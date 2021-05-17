@@ -17,7 +17,7 @@ let package = Package(
 ***REMOVED***dependencies: [
 ***REMOVED******REMOVED******REMOVED*** Dependencies declare other packages that this package depends on.
 ***REMOVED******REMOVED******REMOVED*** .package(url: /* package url */, from: "1.0.0"),
-***REMOVED******REMOVED***.package(name: "ArcGIS", path: "/Users/Shared/Source/ArcGIS/swift")
+***REMOVED******REMOVED***.package(name: "ArcGIS", path: "../swift")
 
 ***REMOVED***],
 ***REMOVED***targets: [
