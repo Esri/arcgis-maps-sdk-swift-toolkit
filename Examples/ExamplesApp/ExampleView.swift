@@ -11,17 +11,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import XCTest
-@testable import ArcGISToolkitSwift
+import SwiftUI
 
-final class arcgis_runtime_toolkit_swiftTests: XCTestCase {
-    func testExample() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct
-        // results.
+struct ExampleView: View {
+    var example: Example
+    
+    var body: some View {
+        example.makeBody()
+            .navigationTitle(example.name)
     }
+}
 
-    static var allTests = [
-        ("testExample", testExample),
-    ]
+extension ExampleView: Identifiable {
+    var id: String { example.name }
 }
