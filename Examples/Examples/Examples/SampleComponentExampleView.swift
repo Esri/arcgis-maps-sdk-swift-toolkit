@@ -11,17 +11,18 @@
 ***REMOVED*** See the License for the specific language governing permissions and
 ***REMOVED*** limitations under the License.
 
-import XCTest
-@testable ***REMOVED***ToolkitSwift
+***REMOVED***
+***REMOVED***
+***REMOVED***ToolkitSwift
 
-final class arcgis_runtime_toolkit_swiftTests: XCTestCase {
-***REMOVED***func testExample() {
-***REMOVED******REMOVED******REMOVED*** This is an example of a functional test case.
-***REMOVED******REMOVED******REMOVED*** Use XCTAssert and related functions to verify your tests produce the correct
-***REMOVED******REMOVED******REMOVED*** results.
+struct SampleComponentExampleView: View {
+***REMOVED***var body: some View {
+***REMOVED******REMOVED***SampleComponent(mapView: MapView(map: Map(basemap: Basemap.topographic())))
+***REMOVED***
 ***REMOVED***
 
-***REMOVED***static var allTests = [
-***REMOVED******REMOVED***("testExample", testExample),
-***REMOVED***]
+struct ComponentSampleExampleView_Previews: PreviewProvider {
+***REMOVED***static var previews: some View {
+***REMOVED******REMOVED***SampleComponentExampleView()
+***REMOVED***
 ***REMOVED***

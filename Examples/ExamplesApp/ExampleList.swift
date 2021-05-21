@@ -11,17 +11,20 @@
 ***REMOVED*** See the License for the specific language governing permissions and
 ***REMOVED*** limitations under the License.
 
-import XCTest
-@testable ***REMOVED***ToolkitSwift
-
-final class arcgis_runtime_toolkit_swiftTests: XCTestCase {
-***REMOVED***func testExample() {
-***REMOVED******REMOVED******REMOVED*** This is an example of a functional test case.
-***REMOVED******REMOVED******REMOVED*** Use XCTAssert and related functions to verify your tests produce the correct
-***REMOVED******REMOVED******REMOVED*** results.
 ***REMOVED***
 
-***REMOVED***static var allTests = [
-***REMOVED******REMOVED***("testExample", testExample),
-***REMOVED***]
+struct ExampleList: View {
+***REMOVED***var name: String
+***REMOVED***var examples: [Example]
+***REMOVED***
+***REMOVED***var body: some View {
+***REMOVED******REMOVED***List(examples, id: \.name) { (example) in
+***REMOVED******REMOVED******REMOVED***NavigationLink(example.name, destination: ExampleView(example: example))
+***REMOVED***
+***REMOVED******REMOVED***.navigationBarTitle(Text(name), displayMode: .inline)
+***REMOVED***
+***REMOVED***
+
+extension ExampleList: Identifiable {
+***REMOVED***var id: String { name ***REMOVED***
 ***REMOVED***
