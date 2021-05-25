@@ -20,6 +20,7 @@ public struct SampleComponent: View {
     }
     
     var mapView: MapView
+    
     public var body: some View {
         mapView
     }
