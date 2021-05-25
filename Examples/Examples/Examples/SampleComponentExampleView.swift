@@ -13,7 +13,7 @@
 
 import SwiftUI
 import ArcGIS
-import ArcGISToolkitSwift
+import ArcGISToolkit
 
 struct SampleComponentExampleView: View {
     var body: some View {
