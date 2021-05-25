@@ -17,7 +17,7 @@
 
 struct SampleComponentExampleView: View {
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***SampleComponent(mapView: MapView(map: Map(basemap: Basemap.topographic())))
+***REMOVED******REMOVED***SampleComponent(mapView: MapView(map: Map(basemap: .topographic())))
 ***REMOVED***
 ***REMOVED***
 
