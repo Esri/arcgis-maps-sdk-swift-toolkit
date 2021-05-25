@@ -15,7 +15,7 @@
 ***REMOVED***
 
 public struct SampleComponent: View {
-***REMOVED***public  init(mapView: MapView) {
+***REMOVED***public init(mapView: MapView) {
 ***REMOVED******REMOVED***self.mapView = mapView
 ***REMOVED***
 ***REMOVED***
