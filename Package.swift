@@ -23,8 +23,8 @@ let package = Package(
     ],
     products: [
         .library(
-            name: "ArcGISToolkitSwift",
-            targets: ["ArcGISToolkitSwift"]),
+            name: "ArcGISToolkit",
+            targets: ["ArcGISToolkit"]),
     ],
     dependencies: [
         .package(name: "ArcGIS", path: "../swift")
@@ -32,7 +32,7 @@ let package = Package(
     ],
     targets: [
         .target(
-            name: "ArcGISToolkitSwift",
+            name: "ArcGISToolkit",
             dependencies: ["ArcGIS"]),
     ]
 )
