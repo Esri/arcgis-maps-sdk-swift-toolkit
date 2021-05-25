@@ -34,8 +34,5 @@ let package = Package(
 ***REMOVED******REMOVED***.target(
 ***REMOVED******REMOVED******REMOVED***name: "ArcGISToolkitSwift",
 ***REMOVED******REMOVED******REMOVED***dependencies: ["ArcGIS"]),
-***REMOVED******REMOVED***.testTarget(
-***REMOVED******REMOVED******REMOVED***name: "ArcGISToolkitSwiftTests",
-***REMOVED******REMOVED******REMOVED***dependencies: ["ArcGISToolkitSwift"]),
 ***REMOVED***]
 )
