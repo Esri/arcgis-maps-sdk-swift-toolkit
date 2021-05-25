@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		E40F58082656E695006F5CB9 /* ArcGISToolkitSwift in Frameworks */ = {isa = PBXBuildFile; productRef = E40F58072656E695006F5CB9 /* ArcGISToolkitSwift */; ***REMOVED***;
 		E47ABE442652FE0900FD2FE3 /* ExamplesApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E47ABE432652FE0900FD2FE3 /* ExamplesApp.swift */; ***REMOVED***;
-		E47ABE462652FE0900FD2FE3 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E47ABE452652FE0900FD2FE3 /* ContentView.swift */; ***REMOVED***;
 		E47ABE482652FE0C00FD2FE3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E47ABE472652FE0C00FD2FE3 /* Assets.xcassets */; ***REMOVED***;
 		E47ABE4B2652FE0C00FD2FE3 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E47ABE4A2652FE0C00FD2FE3 /* Preview Assets.xcassets */; ***REMOVED***;
 		E47ABE5C2652FF1200FD2FE3 /* ArcGIS in Frameworks */ = {isa = PBXBuildFile; productRef = E47ABE5B2652FF1200FD2FE3 /* ArcGIS */; ***REMOVED***;
@@ -39,7 +38,6 @@
 /* Begin PBXFileReference section */
 		E47ABE402652FE0900FD2FE3 /* Examples.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Examples.app; sourceTree = BUILT_PRODUCTS_DIR; ***REMOVED***;
 		E47ABE432652FE0900FD2FE3 /* ExamplesApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExamplesApp.swift; sourceTree = "<group>"; ***REMOVED***;
-		E47ABE452652FE0900FD2FE3 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; ***REMOVED***;
 		E47ABE472652FE0C00FD2FE3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; ***REMOVED***;
 		E47ABE4A2652FE0C00FD2FE3 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; ***REMOVED***;
 		E47ABE4C2652FE0C00FD2FE3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; ***REMOVED***;
@@ -98,7 +96,6 @@
 			children = (
 				E48A73412658227100F5C118 /* AnyExample.swift */,
 				E47ABE472652FE0C00FD2FE3 /* Assets.xcassets */,
-				E47ABE452652FE0900FD2FE3 /* ContentView.swift */,
 				E48A73402658227100F5C118 /* Example.swift */,
 				E48A733E2658227100F5C118 /* ExampleList.swift */,
 				E48A733F2658227100F5C118 /* Examples.entitlements */,
@@ -208,7 +205,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E47ABE462652FE0900FD2FE3 /* ContentView.swift in Sources */,
 				E48A73452658227100F5C118 /* Examples.swift in Sources */,
 				E48A73432658227100F5C118 /* Example.swift in Sources */,
 				E47ABE442652FE0900FD2FE3 /* ExamplesApp.swift in Sources */,
