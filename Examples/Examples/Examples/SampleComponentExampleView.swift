@@ -13,7 +13,7 @@
 
 ***REMOVED***
 ***REMOVED***
-***REMOVED***ToolkitSwift
+***REMOVED***Toolkit
 
 struct SampleComponentExampleView: View {
 ***REMOVED***var body: some View {
