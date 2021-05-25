@@ -17,7 +17,7 @@ import ArcGISToolkitSwift
 
 struct SampleComponentExampleView: View {
     var body: some View {
-        SampleComponent(mapView: MapView(map: Map(basemap: Basemap.topographic())))
+        SampleComponent(mapView: MapView(map: Map(basemap: .topographic())))
     }
 }
 
