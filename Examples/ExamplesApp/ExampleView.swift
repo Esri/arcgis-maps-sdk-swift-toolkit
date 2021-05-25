@@ -14,6 +14,7 @@
 ***REMOVED***
 
 struct ExampleView: View {
+***REMOVED******REMOVED***/ The example to display in the view.
 ***REMOVED***var example: Example
 ***REMOVED***
 ***REMOVED***var body: some View {

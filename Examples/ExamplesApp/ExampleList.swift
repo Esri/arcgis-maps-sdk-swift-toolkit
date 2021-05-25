@@ -14,7 +14,10 @@
 ***REMOVED***
 
 struct ExampleList: View {
+***REMOVED******REMOVED***/ The name of the list of examples.
 ***REMOVED***var name: String
+***REMOVED***
+***REMOVED******REMOVED***/ The list of examples to display.
 ***REMOVED***var examples: [Example]
 ***REMOVED***
 ***REMOVED***var body: some View {
