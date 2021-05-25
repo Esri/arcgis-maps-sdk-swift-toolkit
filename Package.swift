@@ -18,7 +18,8 @@ import PackageDescription
 let package = Package(
 ***REMOVED***name: "arcgis-runtime-toolkit-swift",
 ***REMOVED***platforms: [
-***REMOVED******REMOVED***.iOS(.v14)
+***REMOVED******REMOVED***.iOS(.v14),
+***REMOVED******REMOVED***.macOS(.v11)
 ***REMOVED***],
 ***REMOVED***products: [
 ***REMOVED******REMOVED******REMOVED*** Products define the executables and libraries a package produces, and make them visible to other packages.
