@@ -14,7 +14,9 @@
 import SwiftUI
 
 protocol Example {
+    /// The name of the example.
     var name: String { get }
     
+    /// A function which creates the example view.
     func makeBody() -> AnyView
 }
