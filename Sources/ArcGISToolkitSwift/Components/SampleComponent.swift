@@ -15,7 +15,7 @@ import SwiftUI
 import ArcGIS
 
 public struct SampleComponent: View {
-    public  init(mapView: MapView) {
+    public init(mapView: MapView) {
         self.mapView = mapView
     }
     
