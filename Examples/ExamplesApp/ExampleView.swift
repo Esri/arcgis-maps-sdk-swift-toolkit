@@ -14,6 +14,7 @@
 import SwiftUI
 
 struct ExampleView: View {
+    /// The example to display in the view.
     var example: Example
     
     var body: some View {

@@ -14,7 +14,10 @@
 import SwiftUI
 
 struct ExampleList: View {
+    /// The name of the list of examples.
     var name: String
+    
+    /// The list of examples to display.
     var examples: [Example]
     
     var body: some View {

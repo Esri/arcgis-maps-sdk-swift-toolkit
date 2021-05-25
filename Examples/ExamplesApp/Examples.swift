@@ -14,6 +14,7 @@
 import SwiftUI
 
 struct Examples: View {
+    /// The list of example lists.  Allows for a hierarchical navigation model for examples.
     let lists: [ExampleList] = [
         .geoview,
     ]
