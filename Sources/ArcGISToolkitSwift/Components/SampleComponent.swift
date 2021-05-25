@@ -20,6 +20,7 @@ public struct SampleComponent: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var mapView: MapView
+***REMOVED***
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***mapView
 ***REMOVED***
