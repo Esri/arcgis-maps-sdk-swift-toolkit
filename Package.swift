@@ -34,8 +34,5 @@ let package = Package(
         .target(
             name: "ArcGISToolkitSwift",
             dependencies: ["ArcGIS"]),
-        .testTarget(
-            name: "ArcGISToolkitSwiftTests",
-            dependencies: ["ArcGISToolkitSwift"]),
     ]
 )
