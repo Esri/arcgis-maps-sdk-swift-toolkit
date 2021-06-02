@@ -48,6 +48,20 @@
 ***REMOVED******REMOVED******REMOVED***   ReferencedContainer = "container:">
 ***REMOVED******REMOVED******REMOVED***</BuildableReference>
 ***REMOVED******REMOVED*** </BuildActionEntry>
+***REMOVED******REMOVED*** <BuildActionEntry
+***REMOVED******REMOVED******REMOVED***buildForTesting = "YES"
+***REMOVED******REMOVED******REMOVED***buildForRunning = "YES"
+***REMOVED******REMOVED******REMOVED***buildForProfiling = "YES"
+***REMOVED******REMOVED******REMOVED***buildForArchiving = "YES"
+***REMOVED******REMOVED******REMOVED***buildForAnalyzing = "YES">
+***REMOVED******REMOVED******REMOVED***<BuildableReference
+***REMOVED******REMOVED******REMOVED***   BuildableIdentifier = "primary"
+***REMOVED******REMOVED******REMOVED***   BlueprintIdentifier = "ArcGISToolkit"
+***REMOVED******REMOVED******REMOVED***   BuildableName = "ArcGISToolkit"
+***REMOVED******REMOVED******REMOVED***   BlueprintName = "ArcGISToolkit"
+***REMOVED******REMOVED******REMOVED***   ReferencedContainer = "container:">
+***REMOVED******REMOVED******REMOVED***</BuildableReference>
+***REMOVED******REMOVED*** </BuildActionEntry>
 ***REMOVED***  </BuildActionEntries>
    </BuildAction>
    <TestAction
