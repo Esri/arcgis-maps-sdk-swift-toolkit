@@ -1,4 +1,4 @@
-***REMOVED***.
+***REMOVED***./APsPl0cx9SjC7zrU5rCZKCw
 
 ***REMOVED*** Licensed under the Apache License, Version 2.0 (the "License");
 ***REMOVED*** you may not use this file except in compliance with the License.
@@ -12,17 +12,27 @@
 ***REMOVED*** limitations under the License.
 
 ***REMOVED***
+import Combine
 ***REMOVED***
 ***REMOVED***Toolkit
 
-struct SampleComponentExampleView: View {
+struct OverviewMapExampleView: View {
+***REMOVED***private var mapView = MapView(map: Map(basemap: Basemap.imageryWithLabels()))
+
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***SampleComponent(mapView: MapView(map: Map(basemap: .topographic())))
+***REMOVED******REMOVED***ZStack (alignment: .topTrailing) {
+***REMOVED******REMOVED******REMOVED***mapView
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onViewpointChanged { viewpoint in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***<#code#>
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***OverviewMap(geoView: mapView)
+***REMOVED******REMOVED******REMOVED******REMOVED***.padding()
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
-struct ComponentSampleExampleView_Previews: PreviewProvider {
+struct OverviewMapExampleView_Previews: PreviewProvider {
 ***REMOVED***static var previews: some View {
-***REMOVED******REMOVED***SampleComponentExampleView()
+***REMOVED******REMOVED***OverviewMapExampleView()
 ***REMOVED***
 ***REMOVED***
