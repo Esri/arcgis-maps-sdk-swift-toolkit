@@ -1,4 +1,4 @@
-// Copyright 2021 Esri.
+// Copyright 2021 Esri./APsPl0cx9SjC7zrU5rCZKCw
 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,17 +12,27 @@
 // limitations under the License.
 
 import SwiftUI
+import Combine
 import ArcGIS
 import ArcGISToolkit
 
-struct SampleComponentExampleView: View {
+struct OverviewMapExampleView: View {
+    private var mapView = MapView(map: Map(basemap: Basemap.imageryWithLabels()))
+
     var body: some View {
-        SampleComponent(mapView: MapView(map: Map(basemap: .topographic())))
+        ZStack (alignment: .topTrailing) {
+            mapView
+//                .onViewpointChanged { viewpoint in
+//                    <#code#>
+//                }
+            OverviewMap(geoView: mapView)
+                .padding()
+        }
     }
 }
 
-struct ComponentSampleExampleView_Previews: PreviewProvider {
+struct OverviewMapExampleView_Previews: PreviewProvider {
     static var previews: some View {
-        SampleComponentExampleView()
+        OverviewMapExampleView()
     }
 }

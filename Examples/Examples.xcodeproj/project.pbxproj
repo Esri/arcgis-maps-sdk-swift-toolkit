@@ -17,8 +17,8 @@
 		E48A73452658227100F5C118 /* Examples.swift in Sources */ = {isa = PBXBuildFile; fileRef = E48A733D2658227000F5C118 /* Examples.swift */; };
 		E48A73462658227100F5C118 /* ExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E48A73422658227100F5C118 /* ExampleView.swift */; };
 		E48A73472658227100F5C118 /* ExampleList.swift in Sources */ = {isa = PBXBuildFile; fileRef = E48A733E2658227100F5C118 /* ExampleList.swift */; };
-		E4D9C33E26585AC4000AAAE8 /* SampleComponentExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4D9C33D26585AC4000AAAE8 /* SampleComponentExampleView.swift */; };
 		E4E57DC6265D8EB00077A093 /* ArcGISToolkit in Frameworks */ = {isa = PBXBuildFile; productRef = E4E57DC5265D8EB00077A093 /* ArcGISToolkit */; };
+		E4F9BC99265EFCAF001280FF /* OverviewMapExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4F9BC98265EFCAF001280FF /* OverviewMapExampleView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -48,7 +48,7 @@
 		E48A73402658227100F5C118 /* Example.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Example.swift; sourceTree = "<group>"; };
 		E48A73412658227100F5C118 /* AnyExample.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyExample.swift; sourceTree = "<group>"; };
 		E48A73422658227100F5C118 /* ExampleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExampleView.swift; sourceTree = "<group>"; };
-		E4D9C33D26585AC4000AAAE8 /* SampleComponentExampleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleComponentExampleView.swift; sourceTree = "<group>"; };
+		E4F9BC98265EFCAF001280FF /* OverviewMapExampleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OverviewMapExampleView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -67,7 +67,7 @@
 		E40F58042656E509006F5CB9 /* Examples */ = {
 			isa = PBXGroup;
 			children = (
-				E4D9C33D26585AC4000AAAE8 /* SampleComponentExampleView.swift */,
+				E4F9BC98265EFCAF001280FF /* OverviewMapExampleView.swift */,
 			);
 			path = Examples;
 			sourceTree = "<group>";
@@ -208,7 +208,7 @@
 				E48A73452658227100F5C118 /* Examples.swift in Sources */,
 				E48A73432658227100F5C118 /* Example.swift in Sources */,
 				E47ABE442652FE0900FD2FE3 /* ExamplesApp.swift in Sources */,
-				E4D9C33E26585AC4000AAAE8 /* SampleComponentExampleView.swift in Sources */,
+				E4F9BC99265EFCAF001280FF /* OverviewMapExampleView.swift in Sources */,
 				E48A73442658227100F5C118 /* AnyExample.swift in Sources */,
 				E48A73472658227100F5C118 /* ExampleList.swift in Sources */,
 				E48A73462658227100F5C118 /* ExampleView.swift in Sources */,
@@ -339,7 +339,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = Examples/Examples.entitlements;
+				CODE_SIGN_ENTITLEMENTS = ExamplesApp/Examples.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"ExamplesApp/Preview Content\"";
 				DEVELOPMENT_TEAM = P8HGHS7JQ8;
@@ -363,7 +363,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = Examples/Examples.entitlements;
+				CODE_SIGN_ENTITLEMENTS = ExamplesApp/Examples.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"ExamplesApp/Preview Content\"";
 				DEVELOPMENT_TEAM = P8HGHS7JQ8;

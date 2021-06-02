@@ -17,7 +17,7 @@ import SwiftUI
 struct ExamplesApp: App {
     var body: some Scene {
         WindowGroup {
-            Examples()
+            OverviewMapExampleView()
         }
     }
 }
