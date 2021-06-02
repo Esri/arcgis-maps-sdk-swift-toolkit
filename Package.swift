@@ -28,7 +28,6 @@ let package = Package(
     ],
     dependencies: [
         .package(name: "ArcGIS", path: "../swift")
-
     ],
     targets: [
         .target(
