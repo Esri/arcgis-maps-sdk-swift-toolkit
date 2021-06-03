@@ -1,0 +1,98 @@
+{
+  "images" : [
+***REMOVED***{
+***REMOVED***  "idiom" : "iphone",
+***REMOVED***  "scale" : "2x",
+***REMOVED***  "size" : "20x20"
+***REMOVED***,
+***REMOVED***{
+***REMOVED***  "idiom" : "iphone",
+***REMOVED***  "scale" : "3x",
+***REMOVED***  "size" : "20x20"
+***REMOVED***,
+***REMOVED***{
+***REMOVED***  "idiom" : "iphone",
+***REMOVED***  "scale" : "2x",
+***REMOVED***  "size" : "29x29"
+***REMOVED***,
+***REMOVED***{
+***REMOVED***  "idiom" : "iphone",
+***REMOVED***  "scale" : "3x",
+***REMOVED***  "size" : "29x29"
+***REMOVED***,
+***REMOVED***{
+***REMOVED***  "idiom" : "iphone",
+***REMOVED***  "scale" : "2x",
+***REMOVED***  "size" : "40x40"
+***REMOVED***,
+***REMOVED***{
+***REMOVED***  "idiom" : "iphone",
+***REMOVED***  "scale" : "3x",
+***REMOVED***  "size" : "40x40"
+***REMOVED***,
+***REMOVED***{
+***REMOVED***  "idiom" : "iphone",
+***REMOVED***  "scale" : "2x",
+***REMOVED***  "size" : "60x60"
+***REMOVED***,
+***REMOVED***{
+***REMOVED***  "idiom" : "iphone",
+***REMOVED***  "scale" : "3x",
+***REMOVED***  "size" : "60x60"
+***REMOVED***,
+***REMOVED***{
+***REMOVED***  "idiom" : "ipad",
+***REMOVED***  "scale" : "1x",
+***REMOVED***  "size" : "20x20"
+***REMOVED***,
+***REMOVED***{
+***REMOVED***  "idiom" : "ipad",
+***REMOVED***  "scale" : "2x",
+***REMOVED***  "size" : "20x20"
+***REMOVED***,
+***REMOVED***{
+***REMOVED***  "idiom" : "ipad",
+***REMOVED***  "scale" : "1x",
+***REMOVED***  "size" : "29x29"
+***REMOVED***,
+***REMOVED***{
+***REMOVED***  "idiom" : "ipad",
+***REMOVED***  "scale" : "2x",
+***REMOVED***  "size" : "29x29"
+***REMOVED***,
+***REMOVED***{
+***REMOVED***  "idiom" : "ipad",
+***REMOVED***  "scale" : "1x",
+***REMOVED***  "size" : "40x40"
+***REMOVED***,
+***REMOVED***{
+***REMOVED***  "idiom" : "ipad",
+***REMOVED***  "scale" : "2x",
+***REMOVED***  "size" : "40x40"
+***REMOVED***,
+***REMOVED***{
+***REMOVED***  "idiom" : "ipad",
+***REMOVED***  "scale" : "1x",
+***REMOVED***  "size" : "76x76"
+***REMOVED***,
+***REMOVED***{
+***REMOVED***  "idiom" : "ipad",
+***REMOVED***  "scale" : "2x",
+***REMOVED***  "size" : "76x76"
+***REMOVED***,
+***REMOVED***{
+***REMOVED***  "idiom" : "ipad",
+***REMOVED***  "scale" : "2x",
+***REMOVED***  "size" : "83.5x83.5"
+***REMOVED***,
+***REMOVED***{
+***REMOVED***  "idiom" : "ios-marketing",
+***REMOVED***  "scale" : "1x",
+***REMOVED***  "size" : "1024x1024"
+***REMOVED***
+  ],
+  "info" : {
+***REMOVED***"author" : "xcode",
+***REMOVED***"version" : 1
+  ***REMOVED***
+***REMOVED***
