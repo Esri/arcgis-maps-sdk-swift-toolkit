@@ -17,15 +17,13 @@ import Combine
 ***REMOVED***Toolkit
 
 struct OverviewMapExampleView: View {
-***REMOVED***private var mapView = MapView(map: Map(basemap: Basemap.imageryWithLabels()))
-
+***REMOVED***private var mapViewProxy: Binding<MapViewProxy?>?
+***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***ZStack (alignment: .topTrailing) {
-***REMOVED******REMOVED******REMOVED***mapView
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onViewpointChanged { viewpoint in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***<#code#>
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***OverviewMap(geoView: mapView)
+***REMOVED******REMOVED******REMOVED***MapView(map: Map(basemap: Basemap.imageryWithLabels()),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***   proxy: mapViewProxy)
+***REMOVED******REMOVED******REMOVED***OverviewMap(proxy: mapViewProxy)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding()
 ***REMOVED***
 ***REMOVED***
