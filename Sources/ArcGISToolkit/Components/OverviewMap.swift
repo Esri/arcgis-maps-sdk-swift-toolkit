@@ -36,7 +36,8 @@ public struct OverviewMap: View {
     @State private var extentGeometry: Envelope?
     
     /// The proxy for the overviewMap's map view.
-    private var overviewMapViewProxy: Binding<MapViewProxy?>?
+    @State private var overviewMapViewProxy: MapViewProxy?
+//    private var overviewMapViewProxy: Binding<MapViewProxy?>?
 
     private var subscriptions = Set<AnyCancellable>()
     
@@ -56,36 +57,50 @@ public struct OverviewMap: View {
         self.height = height
         self.extentSymbol = extentSymbol
         
-        self.proxy?.wrappedValue?.viewpointChangedPublisher.sink(receiveValue: {
-            guard let centerAndScaleViewpoint = (proxy?.wrappedValue)?.currentViewpoint(type: .centerAndScale),
-                  let boundingGeometryViewpoint = (proxy?.wrappedValue)?.currentViewpoint(type: .boundingGeometry)
-            else { return }
-            
-            if let newExtent = boundingGeometryViewpoint.targetGeometry as? Envelope {
-                extentGeometry = newExtent
-            }
-            
-            (overviewMapViewProxy?.wrappedValue)?.setViewpoint(viewpoint: Viewpoint(center: centerAndScaleViewpoint.targetGeometry as! Point,
-                                                                     scale: centerAndScaleViewpoint.targetScale * scaleFactor))
-        })
-        .store(in: &subscriptions)
+        //        self.proxy?.wrappedValue?.viewpointChangedPublisher.sink(receiveValue: {
+        //            guard let centerAndScaleViewpoint = (proxy?.wrappedValue)?.currentViewpoint(type: .centerAndScale),
+        //                  let boundingGeometryViewpoint = (proxy?.wrappedValue)?.currentViewpoint(type: .boundingGeometry)
+        //            else { return }
+        //
+        //            if let newExtent = boundingGeometryViewpoint.targetGeometry as? Envelope {
+        //                extentGeometry = newExtent
+        //            }
+        //
+        //            (overviewMapViewProxy?.wrappedValue)?.setViewpoint(viewpoint: Viewpoint(center: centerAndScaleViewpoint.targetGeometry as! Point,
+        //                                                                     scale: centerAndScaleViewpoint.targetScale * scaleFactor))
+        //        })
+        //        .store(in: &subscriptions)
     }
     
     public var body: some View {
         ZStack {
-            makeMapView()
+            MapView(map: map,
+                    graphicsOverlays: [GraphicsOverlay(graphics: [Graphic(geometry: extentGeometry,
+                                                                          symbol: extentSymbol)])],
+                    proxy: $overviewMapViewProxy)
                 .attributionTextHidden()
                 .interactionModes([])
                 .frame(width: width, height: height)
                 .border(Color.black, width: 1)
+                .onReceive((proxy?.wrappedValue!.viewpointChangedPublisher)!) {
+                    guard let centerAndScaleViewpoint = (proxy?.wrappedValue)?.currentViewpoint(type: .centerAndScale),
+                          let boundingGeometryViewpoint = (proxy?.wrappedValue)?.currentViewpoint(type: .boundingGeometry)
+                    else { return }
+                    
+                    if let newExtent = boundingGeometryViewpoint.targetGeometry as? Envelope {
+                        extentGeometry = newExtent
+                    }
+                    let viewpoint = Viewpoint(center: centerAndScaleViewpoint.targetGeometry as! Point,
+                                              scale: centerAndScaleViewpoint.targetScale * scaleFactor)
+                    overviewMapViewProxy?.setViewpoint(viewpoint: viewpoint)
+                }
         }
     }
     
-    private func makeMapView() -> MapView {
-        let extentGraphic = Graphic(geometry: extentGeometry, symbol: extentSymbol)
-        return MapView(map: map,
-                       graphicsOverlays: [GraphicsOverlay(graphics: [extentGraphic])],
-                       proxy: overviewMapViewProxy
-        )
-    }
+//    private func makeMapView() -> MapView {
+//        return MapView(map: map,
+//                       graphicsOverlays: [GraphicsOverlay(graphics: [Graphic(geometry: extentGeometry, symbol: extentSymbol)])],
+//                       proxy: overviewMapViewProxy
+//        )
+//    }
 }
