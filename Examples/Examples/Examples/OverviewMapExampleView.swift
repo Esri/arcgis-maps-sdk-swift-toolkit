@@ -17,15 +17,13 @@ import ArcGIS
 import ArcGISToolkit
 
 struct OverviewMapExampleView: View {
-    private var mapView = MapView(map: Map(basemap: Basemap.imageryWithLabels()))
-
+    private var mapViewProxy: Binding<MapViewProxy?>?
+    
     var body: some View {
         ZStack (alignment: .topTrailing) {
-            mapView
-//                .onViewpointChanged { viewpoint in
-//                    <#code#>
-//                }
-            OverviewMap(geoView: mapView)
+            MapView(map: Map(basemap: Basemap.imageryWithLabels()),
+                           proxy: mapViewProxy)
+            OverviewMap(proxy: mapViewProxy)
                 .padding()
         }
     }
