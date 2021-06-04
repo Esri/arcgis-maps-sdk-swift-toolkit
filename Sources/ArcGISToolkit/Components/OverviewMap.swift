@@ -36,7 +36,8 @@ public struct OverviewMap: View {
 ***REMOVED***@State private var extentGeometry: Envelope?
 ***REMOVED***
 ***REMOVED******REMOVED***/ The proxy for the overviewMap's map view.
-***REMOVED***private var overviewMapViewProxy: Binding<MapViewProxy?>?
+***REMOVED***@State private var overviewMapViewProxy: MapViewProxy?
+***REMOVED******REMOVED***private var overviewMapViewProxy: Binding<MapViewProxy?>?
 
 ***REMOVED***private var subscriptions = Set<AnyCancellable>()
 ***REMOVED***
@@ -56,36 +57,50 @@ public struct OverviewMap: View {
 ***REMOVED******REMOVED***self.height = height
 ***REMOVED******REMOVED***self.extentSymbol = extentSymbol
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***self.proxy?.wrappedValue?.viewpointChangedPublisher.sink(receiveValue: {
-***REMOVED******REMOVED******REMOVED***guard let centerAndScaleViewpoint = (proxy?.wrappedValue)?.currentViewpoint(type: .centerAndScale),
-***REMOVED******REMOVED******REMOVED******REMOVED***  let boundingGeometryViewpoint = (proxy?.wrappedValue)?.currentViewpoint(type: .boundingGeometry)
-***REMOVED******REMOVED******REMOVED***else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.proxy?.wrappedValue?.viewpointChangedPublisher.sink(receiveValue: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let centerAndScaleViewpoint = (proxy?.wrappedValue)?.currentViewpoint(type: .centerAndScale),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  let boundingGeometryViewpoint = (proxy?.wrappedValue)?.currentViewpoint(type: .boundingGeometry)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***if let newExtent = boundingGeometryViewpoint.targetGeometry as? Envelope {
-***REMOVED******REMOVED******REMOVED******REMOVED***extentGeometry = newExtent
-***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let newExtent = boundingGeometryViewpoint.targetGeometry as? Envelope {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***extentGeometry = newExtent
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***(overviewMapViewProxy?.wrappedValue)?.setViewpoint(viewpoint: Viewpoint(center: centerAndScaleViewpoint.targetGeometry as! Point,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** scale: centerAndScaleViewpoint.targetScale * scaleFactor))
-***REMOVED***)
-***REMOVED******REMOVED***.store(in: &subscriptions)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***(overviewMapViewProxy?.wrappedValue)?.setViewpoint(viewpoint: Viewpoint(center: centerAndScaleViewpoint.targetGeometry as! Point,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** scale: centerAndScaleViewpoint.targetScale * scaleFactor))
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.store(in: &subscriptions)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***ZStack {
-***REMOVED******REMOVED******REMOVED***makeMapView()
+***REMOVED******REMOVED******REMOVED***MapView(map: map,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***graphicsOverlays: [GraphicsOverlay(graphics: [Graphic(geometry: extentGeometry,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  symbol: extentSymbol)])],
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***proxy: $overviewMapViewProxy)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.attributionTextHidden()
 ***REMOVED******REMOVED******REMOVED******REMOVED***.interactionModes([])
 ***REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: width, height: height)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.border(Color.black, width: 1)
+***REMOVED******REMOVED******REMOVED******REMOVED***.onReceive((proxy?.wrappedValue!.viewpointChangedPublisher)!) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let centerAndScaleViewpoint = (proxy?.wrappedValue)?.currentViewpoint(type: .centerAndScale),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  let boundingGeometryViewpoint = (proxy?.wrappedValue)?.currentViewpoint(type: .boundingGeometry)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let newExtent = boundingGeometryViewpoint.targetGeometry as? Envelope {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***extentGeometry = newExtent
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let viewpoint = Viewpoint(center: centerAndScaleViewpoint.targetGeometry as! Point,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  scale: centerAndScaleViewpoint.targetScale * scaleFactor)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***overviewMapViewProxy?.setViewpoint(viewpoint: viewpoint)
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED***private func makeMapView() -> MapView {
-***REMOVED******REMOVED***let extentGraphic = Graphic(geometry: extentGeometry, symbol: extentSymbol)
-***REMOVED******REMOVED***return MapView(map: map,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***   graphicsOverlays: [GraphicsOverlay(graphics: [extentGraphic])],
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***   proxy: overviewMapViewProxy
-***REMOVED******REMOVED***)
-***REMOVED***
+***REMOVED******REMOVED***private func makeMapView() -> MapView {
+***REMOVED******REMOVED******REMOVED***return MapView(map: map,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***   graphicsOverlays: [GraphicsOverlay(graphics: [Graphic(geometry: extentGeometry, symbol: extentSymbol)])],
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***   proxy: overviewMapViewProxy
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***
 ***REMOVED***
