@@ -18,89 +18,98 @@ import SwiftUI
 import Combine
 import ArcGIS
 
+/// <#Description#>
 public struct OverviewMap: View {
-    public var proxy: Binding<MapViewProxy?>?
-    public var map = Map(basemap: Basemap.topographic())
-    public var width: CGFloat = 200.0
-    public var height: CGFloat = 132.0
-    public var extentSymbol = SimpleFillSymbol(style: .solid,
-                                               color: .clear,
-                                               outline: SimpleLineSymbol(style: .solid,
-                                                                         color: .red,
-                                                                         width: 1.0)
-    )
+    /// <#Description#>
+    public var proxy: Binding<MapViewProxy?>
+
+    /// <#Description#>
+    public var map: Map
+
+    /// <#Description#>
+    public var extentSymbol: SimpleFillSymbol
     
-    public var scaleFactor = 25.0
+    /// <#Description#>
+    public var scaleFactor: Double
     
     /// The geometry of the extent Graphic displaying the main map view's extent.
     @State private var extentGeometry: Envelope?
-    
-    /// The proxy for the overviewMap's map view.
-    @State private var overviewMapViewProxy: MapViewProxy?
-//    private var overviewMapViewProxy: Binding<MapViewProxy?>?
 
-    private var subscriptions = Set<AnyCancellable>()
+    @State private var overviewMapViewpoint: Viewpoint?
     
-    public init(proxy: Binding<MapViewProxy?>?,
+    /// <#Description#>
+    /// - Parameters:
+    ///   - proxy: <#proxy description#>
+    ///   - map: <#map description#>
+    ///   - extentSymbol: <#extentSymbol description#>
+    public init(proxy: Binding<MapViewProxy?>,
                 map: Map = Map(basemap: Basemap.topographic()),
-                width: CGFloat = 200.0,
-                height: CGFloat = 132.0,
-                extentSymbol: SimpleFillSymbol = SimpleFillSymbol(style: .solid,
-                                                                  color: .clear,
-                                                                  outline: SimpleLineSymbol(style: .solid,
-                                                                                            color: .red,
-                                                                                            width: 1.0))
+                extentSymbol: SimpleFillSymbol = SimpleFillSymbol(
+                    style: .solid,
+                    color: .clear,
+                    outline: SimpleLineSymbol(
+                        style: .solid,
+                        color: .red,
+                        width: 1.0
+                    )
+                ),
+                scaleFactor: Double = 25.0
     ) {
         self.proxy = proxy
         self.map = map
-        self.width = width
-        self.height = height
         self.extentSymbol = extentSymbol
-        
-        //        self.proxy?.wrappedValue?.viewpointChangedPublisher.sink(receiveValue: {
-        //            guard let centerAndScaleViewpoint = (proxy?.wrappedValue)?.currentViewpoint(type: .centerAndScale),
-        //                  let boundingGeometryViewpoint = (proxy?.wrappedValue)?.currentViewpoint(type: .boundingGeometry)
-        //            else { return }
-        //
-        //            if let newExtent = boundingGeometryViewpoint.targetGeometry as? Envelope {
-        //                extentGeometry = newExtent
-        //            }
-        //
-        //            (overviewMapViewProxy?.wrappedValue)?.setViewpoint(viewpoint: Viewpoint(center: centerAndScaleViewpoint.targetGeometry as! Point,
-        //                                                                     scale: centerAndScaleViewpoint.targetScale * scaleFactor))
-        //        })
-        //        .store(in: &subscriptions)
+        self.scaleFactor = scaleFactor
     }
-    
+
     public var body: some View {
         ZStack {
             MapView(map: map,
+                    viewpoint: $overviewMapViewpoint,
                     graphicsOverlays: [GraphicsOverlay(graphics: [Graphic(geometry: extentGeometry,
-                                                                          symbol: extentSymbol)])],
-                    proxy: $overviewMapViewProxy)
+                                                                          symbol: extentSymbol)])]
+                    )
                 .attributionTextHidden()
                 .interactionModes([])
-                .frame(width: width, height: height)
                 .border(Color.black, width: 1)
-                .onReceive((proxy?.wrappedValue!.viewpointChangedPublisher)!) {
-                    guard let centerAndScaleViewpoint = (proxy?.wrappedValue)?.currentViewpoint(type: .centerAndScale),
-                          let boundingGeometryViewpoint = (proxy?.wrappedValue)?.currentViewpoint(type: .boundingGeometry)
+                .onReceive(proxy.wrappedValue?.viewpointChangedPublisher
+                            .receive(on: DispatchQueue.main)
+                            //
+                            // I think "throttle" is what we need here because that does
+                            // not reset the timer when a new value is published, whereas
+                            // debounce will reset the timer, so if there are multiple
+                            // values published that arriver faster than the timeout,
+                            // none of them will be sent because the timer gets reset.
+                            //
+                            // That said, neither of these solve the issue of the
+                            // extent rectangle not getting drawn while the user is
+                            // panning the map.  The extent rectangle disappears when the user
+                            // starts panning and will not reappear until the panning stops.
+                            //
+//                            .debounce(for: .seconds(0.25),
+//                                      scheduler: DispatchQueue.main)
+//                            .throttle(for: .seconds(0.25),
+//                                      scheduler: DispatchQueue.main,
+//                                      latest: true
+//                            )
+                            .eraseToAnyPublisher() ?? Empty<Void, Never>().eraseToAnyPublisher()
+                ) {
+                    guard let centerAndScaleViewpoint = proxy.wrappedValue?.currentViewpoint(type: .centerAndScale),
+                          centerAndScaleViewpoint.objectType != .unknown,
+                          let boundingGeometryViewpoint = proxy.wrappedValue?.currentViewpoint(type: .boundingGeometry),
+                          boundingGeometryViewpoint.objectType != .unknown
                     else { return }
-                    
+
                     if let newExtent = boundingGeometryViewpoint.targetGeometry as? Envelope {
                         extentGeometry = newExtent
                     }
-                    let viewpoint = Viewpoint(center: centerAndScaleViewpoint.targetGeometry as! Point,
-                                              scale: centerAndScaleViewpoint.targetScale * scaleFactor)
-                    overviewMapViewProxy?.setViewpoint(viewpoint: viewpoint)
+                    
+                    if let viewpointGeometry = centerAndScaleViewpoint.targetGeometry as? Point {
+                        let viewpoint = Viewpoint(center: viewpointGeometry,
+                                                  scale: centerAndScaleViewpoint.targetScale * scaleFactor)
+                        print("overviewMapViewpoint updated")
+                        overviewMapViewpoint = viewpoint
+                    }
                 }
         }
     }
-    
-//    private func makeMapView() -> MapView {
-//        return MapView(map: map,
-//                       graphicsOverlays: [GraphicsOverlay(graphics: [Graphic(geometry: extentGeometry, symbol: extentSymbol)])],
-//                       proxy: overviewMapViewProxy
-//        )
-//    }
 }
