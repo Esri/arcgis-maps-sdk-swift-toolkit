@@ -24,10 +24,10 @@ public struct OverviewMap: View {
 ***REMOVED******REMOVED***/   available, the binding will be updated by the view. The proxy is
 ***REMOVED******REMOVED***/   necessary for accessing `MapView` functionality to get and set viewpoints.
 ***REMOVED***public var proxy: Binding<MapViewProxy?>
-
+***REMOVED***
 ***REMOVED******REMOVED***/ The Map displayed in the OverviewMap.
 ***REMOVED***public var map: Map
-
+***REMOVED***
 ***REMOVED******REMOVED***/ The fill symbol used to display the main MapView extent.
 ***REMOVED******REMOVED***/ The default is a transparent SimpleFillSymbol with a red, 1 point width outline.
 ***REMOVED***public var extentSymbol: FillSymbol
@@ -39,7 +39,7 @@ public struct OverviewMap: View {
 ***REMOVED******REMOVED***/ The geometry of the extent Graphic displaying the main map view's extent.  Updating
 ***REMOVED******REMOVED***/ this property will update the display of the OverviewMap.
 ***REMOVED***@State private var extentGeometry: Envelope?
-
+***REMOVED***
 ***REMOVED******REMOVED***/ The viewpoint of the OverviewMap's MapView.  Updating
 ***REMOVED******REMOVED***/ this property will update the display of the OverviewMap.
 ***REMOVED***@State private var overviewMapViewpoint: Viewpoint?
@@ -75,34 +75,34 @@ public struct OverviewMap: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint: $overviewMapViewpoint,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***graphicsOverlays: [GraphicsOverlay(graphics: [Graphic(geometry: extentGeometry,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  symbol: extentSymbol)])]
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED***.attributionTextHidden()
-***REMOVED******REMOVED******REMOVED******REMOVED***.interactionModes([])
-***REMOVED******REMOVED******REMOVED******REMOVED***.border(Color.black, width: 1)
-***REMOVED******REMOVED******REMOVED******REMOVED***.onReceive(proxy.wrappedValue?.viewpointChangedPublisher
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.receive(on: DispatchQueue.main)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.throttle(for: .seconds(0.25),
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  scheduler: DispatchQueue.main,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  latest: true
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.eraseToAnyPublisher() ?? Empty<Void, Never>().eraseToAnyPublisher()
-***REMOVED******REMOVED******REMOVED******REMOVED***) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let centerAndScaleViewpoint = proxy.wrappedValue?.currentViewpoint(type: .centerAndScale),
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  centerAndScaleViewpoint.objectType != .unknown,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  let boundingGeometryViewpoint = proxy.wrappedValue?.currentViewpoint(type: .boundingGeometry),
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  boundingGeometryViewpoint.objectType != .unknown
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***else { return ***REMOVED***
-
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let newExtent = boundingGeometryViewpoint.targetGeometry as? Envelope {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***extentGeometry = newExtent
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***.attributionTextHidden()
+***REMOVED******REMOVED******REMOVED***.interactionModes([])
+***REMOVED******REMOVED******REMOVED***.border(Color.black, width: 1)
+***REMOVED******REMOVED******REMOVED***.onReceive(proxy.wrappedValue?.viewpointChangedPublisher
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.receive(on: DispatchQueue.main)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.throttle(for: .seconds(0.25),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  scheduler: DispatchQueue.main,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  latest: true
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.eraseToAnyPublisher() ?? Empty<Void, Never>().eraseToAnyPublisher()
+***REMOVED******REMOVED******REMOVED***) {
+***REMOVED******REMOVED******REMOVED******REMOVED***guard let centerAndScaleViewpoint = proxy.wrappedValue?.currentViewpoint(type: .centerAndScale),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  centerAndScaleViewpoint.objectType != .unknown,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  let boundingGeometryViewpoint = proxy.wrappedValue?.currentViewpoint(type: .boundingGeometry),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  boundingGeometryViewpoint.objectType != .unknown
+***REMOVED******REMOVED******REMOVED******REMOVED***else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let viewpointGeometry = centerAndScaleViewpoint.targetGeometry as? Point {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let viewpoint = Viewpoint(center: viewpointGeometry,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  scale: centerAndScaleViewpoint.targetScale * scaleFactor)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***overviewMapViewpoint = viewpoint
-***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***if let newExtent = boundingGeometryViewpoint.targetGeometry as? Envelope {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***extentGeometry = newExtent
 ***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***if let viewpointGeometry = centerAndScaleViewpoint.targetGeometry as? Point {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let viewpoint = Viewpoint(center: viewpointGeometry,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  scale: centerAndScaleViewpoint.targetScale * scaleFactor)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***overviewMapViewpoint = viewpoint
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
