@@ -18,33 +18,41 @@ import SwiftUI
 import Combine
 import ArcGIS
 
-/// <#Description#>
+/// OverviewMap is a small, secondary MapView (sometimes called an "inset map"), superimposed on an existing MapView, which shows the visible extent of the main MapView.
 public struct OverviewMap: View {
-    /// <#Description#>
+    /// A binding to an optional `MapViewProxy`. When a proxy is
+    ///   available, the binding will be updated by the view. The proxy is
+    ///   necessary for accessing `MapView` functionality to get and set viewpoints.
     public var proxy: Binding<MapViewProxy?>
 
-    /// <#Description#>
+    /// The Map displayed in the OverviewMap.
     public var map: Map
 
-    /// <#Description#>
-    public var extentSymbol: SimpleFillSymbol
+    /// The fill symbol used to display the main MapView extent.
+    /// The default is a transparent SimpleFillSymbol with a red, 1 point width outline.
+    public var extentSymbol: FillSymbol
     
-    /// <#Description#>
+    /// The factor to multiply the main GeoView's scale by. The OverviewMap will display
+    /// at the product of mainGeoViewScale * scaleFactor.  The default is 25.0.
     public var scaleFactor: Double
     
-    /// The geometry of the extent Graphic displaying the main map view's extent.
+    /// The geometry of the extent Graphic displaying the main map view's extent.  Updating
+    /// this property will update the display of the OverviewMap.
     @State private var extentGeometry: Envelope?
 
+    /// The viewpoint of the OverviewMap's MapView.  Updating
+    /// this property will update the display of the OverviewMap.
     @State private var overviewMapViewpoint: Viewpoint?
     
-    /// <#Description#>
+    /// Creates an OverviewMap.
     /// - Parameters:
-    ///   - proxy: <#proxy description#>
-    ///   - map: <#map description#>
-    ///   - extentSymbol: <#extentSymbol description#>
+    ///   - proxy: The binding to an optional MapViewProxy.
+    ///   - map: The Map to display in the OverviewMap.
+    ///   - extentSymbol: The FillSymbol used to display the main MapView's extent.
+    ///   - scaleFactor: The scale factor used to calculate the OverviewMap's scale.
     public init(proxy: Binding<MapViewProxy?>,
                 map: Map = Map(basemap: Basemap.topographic()),
-                extentSymbol: SimpleFillSymbol = SimpleFillSymbol(
+                extentSymbol: FillSymbol = SimpleFillSymbol(
                     style: .solid,
                     color: .clear,
                     outline: SimpleLineSymbol(
@@ -60,7 +68,7 @@ public struct OverviewMap: View {
         self.extentSymbol = extentSymbol
         self.scaleFactor = scaleFactor
     }
-
+    
     public var body: some View {
         ZStack {
             MapView(map: map,
@@ -73,24 +81,10 @@ public struct OverviewMap: View {
                 .border(Color.black, width: 1)
                 .onReceive(proxy.wrappedValue?.viewpointChangedPublisher
                             .receive(on: DispatchQueue.main)
-                            //
-                            // I think "throttle" is what we need here because that does
-                            // not reset the timer when a new value is published, whereas
-                            // debounce will reset the timer, so if there are multiple
-                            // values published that arriver faster than the timeout,
-                            // none of them will be sent because the timer gets reset.
-                            //
-                            // That said, neither of these solve the issue of the
-                            // extent rectangle not getting drawn while the user is
-                            // panning the map.  The extent rectangle disappears when the user
-                            // starts panning and will not reappear until the panning stops.
-                            //
-//                            .debounce(for: .seconds(0.25),
-//                                      scheduler: DispatchQueue.main)
-//                            .throttle(for: .seconds(0.25),
-//                                      scheduler: DispatchQueue.main,
-//                                      latest: true
-//                            )
+                            .throttle(for: .seconds(0.25),
+                                      scheduler: DispatchQueue.main,
+                                      latest: true
+                            )
                             .eraseToAnyPublisher() ?? Empty<Void, Never>().eraseToAnyPublisher()
                 ) {
                     guard let centerAndScaleViewpoint = proxy.wrappedValue?.currentViewpoint(type: .centerAndScale),
@@ -102,11 +96,10 @@ public struct OverviewMap: View {
                     if let newExtent = boundingGeometryViewpoint.targetGeometry as? Envelope {
                         extentGeometry = newExtent
                     }
-                    
+
                     if let viewpointGeometry = centerAndScaleViewpoint.targetGeometry as? Point {
                         let viewpoint = Viewpoint(center: viewpointGeometry,
                                                   scale: centerAndScaleViewpoint.targetScale * scaleFactor)
-                        print("overviewMapViewpoint updated")
                         overviewMapViewpoint = viewpoint
                     }
                 }
