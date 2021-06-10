@@ -88,9 +88,7 @@ public struct OverviewMap: View {
                         .eraseToAnyPublisher() ?? Empty<Void, Never>().eraseToAnyPublisher()
             ) {
                 guard let centerAndScaleViewpoint = proxy.wrappedValue?.currentViewpoint(type: .centerAndScale),
-                      centerAndScaleViewpoint.objectType != .unknown,
                       let boundingGeometryViewpoint = proxy.wrappedValue?.currentViewpoint(type: .boundingGeometry),
-                      boundingGeometryViewpoint.objectType != .unknown
                 else { return }
                 
                 if let newExtent = boundingGeometryViewpoint.targetGeometry as? Envelope {
