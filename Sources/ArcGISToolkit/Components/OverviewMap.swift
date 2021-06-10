@@ -24,10 +24,10 @@ public struct OverviewMap: View {
     ///   available, the binding will be updated by the view. The proxy is
     ///   necessary for accessing `MapView` functionality to get and set viewpoints.
     public var proxy: Binding<MapViewProxy?>
-
+    
     /// The Map displayed in the OverviewMap.
     public var map: Map
-
+    
     /// The fill symbol used to display the main MapView extent.
     /// The default is a transparent SimpleFillSymbol with a red, 1 point width outline.
     public var extentSymbol: FillSymbol
@@ -39,7 +39,7 @@ public struct OverviewMap: View {
     /// The geometry of the extent Graphic displaying the main map view's extent.  Updating
     /// this property will update the display of the OverviewMap.
     @State private var extentGeometry: Envelope?
-
+    
     /// The viewpoint of the OverviewMap's MapView.  Updating
     /// this property will update the display of the OverviewMap.
     @State private var overviewMapViewpoint: Viewpoint?
@@ -75,34 +75,34 @@ public struct OverviewMap: View {
                     viewpoint: $overviewMapViewpoint,
                     graphicsOverlays: [GraphicsOverlay(graphics: [Graphic(geometry: extentGeometry,
                                                                           symbol: extentSymbol)])]
-                    )
-                .attributionTextHidden()
-                .interactionModes([])
-                .border(Color.black, width: 1)
-                .onReceive(proxy.wrappedValue?.viewpointChangedPublisher
-                            .receive(on: DispatchQueue.main)
-                            .throttle(for: .seconds(0.25),
-                                      scheduler: DispatchQueue.main,
-                                      latest: true
-                            )
-                            .eraseToAnyPublisher() ?? Empty<Void, Never>().eraseToAnyPublisher()
-                ) {
-                    guard let centerAndScaleViewpoint = proxy.wrappedValue?.currentViewpoint(type: .centerAndScale),
-                          centerAndScaleViewpoint.objectType != .unknown,
-                          let boundingGeometryViewpoint = proxy.wrappedValue?.currentViewpoint(type: .boundingGeometry),
-                          boundingGeometryViewpoint.objectType != .unknown
-                    else { return }
-
-                    if let newExtent = boundingGeometryViewpoint.targetGeometry as? Envelope {
-                        extentGeometry = newExtent
-                    }
-
-                    if let viewpointGeometry = centerAndScaleViewpoint.targetGeometry as? Point {
-                        let viewpoint = Viewpoint(center: viewpointGeometry,
-                                                  scale: centerAndScaleViewpoint.targetScale * scaleFactor)
-                        overviewMapViewpoint = viewpoint
-                    }
+            )
+            .attributionTextHidden()
+            .interactionModes([])
+            .border(Color.black, width: 1)
+            .onReceive(proxy.wrappedValue?.viewpointChangedPublisher
+                        .receive(on: DispatchQueue.main)
+                        .throttle(for: .seconds(0.25),
+                                  scheduler: DispatchQueue.main,
+                                  latest: true
+                        )
+                        .eraseToAnyPublisher() ?? Empty<Void, Never>().eraseToAnyPublisher()
+            ) {
+                guard let centerAndScaleViewpoint = proxy.wrappedValue?.currentViewpoint(type: .centerAndScale),
+                      centerAndScaleViewpoint.objectType != .unknown,
+                      let boundingGeometryViewpoint = proxy.wrappedValue?.currentViewpoint(type: .boundingGeometry),
+                      boundingGeometryViewpoint.objectType != .unknown
+                else { return }
+                
+                if let newExtent = boundingGeometryViewpoint.targetGeometry as? Envelope {
+                    extentGeometry = newExtent
                 }
+                
+                if let viewpointGeometry = centerAndScaleViewpoint.targetGeometry as? Point {
+                    let viewpoint = Viewpoint(center: viewpointGeometry,
+                                              scale: centerAndScaleViewpoint.targetScale * scaleFactor)
+                    overviewMapViewpoint = viewpoint
+                }
+            }
         }
     }
 }
