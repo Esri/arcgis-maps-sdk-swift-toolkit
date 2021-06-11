@@ -15,40 +15,24 @@ import SwiftUI
 import Combine
 import ArcGIS
 
-/// OverviewMap is a small, secondary MapView (sometimes called an "inset map"), superimposed on an existing MapView, which shows the visible extent of the main MapView.
-public struct Search: View {    
+public struct Search: View {
+    public var proxy: Binding<MapViewProxy?>
+
+    @State private var searchText = ""
+    
+    public init(proxy: Binding<MapViewProxy?>) {
+        self.proxy = proxy
+    }
+    
     public var body: some View {
         ZStack {
-            MapView(map: map,
-                    viewpoint: $overviewMapViewpoint,
-                    graphicsOverlays: [GraphicsOverlay(graphics: [Graphic(geometry: extentGeometry,
-                                                                          symbol: extentSymbol)])]
-            )
-            .attributionTextHidden()
-            .interactionModes([])
-            .border(Color.black, width: 1)
-            .onReceive(proxy.wrappedValue?.viewpointChangedPublisher
-                        .receive(on: DispatchQueue.main)
-                        .throttle(for: .seconds(0.25),
-                                  scheduler: DispatchQueue.main,
-                                  latest: true
-                        )
-                        .eraseToAnyPublisher() ?? Empty<Void, Never>().eraseToAnyPublisher()
-            ) {
-                guard let centerAndScaleViewpoint = proxy.wrappedValue?.currentViewpoint(type: .centerAndScale),
-                      let boundingGeometryViewpoint = proxy.wrappedValue?.currentViewpoint(type: .boundingGeometry)
-                else { return }
-                
-                if let newExtent = boundingGeometryViewpoint.targetGeometry as? Envelope {
-                    extentGeometry = newExtent
-                }
-                
-                if let viewpointGeometry = centerAndScaleViewpoint.targetGeometry as? Point {
-                    let viewpoint = Viewpoint(center: viewpointGeometry,
-                                              scale: centerAndScaleViewpoint.targetScale * scaleFactor)
-                    overviewMapViewpoint = viewpoint
-                }
+            TextField("Search",
+                      text: $searchText) { editing in
+                print("editing changed")
+            } onCommit: { 
+                print("On commit")
             }
+
         }
     }
 }
