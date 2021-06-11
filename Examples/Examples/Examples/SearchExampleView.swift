@@ -17,9 +17,17 @@ import ArcGIS
 import ArcGISToolkit
 
 struct SearchExampleView: View {
+    @State var mapViewProxy: MapViewProxy?
     
     var body: some View {
-        Text("Hello Search")
+        ZStack (alignment: .topTrailing) {
+            MapView(map: Map(basemap: Basemap.imageryWithLabels()),
+                    proxy: $mapViewProxy
+            )
+            Search(proxy: $mapViewProxy)
+                .frame(width: 200, height: 132)
+                .padding()
+        }
     }
 }
 
