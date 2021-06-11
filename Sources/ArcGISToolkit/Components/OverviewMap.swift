@@ -33,7 +33,7 @@ public struct OverviewMap: View {
     /// at the product of mainGeoViewScale * scaleFactor.  The default is 25.0.
     public var scaleFactor: Double
     
-    /// The geometry of the extent Graphic displaying the main map view's extent.  Updating
+    /// The geometry of the extent Graphic displaying the main map view's extent. Updating
     /// this property will update the display of the OverviewMap.
     @State private var extentGeometry: Envelope?
     
