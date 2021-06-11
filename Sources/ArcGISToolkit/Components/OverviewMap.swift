@@ -37,7 +37,7 @@ public struct OverviewMap: View {
     /// this property will update the display of the OverviewMap.
     @State private var extentGeometry: Envelope?
     
-    /// The viewpoint of the OverviewMap's MapView.  Updating
+    /// The viewpoint of the OverviewMap's MapView. Updating
     /// this property will update the display of the OverviewMap.
     @State private var overviewMapViewpoint: Viewpoint?
     
