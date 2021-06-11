@@ -18,8 +18,8 @@ import Combine
 ***REMOVED***/ OverviewMap is a small, secondary MapView (sometimes called an "inset map"), superimposed on an existing MapView, which shows the visible extent of the main MapView.
 public struct OverviewMap: View {
 ***REMOVED******REMOVED***/ A binding to an optional `MapViewProxy`. When a proxy is
-***REMOVED******REMOVED***/   available, the binding will be updated by the view. The proxy is
-***REMOVED******REMOVED***/   necessary for accessing `MapView` functionality to get and set viewpoints.
+***REMOVED******REMOVED***/ available, the binding will be updated by the view. The proxy is
+***REMOVED******REMOVED***/ necessary for accessing `MapView` functionality to get and set viewpoints.
 ***REMOVED***public var proxy: Binding<MapViewProxy?>
 ***REMOVED***
 ***REMOVED******REMOVED***/ The Map displayed in the OverviewMap.
