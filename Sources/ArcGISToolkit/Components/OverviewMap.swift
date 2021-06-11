@@ -18,8 +18,8 @@ import ArcGIS
 /// OverviewMap is a small, secondary MapView (sometimes called an "inset map"), superimposed on an existing MapView, which shows the visible extent of the main MapView.
 public struct OverviewMap: View {
     /// A binding to an optional `MapViewProxy`. When a proxy is
-    ///   available, the binding will be updated by the view. The proxy is
-    ///   necessary for accessing `MapView` functionality to get and set viewpoints.
+    /// available, the binding will be updated by the view. The proxy is
+    /// necessary for accessing `MapView` functionality to get and set viewpoints.
     public var proxy: Binding<MapViewProxy?>
     
     /// The Map displayed in the OverviewMap.
