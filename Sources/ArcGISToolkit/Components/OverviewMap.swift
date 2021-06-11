@@ -30,7 +30,7 @@ public struct OverviewMap: View {
 ***REMOVED***public var extentSymbol: FillSymbol
 ***REMOVED***
 ***REMOVED******REMOVED***/ The factor to multiply the main GeoView's scale by. The OverviewMap will display
-***REMOVED******REMOVED***/ at the product of mainGeoViewScale * scaleFactor.  The default is 25.0.
+***REMOVED******REMOVED***/ at the product of mainGeoViewScale * scaleFactor. The default is `25.0`.
 ***REMOVED***public var scaleFactor: Double
 ***REMOVED***
 ***REMOVED******REMOVED***/ The geometry of the extent Graphic displaying the main map view's extent. Updating
