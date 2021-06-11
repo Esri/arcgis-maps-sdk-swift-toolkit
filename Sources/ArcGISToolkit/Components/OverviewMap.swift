@@ -37,7 +37,7 @@ public struct OverviewMap: View {
 ***REMOVED******REMOVED***/ this property will update the display of the OverviewMap.
 ***REMOVED***@State private var extentGeometry: Envelope?
 ***REMOVED***
-***REMOVED******REMOVED***/ The viewpoint of the OverviewMap's MapView.  Updating
+***REMOVED******REMOVED***/ The viewpoint of the OverviewMap's MapView. Updating
 ***REMOVED******REMOVED***/ this property will update the display of the OverviewMap.
 ***REMOVED***@State private var overviewMapViewpoint: Viewpoint?
 ***REMOVED***
