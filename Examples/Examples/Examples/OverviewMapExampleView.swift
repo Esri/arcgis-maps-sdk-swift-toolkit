@@ -32,7 +32,8 @@ struct OverviewMapExampleView: View {
                     .padding()
             }
             ZStack (alignment: .topTrailing) {
-                SceneView(scene: Scene(basemap: Basemap.imageryWithLabels()),
+                SceneView(
+                        scene: Scene(basemap: Basemap.imageryWithLabels()),
                         proxy: $sceneViewProxy
                 )
                 OverviewMap(proxy: sceneViewProxy)
