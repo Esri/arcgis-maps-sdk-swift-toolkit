@@ -93,7 +93,8 @@ public struct OverviewMap: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***extentGeometry = newExtent
-***REMOVED******REMOVED******REMOVED******REMOVED***overviewMapViewpoint = Viewpoint(center: newCenter,
+***REMOVED******REMOVED******REMOVED******REMOVED***overviewMapViewpoint = Viewpoint(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***center: newCenter,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** scale: centerAndScaleViewpoint.targetScale * scaleFactor)
 ***REMOVED******REMOVED***
 ***REMOVED***
