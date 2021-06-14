@@ -79,7 +79,8 @@ public struct OverviewMap: View {
             .border(Color.black, width: 1)
             .onReceive(proxy?.viewpointChangedPublisher
                         .receive(on: DispatchQueue.main)
-                        .throttle(for: .seconds(0.25),
+                        .throttle(
+                                 for: .seconds(0.25),
                                   scheduler: DispatchQueue.main,
                                   latest: true
                         )
