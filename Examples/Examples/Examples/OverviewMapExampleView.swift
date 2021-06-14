@@ -18,15 +18,26 @@ import Combine
 
 struct OverviewMapExampleView: View {
 ***REMOVED***@State private var mapViewProxy: MapViewProxy?
-***REMOVED***
+***REMOVED***@State private var sceneViewProxy: SceneViewProxy?
+
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***ZStack (alignment: .topTrailing) {
-***REMOVED******REMOVED******REMOVED***MapView(map: Map(basemap: Basemap.imageryWithLabels()),
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***proxy: $mapViewProxy
-***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***OverviewMap(proxy: $mapViewProxy)
-***REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 200, height: 132)
-***REMOVED******REMOVED******REMOVED******REMOVED***.padding()
+***REMOVED******REMOVED***VStack {
+***REMOVED******REMOVED******REMOVED***ZStack (alignment: .topTrailing) {
+***REMOVED******REMOVED******REMOVED******REMOVED***MapView(map: Map(basemap: Basemap.imageryWithLabels()),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***proxy: $mapViewProxy
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***OverviewMap(proxy: mapViewProxy)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 200, height: 132)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***ZStack (alignment: .topTrailing) {
+***REMOVED******REMOVED******REMOVED******REMOVED***SceneView(scene: Scene(basemap: Basemap.imageryWithLabels()),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***proxy: $sceneViewProxy
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***OverviewMap(proxy: sceneViewProxy)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 200, height: 132)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
