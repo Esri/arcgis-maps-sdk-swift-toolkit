@@ -79,7 +79,8 @@ public struct OverviewMap: View {
 ***REMOVED******REMOVED******REMOVED***.border(Color.black, width: 1)
 ***REMOVED******REMOVED******REMOVED***.onReceive(proxy?.viewpointChangedPublisher
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.receive(on: DispatchQueue.main)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.throttle(for: .seconds(0.25),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.throttle(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** for: .seconds(0.25),
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  scheduler: DispatchQueue.main,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  latest: true
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
