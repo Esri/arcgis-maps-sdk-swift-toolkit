@@ -19,13 +19,13 @@ import Combine
 struct OverviewMapExampleView: View {
 ***REMOVED***@State private var mapViewProxy: MapViewProxy?
 ***REMOVED***@State private var sceneViewProxy: SceneViewProxy?
-
+***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***VStack {
 ***REMOVED******REMOVED******REMOVED***ZStack (alignment: .topTrailing) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***MapView(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***map: Map(basemap: Basemap.imageryWithLabels()),
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***proxy: $mapViewProxy
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***map: Map(basemap: Basemap.imageryWithLabels()),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***proxy: $mapViewProxy
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***OverviewMap(proxy: mapViewProxy)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 200, height: 132)
@@ -33,8 +33,8 @@ struct OverviewMapExampleView: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***ZStack (alignment: .topTrailing) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***SceneView(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***scene: Scene(basemap: Basemap.imageryWithLabels()),
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***proxy: $sceneViewProxy
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***scene: Scene(basemap: Basemap.imageryWithLabels()),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***proxy: $sceneViewProxy
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***OverviewMap(proxy: sceneViewProxy)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 200, height: 132)

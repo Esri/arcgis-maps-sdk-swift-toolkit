@@ -47,18 +47,18 @@ public struct OverviewMap: View {
 ***REMOVED******REMOVED***/   - extentSymbol: The `FillSymbol` used to display the main `GeoView`'s extent.
 ***REMOVED******REMOVED***/   - scaleFactor: The scale factor used to calculate the `OverviewMap`'s scale.
 ***REMOVED***public init(
-***REMOVED******REMOVED******REMOVED***proxy: GeoViewProxy?,
-***REMOVED******REMOVED******REMOVED******REMOVED***map: Map = Map(basemap: Basemap.topographic()),
-***REMOVED******REMOVED******REMOVED******REMOVED***extentSymbol: FillSymbol = SimpleFillSymbol(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***style: .solid,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***color: .clear,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***outline: SimpleLineSymbol(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***style: .solid,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***color: .red,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***width: 1.0
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED***),
-***REMOVED******REMOVED******REMOVED******REMOVED***scaleFactor: Double = 25.0
+***REMOVED******REMOVED***proxy: GeoViewProxy?,
+***REMOVED******REMOVED***map: Map = Map(basemap: Basemap.topographic()),
+***REMOVED******REMOVED***extentSymbol: FillSymbol = SimpleFillSymbol(
+***REMOVED******REMOVED******REMOVED***style: .solid,
+***REMOVED******REMOVED******REMOVED***color: .clear,
+***REMOVED******REMOVED******REMOVED***outline: SimpleLineSymbol(
+***REMOVED******REMOVED******REMOVED******REMOVED***style: .solid,
+***REMOVED******REMOVED******REMOVED******REMOVED***color: .red,
+***REMOVED******REMOVED******REMOVED******REMOVED***width: 1.0
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***),
+***REMOVED******REMOVED***scaleFactor: Double = 25.0
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.proxy = proxy
 ***REMOVED******REMOVED***self.map = map
@@ -69,10 +69,10 @@ public struct OverviewMap: View {
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***ZStack {
 ***REMOVED******REMOVED******REMOVED***MapView(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***map: map,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint: $overviewMapViewpoint,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***graphicsOverlays: [GraphicsOverlay(graphics: [Graphic(geometry: extentGeometry,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  symbol: extentSymbol)])]
+***REMOVED******REMOVED******REMOVED******REMOVED***map: map,
+***REMOVED******REMOVED******REMOVED******REMOVED***viewpoint: $overviewMapViewpoint,
+***REMOVED******REMOVED******REMOVED******REMOVED***graphicsOverlays: [GraphicsOverlay(graphics: [Graphic(geometry: extentGeometry,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  symbol: extentSymbol)])]
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***.attributionTextHidden()
 ***REMOVED******REMOVED******REMOVED***.interactionModes([])
@@ -80,9 +80,9 @@ public struct OverviewMap: View {
 ***REMOVED******REMOVED******REMOVED***.onReceive(proxy?.viewpointChangedPublisher
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.receive(on: DispatchQueue.main)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.throttle(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** for: .seconds(0.25),
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  scheduler: DispatchQueue.main,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  latest: true
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for: .seconds(0.25),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***scheduler: DispatchQueue.main,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***latest: true
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.eraseToAnyPublisher() ?? Empty<Void, Never>().eraseToAnyPublisher()
 ***REMOVED******REMOVED******REMOVED***) {
@@ -94,8 +94,8 @@ public struct OverviewMap: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***extentGeometry = newExtent
 ***REMOVED******REMOVED******REMOVED******REMOVED***overviewMapViewpoint = Viewpoint(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***center: newCenter,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** scale: centerAndScaleViewpoint.targetScale * scaleFactor)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***center: newCenter,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***scale: centerAndScaleViewpoint.targetScale * scaleFactor)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
