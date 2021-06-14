@@ -68,7 +68,8 @@ public struct OverviewMap: View {
 ***REMOVED***
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***ZStack {
-***REMOVED******REMOVED******REMOVED***MapView(map: map,
+***REMOVED******REMOVED******REMOVED***MapView(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***map: map,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint: $overviewMapViewpoint,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***graphicsOverlays: [GraphicsOverlay(graphics: [Graphic(geometry: extentGeometry,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  symbol: extentSymbol)])]
