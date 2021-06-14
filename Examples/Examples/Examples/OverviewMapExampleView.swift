@@ -23,7 +23,8 @@ struct OverviewMapExampleView: View {
     var body: some View {
         VStack {
             ZStack (alignment: .topTrailing) {
-                MapView(map: Map(basemap: Basemap.imageryWithLabels()),
+                MapView(
+                        map: Map(basemap: Basemap.imageryWithLabels()),
                         proxy: $mapViewProxy
                 )
                 OverviewMap(proxy: mapViewProxy)
