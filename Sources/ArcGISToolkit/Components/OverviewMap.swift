@@ -93,7 +93,8 @@ public struct OverviewMap: View {
                 else { return }
                 
                 extentGeometry = newExtent
-                overviewMapViewpoint = Viewpoint(center: newCenter,
+                overviewMapViewpoint = Viewpoint(
+                        center: newCenter,
                                                  scale: centerAndScaleViewpoint.targetScale * scaleFactor)
             }
         }
