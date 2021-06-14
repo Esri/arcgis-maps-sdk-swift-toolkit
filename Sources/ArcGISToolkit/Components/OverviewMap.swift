@@ -25,11 +25,10 @@ public struct OverviewMap: View {
 ***REMOVED***public var map: Map
 ***REMOVED***
 ***REMOVED******REMOVED***/ The fill symbol used to display the main `GeoView` extent.
-***REMOVED******REMOVED***/ The default is a transparent `SimpleFillSymbol` with a red, 1 point width outline.
 ***REMOVED***public var extentSymbol: FillSymbol
 ***REMOVED***
 ***REMOVED******REMOVED***/ The factor to multiply the main `GeoView`'s scale by. The `OverviewMap` will display
-***REMOVED******REMOVED***/ at the product of mainGeoViewScale * scaleFactor. The default is `25.0`.
+***REMOVED******REMOVED***/ at the product of mainGeoViewScale * scaleFactor.
 ***REMOVED***public var scaleFactor: Double
 ***REMOVED***
 ***REMOVED******REMOVED***/ The geometry of the extent `Graphic` displaying the main `GeoView`'s extent. Updating
@@ -45,7 +44,9 @@ public struct OverviewMap: View {
 ***REMOVED******REMOVED***/   - proxy: The `GeoViewProxy` representing the main map.
 ***REMOVED******REMOVED***/   - map: The `Map` to display in the `OverviewMap`.
 ***REMOVED******REMOVED***/   - extentSymbol: The `FillSymbol` used to display the main `GeoView`'s extent.
+***REMOVED******REMOVED***/   The default is a transparent `SimpleFillSymbol` with a red, 1 point width outline.
 ***REMOVED******REMOVED***/   - scaleFactor: The scale factor used to calculate the `OverviewMap`'s scale.
+***REMOVED******REMOVED***/   The default is `25.0`.
 ***REMOVED***public init(
 ***REMOVED******REMOVED***proxy: GeoViewProxy?,
 ***REMOVED******REMOVED***map: Map = Map(basemap: Basemap.topographic()),
