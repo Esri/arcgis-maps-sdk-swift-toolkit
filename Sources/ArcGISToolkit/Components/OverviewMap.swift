@@ -47,18 +47,18 @@ public struct OverviewMap: View {
     ///   - extentSymbol: The `FillSymbol` used to display the main `GeoView`'s extent.
     ///   - scaleFactor: The scale factor used to calculate the `OverviewMap`'s scale.
     public init(
-            proxy: GeoViewProxy?,
-                map: Map = Map(basemap: Basemap.topographic()),
-                extentSymbol: FillSymbol = SimpleFillSymbol(
-                    style: .solid,
-                    color: .clear,
-                    outline: SimpleLineSymbol(
-                        style: .solid,
-                        color: .red,
-                        width: 1.0
-                    )
-                ),
-                scaleFactor: Double = 25.0
+        proxy: GeoViewProxy?,
+        map: Map = Map(basemap: Basemap.topographic()),
+        extentSymbol: FillSymbol = SimpleFillSymbol(
+            style: .solid,
+            color: .clear,
+            outline: SimpleLineSymbol(
+                style: .solid,
+                color: .red,
+                width: 1.0
+            )
+        ),
+        scaleFactor: Double = 25.0
     ) {
         self.proxy = proxy
         self.map = map
@@ -69,10 +69,10 @@ public struct OverviewMap: View {
     public var body: some View {
         ZStack {
             MapView(
-                    map: map,
-                    viewpoint: $overviewMapViewpoint,
-                    graphicsOverlays: [GraphicsOverlay(graphics: [Graphic(geometry: extentGeometry,
-                                                                          symbol: extentSymbol)])]
+                map: map,
+                viewpoint: $overviewMapViewpoint,
+                graphicsOverlays: [GraphicsOverlay(graphics: [Graphic(geometry: extentGeometry,
+                                                                      symbol: extentSymbol)])]
             )
             .attributionTextHidden()
             .interactionModes([])
@@ -80,9 +80,9 @@ public struct OverviewMap: View {
             .onReceive(proxy?.viewpointChangedPublisher
                         .receive(on: DispatchQueue.main)
                         .throttle(
-                                 for: .seconds(0.25),
-                                  scheduler: DispatchQueue.main,
-                                  latest: true
+                            for: .seconds(0.25),
+                            scheduler: DispatchQueue.main,
+                            latest: true
                         )
                         .eraseToAnyPublisher() ?? Empty<Void, Never>().eraseToAnyPublisher()
             ) {
@@ -94,8 +94,8 @@ public struct OverviewMap: View {
                 
                 extentGeometry = newExtent
                 overviewMapViewpoint = Viewpoint(
-                        center: newCenter,
-                                                 scale: centerAndScaleViewpoint.targetScale * scaleFactor)
+                    center: newCenter,
+                    scale: centerAndScaleViewpoint.targetScale * scaleFactor)
             }
         }
     }
