@@ -46,7 +46,8 @@ public struct OverviewMap: View {
 ***REMOVED******REMOVED***/   - map: The `Map` to display in the `OverviewMap`.
 ***REMOVED******REMOVED***/   - extentSymbol: The `FillSymbol` used to display the main `GeoView`'s extent.
 ***REMOVED******REMOVED***/   - scaleFactor: The scale factor used to calculate the `OverviewMap`'s scale.
-***REMOVED***public init(proxy: GeoViewProxy?,
+***REMOVED***public init(
+***REMOVED******REMOVED******REMOVED***proxy: GeoViewProxy?,
 ***REMOVED******REMOVED******REMOVED******REMOVED***map: Map = Map(basemap: Basemap.topographic()),
 ***REMOVED******REMOVED******REMOVED******REMOVED***extentSymbol: FillSymbol = SimpleFillSymbol(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***style: .solid,
