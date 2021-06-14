@@ -18,15 +18,26 @@ import ArcGISToolkit
 
 struct OverviewMapExampleView: View {
     @State private var mapViewProxy: MapViewProxy?
-    
+    @State private var sceneViewProxy: SceneViewProxy?
+
     var body: some View {
-        ZStack (alignment: .topTrailing) {
-            MapView(map: Map(basemap: Basemap.imageryWithLabels()),
-                    proxy: $mapViewProxy
-            )
-            OverviewMap(proxy: $mapViewProxy)
-                .frame(width: 200, height: 132)
-                .padding()
+        VStack {
+            ZStack (alignment: .topTrailing) {
+                MapView(map: Map(basemap: Basemap.imageryWithLabels()),
+                        proxy: $mapViewProxy
+                )
+                OverviewMap(proxy: mapViewProxy)
+                    .frame(width: 200, height: 132)
+                    .padding()
+            }
+            ZStack (alignment: .topTrailing) {
+                SceneView(scene: Scene(basemap: Basemap.imageryWithLabels()),
+                        proxy: $sceneViewProxy
+                )
+                OverviewMap(proxy: sceneViewProxy)
+                    .frame(width: 200, height: 132)
+                    .padding()
+            }
         }
     }
 }

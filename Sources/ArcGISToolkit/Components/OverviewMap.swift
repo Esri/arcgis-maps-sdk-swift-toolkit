@@ -15,17 +15,16 @@ import SwiftUI
 import Combine
 import ArcGIS
 
-/// `OverviewMap` is a small, secondary `MapView` (sometimes called an "inset map"), superimposed on an existing `MapView`, which shows the visible extent of the main `MapView`.
+/// `OverviewMap` is a small, secondary `MapView` (sometimes called an "inset map"), superimposed on an existing `GeoView`, which shows the visible extent of that `GeoView`.
 public struct OverviewMap: View {
-    /// A binding to an optional `MapViewProxy`. When a proxy is
-    /// available, the binding will be updated by the view. The proxy is
-    /// necessary for accessing `MapView` functionality to get and set viewpoints.
-    public var proxy: Binding<MapViewProxy?>
+    /// The `GeoViewProxy` representing the main `GeoView`. The proxy is
+    /// necessary for accessing `GeoView` functionality to get and set viewpoints.
+    public var proxy: GeoViewProxy?
     
     /// The `Map` displayed in the `OverviewMap`.
     public var map: Map
     
-    /// The fill symbol used to display the main `MapView` extent.
+    /// The fill symbol used to display the main `GeoView` extent.
     /// The default is a transparent `SimpleFillSymbol` with a red, 1 point width outline.
     public var extentSymbol: FillSymbol
     
@@ -33,7 +32,7 @@ public struct OverviewMap: View {
     /// at the product of mainGeoViewScale * scaleFactor. The default is `25.0`.
     public var scaleFactor: Double
     
-    /// The geometry of the extent `Graphic` displaying the main `MapView`'s extent. Updating
+    /// The geometry of the extent `Graphic` displaying the main `GeoView`'s extent. Updating
     /// this property will update the display of the `OverviewMap`.
     @State private var extentGeometry: Envelope?
     
@@ -43,11 +42,11 @@ public struct OverviewMap: View {
     
     /// Creates an `OverviewMap`.
     /// - Parameters:
-    ///   - proxy: The binding to an optional `MapViewProxy`.
+    ///   - proxy: The `GeoViewProxy` representing the main map.
     ///   - map: The `Map` to display in the `OverviewMap`.
-    ///   - extentSymbol: The `FillSymbol` used to display the main `MapView`'s extent.
+    ///   - extentSymbol: The `FillSymbol` used to display the main `GeoView`'s extent.
     ///   - scaleFactor: The scale factor used to calculate the `OverviewMap`'s scale.
-    public init(proxy: Binding<MapViewProxy?>,
+    public init(proxy: GeoViewProxy?,
                 map: Map = Map(basemap: Basemap.topographic()),
                 extentSymbol: FillSymbol = SimpleFillSymbol(
                     style: .solid,
@@ -76,7 +75,7 @@ public struct OverviewMap: View {
             .attributionTextHidden()
             .interactionModes([])
             .border(Color.black, width: 1)
-            .onReceive(proxy.wrappedValue?.viewpointChangedPublisher
+            .onReceive(proxy?.viewpointChangedPublisher
                         .receive(on: DispatchQueue.main)
                         .throttle(for: .seconds(0.25),
                                   scheduler: DispatchQueue.main,
@@ -84,8 +83,8 @@ public struct OverviewMap: View {
                         )
                         .eraseToAnyPublisher() ?? Empty<Void, Never>().eraseToAnyPublisher()
             ) {
-                guard let centerAndScaleViewpoint = proxy.wrappedValue?.currentViewpoint(type: .centerAndScale),
-                      let boundingGeometryViewpoint = proxy.wrappedValue?.currentViewpoint(type: .boundingGeometry),
+                guard let centerAndScaleViewpoint = proxy?.currentViewpoint(type: .centerAndScale),
+                      let boundingGeometryViewpoint = proxy?.currentViewpoint(type: .boundingGeometry),
                       let newExtent = boundingGeometryViewpoint.targetGeometry as? Envelope,
                       let newCenter = centerAndScaleViewpoint.targetGeometry as? Point
                 else { return }
