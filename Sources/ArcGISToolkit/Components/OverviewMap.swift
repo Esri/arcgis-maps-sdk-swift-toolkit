@@ -68,7 +68,8 @@ public struct OverviewMap: View {
     
     public var body: some View {
         ZStack {
-            MapView(map: map,
+            MapView(
+                    map: map,
                     viewpoint: $overviewMapViewpoint,
                     graphicsOverlays: [GraphicsOverlay(graphics: [Graphic(geometry: extentGeometry,
                                                                           symbol: extentSymbol)])]
