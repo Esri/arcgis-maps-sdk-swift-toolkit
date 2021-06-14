@@ -46,7 +46,8 @@ public struct OverviewMap: View {
     ///   - map: The `Map` to display in the `OverviewMap`.
     ///   - extentSymbol: The `FillSymbol` used to display the main `GeoView`'s extent.
     ///   - scaleFactor: The scale factor used to calculate the `OverviewMap`'s scale.
-    public init(proxy: GeoViewProxy?,
+    public init(
+            proxy: GeoViewProxy?,
                 map: Map = Map(basemap: Basemap.topographic()),
                 extentSymbol: FillSymbol = SimpleFillSymbol(
                     style: .solid,
