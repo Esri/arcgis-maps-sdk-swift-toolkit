@@ -32,7 +32,8 @@ struct OverviewMapExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***ZStack (alignment: .topTrailing) {
-***REMOVED******REMOVED******REMOVED******REMOVED***SceneView(scene: Scene(basemap: Basemap.imageryWithLabels()),
+***REMOVED******REMOVED******REMOVED******REMOVED***SceneView(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***scene: Scene(basemap: Basemap.imageryWithLabels()),
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***proxy: $sceneViewProxy
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***OverviewMap(proxy: sceneViewProxy)
