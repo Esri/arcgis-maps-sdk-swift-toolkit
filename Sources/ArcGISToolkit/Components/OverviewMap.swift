@@ -15,21 +15,22 @@ import SwiftUI
 import Combine
 import ArcGIS
 
-/// `OverviewMap` is a small, secondary `MapView` (sometimes called an "inset map"), superimposed on an existing `GeoView`, which shows the visible extent of that `GeoView`.
+/// `OverviewMap` is a small, secondary `MapView` (sometimes called an "inset map"), superimposed
+/// on an existing `GeoView`, which shows the visible extent of that `GeoView`.
 public struct OverviewMap: View {
     /// The `GeoViewProxy` representing the main `GeoView`. The proxy is
     /// necessary for accessing `GeoView` functionality to get and set viewpoints.
-    public var proxy: GeoViewProxy?
+    private(set) var proxy: GeoViewProxy?
     
     /// The `Map` displayed in the `OverviewMap`.
-    public var map: Map
+    private(set) var map: Map
     
     /// The fill symbol used to display the main `GeoView` extent.
-    public var extentSymbol: FillSymbol
+    private(set) var extentSymbol: FillSymbol
     
     /// The factor to multiply the main `GeoView`'s scale by. The `OverviewMap` will display
     /// at the product of mainGeoViewScale * scaleFactor.
-    public var scaleFactor: Double
+    private(set) var scaleFactor: Double
     
     /// The geometry of the extent `Graphic` displaying the main `GeoView`'s extent. Updating
     /// this property will update the display of the `OverviewMap`.
@@ -69,24 +70,26 @@ public struct OverviewMap: View {
     
     public var body: some View {
         ZStack {
+            let viewpointChangedPublisher: AnyPublisher<Void, Never> = proxy?.viewpointChangedPublisher
+                .receive(on: DispatchQueue.main)
+                .throttle(
+                    for: .seconds(0.25),
+                    scheduler: DispatchQueue.main,
+                    latest: true
+                )
+                .eraseToAnyPublisher() ?? Empty<Void, Never>().eraseToAnyPublisher()
+            
             MapView(
                 map: map,
                 viewpoint: $overviewMapViewpoint,
-                graphicsOverlays: [GraphicsOverlay(graphics: [Graphic(geometry: extentGeometry,
-                                                                      symbol: extentSymbol)])]
+                graphicsOverlays: [GraphicsOverlay(
+                                    graphics: [Graphic(geometry: extentGeometry,
+                                                       symbol: extentSymbol)])]
             )
             .attributionTextHidden()
             .interactionModes([])
             .border(Color.black, width: 1)
-            .onReceive(proxy?.viewpointChangedPublisher
-                        .receive(on: DispatchQueue.main)
-                        .throttle(
-                            for: .seconds(0.25),
-                            scheduler: DispatchQueue.main,
-                            latest: true
-                        )
-                        .eraseToAnyPublisher() ?? Empty<Void, Never>().eraseToAnyPublisher()
-            ) {
+            .onReceive(viewpointChangedPublisher) {
                 guard let centerAndScaleViewpoint = proxy?.currentViewpoint(type: .centerAndScale),
                       let newCenter = centerAndScaleViewpoint.targetGeometry as? Point
                 else { return }
@@ -94,7 +97,7 @@ public struct OverviewMap: View {
                 if let mapViewProxy = proxy as? MapViewProxy {
                     extentGeometry = mapViewProxy.visibleArea
                 }
-
+                
                 overviewMapViewpoint = Viewpoint(
                     center: newCenter,
                     scale: centerAndScaleViewpoint.targetScale * scaleFactor)
