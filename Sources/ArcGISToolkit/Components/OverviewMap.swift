@@ -33,7 +33,7 @@ public struct OverviewMap: View {
     
     /// The geometry of the extent `Graphic` displaying the main `GeoView`'s extent. Updating
     /// this property will update the display of the `OverviewMap`.
-    @State private var extentGeometry: Envelope?
+    @State private var extentGeometry: Geometry?
     
     /// The viewpoint of the `OverviewMap'`s `MapView`. Updating
     /// this property will update the display of the `OverviewMap`.
@@ -88,12 +88,13 @@ public struct OverviewMap: View {
                         .eraseToAnyPublisher() ?? Empty<Void, Never>().eraseToAnyPublisher()
             ) {
                 guard let centerAndScaleViewpoint = proxy?.currentViewpoint(type: .centerAndScale),
-                      let boundingGeometryViewpoint = proxy?.currentViewpoint(type: .boundingGeometry),
-                      let newExtent = boundingGeometryViewpoint.targetGeometry as? Envelope,
                       let newCenter = centerAndScaleViewpoint.targetGeometry as? Point
                 else { return }
                 
-                extentGeometry = newExtent
+                if let mapViewProxy = proxy as? MapViewProxy {
+                    extentGeometry = mapViewProxy.visibleArea
+                }
+
                 overviewMapViewpoint = Viewpoint(
                     center: newCenter,
                     scale: centerAndScaleViewpoint.targetScale * scaleFactor)
