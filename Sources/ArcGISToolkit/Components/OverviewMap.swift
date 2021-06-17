@@ -33,7 +33,7 @@ public struct OverviewMap: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ The geometry of the extent `Graphic` displaying the main `GeoView`'s extent. Updating
 ***REMOVED******REMOVED***/ this property will update the display of the `OverviewMap`.
-***REMOVED***@State private var extentGeometry: Envelope?
+***REMOVED***@State private var extentGeometry: Geometry?
 ***REMOVED***
 ***REMOVED******REMOVED***/ The viewpoint of the `OverviewMap'`s `MapView`. Updating
 ***REMOVED******REMOVED***/ this property will update the display of the `OverviewMap`.
@@ -88,12 +88,13 @@ public struct OverviewMap: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.eraseToAnyPublisher() ?? Empty<Void, Never>().eraseToAnyPublisher()
 ***REMOVED******REMOVED******REMOVED***) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***guard let centerAndScaleViewpoint = proxy?.currentViewpoint(type: .centerAndScale),
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  let boundingGeometryViewpoint = proxy?.currentViewpoint(type: .boundingGeometry),
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  let newExtent = boundingGeometryViewpoint.targetGeometry as? Envelope,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  let newCenter = centerAndScaleViewpoint.targetGeometry as? Point
 ***REMOVED******REMOVED******REMOVED******REMOVED***else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***extentGeometry = newExtent
+***REMOVED******REMOVED******REMOVED******REMOVED***if let mapViewProxy = proxy as? MapViewProxy {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***extentGeometry = mapViewProxy.visibleArea
+***REMOVED******REMOVED******REMOVED***
+
 ***REMOVED******REMOVED******REMOVED******REMOVED***overviewMapViewpoint = Viewpoint(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***center: newCenter,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***scale: centerAndScaleViewpoint.targetScale * scaleFactor)
