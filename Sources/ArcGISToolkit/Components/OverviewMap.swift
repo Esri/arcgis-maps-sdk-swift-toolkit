@@ -15,21 +15,22 @@
 import Combine
 ***REMOVED***
 
-***REMOVED***/ `OverviewMap` is a small, secondary `MapView` (sometimes called an "inset map"), superimposed on an existing `GeoView`, which shows the visible extent of that `GeoView`.
+***REMOVED***/ `OverviewMap` is a small, secondary `MapView` (sometimes called an "inset map"), superimposed
+***REMOVED***/ on an existing `GeoView`, which shows the visible extent of that `GeoView`.
 public struct OverviewMap: View {
 ***REMOVED******REMOVED***/ The `GeoViewProxy` representing the main `GeoView`. The proxy is
 ***REMOVED******REMOVED***/ necessary for accessing `GeoView` functionality to get and set viewpoints.
-***REMOVED***public var proxy: GeoViewProxy?
+***REMOVED***private(set) var proxy: GeoViewProxy?
 ***REMOVED***
 ***REMOVED******REMOVED***/ The `Map` displayed in the `OverviewMap`.
-***REMOVED***public var map: Map
+***REMOVED***private(set) var map: Map
 ***REMOVED***
 ***REMOVED******REMOVED***/ The fill symbol used to display the main `GeoView` extent.
-***REMOVED***public var extentSymbol: FillSymbol
+***REMOVED***private(set) var extentSymbol: FillSymbol
 ***REMOVED***
 ***REMOVED******REMOVED***/ The factor to multiply the main `GeoView`'s scale by. The `OverviewMap` will display
 ***REMOVED******REMOVED***/ at the product of mainGeoViewScale * scaleFactor.
-***REMOVED***public var scaleFactor: Double
+***REMOVED***private(set) var scaleFactor: Double
 ***REMOVED***
 ***REMOVED******REMOVED***/ The geometry of the extent `Graphic` displaying the main `GeoView`'s extent. Updating
 ***REMOVED******REMOVED***/ this property will update the display of the `OverviewMap`.
@@ -69,24 +70,26 @@ public struct OverviewMap: View {
 ***REMOVED***
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***ZStack {
+***REMOVED******REMOVED******REMOVED***let viewpointChangedPublisher: AnyPublisher<Void, Never> = proxy?.viewpointChangedPublisher
+***REMOVED******REMOVED******REMOVED******REMOVED***.receive(on: DispatchQueue.main)
+***REMOVED******REMOVED******REMOVED******REMOVED***.throttle(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for: .seconds(0.25),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***scheduler: DispatchQueue.main,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***latest: true
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***.eraseToAnyPublisher() ?? Empty<Void, Never>().eraseToAnyPublisher()
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***MapView(
 ***REMOVED******REMOVED******REMOVED******REMOVED***map: map,
 ***REMOVED******REMOVED******REMOVED******REMOVED***viewpoint: $overviewMapViewpoint,
-***REMOVED******REMOVED******REMOVED******REMOVED***graphicsOverlays: [GraphicsOverlay(graphics: [Graphic(geometry: extentGeometry,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  symbol: extentSymbol)])]
+***REMOVED******REMOVED******REMOVED******REMOVED***graphicsOverlays: [GraphicsOverlay(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***graphics: [Graphic(geometry: extentGeometry,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***   symbol: extentSymbol)])]
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***.attributionTextHidden()
 ***REMOVED******REMOVED******REMOVED***.interactionModes([])
 ***REMOVED******REMOVED******REMOVED***.border(Color.black, width: 1)
-***REMOVED******REMOVED******REMOVED***.onReceive(proxy?.viewpointChangedPublisher
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.receive(on: DispatchQueue.main)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.throttle(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for: .seconds(0.25),
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***scheduler: DispatchQueue.main,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***latest: true
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.eraseToAnyPublisher() ?? Empty<Void, Never>().eraseToAnyPublisher()
-***REMOVED******REMOVED******REMOVED***) {
+***REMOVED******REMOVED******REMOVED***.onReceive(viewpointChangedPublisher) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***guard let centerAndScaleViewpoint = proxy?.currentViewpoint(type: .centerAndScale),
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  let newCenter = centerAndScaleViewpoint.targetGeometry as? Point
 ***REMOVED******REMOVED******REMOVED******REMOVED***else { return ***REMOVED***
@@ -94,7 +97,7 @@ public struct OverviewMap: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if let mapViewProxy = proxy as? MapViewProxy {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***extentGeometry = mapViewProxy.visibleArea
 ***REMOVED******REMOVED******REMOVED***
-
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***overviewMapViewpoint = Viewpoint(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***center: newCenter,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***scale: centerAndScaleViewpoint.targetScale * scaleFactor)
