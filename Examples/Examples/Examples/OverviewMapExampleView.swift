@@ -22,7 +22,7 @@ struct OverviewMapExampleView: View {
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***ZStack (alignment: .topTrailing) {
 ***REMOVED******REMOVED******REMOVED***MapView(
-***REMOVED******REMOVED******REMOVED******REMOVED***map: Map(basemap: Basemap.imageryWithLabels()),
+***REMOVED******REMOVED******REMOVED******REMOVED***map: Map(basemap: .imageryWithLabels()),
 ***REMOVED******REMOVED******REMOVED******REMOVED***proxy: $mapViewProxy
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***OverviewMap(proxy: mapViewProxy)
