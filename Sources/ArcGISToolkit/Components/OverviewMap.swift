@@ -68,17 +68,19 @@ public struct OverviewMap: View {
         self.scaleFactor = scaleFactor
     }
     
+    private func viewpointChangedPublisher() -> AnyPublisher<Void, Never> {
+        proxy?.viewpointChangedPublisher
+            .receive(on: DispatchQueue.main)
+            .throttle(
+                for: .seconds(0.25),
+                scheduler: DispatchQueue.main,
+                latest: true
+            )
+            .eraseToAnyPublisher() ?? Empty<Void, Never>().eraseToAnyPublisher()
+    }
+
     public var body: some View {
         ZStack {
-            let viewpointChangedPublisher: AnyPublisher<Void, Never> = proxy?.viewpointChangedPublisher
-                .receive(on: DispatchQueue.main)
-                .throttle(
-                    for: .seconds(0.25),
-                    scheduler: DispatchQueue.main,
-                    latest: true
-                )
-                .eraseToAnyPublisher() ?? Empty<Void, Never>().eraseToAnyPublisher()
-            
             MapView(
                 map: map,
                 viewpoint: $overviewMapViewpoint,
@@ -89,7 +91,7 @@ public struct OverviewMap: View {
             .attributionTextHidden()
             .interactionModes([])
             .border(Color.black, width: 1)
-            .onReceive(viewpointChangedPublisher) {
+            .onReceive(viewpointChangedPublisher()) {
                 guard let centerAndScaleViewpoint = proxy?.currentViewpoint(type: .centerAndScale),
                       let newCenter = centerAndScaleViewpoint.targetGeometry as? Point
                 else { return }
