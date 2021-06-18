@@ -68,17 +68,19 @@ public struct OverviewMap: View {
 ***REMOVED******REMOVED***self.scaleFactor = scaleFactor
 ***REMOVED***
 ***REMOVED***
+***REMOVED***private func viewpointChangedPublisher() -> AnyPublisher<Void, Never> {
+***REMOVED******REMOVED***proxy?.viewpointChangedPublisher
+***REMOVED******REMOVED******REMOVED***.receive(on: DispatchQueue.main)
+***REMOVED******REMOVED******REMOVED***.throttle(
+***REMOVED******REMOVED******REMOVED******REMOVED***for: .seconds(0.25),
+***REMOVED******REMOVED******REMOVED******REMOVED***scheduler: DispatchQueue.main,
+***REMOVED******REMOVED******REMOVED******REMOVED***latest: true
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***.eraseToAnyPublisher() ?? Empty<Void, Never>().eraseToAnyPublisher()
+***REMOVED***
+
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***ZStack {
-***REMOVED******REMOVED******REMOVED***let viewpointChangedPublisher: AnyPublisher<Void, Never> = proxy?.viewpointChangedPublisher
-***REMOVED******REMOVED******REMOVED******REMOVED***.receive(on: DispatchQueue.main)
-***REMOVED******REMOVED******REMOVED******REMOVED***.throttle(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for: .seconds(0.25),
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***scheduler: DispatchQueue.main,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***latest: true
-***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED***.eraseToAnyPublisher() ?? Empty<Void, Never>().eraseToAnyPublisher()
-***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***MapView(
 ***REMOVED******REMOVED******REMOVED******REMOVED***map: map,
 ***REMOVED******REMOVED******REMOVED******REMOVED***viewpoint: $overviewMapViewpoint,
@@ -89,7 +91,7 @@ public struct OverviewMap: View {
 ***REMOVED******REMOVED******REMOVED***.attributionTextHidden()
 ***REMOVED******REMOVED******REMOVED***.interactionModes([])
 ***REMOVED******REMOVED******REMOVED***.border(Color.black, width: 1)
-***REMOVED******REMOVED******REMOVED***.onReceive(viewpointChangedPublisher) {
+***REMOVED******REMOVED******REMOVED***.onReceive(viewpointChangedPublisher()) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***guard let centerAndScaleViewpoint = proxy?.currentViewpoint(type: .centerAndScale),
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  let newCenter = centerAndScaleViewpoint.targetGeometry as? Point
 ***REMOVED******REMOVED******REMOVED******REMOVED***else { return ***REMOVED***
