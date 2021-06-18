@@ -50,7 +50,7 @@ public struct OverviewMap: View {
 ***REMOVED******REMOVED***/   The default is `25.0`.
 ***REMOVED***public init(
 ***REMOVED******REMOVED***proxy: GeoViewProxy?,
-***REMOVED******REMOVED***map: Map = Map(basemap: Basemap.topographic()),
+***REMOVED******REMOVED***map: Map = Map(basemap: .topographic()),
 ***REMOVED******REMOVED***extentSymbol: FillSymbol = SimpleFillSymbol(
 ***REMOVED******REMOVED******REMOVED***style: .solid,
 ***REMOVED******REMOVED******REMOVED***color: .clear,
