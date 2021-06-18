@@ -68,7 +68,7 @@ public struct OverviewMap: View {
 ***REMOVED******REMOVED***self.scaleFactor = scaleFactor
 ***REMOVED***
 ***REMOVED***
-***REMOVED***private func viewpointChangedPublisher() -> AnyPublisher<Void, Never> {
+***REMOVED***private var viewpointChangedPublisher: AnyPublisher<Void, Never> {
 ***REMOVED******REMOVED***proxy?.viewpointChangedPublisher
 ***REMOVED******REMOVED******REMOVED***.receive(on: DispatchQueue.main)
 ***REMOVED******REMOVED******REMOVED***.throttle(
@@ -91,7 +91,7 @@ public struct OverviewMap: View {
 ***REMOVED******REMOVED******REMOVED***.attributionTextHidden()
 ***REMOVED******REMOVED******REMOVED***.interactionModes([])
 ***REMOVED******REMOVED******REMOVED***.border(Color.black, width: 1)
-***REMOVED******REMOVED******REMOVED***.onReceive(viewpointChangedPublisher()) {
+***REMOVED******REMOVED******REMOVED***.onReceive(viewpointChangedPublisher) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***guard let centerAndScaleViewpoint = proxy?.currentViewpoint(type: .centerAndScale),
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  let newCenter = centerAndScaleViewpoint.targetGeometry as? Point
 ***REMOVED******REMOVED******REMOVED******REMOVED***else { return ***REMOVED***
