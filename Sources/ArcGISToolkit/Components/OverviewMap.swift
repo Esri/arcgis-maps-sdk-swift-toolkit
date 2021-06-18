@@ -102,7 +102,8 @@ public struct OverviewMap: View {
                 
                 overviewMapViewpoint = Viewpoint(
                     center: newCenter,
-                    scale: centerAndScaleViewpoint.targetScale * scaleFactor)
+                    scale: centerAndScaleViewpoint.targetScale * scaleFactor
+                )
             }
         }
     }
