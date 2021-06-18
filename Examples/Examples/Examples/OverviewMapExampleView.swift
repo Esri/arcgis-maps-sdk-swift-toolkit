@@ -22,7 +22,7 @@ struct OverviewMapExampleView: View {
     var body: some View {
         ZStack (alignment: .topTrailing) {
             MapView(
-                map: Map(basemap: Basemap.imageryWithLabels()),
+                map: Map(basemap: .imageryWithLabels()),
                 proxy: $mapViewProxy
             )
             OverviewMap(proxy: mapViewProxy)
