@@ -50,7 +50,7 @@ public struct OverviewMap: View {
     ///   The default is `25.0`.
     public init(
         proxy: GeoViewProxy?,
-        map: Map = Map(basemap: Basemap.topographic()),
+        map: Map = Map(basemap: .topographic()),
         extentSymbol: FillSymbol = SimpleFillSymbol(
             style: .solid,
             color: .clear,
