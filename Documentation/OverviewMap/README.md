@@ -35,5 +35,5 @@ For an `OverviewMap` on a `SceneView`, the center point of the `SceneView`'s `cu
 // Waiting on final implementation details
 ```
 
-To see it in action, try out the [Examples](../../Examples) and refer to [OverviewMap.swift](../../Examples/ArcGISToolkitExamples/OverviewMap.swift) in the project.
+To see it in action, try out the [Examples](../../Examples) and refer to [OverviewMapExampleView.swift](../../Examples/Examples/OverviewMapExampleView.swift) in the project.
 
