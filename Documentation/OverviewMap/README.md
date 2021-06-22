@@ -10,16 +10,16 @@
 
 OverviewMap:
 
-- Displays a representation of the current `Viewpoint` for a connected `GeoView`
+- Displays a representation of the current `Viewpoint` for a connected `GeoView`.
 - Supports a configurable scaling factor for setting the overview map's zoom level relative to the connected view.
-- Supports a configurable symbol for visualizing the current `Viewpoint` representation (a `FillSymbol` for connected `MapView`s; a `MarkerSymbol` for connected `SceneView`s).
+- Supports a configurable symbol for visualizing the current `Viewpoint` representation (a `FillSymbol` for a connected `MapView`; a `MarkerSymbol` for a connected `SceneView`).
 
 ## Key properties
 
 `OverviewMap` has the following customizable properties:
 
 - `geoView` - References the connected `MapView` or `SceneView`
-- `symbol` - Defines the symbol used to visualize the current `Viewpoint` . This is a red rectangle by default for `MapView`s; for `SceneView`s, this is a red cross.
+- `symbol` - Defines the symbol used to visualize the current `Viewpoint` . This is a red rectangle by default for a `MapView`; for a `SceneView`, this is a red cross.
 - `scaleFactor` - Defines the scale of the `OverviewMap` relative to the scale of the connected `GeoView`. The default is 25.
 - `map` - the `Map` displayed in the `OverviewMap`.  For example, you can use `map` to change the base map displayed by the `OverviewMap`.
 
