@@ -69,7 +69,7 @@
 			children = (
 				E4F9BC98265EFCAF001280FF /* OverviewMapExampleView.swift */,
 			);
-			path = Examples;
+			name = Examples;
 			sourceTree = "<group>";
 		***REMOVED***;
 		E47ABE372652FE0900FD2FE3 = {
