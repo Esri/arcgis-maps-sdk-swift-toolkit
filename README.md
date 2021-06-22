@@ -12,7 +12,7 @@ To use Toolkit in your project:
 
 ## Toolkit Components
 
-* TBD
+* [OverviewMap](./Documentation/OverviewMap/README.md)
 
 ## Requirements
 * ArcGIS Runtime SDK for Swift
