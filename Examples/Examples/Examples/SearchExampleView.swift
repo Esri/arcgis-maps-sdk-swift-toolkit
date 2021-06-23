@@ -17,16 +17,14 @@ import Combine
 ***REMOVED***Toolkit
 
 struct SearchExampleView: View {
-***REMOVED***@State var mapViewProxy: MapViewProxy?
-***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***ZStack (alignment: .topTrailing) {
-***REMOVED******REMOVED******REMOVED***MapView(map: Map(basemap: Basemap.imageryWithLabels()),
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***proxy: $mapViewProxy
-***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***Search(proxy: $mapViewProxy)
-***REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 200, height: 132)
-***REMOVED******REMOVED******REMOVED******REMOVED***.padding()
+***REMOVED******REMOVED******REMOVED***MapViewReader { proxy in 
+***REMOVED******REMOVED******REMOVED******REMOVED***MapView(map: Map(basemap: Basemap.imageryWithLabels()))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***SearchView(proxy: proxy)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 200, height: 132)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***

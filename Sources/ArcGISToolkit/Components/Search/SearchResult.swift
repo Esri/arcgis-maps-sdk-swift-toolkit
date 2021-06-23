@@ -1,0 +1,43 @@
+***REMOVED***.
+
+import UIKit.UIImage
+***REMOVED***
+
+***REMOVED*** Licensed under the Apache License, Version 2.0 (the "License");
+***REMOVED*** you may not use this file except in compliance with the License.
+***REMOVED*** You may obtain a copy of the License at
+***REMOVED*** http:***REMOVED***www.apache.org/licenses/LICENSE-2.0
+
+***REMOVED*** Unless required by applicable law or agreed to in writing, software
+***REMOVED*** distributed under the License is distributed on an "AS IS" BASIS,
+***REMOVED*** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+***REMOVED*** See the License for the specific language governing permissions and
+***REMOVED*** limitations under the License.
+
+***REMOVED***/ Wraps a search result for display.
+public struct SearchResult {
+***REMOVED***
+***REMOVED******REMOVED***/ Title that should be shown whenever a result is displayed.
+***REMOVED***var displayTitle: String
+***REMOVED***
+***REMOVED******REMOVED***/ Should be shown as a subtitle wherever results are shown.
+***REMOVED***var displaySubtitle: String?
+***REMOVED***
+***REMOVED******REMOVED***/ Image, in the native platform's format, for the result. This should be the marker that would be
+***REMOVED******REMOVED***/ shown on the map, and also shown in the UI. This property is available for convenience so the
+***REMOVED******REMOVED***/ UI doesn't have to worry about whether the GeoElement is a graphic or a feature when displaying
+***REMOVED******REMOVED***/ the icon in the UI.
+***REMOVED***var markerImage: UIImage?
+***REMOVED***
+***REMOVED******REMOVED***/ Reference to the search source that created this result.
+***REMOVED***var owningSource: SearchSourceProtocol
+***REMOVED***
+***REMOVED******REMOVED***/ For locator results, should be the graphic that was used to display the result on the map.
+***REMOVED******REMOVED***/ For feature layer results, should be the result feature. Can be null depending on the type of the
+***REMOVED******REMOVED***/ result, and can have GeoElements without a defined geometry.
+***REMOVED***var geoElement: GeoElement?
+***REMOVED***
+***REMOVED******REMOVED***/ The viewpoint to be used when the view zooms to a selected result. This property can be `nil`
+***REMOVED******REMOVED***/ because not all valid results will have a geometry. E.g. feature results from non-spatial features.
+***REMOVED***var selectionViewpoint: Viewpoint?
+***REMOVED***
