@@ -12,6 +12,7 @@
 ***REMOVED*** limitations under the License.
 
 ***REMOVED***
+import Foundation
 
 ***REMOVED***/ Defines the contract for a search result provider.
 public protocol SearchSourceProtocol {

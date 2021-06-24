@@ -19,11 +19,13 @@ import Combine
 struct SearchExampleView: View {
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***ZStack (alignment: .topTrailing) {
-***REMOVED******REMOVED******REMOVED***MapViewReader { proxy in 
+***REMOVED******REMOVED******REMOVED***MapViewReader { proxy in
 ***REMOVED******REMOVED******REMOVED******REMOVED***MapView(map: Map(basemap: Basemap.imageryWithLabels()))
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***SearchView(proxy: proxy)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 200, height: 132)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
+***REMOVED******REMOVED******REMOVED******REMOVED***SearchView(proxy: proxy,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***   searchViewModel: SearchViewModel()
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 300, height: 132)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
