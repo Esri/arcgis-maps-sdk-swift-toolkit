@@ -1,5 +1,16 @@
 // Copyright 2021 Esri.
 
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// http://www.apache.org/licenses/LICENSE-2.0
+
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 import UIKit.UIImage
 import ArcGIS
 
@@ -25,7 +36,7 @@ public struct SearchResult {
     
     /// Image, in the native platform's format, for the result. This should be the marker that would be
     /// shown on the map, and also shown in the UI. This property is available for convenience so the
-    /// UI doesn't have to worry about whether the GeoElement is a graphic or a feature when displaying
+    /// UI doesn't have to worry about whether the `GeoElement` is a graphic or a feature when displaying
     /// the icon in the UI.
     var markerImage: UIImage?
     
@@ -34,7 +45,7 @@ public struct SearchResult {
     
     /// For locator results, should be the graphic that was used to display the result on the map.
     /// For feature layer results, should be the result feature. Can be null depending on the type of the
-    /// result, and can have GeoElements without a defined geometry.
+    /// result, and can have `GeoElement`s without a defined geometry.
     var geoElement: GeoElement?
     
     /// The viewpoint to be used when the view zooms to a selected result. This property can be `nil`
