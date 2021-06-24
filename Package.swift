@@ -18,8 +18,8 @@ import PackageDescription
 let package = Package(
     name: "arcgis-runtime-toolkit-swift",
     platforms: [
-        .iOS(.v14),
-        .macOS(.v11)
+        .iOS("15"),
+        .macOS("12")
     ],
     products: [
         .library(

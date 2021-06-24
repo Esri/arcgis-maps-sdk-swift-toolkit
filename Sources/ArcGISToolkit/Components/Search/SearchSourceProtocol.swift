@@ -12,6 +12,7 @@
 // limitations under the License.
 
 import ArcGIS
+import Foundation
 
 /// Defines the contract for a search result provider.
 public protocol SearchSourceProtocol {

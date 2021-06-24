@@ -19,11 +19,13 @@ import ArcGISToolkit
 struct SearchExampleView: View {
     var body: some View {
         ZStack (alignment: .topTrailing) {
-            MapViewReader { proxy in 
+            MapViewReader { proxy in
                 MapView(map: Map(basemap: Basemap.imageryWithLabels()))
-//                SearchView(proxy: proxy)
-//                    .frame(width: 200, height: 132)
-//                    .padding()
+                SearchView(proxy: proxy,
+                           searchViewModel: SearchViewModel()
+                )
+                    .frame(width: 300, height: 132)
+                    .padding()
             }
         }
     }
