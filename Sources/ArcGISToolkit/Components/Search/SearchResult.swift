@@ -26,7 +26,20 @@ import UIKit.UIImage
 ***REMOVED*** limitations under the License.
 
 ***REMOVED***/ Wraps a search result for display.
-public struct SearchResult {
+public class SearchResult {
+***REMOVED***public init(displayTitle: String,
+***REMOVED******REMOVED******REMOVED******REMOVED***displaySubtitle: String? = nil,
+***REMOVED******REMOVED******REMOVED******REMOVED***markerImage: UIImage? = nil,
+***REMOVED******REMOVED******REMOVED******REMOVED***owningSource: SearchSourceProtocol,
+***REMOVED******REMOVED******REMOVED******REMOVED***geoElement: GeoElement? = nil,
+***REMOVED******REMOVED******REMOVED******REMOVED***selectionViewpoint: Viewpoint? = nil) {
+***REMOVED******REMOVED***self.displayTitle = displayTitle
+***REMOVED******REMOVED***self.displaySubtitle = displaySubtitle
+***REMOVED******REMOVED***self.markerImage = markerImage
+***REMOVED******REMOVED***self.owningSource = owningSource
+***REMOVED******REMOVED***self.geoElement = geoElement
+***REMOVED******REMOVED***self.selectionViewpoint = selectionViewpoint
+***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Title that should be shown whenever a result is displayed.
 ***REMOVED***var displayTitle: String

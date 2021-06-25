@@ -11,6 +11,7 @@
 ***REMOVED*** See the License for the specific language governing permissions and
 ***REMOVED*** limitations under the License.
 
+import Swift
 ***REMOVED***
 ***REMOVED***
 
@@ -109,9 +110,19 @@ public class SearchViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ - Parameter restrictToArea: If true, the search is restricted to results within the extent
 ***REMOVED******REMOVED***/ of the `queryArea` property. Behavior when called with `restrictToArea` set to true
 ***REMOVED******REMOVED***/ when the `queryArea` property is null, a line, a point, or an empty geometry is undefined.
-***REMOVED***func commitSearch(_ restrictToArea: Bool) async {
-***REMOVED******REMOVED***guard !currentQuery.isEmpty else { return ***REMOVED***
+***REMOVED***func commitSearch(_ restrictToArea: Bool) async throws -> [SearchResult] {
+***REMOVED******REMOVED***guard !currentQuery.isEmpty else { return [] ***REMOVED***
 ***REMOVED******REMOVED***print("SearchViewModel.commitSearch: \(currentQuery)")
+
+***REMOVED******REMOVED***var results = [SearchResult]()
+***REMOVED******REMOVED***for searchSource in sources {
+***REMOVED******REMOVED******REMOVED***let searchResults = try await searchSource.search(currentQuery,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  area: restrictToArea ? queryArea : nil,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  cancellationToken: ""
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***results.append(contentsOf: searchResults)
+***REMOVED***
+***REMOVED******REMOVED***return results
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Updates suggestions list asynchronously. View should take care to cancel previous suggestion

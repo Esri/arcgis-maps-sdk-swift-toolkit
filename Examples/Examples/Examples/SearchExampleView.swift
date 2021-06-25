@@ -17,14 +17,15 @@ import Combine
 ***REMOVED***Toolkit
 
 struct SearchExampleView: View {
+***REMOVED***let searchViewModel = SearchViewModel(
+***REMOVED******REMOVED***sources: [LocatorSearchSource(),
+***REMOVED******REMOVED******REMOVED******REMOVED***  LocatorSearchSource()]
+***REMOVED***)
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***ZStack (alignment: .topTrailing) {
 ***REMOVED******REMOVED******REMOVED***MapViewReader { proxy in
 ***REMOVED******REMOVED******REMOVED******REMOVED***MapView(map: Map(basemap: Basemap.imageryWithLabels()))
-***REMOVED******REMOVED******REMOVED******REMOVED***SearchView(proxy: proxy,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***   searchViewModel: SearchViewModel()
-***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 300, height: 132)
+***REMOVED******REMOVED******REMOVED******REMOVED***SearchView(proxy: proxy, searchViewModel:searchViewModel)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
 ***REMOVED******REMOVED***
 ***REMOVED***

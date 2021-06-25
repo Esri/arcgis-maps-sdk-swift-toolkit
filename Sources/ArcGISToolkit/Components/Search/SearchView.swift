@@ -37,7 +37,7 @@ public struct SearchView: View {
 ***REMOVED******REMOVED***/ search result changes. Additionally, the view's current center and extent will be automatically
 ***REMOVED******REMOVED***/ provided to locators as parameters.
 ***REMOVED***var proxy: GeoViewProxy
-
+***REMOVED***
 ***REMOVED******REMOVED***/ The view model used by the view. The `ViewModel` manages state and handles the activity of
 ***REMOVED******REMOVED***/ searching. The view observes `ViewModel` for changes in state. The view calls methods on
 ***REMOVED******REMOVED***/ `ViewModel` in response to user action. The `ViewModel` is created automatically by the
@@ -69,11 +69,14 @@ public struct SearchView: View {
 ***REMOVED***
 ***REMOVED***@State
 ***REMOVED******REMOVED***/ Indicates that the `SearchViewModel` should start a search.
-***REMOVED***private var commitSearch: Bool = false
+***REMOVED***private var shouldCommitSearch: Bool = false
 ***REMOVED***
 ***REMOVED***@State
 ***REMOVED******REMOVED***/ Indicates that the geoView's viewpoint has changed since the last search.
 ***REMOVED***private var viewpointChanged: Bool = false
+***REMOVED***
+***REMOVED***@State
+***REMOVED***private var result: Result<[SearchResult], Error> = .success([])
 ***REMOVED***
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***VStack (alignment: .center) {
@@ -81,28 +84,58 @@ public struct SearchView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  text: $searchViewModel.currentQuery) { editing in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** For when editing state changes (becomes/looses firstResponder)
 ***REMOVED******REMOVED*** onCommit: {
-***REMOVED******REMOVED******REMOVED******REMOVED***commitSearch = true
+***REMOVED******REMOVED******REMOVED******REMOVED***shouldCommitSearch.toggle()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.esriDeleteTextButton(text: $searchViewModel.currentQuery)
-***REMOVED******REMOVED******REMOVED***.esriSearchButton(performSearch: $commitSearch)
+***REMOVED******REMOVED******REMOVED***.esriSearchButton(performSearch: $shouldCommitSearch)
 ***REMOVED******REMOVED******REMOVED***.esriBorder()
 ***REMOVED******REMOVED******REMOVED***if enableRepeatSearchHereButton, viewpointChanged {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Button("Search Here") {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpointChanged = false
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***commitSearch = true
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***shouldCommitSearch.toggle()
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.esriBorder()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***switch result {
+***REMOVED******REMOVED******REMOVED***case .success(let results):
+***REMOVED******REMOVED******REMOVED******REMOVED***if results.count > 0 {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***List(results) { result in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***VStack (alignment: .leading){
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(result.displayTitle)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.callout)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let subtitle = result.displaySubtitle {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(subtitle)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.caption)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** TODO: Figure out better styling for list
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** TODO: continue fleshing out SearchViewModel and LocatorSearchSource/SmartSearchSource
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.listStyle(DefaultListStyle())
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***case .failure(let error):
+***REMOVED******REMOVED******REMOVED******REMOVED***Text("Error occurred: \(error.localizedDescription)")
+***REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.task(id: searchViewModel.currentQuery) {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** For when user types a new character
+***REMOVED******REMOVED******REMOVED***guard !searchViewModel.currentQuery.isEmpty else {
+***REMOVED******REMOVED******REMOVED******REMOVED***result = .success([])
+***REMOVED******REMOVED******REMOVED******REMOVED***return
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***await searchViewModel.updateSuggestions(nil)
 ***REMOVED***
-***REMOVED******REMOVED***.task(id: commitSearch) {
+***REMOVED******REMOVED***.task(id: shouldCommitSearch) {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** For when user commits changes (hits Enter/Search button)
-***REMOVED******REMOVED******REMOVED***guard commitSearch else { return ***REMOVED***
-***REMOVED******REMOVED******REMOVED***commitSearch = false
-***REMOVED******REMOVED******REMOVED***await searchViewModel.commitSearch(true)
+***REMOVED******REMOVED******REMOVED***print("geocoding...")
+***REMOVED******REMOVED******REMOVED***result = await Result { try await searchViewModel.commitSearch(true) ***REMOVED***
 ***REMOVED***
 ***REMOVED***
+***REMOVED***
+
+***REMOVED*** MARK: Extensions
+
+extension SearchResult: Identifiable {
+***REMOVED***public var id: ObjectIdentifier { ObjectIdentifier(self) ***REMOVED***
 ***REMOVED***
