@@ -11,6 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import Swift
 import SwiftUI
 import ArcGIS
 
@@ -109,9 +110,19 @@ public class SearchViewModel: ObservableObject {
     /// - Parameter restrictToArea: If true, the search is restricted to results within the extent
     /// of the `queryArea` property. Behavior when called with `restrictToArea` set to true
     /// when the `queryArea` property is null, a line, a point, or an empty geometry is undefined.
-    func commitSearch(_ restrictToArea: Bool) async {
-        guard !currentQuery.isEmpty else { return }
+    func commitSearch(_ restrictToArea: Bool) async throws -> [SearchResult] {
+        guard !currentQuery.isEmpty else { return [] }
         print("SearchViewModel.commitSearch: \(currentQuery)")
+
+        var results = [SearchResult]()
+        for searchSource in sources {
+            let searchResults = try await searchSource.search(currentQuery,
+                                                              area: restrictToArea ? queryArea : nil,
+                                                              cancellationToken: ""
+            )
+            results.append(contentsOf: searchResults)
+        }
+        return results
     }
     
     /// Updates suggestions list asynchronously. View should take care to cancel previous suggestion

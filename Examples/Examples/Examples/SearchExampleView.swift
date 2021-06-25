@@ -17,14 +17,15 @@ import ArcGIS
 import ArcGISToolkit
 
 struct SearchExampleView: View {
+    let searchViewModel = SearchViewModel(
+        sources: [LocatorSearchSource(),
+                  LocatorSearchSource()]
+    )
     var body: some View {
         ZStack (alignment: .topTrailing) {
             MapViewReader { proxy in
                 MapView(map: Map(basemap: Basemap.imageryWithLabels()))
-                SearchView(proxy: proxy,
-                           searchViewModel: SearchViewModel()
-                )
-                    .frame(width: 300, height: 132)
+                SearchView(proxy: proxy, searchViewModel:searchViewModel)
                     .padding()
             }
         }
