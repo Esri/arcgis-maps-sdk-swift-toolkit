@@ -26,7 +26,20 @@ import ArcGIS
 // limitations under the License.
 
 /// Wraps a search result for display.
-public struct SearchResult {
+public class SearchResult {
+    public init(displayTitle: String,
+                displaySubtitle: String? = nil,
+                markerImage: UIImage? = nil,
+                owningSource: SearchSourceProtocol,
+                geoElement: GeoElement? = nil,
+                selectionViewpoint: Viewpoint? = nil) {
+        self.displayTitle = displayTitle
+        self.displaySubtitle = displaySubtitle
+        self.markerImage = markerImage
+        self.owningSource = owningSource
+        self.geoElement = geoElement
+        self.selectionViewpoint = selectionViewpoint
+    }
     
     /// Title that should be shown whenever a result is displayed.
     var displayTitle: String

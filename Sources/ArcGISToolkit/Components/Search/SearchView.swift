@@ -37,7 +37,7 @@ public struct SearchView: View {
     /// search result changes. Additionally, the view's current center and extent will be automatically
     /// provided to locators as parameters.
     var proxy: GeoViewProxy
-
+    
     /// The view model used by the view. The `ViewModel` manages state and handles the activity of
     /// searching. The view observes `ViewModel` for changes in state. The view calls methods on
     /// `ViewModel` in response to user action. The `ViewModel` is created automatically by the
@@ -69,11 +69,14 @@ public struct SearchView: View {
     
     @State
     /// Indicates that the `SearchViewModel` should start a search.
-    private var commitSearch: Bool = false
+    private var shouldCommitSearch: Bool = false
     
     @State
     /// Indicates that the geoView's viewpoint has changed since the last search.
     private var viewpointChanged: Bool = false
+    
+    @State
+    private var result: Result<[SearchResult], Error> = .success([])
     
     public var body: some View {
         VStack (alignment: .center) {
@@ -81,28 +84,58 @@ public struct SearchView: View {
                       text: $searchViewModel.currentQuery) { editing in
                 // For when editing state changes (becomes/looses firstResponder)
             } onCommit: {
-                commitSearch = true
+                shouldCommitSearch.toggle()
             }
             .esriDeleteTextButton(text: $searchViewModel.currentQuery)
-            .esriSearchButton(performSearch: $commitSearch)
+            .esriSearchButton(performSearch: $shouldCommitSearch)
             .esriBorder()
             if enableRepeatSearchHereButton, viewpointChanged {
                 Button("Search Here") {
                     viewpointChanged = false
-                    commitSearch = true
+                    shouldCommitSearch.toggle()
                 }
                 .esriBorder()
+            }
+            switch result {
+            case .success(let results):
+                if results.count > 0 {
+                    List(results) { result in
+                        VStack (alignment: .leading){
+                            Text(result.displayTitle)
+                                .font(.callout)
+                            if let subtitle = result.displaySubtitle {
+                                Text(subtitle)
+                                    .font(.caption)
+                            }
+                        }
+                    }
+                    // TODO: Figure out better styling for list
+                    // TODO: continue fleshing out SearchViewModel and LocatorSearchSource/SmartSearchSource
+//                    .listStyle(DefaultListStyle())
+                }
+            case .failure(let error):
+                Text("Error occurred: \(error.localizedDescription)")
+                Spacer()
             }
         }
         .task(id: searchViewModel.currentQuery) {
             // For when user types a new character
+            guard !searchViewModel.currentQuery.isEmpty else {
+                result = .success([])
+                return
+            }
             await searchViewModel.updateSuggestions(nil)
         }
-        .task(id: commitSearch) {
+        .task(id: shouldCommitSearch) {
             // For when user commits changes (hits Enter/Search button)
-            guard commitSearch else { return }
-            commitSearch = false
-            await searchViewModel.commitSearch(true)
+            print("geocoding...")
+            result = await Result { try await searchViewModel.commitSearch(true) }
         }
     }
+}
+
+// MARK: Extensions
+
+extension SearchResult: Identifiable {
+    public var id: ObjectIdentifier { ObjectIdentifier(self) }
 }
