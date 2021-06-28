@@ -51,12 +51,12 @@ public struct SearchView: View {
 ***REMOVED******REMOVED***/ document automatically.
 ***REMOVED***var enableAutomaticConfiguration: Bool = true
 ***REMOVED***
-***REMOVED***@State
 ***REMOVED******REMOVED***/ Determines whether a button that allows the user to repeat a search with a spatial constraint
 ***REMOVED******REMOVED***/ is displayed automatically. Set to false if you want to use a custom button, for example so that
 ***REMOVED******REMOVED***/ you can place it elsewhere on the map. `SearchViewModel` has properties and methods
 ***REMOVED******REMOVED***/ you can use to determine when the custom button should be visible and to trigger the search
 ***REMOVED******REMOVED***/ repeat behavior.
+***REMOVED***@State
 ***REMOVED***var enableRepeatSearchHereButton: Bool = true
 ***REMOVED***
 ***REMOVED******REMOVED***/ Determines whether a built-in result view will be shown. If false, the result display/selection
@@ -67,17 +67,18 @@ public struct SearchView: View {
 ***REMOVED******REMOVED***/ Message to show when there are no results or suggestions.
 ***REMOVED***var noResultMessage: String = "No results found"
 ***REMOVED***
-***REMOVED***@State
 ***REMOVED******REMOVED***/ Indicates that the `SearchViewModel` should start a search.
+***REMOVED***@State
 ***REMOVED***private var shouldCommitSearch: Bool = false
 ***REMOVED***
-***REMOVED***@State
 ***REMOVED******REMOVED***/ Indicates that the geoView's viewpoint has changed since the last search.
+***REMOVED***@State
 ***REMOVED***private var viewpointChanged: Bool = false
 ***REMOVED***
-***REMOVED***@State
-***REMOVED***private var result: Result<[SearchResult], Error> = .success([])
-***REMOVED***
+***REMOVED******REMOVED*** TODO: Figure out better styling for list
+***REMOVED******REMOVED*** TODO: continue fleshing out SearchViewModel and LocatorSearchSource/SmartSearchSource
+***REMOVED******REMOVED*** TODO: following Nathan's lead on all this stuff, i.e., go through his code and duplicate it as I go.
+
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***VStack (alignment: .center) {
 ***REMOVED******REMOVED******REMOVED***TextField(searchViewModel.defaultPlaceHolder,
@@ -96,9 +97,9 @@ public struct SearchView: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.esriBorder()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***switch result {
+***REMOVED******REMOVED******REMOVED***switch searchViewModel.results {
 ***REMOVED******REMOVED******REMOVED***case .success(let results):
-***REMOVED******REMOVED******REMOVED******REMOVED***if results.count > 0 {
+***REMOVED******REMOVED******REMOVED******REMOVED***if let results = results, results.count > 0 {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***List(results) { result in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***VStack (alignment: .leading){
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(result.displayTitle)
@@ -109,9 +110,26 @@ public struct SearchView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** TODO: Figure out better styling for list
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** TODO: continue fleshing out SearchViewModel and LocatorSearchSource/SmartSearchSource
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.listStyle(DefaultListStyle())
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.listStyle(DefaultListStyle())
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***case .failure(let error):
+***REMOVED******REMOVED******REMOVED******REMOVED***Text("Error occurred: \(error.localizedDescription)")
+***REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***switch searchViewModel.suggestions {
+***REMOVED******REMOVED******REMOVED***case .success(let results):
+***REMOVED******REMOVED******REMOVED******REMOVED***if let results = results, results.count > 0 {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***List(results) { result in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***VStack (alignment: .leading){
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(result.displayTitle)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.callout)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let subtitle = result.displaySubtitle {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(subtitle)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.caption)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.listStyle(DefaultListStyle())
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***case .failure(let error):
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text("Error occurred: \(error.localizedDescription)")
@@ -120,22 +138,12 @@ public struct SearchView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***.task(id: searchViewModel.currentQuery) {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** For when user types a new character
-***REMOVED******REMOVED******REMOVED***guard !searchViewModel.currentQuery.isEmpty else {
-***REMOVED******REMOVED******REMOVED******REMOVED***result = .success([])
-***REMOVED******REMOVED******REMOVED******REMOVED***return
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***await searchViewModel.updateSuggestions(nil)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***suggestionResult = await Result { try await searchViewModel.updateSuggestions() ***REMOVED***
+***REMOVED******REMOVED******REMOVED***await searchViewModel.updateSuggestions()
 ***REMOVED***
 ***REMOVED******REMOVED***.task(id: shouldCommitSearch) {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** For when user commits changes (hits Enter/Search button)
-***REMOVED******REMOVED******REMOVED***print("geocoding...")
-***REMOVED******REMOVED******REMOVED***result = await Result { try await searchViewModel.commitSearch(true) ***REMOVED***
+***REMOVED******REMOVED******REMOVED***await searchViewModel.commitSearch(true)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***
-
-***REMOVED*** MARK: Extensions
-
-extension SearchResult: Identifiable {
-***REMOVED***public var id: ObjectIdentifier { ObjectIdentifier(self) ***REMOVED***
 ***REMOVED***

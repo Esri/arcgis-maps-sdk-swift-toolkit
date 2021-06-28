@@ -29,13 +29,13 @@ public enum SearchResultMode {
 ***REMOVED***/ Performs searches and manages search state for a Search, or optionally without a UI connection.
 public class SearchViewModel: ObservableObject {
 ***REMOVED***public convenience init(defaultPlaceHolder: String = "Find a place or address",
-***REMOVED******REMOVED******REMOVED******REMOVED***activeSource: SearchSourceProtocol? = nil,
-***REMOVED******REMOVED******REMOVED******REMOVED***queryArea: Geometry? = nil,
-***REMOVED******REMOVED******REMOVED******REMOVED***queryCenter: Point? = nil,
-***REMOVED******REMOVED******REMOVED******REMOVED***resultMode: SearchResultMode = .automatic,
-***REMOVED******REMOVED******REMOVED******REMOVED***results: [SearchResult]? = nil,
-***REMOVED******REMOVED******REMOVED******REMOVED***sources: [SearchSourceProtocol] = [],
-***REMOVED******REMOVED******REMOVED******REMOVED***suggestions: [SearchSuggestion]? = nil
+activeSource: SearchSourceProtocol? = nil,
+queryArea: Geometry? = nil,
+queryCenter: Point? = nil,
+resultMode: SearchResultMode = .automatic,
+results: Result<[SearchResult]?, Error> = .success(nil),
+sources: [SearchSourceProtocol] = [],
+suggestions: Result<[SearchSuggestion]?, Error> = .success(nil)
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.init()
 ***REMOVED******REMOVED***self.defaultPlaceHolder = defaultPlaceHolder
@@ -60,7 +60,15 @@ public class SearchViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ other method calls and property changes within the view model, so the view should take care to
 ***REMOVED******REMOVED***/ observe for changes.
 ***REMOVED***@Published
-***REMOVED***var currentQuery: String = ""
+***REMOVED***var currentQuery: String = "" {
+***REMOVED******REMOVED***didSet {
+***REMOVED******REMOVED******REMOVED***selectedResult = nil
+***REMOVED******REMOVED******REMOVED***if currentQuery.isEmpty {
+***REMOVED******REMOVED******REMOVED******REMOVED***results = .success(nil)
+***REMOVED******REMOVED******REMOVED******REMOVED***suggestions = .success(nil)
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The search area to be used for the current query. Ignored in most queries, unless the
 ***REMOVED******REMOVED***/ `RestrictToArea` property is set to true when calling `commitSearch`. This property
@@ -77,13 +85,14 @@ public class SearchViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Collection of results. `nil` means no query has been made. An empty array means there
 ***REMOVED******REMOVED***/ were no results, and the view should show an appropriate 'no results' message.
-***REMOVED***var results: [SearchResult]?
-***REMOVED***
 ***REMOVED***@Published
+***REMOVED***var results: Result<[SearchResult]?, Error> = .success([])
+***REMOVED***
 ***REMOVED******REMOVED***/ Tracks selection of results from the `results` collection. When there is only one result,
 ***REMOVED******REMOVED***/ that result is automatically assigned to this property. If there are multiple results, the view sets
 ***REMOVED******REMOVED***/ this property upon user selection. This property is observable. The view should observe this
 ***REMOVED******REMOVED***/ property and update the associated GeoView's viewpoint, if configured.
+***REMOVED***@Published
 ***REMOVED***var selectedResult: SearchResult?
 ***REMOVED***
 ***REMOVED******REMOVED***/ Collection of search sources to be used. This list is maintained over time and is not nullable.
@@ -94,44 +103,83 @@ public class SearchViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ Collection of suggestion results. Defaults to `nil`. This collection will be set to empty when there
 ***REMOVED******REMOVED***/ are no suggestions, `nil` when no suggestions have been requested. If the list is empty,
 ***REMOVED******REMOVED***/ a useful 'no results' message should be shown by the view.
-***REMOVED***var suggestions: [SearchSuggestion]?
+***REMOVED***@Published
+***REMOVED***var suggestions: Result<[SearchSuggestion]?, Error> = .success([])
 ***REMOVED***
 ***REMOVED******REMOVED***/ True if the `queryArea` has changed since the `results` collection has been set.
 ***REMOVED******REMOVED***/ This property is used by the view to enable 'Repeat search here' functionality. This property is
 ***REMOVED******REMOVED***/ observable, and the view should use it to hide and show the 'repeat search' button. Changes to
 ***REMOVED******REMOVED***/ this property are driven by changes to the `queryArea` property.
 ***REMOVED***@Published
-***REMOVED***var isEligibleForRequery: Bool = false
+***REMOVED******REMOVED***TODO: should be reset if viewpoint has changed since last result returned.
+***REMOVED***private(set) var isEligibleForRequery: Bool = false
 ***REMOVED***
 ***REMOVED******REMOVED***/ Starts a search. `selectedResult` and `results`, among other properties, are set
 ***REMOVED******REMOVED***/ asynchronously. Other query properties are read to define the parameters of the search.
-***REMOVED******REMOVED***/ Participates in cooperative cancellation using the supplied cancellation token.
 ***REMOVED******REMOVED***/ If `restrictToArea` is true, only results in the query area will be returned.
 ***REMOVED******REMOVED***/ - Parameter restrictToArea: If true, the search is restricted to results within the extent
 ***REMOVED******REMOVED***/ of the `queryArea` property. Behavior when called with `restrictToArea` set to true
 ***REMOVED******REMOVED***/ when the `queryArea` property is null, a line, a point, or an empty geometry is undefined.
-***REMOVED***func commitSearch(_ restrictToArea: Bool) async throws -> [SearchResult] {
-***REMOVED******REMOVED***guard !currentQuery.isEmpty else { return [] ***REMOVED***
+***REMOVED***func commitSearch(_ restrictToArea: Bool) async -> Void {
+***REMOVED******REMOVED***guard !currentQuery.isEmpty else { return ***REMOVED***
 ***REMOVED******REMOVED***print("SearchViewModel.commitSearch: \(currentQuery)")
-
-***REMOVED******REMOVED***var results = [SearchResult]()
-***REMOVED******REMOVED***for searchSource in sources {
-***REMOVED******REMOVED******REMOVED***let searchResults = try await searchSource.search(currentQuery,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  area: restrictToArea ? queryArea : nil,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  cancellationToken: ""
-***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***results.append(contentsOf: searchResults)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***selectedResult = nil
+***REMOVED******REMOVED***isEligibleForRequery = false
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***var searchResults = [SearchResult]()
+***REMOVED******REMOVED***let searchSources = sourcesToSearch()
+***REMOVED******REMOVED***for i in 0...searchSources.count - 1 {
+***REMOVED******REMOVED******REMOVED***print("commit search source \(i)")
+***REMOVED******REMOVED******REMOVED***var searchSource = searchSources[i]
+***REMOVED******REMOVED******REMOVED***searchSource.searchArea = queryArea
+***REMOVED******REMOVED******REMOVED***searchSource.preferredSearchLocation = queryCenter
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***let searchResult = await Result {
+***REMOVED******REMOVED******REMOVED******REMOVED***try await searchSource.search(currentQuery,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  area: restrictToArea ? queryArea : nil
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***switch searchResult {
+***REMOVED******REMOVED******REMOVED***case .success(let results):
+***REMOVED******REMOVED******REMOVED******REMOVED***searchResults.append(contentsOf: results)
+***REMOVED******REMOVED******REMOVED***case .failure(let error):
+***REMOVED******REMOVED******REMOVED******REMOVED***print("\(searchSource.displayName) encountered an error: \(error.localizedDescription)")
+***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***return results
+***REMOVED******REMOVED***results = .success(searchResults)
+***REMOVED******REMOVED***suggestions = .success(nil)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Updates suggestions list asynchronously. View should take care to cancel previous suggestion
 ***REMOVED******REMOVED***/ requests before initiating new ones. The view should also wait for some time after user finishes
 ***REMOVED******REMOVED***/ typing before making suggestions. The JavaScript implementation uses 150ms by default.
-***REMOVED******REMOVED***/ - Parameter cancellationToken: Token used for cooperative cancellation.
-***REMOVED***func updateSuggestions(_ cancellationToken: String?) async {
+***REMOVED******REMOVED***TODO: should the return be optional (according to .NET impl)?
+***REMOVED***func updateSuggestions() async -> Void {
 ***REMOVED******REMOVED***guard !currentQuery.isEmpty else { return ***REMOVED***
 ***REMOVED******REMOVED***print("SearchViewModel.updateSuggestions: \(currentQuery)")
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***var suggestionResults = [SearchSuggestion]()
+***REMOVED******REMOVED***let searchSources = sourcesToSearch()
+***REMOVED******REMOVED***for i in 0...searchSources.count - 1 {
+***REMOVED******REMOVED******REMOVED***print("update suggestions source \(i)")
+***REMOVED******REMOVED******REMOVED***var searchSource = searchSources[i]
+***REMOVED******REMOVED******REMOVED***searchSource.searchArea = queryArea
+***REMOVED******REMOVED******REMOVED***searchSource.preferredSearchLocation = queryCenter
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***let suggestResults = await Result {
+***REMOVED******REMOVED******REMOVED******REMOVED***try await searchSource.suggest(currentQuery)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***switch suggestResults {
+***REMOVED******REMOVED******REMOVED***case .success(let results):
+***REMOVED******REMOVED******REMOVED******REMOVED***suggestionResults.append(contentsOf: results)
+***REMOVED******REMOVED******REMOVED***case .failure(let error):
+***REMOVED******REMOVED******REMOVED******REMOVED***print("\(searchSource.displayName) encountered an error: \(error.localizedDescription)")
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***suggestions = .success(suggestionResults)
+***REMOVED******REMOVED***results = .success(nil)
+***REMOVED******REMOVED***selectedResult = nil
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Commits a search from a specific suggestion. Results will be set asynchronously. Behavior is
@@ -141,10 +189,44 @@ public class SearchViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ to changes to `currentQuery` initiated by a call to this method.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - searchSuggestion: The suggestion to use to commit the search.
-***REMOVED******REMOVED***/   - cancellationToken: ken used for cooperative cancellation.
-***REMOVED***func acceptSuggestion(_ searchSuggestion: SearchSuggestion,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  cancellationToken: String?) async {
-***REMOVED******REMOVED***print("SearchViewModel.acceptSuggestion")
+***REMOVED***func acceptSuggestion(_ searchSuggestion: SearchSuggestion) async -> Void {
+***REMOVED******REMOVED***currentQuery = searchSuggestion.displayTitle
+***REMOVED******REMOVED***print("SearchViewModel.acceptSuggestion: \(currentQuery)")
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***isEligibleForRequery = false
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***var searchResults = [SearchResult]()
+***REMOVED******REMOVED***let searchResult = await Result {
+***REMOVED******REMOVED******REMOVED***try await searchSuggestion.owningSource.search(searchSuggestion, area: nil)
+***REMOVED***
+***REMOVED******REMOVED***switch searchResult {
+***REMOVED******REMOVED***case .success(let results):
+***REMOVED******REMOVED******REMOVED***switch (resultMode)
+***REMOVED******REMOVED******REMOVED***{
+***REMOVED******REMOVED******REMOVED***case .single:
+***REMOVED******REMOVED******REMOVED******REMOVED***if let firstResult = results.first {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***searchResults = [firstResult]
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedResult = firstResult
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***case .multiple:
+***REMOVED******REMOVED******REMOVED******REMOVED***searchResults = results
+***REMOVED******REMOVED******REMOVED***case .automatic:
+***REMOVED******REMOVED******REMOVED******REMOVED***if searchSuggestion.suggestResult?.isCollection ?? true {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***searchResults = results
+***REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let firstResult = results.first {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***searchResults = [firstResult]
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedResult = firstResult
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***case .failure(let error):
+***REMOVED******REMOVED******REMOVED***print("\(searchSuggestion.owningSource.displayName) encountered an error: \(error.localizedDescription)")
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***results = .success(searchResults)
+***REMOVED******REMOVED***suggestions = .success(nil)
+***REMOVED******REMOVED***selectedResult = nil
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Configures the view model for the provided map. By default, will only configure the view model
@@ -152,8 +234,7 @@ public class SearchViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ web map configuration into account.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - map: Map to use for configuration.
-***REMOVED******REMOVED***/   - cancellationToken: cancellationToken: String
-***REMOVED***func configureForMap(_ map: Map, cancellationToken: String?) {
+***REMOVED***func configureForMap(_ map: Map) {
 ***REMOVED******REMOVED***print("SearchViewModel.configureForMap")
 ***REMOVED***
 ***REMOVED***
@@ -162,8 +243,7 @@ public class SearchViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ web scene configuration into account.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - scene: Scene used for configuration.
-***REMOVED******REMOVED***/   - cancellationToke: Token used for cooperative cancellation.
-***REMOVED***func configureForScene(_ scene: ArcGIS.Scene, cancellationToken: String?) {
+***REMOVED***func configureForScene(_ scene: ArcGIS.Scene) {
 ***REMOVED******REMOVED***print("SearchViewModel.configureForScene")
 ***REMOVED***
 ***REMOVED***
@@ -171,5 +251,17 @@ public class SearchViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ and reset the current query.
 ***REMOVED***func clearSearch() {
 ***REMOVED******REMOVED***print("SearchViewModel.clearSearch")
+***REMOVED***
+***REMOVED***
+
+extension SearchViewModel {
+***REMOVED***func sourcesToSearch() -> [SearchSourceProtocol] {
+***REMOVED******REMOVED***var selectedSources = [SearchSourceProtocol]()
+***REMOVED******REMOVED***if let activeSource = activeSource {
+***REMOVED******REMOVED******REMOVED***selectedSources.append(activeSource)
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***selectedSources.append(contentsOf: sources)
+***REMOVED***
+***REMOVED******REMOVED***return selectedSources
 ***REMOVED***
 ***REMOVED***

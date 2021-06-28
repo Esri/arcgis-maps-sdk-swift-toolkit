@@ -58,33 +58,21 @@ public class LocatorSearchSource {
 ***REMOVED***
 
 extension LocatorSearchSource: SearchSourceProtocol {
-***REMOVED***public func suggest(_ queryString: String, cancelationToken: String) async throws -> [SearchSuggestion] {
-***REMOVED******REMOVED***return []
+***REMOVED***public func suggest(_ queryString: String) async throws -> [SearchSuggestion] {
+***REMOVED******REMOVED***let suggestResults =  try await locator.suggest(searchText: queryString)
+***REMOVED******REMOVED******REMOVED***convert to search results
+***REMOVED******REMOVED***return suggestResults.map{ $0.toSearchSuggestion(searchSource: self) ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED***public func search(_ queryString: String, area: Geometry?, cancellationToken: String?) async throws -> [SearchResult] {
+***REMOVED***public func search(_ queryString: String, area: Geometry? = nil) async throws -> [SearchResult] {
 ***REMOVED******REMOVED***let geocodeResults =  try await locator.geocode(searchText: queryString)
 ***REMOVED******REMOVED******REMOVED***convert to search results
 ***REMOVED******REMOVED***return geocodeResults.map{ $0.toSearchResult(searchSource: self) ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED***public func search(_ searchSuggestion: SearchSuggestion, area: Geometry?, cancellationToken: String?) async throws -> [SearchResult] {
-***REMOVED******REMOVED***return []
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***
-
-***REMOVED*** TODO: add locator name from Locator.locatorInfo.name (can't do it here because search source is no LocatorSearchSource, but maybe could subclass toSearchResult....
-***REMOVED*** TODO: following Nathan's lead on all this stuff, i.e., go through his code and duplicate it as I go.
-***REMOVED*** TODO: Should move this to the Extensions folder in it's own file (along with Identifieable compliance).
-extension GeocodeResult {
-***REMOVED***func toSearchResult(searchSource: SearchSourceProtocol) -> SearchResult {
-***REMOVED******REMOVED***return SearchResult(displayTitle: self.label,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***displaySubtitle: "Score: \((self.score).formatted(.percent))",
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***markerImage: nil,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***owningSource: searchSource,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***geoElement: nil,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectionViewpoint: nil)
+***REMOVED***public func search(_ searchSuggestion: SearchSuggestion, area: Geometry? = nil) async throws -> [SearchResult] {
+***REMOVED******REMOVED***guard let query = searchSuggestion.suggestResult?.label else { return [] ***REMOVED***
+***REMOVED******REMOVED***let geocodeResults =  try await locator.geocode(searchText: query)
+***REMOVED******REMOVED***return geocodeResults.map{ $0.toSearchResult(searchSource: self) ***REMOVED***
 ***REMOVED***
 ***REMOVED***

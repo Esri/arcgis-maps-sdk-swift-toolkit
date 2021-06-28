@@ -34,29 +34,24 @@ public protocol SearchSourceProtocol {
 ***REMOVED******REMOVED***/ Gets suggestions.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - queryString: Text to be used for query.
-***REMOVED******REMOVED***/   - cancellationToken: Token used for cooperative cancellation.
 ***REMOVED******REMOVED***/ - Returns: The array of suggestions.
-***REMOVED***func suggest(_ queryString: String, cancelationToken: String) async throws -> [SearchSuggestion]
+***REMOVED***func suggest(_ queryString: String) async throws -> [SearchSuggestion]
 ***REMOVED***
 ***REMOVED******REMOVED***/ Gets search results. If `area` is not `nil`, search is restricted to that area. Otherwise, the
 ***REMOVED******REMOVED***/ `searchArea` property may be consulted but does not need to be used as a strict limit.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - queryString: Text to be used for query.
 ***REMOVED******REMOVED***/   - area: Area to be used to constrain search results.
-***REMOVED******REMOVED***/   - cancellationToken: Token used for cooperative cancellation.
 ***REMOVED******REMOVED***/ - Returns: Array of `SearchResult`s
 ***REMOVED***func search(_ queryString: String,
-***REMOVED******REMOVED******REMOVED******REMOVED***area: Geometry?,
-***REMOVED******REMOVED******REMOVED******REMOVED***cancellationToken: String?) async throws -> [SearchResult]
+***REMOVED******REMOVED******REMOVED******REMOVED***area: Geometry?) async throws -> [SearchResult]
 ***REMOVED***
 ***REMOVED******REMOVED***/ Gets search results. If `area` is not `nil`, search is restricted to that area. Otherwise, the
 ***REMOVED******REMOVED***/ `searchArea` property may be consulted but does not need to be used as a strict limit.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - searchSuggestion: Suggestion to be used as basis for search.
 ***REMOVED******REMOVED***/   - area: Area to be used to constrain search results.
-***REMOVED******REMOVED***/   - cancellationToken: Token used for cooperative cancellation.
 ***REMOVED******REMOVED***/ - Returns: Array of `SearchResult`s
 ***REMOVED***func search(_ searchSuggestion: SearchSuggestion,
-***REMOVED******REMOVED******REMOVED******REMOVED***area: Geometry?,
-***REMOVED******REMOVED******REMOVED******REMOVED***cancellationToken: String?) async throws -> [SearchResult]
+***REMOVED******REMOVED******REMOVED******REMOVED***area: Geometry?) async throws -> [SearchResult]
 ***REMOVED***
