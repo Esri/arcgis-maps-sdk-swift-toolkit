@@ -34,29 +34,24 @@ public protocol SearchSourceProtocol {
     /// Gets suggestions.
     /// - Parameters:
     ///   - queryString: Text to be used for query.
-    ///   - cancellationToken: Token used for cooperative cancellation.
     /// - Returns: The array of suggestions.
-    func suggest(_ queryString: String, cancelationToken: String) async throws -> [SearchSuggestion]
+    func suggest(_ queryString: String) async throws -> [SearchSuggestion]
     
     /// Gets search results. If `area` is not `nil`, search is restricted to that area. Otherwise, the
     /// `searchArea` property may be consulted but does not need to be used as a strict limit.
     /// - Parameters:
     ///   - queryString: Text to be used for query.
     ///   - area: Area to be used to constrain search results.
-    ///   - cancellationToken: Token used for cooperative cancellation.
     /// - Returns: Array of `SearchResult`s
     func search(_ queryString: String,
-                area: Geometry?,
-                cancellationToken: String?) async throws -> [SearchResult]
+                area: Geometry?) async throws -> [SearchResult]
     
     /// Gets search results. If `area` is not `nil`, search is restricted to that area. Otherwise, the
     /// `searchArea` property may be consulted but does not need to be used as a strict limit.
     /// - Parameters:
     ///   - searchSuggestion: Suggestion to be used as basis for search.
     ///   - area: Area to be used to constrain search results.
-    ///   - cancellationToken: Token used for cooperative cancellation.
     /// - Returns: Array of `SearchResult`s
     func search(_ searchSuggestion: SearchSuggestion,
-                area: Geometry?,
-                cancellationToken: String?) async throws -> [SearchResult]
+                area: Geometry?) async throws -> [SearchResult]
 }

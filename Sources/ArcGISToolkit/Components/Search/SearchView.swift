@@ -51,12 +51,12 @@ public struct SearchView: View {
     /// document automatically.
     var enableAutomaticConfiguration: Bool = true
     
-    @State
     /// Determines whether a button that allows the user to repeat a search with a spatial constraint
     /// is displayed automatically. Set to false if you want to use a custom button, for example so that
     /// you can place it elsewhere on the map. `SearchViewModel` has properties and methods
     /// you can use to determine when the custom button should be visible and to trigger the search
     /// repeat behavior.
+    @State
     var enableRepeatSearchHereButton: Bool = true
     
     /// Determines whether a built-in result view will be shown. If false, the result display/selection
@@ -67,17 +67,18 @@ public struct SearchView: View {
     /// Message to show when there are no results or suggestions.
     var noResultMessage: String = "No results found"
     
-    @State
     /// Indicates that the `SearchViewModel` should start a search.
+    @State
     private var shouldCommitSearch: Bool = false
     
-    @State
     /// Indicates that the geoView's viewpoint has changed since the last search.
+    @State
     private var viewpointChanged: Bool = false
     
-    @State
-    private var result: Result<[SearchResult], Error> = .success([])
-    
+    // TODO: Figure out better styling for list
+    // TODO: continue fleshing out SearchViewModel and LocatorSearchSource/SmartSearchSource
+    // TODO: following Nathan's lead on all this stuff, i.e., go through his code and duplicate it as I go.
+
     public var body: some View {
         VStack (alignment: .center) {
             TextField(searchViewModel.defaultPlaceHolder,
@@ -96,9 +97,9 @@ public struct SearchView: View {
                 }
                 .esriBorder()
             }
-            switch result {
+            switch searchViewModel.results {
             case .success(let results):
-                if results.count > 0 {
+                if let results = results, results.count > 0 {
                     List(results) { result in
                         VStack (alignment: .leading){
                             Text(result.displayTitle)
@@ -109,9 +110,26 @@ public struct SearchView: View {
                             }
                         }
                     }
-                    // TODO: Figure out better styling for list
-                    // TODO: continue fleshing out SearchViewModel and LocatorSearchSource/SmartSearchSource
-//                    .listStyle(DefaultListStyle())
+                    //                    .listStyle(DefaultListStyle())
+                }
+            case .failure(let error):
+                Text("Error occurred: \(error.localizedDescription)")
+                Spacer()
+            }
+            switch searchViewModel.suggestions {
+            case .success(let results):
+                if let results = results, results.count > 0 {
+                    List(results) { result in
+                        VStack (alignment: .leading){
+                            Text(result.displayTitle)
+                                .font(.callout)
+                            if let subtitle = result.displaySubtitle {
+                                Text(subtitle)
+                                    .font(.caption)
+                            }
+                        }
+                    }
+                    //                    .listStyle(DefaultListStyle())
                 }
             case .failure(let error):
                 Text("Error occurred: \(error.localizedDescription)")
@@ -120,22 +138,12 @@ public struct SearchView: View {
         }
         .task(id: searchViewModel.currentQuery) {
             // For when user types a new character
-            guard !searchViewModel.currentQuery.isEmpty else {
-                result = .success([])
-                return
-            }
-            await searchViewModel.updateSuggestions(nil)
+            //            suggestionResult = await Result { try await searchViewModel.updateSuggestions() }
+            await searchViewModel.updateSuggestions()
         }
         .task(id: shouldCommitSearch) {
             // For when user commits changes (hits Enter/Search button)
-            print("geocoding...")
-            result = await Result { try await searchViewModel.commitSearch(true) }
+            await searchViewModel.commitSearch(true)
         }
     }
-}
-
-// MARK: Extensions
-
-extension SearchResult: Identifiable {
-    public var id: ObjectIdentifier { ObjectIdentifier(self) }
 }
