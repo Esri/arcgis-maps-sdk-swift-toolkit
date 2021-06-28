@@ -29,13 +29,13 @@ public enum SearchResultMode {
 /// Performs searches and manages search state for a Search, or optionally without a UI connection.
 public class SearchViewModel: ObservableObject {
     public convenience init(defaultPlaceHolder: String = "Find a place or address",
-                activeSource: SearchSourceProtocol? = nil,
-                queryArea: Geometry? = nil,
-                queryCenter: Point? = nil,
-                resultMode: SearchResultMode = .automatic,
-                results: [SearchResult]? = nil,
-                sources: [SearchSourceProtocol] = [],
-                suggestions: [SearchSuggestion]? = nil
+activeSource: SearchSourceProtocol? = nil,
+queryArea: Geometry? = nil,
+queryCenter: Point? = nil,
+resultMode: SearchResultMode = .automatic,
+results: Result<[SearchResult]?, Error> = .success(nil),
+sources: [SearchSourceProtocol] = [],
+suggestions: Result<[SearchSuggestion]?, Error> = .success(nil)
     ) {
         self.init()
         self.defaultPlaceHolder = defaultPlaceHolder
@@ -60,7 +60,15 @@ public class SearchViewModel: ObservableObject {
     /// other method calls and property changes within the view model, so the view should take care to
     /// observe for changes.
     @Published
-    var currentQuery: String = ""
+    var currentQuery: String = "" {
+        didSet {
+            selectedResult = nil
+            if currentQuery.isEmpty {
+                results = .success(nil)
+                suggestions = .success(nil)
+            }
+        }
+    }
     
     /// The search area to be used for the current query. Ignored in most queries, unless the
     /// `RestrictToArea` property is set to true when calling `commitSearch`. This property
@@ -77,13 +85,14 @@ public class SearchViewModel: ObservableObject {
     
     /// Collection of results. `nil` means no query has been made. An empty array means there
     /// were no results, and the view should show an appropriate 'no results' message.
-    var results: [SearchResult]?
-    
     @Published
+    var results: Result<[SearchResult]?, Error> = .success([])
+    
     /// Tracks selection of results from the `results` collection. When there is only one result,
     /// that result is automatically assigned to this property. If there are multiple results, the view sets
     /// this property upon user selection. This property is observable. The view should observe this
     /// property and update the associated GeoView's viewpoint, if configured.
+    @Published
     var selectedResult: SearchResult?
     
     /// Collection of search sources to be used. This list is maintained over time and is not nullable.
@@ -94,44 +103,83 @@ public class SearchViewModel: ObservableObject {
     /// Collection of suggestion results. Defaults to `nil`. This collection will be set to empty when there
     /// are no suggestions, `nil` when no suggestions have been requested. If the list is empty,
     /// a useful 'no results' message should be shown by the view.
-    var suggestions: [SearchSuggestion]?
+    @Published
+    var suggestions: Result<[SearchSuggestion]?, Error> = .success([])
     
     /// True if the `queryArea` has changed since the `results` collection has been set.
     /// This property is used by the view to enable 'Repeat search here' functionality. This property is
     /// observable, and the view should use it to hide and show the 'repeat search' button. Changes to
     /// this property are driven by changes to the `queryArea` property.
     @Published
-    var isEligibleForRequery: Bool = false
+    //TODO: should be reset if viewpoint has changed since last result returned.
+    private(set) var isEligibleForRequery: Bool = false
     
     /// Starts a search. `selectedResult` and `results`, among other properties, are set
     /// asynchronously. Other query properties are read to define the parameters of the search.
-    /// Participates in cooperative cancellation using the supplied cancellation token.
     /// If `restrictToArea` is true, only results in the query area will be returned.
     /// - Parameter restrictToArea: If true, the search is restricted to results within the extent
     /// of the `queryArea` property. Behavior when called with `restrictToArea` set to true
     /// when the `queryArea` property is null, a line, a point, or an empty geometry is undefined.
-    func commitSearch(_ restrictToArea: Bool) async throws -> [SearchResult] {
-        guard !currentQuery.isEmpty else { return [] }
+    func commitSearch(_ restrictToArea: Bool) async -> Void {
+        guard !currentQuery.isEmpty else { return }
         print("SearchViewModel.commitSearch: \(currentQuery)")
-
-        var results = [SearchResult]()
-        for searchSource in sources {
-            let searchResults = try await searchSource.search(currentQuery,
-                                                              area: restrictToArea ? queryArea : nil,
-                                                              cancellationToken: ""
-            )
-            results.append(contentsOf: searchResults)
+        
+        selectedResult = nil
+        isEligibleForRequery = false
+        
+        var searchResults = [SearchResult]()
+        let searchSources = sourcesToSearch()
+        for i in 0...searchSources.count - 1 {
+            print("commit search source \(i)")
+            var searchSource = searchSources[i]
+            searchSource.searchArea = queryArea
+            searchSource.preferredSearchLocation = queryCenter
+            
+            let searchResult = await Result {
+                try await searchSource.search(currentQuery,
+                                              area: restrictToArea ? queryArea : nil
+                )
+            }
+            switch searchResult {
+            case .success(let results):
+                searchResults.append(contentsOf: results)
+            case .failure(let error):
+                print("\(searchSource.displayName) encountered an error: \(error.localizedDescription)")
+            }
         }
-        return results
+        results = .success(searchResults)
+        suggestions = .success(nil)
     }
     
     /// Updates suggestions list asynchronously. View should take care to cancel previous suggestion
     /// requests before initiating new ones. The view should also wait for some time after user finishes
     /// typing before making suggestions. The JavaScript implementation uses 150ms by default.
-    /// - Parameter cancellationToken: Token used for cooperative cancellation.
-    func updateSuggestions(_ cancellationToken: String?) async {
+    //TODO: should the return be optional (according to .NET impl)?
+    func updateSuggestions() async -> Void {
         guard !currentQuery.isEmpty else { return }
         print("SearchViewModel.updateSuggestions: \(currentQuery)")
+        
+        var suggestionResults = [SearchSuggestion]()
+        let searchSources = sourcesToSearch()
+        for i in 0...searchSources.count - 1 {
+            print("update suggestions source \(i)")
+            var searchSource = searchSources[i]
+            searchSource.searchArea = queryArea
+            searchSource.preferredSearchLocation = queryCenter
+            
+            let suggestResults = await Result {
+                try await searchSource.suggest(currentQuery)
+            }
+            switch suggestResults {
+            case .success(let results):
+                suggestionResults.append(contentsOf: results)
+            case .failure(let error):
+                print("\(searchSource.displayName) encountered an error: \(error.localizedDescription)")
+            }
+        }
+        suggestions = .success(suggestionResults)
+        results = .success(nil)
+        selectedResult = nil
     }
     
     /// Commits a search from a specific suggestion. Results will be set asynchronously. Behavior is
@@ -141,10 +189,44 @@ public class SearchViewModel: ObservableObject {
     /// to changes to `currentQuery` initiated by a call to this method.
     /// - Parameters:
     ///   - searchSuggestion: The suggestion to use to commit the search.
-    ///   - cancellationToken: ken used for cooperative cancellation.
-    func acceptSuggestion(_ searchSuggestion: SearchSuggestion,
-                          cancellationToken: String?) async {
-        print("SearchViewModel.acceptSuggestion")
+    func acceptSuggestion(_ searchSuggestion: SearchSuggestion) async -> Void {
+        currentQuery = searchSuggestion.displayTitle
+        print("SearchViewModel.acceptSuggestion: \(currentQuery)")
+        
+        isEligibleForRequery = false
+        
+        var searchResults = [SearchResult]()
+        let searchResult = await Result {
+            try await searchSuggestion.owningSource.search(searchSuggestion, area: nil)
+        }
+        switch searchResult {
+        case .success(let results):
+            switch (resultMode)
+            {
+            case .single:
+                if let firstResult = results.first {
+                    searchResults = [firstResult]
+                    selectedResult = firstResult
+                }
+            case .multiple:
+                searchResults = results
+            case .automatic:
+                if searchSuggestion.suggestResult?.isCollection ?? true {
+                    searchResults = results
+                } else {
+                    if let firstResult = results.first {
+                        searchResults = [firstResult]
+                        selectedResult = firstResult
+                    }
+                }
+            }
+        case .failure(let error):
+            print("\(searchSuggestion.owningSource.displayName) encountered an error: \(error.localizedDescription)")
+        }
+        
+        results = .success(searchResults)
+        suggestions = .success(nil)
+        selectedResult = nil
     }
     
     /// Configures the view model for the provided map. By default, will only configure the view model
@@ -152,8 +234,7 @@ public class SearchViewModel: ObservableObject {
     /// web map configuration into account.
     /// - Parameters:
     ///   - map: Map to use for configuration.
-    ///   - cancellationToken: cancellationToken: String
-    func configureForMap(_ map: Map, cancellationToken: String?) {
+    func configureForMap(_ map: Map) {
         print("SearchViewModel.configureForMap")
     }
     
@@ -162,8 +243,7 @@ public class SearchViewModel: ObservableObject {
     /// web scene configuration into account.
     /// - Parameters:
     ///   - scene: Scene used for configuration.
-    ///   - cancellationToke: Token used for cooperative cancellation.
-    func configureForScene(_ scene: ArcGIS.Scene, cancellationToken: String?) {
+    func configureForScene(_ scene: ArcGIS.Scene) {
         print("SearchViewModel.configureForScene")
     }
     
@@ -171,5 +251,17 @@ public class SearchViewModel: ObservableObject {
     /// and reset the current query.
     func clearSearch() {
         print("SearchViewModel.clearSearch")
+    }
+}
+
+extension SearchViewModel {
+    func sourcesToSearch() -> [SearchSourceProtocol] {
+        var selectedSources = [SearchSourceProtocol]()
+        if let activeSource = activeSource {
+            selectedSources.append(activeSource)
+        } else {
+            selectedSources.append(contentsOf: sources)
+        }
+        return selectedSources
     }
 }

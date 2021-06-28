@@ -58,33 +58,21 @@ public class LocatorSearchSource {
 }
 
 extension LocatorSearchSource: SearchSourceProtocol {
-    public func suggest(_ queryString: String, cancelationToken: String) async throws -> [SearchSuggestion] {
-        return []
+    public func suggest(_ queryString: String) async throws -> [SearchSuggestion] {
+        let suggestResults =  try await locator.suggest(searchText: queryString)
+        //convert to search results
+        return suggestResults.map{ $0.toSearchSuggestion(searchSource: self) }
     }
     
-    public func search(_ queryString: String, area: Geometry?, cancellationToken: String?) async throws -> [SearchResult] {
+    public func search(_ queryString: String, area: Geometry? = nil) async throws -> [SearchResult] {
         let geocodeResults =  try await locator.geocode(searchText: queryString)
         //convert to search results
         return geocodeResults.map{ $0.toSearchResult(searchSource: self) }
     }
     
-    public func search(_ searchSuggestion: SearchSuggestion, area: Geometry?, cancellationToken: String?) async throws -> [SearchResult] {
-        return []
-    }
-    
-    
-}
-
-// TODO: add locator name from Locator.locatorInfo.name (can't do it here because search source is no LocatorSearchSource, but maybe could subclass toSearchResult....
-// TODO: following Nathan's lead on all this stuff, i.e., go through his code and duplicate it as I go.
-// TODO: Should move this to the Extensions folder in it's own file (along with Identifieable compliance).
-extension GeocodeResult {
-    func toSearchResult(searchSource: SearchSourceProtocol) -> SearchResult {
-        return SearchResult(displayTitle: self.label,
-                            displaySubtitle: "Score: \((self.score).formatted(.percent))",
-                            markerImage: nil,
-                            owningSource: searchSource,
-                            geoElement: nil,
-                            selectionViewpoint: nil)
+    public func search(_ searchSuggestion: SearchSuggestion, area: Geometry? = nil) async throws -> [SearchResult] {
+        guard let query = searchSuggestion.suggestResult?.label else { return [] }
+        let geocodeResults =  try await locator.geocode(searchText: query)
+        return geocodeResults.map{ $0.toSearchResult(searchSource: self) }
     }
 }
