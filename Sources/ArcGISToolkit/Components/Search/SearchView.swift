@@ -69,7 +69,11 @@ public struct SearchView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Indicates that the `SearchViewModel` should start a search.
 ***REMOVED***@State
-***REMOVED***private var shouldCommitSearch: Bool = false
+***REMOVED***private var commitSearch: Bool = false
+***REMOVED***
+***REMOVED******REMOVED***/ Indicates that the `SearchViewModel` should accept a suggestion.
+***REMOVED***@State
+***REMOVED***private var currentSuggestion: SearchSuggestion?
 ***REMOVED***
 ***REMOVED******REMOVED***/ Indicates that the geoView's viewpoint has changed since the last search.
 ***REMOVED***@State
@@ -78,72 +82,152 @@ public struct SearchView: View {
 ***REMOVED******REMOVED*** TODO: Figure out better styling for list
 ***REMOVED******REMOVED*** TODO: continue fleshing out SearchViewModel and LocatorSearchSource/SmartSearchSource
 ***REMOVED******REMOVED*** TODO: following Nathan's lead on all this stuff, i.e., go through his code and duplicate it as I go.
-
+***REMOVED******REMOVED*** TODO: better modifiers for search text field; maybe SearchTextField or something...
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***VStack (alignment: .center) {
 ***REMOVED******REMOVED******REMOVED***TextField(searchViewModel.defaultPlaceHolder,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  text: $searchViewModel.currentQuery) { editing in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** For when editing state changes (becomes/looses firstResponder)
 ***REMOVED******REMOVED*** onCommit: {
-***REMOVED******REMOVED******REMOVED******REMOVED***shouldCommitSearch.toggle()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Editing state changed (becomes/looses firstResponder)
+***REMOVED******REMOVED******REMOVED******REMOVED***commitSearch.toggle()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.esriDeleteTextButton(text: $searchViewModel.currentQuery)
-***REMOVED******REMOVED******REMOVED***.esriSearchButton(performSearch: $shouldCommitSearch)
+***REMOVED******REMOVED******REMOVED***.esriSearchButton(performSearch: $commitSearch)
 ***REMOVED******REMOVED******REMOVED***.esriBorder()
 ***REMOVED******REMOVED******REMOVED***if enableRepeatSearchHereButton, viewpointChanged {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Button("Search Here") {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpointChanged = false
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***shouldCommitSearch.toggle()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***commitSearch.toggle()
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.esriBorder()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***switch searchViewModel.results {
-***REMOVED******REMOVED******REMOVED***case .success(let results):
-***REMOVED******REMOVED******REMOVED******REMOVED***if let results = results, results.count > 0 {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***List(results) { result in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***VStack (alignment: .leading){
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(result.displayTitle)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.callout)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let subtitle = result.displaySubtitle {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(subtitle)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.caption)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.listStyle(DefaultListStyle())
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***case .failure(let error):
-***REMOVED******REMOVED******REMOVED******REMOVED***Text("Error occurred: \(error.localizedDescription)")
-***REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***switch searchViewModel.suggestions {
-***REMOVED******REMOVED******REMOVED***case .success(let results):
-***REMOVED******REMOVED******REMOVED******REMOVED***if let results = results, results.count > 0 {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***List(results) { result in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***VStack (alignment: .leading){
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(result.displayTitle)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.callout)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let subtitle = result.displaySubtitle {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(subtitle)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.caption)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.listStyle(DefaultListStyle())
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***case .failure(let error):
-***REMOVED******REMOVED******REMOVED******REMOVED***Text("Error occurred: \(error.localizedDescription)")
-***REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***SearchResultList(searchResults: searchViewModel.results)
+***REMOVED******REMOVED******REMOVED***SearchSuggestionList(searchSuggestions: searchViewModel.suggestions,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** currentSuggestion: $currentSuggestion
+***REMOVED******REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED******REMOVED***.task(id: searchViewModel.currentQuery) {
-***REMOVED******REMOVED******REMOVED******REMOVED*** For when user types a new character
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***suggestionResult = await Result { try await searchViewModel.updateSuggestions() ***REMOVED***
-***REMOVED******REMOVED******REMOVED***await searchViewModel.updateSuggestions()
+***REMOVED******REMOVED******REMOVED******REMOVED*** User typed a new character
+***REMOVED******REMOVED******REMOVED***if currentSuggestion == nil {
+***REMOVED******REMOVED******REMOVED******REMOVED***await searchViewModel.updateSuggestions()
+***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.task(id: shouldCommitSearch) {
-***REMOVED******REMOVED******REMOVED******REMOVED*** For when user commits changes (hits Enter/Search button)
+***REMOVED******REMOVED***.task(id: commitSearch) {
+***REMOVED******REMOVED******REMOVED******REMOVED*** User committed changes (hit Enter/Search button)
 ***REMOVED******REMOVED******REMOVED***await searchViewModel.commitSearch(true)
+***REMOVED***
+***REMOVED******REMOVED***.task(id: currentSuggestion) {
+***REMOVED******REMOVED******REMOVED******REMOVED*** User committed changes (hit Enter/Search button)
+***REMOVED******REMOVED******REMOVED***if let suggestion = currentSuggestion {
+***REMOVED******REMOVED******REMOVED******REMOVED***await searchViewModel.acceptSuggestion(suggestion)
+***REMOVED******REMOVED******REMOVED******REMOVED***currentSuggestion = nil
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
+
+***REMOVED*** TODO: look at consolidating SearchResultView and SearchSuggestionView with
+***REMOVED*** TODO: new SearchDisplayProtocol containing only displayTitle and displaySubtitle
+***REMOVED*** TODO: That would mean we only needed one of these.
+struct SearchResultList: View {
+***REMOVED***var searchResults: Result<[SearchResult]?, Error>
+***REMOVED***
+***REMOVED***var body: some View {
+***REMOVED******REMOVED***Group {
+***REMOVED******REMOVED******REMOVED***switch searchResults {
+***REMOVED******REMOVED******REMOVED***case .success(let results):
+***REMOVED******REMOVED******REMOVED******REMOVED***if let results = results, results.count > 0 {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***List {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Get array of unique search source displayNames.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let sourceDisplayNames = Array(Set(results.map { $0.owningSource.displayName ***REMOVED***)).sorted()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(sourceDisplayNames, id: \.self) { displayName in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Section(header: Text(displayName)) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Get results filtered by displayName
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let sourceResults = results.filter { $0.owningSource.displayName == displayName ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if sourceResults.count > 0 {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(sourceResults) { result in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***HStack {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "mappin")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(Color(.red))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***SearchResultRow(title: result.displayTitle, subtitle: result.displaySubtitle)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onTapGesture {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print("user selected result: \(result.displayTitle)")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** TODO: figure out why this isn't triggered.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("No results found")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.listStyle(DefaultListStyle())
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***case .failure(_):
+***REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
+
+struct SearchSuggestionList: View {
+***REMOVED***var searchSuggestions: Result<[SearchSuggestion]?, Error>
+***REMOVED***var currentSuggestion: Binding<SearchSuggestion?>
+***REMOVED***
+***REMOVED***var body: some View {
+***REMOVED******REMOVED***Group {
+***REMOVED******REMOVED******REMOVED***switch searchSuggestions {
+***REMOVED******REMOVED******REMOVED***case .success(let results):
+***REMOVED******REMOVED******REMOVED******REMOVED***if let suggestions = results, suggestions.count > 0 {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***List {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Get array of unique search source displayNames.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let sourceDisplayNames = Array(Set(suggestions.map { $0.owningSource.displayName ***REMOVED***)).sorted()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(sourceDisplayNames, id: \.self) { displayName in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Section(header: Text(displayName)) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Get results filtered by displayName
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let sourceSuggestions = suggestions.filter { $0.owningSource.displayName == displayName ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if sourceSuggestions.count > 0 {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(sourceSuggestions) { suggestion in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***HStack {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let imageName = suggestion.isCollection ? "magnifyingglass" : "mappin"
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: imageName)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***SearchResultRow(title: suggestion.displayTitle, subtitle: suggestion.displaySubtitle)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onTapGesture() {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentSuggestion.wrappedValue = suggestion
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.listStyle(DefaultListStyle())
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** TODO: figure out why this isn't triggered.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("No results found")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***case .failure(_):
+***REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***TODO:***REMOVED******REMOVED******REMOVED*** NoResultMessage = "No Results";
+
+struct SearchResultRow: View {
+***REMOVED***var title: String
+***REMOVED***var subtitle: String?
+***REMOVED***
+***REMOVED***var body: some View {
+***REMOVED******REMOVED***VStack (alignment: .leading){
+***REMOVED******REMOVED******REMOVED***Text(title)
+***REMOVED******REMOVED******REMOVED******REMOVED***.font(.callout)
+***REMOVED******REMOVED******REMOVED***if let subtitle = subtitle {
+***REMOVED******REMOVED******REMOVED******REMOVED***Text(subtitle)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.caption)
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***

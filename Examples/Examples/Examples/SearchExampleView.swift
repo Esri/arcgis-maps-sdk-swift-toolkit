@@ -18,9 +18,16 @@ import Combine
 
 struct SearchExampleView: View {
 ***REMOVED***let searchViewModel = SearchViewModel(
-***REMOVED******REMOVED***sources: [LocatorSearchSource(),
-***REMOVED******REMOVED******REMOVED******REMOVED***  LocatorSearchSource()]
+***REMOVED******REMOVED***sources: [LocatorSearchSource(displayName: "Locator One",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  maximumResults: 3,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  maximumSuggestions: 3
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** ),
+***REMOVED******REMOVED******REMOVED******REMOVED***  LocatorSearchSource(displayName: "Locator Two",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  maximumResults: 1,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  maximumSuggestions: 1
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** )]
 ***REMOVED***)
+***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***ZStack (alignment: .topTrailing) {
 ***REMOVED******REMOVED******REMOVED***MapViewReader { proxy in

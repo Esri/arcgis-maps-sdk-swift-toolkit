@@ -154,7 +154,6 @@ suggestions: Result<[SearchSuggestion]?, Error> = .success(nil)
 ***REMOVED******REMOVED***/ Updates suggestions list asynchronously. View should take care to cancel previous suggestion
 ***REMOVED******REMOVED***/ requests before initiating new ones. The view should also wait for some time after user finishes
 ***REMOVED******REMOVED***/ typing before making suggestions. The JavaScript implementation uses 150ms by default.
-***REMOVED******REMOVED***TODO: should the return be optional (according to .NET impl)?
 ***REMOVED***func updateSuggestions() async -> Void {
 ***REMOVED******REMOVED***guard !currentQuery.isEmpty else { return ***REMOVED***
 ***REMOVED******REMOVED***print("SearchViewModel.updateSuggestions: \(currentQuery)")

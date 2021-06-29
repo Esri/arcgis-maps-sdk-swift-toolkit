@@ -16,41 +16,46 @@ import Foundation
 
 ***REMOVED***/ Uses a Locator to provide search and suggest results. Most configuration should be done on the
 ***REMOVED***/ `GeocodeParameters` directly.
-public class LocatorSearchSource {
-***REMOVED***public init(locator: LocatorTask = LocatorTask(url: URL(string: "https:***REMOVED***geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer")!),
-***REMOVED******REMOVED******REMOVED******REMOVED***geocodeParameters: GeocodeParameters = GeocodeParameters(),
-***REMOVED******REMOVED******REMOVED******REMOVED***suggestParameters: SuggestParameters = SuggestParameters(),
-***REMOVED******REMOVED******REMOVED******REMOVED***displayName: String = "Search",
+public class LocatorSearchSource: ObservableObject {
+***REMOVED***public init(displayName: String = "Search",
 ***REMOVED******REMOVED******REMOVED******REMOVED***maximumResults: Int = 6,
 ***REMOVED******REMOVED******REMOVED******REMOVED***maximumSuggestions: Int = 6,
 ***REMOVED******REMOVED******REMOVED******REMOVED***searchArea: Geometry? = nil,
 ***REMOVED******REMOVED******REMOVED******REMOVED***preferredSearchLocation: Point? = nil) {
-***REMOVED******REMOVED***self.locator = locator
-***REMOVED******REMOVED***self.geocodeParameters = geocodeParameters
-***REMOVED******REMOVED***self.suggestParameters = suggestParameters
 ***REMOVED******REMOVED***self.displayName = displayName
 ***REMOVED******REMOVED***self.maximumResults = maximumResults
 ***REMOVED******REMOVED***self.maximumSuggestions = maximumSuggestions
 ***REMOVED******REMOVED***self.searchArea = searchArea
 ***REMOVED******REMOVED***self.preferredSearchLocation = preferredSearchLocation
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***geocodeParameters.maxResults = Int32(maximumResults)
+***REMOVED******REMOVED***suggestParameters.maxResults = Int32(maximumSuggestions)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The locator used by this search source.
-***REMOVED***var locator: LocatorTask = LocatorTask(url: URL(string: "https:***REMOVED***geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer")!)
+***REMOVED***private(set) var locator: LocatorTask = LocatorTask(url: URL(string: "https:***REMOVED***geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer")!)
 ***REMOVED***
 ***REMOVED******REMOVED***/ Parameters used for geocoding. Some properties on parameters will be updated automatically
 ***REMOVED******REMOVED***/ based on searches.
-***REMOVED***var geocodeParameters: GeocodeParameters = GeocodeParameters()
+***REMOVED***private(set) var geocodeParameters: GeocodeParameters = GeocodeParameters()
 ***REMOVED***
 ***REMOVED******REMOVED***/ Parameters used for getting suggestions. Some properties will be updated automatically
 ***REMOVED******REMOVED***/ based on searches.
-***REMOVED***var suggestParameters: SuggestParameters = SuggestParameters()
+***REMOVED***private(set) var suggestParameters: SuggestParameters = SuggestParameters()
 ***REMOVED***
 ***REMOVED***public var displayName: String = "Search"
 ***REMOVED***
-***REMOVED***public var maximumResults: Int = 6
+***REMOVED***public var maximumResults: Int = 6 {
+***REMOVED******REMOVED***didSet {
+***REMOVED******REMOVED******REMOVED***geocodeParameters.maxResults = Int32(maximumResults)
 ***REMOVED***
-***REMOVED***public var maximumSuggestions: Int = 6
+***REMOVED***
+***REMOVED***
+***REMOVED***public var maximumSuggestions: Int = 6 {
+***REMOVED******REMOVED***didSet {
+***REMOVED******REMOVED******REMOVED***suggestParameters.maxResults = Int32(maximumResults)
+***REMOVED***
+***REMOVED***
 ***REMOVED***
 ***REMOVED***public var searchArea: Geometry?
 ***REMOVED***
@@ -65,7 +70,13 @@ extension LocatorSearchSource: SearchSourceProtocol {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***public func search(_ queryString: String, area: Geometry? = nil) async throws -> [SearchResult] {
-***REMOVED******REMOVED***let geocodeResults =  try await locator.geocode(searchText: queryString)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***let tempParams
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let geocodeResults =  try await locator.geocode(searchText: queryString,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***parameters: geocodeParameters)
 ***REMOVED******REMOVED******REMOVED***convert to search results
 ***REMOVED******REMOVED***return geocodeResults.map{ $0.toSearchResult(searchSource: self) ***REMOVED***
 ***REMOVED***
