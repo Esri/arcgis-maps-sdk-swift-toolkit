@@ -16,41 +16,46 @@ import ArcGIS
 
 /// Uses a Locator to provide search and suggest results. Most configuration should be done on the
 /// `GeocodeParameters` directly.
-public class LocatorSearchSource {
-    public init(locator: LocatorTask = LocatorTask(url: URL(string: "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer")!),
-                geocodeParameters: GeocodeParameters = GeocodeParameters(),
-                suggestParameters: SuggestParameters = SuggestParameters(),
-                displayName: String = "Search",
+public class LocatorSearchSource: ObservableObject {
+    public init(displayName: String = "Search",
                 maximumResults: Int = 6,
                 maximumSuggestions: Int = 6,
                 searchArea: Geometry? = nil,
                 preferredSearchLocation: Point? = nil) {
-        self.locator = locator
-        self.geocodeParameters = geocodeParameters
-        self.suggestParameters = suggestParameters
         self.displayName = displayName
         self.maximumResults = maximumResults
         self.maximumSuggestions = maximumSuggestions
         self.searchArea = searchArea
         self.preferredSearchLocation = preferredSearchLocation
+        
+        geocodeParameters.maxResults = Int32(maximumResults)
+        suggestParameters.maxResults = Int32(maximumSuggestions)
     }
     
     /// The locator used by this search source.
-    var locator: LocatorTask = LocatorTask(url: URL(string: "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer")!)
+    private(set) var locator: LocatorTask = LocatorTask(url: URL(string: "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer")!)
     
     /// Parameters used for geocoding. Some properties on parameters will be updated automatically
     /// based on searches.
-    var geocodeParameters: GeocodeParameters = GeocodeParameters()
+    private(set) var geocodeParameters: GeocodeParameters = GeocodeParameters()
     
     /// Parameters used for getting suggestions. Some properties will be updated automatically
     /// based on searches.
-    var suggestParameters: SuggestParameters = SuggestParameters()
+    private(set) var suggestParameters: SuggestParameters = SuggestParameters()
     
     public var displayName: String = "Search"
     
-    public var maximumResults: Int = 6
+    public var maximumResults: Int = 6 {
+        didSet {
+            geocodeParameters.maxResults = Int32(maximumResults)
+        }
+    }
     
-    public var maximumSuggestions: Int = 6
+    public var maximumSuggestions: Int = 6 {
+        didSet {
+            suggestParameters.maxResults = Int32(maximumResults)
+        }
+    }
     
     public var searchArea: Geometry?
     
@@ -65,7 +70,13 @@ extension LocatorSearchSource: SearchSourceProtocol {
     }
     
     public func search(_ queryString: String, area: Geometry? = nil) async throws -> [SearchResult] {
-        let geocodeResults =  try await locator.geocode(searchText: queryString)
+        
+//        let tempParams
+        
+        
+        
+        let geocodeResults =  try await locator.geocode(searchText: queryString,
+                                                        parameters: geocodeParameters)
         //convert to search results
         return geocodeResults.map{ $0.toSearchResult(searchSource: self) }
     }

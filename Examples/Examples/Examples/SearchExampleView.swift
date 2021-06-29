@@ -18,9 +18,16 @@ import ArcGISToolkit
 
 struct SearchExampleView: View {
     let searchViewModel = SearchViewModel(
-        sources: [LocatorSearchSource(),
-                  LocatorSearchSource()]
+        sources: [LocatorSearchSource(displayName: "Locator One",
+                                      maximumResults: 3,
+                                      maximumSuggestions: 3
+                                     ),
+                  LocatorSearchSource(displayName: "Locator Two",
+                                      maximumResults: 1,
+                                      maximumSuggestions: 1
+                                     )]
     )
+    
     var body: some View {
         ZStack (alignment: .topTrailing) {
             MapViewReader { proxy in
