@@ -69,7 +69,11 @@ public struct SearchView: View {
     
     /// Indicates that the `SearchViewModel` should start a search.
     @State
-    private var shouldCommitSearch: Bool = false
+    private var commitSearch: Bool = false
+    
+    /// Indicates that the `SearchViewModel` should accept a suggestion.
+    @State
+    private var currentSuggestion: SearchSuggestion?
     
     /// Indicates that the geoView's viewpoint has changed since the last search.
     @State
@@ -78,72 +82,152 @@ public struct SearchView: View {
     // TODO: Figure out better styling for list
     // TODO: continue fleshing out SearchViewModel and LocatorSearchSource/SmartSearchSource
     // TODO: following Nathan's lead on all this stuff, i.e., go through his code and duplicate it as I go.
-
+    // TODO: better modifiers for search text field; maybe SearchTextField or something...
     public var body: some View {
         VStack (alignment: .center) {
             TextField(searchViewModel.defaultPlaceHolder,
                       text: $searchViewModel.currentQuery) { editing in
-                // For when editing state changes (becomes/looses firstResponder)
             } onCommit: {
-                shouldCommitSearch.toggle()
+                // Editing state changed (becomes/looses firstResponder)
+                commitSearch.toggle()
             }
             .esriDeleteTextButton(text: $searchViewModel.currentQuery)
-            .esriSearchButton(performSearch: $shouldCommitSearch)
+            .esriSearchButton(performSearch: $commitSearch)
             .esriBorder()
             if enableRepeatSearchHereButton, viewpointChanged {
                 Button("Search Here") {
                     viewpointChanged = false
-                    shouldCommitSearch.toggle()
+                    commitSearch.toggle()
                 }
-                .esriBorder()
             }
-            switch searchViewModel.results {
-            case .success(let results):
-                if let results = results, results.count > 0 {
-                    List(results) { result in
-                        VStack (alignment: .leading){
-                            Text(result.displayTitle)
-                                .font(.callout)
-                            if let subtitle = result.displaySubtitle {
-                                Text(subtitle)
-                                    .font(.caption)
-                            }
-                        }
-                    }
-                    //                    .listStyle(DefaultListStyle())
-                }
-            case .failure(let error):
-                Text("Error occurred: \(error.localizedDescription)")
-                Spacer()
-            }
-            switch searchViewModel.suggestions {
-            case .success(let results):
-                if let results = results, results.count > 0 {
-                    List(results) { result in
-                        VStack (alignment: .leading){
-                            Text(result.displayTitle)
-                                .font(.callout)
-                            if let subtitle = result.displaySubtitle {
-                                Text(subtitle)
-                                    .font(.caption)
-                            }
-                        }
-                    }
-                    //                    .listStyle(DefaultListStyle())
-                }
-            case .failure(let error):
-                Text("Error occurred: \(error.localizedDescription)")
-                Spacer()
-            }
+            SearchResultList(searchResults: searchViewModel.results)
+            SearchSuggestionList(searchSuggestions: searchViewModel.suggestions,
+                                 currentSuggestion: $currentSuggestion
+            )
         }
         .task(id: searchViewModel.currentQuery) {
-            // For when user types a new character
-            //            suggestionResult = await Result { try await searchViewModel.updateSuggestions() }
-            await searchViewModel.updateSuggestions()
+            // User typed a new character
+            if currentSuggestion == nil {
+                await searchViewModel.updateSuggestions()
+            }
         }
-        .task(id: shouldCommitSearch) {
-            // For when user commits changes (hits Enter/Search button)
+        .task(id: commitSearch) {
+            // User committed changes (hit Enter/Search button)
             await searchViewModel.commitSearch(true)
+        }
+        .task(id: currentSuggestion) {
+            // User committed changes (hit Enter/Search button)
+            if let suggestion = currentSuggestion {
+                await searchViewModel.acceptSuggestion(suggestion)
+                currentSuggestion = nil
+            }
+        }
+    }
+}
+
+// TODO: look at consolidating SearchResultView and SearchSuggestionView with
+// TODO: new SearchDisplayProtocol containing only displayTitle and displaySubtitle
+// TODO: That would mean we only needed one of these.
+struct SearchResultList: View {
+    var searchResults: Result<[SearchResult]?, Error>
+    
+    var body: some View {
+        Group {
+            switch searchResults {
+            case .success(let results):
+                if let results = results, results.count > 0 {
+                    List {
+                        // Get array of unique search source displayNames.
+                        let sourceDisplayNames = Array(Set(results.map { $0.owningSource.displayName })).sorted()
+                        ForEach(sourceDisplayNames, id: \.self) { displayName in
+                            Section(header: Text(displayName)) {
+                                // Get results filtered by displayName
+                                let sourceResults = results.filter { $0.owningSource.displayName == displayName }
+                                if sourceResults.count > 0 {
+                                    ForEach(sourceResults) { result in
+                                        HStack {
+                                            Image(systemName: "mappin")
+                                                .foregroundColor(Color(.red))
+                                            SearchResultRow(title: result.displayTitle, subtitle: result.displaySubtitle)
+                                        }
+                                        .onTapGesture {
+                                            print("user selected result: \(result.displayTitle)")
+                                        }
+                                    }
+                                }
+                                else {
+                                    // TODO: figure out why this isn't triggered.
+                                    Text("No results found")
+                                }
+                                //                    .listStyle(DefaultListStyle())
+                            }
+                        }
+                    }
+                }
+            case .failure(_):
+                Spacer()
+            }
+        }
+    }
+}
+
+struct SearchSuggestionList: View {
+    var searchSuggestions: Result<[SearchSuggestion]?, Error>
+    var currentSuggestion: Binding<SearchSuggestion?>
+    
+    var body: some View {
+        Group {
+            switch searchSuggestions {
+            case .success(let results):
+                if let suggestions = results, suggestions.count > 0 {
+                    List {
+                        // Get array of unique search source displayNames.
+                        let sourceDisplayNames = Array(Set(suggestions.map { $0.owningSource.displayName })).sorted()
+                        ForEach(sourceDisplayNames, id: \.self) { displayName in
+                            Section(header: Text(displayName)) {
+                                // Get results filtered by displayName
+                                let sourceSuggestions = suggestions.filter { $0.owningSource.displayName == displayName }
+                                if sourceSuggestions.count > 0 {
+                                    ForEach(sourceSuggestions) { suggestion in
+                                        HStack {
+                                            let imageName = suggestion.isCollection ? "magnifyingglass" : "mappin"
+                                            Image(systemName: imageName)
+                                            SearchResultRow(title: suggestion.displayTitle, subtitle: suggestion.displaySubtitle)
+                                        }
+                                        .onTapGesture() {
+                                            currentSuggestion.wrappedValue = suggestion
+                                        }
+                                    }
+                                    //                    .listStyle(DefaultListStyle())
+                                }
+                                else {
+                                    // TODO: figure out why this isn't triggered.
+                                    Text("No results found")
+                                }
+                            }
+                        }
+                    }
+                }
+            case .failure(_):
+                Spacer()
+            }
+        }
+    }
+}
+//TODO:             NoResultMessage = "No Results";
+
+struct SearchResultRow: View {
+    var title: String
+    var subtitle: String?
+    
+    var body: some View {
+        VStack (alignment: .leading){
+            Text(title)
+                .font(.callout)
+            if let subtitle = subtitle {
+                Text(subtitle)
+                    .font(.caption)
+            }
         }
     }
 }

@@ -52,3 +52,9 @@ public class SearchSuggestion {
 extension SearchSuggestion: Identifiable {
     public var id: ObjectIdentifier { ObjectIdentifier(self) }
 }
+
+extension SearchSuggestion: Equatable {
+    public static func == (lhs: SearchSuggestion, rhs: SearchSuggestion) -> Bool {
+        lhs === rhs
+    }
+}

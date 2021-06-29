@@ -154,7 +154,6 @@ suggestions: Result<[SearchSuggestion]?, Error> = .success(nil)
     /// Updates suggestions list asynchronously. View should take care to cancel previous suggestion
     /// requests before initiating new ones. The view should also wait for some time after user finishes
     /// typing before making suggestions. The JavaScript implementation uses 150ms by default.
-    //TODO: should the return be optional (according to .NET impl)?
     func updateSuggestions() async -> Void {
         guard !currentQuery.isEmpty else { return }
         print("SearchViewModel.updateSuggestions: \(currentQuery)")
