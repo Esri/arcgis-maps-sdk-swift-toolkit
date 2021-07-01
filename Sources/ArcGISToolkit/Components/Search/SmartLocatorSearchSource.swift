@@ -19,6 +19,46 @@ import ArcGIS
 /// underlying locator to be used well; this class implements behaviors that make assumptions about the
 /// locator being the world geocode service.
 public class SmartLocatorSearchSource: LocatorSearchSource {
+    public init(displayName: String = "Search",
+                maximumSuggestions: Int,
+                searchArea: Geometry? = nil,
+                preferredSearchLocation: Point? = nil,
+                repeatSearchResultThreshold: Int = 1,
+                repeatSuggestResultThreshold: Int = 6,
+                resultSymbolStyle: SymbolStyle? = nil) {
+        self.objectWillChange = objectWillChange
+        self.displayName = displayName
+        self.maximumSuggestions = maximumSuggestions
+        self.searchArea = searchArea
+        self.preferredSearchLocation = preferredSearchLocation
+        self.repeatSearchResultThreshold = repeatSearchResultThreshold
+        self.repeatSuggestResultThreshold = repeatSuggestResultThreshold
+        self.resultSymbolStyle = resultSymbolStyle
+        
+        geocodeParameters.maxResults = Int32(maximumResults)
+        suggestParameters.maxResults = Int32(maximumSuggestions)
+    }
+    
+    public var displayName: String
+    
+    public var maximumSuggestions: Int
+    
+    public var searchArea: Geometry?
+    
+    public var preferredSearchLocation: Point?
+    
+    public func suggest(_ queryString: String) async throws -> [SearchSuggestion] {
+        <#code#>
+    }
+    
+    public func search(_ queryString: String, area: Geometry?) async throws -> [SearchResult] {
+        <#code#>
+    }
+    
+    public func search(_ searchSuggestion: SearchSuggestion, area: Geometry?) async throws -> [SearchResult] {
+        <#code#>
+    }
+    
     /// The minimum number of results to attempt to return. If there are too few results, the search is
     /// repeated with loosened parameters until enough results are accumulated. If no search is
     /// successful, it is still possible to have a total number of results less than this threshold. Does not
@@ -39,10 +79,4 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
     /// by publishing a web style, taking care to ensure that symbol keys match the `Type` attribute
     /// returned by the locator.
     var resultSymbolStyle: SymbolStyle?
-    
-    //    @State
-    //    private var address: String = ""
-    //
-    //    @State
-    //    private var result: Result<[GeocodeResult], Error> = .success([])
 }
