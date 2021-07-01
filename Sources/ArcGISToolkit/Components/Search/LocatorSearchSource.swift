@@ -64,26 +64,37 @@ public class LocatorSearchSource: ObservableObject {
 
 extension LocatorSearchSource: SearchSourceProtocol {
 ***REMOVED***public func suggest(_ queryString: String) async throws -> [SearchSuggestion] {
-***REMOVED******REMOVED***let suggestResults =  try await locator.suggest(searchText: queryString)
-***REMOVED******REMOVED******REMOVED***convert to search results
+***REMOVED******REMOVED***suggestParameters.searchArea = searchArea
+***REMOVED******REMOVED***suggestParameters.preferredSearchLocation = preferredSearchLocation
+
+***REMOVED******REMOVED***let suggestResults =  try await locator.suggest(searchText: queryString,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***parameters: suggestParameters
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***convert to SearchSuggestions
 ***REMOVED******REMOVED***return suggestResults.map{ $0.toSearchSuggestion(searchSource: self) ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***public func search(_ queryString: String, area: Geometry? = nil) async throws -> [SearchResult] {
+***REMOVED******REMOVED***geocodeParameters.searchArea = searchArea
+***REMOVED******REMOVED***geocodeParameters.preferredSearchLocation = preferredSearchLocation
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***let tempParams
+***REMOVED******REMOVED***let geocodeResults = try await locator.geocode(searchText: queryString,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***   parameters: geocodeParameters
+***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***let geocodeResults =  try await locator.geocode(searchText: queryString,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***parameters: geocodeParameters)
-***REMOVED******REMOVED******REMOVED***convert to search results
+***REMOVED******REMOVED******REMOVED***convert to SearchResults
 ***REMOVED******REMOVED***return geocodeResults.map{ $0.toSearchResult(searchSource: self) ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***public func search(_ searchSuggestion: SearchSuggestion, area: Geometry? = nil) async throws -> [SearchResult] {
-***REMOVED******REMOVED***guard let query = searchSuggestion.suggestResult?.label else { return [] ***REMOVED***
-***REMOVED******REMOVED***let geocodeResults =  try await locator.geocode(searchText: query)
+***REMOVED******REMOVED***guard let suggestResult = searchSuggestion.suggestResult else { return [] ***REMOVED***
+
+***REMOVED******REMOVED***geocodeParameters.searchArea = searchArea
+***REMOVED******REMOVED***geocodeParameters.preferredSearchLocation = preferredSearchLocation
+
+***REMOVED******REMOVED***let geocodeResults =  try await locator.geocode(suggestResult: suggestResult,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***parameters: geocodeParameters
+***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***return geocodeResults.map{ $0.toSearchResult(searchSource: self) ***REMOVED***
 ***REMOVED***
 ***REMOVED***

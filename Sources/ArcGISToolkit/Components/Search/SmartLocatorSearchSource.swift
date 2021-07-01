@@ -19,6 +19,46 @@
 ***REMOVED***/ underlying locator to be used well; this class implements behaviors that make assumptions about the
 ***REMOVED***/ locator being the world geocode service.
 public class SmartLocatorSearchSource: LocatorSearchSource {
+***REMOVED***public init(displayName: String = "Search",
+***REMOVED******REMOVED******REMOVED******REMOVED***maximumSuggestions: Int,
+***REMOVED******REMOVED******REMOVED******REMOVED***searchArea: Geometry? = nil,
+***REMOVED******REMOVED******REMOVED******REMOVED***preferredSearchLocation: Point? = nil,
+***REMOVED******REMOVED******REMOVED******REMOVED***repeatSearchResultThreshold: Int = 1,
+***REMOVED******REMOVED******REMOVED******REMOVED***repeatSuggestResultThreshold: Int = 6,
+***REMOVED******REMOVED******REMOVED******REMOVED***resultSymbolStyle: SymbolStyle? = nil) {
+***REMOVED******REMOVED***self.objectWillChange = objectWillChange
+***REMOVED******REMOVED***self.displayName = displayName
+***REMOVED******REMOVED***self.maximumSuggestions = maximumSuggestions
+***REMOVED******REMOVED***self.searchArea = searchArea
+***REMOVED******REMOVED***self.preferredSearchLocation = preferredSearchLocation
+***REMOVED******REMOVED***self.repeatSearchResultThreshold = repeatSearchResultThreshold
+***REMOVED******REMOVED***self.repeatSuggestResultThreshold = repeatSuggestResultThreshold
+***REMOVED******REMOVED***self.resultSymbolStyle = resultSymbolStyle
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***geocodeParameters.maxResults = Int32(maximumResults)
+***REMOVED******REMOVED***suggestParameters.maxResults = Int32(maximumSuggestions)
+***REMOVED***
+***REMOVED***
+***REMOVED***public var displayName: String
+***REMOVED***
+***REMOVED***public var maximumSuggestions: Int
+***REMOVED***
+***REMOVED***public var searchArea: Geometry?
+***REMOVED***
+***REMOVED***public var preferredSearchLocation: Point?
+***REMOVED***
+***REMOVED***public func suggest(_ queryString: String) async throws -> [SearchSuggestion] {
+***REMOVED******REMOVED***<#code#>
+***REMOVED***
+***REMOVED***
+***REMOVED***public func search(_ queryString: String, area: Geometry?) async throws -> [SearchResult] {
+***REMOVED******REMOVED***<#code#>
+***REMOVED***
+***REMOVED***
+***REMOVED***public func search(_ searchSuggestion: SearchSuggestion, area: Geometry?) async throws -> [SearchResult] {
+***REMOVED******REMOVED***<#code#>
+***REMOVED***
+***REMOVED***
 ***REMOVED******REMOVED***/ The minimum number of results to attempt to return. If there are too few results, the search is
 ***REMOVED******REMOVED***/ repeated with loosened parameters until enough results are accumulated. If no search is
 ***REMOVED******REMOVED***/ successful, it is still possible to have a total number of results less than this threshold. Does not
@@ -39,10 +79,4 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
 ***REMOVED******REMOVED***/ by publishing a web style, taking care to ensure that symbol keys match the `Type` attribute
 ***REMOVED******REMOVED***/ returned by the locator.
 ***REMOVED***var resultSymbolStyle: SymbolStyle?
-***REMOVED***
-***REMOVED******REMOVED******REMOVED***@State
-***REMOVED******REMOVED******REMOVED***private var address: String = ""
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***@State
-***REMOVED******REMOVED******REMOVED***private var result: Result<[GeocodeResult], Error> = .success([])
 ***REMOVED***
