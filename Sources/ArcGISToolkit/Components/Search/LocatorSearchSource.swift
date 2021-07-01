@@ -64,26 +64,37 @@ public class LocatorSearchSource: ObservableObject {
 
 extension LocatorSearchSource: SearchSourceProtocol {
     public func suggest(_ queryString: String) async throws -> [SearchSuggestion] {
-        let suggestResults =  try await locator.suggest(searchText: queryString)
-        //convert to search results
+        suggestParameters.searchArea = searchArea
+        suggestParameters.preferredSearchLocation = preferredSearchLocation
+
+        let suggestResults =  try await locator.suggest(searchText: queryString,
+                                                        parameters: suggestParameters
+        )
+        //convert to SearchSuggestions
         return suggestResults.map{ $0.toSearchSuggestion(searchSource: self) }
     }
     
     public func search(_ queryString: String, area: Geometry? = nil) async throws -> [SearchResult] {
+        geocodeParameters.searchArea = searchArea
+        geocodeParameters.preferredSearchLocation = preferredSearchLocation
         
-//        let tempParams
+        let geocodeResults = try await locator.geocode(searchText: queryString,
+                                                       parameters: geocodeParameters
+        )
         
-        
-        
-        let geocodeResults =  try await locator.geocode(searchText: queryString,
-                                                        parameters: geocodeParameters)
-        //convert to search results
+        //convert to SearchResults
         return geocodeResults.map{ $0.toSearchResult(searchSource: self) }
     }
     
     public func search(_ searchSuggestion: SearchSuggestion, area: Geometry? = nil) async throws -> [SearchResult] {
-        guard let query = searchSuggestion.suggestResult?.label else { return [] }
-        let geocodeResults =  try await locator.geocode(searchText: query)
+        guard let suggestResult = searchSuggestion.suggestResult else { return [] }
+
+        geocodeParameters.searchArea = searchArea
+        geocodeParameters.preferredSearchLocation = preferredSearchLocation
+
+        let geocodeResults =  try await locator.geocode(suggestResult: suggestResult,
+                                                        parameters: geocodeParameters
+        )
         return geocodeResults.map{ $0.toSearchResult(searchSource: self) }
     }
 }
