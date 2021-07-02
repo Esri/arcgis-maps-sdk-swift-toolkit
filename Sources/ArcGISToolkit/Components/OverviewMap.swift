@@ -18,93 +18,93 @@ import ArcGIS
 /// `OverviewMap` is a small, secondary `MapView` (sometimes called an "inset map"), superimposed
 /// on an existing `GeoView`, which shows the visible extent of that `GeoView`.
 public struct OverviewMap: View {
-    /// The `GeoViewProxy` representing the main `GeoView`. The proxy is
-    /// necessary for accessing `GeoView` functionality to get and set viewpoints.
-    private(set) var proxy: GeoViewProxy?
+    /// The `Viewpoint` of the main `GeoView`
+    let viewpoint: Viewpoint?
+    
+    /// The visible area of the main `GeoView`.
+    let visibleArea: Polygon?
+    
+    /// The `Graphic` displaying the visible area of the main `GeoView`.
+    @StateObject var graphic: Graphic
+    
+    /// The `GraphicsOverlay` used to display the visible area graphic.
+    @StateObject var graphicsOverlay: GraphicsOverlay
     
     /// The `Map` displayed in the `OverviewMap`.
-    private(set) var map: Map
+    @StateObject var map: Map = Map(basemap: .topographic())
     
-    /// The fill symbol used to display the main `GeoView` extent.
+    /// The `FillSymbol` used to display the main `GeoView` visible area.
     private(set) var extentSymbol: FillSymbol
     
-    /// The factor to multiply the main `GeoView`'s scale by. The `OverviewMap` will display
-    /// at the product of mainGeoViewScale * scaleFactor.
+    /// The factor to multiply the main `GeoView`'s scale by.  The `OverviewMap` will display
+    /// at the a scale equal to: `viewpoint.targetscale` x `scaleFactor.
     private(set) var scaleFactor: Double
-    
-    /// The geometry of the extent `Graphic` displaying the main `GeoView`'s extent. Updating
-    /// this property will update the display of the `OverviewMap`.
-    @State private var extentGeometry: Geometry?
-    
-    /// The viewpoint of the `OverviewMap'`s `MapView`. Updating
-    /// this property will update the display of the `OverviewMap`.
-    @State private var overviewMapViewpoint: Viewpoint?
     
     /// Creates an `OverviewMap`.
     /// - Parameters:
-    ///   - proxy: The `GeoViewProxy` representing the main map.
-    ///   - map: The `Map` to display in the `OverviewMap`.
-    ///   - extentSymbol: The `FillSymbol` used to display the main `GeoView`'s extent.
+    ///   - viewpoint: Viewpoint of the main `GeoView` used to update the `OverviewMap` view.
+    ///   - visibleArea: Visible area of the main `GeoView`.
+    ///   - extentSymbol: The `FillSymbol` used to display the main `GeoView`'s visible area.
     ///   The default is a transparent `SimpleFillSymbol` with a red, 1 point width outline.
-    ///   - scaleFactor: The scale factor used to calculate the `OverviewMap`'s scale.
-    ///   The default is `25.0`.
-    public init(
-        proxy: GeoViewProxy?,
-        map: Map = Map(basemap: .topographic()),
-        extentSymbol: FillSymbol = SimpleFillSymbol(
-            style: .solid,
-            color: .clear,
-            outline: SimpleLineSymbol(
-                style: .solid,
-                color: .red,
-                width: 1.0
-            )
-        ),
-        scaleFactor: Double = 25.0
+    ///   - scaleFactor: The factor to multiply the main `GeoView`'s scale by.
+    ///   The default value is 25.0
+    public init(viewpoint: Viewpoint?,
+                visibleArea: Polygon?,
+                extentSymbol: FillSymbol = SimpleFillSymbol(
+                    style: .solid,
+                    color: .clear,
+                    outline: SimpleLineSymbol(
+                        style: .solid,
+                        color: .red,
+                        width: 1.0
+                    )
+                ),
+                scaleFactor: Double = 25.0
     ) {
-        self.proxy = proxy
-        self.map = map
+        self.visibleArea = visibleArea
         self.extentSymbol = extentSymbol
         self.scaleFactor = scaleFactor
+        
+        let graphic = Graphic(geometry: visibleArea,
+                              symbol: extentSymbol)
+        
+        // It is necessary to set the graphic and graphicsOverlay this way
+        // in order to prevent the main geoview from recreating the
+        // graphicsOverlay every draw cycle.  That was causing refresh issues
+        // with the graphic during panning/zooming/rotating.
+        _graphic = StateObject(wrappedValue: graphic)
+        _graphicsOverlay = StateObject(wrappedValue: GraphicsOverlay(graphics: [graphic]))
+        
+        if let viewpoint = viewpoint,
+           let center = viewpoint.targetGeometry as? Point {
+            self.viewpoint = Viewpoint(center: center,
+                                       scale: viewpoint.targetScale * scaleFactor
+            )
+        }
+        else {
+            self.viewpoint = nil
+        }
     }
     
-    private var viewpointChangedPublisher: AnyPublisher<Void, Never> {
-        proxy?.viewpointChangedPublisher
-            .receive(on: DispatchQueue.main)
-            .throttle(
-                for: .seconds(0.25),
-                scheduler: DispatchQueue.main,
-                latest: true
-            )
-            .eraseToAnyPublisher() ?? Empty<Void, Never>().eraseToAnyPublisher()
-    }
-
     public var body: some View {
-        ZStack {
-            MapView(
-                map: map,
-                viewpoint: $overviewMapViewpoint,
-                graphicsOverlays: [GraphicsOverlay(
-                                    graphics: [Graphic(geometry: extentGeometry,
-                                                       symbol: extentSymbol)])]
-            )
+        MapView(
+            map: map,
+            viewpoint: viewpoint,
+            graphicsOverlays: [graphicsOverlay]
+        )
             .attributionTextHidden()
             .interactionModes([])
             .border(Color.black, width: 1)
-            .onReceive(viewpointChangedPublisher) {
-                guard let centerAndScaleViewpoint = proxy?.currentViewpoint(type: .centerAndScale),
-                      let newCenter = centerAndScaleViewpoint.targetGeometry as? Point
-                else { return }
-                
-                if let mapViewProxy = proxy as? MapViewProxy {
-                    extentGeometry = mapViewProxy.visibleArea
-                }
-                
-                overviewMapViewpoint = Viewpoint(
-                    center: newCenter,
-                    scale: centerAndScaleViewpoint.targetScale * scaleFactor
-                )
-            }
-        }
+            .onChange(of: visibleArea, perform: { graphic.geometry = $0 })
+            .onChange(of: extentSymbol, perform: { graphic.symbol = $0 })
+    }
+    
+    public func map(_ map: Map) -> OverviewMap {
+        var copy = self
+        copy._map = StateObject(wrappedValue: map)
+        return copy
     }
 }
+
+extension Graphic: ObservableObject {}
+extension GraphicsOverlay: ObservableObject {}
