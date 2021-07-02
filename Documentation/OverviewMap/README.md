@@ -35,9 +35,9 @@ For an `OverviewMap` on a `SceneView`, the center point of the `SceneView`'s `cu
 
 ## Usage
 
-###Basic usage for overlaying a `MapView`
+### Basic usage for overlaying a `MapView`
 
-Note that for `MapView`'s, you need to provide the `OverviewMap both a viewpoint and visibleArea, as well as providing a `FillSymbol` if you want to customize the display of the visible area.
+Note that for `MapView`'s, you need to provide the `OverviewMap` both a viewpoint and visibleArea, as well as providing a `FillSymbol` if you want to customize the display of the visible area.
 
 ```swift
 let map = Map(basemap: .imageryWithLabels())
@@ -63,7 +63,7 @@ var body: some View {
 ***REMOVED***
 ```
 
-### Displaying a custom fill symbol for a `MapView`'s visible area.
+### Displaying a custom fill symbol and scale factor for a `MapView`'s visible area.
 
 ```swift
 let map = Map(basemap: .imageryWithLabels())
@@ -89,7 +89,8 @@ var body: some View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***color: .blue,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***width: 2.0
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***scaleFactor: 32.0
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***   )
 ***REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 200, height: 132)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding(),
@@ -98,9 +99,9 @@ var body: some View {
 ***REMOVED***
 ```
 
-###Basic usage for overlaying a `SceneView`
+### Basic usage for overlaying a `SceneView`
 
-Note that for `SceneView`'s, you need to provide the `OverviewMap only a viewpoint, as well as providing a `MarkerSymbol` if you want to customize the display of the viewpoint.
+Note that for `SceneView`'s, you need to provide the `OverviewMap` only a viewpoint, as well as providing a `MarkerSymbol` if you want to customize the display of the viewpoint.
 
 ```swift
 let scene = Scene(basemap: .imageryWithLabels())
@@ -120,29 +121,32 @@ var body: some View {
 ***REMOVED***
 ```
 
-### Displaying a custom marker symbol for a `SceneView`'s viewpoint.
+### Displaying a custom marker symbol and scale factor for a `SceneView`'s viewpoint.
 
 ```swift
-let scene = Scene(basemap: .imageryWithLabels())
-***REMOVED***
-@State
-private var viewpoint: Viewpoint?
+SceneView(scene: scene)
+***REMOVED***.onViewpointChanged(type: .centerAndScale) { viewpoint = $0 ***REMOVED***
+***REMOVED***.overlay(
+***REMOVED******REMOVED***OverviewMap(viewpoint: viewpoint,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***symbol: SimpleMarkerSymbol(style: .x,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***   color: .blue,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***   size: 24.0
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  ),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***scaleFactor: 32.0
+***REMOVED******REMOVED******REMOVED******REMOVED***   )
+***REMOVED******REMOVED******REMOVED***.frame(width: 200, height: 132)
+***REMOVED******REMOVED******REMOVED***.padding(),
+***REMOVED******REMOVED***alignment: .topTrailing
+***REMOVED***)
+```
 
-var body: some View {
-***REMOVED***SceneView(scene: scene)
-***REMOVED******REMOVED***.onViewpointChanged(type: .centerAndScale) { viewpoint = $0 ***REMOVED***
-***REMOVED******REMOVED***.overlay(
-***REMOVED******REMOVED******REMOVED***OverviewMap(viewpoint: viewpoint,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***symbol: SimpleMarkerSymbol(style: .x,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***   color: .blue,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***   size: 24.0
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  )
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***   )
-***REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 200, height: 132)
-***REMOVED******REMOVED******REMOVED******REMOVED***.padding(),
-***REMOVED******REMOVED******REMOVED***alignment: .topTrailing
-***REMOVED******REMOVED***)
-***REMOVED***
+### Changing the map used by the `OverviewMap`
+
+To change the `OverviewMap`'s `map`, you use the `.map()` modifier on `OverviewMap`
+
+```swift
+OverviewMap(viewpoint: viewpoint)
+***REMOVED***.map(Map(basemap: .darkGrayCanvasVector()))
 ```
 
 To see it in action, try out the [Examples](../../Examples) and refer to [OverviewMapExampleView.swift](../../Examples/Examples/OverviewMapExampleView.swift) in the project.
