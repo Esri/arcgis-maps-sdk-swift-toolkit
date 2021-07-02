@@ -24,15 +24,6 @@ public struct OverviewMap: View {
 ***REMOVED******REMOVED***/ The visible area of the main `GeoView`.
 ***REMOVED***let visibleArea: Polygon?
 ***REMOVED***
-***REMOVED******REMOVED***/ The `Graphic` displaying the visible area of the main `GeoView`.
-***REMOVED***@StateObject var graphic: Graphic
-***REMOVED***
-***REMOVED******REMOVED***/ The `GraphicsOverlay` used to display the visible area graphic.
-***REMOVED***@StateObject var graphicsOverlay: GraphicsOverlay
-***REMOVED***
-***REMOVED******REMOVED***/ The `Map` displayed in the `OverviewMap`.
-***REMOVED***@StateObject var map: Map = Map(basemap: .topographic())
-***REMOVED***
 ***REMOVED******REMOVED***/ The `Symbol` used to display the main `GeoView` visible area. For MapViews,
 ***REMOVED******REMOVED***/ the symbol will be a FillSymbol used to display the GeoView visible area. For SceneViews,
 ***REMOVED******REMOVED***/ the symbol will be a MarkerSymbol, used to display the current viewpoint's center.
@@ -44,6 +35,19 @@ public struct OverviewMap: View {
 ***REMOVED******REMOVED***/ at the a scale equal to: `viewpoint.targetscale` x `scaleFactor.
 ***REMOVED***private(set) var scaleFactor: Double
 ***REMOVED***
+***REMOVED******REMOVED***/ The `Map` displayed in the `OverviewMap`.
+***REMOVED***@StateObject
+***REMOVED***var map: Map = Map(basemap: .topographic())
+
+***REMOVED******REMOVED***/ The `Graphic` displaying the visible area of the main `GeoView`.
+***REMOVED***@StateObject
+***REMOVED***private var graphic: Graphic
+***REMOVED***
+***REMOVED******REMOVED***/ The `GraphicsOverlay` used to display the visible area graphic.
+***REMOVED***@StateObject
+***REMOVED***private var graphicsOverlay: GraphicsOverlay
+***REMOVED***
+***REMOVED******REMOVED***/ The default fill symbol.
 ***REMOVED***private let fillSymbol: FillSymbol = SimpleFillSymbol(
 ***REMOVED******REMOVED***style: .solid,
 ***REMOVED******REMOVED***color: .clear,
@@ -54,6 +58,7 @@ public struct OverviewMap: View {
 ***REMOVED******REMOVED***)
 ***REMOVED***)
 ***REMOVED***
+***REMOVED******REMOVED***/ The default marker symbol.
 ***REMOVED***private let markerSymbol: MarkerSymbol = SimpleMarkerSymbol(style: .cross,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***color: .red,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***size: 12.0
