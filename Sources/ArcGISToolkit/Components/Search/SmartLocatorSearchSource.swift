@@ -19,14 +19,15 @@ import ArcGIS
 /// underlying locator to be used well; this class implements behaviors that make assumptions about the
 /// locator being the world geocode service.
 public class SmartLocatorSearchSource: LocatorSearchSource {
-    public init(displayName: String = "Search",
+    public convenience init(displayName: String = "Search",
                 maximumSuggestions: Int,
                 searchArea: Geometry? = nil,
                 preferredSearchLocation: Point? = nil,
                 repeatSearchResultThreshold: Int = 1,
                 repeatSuggestResultThreshold: Int = 6,
                 resultSymbolStyle: SymbolStyle? = nil) {
-        self.objectWillChange = objectWillChange
+        self.init()
+//        self.objectWillChange = objectWillChange
         self.displayName = displayName
         self.maximumSuggestions = maximumSuggestions
         self.searchArea = searchArea
@@ -39,25 +40,25 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
         suggestParameters.maxResults = Int32(maximumSuggestions)
     }
     
-    public var displayName: String
-    
-    public var maximumSuggestions: Int
-    
-    public var searchArea: Geometry?
-    
-    public var preferredSearchLocation: Point?
-    
-    public func suggest(_ queryString: String) async throws -> [SearchSuggestion] {
-        <#code#>
-    }
-    
-    public func search(_ queryString: String, area: Geometry?) async throws -> [SearchResult] {
-        <#code#>
-    }
-    
-    public func search(_ searchSuggestion: SearchSuggestion, area: Geometry?) async throws -> [SearchResult] {
-        <#code#>
-    }
+//    public var displayName: String
+//
+//    public var maximumSuggestions: Int
+//
+//    public var searchArea: Geometry?
+//
+//    public var preferredSearchLocation: Point?
+//
+//    public func suggest(_ queryString: String) async throws -> [SearchSuggestion] {
+//        <#code#>
+//    }
+//
+//    public func search(_ queryString: String, area: Geometry?) async throws -> [SearchResult] {
+//        <#code#>
+//    }
+//
+//    public func search(_ searchSuggestion: SearchSuggestion, area: Geometry?) async throws -> [SearchResult] {
+//        <#code#>
+//    }
     
     /// The minimum number of results to attempt to return. If there are too few results, the search is
     /// repeated with loosened parameters until enough results are accumulated. If no search is

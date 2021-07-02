@@ -12,22 +12,24 @@
 // limitations under the License.
 
 import SwiftUI
-import Combine
 import ArcGIS
 import ArcGISToolkit
 
 struct OverviewMapExampleView: View {
-    @State private var mapViewProxy: MapViewProxy?
+    let map = Map(basemap: .imageryWithLabels())
+    @State private var viewpoint: Viewpoint?
+    @State private var visibleArea: ArcGIS.Polygon?
     
     var body: some View {
-        ZStack (alignment: .topTrailing) {
-            MapView(map: Map(basemap: Basemap.imageryWithLabels()),
-                    proxy: $mapViewProxy
+        MapView(map: map)
+            .onViewpointChanged(type: .centerAndScale) { viewpoint = $0 }
+            .onVisibleAreaChanged { visibleArea = $0 }
+            .overlay(
+                OverviewMap(viewpoint: viewpoint, visibleArea: visibleArea)
+                    .frame(width: 200, height: 132)
+                    .padding(),
+                alignment: .topTrailing
             )
-            OverviewMap(proxy: $mapViewProxy)
-                .frame(width: 200, height: 132)
-                .padding()
-        }
     }
 }
 

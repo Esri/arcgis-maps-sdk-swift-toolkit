@@ -72,7 +72,7 @@
 				E4F9BC98265EFCAF001280FF /* OverviewMapExampleView.swift */,
 				E42BFBE82672BF9500159107 /* SearchExampleView.swift */,
 			);
-			path = Examples;
+			name = Examples;
 			sourceTree = "<group>";
 		};
 		E47ABE372652FE0900FD2FE3 = {
