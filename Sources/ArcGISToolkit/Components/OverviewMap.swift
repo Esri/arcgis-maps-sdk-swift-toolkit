@@ -24,15 +24,6 @@ public struct OverviewMap: View {
     /// The visible area of the main `GeoView`.
     let visibleArea: Polygon?
     
-    /// The `Graphic` displaying the visible area of the main `GeoView`.
-    @StateObject var graphic: Graphic
-    
-    /// The `GraphicsOverlay` used to display the visible area graphic.
-    @StateObject var graphicsOverlay: GraphicsOverlay
-    
-    /// The `Map` displayed in the `OverviewMap`.
-    @StateObject var map: Map = Map(basemap: .topographic())
-    
     /// The `Symbol` used to display the main `GeoView` visible area. For MapViews,
     /// the symbol will be a FillSymbol used to display the GeoView visible area. For SceneViews,
     /// the symbol will be a MarkerSymbol, used to display the current viewpoint's center.
@@ -44,6 +35,19 @@ public struct OverviewMap: View {
     /// at the a scale equal to: `viewpoint.targetscale` x `scaleFactor.
     private(set) var scaleFactor: Double
     
+    /// The `Map` displayed in the `OverviewMap`.
+    @StateObject
+    var map: Map = Map(basemap: .topographic())
+
+    /// The `Graphic` displaying the visible area of the main `GeoView`.
+    @StateObject
+    private var graphic: Graphic
+    
+    /// The `GraphicsOverlay` used to display the visible area graphic.
+    @StateObject
+    private var graphicsOverlay: GraphicsOverlay
+    
+    /// The default fill symbol.
     private let fillSymbol: FillSymbol = SimpleFillSymbol(
         style: .solid,
         color: .clear,
@@ -54,6 +58,7 @@ public struct OverviewMap: View {
         )
     )
     
+    /// The default marker symbol.
     private let markerSymbol: MarkerSymbol = SimpleMarkerSymbol(style: .cross,
                                                                 color: .red,
                                                                 size: 12.0
