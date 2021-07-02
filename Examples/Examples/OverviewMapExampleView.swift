@@ -16,19 +16,20 @@
 ***REMOVED***Toolkit
 
 struct OverviewMapExampleView: View {
-***REMOVED***@State private var mapViewProxy: MapViewProxy?
-***REMOVED***@State private var sceneViewProxy: SceneViewProxy?
+***REMOVED***let map = Map(basemap: .imageryWithLabels())
+***REMOVED***@State private var viewpoint: Viewpoint?
+***REMOVED***@State private var visibleArea: ArcGIS.Polygon?
 ***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***ZStack (alignment: .topTrailing) {
-***REMOVED******REMOVED******REMOVED***MapView(
-***REMOVED******REMOVED******REMOVED******REMOVED***map: Map(basemap: .imageryWithLabels()),
-***REMOVED******REMOVED******REMOVED******REMOVED***proxy: $mapViewProxy
+***REMOVED******REMOVED***MapView(map: map)
+***REMOVED******REMOVED******REMOVED***.onViewpointChanged(type: .centerAndScale) { viewpoint = $0 ***REMOVED***
+***REMOVED******REMOVED******REMOVED***.onVisibleAreaChanged { visibleArea = $0 ***REMOVED***
+***REMOVED******REMOVED******REMOVED***.overlay(
+***REMOVED******REMOVED******REMOVED******REMOVED***OverviewMap(viewpoint: viewpoint, visibleArea: visibleArea)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 200, height: 132)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(),
+***REMOVED******REMOVED******REMOVED******REMOVED***alignment: .topTrailing
 ***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***OverviewMap(proxy: mapViewProxy)
-***REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 200, height: 132)
-***REMOVED******REMOVED******REMOVED******REMOVED***.padding()
-***REMOVED***
 ***REMOVED***
 ***REMOVED***
 

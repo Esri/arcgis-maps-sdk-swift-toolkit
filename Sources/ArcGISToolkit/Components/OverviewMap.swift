@@ -18,93 +18,93 @@ import Combine
 ***REMOVED***/ `OverviewMap` is a small, secondary `MapView` (sometimes called an "inset map"), superimposed
 ***REMOVED***/ on an existing `GeoView`, which shows the visible extent of that `GeoView`.
 public struct OverviewMap: View {
-***REMOVED******REMOVED***/ The `GeoViewProxy` representing the main `GeoView`. The proxy is
-***REMOVED******REMOVED***/ necessary for accessing `GeoView` functionality to get and set viewpoints.
-***REMOVED***private(set) var proxy: GeoViewProxy?
+***REMOVED******REMOVED***/ The `Viewpoint` of the main `GeoView`
+***REMOVED***let viewpoint: Viewpoint?
+***REMOVED***
+***REMOVED******REMOVED***/ The visible area of the main `GeoView`.
+***REMOVED***let visibleArea: Polygon?
+***REMOVED***
+***REMOVED******REMOVED***/ The `Graphic` displaying the visible area of the main `GeoView`.
+***REMOVED***@StateObject var graphic: Graphic
+***REMOVED***
+***REMOVED******REMOVED***/ The `GraphicsOverlay` used to display the visible area graphic.
+***REMOVED***@StateObject var graphicsOverlay: GraphicsOverlay
 ***REMOVED***
 ***REMOVED******REMOVED***/ The `Map` displayed in the `OverviewMap`.
-***REMOVED***private(set) var map: Map
+***REMOVED***@StateObject var map: Map = Map(basemap: .topographic())
 ***REMOVED***
-***REMOVED******REMOVED***/ The fill symbol used to display the main `GeoView` extent.
+***REMOVED******REMOVED***/ The `FillSymbol` used to display the main `GeoView` visible area.
 ***REMOVED***private(set) var extentSymbol: FillSymbol
 ***REMOVED***
-***REMOVED******REMOVED***/ The factor to multiply the main `GeoView`'s scale by. The `OverviewMap` will display
-***REMOVED******REMOVED***/ at the product of mainGeoViewScale * scaleFactor.
+***REMOVED******REMOVED***/ The factor to multiply the main `GeoView`'s scale by.  The `OverviewMap` will display
+***REMOVED******REMOVED***/ at the a scale equal to: `viewpoint.targetscale` x `scaleFactor.
 ***REMOVED***private(set) var scaleFactor: Double
-***REMOVED***
-***REMOVED******REMOVED***/ The geometry of the extent `Graphic` displaying the main `GeoView`'s extent. Updating
-***REMOVED******REMOVED***/ this property will update the display of the `OverviewMap`.
-***REMOVED***@State private var extentGeometry: Geometry?
-***REMOVED***
-***REMOVED******REMOVED***/ The viewpoint of the `OverviewMap'`s `MapView`. Updating
-***REMOVED******REMOVED***/ this property will update the display of the `OverviewMap`.
-***REMOVED***@State private var overviewMapViewpoint: Viewpoint?
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates an `OverviewMap`.
 ***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - proxy: The `GeoViewProxy` representing the main map.
-***REMOVED******REMOVED***/   - map: The `Map` to display in the `OverviewMap`.
-***REMOVED******REMOVED***/   - extentSymbol: The `FillSymbol` used to display the main `GeoView`'s extent.
+***REMOVED******REMOVED***/   - viewpoint: Viewpoint of the main `GeoView` used to update the `OverviewMap` view.
+***REMOVED******REMOVED***/   - visibleArea: Visible area of the main `GeoView`.
+***REMOVED******REMOVED***/   - extentSymbol: The `FillSymbol` used to display the main `GeoView`'s visible area.
 ***REMOVED******REMOVED***/   The default is a transparent `SimpleFillSymbol` with a red, 1 point width outline.
-***REMOVED******REMOVED***/   - scaleFactor: The scale factor used to calculate the `OverviewMap`'s scale.
-***REMOVED******REMOVED***/   The default is `25.0`.
-***REMOVED***public init(
-***REMOVED******REMOVED***proxy: GeoViewProxy?,
-***REMOVED******REMOVED***map: Map = Map(basemap: .topographic()),
-***REMOVED******REMOVED***extentSymbol: FillSymbol = SimpleFillSymbol(
-***REMOVED******REMOVED******REMOVED***style: .solid,
-***REMOVED******REMOVED******REMOVED***color: .clear,
-***REMOVED******REMOVED******REMOVED***outline: SimpleLineSymbol(
-***REMOVED******REMOVED******REMOVED******REMOVED***style: .solid,
-***REMOVED******REMOVED******REMOVED******REMOVED***color: .red,
-***REMOVED******REMOVED******REMOVED******REMOVED***width: 1.0
-***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED***),
-***REMOVED******REMOVED***scaleFactor: Double = 25.0
+***REMOVED******REMOVED***/   - scaleFactor: The factor to multiply the main `GeoView`'s scale by.
+***REMOVED******REMOVED***/   The default value is 25.0
+***REMOVED***public init(viewpoint: Viewpoint?,
+***REMOVED******REMOVED******REMOVED******REMOVED***visibleArea: Polygon?,
+***REMOVED******REMOVED******REMOVED******REMOVED***extentSymbol: FillSymbol = SimpleFillSymbol(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***style: .solid,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***color: .clear,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***outline: SimpleLineSymbol(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***style: .solid,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***color: .red,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***width: 1.0
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***),
+***REMOVED******REMOVED******REMOVED******REMOVED***scaleFactor: Double = 25.0
 ***REMOVED***) {
-***REMOVED******REMOVED***self.proxy = proxy
-***REMOVED******REMOVED***self.map = map
+***REMOVED******REMOVED***self.visibleArea = visibleArea
 ***REMOVED******REMOVED***self.extentSymbol = extentSymbol
 ***REMOVED******REMOVED***self.scaleFactor = scaleFactor
-***REMOVED***
-***REMOVED***
-***REMOVED***private var viewpointChangedPublisher: AnyPublisher<Void, Never> {
-***REMOVED******REMOVED***proxy?.viewpointChangedPublisher
-***REMOVED******REMOVED******REMOVED***.receive(on: DispatchQueue.main)
-***REMOVED******REMOVED******REMOVED***.throttle(
-***REMOVED******REMOVED******REMOVED******REMOVED***for: .seconds(0.25),
-***REMOVED******REMOVED******REMOVED******REMOVED***scheduler: DispatchQueue.main,
-***REMOVED******REMOVED******REMOVED******REMOVED***latest: true
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let graphic = Graphic(geometry: visibleArea,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  symbol: extentSymbol)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** It is necessary to set the graphic and graphicsOverlay this way
+***REMOVED******REMOVED******REMOVED*** in order to prevent the main geoview from recreating the
+***REMOVED******REMOVED******REMOVED*** graphicsOverlay every draw cycle.  That was causing refresh issues
+***REMOVED******REMOVED******REMOVED*** with the graphic during panning/zooming/rotating.
+***REMOVED******REMOVED***_graphic = StateObject(wrappedValue: graphic)
+***REMOVED******REMOVED***_graphicsOverlay = StateObject(wrappedValue: GraphicsOverlay(graphics: [graphic]))
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***if let viewpoint = viewpoint,
+***REMOVED******REMOVED***   let center = viewpoint.targetGeometry as? Point {
+***REMOVED******REMOVED******REMOVED***self.viewpoint = Viewpoint(center: center,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***   scale: viewpoint.targetScale * scaleFactor
 ***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***.eraseToAnyPublisher() ?? Empty<Void, Never>().eraseToAnyPublisher()
 ***REMOVED***
-
+***REMOVED******REMOVED***else {
+***REMOVED******REMOVED******REMOVED***self.viewpoint = nil
+***REMOVED***
+***REMOVED***
+***REMOVED***
 ***REMOVED***public var body: some View {
-***REMOVED******REMOVED***ZStack {
-***REMOVED******REMOVED******REMOVED***MapView(
-***REMOVED******REMOVED******REMOVED******REMOVED***map: map,
-***REMOVED******REMOVED******REMOVED******REMOVED***viewpoint: $overviewMapViewpoint,
-***REMOVED******REMOVED******REMOVED******REMOVED***graphicsOverlays: [GraphicsOverlay(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***graphics: [Graphic(geometry: extentGeometry,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***   symbol: extentSymbol)])]
-***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***MapView(
+***REMOVED******REMOVED******REMOVED***map: map,
+***REMOVED******REMOVED******REMOVED***viewpoint: viewpoint,
+***REMOVED******REMOVED******REMOVED***graphicsOverlays: [graphicsOverlay]
+***REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***.attributionTextHidden()
 ***REMOVED******REMOVED******REMOVED***.interactionModes([])
 ***REMOVED******REMOVED******REMOVED***.border(Color.black, width: 1)
-***REMOVED******REMOVED******REMOVED***.onReceive(viewpointChangedPublisher) {
-***REMOVED******REMOVED******REMOVED******REMOVED***guard let centerAndScaleViewpoint = proxy?.currentViewpoint(type: .centerAndScale),
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  let newCenter = centerAndScaleViewpoint.targetGeometry as? Point
-***REMOVED******REMOVED******REMOVED******REMOVED***else { return ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***if let mapViewProxy = proxy as? MapViewProxy {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***extentGeometry = mapViewProxy.visibleArea
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***overviewMapViewpoint = Viewpoint(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***center: newCenter,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***scale: centerAndScaleViewpoint.targetScale * scaleFactor
-***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.onChange(of: visibleArea, perform: { graphic.geometry = $0 ***REMOVED***)
+***REMOVED******REMOVED******REMOVED***.onChange(of: extentSymbol, perform: { graphic.symbol = $0 ***REMOVED***)
 ***REMOVED***
 ***REMOVED***
+***REMOVED***public func map(_ map: Map) -> OverviewMap {
+***REMOVED******REMOVED***var copy = self
+***REMOVED******REMOVED***copy._map = StateObject(wrappedValue: map)
+***REMOVED******REMOVED***return copy
 ***REMOVED***
+***REMOVED***
+
+extension Graphic: ObservableObject {***REMOVED***
+extension GraphicsOverlay: ObservableObject {***REMOVED***
