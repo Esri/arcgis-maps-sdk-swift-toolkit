@@ -56,7 +56,7 @@ public struct OverviewMap: View {
 ***REMOVED***
 ***REMOVED***private let markerSymbol: MarkerSymbol = SimpleMarkerSymbol(style: .cross,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***color: .red,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***size: 16.0
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***size: 12.0
 ***REMOVED***)
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates an `OverviewMap`.
@@ -75,15 +75,18 @@ public struct OverviewMap: View {
 ***REMOVED******REMOVED***self.visibleArea = visibleArea
 ***REMOVED******REMOVED***self.scaleFactor = scaleFactor
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** If the client did not pass in a symbol, set the appropriate
+***REMOVED******REMOVED******REMOVED*** symbol based on the presence of `visibleArea` (which indicates
+***REMOVED******REMOVED******REMOVED*** the main `GeoView` is a `MapView`).
 ***REMOVED******REMOVED***if symbol == nil {
-***REMOVED******REMOVED******REMOVED***self.symbol = visibleArea == nil ? markerSymbol : fillSymbol
+***REMOVED******REMOVED******REMOVED***self.symbol = (visibleArea == nil) ? markerSymbol : fillSymbol
 ***REMOVED***
 ***REMOVED******REMOVED***else {
 ***REMOVED******REMOVED******REMOVED***self.symbol = symbol
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let graphic = Graphic(geometry: visibleArea,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  symbol: symbol)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  symbol: self.symbol)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** It is necessary to set the graphic and graphicsOverlay this way
 ***REMOVED******REMOVED******REMOVED*** in order to prevent the main geoview from recreating the
@@ -115,7 +118,8 @@ public struct OverviewMap: View {
 ***REMOVED******REMOVED******REMOVED***.onChange(of: visibleArea, perform: { visibleArea in
 ***REMOVED******REMOVED******REMOVED******REMOVED***if let visibleArea = visibleArea {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***graphic.geometry = visibleArea
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***graphic.symbol = symbol != nil ? symbol : fillSymbol
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let newSymbol = symbol as? FillSymbol
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***graphic.symbol = newSymbol != nil ? symbol : fillSymbol
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***.onChange(of: viewpoint, perform: { viewpoint in
@@ -123,7 +127,8 @@ public struct OverviewMap: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***   let viewpoint = viewpoint,
 ***REMOVED******REMOVED******REMOVED******REMOVED***   let point = viewpoint.targetGeometry as? Point {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***graphic.geometry = point
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***graphic.symbol = symbol != nil ? symbol : markerSymbol
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let newSymbol = symbol as? MarkerSymbol
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***graphic.symbol = newSymbol != nil ? newSymbol : markerSymbol
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***.onChange(of: symbol, perform: { graphic.symbol = $0 ***REMOVED***)
