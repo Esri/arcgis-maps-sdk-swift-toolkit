@@ -33,12 +33,31 @@ public struct OverviewMap: View {
     /// The `Map` displayed in the `OverviewMap`.
     @StateObject var map: Map = Map(basemap: .topographic())
     
-    /// The `FillSymbol` used to display the main `GeoView` visible area.
-    private(set) var extentSymbol: FillSymbol
+    /// The `Symbol` used to display the main `GeoView` visible area. For MapViews,
+    /// the symbol will be a FillSymbol used to display the GeoView visible area. For SceneViews,
+    /// the symbol will be a MarkerSymbol, used to display the current viewpoint's center.
+    /// For MapViews, the default is a transparent FillSymbol with a red, 1 point width outline;
+    /// for SceneViews, the default is a red, crosshair SimpleMarkerSymbol.
+    private(set) var symbol: Symbol?
     
     /// The factor to multiply the main `GeoView`'s scale by.  The `OverviewMap` will display
     /// at the a scale equal to: `viewpoint.targetscale` x `scaleFactor.
     private(set) var scaleFactor: Double
+    
+    private let fillSymbol: FillSymbol = SimpleFillSymbol(
+        style: .solid,
+        color: .clear,
+        outline: SimpleLineSymbol(
+            style: .solid,
+            color: .red,
+            width: 1.0
+        )
+    )
+    
+    private let markerSymbol: MarkerSymbol = SimpleMarkerSymbol(style: .cross,
+                                                                color: .red,
+                                                                size: 16.0
+    )
     
     /// Creates an `OverviewMap`.
     /// - Parameters:
@@ -49,24 +68,22 @@ public struct OverviewMap: View {
     ///   - scaleFactor: The factor to multiply the main `GeoView`'s scale by.
     ///   The default value is 25.0
     public init(viewpoint: Viewpoint?,
-                visibleArea: Polygon?,
-                extentSymbol: FillSymbol = SimpleFillSymbol(
-                    style: .solid,
-                    color: .clear,
-                    outline: SimpleLineSymbol(
-                        style: .solid,
-                        color: .red,
-                        width: 1.0
-                    )
-                ),
+                visibleArea: Polygon? = nil,
+                symbol: Symbol? = nil,
                 scaleFactor: Double = 25.0
     ) {
         self.visibleArea = visibleArea
-        self.extentSymbol = extentSymbol
         self.scaleFactor = scaleFactor
         
+        if symbol == nil {
+            self.symbol = visibleArea == nil ? markerSymbol : fillSymbol
+        }
+        else {
+            self.symbol = symbol
+        }
+        
         let graphic = Graphic(geometry: visibleArea,
-                              symbol: extentSymbol)
+                              symbol: symbol)
         
         // It is necessary to set the graphic and graphicsOverlay this way
         // in order to prevent the main geoview from recreating the
@@ -95,8 +112,21 @@ public struct OverviewMap: View {
             .attributionTextHidden()
             .interactionModes([])
             .border(Color.black, width: 1)
-            .onChange(of: visibleArea, perform: { graphic.geometry = $0 })
-            .onChange(of: extentSymbol, perform: { graphic.symbol = $0 })
+            .onChange(of: visibleArea, perform: { visibleArea in
+                if let visibleArea = visibleArea {
+                    graphic.geometry = visibleArea
+                    graphic.symbol = symbol != nil ? symbol : fillSymbol
+                }
+            })
+            .onChange(of: viewpoint, perform: { viewpoint in
+                if visibleArea == nil,
+                   let viewpoint = viewpoint,
+                   let point = viewpoint.targetGeometry as? Point {
+                    graphic.geometry = point
+                    graphic.symbol = symbol != nil ? symbol : markerSymbol
+                }
+            })
+            .onChange(of: symbol, perform: { graphic.symbol = $0 })
     }
     
     public func map(_ map: Map) -> OverviewMap {

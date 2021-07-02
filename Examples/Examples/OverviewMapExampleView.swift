@@ -17,19 +17,31 @@ import ArcGISToolkit
 
 struct OverviewMapExampleView: View {
     let map = Map(basemap: .imageryWithLabels())
-    @State private var viewpoint: Viewpoint?
+    let scene = Scene(basemap: .imageryWithLabels())
+    @State private var mapViewpoint: Viewpoint?
+    @State private var sceneViewpoint: Viewpoint?
     @State private var visibleArea: ArcGIS.Polygon?
-    
+
     var body: some View {
+        VStack {
         MapView(map: map)
-            .onViewpointChanged(type: .centerAndScale) { viewpoint = $0 }
+            .onViewpointChanged(type: .centerAndScale) { mapViewpoint = $0 }
             .onVisibleAreaChanged { visibleArea = $0 }
             .overlay(
-                OverviewMap(viewpoint: viewpoint, visibleArea: visibleArea)
+                OverviewMap(viewpoint: mapViewpoint, visibleArea: visibleArea)
                     .frame(width: 200, height: 132)
                     .padding(),
                 alignment: .topTrailing
             )
+        SceneView(scene: scene)
+            .onViewpointChanged(type: .centerAndScale) { sceneViewpoint = $0 }
+            .overlay(
+                OverviewMap(viewpoint: sceneViewpoint)
+                    .frame(width: 200, height: 132)
+                    .padding(),
+                alignment: .topTrailing
+            )
+    }
     }
 }
 
