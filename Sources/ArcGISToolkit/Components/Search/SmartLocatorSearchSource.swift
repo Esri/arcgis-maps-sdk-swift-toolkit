@@ -19,14 +19,15 @@
 ***REMOVED***/ underlying locator to be used well; this class implements behaviors that make assumptions about the
 ***REMOVED***/ locator being the world geocode service.
 public class SmartLocatorSearchSource: LocatorSearchSource {
-***REMOVED***public init(displayName: String = "Search",
+***REMOVED***public convenience init(displayName: String = "Search",
 ***REMOVED******REMOVED******REMOVED******REMOVED***maximumSuggestions: Int,
 ***REMOVED******REMOVED******REMOVED******REMOVED***searchArea: Geometry? = nil,
 ***REMOVED******REMOVED******REMOVED******REMOVED***preferredSearchLocation: Point? = nil,
 ***REMOVED******REMOVED******REMOVED******REMOVED***repeatSearchResultThreshold: Int = 1,
 ***REMOVED******REMOVED******REMOVED******REMOVED***repeatSuggestResultThreshold: Int = 6,
 ***REMOVED******REMOVED******REMOVED******REMOVED***resultSymbolStyle: SymbolStyle? = nil) {
-***REMOVED******REMOVED***self.objectWillChange = objectWillChange
+***REMOVED******REMOVED***self.init()
+***REMOVED******REMOVED******REMOVED***self.objectWillChange = objectWillChange
 ***REMOVED******REMOVED***self.displayName = displayName
 ***REMOVED******REMOVED***self.maximumSuggestions = maximumSuggestions
 ***REMOVED******REMOVED***self.searchArea = searchArea
@@ -39,25 +40,25 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
 ***REMOVED******REMOVED***suggestParameters.maxResults = Int32(maximumSuggestions)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***public var displayName: String
+***REMOVED******REMOVED***public var displayName: String
 ***REMOVED***
-***REMOVED***public var maximumSuggestions: Int
+***REMOVED******REMOVED***public var maximumSuggestions: Int
 ***REMOVED***
-***REMOVED***public var searchArea: Geometry?
+***REMOVED******REMOVED***public var searchArea: Geometry?
 ***REMOVED***
-***REMOVED***public var preferredSearchLocation: Point?
+***REMOVED******REMOVED***public var preferredSearchLocation: Point?
 ***REMOVED***
-***REMOVED***public func suggest(_ queryString: String) async throws -> [SearchSuggestion] {
-***REMOVED******REMOVED***<#code#>
+***REMOVED******REMOVED***public func suggest(_ queryString: String) async throws -> [SearchSuggestion] {
+***REMOVED******REMOVED******REMOVED***<#code#>
+***REMOVED******REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***public func search(_ queryString: String, area: Geometry?) async throws -> [SearchResult] {
+***REMOVED******REMOVED******REMOVED***<#code#>
+***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED***public func search(_ queryString: String, area: Geometry?) async throws -> [SearchResult] {
-***REMOVED******REMOVED***<#code#>
-***REMOVED***
-***REMOVED***
-***REMOVED***public func search(_ searchSuggestion: SearchSuggestion, area: Geometry?) async throws -> [SearchResult] {
-***REMOVED******REMOVED***<#code#>
-***REMOVED***
+***REMOVED******REMOVED***public func search(_ searchSuggestion: SearchSuggestion, area: Geometry?) async throws -> [SearchResult] {
+***REMOVED******REMOVED******REMOVED***<#code#>
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The minimum number of results to attempt to return. If there are too few results, the search is
 ***REMOVED******REMOVED***/ repeated with loosened parameters until enough results are accumulated. If no search is
