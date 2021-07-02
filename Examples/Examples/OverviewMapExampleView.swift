@@ -15,13 +15,31 @@ import SwiftUI
 import ArcGIS
 import ArcGISToolkit
 
-struct OverviewMapExampleView_Map: View {
+struct OverviewMapExampleView: View {
+    enum MapOrScene {
+        /// The Example shows a map view.
+        case map
+        /// The Example shows a scene view.
+        case scene
+    }
+    
     let map = Map(basemap: .imageryWithLabels())
+    let scene = Scene(basemap: .imageryWithLabels())
+    
     @State private var viewpoint: Viewpoint?
     @State private var visibleArea: ArcGIS.Polygon?
     
+    @State var mapOrScene: MapOrScene = .map
+    
     var body: some View {
-        VStack {
+        Picker("Map or Scene", selection: $mapOrScene, content: {
+            Text("Map").tag(MapOrScene.map)
+            Text("Scene").tag(MapOrScene.scene)
+        })
+            .pickerStyle(SegmentedPickerStyle())
+            .padding()
+        switch mapOrScene {
+        case .map:
             MapView(map: map)
                 .onViewpointChanged(type: .centerAndScale) { viewpoint = $0 }
                 .onVisibleAreaChanged { visibleArea = $0 }
@@ -33,12 +51,21 @@ struct OverviewMapExampleView_Map: View {
                         .padding(),
                     alignment: .topTrailing
                 )
+        case .scene:
+            SceneView(scene: scene)
+                .onViewpointChanged(type: .centerAndScale) { viewpoint = $0 }
+                .overlay(
+                    OverviewMap(viewpoint: viewpoint)
+                        .frame(width: 200, height: 132)
+                        .padding(),
+                    alignment: .topTrailing
+                )
         }
     }
 }
 
-struct OverviewMapExampleView_Map_Previews: PreviewProvider {
+struct OverviewMapExampleView_Previews: PreviewProvider {
     static var previews: some View {
-        OverviewMapExampleView_Map()
+        OverviewMapExampleView()
     }
 }
