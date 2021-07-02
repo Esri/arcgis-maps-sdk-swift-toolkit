@@ -63,7 +63,7 @@ var body: some View {
 ***REMOVED***
 ```
 
-### Displaying a custom fill symbol and scale factor for a `MapView`'s visible area.
+### Displaying a custom fill symbol and scale factor for a `MapView`'s visible area
 
 ```swift
 let map = Map(basemap: .imageryWithLabels())
@@ -121,7 +121,7 @@ var body: some View {
 ***REMOVED***
 ```
 
-### Displaying a custom marker symbol and scale factor for a `SceneView`'s viewpoint.
+### Displaying a custom marker symbol and scale factor for a `SceneView`'s viewpoint
 
 ```swift
 SceneView(scene: scene)
@@ -142,12 +142,12 @@ SceneView(scene: scene)
 
 ### Changing the map used by the `OverviewMap`
 
-To change the `OverviewMap`'s `map`, you use the `.map()` modifier on `OverviewMap`
+To change the `OverviewMap`'s `map`, you use the `.map()` modifier on `OverviewMap`.
 
 ```swift
 OverviewMap(viewpoint: viewpoint)
 ***REMOVED***.map(Map(basemap: .darkGrayCanvasVector()))
 ```
 
-To see it in action, try out the [Examples](../../Examples) and refer to [OverviewMapExampleView.swift](../../Examples/Examples/OverviewMapExampleView.swift) in the project.
+To see the `OverviewMap` in action, try out the [Examples](../../Examples) and refer to [OverviewMapExampleView.swift](../../Examples/Examples/OverviewMapExampleView.swift) in the project.
 
