@@ -17,19 +17,31 @@
 
 struct OverviewMapExampleView: View {
 ***REMOVED***let map = Map(basemap: .imageryWithLabels())
-***REMOVED***@State private var viewpoint: Viewpoint?
+***REMOVED***let scene = Scene(basemap: .imageryWithLabels())
+***REMOVED***@State private var mapViewpoint: Viewpoint?
+***REMOVED***@State private var sceneViewpoint: Viewpoint?
 ***REMOVED***@State private var visibleArea: ArcGIS.Polygon?
-***REMOVED***
+
 ***REMOVED***var body: some View {
+***REMOVED******REMOVED***VStack {
 ***REMOVED******REMOVED***MapView(map: map)
-***REMOVED******REMOVED******REMOVED***.onViewpointChanged(type: .centerAndScale) { viewpoint = $0 ***REMOVED***
+***REMOVED******REMOVED******REMOVED***.onViewpointChanged(type: .centerAndScale) { mapViewpoint = $0 ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onVisibleAreaChanged { visibleArea = $0 ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***.overlay(
-***REMOVED******REMOVED******REMOVED******REMOVED***OverviewMap(viewpoint: viewpoint, visibleArea: visibleArea)
+***REMOVED******REMOVED******REMOVED******REMOVED***OverviewMap(viewpoint: mapViewpoint, visibleArea: visibleArea)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 200, height: 132)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(),
 ***REMOVED******REMOVED******REMOVED******REMOVED***alignment: .topTrailing
 ***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***SceneView(scene: scene)
+***REMOVED******REMOVED******REMOVED***.onViewpointChanged(type: .centerAndScale) { sceneViewpoint = $0 ***REMOVED***
+***REMOVED******REMOVED******REMOVED***.overlay(
+***REMOVED******REMOVED******REMOVED******REMOVED***OverviewMap(viewpoint: sceneViewpoint)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 200, height: 132)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(),
+***REMOVED******REMOVED******REMOVED******REMOVED***alignment: .topTrailing
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
