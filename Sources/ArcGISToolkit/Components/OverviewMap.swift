@@ -56,7 +56,7 @@ public struct OverviewMap: View {
     
     private let markerSymbol: MarkerSymbol = SimpleMarkerSymbol(style: .cross,
                                                                 color: .red,
-                                                                size: 16.0
+                                                                size: 12.0
     )
     
     /// Creates an `OverviewMap`.
@@ -75,15 +75,18 @@ public struct OverviewMap: View {
         self.visibleArea = visibleArea
         self.scaleFactor = scaleFactor
         
+        // If the client did not pass in a symbol, set the appropriate
+        // symbol based on the presence of `visibleArea` (which indicates
+        // the main `GeoView` is a `MapView`).
         if symbol == nil {
-            self.symbol = visibleArea == nil ? markerSymbol : fillSymbol
+            self.symbol = (visibleArea == nil) ? markerSymbol : fillSymbol
         }
         else {
             self.symbol = symbol
         }
         
         let graphic = Graphic(geometry: visibleArea,
-                              symbol: symbol)
+                              symbol: self.symbol)
         
         // It is necessary to set the graphic and graphicsOverlay this way
         // in order to prevent the main geoview from recreating the
@@ -115,7 +118,8 @@ public struct OverviewMap: View {
             .onChange(of: visibleArea, perform: { visibleArea in
                 if let visibleArea = visibleArea {
                     graphic.geometry = visibleArea
-                    graphic.symbol = symbol != nil ? symbol : fillSymbol
+                    let newSymbol = symbol as? FillSymbol
+                    graphic.symbol = newSymbol != nil ? symbol : fillSymbol
                 }
             })
             .onChange(of: viewpoint, perform: { viewpoint in
@@ -123,7 +127,8 @@ public struct OverviewMap: View {
                    let viewpoint = viewpoint,
                    let point = viewpoint.targetGeometry as? Point {
                     graphic.geometry = point
-                    graphic.symbol = symbol != nil ? symbol : markerSymbol
+                    let newSymbol = symbol as? MarkerSymbol
+                    graphic.symbol = newSymbol != nil ? newSymbol : markerSymbol
                 }
             })
             .onChange(of: symbol, perform: { graphic.symbol = $0 })

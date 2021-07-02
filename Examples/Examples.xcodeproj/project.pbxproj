@@ -12,13 +12,14 @@
 		E47ABE4B2652FE0C00FD2FE3 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E47ABE4A2652FE0C00FD2FE3 /* Preview Assets.xcassets */; };
 		E47ABE5C2652FF1200FD2FE3 /* ArcGIS in Frameworks */ = {isa = PBXBuildFile; productRef = E47ABE5B2652FF1200FD2FE3 /* ArcGIS */; };
 		E47ABE5D2652FF1200FD2FE3 /* ArcGIS in Embed Frameworks */ = {isa = PBXBuildFile; productRef = E47ABE5B2652FF1200FD2FE3 /* ArcGIS */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		E4856844268FA111007BE537 /* OverviewMapExampleView_Scene.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4856843268FA111007BE537 /* OverviewMapExampleView_Scene.swift */; };
 		E48A73432658227100F5C118 /* Example.swift in Sources */ = {isa = PBXBuildFile; fileRef = E48A73402658227100F5C118 /* Example.swift */; };
 		E48A73442658227100F5C118 /* AnyExample.swift in Sources */ = {isa = PBXBuildFile; fileRef = E48A73412658227100F5C118 /* AnyExample.swift */; };
 		E48A73452658227100F5C118 /* Examples.swift in Sources */ = {isa = PBXBuildFile; fileRef = E48A733D2658227000F5C118 /* Examples.swift */; };
 		E48A73462658227100F5C118 /* ExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E48A73422658227100F5C118 /* ExampleView.swift */; };
 		E48A73472658227100F5C118 /* ExampleList.swift in Sources */ = {isa = PBXBuildFile; fileRef = E48A733E2658227100F5C118 /* ExampleList.swift */; };
 		E4E57DC6265D8EB00077A093 /* ArcGISToolkit in Frameworks */ = {isa = PBXBuildFile; productRef = E4E57DC5265D8EB00077A093 /* ArcGISToolkit */; };
-		E4F9BC99265EFCAF001280FF /* OverviewMapExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4F9BC98265EFCAF001280FF /* OverviewMapExampleView.swift */; };
+		E4F9BC99265EFCAF001280FF /* OverviewMapExampleView_Map.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4F9BC98265EFCAF001280FF /* OverviewMapExampleView_Map.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -42,13 +43,14 @@
 		E47ABE4A2652FE0C00FD2FE3 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		E47ABE4C2652FE0C00FD2FE3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E47ABE622653005F00FD2FE3 /* arcgis-runtime-toolkit-swift */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "arcgis-runtime-toolkit-swift"; path = ..; sourceTree = "<group>"; };
+		E4856843268FA111007BE537 /* OverviewMapExampleView_Scene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverviewMapExampleView_Scene.swift; sourceTree = "<group>"; };
 		E48A733D2658227000F5C118 /* Examples.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Examples.swift; sourceTree = "<group>"; };
 		E48A733E2658227100F5C118 /* ExampleList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExampleList.swift; sourceTree = "<group>"; };
 		E48A733F2658227100F5C118 /* Examples.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Examples.entitlements; sourceTree = "<group>"; };
 		E48A73402658227100F5C118 /* Example.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Example.swift; sourceTree = "<group>"; };
 		E48A73412658227100F5C118 /* AnyExample.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyExample.swift; sourceTree = "<group>"; };
 		E48A73422658227100F5C118 /* ExampleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExampleView.swift; sourceTree = "<group>"; };
-		E4F9BC98265EFCAF001280FF /* OverviewMapExampleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OverviewMapExampleView.swift; sourceTree = "<group>"; };
+		E4F9BC98265EFCAF001280FF /* OverviewMapExampleView_Map.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OverviewMapExampleView_Map.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -67,7 +69,8 @@
 		E40F58042656E509006F5CB9 /* Examples */ = {
 			isa = PBXGroup;
 			children = (
-				E4F9BC98265EFCAF001280FF /* OverviewMapExampleView.swift */,
+				E4F9BC98265EFCAF001280FF /* OverviewMapExampleView_Map.swift */,
+				E4856843268FA111007BE537 /* OverviewMapExampleView_Scene.swift */,
 			);
 			name = Examples;
 			sourceTree = "<group>";
@@ -208,9 +211,10 @@
 				E48A73452658227100F5C118 /* Examples.swift in Sources */,
 				E48A73432658227100F5C118 /* Example.swift in Sources */,
 				E47ABE442652FE0900FD2FE3 /* ExamplesApp.swift in Sources */,
-				E4F9BC99265EFCAF001280FF /* OverviewMapExampleView.swift in Sources */,
+				E4F9BC99265EFCAF001280FF /* OverviewMapExampleView_Map.swift in Sources */,
 				E48A73442658227100F5C118 /* AnyExample.swift in Sources */,
 				E48A73472658227100F5C118 /* ExampleList.swift in Sources */,
+				E4856844268FA111007BE537 /* OverviewMapExampleView_Scene.swift in Sources */,
 				E48A73462658227100F5C118 /* ExampleView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
