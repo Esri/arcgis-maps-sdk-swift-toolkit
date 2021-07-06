@@ -37,7 +37,7 @@ public struct OverviewMap: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ The `Map` displayed in the `OverviewMap`.
 ***REMOVED***@StateObject
-***REMOVED***var map: Map = Map(basemap: .topographic())
+***REMOVED***var map: Map = Map(basemapStyle: .arcGISTopographic)
 
 ***REMOVED******REMOVED***/ The `Graphic` displaying the visible area of the main `GeoView`.
 ***REMOVED***@StateObject

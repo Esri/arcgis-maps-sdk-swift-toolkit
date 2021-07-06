@@ -23,8 +23,8 @@ struct OverviewMapExampleView: View {
 ***REMOVED******REMOVED***case scene
 ***REMOVED***
 ***REMOVED***
-***REMOVED***let map = Map(basemap: .imageryWithLabels())
-***REMOVED***let scene = Scene(basemap: .imageryWithLabels())
+***REMOVED***let map = Map(basemapStyle: .arcGISImagery)
+***REMOVED***let scene = Scene(basemapStyle: .arcGISImagery)
 ***REMOVED***
 ***REMOVED***@State private var viewpoint: Viewpoint?
 ***REMOVED***@State private var visibleArea: ArcGIS.Polygon?
