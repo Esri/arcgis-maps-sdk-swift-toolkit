@@ -1,8 +1,15 @@
 # OverviewMap
 
-`OverviewMap` is a small, secondary `MapView` (sometimes called an inset map), that can be superimposed on an existing `MapView`/`SceneView`. `OverviewMap` shows shows a representation of the current `Viewpoint` of the `GeoView` it is connected to.
+`OverviewMap` is a small, secondary `MapView` (sometimes called an inset map), that can be overlayed on an existing `GeoView` (`MapView` or `SceneView`). `OverviewMap` shows shows a representation of the current `visibleArea` (for a `MapView`) or `viewpoint` (for a `SceneView`) of the `GeoView` it is connected to.
 
-![OverviewMap](https://user-images.githubusercontent.com/29742178/121975740-34f07000-cd37-11eb-9162-462925cb3fe7.png)
+Map View
+
+![OverviewMap - MapView](./OverviewMap_MapView.png)
+
+SceneView
+
+![OverviewMap - SceneView](./OverviewMap_SceneView.png)
+
 
 > **NOTE**: OverviewMap uses metered ArcGIS basemaps by default, so you will need to configure an API key. See [Security and authentication documentation](https://developers.arcgis.com/documentation/mapping-apis-and-services/security/#api-keys) for more information.
 
@@ -10,18 +17,17 @@
 
 OverviewMap:
 
-- Displays a representation of the current `Viewpoint` for a connected `GeoView`.
+- Displays a representation of the current `VisibleArea`/`Viewpoint` for a connected `GeoView`.
 - Supports a configurable scaling factor for setting the overview map's zoom level relative to the connected view.
-- Supports a configurable symbol for visualizing the current `Viewpoint` representation (a `FillSymbol` for a connected `MapView`; a `MarkerSymbol` for a connected `SceneView`).
+- Supports a configurable symbol for visualizing the current `VisibleArea`/`Viewpoint` representation (a `FillSymbol` for a connected `MapView`; a `MarkerSymbol` for a connected `SceneView`).
 
 ## Key properties
 
 `OverviewMap` has the following customizable properties:
 
-- `geoView` - References the connected `MapView` or `SceneView`.
-- `symbol` - Defines the symbol used to visualize the current `Viewpoint` . This is a red rectangle by default for a `MapView`; for a `SceneView`, this is a red cross.
-- `scaleFactor` - Defines the scale of the `OverviewMap` relative to the scale of the connected `GeoView`. The default is 25.
 - `map` - the `Map` displayed in the `OverviewMap`.  For example, you can use `map` to change the base map displayed by the `OverviewMap`.
+- `scaleFactor` - Defines the scale of the `OverviewMap` relative to the scale of the connected `GeoView`. The default is 25.
+- `symbol` - Defines the symbol used to visualize the current `Viewpoint` . This is a red rectangle by default for a `MapView`; for a `SceneView`, this is a red cross.
 
 ## Behavior:
 
@@ -31,9 +37,119 @@ For an `OverviewMap` on a `SceneView`, the center point of the `SceneView`'s `cu
 
 ## Usage
 
+### Basic usage for overlaying a `MapView`
+
+Note that for `MapView`'s, you need to provide the `OverviewMap` both a viewpoint and visibleArea, as well as providing a `FillSymbol` if you want to customize the display of the visible area.
+
 ```swift
-// Waiting on final implementation details
+let map = Map(basemap: .imageryWithLabels())
+    
+@State
+private var viewpoint: Viewpoint?
+
+@State
+private var visibleArea: ArcGIS.Polygon?
+
+var body: some View {
+    MapView(map: map)
+        .onViewpointChanged(type: .centerAndScale) { viewpoint = $0 }
+        .onVisibleAreaChanged { visibleArea = $0 }
+        .overlay(
+            OverviewMap(viewpoint: viewpoint,
+                        visibleArea: visibleArea
+                       )
+                .frame(width: 200, height: 132)
+                .padding(),
+            alignment: .topTrailing
+        )
+}
 ```
 
-To see it in action, try out the [Examples](../../Examples) and refer to [OverviewMapExampleView.swift](../../Examples/Examples/OverviewMapExampleView.swift) in the project.
+### Displaying a custom fill symbol and scale factor for a `MapView`'s visible area
+
+```swift
+let map = Map(basemap: .imageryWithLabels())
+    
+@State
+private var viewpoint: Viewpoint?
+
+@State
+private var visibleArea: ArcGIS.Polygon?
+
+var body: some View {
+    MapView(map: map)
+        .onViewpointChanged(type: .centerAndScale) { viewpoint = $0 }
+        .onVisibleAreaChanged { visibleArea = $0 }
+        .overlay(
+            OverviewMap(viewpoint: viewpoint,
+                        visibleArea: visibleArea,
+                        symbol: SimpleFillSymbol(
+                            style: .solid,
+                            color: .clear,
+                            outline: SimpleLineSymbol(
+                                style: .solid,
+                                color: .blue,
+                                width: 2.0
+                            )
+                        ),
+                        scaleFactor: 32.0
+                       )
+                .frame(width: 200, height: 132)
+                .padding(),
+            alignment: .topTrailing
+        )
+}
+```
+
+### Basic usage for overlaying a `SceneView`
+
+Note that for `SceneView`'s, you need to provide the `OverviewMap` only a viewpoint, as well as providing a `MarkerSymbol` if you want to customize the display of the viewpoint.
+
+```swift
+let scene = Scene(basemap: .imageryWithLabels())
+    
+@State
+private var viewpoint: Viewpoint?
+
+var body: some View {
+    SceneView(scene: scene)
+        .onViewpointChanged(type: .centerAndScale) { viewpoint = $0 }
+        .overlay(
+            OverviewMap(viewpoint: viewpoint)
+                .frame(width: 200, height: 132)
+                .padding(),
+            alignment: .topTrailing
+        )
+}
+```
+
+### Displaying a custom marker symbol and scale factor for a `SceneView`'s viewpoint
+
+```swift
+SceneView(scene: scene)
+    .onViewpointChanged(type: .centerAndScale) { viewpoint = $0 }
+    .overlay(
+        OverviewMap(viewpoint: viewpoint,
+                    symbol: SimpleMarkerSymbol(style: .x,
+                                               color: .blue,
+                                               size: 24.0
+                                              ),
+                    scaleFactor: 32.0
+                   )
+            .frame(width: 200, height: 132)
+            .padding(),
+        alignment: .topTrailing
+    )
+```
+
+### Changing the map used by the `OverviewMap`
+
+To change the `OverviewMap`'s `map`, you use the `.map()` modifier on `OverviewMap`.
+
+```swift
+OverviewMap(viewpoint: viewpoint)
+    .map(Map(basemap: .darkGrayCanvasVector()))
+```
+
+To see the `OverviewMap` in action, try out the [Examples](../../Examples) and refer to [OverviewMapExampleView.swift](../../Examples/Examples/OverviewMapExampleView.swift) in the project.
 

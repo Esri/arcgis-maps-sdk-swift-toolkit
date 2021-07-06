@@ -16,20 +16,51 @@ import ArcGIS
 import ArcGISToolkit
 
 struct OverviewMapExampleView: View {
-    let map = Map(basemap: .imageryWithLabels())
+    enum MapOrScene {
+        /// The Example shows a map view.
+        case map
+        /// The Example shows a scene view.
+        case scene
+    }
+    
+    let map = Map(basemapStyle: .arcGISImagery)
+    let scene = Scene(basemapStyle: .arcGISImagery)
+    
     @State private var viewpoint: Viewpoint?
     @State private var visibleArea: ArcGIS.Polygon?
     
+    @State var mapOrScene: MapOrScene = .map
+    
     var body: some View {
-        MapView(map: map)
-            .onViewpointChanged(type: .centerAndScale) { viewpoint = $0 }
-            .onVisibleAreaChanged { visibleArea = $0 }
-            .overlay(
-                OverviewMap(viewpoint: viewpoint, visibleArea: visibleArea)
-                    .frame(width: 200, height: 132)
-                    .padding(),
-                alignment: .topTrailing
-            )
+        Picker("Map or Scene", selection: $mapOrScene, content: {
+            Text("Map").tag(MapOrScene.map)
+            Text("Scene").tag(MapOrScene.scene)
+        })
+            .pickerStyle(SegmentedPickerStyle())
+            .padding()
+        switch mapOrScene {
+        case .map:
+            MapView(map: map)
+                .onViewpointChanged(type: .centerAndScale) { viewpoint = $0 }
+                .onVisibleAreaChanged { visibleArea = $0 }
+                .overlay(
+                    OverviewMap(viewpoint: viewpoint,
+                                visibleArea: visibleArea
+                               )
+                        .frame(width: 200, height: 132)
+                        .padding(),
+                    alignment: .topTrailing
+                )
+        case .scene:
+            SceneView(scene: scene)
+                .onViewpointChanged(type: .centerAndScale) { viewpoint = $0 }
+                .overlay(
+                    OverviewMap(viewpoint: viewpoint)
+                        .frame(width: 200, height: 132)
+                        .padding(),
+                    alignment: .topTrailing
+                )
+        }
     }
 }
 
