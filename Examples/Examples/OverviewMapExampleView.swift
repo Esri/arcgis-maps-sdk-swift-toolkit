@@ -16,20 +16,51 @@
 ***REMOVED***Toolkit
 
 struct OverviewMapExampleView: View {
-***REMOVED***let map = Map(basemap: .imageryWithLabels())
+***REMOVED***enum MapOrScene {
+***REMOVED******REMOVED******REMOVED***/ The Example shows a map view.
+***REMOVED******REMOVED***case map
+***REMOVED******REMOVED******REMOVED***/ The Example shows a scene view.
+***REMOVED******REMOVED***case scene
+***REMOVED***
+***REMOVED***
+***REMOVED***let map = Map(basemapStyle: .arcGISImagery)
+***REMOVED***let scene = Scene(basemapStyle: .arcGISImagery)
+***REMOVED***
 ***REMOVED***@State private var viewpoint: Viewpoint?
 ***REMOVED***@State private var visibleArea: ArcGIS.Polygon?
 ***REMOVED***
+***REMOVED***@State var mapOrScene: MapOrScene = .map
+***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***MapView(map: map)
-***REMOVED******REMOVED******REMOVED***.onViewpointChanged(type: .centerAndScale) { viewpoint = $0 ***REMOVED***
-***REMOVED******REMOVED******REMOVED***.onVisibleAreaChanged { visibleArea = $0 ***REMOVED***
-***REMOVED******REMOVED******REMOVED***.overlay(
-***REMOVED******REMOVED******REMOVED******REMOVED***OverviewMap(viewpoint: viewpoint, visibleArea: visibleArea)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 200, height: 132)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(),
-***REMOVED******REMOVED******REMOVED******REMOVED***alignment: .topTrailing
-***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***Picker("Map or Scene", selection: $mapOrScene, content: {
+***REMOVED******REMOVED******REMOVED***Text("Map").tag(MapOrScene.map)
+***REMOVED******REMOVED******REMOVED***Text("Scene").tag(MapOrScene.scene)
+***REMOVED***)
+***REMOVED******REMOVED******REMOVED***.pickerStyle(SegmentedPickerStyle())
+***REMOVED******REMOVED******REMOVED***.padding()
+***REMOVED******REMOVED***switch mapOrScene {
+***REMOVED******REMOVED***case .map:
+***REMOVED******REMOVED******REMOVED***MapView(map: map)
+***REMOVED******REMOVED******REMOVED******REMOVED***.onViewpointChanged(type: .centerAndScale) { viewpoint = $0 ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.onVisibleAreaChanged { visibleArea = $0 ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.overlay(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***OverviewMap(viewpoint: viewpoint,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***visibleArea: visibleArea
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***   )
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 200, height: 132)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***alignment: .topTrailing
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***case .scene:
+***REMOVED******REMOVED******REMOVED***SceneView(scene: scene)
+***REMOVED******REMOVED******REMOVED******REMOVED***.onViewpointChanged(type: .centerAndScale) { viewpoint = $0 ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.overlay(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***OverviewMap(viewpoint: viewpoint)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 200, height: 132)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***alignment: .topTrailing
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
