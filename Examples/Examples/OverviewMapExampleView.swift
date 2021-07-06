@@ -23,8 +23,8 @@ struct OverviewMapExampleView: View {
         case scene
     }
     
-    let map = Map(basemap: .imageryWithLabels())
-    let scene = Scene(basemap: .imageryWithLabels())
+    let map = Map(basemapStyle: .arcGISImagery)
+    let scene = Scene(basemapStyle: .arcGISImagery)
     
     @State private var viewpoint: Viewpoint?
     @State private var visibleArea: ArcGIS.Polygon?
