@@ -27,7 +27,7 @@ OverviewMap:
 
 - `.map(_ map: Map)` - The `Map` displayed in the `OverviewMap`.  For example, you can use `.map()` to display a custom base map in the `OverviewMap`.
 - `scaleFactor(_ scaleFactor: Double)` - The scale of the `OverviewMap` relative to the scale of the connected `GeoView`. The default is 25.
-- `symbol(_ symbol: Symbol)` - The symbol used to visualize the current `Viewpoint` . This is a red rectangle by default for a `MapView`; for a `SceneView`, this is a red cross.
+- `symbol(_ symbol: Symbol)` - The symbol used to visualize the current `VisibleArea`/`Viewpoint`. This is a red rectangle by default for a `MapView`; for a `SceneView`, this is a red cross.
 
 ## Behavior:
 
