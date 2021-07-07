@@ -102,6 +102,9 @@ public struct OverviewMap: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***graphic.geometry = point
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***.onChange(of: symbol, perform: {
+***REMOVED******REMOVED******REMOVED******REMOVED***graphic.symbol = $0
+***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a new viewpoint based on the `viewpoint` center, scale, and `scaleFactor`.
