@@ -21,24 +21,16 @@ public struct OverviewMap: View {
     /// The `Viewpoint` of the main `GeoView`
     let viewpoint: Viewpoint?
     
-    /// The visible area of the main `GeoView`.
+    /// The visible area of the main `GeoView`.  Not applicable to SceneViews.
     let visibleArea: Polygon?
     
-    /// The `Symbol` used to display the main `GeoView` visible area. For MapViews,
-    /// the symbol will be a FillSymbol used to display the GeoView visible area. For SceneViews,
-    /// the symbol will be a MarkerSymbol, used to display the current viewpoint's center.
-    /// For MapViews, the default is a transparent FillSymbol with a red, 1 point width outline;
-    /// for SceneViews, the default is a red, crosshair SimpleMarkerSymbol.
-    private(set) var symbol: Symbol?
+    private var symbol: Symbol
     
-    /// The factor to multiply the main `GeoView`'s scale by.  The `OverviewMap` will display
-    /// at the a scale equal to: `viewpoint.targetscale` x `scaleFactor.
-    private(set) var scaleFactor: Double
+    private var scaleFactor: Double = 25.0
     
-    /// The `Map` displayed in the `OverviewMap`.
     @StateObject
-    var map: Map = Map(basemapStyle: .arcGISTopographic)
-
+    private var map: Map = Map(basemapStyle: .arcGISTopographic)
+    
     /// The `Graphic` displaying the visible area of the main `GeoView`.
     @StateObject
     private var graphic: Graphic
@@ -47,8 +39,138 @@ public struct OverviewMap: View {
     @StateObject
     private var graphicsOverlay: GraphicsOverlay
     
+    /// Creates an `OverviewMap`. Used for creating an `OverviewMap` for use on a `MapView`.
+    /// - Parameters:
+    ///   - viewpoint: Viewpoint of the main `GeoView` used to update the `OverviewMap` view.
+    ///   - visibleArea: Visible area of the main `GeoView` used to display the extent graphic.
+    public init(viewpoint: Viewpoint?,
+                visibleArea: Polygon?
+    ) {
+        self.visibleArea = visibleArea
+        self.viewpoint = viewpoint
+        
+        self.symbol = .defaultFill
+        let graphic = Graphic(symbol: self.symbol)
+
+        // It is necessary to set the graphic and graphicsOverlay this way
+        // in order to prevent the main geoview from recreating the
+        // graphicsOverlay every draw cycle.  That was causing refresh issues
+        // with the graphic during panning/zooming/rotating.
+        _graphic = StateObject(wrappedValue: graphic)
+        _graphicsOverlay = StateObject(wrappedValue: GraphicsOverlay(graphics: [graphic]))
+    }
+    
+    /// Creates an `OverviewMap`. Used for creating an `OverviewMap` for use on a `SceneView`.
+    /// - Parameters:
+    ///   - viewpoint: Viewpoint of the main `GeoView` used to update the `OverviewMap` view.
+    public init(viewpoint: Viewpoint?) {
+        self.viewpoint = viewpoint
+        self.visibleArea = nil
+        
+        self.symbol = .defaultMarker
+        let graphic = Graphic(symbol: self.symbol)
+
+        // It is necessary to set the graphic and graphicsOverlay this way
+        // in order to prevent the main geoview from recreating the
+        // graphicsOverlay every draw cycle.  That was causing refresh issues
+        // with the graphic during panning/zooming/rotating.
+        _graphic = StateObject(wrappedValue: graphic)
+        _graphicsOverlay = StateObject(wrappedValue: GraphicsOverlay(graphics: [graphic]))
+    }
+    
+    public var body: some View {
+        MapView(
+            map: map,
+            viewpoint: makeViewpoint(),
+            graphicsOverlays: [graphicsOverlay]
+        )
+            .attributionTextHidden()
+            .interactionModes([])
+            .border(Color.black, width: 1)
+            .onAppear(perform: {
+                graphic.symbol = symbol
+            })
+            .onChange(of: visibleArea, perform: { visibleArea in
+                if let visibleArea = visibleArea {
+                    graphic.geometry = visibleArea
+                }
+            })
+            .onChange(of: viewpoint, perform: { viewpoint in
+                if visibleArea == nil,
+                   let viewpoint = viewpoint,
+                   let point = viewpoint.targetGeometry as? Point {
+                    graphic.geometry = point
+                }
+            })
+    }
+    
+    /// Creates a new viewpoint based on the `viewpoint` center, scale, and `scaleFactor`.
+    /// - Returns: The new `Viewpoint`.
+    func makeViewpoint() -> Viewpoint? {
+        if let viewpoint = viewpoint,
+           let center = viewpoint.targetGeometry as? Point {
+            return Viewpoint(
+                center: center,
+                scale: viewpoint.targetScale * scaleFactor
+            )
+        } else {
+            return nil
+        }
+    }
+    
+    // MARK: Modifiers
+    
+    /// The `Map` displayed in the `OverviewMap`.
+    /// - Parameter map: The new map.
+    /// - Returns: The OverviewMap.
+    public func map(_ map: Map) -> OverviewMap {
+        var copy = self
+        copy._map = StateObject(wrappedValue: map)
+        return copy
+    }
+    
+    /// The factor to multiply the main `GeoView`'s scale by.  The `OverviewMap` will display
+    /// at the a scale equal to: `viewpoint.targetscale` x `scaleFactor.
+    /// The default value is 25.0.
+    /// - Parameter scaleFactor: The new scale factor.
+    /// - Returns: The OverviewMap.
+    public func scaleFactor(_ scaleFactor: Double) -> OverviewMap {
+        var copy = self
+        copy.scaleFactor = scaleFactor
+        return copy
+    }
+    
+    /// The `Symbol` used to display the main `GeoView` visible area. For MapViews,
+    /// the symbol will be a FillSymbol used to display the GeoView visible area. For SceneViews,
+    /// the symbol will be a MarkerSymbol, used to display the current viewpoint's center.
+    /// For MapViews, the default is a transparent FillSymbol with a red, 1 point width outline;
+    /// for SceneViews, the default is a red, crosshair SimpleMarkerSymbol.
+    /// - Parameter symbol: The new symbol.
+    /// - Returns: The OverviewMap.
+    public func symbol(_ symbol: Symbol) -> OverviewMap {
+        var copy = self
+        copy.symbol = symbol
+        return copy
+    }
+}
+
+
+// MARK: Extensions
+
+extension Graphic: ObservableObject {}
+extension GraphicsOverlay: ObservableObject {}
+extension Symbol: ObservableObject {}
+
+private extension Symbol {
+    /// The default marker symbol.
+    static let defaultMarker: MarkerSymbol = SimpleMarkerSymbol(
+        style: .cross,
+        color: .red,
+        size: 12.0
+    )
+    
     /// The default fill symbol.
-    private let fillSymbol: FillSymbol = SimpleFillSymbol(
+    static let defaultFill: FillSymbol = SimpleFillSymbol(
         style: .solid,
         color: .clear,
         outline: SimpleLineSymbol(
@@ -57,94 +179,4 @@ public struct OverviewMap: View {
             width: 1.0
         )
     )
-    
-    /// The default marker symbol.
-    private let markerSymbol: MarkerSymbol = SimpleMarkerSymbol(style: .cross,
-                                                                color: .red,
-                                                                size: 12.0
-    )
-    
-    /// Creates an `OverviewMap`.
-    /// - Parameters:
-    ///   - viewpoint: Viewpoint of the main `GeoView` used to update the `OverviewMap` view.
-    ///   - visibleArea: Visible area of the main `GeoView`.
-    ///   - extentSymbol: The `FillSymbol` used to display the main `GeoView`'s visible area.
-    ///   The default is a transparent `SimpleFillSymbol` with a red, 1 point width outline.
-    ///   - scaleFactor: The factor to multiply the main `GeoView`'s scale by.
-    ///   The default value is 25.0
-    public init(viewpoint: Viewpoint?,
-                visibleArea: Polygon? = nil,
-                symbol: Symbol? = nil,
-                scaleFactor: Double = 25.0
-    ) {
-        self.visibleArea = visibleArea
-        self.scaleFactor = scaleFactor
-        
-        // If the client did not pass in a symbol, set the appropriate
-        // symbol based on the presence of `visibleArea` (which indicates
-        // the main `GeoView` is a `MapView`).
-        if symbol == nil {
-            self.symbol = (visibleArea == nil) ? markerSymbol : fillSymbol
-        }
-        else {
-            self.symbol = symbol
-        }
-        
-        let graphic = Graphic(geometry: visibleArea,
-                              symbol: self.symbol)
-        
-        // It is necessary to set the graphic and graphicsOverlay this way
-        // in order to prevent the main geoview from recreating the
-        // graphicsOverlay every draw cycle.  That was causing refresh issues
-        // with the graphic during panning/zooming/rotating.
-        _graphic = StateObject(wrappedValue: graphic)
-        _graphicsOverlay = StateObject(wrappedValue: GraphicsOverlay(graphics: [graphic]))
-        
-        if let viewpoint = viewpoint,
-           let center = viewpoint.targetGeometry as? Point {
-            self.viewpoint = Viewpoint(center: center,
-                                       scale: viewpoint.targetScale * scaleFactor
-            )
-        }
-        else {
-            self.viewpoint = nil
-        }
-    }
-    
-    public var body: some View {
-        MapView(
-            map: map,
-            viewpoint: viewpoint,
-            graphicsOverlays: [graphicsOverlay]
-        )
-            .attributionTextHidden()
-            .interactionModes([])
-            .border(Color.black, width: 1)
-            .onChange(of: visibleArea, perform: { visibleArea in
-                if let visibleArea = visibleArea {
-                    graphic.geometry = visibleArea
-                    let newSymbol = symbol as? FillSymbol
-                    graphic.symbol = newSymbol != nil ? symbol : fillSymbol
-                }
-            })
-            .onChange(of: viewpoint, perform: { viewpoint in
-                if visibleArea == nil,
-                   let viewpoint = viewpoint,
-                   let point = viewpoint.targetGeometry as? Point {
-                    graphic.geometry = point
-                    let newSymbol = symbol as? MarkerSymbol
-                    graphic.symbol = newSymbol != nil ? newSymbol : markerSymbol
-                }
-            })
-            .onChange(of: symbol, perform: { graphic.symbol = $0 })
-    }
-    
-    public func map(_ map: Map) -> OverviewMap {
-        var copy = self
-        copy._map = StateObject(wrappedValue: map)
-        return copy
-    }
 }
-
-extension Graphic: ObservableObject {}
-extension GraphicsOverlay: ObservableObject {}
