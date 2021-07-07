@@ -23,12 +23,6 @@ struct OverviewMapExampleView: View {
         case scene
     }
     
-    let map = Map(basemapStyle: .arcGISImagery)
-    let scene = Scene(basemapStyle: .arcGISImagery)
-    
-    @State private var viewpoint: Viewpoint?
-    @State private var visibleArea: ArcGIS.Polygon?
-    
     @State var mapOrScene: MapOrScene = .map
     
     var body: some View {
@@ -40,27 +34,58 @@ struct OverviewMapExampleView: View {
             .padding()
         switch mapOrScene {
         case .map:
-            MapView(map: map)
-                .onViewpointChanged(type: .centerAndScale) { viewpoint = $0 }
-                .onVisibleAreaChanged { visibleArea = $0 }
-                .overlay(
-                    OverviewMap(viewpoint: viewpoint,
-                                visibleArea: visibleArea
-                               )
-                        .frame(width: 200, height: 132)
-                        .padding(),
-                    alignment: .topTrailing
-                )
+            OverviewMapForMapView()
         case .scene:
-            SceneView(scene: scene)
-                .onViewpointChanged(type: .centerAndScale) { viewpoint = $0 }
-                .overlay(
-                    OverviewMap(viewpoint: viewpoint)
-                        .frame(width: 200, height: 132)
-                        .padding(),
-                    alignment: .topTrailing
-                )
+            OverviewMapForSceneView()
         }
+    }
+}
+
+struct OverviewMapForMapView: View {
+    let map = Map(basemapStyle: .arcGISImagery)
+    
+    @State private var viewpoint: Viewpoint?
+    @State private var visibleArea: ArcGIS.Polygon?
+    
+    var body: some View {
+        MapView(map: map)
+            .onViewpointChanged(type: .centerAndScale) { viewpoint = $0 }
+            .onVisibleAreaChanged { visibleArea = $0 }
+            .overlay(
+                OverviewMap(viewpoint: viewpoint,
+                            visibleArea: visibleArea
+                           )
+                // These modifiers show how you can modify the default
+                // values used for the symbol, map, and scaleFactor.
+//                    .symbol(.customFillSymbol)
+//                    .map(.customOverviewMap)
+//                    .scaleFactor(15.0)
+                    .frame(width: 200, height: 132)
+                    .padding(),
+                alignment: .topTrailing
+            )
+    }
+}
+
+struct OverviewMapForSceneView: View {
+    let scene = Scene(basemapStyle: .arcGISImagery)
+    
+    @State private var viewpoint: Viewpoint?
+    
+    var body: some View {
+        SceneView(scene: scene)
+            .onViewpointChanged(type: .centerAndScale) { viewpoint = $0 }
+            .overlay(
+                OverviewMap(viewpoint: viewpoint)
+                // These modifiers show how you can modify the default
+                // values used for the symbol, map, and scaleFactor.
+//                    .symbol(.customMarkerSymbol)
+//                    .map(.customOverviewMap)
+//                    .scaleFactor(15.0)
+                    .frame(width: 200, height: 132)
+                    .padding(),
+                alignment: .topTrailing
+            )
     }
 }
 
@@ -68,4 +93,31 @@ struct OverviewMapExampleView_Previews: PreviewProvider {
     static var previews: some View {
         OverviewMapExampleView()
     }
+}
+
+// MARK: Extensions
+
+private extension Symbol {
+    /// A custom fill symbol.
+    static let customFillSymbol: FillSymbol = SimpleFillSymbol(
+        style: .diagonalCross,
+        color: .blue,
+        outline: SimpleLineSymbol(
+            style: .solid,
+            color: .blue,
+            width: 1.0
+        )
+    )
+    
+    /// A custom marker symbol.
+    static let customMarkerSymbol: MarkerSymbol = SimpleMarkerSymbol(
+        style: .x,
+        color: .blue,
+        size: 16.0
+    )
+}
+
+private extension Map {
+    /// A custom map for the OverviewMap.
+    static let customOverviewMap: Map = Map(basemapStyle: .arcGISDarkGray)
 }
