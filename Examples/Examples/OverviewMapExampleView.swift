@@ -23,7 +23,8 @@ struct OverviewMapExampleView: View {
         case scene
     }
     
-    @State var mapOrScene: MapOrScene = .map
+    @State
+    var mapOrScene: MapOrScene = .map
     
     var body: some View {
         Picker("Map or Scene", selection: $mapOrScene, content: {
@@ -44,8 +45,11 @@ struct OverviewMapExampleView: View {
 struct OverviewMapForMapView: View {
     let map = Map(basemapStyle: .arcGISImagery)
     
-    @State private var viewpoint: Viewpoint?
-    @State private var visibleArea: ArcGIS.Polygon?
+    @State
+    private var viewpoint: Viewpoint?
+    
+    @State
+    private var visibleArea: ArcGIS.Polygon?
     
     var body: some View {
         MapView(map: map)
@@ -70,7 +74,8 @@ struct OverviewMapForMapView: View {
 struct OverviewMapForSceneView: View {
     let scene = Scene(basemapStyle: .arcGISImagery)
     
-    @State private var viewpoint: Viewpoint?
+    @State
+    private var viewpoint: Viewpoint?
     
     var body: some View {
         SceneView(scene: scene)
