@@ -23,11 +23,11 @@ OverviewMap:
 
 ## Key properties
 
-`OverviewMap` has the following customizable properties:
+`OverviewMap` has the following modifiers:
 
-- `map` - the `Map` displayed in the `OverviewMap`.  For example, you can use `map` to change the base map displayed by the `OverviewMap`.
-- `scaleFactor` - Defines the scale of the `OverviewMap` relative to the scale of the connected `GeoView`. The default is 25.
-- `symbol` - Defines the symbol used to visualize the current `Viewpoint` . This is a red rectangle by default for a `MapView`; for a `SceneView`, this is a red cross.
+- `.map(_ map: Map)` - The `Map` displayed in the `OverviewMap`.  For example, you can use `.map()` to display a custom base map in the `OverviewMap`.
+- `scaleFactor(_ scaleFactor: Double)` - The scale of the `OverviewMap` relative to the scale of the connected `GeoView`. The default is 25.
+- `symbol(_ symbol: Symbol)` - The symbol used to visualize the current `Viewpoint` . This is a red rectangle by default for a `MapView`; for a `SceneView`, this is a red cross.
 
 ## Behavior:
 
@@ -39,10 +39,10 @@ For an `OverviewMap` on a `SceneView`, the center point of the `SceneView`'s `cu
 
 ### Basic usage for overlaying a `MapView`
 
-Note that for `MapView`'s, you need to provide the `OverviewMap` both a viewpoint and visibleArea, as well as providing a `FillSymbol` if you want to customize the display of the visible area.
+Note that for `MapView`s, you need to provide the `OverviewMap` both a viewpoint and visibleArea.
 
 ```swift
-let map = Map(basemap: .imageryWithLabels())
+let map = Map(basemapStyle: .arcGISImagery)
 ***REMOVED***
 @State
 private var viewpoint: Viewpoint?
@@ -65,45 +65,9 @@ var body: some View {
 ***REMOVED***
 ```
 
-### Displaying a custom fill symbol and scale factor for a `MapView`'s visible area
-
-```swift
-let map = Map(basemap: .imageryWithLabels())
-***REMOVED***
-@State
-private var viewpoint: Viewpoint?
-
-@State
-private var visibleArea: ArcGIS.Polygon?
-
-var body: some View {
-***REMOVED***MapView(map: map)
-***REMOVED******REMOVED***.onViewpointChanged(type: .centerAndScale) { viewpoint = $0 ***REMOVED***
-***REMOVED******REMOVED***.onVisibleAreaChanged { visibleArea = $0 ***REMOVED***
-***REMOVED******REMOVED***.overlay(
-***REMOVED******REMOVED******REMOVED***OverviewMap(viewpoint: viewpoint,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***visibleArea: visibleArea,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***symbol: SimpleFillSymbol(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***style: .solid,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***color: .clear,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***outline: SimpleLineSymbol(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***style: .solid,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***color: .blue,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***width: 2.0
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***),
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***scaleFactor: 32.0
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***   )
-***REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 200, height: 132)
-***REMOVED******REMOVED******REMOVED******REMOVED***.padding(),
-***REMOVED******REMOVED******REMOVED***alignment: .topTrailing
-***REMOVED******REMOVED***)
-***REMOVED***
-```
-
 ### Basic usage for overlaying a `SceneView`
 
-Note that for `SceneView`'s, you need to provide the `OverviewMap` only a viewpoint, as well as providing a `MarkerSymbol` if you want to customize the display of the viewpoint.
+Note that for `SceneView`s, you need to provide the `OverviewMap` only a viewpoint.
 
 ```swift
 let scene = Scene(basemap: .imageryWithLabels())
@@ -123,33 +87,5 @@ var body: some View {
 ***REMOVED***
 ```
 
-### Displaying a custom marker symbol and scale factor for a `SceneView`'s viewpoint
-
-```swift
-SceneView(scene: scene)
-***REMOVED***.onViewpointChanged(type: .centerAndScale) { viewpoint = $0 ***REMOVED***
-***REMOVED***.overlay(
-***REMOVED******REMOVED***OverviewMap(viewpoint: viewpoint,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***symbol: SimpleMarkerSymbol(style: .x,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***   color: .blue,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***   size: 24.0
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  ),
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***scaleFactor: 32.0
-***REMOVED******REMOVED******REMOVED******REMOVED***   )
-***REMOVED******REMOVED******REMOVED***.frame(width: 200, height: 132)
-***REMOVED******REMOVED******REMOVED***.padding(),
-***REMOVED******REMOVED***alignment: .topTrailing
-***REMOVED***)
-```
-
-### Changing the map used by the `OverviewMap`
-
-To change the `OverviewMap`'s `map`, you use the `.map()` modifier on `OverviewMap`.
-
-```swift
-OverviewMap(viewpoint: viewpoint)
-***REMOVED***.map(Map(basemap: .darkGrayCanvasVector()))
-```
-
-To see the `OverviewMap` in action, try out the [Examples](../../Examples) and refer to [OverviewMapExampleView.swift](../../Examples/Examples/OverviewMapExampleView.swift) in the project.
+To see the `OverviewMap` in action, and for examples of `OverviewMap` customization, check out the [Examples](../../Examples) and refer to [OverviewMapExampleView.swift](../../Examples/Examples/OverviewMapExampleView.swift) in the project.
 
