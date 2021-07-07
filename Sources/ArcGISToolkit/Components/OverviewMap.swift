@@ -102,6 +102,9 @@ public struct OverviewMap: View {
                     graphic.geometry = point
                 }
             })
+            .onChange(of: symbol, perform: {
+                graphic.symbol = $0
+            })
     }
     
     /// Creates a new viewpoint based on the `viewpoint` center, scale, and `scaleFactor`.
