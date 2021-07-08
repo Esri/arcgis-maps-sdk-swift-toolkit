@@ -55,7 +55,10 @@ var body: some View {
 ***REMOVED******REMOVED***.onViewpointChanged(type: .centerAndScale) { viewpoint = $0 ***REMOVED***
 ***REMOVED******REMOVED***.onVisibleAreaChanged { visibleArea = $0 ***REMOVED***
 ***REMOVED******REMOVED***.overlay(
-***REMOVED******REMOVED******REMOVED***OverviewMap(viewpoint: viewpoint, visibleArea: visibleArea)
+***REMOVED******REMOVED******REMOVED***OverviewMap.forMapView(
+***REMOVED******REMOVED******REMOVED******REMOVED***with: viewpoint,
+***REMOVED******REMOVED******REMOVED******REMOVED***visibleArea: visibleArea
+***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 200, height: 132)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding(),
 ***REMOVED******REMOVED******REMOVED***alignment: .topTrailing
@@ -77,7 +80,7 @@ var body: some View {
 ***REMOVED***SceneView(scene: scene)
 ***REMOVED******REMOVED***.onViewpointChanged(type: .centerAndScale) { viewpoint = $0 ***REMOVED***
 ***REMOVED******REMOVED***.overlay(
-***REMOVED******REMOVED******REMOVED***OverviewMap(viewpoint: viewpoint)
+***REMOVED******REMOVED******REMOVED***OverviewMap.forSceneView(with: viewpoint)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 200, height: 132)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding(),
 ***REMOVED******REMOVED******REMOVED***alignment: .topTrailing
