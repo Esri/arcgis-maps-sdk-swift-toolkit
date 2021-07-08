@@ -81,7 +81,7 @@ public struct OverviewMap: View {
     public var body: some View {
         MapView(
             map: map,
-            viewpoint: makeViewpoint(),
+            viewpoint: makeOverviewViewpoint(),
             graphicsOverlays: [graphicsOverlay]
         )
             .attributionTextHidden()
@@ -107,9 +107,9 @@ public struct OverviewMap: View {
             })
     }
     
-    /// Creates a new viewpoint based on the `viewpoint` center, scale, and `scaleFactor`.
+    /// Creates an overview viewpoint based on the observed `viewpoint` center, scale, and `scaleFactor`.
     /// - Returns: The new `Viewpoint`.
-    func makeViewpoint() -> Viewpoint? {
+    func makeOverviewViewpoint() -> Viewpoint? {
         if let viewpoint = viewpoint,
            let center = viewpoint.targetGeometry as? Point {
             return Viewpoint(
@@ -125,7 +125,7 @@ public struct OverviewMap: View {
     
     /// The `Map` displayed in the `OverviewMap`.
     /// - Parameter map: The new map.
-    /// - Returns: The OverviewMap.
+    /// - Returns: The `OverviewMap`.
     public func map(_ map: Map) -> OverviewMap {
         var copy = self
         copy._map = StateObject(wrappedValue: map)
@@ -136,20 +136,21 @@ public struct OverviewMap: View {
     /// at the a scale equal to: `viewpoint.targetscale` x `scaleFactor.
     /// The default value is 25.0.
     /// - Parameter scaleFactor: The new scale factor.
-    /// - Returns: The OverviewMap.
+    /// - Returns: The `OverviewMap`.
     public func scaleFactor(_ scaleFactor: Double) -> OverviewMap {
         var copy = self
         copy.scaleFactor = scaleFactor
         return copy
     }
     
-    /// The `Symbol` used to display the main `GeoView` visible area. For MapViews,
-    /// the symbol will be a FillSymbol used to display the GeoView visible area. For SceneViews,
-    /// the symbol will be a MarkerSymbol, used to display the current viewpoint's center.
-    /// For MapViews, the default is a transparent FillSymbol with a red, 1 point width outline;
-    /// for SceneViews, the default is a red, crosshair SimpleMarkerSymbol.
+    /// The `Symbol` used to display the main `GeoView` visible area. For `MapView`s, the symbol
+    /// should be appropriate for visualizing a polygon, as it will be used to draw the visible area. For
+    /// `SceneView`s, the symbol should be appropriate for visualizing a point, as it will be used to
+    /// draw the current viewpoint's center. For `MapView`s, the default is a transparent
+    /// `SimpleFillSymbol` with a red,1 point width outline; for `SceneView`s, the default is a
+    /// red, crosshair `SimpleMarkerSymbol`.
     /// - Parameter symbol: The new symbol.
-    /// - Returns: The OverviewMap.
+    /// - Returns: The `OverviewMap`.
     public func symbol(_ symbol: Symbol) -> OverviewMap {
         var copy = self
         copy.symbol = symbol
