@@ -21,7 +21,7 @@ public struct OverviewMap: View {
 ***REMOVED******REMOVED***/ The `Viewpoint` of the main `GeoView`
 ***REMOVED***let viewpoint: Viewpoint?
 ***REMOVED***
-***REMOVED******REMOVED***/ The visible area of the main `GeoView`.  Not applicable to SceneViews.
+***REMOVED******REMOVED***/ The visible area of the main `GeoView`.  Not applicable to `SceneView`s.
 ***REMOVED***let visibleArea: Polygon?
 ***REMOVED***
 ***REMOVED***private var symbol: Symbol
@@ -39,6 +39,11 @@ public struct OverviewMap: View {
 ***REMOVED***@StateObject
 ***REMOVED***private var graphicsOverlay: GraphicsOverlay
 ***REMOVED***
+***REMOVED******REMOVED***/ Creates an `OverviewMap` for use on a `MapView`.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - viewpoint: Viewpoint of the main `GeoView` used to update the `OverviewMap` view.
+***REMOVED******REMOVED***/   - visibleArea: Visible area of the main `GeoView` used to display the extent graphic.
+***REMOVED******REMOVED***/ - Returns: A new `OverviewMap`.
 ***REMOVED***public static func forMapView(
 ***REMOVED******REMOVED***with viewpoint: Viewpoint?,
 ***REMOVED******REMOVED***visibleArea: Polygon?
@@ -46,6 +51,10 @@ public struct OverviewMap: View {
 ***REMOVED******REMOVED***return OverviewMap(viewpoint: viewpoint, visibleArea: visibleArea)
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ Creates an `OverviewMap` for use on a `SceneView`.
+***REMOVED******REMOVED***/ - Parameter viewpoint: Viewpoint of the main `GeoView` used to update the
+***REMOVED******REMOVED***/ `OverviewMap` view.
+***REMOVED******REMOVED***/ - Returns: A new `OverviewMap`.
 ***REMOVED***public static func forSceneView(
 ***REMOVED******REMOVED***with viewpoint: Viewpoint?
 ***REMOVED***) -> OverviewMap {
@@ -56,7 +65,7 @@ public struct OverviewMap: View {
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - viewpoint: Viewpoint of the main `GeoView` used to update the `OverviewMap` view.
 ***REMOVED******REMOVED***/   - visibleArea: Visible area of the main `GeoView` used to display the extent graphic.
-***REMOVED***internal init(viewpoint: Viewpoint?,
+***REMOVED***init(viewpoint: Viewpoint?,
 ***REMOVED******REMOVED******REMOVED******REMOVED***visibleArea: Polygon?
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.visibleArea = visibleArea
@@ -76,7 +85,7 @@ public struct OverviewMap: View {
 ***REMOVED******REMOVED***/ Creates an `OverviewMap`. Used for creating an `OverviewMap` for use on a `SceneView`.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - viewpoint: Viewpoint of the main `GeoView` used to update the `OverviewMap` view.
-***REMOVED***internal init(viewpoint: Viewpoint?) {
+***REMOVED***init(viewpoint: Viewpoint?) {
 ***REMOVED******REMOVED***self.viewpoint = viewpoint
 ***REMOVED******REMOVED***self.visibleArea = nil
 ***REMOVED******REMOVED***
