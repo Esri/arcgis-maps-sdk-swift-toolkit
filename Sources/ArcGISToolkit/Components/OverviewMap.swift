@@ -21,7 +21,7 @@ public struct OverviewMap: View {
     /// The `Viewpoint` of the main `GeoView`
     let viewpoint: Viewpoint?
     
-    /// The visible area of the main `GeoView`.  Not applicable to SceneViews.
+    /// The visible area of the main `GeoView`.  Not applicable to `SceneView`s.
     let visibleArea: Polygon?
     
     private var symbol: Symbol
@@ -39,6 +39,11 @@ public struct OverviewMap: View {
     @StateObject
     private var graphicsOverlay: GraphicsOverlay
     
+    /// Creates an `OverviewMap` for use on a `MapView`.
+    /// - Parameters:
+    ///   - viewpoint: Viewpoint of the main `GeoView` used to update the `OverviewMap` view.
+    ///   - visibleArea: Visible area of the main `GeoView` used to display the extent graphic.
+    /// - Returns: A new `OverviewMap`.
     public static func forMapView(
         with viewpoint: Viewpoint?,
         visibleArea: Polygon?
@@ -46,6 +51,10 @@ public struct OverviewMap: View {
         return OverviewMap(viewpoint: viewpoint, visibleArea: visibleArea)
     }
     
+    /// Creates an `OverviewMap` for use on a `SceneView`.
+    /// - Parameter viewpoint: Viewpoint of the main `GeoView` used to update the
+    /// `OverviewMap` view.
+    /// - Returns: A new `OverviewMap`.
     public static func forSceneView(
         with viewpoint: Viewpoint?
     ) -> OverviewMap {
@@ -56,7 +65,7 @@ public struct OverviewMap: View {
     /// - Parameters:
     ///   - viewpoint: Viewpoint of the main `GeoView` used to update the `OverviewMap` view.
     ///   - visibleArea: Visible area of the main `GeoView` used to display the extent graphic.
-    internal init(viewpoint: Viewpoint?,
+    init(viewpoint: Viewpoint?,
                 visibleArea: Polygon?
     ) {
         self.visibleArea = visibleArea
@@ -76,7 +85,7 @@ public struct OverviewMap: View {
     /// Creates an `OverviewMap`. Used for creating an `OverviewMap` for use on a `SceneView`.
     /// - Parameters:
     ///   - viewpoint: Viewpoint of the main `GeoView` used to update the `OverviewMap` view.
-    internal init(viewpoint: Viewpoint?) {
+    init(viewpoint: Viewpoint?) {
         self.viewpoint = viewpoint
         self.visibleArea = nil
         
