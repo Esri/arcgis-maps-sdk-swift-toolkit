@@ -56,7 +56,10 @@ struct OverviewMapForMapView: View {
             .onViewpointChanged(type: .centerAndScale) { viewpoint = $0 }
             .onVisibleAreaChanged { visibleArea = $0 }
             .overlay(
-                OverviewMap(viewpoint: viewpoint, visibleArea: visibleArea)
+                OverviewMap.forMapView(
+                    with: viewpoint,
+                    visibleArea: visibleArea
+                )
                 // These modifiers show how you can modify the default
                 // values used for the symbol, map, and scaleFactor.
 //                    .symbol(.customFillSymbol)
@@ -79,7 +82,7 @@ struct OverviewMapForSceneView: View {
         SceneView(scene: scene)
             .onViewpointChanged(type: .centerAndScale) { viewpoint = $0 }
             .overlay(
-                OverviewMap(viewpoint: viewpoint)
+                OverviewMap.forSceneView(with: viewpoint)
                 // These modifiers show how you can modify the default
                 // values used for the symbol, map, and scaleFactor.
 //                    .symbol(.customMarkerSymbol)

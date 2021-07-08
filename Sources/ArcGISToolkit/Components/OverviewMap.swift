@@ -39,11 +39,24 @@ public struct OverviewMap: View {
     @StateObject
     private var graphicsOverlay: GraphicsOverlay
     
+    public static func forMapView(
+        with viewpoint: Viewpoint?,
+        visibleArea: Polygon?
+    ) -> OverviewMap {
+        return OverviewMap(viewpoint: viewpoint, visibleArea: visibleArea)
+    }
+    
+    public static func forSceneView(
+        with viewpoint: Viewpoint?
+    ) -> OverviewMap {
+        return OverviewMap(viewpoint: viewpoint)
+    }
+
     /// Creates an `OverviewMap`. Used for creating an `OverviewMap` for use on a `MapView`.
     /// - Parameters:
     ///   - viewpoint: Viewpoint of the main `GeoView` used to update the `OverviewMap` view.
     ///   - visibleArea: Visible area of the main `GeoView` used to display the extent graphic.
-    public init(viewpoint: Viewpoint?,
+    internal init(viewpoint: Viewpoint?,
                 visibleArea: Polygon?
     ) {
         self.visibleArea = visibleArea
@@ -63,7 +76,7 @@ public struct OverviewMap: View {
     /// Creates an `OverviewMap`. Used for creating an `OverviewMap` for use on a `SceneView`.
     /// - Parameters:
     ///   - viewpoint: Viewpoint of the main `GeoView` used to update the `OverviewMap` view.
-    public init(viewpoint: Viewpoint?) {
+    internal init(viewpoint: Viewpoint?) {
         self.viewpoint = viewpoint
         self.visibleArea = nil
         

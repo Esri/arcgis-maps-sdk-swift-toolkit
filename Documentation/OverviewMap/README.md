@@ -55,7 +55,10 @@ var body: some View {
         .onViewpointChanged(type: .centerAndScale) { viewpoint = $0 }
         .onVisibleAreaChanged { visibleArea = $0 }
         .overlay(
-            OverviewMap(viewpoint: viewpoint, visibleArea: visibleArea)
+            OverviewMap.forMapView(
+                with: viewpoint,
+                visibleArea: visibleArea
+            )
                 .frame(width: 200, height: 132)
                 .padding(),
             alignment: .topTrailing
@@ -77,7 +80,7 @@ var body: some View {
     SceneView(scene: scene)
         .onViewpointChanged(type: .centerAndScale) { viewpoint = $0 }
         .overlay(
-            OverviewMap(viewpoint: viewpoint)
+            OverviewMap.forSceneView(with: viewpoint)
                 .frame(width: 200, height: 132)
                 .padding(),
             alignment: .topTrailing
