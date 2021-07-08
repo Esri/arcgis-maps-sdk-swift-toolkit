@@ -81,7 +81,7 @@ public struct OverviewMap: View {
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***MapView(
 ***REMOVED******REMOVED******REMOVED***map: map,
-***REMOVED******REMOVED******REMOVED***viewpoint: makeViewpoint(),
+***REMOVED******REMOVED******REMOVED***viewpoint: makeOverviewViewpoint(),
 ***REMOVED******REMOVED******REMOVED***graphicsOverlays: [graphicsOverlay]
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***.attributionTextHidden()
@@ -107,9 +107,9 @@ public struct OverviewMap: View {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Creates a new viewpoint based on the `viewpoint` center, scale, and `scaleFactor`.
+***REMOVED******REMOVED***/ Creates an overview viewpoint based on the observed `viewpoint` center, scale, and `scaleFactor`.
 ***REMOVED******REMOVED***/ - Returns: The new `Viewpoint`.
-***REMOVED***func makeViewpoint() -> Viewpoint? {
+***REMOVED***func makeOverviewViewpoint() -> Viewpoint? {
 ***REMOVED******REMOVED***if let viewpoint = viewpoint,
 ***REMOVED******REMOVED***   let center = viewpoint.targetGeometry as? Point {
 ***REMOVED******REMOVED******REMOVED***return Viewpoint(
@@ -125,7 +125,7 @@ public struct OverviewMap: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ The `Map` displayed in the `OverviewMap`.
 ***REMOVED******REMOVED***/ - Parameter map: The new map.
-***REMOVED******REMOVED***/ - Returns: The OverviewMap.
+***REMOVED******REMOVED***/ - Returns: The `OverviewMap`.
 ***REMOVED***public func map(_ map: Map) -> OverviewMap {
 ***REMOVED******REMOVED***var copy = self
 ***REMOVED******REMOVED***copy._map = StateObject(wrappedValue: map)
@@ -136,20 +136,21 @@ public struct OverviewMap: View {
 ***REMOVED******REMOVED***/ at the a scale equal to: `viewpoint.targetscale` x `scaleFactor.
 ***REMOVED******REMOVED***/ The default value is 25.0.
 ***REMOVED******REMOVED***/ - Parameter scaleFactor: The new scale factor.
-***REMOVED******REMOVED***/ - Returns: The OverviewMap.
+***REMOVED******REMOVED***/ - Returns: The `OverviewMap`.
 ***REMOVED***public func scaleFactor(_ scaleFactor: Double) -> OverviewMap {
 ***REMOVED******REMOVED***var copy = self
 ***REMOVED******REMOVED***copy.scaleFactor = scaleFactor
 ***REMOVED******REMOVED***return copy
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ The `Symbol` used to display the main `GeoView` visible area. For MapViews,
-***REMOVED******REMOVED***/ the symbol will be a FillSymbol used to display the GeoView visible area. For SceneViews,
-***REMOVED******REMOVED***/ the symbol will be a MarkerSymbol, used to display the current viewpoint's center.
-***REMOVED******REMOVED***/ For MapViews, the default is a transparent FillSymbol with a red, 1 point width outline;
-***REMOVED******REMOVED***/ for SceneViews, the default is a red, crosshair SimpleMarkerSymbol.
+***REMOVED******REMOVED***/ The `Symbol` used to display the main `GeoView` visible area. For `MapView`s, the symbol
+***REMOVED******REMOVED***/ should be appropriate for visualizing a polygon, as it will be used to draw the visible area. For
+***REMOVED******REMOVED***/ `SceneView`s, the symbol should be appropriate for visualizing a point, as it will be used to
+***REMOVED******REMOVED***/ draw the current viewpoint's center. For `MapView`s, the default is a transparent
+***REMOVED******REMOVED***/ `SimpleFillSymbol` with a red,1 point width outline; for `SceneView`s, the default is a
+***REMOVED******REMOVED***/ red, crosshair `SimpleMarkerSymbol`.
 ***REMOVED******REMOVED***/ - Parameter symbol: The new symbol.
-***REMOVED******REMOVED***/ - Returns: The OverviewMap.
+***REMOVED******REMOVED***/ - Returns: The `OverviewMap`.
 ***REMOVED***public func symbol(_ symbol: Symbol) -> OverviewMap {
 ***REMOVED******REMOVED***var copy = self
 ***REMOVED******REMOVED***copy.symbol = symbol

@@ -26,7 +26,7 @@ OverviewMap:
 `OverviewMap` has the following modifiers:
 
 - `.map(_ map: Map)` - The `Map` displayed in the `OverviewMap`.  For example, you can use `.map()` to display a custom base map in the `OverviewMap`.
-- `scaleFactor(_ scaleFactor: Double)` - The scale of the `OverviewMap` relative to the scale of the connected `GeoView`. The default is 25.
+- `scaleFactor(_ scaleFactor: Double)` - The scale of the `OverviewMap` relative to the scale of the connected `GeoView`.  The `OverviewMap` will display at the a scale equal to: `viewpoint.targetscale` x `scaleFactor`. The default is 25.
 - `symbol(_ symbol: Symbol)` - The symbol used to visualize the current `VisibleArea`/`Viewpoint`. This is a red rectangle by default for a `MapView`; for a `SceneView`, this is a red cross.
 
 ## Behavior:
@@ -55,9 +55,7 @@ var body: some View {
 ***REMOVED******REMOVED***.onViewpointChanged(type: .centerAndScale) { viewpoint = $0 ***REMOVED***
 ***REMOVED******REMOVED***.onVisibleAreaChanged { visibleArea = $0 ***REMOVED***
 ***REMOVED******REMOVED***.overlay(
-***REMOVED******REMOVED******REMOVED***OverviewMap(viewpoint: viewpoint,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***visibleArea: visibleArea
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***   )
+***REMOVED******REMOVED******REMOVED***OverviewMap(viewpoint: viewpoint, visibleArea: visibleArea)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 200, height: 132)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding(),
 ***REMOVED******REMOVED******REMOVED***alignment: .topTrailing

@@ -56,9 +56,7 @@ struct OverviewMapForMapView: View {
 ***REMOVED******REMOVED******REMOVED***.onViewpointChanged(type: .centerAndScale) { viewpoint = $0 ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onVisibleAreaChanged { visibleArea = $0 ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***.overlay(
-***REMOVED******REMOVED******REMOVED******REMOVED***OverviewMap(viewpoint: viewpoint,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***visibleArea: visibleArea
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***   )
+***REMOVED******REMOVED******REMOVED******REMOVED***OverviewMap(viewpoint: viewpoint, visibleArea: visibleArea)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** These modifiers show how you can modify the default
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** values used for the symbol, map, and scaleFactor.
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.symbol(.customFillSymbol)
