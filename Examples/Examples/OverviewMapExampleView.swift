@@ -124,6 +124,6 @@ private extension Symbol {
 }
 
 private extension Map {
-    /// A custom map for the OverviewMap.
-    static let customOverviewMap: Map = Map(basemapStyle: .arcGISDarkGray)
+    /// A custom map for the `OverviewMap`.
+    static let customOverviewMap = Map(basemapStyle: .arcGISDarkGray)
 }
