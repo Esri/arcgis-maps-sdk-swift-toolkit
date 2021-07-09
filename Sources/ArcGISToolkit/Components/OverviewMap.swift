@@ -133,15 +133,11 @@ public struct OverviewMap: View {
     /// Creates an overview viewpoint based on the observed `viewpoint` center, scale, and `scaleFactor`.
     /// - Returns: The new `Viewpoint`.
     func makeOverviewViewpoint() -> Viewpoint? {
-        if let viewpoint = viewpoint,
-           let center = viewpoint.targetGeometry as? Point {
-            return Viewpoint(
-                center: center,
-                scale: viewpoint.targetScale * scaleFactor
-            )
-        } else {
-            return nil
-        }
+        guard let viewpoint = viewpoint, let center = viewpoint.targetGeometry as? Point else { return nil }
+        return Viewpoint(
+            center: center,
+            scale: viewpoint.targetScale * scaleFactor
+        )
     }
     
     // MARK: Modifiers
