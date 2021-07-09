@@ -52,7 +52,7 @@ public struct OverviewMap: View {
     }
     
     /// Creates an `OverviewMap` for use on a `SceneView`.
-    /// - Parameter viewpoint: Viewpoint of the main `GeoView` used to update the
+    /// - Parameter viewpoint: Viewpoint of the main `SceneView` used to update the
     /// `OverviewMap` view.
     /// - Returns: A new `OverviewMap`.
     public static func forSceneView(
