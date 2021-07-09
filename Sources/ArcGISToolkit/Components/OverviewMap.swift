@@ -133,15 +133,11 @@ public struct OverviewMap: View {
 ***REMOVED******REMOVED***/ Creates an overview viewpoint based on the observed `viewpoint` center, scale, and `scaleFactor`.
 ***REMOVED******REMOVED***/ - Returns: The new `Viewpoint`.
 ***REMOVED***func makeOverviewViewpoint() -> Viewpoint? {
-***REMOVED******REMOVED***if let viewpoint = viewpoint,
-***REMOVED******REMOVED***   let center = viewpoint.targetGeometry as? Point {
-***REMOVED******REMOVED******REMOVED***return Viewpoint(
-***REMOVED******REMOVED******REMOVED******REMOVED***center: center,
-***REMOVED******REMOVED******REMOVED******REMOVED***scale: viewpoint.targetScale * scaleFactor
-***REMOVED******REMOVED******REMOVED***)
-***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***return nil
-***REMOVED***
+***REMOVED******REMOVED***guard let viewpoint = viewpoint, let center = viewpoint.targetGeometry as? Point else { return nil ***REMOVED***
+***REMOVED******REMOVED***return Viewpoint(
+***REMOVED******REMOVED******REMOVED***center: center,
+***REMOVED******REMOVED******REMOVED***scale: viewpoint.targetScale * scaleFactor
+***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED*** MARK: Modifiers
