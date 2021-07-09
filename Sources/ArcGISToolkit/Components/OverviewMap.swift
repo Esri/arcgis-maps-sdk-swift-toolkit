@@ -77,7 +77,7 @@ public struct OverviewMap: View {
 
         // It is necessary to set the graphic and graphicsOverlay this way
         // in order to prevent the main geoview from recreating the
-        // graphicsOverlay every draw cycle.  That was causing refresh issues
+        // graphicsOverlay every draw cycle. That was causing refresh issues
         // with the graphic during panning/zooming/rotating.
         _graphic = StateObject(wrappedValue: graphic)
         _graphicsOverlay = StateObject(wrappedValue: GraphicsOverlay(graphics: [graphic]))
