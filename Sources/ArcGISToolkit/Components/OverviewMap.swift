@@ -18,7 +18,7 @@ import ArcGIS
 /// `OverviewMap` is a small, secondary `MapView` (sometimes called an "inset map"), superimposed
 /// on an existing `GeoView`, which shows the visible extent of that `GeoView`.
 public struct OverviewMap: View {
-    /// The `Viewpoint` of the main `GeoView`
+    /// The `Viewpoint` of the main `GeoView`.
     let viewpoint: Viewpoint?
     
     /// The visible area of the main `GeoView`.  Not applicable to `SceneView`s.
