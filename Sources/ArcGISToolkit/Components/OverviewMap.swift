@@ -169,7 +169,7 @@ public struct OverviewMap: View {
     /// should be appropriate for visualizing a polygon, as it will be used to draw the visible area. For
     /// `SceneView`s, the symbol should be appropriate for visualizing a point, as it will be used to
     /// draw the current viewpoint's center. For `MapView`s, the default is a transparent
-    /// `SimpleFillSymbol` with a red,1 point width outline; for `SceneView`s, the default is a
+    /// `SimpleFillSymbol` with a red 1 point width outline; for `SceneView`s, the default is a
     /// red, crosshair `SimpleMarkerSymbol`.
     /// - Parameter symbol: The new symbol.
     /// - Returns: The `OverviewMap`.
