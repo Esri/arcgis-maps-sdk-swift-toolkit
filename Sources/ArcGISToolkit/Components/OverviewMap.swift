@@ -65,8 +65,9 @@ public struct OverviewMap: View {
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - viewpoint: Viewpoint of the main `GeoView` used to update the `OverviewMap` view.
 ***REMOVED******REMOVED***/   - visibleArea: Visible area of the main `GeoView` used to display the extent graphic.
-***REMOVED***init(viewpoint: Viewpoint?,
-***REMOVED******REMOVED******REMOVED******REMOVED***visibleArea: Polygon?
+***REMOVED***init(
+***REMOVED******REMOVED***viewpoint: Viewpoint?,
+***REMOVED******REMOVED***visibleArea: Polygon?
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.visibleArea = visibleArea
 ***REMOVED******REMOVED***self.viewpoint = viewpoint
