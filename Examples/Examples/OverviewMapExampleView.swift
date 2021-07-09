@@ -19,7 +19,7 @@ struct OverviewMapExampleView: View {
 ***REMOVED***enum MapOrScene {
 ***REMOVED******REMOVED******REMOVED***/ The example shows a map view.
 ***REMOVED******REMOVED***case map
-***REMOVED******REMOVED******REMOVED***/ The Example shows a scene view.
+***REMOVED******REMOVED******REMOVED***/ The example shows a scene view.
 ***REMOVED******REMOVED***case scene
 ***REMOVED***
 ***REMOVED***
