@@ -17,9 +17,9 @@
 
 struct OverviewMapExampleView: View {
 ***REMOVED***enum MapOrScene {
-***REMOVED******REMOVED******REMOVED***/ The Example shows a map view.
+***REMOVED******REMOVED******REMOVED***/ The example shows a map view.
 ***REMOVED******REMOVED***case map
-***REMOVED******REMOVED******REMOVED***/ The Example shows a scene view.
+***REMOVED******REMOVED******REMOVED***/ The example shows a scene view.
 ***REMOVED******REMOVED***case scene
 ***REMOVED***
 ***REMOVED***
@@ -124,6 +124,6 @@ private extension Symbol {
 ***REMOVED***
 
 private extension Map {
-***REMOVED******REMOVED***/ A custom map for the OverviewMap.
-***REMOVED***static let customOverviewMap: Map = Map(basemapStyle: .arcGISDarkGray)
+***REMOVED******REMOVED***/ A custom map for the `OverviewMap`.
+***REMOVED***static let customOverviewMap = Map(basemapStyle: .arcGISDarkGray)
 ***REMOVED***

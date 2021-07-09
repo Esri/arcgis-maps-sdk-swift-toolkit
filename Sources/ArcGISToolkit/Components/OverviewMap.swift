@@ -18,18 +18,18 @@ import Combine
 ***REMOVED***/ `OverviewMap` is a small, secondary `MapView` (sometimes called an "inset map"), superimposed
 ***REMOVED***/ on an existing `GeoView`, which shows the visible extent of that `GeoView`.
 public struct OverviewMap: View {
-***REMOVED******REMOVED***/ The `Viewpoint` of the main `GeoView`
+***REMOVED******REMOVED***/ The `Viewpoint` of the main `GeoView`.
 ***REMOVED***let viewpoint: Viewpoint?
 ***REMOVED***
-***REMOVED******REMOVED***/ The visible area of the main `GeoView`.  Not applicable to `SceneView`s.
+***REMOVED******REMOVED***/ The visible area of the main `GeoView`. Not applicable to `SceneView`s.
 ***REMOVED***let visibleArea: Polygon?
 ***REMOVED***
 ***REMOVED***private var symbol: Symbol
 ***REMOVED***
-***REMOVED***private var scaleFactor: Double = 25.0
+***REMOVED***private var scaleFactor = 25.0
 ***REMOVED***
 ***REMOVED***@StateObject
-***REMOVED***private var map: Map = Map(basemapStyle: .arcGISTopographic)
+***REMOVED***private var map = Map(basemapStyle: .arcGISTopographic)
 ***REMOVED***
 ***REMOVED******REMOVED***/ The `Graphic` displaying the visible area of the main `GeoView`.
 ***REMOVED***@StateObject
@@ -41,32 +41,33 @@ public struct OverviewMap: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates an `OverviewMap` for use on a `MapView`.
 ***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - viewpoint: Viewpoint of the main `GeoView` used to update the `OverviewMap` view.
-***REMOVED******REMOVED***/   - visibleArea: Visible area of the main `GeoView` used to display the extent graphic.
+***REMOVED******REMOVED***/   - viewpoint: Viewpoint of the main `MapView` used to update the `OverviewMap` view.
+***REMOVED******REMOVED***/   - visibleArea: Visible area of the main `MapView ` used to display the extent graphic.
 ***REMOVED******REMOVED***/ - Returns: A new `OverviewMap`.
 ***REMOVED***public static func forMapView(
 ***REMOVED******REMOVED***with viewpoint: Viewpoint?,
 ***REMOVED******REMOVED***visibleArea: Polygon?
 ***REMOVED***) -> OverviewMap {
-***REMOVED******REMOVED***return OverviewMap(viewpoint: viewpoint, visibleArea: visibleArea)
+***REMOVED******REMOVED***OverviewMap(viewpoint: viewpoint, visibleArea: visibleArea)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates an `OverviewMap` for use on a `SceneView`.
-***REMOVED******REMOVED***/ - Parameter viewpoint: Viewpoint of the main `GeoView` used to update the
+***REMOVED******REMOVED***/ - Parameter viewpoint: Viewpoint of the main `SceneView` used to update the
 ***REMOVED******REMOVED***/ `OverviewMap` view.
 ***REMOVED******REMOVED***/ - Returns: A new `OverviewMap`.
 ***REMOVED***public static func forSceneView(
 ***REMOVED******REMOVED***with viewpoint: Viewpoint?
 ***REMOVED***) -> OverviewMap {
-***REMOVED******REMOVED***return OverviewMap(viewpoint: viewpoint)
+***REMOVED******REMOVED***OverviewMap(viewpoint: viewpoint)
 ***REMOVED***
 
 ***REMOVED******REMOVED***/ Creates an `OverviewMap`. Used for creating an `OverviewMap` for use on a `MapView`.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - viewpoint: Viewpoint of the main `GeoView` used to update the `OverviewMap` view.
 ***REMOVED******REMOVED***/   - visibleArea: Visible area of the main `GeoView` used to display the extent graphic.
-***REMOVED***init(viewpoint: Viewpoint?,
-***REMOVED******REMOVED******REMOVED******REMOVED***visibleArea: Polygon?
+***REMOVED***init(
+***REMOVED******REMOVED***viewpoint: Viewpoint?,
+***REMOVED******REMOVED***visibleArea: Polygon?
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.visibleArea = visibleArea
 ***REMOVED******REMOVED***self.viewpoint = viewpoint
@@ -76,7 +77,7 @@ public struct OverviewMap: View {
 
 ***REMOVED******REMOVED******REMOVED*** It is necessary to set the graphic and graphicsOverlay this way
 ***REMOVED******REMOVED******REMOVED*** in order to prevent the main geoview from recreating the
-***REMOVED******REMOVED******REMOVED*** graphicsOverlay every draw cycle.  That was causing refresh issues
+***REMOVED******REMOVED******REMOVED*** graphicsOverlay every draw cycle. That was causing refresh issues
 ***REMOVED******REMOVED******REMOVED*** with the graphic during panning/zooming/rotating.
 ***REMOVED******REMOVED***_graphic = StateObject(wrappedValue: graphic)
 ***REMOVED******REMOVED***_graphicsOverlay = StateObject(wrappedValue: GraphicsOverlay(graphics: [graphic]))
@@ -94,7 +95,7 @@ public struct OverviewMap: View {
 
 ***REMOVED******REMOVED******REMOVED*** It is necessary to set the graphic and graphicsOverlay this way
 ***REMOVED******REMOVED******REMOVED*** in order to prevent the main geoview from recreating the
-***REMOVED******REMOVED******REMOVED*** graphicsOverlay every draw cycle.  That was causing refresh issues
+***REMOVED******REMOVED******REMOVED*** graphicsOverlay every draw cycle. That was causing refresh issues
 ***REMOVED******REMOVED******REMOVED*** with the graphic during panning/zooming/rotating.
 ***REMOVED******REMOVED***_graphic = StateObject(wrappedValue: graphic)
 ***REMOVED******REMOVED***_graphicsOverlay = StateObject(wrappedValue: GraphicsOverlay(graphics: [graphic]))
@@ -108,7 +109,7 @@ public struct OverviewMap: View {
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***.attributionTextHidden()
 ***REMOVED******REMOVED******REMOVED***.interactionModes([])
-***REMOVED******REMOVED******REMOVED***.border(Color.black, width: 1)
+***REMOVED******REMOVED******REMOVED***.border(.black, width: 1)
 ***REMOVED******REMOVED******REMOVED***.onAppear(perform: {
 ***REMOVED******REMOVED******REMOVED******REMOVED***graphic.symbol = symbol
 ***REMOVED******REMOVED***)
@@ -132,15 +133,11 @@ public struct OverviewMap: View {
 ***REMOVED******REMOVED***/ Creates an overview viewpoint based on the observed `viewpoint` center, scale, and `scaleFactor`.
 ***REMOVED******REMOVED***/ - Returns: The new `Viewpoint`.
 ***REMOVED***func makeOverviewViewpoint() -> Viewpoint? {
-***REMOVED******REMOVED***if let viewpoint = viewpoint,
-***REMOVED******REMOVED***   let center = viewpoint.targetGeometry as? Point {
-***REMOVED******REMOVED******REMOVED***return Viewpoint(
-***REMOVED******REMOVED******REMOVED******REMOVED***center: center,
-***REMOVED******REMOVED******REMOVED******REMOVED***scale: viewpoint.targetScale * scaleFactor
-***REMOVED******REMOVED******REMOVED***)
-***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***return nil
-***REMOVED***
+***REMOVED******REMOVED***guard let viewpoint = viewpoint, let center = viewpoint.targetGeometry as? Point else { return nil ***REMOVED***
+***REMOVED******REMOVED***return Viewpoint(
+***REMOVED******REMOVED******REMOVED***center: center,
+***REMOVED******REMOVED******REMOVED***scale: viewpoint.targetScale * scaleFactor
+***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED*** MARK: Modifiers
@@ -155,8 +152,8 @@ public struct OverviewMap: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The factor to multiply the main `GeoView`'s scale by.  The `OverviewMap` will display
-***REMOVED******REMOVED***/ at the a scale equal to: `viewpoint.targetscale` x `scaleFactor.
-***REMOVED******REMOVED***/ The default value is 25.0.
+***REMOVED******REMOVED***/ at the a scale equal to: `viewpoint.targetscale` x `scaleFactor`.
+***REMOVED******REMOVED***/ The default value is `25.0`.
 ***REMOVED******REMOVED***/ - Parameter scaleFactor: The new scale factor.
 ***REMOVED******REMOVED***/ - Returns: The `OverviewMap`.
 ***REMOVED***public func scaleFactor(_ scaleFactor: Double) -> OverviewMap {
@@ -169,7 +166,7 @@ public struct OverviewMap: View {
 ***REMOVED******REMOVED***/ should be appropriate for visualizing a polygon, as it will be used to draw the visible area. For
 ***REMOVED******REMOVED***/ `SceneView`s, the symbol should be appropriate for visualizing a point, as it will be used to
 ***REMOVED******REMOVED***/ draw the current viewpoint's center. For `MapView`s, the default is a transparent
-***REMOVED******REMOVED***/ `SimpleFillSymbol` with a red,1 point width outline; for `SceneView`s, the default is a
+***REMOVED******REMOVED***/ `SimpleFillSymbol` with a red 1 point width outline; for `SceneView`s, the default is a
 ***REMOVED******REMOVED***/ red, crosshair `SimpleMarkerSymbol`.
 ***REMOVED******REMOVED***/ - Parameter symbol: The new symbol.
 ***REMOVED******REMOVED***/ - Returns: The `OverviewMap`.
