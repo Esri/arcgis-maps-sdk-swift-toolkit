@@ -52,7 +52,7 @@ public struct OverviewMap: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates an `OverviewMap` for use on a `SceneView`.
-***REMOVED******REMOVED***/ - Parameter viewpoint: Viewpoint of the main `GeoView` used to update the
+***REMOVED******REMOVED***/ - Parameter viewpoint: Viewpoint of the main `SceneView` used to update the
 ***REMOVED******REMOVED***/ `OverviewMap` view.
 ***REMOVED******REMOVED***/ - Returns: A new `OverviewMap`.
 ***REMOVED***public static func forSceneView(
