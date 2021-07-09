@@ -169,7 +169,7 @@ public struct OverviewMap: View {
 ***REMOVED******REMOVED***/ should be appropriate for visualizing a polygon, as it will be used to draw the visible area. For
 ***REMOVED******REMOVED***/ `SceneView`s, the symbol should be appropriate for visualizing a point, as it will be used to
 ***REMOVED******REMOVED***/ draw the current viewpoint's center. For `MapView`s, the default is a transparent
-***REMOVED******REMOVED***/ `SimpleFillSymbol` with a red,1 point width outline; for `SceneView`s, the default is a
+***REMOVED******REMOVED***/ `SimpleFillSymbol` with a red 1 point width outline; for `SceneView`s, the default is a
 ***REMOVED******REMOVED***/ red, crosshair `SimpleMarkerSymbol`.
 ***REMOVED******REMOVED***/ - Parameter symbol: The new symbol.
 ***REMOVED******REMOVED***/ - Returns: The `OverviewMap`.
