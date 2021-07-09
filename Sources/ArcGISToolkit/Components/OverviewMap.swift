@@ -95,7 +95,7 @@ public struct OverviewMap: View {
 
 ***REMOVED******REMOVED******REMOVED*** It is necessary to set the graphic and graphicsOverlay this way
 ***REMOVED******REMOVED******REMOVED*** in order to prevent the main geoview from recreating the
-***REMOVED******REMOVED******REMOVED*** graphicsOverlay every draw cycle.  That was causing refresh issues
+***REMOVED******REMOVED******REMOVED*** graphicsOverlay every draw cycle. That was causing refresh issues
 ***REMOVED******REMOVED******REMOVED*** with the graphic during panning/zooming/rotating.
 ***REMOVED******REMOVED***_graphic = StateObject(wrappedValue: graphic)
 ***REMOVED******REMOVED***_graphicsOverlay = StateObject(wrappedValue: GraphicsOverlay(graphics: [graphic]))
