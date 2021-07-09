@@ -18,18 +18,18 @@ import ArcGIS
 /// `OverviewMap` is a small, secondary `MapView` (sometimes called an "inset map"), superimposed
 /// on an existing `GeoView`, which shows the visible extent of that `GeoView`.
 public struct OverviewMap: View {
-    /// The `Viewpoint` of the main `GeoView`
+    /// The `Viewpoint` of the main `GeoView`.
     let viewpoint: Viewpoint?
     
-    /// The visible area of the main `GeoView`.  Not applicable to `SceneView`s.
+    /// The visible area of the main `GeoView`. Not applicable to `SceneView`s.
     let visibleArea: Polygon?
     
     private var symbol: Symbol
     
-    private var scaleFactor: Double = 25.0
+    private var scaleFactor = 25.0
     
     @StateObject
-    private var map: Map = Map(basemapStyle: .arcGISTopographic)
+    private var map = Map(basemapStyle: .arcGISTopographic)
     
     /// The `Graphic` displaying the visible area of the main `GeoView`.
     @StateObject
@@ -41,32 +41,33 @@ public struct OverviewMap: View {
     
     /// Creates an `OverviewMap` for use on a `MapView`.
     /// - Parameters:
-    ///   - viewpoint: Viewpoint of the main `GeoView` used to update the `OverviewMap` view.
-    ///   - visibleArea: Visible area of the main `GeoView` used to display the extent graphic.
+    ///   - viewpoint: Viewpoint of the main `MapView` used to update the `OverviewMap` view.
+    ///   - visibleArea: Visible area of the main `MapView ` used to display the extent graphic.
     /// - Returns: A new `OverviewMap`.
     public static func forMapView(
         with viewpoint: Viewpoint?,
         visibleArea: Polygon?
     ) -> OverviewMap {
-        return OverviewMap(viewpoint: viewpoint, visibleArea: visibleArea)
+        OverviewMap(viewpoint: viewpoint, visibleArea: visibleArea)
     }
     
     /// Creates an `OverviewMap` for use on a `SceneView`.
-    /// - Parameter viewpoint: Viewpoint of the main `GeoView` used to update the
+    /// - Parameter viewpoint: Viewpoint of the main `SceneView` used to update the
     /// `OverviewMap` view.
     /// - Returns: A new `OverviewMap`.
     public static func forSceneView(
         with viewpoint: Viewpoint?
     ) -> OverviewMap {
-        return OverviewMap(viewpoint: viewpoint)
+        OverviewMap(viewpoint: viewpoint)
     }
 
     /// Creates an `OverviewMap`. Used for creating an `OverviewMap` for use on a `MapView`.
     /// - Parameters:
     ///   - viewpoint: Viewpoint of the main `GeoView` used to update the `OverviewMap` view.
     ///   - visibleArea: Visible area of the main `GeoView` used to display the extent graphic.
-    init(viewpoint: Viewpoint?,
-                visibleArea: Polygon?
+    init(
+        viewpoint: Viewpoint?,
+        visibleArea: Polygon?
     ) {
         self.visibleArea = visibleArea
         self.viewpoint = viewpoint
@@ -76,7 +77,7 @@ public struct OverviewMap: View {
 
         // It is necessary to set the graphic and graphicsOverlay this way
         // in order to prevent the main geoview from recreating the
-        // graphicsOverlay every draw cycle.  That was causing refresh issues
+        // graphicsOverlay every draw cycle. That was causing refresh issues
         // with the graphic during panning/zooming/rotating.
         _graphic = StateObject(wrappedValue: graphic)
         _graphicsOverlay = StateObject(wrappedValue: GraphicsOverlay(graphics: [graphic]))
@@ -94,7 +95,7 @@ public struct OverviewMap: View {
 
         // It is necessary to set the graphic and graphicsOverlay this way
         // in order to prevent the main geoview from recreating the
-        // graphicsOverlay every draw cycle.  That was causing refresh issues
+        // graphicsOverlay every draw cycle. That was causing refresh issues
         // with the graphic during panning/zooming/rotating.
         _graphic = StateObject(wrappedValue: graphic)
         _graphicsOverlay = StateObject(wrappedValue: GraphicsOverlay(graphics: [graphic]))
@@ -108,7 +109,7 @@ public struct OverviewMap: View {
         )
             .attributionTextHidden()
             .interactionModes([])
-            .border(Color.black, width: 1)
+            .border(.black, width: 1)
             .onAppear(perform: {
                 graphic.symbol = symbol
             })
@@ -132,15 +133,11 @@ public struct OverviewMap: View {
     /// Creates an overview viewpoint based on the observed `viewpoint` center, scale, and `scaleFactor`.
     /// - Returns: The new `Viewpoint`.
     func makeOverviewViewpoint() -> Viewpoint? {
-        if let viewpoint = viewpoint,
-           let center = viewpoint.targetGeometry as? Point {
-            return Viewpoint(
-                center: center,
-                scale: viewpoint.targetScale * scaleFactor
-            )
-        } else {
-            return nil
-        }
+        guard let viewpoint = viewpoint, let center = viewpoint.targetGeometry as? Point else { return nil }
+        return Viewpoint(
+            center: center,
+            scale: viewpoint.targetScale * scaleFactor
+        )
     }
     
     // MARK: Modifiers
@@ -155,8 +152,8 @@ public struct OverviewMap: View {
     }
     
     /// The factor to multiply the main `GeoView`'s scale by.  The `OverviewMap` will display
-    /// at the a scale equal to: `viewpoint.targetscale` x `scaleFactor.
-    /// The default value is 25.0.
+    /// at the a scale equal to: `viewpoint.targetscale` x `scaleFactor`.
+    /// The default value is `25.0`.
     /// - Parameter scaleFactor: The new scale factor.
     /// - Returns: The `OverviewMap`.
     public func scaleFactor(_ scaleFactor: Double) -> OverviewMap {
@@ -169,7 +166,7 @@ public struct OverviewMap: View {
     /// should be appropriate for visualizing a polygon, as it will be used to draw the visible area. For
     /// `SceneView`s, the symbol should be appropriate for visualizing a point, as it will be used to
     /// draw the current viewpoint's center. For `MapView`s, the default is a transparent
-    /// `SimpleFillSymbol` with a red,1 point width outline; for `SceneView`s, the default is a
+    /// `SimpleFillSymbol` with a red 1 point width outline; for `SceneView`s, the default is a
     /// red, crosshair `SimpleMarkerSymbol`.
     /// - Parameter symbol: The new symbol.
     /// - Returns: The `OverviewMap`.
