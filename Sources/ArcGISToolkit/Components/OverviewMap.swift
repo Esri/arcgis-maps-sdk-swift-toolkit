@@ -156,7 +156,7 @@ public struct OverviewMap: View {
     
     /// The factor to multiply the main `GeoView`'s scale by.  The `OverviewMap` will display
     /// at the a scale equal to: `viewpoint.targetscale` x `scaleFactor`.
-    /// The default value is 25.0.
+    /// The default value is `25.0`.
     /// - Parameter scaleFactor: The new scale factor.
     /// - Returns: The `OverviewMap`.
     public func scaleFactor(_ scaleFactor: Double) -> OverviewMap {
