@@ -17,9 +17,9 @@ import ArcGISToolkit
 
 struct OverviewMapExampleView: View {
     enum MapOrScene {
-        /// The Example shows a map view.
+        /// The example shows a map view.
         case map
-        /// The Example shows a scene view.
+        /// The example shows a scene view.
         case scene
     }
     
@@ -124,6 +124,6 @@ private extension Symbol {
 }
 
 private extension Map {
-    /// A custom map for the OverviewMap.
-    static let customOverviewMap: Map = Map(basemapStyle: .arcGISDarkGray)
+    /// A custom map for the `OverviewMap`.
+    static let customOverviewMap = Map(basemapStyle: .arcGISDarkGray)
 }
