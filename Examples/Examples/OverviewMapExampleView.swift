@@ -124,6 +124,6 @@ private extension Symbol {
 ***REMOVED***
 
 private extension Map {
-***REMOVED******REMOVED***/ A custom map for the OverviewMap.
-***REMOVED***static let customOverviewMap: Map = Map(basemapStyle: .arcGISDarkGray)
+***REMOVED******REMOVED***/ A custom map for the `OverviewMap`.
+***REMOVED***static let customOverviewMap = Map(basemapStyle: .arcGISDarkGray)
 ***REMOVED***
