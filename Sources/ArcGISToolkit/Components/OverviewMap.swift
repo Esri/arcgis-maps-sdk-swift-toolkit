@@ -21,7 +21,7 @@ public struct OverviewMap: View {
     /// The `Viewpoint` of the main `GeoView`.
     let viewpoint: Viewpoint?
     
-    /// The visible area of the main `GeoView`.  Not applicable to `SceneView`s.
+    /// The visible area of the main `GeoView`. Not applicable to `SceneView`s.
     let visibleArea: Polygon?
     
     private var symbol: Symbol
