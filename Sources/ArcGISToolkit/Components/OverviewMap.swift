@@ -41,8 +41,8 @@ public struct OverviewMap: View {
     
     /// Creates an `OverviewMap` for use on a `MapView`.
     /// - Parameters:
-    ///   - viewpoint: Viewpoint of the main `GeoView` used to update the `OverviewMap` view.
-    ///   - visibleArea: Visible area of the main `GeoView` used to display the extent graphic.
+    ///   - viewpoint: Viewpoint of the main `MapView` used to update the `OverviewMap` view.
+    ///   - visibleArea: Visible area of the main `MapView ` used to display the extent graphic.
     /// - Returns: A new `OverviewMap`.
     public static func forMapView(
         with viewpoint: Viewpoint?,
