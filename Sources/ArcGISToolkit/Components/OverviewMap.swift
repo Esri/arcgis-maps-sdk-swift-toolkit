@@ -48,7 +48,7 @@ public struct OverviewMap: View {
 ***REMOVED******REMOVED***with viewpoint: Viewpoint?,
 ***REMOVED******REMOVED***visibleArea: Polygon?
 ***REMOVED***) -> OverviewMap {
-***REMOVED******REMOVED***return OverviewMap(viewpoint: viewpoint, visibleArea: visibleArea)
+***REMOVED******REMOVED***OverviewMap(viewpoint: viewpoint, visibleArea: visibleArea)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates an `OverviewMap` for use on a `SceneView`.
