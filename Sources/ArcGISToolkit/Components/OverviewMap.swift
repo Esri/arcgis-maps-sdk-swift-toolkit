@@ -58,7 +58,7 @@ public struct OverviewMap: View {
     public static func forSceneView(
         with viewpoint: Viewpoint?
     ) -> OverviewMap {
-        return OverviewMap(viewpoint: viewpoint)
+        OverviewMap(viewpoint: viewpoint)
     }
 
     /// Creates an `OverviewMap`. Used for creating an `OverviewMap` for use on a `MapView`.
