@@ -48,7 +48,7 @@ public struct OverviewMap: View {
         with viewpoint: Viewpoint?,
         visibleArea: Polygon?
     ) -> OverviewMap {
-        return OverviewMap(viewpoint: viewpoint, visibleArea: visibleArea)
+        OverviewMap(viewpoint: viewpoint, visibleArea: visibleArea)
     }
     
     /// Creates an `OverviewMap` for use on a `SceneView`.
