@@ -18,7 +18,7 @@ import Combine
 ***REMOVED***/ `OverviewMap` is a small, secondary `MapView` (sometimes called an "inset map"), superimposed
 ***REMOVED***/ on an existing `GeoView`, which shows the visible extent of that `GeoView`.
 public struct OverviewMap: View {
-***REMOVED******REMOVED***/ The `Viewpoint` of the main `GeoView`
+***REMOVED******REMOVED***/ The `Viewpoint` of the main `GeoView`.
 ***REMOVED***let viewpoint: Viewpoint?
 ***REMOVED***
 ***REMOVED******REMOVED***/ The visible area of the main `GeoView`.  Not applicable to `SceneView`s.
