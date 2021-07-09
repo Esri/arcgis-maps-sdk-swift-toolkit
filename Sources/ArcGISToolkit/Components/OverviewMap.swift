@@ -26,10 +26,10 @@ public struct OverviewMap: View {
 ***REMOVED***
 ***REMOVED***private var symbol: Symbol
 ***REMOVED***
-***REMOVED***private var scaleFactor: Double = 25.0
+***REMOVED***private var scaleFactor = 25.0
 ***REMOVED***
 ***REMOVED***@StateObject
-***REMOVED***private var map: Map = Map(basemapStyle: .arcGISTopographic)
+***REMOVED***private var map = Map(basemapStyle: .arcGISTopographic)
 ***REMOVED***
 ***REMOVED******REMOVED***/ The `Graphic` displaying the visible area of the main `GeoView`.
 ***REMOVED***@StateObject
