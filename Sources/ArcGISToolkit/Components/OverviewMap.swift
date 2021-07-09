@@ -65,8 +65,9 @@ public struct OverviewMap: View {
     /// - Parameters:
     ///   - viewpoint: Viewpoint of the main `GeoView` used to update the `OverviewMap` view.
     ///   - visibleArea: Visible area of the main `GeoView` used to display the extent graphic.
-    init(viewpoint: Viewpoint?,
-                visibleArea: Polygon?
+    init(
+        viewpoint: Viewpoint?,
+        visibleArea: Polygon?
     ) {
         self.visibleArea = visibleArea
         self.viewpoint = viewpoint
