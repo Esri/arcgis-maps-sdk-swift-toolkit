@@ -19,7 +19,7 @@ struct OverviewMapExampleView: View {
     enum MapOrScene {
         /// The example shows a map view.
         case map
-        /// The Example shows a scene view.
+        /// The example shows a scene view.
         case scene
     }
     
