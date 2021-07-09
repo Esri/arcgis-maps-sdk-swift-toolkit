@@ -58,7 +58,7 @@ public struct OverviewMap: View {
 ***REMOVED***public static func forSceneView(
 ***REMOVED******REMOVED***with viewpoint: Viewpoint?
 ***REMOVED***) -> OverviewMap {
-***REMOVED******REMOVED***return OverviewMap(viewpoint: viewpoint)
+***REMOVED******REMOVED***OverviewMap(viewpoint: viewpoint)
 ***REMOVED***
 
 ***REMOVED******REMOVED***/ Creates an `OverviewMap`. Used for creating an `OverviewMap` for use on a `MapView`.
