@@ -48,7 +48,7 @@ public struct OverviewMap: View {
         with viewpoint: Viewpoint?,
         visibleArea: Polygon?
     ) -> OverviewMap {
-        OverviewMap(viewpoint: viewpoint, visibleArea: visibleArea)
+        OverviewMap(viewpoint: viewpoint, visibleArea: visibleArea, symbol: .defaultFill)
     }
     
     /// Creates an `OverviewMap` for use on a `SceneView`.
@@ -58,7 +58,7 @@ public struct OverviewMap: View {
     public static func forSceneView(
         with viewpoint: Viewpoint?
     ) -> OverviewMap {
-        OverviewMap(viewpoint: viewpoint)
+        OverviewMap(viewpoint: viewpoint, symbol: .defaultMarker)
     }
 
     /// Creates an `OverviewMap`. Used for creating an `OverviewMap` for use on a `MapView`.
@@ -67,30 +67,13 @@ public struct OverviewMap: View {
     ///   - visibleArea: Visible area of the main `GeoView` used to display the extent graphic.
     init(
         viewpoint: Viewpoint?,
-        visibleArea: Polygon?
+        visibleArea: Polygon? = nil,
+        symbol: Symbol
     ) {
         self.visibleArea = visibleArea
         self.viewpoint = viewpoint
+        self.symbol = symbol
         
-        self.symbol = .defaultFill
-        let graphic = Graphic(symbol: self.symbol)
-
-        // It is necessary to set the graphic and graphicsOverlay this way
-        // in order to prevent the main geoview from recreating the
-        // graphicsOverlay every draw cycle. That was causing refresh issues
-        // with the graphic during panning/zooming/rotating.
-        _graphic = StateObject(wrappedValue: graphic)
-        _graphicsOverlay = StateObject(wrappedValue: GraphicsOverlay(graphics: [graphic]))
-    }
-    
-    /// Creates an `OverviewMap`. Used for creating an `OverviewMap` for use on a `SceneView`.
-    /// - Parameters:
-    ///   - viewpoint: Viewpoint of the main `GeoView` used to update the `OverviewMap` view.
-    init(viewpoint: Viewpoint?) {
-        self.viewpoint = viewpoint
-        self.visibleArea = nil
-        
-        self.symbol = .defaultMarker
         let graphic = Graphic(symbol: self.symbol)
 
         // It is necessary to set the graphic and graphicsOverlay this way
@@ -177,12 +160,7 @@ public struct OverviewMap: View {
     }
 }
 
-
 // MARK: Extensions
-
-extension Graphic: ObservableObject {}
-extension GraphicsOverlay: ObservableObject {}
-extension Symbol: ObservableObject {}
 
 private extension Symbol {
     /// The default marker symbol.
