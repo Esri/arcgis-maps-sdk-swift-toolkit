@@ -27,7 +27,6 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
                 repeatSuggestResultThreshold: Int = 6,
                 resultSymbolStyle: SymbolStyle? = nil) {
         self.init()
-//        self.objectWillChange = objectWillChange
         self.displayName = displayName
         self.maximumSuggestions = maximumSuggestions
         self.searchArea = searchArea
@@ -39,26 +38,6 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
         geocodeParameters.maxResults = Int32(maximumResults)
         suggestParameters.maxResults = Int32(maximumSuggestions)
     }
-    
-//    public var displayName: String
-//
-//    public var maximumSuggestions: Int
-//
-//    public var searchArea: Geometry?
-//
-//    public var preferredSearchLocation: Point?
-//
-//    public func suggest(_ queryString: String) async throws -> [SearchSuggestion] {
-//        <#code#>
-//    }
-//
-//    public func search(_ queryString: String, area: Geometry?) async throws -> [SearchResult] {
-//        <#code#>
-//    }
-//
-//    public func search(_ searchSuggestion: SearchSuggestion, area: Geometry?) async throws -> [SearchResult] {
-//        <#code#>
-//    }
     
     /// The minimum number of results to attempt to return. If there are too few results, the search is
     /// repeated with loosened parameters until enough results are accumulated. If no search is
@@ -80,4 +59,16 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
     /// by publishing a web style, taking care to ensure that symbol keys match the `Type` attribute
     /// returned by the locator.
     var resultSymbolStyle: SymbolStyle?
+
+    public override func search(_ queryString: String, area: Geometry?) async throws -> [SearchResult] {
+        return try await super.search(queryString, area: area)
+    }
+
+    public override func search(_ searchSuggestion: SearchSuggestion, area: Geometry?) async throws -> [SearchResult] {
+        return try await super.search(searchSuggestion, area: area)
+    }
+    
+    public override func suggest(_ queryString: String) async throws -> [SearchSuggestion] {
+        return try await super.suggest(queryString)
+    }
 }

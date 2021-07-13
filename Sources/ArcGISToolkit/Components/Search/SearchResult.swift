@@ -60,3 +60,9 @@ public class SearchResult {
 extension SearchResult: Identifiable {
     public var id: ObjectIdentifier { ObjectIdentifier(self) }
 }
+
+extension SearchResult: Equatable {
+    public static func == (lhs: SearchResult, rhs: SearchResult) -> Bool {
+        lhs === rhs
+    }
+}
