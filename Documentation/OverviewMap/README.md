@@ -42,7 +42,8 @@ For an `OverviewMap` on a `SceneView`, the center point of the `SceneView`'s `cu
 Note that for a `MapView`, you need to provide the `OverviewMap` both a viewpoint and a polygon representing the visible area.
 
 ```swift
-let map = Map(basemapStyle: .arcGISImagery)
+@StateObject
+var map = Map(basemapStyle: .arcGISImagery)
 ***REMOVED***
 @State
 private var viewpoint: Viewpoint?
