@@ -53,7 +53,7 @@ struct OverviewMapForMapView: View {
     
     var body: some View {
         MapView(map: map)
-            .onViewpointChanged(type: .centerAndScale) { viewpoint = $0 }
+            .onViewpointChanged(kind: .centerAndScale) { viewpoint = $0 }
             .onVisibleAreaChanged { visibleArea = $0 }
             .overlay(
                 OverviewMap.forMapView(
@@ -80,7 +80,7 @@ struct OverviewMapForSceneView: View {
     
     var body: some View {
         SceneView(scene: scene)
-            .onViewpointChanged(type: .centerAndScale) { viewpoint = $0 }
+            .onViewpointChanged(kind: .centerAndScale) { viewpoint = $0 }
             .overlay(
                 OverviewMap.forSceneView(with: viewpoint)
                 // These modifiers show how you can modify the default
