@@ -39,7 +39,7 @@ For an `OverviewMap` on a `SceneView`, the center point of the `SceneView`'s `cu
 
 ### Basic usage for overlaying a `MapView`
 
-Note that for `MapView`s, you need to provide the `OverviewMap` both a viewpoint and visibleArea.
+Note that for a `MapView`, you need to provide the `OverviewMap` both a viewpoint and a polygon representing the visible area.
 
 ```swift
 let map = Map(basemapStyle: .arcGISImagery)
