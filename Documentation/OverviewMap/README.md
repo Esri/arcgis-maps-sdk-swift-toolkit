@@ -72,7 +72,8 @@ var body: some View {
 Note that for a `SceneView`, you need to provide the `OverviewMap` only a viewpoint.
 
 ```swift
-let scene = Scene(basemap: .imageryWithLabels())
+@StateObject
+var scene = Scene(basemap: .imageryWithLabels())
 ***REMOVED***
 @State
 private var viewpoint: Viewpoint?
