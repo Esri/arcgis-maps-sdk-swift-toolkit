@@ -25,8 +25,8 @@ OverviewMap:
 
 `OverviewMap` has the following modifiers:
 
-- `.map(_ map: Map)` - The `Map` displayed in the `OverviewMap`.  For example, you can use `.map()` to display a custom base map in the `OverviewMap`.
-- `scaleFactor(_ scaleFactor: Double)` - The scale of the `OverviewMap` relative to the scale of the connected `GeoView`.  The `OverviewMap` will display at the a scale equal to: `viewpoint.targetscale` x `scaleFactor`. The default is 25.
+- `map(_ map: Map)` - The `Map` displayed in the `OverviewMap`. For example, you can use `map(_:)` to display a custom base map in the `OverviewMap`.
+- `scaleFactor(_ scaleFactor: Double)` - The scale of the `OverviewMap` relative to the scale of the connected `GeoView`. The `OverviewMap` will display at the a scale equal to: `viewpoint.targetscale` x `scaleFactor`. The default is `25`.
 - `symbol(_ symbol: Symbol)` - The symbol used to visualize the current `VisibleArea`/`Viewpoint`. This is a red rectangle by default for a `MapView`; for a `SceneView`, this is a red cross.
 
 ## Behavior:
@@ -39,10 +39,11 @@ For an `OverviewMap` on a `SceneView`, the center point of the `SceneView`'s `cu
 
 ### Basic usage for overlaying a `MapView`
 
-Note that for `MapView`s, you need to provide the `OverviewMap` both a viewpoint and visibleArea.
+Note that for a `MapView`, you need to provide the `OverviewMap` both a viewpoint and a polygon representing the visible area.
 
 ```swift
-let map = Map(basemapStyle: .arcGISImagery)
+@StateObject
+var map = Map(basemapStyle: .arcGISImagery)
     
 @State
 private var viewpoint: Viewpoint?
@@ -68,10 +69,11 @@ var body: some View {
 
 ### Basic usage for overlaying a `SceneView`
 
-Note that for `SceneView`s, you need to provide the `OverviewMap` only a viewpoint.
+Note that for a `SceneView`, you need to provide the `OverviewMap` only a viewpoint.
 
 ```swift
-let scene = Scene(basemap: .imageryWithLabels())
+@StateObject
+var scene = Scene(basemap: .imageryWithLabels())
     
 @State
 private var viewpoint: Viewpoint?
@@ -89,4 +91,3 @@ var body: some View {
 ```
 
 To see the `OverviewMap` in action, and for examples of `OverviewMap` customization, check out the [Examples](../../Examples) and refer to [OverviewMapExampleView.swift](../../Examples/Examples/OverviewMapExampleView.swift) in the project.
-
