@@ -18,22 +18,48 @@ import ArcGISToolkit
 
 struct SearchExampleView: View {
     let searchViewModel = SearchViewModel(
-        sources: [LocatorSearchSource(displayName: "Locator One",
-                                      maximumResults: 3,
-                                      maximumSuggestions: 3
-                                     ),
-                  LocatorSearchSource(displayName: "Locator Two",
-                                      maximumResults: 1,
-                                      maximumSuggestions: 1
-                                     )]
+        sources: [LocatorSearchSource(displayName: "Locator One"),
+                  LocatorSearchSource(displayName: "Locator Two")]
     )
     
+    @State
+    var showResults = true
+    
+    @State
+    private var viewpoint: Viewpoint?
+    
+    @State
+    private var visibleArea: ArcGIS.Polygon?
+
     var body: some View {
         ZStack (alignment: .topTrailing) {
             MapViewReader { proxy in
                 MapView(map: Map(basemap: Basemap.imageryWithLabels()))
-                SearchView(proxy: proxy, searchViewModel:searchViewModel)
-                    .padding()
+                    .onViewpointChanged(type: .centerAndScale) {
+                        searchViewModel.queryCenter = $0.targetGeometry as? Point
+                    }
+                    .onVisibleAreaChanged {
+                        searchViewModel.queryArea = $0
+                    }
+                    .onChange(of: searchViewModel.results, perform: { results in
+                        print("Search results changed")
+                    })
+                    .onChange(of: searchViewModel.suggestions, perform: { results in
+                        print("Search suggestions changed")
+                    })
+                    .overlay(
+                        SearchView(proxy: proxy, searchViewModel:searchViewModel)
+                            .enableResultListView(showResults)
+                            .frame(width: 360)
+                            .padding(),
+                        alignment: .topTrailing
+                    )
+                Button {
+                    showResults.toggle()
+                } label: {
+                    Text(showResults ? "Hide results" : "Show results")
+                }
+
             }
         }
     }

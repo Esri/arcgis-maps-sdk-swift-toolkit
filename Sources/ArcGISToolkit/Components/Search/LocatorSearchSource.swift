@@ -16,7 +16,7 @@ import ArcGIS
 
 /// Uses a Locator to provide search and suggest results. Most configuration should be done on the
 /// `GeocodeParameters` directly.
-public class LocatorSearchSource: ObservableObject {
+public class LocatorSearchSource: ObservableObject, SearchSourceProtocol {
     public init(displayName: String = "Search",
                 maximumResults: Int = 6,
                 maximumSuggestions: Int = 6,
@@ -60,22 +60,9 @@ public class LocatorSearchSource: ObservableObject {
     public var searchArea: Geometry?
     
     public var preferredSearchLocation: Point?
-}
 
-extension LocatorSearchSource: SearchSourceProtocol {
-    public func suggest(_ queryString: String) async throws -> [SearchSuggestion] {
-        suggestParameters.searchArea = searchArea
-        suggestParameters.preferredSearchLocation = preferredSearchLocation
-
-        let suggestResults =  try await locator.suggest(searchText: queryString,
-                                                        parameters: suggestParameters
-        )
-        //convert to SearchSuggestions
-        return suggestResults.map{ $0.toSearchSuggestion(searchSource: self) }
-    }
-    
     public func search(_ queryString: String, area: Geometry? = nil) async throws -> [SearchResult] {
-        geocodeParameters.searchArea = searchArea
+        geocodeParameters.searchArea = (area != nil) ? area : searchArea
         geocodeParameters.preferredSearchLocation = preferredSearchLocation
         
         let geocodeResults = try await locator.geocode(searchText: queryString,
@@ -89,12 +76,23 @@ extension LocatorSearchSource: SearchSourceProtocol {
     public func search(_ searchSuggestion: SearchSuggestion, area: Geometry? = nil) async throws -> [SearchResult] {
         guard let suggestResult = searchSuggestion.suggestResult else { return [] }
 
-        geocodeParameters.searchArea = searchArea
+        geocodeParameters.searchArea = (area != nil) ? area : searchArea
         geocodeParameters.preferredSearchLocation = preferredSearchLocation
 
-        let geocodeResults =  try await locator.geocode(suggestResult: suggestResult,
+        let geocodeResults = try await locator.geocode(suggestResult: suggestResult,
                                                         parameters: geocodeParameters
         )
         return geocodeResults.map{ $0.toSearchResult(searchSource: self) }
+    }
+
+    public func suggest(_ queryString: String) async throws -> [SearchSuggestion] {
+        suggestParameters.searchArea = searchArea
+        suggestParameters.preferredSearchLocation = preferredSearchLocation
+
+        let suggestResults =  try await locator.suggest(searchText: queryString,
+                                                        parameters: suggestParameters
+        )
+        //convert to SearchSuggestions
+        return suggestResults.map{ $0.toSearchSuggestion(searchSource: self) }
     }
 }

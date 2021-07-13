@@ -33,9 +33,9 @@ activeSource: SearchSourceProtocol? = nil,
 queryArea: Geometry? = nil,
 queryCenter: Point? = nil,
 resultMode: SearchResultMode = .automatic,
-results: Result<[SearchResult]?, Error> = .success(nil),
+results: Result<[SearchResult]?, RuntimeError> = .success(nil),
 sources: [SearchSourceProtocol] = [],
-suggestions: Result<[SearchSuggestion]?, Error> = .success(nil)
+suggestions: Result<[SearchSuggestion]?, RuntimeError> = .success(nil)
     ) {
         self.init()
         self.defaultPlaceHolder = defaultPlaceHolder
@@ -50,17 +50,17 @@ suggestions: Result<[SearchSuggestion]?, Error> = .success(nil)
     
     /// The string shown in the search view when no user query is entered.
     /// Default is "Find a place or address", or read from web map JSON if specified in the web map configuration.
-    var defaultPlaceHolder: String = "Find a place or address"
+    public var defaultPlaceHolder: String = "Find a place or address"
     
     /// Tracks the currently active search source.  All sources are used if this property is `nil`.
-    var activeSource: SearchSourceProtocol?
+    public var activeSource: SearchSourceProtocol?
     
     /// Tracks the current user-entered query. This should be updated by the view after every key press.
     /// This property drives both suggestions and searches. This property can be changed by
     /// other method calls and property changes within the view model, so the view should take care to
     /// observe for changes.
     @Published
-    var currentQuery: String = "" {
+    public var currentQuery: String = "" {
         didSet {
             selectedResult = nil
             if currentQuery.isEmpty {
@@ -73,45 +73,50 @@ suggestions: Result<[SearchSuggestion]?, Error> = .success(nil)
     /// The search area to be used for the current query. Ignored in most queries, unless the
     /// `RestrictToArea` property is set to true when calling `commitSearch`. This property
     /// should be updated as the user navigates the map/scene, or at minimum before calling `commitSearch`.
-    var queryArea: Geometry?
+    public var queryArea: Geometry? {
+        didSet {
+            isEligibleForRequery = true
+        }
+    }
     
     /// Defines the center for the search. This should be updated by the view every time the
     /// user navigates the map.
-    var queryCenter: Point?
+    public var queryCenter: Point?
     
     /// Defines how many results to return. Defaults to Automatic. In automatic mode, an appropriate
     /// number of results is returned based on the type of suggestion chosen (driven by the IsCollection property).
-    var resultMode: SearchResultMode = .automatic
+    public var resultMode: SearchResultMode = .automatic
     
     /// Collection of results. `nil` means no query has been made. An empty array means there
     /// were no results, and the view should show an appropriate 'no results' message.
     @Published
-    var results: Result<[SearchResult]?, Error> = .success([])
-    
+//    public var results: [SearchResult]? = nil
+    public var results: Result<[SearchResult]?, RuntimeError> = .success([])
+
     /// Tracks selection of results from the `results` collection. When there is only one result,
     /// that result is automatically assigned to this property. If there are multiple results, the view sets
     /// this property upon user selection. This property is observable. The view should observe this
     /// property and update the associated GeoView's viewpoint, if configured.
-    @Published
-    var selectedResult: SearchResult?
+    @State
+    public var selectedResult: SearchResult?
     
     /// Collection of search sources to be used. This list is maintained over time and is not nullable.
     /// The view should observe this list for changes. Consumers should add and remove sources from
     /// this list as needed.
-    var sources: [SearchSourceProtocol] = []
+    public var sources: [SearchSourceProtocol] = []
     
     /// Collection of suggestion results. Defaults to `nil`. This collection will be set to empty when there
     /// are no suggestions, `nil` when no suggestions have been requested. If the list is empty,
     /// a useful 'no results' message should be shown by the view.
     @Published
-    var suggestions: Result<[SearchSuggestion]?, Error> = .success([])
-    
+//    public var suggestions: [SearchSuggestion]? = nil
+    public var suggestions: Result<[SearchSuggestion]?, RuntimeError> = .success([])
+
     /// True if the `queryArea` has changed since the `results` collection has been set.
     /// This property is used by the view to enable 'Repeat search here' functionality. This property is
     /// observable, and the view should use it to hide and show the 'repeat search' button. Changes to
     /// this property are driven by changes to the `queryArea` property.
     @Published
-    //TODO: should be reset if viewpoint has changed since last result returned.
     private(set) var isEligibleForRequery: Bool = false
     
     /// Starts a search. `selectedResult` and `results`, among other properties, are set
@@ -157,7 +162,7 @@ suggestions: Result<[SearchSuggestion]?, Error> = .success(nil)
     func updateSuggestions() async -> Void {
         guard !currentQuery.isEmpty else { return }
         print("SearchViewModel.updateSuggestions: \(currentQuery)")
-        
+
         var suggestionResults = [SearchSuggestion]()
         let searchSources = sourcesToSearch()
         for i in 0...searchSources.count - 1 {
@@ -178,7 +183,9 @@ suggestions: Result<[SearchSuggestion]?, Error> = .success(nil)
         }
         suggestions = .success(suggestionResults)
         results = .success(nil)
+        
         selectedResult = nil
+        isEligibleForRequery = false
     }
     
     /// Commits a search from a specific suggestion. Results will be set asynchronously. Behavior is
@@ -193,7 +200,8 @@ suggestions: Result<[SearchSuggestion]?, Error> = .success(nil)
         print("SearchViewModel.acceptSuggestion: \(currentQuery)")
         
         isEligibleForRequery = false
-        
+        selectedResult = nil
+
         var searchResults = [SearchResult]()
         let searchResult = await Result {
             try await searchSuggestion.owningSource.search(searchSuggestion, area: nil)
@@ -225,7 +233,6 @@ suggestions: Result<[SearchSuggestion]?, Error> = .success(nil)
         
         results = .success(searchResults)
         suggestions = .success(nil)
-        selectedResult = nil
     }
     
     /// Configures the view model for the provided map. By default, will only configure the view model

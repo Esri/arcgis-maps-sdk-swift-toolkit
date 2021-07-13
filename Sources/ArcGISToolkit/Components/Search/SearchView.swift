@@ -19,16 +19,11 @@ import ArcGIS
 public struct SearchView: View {
     public init(proxy: GeoViewProxy,
                 searchViewModel: SearchViewModel,
-                enableAutomaticConfiguration: Bool = true,
-                enableRepeatSearchHereButton: Bool = true,
-                enableResultListView: Bool = true,
-                noResultMessage: String = "No results found") {
+                viewpoint: Binding<Viewpoint?>? = nil
+    ) {
         self.proxy = proxy
         self.searchViewModel = searchViewModel
-        self.enableAutomaticConfiguration = enableAutomaticConfiguration
-        self.enableRepeatSearchHereButton = enableRepeatSearchHereButton
-        self.enableResultListView = enableResultListView
-        self.noResultMessage = noResultMessage
+        self.viewpoint = viewpoint
     }
     
     /// Used for accessing `GeoView` functionality for geocoding and searching.
@@ -47,38 +42,31 @@ public struct SearchView: View {
     @ObservedObject
     var searchViewModel: SearchViewModel
     
-    /// Determines whether the view will update its configuration based on the attached geoview's
-    /// document automatically.
-    var enableAutomaticConfiguration: Bool = true
+    private var enableAutomaticConfiguration = true
     
-    /// Determines whether a button that allows the user to repeat a search with a spatial constraint
-    /// is displayed automatically. Set to false if you want to use a custom button, for example so that
-    /// you can place it elsewhere on the map. `SearchViewModel` has properties and methods
-    /// you can use to determine when the custom button should be visible and to trigger the search
-    /// repeat behavior.
     @State
-    var enableRepeatSearchHereButton: Bool = true
+    private var enableRepeatSearchHereButton = true
     
-    /// Determines whether a built-in result view will be shown. If false, the result display/selection
-    /// list is not shown. Set to false if you want to define a custom result list. You might use a
-    /// custom result list to show results in a separate list, disconnected from the rest of the search view.
-    var enableResultListView: Bool = true
+    @State
+    private var enableResultListView = true
     
-    /// Message to show when there are no results or suggestions.
-    var noResultMessage: String = "No results found"
+    @State
+    private var noResultMessage = "No results found"
     
     /// Indicates that the `SearchViewModel` should start a search.
     @State
-    private var commitSearch: Bool = false
+    private var commitSearch = false
     
     /// Indicates that the `SearchViewModel` should accept a suggestion.
     @State
     private var currentSuggestion: SearchSuggestion?
     
+    private var viewpoint: Binding<Viewpoint?>?
+    
     /// Indicates that the geoView's viewpoint has changed since the last search.
     @State
     private var viewpointChanged: Bool = false
-    
+
     // TODO: Figure out better styling for list
     // TODO: continue fleshing out SearchViewModel and LocatorSearchSource/SmartSearchSource
     // TODO: following Nathan's lead on all this stuff, i.e., go through his code and duplicate it as I go.
@@ -100,10 +88,13 @@ public struct SearchView: View {
                     commitSearch.toggle()
                 }
             }
-            SearchResultList(searchResults: searchViewModel.results)
-            SearchSuggestionList(searchSuggestions: searchViewModel.suggestions,
-                                 currentSuggestion: $currentSuggestion
-            )
+            if enableResultListView {
+                SearchResultList(searchViewModel: searchViewModel)
+                SearchSuggestionList(
+                    searchViewModel: searchViewModel,
+                    currentSuggestion: $currentSuggestion
+                )
+            }
         }
         .task(id: searchViewModel.currentQuery) {
             // User typed a new character
@@ -123,17 +114,67 @@ public struct SearchView: View {
             }
         }
     }
+    
+    // MARK: Modifiers
+
+    /// Determines whether the view will update its configuration based on the geoview's
+    /// document automatically.  Defaults to `true`.
+    /// - Parameter enableAutomaticConfiguration: The new value.
+    /// - Returns: The `SearchView`.
+    public func enableAutomaticConfiguration(_ enableAutomaticConfiguration: Bool) -> SearchView {
+        var copy = self
+        copy.enableAutomaticConfiguration = enableAutomaticConfiguration
+        return copy
+    }
+    
+    /// Determines whether a button that allows the user to repeat a search with a spatial constraint
+    /// is displayed automatically. Set to `false` if you want to use a custom button, for example so that
+    /// you can place it elsewhere on the map. `SearchViewModel` has properties and methods
+    /// you can use to determine when the custom button should be visible and to trigger the search
+    /// repeat behavior.  Defaults to `true`.
+    /// - Parameter enableRepeatSearchHereButton: The new value.
+    /// - Returns: The `SearchView`.
+    public func enableRepeatSearchHereButton(
+        _ enableRepeatSearchHereButton: Bool
+    ) -> SearchView {
+        self.enableRepeatSearchHereButton = enableRepeatSearchHereButton
+        return self
+    }
+    
+    /// Determines whether a built-in result view will be shown. If `false`, the result display/selection
+    /// list is not shown. Set to `false` if you want to define a custom result list. You might use a
+    /// custom result list to show results in a separate list, disconnected from the rest of the search view.
+    /// Defaults to `true`.
+    /// - Parameter enableResultListView: The new value.
+    /// - Returns: The `SearchView`.
+    public func enableResultListView(_ enableResultListView: Bool) -> SearchView {
+        // TODO: this doesn't work; the view doesn't redraw
+//        self._enableResultListView.wrappedValue = enableResultListView
+        self.enableResultListView = enableResultListView
+        return self
+    }
+    
+    /// Message to show when there are no results or suggestions.  Defaults to "No results found".
+    /// - Parameter noResultMessage: The new value.
+    /// - Returns: The `SearchView`.
+    public func noResultMessage(_ noResultMessage: String) -> SearchView {
+        self.noResultMessage = noResultMessage
+        return self
+    }
 }
+
+// TODO:  why no results?  Why .onChange for results/suggestions don't work
+// TODO: get currentResult working in Example.
 
 // TODO: look at consolidating SearchResultView and SearchSuggestionView with
 // TODO: new SearchDisplayProtocol containing only displayTitle and displaySubtitle
 // TODO: That would mean we only needed one of these.
 struct SearchResultList: View {
-    var searchResults: Result<[SearchResult]?, Error>
-    
+    var searchViewModel: SearchViewModel
+
     var body: some View {
         Group {
-            switch searchResults {
+            switch searchViewModel.results {
             case .success(let results):
                 if let results = results, results.count > 0 {
                     List {
@@ -151,6 +192,7 @@ struct SearchResultList: View {
                                             SearchResultRow(title: result.displayTitle, subtitle: result.displaySubtitle)
                                         }
                                         .onTapGesture {
+                                            searchViewModel.selectedResult = result
                                             print("user selected result: \(result.displayTitle)")
                                         }
                                     }
@@ -172,12 +214,12 @@ struct SearchResultList: View {
 }
 
 struct SearchSuggestionList: View {
-    var searchSuggestions: Result<[SearchSuggestion]?, Error>
+    var searchViewModel: SearchViewModel
     var currentSuggestion: Binding<SearchSuggestion?>
     
     var body: some View {
         Group {
-            switch searchSuggestions {
+            switch searchViewModel.suggestions {
             case .success(let results):
                 if let suggestions = results, suggestions.count > 0 {
                     List {
