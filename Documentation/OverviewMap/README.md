@@ -26,7 +26,7 @@ OverviewMap:
 `OverviewMap` has the following modifiers:
 
 - `map(_ map: Map)` - The `Map` displayed in the `OverviewMap`. For example, you can use `map(_:)` to display a custom base map in the `OverviewMap`.
-- `scaleFactor(_ scaleFactor: Double)` - The scale of the `OverviewMap` relative to the scale of the connected `GeoView`.  The `OverviewMap` will display at the a scale equal to: `viewpoint.targetscale` x `scaleFactor`. The default is 25.
+- `scaleFactor(_ scaleFactor: Double)` - The scale of the `OverviewMap` relative to the scale of the connected `GeoView`. The `OverviewMap` will display at the a scale equal to: `viewpoint.targetscale` x `scaleFactor`. The default is `25`.
 - `symbol(_ symbol: Symbol)` - The symbol used to visualize the current `VisibleArea`/`Viewpoint`. This is a red rectangle by default for a `MapView`; for a `SceneView`, this is a red cross.
 
 ## Behavior:
