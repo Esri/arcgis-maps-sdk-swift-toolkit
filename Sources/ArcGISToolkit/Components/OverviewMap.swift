@@ -48,7 +48,7 @@ public struct OverviewMap: View {
 ***REMOVED******REMOVED***with viewpoint: Viewpoint?,
 ***REMOVED******REMOVED***visibleArea: Polygon?
 ***REMOVED***) -> OverviewMap {
-***REMOVED******REMOVED***OverviewMap(viewpoint: viewpoint, visibleArea: visibleArea)
+***REMOVED******REMOVED***OverviewMap(viewpoint: viewpoint, visibleArea: visibleArea, symbol: .defaultFill)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates an `OverviewMap` for use on a `SceneView`.
@@ -58,7 +58,7 @@ public struct OverviewMap: View {
 ***REMOVED***public static func forSceneView(
 ***REMOVED******REMOVED***with viewpoint: Viewpoint?
 ***REMOVED***) -> OverviewMap {
-***REMOVED******REMOVED***OverviewMap(viewpoint: viewpoint)
+***REMOVED******REMOVED***OverviewMap(viewpoint: viewpoint, symbol: .defaultMarker)
 ***REMOVED***
 
 ***REMOVED******REMOVED***/ Creates an `OverviewMap`. Used for creating an `OverviewMap` for use on a `MapView`.
@@ -67,30 +67,13 @@ public struct OverviewMap: View {
 ***REMOVED******REMOVED***/   - visibleArea: Visible area of the main `GeoView` used to display the extent graphic.
 ***REMOVED***init(
 ***REMOVED******REMOVED***viewpoint: Viewpoint?,
-***REMOVED******REMOVED***visibleArea: Polygon?
+***REMOVED******REMOVED***visibleArea: Polygon? = nil,
+***REMOVED******REMOVED***symbol: Symbol
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.visibleArea = visibleArea
 ***REMOVED******REMOVED***self.viewpoint = viewpoint
+***REMOVED******REMOVED***self.symbol = symbol
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***self.symbol = .defaultFill
-***REMOVED******REMOVED***let graphic = Graphic(symbol: self.symbol)
-
-***REMOVED******REMOVED******REMOVED*** It is necessary to set the graphic and graphicsOverlay this way
-***REMOVED******REMOVED******REMOVED*** in order to prevent the main geoview from recreating the
-***REMOVED******REMOVED******REMOVED*** graphicsOverlay every draw cycle. That was causing refresh issues
-***REMOVED******REMOVED******REMOVED*** with the graphic during panning/zooming/rotating.
-***REMOVED******REMOVED***_graphic = StateObject(wrappedValue: graphic)
-***REMOVED******REMOVED***_graphicsOverlay = StateObject(wrappedValue: GraphicsOverlay(graphics: [graphic]))
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ Creates an `OverviewMap`. Used for creating an `OverviewMap` for use on a `SceneView`.
-***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - viewpoint: Viewpoint of the main `GeoView` used to update the `OverviewMap` view.
-***REMOVED***init(viewpoint: Viewpoint?) {
-***REMOVED******REMOVED***self.viewpoint = viewpoint
-***REMOVED******REMOVED***self.visibleArea = nil
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***self.symbol = .defaultMarker
 ***REMOVED******REMOVED***let graphic = Graphic(symbol: self.symbol)
 
 ***REMOVED******REMOVED******REMOVED*** It is necessary to set the graphic and graphicsOverlay this way
@@ -177,12 +160,7 @@ public struct OverviewMap: View {
 ***REMOVED***
 ***REMOVED***
 
-
 ***REMOVED*** MARK: Extensions
-
-extension Graphic: ObservableObject {***REMOVED***
-extension GraphicsOverlay: ObservableObject {***REMOVED***
-extension Symbol: ObservableObject {***REMOVED***
 
 private extension Symbol {
 ***REMOVED******REMOVED***/ The default marker symbol.
