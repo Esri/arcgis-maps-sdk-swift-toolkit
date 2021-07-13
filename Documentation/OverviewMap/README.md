@@ -69,7 +69,7 @@ var body: some View {
 
 ### Basic usage for overlaying a `SceneView`
 
-Note that for `SceneView`s, you need to provide the `OverviewMap` only a viewpoint.
+Note that for a `SceneView`, you need to provide the `OverviewMap` only a viewpoint.
 
 ```swift
 let scene = Scene(basemap: .imageryWithLabels())
