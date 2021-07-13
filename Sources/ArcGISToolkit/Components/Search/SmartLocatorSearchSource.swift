@@ -27,7 +27,6 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
 ***REMOVED******REMOVED******REMOVED******REMOVED***repeatSuggestResultThreshold: Int = 6,
 ***REMOVED******REMOVED******REMOVED******REMOVED***resultSymbolStyle: SymbolStyle? = nil) {
 ***REMOVED******REMOVED***self.init()
-***REMOVED******REMOVED******REMOVED***self.objectWillChange = objectWillChange
 ***REMOVED******REMOVED***self.displayName = displayName
 ***REMOVED******REMOVED***self.maximumSuggestions = maximumSuggestions
 ***REMOVED******REMOVED***self.searchArea = searchArea
@@ -39,26 +38,6 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
 ***REMOVED******REMOVED***geocodeParameters.maxResults = Int32(maximumResults)
 ***REMOVED******REMOVED***suggestParameters.maxResults = Int32(maximumSuggestions)
 ***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***public var displayName: String
-***REMOVED***
-***REMOVED******REMOVED***public var maximumSuggestions: Int
-***REMOVED***
-***REMOVED******REMOVED***public var searchArea: Geometry?
-***REMOVED***
-***REMOVED******REMOVED***public var preferredSearchLocation: Point?
-***REMOVED***
-***REMOVED******REMOVED***public func suggest(_ queryString: String) async throws -> [SearchSuggestion] {
-***REMOVED******REMOVED******REMOVED***<#code#>
-***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***public func search(_ queryString: String, area: Geometry?) async throws -> [SearchResult] {
-***REMOVED******REMOVED******REMOVED***<#code#>
-***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***public func search(_ searchSuggestion: SearchSuggestion, area: Geometry?) async throws -> [SearchResult] {
-***REMOVED******REMOVED******REMOVED***<#code#>
-***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The minimum number of results to attempt to return. If there are too few results, the search is
 ***REMOVED******REMOVED***/ repeated with loosened parameters until enough results are accumulated. If no search is
@@ -80,4 +59,16 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
 ***REMOVED******REMOVED***/ by publishing a web style, taking care to ensure that symbol keys match the `Type` attribute
 ***REMOVED******REMOVED***/ returned by the locator.
 ***REMOVED***var resultSymbolStyle: SymbolStyle?
+
+***REMOVED***public override func search(_ queryString: String, area: Geometry?) async throws -> [SearchResult] {
+***REMOVED******REMOVED***return try await super.search(queryString, area: area)
+***REMOVED***
+
+***REMOVED***public override func search(_ searchSuggestion: SearchSuggestion, area: Geometry?) async throws -> [SearchResult] {
+***REMOVED******REMOVED***return try await super.search(searchSuggestion, area: area)
+***REMOVED***
+***REMOVED***
+***REMOVED***public override func suggest(_ queryString: String) async throws -> [SearchSuggestion] {
+***REMOVED******REMOVED***return try await super.suggest(queryString)
+***REMOVED***
 ***REMOVED***

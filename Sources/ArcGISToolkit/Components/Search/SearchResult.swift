@@ -60,3 +60,9 @@ public class SearchResult {
 extension SearchResult: Identifiable {
 ***REMOVED***public var id: ObjectIdentifier { ObjectIdentifier(self) ***REMOVED***
 ***REMOVED***
+
+extension SearchResult: Equatable {
+***REMOVED***public static func == (lhs: SearchResult, rhs: SearchResult) -> Bool {
+***REMOVED******REMOVED***lhs === rhs
+***REMOVED***
+***REMOVED***
