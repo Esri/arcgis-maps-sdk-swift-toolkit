@@ -53,7 +53,7 @@ private var visibleArea: ArcGIS.Polygon?
 
 var body: some View {
     MapView(map: map)
-        .onViewpointChanged(type: .centerAndScale) { viewpoint = $0 }
+        .onViewpointChanged(kind: .centerAndScale) { viewpoint = $0 }
         .onVisibleAreaChanged { visibleArea = $0 }
         .overlay(
             OverviewMap.forMapView(
