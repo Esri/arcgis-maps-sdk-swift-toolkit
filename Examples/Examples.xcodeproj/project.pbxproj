@@ -67,6 +67,7 @@
 		E40F58042656E509006F5CB9 /* Examples */ = {
 			isa = PBXGroup;
 			children = (
+				E4B60CB226A09F59001C4955 /* Extensions */,
 				E4F9BC98265EFCAF001280FF /* OverviewMapExampleView.swift */,
 			);
 			name = Examples;
@@ -129,6 +130,13 @@
 			children = (
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		E4B60CB226A09F59001C4955 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
