@@ -24,7 +24,7 @@ struct OverviewMapExampleView: View {
     }
     
     @State
-    var mapOrScene: MapOrScene = .map
+    private var mapOrScene: MapOrScene = .map
     
     var body: some View {
         Picker("Map or Scene", selection: $mapOrScene, content: {
