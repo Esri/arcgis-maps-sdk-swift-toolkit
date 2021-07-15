@@ -24,7 +24,7 @@ struct OverviewMapExampleView: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@State
-***REMOVED***var mapOrScene: MapOrScene = .map
+***REMOVED***private var mapOrScene: MapOrScene = .map
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***Picker("Map or Scene", selection: $mapOrScene, content: {
