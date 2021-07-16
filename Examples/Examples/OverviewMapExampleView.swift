@@ -63,7 +63,7 @@ struct OverviewMapForMapView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** These modifiers show how you can modify the default
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** values used for the symbol, map, and scaleFactor.
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.symbol(.customFillSymbol)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.map(.customOverviewMap)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.map(.customOverviewMapForMapView)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.scaleFactor(15.0)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 200, height: 132)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(),
@@ -86,7 +86,7 @@ struct OverviewMapForSceneView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** These modifiers show how you can modify the default
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** values used for the symbol, map, and scaleFactor.
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.symbol(.customMarkerSymbol)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.map(.customOverviewMap)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.map(.customOverviewMapForSceneView)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.scaleFactor(15.0)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 200, height: 132)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(),
@@ -124,6 +124,9 @@ private extension Symbol {
 ***REMOVED***
 
 private extension Map {
-***REMOVED******REMOVED***/ A custom map for the `OverviewMap`.
-***REMOVED***static let customOverviewMap = Map(basemapStyle: .arcGISDarkGray)
+***REMOVED******REMOVED***/ A custom map for the `OverviewMap` used in a MapView.
+***REMOVED***static let customOverviewMapForMapView = Map(basemapStyle: .arcGISDarkGray)
+
+***REMOVED******REMOVED***/ A custom map for the `OverviewMap` used in a SceneView.
+***REMOVED***static let customOverviewMapForSceneView = Map(basemapStyle: .arcGISDarkGray)
 ***REMOVED***
