@@ -1,6 +1,6 @@
 # OverviewMap
 
-`OverviewMap` is a small, secondary `MapView` (sometimes called an inset map), that can be overlayed on an existing `GeoView` (`MapView` or `SceneView`). `OverviewMap` shows a representation of the current `visibleArea` (for a `MapView`) or `viewpoint` (for a `SceneView`).
+`OverviewMap` is a small, secondary `MapView` (sometimes called an inset map), that can be overlaid on an existing `GeoView` (`MapView` or `SceneView`). `OverviewMap` shows a representation of the current `visibleArea` (for a `MapView`) or `viewpoint` (for a `SceneView`).
 
 MapView
 
