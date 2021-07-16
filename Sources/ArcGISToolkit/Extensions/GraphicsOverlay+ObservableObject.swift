@@ -13,16 +13,5 @@
 
 import SwiftUI
 import ArcGIS
-import ArcGISToolkit
 
-struct SampleComponentExampleView: View {
-    var body: some View {
-        SampleComponent(mapView: MapView(map: Map(basemap: .topographic())))
-    }
-}
-
-struct ComponentSampleExampleView_Previews: PreviewProvider {
-    static var previews: some View {
-        SampleComponentExampleView()
-    }
-}
+extension GraphicsOverlay: ObservableObject {}

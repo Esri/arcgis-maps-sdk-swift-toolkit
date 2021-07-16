@@ -34,7 +34,7 @@ extension ExampleList {
     static let geoview = Self(
         name: "GeoView",
         examples: [
-            AnyExample("Sample Component", content: SampleComponentExampleView())
+            AnyExample("Overview Map", content: OverviewMapExampleView())
         ]
     )
 }

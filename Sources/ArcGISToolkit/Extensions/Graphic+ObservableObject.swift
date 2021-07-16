@@ -14,14 +14,4 @@
 import SwiftUI
 import ArcGIS
 
-public struct SampleComponent: View {
-    public init(mapView: MapView) {
-        self.mapView = mapView
-    }
-    
-    var mapView: MapView
-    
-    public var body: some View {
-        mapView
-    }
-}
+extension Graphic: ObservableObject {}
