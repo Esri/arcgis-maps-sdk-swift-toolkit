@@ -24,7 +24,7 @@ struct OverviewMapExampleView: View {
     }
     
     @State
-    var mapOrScene: MapOrScene = .map
+    private var mapOrScene: MapOrScene = .map
     
     var body: some View {
         Picker("Map or Scene", selection: $mapOrScene, content: {
@@ -53,7 +53,7 @@ struct OverviewMapForMapView: View {
     
     var body: some View {
         MapView(map: map)
-            .onViewpointChanged(type: .centerAndScale) { viewpoint = $0 }
+            .onViewpointChanged(kind: .centerAndScale) { viewpoint = $0 }
             .onVisibleAreaChanged { visibleArea = $0 }
             .overlay(
                 OverviewMap.forMapView(
@@ -63,7 +63,7 @@ struct OverviewMapForMapView: View {
                 // These modifiers show how you can modify the default
                 // values used for the symbol, map, and scaleFactor.
 //                    .symbol(.customFillSymbol)
-//                    .map(.customOverviewMap)
+//                    .map(.customOverviewMapForMapView)
 //                    .scaleFactor(15.0)
                     .frame(width: 200, height: 132)
                     .padding(),
@@ -80,13 +80,13 @@ struct OverviewMapForSceneView: View {
     
     var body: some View {
         SceneView(scene: scene)
-            .onViewpointChanged(type: .centerAndScale) { viewpoint = $0 }
+            .onViewpointChanged(kind: .centerAndScale) { viewpoint = $0 }
             .overlay(
                 OverviewMap.forSceneView(with: viewpoint)
                 // These modifiers show how you can modify the default
                 // values used for the symbol, map, and scaleFactor.
 //                    .symbol(.customMarkerSymbol)
-//                    .map(.customOverviewMap)
+//                    .map(.customOverviewMapForSceneView)
 //                    .scaleFactor(15.0)
                     .frame(width: 200, height: 132)
                     .padding(),
@@ -124,6 +124,9 @@ private extension Symbol {
 }
 
 private extension Map {
-    /// A custom map for the `OverviewMap`.
-    static let customOverviewMap = Map(basemapStyle: .arcGISDarkGray)
+    /// A custom map for the `OverviewMap` used in a MapView.
+    static let customOverviewMapForMapView = Map(basemapStyle: .arcGISDarkGray)
+
+    /// A custom map for the `OverviewMap` used in a SceneView.
+    static let customOverviewMapForSceneView = Map(basemapStyle: .arcGISDarkGray)
 }
