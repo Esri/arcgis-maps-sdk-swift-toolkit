@@ -135,7 +135,7 @@ public struct OverviewMap: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The factor to multiply the main `GeoView`'s scale by.  The `OverviewMap` will display
-***REMOVED******REMOVED***/ at the a scale equal to: `viewpoint.targetscale` x `scaleFactor`.
+***REMOVED******REMOVED***/ at the a scale equal to: `viewpoint.targetScale` x `scaleFactor`.
 ***REMOVED******REMOVED***/ The default value is `25.0`.
 ***REMOVED******REMOVED***/ - Parameter scaleFactor: The new scale factor.
 ***REMOVED******REMOVED***/ - Returns: The `OverviewMap`.
