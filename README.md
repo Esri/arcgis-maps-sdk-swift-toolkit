@@ -4,21 +4,19 @@
 
 The ArcGIS Runtime SDK for Swift Toolkit contains components that will simplify your iOS app development.  It is built off of the new Swift ArcGIS Runtime SDK.
 
-Examples and Documentation are coming soon.
-
 To use Toolkit in your project:
 
 * **[Install with Swift Package Manager](#swift-package-manager)** - Add `https:***REMOVED***github.com/ArcGIS/arcgis-runtime-toolkit-swift` as the package repository URL.
 
 ## Toolkit Components
 
-* TBD
+* [OverviewMap](./Documentation/OverviewMap/README.md)
 
 ## Requirements
 * ArcGIS Runtime SDK for Swift
-* Xcode 12.0 (or higher)
+* Xcode 13.0 (or higher)
 
-The *ArcGIS Runtime Toolkit for Swift* has a *Target SDK* version of *13.0*, meaning that it can run on devices with *iOS 13.0* or newer.
+The *ArcGIS Runtime Toolkit for Swift* has a *Target SDK* version of *15.0*, meaning that it can run on devices with *iOS 15.0* or newer.
 
 ## Instructions
 
@@ -29,7 +27,7 @@ The *ArcGIS Runtime Toolkit for Swift* has a *Target SDK* version of *13.0*, mea
  3. Enter `https:***REMOVED***github.com/ArcGIS/arcgis-runtime-toolkit-swift` as the package repository URL
  4. ~Choose version 100.12.0 or a later version. Click Next. Only version 100.12.0 or newer supports Swift Package Manager.~
  
- Note: The Toolkit Swift Package adds the ArcGIS SDK Swift Package as a dependency so no need to add both separately. If you already have the ArcGIS SDK Swift Package delete that and just add the Toolkit Swift Package. 
+ Note: The Toolkit Swift Package adds the ArcGIS SDK Swift Package as a dependency so there's no need to add both separately. If you already have the ArcGIS SDK Swift Package, delete it and just add the Toolkit Swift Package. 
 
  New to Swift Package Manager? Visit [swift.org/package-manager/](https:***REMOVED***swift.org/package-manager/).
 

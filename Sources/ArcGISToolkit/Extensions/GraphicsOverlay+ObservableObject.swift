@@ -14,14 +14,4 @@
 ***REMOVED***
 ***REMOVED***
 
-public struct SampleComponent: View {
-***REMOVED***public init(mapView: MapView) {
-***REMOVED******REMOVED***self.mapView = mapView
-***REMOVED***
-***REMOVED***
-***REMOVED***var mapView: MapView
-***REMOVED***
-***REMOVED***public var body: some View {
-***REMOVED******REMOVED***mapView
-***REMOVED***
-***REMOVED***
+extension GraphicsOverlay: ObservableObject {***REMOVED***

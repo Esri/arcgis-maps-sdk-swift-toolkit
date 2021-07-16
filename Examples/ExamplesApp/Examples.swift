@@ -34,7 +34,7 @@ extension ExampleList {
 ***REMOVED***static let geoview = Self(
 ***REMOVED******REMOVED***name: "GeoView",
 ***REMOVED******REMOVED***examples: [
-***REMOVED******REMOVED******REMOVED***AnyExample("Sample Component", content: SampleComponentExampleView())
+***REMOVED******REMOVED******REMOVED***AnyExample("Overview Map", content: OverviewMapExampleView())
 ***REMOVED******REMOVED***]
 ***REMOVED***)
 ***REMOVED***

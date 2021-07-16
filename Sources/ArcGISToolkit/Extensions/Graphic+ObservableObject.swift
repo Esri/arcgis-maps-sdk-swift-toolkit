@@ -13,16 +13,5 @@
 
 ***REMOVED***
 ***REMOVED***
-***REMOVED***Toolkit
 
-struct SampleComponentExampleView: View {
-***REMOVED***var body: some View {
-***REMOVED******REMOVED***SampleComponent(mapView: MapView(map: Map(basemap: .topographic())))
-***REMOVED***
-***REMOVED***
-
-struct ComponentSampleExampleView_Previews: PreviewProvider {
-***REMOVED***static var previews: some View {
-***REMOVED******REMOVED***SampleComponentExampleView()
-***REMOVED***
-***REMOVED***
+extension Graphic: ObservableObject {***REMOVED***
