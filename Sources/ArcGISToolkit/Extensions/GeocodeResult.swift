@@ -15,12 +15,23 @@ import ArcGIS
 
 extension GeocodeResult {
     func toSearchResult(searchSource: SearchSourceProtocol) -> SearchResult {
-        return SearchResult(displayTitle: self.label,
-                            displaySubtitle: "Match percent: \((self.score).formatted(.percent))",
-                            markerImage: nil,
-                            owningSource: searchSource,
-                            geoElement: nil,
-                            selectionViewpoint: nil)
+        let subtitle = self.attributes["LongLabel"] as? String ??
+        "Match percent: \((self.score).formatted(.percent))"
+        var viewpoint: Viewpoint? = nil
+        if let extent = self.extent {
+            viewpoint = Viewpoint(targetExtent: extent)
+        }
+        return SearchResult(
+            displayTitle: self.label,
+            displaySubtitle: subtitle,
+            markerImage: nil,
+            owningSource: searchSource,
+            geoElement: Graphic(
+                geometry: self.displayLocation,
+                attributes: self.attributes
+            ),
+            selectionViewpoint: viewpoint
+        )
     }
 }
 

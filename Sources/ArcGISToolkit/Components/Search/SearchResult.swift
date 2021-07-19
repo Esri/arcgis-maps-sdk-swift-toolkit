@@ -31,28 +31,28 @@ public class SearchResult {
     }
     
     /// Title that should be shown whenever a result is displayed.
-    var displayTitle: String
+    public var displayTitle: String
     
     /// Should be shown as a subtitle wherever results are shown.
-    var displaySubtitle: String?
+    public var displaySubtitle: String?
     
     /// Image, in the native platform's format, for the result. This should be the marker that would be
     /// shown on the map, and also shown in the UI. This property is available for convenience so the
     /// UI doesn't have to worry about whether the `GeoElement` is a graphic or a feature when displaying
     /// the icon in the UI.
-    var markerImage: UIImage?
+    public var markerImage: UIImage?
     
     /// Reference to the search source that created this result.
-    var owningSource: SearchSourceProtocol
+    public var owningSource: SearchSourceProtocol
     
     /// For locator results, should be the graphic that was used to display the result on the map.
     /// For feature layer results, should be the result feature. Can be null depending on the type of the
     /// result, and can have `GeoElement`s without a defined geometry.
-    var geoElement: GeoElement?
+    public var geoElement: GeoElement?
     
     /// The viewpoint to be used when the view zooms to a selected result. This property can be `nil`
     /// because not all valid results will have a geometry. E.g. feature results from non-spatial features.
-    var selectionViewpoint: Viewpoint?
+    public var selectionViewpoint: Viewpoint?
 }
 
 // MARK: Extensions

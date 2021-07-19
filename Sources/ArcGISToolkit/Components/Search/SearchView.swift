@@ -17,21 +17,11 @@ import ArcGIS
 
 /// SearchView presents a search experience, powered by underlying SearchViewModel.
 public struct SearchView: View {
-    public init(proxy: GeoViewProxy,
-                searchViewModel: SearchViewModel,
-                viewpoint: Binding<Viewpoint?>? = nil
+    public init(
+        searchViewModel: SearchViewModel
     ) {
-        self.proxy = proxy
         self.searchViewModel = searchViewModel
-        self.viewpoint = viewpoint
     }
-    
-    /// Used for accessing `GeoView` functionality for geocoding and searching.
-    /// Reference to the GeoView used for automatic configuration.
-    /// When connected to a GeoView, SearchView will automatically navigate the view in response to
-    /// search result changes. Additionally, the view's current center and extent will be automatically
-    /// provided to locators as parameters.
-    var proxy: GeoViewProxy
     
     /// The view model used by the view. The `ViewModel` manages state and handles the activity of
     /// searching. The view observes `ViewModel` for changes in state. The view calls methods on
@@ -47,10 +37,8 @@ public struct SearchView: View {
     @State
     private var enableRepeatSearchHereButton = true
     
-    @State
     private var enableResultListView = true
     
-    @State
     private var noResultMessage = "No results found"
     
     /// Indicates that the `SearchViewModel` should start a search.
@@ -61,12 +49,10 @@ public struct SearchView: View {
     @State
     private var currentSuggestion: SearchSuggestion?
     
-    private var viewpoint: Binding<Viewpoint?>?
-    
     /// Indicates that the geoView's viewpoint has changed since the last search.
     @State
     private var viewpointChanged: Bool = false
-
+    
     // TODO: Figure out better styling for list
     // TODO: continue fleshing out SearchViewModel and LocatorSearchSource/SmartSearchSource
     // TODO: following Nathan's lead on all this stuff, i.e., go through his code and duplicate it as I go.
@@ -89,34 +75,43 @@ public struct SearchView: View {
                 }
             }
             if enableResultListView {
-                SearchResultList(searchViewModel: searchViewModel)
+                SearchResultList(
+                    searchResults: searchViewModel.results,
+                    selectedResult: $searchViewModel.selectedResult,
+                    noResultMessage: noResultMessage
+                )
                 SearchSuggestionList(
-                    searchViewModel: searchViewModel,
-                    currentSuggestion: $currentSuggestion
+                    suggestionResults: searchViewModel.suggestions,
+                    currentSuggestion: $currentSuggestion,
+                    noResultMessage: noResultMessage
                 )
             }
         }
-        .task(id: searchViewModel.currentQuery) {
-            // User typed a new character
-            if currentSuggestion == nil {
-                await searchViewModel.updateSuggestions()
+        // TODO:  Not sure how to get the list to constrain itself if there's less than a screen full of rows.
+        Spacer()
+            .task(id: searchViewModel.currentQuery) {
+                // User typed a new character
+                if currentSuggestion == nil {
+                    await searchViewModel.updateSuggestions()
+                }
             }
-        }
-        .task(id: commitSearch) {
-            // User committed changes (hit Enter/Search button)
-            await searchViewModel.commitSearch(true)
-        }
-        .task(id: currentSuggestion) {
-            // User committed changes (hit Enter/Search button)
-            if let suggestion = currentSuggestion {
-                await searchViewModel.acceptSuggestion(suggestion)
-                currentSuggestion = nil
+            .task(id: commitSearch) {
+                // User committed changes (hit Enter/Search button)
+                await searchViewModel.commitSearch(true)
             }
-        }
+            .task(id: currentSuggestion) {
+                // User committed changes (hit Enter/Search button)
+                if let suggestion = currentSuggestion {
+                    await searchViewModel.acceptSuggestion(suggestion)
+                    currentSuggestion = nil
+                }
+            }
     }
     
-    // MARK: Modifiers
+    // TODO:  Show error but filter out user canceled errors
 
+    // MARK: Modifiers
+    
     /// Determines whether the view will update its configuration based on the geoview's
     /// document automatically.  Defaults to `true`.
     /// - Parameter enableAutomaticConfiguration: The new value.
@@ -148,33 +143,34 @@ public struct SearchView: View {
     /// - Parameter enableResultListView: The new value.
     /// - Returns: The `SearchView`.
     public func enableResultListView(_ enableResultListView: Bool) -> SearchView {
-        // TODO: this doesn't work; the view doesn't redraw
-//        self._enableResultListView.wrappedValue = enableResultListView
-        self.enableResultListView = enableResultListView
-        return self
+        var copy = self
+        copy.enableResultListView = enableResultListView
+        return copy
     }
     
     /// Message to show when there are no results or suggestions.  Defaults to "No results found".
     /// - Parameter noResultMessage: The new value.
     /// - Returns: The `SearchView`.
     public func noResultMessage(_ noResultMessage: String) -> SearchView {
-        self.noResultMessage = noResultMessage
-        return self
+        var copy = self
+        copy.noResultMessage = noResultMessage
+        return copy
     }
 }
 
-// TODO:  why no results?  Why .onChange for results/suggestions don't work
 // TODO: get currentResult working in Example.
 
 // TODO: look at consolidating SearchResultView and SearchSuggestionView with
 // TODO: new SearchDisplayProtocol containing only displayTitle and displaySubtitle
 // TODO: That would mean we only needed one of these.
 struct SearchResultList: View {
-    var searchViewModel: SearchViewModel
-
+    var searchResults: Result<[SearchResult]?, RuntimeError>
+    @Binding var selectedResult: SearchResult?
+    var noResultMessage: String
+    
     var body: some View {
         Group {
-            switch searchViewModel.results {
+            switch searchResults {
             case .success(let results):
                 if let results = results, results.count > 0 {
                     List {
@@ -192,34 +188,38 @@ struct SearchResultList: View {
                                             SearchResultRow(title: result.displayTitle, subtitle: result.displaySubtitle)
                                         }
                                         .onTapGesture {
-                                            searchViewModel.selectedResult = result
+//                                            searchViewModel.selectedResult = result
+                                            selectedResult = result
                                             print("user selected result: \(result.displayTitle)")
                                         }
                                     }
-                                }
-                                else {
-                                    // TODO: figure out why this isn't triggered.
-                                    Text("No results found")
                                 }
                                 //                    .listStyle(DefaultListStyle())
                             }
                         }
                     }
                 }
+                else if results != nil {
+                    List {
+                        Text(noResultMessage)
+                    }
+                }
             case .failure(_):
-                Spacer()
+                EmptyView()
             }
         }
+        .esriBorder()
     }
 }
 
 struct SearchSuggestionList: View {
-    var searchViewModel: SearchViewModel
-    var currentSuggestion: Binding<SearchSuggestion?>
+    var suggestionResults: Result<[SearchSuggestion]?, RuntimeError>
+    @Binding var currentSuggestion: SearchSuggestion?
+    var noResultMessage: String
     
     var body: some View {
         Group {
-            switch searchViewModel.suggestions {
+            switch suggestionResults {
             case .success(let results):
                 if let suggestions = results, suggestions.count > 0 {
                     List {
@@ -237,26 +237,27 @@ struct SearchSuggestionList: View {
                                             SearchResultRow(title: suggestion.displayTitle, subtitle: suggestion.displaySubtitle)
                                         }
                                         .onTapGesture() {
-                                            currentSuggestion.wrappedValue = suggestion
+                                            currentSuggestion = suggestion
                                         }
                                     }
                                     //                    .listStyle(DefaultListStyle())
-                                }
-                                else {
-                                    // TODO: figure out why this isn't triggered.
-                                    Text("No results found")
                                 }
                             }
                         }
                     }
                 }
+                else if results != nil {
+                    List {
+                        Text(noResultMessage)
+                    }
+                }
             case .failure(_):
-                Spacer()
+                EmptyView()
             }
         }
+        .esriBorder()
     }
 }
-//TODO:             NoResultMessage = "No Results";
 
 struct SearchResultRow: View {
     var title: String

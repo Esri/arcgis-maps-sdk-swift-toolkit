@@ -90,14 +90,13 @@ suggestions: Result<[SearchSuggestion]?, RuntimeError> = .success(nil)
     /// Collection of results. `nil` means no query has been made. An empty array means there
     /// were no results, and the view should show an appropriate 'no results' message.
     @Published
-//    public var results: [SearchResult]? = nil
-    public var results: Result<[SearchResult]?, RuntimeError> = .success([])
+    public var results: Result<[SearchResult]?, RuntimeError> = .success(nil)
 
     /// Tracks selection of results from the `results` collection. When there is only one result,
     /// that result is automatically assigned to this property. If there are multiple results, the view sets
     /// this property upon user selection. This property is observable. The view should observe this
     /// property and update the associated GeoView's viewpoint, if configured.
-    @State
+    @Published
     public var selectedResult: SearchResult?
     
     /// Collection of search sources to be used. This list is maintained over time and is not nullable.
@@ -109,14 +108,12 @@ suggestions: Result<[SearchSuggestion]?, RuntimeError> = .success(nil)
     /// are no suggestions, `nil` when no suggestions have been requested. If the list is empty,
     /// a useful 'no results' message should be shown by the view.
     @Published
-//    public var suggestions: [SearchSuggestion]? = nil
-    public var suggestions: Result<[SearchSuggestion]?, RuntimeError> = .success([])
+    public var suggestions: Result<[SearchSuggestion]?, RuntimeError> = .success(nil)
 
     /// True if the `queryArea` has changed since the `results` collection has been set.
     /// This property is used by the view to enable 'Repeat search here' functionality. This property is
     /// observable, and the view should use it to hide and show the 'repeat search' button. Changes to
     /// this property are driven by changes to the `queryArea` property.
-    @Published
     private(set) var isEligibleForRequery: Bool = false
     
     /// Starts a search. `selectedResult` and `results`, among other properties, are set
@@ -127,7 +124,6 @@ suggestions: Result<[SearchSuggestion]?, RuntimeError> = .success(nil)
     /// when the `queryArea` property is null, a line, a point, or an empty geometry is undefined.
     func commitSearch(_ restrictToArea: Bool) async -> Void {
         guard !currentQuery.isEmpty else { return }
-        print("SearchViewModel.commitSearch: \(currentQuery)")
         
         selectedResult = nil
         isEligibleForRequery = false
@@ -135,7 +131,6 @@ suggestions: Result<[SearchSuggestion]?, RuntimeError> = .success(nil)
         var searchResults = [SearchResult]()
         let searchSources = sourcesToSearch()
         for i in 0...searchSources.count - 1 {
-            print("commit search source \(i)")
             var searchSource = searchSources[i]
             searchSource.searchArea = queryArea
             searchSource.preferredSearchLocation = queryCenter
@@ -152,8 +147,8 @@ suggestions: Result<[SearchSuggestion]?, RuntimeError> = .success(nil)
                 print("\(searchSource.displayName) encountered an error: \(error.localizedDescription)")
             }
         }
-        results = .success(searchResults)
         suggestions = .success(nil)
+        results = .success(searchResults)
     }
     
     /// Updates suggestions list asynchronously. View should take care to cancel previous suggestion
@@ -166,7 +161,6 @@ suggestions: Result<[SearchSuggestion]?, RuntimeError> = .success(nil)
         var suggestionResults = [SearchSuggestion]()
         let searchSources = sourcesToSearch()
         for i in 0...searchSources.count - 1 {
-            print("update suggestions source \(i)")
             var searchSource = searchSources[i]
             searchSource.searchArea = queryArea
             searchSource.preferredSearchLocation = queryCenter
@@ -181,8 +175,9 @@ suggestions: Result<[SearchSuggestion]?, RuntimeError> = .success(nil)
                 print("\(searchSource.displayName) encountered an error: \(error.localizedDescription)")
             }
         }
-        suggestions = .success(suggestionResults)
+
         results = .success(nil)
+        suggestions = .success(suggestionResults)
         
         selectedResult = nil
         isEligibleForRequery = false
@@ -197,7 +192,6 @@ suggestions: Result<[SearchSuggestion]?, RuntimeError> = .success(nil)
     ///   - searchSuggestion: The suggestion to use to commit the search.
     func acceptSuggestion(_ searchSuggestion: SearchSuggestion) async -> Void {
         currentQuery = searchSuggestion.displayTitle
-        print("SearchViewModel.acceptSuggestion: \(currentQuery)")
         
         isEligibleForRequery = false
         selectedResult = nil
