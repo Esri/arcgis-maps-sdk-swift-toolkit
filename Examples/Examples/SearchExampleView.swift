@@ -17,51 +17,97 @@ import ArcGIS
 import ArcGISToolkit
 
 struct SearchExampleView: View {
-    let searchViewModel = SearchViewModel(
-        sources: [LocatorSearchSource(displayName: "Locator One"),
-                  LocatorSearchSource(displayName: "Locator Two")]
+    @ObservedObject
+    var searchViewModel = SearchViewModel(
+        sources: [LocatorSearchSource(
+            displayName: "Locator One",
+            maximumResults: 16,
+            maximumSuggestions: 16)]/*,
+                                     LocatorSearchSource(displayName: "Locator Two")]*/
     )
     
     @State
     var showResults = true
     
-    @State
-    private var viewpoint: Viewpoint?
+    let map = Map(basemapStyle: .arcGISImagery)
     
     @State
-    private var visibleArea: ArcGIS.Polygon?
-
+    var searchResultViewpoint: Viewpoint? = nil
+    
+    var searchResultsOverlay = GraphicsOverlay()
+    
     var body: some View {
-        ZStack (alignment: .topTrailing) {
-            MapViewReader { proxy in
-                MapView(map: Map(basemap: Basemap.imageryWithLabels()))
-                    .onViewpointChanged(type: .centerAndScale) {
-                        searchViewModel.queryCenter = $0.targetGeometry as? Point
-                    }
-                    .onVisibleAreaChanged {
-                        searchViewModel.queryArea = $0
-                    }
-                    .onChange(of: searchViewModel.results, perform: { results in
-                        print("Search results changed")
-                    })
-                    .onChange(of: searchViewModel.suggestions, perform: { results in
-                        print("Search suggestions changed")
-                    })
-                    .overlay(
-                        SearchView(proxy: proxy, searchViewModel:searchViewModel)
-                            .enableResultListView(showResults)
-                            .frame(width: 360)
-                            .padding(),
-                        alignment: .topTrailing
-                    )
+        MapView(
+            map: map,
+            viewpoint: searchResultViewpoint,
+            graphicsOverlays: [searchResultsOverlay]
+        )
+            .onViewpointChanged(kind: .centerAndScale) {
+                searchViewModel.queryCenter = $0.targetGeometry as? Point
+            }
+            .onVisibleAreaChanged {
+                searchViewModel.queryArea = $0
+            }
+            .overlay(
+                VStack {
                 Button {
                     showResults.toggle()
                 } label: {
                     Text(showResults ? "Hide results" : "Show results")
                 }
-
+                SearchView(searchViewModel: searchViewModel)
+                    .enableResultListView(showResults)
+                    .frame(width: 360)
+                    .padding()
+            },
+                alignment: .topTrailing
+            )
+            .onChange(of: searchViewModel.results, perform: { searchResults in
+                display(searchResults: searchResults)
+            })
+            .onChange(of: searchViewModel.selectedResult, perform: { _ in
+                display(selectedResult: searchViewModel.selectedResult)
+            })
+    }
+    
+    fileprivate func display(searchResults: Result<[SearchResult]?, RuntimeError>) {
+        let searchResultEnvelopeBuilder = EnvelopeBuilder(spatialReference: .wgs84)
+        switch searchResults {
+        case .success(let results):
+            var resultGraphics = [Graphic]()
+            results?.forEach({ result in
+                if let extent = result.selectionViewpoint?.targetGeometry as? Envelope {
+                    searchResultEnvelopeBuilder.union(envelope: extent)
+                }
+                let graphic = Graphic(geometry: result.geoElement?.geometry,
+                                      symbol: .resultSymbol)
+                resultGraphics.append(graphic)
+                
+            })
+            let currentGraphics = searchResultsOverlay.graphics
+            searchResultsOverlay.removeGraphics(currentGraphics)
+            searchResultsOverlay.addGraphics(resultGraphics)
+            
+            if resultGraphics.count > 0,
+               let envelope = searchResultEnvelopeBuilder.toGeometry() as? Envelope {
+                searchResultViewpoint = Viewpoint(targetExtent: envelope)
             }
+        case .failure(_):
+            break
         }
+    }
+    
+    fileprivate func display(selectedResult: SearchResult?) {
+        guard let selectedResult = selectedResult,
+              let graphic = selectedResult.geoElement as? Graphic else { return }
+        
+        searchResultViewpoint = selectedResult.selectionViewpoint
+        if graphic.symbol == nil {
+            graphic.symbol = .resultSymbol
+        }
+        let currentGraphics = searchResultsOverlay.graphics
+        searchResultsOverlay.removeGraphics(currentGraphics)
+        searchResultsOverlay.addGraphic(graphic)
     }
 }
 
@@ -69,4 +115,13 @@ struct SearchExampleView_Previews: PreviewProvider {
     static var previews: some View {
         SearchExampleView()
     }
+}
+
+private extension Symbol {
+    /// A search result marker symbol.
+    static let resultSymbol: MarkerSymbol = SimpleMarkerSymbol(
+        style: .diamond,
+        color: .red,
+        size: 12.0
+    )
 }
