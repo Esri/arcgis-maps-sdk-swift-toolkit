@@ -17,21 +17,11 @@ import Combine
 
 ***REMOVED***/ SearchView presents a search experience, powered by underlying SearchViewModel.
 public struct SearchView: View {
-***REMOVED***public init(proxy: GeoViewProxy,
-***REMOVED******REMOVED******REMOVED******REMOVED***searchViewModel: SearchViewModel,
-***REMOVED******REMOVED******REMOVED******REMOVED***viewpoint: Binding<Viewpoint?>? = nil
+***REMOVED***public init(
+***REMOVED******REMOVED***searchViewModel: SearchViewModel
 ***REMOVED***) {
-***REMOVED******REMOVED***self.proxy = proxy
 ***REMOVED******REMOVED***self.searchViewModel = searchViewModel
-***REMOVED******REMOVED***self.viewpoint = viewpoint
 ***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ Used for accessing `GeoView` functionality for geocoding and searching.
-***REMOVED******REMOVED***/ Reference to the GeoView used for automatic configuration.
-***REMOVED******REMOVED***/ When connected to a GeoView, SearchView will automatically navigate the view in response to
-***REMOVED******REMOVED***/ search result changes. Additionally, the view's current center and extent will be automatically
-***REMOVED******REMOVED***/ provided to locators as parameters.
-***REMOVED***var proxy: GeoViewProxy
 ***REMOVED***
 ***REMOVED******REMOVED***/ The view model used by the view. The `ViewModel` manages state and handles the activity of
 ***REMOVED******REMOVED***/ searching. The view observes `ViewModel` for changes in state. The view calls methods on
@@ -47,10 +37,8 @@ public struct SearchView: View {
 ***REMOVED***@State
 ***REMOVED***private var enableRepeatSearchHereButton = true
 ***REMOVED***
-***REMOVED***@State
 ***REMOVED***private var enableResultListView = true
 ***REMOVED***
-***REMOVED***@State
 ***REMOVED***private var noResultMessage = "No results found"
 ***REMOVED***
 ***REMOVED******REMOVED***/ Indicates that the `SearchViewModel` should start a search.
@@ -61,12 +49,10 @@ public struct SearchView: View {
 ***REMOVED***@State
 ***REMOVED***private var currentSuggestion: SearchSuggestion?
 ***REMOVED***
-***REMOVED***private var viewpoint: Binding<Viewpoint?>?
-***REMOVED***
 ***REMOVED******REMOVED***/ Indicates that the geoView's viewpoint has changed since the last search.
 ***REMOVED***@State
 ***REMOVED***private var viewpointChanged: Bool = false
-
+***REMOVED***
 ***REMOVED******REMOVED*** TODO: Figure out better styling for list
 ***REMOVED******REMOVED*** TODO: continue fleshing out SearchViewModel and LocatorSearchSource/SmartSearchSource
 ***REMOVED******REMOVED*** TODO: following Nathan's lead on all this stuff, i.e., go through his code and duplicate it as I go.
@@ -89,34 +75,43 @@ public struct SearchView: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***if enableResultListView {
-***REMOVED******REMOVED******REMOVED******REMOVED***SearchResultList(searchViewModel: searchViewModel)
+***REMOVED******REMOVED******REMOVED******REMOVED***SearchResultList(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***searchResults: searchViewModel.results,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedResult: $searchViewModel.selectedResult,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***noResultMessage: noResultMessage
+***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***SearchSuggestionList(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***searchViewModel: searchViewModel,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentSuggestion: $currentSuggestion
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***suggestionResults: searchViewModel.suggestions,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentSuggestion: $currentSuggestion,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***noResultMessage: noResultMessage
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.task(id: searchViewModel.currentQuery) {
-***REMOVED******REMOVED******REMOVED******REMOVED*** User typed a new character
-***REMOVED******REMOVED******REMOVED***if currentSuggestion == nil {
-***REMOVED******REMOVED******REMOVED******REMOVED***await searchViewModel.updateSuggestions()
+***REMOVED******REMOVED******REMOVED*** TODO:  Not sure how to get the list to constrain itself if there's less than a screen full of rows.
+***REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED******REMOVED***.task(id: searchViewModel.currentQuery) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** User typed a new character
+***REMOVED******REMOVED******REMOVED******REMOVED***if currentSuggestion == nil {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await searchViewModel.updateSuggestions()
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.task(id: commitSearch) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** User committed changes (hit Enter/Search button)
+***REMOVED******REMOVED******REMOVED******REMOVED***await searchViewModel.commitSearch(true)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.task(id: currentSuggestion) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** User committed changes (hit Enter/Search button)
+***REMOVED******REMOVED******REMOVED******REMOVED***if let suggestion = currentSuggestion {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await searchViewModel.acceptSuggestion(suggestion)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentSuggestion = nil
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.task(id: commitSearch) {
-***REMOVED******REMOVED******REMOVED******REMOVED*** User committed changes (hit Enter/Search button)
-***REMOVED******REMOVED******REMOVED***await searchViewModel.commitSearch(true)
 ***REMOVED***
-***REMOVED******REMOVED***.task(id: currentSuggestion) {
-***REMOVED******REMOVED******REMOVED******REMOVED*** User committed changes (hit Enter/Search button)
-***REMOVED******REMOVED******REMOVED***if let suggestion = currentSuggestion {
-***REMOVED******REMOVED******REMOVED******REMOVED***await searchViewModel.acceptSuggestion(suggestion)
-***REMOVED******REMOVED******REMOVED******REMOVED***currentSuggestion = nil
-***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED*** MARK: Modifiers
+***REMOVED******REMOVED*** TODO:  Show error but filter out user canceled errors
 
+***REMOVED******REMOVED*** MARK: Modifiers
+***REMOVED***
 ***REMOVED******REMOVED***/ Determines whether the view will update its configuration based on the geoview's
 ***REMOVED******REMOVED***/ document automatically.  Defaults to `true`.
 ***REMOVED******REMOVED***/ - Parameter enableAutomaticConfiguration: The new value.
@@ -148,33 +143,34 @@ public struct SearchView: View {
 ***REMOVED******REMOVED***/ - Parameter enableResultListView: The new value.
 ***REMOVED******REMOVED***/ - Returns: The `SearchView`.
 ***REMOVED***public func enableResultListView(_ enableResultListView: Bool) -> SearchView {
-***REMOVED******REMOVED******REMOVED*** TODO: this doesn't work; the view doesn't redraw
-***REMOVED******REMOVED******REMOVED***self._enableResultListView.wrappedValue = enableResultListView
-***REMOVED******REMOVED***self.enableResultListView = enableResultListView
-***REMOVED******REMOVED***return self
+***REMOVED******REMOVED***var copy = self
+***REMOVED******REMOVED***copy.enableResultListView = enableResultListView
+***REMOVED******REMOVED***return copy
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Message to show when there are no results or suggestions.  Defaults to "No results found".
 ***REMOVED******REMOVED***/ - Parameter noResultMessage: The new value.
 ***REMOVED******REMOVED***/ - Returns: The `SearchView`.
 ***REMOVED***public func noResultMessage(_ noResultMessage: String) -> SearchView {
-***REMOVED******REMOVED***self.noResultMessage = noResultMessage
-***REMOVED******REMOVED***return self
+***REMOVED******REMOVED***var copy = self
+***REMOVED******REMOVED***copy.noResultMessage = noResultMessage
+***REMOVED******REMOVED***return copy
 ***REMOVED***
 ***REMOVED***
 
-***REMOVED*** TODO:  why no results?  Why .onChange for results/suggestions don't work
 ***REMOVED*** TODO: get currentResult working in Example.
 
 ***REMOVED*** TODO: look at consolidating SearchResultView and SearchSuggestionView with
 ***REMOVED*** TODO: new SearchDisplayProtocol containing only displayTitle and displaySubtitle
 ***REMOVED*** TODO: That would mean we only needed one of these.
 struct SearchResultList: View {
-***REMOVED***var searchViewModel: SearchViewModel
-
+***REMOVED***var searchResults: Result<[SearchResult]?, RuntimeError>
+***REMOVED***@Binding var selectedResult: SearchResult?
+***REMOVED***var noResultMessage: String
+***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***Group {
-***REMOVED******REMOVED******REMOVED***switch searchViewModel.results {
+***REMOVED******REMOVED******REMOVED***switch searchResults {
 ***REMOVED******REMOVED******REMOVED***case .success(let results):
 ***REMOVED******REMOVED******REMOVED******REMOVED***if let results = results, results.count > 0 {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***List {
@@ -192,34 +188,38 @@ struct SearchResultList: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***SearchResultRow(title: result.displayTitle, subtitle: result.displaySubtitle)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onTapGesture {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***searchViewModel.selectedResult = result
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***searchViewModel.selectedResult = result
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedResult = result
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print("user selected result: \(result.displayTitle)")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** TODO: figure out why this isn't triggered.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("No results found")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.listStyle(DefaultListStyle())
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***else if results != nil {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***List {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(noResultMessage)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***case .failure(_):
-***REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED******REMOVED******REMOVED***EmptyView()
 ***REMOVED******REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***.esriBorder()
 ***REMOVED***
 ***REMOVED***
 
 struct SearchSuggestionList: View {
-***REMOVED***var searchViewModel: SearchViewModel
-***REMOVED***var currentSuggestion: Binding<SearchSuggestion?>
+***REMOVED***var suggestionResults: Result<[SearchSuggestion]?, RuntimeError>
+***REMOVED***@Binding var currentSuggestion: SearchSuggestion?
+***REMOVED***var noResultMessage: String
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***Group {
-***REMOVED******REMOVED******REMOVED***switch searchViewModel.suggestions {
+***REMOVED******REMOVED******REMOVED***switch suggestionResults {
 ***REMOVED******REMOVED******REMOVED***case .success(let results):
 ***REMOVED******REMOVED******REMOVED******REMOVED***if let suggestions = results, suggestions.count > 0 {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***List {
@@ -237,26 +237,27 @@ struct SearchSuggestionList: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***SearchResultRow(title: suggestion.displayTitle, subtitle: suggestion.displaySubtitle)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onTapGesture() {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentSuggestion.wrappedValue = suggestion
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentSuggestion = suggestion
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.listStyle(DefaultListStyle())
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** TODO: figure out why this isn't triggered.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("No results found")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***else if results != nil {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***List {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(noResultMessage)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***case .failure(_):
-***REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED******REMOVED******REMOVED***EmptyView()
 ***REMOVED******REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***.esriBorder()
 ***REMOVED***
 ***REMOVED***
-***REMOVED***TODO:***REMOVED******REMOVED******REMOVED*** NoResultMessage = "No Results";
 
 struct SearchResultRow: View {
 ***REMOVED***var title: String

@@ -15,12 +15,23 @@
 
 extension GeocodeResult {
 ***REMOVED***func toSearchResult(searchSource: SearchSourceProtocol) -> SearchResult {
-***REMOVED******REMOVED***return SearchResult(displayTitle: self.label,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***displaySubtitle: "Match percent: \((self.score).formatted(.percent))",
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***markerImage: nil,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***owningSource: searchSource,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***geoElement: nil,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectionViewpoint: nil)
+***REMOVED******REMOVED***let subtitle = self.attributes["LongLabel"] as? String ??
+***REMOVED******REMOVED***"Match percent: \((self.score).formatted(.percent))"
+***REMOVED******REMOVED***var viewpoint: Viewpoint? = nil
+***REMOVED******REMOVED***if let extent = self.extent {
+***REMOVED******REMOVED******REMOVED***viewpoint = Viewpoint(targetExtent: extent)
+***REMOVED***
+***REMOVED******REMOVED***return SearchResult(
+***REMOVED******REMOVED******REMOVED***displayTitle: self.label,
+***REMOVED******REMOVED******REMOVED***displaySubtitle: subtitle,
+***REMOVED******REMOVED******REMOVED***markerImage: nil,
+***REMOVED******REMOVED******REMOVED***owningSource: searchSource,
+***REMOVED******REMOVED******REMOVED***geoElement: Graphic(
+***REMOVED******REMOVED******REMOVED******REMOVED***geometry: self.displayLocation,
+***REMOVED******REMOVED******REMOVED******REMOVED***attributes: self.attributes
+***REMOVED******REMOVED******REMOVED***),
+***REMOVED******REMOVED******REMOVED***selectionViewpoint: viewpoint
+***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 

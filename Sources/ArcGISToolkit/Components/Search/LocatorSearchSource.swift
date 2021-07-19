@@ -45,13 +45,13 @@ public class LocatorSearchSource: ObservableObject, SearchSourceProtocol {
 ***REMOVED***
 ***REMOVED***public var displayName: String = "Search"
 ***REMOVED***
-***REMOVED***public var maximumResults: Int = 6 {
+***REMOVED***public var maximumResults: Int {
 ***REMOVED******REMOVED***didSet {
 ***REMOVED******REMOVED******REMOVED***geocodeParameters.maxResults = Int32(maximumResults)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED***public var maximumSuggestions: Int = 6 {
+***REMOVED***public var maximumSuggestions: Int {
 ***REMOVED******REMOVED***didSet {
 ***REMOVED******REMOVED******REMOVED***suggestParameters.maxResults = Int32(maximumResults)
 ***REMOVED***

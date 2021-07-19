@@ -90,14 +90,13 @@ suggestions: Result<[SearchSuggestion]?, RuntimeError> = .success(nil)
 ***REMOVED******REMOVED***/ Collection of results. `nil` means no query has been made. An empty array means there
 ***REMOVED******REMOVED***/ were no results, and the view should show an appropriate 'no results' message.
 ***REMOVED***@Published
-***REMOVED******REMOVED***public var results: [SearchResult]? = nil
-***REMOVED***public var results: Result<[SearchResult]?, RuntimeError> = .success([])
+***REMOVED***public var results: Result<[SearchResult]?, RuntimeError> = .success(nil)
 
 ***REMOVED******REMOVED***/ Tracks selection of results from the `results` collection. When there is only one result,
 ***REMOVED******REMOVED***/ that result is automatically assigned to this property. If there are multiple results, the view sets
 ***REMOVED******REMOVED***/ this property upon user selection. This property is observable. The view should observe this
 ***REMOVED******REMOVED***/ property and update the associated GeoView's viewpoint, if configured.
-***REMOVED***@State
+***REMOVED***@Published
 ***REMOVED***public var selectedResult: SearchResult?
 ***REMOVED***
 ***REMOVED******REMOVED***/ Collection of search sources to be used. This list is maintained over time and is not nullable.
@@ -109,14 +108,12 @@ suggestions: Result<[SearchSuggestion]?, RuntimeError> = .success(nil)
 ***REMOVED******REMOVED***/ are no suggestions, `nil` when no suggestions have been requested. If the list is empty,
 ***REMOVED******REMOVED***/ a useful 'no results' message should be shown by the view.
 ***REMOVED***@Published
-***REMOVED******REMOVED***public var suggestions: [SearchSuggestion]? = nil
-***REMOVED***public var suggestions: Result<[SearchSuggestion]?, RuntimeError> = .success([])
+***REMOVED***public var suggestions: Result<[SearchSuggestion]?, RuntimeError> = .success(nil)
 
 ***REMOVED******REMOVED***/ True if the `queryArea` has changed since the `results` collection has been set.
 ***REMOVED******REMOVED***/ This property is used by the view to enable 'Repeat search here' functionality. This property is
 ***REMOVED******REMOVED***/ observable, and the view should use it to hide and show the 'repeat search' button. Changes to
 ***REMOVED******REMOVED***/ this property are driven by changes to the `queryArea` property.
-***REMOVED***@Published
 ***REMOVED***private(set) var isEligibleForRequery: Bool = false
 ***REMOVED***
 ***REMOVED******REMOVED***/ Starts a search. `selectedResult` and `results`, among other properties, are set
@@ -127,7 +124,6 @@ suggestions: Result<[SearchSuggestion]?, RuntimeError> = .success(nil)
 ***REMOVED******REMOVED***/ when the `queryArea` property is null, a line, a point, or an empty geometry is undefined.
 ***REMOVED***func commitSearch(_ restrictToArea: Bool) async -> Void {
 ***REMOVED******REMOVED***guard !currentQuery.isEmpty else { return ***REMOVED***
-***REMOVED******REMOVED***print("SearchViewModel.commitSearch: \(currentQuery)")
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***selectedResult = nil
 ***REMOVED******REMOVED***isEligibleForRequery = false
@@ -135,7 +131,6 @@ suggestions: Result<[SearchSuggestion]?, RuntimeError> = .success(nil)
 ***REMOVED******REMOVED***var searchResults = [SearchResult]()
 ***REMOVED******REMOVED***let searchSources = sourcesToSearch()
 ***REMOVED******REMOVED***for i in 0...searchSources.count - 1 {
-***REMOVED******REMOVED******REMOVED***print("commit search source \(i)")
 ***REMOVED******REMOVED******REMOVED***var searchSource = searchSources[i]
 ***REMOVED******REMOVED******REMOVED***searchSource.searchArea = queryArea
 ***REMOVED******REMOVED******REMOVED***searchSource.preferredSearchLocation = queryCenter
@@ -152,8 +147,8 @@ suggestions: Result<[SearchSuggestion]?, RuntimeError> = .success(nil)
 ***REMOVED******REMOVED******REMOVED******REMOVED***print("\(searchSource.displayName) encountered an error: \(error.localizedDescription)")
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***results = .success(searchResults)
 ***REMOVED******REMOVED***suggestions = .success(nil)
+***REMOVED******REMOVED***results = .success(searchResults)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Updates suggestions list asynchronously. View should take care to cancel previous suggestion
@@ -166,7 +161,6 @@ suggestions: Result<[SearchSuggestion]?, RuntimeError> = .success(nil)
 ***REMOVED******REMOVED***var suggestionResults = [SearchSuggestion]()
 ***REMOVED******REMOVED***let searchSources = sourcesToSearch()
 ***REMOVED******REMOVED***for i in 0...searchSources.count - 1 {
-***REMOVED******REMOVED******REMOVED***print("update suggestions source \(i)")
 ***REMOVED******REMOVED******REMOVED***var searchSource = searchSources[i]
 ***REMOVED******REMOVED******REMOVED***searchSource.searchArea = queryArea
 ***REMOVED******REMOVED******REMOVED***searchSource.preferredSearchLocation = queryCenter
@@ -181,8 +175,9 @@ suggestions: Result<[SearchSuggestion]?, RuntimeError> = .success(nil)
 ***REMOVED******REMOVED******REMOVED******REMOVED***print("\(searchSource.displayName) encountered an error: \(error.localizedDescription)")
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***suggestions = .success(suggestionResults)
+
 ***REMOVED******REMOVED***results = .success(nil)
+***REMOVED******REMOVED***suggestions = .success(suggestionResults)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***selectedResult = nil
 ***REMOVED******REMOVED***isEligibleForRequery = false
@@ -197,7 +192,6 @@ suggestions: Result<[SearchSuggestion]?, RuntimeError> = .success(nil)
 ***REMOVED******REMOVED***/   - searchSuggestion: The suggestion to use to commit the search.
 ***REMOVED***func acceptSuggestion(_ searchSuggestion: SearchSuggestion) async -> Void {
 ***REMOVED******REMOVED***currentQuery = searchSuggestion.displayTitle
-***REMOVED******REMOVED***print("SearchViewModel.acceptSuggestion: \(currentQuery)")
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***isEligibleForRequery = false
 ***REMOVED******REMOVED***selectedResult = nil
