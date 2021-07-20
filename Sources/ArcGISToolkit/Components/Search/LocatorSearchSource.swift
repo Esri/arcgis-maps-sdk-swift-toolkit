@@ -60,8 +60,13 @@ public class LocatorSearchSource: ObservableObject, SearchSourceProtocol {
     public var searchArea: Geometry?
     
     public var preferredSearchLocation: Point?
-
+    
     public func search(_ queryString: String, area: Geometry? = nil) async throws -> [SearchResult] {
+        //
+        // This differs from the .NET approach; .NET only uses the
+        // center of `searchArea` for the `geocodeParameters.preferredSearchLocation`
+        // and only sets `geocodeParameters.searchArea` from the `area` argument.
+        //
         geocodeParameters.searchArea = (area != nil) ? area : searchArea
         geocodeParameters.preferredSearchLocation = preferredSearchLocation
         
@@ -69,30 +74,51 @@ public class LocatorSearchSource: ObservableObject, SearchSourceProtocol {
                                                        parameters: geocodeParameters
         )
         
-        //convert to SearchResults
+        // Convert to SearchResults and return.
         return geocodeResults.map{ $0.toSearchResult(searchSource: self) }
     }
     
-    public func search(_ searchSuggestion: SearchSuggestion, area: Geometry? = nil) async throws -> [SearchResult] {
+    public func search(_ searchSuggestion: SearchSuggestion) async throws -> [SearchResult] {
         guard let suggestResult = searchSuggestion.suggestResult else { return [] }
-
-        geocodeParameters.searchArea = (area != nil) ? area : searchArea
-        geocodeParameters.preferredSearchLocation = preferredSearchLocation
-
+        
+        geocodeParameters.searchArea = nil
+        geocodeParameters.preferredSearchLocation = nil
+        if preferredSearchLocation == nil,
+           let area = searchArea {
+            if let point = searchArea as? Point {
+                geocodeParameters.preferredSearchLocation = point
+                geocodeParameters.searchArea = nil
+            }
+            else if !area.extent.isEmpty {
+                geocodeParameters.preferredSearchLocation = area.extent.center
+                geocodeParameters.searchArea = nil
+            }
+        }
+        else if preferredSearchLocation != nil {
+            geocodeParameters.preferredSearchLocation = preferredSearchLocation
+        }
+        
         let geocodeResults = try await locator.geocode(suggestResult: suggestResult,
-                                                        parameters: geocodeParameters
+                                                       parameters: geocodeParameters
         )
+        
+        // Convert to SearchResults and return.
         return geocodeResults.map{ $0.toSearchResult(searchSource: self) }
     }
-
+    
     public func suggest(_ queryString: String) async throws -> [SearchSuggestion] {
+        //
+        // This differs from the .NET approach; .NET only uses the
+        // center of `searchArea` for the `geocodeParameters.preferredSearchLocation`.
+        //
         suggestParameters.searchArea = searchArea
         suggestParameters.preferredSearchLocation = preferredSearchLocation
-
-        let suggestResults =  try await locator.suggest(searchText: queryString,
-                                                        parameters: suggestParameters
+        
+        let geocodeResults = try await locator.suggest(
+            searchText: queryString,
+            parameters: suggestParameters
         )
-        //convert to SearchSuggestions
-        return suggestResults.map{ $0.toSearchSuggestion(searchSource: self) }
+        // Convert to SearchSuggestions and return.
+        return geocodeResults.map{ $0.toSearchSuggestion(searchSource: self) }
     }
 }

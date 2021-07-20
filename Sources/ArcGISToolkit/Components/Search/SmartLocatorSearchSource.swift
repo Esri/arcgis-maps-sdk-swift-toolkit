@@ -19,15 +19,19 @@ import ArcGIS
 /// underlying locator to be used well; this class implements behaviors that make assumptions about the
 /// locator being the world geocode service.
 public class SmartLocatorSearchSource: LocatorSearchSource {
-    public convenience init(displayName: String = "Search",
-                maximumSuggestions: Int,
-                searchArea: Geometry? = nil,
-                preferredSearchLocation: Point? = nil,
-                repeatSearchResultThreshold: Int = 1,
-                repeatSuggestResultThreshold: Int = 6,
-                resultSymbolStyle: SymbolStyle? = nil) {
+    public convenience init(
+        displayName: String = "Search",
+        maximumResults: Int = 6,
+        maximumSuggestions: Int,
+        searchArea: Geometry? = nil,
+        preferredSearchLocation: Point? = nil,
+        repeatSearchResultThreshold: Int = 1,
+        repeatSuggestResultThreshold: Int = 6,
+        resultSymbolStyle: SymbolStyle? = nil
+    ) {
         self.init()
         self.displayName = displayName
+        self.maximumResults = maximumResults
         self.maximumSuggestions = maximumSuggestions
         self.searchArea = searchArea
         self.preferredSearchLocation = preferredSearchLocation
@@ -60,15 +64,106 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
     /// returned by the locator.
     var resultSymbolStyle: SymbolStyle?
 
-    public override func search(_ queryString: String, area: Geometry?) async throws -> [SearchResult] {
-        return try await super.search(queryString, area: area)
+    public override func search(
+        _ queryString: String,
+        area: Geometry?
+    ) async throws -> [SearchResult] {
+        // First, peform super class search.
+        var results = try await super.search(queryString, area: area)
+        if results.count > repeatSearchResultThreshold ||
+           area == nil,
+           searchArea == nil,
+           preferredSearchLocation == nil {
+            // Result count meets threshold or there were no geographic
+            // constraints on the search, so return results.
+            return results
+        }
+        
+        // Remove geographic constraints and re-run search.
+        geocodeParameters.searchArea = nil
+        geocodeParameters.preferredSearchLocation = nil
+        let geocodeResults = try await locator.geocode(
+            searchText: queryString,
+            parameters: geocodeParameters
+        )
+        
+        // Union results and return.
+        let searchResults = geocodeResults.map{ $0.toSearchResult(searchSource: self) }
+        results.append(contentsOf: searchResults)
+        var allResults: [SearchResult] = Array(Set(results))
+
+        // Limit results to `maximumResults`.
+        if allResults.count > maximumResults {
+            let dropCount = allResults.count - maximumResults
+            allResults = allResults.dropLast(dropCount)
+        }
+        return allResults
     }
 
-    public override func search(_ searchSuggestion: SearchSuggestion, area: Geometry?) async throws -> [SearchResult] {
-        return try await super.search(searchSuggestion, area: area)
+    public override func search(
+        _ searchSuggestion: SearchSuggestion
+    ) async throws -> [SearchResult] {
+        guard let suggestResult = searchSuggestion.suggestResult else { return [] }
+
+        var results = try await super.search(searchSuggestion)
+        if results.count > repeatSearchResultThreshold ||
+           searchArea == nil,
+           preferredSearchLocation == nil {
+            // Result count meets threshold or there were no geographic
+            // constraints on the search, so return results.
+            return results
+        }
+
+        // Remove geographic constraints and re-run search.
+        geocodeParameters.searchArea = nil
+        geocodeParameters.preferredSearchLocation = nil
+        let geocodeResults = try await locator.geocode(suggestResult: suggestResult,
+                                                        parameters: geocodeParameters
+        )
+        
+        // Union results and return.
+        let searchResults = geocodeResults.map{ $0.toSearchResult(searchSource: self) }
+        results.append(contentsOf: searchResults)
+        var allResults: [SearchResult] = Array(Set(results))
+
+        // Limit results to `maximumResults`.
+        if allResults.count > maximumResults {
+            let dropCount = allResults.count - maximumResults
+            allResults = allResults.dropLast(dropCount)
+        }
+        return allResults
     }
     
-    public override func suggest(_ queryString: String) async throws -> [SearchSuggestion] {
-        return try await super.suggest(queryString)
+    public override func suggest(
+        _ queryString: String
+    ) async throws -> [SearchSuggestion] {
+        var results = try await super.suggest(queryString)
+        if results.count > repeatSuggestResultThreshold ||
+           searchArea == nil,
+           preferredSearchLocation == nil {
+            // Result count meets threshold or there were no geographic
+            // constraints on the search, so return results.
+            return results
+        }
+
+        // Remove geographic constraints and re-run search.
+        suggestParameters.searchArea = nil
+        suggestParameters.preferredSearchLocation = nil
+        let geocodeResults =  try await locator.suggest(
+            searchText: queryString,
+            parameters: suggestParameters
+        )
+        
+        // Union results and return.
+        let suggestResults = geocodeResults.map{ $0.toSearchSuggestion(searchSource: self) }
+        results.append(contentsOf: suggestResults)
+        var allResults: [SearchSuggestion] = Array(Set(results))
+
+        // Limit results to `maximumResults`.
+        if allResults.count > maximumSuggestions {
+            let dropCount = allResults.count - maximumSuggestions
+            allResults = allResults.dropLast(dropCount)
+        }
+        return allResults
     }
 }

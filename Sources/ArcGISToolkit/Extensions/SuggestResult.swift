@@ -19,6 +19,6 @@ extension SuggestResult {
                                 displaySubtitle: nil,
                                 owningSource: searchSource,
                                 suggestResult: self,
-                                isCollection: self.isCollection)
+                                isCollection: isCollection)
     }
 }

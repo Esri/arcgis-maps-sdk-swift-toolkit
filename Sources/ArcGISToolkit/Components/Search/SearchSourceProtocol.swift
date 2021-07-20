@@ -43,8 +43,10 @@ public protocol SearchSourceProtocol {
     ///   - queryString: Text to be used for query.
     ///   - area: Area to be used to constrain search results.
     /// - Returns: Array of `SearchResult`s
-    func search(_ queryString: String,
-                area: Geometry?) async throws -> [SearchResult]
+    func search(
+        _ queryString: String,
+        area: Geometry?
+    ) async throws -> [SearchResult]
     
     /// Gets search results. If `area` is not `nil`, search is restricted to that area. Otherwise, the
     /// `searchArea` property may be consulted but does not need to be used as a strict limit.
@@ -52,6 +54,7 @@ public protocol SearchSourceProtocol {
     ///   - searchSuggestion: Suggestion to be used as basis for search.
     ///   - area: Area to be used to constrain search results.
     /// - Returns: Array of `SearchResult`s
-    func search(_ searchSuggestion: SearchSuggestion,
-                area: Geometry?) async throws -> [SearchResult]
+    func search(
+        _ searchSuggestion: SearchSuggestion
+    ) async throws -> [SearchResult]
 }
