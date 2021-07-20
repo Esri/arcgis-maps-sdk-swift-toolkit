@@ -71,7 +71,7 @@ suggestions: Result<[SearchSuggestion]?, RuntimeError> = .success(nil)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The search area to be used for the current query. Ignored in most queries, unless the
-***REMOVED******REMOVED***/ `RestrictToArea` property is set to true when calling `commitSearch`. This property
+***REMOVED******REMOVED***/ `restrictToArea` property is set to true when calling `commitSearch`. This property
 ***REMOVED******REMOVED***/ should be updated as the user navigates the map/scene, or at minimum before calling `commitSearch`.
 ***REMOVED***public var queryArea: Geometry? {
 ***REMOVED******REMOVED***didSet {
@@ -136,8 +136,9 @@ suggestions: Result<[SearchSuggestion]?, RuntimeError> = .success(nil)
 ***REMOVED******REMOVED******REMOVED***searchSource.preferredSearchLocation = queryCenter
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***let searchResult = await Result {
-***REMOVED******REMOVED******REMOVED******REMOVED***try await searchSource.search(currentQuery,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  area: restrictToArea ? queryArea : nil
+***REMOVED******REMOVED******REMOVED******REMOVED***try await searchSource.search(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentQuery,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***area: restrictToArea ? queryArea : nil
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***switch searchResult {
@@ -198,7 +199,7 @@ suggestions: Result<[SearchSuggestion]?, RuntimeError> = .success(nil)
 
 ***REMOVED******REMOVED***var searchResults = [SearchResult]()
 ***REMOVED******REMOVED***let searchResult = await Result {
-***REMOVED******REMOVED******REMOVED***try await searchSuggestion.owningSource.search(searchSuggestion, area: nil)
+***REMOVED******REMOVED******REMOVED***try await searchSuggestion.owningSource.search(searchSuggestion)
 ***REMOVED***
 ***REMOVED******REMOVED***switch searchResult {
 ***REMOVED******REMOVED***case .success(let results):

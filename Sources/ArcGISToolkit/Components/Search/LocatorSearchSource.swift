@@ -60,8 +60,13 @@ public class LocatorSearchSource: ObservableObject, SearchSourceProtocol {
 ***REMOVED***public var searchArea: Geometry?
 ***REMOVED***
 ***REMOVED***public var preferredSearchLocation: Point?
-
+***REMOVED***
 ***REMOVED***public func search(_ queryString: String, area: Geometry? = nil) async throws -> [SearchResult] {
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** This differs from the .NET approach; .NET only uses the
+***REMOVED******REMOVED******REMOVED*** center of `searchArea` for the `geocodeParameters.preferredSearchLocation`
+***REMOVED******REMOVED******REMOVED*** and only sets `geocodeParameters.searchArea` from the `area` argument.
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***geocodeParameters.searchArea = (area != nil) ? area : searchArea
 ***REMOVED******REMOVED***geocodeParameters.preferredSearchLocation = preferredSearchLocation
 ***REMOVED******REMOVED***
@@ -69,30 +74,51 @@ public class LocatorSearchSource: ObservableObject, SearchSourceProtocol {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***   parameters: geocodeParameters
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***convert to SearchResults
+***REMOVED******REMOVED******REMOVED*** Convert to SearchResults and return.
 ***REMOVED******REMOVED***return geocodeResults.map{ $0.toSearchResult(searchSource: self) ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED***public func search(_ searchSuggestion: SearchSuggestion, area: Geometry? = nil) async throws -> [SearchResult] {
+***REMOVED***public func search(_ searchSuggestion: SearchSuggestion) async throws -> [SearchResult] {
 ***REMOVED******REMOVED***guard let suggestResult = searchSuggestion.suggestResult else { return [] ***REMOVED***
-
-***REMOVED******REMOVED***geocodeParameters.searchArea = (area != nil) ? area : searchArea
-***REMOVED******REMOVED***geocodeParameters.preferredSearchLocation = preferredSearchLocation
-
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***geocodeParameters.searchArea = nil
+***REMOVED******REMOVED***geocodeParameters.preferredSearchLocation = nil
+***REMOVED******REMOVED***if preferredSearchLocation == nil,
+***REMOVED******REMOVED***   let area = searchArea {
+***REMOVED******REMOVED******REMOVED***if let point = searchArea as? Point {
+***REMOVED******REMOVED******REMOVED******REMOVED***geocodeParameters.preferredSearchLocation = point
+***REMOVED******REMOVED******REMOVED******REMOVED***geocodeParameters.searchArea = nil
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***else if !area.extent.isEmpty {
+***REMOVED******REMOVED******REMOVED******REMOVED***geocodeParameters.preferredSearchLocation = area.extent.center
+***REMOVED******REMOVED******REMOVED******REMOVED***geocodeParameters.searchArea = nil
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***else if preferredSearchLocation != nil {
+***REMOVED******REMOVED******REMOVED***geocodeParameters.preferredSearchLocation = preferredSearchLocation
+***REMOVED***
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let geocodeResults = try await locator.geocode(suggestResult: suggestResult,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***parameters: geocodeParameters
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***   parameters: geocodeParameters
 ***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Convert to SearchResults and return.
 ***REMOVED******REMOVED***return geocodeResults.map{ $0.toSearchResult(searchSource: self) ***REMOVED***
 ***REMOVED***
-
+***REMOVED***
 ***REMOVED***public func suggest(_ queryString: String) async throws -> [SearchSuggestion] {
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** This differs from the .NET approach; .NET only uses the
+***REMOVED******REMOVED******REMOVED*** center of `searchArea` for the `geocodeParameters.preferredSearchLocation`.
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***suggestParameters.searchArea = searchArea
 ***REMOVED******REMOVED***suggestParameters.preferredSearchLocation = preferredSearchLocation
-
-***REMOVED******REMOVED***let suggestResults =  try await locator.suggest(searchText: queryString,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***parameters: suggestParameters
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let geocodeResults = try await locator.suggest(
+***REMOVED******REMOVED******REMOVED***searchText: queryString,
+***REMOVED******REMOVED******REMOVED***parameters: suggestParameters
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***convert to SearchSuggestions
-***REMOVED******REMOVED***return suggestResults.map{ $0.toSearchSuggestion(searchSource: self) ***REMOVED***
+***REMOVED******REMOVED******REMOVED*** Convert to SearchSuggestions and return.
+***REMOVED******REMOVED***return geocodeResults.map{ $0.toSearchSuggestion(searchSource: self) ***REMOVED***
 ***REMOVED***
 ***REMOVED***

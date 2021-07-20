@@ -43,8 +43,10 @@ public protocol SearchSourceProtocol {
 ***REMOVED******REMOVED***/   - queryString: Text to be used for query.
 ***REMOVED******REMOVED***/   - area: Area to be used to constrain search results.
 ***REMOVED******REMOVED***/ - Returns: Array of `SearchResult`s
-***REMOVED***func search(_ queryString: String,
-***REMOVED******REMOVED******REMOVED******REMOVED***area: Geometry?) async throws -> [SearchResult]
+***REMOVED***func search(
+***REMOVED******REMOVED***_ queryString: String,
+***REMOVED******REMOVED***area: Geometry?
+***REMOVED***) async throws -> [SearchResult]
 ***REMOVED***
 ***REMOVED******REMOVED***/ Gets search results. If `area` is not `nil`, search is restricted to that area. Otherwise, the
 ***REMOVED******REMOVED***/ `searchArea` property may be consulted but does not need to be used as a strict limit.
@@ -52,6 +54,7 @@ public protocol SearchSourceProtocol {
 ***REMOVED******REMOVED***/   - searchSuggestion: Suggestion to be used as basis for search.
 ***REMOVED******REMOVED***/   - area: Area to be used to constrain search results.
 ***REMOVED******REMOVED***/ - Returns: Array of `SearchResult`s
-***REMOVED***func search(_ searchSuggestion: SearchSuggestion,
-***REMOVED******REMOVED******REMOVED******REMOVED***area: Geometry?) async throws -> [SearchResult]
+***REMOVED***func search(
+***REMOVED******REMOVED***_ searchSuggestion: SearchSuggestion
+***REMOVED***) async throws -> [SearchResult]
 ***REMOVED***

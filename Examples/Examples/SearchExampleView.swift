@@ -19,7 +19,7 @@ import Combine
 struct SearchExampleView: View {
 ***REMOVED***@ObservedObject
 ***REMOVED***var searchViewModel = SearchViewModel(
-***REMOVED******REMOVED***sources: [LocatorSearchSource(
+***REMOVED******REMOVED***sources: [SmartLocatorSearchSource(
 ***REMOVED******REMOVED******REMOVED***displayName: "Locator One",
 ***REMOVED******REMOVED******REMOVED***maximumResults: 16,
 ***REMOVED******REMOVED******REMOVED***maximumSuggestions: 16)]/*,

@@ -66,3 +66,13 @@ extension SearchResult: Equatable {
 ***REMOVED******REMOVED***lhs === rhs
 ***REMOVED***
 ***REMOVED***
+
+extension SearchResult: Hashable {
+***REMOVED***public func hash(into hasher: inout Hasher) {
+***REMOVED******REMOVED***hasher.combine(displayTitle)
+***REMOVED******REMOVED***hasher.combine(displaySubtitle)
+***REMOVED******REMOVED***if let geometry = geoElement?.geometry {
+***REMOVED******REMOVED******REMOVED***hasher.combine(geometry)
+***REMOVED***
+***REMOVED***
+***REMOVED***
