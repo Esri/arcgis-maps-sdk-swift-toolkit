@@ -71,7 +71,7 @@ suggestions: Result<[SearchSuggestion]?, RuntimeError> = .success(nil)
     }
     
     /// The search area to be used for the current query. Ignored in most queries, unless the
-    /// `RestrictToArea` property is set to true when calling `commitSearch`. This property
+    /// `restrictToArea` property is set to true when calling `commitSearch`. This property
     /// should be updated as the user navigates the map/scene, or at minimum before calling `commitSearch`.
     public var queryArea: Geometry? {
         didSet {
@@ -136,8 +136,9 @@ suggestions: Result<[SearchSuggestion]?, RuntimeError> = .success(nil)
             searchSource.preferredSearchLocation = queryCenter
             
             let searchResult = await Result {
-                try await searchSource.search(currentQuery,
-                                              area: restrictToArea ? queryArea : nil
+                try await searchSource.search(
+                    currentQuery,
+                    area: restrictToArea ? queryArea : nil
                 )
             }
             switch searchResult {
@@ -198,7 +199,7 @@ suggestions: Result<[SearchSuggestion]?, RuntimeError> = .success(nil)
 
         var searchResults = [SearchResult]()
         let searchResult = await Result {
-            try await searchSuggestion.owningSource.search(searchSuggestion, area: nil)
+            try await searchSuggestion.owningSource.search(searchSuggestion)
         }
         switch searchResult {
         case .success(let results):

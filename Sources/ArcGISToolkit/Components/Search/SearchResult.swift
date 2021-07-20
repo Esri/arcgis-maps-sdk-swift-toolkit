@@ -66,3 +66,13 @@ extension SearchResult: Equatable {
         lhs === rhs
     }
 }
+
+extension SearchResult: Hashable {
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(displayTitle)
+        hasher.combine(displaySubtitle)
+        if let geometry = geoElement?.geometry {
+            hasher.combine(geometry)
+        }
+    }
+}

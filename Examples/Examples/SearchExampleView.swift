@@ -19,7 +19,7 @@ import ArcGISToolkit
 struct SearchExampleView: View {
     @ObservedObject
     var searchViewModel = SearchViewModel(
-        sources: [LocatorSearchSource(
+        sources: [SmartLocatorSearchSource(
             displayName: "Locator One",
             maximumResults: 16,
             maximumSuggestions: 16)]/*,
