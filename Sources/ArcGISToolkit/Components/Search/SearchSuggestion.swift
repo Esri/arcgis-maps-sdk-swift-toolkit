@@ -55,6 +55,27 @@ extension SearchSuggestion: Identifiable {
 
 extension SearchSuggestion: Equatable {
 ***REMOVED***public static func == (lhs: SearchSuggestion, rhs: SearchSuggestion) -> Bool {
-***REMOVED******REMOVED***lhs === rhs
+***REMOVED******REMOVED***lhs.hashValue == rhs.hashValue
+***REMOVED***
+***REMOVED***
+
+extension SearchSuggestion: Hashable {
+***REMOVED******REMOVED***/ Note:  we're not hashing `suggestResult` as `SearchSuggestion` is created from
+***REMOVED******REMOVED***/ a `SuggestResult` and `suggestResult` will be different for two sepate geocode
+***REMOVED******REMOVED***/ operations even though they represent the same suggestion.
+***REMOVED***public func hash(into hasher: inout Hasher) {
+***REMOVED******REMOVED***hasher.combine(displayTitle)
+***REMOVED******REMOVED***hasher.combine(displaySubtitle)
+***REMOVED******REMOVED***hasher.combine(isCollection)
+
+***REMOVED******REMOVED***if let locatorSource = owningSource as? LocatorSearchSource {
+***REMOVED******REMOVED******REMOVED***hasher.combine(ObjectIdentifier(locatorSource))
+***REMOVED***
+***REMOVED******REMOVED******REMOVED*** If you define a custom type that does NOT inherit from
+***REMOVED******REMOVED******REMOVED*** `LocatorSearchSource`, you will need to add an `else if` check
+***REMOVED******REMOVED******REMOVED*** for your custom type.
+***REMOVED******REMOVED******REMOVED***else if let customSearchSource = owningSource as? MyCustomSearchSource {
+***REMOVED******REMOVED******REMOVED******REMOVED***hasher.combine(ObjectIdentifier(customSearchSource))
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***

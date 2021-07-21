@@ -63,16 +63,29 @@ extension SearchResult: Identifiable {
 
 extension SearchResult: Equatable {
 ***REMOVED***public static func == (lhs: SearchResult, rhs: SearchResult) -> Bool {
-***REMOVED******REMOVED***lhs === rhs
+***REMOVED******REMOVED***lhs.hashValue == rhs.hashValue
 ***REMOVED***
 ***REMOVED***
 
 extension SearchResult: Hashable {
+***REMOVED******REMOVED***/ Note:  we're not hashing `geoElement.attributes` as results with the same title,
+***REMOVED******REMOVED***/ subtitle, geometry, and owningSource are considered identical for searching purposes.
 ***REMOVED***public func hash(into hasher: inout Hasher) {
 ***REMOVED******REMOVED***hasher.combine(displayTitle)
 ***REMOVED******REMOVED***hasher.combine(displaySubtitle)
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***if let geometry = geoElement?.geometry {
 ***REMOVED******REMOVED******REMOVED***hasher.combine(geometry)
 ***REMOVED***
+
+***REMOVED******REMOVED***if let locatorSource = owningSource as? LocatorSearchSource {
+***REMOVED******REMOVED******REMOVED***hasher.combine(ObjectIdentifier(locatorSource))
+***REMOVED***
+***REMOVED******REMOVED******REMOVED*** If you define a custom type that does NOT inherit from
+***REMOVED******REMOVED******REMOVED*** `LocatorSearchSource`, you will need to add an `else if` check
+***REMOVED******REMOVED******REMOVED*** for your custom type.
+***REMOVED******REMOVED******REMOVED***else if let customSearchSource = owningSource as? MyCustomSearchSource {
+***REMOVED******REMOVED******REMOVED******REMOVED***hasher.combine(ObjectIdentifier(customSearchSource))
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
