@@ -55,6 +55,27 @@ extension SearchSuggestion: Identifiable {
 
 extension SearchSuggestion: Equatable {
     public static func == (lhs: SearchSuggestion, rhs: SearchSuggestion) -> Bool {
-        lhs === rhs
+        lhs.hashValue == rhs.hashValue
+    }
+}
+
+extension SearchSuggestion: Hashable {
+    /// Note:  we're not hashing `suggestResult` as `SearchSuggestion` is created from
+    /// a `SuggestResult` and `suggestResult` will be different for two sepate geocode
+    /// operations even though they represent the same suggestion.
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(displayTitle)
+        hasher.combine(displaySubtitle)
+        hasher.combine(isCollection)
+
+        if let locatorSource = owningSource as? LocatorSearchSource {
+            hasher.combine(ObjectIdentifier(locatorSource))
+        }
+        // If you define a custom type that does NOT inherit from
+        // `LocatorSearchSource`, you will need to add an `else if` check
+        // for your custom type.
+//        else if let customSearchSource = owningSource as? MyCustomSearchSource {
+//            hasher.combine(ObjectIdentifier(customSearchSource))
+//        }
     }
 }

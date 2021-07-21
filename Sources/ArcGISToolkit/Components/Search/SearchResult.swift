@@ -63,16 +63,29 @@ extension SearchResult: Identifiable {
 
 extension SearchResult: Equatable {
     public static func == (lhs: SearchResult, rhs: SearchResult) -> Bool {
-        lhs === rhs
+        lhs.hashValue == rhs.hashValue
     }
 }
 
 extension SearchResult: Hashable {
+    /// Note:  we're not hashing `geoElement.attributes` as results with the same title,
+    /// subtitle, geometry, and owningSource are considered identical for searching purposes.
     public func hash(into hasher: inout Hasher) {
         hasher.combine(displayTitle)
         hasher.combine(displaySubtitle)
+        
         if let geometry = geoElement?.geometry {
             hasher.combine(geometry)
         }
+
+        if let locatorSource = owningSource as? LocatorSearchSource {
+            hasher.combine(ObjectIdentifier(locatorSource))
+        }
+        // If you define a custom type that does NOT inherit from
+        // `LocatorSearchSource`, you will need to add an `else if` check
+        // for your custom type.
+//        else if let customSearchSource = owningSource as? MyCustomSearchSource {
+//            hasher.combine(ObjectIdentifier(customSearchSource))
+//        }
     }
 }
