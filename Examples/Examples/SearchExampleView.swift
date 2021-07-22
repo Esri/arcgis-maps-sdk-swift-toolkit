@@ -44,6 +44,13 @@ struct SearchExampleView: View {
         )
             .onViewpointChanged(kind: .centerAndScale) {
                 searchViewModel.queryCenter = $0.targetGeometry as? Point
+                
+                // Reset `searchResultViewpoint` here when the user pans/zooms
+                // the map, so if the user commits the same search with the
+                // same result, the Map will pan/zoom to the result.  Otherwise
+                // `searchResultViewpoint` doesn't change which doesn't
+                // redraw the map with the new viewpoint.
+                searchResultViewpoint = nil
             }
             .onVisibleAreaChanged {
                 searchViewModel.queryArea = $0
@@ -62,23 +69,19 @@ struct SearchExampleView: View {
             },
                 alignment: .topTrailing
             )
-            .onChange(of: searchViewModel.results, perform: { searchResults in
-                display(searchResults: searchResults)
+            .onChange(of: searchViewModel.results, perform: { newValue in
+                display(searchResults: newValue)
             })
-            .onChange(of: searchViewModel.selectedResult, perform: { _ in
-                display(selectedResult: searchViewModel.selectedResult)
+            .onChange(of: searchViewModel.selectedResult, perform: { newValue in
+                display(selectedResult: newValue)
             })
     }
     
     fileprivate func display(searchResults: Result<[SearchResult]?, RuntimeError>) {
-        let searchResultEnvelopeBuilder = EnvelopeBuilder(spatialReference: .wgs84)
         switch searchResults {
         case .success(let results):
             var resultGraphics = [Graphic]()
             results?.forEach({ result in
-                if let extent = result.selectionViewpoint?.targetGeometry as? Envelope {
-                    searchResultEnvelopeBuilder.union(envelope: extent)
-                }
                 let graphic = Graphic(geometry: result.geoElement?.geometry,
                                       symbol: .resultSymbol)
                 resultGraphics.append(graphic)
@@ -89,8 +92,13 @@ struct SearchExampleView: View {
             searchResultsOverlay.addGraphics(resultGraphics)
             
             if resultGraphics.count > 0,
-               let envelope = searchResultEnvelopeBuilder.toGeometry() as? Envelope {
-                searchResultViewpoint = Viewpoint(targetExtent: envelope)
+               let envelope = searchResultsOverlay.extent {
+                let builder = EnvelopeBuilder(envelope: envelope)
+                builder.expand(factor: 1.1)
+                searchResultViewpoint = Viewpoint(targetExtent: builder.toGeometry())
+            }
+            else {
+                searchResultViewpoint = nil
             }
         case .failure(_):
             break

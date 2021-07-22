@@ -57,6 +57,7 @@ public struct SearchView: View {
     // TODO: continue fleshing out SearchViewModel and LocatorSearchSource/SmartSearchSource
     // TODO: following Nathan's lead on all this stuff, i.e., go through his code and duplicate it as I go.
     // TODO: better modifiers for search text field; maybe SearchTextField or something...
+    // TODO: Get proper pins for example app. - How to use SF font with PictureMarkerSymbol?? How to tint calcite icons/images.
     public var body: some View {
         VStack (alignment: .center) {
             TextField(searchViewModel.defaultPlaceHolder,
@@ -158,8 +159,6 @@ public struct SearchView: View {
     }
 }
 
-// TODO: get currentResult working in Example.
-
 // TODO: look at consolidating SearchResultView and SearchSuggestionView with
 // TODO: new SearchDisplayProtocol containing only displayTitle and displaySubtitle
 // TODO: That would mean we only needed one of these.
@@ -204,8 +203,10 @@ struct SearchResultList: View {
                         Text(noResultMessage)
                     }
                 }
-            case .failure(_):
-                EmptyView()
+            case .failure(let error):
+                List {
+                    Text(error.localizedDescription)
+                }
             }
         }
         .esriBorder()
@@ -251,8 +252,10 @@ struct SearchSuggestionList: View {
                         Text(noResultMessage)
                     }
                 }
-            case .failure(_):
-                EmptyView()
+            case .failure(let error):
+                List {
+                    Text(error.localizedDescription)
+                }
             }
         }
         .esriBorder()
