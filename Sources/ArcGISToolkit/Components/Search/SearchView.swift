@@ -57,6 +57,7 @@ public struct SearchView: View {
 ***REMOVED******REMOVED*** TODO: continue fleshing out SearchViewModel and LocatorSearchSource/SmartSearchSource
 ***REMOVED******REMOVED*** TODO: following Nathan's lead on all this stuff, i.e., go through his code and duplicate it as I go.
 ***REMOVED******REMOVED*** TODO: better modifiers for search text field; maybe SearchTextField or something...
+***REMOVED******REMOVED*** TODO: Get proper pins for example app. - How to use SF font with PictureMarkerSymbol?? How to tint calcite icons/images.
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***VStack (alignment: .center) {
 ***REMOVED******REMOVED******REMOVED***TextField(searchViewModel.defaultPlaceHolder,
@@ -158,8 +159,6 @@ public struct SearchView: View {
 ***REMOVED***
 ***REMOVED***
 
-***REMOVED*** TODO: get currentResult working in Example.
-
 ***REMOVED*** TODO: look at consolidating SearchResultView and SearchSuggestionView with
 ***REMOVED*** TODO: new SearchDisplayProtocol containing only displayTitle and displaySubtitle
 ***REMOVED*** TODO: That would mean we only needed one of these.
@@ -204,8 +203,10 @@ struct SearchResultList: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(noResultMessage)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***case .failure(_):
-***REMOVED******REMOVED******REMOVED******REMOVED***EmptyView()
+***REMOVED******REMOVED******REMOVED***case .failure(let error):
+***REMOVED******REMOVED******REMOVED******REMOVED***List {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(error.localizedDescription)
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.esriBorder()
@@ -251,8 +252,10 @@ struct SearchSuggestionList: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(noResultMessage)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***case .failure(_):
-***REMOVED******REMOVED******REMOVED******REMOVED***EmptyView()
+***REMOVED******REMOVED******REMOVED***case .failure(let error):
+***REMOVED******REMOVED******REMOVED******REMOVED***List {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(error.localizedDescription)
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.esriBorder()

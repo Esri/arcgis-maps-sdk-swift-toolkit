@@ -44,6 +44,13 @@ struct SearchExampleView: View {
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***.onViewpointChanged(kind: .centerAndScale) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***searchViewModel.queryCenter = $0.targetGeometry as? Point
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Reset `searchResultViewpoint` here when the user pans/zooms
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** the map, so if the user commits the same search with the
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** same result, the Map will pan/zoom to the result.  Otherwise
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** `searchResultViewpoint` doesn't change which doesn't
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** redraw the map with the new viewpoint.
+***REMOVED******REMOVED******REMOVED******REMOVED***searchResultViewpoint = nil
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onVisibleAreaChanged {
 ***REMOVED******REMOVED******REMOVED******REMOVED***searchViewModel.queryArea = $0
@@ -62,23 +69,19 @@ struct SearchExampleView: View {
 ***REMOVED******REMOVED***,
 ***REMOVED******REMOVED******REMOVED******REMOVED***alignment: .topTrailing
 ***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***.onChange(of: searchViewModel.results, perform: { searchResults in
-***REMOVED******REMOVED******REMOVED******REMOVED***display(searchResults: searchResults)
+***REMOVED******REMOVED******REMOVED***.onChange(of: searchViewModel.results, perform: { newValue in
+***REMOVED******REMOVED******REMOVED******REMOVED***display(searchResults: newValue)
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***.onChange(of: searchViewModel.selectedResult, perform: { _ in
-***REMOVED******REMOVED******REMOVED******REMOVED***display(selectedResult: searchViewModel.selectedResult)
+***REMOVED******REMOVED******REMOVED***.onChange(of: searchViewModel.selectedResult, perform: { newValue in
+***REMOVED******REMOVED******REMOVED******REMOVED***display(selectedResult: newValue)
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***fileprivate func display(searchResults: Result<[SearchResult]?, RuntimeError>) {
-***REMOVED******REMOVED***let searchResultEnvelopeBuilder = EnvelopeBuilder(spatialReference: .wgs84)
 ***REMOVED******REMOVED***switch searchResults {
 ***REMOVED******REMOVED***case .success(let results):
 ***REMOVED******REMOVED******REMOVED***var resultGraphics = [Graphic]()
 ***REMOVED******REMOVED******REMOVED***results?.forEach({ result in
-***REMOVED******REMOVED******REMOVED******REMOVED***if let extent = result.selectionViewpoint?.targetGeometry as? Envelope {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***searchResultEnvelopeBuilder.union(envelope: extent)
-***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***let graphic = Graphic(geometry: result.geoElement?.geometry,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  symbol: .resultSymbol)
 ***REMOVED******REMOVED******REMOVED******REMOVED***resultGraphics.append(graphic)
@@ -89,8 +92,13 @@ struct SearchExampleView: View {
 ***REMOVED******REMOVED******REMOVED***searchResultsOverlay.addGraphics(resultGraphics)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***if resultGraphics.count > 0,
-***REMOVED******REMOVED******REMOVED***   let envelope = searchResultEnvelopeBuilder.toGeometry() as? Envelope {
-***REMOVED******REMOVED******REMOVED******REMOVED***searchResultViewpoint = Viewpoint(targetExtent: envelope)
+***REMOVED******REMOVED******REMOVED***   let envelope = searchResultsOverlay.extent {
+***REMOVED******REMOVED******REMOVED******REMOVED***let builder = EnvelopeBuilder(envelope: envelope)
+***REMOVED******REMOVED******REMOVED******REMOVED***builder.expand(factor: 1.1)
+***REMOVED******REMOVED******REMOVED******REMOVED***searchResultViewpoint = Viewpoint(targetExtent: builder.toGeometry())
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***else {
+***REMOVED******REMOVED******REMOVED******REMOVED***searchResultViewpoint = nil
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***case .failure(_):
 ***REMOVED******REMOVED******REMOVED***break
