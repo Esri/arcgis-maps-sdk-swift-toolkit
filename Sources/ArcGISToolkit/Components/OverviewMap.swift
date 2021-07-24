@@ -90,7 +90,7 @@ public struct OverviewMap: View {
             viewpoint: makeOverviewViewpoint(),
             graphicsOverlays: [graphicsOverlay]
         )
-            .attributionTextHidden()
+            .attributionText(hidden: true)
             .interactionModes([])
             .border(.black, width: 1)
             .onAppear(perform: {
