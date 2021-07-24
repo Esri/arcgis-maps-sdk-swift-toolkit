@@ -90,7 +90,7 @@ public struct OverviewMap: View {
 ***REMOVED******REMOVED******REMOVED***viewpoint: makeOverviewViewpoint(),
 ***REMOVED******REMOVED******REMOVED***graphicsOverlays: [graphicsOverlay]
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***.attributionTextHidden()
+***REMOVED******REMOVED******REMOVED***.attributionText(hidden: true)
 ***REMOVED******REMOVED******REMOVED***.interactionModes([])
 ***REMOVED******REMOVED******REMOVED***.border(.black, width: 1)
 ***REMOVED******REMOVED******REMOVED***.onAppear(perform: {
