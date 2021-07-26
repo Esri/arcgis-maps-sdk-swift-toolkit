@@ -98,7 +98,7 @@ public struct SearchView: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.task(id: commitSearch) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** User committed changes (hit Enter/Search button)
-***REMOVED******REMOVED******REMOVED******REMOVED***await searchViewModel.commitSearch(true)
+***REMOVED******REMOVED******REMOVED******REMOVED***await searchViewModel.commitSearch(false)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.task(id: currentSuggestion) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** User committed changes (hit Enter/Search button)

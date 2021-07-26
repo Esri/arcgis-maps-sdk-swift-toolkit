@@ -12,8 +12,13 @@
 ***REMOVED*** limitations under the License.
 
 extension Result where Failure == Error {
-***REMOVED***init(awaiting task: () async throws -> Success) async {
-***REMOVED******REMOVED***do { self = .success(try await task()) ***REMOVED***
-***REMOVED******REMOVED***catch { self = .failure(error) ***REMOVED***
+***REMOVED***init?(awaiting task: () async throws -> Success) async {
+***REMOVED******REMOVED***do {
+***REMOVED******REMOVED******REMOVED***self = .success(try await task())
+***REMOVED*** catch is CancellationError {
+***REMOVED******REMOVED******REMOVED***return nil
+***REMOVED*** catch {
+***REMOVED******REMOVED******REMOVED***self = .failure(error)
+***REMOVED***
 ***REMOVED***
 ***REMOVED***

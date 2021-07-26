@@ -28,7 +28,8 @@ public enum SearchResultMode {
 
 ***REMOVED***/ Performs searches and manages search state for a Search, or optionally without a UI connection.
 public class SearchViewModel: ObservableObject {
-***REMOVED***public convenience init(defaultPlaceHolder: String = "Find a place or address",
+***REMOVED***public convenience init(
+defaultPlaceHolder: String = "Find a place or address",
 activeSource: SearchSourceProtocol? = nil,
 queryArea: Geometry? = nil,
 queryCenter: Point? = nil,
@@ -146,10 +147,15 @@ suggestions: Result<[SearchSuggestion]?, RuntimeError> = .success(nil)
 ***REMOVED******REMOVED******REMOVED******REMOVED***searchResults.append(contentsOf: results)
 ***REMOVED******REMOVED******REMOVED***case .failure(let error):
 ***REMOVED******REMOVED******REMOVED******REMOVED***print("\(searchSource.displayName) encountered an error: \(error.localizedDescription)")
+***REMOVED******REMOVED******REMOVED***case .none:
+***REMOVED******REMOVED******REMOVED******REMOVED***break
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***suggestions = .success(nil)
 ***REMOVED******REMOVED***results = .success(searchResults)
+***REMOVED******REMOVED***if searchResults.count == 1 {
+***REMOVED******REMOVED******REMOVED***selectedResult = searchResults.first
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Updates suggestions list asynchronously. View should take care to cancel previous suggestion
@@ -174,6 +180,8 @@ suggestions: Result<[SearchSuggestion]?, RuntimeError> = .success(nil)
 ***REMOVED******REMOVED******REMOVED******REMOVED***suggestionResults.append(contentsOf: results)
 ***REMOVED******REMOVED******REMOVED***case .failure(let error):
 ***REMOVED******REMOVED******REMOVED******REMOVED***print("\(searchSource.displayName) encountered an error: \(error.localizedDescription)")
+***REMOVED******REMOVED******REMOVED***case .none:
+***REMOVED******REMOVED******REMOVED******REMOVED***break
 ***REMOVED******REMOVED***
 ***REMOVED***
 
@@ -224,9 +232,14 @@ suggestions: Result<[SearchSuggestion]?, RuntimeError> = .success(nil)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***case .failure(let error):
 ***REMOVED******REMOVED******REMOVED***print("\(searchSuggestion.owningSource.displayName) encountered an error: \(error.localizedDescription)")
+***REMOVED******REMOVED***case .none:
+***REMOVED******REMOVED******REMOVED***break
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***results = .success(searchResults)
+***REMOVED******REMOVED***if searchResults.count == 1 {
+***REMOVED******REMOVED******REMOVED***selectedResult = searchResults.first
+***REMOVED***
 ***REMOVED******REMOVED***suggestions = .success(nil)
 ***REMOVED***
 ***REMOVED***
