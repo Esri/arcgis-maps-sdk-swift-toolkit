@@ -71,9 +71,8 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
         // First, peform super class search.
         var results = try await super.search(queryString, area: area)
         if results.count > repeatSearchResultThreshold ||
-           area == nil,
-           searchArea == nil,
-           preferredSearchLocation == nil {
+            area != nil ||
+            geocodeParameters.searchArea == nil {
             // Result count meets threshold or there were no geographic
             // constraints on the search, so return results.
             return results
@@ -81,7 +80,6 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
         
         // Remove geographic constraints and re-run search.
         geocodeParameters.searchArea = nil
-        geocodeParameters.preferredSearchLocation = nil
         let geocodeResults = try await locator.geocode(
             searchText: queryString,
             parameters: geocodeParameters
@@ -107,8 +105,7 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
 
         var results = try await super.search(searchSuggestion)
         if results.count > repeatSearchResultThreshold ||
-           searchArea == nil,
-           preferredSearchLocation == nil {
+            geocodeParameters.searchArea == nil {
             // Result count meets threshold or there were no geographic
             // constraints on the search, so return results.
             return results
@@ -116,7 +113,6 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
 
         // Remove geographic constraints and re-run search.
         geocodeParameters.searchArea = nil
-        geocodeParameters.preferredSearchLocation = nil
         let geocodeResults = try await locator.geocode(suggestResult: suggestResult,
                                                         parameters: geocodeParameters
         )
@@ -139,8 +135,7 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
     ) async throws -> [SearchSuggestion] {
         var results = try await super.suggest(queryString)
         if results.count > repeatSuggestResultThreshold ||
-           searchArea == nil,
-           preferredSearchLocation == nil {
+            suggestParameters.searchArea == nil {
             // Result count meets threshold or there were no geographic
             // constraints on the search, so return results.
             return results
@@ -148,7 +143,6 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
 
         // Remove geographic constraints and re-run search.
         suggestParameters.searchArea = nil
-        suggestParameters.preferredSearchLocation = nil
         let geocodeResults =  try await locator.suggest(
             searchText: queryString,
             parameters: suggestParameters

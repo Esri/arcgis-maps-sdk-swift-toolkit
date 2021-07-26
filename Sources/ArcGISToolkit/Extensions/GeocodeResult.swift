@@ -16,7 +16,7 @@ import ArcGIS
 extension GeocodeResult {
     func toSearchResult(searchSource: SearchSourceProtocol) -> SearchResult {
         let subtitle = self.attributes["LongLabel"] as? String ??
-        "Match percent: \((self.score).formatted(.percent))"
+        "Match percent: \((self.score / 100.0).formatted(.percent))"
         var viewpoint: Viewpoint? = nil
         if let extent = self.extent {
             viewpoint = Viewpoint(targetExtent: extent)
