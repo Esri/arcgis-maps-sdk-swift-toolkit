@@ -98,7 +98,7 @@ public struct SearchView: View {
             }
             .task(id: commitSearch) {
                 // User committed changes (hit Enter/Search button)
-                await searchViewModel.commitSearch(true)
+                await searchViewModel.commitSearch(false)
             }
             .task(id: currentSuggestion) {
                 // User committed changes (hit Enter/Search button)
