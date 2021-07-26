@@ -16,7 +16,7 @@
 extension GeocodeResult {
 ***REMOVED***func toSearchResult(searchSource: SearchSourceProtocol) -> SearchResult {
 ***REMOVED******REMOVED***let subtitle = self.attributes["LongLabel"] as? String ??
-***REMOVED******REMOVED***"Match percent: \((self.score).formatted(.percent))"
+***REMOVED******REMOVED***"Match percent: \((self.score / 100.0).formatted(.percent))"
 ***REMOVED******REMOVED***var viewpoint: Viewpoint? = nil
 ***REMOVED******REMOVED***if let extent = self.extent {
 ***REMOVED******REMOVED******REMOVED***viewpoint = Viewpoint(targetExtent: extent)
