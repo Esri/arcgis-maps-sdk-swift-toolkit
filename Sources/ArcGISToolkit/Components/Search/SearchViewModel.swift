@@ -28,7 +28,8 @@ public enum SearchResultMode {
 
 /// Performs searches and manages search state for a Search, or optionally without a UI connection.
 public class SearchViewModel: ObservableObject {
-    public convenience init(defaultPlaceHolder: String = "Find a place or address",
+    public convenience init(
+defaultPlaceHolder: String = "Find a place or address",
 activeSource: SearchSourceProtocol? = nil,
 queryArea: Geometry? = nil,
 queryCenter: Point? = nil,
@@ -146,10 +147,15 @@ suggestions: Result<[SearchSuggestion]?, RuntimeError> = .success(nil)
                 searchResults.append(contentsOf: results)
             case .failure(let error):
                 print("\(searchSource.displayName) encountered an error: \(error.localizedDescription)")
+            case .none:
+                break
             }
         }
         suggestions = .success(nil)
         results = .success(searchResults)
+        if searchResults.count == 1 {
+            selectedResult = searchResults.first
+        }
     }
     
     /// Updates suggestions list asynchronously. View should take care to cancel previous suggestion
@@ -174,6 +180,8 @@ suggestions: Result<[SearchSuggestion]?, RuntimeError> = .success(nil)
                 suggestionResults.append(contentsOf: results)
             case .failure(let error):
                 print("\(searchSource.displayName) encountered an error: \(error.localizedDescription)")
+            case .none:
+                break
             }
         }
 
@@ -224,9 +232,14 @@ suggestions: Result<[SearchSuggestion]?, RuntimeError> = .success(nil)
             }
         case .failure(let error):
             print("\(searchSuggestion.owningSource.displayName) encountered an error: \(error.localizedDescription)")
+        case .none:
+            break
         }
         
         results = .success(searchResults)
+        if searchResults.count == 1 {
+            selectedResult = searchResults.first
+        }
         suggestions = .success(nil)
     }
     

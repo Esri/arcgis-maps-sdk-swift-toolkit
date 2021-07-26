@@ -12,8 +12,13 @@
 // limitations under the License.
 
 extension Result where Failure == Error {
-    init(awaiting task: () async throws -> Success) async {
-        do { self = .success(try await task()) }
-        catch { self = .failure(error) }
+    init?(awaiting task: () async throws -> Success) async {
+        do {
+            self = .success(try await task())
+        } catch is CancellationError {
+            return nil
+        } catch {
+            self = .failure(error)
+        }
     }
 }
