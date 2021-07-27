@@ -34,9 +34,9 @@ activeSource: SearchSourceProtocol? = nil,
 queryArea: Geometry? = nil,
 queryCenter: Point? = nil,
 resultMode: SearchResultMode = .automatic,
-results: Result<[SearchResult]?, RuntimeError> = .success(nil),
+results: Result<[SearchResult]?, SearchError> = .success(nil),
 sources: [SearchSourceProtocol] = [],
-suggestions: Result<[SearchSuggestion]?, RuntimeError> = .success(nil)
+suggestions: Result<[SearchSuggestion]?, SearchError> = .success(nil)
     ) {
         self.init()
         self.defaultPlaceHolder = defaultPlaceHolder
@@ -91,7 +91,7 @@ suggestions: Result<[SearchSuggestion]?, RuntimeError> = .success(nil)
     /// Collection of results. `nil` means no query has been made. An empty array means there
     /// were no results, and the view should show an appropriate 'no results' message.
     @Published
-    public var results: Result<[SearchResult]?, RuntimeError> = .success(nil)
+    public var results: Result<[SearchResult]?, SearchError> = .success(nil)
 
     /// Tracks selection of results from the `results` collection. When there is only one result,
     /// that result is automatically assigned to this property. If there are multiple results, the view sets
@@ -109,7 +109,7 @@ suggestions: Result<[SearchSuggestion]?, RuntimeError> = .success(nil)
     /// are no suggestions, `nil` when no suggestions have been requested. If the list is empty,
     /// a useful 'no results' message should be shown by the view.
     @Published
-    public var suggestions: Result<[SearchSuggestion]?, RuntimeError> = .success(nil)
+    public var suggestions: Result<[SearchSuggestion]?, SearchError> = .success(nil)
 
     /// True if the `queryArea` has changed since the `results` collection has been set.
     /// This property is used by the view to enable 'Repeat search here' functionality. This property is
@@ -124,37 +124,36 @@ suggestions: Result<[SearchSuggestion]?, RuntimeError> = .success(nil)
     /// of the `queryArea` property. Behavior when called with `restrictToArea` set to true
     /// when the `queryArea` property is null, a line, a point, or an empty geometry is undefined.
     func commitSearch(_ restrictToArea: Bool) async -> Void {
-        guard !currentQuery.isEmpty else { return }
+        guard !currentQuery.isEmpty,
+              var source = currentSource() else { return }
         
         selectedResult = nil
         isEligibleForRequery = false
-        
-        var searchResults = [SearchResult]()
-        let searchSources = sourcesToSearch()
-        for i in 0...searchSources.count - 1 {
-            var searchSource = searchSources[i]
-            searchSource.searchArea = queryArea
-            searchSource.preferredSearchLocation = queryCenter
-            
-            let searchResult = await Result {
-                try await searchSource.search(
-                    currentQuery,
-                    area: restrictToArea ? queryArea : nil
-                )
-            }
-            switch searchResult {
-            case .success(let results):
-                searchResults.append(contentsOf: results)
-            case .failure(let error):
-                print("\(searchSource.displayName) encountered an error: \(error.localizedDescription)")
-            case .none:
-                break
-            }
-        }
         suggestions = .success(nil)
-        results = .success(searchResults)
-        if searchResults.count == 1 {
-            selectedResult = searchResults.first
+
+        
+        source.searchArea = queryArea
+        source.preferredSearchLocation = queryCenter
+        
+        let searchResult = await Result {
+            try await source.search(
+                currentQuery,
+                area: restrictToArea ? queryArea : nil
+            )
+        }
+
+        switch searchResult {
+        case .success(let searchResults):
+            results = .success(searchResults)
+            if searchResults.count == 1 {
+                selectedResult = searchResults.first
+            }
+        case .failure(let error):
+            results = .failure(SearchError(error))
+            break
+        case .none:
+            results = .success(nil)
+            break
         }
     }
     
@@ -162,34 +161,31 @@ suggestions: Result<[SearchSuggestion]?, RuntimeError> = .success(nil)
     /// requests before initiating new ones. The view should also wait for some time after user finishes
     /// typing before making suggestions. The JavaScript implementation uses 150ms by default.
     func updateSuggestions() async -> Void {
-        guard !currentQuery.isEmpty else { return }
+        guard !currentQuery.isEmpty,
+              var source = currentSource() else { return }
         print("SearchViewModel.updateSuggestions: \(currentQuery)")
-
-        var suggestionResults = [SearchSuggestion]()
-        let searchSources = sourcesToSearch()
-        for i in 0...searchSources.count - 1 {
-            var searchSource = searchSources[i]
-            searchSource.searchArea = queryArea
-            searchSource.preferredSearchLocation = queryCenter
-            
-            let suggestResults = await Result {
-                try await searchSource.suggest(currentQuery)
-            }
-            switch suggestResults {
-            case .success(let results):
-                suggestionResults.append(contentsOf: results)
-            case .failure(let error):
-                print("\(searchSource.displayName) encountered an error: \(error.localizedDescription)")
-            case .none:
-                break
-            }
-        }
-
-        results = .success(nil)
-        suggestions = .success(suggestionResults)
         
+        results = .success(nil)
         selectedResult = nil
         isEligibleForRequery = false
+        
+        source.searchArea = queryArea
+        source.preferredSearchLocation = queryCenter
+        
+        let suggestResult = await Result {
+            try await source.suggest(currentQuery)
+        }
+
+        switch suggestResult {
+        case .success(let suggestResults):
+            suggestions = .success(suggestResults)
+        case .failure(let error):
+            suggestions = .failure(SearchError(error))
+            break
+        case .none:
+            suggestions = .success(nil)
+            break
+        }
     }
     
     /// Commits a search from a specific suggestion. Results will be set asynchronously. Behavior is
@@ -206,6 +202,7 @@ suggestions: Result<[SearchSuggestion]?, RuntimeError> = .success(nil)
         selectedResult = nil
 
         var searchResults = [SearchResult]()
+        var suggestError: Error?
         let searchResult = await Result {
             try await searchSuggestion.owningSource.search(searchSuggestion)
         }
@@ -216,7 +213,6 @@ suggestions: Result<[SearchSuggestion]?, RuntimeError> = .success(nil)
             case .single:
                 if let firstResult = results.first {
                     searchResults = [firstResult]
-                    selectedResult = firstResult
                 }
             case .multiple:
                 searchResults = results
@@ -226,19 +222,23 @@ suggestions: Result<[SearchSuggestion]?, RuntimeError> = .success(nil)
                 } else {
                     if let firstResult = results.first {
                         searchResults = [firstResult]
-                        selectedResult = firstResult
                     }
                 }
             }
         case .failure(let error):
-            print("\(searchSuggestion.owningSource.displayName) encountered an error: \(error.localizedDescription)")
+            suggestError = error
         case .none:
             break
         }
-        
-        results = .success(searchResults)
-        if searchResults.count == 1 {
-            selectedResult = searchResults.first
+
+        if let error = suggestError {
+            results = .failure(SearchError(error))
+        }
+        else {
+            results = .success(searchResults)
+            if searchResults.count == 1 {
+                selectedResult = searchResults.first
+            }
         }
         suggestions = .success(nil)
     }
@@ -264,18 +264,19 @@ suggestions: Result<[SearchSuggestion]?, RuntimeError> = .success(nil)
     /// Clears the search. This will set the results list to null, clear the result selection, clear suggestions,
     /// and reset the current query.
     func clearSearch() {
-        print("SearchViewModel.clearSearch")
+        // Setting currentQuery to "" will reset everything necessary.
+        currentQuery = ""
     }
 }
 
 extension SearchViewModel {
-    func sourcesToSearch() -> [SearchSourceProtocol] {
-        var selectedSources = [SearchSourceProtocol]()
+    func currentSource() -> SearchSourceProtocol? {
+        var source: SearchSourceProtocol?
         if let activeSource = activeSource {
-            selectedSources.append(activeSource)
+            source = activeSource
         } else {
-            selectedSources.append(contentsOf: sources)
+            source = sources.first
         }
-        return selectedSources
+        return source
     }
 }

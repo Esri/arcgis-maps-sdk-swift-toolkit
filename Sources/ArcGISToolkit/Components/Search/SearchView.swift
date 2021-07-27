@@ -37,6 +37,7 @@ public struct SearchView: View {
     @State
     private var enableRepeatSearchHereButton = true
     
+    @State
     private var enableResultListView = true
     
     private var noResultMessage = "No results found"
@@ -68,6 +69,7 @@ public struct SearchView: View {
             }
             .esriDeleteTextButton(text: $searchViewModel.currentQuery)
             .esriSearchButton(performSearch: $commitSearch)
+            .esriShowResultsButton(showResults: $enableResultListView)
             .esriBorder()
             if enableRepeatSearchHereButton, viewpointChanged {
                 Button("Search Here") {
@@ -144,9 +146,8 @@ public struct SearchView: View {
     /// - Parameter enableResultListView: The new value.
     /// - Returns: The `SearchView`.
     public func enableResultListView(_ enableResultListView: Bool) -> SearchView {
-        var copy = self
-        copy.enableResultListView = enableResultListView
-        return copy
+        self.enableResultListView = enableResultListView
+        return self
     }
     
     /// Message to show when there are no results or suggestions.  Defaults to "No results found".
@@ -163,7 +164,7 @@ public struct SearchView: View {
 // TODO: new SearchDisplayProtocol containing only displayTitle and displaySubtitle
 // TODO: That would mean we only needed one of these.
 struct SearchResultList: View {
-    var searchResults: Result<[SearchResult]?, RuntimeError>
+    var searchResults: Result<[SearchResult]?, SearchError>
     @Binding var selectedResult: SearchResult?
     var noResultMessage: String
     
@@ -173,29 +174,21 @@ struct SearchResultList: View {
             case .success(let results):
                 if let results = results, results.count > 0 {
                     List {
-                        // Get array of unique search source displayNames.
-                        let sourceDisplayNames = Array(Set(results.map { $0.owningSource.displayName })).sorted()
-                        ForEach(sourceDisplayNames, id: \.self) { displayName in
-                            Section(header: Text(displayName)) {
-                                // Get results filtered by displayName
-                                let sourceResults = results.filter { $0.owningSource.displayName == displayName }
-                                if sourceResults.count > 0 {
-                                    ForEach(sourceResults) { result in
-                                        HStack {
-                                            Image(systemName: "mappin")
-                                                .foregroundColor(Color(.red))
-                                            SearchResultRow(title: result.displayTitle, subtitle: result.displaySubtitle)
-                                        }
-                                        .onTapGesture {
-//                                            searchViewModel.selectedResult = result
-                                            selectedResult = result
-                                            print("user selected result: \(result.displayTitle)")
-                                        }
-                                    }
+                        if results.count > 0 {
+                            ForEach(results) { result in
+                                HStack {
+                                    Image(systemName: "mappin")
+                                        .foregroundColor(Color(.red))
+                                    SearchResultRow(title: result.displayTitle, subtitle: result.displaySubtitle)
                                 }
-                                //                    .listStyle(DefaultListStyle())
+                                .onTapGesture {
+                                    //                                            searchViewModel.selectedResult = result
+                                    selectedResult = result
+                                    print("user selected result: \(result.displayTitle)")
+                                }
                             }
                         }
+                        //                    .listStyle(DefaultListStyle())
                     }
                 }
                 else if results != nil {
@@ -214,7 +207,7 @@ struct SearchResultList: View {
 }
 
 struct SearchSuggestionList: View {
-    var suggestionResults: Result<[SearchSuggestion]?, RuntimeError>
+    var suggestionResults: Result<[SearchSuggestion]?, SearchError>
     @Binding var currentSuggestion: SearchSuggestion?
     var noResultMessage: String
     
@@ -224,26 +217,18 @@ struct SearchSuggestionList: View {
             case .success(let results):
                 if let suggestions = results, suggestions.count > 0 {
                     List {
-                        // Get array of unique search source displayNames.
-                        let sourceDisplayNames = Array(Set(suggestions.map { $0.owningSource.displayName })).sorted()
-                        ForEach(sourceDisplayNames, id: \.self) { displayName in
-                            Section(header: Text(displayName)) {
-                                // Get results filtered by displayName
-                                let sourceSuggestions = suggestions.filter { $0.owningSource.displayName == displayName }
-                                if sourceSuggestions.count > 0 {
-                                    ForEach(sourceSuggestions) { suggestion in
-                                        HStack {
-                                            let imageName = suggestion.isCollection ? "magnifyingglass" : "mappin"
-                                            Image(systemName: imageName)
-                                            SearchResultRow(title: suggestion.displayTitle, subtitle: suggestion.displaySubtitle)
-                                        }
-                                        .onTapGesture() {
-                                            currentSuggestion = suggestion
-                                        }
-                                    }
-                                    //                    .listStyle(DefaultListStyle())
+                        if suggestions.count > 0 {
+                            ForEach(suggestions) { suggestion in
+                                HStack {
+                                    let imageName = suggestion.isCollection ? "magnifyingglass" : "mappin"
+                                    Image(systemName: imageName)
+                                    SearchResultRow(title: suggestion.displayTitle, subtitle: suggestion.displaySubtitle)
+                                }
+                                .onTapGesture() {
+                                    currentSuggestion = suggestion
                                 }
                             }
+                            //                    .listStyle(DefaultListStyle())
                         }
                     }
                 }
@@ -254,7 +239,7 @@ struct SearchSuggestionList: View {
                 }
             case .failure(let error):
                 List {
-                    Text(error.localizedDescription)
+                    Text(error.errorDescription)
                 }
             }
         }
