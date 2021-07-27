@@ -56,10 +56,6 @@ public struct SearchView: View {
     
     @State
     private var currentTask: Task<Void, Never>?
-//    private var searchTask: Task<Void, Never>?
-//    private var suggestTask: Task<Void, Never>?
-//    private var acceptTask: Task<Void, Never>?
-
     
     // TODO: Figure out better styling for list
     // TODO: continue fleshing out SearchViewModel and LocatorSearchSource/SmartSearchSource
