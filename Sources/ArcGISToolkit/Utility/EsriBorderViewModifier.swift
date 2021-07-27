@@ -14,16 +14,12 @@
 import SwiftUI
 
 struct EsriBorderViewModifier: ViewModifier {
+    var edgeInsets: EdgeInsets
     func body(content: Content) -> some View {
         let roundedRect = RoundedRectangle(cornerRadius: 8)
         content
-            .padding(EdgeInsets(top: 8,
-                                leading: 12,
-                                bottom: 8,
-                                trailing: 12
-                               )
-            )
-            .background(Color.white)
+            .padding(edgeInsets)
+            .background(.white)
             .clipShape(roundedRect)
             .overlay(
                 roundedRect
@@ -39,10 +35,17 @@ struct EsriBorderViewModifier: ViewModifier {
 }
 
 extension View {
-    func esriBorder() -> some View {
-        ModifiedContent(
+    func esriBorder(
+        edgeInsets: EdgeInsets = EdgeInsets(
+            top: 8,
+            leading: 12,
+            bottom: 8,
+            trailing: 12
+        )
+    ) -> some View {
+        return ModifiedContent(
             content: self,
-            modifier: EsriBorderViewModifier()
+            modifier: EsriBorderViewModifier(edgeInsets: edgeInsets)
         )
     }
 }

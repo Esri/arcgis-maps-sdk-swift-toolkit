@@ -127,11 +127,6 @@ suggestions: Result<[SearchSuggestion]?, SearchError> = .success(nil)
         guard !currentQuery.isEmpty,
               var source = currentSource() else { return }
         
-        selectedResult = nil
-        isEligibleForRequery = false
-        suggestions = .success(nil)
-
-        
         source.searchArea = queryArea
         source.preferredSearchLocation = queryCenter
         
@@ -141,6 +136,10 @@ suggestions: Result<[SearchSuggestion]?, SearchError> = .success(nil)
                 area: restrictToArea ? queryArea : nil
             )
         }
+        
+        selectedResult = nil
+        isEligibleForRequery = false
+        suggestions = .success(nil)
 
         switch searchResult {
         case .success(let searchResults):
@@ -165,16 +164,16 @@ suggestions: Result<[SearchSuggestion]?, SearchError> = .success(nil)
               var source = currentSource() else { return }
         print("SearchViewModel.updateSuggestions: \(currentQuery)")
         
-        results = .success(nil)
-        selectedResult = nil
-        isEligibleForRequery = false
-        
         source.searchArea = queryArea
         source.preferredSearchLocation = queryCenter
         
         let suggestResult = await Result {
             try await source.suggest(currentQuery)
         }
+        
+        results = .success(nil)
+        selectedResult = nil
+        isEligibleForRequery = false
 
         switch suggestResult {
         case .success(let suggestResults):
@@ -197,15 +196,17 @@ suggestions: Result<[SearchSuggestion]?, SearchError> = .success(nil)
     ///   - searchSuggestion: The suggestion to use to commit the search.
     func acceptSuggestion(_ searchSuggestion: SearchSuggestion) async -> Void {
         currentQuery = searchSuggestion.displayTitle
-        
-        isEligibleForRequery = false
-        selectedResult = nil
 
         var searchResults = [SearchResult]()
         var suggestError: Error?
         let searchResult = await Result {
             try await searchSuggestion.owningSource.search(searchSuggestion)
         }
+        
+        suggestions = .success(nil)
+        isEligibleForRequery = false
+        selectedResult = nil
+
         switch searchResult {
         case .success(let results):
             switch (resultMode)
@@ -240,7 +241,6 @@ suggestions: Result<[SearchSuggestion]?, SearchError> = .success(nil)
                 selectedResult = searchResults.first
             }
         }
-        suggestions = .success(nil)
     }
     
     /// Configures the view model for the provided map. By default, will only configure the view model
