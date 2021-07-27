@@ -34,9 +34,9 @@ activeSource: SearchSourceProtocol? = nil,
 queryArea: Geometry? = nil,
 queryCenter: Point? = nil,
 resultMode: SearchResultMode = .automatic,
-results: Result<[SearchResult]?, RuntimeError> = .success(nil),
+results: Result<[SearchResult]?, SearchError> = .success(nil),
 sources: [SearchSourceProtocol] = [],
-suggestions: Result<[SearchSuggestion]?, RuntimeError> = .success(nil)
+suggestions: Result<[SearchSuggestion]?, SearchError> = .success(nil)
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.init()
 ***REMOVED******REMOVED***self.defaultPlaceHolder = defaultPlaceHolder
@@ -91,7 +91,7 @@ suggestions: Result<[SearchSuggestion]?, RuntimeError> = .success(nil)
 ***REMOVED******REMOVED***/ Collection of results. `nil` means no query has been made. An empty array means there
 ***REMOVED******REMOVED***/ were no results, and the view should show an appropriate 'no results' message.
 ***REMOVED***@Published
-***REMOVED***public var results: Result<[SearchResult]?, RuntimeError> = .success(nil)
+***REMOVED***public var results: Result<[SearchResult]?, SearchError> = .success(nil)
 
 ***REMOVED******REMOVED***/ Tracks selection of results from the `results` collection. When there is only one result,
 ***REMOVED******REMOVED***/ that result is automatically assigned to this property. If there are multiple results, the view sets
@@ -109,7 +109,7 @@ suggestions: Result<[SearchSuggestion]?, RuntimeError> = .success(nil)
 ***REMOVED******REMOVED***/ are no suggestions, `nil` when no suggestions have been requested. If the list is empty,
 ***REMOVED******REMOVED***/ a useful 'no results' message should be shown by the view.
 ***REMOVED***@Published
-***REMOVED***public var suggestions: Result<[SearchSuggestion]?, RuntimeError> = .success(nil)
+***REMOVED***public var suggestions: Result<[SearchSuggestion]?, SearchError> = .success(nil)
 
 ***REMOVED******REMOVED***/ True if the `queryArea` has changed since the `results` collection has been set.
 ***REMOVED******REMOVED***/ This property is used by the view to enable 'Repeat search here' functionality. This property is
@@ -124,37 +124,36 @@ suggestions: Result<[SearchSuggestion]?, RuntimeError> = .success(nil)
 ***REMOVED******REMOVED***/ of the `queryArea` property. Behavior when called with `restrictToArea` set to true
 ***REMOVED******REMOVED***/ when the `queryArea` property is null, a line, a point, or an empty geometry is undefined.
 ***REMOVED***func commitSearch(_ restrictToArea: Bool) async -> Void {
-***REMOVED******REMOVED***guard !currentQuery.isEmpty else { return ***REMOVED***
+***REMOVED******REMOVED***guard !currentQuery.isEmpty,
+***REMOVED******REMOVED******REMOVED***  var source = currentSource() else { return ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***selectedResult = nil
 ***REMOVED******REMOVED***isEligibleForRequery = false
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***var searchResults = [SearchResult]()
-***REMOVED******REMOVED***let searchSources = sourcesToSearch()
-***REMOVED******REMOVED***for i in 0...searchSources.count - 1 {
-***REMOVED******REMOVED******REMOVED***var searchSource = searchSources[i]
-***REMOVED******REMOVED******REMOVED***searchSource.searchArea = queryArea
-***REMOVED******REMOVED******REMOVED***searchSource.preferredSearchLocation = queryCenter
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***let searchResult = await Result {
-***REMOVED******REMOVED******REMOVED******REMOVED***try await searchSource.search(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentQuery,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***area: restrictToArea ? queryArea : nil
-***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***switch searchResult {
-***REMOVED******REMOVED******REMOVED***case .success(let results):
-***REMOVED******REMOVED******REMOVED******REMOVED***searchResults.append(contentsOf: results)
-***REMOVED******REMOVED******REMOVED***case .failure(let error):
-***REMOVED******REMOVED******REMOVED******REMOVED***print("\(searchSource.displayName) encountered an error: \(error.localizedDescription)")
-***REMOVED******REMOVED******REMOVED***case .none:
-***REMOVED******REMOVED******REMOVED******REMOVED***break
-***REMOVED******REMOVED***
-***REMOVED***
 ***REMOVED******REMOVED***suggestions = .success(nil)
-***REMOVED******REMOVED***results = .success(searchResults)
-***REMOVED******REMOVED***if searchResults.count == 1 {
-***REMOVED******REMOVED******REMOVED***selectedResult = searchResults.first
+
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***source.searchArea = queryArea
+***REMOVED******REMOVED***source.preferredSearchLocation = queryCenter
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let searchResult = await Result {
+***REMOVED******REMOVED******REMOVED***try await source.search(
+***REMOVED******REMOVED******REMOVED******REMOVED***currentQuery,
+***REMOVED******REMOVED******REMOVED******REMOVED***area: restrictToArea ? queryArea : nil
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED***
+
+***REMOVED******REMOVED***switch searchResult {
+***REMOVED******REMOVED***case .success(let searchResults):
+***REMOVED******REMOVED******REMOVED***results = .success(searchResults)
+***REMOVED******REMOVED******REMOVED***if searchResults.count == 1 {
+***REMOVED******REMOVED******REMOVED******REMOVED***selectedResult = searchResults.first
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***case .failure(let error):
+***REMOVED******REMOVED******REMOVED***results = .failure(SearchError(error))
+***REMOVED******REMOVED******REMOVED***break
+***REMOVED******REMOVED***case .none:
+***REMOVED******REMOVED******REMOVED***results = .success(nil)
+***REMOVED******REMOVED******REMOVED***break
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -162,34 +161,31 @@ suggestions: Result<[SearchSuggestion]?, RuntimeError> = .success(nil)
 ***REMOVED******REMOVED***/ requests before initiating new ones. The view should also wait for some time after user finishes
 ***REMOVED******REMOVED***/ typing before making suggestions. The JavaScript implementation uses 150ms by default.
 ***REMOVED***func updateSuggestions() async -> Void {
-***REMOVED******REMOVED***guard !currentQuery.isEmpty else { return ***REMOVED***
+***REMOVED******REMOVED***guard !currentQuery.isEmpty,
+***REMOVED******REMOVED******REMOVED***  var source = currentSource() else { return ***REMOVED***
 ***REMOVED******REMOVED***print("SearchViewModel.updateSuggestions: \(currentQuery)")
-
-***REMOVED******REMOVED***var suggestionResults = [SearchSuggestion]()
-***REMOVED******REMOVED***let searchSources = sourcesToSearch()
-***REMOVED******REMOVED***for i in 0...searchSources.count - 1 {
-***REMOVED******REMOVED******REMOVED***var searchSource = searchSources[i]
-***REMOVED******REMOVED******REMOVED***searchSource.searchArea = queryArea
-***REMOVED******REMOVED******REMOVED***searchSource.preferredSearchLocation = queryCenter
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***let suggestResults = await Result {
-***REMOVED******REMOVED******REMOVED******REMOVED***try await searchSource.suggest(currentQuery)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***switch suggestResults {
-***REMOVED******REMOVED******REMOVED***case .success(let results):
-***REMOVED******REMOVED******REMOVED******REMOVED***suggestionResults.append(contentsOf: results)
-***REMOVED******REMOVED******REMOVED***case .failure(let error):
-***REMOVED******REMOVED******REMOVED******REMOVED***print("\(searchSource.displayName) encountered an error: \(error.localizedDescription)")
-***REMOVED******REMOVED******REMOVED***case .none:
-***REMOVED******REMOVED******REMOVED******REMOVED***break
-***REMOVED******REMOVED***
-***REMOVED***
-
 ***REMOVED******REMOVED***results = .success(nil)
-***REMOVED******REMOVED***suggestions = .success(suggestionResults)
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED***selectedResult = nil
 ***REMOVED******REMOVED***isEligibleForRequery = false
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***source.searchArea = queryArea
+***REMOVED******REMOVED***source.preferredSearchLocation = queryCenter
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let suggestResult = await Result {
+***REMOVED******REMOVED******REMOVED***try await source.suggest(currentQuery)
+***REMOVED***
+
+***REMOVED******REMOVED***switch suggestResult {
+***REMOVED******REMOVED***case .success(let suggestResults):
+***REMOVED******REMOVED******REMOVED***suggestions = .success(suggestResults)
+***REMOVED******REMOVED***case .failure(let error):
+***REMOVED******REMOVED******REMOVED***suggestions = .failure(SearchError(error))
+***REMOVED******REMOVED******REMOVED***break
+***REMOVED******REMOVED***case .none:
+***REMOVED******REMOVED******REMOVED***suggestions = .success(nil)
+***REMOVED******REMOVED******REMOVED***break
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Commits a search from a specific suggestion. Results will be set asynchronously. Behavior is
@@ -206,6 +202,7 @@ suggestions: Result<[SearchSuggestion]?, RuntimeError> = .success(nil)
 ***REMOVED******REMOVED***selectedResult = nil
 
 ***REMOVED******REMOVED***var searchResults = [SearchResult]()
+***REMOVED******REMOVED***var suggestError: Error?
 ***REMOVED******REMOVED***let searchResult = await Result {
 ***REMOVED******REMOVED******REMOVED***try await searchSuggestion.owningSource.search(searchSuggestion)
 ***REMOVED***
@@ -216,7 +213,6 @@ suggestions: Result<[SearchSuggestion]?, RuntimeError> = .success(nil)
 ***REMOVED******REMOVED******REMOVED***case .single:
 ***REMOVED******REMOVED******REMOVED******REMOVED***if let firstResult = results.first {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***searchResults = [firstResult]
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedResult = firstResult
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***case .multiple:
 ***REMOVED******REMOVED******REMOVED******REMOVED***searchResults = results
@@ -226,19 +222,23 @@ suggestions: Result<[SearchSuggestion]?, RuntimeError> = .success(nil)
 ***REMOVED******REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let firstResult = results.first {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***searchResults = [firstResult]
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedResult = firstResult
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***case .failure(let error):
-***REMOVED******REMOVED******REMOVED***print("\(searchSuggestion.owningSource.displayName) encountered an error: \(error.localizedDescription)")
+***REMOVED******REMOVED******REMOVED***suggestError = error
 ***REMOVED******REMOVED***case .none:
 ***REMOVED******REMOVED******REMOVED***break
 ***REMOVED***
+
+***REMOVED******REMOVED***if let error = suggestError {
+***REMOVED******REMOVED******REMOVED***results = .failure(SearchError(error))
+***REMOVED***
+***REMOVED******REMOVED***else {
+***REMOVED******REMOVED******REMOVED***results = .success(searchResults)
+***REMOVED******REMOVED******REMOVED***if searchResults.count == 1 {
+***REMOVED******REMOVED******REMOVED******REMOVED***selectedResult = searchResults.first
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***results = .success(searchResults)
-***REMOVED******REMOVED***if searchResults.count == 1 {
-***REMOVED******REMOVED******REMOVED***selectedResult = searchResults.first
 ***REMOVED***
 ***REMOVED******REMOVED***suggestions = .success(nil)
 ***REMOVED***
@@ -264,18 +264,19 @@ suggestions: Result<[SearchSuggestion]?, RuntimeError> = .success(nil)
 ***REMOVED******REMOVED***/ Clears the search. This will set the results list to null, clear the result selection, clear suggestions,
 ***REMOVED******REMOVED***/ and reset the current query.
 ***REMOVED***func clearSearch() {
-***REMOVED******REMOVED***print("SearchViewModel.clearSearch")
+***REMOVED******REMOVED******REMOVED*** Setting currentQuery to "" will reset everything necessary.
+***REMOVED******REMOVED***currentQuery = ""
 ***REMOVED***
 ***REMOVED***
 
 extension SearchViewModel {
-***REMOVED***func sourcesToSearch() -> [SearchSourceProtocol] {
-***REMOVED******REMOVED***var selectedSources = [SearchSourceProtocol]()
+***REMOVED***func currentSource() -> SearchSourceProtocol? {
+***REMOVED******REMOVED***var source: SearchSourceProtocol?
 ***REMOVED******REMOVED***if let activeSource = activeSource {
-***REMOVED******REMOVED******REMOVED***selectedSources.append(activeSource)
+***REMOVED******REMOVED******REMOVED***source = activeSource
 ***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***selectedSources.append(contentsOf: sources)
+***REMOVED******REMOVED******REMOVED***source = sources.first
 ***REMOVED***
-***REMOVED******REMOVED***return selectedSources
+***REMOVED******REMOVED***return source
 ***REMOVED***
 ***REMOVED***

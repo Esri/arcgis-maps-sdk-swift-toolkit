@@ -37,6 +37,7 @@ public struct SearchView: View {
 ***REMOVED***@State
 ***REMOVED***private var enableRepeatSearchHereButton = true
 ***REMOVED***
+***REMOVED***@State
 ***REMOVED***private var enableResultListView = true
 ***REMOVED***
 ***REMOVED***private var noResultMessage = "No results found"
@@ -68,6 +69,7 @@ public struct SearchView: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.esriDeleteTextButton(text: $searchViewModel.currentQuery)
 ***REMOVED******REMOVED******REMOVED***.esriSearchButton(performSearch: $commitSearch)
+***REMOVED******REMOVED******REMOVED***.esriShowResultsButton(showResults: $enableResultListView)
 ***REMOVED******REMOVED******REMOVED***.esriBorder()
 ***REMOVED******REMOVED******REMOVED***if enableRepeatSearchHereButton, viewpointChanged {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Button("Search Here") {
@@ -144,9 +146,8 @@ public struct SearchView: View {
 ***REMOVED******REMOVED***/ - Parameter enableResultListView: The new value.
 ***REMOVED******REMOVED***/ - Returns: The `SearchView`.
 ***REMOVED***public func enableResultListView(_ enableResultListView: Bool) -> SearchView {
-***REMOVED******REMOVED***var copy = self
-***REMOVED******REMOVED***copy.enableResultListView = enableResultListView
-***REMOVED******REMOVED***return copy
+***REMOVED******REMOVED***self.enableResultListView = enableResultListView
+***REMOVED******REMOVED***return self
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Message to show when there are no results or suggestions.  Defaults to "No results found".
@@ -163,7 +164,7 @@ public struct SearchView: View {
 ***REMOVED*** TODO: new SearchDisplayProtocol containing only displayTitle and displaySubtitle
 ***REMOVED*** TODO: That would mean we only needed one of these.
 struct SearchResultList: View {
-***REMOVED***var searchResults: Result<[SearchResult]?, RuntimeError>
+***REMOVED***var searchResults: Result<[SearchResult]?, SearchError>
 ***REMOVED***@Binding var selectedResult: SearchResult?
 ***REMOVED***var noResultMessage: String
 ***REMOVED***
@@ -173,29 +174,21 @@ struct SearchResultList: View {
 ***REMOVED******REMOVED******REMOVED***case .success(let results):
 ***REMOVED******REMOVED******REMOVED******REMOVED***if let results = results, results.count > 0 {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***List {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Get array of unique search source displayNames.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let sourceDisplayNames = Array(Set(results.map { $0.owningSource.displayName ***REMOVED***)).sorted()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(sourceDisplayNames, id: \.self) { displayName in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Section(header: Text(displayName)) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Get results filtered by displayName
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let sourceResults = results.filter { $0.owningSource.displayName == displayName ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if sourceResults.count > 0 {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(sourceResults) { result in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "mappin")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(Color(.red))
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***SearchResultRow(title: result.displayTitle, subtitle: result.displaySubtitle)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onTapGesture {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***searchViewModel.selectedResult = result
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedResult = result
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print("user selected result: \(result.displayTitle)")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if results.count > 0 {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(results) { result in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***HStack {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "mappin")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(Color(.red))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***SearchResultRow(title: result.displayTitle, subtitle: result.displaySubtitle)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.listStyle(DefaultListStyle())
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onTapGesture {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***searchViewModel.selectedResult = result
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedResult = result
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print("user selected result: \(result.displayTitle)")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.listStyle(DefaultListStyle())
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***else if results != nil {
@@ -214,7 +207,7 @@ struct SearchResultList: View {
 ***REMOVED***
 
 struct SearchSuggestionList: View {
-***REMOVED***var suggestionResults: Result<[SearchSuggestion]?, RuntimeError>
+***REMOVED***var suggestionResults: Result<[SearchSuggestion]?, SearchError>
 ***REMOVED***@Binding var currentSuggestion: SearchSuggestion?
 ***REMOVED***var noResultMessage: String
 ***REMOVED***
@@ -224,26 +217,18 @@ struct SearchSuggestionList: View {
 ***REMOVED******REMOVED******REMOVED***case .success(let results):
 ***REMOVED******REMOVED******REMOVED******REMOVED***if let suggestions = results, suggestions.count > 0 {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***List {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Get array of unique search source displayNames.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let sourceDisplayNames = Array(Set(suggestions.map { $0.owningSource.displayName ***REMOVED***)).sorted()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(sourceDisplayNames, id: \.self) { displayName in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Section(header: Text(displayName)) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Get results filtered by displayName
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let sourceSuggestions = suggestions.filter { $0.owningSource.displayName == displayName ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if sourceSuggestions.count > 0 {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(sourceSuggestions) { suggestion in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let imageName = suggestion.isCollection ? "magnifyingglass" : "mappin"
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: imageName)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***SearchResultRow(title: suggestion.displayTitle, subtitle: suggestion.displaySubtitle)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onTapGesture() {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentSuggestion = suggestion
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.listStyle(DefaultListStyle())
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if suggestions.count > 0 {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(suggestions) { suggestion in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***HStack {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let imageName = suggestion.isCollection ? "magnifyingglass" : "mappin"
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: imageName)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***SearchResultRow(title: suggestion.displayTitle, subtitle: suggestion.displaySubtitle)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onTapGesture() {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentSuggestion = suggestion
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.listStyle(DefaultListStyle())
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
@@ -254,7 +239,7 @@ struct SearchSuggestionList: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***case .failure(let error):
 ***REMOVED******REMOVED******REMOVED******REMOVED***List {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(error.localizedDescription)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(error.errorDescription)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***

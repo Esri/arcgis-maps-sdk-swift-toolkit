@@ -22,12 +22,8 @@ struct SearchExampleView: View {
 ***REMOVED******REMOVED***sources: [SmartLocatorSearchSource(
 ***REMOVED******REMOVED******REMOVED***displayName: "Locator One",
 ***REMOVED******REMOVED******REMOVED***maximumResults: 16,
-***REMOVED******REMOVED******REMOVED***maximumSuggestions: 16)]/*,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** LocatorSearchSource(displayName: "Locator Two")]*/
+***REMOVED******REMOVED******REMOVED***maximumSuggestions: 16)]
 ***REMOVED***)
-***REMOVED***
-***REMOVED***@State
-***REMOVED***var showResults = true
 ***REMOVED***
 ***REMOVED***let map = Map(basemapStyle: .arcGISImagery)
 ***REMOVED***
@@ -56,17 +52,9 @@ struct SearchExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***searchViewModel.queryArea = $0
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.overlay(
-***REMOVED******REMOVED******REMOVED******REMOVED***VStack {
-***REMOVED******REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***showResults.toggle()
-***REMOVED******REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(showResults ? "Hide results" : "Show results")
-***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***SearchView(searchViewModel: searchViewModel)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.enableResultListView(showResults)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 360)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
-***REMOVED******REMOVED***,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(),
 ***REMOVED******REMOVED******REMOVED******REMOVED***alignment: .topTrailing
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***.onChange(of: searchViewModel.results, perform: { newValue in
@@ -77,7 +65,7 @@ struct SearchExampleView: View {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***fileprivate func display(searchResults: Result<[SearchResult]?, RuntimeError>) {
+***REMOVED***fileprivate func display(searchResults: Result<[SearchResult]?, SearchError>) {
 ***REMOVED******REMOVED***switch searchResults {
 ***REMOVED******REMOVED***case .success(let results):
 ***REMOVED******REMOVED******REMOVED***var resultGraphics = [Graphic]()
