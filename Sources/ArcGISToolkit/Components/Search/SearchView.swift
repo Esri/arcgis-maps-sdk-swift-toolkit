@@ -56,10 +56,6 @@ public struct SearchView: View {
 ***REMOVED***
 ***REMOVED***@State
 ***REMOVED***private var currentTask: Task<Void, Never>?
-***REMOVED******REMOVED***private var searchTask: Task<Void, Never>?
-***REMOVED******REMOVED***private var suggestTask: Task<Void, Never>?
-***REMOVED******REMOVED***private var acceptTask: Task<Void, Never>?
-
 ***REMOVED***
 ***REMOVED******REMOVED*** TODO: Figure out better styling for list
 ***REMOVED******REMOVED*** TODO: continue fleshing out SearchViewModel and LocatorSearchSource/SmartSearchSource
