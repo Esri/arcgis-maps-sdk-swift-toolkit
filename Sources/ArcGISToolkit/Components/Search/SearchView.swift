@@ -173,8 +173,9 @@ struct SearchResultList: View {
             switch searchResults {
             case .success(let results):
                 if let results = results, results.count > 0 {
-                    List {
-                        if results.count > 0 {
+                    if results.count > 1 {
+                        // If we have only 1 results, don't show the list.
+                        List {
                             ForEach(results) { result in
                                 HStack {
                                     Image(systemName: "mappin")
@@ -182,7 +183,6 @@ struct SearchResultList: View {
                                     SearchResultRow(title: result.displayTitle, subtitle: result.displaySubtitle)
                                 }
                                 .onTapGesture {
-                                    //                                            searchViewModel.selectedResult = result
                                     selectedResult = result
                                     print("user selected result: \(result.displayTitle)")
                                 }
