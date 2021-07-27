@@ -92,7 +92,7 @@ suggestions: Result<[SearchSuggestion]?, SearchError> = .success(nil)
 ***REMOVED******REMOVED***/ were no results, and the view should show an appropriate 'no results' message.
 ***REMOVED***@Published
 ***REMOVED***public var results: Result<[SearchResult]?, SearchError> = .success(nil)
-
+***REMOVED***
 ***REMOVED******REMOVED***/ Tracks selection of results from the `results` collection. When there is only one result,
 ***REMOVED******REMOVED***/ that result is automatically assigned to this property. If there are multiple results, the view sets
 ***REMOVED******REMOVED***/ this property upon user selection. This property is observable. The view should observe this
@@ -110,7 +110,7 @@ suggestions: Result<[SearchSuggestion]?, SearchError> = .success(nil)
 ***REMOVED******REMOVED***/ a useful 'no results' message should be shown by the view.
 ***REMOVED***@Published
 ***REMOVED***public var suggestions: Result<[SearchSuggestion]?, SearchError> = .success(nil)
-
+***REMOVED***
 ***REMOVED******REMOVED***/ True if the `queryArea` has changed since the `results` collection has been set.
 ***REMOVED******REMOVED***/ This property is used by the view to enable 'Repeat search here' functionality. This property is
 ***REMOVED******REMOVED***/ observable, and the view should use it to hide and show the 'repeat search' button. Changes to
@@ -140,7 +140,7 @@ suggestions: Result<[SearchSuggestion]?, SearchError> = .success(nil)
 ***REMOVED******REMOVED***selectedResult = nil
 ***REMOVED******REMOVED***isEligibleForRequery = false
 ***REMOVED******REMOVED***suggestions = .success(nil)
-
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***switch searchResult {
 ***REMOVED******REMOVED***case .success(let searchResults):
 ***REMOVED******REMOVED******REMOVED***results = .success(searchResults)
@@ -174,7 +174,7 @@ suggestions: Result<[SearchSuggestion]?, SearchError> = .success(nil)
 ***REMOVED******REMOVED***results = .success(nil)
 ***REMOVED******REMOVED***selectedResult = nil
 ***REMOVED******REMOVED***isEligibleForRequery = false
-
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***switch suggestResult {
 ***REMOVED******REMOVED***case .success(let suggestResults):
 ***REMOVED******REMOVED******REMOVED***suggestions = .success(suggestResults)
@@ -196,7 +196,7 @@ suggestions: Result<[SearchSuggestion]?, SearchError> = .success(nil)
 ***REMOVED******REMOVED***/   - searchSuggestion: The suggestion to use to commit the search.
 ***REMOVED***func acceptSuggestion(_ searchSuggestion: SearchSuggestion) async -> Void {
 ***REMOVED******REMOVED***currentQuery = searchSuggestion.displayTitle
-
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var searchResults = [SearchResult]()
 ***REMOVED******REMOVED***var suggestError: Error?
 ***REMOVED******REMOVED***let searchResult = await Result {
@@ -206,7 +206,7 @@ suggestions: Result<[SearchSuggestion]?, SearchError> = .success(nil)
 ***REMOVED******REMOVED***suggestions = .success(nil)
 ***REMOVED******REMOVED***isEligibleForRequery = false
 ***REMOVED******REMOVED***selectedResult = nil
-
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***switch searchResult {
 ***REMOVED******REMOVED***case .success(let results):
 ***REMOVED******REMOVED******REMOVED***switch (resultMode)
@@ -231,7 +231,7 @@ suggestions: Result<[SearchSuggestion]?, SearchError> = .success(nil)
 ***REMOVED******REMOVED***case .none:
 ***REMOVED******REMOVED******REMOVED***break
 ***REMOVED***
-
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***if let error = suggestError {
 ***REMOVED******REMOVED******REMOVED***results = .failure(SearchError(error))
 ***REMOVED***
