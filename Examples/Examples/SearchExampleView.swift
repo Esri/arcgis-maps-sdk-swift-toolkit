@@ -22,12 +22,8 @@ struct SearchExampleView: View {
         sources: [SmartLocatorSearchSource(
             displayName: "Locator One",
             maximumResults: 16,
-            maximumSuggestions: 16)]/*,
-                                     LocatorSearchSource(displayName: "Locator Two")]*/
+            maximumSuggestions: 16)]
     )
-    
-    @State
-    var showResults = true
     
     let map = Map(basemapStyle: .arcGISImagery)
     
@@ -56,17 +52,9 @@ struct SearchExampleView: View {
                 searchViewModel.queryArea = $0
             }
             .overlay(
-                VStack {
-                Button {
-                    showResults.toggle()
-                } label: {
-                    Text(showResults ? "Hide results" : "Show results")
-                }
                 SearchView(searchViewModel: searchViewModel)
-                    .enableResultListView(showResults)
                     .frame(width: 360)
-                    .padding()
-            },
+                    .padding(),
                 alignment: .topTrailing
             )
             .onChange(of: searchViewModel.results, perform: { newValue in
@@ -77,7 +65,7 @@ struct SearchExampleView: View {
             })
     }
     
-    fileprivate func display(searchResults: Result<[SearchResult]?, RuntimeError>) {
+    fileprivate func display(searchResults: Result<[SearchResult]?, SearchError>) {
         switch searchResults {
         case .success(let results):
             var resultGraphics = [Graphic]()
