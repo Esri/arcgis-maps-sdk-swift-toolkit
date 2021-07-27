@@ -92,7 +92,7 @@ suggestions: Result<[SearchSuggestion]?, SearchError> = .success(nil)
     /// were no results, and the view should show an appropriate 'no results' message.
     @Published
     public var results: Result<[SearchResult]?, SearchError> = .success(nil)
-
+    
     /// Tracks selection of results from the `results` collection. When there is only one result,
     /// that result is automatically assigned to this property. If there are multiple results, the view sets
     /// this property upon user selection. This property is observable. The view should observe this
@@ -110,7 +110,7 @@ suggestions: Result<[SearchSuggestion]?, SearchError> = .success(nil)
     /// a useful 'no results' message should be shown by the view.
     @Published
     public var suggestions: Result<[SearchSuggestion]?, SearchError> = .success(nil)
-
+    
     /// True if the `queryArea` has changed since the `results` collection has been set.
     /// This property is used by the view to enable 'Repeat search here' functionality. This property is
     /// observable, and the view should use it to hide and show the 'repeat search' button. Changes to
@@ -140,7 +140,7 @@ suggestions: Result<[SearchSuggestion]?, SearchError> = .success(nil)
         selectedResult = nil
         isEligibleForRequery = false
         suggestions = .success(nil)
-
+        
         switch searchResult {
         case .success(let searchResults):
             results = .success(searchResults)
@@ -174,7 +174,7 @@ suggestions: Result<[SearchSuggestion]?, SearchError> = .success(nil)
         results = .success(nil)
         selectedResult = nil
         isEligibleForRequery = false
-
+        
         switch suggestResult {
         case .success(let suggestResults):
             suggestions = .success(suggestResults)
@@ -196,7 +196,7 @@ suggestions: Result<[SearchSuggestion]?, SearchError> = .success(nil)
     ///   - searchSuggestion: The suggestion to use to commit the search.
     func acceptSuggestion(_ searchSuggestion: SearchSuggestion) async -> Void {
         currentQuery = searchSuggestion.displayTitle
-
+        
         var searchResults = [SearchResult]()
         var suggestError: Error?
         let searchResult = await Result {
@@ -206,7 +206,7 @@ suggestions: Result<[SearchSuggestion]?, SearchError> = .success(nil)
         suggestions = .success(nil)
         isEligibleForRequery = false
         selectedResult = nil
-
+        
         switch searchResult {
         case .success(let results):
             switch (resultMode)
@@ -231,7 +231,7 @@ suggestions: Result<[SearchSuggestion]?, SearchError> = .success(nil)
         case .none:
             break
         }
-
+        
         if let error = suggestError {
             results = .failure(SearchError(error))
         }
