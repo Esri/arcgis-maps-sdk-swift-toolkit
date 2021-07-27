@@ -64,7 +64,6 @@ public struct SearchView: View {
 ***REMOVED******REMOVED******REMOVED***TextField(searchViewModel.defaultPlaceHolder,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  text: $searchViewModel.currentQuery) { editing in
 ***REMOVED******REMOVED*** onCommit: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Editing state changed (becomes/looses firstResponder)
 ***REMOVED******REMOVED******REMOVED******REMOVED***commitSearch.toggle()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.esriDeleteTextButton(text: $searchViewModel.currentQuery)
@@ -99,8 +98,9 @@ public struct SearchView: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.task(id: commitSearch) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** User committed changes (hit Enter/Search button)
-***REMOVED******REMOVED******REMOVED******REMOVED***await searchViewModel.commitSearch(false)
+***REMOVED******REMOVED******REMOVED******REMOVED***if commitSearch {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await searchViewModel.commitSearch(false)
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.task(id: currentSuggestion) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** User committed changes (hit Enter/Search button)
@@ -110,8 +110,6 @@ public struct SearchView: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED*** TODO:  Show error but filter out user canceled errors
 
 ***REMOVED******REMOVED*** MARK: Modifiers
 ***REMOVED***
@@ -160,9 +158,6 @@ public struct SearchView: View {
 ***REMOVED***
 ***REMOVED***
 
-***REMOVED*** TODO: look at consolidating SearchResultView and SearchSuggestionView with
-***REMOVED*** TODO: new SearchDisplayProtocol containing only displayTitle and displaySubtitle
-***REMOVED*** TODO: That would mean we only needed one of these.
 struct SearchResultList: View {
 ***REMOVED***var searchResults: Result<[SearchResult]?, SearchError>
 ***REMOVED***@Binding var selectedResult: SearchResult?
@@ -177,14 +172,9 @@ struct SearchResultList: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** If we have only 1 results, don't show the list.
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***List {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(results) { result in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "mappin")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(Color(.red))
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***SearchResultRow(title: result.displayTitle, subtitle: result.displaySubtitle)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***SearchResultRow(result: result)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onTapGesture {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedResult = result
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print("user selected result: \(result.displayTitle)")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
@@ -202,7 +192,7 @@ struct SearchResultList: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.esriBorder()
+***REMOVED******REMOVED***.esriBorder(edgeInsets: EdgeInsets())
 ***REMOVED***
 ***REMOVED***
 
@@ -219,11 +209,7 @@ struct SearchSuggestionList: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***List {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if suggestions.count > 0 {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(suggestions) { suggestion in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let imageName = suggestion.isCollection ? "magnifyingglass" : "mappin"
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: imageName)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***SearchResultRow(title: suggestion.displayTitle, subtitle: suggestion.displaySubtitle)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***SuggestionResultRow(suggestion: suggestion)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onTapGesture() {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentSuggestion = suggestion
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
@@ -243,11 +229,35 @@ struct SearchSuggestionList: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.esriBorder()
+***REMOVED******REMOVED***.esriBorder(edgeInsets: EdgeInsets())
 ***REMOVED***
 ***REMOVED***
 
 struct SearchResultRow: View {
+***REMOVED***var result: SearchResult
+
+***REMOVED***var body: some View {
+***REMOVED******REMOVED***HStack {
+***REMOVED******REMOVED******REMOVED***Image(systemName: "mappin")
+***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(Color(.red))
+***REMOVED******REMOVED******REMOVED***ResultRow(title: result.displayTitle, subtitle: result.displaySubtitle)
+***REMOVED***
+***REMOVED***
+***REMOVED***
+
+struct SuggestionResultRow: View {
+***REMOVED***var suggestion: SearchSuggestion
+
+***REMOVED***var body: some View {
+***REMOVED******REMOVED***HStack {
+***REMOVED******REMOVED******REMOVED***let imageName = suggestion.isCollection ? "magnifyingglass" : "mappin"
+***REMOVED******REMOVED******REMOVED***Image(systemName: imageName)
+***REMOVED******REMOVED******REMOVED***ResultRow(title: suggestion.displayTitle, subtitle: suggestion.displaySubtitle)
+***REMOVED***
+***REMOVED***
+***REMOVED***
+
+struct ResultRow: View {
 ***REMOVED***var title: String
 ***REMOVED***var subtitle: String?
 ***REMOVED***

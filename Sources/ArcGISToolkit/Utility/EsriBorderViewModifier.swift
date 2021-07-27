@@ -14,16 +14,12 @@
 ***REMOVED***
 
 struct EsriBorderViewModifier: ViewModifier {
+***REMOVED***var edgeInsets: EdgeInsets
 ***REMOVED***func body(content: Content) -> some View {
 ***REMOVED******REMOVED***let roundedRect = RoundedRectangle(cornerRadius: 8)
 ***REMOVED******REMOVED***content
-***REMOVED******REMOVED******REMOVED***.padding(EdgeInsets(top: 8,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***leading: 12,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bottom: 8,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***trailing: 12
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***   )
-***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***.background(Color.white)
+***REMOVED******REMOVED******REMOVED***.padding(edgeInsets)
+***REMOVED******REMOVED******REMOVED***.background(.white)
 ***REMOVED******REMOVED******REMOVED***.clipShape(roundedRect)
 ***REMOVED******REMOVED******REMOVED***.overlay(
 ***REMOVED******REMOVED******REMOVED******REMOVED***roundedRect
@@ -39,10 +35,17 @@ struct EsriBorderViewModifier: ViewModifier {
 ***REMOVED***
 
 extension View {
-***REMOVED***func esriBorder() -> some View {
-***REMOVED******REMOVED***ModifiedContent(
+***REMOVED***func esriBorder(
+***REMOVED******REMOVED***edgeInsets: EdgeInsets = EdgeInsets(
+***REMOVED******REMOVED******REMOVED***top: 8,
+***REMOVED******REMOVED******REMOVED***leading: 12,
+***REMOVED******REMOVED******REMOVED***bottom: 8,
+***REMOVED******REMOVED******REMOVED***trailing: 12
+***REMOVED******REMOVED***)
+***REMOVED***) -> some View {
+***REMOVED******REMOVED***return ModifiedContent(
 ***REMOVED******REMOVED******REMOVED***content: self,
-***REMOVED******REMOVED******REMOVED***modifier: EsriBorderViewModifier()
+***REMOVED******REMOVED******REMOVED***modifier: EsriBorderViewModifier(edgeInsets: edgeInsets)
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***

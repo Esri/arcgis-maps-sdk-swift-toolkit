@@ -127,11 +127,6 @@ suggestions: Result<[SearchSuggestion]?, SearchError> = .success(nil)
 ***REMOVED******REMOVED***guard !currentQuery.isEmpty,
 ***REMOVED******REMOVED******REMOVED***  var source = currentSource() else { return ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***selectedResult = nil
-***REMOVED******REMOVED***isEligibleForRequery = false
-***REMOVED******REMOVED***suggestions = .success(nil)
-
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED***source.searchArea = queryArea
 ***REMOVED******REMOVED***source.preferredSearchLocation = queryCenter
 ***REMOVED******REMOVED***
@@ -141,6 +136,10 @@ suggestions: Result<[SearchSuggestion]?, SearchError> = .success(nil)
 ***REMOVED******REMOVED******REMOVED******REMOVED***area: restrictToArea ? queryArea : nil
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***selectedResult = nil
+***REMOVED******REMOVED***isEligibleForRequery = false
+***REMOVED******REMOVED***suggestions = .success(nil)
 
 ***REMOVED******REMOVED***switch searchResult {
 ***REMOVED******REMOVED***case .success(let searchResults):
@@ -165,16 +164,16 @@ suggestions: Result<[SearchSuggestion]?, SearchError> = .success(nil)
 ***REMOVED******REMOVED******REMOVED***  var source = currentSource() else { return ***REMOVED***
 ***REMOVED******REMOVED***print("SearchViewModel.updateSuggestions: \(currentQuery)")
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***results = .success(nil)
-***REMOVED******REMOVED***selectedResult = nil
-***REMOVED******REMOVED***isEligibleForRequery = false
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED***source.searchArea = queryArea
 ***REMOVED******REMOVED***source.preferredSearchLocation = queryCenter
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let suggestResult = await Result {
 ***REMOVED******REMOVED******REMOVED***try await source.suggest(currentQuery)
 ***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***results = .success(nil)
+***REMOVED******REMOVED***selectedResult = nil
+***REMOVED******REMOVED***isEligibleForRequery = false
 
 ***REMOVED******REMOVED***switch suggestResult {
 ***REMOVED******REMOVED***case .success(let suggestResults):
@@ -197,15 +196,17 @@ suggestions: Result<[SearchSuggestion]?, SearchError> = .success(nil)
 ***REMOVED******REMOVED***/   - searchSuggestion: The suggestion to use to commit the search.
 ***REMOVED***func acceptSuggestion(_ searchSuggestion: SearchSuggestion) async -> Void {
 ***REMOVED******REMOVED***currentQuery = searchSuggestion.displayTitle
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***isEligibleForRequery = false
-***REMOVED******REMOVED***selectedResult = nil
 
 ***REMOVED******REMOVED***var searchResults = [SearchResult]()
 ***REMOVED******REMOVED***var suggestError: Error?
 ***REMOVED******REMOVED***let searchResult = await Result {
 ***REMOVED******REMOVED******REMOVED***try await searchSuggestion.owningSource.search(searchSuggestion)
 ***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***suggestions = .success(nil)
+***REMOVED******REMOVED***isEligibleForRequery = false
+***REMOVED******REMOVED***selectedResult = nil
+
 ***REMOVED******REMOVED***switch searchResult {
 ***REMOVED******REMOVED***case .success(let results):
 ***REMOVED******REMOVED******REMOVED***switch (resultMode)
@@ -240,7 +241,6 @@ suggestions: Result<[SearchSuggestion]?, SearchError> = .success(nil)
 ***REMOVED******REMOVED******REMOVED******REMOVED***selectedResult = searchResults.first
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***suggestions = .success(nil)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Configures the view model for the provided map. By default, will only configure the view model
