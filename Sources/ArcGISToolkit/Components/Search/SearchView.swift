@@ -64,7 +64,6 @@ public struct SearchView: View {
             TextField(searchViewModel.defaultPlaceHolder,
                       text: $searchViewModel.currentQuery) { editing in
             } onCommit: {
-                // Editing state changed (becomes/looses firstResponder)
                 commitSearch.toggle()
             }
             .esriDeleteTextButton(text: $searchViewModel.currentQuery)
@@ -99,8 +98,9 @@ public struct SearchView: View {
                 }
             }
             .task(id: commitSearch) {
-                // User committed changes (hit Enter/Search button)
-                await searchViewModel.commitSearch(false)
+                if commitSearch {
+                    await searchViewModel.commitSearch(false)
+                }
             }
             .task(id: currentSuggestion) {
                 // User committed changes (hit Enter/Search button)
@@ -110,8 +110,6 @@ public struct SearchView: View {
                 }
             }
     }
-    
-    // TODO:  Show error but filter out user canceled errors
 
     // MARK: Modifiers
     
@@ -160,9 +158,6 @@ public struct SearchView: View {
     }
 }
 
-// TODO: look at consolidating SearchResultView and SearchSuggestionView with
-// TODO: new SearchDisplayProtocol containing only displayTitle and displaySubtitle
-// TODO: That would mean we only needed one of these.
 struct SearchResultList: View {
     var searchResults: Result<[SearchResult]?, SearchError>
     @Binding var selectedResult: SearchResult?
@@ -177,14 +172,9 @@ struct SearchResultList: View {
                         // If we have only 1 results, don't show the list.
                         List {
                             ForEach(results) { result in
-                                HStack {
-                                    Image(systemName: "mappin")
-                                        .foregroundColor(Color(.red))
-                                    SearchResultRow(title: result.displayTitle, subtitle: result.displaySubtitle)
-                                }
+                                SearchResultRow(result: result)
                                 .onTapGesture {
                                     selectedResult = result
-                                    print("user selected result: \(result.displayTitle)")
                                 }
                             }
                         }
@@ -202,7 +192,7 @@ struct SearchResultList: View {
                 }
             }
         }
-        .esriBorder()
+        .esriBorder(edgeInsets: EdgeInsets())
     }
 }
 
@@ -219,11 +209,7 @@ struct SearchSuggestionList: View {
                     List {
                         if suggestions.count > 0 {
                             ForEach(suggestions) { suggestion in
-                                HStack {
-                                    let imageName = suggestion.isCollection ? "magnifyingglass" : "mappin"
-                                    Image(systemName: imageName)
-                                    SearchResultRow(title: suggestion.displayTitle, subtitle: suggestion.displaySubtitle)
-                                }
+                                SuggestionResultRow(suggestion: suggestion)
                                 .onTapGesture() {
                                     currentSuggestion = suggestion
                                 }
@@ -243,11 +229,35 @@ struct SearchSuggestionList: View {
                 }
             }
         }
-        .esriBorder()
+        .esriBorder(edgeInsets: EdgeInsets())
     }
 }
 
 struct SearchResultRow: View {
+    var result: SearchResult
+
+    var body: some View {
+        HStack {
+            Image(systemName: "mappin")
+                .foregroundColor(Color(.red))
+            ResultRow(title: result.displayTitle, subtitle: result.displaySubtitle)
+        }
+    }
+}
+
+struct SuggestionResultRow: View {
+    var suggestion: SearchSuggestion
+
+    var body: some View {
+        HStack {
+            let imageName = suggestion.isCollection ? "magnifyingglass" : "mappin"
+            Image(systemName: imageName)
+            ResultRow(title: suggestion.displayTitle, subtitle: suggestion.displaySubtitle)
+        }
+    }
+}
+
+struct ResultRow: View {
     var title: String
     var subtitle: String?
     
