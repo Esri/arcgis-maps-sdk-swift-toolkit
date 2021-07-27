@@ -54,6 +54,13 @@ public struct SearchView: View {
     @State
     private var viewpointChanged: Bool = false
     
+    @State
+    private var currentTask: Task<Void, Never>?
+//    private var searchTask: Task<Void, Never>?
+//    private var suggestTask: Task<Void, Never>?
+//    private var acceptTask: Task<Void, Never>?
+
+    
     // TODO: Figure out better styling for list
     // TODO: continue fleshing out SearchViewModel and LocatorSearchSource/SmartSearchSource
     // TODO: following Nathan's lead on all this stuff, i.e., go through his code and duplicate it as I go.
@@ -94,18 +101,19 @@ public struct SearchView: View {
             .task(id: searchViewModel.currentQuery) {
                 // User typed a new character
                 if currentSuggestion == nil {
-                    await searchViewModel.updateSuggestions()
+                    await suggest()
                 }
             }
             .task(id: commitSearch) {
                 if commitSearch {
-                    await searchViewModel.commitSearch(false)
+                    await search()
+                    commitSearch.toggle()
                 }
             }
             .task(id: currentSuggestion) {
                 // User committed changes (hit Enter/Search button)
                 if let suggestion = currentSuggestion {
-                    await searchViewModel.acceptSuggestion(suggestion)
+                    await accept(suggestion)
                     currentSuggestion = nil
                 }
             }
@@ -155,6 +163,32 @@ public struct SearchView: View {
         var copy = self
         copy.noResultMessage = noResultMessage
         return copy
+    }
+}
+
+extension SearchView {
+    func search() async {
+        currentTask?.cancel()
+        currentTask = Task(operation: {
+            await searchViewModel.commitSearch(false)
+        })
+        await currentTask?.value
+    }
+    
+    func suggest() async {
+        currentTask?.cancel()
+        currentTask = Task(operation: {
+            await searchViewModel.updateSuggestions()
+        })
+        await currentTask?.value
+    }
+    
+    func accept(_ suggestion: SearchSuggestion) async {
+        currentTask?.cancel()
+        currentTask = Task(operation: {
+            await searchViewModel.acceptSuggestion(suggestion)
+        })
+        await currentTask?.value
     }
 }
 
