@@ -19,28 +19,33 @@ import ArcGIS
 /// underlying locator to be used well; this class implements behaviors that make assumptions about the
 /// locator being the world geocode service.
 public class SmartLocatorSearchSource: LocatorSearchSource {
-    public convenience init(
-        displayName: String = "Search",
+    /// Creates a smart locator search source.
+    /// - Parameters:
+    ///   - displayName: Name to show when presenting this source in the UI.
+    ///   - maximumResults: The maximum results to return when performing a search. Most sources default to 6.
+    ///   - maximumSuggestions: The maximum suggestions to return. Most sources default to 6.
+    ///   - searchArea: Area to be used as a constraint for searches and suggestions.
+    ///   - preferredSearchLocation: Point to be used as an input to searches and suggestions.
+    ///   - repeatSearchResultThreshold: The minimum number of search results to attempt to return.
+    ///   - repeatSuggestResultThreshold: The minimum number of suggestions to attempt to return.
+    public init(
+        displayName: String = "Smart Locator",
         maximumResults: Int = 6,
-        maximumSuggestions: Int,
+        maximumSuggestions: Int = 6,
         searchArea: Geometry? = nil,
         preferredSearchLocation: Point? = nil,
         repeatSearchResultThreshold: Int = 1,
-        repeatSuggestResultThreshold: Int = 6,
-        resultSymbolStyle: SymbolStyle? = nil
+        repeatSuggestResultThreshold: Int = 6
     ) {
-        self.init()
-        self.displayName = displayName
-        self.maximumResults = maximumResults
-        self.maximumSuggestions = maximumSuggestions
-        self.searchArea = searchArea
-        self.preferredSearchLocation = preferredSearchLocation
+        super.init(
+            displayName: displayName,
+            maximumResults: maximumResults,
+            maximumSuggestions: maximumSuggestions,
+            searchArea: searchArea,
+            preferredSearchLocation: preferredSearchLocation
+        )
         self.repeatSearchResultThreshold = repeatSearchResultThreshold
         self.repeatSuggestResultThreshold = repeatSuggestResultThreshold
-        self.resultSymbolStyle = resultSymbolStyle
-        
-        geocodeParameters.maxResults = Int32(maximumResults)
-        suggestParameters.maxResults = Int32(maximumSuggestions)
     }
     
     /// The minimum number of results to attempt to return. If there are too few results, the search is
@@ -55,14 +60,6 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
     /// threshold. Does not apply to repeated search with area constraint. Set to zero to disable search
     /// repeat behavior.
     var repeatSuggestResultThreshold: Int = 6
-    
-    /// Web style used to find symbols for results. When set, symbols are found for results based on the
-    /// result's `Type` field, if available. Defaults to the style identified by the name
-    /// "Esri2DPointSymbolsStyle". The default Esri 2D point symbol has good results for many of the
-    /// types returned by the world geocode service. You can use this property to customize result icons
-    /// by publishing a web style, taking care to ensure that symbol keys match the `Type` attribute
-    /// returned by the locator.
-    var resultSymbolStyle: SymbolStyle?
 
     public override func search(
         _ queryString: String,
@@ -80,7 +77,7 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
         
         // Remove geographic constraints and re-run search.
         geocodeParameters.searchArea = nil
-        let geocodeResults = try await locator.geocode(
+        let geocodeResults = try await locatorTask.geocode(
             searchText: queryString,
             parameters: geocodeParameters
         )
@@ -113,7 +110,7 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
 
         // Remove geographic constraints and re-run search.
         geocodeParameters.searchArea = nil
-        let geocodeResults = try await locator.geocode(suggestResult: suggestResult,
+        let geocodeResults = try await locatorTask.geocode(suggestResult: suggestResult,
                                                         parameters: geocodeParameters
         )
         
@@ -143,7 +140,7 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
 
         // Remove geographic constraints and re-run search.
         suggestParameters.searchArea = nil
-        let geocodeResults =  try await locator.suggest(
+        let geocodeResults =  try await locatorTask.suggest(
             searchText: queryString,
             parameters: suggestParameters
         )

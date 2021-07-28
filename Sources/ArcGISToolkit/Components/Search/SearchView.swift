@@ -15,28 +15,27 @@ import SwiftUI
 import Combine
 import ArcGIS
 
-/// SearchView presents a search experience, powered by underlying SearchViewModel.
+/// SearchView presents a search experience, powered by an underlying SearchViewModel.
 public struct SearchView: View {
-    public init(
-        searchViewModel: SearchViewModel
-    ) {
-        self.searchViewModel = searchViewModel
+    public init(searchViewModel: SearchViewModel? = nil) {
+        if let searchViewModel = searchViewModel {
+            self.searchViewModel = searchViewModel
+        }
+        else {
+            self.searchViewModel = SearchViewModel(
+                sources: [LocatorSearchSource()]
+            )
+        }
     }
     
     /// The view model used by the view. The `ViewModel` manages state and handles the activity of
     /// searching. The view observes `ViewModel` for changes in state. The view calls methods on
-    /// `ViewModel` in response to user action. The `ViewModel` is created automatically by the
-    /// view upon construction. If `enableAutomaticConfiguration` is true, the view calls
-    /// `SearchViewModel.ConfigureForMap` for the map/scene whenever it changes. Both
-    /// the associated `GeoView` and the `GeoView`'s document can change after initial configuration.
+    /// `ViewModel` in response to user action.
     @ObservedObject
     var searchViewModel: SearchViewModel
     
-    private var enableAutomaticConfiguration = true
-    
-    @State
-    private var enableRepeatSearchHereButton = true
-    
+    // TODO: go through these properties, and in the SearchViewModel and make sure they're implemented correctly.
+
     @State
     private var enableResultListView = true
     
@@ -50,10 +49,6 @@ public struct SearchView: View {
     @State
     private var currentSuggestion: SearchSuggestion?
     
-    /// Indicates that the geoView's viewpoint has changed since the last search.
-    @State
-    private var viewpointChanged: Bool = false
-    
     @State
     private var currentTask: Task<Void, Never>?
     
@@ -64,21 +59,15 @@ public struct SearchView: View {
     // TODO: Get proper pins for example app. - How to use SF font with PictureMarkerSymbol?? How to tint calcite icons/images.
     public var body: some View {
         VStack (alignment: .center) {
-            TextField(searchViewModel.defaultPlaceHolder,
+            TextField(searchViewModel.defaultPlaceholder,
                       text: $searchViewModel.currentQuery) { editing in
             } onCommit: {
-                commitSearch.toggle()
+                commitSearch = true
             }
             .esriDeleteTextButton(text: $searchViewModel.currentQuery)
             .esriSearchButton(performSearch: $commitSearch)
             .esriShowResultsButton(showResults: $enableResultListView)
             .esriBorder()
-            if enableRepeatSearchHereButton, viewpointChanged {
-                Button("Search Here") {
-                    viewpointChanged = false
-                    commitSearch.toggle()
-                }
-            }
             if enableResultListView {
                 SearchResultList(
                     searchResults: searchViewModel.results,
@@ -102,8 +91,8 @@ public struct SearchView: View {
             }
             .task(id: commitSearch) {
                 if commitSearch {
-                    await search()
                     commitSearch.toggle()
+                    await search()
                 }
             }
             .task(id: currentSuggestion) {
@@ -116,30 +105,6 @@ public struct SearchView: View {
     }
 
     // MARK: Modifiers
-    
-    /// Determines whether the view will update its configuration based on the geoview's
-    /// document automatically.  Defaults to `true`.
-    /// - Parameter enableAutomaticConfiguration: The new value.
-    /// - Returns: The `SearchView`.
-    public func enableAutomaticConfiguration(_ enableAutomaticConfiguration: Bool) -> SearchView {
-        var copy = self
-        copy.enableAutomaticConfiguration = enableAutomaticConfiguration
-        return copy
-    }
-    
-    /// Determines whether a button that allows the user to repeat a search with a spatial constraint
-    /// is displayed automatically. Set to `false` if you want to use a custom button, for example so that
-    /// you can place it elsewhere on the map. `SearchViewModel` has properties and methods
-    /// you can use to determine when the custom button should be visible and to trigger the search
-    /// repeat behavior.  Defaults to `true`.
-    /// - Parameter enableRepeatSearchHereButton: The new value.
-    /// - Returns: The `SearchView`.
-    public func enableRepeatSearchHereButton(
-        _ enableRepeatSearchHereButton: Bool
-    ) -> SearchView {
-        self.enableRepeatSearchHereButton = enableRepeatSearchHereButton
-        return self
-    }
     
     /// Determines whether a built-in result view will be shown. If `false`, the result display/selection
     /// list is not shown. Set to `false` if you want to define a custom result list. You might use a

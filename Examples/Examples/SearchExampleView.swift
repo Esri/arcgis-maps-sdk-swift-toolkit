@@ -18,12 +18,7 @@ import ArcGISToolkit
 
 struct SearchExampleView: View {
     @ObservedObject
-    var searchViewModel = SearchViewModel(
-        sources: [SmartLocatorSearchSource(
-            displayName: "Locator One",
-            maximumResults: 16,
-            maximumSuggestions: 16)]
-    )
+    var searchViewModel = SearchViewModel()
     
     let map = Map(basemapStyle: .arcGISImagery)
     
@@ -63,6 +58,19 @@ struct SearchExampleView: View {
             .onChange(of: searchViewModel.selectedResult, perform: { newValue in
                 display(selectedResult: newValue)
             })
+            .task {
+                setupSearchViewModel()
+            }
+    }
+    
+    /// Sets up any desired customization on `searchViewModel`.
+    private func setupSearchViewModel() {
+        let smartLocator = SmartLocatorSearchSource(
+            displayName: "Locator One",
+            maximumResults: 16,
+            maximumSuggestions: 16
+        )
+        searchViewModel.sources = [smartLocator]
     }
     
     fileprivate func display(searchResults: Result<[SearchResult]?, SearchError>) {
