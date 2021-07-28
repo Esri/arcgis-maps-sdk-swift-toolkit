@@ -15,28 +15,27 @@
 import Combine
 ***REMOVED***
 
-***REMOVED***/ SearchView presents a search experience, powered by underlying SearchViewModel.
+***REMOVED***/ SearchView presents a search experience, powered by an underlying SearchViewModel.
 public struct SearchView: View {
-***REMOVED***public init(
-***REMOVED******REMOVED***searchViewModel: SearchViewModel
-***REMOVED***) {
-***REMOVED******REMOVED***self.searchViewModel = searchViewModel
+***REMOVED***public init(searchViewModel: SearchViewModel? = nil) {
+***REMOVED******REMOVED***if let searchViewModel = searchViewModel {
+***REMOVED******REMOVED******REMOVED***self.searchViewModel = searchViewModel
+***REMOVED***
+***REMOVED******REMOVED***else {
+***REMOVED******REMOVED******REMOVED***self.searchViewModel = SearchViewModel(
+***REMOVED******REMOVED******REMOVED******REMOVED***sources: [LocatorSearchSource()]
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The view model used by the view. The `ViewModel` manages state and handles the activity of
 ***REMOVED******REMOVED***/ searching. The view observes `ViewModel` for changes in state. The view calls methods on
-***REMOVED******REMOVED***/ `ViewModel` in response to user action. The `ViewModel` is created automatically by the
-***REMOVED******REMOVED***/ view upon construction. If `enableAutomaticConfiguration` is true, the view calls
-***REMOVED******REMOVED***/ `SearchViewModel.ConfigureForMap` for the map/scene whenever it changes. Both
-***REMOVED******REMOVED***/ the associated `GeoView` and the `GeoView`'s document can change after initial configuration.
+***REMOVED******REMOVED***/ `ViewModel` in response to user action.
 ***REMOVED***@ObservedObject
 ***REMOVED***var searchViewModel: SearchViewModel
 ***REMOVED***
-***REMOVED***private var enableAutomaticConfiguration = true
-***REMOVED***
-***REMOVED***@State
-***REMOVED***private var enableRepeatSearchHereButton = true
-***REMOVED***
+***REMOVED******REMOVED*** TODO: go through these properties, and in the SearchViewModel and make sure they're implemented correctly.
+
 ***REMOVED***@State
 ***REMOVED***private var enableResultListView = true
 ***REMOVED***
@@ -50,10 +49,6 @@ public struct SearchView: View {
 ***REMOVED***@State
 ***REMOVED***private var currentSuggestion: SearchSuggestion?
 ***REMOVED***
-***REMOVED******REMOVED***/ Indicates that the geoView's viewpoint has changed since the last search.
-***REMOVED***@State
-***REMOVED***private var viewpointChanged: Bool = false
-***REMOVED***
 ***REMOVED***@State
 ***REMOVED***private var currentTask: Task<Void, Never>?
 ***REMOVED***
@@ -64,21 +59,15 @@ public struct SearchView: View {
 ***REMOVED******REMOVED*** TODO: Get proper pins for example app. - How to use SF font with PictureMarkerSymbol?? How to tint calcite icons/images.
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***VStack (alignment: .center) {
-***REMOVED******REMOVED******REMOVED***TextField(searchViewModel.defaultPlaceHolder,
+***REMOVED******REMOVED******REMOVED***TextField(searchViewModel.defaultPlaceholder,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  text: $searchViewModel.currentQuery) { editing in
 ***REMOVED******REMOVED*** onCommit: {
-***REMOVED******REMOVED******REMOVED******REMOVED***commitSearch.toggle()
+***REMOVED******REMOVED******REMOVED******REMOVED***commitSearch = true
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.esriDeleteTextButton(text: $searchViewModel.currentQuery)
 ***REMOVED******REMOVED******REMOVED***.esriSearchButton(performSearch: $commitSearch)
 ***REMOVED******REMOVED******REMOVED***.esriShowResultsButton(showResults: $enableResultListView)
 ***REMOVED******REMOVED******REMOVED***.esriBorder()
-***REMOVED******REMOVED******REMOVED***if enableRepeatSearchHereButton, viewpointChanged {
-***REMOVED******REMOVED******REMOVED******REMOVED***Button("Search Here") {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpointChanged = false
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***commitSearch.toggle()
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***if enableResultListView {
 ***REMOVED******REMOVED******REMOVED******REMOVED***SearchResultList(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***searchResults: searchViewModel.results,
@@ -102,8 +91,8 @@ public struct SearchView: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.task(id: commitSearch) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if commitSearch {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await search()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***commitSearch.toggle()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await search()
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.task(id: currentSuggestion) {
@@ -116,30 +105,6 @@ public struct SearchView: View {
 ***REMOVED***
 
 ***REMOVED******REMOVED*** MARK: Modifiers
-***REMOVED***
-***REMOVED******REMOVED***/ Determines whether the view will update its configuration based on the geoview's
-***REMOVED******REMOVED***/ document automatically.  Defaults to `true`.
-***REMOVED******REMOVED***/ - Parameter enableAutomaticConfiguration: The new value.
-***REMOVED******REMOVED***/ - Returns: The `SearchView`.
-***REMOVED***public func enableAutomaticConfiguration(_ enableAutomaticConfiguration: Bool) -> SearchView {
-***REMOVED******REMOVED***var copy = self
-***REMOVED******REMOVED***copy.enableAutomaticConfiguration = enableAutomaticConfiguration
-***REMOVED******REMOVED***return copy
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ Determines whether a button that allows the user to repeat a search with a spatial constraint
-***REMOVED******REMOVED***/ is displayed automatically. Set to `false` if you want to use a custom button, for example so that
-***REMOVED******REMOVED***/ you can place it elsewhere on the map. `SearchViewModel` has properties and methods
-***REMOVED******REMOVED***/ you can use to determine when the custom button should be visible and to trigger the search
-***REMOVED******REMOVED***/ repeat behavior.  Defaults to `true`.
-***REMOVED******REMOVED***/ - Parameter enableRepeatSearchHereButton: The new value.
-***REMOVED******REMOVED***/ - Returns: The `SearchView`.
-***REMOVED***public func enableRepeatSearchHereButton(
-***REMOVED******REMOVED***_ enableRepeatSearchHereButton: Bool
-***REMOVED***) -> SearchView {
-***REMOVED******REMOVED***self.enableRepeatSearchHereButton = enableRepeatSearchHereButton
-***REMOVED******REMOVED***return self
-***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Determines whether a built-in result view will be shown. If `false`, the result display/selection
 ***REMOVED******REMOVED***/ list is not shown. Set to `false` if you want to define a custom result list. You might use a

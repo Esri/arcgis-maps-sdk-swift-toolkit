@@ -19,28 +19,33 @@
 ***REMOVED***/ underlying locator to be used well; this class implements behaviors that make assumptions about the
 ***REMOVED***/ locator being the world geocode service.
 public class SmartLocatorSearchSource: LocatorSearchSource {
-***REMOVED***public convenience init(
-***REMOVED******REMOVED***displayName: String = "Search",
+***REMOVED******REMOVED***/ Creates a smart locator search source.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - displayName: Name to show when presenting this source in the UI.
+***REMOVED******REMOVED***/   - maximumResults: The maximum results to return when performing a search. Most sources default to 6.
+***REMOVED******REMOVED***/   - maximumSuggestions: The maximum suggestions to return. Most sources default to 6.
+***REMOVED******REMOVED***/   - searchArea: Area to be used as a constraint for searches and suggestions.
+***REMOVED******REMOVED***/   - preferredSearchLocation: Point to be used as an input to searches and suggestions.
+***REMOVED******REMOVED***/   - repeatSearchResultThreshold: The minimum number of search results to attempt to return.
+***REMOVED******REMOVED***/   - repeatSuggestResultThreshold: The minimum number of suggestions to attempt to return.
+***REMOVED***public init(
+***REMOVED******REMOVED***displayName: String = "Smart Locator",
 ***REMOVED******REMOVED***maximumResults: Int = 6,
-***REMOVED******REMOVED***maximumSuggestions: Int,
+***REMOVED******REMOVED***maximumSuggestions: Int = 6,
 ***REMOVED******REMOVED***searchArea: Geometry? = nil,
 ***REMOVED******REMOVED***preferredSearchLocation: Point? = nil,
 ***REMOVED******REMOVED***repeatSearchResultThreshold: Int = 1,
-***REMOVED******REMOVED***repeatSuggestResultThreshold: Int = 6,
-***REMOVED******REMOVED***resultSymbolStyle: SymbolStyle? = nil
+***REMOVED******REMOVED***repeatSuggestResultThreshold: Int = 6
 ***REMOVED***) {
-***REMOVED******REMOVED***self.init()
-***REMOVED******REMOVED***self.displayName = displayName
-***REMOVED******REMOVED***self.maximumResults = maximumResults
-***REMOVED******REMOVED***self.maximumSuggestions = maximumSuggestions
-***REMOVED******REMOVED***self.searchArea = searchArea
-***REMOVED******REMOVED***self.preferredSearchLocation = preferredSearchLocation
+***REMOVED******REMOVED***super.init(
+***REMOVED******REMOVED******REMOVED***displayName: displayName,
+***REMOVED******REMOVED******REMOVED***maximumResults: maximumResults,
+***REMOVED******REMOVED******REMOVED***maximumSuggestions: maximumSuggestions,
+***REMOVED******REMOVED******REMOVED***searchArea: searchArea,
+***REMOVED******REMOVED******REMOVED***preferredSearchLocation: preferredSearchLocation
+***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***self.repeatSearchResultThreshold = repeatSearchResultThreshold
 ***REMOVED******REMOVED***self.repeatSuggestResultThreshold = repeatSuggestResultThreshold
-***REMOVED******REMOVED***self.resultSymbolStyle = resultSymbolStyle
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***geocodeParameters.maxResults = Int32(maximumResults)
-***REMOVED******REMOVED***suggestParameters.maxResults = Int32(maximumSuggestions)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The minimum number of results to attempt to return. If there are too few results, the search is
@@ -55,14 +60,6 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
 ***REMOVED******REMOVED***/ threshold. Does not apply to repeated search with area constraint. Set to zero to disable search
 ***REMOVED******REMOVED***/ repeat behavior.
 ***REMOVED***var repeatSuggestResultThreshold: Int = 6
-***REMOVED***
-***REMOVED******REMOVED***/ Web style used to find symbols for results. When set, symbols are found for results based on the
-***REMOVED******REMOVED***/ result's `Type` field, if available. Defaults to the style identified by the name
-***REMOVED******REMOVED***/ "Esri2DPointSymbolsStyle". The default Esri 2D point symbol has good results for many of the
-***REMOVED******REMOVED***/ types returned by the world geocode service. You can use this property to customize result icons
-***REMOVED******REMOVED***/ by publishing a web style, taking care to ensure that symbol keys match the `Type` attribute
-***REMOVED******REMOVED***/ returned by the locator.
-***REMOVED***var resultSymbolStyle: SymbolStyle?
 
 ***REMOVED***public override func search(
 ***REMOVED******REMOVED***_ queryString: String,
@@ -80,7 +77,7 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Remove geographic constraints and re-run search.
 ***REMOVED******REMOVED***geocodeParameters.searchArea = nil
-***REMOVED******REMOVED***let geocodeResults = try await locator.geocode(
+***REMOVED******REMOVED***let geocodeResults = try await locatorTask.geocode(
 ***REMOVED******REMOVED******REMOVED***searchText: queryString,
 ***REMOVED******REMOVED******REMOVED***parameters: geocodeParameters
 ***REMOVED******REMOVED***)
@@ -113,7 +110,7 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
 
 ***REMOVED******REMOVED******REMOVED*** Remove geographic constraints and re-run search.
 ***REMOVED******REMOVED***geocodeParameters.searchArea = nil
-***REMOVED******REMOVED***let geocodeResults = try await locator.geocode(suggestResult: suggestResult,
+***REMOVED******REMOVED***let geocodeResults = try await locatorTask.geocode(suggestResult: suggestResult,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***parameters: geocodeParameters
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
@@ -143,7 +140,7 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
 
 ***REMOVED******REMOVED******REMOVED*** Remove geographic constraints and re-run search.
 ***REMOVED******REMOVED***suggestParameters.searchArea = nil
-***REMOVED******REMOVED***let geocodeResults =  try await locator.suggest(
+***REMOVED******REMOVED***let geocodeResults =  try await locatorTask.suggest(
 ***REMOVED******REMOVED******REMOVED***searchText: queryString,
 ***REMOVED******REMOVED******REMOVED***parameters: suggestParameters
 ***REMOVED******REMOVED***)

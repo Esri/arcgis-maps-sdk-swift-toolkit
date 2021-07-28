@@ -14,44 +14,42 @@
 import Swift
 ***REMOVED***
 ***REMOVED***
-
-***REMOVED***/ Defines how many results to return; one, many, or automatic based on circumstance.
-public enum SearchResultMode {
-***REMOVED******REMOVED***/ Search should always result in at most one result.
-***REMOVED***case single
-***REMOVED******REMOVED***/ Search should always try to return multiple results.
-***REMOVED***case multiple
-***REMOVED******REMOVED***/ Search should make a choice based on context. E.g. 'coffee shop' should be multiple results,
-***REMOVED******REMOVED***/ while '380 New York St. Redlands' should be one result.
-***REMOVED***case automatic
-***REMOVED***
+import Combine
 
 ***REMOVED***/ Performs searches and manages search state for a Search, or optionally without a UI connection.
 public class SearchViewModel: ObservableObject {
+***REMOVED***
+***REMOVED******REMOVED***/ Defines how many results to return; one, many, or automatic based on circumstance.
+***REMOVED***public enum SearchResultMode {
+***REMOVED******REMOVED******REMOVED***/ Search should always result in at most one result.
+***REMOVED******REMOVED***case single
+***REMOVED******REMOVED******REMOVED***/ Search should always try to return multiple results.
+***REMOVED******REMOVED***case multiple
+***REMOVED******REMOVED******REMOVED***/ Search should make a choice based on context. E.g. 'coffee shop' should be multiple results,
+***REMOVED******REMOVED******REMOVED***/ while '380 New York St. Redlands' should be one result.
+***REMOVED******REMOVED***case automatic
+***REMOVED***
+
 ***REMOVED***public convenience init(
-defaultPlaceHolder: String = "Find a place or address",
+defaultPlaceholder: String = .defaultPlaceholder,
 activeSource: SearchSourceProtocol? = nil,
 queryArea: Geometry? = nil,
 queryCenter: Point? = nil,
 resultMode: SearchResultMode = .automatic,
-results: Result<[SearchResult]?, SearchError> = .success(nil),
-sources: [SearchSourceProtocol] = [],
-suggestions: Result<[SearchSuggestion]?, SearchError> = .success(nil)
+sources: [SearchSourceProtocol] = []
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.init()
-***REMOVED******REMOVED***self.defaultPlaceHolder = defaultPlaceHolder
+***REMOVED******REMOVED***self.defaultPlaceholder = defaultPlaceholder
 ***REMOVED******REMOVED***self.activeSource = activeSource
 ***REMOVED******REMOVED***self.queryArea = queryArea
 ***REMOVED******REMOVED***self.queryCenter = queryCenter
 ***REMOVED******REMOVED***self.resultMode = resultMode
-***REMOVED******REMOVED***self.results = results
 ***REMOVED******REMOVED***self.sources = sources
-***REMOVED******REMOVED***self.suggestions = suggestions
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The string shown in the search view when no user query is entered.
 ***REMOVED******REMOVED***/ Default is "Find a place or address", or read from web map JSON if specified in the web map configuration.
-***REMOVED***public var defaultPlaceHolder: String = "Find a place or address"
+***REMOVED***public var defaultPlaceholder: String = .defaultPlaceholder
 ***REMOVED***
 ***REMOVED******REMOVED***/ Tracks the currently active search source.  All sources are used if this property is `nil`.
 ***REMOVED***public var activeSource: SearchSourceProtocol?
@@ -68,6 +66,7 @@ suggestions: Result<[SearchSuggestion]?, SearchError> = .success(nil)
 ***REMOVED******REMOVED******REMOVED******REMOVED***results = .success(nil)
 ***REMOVED******REMOVED******REMOVED******REMOVED***suggestions = .success(nil)
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***isEligibleForRequery = false
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -75,8 +74,18 @@ suggestions: Result<[SearchSuggestion]?, SearchError> = .success(nil)
 ***REMOVED******REMOVED***/ `restrictToArea` property is set to true when calling `commitSearch`. This property
 ***REMOVED******REMOVED***/ should be updated as the user navigates the map/scene, or at minimum before calling `commitSearch`.
 ***REMOVED***public var queryArea: Geometry? {
-***REMOVED******REMOVED***didSet {
-***REMOVED******REMOVED******REMOVED***isEligibleForRequery = true
+***REMOVED******REMOVED***willSet {
+***REMOVED******REMOVED******REMOVED***var hasResults = false
+***REMOVED******REMOVED******REMOVED***switch results {
+***REMOVED******REMOVED******REMOVED***case .success(let results):
+***REMOVED******REMOVED******REMOVED******REMOVED***hasResults = results != nil
+***REMOVED******REMOVED******REMOVED***case .failure(_):
+***REMOVED******REMOVED******REMOVED******REMOVED***break;
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED*** When `queryArea` changes, whether the model is eligible for
+***REMOVED******REMOVED******REMOVED******REMOVED*** requery is dependent on whether a previous search was performed.
+***REMOVED******REMOVED******REMOVED***isEligibleForRequery = hasResults
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -115,8 +124,11 @@ suggestions: Result<[SearchSuggestion]?, SearchError> = .success(nil)
 ***REMOVED******REMOVED***/ This property is used by the view to enable 'Repeat search here' functionality. This property is
 ***REMOVED******REMOVED***/ observable, and the view should use it to hide and show the 'repeat search' button. Changes to
 ***REMOVED******REMOVED***/ this property are driven by changes to the `queryArea` property.
+***REMOVED***@Published
 ***REMOVED***private(set) var isEligibleForRequery: Bool = false
 ***REMOVED***
+***REMOVED***private var subscriptions = Set<AnyCancellable>()
+
 ***REMOVED******REMOVED***/ Starts a search. `selectedResult` and `results`, among other properties, are set
 ***REMOVED******REMOVED***/ asynchronously. Other query properties are read to define the parameters of the search.
 ***REMOVED******REMOVED***/ If `restrictToArea` is true, only results in the query area will be returned.
@@ -124,11 +136,12 @@ suggestions: Result<[SearchSuggestion]?, SearchError> = .success(nil)
 ***REMOVED******REMOVED***/ of the `queryArea` property. Behavior when called with `restrictToArea` set to true
 ***REMOVED******REMOVED***/ when the `queryArea` property is null, a line, a point, or an empty geometry is undefined.
 ***REMOVED***func commitSearch(_ restrictToArea: Bool) async -> Void {
-***REMOVED******REMOVED***guard !currentQuery.isEmpty,
+***REMOVED******REMOVED***guard !currentQuery.trimmingCharacters(in: .whitespaces).isEmpty,
 ***REMOVED******REMOVED******REMOVED***  var source = currentSource() else { return ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***source.searchArea = queryArea
 ***REMOVED******REMOVED***source.preferredSearchLocation = queryCenter
+***REMOVED******REMOVED***selectedResult = nil
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let searchResult = await Result {
 ***REMOVED******REMOVED******REMOVED***try await source.search(
@@ -137,7 +150,6 @@ suggestions: Result<[SearchSuggestion]?, SearchError> = .success(nil)
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***selectedResult = nil
 ***REMOVED******REMOVED***isEligibleForRequery = false
 ***REMOVED******REMOVED***suggestions = .success(nil)
 ***REMOVED******REMOVED***
@@ -160,9 +172,8 @@ suggestions: Result<[SearchSuggestion]?, SearchError> = .success(nil)
 ***REMOVED******REMOVED***/ requests before initiating new ones. The view should also wait for some time after user finishes
 ***REMOVED******REMOVED***/ typing before making suggestions. The JavaScript implementation uses 150ms by default.
 ***REMOVED***func updateSuggestions() async -> Void {
-***REMOVED******REMOVED***guard !currentQuery.isEmpty,
+***REMOVED******REMOVED***guard !currentQuery.trimmingCharacters(in: .whitespaces).isEmpty,
 ***REMOVED******REMOVED******REMOVED***  var source = currentSource() else { return ***REMOVED***
-***REMOVED******REMOVED***print("SearchViewModel.updateSuggestions: \(currentQuery)")
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***source.searchArea = queryArea
 ***REMOVED******REMOVED***source.preferredSearchLocation = queryCenter
@@ -249,7 +260,30 @@ suggestions: Result<[SearchSuggestion]?, SearchError> = .success(nil)
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - map: Map to use for configuration.
 ***REMOVED***func configureForMap(_ map: Map) {
-***REMOVED******REMOVED***print("SearchViewModel.configureForMap")
+***REMOVED******REMOVED******REMOVED*** Reset existing properties
+***REMOVED******REMOVED***sources.removeAll()
+***REMOVED******REMOVED***activeSource = nil
+***REMOVED******REMOVED***currentQuery = ""
+***REMOVED******REMOVED***defaultPlaceholder = .defaultPlaceholder
+***REMOVED******REMOVED***sources = [LocatorSearchSource()]
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***map.loadPublisher.sink(receiveCompletion: { [weak self] completion in
+***REMOVED******REMOVED******REMOVED***if let localItem = map.item as? LocalItem {
+***REMOVED******REMOVED******REMOVED******REMOVED***let mmpk = MobileMapPackage(fileURL: localItem.fileURL)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***guard let self = self else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***mmpk.loadPublisher.sink(receiveCompletion: { [weak self] completion in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let locatorTask = mmpk.locatorTask {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self?.sources = [
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***LocatorSearchSource(locatorTask: locatorTask)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***]
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***, receiveValue: { _ in ***REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.store(in: &self.subscriptions)
+***REMOVED******REMOVED***
+***REMOVED***, receiveValue: { _ in ***REMOVED***)
+***REMOVED******REMOVED***.store(in: &subscriptions)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Configures the view model for the provided scene. By default, will only configure the view model
@@ -279,4 +313,8 @@ extension SearchViewModel {
 ***REMOVED***
 ***REMOVED******REMOVED***return source
 ***REMOVED***
+***REMOVED***
+
+public extension String {
+***REMOVED***static let defaultPlaceholder = "Find a place or address"
 ***REMOVED***

@@ -18,12 +18,7 @@ import Combine
 
 struct SearchExampleView: View {
 ***REMOVED***@ObservedObject
-***REMOVED***var searchViewModel = SearchViewModel(
-***REMOVED******REMOVED***sources: [SmartLocatorSearchSource(
-***REMOVED******REMOVED******REMOVED***displayName: "Locator One",
-***REMOVED******REMOVED******REMOVED***maximumResults: 16,
-***REMOVED******REMOVED******REMOVED***maximumSuggestions: 16)]
-***REMOVED***)
+***REMOVED***var searchViewModel = SearchViewModel()
 ***REMOVED***
 ***REMOVED***let map = Map(basemapStyle: .arcGISImagery)
 ***REMOVED***
@@ -63,6 +58,19 @@ struct SearchExampleView: View {
 ***REMOVED******REMOVED******REMOVED***.onChange(of: searchViewModel.selectedResult, perform: { newValue in
 ***REMOVED******REMOVED******REMOVED******REMOVED***display(selectedResult: newValue)
 ***REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***.task {
+***REMOVED******REMOVED******REMOVED******REMOVED***setupSearchViewModel()
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Sets up any desired customization on `searchViewModel`.
+***REMOVED***private func setupSearchViewModel() {
+***REMOVED******REMOVED***let smartLocator = SmartLocatorSearchSource(
+***REMOVED******REMOVED******REMOVED***displayName: "Locator One",
+***REMOVED******REMOVED******REMOVED***maximumResults: 16,
+***REMOVED******REMOVED******REMOVED***maximumSuggestions: 16
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***searchViewModel.sources = [smartLocator]
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***fileprivate func display(searchResults: Result<[SearchResult]?, SearchError>) {

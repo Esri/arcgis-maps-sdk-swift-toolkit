@@ -20,7 +20,7 @@ struct EsriSearchButtonViewModifier: ViewModifier {
 ***REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED***content
 ***REMOVED******REMOVED******REMOVED***Button(
-***REMOVED******REMOVED******REMOVED******REMOVED***action: { self.performSearch.toggle() ***REMOVED***,
+***REMOVED******REMOVED******REMOVED******REMOVED***action: { self.performSearch = true ***REMOVED***,
 ***REMOVED******REMOVED******REMOVED******REMOVED***label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "magnifyingglass.circle.fill")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(Color(UIColor.opaqueSeparator))
