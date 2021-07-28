@@ -14,44 +14,42 @@
 import Swift
 import SwiftUI
 import ArcGIS
-
-/// Defines how many results to return; one, many, or automatic based on circumstance.
-public enum SearchResultMode {
-    /// Search should always result in at most one result.
-    case single
-    /// Search should always try to return multiple results.
-    case multiple
-    /// Search should make a choice based on context. E.g. 'coffee shop' should be multiple results,
-    /// while '380 New York St. Redlands' should be one result.
-    case automatic
-}
+import Combine
 
 /// Performs searches and manages search state for a Search, or optionally without a UI connection.
 public class SearchViewModel: ObservableObject {
+    
+    /// Defines how many results to return; one, many, or automatic based on circumstance.
+    public enum SearchResultMode {
+        /// Search should always result in at most one result.
+        case single
+        /// Search should always try to return multiple results.
+        case multiple
+        /// Search should make a choice based on context. E.g. 'coffee shop' should be multiple results,
+        /// while '380 New York St. Redlands' should be one result.
+        case automatic
+    }
+
     public convenience init(
-defaultPlaceHolder: String = "Find a place or address",
+defaultPlaceholder: String = .defaultPlaceholder,
 activeSource: SearchSourceProtocol? = nil,
 queryArea: Geometry? = nil,
 queryCenter: Point? = nil,
 resultMode: SearchResultMode = .automatic,
-results: Result<[SearchResult]?, SearchError> = .success(nil),
-sources: [SearchSourceProtocol] = [],
-suggestions: Result<[SearchSuggestion]?, SearchError> = .success(nil)
+sources: [SearchSourceProtocol] = []
     ) {
         self.init()
-        self.defaultPlaceHolder = defaultPlaceHolder
+        self.defaultPlaceholder = defaultPlaceholder
         self.activeSource = activeSource
         self.queryArea = queryArea
         self.queryCenter = queryCenter
         self.resultMode = resultMode
-        self.results = results
         self.sources = sources
-        self.suggestions = suggestions
     }
     
     /// The string shown in the search view when no user query is entered.
     /// Default is "Find a place or address", or read from web map JSON if specified in the web map configuration.
-    public var defaultPlaceHolder: String = "Find a place or address"
+    public var defaultPlaceholder: String = .defaultPlaceholder
     
     /// Tracks the currently active search source.  All sources are used if this property is `nil`.
     public var activeSource: SearchSourceProtocol?
@@ -68,6 +66,7 @@ suggestions: Result<[SearchSuggestion]?, SearchError> = .success(nil)
                 results = .success(nil)
                 suggestions = .success(nil)
             }
+            isEligibleForRequery = false
         }
     }
     
@@ -75,8 +74,18 @@ suggestions: Result<[SearchSuggestion]?, SearchError> = .success(nil)
     /// `restrictToArea` property is set to true when calling `commitSearch`. This property
     /// should be updated as the user navigates the map/scene, or at minimum before calling `commitSearch`.
     public var queryArea: Geometry? {
-        didSet {
-            isEligibleForRequery = true
+        willSet {
+            var hasResults = false
+            switch results {
+            case .success(let results):
+                hasResults = results != nil
+            case .failure(_):
+                break;
+            }
+            
+            // When `queryArea` changes, whether the model is eligible for
+            // requery is dependent on whether a previous search was performed.
+            isEligibleForRequery = hasResults
         }
     }
     
@@ -115,8 +124,11 @@ suggestions: Result<[SearchSuggestion]?, SearchError> = .success(nil)
     /// This property is used by the view to enable 'Repeat search here' functionality. This property is
     /// observable, and the view should use it to hide and show the 'repeat search' button. Changes to
     /// this property are driven by changes to the `queryArea` property.
+    @Published
     private(set) var isEligibleForRequery: Bool = false
     
+    private var subscriptions = Set<AnyCancellable>()
+
     /// Starts a search. `selectedResult` and `results`, among other properties, are set
     /// asynchronously. Other query properties are read to define the parameters of the search.
     /// If `restrictToArea` is true, only results in the query area will be returned.
@@ -124,11 +136,12 @@ suggestions: Result<[SearchSuggestion]?, SearchError> = .success(nil)
     /// of the `queryArea` property. Behavior when called with `restrictToArea` set to true
     /// when the `queryArea` property is null, a line, a point, or an empty geometry is undefined.
     func commitSearch(_ restrictToArea: Bool) async -> Void {
-        guard !currentQuery.isEmpty,
+        guard !currentQuery.trimmingCharacters(in: .whitespaces).isEmpty,
               var source = currentSource() else { return }
         
         source.searchArea = queryArea
         source.preferredSearchLocation = queryCenter
+        selectedResult = nil
         
         let searchResult = await Result {
             try await source.search(
@@ -137,7 +150,6 @@ suggestions: Result<[SearchSuggestion]?, SearchError> = .success(nil)
             )
         }
         
-        selectedResult = nil
         isEligibleForRequery = false
         suggestions = .success(nil)
         
@@ -160,9 +172,8 @@ suggestions: Result<[SearchSuggestion]?, SearchError> = .success(nil)
     /// requests before initiating new ones. The view should also wait for some time after user finishes
     /// typing before making suggestions. The JavaScript implementation uses 150ms by default.
     func updateSuggestions() async -> Void {
-        guard !currentQuery.isEmpty,
+        guard !currentQuery.trimmingCharacters(in: .whitespaces).isEmpty,
               var source = currentSource() else { return }
-        print("SearchViewModel.updateSuggestions: \(currentQuery)")
         
         source.searchArea = queryArea
         source.preferredSearchLocation = queryCenter
@@ -249,7 +260,30 @@ suggestions: Result<[SearchSuggestion]?, SearchError> = .success(nil)
     /// - Parameters:
     ///   - map: Map to use for configuration.
     func configureForMap(_ map: Map) {
-        print("SearchViewModel.configureForMap")
+        // Reset existing properties
+        sources.removeAll()
+        activeSource = nil
+        currentQuery = ""
+        defaultPlaceholder = .defaultPlaceholder
+        sources = [LocatorSearchSource()]
+        
+        map.loadPublisher.sink(receiveCompletion: { [weak self] completion in
+            if let localItem = map.item as? LocalItem {
+                let mmpk = MobileMapPackage(fileURL: localItem.fileURL)
+                
+                guard let self = self else { return }
+                mmpk.loadPublisher.sink(receiveCompletion: { [weak self] completion in
+                    if let locatorTask = mmpk.locatorTask {
+                        self?.sources = [
+                            LocatorSearchSource(locatorTask: locatorTask)
+                        ]
+                    }
+                    
+                }, receiveValue: { _ in })
+                    .store(in: &self.subscriptions)
+            }
+        }, receiveValue: { _ in })
+        .store(in: &subscriptions)
     }
     
     /// Configures the view model for the provided scene. By default, will only configure the view model
@@ -279,4 +313,8 @@ extension SearchViewModel {
         }
         return source
     }
+}
+
+public extension String {
+    static let defaultPlaceholder = "Find a place or address"
 }

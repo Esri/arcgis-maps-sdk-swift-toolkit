@@ -17,23 +17,62 @@ import ArcGIS
 /// Uses a Locator to provide search and suggest results. Most configuration should be done on the
 /// `GeocodeParameters` directly.
 public class LocatorSearchSource: ObservableObject, SearchSourceProtocol {
-    public init(displayName: String = "Search",
+    /// Creates a locator search source.
+    /// - Parameters:
+    ///   - displayName: Name to show when presenting this source in the UI.
+    ///   - maximumResults: The maximum results to return when performing a search. Most sources default to 6.
+    ///   - maximumSuggestions: The maximum suggestions to return. Most sources default to 6.
+    ///   - searchArea: Area to be used as a constraint for searches and suggestions.
+    ///   - preferredSearchLocation: Point to be used as an input to searches and suggestions.
+    public init(displayName: String = "Locator",
+                locatorTask: LocatorTask = LocatorTask(
+                    url: URL(
+                        string: "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer"
+                    )!
+                ),
                 maximumResults: Int = 6,
                 maximumSuggestions: Int = 6,
                 searchArea: Geometry? = nil,
                 preferredSearchLocation: Point? = nil) {
         self.displayName = displayName
+        self.locatorTask = locatorTask
         self.maximumResults = maximumResults
         self.maximumSuggestions = maximumSuggestions
         self.searchArea = searchArea
         self.preferredSearchLocation = preferredSearchLocation
-        
-        geocodeParameters.maxResults = Int32(maximumResults)
-        suggestParameters.maxResults = Int32(maximumSuggestions)
     }
     
+    /// Name to show when presenting this source in the UI.
+    public var displayName: String
+    
+    /// The maximum results to return when performing a search. Most sources default to 6
+    public var maximumResults: Int {
+        get {
+            Int(geocodeParameters.maxResults)
+        }
+        set {
+            geocodeParameters.maxResults = Int32(newValue)
+        }
+    }
+    
+    /// The maximum suggestions to return. Most sources default to 6.
+    public var maximumSuggestions: Int {
+        get {
+            Int(suggestParameters.maxResults)
+        }
+        set {
+            suggestParameters.maxResults = Int32(newValue)
+        }
+    }
+    
+    /// Area to be used as a constraint for searches and suggestions.
+    public var searchArea: Geometry?
+    
+    /// Point to be used as an input to searches and suggestions.
+    public var preferredSearchLocation: Point?
+    
     /// The locator used by this search source.
-    private(set) var locator: LocatorTask = LocatorTask(url: URL(string: "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer")!)
+    private(set) var locatorTask: LocatorTask
     
     /// Parameters used for geocoding. Some properties on parameters will be updated automatically
     /// based on searches.
@@ -42,25 +81,7 @@ public class LocatorSearchSource: ObservableObject, SearchSourceProtocol {
     /// Parameters used for getting suggestions. Some properties will be updated automatically
     /// based on searches.
     private(set) var suggestParameters: SuggestParameters = SuggestParameters()
-    
-    public var displayName: String = "Search"
-    
-    public var maximumResults: Int {
-        didSet {
-            geocodeParameters.maxResults = Int32(maximumResults)
-        }
-    }
-    
-    public var maximumSuggestions: Int {
-        didSet {
-            suggestParameters.maxResults = Int32(maximumResults)
-        }
-    }
-    
-    public var searchArea: Geometry?
-    
-    public var preferredSearchLocation: Point?
-    
+
     public func search(_ queryString: String, area: Geometry? = nil) async throws -> [SearchResult] {
         //
         // This differs from the .NET approach; .NET only uses the
@@ -70,7 +91,7 @@ public class LocatorSearchSource: ObservableObject, SearchSourceProtocol {
         geocodeParameters.searchArea = (area != nil) ? area : searchArea
         geocodeParameters.preferredSearchLocation = preferredSearchLocation
         
-        let geocodeResults = try await locator.geocode(searchText: queryString,
+        let geocodeResults = try await locatorTask.geocode(searchText: queryString,
                                                        parameters: geocodeParameters
         )
         
@@ -98,7 +119,7 @@ public class LocatorSearchSource: ObservableObject, SearchSourceProtocol {
             geocodeParameters.preferredSearchLocation = preferredSearchLocation
         }
         
-        let geocodeResults = try await locator.geocode(suggestResult: suggestResult,
+        let geocodeResults = try await locatorTask.geocode(suggestResult: suggestResult,
                                                        parameters: geocodeParameters
         )
         
@@ -114,7 +135,7 @@ public class LocatorSearchSource: ObservableObject, SearchSourceProtocol {
         suggestParameters.searchArea = searchArea
         suggestParameters.preferredSearchLocation = preferredSearchLocation
         
-        let geocodeResults = try await locator.suggest(
+        let geocodeResults = try await locatorTask.suggest(
             searchText: queryString,
             parameters: suggestParameters
         )

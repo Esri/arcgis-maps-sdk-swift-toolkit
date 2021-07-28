@@ -20,7 +20,7 @@ struct EsriSearchButtonViewModifier: ViewModifier {
         HStack {
             content
             Button(
-                action: { self.performSearch.toggle() },
+                action: { self.performSearch = true },
                 label: {
                 Image(systemName: "magnifyingglass.circle.fill")
                     .foregroundColor(Color(UIColor.opaqueSeparator))
