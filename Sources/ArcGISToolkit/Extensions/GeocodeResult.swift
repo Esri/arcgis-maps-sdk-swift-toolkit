@@ -14,6 +14,9 @@
 import ArcGIS
 
 extension GeocodeResult {
+    /// Converts a `GeocodeResult` to a `SearchResult`.
+    /// - Parameter searchSource: The search source generating the result.
+    /// - Returns: The new `SearchResult`.
     func toSearchResult(searchSource: SearchSourceProtocol) -> SearchResult {
         let subtitle = self.attributes["LongLabel"] as? String ??
         "Match percent: \((self.score / 100.0).formatted(.percent))"

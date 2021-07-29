@@ -14,6 +14,9 @@
 import ArcGIS
 
 extension SuggestResult {
+    /// Converts a `SuggestResult` to a `SearchSuggestion`.
+    /// - Parameter searchSource: The search source generating the result.
+    /// - Returns: The new `SearchSuggestion`.
     func toSearchSuggestion(searchSource: SearchSourceProtocol) -> SearchSuggestion {
         return SearchSuggestion(displayTitle: label,
                                 displaySubtitle: nil,

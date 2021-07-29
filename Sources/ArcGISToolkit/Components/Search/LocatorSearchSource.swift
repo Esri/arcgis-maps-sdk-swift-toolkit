@@ -128,10 +128,6 @@ public class LocatorSearchSource: ObservableObject, SearchSourceProtocol {
     }
     
     public func suggest(_ queryString: String) async throws -> [SearchSuggestion] {
-        //
-        // This differs from the .NET approach; .NET only uses the
-        // center of `searchArea` for the `geocodeParameters.preferredSearchLocation`.
-        //
         suggestParameters.searchArea = searchArea
         suggestParameters.preferredSearchLocation = preferredSearchLocation
         

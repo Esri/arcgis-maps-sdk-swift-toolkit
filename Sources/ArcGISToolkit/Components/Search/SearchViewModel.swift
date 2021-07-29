@@ -18,7 +18,6 @@ import Combine
 
 /// Performs searches and manages search state for a Search, or optionally without a UI connection.
 public class SearchViewModel: ObservableObject {
-    
     /// Defines how many results to return; one, many, or automatic based on circumstance.
     public enum SearchResultMode {
         /// Search should always result in at most one result.
@@ -29,14 +28,22 @@ public class SearchViewModel: ObservableObject {
         /// while '380 New York St. Redlands' should be one result.
         case automatic
     }
-
+    
+    /// Creates a `SearchViewModel`.
+    /// - Parameters:
+    ///   - defaultPlaceholder: The string shown in the search view when no user query is entered.
+    ///   - activeSource: Tracks the currently active search source.
+    ///   - queryArea: The search area to be used for the current query.
+    ///   - queryCenter: Defines the center for the search.
+    ///   - resultMode: Defines how many results to return.
+    ///   - sources: Collection of search sources to be used.
     public convenience init(
-defaultPlaceholder: String = .defaultPlaceholder,
-activeSource: SearchSourceProtocol? = nil,
-queryArea: Geometry? = nil,
-queryCenter: Point? = nil,
-resultMode: SearchResultMode = .automatic,
-sources: [SearchSourceProtocol] = []
+        defaultPlaceholder: String = .defaultPlaceholder,
+        activeSource: SearchSourceProtocol? = nil,
+        queryArea: Geometry? = nil,
+        queryCenter: Point? = nil,
+        resultMode: SearchResultMode = .automatic,
+        sources: [SearchSourceProtocol] = []
     ) {
         self.init()
         self.defaultPlaceholder = defaultPlaceholder
@@ -112,6 +119,7 @@ sources: [SearchSourceProtocol] = []
     /// Collection of search sources to be used. This list is maintained over time and is not nullable.
     /// The view should observe this list for changes. Consumers should add and remove sources from
     /// this list as needed.
+    /// NOTE:  only the first source is currently used; multiple sources are not yet supported.
     public var sources: [SearchSourceProtocol] = []
     
     /// Collection of suggestion results. Defaults to `nil`. This collection will be set to empty when there
@@ -125,17 +133,17 @@ sources: [SearchSourceProtocol] = []
     /// observable, and the view should use it to hide and show the 'repeat search' button. Changes to
     /// this property are driven by changes to the `queryArea` property.
     @Published
-    private(set) var isEligibleForRequery: Bool = false
+    public private(set) var isEligibleForRequery: Bool = false
     
     private var subscriptions = Set<AnyCancellable>()
-
+    
     /// Starts a search. `selectedResult` and `results`, among other properties, are set
     /// asynchronously. Other query properties are read to define the parameters of the search.
     /// If `restrictToArea` is true, only results in the query area will be returned.
     /// - Parameter restrictToArea: If true, the search is restricted to results within the extent
     /// of the `queryArea` property. Behavior when called with `restrictToArea` set to true
     /// when the `queryArea` property is null, a line, a point, or an empty geometry is undefined.
-    func commitSearch(_ restrictToArea: Bool) async -> Void {
+    public func commitSearch(_ restrictToArea: Bool) async -> Void {
         guard !currentQuery.trimmingCharacters(in: .whitespaces).isEmpty,
               var source = currentSource() else { return }
         
@@ -168,10 +176,8 @@ sources: [SearchSourceProtocol] = []
         }
     }
     
-    /// Updates suggestions list asynchronously. View should take care to cancel previous suggestion
-    /// requests before initiating new ones. The view should also wait for some time after user finishes
-    /// typing before making suggestions. The JavaScript implementation uses 150ms by default.
-    func updateSuggestions() async -> Void {
+    /// Updates suggestions list asynchronously.
+    public func updateSuggestions() async -> Void {
         guard !currentQuery.trimmingCharacters(in: .whitespaces).isEmpty,
               var source = currentSource() else { return }
         
@@ -199,13 +205,11 @@ sources: [SearchSourceProtocol] = []
     }
     
     /// Commits a search from a specific suggestion. Results will be set asynchronously. Behavior is
-    /// generally the same as `commitSearch`, except the suggestion is used instead of the
-    /// `currentQuery` property. When a suggestion is accepted, `currentQuery` is updated to
-    /// match the suggestion text. The view should take care not to submit a separate search in response
-    /// to changes to `currentQuery` initiated by a call to this method.
+    /// generally the same as `commitSearch`, except `searchSuggestion` is used instead of the
+    /// `currentQuery` property.
     /// - Parameters:
     ///   - searchSuggestion: The suggestion to use to commit the search.
-    func acceptSuggestion(_ searchSuggestion: SearchSuggestion) async -> Void {
+    public func acceptSuggestion(_ searchSuggestion: SearchSuggestion) async -> Void {
         currentQuery = searchSuggestion.displayTitle
         
         var searchResults = [SearchResult]()
@@ -253,16 +257,18 @@ sources: [SearchSourceProtocol] = []
             }
         }
     }
-    
+
     /// Clears the search. This will set the results list to null, clear the result selection, clear suggestions,
     /// and reset the current query.
-    func clearSearch() {
+    public func clearSearch() {
         // Setting currentQuery to "" will reset everything necessary.
         currentQuery = ""
     }
 }
 
 extension SearchViewModel {
+    /// Returns the search source to be used in geocode operations.
+    /// - Returns: The search source to use.
     func currentSource() -> SearchSourceProtocol? {
         var source: SearchSourceProtocol?
         if let activeSource = activeSource {
