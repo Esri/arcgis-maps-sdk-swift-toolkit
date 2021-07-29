@@ -254,47 +254,6 @@ sources: [SearchSourceProtocol] = []
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Configures the view model for the provided map. By default, will only configure the view model
-***REMOVED******REMOVED***/ with the default world geocoder. In future updates, additional functionality may be added to take
-***REMOVED******REMOVED***/ web map configuration into account.
-***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - map: Map to use for configuration.
-***REMOVED***func configureForMap(_ map: Map) {
-***REMOVED******REMOVED******REMOVED*** Reset existing properties
-***REMOVED******REMOVED***sources.removeAll()
-***REMOVED******REMOVED***activeSource = nil
-***REMOVED******REMOVED***currentQuery = ""
-***REMOVED******REMOVED***defaultPlaceholder = .defaultPlaceholder
-***REMOVED******REMOVED***sources = [LocatorSearchSource()]
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***map.loadPublisher.sink(receiveCompletion: { [weak self] completion in
-***REMOVED******REMOVED******REMOVED***if let localItem = map.item as? LocalItem {
-***REMOVED******REMOVED******REMOVED******REMOVED***let mmpk = MobileMapPackage(fileURL: localItem.fileURL)
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***guard let self = self else { return ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***mmpk.loadPublisher.sink(receiveCompletion: { [weak self] completion in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let locatorTask = mmpk.locatorTask {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self?.sources = [
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***LocatorSearchSource(locatorTask: locatorTask)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***]
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***, receiveValue: { _ in ***REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.store(in: &self.subscriptions)
-***REMOVED******REMOVED***
-***REMOVED***, receiveValue: { _ in ***REMOVED***)
-***REMOVED******REMOVED***.store(in: &subscriptions)
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ Configures the view model for the provided scene. By default, will only configure the view model
-***REMOVED******REMOVED***/ with the default world geocoder. In future updates, additional functionality may be added to take
-***REMOVED******REMOVED***/ web scene configuration into account.
-***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - scene: Scene used for configuration.
-***REMOVED***func configureForScene(_ scene: ArcGIS.Scene) {
-***REMOVED******REMOVED***print("SearchViewModel.configureForScene")
-***REMOVED***
-***REMOVED***
 ***REMOVED******REMOVED***/ Clears the search. This will set the results list to null, clear the result selection, clear suggestions,
 ***REMOVED******REMOVED***/ and reset the current query.
 ***REMOVED***func clearSearch() {
