@@ -34,38 +34,38 @@ public struct SearchView: View {
     @ObservedObject
     var searchViewModel: SearchViewModel
     
-    // TODO: go through these properties, and in the SearchViewModel and make sure they're implemented correctly.
-
+    /// Determines whether a built-in result view will be shown. Defaults to true.
+    /// If false, the result display/selection list is not shown. Set to false if you want to hide the results
+    /// or define a custom result list. You might use a custom result list to show results in a separate list,
+    /// disconnected from the rest of the search view.
     @State
     private var enableResultListView = true
     
+    /// Message to show when there are no results or suggestions.  Defaults to "No results found".
     private var noResultMessage = "No results found"
     
     /// Indicates that the `SearchViewModel` should start a search.
     @State
-    private var commitSearch = false
+    private var shouldCommitSearch = false
     
     /// Indicates that the `SearchViewModel` should accept a suggestion.
     @State
     private var currentSuggestion: SearchSuggestion?
     
+    /// The currently executing async task.  `currentTask` should be cancelled
+    /// prior to starting another async task.
     @State
     private var currentTask: Task<Void, Never>?
     
-    // TODO: Figure out better styling for list
-    // TODO: continue fleshing out SearchViewModel and LocatorSearchSource/SmartSearchSource
-    // TODO: following Nathan's lead on all this stuff, i.e., go through his code and duplicate it as I go.
-    // TODO: better modifiers for search text field; maybe SearchTextField or something...
-    // TODO: Get proper pins for example app. - How to use SF font with PictureMarkerSymbol?? How to tint calcite icons/images.
     public var body: some View {
         VStack (alignment: .center) {
             TextField(searchViewModel.defaultPlaceholder,
                       text: $searchViewModel.currentQuery) { editing in
             } onCommit: {
-                commitSearch = true
+                shouldCommitSearch = true
             }
             .esriDeleteTextButton(text: $searchViewModel.currentQuery)
-            .esriSearchButton(performSearch: $commitSearch)
+            .esriSearchButton(performSearch: $shouldCommitSearch)
             .esriShowResultsButton(showResults: $enableResultListView)
             .esriBorder()
             if enableResultListView {
@@ -89,9 +89,9 @@ public struct SearchView: View {
                     await suggest()
                 }
             }
-            .task(id: commitSearch) {
-                if commitSearch {
-                    commitSearch.toggle()
+            .task(id: shouldCommitSearch) {
+                if shouldCommitSearch {
+                    shouldCommitSearch.toggle()
                     await search()
                 }
             }
@@ -103,7 +103,7 @@ public struct SearchView: View {
                 }
             }
     }
-
+    
     // MARK: Modifiers
     
     /// Determines whether a built-in result view will be shown. If `false`, the result display/selection
@@ -168,12 +168,11 @@ struct SearchResultList: View {
                         List {
                             ForEach(results) { result in
                                 SearchResultRow(result: result)
-                                .onTapGesture {
-                                    selectedResult = result
-                                }
+                                    .onTapGesture {
+                                        selectedResult = result
+                                    }
                             }
                         }
-                        //                    .listStyle(DefaultListStyle())
                     }
                 }
                 else if results != nil {
@@ -205,11 +204,10 @@ struct SearchSuggestionList: View {
                         if suggestions.count > 0 {
                             ForEach(suggestions) { suggestion in
                                 SuggestionResultRow(suggestion: suggestion)
-                                .onTapGesture() {
-                                    currentSuggestion = suggestion
-                                }
+                                    .onTapGesture() {
+                                        currentSuggestion = suggestion
+                                    }
                             }
-                            //                    .listStyle(DefaultListStyle())
                         }
                     }
                 }
@@ -230,7 +228,7 @@ struct SearchSuggestionList: View {
 
 struct SearchResultRow: View {
     var result: SearchResult
-
+    
     var body: some View {
         HStack {
             Image(systemName: "mappin")
@@ -242,7 +240,7 @@ struct SearchResultRow: View {
 
 struct SuggestionResultRow: View {
     var suggestion: SearchSuggestion
-
+    
     var body: some View {
         HStack {
             let imageName = suggestion.isCollection ? "magnifyingglass" : "mappin"
