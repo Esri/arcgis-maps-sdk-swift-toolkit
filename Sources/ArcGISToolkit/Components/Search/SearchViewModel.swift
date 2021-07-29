@@ -18,7 +18,6 @@ import Combine
 
 ***REMOVED***/ Performs searches and manages search state for a Search, or optionally without a UI connection.
 public class SearchViewModel: ObservableObject {
-***REMOVED***
 ***REMOVED******REMOVED***/ Defines how many results to return; one, many, or automatic based on circumstance.
 ***REMOVED***public enum SearchResultMode {
 ***REMOVED******REMOVED******REMOVED***/ Search should always result in at most one result.
@@ -29,14 +28,22 @@ public class SearchViewModel: ObservableObject {
 ***REMOVED******REMOVED******REMOVED***/ while '380 New York St. Redlands' should be one result.
 ***REMOVED******REMOVED***case automatic
 ***REMOVED***
-
+***REMOVED***
+***REMOVED******REMOVED***/ Creates a `SearchViewModel`.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - defaultPlaceholder: The string shown in the search view when no user query is entered.
+***REMOVED******REMOVED***/   - activeSource: Tracks the currently active search source.
+***REMOVED******REMOVED***/   - queryArea: The search area to be used for the current query.
+***REMOVED******REMOVED***/   - queryCenter: Defines the center for the search.
+***REMOVED******REMOVED***/   - resultMode: Defines how many results to return.
+***REMOVED******REMOVED***/   - sources: Collection of search sources to be used.
 ***REMOVED***public convenience init(
-defaultPlaceholder: String = .defaultPlaceholder,
-activeSource: SearchSourceProtocol? = nil,
-queryArea: Geometry? = nil,
-queryCenter: Point? = nil,
-resultMode: SearchResultMode = .automatic,
-sources: [SearchSourceProtocol] = []
+***REMOVED******REMOVED***defaultPlaceholder: String = .defaultPlaceholder,
+***REMOVED******REMOVED***activeSource: SearchSourceProtocol? = nil,
+***REMOVED******REMOVED***queryArea: Geometry? = nil,
+***REMOVED******REMOVED***queryCenter: Point? = nil,
+***REMOVED******REMOVED***resultMode: SearchResultMode = .automatic,
+***REMOVED******REMOVED***sources: [SearchSourceProtocol] = []
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.init()
 ***REMOVED******REMOVED***self.defaultPlaceholder = defaultPlaceholder
@@ -112,6 +119,7 @@ sources: [SearchSourceProtocol] = []
 ***REMOVED******REMOVED***/ Collection of search sources to be used. This list is maintained over time and is not nullable.
 ***REMOVED******REMOVED***/ The view should observe this list for changes. Consumers should add and remove sources from
 ***REMOVED******REMOVED***/ this list as needed.
+***REMOVED******REMOVED***/ NOTE:  only the first source is currently used; multiple sources are not yet supported.
 ***REMOVED***public var sources: [SearchSourceProtocol] = []
 ***REMOVED***
 ***REMOVED******REMOVED***/ Collection of suggestion results. Defaults to `nil`. This collection will be set to empty when there
@@ -125,17 +133,17 @@ sources: [SearchSourceProtocol] = []
 ***REMOVED******REMOVED***/ observable, and the view should use it to hide and show the 'repeat search' button. Changes to
 ***REMOVED******REMOVED***/ this property are driven by changes to the `queryArea` property.
 ***REMOVED***@Published
-***REMOVED***private(set) var isEligibleForRequery: Bool = false
+***REMOVED***public private(set) var isEligibleForRequery: Bool = false
 ***REMOVED***
 ***REMOVED***private var subscriptions = Set<AnyCancellable>()
-
+***REMOVED***
 ***REMOVED******REMOVED***/ Starts a search. `selectedResult` and `results`, among other properties, are set
 ***REMOVED******REMOVED***/ asynchronously. Other query properties are read to define the parameters of the search.
 ***REMOVED******REMOVED***/ If `restrictToArea` is true, only results in the query area will be returned.
 ***REMOVED******REMOVED***/ - Parameter restrictToArea: If true, the search is restricted to results within the extent
 ***REMOVED******REMOVED***/ of the `queryArea` property. Behavior when called with `restrictToArea` set to true
 ***REMOVED******REMOVED***/ when the `queryArea` property is null, a line, a point, or an empty geometry is undefined.
-***REMOVED***func commitSearch(_ restrictToArea: Bool) async -> Void {
+***REMOVED***public func commitSearch(_ restrictToArea: Bool) async -> Void {
 ***REMOVED******REMOVED***guard !currentQuery.trimmingCharacters(in: .whitespaces).isEmpty,
 ***REMOVED******REMOVED******REMOVED***  var source = currentSource() else { return ***REMOVED***
 ***REMOVED******REMOVED***
@@ -168,10 +176,8 @@ sources: [SearchSourceProtocol] = []
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Updates suggestions list asynchronously. View should take care to cancel previous suggestion
-***REMOVED******REMOVED***/ requests before initiating new ones. The view should also wait for some time after user finishes
-***REMOVED******REMOVED***/ typing before making suggestions. The JavaScript implementation uses 150ms by default.
-***REMOVED***func updateSuggestions() async -> Void {
+***REMOVED******REMOVED***/ Updates suggestions list asynchronously.
+***REMOVED***public func updateSuggestions() async -> Void {
 ***REMOVED******REMOVED***guard !currentQuery.trimmingCharacters(in: .whitespaces).isEmpty,
 ***REMOVED******REMOVED******REMOVED***  var source = currentSource() else { return ***REMOVED***
 ***REMOVED******REMOVED***
@@ -199,13 +205,11 @@ sources: [SearchSourceProtocol] = []
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Commits a search from a specific suggestion. Results will be set asynchronously. Behavior is
-***REMOVED******REMOVED***/ generally the same as `commitSearch`, except the suggestion is used instead of the
-***REMOVED******REMOVED***/ `currentQuery` property. When a suggestion is accepted, `currentQuery` is updated to
-***REMOVED******REMOVED***/ match the suggestion text. The view should take care not to submit a separate search in response
-***REMOVED******REMOVED***/ to changes to `currentQuery` initiated by a call to this method.
+***REMOVED******REMOVED***/ generally the same as `commitSearch`, except `searchSuggestion` is used instead of the
+***REMOVED******REMOVED***/ `currentQuery` property.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - searchSuggestion: The suggestion to use to commit the search.
-***REMOVED***func acceptSuggestion(_ searchSuggestion: SearchSuggestion) async -> Void {
+***REMOVED***public func acceptSuggestion(_ searchSuggestion: SearchSuggestion) async -> Void {
 ***REMOVED******REMOVED***currentQuery = searchSuggestion.displayTitle
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var searchResults = [SearchResult]()
@@ -253,16 +257,18 @@ sources: [SearchSourceProtocol] = []
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED***
+
 ***REMOVED******REMOVED***/ Clears the search. This will set the results list to null, clear the result selection, clear suggestions,
 ***REMOVED******REMOVED***/ and reset the current query.
-***REMOVED***func clearSearch() {
+***REMOVED***public func clearSearch() {
 ***REMOVED******REMOVED******REMOVED*** Setting currentQuery to "" will reset everything necessary.
 ***REMOVED******REMOVED***currentQuery = ""
 ***REMOVED***
 ***REMOVED***
 
 extension SearchViewModel {
+***REMOVED******REMOVED***/ Returns the search source to be used in geocode operations.
+***REMOVED******REMOVED***/ - Returns: The search source to use.
 ***REMOVED***func currentSource() -> SearchSourceProtocol? {
 ***REMOVED******REMOVED***var source: SearchSourceProtocol?
 ***REMOVED******REMOVED***if let activeSource = activeSource {

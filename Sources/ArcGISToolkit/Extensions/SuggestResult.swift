@@ -14,6 +14,9 @@
 ***REMOVED***
 
 extension SuggestResult {
+***REMOVED******REMOVED***/ Converts a `SuggestResult` to a `SearchSuggestion`.
+***REMOVED******REMOVED***/ - Parameter searchSource: The search source generating the result.
+***REMOVED******REMOVED***/ - Returns: The new `SearchSuggestion`.
 ***REMOVED***func toSearchSuggestion(searchSource: SearchSourceProtocol) -> SearchSuggestion {
 ***REMOVED******REMOVED***return SearchSuggestion(displayTitle: label,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***displaySubtitle: nil,

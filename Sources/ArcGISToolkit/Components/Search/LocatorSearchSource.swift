@@ -128,10 +128,6 @@ public class LocatorSearchSource: ObservableObject, SearchSourceProtocol {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***public func suggest(_ queryString: String) async throws -> [SearchSuggestion] {
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** This differs from the .NET approach; .NET only uses the
-***REMOVED******REMOVED******REMOVED*** center of `searchArea` for the `geocodeParameters.preferredSearchLocation`.
-***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***suggestParameters.searchArea = searchArea
 ***REMOVED******REMOVED***suggestParameters.preferredSearchLocation = preferredSearchLocation
 ***REMOVED******REMOVED***

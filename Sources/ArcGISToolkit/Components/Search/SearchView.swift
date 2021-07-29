@@ -34,38 +34,38 @@ public struct SearchView: View {
 ***REMOVED***@ObservedObject
 ***REMOVED***var searchViewModel: SearchViewModel
 ***REMOVED***
-***REMOVED******REMOVED*** TODO: go through these properties, and in the SearchViewModel and make sure they're implemented correctly.
-
+***REMOVED******REMOVED***/ Determines whether a built-in result view will be shown. Defaults to true.
+***REMOVED******REMOVED***/ If false, the result display/selection list is not shown. Set to false if you want to hide the results
+***REMOVED******REMOVED***/ or define a custom result list. You might use a custom result list to show results in a separate list,
+***REMOVED******REMOVED***/ disconnected from the rest of the search view.
 ***REMOVED***@State
 ***REMOVED***private var enableResultListView = true
 ***REMOVED***
+***REMOVED******REMOVED***/ Message to show when there are no results or suggestions.  Defaults to "No results found".
 ***REMOVED***private var noResultMessage = "No results found"
 ***REMOVED***
 ***REMOVED******REMOVED***/ Indicates that the `SearchViewModel` should start a search.
 ***REMOVED***@State
-***REMOVED***private var commitSearch = false
+***REMOVED***private var shouldCommitSearch = false
 ***REMOVED***
 ***REMOVED******REMOVED***/ Indicates that the `SearchViewModel` should accept a suggestion.
 ***REMOVED***@State
 ***REMOVED***private var currentSuggestion: SearchSuggestion?
 ***REMOVED***
+***REMOVED******REMOVED***/ The currently executing async task.  `currentTask` should be cancelled
+***REMOVED******REMOVED***/ prior to starting another async task.
 ***REMOVED***@State
 ***REMOVED***private var currentTask: Task<Void, Never>?
 ***REMOVED***
-***REMOVED******REMOVED*** TODO: Figure out better styling for list
-***REMOVED******REMOVED*** TODO: continue fleshing out SearchViewModel and LocatorSearchSource/SmartSearchSource
-***REMOVED******REMOVED*** TODO: following Nathan's lead on all this stuff, i.e., go through his code and duplicate it as I go.
-***REMOVED******REMOVED*** TODO: better modifiers for search text field; maybe SearchTextField or something...
-***REMOVED******REMOVED*** TODO: Get proper pins for example app. - How to use SF font with PictureMarkerSymbol?? How to tint calcite icons/images.
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***VStack (alignment: .center) {
 ***REMOVED******REMOVED******REMOVED***TextField(searchViewModel.defaultPlaceholder,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  text: $searchViewModel.currentQuery) { editing in
 ***REMOVED******REMOVED*** onCommit: {
-***REMOVED******REMOVED******REMOVED******REMOVED***commitSearch = true
+***REMOVED******REMOVED******REMOVED******REMOVED***shouldCommitSearch = true
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.esriDeleteTextButton(text: $searchViewModel.currentQuery)
-***REMOVED******REMOVED******REMOVED***.esriSearchButton(performSearch: $commitSearch)
+***REMOVED******REMOVED******REMOVED***.esriSearchButton(performSearch: $shouldCommitSearch)
 ***REMOVED******REMOVED******REMOVED***.esriShowResultsButton(showResults: $enableResultListView)
 ***REMOVED******REMOVED******REMOVED***.esriBorder()
 ***REMOVED******REMOVED******REMOVED***if enableResultListView {
@@ -89,9 +89,9 @@ public struct SearchView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await suggest()
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.task(id: commitSearch) {
-***REMOVED******REMOVED******REMOVED******REMOVED***if commitSearch {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***commitSearch.toggle()
+***REMOVED******REMOVED******REMOVED***.task(id: shouldCommitSearch) {
+***REMOVED******REMOVED******REMOVED******REMOVED***if shouldCommitSearch {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***shouldCommitSearch.toggle()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await search()
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
@@ -103,7 +103,7 @@ public struct SearchView: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
-
+***REMOVED***
 ***REMOVED******REMOVED*** MARK: Modifiers
 ***REMOVED***
 ***REMOVED******REMOVED***/ Determines whether a built-in result view will be shown. If `false`, the result display/selection
@@ -168,12 +168,11 @@ struct SearchResultList: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***List {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(results) { result in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***SearchResultRow(result: result)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onTapGesture {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedResult = result
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onTapGesture {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedResult = result
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.listStyle(DefaultListStyle())
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***else if results != nil {
@@ -205,11 +204,10 @@ struct SearchSuggestionList: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if suggestions.count > 0 {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(suggestions) { suggestion in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***SuggestionResultRow(suggestion: suggestion)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onTapGesture() {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentSuggestion = suggestion
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onTapGesture() {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentSuggestion = suggestion
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.listStyle(DefaultListStyle())
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
@@ -230,7 +228,7 @@ struct SearchSuggestionList: View {
 
 struct SearchResultRow: View {
 ***REMOVED***var result: SearchResult
-
+***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED***Image(systemName: "mappin")
@@ -242,7 +240,7 @@ struct SearchResultRow: View {
 
 struct SuggestionResultRow: View {
 ***REMOVED***var suggestion: SearchSuggestion
-
+***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED***let imageName = suggestion.isCollection ? "magnifyingglass" : "mappin"
