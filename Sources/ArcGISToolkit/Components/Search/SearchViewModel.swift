@@ -254,47 +254,6 @@ sources: [SearchSourceProtocol] = []
         }
     }
     
-    /// Configures the view model for the provided map. By default, will only configure the view model
-    /// with the default world geocoder. In future updates, additional functionality may be added to take
-    /// web map configuration into account.
-    /// - Parameters:
-    ///   - map: Map to use for configuration.
-    func configureForMap(_ map: Map) {
-        // Reset existing properties
-        sources.removeAll()
-        activeSource = nil
-        currentQuery = ""
-        defaultPlaceholder = .defaultPlaceholder
-        sources = [LocatorSearchSource()]
-        
-        map.loadPublisher.sink(receiveCompletion: { [weak self] completion in
-            if let localItem = map.item as? LocalItem {
-                let mmpk = MobileMapPackage(fileURL: localItem.fileURL)
-                
-                guard let self = self else { return }
-                mmpk.loadPublisher.sink(receiveCompletion: { [weak self] completion in
-                    if let locatorTask = mmpk.locatorTask {
-                        self?.sources = [
-                            LocatorSearchSource(locatorTask: locatorTask)
-                        ]
-                    }
-                    
-                }, receiveValue: { _ in })
-                    .store(in: &self.subscriptions)
-            }
-        }, receiveValue: { _ in })
-        .store(in: &subscriptions)
-    }
-    
-    /// Configures the view model for the provided scene. By default, will only configure the view model
-    /// with the default world geocoder. In future updates, additional functionality may be added to take
-    /// web scene configuration into account.
-    /// - Parameters:
-    ///   - scene: Scene used for configuration.
-    func configureForScene(_ scene: ArcGIS.Scene) {
-        print("SearchViewModel.configureForScene")
-    }
-    
     /// Clears the search. This will set the results list to null, clear the result selection, clear suggestions,
     /// and reset the current query.
     func clearSearch() {
