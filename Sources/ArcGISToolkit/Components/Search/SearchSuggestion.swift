@@ -15,7 +15,7 @@
 
 ***REMOVED***/ Wraps a suggestion for display.
 public class SearchSuggestion {
-***REMOVED***internal init(
+***REMOVED***public init(
 ***REMOVED******REMOVED***displayTitle: String,
 ***REMOVED******REMOVED***displaySubtitle: String? = nil,
 ***REMOVED******REMOVED***owningSource: SearchSourceProtocol,
@@ -30,25 +30,25 @@ public class SearchSuggestion {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Title that should be used when displaying a suggestion.
-***REMOVED***var displayTitle: String
+***REMOVED***public var displayTitle: String
 ***REMOVED***
 ***REMOVED******REMOVED***/ Optional subtitle that can be displayed when showing a suggestion.
-***REMOVED***var displaySubtitle: String?
+***REMOVED***public var displaySubtitle: String?
 ***REMOVED***
 ***REMOVED******REMOVED***/ Reference to the `SearchSourceProtocol` that created this suggestion. This property is necessary for the
 ***REMOVED******REMOVED***/ view model to be able to accept a suggestion, because a suggestion should only be used with the
 ***REMOVED******REMOVED***/ locator that created it.
-***REMOVED***var owningSource: SearchSourceProtocol
+***REMOVED***public var owningSource: SearchSourceProtocol
 ***REMOVED***
 ***REMOVED******REMOVED***/ Underlying suggest result if this suggestion was created by a LocatorTask. This can be `nil`, and
 ***REMOVED******REMOVED***/ is likely to be `nil` when using custom `SearchSourceProtocol` implementations.
-***REMOVED***var suggestResult: SuggestResult?
+***REMOVED***public var suggestResult: SuggestResult?
 ***REMOVED***
 ***REMOVED******REMOVED***/ True if the search from this suggestion should be treated like a collection search, false if the
 ***REMOVED******REMOVED***/ search would return a single result. This property should be used to display a different icon
 ***REMOVED******REMOVED***/ in the UI depending on if this is a category search (like 'Coffee', 'Pizza', or 'Starbucks') and
 ***REMOVED******REMOVED***/ false if it is a search for a specific result (e.g. '380 New York St. Redlands CA').
-***REMOVED***var isCollection: Bool
+***REMOVED***public var isCollection: Bool
 ***REMOVED***
 
 extension SearchSuggestion: Identifiable {
