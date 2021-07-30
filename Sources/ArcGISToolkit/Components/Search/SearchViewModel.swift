@@ -104,7 +104,7 @@ public class SearchViewModel: ObservableObject {
     /// Collection of results. `nil` means no query has been made. An empty array means there
     /// were no results, and the view should show an appropriate 'no results' message.
     @Published
-    public var results: Result<[SearchResult]?, SearchError> = .success(nil)
+    public private(set) var results: Result<[SearchResult]?, SearchError> = .success(nil)
     
     /// Tracks selection of results from the `results` collection. When there is only one result,
     /// that result is automatically assigned to this property. If there are multiple results, the view sets
@@ -123,7 +123,7 @@ public class SearchViewModel: ObservableObject {
     /// are no suggestions, `nil` when no suggestions have been requested. If the list is empty,
     /// a useful 'no results' message should be shown by the view.
     @Published
-    public var suggestions: Result<[SearchSuggestion]?, SearchError> = .success(nil)
+    public private(set) var suggestions: Result<[SearchSuggestion]?, SearchError> = .success(nil)
     
     /// `true` if the `queryArea` has changed since the `results` collection has been set.
     /// This property is used by the view to enable 'Repeat search here' functionality. This property is
