@@ -123,9 +123,5 @@ struct SearchExampleView_Previews: PreviewProvider {
 
 private extension Symbol {
     /// A search result marker symbol.
-    static let resultSymbol: MarkerSymbol = SimpleMarkerSymbol(
-        style: .diamond,
-        color: .red,
-        size: 12.0
-    )
+    static let resultSymbol: MarkerSymbol = PictureMarkerSymbol(image: UIImage(named: "MapPin")!)
 }
