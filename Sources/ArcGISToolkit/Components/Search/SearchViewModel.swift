@@ -55,16 +55,13 @@ public class SearchViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The string shown in the search view when no user query is entered.
-***REMOVED******REMOVED***/ Default is "Find a place or address", or read from web map JSON if specified in the web map configuration.
+***REMOVED******REMOVED***/ Default is "Find a place or address".
 ***REMOVED***public var defaultPlaceholder: String = .defaultPlaceholder
 ***REMOVED***
-***REMOVED******REMOVED***/ Tracks the currently active search source.  All sources are used if this property is `nil`.
+***REMOVED******REMOVED***/ The active search source.  If `nil`, the first item in `sources` is used.
 ***REMOVED***public var activeSource: SearchSourceProtocol?
 ***REMOVED***
-***REMOVED******REMOVED***/ Tracks the current user-entered query. This should be updated by the view after every key press.
-***REMOVED******REMOVED***/ This property drives both suggestions and searches. This property can be changed by
-***REMOVED******REMOVED***/ other method calls and property changes within the view model, so the view should take care to
-***REMOVED******REMOVED***/ observe for changes.
+***REMOVED******REMOVED***/ Tracks the current user-entered query. This property drives both suggestions and searches.
 ***REMOVED***@Published
 ***REMOVED***public var currentQuery: String = "" {
 ***REMOVED******REMOVED***didSet {
@@ -77,9 +74,8 @@ public class SearchViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ The search area to be used for the current query. Ignored in most queries, unless the
-***REMOVED******REMOVED***/ `restrictToArea` property is set to true when calling `commitSearch`. This property
-***REMOVED******REMOVED***/ should be updated as the user navigates the map/scene, or at minimum before calling `commitSearch`.
+***REMOVED******REMOVED***/ The search area to be used for the current query.  This property should be updated
+***REMOVED******REMOVED***/ as the user navigates the map/scene, or at minimum before calling `commitSearch`.
 ***REMOVED***public var queryArea: Geometry? {
 ***REMOVED******REMOVED***willSet {
 ***REMOVED******REMOVED******REMOVED***var hasResults = false
@@ -90,18 +86,19 @@ public class SearchViewModel: ObservableObject {
 ***REMOVED******REMOVED******REMOVED******REMOVED***break;
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED*** When `queryArea` changes, whether the model is eligible for
-***REMOVED******REMOVED******REMOVED******REMOVED*** requery is dependent on whether a previous search was performed.
+***REMOVED******REMOVED******REMOVED******REMOVED*** When `queryArea` changes, the model is eligible for
+***REMOVED******REMOVED******REMOVED******REMOVED*** requery if there are previous results.
 ***REMOVED******REMOVED******REMOVED***isEligibleForRequery = hasResults
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Defines the center for the search. This should be updated by the view every time the
-***REMOVED******REMOVED***/ user navigates the map.
+***REMOVED******REMOVED***/ Defines the center for the search. For most use cases, this should be updated by the view
+***REMOVED******REMOVED***/ every time the user navigates the map.
 ***REMOVED***public var queryCenter: Point?
 ***REMOVED***
 ***REMOVED******REMOVED***/ Defines how many results to return. Defaults to Automatic. In automatic mode, an appropriate
-***REMOVED******REMOVED***/ number of results is returned based on the type of suggestion chosen (driven by the IsCollection property).
+***REMOVED******REMOVED***/ number of results is returned based on the type of suggestion chosen
+***REMOVED******REMOVED***/ (driven by the IsCollection property).
 ***REMOVED***public var resultMode: SearchResultMode = .automatic
 ***REMOVED***
 ***REMOVED******REMOVED***/ Collection of results. `nil` means no query has been made. An empty array means there
@@ -128,7 +125,7 @@ public class SearchViewModel: ObservableObject {
 ***REMOVED***@Published
 ***REMOVED***public var suggestions: Result<[SearchSuggestion]?, SearchError> = .success(nil)
 ***REMOVED***
-***REMOVED******REMOVED***/ True if the `queryArea` has changed since the `results` collection has been set.
+***REMOVED******REMOVED***/ `true` if the `queryArea` has changed since the `results` collection has been set.
 ***REMOVED******REMOVED***/ This property is used by the view to enable 'Repeat search here' functionality. This property is
 ***REMOVED******REMOVED***/ observable, and the view should use it to hide and show the 'repeat search' button. Changes to
 ***REMOVED******REMOVED***/ this property are driven by changes to the `queryArea` property.
@@ -209,7 +206,9 @@ public class SearchViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ `currentQuery` property.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - searchSuggestion: The suggestion to use to commit the search.
-***REMOVED***public func acceptSuggestion(_ searchSuggestion: SearchSuggestion) async -> Void {
+***REMOVED***public func acceptSuggestion(
+***REMOVED******REMOVED***_ searchSuggestion: SearchSuggestion
+***REMOVED***) async -> Void {
 ***REMOVED******REMOVED***currentQuery = searchSuggestion.displayTitle
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var searchResults = [SearchResult]()
@@ -257,7 +256,7 @@ public class SearchViewModel: ObservableObject {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
-
+***REMOVED***
 ***REMOVED******REMOVED***/ Clears the search. This will set the results list to null, clear the result selection, clear suggestions,
 ***REMOVED******REMOVED***/ and reset the current query.
 ***REMOVED***public func clearSearch() {

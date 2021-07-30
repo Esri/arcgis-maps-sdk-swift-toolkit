@@ -60,7 +60,7 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
 ***REMOVED******REMOVED***/ threshold. Does not apply to repeated search with area constraint. Set to zero to disable search
 ***REMOVED******REMOVED***/ repeat behavior.
 ***REMOVED***var repeatSuggestResultThreshold: Int = 6
-
+***REMOVED***
 ***REMOVED***public override func search(
 ***REMOVED******REMOVED***_ queryString: String,
 ***REMOVED******REMOVED***area: Geometry?
@@ -83,10 +83,12 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Union results and return.
-***REMOVED******REMOVED***let searchResults = geocodeResults.map{ $0.toSearchResult(searchSource: self) ***REMOVED***
+***REMOVED******REMOVED***let searchResults = geocodeResults.map {
+***REMOVED******REMOVED******REMOVED***$0.toSearchResult(searchSource: self)
+***REMOVED***
 ***REMOVED******REMOVED***results.append(contentsOf: searchResults)
 ***REMOVED******REMOVED***var allResults: [SearchResult] = Array(Set(results))
-
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Limit results to `maximumResults`.
 ***REMOVED******REMOVED***if allResults.count > maximumResults {
 ***REMOVED******REMOVED******REMOVED***let dropCount = allResults.count - maximumResults
@@ -94,12 +96,14 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
 ***REMOVED***
 ***REMOVED******REMOVED***return allResults
 ***REMOVED***
-
+***REMOVED***
 ***REMOVED***public override func search(
 ***REMOVED******REMOVED***_ searchSuggestion: SearchSuggestion
 ***REMOVED***) async throws -> [SearchResult] {
-***REMOVED******REMOVED***guard let suggestResult = searchSuggestion.suggestResult else { return [] ***REMOVED***
-
+***REMOVED******REMOVED***guard let suggestResult = searchSuggestion.suggestResult else {
+***REMOVED******REMOVED******REMOVED***return []
+***REMOVED***
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var results = try await super.search(searchSuggestion)
 ***REMOVED******REMOVED***if results.count > repeatSearchResultThreshold ||
 ***REMOVED******REMOVED******REMOVED***geocodeParameters.searchArea == nil {
@@ -107,18 +111,21 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** constraints on the search, so return results.
 ***REMOVED******REMOVED******REMOVED***return results
 ***REMOVED***
-
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Remove geographic constraints and re-run search.
 ***REMOVED******REMOVED***geocodeParameters.searchArea = nil
-***REMOVED******REMOVED***let geocodeResults = try await locatorTask.geocode(suggestResult: suggestResult,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***parameters: geocodeParameters
+***REMOVED******REMOVED***let geocodeResults = try await locatorTask.geocode(
+***REMOVED******REMOVED******REMOVED***suggestResult: suggestResult,
+***REMOVED******REMOVED******REMOVED***parameters: geocodeParameters
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Union results and return.
-***REMOVED******REMOVED***let searchResults = geocodeResults.map{ $0.toSearchResult(searchSource: self) ***REMOVED***
+***REMOVED******REMOVED***let searchResults = geocodeResults.map {
+***REMOVED******REMOVED******REMOVED***$0.toSearchResult(searchSource: self)
+***REMOVED***
 ***REMOVED******REMOVED***results.append(contentsOf: searchResults)
 ***REMOVED******REMOVED***var allResults: [SearchResult] = Array(Set(results))
-
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Limit results to `maximumResults`.
 ***REMOVED******REMOVED***if allResults.count > maximumResults {
 ***REMOVED******REMOVED******REMOVED***let dropCount = allResults.count - maximumResults
@@ -137,7 +144,7 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** constraints on the search, so return results.
 ***REMOVED******REMOVED******REMOVED***return results
 ***REMOVED***
-
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Remove geographic constraints and re-run search.
 ***REMOVED******REMOVED***suggestParameters.searchArea = nil
 ***REMOVED******REMOVED***let geocodeResults =  try await locatorTask.suggest(
@@ -146,10 +153,12 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Union results and return.
-***REMOVED******REMOVED***let suggestResults = geocodeResults.map{ $0.toSearchSuggestion(searchSource: self) ***REMOVED***
+***REMOVED******REMOVED***let suggestResults = geocodeResults.map {
+***REMOVED******REMOVED******REMOVED***$0.toSearchSuggestion(searchSource: self)
+***REMOVED***
 ***REMOVED******REMOVED***results.append(contentsOf: suggestResults)
 ***REMOVED******REMOVED***var allResults: [SearchSuggestion] = Array(Set(results))
-
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Limit results to `maximumResults`.
 ***REMOVED******REMOVED***if allResults.count > maximumSuggestions {
 ***REMOVED******REMOVED******REMOVED***let dropCount = allResults.count - maximumSuggestions

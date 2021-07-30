@@ -14,27 +14,39 @@
 ***REMOVED***
 
 struct EsriShowResultsButtonViewModifier: ViewModifier {
-***REMOVED***@Binding var showResults: Bool
+***REMOVED***var isEnabled: Bool
+***REMOVED***@Binding var isHidden: Bool
 ***REMOVED***
 ***REMOVED***func body(content: Content) -> some View {
 ***REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED***content
-***REMOVED******REMOVED******REMOVED***Button(
-***REMOVED******REMOVED******REMOVED******REMOVED***action: { showResults.toggle() ***REMOVED***,
-***REMOVED******REMOVED******REMOVED******REMOVED***label: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: showResults ? "eye.fill" : "eye.slash.fill")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(Color(UIColor.opaqueSeparator))
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***if isEnabled {
+***REMOVED******REMOVED******REMOVED******REMOVED***EmptyView()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***else {
+***REMOVED******REMOVED******REMOVED******REMOVED***Button(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***action: { isHidden.toggle() ***REMOVED***,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***label: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: isHidden ? "eye.slash.fill" : "eye.fill")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(Color(UIColor.opaqueSeparator))
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
 extension View {
-***REMOVED***func esriShowResultsButton(showResults: Binding<Bool>) -> some View {
+***REMOVED***func esriShowResultsButton(
+***REMOVED******REMOVED***isEnabled: Bool,
+***REMOVED******REMOVED***isHidden: Binding<Bool>
+***REMOVED***) -> some View {
 ***REMOVED******REMOVED***ModifiedContent(
 ***REMOVED******REMOVED******REMOVED***content: self,
-***REMOVED******REMOVED******REMOVED***modifier: EsriShowResultsButtonViewModifier(showResults: showResults)
+***REMOVED******REMOVED******REMOVED***modifier: EsriShowResultsButtonViewModifier(
+***REMOVED******REMOVED******REMOVED******REMOVED***isEnabled: isEnabled,
+***REMOVED******REMOVED******REMOVED******REMOVED***isHidden: isHidden
+***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***

@@ -15,11 +15,13 @@
 
 ***REMOVED***/ Wraps a suggestion for display.
 public class SearchSuggestion {
-***REMOVED***internal init(displayTitle: String,
-***REMOVED******REMOVED******REMOVED******REMOVED***  displaySubtitle: String? = nil,
-***REMOVED******REMOVED******REMOVED******REMOVED***  owningSource: SearchSourceProtocol,
-***REMOVED******REMOVED******REMOVED******REMOVED***  suggestResult: SuggestResult? = nil,
-***REMOVED******REMOVED******REMOVED******REMOVED***  isCollection: Bool) {
+***REMOVED***internal init(
+***REMOVED******REMOVED***displayTitle: String,
+***REMOVED******REMOVED***displaySubtitle: String? = nil,
+***REMOVED******REMOVED***owningSource: SearchSourceProtocol,
+***REMOVED******REMOVED***suggestResult: SuggestResult? = nil,
+***REMOVED******REMOVED***isCollection: Bool
+***REMOVED***) {
 ***REMOVED******REMOVED***self.displayTitle = displayTitle
 ***REMOVED******REMOVED***self.displaySubtitle = displaySubtitle
 ***REMOVED******REMOVED***self.owningSource = owningSource
@@ -67,15 +69,15 @@ extension SearchSuggestion: Hashable {
 ***REMOVED******REMOVED***hasher.combine(displayTitle)
 ***REMOVED******REMOVED***hasher.combine(displaySubtitle)
 ***REMOVED******REMOVED***hasher.combine(isCollection)
-
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***if let locatorSource = owningSource as? LocatorSearchSource {
 ***REMOVED******REMOVED******REMOVED***hasher.combine(ObjectIdentifier(locatorSource))
 ***REMOVED***
 ***REMOVED******REMOVED******REMOVED*** If you define a custom type that does NOT inherit from
 ***REMOVED******REMOVED******REMOVED*** `LocatorSearchSource`, you will need to add an `else if` check
 ***REMOVED******REMOVED******REMOVED*** for your custom type.
-***REMOVED******REMOVED******REMOVED***else if let customSearchSource = owningSource as? MyCustomSearchSource {
-***REMOVED******REMOVED******REMOVED******REMOVED***hasher.combine(ObjectIdentifier(customSearchSource))
-***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***else if let customSearchSource = owningSource as? MyCustomSearchSource {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***hasher.combine(ObjectIdentifier(customSearchSource))
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***

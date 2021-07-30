@@ -23,7 +23,10 @@ struct SearchExampleView: View {
 ***REMOVED***let map = Map(basemapStyle: .arcGISImagery)
 ***REMOVED***
 ***REMOVED***@State
-***REMOVED***var searchResultViewpoint: Viewpoint? = nil
+***REMOVED***var searchResultViewpoint: Viewpoint? = Viewpoint(
+***REMOVED******REMOVED***center: Point(x: -93.258133, y: 44.986656, spatialReference: .wgs84),
+***REMOVED******REMOVED***scale: 1000000
+***REMOVED***)
 ***REMOVED***
 ***REMOVED***var searchResultsOverlay = GraphicsOverlay()
 ***REMOVED***
@@ -78,8 +81,10 @@ struct SearchExampleView: View {
 ***REMOVED******REMOVED***case .success(let results):
 ***REMOVED******REMOVED******REMOVED***var resultGraphics = [Graphic]()
 ***REMOVED******REMOVED******REMOVED***results?.forEach({ result in
-***REMOVED******REMOVED******REMOVED******REMOVED***let graphic = Graphic(geometry: result.geoElement?.geometry,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  symbol: .resultSymbol)
+***REMOVED******REMOVED******REMOVED******REMOVED***let graphic = Graphic(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***geometry: result.geoElement?.geometry,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***symbol: .resultSymbol
+***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***resultGraphics.append(graphic)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***)
@@ -91,7 +96,9 @@ struct SearchExampleView: View {
 ***REMOVED******REMOVED******REMOVED***   let envelope = searchResultsOverlay.extent {
 ***REMOVED******REMOVED******REMOVED******REMOVED***let builder = EnvelopeBuilder(envelope: envelope)
 ***REMOVED******REMOVED******REMOVED******REMOVED***builder.expand(factor: 1.1)
-***REMOVED******REMOVED******REMOVED******REMOVED***searchResultViewpoint = Viewpoint(targetExtent: builder.toGeometry())
+***REMOVED******REMOVED******REMOVED******REMOVED***searchResultViewpoint = Viewpoint(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***targetExtent: builder.toGeometry()
+***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***searchResultViewpoint = nil
@@ -115,13 +122,9 @@ struct SearchExampleView: View {
 ***REMOVED***
 ***REMOVED***
 
-struct SearchExampleView_Previews: PreviewProvider {
-***REMOVED***static var previews: some View {
-***REMOVED******REMOVED***SearchExampleView()
-***REMOVED***
-***REMOVED***
-
 private extension Symbol {
 ***REMOVED******REMOVED***/ A search result marker symbol.
-***REMOVED***static let resultSymbol: MarkerSymbol = PictureMarkerSymbol(image: UIImage(named: "MapPin")!)
+***REMOVED***static let resultSymbol: MarkerSymbol = PictureMarkerSymbol(
+***REMOVED******REMOVED***image: UIImage(named: "MapPin")!
+***REMOVED***)
 ***REMOVED***
