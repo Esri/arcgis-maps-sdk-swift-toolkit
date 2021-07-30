@@ -61,7 +61,7 @@ struct SearchExampleView: View {
             .onChange(of: searchViewModel.selectedResult, perform: { newValue in
                 display(selectedResult: newValue)
             })
-            .task {
+            .onAppear() {
                 setupSearchViewModel()
             }
     }
