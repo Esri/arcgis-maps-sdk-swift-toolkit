@@ -52,14 +52,14 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
 ***REMOVED******REMOVED***/ repeated with loosened parameters until enough results are accumulated. If no search is
 ***REMOVED******REMOVED***/ successful, it is still possible to have a total number of results less than this threshold. Does not
 ***REMOVED******REMOVED***/ apply to repeated search with area constraint. Set to zero to disable search repeat behavior.
-***REMOVED***var repeatSearchResultThreshold: Int = 1
+***REMOVED***public var repeatSearchResultThreshold: Int = 1
 ***REMOVED***
 ***REMOVED******REMOVED***/ The minimum number of suggestions to attempt to return. If there are too few suggestions,
 ***REMOVED******REMOVED***/ request is repeated with loosened constraints until enough suggestions are accumulated.
 ***REMOVED******REMOVED***/ If no search is successful, it is still possible to have a total number of results less than this
 ***REMOVED******REMOVED***/ threshold. Does not apply to repeated search with area constraint. Set to zero to disable search
 ***REMOVED******REMOVED***/ repeat behavior.
-***REMOVED***var repeatSuggestResultThreshold: Int = 6
+***REMOVED***public var repeatSuggestResultThreshold: Int = 6
 ***REMOVED***
 ***REMOVED***public override func search(
 ***REMOVED******REMOVED***_ queryString: String,

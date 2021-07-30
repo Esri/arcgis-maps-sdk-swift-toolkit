@@ -61,7 +61,7 @@ struct SearchExampleView: View {
 ***REMOVED******REMOVED******REMOVED***.onChange(of: searchViewModel.selectedResult, perform: { newValue in
 ***REMOVED******REMOVED******REMOVED******REMOVED***display(selectedResult: newValue)
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***.task {
+***REMOVED******REMOVED******REMOVED***.onAppear() {
 ***REMOVED******REMOVED******REMOVED******REMOVED***setupSearchViewModel()
 ***REMOVED******REMOVED***
 ***REMOVED***
