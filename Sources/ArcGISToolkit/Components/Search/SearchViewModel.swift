@@ -104,7 +104,7 @@ public class SearchViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ Collection of results. `nil` means no query has been made. An empty array means there
 ***REMOVED******REMOVED***/ were no results, and the view should show an appropriate 'no results' message.
 ***REMOVED***@Published
-***REMOVED***public var results: Result<[SearchResult]?, SearchError> = .success(nil)
+***REMOVED***public private(set) var results: Result<[SearchResult]?, SearchError> = .success(nil)
 ***REMOVED***
 ***REMOVED******REMOVED***/ Tracks selection of results from the `results` collection. When there is only one result,
 ***REMOVED******REMOVED***/ that result is automatically assigned to this property. If there are multiple results, the view sets
@@ -123,7 +123,7 @@ public class SearchViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ are no suggestions, `nil` when no suggestions have been requested. If the list is empty,
 ***REMOVED******REMOVED***/ a useful 'no results' message should be shown by the view.
 ***REMOVED***@Published
-***REMOVED***public var suggestions: Result<[SearchSuggestion]?, SearchError> = .success(nil)
+***REMOVED***public private(set) var suggestions: Result<[SearchSuggestion]?, SearchError> = .success(nil)
 ***REMOVED***
 ***REMOVED******REMOVED***/ `true` if the `queryArea` has changed since the `results` collection has been set.
 ***REMOVED******REMOVED***/ This property is used by the view to enable 'Repeat search here' functionality. This property is
