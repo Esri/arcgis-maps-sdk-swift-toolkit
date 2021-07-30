@@ -55,16 +55,13 @@ public class SearchViewModel: ObservableObject {
     }
     
     /// The string shown in the search view when no user query is entered.
-    /// Default is "Find a place or address", or read from web map JSON if specified in the web map configuration.
+    /// Default is "Find a place or address".
     public var defaultPlaceholder: String = .defaultPlaceholder
     
-    /// Tracks the currently active search source.  All sources are used if this property is `nil`.
+    /// The active search source.  If `nil`, the first item in `sources` is used.
     public var activeSource: SearchSourceProtocol?
     
-    /// Tracks the current user-entered query. This should be updated by the view after every key press.
-    /// This property drives both suggestions and searches. This property can be changed by
-    /// other method calls and property changes within the view model, so the view should take care to
-    /// observe for changes.
+    /// Tracks the current user-entered query. This property drives both suggestions and searches.
     @Published
     public var currentQuery: String = "" {
         didSet {
@@ -77,9 +74,8 @@ public class SearchViewModel: ObservableObject {
         }
     }
     
-    /// The search area to be used for the current query. Ignored in most queries, unless the
-    /// `restrictToArea` property is set to true when calling `commitSearch`. This property
-    /// should be updated as the user navigates the map/scene, or at minimum before calling `commitSearch`.
+    /// The search area to be used for the current query.  This property should be updated
+    /// as the user navigates the map/scene, or at minimum before calling `commitSearch`.
     public var queryArea: Geometry? {
         willSet {
             var hasResults = false
@@ -90,18 +86,19 @@ public class SearchViewModel: ObservableObject {
                 break;
             }
             
-            // When `queryArea` changes, whether the model is eligible for
-            // requery is dependent on whether a previous search was performed.
+            // When `queryArea` changes, the model is eligible for
+            // requery if there are previous results.
             isEligibleForRequery = hasResults
         }
     }
     
-    /// Defines the center for the search. This should be updated by the view every time the
-    /// user navigates the map.
+    /// Defines the center for the search. For most use cases, this should be updated by the view
+    /// every time the user navigates the map.
     public var queryCenter: Point?
     
     /// Defines how many results to return. Defaults to Automatic. In automatic mode, an appropriate
-    /// number of results is returned based on the type of suggestion chosen (driven by the IsCollection property).
+    /// number of results is returned based on the type of suggestion chosen
+    /// (driven by the IsCollection property).
     public var resultMode: SearchResultMode = .automatic
     
     /// Collection of results. `nil` means no query has been made. An empty array means there
@@ -128,7 +125,7 @@ public class SearchViewModel: ObservableObject {
     @Published
     public var suggestions: Result<[SearchSuggestion]?, SearchError> = .success(nil)
     
-    /// True if the `queryArea` has changed since the `results` collection has been set.
+    /// `true` if the `queryArea` has changed since the `results` collection has been set.
     /// This property is used by the view to enable 'Repeat search here' functionality. This property is
     /// observable, and the view should use it to hide and show the 'repeat search' button. Changes to
     /// this property are driven by changes to the `queryArea` property.
@@ -209,7 +206,9 @@ public class SearchViewModel: ObservableObject {
     /// `currentQuery` property.
     /// - Parameters:
     ///   - searchSuggestion: The suggestion to use to commit the search.
-    public func acceptSuggestion(_ searchSuggestion: SearchSuggestion) async -> Void {
+    public func acceptSuggestion(
+        _ searchSuggestion: SearchSuggestion
+    ) async -> Void {
         currentQuery = searchSuggestion.displayTitle
         
         var searchResults = [SearchResult]()
@@ -257,7 +256,7 @@ public class SearchViewModel: ObservableObject {
             }
         }
     }
-
+    
     /// Clears the search. This will set the results list to null, clear the result selection, clear suggestions,
     /// and reset the current query.
     public func clearSearch() {

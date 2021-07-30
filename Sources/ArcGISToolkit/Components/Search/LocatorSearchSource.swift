@@ -24,16 +24,18 @@ public class LocatorSearchSource: ObservableObject, SearchSourceProtocol {
     ///   - maximumSuggestions: The maximum suggestions to return. Most sources default to 6.
     ///   - searchArea: Area to be used as a constraint for searches and suggestions.
     ///   - preferredSearchLocation: Point to be used as an input to searches and suggestions.
-    public init(displayName: String = "Locator",
-                locatorTask: LocatorTask = LocatorTask(
-                    url: URL(
-                        string: "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer"
-                    )!
-                ),
-                maximumResults: Int = 6,
-                maximumSuggestions: Int = 6,
-                searchArea: Geometry? = nil,
-                preferredSearchLocation: Point? = nil) {
+    public init(
+        displayName: String = "Locator",
+        locatorTask: LocatorTask = LocatorTask(
+            url: URL(
+                string: "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer"
+            )!
+        ),
+        maximumResults: Int = 6,
+        maximumSuggestions: Int = 6,
+        searchArea: Geometry? = nil,
+        preferredSearchLocation: Point? = nil
+    ) {
         self.displayName = displayName
         self.locatorTask = locatorTask
         self.maximumResults = maximumResults
@@ -72,18 +74,21 @@ public class LocatorSearchSource: ObservableObject, SearchSourceProtocol {
     public var preferredSearchLocation: Point?
     
     /// The locator used by this search source.
-    private(set) var locatorTask: LocatorTask
+    public private(set) var locatorTask: LocatorTask
     
     /// Parameters used for geocoding. Some properties on parameters will be updated automatically
     /// based on searches.
-    private(set) var geocodeParameters: GeocodeParameters = GeocodeParameters()
+    public private(set) var geocodeParameters: GeocodeParameters = GeocodeParameters()
     
     /// Parameters used for getting suggestions. Some properties will be updated automatically
     /// based on searches.
-    private(set) var suggestParameters: SuggestParameters = SuggestParameters()
-
-    public func search(_ queryString: String, area: Geometry? = nil) async throws -> [SearchResult] {
-        //
+    public private(set) var suggestParameters: SuggestParameters = SuggestParameters()
+    
+    public func search(
+        _ queryString: String,
+        area: Geometry? = nil
+    ) async throws -> [SearchResult] {
+        // TODO: think about this...
         // This differs from the .NET approach; .NET only uses the
         // center of `searchArea` for the `geocodeParameters.preferredSearchLocation`
         // and only sets `geocodeParameters.searchArea` from the `area` argument.
@@ -91,15 +96,18 @@ public class LocatorSearchSource: ObservableObject, SearchSourceProtocol {
         geocodeParameters.searchArea = (area != nil) ? area : searchArea
         geocodeParameters.preferredSearchLocation = preferredSearchLocation
         
-        let geocodeResults = try await locatorTask.geocode(searchText: queryString,
-                                                       parameters: geocodeParameters
+        let geocodeResults = try await locatorTask.geocode(
+            searchText: queryString,
+            parameters: geocodeParameters
         )
         
         // Convert to SearchResults and return.
         return geocodeResults.map{ $0.toSearchResult(searchSource: self) }
     }
     
-    public func search(_ searchSuggestion: SearchSuggestion) async throws -> [SearchResult] {
+    public func search(
+        _ searchSuggestion: SearchSuggestion
+    ) async throws -> [SearchResult] {
         guard let suggestResult = searchSuggestion.suggestResult else { return [] }
         
         geocodeParameters.searchArea = nil
@@ -119,15 +127,18 @@ public class LocatorSearchSource: ObservableObject, SearchSourceProtocol {
             geocodeParameters.preferredSearchLocation = preferredSearchLocation
         }
         
-        let geocodeResults = try await locatorTask.geocode(suggestResult: suggestResult,
-                                                       parameters: geocodeParameters
+        let geocodeResults = try await locatorTask.geocode(
+            suggestResult: suggestResult,
+            parameters: geocodeParameters
         )
         
         // Convert to SearchResults and return.
         return geocodeResults.map{ $0.toSearchResult(searchSource: self) }
     }
     
-    public func suggest(_ queryString: String) async throws -> [SearchSuggestion] {
+    public func suggest(
+        _ queryString: String
+    ) async throws -> [SearchSuggestion] {
         suggestParameters.searchArea = searchArea
         suggestParameters.preferredSearchLocation = preferredSearchLocation
         

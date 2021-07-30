@@ -28,9 +28,9 @@ public struct SearchView: View {
         }
     }
     
-    /// The view model used by the view. The `ViewModel` manages state and handles the activity of
-    /// searching. The view observes `ViewModel` for changes in state. The view calls methods on
-    /// `ViewModel` in response to user action.
+    /// The view model used by the view. The `SearchViewModel` manages state and handles the
+    /// activity of searching. The view observes `SearchViewModel` for changes in state. The view
+    /// calls methods on `SearchViewModel` in response to user action.
     @ObservedObject
     var searchViewModel: SearchViewModel
     
@@ -38,7 +38,6 @@ public struct SearchView: View {
     /// If false, the result display/selection list is not shown. Set to false if you want to hide the results
     /// or define a custom result list. You might use a custom result list to show results in a separate list,
     /// disconnected from the rest of the search view.
-    @State
     private var enableResultListView = true
     
     /// Message to show when there are no results or suggestions.  Defaults to "No results found".
@@ -48,7 +47,7 @@ public struct SearchView: View {
     @State
     private var shouldCommitSearch = false
     
-    /// Indicates that the `SearchViewModel` should accept a suggestion.
+    /// The current suggestion selected by the user.
     @State
     private var currentSuggestion: SearchSuggestion?
     
@@ -57,18 +56,27 @@ public struct SearchView: View {
     @State
     private var currentTask: Task<Void, Never>?
     
+    /// Determines whether the results lists are displayed.
+    @State
+    private var isResultDisplayHidden: Bool = false
+    
     public var body: some View {
         VStack (alignment: .center) {
-            TextField(searchViewModel.defaultPlaceholder,
-                      text: $searchViewModel.currentQuery) { editing in
+            TextField(
+                searchViewModel.defaultPlaceholder,
+                text: $searchViewModel.currentQuery
+            ) { _ in
             } onCommit: {
                 shouldCommitSearch = true
             }
             .esriDeleteTextButton(text: $searchViewModel.currentQuery)
             .esriSearchButton(performSearch: $shouldCommitSearch)
-            .esriShowResultsButton(showResults: $enableResultListView)
+            .esriShowResultsButton(
+                isEnabled: !enableResultListView,
+                isHidden: $isResultDisplayHidden
+            )
             .esriBorder()
-            if enableResultListView {
+            if enableResultListView, !isResultDisplayHidden {
                 SearchResultList(
                     searchResults: searchViewModel.results,
                     selectedResult: $searchViewModel.selectedResult,
@@ -91,13 +99,14 @@ public struct SearchView: View {
             }
             .task(id: shouldCommitSearch) {
                 if shouldCommitSearch {
+                    // User committed changes (hit Enter/Search button)
                     shouldCommitSearch.toggle()
                     await search()
                 }
             }
             .task(id: currentSuggestion) {
-                // User committed changes (hit Enter/Search button)
                 if let suggestion = currentSuggestion {
+                    // User selected a suggestion.
                     await accept(suggestion)
                     currentSuggestion = nil
                 }
@@ -113,8 +122,9 @@ public struct SearchView: View {
     /// - Parameter enableResultListView: The new value.
     /// - Returns: The `SearchView`.
     public func enableResultListView(_ enableResultListView: Bool) -> SearchView {
-        self.enableResultListView = enableResultListView
-        return self
+        var copy = self
+        copy.enableResultListView = enableResultListView
+        return copy
     }
     
     /// Message to show when there are no results or suggestions.  Defaults to "No results found".
@@ -164,7 +174,7 @@ struct SearchResultList: View {
             case .success(let results):
                 if let results = results, results.count > 0 {
                     if results.count > 1 {
-                        // If we have only 1 results, don't show the list.
+                        // Only show the list if we have more than one result.
                         List {
                             ForEach(results) { result in
                                 SearchResultRow(result: result)
@@ -233,7 +243,10 @@ struct SearchResultRow: View {
         HStack {
             Image(systemName: "mappin")
                 .foregroundColor(Color(.red))
-            ResultRow(title: result.displayTitle, subtitle: result.displaySubtitle)
+            ResultRow(
+                title: result.displayTitle,
+                subtitle: result.displaySubtitle
+            )
         }
     }
 }
@@ -245,7 +258,10 @@ struct SuggestionResultRow: View {
         HStack {
             let imageName = suggestion.isCollection ? "magnifyingglass" : "mappin"
             Image(systemName: imageName)
-            ResultRow(title: suggestion.displayTitle, subtitle: suggestion.displaySubtitle)
+            ResultRow(
+                title: suggestion.displayTitle,
+                subtitle: suggestion.displaySubtitle
+            )
         }
     }
 }
