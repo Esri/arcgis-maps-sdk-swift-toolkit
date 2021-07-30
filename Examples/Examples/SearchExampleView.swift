@@ -123,9 +123,5 @@ struct SearchExampleView_Previews: PreviewProvider {
 
 private extension Symbol {
 ***REMOVED******REMOVED***/ A search result marker symbol.
-***REMOVED***static let resultSymbol: MarkerSymbol = SimpleMarkerSymbol(
-***REMOVED******REMOVED***style: .diamond,
-***REMOVED******REMOVED***color: .red,
-***REMOVED******REMOVED***size: 12.0
-***REMOVED***)
+***REMOVED***static let resultSymbol: MarkerSymbol = PictureMarkerSymbol(image: UIImage(named: "MapPin")!)
 ***REMOVED***
