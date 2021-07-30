@@ -15,7 +15,7 @@ import ArcGIS
 
 /// Wraps a suggestion for display.
 public class SearchSuggestion {
-    internal init(
+    public init(
         displayTitle: String,
         displaySubtitle: String? = nil,
         owningSource: SearchSourceProtocol,
@@ -30,25 +30,25 @@ public class SearchSuggestion {
     }
     
     /// Title that should be used when displaying a suggestion.
-    var displayTitle: String
+    public var displayTitle: String
     
     /// Optional subtitle that can be displayed when showing a suggestion.
-    var displaySubtitle: String?
+    public var displaySubtitle: String?
     
     /// Reference to the `SearchSourceProtocol` that created this suggestion. This property is necessary for the
     /// view model to be able to accept a suggestion, because a suggestion should only be used with the
     /// locator that created it.
-    var owningSource: SearchSourceProtocol
+    public var owningSource: SearchSourceProtocol
     
     /// Underlying suggest result if this suggestion was created by a LocatorTask. This can be `nil`, and
     /// is likely to be `nil` when using custom `SearchSourceProtocol` implementations.
-    var suggestResult: SuggestResult?
+    public var suggestResult: SuggestResult?
     
     /// True if the search from this suggestion should be treated like a collection search, false if the
     /// search would return a single result. This property should be used to display a different icon
     /// in the UI depending on if this is a category search (like 'Coffee', 'Pizza', or 'Starbucks') and
     /// false if it is a search for a specific result (e.g. '380 New York St. Redlands CA').
-    var isCollection: Bool
+    public var isCollection: Bool
 }
 
 extension SearchSuggestion: Identifiable {
