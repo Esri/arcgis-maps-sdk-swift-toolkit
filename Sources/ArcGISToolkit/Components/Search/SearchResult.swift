@@ -16,12 +16,14 @@ import ArcGIS
 
 /// Wraps a search result for display.
 public class SearchResult {
-    public init(displayTitle: String,
-                displaySubtitle: String? = nil,
-                markerImage: UIImage? = nil,
-                owningSource: SearchSourceProtocol,
-                geoElement: GeoElement? = nil,
-                selectionViewpoint: Viewpoint? = nil) {
+    public init(
+        displayTitle: String,
+        displaySubtitle: String? = nil,
+        markerImage: UIImage? = nil,
+        owningSource: SearchSourceProtocol,
+        geoElement: GeoElement? = nil,
+        selectionViewpoint: Viewpoint? = nil
+    ) {
         self.displayTitle = displayTitle
         self.displaySubtitle = displaySubtitle
         self.markerImage = markerImage
@@ -77,15 +79,15 @@ extension SearchResult: Hashable {
         if let geometry = geoElement?.geometry {
             hasher.combine(geometry)
         }
-
+        
         if let locatorSource = owningSource as? LocatorSearchSource {
             hasher.combine(ObjectIdentifier(locatorSource))
         }
         // If you define a custom type that does NOT inherit from
         // `LocatorSearchSource`, you will need to add an `else if` check
         // for your custom type.
-//        else if let customSearchSource = owningSource as? MyCustomSearchSource {
-//            hasher.combine(ObjectIdentifier(customSearchSource))
-//        }
+        //        else if let customSearchSource = owningSource as? MyCustomSearchSource {
+        //            hasher.combine(ObjectIdentifier(customSearchSource))
+        //        }
     }
 }

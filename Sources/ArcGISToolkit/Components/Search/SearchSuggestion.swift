@@ -15,11 +15,13 @@ import ArcGIS
 
 /// Wraps a suggestion for display.
 public class SearchSuggestion {
-    internal init(displayTitle: String,
-                  displaySubtitle: String? = nil,
-                  owningSource: SearchSourceProtocol,
-                  suggestResult: SuggestResult? = nil,
-                  isCollection: Bool) {
+    internal init(
+        displayTitle: String,
+        displaySubtitle: String? = nil,
+        owningSource: SearchSourceProtocol,
+        suggestResult: SuggestResult? = nil,
+        isCollection: Bool
+    ) {
         self.displayTitle = displayTitle
         self.displaySubtitle = displaySubtitle
         self.owningSource = owningSource
@@ -67,15 +69,15 @@ extension SearchSuggestion: Hashable {
         hasher.combine(displayTitle)
         hasher.combine(displaySubtitle)
         hasher.combine(isCollection)
-
+        
         if let locatorSource = owningSource as? LocatorSearchSource {
             hasher.combine(ObjectIdentifier(locatorSource))
         }
         // If you define a custom type that does NOT inherit from
         // `LocatorSearchSource`, you will need to add an `else if` check
         // for your custom type.
-//        else if let customSearchSource = owningSource as? MyCustomSearchSource {
-//            hasher.combine(ObjectIdentifier(customSearchSource))
-//        }
+        //        else if let customSearchSource = owningSource as? MyCustomSearchSource {
+        //            hasher.combine(ObjectIdentifier(customSearchSource))
+        //        }
     }
 }

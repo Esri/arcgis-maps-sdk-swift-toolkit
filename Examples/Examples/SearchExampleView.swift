@@ -23,7 +23,10 @@ struct SearchExampleView: View {
     let map = Map(basemapStyle: .arcGISImagery)
     
     @State
-    var searchResultViewpoint: Viewpoint? = nil
+    var searchResultViewpoint: Viewpoint? = Viewpoint(
+        center: Point(x: -93.258133, y: 44.986656, spatialReference: .wgs84),
+        scale: 1000000
+    )
     
     var searchResultsOverlay = GraphicsOverlay()
     
@@ -78,8 +81,10 @@ struct SearchExampleView: View {
         case .success(let results):
             var resultGraphics = [Graphic]()
             results?.forEach({ result in
-                let graphic = Graphic(geometry: result.geoElement?.geometry,
-                                      symbol: .resultSymbol)
+                let graphic = Graphic(
+                    geometry: result.geoElement?.geometry,
+                    symbol: .resultSymbol
+                )
                 resultGraphics.append(graphic)
                 
             })
@@ -91,7 +96,9 @@ struct SearchExampleView: View {
                let envelope = searchResultsOverlay.extent {
                 let builder = EnvelopeBuilder(envelope: envelope)
                 builder.expand(factor: 1.1)
-                searchResultViewpoint = Viewpoint(targetExtent: builder.toGeometry())
+                searchResultViewpoint = Viewpoint(
+                    targetExtent: builder.toGeometry()
+                )
             }
             else {
                 searchResultViewpoint = nil
@@ -115,13 +122,9 @@ struct SearchExampleView: View {
     }
 }
 
-struct SearchExampleView_Previews: PreviewProvider {
-    static var previews: some View {
-        SearchExampleView()
-    }
-}
-
 private extension Symbol {
     /// A search result marker symbol.
-    static let resultSymbol: MarkerSymbol = PictureMarkerSymbol(image: UIImage(named: "MapPin")!)
+    static let resultSymbol: MarkerSymbol = PictureMarkerSymbol(
+        image: UIImage(named: "MapPin")!
+    )
 }

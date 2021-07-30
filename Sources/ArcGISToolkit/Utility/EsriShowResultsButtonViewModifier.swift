@@ -14,27 +14,39 @@
 import SwiftUI
 
 struct EsriShowResultsButtonViewModifier: ViewModifier {
-    @Binding var showResults: Bool
+    var isEnabled: Bool
+    @Binding var isHidden: Bool
     
     func body(content: Content) -> some View {
         HStack {
             content
-            Button(
-                action: { showResults.toggle() },
-                label: {
-                    Image(systemName: showResults ? "eye.fill" : "eye.slash.fill")
-                        .foregroundColor(Color(UIColor.opaqueSeparator))
-                }
-            )
+            if isEnabled {
+                EmptyView()
+            }
+            else {
+                Button(
+                    action: { isHidden.toggle() },
+                    label: {
+                        Image(systemName: isHidden ? "eye.slash.fill" : "eye.fill")
+                            .foregroundColor(Color(UIColor.opaqueSeparator))
+                    }
+                )
+            }
         }
     }
 }
 
 extension View {
-    func esriShowResultsButton(showResults: Binding<Bool>) -> some View {
+    func esriShowResultsButton(
+        isEnabled: Bool,
+        isHidden: Binding<Bool>
+    ) -> some View {
         ModifiedContent(
             content: self,
-            modifier: EsriShowResultsButtonViewModifier(showResults: showResults)
+            modifier: EsriShowResultsButtonViewModifier(
+                isEnabled: isEnabled,
+                isHidden: isHidden
+            )
         )
     }
 }

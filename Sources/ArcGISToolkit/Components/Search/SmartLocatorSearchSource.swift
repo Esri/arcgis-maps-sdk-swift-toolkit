@@ -60,7 +60,7 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
     /// threshold. Does not apply to repeated search with area constraint. Set to zero to disable search
     /// repeat behavior.
     var repeatSuggestResultThreshold: Int = 6
-
+    
     public override func search(
         _ queryString: String,
         area: Geometry?
@@ -83,10 +83,12 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
         )
         
         // Union results and return.
-        let searchResults = geocodeResults.map{ $0.toSearchResult(searchSource: self) }
+        let searchResults = geocodeResults.map {
+            $0.toSearchResult(searchSource: self)
+        }
         results.append(contentsOf: searchResults)
         var allResults: [SearchResult] = Array(Set(results))
-
+        
         // Limit results to `maximumResults`.
         if allResults.count > maximumResults {
             let dropCount = allResults.count - maximumResults
@@ -94,12 +96,14 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
         }
         return allResults
     }
-
+    
     public override func search(
         _ searchSuggestion: SearchSuggestion
     ) async throws -> [SearchResult] {
-        guard let suggestResult = searchSuggestion.suggestResult else { return [] }
-
+        guard let suggestResult = searchSuggestion.suggestResult else {
+            return []
+        }
+        
         var results = try await super.search(searchSuggestion)
         if results.count > repeatSearchResultThreshold ||
             geocodeParameters.searchArea == nil {
@@ -107,18 +111,21 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
             // constraints on the search, so return results.
             return results
         }
-
+        
         // Remove geographic constraints and re-run search.
         geocodeParameters.searchArea = nil
-        let geocodeResults = try await locatorTask.geocode(suggestResult: suggestResult,
-                                                        parameters: geocodeParameters
+        let geocodeResults = try await locatorTask.geocode(
+            suggestResult: suggestResult,
+            parameters: geocodeParameters
         )
         
         // Union results and return.
-        let searchResults = geocodeResults.map{ $0.toSearchResult(searchSource: self) }
+        let searchResults = geocodeResults.map {
+            $0.toSearchResult(searchSource: self)
+        }
         results.append(contentsOf: searchResults)
         var allResults: [SearchResult] = Array(Set(results))
-
+        
         // Limit results to `maximumResults`.
         if allResults.count > maximumResults {
             let dropCount = allResults.count - maximumResults
@@ -137,7 +144,7 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
             // constraints on the search, so return results.
             return results
         }
-
+        
         // Remove geographic constraints and re-run search.
         suggestParameters.searchArea = nil
         let geocodeResults =  try await locatorTask.suggest(
@@ -146,10 +153,12 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
         )
         
         // Union results and return.
-        let suggestResults = geocodeResults.map{ $0.toSearchSuggestion(searchSource: self) }
+        let suggestResults = geocodeResults.map {
+            $0.toSearchSuggestion(searchSource: self)
+        }
         results.append(contentsOf: suggestResults)
         var allResults: [SearchSuggestion] = Array(Set(results))
-
+        
         // Limit results to `maximumResults`.
         if allResults.count > maximumSuggestions {
             let dropCount = allResults.count - maximumSuggestions
