@@ -28,7 +28,7 @@ struct EsriShowResultsButtonViewModifier: ViewModifier {
                     action: { isHidden.toggle() },
                     label: {
                         Image(systemName: isHidden ? "eye.slash.fill" : "eye.fill")
-                            .foregroundColor(Color(UIColor.opaqueSeparator))
+                            .foregroundColor(Color(.opaqueSeparator))
                     }
                 )
             }
