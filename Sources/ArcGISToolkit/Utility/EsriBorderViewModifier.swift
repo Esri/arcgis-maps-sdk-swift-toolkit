@@ -19,14 +19,14 @@ struct EsriBorderViewModifier: ViewModifier {
 ***REMOVED******REMOVED***let roundedRect = RoundedRectangle(cornerRadius: 8)
 ***REMOVED******REMOVED***content
 ***REMOVED******REMOVED******REMOVED***.padding(edgeInsets)
-***REMOVED******REMOVED******REMOVED***.background(.white)
+***REMOVED******REMOVED******REMOVED***.background(Color(.systemBackground))
 ***REMOVED******REMOVED******REMOVED***.clipShape(roundedRect)
 ***REMOVED******REMOVED******REMOVED***.overlay(
 ***REMOVED******REMOVED******REMOVED******REMOVED***roundedRect
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.stroke(lineWidth: 2)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.blue)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(Color(.separator))
 ***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***.shadow(color: Color.gray.opacity(0.6),
+***REMOVED******REMOVED******REMOVED***.shadow(color: Color.gray.opacity(0.4),
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***radius: 3,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***x: 1,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***y: 2
