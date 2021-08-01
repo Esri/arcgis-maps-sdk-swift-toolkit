@@ -175,7 +175,7 @@ struct SearchResultList: View {
                 if let results = results, results.count > 0 {
                     if results.count > 1 {
                         // Only show the list if we have more than one result.
-                        List {
+                        PlainList {
                             ForEach(results) { result in
                                 SearchResultRow(result: result)
                                     .onTapGesture {
@@ -186,12 +186,12 @@ struct SearchResultList: View {
                     }
                 }
                 else if results != nil {
-                    List {
+                    PlainList {
                         Text(noResultMessage)
                     }
                 }
             case .failure(let error):
-                List {
+                PlainList {
                     Text(error.localizedDescription)
                 }
             }
@@ -210,7 +210,7 @@ struct SearchSuggestionList: View {
             switch suggestionResults {
             case .success(let results):
                 if let suggestions = results, suggestions.count > 0 {
-                    List {
+                    PlainList {
                         if suggestions.count > 0 {
                             ForEach(suggestions) { suggestion in
                                 SuggestionResultRow(suggestion: suggestion)
@@ -222,12 +222,12 @@ struct SearchSuggestionList: View {
                     }
                 }
                 else if results != nil {
-                    List {
+                    PlainList {
                         Text(noResultMessage)
                     }
                 }
             case .failure(let error):
-                List {
+                PlainList {
                     Text(error.errorDescription)
                 }
             }

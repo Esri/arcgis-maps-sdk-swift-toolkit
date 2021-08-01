@@ -23,7 +23,7 @@ struct EsriSearchButtonViewModifier: ViewModifier {
                 action: { self.performSearch = true },
                 label: {
                 Image(systemName: "magnifyingglass.circle.fill")
-                    .foregroundColor(Color(UIColor.opaqueSeparator))
+                    .foregroundColor(Color(.opaqueSeparator))
             }
             )
         }

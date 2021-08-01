@@ -19,14 +19,14 @@ struct EsriBorderViewModifier: ViewModifier {
         let roundedRect = RoundedRectangle(cornerRadius: 8)
         content
             .padding(edgeInsets)
-            .background(.white)
+            .background(Color(.systemBackground))
             .clipShape(roundedRect)
             .overlay(
                 roundedRect
                     .stroke(lineWidth: 2)
-                    .foregroundColor(.blue)
+                    .foregroundColor(Color(.separator))
             )
-            .shadow(color: Color.gray.opacity(0.6),
+            .shadow(color: Color.gray.opacity(0.4),
                     radius: 3,
                     x: 1,
                     y: 2
