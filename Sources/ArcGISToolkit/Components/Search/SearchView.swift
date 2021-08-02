@@ -51,11 +51,6 @@ public struct SearchView: View {
     @State
     private var currentSuggestion: SearchSuggestion?
     
-    /// The currently executing async task.  `currentTask` should be cancelled
-    /// prior to starting another async task.
-    @State
-    private var currentTask: Task<Void, Never>?
-    
     /// Determines whether the results lists are displayed.
     @State
     private var isResultDisplayHidden: Bool = false
@@ -94,20 +89,20 @@ public struct SearchView: View {
             .task(id: searchViewModel.currentQuery) {
                 // User typed a new character
                 if currentSuggestion == nil {
-                    await suggest()
+                    await searchViewModel.updateSuggestions()
                 }
             }
             .task(id: shouldCommitSearch) {
                 if shouldCommitSearch {
                     // User committed changes (hit Enter/Search button)
+                    await searchViewModel.commitSearch(false)
                     shouldCommitSearch.toggle()
-                    await search()
                 }
             }
             .task(id: currentSuggestion) {
                 if let suggestion = currentSuggestion {
                     // User selected a suggestion.
-                    await accept(suggestion)
+                    await searchViewModel.acceptSuggestion(suggestion)
                     currentSuggestion = nil
                 }
             }
@@ -134,32 +129,6 @@ public struct SearchView: View {
         var copy = self
         copy.noResultMessage = noResultMessage
         return copy
-    }
-}
-
-extension SearchView {
-    func search() async {
-        currentTask?.cancel()
-        currentTask = Task(operation: {
-            await searchViewModel.commitSearch(false)
-        })
-        await currentTask?.value
-    }
-    
-    func suggest() async {
-        currentTask?.cancel()
-        currentTask = Task(operation: {
-            await searchViewModel.updateSuggestions()
-        })
-        await currentTask?.value
-    }
-    
-    func accept(_ suggestion: SearchSuggestion) async {
-        currentTask?.cancel()
-        currentTask = Task(operation: {
-            await searchViewModel.acceptSuggestion(suggestion)
-        })
-        await currentTask?.value
     }
 }
 
