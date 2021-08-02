@@ -137,7 +137,7 @@ public class SearchViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ The currently executing async task.  `currentTask` should be cancelled
 ***REMOVED******REMOVED***/ prior to starting another async task.
 ***REMOVED***private var currentTask: Task<Void, Never>?
-
+***REMOVED***
 ***REMOVED******REMOVED***/ Starts a search. `selectedResult` and `results`, among other properties, are set
 ***REMOVED******REMOVED***/ asynchronously. Other query properties are read to define the parameters of the search.
 ***REMOVED******REMOVED***/ If `restrictToArea` is true, only results in the query area will be returned.
@@ -230,7 +230,7 @@ extension SearchViewModel {
 ***REMOVED***)
 ***REMOVED******REMOVED***return task
 ***REMOVED***
-
+***REMOVED***
 ***REMOVED***private func updateSuggestionsTask(
 ***REMOVED******REMOVED***_ source: SearchSourceProtocol
 ***REMOVED***) -> Task<(), Never> {
@@ -258,7 +258,7 @@ extension SearchViewModel {
 ***REMOVED***)
 ***REMOVED******REMOVED***return task
 ***REMOVED***
-
+***REMOVED***
 ***REMOVED***private func acceptSuggestionTask(
 ***REMOVED******REMOVED***_ searchSuggestion: SearchSuggestion
 ***REMOVED***) -> Task<(), Never> {
@@ -270,7 +270,7 @@ extension SearchViewModel {
 ***REMOVED******REMOVED******REMOVED***DispatchQueue.main.async { [weak self] in
 ***REMOVED******REMOVED******REMOVED******REMOVED***var searchResults = [SearchResult]()
 ***REMOVED******REMOVED******REMOVED******REMOVED***var suggestError: Error?
-
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***self?.suggestions = .success(nil)
 ***REMOVED******REMOVED******REMOVED******REMOVED***self?.isEligibleForRequery = false
 ***REMOVED******REMOVED******REMOVED******REMOVED***self?.selectedResult = nil
@@ -315,7 +315,7 @@ extension SearchViewModel {
 ***REMOVED***)
 ***REMOVED******REMOVED***return task
 ***REMOVED***
-
+***REMOVED***
 ***REMOVED***
 
 extension SearchViewModel {
