@@ -81,12 +81,10 @@ struct SearchExampleView: View {
         case .success(let results):
             var resultGraphics = [Graphic]()
             results?.forEach({ result in
-                let graphic = Graphic(
-                    geometry: result.geoElement?.geometry,
-                    symbol: .resultSymbol
-                )
-                resultGraphics.append(graphic)
-                
+                if let graphic = result.geoElement as? Graphic {
+                    graphic.updateGraphic(withResult: result)
+                    resultGraphics.append(graphic)
+                }
             })
             let currentGraphics = searchResultsOverlay.graphics
             searchResultsOverlay.removeGraphics(currentGraphics)
@@ -113,9 +111,8 @@ struct SearchExampleView: View {
               let graphic = selectedResult.geoElement as? Graphic else { return }
         
         searchResultViewpoint = selectedResult.selectionViewpoint
-        if graphic.symbol == nil {
-            graphic.symbol = .resultSymbol
-        }
+        graphic.updateGraphic(withResult: selectedResult)
+
         let currentGraphics = searchResultsOverlay.graphics
         searchResultsOverlay.removeGraphics(currentGraphics)
         searchResultsOverlay.addGraphic(graphic)
@@ -127,4 +124,14 @@ private extension Symbol {
     static let resultSymbol: MarkerSymbol = PictureMarkerSymbol(
         image: UIImage(named: "MapPin")!
     )
+}
+
+private extension Graphic {
+    func updateGraphic(withResult result: SearchResult) {
+        if symbol == nil {
+            symbol = .resultSymbol
+        }
+        setAttributeValue(result.displayTitle, forKey: "displayTitle")
+        setAttributeValue(result.displaySubtitle, forKey: "displaySubtitle")
+    }
 }
