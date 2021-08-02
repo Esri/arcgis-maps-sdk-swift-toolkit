@@ -137,7 +137,7 @@ public class SearchViewModel: ObservableObject {
     /// The currently executing async task.  `currentTask` should be cancelled
     /// prior to starting another async task.
     private var currentTask: Task<Void, Never>?
-
+    
     /// Starts a search. `selectedResult` and `results`, among other properties, are set
     /// asynchronously. Other query properties are read to define the parameters of the search.
     /// If `restrictToArea` is true, only results in the query area will be returned.
@@ -230,7 +230,7 @@ extension SearchViewModel {
         })
         return task
     }
-
+    
     private func updateSuggestionsTask(
         _ source: SearchSourceProtocol
     ) -> Task<(), Never> {
@@ -258,7 +258,7 @@ extension SearchViewModel {
         })
         return task
     }
-
+    
     private func acceptSuggestionTask(
         _ searchSuggestion: SearchSuggestion
     ) -> Task<(), Never> {
@@ -270,7 +270,7 @@ extension SearchViewModel {
             DispatchQueue.main.async { [weak self] in
                 var searchResults = [SearchResult]()
                 var suggestError: Error?
-
+                
                 self?.suggestions = .success(nil)
                 self?.isEligibleForRequery = false
                 self?.selectedResult = nil
@@ -315,7 +315,7 @@ extension SearchViewModel {
         })
         return task
     }
-
+    
 }
 
 extension SearchViewModel {
