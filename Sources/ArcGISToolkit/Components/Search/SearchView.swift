@@ -51,11 +51,6 @@ public struct SearchView: View {
 ***REMOVED***@State
 ***REMOVED***private var currentSuggestion: SearchSuggestion?
 ***REMOVED***
-***REMOVED******REMOVED***/ The currently executing async task.  `currentTask` should be cancelled
-***REMOVED******REMOVED***/ prior to starting another async task.
-***REMOVED***@State
-***REMOVED***private var currentTask: Task<Void, Never>?
-***REMOVED***
 ***REMOVED******REMOVED***/ Determines whether the results lists are displayed.
 ***REMOVED***@State
 ***REMOVED***private var isResultDisplayHidden: Bool = false
@@ -94,20 +89,20 @@ public struct SearchView: View {
 ***REMOVED******REMOVED******REMOVED***.task(id: searchViewModel.currentQuery) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** User typed a new character
 ***REMOVED******REMOVED******REMOVED******REMOVED***if currentSuggestion == nil {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await suggest()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await searchViewModel.updateSuggestions()
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.task(id: shouldCommitSearch) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if shouldCommitSearch {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** User committed changes (hit Enter/Search button)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await searchViewModel.commitSearch(false)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***shouldCommitSearch.toggle()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await search()
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.task(id: currentSuggestion) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if let suggestion = currentSuggestion {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** User selected a suggestion.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await accept(suggestion)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await searchViewModel.acceptSuggestion(suggestion)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentSuggestion = nil
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
@@ -134,32 +129,6 @@ public struct SearchView: View {
 ***REMOVED******REMOVED***var copy = self
 ***REMOVED******REMOVED***copy.noResultMessage = noResultMessage
 ***REMOVED******REMOVED***return copy
-***REMOVED***
-***REMOVED***
-
-extension SearchView {
-***REMOVED***func search() async {
-***REMOVED******REMOVED***currentTask?.cancel()
-***REMOVED******REMOVED***currentTask = Task(operation: {
-***REMOVED******REMOVED******REMOVED***await searchViewModel.commitSearch(false)
-***REMOVED***)
-***REMOVED******REMOVED***await currentTask?.value
-***REMOVED***
-***REMOVED***
-***REMOVED***func suggest() async {
-***REMOVED******REMOVED***currentTask?.cancel()
-***REMOVED******REMOVED***currentTask = Task(operation: {
-***REMOVED******REMOVED******REMOVED***await searchViewModel.updateSuggestions()
-***REMOVED***)
-***REMOVED******REMOVED***await currentTask?.value
-***REMOVED***
-***REMOVED***
-***REMOVED***func accept(_ suggestion: SearchSuggestion) async {
-***REMOVED******REMOVED***currentTask?.cancel()
-***REMOVED******REMOVED***currentTask = Task(operation: {
-***REMOVED******REMOVED******REMOVED***await searchViewModel.acceptSuggestion(suggestion)
-***REMOVED***)
-***REMOVED******REMOVED***await currentTask?.value
 ***REMOVED***
 ***REMOVED***
 
