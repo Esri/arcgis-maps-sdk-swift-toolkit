@@ -81,12 +81,10 @@ struct SearchExampleView: View {
 ***REMOVED******REMOVED***case .success(let results):
 ***REMOVED******REMOVED******REMOVED***var resultGraphics = [Graphic]()
 ***REMOVED******REMOVED******REMOVED***results?.forEach({ result in
-***REMOVED******REMOVED******REMOVED******REMOVED***let graphic = Graphic(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***geometry: result.geoElement?.geometry,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***symbol: .resultSymbol
-***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED***resultGraphics.append(graphic)
-***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***if let graphic = result.geoElement as? Graphic {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***graphic.updateGraphic(withResult: result)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***resultGraphics.append(graphic)
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***let currentGraphics = searchResultsOverlay.graphics
 ***REMOVED******REMOVED******REMOVED***searchResultsOverlay.removeGraphics(currentGraphics)
@@ -113,9 +111,8 @@ struct SearchExampleView: View {
 ***REMOVED******REMOVED******REMOVED***  let graphic = selectedResult.geoElement as? Graphic else { return ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***searchResultViewpoint = selectedResult.selectionViewpoint
-***REMOVED******REMOVED***if graphic.symbol == nil {
-***REMOVED******REMOVED******REMOVED***graphic.symbol = .resultSymbol
-***REMOVED***
+***REMOVED******REMOVED***graphic.updateGraphic(withResult: selectedResult)
+
 ***REMOVED******REMOVED***let currentGraphics = searchResultsOverlay.graphics
 ***REMOVED******REMOVED***searchResultsOverlay.removeGraphics(currentGraphics)
 ***REMOVED******REMOVED***searchResultsOverlay.addGraphic(graphic)
@@ -127,4 +124,14 @@ private extension Symbol {
 ***REMOVED***static let resultSymbol: MarkerSymbol = PictureMarkerSymbol(
 ***REMOVED******REMOVED***image: UIImage(named: "MapPin")!
 ***REMOVED***)
+***REMOVED***
+
+private extension Graphic {
+***REMOVED***func updateGraphic(withResult result: SearchResult) {
+***REMOVED******REMOVED***if symbol == nil {
+***REMOVED******REMOVED******REMOVED***symbol = .resultSymbol
+***REMOVED***
+***REMOVED******REMOVED***setAttributeValue(result.displayTitle, forKey: "displayTitle")
+***REMOVED******REMOVED***setAttributeValue(result.displaySubtitle, forKey: "displaySubtitle")
+***REMOVED***
 ***REMOVED***
