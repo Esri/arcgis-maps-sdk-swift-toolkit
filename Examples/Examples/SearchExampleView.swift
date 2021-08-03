@@ -86,8 +86,7 @@ struct SearchExampleView: View {
                     resultGraphics.append(graphic)
                 }
             })
-            let currentGraphics = searchResultsOverlay.graphics
-            searchResultsOverlay.removeGraphics(currentGraphics)
+            searchResultsOverlay.removeAllGraphics()
             searchResultsOverlay.addGraphics(resultGraphics)
             
             if resultGraphics.count > 0,
@@ -113,8 +112,7 @@ struct SearchExampleView: View {
         searchResultViewpoint = selectedResult.selectionViewpoint
         graphic.updateGraphic(withResult: selectedResult)
 
-        let currentGraphics = searchResultsOverlay.graphics
-        searchResultsOverlay.removeGraphics(currentGraphics)
+        searchResultsOverlay.removeAllGraphics()
         searchResultsOverlay.addGraphic(graphic)
     }
 }
