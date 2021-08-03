@@ -86,8 +86,7 @@ struct SearchExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***resultGraphics.append(graphic)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***let currentGraphics = searchResultsOverlay.graphics
-***REMOVED******REMOVED******REMOVED***searchResultsOverlay.removeGraphics(currentGraphics)
+***REMOVED******REMOVED******REMOVED***searchResultsOverlay.removeAllGraphics()
 ***REMOVED******REMOVED******REMOVED***searchResultsOverlay.addGraphics(resultGraphics)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***if resultGraphics.count > 0,
@@ -113,8 +112,7 @@ struct SearchExampleView: View {
 ***REMOVED******REMOVED***searchResultViewpoint = selectedResult.selectionViewpoint
 ***REMOVED******REMOVED***graphic.updateGraphic(withResult: selectedResult)
 
-***REMOVED******REMOVED***let currentGraphics = searchResultsOverlay.graphics
-***REMOVED******REMOVED***searchResultsOverlay.removeGraphics(currentGraphics)
+***REMOVED******REMOVED***searchResultsOverlay.removeAllGraphics()
 ***REMOVED******REMOVED***searchResultsOverlay.addGraphic(graphic)
 ***REMOVED***
 ***REMOVED***
