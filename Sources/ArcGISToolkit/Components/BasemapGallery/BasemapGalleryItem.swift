@@ -27,14 +27,26 @@ public struct BasemapGalleryItem {
         self.name = name
         self.description = description
         self.thumbnail = thumbnail
+//        self.thumbnailURL = thumbnailURL
     }
     
-    var basemap: Basemap
-    var name: String
-    var description: String?
-    var thumbnail: UIImage?
+    public var basemap: Basemap
+    public var name: String
+    public var description: String?
+//    public var thumbnailURL: URL?
+    public let thumbnail: UIImage?
 }
 
-//extension DisplayableBasemap: Identifiable {
-//    public var id: ObjectIdentifier { ObjectIdentifier(self) }
-//}
+extension BasemapGalleryItem: Identifiable {
+    public var id: String { name }
+}
+
+extension BasemapGalleryItem: Equatable {
+    public static func == (lhs: BasemapGalleryItem, rhs: BasemapGalleryItem) -> Bool {
+        lhs.basemap === rhs.basemap &&
+        lhs.name == rhs.name &&
+        lhs.description == rhs.description &&
+        lhs.thumbnail === rhs.thumbnail
+    }
+    
+}

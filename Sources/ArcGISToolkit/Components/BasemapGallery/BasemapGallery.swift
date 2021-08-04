@@ -17,147 +17,107 @@ import ArcGIS
 /// `OverviewMap` is a small, secondary `MapView` (sometimes called an "inset map"), superimposed
 /// on an existing `GeoView`, which shows the visible extent of that `GeoView`.
 public struct BasemapGallery: View {
-    public init(basemaps: [BasemapGalleryItem] = []) {
-        self.basemaps = basemaps
+    public init(
+        basemapGalleryItems: [BasemapGalleryItem] = [],
+        selectedBasemapGalleryItem: Binding<BasemapGalleryItem?>
+    ) {
+        self.basemapGalleryItems = basemapGalleryItems
+        self._selectedBasemapGalleryItem = selectedBasemapGalleryItem
     }
-
-    public var basemaps: [BasemapGalleryItem] = []
-//    /// The `Viewpoint` of the main `GeoView`.
-//    let viewpoint: Viewpoint?
-//
-//    /// The visible area of the main `GeoView`. Not applicable to `SceneView`s.
-//    let visibleArea: Polygon?
-//
-//    private var symbol: Symbol
-//
-//    private var scaleFactor = 25.0
-//
-//    @StateObject
-//    private var map = Map(basemapStyle: .arcGISTopographic)
-//
-//    /// The `Graphic` displaying the visible area of the main `GeoView`.
-//    @StateObject
-//    private var graphic: Graphic
-//
-//    /// The `GraphicsOverlay` used to display the visible area graphic.
-//    @StateObject
-//    private var graphicsOverlay: GraphicsOverlay
-//
-//    /// Creates an `OverviewMap` for use on a `MapView`.
-//    /// - Parameters:
-//    ///   - viewpoint: Viewpoint of the main `MapView` used to update the `OverviewMap` view.
-//    ///   - visibleArea: Visible area of the main `MapView ` used to display the extent graphic.
-//    /// - Returns: A new `OverviewMap`.
-//    public static func forMapView(
-//        with viewpoint: Viewpoint?,
-//        visibleArea: Polygon?
-//    ) -> OverviewMap {
-//        OverviewMap(viewpoint: viewpoint, visibleArea: visibleArea, symbol: .defaultFill)
-//    }
-//
-//    /// Creates an `OverviewMap` for use on a `SceneView`.
-//    /// - Parameter viewpoint: Viewpoint of the main `SceneView` used to update the
-//    /// `OverviewMap` view.
-//    /// - Returns: A new `OverviewMap`.
-//    public static func forSceneView(
-//        with viewpoint: Viewpoint?
-//    ) -> OverviewMap {
-//        OverviewMap(viewpoint: viewpoint, symbol: .defaultMarker)
-//    }
-//
-//    /// Creates an `OverviewMap`. Used for creating an `OverviewMap` for use on a `MapView`.
-//    /// - Parameters:
-//    ///   - viewpoint: Viewpoint of the main `GeoView` used to update the `OverviewMap` view.
-//    ///   - visibleArea: Visible area of the main `GeoView` used to display the extent graphic.
-//    init(
-//        viewpoint: Viewpoint?,
-//        visibleArea: Polygon? = nil,
-//        symbol: Symbol
-//    ) {
-//        self.visibleArea = visibleArea
-//        self.viewpoint = viewpoint
-//        self.symbol = symbol
-//
-//        let graphic = Graphic(symbol: self.symbol)
-//
-//        // It is necessary to set the graphic and graphicsOverlay this way
-//        // in order to prevent the main geoview from recreating the
-//        // graphicsOverlay every draw cycle. That was causing refresh issues
-//        // with the graphic during panning/zooming/rotating.
-//        _graphic = StateObject(wrappedValue: graphic)
-//        _graphicsOverlay = StateObject(wrappedValue: GraphicsOverlay(graphics: [graphic]))
-//    }
+    
+    public var basemapGalleryItems: [BasemapGalleryItem] = []
+    
+    @Binding
+    public var selectedBasemapGalleryItem: BasemapGalleryItem?
     
     public var body: some View {
-        List {
-            basemaps.forEach { basemapGalleryItem in
-                Text(basemapGalleryItem.name)
+        PlainList {
+            ForEach(basemapGalleryItems) { basemapGalleryItem in
+                BasemapGalleryItemRow(item: basemapGalleryItem)
+                    .onTapGesture {
+                        selectedBasemapGalleryItem = basemapGalleryItem
+                    }
             }
         }
+        .esriBorder()
     }
-//        MapView(
-//            map: map,
-//            viewpoint: makeOverviewViewpoint(),
-//            graphicsOverlays: [graphicsOverlay]
-//        )
-//            .attributionText(hidden: true)
-//            .interactionModes([])
-//            .border(.black, width: 1)
-//            .onAppear(perform: {
-//                graphic.symbol = symbol
-//            })
-//            .onChange(of: visibleArea, perform: { visibleArea in
-//                if let visibleArea = visibleArea {
-//                    graphic.geometry = visibleArea
-//                }
-//            })
-//            .onChange(of: viewpoint, perform: { viewpoint in
-//                if visibleArea == nil,
-//                   let viewpoint = viewpoint,
-//                   let point = viewpoint.targetGeometry as? Point {
-//                    graphic.geometry = point
-//                }
-//            })
-//            .onChange(of: symbol, perform: {
-//                graphic.symbol = $0
-//            })
-//    }
+    //        MapView(
+    //            map: map,
+    //            viewpoint: makeOverviewViewpoint(),
+    //            graphicsOverlays: [graphicsOverlay]
+    //        )
+    //            .attributionText(hidden: true)
+    //            .interactionModes([])
+    //            .border(.black, width: 1)
+    //            .onAppear(perform: {
+    //                graphic.symbol = symbol
+    //            })
+    //            .onChange(of: visibleArea, perform: { visibleArea in
+    //                if let visibleArea = visibleArea {
+    //                    graphic.geometry = visibleArea
+    //                }
+    //            })
+    //            .onChange(of: viewpoint, perform: { viewpoint in
+    //                if visibleArea == nil,
+    //                   let viewpoint = viewpoint,
+    //                   let point = viewpoint.targetGeometry as? Point {
+    //                    graphic.geometry = point
+    //                }
+    //            })
+    //            .onChange(of: symbol, perform: {
+    //                graphic.symbol = $0
+    //            })
+    //    }
     
     // MARK: Modifiers
-//    
-//    /// The `Map` displayed in the `OverviewMap`.
-//    /// - Parameter map: The new map.
-//    /// - Returns: The `OverviewMap`.
-//    public func map(_ map: Map) -> OverviewMap {
-//        var copy = self
-//        copy._map = StateObject(wrappedValue: map)
-//        return copy
-//    }
-//    
-//    /// The factor to multiply the main `GeoView`'s scale by.  The `OverviewMap` will display
-//    /// at the a scale equal to: `viewpoint.targetScale` x `scaleFactor`.
-//    /// The default value is `25.0`.
-//    /// - Parameter scaleFactor: The new scale factor.
-//    /// - Returns: The `OverviewMap`.
-//    public func scaleFactor(_ scaleFactor: Double) -> OverviewMap {
-//        var copy = self
-//        copy.scaleFactor = scaleFactor
-//        return copy
-//    }
-//    
-//    /// The `Symbol` used to display the main `GeoView` visible area. For `MapView`s, the symbol
-//    /// should be appropriate for visualizing a polygon, as it will be used to draw the visible area. For
-//    /// `SceneView`s, the symbol should be appropriate for visualizing a point, as it will be used to
-//    /// draw the current viewpoint's center. For `MapView`s, the default is a transparent
-//    /// `SimpleFillSymbol` with a red 1 point width outline; for `SceneView`s, the default is a
-//    /// red, crosshair `SimpleMarkerSymbol`.
-//    /// - Parameter symbol: The new symbol.
-//    /// - Returns: The `OverviewMap`.
-//    public func symbol(_ symbol: Symbol) -> OverviewMap {
-//        var copy = self
-//        copy.symbol = symbol
-//        return copy
-//    }
+    //
+    //    /// The `Map` displayed in the `OverviewMap`.
+    //    /// - Parameter map: The new map.
+    //    /// - Returns: The `OverviewMap`.
+    //    public func map(_ map: Map) -> OverviewMap {
+    //        var copy = self
+    //        copy._map = StateObject(wrappedValue: map)
+    //        return copy
+    //    }
+    //
+    //    /// The factor to multiply the main `GeoView`'s scale by.  The `OverviewMap` will display
+    //    /// at the a scale equal to: `viewpoint.targetScale` x `scaleFactor`.
+    //    /// The default value is `25.0`.
+    //    /// - Parameter scaleFactor: The new scale factor.
+    //    /// - Returns: The `OverviewMap`.
+    //    public func scaleFactor(_ scaleFactor: Double) -> OverviewMap {
+    //        var copy = self
+    //        copy.scaleFactor = scaleFactor
+    //        return copy
+    //    }
+    //
+    //    /// The `Symbol` used to display the main `GeoView` visible area. For `MapView`s, the symbol
+    //    /// should be appropriate for visualizing a polygon, as it will be used to draw the visible area. For
+    //    /// `SceneView`s, the symbol should be appropriate for visualizing a point, as it will be used to
+    //    /// draw the current viewpoint's center. For `MapView`s, the default is a transparent
+    //    /// `SimpleFillSymbol` with a red 1 point width outline; for `SceneView`s, the default is a
+    //    /// red, crosshair `SimpleMarkerSymbol`.
+    //    /// - Parameter symbol: The new symbol.
+    //    /// - Returns: The `OverviewMap`.
+    //    public func symbol(_ symbol: Symbol) -> OverviewMap {
+    //        var copy = self
+    //        copy.symbol = symbol
+    //        return copy
+    //    }
+}
+
+private struct BasemapGalleryItemRow: View {
+    var item: BasemapGalleryItem
+    var body: some View {
+        VStack {
+            if let thumbnail = item.thumbnail {
+                // TODO: thumbnail will have to be loaded.
+                Image(uiImage: thumbnail)
+            }
+            Text(item.name)
+                .font(.footnote)
+        }
+    }
 }
 
 // MARK: Extensions
