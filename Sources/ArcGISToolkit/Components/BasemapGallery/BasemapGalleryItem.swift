@@ -27,14 +27,26 @@ public struct BasemapGalleryItem {
 ***REMOVED******REMOVED***self.name = name
 ***REMOVED******REMOVED***self.description = description
 ***REMOVED******REMOVED***self.thumbnail = thumbnail
+***REMOVED******REMOVED******REMOVED***self.thumbnailURL = thumbnailURL
 ***REMOVED***
 ***REMOVED***
-***REMOVED***var basemap: Basemap
-***REMOVED***var name: String
-***REMOVED***var description: String?
-***REMOVED***var thumbnail: UIImage?
+***REMOVED***public var basemap: Basemap
+***REMOVED***public var name: String
+***REMOVED***public var description: String?
+***REMOVED******REMOVED***public var thumbnailURL: URL?
+***REMOVED***public let thumbnail: UIImage?
 ***REMOVED***
 
-***REMOVED***extension DisplayableBasemap: Identifiable {
-***REMOVED******REMOVED***public var id: ObjectIdentifier { ObjectIdentifier(self) ***REMOVED***
-***REMOVED******REMOVED***
+extension BasemapGalleryItem: Identifiable {
+***REMOVED***public var id: String { name ***REMOVED***
+***REMOVED***
+
+extension BasemapGalleryItem: Equatable {
+***REMOVED***public static func == (lhs: BasemapGalleryItem, rhs: BasemapGalleryItem) -> Bool {
+***REMOVED******REMOVED***lhs.basemap === rhs.basemap &&
+***REMOVED******REMOVED***lhs.name == rhs.name &&
+***REMOVED******REMOVED***lhs.description == rhs.description &&
+***REMOVED******REMOVED***lhs.thumbnail === rhs.thumbnail
+***REMOVED***
+***REMOVED***
+***REMOVED***

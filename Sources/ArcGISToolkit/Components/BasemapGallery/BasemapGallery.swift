@@ -17,147 +17,107 @@
 ***REMOVED***/ `OverviewMap` is a small, secondary `MapView` (sometimes called an "inset map"), superimposed
 ***REMOVED***/ on an existing `GeoView`, which shows the visible extent of that `GeoView`.
 public struct BasemapGallery: View {
-***REMOVED***public init(basemaps: [BasemapGalleryItem] = []) {
-***REMOVED******REMOVED***self.basemaps = basemaps
+***REMOVED***public init(
+***REMOVED******REMOVED***basemapGalleryItems: [BasemapGalleryItem] = [],
+***REMOVED******REMOVED***selectedBasemapGalleryItem: Binding<BasemapGalleryItem?>
+***REMOVED***) {
+***REMOVED******REMOVED***self.basemapGalleryItems = basemapGalleryItems
+***REMOVED******REMOVED***self._selectedBasemapGalleryItem = selectedBasemapGalleryItem
 ***REMOVED***
-
-***REMOVED***public var basemaps: [BasemapGalleryItem] = []
-***REMOVED******REMOVED******REMOVED***/ The `Viewpoint` of the main `GeoView`.
-***REMOVED******REMOVED***let viewpoint: Viewpoint?
 ***REMOVED***
-***REMOVED******REMOVED******REMOVED***/ The visible area of the main `GeoView`. Not applicable to `SceneView`s.
-***REMOVED******REMOVED***let visibleArea: Polygon?
+***REMOVED***public var basemapGalleryItems: [BasemapGalleryItem] = []
 ***REMOVED***
-***REMOVED******REMOVED***private var symbol: Symbol
-***REMOVED***
-***REMOVED******REMOVED***private var scaleFactor = 25.0
-***REMOVED***
-***REMOVED******REMOVED***@StateObject
-***REMOVED******REMOVED***private var map = Map(basemapStyle: .arcGISTopographic)
-***REMOVED***
-***REMOVED******REMOVED******REMOVED***/ The `Graphic` displaying the visible area of the main `GeoView`.
-***REMOVED******REMOVED***@StateObject
-***REMOVED******REMOVED***private var graphic: Graphic
-***REMOVED***
-***REMOVED******REMOVED******REMOVED***/ The `GraphicsOverlay` used to display the visible area graphic.
-***REMOVED******REMOVED***@StateObject
-***REMOVED******REMOVED***private var graphicsOverlay: GraphicsOverlay
-***REMOVED***
-***REMOVED******REMOVED******REMOVED***/ Creates an `OverviewMap` for use on a `MapView`.
-***REMOVED******REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED******REMOVED***/   - viewpoint: Viewpoint of the main `MapView` used to update the `OverviewMap` view.
-***REMOVED******REMOVED******REMOVED***/   - visibleArea: Visible area of the main `MapView ` used to display the extent graphic.
-***REMOVED******REMOVED******REMOVED***/ - Returns: A new `OverviewMap`.
-***REMOVED******REMOVED***public static func forMapView(
-***REMOVED******REMOVED******REMOVED***with viewpoint: Viewpoint?,
-***REMOVED******REMOVED******REMOVED***visibleArea: Polygon?
-***REMOVED******REMOVED***) -> OverviewMap {
-***REMOVED******REMOVED******REMOVED***OverviewMap(viewpoint: viewpoint, visibleArea: visibleArea, symbol: .defaultFill)
-***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED******REMOVED******REMOVED***/ Creates an `OverviewMap` for use on a `SceneView`.
-***REMOVED******REMOVED******REMOVED***/ - Parameter viewpoint: Viewpoint of the main `SceneView` used to update the
-***REMOVED******REMOVED******REMOVED***/ `OverviewMap` view.
-***REMOVED******REMOVED******REMOVED***/ - Returns: A new `OverviewMap`.
-***REMOVED******REMOVED***public static func forSceneView(
-***REMOVED******REMOVED******REMOVED***with viewpoint: Viewpoint?
-***REMOVED******REMOVED***) -> OverviewMap {
-***REMOVED******REMOVED******REMOVED***OverviewMap(viewpoint: viewpoint, symbol: .defaultMarker)
-***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED******REMOVED******REMOVED***/ Creates an `OverviewMap`. Used for creating an `OverviewMap` for use on a `MapView`.
-***REMOVED******REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED******REMOVED***/   - viewpoint: Viewpoint of the main `GeoView` used to update the `OverviewMap` view.
-***REMOVED******REMOVED******REMOVED***/   - visibleArea: Visible area of the main `GeoView` used to display the extent graphic.
-***REMOVED******REMOVED***init(
-***REMOVED******REMOVED******REMOVED***viewpoint: Viewpoint?,
-***REMOVED******REMOVED******REMOVED***visibleArea: Polygon? = nil,
-***REMOVED******REMOVED******REMOVED***symbol: Symbol
-***REMOVED******REMOVED***) {
-***REMOVED******REMOVED******REMOVED***self.visibleArea = visibleArea
-***REMOVED******REMOVED******REMOVED***self.viewpoint = viewpoint
-***REMOVED******REMOVED******REMOVED***self.symbol = symbol
-***REMOVED***
-***REMOVED******REMOVED******REMOVED***let graphic = Graphic(symbol: self.symbol)
-***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED*** It is necessary to set the graphic and graphicsOverlay this way
-***REMOVED******REMOVED******REMOVED******REMOVED*** in order to prevent the main geoview from recreating the
-***REMOVED******REMOVED******REMOVED******REMOVED*** graphicsOverlay every draw cycle. That was causing refresh issues
-***REMOVED******REMOVED******REMOVED******REMOVED*** with the graphic during panning/zooming/rotating.
-***REMOVED******REMOVED******REMOVED***_graphic = StateObject(wrappedValue: graphic)
-***REMOVED******REMOVED******REMOVED***_graphicsOverlay = StateObject(wrappedValue: GraphicsOverlay(graphics: [graphic]))
-***REMOVED******REMOVED***
+***REMOVED***@Binding
+***REMOVED***public var selectedBasemapGalleryItem: BasemapGalleryItem?
 ***REMOVED***
 ***REMOVED***public var body: some View {
-***REMOVED******REMOVED***List {
-***REMOVED******REMOVED******REMOVED***basemaps.forEach { basemapGalleryItem in
-***REMOVED******REMOVED******REMOVED******REMOVED***Text(basemapGalleryItem.name)
+***REMOVED******REMOVED***PlainList {
+***REMOVED******REMOVED******REMOVED***ForEach(basemapGalleryItems) { basemapGalleryItem in
+***REMOVED******REMOVED******REMOVED******REMOVED***BasemapGalleryItemRow(item: basemapGalleryItem)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onTapGesture {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedBasemapGalleryItem = basemapGalleryItem
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***.esriBorder()
 ***REMOVED***
-***REMOVED******REMOVED******REMOVED***MapView(
-***REMOVED******REMOVED******REMOVED******REMOVED***map: map,
-***REMOVED******REMOVED******REMOVED******REMOVED***viewpoint: makeOverviewViewpoint(),
-***REMOVED******REMOVED******REMOVED******REMOVED***graphicsOverlays: [graphicsOverlay]
-***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED***.attributionText(hidden: true)
-***REMOVED******REMOVED******REMOVED******REMOVED***.interactionModes([])
-***REMOVED******REMOVED******REMOVED******REMOVED***.border(.black, width: 1)
-***REMOVED******REMOVED******REMOVED******REMOVED***.onAppear(perform: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***graphic.symbol = symbol
-***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: visibleArea, perform: { visibleArea in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let visibleArea = visibleArea {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***graphic.geometry = visibleArea
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: viewpoint, perform: { viewpoint in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if visibleArea == nil,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***   let viewpoint = viewpoint,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***   let point = viewpoint.targetGeometry as? Point {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***graphic.geometry = point
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: symbol, perform: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***graphic.symbol = $0
-***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***MapView(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***map: map,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint: makeOverviewViewpoint(),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***graphicsOverlays: [graphicsOverlay]
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.attributionText(hidden: true)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.interactionModes([])
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.border(.black, width: 1)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onAppear(perform: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***graphic.symbol = symbol
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: visibleArea, perform: { visibleArea in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let visibleArea = visibleArea {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***graphic.geometry = visibleArea
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: viewpoint, perform: { viewpoint in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if visibleArea == nil,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***   let viewpoint = viewpoint,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***   let point = viewpoint.targetGeometry as? Point {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***graphic.geometry = point
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: symbol, perform: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***graphic.symbol = $0
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED*** MARK: Modifiers
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ The `Map` displayed in the `OverviewMap`.
-***REMOVED******REMOVED******REMOVED***/ - Parameter map: The new map.
-***REMOVED******REMOVED******REMOVED***/ - Returns: The `OverviewMap`.
-***REMOVED******REMOVED***public func map(_ map: Map) -> OverviewMap {
-***REMOVED******REMOVED******REMOVED***var copy = self
-***REMOVED******REMOVED******REMOVED***copy._map = StateObject(wrappedValue: map)
-***REMOVED******REMOVED******REMOVED***return copy
+***REMOVED******REMOVED******REMOVED******REMOVED***/ The `Map` displayed in the `OverviewMap`.
+***REMOVED******REMOVED******REMOVED******REMOVED***/ - Parameter map: The new map.
+***REMOVED******REMOVED******REMOVED******REMOVED***/ - Returns: The `OverviewMap`.
+***REMOVED******REMOVED******REMOVED***public func map(_ map: Map) -> OverviewMap {
+***REMOVED******REMOVED******REMOVED******REMOVED***var copy = self
+***REMOVED******REMOVED******REMOVED******REMOVED***copy._map = StateObject(wrappedValue: map)
+***REMOVED******REMOVED******REMOVED******REMOVED***return copy
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***/ The factor to multiply the main `GeoView`'s scale by.  The `OverviewMap` will display
+***REMOVED******REMOVED******REMOVED******REMOVED***/ at the a scale equal to: `viewpoint.targetScale` x `scaleFactor`.
+***REMOVED******REMOVED******REMOVED******REMOVED***/ The default value is `25.0`.
+***REMOVED******REMOVED******REMOVED******REMOVED***/ - Parameter scaleFactor: The new scale factor.
+***REMOVED******REMOVED******REMOVED******REMOVED***/ - Returns: The `OverviewMap`.
+***REMOVED******REMOVED******REMOVED***public func scaleFactor(_ scaleFactor: Double) -> OverviewMap {
+***REMOVED******REMOVED******REMOVED******REMOVED***var copy = self
+***REMOVED******REMOVED******REMOVED******REMOVED***copy.scaleFactor = scaleFactor
+***REMOVED******REMOVED******REMOVED******REMOVED***return copy
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ The factor to multiply the main `GeoView`'s scale by.  The `OverviewMap` will display
-***REMOVED******REMOVED******REMOVED***/ at the a scale equal to: `viewpoint.targetScale` x `scaleFactor`.
-***REMOVED******REMOVED******REMOVED***/ The default value is `25.0`.
-***REMOVED******REMOVED******REMOVED***/ - Parameter scaleFactor: The new scale factor.
-***REMOVED******REMOVED******REMOVED***/ - Returns: The `OverviewMap`.
-***REMOVED******REMOVED***public func scaleFactor(_ scaleFactor: Double) -> OverviewMap {
-***REMOVED******REMOVED******REMOVED***var copy = self
-***REMOVED******REMOVED******REMOVED***copy.scaleFactor = scaleFactor
-***REMOVED******REMOVED******REMOVED***return copy
+***REMOVED******REMOVED******REMOVED******REMOVED***/ The `Symbol` used to display the main `GeoView` visible area. For `MapView`s, the symbol
+***REMOVED******REMOVED******REMOVED******REMOVED***/ should be appropriate for visualizing a polygon, as it will be used to draw the visible area. For
+***REMOVED******REMOVED******REMOVED******REMOVED***/ `SceneView`s, the symbol should be appropriate for visualizing a point, as it will be used to
+***REMOVED******REMOVED******REMOVED******REMOVED***/ draw the current viewpoint's center. For `MapView`s, the default is a transparent
+***REMOVED******REMOVED******REMOVED******REMOVED***/ `SimpleFillSymbol` with a red 1 point width outline; for `SceneView`s, the default is a
+***REMOVED******REMOVED******REMOVED******REMOVED***/ red, crosshair `SimpleMarkerSymbol`.
+***REMOVED******REMOVED******REMOVED******REMOVED***/ - Parameter symbol: The new symbol.
+***REMOVED******REMOVED******REMOVED******REMOVED***/ - Returns: The `OverviewMap`.
+***REMOVED******REMOVED******REMOVED***public func symbol(_ symbol: Symbol) -> OverviewMap {
+***REMOVED******REMOVED******REMOVED******REMOVED***var copy = self
+***REMOVED******REMOVED******REMOVED******REMOVED***copy.symbol = symbol
+***REMOVED******REMOVED******REMOVED******REMOVED***return copy
+***REMOVED******REMOVED******REMOVED***
+***REMOVED***
+
+private struct BasemapGalleryItemRow: View {
+***REMOVED***var item: BasemapGalleryItem
+***REMOVED***var body: some View {
+***REMOVED******REMOVED***VStack {
+***REMOVED******REMOVED******REMOVED***if let thumbnail = item.thumbnail {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** TODO: thumbnail will have to be loaded.
+***REMOVED******REMOVED******REMOVED******REMOVED***Image(uiImage: thumbnail)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ The `Symbol` used to display the main `GeoView` visible area. For `MapView`s, the symbol
-***REMOVED******REMOVED******REMOVED***/ should be appropriate for visualizing a polygon, as it will be used to draw the visible area. For
-***REMOVED******REMOVED******REMOVED***/ `SceneView`s, the symbol should be appropriate for visualizing a point, as it will be used to
-***REMOVED******REMOVED******REMOVED***/ draw the current viewpoint's center. For `MapView`s, the default is a transparent
-***REMOVED******REMOVED******REMOVED***/ `SimpleFillSymbol` with a red 1 point width outline; for `SceneView`s, the default is a
-***REMOVED******REMOVED******REMOVED***/ red, crosshair `SimpleMarkerSymbol`.
-***REMOVED******REMOVED******REMOVED***/ - Parameter symbol: The new symbol.
-***REMOVED******REMOVED******REMOVED***/ - Returns: The `OverviewMap`.
-***REMOVED******REMOVED***public func symbol(_ symbol: Symbol) -> OverviewMap {
-***REMOVED******REMOVED******REMOVED***var copy = self
-***REMOVED******REMOVED******REMOVED***copy.symbol = symbol
-***REMOVED******REMOVED******REMOVED***return copy
-***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***Text(item.name)
+***REMOVED******REMOVED******REMOVED******REMOVED***.font(.footnote)
+***REMOVED***
+***REMOVED***
 ***REMOVED***
 
 ***REMOVED*** MARK: Extensions
