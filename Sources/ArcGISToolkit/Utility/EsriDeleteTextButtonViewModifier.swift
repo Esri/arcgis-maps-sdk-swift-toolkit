@@ -23,9 +23,9 @@ struct EsriDeleteTextButtonViewModifier: ViewModifier {
                 Button(
                     action: { self.text = "" },
                     label: {
-                    Image(systemName: "xmark.circle.fill")
-                        .foregroundColor(Color(.opaqueSeparator))
-                }
+                        Image(systemName: "xmark.circle.fill")
+                            .foregroundColor(Color(.opaqueSeparator))
+                    }
                 )
             }
         }
