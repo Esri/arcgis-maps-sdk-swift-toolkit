@@ -22,7 +22,7 @@ public struct PlainList<Content> : View where Content : View {
 ***REMOVED***public init(@ViewBuilder content: () -> Content) {
 ***REMOVED******REMOVED***self.content = content()
 ***REMOVED***
-
+***REMOVED***
 ***REMOVED******REMOVED***/ The content of the list.
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***List {
