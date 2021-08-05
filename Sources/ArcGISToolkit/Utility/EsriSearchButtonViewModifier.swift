@@ -18,14 +18,14 @@ struct EsriSearchButtonViewModifier: ViewModifier {
     
     func body(content: Content) -> some View {
         HStack {
-            content
             Button(
                 action: { self.performSearch = true },
                 label: {
-                Image(systemName: "magnifyingglass.circle.fill")
-                    .foregroundColor(Color(.opaqueSeparator))
-            }
+                    Image(systemName: "magnifyingglass.circle.fill")
+                        .foregroundColor(Color(.opaqueSeparator))
+                }
             )
+            content
         }
     }
 }
