@@ -19,24 +19,21 @@ import XCTest
 ***REMOVED***
 
 class SearchViewModelTests: XCTestCase {
-***REMOVED***func testIsEligibleForRequery() async {
+***REMOVED***func testAcceptSuggestion() async throws {
 ***REMOVED******REMOVED***let model = SearchViewModel(sources: [LocatorSearchSource()])
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** isEligibleForRequery defaults to `false`.
-***REMOVED******REMOVED***XCTAssertFalse(model.isEligibleForRequery)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** There are no results, so setting `queryArea` has
-***REMOVED******REMOVED******REMOVED*** no effect on `isEligibleForRequery`.
-***REMOVED******REMOVED***model.queryArea = createPolygon()
-***REMOVED******REMOVED***XCTAssertFalse(model.isEligibleForRequery)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** We have results and a new polygon, `isEligibleForRequery` is true.
+
 ***REMOVED******REMOVED***model.currentQuery = "Magers & Quinn Bookseller"
-***REMOVED******REMOVED***await model.commitSearch(false)
-***REMOVED******REMOVED***model.queryArea = createPolygon()
-***REMOVED******REMOVED***XCTAssertTrue(model.isEligibleForRequery)
+***REMOVED******REMOVED***await model.updateSuggestions()
+***REMOVED******REMOVED***let suggestionionResults = try XCTUnwrap(model.suggestions.get())
+***REMOVED******REMOVED***let suggestion = try XCTUnwrap(suggestionionResults.first)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***await model.acceptSuggestion(suggestion)
+***REMOVED******REMOVED***let results = try XCTUnwrap(model.results.get())
+***REMOVED******REMOVED***XCTAssertEqual(results.count, 1)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***try XCTAssertNil(model.suggestions.get())
 ***REMOVED***
-***REMOVED***
+
 ***REMOVED***func testCommitSearch() async throws {
 ***REMOVED******REMOVED***let model = SearchViewModel(sources: [LocatorSearchSource()])
 ***REMOVED******REMOVED***
@@ -71,6 +68,24 @@ class SearchViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***XCTAssertNil(model.selectedResult)
 ***REMOVED******REMOVED***try XCTAssertNil(model.suggestions.get())
 ***REMOVED***
+
+***REMOVED***func testIsEligibleForRequery() async {
+***REMOVED******REMOVED***let model = SearchViewModel(sources: [LocatorSearchSource()])
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** isEligibleForRequery defaults to `false`.
+***REMOVED******REMOVED***XCTAssertFalse(model.isEligibleForRequery)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** There are no results, so setting `queryArea` has
+***REMOVED******REMOVED******REMOVED*** no effect on `isEligibleForRequery`.
+***REMOVED******REMOVED***model.queryArea = createPolygon()
+***REMOVED******REMOVED***XCTAssertFalse(model.isEligibleForRequery)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** We have results and a new polygon, `isEligibleForRequery` is true.
+***REMOVED******REMOVED***model.currentQuery = "Magers & Quinn Bookseller"
+***REMOVED******REMOVED***await model.commitSearch(false)
+***REMOVED******REMOVED***model.queryArea = createPolygon()
+***REMOVED******REMOVED***XCTAssertTrue(model.isEligibleForRequery)
+***REMOVED***
 ***REMOVED***
 ***REMOVED***func testUpdateSuggestions() async throws {
 ***REMOVED******REMOVED***let model = SearchViewModel(sources: [LocatorSearchSource()])
@@ -97,35 +112,6 @@ class SearchViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***try XCTAssertNil(model.results.get())
 ***REMOVED***
 ***REMOVED***
-***REMOVED***func testAcceptSuggestion() async throws {
-***REMOVED******REMOVED***let model = SearchViewModel(sources: [LocatorSearchSource()])
-
-***REMOVED******REMOVED***model.currentQuery = "Magers & Quinn Bookseller"
-***REMOVED******REMOVED***await model.updateSuggestions()
-***REMOVED******REMOVED***let suggestionionResults = try XCTUnwrap(model.suggestions.get())
-***REMOVED******REMOVED***let suggestion = try XCTUnwrap(suggestionionResults.first)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***await model.acceptSuggestion(suggestion)
-***REMOVED******REMOVED***let results = try XCTUnwrap(model.results.get())
-***REMOVED******REMOVED***XCTAssertEqual(results.count, 1)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** TODO:  look into setting model.selectedResults in didSet of `results`.
-***REMOVED******REMOVED***XCTAssertNotNil(model.selectedResult)
-***REMOVED******REMOVED***try XCTAssertNil(model.suggestions.get())
-***REMOVED***
-***REMOVED***
-
-***REMOVED*** Move to new file
-class LocatorSearchSourceTests: XCTestCase {
-***REMOVED******REMOVED*** Modify GeocodeParameters and SuggestParameters from example view
-***REMOVED******REMOVED*** Pass in custom locator (maybe from MMPK?)
-***REMOVED******REMOVED*** Set searchArea and/or preferredSearchLocation once (instead of every pan)
-***REMOVED******REMOVED***
-***REMOVED***
-
-***REMOVED*** Move to new file
-class SmartLocatorSearchSourceTests: XCTestCase {
-***REMOVED******REMOVED***
 ***REMOVED***
 
 extension SearchViewModelTests {
