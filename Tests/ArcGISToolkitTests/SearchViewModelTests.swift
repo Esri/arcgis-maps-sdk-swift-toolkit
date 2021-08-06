@@ -19,24 +19,21 @@ import ArcGISToolkit
 import SwiftUI
 
 class SearchViewModelTests: XCTestCase {
-    func testIsEligibleForRequery() async {
+    func testAcceptSuggestion() async throws {
         let model = SearchViewModel(sources: [LocatorSearchSource()])
-        
-        // isEligibleForRequery defaults to `false`.
-        XCTAssertFalse(model.isEligibleForRequery)
-        
-        // There are no results, so setting `queryArea` has
-        // no effect on `isEligibleForRequery`.
-        model.queryArea = createPolygon()
-        XCTAssertFalse(model.isEligibleForRequery)
-        
-        // We have results and a new polygon, `isEligibleForRequery` is true.
+
         model.currentQuery = "Magers & Quinn Bookseller"
-        await model.commitSearch(false)
-        model.queryArea = createPolygon()
-        XCTAssertTrue(model.isEligibleForRequery)
+        await model.updateSuggestions()
+        let suggestionionResults = try XCTUnwrap(model.suggestions.get())
+        let suggestion = try XCTUnwrap(suggestionionResults.first)
+        
+        await model.acceptSuggestion(suggestion)
+        let results = try XCTUnwrap(model.results.get())
+        XCTAssertEqual(results.count, 1)
+        
+        try XCTAssertNil(model.suggestions.get())
     }
-    
+
     func testCommitSearch() async throws {
         let model = SearchViewModel(sources: [LocatorSearchSource()])
         
@@ -71,6 +68,24 @@ class SearchViewModelTests: XCTestCase {
         XCTAssertNil(model.selectedResult)
         try XCTAssertNil(model.suggestions.get())
     }
+
+    func testIsEligibleForRequery() async {
+        let model = SearchViewModel(sources: [LocatorSearchSource()])
+        
+        // isEligibleForRequery defaults to `false`.
+        XCTAssertFalse(model.isEligibleForRequery)
+        
+        // There are no results, so setting `queryArea` has
+        // no effect on `isEligibleForRequery`.
+        model.queryArea = createPolygon()
+        XCTAssertFalse(model.isEligibleForRequery)
+        
+        // We have results and a new polygon, `isEligibleForRequery` is true.
+        model.currentQuery = "Magers & Quinn Bookseller"
+        await model.commitSearch(false)
+        model.queryArea = createPolygon()
+        XCTAssertTrue(model.isEligibleForRequery)
+    }
     
     func testUpdateSuggestions() async throws {
         let model = SearchViewModel(sources: [LocatorSearchSource()])
@@ -97,35 +112,6 @@ class SearchViewModelTests: XCTestCase {
         try XCTAssertNil(model.results.get())
     }
     
-    func testAcceptSuggestion() async throws {
-        let model = SearchViewModel(sources: [LocatorSearchSource()])
-
-        model.currentQuery = "Magers & Quinn Bookseller"
-        await model.updateSuggestions()
-        let suggestionionResults = try XCTUnwrap(model.suggestions.get())
-        let suggestion = try XCTUnwrap(suggestionionResults.first)
-        
-        await model.acceptSuggestion(suggestion)
-        let results = try XCTUnwrap(model.results.get())
-        XCTAssertEqual(results.count, 1)
-        
-        // TODO:  look into setting model.selectedResults in didSet of `results`.
-        XCTAssertNotNil(model.selectedResult)
-        try XCTAssertNil(model.suggestions.get())
-    }
-}
-
-// Move to new file
-class LocatorSearchSourceTests: XCTestCase {
-    // Modify GeocodeParameters and SuggestParameters from example view
-    // Pass in custom locator (maybe from MMPK?)
-    // Set searchArea and/or preferredSearchLocation once (instead of every pan)
-    //
-}
-
-// Move to new file
-class SmartLocatorSearchSourceTests: XCTestCase {
-    //
 }
 
 extension SearchViewModelTests {
