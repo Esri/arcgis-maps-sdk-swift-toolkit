@@ -209,7 +209,7 @@ extension SearchViewModel {
                 )
             }
             
-            DispatchQueue.main.async { [weak self] in
+            DispatchQueue.main.sync { [weak self] in
                 self?.isEligibleForRequery = false
                 self?.suggestions = .success(nil)
                 
@@ -239,7 +239,7 @@ extension SearchViewModel {
                 try await source.suggest(currentQuery)
             }
             
-            DispatchQueue.main.async { [weak self] in
+            DispatchQueue.main.sync { [weak self] in
                 self?.results = .success(nil)
                 self?.selectedResult = nil
                 self?.isEligibleForRequery = false
@@ -267,7 +267,7 @@ extension SearchViewModel {
                 try await searchSuggestion.owningSource.search(searchSuggestion)
             }
             
-            DispatchQueue.main.async { [weak self] in
+            DispatchQueue.main.sync { [weak self] in
                 var searchResults = [SearchResult]()
                 var suggestError: Error?
                 
