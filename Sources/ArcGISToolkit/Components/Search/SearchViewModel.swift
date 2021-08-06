@@ -209,7 +209,7 @@ extension SearchViewModel {
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***DispatchQueue.main.async { [weak self] in
+***REMOVED******REMOVED******REMOVED***DispatchQueue.main.sync { [weak self] in
 ***REMOVED******REMOVED******REMOVED******REMOVED***self?.isEligibleForRequery = false
 ***REMOVED******REMOVED******REMOVED******REMOVED***self?.suggestions = .success(nil)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
@@ -239,7 +239,7 @@ extension SearchViewModel {
 ***REMOVED******REMOVED******REMOVED******REMOVED***try await source.suggest(currentQuery)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***DispatchQueue.main.async { [weak self] in
+***REMOVED******REMOVED******REMOVED***DispatchQueue.main.sync { [weak self] in
 ***REMOVED******REMOVED******REMOVED******REMOVED***self?.results = .success(nil)
 ***REMOVED******REMOVED******REMOVED******REMOVED***self?.selectedResult = nil
 ***REMOVED******REMOVED******REMOVED******REMOVED***self?.isEligibleForRequery = false
@@ -267,7 +267,7 @@ extension SearchViewModel {
 ***REMOVED******REMOVED******REMOVED******REMOVED***try await searchSuggestion.owningSource.search(searchSuggestion)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***DispatchQueue.main.async { [weak self] in
+***REMOVED******REMOVED******REMOVED***DispatchQueue.main.sync { [weak self] in
 ***REMOVED******REMOVED******REMOVED******REMOVED***var searchResults = [SearchResult]()
 ***REMOVED******REMOVED******REMOVED******REMOVED***var suggestError: Error?
 ***REMOVED******REMOVED******REMOVED******REMOVED***
