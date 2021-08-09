@@ -76,7 +76,7 @@ struct SearchExampleView: View {
         searchViewModel.sources = [smartLocator]
     }
     
-    fileprivate func display(searchResults: Result<[SearchResult]?, SearchError>) {
+    private func display(searchResults: Result<[SearchResult]?, SearchError>) {
         switch searchResults {
         case .success(let results):
             var resultGraphics = [Graphic]()
@@ -105,15 +105,9 @@ struct SearchExampleView: View {
         }
     }
     
-    fileprivate func display(selectedResult: SearchResult?) {
-        guard let selectedResult = selectedResult,
-              let graphic = selectedResult.geoElement as? Graphic else { return }
-        
+    private func display(selectedResult: SearchResult?) {
+        guard let selectedResult = selectedResult else { return }
         searchResultViewpoint = selectedResult.selectionViewpoint
-        graphic.updateGraphic(withResult: selectedResult)
-
-        searchResultsOverlay.removeAllGraphics()
-        searchResultsOverlay.addGraphic(graphic)
     }
 }
 
