@@ -65,12 +65,10 @@ public class SearchViewModel: ObservableObject {
     @Published
     public var currentQuery: String = "" {
         didSet {
-            selectedResult = nil
+            results = .success(nil)
             if currentQuery.isEmpty {
-                results = .success(nil)
                 suggestions = .success(nil)
             }
-            isEligibleForRequery = false
         }
     }
     
@@ -104,7 +102,23 @@ public class SearchViewModel: ObservableObject {
     /// Collection of results. `nil` means no query has been made. An empty array means there
     /// were no results, and the view should show an appropriate 'no results' message.
     @Published
-    public private(set) var results: Result<[SearchResult]?, SearchError> = .success(nil)
+    public private(set) var results: Result<[SearchResult]?, SearchError> = .success(nil) {
+        didSet {
+            switch results {
+            case .success(let results):
+                if results != nil && results?.count == 1 {
+                    selectedResult = results?.first
+                }
+                else {
+                    selectedResult = nil
+                }
+            case .failure(_):
+                selectedResult = nil
+            }
+            
+            isEligibleForRequery = false
+        }
+    }
     
     /// Tracks selection of results from the `results` collection. When there is only one result,
     /// that result is automatically assigned to this property. If there are multiple results, the view sets
@@ -150,7 +164,8 @@ public class SearchViewModel: ObservableObject {
         
         source.searchArea = queryArea
         source.preferredSearchLocation = queryCenter
-        selectedResult = nil
+        
+        suggestions = .success(nil)
         
         currentTask?.cancel()
         currentTask = commitSearchTask(
@@ -168,6 +183,8 @@ public class SearchViewModel: ObservableObject {
         source.searchArea = queryArea
         source.preferredSearchLocation = queryCenter
         
+        results = .success(nil)
+        
         currentTask?.cancel()
         currentTask = updateSuggestionsTask(source)
         await currentTask?.value
@@ -182,6 +199,8 @@ public class SearchViewModel: ObservableObject {
         _ searchSuggestion: SearchSuggestion
     ) async -> Void {
         currentQuery = searchSuggestion.displayTitle
+        
+        suggestions = .success(nil)
         
         currentTask?.cancel()
         currentTask = acceptSuggestionTask(searchSuggestion)
@@ -208,25 +227,7 @@ extension SearchViewModel {
                     area: restrictToArea ? queryArea : nil
                 )
             }
-            
-            DispatchQueue.main.sync { [weak self] in
-                self?.isEligibleForRequery = false
-                self?.suggestions = .success(nil)
-                
-                switch searchResult {
-                case .success(let searchResults):
-                    self?.results = .success(searchResults)
-                    if searchResults.count == 1 {
-                        self?.selectedResult = searchResults.first
-                    }
-                case .failure(let error):
-                    self?.results = .failure(SearchError(error))
-                    break
-                case .none:
-                    self?.results = .success(nil)
-                    break
-                }
-            }
+            processSearchResults(searchResult)
         })
         return task
     }
@@ -239,19 +240,15 @@ extension SearchViewModel {
                 try await source.suggest(currentQuery)
             }
             
-            DispatchQueue.main.sync { [weak self] in
-                self?.results = .success(nil)
-                self?.selectedResult = nil
-                self?.isEligibleForRequery = false
-                
+            DispatchQueue.main.sync {
                 switch suggestResult {
                 case .success(let suggestResults):
-                    self?.suggestions = .success(suggestResults)
+                    suggestions = .success(suggestResults)
                 case .failure(let error):
-                    self?.suggestions = .failure(SearchError(error))
+                    suggestions = .failure(SearchError(error))
                     break
                 case .none:
-                    self?.suggestions = .success(nil)
+                    suggestions = .success(nil)
                     break
                 }
             }
@@ -267,55 +264,57 @@ extension SearchViewModel {
                 try await searchSuggestion.owningSource.search(searchSuggestion)
             }
             
-            DispatchQueue.main.sync { [weak self] in
-                var searchResults = [SearchResult]()
-                var suggestError: Error?
-                
-                self?.suggestions = .success(nil)
-                self?.isEligibleForRequery = false
-                self?.selectedResult = nil
-                
-                switch searchResult {
-                case .success(let results):
-                    switch (self?.resultMode)
-                    {
-                    case .single:
-                        if let firstResult = results.first {
-                            searchResults = [firstResult]
-                        }
-                    case .multiple:
-                        searchResults = results
-                    case .automatic:
-                        if searchSuggestion.suggestResult?.isCollection ?? true {
-                            searchResults = results
-                        } else {
-                            if let firstResult = results.first {
-                                searchResults = [firstResult]
-                            }
-                        }
-                    case .none:
-                        break
-                    }
-                case .failure(let error):
-                    suggestError = error
-                case .none:
-                    break
-                }
-                
-                if let error = suggestError {
-                    self?.results = .failure(SearchError(error))
-                }
-                else {
-                    self?.results = .success(searchResults)
-                    if searchResults.count == 1 {
-                        self?.selectedResult = searchResults.first
-                    }
-                }
-            }
+            processSearchResults(
+                searchResult,
+                isCollection: searchSuggestion.suggestResult?.isCollection ?? true
+            )
         })
         return task
     }
     
+    private func processSearchResults(
+        _ result: Result<[SearchResult], Error>?,
+        isCollection: Bool = true
+    ) {
+        guard let result = result else {
+            results = .success([])
+            return
+        }
+        
+        DispatchQueue.main.sync {
+            var searchResults = [SearchResult]()
+            var searchError: Error?
+            
+            switch result {
+            case .success(let results):
+                switch (resultMode) {
+                case .single:
+                    if let firstResult = results.first {
+                        searchResults = [firstResult]
+                    }
+                case .multiple:
+                    searchResults = results
+                case .automatic:
+                    if isCollection {
+                        searchResults = results
+                    } else {
+                        if let firstResult = results.first {
+                            searchResults = [firstResult]
+                        }
+                    }
+                }
+            case .failure(let error):
+                searchError = error
+            }
+            
+            if let error = searchError {
+                results = .failure(SearchError(error))
+            }
+            else {
+                results = .success(searchResults)
+            }
+        }
+    }
 }
 
 extension SearchViewModel {
