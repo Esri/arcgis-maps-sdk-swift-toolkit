@@ -65,12 +65,10 @@ public class SearchViewModel: ObservableObject {
 ***REMOVED***@Published
 ***REMOVED***public var currentQuery: String = "" {
 ***REMOVED******REMOVED***didSet {
-***REMOVED******REMOVED******REMOVED***selectedResult = nil
+***REMOVED******REMOVED******REMOVED***results = .success(nil)
 ***REMOVED******REMOVED******REMOVED***if currentQuery.isEmpty {
-***REMOVED******REMOVED******REMOVED******REMOVED***results = .success(nil)
 ***REMOVED******REMOVED******REMOVED******REMOVED***suggestions = .success(nil)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***isEligibleForRequery = false
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -104,7 +102,23 @@ public class SearchViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ Collection of results. `nil` means no query has been made. An empty array means there
 ***REMOVED******REMOVED***/ were no results, and the view should show an appropriate 'no results' message.
 ***REMOVED***@Published
-***REMOVED***public private(set) var results: Result<[SearchResult]?, SearchError> = .success(nil)
+***REMOVED***public private(set) var results: Result<[SearchResult]?, SearchError> = .success(nil) {
+***REMOVED******REMOVED***didSet {
+***REMOVED******REMOVED******REMOVED***switch results {
+***REMOVED******REMOVED******REMOVED***case .success(let results):
+***REMOVED******REMOVED******REMOVED******REMOVED***if results != nil && results?.count == 1 {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedResult = results?.first
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedResult = nil
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***case .failure(_):
+***REMOVED******REMOVED******REMOVED******REMOVED***selectedResult = nil
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***isEligibleForRequery = false
+***REMOVED***
+***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Tracks selection of results from the `results` collection. When there is only one result,
 ***REMOVED******REMOVED***/ that result is automatically assigned to this property. If there are multiple results, the view sets
@@ -150,7 +164,8 @@ public class SearchViewModel: ObservableObject {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***source.searchArea = queryArea
 ***REMOVED******REMOVED***source.preferredSearchLocation = queryCenter
-***REMOVED******REMOVED***selectedResult = nil
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***suggestions = .success(nil)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***currentTask?.cancel()
 ***REMOVED******REMOVED***currentTask = commitSearchTask(
@@ -168,6 +183,8 @@ public class SearchViewModel: ObservableObject {
 ***REMOVED******REMOVED***source.searchArea = queryArea
 ***REMOVED******REMOVED***source.preferredSearchLocation = queryCenter
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED***results = .success(nil)
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***currentTask?.cancel()
 ***REMOVED******REMOVED***currentTask = updateSuggestionsTask(source)
 ***REMOVED******REMOVED***await currentTask?.value
@@ -182,6 +199,8 @@ public class SearchViewModel: ObservableObject {
 ***REMOVED******REMOVED***_ searchSuggestion: SearchSuggestion
 ***REMOVED***) async -> Void {
 ***REMOVED******REMOVED***currentQuery = searchSuggestion.displayTitle
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***suggestions = .success(nil)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***currentTask?.cancel()
 ***REMOVED******REMOVED***currentTask = acceptSuggestionTask(searchSuggestion)
@@ -208,25 +227,7 @@ extension SearchViewModel {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***area: restrictToArea ? queryArea : nil
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***DispatchQueue.main.sync { [weak self] in
-***REMOVED******REMOVED******REMOVED******REMOVED***self?.isEligibleForRequery = false
-***REMOVED******REMOVED******REMOVED******REMOVED***self?.suggestions = .success(nil)
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***switch searchResult {
-***REMOVED******REMOVED******REMOVED******REMOVED***case .success(let searchResults):
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self?.results = .success(searchResults)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if searchResults.count == 1 {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self?.selectedResult = searchResults.first
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***case .failure(let error):
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self?.results = .failure(SearchError(error))
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***break
-***REMOVED******REMOVED******REMOVED******REMOVED***case .none:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self?.results = .success(nil)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***break
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***processSearchResults(searchResult)
 ***REMOVED***)
 ***REMOVED******REMOVED***return task
 ***REMOVED***
@@ -239,19 +240,15 @@ extension SearchViewModel {
 ***REMOVED******REMOVED******REMOVED******REMOVED***try await source.suggest(currentQuery)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***DispatchQueue.main.sync { [weak self] in
-***REMOVED******REMOVED******REMOVED******REMOVED***self?.results = .success(nil)
-***REMOVED******REMOVED******REMOVED******REMOVED***self?.selectedResult = nil
-***REMOVED******REMOVED******REMOVED******REMOVED***self?.isEligibleForRequery = false
-***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***DispatchQueue.main.sync {
 ***REMOVED******REMOVED******REMOVED******REMOVED***switch suggestResult {
 ***REMOVED******REMOVED******REMOVED******REMOVED***case .success(let suggestResults):
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self?.suggestions = .success(suggestResults)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***suggestions = .success(suggestResults)
 ***REMOVED******REMOVED******REMOVED******REMOVED***case .failure(let error):
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self?.suggestions = .failure(SearchError(error))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***suggestions = .failure(SearchError(error))
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***break
 ***REMOVED******REMOVED******REMOVED******REMOVED***case .none:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self?.suggestions = .success(nil)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***suggestions = .success(nil)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***break
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
@@ -267,53 +264,55 @@ extension SearchViewModel {
 ***REMOVED******REMOVED******REMOVED******REMOVED***try await searchSuggestion.owningSource.search(searchSuggestion)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***DispatchQueue.main.sync { [weak self] in
-***REMOVED******REMOVED******REMOVED******REMOVED***var searchResults = [SearchResult]()
-***REMOVED******REMOVED******REMOVED******REMOVED***var suggestError: Error?
+***REMOVED******REMOVED******REMOVED***processSearchResults(
+***REMOVED******REMOVED******REMOVED******REMOVED***searchResult,
+***REMOVED******REMOVED******REMOVED******REMOVED***isCollection: searchSuggestion.suggestResult?.isCollection ?? true
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED***)
+***REMOVED******REMOVED***return task
+***REMOVED***
+***REMOVED***
+***REMOVED***private func processSearchResults(
+***REMOVED******REMOVED***_ result: Result<[SearchResult], Error>?,
+***REMOVED******REMOVED***isCollection: Bool = true
+***REMOVED***) {
+***REMOVED******REMOVED***guard let result = result else {
+***REMOVED******REMOVED******REMOVED***results = .success([])
+***REMOVED******REMOVED******REMOVED***return
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***DispatchQueue.main.sync {
+***REMOVED******REMOVED******REMOVED***var searchResults = [SearchResult]()
+***REMOVED******REMOVED******REMOVED***var searchError: Error?
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***switch result {
+***REMOVED******REMOVED******REMOVED***case .success(let results):
+***REMOVED******REMOVED******REMOVED******REMOVED***switch (resultMode) {
+***REMOVED******REMOVED******REMOVED******REMOVED***case .single:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let firstResult = results.first {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***searchResults = [firstResult]
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***self?.suggestions = .success(nil)
-***REMOVED******REMOVED******REMOVED******REMOVED***self?.isEligibleForRequery = false
-***REMOVED******REMOVED******REMOVED******REMOVED***self?.selectedResult = nil
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***switch searchResult {
-***REMOVED******REMOVED******REMOVED******REMOVED***case .success(let results):
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***switch (self?.resultMode)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***{
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .single:
+***REMOVED******REMOVED******REMOVED******REMOVED***case .multiple:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***searchResults = results
+***REMOVED******REMOVED******REMOVED******REMOVED***case .automatic:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if isCollection {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***searchResults = results
+***REMOVED******REMOVED******REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let firstResult = results.first {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***searchResults = [firstResult]
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .multiple:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***searchResults = results
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .automatic:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if searchSuggestion.suggestResult?.isCollection ?? true {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***searchResults = results
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let firstResult = results.first {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***searchResults = [firstResult]
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .none:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***break
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***case .failure(let error):
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***suggestError = error
-***REMOVED******REMOVED******REMOVED******REMOVED***case .none:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***break
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***if let error = suggestError {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self?.results = .failure(SearchError(error))
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self?.results = .success(searchResults)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if searchResults.count == 1 {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self?.selectedResult = searchResults.first
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***case .failure(let error):
+***REMOVED******REMOVED******REMOVED******REMOVED***searchError = error
 ***REMOVED******REMOVED***
-***REMOVED***)
-***REMOVED******REMOVED***return task
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***if let error = searchError {
+***REMOVED******REMOVED******REMOVED******REMOVED***results = .failure(SearchError(error))
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***else {
+***REMOVED******REMOVED******REMOVED******REMOVED***results = .success(searchResults)
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
