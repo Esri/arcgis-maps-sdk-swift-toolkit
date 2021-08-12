@@ -15,7 +15,7 @@ import SwiftUI
 
 struct EsriBorderViewModifier: ViewModifier {
     var edgeInsets: EdgeInsets
-    func body(content: Content) -> some View {
+    public func body(content: Content) -> some View {
         let roundedRect = RoundedRectangle(cornerRadius: 8)
         content
             .padding(edgeInsets)
@@ -35,7 +35,7 @@ struct EsriBorderViewModifier: ViewModifier {
 }
 
 extension View {
-    func esriBorder(
+    public func esriBorder(
         edgeInsets: EdgeInsets = EdgeInsets(
             top: 8,
             leading: 12,

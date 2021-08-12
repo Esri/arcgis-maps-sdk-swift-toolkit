@@ -47,7 +47,7 @@ class SearchViewModelTests: XCTestCase {
         )
         
         model.currentQuery = "Magers & Quinn Booksellers"
-        await model.commitSearch(false)
+        await model.commitSearch()
         let result = try XCTUnwrap(model.results.get()?.first)
         XCTAssertEqual(result.owningSource.displayName, activeSource.displayName)
 
@@ -64,7 +64,7 @@ class SearchViewModelTests: XCTestCase {
 
         // Search with no results - result count is 0.
         model.currentQuery = "No results found blah blah blah blah"
-        await model.commitSearch(false)
+        await model.commitSearch()
         var results = try XCTUnwrap(model.results.get())
         XCTAssertEqual(results.count, 0)
 
@@ -73,7 +73,7 @@ class SearchViewModelTests: XCTestCase {
         
         // Search with one result.
         model.currentQuery = "Magers & Quinn Booksellers"
-        await model.commitSearch(false)
+        await model.commitSearch()
         results = try XCTUnwrap(model.results.get())
         XCTAssertEqual(results.count, 1)
 
@@ -83,7 +83,7 @@ class SearchViewModelTests: XCTestCase {
         
         // Search with multiple results.
         model.currentQuery = "Magers & Quinn"
-        await model.commitSearch(false)
+        await model.commitSearch()
         results = try XCTUnwrap(model.results.get())
         XCTAssertGreaterThan(results.count, 1)
 
@@ -96,7 +96,7 @@ class SearchViewModelTests: XCTestCase {
 
         // Empty `currentQuery` should produce nil results value.
         model.currentQuery = ""
-        await model.commitSearch(false)
+        await model.commitSearch()
         try XCTAssertNil(model.results.get())
 
         // Empty `currentQuery` should produce nil suggestions value.
@@ -104,32 +104,12 @@ class SearchViewModelTests: XCTestCase {
         try XCTAssertNil(model.suggestions.get())
         
         model.currentQuery = "Coffee"
-        await model.commitSearch(false)
+        await model.commitSearch()
         try XCTAssertNotNil(model.results.get())
 
         // Changing the `currentQuery` should set results to nil.
         model.currentQuery = "Coffee in Portland"
         try XCTAssertNil(model.results.get())
-    }
-
-    func testIsEligibleForRequery() async {
-        let model = SearchViewModel(sources: [LocatorSearchSource()])
-        
-        // isEligibleForRequery defaults to `false`.
-        XCTAssertFalse(model.isEligibleForRequery)
-        
-        // There are no results, so setting `queryArea` has
-        // no effect on `isEligibleForRequery`.
-        model.queryArea = createPolygon()
-        XCTAssertFalse(model.isEligibleForRequery)
-        
-        // We have results and a new polygon, `isEligibleForRequery` is true.
-        model.currentQuery = "Magers & Quinn Booksellers"
-        await model.commitSearch(false)
-        XCTAssertFalse(model.isEligibleForRequery)
-
-        model.queryArea = createPolygon()
-        XCTAssertTrue(model.isEligibleForRequery)
     }
     
     func testQueryCenter() async throws {
@@ -138,7 +118,7 @@ class SearchViewModelTests: XCTestCase {
         // Set queryCenter to Portland
         model.queryCenter = .portland
         model.currentQuery = "Coffee"
-        await model.commitSearch(false)
+        await model.commitSearch()
         var resultPoint = try XCTUnwrap(
             model.results.get()?.first?.geoElement?.geometry as? Point
         )
@@ -159,7 +139,7 @@ class SearchViewModelTests: XCTestCase {
         // Set queryCenter to Edinburgh
         model.queryCenter = .edinburgh
         model.currentQuery = "Restaurants"
-        await model.commitSearch(false)
+        await model.commitSearch()
         resultPoint = try XCTUnwrap(
             model.results.get()?.first?.geoElement?.geometry as? Point
         )
@@ -190,12 +170,12 @@ class SearchViewModelTests: XCTestCase {
 
         model.resultMode = .single
         model.currentQuery = "Magers & Quinn"
-        await model.commitSearch(false)
+        await model.commitSearch()
         var results = try XCTUnwrap(model.results.get())
         XCTAssertEqual(results.count, 1)
         
         model.resultMode = .multiple
-        await model.commitSearch(false)
+        await model.commitSearch()
         results = try XCTUnwrap(model.results.get())
         XCTAssertGreaterThan(results.count, 1)
         

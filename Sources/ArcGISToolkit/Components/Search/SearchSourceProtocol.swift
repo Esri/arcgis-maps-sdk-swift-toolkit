@@ -37,16 +37,11 @@ public protocol SearchSourceProtocol {
     /// - Returns: The array of suggestions.
     func suggest(_ queryString: String) async throws -> [SearchSuggestion]
     
-    /// Gets search results. If `area` is not `nil`, search is restricted to that area. Otherwise, the
-    /// `searchArea` property may be consulted but does not need to be used as a strict limit.
+    /// Gets search results.
     /// - Parameters:
     ///   - queryString: Text to be used for query.
-    ///   - area: Area to be used to constrain search results.
     /// - Returns: Array of `SearchResult`s
-    func search(
-        _ queryString: String,
-        area: Geometry?
-    ) async throws -> [SearchResult]
+    func search(_ queryString: String) async throws -> [SearchResult]
     
     /// Gets search results. If `area` is not `nil`, search is restricted to that area. Otherwise, the
     /// `searchArea` property may be consulted but does not need to be used as a strict limit.
