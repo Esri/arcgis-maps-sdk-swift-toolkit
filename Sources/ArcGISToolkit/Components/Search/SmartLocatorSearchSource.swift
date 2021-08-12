@@ -68,8 +68,8 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
         // First, peform super class search.
         var results = try await super.search(queryString, area: area)
         if results.count > repeatSearchResultThreshold ||
-            area != nil ||
-            geocodeParameters.searchArea == nil {
+            repeatSearchResultThreshold == 0 ||
+            (area == nil && geocodeParameters.searchArea == nil) {
             // Result count meets threshold or there were no geographic
             // constraints on the search, so return results.
             return results
@@ -139,6 +139,7 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
     ) async throws -> [SearchSuggestion] {
         var results = try await super.suggest(queryString)
         if results.count > repeatSuggestResultThreshold ||
+            repeatSuggestResultThreshold == 0 ||
             suggestParameters.searchArea == nil {
             // Result count meets threshold or there were no geographic
             // constraints on the search, so return results.
