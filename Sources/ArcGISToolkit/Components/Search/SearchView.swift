@@ -84,7 +84,6 @@ public struct SearchView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED******REMOVED*** TODO:  Not sure how to get the list to constrain itself if there's less than a screen full of rows.
 ***REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED***.task(id: searchViewModel.currentQuery) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** User typed a new character

@@ -68,8 +68,8 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
 ***REMOVED******REMOVED******REMOVED*** First, peform super class search.
 ***REMOVED******REMOVED***var results = try await super.search(queryString, area: area)
 ***REMOVED******REMOVED***if results.count > repeatSearchResultThreshold ||
-***REMOVED******REMOVED******REMOVED***area != nil ||
-***REMOVED******REMOVED******REMOVED***geocodeParameters.searchArea == nil {
+***REMOVED******REMOVED******REMOVED***repeatSearchResultThreshold == 0 ||
+***REMOVED******REMOVED******REMOVED***(area == nil && geocodeParameters.searchArea == nil) {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Result count meets threshold or there were no geographic
 ***REMOVED******REMOVED******REMOVED******REMOVED*** constraints on the search, so return results.
 ***REMOVED******REMOVED******REMOVED***return results
@@ -139,6 +139,7 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
 ***REMOVED***) async throws -> [SearchSuggestion] {
 ***REMOVED******REMOVED***var results = try await super.suggest(queryString)
 ***REMOVED******REMOVED***if results.count > repeatSuggestResultThreshold ||
+***REMOVED******REMOVED******REMOVED***repeatSuggestResultThreshold == 0 ||
 ***REMOVED******REMOVED******REMOVED***suggestParameters.searchArea == nil {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Result count meets threshold or there were no geographic
 ***REMOVED******REMOVED******REMOVED******REMOVED*** constraints on the search, so return results.

@@ -86,13 +86,8 @@ public class LocatorSearchSource: ObservableObject, SearchSourceProtocol {
 ***REMOVED***
 ***REMOVED***public func search(
 ***REMOVED******REMOVED***_ queryString: String,
-***REMOVED******REMOVED***area: Geometry? = nil
+***REMOVED******REMOVED***area: Geometry?
 ***REMOVED***) async throws -> [SearchResult] {
-***REMOVED******REMOVED******REMOVED*** TODO: think about this...
-***REMOVED******REMOVED******REMOVED*** This differs from the .NET approach; .NET only uses the
-***REMOVED******REMOVED******REMOVED*** center of `searchArea` for the `geocodeParameters.preferredSearchLocation`
-***REMOVED******REMOVED******REMOVED*** and only sets `geocodeParameters.searchArea` from the `area` argument.
-***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***geocodeParameters.searchArea = (area != nil) ? area : searchArea
 ***REMOVED******REMOVED***geocodeParameters.preferredSearchLocation = preferredSearchLocation
 ***REMOVED******REMOVED***
