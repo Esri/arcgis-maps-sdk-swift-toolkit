@@ -74,21 +74,7 @@ public class SearchViewModel: ObservableObject {
     
     /// The search area to be used for the current query.  This property should be updated
     /// as the user navigates the map/scene, or at minimum before calling `commitSearch`.
-    public var queryArea: Geometry? {
-        willSet {
-            var hasResults = false
-            switch results {
-            case .success(let results):
-                hasResults = results != nil
-            case .failure(_):
-                break;
-            }
-            
-            // When `queryArea` changes, the model is eligible for
-            // requery if there are previous results.
-            isEligibleForRequery = hasResults
-        }
-    }
+    public var queryArea: Geometry? = nil
     
     /// Defines the center for the search. For most use cases, this should be updated by the view
     /// every time the user navigates the map.
@@ -115,8 +101,6 @@ public class SearchViewModel: ObservableObject {
             case .failure(_):
                 selectedResult = nil
             }
-            
-            isEligibleForRequery = false
         }
     }
     
@@ -139,13 +123,6 @@ public class SearchViewModel: ObservableObject {
     @Published
     public private(set) var suggestions: Result<[SearchSuggestion]?, SearchError> = .success(nil)
     
-    /// `true` if the `queryArea` has changed since the `results` collection has been set.
-    /// This property is used by the view to enable 'Repeat search here' functionality. This property is
-    /// observable, and the view should use it to hide and show the 'repeat search' button. Changes to
-    /// this property are driven by changes to the `queryArea` property.
-    @Published
-    public private(set) var isEligibleForRequery: Bool = false
-    
     private var subscriptions = Set<AnyCancellable>()
     
     /// The currently executing async task.  `currentTask` should be cancelled
@@ -154,11 +131,7 @@ public class SearchViewModel: ObservableObject {
     
     /// Starts a search. `selectedResult` and `results`, among other properties, are set
     /// asynchronously. Other query properties are read to define the parameters of the search.
-    /// If `restrictToArea` is true, only results in the query area will be returned.
-    /// - Parameter restrictToArea: If true, the search is restricted to results within the extent
-    /// of the `queryArea` property. Behavior when called with `restrictToArea` set to true
-    /// when the `queryArea` property is null, a line, a point, or an empty geometry is undefined.
-    public func commitSearch(_ restrictToArea: Bool) async -> Void {
+    public func commitSearch() async -> Void {
         guard !currentQuery.trimmingCharacters(in: .whitespaces).isEmpty,
               var source = currentSource() else { return }
         
@@ -168,10 +141,7 @@ public class SearchViewModel: ObservableObject {
         suggestions = .success(nil)
         
         currentTask?.cancel()
-        currentTask = commitSearchTask(
-            source,
-            restrictToArea: restrictToArea
-        )
+        currentTask = commitSearchTask(source)
         await currentTask?.value
     }
     
@@ -217,15 +187,11 @@ public class SearchViewModel: ObservableObject {
 
 extension SearchViewModel {
     private func commitSearchTask(
-        _ source: SearchSourceProtocol,
-        restrictToArea: Bool
+        _ source: SearchSourceProtocol
     ) -> Task<(), Never> {
         let task = Task(operation: {
             let searchResult = await Result {
-                try await source.search(
-                    currentQuery,
-                    area: restrictToArea ? queryArea : nil
-                )
+                try await source.search(currentQuery)
             }
             processSearchResults(searchResult)
         })

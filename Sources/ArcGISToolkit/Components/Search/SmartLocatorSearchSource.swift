@@ -62,14 +62,13 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
     public var repeatSuggestResultThreshold: Int = 6
     
     public override func search(
-        _ queryString: String,
-        area: Geometry?
+        _ queryString: String
     ) async throws -> [SearchResult] {
         // First, peform super class search.
-        var results = try await super.search(queryString, area: area)
+        var results = try await super.search(queryString)
         if results.count > repeatSearchResultThreshold ||
             repeatSearchResultThreshold == 0 ||
-            (area == nil && geocodeParameters.searchArea == nil) {
+            geocodeParameters.searchArea == nil {
             // Result count meets threshold or there were no geographic
             // constraints on the search, so return results.
             return results

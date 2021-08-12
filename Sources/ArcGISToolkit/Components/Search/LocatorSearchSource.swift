@@ -84,11 +84,8 @@ public class LocatorSearchSource: ObservableObject, SearchSourceProtocol {
     /// based on searches.
     public private(set) var suggestParameters: SuggestParameters = SuggestParameters()
     
-    public func search(
-        _ queryString: String,
-        area: Geometry?
-    ) async throws -> [SearchResult] {
-        geocodeParameters.searchArea = (area != nil) ? area : searchArea
+    public func search(_ queryString: String) async throws -> [SearchResult] {
+        geocodeParameters.searchArea = searchArea
         geocodeParameters.preferredSearchLocation = preferredSearchLocation
         
         let geocodeResults = try await locatorTask.geocode(
@@ -105,22 +102,8 @@ public class LocatorSearchSource: ObservableObject, SearchSourceProtocol {
     ) async throws -> [SearchResult] {
         guard let suggestResult = searchSuggestion.suggestResult else { return [] }
         
-        geocodeParameters.searchArea = nil
-        geocodeParameters.preferredSearchLocation = nil
-        if preferredSearchLocation == nil,
-           let area = searchArea {
-            if let point = searchArea as? Point {
-                geocodeParameters.preferredSearchLocation = point
-                geocodeParameters.searchArea = nil
-            }
-            else if !area.extent.isEmpty {
-                geocodeParameters.preferredSearchLocation = area.extent.center
-                geocodeParameters.searchArea = nil
-            }
-        }
-        else if preferredSearchLocation != nil {
-            geocodeParameters.preferredSearchLocation = preferredSearchLocation
-        }
+        geocodeParameters.searchArea = searchArea
+        geocodeParameters.preferredSearchLocation = preferredSearchLocation
         
         let geocodeResults = try await locatorTask.geocode(
             suggestResult: suggestResult,

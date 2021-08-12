@@ -94,7 +94,7 @@ public struct SearchView: View {
             .task(id: shouldCommitSearch) {
                 if shouldCommitSearch {
                     // User committed changes (hit Enter/Search button)
-                    await searchViewModel.commitSearch(false)
+                    await searchViewModel.commitSearch()
                     shouldCommitSearch.toggle()
                 }
             }
