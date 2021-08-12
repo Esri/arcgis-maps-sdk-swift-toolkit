@@ -84,7 +84,6 @@ public struct SearchView: View {
                 )
             }
         }
-        // TODO:  Not sure how to get the list to constrain itself if there's less than a screen full of rows.
         Spacer()
             .task(id: searchViewModel.currentQuery) {
                 // User typed a new character
