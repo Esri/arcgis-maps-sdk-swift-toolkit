@@ -94,7 +94,7 @@ public struct SearchView: View {
 ***REMOVED******REMOVED******REMOVED***.task(id: shouldCommitSearch) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if shouldCommitSearch {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** User committed changes (hit Enter/Search button)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await searchViewModel.commitSearch(false)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await searchViewModel.commitSearch()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***shouldCommitSearch.toggle()
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***

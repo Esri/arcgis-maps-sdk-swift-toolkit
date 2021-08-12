@@ -47,7 +47,7 @@ class SearchViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***model.currentQuery = "Magers & Quinn Booksellers"
-***REMOVED******REMOVED***await model.commitSearch(false)
+***REMOVED******REMOVED***await model.commitSearch()
 ***REMOVED******REMOVED***let result = try XCTUnwrap(model.results.get()?.first)
 ***REMOVED******REMOVED***XCTAssertEqual(result.owningSource.displayName, activeSource.displayName)
 
@@ -64,7 +64,7 @@ class SearchViewModelTests: XCTestCase {
 
 ***REMOVED******REMOVED******REMOVED*** Search with no results - result count is 0.
 ***REMOVED******REMOVED***model.currentQuery = "No results found blah blah blah blah"
-***REMOVED******REMOVED***await model.commitSearch(false)
+***REMOVED******REMOVED***await model.commitSearch()
 ***REMOVED******REMOVED***var results = try XCTUnwrap(model.results.get())
 ***REMOVED******REMOVED***XCTAssertEqual(results.count, 0)
 
@@ -73,7 +73,7 @@ class SearchViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Search with one result.
 ***REMOVED******REMOVED***model.currentQuery = "Magers & Quinn Booksellers"
-***REMOVED******REMOVED***await model.commitSearch(false)
+***REMOVED******REMOVED***await model.commitSearch()
 ***REMOVED******REMOVED***results = try XCTUnwrap(model.results.get())
 ***REMOVED******REMOVED***XCTAssertEqual(results.count, 1)
 
@@ -83,7 +83,7 @@ class SearchViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Search with multiple results.
 ***REMOVED******REMOVED***model.currentQuery = "Magers & Quinn"
-***REMOVED******REMOVED***await model.commitSearch(false)
+***REMOVED******REMOVED***await model.commitSearch()
 ***REMOVED******REMOVED***results = try XCTUnwrap(model.results.get())
 ***REMOVED******REMOVED***XCTAssertGreaterThan(results.count, 1)
 
@@ -96,7 +96,7 @@ class SearchViewModelTests: XCTestCase {
 
 ***REMOVED******REMOVED******REMOVED*** Empty `currentQuery` should produce nil results value.
 ***REMOVED******REMOVED***model.currentQuery = ""
-***REMOVED******REMOVED***await model.commitSearch(false)
+***REMOVED******REMOVED***await model.commitSearch()
 ***REMOVED******REMOVED***try XCTAssertNil(model.results.get())
 
 ***REMOVED******REMOVED******REMOVED*** Empty `currentQuery` should produce nil suggestions value.
@@ -104,32 +104,12 @@ class SearchViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***try XCTAssertNil(model.suggestions.get())
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***model.currentQuery = "Coffee"
-***REMOVED******REMOVED***await model.commitSearch(false)
+***REMOVED******REMOVED***await model.commitSearch()
 ***REMOVED******REMOVED***try XCTAssertNotNil(model.results.get())
 
 ***REMOVED******REMOVED******REMOVED*** Changing the `currentQuery` should set results to nil.
 ***REMOVED******REMOVED***model.currentQuery = "Coffee in Portland"
 ***REMOVED******REMOVED***try XCTAssertNil(model.results.get())
-***REMOVED***
-
-***REMOVED***func testIsEligibleForRequery() async {
-***REMOVED******REMOVED***let model = SearchViewModel(sources: [LocatorSearchSource()])
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** isEligibleForRequery defaults to `false`.
-***REMOVED******REMOVED***XCTAssertFalse(model.isEligibleForRequery)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** There are no results, so setting `queryArea` has
-***REMOVED******REMOVED******REMOVED*** no effect on `isEligibleForRequery`.
-***REMOVED******REMOVED***model.queryArea = createPolygon()
-***REMOVED******REMOVED***XCTAssertFalse(model.isEligibleForRequery)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** We have results and a new polygon, `isEligibleForRequery` is true.
-***REMOVED******REMOVED***model.currentQuery = "Magers & Quinn Booksellers"
-***REMOVED******REMOVED***await model.commitSearch(false)
-***REMOVED******REMOVED***XCTAssertFalse(model.isEligibleForRequery)
-
-***REMOVED******REMOVED***model.queryArea = createPolygon()
-***REMOVED******REMOVED***XCTAssertTrue(model.isEligibleForRequery)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func testQueryCenter() async throws {
@@ -138,7 +118,7 @@ class SearchViewModelTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED*** Set queryCenter to Portland
 ***REMOVED******REMOVED***model.queryCenter = .portland
 ***REMOVED******REMOVED***model.currentQuery = "Coffee"
-***REMOVED******REMOVED***await model.commitSearch(false)
+***REMOVED******REMOVED***await model.commitSearch()
 ***REMOVED******REMOVED***var resultPoint = try XCTUnwrap(
 ***REMOVED******REMOVED******REMOVED***model.results.get()?.first?.geoElement?.geometry as? Point
 ***REMOVED******REMOVED***)
@@ -159,7 +139,7 @@ class SearchViewModelTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED*** Set queryCenter to Edinburgh
 ***REMOVED******REMOVED***model.queryCenter = .edinburgh
 ***REMOVED******REMOVED***model.currentQuery = "Restaurants"
-***REMOVED******REMOVED***await model.commitSearch(false)
+***REMOVED******REMOVED***await model.commitSearch()
 ***REMOVED******REMOVED***resultPoint = try XCTUnwrap(
 ***REMOVED******REMOVED******REMOVED***model.results.get()?.first?.geoElement?.geometry as? Point
 ***REMOVED******REMOVED***)
@@ -190,12 +170,12 @@ class SearchViewModelTests: XCTestCase {
 
 ***REMOVED******REMOVED***model.resultMode = .single
 ***REMOVED******REMOVED***model.currentQuery = "Magers & Quinn"
-***REMOVED******REMOVED***await model.commitSearch(false)
+***REMOVED******REMOVED***await model.commitSearch()
 ***REMOVED******REMOVED***var results = try XCTUnwrap(model.results.get())
 ***REMOVED******REMOVED***XCTAssertEqual(results.count, 1)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***model.resultMode = .multiple
-***REMOVED******REMOVED***await model.commitSearch(false)
+***REMOVED******REMOVED***await model.commitSearch()
 ***REMOVED******REMOVED***results = try XCTUnwrap(model.results.get())
 ***REMOVED******REMOVED***XCTAssertGreaterThan(results.count, 1)
 ***REMOVED******REMOVED***

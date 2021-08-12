@@ -74,21 +74,7 @@ public class SearchViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED******REMOVED***/ The search area to be used for the current query.  This property should be updated
 ***REMOVED******REMOVED***/ as the user navigates the map/scene, or at minimum before calling `commitSearch`.
-***REMOVED***public var queryArea: Geometry? {
-***REMOVED******REMOVED***willSet {
-***REMOVED******REMOVED******REMOVED***var hasResults = false
-***REMOVED******REMOVED******REMOVED***switch results {
-***REMOVED******REMOVED******REMOVED***case .success(let results):
-***REMOVED******REMOVED******REMOVED******REMOVED***hasResults = results != nil
-***REMOVED******REMOVED******REMOVED***case .failure(_):
-***REMOVED******REMOVED******REMOVED******REMOVED***break;
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED*** When `queryArea` changes, the model is eligible for
-***REMOVED******REMOVED******REMOVED******REMOVED*** requery if there are previous results.
-***REMOVED******REMOVED******REMOVED***isEligibleForRequery = hasResults
-***REMOVED***
-***REMOVED***
+***REMOVED***public var queryArea: Geometry? = nil
 ***REMOVED***
 ***REMOVED******REMOVED***/ Defines the center for the search. For most use cases, this should be updated by the view
 ***REMOVED******REMOVED***/ every time the user navigates the map.
@@ -115,8 +101,6 @@ public class SearchViewModel: ObservableObject {
 ***REMOVED******REMOVED******REMOVED***case .failure(_):
 ***REMOVED******REMOVED******REMOVED******REMOVED***selectedResult = nil
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***isEligibleForRequery = false
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -139,13 +123,6 @@ public class SearchViewModel: ObservableObject {
 ***REMOVED***@Published
 ***REMOVED***public private(set) var suggestions: Result<[SearchSuggestion]?, SearchError> = .success(nil)
 ***REMOVED***
-***REMOVED******REMOVED***/ `true` if the `queryArea` has changed since the `results` collection has been set.
-***REMOVED******REMOVED***/ This property is used by the view to enable 'Repeat search here' functionality. This property is
-***REMOVED******REMOVED***/ observable, and the view should use it to hide and show the 'repeat search' button. Changes to
-***REMOVED******REMOVED***/ this property are driven by changes to the `queryArea` property.
-***REMOVED***@Published
-***REMOVED***public private(set) var isEligibleForRequery: Bool = false
-***REMOVED***
 ***REMOVED***private var subscriptions = Set<AnyCancellable>()
 ***REMOVED***
 ***REMOVED******REMOVED***/ The currently executing async task.  `currentTask` should be cancelled
@@ -154,11 +131,7 @@ public class SearchViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Starts a search. `selectedResult` and `results`, among other properties, are set
 ***REMOVED******REMOVED***/ asynchronously. Other query properties are read to define the parameters of the search.
-***REMOVED******REMOVED***/ If `restrictToArea` is true, only results in the query area will be returned.
-***REMOVED******REMOVED***/ - Parameter restrictToArea: If true, the search is restricted to results within the extent
-***REMOVED******REMOVED***/ of the `queryArea` property. Behavior when called with `restrictToArea` set to true
-***REMOVED******REMOVED***/ when the `queryArea` property is null, a line, a point, or an empty geometry is undefined.
-***REMOVED***public func commitSearch(_ restrictToArea: Bool) async -> Void {
+***REMOVED***public func commitSearch() async -> Void {
 ***REMOVED******REMOVED***guard !currentQuery.trimmingCharacters(in: .whitespaces).isEmpty,
 ***REMOVED******REMOVED******REMOVED***  var source = currentSource() else { return ***REMOVED***
 ***REMOVED******REMOVED***
@@ -168,10 +141,7 @@ public class SearchViewModel: ObservableObject {
 ***REMOVED******REMOVED***suggestions = .success(nil)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***currentTask?.cancel()
-***REMOVED******REMOVED***currentTask = commitSearchTask(
-***REMOVED******REMOVED******REMOVED***source,
-***REMOVED******REMOVED******REMOVED***restrictToArea: restrictToArea
-***REMOVED******REMOVED***)
+***REMOVED******REMOVED***currentTask = commitSearchTask(source)
 ***REMOVED******REMOVED***await currentTask?.value
 ***REMOVED***
 ***REMOVED***
@@ -217,15 +187,11 @@ public class SearchViewModel: ObservableObject {
 
 extension SearchViewModel {
 ***REMOVED***private func commitSearchTask(
-***REMOVED******REMOVED***_ source: SearchSourceProtocol,
-***REMOVED******REMOVED***restrictToArea: Bool
+***REMOVED******REMOVED***_ source: SearchSourceProtocol
 ***REMOVED***) -> Task<(), Never> {
 ***REMOVED******REMOVED***let task = Task(operation: {
 ***REMOVED******REMOVED******REMOVED***let searchResult = await Result {
-***REMOVED******REMOVED******REMOVED******REMOVED***try await source.search(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentQuery,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***area: restrictToArea ? queryArea : nil
-***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***try await source.search(currentQuery)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***processSearchResults(searchResult)
 ***REMOVED***)

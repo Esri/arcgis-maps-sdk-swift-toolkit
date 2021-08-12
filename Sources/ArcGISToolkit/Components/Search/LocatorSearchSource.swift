@@ -84,11 +84,8 @@ public class LocatorSearchSource: ObservableObject, SearchSourceProtocol {
 ***REMOVED******REMOVED***/ based on searches.
 ***REMOVED***public private(set) var suggestParameters: SuggestParameters = SuggestParameters()
 ***REMOVED***
-***REMOVED***public func search(
-***REMOVED******REMOVED***_ queryString: String,
-***REMOVED******REMOVED***area: Geometry?
-***REMOVED***) async throws -> [SearchResult] {
-***REMOVED******REMOVED***geocodeParameters.searchArea = (area != nil) ? area : searchArea
+***REMOVED***public func search(_ queryString: String) async throws -> [SearchResult] {
+***REMOVED******REMOVED***geocodeParameters.searchArea = searchArea
 ***REMOVED******REMOVED***geocodeParameters.preferredSearchLocation = preferredSearchLocation
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let geocodeResults = try await locatorTask.geocode(
@@ -105,22 +102,8 @@ public class LocatorSearchSource: ObservableObject, SearchSourceProtocol {
 ***REMOVED***) async throws -> [SearchResult] {
 ***REMOVED******REMOVED***guard let suggestResult = searchSuggestion.suggestResult else { return [] ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***geocodeParameters.searchArea = nil
-***REMOVED******REMOVED***geocodeParameters.preferredSearchLocation = nil
-***REMOVED******REMOVED***if preferredSearchLocation == nil,
-***REMOVED******REMOVED***   let area = searchArea {
-***REMOVED******REMOVED******REMOVED***if let point = searchArea as? Point {
-***REMOVED******REMOVED******REMOVED******REMOVED***geocodeParameters.preferredSearchLocation = point
-***REMOVED******REMOVED******REMOVED******REMOVED***geocodeParameters.searchArea = nil
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***else if !area.extent.isEmpty {
-***REMOVED******REMOVED******REMOVED******REMOVED***geocodeParameters.preferredSearchLocation = area.extent.center
-***REMOVED******REMOVED******REMOVED******REMOVED***geocodeParameters.searchArea = nil
-***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***else if preferredSearchLocation != nil {
-***REMOVED******REMOVED******REMOVED***geocodeParameters.preferredSearchLocation = preferredSearchLocation
-***REMOVED***
+***REMOVED******REMOVED***geocodeParameters.searchArea = searchArea
+***REMOVED******REMOVED***geocodeParameters.preferredSearchLocation = preferredSearchLocation
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let geocodeResults = try await locatorTask.geocode(
 ***REMOVED******REMOVED******REMOVED***suggestResult: suggestResult,
