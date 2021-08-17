@@ -24,12 +24,12 @@ class LocatorSearchSourceTests: XCTestCase {
 ***REMOVED******REMOVED***locator.maximumResults = 4
 ***REMOVED******REMOVED***XCTAssertEqual(locator.maximumResults, 4)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***var searchResults = try await locator.search("Coffee", area: nil)
+***REMOVED******REMOVED***var searchResults = try await locator.search("Coffee")
 ***REMOVED******REMOVED***var results = try XCTUnwrap(searchResults)
 ***REMOVED******REMOVED***XCTAssertEqual(results.count, 4)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***locator.maximumResults = 12
-***REMOVED******REMOVED***searchResults = try await locator.search("Coffee", area: nil)
+***REMOVED******REMOVED***searchResults = try await locator.search("Coffee")
 ***REMOVED******REMOVED***results = try XCTUnwrap(searchResults)
 ***REMOVED******REMOVED***XCTAssertEqual(results.count, 12)
 ***REMOVED******REMOVED***
@@ -37,7 +37,7 @@ class LocatorSearchSourceTests: XCTestCase {
 ***REMOVED******REMOVED***locator.geocodeParameters.maxResults = 2
 ***REMOVED******REMOVED***XCTAssertEqual(Int(locator.geocodeParameters.maxResults), 2)
 ***REMOVED******REMOVED***XCTAssertEqual(locator.maximumResults, 2)
-***REMOVED******REMOVED***searchResults = try await locator.search("Coffee", area: nil)
+***REMOVED******REMOVED***searchResults = try await locator.search("Coffee")
 ***REMOVED******REMOVED***results = try XCTUnwrap(searchResults)
 ***REMOVED******REMOVED***XCTAssertEqual(results.count, 2)
 ***REMOVED***

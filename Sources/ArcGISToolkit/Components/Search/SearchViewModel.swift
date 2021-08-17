@@ -131,11 +131,11 @@ public class SearchViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Starts a search. `selectedResult` and `results`, among other properties, are set
 ***REMOVED******REMOVED***/ asynchronously. Other query properties are read to define the parameters of the search.
-***REMOVED***public func commitSearch() async -> Void {
+***REMOVED***public func commitSearch(_ searchArea: Geometry? = nil) async -> Void {
 ***REMOVED******REMOVED***guard !currentQuery.trimmingCharacters(in: .whitespaces).isEmpty,
 ***REMOVED******REMOVED******REMOVED***  var source = currentSource() else { return ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***source.searchArea = queryArea
+***REMOVED******REMOVED***source.searchArea = searchArea != nil ? searchArea : queryArea
 ***REMOVED******REMOVED***source.preferredSearchLocation = queryCenter
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***suggestions = .success(nil)
