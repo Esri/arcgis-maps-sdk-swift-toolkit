@@ -24,12 +24,12 @@ class LocatorSearchSourceTests: XCTestCase {
         locator.maximumResults = 4
         XCTAssertEqual(locator.maximumResults, 4)
         
-        var searchResults = try await locator.search("Coffee", area: nil)
+        var searchResults = try await locator.search("Coffee")
         var results = try XCTUnwrap(searchResults)
         XCTAssertEqual(results.count, 4)
         
         locator.maximumResults = 12
-        searchResults = try await locator.search("Coffee", area: nil)
+        searchResults = try await locator.search("Coffee")
         results = try XCTUnwrap(searchResults)
         XCTAssertEqual(results.count, 12)
         
@@ -37,7 +37,7 @@ class LocatorSearchSourceTests: XCTestCase {
         locator.geocodeParameters.maxResults = 2
         XCTAssertEqual(Int(locator.geocodeParameters.maxResults), 2)
         XCTAssertEqual(locator.maximumResults, 2)
-        searchResults = try await locator.search("Coffee", area: nil)
+        searchResults = try await locator.search("Coffee")
         results = try XCTUnwrap(searchResults)
         XCTAssertEqual(results.count, 2)
     }

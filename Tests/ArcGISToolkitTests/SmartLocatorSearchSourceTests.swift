@@ -26,8 +26,7 @@ class SmartLocatorSearchSourceTests: XCTestCase {
         // Threshold of 0 means no re-query.
         locator.repeatSearchResultThreshold = 0
         var searchResults = try await locator.search(
-            "Dunkin' Donuts",
-            area: nil
+            "Dunkin' Donuts"
         )
         var results = try XCTUnwrap(searchResults)
         XCTAssertEqual(results.count, 0)
@@ -35,8 +34,7 @@ class SmartLocatorSearchSourceTests: XCTestCase {
         // Threshold of 1+ means requery with fewer restrictions
         locator.repeatSearchResultThreshold = 1
         searchResults = try await locator.search(
-            "Dunkin' Donuts",
-            area: nil
+            "Dunkin' Donuts"
         )
         results = try XCTUnwrap(searchResults)
         XCTAssertGreaterThanOrEqual(results.count, 1)
