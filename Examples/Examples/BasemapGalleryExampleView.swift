@@ -71,9 +71,6 @@ struct BasemapGalleryExampleView: View {
     let map = Map(basemapStyle: .arcGISNova)
     
     @State
-    var selectedBasemapGalleryItem: BasemapGalleryItem?
-    
-    @State
     var showBasemapGallery: Bool = true  // NOTE: Set to false when BasemapGallery is back in the navigation stack.
     
     let initialViewpoint: Viewpoint? = Viewpoint(
@@ -84,11 +81,6 @@ struct BasemapGalleryExampleView: View {
     var body: some View {
         ZStack(alignment: .topTrailing, content: {
             MapView(map: map, viewpoint: initialViewpoint)
-                .onChange(of: selectedBasemapGalleryItem) { newValue in
-                    if let selectedItem = selectedBasemapGalleryItem {
-                        map.basemap = selectedItem.basemap
-                    }
-                }
                 .toolbar {
                     ToolbarItem(placement: .primaryAction) {
                         Button {
@@ -100,9 +92,10 @@ struct BasemapGalleryExampleView: View {
                 }
             if showBasemapGallery {
                 BasemapGallery(
-                    basemapGalleryItems: basemapGalleryItems,
-                    selectedBasemapGalleryItem: $selectedBasemapGalleryItem
+                    geoModel: map,
+                    basemapGalleryItems: basemapGalleryItems
                 )
+                    .basemapGalleryStyle(.automatic)
                     .frame(width: 300)
                     .padding()
             }
