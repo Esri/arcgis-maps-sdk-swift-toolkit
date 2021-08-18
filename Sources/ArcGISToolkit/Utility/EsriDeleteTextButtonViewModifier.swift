@@ -13,6 +13,7 @@
 
 ***REMOVED***
 
+***REMOVED***/ A modifier which adds a "delete text" button in a view, used to delete a given text string.
 struct EsriDeleteTextButtonViewModifier: ViewModifier {
 ***REMOVED***@Binding var text: String
 ***REMOVED***

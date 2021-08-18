@@ -17,17 +17,22 @@ import Combine
 ***REMOVED***Toolkit
 
 struct SearchExampleView: View {
+***REMOVED******REMOVED***/ The `SearchViewModel` used to define behavior of the `SearchView`.
 ***REMOVED***@ObservedObject
 ***REMOVED***var searchViewModel = SearchViewModel()
 ***REMOVED***
 ***REMOVED***let map = Map(basemapStyle: .arcGISImagery)
 ***REMOVED***
+***REMOVED******REMOVED***/ The map viewpoint used by the `SearchView` to pan/zoom the map
+***REMOVED******REMOVED***/ to the extent of the search results.
 ***REMOVED***@State
 ***REMOVED***var searchResultViewpoint: Viewpoint? = Viewpoint(
 ***REMOVED******REMOVED***center: Point(x: -93.258133, y: 44.986656, spatialReference: .wgs84),
 ***REMOVED******REMOVED***scale: 1000000
 ***REMOVED***)
 ***REMOVED***
+***REMOVED******REMOVED***/ The `GraphicsOverlay` used by the `SearchView` to display search results on the map.
+***REMOVED***@State
 ***REMOVED***var searchResultsOverlay = GraphicsOverlay()
 ***REMOVED***
 ***REMOVED***var body: some View {
@@ -46,21 +51,20 @@ struct SearchExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** redraw the map with the new viewpoint.
 ***REMOVED******REMOVED******REMOVED******REMOVED***searchResultViewpoint = nil
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.onVisibleAreaChanged {
-***REMOVED******REMOVED******REMOVED******REMOVED***searchViewModel.queryArea = $0
+***REMOVED******REMOVED******REMOVED***.onVisibleAreaChanged { newValue in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Setting `searchViewModel.queryArea` will limit the initial
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** results to `queryArea`.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***searchViewModel.queryArea = newValue
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.overlay(
-***REMOVED******REMOVED******REMOVED******REMOVED***SearchView(searchViewModel: searchViewModel)
+***REMOVED******REMOVED******REMOVED***.overlay(alignment: .topTrailing) {
+***REMOVED******REMOVED******REMOVED******REMOVED***SearchView(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***searchViewModel: searchViewModel,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint: $searchResultViewpoint,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***resultsOverlay: $searchResultsOverlay
+***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 360)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(),
-***REMOVED******REMOVED******REMOVED******REMOVED***alignment: .topTrailing
-***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***.onChange(of: searchViewModel.results, perform: { newValue in
-***REMOVED******REMOVED******REMOVED******REMOVED***display(searchResults: newValue)
-***REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***.onChange(of: searchViewModel.selectedResult, perform: { newValue in
-***REMOVED******REMOVED******REMOVED******REMOVED***display(selectedResult: newValue)
-***REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onAppear() {
 ***REMOVED******REMOVED******REMOVED******REMOVED***setupSearchViewModel()
 ***REMOVED******REMOVED***
@@ -69,61 +73,10 @@ struct SearchExampleView: View {
 ***REMOVED******REMOVED***/ Sets up any desired customization on `searchViewModel`.
 ***REMOVED***private func setupSearchViewModel() {
 ***REMOVED******REMOVED***let smartLocator = SmartLocatorSearchSource(
-***REMOVED******REMOVED******REMOVED***displayName: "Locator One",
+***REMOVED******REMOVED******REMOVED***displayName: "My locator",
 ***REMOVED******REMOVED******REMOVED***maximumResults: 16,
 ***REMOVED******REMOVED******REMOVED***maximumSuggestions: 16
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***searchViewModel.sources = [smartLocator]
-***REMOVED***
-***REMOVED***
-***REMOVED***private func display(searchResults: Result<[SearchResult]?, SearchError>) {
-***REMOVED******REMOVED***switch searchResults {
-***REMOVED******REMOVED***case .success(let results):
-***REMOVED******REMOVED******REMOVED***var resultGraphics = [Graphic]()
-***REMOVED******REMOVED******REMOVED***results?.forEach({ result in
-***REMOVED******REMOVED******REMOVED******REMOVED***if let graphic = result.geoElement as? Graphic {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***graphic.updateGraphic(withResult: result)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***resultGraphics.append(graphic)
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***searchResultsOverlay.removeAllGraphics()
-***REMOVED******REMOVED******REMOVED***searchResultsOverlay.addGraphics(resultGraphics)
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***if resultGraphics.count > 0,
-***REMOVED******REMOVED******REMOVED***   let envelope = searchResultsOverlay.extent {
-***REMOVED******REMOVED******REMOVED******REMOVED***let builder = EnvelopeBuilder(envelope: envelope)
-***REMOVED******REMOVED******REMOVED******REMOVED***builder.expand(factor: 1.1)
-***REMOVED******REMOVED******REMOVED******REMOVED***searchResultViewpoint = Viewpoint(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***targetExtent: builder.toGeometry()
-***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***else {
-***REMOVED******REMOVED******REMOVED******REMOVED***searchResultViewpoint = nil
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***case .failure(_):
-***REMOVED******REMOVED******REMOVED***break
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***private func display(selectedResult: SearchResult?) {
-***REMOVED******REMOVED***guard let selectedResult = selectedResult else { return ***REMOVED***
-***REMOVED******REMOVED***searchResultViewpoint = selectedResult.selectionViewpoint
-***REMOVED***
-***REMOVED***
-
-private extension Symbol {
-***REMOVED******REMOVED***/ A search result marker symbol.
-***REMOVED***static let resultSymbol: MarkerSymbol = PictureMarkerSymbol(
-***REMOVED******REMOVED***image: UIImage(named: "MapPin")!
-***REMOVED***)
-***REMOVED***
-
-private extension Graphic {
-***REMOVED***func updateGraphic(withResult result: SearchResult) {
-***REMOVED******REMOVED***if symbol == nil {
-***REMOVED******REMOVED******REMOVED***symbol = .resultSymbol
-***REMOVED***
-***REMOVED******REMOVED***setAttributeValue(result.displayTitle, forKey: "displayTitle")
-***REMOVED******REMOVED***setAttributeValue(result.displaySubtitle, forKey: "displaySubtitle")
 ***REMOVED***
 ***REMOVED***

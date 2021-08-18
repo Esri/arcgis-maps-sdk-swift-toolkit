@@ -13,6 +13,7 @@
 
 ***REMOVED***
 
+***REMOVED***/ A modifier which adds a "show results" button in a view, used to hide/show another view.
 struct EsriShowResultsButtonViewModifier: ViewModifier {
 ***REMOVED***var isEnabled: Bool
 ***REMOVED***@Binding var isHidden: Bool
@@ -20,14 +21,14 @@ struct EsriShowResultsButtonViewModifier: ViewModifier {
 ***REMOVED***func body(content: Content) -> some View {
 ***REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED***content
-***REMOVED******REMOVED******REMOVED***if isEnabled {
+***REMOVED******REMOVED******REMOVED***if !isEnabled {
 ***REMOVED******REMOVED******REMOVED******REMOVED***EmptyView()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Button(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***action: { isHidden.toggle() ***REMOVED***,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***label: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: isHidden ? "eye.slash.fill" : "eye.fill")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: isHidden ? "eye.fill" : "eye.slash.fill")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(Color(.opaqueSeparator))
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***)

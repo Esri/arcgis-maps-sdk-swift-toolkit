@@ -13,6 +13,7 @@
 
 ***REMOVED***
 
+***REMOVED***/ A modifier which adds a "search" button in a view, used to initiate an operation.
 struct EsriSearchButtonViewModifier: ViewModifier {
 ***REMOVED***@Binding var performSearch: Bool
 ***REMOVED***

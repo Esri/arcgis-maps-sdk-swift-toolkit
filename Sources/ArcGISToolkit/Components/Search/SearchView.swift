@@ -17,7 +17,14 @@ import Combine
 
 ***REMOVED***/ SearchView presents a search experience, powered by an underlying SearchViewModel.
 public struct SearchView: View {
-***REMOVED***public init(searchViewModel: SearchViewModel? = nil) {
+***REMOVED******REMOVED***/ Creates a new `SearchView`.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - searchViewModel: The view model used by `SearchView`.
+***REMOVED******REMOVED***/   - viewpoint: The `Viewpoint` used to zoom to results.
+***REMOVED******REMOVED***/   - resultsOverlay: The `GraphicsOverlay` used to display results.
+***REMOVED***public init(searchViewModel: SearchViewModel? = nil,
+***REMOVED******REMOVED******REMOVED******REMOVED***viewpoint: Binding<Viewpoint?>? = nil,
+***REMOVED******REMOVED******REMOVED******REMOVED***resultsOverlay: Binding<GraphicsOverlay>? = nil) {
 ***REMOVED******REMOVED***if let searchViewModel = searchViewModel {
 ***REMOVED******REMOVED******REMOVED***self.searchViewModel = searchViewModel
 ***REMOVED***
@@ -26,6 +33,8 @@ public struct SearchView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***sources: [LocatorSearchSource()]
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED***
+***REMOVED******REMOVED***self.resultsOverlay = resultsOverlay
+***REMOVED******REMOVED***self.viewpoint = viewpoint
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The view model used by the view. The `SearchViewModel` manages state and handles the
@@ -34,13 +43,21 @@ public struct SearchView: View {
 ***REMOVED***@ObservedObject
 ***REMOVED***var searchViewModel: SearchViewModel
 ***REMOVED***
+***REMOVED******REMOVED***/ The `Viewpoint` used to pan/zoom to results.  If `nil`, there will be no zooming to results.
+***REMOVED***private var viewpoint: Binding<Viewpoint?>? = nil
+***REMOVED***
+***REMOVED******REMOVED***/ The `GraphicsOverlay` used to display results.  If `nil`, no results will be displayed.
+***REMOVED***private var resultsOverlay: Binding<GraphicsOverlay>? = nil
+***REMOVED***
 ***REMOVED******REMOVED***/ Determines whether a built-in result view will be shown. Defaults to true.
 ***REMOVED******REMOVED***/ If false, the result display/selection list is not shown. Set to false if you want to hide the results
 ***REMOVED******REMOVED***/ or define a custom result list. You might use a custom result list to show results in a separate list,
 ***REMOVED******REMOVED***/ disconnected from the rest of the search view.
+***REMOVED******REMOVED***/ Note: this is set using the `enableResultListView` modifier.
 ***REMOVED***private var enableResultListView = true
 ***REMOVED***
 ***REMOVED******REMOVED***/ Message to show when there are no results or suggestions.  Defaults to "No results found".
+***REMOVED******REMOVED***/ Note: this is set using the `noResultMessage` modifier.
 ***REMOVED***private var noResultMessage = "No results found"
 ***REMOVED***
 ***REMOVED******REMOVED***/ Indicates that the `SearchViewModel` should start a search.
@@ -67,7 +84,7 @@ public struct SearchView: View {
 ***REMOVED******REMOVED******REMOVED***.esriDeleteTextButton(text: $searchViewModel.currentQuery)
 ***REMOVED******REMOVED******REMOVED***.esriSearchButton(performSearch: $shouldCommitSearch)
 ***REMOVED******REMOVED******REMOVED***.esriShowResultsButton(
-***REMOVED******REMOVED******REMOVED******REMOVED***isEnabled: !enableResultListView,
+***REMOVED******REMOVED******REMOVED******REMOVED***isEnabled: enableResultListView,
 ***REMOVED******REMOVED******REMOVED******REMOVED***isHidden: $isResultDisplayHidden
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***.esriBorder()
@@ -84,6 +101,12 @@ public struct SearchView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***.onChange(of: searchViewModel.results, perform: { newValue in
+***REMOVED******REMOVED******REMOVED***display(searchResults: newValue)
+***REMOVED***)
+***REMOVED******REMOVED***.onChange(of: searchViewModel.selectedResult, perform: { newValue in
+***REMOVED******REMOVED******REMOVED***display(selectedResult: newValue)
+***REMOVED***)
 ***REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED***.task(id: searchViewModel.currentQuery) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** User typed a new character
@@ -128,6 +151,42 @@ public struct SearchView: View {
 ***REMOVED******REMOVED***var copy = self
 ***REMOVED******REMOVED***copy.noResultMessage = noResultMessage
 ***REMOVED******REMOVED***return copy
+***REMOVED***
+***REMOVED***
+
+extension SearchView {
+***REMOVED***private func display(searchResults: Result<[SearchResult]?, SearchError>) {
+***REMOVED******REMOVED***switch searchResults {
+***REMOVED******REMOVED***case .success(let results):
+***REMOVED******REMOVED******REMOVED***var resultGraphics = [Graphic]()
+***REMOVED******REMOVED******REMOVED***results?.forEach({ result in
+***REMOVED******REMOVED******REMOVED******REMOVED***if let graphic = result.geoElement as? Graphic {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***graphic.updateGraphic(withResult: result)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***resultGraphics.append(graphic)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***resultsOverlay?.wrappedValue.removeAllGraphics()
+***REMOVED******REMOVED******REMOVED***resultsOverlay?.wrappedValue.addGraphics(resultGraphics)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***if resultGraphics.count > 0,
+***REMOVED******REMOVED******REMOVED***   let envelope = resultsOverlay?.wrappedValue.extent {
+***REMOVED******REMOVED******REMOVED******REMOVED***let builder = EnvelopeBuilder(envelope: envelope)
+***REMOVED******REMOVED******REMOVED******REMOVED***builder.expand(factor: 1.1)
+***REMOVED******REMOVED******REMOVED******REMOVED***viewpoint?.wrappedValue = Viewpoint(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***targetExtent: builder.toGeometry()
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***else {
+***REMOVED******REMOVED******REMOVED******REMOVED***viewpoint?.wrappedValue = nil
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***case .failure(_):
+***REMOVED******REMOVED******REMOVED***break
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***private func display(selectedResult: SearchResult?) {
+***REMOVED******REMOVED***guard let selectedResult = selectedResult else { return ***REMOVED***
+***REMOVED******REMOVED***viewpoint?.wrappedValue = selectedResult.selectionViewpoint
 ***REMOVED***
 ***REMOVED***
 
@@ -248,4 +307,21 @@ struct ResultRow: View {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
+***REMOVED***
+
+private extension Graphic {
+***REMOVED***func updateGraphic(withResult result: SearchResult) {
+***REMOVED******REMOVED***if symbol == nil {
+***REMOVED******REMOVED******REMOVED***symbol = .resultSymbol
+***REMOVED***
+***REMOVED******REMOVED***setAttributeValue(result.displayTitle, forKey: "displayTitle")
+***REMOVED******REMOVED***setAttributeValue(result.displaySubtitle, forKey: "displaySubtitle")
+***REMOVED***
+***REMOVED***
+
+private extension Symbol {
+***REMOVED******REMOVED***/ A search result marker symbol.
+***REMOVED***static let resultSymbol: MarkerSymbol = PictureMarkerSymbol(
+***REMOVED******REMOVED***image: UIImage(named: "MapPin")!
+***REMOVED***)
 ***REMOVED***
