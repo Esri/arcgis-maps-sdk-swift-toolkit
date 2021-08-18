@@ -16,6 +16,7 @@ import ArcGIS
 
 import Foundation
 
+///  The `BasemapGalleryItem` encompasses an element in a `BasemapGallery`.
 public struct BasemapGalleryItem {
     public init(
         basemap: Basemap,
@@ -27,13 +28,18 @@ public struct BasemapGalleryItem {
         self.name = name
         self.description = description
         self.thumbnail = thumbnail
-//        self.thumbnailURL = thumbnailURL
     }
     
+    /// The basemap this `BasemapGalleryItem` represents.
     public var basemap: Basemap
+    
+    /// The name of this `Basemap`.
     public var name: String
+    
+    /// The description which will be used in the gallery.
     public var description: String?
-//    public var thumbnailURL: URL?
+    
+    /// The thumbnail which will be displayed in the gallery.
     public let thumbnail: UIImage?
 }
 
