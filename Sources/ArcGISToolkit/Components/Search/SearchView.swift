@@ -17,7 +17,14 @@ import ArcGIS
 
 /// SearchView presents a search experience, powered by an underlying SearchViewModel.
 public struct SearchView: View {
-    public init(searchViewModel: SearchViewModel? = nil) {
+    /// Creates a new `SearchView`.
+    /// - Parameters:
+    ///   - searchViewModel: The view model used by `SearchView`.
+    ///   - viewpoint: The `Viewpoint` used to zoom to results.
+    ///   - resultsOverlay: The `GraphicsOverlay` used to display results.
+    public init(searchViewModel: SearchViewModel? = nil,
+                viewpoint: Binding<Viewpoint?>? = nil,
+                resultsOverlay: Binding<GraphicsOverlay>? = nil) {
         if let searchViewModel = searchViewModel {
             self.searchViewModel = searchViewModel
         }
@@ -26,6 +33,8 @@ public struct SearchView: View {
                 sources: [LocatorSearchSource()]
             )
         }
+        self.resultsOverlay = resultsOverlay
+        self.viewpoint = viewpoint
     }
     
     /// The view model used by the view. The `SearchViewModel` manages state and handles the
@@ -34,13 +43,21 @@ public struct SearchView: View {
     @ObservedObject
     var searchViewModel: SearchViewModel
     
+    /// The `Viewpoint` used to pan/zoom to results.  If `nil`, there will be no zooming to results.
+    private var viewpoint: Binding<Viewpoint?>? = nil
+    
+    /// The `GraphicsOverlay` used to display results.  If `nil`, no results will be displayed.
+    private var resultsOverlay: Binding<GraphicsOverlay>? = nil
+    
     /// Determines whether a built-in result view will be shown. Defaults to true.
     /// If false, the result display/selection list is not shown. Set to false if you want to hide the results
     /// or define a custom result list. You might use a custom result list to show results in a separate list,
     /// disconnected from the rest of the search view.
+    /// Note: this is set using the `enableResultListView` modifier.
     private var enableResultListView = true
     
     /// Message to show when there are no results or suggestions.  Defaults to "No results found".
+    /// Note: this is set using the `noResultMessage` modifier.
     private var noResultMessage = "No results found"
     
     /// Indicates that the `SearchViewModel` should start a search.
@@ -67,7 +84,7 @@ public struct SearchView: View {
             .esriDeleteTextButton(text: $searchViewModel.currentQuery)
             .esriSearchButton(performSearch: $shouldCommitSearch)
             .esriShowResultsButton(
-                isEnabled: !enableResultListView,
+                isEnabled: enableResultListView,
                 isHidden: $isResultDisplayHidden
             )
             .esriBorder()
@@ -84,6 +101,12 @@ public struct SearchView: View {
                 )
             }
         }
+        .onChange(of: searchViewModel.results, perform: { newValue in
+            display(searchResults: newValue)
+        })
+        .onChange(of: searchViewModel.selectedResult, perform: { newValue in
+            display(selectedResult: newValue)
+        })
         Spacer()
             .task(id: searchViewModel.currentQuery) {
                 // User typed a new character
@@ -128,6 +151,42 @@ public struct SearchView: View {
         var copy = self
         copy.noResultMessage = noResultMessage
         return copy
+    }
+}
+
+extension SearchView {
+    private func display(searchResults: Result<[SearchResult]?, SearchError>) {
+        switch searchResults {
+        case .success(let results):
+            var resultGraphics = [Graphic]()
+            results?.forEach({ result in
+                if let graphic = result.geoElement as? Graphic {
+                    graphic.updateGraphic(withResult: result)
+                    resultGraphics.append(graphic)
+                }
+            })
+            resultsOverlay?.wrappedValue.removeAllGraphics()
+            resultsOverlay?.wrappedValue.addGraphics(resultGraphics)
+            
+            if resultGraphics.count > 0,
+               let envelope = resultsOverlay?.wrappedValue.extent {
+                let builder = EnvelopeBuilder(envelope: envelope)
+                builder.expand(factor: 1.1)
+                viewpoint?.wrappedValue = Viewpoint(
+                    targetExtent: builder.toGeometry()
+                )
+            }
+            else {
+                viewpoint?.wrappedValue = nil
+            }
+        case .failure(_):
+            break
+        }
+    }
+    
+    private func display(selectedResult: SearchResult?) {
+        guard let selectedResult = selectedResult else { return }
+        viewpoint?.wrappedValue = selectedResult.selectionViewpoint
     }
 }
 
@@ -248,4 +307,21 @@ struct ResultRow: View {
             }
         }
     }
+}
+
+private extension Graphic {
+    func updateGraphic(withResult result: SearchResult) {
+        if symbol == nil {
+            symbol = .resultSymbol
+        }
+        setAttributeValue(result.displayTitle, forKey: "displayTitle")
+        setAttributeValue(result.displaySubtitle, forKey: "displaySubtitle")
+    }
+}
+
+private extension Symbol {
+    /// A search result marker symbol.
+    static let resultSymbol: MarkerSymbol = PictureMarkerSymbol(
+        image: UIImage(named: "MapPin")!
+    )
 }

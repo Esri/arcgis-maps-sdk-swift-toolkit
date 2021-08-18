@@ -17,17 +17,22 @@ import ArcGIS
 import ArcGISToolkit
 
 struct SearchExampleView: View {
+    /// The `SearchViewModel` used to define behavior of the `SearchView`.
     @ObservedObject
     var searchViewModel = SearchViewModel()
     
     let map = Map(basemapStyle: .arcGISImagery)
     
+    /// The map viewpoint used by the `SearchView` to pan/zoom the map
+    /// to the extent of the search results.
     @State
     var searchResultViewpoint: Viewpoint? = Viewpoint(
         center: Point(x: -93.258133, y: 44.986656, spatialReference: .wgs84),
         scale: 1000000
     )
     
+    /// The `GraphicsOverlay` used by the `SearchView` to display search results on the map.
+    @State
     var searchResultsOverlay = GraphicsOverlay()
     
     var body: some View {
@@ -46,21 +51,20 @@ struct SearchExampleView: View {
                 // redraw the map with the new viewpoint.
                 searchResultViewpoint = nil
             }
-            .onVisibleAreaChanged {
-                searchViewModel.queryArea = $0
+            .onVisibleAreaChanged { newValue in
+                // Setting `searchViewModel.queryArea` will limit the initial
+                // results to `queryArea`.
+                //                searchViewModel.queryArea = newValue
             }
-            .overlay(
-                SearchView(searchViewModel: searchViewModel)
+            .overlay(alignment: .topTrailing) {
+                SearchView(
+                    searchViewModel: searchViewModel,
+                    viewpoint: $searchResultViewpoint,
+                    resultsOverlay: $searchResultsOverlay
+                )
                     .frame(width: 360)
-                    .padding(),
-                alignment: .topTrailing
-            )
-            .onChange(of: searchViewModel.results, perform: { newValue in
-                display(searchResults: newValue)
-            })
-            .onChange(of: searchViewModel.selectedResult, perform: { newValue in
-                display(selectedResult: newValue)
-            })
+                    .padding()
+            }
             .onAppear() {
                 setupSearchViewModel()
             }
@@ -69,61 +73,10 @@ struct SearchExampleView: View {
     /// Sets up any desired customization on `searchViewModel`.
     private func setupSearchViewModel() {
         let smartLocator = SmartLocatorSearchSource(
-            displayName: "Locator One",
+            displayName: "My locator",
             maximumResults: 16,
             maximumSuggestions: 16
         )
         searchViewModel.sources = [smartLocator]
-    }
-    
-    private func display(searchResults: Result<[SearchResult]?, SearchError>) {
-        switch searchResults {
-        case .success(let results):
-            var resultGraphics = [Graphic]()
-            results?.forEach({ result in
-                if let graphic = result.geoElement as? Graphic {
-                    graphic.updateGraphic(withResult: result)
-                    resultGraphics.append(graphic)
-                }
-            })
-            searchResultsOverlay.removeAllGraphics()
-            searchResultsOverlay.addGraphics(resultGraphics)
-            
-            if resultGraphics.count > 0,
-               let envelope = searchResultsOverlay.extent {
-                let builder = EnvelopeBuilder(envelope: envelope)
-                builder.expand(factor: 1.1)
-                searchResultViewpoint = Viewpoint(
-                    targetExtent: builder.toGeometry()
-                )
-            }
-            else {
-                searchResultViewpoint = nil
-            }
-        case .failure(_):
-            break
-        }
-    }
-    
-    private func display(selectedResult: SearchResult?) {
-        guard let selectedResult = selectedResult else { return }
-        searchResultViewpoint = selectedResult.selectionViewpoint
-    }
-}
-
-private extension Symbol {
-    /// A search result marker symbol.
-    static let resultSymbol: MarkerSymbol = PictureMarkerSymbol(
-        image: UIImage(named: "MapPin")!
-    )
-}
-
-private extension Graphic {
-    func updateGraphic(withResult result: SearchResult) {
-        if symbol == nil {
-            symbol = .resultSymbol
-        }
-        setAttributeValue(result.displayTitle, forKey: "displayTitle")
-        setAttributeValue(result.displaySubtitle, forKey: "displaySubtitle")
     }
 }
