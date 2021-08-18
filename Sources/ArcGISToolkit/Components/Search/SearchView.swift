@@ -70,7 +70,7 @@ public struct SearchView: View {
     
     /// Determines whether the results lists are displayed.
     @State
-    private var isResultDisplayHidden: Bool = false
+    private var isResultListViewHidden: Bool = false
     
     public var body: some View {
         VStack (alignment: .center) {
@@ -85,10 +85,10 @@ public struct SearchView: View {
             .esriSearchButton(performSearch: $shouldCommitSearch)
             .esriShowResultsButton(
                 isEnabled: enableResultListView,
-                isHidden: $isResultDisplayHidden
+                isHidden: $isResultListViewHidden
             )
             .esriBorder()
-            if enableResultListView, !isResultDisplayHidden {
+            if enableResultListView, !isResultListViewHidden {
                 SearchResultList(
                     searchResults: searchViewModel.results,
                     selectedResult: $searchViewModel.selectedResult,
