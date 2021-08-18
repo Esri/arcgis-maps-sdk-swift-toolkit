@@ -70,7 +70,7 @@ public struct SearchView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Determines whether the results lists are displayed.
 ***REMOVED***@State
-***REMOVED***private var isResultDisplayHidden: Bool = false
+***REMOVED***private var isResultListViewHidden: Bool = false
 ***REMOVED***
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***VStack (alignment: .center) {
@@ -85,10 +85,10 @@ public struct SearchView: View {
 ***REMOVED******REMOVED******REMOVED***.esriSearchButton(performSearch: $shouldCommitSearch)
 ***REMOVED******REMOVED******REMOVED***.esriShowResultsButton(
 ***REMOVED******REMOVED******REMOVED******REMOVED***isEnabled: enableResultListView,
-***REMOVED******REMOVED******REMOVED******REMOVED***isHidden: $isResultDisplayHidden
+***REMOVED******REMOVED******REMOVED******REMOVED***isHidden: $isResultListViewHidden
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***.esriBorder()
-***REMOVED******REMOVED******REMOVED***if enableResultListView, !isResultDisplayHidden {
+***REMOVED******REMOVED******REMOVED***if enableResultListView, !isResultListViewHidden {
 ***REMOVED******REMOVED******REMOVED******REMOVED***SearchResultList(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***searchResults: searchViewModel.results,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedResult: $searchViewModel.selectedResult,
