@@ -71,9 +71,6 @@ struct BasemapGalleryExampleView: View {
 ***REMOVED***let map = Map(basemapStyle: .arcGISNova)
 ***REMOVED***
 ***REMOVED***@State
-***REMOVED***var selectedBasemapGalleryItem: BasemapGalleryItem?
-***REMOVED***
-***REMOVED***@State
 ***REMOVED***var showBasemapGallery: Bool = true  ***REMOVED*** NOTE: Set to false when BasemapGallery is back in the navigation stack.
 ***REMOVED***
 ***REMOVED***let initialViewpoint: Viewpoint? = Viewpoint(
@@ -84,11 +81,6 @@ struct BasemapGalleryExampleView: View {
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***ZStack(alignment: .topTrailing, content: {
 ***REMOVED******REMOVED******REMOVED***MapView(map: map, viewpoint: initialViewpoint)
-***REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: selectedBasemapGalleryItem) { newValue in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let selectedItem = selectedBasemapGalleryItem {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***map.basemap = selectedItem.basemap
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.toolbar {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ToolbarItem(placement: .primaryAction) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
@@ -100,9 +92,10 @@ struct BasemapGalleryExampleView: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***if showBasemapGallery {
 ***REMOVED******REMOVED******REMOVED******REMOVED***BasemapGallery(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***basemapGalleryItems: basemapGalleryItems,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedBasemapGalleryItem: $selectedBasemapGalleryItem
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***geoModel: map,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***basemapGalleryItems: basemapGalleryItems
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.basemapGalleryStyle(.automatic)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 300)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
 ***REMOVED******REMOVED***

@@ -14,130 +14,170 @@
 ***REMOVED***
 ***REMOVED***
 
-***REMOVED***/ `OverviewMap` is a small, secondary `MapView` (sometimes called an "inset map"), superimposed
-***REMOVED***/ on an existing `GeoView`, which shows the visible extent of that `GeoView`.
+***REMOVED***/ The `BasemapGallery` tool displays a collection of images representing basemaps from
+***REMOVED***/ ArcGIS Online, a user-defined portal, or an array of `Basemap`s.
+***REMOVED***/ When a new basemap is selected from the `BasemapGallery` and the optional
+***REMOVED***/ `BasemapGallery.geoModel` property is set, then the basemap of the geoModel is replaced
+***REMOVED***/ with the basemap in the gallery.
 public struct BasemapGallery: View {
+***REMOVED******REMOVED***/ The view style of the gallery.
+***REMOVED***public enum BasemapGalleryStyle {
+***REMOVED******REMOVED******REMOVED***/ The `BasemapGallery` will display as a grid when there is appropriate
+***REMOVED******REMOVED******REMOVED***/ width available for the gallery to do so. Otherwise the gallery will display as a list.
+***REMOVED******REMOVED***case automatic
+***REMOVED******REMOVED******REMOVED***/ The `BasemapGallery` will display as a grid.
+***REMOVED******REMOVED***case grid
+***REMOVED******REMOVED******REMOVED***/ The `BasemapGallery` will display as a list.
+***REMOVED******REMOVED***case list
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Creates a `BasemapGallery`. Generates a list of appropriate, default basemaps.
+***REMOVED******REMOVED***/ The given default basemaps require either an API key or named-user to be signed into the app.
+***REMOVED******REMOVED***/ These basemaps are sourced from this PortalGroup:
+***REMOVED******REMOVED***/ https:***REMOVED***www.arcgis.com/home/group.html?id=a25523e2241d4ff2bcc9182cc971c156).
+***REMOVED******REMOVED***/ `BasemapmapGallery.currentBasemap` is set to the basemap of the given
+***REMOVED******REMOVED***/ geoModel if not `nil`.
+***REMOVED******REMOVED***/ - Parameter geoModel: The `GeoModel` we're selecting the basemap for.
+***REMOVED***public init(geoModel: GeoModel? = nil) {
+***REMOVED******REMOVED***self.geoModel = geoModel
+***REMOVED******REMOVED***self.currentBasemap = geoModel?.basemap
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Creates a `BasemapGallery`. Uses the given `portal` to retrieve basemaps.
+***REMOVED******REMOVED***/ `BasemapmapGallery.currentBasemap` is set to the basemap of the given
+***REMOVED******REMOVED***/ geoModel if not `nil`.
+***REMOVED******REMOVED***/ - Parameter geoModel: The `GeoModel` we're selecting the basemap for.
+***REMOVED******REMOVED***/ - Parameter portal: The `GeoModel` we're selecting the basemap for.
 ***REMOVED***public init(
-***REMOVED******REMOVED***basemapGalleryItems: [BasemapGalleryItem] = [],
-***REMOVED******REMOVED***selectedBasemapGalleryItem: Binding<BasemapGalleryItem?>
+***REMOVED******REMOVED***geoModel: GeoModel? = nil,
+***REMOVED******REMOVED***portal: Portal
 ***REMOVED***) {
+***REMOVED******REMOVED***self.geoModel = geoModel
+***REMOVED******REMOVED***self.currentBasemap = geoModel?.basemap
+***REMOVED******REMOVED***self.portal = portal
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Creates a `BasemapGallery`. Uses the given list of basemap gallery items.
+***REMOVED******REMOVED***/ `BasemapmapGallery.currentBasemap` is set to the basemap of the given
+***REMOVED******REMOVED***/ geoModel if not `nil`.
+***REMOVED******REMOVED***/ - Parameter geoModel: The `GeoModel` we're selecting the basemap for.
+***REMOVED******REMOVED***/ - Parameter basemapGalleryItems: The `GeoModel` we're selecting the basemap for.
+***REMOVED***public init(
+***REMOVED******REMOVED***geoModel: GeoModel? = nil,
+***REMOVED******REMOVED***basemapGalleryItems: [BasemapGalleryItem] = []
+***REMOVED***) {
+***REMOVED******REMOVED***self.geoModel = geoModel
+***REMOVED******REMOVED***self.currentBasemap = geoModel?.basemap
 ***REMOVED******REMOVED***self.basemapGalleryItems = basemapGalleryItems
-***REMOVED******REMOVED***self._selectedBasemapGalleryItem = selectedBasemapGalleryItem
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ If the `GeoModel` is not loaded when passed to the `BasemapGallery`, then the
+***REMOVED******REMOVED***/ geoModel will be immediately loaded. The spatial reference of geoModel dictates which
+***REMOVED******REMOVED***/ basemaps from the gallery are enabled.
+***REMOVED******REMOVED***/ When an enabled basemap is selected by the user, the geoModel will have its
+***REMOVED******REMOVED***/ basemap replaced with the selected basemap.
+***REMOVED***public var geoModel: GeoModel? = nil
+***REMOVED***
+***REMOVED***@State
+***REMOVED******REMOVED***/ Currently applied basemap on the associated `GeoModel`. This may be a basemap
+***REMOVED******REMOVED***/ which does not exist in the gallery.
+***REMOVED***public var currentBasemap: Basemap? = nil
+***REMOVED***
+***REMOVED******REMOVED***/ The `Portal` object, if set in the constructor of the `BasemapGallery`.
+***REMOVED***public var portal: Portal? = nil
+
+***REMOVED******REMOVED***/ The list of basemaps currently visible in the gallery. Items added or removed from this list will
+***REMOVED******REMOVED***/ update the gallery.
 ***REMOVED***public var basemapGalleryItems: [BasemapGalleryItem] = []
 ***REMOVED***
-***REMOVED***@Binding
-***REMOVED***public var selectedBasemapGalleryItem: BasemapGalleryItem?
+***REMOVED******REMOVED***/ The style of the basemap gallery. The gallery can be displayed as a list, grid, or automatically
+***REMOVED******REMOVED***/ switch between the two based on screen real estate. Defaults to `automatic`.
+***REMOVED******REMOVED***/ Set using the `basemapGalleryStyle` modifier.
+***REMOVED***private var style: BasemapGalleryStyle = .automatic
+***REMOVED***
+***REMOVED***@Environment(\.horizontalSizeClass) var horizontalSizeClass
+
+***REMOVED******REMOVED***@Binding
+***REMOVED******REMOVED***public var selectedBasemapGalleryItem: BasemapGalleryItem?
 ***REMOVED***
 ***REMOVED***public var body: some View {
-***REMOVED******REMOVED***PlainList {
+***REMOVED******REMOVED***switch style {
+***REMOVED******REMOVED***case .automatic:
+***REMOVED******REMOVED******REMOVED***if horizontalSizeClass == .regular {
+***REMOVED******REMOVED******REMOVED******REMOVED***GridView()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***else {
+***REMOVED******REMOVED******REMOVED******REMOVED***ListView()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***case .grid:
+***REMOVED******REMOVED******REMOVED***GridView()
+***REMOVED******REMOVED***case .list:
+***REMOVED******REMOVED******REMOVED***ListView()
+***REMOVED***
+***REMOVED******REMOVED***Spacer()
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED*** MARK: Modifiers
+***REMOVED***
+***REMOVED******REMOVED***/ The style of the basemap gallery. Defaults to `.automatic`.
+***REMOVED******REMOVED***/ - Parameter style: The `BasemapGalleryStyle` to use.
+***REMOVED******REMOVED***/ - Returns: The `BasemapGallery`.
+***REMOVED***public func basemapGalleryStyle(_ style: BasemapGalleryStyle) -> BasemapGallery {
+***REMOVED******REMOVED***var copy = self
+***REMOVED******REMOVED***copy.style = style
+***REMOVED******REMOVED***return copy
+***REMOVED***
+***REMOVED***
+
+extension BasemapGallery {
+***REMOVED***private func GridView() -> some View {
+***REMOVED******REMOVED***let columns: [GridItem] = [
+***REMOVED******REMOVED******REMOVED***.init(.flexible(), spacing: 8.0, alignment: .top),
+***REMOVED******REMOVED******REMOVED***.init(.flexible(), spacing: 8.0, alignment: .top),
+***REMOVED******REMOVED******REMOVED***.init(.flexible(), spacing: 8.0, alignment: .top)
+***REMOVED******REMOVED***]
+
+***REMOVED******REMOVED***return ScrollView {
+***REMOVED******REMOVED******REMOVED***LazyVGrid(columns: columns, spacing: 4) {
+***REMOVED******REMOVED******REMOVED******REMOVED***ForEach(basemapGalleryItems) { basemapGalleryItem in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***BasemapGalleryItemRow(item: basemapGalleryItem)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onTapGesture {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***geoModel?.basemap = basemapGalleryItem.basemap
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentBasemap = basemapGalleryItem.basemap
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***.esriBorder()
+***REMOVED***
+***REMOVED***
+***REMOVED***private func ListView() -> some View {
+***REMOVED******REMOVED***return PlainList {
 ***REMOVED******REMOVED******REMOVED***ForEach(basemapGalleryItems) { basemapGalleryItem in
 ***REMOVED******REMOVED******REMOVED******REMOVED***BasemapGalleryItemRow(item: basemapGalleryItem)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onTapGesture {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedBasemapGalleryItem = basemapGalleryItem
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***geoModel?.basemap = basemapGalleryItem.basemap
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentBasemap = basemapGalleryItem.basemap
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.esriBorder()
 ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***MapView(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***map: map,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint: makeOverviewViewpoint(),
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***graphicsOverlays: [graphicsOverlay]
-***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.attributionText(hidden: true)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.interactionModes([])
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.border(.black, width: 1)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onAppear(perform: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***graphic.symbol = symbol
-***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: visibleArea, perform: { visibleArea in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let visibleArea = visibleArea {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***graphic.geometry = visibleArea
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: viewpoint, perform: { viewpoint in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if visibleArea == nil,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***   let viewpoint = viewpoint,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***   let point = viewpoint.targetGeometry as? Point {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***graphic.geometry = point
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: symbol, perform: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***graphic.symbol = $0
-***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***
-***REMOVED***
-***REMOVED******REMOVED*** MARK: Modifiers
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***/ The `Map` displayed in the `OverviewMap`.
-***REMOVED******REMOVED******REMOVED******REMOVED***/ - Parameter map: The new map.
-***REMOVED******REMOVED******REMOVED******REMOVED***/ - Returns: The `OverviewMap`.
-***REMOVED******REMOVED******REMOVED***public func map(_ map: Map) -> OverviewMap {
-***REMOVED******REMOVED******REMOVED******REMOVED***var copy = self
-***REMOVED******REMOVED******REMOVED******REMOVED***copy._map = StateObject(wrappedValue: map)
-***REMOVED******REMOVED******REMOVED******REMOVED***return copy
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***/ The factor to multiply the main `GeoView`'s scale by.  The `OverviewMap` will display
-***REMOVED******REMOVED******REMOVED******REMOVED***/ at the a scale equal to: `viewpoint.targetScale` x `scaleFactor`.
-***REMOVED******REMOVED******REMOVED******REMOVED***/ The default value is `25.0`.
-***REMOVED******REMOVED******REMOVED******REMOVED***/ - Parameter scaleFactor: The new scale factor.
-***REMOVED******REMOVED******REMOVED******REMOVED***/ - Returns: The `OverviewMap`.
-***REMOVED******REMOVED******REMOVED***public func scaleFactor(_ scaleFactor: Double) -> OverviewMap {
-***REMOVED******REMOVED******REMOVED******REMOVED***var copy = self
-***REMOVED******REMOVED******REMOVED******REMOVED***copy.scaleFactor = scaleFactor
-***REMOVED******REMOVED******REMOVED******REMOVED***return copy
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***/ The `Symbol` used to display the main `GeoView` visible area. For `MapView`s, the symbol
-***REMOVED******REMOVED******REMOVED******REMOVED***/ should be appropriate for visualizing a polygon, as it will be used to draw the visible area. For
-***REMOVED******REMOVED******REMOVED******REMOVED***/ `SceneView`s, the symbol should be appropriate for visualizing a point, as it will be used to
-***REMOVED******REMOVED******REMOVED******REMOVED***/ draw the current viewpoint's center. For `MapView`s, the default is a transparent
-***REMOVED******REMOVED******REMOVED******REMOVED***/ `SimpleFillSymbol` with a red 1 point width outline; for `SceneView`s, the default is a
-***REMOVED******REMOVED******REMOVED******REMOVED***/ red, crosshair `SimpleMarkerSymbol`.
-***REMOVED******REMOVED******REMOVED******REMOVED***/ - Parameter symbol: The new symbol.
-***REMOVED******REMOVED******REMOVED******REMOVED***/ - Returns: The `OverviewMap`.
-***REMOVED******REMOVED******REMOVED***public func symbol(_ symbol: Symbol) -> OverviewMap {
-***REMOVED******REMOVED******REMOVED******REMOVED***var copy = self
-***REMOVED******REMOVED******REMOVED******REMOVED***copy.symbol = symbol
-***REMOVED******REMOVED******REMOVED******REMOVED***return copy
-***REMOVED******REMOVED******REMOVED***
+
 ***REMOVED***
 
 private struct BasemapGalleryItemRow: View {
 ***REMOVED***var item: BasemapGalleryItem
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***VStack {
-***REMOVED******REMOVED******REMOVED***if let thumbnail = item.thumbnail {
+***REMOVED******REMOVED******REMOVED***if let thumbnailImage = item.thumbnail {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** TODO: thumbnail will have to be loaded.
-***REMOVED******REMOVED******REMOVED******REMOVED***Image(uiImage: thumbnail)
+***REMOVED******REMOVED******REMOVED******REMOVED***Image(uiImage: thumbnailImage)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.resizable()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.aspectRatio(contentMode: .fit)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***Text(item.name)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.font(.footnote)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***
-
-***REMOVED*** MARK: Extensions
-
-private extension Symbol {
-***REMOVED******REMOVED***/ The default marker symbol.
-***REMOVED***static let defaultMarker: MarkerSymbol = SimpleMarkerSymbol(
-***REMOVED******REMOVED***style: .cross,
-***REMOVED******REMOVED***color: .red,
-***REMOVED******REMOVED***size: 12.0
-***REMOVED***)
-***REMOVED***
-***REMOVED******REMOVED***/ The default fill symbol.
-***REMOVED***static let defaultFill: FillSymbol = SimpleFillSymbol(
-***REMOVED******REMOVED***style: .solid,
-***REMOVED******REMOVED***color: .clear,
-***REMOVED******REMOVED***outline: SimpleLineSymbol(
-***REMOVED******REMOVED******REMOVED***style: .solid,
-***REMOVED******REMOVED******REMOVED***color: .red,
-***REMOVED******REMOVED******REMOVED***width: 1.0
-***REMOVED******REMOVED***)
-***REMOVED***)
 ***REMOVED***

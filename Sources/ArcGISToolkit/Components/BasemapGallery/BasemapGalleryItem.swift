@@ -16,6 +16,7 @@
 
 import Foundation
 
+***REMOVED***/  The `BasemapGalleryItem` encompasses an element in a `BasemapGallery`.
 public struct BasemapGalleryItem {
 ***REMOVED***public init(
 ***REMOVED******REMOVED***basemap: Basemap,
@@ -27,13 +28,18 @@ public struct BasemapGalleryItem {
 ***REMOVED******REMOVED***self.name = name
 ***REMOVED******REMOVED***self.description = description
 ***REMOVED******REMOVED***self.thumbnail = thumbnail
-***REMOVED******REMOVED******REMOVED***self.thumbnailURL = thumbnailURL
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ The basemap this `BasemapGalleryItem` represents.
 ***REMOVED***public var basemap: Basemap
+***REMOVED***
+***REMOVED******REMOVED***/ The name of this `Basemap`.
 ***REMOVED***public var name: String
+***REMOVED***
+***REMOVED******REMOVED***/ The description which will be used in the gallery.
 ***REMOVED***public var description: String?
-***REMOVED******REMOVED***public var thumbnailURL: URL?
+***REMOVED***
+***REMOVED******REMOVED***/ The thumbnail which will be displayed in the gallery.
 ***REMOVED***public let thumbnail: UIImage?
 ***REMOVED***
 
