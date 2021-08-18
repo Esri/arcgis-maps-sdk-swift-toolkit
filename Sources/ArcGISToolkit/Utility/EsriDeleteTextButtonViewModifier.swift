@@ -13,6 +13,7 @@
 
 import SwiftUI
 
+/// A modifier which adds a "delete text" button in a view, used to delete a given text string.
 struct EsriDeleteTextButtonViewModifier: ViewModifier {
     @Binding var text: String
     

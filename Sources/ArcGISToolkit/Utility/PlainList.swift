@@ -13,7 +13,7 @@
 
 import SwiftUI
 
-/// A List with the `.plain` list style.
+/// A `View` displaying a `List` with the `.plain` style.
 public struct PlainList<Content> : View where Content : View {
     let content: Content
     /// Creates a plain list with the given content.
