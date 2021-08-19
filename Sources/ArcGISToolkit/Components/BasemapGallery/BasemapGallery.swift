@@ -41,6 +41,7 @@ public struct BasemapGallery: View {
     public init(geoModel: GeoModel? = nil) {
         self.geoModel = geoModel
         self.currentBasemap = geoModel?.basemap
+        self.portal = Portal.arcGISOnline(loginRequired: false)
     }
     
     /// Creates a `BasemapGallery`. Uses the given `portal` to retrieve basemaps.
@@ -68,7 +69,7 @@ public struct BasemapGallery: View {
     ) {
         self.geoModel = geoModel
         self.currentBasemap = geoModel?.basemap
-        self.basemapGalleryItems = basemapGalleryItems
+        self._basemapGalleryItems = State(wrappedValue: basemapGalleryItems)
     }
     
     /// If the `GeoModel` is not loaded when passed to the `BasemapGallery`, then the
@@ -86,19 +87,20 @@ public struct BasemapGallery: View {
     /// The `Portal` object, if set in the constructor of the `BasemapGallery`.
     public var portal: Portal? = nil
 
+    @State
     /// The list of basemaps currently visible in the gallery. Items added or removed from this list will
     /// update the gallery.
     public var basemapGalleryItems: [BasemapGalleryItem] = []
-    
+
+    @State
+    private var fetchBasemapsResult: Result<[BasemapGalleryItem]?, Error>? = .success([])
+
     /// The style of the basemap gallery. The gallery can be displayed as a list, grid, or automatically
     /// switch between the two based on screen real estate. Defaults to `automatic`.
     /// Set using the `basemapGalleryStyle` modifier.
     private var style: BasemapGalleryStyle = .automatic
     
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
-
-//    @Binding
-//    public var selectedBasemapGalleryItem: BasemapGalleryItem?
     
     public var body: some View {
         switch style {
@@ -115,6 +117,27 @@ public struct BasemapGallery: View {
             ListView()
         }
         Spacer()
+            .task {
+                let result = await Result {
+                    try await portal?.fetchDeveloperBasemaps()
+                }
+                switch result {
+                case .success(let basemaps):
+                    let items = basemaps.map {
+                        $0.map {
+                            BasemapGalleryItem(basemap: $0)
+                        }
+                    }
+                    _fetchBasemapsResult = State(wrappedValue: .success(items))
+//                    _basemapGalleryItems = State(wrappedValue: items)
+                case .failure(let error):
+                    self?.results = .failure(error)
+                    break
+                case .none:
+                    self?.results = .success(nil)
+                    break
+                }
+            }
     }
     
     // MARK: Modifiers
@@ -137,10 +160,25 @@ extension BasemapGallery {
             .init(.flexible(), spacing: 8.0, alignment: .top)
         ]
 
+        return GalleryView(columns)
+    }
+    
+    private func ListView() -> some View {
+        let columns: [GridItem] = [
+            .init(.flexible(), spacing: 8.0, alignment: .top)
+        ]
+
+        return GalleryView(columns)
+    }
+    
+    private func GalleryView(_ columns: [GridItem]) -> some View {
         return ScrollView {
             LazyVGrid(columns: columns, spacing: 4) {
                 ForEach(basemapGalleryItems) { basemapGalleryItem in
-                    BasemapGalleryItemRow(item: basemapGalleryItem)
+                    BasemapGalleryItemRow(
+                        basemapGalleryItem: basemapGalleryItem,
+                        currentBasemap: currentBasemap
+                    )
                         .onTapGesture {
                             geoModel?.basemap = basemapGalleryItem.basemap
                             currentBasemap = basemapGalleryItem.basemap
@@ -150,33 +188,21 @@ extension BasemapGallery {
         }
         .esriBorder()
     }
-    
-    private func ListView() -> some View {
-        return PlainList {
-            ForEach(basemapGalleryItems) { basemapGalleryItem in
-                BasemapGalleryItemRow(item: basemapGalleryItem)
-                    .onTapGesture {
-                        geoModel?.basemap = basemapGalleryItem.basemap
-                        currentBasemap = basemapGalleryItem.basemap
-                    }
-            }
-        }
-        .esriBorder()
-    }
-
 }
 
 private struct BasemapGalleryItemRow: View {
-    var item: BasemapGalleryItem
+    var basemapGalleryItem: BasemapGalleryItem
+    var currentBasemap: Basemap? = nil
+    
     var body: some View {
         VStack {
-            if let thumbnailImage = item.thumbnail {
+            if let thumbnailImage = basemapGalleryItem.thumbnail {
                 // TODO: thumbnail will have to be loaded.
                 Image(uiImage: thumbnailImage)
                     .resizable()
                     .aspectRatio(contentMode: .fit)
             }
-            Text(item.name)
+            Text(basemapGalleryItem.name)
                 .font(.footnote)
         }
     }
