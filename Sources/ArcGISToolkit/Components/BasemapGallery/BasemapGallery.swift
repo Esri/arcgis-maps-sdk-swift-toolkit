@@ -31,112 +31,29 @@ public struct BasemapGallery: View {
 ***REMOVED******REMOVED***case list
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Creates a `BasemapGallery`. Generates a list of appropriate, default basemaps.
-***REMOVED******REMOVED***/ The given default basemaps require either an API key or named-user to be signed into the app.
-***REMOVED******REMOVED***/ These basemaps are sourced from this PortalGroup:
-***REMOVED******REMOVED***/ https:***REMOVED***www.arcgis.com/home/group.html?id=a25523e2241d4ff2bcc9182cc971c156).
-***REMOVED******REMOVED***/ `BasemapmapGallery.currentBasemap` is set to the basemap of the given
-***REMOVED******REMOVED***/ geoModel if not `nil`.
-***REMOVED******REMOVED***/ - Parameter geoModel: The `GeoModel` we're selecting the basemap for.
-***REMOVED***public init(geoModel: GeoModel? = nil) {
-***REMOVED******REMOVED***self.geoModel = geoModel
-***REMOVED******REMOVED***self.currentBasemap = geoModel?.basemap
-***REMOVED******REMOVED***self.portal = Portal.arcGISOnline(loginRequired: false)
+***REMOVED***public init(viewModel: BasemapGalleryViewModel? = nil) {
+***REMOVED******REMOVED***if let viewModel = viewModel {
+***REMOVED******REMOVED******REMOVED***self.viewModel = viewModel
+***REMOVED***
+***REMOVED******REMOVED***else {
+***REMOVED******REMOVED******REMOVED***self.viewModel = BasemapGalleryViewModel()
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Creates a `BasemapGallery`. Uses the given `portal` to retrieve basemaps.
-***REMOVED******REMOVED***/ `BasemapmapGallery.currentBasemap` is set to the basemap of the given
-***REMOVED******REMOVED***/ geoModel if not `nil`.
-***REMOVED******REMOVED***/ - Parameter geoModel: The `GeoModel` we're selecting the basemap for.
-***REMOVED******REMOVED***/ - Parameter portal: The `GeoModel` we're selecting the basemap for.
-***REMOVED***public init(
-***REMOVED******REMOVED***geoModel: GeoModel? = nil,
-***REMOVED******REMOVED***portal: Portal
-***REMOVED***) {
-***REMOVED******REMOVED***self.geoModel = geoModel
-***REMOVED******REMOVED***self.currentBasemap = geoModel?.basemap
-***REMOVED******REMOVED***self.portal = portal
 ***REMOVED***
+***REMOVED***@ObservedObject
+***REMOVED***public var viewModel: BasemapGalleryViewModel
 ***REMOVED***
-***REMOVED******REMOVED***/ Creates a `BasemapGallery`. Uses the given list of basemap gallery items.
-***REMOVED******REMOVED***/ `BasemapmapGallery.currentBasemap` is set to the basemap of the given
-***REMOVED******REMOVED***/ geoModel if not `nil`.
-***REMOVED******REMOVED***/ - Parameter geoModel: The `GeoModel` we're selecting the basemap for.
-***REMOVED******REMOVED***/ - Parameter basemapGalleryItems: The `GeoModel` we're selecting the basemap for.
-***REMOVED***public init(
-***REMOVED******REMOVED***geoModel: GeoModel? = nil,
-***REMOVED******REMOVED***basemapGalleryItems: [BasemapGalleryItem] = []
-***REMOVED***) {
-***REMOVED******REMOVED***self.geoModel = geoModel
-***REMOVED******REMOVED***self.currentBasemap = geoModel?.basemap
-***REMOVED******REMOVED***self._basemapGalleryItems = State(wrappedValue: basemapGalleryItems)
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ If the `GeoModel` is not loaded when passed to the `BasemapGallery`, then the
-***REMOVED******REMOVED***/ geoModel will be immediately loaded. The spatial reference of geoModel dictates which
-***REMOVED******REMOVED***/ basemaps from the gallery are enabled.
-***REMOVED******REMOVED***/ When an enabled basemap is selected by the user, the geoModel will have its
-***REMOVED******REMOVED***/ basemap replaced with the selected basemap.
-***REMOVED***public var geoModel: GeoModel? = nil
-***REMOVED***
-***REMOVED***@State
-***REMOVED******REMOVED***/ Currently applied basemap on the associated `GeoModel`. This may be a basemap
-***REMOVED******REMOVED***/ which does not exist in the gallery.
-***REMOVED***public var currentBasemap: Basemap? = nil
-***REMOVED***
-***REMOVED******REMOVED***/ The `Portal` object, if set in the constructor of the `BasemapGallery`.
-***REMOVED***public var portal: Portal? = nil
-
-***REMOVED***@State
-***REMOVED******REMOVED***/ The list of basemaps currently visible in the gallery. Items added or removed from this list will
-***REMOVED******REMOVED***/ update the gallery.
-***REMOVED***public var basemapGalleryItems: [BasemapGalleryItem] = []
-
-***REMOVED***@State
-***REMOVED***private var fetchBasemapsResult: Result<[BasemapGalleryItem]?, Error>? = .success([])
-
 ***REMOVED******REMOVED***/ The style of the basemap gallery. The gallery can be displayed as a list, grid, or automatically
 ***REMOVED******REMOVED***/ switch between the two based on screen real estate. Defaults to `automatic`.
 ***REMOVED******REMOVED***/ Set using the `basemapGalleryStyle` modifier.
 ***REMOVED***private var style: BasemapGalleryStyle = .automatic
 ***REMOVED***
 ***REMOVED***@Environment(\.horizontalSizeClass) var horizontalSizeClass
-***REMOVED***
+
 ***REMOVED***public var body: some View {
-***REMOVED******REMOVED***switch style {
-***REMOVED******REMOVED***case .automatic:
-***REMOVED******REMOVED******REMOVED***if horizontalSizeClass == .regular {
-***REMOVED******REMOVED******REMOVED******REMOVED***GridView()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***else {
-***REMOVED******REMOVED******REMOVED******REMOVED***ListView()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***case .grid:
-***REMOVED******REMOVED******REMOVED***GridView()
-***REMOVED******REMOVED***case .list:
-***REMOVED******REMOVED******REMOVED***ListView()
-***REMOVED***
-***REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED***GalleryView()
 ***REMOVED******REMOVED******REMOVED***.task {
-***REMOVED******REMOVED******REMOVED******REMOVED***let result = await Result {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try await portal?.fetchDeveloperBasemaps()
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***switch result {
-***REMOVED******REMOVED******REMOVED******REMOVED***case .success(let basemaps):
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let items = basemaps.map {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***$0.map {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***BasemapGalleryItem(basemap: $0)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***_fetchBasemapsResult = State(wrappedValue: .success(items))
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***_basemapGalleryItems = State(wrappedValue: items)
-***REMOVED******REMOVED******REMOVED******REMOVED***case .failure(let error):
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self?.results = .failure(error)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***break
-***REMOVED******REMOVED******REMOVED******REMOVED***case .none:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self?.results = .success(nil)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***break
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***await viewModel.fetchBasemaps()
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -153,6 +70,23 @@ public struct BasemapGallery: View {
 ***REMOVED***
 
 extension BasemapGallery {
+***REMOVED***@ViewBuilder
+***REMOVED***private func GalleryView() -> some View {
+***REMOVED******REMOVED***switch style {
+***REMOVED******REMOVED***case .automatic:
+***REMOVED******REMOVED******REMOVED***if horizontalSizeClass == .regular {
+***REMOVED******REMOVED******REMOVED******REMOVED***GridView()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***else {
+***REMOVED******REMOVED******REMOVED******REMOVED***ListView()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***case .grid:
+***REMOVED******REMOVED******REMOVED***GridView()
+***REMOVED******REMOVED***case .list:
+***REMOVED******REMOVED******REMOVED***ListView()
+***REMOVED***
+***REMOVED***
+***REMOVED***
 ***REMOVED***private func GridView() -> some View {
 ***REMOVED******REMOVED***let columns: [GridItem] = [
 ***REMOVED******REMOVED******REMOVED***.init(.flexible(), spacing: 8.0, alignment: .top),
@@ -160,7 +94,7 @@ extension BasemapGallery {
 ***REMOVED******REMOVED******REMOVED***.init(.flexible(), spacing: 8.0, alignment: .top)
 ***REMOVED******REMOVED***]
 
-***REMOVED******REMOVED***return GalleryView(columns)
+***REMOVED******REMOVED***return InternalGalleryView(columns)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***private func ListView() -> some View {
@@ -168,20 +102,18 @@ extension BasemapGallery {
 ***REMOVED******REMOVED******REMOVED***.init(.flexible(), spacing: 8.0, alignment: .top)
 ***REMOVED******REMOVED***]
 
-***REMOVED******REMOVED***return GalleryView(columns)
+***REMOVED******REMOVED***return InternalGalleryView(columns)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***private func GalleryView(_ columns: [GridItem]) -> some View {
+***REMOVED***private func InternalGalleryView(_ columns: [GridItem]) -> some View {
 ***REMOVED******REMOVED***return ScrollView {
 ***REMOVED******REMOVED******REMOVED***LazyVGrid(columns: columns, spacing: 4) {
-***REMOVED******REMOVED******REMOVED******REMOVED***ForEach(basemapGalleryItems) { basemapGalleryItem in
+***REMOVED******REMOVED******REMOVED******REMOVED***ForEach(viewModel.basemapGalleryItems) { basemapGalleryItem in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***BasemapGalleryItemRow(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***basemapGalleryItem: basemapGalleryItem,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentBasemap: currentBasemap
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***basemapGalleryItem: basemapGalleryItem
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onTapGesture {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***geoModel?.basemap = basemapGalleryItem.basemap
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentBasemap = basemapGalleryItem.basemap
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.geoModel?.basemap = basemapGalleryItem.basemap
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
@@ -192,7 +124,6 @@ extension BasemapGallery {
 
 private struct BasemapGalleryItemRow: View {
 ***REMOVED***var basemapGalleryItem: BasemapGalleryItem
-***REMOVED***var currentBasemap: Basemap? = nil
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***VStack {
@@ -205,5 +136,8 @@ private struct BasemapGalleryItemRow: View {
 ***REMOVED******REMOVED******REMOVED***Text(basemapGalleryItem.name)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.font(.footnote)
 ***REMOVED***
+***REMOVED******REMOVED******REMOVED***if basemapGalleryItem == currentBasemap {
+***REMOVED******REMOVED******REMOVED******REMOVED***.background(Color.accentColor)
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***

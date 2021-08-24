@@ -68,7 +68,19 @@ struct BasemapGalleryExampleView: View {
 ***REMOVED******REMOVED***)
 ***REMOVED***]
 ***REMOVED***
+***REMOVED***let newItem = BasemapGalleryItem(
+***REMOVED******REMOVED***basemap: Basemap(style: .arcGISMidcentury),
+***REMOVED******REMOVED***name: "ArcGIS Midcentury 2",
+***REMOVED******REMOVED***description: "A 2nd vector basemap inspired by the art and advertising of the 1950's that presents a unique design option to the ArcGIS basemaps.",
+***REMOVED******REMOVED***thumbnail: UIImage(named: "Midcentury")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***thumbnailURL: URL(string: "https:***REMOVED***www.arcgis.com/sharing/rest/content/items/52d6a28f09704f04b33761ba7c4bf93f/info/thumbnail/thumbnail1607554184831.jpeg")!
+***REMOVED***)
+***REMOVED***
+***REMOVED***
 ***REMOVED***let map = Map(basemapStyle: .arcGISNova)
+***REMOVED***
+***REMOVED***@ObservedObject
+***REMOVED***var viewModel = BasemapGalleryViewModel()
 ***REMOVED***
 ***REMOVED***@State
 ***REMOVED***var showBasemapGallery: Bool = true  ***REMOVED*** NOTE: Set to false when BasemapGallery is back in the navigation stack.
@@ -78,28 +90,54 @@ struct BasemapGalleryExampleView: View {
 ***REMOVED******REMOVED***scale: 1000000
 ***REMOVED***)
 ***REMOVED***
+***REMOVED***@Environment(\.horizontalSizeClass) var horizontalSizeClass
+***REMOVED***
+***REMOVED******REMOVED*** TODO: figure out of viewmodel stuff is OK
+***REMOVED******REMOVED*** TODO: get Portal loading and working
+***REMOVED***
+***REMOVED***var galleryWidth: CGFloat {
+***REMOVED******REMOVED***get {
+***REMOVED******REMOVED******REMOVED***if horizontalSizeClass == .regular {
+***REMOVED******REMOVED******REMOVED******REMOVED***return 300.0
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***else {
+***REMOVED******REMOVED******REMOVED******REMOVED***return 150.0
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***ZStack(alignment: .topTrailing, content: {
+***REMOVED******REMOVED***ZStack(alignment: .topTrailing) {
 ***REMOVED******REMOVED******REMOVED***MapView(map: map, viewpoint: initialViewpoint)
-***REMOVED******REMOVED******REMOVED******REMOVED***.toolbar {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ToolbarItem(placement: .primaryAction) {
+***REMOVED******REMOVED******REMOVED******REMOVED***.overlay(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***VStack(alignment: .trailing) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***showBasemapGallery.toggle()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "map.fill")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***HStack(alignment: .center) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "map.fill")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(showBasemapGallery ? "Hide Basemaps" : "Show Basemaps")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if showBasemapGallery {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***BasemapGallery(viewModel: viewModel)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.basemapGalleryStyle(.automatic)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: galleryWidth)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***if showBasemapGallery {
-***REMOVED******REMOVED******REMOVED******REMOVED***BasemapGallery(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***geoModel: map,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***basemapGalleryItems: basemapGalleryItems
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***alignment: .topTrailing
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.basemapGalleryStyle(.automatic)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 300)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
-***REMOVED******REMOVED***
-***REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***.onAppear() {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***SetupViewModel()
+***REMOVED******REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***private func SetupViewModel() {
+***REMOVED******REMOVED***viewModel.geoModel = map
+***REMOVED******REMOVED***viewModel.basemapGalleryItems = basemapGalleryItems
+***REMOVED******REMOVED******REMOVED***viewModel.portal = Portal.arcGISOnline(loginRequired: false)
 ***REMOVED***
 ***REMOVED***
 
