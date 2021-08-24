@@ -31,112 +31,29 @@ public struct BasemapGallery: View {
         case list
     }
     
-    /// Creates a `BasemapGallery`. Generates a list of appropriate, default basemaps.
-    /// The given default basemaps require either an API key or named-user to be signed into the app.
-    /// These basemaps are sourced from this PortalGroup:
-    /// https://www.arcgis.com/home/group.html?id=a25523e2241d4ff2bcc9182cc971c156).
-    /// `BasemapmapGallery.currentBasemap` is set to the basemap of the given
-    /// geoModel if not `nil`.
-    /// - Parameter geoModel: The `GeoModel` we're selecting the basemap for.
-    public init(geoModel: GeoModel? = nil) {
-        self.geoModel = geoModel
-        self.currentBasemap = geoModel?.basemap
-        self.portal = Portal.arcGISOnline(loginRequired: false)
+    public init(viewModel: BasemapGalleryViewModel? = nil) {
+        if let viewModel = viewModel {
+            self.viewModel = viewModel
+        }
+        else {
+            self.viewModel = BasemapGalleryViewModel()
+        }
     }
     
-    /// Creates a `BasemapGallery`. Uses the given `portal` to retrieve basemaps.
-    /// `BasemapmapGallery.currentBasemap` is set to the basemap of the given
-    /// geoModel if not `nil`.
-    /// - Parameter geoModel: The `GeoModel` we're selecting the basemap for.
-    /// - Parameter portal: The `GeoModel` we're selecting the basemap for.
-    public init(
-        geoModel: GeoModel? = nil,
-        portal: Portal
-    ) {
-        self.geoModel = geoModel
-        self.currentBasemap = geoModel?.basemap
-        self.portal = portal
-    }
+    @ObservedObject
+    public var viewModel: BasemapGalleryViewModel
     
-    /// Creates a `BasemapGallery`. Uses the given list of basemap gallery items.
-    /// `BasemapmapGallery.currentBasemap` is set to the basemap of the given
-    /// geoModel if not `nil`.
-    /// - Parameter geoModel: The `GeoModel` we're selecting the basemap for.
-    /// - Parameter basemapGalleryItems: The `GeoModel` we're selecting the basemap for.
-    public init(
-        geoModel: GeoModel? = nil,
-        basemapGalleryItems: [BasemapGalleryItem] = []
-    ) {
-        self.geoModel = geoModel
-        self.currentBasemap = geoModel?.basemap
-        self._basemapGalleryItems = State(wrappedValue: basemapGalleryItems)
-    }
-    
-    /// If the `GeoModel` is not loaded when passed to the `BasemapGallery`, then the
-    /// geoModel will be immediately loaded. The spatial reference of geoModel dictates which
-    /// basemaps from the gallery are enabled.
-    /// When an enabled basemap is selected by the user, the geoModel will have its
-    /// basemap replaced with the selected basemap.
-    public var geoModel: GeoModel? = nil
-    
-    @State
-    /// Currently applied basemap on the associated `GeoModel`. This may be a basemap
-    /// which does not exist in the gallery.
-    public var currentBasemap: Basemap? = nil
-    
-    /// The `Portal` object, if set in the constructor of the `BasemapGallery`.
-    public var portal: Portal? = nil
-
-    @State
-    /// The list of basemaps currently visible in the gallery. Items added or removed from this list will
-    /// update the gallery.
-    public var basemapGalleryItems: [BasemapGalleryItem] = []
-
-    @State
-    private var fetchBasemapsResult: Result<[BasemapGalleryItem]?, Error>? = .success([])
-
     /// The style of the basemap gallery. The gallery can be displayed as a list, grid, or automatically
     /// switch between the two based on screen real estate. Defaults to `automatic`.
     /// Set using the `basemapGalleryStyle` modifier.
     private var style: BasemapGalleryStyle = .automatic
     
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
-    
+
     public var body: some View {
-        switch style {
-        case .automatic:
-            if horizontalSizeClass == .regular {
-                GridView()
-            }
-            else {
-                ListView()
-            }
-        case .grid:
-            GridView()
-        case .list:
-            ListView()
-        }
-        Spacer()
+        GalleryView()
             .task {
-                let result = await Result {
-                    try await portal?.fetchDeveloperBasemaps()
-                }
-                switch result {
-                case .success(let basemaps):
-                    let items = basemaps.map {
-                        $0.map {
-                            BasemapGalleryItem(basemap: $0)
-                        }
-                    }
-                    _fetchBasemapsResult = State(wrappedValue: .success(items))
-//                    _basemapGalleryItems = State(wrappedValue: items)
-                case .failure(let error):
-                    self?.results = .failure(error)
-                    break
-                case .none:
-                    self?.results = .success(nil)
-                    break
-                }
+                await viewModel.fetchBasemaps()
             }
     }
     
@@ -153,6 +70,23 @@ public struct BasemapGallery: View {
 }
 
 extension BasemapGallery {
+    @ViewBuilder
+    private func GalleryView() -> some View {
+        switch style {
+        case .automatic:
+            if horizontalSizeClass == .regular {
+                GridView()
+            }
+            else {
+                ListView()
+            }
+        case .grid:
+            GridView()
+        case .list:
+            ListView()
+        }
+    }
+    
     private func GridView() -> some View {
         let columns: [GridItem] = [
             .init(.flexible(), spacing: 8.0, alignment: .top),
@@ -160,7 +94,7 @@ extension BasemapGallery {
             .init(.flexible(), spacing: 8.0, alignment: .top)
         ]
 
-        return GalleryView(columns)
+        return InternalGalleryView(columns)
     }
     
     private func ListView() -> some View {
@@ -168,20 +102,18 @@ extension BasemapGallery {
             .init(.flexible(), spacing: 8.0, alignment: .top)
         ]
 
-        return GalleryView(columns)
+        return InternalGalleryView(columns)
     }
     
-    private func GalleryView(_ columns: [GridItem]) -> some View {
+    private func InternalGalleryView(_ columns: [GridItem]) -> some View {
         return ScrollView {
             LazyVGrid(columns: columns, spacing: 4) {
-                ForEach(basemapGalleryItems) { basemapGalleryItem in
+                ForEach(viewModel.basemapGalleryItems) { basemapGalleryItem in
                     BasemapGalleryItemRow(
-                        basemapGalleryItem: basemapGalleryItem,
-                        currentBasemap: currentBasemap
+                        basemapGalleryItem: basemapGalleryItem
                     )
                         .onTapGesture {
-                            geoModel?.basemap = basemapGalleryItem.basemap
-                            currentBasemap = basemapGalleryItem.basemap
+                            viewModel.geoModel?.basemap = basemapGalleryItem.basemap
                         }
                 }
             }
@@ -192,7 +124,6 @@ extension BasemapGallery {
 
 private struct BasemapGalleryItemRow: View {
     var basemapGalleryItem: BasemapGalleryItem
-    var currentBasemap: Basemap? = nil
     
     var body: some View {
         VStack {
@@ -205,5 +136,8 @@ private struct BasemapGalleryItemRow: View {
             Text(basemapGalleryItem.name)
                 .font(.footnote)
         }
+//        if basemapGalleryItem == currentBasemap {
+//            .background(Color.accentColor)
+//        }
     }
 }
