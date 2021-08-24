@@ -68,7 +68,19 @@ struct BasemapGalleryExampleView: View {
         )
     ]
     
+    let newItem = BasemapGalleryItem(
+        basemap: Basemap(style: .arcGISMidcentury),
+        name: "ArcGIS Midcentury 2",
+        description: "A 2nd vector basemap inspired by the art and advertising of the 1950's that presents a unique design option to the ArcGIS basemaps.",
+        thumbnail: UIImage(named: "Midcentury")
+        //            thumbnailURL: URL(string: "https://www.arcgis.com/sharing/rest/content/items/52d6a28f09704f04b33761ba7c4bf93f/info/thumbnail/thumbnail1607554184831.jpeg")!
+    )
+    
+    
     let map = Map(basemapStyle: .arcGISNova)
+    
+    @ObservedObject
+    var viewModel = BasemapGalleryViewModel()
     
     @State
     var showBasemapGallery: Bool = true  // NOTE: Set to false when BasemapGallery is back in the navigation stack.
@@ -78,28 +90,54 @@ struct BasemapGalleryExampleView: View {
         scale: 1000000
     )
     
+    @Environment(\.horizontalSizeClass) var horizontalSizeClass
+    
+    // TODO: figure out of viewmodel stuff is OK
+    // TODO: get Portal loading and working
+    
+    var galleryWidth: CGFloat {
+        get {
+            if horizontalSizeClass == .regular {
+                return 300.0
+            }
+            else {
+                return 150.0
+            }
+        }
+    }
+    
     var body: some View {
-        ZStack(alignment: .topTrailing, content: {
+        ZStack(alignment: .topTrailing) {
             MapView(map: map, viewpoint: initialViewpoint)
-                .toolbar {
-                    ToolbarItem(placement: .primaryAction) {
+                .overlay(
+                    VStack(alignment: .trailing) {
                         Button {
                             showBasemapGallery.toggle()
                         } label: {
-                            Image(systemName: "map.fill")
+                            HStack(alignment: .center) {
+                                Image(systemName: "map.fill")
+                                Text(showBasemapGallery ? "Hide Basemaps" : "Show Basemaps")
+                            }
+                        }
+                        if showBasemapGallery {
+                            BasemapGallery(viewModel: viewModel)
+                                .basemapGalleryStyle(.automatic)
+                                .frame(width: galleryWidth)
                         }
                     }
-                }
-            if showBasemapGallery {
-                BasemapGallery(
-                    geoModel: map,
-                    basemapGalleryItems: basemapGalleryItems
+                        .padding(),
+                    alignment: .topTrailing
                 )
-                    .basemapGalleryStyle(.automatic)
-                    .frame(width: 300)
-                    .padding()
-            }
-        })
+                .onAppear() {
+                    SetupViewModel()
+                }
+        }
+    }
+    
+    private func SetupViewModel() {
+        viewModel.geoModel = map
+        viewModel.basemapGalleryItems = basemapGalleryItems
+//        viewModel.portal = Portal.arcGISOnline(loginRequired: false)
     }
 }
 
