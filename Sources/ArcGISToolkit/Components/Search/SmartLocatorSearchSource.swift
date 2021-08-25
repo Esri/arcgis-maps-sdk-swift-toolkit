@@ -30,8 +30,8 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
     ///   - repeatSuggestResultThreshold: The minimum number of suggestions to attempt to return.
     public init(
         displayName: String = "Smart Locator",
-        maximumResults: Int = 6,
-        maximumSuggestions: Int = 6,
+        maximumResults: Int32 = 6,
+        maximumSuggestions: Int32 = 6,
         searchArea: Geometry? = nil,
         preferredSearchLocation: Point? = nil,
         repeatSearchResultThreshold: Int = 1,
@@ -90,7 +90,7 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
         
         // Limit results to `maximumResults`.
         if allResults.count > maximumResults {
-            let dropCount = allResults.count - maximumResults
+            let dropCount = allResults.count - Int(maximumResults)
             allResults = allResults.dropLast(dropCount)
         }
         return allResults
@@ -127,7 +127,7 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
         
         // Limit results to `maximumResults`.
         if allResults.count > maximumResults {
-            let dropCount = allResults.count - maximumResults
+            let dropCount = allResults.count - Int(maximumResults)
             allResults = allResults.dropLast(dropCount)
         }
         return allResults
@@ -161,7 +161,7 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
         
         // Limit results to `maximumResults`.
         if allResults.count > maximumSuggestions {
-            let dropCount = allResults.count - maximumSuggestions
+            let dropCount = allResults.count - Int(maximumSuggestions)
             allResults = allResults.dropLast(dropCount)
         }
         return allResults
