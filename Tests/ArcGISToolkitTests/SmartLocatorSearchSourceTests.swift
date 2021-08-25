@@ -22,7 +22,7 @@ class SmartLocatorSearchSourceTests: XCTestCase {
 ***REMOVED***func testRepeatSearchResultThreshold() async throws {
 ***REMOVED******REMOVED***let locator = SmartLocatorSearchSource()
 ***REMOVED******REMOVED***locator.searchArea = Envelope.edinburgh
-
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Threshold of 0 means no re-query.
 ***REMOVED******REMOVED***locator.repeatSearchResultThreshold = 0
 ***REMOVED******REMOVED***var searchResults = try await locator.search(
@@ -43,7 +43,7 @@ class SmartLocatorSearchSourceTests: XCTestCase {
 ***REMOVED***func testRepeatSuggestResultThreshold() async throws {
 ***REMOVED******REMOVED***let locator = SmartLocatorSearchSource()
 ***REMOVED******REMOVED***locator.searchArea = Envelope.edinburgh
-
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Threshold of 0 means no re-query.
 ***REMOVED******REMOVED***locator.repeatSuggestResultThreshold = 0
 ***REMOVED******REMOVED***var suggestResults = try await locator.suggest(

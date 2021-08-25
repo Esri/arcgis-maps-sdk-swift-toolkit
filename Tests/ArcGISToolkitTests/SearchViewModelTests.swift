@@ -189,7 +189,7 @@ class SearchViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***await model.commitSearch()
 ***REMOVED******REMOVED***results = try XCTUnwrap(model.results.get())
 ***REMOVED******REMOVED***XCTAssertEqual(results.count, 0)
-
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***model.queryArea = Polygon.minneapolis
 ***REMOVED******REMOVED***await model.commitSearch()
 ***REMOVED******REMOVED***results = try XCTUnwrap(model.results.get())
