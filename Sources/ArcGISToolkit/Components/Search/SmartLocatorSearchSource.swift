@@ -30,8 +30,8 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
 ***REMOVED******REMOVED***/   - repeatSuggestResultThreshold: The minimum number of suggestions to attempt to return.
 ***REMOVED***public init(
 ***REMOVED******REMOVED***displayName: String = "Smart Locator",
-***REMOVED******REMOVED***maximumResults: Int = 6,
-***REMOVED******REMOVED***maximumSuggestions: Int = 6,
+***REMOVED******REMOVED***maximumResults: Int32 = 6,
+***REMOVED******REMOVED***maximumSuggestions: Int32 = 6,
 ***REMOVED******REMOVED***searchArea: Geometry? = nil,
 ***REMOVED******REMOVED***preferredSearchLocation: Point? = nil,
 ***REMOVED******REMOVED***repeatSearchResultThreshold: Int = 1,
@@ -90,7 +90,7 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Limit results to `maximumResults`.
 ***REMOVED******REMOVED***if allResults.count > maximumResults {
-***REMOVED******REMOVED******REMOVED***let dropCount = allResults.count - maximumResults
+***REMOVED******REMOVED******REMOVED***let dropCount = allResults.count - Int(maximumResults)
 ***REMOVED******REMOVED******REMOVED***allResults = allResults.dropLast(dropCount)
 ***REMOVED***
 ***REMOVED******REMOVED***return allResults
@@ -127,7 +127,7 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Limit results to `maximumResults`.
 ***REMOVED******REMOVED***if allResults.count > maximumResults {
-***REMOVED******REMOVED******REMOVED***let dropCount = allResults.count - maximumResults
+***REMOVED******REMOVED******REMOVED***let dropCount = allResults.count - Int(maximumResults)
 ***REMOVED******REMOVED******REMOVED***allResults = allResults.dropLast(dropCount)
 ***REMOVED***
 ***REMOVED******REMOVED***return allResults
@@ -161,7 +161,7 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Limit results to `maximumResults`.
 ***REMOVED******REMOVED***if allResults.count > maximumSuggestions {
-***REMOVED******REMOVED******REMOVED***let dropCount = allResults.count - maximumSuggestions
+***REMOVED******REMOVED******REMOVED***let dropCount = allResults.count - Int(maximumSuggestions)
 ***REMOVED******REMOVED******REMOVED***allResults = allResults.dropLast(dropCount)
 ***REMOVED***
 ***REMOVED******REMOVED***return allResults

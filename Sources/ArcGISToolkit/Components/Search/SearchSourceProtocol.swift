@@ -20,10 +20,10 @@ public protocol SearchSourceProtocol {
 ***REMOVED***var displayName: String { get set ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The maximum results to return when performing a search. Most sources default to 6.
-***REMOVED***var maximumResults: Int { get set ***REMOVED***
+***REMOVED***var maximumResults: Int32 { get set ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The maximum suggestions to return. Most sources default to 6.
-***REMOVED***var maximumSuggestions: Int { get set ***REMOVED***
+***REMOVED***var maximumSuggestions: Int32 { get set ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Area to be used as a constraint for searches and suggestions.
 ***REMOVED***var searchArea: Geometry? { get set ***REMOVED***

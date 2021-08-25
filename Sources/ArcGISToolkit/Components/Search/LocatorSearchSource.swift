@@ -31,8 +31,8 @@ public class LocatorSearchSource: ObservableObject, SearchSourceProtocol {
 ***REMOVED******REMOVED******REMOVED******REMOVED***string: "https:***REMOVED***geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer"
 ***REMOVED******REMOVED******REMOVED***)!
 ***REMOVED******REMOVED***),
-***REMOVED******REMOVED***maximumResults: Int = 6,
-***REMOVED******REMOVED***maximumSuggestions: Int = 6,
+***REMOVED******REMOVED***maximumResults: Int32 = 6,
+***REMOVED******REMOVED***maximumSuggestions: Int32 = 6,
 ***REMOVED******REMOVED***searchArea: Geometry? = nil,
 ***REMOVED******REMOVED***preferredSearchLocation: Point? = nil
 ***REMOVED***) {
@@ -48,22 +48,22 @@ public class LocatorSearchSource: ObservableObject, SearchSourceProtocol {
 ***REMOVED***public var displayName: String
 ***REMOVED***
 ***REMOVED******REMOVED***/ The maximum results to return when performing a search. Most sources default to 6
-***REMOVED***public var maximumResults: Int {
+***REMOVED***public var maximumResults: Int32 {
 ***REMOVED******REMOVED***get {
-***REMOVED******REMOVED******REMOVED***Int(geocodeParameters.maxResults)
+***REMOVED******REMOVED******REMOVED***geocodeParameters.maxResults
 ***REMOVED***
 ***REMOVED******REMOVED***set {
-***REMOVED******REMOVED******REMOVED***geocodeParameters.maxResults = Int32(newValue)
+***REMOVED******REMOVED******REMOVED***geocodeParameters.maxResults = newValue
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The maximum suggestions to return. Most sources default to 6.
-***REMOVED***public var maximumSuggestions: Int {
+***REMOVED***public var maximumSuggestions: Int32 {
 ***REMOVED******REMOVED***get {
-***REMOVED******REMOVED******REMOVED***Int(suggestParameters.maxResults)
+***REMOVED******REMOVED******REMOVED***suggestParameters.maxResults
 ***REMOVED***
 ***REMOVED******REMOVED***set {
-***REMOVED******REMOVED******REMOVED***suggestParameters.maxResults = Int32(newValue)
+***REMOVED******REMOVED******REMOVED***suggestParameters.maxResults = newValue
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
