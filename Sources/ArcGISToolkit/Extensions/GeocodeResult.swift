@@ -37,7 +37,3 @@ extension GeocodeResult {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-
-extension GeocodeResult: Identifiable {
-***REMOVED***public var id: ObjectIdentifier { ObjectIdentifier(self) ***REMOVED***
-***REMOVED***

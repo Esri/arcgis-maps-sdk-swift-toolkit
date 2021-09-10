@@ -131,6 +131,8 @@ public class SearchViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Starts a search. `selectedResult` and `results`, among other properties, are set
 ***REMOVED******REMOVED***/ asynchronously. Other query properties are read to define the parameters of the search.
+***REMOVED******REMOVED***/ - Parameter searchArea: geometry used to constrain the results.  If `nil`, the
+***REMOVED******REMOVED***/ `queryArea` property is used instead.  If `queryArea` is `nil`, results are not constrained.
 ***REMOVED***public func commitSearch(_ searchArea: Geometry? = nil) async -> Void {
 ***REMOVED******REMOVED***guard !currentQuery.trimmingCharacters(in: .whitespaces).isEmpty,
 ***REMOVED******REMOVED******REMOVED***  var source = currentSource() else { return ***REMOVED***
@@ -146,6 +148,7 @@ public class SearchViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Updates suggestions list asynchronously.
+***REMOVED***@MainActor  ***REMOVED*** TODO:  ???? yes or no or a better idea?  Maybe model is an Actor and not a class
 ***REMOVED***public func updateSuggestions() async -> Void {
 ***REMOVED******REMOVED***guard !currentQuery.trimmingCharacters(in: .whitespaces).isEmpty,
 ***REMOVED******REMOVED******REMOVED***  var source = currentSource() else { return ***REMOVED***
@@ -155,6 +158,7 @@ public class SearchViewModel: ObservableObject {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***results = .success(nil)
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** TODO: Not thread safe... (currentTask)
 ***REMOVED******REMOVED***currentTask?.cancel()
 ***REMOVED******REMOVED***currentTask = updateSuggestionsTask(source)
 ***REMOVED******REMOVED***await currentTask?.value

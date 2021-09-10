@@ -108,6 +108,7 @@ public struct SearchView: View {
 ***REMOVED******REMOVED******REMOVED***display(selectedResult: newValue)
 ***REMOVED***)
 ***REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED******REMOVED*** TODO: Look at debouncing currentQuery to 1/4 second or so.
 ***REMOVED******REMOVED******REMOVED***.task(id: searchViewModel.currentQuery) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** User typed a new character
 ***REMOVED******REMOVED******REMOVED******REMOVED***if currentSuggestion == nil {
