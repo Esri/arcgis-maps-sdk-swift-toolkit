@@ -15,12 +15,12 @@
 
 ***REMOVED***/ A modifier which adds a "search" button in a view, used to initiate an operation.
 struct EsriSearchButtonViewModifier: ViewModifier {
-***REMOVED***@Binding var performSearch: Bool
+***REMOVED***var action: () -> Void
 ***REMOVED***
 ***REMOVED***func body(content: Content) -> some View {
 ***REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED***Button(
-***REMOVED******REMOVED******REMOVED******REMOVED***action: { self.performSearch = true ***REMOVED***,
+***REMOVED******REMOVED******REMOVED******REMOVED***action: action,
 ***REMOVED******REMOVED******REMOVED******REMOVED***label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "magnifyingglass.circle.fill")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(Color(.opaqueSeparator))
@@ -32,10 +32,10 @@ struct EsriSearchButtonViewModifier: ViewModifier {
 ***REMOVED***
 
 extension View {
-***REMOVED***func esriSearchButton(performSearch: Binding<Bool>) -> some View {
+***REMOVED***func esriSearchButton(_ action: @escaping () -> Void) -> some View {
 ***REMOVED******REMOVED***ModifiedContent(
 ***REMOVED******REMOVED******REMOVED***content: self,
-***REMOVED******REMOVED******REMOVED***modifier: EsriSearchButtonViewModifier(performSearch: performSearch)
+***REMOVED******REMOVED******REMOVED***modifier: EsriSearchButtonViewModifier(action: action)
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***

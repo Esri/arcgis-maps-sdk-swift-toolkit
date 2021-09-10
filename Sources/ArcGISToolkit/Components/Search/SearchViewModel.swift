@@ -17,6 +17,7 @@ import Swift
 import Combine
 
 ***REMOVED***/ Performs searches and manages search state for a Search, or optionally without a UI connection.
+@MainActor
 public class SearchViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ Defines how many results to return; one, many, or automatic based on circumstance.
 ***REMOVED***public enum SearchResultMode {
@@ -65,9 +66,9 @@ public class SearchViewModel: ObservableObject {
 ***REMOVED***@Published
 ***REMOVED***public var currentQuery: String = "" {
 ***REMOVED******REMOVED***didSet {
-***REMOVED******REMOVED******REMOVED***results = .success(nil)
+***REMOVED******REMOVED******REMOVED***results = nil
 ***REMOVED******REMOVED******REMOVED***if currentQuery.isEmpty {
-***REMOVED******REMOVED******REMOVED******REMOVED***suggestions = .success(nil)
+***REMOVED******REMOVED******REMOVED******REMOVED***suggestions = nil
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -88,17 +89,14 @@ public class SearchViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ Collection of results. `nil` means no query has been made. An empty array means there
 ***REMOVED******REMOVED***/ were no results, and the view should show an appropriate 'no results' message.
 ***REMOVED***@Published
-***REMOVED***public private(set) var results: Result<[SearchResult]?, SearchError> = .success(nil) {
+***REMOVED***public private(set) var results: Result<[SearchResult], SearchError>? {
 ***REMOVED******REMOVED***didSet {
 ***REMOVED******REMOVED******REMOVED***switch results {
 ***REMOVED******REMOVED******REMOVED***case .success(let results):
-***REMOVED******REMOVED******REMOVED******REMOVED***if results != nil && results?.count == 1 {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedResult = results?.first
+***REMOVED******REMOVED******REMOVED******REMOVED***if results.count == 1 {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedResult = results.first
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedResult = nil
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***case .failure(_):
+***REMOVED******REMOVED******REMOVED***default:
 ***REMOVED******REMOVED******REMOVED******REMOVED***selectedResult = nil
 ***REMOVED******REMOVED***
 ***REMOVED***
@@ -121,7 +119,7 @@ public class SearchViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ are no suggestions, `nil` when no suggestions have been requested. If the list is empty,
 ***REMOVED******REMOVED***/ a useful 'no results' message should be shown by the view.
 ***REMOVED***@Published
-***REMOVED***public private(set) var suggestions: Result<[SearchSuggestion]?, SearchError> = .success(nil)
+***REMOVED***public private(set) var suggestions: Result<[SearchSuggestion], SearchError>?
 ***REMOVED***
 ***REMOVED***private var subscriptions = Set<AnyCancellable>()
 ***REMOVED***
@@ -129,39 +127,52 @@ public class SearchViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ prior to starting another async task.
 ***REMOVED***private var currentTask: Task<Void, Never>?
 ***REMOVED***
+***REMOVED***private func makeEffectiveSource(
+***REMOVED******REMOVED***with searchArea: Geometry?,
+***REMOVED******REMOVED***preferredSearchLocation: Point?
+***REMOVED***) -> SearchSourceProtocol? {
+***REMOVED******REMOVED***guard var source = currentSource() else { return nil ***REMOVED***
+***REMOVED******REMOVED***source.searchArea = searchArea ?? queryArea
+***REMOVED******REMOVED***source.preferredSearchLocation = preferredSearchLocation
+***REMOVED******REMOVED***return source
+***REMOVED***
+***REMOVED***
 ***REMOVED******REMOVED***/ Starts a search. `selectedResult` and `results`, among other properties, are set
 ***REMOVED******REMOVED***/ asynchronously. Other query properties are read to define the parameters of the search.
 ***REMOVED******REMOVED***/ - Parameter searchArea: geometry used to constrain the results.  If `nil`, the
 ***REMOVED******REMOVED***/ `queryArea` property is used instead.  If `queryArea` is `nil`, results are not constrained.
-***REMOVED***public func commitSearch(_ searchArea: Geometry? = nil) async -> Void {
+***REMOVED***public func commitSearch(_ searchArea: Geometry? = nil) {
 ***REMOVED******REMOVED***guard !currentQuery.trimmingCharacters(in: .whitespaces).isEmpty,
-***REMOVED******REMOVED******REMOVED***  var source = currentSource() else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED***  let source = makeEffectiveSource(with: searchArea, preferredSearchLocation: queryCenter) else {
+***REMOVED******REMOVED******REMOVED******REMOVED***  return
+***REMOVED***  ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***source.searchArea = searchArea != nil ? searchArea : queryArea
-***REMOVED******REMOVED***source.preferredSearchLocation = queryCenter
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***suggestions = .success(nil)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***currentTask?.cancel()
-***REMOVED******REMOVED***currentTask = commitSearchTask(source)
-***REMOVED******REMOVED***await currentTask?.value
+***REMOVED******REMOVED***kickoffTask(commitSearchTask(source))
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Updates suggestions list asynchronously.
 ***REMOVED***@MainActor  ***REMOVED*** TODO:  ???? yes or no or a better idea?  Maybe model is an Actor and not a class
-***REMOVED***public func updateSuggestions() async -> Void {
+***REMOVED***public func updateSuggestions() {
 ***REMOVED******REMOVED***guard !currentQuery.trimmingCharacters(in: .whitespaces).isEmpty,
-***REMOVED******REMOVED******REMOVED***  var source = currentSource() else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED***  let source = makeEffectiveSource(with: queryArea, preferredSearchLocation: queryCenter) else {
+***REMOVED******REMOVED******REMOVED******REMOVED***  return
+***REMOVED***  ***REMOVED***
+***REMOVED******REMOVED***guard currentSuggestion == nil else {
+***REMOVED******REMOVED******REMOVED******REMOVED*** don't update suggestions if currently searching for one
+***REMOVED******REMOVED******REMOVED***return
+***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***source.searchArea = queryArea
-***REMOVED******REMOVED***source.preferredSearchLocation = queryCenter
+***REMOVED******REMOVED***kickoffTask(updateSuggestionsTask(source))
+***REMOVED***
+***REMOVED***
+***REMOVED***@Published
+***REMOVED***public var currentSuggestion: SearchSuggestion? {
+***REMOVED******REMOVED***didSet {
+***REMOVED******REMOVED******REMOVED***if let currentSuggestion = currentSuggestion {
+***REMOVED******REMOVED******REMOVED******REMOVED***currentQuery = currentSuggestion.displayTitle
+***REMOVED******REMOVED******REMOVED******REMOVED***kickoffTask(acceptSuggestionTask(currentSuggestion))
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***results = .success(nil)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** TODO: Not thread safe... (currentTask)
-***REMOVED******REMOVED***currentTask?.cancel()
-***REMOVED******REMOVED***currentTask = updateSuggestionsTask(source)
-***REMOVED******REMOVED***await currentTask?.value
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Commits a search from a specific suggestion. Results will be set asynchronously. Behavior is
@@ -174,11 +185,17 @@ public class SearchViewModel: ObservableObject {
 ***REMOVED***) async -> Void {
 ***REMOVED******REMOVED***currentQuery = searchSuggestion.displayTitle
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***suggestions = .success(nil)
+***REMOVED******REMOVED***suggestions = nil
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***currentTask?.cancel()
 ***REMOVED******REMOVED***currentTask = acceptSuggestionTask(searchSuggestion)
 ***REMOVED******REMOVED***await currentTask?.value
+***REMOVED***
+***REMOVED***
+***REMOVED***private func kickoffTask(_ task: Task<(), Never>) {
+***REMOVED******REMOVED***suggestions = nil
+***REMOVED******REMOVED***currentTask?.cancel()
+***REMOVED******REMOVED***currentTask = task
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Clears the search. This will set the results list to null, clear the result selection, clear suggestions,
@@ -190,100 +207,77 @@ public class SearchViewModel: ObservableObject {
 ***REMOVED***
 
 extension SearchViewModel {
-***REMOVED***private func commitSearchTask(
-***REMOVED******REMOVED***_ source: SearchSourceProtocol
-***REMOVED***) -> Task<(), Never> {
-***REMOVED******REMOVED***let task = Task(operation: {
-***REMOVED******REMOVED******REMOVED***let searchResult = await Result {
-***REMOVED******REMOVED******REMOVED******REMOVED***try await source.search(currentQuery)
+***REMOVED***private func commitSearchTask(_ source: SearchSourceProtocol) -> Task<(), Never> {
+***REMOVED******REMOVED***Task {
+***REMOVED******REMOVED******REMOVED***do {
+***REMOVED******REMOVED******REMOVED******REMOVED***try await process(searchResults: source.search(currentQuery))
+***REMOVED******REMOVED*** catch is CancellationError {
+***REMOVED******REMOVED******REMOVED******REMOVED***results = nil
+***REMOVED******REMOVED*** catch {
+***REMOVED******REMOVED******REMOVED******REMOVED***results = .failure(SearchError(error))
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***processSearchResults(searchResult)
-***REMOVED***)
-***REMOVED******REMOVED***return task
 ***REMOVED***
 ***REMOVED***
-***REMOVED***private func updateSuggestionsTask(
-***REMOVED******REMOVED***_ source: SearchSourceProtocol
-***REMOVED***) -> Task<(), Never> {
-***REMOVED******REMOVED***let task = Task(operation: {
+***REMOVED***
+***REMOVED***private func updateSuggestionsTask(_ source: SearchSourceProtocol) -> Task<(), Never> {
+***REMOVED******REMOVED***Task {
 ***REMOVED******REMOVED******REMOVED***let suggestResult = await Result {
 ***REMOVED******REMOVED******REMOVED******REMOVED***try await source.suggest(currentQuery)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***DispatchQueue.main.sync {
-***REMOVED******REMOVED******REMOVED******REMOVED***switch suggestResult {
-***REMOVED******REMOVED******REMOVED******REMOVED***case .success(let suggestResults):
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***suggestions = .success(suggestResults)
-***REMOVED******REMOVED******REMOVED******REMOVED***case .failure(let error):
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***suggestions = .failure(SearchError(error))
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***break
-***REMOVED******REMOVED******REMOVED******REMOVED***case .none:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***suggestions = .success(nil)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***break
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED***)
-***REMOVED******REMOVED***return task
-***REMOVED***
-***REMOVED***
-***REMOVED***private func acceptSuggestionTask(
-***REMOVED******REMOVED***_ searchSuggestion: SearchSuggestion
-***REMOVED***) -> Task<(), Never> {
-***REMOVED******REMOVED***let task = Task(operation: {
-***REMOVED******REMOVED******REMOVED***let searchResult = await Result {
-***REMOVED******REMOVED******REMOVED******REMOVED***try await searchSuggestion.owningSource.search(searchSuggestion)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***processSearchResults(
-***REMOVED******REMOVED******REMOVED******REMOVED***searchResult,
-***REMOVED******REMOVED******REMOVED******REMOVED***isCollection: searchSuggestion.suggestResult?.isCollection ?? true
-***REMOVED******REMOVED******REMOVED***)
-***REMOVED***)
-***REMOVED******REMOVED***return task
-***REMOVED***
-***REMOVED***
-***REMOVED***private func processSearchResults(
-***REMOVED******REMOVED***_ result: Result<[SearchResult], Error>?,
-***REMOVED******REMOVED***isCollection: Bool = true
-***REMOVED***) {
-***REMOVED******REMOVED***guard let result = result else {
-***REMOVED******REMOVED******REMOVED***results = .success([])
-***REMOVED******REMOVED******REMOVED***return
-***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***DispatchQueue.main.sync {
-***REMOVED******REMOVED******REMOVED***var searchResults = [SearchResult]()
-***REMOVED******REMOVED******REMOVED***var searchError: Error?
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***switch result {
-***REMOVED******REMOVED******REMOVED***case .success(let results):
-***REMOVED******REMOVED******REMOVED******REMOVED***switch (resultMode) {
-***REMOVED******REMOVED******REMOVED******REMOVED***case .single:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let firstResult = results.first {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***searchResults = [firstResult]
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***case .multiple:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***searchResults = results
-***REMOVED******REMOVED******REMOVED******REMOVED***case .automatic:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if isCollection {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***searchResults = results
-***REMOVED******REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let firstResult = results.first {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***searchResults = [firstResult]
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***switch suggestResult {
+***REMOVED******REMOVED******REMOVED***case .success(let suggestResults):
+***REMOVED******REMOVED******REMOVED******REMOVED***suggestions = .success(suggestResults)
 ***REMOVED******REMOVED******REMOVED***case .failure(let error):
-***REMOVED******REMOVED******REMOVED******REMOVED***searchError = error
+***REMOVED******REMOVED******REMOVED******REMOVED***suggestions = .failure(SearchError(error))
+***REMOVED******REMOVED******REMOVED******REMOVED***break
+***REMOVED******REMOVED******REMOVED***case nil:
+***REMOVED******REMOVED******REMOVED******REMOVED***suggestions = nil
+***REMOVED******REMOVED******REMOVED******REMOVED***break
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***if let error = searchError {
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***private func acceptSuggestionTask(_ searchSuggestion: SearchSuggestion) -> Task<(), Never> {
+***REMOVED******REMOVED***Task {
+***REMOVED******REMOVED******REMOVED***do {
+***REMOVED******REMOVED******REMOVED******REMOVED***try await process(searchResults: searchSuggestion.owningSource.search(searchSuggestion))
+***REMOVED******REMOVED*** catch is CancellationError {
+***REMOVED******REMOVED******REMOVED******REMOVED***results = nil
+***REMOVED******REMOVED*** catch {
 ***REMOVED******REMOVED******REMOVED******REMOVED***results = .failure(SearchError(error))
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***else {
-***REMOVED******REMOVED******REMOVED******REMOVED***results = .success(searchResults)
+***REMOVED******REMOVED******REMOVED******REMOVED*** once we are done searching for the suggestion, then reset it to nil
+***REMOVED******REMOVED******REMOVED***currentSuggestion = nil
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***private func process(searchResults: [SearchResult], isCollection: Bool = true) {
+***REMOVED******REMOVED***let effectiveResults: [SearchResult]
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***switch (resultMode) {
+***REMOVED******REMOVED***case .single:
+***REMOVED******REMOVED******REMOVED***if let firstResult = searchResults.first {
+***REMOVED******REMOVED******REMOVED******REMOVED***effectiveResults = [firstResult]
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***effectiveResults = []
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***case .multiple:
+***REMOVED******REMOVED******REMOVED***effectiveResults = searchResults
+***REMOVED******REMOVED***case .automatic:
+***REMOVED******REMOVED******REMOVED***if isCollection {
+***REMOVED******REMOVED******REMOVED******REMOVED***effectiveResults = searchResults
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***if let firstResult = searchResults.first {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***effectiveResults = [firstResult]
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***effectiveResults = []
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***results = .success(effectiveResults)
 ***REMOVED***
 ***REMOVED***
 
