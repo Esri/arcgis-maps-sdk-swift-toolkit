@@ -17,6 +17,7 @@ import ArcGIS
 import Combine
 
 /// Performs searches and manages search state for a Search, or optionally without a UI connection.
+@MainActor
 public class SearchViewModel: ObservableObject {
     /// Defines how many results to return; one, many, or automatic based on circumstance.
     public enum SearchResultMode {
@@ -65,9 +66,9 @@ public class SearchViewModel: ObservableObject {
     @Published
     public var currentQuery: String = "" {
         didSet {
-            results = .success(nil)
+            results = nil
             if currentQuery.isEmpty {
-                suggestions = .success(nil)
+                suggestions = nil
             }
         }
     }
@@ -88,17 +89,14 @@ public class SearchViewModel: ObservableObject {
     /// Collection of results. `nil` means no query has been made. An empty array means there
     /// were no results, and the view should show an appropriate 'no results' message.
     @Published
-    public private(set) var results: Result<[SearchResult]?, SearchError> = .success(nil) {
+    public private(set) var results: Result<[SearchResult], SearchError>? {
         didSet {
             switch results {
             case .success(let results):
-                if results != nil && results?.count == 1 {
-                    selectedResult = results?.first
+                if results.count == 1 {
+                    selectedResult = results.first
                 }
-                else {
-                    selectedResult = nil
-                }
-            case .failure(_):
+            default:
                 selectedResult = nil
             }
         }
@@ -121,7 +119,7 @@ public class SearchViewModel: ObservableObject {
     /// are no suggestions, `nil` when no suggestions have been requested. If the list is empty,
     /// a useful 'no results' message should be shown by the view.
     @Published
-    public private(set) var suggestions: Result<[SearchSuggestion]?, SearchError> = .success(nil)
+    public private(set) var suggestions: Result<[SearchSuggestion], SearchError>?
     
     private var subscriptions = Set<AnyCancellable>()
     
@@ -129,39 +127,52 @@ public class SearchViewModel: ObservableObject {
     /// prior to starting another async task.
     private var currentTask: Task<Void, Never>?
     
+    private func makeEffectiveSource(
+        with searchArea: Geometry?,
+        preferredSearchLocation: Point?
+    ) -> SearchSourceProtocol? {
+        guard var source = currentSource() else { return nil }
+        source.searchArea = searchArea ?? queryArea
+        source.preferredSearchLocation = preferredSearchLocation
+        return source
+    }
+    
     /// Starts a search. `selectedResult` and `results`, among other properties, are set
     /// asynchronously. Other query properties are read to define the parameters of the search.
     /// - Parameter searchArea: geometry used to constrain the results.  If `nil`, the
     /// `queryArea` property is used instead.  If `queryArea` is `nil`, results are not constrained.
-    public func commitSearch(_ searchArea: Geometry? = nil) async -> Void {
+    public func commitSearch(_ searchArea: Geometry? = nil) {
         guard !currentQuery.trimmingCharacters(in: .whitespaces).isEmpty,
-              var source = currentSource() else { return }
+              let source = makeEffectiveSource(with: searchArea, preferredSearchLocation: queryCenter) else {
+                  return
+              }
         
-        source.searchArea = searchArea != nil ? searchArea : queryArea
-        source.preferredSearchLocation = queryCenter
-        
-        suggestions = .success(nil)
-        
-        currentTask?.cancel()
-        currentTask = commitSearchTask(source)
-        await currentTask?.value
+        kickoffTask(commitSearchTask(source))
     }
     
     /// Updates suggestions list asynchronously.
     @MainActor  // TODO:  ???? yes or no or a better idea?  Maybe model is an Actor and not a class
-    public func updateSuggestions() async -> Void {
+    public func updateSuggestions() {
         guard !currentQuery.trimmingCharacters(in: .whitespaces).isEmpty,
-              var source = currentSource() else { return }
+              let source = makeEffectiveSource(with: queryArea, preferredSearchLocation: queryCenter) else {
+                  return
+              }
+        guard currentSuggestion == nil else {
+            // don't update suggestions if currently searching for one
+            return
+        }
         
-        source.searchArea = queryArea
-        source.preferredSearchLocation = queryCenter
-        
-        results = .success(nil)
-        
-        // TODO: Not thread safe... (currentTask)
-        currentTask?.cancel()
-        currentTask = updateSuggestionsTask(source)
-        await currentTask?.value
+        kickoffTask(updateSuggestionsTask(source))
+    }
+    
+    @Published
+    public var currentSuggestion: SearchSuggestion? {
+        didSet {
+            if let currentSuggestion = currentSuggestion {
+                currentQuery = currentSuggestion.displayTitle
+                kickoffTask(acceptSuggestionTask(currentSuggestion))
+            }
+        }
     }
     
     /// Commits a search from a specific suggestion. Results will be set asynchronously. Behavior is
@@ -174,11 +185,17 @@ public class SearchViewModel: ObservableObject {
     ) async -> Void {
         currentQuery = searchSuggestion.displayTitle
         
-        suggestions = .success(nil)
+        suggestions = nil
         
         currentTask?.cancel()
         currentTask = acceptSuggestionTask(searchSuggestion)
         await currentTask?.value
+    }
+    
+    private func kickoffTask(_ task: Task<(), Never>) {
+        suggestions = nil
+        currentTask?.cancel()
+        currentTask = task
     }
     
     /// Clears the search. This will set the results list to null, clear the result selection, clear suggestions,
@@ -190,100 +207,77 @@ public class SearchViewModel: ObservableObject {
 }
 
 extension SearchViewModel {
-    private func commitSearchTask(
-        _ source: SearchSourceProtocol
-    ) -> Task<(), Never> {
-        let task = Task(operation: {
-            let searchResult = await Result {
-                try await source.search(currentQuery)
+    private func commitSearchTask(_ source: SearchSourceProtocol) -> Task<(), Never> {
+        Task {
+            do {
+                try await process(searchResults: source.search(currentQuery))
+            } catch is CancellationError {
+                results = nil
+            } catch {
+                results = .failure(SearchError(error))
             }
-            processSearchResults(searchResult)
-        })
-        return task
+        }
     }
     
-    private func updateSuggestionsTask(
-        _ source: SearchSourceProtocol
-    ) -> Task<(), Never> {
-        let task = Task(operation: {
+    private func updateSuggestionsTask(_ source: SearchSourceProtocol) -> Task<(), Never> {
+        Task {
             let suggestResult = await Result {
                 try await source.suggest(currentQuery)
             }
             
-            DispatchQueue.main.sync {
-                switch suggestResult {
-                case .success(let suggestResults):
-                    suggestions = .success(suggestResults)
-                case .failure(let error):
-                    suggestions = .failure(SearchError(error))
-                    break
-                case .none:
-                    suggestions = .success(nil)
-                    break
-                }
-            }
-        })
-        return task
-    }
-    
-    private func acceptSuggestionTask(
-        _ searchSuggestion: SearchSuggestion
-    ) -> Task<(), Never> {
-        let task = Task(operation: {
-            let searchResult = await Result {
-                try await searchSuggestion.owningSource.search(searchSuggestion)
-            }
-            
-            processSearchResults(
-                searchResult,
-                isCollection: searchSuggestion.suggestResult?.isCollection ?? true
-            )
-        })
-        return task
-    }
-    
-    private func processSearchResults(
-        _ result: Result<[SearchResult], Error>?,
-        isCollection: Bool = true
-    ) {
-        guard let result = result else {
-            results = .success([])
-            return
-        }
-        
-        DispatchQueue.main.sync {
-            var searchResults = [SearchResult]()
-            var searchError: Error?
-            
-            switch result {
-            case .success(let results):
-                switch (resultMode) {
-                case .single:
-                    if let firstResult = results.first {
-                        searchResults = [firstResult]
-                    }
-                case .multiple:
-                    searchResults = results
-                case .automatic:
-                    if isCollection {
-                        searchResults = results
-                    } else {
-                        if let firstResult = results.first {
-                            searchResults = [firstResult]
-                        }
-                    }
-                }
+            switch suggestResult {
+            case .success(let suggestResults):
+                suggestions = .success(suggestResults)
             case .failure(let error):
-                searchError = error
+                suggestions = .failure(SearchError(error))
+                break
+            case nil:
+                suggestions = nil
+                break
             }
-            
-            if let error = searchError {
+        }
+    }
+    
+    private func acceptSuggestionTask(_ searchSuggestion: SearchSuggestion) -> Task<(), Never> {
+        Task {
+            do {
+                try await process(searchResults: searchSuggestion.owningSource.search(searchSuggestion))
+            } catch is CancellationError {
+                results = nil
+            } catch {
                 results = .failure(SearchError(error))
             }
-            else {
-                results = .success(searchResults)
+            // once we are done searching for the suggestion, then reset it to nil
+            currentSuggestion = nil
+        }
+    }
+    
+    private func process(searchResults: [SearchResult], isCollection: Bool = true) {
+        let effectiveResults: [SearchResult]
+        
+        switch (resultMode) {
+        case .single:
+            if let firstResult = searchResults.first {
+                effectiveResults = [firstResult]
+            } else {
+                effectiveResults = []
+            }
+        case .multiple:
+            effectiveResults = searchResults
+        case .automatic:
+            if isCollection {
+                effectiveResults = searchResults
+            } else {
+                if let firstResult = searchResults.first {
+                    effectiveResults = [firstResult]
+                }
+                else {
+                    effectiveResults = []
+                }
             }
         }
+        
+        results = .success(effectiveResults)
     }
 }
 

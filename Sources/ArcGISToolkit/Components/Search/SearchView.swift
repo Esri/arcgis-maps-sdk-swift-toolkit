@@ -60,13 +60,10 @@ public struct SearchView: View {
     /// Note: this is set using the `noResultMessage` modifier.
     private var noResultMessage = "No results found"
     
-    /// Indicates that the `SearchViewModel` should start a search.
-    @State
-    private var shouldCommitSearch = false
     
-    /// The current suggestion selected by the user.
-    @State
-    private var currentSuggestion: SearchSuggestion?
+//    /// The current suggestion selected by the user.
+//    @State
+//    private var currentSuggestion: SearchSuggestion?
     
     /// Determines whether the results lists are displayed.
     @State
@@ -79,56 +76,43 @@ public struct SearchView: View {
                 text: $searchViewModel.currentQuery
             ) { _ in
             } onCommit: {
-                shouldCommitSearch = true
+                searchViewModel.commitSearch()
             }
             .esriDeleteTextButton(text: $searchViewModel.currentQuery)
-            .esriSearchButton(performSearch: $shouldCommitSearch)
+            .esriSearchButton { searchViewModel.commitSearch() }
             .esriShowResultsButton(
                 isEnabled: enableResultListView,
                 isHidden: $isResultListViewHidden
             )
             .esriBorder()
             if enableResultListView, !isResultListViewHidden {
-                SearchResultList(
-                    searchResults: searchViewModel.results,
-                    selectedResult: $searchViewModel.selectedResult,
-                    noResultMessage: noResultMessage
-                )
-                SearchSuggestionList(
-                    suggestionResults: searchViewModel.suggestions,
-                    currentSuggestion: $currentSuggestion,
-                    noResultMessage: noResultMessage
-                )
+                if let results = searchViewModel.results {
+                    SearchResultList(
+                        searchResults: results,
+                        selectedResult: $searchViewModel.selectedResult,
+                        noResultMessage: noResultMessage
+                    )
+                }
+                if let suggestions = searchViewModel.suggestions {
+                    SearchSuggestionList(
+                        suggestionResults: suggestions,
+                        currentSuggestion: $searchViewModel.currentSuggestion,
+                        noResultMessage: noResultMessage
+                    )
+                }
             }
         }
-        .onChange(of: searchViewModel.results, perform: { newValue in
-            display(searchResults: newValue)
-        })
-        .onChange(of: searchViewModel.selectedResult, perform: { newValue in
-            display(selectedResult: newValue)
-        })
+        .onChange(of: searchViewModel.results) {
+            display(searchResults: $0)
+        }
+        .onChange(of: searchViewModel.selectedResult) {
+            display(selectedResult: $0)
+        }
+        .onReceive(searchViewModel.$currentQuery/*.debounce(for: .seconds(0.5), scheduler: DispatchQueue.main)*/) { _ in
+            searchViewModel.updateSuggestions()
+        }
+        
         Spacer()
-        // TODO: Look at debouncing currentQuery to 1/4 second or so.
-            .task(id: searchViewModel.currentQuery) {
-                // User typed a new character
-                if currentSuggestion == nil {
-                    await searchViewModel.updateSuggestions()
-                }
-            }
-            .task(id: shouldCommitSearch) {
-                if shouldCommitSearch {
-                    // User committed changes (hit Enter/Search button)
-                    await searchViewModel.commitSearch()
-                    shouldCommitSearch.toggle()
-                }
-            }
-            .task(id: currentSuggestion) {
-                if let suggestion = currentSuggestion {
-                    // User selected a suggestion.
-                    await searchViewModel.acceptSuggestion(suggestion)
-                    currentSuggestion = nil
-                }
-            }
     }
     
     // MARK: Modifiers
@@ -139,7 +123,7 @@ public struct SearchView: View {
     /// Defaults to `true`.
     /// - Parameter enableResultListView: The new value.
     /// - Returns: The `SearchView`.
-    public func enableResultListView(_ enableResultListView: Bool) -> SearchView {
+    public func enableResultListView(_ enableResultListView: Bool) -> Self {
         var copy = self
         copy.enableResultListView = enableResultListView
         return copy
@@ -148,7 +132,7 @@ public struct SearchView: View {
     /// Message to show when there are no results or suggestions.  Defaults to "No results found".
     /// - Parameter noResultMessage: The new value.
     /// - Returns: The `SearchView`.
-    public func noResultMessage(_ noResultMessage: String) -> SearchView {
+    public func noResultMessage(_ noResultMessage: String) -> Self {
         var copy = self
         copy.noResultMessage = noResultMessage
         return copy
@@ -156,11 +140,11 @@ public struct SearchView: View {
 }
 
 extension SearchView {
-    private func display(searchResults: Result<[SearchResult]?, SearchError>) {
+    private func display(searchResults: Result<[SearchResult], SearchError>?) {
         switch searchResults {
         case .success(let results):
             var resultGraphics = [Graphic]()
-            results?.forEach({ result in
+            results.forEach({ result in
                 if let graphic = result.geoElement as? Graphic {
                     graphic.updateGraphic(withResult: result)
                     resultGraphics.append(graphic)
@@ -180,8 +164,9 @@ extension SearchView {
             else {
                 viewpoint?.wrappedValue = nil
             }
-        case .failure(_):
-            break
+        default:
+            resultsOverlay?.wrappedValue.removeAllGraphics()
+            viewpoint?.wrappedValue = nil
         }
     }
     
@@ -192,7 +177,7 @@ extension SearchView {
 }
 
 struct SearchResultList: View {
-    var searchResults: Result<[SearchResult]?, SearchError>
+    var searchResults: Result<[SearchResult], SearchError>
     @Binding var selectedResult: SearchResult?
     var noResultMessage: String
     
@@ -200,8 +185,7 @@ struct SearchResultList: View {
         Group {
             switch searchResults {
             case .success(let results):
-                if let results = results, results.count > 0 {
-                    if results.count > 1 {
+                if results.count > 1 {
                         // Only show the list if we have more than one result.
                         PlainList {
                             ForEach(results) { result in
@@ -210,10 +194,9 @@ struct SearchResultList: View {
                                         selectedResult = result
                                     }
                             }
-                        }
                     }
                 }
-                else if results != nil {
+                else if results.isEmpty {
                     PlainList {
                         Text(noResultMessage)
                     }
@@ -229,15 +212,15 @@ struct SearchResultList: View {
 }
 
 struct SearchSuggestionList: View {
-    var suggestionResults: Result<[SearchSuggestion]?, SearchError>
+    var suggestionResults: Result<[SearchSuggestion], SearchError>
     @Binding var currentSuggestion: SearchSuggestion?
     var noResultMessage: String
     
     var body: some View {
         Group {
             switch suggestionResults {
-            case .success(let results):
-                if let suggestions = results, suggestions.count > 0 {
+            case .success(let suggestions):
+                if !suggestions.isEmpty {
                     PlainList {
                         if suggestions.count > 0 {
                             ForEach(suggestions) { suggestion in
@@ -249,7 +232,7 @@ struct SearchSuggestionList: View {
                         }
                     }
                 }
-                else if results != nil {
+                else {
                     PlainList {
                         Text(noResultMessage)
                     }
