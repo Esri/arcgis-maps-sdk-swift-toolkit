@@ -131,6 +131,8 @@ public class SearchViewModel: ObservableObject {
     
     /// Starts a search. `selectedResult` and `results`, among other properties, are set
     /// asynchronously. Other query properties are read to define the parameters of the search.
+    /// - Parameter searchArea: geometry used to constrain the results.  If `nil`, the
+    /// `queryArea` property is used instead.  If `queryArea` is `nil`, results are not constrained.
     public func commitSearch(_ searchArea: Geometry? = nil) async -> Void {
         guard !currentQuery.trimmingCharacters(in: .whitespaces).isEmpty,
               var source = currentSource() else { return }
@@ -146,6 +148,7 @@ public class SearchViewModel: ObservableObject {
     }
     
     /// Updates suggestions list asynchronously.
+    @MainActor  // TODO:  ???? yes or no or a better idea?  Maybe model is an Actor and not a class
     public func updateSuggestions() async -> Void {
         guard !currentQuery.trimmingCharacters(in: .whitespaces).isEmpty,
               var source = currentSource() else { return }
@@ -155,6 +158,7 @@ public class SearchViewModel: ObservableObject {
         
         results = .success(nil)
         
+        // TODO: Not thread safe... (currentTask)
         currentTask?.cancel()
         currentTask = updateSuggestionsTask(source)
         await currentTask?.value
