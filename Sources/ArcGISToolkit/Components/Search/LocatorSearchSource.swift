@@ -42,6 +42,8 @@ public class LocatorSearchSource: ObservableObject, SearchSourceProtocol {
 ***REMOVED******REMOVED***self.maximumSuggestions = maximumSuggestions
 ***REMOVED******REMOVED***self.searchArea = searchArea
 ***REMOVED******REMOVED***self.preferredSearchLocation = preferredSearchLocation
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***self.geocodeParameters.addResultAttributeName("*")
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Name to show when presenting this source in the UI.
