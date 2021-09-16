@@ -65,11 +65,9 @@ public class SearchViewModel: ObservableObject {
     /// Tracks the current user-entered query. This property drives both suggestions and searches.
     @Published
     public var currentQuery: String = "" {
-        didSet {
+        willSet {
             results = nil
-            if currentQuery.isEmpty {
-                suggestions = nil
-            }
+            suggestions = nil
         }
     }
     
