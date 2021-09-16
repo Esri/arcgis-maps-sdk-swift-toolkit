@@ -117,6 +117,14 @@ class SearchViewModelTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED*** Changing the `currentQuery` should set results to nil.
 ***REMOVED******REMOVED***model.currentQuery = "Coffee in Edinburgh"
 ***REMOVED******REMOVED***try XCTAssertNil(model.suggestions.get())
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Changing current query after search with 1 result
+***REMOVED******REMOVED******REMOVED*** should set `selectedResult` to nil
+***REMOVED******REMOVED***model.currentQuery = "Magers & Quinn Bookseller"
+***REMOVED******REMOVED***await model.commitSearch()
+***REMOVED******REMOVED***XCTAssertNotNil(model.selectedResult)
+***REMOVED******REMOVED***model.currentQuery = "Hotel"
+***REMOVED******REMOVED***XCTAssertNil(model.selectedResult)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func testQueryArea() async throws {

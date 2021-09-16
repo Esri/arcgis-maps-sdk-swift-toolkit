@@ -65,11 +65,9 @@ public class SearchViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ Tracks the current user-entered query. This property drives both suggestions and searches.
 ***REMOVED***@Published
 ***REMOVED***public var currentQuery: String = "" {
-***REMOVED******REMOVED***didSet {
+***REMOVED******REMOVED***willSet {
 ***REMOVED******REMOVED******REMOVED***results = nil
-***REMOVED******REMOVED******REMOVED***if currentQuery.isEmpty {
-***REMOVED******REMOVED******REMOVED******REMOVED***suggestions = nil
-***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***suggestions = nil
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***

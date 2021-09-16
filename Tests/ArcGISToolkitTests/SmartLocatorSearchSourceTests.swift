@@ -61,6 +61,20 @@ class SmartLocatorSearchSourceTests: XCTestCase {
 ***REMOVED******REMOVED***XCTAssertGreaterThanOrEqual(results.count, 1)
 ***REMOVED***
 ***REMOVED***
+***REMOVED***func testLocalLocatorTask() async throws {
+***REMOVED******REMOVED***let locatorTask = LocatorTask(url: URL(fileURLWithPath: "/Users/mark1113/san-diego/SanDiego_StreetAddress.loc/"));
+***REMOVED******REMOVED***let locator = SmartLocatorSearchSource(locatorTask: locatorTask)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let suggestResults = try await locator.suggest("Coffee")
+***REMOVED******REMOVED***let suggestions = try XCTUnwrap(suggestResults)
+***REMOVED******REMOVED***XCTAssertEqual(suggestions.count, 3)
+
+***REMOVED******REMOVED***let searchResults = try await locator.search("Hotel")
+***REMOVED******REMOVED***let results = try XCTUnwrap(searchResults)
+***REMOVED******REMOVED***XCTAssertEqual(results.count, 2)
+***REMOVED***
+
+***REMOVED***
 
 extension Envelope {
 ***REMOVED***static let edinburgh = Envelope(

@@ -30,6 +30,11 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
 ***REMOVED******REMOVED***/   - repeatSuggestResultThreshold: The minimum number of suggestions to attempt to return.
 ***REMOVED***public init(
 ***REMOVED******REMOVED***displayName: String = "Smart Locator",
+***REMOVED******REMOVED***locatorTask: LocatorTask = LocatorTask(
+***REMOVED******REMOVED******REMOVED***url: URL(
+***REMOVED******REMOVED******REMOVED******REMOVED***string: "https:***REMOVED***geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer"
+***REMOVED******REMOVED******REMOVED***)!
+***REMOVED******REMOVED***),
 ***REMOVED******REMOVED***maximumResults: Int32 = 6,
 ***REMOVED******REMOVED***maximumSuggestions: Int32 = 6,
 ***REMOVED******REMOVED***searchArea: Geometry? = nil,
@@ -39,6 +44,7 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
 ***REMOVED***) {
 ***REMOVED******REMOVED***super.init(
 ***REMOVED******REMOVED******REMOVED***displayName: displayName,
+***REMOVED******REMOVED******REMOVED***locatorTask: locatorTask,
 ***REMOVED******REMOVED******REMOVED***maximumResults: maximumResults,
 ***REMOVED******REMOVED******REMOVED***maximumSuggestions: maximumSuggestions,
 ***REMOVED******REMOVED******REMOVED***searchArea: searchArea,
