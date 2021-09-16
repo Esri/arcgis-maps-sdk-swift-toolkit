@@ -60,6 +60,20 @@ class SmartLocatorSearchSourceTests: XCTestCase {
         results = try XCTUnwrap(suggestResults)
         XCTAssertGreaterThanOrEqual(results.count, 1)
     }
+    
+    func testLocalLocatorTask() async throws {
+        let locatorTask = LocatorTask(url: URL(fileURLWithPath: "/Users/mark1113/san-diego/SanDiego_StreetAddress.loc/"));
+        let locator = SmartLocatorSearchSource(locatorTask: locatorTask)
+        
+        let suggestResults = try await locator.suggest("Coffee")
+        let suggestions = try XCTUnwrap(suggestResults)
+        XCTAssertEqual(suggestions.count, 3)
+
+        let searchResults = try await locator.search("Hotel")
+        let results = try XCTUnwrap(searchResults)
+        XCTAssertEqual(results.count, 2)
+    }
+
 }
 
 extension Envelope {
