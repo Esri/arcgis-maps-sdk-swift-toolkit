@@ -68,13 +68,64 @@ public class SearchViewModel: ObservableObject {
 ***REMOVED******REMOVED***willSet {
 ***REMOVED******REMOVED******REMOVED***results = nil
 ***REMOVED******REMOVED******REMOVED***suggestions = nil
+***REMOVED******REMOVED******REMOVED***isEligibleForRequery = false
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ The search area to be used for the current query.  This property should be updated
-***REMOVED******REMOVED***/ as the user navigates the map/scene, or at minimum before calling `commitSearch`.
+***REMOVED******REMOVED***/ The extent at the time of the last search.  This is primarily set by the model, but in certain
+***REMOVED******REMOVED***/ circumstances can be set by an external client, for example after a view zooms programmatically
+***REMOVED******REMOVED***/ to an extent based on results of a search.
+***REMOVED***public var lastSearchExtent: Envelope? = nil {
+***REMOVED******REMOVED***didSet {
+***REMOVED******REMOVED******REMOVED***isEligibleForRequery = false
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ The current GeoView extent.  Defaults to null.  This should be updated as the user navigates
+***REMOVED******REMOVED***/ the map/scene.  It will be used to determine the value of `IsEligibleForRequery`
+***REMOVED******REMOVED***/ for the 'Repeat search here' behavior.  If that behavior is not wanted, it should be left `nil`.
+***REMOVED***public var extent: Envelope? = nil {
+***REMOVED******REMOVED***willSet {
+***REMOVED******REMOVED******REMOVED***guard !isEligibleForRequery,
+***REMOVED******REMOVED******REMOVED******REMOVED***  !currentQuery.isEmpty,
+***REMOVED******REMOVED******REMOVED******REMOVED***  let lastExtent = lastSearchExtent,
+***REMOVED******REMOVED******REMOVED******REMOVED***  let newExtent = newValue
+***REMOVED******REMOVED******REMOVED***else { return ***REMOVED***
+
+***REMOVED******REMOVED******REMOVED******REMOVED*** Check extent difference.
+***REMOVED******REMOVED******REMOVED***let widthDiff = fabs(lastExtent.width - newExtent.width)
+***REMOVED******REMOVED******REMOVED***let heightDiff = fabs(lastExtent.height - newExtent.height)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***let widthThreshold = lastExtent.width * 0.25
+***REMOVED******REMOVED******REMOVED***let heightThreshold = lastExtent.height * 0.25
+
+***REMOVED******REMOVED******REMOVED***isEligibleForRequery = widthDiff > widthThreshold || heightDiff > heightThreshold
+***REMOVED******REMOVED******REMOVED***guard !isEligibleForRequery else { return ***REMOVED***
+
+***REMOVED******REMOVED******REMOVED******REMOVED*** Check center difference.
+***REMOVED******REMOVED******REMOVED***let centerDiff = GeometryEngine.distance(
+***REMOVED******REMOVED******REMOVED******REMOVED***geometry1: lastExtent.center,
+***REMOVED******REMOVED******REMOVED******REMOVED***geometry2: newExtent.center
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***let currentExtentAvg = (lastExtent.width + lastExtent.height / 2.0)
+***REMOVED******REMOVED******REMOVED***let threshold = currentExtentAvg * 0.25
+***REMOVED******REMOVED******REMOVED***isEligibleForRequery = (centerDiff ?? 0.0) > threshold
+***REMOVED***
+***REMOVED***
+
+***REMOVED******REMOVED***/ True if the Extent has changed by a set amount after a `Search` or `AcceptSuggestion` call.
+***REMOVED******REMOVED***/ This property is used by the view to enable 'Repeat search here' functionality. This property is
+***REMOVED******REMOVED***/ observable, and the view should use it to hide and show the 'repeat search' button.
+***REMOVED******REMOVED***/ Changes to this property are driven by changes to the `Extent` property.  This value will be
+***REMOVED******REMOVED***/ true if the extent center changes by more than 25% of the average of the extent's height and width
+***REMOVED******REMOVED***/ at the time of the last search or if the extent width/height changes by the same amount.
+***REMOVED***@Published
+***REMOVED***public private(set) var isEligibleForRequery: Bool = false
+
+***REMOVED******REMOVED***/ The search area to be used for the current query.  Results will be limited to those
+***REMOVED******REMOVED***/ within `QueryArea`.  Defaults to `nil`.
 ***REMOVED***public var queryArea: Geometry? = nil
-***REMOVED***
+
 ***REMOVED******REMOVED***/ Defines the center for the search. For most use cases, this should be updated by the view
 ***REMOVED******REMOVED***/ every time the user navigates the map.
 ***REMOVED***public var queryCenter: Point?
@@ -130,7 +181,7 @@ public class SearchViewModel: ObservableObject {
 ***REMOVED******REMOVED***preferredSearchLocation: Point?
 ***REMOVED***) -> SearchSourceProtocol? {
 ***REMOVED******REMOVED***guard var source = currentSource() else { return nil ***REMOVED***
-***REMOVED******REMOVED***source.searchArea = searchArea ?? queryArea
+***REMOVED******REMOVED***source.searchArea = searchArea
 ***REMOVED******REMOVED***source.preferredSearchLocation = preferredSearchLocation
 ***REMOVED******REMOVED***return source
 ***REMOVED***
@@ -139,17 +190,27 @@ public class SearchViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ asynchronously. Other query properties are read to define the parameters of the search.
 ***REMOVED******REMOVED***/ - Parameter searchArea: geometry used to constrain the results.  If `nil`, the
 ***REMOVED******REMOVED***/ `queryArea` property is used instead.  If `queryArea` is `nil`, results are not constrained.
-***REMOVED***public func commitSearch(_ searchArea: Geometry? = nil) {
+***REMOVED***public func commitSearch() {
 ***REMOVED******REMOVED***guard !currentQuery.trimmingCharacters(in: .whitespaces).isEmpty,
-***REMOVED******REMOVED******REMOVED***  let source = makeEffectiveSource(with: searchArea, preferredSearchLocation: queryCenter) else {
+***REMOVED******REMOVED******REMOVED***  let source = makeEffectiveSource(with: queryArea, preferredSearchLocation: queryCenter) else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***  return
 ***REMOVED***  ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***kickoffTask(commitSearchTask(source))
+***REMOVED******REMOVED***kickoffTask(searchTask(source))
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Repeats the last search, limiting results to the extent specified in `extent`.
+***REMOVED***public func repeatSearch() {
+***REMOVED******REMOVED***guard !currentQuery.trimmingCharacters(in: .whitespaces).isEmpty,
+***REMOVED******REMOVED******REMOVED***  let queryExtent = extent,
+***REMOVED******REMOVED******REMOVED***  let source = makeEffectiveSource(with: extent, preferredSearchLocation: nil) else {
+***REMOVED******REMOVED******REMOVED******REMOVED***  return
+***REMOVED***  ***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***kickoffTask(repeatSearchTask(source, extent: queryExtent))
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Updates suggestions list asynchronously.
-***REMOVED***@MainActor  ***REMOVED*** TODO:  ???? yes or no or a better idea?  Maybe model is an Actor and not a class
 ***REMOVED***public func updateSuggestions() {
 ***REMOVED******REMOVED***guard !currentQuery.trimmingCharacters(in: .whitespaces).isEmpty,
 ***REMOVED******REMOVED******REMOVED***  let source = makeEffectiveSource(with: queryArea, preferredSearchLocation: queryCenter) else {
@@ -205,9 +266,25 @@ public class SearchViewModel: ObservableObject {
 ***REMOVED***
 
 extension SearchViewModel {
-***REMOVED***private func commitSearchTask(_ source: SearchSourceProtocol) -> Task<(), Never> {
+***REMOVED***private func repeatSearchTask(_ source: SearchSourceProtocol, extent: Envelope) -> Task<(), Never> {
 ***REMOVED******REMOVED***Task {
 ***REMOVED******REMOVED******REMOVED***do {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** User is performing a search, so set `lastSearchExtent`.
+***REMOVED******REMOVED******REMOVED******REMOVED***lastSearchExtent = extent
+***REMOVED******REMOVED******REMOVED******REMOVED***try await process(searchResults: source.repeatSearch(currentQuery, queryExtent: extent))
+***REMOVED******REMOVED*** catch is CancellationError {
+***REMOVED******REMOVED******REMOVED******REMOVED***results = nil
+***REMOVED******REMOVED*** catch {
+***REMOVED******REMOVED******REMOVED******REMOVED***results = .failure(SearchError(error))
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***private func searchTask(_ source: SearchSourceProtocol) -> Task<(), Never> {
+***REMOVED******REMOVED***Task {
+***REMOVED******REMOVED******REMOVED***do {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** User is performing a search, so set `lastSearchExtent`.
+***REMOVED******REMOVED******REMOVED******REMOVED***lastSearchExtent = extent
 ***REMOVED******REMOVED******REMOVED******REMOVED***try await process(searchResults: source.search(currentQuery))
 ***REMOVED******REMOVED*** catch is CancellationError {
 ***REMOVED******REMOVED******REMOVED******REMOVED***results = nil
@@ -239,6 +316,8 @@ extension SearchViewModel {
 ***REMOVED***private func acceptSuggestionTask(_ searchSuggestion: SearchSuggestion) -> Task<(), Never> {
 ***REMOVED******REMOVED***Task {
 ***REMOVED******REMOVED******REMOVED***do {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** User is performing a search, so set `lastSearchExtent`.
+***REMOVED******REMOVED******REMOVED******REMOVED***lastSearchExtent = extent
 ***REMOVED******REMOVED******REMOVED******REMOVED***try await process(searchResults: searchSuggestion.owningSource.search(searchSuggestion))
 ***REMOVED******REMOVED*** catch is CancellationError {
 ***REMOVED******REMOVED******REMOVED******REMOVED***results = nil

@@ -60,10 +60,10 @@ public struct SearchView: View {
 ***REMOVED******REMOVED***/ Note: this is set using the `noResultMessage` modifier.
 ***REMOVED***private var noResultMessage = "No results found"
 ***REMOVED***
+***REMOVED***public var searchBarWidth: CGFloat = 360.0
 ***REMOVED***
-***REMOVED******REMOVED******REMOVED***/ The current suggestion selected by the user.
-***REMOVED******REMOVED***@State
-***REMOVED******REMOVED***private var currentSuggestion: SearchSuggestion?
+***REMOVED***@State
+***REMOVED***private var shouldZoomToResults = true
 ***REMOVED***
 ***REMOVED******REMOVED***/ Determines whether the results lists are displayed.
 ***REMOVED***@State
@@ -71,35 +71,49 @@ public struct SearchView: View {
 ***REMOVED***
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***VStack (alignment: .center) {
-***REMOVED******REMOVED******REMOVED***TextField(
-***REMOVED******REMOVED******REMOVED******REMOVED***searchViewModel.defaultPlaceholder,
-***REMOVED******REMOVED******REMOVED******REMOVED***text: $searchViewModel.currentQuery
-***REMOVED******REMOVED******REMOVED***) { _ in
-***REMOVED******REMOVED*** onCommit: {
-***REMOVED******REMOVED******REMOVED******REMOVED***searchViewModel.commitSearch()
+***REMOVED******REMOVED******REMOVED***HStack {
+***REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED******REMOVED******REMOVED***VStack (alignment: .center) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***TextField(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***searchViewModel.defaultPlaceholder,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***text: $searchViewModel.currentQuery
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***) { _ in
+***REMOVED******REMOVED******REMOVED******REMOVED*** onCommit: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***searchViewModel.commitSearch()
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.esriDeleteTextButton(text: $searchViewModel.currentQuery)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.esriSearchButton { searchViewModel.commitSearch() ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.esriShowResultsButton(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isEnabled: enableResultListView,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isHidden: $isResultListViewHidden
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.esriBorder()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if enableResultListView, !isResultListViewHidden {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let results = searchViewModel.results {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***SearchResultList(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***searchResults: results,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedResult: $searchViewModel.selectedResult,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***noResultMessage: noResultMessage
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let suggestions = searchViewModel.suggestions {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***SearchSuggestionList(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***suggestionResults: suggestions,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentSuggestion: $searchViewModel.currentSuggestion,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***noResultMessage: noResultMessage
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: searchBarWidth)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.esriDeleteTextButton(text: $searchViewModel.currentQuery)
-***REMOVED******REMOVED******REMOVED***.esriSearchButton { searchViewModel.commitSearch() ***REMOVED***
-***REMOVED******REMOVED******REMOVED***.esriShowResultsButton(
-***REMOVED******REMOVED******REMOVED******REMOVED***isEnabled: enableResultListView,
-***REMOVED******REMOVED******REMOVED******REMOVED***isHidden: $isResultListViewHidden
-***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***.esriBorder()
-***REMOVED******REMOVED******REMOVED***if enableResultListView, !isResultListViewHidden {
-***REMOVED******REMOVED******REMOVED******REMOVED***if let results = searchViewModel.results {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***SearchResultList(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***searchResults: results,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedResult: $searchViewModel.selectedResult,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***noResultMessage: noResultMessage
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***if searchViewModel.isEligibleForRequery {
+***REMOVED******REMOVED******REMOVED******REMOVED***Button("Repeat Search Here") {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***shouldZoomToResults = false
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***searchViewModel.repeatSearch()
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***if let suggestions = searchViewModel.suggestions {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***SearchSuggestionList(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***suggestionResults: suggestions,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentSuggestion: $searchViewModel.currentSuggestion,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***noResultMessage: noResultMessage
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.esriBorder()
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.onChange(of: searchViewModel.results) {
@@ -138,6 +152,15 @@ public struct SearchView: View {
 ***REMOVED******REMOVED***return copy
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ The width of the search bar.
+***REMOVED******REMOVED***/ - Parameter searchBarWidth: The desired width of the search bar.
+***REMOVED******REMOVED***/ - Returns: The `SearchView`.
+***REMOVED***public func searchBarWidth(_ searchBarWidth: CGFloat) -> Self {
+***REMOVED******REMOVED***var copy = self
+***REMOVED******REMOVED***copy.searchBarWidth = searchBarWidth
+***REMOVED******REMOVED***return copy
+***REMOVED***
+***REMOVED***
 
 extension SearchView {
 ***REMOVED***private func display(searchResults: Result<[SearchResult], SearchError>?) {
@@ -154,12 +177,15 @@ extension SearchView {
 ***REMOVED******REMOVED******REMOVED***resultsOverlay?.wrappedValue.addGraphics(resultGraphics)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***if resultGraphics.count > 0,
-***REMOVED******REMOVED******REMOVED***   let envelope = resultsOverlay?.wrappedValue.extent {
+***REMOVED******REMOVED******REMOVED***   let envelope = resultsOverlay?.wrappedValue.extent,
+***REMOVED******REMOVED******REMOVED***   shouldZoomToResults {
 ***REMOVED******REMOVED******REMOVED******REMOVED***let builder = EnvelopeBuilder(envelope: envelope)
 ***REMOVED******REMOVED******REMOVED******REMOVED***builder.expand(factor: 1.1)
+***REMOVED******REMOVED******REMOVED******REMOVED***let targetExtent = builder.toGeometry() as! Envelope
 ***REMOVED******REMOVED******REMOVED******REMOVED***viewpoint?.wrappedValue = Viewpoint(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***targetExtent: builder.toGeometry()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***targetExtent: targetExtent
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***searchViewModel.lastSearchExtent = targetExtent
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***viewpoint?.wrappedValue = nil
@@ -168,6 +194,8 @@ extension SearchView {
 ***REMOVED******REMOVED******REMOVED***resultsOverlay?.wrappedValue.removeAllGraphics()
 ***REMOVED******REMOVED******REMOVED***viewpoint?.wrappedValue = nil
 ***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***if !shouldZoomToResults { shouldZoomToResults = true ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***private func display(selectedResult: SearchResult?) {
@@ -186,14 +214,14 @@ struct SearchResultList: View {
 ***REMOVED******REMOVED******REMOVED***switch searchResults {
 ***REMOVED******REMOVED******REMOVED***case .success(let results):
 ***REMOVED******REMOVED******REMOVED******REMOVED***if results.count > 1 {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Only show the list if we have more than one result.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***PlainList {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(results) { result in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***SearchResultRow(result: result)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onTapGesture {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedResult = result
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Only show the list if we have more than one result.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***PlainList {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(results) { result in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***SearchResultRow(result: result)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onTapGesture {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedResult = result
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***else if results.isEmpty {
@@ -305,7 +333,10 @@ private extension Graphic {
 
 private extension Symbol {
 ***REMOVED******REMOVED***/ A search result marker symbol.
-***REMOVED***static let resultSymbol: MarkerSymbol = PictureMarkerSymbol(
-***REMOVED******REMOVED***image: UIImage(named: "MapPin")!
-***REMOVED***)
+***REMOVED***static var resultSymbol: MarkerSymbol {
+***REMOVED******REMOVED***let image = UIImage(named: "MapPin")!
+***REMOVED******REMOVED***let symbol = PictureMarkerSymbol(image: image)
+***REMOVED******REMOVED***symbol.offsetY = Float(image.size.height / 2.0)
+***REMOVED******REMOVED***return symbol
+***REMOVED***
 ***REMOVED***

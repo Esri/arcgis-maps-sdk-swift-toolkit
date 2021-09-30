@@ -86,17 +86,15 @@ public class LocatorSearchSource: ObservableObject, SearchSourceProtocol {
 ***REMOVED******REMOVED***/ based on searches.
 ***REMOVED***public private(set) var suggestParameters: SuggestParameters = SuggestParameters()
 ***REMOVED***
+***REMOVED***public func repeatSearch(
+***REMOVED******REMOVED***_ queryString: String,
+***REMOVED******REMOVED***queryExtent: Envelope
+***REMOVED***) async throws -> [SearchResult] {
+***REMOVED******REMOVED***return try await internalSearch(queryString, queryArea: queryExtent)
+***REMOVED***
+
 ***REMOVED***public func search(_ queryString: String) async throws -> [SearchResult] {
-***REMOVED******REMOVED***geocodeParameters.searchArea = searchArea
-***REMOVED******REMOVED***geocodeParameters.preferredSearchLocation = preferredSearchLocation
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***let geocodeResults = try await locatorTask.geocode(
-***REMOVED******REMOVED******REMOVED***searchText: queryString,
-***REMOVED******REMOVED******REMOVED***parameters: geocodeParameters
-***REMOVED******REMOVED***)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Convert to SearchResults and return.
-***REMOVED******REMOVED***return geocodeResults.map{ $0.toSearchResult(searchSource: self) ***REMOVED***
+***REMOVED******REMOVED***return try await internalSearch(queryString, queryArea: searchArea)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***public func search(
@@ -128,5 +126,23 @@ public class LocatorSearchSource: ObservableObject, SearchSourceProtocol {
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED*** Convert to SearchSuggestions and return.
 ***REMOVED******REMOVED***return geocodeResults.map{ $0.toSearchSuggestion(searchSource: self) ***REMOVED***
+***REMOVED***
+***REMOVED***
+
+extension LocatorSearchSource {
+***REMOVED***private func internalSearch(
+***REMOVED******REMOVED***_ queryString: String,
+***REMOVED******REMOVED***queryArea: Geometry?
+***REMOVED***) async throws -> [SearchResult] {
+***REMOVED******REMOVED***geocodeParameters.searchArea = queryArea
+***REMOVED******REMOVED***geocodeParameters.preferredSearchLocation = preferredSearchLocation
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let geocodeResults = try await locatorTask.geocode(
+***REMOVED******REMOVED******REMOVED***searchText: queryString,
+***REMOVED******REMOVED******REMOVED***parameters: geocodeParameters
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Convert to SearchResults and return.
+***REMOVED******REMOVED***return geocodeResults.map{ $0.toSearchResult(searchSource: self) ***REMOVED***
 ***REMOVED***
 ***REMOVED***

@@ -53,3 +53,10 @@ public protocol SearchSourceProtocol {
 ***REMOVED******REMOVED***_ searchSuggestion: SearchSuggestion
 ***REMOVED***) async throws -> [SearchResult]
 ***REMOVED***
+***REMOVED******REMOVED***/ Repeats the last search.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - queryString: Text to be used for query.
+***REMOVED******REMOVED***/   - queryExtent: Extent used to limit the results.
+***REMOVED******REMOVED***/ - Returns: Array of `SearchResult`s
+***REMOVED***func repeatSearch(_ queryString: String, queryExtent: Envelope) async throws -> [SearchResult]
+***REMOVED***

@@ -35,12 +35,16 @@ struct SearchExampleView: View {
 ***REMOVED***@State
 ***REMOVED***var searchResultsOverlay = GraphicsOverlay()
 ***REMOVED***
+***REMOVED***@State
+***REMOVED***private var isNavigating: Bool = false
+
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***MapView(
 ***REMOVED******REMOVED******REMOVED***map: map,
 ***REMOVED******REMOVED******REMOVED***viewpoint: searchResultViewpoint,
 ***REMOVED******REMOVED******REMOVED***graphicsOverlays: [searchResultsOverlay]
 ***REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***.onNavigatingChanged { isNavigating = $0 ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onViewpointChanged(kind: .centerAndScale) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***searchViewModel.queryCenter = $0.targetGeometry as? Point
 ***REMOVED******REMOVED******REMOVED******REMOVED***
@@ -52,9 +56,15 @@ struct SearchExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***searchResultViewpoint = nil
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onVisibleAreaChanged { newValue in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Setting `searchViewModel.queryArea` will limit the initial
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Setting `searchViewModel.queryArea` will limit the
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** results to `queryArea`.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***searchViewModel.queryArea = newValue
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***searchViewModel.queryArea = newValue
+
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** For "Repeat Search Here" behavior, set the
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** `searchViewModel.extent` property when navigating.
+***REMOVED******REMOVED******REMOVED******REMOVED***if isNavigating || searchViewModel.extent == nil {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***searchViewModel.extent = newValue.extent
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.overlay(alignment: .topTrailing) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***SearchView(
@@ -62,7 +72,7 @@ struct SearchExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint: $searchResultViewpoint,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***resultsOverlay: $searchResultsOverlay
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 360)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.searchBarWidth(360.0)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onAppear() {
@@ -77,6 +87,7 @@ struct SearchExampleView: View {
 ***REMOVED******REMOVED******REMOVED***maximumResults: 16,
 ***REMOVED******REMOVED******REMOVED***maximumSuggestions: 16
 ***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***searchViewModel.sources = [smartLocator]
 ***REMOVED***
 ***REMOVED***
