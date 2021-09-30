@@ -86,17 +86,15 @@ public class LocatorSearchSource: ObservableObject, SearchSourceProtocol {
     /// based on searches.
     public private(set) var suggestParameters: SuggestParameters = SuggestParameters()
     
+    public func repeatSearch(
+        _ queryString: String,
+        queryExtent: Envelope
+    ) async throws -> [SearchResult] {
+        return try await internalSearch(queryString, queryArea: queryExtent)
+    }
+
     public func search(_ queryString: String) async throws -> [SearchResult] {
-        geocodeParameters.searchArea = searchArea
-        geocodeParameters.preferredSearchLocation = preferredSearchLocation
-        
-        let geocodeResults = try await locatorTask.geocode(
-            searchText: queryString,
-            parameters: geocodeParameters
-        )
-        
-        // Convert to SearchResults and return.
-        return geocodeResults.map{ $0.toSearchResult(searchSource: self) }
+        return try await internalSearch(queryString, queryArea: searchArea)
     }
     
     public func search(
@@ -128,5 +126,23 @@ public class LocatorSearchSource: ObservableObject, SearchSourceProtocol {
         )
         // Convert to SearchSuggestions and return.
         return geocodeResults.map{ $0.toSearchSuggestion(searchSource: self) }
+    }
+}
+
+extension LocatorSearchSource {
+    private func internalSearch(
+        _ queryString: String,
+        queryArea: Geometry?
+    ) async throws -> [SearchResult] {
+        geocodeParameters.searchArea = queryArea
+        geocodeParameters.preferredSearchLocation = preferredSearchLocation
+        
+        let geocodeResults = try await locatorTask.geocode(
+            searchText: queryString,
+            parameters: geocodeParameters
+        )
+        
+        // Convert to SearchResults and return.
+        return geocodeResults.map{ $0.toSearchResult(searchSource: self) }
     }
 }
