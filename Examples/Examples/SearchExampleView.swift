@@ -35,12 +35,16 @@ struct SearchExampleView: View {
     @State
     var searchResultsOverlay = GraphicsOverlay()
     
+    @State
+    private var isNavigating: Bool = false
+
     var body: some View {
         MapView(
             map: map,
             viewpoint: searchResultViewpoint,
             graphicsOverlays: [searchResultsOverlay]
         )
+            .onNavigatingChanged { isNavigating = $0 }
             .onViewpointChanged(kind: .centerAndScale) {
                 searchViewModel.queryCenter = $0.targetGeometry as? Point
                 
@@ -52,9 +56,15 @@ struct SearchExampleView: View {
                 searchResultViewpoint = nil
             }
             .onVisibleAreaChanged { newValue in
-                // Setting `searchViewModel.queryArea` will limit the initial
+                // Setting `searchViewModel.queryArea` will limit the
                 // results to `queryArea`.
-                //                searchViewModel.queryArea = newValue
+                //searchViewModel.queryArea = newValue
+
+                // For "Repeat Search Here" behavior, set the
+                // `searchViewModel.extent` property when navigating.
+                if isNavigating || searchViewModel.extent == nil {
+                    searchViewModel.extent = newValue.extent
+                }
             }
             .overlay(alignment: .topTrailing) {
                 SearchView(
@@ -62,7 +72,7 @@ struct SearchExampleView: View {
                     viewpoint: $searchResultViewpoint,
                     resultsOverlay: $searchResultsOverlay
                 )
-                    .frame(width: 360)
+                    .searchBarWidth(360.0)
                     .padding()
             }
             .onAppear() {
@@ -77,6 +87,7 @@ struct SearchExampleView: View {
             maximumResults: 16,
             maximumSuggestions: 16
         )
+        
         searchViewModel.sources = [smartLocator]
     }
 }

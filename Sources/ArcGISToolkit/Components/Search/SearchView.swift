@@ -60,10 +60,10 @@ public struct SearchView: View {
     /// Note: this is set using the `noResultMessage` modifier.
     private var noResultMessage = "No results found"
     
+    public var searchBarWidth: CGFloat = 360.0
     
-//    /// The current suggestion selected by the user.
-//    @State
-//    private var currentSuggestion: SearchSuggestion?
+    @State
+    private var shouldZoomToResults = true
     
     /// Determines whether the results lists are displayed.
     @State
@@ -71,35 +71,49 @@ public struct SearchView: View {
     
     public var body: some View {
         VStack (alignment: .center) {
-            TextField(
-                searchViewModel.defaultPlaceholder,
-                text: $searchViewModel.currentQuery
-            ) { _ in
-            } onCommit: {
-                searchViewModel.commitSearch()
+            HStack {
+                Spacer()
+                VStack (alignment: .center) {
+                    TextField(
+                        searchViewModel.defaultPlaceholder,
+                        text: $searchViewModel.currentQuery
+                    ) { _ in
+                    } onCommit: {
+                        searchViewModel.commitSearch()
+                    }
+                    .esriDeleteTextButton(text: $searchViewModel.currentQuery)
+                    .esriSearchButton { searchViewModel.commitSearch() }
+                    .esriShowResultsButton(
+                        isEnabled: enableResultListView,
+                        isHidden: $isResultListViewHidden
+                    )
+                    .esriBorder()
+                    if enableResultListView, !isResultListViewHidden {
+                        if let results = searchViewModel.results {
+                            SearchResultList(
+                                searchResults: results,
+                                selectedResult: $searchViewModel.selectedResult,
+                                noResultMessage: noResultMessage
+                            )
+                        }
+                        if let suggestions = searchViewModel.suggestions {
+                            SearchSuggestionList(
+                                suggestionResults: suggestions,
+                                currentSuggestion: $searchViewModel.currentSuggestion,
+                                noResultMessage: noResultMessage
+                            )
+                        }
+                    }
+                    Spacer()
+                }
+                .frame(width: searchBarWidth)
             }
-            .esriDeleteTextButton(text: $searchViewModel.currentQuery)
-            .esriSearchButton { searchViewModel.commitSearch() }
-            .esriShowResultsButton(
-                isEnabled: enableResultListView,
-                isHidden: $isResultListViewHidden
-            )
-            .esriBorder()
-            if enableResultListView, !isResultListViewHidden {
-                if let results = searchViewModel.results {
-                    SearchResultList(
-                        searchResults: results,
-                        selectedResult: $searchViewModel.selectedResult,
-                        noResultMessage: noResultMessage
-                    )
+            if searchViewModel.isEligibleForRequery {
+                Button("Repeat Search Here") {
+                    shouldZoomToResults = false
+                    searchViewModel.repeatSearch()
                 }
-                if let suggestions = searchViewModel.suggestions {
-                    SearchSuggestionList(
-                        suggestionResults: suggestions,
-                        currentSuggestion: $searchViewModel.currentSuggestion,
-                        noResultMessage: noResultMessage
-                    )
-                }
+                .esriBorder()
             }
         }
         .onChange(of: searchViewModel.results) {
@@ -137,6 +151,15 @@ public struct SearchView: View {
         copy.noResultMessage = noResultMessage
         return copy
     }
+    
+    /// The width of the search bar.
+    /// - Parameter searchBarWidth: The desired width of the search bar.
+    /// - Returns: The `SearchView`.
+    public func searchBarWidth(_ searchBarWidth: CGFloat) -> Self {
+        var copy = self
+        copy.searchBarWidth = searchBarWidth
+        return copy
+    }
 }
 
 extension SearchView {
@@ -154,12 +177,15 @@ extension SearchView {
             resultsOverlay?.wrappedValue.addGraphics(resultGraphics)
             
             if resultGraphics.count > 0,
-               let envelope = resultsOverlay?.wrappedValue.extent {
+               let envelope = resultsOverlay?.wrappedValue.extent,
+               shouldZoomToResults {
                 let builder = EnvelopeBuilder(envelope: envelope)
                 builder.expand(factor: 1.1)
+                let targetExtent = builder.toGeometry() as! Envelope
                 viewpoint?.wrappedValue = Viewpoint(
-                    targetExtent: builder.toGeometry()
+                    targetExtent: targetExtent
                 )
+                searchViewModel.lastSearchExtent = targetExtent
             }
             else {
                 viewpoint?.wrappedValue = nil
@@ -168,6 +194,8 @@ extension SearchView {
             resultsOverlay?.wrappedValue.removeAllGraphics()
             viewpoint?.wrappedValue = nil
         }
+        
+        if !shouldZoomToResults { shouldZoomToResults = true }
     }
     
     private func display(selectedResult: SearchResult?) {
@@ -186,14 +214,14 @@ struct SearchResultList: View {
             switch searchResults {
             case .success(let results):
                 if results.count > 1 {
-                        // Only show the list if we have more than one result.
-                        PlainList {
-                            ForEach(results) { result in
-                                SearchResultRow(result: result)
-                                    .onTapGesture {
-                                        selectedResult = result
-                                    }
-                            }
+                    // Only show the list if we have more than one result.
+                    PlainList {
+                        ForEach(results) { result in
+                            SearchResultRow(result: result)
+                                .onTapGesture {
+                                    selectedResult = result
+                                }
+                        }
                     }
                 }
                 else if results.isEmpty {
@@ -305,7 +333,10 @@ private extension Graphic {
 
 private extension Symbol {
     /// A search result marker symbol.
-    static let resultSymbol: MarkerSymbol = PictureMarkerSymbol(
-        image: UIImage(named: "MapPin")!
-    )
+    static var resultSymbol: MarkerSymbol {
+        let image = UIImage(named: "MapPin")!
+        let symbol = PictureMarkerSymbol(image: image)
+        symbol.offsetY = Float(image.size.height / 2.0)
+        return symbol
+    }
 }

@@ -52,4 +52,11 @@ public protocol SearchSourceProtocol {
     func search(
         _ searchSuggestion: SearchSuggestion
     ) async throws -> [SearchResult]
+    
+    /// Repeats the last search.
+    /// - Parameters:
+    ///   - queryString: Text to be used for query.
+    ///   - queryExtent: Extent used to limit the results.
+    /// - Returns: Array of `SearchResult`s
+    func repeatSearch(_ queryString: String, queryExtent: Envelope) async throws -> [SearchResult]
 }
