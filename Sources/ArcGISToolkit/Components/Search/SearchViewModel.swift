@@ -53,6 +53,16 @@ public class SearchViewModel: ObservableObject {
 ***REMOVED******REMOVED***self.queryCenter = queryCenter
 ***REMOVED******REMOVED***self.resultMode = resultMode
 ***REMOVED******REMOVED***self.sources = sources
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***$currentQuery.sink { [weak self] query in
+***REMOVED******REMOVED******REMOVED***self?.results = nil
+***REMOVED******REMOVED******REMOVED***self?.isEligibleForRequery = false
+***REMOVED******REMOVED******REMOVED***if query.isEmpty {
+***REMOVED******REMOVED******REMOVED******REMOVED***self?.suggestions = nil
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***self?.updateSuggestions()
+***REMOVED******REMOVED***
+***REMOVED***.store(in: &subscriptions)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The string shown in the search view when no user query is entered.
@@ -64,13 +74,7 @@ public class SearchViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Tracks the current user-entered query. This property drives both suggestions and searches.
 ***REMOVED***@Published
-***REMOVED***public var currentQuery: String = "" {
-***REMOVED******REMOVED***willSet {
-***REMOVED******REMOVED******REMOVED***results = nil
-***REMOVED******REMOVED******REMOVED***suggestions = nil
-***REMOVED******REMOVED******REMOVED***isEligibleForRequery = false
-***REMOVED***
-***REMOVED***
+***REMOVED***public var currentQuery: String = ""
 ***REMOVED***
 ***REMOVED******REMOVED***/ The extent at the time of the last search.  This is primarily set by the model, but in certain
 ***REMOVED******REMOVED***/ circumstances can be set by an external client, for example after a view zooms programmatically
@@ -98,10 +102,10 @@ public class SearchViewModel: ObservableObject {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***let widthThreshold = lastExtent.width * 0.25
 ***REMOVED******REMOVED******REMOVED***let heightThreshold = lastExtent.height * 0.25
-
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***isEligibleForRequery = widthDiff > widthThreshold || heightDiff > heightThreshold
 ***REMOVED******REMOVED******REMOVED***guard !isEligibleForRequery else { return ***REMOVED***
-
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Check center difference.
 ***REMOVED******REMOVED******REMOVED***let centerDiff = GeometryEngine.distance(
 ***REMOVED******REMOVED******REMOVED******REMOVED***geometry1: lastExtent.center,
@@ -139,6 +143,11 @@ public class SearchViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ were no results, and the view should show an appropriate 'no results' message.
 ***REMOVED***@Published
 ***REMOVED***public private(set) var results: Result<[SearchResult], SearchError>? {
+***REMOVED******REMOVED***willSet {
+***REMOVED******REMOVED******REMOVED***if newValue != nil {
+***REMOVED******REMOVED******REMOVED******REMOVED***suggestions = nil
+***REMOVED******REMOVED***
+***REMOVED***
 ***REMOVED******REMOVED***didSet {
 ***REMOVED******REMOVED******REMOVED***switch results {
 ***REMOVED******REMOVED******REMOVED***case .success(let results):
@@ -168,7 +177,13 @@ public class SearchViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ are no suggestions, `nil` when no suggestions have been requested. If the list is empty,
 ***REMOVED******REMOVED***/ a useful 'no results' message should be shown by the view.
 ***REMOVED***@Published
-***REMOVED***public private(set) var suggestions: Result<[SearchSuggestion], SearchError>?
+***REMOVED***public private(set) var suggestions: Result<[SearchSuggestion], SearchError>? {
+***REMOVED******REMOVED***willSet {
+***REMOVED******REMOVED******REMOVED***if newValue != nil {
+***REMOVED******REMOVED******REMOVED******REMOVED***results = nil
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
 ***REMOVED***
 ***REMOVED***private var subscriptions = Set<AnyCancellable>()
 ***REMOVED***
@@ -210,6 +225,10 @@ public class SearchViewModel: ObservableObject {
 ***REMOVED******REMOVED***kickoffTask(repeatSearchTask(source, extent: queryExtent))
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED*** TODO: something's not right with concurrency; currently seeing both results and suggestions
+***REMOVED******REMOVED*** but that shouldn't be possible.  What's up?  Maybe because model methods are not async it's
+***REMOVED******REMOVED*** messing things up?  But the model should account for that... Right?
+***REMOVED***
 ***REMOVED******REMOVED***/ Updates suggestions list asynchronously.
 ***REMOVED***public func updateSuggestions() {
 ***REMOVED******REMOVED***guard !currentQuery.trimmingCharacters(in: .whitespaces).isEmpty,
@@ -228,8 +247,7 @@ public class SearchViewModel: ObservableObject {
 ***REMOVED***public var currentSuggestion: SearchSuggestion? {
 ***REMOVED******REMOVED***didSet {
 ***REMOVED******REMOVED******REMOVED***if let currentSuggestion = currentSuggestion {
-***REMOVED******REMOVED******REMOVED******REMOVED***currentQuery = currentSuggestion.displayTitle
-***REMOVED******REMOVED******REMOVED******REMOVED***kickoffTask(acceptSuggestionTask(currentSuggestion))
+***REMOVED******REMOVED******REMOVED******REMOVED***acceptSuggestion(currentSuggestion)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -239,20 +257,12 @@ public class SearchViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ `currentQuery` property.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - searchSuggestion: The suggestion to use to commit the search.
-***REMOVED***public func acceptSuggestion(
-***REMOVED******REMOVED***_ searchSuggestion: SearchSuggestion
-***REMOVED***) async -> Void {
+***REMOVED***public func acceptSuggestion(_ searchSuggestion: SearchSuggestion) {
 ***REMOVED******REMOVED***currentQuery = searchSuggestion.displayTitle
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***suggestions = nil
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***currentTask?.cancel()
-***REMOVED******REMOVED***currentTask = acceptSuggestionTask(searchSuggestion)
-***REMOVED******REMOVED***await currentTask?.value
+***REMOVED******REMOVED***kickoffTask(acceptSuggestionTask(searchSuggestion))
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***private func kickoffTask(_ task: Task<(), Never>) {
-***REMOVED******REMOVED***suggestions = nil
 ***REMOVED******REMOVED***currentTask?.cancel()
 ***REMOVED******REMOVED***currentTask = task
 ***REMOVED***
