@@ -122,9 +122,9 @@ public struct SearchView: View {
         .onChange(of: searchViewModel.selectedResult) {
             display(selectedResult: $0)
         }
-        .onReceive(searchViewModel.$currentQuery/*.debounce(for: .seconds(0.5), scheduler: DispatchQueue.main)*/) { _ in
-            searchViewModel.updateSuggestions()
-        }
+//        .onReceive(searchViewModel.$currentQuery/*.debounce(for: .seconds(0.5), scheduler: DispatchQueue.main)*/) { _ in
+//            searchViewModel.updateSuggestions()
+//        }
         
         Spacer()
     }
