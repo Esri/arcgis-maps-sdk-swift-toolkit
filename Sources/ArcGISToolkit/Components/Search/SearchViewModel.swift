@@ -53,6 +53,16 @@ public class SearchViewModel: ObservableObject {
         self.queryCenter = queryCenter
         self.resultMode = resultMode
         self.sources = sources
+        
+        $currentQuery.sink { [weak self] query in
+            self?.results = nil
+            self?.isEligibleForRequery = false
+            if query.isEmpty {
+                self?.suggestions = nil
+            } else {
+                self?.updateSuggestions()
+            }
+        }.store(in: &subscriptions)
     }
     
     /// The string shown in the search view when no user query is entered.
@@ -64,13 +74,7 @@ public class SearchViewModel: ObservableObject {
     
     /// Tracks the current user-entered query. This property drives both suggestions and searches.
     @Published
-    public var currentQuery: String = "" {
-        willSet {
-            results = nil
-            suggestions = nil
-            isEligibleForRequery = false
-        }
-    }
+    public var currentQuery: String = ""
     
     /// The extent at the time of the last search.  This is primarily set by the model, but in certain
     /// circumstances can be set by an external client, for example after a view zooms programmatically
@@ -98,10 +102,10 @@ public class SearchViewModel: ObservableObject {
             
             let widthThreshold = lastExtent.width * 0.25
             let heightThreshold = lastExtent.height * 0.25
-
+            
             isEligibleForRequery = widthDiff > widthThreshold || heightDiff > heightThreshold
             guard !isEligibleForRequery else { return }
-
+            
             // Check center difference.
             let centerDiff = GeometryEngine.distance(
                 geometry1: lastExtent.center,
@@ -139,6 +143,11 @@ public class SearchViewModel: ObservableObject {
     /// were no results, and the view should show an appropriate 'no results' message.
     @Published
     public private(set) var results: Result<[SearchResult], SearchError>? {
+        willSet {
+            if newValue != nil {
+                suggestions = nil
+            }
+        }
         didSet {
             switch results {
             case .success(let results):
@@ -168,7 +177,13 @@ public class SearchViewModel: ObservableObject {
     /// are no suggestions, `nil` when no suggestions have been requested. If the list is empty,
     /// a useful 'no results' message should be shown by the view.
     @Published
-    public private(set) var suggestions: Result<[SearchSuggestion], SearchError>?
+    public private(set) var suggestions: Result<[SearchSuggestion], SearchError>? {
+        willSet {
+            if newValue != nil {
+                results = nil
+            }
+        }
+    }
     
     private var subscriptions = Set<AnyCancellable>()
     
@@ -210,6 +225,10 @@ public class SearchViewModel: ObservableObject {
         kickoffTask(repeatSearchTask(source, extent: queryExtent))
     }
     
+    // TODO: something's not right with concurrency; currently seeing both results and suggestions
+    // but that shouldn't be possible.  What's up?  Maybe because model methods are not async it's
+    // messing things up?  But the model should account for that... Right?
+    
     /// Updates suggestions list asynchronously.
     public func updateSuggestions() {
         guard !currentQuery.trimmingCharacters(in: .whitespaces).isEmpty,
@@ -228,8 +247,7 @@ public class SearchViewModel: ObservableObject {
     public var currentSuggestion: SearchSuggestion? {
         didSet {
             if let currentSuggestion = currentSuggestion {
-                currentQuery = currentSuggestion.displayTitle
-                kickoffTask(acceptSuggestionTask(currentSuggestion))
+                acceptSuggestion(currentSuggestion)
             }
         }
     }
@@ -239,20 +257,12 @@ public class SearchViewModel: ObservableObject {
     /// `currentQuery` property.
     /// - Parameters:
     ///   - searchSuggestion: The suggestion to use to commit the search.
-    public func acceptSuggestion(
-        _ searchSuggestion: SearchSuggestion
-    ) async -> Void {
+    public func acceptSuggestion(_ searchSuggestion: SearchSuggestion) {
         currentQuery = searchSuggestion.displayTitle
-        
-        suggestions = nil
-        
-        currentTask?.cancel()
-        currentTask = acceptSuggestionTask(searchSuggestion)
-        await currentTask?.value
+        kickoffTask(acceptSuggestionTask(searchSuggestion))
     }
     
     private func kickoffTask(_ task: Task<(), Never>) {
-        suggestions = nil
         currentTask?.cancel()
         currentTask = task
     }
