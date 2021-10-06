@@ -24,55 +24,83 @@ class SearchViewModelTests: XCTestCase {
     func testAcceptSuggestion() async throws {
         let model = SearchViewModel(sources: [LocatorSearchSource()])
         model.currentQuery = "Magers & Quinn Booksellers"
-        
-        var subscriptions = Set<AnyCancellable>()
 
+        Task {
+            model.updateSuggestions()
+        }
+        
         // Get suggestion
-        let exp = expectation(description: "UpdateSuggestions")
-        var suggestion: SearchSuggestion?
-        model.$suggestions.dropFirst().first().sink { value in
-            do {
-                print("$suggestions: \(String(describing: value))")
-                suggestion = try XCTUnwrap(value?.get().first)
-            } catch {
-                XCTFail("Valid suggestion")
-            }
-            exp.fulfill()
+        let suggestionResult = try await model.$suggestions.dropFirst().compactMap({$0}).first
+        let suggestion = try XCTUnwrap(suggestionResult?.get().first)
+        
+        Task {
+            model.acceptSuggestion(suggestion)
         }
-        .store(in: &subscriptions)
         
-        // `model.updateSuggestions()` gets called, but the inner locatorSearchSource.suggest()
-        // is never called (it's wrapped in a Taks, which is never started.  I'm wondering if
-        // `waitForExpectations` is blocking the main thread, which is where the Task is
-        // started (maybe?) because the model is marked as `@MainActor`.???
-        model.updateSuggestions()
-        waitForExpectations(timeout: 5.0)
-        
-        // Get search result
-        guard let suggestion = suggestion else { return }
-        
-        let exp2 = expectation(description: "AcceptSuggestion")
-        model.$results.drop(while: { $0 == nil }).sink { value in
-            do {
-                print("$results: \(String(describing: value))")
-                let results = try XCTUnwrap(value?.get())
-                XCTAssertEqual(results.count, 1)
-
-                try XCTAssertNil(model.suggestions?.get())
-            } catch {
-                XCTFail("Valid suggestion")
-            }
-            exp2.fulfill()
-        }
-        .store(in: &subscriptions)
-        
-        model.acceptSuggestion(suggestion)
-        waitForExpectations(timeout: 5.0)
+        let searchResultResult = try await model.$results.dropFirst().compactMap({$0}).first
+        let searchResults = try XCTUnwrap(searchResultResult?.get())
+        XCTAssertEqual(searchResults.count, 1)
+        try XCTAssertNil(model.suggestions?.get())
         
         // With only one results, model should set `selectedResult` property.
         let results = try XCTUnwrap(model.results?.get())
         XCTAssertEqual(results.first!, model.selectedResult)
     }
+    
+    
+//    @MainActor
+//    func testAcceptSuggestion() async throws {
+//        let model = SearchViewModel(sources: [LocatorSearchSource()])
+//        model.currentQuery = "Magers & Quinn Booksellers"
+//
+//        var subscriptions = Set<AnyCancellable>()
+//
+//        // Get suggestion
+//        let exp = expectation(description: "UpdateSuggestions")
+//        var suggestion: SearchSuggestion?
+//        model.$suggestions.dropFirst().first().sink { value in
+//            do {
+//                print("$suggestions: \(String(describing: value))")
+//                suggestion = try XCTUnwrap(value?.get().first)
+//            } catch {
+//                XCTFail("Valid suggestion")
+//            }
+//            exp.fulfill()
+//        }
+//        .store(in: &subscriptions)
+//
+//        // `model.updateSuggestions()` gets called, but the inner locatorSearchSource.suggest()
+//        // is never called (it's wrapped in a Taks, which is never started.  I'm wondering if
+//        // `waitForExpectations` is blocking the main thread, which is where the Task is
+//        // started (maybe?) because the model is marked as `@MainActor`.???
+//        model.updateSuggestions()
+//        waitForExpectations(timeout: 5.0)
+//
+//        // Get search result
+//        guard let suggestion = suggestion else { return }
+//
+//        let exp2 = expectation(description: "AcceptSuggestion")
+//        model.$results.drop(while: { $0 == nil }).sink { value in
+//            do {
+//                print("$results: \(String(describing: value))")
+//                let results = try XCTUnwrap(value?.get())
+//                XCTAssertEqual(results.count, 1)
+//
+//                try XCTAssertNil(model.suggestions?.get())
+//            } catch {
+//                XCTFail("Valid suggestion")
+//            }
+//            exp2.fulfill()
+//        }
+//        .store(in: &subscriptions)
+//
+//        model.acceptSuggestion(suggestion)
+//        waitForExpectations(timeout: 5.0)
+//
+//        // With only one results, model should set `selectedResult` property.
+//        let results = try XCTUnwrap(model.results?.get())
+//        XCTAssertEqual(results.first!, model.selectedResult)
+//    }
 /*
     func testActiveSource() async throws {
         let activeSource = LocatorSearchSource()
@@ -327,3 +355,4 @@ extension Point {
     static let edinburgh = Point(x: -3.188267, y: 55.953251, spatialReference: .wgs84)
     static let portland = Point(x: -122.658722, y: 45.512230, spatialReference: .wgs84)
 }
+
