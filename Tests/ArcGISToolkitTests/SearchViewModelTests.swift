@@ -30,14 +30,14 @@ class SearchViewModelTests: XCTestCase {
         }
         
         // Get suggestion
-        let suggestionResult = try await model.$suggestions.dropFirst().compactMap({$0}).first
+        let suggestionResult = try await model.$suggestions.compactMap({$0}).first
         let suggestion = try XCTUnwrap(suggestionResult?.get().first)
         
         Task {
             model.acceptSuggestion(suggestion)
         }
         
-        let searchResultResult = try await model.$results.dropFirst().compactMap({$0}).first
+        let searchResultResult = try await model.$results.compactMap({$0}).first
         let searchResults = try XCTUnwrap(searchResultResult?.get())
         XCTAssertEqual(searchResults.count, 1)
         try XCTAssertNil(model.suggestions?.get())
