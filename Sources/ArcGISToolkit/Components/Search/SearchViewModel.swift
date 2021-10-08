@@ -53,16 +53,6 @@ public class SearchViewModel: ObservableObject {
 ***REMOVED******REMOVED***self.queryCenter = queryCenter
 ***REMOVED******REMOVED***self.resultMode = resultMode
 ***REMOVED******REMOVED***self.sources = sources
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***$currentQuery.sink { [weak self] query in
-***REMOVED******REMOVED******REMOVED***self?.results = nil
-***REMOVED******REMOVED******REMOVED***self?.isEligibleForRequery = false
-***REMOVED******REMOVED******REMOVED***if query.isEmpty {
-***REMOVED******REMOVED******REMOVED******REMOVED***self?.suggestions = nil
-***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***self?.updateSuggestions()
-***REMOVED******REMOVED***
-***REMOVED***.store(in: &subscriptions)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The string shown in the search view when no user query is entered.
@@ -74,7 +64,13 @@ public class SearchViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Tracks the current user-entered query. This property drives both suggestions and searches.
 ***REMOVED***@Published
-***REMOVED***public var currentQuery: String = ""
+***REMOVED***public var currentQuery: String = "" {
+***REMOVED******REMOVED***willSet {
+***REMOVED******REMOVED******REMOVED***results = nil
+***REMOVED******REMOVED******REMOVED***suggestions = nil
+***REMOVED******REMOVED******REMOVED***isEligibleForRequery = false
+***REMOVED***
+***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The extent at the time of the last search.  This is primarily set by the model, but in certain
 ***REMOVED******REMOVED***/ circumstances can be set by an external client, for example after a view zooms programmatically
@@ -184,9 +180,7 @@ public class SearchViewModel: ObservableObject {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED***
-***REMOVED***private var subscriptions = Set<AnyCancellable>()
-***REMOVED***
+
 ***REMOVED******REMOVED***/ The currently executing async task.  `currentTask` should be cancelled
 ***REMOVED******REMOVED***/ prior to starting another async task.
 ***REMOVED***private var currentTask: Task<Void, Never>?
@@ -198,6 +192,7 @@ public class SearchViewModel: ObservableObject {
 ***REMOVED******REMOVED***guard var source = currentSource() else { return nil ***REMOVED***
 ***REMOVED******REMOVED***source.searchArea = searchArea
 ***REMOVED******REMOVED***source.preferredSearchLocation = preferredSearchLocation
+
 ***REMOVED******REMOVED***return source
 ***REMOVED***
 ***REMOVED***
@@ -210,7 +205,7 @@ public class SearchViewModel: ObservableObject {
 ***REMOVED******REMOVED******REMOVED***  let source = makeEffectiveSource(with: queryArea, preferredSearchLocation: queryCenter) else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***  return
 ***REMOVED***  ***REMOVED***
-***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** TODO:  do we want the above in the `searchTask()` method??
 ***REMOVED******REMOVED***kickoffTask(searchTask(source))
 ***REMOVED***
 ***REMOVED***
@@ -224,10 +219,6 @@ public class SearchViewModel: ObservableObject {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***kickoffTask(repeatSearchTask(source, extent: queryExtent))
 ***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED*** TODO: something's not right with concurrency; currently seeing both results and suggestions
-***REMOVED******REMOVED*** but that shouldn't be possible.  What's up?  Maybe because model methods are not async it's
-***REMOVED******REMOVED*** messing things up?  But the model should account for that... Right?
 ***REMOVED***
 ***REMOVED******REMOVED***/ Updates suggestions list asynchronously.
 ***REMOVED***public func updateSuggestions() {

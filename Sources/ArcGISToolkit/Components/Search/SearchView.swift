@@ -122,9 +122,9 @@ public struct SearchView: View {
 ***REMOVED******REMOVED***.onChange(of: searchViewModel.selectedResult) {
 ***REMOVED******REMOVED******REMOVED***display(selectedResult: $0)
 ***REMOVED***
-***REMOVED******REMOVED******REMOVED***.onReceive(searchViewModel.$currentQuery/*.debounce(for: .seconds(0.5), scheduler: DispatchQueue.main)*/) { _ in
-***REMOVED******REMOVED******REMOVED******REMOVED***searchViewModel.updateSuggestions()
-***REMOVED******REMOVED***
+***REMOVED******REMOVED***.onReceive(searchViewModel.$currentQuery) { _ in
+***REMOVED******REMOVED******REMOVED***searchViewModel.updateSuggestions()
+***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***Spacer()
 ***REMOVED***
