@@ -84,7 +84,7 @@ public class SearchViewModel: ObservableObject {
     /// The current GeoView extent.  Defaults to null.  This should be updated as the user navigates
     /// the map/scene.  It will be used to determine the value of `IsEligibleForRequery`
     /// for the 'Repeat search here' behavior.  If that behavior is not wanted, it should be left `nil`.
-    public var extent: Envelope? = nil {
+    public var geoViewExtent: Envelope? = nil {
         willSet {
             guard !isEligibleForRequery,
                   !currentQuery.isEmpty,
@@ -116,7 +116,7 @@ public class SearchViewModel: ObservableObject {
     /// True if the Extent has changed by a set amount after a `Search` or `AcceptSuggestion` call.
     /// This property is used by the view to enable 'Repeat search here' functionality. This property is
     /// observable, and the view should use it to hide and show the 'repeat search' button.
-    /// Changes to this property are driven by changes to the `Extent` property.  This value will be
+    /// Changes to this property are driven by changes to the `geoViewExtent` property.  This value will be
     /// true if the extent center changes by more than 25% of the average of the extent's height and width
     /// at the time of the last search or if the extent width/height changes by the same amount.
     @Published
@@ -201,37 +201,22 @@ public class SearchViewModel: ObservableObject {
     /// - Parameter searchArea: geometry used to constrain the results.  If `nil`, the
     /// `queryArea` property is used instead.  If `queryArea` is `nil`, results are not constrained.
     public func commitSearch() {
-        guard !currentQuery.trimmingCharacters(in: .whitespaces).isEmpty,
-              let source = makeEffectiveSource(with: queryArea, preferredSearchLocation: queryCenter) else {
-                  return
-              }
-        // TODO:  do we want the above in the `searchTask()` method??
-        kickoffTask(searchTask(source))
+        kickoffTask(searchTask())
     }
     
-    /// Repeats the last search, limiting results to the extent specified in `extent`.
+    /// Repeats the last search, limiting results to the extent specified in `geoViewExtent`.
     public func repeatSearch() {
-        guard !currentQuery.trimmingCharacters(in: .whitespaces).isEmpty,
-              let queryExtent = extent,
-              let source = makeEffectiveSource(with: extent, preferredSearchLocation: nil) else {
-                  return
-              }
-        
-        kickoffTask(repeatSearchTask(source, extent: queryExtent))
+        kickoffTask(repeatSearchTask())
     }
     
     /// Updates suggestions list asynchronously.
     public func updateSuggestions() {
-        guard !currentQuery.trimmingCharacters(in: .whitespaces).isEmpty,
-              let source = makeEffectiveSource(with: queryArea, preferredSearchLocation: queryCenter) else {
-                  return
-              }
         guard currentSuggestion == nil else {
             // don't update suggestions if currently searching for one
             return
         }
         
-        kickoffTask(updateSuggestionsTask(source))
+        kickoffTask(updateSuggestionsTask())
     }
     
     @Published
@@ -267,12 +252,18 @@ public class SearchViewModel: ObservableObject {
 }
 
 extension SearchViewModel {
-    private func repeatSearchTask(_ source: SearchSourceProtocol, extent: Envelope) -> Task<(), Never> {
+    private func repeatSearchTask() -> Task<(), Never> {
         Task {
+            guard !currentQuery.trimmingCharacters(in: .whitespaces).isEmpty,
+                  let queryExtent = geoViewExtent,
+                  let source = makeEffectiveSource(with: queryExtent, preferredSearchLocation: nil) else {
+                      return
+                  }
+            
             do {
                 // User is performing a search, so set `lastSearchExtent`.
-                lastSearchExtent = extent
-                try await process(searchResults: source.repeatSearch(currentQuery, queryExtent: extent))
+                lastSearchExtent = geoViewExtent
+                try await process(searchResults: source.repeatSearch(currentQuery, queryExtent: queryExtent))
             } catch is CancellationError {
                 results = nil
             } catch {
@@ -281,11 +272,16 @@ extension SearchViewModel {
         }
     }
     
-    private func searchTask(_ source: SearchSourceProtocol) -> Task<(), Never> {
+    private func searchTask() -> Task<(), Never> {
         Task {
+            guard !currentQuery.trimmingCharacters(in: .whitespaces).isEmpty,
+                  let source = makeEffectiveSource(with: queryArea, preferredSearchLocation: queryCenter) else {
+                      return
+                  }
+            
             do {
                 // User is performing a search, so set `lastSearchExtent`.
-                lastSearchExtent = extent
+                lastSearchExtent = geoViewExtent
                 try await process(searchResults: source.search(currentQuery))
             } catch is CancellationError {
                 results = nil
@@ -295,8 +291,13 @@ extension SearchViewModel {
         }
     }
     
-    private func updateSuggestionsTask(_ source: SearchSourceProtocol) -> Task<(), Never> {
+    private func updateSuggestionsTask() -> Task<(), Never> {
         Task {
+            guard !currentQuery.trimmingCharacters(in: .whitespaces).isEmpty,
+                  let source = makeEffectiveSource(with: queryArea, preferredSearchLocation: queryCenter) else {
+                      return
+                  }
+            
             let suggestResult = await Result {
                 try await source.suggest(currentQuery)
             }
@@ -318,7 +319,7 @@ extension SearchViewModel {
         Task {
             do {
                 // User is performing a search, so set `lastSearchExtent`.
-                lastSearchExtent = extent
+                lastSearchExtent = geoViewExtent
                 try await process(searchResults: searchSuggestion.owningSource.search(searchSuggestion))
             } catch is CancellationError {
                 results = nil

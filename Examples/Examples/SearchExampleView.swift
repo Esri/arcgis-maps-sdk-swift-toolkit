@@ -62,8 +62,8 @@ struct SearchExampleView: View {
 
                 // For "Repeat Search Here" behavior, set the
                 // `searchViewModel.extent` property when navigating.
-                if isNavigating || searchViewModel.extent == nil {
-                    searchViewModel.extent = newValue.extent
+                if isNavigating || searchViewModel.geoViewExtent == nil {
+                    searchViewModel.geoViewExtent = newValue.extent
                 }
             }
             .overlay(alignment: .topTrailing) {
