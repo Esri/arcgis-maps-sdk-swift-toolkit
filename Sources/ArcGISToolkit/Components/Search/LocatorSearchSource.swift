@@ -92,7 +92,7 @@ public class LocatorSearchSource: ObservableObject, SearchSourceProtocol {
 ***REMOVED***) async throws -> [SearchResult] {
 ***REMOVED******REMOVED***return try await internalSearch(queryString, queryArea: queryExtent)
 ***REMOVED***
-
+***REMOVED***
 ***REMOVED***public func search(_ queryString: String) async throws -> [SearchResult] {
 ***REMOVED******REMOVED***return try await internalSearch(queryString, queryArea: searchArea)
 ***REMOVED***

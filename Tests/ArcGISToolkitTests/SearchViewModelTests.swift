@@ -27,7 +27,7 @@ class SearchViewModelTests: XCTestCase {
 ***REMOVED***func testAcceptSuggestion() async throws {
 ***REMOVED******REMOVED***let model = SearchViewModel(sources: [LocatorSearchSource()])
 ***REMOVED******REMOVED***model.currentQuery = "Magers & Quinn Booksellers"
-
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***Task { model.updateSuggestions() ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Get suggestion
@@ -44,7 +44,7 @@ class SearchViewModelTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED*** With only one results, model should set `selectedResult` property.
 ***REMOVED******REMOVED***XCTAssertEqual(result.first!, model.selectedResult)
 ***REMOVED***
-
+***REMOVED***
 ***REMOVED***func testActiveSource() async throws {
 ***REMOVED******REMOVED***let activeSource = LocatorSearchSource()
 ***REMOVED******REMOVED***activeSource.displayName = "Simple Locator"
@@ -67,7 +67,7 @@ class SearchViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***let suggestion = try XCTUnwrap(suggestions?.get().first)
 ***REMOVED******REMOVED***XCTAssertEqual(suggestion.owningSource.displayName, activeSource.displayName)
 ***REMOVED***
-
+***REMOVED***
 ***REMOVED***func testCommitSearch() async throws {
 ***REMOVED******REMOVED***let model = SearchViewModel(sources: [LocatorSearchSource()])
 ***REMOVED******REMOVED***
@@ -110,7 +110,7 @@ class SearchViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***XCTAssertNil(model.selectedResult)
 ***REMOVED******REMOVED***XCTAssertNil(model.suggestions)
 ***REMOVED***
-
+***REMOVED***
 ***REMOVED***func testCurrentQuery() async throws {
 ***REMOVED******REMOVED***let model = SearchViewModel(sources: [LocatorSearchSource()])
 ***REMOVED******REMOVED***
@@ -126,7 +126,7 @@ class SearchViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let results = try await model.$results.compactMap({$0***REMOVED***).first
 ***REMOVED******REMOVED***XCTAssertNotNil(results)
-
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Changing the `currentQuery` should set results to nil.
 ***REMOVED******REMOVED***model.currentQuery = "Coffee in Portland"
 ***REMOVED******REMOVED***XCTAssertNil(model.results)
@@ -151,7 +151,7 @@ class SearchViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***model.currentQuery = "Hotel"
 ***REMOVED******REMOVED***XCTAssertNil(model.selectedResult)
 ***REMOVED***
-
+***REMOVED***
 ***REMOVED***func testQueryArea() async throws {
 ***REMOVED******REMOVED***let source = LocatorSearchSource()
 ***REMOVED******REMOVED***source.maximumResults = Int32.max
@@ -189,9 +189,9 @@ class SearchViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***XCTAssertEqual(result.count, 0)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***model.queryArea = Polygon.minneapolis
-
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***Task { model.commitSearch() ***REMOVED***
-
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** A note about the use of `.dropFirst()`:
 ***REMOVED******REMOVED******REMOVED*** Because `model.results` is not changed between the previous call
 ***REMOVED******REMOVED******REMOVED*** to `model.commitSearch()` and the one right above, the
@@ -204,7 +204,7 @@ class SearchViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***result = try XCTUnwrap(results?.get())
 ***REMOVED******REMOVED***XCTAssertEqual(result.count, 1)
 ***REMOVED***
-
+***REMOVED***
 ***REMOVED***func testQueryCenter() async throws {
 ***REMOVED******REMOVED***let model = SearchViewModel(sources: [LocatorSearchSource()])
 ***REMOVED******REMOVED***
@@ -216,7 +216,7 @@ class SearchViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var results = try await model.$results.compactMap({$0***REMOVED***).first
 ***REMOVED******REMOVED***var result = try XCTUnwrap(results?.get())
-
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var resultPoint = try XCTUnwrap(
 ***REMOVED******REMOVED******REMOVED***result.first?.geoElement?.geometry as? Point
 ***REMOVED******REMOVED***)
@@ -243,7 +243,7 @@ class SearchViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***results = try await model.$results.compactMap({$0***REMOVED***).first
 ***REMOVED******REMOVED***result = try XCTUnwrap(results?.get())
-
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***resultPoint = try XCTUnwrap(
 ***REMOVED******REMOVED******REMOVED***result.first?.geoElement?.geometry as? Point
 ***REMOVED******REMOVED***)
@@ -262,7 +262,7 @@ class SearchViewModelTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED*** First result within 100m of Edinburgh.
 ***REMOVED******REMOVED***XCTAssertLessThan(geodeticDistance.distance,  100)
 ***REMOVED***
-
+***REMOVED***
 ***REMOVED***func testSearchResultMode() async throws {
 ***REMOVED******REMOVED***let model = SearchViewModel(sources: [LocatorSearchSource()])
 ***REMOVED******REMOVED***XCTAssertEqual(model.resultMode, .automatic)
@@ -277,9 +277,9 @@ class SearchViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***XCTAssertEqual(result.count, 1)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***model.resultMode = .multiple
-
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***Task { model.commitSearch() ***REMOVED***
-
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***results = try await model.$results.compactMap({$0***REMOVED***).dropFirst().first
 ***REMOVED******REMOVED***result = try XCTUnwrap(results?.get())
 ***REMOVED******REMOVED***XCTAssertGreaterThan(result.count, 1)
@@ -290,7 +290,7 @@ class SearchViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let suggestionResults = try await model.$suggestions.compactMap({$0***REMOVED***).first
 ***REMOVED******REMOVED***let suggestions = try XCTUnwrap(suggestionResults?.get())
-
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let collectionSuggestion = try XCTUnwrap(suggestions.filter { $0.isCollection ***REMOVED***.first)
 ***REMOVED******REMOVED***let singleSuggestion = try XCTUnwrap(suggestions.filter { !$0.isCollection ***REMOVED***.first)
 ***REMOVED******REMOVED***
@@ -317,9 +317,9 @@ class SearchViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** UpdateSuggestions with no results - result count is 0.
 ***REMOVED******REMOVED***model.currentQuery = "No results found blah blah blah blah"
-
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***Task { model.updateSuggestions() ***REMOVED***
-
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var suggestionResults = try await model.$suggestions.compactMap({$0***REMOVED***).first
 ***REMOVED******REMOVED***var suggestions = try XCTUnwrap(suggestionResults?.get())
 ***REMOVED******REMOVED***XCTAssertEqual(suggestions.count, 0)
@@ -328,7 +328,7 @@ class SearchViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***model.currentQuery = "Magers & Quinn"
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***Task { model.updateSuggestions() ***REMOVED***
-
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***suggestionResults = try await model.$suggestions.compactMap({$0***REMOVED***).first
 ***REMOVED******REMOVED***suggestions = try XCTUnwrap(suggestionResults?.get())
 ***REMOVED******REMOVED***XCTAssertGreaterThanOrEqual(suggestions.count, 1)
@@ -339,22 +339,22 @@ class SearchViewModelTests: XCTestCase {
 ***REMOVED***
 
 extension Polygon {
-static var chippewaFalls: Polygon {
-***REMOVED***let builder = PolygonBuilder(spatialReference: .wgs84)
-***REMOVED***let _ = builder.add(point: Point(x: -91.59127653822401, y: 44.74770908213401, spatialReference: .wgs84))
-***REMOVED***let _ = builder.add(point: Point(x: -91.19322516572637, y: 44.74770908213401, spatialReference: .wgs84))
-***REMOVED***let _ = builder.add(point: Point(x: -91.19322516572637, y: 45.116100854348254, spatialReference: .wgs84))
-***REMOVED***let _ = builder.add(point: Point(x: -91.59127653822401, y: 45.116100854348254, spatialReference: .wgs84))
-***REMOVED***return builder.toGeometry() as! ArcGIS.Polygon
+***REMOVED***static var chippewaFalls: Polygon {
+***REMOVED******REMOVED***let builder = PolygonBuilder(spatialReference: .wgs84)
+***REMOVED******REMOVED***let _ = builder.add(point: Point(x: -91.59127653822401, y: 44.74770908213401, spatialReference: .wgs84))
+***REMOVED******REMOVED***let _ = builder.add(point: Point(x: -91.19322516572637, y: 44.74770908213401, spatialReference: .wgs84))
+***REMOVED******REMOVED***let _ = builder.add(point: Point(x: -91.19322516572637, y: 45.116100854348254, spatialReference: .wgs84))
+***REMOVED******REMOVED***let _ = builder.add(point: Point(x: -91.59127653822401, y: 45.116100854348254, spatialReference: .wgs84))
+***REMOVED******REMOVED***return builder.toGeometry() as! ArcGIS.Polygon
 ***REMOVED***
-
-static var minneapolis: Polygon {
-***REMOVED***let builder = PolygonBuilder(spatialReference: .wgs84)
-***REMOVED***let _ = builder.add(point: Point(x: -94.170821328662, y: 44.13656401114444, spatialReference: .wgs84))
-***REMOVED***let _ = builder.add(point: Point(x: -94.170821328662, y: 44.13656401114444, spatialReference: .wgs84))
-***REMOVED***let _ = builder.add(point: Point(x: -92.34544467133114, y: 45.824325577904446, spatialReference: .wgs84))
-***REMOVED***let _ = builder.add(point: Point(x: -92.34544467133114, y: 45.824325577904446, spatialReference: .wgs84))
-***REMOVED***return builder.toGeometry() as! ArcGIS.Polygon
+***REMOVED***
+***REMOVED***static var minneapolis: Polygon {
+***REMOVED******REMOVED***let builder = PolygonBuilder(spatialReference: .wgs84)
+***REMOVED******REMOVED***let _ = builder.add(point: Point(x: -94.170821328662, y: 44.13656401114444, spatialReference: .wgs84))
+***REMOVED******REMOVED***let _ = builder.add(point: Point(x: -94.170821328662, y: 44.13656401114444, spatialReference: .wgs84))
+***REMOVED******REMOVED***let _ = builder.add(point: Point(x: -92.34544467133114, y: 45.824325577904446, spatialReference: .wgs84))
+***REMOVED******REMOVED***let _ = builder.add(point: Point(x: -92.34544467133114, y: 45.824325577904446, spatialReference: .wgs84))
+***REMOVED******REMOVED***return builder.toGeometry() as! ArcGIS.Polygon
 ***REMOVED***
 ***REMOVED***
 

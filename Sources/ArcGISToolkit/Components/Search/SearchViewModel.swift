@@ -91,7 +91,7 @@ public class SearchViewModel: ObservableObject {
 ***REMOVED******REMOVED******REMOVED******REMOVED***  let lastExtent = lastSearchExtent,
 ***REMOVED******REMOVED******REMOVED******REMOVED***  let newExtent = newValue
 ***REMOVED******REMOVED******REMOVED***else { return ***REMOVED***
-
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Check extent difference.
 ***REMOVED******REMOVED******REMOVED***let widthDiff = fabs(lastExtent.width - newExtent.width)
 ***REMOVED******REMOVED******REMOVED***let heightDiff = fabs(lastExtent.height - newExtent.height)
@@ -112,7 +112,7 @@ public class SearchViewModel: ObservableObject {
 ***REMOVED******REMOVED******REMOVED***isEligibleForRequery = (centerDiff ?? 0.0) > threshold
 ***REMOVED***
 ***REMOVED***
-
+***REMOVED***
 ***REMOVED******REMOVED***/ True if the Extent has changed by a set amount after a `Search` or `AcceptSuggestion` call.
 ***REMOVED******REMOVED***/ This property is used by the view to enable 'Repeat search here' functionality. This property is
 ***REMOVED******REMOVED***/ observable, and the view should use it to hide and show the 'repeat search' button.
@@ -121,11 +121,11 @@ public class SearchViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ at the time of the last search or if the extent width/height changes by the same amount.
 ***REMOVED***@Published
 ***REMOVED***public private(set) var isEligibleForRequery: Bool = false
-
+***REMOVED***
 ***REMOVED******REMOVED***/ The search area to be used for the current query.  Results will be limited to those
 ***REMOVED******REMOVED***/ within `QueryArea`.  Defaults to `nil`.
 ***REMOVED***public var queryArea: Geometry? = nil
-
+***REMOVED***
 ***REMOVED******REMOVED***/ Defines the center for the search. For most use cases, this should be updated by the view
 ***REMOVED******REMOVED***/ every time the user navigates the map.
 ***REMOVED***public var queryCenter: Point?
@@ -180,7 +180,7 @@ public class SearchViewModel: ObservableObject {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
-
+***REMOVED***
 ***REMOVED******REMOVED***/ The currently executing async task.  `currentTask` should be cancelled
 ***REMOVED******REMOVED***/ prior to starting another async task.
 ***REMOVED***private var currentTask: Task<Void, Never>?
@@ -192,7 +192,7 @@ public class SearchViewModel: ObservableObject {
 ***REMOVED******REMOVED***guard var source = currentSource() else { return nil ***REMOVED***
 ***REMOVED******REMOVED***source.searchArea = searchArea
 ***REMOVED******REMOVED***source.preferredSearchLocation = preferredSearchLocation
-
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***return source
 ***REMOVED***
 ***REMOVED***

@@ -66,7 +66,7 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
 ***REMOVED******REMOVED***/ threshold. Does not apply to repeated search with area constraint. Set to zero to disable search
 ***REMOVED******REMOVED***/ repeat behavior.
 ***REMOVED***public var repeatSuggestResultThreshold: Int = 6
-
+***REMOVED***
 ***REMOVED***public override func search(
 ***REMOVED******REMOVED***_ queryString: String
 ***REMOVED***) async throws -> [SearchResult] {
