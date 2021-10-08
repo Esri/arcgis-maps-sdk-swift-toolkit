@@ -53,16 +53,6 @@ public class SearchViewModel: ObservableObject {
         self.queryCenter = queryCenter
         self.resultMode = resultMode
         self.sources = sources
-        
-        $currentQuery.sink { [weak self] query in
-            self?.results = nil
-            self?.isEligibleForRequery = false
-            if query.isEmpty {
-                self?.suggestions = nil
-            } else {
-                self?.updateSuggestions()
-            }
-        }.store(in: &subscriptions)
     }
     
     /// The string shown in the search view when no user query is entered.
@@ -74,7 +64,13 @@ public class SearchViewModel: ObservableObject {
     
     /// Tracks the current user-entered query. This property drives both suggestions and searches.
     @Published
-    public var currentQuery: String = ""
+    public var currentQuery: String = "" {
+        willSet {
+            results = nil
+            suggestions = nil
+            isEligibleForRequery = false
+        }
+    }
     
     /// The extent at the time of the last search.  This is primarily set by the model, but in certain
     /// circumstances can be set by an external client, for example after a view zooms programmatically
@@ -184,9 +180,7 @@ public class SearchViewModel: ObservableObject {
             }
         }
     }
-    
-    private var subscriptions = Set<AnyCancellable>()
-    
+
     /// The currently executing async task.  `currentTask` should be cancelled
     /// prior to starting another async task.
     private var currentTask: Task<Void, Never>?
@@ -198,6 +192,7 @@ public class SearchViewModel: ObservableObject {
         guard var source = currentSource() else { return nil }
         source.searchArea = searchArea
         source.preferredSearchLocation = preferredSearchLocation
+
         return source
     }
     
@@ -210,7 +205,7 @@ public class SearchViewModel: ObservableObject {
               let source = makeEffectiveSource(with: queryArea, preferredSearchLocation: queryCenter) else {
                   return
               }
-        
+        // TODO:  do we want the above in the `searchTask()` method??
         kickoffTask(searchTask(source))
     }
     
@@ -224,10 +219,6 @@ public class SearchViewModel: ObservableObject {
         
         kickoffTask(repeatSearchTask(source, extent: queryExtent))
     }
-    
-    // TODO: something's not right with concurrency; currently seeing both results and suggestions
-    // but that shouldn't be possible.  What's up?  Maybe because model methods are not async it's
-    // messing things up?  But the model should account for that... Right?
     
     /// Updates suggestions list asynchronously.
     public func updateSuggestions() {
