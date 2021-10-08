@@ -27,7 +27,7 @@ class SearchViewModelTests: XCTestCase {
     func testAcceptSuggestion() async throws {
         let model = SearchViewModel(sources: [LocatorSearchSource()])
         model.currentQuery = "Magers & Quinn Booksellers"
-
+        
         Task { model.updateSuggestions() }
         
         // Get suggestion
@@ -44,7 +44,7 @@ class SearchViewModelTests: XCTestCase {
         // With only one results, model should set `selectedResult` property.
         XCTAssertEqual(result.first!, model.selectedResult)
     }
-
+    
     func testActiveSource() async throws {
         let activeSource = LocatorSearchSource()
         activeSource.displayName = "Simple Locator"
@@ -67,7 +67,7 @@ class SearchViewModelTests: XCTestCase {
         let suggestion = try XCTUnwrap(suggestions?.get().first)
         XCTAssertEqual(suggestion.owningSource.displayName, activeSource.displayName)
     }
-
+    
     func testCommitSearch() async throws {
         let model = SearchViewModel(sources: [LocatorSearchSource()])
         
@@ -110,7 +110,7 @@ class SearchViewModelTests: XCTestCase {
         XCTAssertNil(model.selectedResult)
         XCTAssertNil(model.suggestions)
     }
-
+    
     func testCurrentQuery() async throws {
         let model = SearchViewModel(sources: [LocatorSearchSource()])
         
@@ -126,7 +126,7 @@ class SearchViewModelTests: XCTestCase {
         
         let results = try await model.$results.compactMap({$0}).first
         XCTAssertNotNil(results)
-
+        
         // Changing the `currentQuery` should set results to nil.
         model.currentQuery = "Coffee in Portland"
         XCTAssertNil(model.results)
@@ -151,7 +151,7 @@ class SearchViewModelTests: XCTestCase {
         model.currentQuery = "Hotel"
         XCTAssertNil(model.selectedResult)
     }
-
+    
     func testQueryArea() async throws {
         let source = LocatorSearchSource()
         source.maximumResults = Int32.max
@@ -189,9 +189,9 @@ class SearchViewModelTests: XCTestCase {
         XCTAssertEqual(result.count, 0)
         
         model.queryArea = Polygon.minneapolis
-
+        
         Task { model.commitSearch() }
-
+        
         // A note about the use of `.dropFirst()`:
         // Because `model.results` is not changed between the previous call
         // to `model.commitSearch()` and the one right above, the
@@ -204,7 +204,7 @@ class SearchViewModelTests: XCTestCase {
         result = try XCTUnwrap(results?.get())
         XCTAssertEqual(result.count, 1)
     }
-
+    
     func testQueryCenter() async throws {
         let model = SearchViewModel(sources: [LocatorSearchSource()])
         
@@ -216,7 +216,7 @@ class SearchViewModelTests: XCTestCase {
         
         var results = try await model.$results.compactMap({$0}).first
         var result = try XCTUnwrap(results?.get())
-
+        
         var resultPoint = try XCTUnwrap(
             result.first?.geoElement?.geometry as? Point
         )
@@ -243,7 +243,7 @@ class SearchViewModelTests: XCTestCase {
         
         results = try await model.$results.compactMap({$0}).first
         result = try XCTUnwrap(results?.get())
-
+        
         resultPoint = try XCTUnwrap(
             result.first?.geoElement?.geometry as? Point
         )
@@ -262,7 +262,7 @@ class SearchViewModelTests: XCTestCase {
         // First result within 100m of Edinburgh.
         XCTAssertLessThan(geodeticDistance.distance,  100)
     }
-
+    
     func testSearchResultMode() async throws {
         let model = SearchViewModel(sources: [LocatorSearchSource()])
         XCTAssertEqual(model.resultMode, .automatic)
@@ -277,9 +277,9 @@ class SearchViewModelTests: XCTestCase {
         XCTAssertEqual(result.count, 1)
         
         model.resultMode = .multiple
-
+        
         Task { model.commitSearch() }
-
+        
         results = try await model.$results.compactMap({$0}).dropFirst().first
         result = try XCTUnwrap(results?.get())
         XCTAssertGreaterThan(result.count, 1)
@@ -290,7 +290,7 @@ class SearchViewModelTests: XCTestCase {
         
         let suggestionResults = try await model.$suggestions.compactMap({$0}).first
         let suggestions = try XCTUnwrap(suggestionResults?.get())
-
+        
         let collectionSuggestion = try XCTUnwrap(suggestions.filter { $0.isCollection }.first)
         let singleSuggestion = try XCTUnwrap(suggestions.filter { !$0.isCollection }.first)
         
@@ -317,9 +317,9 @@ class SearchViewModelTests: XCTestCase {
         
         // UpdateSuggestions with no results - result count is 0.
         model.currentQuery = "No results found blah blah blah blah"
-
+        
         Task { model.updateSuggestions() }
-
+        
         var suggestionResults = try await model.$suggestions.compactMap({$0}).first
         var suggestions = try XCTUnwrap(suggestionResults?.get())
         XCTAssertEqual(suggestions.count, 0)
@@ -328,7 +328,7 @@ class SearchViewModelTests: XCTestCase {
         model.currentQuery = "Magers & Quinn"
         
         Task { model.updateSuggestions() }
-
+        
         suggestionResults = try await model.$suggestions.compactMap({$0}).first
         suggestions = try XCTUnwrap(suggestionResults?.get())
         XCTAssertGreaterThanOrEqual(suggestions.count, 1)
@@ -339,23 +339,23 @@ class SearchViewModelTests: XCTestCase {
 }
 
 extension Polygon {
-static var chippewaFalls: Polygon {
-    let builder = PolygonBuilder(spatialReference: .wgs84)
-    let _ = builder.add(point: Point(x: -91.59127653822401, y: 44.74770908213401, spatialReference: .wgs84))
-    let _ = builder.add(point: Point(x: -91.19322516572637, y: 44.74770908213401, spatialReference: .wgs84))
-    let _ = builder.add(point: Point(x: -91.19322516572637, y: 45.116100854348254, spatialReference: .wgs84))
-    let _ = builder.add(point: Point(x: -91.59127653822401, y: 45.116100854348254, spatialReference: .wgs84))
-    return builder.toGeometry() as! ArcGIS.Polygon
-}
-
-static var minneapolis: Polygon {
-    let builder = PolygonBuilder(spatialReference: .wgs84)
-    let _ = builder.add(point: Point(x: -94.170821328662, y: 44.13656401114444, spatialReference: .wgs84))
-    let _ = builder.add(point: Point(x: -94.170821328662, y: 44.13656401114444, spatialReference: .wgs84))
-    let _ = builder.add(point: Point(x: -92.34544467133114, y: 45.824325577904446, spatialReference: .wgs84))
-    let _ = builder.add(point: Point(x: -92.34544467133114, y: 45.824325577904446, spatialReference: .wgs84))
-    return builder.toGeometry() as! ArcGIS.Polygon
-}
+    static var chippewaFalls: Polygon {
+        let builder = PolygonBuilder(spatialReference: .wgs84)
+        let _ = builder.add(point: Point(x: -91.59127653822401, y: 44.74770908213401, spatialReference: .wgs84))
+        let _ = builder.add(point: Point(x: -91.19322516572637, y: 44.74770908213401, spatialReference: .wgs84))
+        let _ = builder.add(point: Point(x: -91.19322516572637, y: 45.116100854348254, spatialReference: .wgs84))
+        let _ = builder.add(point: Point(x: -91.59127653822401, y: 45.116100854348254, spatialReference: .wgs84))
+        return builder.toGeometry() as! ArcGIS.Polygon
+    }
+    
+    static var minneapolis: Polygon {
+        let builder = PolygonBuilder(spatialReference: .wgs84)
+        let _ = builder.add(point: Point(x: -94.170821328662, y: 44.13656401114444, spatialReference: .wgs84))
+        let _ = builder.add(point: Point(x: -94.170821328662, y: 44.13656401114444, spatialReference: .wgs84))
+        let _ = builder.add(point: Point(x: -92.34544467133114, y: 45.824325577904446, spatialReference: .wgs84))
+        let _ = builder.add(point: Point(x: -92.34544467133114, y: 45.824325577904446, spatialReference: .wgs84))
+        return builder.toGeometry() as! ArcGIS.Polygon
+    }
 }
 
 extension Point {

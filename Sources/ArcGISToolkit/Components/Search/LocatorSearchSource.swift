@@ -92,7 +92,7 @@ public class LocatorSearchSource: ObservableObject, SearchSourceProtocol {
     ) async throws -> [SearchResult] {
         return try await internalSearch(queryString, queryArea: queryExtent)
     }
-
+    
     public func search(_ queryString: String) async throws -> [SearchResult] {
         return try await internalSearch(queryString, queryArea: searchArea)
     }

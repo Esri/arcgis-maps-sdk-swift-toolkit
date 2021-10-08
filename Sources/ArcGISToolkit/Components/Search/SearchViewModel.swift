@@ -91,7 +91,7 @@ public class SearchViewModel: ObservableObject {
                   let lastExtent = lastSearchExtent,
                   let newExtent = newValue
             else { return }
-
+            
             // Check extent difference.
             let widthDiff = fabs(lastExtent.width - newExtent.width)
             let heightDiff = fabs(lastExtent.height - newExtent.height)
@@ -112,7 +112,7 @@ public class SearchViewModel: ObservableObject {
             isEligibleForRequery = (centerDiff ?? 0.0) > threshold
         }
     }
-
+    
     /// True if the Extent has changed by a set amount after a `Search` or `AcceptSuggestion` call.
     /// This property is used by the view to enable 'Repeat search here' functionality. This property is
     /// observable, and the view should use it to hide and show the 'repeat search' button.
@@ -121,11 +121,11 @@ public class SearchViewModel: ObservableObject {
     /// at the time of the last search or if the extent width/height changes by the same amount.
     @Published
     public private(set) var isEligibleForRequery: Bool = false
-
+    
     /// The search area to be used for the current query.  Results will be limited to those
     /// within `QueryArea`.  Defaults to `nil`.
     public var queryArea: Geometry? = nil
-
+    
     /// Defines the center for the search. For most use cases, this should be updated by the view
     /// every time the user navigates the map.
     public var queryCenter: Point?
@@ -180,7 +180,7 @@ public class SearchViewModel: ObservableObject {
             }
         }
     }
-
+    
     /// The currently executing async task.  `currentTask` should be cancelled
     /// prior to starting another async task.
     private var currentTask: Task<Void, Never>?
@@ -192,7 +192,7 @@ public class SearchViewModel: ObservableObject {
         guard var source = currentSource() else { return nil }
         source.searchArea = searchArea
         source.preferredSearchLocation = preferredSearchLocation
-
+        
         return source
     }
     
