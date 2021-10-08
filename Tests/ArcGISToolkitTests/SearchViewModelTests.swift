@@ -152,6 +152,63 @@ class SearchViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***XCTAssertNil(model.selectedResult)
 ***REMOVED***
 ***REMOVED***
+***REMOVED***func testIsEligibleForRequery() async throws {
+***REMOVED******REMOVED***let model = SearchViewModel(sources: [LocatorSearchSource()])
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Set queryArea to Chippewa Falls
+***REMOVED******REMOVED***model.queryArea = Polygon.chippewaFalls
+***REMOVED******REMOVED***model.geoViewExtent = Polygon.chippewaFalls.extent
+***REMOVED******REMOVED***model.currentQuery = "Coffee"
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***Task { model.commitSearch() ***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***_ = try await model.$results.compactMap({$0***REMOVED***).first
+***REMOVED******REMOVED***XCTAssertFalse(model.isEligibleForRequery)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Offset extent by 10% - isEligibleForRequery should still be `false`.
+***REMOVED******REMOVED***var builder = EnvelopeBuilder(envelope: model.geoViewExtent)
+***REMOVED******REMOVED***let tenPercentWidth = model.geoViewExtent!.width * 0.1
+***REMOVED******REMOVED***builder.offsetBy(x: tenPercentWidth, y: 0.0)
+***REMOVED******REMOVED***var newExtent = builder.toGeometry() as! Envelope
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***model.geoViewExtent = newExtent
+***REMOVED******REMOVED***XCTAssertFalse(model.isEligibleForRequery)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Offset extent by 50% - isEligibleForRequery should now be `true`.
+***REMOVED******REMOVED***builder = EnvelopeBuilder(envelope: model.geoViewExtent)
+***REMOVED******REMOVED***let fiftyPercentWidth = model.geoViewExtent!.width * 0.5
+***REMOVED******REMOVED***builder.offsetBy(x: fiftyPercentWidth, y: 0.0)
+***REMOVED******REMOVED***newExtent = builder.toGeometry() as! Envelope
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***model.geoViewExtent = newExtent
+***REMOVED******REMOVED***XCTAssertTrue(model.isEligibleForRequery)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Set queryArea to Chippewa Falls
+***REMOVED******REMOVED***model.queryArea = Polygon.chippewaFalls
+***REMOVED******REMOVED***model.geoViewExtent = Polygon.chippewaFalls.extent
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***Task { model.commitSearch() ***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***_ = try await model.$results.compactMap({$0***REMOVED***).dropFirst().first
+***REMOVED******REMOVED***XCTAssertFalse(model.isEligibleForRequery)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Expand extent by 1.1x - isEligibleForRequery should still be `false`.
+***REMOVED******REMOVED***builder = EnvelopeBuilder(envelope: model.geoViewExtent)
+***REMOVED******REMOVED***builder.expand(factor: 1.1)
+***REMOVED******REMOVED***newExtent = builder.toGeometry() as! Envelope
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***model.geoViewExtent = newExtent
+***REMOVED******REMOVED***XCTAssertFalse(model.isEligibleForRequery)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Expand extent by 1.5x - isEligibleForRequery should now be `true`.
+***REMOVED******REMOVED***builder = EnvelopeBuilder(envelope: model.geoViewExtent)
+***REMOVED******REMOVED***builder.expand(factor: 1.5)
+***REMOVED******REMOVED***newExtent = builder.toGeometry() as! Envelope
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***model.geoViewExtent = newExtent
+***REMOVED******REMOVED***XCTAssertTrue(model.isEligibleForRequery)
+***REMOVED***
+***REMOVED***
 ***REMOVED***func testQueryArea() async throws {
 ***REMOVED******REMOVED***let source = LocatorSearchSource()
 ***REMOVED******REMOVED***source.maximumResults = Int32.max
@@ -261,6 +318,49 @@ class SearchViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** First result within 100m of Edinburgh.
 ***REMOVED******REMOVED***XCTAssertLessThan(geodeticDistance.distance,  100)
+***REMOVED***
+***REMOVED***
+***REMOVED***func testRepeatSearch() async throws {
+***REMOVED******REMOVED***let model = SearchViewModel(sources: [LocatorSearchSource()])
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Set queryArea to Chippewa Falls
+***REMOVED******REMOVED***model.geoViewExtent = Polygon.chippewaFalls.extent
+***REMOVED******REMOVED***model.currentQuery = "Coffee"
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***Task { model.repeatSearch() ***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***var results = try await model.$results.compactMap({$0***REMOVED***).first
+***REMOVED******REMOVED***var result = try XCTUnwrap(results?.get())
+***REMOVED******REMOVED***XCTAssertGreaterThan(result.count, 1)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let resultGeometryUnion: Geometry = try XCTUnwrap(
+***REMOVED******REMOVED******REMOVED***GeometryEngine.union(
+***REMOVED******REMOVED******REMOVED******REMOVED***geometries: result.compactMap{ $0.geoElement?.geometry ***REMOVED***
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(
+***REMOVED******REMOVED******REMOVED***GeometryEngine.contains(
+***REMOVED******REMOVED******REMOVED******REMOVED***geometry1: model.geoViewExtent!,
+***REMOVED******REMOVED******REMOVED******REMOVED***geometry2: resultGeometryUnion
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***model.currentQuery = "Magers & Quinn Booksellers"
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***Task { model.repeatSearch() ***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***results = try await model.$results.compactMap({$0***REMOVED***).first
+***REMOVED******REMOVED***result = try XCTUnwrap(results?.get())
+***REMOVED******REMOVED***XCTAssertEqual(result.count, 0)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***model.geoViewExtent = Polygon.minneapolis.extent
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***Task { model.repeatSearch() ***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***results = try await model.$results.compactMap({$0***REMOVED***).dropFirst().first
+***REMOVED******REMOVED***result = try XCTUnwrap(results?.get())
+***REMOVED******REMOVED***XCTAssertEqual(result.count, 1)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func testSearchResultMode() async throws {
