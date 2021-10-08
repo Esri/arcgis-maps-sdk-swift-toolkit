@@ -62,8 +62,8 @@ struct SearchExampleView: View {
 
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** For "Repeat Search Here" behavior, set the
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** `searchViewModel.extent` property when navigating.
-***REMOVED******REMOVED******REMOVED******REMOVED***if isNavigating || searchViewModel.extent == nil {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***searchViewModel.extent = newValue.extent
+***REMOVED******REMOVED******REMOVED******REMOVED***if isNavigating || searchViewModel.geoViewExtent == nil {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***searchViewModel.geoViewExtent = newValue.extent
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.overlay(alignment: .topTrailing) {

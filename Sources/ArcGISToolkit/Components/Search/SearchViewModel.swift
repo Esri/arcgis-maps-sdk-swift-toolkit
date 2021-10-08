@@ -84,7 +84,7 @@ public class SearchViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ The current GeoView extent.  Defaults to null.  This should be updated as the user navigates
 ***REMOVED******REMOVED***/ the map/scene.  It will be used to determine the value of `IsEligibleForRequery`
 ***REMOVED******REMOVED***/ for the 'Repeat search here' behavior.  If that behavior is not wanted, it should be left `nil`.
-***REMOVED***public var extent: Envelope? = nil {
+***REMOVED***public var geoViewExtent: Envelope? = nil {
 ***REMOVED******REMOVED***willSet {
 ***REMOVED******REMOVED******REMOVED***guard !isEligibleForRequery,
 ***REMOVED******REMOVED******REMOVED******REMOVED***  !currentQuery.isEmpty,
@@ -116,7 +116,7 @@ public class SearchViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ True if the Extent has changed by a set amount after a `Search` or `AcceptSuggestion` call.
 ***REMOVED******REMOVED***/ This property is used by the view to enable 'Repeat search here' functionality. This property is
 ***REMOVED******REMOVED***/ observable, and the view should use it to hide and show the 'repeat search' button.
-***REMOVED******REMOVED***/ Changes to this property are driven by changes to the `Extent` property.  This value will be
+***REMOVED******REMOVED***/ Changes to this property are driven by changes to the `geoViewExtent` property.  This value will be
 ***REMOVED******REMOVED***/ true if the extent center changes by more than 25% of the average of the extent's height and width
 ***REMOVED******REMOVED***/ at the time of the last search or if the extent width/height changes by the same amount.
 ***REMOVED***@Published
@@ -201,37 +201,22 @@ public class SearchViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ - Parameter searchArea: geometry used to constrain the results.  If `nil`, the
 ***REMOVED******REMOVED***/ `queryArea` property is used instead.  If `queryArea` is `nil`, results are not constrained.
 ***REMOVED***public func commitSearch() {
-***REMOVED******REMOVED***guard !currentQuery.trimmingCharacters(in: .whitespaces).isEmpty,
-***REMOVED******REMOVED******REMOVED***  let source = makeEffectiveSource(with: queryArea, preferredSearchLocation: queryCenter) else {
-***REMOVED******REMOVED******REMOVED******REMOVED***  return
-***REMOVED***  ***REMOVED***
-***REMOVED******REMOVED******REMOVED*** TODO:  do we want the above in the `searchTask()` method??
-***REMOVED******REMOVED***kickoffTask(searchTask(source))
+***REMOVED******REMOVED***kickoffTask(searchTask())
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Repeats the last search, limiting results to the extent specified in `extent`.
+***REMOVED******REMOVED***/ Repeats the last search, limiting results to the extent specified in `geoViewExtent`.
 ***REMOVED***public func repeatSearch() {
-***REMOVED******REMOVED***guard !currentQuery.trimmingCharacters(in: .whitespaces).isEmpty,
-***REMOVED******REMOVED******REMOVED***  let queryExtent = extent,
-***REMOVED******REMOVED******REMOVED***  let source = makeEffectiveSource(with: extent, preferredSearchLocation: nil) else {
-***REMOVED******REMOVED******REMOVED******REMOVED***  return
-***REMOVED***  ***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***kickoffTask(repeatSearchTask(source, extent: queryExtent))
+***REMOVED******REMOVED***kickoffTask(repeatSearchTask())
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Updates suggestions list asynchronously.
 ***REMOVED***public func updateSuggestions() {
-***REMOVED******REMOVED***guard !currentQuery.trimmingCharacters(in: .whitespaces).isEmpty,
-***REMOVED******REMOVED******REMOVED***  let source = makeEffectiveSource(with: queryArea, preferredSearchLocation: queryCenter) else {
-***REMOVED******REMOVED******REMOVED******REMOVED***  return
-***REMOVED***  ***REMOVED***
 ***REMOVED******REMOVED***guard currentSuggestion == nil else {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** don't update suggestions if currently searching for one
 ***REMOVED******REMOVED******REMOVED***return
 ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***kickoffTask(updateSuggestionsTask(source))
+***REMOVED******REMOVED***kickoffTask(updateSuggestionsTask())
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@Published
@@ -267,12 +252,18 @@ public class SearchViewModel: ObservableObject {
 ***REMOVED***
 
 extension SearchViewModel {
-***REMOVED***private func repeatSearchTask(_ source: SearchSourceProtocol, extent: Envelope) -> Task<(), Never> {
+***REMOVED***private func repeatSearchTask() -> Task<(), Never> {
 ***REMOVED******REMOVED***Task {
+***REMOVED******REMOVED******REMOVED***guard !currentQuery.trimmingCharacters(in: .whitespaces).isEmpty,
+***REMOVED******REMOVED******REMOVED******REMOVED***  let queryExtent = geoViewExtent,
+***REMOVED******REMOVED******REMOVED******REMOVED***  let source = makeEffectiveSource(with: queryExtent, preferredSearchLocation: nil) else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  return
+***REMOVED******REMOVED***  ***REMOVED***
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** User is performing a search, so set `lastSearchExtent`.
-***REMOVED******REMOVED******REMOVED******REMOVED***lastSearchExtent = extent
-***REMOVED******REMOVED******REMOVED******REMOVED***try await process(searchResults: source.repeatSearch(currentQuery, queryExtent: extent))
+***REMOVED******REMOVED******REMOVED******REMOVED***lastSearchExtent = geoViewExtent
+***REMOVED******REMOVED******REMOVED******REMOVED***try await process(searchResults: source.repeatSearch(currentQuery, queryExtent: queryExtent))
 ***REMOVED******REMOVED*** catch is CancellationError {
 ***REMOVED******REMOVED******REMOVED******REMOVED***results = nil
 ***REMOVED******REMOVED*** catch {
@@ -281,11 +272,16 @@ extension SearchViewModel {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED***private func searchTask(_ source: SearchSourceProtocol) -> Task<(), Never> {
+***REMOVED***private func searchTask() -> Task<(), Never> {
 ***REMOVED******REMOVED***Task {
+***REMOVED******REMOVED******REMOVED***guard !currentQuery.trimmingCharacters(in: .whitespaces).isEmpty,
+***REMOVED******REMOVED******REMOVED******REMOVED***  let source = makeEffectiveSource(with: queryArea, preferredSearchLocation: queryCenter) else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  return
+***REMOVED******REMOVED***  ***REMOVED***
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** User is performing a search, so set `lastSearchExtent`.
-***REMOVED******REMOVED******REMOVED******REMOVED***lastSearchExtent = extent
+***REMOVED******REMOVED******REMOVED******REMOVED***lastSearchExtent = geoViewExtent
 ***REMOVED******REMOVED******REMOVED******REMOVED***try await process(searchResults: source.search(currentQuery))
 ***REMOVED******REMOVED*** catch is CancellationError {
 ***REMOVED******REMOVED******REMOVED******REMOVED***results = nil
@@ -295,8 +291,13 @@ extension SearchViewModel {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED***private func updateSuggestionsTask(_ source: SearchSourceProtocol) -> Task<(), Never> {
+***REMOVED***private func updateSuggestionsTask() -> Task<(), Never> {
 ***REMOVED******REMOVED***Task {
+***REMOVED******REMOVED******REMOVED***guard !currentQuery.trimmingCharacters(in: .whitespaces).isEmpty,
+***REMOVED******REMOVED******REMOVED******REMOVED***  let source = makeEffectiveSource(with: queryArea, preferredSearchLocation: queryCenter) else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  return
+***REMOVED******REMOVED***  ***REMOVED***
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***let suggestResult = await Result {
 ***REMOVED******REMOVED******REMOVED******REMOVED***try await source.suggest(currentQuery)
 ***REMOVED******REMOVED***
@@ -318,7 +319,7 @@ extension SearchViewModel {
 ***REMOVED******REMOVED***Task {
 ***REMOVED******REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** User is performing a search, so set `lastSearchExtent`.
-***REMOVED******REMOVED******REMOVED******REMOVED***lastSearchExtent = extent
+***REMOVED******REMOVED******REMOVED******REMOVED***lastSearchExtent = geoViewExtent
 ***REMOVED******REMOVED******REMOVED******REMOVED***try await process(searchResults: searchSuggestion.owningSource.search(searchSuggestion))
 ***REMOVED******REMOVED*** catch is CancellationError {
 ***REMOVED******REMOVED******REMOVED******REMOVED***results = nil
