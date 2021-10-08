@@ -152,6 +152,63 @@ class SearchViewModelTests: XCTestCase {
         XCTAssertNil(model.selectedResult)
     }
     
+    func testIsEligibleForRequery() async throws {
+        let model = SearchViewModel(sources: [LocatorSearchSource()])
+        
+        // Set queryArea to Chippewa Falls
+        model.queryArea = Polygon.chippewaFalls
+        model.geoViewExtent = Polygon.chippewaFalls.extent
+        model.currentQuery = "Coffee"
+        
+        Task { model.commitSearch() }
+        
+        _ = try await model.$results.compactMap({$0}).first
+        XCTAssertFalse(model.isEligibleForRequery)
+        
+        // Offset extent by 10% - isEligibleForRequery should still be `false`.
+        var builder = EnvelopeBuilder(envelope: model.geoViewExtent)
+        let tenPercentWidth = model.geoViewExtent!.width * 0.1
+        builder.offsetBy(x: tenPercentWidth, y: 0.0)
+        var newExtent = builder.toGeometry() as! Envelope
+        
+        model.geoViewExtent = newExtent
+        XCTAssertFalse(model.isEligibleForRequery)
+        
+        // Offset extent by 50% - isEligibleForRequery should now be `true`.
+        builder = EnvelopeBuilder(envelope: model.geoViewExtent)
+        let fiftyPercentWidth = model.geoViewExtent!.width * 0.5
+        builder.offsetBy(x: fiftyPercentWidth, y: 0.0)
+        newExtent = builder.toGeometry() as! Envelope
+        
+        model.geoViewExtent = newExtent
+        XCTAssertTrue(model.isEligibleForRequery)
+        
+        // Set queryArea to Chippewa Falls
+        model.queryArea = Polygon.chippewaFalls
+        model.geoViewExtent = Polygon.chippewaFalls.extent
+        
+        Task { model.commitSearch() }
+        
+        _ = try await model.$results.compactMap({$0}).dropFirst().first
+        XCTAssertFalse(model.isEligibleForRequery)
+        
+        // Expand extent by 1.1x - isEligibleForRequery should still be `false`.
+        builder = EnvelopeBuilder(envelope: model.geoViewExtent)
+        builder.expand(factor: 1.1)
+        newExtent = builder.toGeometry() as! Envelope
+        
+        model.geoViewExtent = newExtent
+        XCTAssertFalse(model.isEligibleForRequery)
+        
+        // Expand extent by 1.5x - isEligibleForRequery should now be `true`.
+        builder = EnvelopeBuilder(envelope: model.geoViewExtent)
+        builder.expand(factor: 1.5)
+        newExtent = builder.toGeometry() as! Envelope
+        
+        model.geoViewExtent = newExtent
+        XCTAssertTrue(model.isEligibleForRequery)
+    }
+    
     func testQueryArea() async throws {
         let source = LocatorSearchSource()
         source.maximumResults = Int32.max
@@ -261,6 +318,49 @@ class SearchViewModelTests: XCTestCase {
         
         // First result within 100m of Edinburgh.
         XCTAssertLessThan(geodeticDistance.distance,  100)
+    }
+    
+    func testRepeatSearch() async throws {
+        let model = SearchViewModel(sources: [LocatorSearchSource()])
+        
+        // Set queryArea to Chippewa Falls
+        model.geoViewExtent = Polygon.chippewaFalls.extent
+        model.currentQuery = "Coffee"
+        
+        Task { model.repeatSearch() }
+        
+        var results = try await model.$results.compactMap({$0}).first
+        var result = try XCTUnwrap(results?.get())
+        XCTAssertGreaterThan(result.count, 1)
+        
+        let resultGeometryUnion: Geometry = try XCTUnwrap(
+            GeometryEngine.union(
+                geometries: result.compactMap{ $0.geoElement?.geometry }
+            )
+        )
+        
+        XCTAssertTrue(
+            GeometryEngine.contains(
+                geometry1: model.geoViewExtent!,
+                geometry2: resultGeometryUnion
+            )
+        )
+        
+        model.currentQuery = "Magers & Quinn Booksellers"
+        
+        Task { model.repeatSearch() }
+        
+        results = try await model.$results.compactMap({$0}).first
+        result = try XCTUnwrap(results?.get())
+        XCTAssertEqual(result.count, 0)
+        
+        model.geoViewExtent = Polygon.minneapolis.extent
+        
+        Task { model.repeatSearch() }
+        
+        results = try await model.$results.compactMap({$0}).dropFirst().first
+        result = try XCTUnwrap(results?.get())
+        XCTAssertEqual(result.count, 1)
     }
     
     func testSearchResultMode() async throws {
