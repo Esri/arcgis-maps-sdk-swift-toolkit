@@ -109,6 +109,16 @@ class SearchViewModelTests: XCTestCase {
         
         XCTAssertNil(model.selectedResult)
         XCTAssertNil(model.suggestions)
+        
+        model.selectedResult = result.first!
+        
+        Task { model.commitSearch() }
+        
+        results = try await model.$results.compactMap({$0}).dropFirst().first
+        result = try XCTUnwrap(results?.get())
+        XCTAssertGreaterThan(result.count, 1)
+        
+        XCTAssertNil(model.selectedResult)
     }
     
     func testCurrentQuery() async throws {

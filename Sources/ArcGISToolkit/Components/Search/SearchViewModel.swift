@@ -150,6 +150,9 @@ public class SearchViewModel: ObservableObject {
                 if results.count == 1 {
                     selectedResult = results.first
                 }
+                else {
+                    selectedResult = nil
+                }
             default:
                 selectedResult = nil
             }
