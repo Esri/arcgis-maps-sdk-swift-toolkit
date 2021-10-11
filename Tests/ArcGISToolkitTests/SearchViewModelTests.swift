@@ -109,6 +109,16 @@ class SearchViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertNil(model.selectedResult)
 ***REMOVED******REMOVED***XCTAssertNil(model.suggestions)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***model.selectedResult = result.first!
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***Task { model.commitSearch() ***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***results = try await model.$results.compactMap({$0***REMOVED***).dropFirst().first
+***REMOVED******REMOVED***result = try XCTUnwrap(results?.get())
+***REMOVED******REMOVED***XCTAssertGreaterThan(result.count, 1)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertNil(model.selectedResult)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func testCurrentQuery() async throws {

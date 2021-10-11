@@ -150,6 +150,9 @@ public class SearchViewModel: ObservableObject {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if results.count == 1 {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedResult = results.first
 ***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedResult = nil
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***default:
 ***REMOVED******REMOVED******REMOVED******REMOVED***selectedResult = nil
 ***REMOVED******REMOVED***
