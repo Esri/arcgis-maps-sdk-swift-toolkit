@@ -217,10 +217,17 @@ struct SearchResultList: View {
                     // Only show the list if we have more than one result.
                     PlainList {
                         ForEach(results) { result in
-                            SearchResultRow(result: result)
-                                .onTapGesture {
-                                    selectedResult = result
+                            HStack {
+                                SearchResultRow(result: result)
+                                    .onTapGesture {
+                                        selectedResult = result
+                                    }
+                                if result == selectedResult {
+                                    Spacer()
+                                    Image(systemName: "checkmark.circle.fill")
+                                        .foregroundColor(.accentColor)
                                 }
+                            }
                         }
                     }
                 }
