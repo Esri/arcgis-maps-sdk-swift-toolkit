@@ -31,8 +31,8 @@ public class LocatorSearchSource: ObservableObject, SearchSourceProtocol {
                 string: "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer"
             )!
         ),
-        maximumResults: Int = 6,
-        maximumSuggestions: Int = 6,
+        maximumResults: Int32 = 6,
+        maximumSuggestions: Int32 = 6,
         searchArea: Geometry? = nil,
         preferredSearchLocation: Point? = nil
     ) {
@@ -42,28 +42,30 @@ public class LocatorSearchSource: ObservableObject, SearchSourceProtocol {
         self.maximumSuggestions = maximumSuggestions
         self.searchArea = searchArea
         self.preferredSearchLocation = preferredSearchLocation
+        
+        self.geocodeParameters.addResultAttributeName("*")
     }
     
     /// Name to show when presenting this source in the UI.
     public var displayName: String
     
     /// The maximum results to return when performing a search. Most sources default to 6
-    public var maximumResults: Int {
+    public var maximumResults: Int32 {
         get {
-            Int(geocodeParameters.maxResults)
+            geocodeParameters.maxResults
         }
         set {
-            geocodeParameters.maxResults = Int32(newValue)
+            geocodeParameters.maxResults = newValue
         }
     }
     
     /// The maximum suggestions to return. Most sources default to 6.
-    public var maximumSuggestions: Int {
+    public var maximumSuggestions: Int32 {
         get {
-            Int(suggestParameters.maxResults)
+            suggestParameters.maxResults
         }
         set {
-            suggestParameters.maxResults = Int32(newValue)
+            suggestParameters.maxResults = newValue
         }
     }
     
@@ -84,25 +86,15 @@ public class LocatorSearchSource: ObservableObject, SearchSourceProtocol {
     /// based on searches.
     public private(set) var suggestParameters: SuggestParameters = SuggestParameters()
     
-    public func search(
+    public func repeatSearch(
         _ queryString: String,
-        area: Geometry? = nil
+        queryExtent: Envelope
     ) async throws -> [SearchResult] {
-        // TODO: think about this...
-        // This differs from the .NET approach; .NET only uses the
-        // center of `searchArea` for the `geocodeParameters.preferredSearchLocation`
-        // and only sets `geocodeParameters.searchArea` from the `area` argument.
-        //
-        geocodeParameters.searchArea = (area != nil) ? area : searchArea
-        geocodeParameters.preferredSearchLocation = preferredSearchLocation
-        
-        let geocodeResults = try await locatorTask.geocode(
-            searchText: queryString,
-            parameters: geocodeParameters
-        )
-        
-        // Convert to SearchResults and return.
-        return geocodeResults.map{ $0.toSearchResult(searchSource: self) }
+        return try await internalSearch(queryString, queryArea: queryExtent)
+    }
+    
+    public func search(_ queryString: String) async throws -> [SearchResult] {
+        return try await internalSearch(queryString, queryArea: searchArea)
     }
     
     public func search(
@@ -110,22 +102,8 @@ public class LocatorSearchSource: ObservableObject, SearchSourceProtocol {
     ) async throws -> [SearchResult] {
         guard let suggestResult = searchSuggestion.suggestResult else { return [] }
         
-        geocodeParameters.searchArea = nil
-        geocodeParameters.preferredSearchLocation = nil
-        if preferredSearchLocation == nil,
-           let area = searchArea {
-            if let point = searchArea as? Point {
-                geocodeParameters.preferredSearchLocation = point
-                geocodeParameters.searchArea = nil
-            }
-            else if !area.extent.isEmpty {
-                geocodeParameters.preferredSearchLocation = area.extent.center
-                geocodeParameters.searchArea = nil
-            }
-        }
-        else if preferredSearchLocation != nil {
-            geocodeParameters.preferredSearchLocation = preferredSearchLocation
-        }
+        geocodeParameters.searchArea = searchArea
+        geocodeParameters.preferredSearchLocation = preferredSearchLocation
         
         let geocodeResults = try await locatorTask.geocode(
             suggestResult: suggestResult,
@@ -148,5 +126,23 @@ public class LocatorSearchSource: ObservableObject, SearchSourceProtocol {
         )
         // Convert to SearchSuggestions and return.
         return geocodeResults.map{ $0.toSearchSuggestion(searchSource: self) }
+    }
+}
+
+extension LocatorSearchSource {
+    private func internalSearch(
+        _ queryString: String,
+        queryArea: Geometry?
+    ) async throws -> [SearchResult] {
+        geocodeParameters.searchArea = queryArea
+        geocodeParameters.preferredSearchLocation = preferredSearchLocation
+        
+        let geocodeResults = try await locatorTask.geocode(
+            searchText: queryString,
+            parameters: geocodeParameters
+        )
+        
+        // Convert to SearchResults and return.
+        return geocodeResults.map{ $0.toSearchResult(searchSource: self) }
     }
 }

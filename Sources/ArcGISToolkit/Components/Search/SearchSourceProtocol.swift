@@ -20,10 +20,10 @@ public protocol SearchSourceProtocol {
     var displayName: String { get set }
     
     /// The maximum results to return when performing a search. Most sources default to 6.
-    var maximumResults: Int { get set }
+    var maximumResults: Int32 { get set }
     
     /// The maximum suggestions to return. Most sources default to 6.
-    var maximumSuggestions: Int { get set }
+    var maximumSuggestions: Int32 { get set }
     
     /// Area to be used as a constraint for searches and suggestions.
     var searchArea: Geometry? { get set }
@@ -37,16 +37,11 @@ public protocol SearchSourceProtocol {
     /// - Returns: The array of suggestions.
     func suggest(_ queryString: String) async throws -> [SearchSuggestion]
     
-    /// Gets search results. If `area` is not `nil`, search is restricted to that area. Otherwise, the
-    /// `searchArea` property may be consulted but does not need to be used as a strict limit.
+    /// Gets search results.
     /// - Parameters:
     ///   - queryString: Text to be used for query.
-    ///   - area: Area to be used to constrain search results.
     /// - Returns: Array of `SearchResult`s
-    func search(
-        _ queryString: String,
-        area: Geometry?
-    ) async throws -> [SearchResult]
+    func search(_ queryString: String) async throws -> [SearchResult]
     
     /// Gets search results. If `area` is not `nil`, search is restricted to that area. Otherwise, the
     /// `searchArea` property may be consulted but does not need to be used as a strict limit.
@@ -57,4 +52,11 @@ public protocol SearchSourceProtocol {
     func search(
         _ searchSuggestion: SearchSuggestion
     ) async throws -> [SearchResult]
+    
+    /// Repeats the last search.
+    /// - Parameters:
+    ///   - queryString: Text to be used for query.
+    ///   - queryExtent: Extent used to limit the results.
+    /// - Returns: Array of `SearchResult`s
+    func repeatSearch(_ queryString: String, queryExtent: Envelope) async throws -> [SearchResult]
 }

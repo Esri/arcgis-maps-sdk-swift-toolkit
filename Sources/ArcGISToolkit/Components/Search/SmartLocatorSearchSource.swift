@@ -30,8 +30,13 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
     ///   - repeatSuggestResultThreshold: The minimum number of suggestions to attempt to return.
     public init(
         displayName: String = "Smart Locator",
-        maximumResults: Int = 6,
-        maximumSuggestions: Int = 6,
+        locatorTask: LocatorTask = LocatorTask(
+            url: URL(
+                string: "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer"
+            )!
+        ),
+        maximumResults: Int32 = 6,
+        maximumSuggestions: Int32 = 6,
         searchArea: Geometry? = nil,
         preferredSearchLocation: Point? = nil,
         repeatSearchResultThreshold: Int = 1,
@@ -39,6 +44,7 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
     ) {
         super.init(
             displayName: displayName,
+            locatorTask: locatorTask,
             maximumResults: maximumResults,
             maximumSuggestions: maximumSuggestions,
             searchArea: searchArea,
@@ -62,13 +68,12 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
     public var repeatSuggestResultThreshold: Int = 6
     
     public override func search(
-        _ queryString: String,
-        area: Geometry?
+        _ queryString: String
     ) async throws -> [SearchResult] {
         // First, peform super class search.
-        var results = try await super.search(queryString, area: area)
+        var results = try await super.search(queryString)
         if results.count > repeatSearchResultThreshold ||
-            area != nil ||
+            repeatSearchResultThreshold == 0 ||
             geocodeParameters.searchArea == nil {
             // Result count meets threshold or there were no geographic
             // constraints on the search, so return results.
@@ -91,7 +96,7 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
         
         // Limit results to `maximumResults`.
         if allResults.count > maximumResults {
-            let dropCount = allResults.count - maximumResults
+            let dropCount = allResults.count - Int(maximumResults)
             allResults = allResults.dropLast(dropCount)
         }
         return allResults
@@ -128,7 +133,7 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
         
         // Limit results to `maximumResults`.
         if allResults.count > maximumResults {
-            let dropCount = allResults.count - maximumResults
+            let dropCount = allResults.count - Int(maximumResults)
             allResults = allResults.dropLast(dropCount)
         }
         return allResults
@@ -139,6 +144,7 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
     ) async throws -> [SearchSuggestion] {
         var results = try await super.suggest(queryString)
         if results.count > repeatSuggestResultThreshold ||
+            repeatSuggestResultThreshold == 0 ||
             suggestParameters.searchArea == nil {
             // Result count meets threshold or there were no geographic
             // constraints on the search, so return results.
@@ -161,7 +167,7 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
         
         // Limit results to `maximumResults`.
         if allResults.count > maximumSuggestions {
-            let dropCount = allResults.count - maximumSuggestions
+            let dropCount = allResults.count - Int(maximumSuggestions)
             allResults = allResults.dropLast(dropCount)
         }
         return allResults

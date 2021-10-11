@@ -13,6 +13,7 @@
 
 import SwiftUI
 
+/// A modifier which adds a "show results" button in a view, used to hide/show another view.
 struct EsriShowResultsButtonViewModifier: ViewModifier {
     var isEnabled: Bool
     @Binding var isHidden: Bool
@@ -20,14 +21,14 @@ struct EsriShowResultsButtonViewModifier: ViewModifier {
     func body(content: Content) -> some View {
         HStack {
             content
-            if isEnabled {
+            if !isEnabled {
                 EmptyView()
             }
             else {
                 Button(
                     action: { isHidden.toggle() },
                     label: {
-                        Image(systemName: isHidden ? "eye.slash.fill" : "eye.fill")
+                        Image(systemName: isHidden ? "eye.fill" : "eye.slash.fill")
                             .foregroundColor(Color(.opaqueSeparator))
                     }
                 )
