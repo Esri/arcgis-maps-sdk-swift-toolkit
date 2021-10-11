@@ -31,8 +31,8 @@ public class LocatorSearchSource: ObservableObject, SearchSourceProtocol {
 ***REMOVED******REMOVED******REMOVED******REMOVED***string: "https:***REMOVED***geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer"
 ***REMOVED******REMOVED******REMOVED***)!
 ***REMOVED******REMOVED***),
-***REMOVED******REMOVED***maximumResults: Int = 6,
-***REMOVED******REMOVED***maximumSuggestions: Int = 6,
+***REMOVED******REMOVED***maximumResults: Int32 = 6,
+***REMOVED******REMOVED***maximumSuggestions: Int32 = 6,
 ***REMOVED******REMOVED***searchArea: Geometry? = nil,
 ***REMOVED******REMOVED***preferredSearchLocation: Point? = nil
 ***REMOVED***) {
@@ -42,28 +42,30 @@ public class LocatorSearchSource: ObservableObject, SearchSourceProtocol {
 ***REMOVED******REMOVED***self.maximumSuggestions = maximumSuggestions
 ***REMOVED******REMOVED***self.searchArea = searchArea
 ***REMOVED******REMOVED***self.preferredSearchLocation = preferredSearchLocation
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***self.geocodeParameters.addResultAttributeName("*")
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Name to show when presenting this source in the UI.
 ***REMOVED***public var displayName: String
 ***REMOVED***
 ***REMOVED******REMOVED***/ The maximum results to return when performing a search. Most sources default to 6
-***REMOVED***public var maximumResults: Int {
+***REMOVED***public var maximumResults: Int32 {
 ***REMOVED******REMOVED***get {
-***REMOVED******REMOVED******REMOVED***Int(geocodeParameters.maxResults)
+***REMOVED******REMOVED******REMOVED***geocodeParameters.maxResults
 ***REMOVED***
 ***REMOVED******REMOVED***set {
-***REMOVED******REMOVED******REMOVED***geocodeParameters.maxResults = Int32(newValue)
+***REMOVED******REMOVED******REMOVED***geocodeParameters.maxResults = newValue
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The maximum suggestions to return. Most sources default to 6.
-***REMOVED***public var maximumSuggestions: Int {
+***REMOVED***public var maximumSuggestions: Int32 {
 ***REMOVED******REMOVED***get {
-***REMOVED******REMOVED******REMOVED***Int(suggestParameters.maxResults)
+***REMOVED******REMOVED******REMOVED***suggestParameters.maxResults
 ***REMOVED***
 ***REMOVED******REMOVED***set {
-***REMOVED******REMOVED******REMOVED***suggestParameters.maxResults = Int32(newValue)
+***REMOVED******REMOVED******REMOVED***suggestParameters.maxResults = newValue
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -84,25 +86,15 @@ public class LocatorSearchSource: ObservableObject, SearchSourceProtocol {
 ***REMOVED******REMOVED***/ based on searches.
 ***REMOVED***public private(set) var suggestParameters: SuggestParameters = SuggestParameters()
 ***REMOVED***
-***REMOVED***public func search(
+***REMOVED***public func repeatSearch(
 ***REMOVED******REMOVED***_ queryString: String,
-***REMOVED******REMOVED***area: Geometry? = nil
+***REMOVED******REMOVED***queryExtent: Envelope
 ***REMOVED***) async throws -> [SearchResult] {
-***REMOVED******REMOVED******REMOVED*** TODO: think about this...
-***REMOVED******REMOVED******REMOVED*** This differs from the .NET approach; .NET only uses the
-***REMOVED******REMOVED******REMOVED*** center of `searchArea` for the `geocodeParameters.preferredSearchLocation`
-***REMOVED******REMOVED******REMOVED*** and only sets `geocodeParameters.searchArea` from the `area` argument.
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***geocodeParameters.searchArea = (area != nil) ? area : searchArea
-***REMOVED******REMOVED***geocodeParameters.preferredSearchLocation = preferredSearchLocation
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***let geocodeResults = try await locatorTask.geocode(
-***REMOVED******REMOVED******REMOVED***searchText: queryString,
-***REMOVED******REMOVED******REMOVED***parameters: geocodeParameters
-***REMOVED******REMOVED***)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Convert to SearchResults and return.
-***REMOVED******REMOVED***return geocodeResults.map{ $0.toSearchResult(searchSource: self) ***REMOVED***
+***REMOVED******REMOVED***return try await internalSearch(queryString, queryArea: queryExtent)
+***REMOVED***
+***REMOVED***
+***REMOVED***public func search(_ queryString: String) async throws -> [SearchResult] {
+***REMOVED******REMOVED***return try await internalSearch(queryString, queryArea: searchArea)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***public func search(
@@ -110,22 +102,8 @@ public class LocatorSearchSource: ObservableObject, SearchSourceProtocol {
 ***REMOVED***) async throws -> [SearchResult] {
 ***REMOVED******REMOVED***guard let suggestResult = searchSuggestion.suggestResult else { return [] ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***geocodeParameters.searchArea = nil
-***REMOVED******REMOVED***geocodeParameters.preferredSearchLocation = nil
-***REMOVED******REMOVED***if preferredSearchLocation == nil,
-***REMOVED******REMOVED***   let area = searchArea {
-***REMOVED******REMOVED******REMOVED***if let point = searchArea as? Point {
-***REMOVED******REMOVED******REMOVED******REMOVED***geocodeParameters.preferredSearchLocation = point
-***REMOVED******REMOVED******REMOVED******REMOVED***geocodeParameters.searchArea = nil
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***else if !area.extent.isEmpty {
-***REMOVED******REMOVED******REMOVED******REMOVED***geocodeParameters.preferredSearchLocation = area.extent.center
-***REMOVED******REMOVED******REMOVED******REMOVED***geocodeParameters.searchArea = nil
-***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***else if preferredSearchLocation != nil {
-***REMOVED******REMOVED******REMOVED***geocodeParameters.preferredSearchLocation = preferredSearchLocation
-***REMOVED***
+***REMOVED******REMOVED***geocodeParameters.searchArea = searchArea
+***REMOVED******REMOVED***geocodeParameters.preferredSearchLocation = preferredSearchLocation
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let geocodeResults = try await locatorTask.geocode(
 ***REMOVED******REMOVED******REMOVED***suggestResult: suggestResult,
@@ -148,5 +126,23 @@ public class LocatorSearchSource: ObservableObject, SearchSourceProtocol {
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED*** Convert to SearchSuggestions and return.
 ***REMOVED******REMOVED***return geocodeResults.map{ $0.toSearchSuggestion(searchSource: self) ***REMOVED***
+***REMOVED***
+***REMOVED***
+
+extension LocatorSearchSource {
+***REMOVED***private func internalSearch(
+***REMOVED******REMOVED***_ queryString: String,
+***REMOVED******REMOVED***queryArea: Geometry?
+***REMOVED***) async throws -> [SearchResult] {
+***REMOVED******REMOVED***geocodeParameters.searchArea = queryArea
+***REMOVED******REMOVED***geocodeParameters.preferredSearchLocation = preferredSearchLocation
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let geocodeResults = try await locatorTask.geocode(
+***REMOVED******REMOVED******REMOVED***searchText: queryString,
+***REMOVED******REMOVED******REMOVED***parameters: geocodeParameters
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Convert to SearchResults and return.
+***REMOVED******REMOVED***return geocodeResults.map{ $0.toSearchResult(searchSource: self) ***REMOVED***
 ***REMOVED***
 ***REMOVED***

@@ -20,10 +20,10 @@ public protocol SearchSourceProtocol {
 ***REMOVED***var displayName: String { get set ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The maximum results to return when performing a search. Most sources default to 6.
-***REMOVED***var maximumResults: Int { get set ***REMOVED***
+***REMOVED***var maximumResults: Int32 { get set ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The maximum suggestions to return. Most sources default to 6.
-***REMOVED***var maximumSuggestions: Int { get set ***REMOVED***
+***REMOVED***var maximumSuggestions: Int32 { get set ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Area to be used as a constraint for searches and suggestions.
 ***REMOVED***var searchArea: Geometry? { get set ***REMOVED***
@@ -37,16 +37,11 @@ public protocol SearchSourceProtocol {
 ***REMOVED******REMOVED***/ - Returns: The array of suggestions.
 ***REMOVED***func suggest(_ queryString: String) async throws -> [SearchSuggestion]
 ***REMOVED***
-***REMOVED******REMOVED***/ Gets search results. If `area` is not `nil`, search is restricted to that area. Otherwise, the
-***REMOVED******REMOVED***/ `searchArea` property may be consulted but does not need to be used as a strict limit.
+***REMOVED******REMOVED***/ Gets search results.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - queryString: Text to be used for query.
-***REMOVED******REMOVED***/   - area: Area to be used to constrain search results.
 ***REMOVED******REMOVED***/ - Returns: Array of `SearchResult`s
-***REMOVED***func search(
-***REMOVED******REMOVED***_ queryString: String,
-***REMOVED******REMOVED***area: Geometry?
-***REMOVED***) async throws -> [SearchResult]
+***REMOVED***func search(_ queryString: String) async throws -> [SearchResult]
 ***REMOVED***
 ***REMOVED******REMOVED***/ Gets search results. If `area` is not `nil`, search is restricted to that area. Otherwise, the
 ***REMOVED******REMOVED***/ `searchArea` property may be consulted but does not need to be used as a strict limit.
@@ -57,4 +52,11 @@ public protocol SearchSourceProtocol {
 ***REMOVED***func search(
 ***REMOVED******REMOVED***_ searchSuggestion: SearchSuggestion
 ***REMOVED***) async throws -> [SearchResult]
+***REMOVED***
+***REMOVED******REMOVED***/ Repeats the last search.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - queryString: Text to be used for query.
+***REMOVED******REMOVED***/   - queryExtent: Extent used to limit the results.
+***REMOVED******REMOVED***/ - Returns: Array of `SearchResult`s
+***REMOVED***func repeatSearch(_ queryString: String, queryExtent: Envelope) async throws -> [SearchResult]
 ***REMOVED***

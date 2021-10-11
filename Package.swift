@@ -23,7 +23,8 @@ let package = Package(
 ***REMOVED***products: [
 ***REMOVED******REMOVED***.library(
 ***REMOVED******REMOVED******REMOVED***name: "ArcGISToolkit",
-***REMOVED******REMOVED******REMOVED***targets: ["ArcGISToolkit"]),
+***REMOVED******REMOVED******REMOVED***targets: ["ArcGISToolkit"]
+***REMOVED******REMOVED***),
 ***REMOVED***],
 ***REMOVED***dependencies: [
 ***REMOVED******REMOVED***.package(name: "ArcGIS", path: "../swift")
@@ -31,6 +32,11 @@ let package = Package(
 ***REMOVED***targets: [
 ***REMOVED******REMOVED***.target(
 ***REMOVED******REMOVED******REMOVED***name: "ArcGISToolkit",
-***REMOVED******REMOVED******REMOVED***dependencies: ["ArcGIS"]),
+***REMOVED******REMOVED******REMOVED***dependencies: ["ArcGIS"]
+***REMOVED******REMOVED***),
+***REMOVED******REMOVED***.testTarget(
+***REMOVED******REMOVED******REMOVED***name: "ArcGISToolkitTests",
+***REMOVED******REMOVED******REMOVED***dependencies: ["ArcGISToolkit"]
+***REMOVED******REMOVED***)
 ***REMOVED***]
 )

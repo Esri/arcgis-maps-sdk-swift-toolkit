@@ -13,7 +13,7 @@
 
 ***REMOVED***
 
-***REMOVED***/ A List with the `.plain` list style.
+***REMOVED***/ A `View` displaying a `List` with the `.plain` style.
 public struct PlainList<Content> : View where Content : View {
 ***REMOVED***let content: Content
 ***REMOVED******REMOVED***/ Creates a plain list with the given content.
@@ -22,7 +22,7 @@ public struct PlainList<Content> : View where Content : View {
 ***REMOVED***public init(@ViewBuilder content: () -> Content) {
 ***REMOVED******REMOVED***self.content = content()
 ***REMOVED***
-
+***REMOVED***
 ***REMOVED******REMOVED***/ The content of the list.
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***List {
