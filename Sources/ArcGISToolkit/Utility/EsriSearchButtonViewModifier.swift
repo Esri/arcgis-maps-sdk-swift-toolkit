@@ -13,28 +13,29 @@
 
 import SwiftUI
 
+/// A modifier which adds a "search" button in a view, used to initiate an operation.
 struct EsriSearchButtonViewModifier: ViewModifier {
-    @Binding var performSearch: Bool
+    var action: () -> Void
     
     func body(content: Content) -> some View {
         HStack {
-            content
             Button(
-                action: { self.performSearch = true },
+                action: action,
                 label: {
-                Image(systemName: "magnifyingglass.circle.fill")
-                    .foregroundColor(Color(.opaqueSeparator))
-            }
+                    Image(systemName: "magnifyingglass.circle.fill")
+                        .foregroundColor(Color(.opaqueSeparator))
+                }
             )
+            content
         }
     }
 }
 
 extension View {
-    func esriSearchButton(performSearch: Binding<Bool>) -> some View {
+    func esriSearchButton(_ action: @escaping () -> Void) -> some View {
         ModifiedContent(
             content: self,
-            modifier: EsriSearchButtonViewModifier(performSearch: performSearch)
+            modifier: EsriSearchButtonViewModifier(action: action)
         )
     }
 }

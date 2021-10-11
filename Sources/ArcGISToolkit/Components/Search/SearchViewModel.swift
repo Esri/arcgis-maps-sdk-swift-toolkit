@@ -17,6 +17,7 @@ import ArcGIS
 import Combine
 
 /// Performs searches and manages search state for a Search, or optionally without a UI connection.
+@MainActor
 public class SearchViewModel: ObservableObject {
     /// Defines how many results to return; one, many, or automatic based on circumstance.
     public enum SearchResultMode {
@@ -64,33 +65,66 @@ public class SearchViewModel: ObservableObject {
     /// Tracks the current user-entered query. This property drives both suggestions and searches.
     @Published
     public var currentQuery: String = "" {
-        didSet {
-            selectedResult = nil
-            if currentQuery.isEmpty {
-                results = .success(nil)
-                suggestions = .success(nil)
-            }
+        willSet {
+            results = nil
+            suggestions = nil
             isEligibleForRequery = false
         }
     }
     
-    /// The search area to be used for the current query.  This property should be updated
-    /// as the user navigates the map/scene, or at minimum before calling `commitSearch`.
-    public var queryArea: Geometry? {
-        willSet {
-            var hasResults = false
-            switch results {
-            case .success(let results):
-                hasResults = results != nil
-            case .failure(_):
-                break;
-            }
-            
-            // When `queryArea` changes, the model is eligible for
-            // requery if there are previous results.
-            isEligibleForRequery = hasResults
+    /// The extent at the time of the last search.  This is primarily set by the model, but in certain
+    /// circumstances can be set by an external client, for example after a view zooms programmatically
+    /// to an extent based on results of a search.
+    public var lastSearchExtent: Envelope? = nil {
+        didSet {
+            isEligibleForRequery = false
         }
     }
+    
+    /// The current GeoView extent.  Defaults to null.  This should be updated as the user navigates
+    /// the map/scene.  It will be used to determine the value of `IsEligibleForRequery`
+    /// for the 'Repeat search here' behavior.  If that behavior is not wanted, it should be left `nil`.
+    public var geoViewExtent: Envelope? = nil {
+        willSet {
+            guard !isEligibleForRequery,
+                  !currentQuery.isEmpty,
+                  let lastExtent = lastSearchExtent,
+                  let newExtent = newValue
+            else { return }
+            
+            // Check extent difference.
+            let widthDiff = fabs(lastExtent.width - newExtent.width)
+            let heightDiff = fabs(lastExtent.height - newExtent.height)
+            
+            let widthThreshold = lastExtent.width * 0.25
+            let heightThreshold = lastExtent.height * 0.25
+            
+            isEligibleForRequery = widthDiff > widthThreshold || heightDiff > heightThreshold
+            guard !isEligibleForRequery else { return }
+            
+            // Check center difference.
+            let centerDiff = GeometryEngine.distance(
+                geometry1: lastExtent.center,
+                geometry2: newExtent.center
+            )
+            let currentExtentAvg = (lastExtent.width + lastExtent.height / 2.0)
+            let threshold = currentExtentAvg * 0.25
+            isEligibleForRequery = (centerDiff ?? 0.0) > threshold
+        }
+    }
+    
+    /// True if the Extent has changed by a set amount after a `Search` or `AcceptSuggestion` call.
+    /// This property is used by the view to enable 'Repeat search here' functionality. This property is
+    /// observable, and the view should use it to hide and show the 'repeat search' button.
+    /// Changes to this property are driven by changes to the `geoViewExtent` property.  This value will be
+    /// true if the extent center changes by more than 25% of the average of the extent's height and width
+    /// at the time of the last search or if the extent width/height changes by the same amount.
+    @Published
+    public private(set) var isEligibleForRequery: Bool = false
+    
+    /// The search area to be used for the current query.  Results will be limited to those
+    /// within `QueryArea`.  Defaults to `nil`.
+    public var queryArea: Geometry? = nil
     
     /// Defines the center for the search. For most use cases, this should be updated by the view
     /// every time the user navigates the map.
@@ -104,7 +138,26 @@ public class SearchViewModel: ObservableObject {
     /// Collection of results. `nil` means no query has been made. An empty array means there
     /// were no results, and the view should show an appropriate 'no results' message.
     @Published
-    public private(set) var results: Result<[SearchResult]?, SearchError> = .success(nil)
+    public private(set) var results: Result<[SearchResult], SearchError>? {
+        willSet {
+            if newValue != nil {
+                suggestions = nil
+            }
+        }
+        didSet {
+            switch results {
+            case .success(let results):
+                if results.count == 1 {
+                    selectedResult = results.first
+                }
+                else {
+                    selectedResult = nil
+                }
+            default:
+                selectedResult = nil
+            }
+        }
+    }
     
     /// Tracks selection of results from the `results` collection. When there is only one result,
     /// that result is automatically assigned to this property. If there are multiple results, the view sets
@@ -123,54 +176,59 @@ public class SearchViewModel: ObservableObject {
     /// are no suggestions, `nil` when no suggestions have been requested. If the list is empty,
     /// a useful 'no results' message should be shown by the view.
     @Published
-    public private(set) var suggestions: Result<[SearchSuggestion]?, SearchError> = .success(nil)
-    
-    /// `true` if the `queryArea` has changed since the `results` collection has been set.
-    /// This property is used by the view to enable 'Repeat search here' functionality. This property is
-    /// observable, and the view should use it to hide and show the 'repeat search' button. Changes to
-    /// this property are driven by changes to the `queryArea` property.
-    @Published
-    public private(set) var isEligibleForRequery: Bool = false
-    
-    private var subscriptions = Set<AnyCancellable>()
+    public private(set) var suggestions: Result<[SearchSuggestion], SearchError>? {
+        willSet {
+            if newValue != nil {
+                results = nil
+            }
+        }
+    }
     
     /// The currently executing async task.  `currentTask` should be cancelled
     /// prior to starting another async task.
     private var currentTask: Task<Void, Never>?
     
+    private func makeEffectiveSource(
+        with searchArea: Geometry?,
+        preferredSearchLocation: Point?
+    ) -> SearchSourceProtocol? {
+        guard var source = currentSource() else { return nil }
+        source.searchArea = searchArea
+        source.preferredSearchLocation = preferredSearchLocation
+        
+        return source
+    }
+    
     /// Starts a search. `selectedResult` and `results`, among other properties, are set
     /// asynchronously. Other query properties are read to define the parameters of the search.
-    /// If `restrictToArea` is true, only results in the query area will be returned.
-    /// - Parameter restrictToArea: If true, the search is restricted to results within the extent
-    /// of the `queryArea` property. Behavior when called with `restrictToArea` set to true
-    /// when the `queryArea` property is null, a line, a point, or an empty geometry is undefined.
-    public func commitSearch(_ restrictToArea: Bool) async -> Void {
-        guard !currentQuery.trimmingCharacters(in: .whitespaces).isEmpty,
-              var source = currentSource() else { return }
-        
-        source.searchArea = queryArea
-        source.preferredSearchLocation = queryCenter
-        selectedResult = nil
-        
-        currentTask?.cancel()
-        currentTask = commitSearchTask(
-            source,
-            restrictToArea: restrictToArea
-        )
-        await currentTask?.value
+    /// - Parameter searchArea: geometry used to constrain the results.  If `nil`, the
+    /// `queryArea` property is used instead.  If `queryArea` is `nil`, results are not constrained.
+    public func commitSearch() {
+        kickoffTask(searchTask())
+    }
+    
+    /// Repeats the last search, limiting results to the extent specified in `geoViewExtent`.
+    public func repeatSearch() {
+        kickoffTask(repeatSearchTask())
     }
     
     /// Updates suggestions list asynchronously.
-    public func updateSuggestions() async -> Void {
-        guard !currentQuery.trimmingCharacters(in: .whitespaces).isEmpty,
-              var source = currentSource() else { return }
+    public func updateSuggestions() {
+        guard currentSuggestion == nil else {
+            // don't update suggestions if currently searching for one
+            return
+        }
         
-        source.searchArea = queryArea
-        source.preferredSearchLocation = queryCenter
-        
-        currentTask?.cancel()
-        currentTask = updateSuggestionsTask(source)
-        await currentTask?.value
+        kickoffTask(updateSuggestionsTask())
+    }
+    
+    @Published
+    public var currentSuggestion: SearchSuggestion? {
+        didSet {
+            if let currentSuggestion = currentSuggestion {
+                acceptSuggestion(currentSuggestion)
+            }
+        }
     }
     
     /// Commits a search from a specific suggestion. Results will be set asynchronously. Behavior is
@@ -178,14 +236,14 @@ public class SearchViewModel: ObservableObject {
     /// `currentQuery` property.
     /// - Parameters:
     ///   - searchSuggestion: The suggestion to use to commit the search.
-    public func acceptSuggestion(
-        _ searchSuggestion: SearchSuggestion
-    ) async -> Void {
+    public func acceptSuggestion(_ searchSuggestion: SearchSuggestion) {
         currentQuery = searchSuggestion.displayTitle
-        
+        kickoffTask(acceptSuggestionTask(searchSuggestion))
+    }
+    
+    private func kickoffTask(_ task: Task<(), Never>) {
         currentTask?.cancel()
-        currentTask = acceptSuggestionTask(searchSuggestion)
-        await currentTask?.value
+        currentTask = task
     }
     
     /// Clears the search. This will set the results list to null, clear the result selection, clear suggestions,
@@ -197,125 +255,112 @@ public class SearchViewModel: ObservableObject {
 }
 
 extension SearchViewModel {
-    private func commitSearchTask(
-        _ source: SearchSourceProtocol,
-        restrictToArea: Bool
-    ) -> Task<(), Never> {
-        let task = Task(operation: {
-            let searchResult = await Result {
-                try await source.search(
-                    currentQuery,
-                    area: restrictToArea ? queryArea : nil
-                )
-            }
+    private func repeatSearchTask() -> Task<(), Never> {
+        Task {
+            guard !currentQuery.trimmingCharacters(in: .whitespaces).isEmpty,
+                  let queryExtent = geoViewExtent,
+                  let source = makeEffectiveSource(with: queryExtent, preferredSearchLocation: nil) else {
+                      return
+                  }
             
-            DispatchQueue.main.async { [weak self] in
-                self?.isEligibleForRequery = false
-                self?.suggestions = .success(nil)
-                
-                switch searchResult {
-                case .success(let searchResults):
-                    self?.results = .success(searchResults)
-                    if searchResults.count == 1 {
-                        self?.selectedResult = searchResults.first
-                    }
-                case .failure(let error):
-                    self?.results = .failure(SearchError(error))
-                    break
-                case .none:
-                    self?.results = .success(nil)
-                    break
-                }
+            do {
+                // User is performing a search, so set `lastSearchExtent`.
+                lastSearchExtent = geoViewExtent
+                try await process(searchResults: source.repeatSearch(currentQuery, queryExtent: queryExtent))
+            } catch is CancellationError {
+                results = nil
+            } catch {
+                results = .failure(SearchError(error))
             }
-        })
-        return task
+        }
     }
     
-    private func updateSuggestionsTask(
-        _ source: SearchSourceProtocol
-    ) -> Task<(), Never> {
-        let task = Task(operation: {
+    private func searchTask() -> Task<(), Never> {
+        Task {
+            guard !currentQuery.trimmingCharacters(in: .whitespaces).isEmpty,
+                  let source = makeEffectiveSource(with: queryArea, preferredSearchLocation: queryCenter) else {
+                      return
+                  }
+            
+            do {
+                // User is performing a search, so set `lastSearchExtent`.
+                lastSearchExtent = geoViewExtent
+                try await process(searchResults: source.search(currentQuery))
+            } catch is CancellationError {
+                results = nil
+            } catch {
+                results = .failure(SearchError(error))
+            }
+        }
+    }
+    
+    private func updateSuggestionsTask() -> Task<(), Never> {
+        Task {
+            guard !currentQuery.trimmingCharacters(in: .whitespaces).isEmpty,
+                  let source = makeEffectiveSource(with: queryArea, preferredSearchLocation: queryCenter) else {
+                      return
+                  }
+            
             let suggestResult = await Result {
                 try await source.suggest(currentQuery)
             }
             
-            DispatchQueue.main.async { [weak self] in
-                self?.results = .success(nil)
-                self?.selectedResult = nil
-                self?.isEligibleForRequery = false
-                
-                switch suggestResult {
-                case .success(let suggestResults):
-                    self?.suggestions = .success(suggestResults)
-                case .failure(let error):
-                    self?.suggestions = .failure(SearchError(error))
-                    break
-                case .none:
-                    self?.suggestions = .success(nil)
-                    break
-                }
+            switch suggestResult {
+            case .success(let suggestResults):
+                suggestions = .success(suggestResults)
+            case .failure(let error):
+                suggestions = .failure(SearchError(error))
+                break
+            case nil:
+                suggestions = nil
+                break
             }
-        })
-        return task
+        }
     }
     
-    private func acceptSuggestionTask(
-        _ searchSuggestion: SearchSuggestion
-    ) -> Task<(), Never> {
-        let task = Task(operation: {
-            let searchResult = await Result {
-                try await searchSuggestion.owningSource.search(searchSuggestion)
+    private func acceptSuggestionTask(_ searchSuggestion: SearchSuggestion) -> Task<(), Never> {
+        Task {
+            do {
+                // User is performing a search, so set `lastSearchExtent`.
+                lastSearchExtent = geoViewExtent
+                try await process(searchResults: searchSuggestion.owningSource.search(searchSuggestion))
+            } catch is CancellationError {
+                results = nil
+            } catch {
+                results = .failure(SearchError(error))
             }
-            
-            DispatchQueue.main.async { [weak self] in
-                var searchResults = [SearchResult]()
-                var suggestError: Error?
-                
-                self?.suggestions = .success(nil)
-                self?.isEligibleForRequery = false
-                self?.selectedResult = nil
-                
-                switch searchResult {
-                case .success(let results):
-                    switch (self?.resultMode)
-                    {
-                    case .single:
-                        if let firstResult = results.first {
-                            searchResults = [firstResult]
-                        }
-                    case .multiple:
-                        searchResults = results
-                    case .automatic:
-                        if searchSuggestion.suggestResult?.isCollection ?? true {
-                            searchResults = results
-                        } else {
-                            if let firstResult = results.first {
-                                searchResults = [firstResult]
-                            }
-                        }
-                    case .none:
-                        break
-                    }
-                case .failure(let error):
-                    suggestError = error
-                case .none:
-                    break
-                }
-                
-                if let error = suggestError {
-                    self?.results = .failure(SearchError(error))
+            // once we are done searching for the suggestion, then reset it to nil
+            currentSuggestion = nil
+        }
+    }
+    
+    private func process(searchResults: [SearchResult], isCollection: Bool = true) {
+        let effectiveResults: [SearchResult]
+        
+        switch (resultMode) {
+        case .single:
+            if let firstResult = searchResults.first {
+                effectiveResults = [firstResult]
+            } else {
+                effectiveResults = []
+            }
+        case .multiple:
+            effectiveResults = searchResults
+        case .automatic:
+            if isCollection {
+                effectiveResults = searchResults
+            } else {
+                if let firstResult = searchResults.first {
+                    effectiveResults = [firstResult]
                 }
                 else {
-                    self?.results = .success(searchResults)
-                    if searchResults.count == 1 {
-                        self?.selectedResult = searchResults.first
-                    }
+                    effectiveResults = []
                 }
             }
-        })
-        return task
+        }
+        
+        results = .success(effectiveResults)
     }
-    
 }
 
 extension SearchViewModel {

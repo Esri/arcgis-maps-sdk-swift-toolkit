@@ -37,7 +37,3 @@ extension GeocodeResult {
         )
     }
 }
-
-extension GeocodeResult: Identifiable {
-    public var id: ObjectIdentifier { ObjectIdentifier(self) }
-}
