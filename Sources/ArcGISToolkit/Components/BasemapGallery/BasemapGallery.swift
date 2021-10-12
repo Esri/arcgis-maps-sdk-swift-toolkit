@@ -52,9 +52,9 @@ public struct BasemapGallery: View {
 
     public var body: some View {
         GalleryView()
-            .task {
-                await viewModel.fetchBasemaps()
-            }
+//            .onAppear {
+//                viewModel.fetchBasemaps()
+//            }
     }
     
     // MARK: Modifiers
@@ -110,10 +110,11 @@ extension BasemapGallery {
             LazyVGrid(columns: columns, spacing: 4) {
                 ForEach(viewModel.basemapGalleryItems) { basemapGalleryItem in
                     BasemapGalleryItemRow(
-                        basemapGalleryItem: basemapGalleryItem
+                        basemapGalleryItem: basemapGalleryItem,
+                        currentItem: viewModel.currentBasemapGalleryItem
                     )
                         .onTapGesture {
-                            viewModel.geoModel?.basemap = basemapGalleryItem.basemap
+                            viewModel.currentBasemapGalleryItem = basemapGalleryItem
                         }
                 }
             }
@@ -124,20 +125,22 @@ extension BasemapGallery {
 
 private struct BasemapGalleryItemRow: View {
     var basemapGalleryItem: BasemapGalleryItem
+    var currentItem: BasemapGalleryItem?
     
     var body: some View {
-        VStack {
-            if let thumbnailImage = basemapGalleryItem.thumbnail {
-                // TODO: thumbnail will have to be loaded.
-                Image(uiImage: thumbnailImage)
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
+        HStack (alignment: .center) {
+            VStack {
+                if let thumbnailImage = basemapGalleryItem.thumbnail {
+                    Image(uiImage: thumbnailImage)
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .border(
+                            basemapGalleryItem == currentItem ? Color.accentColor: Color.clear,
+                            width: 3.0)
+                }
+                Text(basemapGalleryItem.name)
+                    .font(.footnote)
             }
-            Text(basemapGalleryItem.name)
-                .font(.footnote)
         }
-//        if basemapGalleryItem == currentBasemap {
-//            .background(Color.accentColor)
-//        }
     }
 }

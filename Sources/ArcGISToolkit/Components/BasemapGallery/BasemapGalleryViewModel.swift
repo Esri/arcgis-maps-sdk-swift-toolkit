@@ -17,7 +17,13 @@ import ArcGIS
 import Combine
 
 /// Manages the state for a `BasemapGallery`.
+@MainActor
 public class BasemapGalleryViewModel: ObservableObject {
+    /// Creates a `BasemapGalleryViewModel`.
+    /// - Parameters:
+    ///   - currentBasemap: The `Basemap` currently used by a `GeoModel`.
+    ///   - portal: The `Portal` to load base maps from.
+    ///   - basemapGalleryItems: A list of pre-defined base maps to display.
     public init(
         geoModel: GeoModel? = nil,
         portal: Portal? = nil,
@@ -25,110 +31,114 @@ public class BasemapGalleryViewModel: ObservableObject {
     ) {
         self.geoModel = geoModel
         self.portal = portal
-        self.basemapGalleryItems = basemapGalleryItems
+        self.basemapGalleryItems.append(contentsOf: basemapGalleryItems)
+        
+        loadGeoModel()
+        fetchBasemaps()
     }
-    
-//
-//    /// Creates a `BasemapGalleryViewModel`. Generates a list of appropriate, default basemaps.
-//    /// The given default basemaps require either an API key or named-user to be signed into the app.
-//    /// These basemaps are sourced from this PortalGroup:
-//    /// https://www.arcgis.com/home/group.html?id=a25523e2241d4ff2bcc9182cc971c156).
-//    /// `BasemapGalleryViewModel.currentBasemap` is set to the basemap of the given
-//    /// geoModel if not `nil`.
-//    /// - Parameter geoModel: The `GeoModel` we're selecting the basemap for.
-//    public init(geoModel: GeoModel? = nil) {
-//        self.geoModel = geoModel
-//        self.currentBasemap = geoModel?.basemap
-//        self.portal = Portal.arcGISOnline(loginRequired: false)
-//    }
-//
-//    /// Creates a `BasemapGalleryViewModel`. Uses the given `portal` to retrieve basemaps.
-//    /// `BasemapGalleryViewModel.currentBasemap` is set to the basemap of the given
-//    /// geoModel if not `nil`.
-//    /// - Parameter geoModel: The `GeoModel` we're selecting the basemap for.
-//    /// - Parameter portal: The `GeoModel` we're selecting the basemap for.
-//    public init(
-//        geoModel: GeoModel? = nil,
-//        portal: Portal
-//    ) {
-//        self.geoModel = geoModel
-//        self.currentBasemap = geoModel?.basemap
-//        self.portal = portal
-//    }
-//
-//    /// Creates a `BasemapGalleryViewModel`. Uses the given list of basemap gallery items.
-//    /// `BasemapGalleryViewModel.currentBasemap` is set to the basemap of the given
-//    /// geoModel if not `nil`.
-//    /// - Parameter geoModel: The `GeoModel` we're selecting the basemap for.
-//    /// - Parameter basemapGalleryItems: The `GeoModel` we're selecting the basemap for.
-//    public init(
-//        geoModel: GeoModel? = nil,
-//        basemapGalleryItems: [BasemapGalleryItem] = []
-//    ) {
-//        self.geoModel = geoModel
-//        self.currentBasemap = geoModel?.basemap
-//        self.basemapGalleryItems = basemapGalleryItems
-//    }
     
     /// If the `GeoModel` is not loaded when passed to the `BasemapGalleryViewModel`, then
     /// the geoModel will be immediately loaded. The spatial reference of geoModel dictates which
     /// basemaps from the gallery are enabled. When an enabled basemap is selected by the user,
     /// the geoModel will have its basemap replaced with the selected basemap.
-    public var geoModel: GeoModel? = nil
-    
-    /// The `Portal` object, if any.
-    public var portal: Portal? = nil
-
-    @Published
-    /// The list of basemaps currently visible in the gallery. Items added or removed from this list will
-    /// update the gallery.
-    public var basemapGalleryItems: [BasemapGalleryItem] = []
-    
-    /// Currently applied basemap on the associated `GeoModel`. This may be a basemap
-    /// which does not exist in the gallery.
-    public var currentBasemap: Basemap? {
-        get async throws {
-            guard let geoModel = geoModel else { return nil }
-            try await geoModel.load()
-            return geoModel.basemap
+    public var geoModel: GeoModel? = nil {
+        didSet {
+            loadGeoModel()
         }
     }
-
-    /// The currently executing async task.  `currentTask` should be cancelled
-    /// prior to starting another async task.
-    private var currentTask: Task<Void, Never>? = nil
     
-    /// Updates suggestions list asynchronously.
-    public func fetchBasemaps() async -> Void {
-        guard let portal = portal else { return }
-        
-        currentTask?.cancel()
-        currentTask = fetchBasemapsTask(portal)
-        await currentTask?.value
+    /// The `Portal` object, if any.  Setting the portal will automatically fetch it's base maps
+    /// and add them to the `basemapGalleryItems` array.
+    public var portal: Portal? = nil {
+        didSet {
+            fetchBasemaps()
+        }
+    }
+    
+    /// The list of basemaps currently visible in the gallery. Items added or removed from this list will
+    /// update the gallery.
+    @Published
+    public var basemapGalleryItems: [BasemapGalleryItem] = []
+    
+    /// `BasemapGalleryItem` representing the `GeoModel`'s current base map. This may be a
+    /// basemap which does not exist in the gallery.
+    @Published
+    public var currentBasemapGalleryItem: BasemapGalleryItem? = nil {
+        didSet {
+            guard let item = currentBasemapGalleryItem else { return }
+            geoModel?.basemap = item.basemap
+        }
+    }
+    
+    // TODO: write tests to check on loading stuff, setting portal and other props, etc.
+    // TODO: Change type of `Task<Void, Never>` so I don't need to wrap operation in a Result.
+    
+    /// The currently executing async task for fetching basemaps from the portal.
+    /// `fetchBasemapTask` should be cancelled prior to starting another async task.
+    private var fetchBasemapTask: Task<Void, Never>? = nil
+    
+    /// Fetches the basemaps from `portal`.
+    private func fetchBasemaps() {
+        fetchBasemapTask?.cancel()
+        fetchBasemapTask = fetchBasemapsTask(portal)
+    }
+    
+    /// The currently executing async task for loading `geoModel`.
+    /// `loadGeoModelTask` should be cancelled prior to starting another async task.
+    private var loadGeoModelTask: Task<Void, Never>? = nil
+    
+    /// Loads `geoModel`.
+    private func loadGeoModel() {
+        loadGeoModelTask?.cancel()
+        loadGeoModelTask = loadGeoModelTask(geoModel)
     }
 }
 
 extension BasemapGalleryViewModel {
-    private func fetchBasemapsTask(_ portal: Portal) -> Task<(), Never> {
-        let task = Task(operation: {
+    private func fetchBasemapsTask(_ portal: Portal?) -> Task<(), Never>? {
+        guard let portal = portal else { return nil }
+        
+        return Task(operation: {
             let basemapResults = await Result {
-                try await portal.fetchDeveloperBasemaps()
+                try await portal.developerBasemaps
             }
             
-            DispatchQueue.main.async { [weak self] in
-                switch basemapResults {
-                case .success(let basemaps):
-                    self?.basemapGalleryItems = basemaps.map { BasemapGalleryItem(basemap: $0) }
-                case .failure(_):
-                    self?.basemapGalleryItems = []
-                case .none:
-                    self?.basemapGalleryItems = []
+            switch basemapResults {
+            case .success(let basemaps):
+                basemaps.forEach { basemap in
+                    Task {
+                        try await basemap.load()
+                        if let loadableImage = basemap.item?.thumbnail {
+                            try await loadableImage.load()
+                        }
+                        basemapGalleryItems.append(BasemapGalleryItem(basemap: basemap))
+                    }
                 }
+            case .failure(_), .none:
+                basemapGalleryItems = []
             }
         })
-        return task
     }
-}
-
-extension BasemapGalleryViewModel {
+    
+    private func loadGeoModelTask(_ geoModel: GeoModel?) -> Task<(), Never>? {
+        guard let geoModel = geoModel else { return nil }
+        
+        return Task(operation: {
+            let loadResult = await Result {
+                try await geoModel.load()
+            }
+            
+            switch loadResult {
+            case .success(_):
+                if let basemap = geoModel.basemap {
+                    currentBasemapGalleryItem = BasemapGalleryItem(basemap: basemap)
+                }
+                else {
+                    fallthrough
+                }
+            case .failure(_), .none:
+                currentBasemapGalleryItem = nil
+            }
+        })
+    }
 }
