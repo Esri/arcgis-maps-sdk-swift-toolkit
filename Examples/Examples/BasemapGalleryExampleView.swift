@@ -28,7 +28,7 @@ struct BasemapGalleryExampleView: View {
             basemap: Basemap(style: .arcGISNova),
             name: "ArcGIS Nova",
             description: "A vector basemap for the world featuring a dark background with glowing blue symbology inspired by science-fiction and futuristic themes.",
-            thumbnail: UIImage(named: "Nova")
+            thumbnail: nil//UIImage(named: "Nova")
             //            thumbnailURL: URL(string: "https://www.arcgis.com/sharing/rest/content/items/90f86b329f37499096d3715ac6e5ed1f/info/thumbnail/thumbnail1607555507609.jpeg")!
         ),
         BasemapGalleryItem(
@@ -92,9 +92,6 @@ struct BasemapGalleryExampleView: View {
     
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
     
-    // TODO: figure out of viewmodel stuff is OK
-    // TODO: get Portal loading and working
-    
     var galleryWidth: CGFloat {
         get {
             if horizontalSizeClass == .regular {
@@ -111,14 +108,6 @@ struct BasemapGalleryExampleView: View {
             MapView(map: map, viewpoint: initialViewpoint)
                 .overlay(
                     VStack(alignment: .trailing) {
-                        Button {
-                            showBasemapGallery.toggle()
-                        } label: {
-                            HStack(alignment: .center) {
-                                Image(systemName: "map.fill")
-                                Text(showBasemapGallery ? "Hide Basemaps" : "Show Basemaps")
-                            }
-                        }
                         if showBasemapGallery {
                             BasemapGallery(viewModel: viewModel)
                                 .basemapGalleryStyle(.automatic)
@@ -132,19 +121,20 @@ struct BasemapGalleryExampleView: View {
                     SetupViewModel()
                 }
         }
+        .navigationTitle("Basemap Gallery")
+        .navigationBarItems(trailing: Button {
+            showBasemapGallery.toggle()
+        } label: {
+            HStack(alignment: .center) {
+                Image(uiImage: UIImage(named: "basemap")!)
+                Text(showBasemapGallery ? "Hide Basemaps" : "Show Basemaps")
+            }
+        })
     }
     
     private func SetupViewModel() {
         viewModel.geoModel = map
         viewModel.basemapGalleryItems = basemapGalleryItems
-//        viewModel.portal = Portal.arcGISOnline(loginRequired: false)
+        viewModel.portal = Portal.arcGISOnline(isLoginRequired: false)
     }
 }
-
-struct BasemapGalleryExampleView_Previews: PreviewProvider {
-    static var previews: some View {
-        BasemapGalleryExampleView()
-    }
-}
-
-// MARK: Extensions

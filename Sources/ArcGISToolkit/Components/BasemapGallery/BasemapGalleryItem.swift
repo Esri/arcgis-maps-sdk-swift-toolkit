@@ -18,6 +18,10 @@ import Foundation
 
 ///  The `BasemapGalleryItem` encompasses an element in a `BasemapGallery`.
 public struct BasemapGalleryItem {
+    static var defaultThumbnail: UIImage {
+        return UIImage(named: "basemap")!
+    }
+    
     public init(
         basemap: Basemap,
         name: String = "",
@@ -25,26 +29,27 @@ public struct BasemapGalleryItem {
         thumbnail: UIImage? = nil
     ) {
         self.basemap = basemap
-        self.name = name
-        self.description = description
-        self.thumbnail = thumbnail
+        self.name = name.isEmpty ? basemap.name : name
+        self.description = description ?? basemap.item?.description
+        self.thumbnail = thumbnail ??
+        (basemap.item?.thumbnail?.image ?? BasemapGalleryItem.defaultThumbnail)
     }
     
     /// The basemap this `BasemapGalleryItem` represents.
-    public var basemap: Basemap
+    public private(set) var basemap: Basemap
     
     /// The name of this `Basemap`.
-    public var name: String
+    public private(set) var name: String
     
     /// The description which will be used in the gallery.
-    public var description: String?
+    public private(set) var description: String?
     
     /// The thumbnail which will be displayed in the gallery.
     public let thumbnail: UIImage?
 }
 
 extension BasemapGalleryItem: Identifiable {
-    public var id: String { name }
+    public var id: ObjectIdentifier { ObjectIdentifier(basemap) }
 }
 
 extension BasemapGalleryItem: Equatable {
