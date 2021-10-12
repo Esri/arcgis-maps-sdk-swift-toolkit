@@ -28,7 +28,7 @@ struct BasemapGalleryExampleView: View {
 ***REMOVED******REMOVED******REMOVED***basemap: Basemap(style: .arcGISNova),
 ***REMOVED******REMOVED******REMOVED***name: "ArcGIS Nova",
 ***REMOVED******REMOVED******REMOVED***description: "A vector basemap for the world featuring a dark background with glowing blue symbology inspired by science-fiction and futuristic themes.",
-***REMOVED******REMOVED******REMOVED***thumbnail: UIImage(named: "Nova")
+***REMOVED******REMOVED******REMOVED***thumbnail: nil***REMOVED***UIImage(named: "Nova")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***thumbnailURL: URL(string: "https:***REMOVED***www.arcgis.com/sharing/rest/content/items/90f86b329f37499096d3715ac6e5ed1f/info/thumbnail/thumbnail1607555507609.jpeg")!
 ***REMOVED******REMOVED***),
 ***REMOVED******REMOVED***BasemapGalleryItem(
@@ -92,9 +92,6 @@ struct BasemapGalleryExampleView: View {
 ***REMOVED***
 ***REMOVED***@Environment(\.horizontalSizeClass) var horizontalSizeClass
 ***REMOVED***
-***REMOVED******REMOVED*** TODO: figure out of viewmodel stuff is OK
-***REMOVED******REMOVED*** TODO: get Portal loading and working
-***REMOVED***
 ***REMOVED***var galleryWidth: CGFloat {
 ***REMOVED******REMOVED***get {
 ***REMOVED******REMOVED******REMOVED***if horizontalSizeClass == .regular {
@@ -111,14 +108,6 @@ struct BasemapGalleryExampleView: View {
 ***REMOVED******REMOVED******REMOVED***MapView(map: map, viewpoint: initialViewpoint)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.overlay(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***VStack(alignment: .trailing) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***showBasemapGallery.toggle()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***HStack(alignment: .center) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "map.fill")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(showBasemapGallery ? "Hide Basemaps" : "Show Basemaps")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if showBasemapGallery {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***BasemapGallery(viewModel: viewModel)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.basemapGalleryStyle(.automatic)
@@ -132,19 +121,20 @@ struct BasemapGalleryExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***SetupViewModel()
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***.navigationTitle("Basemap Gallery")
+***REMOVED******REMOVED***.navigationBarItems(trailing: Button {
+***REMOVED******REMOVED******REMOVED***showBasemapGallery.toggle()
+***REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED***HStack(alignment: .center) {
+***REMOVED******REMOVED******REMOVED******REMOVED***Image(uiImage: UIImage(named: "basemap")!)
+***REMOVED******REMOVED******REMOVED******REMOVED***Text(showBasemapGallery ? "Hide Basemaps" : "Show Basemaps")
+***REMOVED******REMOVED***
+***REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***private func SetupViewModel() {
 ***REMOVED******REMOVED***viewModel.geoModel = map
 ***REMOVED******REMOVED***viewModel.basemapGalleryItems = basemapGalleryItems
-***REMOVED******REMOVED******REMOVED***viewModel.portal = Portal.arcGISOnline(loginRequired: false)
+***REMOVED******REMOVED***viewModel.portal = Portal.arcGISOnline(isLoginRequired: false)
 ***REMOVED***
 ***REMOVED***
-
-struct BasemapGalleryExampleView_Previews: PreviewProvider {
-***REMOVED***static var previews: some View {
-***REMOVED******REMOVED***BasemapGalleryExampleView()
-***REMOVED***
-***REMOVED***
-
-***REMOVED*** MARK: Extensions

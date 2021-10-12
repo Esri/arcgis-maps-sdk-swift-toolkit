@@ -18,6 +18,10 @@ import Foundation
 
 ***REMOVED***/  The `BasemapGalleryItem` encompasses an element in a `BasemapGallery`.
 public struct BasemapGalleryItem {
+***REMOVED***static var defaultThumbnail: UIImage {
+***REMOVED******REMOVED***return UIImage(named: "basemap")!
+***REMOVED***
+***REMOVED***
 ***REMOVED***public init(
 ***REMOVED******REMOVED***basemap: Basemap,
 ***REMOVED******REMOVED***name: String = "",
@@ -25,26 +29,27 @@ public struct BasemapGalleryItem {
 ***REMOVED******REMOVED***thumbnail: UIImage? = nil
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.basemap = basemap
-***REMOVED******REMOVED***self.name = name
-***REMOVED******REMOVED***self.description = description
-***REMOVED******REMOVED***self.thumbnail = thumbnail
+***REMOVED******REMOVED***self.name = name.isEmpty ? basemap.name : name
+***REMOVED******REMOVED***self.description = description ?? basemap.item?.description
+***REMOVED******REMOVED***self.thumbnail = thumbnail ??
+***REMOVED******REMOVED***(basemap.item?.thumbnail?.image ?? BasemapGalleryItem.defaultThumbnail)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The basemap this `BasemapGalleryItem` represents.
-***REMOVED***public var basemap: Basemap
+***REMOVED***public private(set) var basemap: Basemap
 ***REMOVED***
 ***REMOVED******REMOVED***/ The name of this `Basemap`.
-***REMOVED***public var name: String
+***REMOVED***public private(set) var name: String
 ***REMOVED***
 ***REMOVED******REMOVED***/ The description which will be used in the gallery.
-***REMOVED***public var description: String?
+***REMOVED***public private(set) var description: String?
 ***REMOVED***
 ***REMOVED******REMOVED***/ The thumbnail which will be displayed in the gallery.
 ***REMOVED***public let thumbnail: UIImage?
 ***REMOVED***
 
 extension BasemapGalleryItem: Identifiable {
-***REMOVED***public var id: String { name ***REMOVED***
+***REMOVED***public var id: ObjectIdentifier { ObjectIdentifier(basemap) ***REMOVED***
 ***REMOVED***
 
 extension BasemapGalleryItem: Equatable {

@@ -52,9 +52,9 @@ public struct BasemapGallery: View {
 
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***GalleryView()
-***REMOVED******REMOVED******REMOVED***.task {
-***REMOVED******REMOVED******REMOVED******REMOVED***await viewModel.fetchBasemaps()
-***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.onAppear {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.fetchBasemaps()
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED*** MARK: Modifiers
@@ -110,10 +110,11 @@ extension BasemapGallery {
 ***REMOVED******REMOVED******REMOVED***LazyVGrid(columns: columns, spacing: 4) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ForEach(viewModel.basemapGalleryItems) { basemapGalleryItem in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***BasemapGalleryItemRow(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***basemapGalleryItem: basemapGalleryItem
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***basemapGalleryItem: basemapGalleryItem,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentItem: viewModel.currentBasemapGalleryItem
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onTapGesture {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.geoModel?.basemap = basemapGalleryItem.basemap
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.currentBasemapGalleryItem = basemapGalleryItem
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
@@ -124,20 +125,22 @@ extension BasemapGallery {
 
 private struct BasemapGalleryItemRow: View {
 ***REMOVED***var basemapGalleryItem: BasemapGalleryItem
+***REMOVED***var currentItem: BasemapGalleryItem?
 ***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***VStack {
-***REMOVED******REMOVED******REMOVED***if let thumbnailImage = basemapGalleryItem.thumbnail {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** TODO: thumbnail will have to be loaded.
-***REMOVED******REMOVED******REMOVED******REMOVED***Image(uiImage: thumbnailImage)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.resizable()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.aspectRatio(contentMode: .fit)
+***REMOVED******REMOVED***HStack (alignment: .center) {
+***REMOVED******REMOVED******REMOVED***VStack {
+***REMOVED******REMOVED******REMOVED******REMOVED***if let thumbnailImage = basemapGalleryItem.thumbnail {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(uiImage: thumbnailImage)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.resizable()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.aspectRatio(contentMode: .fit)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.border(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***basemapGalleryItem == currentItem ? Color.accentColor: Color.clear,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***width: 3.0)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***Text(basemapGalleryItem.name)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.footnote)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***Text(basemapGalleryItem.name)
-***REMOVED******REMOVED******REMOVED******REMOVED***.font(.footnote)
 ***REMOVED***
-***REMOVED******REMOVED******REMOVED***if basemapGalleryItem == currentBasemap {
-***REMOVED******REMOVED******REMOVED******REMOVED***.background(Color.accentColor)
-***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
