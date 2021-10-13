@@ -71,7 +71,7 @@ public class BasemapGalleryViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED*** TODO: write tests to check on loading stuff, setting portal and other props, etc.
-***REMOVED******REMOVED*** TODO: Change type of `Task<Void, Never>` so I don't need to wrap operation in a Result.
+***REMOVED******REMOVED*** TODO: Change type of `Task<Void, Never>` so I don't need to wrap operation in a Result.???
 ***REMOVED***
 ***REMOVED******REMOVED***/ The currently executing async task for fetching basemaps from the portal.
 ***REMOVED******REMOVED***/ `fetchBasemapTask` should be cancelled prior to starting another async task.

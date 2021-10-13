@@ -68,17 +68,9 @@ struct BasemapGalleryExampleView: View {
 ***REMOVED******REMOVED***)
 ***REMOVED***]
 ***REMOVED***
-***REMOVED***let newItem = BasemapGalleryItem(
-***REMOVED******REMOVED***basemap: Basemap(style: .arcGISMidcentury),
-***REMOVED******REMOVED***name: "ArcGIS Midcentury 2",
-***REMOVED******REMOVED***description: "A 2nd vector basemap inspired by the art and advertising of the 1950's that presents a unique design option to the ArcGIS basemaps.",
-***REMOVED******REMOVED***thumbnail: UIImage(named: "Midcentury")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***thumbnailURL: URL(string: "https:***REMOVED***www.arcgis.com/sharing/rest/content/items/52d6a28f09704f04b33761ba7c4bf93f/info/thumbnail/thumbnail1607554184831.jpeg")!
-***REMOVED***)
-***REMOVED***
-***REMOVED***
-***REMOVED***let map = Map(basemapStyle: .arcGISNova)
-***REMOVED***
+***REMOVED******REMOVED***let geoModel: GeoModel = Map(basemapStyle: .arcGISNova)
+***REMOVED***let geoModel: GeoModel = Scene(basemapStyle: .arcGISNova)
+
 ***REMOVED***@ObservedObject
 ***REMOVED***var viewModel = BasemapGalleryViewModel()
 ***REMOVED***
@@ -105,7 +97,8 @@ struct BasemapGalleryExampleView: View {
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***ZStack(alignment: .topTrailing) {
-***REMOVED******REMOVED******REMOVED***MapView(map: map, viewpoint: initialViewpoint)
+***REMOVED******REMOVED******REMOVED******REMOVED***MapView(map: geoModel as! Map, viewpoint: initialViewpoint)
+***REMOVED******REMOVED******REMOVED***SceneView(scene: geoModel as! ArcGIS.Scene, viewpoint: initialViewpoint)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.overlay(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***VStack(alignment: .trailing) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if showBasemapGallery {
@@ -133,7 +126,7 @@ struct BasemapGalleryExampleView: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***private func SetupViewModel() {
-***REMOVED******REMOVED***viewModel.geoModel = map
+***REMOVED******REMOVED***viewModel.geoModel = geoModel
 ***REMOVED******REMOVED***viewModel.basemapGalleryItems = basemapGalleryItems
 ***REMOVED******REMOVED***viewModel.portal = Portal.arcGISOnline(isLoginRequired: false)
 ***REMOVED***
