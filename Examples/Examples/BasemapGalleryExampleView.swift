@@ -68,17 +68,9 @@ struct BasemapGalleryExampleView: View {
         )
     ]
     
-    let newItem = BasemapGalleryItem(
-        basemap: Basemap(style: .arcGISMidcentury),
-        name: "ArcGIS Midcentury 2",
-        description: "A 2nd vector basemap inspired by the art and advertising of the 1950's that presents a unique design option to the ArcGIS basemaps.",
-        thumbnail: UIImage(named: "Midcentury")
-        //            thumbnailURL: URL(string: "https://www.arcgis.com/sharing/rest/content/items/52d6a28f09704f04b33761ba7c4bf93f/info/thumbnail/thumbnail1607554184831.jpeg")!
-    )
-    
-    
-    let map = Map(basemapStyle: .arcGISNova)
-    
+//    let geoModel: GeoModel = Map(basemapStyle: .arcGISNova)
+    let geoModel: GeoModel = Scene(basemapStyle: .arcGISNova)
+
     @ObservedObject
     var viewModel = BasemapGalleryViewModel()
     
@@ -105,7 +97,8 @@ struct BasemapGalleryExampleView: View {
     
     var body: some View {
         ZStack(alignment: .topTrailing) {
-            MapView(map: map, viewpoint: initialViewpoint)
+//            MapView(map: geoModel as! Map, viewpoint: initialViewpoint)
+            SceneView(scene: geoModel as! ArcGIS.Scene, viewpoint: initialViewpoint)
                 .overlay(
                     VStack(alignment: .trailing) {
                         if showBasemapGallery {
@@ -133,7 +126,7 @@ struct BasemapGalleryExampleView: View {
     }
     
     private func SetupViewModel() {
-        viewModel.geoModel = map
+        viewModel.geoModel = geoModel
         viewModel.basemapGalleryItems = basemapGalleryItems
         viewModel.portal = Portal.arcGISOnline(isLoginRequired: false)
     }
