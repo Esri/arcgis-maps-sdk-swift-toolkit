@@ -71,7 +71,7 @@ public class BasemapGalleryViewModel: ObservableObject {
     }
     
     // TODO: write tests to check on loading stuff, setting portal and other props, etc.
-    // TODO: Change type of `Task<Void, Never>` so I don't need to wrap operation in a Result.
+    // TODO: Change type of `Task<Void, Never>` so I don't need to wrap operation in a Result.???
     
     /// The currently executing async task for fetching basemaps from the portal.
     /// `fetchBasemapTask` should be cancelled prior to starting another async task.
