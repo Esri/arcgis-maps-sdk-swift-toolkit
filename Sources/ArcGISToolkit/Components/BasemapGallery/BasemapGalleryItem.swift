@@ -17,39 +17,117 @@ import ArcGIS
 import Foundation
 
 ///  The `BasemapGalleryItem` encompasses an element in a `BasemapGallery`.
-public struct BasemapGalleryItem {
+public class BasemapGalleryItem: ObservableObject {
     static var defaultThumbnail: UIImage {
-        return UIImage(named: "basemap")!
+        return UIImage(named: "DefaultBasemap")!
     }
     
     public init(
         basemap: Basemap,
-        name: String = "",
-        description: String? = "",
+        name: String? = nil,
+        description: String? = nil,
         thumbnail: UIImage? = nil
     ) {
         self.basemap = basemap
-        self.name = name.isEmpty ? basemap.name : name
-        self.description = description ?? basemap.item?.description
-        self.thumbnail = thumbnail ??
-        (basemap.item?.thumbnail?.image ?? BasemapGalleryItem.defaultThumbnail)
+        self.nameOverride = name
+        self.name = name ?? ""
+        self.descriptionOverride = description
+        self.description = description
+        self.thumbnailOverride = thumbnail
+        self.thumbnail = thumbnail
+        
+        loadBasemapTask = Task { await loadBasemap() }
     }
     
+//    deinit {
+//        loadBasemapTask.cancel()
+//        fetchBasemapTask.cancel()
+//    }
+    
+    @Published
+    public var loadBasemapsError: Error? = nil
+
+    /// The currently executing async task for loading basemap.
+    private var loadBasemapTask: Task<Void, Never>? = nil
+
     /// The basemap this `BasemapGalleryItem` represents.
     public private(set) var basemap: Basemap
-    
+
+    private var nameOverride: String? = nil
     /// The name of this `Basemap`.
-    public private(set) var name: String
-    
+    @Published
+    public private(set) var name: String = ""
+
+    private var descriptionOverride: String? = nil
     /// The description which will be used in the gallery.
-    public private(set) var description: String?
-    
+    @Published
+    public private(set) var description: String? = nil
+
+    private var thumbnailOverride: UIImage? = nil
     /// The thumbnail which will be displayed in the gallery.
-    public let thumbnail: UIImage?
+    @Published
+    public private(set) var thumbnail: UIImage? = nil
+    
+    public private(set) var spatialReference: SpatialReference? = nil
+    
+    @Published
+    public private(set) var isLoaded = false
+}
+
+extension BasemapGalleryItem {
+    private func loadBasemap() async {
+        do {
+            print("pre-basemap.load()")
+            try await basemap.load()
+            print("basemap loaded!")
+            if let loadableImage = basemap.item?.thumbnail {
+                try await loadableImage.load()
+            }
+            
+            //TODO: use the item.spatialreferenceName to create a spatial reference instead of always loading the first base layer.
+            // Determine the spatial reference of the basemap
+//            if let item = basemap.item as? PortalItem {
+//                try await item.load()
+//            }
+
+            print("sr = \(basemap.item?.spatialReferenceName ?? "no name"); item: \(String(describing: (basemap.item as? PortalItem)?.loadStatus))")
+            if let layer = basemap.baseLayers.first {
+                try await layer.load()
+                spatialReference = layer.spatialReference
+            }
+            
+            //TODO:  Add sr checking and setting of sr to bmgi (isValid???); and what to do with errors...
+            
+            await update()
+        } catch {
+            loadBasemapsError = error
+        }
+    }
+    
+    @MainActor
+    func update() {
+        self.name = nameOverride ?? basemap.name
+        self.description = descriptionOverride ?? basemap.item?.description
+        self.thumbnail = thumbnailOverride ??
+        (basemap.item?.thumbnail?.image ?? BasemapGalleryItem.defaultThumbnail)
+        
+        isLoaded = true
+    }
+    
+    /// Returns whether the basemap gallery item is valid and ok to use.
+    /// - Parameter item: item to match spatial references with.
+    /// - Returns: true if the item is loaded and either `item`'s spatial reference is nil
+    /// or matches `spatialReference`.
+    public func isValid(for otherSpatialReference: SpatialReference?) -> Bool {
+        print("name: \(name); isLoaded = \(isLoaded); loadStatus = \(basemap.loadStatus)")
+        guard isLoaded else { return false }
+        return otherSpatialReference == nil || otherSpatialReference == spatialReference
+//        return true
+    }
 }
 
 extension BasemapGalleryItem: Identifiable {
-    public var id: ObjectIdentifier { ObjectIdentifier(basemap) }
+    public var id: ObjectIdentifier { ObjectIdentifier(self) }
 }
 
 extension BasemapGalleryItem: Equatable {
@@ -59,5 +137,5 @@ extension BasemapGalleryItem: Equatable {
         lhs.description == rhs.description &&
         lhs.thumbnail === rhs.thumbnail
     }
-    
+
 }
