@@ -83,7 +83,7 @@ struct SearchExampleView: View {
 ***REMOVED******REMOVED***/ Sets up any desired customization on `searchViewModel`.
 ***REMOVED***private func setupSearchViewModel() {
 ***REMOVED******REMOVED***let smartLocator = SmartLocatorSearchSource(
-***REMOVED******REMOVED******REMOVED***displayName: "My locator",
+***REMOVED******REMOVED******REMOVED***name: "My locator",
 ***REMOVED******REMOVED******REMOVED***maximumResults: 16,
 ***REMOVED******REMOVED******REMOVED***maximumSuggestions: 16
 ***REMOVED******REMOVED***)

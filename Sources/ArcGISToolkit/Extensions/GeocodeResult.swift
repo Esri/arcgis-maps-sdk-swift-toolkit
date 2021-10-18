@@ -17,7 +17,7 @@ extension GeocodeResult {
 ***REMOVED******REMOVED***/ Converts a `GeocodeResult` to a `SearchResult`.
 ***REMOVED******REMOVED***/ - Parameter searchSource: The search source generating the result.
 ***REMOVED******REMOVED***/ - Returns: The new `SearchResult`.
-***REMOVED***func toSearchResult(searchSource: SearchSourceProtocol) -> SearchResult {
+***REMOVED***func toSearchResult(searchSource: SearchSource) -> SearchResult {
 ***REMOVED******REMOVED***let subtitle = self.attributes["LongLabel"] as? String ??
 ***REMOVED******REMOVED***"Match percent: \((self.score / 100.0).formatted(.percent))"
 ***REMOVED******REMOVED***var viewpoint: Viewpoint? = nil

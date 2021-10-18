@@ -40,11 +40,11 @@ public class SearchViewModel: ObservableObject {
 ***REMOVED******REMOVED***/   - sources: Collection of search sources to be used.
 ***REMOVED***public convenience init(
 ***REMOVED******REMOVED***defaultPlaceholder: String = .defaultPlaceholder,
-***REMOVED******REMOVED***activeSource: SearchSourceProtocol? = nil,
+***REMOVED******REMOVED***activeSource: SearchSource? = nil,
 ***REMOVED******REMOVED***queryArea: Geometry? = nil,
 ***REMOVED******REMOVED***queryCenter: Point? = nil,
 ***REMOVED******REMOVED***resultMode: SearchResultMode = .automatic,
-***REMOVED******REMOVED***sources: [SearchSourceProtocol] = []
+***REMOVED******REMOVED***sources: [SearchSource] = []
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.init()
 ***REMOVED******REMOVED***self.defaultPlaceholder = defaultPlaceholder
@@ -60,7 +60,7 @@ public class SearchViewModel: ObservableObject {
 ***REMOVED***public var defaultPlaceholder: String = .defaultPlaceholder
 ***REMOVED***
 ***REMOVED******REMOVED***/ The active search source.  If `nil`, the first item in `sources` is used.
-***REMOVED***public var activeSource: SearchSourceProtocol?
+***REMOVED***public var activeSource: SearchSource?
 ***REMOVED***
 ***REMOVED******REMOVED***/ Tracks the current user-entered query. This property drives both suggestions and searches.
 ***REMOVED***@Published
@@ -170,7 +170,7 @@ public class SearchViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ The view should observe this list for changes. Consumers should add and remove sources from
 ***REMOVED******REMOVED***/ this list as needed.
 ***REMOVED******REMOVED***/ NOTE:  only the first source is currently used; multiple sources are not yet supported.
-***REMOVED***public var sources: [SearchSourceProtocol] = []
+***REMOVED***public var sources: [SearchSource] = []
 ***REMOVED***
 ***REMOVED******REMOVED***/ Collection of suggestion results. Defaults to `nil`. This collection will be set to empty when there
 ***REMOVED******REMOVED***/ are no suggestions, `nil` when no suggestions have been requested. If the list is empty,
@@ -191,7 +191,7 @@ public class SearchViewModel: ObservableObject {
 ***REMOVED***private func makeEffectiveSource(
 ***REMOVED******REMOVED***with searchArea: Geometry?,
 ***REMOVED******REMOVED***preferredSearchLocation: Point?
-***REMOVED***) -> SearchSourceProtocol? {
+***REMOVED***) -> SearchSource? {
 ***REMOVED******REMOVED***guard var source = currentSource() else { return nil ***REMOVED***
 ***REMOVED******REMOVED***source.searchArea = searchArea
 ***REMOVED******REMOVED***source.preferredSearchLocation = preferredSearchLocation
@@ -366,8 +366,8 @@ extension SearchViewModel {
 extension SearchViewModel {
 ***REMOVED******REMOVED***/ Returns the search source to be used in geocode operations.
 ***REMOVED******REMOVED***/ - Returns: The search source to use.
-***REMOVED***func currentSource() -> SearchSourceProtocol? {
-***REMOVED******REMOVED***var source: SearchSourceProtocol?
+***REMOVED***func currentSource() -> SearchSource? {
+***REMOVED******REMOVED***var source: SearchSource?
 ***REMOVED******REMOVED***if let activeSource = activeSource {
 ***REMOVED******REMOVED******REMOVED***source = activeSource
 ***REMOVED*** else {

@@ -15,9 +15,9 @@
 import Foundation
 
 ***REMOVED***/ Defines the contract for a search result provider.
-public protocol SearchSourceProtocol {
+public protocol SearchSource {
 ***REMOVED******REMOVED***/ Name to show when presenting this source in the UI.
-***REMOVED***var displayName: String { get set ***REMOVED***
+***REMOVED***var name: String { get set ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The maximum results to return when performing a search. Most sources default to 6.
 ***REMOVED***var maximumResults: Int32 { get set ***REMOVED***
@@ -25,10 +25,10 @@ public protocol SearchSourceProtocol {
 ***REMOVED******REMOVED***/ The maximum suggestions to return. Most sources default to 6.
 ***REMOVED***var maximumSuggestions: Int32 { get set ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Area to be used as a constraint for searches and suggestions.
+***REMOVED******REMOVED***/ The area to be used as a constraint for searches and suggestions.
 ***REMOVED***var searchArea: Geometry? { get set ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Point to be used as an input to searches and suggestions.
+***REMOVED******REMOVED***/ The point to be used as an input to searches and suggestions.
 ***REMOVED***var preferredSearchLocation: Point? { get set ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Gets suggestions.

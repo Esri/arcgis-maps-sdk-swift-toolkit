@@ -16,16 +16,16 @@ import Foundation
 
 ***REMOVED***/ Uses a Locator to provide search and suggest results. Most configuration should be done on the
 ***REMOVED***/ `GeocodeParameters` directly.
-public class LocatorSearchSource: ObservableObject, SearchSourceProtocol {
+public class LocatorSearchSource: ObservableObject, SearchSource {
 ***REMOVED******REMOVED***/ Creates a locator search source.
 ***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - displayName: Name to show when presenting this source in the UI.
+***REMOVED******REMOVED***/   - name: Name to show when presenting this source in the UI.
 ***REMOVED******REMOVED***/   - maximumResults: The maximum results to return when performing a search. Most sources default to 6.
 ***REMOVED******REMOVED***/   - maximumSuggestions: The maximum suggestions to return. Most sources default to 6.
 ***REMOVED******REMOVED***/   - searchArea: Area to be used as a constraint for searches and suggestions.
 ***REMOVED******REMOVED***/   - preferredSearchLocation: Point to be used as an input to searches and suggestions.
 ***REMOVED***public init(
-***REMOVED******REMOVED***displayName: String = "Locator",
+***REMOVED******REMOVED***name: String = "Locator",
 ***REMOVED******REMOVED***locatorTask: LocatorTask = LocatorTask(
 ***REMOVED******REMOVED******REMOVED***url: URL(
 ***REMOVED******REMOVED******REMOVED******REMOVED***string: "https:***REMOVED***geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer"
@@ -36,7 +36,7 @@ public class LocatorSearchSource: ObservableObject, SearchSourceProtocol {
 ***REMOVED******REMOVED***searchArea: Geometry? = nil,
 ***REMOVED******REMOVED***preferredSearchLocation: Point? = nil
 ***REMOVED***) {
-***REMOVED******REMOVED***self.displayName = displayName
+***REMOVED******REMOVED***self.name = name
 ***REMOVED******REMOVED***self.locatorTask = locatorTask
 ***REMOVED******REMOVED***self.maximumResults = maximumResults
 ***REMOVED******REMOVED***self.maximumSuggestions = maximumSuggestions
@@ -47,7 +47,7 @@ public class LocatorSearchSource: ObservableObject, SearchSourceProtocol {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Name to show when presenting this source in the UI.
-***REMOVED***public var displayName: String
+***REMOVED***public var name: String
 ***REMOVED***
 ***REMOVED******REMOVED***/ The maximum results to return when performing a search. Most sources default to 6
 ***REMOVED***public var maximumResults: Int32 {

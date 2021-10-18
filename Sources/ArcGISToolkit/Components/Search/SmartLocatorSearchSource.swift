@@ -21,7 +21,7 @@
 public class SmartLocatorSearchSource: LocatorSearchSource {
 ***REMOVED******REMOVED***/ Creates a smart locator search source.
 ***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - displayName: Name to show when presenting this source in the UI.
+***REMOVED******REMOVED***/   - name: Name to show when presenting this source in the UI.
 ***REMOVED******REMOVED***/   - maximumResults: The maximum results to return when performing a search. Most sources default to 6.
 ***REMOVED******REMOVED***/   - maximumSuggestions: The maximum suggestions to return. Most sources default to 6.
 ***REMOVED******REMOVED***/   - searchArea: Area to be used as a constraint for searches and suggestions.
@@ -29,7 +29,7 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
 ***REMOVED******REMOVED***/   - repeatSearchResultThreshold: The minimum number of search results to attempt to return.
 ***REMOVED******REMOVED***/   - repeatSuggestResultThreshold: The minimum number of suggestions to attempt to return.
 ***REMOVED***public init(
-***REMOVED******REMOVED***displayName: String = "Smart Locator",
+***REMOVED******REMOVED***name: String = "Smart Locator",
 ***REMOVED******REMOVED***locatorTask: LocatorTask = LocatorTask(
 ***REMOVED******REMOVED******REMOVED***url: URL(
 ***REMOVED******REMOVED******REMOVED******REMOVED***string: "https:***REMOVED***geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer"
@@ -43,7 +43,7 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
 ***REMOVED******REMOVED***repeatSuggestResultThreshold: Int = 6
 ***REMOVED***) {
 ***REMOVED******REMOVED***super.init(
-***REMOVED******REMOVED******REMOVED***displayName: displayName,
+***REMOVED******REMOVED******REMOVED***name: name,
 ***REMOVED******REMOVED******REMOVED***locatorTask: locatorTask,
 ***REMOVED******REMOVED******REMOVED***maximumResults: maximumResults,
 ***REMOVED******REMOVED******REMOVED***maximumSuggestions: maximumSuggestions,

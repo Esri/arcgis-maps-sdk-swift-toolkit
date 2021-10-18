@@ -47,7 +47,7 @@ class SearchViewModelTests: XCTestCase {
 ***REMOVED***
 ***REMOVED***func testActiveSource() async throws {
 ***REMOVED******REMOVED***let activeSource = LocatorSearchSource()
-***REMOVED******REMOVED***activeSource.displayName = "Simple Locator"
+***REMOVED******REMOVED***activeSource.name = "Simple Locator"
 ***REMOVED******REMOVED***let model = SearchViewModel(
 ***REMOVED******REMOVED******REMOVED***activeSource: activeSource,
 ***REMOVED******REMOVED******REMOVED***sources: [LocatorSearchSource()]
@@ -59,13 +59,13 @@ class SearchViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let results = try await model.$results.compactMap({$0***REMOVED***).first
 ***REMOVED******REMOVED***let result = try XCTUnwrap(results?.get().first)
-***REMOVED******REMOVED***XCTAssertEqual(result.owningSource.displayName, activeSource.displayName)
+***REMOVED******REMOVED***XCTAssertEqual(result.owningSource.name, activeSource.name)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***Task { model.updateSuggestions() ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let suggestions = try await model.$suggestions.compactMap({$0***REMOVED***).first
 ***REMOVED******REMOVED***let suggestion = try XCTUnwrap(suggestions?.get().first)
-***REMOVED******REMOVED***XCTAssertEqual(suggestion.owningSource.displayName, activeSource.displayName)
+***REMOVED******REMOVED***XCTAssertEqual(suggestion.owningSource.name, activeSource.name)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func testCommitSearch() async throws {
