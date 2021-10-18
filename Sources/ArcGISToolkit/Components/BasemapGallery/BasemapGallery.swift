@@ -111,7 +111,10 @@ extension BasemapGallery {
                 ForEach(viewModel.basemapGalleryItems) { basemapGalleryItem in
                     BasemapGalleryItemRow(
                         basemapGalleryItem: basemapGalleryItem,
-                        currentItem: viewModel.currentBasemapGalleryItem
+                        isSelected: basemapGalleryItem == viewModel.currentBasemapGalleryItem,
+                        isValid: basemapGalleryItem.isValid(
+                            for: viewModel.currentSpatialReference
+                        )
                     )
                         .onTapGesture {
                             viewModel.currentBasemapGalleryItem = basemapGalleryItem
@@ -124,23 +127,36 @@ extension BasemapGallery {
 }
 
 private struct BasemapGalleryItemRow: View {
-    var basemapGalleryItem: BasemapGalleryItem
-    var currentItem: BasemapGalleryItem?
+    @ObservedObject var basemapGalleryItem: BasemapGalleryItem
+    let isSelected: Bool
+    let isValid: Bool
     
     var body: some View {
-        HStack (alignment: .center) {
+        ZStack {
             VStack {
-                if let thumbnailImage = basemapGalleryItem.thumbnail {
+                if !basemapGalleryItem.isLoaded {
+                    Spacer()
+                    Text("Loading...")
+                        .font(.caption)
+                    Spacer()
+                }
+                else if let thumbnailImage = basemapGalleryItem.thumbnail {
                     Image(uiImage: thumbnailImage)
                         .resizable()
                         .aspectRatio(contentMode: .fit)
                         .border(
-                            basemapGalleryItem == currentItem ? Color.accentColor: Color.clear,
+                            isSelected ? Color.accentColor: Color.clear,
                             width: 3.0)
                 }
                 Text(basemapGalleryItem.name)
                     .font(.footnote)
             }
+            if !isValid {
+                Color(white: 0.5, opacity: 0.5)
+                    .blur(radius: 0.0, opaque: true)
+            }
+
         }
+        .allowsHitTesting(isValid)
     }
 }
