@@ -18,7 +18,7 @@ public class SearchSuggestion {
     public init(
         displayTitle: String,
         displaySubtitle: String? = nil,
-        owningSource: SearchSourceProtocol,
+        owningSource: SearchSource,
         suggestResult: SuggestResult? = nil,
         isCollection: Bool
     ) {
@@ -38,7 +38,7 @@ public class SearchSuggestion {
     /// Reference to the `SearchSourceProtocol` that created this suggestion. This property is necessary for the
     /// view model to be able to accept a suggestion, because a suggestion should only be used with the
     /// locator that created it.
-    public var owningSource: SearchSourceProtocol
+    public var owningSource: SearchSource
     
     /// Underlying suggest result if this suggestion was created by a LocatorTask. This can be `nil`, and
     /// is likely to be `nil` when using custom `SearchSourceProtocol` implementations.
