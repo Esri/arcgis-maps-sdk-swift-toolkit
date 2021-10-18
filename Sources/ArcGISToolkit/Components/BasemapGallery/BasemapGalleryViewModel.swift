@@ -21,40 +21,52 @@ import Combine
 public class BasemapGalleryViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ Creates a `BasemapGalleryViewModel`.
 ***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - currentBasemap: The `Basemap` currently used by a `GeoModel`.
+***REMOVED******REMOVED***/   - geoModel: The `GeoModel`.
 ***REMOVED******REMOVED***/   - portal: The `Portal` to load base maps from.
 ***REMOVED******REMOVED***/   - basemapGalleryItems: A list of pre-defined base maps to display.
 ***REMOVED***public init(
 ***REMOVED******REMOVED***geoModel: GeoModel? = nil,
 ***REMOVED******REMOVED***portal: Portal? = nil,
-***REMOVED******REMOVED***basemapGalleryItems: [BasemapGalleryItem] = []
+***REMOVED******REMOVED***basemapGalleryItems: [BasemapGalleryItem] = []  ***REMOVED*** TODO: Doc passing this in.
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.geoModel = geoModel
 ***REMOVED******REMOVED***self.portal = portal
 ***REMOVED******REMOVED***self.basemapGalleryItems.append(contentsOf: basemapGalleryItems)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***loadGeoModel()
-***REMOVED******REMOVED***fetchBasemaps()
+***REMOVED******REMOVED***loadGeoModelTask = Task { await loadGeoModel() ***REMOVED***
+***REMOVED******REMOVED***fetchBasemapTask = Task { await fetchBasemaps() ***REMOVED***
 ***REMOVED***
 ***REMOVED***
+***REMOVED***deinit {
+***REMOVED******REMOVED***loadGeoModelTask?.cancel()
+***REMOVED******REMOVED***fetchBasemapTask?.cancel()
+***REMOVED***
+***REMOVED***
+***REMOVED***@Published
+***REMOVED***public var fetchBasemapsError: Error? = nil
+***REMOVED***
+***REMOVED***@Published
+***REMOVED***public var loadGeoModelError: Error? = nil
+
 ***REMOVED******REMOVED***/ If the `GeoModel` is not loaded when passed to the `BasemapGalleryViewModel`, then
 ***REMOVED******REMOVED***/ the geoModel will be immediately loaded. The spatial reference of geoModel dictates which
 ***REMOVED******REMOVED***/ basemaps from the gallery are enabled. When an enabled basemap is selected by the user,
 ***REMOVED******REMOVED***/ the geoModel will have its basemap replaced with the selected basemap.
-***REMOVED***public var geoModel: GeoModel? = nil {
+***REMOVED***public var geoModel: GeoModel? {
 ***REMOVED******REMOVED***didSet {
-***REMOVED******REMOVED******REMOVED***loadGeoModel()
+***REMOVED******REMOVED******REMOVED***loadGeoModelTask?.cancel()
+***REMOVED******REMOVED******REMOVED***loadGeoModelTask = Task { await loadGeoModel() ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The `Portal` object, if any.  Setting the portal will automatically fetch it's base maps
 ***REMOVED******REMOVED***/ and add them to the `basemapGalleryItems` array.
-***REMOVED***public var portal: Portal? = nil {
-***REMOVED******REMOVED***didSet {
-***REMOVED******REMOVED******REMOVED***fetchBasemaps()
-***REMOVED***
-***REMOVED***
-***REMOVED***
+***REMOVED***public var portal: Portal? {
+***REMOVED***   didSet {
+***REMOVED******REMOVED***   fetchBasemapTask?.cancel()
+***REMOVED******REMOVED***   fetchBasemapTask = Task { await fetchBasemaps() ***REMOVED***
+   ***REMOVED***
+   ***REMOVED***
 ***REMOVED******REMOVED***/ The list of basemaps currently visible in the gallery. Items added or removed from this list will
 ***REMOVED******REMOVED***/ update the gallery.
 ***REMOVED***@Published
@@ -70,17 +82,29 @@ public class BasemapGalleryViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
+***REMOVED***public var currentSpatialReference: SpatialReference? {
+***REMOVED******REMOVED***guard let scene = geoModel as? ArcGIS.Scene,
+***REMOVED******REMOVED******REMOVED***  scene.sceneViewTilingScheme == .webMercator else {
+***REMOVED******REMOVED******REMOVED******REMOVED***  return geoModel?.spatialReference
+***REMOVED***  ***REMOVED***
+***REMOVED******REMOVED***return .webMercator
+***REMOVED***
+***REMOVED***
 ***REMOVED******REMOVED*** TODO: write tests to check on loading stuff, setting portal and other props, etc.
-***REMOVED******REMOVED*** TODO: Change type of `Task<Void, Never>` so I don't need to wrap operation in a Result.???
 ***REMOVED***
 ***REMOVED******REMOVED***/ The currently executing async task for fetching basemaps from the portal.
 ***REMOVED******REMOVED***/ `fetchBasemapTask` should be cancelled prior to starting another async task.
 ***REMOVED***private var fetchBasemapTask: Task<Void, Never>? = nil
 ***REMOVED***
 ***REMOVED******REMOVED***/ Fetches the basemaps from `portal`.
-***REMOVED***private func fetchBasemaps() {
-***REMOVED******REMOVED***fetchBasemapTask?.cancel()
-***REMOVED******REMOVED***fetchBasemapTask = fetchBasemapsTask(portal)
+***REMOVED***private func fetchBasemaps() async {
+***REMOVED******REMOVED***guard let portal = portal else { return ***REMOVED***
+
+***REMOVED******REMOVED***do {
+***REMOVED******REMOVED******REMOVED***basemapGalleryItems += try await portal.developerBasemaps.map { BasemapGalleryItem.init(basemap: $0) ***REMOVED***
+***REMOVED*** catch {
+***REMOVED******REMOVED******REMOVED***fetchBasemapsError = error
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The currently executing async task for loading `geoModel`.
@@ -88,57 +112,30 @@ public class BasemapGalleryViewModel: ObservableObject {
 ***REMOVED***private var loadGeoModelTask: Task<Void, Never>? = nil
 ***REMOVED***
 ***REMOVED******REMOVED***/ Loads `geoModel`.
-***REMOVED***private func loadGeoModel() {
-***REMOVED******REMOVED***loadGeoModelTask?.cancel()
-***REMOVED******REMOVED***loadGeoModelTask = loadGeoModelTask(geoModel)
+***REMOVED***private func loadGeoModel() async {
+***REMOVED******REMOVED***guard let geoModel = geoModel else { return ***REMOVED***
+***REMOVED******REMOVED***do {
+***REMOVED******REMOVED******REMOVED***try await geoModel.load()
+***REMOVED******REMOVED******REMOVED***if let basemap = geoModel.basemap {
+***REMOVED******REMOVED******REMOVED******REMOVED***currentBasemapGalleryItem = BasemapGalleryItem(basemap: basemap)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***else {
+***REMOVED******REMOVED******REMOVED******REMOVED***currentBasemapGalleryItem = nil
+***REMOVED******REMOVED***
+***REMOVED*** catch {
+***REMOVED******REMOVED******REMOVED***loadGeoModelError = error
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
-extension BasemapGalleryViewModel {
-***REMOVED***private func fetchBasemapsTask(_ portal: Portal?) -> Task<(), Never>? {
-***REMOVED******REMOVED***guard let portal = portal else { return nil ***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***return Task(operation: {
-***REMOVED******REMOVED******REMOVED***let basemapResults = await Result {
-***REMOVED******REMOVED******REMOVED******REMOVED***try await portal.developerBasemaps
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***switch basemapResults {
-***REMOVED******REMOVED******REMOVED***case .success(let basemaps):
-***REMOVED******REMOVED******REMOVED******REMOVED***basemaps.forEach { basemap in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try await basemap.load()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let loadableImage = basemap.item?.thumbnail {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try await loadableImage.load()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***basemapGalleryItems.append(BasemapGalleryItem(basemap: basemap))
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***case .failure(_), .none:
-***REMOVED******REMOVED******REMOVED******REMOVED***basemapGalleryItems = []
-***REMOVED******REMOVED***
-***REMOVED***)
+***REMOVED***extension SpatialReference {
+***REMOVED******REMOVED***public func effectivelyEquals(_ otherSpatialReference: SpatialReference?) -> Bool {
+***REMOVED******REMOVED******REMOVED***guard let otherSR = otherSpatialReference else { false ***REMOVED***
 ***REMOVED***
-***REMOVED***
-***REMOVED***private func loadGeoModelTask(_ geoModel: GeoModel?) -> Task<(), Never>? {
-***REMOVED******REMOVED***guard let geoModel = geoModel else { return nil ***REMOVED***
+***REMOVED******REMOVED******REMOVED***guard let self != otherSpatialReference else { true ***REMOVED***
+***REMOVED******REMOVED******REMOVED***if self == otherSR {
+***REMOVED******REMOVED******REMOVED******REMOVED***return true
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***return Task(operation: {
-***REMOVED******REMOVED******REMOVED***let loadResult = await Result {
-***REMOVED******REMOVED******REMOVED******REMOVED***try await geoModel.load()
+***REMOVED******REMOVED******REMOVED***else
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***switch loadResult {
-***REMOVED******REMOVED******REMOVED***case .success(_):
-***REMOVED******REMOVED******REMOVED******REMOVED***if let basemap = geoModel.basemap {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentBasemapGalleryItem = BasemapGalleryItem(basemap: basemap)
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***fallthrough
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***case .failure(_), .none:
-***REMOVED******REMOVED******REMOVED******REMOVED***currentBasemapGalleryItem = nil
 ***REMOVED******REMOVED***
-***REMOVED***)
-***REMOVED***
-***REMOVED***
