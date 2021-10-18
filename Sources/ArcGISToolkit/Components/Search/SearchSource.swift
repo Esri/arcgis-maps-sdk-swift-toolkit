@@ -12,7 +12,6 @@
 ***REMOVED*** limitations under the License.
 
 ***REMOVED***
-import Foundation
 
 ***REMOVED***/ Defines the contract for a search result provider.
 public protocol SearchSource {
@@ -31,10 +30,9 @@ public protocol SearchSource {
 ***REMOVED******REMOVED***/ The point to be used as an input to searches and suggestions.
 ***REMOVED***var preferredSearchLocation: Point? { get set ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Gets suggestions.
-***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - queryString: Text to be used for query.
-***REMOVED******REMOVED***/ - Returns: The array of suggestions.
+***REMOVED******REMOVED***/ Returns the search suggestions for the specified query.
+***REMOVED******REMOVED***/ - Parameter queryString: The query for which to provide search suggestions.
+***REMOVED******REMOVED***/ - Returns: An array of search suggestions.
 ***REMOVED***func suggest(_ queryString: String) async throws -> [SearchSuggestion]
 ***REMOVED***
 ***REMOVED******REMOVED***/ Gets search results.
@@ -43,12 +41,10 @@ public protocol SearchSource {
 ***REMOVED******REMOVED***/ - Returns: Array of `SearchResult`s
 ***REMOVED***func search(_ queryString: String) async throws -> [SearchResult]
 ***REMOVED***
-***REMOVED******REMOVED***/ Gets search results. If `area` is not `nil`, search is restricted to that area. Otherwise, the
-***REMOVED******REMOVED***/ `searchArea` property may be consulted but does not need to be used as a strict limit.
-***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - searchSuggestion: Suggestion to be used as basis for search.
-***REMOVED******REMOVED***/   - area: Area to be used to constrain search results.
-***REMOVED******REMOVED***/ - Returns: Array of `SearchResult`s
+***REMOVED******REMOVED***/ Returns the search results for the specified search suggestion.
+***REMOVED******REMOVED***/ - Parameter searchSuggestion: The search suggestion for which to provide
+***REMOVED******REMOVED***/ search results.
+***REMOVED******REMOVED***/ - Returns: An array of search results.
 ***REMOVED***func search(
 ***REMOVED******REMOVED***_ searchSuggestion: SearchSuggestion
 ***REMOVED***) async throws -> [SearchResult]
