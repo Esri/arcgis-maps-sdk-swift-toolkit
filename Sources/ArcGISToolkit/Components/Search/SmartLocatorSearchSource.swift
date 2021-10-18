@@ -21,7 +21,7 @@ import ArcGIS
 public class SmartLocatorSearchSource: LocatorSearchSource {
     /// Creates a smart locator search source.
     /// - Parameters:
-    ///   - displayName: Name to show when presenting this source in the UI.
+    ///   - name: Name to show when presenting this source in the UI.
     ///   - maximumResults: The maximum results to return when performing a search. Most sources default to 6.
     ///   - maximumSuggestions: The maximum suggestions to return. Most sources default to 6.
     ///   - searchArea: Area to be used as a constraint for searches and suggestions.
@@ -29,7 +29,7 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
     ///   - repeatSearchResultThreshold: The minimum number of search results to attempt to return.
     ///   - repeatSuggestResultThreshold: The minimum number of suggestions to attempt to return.
     public init(
-        displayName: String = "Smart Locator",
+        name: String = "Smart Locator",
         locatorTask: LocatorTask = LocatorTask(
             url: URL(
                 string: "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer"
@@ -43,7 +43,7 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
         repeatSuggestResultThreshold: Int = 6
     ) {
         super.init(
-            displayName: displayName,
+            name: name,
             locatorTask: locatorTask,
             maximumResults: maximumResults,
             maximumSuggestions: maximumSuggestions,
