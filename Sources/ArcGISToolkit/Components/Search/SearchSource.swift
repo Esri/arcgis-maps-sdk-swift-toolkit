@@ -12,7 +12,6 @@
 // limitations under the License.
 
 import ArcGIS
-import Foundation
 
 /// Defines the contract for a search result provider.
 public protocol SearchSource {
@@ -31,10 +30,9 @@ public protocol SearchSource {
     /// The point to be used as an input to searches and suggestions.
     var preferredSearchLocation: Point? { get set }
     
-    /// Gets suggestions.
-    /// - Parameters:
-    ///   - queryString: Text to be used for query.
-    /// - Returns: The array of suggestions.
+    /// Returns the search suggestions for the specified query.
+    /// - Parameter queryString: The query for which to provide search suggestions.
+    /// - Returns: An array of search suggestions.
     func suggest(_ queryString: String) async throws -> [SearchSuggestion]
     
     /// Gets search results.
@@ -43,12 +41,10 @@ public protocol SearchSource {
     /// - Returns: Array of `SearchResult`s
     func search(_ queryString: String) async throws -> [SearchResult]
     
-    /// Gets search results. If `area` is not `nil`, search is restricted to that area. Otherwise, the
-    /// `searchArea` property may be consulted but does not need to be used as a strict limit.
-    /// - Parameters:
-    ///   - searchSuggestion: Suggestion to be used as basis for search.
-    ///   - area: Area to be used to constrain search results.
-    /// - Returns: Array of `SearchResult`s
+    /// Returns the search results for the specified search suggestion.
+    /// - Parameter searchSuggestion: The search suggestion for which to provide
+    /// search results.
+    /// - Returns: An array of search results.
     func search(
         _ searchSuggestion: SearchSuggestion
     ) async throws -> [SearchResult]
