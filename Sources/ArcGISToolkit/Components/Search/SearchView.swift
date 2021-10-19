@@ -67,7 +67,7 @@ public struct SearchView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Determines whether the results lists are displayed.
 ***REMOVED***@State
-***REMOVED***private var isResultListViewHidden: Bool = false
+***REMOVED***private var showResultListView: Bool = true
 ***REMOVED***
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***VStack (alignment: .center) {
@@ -84,11 +84,11 @@ public struct SearchView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.esriDeleteTextButton(text: $searchViewModel.currentQuery)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.esriSearchButton { searchViewModel.commitSearch() ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.esriShowResultsButton(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isEnabled: enableResultListView,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isHidden: $isResultListViewHidden
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isHidden: !enableResultListView,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***showResults: $showResultListView
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.esriBorder()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if enableResultListView, !isResultListViewHidden {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if enableResultListView, showResultListView {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let results = searchViewModel.results {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***SearchResultList(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***searchResults: results,
@@ -243,7 +243,7 @@ struct SearchResultList: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.esriBorder(edgeInsets: EdgeInsets())
+***REMOVED******REMOVED***.esriBorder(padding: EdgeInsets())
 ***REMOVED***
 ***REMOVED***
 
@@ -279,7 +279,7 @@ struct SearchSuggestionList: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.esriBorder(edgeInsets: EdgeInsets())
+***REMOVED******REMOVED***.esriBorder(padding: EdgeInsets())
 ***REMOVED***
 ***REMOVED***
 

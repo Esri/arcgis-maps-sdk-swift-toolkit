@@ -15,12 +15,12 @@
 
 ***REMOVED***/ A modifier which displays a 2 point width border and a shadow around a view.
 struct EsriBorderViewModifier: ViewModifier {
-***REMOVED***var edgeInsets: EdgeInsets
+***REMOVED***var padding: EdgeInsets
 ***REMOVED***
 ***REMOVED***func body(content: Content) -> some View {
 ***REMOVED******REMOVED***let roundedRect = RoundedRectangle(cornerRadius: 8)
 ***REMOVED******REMOVED***content
-***REMOVED******REMOVED******REMOVED***.padding(edgeInsets)
+***REMOVED******REMOVED******REMOVED***.padding(padding)
 ***REMOVED******REMOVED******REMOVED***.background(Color(uiColor: .systemBackground))
 ***REMOVED******REMOVED******REMOVED***.clipShape(roundedRect)
 ***REMOVED******REMOVED******REMOVED***.overlay(
@@ -39,13 +39,13 @@ struct EsriBorderViewModifier: ViewModifier {
 
 public extension View {
 ***REMOVED***func esriBorder(
-***REMOVED******REMOVED***edgeInsets: EdgeInsets = EdgeInsets(
+***REMOVED******REMOVED***padding: EdgeInsets = EdgeInsets(
 ***REMOVED******REMOVED******REMOVED***top: 8,
 ***REMOVED******REMOVED******REMOVED***leading: 12,
 ***REMOVED******REMOVED******REMOVED***bottom: 8,
 ***REMOVED******REMOVED******REMOVED***trailing: 12
 ***REMOVED******REMOVED***)
 ***REMOVED***) -> some View {
-***REMOVED******REMOVED***modifier(EsriBorderViewModifier(edgeInsets: edgeInsets))
+***REMOVED******REMOVED***modifier(EsriBorderViewModifier(padding: padding))
 ***REMOVED***
 ***REMOVED***
