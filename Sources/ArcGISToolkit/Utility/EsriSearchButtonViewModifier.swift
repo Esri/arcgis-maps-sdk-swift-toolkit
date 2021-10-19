@@ -33,9 +33,6 @@ struct EsriSearchButtonViewModifier: ViewModifier {
 
 extension View {
     func esriSearchButton(_ action: @escaping () -> Void) -> some View {
-        ModifiedContent(
-            content: self,
-            modifier: EsriSearchButtonViewModifier(action: action)
-        )
+        modifier(EsriSearchButtonViewModifier(action: action))
     }
 }
