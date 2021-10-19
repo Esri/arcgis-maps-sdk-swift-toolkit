@@ -21,14 +21,13 @@ struct EsriShowResultsButtonViewModifier: ViewModifier {
 ***REMOVED***func body(content: Content) -> some View {
 ***REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED***content
-***REMOVED******REMOVED******REMOVED***if !isEnabled {
-***REMOVED******REMOVED******REMOVED******REMOVED***EmptyView()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***else {
+***REMOVED******REMOVED******REMOVED***if isEnabled {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Button(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***action: { isHidden.toggle() ***REMOVED***,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***label: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: isHidden ? "eye.fill" : "eye.slash.fill")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "eye")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.symbolVariant(isHidden ? .none : .slash)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.symbolVariant(.fill)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(Color(.opaqueSeparator))
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
