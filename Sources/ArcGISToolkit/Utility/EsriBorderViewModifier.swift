@@ -13,7 +13,7 @@
 
 import SwiftUI
 
-/// A modifier which displays a 2 pixel width border and  a shadow around a view.
+/// A modifier which displays a 2 point width border and a shadow around a view.
 struct EsriBorderViewModifier: ViewModifier {
     var edgeInsets: EdgeInsets
     
