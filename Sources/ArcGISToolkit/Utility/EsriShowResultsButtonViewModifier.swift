@@ -42,12 +42,9 @@ extension View {
         isEnabled: Bool,
         isHidden: Binding<Bool>
     ) -> some View {
-        ModifiedContent(
-            content: self,
-            modifier: EsriShowResultsButtonViewModifier(
-                isEnabled: isEnabled,
-                isHidden: isHidden
-            )
-        )
+        modifier(EsriShowResultsButtonViewModifier(
+            isEnabled: isEnabled,
+            isHidden: isHidden
+        ))
     }
 }
