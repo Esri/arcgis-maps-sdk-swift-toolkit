@@ -27,10 +27,11 @@ struct EsriBorderViewModifier: ViewModifier {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.stroke(lineWidth: 2)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(Color(.separator))
 ***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***.shadow(color: Color.gray.opacity(0.4),
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***radius: 3,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***x: 1,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***y: 2
+***REMOVED******REMOVED******REMOVED***.shadow(
+***REMOVED******REMOVED******REMOVED******REMOVED***color: .gray.opacity(0.4),
+***REMOVED******REMOVED******REMOVED******REMOVED***radius: 3,
+***REMOVED******REMOVED******REMOVED******REMOVED***x: 1,
+***REMOVED******REMOVED******REMOVED******REMOVED***y: 2
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
