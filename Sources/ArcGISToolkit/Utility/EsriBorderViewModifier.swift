@@ -36,8 +36,8 @@ struct EsriBorderViewModifier: ViewModifier {
 ***REMOVED***
 ***REMOVED***
 
-extension View {
-***REMOVED***public func esriBorder(
+public extension View {
+***REMOVED***func esriBorder(
 ***REMOVED******REMOVED***edgeInsets: EdgeInsets = EdgeInsets(
 ***REMOVED******REMOVED******REMOVED***top: 8,
 ***REMOVED******REMOVED******REMOVED***leading: 12,
