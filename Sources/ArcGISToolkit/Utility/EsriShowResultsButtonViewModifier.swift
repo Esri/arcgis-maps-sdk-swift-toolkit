@@ -21,14 +21,13 @@ struct EsriShowResultsButtonViewModifier: ViewModifier {
     func body(content: Content) -> some View {
         HStack {
             content
-            if !isEnabled {
-                EmptyView()
-            }
-            else {
+            if isEnabled {
                 Button(
                     action: { isHidden.toggle() },
                     label: {
-                        Image(systemName: isHidden ? "eye.fill" : "eye.slash.fill")
+                        Image(systemName: "eye")
+                            .symbolVariant(isHidden ? .none : .slash)
+                            .symbolVariant(.fill)
                             .foregroundColor(Color(.opaqueSeparator))
                     }
                 )
