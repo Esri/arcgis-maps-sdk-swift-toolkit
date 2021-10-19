@@ -36,8 +36,8 @@ struct EsriBorderViewModifier: ViewModifier {
     }
 }
 
-extension View {
-    public func esriBorder(
+public extension View {
+    func esriBorder(
         edgeInsets: EdgeInsets = EdgeInsets(
             top: 8,
             leading: 12,
