@@ -35,9 +35,6 @@ struct EsriDeleteTextButtonViewModifier: ViewModifier {
 
 extension View {
 ***REMOVED***func esriDeleteTextButton(text: Binding<String>) -> some View {
-***REMOVED******REMOVED***ModifiedContent(
-***REMOVED******REMOVED******REMOVED***content: self,
-***REMOVED******REMOVED******REMOVED***modifier: EsriDeleteTextButtonViewModifier(text: text)
-***REMOVED******REMOVED***)
+***REMOVED******REMOVED***modifier(EsriDeleteTextButtonViewModifier(text: text))
 ***REMOVED***
 ***REMOVED***
