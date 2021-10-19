@@ -13,7 +13,7 @@
 
 ***REMOVED***
 
-***REMOVED***/ A modifier which displays a 2 pixel width border and  a shadow around a view.
+***REMOVED***/ A modifier which displays a 2 point width border and a shadow around a view.
 struct EsriBorderViewModifier: ViewModifier {
 ***REMOVED***var edgeInsets: EdgeInsets
 ***REMOVED***
