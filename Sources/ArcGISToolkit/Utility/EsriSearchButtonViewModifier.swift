@@ -33,9 +33,6 @@ struct EsriSearchButtonViewModifier: ViewModifier {
 
 extension View {
 ***REMOVED***func esriSearchButton(_ action: @escaping () -> Void) -> some View {
-***REMOVED******REMOVED***ModifiedContent(
-***REMOVED******REMOVED******REMOVED***content: self,
-***REMOVED******REMOVED******REMOVED***modifier: EsriSearchButtonViewModifier(action: action)
-***REMOVED******REMOVED***)
+***REMOVED******REMOVED***modifier(EsriSearchButtonViewModifier(action: action))
 ***REMOVED***
 ***REMOVED***
