@@ -45,9 +45,6 @@ public extension View {
 ***REMOVED******REMOVED******REMOVED***trailing: 12
 ***REMOVED******REMOVED***)
 ***REMOVED***) -> some View {
-***REMOVED******REMOVED***return ModifiedContent(
-***REMOVED******REMOVED******REMOVED***content: self,
-***REMOVED******REMOVED******REMOVED***modifier: EsriBorderViewModifier(edgeInsets: edgeInsets)
-***REMOVED******REMOVED***)
+***REMOVED******REMOVED***modifier(EsriBorderViewModifier(edgeInsets: edgeInsets))
 ***REMOVED***
 ***REMOVED***
