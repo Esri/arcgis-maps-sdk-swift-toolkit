@@ -26,7 +26,7 @@ struct EsriBorderViewModifier: ViewModifier {
             .overlay(
                 roundedRect
                     .stroke(lineWidth: 2)
-                    .foregroundColor(Color(.separator))
+                    .foregroundColor(Color(uiColor: .separator))
             )
             .shadow(
                 color: .gray.opacity(0.4),
