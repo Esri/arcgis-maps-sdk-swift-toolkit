@@ -27,10 +27,11 @@ struct EsriBorderViewModifier: ViewModifier {
                     .stroke(lineWidth: 2)
                     .foregroundColor(Color(.separator))
             )
-            .shadow(color: Color.gray.opacity(0.4),
-                    radius: 3,
-                    x: 1,
-                    y: 2
+            .shadow(
+                color: .gray.opacity(0.4),
+                radius: 3,
+                x: 1,
+                y: 2
             )
     }
 }
