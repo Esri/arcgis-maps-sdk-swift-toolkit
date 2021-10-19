@@ -42,12 +42,9 @@ extension View {
 ***REMOVED******REMOVED***isEnabled: Bool,
 ***REMOVED******REMOVED***isHidden: Binding<Bool>
 ***REMOVED***) -> some View {
-***REMOVED******REMOVED***ModifiedContent(
-***REMOVED******REMOVED******REMOVED***content: self,
-***REMOVED******REMOVED******REMOVED***modifier: EsriShowResultsButtonViewModifier(
-***REMOVED******REMOVED******REMOVED******REMOVED***isEnabled: isEnabled,
-***REMOVED******REMOVED******REMOVED******REMOVED***isHidden: isHidden
-***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED***)
+***REMOVED******REMOVED***modifier(EsriShowResultsButtonViewModifier(
+***REMOVED******REMOVED******REMOVED***isEnabled: isEnabled,
+***REMOVED******REMOVED******REMOVED***isHidden: isHidden
+***REMOVED******REMOVED***))
 ***REMOVED***
 ***REMOVED***
