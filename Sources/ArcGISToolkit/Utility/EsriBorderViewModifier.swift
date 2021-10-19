@@ -45,9 +45,6 @@ public extension View {
             trailing: 12
         )
     ) -> some View {
-        return ModifiedContent(
-            content: self,
-            modifier: EsriBorderViewModifier(edgeInsets: edgeInsets)
-        )
+        modifier(EsriBorderViewModifier(edgeInsets: edgeInsets))
     }
 }
