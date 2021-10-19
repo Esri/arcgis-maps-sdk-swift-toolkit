@@ -67,7 +67,7 @@ public struct SearchView: View {
     
     /// Determines whether the results lists are displayed.
     @State
-    private var isResultListViewHidden: Bool = false
+    private var showResultListView: Bool = true
     
     public var body: some View {
         VStack (alignment: .center) {
@@ -84,11 +84,11 @@ public struct SearchView: View {
                     .esriDeleteTextButton(text: $searchViewModel.currentQuery)
                     .esriSearchButton { searchViewModel.commitSearch() }
                     .esriShowResultsButton(
-                        isEnabled: enableResultListView,
-                        isHidden: $isResultListViewHidden
+                        isHidden: !enableResultListView,
+                        showResults: $showResultListView
                     )
                     .esriBorder()
-                    if enableResultListView, !isResultListViewHidden {
+                    if enableResultListView, showResultListView {
                         if let results = searchViewModel.results {
                             SearchResultList(
                                 searchResults: results,
@@ -243,7 +243,7 @@ struct SearchResultList: View {
                 }
             }
         }
-        .esriBorder(edgeInsets: EdgeInsets())
+        .esriBorder(padding: EdgeInsets())
     }
 }
 
@@ -279,7 +279,7 @@ struct SearchSuggestionList: View {
                 }
             }
         }
-        .esriBorder(edgeInsets: EdgeInsets())
+        .esriBorder(padding: EdgeInsets())
     }
 }
 
