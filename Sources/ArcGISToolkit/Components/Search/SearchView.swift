@@ -116,6 +116,7 @@ public struct SearchView: View {
                 .esriBorder()
             }
         }
+        .listStyle(.plain)
         .onChange(of: searchViewModel.results) {
             display(searchResults: $0)
         }
@@ -215,7 +216,7 @@ struct SearchResultList: View {
             case .success(let results):
                 if results.count > 1 {
                     // Only show the list if we have more than one result.
-                    PlainList {
+                    List {
                         ForEach(results) { result in
                             HStack {
                                 SearchResultRow(result: result)
@@ -232,12 +233,12 @@ struct SearchResultList: View {
                     }
                 }
                 else if results.isEmpty {
-                    PlainList {
+                    List {
                         Text(noResultMessage)
                     }
                 }
             case .failure(let error):
-                PlainList {
+                List {
                     Text(error.localizedDescription)
                 }
             }
@@ -256,7 +257,7 @@ struct SearchSuggestionList: View {
             switch suggestionResults {
             case .success(let suggestions):
                 if !suggestions.isEmpty {
-                    PlainList {
+                    List {
                         if suggestions.count > 0 {
                             ForEach(suggestions) { suggestion in
                                 SuggestionResultRow(suggestion: suggestion)
@@ -268,12 +269,12 @@ struct SearchSuggestionList: View {
                     }
                 }
                 else {
-                    PlainList {
+                    List {
                         Text(noResultMessage)
                     }
                 }
             case .failure(let error):
-                PlainList {
+                List {
                     Text(error.errorDescription)
                 }
             }
