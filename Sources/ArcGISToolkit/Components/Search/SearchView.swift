@@ -288,8 +288,8 @@ struct SearchResultRow: View {
     
     var body: some View {
         HStack {
-            Image(systemName: "mappin")
-                .foregroundColor(Color(.red))
+            Image(uiImage: UIImage.mapPin)
+                .scaleEffect(0.65)
             ResultRow(
                 title: result.displayTitle,
                 subtitle: result.displaySubtitle
@@ -303,13 +303,19 @@ struct SuggestionResultRow: View {
     
     var body: some View {
         HStack {
-            let imageName = suggestion.isCollection ? "magnifyingglass" : "mappin"
-            Image(systemName: imageName)
+            mapPinImage()
+                .foregroundColor(.secondary)
             ResultRow(
                 title: suggestion.displayTitle,
                 subtitle: suggestion.displaySubtitle
             )
         }
+    }
+    
+    func mapPinImage() -> Image {
+      suggestion.isCollection ?
+        Image(systemName: "magnifyingglass") :
+        Image(uiImage: UIImage(named: "pin", in: Bundle.module, with: nil)!)
     }
 }
 
@@ -342,9 +348,15 @@ private extension Graphic {
 private extension Symbol {
     /// A search result marker symbol.
     static var resultSymbol: MarkerSymbol {
-        let image = UIImage(named: "MapPin")!
+        let image = UIImage.mapPin
         let symbol = PictureMarkerSymbol(image: image)
         symbol.offsetY = Float(image.size.height / 2.0)
         return symbol
+    }
+}
+
+extension UIImage {
+    static var mapPin: UIImage {
+        return UIImage(named: "MapPin", in: Bundle.module, with: nil)!
     }
 }
