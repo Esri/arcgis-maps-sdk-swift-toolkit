@@ -288,8 +288,8 @@ struct SearchResultRow: View {
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED***Image(systemName: "mappin")
-***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(Color(.red))
+***REMOVED******REMOVED******REMOVED***Image(uiImage: UIImage.mapPin)
+***REMOVED******REMOVED******REMOVED******REMOVED***.scaleEffect(0.65)
 ***REMOVED******REMOVED******REMOVED***ResultRow(
 ***REMOVED******REMOVED******REMOVED******REMOVED***title: result.displayTitle,
 ***REMOVED******REMOVED******REMOVED******REMOVED***subtitle: result.displaySubtitle
@@ -303,13 +303,19 @@ struct SuggestionResultRow: View {
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED***let imageName = suggestion.isCollection ? "magnifyingglass" : "mappin"
-***REMOVED******REMOVED******REMOVED***Image(systemName: imageName)
+***REMOVED******REMOVED******REMOVED***mapPinImage()
+***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
 ***REMOVED******REMOVED******REMOVED***ResultRow(
 ***REMOVED******REMOVED******REMOVED******REMOVED***title: suggestion.displayTitle,
 ***REMOVED******REMOVED******REMOVED******REMOVED***subtitle: suggestion.displaySubtitle
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***func mapPinImage() -> Image {
+***REMOVED***  suggestion.isCollection ?
+***REMOVED******REMOVED***Image(systemName: "magnifyingglass") :
+***REMOVED******REMOVED***Image(uiImage: UIImage(named: "pin", in: Bundle.module, with: nil)!)
 ***REMOVED***
 ***REMOVED***
 
@@ -342,9 +348,15 @@ private extension Graphic {
 private extension Symbol {
 ***REMOVED******REMOVED***/ A search result marker symbol.
 ***REMOVED***static var resultSymbol: MarkerSymbol {
-***REMOVED******REMOVED***let image = UIImage(named: "MapPin")!
+***REMOVED******REMOVED***let image = UIImage.mapPin
 ***REMOVED******REMOVED***let symbol = PictureMarkerSymbol(image: image)
 ***REMOVED******REMOVED***symbol.offsetY = Float(image.size.height / 2.0)
 ***REMOVED******REMOVED***return symbol
+***REMOVED***
+***REMOVED***
+
+extension UIImage {
+***REMOVED***static var mapPin: UIImage {
+***REMOVED******REMOVED***return UIImage(named: "MapPin", in: Bundle.module, with: nil)!
 ***REMOVED***
 ***REMOVED***
