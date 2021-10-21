@@ -12,12 +12,11 @@
 // limitations under the License.
 
 import ArcGIS
-import Foundation
 
 /// Defines the contract for a search result provider.
-public protocol SearchSourceProtocol {
+public protocol SearchSource {
     /// Name to show when presenting this source in the UI.
-    var displayName: String { get set }
+    var name: String { get set }
     
     /// The maximum results to return when performing a search. Most sources default to 6.
     var maximumResults: Int32 { get set }
@@ -25,16 +24,15 @@ public protocol SearchSourceProtocol {
     /// The maximum suggestions to return. Most sources default to 6.
     var maximumSuggestions: Int32 { get set }
     
-    /// Area to be used as a constraint for searches and suggestions.
+    /// The area to be used as a constraint for searches and suggestions.
     var searchArea: Geometry? { get set }
     
-    /// Point to be used as an input to searches and suggestions.
+    /// The point to be used as an input to searches and suggestions.
     var preferredSearchLocation: Point? { get set }
     
-    /// Gets suggestions.
-    /// - Parameters:
-    ///   - queryString: Text to be used for query.
-    /// - Returns: The array of suggestions.
+    /// Returns the search suggestions for the specified query.
+    /// - Parameter queryString: The query for which to provide search suggestions.
+    /// - Returns: An array of search suggestions.
     func suggest(_ queryString: String) async throws -> [SearchSuggestion]
     
     /// Gets search results.
@@ -43,12 +41,10 @@ public protocol SearchSourceProtocol {
     /// - Returns: Array of `SearchResult`s
     func search(_ queryString: String) async throws -> [SearchResult]
     
-    /// Gets search results. If `area` is not `nil`, search is restricted to that area. Otherwise, the
-    /// `searchArea` property may be consulted but does not need to be used as a strict limit.
-    /// - Parameters:
-    ///   - searchSuggestion: Suggestion to be used as basis for search.
-    ///   - area: Area to be used to constrain search results.
-    /// - Returns: Array of `SearchResult`s
+    /// Returns the search results for the specified search suggestion.
+    /// - Parameter searchSuggestion: The search suggestion for which to provide
+    /// search results.
+    /// - Returns: An array of search results.
     func search(
         _ searchSuggestion: SearchSuggestion
     ) async throws -> [SearchResult]

@@ -83,7 +83,7 @@ struct SearchExampleView: View {
     /// Sets up any desired customization on `searchViewModel`.
     private func setupSearchViewModel() {
         let smartLocator = SmartLocatorSearchSource(
-            displayName: "My locator",
+            name: "My locator",
             maximumResults: 16,
             maximumSuggestions: 16
         )

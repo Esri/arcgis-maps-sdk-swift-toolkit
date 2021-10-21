@@ -13,40 +13,39 @@
 
 import SwiftUI
 
-/// A modifier which displays a 2 pixel width border and  a shadow around a view.
+/// A modifier which displays a 2 point width border and a shadow around a view.
 struct EsriBorderViewModifier: ViewModifier {
-    var edgeInsets: EdgeInsets
-    public func body(content: Content) -> some View {
+    var padding: EdgeInsets
+    
+    func body(content: Content) -> some View {
         let roundedRect = RoundedRectangle(cornerRadius: 8)
         content
-            .padding(edgeInsets)
-            .background(Color(.systemBackground))
+            .padding(padding)
+            .background(Color(uiColor: .systemBackground))
             .clipShape(roundedRect)
             .overlay(
                 roundedRect
                     .stroke(lineWidth: 2)
-                    .foregroundColor(Color(.separator))
+                    .foregroundColor(Color(uiColor: .separator))
             )
-            .shadow(color: Color.gray.opacity(0.4),
-                    radius: 3,
-                    x: 1,
-                    y: 2
+            .shadow(
+                color: .gray.opacity(0.4),
+                radius: 3,
+                x: 1,
+                y: 2
             )
     }
 }
 
-extension View {
-    public func esriBorder(
-        edgeInsets: EdgeInsets = EdgeInsets(
+public extension View {
+    func esriBorder(
+        padding: EdgeInsets = EdgeInsets(
             top: 8,
             leading: 12,
             bottom: 8,
             trailing: 12
         )
     ) -> some View {
-        return ModifiedContent(
-            content: self,
-            modifier: EsriBorderViewModifier(edgeInsets: edgeInsets)
-        )
+        modifier(EsriBorderViewModifier(padding: padding))
     }
 }

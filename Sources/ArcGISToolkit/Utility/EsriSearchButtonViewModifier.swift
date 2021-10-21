@@ -23,7 +23,7 @@ struct EsriSearchButtonViewModifier: ViewModifier {
                 action: action,
                 label: {
                     Image(systemName: "magnifyingglass.circle.fill")
-                        .foregroundColor(Color(.opaqueSeparator))
+                        .foregroundColor(Color(uiColor: .opaqueSeparator))
                 }
             )
             content
@@ -33,9 +33,6 @@ struct EsriSearchButtonViewModifier: ViewModifier {
 
 extension View {
     func esriSearchButton(_ action: @escaping () -> Void) -> some View {
-        ModifiedContent(
-            content: self,
-            modifier: EsriSearchButtonViewModifier(action: action)
-        )
+        modifier(EsriSearchButtonViewModifier(action: action))
     }
 }
