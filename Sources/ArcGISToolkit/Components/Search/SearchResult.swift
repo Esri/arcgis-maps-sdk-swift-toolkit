@@ -20,7 +20,7 @@ public class SearchResult {
 ***REMOVED******REMOVED***displayTitle: String,
 ***REMOVED******REMOVED***displaySubtitle: String? = nil,
 ***REMOVED******REMOVED***markerImage: UIImage? = nil,
-***REMOVED******REMOVED***owningSource: SearchSourceProtocol,
+***REMOVED******REMOVED***owningSource: SearchSource,
 ***REMOVED******REMOVED***geoElement: GeoElement? = nil,
 ***REMOVED******REMOVED***selectionViewpoint: Viewpoint? = nil
 ***REMOVED***) {
@@ -45,7 +45,7 @@ public class SearchResult {
 ***REMOVED***public var markerImage: UIImage?
 ***REMOVED***
 ***REMOVED******REMOVED***/ Reference to the search source that created this result.
-***REMOVED***public var owningSource: SearchSourceProtocol
+***REMOVED***public var owningSource: SearchSource
 ***REMOVED***
 ***REMOVED******REMOVED***/ For locator results, should be the graphic that was used to display the result on the map.
 ***REMOVED******REMOVED***/ For feature layer results, should be the result feature. Can be null depending on the type of the

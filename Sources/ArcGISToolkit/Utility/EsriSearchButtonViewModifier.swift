@@ -23,7 +23,7 @@ struct EsriSearchButtonViewModifier: ViewModifier {
 ***REMOVED******REMOVED******REMOVED******REMOVED***action: action,
 ***REMOVED******REMOVED******REMOVED******REMOVED***label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "magnifyingglass.circle.fill")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(Color(.opaqueSeparator))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(Color(uiColor: .opaqueSeparator))
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***content
@@ -33,9 +33,6 @@ struct EsriSearchButtonViewModifier: ViewModifier {
 
 extension View {
 ***REMOVED***func esriSearchButton(_ action: @escaping () -> Void) -> some View {
-***REMOVED******REMOVED***ModifiedContent(
-***REMOVED******REMOVED******REMOVED***content: self,
-***REMOVED******REMOVED******REMOVED***modifier: EsriSearchButtonViewModifier(action: action)
-***REMOVED******REMOVED***)
+***REMOVED******REMOVED***modifier(EsriSearchButtonViewModifier(action: action))
 ***REMOVED***
 ***REMOVED***

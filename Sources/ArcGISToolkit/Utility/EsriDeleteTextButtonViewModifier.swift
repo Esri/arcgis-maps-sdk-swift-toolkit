@@ -22,7 +22,7 @@ struct EsriDeleteTextButtonViewModifier: ViewModifier {
 ***REMOVED******REMOVED******REMOVED***content
 ***REMOVED******REMOVED******REMOVED***if !text.isEmpty {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Button(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***action: { self.text = "" ***REMOVED***,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***action: { text = "" ***REMOVED***,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "xmark.circle.fill")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(Color(.opaqueSeparator))
@@ -35,9 +35,6 @@ struct EsriDeleteTextButtonViewModifier: ViewModifier {
 
 extension View {
 ***REMOVED***func esriDeleteTextButton(text: Binding<String>) -> some View {
-***REMOVED******REMOVED***ModifiedContent(
-***REMOVED******REMOVED******REMOVED***content: self,
-***REMOVED******REMOVED******REMOVED***modifier: EsriDeleteTextButtonViewModifier(text: text)
-***REMOVED******REMOVED***)
+***REMOVED******REMOVED***modifier(EsriDeleteTextButtonViewModifier(text: text))
 ***REMOVED***
 ***REMOVED***

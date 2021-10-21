@@ -13,40 +13,39 @@
 
 ***REMOVED***
 
-***REMOVED***/ A modifier which displays a 2 pixel width border and  a shadow around a view.
+***REMOVED***/ A modifier which displays a 2 point width border and a shadow around a view.
 struct EsriBorderViewModifier: ViewModifier {
-***REMOVED***var edgeInsets: EdgeInsets
-***REMOVED***public func body(content: Content) -> some View {
+***REMOVED***var padding: EdgeInsets
+***REMOVED***
+***REMOVED***func body(content: Content) -> some View {
 ***REMOVED******REMOVED***let roundedRect = RoundedRectangle(cornerRadius: 8)
 ***REMOVED******REMOVED***content
-***REMOVED******REMOVED******REMOVED***.padding(edgeInsets)
-***REMOVED******REMOVED******REMOVED***.background(Color(.systemBackground))
+***REMOVED******REMOVED******REMOVED***.padding(padding)
+***REMOVED******REMOVED******REMOVED***.background(Color(uiColor: .systemBackground))
 ***REMOVED******REMOVED******REMOVED***.clipShape(roundedRect)
 ***REMOVED******REMOVED******REMOVED***.overlay(
 ***REMOVED******REMOVED******REMOVED******REMOVED***roundedRect
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.stroke(lineWidth: 2)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(Color(.separator))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(Color(uiColor: .separator))
 ***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***.shadow(color: Color.gray.opacity(0.4),
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***radius: 3,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***x: 1,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***y: 2
+***REMOVED******REMOVED******REMOVED***.shadow(
+***REMOVED******REMOVED******REMOVED******REMOVED***color: .gray.opacity(0.4),
+***REMOVED******REMOVED******REMOVED******REMOVED***radius: 3,
+***REMOVED******REMOVED******REMOVED******REMOVED***x: 1,
+***REMOVED******REMOVED******REMOVED******REMOVED***y: 2
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 
-extension View {
-***REMOVED***public func esriBorder(
-***REMOVED******REMOVED***edgeInsets: EdgeInsets = EdgeInsets(
+public extension View {
+***REMOVED***func esriBorder(
+***REMOVED******REMOVED***padding: EdgeInsets = EdgeInsets(
 ***REMOVED******REMOVED******REMOVED***top: 8,
 ***REMOVED******REMOVED******REMOVED***leading: 12,
 ***REMOVED******REMOVED******REMOVED***bottom: 8,
 ***REMOVED******REMOVED******REMOVED***trailing: 12
 ***REMOVED******REMOVED***)
 ***REMOVED***) -> some View {
-***REMOVED******REMOVED***return ModifiedContent(
-***REMOVED******REMOVED******REMOVED***content: self,
-***REMOVED******REMOVED******REMOVED***modifier: EsriBorderViewModifier(edgeInsets: edgeInsets)
-***REMOVED******REMOVED***)
+***REMOVED******REMOVED***modifier(EsriBorderViewModifier(padding: padding))
 ***REMOVED***
 ***REMOVED***

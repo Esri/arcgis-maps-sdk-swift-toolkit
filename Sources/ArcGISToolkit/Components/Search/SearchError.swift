@@ -14,7 +14,7 @@
 import Foundation
 
 ***REMOVED***/ A value that represents an error that occurs while Searching.
-public struct SearchError: LocalizedError {
+public struct SearchError: Error {
 ***REMOVED******REMOVED***/ A basic description for the error.
 ***REMOVED***public let errorDescription: String
 ***REMOVED***

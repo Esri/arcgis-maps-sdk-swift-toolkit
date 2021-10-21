@@ -1,0 +1,29 @@
+{
+  "images" : [
+***REMOVED***{
+***REMOVED***  "idiom" : "universal"
+***REMOVED***,
+***REMOVED***{
+***REMOVED***  "filename" : "pin@1x.png",
+***REMOVED***  "idiom" : "universal",
+***REMOVED***  "scale" : "1x"
+***REMOVED***,
+***REMOVED***{
+***REMOVED***  "filename" : "pin@2x.png",
+***REMOVED***  "idiom" : "universal",
+***REMOVED***  "scale" : "2x"
+***REMOVED***,
+***REMOVED***{
+***REMOVED***  "filename" : "pin@3x.png",
+***REMOVED***  "idiom" : "universal",
+***REMOVED***  "scale" : "3x"
+***REMOVED***
+  ],
+  "info" : {
+***REMOVED***"author" : "xcode",
+***REMOVED***"version" : 1
+  ***REMOVED***,
+  "properties" : {
+***REMOVED***"template-rendering-intent" : "template"
+  ***REMOVED***
+***REMOVED***

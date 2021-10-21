@@ -18,7 +18,7 @@ public class SearchSuggestion {
 ***REMOVED***public init(
 ***REMOVED******REMOVED***displayTitle: String,
 ***REMOVED******REMOVED***displaySubtitle: String? = nil,
-***REMOVED******REMOVED***owningSource: SearchSourceProtocol,
+***REMOVED******REMOVED***owningSource: SearchSource,
 ***REMOVED******REMOVED***suggestResult: SuggestResult? = nil,
 ***REMOVED******REMOVED***isCollection: Bool
 ***REMOVED***) {
@@ -38,7 +38,7 @@ public class SearchSuggestion {
 ***REMOVED******REMOVED***/ Reference to the `SearchSourceProtocol` that created this suggestion. This property is necessary for the
 ***REMOVED******REMOVED***/ view model to be able to accept a suggestion, because a suggestion should only be used with the
 ***REMOVED******REMOVED***/ locator that created it.
-***REMOVED***public var owningSource: SearchSourceProtocol
+***REMOVED***public var owningSource: SearchSource
 ***REMOVED***
 ***REMOVED******REMOVED***/ Underlying suggest result if this suggestion was created by a LocatorTask. This can be `nil`, and
 ***REMOVED******REMOVED***/ is likely to be `nil` when using custom `SearchSourceProtocol` implementations.

@@ -67,7 +67,7 @@ public struct SearchView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Determines whether the results lists are displayed.
 ***REMOVED***@State
-***REMOVED***private var isResultListViewHidden: Bool = false
+***REMOVED***private var showResultListView: Bool = true
 ***REMOVED***
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***VStack (alignment: .center) {
@@ -84,11 +84,11 @@ public struct SearchView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.esriDeleteTextButton(text: $searchViewModel.currentQuery)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.esriSearchButton { searchViewModel.commitSearch() ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.esriShowResultsButton(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isEnabled: enableResultListView,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isHidden: $isResultListViewHidden
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isHidden: !enableResultListView,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***showResults: $showResultListView
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.esriBorder()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if enableResultListView, !isResultListViewHidden {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if enableResultListView, showResultListView {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let results = searchViewModel.results {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***SearchResultList(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***searchResults: results,
@@ -116,6 +116,7 @@ public struct SearchView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.esriBorder()
 ***REMOVED******REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***.listStyle(.plain)
 ***REMOVED******REMOVED***.onChange(of: searchViewModel.results) {
 ***REMOVED******REMOVED******REMOVED***display(searchResults: $0)
 ***REMOVED***
@@ -215,7 +216,7 @@ struct SearchResultList: View {
 ***REMOVED******REMOVED******REMOVED***case .success(let results):
 ***REMOVED******REMOVED******REMOVED******REMOVED***if results.count > 1 {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Only show the list if we have more than one result.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***PlainList {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***List {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(results) { result in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***SearchResultRow(result: result)
@@ -232,17 +233,17 @@ struct SearchResultList: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***else if results.isEmpty {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***PlainList {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***List {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(noResultMessage)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***case .failure(let error):
-***REMOVED******REMOVED******REMOVED******REMOVED***PlainList {
+***REMOVED******REMOVED******REMOVED******REMOVED***List {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(error.localizedDescription)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.esriBorder(edgeInsets: EdgeInsets())
+***REMOVED******REMOVED***.esriBorder(padding: EdgeInsets())
 ***REMOVED***
 ***REMOVED***
 
@@ -256,7 +257,7 @@ struct SearchSuggestionList: View {
 ***REMOVED******REMOVED******REMOVED***switch suggestionResults {
 ***REMOVED******REMOVED******REMOVED***case .success(let suggestions):
 ***REMOVED******REMOVED******REMOVED******REMOVED***if !suggestions.isEmpty {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***PlainList {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***List {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if suggestions.count > 0 {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(suggestions) { suggestion in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***SuggestionResultRow(suggestion: suggestion)
@@ -268,17 +269,17 @@ struct SearchSuggestionList: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***PlainList {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***List {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(noResultMessage)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***case .failure(let error):
-***REMOVED******REMOVED******REMOVED******REMOVED***PlainList {
+***REMOVED******REMOVED******REMOVED******REMOVED***List {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(error.errorDescription)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.esriBorder(edgeInsets: EdgeInsets())
+***REMOVED******REMOVED***.esriBorder(padding: EdgeInsets())
 ***REMOVED***
 ***REMOVED***
 
@@ -287,8 +288,8 @@ struct SearchResultRow: View {
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED***Image(systemName: "mappin")
-***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(Color(.red))
+***REMOVED******REMOVED******REMOVED***Image(uiImage: UIImage.mapPin)
+***REMOVED******REMOVED******REMOVED******REMOVED***.scaleEffect(0.65)
 ***REMOVED******REMOVED******REMOVED***ResultRow(
 ***REMOVED******REMOVED******REMOVED******REMOVED***title: result.displayTitle,
 ***REMOVED******REMOVED******REMOVED******REMOVED***subtitle: result.displaySubtitle
@@ -302,13 +303,19 @@ struct SuggestionResultRow: View {
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED***let imageName = suggestion.isCollection ? "magnifyingglass" : "mappin"
-***REMOVED******REMOVED******REMOVED***Image(systemName: imageName)
+***REMOVED******REMOVED******REMOVED***mapPinImage()
+***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
 ***REMOVED******REMOVED******REMOVED***ResultRow(
 ***REMOVED******REMOVED******REMOVED******REMOVED***title: suggestion.displayTitle,
 ***REMOVED******REMOVED******REMOVED******REMOVED***subtitle: suggestion.displaySubtitle
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***func mapPinImage() -> Image {
+***REMOVED***  suggestion.isCollection ?
+***REMOVED******REMOVED***Image(systemName: "magnifyingglass") :
+***REMOVED******REMOVED***Image(uiImage: UIImage(named: "pin", in: Bundle.module, with: nil)!)
 ***REMOVED***
 ***REMOVED***
 
@@ -341,9 +348,15 @@ private extension Graphic {
 private extension Symbol {
 ***REMOVED******REMOVED***/ A search result marker symbol.
 ***REMOVED***static var resultSymbol: MarkerSymbol {
-***REMOVED******REMOVED***let image = UIImage(named: "MapPin")!
+***REMOVED******REMOVED***let image = UIImage.mapPin
 ***REMOVED******REMOVED***let symbol = PictureMarkerSymbol(image: image)
 ***REMOVED******REMOVED***symbol.offsetY = Float(image.size.height / 2.0)
 ***REMOVED******REMOVED***return symbol
+***REMOVED***
+***REMOVED***
+
+extension UIImage {
+***REMOVED***static var mapPin: UIImage {
+***REMOVED******REMOVED***return UIImage(named: "MapPin", in: Bundle.module, with: nil)!
 ***REMOVED***
 ***REMOVED***
