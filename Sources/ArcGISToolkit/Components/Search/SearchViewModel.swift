@@ -40,11 +40,11 @@ public class SearchViewModel: ObservableObject {
     ///   - sources: Collection of search sources to be used.
     public convenience init(
         defaultPlaceholder: String = .defaultPlaceholder,
-        activeSource: SearchSourceProtocol? = nil,
+        activeSource: SearchSource? = nil,
         queryArea: Geometry? = nil,
         queryCenter: Point? = nil,
         resultMode: SearchResultMode = .automatic,
-        sources: [SearchSourceProtocol] = []
+        sources: [SearchSource] = []
     ) {
         self.init()
         self.defaultPlaceholder = defaultPlaceholder
@@ -60,7 +60,7 @@ public class SearchViewModel: ObservableObject {
     public var defaultPlaceholder: String = .defaultPlaceholder
     
     /// The active search source.  If `nil`, the first item in `sources` is used.
-    public var activeSource: SearchSourceProtocol?
+    public var activeSource: SearchSource?
     
     /// Tracks the current user-entered query. This property drives both suggestions and searches.
     @Published
@@ -170,7 +170,7 @@ public class SearchViewModel: ObservableObject {
     /// The view should observe this list for changes. Consumers should add and remove sources from
     /// this list as needed.
     /// NOTE:  only the first source is currently used; multiple sources are not yet supported.
-    public var sources: [SearchSourceProtocol] = []
+    public var sources: [SearchSource] = []
     
     /// Collection of suggestion results. Defaults to `nil`. This collection will be set to empty when there
     /// are no suggestions, `nil` when no suggestions have been requested. If the list is empty,
@@ -191,7 +191,7 @@ public class SearchViewModel: ObservableObject {
     private func makeEffectiveSource(
         with searchArea: Geometry?,
         preferredSearchLocation: Point?
-    ) -> SearchSourceProtocol? {
+    ) -> SearchSource? {
         guard var source = currentSource() else { return nil }
         source.searchArea = searchArea
         source.preferredSearchLocation = preferredSearchLocation
@@ -366,8 +366,8 @@ extension SearchViewModel {
 extension SearchViewModel {
     /// Returns the search source to be used in geocode operations.
     /// - Returns: The search source to use.
-    func currentSource() -> SearchSourceProtocol? {
-        var source: SearchSourceProtocol?
+    func currentSource() -> SearchSource? {
+        var source: SearchSource?
         if let activeSource = activeSource {
             source = activeSource
         } else {

@@ -16,16 +16,16 @@ import ArcGIS
 
 /// Uses a Locator to provide search and suggest results. Most configuration should be done on the
 /// `GeocodeParameters` directly.
-public class LocatorSearchSource: ObservableObject, SearchSourceProtocol {
+public class LocatorSearchSource: ObservableObject, SearchSource {
     /// Creates a locator search source.
     /// - Parameters:
-    ///   - displayName: Name to show when presenting this source in the UI.
+    ///   - name: Name to show when presenting this source in the UI.
     ///   - maximumResults: The maximum results to return when performing a search. Most sources default to 6.
     ///   - maximumSuggestions: The maximum suggestions to return. Most sources default to 6.
     ///   - searchArea: Area to be used as a constraint for searches and suggestions.
     ///   - preferredSearchLocation: Point to be used as an input to searches and suggestions.
     public init(
-        displayName: String = "Locator",
+        name: String = "Locator",
         locatorTask: LocatorTask = LocatorTask(
             url: URL(
                 string: "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer"
@@ -36,7 +36,7 @@ public class LocatorSearchSource: ObservableObject, SearchSourceProtocol {
         searchArea: Geometry? = nil,
         preferredSearchLocation: Point? = nil
     ) {
-        self.displayName = displayName
+        self.name = name
         self.locatorTask = locatorTask
         self.maximumResults = maximumResults
         self.maximumSuggestions = maximumSuggestions
@@ -47,7 +47,7 @@ public class LocatorSearchSource: ObservableObject, SearchSourceProtocol {
     }
     
     /// Name to show when presenting this source in the UI.
-    public var displayName: String
+    public var name: String
     
     /// The maximum results to return when performing a search. Most sources default to 6
     public var maximumResults: Int32 {

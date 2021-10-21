@@ -67,7 +67,7 @@ public struct SearchView: View {
     
     /// Determines whether the results lists are displayed.
     @State
-    private var isResultListViewHidden: Bool = false
+    private var showResultListView: Bool = true
     
     public var body: some View {
         VStack (alignment: .center) {
@@ -84,11 +84,11 @@ public struct SearchView: View {
                     .esriDeleteTextButton(text: $searchViewModel.currentQuery)
                     .esriSearchButton { searchViewModel.commitSearch() }
                     .esriShowResultsButton(
-                        isEnabled: enableResultListView,
-                        isHidden: $isResultListViewHidden
+                        isHidden: !enableResultListView,
+                        showResults: $showResultListView
                     )
                     .esriBorder()
-                    if enableResultListView, !isResultListViewHidden {
+                    if enableResultListView, showResultListView {
                         if let results = searchViewModel.results {
                             SearchResultList(
                                 searchResults: results,
@@ -116,6 +116,7 @@ public struct SearchView: View {
                 .esriBorder()
             }
         }
+        .listStyle(.plain)
         .onChange(of: searchViewModel.results) {
             display(searchResults: $0)
         }
@@ -215,7 +216,7 @@ struct SearchResultList: View {
             case .success(let results):
                 if results.count > 1 {
                     // Only show the list if we have more than one result.
-                    PlainList {
+                    List {
                         ForEach(results) { result in
                             HStack {
                                 SearchResultRow(result: result)
@@ -232,17 +233,17 @@ struct SearchResultList: View {
                     }
                 }
                 else if results.isEmpty {
-                    PlainList {
+                    List {
                         Text(noResultMessage)
                     }
                 }
             case .failure(let error):
-                PlainList {
+                List {
                     Text(error.localizedDescription)
                 }
             }
         }
-        .esriBorder(edgeInsets: EdgeInsets())
+        .esriBorder(padding: EdgeInsets())
     }
 }
 
@@ -256,7 +257,7 @@ struct SearchSuggestionList: View {
             switch suggestionResults {
             case .success(let suggestions):
                 if !suggestions.isEmpty {
-                    PlainList {
+                    List {
                         if suggestions.count > 0 {
                             ForEach(suggestions) { suggestion in
                                 SuggestionResultRow(suggestion: suggestion)
@@ -268,17 +269,17 @@ struct SearchSuggestionList: View {
                     }
                 }
                 else {
-                    PlainList {
+                    List {
                         Text(noResultMessage)
                     }
                 }
             case .failure(let error):
-                PlainList {
+                List {
                     Text(error.errorDescription)
                 }
             }
         }
-        .esriBorder(edgeInsets: EdgeInsets())
+        .esriBorder(padding: EdgeInsets())
     }
 }
 
@@ -287,8 +288,8 @@ struct SearchResultRow: View {
     
     var body: some View {
         HStack {
-            Image(systemName: "mappin")
-                .foregroundColor(Color(.red))
+            Image(uiImage: UIImage.mapPin)
+                .scaleEffect(0.65)
             ResultRow(
                 title: result.displayTitle,
                 subtitle: result.displaySubtitle
@@ -302,13 +303,19 @@ struct SuggestionResultRow: View {
     
     var body: some View {
         HStack {
-            let imageName = suggestion.isCollection ? "magnifyingglass" : "mappin"
-            Image(systemName: imageName)
+            mapPinImage()
+                .foregroundColor(.secondary)
             ResultRow(
                 title: suggestion.displayTitle,
                 subtitle: suggestion.displaySubtitle
             )
         }
+    }
+    
+    func mapPinImage() -> Image {
+      suggestion.isCollection ?
+        Image(systemName: "magnifyingglass") :
+        Image(uiImage: UIImage(named: "pin", in: Bundle.module, with: nil)!)
     }
 }
 
@@ -341,9 +348,15 @@ private extension Graphic {
 private extension Symbol {
     /// A search result marker symbol.
     static var resultSymbol: MarkerSymbol {
-        let image = UIImage(named: "MapPin")!
+        let image = UIImage.mapPin
         let symbol = PictureMarkerSymbol(image: image)
         symbol.offsetY = Float(image.size.height / 2.0)
         return symbol
+    }
+}
+
+extension UIImage {
+    static var mapPin: UIImage {
+        return UIImage(named: "MapPin", in: Bundle.module, with: nil)!
     }
 }

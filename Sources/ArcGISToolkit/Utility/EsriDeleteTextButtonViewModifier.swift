@@ -22,7 +22,7 @@ struct EsriDeleteTextButtonViewModifier: ViewModifier {
             content
             if !text.isEmpty {
                 Button(
-                    action: { self.text = "" },
+                    action: { text = "" },
                     label: {
                         Image(systemName: "xmark.circle.fill")
                             .foregroundColor(Color(.opaqueSeparator))
@@ -35,9 +35,6 @@ struct EsriDeleteTextButtonViewModifier: ViewModifier {
 
 extension View {
     func esriDeleteTextButton(text: Binding<String>) -> some View {
-        ModifiedContent(
-            content: self,
-            modifier: EsriDeleteTextButtonViewModifier(text: text)
-        )
+        modifier(EsriDeleteTextButtonViewModifier(text: text))
     }
 }

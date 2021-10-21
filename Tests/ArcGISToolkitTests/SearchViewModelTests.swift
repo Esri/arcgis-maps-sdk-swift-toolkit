@@ -47,7 +47,7 @@ class SearchViewModelTests: XCTestCase {
     
     func testActiveSource() async throws {
         let activeSource = LocatorSearchSource()
-        activeSource.displayName = "Simple Locator"
+        activeSource.name = "Simple Locator"
         let model = SearchViewModel(
             activeSource: activeSource,
             sources: [LocatorSearchSource()]
@@ -59,13 +59,13 @@ class SearchViewModelTests: XCTestCase {
         
         let results = try await model.$results.compactMap({$0}).first
         let result = try XCTUnwrap(results?.get().first)
-        XCTAssertEqual(result.owningSource.displayName, activeSource.displayName)
+        XCTAssertEqual(result.owningSource.name, activeSource.name)
         
         Task { model.updateSuggestions() }
         
         let suggestions = try await model.$suggestions.compactMap({$0}).first
         let suggestion = try XCTUnwrap(suggestions?.get().first)
-        XCTAssertEqual(suggestion.owningSource.displayName, activeSource.displayName)
+        XCTAssertEqual(suggestion.owningSource.name, activeSource.name)
     }
     
     func testCommitSearch() async throws {
