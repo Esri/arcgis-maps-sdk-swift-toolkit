@@ -47,9 +47,6 @@ public class BasemapGalleryItem: ObservableObject {
     @Published
     public var loadBasemapsError: Error? = nil
 
-    /// The currently executing async task for loading basemap.
-    private var loadBasemapTask: Task<Void, Never>? = nil
-
     /// The basemap this `BasemapGalleryItem` represents.
     public private(set) var basemap: Basemap
 
@@ -72,6 +69,9 @@ public class BasemapGalleryItem: ObservableObject {
     
     @Published
     public private(set) var isLoaded = false
+
+    /// The currently executing async task for loading basemap.
+    private var loadBasemapTask: Task<Void, Never>? = nil
 }
 
 extension BasemapGalleryItem {
