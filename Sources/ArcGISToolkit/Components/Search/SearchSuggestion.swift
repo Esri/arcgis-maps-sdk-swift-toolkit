@@ -44,7 +44,7 @@ public class SearchSuggestion {
 ***REMOVED******REMOVED***/ is likely to be `nil` when using custom `SearchSourceProtocol` implementations.
 ***REMOVED***public var suggestResult: SuggestResult?
 ***REMOVED***
-***REMOVED******REMOVED***/ True if the search from this suggestion should be treated like a collection search, false if the
+***REMOVED******REMOVED***/ `true` if the search from this suggestion should be treated like a collection search, `false` if the
 ***REMOVED******REMOVED***/ search would return a single result. This property should be used to display a different icon
 ***REMOVED******REMOVED***/ in the UI depending on if this is a category search (like 'Coffee', 'Pizza', or 'Starbucks') and
 ***REMOVED******REMOVED***/ false if it is a search for a specific result (e.g. '380 New York St. Redlands CA').
