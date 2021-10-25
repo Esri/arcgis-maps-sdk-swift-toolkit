@@ -27,4 +27,4 @@ extension SearchError {
     }
 }
 
-extension SearchError: Equatable { }
+extension SearchError: Equatable {}
