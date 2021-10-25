@@ -112,7 +112,7 @@ extension BasemapGallery {
                     BasemapGalleryItemRow(
                         basemapGalleryItem: basemapGalleryItem,
                         isSelected: basemapGalleryItem == viewModel.currentBasemapGalleryItem,
-                        isValid: basemapGalleryItem.isValid(
+                        isValid: basemapGalleryItem.isLoaded && basemapGalleryItem.isValid(
                             for: viewModel.currentSpatialReference
                         )
                     )
@@ -126,6 +126,8 @@ extension BasemapGallery {
     }
 }
 
+// Don't check spatial reference until user taps on it.
+
 private struct BasemapGalleryItemRow: View {
     @ObservedObject var basemapGalleryItem: BasemapGalleryItem
     let isSelected: Bool
@@ -136,20 +138,22 @@ private struct BasemapGalleryItemRow: View {
             VStack {
                 if !basemapGalleryItem.isLoaded {
                     Spacer()
-                    Text("Loading...")
-                        .font(.caption)
+                    ProgressView()
+                       .progressViewStyle(CircularProgressViewStyle())
                     Spacer()
                 }
-                else if let thumbnailImage = basemapGalleryItem.thumbnail {
-                    Image(uiImage: thumbnailImage)
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .border(
-                            isSelected ? Color.accentColor: Color.clear,
-                            width: 3.0)
+                else {
+                    if let thumbnailImage = basemapGalleryItem.thumbnail {
+                        Image(uiImage: thumbnailImage)
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .border(
+                                isSelected ? Color.accentColor: Color.clear,
+                                width: 3.0)
+                    }
+                    Text(basemapGalleryItem.name)
+                        .font(.footnote)
                 }
-                Text(basemapGalleryItem.name)
-                    .font(.footnote)
             }
             if !isValid {
                 Color(white: 0.5, opacity: 0.5)
