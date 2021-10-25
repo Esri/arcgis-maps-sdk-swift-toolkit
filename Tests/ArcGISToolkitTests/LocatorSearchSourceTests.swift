@@ -24,12 +24,20 @@ class LocatorSearchSourceTests: XCTestCase {
 ***REMOVED******REMOVED***locator.maximumResults = 4
 ***REMOVED******REMOVED***XCTAssertEqual(locator.maximumResults, 4)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***var searchResults = try await locator.search("Coffee")
+***REMOVED******REMOVED***var searchResults = try await locator.search(
+***REMOVED******REMOVED******REMOVED***"Coffee",
+***REMOVED******REMOVED******REMOVED***searchArea: nil,
+***REMOVED******REMOVED******REMOVED***preferredSearchLocation: nil
+***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***var results = try XCTUnwrap(searchResults)
 ***REMOVED******REMOVED***XCTAssertEqual(results.count, 4)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***locator.maximumResults = 12
-***REMOVED******REMOVED***searchResults = try await locator.search("Coffee")
+***REMOVED******REMOVED***searchResults = try await locator.search(
+***REMOVED******REMOVED******REMOVED***"Coffee",
+***REMOVED******REMOVED******REMOVED***searchArea: nil,
+***REMOVED******REMOVED******REMOVED***preferredSearchLocation: nil
+***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***results = try XCTUnwrap(searchResults)
 ***REMOVED******REMOVED***XCTAssertEqual(results.count, 12)
 ***REMOVED******REMOVED***
@@ -37,7 +45,11 @@ class LocatorSearchSourceTests: XCTestCase {
 ***REMOVED******REMOVED***locator.geocodeParameters.maxResults = 2
 ***REMOVED******REMOVED***XCTAssertEqual(Int(locator.geocodeParameters.maxResults), 2)
 ***REMOVED******REMOVED***XCTAssertEqual(locator.maximumResults, 2)
-***REMOVED******REMOVED***searchResults = try await locator.search("Coffee")
+***REMOVED******REMOVED***searchResults = try await locator.search(
+***REMOVED******REMOVED******REMOVED***"Coffee",
+***REMOVED******REMOVED******REMOVED***searchArea: nil,
+***REMOVED******REMOVED******REMOVED***preferredSearchLocation: nil
+***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***results = try XCTUnwrap(searchResults)
 ***REMOVED******REMOVED***XCTAssertEqual(results.count, 2)
 ***REMOVED***
@@ -47,12 +59,20 @@ class LocatorSearchSourceTests: XCTestCase {
 ***REMOVED******REMOVED***locator.maximumSuggestions = 4
 ***REMOVED******REMOVED***XCTAssertEqual(locator.maximumSuggestions, 4)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***var suggestResults = try await locator.suggest("Coffee")
+***REMOVED******REMOVED***var suggestResults = try await locator.suggest(
+***REMOVED******REMOVED******REMOVED***"Coffee",
+***REMOVED******REMOVED******REMOVED***searchArea: nil,
+***REMOVED******REMOVED******REMOVED***preferredSearchLocation: nil
+***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***var results = try XCTUnwrap(suggestResults)
 ***REMOVED******REMOVED***XCTAssertEqual(results.count, 4)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***locator.maximumSuggestions = 12
-***REMOVED******REMOVED***suggestResults = try await locator.suggest("Coffee")
+***REMOVED******REMOVED***suggestResults = try await locator.suggest(
+***REMOVED******REMOVED******REMOVED***"Coffee",
+***REMOVED******REMOVED******REMOVED***searchArea: nil,
+***REMOVED******REMOVED******REMOVED***preferredSearchLocation: nil
+***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***results = try XCTUnwrap(suggestResults)
 ***REMOVED******REMOVED***XCTAssertEqual(results.count, 12)
 ***REMOVED******REMOVED***
@@ -60,7 +80,11 @@ class LocatorSearchSourceTests: XCTestCase {
 ***REMOVED******REMOVED***locator.suggestParameters.maxResults = 2
 ***REMOVED******REMOVED***XCTAssertEqual(Int(locator.suggestParameters.maxResults), 2)
 ***REMOVED******REMOVED***XCTAssertEqual(locator.maximumSuggestions, 2)
-***REMOVED******REMOVED***suggestResults = try await locator.suggest("Coffee")
+***REMOVED******REMOVED***suggestResults = try await locator.suggest(
+***REMOVED******REMOVED******REMOVED***"Coffee",
+***REMOVED******REMOVED******REMOVED***searchArea: nil,
+***REMOVED******REMOVED******REMOVED***preferredSearchLocation: nil
+***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***results = try XCTUnwrap(suggestResults)
 ***REMOVED******REMOVED***XCTAssertEqual(results.count, 2)
 ***REMOVED***

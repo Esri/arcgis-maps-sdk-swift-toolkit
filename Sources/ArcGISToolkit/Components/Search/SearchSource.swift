@@ -24,35 +24,49 @@ public protocol SearchSource {
 ***REMOVED******REMOVED***/ The maximum suggestions to return. Most sources default to 6.
 ***REMOVED***var maximumSuggestions: Int32 { get set ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ The area to be used as a constraint for searches and suggestions.
-***REMOVED***var searchArea: Geometry? { get set ***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ The point to be used as an input to searches and suggestions.
-***REMOVED***var preferredSearchLocation: Point? { get set ***REMOVED***
-***REMOVED***
 ***REMOVED******REMOVED***/ Returns the search suggestions for the specified query.
-***REMOVED******REMOVED***/ - Parameter queryString: The query for which to provide search suggestions.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - queryString: The query for which to provide search suggestions.
+***REMOVED******REMOVED***/   - searchArea: The area used to limit results.
+***REMOVED******REMOVED***/   - preferredSearchLocation: The location used as a starting point for searches.
 ***REMOVED******REMOVED***/ - Returns: An array of search suggestions.
-***REMOVED***func suggest(_ queryString: String) async throws -> [SearchSuggestion]
+***REMOVED***func suggest(
+***REMOVED******REMOVED***_ queryString: String,
+***REMOVED******REMOVED***searchArea: Geometry?,
+***REMOVED******REMOVED***preferredSearchLocation: Point?
+***REMOVED***) async throws -> [SearchSuggestion]
 ***REMOVED***
 ***REMOVED******REMOVED***/ Gets search results.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - queryString: Text to be used for query.
+***REMOVED******REMOVED***/   - searchArea: The area used to limit results.
+***REMOVED******REMOVED***/   - preferredSearchLocation: The location used as a starting point for searches.
 ***REMOVED******REMOVED***/ - Returns: Array of `SearchResult`s
-***REMOVED***func search(_ queryString: String) async throws -> [SearchResult]
+***REMOVED***func search(
+***REMOVED******REMOVED***_ queryString: String,
+***REMOVED******REMOVED***searchArea: Geometry?,
+***REMOVED******REMOVED***preferredSearchLocation: Point?
+***REMOVED***) async throws -> [SearchResult]
 ***REMOVED***
 ***REMOVED******REMOVED***/ Returns the search results for the specified search suggestion.
-***REMOVED******REMOVED***/ - Parameter searchSuggestion: The search suggestion for which to provide
-***REMOVED******REMOVED***/ search results.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - searchSuggestion: The search suggestion for which to provide search results.
+***REMOVED******REMOVED***/   - searchArea: The area used to limit results.
+***REMOVED******REMOVED***/   - preferredSearchLocation: The location used as a starting point for searches.
 ***REMOVED******REMOVED***/ - Returns: An array of search results.
 ***REMOVED***func search(
-***REMOVED******REMOVED***_ searchSuggestion: SearchSuggestion
+***REMOVED******REMOVED***_ searchSuggestion: SearchSuggestion,
+***REMOVED******REMOVED***searchArea: Geometry?,
+***REMOVED******REMOVED***preferredSearchLocation: Point?
 ***REMOVED***) async throws -> [SearchResult]
 ***REMOVED***
 ***REMOVED******REMOVED***/ Repeats the last search.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - queryString: Text to be used for query.
-***REMOVED******REMOVED***/   - queryExtent: Extent used to limit the results.
+***REMOVED******REMOVED***/   - searchExtent: Extent used to limit the results.
 ***REMOVED******REMOVED***/ - Returns: Array of `SearchResult`s
-***REMOVED***func repeatSearch(_ queryString: String, queryExtent: Envelope) async throws -> [SearchResult]
+***REMOVED***func repeatSearch(
+***REMOVED******REMOVED***_ queryString: String,
+***REMOVED******REMOVED***searchExtent: Envelope
+***REMOVED***) async throws -> [SearchResult]
 ***REMOVED***

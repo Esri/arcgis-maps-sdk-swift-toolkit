@@ -21,12 +21,13 @@ import XCTest
 class SmartLocatorSearchSourceTests: XCTestCase {
 ***REMOVED***func testRepeatSearchResultThreshold() async throws {
 ***REMOVED******REMOVED***let locator = SmartLocatorSearchSource()
-***REMOVED******REMOVED***locator.searchArea = Envelope.edinburgh
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Threshold of 0 means no re-query.
 ***REMOVED******REMOVED***locator.repeatSearchResultThreshold = 0
 ***REMOVED******REMOVED***var searchResults = try await locator.search(
-***REMOVED******REMOVED******REMOVED***"Dunkin' Donuts"
+***REMOVED******REMOVED******REMOVED***"Dunkin' Donuts",
+***REMOVED******REMOVED******REMOVED***searchArea: Envelope.edinburgh,
+***REMOVED******REMOVED******REMOVED***preferredSearchLocation: nil
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***var results = try XCTUnwrap(searchResults)
 ***REMOVED******REMOVED***XCTAssertEqual(results.count, 0)
@@ -34,7 +35,9 @@ class SmartLocatorSearchSourceTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED*** Threshold of 1+ means requery with fewer restrictions
 ***REMOVED******REMOVED***locator.repeatSearchResultThreshold = 1
 ***REMOVED******REMOVED***searchResults = try await locator.search(
-***REMOVED******REMOVED******REMOVED***"Dunkin' Donuts"
+***REMOVED******REMOVED******REMOVED***"Dunkin' Donuts",
+***REMOVED******REMOVED******REMOVED***searchArea: Envelope.edinburgh,
+***REMOVED******REMOVED******REMOVED***preferredSearchLocation: nil
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***results = try XCTUnwrap(searchResults)
 ***REMOVED******REMOVED***XCTAssertGreaterThanOrEqual(results.count, 1)
@@ -42,12 +45,13 @@ class SmartLocatorSearchSourceTests: XCTestCase {
 ***REMOVED***
 ***REMOVED***func testRepeatSuggestResultThreshold() async throws {
 ***REMOVED******REMOVED***let locator = SmartLocatorSearchSource()
-***REMOVED******REMOVED***locator.searchArea = Envelope.edinburgh
-***REMOVED******REMOVED***
+
 ***REMOVED******REMOVED******REMOVED*** Threshold of 0 means no re-query.
 ***REMOVED******REMOVED***locator.repeatSuggestResultThreshold = 0
 ***REMOVED******REMOVED***var suggestResults = try await locator.suggest(
-***REMOVED******REMOVED******REMOVED***"Dunkin' Donuts"
+***REMOVED******REMOVED******REMOVED***"Dunkin' Donuts",
+***REMOVED******REMOVED******REMOVED***searchArea: Envelope.edinburgh,
+***REMOVED******REMOVED******REMOVED***preferredSearchLocation: nil
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***var results = try XCTUnwrap(suggestResults)
 ***REMOVED******REMOVED***XCTAssertEqual(results.count, 0)
@@ -55,25 +59,13 @@ class SmartLocatorSearchSourceTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED*** Threshold of 1 -> requery with fewer restrictions
 ***REMOVED******REMOVED***locator.repeatSuggestResultThreshold = 1
 ***REMOVED******REMOVED***suggestResults = try await locator.suggest(
-***REMOVED******REMOVED******REMOVED***"Dunkin' Donuts"
+***REMOVED******REMOVED******REMOVED***"Dunkin' Donuts",
+***REMOVED******REMOVED******REMOVED***searchArea: Envelope.edinburgh,
+***REMOVED******REMOVED******REMOVED***preferredSearchLocation: nil
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***results = try XCTUnwrap(suggestResults)
 ***REMOVED******REMOVED***XCTAssertGreaterThanOrEqual(results.count, 1)
 ***REMOVED***
-***REMOVED***
-***REMOVED***func testLocalLocatorTask() async throws {
-***REMOVED******REMOVED***let locatorTask = LocatorTask(url: URL(fileURLWithPath: "/Users/mark1113/san-diego/SanDiego_StreetAddress.loc/"));
-***REMOVED******REMOVED***let locator = SmartLocatorSearchSource(locatorTask: locatorTask)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***let suggestResults = try await locator.suggest("Coffee")
-***REMOVED******REMOVED***let suggestions = try XCTUnwrap(suggestResults)
-***REMOVED******REMOVED***XCTAssertEqual(suggestions.count, 3)
-
-***REMOVED******REMOVED***let searchResults = try await locator.search("Hotel")
-***REMOVED******REMOVED***let results = try XCTUnwrap(searchResults)
-***REMOVED******REMOVED***XCTAssertEqual(results.count, 2)
-***REMOVED***
-
 ***REMOVED***
 
 extension Envelope {
