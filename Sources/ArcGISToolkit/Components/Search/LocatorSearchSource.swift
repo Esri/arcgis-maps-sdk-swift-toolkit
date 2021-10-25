@@ -20,6 +20,7 @@ public class LocatorSearchSource: ObservableObject, SearchSource {
 ***REMOVED******REMOVED***/ Creates a locator search source.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - name: Name to show when presenting this source in the UI.
+***REMOVED******REMOVED***/   - locatorTask: The `LocatorTask` to use for searching.
 ***REMOVED******REMOVED***/   - maximumResults: The maximum results to return when performing a search. Most sources default to 6.
 ***REMOVED******REMOVED***/   - maximumSuggestions: The maximum suggestions to return. Most sources default to 6.
 ***REMOVED******REMOVED***/   - searchArea: Area to be used as a constraint for searches and suggestions.
@@ -80,11 +81,11 @@ public class LocatorSearchSource: ObservableObject, SearchSource {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Parameters used for geocoding. Some properties on parameters will be updated automatically
 ***REMOVED******REMOVED***/ based on searches.
-***REMOVED***public private(set) var geocodeParameters: GeocodeParameters = GeocodeParameters()
+***REMOVED***public let geocodeParameters: GeocodeParameters = GeocodeParameters()
 ***REMOVED***
 ***REMOVED******REMOVED***/ Parameters used for getting suggestions. Some properties will be updated automatically
 ***REMOVED******REMOVED***/ based on searches.
-***REMOVED***public private(set) var suggestParameters: SuggestParameters = SuggestParameters()
+***REMOVED***public let suggestParameters: SuggestParameters = SuggestParameters()
 ***REMOVED***
 ***REMOVED***public func repeatSearch(
 ***REMOVED******REMOVED***_ queryString: String,
