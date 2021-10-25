@@ -21,12 +21,13 @@ import SwiftUI
 class SmartLocatorSearchSourceTests: XCTestCase {
     func testRepeatSearchResultThreshold() async throws {
         let locator = SmartLocatorSearchSource()
-        locator.searchArea = Envelope.edinburgh
         
         // Threshold of 0 means no re-query.
         locator.repeatSearchResultThreshold = 0
         var searchResults = try await locator.search(
-            "Dunkin' Donuts"
+            "Dunkin' Donuts",
+            searchArea: Envelope.edinburgh,
+            preferredSearchLocation: nil
         )
         var results = try XCTUnwrap(searchResults)
         XCTAssertEqual(results.count, 0)
@@ -34,7 +35,9 @@ class SmartLocatorSearchSourceTests: XCTestCase {
         // Threshold of 1+ means requery with fewer restrictions
         locator.repeatSearchResultThreshold = 1
         searchResults = try await locator.search(
-            "Dunkin' Donuts"
+            "Dunkin' Donuts",
+            searchArea: Envelope.edinburgh,
+            preferredSearchLocation: nil
         )
         results = try XCTUnwrap(searchResults)
         XCTAssertGreaterThanOrEqual(results.count, 1)
@@ -42,12 +45,13 @@ class SmartLocatorSearchSourceTests: XCTestCase {
     
     func testRepeatSuggestResultThreshold() async throws {
         let locator = SmartLocatorSearchSource()
-        locator.searchArea = Envelope.edinburgh
-        
+
         // Threshold of 0 means no re-query.
         locator.repeatSuggestResultThreshold = 0
         var suggestResults = try await locator.suggest(
-            "Dunkin' Donuts"
+            "Dunkin' Donuts",
+            searchArea: Envelope.edinburgh,
+            preferredSearchLocation: nil
         )
         var results = try XCTUnwrap(suggestResults)
         XCTAssertEqual(results.count, 0)
@@ -55,25 +59,13 @@ class SmartLocatorSearchSourceTests: XCTestCase {
         // Threshold of 1 -> requery with fewer restrictions
         locator.repeatSuggestResultThreshold = 1
         suggestResults = try await locator.suggest(
-            "Dunkin' Donuts"
+            "Dunkin' Donuts",
+            searchArea: Envelope.edinburgh,
+            preferredSearchLocation: nil
         )
         results = try XCTUnwrap(suggestResults)
         XCTAssertGreaterThanOrEqual(results.count, 1)
     }
-    
-    func testLocalLocatorTask() async throws {
-        let locatorTask = LocatorTask(url: URL(fileURLWithPath: "/Users/mark1113/san-diego/SanDiego_StreetAddress.loc/"));
-        let locator = SmartLocatorSearchSource(locatorTask: locatorTask)
-        
-        let suggestResults = try await locator.suggest("Coffee")
-        let suggestions = try XCTUnwrap(suggestResults)
-        XCTAssertEqual(suggestions.count, 3)
-
-        let searchResults = try await locator.search("Hotel")
-        let results = try XCTUnwrap(searchResults)
-        XCTAssertEqual(results.count, 2)
-    }
-
 }
 
 extension Envelope {
