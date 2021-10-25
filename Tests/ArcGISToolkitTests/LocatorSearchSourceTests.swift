@@ -24,12 +24,20 @@ class LocatorSearchSourceTests: XCTestCase {
         locator.maximumResults = 4
         XCTAssertEqual(locator.maximumResults, 4)
         
-        var searchResults = try await locator.search("Coffee")
+        var searchResults = try await locator.search(
+            "Coffee",
+            searchArea: nil,
+            preferredSearchLocation: nil
+        )
         var results = try XCTUnwrap(searchResults)
         XCTAssertEqual(results.count, 4)
         
         locator.maximumResults = 12
-        searchResults = try await locator.search("Coffee")
+        searchResults = try await locator.search(
+            "Coffee",
+            searchArea: nil,
+            preferredSearchLocation: nil
+        )
         results = try XCTUnwrap(searchResults)
         XCTAssertEqual(results.count, 12)
         
@@ -37,7 +45,11 @@ class LocatorSearchSourceTests: XCTestCase {
         locator.geocodeParameters.maxResults = 2
         XCTAssertEqual(Int(locator.geocodeParameters.maxResults), 2)
         XCTAssertEqual(locator.maximumResults, 2)
-        searchResults = try await locator.search("Coffee")
+        searchResults = try await locator.search(
+            "Coffee",
+            searchArea: nil,
+            preferredSearchLocation: nil
+        )
         results = try XCTUnwrap(searchResults)
         XCTAssertEqual(results.count, 2)
     }
@@ -47,12 +59,20 @@ class LocatorSearchSourceTests: XCTestCase {
         locator.maximumSuggestions = 4
         XCTAssertEqual(locator.maximumSuggestions, 4)
         
-        var suggestResults = try await locator.suggest("Coffee")
+        var suggestResults = try await locator.suggest(
+            "Coffee",
+            searchArea: nil,
+            preferredSearchLocation: nil
+        )
         var results = try XCTUnwrap(suggestResults)
         XCTAssertEqual(results.count, 4)
         
         locator.maximumSuggestions = 12
-        suggestResults = try await locator.suggest("Coffee")
+        suggestResults = try await locator.suggest(
+            "Coffee",
+            searchArea: nil,
+            preferredSearchLocation: nil
+        )
         results = try XCTUnwrap(suggestResults)
         XCTAssertEqual(results.count, 12)
         
@@ -60,7 +80,11 @@ class LocatorSearchSourceTests: XCTestCase {
         locator.suggestParameters.maxResults = 2
         XCTAssertEqual(Int(locator.suggestParameters.maxResults), 2)
         XCTAssertEqual(locator.maximumSuggestions, 2)
-        suggestResults = try await locator.suggest("Coffee")
+        suggestResults = try await locator.suggest(
+            "Coffee",
+            searchArea: nil,
+            preferredSearchLocation: nil
+        )
         results = try XCTUnwrap(suggestResults)
         XCTAssertEqual(results.count, 2)
     }

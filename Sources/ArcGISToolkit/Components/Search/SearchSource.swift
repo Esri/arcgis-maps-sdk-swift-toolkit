@@ -24,35 +24,49 @@ public protocol SearchSource {
     /// The maximum suggestions to return. Most sources default to 6.
     var maximumSuggestions: Int32 { get set }
     
-    /// The area to be used as a constraint for searches and suggestions.
-    var searchArea: Geometry? { get set }
-    
-    /// The point to be used as an input to searches and suggestions.
-    var preferredSearchLocation: Point? { get set }
-    
     /// Returns the search suggestions for the specified query.
-    /// - Parameter queryString: The query for which to provide search suggestions.
+    /// - Parameters:
+    ///   - queryString: The query for which to provide search suggestions.
+    ///   - searchArea: The area used to limit results.
+    ///   - preferredSearchLocation: The location used as a starting point for searches.
     /// - Returns: An array of search suggestions.
-    func suggest(_ queryString: String) async throws -> [SearchSuggestion]
+    func suggest(
+        _ queryString: String,
+        searchArea: Geometry?,
+        preferredSearchLocation: Point?
+    ) async throws -> [SearchSuggestion]
     
     /// Gets search results.
     /// - Parameters:
     ///   - queryString: Text to be used for query.
+    ///   - searchArea: The area used to limit results.
+    ///   - preferredSearchLocation: The location used as a starting point for searches.
     /// - Returns: Array of `SearchResult`s
-    func search(_ queryString: String) async throws -> [SearchResult]
+    func search(
+        _ queryString: String,
+        searchArea: Geometry?,
+        preferredSearchLocation: Point?
+    ) async throws -> [SearchResult]
     
     /// Returns the search results for the specified search suggestion.
-    /// - Parameter searchSuggestion: The search suggestion for which to provide
-    /// search results.
+    /// - Parameters:
+    ///   - searchSuggestion: The search suggestion for which to provide search results.
+    ///   - searchArea: The area used to limit results.
+    ///   - preferredSearchLocation: The location used as a starting point for searches.
     /// - Returns: An array of search results.
     func search(
-        _ searchSuggestion: SearchSuggestion
+        _ searchSuggestion: SearchSuggestion,
+        searchArea: Geometry?,
+        preferredSearchLocation: Point?
     ) async throws -> [SearchResult]
     
     /// Repeats the last search.
     /// - Parameters:
     ///   - queryString: Text to be used for query.
-    ///   - queryExtent: Extent used to limit the results.
+    ///   - searchExtent: Extent used to limit the results.
     /// - Returns: Array of `SearchResult`s
-    func repeatSearch(_ queryString: String, queryExtent: Envelope) async throws -> [SearchResult]
+    func repeatSearch(
+        _ queryString: String,
+        searchExtent: Envelope
+    ) async throws -> [SearchResult]
 }
