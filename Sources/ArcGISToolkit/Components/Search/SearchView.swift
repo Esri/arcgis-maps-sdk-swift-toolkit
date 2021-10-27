@@ -116,12 +116,8 @@ public struct SearchView: View {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.listStyle(.plain)
-***REMOVED******REMOVED***.onChange(of: searchViewModel.results) {
-***REMOVED******REMOVED******REMOVED***display(searchResults: $0)
-***REMOVED***
-***REMOVED******REMOVED***.onChange(of: searchViewModel.selectedResult) {
-***REMOVED******REMOVED******REMOVED***display(selectedResult: $0)
-***REMOVED***
+***REMOVED******REMOVED***.onChange(of: searchViewModel.results, perform: display(searchResults:))
+***REMOVED******REMOVED***.onChange(of: searchViewModel.selectedResult, perform: display(selectedResult:))
 ***REMOVED******REMOVED***.onReceive(searchViewModel.$currentQuery) { _ in
 ***REMOVED******REMOVED******REMOVED***searchViewModel.updateSuggestions()
 ***REMOVED***
