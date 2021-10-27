@@ -22,9 +22,11 @@ public struct SearchView: View {
     ///   - searchViewModel: The view model used by `SearchView`.
     ///   - viewpoint: The `Viewpoint` used to zoom to results.
     ///   - resultsOverlay: The `GraphicsOverlay` used to display results.
-    public init(searchViewModel: SearchViewModel? = nil,
-                viewpoint: Binding<Viewpoint?>? = nil,
-                resultsOverlay: Binding<GraphicsOverlay>? = nil) {
+    public init(
+        searchViewModel: SearchViewModel? = nil,
+        viewpoint: Binding<Viewpoint?>? = nil,
+        resultsOverlay: Binding<GraphicsOverlay>? = nil
+    ) {
         if let searchViewModel = searchViewModel {
             self.searchViewModel = searchViewModel
         }
