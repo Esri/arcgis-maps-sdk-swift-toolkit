@@ -150,7 +150,7 @@ public struct SearchView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ The width of the search bar.
 ***REMOVED******REMOVED***/ - Parameter searchBarWidth: The desired width of the search bar.
-***REMOVED******REMOVED***/ - Returns: The `SearchView`.
+***REMOVED******REMOVED***/ - Returns: A new `SearchView`.
 ***REMOVED***public func searchBarWidth(_ searchBarWidth: CGFloat) -> Self {
 ***REMOVED******REMOVED***var copy = self
 ***REMOVED******REMOVED***copy.searchBarWidth = searchBarWidth
