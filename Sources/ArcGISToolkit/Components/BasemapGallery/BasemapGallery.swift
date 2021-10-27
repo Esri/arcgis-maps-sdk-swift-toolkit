@@ -31,6 +31,8 @@ public struct BasemapGallery: View {
 ***REMOVED******REMOVED***case list
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ Creates a `BasemapGallery`.
+***REMOVED******REMOVED***/ - Parameter viewModel: The view model used by the `BasemapGallery`.
 ***REMOVED***public init(viewModel: BasemapGalleryViewModel? = nil) {
 ***REMOVED******REMOVED***if let viewModel = viewModel {
 ***REMOVED******REMOVED******REMOVED***self.viewModel = viewModel
@@ -40,6 +42,10 @@ public struct BasemapGallery: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ The view model used by the view. The `BasemapGalleryViewModel` manages the state
+***REMOVED******REMOVED***/ of the `BasemapGallery`. The view observes `BasemapGalleryViewModel` for changes
+***REMOVED******REMOVED***/ in state. The view updates the state of the `BasemapGalleryViewModel` in response to
+***REMOVED******REMOVED***/ user action.
 ***REMOVED***@ObservedObject
 ***REMOVED***public var viewModel: BasemapGalleryViewModel
 ***REMOVED***
@@ -48,13 +54,12 @@ public struct BasemapGallery: View {
 ***REMOVED******REMOVED***/ Set using the `basemapGalleryStyle` modifier.
 ***REMOVED***private var style: BasemapGalleryStyle = .automatic
 ***REMOVED***
+***REMOVED******REMOVED***/ The size class used to determine if the basemap items should dispaly in a list or grid.
+***REMOVED******REMOVED***/ If the size class is `.regular`, they display in a grid.  If it is `.compact`, they display in a list.
 ***REMOVED***@Environment(\.horizontalSizeClass) var horizontalSizeClass
 
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***GalleryView()
-***REMOVED******REMOVED******REMOVED******REMOVED***.onAppear {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.fetchBasemaps()
-***REMOVED******REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED*** MARK: Modifiers
@@ -111,12 +116,12 @@ extension BasemapGallery {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ForEach(viewModel.basemapGalleryItems) { basemapGalleryItem in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***BasemapGalleryItemRow(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***basemapGalleryItem: basemapGalleryItem,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isSelected: basemapGalleryItem == viewModel.currentBasemapGalleryItem,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isValid: basemapGalleryItem.isLoaded && basemapGalleryItem.isValid(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for: viewModel.currentSpatialReference
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isSelected: basemapGalleryItem == viewModel.currentBasemapGalleryItem
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onTapGesture {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Don't check spatial reference until user taps on it.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** At this point, we need to get errors from setting the basemap (in the model?).
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Error in the model, displayed in the gallery.
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.currentBasemapGalleryItem = basemapGalleryItem
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
@@ -126,12 +131,9 @@ extension BasemapGallery {
 ***REMOVED***
 ***REMOVED***
 
-***REMOVED*** Don't check spatial reference until user taps on it.
-
 private struct BasemapGalleryItemRow: View {
 ***REMOVED***@ObservedObject var basemapGalleryItem: BasemapGalleryItem
 ***REMOVED***let isSelected: Bool
-***REMOVED***let isValid: Bool
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***ZStack {
@@ -143,24 +145,32 @@ private struct BasemapGalleryItemRow: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let thumbnailImage = basemapGalleryItem.thumbnail {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(uiImage: thumbnailImage)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.resizable()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.aspectRatio(contentMode: .fit)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.border(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isSelected ? Color.accentColor: Color.clear,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***width: 3.0)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ZStack {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let thumbnailImage = basemapGalleryItem.thumbnail {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(uiImage: thumbnailImage)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.resizable()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.aspectRatio(contentMode: .fit)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.border(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isSelected ? Color.accentColor: Color.clear,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***width: 3.0)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if basemapGalleryItem.loadBasemapsError != nil {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "minus.circle.fill")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.title)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.red)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(basemapGalleryItem.name)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.footnote)
 ***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***Text(basemapGalleryItem.name)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.footnote)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.multilineTextAlignment(.center)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***if !isValid {
-***REMOVED******REMOVED******REMOVED******REMOVED***Color(white: 0.5, opacity: 0.5)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.blur(radius: 0.0, opaque: true)
-***REMOVED******REMOVED***
-
 ***REMOVED***
-***REMOVED******REMOVED***.allowsHitTesting(isValid)
+***REMOVED******REMOVED***.allowsHitTesting(
+***REMOVED******REMOVED******REMOVED***basemapGalleryItem.isLoaded &&
+***REMOVED******REMOVED******REMOVED***basemapGalleryItem.loadBasemapsError == nil
+***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
