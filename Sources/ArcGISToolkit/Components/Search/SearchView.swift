@@ -150,7 +150,7 @@ public struct SearchView: View {
     
     /// The width of the search bar.
     /// - Parameter searchBarWidth: The desired width of the search bar.
-    /// - Returns: The `SearchView`.
+    /// - Returns: A new `SearchView`.
     public func searchBarWidth(_ searchBarWidth: CGFloat) -> Self {
         var copy = self
         copy.searchBarWidth = searchBarWidth
