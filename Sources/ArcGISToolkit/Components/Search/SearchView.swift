@@ -180,8 +180,7 @@ extension SearchView {
                     targetExtent: targetExtent
                 )
                 searchViewModel.lastSearchExtent = targetExtent
-            }
-            else {
+            } else {
                 viewpoint?.wrappedValue = nil
             }
         default:
