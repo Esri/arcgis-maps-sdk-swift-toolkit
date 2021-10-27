@@ -162,13 +162,11 @@ extension SearchView {
 ***REMOVED***private func display(searchResults: Result<[SearchResult], SearchError>?) {
 ***REMOVED******REMOVED***switch searchResults {
 ***REMOVED******REMOVED***case .success(let results):
-***REMOVED******REMOVED******REMOVED***var resultGraphics = [Graphic]()
-***REMOVED******REMOVED******REMOVED***results.forEach({ result in
-***REMOVED******REMOVED******REMOVED******REMOVED***if let graphic = result.geoElement as? Graphic {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***graphic.updateGraphic(withResult: result)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***resultGraphics.append(graphic)
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***let resultGraphics: [Graphic] = results.compactMap { result in
+***REMOVED******REMOVED******REMOVED******REMOVED***guard let graphic = result.geoElement as? Graphic else { return nil ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***graphic.updateGraphic(withResult: result)
+***REMOVED******REMOVED******REMOVED******REMOVED***return graphic
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***resultsOverlay?.wrappedValue.removeAllGraphics()
 ***REMOVED******REMOVED******REMOVED***resultsOverlay?.wrappedValue.addGraphics(resultGraphics)
 ***REMOVED******REMOVED******REMOVED***
