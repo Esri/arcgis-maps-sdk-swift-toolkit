@@ -74,20 +74,14 @@ public struct SearchView: View {
             HStack {
                 Spacer()
                 VStack (alignment: .center) {
-                    TextField(
-                        searchViewModel.defaultPlaceholder,
-                        text: $searchViewModel.currentQuery
-                    ) { _ in
-                    } onCommit: {
-                        searchViewModel.commitSearch()
-                    }
-                    .esriDeleteTextButton(text: $searchViewModel.currentQuery)
-                    .esriSearchButton { searchViewModel.commitSearch() }
-                    .esriShowResultsButton(
-                        isHidden: !enableResultListView,
+                    SearchField(
+                        defaultPlaceholder: searchViewModel.defaultPlaceholder,
+                        currentQuery: $searchViewModel.currentQuery,
+                        isShowResultsHidden: !enableResultListView,
                         showResults: $showResultListView
                     )
-                    .esriBorder()
+                        .onSubmit { searchViewModel.commitSearch() }
+
                     if enableResultListView, showResultListView {
                         if let results = searchViewModel.results {
                             SearchResultList(
@@ -126,8 +120,6 @@ public struct SearchView: View {
         .onReceive(searchViewModel.$currentQuery) { _ in
             searchViewModel.updateSuggestions()
         }
-        
-        Spacer()
     }
     
     // MARK: Modifiers

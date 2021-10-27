@@ -16,9 +16,9 @@ import ArcGIS
 
 /// Wraps a suggestion for display.
 public struct SearchSuggestion {
-    public init(
+    internal init(
         displayTitle: String,
-        displaySubtitle: String? = nil,
+        displaySubtitle: String = "",
         owningSource: SearchSource,
         suggestResult: SuggestResult? = nil,
         isCollection: Bool
@@ -34,7 +34,7 @@ public struct SearchSuggestion {
     public let displayTitle: String
     
     /// Optional subtitle that can be displayed when showing a suggestion.
-    public let displaySubtitle: String?
+    public let displaySubtitle: String
     
     /// Reference to the `SearchSourceProtocol` that created this suggestion. This property is necessary for the
     /// view model to be able to accept a suggestion, because a suggestion should only be used with the

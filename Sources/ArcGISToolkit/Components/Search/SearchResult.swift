@@ -16,9 +16,9 @@ import ArcGIS
 
 /// Wraps a search result for display.
 public struct SearchResult {
-    public init(
+    internal init(
         displayTitle: String,
-        displaySubtitle: String? = nil,
+        displaySubtitle: String = "",
         markerImage: UIImage? = nil,
         owningSource: SearchSource,
         geoElement: GeoElement? = nil,
@@ -36,7 +36,7 @@ public struct SearchResult {
     public let displayTitle: String
     
     /// Should be shown as a subtitle wherever results are shown.
-    public let displaySubtitle: String?
+    public let displaySubtitle: String
     
     /// Image, in the native platform's format, for the result. This should be the marker that would be
     /// shown on the map, and also shown in the UI. This property is available for convenience so the
