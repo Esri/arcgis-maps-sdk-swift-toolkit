@@ -170,7 +170,7 @@ extension SearchView {
             resultsOverlay?.wrappedValue.removeAllGraphics()
             resultsOverlay?.wrappedValue.addGraphics(resultGraphics)
             
-            if resultGraphics.count > 0,
+            if !resultGraphics.isEmpty,
                let envelope = resultsOverlay?.wrappedValue.extent,
                shouldZoomToResults {
                 let builder = EnvelopeBuilder(envelope: envelope)
