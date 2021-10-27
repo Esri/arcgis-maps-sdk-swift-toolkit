@@ -132,7 +132,7 @@ public struct SearchView: View {
     /// custom result list to show results in a separate list, disconnected from the rest of the search view.
     /// Defaults to `true`.
     /// - Parameter enableResultListView: The new value.
-    /// - Returns: The `SearchView`.
+    /// - Returns: A new `SearchView`.
     public func enableResultListView(_ enableResultListView: Bool) -> Self {
         var copy = self
         copy.enableResultListView = enableResultListView
