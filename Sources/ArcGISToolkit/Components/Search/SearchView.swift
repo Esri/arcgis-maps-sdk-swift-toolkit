@@ -72,7 +72,7 @@ public struct SearchView: View {
     private var showResultListView: Bool = true
     
     public var body: some View {
-        VStack (alignment: .center) {
+        VStack {
             HStack {
                 Spacer()
                 VStack (alignment: .center) {
