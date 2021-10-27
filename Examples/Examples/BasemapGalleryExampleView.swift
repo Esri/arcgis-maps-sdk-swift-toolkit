@@ -18,58 +18,54 @@ import ArcGISToolkit
 struct BasemapGalleryExampleView: View {
     var basemapGalleryItems: [BasemapGalleryItem] = [
         BasemapGalleryItem(
-            basemap: Basemap(style: .arcGISLightGray),
-            name: "ArcGIS Light Gray",
-            description: "A vector basemap for the world featuring a light neutral background style with minimal colors as the base layer and labels as the reference layer.",
-            thumbnail: UIImage(named: "LightGray")
-            //            thumbnailURL: URL(string: "https://www.arcgis.com/sharing/rest/content/items/0f74af7609054be8a29e0ba5f154f0a8/info/thumbnail/thumbnail1607388219207.jpeg")!
+            basemap: Basemap(
+                item: PortalItem(
+                    url: URL(string: "https://runtime.maps.arcgis.com/home/item.html?id=46a87c20f09e4fc48fa3c38081e0cae6")!
+                )!
+            ),
+            name: "OpenStreetMap (Blueprint)",
+            description: "OpenStreetMap (OSM) is a collaborative project to create a free editable map of the world. This vector basemap is based on the Daylight map distribution of OSM data and is hosted by Esri. It presents the map in a cartographic style is like a blueprint technical drawing.",
+            thumbnail: nil
         ),
         BasemapGalleryItem(
-            basemap: Basemap(style: .arcGISNova),
-            name: "ArcGIS Nova",
-            description: "A vector basemap for the world featuring a dark background with glowing blue symbology inspired by science-fiction and futuristic themes.",
-            thumbnail: nil//UIImage(named: "Nova")
-            //            thumbnailURL: URL(string: "https://www.arcgis.com/sharing/rest/content/items/90f86b329f37499096d3715ac6e5ed1f/info/thumbnail/thumbnail1607555507609.jpeg")!
+            basemap: Basemap(
+                item: PortalItem(
+                    url: URL(string: "https://runtime.maps.arcgis.com/home/item.html?id=f33a34de3a294590ab48f246e99958c9")!
+                )!
+            ),
+            name: "National Geographic Style Map",
+            description: "This vector web map provides a detailed view of the world featuring beautiful political boundaries, labeling, and background that highlights the differences in the physical characteristics of the land.",
+            thumbnail: nil
         ),
         BasemapGalleryItem(
-            basemap: Basemap(style: .arcGISNewspaper),
-            name: "ArcGIS Newspaper",
-            description: "A vector basemap in black & white design with halftone patterns, red highlights, and stylized fonts to depict a unique \"newspaper\" styled theme.",
-            thumbnail: UIImage(named: "Newspaper")
-            //            thumbnailURL: URL(string: "https://www.arcgis.com/sharing/rest/content/items/e3c062eedf8b487b8bb5b9b08db1b7a9/info/thumbnail/thumbnail1607553292807.jpeg")!
+            basemap: Basemap(
+                url: URL(
+                    string: "https://runtime.maps.arcgis.com/home/item.html?id=9e557abc61ce41c9b8ec8b15800c20d3"
+                )!
+            )!,
+//            basemap: Basemap(
+//                item: PortalItem(
+//                    url: URL(string: "https://runtime.maps.arcgis.com/home/item.html?id=9e557abc61ce41c9b8ec8b15800c20d3")!
+//                )!
+//            ),
+            name: "Firefly Imagery Hybrid",
+            description: "This map features an alternative view of the World Imagery map designed to be used as a neutral imagery basemap, with de-saturated colors, that is useful for overlaying other brightly styled layers.  The map also includes a reference layer.",
+            thumbnail: nil
         ),
         BasemapGalleryItem(
-            basemap: Basemap(style: .arcGISNavigationNight),
-            name: "ArcGIS NavigationNight",
-            description: "A vector basemap for the world featuring a 'dark mode' version of the `Basemap.Style.arcGISNavigation` style, using the same content.",
-            thumbnail: UIImage(named: "NavigationNight")
-            //            thumbnailURL: URL(string: "https://www.arcgis.com/sharing/rest/content/items/77073a29526046b89bb5622b6276e933/info/thumbnail/thumbnail1607386977674.jpeg")!
+            basemap: Basemap(
+                item: PortalItem(
+                    url: URL(string: "https://runtime.maps.arcgis.com/home/item.html?id=4a3922d6d15f405d8c2b7a448a7fbad2")!
+                )!
+            ),
+            name: "Human Geography Dark Label",
+            description: "This (v2) vector tile layer provides a detailed basemap for the world, featuring a dark monochromatic style with content adjusted to support Human Geography information. This map is designed for use with Human Geography Dark Detail and Base layers.",
+            thumbnail: nil
         ),
-        BasemapGalleryItem(
-            basemap: Basemap(style: .arcGISStreets),
-            name: "ArcGIS Streets",
-            description: "A vector basemap for the world featuring a classic Esri street map style.",
-            thumbnail: UIImage(named: "Streets")
-            //            thumbnailURL: URL(string: "https://www.arcgis.com/sharing/rest/content/items/e3e6df1d2f6a485d8a70f28fdd3ce19e/info/thumbnail/thumbnail1607389307240.jpeg")!
-        ),
-        BasemapGalleryItem(
-            basemap: Basemap(style: .arcGISTerrain),
-            name: "ArcGIS Terrain",
-            description: "A composite basemap with elevation hillshade (raster), minimal map content like water and land fill, water lines and roads (vector) as the base layers and minimal map content like populated place names, admin and water labels with boundary lines (vector) as the reference layer.",
-            thumbnail: UIImage(named: "Terrain")
-            //            thumbnailURL: URL(string: "https://www.arcgis.com/sharing/rest/content/items/2ef1306b93c9459ca7c7b4f872c070b9/info/thumbnail/thumbnail1607387869592.jpeg")!
-        ),
-        BasemapGalleryItem(
-            basemap: Basemap(style: .arcGISMidcentury),
-            name: "ArcGIS Midcentury",
-            description: "A vector basemap inspired by the art and advertising of the 1950's that presents a unique design option to the ArcGIS basemaps.",
-            thumbnail: UIImage(named: "Midcentury")
-            //            thumbnailURL: URL(string: "https://www.arcgis.com/sharing/rest/content/items/52d6a28f09704f04b33761ba7c4bf93f/info/thumbnail/thumbnail1607554184831.jpeg")!
-        )
     ]
     
-//    let geoModel: GeoModel = Map(basemapStyle: .arcGISNova)
-    let geoModel: GeoModel = Scene(basemapStyle: .arcGISNova)
+    let geoModel: GeoModel = Map(basemapStyle: .arcGISNova)
+//    let geoModel: GeoModel = Scene(basemapStyle: .arcGISNova)
 
     @ObservedObject
     var viewModel = BasemapGalleryViewModel()
@@ -97,8 +93,8 @@ struct BasemapGalleryExampleView: View {
     
     var body: some View {
         ZStack(alignment: .topTrailing) {
-//            MapView(map: geoModel as! Map, viewpoint: initialViewpoint)
-            SceneView(scene: geoModel as! ArcGIS.Scene, viewpoint: initialViewpoint)
+            MapView(map: geoModel as! Map, viewpoint: initialViewpoint)
+//            SceneView(scene: geoModel as! ArcGIS.Scene, viewpoint: initialViewpoint)
                 .overlay(
                     VStack(alignment: .trailing) {
                         if showBasemapGallery {
