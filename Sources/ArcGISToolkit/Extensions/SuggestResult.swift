@@ -19,7 +19,6 @@ extension SuggestResult {
     /// - Returns: The new `SearchSuggestion`.
     func toSearchSuggestion(searchSource: SearchSource) -> SearchSuggestion {
         return SearchSuggestion(displayTitle: label,
-                                displaySubtitle: nil,
                                 owningSource: searchSource,
                                 suggestResult: self,
                                 isCollection: isCollection)
