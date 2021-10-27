@@ -75,7 +75,7 @@ public struct SearchView: View {
         VStack {
             HStack {
                 Spacer()
-                VStack (alignment: .center) {
+                VStack {
                     TextField(
                         searchViewModel.defaultPlaceholder,
                         text: $searchViewModel.currentQuery
