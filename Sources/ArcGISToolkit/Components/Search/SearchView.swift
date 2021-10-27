@@ -162,13 +162,11 @@ extension SearchView {
     private func display(searchResults: Result<[SearchResult], SearchError>?) {
         switch searchResults {
         case .success(let results):
-            var resultGraphics = [Graphic]()
-            results.forEach({ result in
-                if let graphic = result.geoElement as? Graphic {
-                    graphic.updateGraphic(withResult: result)
-                    resultGraphics.append(graphic)
-                }
-            })
+            let resultGraphics: [Graphic] = results.compactMap { result in
+                guard let graphic = result.geoElement as? Graphic else { return nil }
+                graphic.updateGraphic(withResult: result)
+                return graphic
+            }
             resultsOverlay?.wrappedValue.removeAllGraphics()
             resultsOverlay?.wrappedValue.addGraphics(resultGraphics)
             
