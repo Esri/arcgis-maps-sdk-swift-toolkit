@@ -31,6 +31,8 @@ public struct BasemapGallery: View {
         case list
     }
     
+    /// Creates a `BasemapGallery`.
+    /// - Parameter viewModel: The view model used by the `BasemapGallery`.
     public init(viewModel: BasemapGalleryViewModel? = nil) {
         if let viewModel = viewModel {
             self.viewModel = viewModel
@@ -40,6 +42,10 @@ public struct BasemapGallery: View {
         }
     }
     
+    /// The view model used by the view. The `BasemapGalleryViewModel` manages the state
+    /// of the `BasemapGallery`. The view observes `BasemapGalleryViewModel` for changes
+    /// in state. The view updates the state of the `BasemapGalleryViewModel` in response to
+    /// user action.
     @ObservedObject
     public var viewModel: BasemapGalleryViewModel
     
@@ -48,13 +54,12 @@ public struct BasemapGallery: View {
     /// Set using the `basemapGalleryStyle` modifier.
     private var style: BasemapGalleryStyle = .automatic
     
+    /// The size class used to determine if the basemap items should dispaly in a list or grid.
+    /// If the size class is `.regular`, they display in a grid.  If it is `.compact`, they display in a list.
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
 
     public var body: some View {
         GalleryView()
-//            .onAppear {
-//                viewModel.fetchBasemaps()
-//            }
     }
     
     // MARK: Modifiers
@@ -111,12 +116,12 @@ extension BasemapGallery {
                 ForEach(viewModel.basemapGalleryItems) { basemapGalleryItem in
                     BasemapGalleryItemRow(
                         basemapGalleryItem: basemapGalleryItem,
-                        isSelected: basemapGalleryItem == viewModel.currentBasemapGalleryItem,
-                        isValid: basemapGalleryItem.isLoaded && basemapGalleryItem.isValid(
-                            for: viewModel.currentSpatialReference
-                        )
+                        isSelected: basemapGalleryItem == viewModel.currentBasemapGalleryItem
                     )
                         .onTapGesture {
+                            // Don't check spatial reference until user taps on it.
+                            // At this point, we need to get errors from setting the basemap (in the model?).
+                            // Error in the model, displayed in the gallery.
                             viewModel.currentBasemapGalleryItem = basemapGalleryItem
                         }
                 }
@@ -126,12 +131,9 @@ extension BasemapGallery {
     }
 }
 
-// Don't check spatial reference until user taps on it.
-
 private struct BasemapGalleryItemRow: View {
     @ObservedObject var basemapGalleryItem: BasemapGalleryItem
     let isSelected: Bool
-    let isValid: Bool
     
     var body: some View {
         ZStack {
@@ -143,24 +145,32 @@ private struct BasemapGalleryItemRow: View {
                     Spacer()
                 }
                 else {
-                    if let thumbnailImage = basemapGalleryItem.thumbnail {
-                        Image(uiImage: thumbnailImage)
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .border(
-                                isSelected ? Color.accentColor: Color.clear,
-                                width: 3.0)
+                    ZStack {
+                        if let thumbnailImage = basemapGalleryItem.thumbnail {
+                            Image(uiImage: thumbnailImage)
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .border(
+                                    isSelected ? Color.accentColor: Color.clear,
+                                    width: 3.0)
+                        }
+                        if basemapGalleryItem.loadBasemapsError != nil {
+                            Spacer()
+                            Image(systemName: "minus.circle.fill")
+                                .font(.title)
+                                .foregroundColor(.red)
+                            Spacer()
+                        }
                     }
-                    Text(basemapGalleryItem.name)
-                        .font(.footnote)
                 }
+                Text(basemapGalleryItem.name)
+                    .font(.footnote)
+                    .multilineTextAlignment(.center)
             }
-            if !isValid {
-                Color(white: 0.5, opacity: 0.5)
-                    .blur(radius: 0.0, opaque: true)
-            }
-
         }
-        .allowsHitTesting(isValid)
+        .allowsHitTesting(
+            basemapGalleryItem.isLoaded &&
+            basemapGalleryItem.loadBasemapsError == nil
+        )
     }
 }
