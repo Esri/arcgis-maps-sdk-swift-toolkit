@@ -62,7 +62,7 @@ public struct SearchView: View {
     /// Note: this is set using the `noResultMessage` modifier.
     private var noResultMessage = "No results found"
     
-    public var searchBarWidth: CGFloat = 360.0
+    private var searchBarWidth: CGFloat = 360.0
     
     @State
     private var shouldZoomToResults = true
