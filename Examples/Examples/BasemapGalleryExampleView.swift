@@ -15,6 +15,10 @@
 ***REMOVED***
 ***REMOVED***Toolkit
 
+***REMOVED*** TODO: once user taps on a map (or maybe in the view model setter for current item)
+***REMOVED*** TODO: then check if SRs match and don't set basemap if they don't.  Figure out
+***REMOVED*** TODO: how to then gray out the item in the gallery.
+
 struct BasemapGalleryExampleView: View {
 ***REMOVED***var basemapGalleryItems: [BasemapGalleryItem] = [
 ***REMOVED******REMOVED***BasemapGalleryItem(
