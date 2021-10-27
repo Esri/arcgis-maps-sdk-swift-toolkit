@@ -95,8 +95,7 @@ public struct SearchView: View {
                                 selectedResult: $searchViewModel.selectedResult,
                                 noResultMessage: noResultMessage
                             )
-                        }
-                        if let suggestions = searchViewModel.suggestions {
+                        } else if let suggestions = searchViewModel.suggestions {
                             SearchSuggestionList(
                                 suggestionResults: suggestions,
                                 currentSuggestion: $searchViewModel.currentSuggestion,
