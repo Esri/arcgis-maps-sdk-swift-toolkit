@@ -22,6 +22,12 @@ public class BasemapGalleryItem: ObservableObject {
 ***REMOVED******REMOVED***return UIImage(named: "DefaultBasemap")!
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ Creates a `BasemapGalleryItem`.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - basemap: The `Basemap` represented by the item.
+***REMOVED******REMOVED***/   - name: The item name.
+***REMOVED******REMOVED***/   - description: The item description.
+***REMOVED******REMOVED***/   - thumbnail: The thumbnail used to represent the item.
 ***REMOVED***public init(
 ***REMOVED******REMOVED***basemap: Basemap,
 ***REMOVED******REMOVED***name: String? = nil,
@@ -39,34 +45,29 @@ public class BasemapGalleryItem: ObservableObject {
 ***REMOVED******REMOVED***loadBasemapTask = Task { await loadBasemap() ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***deinit {
-***REMOVED******REMOVED******REMOVED***loadBasemapTask.cancel()
-***REMOVED******REMOVED******REMOVED***fetchBasemapTask.cancel()
-***REMOVED******REMOVED***
-***REMOVED***
 ***REMOVED***@Published
 ***REMOVED***public var loadBasemapsError: Error? = nil
 
 ***REMOVED******REMOVED***/ The basemap this `BasemapGalleryItem` represents.
 ***REMOVED***public private(set) var basemap: Basemap
 
-***REMOVED***private var nameOverride: String? = nil
 ***REMOVED******REMOVED***/ The name of this `Basemap`.
 ***REMOVED***@Published
 ***REMOVED***public private(set) var name: String = ""
+***REMOVED***private var nameOverride: String? = nil
 
-***REMOVED***private var descriptionOverride: String? = nil
 ***REMOVED******REMOVED***/ The description which will be used in the gallery.
 ***REMOVED***@Published
 ***REMOVED***public private(set) var description: String? = nil
+***REMOVED***private var descriptionOverride: String? = nil
 
-***REMOVED***private var thumbnailOverride: UIImage? = nil
 ***REMOVED******REMOVED***/ The thumbnail which will be displayed in the gallery.
 ***REMOVED***@Published
 ***REMOVED***public private(set) var thumbnail: UIImage? = nil
+***REMOVED***private var thumbnailOverride: UIImage? = nil
 ***REMOVED***
-***REMOVED***public private(set) var spatialReference: SpatialReference? = nil
-***REMOVED***
+***REMOVED******REMOVED***/ Denotes whether loading the `basemap` has been attempted.
+***REMOVED******REMOVED***/ If the loading of the item generates an error, `isLoaded` will be true.
 ***REMOVED***@Published
 ***REMOVED***public private(set) var isLoaded = false
 
@@ -76,53 +77,26 @@ public class BasemapGalleryItem: ObservableObject {
 
 extension BasemapGalleryItem {
 ***REMOVED***private func loadBasemap() async {
+***REMOVED******REMOVED***var loadError: Error? = nil
 ***REMOVED******REMOVED***do {
-***REMOVED******REMOVED******REMOVED***print("pre-basemap.load()")
 ***REMOVED******REMOVED******REMOVED***try await basemap.load()
-***REMOVED******REMOVED******REMOVED***print("basemap loaded!")
 ***REMOVED******REMOVED******REMOVED***if let loadableImage = basemap.item?.thumbnail {
 ***REMOVED******REMOVED******REMOVED******REMOVED***try await loadableImage.load()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***TODO: use the item.spatialreferenceName to create a spatial reference instead of always loading the first base layer.
-***REMOVED******REMOVED******REMOVED******REMOVED*** Determine the spatial reference of the basemap
-***REMOVED******REMOVED******REMOVED******REMOVED***if let item = basemap.item as? PortalItem {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try await item.load()
-***REMOVED******REMOVED******REMOVED***
-
-***REMOVED******REMOVED******REMOVED***print("sr = \(basemap.item?.spatialReferenceName ?? "no name"); item: \(String(describing: (basemap.item as? PortalItem)?.loadStatus))")
-***REMOVED******REMOVED******REMOVED***if let layer = basemap.baseLayers.first {
-***REMOVED******REMOVED******REMOVED******REMOVED***try await layer.load()
-***REMOVED******REMOVED******REMOVED******REMOVED***spatialReference = layer.spatialReference
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***TODO:  Add sr checking and setting of sr to bmgi (isValid???); and what to do with errors...
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***await update()
 ***REMOVED*** catch {
-***REMOVED******REMOVED******REMOVED***loadBasemapsError = error
+***REMOVED******REMOVED******REMOVED***loadError = error
 ***REMOVED***
+***REMOVED******REMOVED***await update(error: loadError)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@MainActor
-***REMOVED***func update() {
-***REMOVED******REMOVED***self.name = nameOverride ?? basemap.name
-***REMOVED******REMOVED***self.description = descriptionOverride ?? basemap.item?.description
-***REMOVED******REMOVED***self.thumbnail = thumbnailOverride ??
+***REMOVED***func update(error: Error?) {
+***REMOVED******REMOVED***name = nameOverride ?? basemap.name
+***REMOVED******REMOVED***description = descriptionOverride ?? basemap.item?.description
+***REMOVED******REMOVED***thumbnail = thumbnailOverride ??
 ***REMOVED******REMOVED***(basemap.item?.thumbnail?.image ?? BasemapGalleryItem.defaultThumbnail)
-***REMOVED******REMOVED***
+***REMOVED******REMOVED***loadBasemapsError = error
 ***REMOVED******REMOVED***isLoaded = true
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ Returns whether the basemap gallery item is valid and ok to use.
-***REMOVED******REMOVED***/ - Parameter item: item to match spatial references with.
-***REMOVED******REMOVED***/ - Returns: true if the item is loaded and either `item`'s spatial reference is nil
-***REMOVED******REMOVED***/ or matches `spatialReference`.
-***REMOVED***public func isValid(for otherSpatialReference: SpatialReference?) -> Bool {
-***REMOVED******REMOVED***print("name: \(name); isLoaded = \(isLoaded); loadStatus = \(basemap.loadStatus)")
-***REMOVED******REMOVED***guard isLoaded else { return false ***REMOVED***
-***REMOVED******REMOVED***return otherSpatialReference == nil || otherSpatialReference == spatialReference
-***REMOVED******REMOVED******REMOVED***return true
 ***REMOVED***
 ***REMOVED***
 
