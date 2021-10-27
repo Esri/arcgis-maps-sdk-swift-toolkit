@@ -22,9 +22,11 @@ public struct SearchView: View {
 ***REMOVED******REMOVED***/   - searchViewModel: The view model used by `SearchView`.
 ***REMOVED******REMOVED***/   - viewpoint: The `Viewpoint` used to zoom to results.
 ***REMOVED******REMOVED***/   - resultsOverlay: The `GraphicsOverlay` used to display results.
-***REMOVED***public init(searchViewModel: SearchViewModel? = nil,
-***REMOVED******REMOVED******REMOVED******REMOVED***viewpoint: Binding<Viewpoint?>? = nil,
-***REMOVED******REMOVED******REMOVED******REMOVED***resultsOverlay: Binding<GraphicsOverlay>? = nil) {
+***REMOVED***public init(
+***REMOVED******REMOVED***searchViewModel: SearchViewModel? = nil,
+***REMOVED******REMOVED***viewpoint: Binding<Viewpoint?>? = nil,
+***REMOVED******REMOVED***resultsOverlay: Binding<GraphicsOverlay>? = nil
+***REMOVED***) {
 ***REMOVED******REMOVED***if let searchViewModel = searchViewModel {
 ***REMOVED******REMOVED******REMOVED***self.searchViewModel = searchViewModel
 ***REMOVED***
