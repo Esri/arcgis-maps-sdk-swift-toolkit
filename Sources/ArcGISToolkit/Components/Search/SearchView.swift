@@ -132,7 +132,7 @@ public struct SearchView: View {
 ***REMOVED******REMOVED***/ custom result list to show results in a separate list, disconnected from the rest of the search view.
 ***REMOVED******REMOVED***/ Defaults to `true`.
 ***REMOVED******REMOVED***/ - Parameter enableResultListView: The new value.
-***REMOVED******REMOVED***/ - Returns: The `SearchView`.
+***REMOVED******REMOVED***/ - Returns: A new `SearchView`.
 ***REMOVED***public func enableResultListView(_ enableResultListView: Bool) -> Self {
 ***REMOVED******REMOVED***var copy = self
 ***REMOVED******REMOVED***copy.enableResultListView = enableResultListView
