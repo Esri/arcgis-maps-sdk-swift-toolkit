@@ -16,9 +16,9 @@ import Foundation
 
 ***REMOVED***/ Wraps a suggestion for display.
 public struct SearchSuggestion {
-***REMOVED***public init(
+***REMOVED***internal init(
 ***REMOVED******REMOVED***displayTitle: String,
-***REMOVED******REMOVED***displaySubtitle: String? = nil,
+***REMOVED******REMOVED***displaySubtitle: String = "",
 ***REMOVED******REMOVED***owningSource: SearchSource,
 ***REMOVED******REMOVED***suggestResult: SuggestResult? = nil,
 ***REMOVED******REMOVED***isCollection: Bool
@@ -34,7 +34,7 @@ public struct SearchSuggestion {
 ***REMOVED***public let displayTitle: String
 ***REMOVED***
 ***REMOVED******REMOVED***/ Optional subtitle that can be displayed when showing a suggestion.
-***REMOVED***public let displaySubtitle: String?
+***REMOVED***public let displaySubtitle: String
 ***REMOVED***
 ***REMOVED******REMOVED***/ Reference to the `SearchSourceProtocol` that created this suggestion. This property is necessary for the
 ***REMOVED******REMOVED***/ view model to be able to accept a suggestion, because a suggestion should only be used with the

@@ -16,9 +16,9 @@ import UIKit.UIImage
 
 ***REMOVED***/ Wraps a search result for display.
 public struct SearchResult {
-***REMOVED***public init(
+***REMOVED***internal init(
 ***REMOVED******REMOVED***displayTitle: String,
-***REMOVED******REMOVED***displaySubtitle: String? = nil,
+***REMOVED******REMOVED***displaySubtitle: String = "",
 ***REMOVED******REMOVED***markerImage: UIImage? = nil,
 ***REMOVED******REMOVED***owningSource: SearchSource,
 ***REMOVED******REMOVED***geoElement: GeoElement? = nil,
@@ -36,7 +36,7 @@ public struct SearchResult {
 ***REMOVED***public let displayTitle: String
 ***REMOVED***
 ***REMOVED******REMOVED***/ Should be shown as a subtitle wherever results are shown.
-***REMOVED***public let displaySubtitle: String?
+***REMOVED***public let displaySubtitle: String
 ***REMOVED***
 ***REMOVED******REMOVED***/ Image, in the native platform's format, for the result. This should be the marker that would be
 ***REMOVED******REMOVED***/ shown on the map, and also shown in the UI. This property is available for convenience so the

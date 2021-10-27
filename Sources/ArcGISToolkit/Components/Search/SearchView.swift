@@ -74,20 +74,14 @@ public struct SearchView: View {
 ***REMOVED******REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED******REMOVED***VStack (alignment: .center) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***TextField(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***searchViewModel.defaultPlaceholder,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***text: $searchViewModel.currentQuery
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***) { _ in
-***REMOVED******REMOVED******REMOVED******REMOVED*** onCommit: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***searchViewModel.commitSearch()
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.esriDeleteTextButton(text: $searchViewModel.currentQuery)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.esriSearchButton { searchViewModel.commitSearch() ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.esriShowResultsButton(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isHidden: !enableResultListView,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***SearchField(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***defaultPlaceholder: searchViewModel.defaultPlaceholder,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentQuery: $searchViewModel.currentQuery,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isShowResultsHidden: !enableResultListView,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***showResults: $showResultListView
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.esriBorder()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onSubmit { searchViewModel.commitSearch() ***REMOVED***
+
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if enableResultListView, showResultListView {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let results = searchViewModel.results {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***SearchResultList(
@@ -126,8 +120,6 @@ public struct SearchView: View {
 ***REMOVED******REMOVED***.onReceive(searchViewModel.$currentQuery) { _ in
 ***REMOVED******REMOVED******REMOVED***searchViewModel.updateSuggestions()
 ***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***Spacer()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED*** MARK: Modifiers
