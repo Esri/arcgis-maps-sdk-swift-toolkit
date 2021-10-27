@@ -79,10 +79,8 @@ public struct SearchView: View {
                     TextField(
                         searchViewModel.defaultPlaceholder,
                         text: $searchViewModel.currentQuery
-                    ) { _ in
-                    } onCommit: {
-                        searchViewModel.commitSearch()
-                    }
+                    )
+                    .onSubmit { searchViewModel.commitSearch() }
                     .esriDeleteTextButton(text: $searchViewModel.currentQuery)
                     .esriSearchButton { searchViewModel.commitSearch() }
                     .esriShowResultsButton(
