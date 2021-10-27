@@ -141,7 +141,7 @@ public struct SearchView: View {
     
     /// Message to show when there are no results or suggestions.  Defaults to "No results found".
     /// - Parameter noResultMessage: The new value.
-    /// - Returns: The `SearchView`.
+    /// - Returns: A new `SearchView`.
     public func noResultMessage(_ noResultMessage: String) -> Self {
         var copy = self
         copy.noResultMessage = noResultMessage
