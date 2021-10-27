@@ -55,7 +55,7 @@ public struct SearchSuggestion {
 ***REMOVED***public let id = UUID()
 ***REMOVED***
 
-extension SearchSuggestion: Identifiable { ***REMOVED***
+extension SearchSuggestion: Identifiable {***REMOVED***
 
 extension SearchSuggestion: Equatable {
 ***REMOVED***public static func == (lhs: SearchSuggestion, rhs: SearchSuggestion) -> Bool {
