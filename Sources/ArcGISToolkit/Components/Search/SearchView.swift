@@ -22,9 +22,11 @@ public struct SearchView: View {
     ///   - searchViewModel: The view model used by `SearchView`.
     ///   - viewpoint: The `Viewpoint` used to zoom to results.
     ///   - resultsOverlay: The `GraphicsOverlay` used to display results.
-    public init(searchViewModel: SearchViewModel? = nil,
-                viewpoint: Binding<Viewpoint?>? = nil,
-                resultsOverlay: Binding<GraphicsOverlay>? = nil) {
+    public init(
+        searchViewModel: SearchViewModel? = nil,
+        viewpoint: Binding<Viewpoint?>? = nil,
+        resultsOverlay: GraphicsOverlay? = nil
+    ) {
         if let searchViewModel = searchViewModel {
             self.searchViewModel = searchViewModel
         }
@@ -47,7 +49,7 @@ public struct SearchView: View {
     private var viewpoint: Binding<Viewpoint?>? = nil
     
     /// The `GraphicsOverlay` used to display results.  If `nil`, no results will be displayed.
-    private var resultsOverlay: Binding<GraphicsOverlay>? = nil
+    private var resultsOverlay: GraphicsOverlay? = nil
     
     /// Determines whether a built-in result view will be shown. Defaults to true.
     /// If false, the result display/selection list is not shown. Set to false if you want to hide the results
@@ -60,7 +62,7 @@ public struct SearchView: View {
     /// Note: this is set using the `noResultMessage` modifier.
     private var noResultMessage = "No results found"
     
-    public var searchBarWidth: CGFloat = 360.0
+    private var searchBarWidth: CGFloat = 360.0
     
     @State
     private var shouldZoomToResults = true
@@ -70,17 +72,16 @@ public struct SearchView: View {
     private var showResultListView: Bool = true
     
     public var body: some View {
-        VStack (alignment: .center) {
+        VStack {
             HStack {
-                Spacer()
                 VStack (alignment: .center) {
                     SearchField(
                         defaultPlaceholder: searchViewModel.defaultPlaceholder,
                         currentQuery: $searchViewModel.currentQuery,
                         isShowResultsHidden: !enableResultListView,
-                        showResults: $showResultListView
+                        showResults: $showResultListView,
+                        onCommit: { searchViewModel.commitSearch() }
                     )
-                        .onSubmit { searchViewModel.commitSearch() }
 
                     if enableResultListView, showResultListView {
                         if let results = searchViewModel.results {
@@ -89,8 +90,7 @@ public struct SearchView: View {
                                 selectedResult: $searchViewModel.selectedResult,
                                 noResultMessage: noResultMessage
                             )
-                        }
-                        if let suggestions = searchViewModel.suggestions {
+                        } else if let suggestions = searchViewModel.suggestions {
                             SearchSuggestionList(
                                 suggestionResults: suggestions,
                                 currentSuggestion: $searchViewModel.currentSuggestion,
@@ -98,10 +98,10 @@ public struct SearchView: View {
                             )
                         }
                     }
-                    Spacer()
                 }
                 .frame(width: searchBarWidth)
             }
+            Spacer()
             if searchViewModel.isEligibleForRequery {
                 Button("Repeat Search Here") {
                     shouldZoomToResults = false
@@ -111,12 +111,8 @@ public struct SearchView: View {
             }
         }
         .listStyle(.plain)
-        .onChange(of: searchViewModel.results) {
-            display(searchResults: $0)
-        }
-        .onChange(of: searchViewModel.selectedResult) {
-            display(selectedResult: $0)
-        }
+        .onChange(of: searchViewModel.results, perform: display(searchResults:))
+        .onChange(of: searchViewModel.selectedResult, perform: display(selectedResult:))
         .onReceive(searchViewModel.$currentQuery) { _ in
             searchViewModel.updateSuggestions()
         }
@@ -129,7 +125,7 @@ public struct SearchView: View {
     /// custom result list to show results in a separate list, disconnected from the rest of the search view.
     /// Defaults to `true`.
     /// - Parameter enableResultListView: The new value.
-    /// - Returns: The `SearchView`.
+    /// - Returns: A new `SearchView`.
     public func enableResultListView(_ enableResultListView: Bool) -> Self {
         var copy = self
         copy.enableResultListView = enableResultListView
@@ -138,7 +134,7 @@ public struct SearchView: View {
     
     /// Message to show when there are no results or suggestions.  Defaults to "No results found".
     /// - Parameter noResultMessage: The new value.
-    /// - Returns: The `SearchView`.
+    /// - Returns: A new `SearchView`.
     public func noResultMessage(_ noResultMessage: String) -> Self {
         var copy = self
         copy.noResultMessage = noResultMessage
@@ -147,7 +143,7 @@ public struct SearchView: View {
     
     /// The width of the search bar.
     /// - Parameter searchBarWidth: The desired width of the search bar.
-    /// - Returns: The `SearchView`.
+    /// - Returns: A new `SearchView`.
     public func searchBarWidth(_ searchBarWidth: CGFloat) -> Self {
         var copy = self
         copy.searchBarWidth = searchBarWidth
@@ -157,20 +153,19 @@ public struct SearchView: View {
 
 extension SearchView {
     private func display(searchResults: Result<[SearchResult], SearchError>?) {
+        guard let resultsOverlay = resultsOverlay else { return }
         switch searchResults {
         case .success(let results):
-            var resultGraphics = [Graphic]()
-            results.forEach({ result in
-                if let graphic = result.geoElement as? Graphic {
-                    graphic.updateGraphic(withResult: result)
-                    resultGraphics.append(graphic)
-                }
-            })
-            resultsOverlay?.wrappedValue.removeAllGraphics()
-            resultsOverlay?.wrappedValue.addGraphics(resultGraphics)
+            let resultGraphics: [Graphic] = results.compactMap { result in
+                guard let graphic = result.geoElement as? Graphic else { return nil }
+                graphic.updateGraphic(withResult: result)
+                return graphic
+            }
+            resultsOverlay.removeAllGraphics()
+            resultsOverlay.addGraphics(resultGraphics)
             
-            if resultGraphics.count > 0,
-               let envelope = resultsOverlay?.wrappedValue.extent,
+            if !resultGraphics.isEmpty,
+               let envelope = resultsOverlay.extent,
                shouldZoomToResults {
                 let builder = EnvelopeBuilder(envelope: envelope)
                 builder.expand(factor: 1.1)
@@ -179,12 +174,11 @@ extension SearchView {
                     targetExtent: targetExtent
                 )
                 searchViewModel.lastSearchExtent = targetExtent
-            }
-            else {
+            } else {
                 viewpoint?.wrappedValue = nil
             }
         default:
-            resultsOverlay?.wrappedValue.removeAllGraphics()
+            resultsOverlay.removeAllGraphics()
             viewpoint?.wrappedValue = nil
         }
         
