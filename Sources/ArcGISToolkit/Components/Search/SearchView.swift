@@ -170,7 +170,7 @@ extension SearchView {
 ***REMOVED******REMOVED******REMOVED***resultsOverlay?.wrappedValue.removeAllGraphics()
 ***REMOVED******REMOVED******REMOVED***resultsOverlay?.wrappedValue.addGraphics(resultGraphics)
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***if resultGraphics.count > 0,
+***REMOVED******REMOVED******REMOVED***if !resultGraphics.isEmpty,
 ***REMOVED******REMOVED******REMOVED***   let envelope = resultsOverlay?.wrappedValue.extent,
 ***REMOVED******REMOVED******REMOVED***   shouldZoomToResults {
 ***REMOVED******REMOVED******REMOVED******REMOVED***let builder = EnvelopeBuilder(envelope: envelope)
