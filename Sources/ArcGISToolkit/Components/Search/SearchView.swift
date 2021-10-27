@@ -72,7 +72,7 @@ public struct SearchView: View {
 ***REMOVED***private var showResultListView: Bool = true
 ***REMOVED***
 ***REMOVED***public var body: some View {
-***REMOVED******REMOVED***VStack (alignment: .center) {
+***REMOVED******REMOVED***VStack {
 ***REMOVED******REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED******REMOVED***VStack (alignment: .center) {
