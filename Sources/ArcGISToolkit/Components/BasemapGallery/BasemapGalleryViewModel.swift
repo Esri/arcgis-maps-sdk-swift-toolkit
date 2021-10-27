@@ -27,7 +27,7 @@ public class BasemapGalleryViewModel: ObservableObject {
 ***REMOVED***public init(
 ***REMOVED******REMOVED***geoModel: GeoModel? = nil,
 ***REMOVED******REMOVED***portal: Portal? = nil,
-***REMOVED******REMOVED***basemapGalleryItems: [BasemapGalleryItem] = []  ***REMOVED*** TODO: Doc passing this in.
+***REMOVED******REMOVED***basemapGalleryItems: [BasemapGalleryItem] = []
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.geoModel = geoModel
 ***REMOVED******REMOVED***self.portal = portal
@@ -67,6 +67,7 @@ public class BasemapGalleryViewModel: ObservableObject {
 ***REMOVED******REMOVED***   fetchBasemapTask = Task { await fetchBasemaps() ***REMOVED***
    ***REMOVED***
    ***REMOVED***
+***REMOVED***
 ***REMOVED******REMOVED***/ The list of basemaps currently visible in the gallery. Items added or removed from this list will
 ***REMOVED******REMOVED***/ update the gallery.
 ***REMOVED***@Published
@@ -82,16 +83,6 @@ public class BasemapGalleryViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED***public var currentSpatialReference: SpatialReference? {
-***REMOVED******REMOVED***guard let scene = geoModel as? ArcGIS.Scene,
-***REMOVED******REMOVED******REMOVED***  scene.sceneViewTilingScheme == .webMercator else {
-***REMOVED******REMOVED******REMOVED******REMOVED***  return geoModel?.spatialReference
-***REMOVED***  ***REMOVED***
-***REMOVED******REMOVED***return .webMercator
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED*** TODO: write tests to check on loading stuff, setting portal and other props, etc.
-***REMOVED***
 ***REMOVED******REMOVED***/ The currently executing async task for fetching basemaps from the portal.
 ***REMOVED******REMOVED***/ `fetchBasemapTask` should be cancelled prior to starting another async task.
 ***REMOVED***private var fetchBasemapTask: Task<Void, Never>? = nil
@@ -101,7 +92,9 @@ public class BasemapGalleryViewModel: ObservableObject {
 ***REMOVED******REMOVED***guard let portal = portal else { return ***REMOVED***
 
 ***REMOVED******REMOVED***do {
-***REMOVED******REMOVED******REMOVED***basemapGalleryItems += try await portal.developerBasemaps.map { BasemapGalleryItem.init(basemap: $0) ***REMOVED***
+***REMOVED******REMOVED******REMOVED***basemapGalleryItems += try await portal.developerBasemaps.map {
+***REMOVED******REMOVED******REMOVED******REMOVED***BasemapGalleryItem.init(basemap: $0)
+***REMOVED******REMOVED***
 ***REMOVED*** catch {
 ***REMOVED******REMOVED******REMOVED***fetchBasemapsError = error
 ***REMOVED***
@@ -127,15 +120,3 @@ public class BasemapGalleryViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-
-***REMOVED***extension SpatialReference {
-***REMOVED******REMOVED***public func effectivelyEquals(_ otherSpatialReference: SpatialReference?) -> Bool {
-***REMOVED******REMOVED******REMOVED***guard let otherSR = otherSpatialReference else { false ***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED******REMOVED***guard let self != otherSpatialReference else { true ***REMOVED***
-***REMOVED******REMOVED******REMOVED***if self == otherSR {
-***REMOVED******REMOVED******REMOVED******REMOVED***return true
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***else
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***
