@@ -62,7 +62,7 @@ public struct SearchResult {
 
 // MARK: Extensions
 
-extension SearchResult: Identifiable { }
+extension SearchResult: Identifiable {}
 
 extension SearchResult: Equatable {
     public static func == (lhs: SearchResult, rhs: SearchResult) -> Bool {

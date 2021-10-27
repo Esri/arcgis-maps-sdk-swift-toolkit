@@ -70,7 +70,7 @@ struct SearchExampleView: View {
                 SearchView(
                     searchViewModel: searchViewModel,
                     viewpoint: $searchResultViewpoint,
-                    resultsOverlay: $searchResultsOverlay
+                    resultsOverlay: searchResultsOverlay
                 )
                     .searchBarWidth(360.0)
                     .padding()
