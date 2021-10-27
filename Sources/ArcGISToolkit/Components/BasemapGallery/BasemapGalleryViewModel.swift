@@ -27,7 +27,7 @@ public class BasemapGalleryViewModel: ObservableObject {
     public init(
         geoModel: GeoModel? = nil,
         portal: Portal? = nil,
-        basemapGalleryItems: [BasemapGalleryItem] = []  // TODO: Doc passing this in.
+        basemapGalleryItems: [BasemapGalleryItem] = []
     ) {
         self.geoModel = geoModel
         self.portal = portal
@@ -67,6 +67,7 @@ public class BasemapGalleryViewModel: ObservableObject {
            fetchBasemapTask = Task { await fetchBasemaps() }
        }
    }
+    
     /// The list of basemaps currently visible in the gallery. Items added or removed from this list will
     /// update the gallery.
     @Published
@@ -82,16 +83,6 @@ public class BasemapGalleryViewModel: ObservableObject {
         }
     }
     
-    public var currentSpatialReference: SpatialReference? {
-        guard let scene = geoModel as? ArcGIS.Scene,
-              scene.sceneViewTilingScheme == .webMercator else {
-                  return geoModel?.spatialReference
-              }
-        return .webMercator
-    }
-    
-    // TODO: write tests to check on loading stuff, setting portal and other props, etc.
-    
     /// The currently executing async task for fetching basemaps from the portal.
     /// `fetchBasemapTask` should be cancelled prior to starting another async task.
     private var fetchBasemapTask: Task<Void, Never>? = nil
@@ -101,7 +92,9 @@ public class BasemapGalleryViewModel: ObservableObject {
         guard let portal = portal else { return }
 
         do {
-            basemapGalleryItems += try await portal.developerBasemaps.map { BasemapGalleryItem.init(basemap: $0) }
+            basemapGalleryItems += try await portal.developerBasemaps.map {
+                BasemapGalleryItem.init(basemap: $0)
+            }
         } catch {
             fetchBasemapsError = error
         }
@@ -127,15 +120,3 @@ public class BasemapGalleryViewModel: ObservableObject {
         }
     }
 }
-
-//extension SpatialReference {
-//    public func effectivelyEquals(_ otherSpatialReference: SpatialReference?) -> Bool {
-//        guard let otherSR = otherSpatialReference else { false }
-//
-//        guard let self != otherSpatialReference else { true }
-//        if self == otherSR {
-//            return true
-//        }
-//        else
-//    }
-//}
