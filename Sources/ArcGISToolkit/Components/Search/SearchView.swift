@@ -79,10 +79,8 @@ public struct SearchView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***TextField(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***searchViewModel.defaultPlaceholder,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***text: $searchViewModel.currentQuery
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***) { _ in
-***REMOVED******REMOVED******REMOVED******REMOVED*** onCommit: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***searchViewModel.commitSearch()
-***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onSubmit { searchViewModel.commitSearch() ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.esriDeleteTextButton(text: $searchViewModel.currentQuery)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.esriSearchButton { searchViewModel.commitSearch() ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.esriShowResultsButton(
