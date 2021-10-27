@@ -116,12 +116,8 @@ public struct SearchView: View {
             }
         }
         .listStyle(.plain)
-        .onChange(of: searchViewModel.results) {
-            display(searchResults: $0)
-        }
-        .onChange(of: searchViewModel.selectedResult) {
-            display(selectedResult: $0)
-        }
+        .onChange(of: searchViewModel.results, perform: display(searchResults:))
+        .onChange(of: searchViewModel.selectedResult, perform: display(selectedResult:))
         .onReceive(searchViewModel.$currentQuery) { _ in
             searchViewModel.updateSuggestions()
         }
