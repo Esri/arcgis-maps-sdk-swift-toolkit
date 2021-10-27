@@ -62,7 +62,7 @@ public struct SearchView: View {
 ***REMOVED******REMOVED***/ Note: this is set using the `noResultMessage` modifier.
 ***REMOVED***private var noResultMessage = "No results found"
 ***REMOVED***
-***REMOVED***public var searchBarWidth: CGFloat = 360.0
+***REMOVED***private var searchBarWidth: CGFloat = 360.0
 ***REMOVED***
 ***REMOVED***@State
 ***REMOVED***private var shouldZoomToResults = true
