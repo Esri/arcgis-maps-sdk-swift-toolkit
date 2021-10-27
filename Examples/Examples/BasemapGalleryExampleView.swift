@@ -15,6 +15,10 @@ import SwiftUI
 import ArcGIS
 import ArcGISToolkit
 
+// TODO: once user taps on a map (or maybe in the view model setter for current item)
+// TODO: then check if SRs match and don't set basemap if they don't.  Figure out
+// TODO: how to then gray out the item in the gallery.
+
 struct BasemapGalleryExampleView: View {
     var basemapGalleryItems: [BasemapGalleryItem] = [
         BasemapGalleryItem(
