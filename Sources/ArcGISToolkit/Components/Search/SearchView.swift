@@ -141,7 +141,7 @@ public struct SearchView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Message to show when there are no results or suggestions.  Defaults to "No results found".
 ***REMOVED******REMOVED***/ - Parameter noResultMessage: The new value.
-***REMOVED******REMOVED***/ - Returns: The `SearchView`.
+***REMOVED******REMOVED***/ - Returns: A new `SearchView`.
 ***REMOVED***public func noResultMessage(_ noResultMessage: String) -> Self {
 ***REMOVED******REMOVED***var copy = self
 ***REMOVED******REMOVED***copy.noResultMessage = noResultMessage
