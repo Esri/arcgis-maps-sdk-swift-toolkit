@@ -75,7 +75,7 @@ public struct SearchView: View {
 ***REMOVED******REMOVED***VStack {
 ***REMOVED******REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED******REMOVED***VStack (alignment: .center) {
+***REMOVED******REMOVED******REMOVED******REMOVED***VStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***TextField(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***searchViewModel.defaultPlaceholder,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***text: $searchViewModel.currentQuery
