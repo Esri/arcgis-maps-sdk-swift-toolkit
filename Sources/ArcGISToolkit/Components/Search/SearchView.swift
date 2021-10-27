@@ -180,8 +180,7 @@ extension SearchView {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***targetExtent: targetExtent
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***searchViewModel.lastSearchExtent = targetExtent
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***else {
+***REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***viewpoint?.wrappedValue = nil
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***default:
