@@ -22,6 +22,12 @@ public class BasemapGalleryItem: ObservableObject {
         return UIImage(named: "DefaultBasemap")!
     }
     
+    /// Creates a `BasemapGalleryItem`.
+    /// - Parameters:
+    ///   - basemap: The `Basemap` represented by the item.
+    ///   - name: The item name.
+    ///   - description: The item description.
+    ///   - thumbnail: The thumbnail used to represent the item.
     public init(
         basemap: Basemap,
         name: String? = nil,
@@ -39,34 +45,29 @@ public class BasemapGalleryItem: ObservableObject {
         loadBasemapTask = Task { await loadBasemap() }
     }
     
-//    deinit {
-//        loadBasemapTask.cancel()
-//        fetchBasemapTask.cancel()
-//    }
-    
     @Published
     public var loadBasemapsError: Error? = nil
 
     /// The basemap this `BasemapGalleryItem` represents.
     public private(set) var basemap: Basemap
 
-    private var nameOverride: String? = nil
     /// The name of this `Basemap`.
     @Published
     public private(set) var name: String = ""
+    private var nameOverride: String? = nil
 
-    private var descriptionOverride: String? = nil
     /// The description which will be used in the gallery.
     @Published
     public private(set) var description: String? = nil
+    private var descriptionOverride: String? = nil
 
-    private var thumbnailOverride: UIImage? = nil
     /// The thumbnail which will be displayed in the gallery.
     @Published
     public private(set) var thumbnail: UIImage? = nil
+    private var thumbnailOverride: UIImage? = nil
     
-    public private(set) var spatialReference: SpatialReference? = nil
-    
+    /// Denotes whether loading the `basemap` has been attempted.
+    /// If the loading of the item generates an error, `isLoaded` will be true.
     @Published
     public private(set) var isLoaded = false
 
@@ -76,53 +77,26 @@ public class BasemapGalleryItem: ObservableObject {
 
 extension BasemapGalleryItem {
     private func loadBasemap() async {
+        var loadError: Error? = nil
         do {
-            print("pre-basemap.load()")
             try await basemap.load()
-            print("basemap loaded!")
             if let loadableImage = basemap.item?.thumbnail {
                 try await loadableImage.load()
             }
-            
-            //TODO: use the item.spatialreferenceName to create a spatial reference instead of always loading the first base layer.
-            // Determine the spatial reference of the basemap
-//            if let item = basemap.item as? PortalItem {
-//                try await item.load()
-//            }
-
-            print("sr = \(basemap.item?.spatialReferenceName ?? "no name"); item: \(String(describing: (basemap.item as? PortalItem)?.loadStatus))")
-            if let layer = basemap.baseLayers.first {
-                try await layer.load()
-                spatialReference = layer.spatialReference
-            }
-            
-            //TODO:  Add sr checking and setting of sr to bmgi (isValid???); and what to do with errors...
-            
-            await update()
         } catch {
-            loadBasemapsError = error
+            loadError = error
         }
+        await update(error: loadError)
     }
     
     @MainActor
-    func update() {
-        self.name = nameOverride ?? basemap.name
-        self.description = descriptionOverride ?? basemap.item?.description
-        self.thumbnail = thumbnailOverride ??
+    func update(error: Error?) {
+        name = nameOverride ?? basemap.name
+        description = descriptionOverride ?? basemap.item?.description
+        thumbnail = thumbnailOverride ??
         (basemap.item?.thumbnail?.image ?? BasemapGalleryItem.defaultThumbnail)
-        
+        loadBasemapsError = error
         isLoaded = true
-    }
-    
-    /// Returns whether the basemap gallery item is valid and ok to use.
-    /// - Parameter item: item to match spatial references with.
-    /// - Returns: true if the item is loaded and either `item`'s spatial reference is nil
-    /// or matches `spatialReference`.
-    public func isValid(for otherSpatialReference: SpatialReference?) -> Bool {
-        print("name: \(name); isLoaded = \(isLoaded); loadStatus = \(basemap.loadStatus)")
-        guard isLoaded else { return false }
-        return otherSpatialReference == nil || otherSpatialReference == spatialReference
-//        return true
     }
 }
 
