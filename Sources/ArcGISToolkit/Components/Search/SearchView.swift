@@ -197,36 +197,29 @@ struct SearchResultList: View {
     var noResultMessage: String
     
     var body: some View {
-        Group {
+        List {
             switch searchResults {
             case .success(let results):
                 if results.count > 1 {
                     // Only show the list if we have more than one result.
-                    List {
-                        ForEach(results) { result in
-                            HStack {
-                                ResultRow(searchResult: result)
-                                    .onTapGesture {
-                                        selectedResult = result
-                                    }
-                                if result == selectedResult {
-                                    Spacer()
-                                    Image(systemName: "checkmark.circle.fill")
-                                        .foregroundColor(.accentColor)
+                    ForEach(results) { result in
+                        HStack {
+                            ResultRow(searchResult: result)
+                                .onTapGesture {
+                                    selectedResult = result
                                 }
+                            if result == selectedResult {
+                                Spacer()
+                                Image(systemName: "checkmark.circle.fill")
+                                    .foregroundColor(.accentColor)
                             }
                         }
                     }
-                }
-                else if results.isEmpty {
-                    List {
-                        Text(noResultMessage)
-                    }
+                } else if results.isEmpty {
+                    Text(noResultMessage)
                 }
             case .failure(let error):
-                List {
-                    Text(error.localizedDescription)
-                }
+                Text(error.localizedDescription)
             }
         }
         .esriBorder(padding: EdgeInsets())
