@@ -158,7 +158,7 @@ extension SearchView {
 ***REMOVED******REMOVED***case .success(let results):
 ***REMOVED******REMOVED******REMOVED***let resultGraphics: [Graphic] = results.compactMap { result in
 ***REMOVED******REMOVED******REMOVED******REMOVED***guard let graphic = result.geoElement as? Graphic else { return nil ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***graphic.updateGraphic(withResult: result)
+***REMOVED******REMOVED******REMOVED******REMOVED***graphic.update(with: result)
 ***REMOVED******REMOVED******REMOVED******REMOVED***return graphic
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***resultsOverlay.removeAllGraphics()
@@ -205,7 +205,7 @@ struct SearchResultList: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***List {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(results) { result in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***SearchResultRow(result: result)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ResultRow(searchResult: result)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onTapGesture {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedResult = result
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
@@ -246,7 +246,7 @@ struct SearchSuggestionList: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***List {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if suggestions.count > 0 {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(suggestions) { suggestion in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***SuggestionResultRow(suggestion: suggestion)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ResultRow(searchSuggestion: suggestion)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onTapGesture() {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentSuggestion = suggestion
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
@@ -269,62 +269,62 @@ struct SearchSuggestionList: View {
 ***REMOVED***
 ***REMOVED***
 
-struct SearchResultRow: View {
-***REMOVED***var result: SearchResult
-***REMOVED***
-***REMOVED***var body: some View {
-***REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED***Image(uiImage: UIImage.mapPin)
-***REMOVED******REMOVED******REMOVED******REMOVED***.scaleEffect(0.65)
-***REMOVED******REMOVED******REMOVED***ResultRow(
-***REMOVED******REMOVED******REMOVED******REMOVED***title: result.displayTitle,
-***REMOVED******REMOVED******REMOVED******REMOVED***subtitle: result.displaySubtitle
-***REMOVED******REMOVED******REMOVED***)
-***REMOVED***
-***REMOVED***
-***REMOVED***
-
-struct SuggestionResultRow: View {
-***REMOVED***var suggestion: SearchSuggestion
-***REMOVED***
-***REMOVED***var body: some View {
-***REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED***mapPinImage()
-***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
-***REMOVED******REMOVED******REMOVED***ResultRow(
-***REMOVED******REMOVED******REMOVED******REMOVED***title: suggestion.displayTitle,
-***REMOVED******REMOVED******REMOVED******REMOVED***subtitle: suggestion.displaySubtitle
-***REMOVED******REMOVED******REMOVED***)
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***func mapPinImage() -> Image {
-***REMOVED***  suggestion.isCollection ?
-***REMOVED******REMOVED***Image(systemName: "magnifyingglass") :
-***REMOVED******REMOVED***Image(uiImage: UIImage(named: "pin", in: Bundle.module, with: nil)!)
-***REMOVED***
-***REMOVED***
-
 struct ResultRow: View {
 ***REMOVED***var title: String
-***REMOVED***var subtitle: String?
-***REMOVED***
+***REMOVED***var subtitle: String = ""
+***REMOVED***var image: AnyView
+
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***VStack (alignment: .leading){
-***REMOVED******REMOVED******REMOVED***Text(title)
-***REMOVED******REMOVED******REMOVED******REMOVED***.font(.callout)
-***REMOVED******REMOVED******REMOVED***if let subtitle = subtitle {
-***REMOVED******REMOVED******REMOVED******REMOVED***Text(subtitle)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.caption)
+***REMOVED******REMOVED***HStack {
+***REMOVED******REMOVED******REMOVED***image
+***REMOVED******REMOVED******REMOVED***VStack (alignment: .leading){
+***REMOVED******REMOVED******REMOVED******REMOVED***Text(title)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.callout)
+***REMOVED******REMOVED******REMOVED******REMOVED***if !subtitle.isEmpty {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(subtitle)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.caption)
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
+extension ResultRow {
+***REMOVED***init(searchSuggestion: SearchSuggestion) {
+***REMOVED******REMOVED***self.init(
+***REMOVED******REMOVED******REMOVED***title: searchSuggestion.displayTitle,
+***REMOVED******REMOVED******REMOVED***subtitle: searchSuggestion.displaySubtitle,
+***REMOVED******REMOVED******REMOVED***image: AnyView(
+***REMOVED******REMOVED******REMOVED******REMOVED***(searchSuggestion.isCollection ?
+***REMOVED******REMOVED******REMOVED******REMOVED*** Image(systemName: "magnifyingglass") :
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***uiImage: UIImage(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***named: "pin",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***in: Bundle.module, with: nil
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)!
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED***init(searchResult: SearchResult) {
+***REMOVED******REMOVED***self.init(
+***REMOVED******REMOVED******REMOVED***title: searchResult.displayTitle,
+***REMOVED******REMOVED******REMOVED***subtitle: searchResult.displaySubtitle,
+***REMOVED******REMOVED******REMOVED***image: AnyView(
+***REMOVED******REMOVED******REMOVED******REMOVED***Image(uiImage: UIImage.mapPin)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.scaleEffect(0.65)
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+
 private extension Graphic {
-***REMOVED***func updateGraphic(withResult result: SearchResult) {
+***REMOVED***func update(with result: SearchResult) {
 ***REMOVED******REMOVED***if symbol == nil {
-***REMOVED******REMOVED******REMOVED***symbol = .resultSymbol
+***REMOVED******REMOVED******REMOVED***symbol = Symbol.searchResult()
 ***REMOVED***
 ***REMOVED******REMOVED***setAttributeValue(result.displayTitle, forKey: "displayTitle")
 ***REMOVED******REMOVED***setAttributeValue(result.displaySubtitle, forKey: "displaySubtitle")
@@ -333,7 +333,7 @@ private extension Graphic {
 
 private extension Symbol {
 ***REMOVED******REMOVED***/ A search result marker symbol.
-***REMOVED***static var resultSymbol: MarkerSymbol {
+***REMOVED***static func searchResult() -> MarkerSymbol {
 ***REMOVED******REMOVED***let image = UIImage.mapPin
 ***REMOVED******REMOVED***let symbol = PictureMarkerSymbol(image: image)
 ***REMOVED******REMOVED***symbol.offsetY = Float(image.size.height / 2.0)
