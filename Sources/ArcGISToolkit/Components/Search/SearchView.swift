@@ -158,7 +158,7 @@ extension SearchView {
         case .success(let results):
             let resultGraphics: [Graphic] = results.compactMap { result in
                 guard let graphic = result.geoElement as? Graphic else { return nil }
-                graphic.updateGraphic(withResult: result)
+                graphic.update(with: result)
                 return graphic
             }
             resultsOverlay.removeAllGraphics()
@@ -205,7 +205,7 @@ struct SearchResultList: View {
                     List {
                         ForEach(results) { result in
                             HStack {
-                                SearchResultRow(result: result)
+                                ResultRow(searchResult: result)
                                     .onTapGesture {
                                         selectedResult = result
                                     }
@@ -246,7 +246,7 @@ struct SearchSuggestionList: View {
                     List {
                         if suggestions.count > 0 {
                             ForEach(suggestions) { suggestion in
-                                SuggestionResultRow(suggestion: suggestion)
+                                ResultRow(searchSuggestion: suggestion)
                                     .onTapGesture() {
                                         currentSuggestion = suggestion
                                     }
@@ -269,62 +269,62 @@ struct SearchSuggestionList: View {
     }
 }
 
-struct SearchResultRow: View {
-    var result: SearchResult
-    
-    var body: some View {
-        HStack {
-            Image(uiImage: UIImage.mapPin)
-                .scaleEffect(0.65)
-            ResultRow(
-                title: result.displayTitle,
-                subtitle: result.displaySubtitle
-            )
-        }
-    }
-}
-
-struct SuggestionResultRow: View {
-    var suggestion: SearchSuggestion
-    
-    var body: some View {
-        HStack {
-            mapPinImage()
-                .foregroundColor(.secondary)
-            ResultRow(
-                title: suggestion.displayTitle,
-                subtitle: suggestion.displaySubtitle
-            )
-        }
-    }
-    
-    func mapPinImage() -> Image {
-      suggestion.isCollection ?
-        Image(systemName: "magnifyingglass") :
-        Image(uiImage: UIImage(named: "pin", in: Bundle.module, with: nil)!)
-    }
-}
-
 struct ResultRow: View {
     var title: String
-    var subtitle: String?
-    
+    var subtitle: String = ""
+    var image: AnyView
+
     var body: some View {
-        VStack (alignment: .leading){
-            Text(title)
-                .font(.callout)
-            if let subtitle = subtitle {
-                Text(subtitle)
-                    .font(.caption)
+        HStack {
+            image
+            VStack (alignment: .leading){
+                Text(title)
+                    .font(.callout)
+                if !subtitle.isEmpty {
+                    Text(subtitle)
+                        .font(.caption)
+                }
             }
         }
     }
 }
 
+extension ResultRow {
+    init(searchSuggestion: SearchSuggestion) {
+        self.init(
+            title: searchSuggestion.displayTitle,
+            subtitle: searchSuggestion.displaySubtitle,
+            image: AnyView(
+                (searchSuggestion.isCollection ?
+                 Image(systemName: "magnifyingglass") :
+                    Image(
+                        uiImage: UIImage(
+                            named: "pin",
+                            in: Bundle.module, with: nil
+                        )!
+                    )
+                )
+                    .foregroundColor(.secondary)
+            )
+        )
+    }
+    
+    init(searchResult: SearchResult) {
+        self.init(
+            title: searchResult.displayTitle,
+            subtitle: searchResult.displaySubtitle,
+            image: AnyView(
+                Image(uiImage: UIImage.mapPin)
+                    .scaleEffect(0.65)
+            )
+        )
+    }
+}
+
 private extension Graphic {
-    func updateGraphic(withResult result: SearchResult) {
+    func update(with result: SearchResult) {
         if symbol == nil {
-            symbol = .resultSymbol
+            symbol = Symbol.searchResult()
         }
         setAttributeValue(result.displayTitle, forKey: "displayTitle")
         setAttributeValue(result.displaySubtitle, forKey: "displaySubtitle")
@@ -333,7 +333,7 @@ private extension Graphic {
 
 private extension Symbol {
     /// A search result marker symbol.
-    static var resultSymbol: MarkerSymbol {
+    static func searchResult() -> MarkerSymbol {
         let image = UIImage.mapPin
         let symbol = PictureMarkerSymbol(image: image)
         symbol.offsetY = Float(image.size.height / 2.0)
