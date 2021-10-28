@@ -19,7 +19,6 @@ extension SuggestResult {
 ***REMOVED******REMOVED***/ - Returns: The new `SearchSuggestion`.
 ***REMOVED***func toSearchSuggestion(searchSource: SearchSource) -> SearchSuggestion {
 ***REMOVED******REMOVED***return SearchSuggestion(displayTitle: label,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***displaySubtitle: nil,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***owningSource: searchSource,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***suggestResult: self,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isCollection: isCollection)

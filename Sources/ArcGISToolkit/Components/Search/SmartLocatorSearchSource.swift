@@ -24,8 +24,6 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
 ***REMOVED******REMOVED***/   - name: Name to show when presenting this source in the UI.
 ***REMOVED******REMOVED***/   - maximumResults: The maximum results to return when performing a search. Most sources default to 6.
 ***REMOVED******REMOVED***/   - maximumSuggestions: The maximum suggestions to return. Most sources default to 6.
-***REMOVED******REMOVED***/   - searchArea: Area to be used as a constraint for searches and suggestions.
-***REMOVED******REMOVED***/   - preferredSearchLocation: Point to be used as an input to searches and suggestions.
 ***REMOVED******REMOVED***/   - repeatSearchResultThreshold: The minimum number of search results to attempt to return.
 ***REMOVED******REMOVED***/   - repeatSuggestResultThreshold: The minimum number of suggestions to attempt to return.
 ***REMOVED***public init(
@@ -37,8 +35,6 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
 ***REMOVED******REMOVED***),
 ***REMOVED******REMOVED***maximumResults: Int32 = 6,
 ***REMOVED******REMOVED***maximumSuggestions: Int32 = 6,
-***REMOVED******REMOVED***searchArea: Geometry? = nil,
-***REMOVED******REMOVED***preferredSearchLocation: Point? = nil,
 ***REMOVED******REMOVED***repeatSearchResultThreshold: Int = 1,
 ***REMOVED******REMOVED***repeatSuggestResultThreshold: Int = 6
 ***REMOVED***) {
@@ -46,9 +42,7 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
 ***REMOVED******REMOVED******REMOVED***name: name,
 ***REMOVED******REMOVED******REMOVED***locatorTask: locatorTask,
 ***REMOVED******REMOVED******REMOVED***maximumResults: maximumResults,
-***REMOVED******REMOVED******REMOVED***maximumSuggestions: maximumSuggestions,
-***REMOVED******REMOVED******REMOVED***searchArea: searchArea,
-***REMOVED******REMOVED******REMOVED***preferredSearchLocation: preferredSearchLocation
+***REMOVED******REMOVED******REMOVED***maximumSuggestions: maximumSuggestions
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***self.repeatSearchResultThreshold = repeatSearchResultThreshold
 ***REMOVED******REMOVED***self.repeatSuggestResultThreshold = repeatSuggestResultThreshold
@@ -68,10 +62,16 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
 ***REMOVED***public var repeatSuggestResultThreshold: Int = 6
 ***REMOVED***
 ***REMOVED***public override func search(
-***REMOVED******REMOVED***_ queryString: String
+***REMOVED******REMOVED***_ queryString: String,
+***REMOVED******REMOVED***searchArea: Geometry?,
+***REMOVED******REMOVED***preferredSearchLocation: Point?
 ***REMOVED***) async throws -> [SearchResult] {
 ***REMOVED******REMOVED******REMOVED*** First, peform super class search.
-***REMOVED******REMOVED***var results = try await super.search(queryString)
+***REMOVED******REMOVED***var results = try await super.search(
+***REMOVED******REMOVED******REMOVED***queryString,
+***REMOVED******REMOVED******REMOVED***searchArea: searchArea,
+***REMOVED******REMOVED******REMOVED***preferredSearchLocation: preferredSearchLocation
+***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***if results.count > repeatSearchResultThreshold ||
 ***REMOVED******REMOVED******REMOVED***repeatSearchResultThreshold == 0 ||
 ***REMOVED******REMOVED******REMOVED***geocodeParameters.searchArea == nil {
@@ -103,13 +103,19 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***public override func search(
-***REMOVED******REMOVED***_ searchSuggestion: SearchSuggestion
+***REMOVED******REMOVED***_ searchSuggestion: SearchSuggestion,
+***REMOVED******REMOVED***searchArea: Geometry?,
+***REMOVED******REMOVED***preferredSearchLocation: Point?
 ***REMOVED***) async throws -> [SearchResult] {
 ***REMOVED******REMOVED***guard let suggestResult = searchSuggestion.suggestResult else {
 ***REMOVED******REMOVED******REMOVED***return []
 ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***var results = try await super.search(searchSuggestion)
+***REMOVED******REMOVED***var results = try await super.search(
+***REMOVED******REMOVED******REMOVED***searchSuggestion,
+***REMOVED******REMOVED******REMOVED***searchArea: searchArea,
+***REMOVED******REMOVED******REMOVED***preferredSearchLocation: preferredSearchLocation
+***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***if results.count > repeatSearchResultThreshold ||
 ***REMOVED******REMOVED******REMOVED***geocodeParameters.searchArea == nil {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Result count meets threshold or there were no geographic
@@ -140,9 +146,15 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***public override func suggest(
-***REMOVED******REMOVED***_ queryString: String
+***REMOVED******REMOVED***_ queryString: String,
+***REMOVED******REMOVED***searchArea: Geometry?,
+***REMOVED******REMOVED***preferredSearchLocation: Point?
 ***REMOVED***) async throws -> [SearchSuggestion] {
-***REMOVED******REMOVED***var results = try await super.suggest(queryString)
+***REMOVED******REMOVED***var results = try await super.suggest(
+***REMOVED******REMOVED******REMOVED***queryString,
+***REMOVED******REMOVED******REMOVED***searchArea: searchArea,
+***REMOVED******REMOVED******REMOVED***preferredSearchLocation: preferredSearchLocation
+***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***if results.count > repeatSuggestResultThreshold ||
 ***REMOVED******REMOVED******REMOVED***repeatSuggestResultThreshold == 0 ||
 ***REMOVED******REMOVED******REMOVED***suggestParameters.searchArea == nil {

@@ -27,4 +27,4 @@ extension SearchError {
 ***REMOVED***
 ***REMOVED***
 
-extension SearchError: Equatable { ***REMOVED***
+extension SearchError: Equatable {***REMOVED***
