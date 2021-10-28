@@ -188,17 +188,6 @@ public class SearchViewModel: ObservableObject {
     /// prior to starting another async task.
     private var currentTask: Task<Void, Never>?
     
-    private func makeEffectiveSource(
-        with searchArea: Geometry?,
-        preferredSearchLocation: Point?
-    ) -> SearchSource? {
-        guard var source = currentSource() else { return nil }
-        source.searchArea = searchArea
-        source.preferredSearchLocation = preferredSearchLocation
-        
-        return source
-    }
-    
     /// Starts a search. `selectedResult` and `results`, among other properties, are set
     /// asynchronously. Other query properties are read to define the parameters of the search.
     /// - Parameter searchArea: geometry used to constrain the results.  If `nil`, the
@@ -259,14 +248,19 @@ extension SearchViewModel {
         Task {
             guard !currentQuery.trimmingCharacters(in: .whitespaces).isEmpty,
                   let queryExtent = geoViewExtent,
-                  let source = makeEffectiveSource(with: queryExtent, preferredSearchLocation: nil) else {
+                  let source = currentSource() else {
                       return
                   }
             
             do {
                 // User is performing a search, so set `lastSearchExtent`.
                 lastSearchExtent = geoViewExtent
-                try await process(searchResults: source.repeatSearch(currentQuery, queryExtent: queryExtent))
+                try await process(
+                    searchResults: source.repeatSearch(
+                        currentQuery,
+                        searchExtent: queryExtent
+                    )
+                )
             } catch is CancellationError {
                 results = nil
             } catch {
@@ -278,14 +272,20 @@ extension SearchViewModel {
     private func searchTask() -> Task<(), Never> {
         Task {
             guard !currentQuery.trimmingCharacters(in: .whitespaces).isEmpty,
-                  let source = makeEffectiveSource(with: queryArea, preferredSearchLocation: queryCenter) else {
+                  let source = currentSource() else {
                       return
                   }
             
             do {
                 // User is performing a search, so set `lastSearchExtent`.
                 lastSearchExtent = geoViewExtent
-                try await process(searchResults: source.search(currentQuery))
+                try await process(
+                    searchResults: source.search(
+                        currentQuery,
+                        searchArea: queryArea,
+                        preferredSearchLocation: queryCenter
+                    )
+                )
             } catch is CancellationError {
                 results = nil
             } catch {
@@ -297,12 +297,16 @@ extension SearchViewModel {
     private func updateSuggestionsTask() -> Task<(), Never> {
         Task {
             guard !currentQuery.trimmingCharacters(in: .whitespaces).isEmpty,
-                  let source = makeEffectiveSource(with: queryArea, preferredSearchLocation: queryCenter) else {
+                  let source = currentSource() else {
                       return
                   }
             
             let suggestResult = await Result {
-                try await source.suggest(currentQuery)
+                try await source.suggest(
+                    currentQuery,
+                    searchArea: queryArea,
+                    preferredSearchLocation: queryCenter
+                )
             }
             
             switch suggestResult {
@@ -323,7 +327,13 @@ extension SearchViewModel {
             do {
                 // User is performing a search, so set `lastSearchExtent`.
                 lastSearchExtent = geoViewExtent
-                try await process(searchResults: searchSuggestion.owningSource.search(searchSuggestion))
+                try await process(
+                    searchResults: searchSuggestion.owningSource.search(
+                        searchSuggestion,
+                        searchArea: queryArea,
+                        preferredSearchLocation: queryCenter
+                    )
+                )
             } catch is CancellationError {
                 results = nil
             } catch {
