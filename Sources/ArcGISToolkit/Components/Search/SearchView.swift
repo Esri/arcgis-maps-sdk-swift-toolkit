@@ -239,30 +239,24 @@ struct SearchSuggestionList: View {
     var noResultMessage: String
     
     var body: some View {
-        Group {
+        List {
             switch suggestionResults {
             case .success(let suggestions):
                 if !suggestions.isEmpty {
-                    List {
-                        if suggestions.count > 0 {
-                            ForEach(suggestions) { suggestion in
-                                ResultRow(searchSuggestion: suggestion)
-                                    .onTapGesture() {
-                                        currentSuggestion = suggestion
-                                    }
-                            }
+                    if suggestions.count > 0 {
+                        ForEach(suggestions) { suggestion in
+                            ResultRow(searchSuggestion: suggestion)
+                                .onTapGesture() {
+                                    currentSuggestion = suggestion
+                                }
                         }
                     }
                 }
                 else {
-                    List {
-                        Text(noResultMessage)
-                    }
+                    Text(noResultMessage)
                 }
             case .failure(let error):
-                List {
-                    Text(error.errorDescription)
-                }
+                Text(error.errorDescription)
             }
         }
         .esriBorder(padding: EdgeInsets())
