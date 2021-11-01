@@ -217,8 +217,7 @@ struct SearchResultList: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***else if results.isEmpty {
+***REMOVED******REMOVED******REMOVED*** else if results.isEmpty {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***List {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(noResultMessage)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
