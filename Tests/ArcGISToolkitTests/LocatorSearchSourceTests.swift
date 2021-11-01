@@ -58,8 +58,7 @@ final class LocatorSearchSourceTests: XCTestCase {
             searchArea: nil,
             preferredSearchLocation: nil
         )
-        var results = try XCTUnwrap(suggestResults)
-        XCTAssertEqual(results.count, 4)
+        XCTAssertEqual(suggestResults.count, 4)
         
         locator.maximumSuggestions = 12
         suggestResults = try await locator.suggest(
