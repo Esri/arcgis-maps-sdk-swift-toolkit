@@ -70,7 +70,7 @@ final class LocatorSearchSourceTests: XCTestCase {
         
         // Set property directly on suggest parameters.
         locator.suggestParameters.maxResults = 2
-        XCTAssertEqual(Int(locator.suggestParameters.maxResults), 2)
+        XCTAssertEqual(locator.suggestParameters.maxResults, 2)
         XCTAssertEqual(locator.maximumSuggestions, 2)
         suggestResults = try await locator.suggest(
             "Coffee",
