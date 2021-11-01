@@ -64,7 +64,7 @@ class SmartLocatorSearchSourceTests: XCTestCase {
             preferredSearchLocation: nil
         )
         results = try XCTUnwrap(suggestResults)
-        XCTAssertGreaterThanOrEqual(results.count, 1)
+        XCTAssertNotEqual(suggestResults, [])
     }
 }
 
