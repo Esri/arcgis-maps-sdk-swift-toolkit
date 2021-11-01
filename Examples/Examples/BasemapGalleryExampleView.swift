@@ -43,17 +43,22 @@ struct BasemapGalleryExampleView: View {
         ),
         BasemapGalleryItem(
             basemap: Basemap(
-                url: URL(
-                    string: "https://runtime.maps.arcgis.com/home/item.html?id=9e557abc61ce41c9b8ec8b15800c20d3"
+                item: PortalItem(
+                    url: URL(string: "https://runtime.maps.arcgis.com/home/item.html?id=9e557abc61ce41c9b8ec8b15800c20d3")!
                 )!
-            )!,
-//            basemap: Basemap(
-//                item: PortalItem(
-//                    url: URL(string: "https://runtime.maps.arcgis.com/home/item.html?id=9e557abc61ce41c9b8ec8b15800c20d3")!
-//                )!
-//            ),
+            ),
             name: "Firefly Imagery Hybrid",
             description: "This map features an alternative view of the World Imagery map designed to be used as a neutral imagery basemap, with de-saturated colors, that is useful for overlaying other brightly styled layers.  The map also includes a reference layer.",
+            thumbnail: nil
+        ),
+        BasemapGalleryItem(
+            basemap: Basemap(
+                item: PortalItem(
+                    url: URL(string: "https://runtime.maps.arcgis.com/home/item.html?id=52bdc7ab7fb044d98add148764eaa30a")!
+                )!
+            ),
+            name: nil,
+            description: "This web map features satellite imagery for the world and high-resolution aerial imagery for many areas. It uses WGS84 Geographic, version 2 tiling scheme.",
             thumbnail: nil
         ),
         BasemapGalleryItem(
