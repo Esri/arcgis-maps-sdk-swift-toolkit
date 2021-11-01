@@ -16,22 +16,6 @@ import UIKit.UIImage
 
 ***REMOVED***/ Wraps a search result for display.
 public struct SearchResult {
-***REMOVED***internal init(
-***REMOVED******REMOVED***displayTitle: String,
-***REMOVED******REMOVED***displaySubtitle: String = "",
-***REMOVED******REMOVED***markerImage: UIImage? = nil,
-***REMOVED******REMOVED***owningSource: SearchSource,
-***REMOVED******REMOVED***geoElement: GeoElement? = nil,
-***REMOVED******REMOVED***selectionViewpoint: Viewpoint? = nil
-***REMOVED***) {
-***REMOVED******REMOVED***self.displayTitle = displayTitle
-***REMOVED******REMOVED***self.displaySubtitle = displaySubtitle
-***REMOVED******REMOVED***self.markerImage = markerImage
-***REMOVED******REMOVED***self.owningSource = owningSource
-***REMOVED******REMOVED***self.geoElement = geoElement
-***REMOVED******REMOVED***self.selectionViewpoint = selectionViewpoint
-***REMOVED***
-***REMOVED***
 ***REMOVED******REMOVED***/ Title that should be shown whenever a result is displayed.
 ***REMOVED***public let displayTitle: String
 ***REMOVED***
