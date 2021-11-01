@@ -66,8 +66,7 @@ final class LocatorSearchSourceTests: XCTestCase {
             searchArea: nil,
             preferredSearchLocation: nil
         )
-        results = try XCTUnwrap(suggestResults)
-        XCTAssertEqual(results.count, 12)
+        XCTAssertEqual(suggestResults.count, 12)
         
         // Set property directly on suggest parameters.
         locator.suggestParameters.maxResults = 2
