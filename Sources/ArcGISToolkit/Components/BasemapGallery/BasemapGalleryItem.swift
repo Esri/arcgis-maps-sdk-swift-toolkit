@@ -22,6 +22,12 @@ public class BasemapGalleryItem: ObservableObject {
 ***REMOVED******REMOVED***return UIImage(named: "DefaultBasemap")!
 ***REMOVED***
 ***REMOVED***
+***REMOVED***public enum SpatialReferenceStatus {
+***REMOVED******REMOVED***case unknown
+***REMOVED******REMOVED***case match
+***REMOVED******REMOVED***case noMatch
+***REMOVED***
+***REMOVED***
 ***REMOVED******REMOVED***/ Creates a `BasemapGalleryItem`.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - basemap: The `Basemap` represented by the item.
@@ -70,9 +76,14 @@ public class BasemapGalleryItem: ObservableObject {
 ***REMOVED******REMOVED***/ If the loading of the item generates an error, `isLoaded` will be true.
 ***REMOVED***@Published
 ***REMOVED***public private(set) var isLoaded = false
-
+***REMOVED***
+***REMOVED***@Published
+***REMOVED***public private(set) var spatialReferenceStatus: SpatialReferenceStatus = .unknown
+***REMOVED***
 ***REMOVED******REMOVED***/ The currently executing async task for loading basemap.
 ***REMOVED***private var loadBasemapTask: Task<Void, Never>? = nil
+***REMOVED***
+***REMOVED***private var lastSpatialReference: SpatialReference? = nil
 ***REMOVED***
 
 extension BasemapGalleryItem {
@@ -95,6 +106,8 @@ extension BasemapGalleryItem {
 ***REMOVED******REMOVED***description = descriptionOverride ?? basemap.item?.description
 ***REMOVED******REMOVED***thumbnail = thumbnailOverride ??
 ***REMOVED******REMOVED***(basemap.item?.thumbnail?.image ?? BasemapGalleryItem.defaultThumbnail)
+
+***REMOVED******REMOVED******REMOVED*** TODO: include error messaging alert.
 ***REMOVED******REMOVED***loadBasemapsError = error
 ***REMOVED******REMOVED***isLoaded = true
 ***REMOVED***
@@ -111,5 +124,44 @@ extension BasemapGalleryItem: Equatable {
 ***REMOVED******REMOVED***lhs.description == rhs.description &&
 ***REMOVED******REMOVED***lhs.thumbnail === rhs.thumbnail
 ***REMOVED***
+***REMOVED***
 
+extension BasemapGalleryItem {
+***REMOVED***public func updateSpatialReferenceStatus(
+***REMOVED******REMOVED***for referenceSpatialReference: SpatialReference?
+***REMOVED***) async throws {
+***REMOVED******REMOVED***guard let spatialReference = referenceSpatialReference,
+***REMOVED******REMOVED******REMOVED***  basemap.loadStatus == .loaded,
+***REMOVED******REMOVED******REMOVED***  spatialReference != lastSpatialReference
+***REMOVED******REMOVED***else { return ***REMOVED***
+
+***REMOVED******REMOVED***lastSpatialReference = spatialReference
+***REMOVED******REMOVED***await withThrowingTaskGroup(of: Void.self,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***returning: Void.self,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***body: { taskGroup in
+***REMOVED******REMOVED******REMOVED***basemap.baseLayers.forEach { baseLayer in
+***REMOVED******REMOVED******REMOVED******REMOVED***taskGroup.addTask {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try await baseLayer.load()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***spatialReferenceStatus = matches(spatialReference) ? .match : .noMatch
+***REMOVED***
+
+***REMOVED***public func matches(
+***REMOVED******REMOVED***_ spatialReference: SpatialReference?
+***REMOVED***) -> Bool {
+***REMOVED******REMOVED***guard let spatialReference = spatialReference else { return false ***REMOVED***
+
+***REMOVED******REMOVED***for baselayer in basemap.baseLayers {
+***REMOVED******REMOVED******REMOVED***if let baseLayerSR = baselayer.spatialReference,
+***REMOVED******REMOVED******REMOVED***   baseLayerSR != spatialReference {
+***REMOVED******REMOVED******REMOVED******REMOVED***return false
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***return true
+***REMOVED***
 ***REMOVED***

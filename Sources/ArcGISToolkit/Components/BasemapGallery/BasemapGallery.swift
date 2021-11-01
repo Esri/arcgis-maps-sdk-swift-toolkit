@@ -57,9 +57,18 @@ public struct BasemapGallery: View {
 ***REMOVED******REMOVED***/ The size class used to determine if the basemap items should dispaly in a list or grid.
 ***REMOVED******REMOVED***/ If the size class is `.regular`, they display in a grid.  If it is `.compact`, they display in a list.
 ***REMOVED***@Environment(\.horizontalSizeClass) var horizontalSizeClass
+***REMOVED***
+***REMOVED***@State
+***REMOVED***private var alertItem: AlertItem?
 
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***GalleryView()
+***REMOVED******REMOVED******REMOVED***.alert(item: $alertItem) { alertItem in
+***REMOVED******REMOVED******REMOVED******REMOVED***Alert(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title: Text(alertItem.title),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***message: Text(alertItem.message)
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED*** MARK: Modifiers
@@ -122,7 +131,29 @@ extension BasemapGallery {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Don't check spatial reference until user taps on it.
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** At this point, we need to get errors from setting the basemap (in the model?).
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Error in the model, displayed in the gallery.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.currentBasemapGalleryItem = basemapGalleryItem
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** TODO:  this doesn't work until the basemap is tapped on once, then I assume
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** TODO: it's loaded the basemap layers.  Figure this out.  (load base layers when bm loads?)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let loadError = basemapGalleryItem.loadBasemapsError {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***alertItem = AlertItem(error: loadError)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print("basemaps DON'T match (or error)!")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if !showingBasemapLoadError,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***   basemapGalleryItem.matchesSpatialReference(viewModel.geoModel?.spatialReference) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try await basemapGalleryItem.updateSpatialReferenceStatus(for: viewModel.geoModel?.spatialReference)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if basemapGalleryItem.spatialReferenceStatus == .match ||
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***basemapGalleryItem.spatialReferenceStatus == .unknown {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print("basemap matches!")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.currentBasemapGalleryItem = basemapGalleryItem
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***alertItem = AlertItem(geoModelSR: viewModel.geoModel?.spatialReference)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print("Task bm don't match")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
@@ -143,9 +174,9 @@ private struct BasemapGalleryItemRow: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ProgressView()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***   .progressViewStyle(CircularProgressViewStyle())
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ZStack {
+
+***REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ZStack(alignment: .center) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let thumbnailImage = basemapGalleryItem.thumbnail {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(uiImage: thumbnailImage)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.resizable()
@@ -154,12 +185,15 @@ private struct BasemapGalleryItemRow: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isSelected ? Color.accentColor: Color.clear,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***width: 3.0)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if basemapGalleryItem.loadBasemapsError != nil {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "minus.circle.fill")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.title)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.red)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** else if basemapGalleryItem.spatialReferenceStatus == .noMatch {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "x.circle.fill")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.title)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.red)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
@@ -169,8 +203,37 @@ private struct BasemapGalleryItemRow: View {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.allowsHitTesting(
-***REMOVED******REMOVED******REMOVED***basemapGalleryItem.isLoaded &&
-***REMOVED******REMOVED******REMOVED***basemapGalleryItem.loadBasemapsError == nil
+***REMOVED******REMOVED******REMOVED***basemapGalleryItem.isLoaded
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+
+struct AlertItem {
+***REMOVED***var title: String = ""
+***REMOVED***var message: String = ""
+***REMOVED***
+
+extension AlertItem: Identifiable {
+***REMOVED***public var id: UUID { UUID() ***REMOVED***
+***REMOVED***
+
+***REMOVED*** TODO: add SR for basemap, if possible (SR property on basemap?)  Maybe that can speed up baselayer sr checking...
+***REMOVED*** TODO: Cleanup all .tapGesture code, alert code, old error/alert stuff
+***REMOVED*** TODO: Figure out common errors, so I don't need to rely on `Error` or `RuntimeError`.
+***REMOVED*** TODO: update item's spatialreferenceStatus on main thread. (method marked with @MainActor, the way `update()` is?)
+***REMOVED*** TODO: add basemap SR to init below.
+extension AlertItem {
+***REMOVED***init(geoModelSR: SpatialReference?) {
+***REMOVED******REMOVED***self.init(
+***REMOVED******REMOVED******REMOVED***title: "Spatial Reference mismatch.",
+***REMOVED******REMOVED******REMOVED***message: "The spatial reference of the basemap does not match that of the geomodel (\(geoModelSR?.description ?? ""))."
+***REMOVED******REMOVED***)
+***REMOVED***
+
+***REMOVED***init(error: Error) {
+***REMOVED******REMOVED***self.init(
+***REMOVED******REMOVED******REMOVED***title: "Error loading basemap.",
+***REMOVED******REMOVED******REMOVED***message: "\(error.localizedDescription)"
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
