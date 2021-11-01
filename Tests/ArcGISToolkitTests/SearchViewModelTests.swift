@@ -414,7 +414,7 @@ class SearchViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***Task { model.acceptSuggestion(singleSuggestion) ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***results = try await model.$results.compactMap({$0***REMOVED***).dropFirst().first
+***REMOVED******REMOVED***results = try await model.$results.compactMap({ $0 ***REMOVED***).dropFirst().first
 ***REMOVED******REMOVED***result = try XCTUnwrap(results?.get())
 ***REMOVED******REMOVED***XCTAssertEqual(result.count, 1)
 ***REMOVED***
