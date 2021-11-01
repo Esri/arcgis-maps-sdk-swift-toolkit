@@ -34,8 +34,7 @@ final class LocatorSearchSourceTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***searchArea: nil,
 ***REMOVED******REMOVED******REMOVED***preferredSearchLocation: nil
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED***results = try XCTUnwrap(searchResults)
-***REMOVED******REMOVED***XCTAssertEqual(results.count, 12)
+***REMOVED******REMOVED***XCTAssertEqual(searchResults.count, 12)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Set property directly on geocode parameters.
 ***REMOVED******REMOVED***locator.geocodeParameters.maxResults = 2
