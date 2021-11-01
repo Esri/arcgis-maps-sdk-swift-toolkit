@@ -33,13 +33,13 @@ public class BasemapGalleryViewModel: ObservableObject {
         self.portal = portal
         self.basemapGalleryItems.append(contentsOf: basemapGalleryItems)
         
-        loadGeoModelTask = Task { await loadGeoModel() }
-        fetchBasemapTask = Task { await fetchBasemaps() }
-    }
-    
-    deinit {
-        loadGeoModelTask?.cancel()
-        fetchBasemapTask?.cancel()
+        // Note that we don't want to store these tasks and cancel them
+        // before kicking off another operation becasue both of these
+        // operations could have been started elsewhere as well as here.
+        // Canceling them here would also cancel those other operations,
+        // which we don't want to do.
+        Task { await load(geoModel: geoModel) }
+        Task { await fetchBasemaps(from: portal) }
     }
     
     @Published
@@ -54,8 +54,7 @@ public class BasemapGalleryViewModel: ObservableObject {
     /// the geoModel will have its basemap replaced with the selected basemap.
     public var geoModel: GeoModel? {
         didSet {
-            loadGeoModelTask?.cancel()
-            loadGeoModelTask = Task { await loadGeoModel() }
+            Task { await load(geoModel: geoModel) }
         }
     }
     
@@ -63,8 +62,7 @@ public class BasemapGalleryViewModel: ObservableObject {
     /// and add them to the `basemapGalleryItems` array.
     public var portal: Portal? {
        didSet {
-           fetchBasemapTask?.cancel()
-           fetchBasemapTask = Task { await fetchBasemaps() }
+           Task { await fetchBasemaps(from: portal) }
        }
    }
     
@@ -82,13 +80,11 @@ public class BasemapGalleryViewModel: ObservableObject {
             geoModel?.basemap = item.basemap
         }
     }
-    
-    /// The currently executing async task for fetching basemaps from the portal.
-    /// `fetchBasemapTask` should be cancelled prior to starting another async task.
-    private var fetchBasemapTask: Task<Void, Never>? = nil
+
+//    public func
     
     /// Fetches the basemaps from `portal`.
-    private func fetchBasemaps() async {
+    private func fetchBasemaps(from portal: Portal?) async {
         guard let portal = portal else { return }
 
         do {
@@ -100,12 +96,8 @@ public class BasemapGalleryViewModel: ObservableObject {
         }
     }
     
-    /// The currently executing async task for loading `geoModel`.
-    /// `loadGeoModelTask` should be cancelled prior to starting another async task.
-    private var loadGeoModelTask: Task<Void, Never>? = nil
-    
     /// Loads `geoModel`.
-    private func loadGeoModel() async {
+    private func load(geoModel: GeoModel?) async {
         guard let geoModel = geoModel else { return }
         do {
             try await geoModel.load()
