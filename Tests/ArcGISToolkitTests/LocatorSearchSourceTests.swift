@@ -77,7 +77,6 @@ final class LocatorSearchSourceTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***searchArea: nil,
 ***REMOVED******REMOVED******REMOVED***preferredSearchLocation: nil
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED***results = try XCTUnwrap(suggestResults)
-***REMOVED******REMOVED***XCTAssertEqual(results.count, 2)
+***REMOVED******REMOVED***XCTAssertEqual(suggestResults.count, 2)
 ***REMOVED***
 ***REMOVED***
