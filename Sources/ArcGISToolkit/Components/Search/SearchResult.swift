@@ -16,22 +16,6 @@ import ArcGIS
 
 /// Wraps a search result for display.
 public struct SearchResult {
-    internal init(
-        displayTitle: String,
-        displaySubtitle: String = "",
-        markerImage: UIImage? = nil,
-        owningSource: SearchSource,
-        geoElement: GeoElement? = nil,
-        selectionViewpoint: Viewpoint? = nil
-    ) {
-        self.displayTitle = displayTitle
-        self.displaySubtitle = displaySubtitle
-        self.markerImage = markerImage
-        self.owningSource = owningSource
-        self.geoElement = geoElement
-        self.selectionViewpoint = selectionViewpoint
-    }
-    
     /// Title that should be shown whenever a result is displayed.
     public let displayTitle: String
     
