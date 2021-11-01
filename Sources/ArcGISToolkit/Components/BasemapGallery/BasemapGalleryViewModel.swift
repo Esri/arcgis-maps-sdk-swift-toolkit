@@ -33,13 +33,13 @@ public class BasemapGalleryViewModel: ObservableObject {
 ***REMOVED******REMOVED***self.portal = portal
 ***REMOVED******REMOVED***self.basemapGalleryItems.append(contentsOf: basemapGalleryItems)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***loadGeoModelTask = Task { await loadGeoModel() ***REMOVED***
-***REMOVED******REMOVED***fetchBasemapTask = Task { await fetchBasemaps() ***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***deinit {
-***REMOVED******REMOVED***loadGeoModelTask?.cancel()
-***REMOVED******REMOVED***fetchBasemapTask?.cancel()
+***REMOVED******REMOVED******REMOVED*** Note that we don't want to store these tasks and cancel them
+***REMOVED******REMOVED******REMOVED*** before kicking off another operation becasue both of these
+***REMOVED******REMOVED******REMOVED*** operations could have been started elsewhere as well as here.
+***REMOVED******REMOVED******REMOVED*** Canceling them here would also cancel those other operations,
+***REMOVED******REMOVED******REMOVED*** which we don't want to do.
+***REMOVED******REMOVED***Task { await load(geoModel: geoModel) ***REMOVED***
+***REMOVED******REMOVED***Task { await fetchBasemaps(from: portal) ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@Published
@@ -54,8 +54,7 @@ public class BasemapGalleryViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ the geoModel will have its basemap replaced with the selected basemap.
 ***REMOVED***public var geoModel: GeoModel? {
 ***REMOVED******REMOVED***didSet {
-***REMOVED******REMOVED******REMOVED***loadGeoModelTask?.cancel()
-***REMOVED******REMOVED******REMOVED***loadGeoModelTask = Task { await loadGeoModel() ***REMOVED***
+***REMOVED******REMOVED******REMOVED***Task { await load(geoModel: geoModel) ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -63,8 +62,7 @@ public class BasemapGalleryViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ and add them to the `basemapGalleryItems` array.
 ***REMOVED***public var portal: Portal? {
 ***REMOVED***   didSet {
-***REMOVED******REMOVED***   fetchBasemapTask?.cancel()
-***REMOVED******REMOVED***   fetchBasemapTask = Task { await fetchBasemaps() ***REMOVED***
+***REMOVED******REMOVED***   Task { await fetchBasemaps(from: portal) ***REMOVED***
    ***REMOVED***
    ***REMOVED***
 ***REMOVED***
@@ -82,13 +80,11 @@ public class BasemapGalleryViewModel: ObservableObject {
 ***REMOVED******REMOVED******REMOVED***geoModel?.basemap = item.basemap
 ***REMOVED***
 ***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ The currently executing async task for fetching basemaps from the portal.
-***REMOVED******REMOVED***/ `fetchBasemapTask` should be cancelled prior to starting another async task.
-***REMOVED***private var fetchBasemapTask: Task<Void, Never>? = nil
+
+***REMOVED******REMOVED***public func
 ***REMOVED***
 ***REMOVED******REMOVED***/ Fetches the basemaps from `portal`.
-***REMOVED***private func fetchBasemaps() async {
+***REMOVED***private func fetchBasemaps(from portal: Portal?) async {
 ***REMOVED******REMOVED***guard let portal = portal else { return ***REMOVED***
 
 ***REMOVED******REMOVED***do {
@@ -100,12 +96,8 @@ public class BasemapGalleryViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ The currently executing async task for loading `geoModel`.
-***REMOVED******REMOVED***/ `loadGeoModelTask` should be cancelled prior to starting another async task.
-***REMOVED***private var loadGeoModelTask: Task<Void, Never>? = nil
-***REMOVED***
 ***REMOVED******REMOVED***/ Loads `geoModel`.
-***REMOVED***private func loadGeoModel() async {
+***REMOVED***private func load(geoModel: GeoModel?) async {
 ***REMOVED******REMOVED***guard let geoModel = geoModel else { return ***REMOVED***
 ***REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED***try await geoModel.load()
