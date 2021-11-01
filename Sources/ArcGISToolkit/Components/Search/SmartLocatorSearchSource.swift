@@ -165,13 +165,8 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
             $0.toSearchSuggestion(searchSource: self)
         }
         results.append(contentsOf: suggestResults)
-        var allResults: [SearchSuggestion] = Array(Set(results))
         
-        // Limit results to `maximumResults`.
-        if allResults.count > maximumSuggestions {
-            let dropCount = allResults.count - Int(maximumSuggestions)
-            allResults = allResults.dropLast(dropCount)
-        }
-        return allResults
+        // Limit results to `maximumSuggestions`.
+        return Array(results.prefix(Int(maximumSuggestions)))
     }
 }
