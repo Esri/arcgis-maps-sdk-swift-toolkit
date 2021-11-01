@@ -15,7 +15,7 @@ import XCTest
 ***REMOVED***
 ***REMOVED***Toolkit
 
-class LocatorSearchSourceTests: XCTestCase {
+final class LocatorSearchSourceTests: XCTestCase {
 ***REMOVED***func testMaximumResults() async throws {
 ***REMOVED******REMOVED***let locator = LocatorSearchSource()
 ***REMOVED******REMOVED***locator.maximumResults = 4
