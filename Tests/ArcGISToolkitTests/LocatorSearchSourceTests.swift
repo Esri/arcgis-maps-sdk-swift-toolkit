@@ -66,8 +66,7 @@ final class LocatorSearchSourceTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***searchArea: nil,
 ***REMOVED******REMOVED******REMOVED***preferredSearchLocation: nil
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED***results = try XCTUnwrap(suggestResults)
-***REMOVED******REMOVED***XCTAssertEqual(results.count, 12)
+***REMOVED******REMOVED***XCTAssertEqual(suggestResults.count, 12)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Set property directly on suggest parameters.
 ***REMOVED******REMOVED***locator.suggestParameters.maxResults = 2
