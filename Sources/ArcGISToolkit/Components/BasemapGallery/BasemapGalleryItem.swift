@@ -22,6 +22,12 @@ public class BasemapGalleryItem: ObservableObject {
         return UIImage(named: "DefaultBasemap")!
     }
     
+    public enum SpatialReferenceStatus {
+        case unknown
+        case match
+        case noMatch
+    }
+    
     /// Creates a `BasemapGalleryItem`.
     /// - Parameters:
     ///   - basemap: The `Basemap` represented by the item.
@@ -70,9 +76,14 @@ public class BasemapGalleryItem: ObservableObject {
     /// If the loading of the item generates an error, `isLoaded` will be true.
     @Published
     public private(set) var isLoaded = false
-
+    
+    @Published
+    public private(set) var spatialReferenceStatus: SpatialReferenceStatus = .unknown
+    
     /// The currently executing async task for loading basemap.
     private var loadBasemapTask: Task<Void, Never>? = nil
+    
+    private var lastSpatialReference: SpatialReference? = nil
 }
 
 extension BasemapGalleryItem {
@@ -95,6 +106,8 @@ extension BasemapGalleryItem {
         description = descriptionOverride ?? basemap.item?.description
         thumbnail = thumbnailOverride ??
         (basemap.item?.thumbnail?.image ?? BasemapGalleryItem.defaultThumbnail)
+
+        // TODO: include error messaging alert.
         loadBasemapsError = error
         isLoaded = true
     }
@@ -111,5 +124,44 @@ extension BasemapGalleryItem: Equatable {
         lhs.description == rhs.description &&
         lhs.thumbnail === rhs.thumbnail
     }
+}
 
+extension BasemapGalleryItem {
+    public func updateSpatialReferenceStatus(
+        for referenceSpatialReference: SpatialReference?
+    ) async throws {
+        guard let spatialReference = referenceSpatialReference,
+              basemap.loadStatus == .loaded,
+              spatialReference != lastSpatialReference
+        else { return }
+
+        lastSpatialReference = spatialReference
+        await withThrowingTaskGroup(of: Void.self,
+                                    returning: Void.self,
+                                    body: { taskGroup in
+            basemap.baseLayers.forEach { baseLayer in
+                taskGroup.addTask {
+                    try await baseLayer.load()
+                    return
+                }
+            }
+        })
+        
+        spatialReferenceStatus = matches(spatialReference) ? .match : .noMatch
+    }
+
+    public func matches(
+        _ spatialReference: SpatialReference?
+    ) -> Bool {
+        guard let spatialReference = spatialReference else { return false }
+
+        for baselayer in basemap.baseLayers {
+            if let baseLayerSR = baselayer.spatialReference,
+               baseLayerSR != spatialReference {
+                return false
+            }
+        }
+        
+        return true
+    }
 }
