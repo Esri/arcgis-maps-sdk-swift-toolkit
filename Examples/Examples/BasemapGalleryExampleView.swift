@@ -43,17 +43,22 @@ struct BasemapGalleryExampleView: View {
 ***REMOVED******REMOVED***),
 ***REMOVED******REMOVED***BasemapGalleryItem(
 ***REMOVED******REMOVED******REMOVED***basemap: Basemap(
-***REMOVED******REMOVED******REMOVED******REMOVED***url: URL(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***string: "https:***REMOVED***runtime.maps.arcgis.com/home/item.html?id=9e557abc61ce41c9b8ec8b15800c20d3"
+***REMOVED******REMOVED******REMOVED******REMOVED***item: PortalItem(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***url: URL(string: "https:***REMOVED***runtime.maps.arcgis.com/home/item.html?id=9e557abc61ce41c9b8ec8b15800c20d3")!
 ***REMOVED******REMOVED******REMOVED******REMOVED***)!
-***REMOVED******REMOVED******REMOVED***)!,
-***REMOVED******REMOVED******REMOVED******REMOVED***basemap: Basemap(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***item: PortalItem(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***url: URL(string: "https:***REMOVED***runtime.maps.arcgis.com/home/item.html?id=9e557abc61ce41c9b8ec8b15800c20d3")!
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)!
-***REMOVED******REMOVED******REMOVED******REMOVED***),
+***REMOVED******REMOVED******REMOVED***),
 ***REMOVED******REMOVED******REMOVED***name: "Firefly Imagery Hybrid",
 ***REMOVED******REMOVED******REMOVED***description: "This map features an alternative view of the World Imagery map designed to be used as a neutral imagery basemap, with de-saturated colors, that is useful for overlaying other brightly styled layers.  The map also includes a reference layer.",
+***REMOVED******REMOVED******REMOVED***thumbnail: nil
+***REMOVED******REMOVED***),
+***REMOVED******REMOVED***BasemapGalleryItem(
+***REMOVED******REMOVED******REMOVED***basemap: Basemap(
+***REMOVED******REMOVED******REMOVED******REMOVED***item: PortalItem(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***url: URL(string: "https:***REMOVED***runtime.maps.arcgis.com/home/item.html?id=52bdc7ab7fb044d98add148764eaa30a")!
+***REMOVED******REMOVED******REMOVED******REMOVED***)!
+***REMOVED******REMOVED******REMOVED***),
+***REMOVED******REMOVED******REMOVED***name: nil,
+***REMOVED******REMOVED******REMOVED***description: "This web map features satellite imagery for the world and high-resolution aerial imagery for many areas. It uses WGS84 Geographic, version 2 tiling scheme.",
 ***REMOVED******REMOVED******REMOVED***thumbnail: nil
 ***REMOVED******REMOVED***),
 ***REMOVED******REMOVED***BasemapGalleryItem(
