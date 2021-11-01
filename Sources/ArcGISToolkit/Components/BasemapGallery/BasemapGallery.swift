@@ -57,9 +57,18 @@ public struct BasemapGallery: View {
     /// The size class used to determine if the basemap items should dispaly in a list or grid.
     /// If the size class is `.regular`, they display in a grid.  If it is `.compact`, they display in a list.
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
+    
+    @State
+    private var alertItem: AlertItem?
 
     public var body: some View {
         GalleryView()
+            .alert(item: $alertItem) { alertItem in
+                Alert(
+                    title: Text(alertItem.title),
+                    message: Text(alertItem.message)
+                )
+            }
     }
     
     // MARK: Modifiers
@@ -122,7 +131,29 @@ extension BasemapGallery {
                             // Don't check spatial reference until user taps on it.
                             // At this point, we need to get errors from setting the basemap (in the model?).
                             // Error in the model, displayed in the gallery.
-                            viewModel.currentBasemapGalleryItem = basemapGalleryItem
+                            
+                            // TODO:  this doesn't work until the basemap is tapped on once, then I assume
+                            // TODO: it's loaded the basemap layers.  Figure this out.  (load base layers when bm loads?)
+                            if let loadError = basemapGalleryItem.loadBasemapsError {
+                                alertItem = AlertItem(error: loadError)
+                                print("basemaps DON'T match (or error)!")
+                            }
+                            else {
+                                //                                if !showingBasemapLoadError,
+                                //                                   basemapGalleryItem.matchesSpatialReference(viewModel.geoModel?.spatialReference) {
+                                Task {
+                                    try await basemapGalleryItem.updateSpatialReferenceStatus(for: viewModel.geoModel?.spatialReference)
+                                    if basemapGalleryItem.spatialReferenceStatus == .match ||
+                                        basemapGalleryItem.spatialReferenceStatus == .unknown {
+                                        print("basemap matches!")
+                                        viewModel.currentBasemapGalleryItem = basemapGalleryItem
+                                    }
+                                    else {
+                                        alertItem = AlertItem(geoModelSR: viewModel.geoModel?.spatialReference)
+                                        print("Task bm don't match")
+                                    }
+                                }
+                            }
                         }
                 }
             }
@@ -143,9 +174,9 @@ private struct BasemapGalleryItemRow: View {
                     ProgressView()
                        .progressViewStyle(CircularProgressViewStyle())
                     Spacer()
-                }
-                else {
-                    ZStack {
+
+                } else {
+                    ZStack(alignment: .center) {
                         if let thumbnailImage = basemapGalleryItem.thumbnail {
                             Image(uiImage: thumbnailImage)
                                 .resizable()
@@ -154,12 +185,15 @@ private struct BasemapGalleryItemRow: View {
                                     isSelected ? Color.accentColor: Color.clear,
                                     width: 3.0)
                         }
+                        
                         if basemapGalleryItem.loadBasemapsError != nil {
-                            Spacer()
                             Image(systemName: "minus.circle.fill")
                                 .font(.title)
                                 .foregroundColor(.red)
-                            Spacer()
+                        } else if basemapGalleryItem.spatialReferenceStatus == .noMatch {
+                            Image(systemName: "x.circle.fill")
+                                .font(.title)
+                                .foregroundColor(.red)
                         }
                     }
                 }
@@ -169,8 +203,37 @@ private struct BasemapGalleryItemRow: View {
             }
         }
         .allowsHitTesting(
-            basemapGalleryItem.isLoaded &&
-            basemapGalleryItem.loadBasemapsError == nil
+            basemapGalleryItem.isLoaded
+        )
+    }
+}
+
+struct AlertItem {
+    var title: String = ""
+    var message: String = ""
+}
+
+extension AlertItem: Identifiable {
+    public var id: UUID { UUID() }
+}
+
+// TODO: add SR for basemap, if possible (SR property on basemap?)  Maybe that can speed up baselayer sr checking...
+// TODO: Cleanup all .tapGesture code, alert code, old error/alert stuff
+// TODO: Figure out common errors, so I don't need to rely on `Error` or `RuntimeError`.
+// TODO: update item's spatialreferenceStatus on main thread. (method marked with @MainActor, the way `update()` is?)
+// TODO: add basemap SR to init below.
+extension AlertItem {
+    init(geoModelSR: SpatialReference?) {
+        self.init(
+            title: "Spatial Reference mismatch.",
+            message: "The spatial reference of the basemap does not match that of the geomodel (\(geoModelSR?.description ?? ""))."
+        )
+    }
+
+    init(error: Error) {
+        self.init(
+            title: "Error loading basemap.",
+            message: "\(error.localizedDescription)"
         )
     }
 }
