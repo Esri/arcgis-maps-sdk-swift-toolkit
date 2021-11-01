@@ -34,8 +34,7 @@ final class LocatorSearchSourceTests: XCTestCase {
             searchArea: nil,
             preferredSearchLocation: nil
         )
-        results = try XCTUnwrap(searchResults)
-        XCTAssertEqual(results.count, 12)
+        XCTAssertEqual(searchResults.count, 12)
         
         // Set property directly on geocode parameters.
         locator.geocodeParameters.maxResults = 2
