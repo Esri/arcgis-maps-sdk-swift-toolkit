@@ -16,7 +16,7 @@ import ArcGIS
 
 /// Wraps a suggestion for display.
 public struct SearchSuggestion {
-    internal init(
+    init(
         displayTitle: String,
         displaySubtitle: String = "",
         owningSource: SearchSource,
