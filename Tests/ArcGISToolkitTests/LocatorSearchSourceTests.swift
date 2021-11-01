@@ -38,7 +38,7 @@ final class LocatorSearchSourceTests: XCTestCase {
         
         // Set property directly on geocode parameters.
         locator.geocodeParameters.maxResults = 2
-        XCTAssertEqual(Int(locator.geocodeParameters.maxResults), 2)
+        XCTAssertEqual(locator.geocodeParameters.maxResults, 2)
         XCTAssertEqual(locator.maximumResults, 2)
         searchResults = try await locator.search(
             "Coffee",
