@@ -45,8 +45,7 @@ final class LocatorSearchSourceTests: XCTestCase {
             searchArea: nil,
             preferredSearchLocation: nil
         )
-        results = try XCTUnwrap(searchResults)
-        XCTAssertEqual(results.count, 2)
+        XCTAssertEqual(searchResults.count, 2)
     }
     
     func testMaximumSuggestions() async throws {
