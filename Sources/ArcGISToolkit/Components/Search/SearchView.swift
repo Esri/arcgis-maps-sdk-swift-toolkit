@@ -217,8 +217,7 @@ struct SearchResultList: View {
                             }
                         }
                     }
-                }
-                else if results.isEmpty {
+                } else if results.isEmpty {
                     List {
                         Text(noResultMessage)
                     }
