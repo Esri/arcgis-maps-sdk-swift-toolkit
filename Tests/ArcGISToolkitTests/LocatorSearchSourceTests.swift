@@ -26,8 +26,7 @@ final class LocatorSearchSourceTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***searchArea: nil,
 ***REMOVED******REMOVED******REMOVED***preferredSearchLocation: nil
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED***var results = try XCTUnwrap(searchResults)
-***REMOVED******REMOVED***XCTAssertEqual(results.count, 4)
+***REMOVED******REMOVED***XCTAssertEqual(searchResults.count, 4)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***locator.maximumResults = 12
 ***REMOVED******REMOVED***searchResults = try await locator.search(
