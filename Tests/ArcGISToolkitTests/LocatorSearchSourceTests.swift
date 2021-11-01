@@ -38,7 +38,7 @@ final class LocatorSearchSourceTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Set property directly on geocode parameters.
 ***REMOVED******REMOVED***locator.geocodeParameters.maxResults = 2
-***REMOVED******REMOVED***XCTAssertEqual(Int(locator.geocodeParameters.maxResults), 2)
+***REMOVED******REMOVED***XCTAssertEqual(locator.geocodeParameters.maxResults, 2)
 ***REMOVED******REMOVED***XCTAssertEqual(locator.maximumResults, 2)
 ***REMOVED******REMOVED***searchResults = try await locator.search(
 ***REMOVED******REMOVED******REMOVED***"Coffee",
