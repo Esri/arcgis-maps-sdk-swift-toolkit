@@ -16,7 +16,7 @@ import Foundation
 
 ***REMOVED***/ Wraps a suggestion for display.
 public struct SearchSuggestion {
-***REMOVED***internal init(
+***REMOVED***init(
 ***REMOVED******REMOVED***displayTitle: String,
 ***REMOVED******REMOVED***displaySubtitle: String = "",
 ***REMOVED******REMOVED***owningSource: SearchSource,
