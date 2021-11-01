@@ -92,14 +92,9 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
 ***REMOVED******REMOVED******REMOVED***$0.toSearchResult(searchSource: self)
 ***REMOVED***
 ***REMOVED******REMOVED***results.append(contentsOf: searchResults)
-***REMOVED******REMOVED***var allResults: [SearchResult] = Array(Set(results))
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Limit results to `maximumResults`.
-***REMOVED******REMOVED***if allResults.count > maximumResults {
-***REMOVED******REMOVED******REMOVED***let dropCount = allResults.count - Int(maximumResults)
-***REMOVED******REMOVED******REMOVED***allResults = allResults.dropLast(dropCount)
-***REMOVED***
-***REMOVED******REMOVED***return allResults
+***REMOVED******REMOVED***return Array(results.prefix(Int(maximumResults)))
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***public override func search(
