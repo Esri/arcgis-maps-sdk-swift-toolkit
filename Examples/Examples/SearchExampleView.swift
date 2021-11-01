@@ -32,8 +32,7 @@ struct SearchExampleView: View {
     )
     
     /// The `GraphicsOverlay` used by the `SearchView` to display search results on the map.
-    @State
-    var searchResultsOverlay = GraphicsOverlay()
+    let searchResultsOverlay = GraphicsOverlay()
     
     @State
     private var isNavigating: Bool = false
