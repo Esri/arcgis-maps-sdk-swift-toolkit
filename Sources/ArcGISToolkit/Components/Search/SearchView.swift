@@ -270,7 +270,7 @@ struct ResultRow: View {
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED***image
-***REMOVED******REMOVED******REMOVED***VStack (alignment: .leading){
+***REMOVED******REMOVED******REMOVED***VStack(alignment: .leading) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text(title)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.callout)
 ***REMOVED******REMOVED******REMOVED******REMOVED***if !subtitle.isEmpty {
