@@ -20,10 +20,7 @@ extension GeocodeResult {
     func toSearchResult(searchSource: SearchSource) -> SearchResult {
         let subtitle = self.attributes["LongLabel"] as? String ??
         "Match percent: \((self.score / 100.0).formatted(.percent))"
-        var viewpoint: Viewpoint? = nil
-        if let extent = self.extent {
-            viewpoint = Viewpoint(targetExtent: extent)
-        }
+        let viewpoint = extent.map(Viewpoint.init(targetExtent:))
         return SearchResult(
             displayTitle: self.label,
             displaySubtitle: subtitle,
