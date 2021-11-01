@@ -270,7 +270,7 @@ struct ResultRow: View {
     var body: some View {
         HStack {
             image
-            VStack (alignment: .leading){
+            VStack(alignment: .leading) {
                 Text(title)
                     .font(.callout)
                 if !subtitle.isEmpty {
