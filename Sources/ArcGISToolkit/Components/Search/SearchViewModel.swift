@@ -375,7 +375,7 @@ extension SearchViewModel {
     /// Returns the search source to be used in geocode operations.
     /// - Returns: The search source to use.
     func currentSource() -> SearchSource? {
-        var source: SearchSource?
+        let source: SearchSource?
         if let activeSource = activeSource {
             source = activeSource
         } else {
