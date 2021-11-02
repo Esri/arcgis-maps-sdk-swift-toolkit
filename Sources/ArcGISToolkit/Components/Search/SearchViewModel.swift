@@ -190,8 +190,6 @@ public class SearchViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Starts a search. `selectedResult` and `results`, among other properties, are set
 ***REMOVED******REMOVED***/ asynchronously. Other query properties are read to define the parameters of the search.
-***REMOVED******REMOVED***/ - Parameter searchArea: geometry used to constrain the results.  If `nil`, the
-***REMOVED******REMOVED***/ `queryArea` property is used instead.  If `queryArea` is `nil`, results are not constrained.
 ***REMOVED***public func commitSearch() {
 ***REMOVED******REMOVED***kickoffTask(searchTask())
 ***REMOVED***
