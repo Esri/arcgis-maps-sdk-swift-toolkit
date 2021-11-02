@@ -296,7 +296,7 @@ class SearchViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** First result within 1500m of Portland.
-***REMOVED******REMOVED***XCTAssertLessThan(geodeticDistance.distance,  1500.0)
+***REMOVED******REMOVED***XCTAssertLessThan(geodeticDistance.distance,  1500)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Set queryCenter to Edinburgh
 ***REMOVED******REMOVED***model.queryCenter = .edinburgh
