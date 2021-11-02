@@ -375,7 +375,7 @@ extension SearchViewModel {
 ***REMOVED******REMOVED***/ Returns the search source to be used in geocode operations.
 ***REMOVED******REMOVED***/ - Returns: The search source to use.
 ***REMOVED***func currentSource() -> SearchSource? {
-***REMOVED******REMOVED***var source: SearchSource?
+***REMOVED******REMOVED***let source: SearchSource?
 ***REMOVED******REMOVED***if let activeSource = activeSource {
 ***REMOVED******REMOVED******REMOVED***source = activeSource
 ***REMOVED*** else {
