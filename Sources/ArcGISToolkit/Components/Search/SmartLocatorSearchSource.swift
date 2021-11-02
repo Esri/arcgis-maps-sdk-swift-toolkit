@@ -93,14 +93,9 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
             SearchResult(geocodeResult: $0, searchSource: self)
         }
         results.append(contentsOf: searchResults)
-        var allResults: [SearchResult] = Array(Set(results))
         
         // Limit results to `maximumResults`.
-        if allResults.count > maximumResults {
-            let dropCount = allResults.count - Int(maximumResults)
-            allResults = allResults.dropLast(dropCount)
-        }
-        return allResults
+        return Array(results.prefix(Int(maximumResults)))
     }
     
     public override func search(
@@ -136,14 +131,9 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
             SearchResult(geocodeResult: $0, searchSource: self)
         }
         results.append(contentsOf: searchResults)
-        var allResults: [SearchResult] = Array(Set(results))
         
         // Limit results to `maximumResults`.
-        if allResults.count > maximumResults {
-            let dropCount = allResults.count - Int(maximumResults)
-            allResults = allResults.dropLast(dropCount)
-        }
-        return allResults
+        return Array(results.prefix(Int(maximumResults)))
     }
     
     public override func suggest(
@@ -176,13 +166,8 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
             SearchSuggestion(suggestResult: $0, searchSource: self)
         }
         results.append(contentsOf: suggestResults)
-        var allResults: [SearchSuggestion] = Array(Set(results))
         
-        // Limit results to `maximumResults`.
-        if allResults.count > maximumSuggestions {
-            let dropCount = allResults.count - Int(maximumSuggestions)
-            allResults = allResults.dropLast(dropCount)
-        }
-        return allResults
+        // Limit results to `maximumSuggestions`.
+        return Array(results.prefix(Int(maximumSuggestions)))
     }
 }
