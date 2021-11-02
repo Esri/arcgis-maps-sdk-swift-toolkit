@@ -88,8 +88,8 @@ public class SearchViewModel: ObservableObject {
 ***REMOVED******REMOVED******REMOVED***else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Check extent difference.
-***REMOVED******REMOVED******REMOVED***let widthDiff = fabs(lastExtent.width - newExtent.width)
-***REMOVED******REMOVED******REMOVED***let heightDiff = fabs(lastExtent.height - newExtent.height)
+***REMOVED******REMOVED******REMOVED***let widthDiff = abs(lastExtent.width - newExtent.width)
+***REMOVED******REMOVED******REMOVED***let heightDiff = abs(lastExtent.height - newExtent.height)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***let widthThreshold = lastExtent.width * 0.25
 ***REMOVED******REMOVED******REMOVED***let heightThreshold = lastExtent.height * 0.25
@@ -102,7 +102,7 @@ public class SearchViewModel: ObservableObject {
 ***REMOVED******REMOVED******REMOVED******REMOVED***geometry1: lastExtent.center,
 ***REMOVED******REMOVED******REMOVED******REMOVED***geometry2: newExtent.center
 ***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***let currentExtentAvg = (lastExtent.width + lastExtent.height / 2.0)
+***REMOVED******REMOVED******REMOVED***let currentExtentAvg = (lastExtent.width + lastExtent.height) / 2.0
 ***REMOVED******REMOVED******REMOVED***let threshold = currentExtentAvg * 0.25
 ***REMOVED******REMOVED******REMOVED***isEligibleForRequery = (centerDiff ?? 0.0) > threshold
 ***REMOVED***
@@ -185,8 +185,6 @@ public class SearchViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Starts a search. `selectedResult` and `results`, among other properties, are set
 ***REMOVED******REMOVED***/ asynchronously. Other query properties are read to define the parameters of the search.
-***REMOVED******REMOVED***/ - Parameter searchArea: geometry used to constrain the results.  If `nil`, the
-***REMOVED******REMOVED***/ `queryArea` property is used instead.  If `queryArea` is `nil`, results are not constrained.
 ***REMOVED***public func commitSearch() {
 ***REMOVED******REMOVED***kickoffTask({ searchTask() ***REMOVED***)
 ***REMOVED***
@@ -356,7 +354,7 @@ extension SearchViewModel {
 ***REMOVED******REMOVED***/ Returns the search source to be used in geocode operations.
 ***REMOVED******REMOVED***/ - Returns: The search source to use.
 ***REMOVED***func currentSource() -> SearchSource? {
-***REMOVED******REMOVED***var source: SearchSource?
+***REMOVED******REMOVED***let source: SearchSource?
 ***REMOVED******REMOVED***if let activeSource = activeSource {
 ***REMOVED******REMOVED******REMOVED***source = activeSource
 ***REMOVED*** else {

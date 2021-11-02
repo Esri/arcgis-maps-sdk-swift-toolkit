@@ -38,8 +38,7 @@ struct SearchExampleView: View {
 ***REMOVED***)
 ***REMOVED***
 ***REMOVED******REMOVED***/ The `GraphicsOverlay` used by the `SearchView` to display search results on the map.
-***REMOVED***@State
-***REMOVED***var searchResultsOverlay = GraphicsOverlay()
+***REMOVED***let searchResultsOverlay = GraphicsOverlay()
 ***REMOVED***
 ***REMOVED***@State
 ***REMOVED***private var isNavigating: Bool = false

@@ -15,7 +15,7 @@ import UIKit.UIImage
 ***REMOVED***
 
 ***REMOVED***/ Wraps a search result for display.
-public struct SearchResult {***REMOVED***
+public struct SearchResult {
 ***REMOVED******REMOVED***/ Title that should be shown whenever a result is displayed.
 ***REMOVED***public let displayTitle: String
 ***REMOVED***

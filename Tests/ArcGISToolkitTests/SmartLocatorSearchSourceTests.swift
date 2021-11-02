@@ -61,7 +61,7 @@ final class SmartLocatorSearchSourceTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***preferredSearchLocation: nil
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***results = try XCTUnwrap(suggestResults)
-***REMOVED******REMOVED***XCTAssertGreaterThanOrEqual(results.count, 1)
+***REMOVED******REMOVED***XCTAssertNotEqual(suggestResults, [])
 ***REMOVED***
 ***REMOVED***
 
