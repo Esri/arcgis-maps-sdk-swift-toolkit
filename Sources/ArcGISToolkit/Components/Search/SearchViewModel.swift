@@ -32,14 +32,12 @@ public class SearchViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a `SearchViewModel`.
 ***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - defaultPlaceholder: The string shown in the search view when no user query is entered.
 ***REMOVED******REMOVED***/   - activeSource: Tracks the currently active search source.
 ***REMOVED******REMOVED***/   - queryArea: The search area to be used for the current query.
 ***REMOVED******REMOVED***/   - queryCenter: Defines the center for the search.
 ***REMOVED******REMOVED***/   - resultMode: Defines how many results to return.
 ***REMOVED******REMOVED***/   - sources: Collection of search sources to be used.
 ***REMOVED***public convenience init(
-***REMOVED******REMOVED***defaultPlaceholder: String = .defaultPlaceholder,
 ***REMOVED******REMOVED***activeSource: SearchSource? = nil,
 ***REMOVED******REMOVED***queryArea: Geometry? = nil,
 ***REMOVED******REMOVED***queryCenter: Point? = nil,
@@ -47,17 +45,12 @@ public class SearchViewModel: ObservableObject {
 ***REMOVED******REMOVED***sources: [SearchSource] = []
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.init()
-***REMOVED******REMOVED***self.defaultPlaceholder = defaultPlaceholder
 ***REMOVED******REMOVED***self.activeSource = activeSource
 ***REMOVED******REMOVED***self.queryArea = queryArea
 ***REMOVED******REMOVED***self.queryCenter = queryCenter
 ***REMOVED******REMOVED***self.resultMode = resultMode
 ***REMOVED******REMOVED***self.sources = sources
 ***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ The string shown in the search view when no user query is entered.
-***REMOVED******REMOVED***/ Default is "Find a place or address".
-***REMOVED***public var defaultPlaceholder: String = .defaultPlaceholder
 ***REMOVED***
 ***REMOVED******REMOVED***/ The active search source.  If `nil`, the first item in `sources` is used.
 ***REMOVED***public var activeSource: SearchSource?
@@ -67,8 +60,10 @@ public class SearchViewModel: ObservableObject {
 ***REMOVED***public var currentQuery: String = "" {
 ***REMOVED******REMOVED***willSet {
 ***REMOVED******REMOVED******REMOVED***results = nil
-***REMOVED******REMOVED******REMOVED***suggestions = nil
 ***REMOVED******REMOVED******REMOVED***isEligibleForRequery = false
+***REMOVED******REMOVED******REMOVED***if currentQuery.isEmpty {
+***REMOVED******REMOVED******REMOVED******REMOVED***suggestions = nil
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -193,12 +188,12 @@ public class SearchViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ - Parameter searchArea: geometry used to constrain the results.  If `nil`, the
 ***REMOVED******REMOVED***/ `queryArea` property is used instead.  If `queryArea` is `nil`, results are not constrained.
 ***REMOVED***public func commitSearch() {
-***REMOVED******REMOVED***kickoffTask(searchTask())
+***REMOVED******REMOVED***kickoffTask({ searchTask() ***REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Repeats the last search, limiting results to the extent specified in `geoViewExtent`.
 ***REMOVED***public func repeatSearch() {
-***REMOVED******REMOVED***kickoffTask(repeatSearchTask())
+***REMOVED******REMOVED***kickoffTask({ repeatSearchTask() ***REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Updates suggestions list asynchronously.
@@ -208,7 +203,7 @@ public class SearchViewModel: ObservableObject {
 ***REMOVED******REMOVED******REMOVED***return
 ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***kickoffTask(updateSuggestionsTask())
+***REMOVED******REMOVED***kickoffTask({ updateSuggestionsTask() ***REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@Published
@@ -227,19 +222,12 @@ public class SearchViewModel: ObservableObject {
 ***REMOVED******REMOVED***/   - searchSuggestion: The suggestion to use to commit the search.
 ***REMOVED***public func acceptSuggestion(_ searchSuggestion: SearchSuggestion) {
 ***REMOVED******REMOVED***currentQuery = searchSuggestion.displayTitle
-***REMOVED******REMOVED***kickoffTask(acceptSuggestionTask(searchSuggestion))
+***REMOVED******REMOVED***kickoffTask({ acceptSuggestionTask(searchSuggestion) ***REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***private func kickoffTask(_ task: Task<(), Never>) {
+***REMOVED***private func kickoffTask(_ taskInit: () -> Task<(), Never>) {
 ***REMOVED******REMOVED***currentTask?.cancel()
-***REMOVED******REMOVED***currentTask = task
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ Clears the search. This will set the results list to null, clear the result selection, clear suggestions,
-***REMOVED******REMOVED***/ and reset the current query.
-***REMOVED***public func clearSearch() {
-***REMOVED******REMOVED******REMOVED*** Setting currentQuery to "" will reset everything necessary.
-***REMOVED******REMOVED***currentQuery = ""
+***REMOVED******REMOVED***currentTask = taskInit()
 ***REMOVED***
 ***REMOVED***
 
@@ -349,23 +337,14 @@ extension SearchViewModel {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***switch (resultMode) {
 ***REMOVED******REMOVED***case .single:
-***REMOVED******REMOVED******REMOVED***if let firstResult = searchResults.first {
-***REMOVED******REMOVED******REMOVED******REMOVED***effectiveResults = [firstResult]
-***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***effectiveResults = []
-***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***effectiveResults = Array(searchResults.prefix(1))
 ***REMOVED******REMOVED***case .multiple:
 ***REMOVED******REMOVED******REMOVED***effectiveResults = searchResults
 ***REMOVED******REMOVED***case .automatic:
 ***REMOVED******REMOVED******REMOVED***if isCollection {
 ***REMOVED******REMOVED******REMOVED******REMOVED***effectiveResults = searchResults
 ***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***if let firstResult = searchResults.first {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***effectiveResults = [firstResult]
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***effectiveResults = []
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***effectiveResults = Array(searchResults.prefix(1))
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***
@@ -385,8 +364,4 @@ extension SearchViewModel {
 ***REMOVED***
 ***REMOVED******REMOVED***return source
 ***REMOVED***
-***REMOVED***
-
-public extension String {
-***REMOVED***static let defaultPlaceholder = "Find a place or address"
 ***REMOVED***

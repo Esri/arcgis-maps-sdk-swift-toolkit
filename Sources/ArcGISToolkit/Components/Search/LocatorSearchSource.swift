@@ -113,7 +113,9 @@ public class LocatorSearchSource: ObservableObject, SearchSource {
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Convert to SearchResults and return.
-***REMOVED******REMOVED***return geocodeResults.map { $0.toSearchResult(searchSource: self) ***REMOVED***
+***REMOVED******REMOVED***return geocodeResults.map {
+***REMOVED******REMOVED******REMOVED***SearchResult(geocodeResult: $0, searchSource: self)
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***public func suggest(
@@ -129,7 +131,9 @@ public class LocatorSearchSource: ObservableObject, SearchSource {
 ***REMOVED******REMOVED******REMOVED***parameters: suggestParameters
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED*** Convert to SearchSuggestions and return.
-***REMOVED******REMOVED***return geocodeResults.map{ $0.toSearchSuggestion(searchSource: self) ***REMOVED***
+***REMOVED******REMOVED***return geocodeResults.map {
+***REMOVED******REMOVED******REMOVED***SearchSuggestion(suggestResult: $0, searchSource: self)
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
@@ -148,6 +152,8 @@ extension LocatorSearchSource {
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Convert to SearchResults and return.
-***REMOVED******REMOVED***return geocodeResults.map { $0.toSearchResult(searchSource: self) ***REMOVED***
+***REMOVED******REMOVED***return geocodeResults.map {
+***REMOVED******REMOVED******REMOVED***SearchResult(geocodeResult: $0, searchSource: self)
+***REMOVED***
 ***REMOVED***
 ***REMOVED***

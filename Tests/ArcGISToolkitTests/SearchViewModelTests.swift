@@ -28,21 +28,21 @@ class SearchViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***let model = SearchViewModel(sources: [LocatorSearchSource()])
 ***REMOVED******REMOVED***model.currentQuery = "Magers & Quinn Booksellers"
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***Task { model.updateSuggestions() ***REMOVED***
+***REMOVED******REMOVED***model.updateSuggestions()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Get suggestion
-***REMOVED******REMOVED***let suggestions = try await model.$suggestions.compactMap({$0***REMOVED***).first
+***REMOVED******REMOVED***let suggestions = try await model.$suggestions.compactMap({ $0 ***REMOVED***).first
 ***REMOVED******REMOVED***let suggestion = try XCTUnwrap(suggestions?.get().first)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***Task { model.acceptSuggestion(suggestion) ***REMOVED***
+***REMOVED******REMOVED***model.acceptSuggestion(suggestion)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***let results = try await model.$results.compactMap({$0***REMOVED***).first
+***REMOVED******REMOVED***let results = try await model.$results.compactMap({ $0 ***REMOVED***).first
 ***REMOVED******REMOVED***let result = try XCTUnwrap(results?.get())
 ***REMOVED******REMOVED***XCTAssertEqual(result.count, 1)
 ***REMOVED******REMOVED***XCTAssertNil(model.suggestions)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** With only one results, model should set `selectedResult` property.
-***REMOVED******REMOVED***XCTAssertEqual(result.first!, model.selectedResult)
+***REMOVED******REMOVED***XCTAssertEqual(result.first, model.selectedResult)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func testActiveSource() async throws {
@@ -55,15 +55,15 @@ class SearchViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***model.currentQuery = "Magers & Quinn Booksellers"
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***Task { model.commitSearch() ***REMOVED***
+***REMOVED******REMOVED***model.commitSearch()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***let results = try await model.$results.compactMap({$0***REMOVED***).first
+***REMOVED******REMOVED***let results = try await model.$results.compactMap({ $0 ***REMOVED***).first
 ***REMOVED******REMOVED***let result = try XCTUnwrap(results?.get().first)
 ***REMOVED******REMOVED***XCTAssertEqual(result.owningSource.name, activeSource.name)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***Task { model.updateSuggestions() ***REMOVED***
+***REMOVED******REMOVED***model.updateSuggestions()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***let suggestions = try await model.$suggestions.compactMap({$0***REMOVED***).first
+***REMOVED******REMOVED***let suggestions = try await model.$suggestions.compactMap({ $0 ***REMOVED***).first
 ***REMOVED******REMOVED***let suggestion = try XCTUnwrap(suggestions?.get().first)
 ***REMOVED******REMOVED***XCTAssertEqual(suggestion.owningSource.name, activeSource.name)
 ***REMOVED***
@@ -77,33 +77,33 @@ class SearchViewModelTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED*** Search with no results - result count is 0.
 ***REMOVED******REMOVED***model.currentQuery = "No results found blah blah blah blah"
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***Task { model.commitSearch() ***REMOVED***
+***REMOVED******REMOVED***model.commitSearch()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***var results = try await model.$results.compactMap({$0***REMOVED***).first
+***REMOVED******REMOVED***var results = try await model.$results.compactMap({ $0 ***REMOVED***).first
 ***REMOVED******REMOVED***var result = try XCTUnwrap(results?.get())
-***REMOVED******REMOVED***XCTAssertEqual(result.count, 0)
+***REMOVED******REMOVED***XCTAssert(result.count, [])
 ***REMOVED******REMOVED***XCTAssertNil(model.selectedResult)
 ***REMOVED******REMOVED***XCTAssertNil(model.suggestions)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Search with one result.
 ***REMOVED******REMOVED***model.currentQuery = "Magers & Quinn Booksellers"
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***Task { model.commitSearch() ***REMOVED***
+***REMOVED******REMOVED***model.commitSearch()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***results = try await model.$results.compactMap({$0***REMOVED***).first
+***REMOVED******REMOVED***results = try await model.$results.compactMap({ $0 ***REMOVED***).first
 ***REMOVED******REMOVED***result = try XCTUnwrap(results?.get())
 ***REMOVED******REMOVED***XCTAssertEqual(result.count, 1)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** One results automatically populates `selectedResult`.
-***REMOVED******REMOVED***XCTAssertEqual(result.first!, model.selectedResult)
+***REMOVED******REMOVED***XCTAssertEqual(result.first, model.selectedResult)
 ***REMOVED******REMOVED***XCTAssertNil(model.suggestions)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Search with multiple results.
 ***REMOVED******REMOVED***model.currentQuery = "Magers & Quinn"
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***Task { model.commitSearch() ***REMOVED***
+***REMOVED******REMOVED***model.commitSearch()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***results = try await model.$results.compactMap({$0***REMOVED***).first
+***REMOVED******REMOVED***results = try await model.$results.compactMap({ $ 0***REMOVED***).first
 ***REMOVED******REMOVED***result = try XCTUnwrap(results?.get())
 ***REMOVED******REMOVED***XCTAssertGreaterThan(result.count, 1)
 ***REMOVED******REMOVED***
@@ -112,9 +112,9 @@ class SearchViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***model.selectedResult = result.first!
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***Task { model.commitSearch() ***REMOVED***
+***REMOVED******REMOVED***model.commitSearch()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***results = try await model.$results.compactMap({$0***REMOVED***).dropFirst().first
+***REMOVED******REMOVED***results = try await model.$results.compactMap({ $0 ***REMOVED***).dropFirst().first
 ***REMOVED******REMOVED***result = try XCTUnwrap(results?.get())
 ***REMOVED******REMOVED***XCTAssertGreaterThan(result.count, 1)
 ***REMOVED******REMOVED***
@@ -132,18 +132,18 @@ class SearchViewModelTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED*** Valid `currentQuery` should produce non-nil results.
 ***REMOVED******REMOVED***model.currentQuery = "Coffee"
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***Task { model.commitSearch() ***REMOVED***
+***REMOVED******REMOVED***model.commitSearch()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***let results = try await model.$results.compactMap({$0***REMOVED***).first
+***REMOVED******REMOVED***let results = try await model.$results.compactMap({ $0 ***REMOVED***).first
 ***REMOVED******REMOVED***XCTAssertNotNil(results)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Changing the `currentQuery` should set results to nil.
 ***REMOVED******REMOVED***model.currentQuery = "Coffee in Portland"
 ***REMOVED******REMOVED***XCTAssertNil(model.results)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***Task { model.updateSuggestions() ***REMOVED***
+***REMOVED******REMOVED***model.updateSuggestions()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***let suggestions = try await model.$suggestions.compactMap({$0***REMOVED***).first
+***REMOVED******REMOVED***let suggestions = try await model.$suggestions.compactMap({ $0 ***REMOVED***).first
 ***REMOVED******REMOVED***XCTAssertNotNil(suggestions)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Changing the `currentQuery` should set suggestions to nil.
@@ -154,9 +154,9 @@ class SearchViewModelTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED*** should set `selectedResult` to nil
 ***REMOVED******REMOVED***model.currentQuery = "Magers & Quinn Bookseller"
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***Task { model.commitSearch() ***REMOVED***
+***REMOVED******REMOVED***model.commitSearch()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***_ = try await model.$results.compactMap({$0***REMOVED***).first
+***REMOVED******REMOVED***_ = try await model.$results.compactMap({ $0 ***REMOVED***).first
 ***REMOVED******REMOVED***XCTAssertNotNil(model.selectedResult)
 ***REMOVED******REMOVED***model.currentQuery = "Hotel"
 ***REMOVED******REMOVED***XCTAssertNil(model.selectedResult)
@@ -170,9 +170,9 @@ class SearchViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***model.geoViewExtent = Polygon.chippewaFalls.extent
 ***REMOVED******REMOVED***model.currentQuery = "Coffee"
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***Task { model.commitSearch() ***REMOVED***
+***REMOVED******REMOVED***model.commitSearch()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***_ = try await model.$results.compactMap({$0***REMOVED***).first
+***REMOVED******REMOVED***_ = try await model.$results.compactMap({ $0 ***REMOVED***).first
 ***REMOVED******REMOVED***XCTAssertFalse(model.isEligibleForRequery)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Offset extent by 10% - isEligibleForRequery should still be `false`.
@@ -197,9 +197,9 @@ class SearchViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***model.queryArea = Polygon.chippewaFalls
 ***REMOVED******REMOVED***model.geoViewExtent = Polygon.chippewaFalls.extent
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***Task { model.commitSearch() ***REMOVED***
+***REMOVED******REMOVED***model.commitSearch()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***_ = try await model.$results.compactMap({$0***REMOVED***).dropFirst().first
+***REMOVED******REMOVED***_ = try await model.$results.compactMap({ $0 ***REMOVED***).dropFirst().first
 ***REMOVED******REMOVED***XCTAssertFalse(model.isEligibleForRequery)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Expand extent by 1.1x - isEligibleForRequery should still be `false`.
@@ -221,22 +221,22 @@ class SearchViewModelTests: XCTestCase {
 ***REMOVED***
 ***REMOVED***func testQueryArea() async throws {
 ***REMOVED******REMOVED***let source = LocatorSearchSource()
-***REMOVED******REMOVED***source.maximumResults = Int32.max
+***REMOVED******REMOVED***source.maximumResults = .max
 ***REMOVED******REMOVED***let model = SearchViewModel(sources: [source])
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Set queryArea to Chippewa Falls
 ***REMOVED******REMOVED***model.queryArea = Polygon.chippewaFalls
 ***REMOVED******REMOVED***model.currentQuery = "Coffee"
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***Task { model.commitSearch() ***REMOVED***
+***REMOVED******REMOVED***model.commitSearch()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***var results = try await model.$results.compactMap({$0***REMOVED***).first
+***REMOVED******REMOVED***var results = try await model.$results.compactMap({ $0 ***REMOVED***).first
 ***REMOVED******REMOVED***var result = try XCTUnwrap(results?.get())
 ***REMOVED******REMOVED***XCTAssertGreaterThan(result.count, 1)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let resultGeometryUnion: Geometry = try XCTUnwrap(
 ***REMOVED******REMOVED******REMOVED***GeometryEngine.union(
-***REMOVED******REMOVED******REMOVED******REMOVED***geometries: result.compactMap{ $0.geoElement?.geometry ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***geometries: result.compactMap { $0.geoElement?.geometry ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
@@ -249,15 +249,15 @@ class SearchViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***model.currentQuery = "Magers & Quinn Booksellers"
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***Task { model.commitSearch() ***REMOVED***
+***REMOVED******REMOVED***model.commitSearch()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***results = try await model.$results.compactMap({$0***REMOVED***).first
+***REMOVED******REMOVED***results = try await model.$results.compactMap({ $0 ***REMOVED***).first
 ***REMOVED******REMOVED***result = try XCTUnwrap(results?.get())
 ***REMOVED******REMOVED***XCTAssertEqual(result.count, 0)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***model.queryArea = Polygon.minneapolis
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***Task { model.commitSearch() ***REMOVED***
+***REMOVED******REMOVED***model.commitSearch()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** A note about the use of `.dropFirst()`:
 ***REMOVED******REMOVED******REMOVED*** Because `model.results` is not changed between the previous call
@@ -267,7 +267,7 @@ class SearchViewModelTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED*** incorrect.  Calling `.dropFirst()` will remove that one
 ***REMOVED******REMOVED******REMOVED*** and will give us the next one, which is the correct one (the result
 ***REMOVED******REMOVED******REMOVED*** from the second `model.commitSearch()` call).
-***REMOVED******REMOVED***results = try await model.$results.compactMap({$0***REMOVED***).dropFirst().first
+***REMOVED******REMOVED***results = try await model.$results.compactMap({ $0 ***REMOVED***).dropFirst().first
 ***REMOVED******REMOVED***result = try XCTUnwrap(results?.get())
 ***REMOVED******REMOVED***XCTAssertEqual(result.count, 1)
 ***REMOVED***
@@ -279,9 +279,9 @@ class SearchViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***model.queryCenter = .portland
 ***REMOVED******REMOVED***model.currentQuery = "Coffee"
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***Task { model.commitSearch() ***REMOVED***
+***REMOVED******REMOVED***model.commitSearch()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***var results = try await model.$results.compactMap({$0***REMOVED***).first
+***REMOVED******REMOVED***var results = try await model.$results.compactMap({ $0 ***REMOVED***).first
 ***REMOVED******REMOVED***var result = try XCTUnwrap(results?.get())
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var resultPoint = try XCTUnwrap(
@@ -299,16 +299,15 @@ class SearchViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** First result within 1500m of Portland.
-***REMOVED******REMOVED***XCTAssertLessThan(geodeticDistance.distance,  1500.0)
+***REMOVED******REMOVED***XCTAssertLessThan(geodeticDistance.distance,  1500)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Set queryCenter to Edinburgh
 ***REMOVED******REMOVED***model.queryCenter = .edinburgh
 ***REMOVED******REMOVED***model.currentQuery = "Restaurants"
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***Task { model.commitSearch() ***REMOVED***
+***REMOVED******REMOVED***model.commitSearch()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***results = try await model.$results.compactMap({$0***REMOVED***).first
+***REMOVED******REMOVED***results = try await model.$results.compactMap({ $0 ***REMOVED***).first
 ***REMOVED******REMOVED***result = try XCTUnwrap(results?.get())
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***resultPoint = try XCTUnwrap(
@@ -337,15 +336,15 @@ class SearchViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***model.geoViewExtent = Polygon.chippewaFalls.extent
 ***REMOVED******REMOVED***model.currentQuery = "Coffee"
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***Task { model.repeatSearch() ***REMOVED***
+***REMOVED******REMOVED***model.repeatSearch()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***var results = try await model.$results.compactMap({$0***REMOVED***).first
+***REMOVED******REMOVED***var results = try await model.$results.compactMap({ $0 ***REMOVED***).first
 ***REMOVED******REMOVED***var result = try XCTUnwrap(results?.get())
 ***REMOVED******REMOVED***XCTAssertGreaterThan(result.count, 1)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let resultGeometryUnion: Geometry = try XCTUnwrap(
 ***REMOVED******REMOVED******REMOVED***GeometryEngine.union(
-***REMOVED******REMOVED******REMOVED******REMOVED***geometries: result.compactMap{ $0.geoElement?.geometry ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***geometries: result.compactMap { $0.geoElement?.geometry ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
@@ -358,17 +357,17 @@ class SearchViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***model.currentQuery = "Magers & Quinn Booksellers"
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***Task { model.repeatSearch() ***REMOVED***
+***REMOVED******REMOVED***model.repeatSearch()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***results = try await model.$results.compactMap({$0***REMOVED***).first
+***REMOVED******REMOVED***results = try await model.$results.compactMap({ $0 ***REMOVED***).first
 ***REMOVED******REMOVED***result = try XCTUnwrap(results?.get())
 ***REMOVED******REMOVED***XCTAssertEqual(result.count, 0)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***model.geoViewExtent = Polygon.minneapolis.extent
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***Task { model.repeatSearch() ***REMOVED***
+***REMOVED******REMOVED***model.repeatSearch()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***results = try await model.$results.compactMap({$0***REMOVED***).dropFirst().first
+***REMOVED******REMOVED***results = try await model.$results.compactMap({ $0 ***REMOVED***).dropFirst().first
 ***REMOVED******REMOVED***result = try XCTUnwrap(results?.get())
 ***REMOVED******REMOVED***XCTAssertEqual(result.count, 1)
 ***REMOVED***
@@ -380,41 +379,41 @@ class SearchViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***model.resultMode = .single
 ***REMOVED******REMOVED***model.currentQuery = "Magers & Quinn"
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***Task { model.commitSearch() ***REMOVED***
+***REMOVED******REMOVED***model.commitSearch()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***var results = try await model.$results.compactMap({$0***REMOVED***).first
+***REMOVED******REMOVED***var results = try await model.$results.compactMap({ $0 ***REMOVED***).first
 ***REMOVED******REMOVED***var result = try XCTUnwrap(results?.get())
 ***REMOVED******REMOVED***XCTAssertEqual(result.count, 1)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***model.resultMode = .multiple
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***Task { model.commitSearch() ***REMOVED***
+***REMOVED******REMOVED***model.commitSearch()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***results = try await model.$results.compactMap({$0***REMOVED***).dropFirst().first
+***REMOVED******REMOVED***results = try await model.$results.compactMap({ $0 ***REMOVED***).dropFirst().first
 ***REMOVED******REMOVED***result = try XCTUnwrap(results?.get())
 ***REMOVED******REMOVED***XCTAssertGreaterThan(result.count, 1)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***model.currentQuery = "Coffee"
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***Task { model.updateSuggestions() ***REMOVED***
+***REMOVED******REMOVED***model.updateSuggestions()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***let suggestionResults = try await model.$suggestions.compactMap({$0***REMOVED***).first
+***REMOVED******REMOVED***let suggestionResults = try await model.$suggestions.compactMap({ $0 ***REMOVED***).first
 ***REMOVED******REMOVED***let suggestions = try XCTUnwrap(suggestionResults?.get())
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***let collectionSuggestion = try XCTUnwrap(suggestions.filter { $0.isCollection ***REMOVED***.first)
-***REMOVED******REMOVED***let singleSuggestion = try XCTUnwrap(suggestions.filter { !$0.isCollection ***REMOVED***.first)
+***REMOVED******REMOVED***let collectionSuggestion = try XCTUnwrap(suggestions.filter(\.isCollection).first)
+***REMOVED******REMOVED***let singleSuggestion = try XCTUnwrap(suggestions.filter(!\.isCollection).first)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***model.resultMode = .automatic
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***Task { model.acceptSuggestion(collectionSuggestion) ***REMOVED***
+***REMOVED******REMOVED***model.acceptSuggestion(collectionSuggestion)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***results = try await model.$results.compactMap({$0***REMOVED***).first
+***REMOVED******REMOVED***results = try await model.$results.compactMap({ $0 ***REMOVED***).first
 ***REMOVED******REMOVED***result = try XCTUnwrap(results?.get())
 ***REMOVED******REMOVED***XCTAssertGreaterThan(result.count, 1)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***Task { model.acceptSuggestion(singleSuggestion) ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***results = try await model.$results.compactMap({$0***REMOVED***).dropFirst().first
+***REMOVED******REMOVED***results = try await model.$results.compactMap({ $0 ***REMOVED***).dropFirst().first
 ***REMOVED******REMOVED***result = try XCTUnwrap(results?.get())
 ***REMOVED******REMOVED***XCTAssertEqual(result.count, 1)
 ***REMOVED***
@@ -428,18 +427,18 @@ class SearchViewModelTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED*** UpdateSuggestions with no results - result count is 0.
 ***REMOVED******REMOVED***model.currentQuery = "No results found blah blah blah blah"
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***Task { model.updateSuggestions() ***REMOVED***
+***REMOVED******REMOVED***model.updateSuggestions()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***var suggestionResults = try await model.$suggestions.compactMap({$0***REMOVED***).first
+***REMOVED******REMOVED***var suggestionResults = try await model.$suggestions.compactMap({ $0 ***REMOVED***).first
 ***REMOVED******REMOVED***var suggestions = try XCTUnwrap(suggestionResults?.get())
-***REMOVED******REMOVED***XCTAssertEqual(suggestions.count, 0)
+***REMOVED******REMOVED***XCTAssertEqual(suggestions, [])
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** UpdateSuggestions with results.
 ***REMOVED******REMOVED***model.currentQuery = "Magers & Quinn"
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***Task { model.updateSuggestions() ***REMOVED***
+***REMOVED******REMOVED***model.updateSuggestions()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***suggestionResults = try await model.$suggestions.compactMap({$0***REMOVED***).first
+***REMOVED******REMOVED***suggestionResults = try await model.$suggestions.compactMap({ $0 ***REMOVED***).first
 ***REMOVED******REMOVED***suggestions = try XCTUnwrap(suggestionResults?.get())
 ***REMOVED******REMOVED***XCTAssertGreaterThanOrEqual(suggestions.count, 1)
 ***REMOVED******REMOVED***
