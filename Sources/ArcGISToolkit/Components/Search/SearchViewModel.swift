@@ -93,8 +93,8 @@ public class SearchViewModel: ObservableObject {
             else { return }
             
             // Check extent difference.
-            let widthDiff = fabs(lastExtent.width - newExtent.width)
-            let heightDiff = fabs(lastExtent.height - newExtent.height)
+            let widthDiff = abs(lastExtent.width - newExtent.width)
+            let heightDiff = abs(lastExtent.height - newExtent.height)
             
             let widthThreshold = lastExtent.width * 0.25
             let heightThreshold = lastExtent.height * 0.25
