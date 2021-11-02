@@ -15,7 +15,7 @@ import UIKit.UIImage
 import ArcGIS
 
 /// Wraps a search result for display.
-public struct SearchResult {    
+public struct SearchResult {
     /// Title that should be shown whenever a result is displayed.
     public let displayTitle: String
     

@@ -11,14 +11,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import Foundation
-
 import XCTest
 import ArcGIS
 import ArcGISToolkit
-import SwiftUI
 
-class LocatorSearchSourceTests: XCTestCase {
+final class LocatorSearchSourceTests: XCTestCase {
     func testMaximumResults() async throws {
         let locator = LocatorSearchSource()
         locator.maximumResults = 4
@@ -29,8 +26,7 @@ class LocatorSearchSourceTests: XCTestCase {
             searchArea: nil,
             preferredSearchLocation: nil
         )
-        var results = try XCTUnwrap(searchResults)
-        XCTAssertEqual(results.count, 4)
+        XCTAssertEqual(searchResults.count, 4)
         
         locator.maximumResults = 12
         searchResults = try await locator.search(
@@ -38,20 +34,18 @@ class LocatorSearchSourceTests: XCTestCase {
             searchArea: nil,
             preferredSearchLocation: nil
         )
-        results = try XCTUnwrap(searchResults)
-        XCTAssertEqual(results.count, 12)
+        XCTAssertEqual(searchResults.count, 12)
         
         // Set property directly on geocode parameters.
         locator.geocodeParameters.maxResults = 2
-        XCTAssertEqual(Int(locator.geocodeParameters.maxResults), 2)
+        XCTAssertEqual(locator.geocodeParameters.maxResults, 2)
         XCTAssertEqual(locator.maximumResults, 2)
         searchResults = try await locator.search(
             "Coffee",
             searchArea: nil,
             preferredSearchLocation: nil
         )
-        results = try XCTUnwrap(searchResults)
-        XCTAssertEqual(results.count, 2)
+        XCTAssertEqual(searchResults.count, 2)
     }
     
     func testMaximumSuggestions() async throws {
@@ -64,8 +58,7 @@ class LocatorSearchSourceTests: XCTestCase {
             searchArea: nil,
             preferredSearchLocation: nil
         )
-        var results = try XCTUnwrap(suggestResults)
-        XCTAssertEqual(results.count, 4)
+        XCTAssertEqual(suggestResults.count, 4)
         
         locator.maximumSuggestions = 12
         suggestResults = try await locator.suggest(
@@ -73,19 +66,17 @@ class LocatorSearchSourceTests: XCTestCase {
             searchArea: nil,
             preferredSearchLocation: nil
         )
-        results = try XCTUnwrap(suggestResults)
-        XCTAssertEqual(results.count, 12)
+        XCTAssertEqual(suggestResults.count, 12)
         
         // Set property directly on suggest parameters.
         locator.suggestParameters.maxResults = 2
-        XCTAssertEqual(Int(locator.suggestParameters.maxResults), 2)
+        XCTAssertEqual(locator.suggestParameters.maxResults, 2)
         XCTAssertEqual(locator.maximumSuggestions, 2)
         suggestResults = try await locator.suggest(
             "Coffee",
             searchArea: nil,
             preferredSearchLocation: nil
         )
-        results = try XCTUnwrap(suggestResults)
-        XCTAssertEqual(results.count, 2)
+        XCTAssertEqual(suggestResults.count, 2)
     }
 }

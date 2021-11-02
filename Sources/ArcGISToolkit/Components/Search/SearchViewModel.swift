@@ -88,8 +88,8 @@ public class SearchViewModel: ObservableObject {
             else { return }
             
             // Check extent difference.
-            let widthDiff = fabs(lastExtent.width - newExtent.width)
-            let heightDiff = fabs(lastExtent.height - newExtent.height)
+            let widthDiff = abs(lastExtent.width - newExtent.width)
+            let heightDiff = abs(lastExtent.height - newExtent.height)
             
             let widthThreshold = lastExtent.width * 0.25
             let heightThreshold = lastExtent.height * 0.25
@@ -102,7 +102,7 @@ public class SearchViewModel: ObservableObject {
                 geometry1: lastExtent.center,
                 geometry2: newExtent.center
             )
-            let currentExtentAvg = (lastExtent.width + lastExtent.height / 2.0)
+            let currentExtentAvg = (lastExtent.width + lastExtent.height) / 2.0
             let threshold = currentExtentAvg * 0.25
             isEligibleForRequery = (centerDiff ?? 0.0) > threshold
         }
@@ -185,8 +185,6 @@ public class SearchViewModel: ObservableObject {
     
     /// Starts a search. `selectedResult` and `results`, among other properties, are set
     /// asynchronously. Other query properties are read to define the parameters of the search.
-    /// - Parameter searchArea: geometry used to constrain the results.  If `nil`, the
-    /// `queryArea` property is used instead.  If `queryArea` is `nil`, results are not constrained.
     public func commitSearch() {
         kickoffTask({ searchTask() })
     }
@@ -356,7 +354,7 @@ extension SearchViewModel {
     /// Returns the search source to be used in geocode operations.
     /// - Returns: The search source to use.
     func currentSource() -> SearchSource? {
-        var source: SearchSource?
+        let source: SearchSource?
         if let activeSource = activeSource {
             source = activeSource
         } else {
