@@ -107,7 +107,7 @@ public class SearchViewModel: ObservableObject {
                 geometry1: lastExtent.center,
                 geometry2: newExtent.center
             )
-            let currentExtentAvg = (lastExtent.width + lastExtent.height / 2.0)
+            let currentExtentAvg = (lastExtent.width + lastExtent.height) / 2.0
             let threshold = currentExtentAvg * 0.25
             isEligibleForRequery = (centerDiff ?? 0.0) > threshold
         }
