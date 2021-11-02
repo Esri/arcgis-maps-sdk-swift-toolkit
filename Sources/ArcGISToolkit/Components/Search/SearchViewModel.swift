@@ -93,8 +93,8 @@ public class SearchViewModel: ObservableObject {
 ***REMOVED******REMOVED******REMOVED***else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Check extent difference.
-***REMOVED******REMOVED******REMOVED***let widthDiff = fabs(lastExtent.width - newExtent.width)
-***REMOVED******REMOVED******REMOVED***let heightDiff = fabs(lastExtent.height - newExtent.height)
+***REMOVED******REMOVED******REMOVED***let widthDiff = abs(lastExtent.width - newExtent.width)
+***REMOVED******REMOVED******REMOVED***let heightDiff = abs(lastExtent.height - newExtent.height)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***let widthThreshold = lastExtent.width * 0.25
 ***REMOVED******REMOVED******REMOVED***let heightThreshold = lastExtent.height * 0.25
