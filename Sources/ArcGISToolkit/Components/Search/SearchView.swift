@@ -51,6 +51,11 @@ public struct SearchView: View {
     /// The `GraphicsOverlay` used to display results.  If `nil`, no results will be displayed.
     private var resultsOverlay: GraphicsOverlay? = nil
     
+    /// The string shown in the search view when no user query is entered.
+    /// Defaults to "Find a place or address". Note: this is set using the
+    /// `defaultPlaceholder` modifier.
+    private var defaultPlaceholder: String = "Find a place or address"
+
     /// Determines whether a built-in result view will be shown. Defaults to true.
     /// If false, the result display/selection list is not shown. Set to false if you want to hide the results
     /// or define a custom result list. You might use a custom result list to show results in a separate list,
@@ -61,7 +66,7 @@ public struct SearchView: View {
     /// Message to show when there are no results or suggestions.  Defaults to "No results found".
     /// Note: this is set using the `noResultMessage` modifier.
     private var noResultMessage = "No results found"
-    
+
     private var searchBarWidth: CGFloat = 360.0
     
     @State
@@ -76,8 +81,8 @@ public struct SearchView: View {
             HStack {
                 VStack (alignment: .center) {
                     SearchField(
-                        defaultPlaceholder: searchViewModel.defaultPlaceholder,
                         currentQuery: $searchViewModel.currentQuery,
+                        defaultPlaceholder: defaultPlaceholder,
                         isShowResultsHidden: !enableResultListView,
                         showResults: $showResultListView,
                         onCommit: { searchViewModel.commitSearch() }
@@ -111,7 +116,9 @@ public struct SearchView: View {
             }
         }
         .listStyle(.plain)
-        .onChange(of: searchViewModel.results, perform: display(searchResults:))
+        .onChange(of: searchViewModel.results, perform: { newValue in
+            display(searchResults: (try? newValue?.get()) ?? [])
+        })
         .onChange(of: searchViewModel.selectedResult, perform: display(selectedResult:))
         .onReceive(searchViewModel.$currentQuery) { _ in
             searchViewModel.updateSuggestions()
@@ -132,6 +139,16 @@ public struct SearchView: View {
         return copy
     }
     
+    /// The string shown in the search view when no user query is entered.
+    /// Defaults to "Find a place or address".
+    /// - Parameter defaultPlaceholder: The new value.
+    /// - Returns: A new `SearchView`.
+    public func defaultPlaceholder(_ defaultPlaceholder: String) -> Self {
+        var copy = self
+        copy.defaultPlaceholder = defaultPlaceholder
+        return copy
+    }
+    
     /// Message to show when there are no results or suggestions.  Defaults to "No results found".
     /// - Parameter noResultMessage: The new value.
     /// - Returns: A new `SearchView`.
@@ -140,7 +157,7 @@ public struct SearchView: View {
         copy.noResultMessage = noResultMessage
         return copy
     }
-    
+
     /// The width of the search bar.
     /// - Parameter searchBarWidth: The desired width of the search bar.
     /// - Returns: A new `SearchView`.
@@ -151,41 +168,35 @@ public struct SearchView: View {
     }
 }
 
-extension SearchView {
-    private func display(searchResults: Result<[SearchResult], SearchError>?) {
+private extension SearchView {
+    func display(searchResults: [SearchResult]) {
         guard let resultsOverlay = resultsOverlay else { return }
-        switch searchResults {
-        case .success(let results):
-            let resultGraphics: [Graphic] = results.compactMap { result in
-                guard let graphic = result.geoElement as? Graphic else { return nil }
-                graphic.update(with: result)
-                return graphic
-            }
-            resultsOverlay.removeAllGraphics()
-            resultsOverlay.addGraphics(resultGraphics)
-            
-            if !resultGraphics.isEmpty,
-               let envelope = resultsOverlay.extent,
-               shouldZoomToResults {
-                let builder = EnvelopeBuilder(envelope: envelope)
-                builder.expand(factor: 1.1)
-                let targetExtent = builder.toGeometry() as! Envelope
-                viewpoint?.wrappedValue = Viewpoint(
-                    targetExtent: targetExtent
-                )
-                searchViewModel.lastSearchExtent = targetExtent
-            } else {
-                viewpoint?.wrappedValue = nil
-            }
-        default:
-            resultsOverlay.removeAllGraphics()
+        let resultGraphics: [Graphic] = searchResults.compactMap { result in
+            guard let graphic = result.geoElement as? Graphic else { return nil }
+            graphic.update(with: result)
+            return graphic
+        }
+        resultsOverlay.removeAllGraphics()
+        resultsOverlay.addGraphics(resultGraphics)
+        
+        if !resultGraphics.isEmpty,
+           let envelope = resultsOverlay.extent,
+           shouldZoomToResults {
+            let builder = EnvelopeBuilder(envelope: envelope)
+            builder.expand(factor: 1.1)
+            let targetExtent = builder.toGeometry() as! Envelope
+            viewpoint?.wrappedValue = Viewpoint(
+                targetExtent: targetExtent
+            )
+            searchViewModel.lastSearchExtent = targetExtent
+        } else {
             viewpoint?.wrappedValue = nil
         }
         
         if !shouldZoomToResults { shouldZoomToResults = true }
     }
     
-    private func display(selectedResult: SearchResult?) {
+    func display(selectedResult: SearchResult?) {
         guard let selectedResult = selectedResult else { return }
         viewpoint?.wrappedValue = selectedResult.selectionViewpoint
     }

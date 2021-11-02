@@ -28,21 +28,21 @@ class SearchViewModelTests: XCTestCase {
         let model = SearchViewModel(sources: [LocatorSearchSource()])
         model.currentQuery = "Magers & Quinn Booksellers"
         
-        Task { model.updateSuggestions() }
+        model.updateSuggestions()
         
         // Get suggestion
-        let suggestions = try await model.$suggestions.compactMap({$0}).first
+        let suggestions = try await model.$suggestions.compactMap({ $0 }).first
         let suggestion = try XCTUnwrap(suggestions?.get().first)
         
-        Task { model.acceptSuggestion(suggestion) }
+        model.acceptSuggestion(suggestion)
         
-        let results = try await model.$results.compactMap({$0}).first
+        let results = try await model.$results.compactMap({ $0 }).first
         let result = try XCTUnwrap(results?.get())
         XCTAssertEqual(result.count, 1)
         XCTAssertNil(model.suggestions)
         
         // With only one results, model should set `selectedResult` property.
-        XCTAssertEqual(result.first!, model.selectedResult)
+        XCTAssertEqual(result.first, model.selectedResult)
     }
     
     func testActiveSource() async throws {
@@ -55,15 +55,15 @@ class SearchViewModelTests: XCTestCase {
         
         model.currentQuery = "Magers & Quinn Booksellers"
         
-        Task { model.commitSearch() }
+        model.commitSearch()
         
-        let results = try await model.$results.compactMap({$0}).first
+        let results = try await model.$results.compactMap({ $0 }).first
         let result = try XCTUnwrap(results?.get().first)
         XCTAssertEqual(result.owningSource.name, activeSource.name)
         
-        Task { model.updateSuggestions() }
+        model.updateSuggestions()
         
-        let suggestions = try await model.$suggestions.compactMap({$0}).first
+        let suggestions = try await model.$suggestions.compactMap({ $0 }).first
         let suggestion = try XCTUnwrap(suggestions?.get().first)
         XCTAssertEqual(suggestion.owningSource.name, activeSource.name)
     }
@@ -77,33 +77,33 @@ class SearchViewModelTests: XCTestCase {
         // Search with no results - result count is 0.
         model.currentQuery = "No results found blah blah blah blah"
         
-        Task { model.commitSearch() }
+        model.commitSearch()
         
-        var results = try await model.$results.compactMap({$0}).first
+        var results = try await model.$results.compactMap({ $0 }).first
         var result = try XCTUnwrap(results?.get())
-        XCTAssertEqual(result.count, 0)
+        XCTAssert(result.count, [])
         XCTAssertNil(model.selectedResult)
         XCTAssertNil(model.suggestions)
         
         // Search with one result.
         model.currentQuery = "Magers & Quinn Booksellers"
         
-        Task { model.commitSearch() }
+        model.commitSearch()
         
-        results = try await model.$results.compactMap({$0}).first
+        results = try await model.$results.compactMap({ $0 }).first
         result = try XCTUnwrap(results?.get())
         XCTAssertEqual(result.count, 1)
         
         // One results automatically populates `selectedResult`.
-        XCTAssertEqual(result.first!, model.selectedResult)
+        XCTAssertEqual(result.first, model.selectedResult)
         XCTAssertNil(model.suggestions)
         
         // Search with multiple results.
         model.currentQuery = "Magers & Quinn"
         
-        Task { model.commitSearch() }
+        model.commitSearch()
         
-        results = try await model.$results.compactMap({$0}).first
+        results = try await model.$results.compactMap({ $ 0}).first
         result = try XCTUnwrap(results?.get())
         XCTAssertGreaterThan(result.count, 1)
         
@@ -112,9 +112,9 @@ class SearchViewModelTests: XCTestCase {
         
         model.selectedResult = result.first!
         
-        Task { model.commitSearch() }
+        model.commitSearch()
         
-        results = try await model.$results.compactMap({$0}).dropFirst().first
+        results = try await model.$results.compactMap({ $0 }).dropFirst().first
         result = try XCTUnwrap(results?.get())
         XCTAssertGreaterThan(result.count, 1)
         
@@ -132,18 +132,18 @@ class SearchViewModelTests: XCTestCase {
         // Valid `currentQuery` should produce non-nil results.
         model.currentQuery = "Coffee"
         
-        Task { model.commitSearch() }
+        model.commitSearch()
         
-        let results = try await model.$results.compactMap({$0}).first
+        let results = try await model.$results.compactMap({ $0 }).first
         XCTAssertNotNil(results)
         
         // Changing the `currentQuery` should set results to nil.
         model.currentQuery = "Coffee in Portland"
         XCTAssertNil(model.results)
         
-        Task { model.updateSuggestions() }
+        model.updateSuggestions()
         
-        let suggestions = try await model.$suggestions.compactMap({$0}).first
+        let suggestions = try await model.$suggestions.compactMap({ $0 }).first
         XCTAssertNotNil(suggestions)
         
         // Changing the `currentQuery` should set suggestions to nil.
@@ -154,9 +154,9 @@ class SearchViewModelTests: XCTestCase {
         // should set `selectedResult` to nil
         model.currentQuery = "Magers & Quinn Bookseller"
         
-        Task { model.commitSearch() }
+        model.commitSearch()
         
-        _ = try await model.$results.compactMap({$0}).first
+        _ = try await model.$results.compactMap({ $0 }).first
         XCTAssertNotNil(model.selectedResult)
         model.currentQuery = "Hotel"
         XCTAssertNil(model.selectedResult)
@@ -170,9 +170,9 @@ class SearchViewModelTests: XCTestCase {
         model.geoViewExtent = Polygon.chippewaFalls.extent
         model.currentQuery = "Coffee"
         
-        Task { model.commitSearch() }
+        model.commitSearch()
         
-        _ = try await model.$results.compactMap({$0}).first
+        _ = try await model.$results.compactMap({ $0 }).first
         XCTAssertFalse(model.isEligibleForRequery)
         
         // Offset extent by 10% - isEligibleForRequery should still be `false`.
@@ -197,9 +197,9 @@ class SearchViewModelTests: XCTestCase {
         model.queryArea = Polygon.chippewaFalls
         model.geoViewExtent = Polygon.chippewaFalls.extent
         
-        Task { model.commitSearch() }
+        model.commitSearch()
         
-        _ = try await model.$results.compactMap({$0}).dropFirst().first
+        _ = try await model.$results.compactMap({ $0 }).dropFirst().first
         XCTAssertFalse(model.isEligibleForRequery)
         
         // Expand extent by 1.1x - isEligibleForRequery should still be `false`.
@@ -221,22 +221,22 @@ class SearchViewModelTests: XCTestCase {
     
     func testQueryArea() async throws {
         let source = LocatorSearchSource()
-        source.maximumResults = Int32.max
+        source.maximumResults = .max
         let model = SearchViewModel(sources: [source])
         
         // Set queryArea to Chippewa Falls
         model.queryArea = Polygon.chippewaFalls
         model.currentQuery = "Coffee"
         
-        Task { model.commitSearch() }
+        model.commitSearch()
         
-        var results = try await model.$results.compactMap({$0}).first
+        var results = try await model.$results.compactMap({ $0 }).first
         var result = try XCTUnwrap(results?.get())
         XCTAssertGreaterThan(result.count, 1)
         
         let resultGeometryUnion: Geometry = try XCTUnwrap(
             GeometryEngine.union(
-                geometries: result.compactMap{ $0.geoElement?.geometry }
+                geometries: result.compactMap { $0.geoElement?.geometry }
             )
         )
         
@@ -249,15 +249,15 @@ class SearchViewModelTests: XCTestCase {
         
         model.currentQuery = "Magers & Quinn Booksellers"
         
-        Task { model.commitSearch() }
+        model.commitSearch()
         
-        results = try await model.$results.compactMap({$0}).first
+        results = try await model.$results.compactMap({ $0 }).first
         result = try XCTUnwrap(results?.get())
         XCTAssertEqual(result.count, 0)
         
         model.queryArea = Polygon.minneapolis
         
-        Task { model.commitSearch() }
+        model.commitSearch()
         
         // A note about the use of `.dropFirst()`:
         // Because `model.results` is not changed between the previous call
@@ -267,7 +267,7 @@ class SearchViewModelTests: XCTestCase {
         // incorrect.  Calling `.dropFirst()` will remove that one
         // and will give us the next one, which is the correct one (the result
         // from the second `model.commitSearch()` call).
-        results = try await model.$results.compactMap({$0}).dropFirst().first
+        results = try await model.$results.compactMap({ $0 }).dropFirst().first
         result = try XCTUnwrap(results?.get())
         XCTAssertEqual(result.count, 1)
     }
@@ -279,9 +279,9 @@ class SearchViewModelTests: XCTestCase {
         model.queryCenter = .portland
         model.currentQuery = "Coffee"
         
-        Task { model.commitSearch() }
+        model.commitSearch()
         
-        var results = try await model.$results.compactMap({$0}).first
+        var results = try await model.$results.compactMap({ $0 }).first
         var result = try XCTUnwrap(results?.get())
         
         var resultPoint = try XCTUnwrap(
@@ -299,16 +299,15 @@ class SearchViewModelTests: XCTestCase {
         )
         
         // First result within 1500m of Portland.
-        XCTAssertLessThan(geodeticDistance.distance,  1500.0)
+        XCTAssertLessThan(geodeticDistance.distance,  1500)
         
         // Set queryCenter to Edinburgh
         model.queryCenter = .edinburgh
         model.currentQuery = "Restaurants"
         
-        Task { model.commitSearch() }
+        model.commitSearch()
         
-        
-        results = try await model.$results.compactMap({$0}).first
+        results = try await model.$results.compactMap({ $0 }).first
         result = try XCTUnwrap(results?.get())
         
         resultPoint = try XCTUnwrap(
@@ -337,15 +336,15 @@ class SearchViewModelTests: XCTestCase {
         model.geoViewExtent = Polygon.chippewaFalls.extent
         model.currentQuery = "Coffee"
         
-        Task { model.repeatSearch() }
+        model.repeatSearch()
         
-        var results = try await model.$results.compactMap({$0}).first
+        var results = try await model.$results.compactMap({ $0 }).first
         var result = try XCTUnwrap(results?.get())
         XCTAssertGreaterThan(result.count, 1)
         
         let resultGeometryUnion: Geometry = try XCTUnwrap(
             GeometryEngine.union(
-                geometries: result.compactMap{ $0.geoElement?.geometry }
+                geometries: result.compactMap { $0.geoElement?.geometry }
             )
         )
         
@@ -358,17 +357,17 @@ class SearchViewModelTests: XCTestCase {
         
         model.currentQuery = "Magers & Quinn Booksellers"
         
-        Task { model.repeatSearch() }
+        model.repeatSearch()
         
-        results = try await model.$results.compactMap({$0}).first
+        results = try await model.$results.compactMap({ $0 }).first
         result = try XCTUnwrap(results?.get())
         XCTAssertEqual(result.count, 0)
         
         model.geoViewExtent = Polygon.minneapolis.extent
         
-        Task { model.repeatSearch() }
+        model.repeatSearch()
         
-        results = try await model.$results.compactMap({$0}).dropFirst().first
+        results = try await model.$results.compactMap({ $0 }).dropFirst().first
         result = try XCTUnwrap(results?.get())
         XCTAssertEqual(result.count, 1)
     }
@@ -380,41 +379,41 @@ class SearchViewModelTests: XCTestCase {
         model.resultMode = .single
         model.currentQuery = "Magers & Quinn"
         
-        Task { model.commitSearch() }
+        model.commitSearch()
         
-        var results = try await model.$results.compactMap({$0}).first
+        var results = try await model.$results.compactMap({ $0 }).first
         var result = try XCTUnwrap(results?.get())
         XCTAssertEqual(result.count, 1)
         
         model.resultMode = .multiple
         
-        Task { model.commitSearch() }
+        model.commitSearch()
         
-        results = try await model.$results.compactMap({$0}).dropFirst().first
+        results = try await model.$results.compactMap({ $0 }).dropFirst().first
         result = try XCTUnwrap(results?.get())
         XCTAssertGreaterThan(result.count, 1)
         
         model.currentQuery = "Coffee"
         
-        Task { model.updateSuggestions() }
+        model.updateSuggestions()
         
-        let suggestionResults = try await model.$suggestions.compactMap({$0}).first
+        let suggestionResults = try await model.$suggestions.compactMap({ $0 }).first
         let suggestions = try XCTUnwrap(suggestionResults?.get())
         
-        let collectionSuggestion = try XCTUnwrap(suggestions.filter { $0.isCollection }.first)
-        let singleSuggestion = try XCTUnwrap(suggestions.filter { !$0.isCollection }.first)
+        let collectionSuggestion = try XCTUnwrap(suggestions.filter(\.isCollection).first)
+        let singleSuggestion = try XCTUnwrap(suggestions.filter(!\.isCollection).first)
         
         model.resultMode = .automatic
         
-        Task { model.acceptSuggestion(collectionSuggestion) }
+        model.acceptSuggestion(collectionSuggestion)
         
-        results = try await model.$results.compactMap({$0}).first
+        results = try await model.$results.compactMap({ $0 }).first
         result = try XCTUnwrap(results?.get())
         XCTAssertGreaterThan(result.count, 1)
         
         Task { model.acceptSuggestion(singleSuggestion) }
         
-        results = try await model.$results.compactMap({$0}).dropFirst().first
+        results = try await model.$results.compactMap({ $0 }).dropFirst().first
         result = try XCTUnwrap(results?.get())
         XCTAssertEqual(result.count, 1)
     }
@@ -428,18 +427,18 @@ class SearchViewModelTests: XCTestCase {
         // UpdateSuggestions with no results - result count is 0.
         model.currentQuery = "No results found blah blah blah blah"
         
-        Task { model.updateSuggestions() }
+        model.updateSuggestions()
         
-        var suggestionResults = try await model.$suggestions.compactMap({$0}).first
+        var suggestionResults = try await model.$suggestions.compactMap({ $0 }).first
         var suggestions = try XCTUnwrap(suggestionResults?.get())
-        XCTAssertEqual(suggestions.count, 0)
+        XCTAssertEqual(suggestions, [])
         
         // UpdateSuggestions with results.
         model.currentQuery = "Magers & Quinn"
         
-        Task { model.updateSuggestions() }
+        model.updateSuggestions()
         
-        suggestionResults = try await model.$suggestions.compactMap({$0}).first
+        suggestionResults = try await model.$suggestions.compactMap({ $0 }).first
         suggestions = try XCTUnwrap(suggestionResults?.get())
         XCTAssertGreaterThanOrEqual(suggestions.count, 1)
         

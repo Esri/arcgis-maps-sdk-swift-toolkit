@@ -32,14 +32,12 @@ public class SearchViewModel: ObservableObject {
     
     /// Creates a `SearchViewModel`.
     /// - Parameters:
-    ///   - defaultPlaceholder: The string shown in the search view when no user query is entered.
     ///   - activeSource: Tracks the currently active search source.
     ///   - queryArea: The search area to be used for the current query.
     ///   - queryCenter: Defines the center for the search.
     ///   - resultMode: Defines how many results to return.
     ///   - sources: Collection of search sources to be used.
     public convenience init(
-        defaultPlaceholder: String = .defaultPlaceholder,
         activeSource: SearchSource? = nil,
         queryArea: Geometry? = nil,
         queryCenter: Point? = nil,
@@ -47,17 +45,12 @@ public class SearchViewModel: ObservableObject {
         sources: [SearchSource] = []
     ) {
         self.init()
-        self.defaultPlaceholder = defaultPlaceholder
         self.activeSource = activeSource
         self.queryArea = queryArea
         self.queryCenter = queryCenter
         self.resultMode = resultMode
         self.sources = sources
     }
-    
-    /// The string shown in the search view when no user query is entered.
-    /// Default is "Find a place or address".
-    public var defaultPlaceholder: String = .defaultPlaceholder
     
     /// The active search source.  If `nil`, the first item in `sources` is used.
     public var activeSource: SearchSource?
@@ -67,8 +60,10 @@ public class SearchViewModel: ObservableObject {
     public var currentQuery: String = "" {
         willSet {
             results = nil
-            suggestions = nil
             isEligibleForRequery = false
+            if currentQuery.isEmpty {
+                suggestions = nil
+            }
         }
     }
     
@@ -193,12 +188,12 @@ public class SearchViewModel: ObservableObject {
     /// - Parameter searchArea: geometry used to constrain the results.  If `nil`, the
     /// `queryArea` property is used instead.  If `queryArea` is `nil`, results are not constrained.
     public func commitSearch() {
-        kickoffTask(searchTask())
+        kickoffTask({ searchTask() })
     }
     
     /// Repeats the last search, limiting results to the extent specified in `geoViewExtent`.
     public func repeatSearch() {
-        kickoffTask(repeatSearchTask())
+        kickoffTask({ repeatSearchTask() })
     }
     
     /// Updates suggestions list asynchronously.
@@ -208,7 +203,7 @@ public class SearchViewModel: ObservableObject {
             return
         }
         
-        kickoffTask(updateSuggestionsTask())
+        kickoffTask({ updateSuggestionsTask() })
     }
     
     @Published
@@ -227,19 +222,12 @@ public class SearchViewModel: ObservableObject {
     ///   - searchSuggestion: The suggestion to use to commit the search.
     public func acceptSuggestion(_ searchSuggestion: SearchSuggestion) {
         currentQuery = searchSuggestion.displayTitle
-        kickoffTask(acceptSuggestionTask(searchSuggestion))
+        kickoffTask({ acceptSuggestionTask(searchSuggestion) })
     }
     
-    private func kickoffTask(_ task: Task<(), Never>) {
+    private func kickoffTask(_ taskInit: () -> Task<(), Never>) {
         currentTask?.cancel()
-        currentTask = task
-    }
-    
-    /// Clears the search. This will set the results list to null, clear the result selection, clear suggestions,
-    /// and reset the current query.
-    public func clearSearch() {
-        // Setting currentQuery to "" will reset everything necessary.
-        currentQuery = ""
+        currentTask = taskInit()
     }
 }
 
@@ -349,23 +337,14 @@ extension SearchViewModel {
         
         switch (resultMode) {
         case .single:
-            if let firstResult = searchResults.first {
-                effectiveResults = [firstResult]
-            } else {
-                effectiveResults = []
-            }
+            effectiveResults = Array(searchResults.prefix(1))
         case .multiple:
             effectiveResults = searchResults
         case .automatic:
             if isCollection {
                 effectiveResults = searchResults
             } else {
-                if let firstResult = searchResults.first {
-                    effectiveResults = [firstResult]
-                }
-                else {
-                    effectiveResults = []
-                }
+                effectiveResults = Array(searchResults.prefix(1))
             }
         }
         
@@ -385,8 +364,4 @@ extension SearchViewModel {
         }
         return source
     }
-}
-
-public extension String {
-    static let defaultPlaceholder = "Find a place or address"
 }

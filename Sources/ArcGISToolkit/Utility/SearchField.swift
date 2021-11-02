@@ -15,47 +15,24 @@ import SwiftUI
 
 /// A custom view implementing a SearchField.  It contains a search button, text field, delete text button,
 /// and a button to allow users to hide/show the search results list.
-struct SearchField: View {
-    /// The default placeholder displayed when `currentQuery` is empty.
-    let defaultPlaceholder: String
-
+public struct SearchField: View {
     /// The current search query.
-    var currentQuery: Binding<String>
+    public var currentQuery: Binding<String>
+
+    /// The default placeholder displayed when `currentQuery` is empty.
+    public var defaultPlaceholder: String = ""
 
     /// The visibility of the `showResults` button.
-    let isShowResultsHidden: Bool
+    public var isShowResultsHidden: Bool = true
 
     /// Binding allowing the user to toggle the visibility of the results list.
-    var showResults: Binding<Bool>?
+    public var showResults: Binding<Bool>? = nil
     
     /// The handler executed when the user submits a search, either via the `TextField`
     /// or the Search button.
-    var onCommit: () -> Void
+    public var onCommit: () -> Void = { }
     
-    /// Creates a new SearchField
-    /// - Parameters:
-    ///   - defaultPlaceholder: The default placeholder displayed when `currentQuery`
-    ///   is empty.
-    ///   - currentQuery: The current search query.
-    ///   - isShowResultsHidden: The visibility of the `showResults` button.
-    ///   - showResults: Binding allowing the user to toggle the visibility of the results list.
-    ///   - onCommit: The handler executed when the user submits a search, either via the
-    ///   `TextField`or the Search button.
-    internal init(
-        defaultPlaceholder: String = "",
-        currentQuery: Binding<String>,
-        isShowResultsHidden: Bool = true,
-        showResults: Binding<Bool>? = nil,
-        onCommit: @escaping () -> Void = { }
-    ) {
-        self.defaultPlaceholder = defaultPlaceholder
-        self.currentQuery = currentQuery
-        self.isShowResultsHidden = isShowResultsHidden
-        self.showResults = showResults
-        self.onCommit = onCommit
-    }
-    
-    var body: some View {
+    public var body: some View {
         HStack {
             // Search button
             Button {
