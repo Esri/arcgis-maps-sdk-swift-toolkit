@@ -55,7 +55,7 @@ public struct SearchView: View {
     /// Defaults to "Find a place or address". Note: this is set using the
     /// `defaultPlaceholder` modifier.
     private var defaultPlaceholder: String = "Find a place or address"
-
+    
     /// Determines whether a built-in result view will be shown. Defaults to true.
     /// If false, the result display/selection list is not shown. Set to false if you want to hide the results
     /// or define a custom result list. You might use a custom result list to show results in a separate list,
@@ -66,7 +66,7 @@ public struct SearchView: View {
     /// Message to show when there are no results or suggestions.  Defaults to "No results found".
     /// Note: this is set using the `noResultMessage` modifier.
     private var noResultMessage = "No results found"
-
+    
     private var searchBarWidth: CGFloat = 360.0
     
     @State
@@ -79,7 +79,8 @@ public struct SearchView: View {
     public var body: some View {
         VStack {
             HStack {
-                VStack (alignment: .center) {
+                Spacer()
+                VStack {
                     SearchField(
                         currentQuery: $searchViewModel.currentQuery,
                         defaultPlaceholder: defaultPlaceholder,
@@ -87,20 +88,23 @@ public struct SearchView: View {
                         showResults: $showResultListView,
                         onCommit: { searchViewModel.commitSearch() }
                     )
-
+                    
                     if enableResultListView, showResultListView {
-                        if let results = searchViewModel.results {
+                        switch searchViewModel.searchOutcome {
+                        case .results(let results):
                             SearchResultList(
                                 searchResults: results,
                                 selectedResult: $searchViewModel.selectedResult,
                                 noResultMessage: noResultMessage
                             )
-                        } else if let suggestions = searchViewModel.suggestions {
+                        case .suggestions(let suggestions):
                             SearchSuggestionList(
                                 suggestionResults: suggestions,
                                 currentSuggestion: $searchViewModel.currentSuggestion,
                                 noResultMessage: noResultMessage
                             )
+                        case .none:
+                            EmptyView()
                         }
                     }
                 }
@@ -116,8 +120,13 @@ public struct SearchView: View {
             }
         }
         .listStyle(.plain)
-        .onChange(of: searchViewModel.results, perform: { newValue in
-            display(searchResults: (try? newValue?.get()) ?? [])
+        .onChange(of: searchViewModel.searchOutcome, perform: { newValue in
+            switch newValue {
+            case .results(let results):
+                display(searchResults: (try? results.get()) ?? [])
+            default:
+                display(searchResults: [])
+            }
         })
         .onChange(of: searchViewModel.selectedResult, perform: display(selectedResult:))
         .onReceive(searchViewModel.$currentQuery) { _ in
@@ -157,7 +166,7 @@ public struct SearchView: View {
         copy.noResultMessage = noResultMessage
         return copy
     }
-
+    
     /// The width of the search bar.
     /// - Parameter searchBarWidth: The desired width of the search bar.
     /// - Returns: A new `SearchView`.
@@ -277,7 +286,7 @@ struct ResultRow: View {
     var title: String
     var subtitle: String = ""
     var image: AnyView
-
+    
     var body: some View {
         HStack {
             image
