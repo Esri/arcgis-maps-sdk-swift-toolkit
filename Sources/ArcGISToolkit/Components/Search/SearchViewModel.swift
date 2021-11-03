@@ -30,6 +30,12 @@ public class SearchViewModel: ObservableObject {
         case automatic
     }
     
+    /// The outcome of a geocode operation (search or suggestion).
+    public enum SearchOutcome {
+        case results(result: Result<[SearchResult], SearchError>)
+        case suggestions(result: Result<[SearchSuggestion], SearchError>)
+    }
+    
     /// Creates a `SearchViewModel`.
     /// - Parameters:
     ///   - activeSource: Tracks the currently active search source.
@@ -59,10 +65,17 @@ public class SearchViewModel: ObservableObject {
     @Published
     public var currentQuery: String = "" {
         willSet {
-            results = nil
             isEligibleForRequery = false
-            if currentQuery.isEmpty {
-                suggestions = nil
+            
+            switch searchOutcome {
+            case .results(_):
+                searchOutcome = nil
+            case .suggestions(_):
+                if currentQuery.isEmpty {
+                    searchOutcome = nil
+                }
+            case .none:
+                break
             }
         }
     }
@@ -132,24 +145,30 @@ public class SearchViewModel: ObservableObject {
     
     /// Collection of results. `nil` means no query has been made. An empty array means there
     /// were no results, and the view should show an appropriate 'no results' message.
+    ///
+    /// Collection of suggestion results. Defaults to `nil`. This collection will be set to empty when there
+    /// are no suggestions, `nil` when no suggestions have been requested. If the list is empty,
+    /// a useful 'no results' message should be shown by the view.
+    
     @Published
-    public private(set) var results: Result<[SearchResult], SearchError>? {
-        willSet {
-            if newValue != nil {
-                suggestions = nil
-            }
-        }
+    public private(set) var searchOutcome: SearchOutcome? {
         didSet {
-            switch results {
-            case .success(let results):
-                if results.count == 1 {
-                    selectedResult = results.first
-                }
-                else {
+            switch searchOutcome {
+            case .results(let results):
+                switch results {
+                case .success(let results):
+                    if results.count == 1 {
+                        selectedResult = results.first
+                    }
+                    else {
+                        selectedResult = nil
+                    }
+                default:
                     selectedResult = nil
                 }
             default:
                 selectedResult = nil
+                break
             }
         }
     }
@@ -166,18 +185,6 @@ public class SearchViewModel: ObservableObject {
     /// this list as needed.
     /// NOTE:  only the first source is currently used; multiple sources are not yet supported.
     public var sources: [SearchSource] = []
-    
-    /// Collection of suggestion results. Defaults to `nil`. This collection will be set to empty when there
-    /// are no suggestions, `nil` when no suggestions have been requested. If the list is empty,
-    /// a useful 'no results' message should be shown by the view.
-    @Published
-    public private(set) var suggestions: Result<[SearchSuggestion], SearchError>? {
-        willSet {
-            if newValue != nil {
-                results = nil
-            }
-        }
-    }
     
     /// The currently executing async task.  `currentTask` should be cancelled
     /// prior to starting another async task.
@@ -238,45 +245,27 @@ extension SearchViewModel {
                       return
                   }
             
-            do {
-                // User is performing a search, so set `lastSearchExtent`.
-                lastSearchExtent = geoViewExtent
-                try await process(
-                    searchResults: source.repeatSearch(
-                        currentQuery,
-                        searchExtent: queryExtent
-                    )
+            await search(with: {
+                try await source.repeatSearch(
+                    currentQuery,
+                    searchExtent: queryExtent
                 )
-            } catch is CancellationError {
-                results = nil
-            } catch {
-                results = .failure(SearchError(error))
-            }
+            } )
         }
     }
     
     private func searchTask() -> Task<(), Never> {
         Task {
             guard !currentQuery.trimmingCharacters(in: .whitespaces).isEmpty,
-                  let source = currentSource() else {
-                      return
-                  }
+                  let source = currentSource() else { return }
             
-            do {
-                // User is performing a search, so set `lastSearchExtent`.
-                lastSearchExtent = geoViewExtent
-                try await process(
-                    searchResults: source.search(
-                        currentQuery,
-                        searchArea: queryArea,
-                        preferredSearchLocation: queryCenter
-                    )
+            await search(with: {
+                try await source.search(
+                    currentQuery,
+                    searchArea: queryArea,
+                    preferredSearchLocation: queryCenter
                 )
-            } catch is CancellationError {
-                results = nil
-            } catch {
-                results = .failure(SearchError(error))
-            }
+            } )
         }
     }
     
@@ -286,47 +275,45 @@ extension SearchViewModel {
                   let source = currentSource() else {
                       return
                   }
-            
-            let suggestResult = await Result {
-                try await source.suggest(
+            do {
+                let suggestions = try await source.suggest(
                     currentQuery,
                     searchArea: queryArea,
                     preferredSearchLocation: queryCenter
                 )
-            }
-            
-            switch suggestResult {
-            case .success(let suggestResults):
-                suggestions = .success(suggestResults)
-            case .failure(let error):
-                suggestions = .failure(SearchError(error))
-                break
-            case nil:
-                suggestions = nil
-                break
+                searchOutcome = .suggestions(result: .success(suggestions))
+            } catch is CancellationError {
+                searchOutcome = nil
+            } catch {
+                searchOutcome = .suggestions(result: .failure(SearchError(error)))
             }
         }
     }
     
     private func acceptSuggestionTask(_ searchSuggestion: SearchSuggestion) -> Task<(), Never> {
         Task {
-            do {
-                // User is performing a search, so set `lastSearchExtent`.
-                lastSearchExtent = geoViewExtent
-                try await process(
-                    searchResults: searchSuggestion.owningSource.search(
-                        searchSuggestion,
-                        searchArea: queryArea,
-                        preferredSearchLocation: queryCenter
-                    )
+            await search(with: {
+                try await searchSuggestion.owningSource.search(
+                    searchSuggestion,
+                    searchArea: queryArea,
+                    preferredSearchLocation: queryCenter
                 )
-            } catch is CancellationError {
-                results = nil
-            } catch {
-                results = .failure(SearchError(error))
-            }
+            } )
+            
             // once we are done searching for the suggestion, then reset it to nil
             currentSuggestion = nil
+        }
+    }
+    
+    private func search(with action: () async throws -> [SearchResult]) async {
+        do {
+            // User is performing a search, so set `lastSearchExtent`.
+            lastSearchExtent = geoViewExtent
+            try await process(searchResults: action())
+        } catch is CancellationError {
+            searchOutcome = nil
+        } catch {
+            searchOutcome = .results(result: .failure(SearchError(error)))
         }
     }
     
@@ -346,7 +333,7 @@ extension SearchViewModel {
             }
         }
         
-        results = .success(effectiveResults)
+        searchOutcome = .results(result: .success(effectiveResults))
     }
 }
 
@@ -363,3 +350,5 @@ extension SearchViewModel {
         return source
     }
 }
+
+extension SearchViewModel.SearchOutcome: Equatable {}
