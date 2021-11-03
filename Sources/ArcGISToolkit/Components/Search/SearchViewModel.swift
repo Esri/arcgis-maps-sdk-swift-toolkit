@@ -30,6 +30,12 @@ public class SearchViewModel: ObservableObject {
 ***REMOVED******REMOVED***case automatic
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ The outcome of a geocode operation (search or suggestion).
+***REMOVED***public enum SearchOutcome {
+***REMOVED******REMOVED***case results(result: Result<[SearchResult], SearchError>)
+***REMOVED******REMOVED***case suggestions(result: Result<[SearchSuggestion], SearchError>)
+***REMOVED***
+***REMOVED***
 ***REMOVED******REMOVED***/ Creates a `SearchViewModel`.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - activeSource: Tracks the currently active search source.
@@ -59,10 +65,17 @@ public class SearchViewModel: ObservableObject {
 ***REMOVED***@Published
 ***REMOVED***public var currentQuery: String = "" {
 ***REMOVED******REMOVED***willSet {
-***REMOVED******REMOVED******REMOVED***results = nil
 ***REMOVED******REMOVED******REMOVED***isEligibleForRequery = false
-***REMOVED******REMOVED******REMOVED***if currentQuery.isEmpty {
-***REMOVED******REMOVED******REMOVED******REMOVED***suggestions = nil
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***switch searchOutcome {
+***REMOVED******REMOVED******REMOVED***case .results(_):
+***REMOVED******REMOVED******REMOVED******REMOVED***searchOutcome = nil
+***REMOVED******REMOVED******REMOVED***case .suggestions(_):
+***REMOVED******REMOVED******REMOVED******REMOVED***if currentQuery.isEmpty {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***searchOutcome = nil
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***case .none:
+***REMOVED******REMOVED******REMOVED******REMOVED***break
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -132,24 +145,30 @@ public class SearchViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Collection of results. `nil` means no query has been made. An empty array means there
 ***REMOVED******REMOVED***/ were no results, and the view should show an appropriate 'no results' message.
-***REMOVED***@Published
-***REMOVED***public private(set) var results: Result<[SearchResult], SearchError>? {
-***REMOVED******REMOVED***willSet {
-***REMOVED******REMOVED******REMOVED***if newValue != nil {
-***REMOVED******REMOVED******REMOVED******REMOVED***suggestions = nil
-***REMOVED******REMOVED***
+***REMOVED******REMOVED***/
+***REMOVED******REMOVED***/ Collection of suggestion results. Defaults to `nil`. This collection will be set to empty when there
+***REMOVED******REMOVED***/ are no suggestions, `nil` when no suggestions have been requested. If the list is empty,
+***REMOVED******REMOVED***/ a useful 'no results' message should be shown by the view.
 ***REMOVED***
+***REMOVED***@Published
+***REMOVED***public private(set) var searchOutcome: SearchOutcome? {
 ***REMOVED******REMOVED***didSet {
-***REMOVED******REMOVED******REMOVED***switch results {
-***REMOVED******REMOVED******REMOVED***case .success(let results):
-***REMOVED******REMOVED******REMOVED******REMOVED***if results.count == 1 {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedResult = results.first
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***else {
+***REMOVED******REMOVED******REMOVED***switch searchOutcome {
+***REMOVED******REMOVED******REMOVED***case .results(let results):
+***REMOVED******REMOVED******REMOVED******REMOVED***switch results {
+***REMOVED******REMOVED******REMOVED******REMOVED***case .success(let results):
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if results.count == 1 {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedResult = results.first
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedResult = nil
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***default:
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedResult = nil
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***default:
 ***REMOVED******REMOVED******REMOVED******REMOVED***selectedResult = nil
+***REMOVED******REMOVED******REMOVED******REMOVED***break
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -166,18 +185,6 @@ public class SearchViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ this list as needed.
 ***REMOVED******REMOVED***/ NOTE:  only the first source is currently used; multiple sources are not yet supported.
 ***REMOVED***public var sources: [SearchSource] = []
-***REMOVED***
-***REMOVED******REMOVED***/ Collection of suggestion results. Defaults to `nil`. This collection will be set to empty when there
-***REMOVED******REMOVED***/ are no suggestions, `nil` when no suggestions have been requested. If the list is empty,
-***REMOVED******REMOVED***/ a useful 'no results' message should be shown by the view.
-***REMOVED***@Published
-***REMOVED***public private(set) var suggestions: Result<[SearchSuggestion], SearchError>? {
-***REMOVED******REMOVED***willSet {
-***REMOVED******REMOVED******REMOVED***if newValue != nil {
-***REMOVED******REMOVED******REMOVED******REMOVED***results = nil
-***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The currently executing async task.  `currentTask` should be cancelled
 ***REMOVED******REMOVED***/ prior to starting another async task.
@@ -238,45 +245,27 @@ extension SearchViewModel {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  return
 ***REMOVED******REMOVED***  ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***do {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** User is performing a search, so set `lastSearchExtent`.
-***REMOVED******REMOVED******REMOVED******REMOVED***lastSearchExtent = geoViewExtent
-***REMOVED******REMOVED******REMOVED******REMOVED***try await process(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***searchResults: source.repeatSearch(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentQuery,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***searchExtent: queryExtent
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***await search(with: {
+***REMOVED******REMOVED******REMOVED******REMOVED***try await source.repeatSearch(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentQuery,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***searchExtent: queryExtent
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED*** catch is CancellationError {
-***REMOVED******REMOVED******REMOVED******REMOVED***results = nil
-***REMOVED******REMOVED*** catch {
-***REMOVED******REMOVED******REMOVED******REMOVED***results = .failure(SearchError(error))
-***REMOVED******REMOVED***
+***REMOVED******REMOVED*** )
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***private func searchTask() -> Task<(), Never> {
 ***REMOVED******REMOVED***Task {
 ***REMOVED******REMOVED******REMOVED***guard !currentQuery.trimmingCharacters(in: .whitespaces).isEmpty,
-***REMOVED******REMOVED******REMOVED******REMOVED***  let source = currentSource() else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  return
-***REMOVED******REMOVED***  ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***  let source = currentSource() else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***do {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** User is performing a search, so set `lastSearchExtent`.
-***REMOVED******REMOVED******REMOVED******REMOVED***lastSearchExtent = geoViewExtent
-***REMOVED******REMOVED******REMOVED******REMOVED***try await process(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***searchResults: source.search(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentQuery,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***searchArea: queryArea,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***preferredSearchLocation: queryCenter
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***await search(with: {
+***REMOVED******REMOVED******REMOVED******REMOVED***try await source.search(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentQuery,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***searchArea: queryArea,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***preferredSearchLocation: queryCenter
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED*** catch is CancellationError {
-***REMOVED******REMOVED******REMOVED******REMOVED***results = nil
-***REMOVED******REMOVED*** catch {
-***REMOVED******REMOVED******REMOVED******REMOVED***results = .failure(SearchError(error))
-***REMOVED******REMOVED***
+***REMOVED******REMOVED*** )
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -286,47 +275,45 @@ extension SearchViewModel {
 ***REMOVED******REMOVED******REMOVED******REMOVED***  let source = currentSource() else {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  return
 ***REMOVED******REMOVED***  ***REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***let suggestResult = await Result {
-***REMOVED******REMOVED******REMOVED******REMOVED***try await source.suggest(
+***REMOVED******REMOVED******REMOVED***do {
+***REMOVED******REMOVED******REMOVED******REMOVED***let suggestions = try await source.suggest(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentQuery,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***searchArea: queryArea,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***preferredSearchLocation: queryCenter
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***switch suggestResult {
-***REMOVED******REMOVED******REMOVED***case .success(let suggestResults):
-***REMOVED******REMOVED******REMOVED******REMOVED***suggestions = .success(suggestResults)
-***REMOVED******REMOVED******REMOVED***case .failure(let error):
-***REMOVED******REMOVED******REMOVED******REMOVED***suggestions = .failure(SearchError(error))
-***REMOVED******REMOVED******REMOVED******REMOVED***break
-***REMOVED******REMOVED******REMOVED***case nil:
-***REMOVED******REMOVED******REMOVED******REMOVED***suggestions = nil
-***REMOVED******REMOVED******REMOVED******REMOVED***break
+***REMOVED******REMOVED******REMOVED******REMOVED***searchOutcome = .suggestions(result: .success(suggestions))
+***REMOVED******REMOVED*** catch is CancellationError {
+***REMOVED******REMOVED******REMOVED******REMOVED***searchOutcome = nil
+***REMOVED******REMOVED*** catch {
+***REMOVED******REMOVED******REMOVED******REMOVED***searchOutcome = .suggestions(result: .failure(SearchError(error)))
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***private func acceptSuggestionTask(_ searchSuggestion: SearchSuggestion) -> Task<(), Never> {
 ***REMOVED******REMOVED***Task {
-***REMOVED******REMOVED******REMOVED***do {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** User is performing a search, so set `lastSearchExtent`.
-***REMOVED******REMOVED******REMOVED******REMOVED***lastSearchExtent = geoViewExtent
-***REMOVED******REMOVED******REMOVED******REMOVED***try await process(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***searchResults: searchSuggestion.owningSource.search(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***searchSuggestion,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***searchArea: queryArea,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***preferredSearchLocation: queryCenter
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***await search(with: {
+***REMOVED******REMOVED******REMOVED******REMOVED***try await searchSuggestion.owningSource.search(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***searchSuggestion,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***searchArea: queryArea,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***preferredSearchLocation: queryCenter
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED*** catch is CancellationError {
-***REMOVED******REMOVED******REMOVED******REMOVED***results = nil
-***REMOVED******REMOVED*** catch {
-***REMOVED******REMOVED******REMOVED******REMOVED***results = .failure(SearchError(error))
-***REMOVED******REMOVED***
+***REMOVED******REMOVED*** )
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** once we are done searching for the suggestion, then reset it to nil
 ***REMOVED******REMOVED******REMOVED***currentSuggestion = nil
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***private func search(with action: () async throws -> [SearchResult]) async {
+***REMOVED******REMOVED***do {
+***REMOVED******REMOVED******REMOVED******REMOVED*** User is performing a search, so set `lastSearchExtent`.
+***REMOVED******REMOVED******REMOVED***lastSearchExtent = geoViewExtent
+***REMOVED******REMOVED******REMOVED***try await process(searchResults: action())
+***REMOVED*** catch is CancellationError {
+***REMOVED******REMOVED******REMOVED***searchOutcome = nil
+***REMOVED*** catch {
+***REMOVED******REMOVED******REMOVED***searchOutcome = .results(result: .failure(SearchError(error)))
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -346,7 +333,7 @@ extension SearchViewModel {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***results = .success(effectiveResults)
+***REMOVED******REMOVED***searchOutcome = .results(result: .success(effectiveResults))
 ***REMOVED***
 ***REMOVED***
 
@@ -363,3 +350,5 @@ extension SearchViewModel {
 ***REMOVED******REMOVED***return source
 ***REMOVED***
 ***REMOVED***
+
+extension SearchViewModel.SearchOutcome: Equatable {***REMOVED***

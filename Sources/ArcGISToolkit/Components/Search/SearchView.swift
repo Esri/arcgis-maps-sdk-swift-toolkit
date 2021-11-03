@@ -55,7 +55,7 @@ public struct SearchView: View {
 ***REMOVED******REMOVED***/ Defaults to "Find a place or address". Note: this is set using the
 ***REMOVED******REMOVED***/ `defaultPlaceholder` modifier.
 ***REMOVED***private var defaultPlaceholder: String = "Find a place or address"
-
+***REMOVED***
 ***REMOVED******REMOVED***/ Determines whether a built-in result view will be shown. Defaults to true.
 ***REMOVED******REMOVED***/ If false, the result display/selection list is not shown. Set to false if you want to hide the results
 ***REMOVED******REMOVED***/ or define a custom result list. You might use a custom result list to show results in a separate list,
@@ -66,7 +66,7 @@ public struct SearchView: View {
 ***REMOVED******REMOVED***/ Message to show when there are no results or suggestions.  Defaults to "No results found".
 ***REMOVED******REMOVED***/ Note: this is set using the `noResultMessage` modifier.
 ***REMOVED***private var noResultMessage = "No results found"
-
+***REMOVED***
 ***REMOVED***private var searchBarWidth: CGFloat = 360.0
 ***REMOVED***
 ***REMOVED***@State
@@ -79,7 +79,8 @@ public struct SearchView: View {
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***VStack {
 ***REMOVED******REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED******REMOVED***VStack (alignment: .center) {
+***REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED******REMOVED******REMOVED***VStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***SearchField(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentQuery: $searchViewModel.currentQuery,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***defaultPlaceholder: defaultPlaceholder,
@@ -87,20 +88,23 @@ public struct SearchView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***showResults: $showResultListView,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onCommit: { searchViewModel.commitSearch() ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if enableResultListView, showResultListView {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let results = searchViewModel.results {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***switch searchViewModel.searchOutcome {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .results(let results):
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***SearchResultList(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***searchResults: results,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedResult: $searchViewModel.selectedResult,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***noResultMessage: noResultMessage
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** else if let suggestions = searchViewModel.suggestions {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .suggestions(let suggestions):
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***SearchSuggestionList(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***suggestionResults: suggestions,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentSuggestion: $searchViewModel.currentSuggestion,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***noResultMessage: noResultMessage
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .none:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***EmptyView()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
@@ -116,8 +120,13 @@ public struct SearchView: View {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.listStyle(.plain)
-***REMOVED******REMOVED***.onChange(of: searchViewModel.results, perform: { newValue in
-***REMOVED******REMOVED******REMOVED***display(searchResults: (try? newValue?.get()) ?? [])
+***REMOVED******REMOVED***.onChange(of: searchViewModel.searchOutcome, perform: { newValue in
+***REMOVED******REMOVED******REMOVED***switch newValue {
+***REMOVED******REMOVED******REMOVED***case .results(let results):
+***REMOVED******REMOVED******REMOVED******REMOVED***display(searchResults: (try? results.get()) ?? [])
+***REMOVED******REMOVED******REMOVED***default:
+***REMOVED******REMOVED******REMOVED******REMOVED***display(searchResults: [])
+***REMOVED******REMOVED***
 ***REMOVED***)
 ***REMOVED******REMOVED***.onChange(of: searchViewModel.selectedResult, perform: display(selectedResult:))
 ***REMOVED******REMOVED***.onReceive(searchViewModel.$currentQuery) { _ in
@@ -157,7 +166,7 @@ public struct SearchView: View {
 ***REMOVED******REMOVED***copy.noResultMessage = noResultMessage
 ***REMOVED******REMOVED***return copy
 ***REMOVED***
-
+***REMOVED***
 ***REMOVED******REMOVED***/ The width of the search bar.
 ***REMOVED******REMOVED***/ - Parameter searchBarWidth: The desired width of the search bar.
 ***REMOVED******REMOVED***/ - Returns: A new `SearchView`.
@@ -277,7 +286,7 @@ struct ResultRow: View {
 ***REMOVED***var title: String
 ***REMOVED***var subtitle: String = ""
 ***REMOVED***var image: AnyView
-
+***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED***image
