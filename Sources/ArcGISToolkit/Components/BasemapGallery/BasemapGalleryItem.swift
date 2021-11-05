@@ -18,22 +18,25 @@ import Foundation
 
 ***REMOVED***/  The `BasemapGalleryItem` encompasses an element in a `BasemapGallery`.
 public class BasemapGalleryItem: ObservableObject {
-***REMOVED***static var defaultThumbnail: UIImage {
-***REMOVED******REMOVED***return UIImage(named: "DefaultBasemap")!
-***REMOVED***
-***REMOVED***
+***REMOVED******REMOVED***/ Indicates the status of the basemap's spatial reference in relation to a reference spatial reference.
 ***REMOVED***public enum SpatialReferenceStatus {
+***REMOVED******REMOVED******REMOVED***/ The basemap's spatial reference status is unknown, either because the basemap's
+***REMOVED******REMOVED******REMOVED***/ base layers haven't been loaded yet or the status has yet to be updated.
 ***REMOVED******REMOVED***case unknown
+***REMOVED******REMOVED******REMOVED***/ The basemap's spatial reference matches the reference spatial reference.
 ***REMOVED******REMOVED***case match
+***REMOVED******REMOVED******REMOVED***/ The basemap's spatial reference does not match the reference spatial reference.
 ***REMOVED******REMOVED***case noMatch
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a `BasemapGalleryItem`.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - basemap: The `Basemap` represented by the item.
-***REMOVED******REMOVED***/   - name: The item name.
-***REMOVED******REMOVED***/   - description: The item description.
-***REMOVED******REMOVED***/   - thumbnail: The thumbnail used to represent the item.
+***REMOVED******REMOVED***/   - name: The item name.  If `nil`, `Basemap.name` is used, if available..
+***REMOVED******REMOVED***/   - description: The item description.  If `nil`, `Basemap.Item.description`
+***REMOVED******REMOVED***/   is used, if available.
+***REMOVED******REMOVED***/   - thumbnail: The thumbnail used to represent the item.  If `nil`,
+***REMOVED******REMOVED***/   `Basemap.Item.thumbnail` is used, if available.
 ***REMOVED***public init(
 ***REMOVED******REMOVED***basemap: Basemap,
 ***REMOVED******REMOVED***name: String? = nil,
@@ -51,23 +54,24 @@ public class BasemapGalleryItem: ObservableObject {
 ***REMOVED******REMOVED***loadBasemapTask = Task { await loadBasemap() ***REMOVED***
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ The error generated loading the basemap, if any.
 ***REMOVED***@Published
 ***REMOVED***public var loadBasemapsError: Error? = nil
 ***REMOVED***
 ***REMOVED******REMOVED***/ The basemap this `BasemapGalleryItem` represents.
 ***REMOVED***public private(set) var basemap: Basemap
 ***REMOVED***
-***REMOVED******REMOVED***/ The name of this `Basemap`.
+***REMOVED******REMOVED***/ The name of the `basemap`.
 ***REMOVED***@Published
 ***REMOVED***public private(set) var name: String = ""
 ***REMOVED***private var nameOverride: String? = nil
 ***REMOVED***
-***REMOVED******REMOVED***/ The description which will be used in the gallery.
+***REMOVED******REMOVED***/ The description of the `basemap`.
 ***REMOVED***@Published
 ***REMOVED***public private(set) var description: String? = nil
 ***REMOVED***private var descriptionOverride: String? = nil
 ***REMOVED***
-***REMOVED******REMOVED***/ The thumbnail which will be displayed in the gallery.
+***REMOVED******REMOVED***/ The thumbnail used to represent the `basemap`.
 ***REMOVED***@Published
 ***REMOVED***public private(set) var thumbnail: UIImage? = nil
 ***REMOVED***private var thumbnailOverride: UIImage? = nil
@@ -76,19 +80,21 @@ public class BasemapGalleryItem: ObservableObject {
 ***REMOVED***@Published
 ***REMOVED***public private(set) var isLoading = true
 ***REMOVED***
+***REMOVED******REMOVED***/ The `SpatialReferenceStatus` of the item.  This is set via a call to
+***REMOVED******REMOVED***/ `updateSpatialReferenceStatus(for:)`
 ***REMOVED***@Published
 ***REMOVED***public private(set) var spatialReferenceStatus: SpatialReferenceStatus = .unknown
 ***REMOVED***
 ***REMOVED******REMOVED***/ The `SpatialReference` of `basemap`.  This will be `nil` until the basemap's
-***REMOVED******REMOVED***/ baseLayers have been loaded in `updateSpatialReferenceStatus`.
+***REMOVED******REMOVED***/ baseLayers have been loaded in `updateSpatialReferenceStatus(for:)`.
 ***REMOVED***public private(set) var spatialReference: SpatialReference? = nil
-
-***REMOVED******REMOVED***/ The currently executing async task for loading basemap.
+***REMOVED***
+***REMOVED******REMOVED***/ The currently executing `Task` for loading the basemap.
 ***REMOVED***private var loadBasemapTask: Task<Void, Never>? = nil
 ***REMOVED***
 
-extension BasemapGalleryItem {
-***REMOVED***private func loadBasemap() async {
+private extension BasemapGalleryItem {
+***REMOVED***func loadBasemap() async {
 ***REMOVED******REMOVED***var loadError: Error? = nil
 ***REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED***try await basemap.load()
@@ -102,17 +108,23 @@ extension BasemapGalleryItem {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@MainActor
+***REMOVED******REMOVED***/ Updates the item in response to basemap loading completion.
+***REMOVED******REMOVED***/ - Parameter error: The basemap load error, if any.
 ***REMOVED***func update(error: Error?) {
 ***REMOVED******REMOVED***name = nameOverride ?? basemap.name
 ***REMOVED******REMOVED***description = descriptionOverride ?? basemap.item?.description
 ***REMOVED******REMOVED***thumbnail = thumbnailOverride ??
-***REMOVED******REMOVED***(basemap.item?.thumbnail?.image ?? BasemapGalleryItem.defaultThumbnail)
+***REMOVED******REMOVED***(basemap.item?.thumbnail?.image ?? UIImage.defaultThumbnail())
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***loadBasemapsError = error
 ***REMOVED******REMOVED***isLoading = false
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@MainActor
+***REMOVED******REMOVED***/ Updates the item's `spatialReference` and `spatialReferenceStatus` properties.
+***REMOVED******REMOVED***/ - Parameter referenceSpatialReference: The `SpatialReference` used to
+***REMOVED******REMOVED***/ compare to the `basemap`'s `SpatialReference`, represented by the first base layer's`
+***REMOVED******REMOVED***/ `SpatialReference`.
 ***REMOVED***func update(with referenceSpatialReference: SpatialReference) {
 ***REMOVED******REMOVED***spatialReference = basemap.baseLayers.first?.spatialReference
 ***REMOVED******REMOVED***spatialReferenceStatus = matches(referenceSpatialReference) ? .match : .noMatch
@@ -134,6 +146,10 @@ extension BasemapGalleryItem: Equatable {
 ***REMOVED***
 
 extension BasemapGalleryItem {
+***REMOVED******REMOVED***/ Loads the first base layer of `basemap` and determines if it matches
+***REMOVED******REMOVED***/ `referenceSpatialReference`, setting the `spatialReferenceStatus`
+***REMOVED******REMOVED***/ property appropriately.
+***REMOVED******REMOVED***/ - Parameter referenceSpatialReference: The `SpatialReference to match to`.
 ***REMOVED***public func updateSpatialReferenceStatus(
 ***REMOVED******REMOVED***for referenceSpatialReference: SpatialReference?
 ***REMOVED***) async throws {
@@ -143,18 +159,7 @@ extension BasemapGalleryItem {
 ***REMOVED******REMOVED***else { return ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***isLoading = true
-***REMOVED******REMOVED***await withThrowingTaskGroup(
-***REMOVED******REMOVED******REMOVED***of: Void.self,
-***REMOVED******REMOVED******REMOVED***returning: Void.self,
-***REMOVED******REMOVED******REMOVED***body: { taskGroup in
-***REMOVED******REMOVED******REMOVED******REMOVED***basemap.baseLayers.forEach { baseLayer in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***taskGroup.addTask {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try await baseLayer.load()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***)
+***REMOVED******REMOVED***try await basemap.baseLayers.first?.load()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***await update(with: spatialReference)
 ***REMOVED***
@@ -172,5 +177,12 @@ extension BasemapGalleryItem {
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***return true
+***REMOVED***
+***REMOVED***
+
+private extension UIImage {
+***REMOVED******REMOVED***/ A search result marker symbol.
+***REMOVED***static func defaultThumbnail() -> UIImage {
+***REMOVED******REMOVED***return UIImage(named: "DefaultBasemap")!
 ***REMOVED***
 ***REMOVED***

@@ -80,7 +80,7 @@ struct BasemapGalleryExampleView: View {
 ***REMOVED***var viewModel = BasemapGalleryViewModel()
 ***REMOVED***
 ***REMOVED***@State
-***REMOVED***var showBasemapGallery: Bool = true  ***REMOVED*** NOTE: Set to false when BasemapGallery is back in the navigation stack.
+***REMOVED***var showBasemapGallery: Bool = true
 ***REMOVED***
 ***REMOVED***let initialViewpoint: Viewpoint? = Viewpoint(
 ***REMOVED******REMOVED***center: Point(x: -93.258133, y: 44.986656, spatialReference: .wgs84),
