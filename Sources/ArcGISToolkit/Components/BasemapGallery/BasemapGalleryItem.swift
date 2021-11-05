@@ -18,22 +18,25 @@ import Foundation
 
 ///  The `BasemapGalleryItem` encompasses an element in a `BasemapGallery`.
 public class BasemapGalleryItem: ObservableObject {
-    static var defaultThumbnail: UIImage {
-        return UIImage(named: "DefaultBasemap")!
-    }
-    
+    /// Indicates the status of the basemap's spatial reference in relation to a reference spatial reference.
     public enum SpatialReferenceStatus {
+        /// The basemap's spatial reference status is unknown, either because the basemap's
+        /// base layers haven't been loaded yet or the status has yet to be updated.
         case unknown
+        /// The basemap's spatial reference matches the reference spatial reference.
         case match
+        /// The basemap's spatial reference does not match the reference spatial reference.
         case noMatch
     }
     
     /// Creates a `BasemapGalleryItem`.
     /// - Parameters:
     ///   - basemap: The `Basemap` represented by the item.
-    ///   - name: The item name.
-    ///   - description: The item description.
-    ///   - thumbnail: The thumbnail used to represent the item.
+    ///   - name: The item name.  If `nil`, `Basemap.name` is used, if available..
+    ///   - description: The item description.  If `nil`, `Basemap.Item.description`
+    ///   is used, if available.
+    ///   - thumbnail: The thumbnail used to represent the item.  If `nil`,
+    ///   `Basemap.Item.thumbnail` is used, if available.
     public init(
         basemap: Basemap,
         name: String? = nil,
@@ -51,23 +54,24 @@ public class BasemapGalleryItem: ObservableObject {
         loadBasemapTask = Task { await loadBasemap() }
     }
     
+    /// The error generated loading the basemap, if any.
     @Published
     public var loadBasemapsError: Error? = nil
     
     /// The basemap this `BasemapGalleryItem` represents.
     public private(set) var basemap: Basemap
     
-    /// The name of this `Basemap`.
+    /// The name of the `basemap`.
     @Published
     public private(set) var name: String = ""
     private var nameOverride: String? = nil
     
-    /// The description which will be used in the gallery.
+    /// The description of the `basemap`.
     @Published
     public private(set) var description: String? = nil
     private var descriptionOverride: String? = nil
     
-    /// The thumbnail which will be displayed in the gallery.
+    /// The thumbnail used to represent the `basemap`.
     @Published
     public private(set) var thumbnail: UIImage? = nil
     private var thumbnailOverride: UIImage? = nil
@@ -76,19 +80,21 @@ public class BasemapGalleryItem: ObservableObject {
     @Published
     public private(set) var isLoading = true
     
+    /// The `SpatialReferenceStatus` of the item.  This is set via a call to
+    /// `updateSpatialReferenceStatus(for:)`
     @Published
     public private(set) var spatialReferenceStatus: SpatialReferenceStatus = .unknown
     
     /// The `SpatialReference` of `basemap`.  This will be `nil` until the basemap's
-    /// baseLayers have been loaded in `updateSpatialReferenceStatus`.
+    /// baseLayers have been loaded in `updateSpatialReferenceStatus(for:)`.
     public private(set) var spatialReference: SpatialReference? = nil
-
-    /// The currently executing async task for loading basemap.
+    
+    /// The currently executing `Task` for loading the basemap.
     private var loadBasemapTask: Task<Void, Never>? = nil
 }
 
-extension BasemapGalleryItem {
-    private func loadBasemap() async {
+private extension BasemapGalleryItem {
+    func loadBasemap() async {
         var loadError: Error? = nil
         do {
             try await basemap.load()
@@ -102,17 +108,23 @@ extension BasemapGalleryItem {
     }
     
     @MainActor
+    /// Updates the item in response to basemap loading completion.
+    /// - Parameter error: The basemap load error, if any.
     func update(error: Error?) {
         name = nameOverride ?? basemap.name
         description = descriptionOverride ?? basemap.item?.description
         thumbnail = thumbnailOverride ??
-        (basemap.item?.thumbnail?.image ?? BasemapGalleryItem.defaultThumbnail)
+        (basemap.item?.thumbnail?.image ?? UIImage.defaultThumbnail())
         
         loadBasemapsError = error
         isLoading = false
     }
     
     @MainActor
+    /// Updates the item's `spatialReference` and `spatialReferenceStatus` properties.
+    /// - Parameter referenceSpatialReference: The `SpatialReference` used to
+    /// compare to the `basemap`'s `SpatialReference`, represented by the first base layer's`
+    /// `SpatialReference`.
     func update(with referenceSpatialReference: SpatialReference) {
         spatialReference = basemap.baseLayers.first?.spatialReference
         spatialReferenceStatus = matches(referenceSpatialReference) ? .match : .noMatch
@@ -134,6 +146,10 @@ extension BasemapGalleryItem: Equatable {
 }
 
 extension BasemapGalleryItem {
+    /// Loads the first base layer of `basemap` and determines if it matches
+    /// `referenceSpatialReference`, setting the `spatialReferenceStatus`
+    /// property appropriately.
+    /// - Parameter referenceSpatialReference: The `SpatialReference to match to`.
     public func updateSpatialReferenceStatus(
         for referenceSpatialReference: SpatialReference?
     ) async throws {
@@ -143,18 +159,7 @@ extension BasemapGalleryItem {
         else { return }
         
         isLoading = true
-        await withThrowingTaskGroup(
-            of: Void.self,
-            returning: Void.self,
-            body: { taskGroup in
-                basemap.baseLayers.forEach { baseLayer in
-                    taskGroup.addTask {
-                        try await baseLayer.load()
-                        return
-                    }
-                }
-            }
-        )
+        try await basemap.baseLayers.first?.load()
         
         await update(with: spatialReference)
     }
@@ -172,5 +177,12 @@ extension BasemapGalleryItem {
         }
         
         return true
+    }
+}
+
+private extension UIImage {
+    /// A search result marker symbol.
+    static func defaultThumbnail() -> UIImage {
+        return UIImage(named: "DefaultBasemap")!
     }
 }
