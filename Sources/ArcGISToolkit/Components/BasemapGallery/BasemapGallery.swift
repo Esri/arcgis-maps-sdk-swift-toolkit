@@ -149,7 +149,10 @@ extension BasemapGallery {
                                         viewModel.currentBasemapGalleryItem = basemapGalleryItem
                                     }
                                     else {
-                                        alertItem = AlertItem(geoModelSR: viewModel.geoModel?.spatialReference)
+                                        alertItem = AlertItem(
+                                            basemapSR: basemapGalleryItem.spatialReference,
+                                            geoModelSR: viewModel.geoModel?.spatialReference
+                                        )
                                         print("Task bm don't match")
                                     }
                                 }
@@ -169,7 +172,7 @@ private struct BasemapGalleryItemRow: View {
     var body: some View {
         ZStack {
             VStack {
-                if !basemapGalleryItem.isLoaded {
+                if basemapGalleryItem.isLoading {
                     Spacer()
                     ProgressView()
                        .progressViewStyle(CircularProgressViewStyle())
@@ -203,7 +206,7 @@ private struct BasemapGalleryItemRow: View {
             }
         }
         .allowsHitTesting(
-            basemapGalleryItem.isLoaded
+            !basemapGalleryItem.isLoading
         )
     }
 }
@@ -220,13 +223,11 @@ extension AlertItem: Identifiable {
 // TODO: add SR for basemap, if possible (SR property on basemap?)  Maybe that can speed up baselayer sr checking...
 // TODO: Cleanup all .tapGesture code, alert code, old error/alert stuff
 // TODO: Figure out common errors, so I don't need to rely on `Error` or `RuntimeError`.
-// TODO: update item's spatialreferenceStatus on main thread. (method marked with @MainActor, the way `update()` is?)
-// TODO: add basemap SR to init below.
 extension AlertItem {
-    init(geoModelSR: SpatialReference?) {
+    init(basemapSR: SpatialReference?, geoModelSR: SpatialReference?) {
         self.init(
             title: "Spatial Reference mismatch.",
-            message: "The spatial reference of the basemap does not match that of the geomodel (\(geoModelSR?.description ?? ""))."
+            message: "The spatial reference of the basemap \(basemapSR?.description ?? "") does not match that of the GeoModel \(geoModelSR?.description ?? "")."
         )
     }
 
