@@ -15,47 +15,24 @@
 
 ***REMOVED***/ A custom view implementing a SearchField.  It contains a search button, text field, delete text button,
 ***REMOVED***/ and a button to allow users to hide/show the search results list.
-struct SearchField: View {
-***REMOVED******REMOVED***/ The default placeholder displayed when `currentQuery` is empty.
-***REMOVED***let defaultPlaceholder: String
-
+public struct SearchField: View {
 ***REMOVED******REMOVED***/ The current search query.
-***REMOVED***var currentQuery: Binding<String>
+***REMOVED***public var currentQuery: Binding<String>
+
+***REMOVED******REMOVED***/ The default placeholder displayed when `currentQuery` is empty.
+***REMOVED***public var defaultPlaceholder: String = ""
 
 ***REMOVED******REMOVED***/ The visibility of the `showResults` button.
-***REMOVED***let isShowResultsHidden: Bool
+***REMOVED***public var isShowResultsHidden: Bool = true
 
 ***REMOVED******REMOVED***/ Binding allowing the user to toggle the visibility of the results list.
-***REMOVED***var showResults: Binding<Bool>?
+***REMOVED***public var showResults: Binding<Bool>? = nil
 ***REMOVED***
 ***REMOVED******REMOVED***/ The handler executed when the user submits a search, either via the `TextField`
 ***REMOVED******REMOVED***/ or the Search button.
-***REMOVED***var onCommit: () -> Void
+***REMOVED***public var onCommit: () -> Void = { ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Creates a new SearchField
-***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - defaultPlaceholder: The default placeholder displayed when `currentQuery`
-***REMOVED******REMOVED***/   is empty.
-***REMOVED******REMOVED***/   - currentQuery: The current search query.
-***REMOVED******REMOVED***/   - isShowResultsHidden: The visibility of the `showResults` button.
-***REMOVED******REMOVED***/   - showResults: Binding allowing the user to toggle the visibility of the results list.
-***REMOVED******REMOVED***/   - onCommit: The handler executed when the user submits a search, either via the
-***REMOVED******REMOVED***/   `TextField`or the Search button.
-***REMOVED***internal init(
-***REMOVED******REMOVED***defaultPlaceholder: String = "",
-***REMOVED******REMOVED***currentQuery: Binding<String>,
-***REMOVED******REMOVED***isShowResultsHidden: Bool = true,
-***REMOVED******REMOVED***showResults: Binding<Bool>? = nil,
-***REMOVED******REMOVED***onCommit: @escaping () -> Void = { ***REMOVED***
-***REMOVED***) {
-***REMOVED******REMOVED***self.defaultPlaceholder = defaultPlaceholder
-***REMOVED******REMOVED***self.currentQuery = currentQuery
-***REMOVED******REMOVED***self.isShowResultsHidden = isShowResultsHidden
-***REMOVED******REMOVED***self.showResults = showResults
-***REMOVED******REMOVED***self.onCommit = onCommit
-***REMOVED***
-***REMOVED***
-***REMOVED***var body: some View {
+***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Search button
 ***REMOVED******REMOVED******REMOVED***Button {

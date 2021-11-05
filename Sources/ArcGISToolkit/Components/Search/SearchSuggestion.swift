@@ -15,41 +15,27 @@ import Foundation
 ***REMOVED***
 
 ***REMOVED***/ Wraps a suggestion for display.
-public struct SearchSuggestion {
-***REMOVED***internal init(
-***REMOVED******REMOVED***displayTitle: String,
-***REMOVED******REMOVED***displaySubtitle: String = "",
-***REMOVED******REMOVED***owningSource: SearchSource,
-***REMOVED******REMOVED***suggestResult: SuggestResult? = nil,
-***REMOVED******REMOVED***isCollection: Bool
-***REMOVED***) {
-***REMOVED******REMOVED***self.displayTitle = displayTitle
-***REMOVED******REMOVED***self.displaySubtitle = displaySubtitle
-***REMOVED******REMOVED***self.owningSource = owningSource
-***REMOVED******REMOVED***self.suggestResult = suggestResult
-***REMOVED******REMOVED***self.isCollection = isCollection
-***REMOVED***
-***REMOVED***
+public struct SearchSuggestion {***REMOVED***
 ***REMOVED******REMOVED***/ Title that should be used when displaying a suggestion.
 ***REMOVED***public let displayTitle: String
-***REMOVED***
-***REMOVED******REMOVED***/ Optional subtitle that can be displayed when showing a suggestion.
-***REMOVED***public let displaySubtitle: String
 ***REMOVED***
 ***REMOVED******REMOVED***/ Reference to the `SearchSourceProtocol` that created this suggestion. This property is necessary for the
 ***REMOVED******REMOVED***/ view model to be able to accept a suggestion, because a suggestion should only be used with the
 ***REMOVED******REMOVED***/ locator that created it.
 ***REMOVED***public let owningSource: SearchSource
 ***REMOVED***
-***REMOVED******REMOVED***/ Underlying suggest result if this suggestion was created by a LocatorTask. This can be `nil`, and
-***REMOVED******REMOVED***/ is likely to be `nil` when using custom `SearchSourceProtocol` implementations.
-***REMOVED***public let suggestResult: SuggestResult?
-***REMOVED***
 ***REMOVED******REMOVED***/ `true` if the search from this suggestion should be treated like a collection search, `false` if the
 ***REMOVED******REMOVED***/ search would return a single result. This property should be used to display a different icon
 ***REMOVED******REMOVED***/ in the UI depending on if this is a category search (like 'Coffee', 'Pizza', or 'Starbucks') and
 ***REMOVED******REMOVED***/ false if it is a search for a specific result (e.g. '380 New York St. Redlands CA').
 ***REMOVED***public let isCollection: Bool
+***REMOVED***
+***REMOVED******REMOVED***/ Optional subtitle that can be displayed when showing a suggestion.
+***REMOVED***public var displaySubtitle: String = ""
+***REMOVED***
+***REMOVED******REMOVED***/ Underlying suggest result if this suggestion was created by a LocatorTask. This can be `nil`, and
+***REMOVED******REMOVED***/ is likely to be `nil` when using custom `SearchSourceProtocol` implementations.
+***REMOVED***public var suggestResult: SuggestResult? = nil
 ***REMOVED***
 ***REMOVED******REMOVED***/ The stable identity of the entity associated with this instance.
 ***REMOVED***public let id = UUID()
@@ -69,5 +55,14 @@ extension SearchSuggestion: Hashable {
 ***REMOVED******REMOVED***/ operations even though they represent the same suggestion.
 ***REMOVED***public func hash(into hasher: inout Hasher) {
 ***REMOVED******REMOVED***hasher.combine(id)
+***REMOVED***
+***REMOVED***
+
+extension SearchSuggestion {
+***REMOVED***init(suggestResult: SuggestResult, searchSource: SearchSource) {
+***REMOVED******REMOVED***displayTitle = suggestResult.label
+***REMOVED******REMOVED***owningSource = searchSource
+***REMOVED******REMOVED***isCollection = suggestResult.isCollection
+***REMOVED******REMOVED***self.suggestResult = suggestResult
 ***REMOVED***
 ***REMOVED***

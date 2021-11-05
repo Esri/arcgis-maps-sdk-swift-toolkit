@@ -22,6 +22,7 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
 ***REMOVED******REMOVED***/ Creates a smart locator search source.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - name: Name to show when presenting this source in the UI.
+***REMOVED******REMOVED***/   - locatorTask: The `LocatorTask` to use for searching..
 ***REMOVED******REMOVED***/   - maximumResults: The maximum results to return when performing a search. Most sources default to 6.
 ***REMOVED******REMOVED***/   - maximumSuggestions: The maximum suggestions to return. Most sources default to 6.
 ***REMOVED******REMOVED***/   - repeatSearchResultThreshold: The minimum number of search results to attempt to return.
@@ -89,17 +90,12 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Union results and return.
 ***REMOVED******REMOVED***let searchResults = geocodeResults.map {
-***REMOVED******REMOVED******REMOVED***$0.toSearchResult(searchSource: self)
+***REMOVED******REMOVED******REMOVED***SearchResult(geocodeResult: $0, searchSource: self)
 ***REMOVED***
 ***REMOVED******REMOVED***results.append(contentsOf: searchResults)
-***REMOVED******REMOVED***var allResults: [SearchResult] = Array(Set(results))
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Limit results to `maximumResults`.
-***REMOVED******REMOVED***if allResults.count > maximumResults {
-***REMOVED******REMOVED******REMOVED***let dropCount = allResults.count - Int(maximumResults)
-***REMOVED******REMOVED******REMOVED***allResults = allResults.dropLast(dropCount)
-***REMOVED***
-***REMOVED******REMOVED***return allResults
+***REMOVED******REMOVED***return Array(results.prefix(Int(maximumResults)))
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***public override func search(
@@ -132,17 +128,12 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Union results and return.
 ***REMOVED******REMOVED***let searchResults = geocodeResults.map {
-***REMOVED******REMOVED******REMOVED***$0.toSearchResult(searchSource: self)
+***REMOVED******REMOVED******REMOVED***SearchResult(geocodeResult: $0, searchSource: self)
 ***REMOVED***
 ***REMOVED******REMOVED***results.append(contentsOf: searchResults)
-***REMOVED******REMOVED***var allResults: [SearchResult] = Array(Set(results))
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Limit results to `maximumResults`.
-***REMOVED******REMOVED***if allResults.count > maximumResults {
-***REMOVED******REMOVED******REMOVED***let dropCount = allResults.count - Int(maximumResults)
-***REMOVED******REMOVED******REMOVED***allResults = allResults.dropLast(dropCount)
-***REMOVED***
-***REMOVED******REMOVED***return allResults
+***REMOVED******REMOVED***return Array(results.prefix(Int(maximumResults)))
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***public override func suggest(
@@ -172,16 +163,11 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Union results and return.
 ***REMOVED******REMOVED***let suggestResults = geocodeResults.map {
-***REMOVED******REMOVED******REMOVED***$0.toSearchSuggestion(searchSource: self)
+***REMOVED******REMOVED******REMOVED***SearchSuggestion(suggestResult: $0, searchSource: self)
 ***REMOVED***
 ***REMOVED******REMOVED***results.append(contentsOf: suggestResults)
-***REMOVED******REMOVED***var allResults: [SearchSuggestion] = Array(Set(results))
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Limit results to `maximumResults`.
-***REMOVED******REMOVED***if allResults.count > maximumSuggestions {
-***REMOVED******REMOVED******REMOVED***let dropCount = allResults.count - Int(maximumSuggestions)
-***REMOVED******REMOVED******REMOVED***allResults = allResults.dropLast(dropCount)
-***REMOVED***
-***REMOVED******REMOVED***return allResults
+***REMOVED******REMOVED******REMOVED*** Limit results to `maximumSuggestions`.
+***REMOVED******REMOVED***return Array(results.prefix(Int(maximumSuggestions)))
 ***REMOVED***
 ***REMOVED***

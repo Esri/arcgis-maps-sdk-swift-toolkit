@@ -11,14 +11,11 @@
 ***REMOVED*** See the License for the specific language governing permissions and
 ***REMOVED*** limitations under the License.
 
-import Foundation
-
 import XCTest
 ***REMOVED***
 ***REMOVED***Toolkit
-***REMOVED***
 
-class SmartLocatorSearchSourceTests: XCTestCase {
+final class SmartLocatorSearchSourceTests: XCTestCase {
 ***REMOVED***func testRepeatSearchResultThreshold() async throws {
 ***REMOVED******REMOVED***let locator = SmartLocatorSearchSource()
 ***REMOVED******REMOVED***
@@ -30,7 +27,7 @@ class SmartLocatorSearchSourceTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***preferredSearchLocation: nil
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***var results = try XCTUnwrap(searchResults)
-***REMOVED******REMOVED***XCTAssertEqual(results.count, 0)
+***REMOVED******REMOVED***XCTAssertEqual(results, [])
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Threshold of 1+ means requery with fewer restrictions
 ***REMOVED******REMOVED***locator.repeatSearchResultThreshold = 1
@@ -40,7 +37,7 @@ class SmartLocatorSearchSourceTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***preferredSearchLocation: nil
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***results = try XCTUnwrap(searchResults)
-***REMOVED******REMOVED***XCTAssertGreaterThanOrEqual(results.count, 1)
+***REMOVED******REMOVED***XCTAssertNotEqual(results, [])
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func testRepeatSuggestResultThreshold() async throws {
@@ -54,7 +51,7 @@ class SmartLocatorSearchSourceTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***preferredSearchLocation: nil
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***var results = try XCTUnwrap(suggestResults)
-***REMOVED******REMOVED***XCTAssertEqual(results.count, 0)
+***REMOVED******REMOVED***XCTAssertEqual(results, [])
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Threshold of 1 -> requery with fewer restrictions
 ***REMOVED******REMOVED***locator.repeatSuggestResultThreshold = 1
@@ -64,7 +61,7 @@ class SmartLocatorSearchSourceTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***preferredSearchLocation: nil
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***results = try XCTUnwrap(suggestResults)
-***REMOVED******REMOVED***XCTAssertGreaterThanOrEqual(results.count, 1)
+***REMOVED******REMOVED***XCTAssertNotEqual(suggestResults, [])
 ***REMOVED***
 ***REMOVED***
 
