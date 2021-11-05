@@ -80,7 +80,7 @@ struct BasemapGalleryExampleView: View {
     var viewModel = BasemapGalleryViewModel()
     
     @State
-    var showBasemapGallery: Bool = true  // NOTE: Set to false when BasemapGallery is back in the navigation stack.
+    var showBasemapGallery: Bool = true
     
     let initialViewpoint: Viewpoint? = Viewpoint(
         center: Point(x: -93.258133, y: 44.986656, spatialReference: .wgs84),

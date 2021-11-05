@@ -60,7 +60,7 @@ public struct BasemapGallery: View {
     
     @State
     private var alertItem: AlertItem?
-
+    
     public var body: some View {
         GalleryView()
             .alert(item: $alertItem) { alertItem in
@@ -107,7 +107,7 @@ extension BasemapGallery {
             .init(.flexible(), spacing: 8.0, alignment: .top),
             .init(.flexible(), spacing: 8.0, alignment: .top)
         ]
-
+        
         return InternalGalleryView(columns)
     }
     
@@ -115,7 +115,7 @@ extension BasemapGallery {
         let columns: [GridItem] = [
             .init(.flexible(), spacing: 8.0, alignment: .top)
         ]
-
+        
         return InternalGalleryView(columns)
     }
     
@@ -172,32 +172,32 @@ private struct BasemapGalleryItemRow: View {
     var body: some View {
         ZStack {
             VStack {
-                if basemapGalleryItem.isLoading {
-                    Spacer()
-                    ProgressView()
-                       .progressViewStyle(CircularProgressViewStyle())
-                    Spacer()
-
-                } else {
-                    ZStack(alignment: .center) {
-                        if let thumbnailImage = basemapGalleryItem.thumbnail {
-                            Image(uiImage: thumbnailImage)
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
-                                .border(
-                                    isSelected ? Color.accentColor: Color.clear,
-                                    width: 3.0)
-                        }
+                ZStack(alignment: .center) {
+                    if let thumbnailImage = basemapGalleryItem.thumbnail {
+                        Image(uiImage: thumbnailImage)
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .border(
+                                isSelected ? Color.accentColor: Color.clear,
+                                width: 3.0)
+                    }
+                    
+                    if basemapGalleryItem.loadBasemapsError != nil {
+                        Image(systemName: "minus.circle.fill")
+                            .font(.title)
+                            .foregroundColor(.red)
+                    } else if basemapGalleryItem.spatialReferenceStatus == .noMatch {
+                        Image(systemName: "x.circle.fill")
+                            .font(.title)
+                            .foregroundColor(.red)
+                    }
+                    if basemapGalleryItem.isLoading {
+                        Spacer()
+                        ProgressView()
+                            .progressViewStyle(CircularProgressViewStyle())
+                            .esriBorder()
+                        Spacer()
                         
-                        if basemapGalleryItem.loadBasemapsError != nil {
-                            Image(systemName: "minus.circle.fill")
-                                .font(.title)
-                                .foregroundColor(.red)
-                        } else if basemapGalleryItem.spatialReferenceStatus == .noMatch {
-                            Image(systemName: "x.circle.fill")
-                                .font(.title)
-                                .foregroundColor(.red)
-                        }
                     }
                 }
                 Text(basemapGalleryItem.name)
@@ -230,7 +230,7 @@ extension AlertItem {
             message: "The spatial reference of the basemap \(basemapSR?.description ?? "") does not match that of the GeoModel \(geoModelSR?.description ?? "")."
         )
     }
-
+    
     init(error: Error) {
         self.init(
             title: "Error loading basemap.",
