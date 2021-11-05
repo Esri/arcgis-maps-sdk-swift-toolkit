@@ -149,7 +149,10 @@ extension BasemapGallery {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.currentBasemapGalleryItem = basemapGalleryItem
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***alertItem = AlertItem(geoModelSR: viewModel.geoModel?.spatialReference)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***alertItem = AlertItem(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***basemapSR: basemapGalleryItem.spatialReference,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***geoModelSR: viewModel.geoModel?.spatialReference
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print("Task bm don't match")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
@@ -169,7 +172,7 @@ private struct BasemapGalleryItemRow: View {
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***ZStack {
 ***REMOVED******REMOVED******REMOVED***VStack {
-***REMOVED******REMOVED******REMOVED******REMOVED***if !basemapGalleryItem.isLoaded {
+***REMOVED******REMOVED******REMOVED******REMOVED***if basemapGalleryItem.isLoading {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ProgressView()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***   .progressViewStyle(CircularProgressViewStyle())
@@ -203,7 +206,7 @@ private struct BasemapGalleryItemRow: View {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.allowsHitTesting(
-***REMOVED******REMOVED******REMOVED***basemapGalleryItem.isLoaded
+***REMOVED******REMOVED******REMOVED***!basemapGalleryItem.isLoading
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
@@ -220,13 +223,11 @@ extension AlertItem: Identifiable {
 ***REMOVED*** TODO: add SR for basemap, if possible (SR property on basemap?)  Maybe that can speed up baselayer sr checking...
 ***REMOVED*** TODO: Cleanup all .tapGesture code, alert code, old error/alert stuff
 ***REMOVED*** TODO: Figure out common errors, so I don't need to rely on `Error` or `RuntimeError`.
-***REMOVED*** TODO: update item's spatialreferenceStatus on main thread. (method marked with @MainActor, the way `update()` is?)
-***REMOVED*** TODO: add basemap SR to init below.
 extension AlertItem {
-***REMOVED***init(geoModelSR: SpatialReference?) {
+***REMOVED***init(basemapSR: SpatialReference?, geoModelSR: SpatialReference?) {
 ***REMOVED******REMOVED***self.init(
 ***REMOVED******REMOVED******REMOVED***title: "Spatial Reference mismatch.",
-***REMOVED******REMOVED******REMOVED***message: "The spatial reference of the basemap does not match that of the geomodel (\(geoModelSR?.description ?? ""))."
+***REMOVED******REMOVED******REMOVED***message: "The spatial reference of the basemap \(basemapSR?.description ?? "") does not match that of the GeoModel \(geoModelSR?.description ?? "")."
 ***REMOVED******REMOVED***)
 ***REMOVED***
 
