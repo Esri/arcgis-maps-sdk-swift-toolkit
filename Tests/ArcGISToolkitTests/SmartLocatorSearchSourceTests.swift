@@ -11,14 +11,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import Foundation
-
 import XCTest
 import ArcGIS
 import ArcGISToolkit
-import SwiftUI
 
-class SmartLocatorSearchSourceTests: XCTestCase {
+final class SmartLocatorSearchSourceTests: XCTestCase {
     func testRepeatSearchResultThreshold() async throws {
         let locator = SmartLocatorSearchSource()
         
@@ -30,7 +27,7 @@ class SmartLocatorSearchSourceTests: XCTestCase {
             preferredSearchLocation: nil
         )
         var results = try XCTUnwrap(searchResults)
-        XCTAssertEqual(results.count, 0)
+        XCTAssertEqual(results, [])
         
         // Threshold of 1+ means requery with fewer restrictions
         locator.repeatSearchResultThreshold = 1
@@ -40,7 +37,7 @@ class SmartLocatorSearchSourceTests: XCTestCase {
             preferredSearchLocation: nil
         )
         results = try XCTUnwrap(searchResults)
-        XCTAssertGreaterThanOrEqual(results.count, 1)
+        XCTAssertNotEqual(results, [])
     }
     
     func testRepeatSuggestResultThreshold() async throws {
@@ -54,7 +51,7 @@ class SmartLocatorSearchSourceTests: XCTestCase {
             preferredSearchLocation: nil
         )
         var results = try XCTUnwrap(suggestResults)
-        XCTAssertEqual(results.count, 0)
+        XCTAssertEqual(results, [])
         
         // Threshold of 1 -> requery with fewer restrictions
         locator.repeatSuggestResultThreshold = 1
@@ -64,7 +61,7 @@ class SmartLocatorSearchSourceTests: XCTestCase {
             preferredSearchLocation: nil
         )
         results = try XCTUnwrap(suggestResults)
-        XCTAssertGreaterThanOrEqual(results.count, 1)
+        XCTAssertNotEqual(suggestResults, [])
     }
 }
 

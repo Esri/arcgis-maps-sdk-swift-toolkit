@@ -19,7 +19,13 @@ import ArcGISToolkit
 struct SearchExampleView: View {
     /// The `SearchViewModel` used to define behavior of the `SearchView`.
     @ObservedObject
-    var searchViewModel = SearchViewModel()
+    var searchViewModel = SearchViewModel(
+        sources: [SmartLocatorSearchSource(
+            name: "My locator",
+            maximumResults: 16,
+            maximumSuggestions: 16
+        )]
+    )
     
     let map = Map(basemapStyle: .arcGISImagery)
     
@@ -32,8 +38,7 @@ struct SearchExampleView: View {
     )
     
     /// The `GraphicsOverlay` used by the `SearchView` to display search results on the map.
-    @State
-    var searchResultsOverlay = GraphicsOverlay()
+    let searchResultsOverlay = GraphicsOverlay()
     
     @State
     private var isNavigating: Bool = false
@@ -75,19 +80,5 @@ struct SearchExampleView: View {
                     .searchBarWidth(360.0)
                     .padding()
             }
-            .onAppear() {
-                setupSearchViewModel()
-            }
-    }
-    
-    /// Sets up any desired customization on `searchViewModel`.
-    private func setupSearchViewModel() {
-        let smartLocator = SmartLocatorSearchSource(
-            name: "My locator",
-            maximumResults: 16,
-            maximumSuggestions: 16
-        )
-        
-        searchViewModel.sources = [smartLocator]
     }
 }
