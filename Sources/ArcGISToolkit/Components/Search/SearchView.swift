@@ -51,6 +51,11 @@ public struct SearchView: View {
     /// The `GraphicsOverlay` used to display results.  If `nil`, no results will be displayed.
     private var resultsOverlay: GraphicsOverlay? = nil
     
+    /// The string shown in the search view when no user query is entered.
+    /// Defaults to "Find a place or address". Note: this is set using the
+    /// `defaultPlaceholder` modifier.
+    private var defaultPlaceholder: String = "Find a place or address"
+    
     /// Determines whether a built-in result view will be shown. Defaults to true.
     /// If false, the result display/selection list is not shown. Set to false if you want to hide the results
     /// or define a custom result list. You might use a custom result list to show results in a separate list,
@@ -74,28 +79,32 @@ public struct SearchView: View {
     public var body: some View {
         VStack {
             HStack {
-                VStack (alignment: .center) {
+                Spacer()
+                VStack {
                     SearchField(
-                        defaultPlaceholder: searchViewModel.defaultPlaceholder,
                         currentQuery: $searchViewModel.currentQuery,
+                        defaultPlaceholder: defaultPlaceholder,
                         isShowResultsHidden: !enableResultListView,
                         showResults: $showResultListView,
                         onCommit: { searchViewModel.commitSearch() }
                     )
-
+                    
                     if enableResultListView, showResultListView {
-                        if let results = searchViewModel.results {
+                        switch searchViewModel.searchOutcome {
+                        case .results(let results):
                             SearchResultList(
                                 searchResults: results,
                                 selectedResult: $searchViewModel.selectedResult,
                                 noResultMessage: noResultMessage
                             )
-                        } else if let suggestions = searchViewModel.suggestions {
+                        case .suggestions(let suggestions):
                             SearchSuggestionList(
                                 suggestionResults: suggestions,
                                 currentSuggestion: $searchViewModel.currentSuggestion,
                                 noResultMessage: noResultMessage
                             )
+                        case .none:
+                            EmptyView()
                         }
                     }
                 }
@@ -111,7 +120,14 @@ public struct SearchView: View {
             }
         }
         .listStyle(.plain)
-        .onChange(of: searchViewModel.results, perform: display(searchResults:))
+        .onChange(of: searchViewModel.searchOutcome, perform: { newValue in
+            switch newValue {
+            case .results(let results):
+                display(searchResults: (try? results.get()) ?? [])
+            default:
+                display(searchResults: [])
+            }
+        })
         .onChange(of: searchViewModel.selectedResult, perform: display(selectedResult:))
         .onReceive(searchViewModel.$currentQuery) { _ in
             searchViewModel.updateSuggestions()
@@ -129,6 +145,16 @@ public struct SearchView: View {
     public func enableResultListView(_ enableResultListView: Bool) -> Self {
         var copy = self
         copy.enableResultListView = enableResultListView
+        return copy
+    }
+    
+    /// The string shown in the search view when no user query is entered.
+    /// Defaults to "Find a place or address".
+    /// - Parameter defaultPlaceholder: The new value.
+    /// - Returns: A new `SearchView`.
+    public func defaultPlaceholder(_ defaultPlaceholder: String) -> Self {
+        var copy = self
+        copy.defaultPlaceholder = defaultPlaceholder
         return copy
     }
     
@@ -151,41 +177,35 @@ public struct SearchView: View {
     }
 }
 
-extension SearchView {
-    private func display(searchResults: Result<[SearchResult], SearchError>?) {
+private extension SearchView {
+    func display(searchResults: [SearchResult]) {
         guard let resultsOverlay = resultsOverlay else { return }
-        switch searchResults {
-        case .success(let results):
-            let resultGraphics: [Graphic] = results.compactMap { result in
-                guard let graphic = result.geoElement as? Graphic else { return nil }
-                graphic.update(with: result)
-                return graphic
-            }
-            resultsOverlay.removeAllGraphics()
-            resultsOverlay.addGraphics(resultGraphics)
-            
-            if !resultGraphics.isEmpty,
-               let envelope = resultsOverlay.extent,
-               shouldZoomToResults {
-                let builder = EnvelopeBuilder(envelope: envelope)
-                builder.expand(factor: 1.1)
-                let targetExtent = builder.toGeometry() as! Envelope
-                viewpoint?.wrappedValue = Viewpoint(
-                    targetExtent: targetExtent
-                )
-                searchViewModel.lastSearchExtent = targetExtent
-            } else {
-                viewpoint?.wrappedValue = nil
-            }
-        default:
-            resultsOverlay.removeAllGraphics()
+        let resultGraphics: [Graphic] = searchResults.compactMap { result in
+            guard let graphic = result.geoElement as? Graphic else { return nil }
+            graphic.update(with: result)
+            return graphic
+        }
+        resultsOverlay.removeAllGraphics()
+        resultsOverlay.addGraphics(resultGraphics)
+        
+        if !resultGraphics.isEmpty,
+           let envelope = resultsOverlay.extent,
+           shouldZoomToResults {
+            let builder = EnvelopeBuilder(envelope: envelope)
+            builder.expand(factor: 1.1)
+            let targetExtent = builder.toGeometry() as! Envelope
+            viewpoint?.wrappedValue = Viewpoint(
+                targetExtent: targetExtent
+            )
+            searchViewModel.lastSearchExtent = targetExtent
+        } else {
             viewpoint?.wrappedValue = nil
         }
         
         if !shouldZoomToResults { shouldZoomToResults = true }
     }
     
-    private func display(selectedResult: SearchResult?) {
+    func display(selectedResult: SearchResult?) {
         guard let selectedResult = selectedResult else { return }
         viewpoint?.wrappedValue = selectedResult.selectionViewpoint
     }
@@ -217,8 +237,7 @@ struct SearchResultList: View {
                             }
                         }
                     }
-                }
-                else if results.isEmpty {
+                } else if results.isEmpty {
                     List {
                         Text(noResultMessage)
                     }
@@ -267,11 +286,11 @@ struct ResultRow: View {
     var title: String
     var subtitle: String = ""
     var image: AnyView
-
+    
     var body: some View {
         HStack {
             image
-            VStack (alignment: .leading){
+            VStack(alignment: .leading) {
                 Text(title)
                     .font(.callout)
                 if !subtitle.isEmpty {

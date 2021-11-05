@@ -113,7 +113,9 @@ public class LocatorSearchSource: ObservableObject, SearchSource {
         )
         
         // Convert to SearchResults and return.
-        return geocodeResults.map { $0.toSearchResult(searchSource: self) }
+        return geocodeResults.map {
+            SearchResult(geocodeResult: $0, searchSource: self)
+        }
     }
     
     public func suggest(
@@ -129,7 +131,9 @@ public class LocatorSearchSource: ObservableObject, SearchSource {
             parameters: suggestParameters
         )
         // Convert to SearchSuggestions and return.
-        return geocodeResults.map{ $0.toSearchSuggestion(searchSource: self) }
+        return geocodeResults.map {
+            SearchSuggestion(suggestResult: $0, searchSource: self)
+        }
     }
 }
 
@@ -148,6 +152,8 @@ extension LocatorSearchSource {
         )
         
         // Convert to SearchResults and return.
-        return geocodeResults.map { $0.toSearchResult(searchSource: self) }
+        return geocodeResults.map {
+            SearchResult(geocodeResult: $0, searchSource: self)
+        }
     }
 }
