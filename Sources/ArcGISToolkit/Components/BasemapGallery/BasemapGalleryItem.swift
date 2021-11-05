@@ -53,37 +53,38 @@ public class BasemapGalleryItem: ObservableObject {
     
     @Published
     public var loadBasemapsError: Error? = nil
-
+    
     /// The basemap this `BasemapGalleryItem` represents.
     public private(set) var basemap: Basemap
-
+    
     /// The name of this `Basemap`.
     @Published
     public private(set) var name: String = ""
     private var nameOverride: String? = nil
-
+    
     /// The description which will be used in the gallery.
     @Published
     public private(set) var description: String? = nil
     private var descriptionOverride: String? = nil
-
+    
     /// The thumbnail which will be displayed in the gallery.
     @Published
     public private(set) var thumbnail: UIImage? = nil
     private var thumbnailOverride: UIImage? = nil
     
-    /// Denotes whether loading the `basemap` has been attempted.
-    /// If the loading of the item generates an error, `isLoaded` will be true.
+    /// Denotes whether the `basemap` or it's base layers are being loaded.
     @Published
-    public private(set) var isLoaded = false
+    public private(set) var isLoading = true
     
     @Published
     public private(set) var spatialReferenceStatus: SpatialReferenceStatus = .unknown
     
+    /// The `SpatialReference` of `basemap`.  This will be `nil` until the basemap's
+    /// baseLayers have been loaded in `updateSpatialReferenceStatus`.
+    public private(set) var spatialReference: SpatialReference? = nil
+
     /// The currently executing async task for loading basemap.
     private var loadBasemapTask: Task<Void, Never>? = nil
-    
-    private var lastSpatialReference: SpatialReference? = nil
 }
 
 extension BasemapGalleryItem {
@@ -106,10 +107,16 @@ extension BasemapGalleryItem {
         description = descriptionOverride ?? basemap.item?.description
         thumbnail = thumbnailOverride ??
         (basemap.item?.thumbnail?.image ?? BasemapGalleryItem.defaultThumbnail)
-
-        // TODO: include error messaging alert.
+        
         loadBasemapsError = error
-        isLoaded = true
+        isLoading = false
+    }
+    
+    @MainActor
+    func update(with referenceSpatialReference: SpatialReference) {
+        spatialReference = basemap.baseLayers.first?.spatialReference
+        spatialReferenceStatus = matches(referenceSpatialReference) ? .match : .noMatch
+        isLoading = false
     }
 }
 
@@ -132,29 +139,31 @@ extension BasemapGalleryItem {
     ) async throws {
         guard let spatialReference = referenceSpatialReference,
               basemap.loadStatus == .loaded,
-              spatialReference != lastSpatialReference
+              self.spatialReference == nil
         else { return }
-
-        lastSpatialReference = spatialReference
-        await withThrowingTaskGroup(of: Void.self,
-                                    returning: Void.self,
-                                    body: { taskGroup in
-            basemap.baseLayers.forEach { baseLayer in
-                taskGroup.addTask {
-                    try await baseLayer.load()
-                    return
+        
+        isLoading = true
+        await withThrowingTaskGroup(
+            of: Void.self,
+            returning: Void.self,
+            body: { taskGroup in
+                basemap.baseLayers.forEach { baseLayer in
+                    taskGroup.addTask {
+                        try await baseLayer.load()
+                        return
+                    }
                 }
             }
-        })
+        )
         
-        spatialReferenceStatus = matches(spatialReference) ? .match : .noMatch
+        await update(with: spatialReference)
     }
-
-    public func matches(
-        _ spatialReference: SpatialReference?
-    ) -> Bool {
-        guard let spatialReference = spatialReference else { return false }
-
+    
+    /// Determines if the basemap spatial reference matches `spatialReference`.
+    /// - Parameter spatialReference: The `SpatialReference` to match against.
+    /// - Returns: `true` if the basemap spatial reference matches `spatialReference`,
+    /// `false` if they don't match.
+    private func matches(_ spatialReference: SpatialReference) -> Bool {
         for baselayer in basemap.baseLayers {
             if let baseLayerSR = baselayer.spatialReference,
                baseLayerSR != spatialReference {
