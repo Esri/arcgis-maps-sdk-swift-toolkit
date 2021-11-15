@@ -65,7 +65,7 @@ public class LocatorSearchSource: ObservableObject, SearchSource {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The locator used by this search source.
-***REMOVED***public private(set) var locatorTask: LocatorTask
+***REMOVED***public let locatorTask: LocatorTask
 ***REMOVED***
 ***REMOVED******REMOVED***/ Parameters used for geocoding. Some properties on parameters will be updated automatically
 ***REMOVED******REMOVED***/ based on searches.

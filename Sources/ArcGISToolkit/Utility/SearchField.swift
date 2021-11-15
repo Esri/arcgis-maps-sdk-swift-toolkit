@@ -20,7 +20,7 @@ public struct SearchField: View {
 ***REMOVED***public var currentQuery: Binding<String>
 
 ***REMOVED******REMOVED***/ The default placeholder displayed when `currentQuery` is empty.
-***REMOVED***public var defaultPlaceholder: String = ""
+***REMOVED***public var searchFieldPrompt: String = ""
 
 ***REMOVED******REMOVED***/ The visibility of the `showResults` button.
 ***REMOVED***public var isShowResultsHidden: Bool = true
@@ -44,7 +44,7 @@ public struct SearchField: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Search text field
 ***REMOVED******REMOVED******REMOVED***TextField(
-***REMOVED******REMOVED******REMOVED******REMOVED***defaultPlaceholder,
+***REMOVED******REMOVED******REMOVED******REMOVED***searchFieldPrompt,
 ***REMOVED******REMOVED******REMOVED******REMOVED***text: currentQuery
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onSubmit { onCommit() ***REMOVED***
