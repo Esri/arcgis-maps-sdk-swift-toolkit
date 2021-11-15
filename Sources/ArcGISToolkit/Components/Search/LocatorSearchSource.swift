@@ -90,7 +90,7 @@ public class LocatorSearchSource: ObservableObject, SearchSource {
 ***REMOVED******REMOVED***searchArea: Geometry?,
 ***REMOVED******REMOVED***preferredSearchLocation: Point?
 ***REMOVED***) async throws -> [SearchResult] {
-***REMOVED******REMOVED***return try await internalSearch(
+***REMOVED******REMOVED***try await internalSearch(
 ***REMOVED******REMOVED******REMOVED***queryString,
 ***REMOVED******REMOVED******REMOVED***searchArea: searchArea,
 ***REMOVED******REMOVED******REMOVED***preferredSearchLocation: preferredSearchLocation
