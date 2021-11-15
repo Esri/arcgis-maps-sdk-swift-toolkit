@@ -65,7 +65,7 @@ public class LocatorSearchSource: ObservableObject, SearchSource {
     }
     
     /// The locator used by this search source.
-    public private(set) var locatorTask: LocatorTask
+    public let locatorTask: LocatorTask
     
     /// Parameters used for geocoding. Some properties on parameters will be updated automatically
     /// based on searches.
