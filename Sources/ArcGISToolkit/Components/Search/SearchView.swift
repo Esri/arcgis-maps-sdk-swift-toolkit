@@ -27,14 +27,9 @@ public struct SearchView: View {
 ***REMOVED******REMOVED***viewpoint: Binding<Viewpoint?>? = nil,
 ***REMOVED******REMOVED***resultsOverlay: GraphicsOverlay? = nil
 ***REMOVED***) {
-***REMOVED******REMOVED***if let searchViewModel = searchViewModel {
-***REMOVED******REMOVED******REMOVED***self.searchViewModel = searchViewModel
-***REMOVED***
-***REMOVED******REMOVED***else {
-***REMOVED******REMOVED******REMOVED***self.searchViewModel = SearchViewModel(
-***REMOVED******REMOVED******REMOVED******REMOVED***sources: [LocatorSearchSource()]
-***REMOVED******REMOVED******REMOVED***)
-***REMOVED***
+***REMOVED******REMOVED***self.searchViewModel = searchViewModel ?? SearchViewModel(
+***REMOVED******REMOVED******REMOVED***sources: [LocatorSearchSource()]
+***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***self.resultsOverlay = resultsOverlay
 ***REMOVED******REMOVED***self.viewpoint = viewpoint
 ***REMOVED***
@@ -139,7 +134,7 @@ public struct SearchView: View {
 ***REMOVED***
 ***REMOVED******REMOVED*** MARK: Modifiers
 ***REMOVED***
-***REMOVED******REMOVED***/ Determines whether a built-in result view will be shown. If `false`, the result display/selection
+***REMOVED******REMOVED***/ Specifies whether a built-in result view will be shown. If `false`, the result display/selection
 ***REMOVED******REMOVED***/ list is not shown. Set to `false` if you want to define a custom result list. You might use a
 ***REMOVED******REMOVED***/ custom result list to show results in a separate list, disconnected from the rest of the search view.
 ***REMOVED******REMOVED***/ Defaults to `true`.
