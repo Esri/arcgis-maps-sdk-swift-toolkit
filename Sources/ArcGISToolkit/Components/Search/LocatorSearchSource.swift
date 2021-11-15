@@ -79,7 +79,7 @@ public class LocatorSearchSource: ObservableObject, SearchSource {
         _ queryString: String,
         searchExtent: Envelope
     ) async throws -> [SearchResult] {
-        return try await internalSearch(
+        try await internalSearch(
             queryString,
             searchArea: searchExtent
         )
