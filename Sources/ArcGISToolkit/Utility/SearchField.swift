@@ -44,8 +44,9 @@ public struct SearchField: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Search text field
 ***REMOVED******REMOVED******REMOVED***TextField(
-***REMOVED******REMOVED******REMOVED******REMOVED***defaultPlaceholder,
-***REMOVED******REMOVED******REMOVED******REMOVED***text: currentQuery
+***REMOVED******REMOVED******REMOVED******REMOVED***"Search Query",
+***REMOVED******REMOVED******REMOVED******REMOVED***text: currentQuery,
+***REMOVED******REMOVED******REMOVED******REMOVED***prompt: Text(defaultPlaceholder)
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onSubmit { onCommit() ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***
