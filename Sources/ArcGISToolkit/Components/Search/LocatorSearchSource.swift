@@ -19,7 +19,7 @@ import Foundation
 public class LocatorSearchSource: ObservableObject, SearchSource {
 ***REMOVED******REMOVED***/ Creates a locator search source.
 ***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - name: Name to show when presenting this source in the UI.
+***REMOVED******REMOVED***/   - name: The name to show when presenting this source in the UI.
 ***REMOVED******REMOVED***/   - locatorTask: The `LocatorTask` to use for searching.
 ***REMOVED******REMOVED***/   - maximumResults: The maximum results to return when performing a search. Most sources default to 6.
 ***REMOVED******REMOVED***/   - maximumSuggestions: The maximum suggestions to return. Most sources default to 6.
