@@ -44,8 +44,9 @@ public struct SearchField: View {
             
             // Search text field
             TextField(
-                defaultPlaceholder,
-                text: currentQuery
+                "Search Query",
+                text: currentQuery,
+                prompt: Text(defaultPlaceholder)
             )
                 .onSubmit { onCommit() }
             
