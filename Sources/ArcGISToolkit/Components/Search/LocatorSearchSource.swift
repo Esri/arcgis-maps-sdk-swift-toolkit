@@ -19,7 +19,7 @@ import ArcGIS
 public class LocatorSearchSource: ObservableObject, SearchSource {
     /// Creates a locator search source.
     /// - Parameters:
-    ///   - name: Name to show when presenting this source in the UI.
+    ///   - name: The name to show when presenting this source in the UI.
     ///   - locatorTask: The `LocatorTask` to use for searching.
     ///   - maximumResults: The maximum results to return when performing a search. Most sources default to 6.
     ///   - maximumSuggestions: The maximum suggestions to return. Most sources default to 6.
@@ -41,7 +41,7 @@ public class LocatorSearchSource: ObservableObject, SearchSource {
         self.geocodeParameters.addResultAttributeName("*")
     }
     
-    /// Name to show when presenting this source in the UI.
+    /// The name to show when presenting this source in the UI.
     public var name: String
     
     /// The maximum results to return when performing a search. Most sources default to 6
@@ -79,7 +79,7 @@ public class LocatorSearchSource: ObservableObject, SearchSource {
         _ queryString: String,
         searchExtent: Envelope
     ) async throws -> [SearchResult] {
-        return try await internalSearch(
+        try await internalSearch(
             queryString,
             searchArea: searchExtent
         )
@@ -90,7 +90,7 @@ public class LocatorSearchSource: ObservableObject, SearchSource {
         searchArea: Geometry?,
         preferredSearchLocation: Point?
     ) async throws -> [SearchResult] {
-        return try await internalSearch(
+        try await internalSearch(
             queryString,
             searchArea: searchArea,
             preferredSearchLocation: preferredSearchLocation
