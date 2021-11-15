@@ -27,14 +27,9 @@ public struct SearchView: View {
         viewpoint: Binding<Viewpoint?>? = nil,
         resultsOverlay: GraphicsOverlay? = nil
     ) {
-        if let searchViewModel = searchViewModel {
-            self.searchViewModel = searchViewModel
-        }
-        else {
-            self.searchViewModel = SearchViewModel(
-                sources: [LocatorSearchSource()]
-            )
-        }
+        self.searchViewModel = searchViewModel ?? SearchViewModel(
+            sources: [LocatorSearchSource()]
+        )
         self.resultsOverlay = resultsOverlay
         self.viewpoint = viewpoint
     }
