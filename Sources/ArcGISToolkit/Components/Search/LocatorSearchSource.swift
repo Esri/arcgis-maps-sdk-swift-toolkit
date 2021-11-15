@@ -41,7 +41,7 @@ public class LocatorSearchSource: ObservableObject, SearchSource {
         self.geocodeParameters.addResultAttributeName("*")
     }
     
-    /// Name to show when presenting this source in the UI.
+    /// The name to show when presenting this source in the UI.
     public var name: String
     
     /// The maximum results to return when performing a search. Most sources default to 6
