@@ -131,7 +131,7 @@ public struct SearchView: View {
     
     // MARK: Modifiers
     
-    /// Determines whether a built-in result view will be shown. If `false`, the result display/selection
+    /// Specifies whether a built-in result view will be shown. If `false`, the result display/selection
     /// list is not shown. Set to `false` if you want to define a custom result list. You might use a
     /// custom result list to show results in a separate list, disconnected from the rest of the search view.
     /// Defaults to `true`.
