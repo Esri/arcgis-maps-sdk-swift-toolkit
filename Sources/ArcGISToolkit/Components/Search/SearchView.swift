@@ -53,8 +53,8 @@ public struct SearchView: View {
     
     /// The string shown in the search view when no user query is entered.
     /// Defaults to "Find a place or address". Note: this is set using the
-    /// `defaultPlaceholder` modifier.
-    private var defaultPlaceholder: String = "Find a place or address"
+    /// `searchFieldPrompt` modifier.
+    private var searchFieldPrompt: String = "Find a place or address"
     
     /// Determines whether a built-in result view will be shown. Defaults to true.
     /// If false, the result display/selection list is not shown. Set to false if you want to hide the results
@@ -64,8 +64,8 @@ public struct SearchView: View {
     private var enableResultListView = true
     
     /// Message to show when there are no results or suggestions.  Defaults to "No results found".
-    /// Note: this is set using the `noResultMessage` modifier.
-    private var noResultMessage = "No results found"
+    /// Note: this is set using the `noResultsMessage` modifier.
+    private var noResultsMessage = "No results found"
     
     private var searchBarWidth: CGFloat = 360.0
     
@@ -83,27 +83,30 @@ public struct SearchView: View {
                 VStack {
                     SearchField(
                         currentQuery: $searchViewModel.currentQuery,
-                        defaultPlaceholder: defaultPlaceholder,
+                        searchFieldPrompt: searchFieldPrompt,
                         isShowResultsHidden: !enableResultListView,
                         showResults: $showResultListView,
                         onCommit: { searchViewModel.commitSearch() }
                     )
                     
                     if enableResultListView, showResultListView {
-                        switch searchViewModel.searchOutcome {
-                        case .results(let results):
-                            SearchResultList(
-                                searchResults: results,
-                                selectedResult: $searchViewModel.selectedResult,
-                                noResultMessage: noResultMessage
-                            )
-                        case .suggestions(let suggestions):
-                            SearchSuggestionList(
-                                suggestionResults: suggestions,
-                                currentSuggestion: $searchViewModel.currentSuggestion,
-                                noResultMessage: noResultMessage
-                            )
-                        case .none:
+                        if let searchOutcome = searchViewModel.searchOutcome {
+                            switch searchOutcome {
+                            case .results(let results):
+                                SearchResultList(
+                                    searchResults: results,
+                                    selectedResult: $searchViewModel.selectedResult,
+                                    noResultsMessage: noResultsMessage
+                                )
+                            case .suggestions(let suggestions):
+                                SearchSuggestionList(
+                                    suggestionResults: suggestions,
+                                    currentSuggestion: $searchViewModel.currentSuggestion,
+                                    noResultsMessage: noResultsMessage
+                                )
+                            }
+                        }
+                        else {
                             EmptyView()
                         }
                     }
@@ -150,20 +153,20 @@ public struct SearchView: View {
     
     /// The string shown in the search view when no user query is entered.
     /// Defaults to "Find a place or address".
-    /// - Parameter defaultPlaceholder: The new value.
+    /// - Parameter searchFieldPrompt: The new value.
     /// - Returns: A new `SearchView`.
-    public func defaultPlaceholder(_ defaultPlaceholder: String) -> Self {
+    public func searchFieldPrompt(_ searchFieldPrompt: String) -> Self {
         var copy = self
-        copy.defaultPlaceholder = defaultPlaceholder
+        copy.searchFieldPrompt = searchFieldPrompt
         return copy
     }
     
     /// Message to show when there are no results or suggestions.  Defaults to "No results found".
-    /// - Parameter noResultMessage: The new value.
+    /// - Parameter noResultsMessage: The new value.
     /// - Returns: A new `SearchView`.
-    public func noResultMessage(_ noResultMessage: String) -> Self {
+    public func noResultsMessage(_ noResultsMessage: String) -> Self {
         var copy = self
-        copy.noResultMessage = noResultMessage
+        copy.noResultsMessage = noResultsMessage
         return copy
     }
     
@@ -214,7 +217,7 @@ private extension SearchView {
 struct SearchResultList: View {
     var searchResults: Result<[SearchResult], SearchError>
     @Binding var selectedResult: SearchResult?
-    var noResultMessage: String
+    var noResultsMessage: String
     
     var body: some View {
         Group {
@@ -239,7 +242,7 @@ struct SearchResultList: View {
                     }
                 } else if results.isEmpty {
                     List {
-                        Text(noResultMessage)
+                        Text(noResultsMessage)
                     }
                 }
             case .failure(let error):
@@ -255,7 +258,7 @@ struct SearchResultList: View {
 struct SearchSuggestionList: View {
     var suggestionResults: Result<[SearchSuggestion], SearchError>
     @Binding var currentSuggestion: SearchSuggestion?
-    var noResultMessage: String
+    var noResultsMessage: String
     
     var body: some View {
         List {
@@ -272,7 +275,7 @@ struct SearchSuggestionList: View {
                     }
                 }
                 else {
-                    Text(noResultMessage)
+                    Text(noResultsMessage)
                 }
             case .failure(let error):
                 Text(error.errorDescription)
