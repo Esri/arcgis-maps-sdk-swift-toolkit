@@ -65,7 +65,7 @@ final class SmartLocatorSearchSourceTests: XCTestCase {
 ***REMOVED***
 ***REMOVED***
 
-extension Envelope {
+private extension Envelope {
 ***REMOVED***static let edinburgh = Envelope(
 ***REMOVED******REMOVED***xMin: -365155.60783391213,
 ***REMOVED******REMOVED***yMin: 7536778.456812576,
