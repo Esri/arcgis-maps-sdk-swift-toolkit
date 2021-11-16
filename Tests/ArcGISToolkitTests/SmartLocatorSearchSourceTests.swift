@@ -23,8 +23,7 @@ final class SmartLocatorSearchSourceTests: XCTestCase {
         locator.repeatSearchResultThreshold = 0
         var searchResults = try await locator.search(
             "Dunkin' Donuts",
-            searchArea: Envelope.edinburgh,
-            preferredSearchLocation: nil
+            searchArea: Envelope.edinburgh
         )
         var results = try XCTUnwrap(searchResults)
         XCTAssertEqual(results, [])
@@ -33,8 +32,7 @@ final class SmartLocatorSearchSourceTests: XCTestCase {
         locator.repeatSearchResultThreshold = 1
         searchResults = try await locator.search(
             "Dunkin' Donuts",
-            searchArea: Envelope.edinburgh,
-            preferredSearchLocation: nil
+            searchArea: Envelope.edinburgh
         )
         results = try XCTUnwrap(searchResults)
         XCTAssertNotEqual(results, [])
@@ -47,8 +45,7 @@ final class SmartLocatorSearchSourceTests: XCTestCase {
         locator.repeatSuggestResultThreshold = 0
         var suggestResults = try await locator.suggest(
             "Dunkin' Donuts",
-            searchArea: Envelope.edinburgh,
-            preferredSearchLocation: nil
+            searchArea: Envelope.edinburgh
         )
         var results = try XCTUnwrap(suggestResults)
         XCTAssertEqual(results, [])
@@ -57,8 +54,7 @@ final class SmartLocatorSearchSourceTests: XCTestCase {
         locator.repeatSuggestResultThreshold = 1
         suggestResults = try await locator.suggest(
             "Dunkin' Donuts",
-            searchArea: Envelope.edinburgh,
-            preferredSearchLocation: nil
+            searchArea: Envelope.edinburgh
         )
         results = try XCTUnwrap(suggestResults)
         XCTAssertNotEqual(suggestResults, [])

@@ -77,7 +77,6 @@ struct SearchExampleView: View {
                     viewpoint: $searchResultViewpoint,
                     resultsOverlay: searchResultsOverlay
                 )
-                    .searchBarWidth(360.0)
                     .padding()
             }
     }

@@ -62,7 +62,15 @@ public struct SearchView: View {
     /// Note: this is set using the `noResultsMessage` modifier.
     private var noResultsMessage = "No results found"
     
-    private var searchBarWidth: CGFloat = 360.0
+    @Environment(\.horizontalSizeClass)
+    private var horizontalSizeClass: UserInterfaceSizeClass?
+    
+    @Environment(\.verticalSizeClass)
+    private var verticalSizeClass: UserInterfaceSizeClass?
+    
+    private var searchBarWidth: CGFloat? {
+        horizontalSizeClass == .compact && verticalSizeClass == .regular ? nil : 360
+    }
     
     @State
     private var shouldZoomToResults = true
@@ -77,31 +85,34 @@ public struct SearchView: View {
                 Spacer()
                 VStack {
                     SearchField(
-                        currentQuery: $searchViewModel.currentQuery,
+                        query: $searchViewModel.currentQuery,
                         searchFieldPrompt: searchFieldPrompt,
                         isShowResultsHidden: !enableResultListView,
-                        showResults: $showResultListView,
-                        onCommit: { searchViewModel.commitSearch() }
+                        showResults: $showResultListView
                     )
+                        .onSubmit { searchViewModel.commitSearch() }
+                        .submitLabel(.search)
                     
                     if enableResultListView, showResultListView {
                         if let searchOutcome = searchViewModel.searchOutcome {
-                            switch searchOutcome {
-                            case .results(let results):
-                                SearchResultList(
-                                    searchResults: results,
-                                    selectedResult: $searchViewModel.selectedResult,
-                                    noResultsMessage: noResultsMessage
-                                )
-                            case .suggestions(let suggestions):
-                                SearchSuggestionList(
-                                    suggestionResults: suggestions,
-                                    currentSuggestion: $searchViewModel.currentSuggestion,
-                                    noResultsMessage: noResultsMessage
-                                )
+                            Group {
+                                switch searchOutcome {
+                                case .results(let results):
+                                    SearchResultList(
+                                        searchResults: results,
+                                        selectedResult: $searchViewModel.selectedResult,
+                                        noResultsMessage: noResultsMessage
+                                    )
+                                case .suggestions(let suggestions):
+                                    SearchSuggestionList(
+                                        suggestionResults: suggestions,
+                                        currentSuggestion: $searchViewModel.currentSuggestion,
+                                        noResultsMessage: noResultsMessage
+                                    )
+                                }
                             }
-                        }
-                        else {
+                            .esriBorder(padding: EdgeInsets())
+                        } else {
                             EmptyView()
                         }
                     }
@@ -156,21 +167,14 @@ public struct SearchView: View {
         return copy
     }
     
-    /// Message to show when there are no results or suggestions.  Defaults to "No results found".
+    /// Sets the message to show when there are no results or suggestions.
+    ///
+    /// The default message is "No results found".
     /// - Parameter noResultsMessage: The new value.
     /// - Returns: A new `SearchView`.
     public func noResultsMessage(_ noResultsMessage: String) -> Self {
         var copy = self
         copy.noResultsMessage = noResultsMessage
-        return copy
-    }
-    
-    /// The width of the search bar.
-    /// - Parameter searchBarWidth: The desired width of the search bar.
-    /// - Returns: A new `SearchView`.
-    public func searchBarWidth(_ searchBarWidth: CGFloat) -> Self {
-        var copy = self
-        copy.searchBarWidth = searchBarWidth
         return copy
     }
 }
@@ -186,18 +190,21 @@ private extension SearchView {
         resultsOverlay.removeAllGraphics()
         resultsOverlay.addGraphics(resultGraphics)
         
+        // Make sure we have a viewpoint to zoom to.
+        guard let viewpoint = viewpoint else { return }
+        
         if !resultGraphics.isEmpty,
            let envelope = resultsOverlay.extent,
            shouldZoomToResults {
             let builder = EnvelopeBuilder(envelope: envelope)
             builder.expand(factor: 1.1)
             let targetExtent = builder.toGeometry() as! Envelope
-            viewpoint?.wrappedValue = Viewpoint(
+            viewpoint.wrappedValue = Viewpoint(
                 targetExtent: targetExtent
             )
             searchViewModel.lastSearchExtent = targetExtent
         } else {
-            viewpoint?.wrappedValue = nil
+            viewpoint.wrappedValue = nil
         }
         
         if !shouldZoomToResults { shouldZoomToResults = true }
@@ -218,26 +225,26 @@ struct SearchResultList: View {
         Group {
             switch searchResults {
             case .success(let results):
-                if results.count > 1 {
-                    // Only show the list if we have more than one result.
+                if results.count != 1 {
                     List {
-                        ForEach(results) { result in
-                            HStack {
-                                ResultRow(searchResult: result)
-                                    .onTapGesture {
-                                        selectedResult = result
+                        if results.count > 1 {
+                            // Only show the list if we have more than one result.
+                            ForEach(results) { result in
+                                HStack {
+                                    ResultRow(searchResult: result)
+                                        .onTapGesture {
+                                            selectedResult = result
+                                        }
+                                    if result == selectedResult {
+                                        Spacer()
+                                        Image(systemName: "checkmark.circle.fill")
+                                            .foregroundColor(.accentColor)
                                     }
-                                if result == selectedResult {
-                                    Spacer()
-                                    Image(systemName: "checkmark.circle.fill")
-                                        .foregroundColor(.accentColor)
                                 }
                             }
+                        } else if results.isEmpty {
+                            Text(noResultsMessage)
                         }
-                    }
-                } else if results.isEmpty {
-                    List {
-                        Text(noResultsMessage)
                     }
                 }
             case .failure(let error):
@@ -246,7 +253,6 @@ struct SearchResultList: View {
                 }
             }
         }
-        .esriBorder(padding: EdgeInsets())
     }
 }
 
@@ -260,23 +266,19 @@ struct SearchSuggestionList: View {
             switch suggestionResults {
             case .success(let suggestions):
                 if !suggestions.isEmpty {
-                    if suggestions.count > 0 {
-                        ForEach(suggestions) { suggestion in
-                            ResultRow(searchSuggestion: suggestion)
-                                .onTapGesture() {
-                                    currentSuggestion = suggestion
-                                }
-                        }
+                    ForEach(suggestions) { suggestion in
+                        ResultRow(searchSuggestion: suggestion)
+                            .onTapGesture() {
+                                currentSuggestion = suggestion
+                            }
                     }
-                }
-                else {
+                } else {
                     Text(noResultsMessage)
                 }
             case .failure(let error):
                 Text(error.errorDescription)
             }
         }
-        .esriBorder(padding: EdgeInsets())
     }
 }
 
