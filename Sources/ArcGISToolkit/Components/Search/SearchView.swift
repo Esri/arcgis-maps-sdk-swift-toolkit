@@ -109,6 +109,10 @@ public struct SearchView: View {
                                         currentSuggestion: $searchViewModel.currentSuggestion,
                                         noResultsMessage: noResultsMessage
                                     )
+                                case .failure(let error):
+                                    List {
+                                        Text(error.errorDescription)
+                                    }
                                 }
                             }
                             .esriBorder(padding: EdgeInsets())
@@ -132,7 +136,7 @@ public struct SearchView: View {
         .onChange(of: searchViewModel.searchOutcome, perform: { newValue in
             switch newValue {
             case .results(let results):
-                display(searchResults: (try? results.get()) ?? [])
+                display(searchResults: results)
             default:
                 display(searchResults: [])
             }
@@ -217,39 +221,30 @@ private extension SearchView {
 }
 
 struct SearchResultList: View {
-    var searchResults: Result<[SearchResult], SearchError>
+    var searchResults: [SearchResult]
     @Binding var selectedResult: SearchResult?
     var noResultsMessage: String
     
     var body: some View {
-        Group {
-            switch searchResults {
-            case .success(let results):
-                if results.count != 1 {
-                    List {
-                        if results.count > 1 {
-                            // Only show the list if we have more than one result.
-                            ForEach(results) { result in
-                                HStack {
-                                    ResultRow(searchResult: result)
-                                        .onTapGesture {
-                                            selectedResult = result
-                                        }
-                                    if result == selectedResult {
-                                        Spacer()
-                                        Image(systemName: "checkmark.circle.fill")
-                                            .foregroundColor(.accentColor)
-                                    }
+        if searchResults.count != 1 {
+            List {
+                if searchResults.count > 1 {
+                    // Only show the list if we have more than one result.
+                    ForEach(searchResults) { result in
+                        HStack {
+                            ResultRow(searchResult: result)
+                                .onTapGesture {
+                                    selectedResult = result
                                 }
+                            if result == selectedResult {
+                                Spacer()
+                                Image(systemName: "checkmark.circle.fill")
+                                    .foregroundColor(.accentColor)
                             }
-                        } else if results.isEmpty {
-                            Text(noResultsMessage)
                         }
                     }
-                }
-            case .failure(let error):
-                List {
-                    Text(error.localizedDescription)
+                } else if searchResults.isEmpty {
+                    Text(noResultsMessage)
                 }
             }
         }
@@ -257,26 +252,21 @@ struct SearchResultList: View {
 }
 
 struct SearchSuggestionList: View {
-    var suggestionResults: Result<[SearchSuggestion], SearchError>
+    var suggestionResults: [SearchSuggestion]
     @Binding var currentSuggestion: SearchSuggestion?
     var noResultsMessage: String
     
     var body: some View {
         List {
-            switch suggestionResults {
-            case .success(let suggestions):
-                if !suggestions.isEmpty {
-                    ForEach(suggestions) { suggestion in
-                        ResultRow(searchSuggestion: suggestion)
-                            .onTapGesture() {
-                                currentSuggestion = suggestion
-                            }
-                    }
-                } else {
-                    Text(noResultsMessage)
+            if !suggestionResults.isEmpty {
+                ForEach(suggestionResults) { suggestion in
+                    ResultRow(searchSuggestion: suggestion)
+                        .onTapGesture() {
+                            currentSuggestion = suggestion
+                        }
                 }
-            case .failure(let error):
-                Text(error.errorDescription)
+            } else {
+                Text(noResultsMessage)
             }
         }
     }
