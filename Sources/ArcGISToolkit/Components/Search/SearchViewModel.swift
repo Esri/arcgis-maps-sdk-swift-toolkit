@@ -183,12 +183,12 @@ public class SearchViewModel: ObservableObject {
     /// Starts a search. `selectedResult` and `results`, among other properties, are set
     /// asynchronously. Other query properties are read to define the parameters of the search.
     public func commitSearch() {
-        kickoffTask({ searchTask() })
+        kickoffTask { await self.doSearch() }
     }
     
     /// Repeats the last search, limiting results to the extent specified in `geoViewExtent`.
     public func repeatSearch() {
-        kickoffTask({ repeatSearchTask() })
+        kickoffTask { await self.doRepeatSearch() }
     }
     
     /// Updates suggestions list asynchronously.
@@ -198,7 +198,7 @@ public class SearchViewModel: ObservableObject {
             return
         }
         
-        kickoffTask({ updateSuggestionsTask() })
+        kickoffTask { await self.doUpdateSuggestions() }
     }
     
     @Published
@@ -217,82 +217,74 @@ public class SearchViewModel: ObservableObject {
     ///   - searchSuggestion: The suggestion to use to commit the search.
     public func acceptSuggestion(_ searchSuggestion: SearchSuggestion) {
         currentQuery = searchSuggestion.displayTitle
-        kickoffTask({ acceptSuggestionTask(searchSuggestion) })
+        kickoffTask { await self.doAcceptSuggestion(searchSuggestion) }
     }
     
-    private func kickoffTask(_ taskInit: () -> Task<(), Never>) {
+    private func kickoffTask(_ taskInit: @escaping () async -> Void) {
         currentTask?.cancel()
-        currentTask = taskInit()
+        currentTask = Task { await taskInit() }
     }
 }
 
 private extension SearchViewModel {
-    func repeatSearchTask() -> Task<(), Never> {
-        Task {
-            guard !currentQuery.trimmingCharacters(in: .whitespaces).isEmpty,
-                  let queryExtent = geoViewExtent,
-                  let source = currentSource() else {
-                      return
-                  }
-            
-            await search(with: {
-                try await source.repeatSearch(
-                    currentQuery,
-                    searchExtent: queryExtent
-                )
-            } )
+    func doRepeatSearch() async {
+        guard !currentQuery.trimmingCharacters(in: .whitespaces).isEmpty,
+              let queryExtent = geoViewExtent,
+              let source = currentSource() else {
+                  return
+              }
+        
+        await search(with: {
+            try await source.repeatSearch(
+                currentQuery,
+                searchExtent: queryExtent
+            )
+        })
+    }
+    
+    func doSearch() async {
+        guard !currentQuery.trimmingCharacters(in: .whitespaces).isEmpty,
+              let source = currentSource() else { return }
+        
+        await search(with: {
+            try await source.search(
+                currentQuery,
+                searchArea: queryArea,
+                preferredSearchLocation: queryCenter
+            )
+        } )
+    }
+    
+    func doUpdateSuggestions() async {
+        guard !currentQuery.trimmingCharacters(in: .whitespaces).isEmpty,
+              let source = currentSource() else {
+                  return
+              }
+        do {
+            let suggestions = try await source.suggest(
+                currentQuery,
+                searchArea: queryArea,
+                preferredSearchLocation: queryCenter
+            )
+            searchOutcome = .suggestions(suggestions)
+        } catch is CancellationError {
+            // Do nothing if user cancelled and let next task set searchOutcome.
+        } catch {
+            searchOutcome = .failure(SearchError(error))
         }
     }
     
-    func searchTask() -> Task<(), Never> {
-        Task {
-            guard !currentQuery.trimmingCharacters(in: .whitespaces).isEmpty,
-                  let source = currentSource() else { return }
-            
-            await search(with: {
-                try await source.search(
-                    currentQuery,
-                    searchArea: queryArea,
-                    preferredSearchLocation: queryCenter
-                )
-            } )
-        }
-    }
-    
-    func updateSuggestionsTask() -> Task<(), Never> {
-        Task {
-            guard !currentQuery.trimmingCharacters(in: .whitespaces).isEmpty,
-                  let source = currentSource() else {
-                      return
-                  }
-            do {
-                let suggestions = try await source.suggest(
-                    currentQuery,
-                    searchArea: queryArea,
-                    preferredSearchLocation: queryCenter
-                )
-                searchOutcome = .suggestions(suggestions)
-            } catch is CancellationError {
-                searchOutcome = nil
-            } catch {
-                searchOutcome = .failure(SearchError(error))
-            }
-        }
-    }
-    
-    func acceptSuggestionTask(_ searchSuggestion: SearchSuggestion) -> Task<(), Never> {
-        Task {
-            await search(with: {
-                try await searchSuggestion.owningSource.search(
-                    searchSuggestion,
-                    searchArea: queryArea,
-                    preferredSearchLocation: queryCenter
-                )
-            } )
-            
-            // once we are done searching for the suggestion, then reset it to nil
-            currentSuggestion = nil
-        }
+    func doAcceptSuggestion(_ searchSuggestion: SearchSuggestion) async {
+        await search(with: {
+            try await searchSuggestion.owningSource.search(
+                searchSuggestion,
+                searchArea: queryArea,
+                preferredSearchLocation: queryCenter
+            )
+        } )
+        
+        // once we are done searching for the suggestion, then reset it to nil
+        currentSuggestion = nil
     }
     
     func search(with action: () async throws -> [SearchResult]) async {

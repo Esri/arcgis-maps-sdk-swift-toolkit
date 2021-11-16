@@ -60,9 +60,11 @@ extension SearchSuggestion: Hashable {
 
 extension SearchSuggestion {
     init(suggestResult: SuggestResult, searchSource: SearchSource) {
-        displayTitle = suggestResult.label
-        owningSource = searchSource
-        isCollection = suggestResult.isCollection
-        self.suggestResult = suggestResult
+        self.init(
+            displayTitle: suggestResult.label,
+            owningSource: searchSource,
+            isCollection: suggestResult.isCollection,
+            suggestResult: suggestResult
+        )
     }
 }
