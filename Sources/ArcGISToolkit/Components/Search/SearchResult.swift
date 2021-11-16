@@ -40,7 +40,6 @@ public struct SearchResult {
     /// because not all valid results will have a geometry. E.g. feature results from non-spatial features.
     public var selectionViewpoint: Viewpoint? = nil
 
-    /// The stable identity of the entity associated with this instance.
     public let id = UUID()
 }
 
@@ -68,18 +67,15 @@ extension SearchResult {
         let subtitle = geocodeResult.attributes["LongLabel"] as? String ??
         "Match percent: \((geocodeResult.score / 100.0).formatted(.percent))"
         
-        var viewpoint: Viewpoint? = nil
-        if let extent = geocodeResult.extent {
-            viewpoint = Viewpoint(targetExtent: extent)
-        }
-        
-        displayTitle = geocodeResult.label
-        owningSource = searchSource
-        displaySubtitle = subtitle
-        geoElement = Graphic(
-            geometry: geocodeResult.displayLocation,
-            attributes: geocodeResult.attributes
+        self.init(
+            displayTitle: geocodeResult.label,
+            owningSource: searchSource,
+            displaySubtitle: subtitle,
+            geoElement: Graphic(
+                geometry: geocodeResult.displayLocation,
+                attributes: geocodeResult.attributes
+            ),
+            selectionViewpoint: geocodeResult.extent.map(Viewpoint.init)
         )
-        selectionViewpoint = viewpoint
     }
 }

@@ -93,32 +93,30 @@ public struct SearchView: View {
                         .onSubmit { searchViewModel.commitSearch() }
                         .submitLabel(.search)
                     
-                    if enableResultListView, showResultListView {
-                        if let searchOutcome = searchViewModel.searchOutcome {
-                            Group {
-                                switch searchOutcome {
-                                case .results(let results):
-                                    SearchResultList(
-                                        searchResults: results,
-                                        selectedResult: $searchViewModel.selectedResult,
-                                        noResultsMessage: noResultsMessage
-                                    )
-                                case .suggestions(let suggestions):
-                                    SearchSuggestionList(
-                                        suggestionResults: suggestions,
-                                        currentSuggestion: $searchViewModel.currentSuggestion,
-                                        noResultsMessage: noResultsMessage
-                                    )
-                                case .failure(let error):
-                                    List {
-                                        Text(error.errorDescription)
-                                    }
+                    if enableResultListView,
+                       showResultListView,
+                       let searchOutcome = searchViewModel.searchOutcome {
+                        Group {
+                            switch searchOutcome {
+                            case .results(let results):
+                                SearchResultList(
+                                    searchResults: results,
+                                    selectedResult: $searchViewModel.selectedResult,
+                                    noResultsMessage: noResultsMessage
+                                )
+                            case .suggestions(let suggestions):
+                                SearchSuggestionList(
+                                    suggestionResults: suggestions,
+                                    currentSuggestion: $searchViewModel.currentSuggestion,
+                                    noResultsMessage: noResultsMessage
+                                )
+                            case .failure(let error):
+                                List {
+                                    Text(error.errorDescription)
                                 }
                             }
-                            .esriBorder(padding: EdgeInsets())
-                        } else {
-                            EmptyView()
                         }
+                        .esriBorder(padding: EdgeInsets())
                     }
                 }
                 .frame(width: searchBarWidth)
@@ -146,39 +144,40 @@ public struct SearchView: View {
             searchViewModel.updateSuggestions()
         }
     }
-    
-    // MARK: Modifiers
-    
+}
+
+// MARK: Modifiers
+extension SearchView {
     /// Specifies whether a built-in result view will be shown. If `false`, the result display/selection
     /// list is not shown. Set to `false` if you want to define a custom result list. You might use a
     /// custom result list to show results in a separate list, disconnected from the rest of the search view.
     /// Defaults to `true`.
-    /// - Parameter enableResultListView: The new value.
+    /// - Parameter newEnableResultListView: The new value.
     /// - Returns: A new `SearchView`.
-    public func enableResultListView(_ enableResultListView: Bool) -> Self {
+    public func enableResultListView(_ newEnableResultListView: Bool) -> Self {
         var copy = self
-        copy.enableResultListView = enableResultListView
+        copy.enableResultListView = newEnableResultListView
         return copy
     }
     
     /// The string shown in the search view when no user query is entered.
     /// Defaults to "Find a place or address".
-    /// - Parameter searchFieldPrompt: The new value.
+    /// - Parameter newSearchFieldPrompt: The new value.
     /// - Returns: A new `SearchView`.
-    public func searchFieldPrompt(_ searchFieldPrompt: String) -> Self {
+    public func searchFieldPrompt(_ newSearchFieldPrompt: String) -> Self {
         var copy = self
-        copy.searchFieldPrompt = searchFieldPrompt
+        copy.searchFieldPrompt = newSearchFieldPrompt
         return copy
     }
     
     /// Sets the message to show when there are no results or suggestions.
     ///
     /// The default message is "No results found".
-    /// - Parameter noResultsMessage: The new value.
+    /// - Parameter newNoResultsMessage: The new value.
     /// - Returns: A new `SearchView`.
-    public func noResultsMessage(_ noResultsMessage: String) -> Self {
+    public func noResultsMessage(_ newNoResultsMessage: String) -> Self {
         var copy = self
-        copy.noResultsMessage = noResultsMessage
+        copy.noResultsMessage = newNoResultsMessage
         return copy
     }
 }
@@ -227,8 +226,8 @@ struct SearchResultList: View {
     
     var body: some View {
         if searchResults.count != 1 {
-            List {
-                if searchResults.count > 1 {
+            if searchResults.count > 1 {
+                List {
                     // Only show the list if we have more than one result.
                     ForEach(searchResults) { result in
                         HStack {
@@ -243,9 +242,9 @@ struct SearchResultList: View {
                             }
                         }
                     }
-                } else if searchResults.isEmpty {
-                    Text(noResultsMessage)
                 }
+            } else if searchResults.isEmpty {
+                NoResultsView(message: noResultsMessage)
             }
         }
     }
@@ -257,17 +256,28 @@ struct SearchSuggestionList: View {
     var noResultsMessage: String
     
     var body: some View {
-        List {
-            if !suggestionResults.isEmpty {
+        if !suggestionResults.isEmpty {
+            List {
                 ForEach(suggestionResults) { suggestion in
                     ResultRow(searchSuggestion: suggestion)
                         .onTapGesture() {
                             currentSuggestion = suggestion
                         }
                 }
-            } else {
-                Text(noResultsMessage)
             }
+        } else {
+            NoResultsView(message: noResultsMessage)
+        }
+    }
+}
+
+struct NoResultsView: View {
+    var message: String
+    
+    var body: some View {
+        LazyVStack {
+            Text(message)
+                .padding()
         }
     }
 }
