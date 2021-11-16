@@ -43,14 +43,13 @@ public class SearchViewModel: ObservableObject {
 ***REMOVED******REMOVED***/   - queryCenter: Defines the center for the search.
 ***REMOVED******REMOVED***/   - resultMode: Defines how many results to return.
 ***REMOVED******REMOVED***/   - sources: Collection of search sources to be used.
-***REMOVED***public convenience init(
+***REMOVED***public init(
 ***REMOVED******REMOVED***activeSource: SearchSource? = nil,
 ***REMOVED******REMOVED***queryArea: Geometry? = nil,
 ***REMOVED******REMOVED***queryCenter: Point? = nil,
 ***REMOVED******REMOVED***resultMode: SearchResultMode = .automatic,
 ***REMOVED******REMOVED***sources: [SearchSource] = []
 ***REMOVED***) {
-***REMOVED******REMOVED***self.init()
 ***REMOVED******REMOVED***self.activeSource = activeSource
 ***REMOVED******REMOVED***self.queryArea = queryArea
 ***REMOVED******REMOVED***self.queryCenter = queryCenter
@@ -89,9 +88,11 @@ public class SearchViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ The current GeoView extent.  Defaults to null.  This should be updated as the user navigates
-***REMOVED******REMOVED***/ the map/scene.  It will be used to determine the value of `IsEligibleForRequery`
-***REMOVED******REMOVED***/ for the 'Repeat search here' behavior.  If that behavior is not wanted, it should be left `nil`.
+***REMOVED******REMOVED***/ The current map/scene view extent. Defaults to `nil`.
+***REMOVED******REMOVED***/
+***REMOVED******REMOVED***/ This should be updated as the user navigates the map/scene. It will be
+***REMOVED******REMOVED***/ used to determine the value of `isEligibleForRequery` for the 'Repeat
+***REMOVED******REMOVED***/ search here' behavior. If that behavior is not wanted, it should be left `nil`.
 ***REMOVED***public var geoViewExtent: Envelope? = nil {
 ***REMOVED******REMOVED***willSet {
 ***REMOVED******REMOVED******REMOVED***guard !isEligibleForRequery,
@@ -121,7 +122,7 @@ public class SearchViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ True if the Extent has changed by a set amount after a `Search` or `AcceptSuggestion` call.
+***REMOVED******REMOVED***/ `true` if the extent has changed by a set amount after a `Search` or `AcceptSuggestion` call.
 ***REMOVED******REMOVED***/ This property is used by the view to enable 'Repeat search here' functionality. This property is
 ***REMOVED******REMOVED***/ observable, and the view should use it to hide and show the 'repeat search' button.
 ***REMOVED******REMOVED***/ Changes to this property are driven by changes to the `geoViewExtent` property.  This value will be
@@ -130,7 +131,7 @@ public class SearchViewModel: ObservableObject {
 ***REMOVED***@Published
 ***REMOVED***public private(set) var isEligibleForRequery: Bool = false
 ***REMOVED***
-***REMOVED******REMOVED***/ The search area to be used for the current query.  Results will be limited to those
+***REMOVED******REMOVED***/ The search area to be used for the current query. Results will be limited to those
 ***REMOVED******REMOVED***/ within `QueryArea`.  Defaults to `nil`.
 ***REMOVED***public var queryArea: Geometry? = nil
 ***REMOVED***
@@ -140,7 +141,7 @@ public class SearchViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Defines how many results to return. Defaults to Automatic. In automatic mode, an appropriate
 ***REMOVED******REMOVED***/ number of results is returned based on the type of suggestion chosen
-***REMOVED******REMOVED***/ (driven by the IsCollection property).
+***REMOVED******REMOVED***/ (driven by the `isCollection` property).
 ***REMOVED***public var resultMode: SearchResultMode = .automatic
 ***REMOVED***
 ***REMOVED******REMOVED***/ Collection of results. `nil` means no query has been made. An empty array means there
@@ -236,8 +237,8 @@ public class SearchViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED***
 
-extension SearchViewModel {
-***REMOVED***private func repeatSearchTask() -> Task<(), Never> {
+private extension SearchViewModel {
+***REMOVED***func repeatSearchTask() -> Task<(), Never> {
 ***REMOVED******REMOVED***Task {
 ***REMOVED******REMOVED******REMOVED***guard !currentQuery.trimmingCharacters(in: .whitespaces).isEmpty,
 ***REMOVED******REMOVED******REMOVED******REMOVED***  let queryExtent = geoViewExtent,
@@ -254,7 +255,7 @@ extension SearchViewModel {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED***private func searchTask() -> Task<(), Never> {
+***REMOVED***func searchTask() -> Task<(), Never> {
 ***REMOVED******REMOVED***Task {
 ***REMOVED******REMOVED******REMOVED***guard !currentQuery.trimmingCharacters(in: .whitespaces).isEmpty,
 ***REMOVED******REMOVED******REMOVED******REMOVED***  let source = currentSource() else { return ***REMOVED***
@@ -269,7 +270,7 @@ extension SearchViewModel {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED***private func updateSuggestionsTask() -> Task<(), Never> {
+***REMOVED***func updateSuggestionsTask() -> Task<(), Never> {
 ***REMOVED******REMOVED***Task {
 ***REMOVED******REMOVED******REMOVED***guard !currentQuery.trimmingCharacters(in: .whitespaces).isEmpty,
 ***REMOVED******REMOVED******REMOVED******REMOVED***  let source = currentSource() else {
@@ -290,7 +291,7 @@ extension SearchViewModel {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED***private func acceptSuggestionTask(_ searchSuggestion: SearchSuggestion) -> Task<(), Never> {
+***REMOVED***func acceptSuggestionTask(_ searchSuggestion: SearchSuggestion) -> Task<(), Never> {
 ***REMOVED******REMOVED***Task {
 ***REMOVED******REMOVED******REMOVED***await search(with: {
 ***REMOVED******REMOVED******REMOVED******REMOVED***try await searchSuggestion.owningSource.search(
@@ -305,7 +306,7 @@ extension SearchViewModel {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED***private func search(with action: () async throws -> [SearchResult]) async {
+***REMOVED***func search(with action: () async throws -> [SearchResult]) async {
 ***REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** User is performing a search, so set `lastSearchExtent`.
 ***REMOVED******REMOVED******REMOVED***lastSearchExtent = geoViewExtent
@@ -317,10 +318,10 @@ extension SearchViewModel {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED***private func process(searchResults: [SearchResult], isCollection: Bool = true) {
+***REMOVED***func process(searchResults: [SearchResult], isCollection: Bool = true) {
 ***REMOVED******REMOVED***let effectiveResults: [SearchResult]
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***switch (resultMode) {
+***REMOVED******REMOVED***switch resultMode {
 ***REMOVED******REMOVED***case .single:
 ***REMOVED******REMOVED******REMOVED***effectiveResults = Array(searchResults.prefix(1))
 ***REMOVED******REMOVED***case .multiple:

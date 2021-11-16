@@ -19,8 +19,8 @@ final class SmartLocatorSearchSourceTests: XCTestCase {
 ***REMOVED***func testRepeatSearchResultThreshold() async throws {
 ***REMOVED******REMOVED***let locator = SmartLocatorSearchSource()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Threshold of 0 means no re-query.
-***REMOVED******REMOVED***locator.repeatSearchResultThreshold = 0
+***REMOVED******REMOVED******REMOVED*** Threshold of nil means no re-query.
+***REMOVED******REMOVED***locator.repeatSearchResultThreshold = nil
 ***REMOVED******REMOVED***var searchResults = try await locator.search(
 ***REMOVED******REMOVED******REMOVED***"Dunkin' Donuts",
 ***REMOVED******REMOVED******REMOVED***searchArea: Envelope.edinburgh
@@ -41,8 +41,8 @@ final class SmartLocatorSearchSourceTests: XCTestCase {
 ***REMOVED***func testRepeatSuggestResultThreshold() async throws {
 ***REMOVED******REMOVED***let locator = SmartLocatorSearchSource()
 
-***REMOVED******REMOVED******REMOVED*** Threshold of 0 means no re-query.
-***REMOVED******REMOVED***locator.repeatSuggestResultThreshold = 0
+***REMOVED******REMOVED******REMOVED*** Threshold of nil means no re-query.
+***REMOVED******REMOVED***locator.repeatSuggestResultThreshold = nil
 ***REMOVED******REMOVED***var suggestResults = try await locator.suggest(
 ***REMOVED******REMOVED******REMOVED***"Dunkin' Donuts",
 ***REMOVED******REMOVED******REMOVED***searchArea: Envelope.edinburgh

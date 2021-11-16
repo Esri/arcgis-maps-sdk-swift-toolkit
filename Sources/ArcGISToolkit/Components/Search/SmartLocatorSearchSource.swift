@@ -36,8 +36,8 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
 ***REMOVED******REMOVED***),
 ***REMOVED******REMOVED***maximumResults: Int32 = 6,
 ***REMOVED******REMOVED***maximumSuggestions: Int32 = 6,
-***REMOVED******REMOVED***repeatSearchResultThreshold: Int = 1,
-***REMOVED******REMOVED***repeatSuggestResultThreshold: Int = 6
+***REMOVED******REMOVED***repeatSearchResultThreshold: Int? = 1,
+***REMOVED******REMOVED***repeatSuggestResultThreshold: Int? = 6
 ***REMOVED***) {
 ***REMOVED******REMOVED***super.init(
 ***REMOVED******REMOVED******REMOVED***name: name,
@@ -52,15 +52,15 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
 ***REMOVED******REMOVED***/ The minimum number of results to attempt to return. If there are too few results, the search is
 ***REMOVED******REMOVED***/ repeated with loosened parameters until enough results are accumulated. If no search is
 ***REMOVED******REMOVED***/ successful, it is still possible to have a total number of results less than this threshold. Does not
-***REMOVED******REMOVED***/ apply to repeated search with area constraint. Set to zero to disable search repeat behavior.
-***REMOVED***public var repeatSearchResultThreshold: Int = 1
+***REMOVED******REMOVED***/ apply to repeated search with area constraint. Set to `nil` to disable search repeat behavior.
+***REMOVED***public var repeatSearchResultThreshold: Int? = 1
 ***REMOVED***
 ***REMOVED******REMOVED***/ The minimum number of suggestions to attempt to return. If there are too few suggestions,
 ***REMOVED******REMOVED***/ request is repeated with loosened constraints until enough suggestions are accumulated.
 ***REMOVED******REMOVED***/ If no search is successful, it is still possible to have a total number of results less than this
-***REMOVED******REMOVED***/ threshold. Does not apply to repeated search with area constraint. Set to zero to disable search
+***REMOVED******REMOVED***/ threshold. Does not apply to repeated search with area constraint. Set to `nil` to disable search
 ***REMOVED******REMOVED***/ repeat behavior.
-***REMOVED***public var repeatSuggestResultThreshold: Int = 6
+***REMOVED***public var repeatSuggestResultThreshold: Int? = 6
 ***REMOVED***
 ***REMOVED***public override func search(
 ***REMOVED******REMOVED***_ queryString: String,
@@ -73,8 +73,8 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
 ***REMOVED******REMOVED******REMOVED***searchArea: searchArea,
 ***REMOVED******REMOVED******REMOVED***preferredSearchLocation: preferredSearchLocation
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED***if results.count > repeatSearchResultThreshold ||
-***REMOVED******REMOVED******REMOVED***repeatSearchResultThreshold == 0 ||
+***REMOVED******REMOVED***if repeatSearchResultThreshold == nil ||
+***REMOVED******REMOVED******REMOVED***results.count > repeatSearchResultThreshold! ||
 ***REMOVED******REMOVED******REMOVED***geocodeParameters.searchArea == nil {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Result count meets threshold or there were no geographic
 ***REMOVED******REMOVED******REMOVED******REMOVED*** constraints on the search, so return results.
@@ -112,7 +112,9 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
 ***REMOVED******REMOVED******REMOVED***searchArea: searchArea,
 ***REMOVED******REMOVED******REMOVED***preferredSearchLocation: preferredSearchLocation
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED***if results.count > repeatSearchResultThreshold ||
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***if repeatSearchResultThreshold == nil ||
+***REMOVED******REMOVED******REMOVED***results.count > repeatSearchResultThreshold! ||
 ***REMOVED******REMOVED******REMOVED***geocodeParameters.searchArea == nil {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Result count meets threshold or there were no geographic
 ***REMOVED******REMOVED******REMOVED******REMOVED*** constraints on the search, so return results.
@@ -146,8 +148,8 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
 ***REMOVED******REMOVED******REMOVED***searchArea: searchArea,
 ***REMOVED******REMOVED******REMOVED***preferredSearchLocation: preferredSearchLocation
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED***if results.count > repeatSuggestResultThreshold ||
-***REMOVED******REMOVED******REMOVED***repeatSuggestResultThreshold == 0 ||
+***REMOVED******REMOVED***if repeatSuggestResultThreshold == nil ||
+***REMOVED******REMOVED******REMOVED***results.count > repeatSuggestResultThreshold! ||
 ***REMOVED******REMOVED******REMOVED***suggestParameters.searchArea == nil {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Result count meets threshold or there were no geographic
 ***REMOVED******REMOVED******REMOVED******REMOVED*** constraints on the search, so return results.
