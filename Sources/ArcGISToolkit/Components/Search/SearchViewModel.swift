@@ -183,12 +183,12 @@ public class SearchViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ Starts a search. `selectedResult` and `results`, among other properties, are set
 ***REMOVED******REMOVED***/ asynchronously. Other query properties are read to define the parameters of the search.
 ***REMOVED***public func commitSearch() {
-***REMOVED******REMOVED***kickoffTask({ searchTask() ***REMOVED***)
+***REMOVED******REMOVED***kickoffTask { await self.doSearch() ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Repeats the last search, limiting results to the extent specified in `geoViewExtent`.
 ***REMOVED***public func repeatSearch() {
-***REMOVED******REMOVED***kickoffTask({ repeatSearchTask() ***REMOVED***)
+***REMOVED******REMOVED***kickoffTask { await self.doRepeatSearch() ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Updates suggestions list asynchronously.
@@ -198,7 +198,7 @@ public class SearchViewModel: ObservableObject {
 ***REMOVED******REMOVED******REMOVED***return
 ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***kickoffTask({ updateSuggestionsTask() ***REMOVED***)
+***REMOVED******REMOVED***kickoffTask { await self.doUpdateSuggestions() ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@Published
@@ -217,82 +217,74 @@ public class SearchViewModel: ObservableObject {
 ***REMOVED******REMOVED***/   - searchSuggestion: The suggestion to use to commit the search.
 ***REMOVED***public func acceptSuggestion(_ searchSuggestion: SearchSuggestion) {
 ***REMOVED******REMOVED***currentQuery = searchSuggestion.displayTitle
-***REMOVED******REMOVED***kickoffTask({ acceptSuggestionTask(searchSuggestion) ***REMOVED***)
+***REMOVED******REMOVED***kickoffTask { await self.doAcceptSuggestion(searchSuggestion) ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED***private func kickoffTask(_ taskInit: () -> Task<(), Never>) {
+***REMOVED***private func kickoffTask(_ taskInit: @escaping () async -> Void) {
 ***REMOVED******REMOVED***currentTask?.cancel()
-***REMOVED******REMOVED***currentTask = taskInit()
+***REMOVED******REMOVED***currentTask = Task { await taskInit() ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
 private extension SearchViewModel {
-***REMOVED***func repeatSearchTask() -> Task<(), Never> {
-***REMOVED******REMOVED***Task {
-***REMOVED******REMOVED******REMOVED***guard !currentQuery.trimmingCharacters(in: .whitespaces).isEmpty,
-***REMOVED******REMOVED******REMOVED******REMOVED***  let queryExtent = geoViewExtent,
-***REMOVED******REMOVED******REMOVED******REMOVED***  let source = currentSource() else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  return
-***REMOVED******REMOVED***  ***REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***await search(with: {
-***REMOVED******REMOVED******REMOVED******REMOVED***try await source.repeatSearch(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentQuery,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***searchExtent: queryExtent
-***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED*** )
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***func searchTask() -> Task<(), Never> {
-***REMOVED******REMOVED***Task {
-***REMOVED******REMOVED******REMOVED***guard !currentQuery.trimmingCharacters(in: .whitespaces).isEmpty,
-***REMOVED******REMOVED******REMOVED******REMOVED***  let source = currentSource() else { return ***REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***await search(with: {
-***REMOVED******REMOVED******REMOVED******REMOVED***try await source.search(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentQuery,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***searchArea: queryArea,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***preferredSearchLocation: queryCenter
-***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED*** )
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***func updateSuggestionsTask() -> Task<(), Never> {
-***REMOVED******REMOVED***Task {
-***REMOVED******REMOVED******REMOVED***guard !currentQuery.trimmingCharacters(in: .whitespaces).isEmpty,
-***REMOVED******REMOVED******REMOVED******REMOVED***  let source = currentSource() else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  return
-***REMOVED******REMOVED***  ***REMOVED***
-***REMOVED******REMOVED******REMOVED***do {
-***REMOVED******REMOVED******REMOVED******REMOVED***let suggestions = try await source.suggest(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentQuery,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***searchArea: queryArea,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***preferredSearchLocation: queryCenter
-***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED***searchOutcome = .suggestions(suggestions)
-***REMOVED******REMOVED*** catch is CancellationError {
-***REMOVED******REMOVED******REMOVED******REMOVED***searchOutcome = nil
-***REMOVED******REMOVED*** catch {
-***REMOVED******REMOVED******REMOVED******REMOVED***searchOutcome = .failure(SearchError(error))
+***REMOVED***func doRepeatSearch() async {
+***REMOVED******REMOVED***guard !currentQuery.trimmingCharacters(in: .whitespaces).isEmpty,
+***REMOVED******REMOVED******REMOVED***  let queryExtent = geoViewExtent,
+***REMOVED******REMOVED******REMOVED***  let source = currentSource() else {
+***REMOVED******REMOVED******REMOVED******REMOVED***  return
+***REMOVED***  ***REMOVED***
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED***await search(with: {
+***REMOVED******REMOVED******REMOVED***try await source.repeatSearch(
+***REMOVED******REMOVED******REMOVED******REMOVED***currentQuery,
+***REMOVED******REMOVED******REMOVED******REMOVED***searchExtent: queryExtent
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED***func doSearch() async {
+***REMOVED******REMOVED***guard !currentQuery.trimmingCharacters(in: .whitespaces).isEmpty,
+***REMOVED******REMOVED******REMOVED***  let source = currentSource() else { return ***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***await search(with: {
+***REMOVED******REMOVED******REMOVED***try await source.search(
+***REMOVED******REMOVED******REMOVED******REMOVED***currentQuery,
+***REMOVED******REMOVED******REMOVED******REMOVED***searchArea: queryArea,
+***REMOVED******REMOVED******REMOVED******REMOVED***preferredSearchLocation: queryCenter
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED*** )
+***REMOVED***
+***REMOVED***
+***REMOVED***func doUpdateSuggestions() async {
+***REMOVED******REMOVED***guard !currentQuery.trimmingCharacters(in: .whitespaces).isEmpty,
+***REMOVED******REMOVED******REMOVED***  let source = currentSource() else {
+***REMOVED******REMOVED******REMOVED******REMOVED***  return
+***REMOVED***  ***REMOVED***
+***REMOVED******REMOVED***do {
+***REMOVED******REMOVED******REMOVED***let suggestions = try await source.suggest(
+***REMOVED******REMOVED******REMOVED******REMOVED***currentQuery,
+***REMOVED******REMOVED******REMOVED******REMOVED***searchArea: queryArea,
+***REMOVED******REMOVED******REMOVED******REMOVED***preferredSearchLocation: queryCenter
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***searchOutcome = .suggestions(suggestions)
+***REMOVED*** catch is CancellationError {
+***REMOVED******REMOVED******REMOVED******REMOVED*** Do nothing if user cancelled and let next task set searchOutcome.
+***REMOVED*** catch {
+***REMOVED******REMOVED******REMOVED***searchOutcome = .failure(SearchError(error))
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED***func acceptSuggestionTask(_ searchSuggestion: SearchSuggestion) -> Task<(), Never> {
-***REMOVED******REMOVED***Task {
-***REMOVED******REMOVED******REMOVED***await search(with: {
-***REMOVED******REMOVED******REMOVED******REMOVED***try await searchSuggestion.owningSource.search(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***searchSuggestion,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***searchArea: queryArea,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***preferredSearchLocation: queryCenter
-***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED*** )
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED*** once we are done searching for the suggestion, then reset it to nil
-***REMOVED******REMOVED******REMOVED***currentSuggestion = nil
-***REMOVED***
+***REMOVED***func doAcceptSuggestion(_ searchSuggestion: SearchSuggestion) async {
+***REMOVED******REMOVED***await search(with: {
+***REMOVED******REMOVED******REMOVED***try await searchSuggestion.owningSource.search(
+***REMOVED******REMOVED******REMOVED******REMOVED***searchSuggestion,
+***REMOVED******REMOVED******REMOVED******REMOVED***searchArea: queryArea,
+***REMOVED******REMOVED******REMOVED******REMOVED***preferredSearchLocation: queryCenter
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED*** )
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** once we are done searching for the suggestion, then reset it to nil
+***REMOVED******REMOVED***currentSuggestion = nil
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func search(with action: () async throws -> [SearchResult]) async {

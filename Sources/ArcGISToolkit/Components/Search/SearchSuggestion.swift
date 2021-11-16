@@ -60,9 +60,11 @@ extension SearchSuggestion: Hashable {
 
 extension SearchSuggestion {
 ***REMOVED***init(suggestResult: SuggestResult, searchSource: SearchSource) {
-***REMOVED******REMOVED***displayTitle = suggestResult.label
-***REMOVED******REMOVED***owningSource = searchSource
-***REMOVED******REMOVED***isCollection = suggestResult.isCollection
-***REMOVED******REMOVED***self.suggestResult = suggestResult
+***REMOVED******REMOVED***self.init(
+***REMOVED******REMOVED******REMOVED***displayTitle: suggestResult.label,
+***REMOVED******REMOVED******REMOVED***owningSource: searchSource,
+***REMOVED******REMOVED******REMOVED***isCollection: suggestResult.isCollection,
+***REMOVED******REMOVED******REMOVED***suggestResult: suggestResult
+***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
