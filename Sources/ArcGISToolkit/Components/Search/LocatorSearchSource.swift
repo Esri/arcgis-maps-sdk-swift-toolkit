@@ -87,8 +87,8 @@ public class LocatorSearchSource: ObservableObject, SearchSource {
     
     public func search(
         _ queryString: String,
-        searchArea: Geometry?,
-        preferredSearchLocation: Point?
+        searchArea: Geometry? = nil,
+        preferredSearchLocation: Point? = nil
     ) async throws -> [SearchResult] {
         try await internalSearch(
             queryString,
@@ -99,8 +99,8 @@ public class LocatorSearchSource: ObservableObject, SearchSource {
     
     public func search(
         _ searchSuggestion: SearchSuggestion,
-        searchArea: Geometry?,
-        preferredSearchLocation: Point?
+        searchArea: Geometry? = nil,
+        preferredSearchLocation: Point? = nil
     ) async throws -> [SearchResult] {
         guard let suggestResult = searchSuggestion.suggestResult else { return [] }
         
@@ -120,8 +120,8 @@ public class LocatorSearchSource: ObservableObject, SearchSource {
     
     public func suggest(
         _ queryString: String,
-        searchArea: Geometry?,
-        preferredSearchLocation: Point?
+        searchArea: Geometry? = nil,
+        preferredSearchLocation: Point? = nil
     ) async throws -> [SearchSuggestion] {
         suggestParameters.searchArea = searchArea
         suggestParameters.preferredSearchLocation = preferredSearchLocation

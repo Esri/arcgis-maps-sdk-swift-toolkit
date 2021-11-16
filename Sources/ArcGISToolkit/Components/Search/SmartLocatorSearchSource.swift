@@ -64,8 +64,8 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
     
     public override func search(
         _ queryString: String,
-        searchArea: Geometry?,
-        preferredSearchLocation: Point?
+        searchArea: Geometry? = nil,
+        preferredSearchLocation: Point? = nil
     ) async throws -> [SearchResult] {
         // First, peform super class search.
         var results = try await super.search(
@@ -100,8 +100,8 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
     
     public override func search(
         _ searchSuggestion: SearchSuggestion,
-        searchArea: Geometry?,
-        preferredSearchLocation: Point?
+        searchArea: Geometry? = nil,
+        preferredSearchLocation: Point? = nil
     ) async throws -> [SearchResult] {
         guard let suggestResult = searchSuggestion.suggestResult else {
             return []
@@ -138,8 +138,8 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
     
     public override func suggest(
         _ queryString: String,
-        searchArea: Geometry?,
-        preferredSearchLocation: Point?
+        searchArea: Geometry? = nil,
+        preferredSearchLocation: Point? = nil
     ) async throws -> [SearchSuggestion] {
         var results = try await super.suggest(
             queryString,
