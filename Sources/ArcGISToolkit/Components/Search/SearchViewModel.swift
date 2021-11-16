@@ -43,14 +43,13 @@ public class SearchViewModel: ObservableObject {
     ///   - queryCenter: Defines the center for the search.
     ///   - resultMode: Defines how many results to return.
     ///   - sources: Collection of search sources to be used.
-    public convenience init(
+    public init(
         activeSource: SearchSource? = nil,
         queryArea: Geometry? = nil,
         queryCenter: Point? = nil,
         resultMode: SearchResultMode = .automatic,
         sources: [SearchSource] = []
     ) {
-        self.init()
         self.activeSource = activeSource
         self.queryArea = queryArea
         self.queryCenter = queryCenter
@@ -89,9 +88,11 @@ public class SearchViewModel: ObservableObject {
         }
     }
     
-    /// The current GeoView extent.  Defaults to null.  This should be updated as the user navigates
-    /// the map/scene.  It will be used to determine the value of `IsEligibleForRequery`
-    /// for the 'Repeat search here' behavior.  If that behavior is not wanted, it should be left `nil`.
+    /// The current map/scene view extent. Defaults to `nil`.
+    ///
+    /// This should be updated as the user navigates the map/scene. It will be
+    /// used to determine the value of `isEligibleForRequery` for the 'Repeat
+    /// search here' behavior. If that behavior is not wanted, it should be left `nil`.
     public var geoViewExtent: Envelope? = nil {
         willSet {
             guard !isEligibleForRequery,
@@ -121,7 +122,7 @@ public class SearchViewModel: ObservableObject {
         }
     }
     
-    /// True if the Extent has changed by a set amount after a `Search` or `AcceptSuggestion` call.
+    /// `true` if the extent has changed by a set amount after a `Search` or `AcceptSuggestion` call.
     /// This property is used by the view to enable 'Repeat search here' functionality. This property is
     /// observable, and the view should use it to hide and show the 'repeat search' button.
     /// Changes to this property are driven by changes to the `geoViewExtent` property.  This value will be
@@ -130,7 +131,7 @@ public class SearchViewModel: ObservableObject {
     @Published
     public private(set) var isEligibleForRequery: Bool = false
     
-    /// The search area to be used for the current query.  Results will be limited to those
+    /// The search area to be used for the current query. Results will be limited to those
     /// within `QueryArea`.  Defaults to `nil`.
     public var queryArea: Geometry? = nil
     
@@ -140,7 +141,7 @@ public class SearchViewModel: ObservableObject {
     
     /// Defines how many results to return. Defaults to Automatic. In automatic mode, an appropriate
     /// number of results is returned based on the type of suggestion chosen
-    /// (driven by the IsCollection property).
+    /// (driven by the `isCollection` property).
     public var resultMode: SearchResultMode = .automatic
     
     /// Collection of results. `nil` means no query has been made. An empty array means there
@@ -236,8 +237,8 @@ public class SearchViewModel: ObservableObject {
     }
 }
 
-extension SearchViewModel {
-    private func repeatSearchTask() -> Task<(), Never> {
+private extension SearchViewModel {
+    func repeatSearchTask() -> Task<(), Never> {
         Task {
             guard !currentQuery.trimmingCharacters(in: .whitespaces).isEmpty,
                   let queryExtent = geoViewExtent,
@@ -254,7 +255,7 @@ extension SearchViewModel {
         }
     }
     
-    private func searchTask() -> Task<(), Never> {
+    func searchTask() -> Task<(), Never> {
         Task {
             guard !currentQuery.trimmingCharacters(in: .whitespaces).isEmpty,
                   let source = currentSource() else { return }
@@ -269,7 +270,7 @@ extension SearchViewModel {
         }
     }
     
-    private func updateSuggestionsTask() -> Task<(), Never> {
+    func updateSuggestionsTask() -> Task<(), Never> {
         Task {
             guard !currentQuery.trimmingCharacters(in: .whitespaces).isEmpty,
                   let source = currentSource() else {
@@ -290,7 +291,7 @@ extension SearchViewModel {
         }
     }
     
-    private func acceptSuggestionTask(_ searchSuggestion: SearchSuggestion) -> Task<(), Never> {
+    func acceptSuggestionTask(_ searchSuggestion: SearchSuggestion) -> Task<(), Never> {
         Task {
             await search(with: {
                 try await searchSuggestion.owningSource.search(
@@ -305,7 +306,7 @@ extension SearchViewModel {
         }
     }
     
-    private func search(with action: () async throws -> [SearchResult]) async {
+    func search(with action: () async throws -> [SearchResult]) async {
         do {
             // User is performing a search, so set `lastSearchExtent`.
             lastSearchExtent = geoViewExtent
@@ -317,10 +318,10 @@ extension SearchViewModel {
         }
     }
     
-    private func process(searchResults: [SearchResult], isCollection: Bool = true) {
+    func process(searchResults: [SearchResult], isCollection: Bool = true) {
         let effectiveResults: [SearchResult]
         
-        switch (resultMode) {
+        switch resultMode {
         case .single:
             effectiveResults = Array(searchResults.prefix(1))
         case .multiple:

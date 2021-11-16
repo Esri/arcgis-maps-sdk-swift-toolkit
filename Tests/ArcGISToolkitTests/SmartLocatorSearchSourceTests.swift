@@ -19,8 +19,8 @@ final class SmartLocatorSearchSourceTests: XCTestCase {
     func testRepeatSearchResultThreshold() async throws {
         let locator = SmartLocatorSearchSource()
         
-        // Threshold of 0 means no re-query.
-        locator.repeatSearchResultThreshold = 0
+        // Threshold of nil means no re-query.
+        locator.repeatSearchResultThreshold = nil
         var searchResults = try await locator.search(
             "Dunkin' Donuts",
             searchArea: Envelope.edinburgh
@@ -41,8 +41,8 @@ final class SmartLocatorSearchSourceTests: XCTestCase {
     func testRepeatSuggestResultThreshold() async throws {
         let locator = SmartLocatorSearchSource()
 
-        // Threshold of 0 means no re-query.
-        locator.repeatSuggestResultThreshold = 0
+        // Threshold of nil means no re-query.
+        locator.repeatSuggestResultThreshold = nil
         var suggestResults = try await locator.suggest(
             "Dunkin' Donuts",
             searchArea: Envelope.edinburgh
