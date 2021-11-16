@@ -23,8 +23,7 @@ final class SmartLocatorSearchSourceTests: XCTestCase {
 ***REMOVED******REMOVED***locator.repeatSearchResultThreshold = 0
 ***REMOVED******REMOVED***var searchResults = try await locator.search(
 ***REMOVED******REMOVED******REMOVED***"Dunkin' Donuts",
-***REMOVED******REMOVED******REMOVED***searchArea: Envelope.edinburgh,
-***REMOVED******REMOVED******REMOVED***preferredSearchLocation: nil
+***REMOVED******REMOVED******REMOVED***searchArea: Envelope.edinburgh
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***var results = try XCTUnwrap(searchResults)
 ***REMOVED******REMOVED***XCTAssertEqual(results, [])
@@ -33,8 +32,7 @@ final class SmartLocatorSearchSourceTests: XCTestCase {
 ***REMOVED******REMOVED***locator.repeatSearchResultThreshold = 1
 ***REMOVED******REMOVED***searchResults = try await locator.search(
 ***REMOVED******REMOVED******REMOVED***"Dunkin' Donuts",
-***REMOVED******REMOVED******REMOVED***searchArea: Envelope.edinburgh,
-***REMOVED******REMOVED******REMOVED***preferredSearchLocation: nil
+***REMOVED******REMOVED******REMOVED***searchArea: Envelope.edinburgh
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***results = try XCTUnwrap(searchResults)
 ***REMOVED******REMOVED***XCTAssertNotEqual(results, [])
@@ -47,8 +45,7 @@ final class SmartLocatorSearchSourceTests: XCTestCase {
 ***REMOVED******REMOVED***locator.repeatSuggestResultThreshold = 0
 ***REMOVED******REMOVED***var suggestResults = try await locator.suggest(
 ***REMOVED******REMOVED******REMOVED***"Dunkin' Donuts",
-***REMOVED******REMOVED******REMOVED***searchArea: Envelope.edinburgh,
-***REMOVED******REMOVED******REMOVED***preferredSearchLocation: nil
+***REMOVED******REMOVED******REMOVED***searchArea: Envelope.edinburgh
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***var results = try XCTUnwrap(suggestResults)
 ***REMOVED******REMOVED***XCTAssertEqual(results, [])
@@ -57,8 +54,7 @@ final class SmartLocatorSearchSourceTests: XCTestCase {
 ***REMOVED******REMOVED***locator.repeatSuggestResultThreshold = 1
 ***REMOVED******REMOVED***suggestResults = try await locator.suggest(
 ***REMOVED******REMOVED******REMOVED***"Dunkin' Donuts",
-***REMOVED******REMOVED******REMOVED***searchArea: Envelope.edinburgh,
-***REMOVED******REMOVED******REMOVED***preferredSearchLocation: nil
+***REMOVED******REMOVED******REMOVED***searchArea: Envelope.edinburgh
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***results = try XCTUnwrap(suggestResults)
 ***REMOVED******REMOVED***XCTAssertNotEqual(suggestResults, [])

@@ -77,7 +77,6 @@ struct SearchExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint: $searchResultViewpoint,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***resultsOverlay: searchResultsOverlay
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.searchBarWidth(360.0)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
 ***REMOVED******REMOVED***
 ***REMOVED***

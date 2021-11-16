@@ -87,8 +87,8 @@ public class LocatorSearchSource: ObservableObject, SearchSource {
 ***REMOVED***
 ***REMOVED***public func search(
 ***REMOVED******REMOVED***_ queryString: String,
-***REMOVED******REMOVED***searchArea: Geometry?,
-***REMOVED******REMOVED***preferredSearchLocation: Point?
+***REMOVED******REMOVED***searchArea: Geometry? = nil,
+***REMOVED******REMOVED***preferredSearchLocation: Point? = nil
 ***REMOVED***) async throws -> [SearchResult] {
 ***REMOVED******REMOVED***try await internalSearch(
 ***REMOVED******REMOVED******REMOVED***queryString,
@@ -99,8 +99,8 @@ public class LocatorSearchSource: ObservableObject, SearchSource {
 ***REMOVED***
 ***REMOVED***public func search(
 ***REMOVED******REMOVED***_ searchSuggestion: SearchSuggestion,
-***REMOVED******REMOVED***searchArea: Geometry?,
-***REMOVED******REMOVED***preferredSearchLocation: Point?
+***REMOVED******REMOVED***searchArea: Geometry? = nil,
+***REMOVED******REMOVED***preferredSearchLocation: Point? = nil
 ***REMOVED***) async throws -> [SearchResult] {
 ***REMOVED******REMOVED***guard let suggestResult = searchSuggestion.suggestResult else { return [] ***REMOVED***
 ***REMOVED******REMOVED***
@@ -120,8 +120,8 @@ public class LocatorSearchSource: ObservableObject, SearchSource {
 ***REMOVED***
 ***REMOVED***public func suggest(
 ***REMOVED******REMOVED***_ queryString: String,
-***REMOVED******REMOVED***searchArea: Geometry?,
-***REMOVED******REMOVED***preferredSearchLocation: Point?
+***REMOVED******REMOVED***searchArea: Geometry? = nil,
+***REMOVED******REMOVED***preferredSearchLocation: Point? = nil
 ***REMOVED***) async throws -> [SearchSuggestion] {
 ***REMOVED******REMOVED***suggestParameters.searchArea = searchArea
 ***REMOVED******REMOVED***suggestParameters.preferredSearchLocation = preferredSearchLocation

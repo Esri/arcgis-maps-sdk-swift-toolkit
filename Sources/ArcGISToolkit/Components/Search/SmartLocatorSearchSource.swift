@@ -64,8 +64,8 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
 ***REMOVED***
 ***REMOVED***public override func search(
 ***REMOVED******REMOVED***_ queryString: String,
-***REMOVED******REMOVED***searchArea: Geometry?,
-***REMOVED******REMOVED***preferredSearchLocation: Point?
+***REMOVED******REMOVED***searchArea: Geometry? = nil,
+***REMOVED******REMOVED***preferredSearchLocation: Point? = nil
 ***REMOVED***) async throws -> [SearchResult] {
 ***REMOVED******REMOVED******REMOVED*** First, peform super class search.
 ***REMOVED******REMOVED***var results = try await super.search(
@@ -100,8 +100,8 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
 ***REMOVED***
 ***REMOVED***public override func search(
 ***REMOVED******REMOVED***_ searchSuggestion: SearchSuggestion,
-***REMOVED******REMOVED***searchArea: Geometry?,
-***REMOVED******REMOVED***preferredSearchLocation: Point?
+***REMOVED******REMOVED***searchArea: Geometry? = nil,
+***REMOVED******REMOVED***preferredSearchLocation: Point? = nil
 ***REMOVED***) async throws -> [SearchResult] {
 ***REMOVED******REMOVED***guard let suggestResult = searchSuggestion.suggestResult else {
 ***REMOVED******REMOVED******REMOVED***return []
@@ -138,8 +138,8 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
 ***REMOVED***
 ***REMOVED***public override func suggest(
 ***REMOVED******REMOVED***_ queryString: String,
-***REMOVED******REMOVED***searchArea: Geometry?,
-***REMOVED******REMOVED***preferredSearchLocation: Point?
+***REMOVED******REMOVED***searchArea: Geometry? = nil,
+***REMOVED******REMOVED***preferredSearchLocation: Point? = nil
 ***REMOVED***) async throws -> [SearchSuggestion] {
 ***REMOVED******REMOVED***var results = try await super.suggest(
 ***REMOVED******REMOVED******REMOVED***queryString,
