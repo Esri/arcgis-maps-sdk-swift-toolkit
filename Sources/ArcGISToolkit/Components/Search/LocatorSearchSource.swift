@@ -19,7 +19,7 @@ import ArcGIS
 public class LocatorSearchSource: ObservableObject, SearchSource {
     /// Creates a locator search source.
     /// - Parameters:
-    ///   - name: Name to show when presenting this source in the UI.
+    ///   - name: The name to show when presenting this source in the UI.
     ///   - locatorTask: The `LocatorTask` to use for searching.
     ///   - maximumResults: The maximum results to return when performing a search. Most sources default to 6.
     ///   - maximumSuggestions: The maximum suggestions to return. Most sources default to 6.
@@ -41,7 +41,7 @@ public class LocatorSearchSource: ObservableObject, SearchSource {
         self.geocodeParameters.addResultAttributeName("*")
     }
     
-    /// Name to show when presenting this source in the UI.
+    /// The name to show when presenting this source in the UI.
     public var name: String
     
     /// The maximum results to return when performing a search. Most sources default to 6
@@ -65,7 +65,7 @@ public class LocatorSearchSource: ObservableObject, SearchSource {
     }
     
     /// The locator used by this search source.
-    public private(set) var locatorTask: LocatorTask
+    public let locatorTask: LocatorTask
     
     /// Parameters used for geocoding. Some properties on parameters will be updated automatically
     /// based on searches.
@@ -79,7 +79,7 @@ public class LocatorSearchSource: ObservableObject, SearchSource {
         _ queryString: String,
         searchExtent: Envelope
     ) async throws -> [SearchResult] {
-        return try await internalSearch(
+        try await internalSearch(
             queryString,
             searchArea: searchExtent
         )
@@ -87,10 +87,10 @@ public class LocatorSearchSource: ObservableObject, SearchSource {
     
     public func search(
         _ queryString: String,
-        searchArea: Geometry?,
-        preferredSearchLocation: Point?
+        searchArea: Geometry? = nil,
+        preferredSearchLocation: Point? = nil
     ) async throws -> [SearchResult] {
-        return try await internalSearch(
+        try await internalSearch(
             queryString,
             searchArea: searchArea,
             preferredSearchLocation: preferredSearchLocation
@@ -99,8 +99,8 @@ public class LocatorSearchSource: ObservableObject, SearchSource {
     
     public func search(
         _ searchSuggestion: SearchSuggestion,
-        searchArea: Geometry?,
-        preferredSearchLocation: Point?
+        searchArea: Geometry? = nil,
+        preferredSearchLocation: Point? = nil
     ) async throws -> [SearchResult] {
         guard let suggestResult = searchSuggestion.suggestResult else { return [] }
         
@@ -120,8 +120,8 @@ public class LocatorSearchSource: ObservableObject, SearchSource {
     
     public func suggest(
         _ queryString: String,
-        searchArea: Geometry?,
-        preferredSearchLocation: Point?
+        searchArea: Geometry? = nil,
+        preferredSearchLocation: Point? = nil
     ) async throws -> [SearchSuggestion] {
         suggestParameters.searchArea = searchArea
         suggestParameters.preferredSearchLocation = preferredSearchLocation

@@ -21,30 +21,18 @@ final class LocatorSearchSourceTests: XCTestCase {
         locator.maximumResults = 4
         XCTAssertEqual(locator.maximumResults, 4)
         
-        var searchResults = try await locator.search(
-            "Coffee",
-            searchArea: nil,
-            preferredSearchLocation: nil
-        )
+        var searchResults = try await locator.search("Coffee")
         XCTAssertEqual(searchResults.count, 4)
         
         locator.maximumResults = 12
-        searchResults = try await locator.search(
-            "Coffee",
-            searchArea: nil,
-            preferredSearchLocation: nil
-        )
+        searchResults = try await locator.search("Coffee")
         XCTAssertEqual(searchResults.count, 12)
         
         // Set property directly on geocode parameters.
         locator.geocodeParameters.maxResults = 2
         XCTAssertEqual(locator.geocodeParameters.maxResults, 2)
         XCTAssertEqual(locator.maximumResults, 2)
-        searchResults = try await locator.search(
-            "Coffee",
-            searchArea: nil,
-            preferredSearchLocation: nil
-        )
+        searchResults = try await locator.search("Coffee")
         XCTAssertEqual(searchResults.count, 2)
     }
     
@@ -53,30 +41,18 @@ final class LocatorSearchSourceTests: XCTestCase {
         locator.maximumSuggestions = 4
         XCTAssertEqual(locator.maximumSuggestions, 4)
         
-        var suggestResults = try await locator.suggest(
-            "Coffee",
-            searchArea: nil,
-            preferredSearchLocation: nil
-        )
+        var suggestResults = try await locator.suggest("Coffee")
         XCTAssertEqual(suggestResults.count, 4)
         
         locator.maximumSuggestions = 12
-        suggestResults = try await locator.suggest(
-            "Coffee",
-            searchArea: nil,
-            preferredSearchLocation: nil
-        )
+        suggestResults = try await locator.suggest("Coffee")
         XCTAssertEqual(suggestResults.count, 12)
         
         // Set property directly on suggest parameters.
         locator.suggestParameters.maxResults = 2
         XCTAssertEqual(locator.suggestParameters.maxResults, 2)
         XCTAssertEqual(locator.maximumSuggestions, 2)
-        suggestResults = try await locator.suggest(
-            "Coffee",
-            searchArea: nil,
-            preferredSearchLocation: nil
-        )
+        suggestResults = try await locator.suggest("Coffee")
         XCTAssertEqual(suggestResults.count, 2)
     }
 }

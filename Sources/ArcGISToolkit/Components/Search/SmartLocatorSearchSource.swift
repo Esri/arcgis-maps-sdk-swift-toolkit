@@ -36,8 +36,8 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
         ),
         maximumResults: Int32 = 6,
         maximumSuggestions: Int32 = 6,
-        repeatSearchResultThreshold: Int = 1,
-        repeatSuggestResultThreshold: Int = 6
+        repeatSearchResultThreshold: Int? = 1,
+        repeatSuggestResultThreshold: Int? = 6
     ) {
         super.init(
             name: name,
@@ -52,20 +52,20 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
     /// The minimum number of results to attempt to return. If there are too few results, the search is
     /// repeated with loosened parameters until enough results are accumulated. If no search is
     /// successful, it is still possible to have a total number of results less than this threshold. Does not
-    /// apply to repeated search with area constraint. Set to zero to disable search repeat behavior.
-    public var repeatSearchResultThreshold: Int = 1
+    /// apply to repeated search with area constraint. Set to `nil` to disable search repeat behavior.
+    public var repeatSearchResultThreshold: Int? = 1
     
     /// The minimum number of suggestions to attempt to return. If there are too few suggestions,
     /// request is repeated with loosened constraints until enough suggestions are accumulated.
     /// If no search is successful, it is still possible to have a total number of results less than this
-    /// threshold. Does not apply to repeated search with area constraint. Set to zero to disable search
+    /// threshold. Does not apply to repeated search with area constraint. Set to `nil` to disable search
     /// repeat behavior.
-    public var repeatSuggestResultThreshold: Int = 6
+    public var repeatSuggestResultThreshold: Int? = 6
     
     public override func search(
         _ queryString: String,
-        searchArea: Geometry?,
-        preferredSearchLocation: Point?
+        searchArea: Geometry? = nil,
+        preferredSearchLocation: Point? = nil
     ) async throws -> [SearchResult] {
         // First, peform super class search.
         var results = try await super.search(
@@ -73,8 +73,8 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
             searchArea: searchArea,
             preferredSearchLocation: preferredSearchLocation
         )
-        if results.count > repeatSearchResultThreshold ||
-            repeatSearchResultThreshold == 0 ||
+        if repeatSearchResultThreshold == nil ||
+            results.count > repeatSearchResultThreshold! ||
             geocodeParameters.searchArea == nil {
             // Result count meets threshold or there were no geographic
             // constraints on the search, so return results.
@@ -100,8 +100,8 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
     
     public override func search(
         _ searchSuggestion: SearchSuggestion,
-        searchArea: Geometry?,
-        preferredSearchLocation: Point?
+        searchArea: Geometry? = nil,
+        preferredSearchLocation: Point? = nil
     ) async throws -> [SearchResult] {
         guard let suggestResult = searchSuggestion.suggestResult else {
             return []
@@ -112,7 +112,9 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
             searchArea: searchArea,
             preferredSearchLocation: preferredSearchLocation
         )
-        if results.count > repeatSearchResultThreshold ||
+        
+        if repeatSearchResultThreshold == nil ||
+            results.count > repeatSearchResultThreshold! ||
             geocodeParameters.searchArea == nil {
             // Result count meets threshold or there were no geographic
             // constraints on the search, so return results.
@@ -138,16 +140,16 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
     
     public override func suggest(
         _ queryString: String,
-        searchArea: Geometry?,
-        preferredSearchLocation: Point?
+        searchArea: Geometry? = nil,
+        preferredSearchLocation: Point? = nil
     ) async throws -> [SearchSuggestion] {
         var results = try await super.suggest(
             queryString,
             searchArea: searchArea,
             preferredSearchLocation: preferredSearchLocation
         )
-        if results.count > repeatSuggestResultThreshold ||
-            repeatSuggestResultThreshold == 0 ||
+        if repeatSuggestResultThreshold == nil ||
+            results.count > repeatSuggestResultThreshold! ||
             suggestParameters.searchArea == nil {
             // Result count meets threshold or there were no geographic
             // constraints on the search, so return results.

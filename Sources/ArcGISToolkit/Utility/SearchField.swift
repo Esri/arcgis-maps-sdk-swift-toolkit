@@ -16,43 +16,47 @@ import SwiftUI
 /// A custom view implementing a SearchField.  It contains a search button, text field, delete text button,
 /// and a button to allow users to hide/show the search results list.
 public struct SearchField: View {
+    internal init(
+        query: Binding<String>,
+        searchFieldPrompt: String = "",
+        isShowResultsHidden: Bool = true,
+        showResults: Binding<Bool>? = nil
+    ) {
+        self.query = query
+        self.searchFieldPrompt = searchFieldPrompt
+        self.isShowResultsHidden = isShowResultsHidden
+        self.showResults = showResults
+    }
+
     /// The current search query.
-    public var currentQuery: Binding<String>
+    private var query: Binding<String>
 
     /// The default placeholder displayed when `currentQuery` is empty.
-    public var defaultPlaceholder: String = ""
+    private let searchFieldPrompt: String
 
     /// The visibility of the `showResults` button.
-    public var isShowResultsHidden: Bool = true
+    private let isShowResultsHidden: Bool
 
     /// Binding allowing the user to toggle the visibility of the results list.
-    public var showResults: Binding<Bool>? = nil
-    
-    /// The handler executed when the user submits a search, either via the `TextField`
-    /// or the Search button.
-    public var onCommit: () -> Void = { }
+    private var showResults: Binding<Bool>?
     
     public var body: some View {
         HStack {
-            // Search button
-            Button {
-                onCommit()
-            } label: {
-                Image(systemName: "magnifyingglass.circle.fill")
-                    .foregroundColor(Color(uiColor: .opaqueSeparator))
-            }
+            // Search icon
+            Image(systemName: "magnifyingglass.circle.fill")
+                .foregroundColor(Color(uiColor: .opaqueSeparator))
             
             // Search text field
             TextField(
-                defaultPlaceholder,
-                text: currentQuery
+                "Search Query",
+                text: query,
+                prompt: Text(searchFieldPrompt)
             )
-                .onSubmit { onCommit() }
             
             // Delete text button
-            if !currentQuery.wrappedValue.isEmpty {
+            if !query.wrappedValue.isEmpty {
                 Button {
-                    currentQuery.wrappedValue = ""
+                    query.wrappedValue = ""
                 } label: {
                     Image(systemName: "xmark.circle.fill")
                         .foregroundColor(Color(.opaqueSeparator))
