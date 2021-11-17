@@ -29,12 +29,12 @@ class SearchViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Get suggestion
 ***REMOVED******REMOVED***let suggestions = try await searchSuggestions(model)
-***REMOVED******REMOVED***let suggestion = try XCTUnwrap(suggestions?.get().first)
+***REMOVED******REMOVED***let suggestion = try XCTUnwrap(suggestions?.first)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***model.acceptSuggestion(suggestion)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let results = try await searchResults(model, dropFirst: true)
-***REMOVED******REMOVED***let result = try XCTUnwrap(results?.get())
+***REMOVED******REMOVED***let result = try XCTUnwrap(results)
 ***REMOVED******REMOVED***XCTAssertEqual(result.count, 1)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** With only one result, model should set `selectedResult` property.
@@ -54,13 +54,13 @@ class SearchViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***model.commitSearch()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let results = try await searchResults(model)
-***REMOVED******REMOVED***let result = try XCTUnwrap(results?.get().first)
+***REMOVED******REMOVED***let result = try XCTUnwrap(results?.first)
 ***REMOVED******REMOVED***XCTAssertEqual(result.owningSource.name, activeSource.name)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***model.updateSuggestions()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let suggestions = try await searchSuggestions(model, dropFirst: true)
-***REMOVED******REMOVED***let suggestion = try XCTUnwrap(suggestions?.get().first)
+***REMOVED******REMOVED***let suggestion = try XCTUnwrap(suggestions?.first)
 ***REMOVED******REMOVED***XCTAssertEqual(suggestion.owningSource.name, activeSource.name)
 ***REMOVED***
 ***REMOVED***
@@ -76,7 +76,7 @@ class SearchViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***model.commitSearch()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var results = try await searchResults(model)
-***REMOVED******REMOVED***var result = try XCTUnwrap(results?.get())
+***REMOVED******REMOVED***var result = try XCTUnwrap(results)
 ***REMOVED******REMOVED***XCTAssertEqual(result, [])
 ***REMOVED******REMOVED***XCTAssertNil(model.selectedResult)
 ***REMOVED******REMOVED***
@@ -86,7 +86,7 @@ class SearchViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***model.commitSearch()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***results = try await searchResults(model)
-***REMOVED******REMOVED***result = try XCTUnwrap(results?.get())
+***REMOVED******REMOVED***result = try XCTUnwrap(results)
 ***REMOVED******REMOVED***XCTAssertEqual(result.count, 1)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** One results automatically populates `selectedResult`.
@@ -98,7 +98,7 @@ class SearchViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***model.commitSearch()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***results = try await searchResults(model)
-***REMOVED******REMOVED***result = try XCTUnwrap(results?.get())
+***REMOVED******REMOVED***result = try XCTUnwrap(results)
 ***REMOVED******REMOVED***XCTAssertGreaterThan(result.count, 1)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertNil(model.selectedResult)
@@ -108,7 +108,7 @@ class SearchViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***model.commitSearch()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***results = try await searchResults(model, dropFirst: true)
-***REMOVED******REMOVED***result = try XCTUnwrap(results?.get())
+***REMOVED******REMOVED***result = try XCTUnwrap(results)
 ***REMOVED******REMOVED***XCTAssertGreaterThan(result.count, 1)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertNil(model.selectedResult)
@@ -219,7 +219,7 @@ class SearchViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***model.commitSearch()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var results = try await searchResults(model)
-***REMOVED******REMOVED***var result = try XCTUnwrap(results?.get())
+***REMOVED******REMOVED***var result = try XCTUnwrap(results)
 ***REMOVED******REMOVED***XCTAssertGreaterThan(result.count, 1)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let resultGeometryUnion: Geometry = try XCTUnwrap(
@@ -240,7 +240,7 @@ class SearchViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***model.commitSearch()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***results = try await searchResults(model)
-***REMOVED******REMOVED***result = try XCTUnwrap(results?.get())
+***REMOVED******REMOVED***result = try XCTUnwrap(results)
 ***REMOVED******REMOVED***XCTAssertEqual(result, [])
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***model.queryArea = Polygon.minneapolis
@@ -256,7 +256,7 @@ class SearchViewModelTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED*** and will give us the next one, which is the correct one (the result
 ***REMOVED******REMOVED******REMOVED*** from the second `model.commitSearch()` call).
 ***REMOVED******REMOVED***results = try await searchResults(model, dropFirst: true)
-***REMOVED******REMOVED***result = try XCTUnwrap(results?.get())
+***REMOVED******REMOVED***result = try XCTUnwrap(results)
 ***REMOVED******REMOVED***XCTAssertEqual(result.count, 1)
 ***REMOVED***
 ***REMOVED***
@@ -270,7 +270,7 @@ class SearchViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***model.commitSearch()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var results = try await searchResults(model)
-***REMOVED******REMOVED***var result = try XCTUnwrap(results?.get())
+***REMOVED******REMOVED***var result = try XCTUnwrap(results)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var resultPoint = try XCTUnwrap(
 ***REMOVED******REMOVED******REMOVED***result.first?.geoElement?.geometry as? Point
@@ -296,7 +296,7 @@ class SearchViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***model.commitSearch()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***results = try await searchResults(model)
-***REMOVED******REMOVED***result = try XCTUnwrap(results?.get())
+***REMOVED******REMOVED***result = try XCTUnwrap(results)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***resultPoint = try XCTUnwrap(
 ***REMOVED******REMOVED******REMOVED***result.first?.geoElement?.geometry as? Point
@@ -327,7 +327,7 @@ class SearchViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***model.repeatSearch()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var results = try await searchResults(model)
-***REMOVED******REMOVED***var result = try XCTUnwrap(results?.get())
+***REMOVED******REMOVED***var result = try XCTUnwrap(results)
 ***REMOVED******REMOVED***XCTAssertGreaterThan(result.count, 1)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let resultGeometryUnion: Geometry = try XCTUnwrap(
@@ -348,7 +348,7 @@ class SearchViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***model.repeatSearch()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***results = try await searchResults(model)
-***REMOVED******REMOVED***result = try XCTUnwrap(results?.get())
+***REMOVED******REMOVED***result = try XCTUnwrap(results)
 ***REMOVED******REMOVED***XCTAssertEqual(result.count, 0)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***model.geoViewExtent = Polygon.minneapolis.extent
@@ -356,7 +356,7 @@ class SearchViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***model.repeatSearch()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***results = try await searchResults(model, dropFirst: true)
-***REMOVED******REMOVED***result = try XCTUnwrap(results?.get())
+***REMOVED******REMOVED***result = try XCTUnwrap(results)
 ***REMOVED******REMOVED***XCTAssertEqual(result.count, 1)
 ***REMOVED***
 ***REMOVED***
@@ -370,7 +370,7 @@ class SearchViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***model.commitSearch()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var results = try await searchResults(model)
-***REMOVED******REMOVED***var result = try XCTUnwrap(results?.get())
+***REMOVED******REMOVED***var result = try XCTUnwrap(results)
 ***REMOVED******REMOVED***XCTAssertEqual(result.count, 1)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***model.resultMode = .multiple
@@ -378,7 +378,7 @@ class SearchViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***model.commitSearch()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***results = try await searchResults(model, dropFirst: true)
-***REMOVED******REMOVED***result = try XCTUnwrap(results?.get())
+***REMOVED******REMOVED***result = try XCTUnwrap(results)
 ***REMOVED******REMOVED***XCTAssertGreaterThan(result.count, 1)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***model.currentQuery = "Coffee"
@@ -386,7 +386,7 @@ class SearchViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***model.updateSuggestions()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let suggestionResults = try await searchSuggestions(model)
-***REMOVED******REMOVED***let suggestions = try XCTUnwrap(suggestionResults?.get())
+***REMOVED******REMOVED***let suggestions = try XCTUnwrap(suggestionResults)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let collectionSuggestion = try XCTUnwrap(suggestions.filter(\.isCollection).first)
 ***REMOVED******REMOVED***let singleSuggestion = try XCTUnwrap(suggestions.filter { !$0.isCollection ***REMOVED***.first)
@@ -396,13 +396,13 @@ class SearchViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***model.acceptSuggestion(collectionSuggestion)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***results = try await searchResults(model, dropFirst: true)
-***REMOVED******REMOVED***result = try XCTUnwrap(results?.get())
+***REMOVED******REMOVED***result = try XCTUnwrap(results)
 ***REMOVED******REMOVED***XCTAssertGreaterThan(result.count, 1)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***model.acceptSuggestion(singleSuggestion)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***results = try await searchResults(model)
-***REMOVED******REMOVED***result = try XCTUnwrap(results?.get())
+***REMOVED******REMOVED***result = try XCTUnwrap(results)
 ***REMOVED******REMOVED***XCTAssertEqual(result.count, 1)
 ***REMOVED***
 ***REMOVED***
@@ -418,7 +418,7 @@ class SearchViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***model.updateSuggestions()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var suggestionResults = try await searchSuggestions(model)
-***REMOVED******REMOVED***var suggestions = try XCTUnwrap(suggestionResults?.get())
+***REMOVED******REMOVED***var suggestions = try XCTUnwrap(suggestionResults)
 ***REMOVED******REMOVED***XCTAssertEqual(suggestions, [])
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** UpdateSuggestions with results.
@@ -427,7 +427,7 @@ class SearchViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***model.updateSuggestions()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***suggestionResults = try await searchSuggestions(model, dropFirst: true)
-***REMOVED******REMOVED***suggestions = try XCTUnwrap(suggestionResults?.get())
+***REMOVED******REMOVED***suggestions = try XCTUnwrap(suggestionResults)
 ***REMOVED******REMOVED***XCTAssertGreaterThanOrEqual(suggestions.count, 1)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertNil(model.selectedResult)
@@ -438,7 +438,7 @@ extension SearchViewModelTests {
 ***REMOVED***func searchResults(
 ***REMOVED******REMOVED***_ model: SearchViewModel,
 ***REMOVED******REMOVED***dropFirst: Bool = false
-***REMOVED***) async throws -> Result<[SearchResult], SearchError>? {
+***REMOVED***) async throws -> [SearchResult]? {
 ***REMOVED******REMOVED***let searchOutcome = dropFirst ?
 ***REMOVED******REMOVED***try await model.$searchOutcome.compactMap({ $0 ***REMOVED***).dropFirst().first :
 ***REMOVED******REMOVED***try await model.$searchOutcome.compactMap({ $0 ***REMOVED***).first
@@ -454,7 +454,7 @@ extension SearchViewModelTests {
 ***REMOVED***func searchSuggestions(
 ***REMOVED******REMOVED***_ model: SearchViewModel,
 ***REMOVED******REMOVED***dropFirst: Bool = false
-***REMOVED***) async throws -> Result<[SearchSuggestion], SearchError>? {
+***REMOVED***) async throws -> [SearchSuggestion]? {
 ***REMOVED******REMOVED***let searchOutcome = dropFirst ?
 ***REMOVED******REMOVED***try await model.$searchOutcome.compactMap({ $0 ***REMOVED***).dropFirst().first :
 ***REMOVED******REMOVED***try await model.$searchOutcome.compactMap({ $0 ***REMOVED***).first

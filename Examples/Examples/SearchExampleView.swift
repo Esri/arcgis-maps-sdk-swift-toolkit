@@ -32,7 +32,7 @@ struct SearchExampleView: View {
 ***REMOVED******REMOVED***/ The map viewpoint used by the `SearchView` to pan/zoom the map
 ***REMOVED******REMOVED***/ to the extent of the search results.
 ***REMOVED***@State
-***REMOVED***var searchResultViewpoint: Viewpoint? = Viewpoint(
+***REMOVED***private var searchResultViewpoint: Viewpoint? = Viewpoint(
 ***REMOVED******REMOVED***center: Point(x: -93.258133, y: 44.986656, spatialReference: .wgs84),
 ***REMOVED******REMOVED***scale: 1000000
 ***REMOVED***)
@@ -77,7 +77,6 @@ struct SearchExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint: $searchResultViewpoint,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***resultsOverlay: searchResultsOverlay
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.searchBarWidth(360.0)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
 ***REMOVED******REMOVED***
 ***REMOVED***

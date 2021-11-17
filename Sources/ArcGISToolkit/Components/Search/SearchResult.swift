@@ -40,7 +40,6 @@ public struct SearchResult {
 ***REMOVED******REMOVED***/ because not all valid results will have a geometry. E.g. feature results from non-spatial features.
 ***REMOVED***public var selectionViewpoint: Viewpoint? = nil
 
-***REMOVED******REMOVED***/ The stable identity of the entity associated with this instance.
 ***REMOVED***public let id = UUID()
 ***REMOVED***
 
@@ -68,18 +67,15 @@ extension SearchResult {
 ***REMOVED******REMOVED***let subtitle = geocodeResult.attributes["LongLabel"] as? String ??
 ***REMOVED******REMOVED***"Match percent: \((geocodeResult.score / 100.0).formatted(.percent))"
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***var viewpoint: Viewpoint? = nil
-***REMOVED******REMOVED***if let extent = geocodeResult.extent {
-***REMOVED******REMOVED******REMOVED***viewpoint = Viewpoint(targetExtent: extent)
-***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***displayTitle = geocodeResult.label
-***REMOVED******REMOVED***owningSource = searchSource
-***REMOVED******REMOVED***displaySubtitle = subtitle
-***REMOVED******REMOVED***geoElement = Graphic(
-***REMOVED******REMOVED******REMOVED***geometry: geocodeResult.displayLocation,
-***REMOVED******REMOVED******REMOVED***attributes: geocodeResult.attributes
+***REMOVED******REMOVED***self.init(
+***REMOVED******REMOVED******REMOVED***displayTitle: geocodeResult.label,
+***REMOVED******REMOVED******REMOVED***owningSource: searchSource,
+***REMOVED******REMOVED******REMOVED***displaySubtitle: subtitle,
+***REMOVED******REMOVED******REMOVED***geoElement: Graphic(
+***REMOVED******REMOVED******REMOVED******REMOVED***geometry: geocodeResult.displayLocation,
+***REMOVED******REMOVED******REMOVED******REMOVED***attributes: geocodeResult.attributes
+***REMOVED******REMOVED******REMOVED***),
+***REMOVED******REMOVED******REMOVED***selectionViewpoint: geocodeResult.extent.map(Viewpoint.init)
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED***selectionViewpoint = viewpoint
 ***REMOVED***
 ***REMOVED***

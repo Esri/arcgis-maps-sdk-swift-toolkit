@@ -19,7 +19,7 @@ import Foundation
 public class LocatorSearchSource: ObservableObject, SearchSource {
 ***REMOVED******REMOVED***/ Creates a locator search source.
 ***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - name: Name to show when presenting this source in the UI.
+***REMOVED******REMOVED***/   - name: The name to show when presenting this source in the UI.
 ***REMOVED******REMOVED***/   - locatorTask: The `LocatorTask` to use for searching.
 ***REMOVED******REMOVED***/   - maximumResults: The maximum results to return when performing a search. Most sources default to 6.
 ***REMOVED******REMOVED***/   - maximumSuggestions: The maximum suggestions to return. Most sources default to 6.
@@ -41,7 +41,7 @@ public class LocatorSearchSource: ObservableObject, SearchSource {
 ***REMOVED******REMOVED***self.geocodeParameters.addResultAttributeName("*")
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Name to show when presenting this source in the UI.
+***REMOVED******REMOVED***/ The name to show when presenting this source in the UI.
 ***REMOVED***public var name: String
 ***REMOVED***
 ***REMOVED******REMOVED***/ The maximum results to return when performing a search. Most sources default to 6
@@ -65,7 +65,7 @@ public class LocatorSearchSource: ObservableObject, SearchSource {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The locator used by this search source.
-***REMOVED***public private(set) var locatorTask: LocatorTask
+***REMOVED***public let locatorTask: LocatorTask
 ***REMOVED***
 ***REMOVED******REMOVED***/ Parameters used for geocoding. Some properties on parameters will be updated automatically
 ***REMOVED******REMOVED***/ based on searches.
@@ -79,7 +79,7 @@ public class LocatorSearchSource: ObservableObject, SearchSource {
 ***REMOVED******REMOVED***_ queryString: String,
 ***REMOVED******REMOVED***searchExtent: Envelope
 ***REMOVED***) async throws -> [SearchResult] {
-***REMOVED******REMOVED***return try await internalSearch(
+***REMOVED******REMOVED***try await internalSearch(
 ***REMOVED******REMOVED******REMOVED***queryString,
 ***REMOVED******REMOVED******REMOVED***searchArea: searchExtent
 ***REMOVED******REMOVED***)
@@ -87,10 +87,10 @@ public class LocatorSearchSource: ObservableObject, SearchSource {
 ***REMOVED***
 ***REMOVED***public func search(
 ***REMOVED******REMOVED***_ queryString: String,
-***REMOVED******REMOVED***searchArea: Geometry?,
-***REMOVED******REMOVED***preferredSearchLocation: Point?
+***REMOVED******REMOVED***searchArea: Geometry? = nil,
+***REMOVED******REMOVED***preferredSearchLocation: Point? = nil
 ***REMOVED***) async throws -> [SearchResult] {
-***REMOVED******REMOVED***return try await internalSearch(
+***REMOVED******REMOVED***try await internalSearch(
 ***REMOVED******REMOVED******REMOVED***queryString,
 ***REMOVED******REMOVED******REMOVED***searchArea: searchArea,
 ***REMOVED******REMOVED******REMOVED***preferredSearchLocation: preferredSearchLocation
@@ -99,8 +99,8 @@ public class LocatorSearchSource: ObservableObject, SearchSource {
 ***REMOVED***
 ***REMOVED***public func search(
 ***REMOVED******REMOVED***_ searchSuggestion: SearchSuggestion,
-***REMOVED******REMOVED***searchArea: Geometry?,
-***REMOVED******REMOVED***preferredSearchLocation: Point?
+***REMOVED******REMOVED***searchArea: Geometry? = nil,
+***REMOVED******REMOVED***preferredSearchLocation: Point? = nil
 ***REMOVED***) async throws -> [SearchResult] {
 ***REMOVED******REMOVED***guard let suggestResult = searchSuggestion.suggestResult else { return [] ***REMOVED***
 ***REMOVED******REMOVED***
@@ -120,8 +120,8 @@ public class LocatorSearchSource: ObservableObject, SearchSource {
 ***REMOVED***
 ***REMOVED***public func suggest(
 ***REMOVED******REMOVED***_ queryString: String,
-***REMOVED******REMOVED***searchArea: Geometry?,
-***REMOVED******REMOVED***preferredSearchLocation: Point?
+***REMOVED******REMOVED***searchArea: Geometry? = nil,
+***REMOVED******REMOVED***preferredSearchLocation: Point? = nil
 ***REMOVED***) async throws -> [SearchSuggestion] {
 ***REMOVED******REMOVED***suggestParameters.searchArea = searchArea
 ***REMOVED******REMOVED***suggestParameters.preferredSearchLocation = preferredSearchLocation

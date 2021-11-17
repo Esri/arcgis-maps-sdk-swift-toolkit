@@ -27,14 +27,9 @@ public struct SearchView: View {
 ***REMOVED******REMOVED***viewpoint: Binding<Viewpoint?>? = nil,
 ***REMOVED******REMOVED***resultsOverlay: GraphicsOverlay? = nil
 ***REMOVED***) {
-***REMOVED******REMOVED***if let searchViewModel = searchViewModel {
-***REMOVED******REMOVED******REMOVED***self.searchViewModel = searchViewModel
-***REMOVED***
-***REMOVED******REMOVED***else {
-***REMOVED******REMOVED******REMOVED***self.searchViewModel = SearchViewModel(
-***REMOVED******REMOVED******REMOVED******REMOVED***sources: [LocatorSearchSource()]
-***REMOVED******REMOVED******REMOVED***)
-***REMOVED***
+***REMOVED******REMOVED***self.searchViewModel = searchViewModel ?? SearchViewModel(
+***REMOVED******REMOVED******REMOVED***sources: [LocatorSearchSource()]
+***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***self.resultsOverlay = resultsOverlay
 ***REMOVED******REMOVED***self.viewpoint = viewpoint
 ***REMOVED***
@@ -53,8 +48,8 @@ public struct SearchView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ The string shown in the search view when no user query is entered.
 ***REMOVED******REMOVED***/ Defaults to "Find a place or address". Note: this is set using the
-***REMOVED******REMOVED***/ `defaultPlaceholder` modifier.
-***REMOVED***private var defaultPlaceholder: String = "Find a place or address"
+***REMOVED******REMOVED***/ `searchFieldPrompt` modifier.
+***REMOVED***private var searchFieldPrompt: String = "Find a place or address"
 ***REMOVED***
 ***REMOVED******REMOVED***/ Determines whether a built-in result view will be shown. Defaults to true.
 ***REMOVED******REMOVED***/ If false, the result display/selection list is not shown. Set to false if you want to hide the results
@@ -64,10 +59,18 @@ public struct SearchView: View {
 ***REMOVED***private var enableResultListView = true
 ***REMOVED***
 ***REMOVED******REMOVED***/ Message to show when there are no results or suggestions.  Defaults to "No results found".
-***REMOVED******REMOVED***/ Note: this is set using the `noResultMessage` modifier.
-***REMOVED***private var noResultMessage = "No results found"
+***REMOVED******REMOVED***/ Note: this is set using the `noResultsMessage` modifier.
+***REMOVED***private var noResultsMessage = "No results found"
 ***REMOVED***
-***REMOVED***private var searchBarWidth: CGFloat = 360.0
+***REMOVED***@Environment(\.horizontalSizeClass)
+***REMOVED***private var horizontalSizeClass: UserInterfaceSizeClass?
+***REMOVED***
+***REMOVED***@Environment(\.verticalSizeClass)
+***REMOVED***private var verticalSizeClass: UserInterfaceSizeClass?
+***REMOVED***
+***REMOVED***private var searchBarWidth: CGFloat? {
+***REMOVED******REMOVED***horizontalSizeClass == .compact && verticalSizeClass == .regular ? nil : 360
+***REMOVED***
 ***REMOVED***
 ***REMOVED***@State
 ***REMOVED***private var shouldZoomToResults = true
@@ -82,30 +85,38 @@ public struct SearchView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED******REMOVED***VStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***SearchField(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentQuery: $searchViewModel.currentQuery,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***defaultPlaceholder: defaultPlaceholder,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***query: $searchViewModel.currentQuery,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***searchFieldPrompt: searchFieldPrompt,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isShowResultsHidden: !enableResultListView,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***showResults: $showResultListView,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onCommit: { searchViewModel.commitSearch() ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***showResults: $showResultListView
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onSubmit { searchViewModel.commitSearch() ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.submitLabel(.search)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if enableResultListView, showResultListView {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***switch searchViewModel.searchOutcome {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .results(let results):
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***SearchResultList(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***searchResults: results,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedResult: $searchViewModel.selectedResult,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***noResultMessage: noResultMessage
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .suggestions(let suggestions):
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***SearchSuggestionList(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***suggestionResults: suggestions,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentSuggestion: $searchViewModel.currentSuggestion,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***noResultMessage: noResultMessage
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .none:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***EmptyView()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if enableResultListView,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***   showResultListView,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***   let searchOutcome = searchViewModel.searchOutcome {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Group {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***switch searchOutcome {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .results(let results):
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***SearchResultList(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***searchResults: results,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedResult: $searchViewModel.selectedResult,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***noResultsMessage: noResultsMessage
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .suggestions(let suggestions):
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***SearchSuggestionList(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***suggestionResults: suggestions,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentSuggestion: $searchViewModel.currentSuggestion,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***noResultsMessage: noResultsMessage
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .failure(let error):
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***List {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(error.errorDescription)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.esriBorder(padding: EdgeInsets())
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: searchBarWidth)
@@ -123,7 +134,7 @@ public struct SearchView: View {
 ***REMOVED******REMOVED***.onChange(of: searchViewModel.searchOutcome, perform: { newValue in
 ***REMOVED******REMOVED******REMOVED***switch newValue {
 ***REMOVED******REMOVED******REMOVED***case .results(let results):
-***REMOVED******REMOVED******REMOVED******REMOVED***display(searchResults: (try? results.get()) ?? [])
+***REMOVED******REMOVED******REMOVED******REMOVED***display(searchResults: results)
 ***REMOVED******REMOVED******REMOVED***default:
 ***REMOVED******REMOVED******REMOVED******REMOVED***display(searchResults: [])
 ***REMOVED******REMOVED***
@@ -134,45 +145,39 @@ public struct SearchView: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED*** MARK: Modifiers
-***REMOVED***
-***REMOVED******REMOVED***/ Determines whether a built-in result view will be shown. If `false`, the result display/selection
+
+***REMOVED*** MARK: Modifiers
+extension SearchView {
+***REMOVED******REMOVED***/ Specifies whether a built-in result view will be shown. If `false`, the result display/selection
 ***REMOVED******REMOVED***/ list is not shown. Set to `false` if you want to define a custom result list. You might use a
 ***REMOVED******REMOVED***/ custom result list to show results in a separate list, disconnected from the rest of the search view.
 ***REMOVED******REMOVED***/ Defaults to `true`.
-***REMOVED******REMOVED***/ - Parameter enableResultListView: The new value.
+***REMOVED******REMOVED***/ - Parameter newEnableResultListView: The new value.
 ***REMOVED******REMOVED***/ - Returns: A new `SearchView`.
-***REMOVED***public func enableResultListView(_ enableResultListView: Bool) -> Self {
+***REMOVED***public func enableResultListView(_ newEnableResultListView: Bool) -> Self {
 ***REMOVED******REMOVED***var copy = self
-***REMOVED******REMOVED***copy.enableResultListView = enableResultListView
+***REMOVED******REMOVED***copy.enableResultListView = newEnableResultListView
 ***REMOVED******REMOVED***return copy
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The string shown in the search view when no user query is entered.
 ***REMOVED******REMOVED***/ Defaults to "Find a place or address".
-***REMOVED******REMOVED***/ - Parameter defaultPlaceholder: The new value.
+***REMOVED******REMOVED***/ - Parameter newSearchFieldPrompt: The new value.
 ***REMOVED******REMOVED***/ - Returns: A new `SearchView`.
-***REMOVED***public func defaultPlaceholder(_ defaultPlaceholder: String) -> Self {
+***REMOVED***public func searchFieldPrompt(_ newSearchFieldPrompt: String) -> Self {
 ***REMOVED******REMOVED***var copy = self
-***REMOVED******REMOVED***copy.defaultPlaceholder = defaultPlaceholder
+***REMOVED******REMOVED***copy.searchFieldPrompt = newSearchFieldPrompt
 ***REMOVED******REMOVED***return copy
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Message to show when there are no results or suggestions.  Defaults to "No results found".
-***REMOVED******REMOVED***/ - Parameter noResultMessage: The new value.
+***REMOVED******REMOVED***/ Sets the message to show when there are no results or suggestions.
+***REMOVED******REMOVED***/
+***REMOVED******REMOVED***/ The default message is "No results found".
+***REMOVED******REMOVED***/ - Parameter newNoResultsMessage: The new value.
 ***REMOVED******REMOVED***/ - Returns: A new `SearchView`.
-***REMOVED***public func noResultMessage(_ noResultMessage: String) -> Self {
+***REMOVED***public func noResultsMessage(_ newNoResultsMessage: String) -> Self {
 ***REMOVED******REMOVED***var copy = self
-***REMOVED******REMOVED***copy.noResultMessage = noResultMessage
-***REMOVED******REMOVED***return copy
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ The width of the search bar.
-***REMOVED******REMOVED***/ - Parameter searchBarWidth: The desired width of the search bar.
-***REMOVED******REMOVED***/ - Returns: A new `SearchView`.
-***REMOVED***public func searchBarWidth(_ searchBarWidth: CGFloat) -> Self {
-***REMOVED******REMOVED***var copy = self
-***REMOVED******REMOVED***copy.searchBarWidth = searchBarWidth
+***REMOVED******REMOVED***copy.noResultsMessage = newNoResultsMessage
 ***REMOVED******REMOVED***return copy
 ***REMOVED***
 ***REMOVED***
@@ -188,18 +193,21 @@ private extension SearchView {
 ***REMOVED******REMOVED***resultsOverlay.removeAllGraphics()
 ***REMOVED******REMOVED***resultsOverlay.addGraphics(resultGraphics)
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Make sure we have a viewpoint to zoom to.
+***REMOVED******REMOVED***guard let viewpoint = viewpoint else { return ***REMOVED***
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***if !resultGraphics.isEmpty,
 ***REMOVED******REMOVED***   let envelope = resultsOverlay.extent,
 ***REMOVED******REMOVED***   shouldZoomToResults {
 ***REMOVED******REMOVED******REMOVED***let builder = EnvelopeBuilder(envelope: envelope)
 ***REMOVED******REMOVED******REMOVED***builder.expand(factor: 1.1)
 ***REMOVED******REMOVED******REMOVED***let targetExtent = builder.toGeometry() as! Envelope
-***REMOVED******REMOVED******REMOVED***viewpoint?.wrappedValue = Viewpoint(
+***REMOVED******REMOVED******REMOVED***viewpoint.wrappedValue = Viewpoint(
 ***REMOVED******REMOVED******REMOVED******REMOVED***targetExtent: targetExtent
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***searchViewModel.lastSearchExtent = targetExtent
 ***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***viewpoint?.wrappedValue = nil
+***REMOVED******REMOVED******REMOVED***viewpoint.wrappedValue = nil
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***if !shouldZoomToResults { shouldZoomToResults = true ***REMOVED***
@@ -212,73 +220,65 @@ private extension SearchView {
 ***REMOVED***
 
 struct SearchResultList: View {
-***REMOVED***var searchResults: Result<[SearchResult], SearchError>
+***REMOVED***var searchResults: [SearchResult]
 ***REMOVED***@Binding var selectedResult: SearchResult?
-***REMOVED***var noResultMessage: String
+***REMOVED***var noResultsMessage: String
 ***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***Group {
-***REMOVED******REMOVED******REMOVED***switch searchResults {
-***REMOVED******REMOVED******REMOVED***case .success(let results):
-***REMOVED******REMOVED******REMOVED******REMOVED***if results.count > 1 {
+***REMOVED******REMOVED***if searchResults.count != 1 {
+***REMOVED******REMOVED******REMOVED***if searchResults.count > 1 {
+***REMOVED******REMOVED******REMOVED******REMOVED***List {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Only show the list if we have more than one result.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***List {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(results) { result in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ResultRow(searchResult: result)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onTapGesture {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedResult = result
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if result == selectedResult {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "checkmark.circle.fill")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.accentColor)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(searchResults) { result in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***HStack {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ResultRow(searchResult: result)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onTapGesture {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedResult = result
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if result == selectedResult {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "checkmark.circle.fill")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.accentColor)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** else if results.isEmpty {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***List {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(noResultMessage)
-***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***case .failure(let error):
-***REMOVED******REMOVED******REMOVED******REMOVED***List {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(error.localizedDescription)
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED*** else if searchResults.isEmpty {
+***REMOVED******REMOVED******REMOVED******REMOVED***NoResultsView(message: noResultsMessage)
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.esriBorder(padding: EdgeInsets())
 ***REMOVED***
 ***REMOVED***
 
 struct SearchSuggestionList: View {
-***REMOVED***var suggestionResults: Result<[SearchSuggestion], SearchError>
+***REMOVED***var suggestionResults: [SearchSuggestion]
 ***REMOVED***@Binding var currentSuggestion: SearchSuggestion?
-***REMOVED***var noResultMessage: String
+***REMOVED***var noResultsMessage: String
 ***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***List {
-***REMOVED******REMOVED******REMOVED***switch suggestionResults {
-***REMOVED******REMOVED******REMOVED***case .success(let suggestions):
-***REMOVED******REMOVED******REMOVED******REMOVED***if !suggestions.isEmpty {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if suggestions.count > 0 {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(suggestions) { suggestion in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ResultRow(searchSuggestion: suggestion)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onTapGesture() {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentSuggestion = suggestion
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***if !suggestionResults.isEmpty {
+***REMOVED******REMOVED******REMOVED***List {
+***REMOVED******REMOVED******REMOVED******REMOVED***ForEach(suggestionResults) { suggestion in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ResultRow(searchSuggestion: suggestion)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onTapGesture() {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentSuggestion = suggestion
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(noResultMessage)
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***case .failure(let error):
-***REMOVED******REMOVED******REMOVED******REMOVED***Text(error.errorDescription)
 ***REMOVED******REMOVED***
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***NoResultsView(message: noResultsMessage)
 ***REMOVED***
-***REMOVED******REMOVED***.esriBorder(padding: EdgeInsets())
+***REMOVED***
+***REMOVED***
+
+struct NoResultsView: View {
+***REMOVED***var message: String
+***REMOVED***
+***REMOVED***var body: some View {
+***REMOVED******REMOVED***LazyVStack {
+***REMOVED******REMOVED******REMOVED***Text(message)
+***REMOVED******REMOVED******REMOVED******REMOVED***.padding()
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
