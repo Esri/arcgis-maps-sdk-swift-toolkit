@@ -19,12 +19,11 @@ final class SmartLocatorSearchSourceTests: XCTestCase {
     func testRepeatSearchResultThreshold() async throws {
         let locator = SmartLocatorSearchSource()
         
-        // Threshold of 0 means no re-query.
-        locator.repeatSearchResultThreshold = 0
+        // Threshold of nil means no re-query.
+        locator.repeatSearchResultThreshold = nil
         var searchResults = try await locator.search(
             "Dunkin' Donuts",
-            searchArea: Envelope.edinburgh,
-            preferredSearchLocation: nil
+            searchArea: Envelope.edinburgh
         )
         var results = try XCTUnwrap(searchResults)
         XCTAssertEqual(results, [])
@@ -33,8 +32,7 @@ final class SmartLocatorSearchSourceTests: XCTestCase {
         locator.repeatSearchResultThreshold = 1
         searchResults = try await locator.search(
             "Dunkin' Donuts",
-            searchArea: Envelope.edinburgh,
-            preferredSearchLocation: nil
+            searchArea: Envelope.edinburgh
         )
         results = try XCTUnwrap(searchResults)
         XCTAssertNotEqual(results, [])
@@ -43,12 +41,11 @@ final class SmartLocatorSearchSourceTests: XCTestCase {
     func testRepeatSuggestResultThreshold() async throws {
         let locator = SmartLocatorSearchSource()
 
-        // Threshold of 0 means no re-query.
-        locator.repeatSuggestResultThreshold = 0
+        // Threshold of nil means no re-query.
+        locator.repeatSuggestResultThreshold = nil
         var suggestResults = try await locator.suggest(
             "Dunkin' Donuts",
-            searchArea: Envelope.edinburgh,
-            preferredSearchLocation: nil
+            searchArea: Envelope.edinburgh
         )
         var results = try XCTUnwrap(suggestResults)
         XCTAssertEqual(results, [])
@@ -57,15 +54,14 @@ final class SmartLocatorSearchSourceTests: XCTestCase {
         locator.repeatSuggestResultThreshold = 1
         suggestResults = try await locator.suggest(
             "Dunkin' Donuts",
-            searchArea: Envelope.edinburgh,
-            preferredSearchLocation: nil
+            searchArea: Envelope.edinburgh
         )
         results = try XCTUnwrap(suggestResults)
         XCTAssertNotEqual(suggestResults, [])
     }
 }
 
-extension Envelope {
+private extension Envelope {
     static let edinburgh = Envelope(
         xMin: -365155.60783391213,
         yMin: 7536778.456812576,
