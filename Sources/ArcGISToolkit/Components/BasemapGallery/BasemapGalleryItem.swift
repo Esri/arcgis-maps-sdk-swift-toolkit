@@ -54,35 +54,35 @@ public class BasemapGalleryItem: ObservableObject {
         Task { await loadBasemap() }
     }
     
-    @Published
     /// The error generated loading the basemap, if any.
+    @Published
     public private(set) var loadBasemapsError: RuntimeError? = nil
     
     /// The basemap this `BasemapGalleryItem` represents.
     public private(set) var basemap: Basemap
     
-    @Published
     /// The name of the `basemap`.
+    @Published
     public private(set) var name: String = ""
     private var nameOverride: String? = nil
     
-    @Published
     /// The description of the `basemap`.
+    @Published
     public private(set) var description: String? = nil
     private var descriptionOverride: String? = nil
     
-    @Published
     /// The thumbnail used to represent the `basemap`.
+    @Published
     public private(set) var thumbnail: UIImage? = nil
     private var thumbnailOverride: UIImage? = nil
     
-    @Published
     /// Denotes whether the `basemap` or it's base layers are being loaded.
+    @Published
     public private(set) var isLoading = true
     
-    @Published
     /// The `SpatialReferenceStatus` of the item.  This is set via a call to
     /// `updateSpatialReferenceStatus()`
+    @Published
     public private(set) var spatialReferenceStatus: SpatialReferenceStatus = .unknown
     
     /// The `SpatialReference` of `basemap`.  This will be `nil` until the basemap's
@@ -104,9 +104,9 @@ private extension BasemapGalleryItem {
         await finalizeLoading(error: loadError)
     }
     
-    @MainActor
     /// Updates the item in response to basemap loading completion.
     /// - Parameter error: The basemap load error, if any.
+    @MainActor
     func finalizeLoading(error: RuntimeError?) {
         name = nameOverride ?? basemap.name
         description = descriptionOverride ?? basemap.item?.description
@@ -117,11 +117,11 @@ private extension BasemapGalleryItem {
         isLoading = false
     }
     
-    @MainActor
     /// Updates the item's `spatialReference` and `spatialReferenceStatus` properties.
     /// - Parameter referenceSpatialReference: The `SpatialReference` used to
     /// compare to the `basemap`'s `SpatialReference`, represented by the first base layer's`
     /// `SpatialReference`.
+    @MainActor
     func finalizeUpdateSpatialReferenceStatus(
         with referenceSpatialReference: SpatialReference?
     ) {
