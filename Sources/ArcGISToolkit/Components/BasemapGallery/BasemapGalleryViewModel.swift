@@ -90,6 +90,8 @@ public class BasemapGalleryViewModel: ObservableObject {
     /// - Parameter basemapGalleryItem: The new, potential, `BasemapGalleryItem`.
     public func updateCurrentBasemapGalleryItem(_ basemapGalleryItem: BasemapGalleryItem) {
         Task {
+            // Reset the mismatch error.
+            spatialReferenceMismatchError = nil
             try await basemapGalleryItem.updateSpatialReferenceStatus(
                 geoModel?.actualSpatialReference
             )
