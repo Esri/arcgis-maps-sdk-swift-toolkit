@@ -52,29 +52,17 @@ public class BasemapGalleryViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ the geoModel will have its basemap replaced with the selected basemap.
 ***REMOVED***public var geoModel: GeoModel? {
 ***REMOVED******REMOVED***didSet {
-***REMOVED******REMOVED******REMOVED******REMOVED*** Note that we don't want to store this task and cancel it
-***REMOVED******REMOVED******REMOVED******REMOVED*** before kicking off another operation because it could have been
-***REMOVED******REMOVED******REMOVED******REMOVED*** started elsewhere as well as here. Canceling it here would also
-***REMOVED******REMOVED******REMOVED******REMOVED*** cancel those other operations, which we don't want to do.
 ***REMOVED******REMOVED******REMOVED***Task { await load(geoModel: geoModel) ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ The `Portal` object, if any.  Setting the portal will automatically fetch it's base maps
+***REMOVED******REMOVED***/ The `Portal` object, if any.  Setting the portal will automatically fetch it's basemaps
 ***REMOVED******REMOVED***/ and add them to the `basemapGalleryItems` array.
 ***REMOVED***public var portal: Portal? {
 ***REMOVED******REMOVED***didSet {
-***REMOVED******REMOVED******REMOVED******REMOVED*** Note that we don't want to store this task and cancel it
-***REMOVED******REMOVED******REMOVED******REMOVED*** before kicking off another operation because it could have been
-***REMOVED******REMOVED******REMOVED******REMOVED*** started elsewhere as well as here. Canceling it here would also
-***REMOVED******REMOVED******REMOVED******REMOVED*** cancel those other operations, which we don't want to do.
 ***REMOVED******REMOVED******REMOVED***Task { await fetchBasemaps(from: portal) ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED*** TODO: what does this mean that it is a public var?
-***REMOVED******REMOVED*** TODO: what happens if the user sets this after things are loaded
-***REMOVED******REMOVED*** TODO: test this...
 ***REMOVED***
 ***REMOVED******REMOVED***/ The list of basemaps currently visible in the gallery.  It is comprised of items passed into
 ***REMOVED******REMOVED***/ the `BasemapGalleryItem` constructor and items loaded from the `Portal`.
@@ -84,11 +72,48 @@ public class BasemapGalleryViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ `BasemapGalleryItem` representing the `GeoModel`'s current base map. This may be a
 ***REMOVED******REMOVED***/ basemap which does not exist in the gallery.
 ***REMOVED***@Published
-***REMOVED***public var currentBasemapGalleryItem: BasemapGalleryItem? = nil {
+***REMOVED***public private(set) var currentBasemapGalleryItem: BasemapGalleryItem? = nil {
 ***REMOVED******REMOVED***didSet {
 ***REMOVED******REMOVED******REMOVED***guard let item = currentBasemapGalleryItem else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***geoModel?.basemap = item.basemap
 ***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***@Published
+***REMOVED******REMOVED***/ The error signifying the spatial reference of the GeoModel and that of a potential
+***REMOVED******REMOVED***/ current `BasemapGalleryItem` do not match.
+***REMOVED***public private(set) var spatialReferenceMismatchError: SpatialReferenceMismatchError? = nil
+***REMOVED***
+***REMOVED******REMOVED***/ This attempts to set `currentBasemapGalleryItem`. `currentBasemapGalleryItem`
+***REMOVED******REMOVED***/ will be set if it's spatialReference matches that of the current geoModel.  If the spatialReferences
+***REMOVED******REMOVED***/ do not match, `currentBasemapGalleryItem` will be unchanged.
+***REMOVED******REMOVED***/ - Parameter basemapGalleryItem: The new, potential, `BasemapGalleryItem`.
+***REMOVED***public func updateCurrentBasemapGalleryItem(_ basemapGalleryItem: BasemapGalleryItem) {
+***REMOVED******REMOVED***Task {
+***REMOVED******REMOVED******REMOVED***try await basemapGalleryItem.updateSpatialReferenceStatus(
+***REMOVED******REMOVED******REMOVED******REMOVED***geoModel?.actualSpatialReference
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***await MainActor.run {
+***REMOVED******REMOVED******REMOVED******REMOVED***if basemapGalleryItem.spatialReferenceStatus == .match ||
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***basemapGalleryItem.spatialReferenceStatus == .unknown {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentBasemapGalleryItem = basemapGalleryItem
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***spatialReferenceMismatchError = SpatialReferenceMismatchError(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***basemapSR: basemapGalleryItem.spatialReference,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***geoModelSR: geoModel?.actualSpatialReference
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
+
+private extension GeoModel {
+***REMOVED***var actualSpatialReference: SpatialReference? {
+***REMOVED******REMOVED***(self as? ArcGIS.Scene)?.sceneViewTilingScheme == .webMercator ?
+***REMOVED******REMOVED***SpatialReference.webMercator :
+***REMOVED******REMOVED***spatialReference
 ***REMOVED***
 ***REMOVED***
 
@@ -116,8 +141,6 @@ private extension BasemapGalleryViewModel {
 ***REMOVED******REMOVED******REMOVED***else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***currentBasemapGalleryItem = nil
 ***REMOVED******REMOVED***
-***REMOVED*** catch {
-***REMOVED******REMOVED******REMOVED******REMOVED*** We don't need any errors, as that should be handled by the app.
-***REMOVED***
+***REMOVED*** catch { ***REMOVED***
 ***REMOVED***
 ***REMOVED***

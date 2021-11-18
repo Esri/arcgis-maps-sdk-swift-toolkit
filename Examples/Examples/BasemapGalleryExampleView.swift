@@ -15,10 +15,6 @@
 ***REMOVED***
 ***REMOVED***Toolkit
 
-***REMOVED*** TODO: once user taps on a map (or maybe in the view model setter for current item)
-***REMOVED*** TODO: then check if SRs match and don't set basemap if they don't.  Figure out
-***REMOVED*** TODO: how to then gray out the item in the gallery.
-
 struct BasemapGalleryExampleView: View {
 ***REMOVED***var basemapGalleryItems: [BasemapGalleryItem] = [
 ***REMOVED******REMOVED***BasemapGalleryItem(
@@ -74,8 +70,8 @@ struct BasemapGalleryExampleView: View {
 ***REMOVED***]
 ***REMOVED***
 ***REMOVED***let geoModel: GeoModel = Map(basemapStyle: .arcGISNova)
-***REMOVED******REMOVED***let geoModel: GeoModel = Scene(basemapStyle: .arcGISNova)
-
+***REMOVED******REMOVED******REMOVED***let geoModel: GeoModel = Scene(basemapStyle: .arcGISNova)
+***REMOVED***
 ***REMOVED***@ObservedObject
 ***REMOVED***var viewModel = BasemapGalleryViewModel()
 ***REMOVED***
@@ -103,12 +99,12 @@ struct BasemapGalleryExampleView: View {
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***ZStack(alignment: .topTrailing) {
 ***REMOVED******REMOVED******REMOVED***MapView(map: geoModel as! Map, viewpoint: initialViewpoint)
-***REMOVED******REMOVED******REMOVED******REMOVED***SceneView(scene: geoModel as! ArcGIS.Scene, viewpoint: initialViewpoint)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***SceneView(scene: geoModel as! ArcGIS.Scene, viewpoint: initialViewpoint)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.overlay(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***VStack(alignment: .trailing) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if showBasemapGallery {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***BasemapGallery(viewModel: viewModel)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.basemapGalleryStyle(.automatic)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.style(.automatic)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: galleryWidth)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
