@@ -90,6 +90,8 @@ public class BasemapGalleryViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ - Parameter basemapGalleryItem: The new, potential, `BasemapGalleryItem`.
 ***REMOVED***public func updateCurrentBasemapGalleryItem(_ basemapGalleryItem: BasemapGalleryItem) {
 ***REMOVED******REMOVED***Task {
+***REMOVED******REMOVED******REMOVED******REMOVED*** Reset the mismatch error.
+***REMOVED******REMOVED******REMOVED***spatialReferenceMismatchError = nil
 ***REMOVED******REMOVED******REMOVED***try await basemapGalleryItem.updateSpatialReferenceStatus(
 ***REMOVED******REMOVED******REMOVED******REMOVED***geoModel?.actualSpatialReference
 ***REMOVED******REMOVED******REMOVED***)

@@ -63,7 +63,7 @@ public struct BasemapGallery: View {
 ***REMOVED***
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***GalleryView()
-***REMOVED******REMOVED******REMOVED***.onReceive(viewModel.$spatialReferenceMismatchError, perform: { error in
+***REMOVED******REMOVED******REMOVED***.onReceive(viewModel.$spatialReferenceMismatchError.dropFirst(), perform: { error in
 ***REMOVED******REMOVED******REMOVED******REMOVED***guard let error = error else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***alertItem = AlertItem(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***basemapSR: error.basemapSR,
