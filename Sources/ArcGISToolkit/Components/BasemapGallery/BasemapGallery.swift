@@ -21,7 +21,7 @@ import ArcGIS
 /// with the basemap in the gallery.
 public struct BasemapGallery: View {
     /// The view style of the gallery.
-    public enum BasemapGalleryStyle {
+    public enum Style {
         /// The `BasemapGallery` will display as a grid when there is appropriate
         /// width available for the gallery to do so. Otherwise the gallery will display as a list.
         case automatic
@@ -51,8 +51,8 @@ public struct BasemapGallery: View {
     
     /// The style of the basemap gallery. The gallery can be displayed as a list, grid, or automatically
     /// switch between the two based on screen real estate. Defaults to `automatic`.
-    /// Set using the `basemapGalleryStyle` modifier.
-    private var style: BasemapGalleryStyle = .automatic
+    /// Set using the `style` modifier.
+    private var style: Style = .automatic
     
     /// The size class used to determine if the basemap items should dispaly in a list or grid.
     /// If the size class is `.regular`, they display in a grid.  If it is `.compact`, they display in a list.
@@ -63,6 +63,13 @@ public struct BasemapGallery: View {
     
     public var body: some View {
         GalleryView()
+            .onReceive(viewModel.$spatialReferenceMismatchError, perform: { error in
+                guard let error = error else { return }
+                alertItem = AlertItem(
+                    basemapSR: error.basemapSR,
+                    geoModelSR: error.geoModelSR
+                )
+            })
             .alert(item: $alertItem) { alertItem in
                 Alert(
                     title: Text(alertItem.title),
@@ -70,22 +77,26 @@ public struct BasemapGallery: View {
                 )
             }
     }
-    
-    // MARK: Modifiers
-    
+}
+
+// MARK: Modifiers
+
+public extension BasemapGallery {
     /// The style of the basemap gallery. Defaults to `.automatic`.
-    /// - Parameter style: The `BasemapGalleryStyle` to use.
+    /// - Parameter style: The `Style` to use.
     /// - Returns: The `BasemapGallery`.
-    public func basemapGalleryStyle(_ style: BasemapGalleryStyle) -> BasemapGallery {
+    func style(
+        _ newStyle: Style
+    ) -> BasemapGallery {
         var copy = self
-        copy.style = style
+        copy.style = newStyle
         return copy
     }
 }
 
-extension BasemapGallery {
+private extension BasemapGallery {
     @ViewBuilder
-    private func GalleryView() -> some View {
+    func GalleryView() -> some View {
         switch style {
         case .automatic:
             if horizontalSizeClass == .regular {
@@ -101,7 +112,7 @@ extension BasemapGallery {
         }
     }
     
-    private func GridView() -> some View {
+    func GridView() -> some View {
         let columns: [GridItem] = [
             .init(.flexible(), spacing: 8.0, alignment: .top),
             .init(.flexible(), spacing: 8.0, alignment: .top),
@@ -111,7 +122,7 @@ extension BasemapGallery {
         return InternalGalleryView(columns)
     }
     
-    private func ListView() -> some View {
+    func ListView() -> some View {
         let columns: [GridItem] = [
             .init(.flexible(), spacing: 8.0, alignment: .top)
         ]
@@ -119,7 +130,7 @@ extension BasemapGallery {
         return InternalGalleryView(columns)
     }
     
-    private func InternalGalleryView(_ columns: [GridItem]) -> some View {
+    func InternalGalleryView(_ columns: [GridItem]) -> some View {
         return ScrollView {
             LazyVGrid(columns: columns, spacing: 4) {
                 ForEach(viewModel.basemapGalleryItems) { basemapGalleryItem in
@@ -128,34 +139,11 @@ extension BasemapGallery {
                         isSelected: basemapGalleryItem == viewModel.currentBasemapGalleryItem
                     )
                         .onTapGesture {
-                            // Don't check spatial reference until user taps on it.
-                            // At this point, we need to get errors from setting the basemap (in the model?).
-                            // Error in the model, displayed in the gallery.
-                            
-                            // TODO:  this doesn't work until the basemap is tapped on once, then I assume
-                            // TODO: it's loaded the basemap layers.  Figure this out.  (load base layers when bm loads?)
                             if let loadError = basemapGalleryItem.loadBasemapsError {
-                                alertItem = AlertItem(error: loadError)
-                                print("basemaps DON'T match (or error)!")
+                                alertItem = AlertItem(loadBasemapError: loadError)
                             }
                             else {
-                                //                                if !showingBasemapLoadError,
-                                //                                   basemapGalleryItem.matchesSpatialReference(viewModel.geoModel?.spatialReference) {
-                                Task {
-                                    try await basemapGalleryItem.updateSpatialReferenceStatus(for: viewModel.geoModel?.spatialReference)
-                                    if basemapGalleryItem.spatialReferenceStatus == .match ||
-                                        basemapGalleryItem.spatialReferenceStatus == .unknown {
-                                        print("basemap matches!")
-                                        viewModel.currentBasemapGalleryItem = basemapGalleryItem
-                                    }
-                                    else {
-                                        alertItem = AlertItem(
-                                            basemapSR: basemapGalleryItem.spatialReference,
-                                            geoModelSR: viewModel.geoModel?.spatialReference
-                                        )
-                                        print("Task bm don't match")
-                                    }
-                                }
+                                viewModel.updateCurrentBasemapGalleryItem(basemapGalleryItem)
                             }
                         }
                 }
@@ -170,40 +158,38 @@ private struct BasemapGalleryItemRow: View {
     let isSelected: Bool
     
     var body: some View {
-        ZStack {
-            VStack {
-                ZStack(alignment: .center) {
-                    if let thumbnailImage = basemapGalleryItem.thumbnail {
-                        Image(uiImage: thumbnailImage)
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .border(
-                                isSelected ? Color.accentColor: Color.clear,
-                                width: 3.0)
-                    }
-                    
-                    if basemapGalleryItem.loadBasemapsError != nil {
-                        Image(systemName: "minus.circle.fill")
-                            .font(.title)
-                            .foregroundColor(.red)
-                    } else if basemapGalleryItem.spatialReferenceStatus == .noMatch {
-                        Image(systemName: "x.circle.fill")
-                            .font(.title)
-                            .foregroundColor(.red)
-                    }
-                    if basemapGalleryItem.isLoading {
-                        Spacer()
-                        ProgressView()
-                            .progressViewStyle(CircularProgressViewStyle())
-                            .esriBorder()
-                        Spacer()
-                        
-                    }
+        VStack {
+            ZStack(alignment: .center) {
+                if let thumbnailImage = basemapGalleryItem.thumbnail {
+                    Image(uiImage: thumbnailImage)
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .border(
+                            isSelected ? Color.accentColor: Color.clear,
+                            width: 3.0)
                 }
-                Text(basemapGalleryItem.name)
-                    .font(.footnote)
-                    .multilineTextAlignment(.center)
+                
+                if basemapGalleryItem.loadBasemapsError != nil {
+                    Image(systemName: "minus.circle.fill")
+                        .font(.title)
+                        .foregroundColor(.red)
+                } else if basemapGalleryItem.spatialReferenceStatus == .noMatch {
+                    Image(systemName: "x.circle.fill")
+                        .font(.title)
+                        .foregroundColor(.red)
+                }
+                if basemapGalleryItem.isLoading {
+                    Spacer()
+                    ProgressView()
+                        .progressViewStyle(CircularProgressViewStyle())
+                        .esriBorder()
+                    Spacer()
+                    
+                }
             }
+            Text(basemapGalleryItem.name)
+                .font(.footnote)
+                .multilineTextAlignment(.center)
         }
         .allowsHitTesting(
             !basemapGalleryItem.isLoading
@@ -220,21 +206,24 @@ extension AlertItem: Identifiable {
     public var id: UUID { UUID() }
 }
 
-// TODO: add SR for basemap, if possible (SR property on basemap?)  Maybe that can speed up baselayer sr checking...
-// TODO: Cleanup all .tapGesture code, alert code, old error/alert stuff
-// TODO: Figure out common errors, so I don't need to rely on `Error` or `RuntimeError`.
 extension AlertItem {
+    /// Creates an alert item based on a spatial reference mismatch.
+    /// - Parameters:
+    ///   - basemapSR: The basemap's spatial reference.
+    ///   - geoModelSR: The geomodel's spatial reference.
     init(basemapSR: SpatialReference?, geoModelSR: SpatialReference?) {
         self.init(
-            title: "Spatial Reference mismatch.",
-            message: "The spatial reference of the basemap \(basemapSR?.description ?? "") does not match that of the GeoModel \(geoModelSR?.description ?? "")."
+            title: "Spatial reference mismatch.",
+            message: "The spatial reference of the basemap: \(basemapSR?.description ?? "") does not match that of the geomodel: \(geoModelSR?.description ?? "")."
         )
     }
     
-    init(error: Error) {
+    /// Creates an alert item based on an error generated loading a basemap.
+    /// - Parameter loadBasemapError: The load basemap error.
+    init(loadBasemapError: RuntimeError) {
         self.init(
             title: "Error loading basemap.",
-            message: "\(error.localizedDescription)"
+            message: "\(loadBasemapError.failureReason ?? "")"
         )
     }
 }

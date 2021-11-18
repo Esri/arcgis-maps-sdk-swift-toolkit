@@ -52,29 +52,17 @@ public class BasemapGalleryViewModel: ObservableObject {
     /// the geoModel will have its basemap replaced with the selected basemap.
     public var geoModel: GeoModel? {
         didSet {
-            // Note that we don't want to store this task and cancel it
-            // before kicking off another operation because it could have been
-            // started elsewhere as well as here. Canceling it here would also
-            // cancel those other operations, which we don't want to do.
             Task { await load(geoModel: geoModel) }
         }
     }
     
-    /// The `Portal` object, if any.  Setting the portal will automatically fetch it's base maps
+    /// The `Portal` object, if any.  Setting the portal will automatically fetch it's basemaps
     /// and add them to the `basemapGalleryItems` array.
     public var portal: Portal? {
         didSet {
-            // Note that we don't want to store this task and cancel it
-            // before kicking off another operation because it could have been
-            // started elsewhere as well as here. Canceling it here would also
-            // cancel those other operations, which we don't want to do.
             Task { await fetchBasemaps(from: portal) }
         }
     }
-    
-    // TODO: what does this mean that it is a public var?
-    // TODO: what happens if the user sets this after things are loaded
-    // TODO: test this...
     
     /// The list of basemaps currently visible in the gallery.  It is comprised of items passed into
     /// the `BasemapGalleryItem` constructor and items loaded from the `Portal`.
@@ -84,11 +72,48 @@ public class BasemapGalleryViewModel: ObservableObject {
     /// `BasemapGalleryItem` representing the `GeoModel`'s current base map. This may be a
     /// basemap which does not exist in the gallery.
     @Published
-    public var currentBasemapGalleryItem: BasemapGalleryItem? = nil {
+    public private(set) var currentBasemapGalleryItem: BasemapGalleryItem? = nil {
         didSet {
             guard let item = currentBasemapGalleryItem else { return }
             geoModel?.basemap = item.basemap
         }
+    }
+    
+    @Published
+    /// The error signifying the spatial reference of the GeoModel and that of a potential
+    /// current `BasemapGalleryItem` do not match.
+    public private(set) var spatialReferenceMismatchError: SpatialReferenceMismatchError? = nil
+    
+    /// This attempts to set `currentBasemapGalleryItem`. `currentBasemapGalleryItem`
+    /// will be set if it's spatialReference matches that of the current geoModel.  If the spatialReferences
+    /// do not match, `currentBasemapGalleryItem` will be unchanged.
+    /// - Parameter basemapGalleryItem: The new, potential, `BasemapGalleryItem`.
+    public func updateCurrentBasemapGalleryItem(_ basemapGalleryItem: BasemapGalleryItem) {
+        Task {
+            try await basemapGalleryItem.updateSpatialReferenceStatus(
+                geoModel?.actualSpatialReference
+            )
+            await MainActor.run {
+                if basemapGalleryItem.spatialReferenceStatus == .match ||
+                    basemapGalleryItem.spatialReferenceStatus == .unknown {
+                    currentBasemapGalleryItem = basemapGalleryItem
+                }
+                else {
+                    spatialReferenceMismatchError = SpatialReferenceMismatchError(
+                        basemapSR: basemapGalleryItem.spatialReference,
+                        geoModelSR: geoModel?.actualSpatialReference
+                    )
+                }
+            }
+        }
+    }
+}
+
+private extension GeoModel {
+    var actualSpatialReference: SpatialReference? {
+        (self as? ArcGIS.Scene)?.sceneViewTilingScheme == .webMercator ?
+        SpatialReference.webMercator :
+        spatialReference
     }
 }
 
@@ -116,8 +141,6 @@ private extension BasemapGalleryViewModel {
             else {
                 currentBasemapGalleryItem = nil
             }
-        } catch {
-            // We don't need any errors, as that should be handled by the app.
-        }
+        } catch { }
     }
 }
