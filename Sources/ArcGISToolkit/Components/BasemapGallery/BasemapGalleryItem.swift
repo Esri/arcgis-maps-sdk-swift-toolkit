@@ -54,35 +54,35 @@ public class BasemapGalleryItem: ObservableObject {
 ***REMOVED******REMOVED***Task { await loadBasemap() ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED***@Published
 ***REMOVED******REMOVED***/ The error generated loading the basemap, if any.
+***REMOVED***@Published
 ***REMOVED***public private(set) var loadBasemapsError: RuntimeError? = nil
 ***REMOVED***
 ***REMOVED******REMOVED***/ The basemap this `BasemapGalleryItem` represents.
 ***REMOVED***public private(set) var basemap: Basemap
 ***REMOVED***
-***REMOVED***@Published
 ***REMOVED******REMOVED***/ The name of the `basemap`.
+***REMOVED***@Published
 ***REMOVED***public private(set) var name: String = ""
 ***REMOVED***private var nameOverride: String? = nil
 ***REMOVED***
-***REMOVED***@Published
 ***REMOVED******REMOVED***/ The description of the `basemap`.
+***REMOVED***@Published
 ***REMOVED***public private(set) var description: String? = nil
 ***REMOVED***private var descriptionOverride: String? = nil
 ***REMOVED***
-***REMOVED***@Published
 ***REMOVED******REMOVED***/ The thumbnail used to represent the `basemap`.
+***REMOVED***@Published
 ***REMOVED***public private(set) var thumbnail: UIImage? = nil
 ***REMOVED***private var thumbnailOverride: UIImage? = nil
 ***REMOVED***
-***REMOVED***@Published
 ***REMOVED******REMOVED***/ Denotes whether the `basemap` or it's base layers are being loaded.
+***REMOVED***@Published
 ***REMOVED***public private(set) var isLoading = true
 ***REMOVED***
-***REMOVED***@Published
 ***REMOVED******REMOVED***/ The `SpatialReferenceStatus` of the item.  This is set via a call to
 ***REMOVED******REMOVED***/ `updateSpatialReferenceStatus()`
+***REMOVED***@Published
 ***REMOVED***public private(set) var spatialReferenceStatus: SpatialReferenceStatus = .unknown
 ***REMOVED***
 ***REMOVED******REMOVED***/ The `SpatialReference` of `basemap`.  This will be `nil` until the basemap's
@@ -104,9 +104,9 @@ private extension BasemapGalleryItem {
 ***REMOVED******REMOVED***await finalizeLoading(error: loadError)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***@MainActor
 ***REMOVED******REMOVED***/ Updates the item in response to basemap loading completion.
 ***REMOVED******REMOVED***/ - Parameter error: The basemap load error, if any.
+***REMOVED***@MainActor
 ***REMOVED***func finalizeLoading(error: RuntimeError?) {
 ***REMOVED******REMOVED***name = nameOverride ?? basemap.name
 ***REMOVED******REMOVED***description = descriptionOverride ?? basemap.item?.description
@@ -117,11 +117,11 @@ private extension BasemapGalleryItem {
 ***REMOVED******REMOVED***isLoading = false
 ***REMOVED***
 ***REMOVED***
-***REMOVED***@MainActor
 ***REMOVED******REMOVED***/ Updates the item's `spatialReference` and `spatialReferenceStatus` properties.
 ***REMOVED******REMOVED***/ - Parameter referenceSpatialReference: The `SpatialReference` used to
 ***REMOVED******REMOVED***/ compare to the `basemap`'s `SpatialReference`, represented by the first base layer's`
 ***REMOVED******REMOVED***/ `SpatialReference`.
+***REMOVED***@MainActor
 ***REMOVED***func finalizeUpdateSpatialReferenceStatus(
 ***REMOVED******REMOVED***with referenceSpatialReference: SpatialReference?
 ***REMOVED***) {
