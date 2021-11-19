@@ -439,9 +439,10 @@ extension SearchViewModelTests {
 ***REMOVED******REMOVED***_ model: SearchViewModel,
 ***REMOVED******REMOVED***dropFirst: Bool = false
 ***REMOVED***) async throws -> [SearchResult]? {
-***REMOVED******REMOVED***let searchOutcome = dropFirst ?
-***REMOVED******REMOVED***try await model.$searchOutcome.compactMap({ $0 ***REMOVED***).dropFirst().first :
-***REMOVED******REMOVED***try await model.$searchOutcome.compactMap({ $0 ***REMOVED***).first
+***REMOVED******REMOVED***let searchOutcome = try await model.$searchOutcome
+***REMOVED******REMOVED******REMOVED***.compactMap { $0 ***REMOVED***
+***REMOVED******REMOVED******REMOVED***.dropFirst(dropFirst ? 1 : 0)
+***REMOVED******REMOVED******REMOVED***.first
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***switch searchOutcome {
 ***REMOVED******REMOVED***case .results(let results):
