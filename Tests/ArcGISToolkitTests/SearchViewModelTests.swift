@@ -494,4 +494,3 @@ extension Point {
 ***REMOVED***static let edinburgh = Point(x: -3.188267, y: 55.953251, spatialReference: .wgs84)
 ***REMOVED***static let portland = Point(x: -122.658722, y: 45.512230, spatialReference: .wgs84)
 ***REMOVED***
-
