@@ -80,7 +80,6 @@ public class SearchViewModel: ObservableObject {
                 }
             default:
                 self.searchOutcome = nil
-                break
             }
         }
     }
