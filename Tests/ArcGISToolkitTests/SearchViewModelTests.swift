@@ -439,9 +439,10 @@ extension SearchViewModelTests {
         _ model: SearchViewModel,
         dropFirst: Bool = false
     ) async throws -> [SearchResult]? {
-        let searchOutcome = dropFirst ?
-        try await model.$searchOutcome.compactMap({ $0 }).dropFirst().first :
-        try await model.$searchOutcome.compactMap({ $0 }).first
+        let searchOutcome = try await model.$searchOutcome
+            .compactMap { $0 }
+            .dropFirst(dropFirst ? 1 : 0)
+            .first
         
         switch searchOutcome {
         case .results(let results):
@@ -455,9 +456,10 @@ extension SearchViewModelTests {
         _ model: SearchViewModel,
         dropFirst: Bool = false
     ) async throws -> [SearchSuggestion]? {
-        let searchOutcome = dropFirst ?
-        try await model.$searchOutcome.compactMap({ $0 }).dropFirst().first :
-        try await model.$searchOutcome.compactMap({ $0 }).first
+        let searchOutcome = try await model.$searchOutcome
+            .compactMap { $0 }
+            .dropFirst(dropFirst ? 1 : 0)
+            .first
         
         switch searchOutcome {
         case .suggestions(let suggestions):
@@ -469,27 +471,26 @@ extension SearchViewModelTests {
 }
 
 extension Polygon {
-    static var chippewaFalls: Polygon {
+    static let chippewaFalls: Polygon = {
         let builder = PolygonBuilder(spatialReference: .wgs84)
-        let _ = builder.add(point: Point(x: -91.59127653822401, y: 44.74770908213401, spatialReference: .wgs84))
-        let _ = builder.add(point: Point(x: -91.19322516572637, y: 44.74770908213401, spatialReference: .wgs84))
-        let _ = builder.add(point: Point(x: -91.19322516572637, y: 45.116100854348254, spatialReference: .wgs84))
-        let _ = builder.add(point: Point(x: -91.59127653822401, y: 45.116100854348254, spatialReference: .wgs84))
+        _ = builder.add(point: Point(x: -91.59127653822401, y: 44.74770908213401, spatialReference: .wgs84))
+        _ = builder.add(point: Point(x: -91.19322516572637, y: 44.74770908213401, spatialReference: .wgs84))
+        _ = builder.add(point: Point(x: -91.19322516572637, y: 45.116100854348254, spatialReference: .wgs84))
+        _ = builder.add(point: Point(x: -91.59127653822401, y: 45.116100854348254, spatialReference: .wgs84))
         return builder.toGeometry() as! ArcGIS.Polygon
-    }
+    }()
     
-    static var minneapolis: Polygon {
+    static let minneapolis: Polygon = {
         let builder = PolygonBuilder(spatialReference: .wgs84)
-        let _ = builder.add(point: Point(x: -94.170821328662, y: 44.13656401114444, spatialReference: .wgs84))
-        let _ = builder.add(point: Point(x: -94.170821328662, y: 44.13656401114444, spatialReference: .wgs84))
-        let _ = builder.add(point: Point(x: -92.34544467133114, y: 45.824325577904446, spatialReference: .wgs84))
-        let _ = builder.add(point: Point(x: -92.34544467133114, y: 45.824325577904446, spatialReference: .wgs84))
+        _ = builder.add(point: Point(x: -94.170821328662, y: 44.13656401114444, spatialReference: .wgs84))
+        _ = builder.add(point: Point(x: -94.170821328662, y: 44.13656401114444, spatialReference: .wgs84))
+        _ = builder.add(point: Point(x: -92.34544467133114, y: 45.824325577904446, spatialReference: .wgs84))
+        _ = builder.add(point: Point(x: -92.34544467133114, y: 45.824325577904446, spatialReference: .wgs84))
         return builder.toGeometry() as! ArcGIS.Polygon
-    }
+    }()
 }
 
 extension Point {
     static let edinburgh = Point(x: -3.188267, y: 55.953251, spatialReference: .wgs84)
     static let portland = Point(x: -122.658722, y: 45.512230, spatialReference: .wgs84)
 }
-
