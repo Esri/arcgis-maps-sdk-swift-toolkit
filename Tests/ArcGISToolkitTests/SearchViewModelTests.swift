@@ -480,14 +480,14 @@ extension Polygon {
         return builder.toGeometry() as! ArcGIS.Polygon
     }()
     
-    static var minneapolis: Polygon {
+    static let minneapolis: Polygon = {
         let builder = PolygonBuilder(spatialReference: .wgs84)
         let _ = builder.add(point: Point(x: -94.170821328662, y: 44.13656401114444, spatialReference: .wgs84))
         let _ = builder.add(point: Point(x: -94.170821328662, y: 44.13656401114444, spatialReference: .wgs84))
         let _ = builder.add(point: Point(x: -92.34544467133114, y: 45.824325577904446, spatialReference: .wgs84))
         let _ = builder.add(point: Point(x: -92.34544467133114, y: 45.824325577904446, spatialReference: .wgs84))
         return builder.toGeometry() as! ArcGIS.Polygon
-    }
+    }()
 }
 
 extension Point {
