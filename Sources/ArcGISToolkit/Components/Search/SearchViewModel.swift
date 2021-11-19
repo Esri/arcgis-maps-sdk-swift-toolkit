@@ -80,7 +80,6 @@ public class SearchViewModel: ObservableObject {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***default:
 ***REMOVED******REMOVED******REMOVED******REMOVED***self.searchOutcome = nil
-***REMOVED******REMOVED******REMOVED******REMOVED***break
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -281,7 +280,7 @@ private extension SearchViewModel {
 ***REMOVED******REMOVED******REMOVED******REMOVED***searchArea: queryArea,
 ***REMOVED******REMOVED******REMOVED******REMOVED***preferredSearchLocation: queryCenter
 ***REMOVED******REMOVED******REMOVED***)
-***REMOVED*** )
+***REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** once we are done searching for the suggestion, then reset it to nil
 ***REMOVED******REMOVED***currentSuggestion = nil

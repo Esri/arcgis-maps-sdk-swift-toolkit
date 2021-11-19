@@ -439,9 +439,10 @@ extension SearchViewModelTests {
 ***REMOVED******REMOVED***_ model: SearchViewModel,
 ***REMOVED******REMOVED***dropFirst: Bool = false
 ***REMOVED***) async throws -> [SearchResult]? {
-***REMOVED******REMOVED***let searchOutcome = dropFirst ?
-***REMOVED******REMOVED***try await model.$searchOutcome.compactMap({ $0 ***REMOVED***).dropFirst().first :
-***REMOVED******REMOVED***try await model.$searchOutcome.compactMap({ $0 ***REMOVED***).first
+***REMOVED******REMOVED***let searchOutcome = try await model.$searchOutcome
+***REMOVED******REMOVED******REMOVED***.compactMap { $0 ***REMOVED***
+***REMOVED******REMOVED******REMOVED***.dropFirst(dropFirst ? 1 : 0)
+***REMOVED******REMOVED******REMOVED***.first
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***switch searchOutcome {
 ***REMOVED******REMOVED***case .results(let results):
@@ -455,9 +456,10 @@ extension SearchViewModelTests {
 ***REMOVED******REMOVED***_ model: SearchViewModel,
 ***REMOVED******REMOVED***dropFirst: Bool = false
 ***REMOVED***) async throws -> [SearchSuggestion]? {
-***REMOVED******REMOVED***let searchOutcome = dropFirst ?
-***REMOVED******REMOVED***try await model.$searchOutcome.compactMap({ $0 ***REMOVED***).dropFirst().first :
-***REMOVED******REMOVED***try await model.$searchOutcome.compactMap({ $0 ***REMOVED***).first
+***REMOVED******REMOVED***let searchOutcome = try await model.$searchOutcome
+***REMOVED******REMOVED******REMOVED***.compactMap { $0 ***REMOVED***
+***REMOVED******REMOVED******REMOVED***.dropFirst(dropFirst ? 1 : 0)
+***REMOVED******REMOVED******REMOVED***.first
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***switch searchOutcome {
 ***REMOVED******REMOVED***case .suggestions(let suggestions):
@@ -469,27 +471,26 @@ extension SearchViewModelTests {
 ***REMOVED***
 
 extension Polygon {
-***REMOVED***static var chippewaFalls: Polygon {
+***REMOVED***static let chippewaFalls: Polygon = {
 ***REMOVED******REMOVED***let builder = PolygonBuilder(spatialReference: .wgs84)
-***REMOVED******REMOVED***let _ = builder.add(point: Point(x: -91.59127653822401, y: 44.74770908213401, spatialReference: .wgs84))
-***REMOVED******REMOVED***let _ = builder.add(point: Point(x: -91.19322516572637, y: 44.74770908213401, spatialReference: .wgs84))
-***REMOVED******REMOVED***let _ = builder.add(point: Point(x: -91.19322516572637, y: 45.116100854348254, spatialReference: .wgs84))
-***REMOVED******REMOVED***let _ = builder.add(point: Point(x: -91.59127653822401, y: 45.116100854348254, spatialReference: .wgs84))
+***REMOVED******REMOVED***_ = builder.add(point: Point(x: -91.59127653822401, y: 44.74770908213401, spatialReference: .wgs84))
+***REMOVED******REMOVED***_ = builder.add(point: Point(x: -91.19322516572637, y: 44.74770908213401, spatialReference: .wgs84))
+***REMOVED******REMOVED***_ = builder.add(point: Point(x: -91.19322516572637, y: 45.116100854348254, spatialReference: .wgs84))
+***REMOVED******REMOVED***_ = builder.add(point: Point(x: -91.59127653822401, y: 45.116100854348254, spatialReference: .wgs84))
 ***REMOVED******REMOVED***return builder.toGeometry() as! ArcGIS.Polygon
+***REMOVED***()
 ***REMOVED***
-***REMOVED***
-***REMOVED***static var minneapolis: Polygon {
+***REMOVED***static let minneapolis: Polygon = {
 ***REMOVED******REMOVED***let builder = PolygonBuilder(spatialReference: .wgs84)
-***REMOVED******REMOVED***let _ = builder.add(point: Point(x: -94.170821328662, y: 44.13656401114444, spatialReference: .wgs84))
-***REMOVED******REMOVED***let _ = builder.add(point: Point(x: -94.170821328662, y: 44.13656401114444, spatialReference: .wgs84))
-***REMOVED******REMOVED***let _ = builder.add(point: Point(x: -92.34544467133114, y: 45.824325577904446, spatialReference: .wgs84))
-***REMOVED******REMOVED***let _ = builder.add(point: Point(x: -92.34544467133114, y: 45.824325577904446, spatialReference: .wgs84))
+***REMOVED******REMOVED***_ = builder.add(point: Point(x: -94.170821328662, y: 44.13656401114444, spatialReference: .wgs84))
+***REMOVED******REMOVED***_ = builder.add(point: Point(x: -94.170821328662, y: 44.13656401114444, spatialReference: .wgs84))
+***REMOVED******REMOVED***_ = builder.add(point: Point(x: -92.34544467133114, y: 45.824325577904446, spatialReference: .wgs84))
+***REMOVED******REMOVED***_ = builder.add(point: Point(x: -92.34544467133114, y: 45.824325577904446, spatialReference: .wgs84))
 ***REMOVED******REMOVED***return builder.toGeometry() as! ArcGIS.Polygon
-***REMOVED***
+***REMOVED***()
 ***REMOVED***
 
 extension Point {
 ***REMOVED***static let edinburgh = Point(x: -3.188267, y: 55.953251, spatialReference: .wgs84)
 ***REMOVED***static let portland = Point(x: -122.658722, y: 45.512230, spatialReference: .wgs84)
 ***REMOVED***
-
