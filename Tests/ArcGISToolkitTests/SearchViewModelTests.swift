@@ -471,14 +471,14 @@ extension SearchViewModelTests {
 }
 
 extension Polygon {
-    static var chippewaFalls: Polygon {
+    static let chippewaFalls: Polygon = {
         let builder = PolygonBuilder(spatialReference: .wgs84)
         let _ = builder.add(point: Point(x: -91.59127653822401, y: 44.74770908213401, spatialReference: .wgs84))
         let _ = builder.add(point: Point(x: -91.19322516572637, y: 44.74770908213401, spatialReference: .wgs84))
         let _ = builder.add(point: Point(x: -91.19322516572637, y: 45.116100854348254, spatialReference: .wgs84))
         let _ = builder.add(point: Point(x: -91.59127653822401, y: 45.116100854348254, spatialReference: .wgs84))
         return builder.toGeometry() as! ArcGIS.Polygon
-    }
+    }()
     
     static var minneapolis: Polygon {
         let builder = PolygonBuilder(spatialReference: .wgs84)
