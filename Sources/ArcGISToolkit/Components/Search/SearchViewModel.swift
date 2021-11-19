@@ -80,7 +80,6 @@ public class SearchViewModel: ObservableObject {
                 }
             default:
                 self.searchOutcome = nil
-                break
             }
         }
     }
@@ -281,7 +280,7 @@ private extension SearchViewModel {
                 searchArea: queryArea,
                 preferredSearchLocation: queryCenter
             )
-        } )
+        })
         
         // once we are done searching for the suggestion, then reset it to nil
         currentSuggestion = nil
