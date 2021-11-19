@@ -90,6 +90,9 @@ public class BasemapGalleryViewModel: ObservableObject {
     /// - Parameter basemapGalleryItem: The new, potential, `BasemapGalleryItem`.
     public func updateCurrentBasemapGalleryItem(_ basemapGalleryItem: BasemapGalleryItem) {
         Task {
+            // Ensure the geoModel is loaded.
+            try await geoModel?.load()
+            
             // Reset the mismatch error.
             spatialReferenceMismatchError = nil
             try await basemapGalleryItem.updateSpatialReferenceStatus(
@@ -111,7 +114,7 @@ public class BasemapGalleryViewModel: ObservableObject {
     }
 }
 
-private extension GeoModel {
+internal extension GeoModel {
     var actualSpatialReference: SpatialReference? {
         (self as? ArcGIS.Scene)?.sceneViewTilingScheme == .webMercator ?
         SpatialReference.webMercator :

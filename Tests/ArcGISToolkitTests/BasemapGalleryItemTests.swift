@@ -88,468 +88,63 @@ class BasemapGalleryItemTests: XCTestCase {
         XCTAssertNotNil(item.loadBasemapsError)
     }
     
-    func testSpatialReferenceStatus() async throws {
+    func testSpatialReferenceAndStatus() async throws {
         let basemap = Basemap.lightGrayCanvas()
         let item = BasemapGalleryItem(basemap: basemap)
-        
-    }
-    
-    func testSpatialReference() async throws {
-        
-    }
 
-    
-    /*
+        var isLoading = try await item.$isLoading.compactMap({ $0 }).dropFirst().first
+        var loading = try XCTUnwrap(isLoading)
+        XCTAssertFalse(loading, "Item is not loading.")
 
-    
-    
-    func testAcceptSuggestion() async throws {
-        let model = BasemapGalleryViewModel(sources: [LocatorSearchSource()])
-        model.currentQuery = "Magers & Quinn Booksellers"
+        XCTAssertEqual(item.spatialReferenceStatus, .unknown)
+
+        // Test if basemap matches.  Use a Task here so we can catch and test
+        // the change to `item.isLoading` during the loading of the base layers.
+        Task {
+            try await item.updateSpatialReferenceStatus(SpatialReference.webMercator)
+        }
+
+        // Check if `isLoading` is set to true during first call
+        // to updateSpatialReferenceStatus.
+        isLoading = try await item.$isLoading.compactMap({ $0 }).dropFirst().first
+        loading = try XCTUnwrap(isLoading)
+        XCTAssertTrue(loading, "Item base layers are loading.")
+
+        var srStatus = try await item.$spatialReferenceStatus.compactMap({ $0 }).dropFirst().first
+        var status = try XCTUnwrap(srStatus)
+        XCTAssertEqual(status, .match)
+        XCTAssertEqual(item.spatialReference, SpatialReference.webMercator)
+        XCTAssertFalse(item.isLoading)
         
-        Task { model.updateSuggestions() }
+        // Test if basemap doesn't match.
+        try await item.updateSpatialReferenceStatus(SpatialReference.wgs84)
         
-        // Get suggestion
-        let suggestions = try await model.$suggestions.compactMap({$0}).first
-        let suggestion = try XCTUnwrap(suggestions?.get().first)
-        
-        Task { model.acceptSuggestion(suggestion) }
-        
-        let results = try await model.$results.compactMap({$0}).first
-        let result = try XCTUnwrap(results?.get())
-        XCTAssertEqual(result.count, 1)
-        XCTAssertNil(model.suggestions)
-        
-        // With only one results, model should set `selectedResult` property.
-        XCTAssertEqual(result.first!, model.selectedResult)
-    }
-    
-    func testActiveSource() async throws {
-        let activeSource = LocatorSearchSource()
-        activeSource.displayName = "Simple Locator"
-        let model = BasemapGalleryViewModel(
-            activeSource: activeSource,
-            sources: [LocatorSearchSource()]
-        )
-        
-        model.currentQuery = "Magers & Quinn Booksellers"
-        
-        Task { model.commitSearch() }
-        
-        let results = try await model.$results.compactMap({$0}).first
-        let result = try XCTUnwrap(results?.get().first)
-        XCTAssertEqual(result.owningSource.displayName, activeSource.displayName)
-        
-        Task { model.updateSuggestions() }
-        
-        let suggestions = try await model.$suggestions.compactMap({$0}).first
-        let suggestion = try XCTUnwrap(suggestions?.get().first)
-        XCTAssertEqual(suggestion.owningSource.displayName, activeSource.displayName)
-    }
-    
-    func testCommitSearch() async throws {
-        let model = BasemapGalleryViewModel(sources: [LocatorSearchSource()])
-        
-        // No search - results are nil.
-        XCTAssertNil(model.results)
-        
-        // Search with no results - result count is 0.
-        model.currentQuery = "No results found blah blah blah blah"
-        
-        Task { model.commitSearch() }
-        
-        var results = try await model.$results.compactMap({$0}).first
-        var result = try XCTUnwrap(results?.get())
-        XCTAssertEqual(result.count, 0)
-        XCTAssertNil(model.selectedResult)
-        XCTAssertNil(model.suggestions)
-        
-        // Search with one result.
-        model.currentQuery = "Magers & Quinn Booksellers"
-        
-        Task { model.commitSearch() }
-        
-        results = try await model.$results.compactMap({$0}).first
-        result = try XCTUnwrap(results?.get())
-        XCTAssertEqual(result.count, 1)
-        
-        // One results automatically populates `selectedResult`.
-        XCTAssertEqual(result.first!, model.selectedResult)
-        XCTAssertNil(model.suggestions)
-        
-        // Search with multiple results.
-        model.currentQuery = "Magers & Quinn"
-        
-        Task { model.commitSearch() }
-        
-        results = try await model.$results.compactMap({$0}).first
-        result = try XCTUnwrap(results?.get())
-        XCTAssertGreaterThan(result.count, 1)
-        
-        XCTAssertNil(model.selectedResult)
-        XCTAssertNil(model.suggestions)
-        
-        model.selectedResult = result.first!
-        
-        Task { model.commitSearch() }
-        
-        results = try await model.$results.compactMap({$0}).dropFirst().first
-        result = try XCTUnwrap(results?.get())
-        XCTAssertGreaterThan(result.count, 1)
-        
-        XCTAssertNil(model.selectedResult)
-    }
-    
-    func testCurrentQuery() async throws {
-        let model = BasemapGalleryViewModel(sources: [LocatorSearchSource()])
-        
-        // Empty `currentQuery` should produce nil results and suggestions.
-        model.currentQuery = ""
-        XCTAssertNil(model.results)
-        XCTAssertNil(model.suggestions)
-        
-        // Valid `currentQuery` should produce non-nil results.
-        model.currentQuery = "Coffee"
-        
-        Task { model.commitSearch() }
-        
-        let results = try await model.$results.compactMap({$0}).first
-        XCTAssertNotNil(results)
-        
-        // Changing the `currentQuery` should set results to nil.
-        model.currentQuery = "Coffee in Portland"
-        XCTAssertNil(model.results)
-        
-        Task { model.updateSuggestions() }
-        
-        let suggestions = try await model.$suggestions.compactMap({$0}).first
-        XCTAssertNotNil(suggestions)
-        
-        // Changing the `currentQuery` should set suggestions to nil.
-        model.currentQuery = "Coffee in Edinburgh"
-        XCTAssertNil(model.suggestions)
-        
-        // Changing current query after search with 1 result
-        // should set `selectedResult` to nil
-        model.currentQuery = "Magers & Quinn Bookseller"
-        
-        Task { model.commitSearch() }
-        
-        _ = try await model.$results.compactMap({$0}).first
-        XCTAssertNotNil(model.selectedResult)
-        model.currentQuery = "Hotel"
-        XCTAssertNil(model.selectedResult)
-    }
-    
-    func testIsEligibleForRequery() async throws {
-        let model = BasemapGalleryViewModel(sources: [LocatorSearchSource()])
-        
-        // Set queryArea to Chippewa Falls
-        model.queryArea = Polygon.chippewaFalls
-        model.geoViewExtent = Polygon.chippewaFalls.extent
-        model.currentQuery = "Coffee"
-        
-        Task { model.commitSearch() }
-        
-        _ = try await model.$results.compactMap({$0}).first
-        XCTAssertFalse(model.isEligibleForRequery)
-        
-        // Offset extent by 10% - isEligibleForRequery should still be `false`.
-        var builder = EnvelopeBuilder(envelope: model.geoViewExtent)
-        let tenPercentWidth = model.geoViewExtent!.width * 0.1
-        builder.offsetBy(x: tenPercentWidth, y: 0.0)
-        var newExtent = builder.toGeometry() as! Envelope
-        
-        model.geoViewExtent = newExtent
-        XCTAssertFalse(model.isEligibleForRequery)
-        
-        // Offset extent by 50% - isEligibleForRequery should now be `true`.
-        builder = EnvelopeBuilder(envelope: model.geoViewExtent)
-        let fiftyPercentWidth = model.geoViewExtent!.width * 0.5
-        builder.offsetBy(x: fiftyPercentWidth, y: 0.0)
-        newExtent = builder.toGeometry() as! Envelope
-        
-        model.geoViewExtent = newExtent
-        XCTAssertTrue(model.isEligibleForRequery)
-        
-        // Set queryArea to Chippewa Falls
-        model.queryArea = Polygon.chippewaFalls
-        model.geoViewExtent = Polygon.chippewaFalls.extent
-        
-        Task { model.commitSearch() }
-        
-        _ = try await model.$results.compactMap({$0}).dropFirst().first
-        XCTAssertFalse(model.isEligibleForRequery)
-        
-        // Expand extent by 1.1x - isEligibleForRequery should still be `false`.
-        builder = EnvelopeBuilder(envelope: model.geoViewExtent)
-        builder.expand(factor: 1.1)
-        newExtent = builder.toGeometry() as! Envelope
-        
-        model.geoViewExtent = newExtent
-        XCTAssertFalse(model.isEligibleForRequery)
-        
-        // Expand extent by 1.5x - isEligibleForRequery should now be `true`.
-        builder = EnvelopeBuilder(envelope: model.geoViewExtent)
-        builder.expand(factor: 1.5)
-        newExtent = builder.toGeometry() as! Envelope
-        
-        model.geoViewExtent = newExtent
-        XCTAssertTrue(model.isEligibleForRequery)
-    }
-    
-    func testQueryArea() async throws {
-        let source = LocatorSearchSource()
-        source.maximumResults = Int32.max
-        let model = BasemapGalleryViewModel(sources: [source])
-        
-        // Set queryArea to Chippewa Falls
-        model.queryArea = Polygon.chippewaFalls
-        model.currentQuery = "Coffee"
-        
-        Task { model.commitSearch() }
-        
-        var results = try await model.$results.compactMap({$0}).first
-        var result = try XCTUnwrap(results?.get())
-        XCTAssertGreaterThan(result.count, 1)
-        
-        let resultGeometryUnion: Geometry = try XCTUnwrap(
-            GeometryEngine.union(
-                geometries: result.compactMap{ $0.geoElement?.geometry }
+        // Since we've already called `updateSpatialReferenceStatus` once,
+        // we should no longer internally need to load the baselayers.
+        isLoading = try await item.$isLoading.compactMap({ $0 }).first
+        loading = try XCTUnwrap(isLoading)
+        XCTAssertFalse(loading, "Item base layers are not loading.")
+
+        srStatus = try await item.$spatialReferenceStatus.compactMap({ $0 }).first
+        status = try XCTUnwrap(srStatus)
+        XCTAssertEqual(status, .noMatch)
+        XCTAssertEqual(item.spatialReference, SpatialReference.webMercator)
+
+        // Test WGS84 basemap.
+        let otherItem = BasemapGalleryItem(
+            basemap: Basemap(
+                item: PortalItem(
+                    url: URL(string: "https://runtime.maps.arcgis.com/home/item.html?id=52bdc7ab7fb044d98add148764eaa30a")!
+                )!
             )
         )
         
-        XCTAssertTrue(
-            GeometryEngine.contains(
-                geometry1: model.queryArea!,
-                geometry2: resultGeometryUnion
-            )
-        )
-        
-        model.currentQuery = "Magers & Quinn Booksellers"
-        
-        Task { model.commitSearch() }
-        
-        results = try await model.$results.compactMap({$0}).first
-        result = try XCTUnwrap(results?.get())
-        XCTAssertEqual(result.count, 0)
-        
-        model.queryArea = Polygon.minneapolis
-        
-        Task { model.commitSearch() }
-        
-        // A note about the use of `.dropFirst()`:
-        // Because `model.results` is not changed between the previous call
-        // to `model.commitSearch()` and the one right above, the
-        // `try await model.$results...` call will return the last result
-        // received (from the first `model.commitSearch()` call), which is
-        // incorrect.  Calling `.dropFirst()` will remove that one
-        // and will give us the next one, which is the correct one (the result
-        // from the second `model.commitSearch()` call).
-        results = try await model.$results.compactMap({$0}).dropFirst().first
-        result = try XCTUnwrap(results?.get())
-        XCTAssertEqual(result.count, 1)
+        _ = try await otherItem.$isLoading.compactMap({ $0 }).dropFirst().first
+
+        try await otherItem.updateSpatialReferenceStatus(SpatialReference.wgs84)
+        srStatus = try await otherItem.$spatialReferenceStatus.compactMap({ $0 }).first
+        status = try XCTUnwrap(srStatus)
+        XCTAssertEqual(status, .match)
+        XCTAssertEqual(otherItem.spatialReference, SpatialReference.wgs84)
     }
-    
-    func testQueryCenter() async throws {
-        let model = BasemapGalleryViewModel(sources: [LocatorSearchSource()])
-        
-        // Set queryCenter to Portland
-        model.queryCenter = .portland
-        model.currentQuery = "Coffee"
-        
-        Task { model.commitSearch() }
-        
-        var results = try await model.$results.compactMap({$0}).first
-        var result = try XCTUnwrap(results?.get())
-        
-        var resultPoint = try XCTUnwrap(
-            result.first?.geoElement?.geometry as? Point
-        )
-        
-        var geodeticDistance = try XCTUnwrap (
-            GeometryEngine.distanceGeodetic(
-                point1: .portland,
-                point2: resultPoint,
-                distanceUnit: .meters,
-                azimuthUnit: nil,
-                curveType: .geodesic
-            )
-        )
-        
-        // First result within 1500m of Portland.
-        XCTAssertLessThan(geodeticDistance.distance,  1500.0)
-        
-        // Set queryCenter to Edinburgh
-        model.queryCenter = .edinburgh
-        model.currentQuery = "Restaurants"
-        
-        Task { model.commitSearch() }
-        
-        
-        results = try await model.$results.compactMap({$0}).first
-        result = try XCTUnwrap(results?.get())
-        
-        resultPoint = try XCTUnwrap(
-            result.first?.geoElement?.geometry as? Point
-        )
-        
-        // Web Mercator distance between .edinburgh and first result.
-        geodeticDistance = try XCTUnwrap (
-            GeometryEngine.distanceGeodetic(
-                point1: .edinburgh,
-                point2: resultPoint,
-                distanceUnit: .meters,
-                azimuthUnit: nil,
-                curveType: .geodesic
-            )
-        )
-        
-        // First result within 100m of Edinburgh.
-        XCTAssertLessThan(geodeticDistance.distance,  100)
-    }
-    
-    func testRepeatSearch() async throws {
-        let model = BasemapGalleryViewModel(sources: [LocatorSearchSource()])
-        
-        // Set queryArea to Chippewa Falls
-        model.geoViewExtent = Polygon.chippewaFalls.extent
-        model.currentQuery = "Coffee"
-        
-        Task { model.repeatSearch() }
-        
-        var results = try await model.$results.compactMap({$0}).first
-        var result = try XCTUnwrap(results?.get())
-        XCTAssertGreaterThan(result.count, 1)
-        
-        let resultGeometryUnion: Geometry = try XCTUnwrap(
-            GeometryEngine.union(
-                geometries: result.compactMap{ $0.geoElement?.geometry }
-            )
-        )
-        
-        XCTAssertTrue(
-            GeometryEngine.contains(
-                geometry1: model.geoViewExtent!,
-                geometry2: resultGeometryUnion
-            )
-        )
-        
-        model.currentQuery = "Magers & Quinn Booksellers"
-        
-        Task { model.repeatSearch() }
-        
-        results = try await model.$results.compactMap({$0}).first
-        result = try XCTUnwrap(results?.get())
-        XCTAssertEqual(result.count, 0)
-        
-        model.geoViewExtent = Polygon.minneapolis.extent
-        
-        Task { model.repeatSearch() }
-        
-        results = try await model.$results.compactMap({$0}).dropFirst().first
-        result = try XCTUnwrap(results?.get())
-        XCTAssertEqual(result.count, 1)
-    }
-    
-    func testSearchResultMode() async throws {
-        let model = BasemapGalleryViewModel(sources: [LocatorSearchSource()])
-        XCTAssertEqual(model.resultMode, .automatic)
-        
-        model.resultMode = .single
-        model.currentQuery = "Magers & Quinn"
-        
-        Task { model.commitSearch() }
-        
-        var results = try await model.$results.compactMap({$0}).first
-        var result = try XCTUnwrap(results?.get())
-        XCTAssertEqual(result.count, 1)
-        
-        model.resultMode = .multiple
-        
-        Task { model.commitSearch() }
-        
-        results = try await model.$results.compactMap({$0}).dropFirst().first
-        result = try XCTUnwrap(results?.get())
-        XCTAssertGreaterThan(result.count, 1)
-        
-        model.currentQuery = "Coffee"
-        
-        Task { model.updateSuggestions() }
-        
-        let suggestionResults = try await model.$suggestions.compactMap({$0}).first
-        let suggestions = try XCTUnwrap(suggestionResults?.get())
-        
-        let collectionSuggestion = try XCTUnwrap(suggestions.filter { $0.isCollection }.first)
-        let singleSuggestion = try XCTUnwrap(suggestions.filter { !$0.isCollection }.first)
-        
-        model.resultMode = .automatic
-        
-        Task { model.acceptSuggestion(collectionSuggestion) }
-        
-        results = try await model.$results.compactMap({$0}).first
-        result = try XCTUnwrap(results?.get())
-        XCTAssertGreaterThan(result.count, 1)
-        
-        Task { model.acceptSuggestion(singleSuggestion) }
-        
-        results = try await model.$results.compactMap({$0}).dropFirst().first
-        result = try XCTUnwrap(results?.get())
-        XCTAssertEqual(result.count, 1)
-    }
-    
-    func testUpdateSuggestions() async throws {
-        let model = BasemapGalleryViewModel(sources: [LocatorSearchSource()])
-        
-        // No currentQuery - suggestions are nil.
-        XCTAssertNil(model.suggestions)
-        
-        // UpdateSuggestions with no results - result count is 0.
-        model.currentQuery = "No results found blah blah blah blah"
-        
-        Task { model.updateSuggestions() }
-        
-        var suggestionResults = try await model.$suggestions.compactMap({$0}).first
-        var suggestions = try XCTUnwrap(suggestionResults?.get())
-        XCTAssertEqual(suggestions.count, 0)
-        
-        // UpdateSuggestions with results.
-        model.currentQuery = "Magers & Quinn"
-        
-        Task { model.updateSuggestions() }
-        
-        suggestionResults = try await model.$suggestions.compactMap({$0}).first
-        suggestions = try XCTUnwrap(suggestionResults?.get())
-        XCTAssertGreaterThanOrEqual(suggestions.count, 1)
-        
-        XCTAssertNil(model.selectedResult)
-        XCTAssertNil(model.results)
-    }
-     */
 }
-
-//extension Polygon {
-//    static var chippewaFalls: Polygon {
-//        let builder = PolygonBuilder(spatialReference: .wgs84)
-//        let _ = builder.add(point: Point(x: -91.59127653822401, y: 44.74770908213401, spatialReference: .wgs84))
-//        let _ = builder.add(point: Point(x: -91.19322516572637, y: 44.74770908213401, spatialReference: .wgs84))
-//        let _ = builder.add(point: Point(x: -91.19322516572637, y: 45.116100854348254, spatialReference: .wgs84))
-//        let _ = builder.add(point: Point(x: -91.59127653822401, y: 45.116100854348254, spatialReference: .wgs84))
-//        return builder.toGeometry() as! ArcGIS.Polygon
-//    }
-//    
-//    static var minneapolis: Polygon {
-//        let builder = PolygonBuilder(spatialReference: .wgs84)
-//        let _ = builder.add(point: Point(x: -94.170821328662, y: 44.13656401114444, spatialReference: .wgs84))
-//        let _ = builder.add(point: Point(x: -94.170821328662, y: 44.13656401114444, spatialReference: .wgs84))
-//        let _ = builder.add(point: Point(x: -92.34544467133114, y: 45.824325577904446, spatialReference: .wgs84))
-//        let _ = builder.add(point: Point(x: -92.34544467133114, y: 45.824325577904446, spatialReference: .wgs84))
-//        return builder.toGeometry() as! ArcGIS.Polygon
-//    }
-//}
-//
-//extension Point {
-//    static let edinburgh = Point(x: -3.188267, y: 55.953251, spatialReference: .wgs84)
-//    static let portland = Point(x: -122.658722, y: 45.512230, spatialReference: .wgs84)
-//}
-//

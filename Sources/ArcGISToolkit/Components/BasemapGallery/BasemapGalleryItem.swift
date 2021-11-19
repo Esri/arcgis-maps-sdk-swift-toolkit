@@ -147,16 +147,14 @@ public extension BasemapGalleryItem {
     func updateSpatialReferenceStatus(
         _ spatialReference: SpatialReference?
     ) async throws {
-        guard basemap.loadStatus == .loaded,
-              self.spatialReference == nil
-        else {
-            return
+        guard basemap.loadStatus == .loaded else { return }
+
+        if self.spatialReference == nil {
+            await MainActor.run {
+                isLoading = true
+            }
+            try await basemap.baseLayers.first?.load()
         }
-        
-        await MainActor.run {
-            isLoading = true
-        }
-        try await basemap.baseLayers.first?.load()
         
         await finalizeUpdateSpatialReferenceStatus(with: spatialReference)
     }
