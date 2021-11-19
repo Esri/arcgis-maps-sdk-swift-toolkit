@@ -22,25 +22,79 @@ import Combine
 @MainActor
 class BasemapGalleryItemTests: XCTestCase {
     //
-    // Test Design: https://devtopia.esri.com/runtime/common-toolkit/blob/master/designs/Search/Search_Test_Design.md
+    // Test Design: https://devtopia.esri.com/runtime/common-toolkit/blob/master/designs/BasemapGallery/BasemapGallery_Test_Design.md
     //
     func testInit() async throws {
+        let basemap = Basemap.lightGrayCanvas()
+        var item = BasemapGalleryItem(basemap: basemap)
+        
+        var isLoading = try await item.$isLoading.compactMap({ $0 }).dropFirst().first
+        var loading = try XCTUnwrap(isLoading)
+        XCTAssertFalse(loading, "Item is not loading.")
+        XCTAssertTrue(item.basemap === basemap)
+        XCTAssertEqual(item.name, "Light Gray Canvas")
+        XCTAssertNil(item.description)
+        XCTAssertNotNil(item.thumbnail)
+        XCTAssertNil(item.loadBasemapsError)
+
+        // Test with overrides.
+        let thumbnail = UIImage(systemName: "magnifyingglass")
+        XCTAssertNotNil(thumbnail)
+        item = BasemapGalleryItem(
+            basemap: basemap,
+            name: "My Basemap",
+            description: "Basemap description",
+            thumbnail: thumbnail
+        )
+        
+        isLoading = try await item.$isLoading.compactMap({ $0 }).dropFirst().first
+        loading = try XCTUnwrap(isLoading)
+        XCTAssertFalse(loading, "Item is not loading.")
+        XCTAssertEqual(item.name, "My Basemap")
+        XCTAssertEqual(item.description, "Basemap description")
+        XCTAssertEqual(item.thumbnail, thumbnail)
+        XCTAssertNil(item.loadBasemapsError)
+
+        // Test with portal item.
+        item = BasemapGalleryItem(
+            basemap: Basemap(
+                item: PortalItem(
+                    url: URL(string: "https://runtime.maps.arcgis.com/home/item.html?id=46a87c20f09e4fc48fa3c38081e0cae6")!
+                )!
+            )
+        )
+        
+        isLoading = try await item.$isLoading.compactMap({ $0 }).dropFirst().first
+        loading = try XCTUnwrap(isLoading)
+        XCTAssertFalse(loading, "Item is not loading.")
+        XCTAssertEqual(item.name, "OpenStreetMap Blueprint")
+        XCTAssertEqual(item.description, "<div><div style=\'margin-bottom:3rem;\'><div><div style=\'max-width:100%; display:inherit;\'><p style=\'margin-top:0px; margin-bottom:1.5rem;\'><span style=\'font-family:&quot;Avenir Next W01&quot;, &quot;Avenir Next W00&quot;, &quot;Avenir Next&quot;, Avenir, &quot;Helvetica Neue&quot;, sans-serif; font-size:16px;\'>This web map presents a vector basemap of OpenStreetMap (OSM) data hosted by Esri. Esri created this vector tile basemap from the </span><a href=\'https://daylightmap.org/\' rel=\'nofollow ugc\' style=\'color:rgb(0, 121, 193); text-decoration-line:none; font-family:&quot;Avenir Next W01&quot;, &quot;Avenir Next W00&quot;, &quot;Avenir Next&quot;, Avenir, &quot;Helvetica Neue&quot;, sans-serif; font-size:16px;\'>Daylight map distribution</a><span style=\'font-family:&quot;Avenir Next W01&quot;, &quot;Avenir Next W00&quot;, &quot;Avenir Next&quot;, Avenir, &quot;Helvetica Neue&quot;, sans-serif; font-size:16px;\'> of OSM data, which is supported by </span><b><font style=\'font-family:inherit;\'><span style=\'font-family:inherit;\'>Facebook</span></font> </b><span style=\'font-family:&quot;Avenir Next W01&quot;, &quot;Avenir Next W00&quot;, &quot;Avenir Next&quot;, Avenir, &quot;Helvetica Neue&quot;, sans-serif; font-size:16px;\'>and supplemented with additional data from </span><font style=\'font-family:&quot;Avenir Next W01&quot;, &quot;Avenir Next W00&quot;, &quot;Avenir Next&quot;, Avenir, &quot;Helvetica Neue&quot;, sans-serif; font-size:16px;\'><b>Microsoft</b>. It presents the map in a cartographic style is like a blueprint technical drawing. The OSM Daylight map will be updated every month with the latest version of OSM Daylight data. </font></p><div style=\'font-family:&quot;Avenir Next W01&quot;, &quot;Avenir Next W00&quot;, &quot;Avenir Next&quot;, Avenir, &quot;Helvetica Neue&quot;, sans-serif; font-size:16px;\'>OpenStreetMap is an open collaborative project to create a free editable map of the world. Volunteers gather location data using GPS, local knowledge, and other free sources of information and upload it. The resulting free map can be viewed and downloaded from the OpenStreetMap site: <a href=\'https://www.openstreetmap.org/\' rel=\'nofollow ugc\' style=\'color:rgb(0, 121, 193); text-decoration-line:none; font-family:inherit;\' target=\'_blank\'>www.OpenStreetMap.org</a>. Esri is a supporter of the OSM project and is excited to make this enhanced vector basemap available to the ArcGIS user and developer communities.</div></div></div></div></div><div style=\'margin-bottom:3rem; display:inherit; font-family:&quot;Avenir Next W01&quot;, &quot;Avenir Next W00&quot;, &quot;Avenir Next&quot;, Avenir, &quot;Helvetica Neue&quot;, sans-serif; font-size:16px;\'><div style=\'display:inherit;\'></div></div>")
+        XCTAssertNotNil(item.thumbnail)
+        XCTAssertNil(item.loadBasemapsError)
+    }
+    
+    func testLoadBasemapError() async throws {
+        let item = BasemapGalleryItem(
+            basemap: Basemap(
+                item: PortalItem(
+                    url: URL(string: "https://runtime.maps.arcgis.com/home/item.html?id=4a3922d6d15f405d8c2b7a448a7fbad2")!
+                )!
+            )
+        )
+
+        let isLoading = try await item.$isLoading.compactMap({ $0 }).dropFirst().first
+        let loading = try XCTUnwrap(isLoading)
+        XCTAssertFalse(loading, "Item is not loading.")
+        XCTAssertNotNil(item.loadBasemapsError)
+    }
+    
+    func testSpatialReferenceStatus() async throws {
+        let basemap = Basemap.lightGrayCanvas()
+        let item = BasemapGalleryItem(basemap: basemap)
         
     }
     
-    func testPortal() async throws {
-        
-    }
-    
-    func testInitialBasemapItems() async throws {
-        
-    }
-    
-    func testGeoModel() async throws {
-        
-    }
-    
-    func testCurrentBasemapItem() async throws {
+    func testSpatialReference() async throws {
         
     }
 

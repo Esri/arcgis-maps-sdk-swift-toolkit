@@ -178,6 +178,6 @@ extension BasemapGalleryItem: Equatable {
 private extension UIImage {
     /// A search result marker symbol.
     static func defaultThumbnail() -> UIImage {
-        return UIImage(named: "DefaultBasemap")!
+        return UIImage(named: "DefaultBasemap", in: Bundle.module, with: nil)!
     }
 }

@@ -25,7 +25,6 @@ struct BasemapGalleryExampleView: View {
             ),
             name: "OpenStreetMap (Blueprint)",
             description: "OpenStreetMap (OSM) is a collaborative project to create a free editable map of the world. This vector basemap is based on the Daylight map distribution of OSM data and is hosted by Esri. It presents the map in a cartographic style is like a blueprint technical drawing.",
-            thumbnail: nil
         ),
         BasemapGalleryItem(
             basemap: Basemap(
@@ -35,7 +34,6 @@ struct BasemapGalleryExampleView: View {
             ),
             name: "National Geographic Style Map",
             description: "This vector web map provides a detailed view of the world featuring beautiful political boundaries, labeling, and background that highlights the differences in the physical characteristics of the land.",
-            thumbnail: nil
         ),
         BasemapGalleryItem(
             basemap: Basemap(
@@ -45,7 +43,6 @@ struct BasemapGalleryExampleView: View {
             ),
             name: "Firefly Imagery Hybrid",
             description: "This map features an alternative view of the World Imagery map designed to be used as a neutral imagery basemap, with de-saturated colors, that is useful for overlaying other brightly styled layers.  The map also includes a reference layer.",
-            thumbnail: nil
         ),
         BasemapGalleryItem(
             basemap: Basemap(
