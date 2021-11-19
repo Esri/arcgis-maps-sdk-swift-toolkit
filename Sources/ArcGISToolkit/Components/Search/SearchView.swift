@@ -44,7 +44,7 @@ public struct SearchView: View {
 ***REMOVED***private let viewpoint: Binding<Viewpoint?>?
 ***REMOVED***
 ***REMOVED******REMOVED***/ The `GraphicsOverlay` used to display results.  If `nil`, no results will be displayed.
-***REMOVED***private var resultsOverlay: GraphicsOverlay? = nil
+***REMOVED***private let resultsOverlay: GraphicsOverlay?
 ***REMOVED***
 ***REMOVED******REMOVED***/ The string shown in the search view when no user query is entered.
 ***REMOVED******REMOVED***/ Defaults to "Find a place or address". Note: this is set using the
