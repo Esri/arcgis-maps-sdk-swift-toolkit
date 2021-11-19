@@ -41,7 +41,7 @@ public struct SearchView: View {
 ***REMOVED***var searchViewModel: SearchViewModel
 ***REMOVED***
 ***REMOVED******REMOVED***/ The `Viewpoint` used to pan/zoom to results.  If `nil`, there will be no zooming to results.
-***REMOVED***private var viewpoint: Binding<Viewpoint?>? = nil
+***REMOVED***private let viewpoint: Binding<Viewpoint?>?
 ***REMOVED***
 ***REMOVED******REMOVED***/ The `GraphicsOverlay` used to display results.  If `nil`, no results will be displayed.
 ***REMOVED***private var resultsOverlay: GraphicsOverlay? = nil
