@@ -178,6 +178,6 @@ extension BasemapGalleryItem: Equatable {
 private extension UIImage {
 ***REMOVED******REMOVED***/ A search result marker symbol.
 ***REMOVED***static func defaultThumbnail() -> UIImage {
-***REMOVED******REMOVED***return UIImage(named: "DefaultBasemap")!
+***REMOVED******REMOVED***return UIImage(named: "DefaultBasemap", in: Bundle.module, with: nil)!
 ***REMOVED***
 ***REMOVED***

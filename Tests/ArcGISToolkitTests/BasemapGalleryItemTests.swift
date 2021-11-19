@@ -22,25 +22,79 @@ import Combine
 @MainActor
 class BasemapGalleryItemTests: XCTestCase {
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED*** Test Design: https:***REMOVED***devtopia.esri.com/runtime/common-toolkit/blob/master/designs/Search/Search_Test_Design.md
+***REMOVED******REMOVED*** Test Design: https:***REMOVED***devtopia.esri.com/runtime/common-toolkit/blob/master/designs/BasemapGallery/BasemapGallery_Test_Design.md
 ***REMOVED******REMOVED***
 ***REMOVED***func testInit() async throws {
+***REMOVED******REMOVED***let basemap = Basemap.lightGrayCanvas()
+***REMOVED******REMOVED***var item = BasemapGalleryItem(basemap: basemap)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***var isLoading = try await item.$isLoading.compactMap({ $0 ***REMOVED***).dropFirst().first
+***REMOVED******REMOVED***var loading = try XCTUnwrap(isLoading)
+***REMOVED******REMOVED***XCTAssertFalse(loading, "Item is not loading.")
+***REMOVED******REMOVED***XCTAssertTrue(item.basemap === basemap)
+***REMOVED******REMOVED***XCTAssertEqual(item.name, "Light Gray Canvas")
+***REMOVED******REMOVED***XCTAssertNil(item.description)
+***REMOVED******REMOVED***XCTAssertNotNil(item.thumbnail)
+***REMOVED******REMOVED***XCTAssertNil(item.loadBasemapsError)
+
+***REMOVED******REMOVED******REMOVED*** Test with overrides.
+***REMOVED******REMOVED***let thumbnail = UIImage(systemName: "magnifyingglass")
+***REMOVED******REMOVED***XCTAssertNotNil(thumbnail)
+***REMOVED******REMOVED***item = BasemapGalleryItem(
+***REMOVED******REMOVED******REMOVED***basemap: basemap,
+***REMOVED******REMOVED******REMOVED***name: "My Basemap",
+***REMOVED******REMOVED******REMOVED***description: "Basemap description",
+***REMOVED******REMOVED******REMOVED***thumbnail: thumbnail
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***isLoading = try await item.$isLoading.compactMap({ $0 ***REMOVED***).dropFirst().first
+***REMOVED******REMOVED***loading = try XCTUnwrap(isLoading)
+***REMOVED******REMOVED***XCTAssertFalse(loading, "Item is not loading.")
+***REMOVED******REMOVED***XCTAssertEqual(item.name, "My Basemap")
+***REMOVED******REMOVED***XCTAssertEqual(item.description, "Basemap description")
+***REMOVED******REMOVED***XCTAssertEqual(item.thumbnail, thumbnail)
+***REMOVED******REMOVED***XCTAssertNil(item.loadBasemapsError)
+
+***REMOVED******REMOVED******REMOVED*** Test with portal item.
+***REMOVED******REMOVED***item = BasemapGalleryItem(
+***REMOVED******REMOVED******REMOVED***basemap: Basemap(
+***REMOVED******REMOVED******REMOVED******REMOVED***item: PortalItem(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***url: URL(string: "https:***REMOVED***runtime.maps.arcgis.com/home/item.html?id=46a87c20f09e4fc48fa3c38081e0cae6")!
+***REMOVED******REMOVED******REMOVED******REMOVED***)!
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***isLoading = try await item.$isLoading.compactMap({ $0 ***REMOVED***).dropFirst().first
+***REMOVED******REMOVED***loading = try XCTUnwrap(isLoading)
+***REMOVED******REMOVED***XCTAssertFalse(loading, "Item is not loading.")
+***REMOVED******REMOVED***XCTAssertEqual(item.name, "OpenStreetMap Blueprint")
+***REMOVED******REMOVED***XCTAssertEqual(item.description, "<div><div style=\'margin-bottom:3rem;\'><div><div style=\'max-width:100%; display:inherit;\'><p style=\'margin-top:0px; margin-bottom:1.5rem;\'><span style=\'font-family:&quot;Avenir Next W01&quot;, &quot;Avenir Next W00&quot;, &quot;Avenir Next&quot;, Avenir, &quot;Helvetica Neue&quot;, sans-serif; font-size:16px;\'>This web map presents a vector basemap of OpenStreetMap (OSM) data hosted by Esri. Esri created this vector tile basemap from the </span><a href=\'https:***REMOVED***daylightmap.org/\' rel=\'nofollow ugc\' style=\'color:rgb(0, 121, 193); text-decoration-line:none; font-family:&quot;Avenir Next W01&quot;, &quot;Avenir Next W00&quot;, &quot;Avenir Next&quot;, Avenir, &quot;Helvetica Neue&quot;, sans-serif; font-size:16px;\'>Daylight map distribution</a><span style=\'font-family:&quot;Avenir Next W01&quot;, &quot;Avenir Next W00&quot;, &quot;Avenir Next&quot;, Avenir, &quot;Helvetica Neue&quot;, sans-serif; font-size:16px;\'> of OSM data, which is supported by </span><b><font style=\'font-family:inherit;\'><span style=\'font-family:inherit;\'>Facebook</span></font> </b><span style=\'font-family:&quot;Avenir Next W01&quot;, &quot;Avenir Next W00&quot;, &quot;Avenir Next&quot;, Avenir, &quot;Helvetica Neue&quot;, sans-serif; font-size:16px;\'>and supplemented with additional data from </span><font style=\'font-family:&quot;Avenir Next W01&quot;, &quot;Avenir Next W00&quot;, &quot;Avenir Next&quot;, Avenir, &quot;Helvetica Neue&quot;, sans-serif; font-size:16px;\'><b>Microsoft</b>. It presents the map in a cartographic style is like a blueprint technical drawing. The OSM Daylight map will be updated every month with the latest version of OSM Daylight data. </font></p><div style=\'font-family:&quot;Avenir Next W01&quot;, &quot;Avenir Next W00&quot;, &quot;Avenir Next&quot;, Avenir, &quot;Helvetica Neue&quot;, sans-serif; font-size:16px;\'>OpenStreetMap is an open collaborative project to create a free editable map of the world. Volunteers gather location data using GPS, local knowledge, and other free sources of information and upload it. The resulting free map can be viewed and downloaded from the OpenStreetMap site: <a href=\'https:***REMOVED***www.openstreetmap.org/\' rel=\'nofollow ugc\' style=\'color:rgb(0, 121, 193); text-decoration-line:none; font-family:inherit;\' target=\'_blank\'>www.OpenStreetMap.org</a>. Esri is a supporter of the OSM project and is excited to make this enhanced vector basemap available to the ArcGIS user and developer communities.</div></div></div></div></div><div style=\'margin-bottom:3rem; display:inherit; font-family:&quot;Avenir Next W01&quot;, &quot;Avenir Next W00&quot;, &quot;Avenir Next&quot;, Avenir, &quot;Helvetica Neue&quot;, sans-serif; font-size:16px;\'><div style=\'display:inherit;\'></div></div>")
+***REMOVED******REMOVED***XCTAssertNotNil(item.thumbnail)
+***REMOVED******REMOVED***XCTAssertNil(item.loadBasemapsError)
+***REMOVED***
+***REMOVED***
+***REMOVED***func testLoadBasemapError() async throws {
+***REMOVED******REMOVED***let item = BasemapGalleryItem(
+***REMOVED******REMOVED******REMOVED***basemap: Basemap(
+***REMOVED******REMOVED******REMOVED******REMOVED***item: PortalItem(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***url: URL(string: "https:***REMOVED***runtime.maps.arcgis.com/home/item.html?id=4a3922d6d15f405d8c2b7a448a7fbad2")!
+***REMOVED******REMOVED******REMOVED******REMOVED***)!
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***)
+
+***REMOVED******REMOVED***let isLoading = try await item.$isLoading.compactMap({ $0 ***REMOVED***).dropFirst().first
+***REMOVED******REMOVED***let loading = try XCTUnwrap(isLoading)
+***REMOVED******REMOVED***XCTAssertFalse(loading, "Item is not loading.")
+***REMOVED******REMOVED***XCTAssertNotNil(item.loadBasemapsError)
+***REMOVED***
+***REMOVED***
+***REMOVED***func testSpatialReferenceStatus() async throws {
+***REMOVED******REMOVED***let basemap = Basemap.lightGrayCanvas()
+***REMOVED******REMOVED***let item = BasemapGalleryItem(basemap: basemap)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED***func testPortal() async throws {
-***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***func testInitialBasemapItems() async throws {
-***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***func testGeoModel() async throws {
-***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***func testCurrentBasemapItem() async throws {
+***REMOVED***func testSpatialReference() async throws {
 ***REMOVED******REMOVED***
 ***REMOVED***
 
