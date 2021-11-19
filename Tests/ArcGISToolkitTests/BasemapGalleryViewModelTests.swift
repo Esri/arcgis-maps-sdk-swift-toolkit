@@ -21,11 +21,65 @@ import Combine
 
 @MainActor
 class BasemapGalleryViewModelTests: XCTestCase {
+    var basemapGalleryItems: [BasemapGalleryItem] = [
+        BasemapGalleryItem(
+            basemap: Basemap(
+                item: PortalItem(
+                    url: URL(string: "https://runtime.maps.arcgis.com/home/item.html?id=46a87c20f09e4fc48fa3c38081e0cae6")!
+                )!
+            ),
+            name: "OpenStreetMap (Blueprint)",
+            description: "OpenStreetMap (OSM) is a collaborative project to create a free editable map of the world. This vector basemap is based on the Daylight map distribution of OSM data and is hosted by Esri. It presents the map in a cartographic style is like a blueprint technical drawing.",
+            thumbnail: nil
+        ),
+        BasemapGalleryItem(
+            basemap: Basemap(
+                item: PortalItem(
+                    url: URL(string: "https://runtime.maps.arcgis.com/home/item.html?id=f33a34de3a294590ab48f246e99958c9")!
+                )!
+            ),
+            name: "National Geographic Style Map",
+            description: "This vector web map provides a detailed view of the world featuring beautiful political boundaries, labeling, and background that highlights the differences in the physical characteristics of the land.",
+            thumbnail: nil
+        ),
+        BasemapGalleryItem(
+            basemap: Basemap(
+                item: PortalItem(
+                    url: URL(string: "https://runtime.maps.arcgis.com/home/item.html?id=9e557abc61ce41c9b8ec8b15800c20d3")!
+                )!
+            ),
+            name: "Firefly Imagery Hybrid",
+            description: "This map features an alternative view of the World Imagery map designed to be used as a neutral imagery basemap, with de-saturated colors, that is useful for overlaying other brightly styled layers.  The map also includes a reference layer.",
+            thumbnail: nil
+        ),
+        BasemapGalleryItem(
+            basemap: Basemap(
+                item: PortalItem(
+                    url: URL(string: "https://runtime.maps.arcgis.com/home/item.html?id=52bdc7ab7fb044d98add148764eaa30a")!
+                )!
+            ),
+            name: nil,
+            description: "This web map features satellite imagery for the world and high-resolution aerial imagery for many areas. It uses WGS84 Geographic, version 2 tiling scheme.",
+            thumbnail: nil
+        ),
+        BasemapGalleryItem(
+            basemap: Basemap(
+                item: PortalItem(
+                    url: URL(string: "https://runtime.maps.arcgis.com/home/item.html?id=4a3922d6d15f405d8c2b7a448a7fbad2")!
+                )!
+            ),
+            name: "Human Geography Dark Label",
+            description: "This (v2) vector tile layer provides a detailed basemap for the world, featuring a dark monochromatic style with content adjusted to support Human Geography information. This map is designed for use with Human Geography Dark Detail and Base layers.",
+            thumbnail: nil
+        ),
+    ]
+
+    
+    
     //
-    // Test Design: https://devtopia.esri.com/runtime/common-toolkit/blob/master/designs/Search/Search_Test_Design.md
+    // Test Design: https://devtopia.esri.com/runtime/common-toolkit/blob/master/designs/BasemapGallery/BasemapGallery_Test_Design.md
     //
     func testInit() async throws {
-        
     }
     
     func testPortal() async throws {
