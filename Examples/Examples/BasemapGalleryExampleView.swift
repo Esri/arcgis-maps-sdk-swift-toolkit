@@ -24,7 +24,7 @@ struct BasemapGalleryExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***)!
 ***REMOVED******REMOVED******REMOVED***),
 ***REMOVED******REMOVED******REMOVED***name: "OpenStreetMap (Blueprint)",
-***REMOVED******REMOVED******REMOVED***description: "OpenStreetMap (OSM) is a collaborative project to create a free editable map of the world. This vector basemap is based on the Daylight map distribution of OSM data and is hosted by Esri. It presents the map in a cartographic style is like a blueprint technical drawing.",
+***REMOVED******REMOVED******REMOVED***description: "OpenStreetMap (OSM) is a collaborative project to create a free editable map of the world. This vector basemap is based on the Daylight map distribution of OSM data and is hosted by Esri. It presents the map in a cartographic style is like a blueprint technical drawing."
 ***REMOVED******REMOVED***),
 ***REMOVED******REMOVED***BasemapGalleryItem(
 ***REMOVED******REMOVED******REMOVED***basemap: Basemap(
@@ -33,7 +33,7 @@ struct BasemapGalleryExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***)!
 ***REMOVED******REMOVED******REMOVED***),
 ***REMOVED******REMOVED******REMOVED***name: "National Geographic Style Map",
-***REMOVED******REMOVED******REMOVED***description: "This vector web map provides a detailed view of the world featuring beautiful political boundaries, labeling, and background that highlights the differences in the physical characteristics of the land.",
+***REMOVED******REMOVED******REMOVED***description: "This vector web map provides a detailed view of the world featuring beautiful political boundaries, labeling, and background that highlights the differences in the physical characteristics of the land."
 ***REMOVED******REMOVED***),
 ***REMOVED******REMOVED***BasemapGalleryItem(
 ***REMOVED******REMOVED******REMOVED***basemap: Basemap(
@@ -42,7 +42,7 @@ struct BasemapGalleryExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***)!
 ***REMOVED******REMOVED******REMOVED***),
 ***REMOVED******REMOVED******REMOVED***name: "Firefly Imagery Hybrid",
-***REMOVED******REMOVED******REMOVED***description: "This map features an alternative view of the World Imagery map designed to be used as a neutral imagery basemap, with de-saturated colors, that is useful for overlaying other brightly styled layers.  The map also includes a reference layer.",
+***REMOVED******REMOVED******REMOVED***description: "This map features an alternative view of the World Imagery map designed to be used as a neutral imagery basemap, with de-saturated colors, that is useful for overlaying other brightly styled layers.  The map also includes a reference layer."
 ***REMOVED******REMOVED***),
 ***REMOVED******REMOVED***BasemapGalleryItem(
 ***REMOVED******REMOVED******REMOVED***basemap: Basemap(
@@ -63,7 +63,7 @@ struct BasemapGalleryExampleView: View {
 ***REMOVED******REMOVED******REMOVED***name: "Human Geography Dark Label",
 ***REMOVED******REMOVED******REMOVED***description: "This (v2) vector tile layer provides a detailed basemap for the world, featuring a dark monochromatic style with content adjusted to support Human Geography information. This map is designed for use with Human Geography Dark Detail and Base layers.",
 ***REMOVED******REMOVED******REMOVED***thumbnail: nil
-***REMOVED******REMOVED***),
+***REMOVED******REMOVED***)
 ***REMOVED***]
 ***REMOVED***
 ***REMOVED***let geoModel: GeoModel = Map(basemapStyle: .arcGISNova)

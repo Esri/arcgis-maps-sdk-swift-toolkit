@@ -147,16 +147,14 @@ public extension BasemapGalleryItem {
 ***REMOVED***func updateSpatialReferenceStatus(
 ***REMOVED******REMOVED***_ spatialReference: SpatialReference?
 ***REMOVED***) async throws {
-***REMOVED******REMOVED***guard basemap.loadStatus == .loaded,
-***REMOVED******REMOVED******REMOVED***  self.spatialReference == nil
-***REMOVED******REMOVED***else {
-***REMOVED******REMOVED******REMOVED***return
-***REMOVED***
+***REMOVED******REMOVED***guard basemap.loadStatus == .loaded else { return ***REMOVED***
+
+***REMOVED******REMOVED***if self.spatialReference == nil {
+***REMOVED******REMOVED******REMOVED***await MainActor.run {
+***REMOVED******REMOVED******REMOVED******REMOVED***isLoading = true
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***await MainActor.run {
-***REMOVED******REMOVED******REMOVED***isLoading = true
+***REMOVED******REMOVED******REMOVED***try await basemap.baseLayers.first?.load()
 ***REMOVED***
-***REMOVED******REMOVED***try await basemap.baseLayers.first?.load()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***await finalizeUpdateSpatialReferenceStatus(with: spatialReference)
 ***REMOVED***
