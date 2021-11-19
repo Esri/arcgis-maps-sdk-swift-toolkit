@@ -456,9 +456,10 @@ extension SearchViewModelTests {
         _ model: SearchViewModel,
         dropFirst: Bool = false
     ) async throws -> [SearchSuggestion]? {
-        let searchOutcome = dropFirst ?
-        try await model.$searchOutcome.compactMap({ $0 }).dropFirst().first :
-        try await model.$searchOutcome.compactMap({ $0 }).first
+        let searchOutcome = try await model.$searchOutcome
+            .compactMap { $0 }
+            .dropFirst(dropFirst ? 1 : 0)
+            .first
         
         switch searchOutcome {
         case .suggestions(let suggestions):
