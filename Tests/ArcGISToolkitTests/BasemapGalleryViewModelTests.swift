@@ -19,9 +19,17 @@ import ArcGIS
 import SwiftUI
 import Combine
 
+//
+// Test Design: https://devtopia.esri.com/runtime/common-toolkit/blob/master/designs/BasemapGallery/BasemapGallery_Test_Design.md
+//
+// Note:  the iOS implementation uses the MVVM approach and SwiftUI.  This
+// required a bit more properties/logic in the `BasemapGalleryViewModel` (such
+// as `geoModel.actualSpatialReference`) than the `BasemapGallery` design
+// specifies.  Tests not present in the test design have been added to
+// accomodate those differences.
 @MainActor
 class BasemapGalleryViewModelTests: XCTestCase {
-    let basemapGalleryItems: [BasemapGalleryItem] = [
+    let defaultBasemapGalleryItems: [BasemapGalleryItem] = [
         BasemapGalleryItem(
             basemap: Basemap(
                 item: PortalItem(
@@ -37,48 +45,60 @@ class BasemapGalleryViewModelTests: XCTestCase {
             )
         )
     ]
-    
-    //
-    // Test Design: https://devtopia.esri.com/runtime/common-toolkit/blob/master/designs/BasemapGallery/BasemapGallery_Test_Design.md
-    //
+
     func testInit() async throws {
         // Note:  this is a good candidate for mocking portal data.
-        // This would allow the test to check for a specific number of items
-        // in both the "Portal" and "Both" sections.
-
+        // This would allow the test to check for a specific number of items.
+        
+        // GeoModel.
+        let geoModel = Map(basemap: Basemap.streets())
+        let geoModelViewModel = BasemapGalleryViewModel(geoModel: geoModel)
+        
+        // With no portal, `basemapGalleryItems` are fetched from AGOL's
+        // list of developer basemaps.
+        var items = try await geoModelViewModel.$basemapGalleryItems.compactMap({ $0 }).dropFirst().first
+        var basemapGalleryItems = try XCTUnwrap(items)
+        XCTAssertTrue(basemapGalleryItems.isEmpty)
+        
+        let developerBasemapItems = basemapGalleryItems
+        
         // Portal.
         let portalViewModel = BasemapGalleryViewModel(
             portal: Portal.arcGISOnline(isLoginRequired: false)
         )
 
-        var bgItems = try await portalViewModel.$basemapGalleryItems.compactMap({ $0 }).dropFirst().first
-        var items = try XCTUnwrap(bgItems)
-        
-        // There will be greater than 10 basemaps in the portal.
-        XCTAssertGreaterThan(items.count, 10)
+        // With a portal, `basemapGalleryItems` are fetched from either the
+        // portal's vector basemaps or regular basemaps.
+        items = try await portalViewModel.$basemapGalleryItems.compactMap({ $0 }).dropFirst().first
+        basemapGalleryItems = try XCTUnwrap(items)
+        XCTAssertFalse(basemapGalleryItems.isEmpty)
+
+        let sortedItems = basemapGalleryItems.sorted { $0.name < $1.name }
+        let sortedDeveloperItems = developerBasemapItems.sorted { $0.name < $1.name }
+        XCTAssertNotEqual(sortedItems, sortedDeveloperItems)
 
         // BasemapGalleryItems.
         let itemsViewModel = BasemapGalleryViewModel(
-            basemapGalleryItems: basemapGalleryItems
+            basemapGalleryItems: defaultBasemapGalleryItems
         )
         
         // The item counts should match.
         XCTAssertEqual(
             itemsViewModel.basemapGalleryItems.count,
-            basemapGalleryItems.count
+            defaultBasemapGalleryItems.count
         )
         
         // Both Portal and BasemapGalleryItems.
         let viewModel = BasemapGalleryViewModel(
             portal: Portal.arcGISOnline(isLoginRequired: false),
-            basemapGalleryItems: basemapGalleryItems
+            basemapGalleryItems: defaultBasemapGalleryItems
         )
 
-        bgItems  = try await viewModel.$basemapGalleryItems.compactMap({ $0 }).dropFirst().first
-        items = try XCTUnwrap(bgItems)
+        items  = try await viewModel.$basemapGalleryItems.compactMap({ $0 }).dropFirst().first
+        basemapGalleryItems = try XCTUnwrap(items)
         
         // Count will be greater than the number of hardcoded items.
-        XCTAssertGreaterThan(items.count, basemapGalleryItems.count)
+        XCTAssertGreaterThan(basemapGalleryItems.count, defaultBasemapGalleryItems.count)
     }
     
     func testGeoModelActualSpatialReference() async throws {
@@ -99,15 +119,21 @@ class BasemapGalleryViewModelTests: XCTestCase {
         try await geoModel2.load()
         XCTAssertEqual(geoModel2.actualSpatialReference, .wgs84)
 
-        // Test with Scene that has a tiling scheme of .webMercator
+        // TODO: Test with Scene that has a tiling scheme of .webMercator
         // but a different spatial reference...
     }
     
-    func testCurrentBasemapItem() async throws {
-        let geoModel = Map(basemap: Basemap.streets())
+    func testCurrentBasemapGalleryItem() async throws {
+        let basemap = Basemap.streets()
+        let geoModel = Map(basemap: basemap)
 
         let viewModel = BasemapGalleryViewModel(geoModel: geoModel)
         
+        // Verify current item is equal to map's basemap.
+        var item = try await viewModel.$currentBasemapGalleryItem.compactMap({ $0 }).first
+        var currentItem = try XCTUnwrap(item)
+        XCTAssertTrue(currentItem.basemap === basemap)
+
         // Test valid basemap item (OpenStreetMap Vector Basemap (Blueprint)).
         let validItem = BasemapGalleryItem(
             basemap: Basemap(
@@ -123,8 +149,8 @@ class BasemapGalleryViewModelTests: XCTestCase {
         viewModel.updateCurrentBasemapGalleryItem(validItem)
         
         // Wait until the `currentBasemapGalleryItem` is updated.
-        let tmpItem = try await viewModel.$currentBasemapGalleryItem.compactMap({ $0 }).dropFirst().first
-        let currentItem = try XCTUnwrap(tmpItem)
+        item = try await viewModel.$currentBasemapGalleryItem.compactMap({ $0 }).dropFirst().first
+        currentItem = try XCTUnwrap(item)
         XCTAssertEqual(currentItem, validItem)
     
         // Test WGS84 basemap item (Imagery (WGS84)).
@@ -148,5 +174,32 @@ class BasemapGalleryViewModelTests: XCTestCase {
         
         // Make sure the current item is still equal to the valid item.
         XCTAssertEqual(currentItem, validItem)
+    }
+    
+    func testUpdatePortal() async throws {
+        // Note:  this is a good candidate for mocking portal data.
+        // This would allow the test to check for a specific number of items.
+
+        let viewModel = BasemapGalleryViewModel(
+            basemapGalleryItems: defaultBasemapGalleryItems
+        )
+
+        var items = try await viewModel.$basemapGalleryItems.compactMap({ $0 }).first
+        var basemapGalleryItems = try XCTUnwrap(items)
+        
+        // There are exactly two default items.
+        XCTAssertEqual(basemapGalleryItems.count, 2)
+
+        viewModel.portal = Portal.arcGISOnline(isLoginRequired: false)
+        
+        items = try await viewModel.$basemapGalleryItems.compactMap({ $0 }).dropFirst().first
+        basemapGalleryItems = try XCTUnwrap(items)
+
+        // There should be no default items in the basemap gallery.
+        let foundDefaultItem = basemapGalleryItems.first(where: {
+            $0 == defaultBasemapGalleryItems[0] ||
+            $0 == defaultBasemapGalleryItems[1]
+        })
+        XCTAssertNil(foundDefaultItem)
     }
 }

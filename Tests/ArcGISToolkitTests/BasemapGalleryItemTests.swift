@@ -19,11 +19,16 @@ import ArcGISToolkit
 import SwiftUI
 import Combine
 
+//
+// Test Design: https://devtopia.esri.com/runtime/common-toolkit/blob/master/designs/BasemapGallery/BasemapGallery_Test_Design.md
+//
+// Note:  the iOS implementation uses the MVVM approach and SwiftUI.  This
+// required a bit more properties/logic in the `BasemapGalleryItem` (such
+// as the `loadBasemapError` and `spatialReferenceStatus` properties than
+// the `BasemapGallery` design specifies.  Tests not present in the
+// test design have been added to accomodate those differences.
 @MainActor
 class BasemapGalleryItemTests: XCTestCase {
-    //
-    // Test Design: https://devtopia.esri.com/runtime/common-toolkit/blob/master/designs/BasemapGallery/BasemapGallery_Test_Design.md
-    //
     func testInit() async throws {
         let basemap = Basemap.lightGrayCanvas()
         var item = BasemapGalleryItem(basemap: basemap)
