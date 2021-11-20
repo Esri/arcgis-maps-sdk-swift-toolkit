@@ -19,11 +19,16 @@ import XCTest
 ***REMOVED***
 import Combine
 
+***REMOVED***
+***REMOVED*** Test Design: https:***REMOVED***devtopia.esri.com/runtime/common-toolkit/blob/master/designs/BasemapGallery/BasemapGallery_Test_Design.md
+***REMOVED***
+***REMOVED*** Note:  the iOS implementation uses the MVVM approach and SwiftUI.  This
+***REMOVED*** required a bit more properties/logic in the `BasemapGalleryItem` (such
+***REMOVED*** as the `loadBasemapError` and `spatialReferenceStatus` properties than
+***REMOVED*** the `BasemapGallery` design specifies.  Tests not present in the
+***REMOVED*** test design have been added to accomodate those differences.
 @MainActor
 class BasemapGalleryItemTests: XCTestCase {
-***REMOVED******REMOVED***
-***REMOVED******REMOVED*** Test Design: https:***REMOVED***devtopia.esri.com/runtime/common-toolkit/blob/master/designs/BasemapGallery/BasemapGallery_Test_Design.md
-***REMOVED******REMOVED***
 ***REMOVED***func testInit() async throws {
 ***REMOVED******REMOVED***let basemap = Basemap.lightGrayCanvas()
 ***REMOVED******REMOVED***var item = BasemapGalleryItem(basemap: basemap)
