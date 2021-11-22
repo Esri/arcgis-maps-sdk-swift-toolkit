@@ -24,7 +24,7 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
 ***REMOVED******REMOVED***/   - name: Name to show when presenting this source in the UI.
 ***REMOVED******REMOVED***/   - locatorTask: The `LocatorTask` to use for searching..
 ***REMOVED******REMOVED***/   - maximumResults: The maximum results to return when performing a search. Most sources default to `6`.
-***REMOVED******REMOVED***/   - maximumSuggestions: The maximum suggestions to return. Most sources default to 6.
+***REMOVED******REMOVED***/   - maximumSuggestions: The maximum suggestions to return. Most sources default to `6`.
 ***REMOVED******REMOVED***/   - repeatSearchResultThreshold: The minimum number of search results to attempt to return.
 ***REMOVED******REMOVED***/   - repeatSuggestResultThreshold: The minimum number of suggestions to attempt to return.
 ***REMOVED***public init(
