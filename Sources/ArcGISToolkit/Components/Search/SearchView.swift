@@ -12,7 +12,6 @@
 // limitations under the License.
 
 import SwiftUI
-import Combine
 import ArcGIS
 
 /// `SearchView` presents a search experience, powered by an underlying `SearchViewModel`.
