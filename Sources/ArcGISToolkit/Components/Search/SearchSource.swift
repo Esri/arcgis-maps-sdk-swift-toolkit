@@ -21,7 +21,7 @@ public protocol SearchSource {
     /// The maximum results to return when performing a search. Most sources default to `6`.
     var maximumResults: Int32 { get set }
     
-    /// The maximum suggestions to return. Most sources default to 6.
+    /// The maximum suggestions to return. Most sources default to `6`.
     var maximumSuggestions: Int32 { get set }
     
     /// Returns the search suggestions for the specified query.
