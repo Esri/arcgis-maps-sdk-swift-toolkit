@@ -64,7 +64,7 @@ public protocol SearchSource {
     /// - Parameters:
     ///   - queryString: Text to be used for query.
     ///   - searchExtent: Extent used to limit the results.
-    /// - Returns: Array of `SearchResult`s
+    /// - Returns: An array of search results.
     func repeatSearch(
         _ queryString: String,
         searchExtent: Envelope
