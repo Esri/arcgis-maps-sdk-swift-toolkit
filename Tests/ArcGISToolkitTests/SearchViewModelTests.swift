@@ -14,7 +14,6 @@
 import XCTest
 import ArcGIS
 import ArcGISToolkit
-import Combine
 
 @MainActor
 class SearchViewModelTests: XCTestCase {
