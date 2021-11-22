@@ -44,7 +44,7 @@ public class LocatorSearchSource: ObservableObject, SearchSource {
 ***REMOVED******REMOVED***/ The name to show when presenting this source in the UI.
 ***REMOVED***public var name: String
 ***REMOVED***
-***REMOVED******REMOVED***/ The maximum results to return when performing a search. Most sources default to 6
+***REMOVED******REMOVED***/ The maximum results to return when performing a search. Most sources default to `6`.
 ***REMOVED***public var maximumResults: Int32 {
 ***REMOVED******REMOVED***get {
 ***REMOVED******REMOVED******REMOVED***geocodeParameters.maxResults
