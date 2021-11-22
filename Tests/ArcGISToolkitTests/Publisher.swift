@@ -16,7 +16,7 @@ import Combine
 
 extension Publisher {
     /// Asynchronously returns the first value emitted from the publisher.
-    /// This property will return `nil` if this Publisher completes without an error before
+    /// This property will return `nil` if this publisher completes without an error before
     /// it emits a value.
     var first: Output? {
         get async throws {
