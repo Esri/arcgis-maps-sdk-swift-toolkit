@@ -212,8 +212,7 @@ public class SearchViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ Commits a search from a specific suggestion. Results will be set asynchronously. Behavior is
 ***REMOVED******REMOVED***/ generally the same as `commitSearch`, except `searchSuggestion` is used instead of the
 ***REMOVED******REMOVED***/ `currentQuery` property.
-***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - searchSuggestion: The suggestion to use to commit the search.
+***REMOVED******REMOVED***/ - Parameter searchSuggestion: The suggestion to use to commit the search.
 ***REMOVED***public func acceptSuggestion(_ searchSuggestion: SearchSuggestion) {
 ***REMOVED******REMOVED***currentQuery = searchSuggestion.displayTitle
 ***REMOVED******REMOVED***kickoffTask { await self.doAcceptSuggestion(searchSuggestion) ***REMOVED***
