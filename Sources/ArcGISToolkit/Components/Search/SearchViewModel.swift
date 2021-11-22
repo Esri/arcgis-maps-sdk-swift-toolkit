@@ -16,7 +16,7 @@ import Swift
 ***REMOVED***
 import Combine
 
-***REMOVED***/ Performs searches and manages search state for a Search, or optionally without a UI connection.
+***REMOVED***/ Performs searches and manages search state for a search, or optionally without a UI connection.
 @MainActor
 public class SearchViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ Defines how many results to return; one, many, or automatic based on circumstance.
