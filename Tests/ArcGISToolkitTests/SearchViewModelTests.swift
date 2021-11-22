@@ -14,7 +14,6 @@
 import XCTest
 ***REMOVED***
 ***REMOVED***Toolkit
-import Combine
 
 @MainActor
 class SearchViewModelTests: XCTestCase {
