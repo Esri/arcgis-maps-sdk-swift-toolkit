@@ -58,7 +58,7 @@ class BasemapGalleryViewModelTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED*** list of developer basemaps.
 ***REMOVED******REMOVED***var items = try await geoModelViewModel.$basemapGalleryItems.compactMap({ $0 ***REMOVED***).dropFirst().first
 ***REMOVED******REMOVED***var basemapGalleryItems = try XCTUnwrap(items)
-***REMOVED******REMOVED***XCTAssertTrue(basemapGalleryItems.isEmpty)
+***REMOVED******REMOVED***XCTAssertFalse(basemapGalleryItems.isEmpty)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let developerBasemapItems = basemapGalleryItems
 ***REMOVED******REMOVED***
@@ -73,11 +73,13 @@ class BasemapGalleryViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***basemapGalleryItems = try XCTUnwrap(items)
 ***REMOVED******REMOVED***XCTAssertFalse(basemapGalleryItems.isEmpty)
 
+***REMOVED******REMOVED******REMOVED*** Sort the developer items from the "GeoModel" test above and the
+***REMOVED******REMOVED******REMOVED*** items from the portal and make sure they are not equal.
 ***REMOVED******REMOVED***let sortedItems = basemapGalleryItems.sorted { $0.name < $1.name ***REMOVED***
 ***REMOVED******REMOVED***let sortedDeveloperItems = developerBasemapItems.sorted { $0.name < $1.name ***REMOVED***
 ***REMOVED******REMOVED***XCTAssertNotEqual(sortedItems, sortedDeveloperItems)
 
-***REMOVED******REMOVED******REMOVED*** BasemapGalleryItems.
+***REMOVED******REMOVED******REMOVED*** BasemapGalleryItems.  No basemaps are fetched from a portal.
 ***REMOVED******REMOVED***let itemsViewModel = BasemapGalleryViewModel(
 ***REMOVED******REMOVED******REMOVED***basemapGalleryItems: defaultBasemapGalleryItems
 ***REMOVED******REMOVED***)
@@ -88,7 +90,8 @@ class BasemapGalleryViewModelTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***defaultBasemapGalleryItems.count
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Both Portal and BasemapGalleryItems.
+***REMOVED******REMOVED******REMOVED*** Both Portal and BasemapGalleryItems.  Basemaps are fetched from
+***REMOVED******REMOVED******REMOVED*** the portal and appended to the list of basemapGalleryItems.
 ***REMOVED******REMOVED***let viewModel = BasemapGalleryViewModel(
 ***REMOVED******REMOVED******REMOVED***portal: Portal.arcGISOnline(isLoginRequired: false),
 ***REMOVED******REMOVED******REMOVED***basemapGalleryItems: defaultBasemapGalleryItems
@@ -119,8 +122,17 @@ class BasemapGalleryViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***try await geoModel2.load()
 ***REMOVED******REMOVED***XCTAssertEqual(geoModel2.actualSpatialReference, .wgs84)
 
-***REMOVED******REMOVED******REMOVED*** TODO: Test with Scene that has a tiling scheme of .webMercator
-***REMOVED******REMOVED******REMOVED*** but a different spatial reference...
+***REMOVED******REMOVED******REMOVED*** Test with Scene that has a tiling scheme of .webMercator
+***REMOVED******REMOVED***let geoModel3 = Scene(
+***REMOVED******REMOVED******REMOVED***basemap: Basemap(
+***REMOVED******REMOVED******REMOVED******REMOVED***item: PortalItem(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***url: URL(string: "https:***REMOVED***runtime.maps.arcgis.com/home/item.html?id=46a87c20f09e4fc48fa3c38081e0cae6")!
+***REMOVED******REMOVED******REMOVED******REMOVED***)!
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***)
+
+***REMOVED******REMOVED***try await geoModel3.load()
+***REMOVED******REMOVED***XCTAssertEqual(geoModel3.actualSpatialReference, .webMercator)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func testCurrentBasemapGalleryItem() async throws {

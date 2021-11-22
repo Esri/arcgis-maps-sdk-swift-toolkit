@@ -50,7 +50,7 @@ public class BasemapGalleryViewModel: ObservableObject {
 ***REMOVED******REMOVED******REMOVED***if portal != nil || basemapGalleryItems.isEmpty {
 ***REMOVED******REMOVED******REMOVED******REMOVED***var thePortal = portal
 ***REMOVED******REMOVED******REMOVED******REMOVED***var useDeveloperBasemaps = false
-***REMOVED******REMOVED******REMOVED******REMOVED***if portal == nil {
+***REMOVED******REMOVED******REMOVED******REMOVED***if thePortal == nil {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***thePortal = Portal.arcGISOnline(isLoginRequired: false)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***useDeveloperBasemaps = true
 ***REMOVED******REMOVED******REMOVED***
@@ -164,7 +164,6 @@ private extension BasemapGalleryViewModel {
 ***REMOVED******REMOVED******REMOVED***try await portal.load()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***var tmpItems = [BasemapGalleryItem]()
-***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***if useDeveloperBasemaps {
 ***REMOVED******REMOVED******REMOVED******REMOVED***tmpItems += try await portal.developerBasemaps.map {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***BasemapGalleryItem(basemap: $0)
@@ -193,7 +192,6 @@ private extension BasemapGalleryViewModel {
 ***REMOVED***
 ***REMOVED***func load(geoModel: GeoModel?) async {
 ***REMOVED******REMOVED***guard let geoModel = geoModel else { return ***REMOVED***
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED***try await geoModel.load()
 ***REMOVED******REMOVED******REMOVED***if let basemap = geoModel.basemap {
