@@ -15,7 +15,7 @@ import SwiftUI
 import Combine
 import ArcGIS
 
-/// SearchView presents a search experience, powered by an underlying SearchViewModel.
+/// `SearchView` presents a search experience, powered by an underlying `SearchViewModel`.
 public struct SearchView: View {
     /// Creates a new `SearchView`.
     /// - Parameters:
