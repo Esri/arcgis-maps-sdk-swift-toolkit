@@ -64,7 +64,7 @@ public protocol SearchSource {
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - queryString: Text to be used for query.
 ***REMOVED******REMOVED***/   - searchExtent: Extent used to limit the results.
-***REMOVED******REMOVED***/ - Returns: Array of `SearchResult`s
+***REMOVED******REMOVED***/ - Returns: An array of search results.
 ***REMOVED***func repeatSearch(
 ***REMOVED******REMOVED***_ queryString: String,
 ***REMOVED******REMOVED***searchExtent: Envelope
