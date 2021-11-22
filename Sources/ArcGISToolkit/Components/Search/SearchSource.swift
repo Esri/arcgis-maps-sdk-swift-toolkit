@@ -21,7 +21,7 @@ public protocol SearchSource {
 ***REMOVED******REMOVED***/ The maximum results to return when performing a search. Most sources default to `6`.
 ***REMOVED***var maximumResults: Int32 { get set ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ The maximum suggestions to return. Most sources default to 6.
+***REMOVED******REMOVED***/ The maximum suggestions to return. Most sources default to `6`.
 ***REMOVED***var maximumSuggestions: Int32 { get set ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Returns the search suggestions for the specified query.
