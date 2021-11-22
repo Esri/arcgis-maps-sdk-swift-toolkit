@@ -41,7 +41,7 @@ public protocol SearchSource {
     ///   - queryString: Text to be used for query.
     ///   - searchArea: The area used to limit results.
     ///   - preferredSearchLocation: The location used as a starting point for searches.
-    /// - Returns: Array of `SearchResult`s
+    /// - Returns: An array of search results.
     func search(
         _ queryString: String,
         searchArea: Geometry?,
