@@ -18,7 +18,7 @@ public protocol SearchSource {
     /// Name to show when presenting this source in the UI.
     var name: String { get set }
     
-    /// The maximum results to return when performing a search. Most sources default to 6.
+    /// The maximum results to return when performing a search. Most sources default to `6`.
     var maximumResults: Int32 { get set }
     
     /// The maximum suggestions to return. Most sources default to 6.
