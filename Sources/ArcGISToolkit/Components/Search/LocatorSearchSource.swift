@@ -21,7 +21,7 @@ public class LocatorSearchSource: ObservableObject, SearchSource {
     /// - Parameters:
     ///   - name: The name to show when presenting this source in the UI.
     ///   - locatorTask: The `LocatorTask` to use for searching.
-    ///   - maximumResults: The maximum results to return when performing a search. Most sources default to 6.
+    ///   - maximumResults: The maximum results to return when performing a search. Most sources default to `6`.
     ///   - maximumSuggestions: The maximum suggestions to return. Most sources default to 6.
     public init(
         name: String = "Locator",
