@@ -16,7 +16,7 @@ import SwiftUI
 import ArcGIS
 import Combine
 
-/// Performs searches and manages search state for a Search, or optionally without a UI connection.
+/// Performs searches and manages search state for a search, or optionally without a UI connection.
 @MainActor
 public class SearchViewModel: ObservableObject {
     /// Defines how many results to return; one, many, or automatic based on circumstance.
