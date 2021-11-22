@@ -57,7 +57,7 @@ public struct SearchView: View {
     /// Note: this is set using the `enableResultListView` modifier.
     private var enableResultListView = true
     
-    /// Message to show when there are no results or suggestions.  Defaults to "No results found".
+    /// Message to show when there are no results or suggestions. Defaults to "No results found".
     /// Note: this is set using the `noResultsMessage` modifier.
     private var noResultsMessage = "No results found"
     
