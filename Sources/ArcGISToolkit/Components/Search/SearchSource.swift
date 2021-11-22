@@ -41,7 +41,7 @@ public protocol SearchSource {
 ***REMOVED******REMOVED***/   - queryString: Text to be used for query.
 ***REMOVED******REMOVED***/   - searchArea: The area used to limit results.
 ***REMOVED******REMOVED***/   - preferredSearchLocation: The location used as a starting point for searches.
-***REMOVED******REMOVED***/ - Returns: Array of `SearchResult`s
+***REMOVED******REMOVED***/ - Returns: An array of search results.
 ***REMOVED***func search(
 ***REMOVED******REMOVED***_ queryString: String,
 ***REMOVED******REMOVED***searchArea: Geometry?,
