@@ -57,7 +57,7 @@ public struct SearchView: View {
 ***REMOVED******REMOVED***/ Note: this is set using the `enableResultListView` modifier.
 ***REMOVED***private var enableResultListView = true
 ***REMOVED***
-***REMOVED******REMOVED***/ Message to show when there are no results or suggestions.  Defaults to "No results found".
+***REMOVED******REMOVED***/ Message to show when there are no results or suggestions. Defaults to "No results found".
 ***REMOVED******REMOVED***/ Note: this is set using the `noResultsMessage` modifier.
 ***REMOVED***private var noResultsMessage = "No results found"
 ***REMOVED***
