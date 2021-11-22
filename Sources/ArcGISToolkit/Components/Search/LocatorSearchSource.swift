@@ -44,7 +44,7 @@ public class LocatorSearchSource: ObservableObject, SearchSource {
     /// The name to show when presenting this source in the UI.
     public var name: String
     
-    /// The maximum results to return when performing a search. Most sources default to 6
+    /// The maximum results to return when performing a search. Most sources default to `6`.
     public var maximumResults: Int32 {
         get {
             geocodeParameters.maxResults
