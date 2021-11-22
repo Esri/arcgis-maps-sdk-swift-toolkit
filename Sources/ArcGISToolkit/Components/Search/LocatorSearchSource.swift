@@ -56,12 +56,8 @@ public class LocatorSearchSource: ObservableObject, SearchSource {
 ***REMOVED***
 ***REMOVED******REMOVED***/ The maximum suggestions to return. Most sources default to `6`.
 ***REMOVED***public var maximumSuggestions: Int32 {
-***REMOVED******REMOVED***get {
-***REMOVED******REMOVED******REMOVED***suggestParameters.maxResults
-***REMOVED***
-***REMOVED******REMOVED***set {
-***REMOVED******REMOVED******REMOVED***suggestParameters.maxResults = newValue
-***REMOVED***
+***REMOVED******REMOVED***get { suggestParameters.maxResults ***REMOVED***
+***REMOVED******REMOVED***set { suggestParameters.maxResults = newValue ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The locator used by this search source.
