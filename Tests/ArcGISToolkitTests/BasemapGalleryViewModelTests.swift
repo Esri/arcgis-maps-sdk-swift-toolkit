@@ -58,7 +58,7 @@ class BasemapGalleryViewModelTests: XCTestCase {
         // list of developer basemaps.
         var items = try await geoModelViewModel.$basemapGalleryItems.compactMap({ $0 }).dropFirst().first
         var basemapGalleryItems = try XCTUnwrap(items)
-        XCTAssertTrue(basemapGalleryItems.isEmpty)
+        XCTAssertFalse(basemapGalleryItems.isEmpty)
         
         let developerBasemapItems = basemapGalleryItems
         
@@ -73,11 +73,13 @@ class BasemapGalleryViewModelTests: XCTestCase {
         basemapGalleryItems = try XCTUnwrap(items)
         XCTAssertFalse(basemapGalleryItems.isEmpty)
 
+        // Sort the developer items from the "GeoModel" test above and the
+        // items from the portal and make sure they are not equal.
         let sortedItems = basemapGalleryItems.sorted { $0.name < $1.name }
         let sortedDeveloperItems = developerBasemapItems.sorted { $0.name < $1.name }
         XCTAssertNotEqual(sortedItems, sortedDeveloperItems)
 
-        // BasemapGalleryItems.
+        // BasemapGalleryItems.  No basemaps are fetched from a portal.
         let itemsViewModel = BasemapGalleryViewModel(
             basemapGalleryItems: defaultBasemapGalleryItems
         )
@@ -88,7 +90,8 @@ class BasemapGalleryViewModelTests: XCTestCase {
             defaultBasemapGalleryItems.count
         )
         
-        // Both Portal and BasemapGalleryItems.
+        // Both Portal and BasemapGalleryItems.  Basemaps are fetched from
+        // the portal and appended to the list of basemapGalleryItems.
         let viewModel = BasemapGalleryViewModel(
             portal: Portal.arcGISOnline(isLoginRequired: false),
             basemapGalleryItems: defaultBasemapGalleryItems
@@ -119,8 +122,17 @@ class BasemapGalleryViewModelTests: XCTestCase {
         try await geoModel2.load()
         XCTAssertEqual(geoModel2.actualSpatialReference, .wgs84)
 
-        // TODO: Test with Scene that has a tiling scheme of .webMercator
-        // but a different spatial reference...
+        // Test with Scene that has a tiling scheme of .webMercator
+        let geoModel3 = Scene(
+            basemap: Basemap(
+                item: PortalItem(
+                    url: URL(string: "https://runtime.maps.arcgis.com/home/item.html?id=46a87c20f09e4fc48fa3c38081e0cae6")!
+                )!
+            )
+        )
+
+        try await geoModel3.load()
+        XCTAssertEqual(geoModel3.actualSpatialReference, .webMercator)
     }
     
     func testCurrentBasemapGalleryItem() async throws {
