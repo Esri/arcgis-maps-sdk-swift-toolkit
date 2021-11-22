@@ -50,7 +50,7 @@ public class BasemapGalleryViewModel: ObservableObject {
             if portal != nil || basemapGalleryItems.isEmpty {
                 var thePortal = portal
                 var useDeveloperBasemaps = false
-                if portal == nil {
+                if thePortal == nil {
                     thePortal = Portal.arcGISOnline(isLoginRequired: false)
                     useDeveloperBasemaps = true
                 }
@@ -164,7 +164,6 @@ private extension BasemapGalleryViewModel {
             try await portal.load()
         
             var tmpItems = [BasemapGalleryItem]()
-            
             if useDeveloperBasemaps {
                 tmpItems += try await portal.developerBasemaps.map {
                     BasemapGalleryItem(basemap: $0)
@@ -193,7 +192,6 @@ private extension BasemapGalleryViewModel {
     
     func load(geoModel: GeoModel?) async {
         guard let geoModel = geoModel else { return }
-        
         do {
             try await geoModel.load()
             if let basemap = geoModel.basemap {
