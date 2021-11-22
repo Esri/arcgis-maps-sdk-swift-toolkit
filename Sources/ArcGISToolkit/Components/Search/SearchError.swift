@@ -13,7 +13,7 @@
 
 import Foundation
 
-/// A value that represents an error that occurs while Searching.
+/// A value that represents an error that occurs while searching.
 public struct SearchError: Error {
     /// A basic description for the error.
     public let errorDescription: String
