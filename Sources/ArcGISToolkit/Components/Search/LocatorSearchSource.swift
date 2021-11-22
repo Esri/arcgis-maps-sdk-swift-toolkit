@@ -54,7 +54,7 @@ public class LocatorSearchSource: ObservableObject, SearchSource {
         }
     }
     
-    /// The maximum suggestions to return. Most sources default to 6.
+    /// The maximum suggestions to return. Most sources default to `6`.
     public var maximumSuggestions: Int32 {
         get {
             suggestParameters.maxResults
