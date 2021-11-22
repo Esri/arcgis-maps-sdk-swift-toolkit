@@ -212,8 +212,7 @@ public class SearchViewModel: ObservableObject {
     /// Commits a search from a specific suggestion. Results will be set asynchronously. Behavior is
     /// generally the same as `commitSearch`, except `searchSuggestion` is used instead of the
     /// `currentQuery` property.
-    /// - Parameters:
-    ///   - searchSuggestion: The suggestion to use to commit the search.
+    /// - Parameter searchSuggestion: The suggestion to use to commit the search.
     public func acceptSuggestion(_ searchSuggestion: SearchSuggestion) {
         currentQuery = searchSuggestion.displayTitle
         kickoffTask { await self.doAcceptSuggestion(searchSuggestion) }
