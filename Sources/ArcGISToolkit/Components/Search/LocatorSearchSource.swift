@@ -54,7 +54,7 @@ public class LocatorSearchSource: ObservableObject, SearchSource {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ The maximum suggestions to return. Most sources default to 6.
+***REMOVED******REMOVED***/ The maximum suggestions to return. Most sources default to `6`.
 ***REMOVED***public var maximumSuggestions: Int32 {
 ***REMOVED******REMOVED***get {
 ***REMOVED******REMOVED******REMOVED***suggestParameters.maxResults
