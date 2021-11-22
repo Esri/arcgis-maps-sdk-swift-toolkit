@@ -23,7 +23,7 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
     /// - Parameters:
     ///   - name: Name to show when presenting this source in the UI.
     ///   - locatorTask: The `LocatorTask` to use for searching..
-    ///   - maximumResults: The maximum results to return when performing a search. Most sources default to 6.
+    ///   - maximumResults: The maximum results to return when performing a search. Most sources default to `6`.
     ///   - maximumSuggestions: The maximum suggestions to return. Most sources default to 6.
     ///   - repeatSearchResultThreshold: The minimum number of search results to attempt to return.
     ///   - repeatSuggestResultThreshold: The minimum number of suggestions to attempt to return.
