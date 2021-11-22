@@ -26,7 +26,7 @@ public struct SearchResult {
 ***REMOVED***public var displaySubtitle: String = ""
 
 ***REMOVED******REMOVED***/ For locator results, should be the graphic that was used to display the result on the map.
-***REMOVED******REMOVED***/ For feature layer results, should be the result feature. Can be null depending on the type of the
+***REMOVED******REMOVED***/ For feature layer results, should be the resulting feature. Can be `nil` depending on the type of the
 ***REMOVED******REMOVED***/ result, and can have `GeoElement`s without a defined geometry.
 ***REMOVED***public var geoElement: GeoElement? = nil
 ***REMOVED***
