@@ -13,7 +13,7 @@
 
 import Foundation
 
-***REMOVED***/ A value that represents an error that occurs while Searching.
+***REMOVED***/ A value that represents an error that occurs while searching.
 public struct SearchError: Error {
 ***REMOVED******REMOVED***/ A basic description for the error.
 ***REMOVED***public let errorDescription: String
