@@ -15,7 +15,7 @@
 import Combine
 ***REMOVED***
 
-***REMOVED***/ SearchView presents a search experience, powered by an underlying SearchViewModel.
+***REMOVED***/ `SearchView` presents a search experience, powered by an underlying `SearchViewModel`.
 public struct SearchView: View {
 ***REMOVED******REMOVED***/ Creates a new `SearchView`.
 ***REMOVED******REMOVED***/ - Parameters:
