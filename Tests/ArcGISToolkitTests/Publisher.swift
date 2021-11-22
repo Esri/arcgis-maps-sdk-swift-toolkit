@@ -16,7 +16,7 @@ import Combine
 
 extension Publisher {
 ***REMOVED******REMOVED***/ Asynchronously returns the first value emitted from the publisher.
-***REMOVED******REMOVED***/ This property will return `nil` if this Publisher completes without an error before
+***REMOVED******REMOVED***/ This property will return `nil` if this publisher completes without an error before
 ***REMOVED******REMOVED***/ it emits a value.
 ***REMOVED***var first: Output? {
 ***REMOVED******REMOVED***get async throws {
