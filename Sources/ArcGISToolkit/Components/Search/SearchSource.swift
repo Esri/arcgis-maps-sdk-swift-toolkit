@@ -18,7 +18,7 @@ public protocol SearchSource {
 ***REMOVED******REMOVED***/ Name to show when presenting this source in the UI.
 ***REMOVED***var name: String { get set ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ The maximum results to return when performing a search. Most sources default to 6.
+***REMOVED******REMOVED***/ The maximum results to return when performing a search. Most sources default to `6`.
 ***REMOVED***var maximumResults: Int32 { get set ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The maximum suggestions to return. Most sources default to 6.
