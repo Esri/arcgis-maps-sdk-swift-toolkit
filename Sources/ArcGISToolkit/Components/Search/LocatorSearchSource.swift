@@ -46,12 +46,8 @@ public class LocatorSearchSource: ObservableObject, SearchSource {
 ***REMOVED***
 ***REMOVED******REMOVED***/ The maximum results to return when performing a search. Most sources default to `6`.
 ***REMOVED***public var maximumResults: Int32 {
-***REMOVED******REMOVED***get {
-***REMOVED******REMOVED******REMOVED***geocodeParameters.maxResults
-***REMOVED***
-***REMOVED******REMOVED***set {
-***REMOVED******REMOVED******REMOVED***geocodeParameters.maxResults = newValue
-***REMOVED***
+***REMOVED******REMOVED***get { geocodeParameters.maxResults ***REMOVED***
+***REMOVED******REMOVED***set { geocodeParameters.maxResults = newValue ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The maximum suggestions to return. Most sources default to `6`.
@@ -72,22 +68,22 @@ public class LocatorSearchSource: ObservableObject, SearchSource {
 ***REMOVED***public let suggestParameters: SuggestParameters = SuggestParameters()
 ***REMOVED***
 ***REMOVED***public func repeatSearch(
-***REMOVED******REMOVED***_ queryString: String,
+***REMOVED******REMOVED***_ query: String,
 ***REMOVED******REMOVED***searchExtent: Envelope
 ***REMOVED***) async throws -> [SearchResult] {
 ***REMOVED******REMOVED***try await internalSearch(
-***REMOVED******REMOVED******REMOVED***queryString,
+***REMOVED******REMOVED******REMOVED***query,
 ***REMOVED******REMOVED******REMOVED***searchArea: searchExtent
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***public func search(
-***REMOVED******REMOVED***_ queryString: String,
+***REMOVED******REMOVED***_ query: String,
 ***REMOVED******REMOVED***searchArea: Geometry? = nil,
 ***REMOVED******REMOVED***preferredSearchLocation: Point? = nil
 ***REMOVED***) async throws -> [SearchResult] {
 ***REMOVED******REMOVED***try await internalSearch(
-***REMOVED******REMOVED******REMOVED***queryString,
+***REMOVED******REMOVED******REMOVED***query,
 ***REMOVED******REMOVED******REMOVED***searchArea: searchArea,
 ***REMOVED******REMOVED******REMOVED***preferredSearchLocation: preferredSearchLocation
 ***REMOVED******REMOVED***)
@@ -115,7 +111,7 @@ public class LocatorSearchSource: ObservableObject, SearchSource {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***public func suggest(
-***REMOVED******REMOVED***_ queryString: String,
+***REMOVED******REMOVED***_ query: String,
 ***REMOVED******REMOVED***searchArea: Geometry? = nil,
 ***REMOVED******REMOVED***preferredSearchLocation: Point? = nil
 ***REMOVED***) async throws -> [SearchSuggestion] {
@@ -123,7 +119,7 @@ public class LocatorSearchSource: ObservableObject, SearchSource {
 ***REMOVED******REMOVED***suggestParameters.preferredSearchLocation = preferredSearchLocation
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let geocodeResults = try await locatorTask.suggest(
-***REMOVED******REMOVED******REMOVED***searchText: queryString,
+***REMOVED******REMOVED******REMOVED***searchText: query,
 ***REMOVED******REMOVED******REMOVED***parameters: suggestParameters
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED*** Convert to SearchSuggestions and return.
@@ -135,7 +131,7 @@ public class LocatorSearchSource: ObservableObject, SearchSource {
 
 extension LocatorSearchSource {
 ***REMOVED***private func internalSearch(
-***REMOVED******REMOVED***_ queryString: String,
+***REMOVED******REMOVED***_ query: String,
 ***REMOVED******REMOVED***searchArea: Geometry?,
 ***REMOVED******REMOVED***preferredSearchLocation: Point? = nil
 ***REMOVED***) async throws -> [SearchResult] {
@@ -143,7 +139,7 @@ extension LocatorSearchSource {
 ***REMOVED******REMOVED***geocodeParameters.preferredSearchLocation = preferredSearchLocation
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let geocodeResults = try await locatorTask.geocode(
-***REMOVED******REMOVED******REMOVED***searchText: queryString,
+***REMOVED******REMOVED******REMOVED***searchText: query,
 ***REMOVED******REMOVED******REMOVED***parameters: geocodeParameters
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***

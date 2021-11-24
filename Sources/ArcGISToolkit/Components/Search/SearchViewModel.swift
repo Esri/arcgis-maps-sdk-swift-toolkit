@@ -39,7 +39,7 @@ public class SearchViewModel: ObservableObject {
 ***REMOVED***public enum SearchOutcome {
 ***REMOVED******REMOVED***case results([SearchResult])
 ***REMOVED******REMOVED***case suggestions([SearchSuggestion])
-***REMOVED******REMOVED***case failure(SearchError)
+***REMOVED******REMOVED***case failure(String)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a `SearchViewModel`.
@@ -175,29 +175,34 @@ public class SearchViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ NOTE:  only the first source is currently used; multiple sources are not yet supported.
 ***REMOVED***public var sources: [SearchSource] = []
 ***REMOVED***
-***REMOVED******REMOVED***/ The currently executing async task.  `currentTask` should be cancelled
+***REMOVED******REMOVED***/ The currently executing async task.  `currentTask` will be cancelled
 ***REMOVED******REMOVED***/ prior to starting another async task.
-***REMOVED***private var currentTask: Task<Void, Never>?
+***REMOVED***private var currentTask: Task<Void, Never>? {
+***REMOVED******REMOVED***willSet {
+***REMOVED******REMOVED******REMOVED***currentTask?.cancel()
+***REMOVED***
+***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Starts a search. `selectedResult` and `results`, among other properties, are set
 ***REMOVED******REMOVED***/ asynchronously. Other query properties are read to define the parameters of the search.
 ***REMOVED***public func commitSearch() {
-***REMOVED******REMOVED***kickoffTask { await self.doSearch() ***REMOVED***
+***REMOVED******REMOVED***currentTask = Task { await self.doSearch() ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Repeats the last search, limiting results to the extent specified in `geoViewExtent`.
 ***REMOVED***public func repeatSearch() {
-***REMOVED******REMOVED***kickoffTask { await self.doRepeatSearch() ***REMOVED***
+***REMOVED******REMOVED***currentTask = Task { await self.doRepeatSearch() ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Updates suggestions list asynchronously.
 ***REMOVED***public func updateSuggestions() {
-***REMOVED******REMOVED***guard currentSuggestion == nil else {
+***REMOVED******REMOVED***guard currentSuggestion == nil
+***REMOVED******REMOVED***else {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** don't update suggestions if currently searching for one
 ***REMOVED******REMOVED******REMOVED***return
 ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***kickoffTask { await self.doUpdateSuggestions() ***REMOVED***
+***REMOVED******REMOVED***currentTask = Task { await self.doUpdateSuggestions() ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@Published
@@ -215,12 +220,7 @@ public class SearchViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ - Parameter searchSuggestion: The suggestion to use to commit the search.
 ***REMOVED***public func acceptSuggestion(_ searchSuggestion: SearchSuggestion) {
 ***REMOVED******REMOVED***currentQuery = searchSuggestion.displayTitle
-***REMOVED******REMOVED***kickoffTask { await self.doAcceptSuggestion(searchSuggestion) ***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***private func kickoffTask(_ taskInit: @escaping () async -> Void) {
-***REMOVED******REMOVED***currentTask?.cancel()
-***REMOVED******REMOVED***currentTask = Task { await taskInit() ***REMOVED***
+***REMOVED******REMOVED***currentTask = Task { await self.doAcceptSuggestion(searchSuggestion) ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
@@ -228,9 +228,8 @@ private extension SearchViewModel {
 ***REMOVED***func doRepeatSearch() async {
 ***REMOVED******REMOVED***guard !currentQuery.trimmingCharacters(in: .whitespaces).isEmpty,
 ***REMOVED******REMOVED******REMOVED***  let queryExtent = geoViewExtent,
-***REMOVED******REMOVED******REMOVED***  let source = currentSource() else {
-***REMOVED******REMOVED******REMOVED******REMOVED***  return
-***REMOVED***  ***REMOVED***
+***REMOVED******REMOVED******REMOVED***  let source = currentSource()
+***REMOVED******REMOVED***else { return ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***await search(with: {
 ***REMOVED******REMOVED******REMOVED***try await source.repeatSearch(
@@ -242,7 +241,8 @@ private extension SearchViewModel {
 ***REMOVED***
 ***REMOVED***func doSearch() async {
 ***REMOVED******REMOVED***guard !currentQuery.trimmingCharacters(in: .whitespaces).isEmpty,
-***REMOVED******REMOVED******REMOVED***  let source = currentSource() else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED***  let source = currentSource()
+***REMOVED******REMOVED***else { return ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***await search(with: {
 ***REMOVED******REMOVED******REMOVED***try await source.search(
@@ -255,9 +255,9 @@ private extension SearchViewModel {
 ***REMOVED***
 ***REMOVED***func doUpdateSuggestions() async {
 ***REMOVED******REMOVED***guard !currentQuery.trimmingCharacters(in: .whitespaces).isEmpty,
-***REMOVED******REMOVED******REMOVED***  let source = currentSource() else {
-***REMOVED******REMOVED******REMOVED******REMOVED***  return
-***REMOVED***  ***REMOVED***
+***REMOVED******REMOVED******REMOVED***  let source = currentSource()
+***REMOVED******REMOVED***else { return ***REMOVED***
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED***let suggestions = try await source.suggest(
 ***REMOVED******REMOVED******REMOVED******REMOVED***currentQuery,
@@ -268,7 +268,7 @@ private extension SearchViewModel {
 ***REMOVED*** catch is CancellationError {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Do nothing if user cancelled and let next task set searchOutcome.
 ***REMOVED*** catch {
-***REMOVED******REMOVED******REMOVED***searchOutcome = .failure(SearchError(error))
+***REMOVED******REMOVED******REMOVED***searchOutcome = .failure(error.localizedDescription)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -293,7 +293,7 @@ private extension SearchViewModel {
 ***REMOVED*** catch is CancellationError {
 ***REMOVED******REMOVED******REMOVED***searchOutcome = nil
 ***REMOVED*** catch {
-***REMOVED******REMOVED******REMOVED***searchOutcome = .failure(SearchError(error))
+***REMOVED******REMOVED******REMOVED***searchOutcome = .failure(error.localizedDescription)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
