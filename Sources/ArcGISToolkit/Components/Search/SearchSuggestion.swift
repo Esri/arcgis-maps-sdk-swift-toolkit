@@ -15,8 +15,29 @@ import Foundation
 import ArcGIS
 
 /// Wraps a suggestion for display.
-public struct SearchSuggestion {    
-    /// Title that should be used when displaying a suggestion.
+public struct SearchSuggestion {
+    /// Creates a `SearchSuggestion`.
+    /// - Parameters:
+    ///   - displayTitle: The string to be used when displaying a suggestion.
+    ///   - owningSource: Reference to the `SearchSourceProtocol` that created this suggestion.
+    ///   - isCollection: `true` if the search from this suggestion should be treated like a collection search, `false` if the search would return a single result.
+    ///   - displaySubtitle: Optional subtitle that can be displayed when showing a suggestion.
+    ///   - suggestResult: Underlying suggest result if this suggestion was created by a LocatorTask.
+    public init(
+        displayTitle: String,
+        owningSource: SearchSource,
+        isCollection: Bool = false,
+        displaySubtitle: String = "",
+        suggestResult: SuggestResult? = nil
+    ) {
+        self.displayTitle = displayTitle
+        self.owningSource = owningSource
+        self.isCollection = isCollection
+        self.displaySubtitle = displaySubtitle
+        self.suggestResult = suggestResult
+    }
+    
+    /// The string to be used when displaying a suggestion.
     public let displayTitle: String
     
     /// Reference to the `SearchSourceProtocol` that created this suggestion. This property is necessary for the
@@ -31,13 +52,14 @@ public struct SearchSuggestion {
     public let isCollection: Bool
     
     /// Optional subtitle that can be displayed when showing a suggestion.
-    public var displaySubtitle: String = ""
+    public let displaySubtitle: String
     
     /// Underlying suggest result if this suggestion was created by a LocatorTask. This can be `nil`, and
     /// is likely to be `nil` when using custom `SearchSourceProtocol` implementations.
-    public var suggestResult: SuggestResult? = nil
+    public let suggestResult: SuggestResult?
     
     /// The stable identity of the entity associated with this instance.
+    /// Required by `Identifiable` protocol.
     public let id = UUID()
 }
 

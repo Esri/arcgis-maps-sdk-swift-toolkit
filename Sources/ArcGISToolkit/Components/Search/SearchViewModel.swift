@@ -39,7 +39,7 @@ public class SearchViewModel: ObservableObject {
     public enum SearchOutcome {
         case results([SearchResult])
         case suggestions([SearchSuggestion])
-        case failure(SearchError)
+        case failure(String)
     }
     
     /// Creates a `SearchViewModel`.
@@ -175,29 +175,34 @@ public class SearchViewModel: ObservableObject {
     /// NOTE:  only the first source is currently used; multiple sources are not yet supported.
     public var sources: [SearchSource] = []
     
-    /// The currently executing async task.  `currentTask` should be cancelled
+    /// The currently executing async task.  `currentTask` will be cancelled
     /// prior to starting another async task.
-    private var currentTask: Task<Void, Never>?
+    private var currentTask: Task<Void, Never>? {
+        willSet {
+            currentTask?.cancel()
+        }
+    }
     
     /// Starts a search. `selectedResult` and `results`, among other properties, are set
     /// asynchronously. Other query properties are read to define the parameters of the search.
     public func commitSearch() {
-        kickoffTask { await self.doSearch() }
+        currentTask = Task { await self.doSearch() }
     }
     
     /// Repeats the last search, limiting results to the extent specified in `geoViewExtent`.
     public func repeatSearch() {
-        kickoffTask { await self.doRepeatSearch() }
+        currentTask = Task { await self.doRepeatSearch() }
     }
     
     /// Updates suggestions list asynchronously.
     public func updateSuggestions() {
-        guard currentSuggestion == nil else {
+        guard currentSuggestion == nil
+        else {
             // don't update suggestions if currently searching for one
             return
         }
         
-        kickoffTask { await self.doUpdateSuggestions() }
+        currentTask = Task { await self.doUpdateSuggestions() }
     }
     
     @Published
@@ -215,12 +220,7 @@ public class SearchViewModel: ObservableObject {
     /// - Parameter searchSuggestion: The suggestion to use to commit the search.
     public func acceptSuggestion(_ searchSuggestion: SearchSuggestion) {
         currentQuery = searchSuggestion.displayTitle
-        kickoffTask { await self.doAcceptSuggestion(searchSuggestion) }
-    }
-    
-    private func kickoffTask(_ taskInit: @escaping () async -> Void) {
-        currentTask?.cancel()
-        currentTask = Task { await taskInit() }
+        currentTask = Task { await self.doAcceptSuggestion(searchSuggestion) }
     }
 }
 
@@ -228,9 +228,8 @@ private extension SearchViewModel {
     func doRepeatSearch() async {
         guard !currentQuery.trimmingCharacters(in: .whitespaces).isEmpty,
               let queryExtent = geoViewExtent,
-              let source = currentSource() else {
-                  return
-              }
+              let source = currentSource()
+        else { return }
         
         await search(with: {
             try await source.repeatSearch(
@@ -242,7 +241,8 @@ private extension SearchViewModel {
     
     func doSearch() async {
         guard !currentQuery.trimmingCharacters(in: .whitespaces).isEmpty,
-              let source = currentSource() else { return }
+              let source = currentSource()
+        else { return }
         
         await search(with: {
             try await source.search(
@@ -255,9 +255,9 @@ private extension SearchViewModel {
     
     func doUpdateSuggestions() async {
         guard !currentQuery.trimmingCharacters(in: .whitespaces).isEmpty,
-              let source = currentSource() else {
-                  return
-              }
+              let source = currentSource()
+        else { return }
+        
         do {
             let suggestions = try await source.suggest(
                 currentQuery,
@@ -268,7 +268,7 @@ private extension SearchViewModel {
         } catch is CancellationError {
             // Do nothing if user cancelled and let next task set searchOutcome.
         } catch {
-            searchOutcome = .failure(SearchError(error))
+            searchOutcome = .failure(error.localizedDescription)
         }
     }
     
@@ -293,7 +293,7 @@ private extension SearchViewModel {
         } catch is CancellationError {
             searchOutcome = nil
         } catch {
-            searchOutcome = .failure(SearchError(error))
+            searchOutcome = .failure(error.localizedDescription)
         }
     }
     

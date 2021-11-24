@@ -47,8 +47,8 @@ public struct SearchView: View {
     
     /// The string shown in the search view when no user query is entered.
     /// Defaults to "Find a place or address". Note: this is set using the
-    /// `searchFieldPrompt` modifier.
-    private var searchFieldPrompt: String = "Find a place or address"
+    /// `prompt` modifier.
+    private var prompt: String = "Find a place or address"
     
     /// Determines whether a built-in result view will be shown. Defaults to true.
     /// If false, the result display/selection list is not shown. Set to false if you want to hide the results
@@ -67,58 +67,74 @@ public struct SearchView: View {
     @Environment(\.verticalSizeClass)
     private var verticalSizeClass: UserInterfaceSizeClass?
     
+    /// The width of the search bar, taking into account the horizontal and vertical size classes
+    /// of the device.  This will cause the search field to display full-width on an iPhone in portrait
+    /// orientation (and certain iPad multitasking configurations) and limit the width to `360` in other cases.
     private var searchBarWidth: CGFloat? {
         horizontalSizeClass == .compact && verticalSizeClass == .regular ? nil : 360
     }
     
+    /// If `true`, will draw the results list view at half height, exposing a portion of the
+    /// underlying map below the list on an iPhone in portrait orientation (and certain iPad multitasking
+    /// configurations).  If `false`, will draw the results list view full size.
+    private var useHalfHeightResults: Bool {
+        horizontalSizeClass == .compact && verticalSizeClass == .regular
+    }
+    
+    /// If `true`, will set the viewpoint to the extent of the results, plus a little buffer, which will
+    /// cause the geoView to zoom to the extent of the results.  If `false`,
+    /// no setting of the viewpoint will occur.
     @State
     private var shouldZoomToResults = true
     
     /// Determines whether the results lists are displayed.
     @State
-    private var showResultListView: Bool = true
+    private var isResultListHidden: Bool = false
     
     public var body: some View {
         VStack {
-            HStack {
-                Spacer()
-                VStack {
-                    SearchField(
-                        query: $searchViewModel.currentQuery,
-                        searchFieldPrompt: searchFieldPrompt,
-                        isShowResultsHidden: !enableResultListView,
-                        showResults: $showResultListView
-                    )
-                        .onSubmit { searchViewModel.commitSearch() }
-                        .submitLabel(.search)
-                    
-                    if enableResultListView,
-                       showResultListView,
-                       let searchOutcome = searchViewModel.searchOutcome {
-                        Group {
-                            switch searchOutcome {
-                            case .results(let results):
-                                SearchResultList(
-                                    searchResults: results,
-                                    selectedResult: $searchViewModel.selectedResult,
-                                    noResultsMessage: noResultsMessage
-                                )
-                            case .suggestions(let suggestions):
-                                SearchSuggestionList(
-                                    suggestionResults: suggestions,
-                                    currentSuggestion: $searchViewModel.currentSuggestion,
-                                    noResultsMessage: noResultsMessage
-                                )
-                            case .failure(let error):
-                                List {
-                                    Text(error.errorDescription)
+            GeometryReader { geometry in
+                HStack {
+                    Spacer()
+                    VStack {
+                        SearchField(
+                            query: $searchViewModel.currentQuery,
+                            prompt: prompt,
+                            isResultsButtonHidden: !enableResultListView,
+                            isResultListHidden: $isResultListHidden
+                        )
+                            .onSubmit { searchViewModel.commitSearch() }
+                            .submitLabel(.search)
+                            .esriBorder(padding: EdgeInsets())
+                        if enableResultListView,
+                           !isResultListHidden,
+                           let searchOutcome = searchViewModel.searchOutcome {
+                            Group {
+                                switch searchOutcome {
+                                case .results(let results):
+                                    SearchResultList(
+                                        searchResults: results,
+                                        selectedResult: $searchViewModel.selectedResult,
+                                        noResultsMessage: noResultsMessage
+                                    )
+                                        .frame(height: useHalfHeightResults ? geometry.size.height / 2 : nil)
+                                case .suggestions(let suggestions):
+                                    SearchSuggestionList(
+                                        suggestionResults: suggestions,
+                                        currentSuggestion: $searchViewModel.currentSuggestion,
+                                        noResultsMessage: noResultsMessage
+                                    )
+                                case .failure(let errorString):
+                                    List {
+                                        Text(errorString)
+                                    }
                                 }
                             }
+                            .esriBorder(padding: EdgeInsets())
                         }
-                        .esriBorder(padding: EdgeInsets())
                     }
+                    .frame(width: searchBarWidth)
                 }
-                .frame(width: searchBarWidth)
             }
             Spacer()
             if searchViewModel.isEligibleForRequery {
@@ -161,11 +177,11 @@ extension SearchView {
     
     /// The string shown in the search view when no user query is entered.
     /// Defaults to "Find a place or address".
-    /// - Parameter newSearchFieldPrompt: The new value.
+    /// - Parameter newPrompt: The new value.
     /// - Returns: A new `SearchView`.
-    public func searchFieldPrompt(_ newSearchFieldPrompt: String) -> Self {
+    public func prompt(_ newPrompt: String) -> Self {
         var copy = self
-        copy.searchFieldPrompt = newSearchFieldPrompt
+        copy.prompt = newPrompt
         return copy
     }
     
