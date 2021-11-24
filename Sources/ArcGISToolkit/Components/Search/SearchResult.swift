@@ -16,30 +16,56 @@ import ArcGIS
 
 /// Wraps a search result for display.
 public struct SearchResult {
-    /// Title that should be shown whenever a result is displayed.
+    /// Creates a `SearchResult`.
+    /// - Parameters:
+    ///   - displayTitle: The string to be shown whenever a result is displayed.
+    ///   - owningSource: Reference to the search source that created this result.
+    ///   - displaySubtitle: The string to be shown as a subtitle wherever results are shown.
+    ///   - geoElement: The graphic that was used to display the result on the map.
+    ///   - markerImage: The marker that would be shown on the map for the result.
+    ///   - selectionViewpoint: The viewpoint to be used when the view zooms to a selected result.
+    public init(
+        displayTitle: String,
+        owningSource: SearchSource,
+        displaySubtitle: String = "",
+        geoElement: GeoElement? = nil,
+        markerImage: UIImage? = nil,
+        selectionViewpoint: Viewpoint? = nil
+    ) {
+        self.displayTitle = displayTitle
+        self.owningSource = owningSource
+        self.displaySubtitle = displaySubtitle
+        self.geoElement = geoElement
+        self.markerImage = markerImage
+        self.selectionViewpoint = selectionViewpoint
+    }
+    
+    /// The string to be shown whenever a result is displayed.
     public let displayTitle: String
     
     /// Reference to the search source that created this result.
     public let owningSource: SearchSource
     
-    /// Should be shown as a subtitle wherever results are shown.
-    public var displaySubtitle: String = ""
+    /// The string to be shown as a subtitle wherever results are shown.
+    public let displaySubtitle: String
 
     /// For locator results, should be the graphic that was used to display the result on the map.
     /// For feature layer results, should be the resulting feature. Can be `nil` depending on the type of the
     /// result, and can have `GeoElement`s without a defined geometry.
-    public var geoElement: GeoElement? = nil
+    public let geoElement: GeoElement?
     
     /// Image, in the native platform's format, for the result. This should be the marker that would be
     /// shown on the map, and also shown in the UI. This property is available for convenience so the
     /// UI doesn't have to worry about whether the `GeoElement` is a graphic or a feature when displaying
     /// the icon in the UI.
-    public var markerImage: UIImage? = nil
+    public let markerImage: UIImage?
 
     /// The viewpoint to be used when the view zooms to a selected result. This property can be `nil`
     /// because not all valid results will have a geometry. E.g. feature results from non-spatial features.
-    public var selectionViewpoint: Viewpoint? = nil
-
+    public let selectionViewpoint: Viewpoint?
+    
+    /// The stable identity of the entity associated with this instance.
+    /// Required by `Identifiable` protocol.
     public let id = UUID()
 }
 
