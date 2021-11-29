@@ -50,7 +50,7 @@ public struct SearchField: View {
         HStack {
             // Search icon
             Image(systemName: "magnifyingglass.circle.fill")
-                .foregroundColor(Color(uiColor: .opaqueSeparator))
+                .foregroundColor(Color.secondary)
             
             // Search text field
             TextField(
@@ -65,7 +65,7 @@ public struct SearchField: View {
                     query.wrappedValue = ""
                 } label: {
                     Image(systemName: "xmark.circle.fill")
-                        .foregroundColor(Color(.opaqueSeparator))
+                        .foregroundColor(Color.secondary)
                 }
             }
             
@@ -74,10 +74,12 @@ public struct SearchField: View {
                 Button {
                     isResultListHidden?.wrappedValue.toggle()
                 } label: {
-                    Image(systemName: "eye")
-                        .symbolVariant(!(isResultListHidden?.wrappedValue ?? false) ? .none : .slash)
-                        .symbolVariant(.fill)
-                        .foregroundColor(.accentColor)
+                    Image(
+                        systemName: (isResultListHidden?.wrappedValue ?? false) ?
+                        "chevron.down" :
+                            "chevron.up"
+                    )
+                        .foregroundColor(Color.secondary)
                 }
             }
         }
