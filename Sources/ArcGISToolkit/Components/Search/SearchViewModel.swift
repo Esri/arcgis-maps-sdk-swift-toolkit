@@ -104,7 +104,7 @@ public class SearchViewModel: ObservableObject {
                   let lastExtent = lastSearchExtent,
                   let newExtent = newValue
             else { return }
-
+            
             viewpoint?.wrappedValue = nil
             
             // Check extent difference.
@@ -142,7 +142,7 @@ public class SearchViewModel: ObservableObject {
     /// no setting of the viewpoint will occur.
     @Published
     private var shouldZoomToResults = true
-
+    
     /// `true` if the extent has changed by a set amount after a `Search` or `AcceptSuggestion` call.
     /// This property is used by the view to enable 'Repeat search here' functionality. This property is
     /// observable, and the view should use it to hide and show the 'repeat search' button.
@@ -254,7 +254,7 @@ private extension SearchViewModel {
               let queryExtent = geoViewExtent,
               let source = currentSource()
         else { return }
-
+        
         // We're repeating a search, don't zoom to results.
         shouldZoomToResults = false
         await search(with: {

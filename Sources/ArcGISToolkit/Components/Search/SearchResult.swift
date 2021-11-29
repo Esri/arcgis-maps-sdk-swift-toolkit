@@ -48,7 +48,7 @@ public struct SearchResult {
     
     /// The string to be shown as a subtitle wherever results are shown.
     public let displaySubtitle: String
-
+    
     /// For locator results, should be the graphic that was used to display the result on the map.
     /// For feature layer results, should be the resulting feature. Can be `nil` depending on the type of the
     /// result, and can have `GeoElement`s without a defined geometry.
@@ -59,7 +59,7 @@ public struct SearchResult {
     /// UI doesn't have to worry about whether the `GeoElement` is a graphic or a feature when displaying
     /// the icon in the UI.
     public let markerImage: UIImage?
-
+    
     /// The viewpoint to be used when the view zooms to a selected result. This property can be `nil`
     /// because not all valid results will have a geometry. E.g. feature results from non-spatial features.
     public let selectionViewpoint: Viewpoint?
