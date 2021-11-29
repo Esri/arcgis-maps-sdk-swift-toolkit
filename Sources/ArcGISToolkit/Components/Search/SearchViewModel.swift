@@ -44,19 +44,16 @@ public class SearchViewModel: ObservableObject {
     
     /// Creates a `SearchViewModel`.
     /// - Parameters:
-    ///   - activeSource: Tracks the currently active search source.
     ///   - queryArea: The search area to be used for the current query.
     ///   - queryCenter: Defines the center for the search.
     ///   - resultMode: Defines how many results to return.
     ///   - sources: Collection of search sources to be used.
     public init(
-        activeSource: SearchSource? = nil,
         queryArea: Geometry? = nil,
         queryCenter: Point? = nil,
         resultMode: SearchResultMode = .automatic,
         sources: [SearchSource] = []
     ) {
-        self.activeSource = activeSource
         self.queryArea = queryArea
         self.queryCenter = queryCenter
         self.resultMode = resultMode
@@ -64,7 +61,7 @@ public class SearchViewModel: ObservableObject {
     }
     
     /// The active search source.  If `nil`, the first item in `sources` is used.
-    public var activeSource: SearchSource?
+    private var activeSource: SearchSource? = nil
     
     /// Tracks the current user-entered query. This property drives both suggestions and searches.
     @Published

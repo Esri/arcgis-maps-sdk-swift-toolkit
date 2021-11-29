@@ -40,29 +40,6 @@ class SearchViewModelTests: XCTestCase {
         XCTAssertEqual(result.first, model.selectedResult)
     }
     
-    func testActiveSource() async throws {
-        let activeSource = LocatorSearchSource()
-        activeSource.name = "Simple Locator"
-        let model = SearchViewModel(
-            activeSource: activeSource,
-            sources: [LocatorSearchSource()]
-        )
-        
-        model.currentQuery = "Magers & Quinn Booksellers"
-        
-        model.commitSearch()
-        
-        let results = try await searchResults(model)
-        let result = try XCTUnwrap(results?.first)
-        XCTAssertEqual(result.owningSource.name, activeSource.name)
-        
-        model.updateSuggestions()
-        
-        let suggestions = try await searchSuggestions(model, dropFirst: true)
-        let suggestion = try XCTUnwrap(suggestions?.first)
-        XCTAssertEqual(suggestion.owningSource.name, activeSource.name)
-    }
-    
     func testCommitSearch() async throws {
         let model = SearchViewModel(sources: [LocatorSearchSource()])
         
