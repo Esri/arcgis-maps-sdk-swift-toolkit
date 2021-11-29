@@ -281,21 +281,19 @@ extension ResultRow {
 ***REMOVED***/ A modifier which displays a 2 point width border and a shadow around a view.
 struct SelectedModifier: ViewModifier {
 ***REMOVED***var isSelected: Bool
-
+***REMOVED***
 ***REMOVED***func body(content: Content) -> some View {
 ***REMOVED******REMOVED***let roundedRect = RoundedRectangle(cornerRadius: 4)
-***REMOVED******REMOVED***Group {
-***REMOVED******REMOVED******REMOVED***if isSelected {
-***REMOVED******REMOVED******REMOVED******REMOVED***content
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.background(Color.accentColor.opacity(0.8))
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.clipShape(roundedRect)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.shadow(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***color: Color.accentColor.opacity(0.8),
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***radius: 2
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***content
-***REMOVED******REMOVED***
+***REMOVED******REMOVED***if isSelected {
+***REMOVED******REMOVED******REMOVED***content
+***REMOVED******REMOVED******REMOVED******REMOVED***.background(Color.accentColor.opacity(0.8))
+***REMOVED******REMOVED******REMOVED******REMOVED***.clipShape(roundedRect)
+***REMOVED******REMOVED******REMOVED******REMOVED***.shadow(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***color: Color.accentColor.opacity(0.8),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***radius: 2
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***content
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
