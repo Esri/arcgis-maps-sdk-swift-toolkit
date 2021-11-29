@@ -41,14 +41,14 @@ public struct SearchSuggestion {
     public let displayTitle: String
     
     /// Reference to the `SearchSourceProtocol` that created this suggestion. This property is necessary for the
-    /// view model to be able to accept a suggestion, because a suggestion should only be used with the
+    /// view model to be able to accept a suggestion because a suggestion should only be used with the
     /// locator that created it.
     public let owningSource: SearchSource
     
     /// `true` if the search from this suggestion should be treated like a collection search, `false` if the
     /// search would return a single result. This property should be used to display a different icon
     /// in the UI depending on if this is a category search (like 'Coffee', 'Pizza', or 'Starbucks') and
-    /// false if it is a search for a specific result (e.g. '380 New York St. Redlands CA').
+    /// `false` if it is a search for a specific result (e.g. '380 New York St. Redlands CA').
     public let isCollection: Bool
     
     /// Optional subtitle that can be displayed when showing a suggestion.
@@ -72,7 +72,7 @@ extension SearchSuggestion: Equatable {
 }
 
 extension SearchSuggestion: Hashable {
-    /// Note:  we're not hashing `suggestResult` as `SearchSuggestion` is created from
+    /// Note:  We're not hashing `suggestResult` as `SearchSuggestion` is created from
     /// a `SuggestResult` and `suggestResult` will be different for two sepate geocode
     /// operations even though they represent the same suggestion.
     public func hash(into hasher: inout Hasher) {

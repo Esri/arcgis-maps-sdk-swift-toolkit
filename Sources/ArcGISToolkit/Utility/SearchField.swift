@@ -75,7 +75,7 @@ public struct SearchField: View {
                     isResultListHidden?.wrappedValue.toggle()
                 } label: {
                     Image(systemName: "eye")
-                        .symbolVariant((isResultListHidden?.wrappedValue ?? false) ? .none : .slash)
+                        .symbolVariant(!(isResultListHidden?.wrappedValue ?? false) ? .none : .slash)
                         .symbolVariant(.fill)
                         .foregroundColor(.accentColor)
                 }
