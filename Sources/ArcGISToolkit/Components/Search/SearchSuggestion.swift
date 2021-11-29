@@ -19,7 +19,7 @@ public struct SearchSuggestion {
     /// Creates a `SearchSuggestion`.
     /// - Parameters:
     ///   - displayTitle: The string to be used when displaying a suggestion.
-    ///   - owningSource: Reference to the `SearchSourceProtocol` that created this suggestion.
+    ///   - owningSource: Reference to the `SearchSource` that created this suggestion.
     ///   - isCollection: `true` if the search from this suggestion should be treated like a collection search, `false` if the search would return a single result.
     ///   - displaySubtitle: Optional subtitle that can be displayed when showing a suggestion.
     ///   - suggestResult: Underlying suggest result if this suggestion was created by a LocatorTask.
@@ -40,7 +40,7 @@ public struct SearchSuggestion {
     /// The string to be used when displaying a suggestion.
     public let displayTitle: String
     
-    /// Reference to the `SearchSourceProtocol` that created this suggestion. This property is necessary for the
+    /// Reference to the `SearchSource` that created this suggestion. This property is necessary for the
     /// view model to be able to accept a suggestion because a suggestion should only be used with the
     /// locator that created it.
     public let owningSource: SearchSource
@@ -55,7 +55,7 @@ public struct SearchSuggestion {
     public let displaySubtitle: String
     
     /// Underlying suggest result if this suggestion was created by a LocatorTask. This can be `nil`, and
-    /// is likely to be `nil` when using custom `SearchSourceProtocol` implementations.
+    /// is likely to be `nil` when using custom `SearchSource` implementations.
     public let suggestResult: SuggestResult?
     
     /// The stable identity of the entity associated with this instance.
