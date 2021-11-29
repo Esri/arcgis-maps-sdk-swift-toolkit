@@ -19,7 +19,7 @@ public struct SearchSuggestion {
 ***REMOVED******REMOVED***/ Creates a `SearchSuggestion`.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - displayTitle: The string to be used when displaying a suggestion.
-***REMOVED******REMOVED***/   - owningSource: Reference to the `SearchSourceProtocol` that created this suggestion.
+***REMOVED******REMOVED***/   - owningSource: Reference to the `SearchSource` that created this suggestion.
 ***REMOVED******REMOVED***/   - isCollection: `true` if the search from this suggestion should be treated like a collection search, `false` if the search would return a single result.
 ***REMOVED******REMOVED***/   - displaySubtitle: Optional subtitle that can be displayed when showing a suggestion.
 ***REMOVED******REMOVED***/   - suggestResult: Underlying suggest result if this suggestion was created by a LocatorTask.
@@ -40,7 +40,7 @@ public struct SearchSuggestion {
 ***REMOVED******REMOVED***/ The string to be used when displaying a suggestion.
 ***REMOVED***public let displayTitle: String
 ***REMOVED***
-***REMOVED******REMOVED***/ Reference to the `SearchSourceProtocol` that created this suggestion. This property is necessary for the
+***REMOVED******REMOVED***/ Reference to the `SearchSource` that created this suggestion. This property is necessary for the
 ***REMOVED******REMOVED***/ view model to be able to accept a suggestion because a suggestion should only be used with the
 ***REMOVED******REMOVED***/ locator that created it.
 ***REMOVED***public let owningSource: SearchSource
@@ -55,7 +55,7 @@ public struct SearchSuggestion {
 ***REMOVED***public let displaySubtitle: String
 ***REMOVED***
 ***REMOVED******REMOVED***/ Underlying suggest result if this suggestion was created by a LocatorTask. This can be `nil`, and
-***REMOVED******REMOVED***/ is likely to be `nil` when using custom `SearchSourceProtocol` implementations.
+***REMOVED******REMOVED***/ is likely to be `nil` when using custom `SearchSource` implementations.
 ***REMOVED***public let suggestResult: SuggestResult?
 ***REMOVED***
 ***REMOVED******REMOVED***/ The stable identity of the entity associated with this instance.
