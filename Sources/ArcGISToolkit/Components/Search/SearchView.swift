@@ -243,6 +243,7 @@ struct ResultRow: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***.padding(EdgeInsets(top: 2, leading: 0, bottom: 2, trailing: 0))
 ***REMOVED***
 ***REMOVED***
 
@@ -286,10 +287,10 @@ struct SelectedModifier: ViewModifier {
 ***REMOVED******REMOVED***let roundedRect = RoundedRectangle(cornerRadius: 4)
 ***REMOVED******REMOVED***if isSelected {
 ***REMOVED******REMOVED******REMOVED***content
-***REMOVED******REMOVED******REMOVED******REMOVED***.background(Color.accentColor.opacity(0.8))
+***REMOVED******REMOVED******REMOVED******REMOVED***.background(Color.secondary.opacity(0.8))
 ***REMOVED******REMOVED******REMOVED******REMOVED***.clipShape(roundedRect)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.shadow(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***color: Color.accentColor.opacity(0.8),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***color: Color.secondary.opacity(0.8),
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***radius: 2
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED*** else {
