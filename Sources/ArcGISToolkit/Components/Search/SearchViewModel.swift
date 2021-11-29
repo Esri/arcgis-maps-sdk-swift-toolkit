@@ -84,10 +84,8 @@ public class SearchViewModel: ObservableObject {
         }
     }
     
-    /// The extent at the time of the last search.  This is primarily set by the model, but in certain
-    /// circumstances can be set by an external client, for example after a view zooms programmatically
-    /// to an extent based on results of a search.
-    public var lastSearchExtent: Envelope? = nil {
+    /// The extent at the time of the last search.
+    private var lastSearchExtent: Envelope? = nil {
         didSet {
             isEligibleForRequery = false
         }
@@ -100,11 +98,14 @@ public class SearchViewModel: ObservableObject {
     /// search here' behavior. If that behavior is not wanted, it should be left `nil`.
     public var geoViewExtent: Envelope? = nil {
         willSet {
-            guard !isEligibleForRequery,
+            guard isGeoViewNavigating,
+                  !isEligibleForRequery,
                   !currentQuery.isEmpty,
                   let lastExtent = lastSearchExtent,
                   let newExtent = newValue
             else { return }
+
+            viewpoint?.wrappedValue = nil
             
             // Check extent difference.
             let widthDiff = abs(lastExtent.width - newExtent.width)
@@ -127,6 +128,21 @@ public class SearchViewModel: ObservableObject {
         }
     }
     
+    /// `true` when the geoView is navigating, `false` otherwise.  Set by the external client.
+    public var isGeoViewNavigating: Bool = false
+    
+    /// The `Viewpoint` used to pan/zoom to results.  If `nil`, there will be no zooming to results.
+    public var viewpoint: Binding<Viewpoint?>? = nil
+    
+    /// The `GraphicsOverlay` used to display results.  If `nil`, no results will be displayed.
+    public var resultsOverlay: GraphicsOverlay? = nil
+    
+    /// If `true`, will set the viewpoint to the extent of the results, plus a little buffer, which will
+    /// cause the geoView to zoom to the extent of the results.  If `false`,
+    /// no setting of the viewpoint will occur.
+    @Published
+    private var shouldZoomToResults = true
+
     /// `true` if the extent has changed by a set amount after a `Search` or `AcceptSuggestion` call.
     /// This property is used by the view to enable 'Repeat search here' functionality. This property is
     /// observable, and the view should use it to hide and show the 'repeat search' button.
@@ -153,11 +169,11 @@ public class SearchViewModel: ObservableObject {
     @Published
     public private(set) var searchOutcome: SearchOutcome? {
         didSet {
-            if case let .results(results) = searchOutcome,
-               results.count == 1 {
-                selectedResult = results.first
+            if case let .results(results) = searchOutcome {
+                display(searchResults: results)
+                selectedResult = results.count == 1 ? results.first : nil
             } else {
-                selectedResult = nil
+                display(searchResults: [])
             }
         }
     }
@@ -167,7 +183,15 @@ public class SearchViewModel: ObservableObject {
     /// this property upon user selection. This property is observable. The view should observe this
     /// property and update the associated GeoView's viewpoint, if configured.
     @Published
-    public var selectedResult: SearchResult?
+    public var selectedResult: SearchResult? {
+        willSet {
+            (selectedResult?.geoElement as? Graphic)?.isSelected = false
+        }
+        didSet {
+            (selectedResult?.geoElement as? Graphic)?.isSelected = true
+            display(selectedResult: selectedResult)
+        }
+    }
     
     /// Collection of search sources to be used. This list is maintained over time and is not nullable.
     /// The view should observe this list for changes. Consumers should add and remove sources from
@@ -230,7 +254,9 @@ private extension SearchViewModel {
               let queryExtent = geoViewExtent,
               let source = currentSource()
         else { return }
-        
+
+        // We're repeating a search, don't zoom to results.
+        shouldZoomToResults = false
         await search(with: {
             try await source.repeatSearch(
                 currentQuery,
@@ -331,4 +357,67 @@ extension SearchViewModel {
     }
 }
 
+private extension SearchViewModel {
+    func display(searchResults: [SearchResult]) {
+        guard let resultsOverlay = resultsOverlay else { return }
+        let resultGraphics: [Graphic] = searchResults.compactMap { result in
+            guard let graphic = result.geoElement as? Graphic else { return nil }
+            graphic.update(with: result)
+            return graphic
+        }
+        resultsOverlay.removeAllGraphics()
+        resultsOverlay.addGraphics(resultGraphics)
+        
+        // Make sure we have a viewpoint to zoom to.
+        guard let viewpoint = viewpoint else { return }
+        
+        if !resultGraphics.isEmpty,
+           let envelope = resultsOverlay.extent,
+           shouldZoomToResults {
+            let builder = EnvelopeBuilder(envelope: envelope)
+            builder.expand(factor: 1.1)
+            let targetExtent = builder.toGeometry() as! Envelope
+            viewpoint.wrappedValue = Viewpoint(
+                targetExtent: targetExtent
+            )
+            lastSearchExtent = targetExtent
+        } else {
+            viewpoint.wrappedValue = nil
+        }
+        
+        if !shouldZoomToResults { shouldZoomToResults = true }
+    }
+    
+    func display(selectedResult: SearchResult?) {
+        guard let selectedResult = selectedResult else { return }
+        viewpoint?.wrappedValue = selectedResult.selectionViewpoint
+    }
+}
+
 extension SearchViewModel.SearchOutcome: Equatable {}
+
+private extension Graphic {
+    func update(with result: SearchResult) {
+        if symbol == nil {
+            symbol = Symbol.searchResult()
+        }
+        setAttributeValue(result.displayTitle, forKey: "displayTitle")
+        setAttributeValue(result.displaySubtitle, forKey: "displaySubtitle")
+    }
+}
+
+private extension Symbol {
+    /// A search result marker symbol.
+    static func searchResult() -> MarkerSymbol {
+        let image = UIImage.mapPin
+        let symbol = PictureMarkerSymbol(image: image)
+        symbol.offsetY = Float(image.size.height / 2.0)
+        return symbol
+    }
+}
+
+extension UIImage {
+    static var mapPin: UIImage {
+        return UIImage(named: "MapPin", in: Bundle.module, with: nil)!
+    }
+}

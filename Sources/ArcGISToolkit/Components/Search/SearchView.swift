@@ -19,18 +19,10 @@ public struct SearchView: View {
     /// Creates a new `SearchView`.
     /// - Parameters:
     ///   - searchViewModel: The view model used by `SearchView`.
-    ///   - viewpoint: The `Viewpoint` used to zoom to results.
-    ///   - resultsOverlay: The `GraphicsOverlay` used to display results.
-    public init(
-        searchViewModel: SearchViewModel? = nil,
-        viewpoint: Binding<Viewpoint?>? = nil,
-        resultsOverlay: GraphicsOverlay? = nil
-    ) {
+    public init(searchViewModel: SearchViewModel? = nil) {
         self.searchViewModel = searchViewModel ?? SearchViewModel(
             sources: [LocatorSearchSource()]
         )
-        self.resultsOverlay = resultsOverlay
-        self.viewpoint = viewpoint
     }
     
     /// The view model used by the view. The `SearchViewModel` manages state and handles the
@@ -38,12 +30,6 @@ public struct SearchView: View {
     /// calls methods on `SearchViewModel` in response to user action.
     @ObservedObject
     var searchViewModel: SearchViewModel
-    
-    /// The `Viewpoint` used to pan/zoom to results.  If `nil`, there will be no zooming to results.
-    private let viewpoint: Binding<Viewpoint?>?
-    
-    /// The `GraphicsOverlay` used to display results.  If `nil`, no results will be displayed.
-    private let resultsOverlay: GraphicsOverlay?
     
     /// The string shown in the search view when no user query is entered.
     /// Defaults to "Find a place or address". Note: this is set using the
@@ -81,12 +67,6 @@ public struct SearchView: View {
         horizontalSizeClass == .compact && verticalSizeClass == .regular
     }
     
-    /// If `true`, will set the viewpoint to the extent of the results, plus a little buffer, which will
-    /// cause the geoView to zoom to the extent of the results.  If `false`,
-    /// no setting of the viewpoint will occur.
-    @State
-    private var shouldZoomToResults = true
-    
     /// Determines whether the results lists are displayed.
     @State
     private var isResultListHidden: Bool = false
@@ -105,7 +85,6 @@ public struct SearchView: View {
                         )
                             .onSubmit { searchViewModel.commitSearch() }
                             .submitLabel(.search)
-                            .esriBorder(padding: EdgeInsets())
                         if enableResultListView,
                            !isResultListHidden,
                            let searchOutcome = searchViewModel.searchOutcome {
@@ -139,22 +118,12 @@ public struct SearchView: View {
             Spacer()
             if searchViewModel.isEligibleForRequery {
                 Button("Repeat Search Here") {
-                    shouldZoomToResults = false
                     searchViewModel.repeatSearch()
                 }
                 .esriBorder()
             }
         }
         .listStyle(.plain)
-        .onChange(of: searchViewModel.searchOutcome, perform: { newValue in
-            switch newValue {
-            case .results(let results):
-                display(searchResults: results)
-            default:
-                display(searchResults: [])
-            }
-        })
-        .onChange(of: searchViewModel.selectedResult, perform: display(selectedResult:))
         .onReceive(searchViewModel.$currentQuery) { _ in
             searchViewModel.updateSuggestions()
         }
@@ -197,43 +166,6 @@ extension SearchView {
     }
 }
 
-private extension SearchView {
-    func display(searchResults: [SearchResult]) {
-        guard let resultsOverlay = resultsOverlay else { return }
-        let resultGraphics: [Graphic] = searchResults.compactMap { result in
-            guard let graphic = result.geoElement as? Graphic else { return nil }
-            graphic.update(with: result)
-            return graphic
-        }
-        resultsOverlay.removeAllGraphics()
-        resultsOverlay.addGraphics(resultGraphics)
-        
-        // Make sure we have a viewpoint to zoom to.
-        guard let viewpoint = viewpoint else { return }
-        
-        if !resultGraphics.isEmpty,
-           let envelope = resultsOverlay.extent,
-           shouldZoomToResults {
-            let builder = EnvelopeBuilder(envelope: envelope)
-            builder.expand(factor: 1.1)
-            let targetExtent = builder.toGeometry() as! Envelope
-            viewpoint.wrappedValue = Viewpoint(
-                targetExtent: targetExtent
-            )
-            searchViewModel.lastSearchExtent = targetExtent
-        } else {
-            viewpoint.wrappedValue = nil
-        }
-        
-        if !shouldZoomToResults { shouldZoomToResults = true }
-    }
-    
-    func display(selectedResult: SearchResult?) {
-        guard let selectedResult = selectedResult else { return }
-        viewpoint?.wrappedValue = selectedResult.selectionViewpoint
-    }
-}
-
 struct SearchResultList: View {
     var searchResults: [SearchResult]
     @Binding var selectedResult: SearchResult?
@@ -250,12 +182,9 @@ struct SearchResultList: View {
                                 .onTapGesture {
                                     selectedResult = result
                                 }
-                            if result == selectedResult {
-                                Spacer()
-                                Image(systemName: "checkmark.circle.fill")
-                                    .foregroundColor(.accentColor)
-                            }
+                            Spacer()
                         }
+                        .selected(result == selectedResult)
                     }
                 }
             } else if searchResults.isEmpty {
@@ -349,28 +278,32 @@ extension ResultRow {
     }
 }
 
-private extension Graphic {
-    func update(with result: SearchResult) {
-        if symbol == nil {
-            symbol = Symbol.searchResult()
+/// A modifier which displays a 2 point width border and a shadow around a view.
+struct SelectedModifier: ViewModifier {
+    var isSelected: Bool
+
+    func body(content: Content) -> some View {
+        let roundedRect = RoundedRectangle(cornerRadius: 4)
+        Group {
+            if isSelected {
+                content
+                    .background(Color.accentColor.opacity(0.8))
+                    .clipShape(roundedRect)
+                    .shadow(
+                        color: Color.accentColor.opacity(0.8),
+                        radius: 2
+                    )
+            } else {
+                content
+            }
         }
-        setAttributeValue(result.displayTitle, forKey: "displayTitle")
-        setAttributeValue(result.displaySubtitle, forKey: "displaySubtitle")
     }
 }
 
-private extension Symbol {
-    /// A search result marker symbol.
-    static func searchResult() -> MarkerSymbol {
-        let image = UIImage.mapPin
-        let symbol = PictureMarkerSymbol(image: image)
-        symbol.offsetY = Float(image.size.height / 2.0)
-        return symbol
-    }
-}
-
-extension UIImage {
-    static var mapPin: UIImage {
-        return UIImage(named: "MapPin", in: Bundle.module, with: nil)!
+extension View {
+    func selected(
+        _ isSelected: Bool = false
+    ) -> some View {
+        modifier(SelectedModifier(isSelected: isSelected))
     }
 }
