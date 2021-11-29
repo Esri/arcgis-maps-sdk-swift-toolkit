@@ -243,6 +243,7 @@ struct ResultRow: View {
                 }
             }
         }
+        .padding(EdgeInsets(top: 2, leading: 0, bottom: 2, trailing: 0))
     }
 }
 
@@ -286,10 +287,10 @@ struct SelectedModifier: ViewModifier {
         let roundedRect = RoundedRectangle(cornerRadius: 4)
         if isSelected {
             content
-                .background(Color.accentColor.opacity(0.8))
+                .background(Color.secondary.opacity(0.8))
                 .clipShape(roundedRect)
                 .shadow(
-                    color: Color.accentColor.opacity(0.8),
+                    color: Color.secondary.opacity(0.8),
                     radius: 2
                 )
         } else {
