@@ -33,16 +33,16 @@ public struct SearchField: View {
         self.isResultsButtonHidden = isResultsButtonHidden
         self.isResultListHidden = isResultListHidden
     }
-
+    
     /// The current search query.
     private var query: Binding<String>
-
+    
     /// The default placeholder displayed when `currentQuery` is empty.
     private let prompt: String
-
+    
     /// The visibility of the button used to toggle visibility of the results list.
     private let isResultsButtonHidden: Bool
-
+    
     /// Binding allowing the user to toggle the visibility of the results list.
     private var isResultListHidden: Binding<Bool>?
     
