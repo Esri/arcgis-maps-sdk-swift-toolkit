@@ -281,21 +281,19 @@ extension ResultRow {
 /// A modifier which displays a 2 point width border and a shadow around a view.
 struct SelectedModifier: ViewModifier {
     var isSelected: Bool
-
+    
     func body(content: Content) -> some View {
         let roundedRect = RoundedRectangle(cornerRadius: 4)
-        Group {
-            if isSelected {
-                content
-                    .background(Color.accentColor.opacity(0.8))
-                    .clipShape(roundedRect)
-                    .shadow(
-                        color: Color.accentColor.opacity(0.8),
-                        radius: 2
-                    )
-            } else {
-                content
-            }
+        if isSelected {
+            content
+                .background(Color.accentColor.opacity(0.8))
+                .clipShape(roundedRect)
+                .shadow(
+                    color: Color.accentColor.opacity(0.8),
+                    radius: 2
+                )
+        } else {
+            content
         }
     }
 }
