@@ -75,7 +75,7 @@ public struct SearchField: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isResultListHidden?.wrappedValue.toggle()
 ***REMOVED******REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "eye")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.symbolVariant((isResultListHidden?.wrappedValue ?? false) ? .none : .slash)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.symbolVariant(!(isResultListHidden?.wrappedValue ?? false) ? .none : .slash)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.symbolVariant(.fill)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.accentColor)
 ***REMOVED******REMOVED******REMOVED***

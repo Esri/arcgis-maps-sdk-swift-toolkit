@@ -41,14 +41,14 @@ public struct SearchSuggestion {
 ***REMOVED***public let displayTitle: String
 ***REMOVED***
 ***REMOVED******REMOVED***/ Reference to the `SearchSourceProtocol` that created this suggestion. This property is necessary for the
-***REMOVED******REMOVED***/ view model to be able to accept a suggestion, because a suggestion should only be used with the
+***REMOVED******REMOVED***/ view model to be able to accept a suggestion because a suggestion should only be used with the
 ***REMOVED******REMOVED***/ locator that created it.
 ***REMOVED***public let owningSource: SearchSource
 ***REMOVED***
 ***REMOVED******REMOVED***/ `true` if the search from this suggestion should be treated like a collection search, `false` if the
 ***REMOVED******REMOVED***/ search would return a single result. This property should be used to display a different icon
 ***REMOVED******REMOVED***/ in the UI depending on if this is a category search (like 'Coffee', 'Pizza', or 'Starbucks') and
-***REMOVED******REMOVED***/ false if it is a search for a specific result (e.g. '380 New York St. Redlands CA').
+***REMOVED******REMOVED***/ `false` if it is a search for a specific result (e.g. '380 New York St. Redlands CA').
 ***REMOVED***public let isCollection: Bool
 ***REMOVED***
 ***REMOVED******REMOVED***/ Optional subtitle that can be displayed when showing a suggestion.
@@ -72,7 +72,7 @@ extension SearchSuggestion: Equatable {
 ***REMOVED***
 
 extension SearchSuggestion: Hashable {
-***REMOVED******REMOVED***/ Note:  we're not hashing `suggestResult` as `SearchSuggestion` is created from
+***REMOVED******REMOVED***/ Note:  We're not hashing `suggestResult` as `SearchSuggestion` is created from
 ***REMOVED******REMOVED***/ a `SuggestResult` and `suggestResult` will be different for two sepate geocode
 ***REMOVED******REMOVED***/ operations even though they represent the same suggestion.
 ***REMOVED***public func hash(into hasher: inout Hasher) {

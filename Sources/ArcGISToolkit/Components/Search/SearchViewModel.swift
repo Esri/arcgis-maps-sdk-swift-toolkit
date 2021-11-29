@@ -84,10 +84,8 @@ public class SearchViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ The extent at the time of the last search.  This is primarily set by the model, but in certain
-***REMOVED******REMOVED***/ circumstances can be set by an external client, for example after a view zooms programmatically
-***REMOVED******REMOVED***/ to an extent based on results of a search.
-***REMOVED***public var lastSearchExtent: Envelope? = nil {
+***REMOVED******REMOVED***/ The extent at the time of the last search.
+***REMOVED***private var lastSearchExtent: Envelope? = nil {
 ***REMOVED******REMOVED***didSet {
 ***REMOVED******REMOVED******REMOVED***isEligibleForRequery = false
 ***REMOVED***
@@ -100,11 +98,14 @@ public class SearchViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ search here' behavior. If that behavior is not wanted, it should be left `nil`.
 ***REMOVED***public var geoViewExtent: Envelope? = nil {
 ***REMOVED******REMOVED***willSet {
-***REMOVED******REMOVED******REMOVED***guard !isEligibleForRequery,
+***REMOVED******REMOVED******REMOVED***guard isGeoViewNavigating,
+***REMOVED******REMOVED******REMOVED******REMOVED***  !isEligibleForRequery,
 ***REMOVED******REMOVED******REMOVED******REMOVED***  !currentQuery.isEmpty,
 ***REMOVED******REMOVED******REMOVED******REMOVED***  let lastExtent = lastSearchExtent,
 ***REMOVED******REMOVED******REMOVED******REMOVED***  let newExtent = newValue
 ***REMOVED******REMOVED******REMOVED***else { return ***REMOVED***
+
+***REMOVED******REMOVED******REMOVED***viewpoint?.wrappedValue = nil
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Check extent difference.
 ***REMOVED******REMOVED******REMOVED***let widthDiff = abs(lastExtent.width - newExtent.width)
@@ -127,6 +128,21 @@ public class SearchViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ `true` when the geoView is navigating, `false` otherwise.  Set by the external client.
+***REMOVED***public var isGeoViewNavigating: Bool = false
+***REMOVED***
+***REMOVED******REMOVED***/ The `Viewpoint` used to pan/zoom to results.  If `nil`, there will be no zooming to results.
+***REMOVED***public var viewpoint: Binding<Viewpoint?>? = nil
+***REMOVED***
+***REMOVED******REMOVED***/ The `GraphicsOverlay` used to display results.  If `nil`, no results will be displayed.
+***REMOVED***public var resultsOverlay: GraphicsOverlay? = nil
+***REMOVED***
+***REMOVED******REMOVED***/ If `true`, will set the viewpoint to the extent of the results, plus a little buffer, which will
+***REMOVED******REMOVED***/ cause the geoView to zoom to the extent of the results.  If `false`,
+***REMOVED******REMOVED***/ no setting of the viewpoint will occur.
+***REMOVED***@Published
+***REMOVED***private var shouldZoomToResults = true
+
 ***REMOVED******REMOVED***/ `true` if the extent has changed by a set amount after a `Search` or `AcceptSuggestion` call.
 ***REMOVED******REMOVED***/ This property is used by the view to enable 'Repeat search here' functionality. This property is
 ***REMOVED******REMOVED***/ observable, and the view should use it to hide and show the 'repeat search' button.
@@ -153,11 +169,11 @@ public class SearchViewModel: ObservableObject {
 ***REMOVED***@Published
 ***REMOVED***public private(set) var searchOutcome: SearchOutcome? {
 ***REMOVED******REMOVED***didSet {
-***REMOVED******REMOVED******REMOVED***if case let .results(results) = searchOutcome,
-***REMOVED******REMOVED******REMOVED***   results.count == 1 {
-***REMOVED******REMOVED******REMOVED******REMOVED***selectedResult = results.first
+***REMOVED******REMOVED******REMOVED***if case let .results(results) = searchOutcome {
+***REMOVED******REMOVED******REMOVED******REMOVED***display(searchResults: results)
+***REMOVED******REMOVED******REMOVED******REMOVED***selectedResult = results.count == 1 ? results.first : nil
 ***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***selectedResult = nil
+***REMOVED******REMOVED******REMOVED******REMOVED***display(searchResults: [])
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -167,7 +183,15 @@ public class SearchViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ this property upon user selection. This property is observable. The view should observe this
 ***REMOVED******REMOVED***/ property and update the associated GeoView's viewpoint, if configured.
 ***REMOVED***@Published
-***REMOVED***public var selectedResult: SearchResult?
+***REMOVED***public var selectedResult: SearchResult? {
+***REMOVED******REMOVED***willSet {
+***REMOVED******REMOVED******REMOVED***(selectedResult?.geoElement as? Graphic)?.isSelected = false
+***REMOVED***
+***REMOVED******REMOVED***didSet {
+***REMOVED******REMOVED******REMOVED***(selectedResult?.geoElement as? Graphic)?.isSelected = true
+***REMOVED******REMOVED******REMOVED***display(selectedResult: selectedResult)
+***REMOVED***
+***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Collection of search sources to be used. This list is maintained over time and is not nullable.
 ***REMOVED******REMOVED***/ The view should observe this list for changes. Consumers should add and remove sources from
@@ -230,7 +254,9 @@ private extension SearchViewModel {
 ***REMOVED******REMOVED******REMOVED***  let queryExtent = geoViewExtent,
 ***REMOVED******REMOVED******REMOVED***  let source = currentSource()
 ***REMOVED******REMOVED***else { return ***REMOVED***
-***REMOVED******REMOVED***
+
+***REMOVED******REMOVED******REMOVED*** We're repeating a search, don't zoom to results.
+***REMOVED******REMOVED***shouldZoomToResults = false
 ***REMOVED******REMOVED***await search(with: {
 ***REMOVED******REMOVED******REMOVED***try await source.repeatSearch(
 ***REMOVED******REMOVED******REMOVED******REMOVED***currentQuery,
@@ -331,4 +357,67 @@ extension SearchViewModel {
 ***REMOVED***
 ***REMOVED***
 
+private extension SearchViewModel {
+***REMOVED***func display(searchResults: [SearchResult]) {
+***REMOVED******REMOVED***guard let resultsOverlay = resultsOverlay else { return ***REMOVED***
+***REMOVED******REMOVED***let resultGraphics: [Graphic] = searchResults.compactMap { result in
+***REMOVED******REMOVED******REMOVED***guard let graphic = result.geoElement as? Graphic else { return nil ***REMOVED***
+***REMOVED******REMOVED******REMOVED***graphic.update(with: result)
+***REMOVED******REMOVED******REMOVED***return graphic
+***REMOVED***
+***REMOVED******REMOVED***resultsOverlay.removeAllGraphics()
+***REMOVED******REMOVED***resultsOverlay.addGraphics(resultGraphics)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Make sure we have a viewpoint to zoom to.
+***REMOVED******REMOVED***guard let viewpoint = viewpoint else { return ***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***if !resultGraphics.isEmpty,
+***REMOVED******REMOVED***   let envelope = resultsOverlay.extent,
+***REMOVED******REMOVED***   shouldZoomToResults {
+***REMOVED******REMOVED******REMOVED***let builder = EnvelopeBuilder(envelope: envelope)
+***REMOVED******REMOVED******REMOVED***builder.expand(factor: 1.1)
+***REMOVED******REMOVED******REMOVED***let targetExtent = builder.toGeometry() as! Envelope
+***REMOVED******REMOVED******REMOVED***viewpoint.wrappedValue = Viewpoint(
+***REMOVED******REMOVED******REMOVED******REMOVED***targetExtent: targetExtent
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***lastSearchExtent = targetExtent
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***viewpoint.wrappedValue = nil
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***if !shouldZoomToResults { shouldZoomToResults = true ***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***func display(selectedResult: SearchResult?) {
+***REMOVED******REMOVED***guard let selectedResult = selectedResult else { return ***REMOVED***
+***REMOVED******REMOVED***viewpoint?.wrappedValue = selectedResult.selectionViewpoint
+***REMOVED***
+***REMOVED***
+
 extension SearchViewModel.SearchOutcome: Equatable {***REMOVED***
+
+private extension Graphic {
+***REMOVED***func update(with result: SearchResult) {
+***REMOVED******REMOVED***if symbol == nil {
+***REMOVED******REMOVED******REMOVED***symbol = Symbol.searchResult()
+***REMOVED***
+***REMOVED******REMOVED***setAttributeValue(result.displayTitle, forKey: "displayTitle")
+***REMOVED******REMOVED***setAttributeValue(result.displaySubtitle, forKey: "displaySubtitle")
+***REMOVED***
+***REMOVED***
+
+private extension Symbol {
+***REMOVED******REMOVED***/ A search result marker symbol.
+***REMOVED***static func searchResult() -> MarkerSymbol {
+***REMOVED******REMOVED***let image = UIImage.mapPin
+***REMOVED******REMOVED***let symbol = PictureMarkerSymbol(image: image)
+***REMOVED******REMOVED***symbol.offsetY = Float(image.size.height / 2.0)
+***REMOVED******REMOVED***return symbol
+***REMOVED***
+***REMOVED***
+
+extension UIImage {
+***REMOVED***static var mapPin: UIImage {
+***REMOVED******REMOVED***return UIImage(named: "MapPin", in: Bundle.module, with: nil)!
+***REMOVED***
+***REMOVED***

@@ -19,18 +19,10 @@ public struct SearchView: View {
 ***REMOVED******REMOVED***/ Creates a new `SearchView`.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - searchViewModel: The view model used by `SearchView`.
-***REMOVED******REMOVED***/   - viewpoint: The `Viewpoint` used to zoom to results.
-***REMOVED******REMOVED***/   - resultsOverlay: The `GraphicsOverlay` used to display results.
-***REMOVED***public init(
-***REMOVED******REMOVED***searchViewModel: SearchViewModel? = nil,
-***REMOVED******REMOVED***viewpoint: Binding<Viewpoint?>? = nil,
-***REMOVED******REMOVED***resultsOverlay: GraphicsOverlay? = nil
-***REMOVED***) {
+***REMOVED***public init(searchViewModel: SearchViewModel? = nil) {
 ***REMOVED******REMOVED***self.searchViewModel = searchViewModel ?? SearchViewModel(
 ***REMOVED******REMOVED******REMOVED***sources: [LocatorSearchSource()]
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED***self.resultsOverlay = resultsOverlay
-***REMOVED******REMOVED***self.viewpoint = viewpoint
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The view model used by the view. The `SearchViewModel` manages state and handles the
@@ -38,12 +30,6 @@ public struct SearchView: View {
 ***REMOVED******REMOVED***/ calls methods on `SearchViewModel` in response to user action.
 ***REMOVED***@ObservedObject
 ***REMOVED***var searchViewModel: SearchViewModel
-***REMOVED***
-***REMOVED******REMOVED***/ The `Viewpoint` used to pan/zoom to results.  If `nil`, there will be no zooming to results.
-***REMOVED***private let viewpoint: Binding<Viewpoint?>?
-***REMOVED***
-***REMOVED******REMOVED***/ The `GraphicsOverlay` used to display results.  If `nil`, no results will be displayed.
-***REMOVED***private let resultsOverlay: GraphicsOverlay?
 ***REMOVED***
 ***REMOVED******REMOVED***/ The string shown in the search view when no user query is entered.
 ***REMOVED******REMOVED***/ Defaults to "Find a place or address". Note: this is set using the
@@ -81,12 +67,6 @@ public struct SearchView: View {
 ***REMOVED******REMOVED***horizontalSizeClass == .compact && verticalSizeClass == .regular
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ If `true`, will set the viewpoint to the extent of the results, plus a little buffer, which will
-***REMOVED******REMOVED***/ cause the geoView to zoom to the extent of the results.  If `false`,
-***REMOVED******REMOVED***/ no setting of the viewpoint will occur.
-***REMOVED***@State
-***REMOVED***private var shouldZoomToResults = true
-***REMOVED***
 ***REMOVED******REMOVED***/ Determines whether the results lists are displayed.
 ***REMOVED***@State
 ***REMOVED***private var isResultListHidden: Bool = false
@@ -105,7 +85,6 @@ public struct SearchView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onSubmit { searchViewModel.commitSearch() ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.submitLabel(.search)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.esriBorder(padding: EdgeInsets())
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if enableResultListView,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***   !isResultListHidden,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***   let searchOutcome = searchViewModel.searchOutcome {
@@ -139,22 +118,12 @@ public struct SearchView: View {
 ***REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED***if searchViewModel.isEligibleForRequery {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Button("Repeat Search Here") {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***shouldZoomToResults = false
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***searchViewModel.repeatSearch()
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.esriBorder()
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.listStyle(.plain)
-***REMOVED******REMOVED***.onChange(of: searchViewModel.searchOutcome, perform: { newValue in
-***REMOVED******REMOVED******REMOVED***switch newValue {
-***REMOVED******REMOVED******REMOVED***case .results(let results):
-***REMOVED******REMOVED******REMOVED******REMOVED***display(searchResults: results)
-***REMOVED******REMOVED******REMOVED***default:
-***REMOVED******REMOVED******REMOVED******REMOVED***display(searchResults: [])
-***REMOVED******REMOVED***
-***REMOVED***)
-***REMOVED******REMOVED***.onChange(of: searchViewModel.selectedResult, perform: display(selectedResult:))
 ***REMOVED******REMOVED***.onReceive(searchViewModel.$currentQuery) { _ in
 ***REMOVED******REMOVED******REMOVED***searchViewModel.updateSuggestions()
 ***REMOVED***
@@ -197,43 +166,6 @@ extension SearchView {
 ***REMOVED***
 ***REMOVED***
 
-private extension SearchView {
-***REMOVED***func display(searchResults: [SearchResult]) {
-***REMOVED******REMOVED***guard let resultsOverlay = resultsOverlay else { return ***REMOVED***
-***REMOVED******REMOVED***let resultGraphics: [Graphic] = searchResults.compactMap { result in
-***REMOVED******REMOVED******REMOVED***guard let graphic = result.geoElement as? Graphic else { return nil ***REMOVED***
-***REMOVED******REMOVED******REMOVED***graphic.update(with: result)
-***REMOVED******REMOVED******REMOVED***return graphic
-***REMOVED***
-***REMOVED******REMOVED***resultsOverlay.removeAllGraphics()
-***REMOVED******REMOVED***resultsOverlay.addGraphics(resultGraphics)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Make sure we have a viewpoint to zoom to.
-***REMOVED******REMOVED***guard let viewpoint = viewpoint else { return ***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***if !resultGraphics.isEmpty,
-***REMOVED******REMOVED***   let envelope = resultsOverlay.extent,
-***REMOVED******REMOVED***   shouldZoomToResults {
-***REMOVED******REMOVED******REMOVED***let builder = EnvelopeBuilder(envelope: envelope)
-***REMOVED******REMOVED******REMOVED***builder.expand(factor: 1.1)
-***REMOVED******REMOVED******REMOVED***let targetExtent = builder.toGeometry() as! Envelope
-***REMOVED******REMOVED******REMOVED***viewpoint.wrappedValue = Viewpoint(
-***REMOVED******REMOVED******REMOVED******REMOVED***targetExtent: targetExtent
-***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***searchViewModel.lastSearchExtent = targetExtent
-***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***viewpoint.wrappedValue = nil
-***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***if !shouldZoomToResults { shouldZoomToResults = true ***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***func display(selectedResult: SearchResult?) {
-***REMOVED******REMOVED***guard let selectedResult = selectedResult else { return ***REMOVED***
-***REMOVED******REMOVED***viewpoint?.wrappedValue = selectedResult.selectionViewpoint
-***REMOVED***
-***REMOVED***
-
 struct SearchResultList: View {
 ***REMOVED***var searchResults: [SearchResult]
 ***REMOVED***@Binding var selectedResult: SearchResult?
@@ -250,12 +182,9 @@ struct SearchResultList: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onTapGesture {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedResult = result
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if result == selectedResult {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "checkmark.circle.fill")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.accentColor)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.selected(result == selectedResult)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED*** else if searchResults.isEmpty {
@@ -349,28 +278,32 @@ extension ResultRow {
 ***REMOVED***
 ***REMOVED***
 
-private extension Graphic {
-***REMOVED***func update(with result: SearchResult) {
-***REMOVED******REMOVED***if symbol == nil {
-***REMOVED******REMOVED******REMOVED***symbol = Symbol.searchResult()
+***REMOVED***/ A modifier which displays a 2 point width border and a shadow around a view.
+struct SelectedModifier: ViewModifier {
+***REMOVED***var isSelected: Bool
+
+***REMOVED***func body(content: Content) -> some View {
+***REMOVED******REMOVED***let roundedRect = RoundedRectangle(cornerRadius: 4)
+***REMOVED******REMOVED***Group {
+***REMOVED******REMOVED******REMOVED***if isSelected {
+***REMOVED******REMOVED******REMOVED******REMOVED***content
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.background(Color.accentColor.opacity(0.8))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.clipShape(roundedRect)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.shadow(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***color: Color.accentColor.opacity(0.8),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***radius: 2
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***content
+***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***setAttributeValue(result.displayTitle, forKey: "displayTitle")
-***REMOVED******REMOVED***setAttributeValue(result.displaySubtitle, forKey: "displaySubtitle")
 ***REMOVED***
 ***REMOVED***
 
-private extension Symbol {
-***REMOVED******REMOVED***/ A search result marker symbol.
-***REMOVED***static func searchResult() -> MarkerSymbol {
-***REMOVED******REMOVED***let image = UIImage.mapPin
-***REMOVED******REMOVED***let symbol = PictureMarkerSymbol(image: image)
-***REMOVED******REMOVED***symbol.offsetY = Float(image.size.height / 2.0)
-***REMOVED******REMOVED***return symbol
-***REMOVED***
-***REMOVED***
-
-extension UIImage {
-***REMOVED***static var mapPin: UIImage {
-***REMOVED******REMOVED***return UIImage(named: "MapPin", in: Bundle.module, with: nil)!
+extension View {
+***REMOVED***func selected(
+***REMOVED******REMOVED***_ isSelected: Bool = false
+***REMOVED***) -> some View {
+***REMOVED******REMOVED***modifier(SelectedModifier(isSelected: isSelected))
 ***REMOVED***
 ***REMOVED***
