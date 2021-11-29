@@ -44,19 +44,16 @@ public class SearchViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a `SearchViewModel`.
 ***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - activeSource: Tracks the currently active search source.
 ***REMOVED******REMOVED***/   - queryArea: The search area to be used for the current query.
 ***REMOVED******REMOVED***/   - queryCenter: Defines the center for the search.
 ***REMOVED******REMOVED***/   - resultMode: Defines how many results to return.
 ***REMOVED******REMOVED***/   - sources: Collection of search sources to be used.
 ***REMOVED***public init(
-***REMOVED******REMOVED***activeSource: SearchSource? = nil,
 ***REMOVED******REMOVED***queryArea: Geometry? = nil,
 ***REMOVED******REMOVED***queryCenter: Point? = nil,
 ***REMOVED******REMOVED***resultMode: SearchResultMode = .automatic,
 ***REMOVED******REMOVED***sources: [SearchSource] = []
 ***REMOVED***) {
-***REMOVED******REMOVED***self.activeSource = activeSource
 ***REMOVED******REMOVED***self.queryArea = queryArea
 ***REMOVED******REMOVED***self.queryCenter = queryCenter
 ***REMOVED******REMOVED***self.resultMode = resultMode
@@ -64,7 +61,7 @@ public class SearchViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The active search source.  If `nil`, the first item in `sources` is used.
-***REMOVED***public var activeSource: SearchSource?
+***REMOVED***private var activeSource: SearchSource? = nil
 ***REMOVED***
 ***REMOVED******REMOVED***/ Tracks the current user-entered query. This property drives both suggestions and searches.
 ***REMOVED***@Published

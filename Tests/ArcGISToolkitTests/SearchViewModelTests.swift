@@ -40,29 +40,6 @@ class SearchViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***XCTAssertEqual(result.first, model.selectedResult)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***func testActiveSource() async throws {
-***REMOVED******REMOVED***let activeSource = LocatorSearchSource()
-***REMOVED******REMOVED***activeSource.name = "Simple Locator"
-***REMOVED******REMOVED***let model = SearchViewModel(
-***REMOVED******REMOVED******REMOVED***activeSource: activeSource,
-***REMOVED******REMOVED******REMOVED***sources: [LocatorSearchSource()]
-***REMOVED******REMOVED***)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***model.currentQuery = "Magers & Quinn Booksellers"
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***model.commitSearch()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***let results = try await searchResults(model)
-***REMOVED******REMOVED***let result = try XCTUnwrap(results?.first)
-***REMOVED******REMOVED***XCTAssertEqual(result.owningSource.name, activeSource.name)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***model.updateSuggestions()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***let suggestions = try await searchSuggestions(model, dropFirst: true)
-***REMOVED******REMOVED***let suggestion = try XCTUnwrap(suggestions?.first)
-***REMOVED******REMOVED***XCTAssertEqual(suggestion.owningSource.name, activeSource.name)
-***REMOVED***
-***REMOVED***
 ***REMOVED***func testCommitSearch() async throws {
 ***REMOVED******REMOVED***let model = SearchViewModel(sources: [LocatorSearchSource()])
 ***REMOVED******REMOVED***
