@@ -51,7 +51,7 @@ struct SearchExampleView: View {
                 
                 // Reset `searchResultViewpoint` here when the user pans/zooms
                 // the map, so if the user commits the same search with the
-                // same result, the Map will pan/zoom to the result.  Otherwise
+                // same result, the Map will pan/zoom to the result. Otherwise,
                 // `searchResultViewpoint` doesn't change which doesn't
                 // redraw the map with the new viewpoint.
                 searchResultViewpoint = nil

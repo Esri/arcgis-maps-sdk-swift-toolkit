@@ -36,8 +36,8 @@ public struct SearchView: View {
     /// `prompt` modifier.
     private var prompt: String = "Find a place or address"
     
-    /// Determines whether a built-in result view will be shown. Defaults to true.
-    /// If false, the result display/selection list is not shown. Set to false if you want to hide the results
+    /// Determines whether a built-in result view will be shown. Defaults to `true`.
+    /// If `false`, the result display/selection list is not shown. Set to false if you want to hide the results
     /// or define a custom result list. You might use a custom result list to show results in a separate list,
     /// disconnected from the rest of the search view.
     /// Note: this is set using the `enableResultListView` modifier.
@@ -54,7 +54,7 @@ public struct SearchView: View {
     private var verticalSizeClass: UserInterfaceSizeClass?
     
     /// The width of the search bar, taking into account the horizontal and vertical size classes
-    /// of the device.  This will cause the search field to display full-width on an iPhone in portrait
+    /// of the device. This will cause the search field to display full-width on an iPhone in portrait
     /// orientation (and certain iPad multitasking configurations) and limit the width to `360` in other cases.
     private var searchBarWidth: CGFloat? {
         horizontalSizeClass == .compact && verticalSizeClass == .regular ? nil : 360
@@ -166,9 +166,13 @@ extension SearchView {
     }
 }
 
+/// A View displaying the list of search results.
 struct SearchResultList: View {
+    /// The array of search results to display.
     var searchResults: [SearchResult]
+    /// The result the user selects.
     @Binding var selectedResult: SearchResult?
+    /// The message to display when there are no results.
     var noResultsMessage: String
     
     var body: some View {
@@ -194,9 +198,13 @@ struct SearchResultList: View {
     }
 }
 
+/// A View displaying the list of search suggestion results.
 struct SearchSuggestionList: View {
+    /// The array of suggestion results to display.
     var suggestionResults: [SearchSuggestion]
+    /// The suggestion the user selects.
     @Binding var currentSuggestion: SearchSuggestion?
+    /// The message to display when there are no results.
     var noResultsMessage: String
     
     var body: some View {
@@ -215,7 +223,9 @@ struct SearchSuggestionList: View {
     }
 }
 
+/// A View displaying the "no results" message when there are no search or suggestion results.
 struct NoResultsView: View {
+    /// The message to display when there are no results.
     var message: String
     
     var body: some View {
@@ -226,9 +236,13 @@ struct NoResultsView: View {
     }
 }
 
+/// A view representing a row containing one search or suggestion result.
 struct ResultRow: View {
+    /// The title of the result.
     var title: String
+    /// Additional result information, if available.
     var subtitle: String = ""
+    /// The image to display for the result.
     var image: AnyView
     
     var body: some View {
@@ -248,6 +262,8 @@ struct ResultRow: View {
 }
 
 extension ResultRow {
+    /// Creates a `ResultRow` from a search suggestion.
+    /// - Parameter searchSuggestion: The search suggestion displayed in the row.
     init(searchSuggestion: SearchSuggestion) {
         self.init(
             title: searchSuggestion.displayTitle,
@@ -267,6 +283,8 @@ extension ResultRow {
         )
     }
     
+    /// Creates a `ResultRow` from a search result.
+    /// - Parameter searchResult: The search result displayed in the view.
     init(searchResult: SearchResult) {
         self.init(
             title: searchResult.displayTitle,
@@ -279,8 +297,9 @@ extension ResultRow {
     }
 }
 
-/// A modifier which displays a 2 point width border and a shadow around a view.
+/// A modifier which displays a background and shadow for a view.  Used to represent a selected view.
 struct SelectedModifier: ViewModifier {
+    /// `true` if the view should display as selected, `false` otherwise.
     var isSelected: Bool
     
     func body(content: Content) -> some View {
@@ -300,6 +319,9 @@ struct SelectedModifier: ViewModifier {
 }
 
 extension View {
+    /// View modifier used to denote the view is selected.
+    /// - Parameter isSelected: `true` if the view is selected, `false` otherwise.
+    /// - Returns: The view being modified.
     func selected(
         _ isSelected: Bool = false
     ) -> some View {

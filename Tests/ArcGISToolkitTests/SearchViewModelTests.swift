@@ -134,6 +134,9 @@ class SearchViewModelTests: XCTestCase {
         model.geoViewExtent = Polygon.chippewaFalls.extent
         model.currentQuery = "Coffee"
         
+        // This is necessary for the model to compute `isEligibleForRequery`.
+        model.isGeoViewNavigating = true
+        
         model.commitSearch()
         
         _ = try await searchResults(model)

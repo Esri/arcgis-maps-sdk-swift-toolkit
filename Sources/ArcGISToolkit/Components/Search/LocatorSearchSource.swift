@@ -104,7 +104,7 @@ public class LocatorSearchSource: ObservableObject, SearchSource {
             parameters: geocodeParameters
         )
         
-        // Convert to SearchResults and return.
+        // Convert to an array of `SearchResult` objects and return.
         return geocodeResults.map {
             SearchResult(geocodeResult: $0, searchSource: self)
         }
@@ -122,15 +122,15 @@ public class LocatorSearchSource: ObservableObject, SearchSource {
             searchText: query,
             parameters: suggestParameters
         )
-        // Convert to SearchSuggestions and return.
+        // Convert to an array of `SearchSuggestion` objects and return.
         return geocodeResults.map {
             SearchSuggestion(suggestResult: $0, searchSource: self)
         }
     }
 }
 
-extension LocatorSearchSource {
-    private func internalSearch(
+private extension LocatorSearchSource {
+    func internalSearch(
         _ query: String,
         searchArea: Geometry?,
         preferredSearchLocation: Point? = nil
