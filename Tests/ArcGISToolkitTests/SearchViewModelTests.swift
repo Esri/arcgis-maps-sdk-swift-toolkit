@@ -134,6 +134,9 @@ class SearchViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***model.geoViewExtent = Polygon.chippewaFalls.extent
 ***REMOVED******REMOVED***model.currentQuery = "Coffee"
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** This is necessary for the model to compute `isEligibleForRequery`.
+***REMOVED******REMOVED***model.isGeoViewNavigating = true
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***model.commitSearch()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***_ = try await searchResults(model)

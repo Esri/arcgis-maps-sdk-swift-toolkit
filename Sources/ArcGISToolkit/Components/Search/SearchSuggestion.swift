@@ -58,8 +58,6 @@ public struct SearchSuggestion {
 ***REMOVED******REMOVED***/ is likely to be `nil` when using custom `SearchSource` implementations.
 ***REMOVED***public let suggestResult: SuggestResult?
 ***REMOVED***
-***REMOVED******REMOVED***/ The stable identity of the entity associated with this instance.
-***REMOVED******REMOVED***/ Required by `Identifiable` protocol.
 ***REMOVED***public let id = UUID()
 ***REMOVED***
 
@@ -72,7 +70,7 @@ extension SearchSuggestion: Equatable {
 ***REMOVED***
 
 extension SearchSuggestion: Hashable {
-***REMOVED******REMOVED***/ Note:  We're not hashing `suggestResult` as `SearchSuggestion` is created from
+***REMOVED******REMOVED***/ Note: We're not hashing `suggestResult` as `SearchSuggestion` is created from
 ***REMOVED******REMOVED***/ a `SuggestResult` and `suggestResult` will be different for two sepate geocode
 ***REMOVED******REMOVED***/ operations even though they represent the same suggestion.
 ***REMOVED***public func hash(into hasher: inout Hasher) {

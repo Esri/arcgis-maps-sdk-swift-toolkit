@@ -104,7 +104,7 @@ public class LocatorSearchSource: ObservableObject, SearchSource {
 ***REMOVED******REMOVED******REMOVED***parameters: geocodeParameters
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Convert to SearchResults and return.
+***REMOVED******REMOVED******REMOVED*** Convert to an array of `SearchResult` objects and return.
 ***REMOVED******REMOVED***return geocodeResults.map {
 ***REMOVED******REMOVED******REMOVED***SearchResult(geocodeResult: $0, searchSource: self)
 ***REMOVED***
@@ -122,15 +122,15 @@ public class LocatorSearchSource: ObservableObject, SearchSource {
 ***REMOVED******REMOVED******REMOVED***searchText: query,
 ***REMOVED******REMOVED******REMOVED***parameters: suggestParameters
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED*** Convert to SearchSuggestions and return.
+***REMOVED******REMOVED******REMOVED*** Convert to an array of `SearchSuggestion` objects and return.
 ***REMOVED******REMOVED***return geocodeResults.map {
 ***REMOVED******REMOVED******REMOVED***SearchSuggestion(suggestResult: $0, searchSource: self)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
-extension LocatorSearchSource {
-***REMOVED***private func internalSearch(
+private extension LocatorSearchSource {
+***REMOVED***func internalSearch(
 ***REMOVED******REMOVED***_ query: String,
 ***REMOVED******REMOVED***searchArea: Geometry?,
 ***REMOVED******REMOVED***preferredSearchLocation: Point? = nil

@@ -36,8 +36,8 @@ public struct SearchView: View {
 ***REMOVED******REMOVED***/ `prompt` modifier.
 ***REMOVED***private var prompt: String = "Find a place or address"
 ***REMOVED***
-***REMOVED******REMOVED***/ Determines whether a built-in result view will be shown. Defaults to true.
-***REMOVED******REMOVED***/ If false, the result display/selection list is not shown. Set to false if you want to hide the results
+***REMOVED******REMOVED***/ Determines whether a built-in result view will be shown. Defaults to `true`.
+***REMOVED******REMOVED***/ If `false`, the result display/selection list is not shown. Set to false if you want to hide the results
 ***REMOVED******REMOVED***/ or define a custom result list. You might use a custom result list to show results in a separate list,
 ***REMOVED******REMOVED***/ disconnected from the rest of the search view.
 ***REMOVED******REMOVED***/ Note: this is set using the `enableResultListView` modifier.
@@ -54,7 +54,7 @@ public struct SearchView: View {
 ***REMOVED***private var verticalSizeClass: UserInterfaceSizeClass?
 ***REMOVED***
 ***REMOVED******REMOVED***/ The width of the search bar, taking into account the horizontal and vertical size classes
-***REMOVED******REMOVED***/ of the device.  This will cause the search field to display full-width on an iPhone in portrait
+***REMOVED******REMOVED***/ of the device. This will cause the search field to display full-width on an iPhone in portrait
 ***REMOVED******REMOVED***/ orientation (and certain iPad multitasking configurations) and limit the width to `360` in other cases.
 ***REMOVED***private var searchBarWidth: CGFloat? {
 ***REMOVED******REMOVED***horizontalSizeClass == .compact && verticalSizeClass == .regular ? nil : 360
@@ -166,9 +166,13 @@ extension SearchView {
 ***REMOVED***
 ***REMOVED***
 
+***REMOVED***/ A View displaying the list of search results.
 struct SearchResultList: View {
+***REMOVED******REMOVED***/ The array of search results to display.
 ***REMOVED***var searchResults: [SearchResult]
+***REMOVED******REMOVED***/ The result the user selects.
 ***REMOVED***@Binding var selectedResult: SearchResult?
+***REMOVED******REMOVED***/ The message to display when there are no results.
 ***REMOVED***var noResultsMessage: String
 ***REMOVED***
 ***REMOVED***var body: some View {
@@ -194,9 +198,13 @@ struct SearchResultList: View {
 ***REMOVED***
 ***REMOVED***
 
+***REMOVED***/ A View displaying the list of search suggestion results.
 struct SearchSuggestionList: View {
+***REMOVED******REMOVED***/ The array of suggestion results to display.
 ***REMOVED***var suggestionResults: [SearchSuggestion]
+***REMOVED******REMOVED***/ The suggestion the user selects.
 ***REMOVED***@Binding var currentSuggestion: SearchSuggestion?
+***REMOVED******REMOVED***/ The message to display when there are no results.
 ***REMOVED***var noResultsMessage: String
 ***REMOVED***
 ***REMOVED***var body: some View {
@@ -215,7 +223,9 @@ struct SearchSuggestionList: View {
 ***REMOVED***
 ***REMOVED***
 
+***REMOVED***/ A View displaying the "no results" message when there are no search or suggestion results.
 struct NoResultsView: View {
+***REMOVED******REMOVED***/ The message to display when there are no results.
 ***REMOVED***var message: String
 ***REMOVED***
 ***REMOVED***var body: some View {
@@ -226,9 +236,13 @@ struct NoResultsView: View {
 ***REMOVED***
 ***REMOVED***
 
+***REMOVED***/ A view representing a row containing one search or suggestion result.
 struct ResultRow: View {
+***REMOVED******REMOVED***/ The title of the result.
 ***REMOVED***var title: String
+***REMOVED******REMOVED***/ Additional result information, if available.
 ***REMOVED***var subtitle: String = ""
+***REMOVED******REMOVED***/ The image to display for the result.
 ***REMOVED***var image: AnyView
 ***REMOVED***
 ***REMOVED***var body: some View {
@@ -248,6 +262,8 @@ struct ResultRow: View {
 ***REMOVED***
 
 extension ResultRow {
+***REMOVED******REMOVED***/ Creates a `ResultRow` from a search suggestion.
+***REMOVED******REMOVED***/ - Parameter searchSuggestion: The search suggestion displayed in the row.
 ***REMOVED***init(searchSuggestion: SearchSuggestion) {
 ***REMOVED******REMOVED***self.init(
 ***REMOVED******REMOVED******REMOVED***title: searchSuggestion.displayTitle,
@@ -267,6 +283,8 @@ extension ResultRow {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ Creates a `ResultRow` from a search result.
+***REMOVED******REMOVED***/ - Parameter searchResult: The search result displayed in the view.
 ***REMOVED***init(searchResult: SearchResult) {
 ***REMOVED******REMOVED***self.init(
 ***REMOVED******REMOVED******REMOVED***title: searchResult.displayTitle,
@@ -279,8 +297,9 @@ extension ResultRow {
 ***REMOVED***
 ***REMOVED***
 
-***REMOVED***/ A modifier which displays a 2 point width border and a shadow around a view.
+***REMOVED***/ A modifier which displays a background and shadow for a view.  Used to represent a selected view.
 struct SelectedModifier: ViewModifier {
+***REMOVED******REMOVED***/ `true` if the view should display as selected, `false` otherwise.
 ***REMOVED***var isSelected: Bool
 ***REMOVED***
 ***REMOVED***func body(content: Content) -> some View {
@@ -300,6 +319,9 @@ struct SelectedModifier: ViewModifier {
 ***REMOVED***
 
 extension View {
+***REMOVED******REMOVED***/ View modifier used to denote the view is selected.
+***REMOVED******REMOVED***/ - Parameter isSelected: `true` if the view is selected, `false` otherwise.
+***REMOVED******REMOVED***/ - Returns: The view being modified.
 ***REMOVED***func selected(
 ***REMOVED******REMOVED***_ isSelected: Bool = false
 ***REMOVED***) -> some View {

@@ -11,10 +11,8 @@
 ***REMOVED*** See the License for the specific language governing permissions and
 ***REMOVED*** limitations under the License.
 
-import Swift
 ***REMOVED***
 ***REMOVED***
-import Combine
 
 ***REMOVED***/ Performs searches and manages search state for a search, or optionally without a UI connection.
 @MainActor
@@ -125,32 +123,32 @@ public class SearchViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ `true` when the geoView is navigating, `false` otherwise.  Set by the external client.
+***REMOVED******REMOVED***/ `true` when the geoView is navigating, `false` otherwise. Set by the external client.
 ***REMOVED***public var isGeoViewNavigating: Bool = false
 ***REMOVED***
-***REMOVED******REMOVED***/ The `Viewpoint` used to pan/zoom to results.  If `nil`, there will be no zooming to results.
+***REMOVED******REMOVED***/ The `Viewpoint` used to pan/zoom to results. If `nil`, there will be no zooming to results.
 ***REMOVED***public var viewpoint: Binding<Viewpoint?>? = nil
 ***REMOVED***
-***REMOVED******REMOVED***/ The `GraphicsOverlay` used to display results.  If `nil`, no results will be displayed.
+***REMOVED******REMOVED***/ The `GraphicsOverlay` used to display results. If `nil`, no results will be displayed.
 ***REMOVED***public var resultsOverlay: GraphicsOverlay? = nil
 ***REMOVED***
 ***REMOVED******REMOVED***/ If `true`, will set the viewpoint to the extent of the results, plus a little buffer, which will
-***REMOVED******REMOVED***/ cause the geoView to zoom to the extent of the results.  If `false`,
+***REMOVED******REMOVED***/ cause the geoView to zoom to the extent of the results. If `false`,
 ***REMOVED******REMOVED***/ no setting of the viewpoint will occur.
 ***REMOVED***@Published
 ***REMOVED***private var shouldZoomToResults = true
 ***REMOVED***
-***REMOVED******REMOVED***/ `true` if the extent has changed by a set amount after a `Search` or `AcceptSuggestion` call.
-***REMOVED******REMOVED***/ This property is used by the view to enable 'Repeat search here' functionality. This property is
+***REMOVED******REMOVED***/ `true` if the extent has changed by a set amount after a `Search` or `AcceptSuggestion`
+***REMOVED******REMOVED***/ call. This property is used by the view to enable 'Repeat search here' functionality. This property is
 ***REMOVED******REMOVED***/ observable, and the view should use it to hide and show the 'repeat search' button.
-***REMOVED******REMOVED***/ Changes to this property are driven by changes to the `geoViewExtent` property.  This value will be
-***REMOVED******REMOVED***/ true if the extent center changes by more than 25% of the average of the extent's height and width
+***REMOVED******REMOVED***/ Changes to this property are driven by changes to the `geoViewExtent` property. This value will be
+***REMOVED******REMOVED***/ `true` if the extent center changes by more than 25% of the average of the extent's height and width
 ***REMOVED******REMOVED***/ at the time of the last search or if the extent width/height changes by the same amount.
 ***REMOVED***@Published
 ***REMOVED***public private(set) var isEligibleForRequery: Bool = false
 ***REMOVED***
 ***REMOVED******REMOVED***/ The search area to be used for the current query. Results will be limited to those
-***REMOVED******REMOVED***/ within `QueryArea`.  Defaults to `nil`.
+***REMOVED******REMOVED***/ within `QueryArea`. Defaults to `nil`.
 ***REMOVED***public var queryArea: Geometry? = nil
 ***REMOVED***
 ***REMOVED******REMOVED***/ Defines the center for the search. For most use cases, this should be updated by the view
@@ -162,7 +160,7 @@ public class SearchViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ (driven by the `isCollection` property).
 ***REMOVED***public var resultMode: SearchResultMode = .automatic
 ***REMOVED***
-***REMOVED******REMOVED***/ The collection of search and suggestion results.  A `nil` value means no query has been made.
+***REMOVED******REMOVED***/ The collection of search and suggestion results. A `nil` value means no query has been made.
 ***REMOVED***@Published
 ***REMOVED***public private(set) var searchOutcome: SearchOutcome? {
 ***REMOVED******REMOVED***didSet {
@@ -171,6 +169,7 @@ public class SearchViewModel: ObservableObject {
 ***REMOVED******REMOVED******REMOVED******REMOVED***selectedResult = results.count == 1 ? results.first : nil
 ***REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***display(searchResults: [])
+***REMOVED******REMOVED******REMOVED******REMOVED***selectedResult = nil
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -193,10 +192,10 @@ public class SearchViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ Collection of search sources to be used. This list is maintained over time and is not nullable.
 ***REMOVED******REMOVED***/ The view should observe this list for changes. Consumers should add and remove sources from
 ***REMOVED******REMOVED***/ this list as needed.
-***REMOVED******REMOVED***/ NOTE:  only the first source is currently used; multiple sources are not yet supported.
+***REMOVED******REMOVED***/ NOTE: Only the first source is currently used; multiple sources are not yet supported.
 ***REMOVED***public var sources: [SearchSource] = []
 ***REMOVED***
-***REMOVED******REMOVED***/ The currently executing async task.  `currentTask` will be cancelled
+***REMOVED******REMOVED***/ The currently executing async task. `currentTask` will be cancelled
 ***REMOVED******REMOVED***/ prior to starting another async task.
 ***REMOVED***private var currentTask: Task<Void, Never>? {
 ***REMOVED******REMOVED***willSet {
@@ -219,7 +218,7 @@ public class SearchViewModel: ObservableObject {
 ***REMOVED***public func updateSuggestions() {
 ***REMOVED******REMOVED***guard currentSuggestion == nil
 ***REMOVED******REMOVED***else {
-***REMOVED******REMOVED******REMOVED******REMOVED*** don't update suggestions if currently searching for one
+***REMOVED******REMOVED******REMOVED******REMOVED*** Don't update suggestions if currently searching for one.
 ***REMOVED******REMOVED******REMOVED***return
 ***REMOVED***
 ***REMOVED******REMOVED***
@@ -227,6 +226,7 @@ public class SearchViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@Published
+***REMOVED******REMOVED***/ The suggestion currently selected by the user.
 ***REMOVED***public var currentSuggestion: SearchSuggestion? {
 ***REMOVED******REMOVED***didSet {
 ***REMOVED******REMOVED******REMOVED***if let currentSuggestion = currentSuggestion {
@@ -246,6 +246,7 @@ public class SearchViewModel: ObservableObject {
 ***REMOVED***
 
 private extension SearchViewModel {
+***REMOVED******REMOVED***/ Method to execute an async `repeatSearch` operation.
 ***REMOVED***func doRepeatSearch() async {
 ***REMOVED******REMOVED***guard !currentQuery.trimmingCharacters(in: .whitespaces).isEmpty,
 ***REMOVED******REMOVED******REMOVED***  let queryExtent = geoViewExtent,
@@ -262,6 +263,7 @@ private extension SearchViewModel {
 ***REMOVED***)
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ Method to execute an async `search` operation.
 ***REMOVED***func doSearch() async {
 ***REMOVED******REMOVED***guard !currentQuery.trimmingCharacters(in: .whitespaces).isEmpty,
 ***REMOVED******REMOVED******REMOVED***  let source = currentSource()
@@ -276,6 +278,7 @@ private extension SearchViewModel {
 ***REMOVED*** )
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ Method to execute an async `suggest` operation.
 ***REMOVED***func doUpdateSuggestions() async {
 ***REMOVED******REMOVED***guard !currentQuery.trimmingCharacters(in: .whitespaces).isEmpty,
 ***REMOVED******REMOVED******REMOVED***  let source = currentSource()
@@ -295,32 +298,46 @@ private extension SearchViewModel {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ Method to execute an async `search` operation using a search suggestion..
+***REMOVED******REMOVED***/ - Parameter searchSuggestion: The suggestion to search for.
 ***REMOVED***func doAcceptSuggestion(_ searchSuggestion: SearchSuggestion) async {
-***REMOVED******REMOVED***await search(with: {
-***REMOVED******REMOVED******REMOVED***try await searchSuggestion.owningSource.search(
-***REMOVED******REMOVED******REMOVED******REMOVED***searchSuggestion,
-***REMOVED******REMOVED******REMOVED******REMOVED***searchArea: queryArea,
-***REMOVED******REMOVED******REMOVED******REMOVED***preferredSearchLocation: queryCenter
-***REMOVED******REMOVED******REMOVED***)
-***REMOVED***)
+***REMOVED******REMOVED***await search(
+***REMOVED******REMOVED******REMOVED***with: {
+***REMOVED******REMOVED******REMOVED******REMOVED***try await searchSuggestion.owningSource.search(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***searchSuggestion,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***searchArea: queryArea,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***preferredSearchLocation: queryCenter
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***,
+***REMOVED******REMOVED******REMOVED***isCollection: searchSuggestion.isCollection
+***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** once we are done searching for the suggestion, then reset it to nil
 ***REMOVED******REMOVED***currentSuggestion = nil
 ***REMOVED***
 ***REMOVED***
-***REMOVED***func search(with action: () async throws -> [SearchResult]) async {
-***REMOVED******REMOVED***do {
-***REMOVED******REMOVED******REMOVED******REMOVED*** User is performing a search, so set `lastSearchExtent`.
-***REMOVED******REMOVED******REMOVED***lastSearchExtent = geoViewExtent
-***REMOVED******REMOVED******REMOVED***try await process(searchResults: action())
-***REMOVED*** catch is CancellationError {
-***REMOVED******REMOVED******REMOVED***searchOutcome = nil
-***REMOVED*** catch {
-***REMOVED******REMOVED******REMOVED***searchOutcome = .failure(error.localizedDescription)
+***REMOVED******REMOVED***/ Method to execut a search action and process the results.
+***REMOVED******REMOVED***/ - Parameter action: The action to perform prior to processing results.
+***REMOVED******REMOVED***/ - Parameter isCollection: `true` if the results are based on a collection search.
+***REMOVED***func search(
+***REMOVED******REMOVED***with action: () async throws -> [SearchResult],
+***REMOVED******REMOVED***isCollection: Bool = true) async {
+***REMOVED******REMOVED******REMOVED***do {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** User is performing a search, so set `lastSearchExtent`.
+***REMOVED******REMOVED******REMOVED******REMOVED***lastSearchExtent = geoViewExtent
+***REMOVED******REMOVED******REMOVED******REMOVED***try await process(searchResults: action(), isCollection: isCollection)
+***REMOVED******REMOVED*** catch is CancellationError {
+***REMOVED******REMOVED******REMOVED******REMOVED***searchOutcome = nil
+***REMOVED******REMOVED*** catch {
+***REMOVED******REMOVED******REMOVED******REMOVED***searchOutcome = .failure(error.localizedDescription)
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED***
-***REMOVED***func process(searchResults: [SearchResult], isCollection: Bool = true) {
+***REMOVED******REMOVED***/ Method to process search results based on the current `resultMode`.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - searchResults: The array of search results to process.
+***REMOVED******REMOVED***/   - isCollection: `true` if the results are based on a collection search.
+***REMOVED***func process(searchResults: [SearchResult], isCollection: Bool) {
 ***REMOVED******REMOVED***let effectiveResults: [SearchResult]
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***switch resultMode {
