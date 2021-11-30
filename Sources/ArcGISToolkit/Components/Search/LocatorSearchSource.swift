@@ -21,8 +21,8 @@ public class LocatorSearchSource: ObservableObject, SearchSource {
     /// - Parameters:
     ///   - name: The name to show when presenting this source in the UI.
     ///   - locatorTask: The `LocatorTask` to use for searching.
-    ///   - maximumResults: The maximum results to return when performing a search. Most sources default to 6.
-    ///   - maximumSuggestions: The maximum suggestions to return. Most sources default to 6.
+    ///   - maximumResults: The maximum results to return when performing a search. Most sources default to `6`.
+    ///   - maximumSuggestions: The maximum suggestions to return. Most sources default to `6`.
     public init(
         name: String = "Locator",
         locatorTask: LocatorTask = LocatorTask(
@@ -44,24 +44,16 @@ public class LocatorSearchSource: ObservableObject, SearchSource {
     /// The name to show when presenting this source in the UI.
     public var name: String
     
-    /// The maximum results to return when performing a search. Most sources default to 6
+    /// The maximum results to return when performing a search. Most sources default to `6`.
     public var maximumResults: Int32 {
-        get {
-            geocodeParameters.maxResults
-        }
-        set {
-            geocodeParameters.maxResults = newValue
-        }
+        get { geocodeParameters.maxResults }
+        set { geocodeParameters.maxResults = newValue }
     }
     
-    /// The maximum suggestions to return. Most sources default to 6.
+    /// The maximum suggestions to return. Most sources default to `6`.
     public var maximumSuggestions: Int32 {
-        get {
-            suggestParameters.maxResults
-        }
-        set {
-            suggestParameters.maxResults = newValue
-        }
+        get { suggestParameters.maxResults }
+        set { suggestParameters.maxResults = newValue }
     }
     
     /// The locator used by this search source.
@@ -76,22 +68,22 @@ public class LocatorSearchSource: ObservableObject, SearchSource {
     public let suggestParameters: SuggestParameters = SuggestParameters()
     
     public func repeatSearch(
-        _ queryString: String,
+        _ query: String,
         searchExtent: Envelope
     ) async throws -> [SearchResult] {
         try await internalSearch(
-            queryString,
+            query,
             searchArea: searchExtent
         )
     }
     
     public func search(
-        _ queryString: String,
+        _ query: String,
         searchArea: Geometry? = nil,
         preferredSearchLocation: Point? = nil
     ) async throws -> [SearchResult] {
         try await internalSearch(
-            queryString,
+            query,
             searchArea: searchArea,
             preferredSearchLocation: preferredSearchLocation
         )
@@ -112,14 +104,14 @@ public class LocatorSearchSource: ObservableObject, SearchSource {
             parameters: geocodeParameters
         )
         
-        // Convert to SearchResults and return.
+        // Convert to an array of `SearchResult` objects and return.
         return geocodeResults.map {
             SearchResult(geocodeResult: $0, searchSource: self)
         }
     }
     
     public func suggest(
-        _ queryString: String,
+        _ query: String,
         searchArea: Geometry? = nil,
         preferredSearchLocation: Point? = nil
     ) async throws -> [SearchSuggestion] {
@@ -127,19 +119,19 @@ public class LocatorSearchSource: ObservableObject, SearchSource {
         suggestParameters.preferredSearchLocation = preferredSearchLocation
         
         let geocodeResults = try await locatorTask.suggest(
-            searchText: queryString,
+            searchText: query,
             parameters: suggestParameters
         )
-        // Convert to SearchSuggestions and return.
+        // Convert to an array of `SearchSuggestion` objects and return.
         return geocodeResults.map {
             SearchSuggestion(suggestResult: $0, searchSource: self)
         }
     }
 }
 
-extension LocatorSearchSource {
-    private func internalSearch(
-        _ queryString: String,
+private extension LocatorSearchSource {
+    func internalSearch(
+        _ query: String,
         searchArea: Geometry?,
         preferredSearchLocation: Point? = nil
     ) async throws -> [SearchResult] {
@@ -147,7 +139,7 @@ extension LocatorSearchSource {
         geocodeParameters.preferredSearchLocation = preferredSearchLocation
         
         let geocodeResults = try await locatorTask.geocode(
-            searchText: queryString,
+            searchText: query,
             parameters: geocodeParameters
         )
         

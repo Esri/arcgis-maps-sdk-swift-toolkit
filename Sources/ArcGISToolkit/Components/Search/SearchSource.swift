@@ -18,32 +18,32 @@ public protocol SearchSource {
     /// Name to show when presenting this source in the UI.
     var name: String { get set }
     
-    /// The maximum results to return when performing a search. Most sources default to 6.
+    /// The maximum results to return when performing a search. Most sources default to `6`.
     var maximumResults: Int32 { get set }
     
-    /// The maximum suggestions to return. Most sources default to 6.
+    /// The maximum suggestions to return. Most sources default to `6`.
     var maximumSuggestions: Int32 { get set }
     
     /// Returns the search suggestions for the specified query.
     /// - Parameters:
-    ///   - queryString: The query for which to provide search suggestions.
+    ///   - query: The query for which to provide search suggestions.
     ///   - searchArea: The area used to limit results.
     ///   - preferredSearchLocation: The location used as a starting point for searches.
     /// - Returns: An array of search suggestions.
     func suggest(
-        _ queryString: String,
+        _ query: String,
         searchArea: Geometry?,
         preferredSearchLocation: Point?
     ) async throws -> [SearchSuggestion]
     
     /// Gets search results.
     /// - Parameters:
-    ///   - queryString: Text to be used for query.
+    ///   - query: Text to be used for query.
     ///   - searchArea: The area used to limit results.
     ///   - preferredSearchLocation: The location used as a starting point for searches.
-    /// - Returns: Array of `SearchResult`s
+    /// - Returns: An array of search results.
     func search(
-        _ queryString: String,
+        _ query: String,
         searchArea: Geometry?,
         preferredSearchLocation: Point?
     ) async throws -> [SearchResult]
@@ -62,11 +62,11 @@ public protocol SearchSource {
     
     /// Repeats the last search.
     /// - Parameters:
-    ///   - queryString: Text to be used for query.
+    ///   - query: Text to be used for query.
     ///   - searchExtent: Extent used to limit the results.
-    /// - Returns: Array of `SearchResult`s
+    /// - Returns: An array of search results.
     func repeatSearch(
-        _ queryString: String,
+        _ query: String,
         searchExtent: Envelope
     ) async throws -> [SearchResult]
 }

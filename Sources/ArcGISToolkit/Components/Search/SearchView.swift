@@ -12,26 +12,17 @@
 // limitations under the License.
 
 import SwiftUI
-import Combine
 import ArcGIS
 
-/// SearchView presents a search experience, powered by an underlying SearchViewModel.
+/// `SearchView` presents a search experience, powered by an underlying `SearchViewModel`.
 public struct SearchView: View {
     /// Creates a new `SearchView`.
     /// - Parameters:
     ///   - searchViewModel: The view model used by `SearchView`.
-    ///   - viewpoint: The `Viewpoint` used to zoom to results.
-    ///   - resultsOverlay: The `GraphicsOverlay` used to display results.
-    public init(
-        searchViewModel: SearchViewModel? = nil,
-        viewpoint: Binding<Viewpoint?>? = nil,
-        resultsOverlay: GraphicsOverlay? = nil
-    ) {
+    public init(searchViewModel: SearchViewModel? = nil) {
         self.searchViewModel = searchViewModel ?? SearchViewModel(
             sources: [LocatorSearchSource()]
         )
-        self.resultsOverlay = resultsOverlay
-        self.viewpoint = viewpoint
     }
     
     /// The view model used by the view. The `SearchViewModel` manages state and handles the
@@ -40,25 +31,19 @@ public struct SearchView: View {
     @ObservedObject
     var searchViewModel: SearchViewModel
     
-    /// The `Viewpoint` used to pan/zoom to results.  If `nil`, there will be no zooming to results.
-    private let viewpoint: Binding<Viewpoint?>?
-    
-    /// The `GraphicsOverlay` used to display results.  If `nil`, no results will be displayed.
-    private let resultsOverlay: GraphicsOverlay?
-    
     /// The string shown in the search view when no user query is entered.
     /// Defaults to "Find a place or address". Note: this is set using the
-    /// `searchFieldPrompt` modifier.
-    private var searchFieldPrompt: String = "Find a place or address"
+    /// `prompt` modifier.
+    private var prompt: String = "Find a place or address"
     
-    /// Determines whether a built-in result view will be shown. Defaults to true.
-    /// If false, the result display/selection list is not shown. Set to false if you want to hide the results
+    /// Determines whether a built-in result view will be shown. Defaults to `true`.
+    /// If `false`, the result display/selection list is not shown. Set to false if you want to hide the results
     /// or define a custom result list. You might use a custom result list to show results in a separate list,
     /// disconnected from the rest of the search view.
     /// Note: this is set using the `enableResultListView` modifier.
     private var enableResultListView = true
     
-    /// Message to show when there are no results or suggestions.  Defaults to "No results found".
+    /// Message to show when there are no results or suggestions. Defaults to "No results found".
     /// Note: this is set using the `noResultsMessage` modifier.
     private var noResultsMessage = "No results found"
     
@@ -68,78 +53,77 @@ public struct SearchView: View {
     @Environment(\.verticalSizeClass)
     private var verticalSizeClass: UserInterfaceSizeClass?
     
+    /// The width of the search bar, taking into account the horizontal and vertical size classes
+    /// of the device. This will cause the search field to display full-width on an iPhone in portrait
+    /// orientation (and certain iPad multitasking configurations) and limit the width to `360` in other cases.
     private var searchBarWidth: CGFloat? {
         horizontalSizeClass == .compact && verticalSizeClass == .regular ? nil : 360
     }
     
-    @State
-    private var shouldZoomToResults = true
+    /// If `true`, will draw the results list view at half height, exposing a portion of the
+    /// underlying map below the list on an iPhone in portrait orientation (and certain iPad multitasking
+    /// configurations).  If `false`, will draw the results list view full size.
+    private var useHalfHeightResults: Bool {
+        horizontalSizeClass == .compact && verticalSizeClass == .regular
+    }
     
     /// Determines whether the results lists are displayed.
     @State
-    private var showResultListView: Bool = true
+    private var isResultListHidden: Bool = false
     
     public var body: some View {
         VStack {
-            HStack {
-                Spacer()
-                VStack {
-                    SearchField(
-                        query: $searchViewModel.currentQuery,
-                        searchFieldPrompt: searchFieldPrompt,
-                        isShowResultsHidden: !enableResultListView,
-                        showResults: $showResultListView
-                    )
-                        .onSubmit { searchViewModel.commitSearch() }
-                        .submitLabel(.search)
-                    
-                    if enableResultListView,
-                       showResultListView,
-                       let searchOutcome = searchViewModel.searchOutcome {
-                        Group {
-                            switch searchOutcome {
-                            case .results(let results):
-                                SearchResultList(
-                                    searchResults: results,
-                                    selectedResult: $searchViewModel.selectedResult,
-                                    noResultsMessage: noResultsMessage
-                                )
-                            case .suggestions(let suggestions):
-                                SearchSuggestionList(
-                                    suggestionResults: suggestions,
-                                    currentSuggestion: $searchViewModel.currentSuggestion,
-                                    noResultsMessage: noResultsMessage
-                                )
-                            case .failure(let error):
-                                List {
-                                    Text(error.errorDescription)
+            GeometryReader { geometry in
+                HStack {
+                    Spacer()
+                    VStack {
+                        SearchField(
+                            query: $searchViewModel.currentQuery,
+                            prompt: prompt,
+                            isResultsButtonHidden: !enableResultListView,
+                            isResultListHidden: $isResultListHidden
+                        )
+                            .onSubmit { searchViewModel.commitSearch() }
+                            .submitLabel(.search)
+                        if enableResultListView,
+                           !isResultListHidden,
+                           let searchOutcome = searchViewModel.searchOutcome {
+                            Group {
+                                switch searchOutcome {
+                                case .results(let results):
+                                    SearchResultList(
+                                        searchResults: results,
+                                        selectedResult: $searchViewModel.selectedResult,
+                                        noResultsMessage: noResultsMessage
+                                    )
+                                        .frame(height: useHalfHeightResults ? geometry.size.height / 2 : nil)
+                                case .suggestions(let suggestions):
+                                    SearchSuggestionList(
+                                        suggestionResults: suggestions,
+                                        currentSuggestion: $searchViewModel.currentSuggestion,
+                                        noResultsMessage: noResultsMessage
+                                    )
+                                case .failure(let errorString):
+                                    List {
+                                        Text(errorString)
+                                    }
                                 }
                             }
+                            .esriBorder(padding: EdgeInsets())
                         }
-                        .esriBorder(padding: EdgeInsets())
                     }
+                    .frame(width: searchBarWidth)
                 }
-                .frame(width: searchBarWidth)
             }
             Spacer()
             if searchViewModel.isEligibleForRequery {
                 Button("Repeat Search Here") {
-                    shouldZoomToResults = false
                     searchViewModel.repeatSearch()
                 }
                 .esriBorder()
             }
         }
         .listStyle(.plain)
-        .onChange(of: searchViewModel.searchOutcome, perform: { newValue in
-            switch newValue {
-            case .results(let results):
-                display(searchResults: results)
-            default:
-                display(searchResults: [])
-            }
-        })
-        .onChange(of: searchViewModel.selectedResult, perform: display(selectedResult:))
         .onReceive(searchViewModel.$currentQuery) { _ in
             searchViewModel.updateSuggestions()
         }
@@ -162,11 +146,11 @@ extension SearchView {
     
     /// The string shown in the search view when no user query is entered.
     /// Defaults to "Find a place or address".
-    /// - Parameter newSearchFieldPrompt: The new value.
+    /// - Parameter newPrompt: The new value.
     /// - Returns: A new `SearchView`.
-    public func searchFieldPrompt(_ newSearchFieldPrompt: String) -> Self {
+    public func prompt(_ newPrompt: String) -> Self {
         var copy = self
-        copy.searchFieldPrompt = newSearchFieldPrompt
+        copy.prompt = newPrompt
         return copy
     }
     
@@ -182,46 +166,13 @@ extension SearchView {
     }
 }
 
-private extension SearchView {
-    func display(searchResults: [SearchResult]) {
-        guard let resultsOverlay = resultsOverlay else { return }
-        let resultGraphics: [Graphic] = searchResults.compactMap { result in
-            guard let graphic = result.geoElement as? Graphic else { return nil }
-            graphic.update(with: result)
-            return graphic
-        }
-        resultsOverlay.removeAllGraphics()
-        resultsOverlay.addGraphics(resultGraphics)
-        
-        // Make sure we have a viewpoint to zoom to.
-        guard let viewpoint = viewpoint else { return }
-        
-        if !resultGraphics.isEmpty,
-           let envelope = resultsOverlay.extent,
-           shouldZoomToResults {
-            let builder = EnvelopeBuilder(envelope: envelope)
-            builder.expand(factor: 1.1)
-            let targetExtent = builder.toGeometry() as! Envelope
-            viewpoint.wrappedValue = Viewpoint(
-                targetExtent: targetExtent
-            )
-            searchViewModel.lastSearchExtent = targetExtent
-        } else {
-            viewpoint.wrappedValue = nil
-        }
-        
-        if !shouldZoomToResults { shouldZoomToResults = true }
-    }
-    
-    func display(selectedResult: SearchResult?) {
-        guard let selectedResult = selectedResult else { return }
-        viewpoint?.wrappedValue = selectedResult.selectionViewpoint
-    }
-}
-
+/// A View displaying the list of search results.
 struct SearchResultList: View {
+    /// The array of search results to display.
     var searchResults: [SearchResult]
+    /// The result the user selects.
     @Binding var selectedResult: SearchResult?
+    /// The message to display when there are no results.
     var noResultsMessage: String
     
     var body: some View {
@@ -235,12 +186,9 @@ struct SearchResultList: View {
                                 .onTapGesture {
                                     selectedResult = result
                                 }
-                            if result == selectedResult {
-                                Spacer()
-                                Image(systemName: "checkmark.circle.fill")
-                                    .foregroundColor(.accentColor)
-                            }
+                            Spacer()
                         }
+                        .selected(result == selectedResult)
                     }
                 }
             } else if searchResults.isEmpty {
@@ -250,9 +198,13 @@ struct SearchResultList: View {
     }
 }
 
+/// A View displaying the list of search suggestion results.
 struct SearchSuggestionList: View {
+    /// The array of suggestion results to display.
     var suggestionResults: [SearchSuggestion]
+    /// The suggestion the user selects.
     @Binding var currentSuggestion: SearchSuggestion?
+    /// The message to display when there are no results.
     var noResultsMessage: String
     
     var body: some View {
@@ -271,7 +223,9 @@ struct SearchSuggestionList: View {
     }
 }
 
+/// A View displaying the "no results" message when there are no search or suggestion results.
 struct NoResultsView: View {
+    /// The message to display when there are no results.
     var message: String
     
     var body: some View {
@@ -282,9 +236,13 @@ struct NoResultsView: View {
     }
 }
 
+/// A view representing a row containing one search or suggestion result.
 struct ResultRow: View {
+    /// The title of the result.
     var title: String
+    /// Additional result information, if available.
     var subtitle: String = ""
+    /// The image to display for the result.
     var image: AnyView
     
     var body: some View {
@@ -299,10 +257,13 @@ struct ResultRow: View {
                 }
             }
         }
+        .padding(EdgeInsets(top: 2, leading: 0, bottom: 2, trailing: 0))
     }
 }
 
 extension ResultRow {
+    /// Creates a `ResultRow` from a search suggestion.
+    /// - Parameter searchSuggestion: The search suggestion displayed in the row.
     init(searchSuggestion: SearchSuggestion) {
         self.init(
             title: searchSuggestion.displayTitle,
@@ -322,6 +283,8 @@ extension ResultRow {
         )
     }
     
+    /// Creates a `ResultRow` from a search result.
+    /// - Parameter searchResult: The search result displayed in the view.
     init(searchResult: SearchResult) {
         self.init(
             title: searchResult.displayTitle,
@@ -334,28 +297,34 @@ extension ResultRow {
     }
 }
 
-private extension Graphic {
-    func update(with result: SearchResult) {
-        if symbol == nil {
-            symbol = Symbol.searchResult()
+/// A modifier which displays a background and shadow for a view. Used to represent a selected view.
+struct SelectedModifier: ViewModifier {
+    /// `true` if the view should display as selected, `false` otherwise.
+    var isSelected: Bool
+    
+    func body(content: Content) -> some View {
+        let roundedRect = RoundedRectangle(cornerRadius: 4)
+        if isSelected {
+            content
+                .background(Color.secondary.opacity(0.8))
+                .clipShape(roundedRect)
+                .shadow(
+                    color: Color.secondary.opacity(0.8),
+                    radius: 2
+                )
+        } else {
+            content
         }
-        setAttributeValue(result.displayTitle, forKey: "displayTitle")
-        setAttributeValue(result.displaySubtitle, forKey: "displaySubtitle")
     }
 }
 
-private extension Symbol {
-    /// A search result marker symbol.
-    static func searchResult() -> MarkerSymbol {
-        let image = UIImage.mapPin
-        let symbol = PictureMarkerSymbol(image: image)
-        symbol.offsetY = Float(image.size.height / 2.0)
-        return symbol
-    }
-}
-
-extension UIImage {
-    static var mapPin: UIImage {
-        return UIImage(named: "MapPin", in: Bundle.module, with: nil)!
+extension View {
+    /// View modifier used to denote the view is selected.
+    /// - Parameter isSelected: `true` if the view is selected, `false` otherwise.
+    /// - Returns: The view being modified.
+    func selected(
+        _ isSelected: Bool = false
+    ) -> some View {
+        modifier(SelectedModifier(isSelected: isSelected))
     }
 }

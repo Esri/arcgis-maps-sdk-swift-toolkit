@@ -13,44 +13,50 @@
 
 import SwiftUI
 
-/// A custom view implementing a SearchField.  It contains a search button, text field, delete text button,
+/// A custom view implementing a SearchField. It contains a search button, text field, delete text button,
 /// and a button to allow users to hide/show the search results list.
 public struct SearchField: View {
+    /// Creates a `SearchField`.
+    /// - Parameters:
+    ///   - query: The current search query.
+    ///   - prompt: The default placeholder displayed when `currentQuery` is empty.
+    ///   - isResultsButtonHidden: The visibility of the button used to toggle visibility of the results list.
+    ///   - isResultListHidden: Binding allowing the user to toggle the visibility of the results list.
     init(
         query: Binding<String>,
-        searchFieldPrompt: String = "",
-        isShowResultsHidden: Bool = true,
-        showResults: Binding<Bool>? = nil
+        prompt: String = "",
+        isResultsButtonHidden: Bool = false,
+        isResultListHidden: Binding<Bool>? = nil
     ) {
         self.query = query
-        self.searchFieldPrompt = searchFieldPrompt
-        self.isShowResultsHidden = isShowResultsHidden
-        self.showResults = showResults
+        self.prompt = prompt
+        self.isResultsButtonHidden = isResultsButtonHidden
+        self.isResultListHidden = isResultListHidden
     }
-
+    
     /// The current search query.
     private var query: Binding<String>
-
+    
     /// The default placeholder displayed when `currentQuery` is empty.
-    private let searchFieldPrompt: String
-
-    /// The visibility of the `showResults` button.
-    private let isShowResultsHidden: Bool
-
+    private let prompt: String
+    
+    /// The visibility of the button used to toggle visibility of the results list.
+    private let isResultsButtonHidden: Bool
+    
     /// Binding allowing the user to toggle the visibility of the results list.
-    private var showResults: Binding<Bool>?
+    private var isResultListHidden: Binding<Bool>?
     
     public var body: some View {
         HStack {
             // Search icon
             Image(systemName: "magnifyingglass.circle.fill")
-                .foregroundColor(Color(uiColor: .opaqueSeparator))
+                .foregroundColor(Color.secondary)
             
             // Search text field
             TextField(
                 "Search Query",
                 text: query,
-                prompt: Text(searchFieldPrompt)
+                prompt: Text(prompt)
             )
             
             // Delete text button
@@ -59,19 +65,21 @@ public struct SearchField: View {
                     query.wrappedValue = ""
                 } label: {
                     Image(systemName: "xmark.circle.fill")
-                        .foregroundColor(Color(.opaqueSeparator))
+                        .foregroundColor(Color.secondary)
                 }
             }
             
             // Show Results button
-            if !isShowResultsHidden {
+            if !isResultsButtonHidden {
                 Button {
-                    showResults?.wrappedValue.toggle()
+                    isResultListHidden?.wrappedValue.toggle()
                 } label: {
-                    Image(systemName: "eye")
-                        .symbolVariant(!(showResults?.wrappedValue ?? false) ? .none : .slash)
-                        .symbolVariant(.fill)
-                        .foregroundColor(Color(.opaqueSeparator))
+                    Image(
+                        systemName: (isResultListHidden?.wrappedValue ?? false) ?
+                        "chevron.down" :
+                            "chevron.up"
+                    )
+                        .foregroundColor(Color.secondary)
                 }
             }
         }
