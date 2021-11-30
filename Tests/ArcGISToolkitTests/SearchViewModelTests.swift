@@ -14,7 +14,6 @@
 import XCTest
 ***REMOVED***
 ***REMOVED***Toolkit
-import Combine
 
 @MainActor
 class SearchViewModelTests: XCTestCase {
@@ -39,29 +38,6 @@ class SearchViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** With only one result, model should set `selectedResult` property.
 ***REMOVED******REMOVED***XCTAssertEqual(result.first, model.selectedResult)
-***REMOVED***
-***REMOVED***
-***REMOVED***func testActiveSource() async throws {
-***REMOVED******REMOVED***let activeSource = LocatorSearchSource()
-***REMOVED******REMOVED***activeSource.name = "Simple Locator"
-***REMOVED******REMOVED***let model = SearchViewModel(
-***REMOVED******REMOVED******REMOVED***activeSource: activeSource,
-***REMOVED******REMOVED******REMOVED***sources: [LocatorSearchSource()]
-***REMOVED******REMOVED***)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***model.currentQuery = "Magers & Quinn Booksellers"
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***model.commitSearch()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***let results = try await searchResults(model)
-***REMOVED******REMOVED***let result = try XCTUnwrap(results?.first)
-***REMOVED******REMOVED***XCTAssertEqual(result.owningSource.name, activeSource.name)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***model.updateSuggestions()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***let suggestions = try await searchSuggestions(model, dropFirst: true)
-***REMOVED******REMOVED***let suggestion = try XCTUnwrap(suggestions?.first)
-***REMOVED******REMOVED***XCTAssertEqual(suggestion.owningSource.name, activeSource.name)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func testCommitSearch() async throws {
@@ -157,6 +133,9 @@ class SearchViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***model.queryArea = Polygon.chippewaFalls
 ***REMOVED******REMOVED***model.geoViewExtent = Polygon.chippewaFalls.extent
 ***REMOVED******REMOVED***model.currentQuery = "Coffee"
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** This is necessary for the model to compute `isEligibleForRequery`.
+***REMOVED******REMOVED***model.isGeoViewNavigating = true
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***model.commitSearch()
 ***REMOVED******REMOVED***

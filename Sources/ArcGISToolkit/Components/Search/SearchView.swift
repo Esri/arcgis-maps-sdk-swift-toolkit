@@ -12,26 +12,17 @@
 ***REMOVED*** limitations under the License.
 
 ***REMOVED***
-import Combine
 ***REMOVED***
 
-***REMOVED***/ SearchView presents a search experience, powered by an underlying SearchViewModel.
+***REMOVED***/ `SearchView` presents a search experience, powered by an underlying `SearchViewModel`.
 public struct SearchView: View {
 ***REMOVED******REMOVED***/ Creates a new `SearchView`.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - searchViewModel: The view model used by `SearchView`.
-***REMOVED******REMOVED***/   - viewpoint: The `Viewpoint` used to zoom to results.
-***REMOVED******REMOVED***/   - resultsOverlay: The `GraphicsOverlay` used to display results.
-***REMOVED***public init(
-***REMOVED******REMOVED***searchViewModel: SearchViewModel? = nil,
-***REMOVED******REMOVED***viewpoint: Binding<Viewpoint?>? = nil,
-***REMOVED******REMOVED***resultsOverlay: GraphicsOverlay? = nil
-***REMOVED***) {
+***REMOVED***public init(searchViewModel: SearchViewModel? = nil) {
 ***REMOVED******REMOVED***self.searchViewModel = searchViewModel ?? SearchViewModel(
 ***REMOVED******REMOVED******REMOVED***sources: [LocatorSearchSource()]
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED***self.resultsOverlay = resultsOverlay
-***REMOVED******REMOVED***self.viewpoint = viewpoint
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The view model used by the view. The `SearchViewModel` manages state and handles the
@@ -40,25 +31,19 @@ public struct SearchView: View {
 ***REMOVED***@ObservedObject
 ***REMOVED***var searchViewModel: SearchViewModel
 ***REMOVED***
-***REMOVED******REMOVED***/ The `Viewpoint` used to pan/zoom to results.  If `nil`, there will be no zooming to results.
-***REMOVED***private let viewpoint: Binding<Viewpoint?>?
-***REMOVED***
-***REMOVED******REMOVED***/ The `GraphicsOverlay` used to display results.  If `nil`, no results will be displayed.
-***REMOVED***private let resultsOverlay: GraphicsOverlay?
-***REMOVED***
 ***REMOVED******REMOVED***/ The string shown in the search view when no user query is entered.
 ***REMOVED******REMOVED***/ Defaults to "Find a place or address". Note: this is set using the
-***REMOVED******REMOVED***/ `searchFieldPrompt` modifier.
-***REMOVED***private var searchFieldPrompt: String = "Find a place or address"
+***REMOVED******REMOVED***/ `prompt` modifier.
+***REMOVED***private var prompt: String = "Find a place or address"
 ***REMOVED***
-***REMOVED******REMOVED***/ Determines whether a built-in result view will be shown. Defaults to true.
-***REMOVED******REMOVED***/ If false, the result display/selection list is not shown. Set to false if you want to hide the results
+***REMOVED******REMOVED***/ Determines whether a built-in result view will be shown. Defaults to `true`.
+***REMOVED******REMOVED***/ If `false`, the result display/selection list is not shown. Set to false if you want to hide the results
 ***REMOVED******REMOVED***/ or define a custom result list. You might use a custom result list to show results in a separate list,
 ***REMOVED******REMOVED***/ disconnected from the rest of the search view.
 ***REMOVED******REMOVED***/ Note: this is set using the `enableResultListView` modifier.
 ***REMOVED***private var enableResultListView = true
 ***REMOVED***
-***REMOVED******REMOVED***/ Message to show when there are no results or suggestions.  Defaults to "No results found".
+***REMOVED******REMOVED***/ Message to show when there are no results or suggestions. Defaults to "No results found".
 ***REMOVED******REMOVED***/ Note: this is set using the `noResultsMessage` modifier.
 ***REMOVED***private var noResultsMessage = "No results found"
 ***REMOVED***
@@ -68,78 +53,77 @@ public struct SearchView: View {
 ***REMOVED***@Environment(\.verticalSizeClass)
 ***REMOVED***private var verticalSizeClass: UserInterfaceSizeClass?
 ***REMOVED***
+***REMOVED******REMOVED***/ The width of the search bar, taking into account the horizontal and vertical size classes
+***REMOVED******REMOVED***/ of the device. This will cause the search field to display full-width on an iPhone in portrait
+***REMOVED******REMOVED***/ orientation (and certain iPad multitasking configurations) and limit the width to `360` in other cases.
 ***REMOVED***private var searchBarWidth: CGFloat? {
 ***REMOVED******REMOVED***horizontalSizeClass == .compact && verticalSizeClass == .regular ? nil : 360
 ***REMOVED***
 ***REMOVED***
-***REMOVED***@State
-***REMOVED***private var shouldZoomToResults = true
+***REMOVED******REMOVED***/ If `true`, will draw the results list view at half height, exposing a portion of the
+***REMOVED******REMOVED***/ underlying map below the list on an iPhone in portrait orientation (and certain iPad multitasking
+***REMOVED******REMOVED***/ configurations).  If `false`, will draw the results list view full size.
+***REMOVED***private var useHalfHeightResults: Bool {
+***REMOVED******REMOVED***horizontalSizeClass == .compact && verticalSizeClass == .regular
+***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Determines whether the results lists are displayed.
 ***REMOVED***@State
-***REMOVED***private var showResultListView: Bool = true
+***REMOVED***private var isResultListHidden: Bool = false
 ***REMOVED***
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***VStack {
-***REMOVED******REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED******REMOVED***VStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***SearchField(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***query: $searchViewModel.currentQuery,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***searchFieldPrompt: searchFieldPrompt,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isShowResultsHidden: !enableResultListView,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***showResults: $showResultListView
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onSubmit { searchViewModel.commitSearch() ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.submitLabel(.search)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if enableResultListView,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***   showResultListView,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***   let searchOutcome = searchViewModel.searchOutcome {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Group {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***switch searchOutcome {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .results(let results):
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***SearchResultList(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***searchResults: results,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedResult: $searchViewModel.selectedResult,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***noResultsMessage: noResultsMessage
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .suggestions(let suggestions):
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***SearchSuggestionList(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***suggestionResults: suggestions,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentSuggestion: $searchViewModel.currentSuggestion,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***noResultsMessage: noResultsMessage
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .failure(let error):
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***List {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(error.errorDescription)
+***REMOVED******REMOVED******REMOVED***GeometryReader { geometry in
+***REMOVED******REMOVED******REMOVED******REMOVED***HStack {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***VStack {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***SearchField(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***query: $searchViewModel.currentQuery,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***prompt: prompt,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isResultsButtonHidden: !enableResultListView,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isResultListHidden: $isResultListHidden
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onSubmit { searchViewModel.commitSearch() ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.submitLabel(.search)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if enableResultListView,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***   !isResultListHidden,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***   let searchOutcome = searchViewModel.searchOutcome {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Group {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***switch searchOutcome {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .results(let results):
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***SearchResultList(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***searchResults: results,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedResult: $searchViewModel.selectedResult,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***noResultsMessage: noResultsMessage
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(height: useHalfHeightResults ? geometry.size.height / 2 : nil)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .suggestions(let suggestions):
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***SearchSuggestionList(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***suggestionResults: suggestions,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentSuggestion: $searchViewModel.currentSuggestion,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***noResultsMessage: noResultsMessage
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .failure(let errorString):
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***List {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(errorString)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.esriBorder(padding: EdgeInsets())
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.esriBorder(padding: EdgeInsets())
 ***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: searchBarWidth)
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: searchBarWidth)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED***if searchViewModel.isEligibleForRequery {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Button("Repeat Search Here") {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***shouldZoomToResults = false
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***searchViewModel.repeatSearch()
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.esriBorder()
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.listStyle(.plain)
-***REMOVED******REMOVED***.onChange(of: searchViewModel.searchOutcome, perform: { newValue in
-***REMOVED******REMOVED******REMOVED***switch newValue {
-***REMOVED******REMOVED******REMOVED***case .results(let results):
-***REMOVED******REMOVED******REMOVED******REMOVED***display(searchResults: results)
-***REMOVED******REMOVED******REMOVED***default:
-***REMOVED******REMOVED******REMOVED******REMOVED***display(searchResults: [])
-***REMOVED******REMOVED***
-***REMOVED***)
-***REMOVED******REMOVED***.onChange(of: searchViewModel.selectedResult, perform: display(selectedResult:))
 ***REMOVED******REMOVED***.onReceive(searchViewModel.$currentQuery) { _ in
 ***REMOVED******REMOVED******REMOVED***searchViewModel.updateSuggestions()
 ***REMOVED***
@@ -162,11 +146,11 @@ extension SearchView {
 ***REMOVED***
 ***REMOVED******REMOVED***/ The string shown in the search view when no user query is entered.
 ***REMOVED******REMOVED***/ Defaults to "Find a place or address".
-***REMOVED******REMOVED***/ - Parameter newSearchFieldPrompt: The new value.
+***REMOVED******REMOVED***/ - Parameter newPrompt: The new value.
 ***REMOVED******REMOVED***/ - Returns: A new `SearchView`.
-***REMOVED***public func searchFieldPrompt(_ newSearchFieldPrompt: String) -> Self {
+***REMOVED***public func prompt(_ newPrompt: String) -> Self {
 ***REMOVED******REMOVED***var copy = self
-***REMOVED******REMOVED***copy.searchFieldPrompt = newSearchFieldPrompt
+***REMOVED******REMOVED***copy.prompt = newPrompt
 ***REMOVED******REMOVED***return copy
 ***REMOVED***
 ***REMOVED***
@@ -182,46 +166,13 @@ extension SearchView {
 ***REMOVED***
 ***REMOVED***
 
-private extension SearchView {
-***REMOVED***func display(searchResults: [SearchResult]) {
-***REMOVED******REMOVED***guard let resultsOverlay = resultsOverlay else { return ***REMOVED***
-***REMOVED******REMOVED***let resultGraphics: [Graphic] = searchResults.compactMap { result in
-***REMOVED******REMOVED******REMOVED***guard let graphic = result.geoElement as? Graphic else { return nil ***REMOVED***
-***REMOVED******REMOVED******REMOVED***graphic.update(with: result)
-***REMOVED******REMOVED******REMOVED***return graphic
-***REMOVED***
-***REMOVED******REMOVED***resultsOverlay.removeAllGraphics()
-***REMOVED******REMOVED***resultsOverlay.addGraphics(resultGraphics)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Make sure we have a viewpoint to zoom to.
-***REMOVED******REMOVED***guard let viewpoint = viewpoint else { return ***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***if !resultGraphics.isEmpty,
-***REMOVED******REMOVED***   let envelope = resultsOverlay.extent,
-***REMOVED******REMOVED***   shouldZoomToResults {
-***REMOVED******REMOVED******REMOVED***let builder = EnvelopeBuilder(envelope: envelope)
-***REMOVED******REMOVED******REMOVED***builder.expand(factor: 1.1)
-***REMOVED******REMOVED******REMOVED***let targetExtent = builder.toGeometry() as! Envelope
-***REMOVED******REMOVED******REMOVED***viewpoint.wrappedValue = Viewpoint(
-***REMOVED******REMOVED******REMOVED******REMOVED***targetExtent: targetExtent
-***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***searchViewModel.lastSearchExtent = targetExtent
-***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***viewpoint.wrappedValue = nil
-***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***if !shouldZoomToResults { shouldZoomToResults = true ***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***func display(selectedResult: SearchResult?) {
-***REMOVED******REMOVED***guard let selectedResult = selectedResult else { return ***REMOVED***
-***REMOVED******REMOVED***viewpoint?.wrappedValue = selectedResult.selectionViewpoint
-***REMOVED***
-***REMOVED***
-
+***REMOVED***/ A View displaying the list of search results.
 struct SearchResultList: View {
+***REMOVED******REMOVED***/ The array of search results to display.
 ***REMOVED***var searchResults: [SearchResult]
+***REMOVED******REMOVED***/ The result the user selects.
 ***REMOVED***@Binding var selectedResult: SearchResult?
+***REMOVED******REMOVED***/ The message to display when there are no results.
 ***REMOVED***var noResultsMessage: String
 ***REMOVED***
 ***REMOVED***var body: some View {
@@ -235,12 +186,9 @@ struct SearchResultList: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onTapGesture {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedResult = result
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if result == selectedResult {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "checkmark.circle.fill")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.accentColor)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.selected(result == selectedResult)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED*** else if searchResults.isEmpty {
@@ -250,9 +198,13 @@ struct SearchResultList: View {
 ***REMOVED***
 ***REMOVED***
 
+***REMOVED***/ A View displaying the list of search suggestion results.
 struct SearchSuggestionList: View {
+***REMOVED******REMOVED***/ The array of suggestion results to display.
 ***REMOVED***var suggestionResults: [SearchSuggestion]
+***REMOVED******REMOVED***/ The suggestion the user selects.
 ***REMOVED***@Binding var currentSuggestion: SearchSuggestion?
+***REMOVED******REMOVED***/ The message to display when there are no results.
 ***REMOVED***var noResultsMessage: String
 ***REMOVED***
 ***REMOVED***var body: some View {
@@ -271,7 +223,9 @@ struct SearchSuggestionList: View {
 ***REMOVED***
 ***REMOVED***
 
+***REMOVED***/ A View displaying the "no results" message when there are no search or suggestion results.
 struct NoResultsView: View {
+***REMOVED******REMOVED***/ The message to display when there are no results.
 ***REMOVED***var message: String
 ***REMOVED***
 ***REMOVED***var body: some View {
@@ -282,9 +236,13 @@ struct NoResultsView: View {
 ***REMOVED***
 ***REMOVED***
 
+***REMOVED***/ A view representing a row containing one search or suggestion result.
 struct ResultRow: View {
+***REMOVED******REMOVED***/ The title of the result.
 ***REMOVED***var title: String
+***REMOVED******REMOVED***/ Additional result information, if available.
 ***REMOVED***var subtitle: String = ""
+***REMOVED******REMOVED***/ The image to display for the result.
 ***REMOVED***var image: AnyView
 ***REMOVED***
 ***REMOVED***var body: some View {
@@ -299,10 +257,13 @@ struct ResultRow: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***.padding(EdgeInsets(top: 2, leading: 0, bottom: 2, trailing: 0))
 ***REMOVED***
 ***REMOVED***
 
 extension ResultRow {
+***REMOVED******REMOVED***/ Creates a `ResultRow` from a search suggestion.
+***REMOVED******REMOVED***/ - Parameter searchSuggestion: The search suggestion displayed in the row.
 ***REMOVED***init(searchSuggestion: SearchSuggestion) {
 ***REMOVED******REMOVED***self.init(
 ***REMOVED******REMOVED******REMOVED***title: searchSuggestion.displayTitle,
@@ -322,6 +283,8 @@ extension ResultRow {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ Creates a `ResultRow` from a search result.
+***REMOVED******REMOVED***/ - Parameter searchResult: The search result displayed in the view.
 ***REMOVED***init(searchResult: SearchResult) {
 ***REMOVED******REMOVED***self.init(
 ***REMOVED******REMOVED******REMOVED***title: searchResult.displayTitle,
@@ -334,28 +297,34 @@ extension ResultRow {
 ***REMOVED***
 ***REMOVED***
 
-private extension Graphic {
-***REMOVED***func update(with result: SearchResult) {
-***REMOVED******REMOVED***if symbol == nil {
-***REMOVED******REMOVED******REMOVED***symbol = Symbol.searchResult()
+***REMOVED***/ A modifier which displays a background and shadow for a view. Used to represent a selected view.
+struct SelectedModifier: ViewModifier {
+***REMOVED******REMOVED***/ `true` if the view should display as selected, `false` otherwise.
+***REMOVED***var isSelected: Bool
 ***REMOVED***
-***REMOVED******REMOVED***setAttributeValue(result.displayTitle, forKey: "displayTitle")
-***REMOVED******REMOVED***setAttributeValue(result.displaySubtitle, forKey: "displaySubtitle")
+***REMOVED***func body(content: Content) -> some View {
+***REMOVED******REMOVED***let roundedRect = RoundedRectangle(cornerRadius: 4)
+***REMOVED******REMOVED***if isSelected {
+***REMOVED******REMOVED******REMOVED***content
+***REMOVED******REMOVED******REMOVED******REMOVED***.background(Color.secondary.opacity(0.8))
+***REMOVED******REMOVED******REMOVED******REMOVED***.clipShape(roundedRect)
+***REMOVED******REMOVED******REMOVED******REMOVED***.shadow(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***color: Color.secondary.opacity(0.8),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***radius: 2
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***content
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
-private extension Symbol {
-***REMOVED******REMOVED***/ A search result marker symbol.
-***REMOVED***static func searchResult() -> MarkerSymbol {
-***REMOVED******REMOVED***let image = UIImage.mapPin
-***REMOVED******REMOVED***let symbol = PictureMarkerSymbol(image: image)
-***REMOVED******REMOVED***symbol.offsetY = Float(image.size.height / 2.0)
-***REMOVED******REMOVED***return symbol
-***REMOVED***
-***REMOVED***
-
-extension UIImage {
-***REMOVED***static var mapPin: UIImage {
-***REMOVED******REMOVED***return UIImage(named: "MapPin", in: Bundle.module, with: nil)!
+extension View {
+***REMOVED******REMOVED***/ View modifier used to denote the view is selected.
+***REMOVED******REMOVED***/ - Parameter isSelected: `true` if the view is selected, `false` otherwise.
+***REMOVED******REMOVED***/ - Returns: The view being modified.
+***REMOVED***func selected(
+***REMOVED******REMOVED***_ isSelected: Bool = false
+***REMOVED***) -> some View {
+***REMOVED******REMOVED***modifier(SelectedModifier(isSelected: isSelected))
 ***REMOVED***
 ***REMOVED***

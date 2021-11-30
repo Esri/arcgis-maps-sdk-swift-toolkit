@@ -16,30 +16,54 @@ import UIKit.UIImage
 
 ***REMOVED***/ Wraps a search result for display.
 public struct SearchResult {
-***REMOVED******REMOVED***/ Title that should be shown whenever a result is displayed.
+***REMOVED******REMOVED***/ Creates a `SearchResult`.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - displayTitle: The string to be shown whenever a result is displayed.
+***REMOVED******REMOVED***/   - owningSource: Reference to the search source that created this result.
+***REMOVED******REMOVED***/   - displaySubtitle: The string to be shown as a subtitle wherever results are shown.
+***REMOVED******REMOVED***/   - geoElement: The graphic that was used to display the result on the map.
+***REMOVED******REMOVED***/   - markerImage: The marker that would be shown on the map for the result.
+***REMOVED******REMOVED***/   - selectionViewpoint: The viewpoint to be used when the view zooms to a selected result.
+***REMOVED***public init(
+***REMOVED******REMOVED***displayTitle: String,
+***REMOVED******REMOVED***owningSource: SearchSource,
+***REMOVED******REMOVED***displaySubtitle: String = "",
+***REMOVED******REMOVED***geoElement: GeoElement? = nil,
+***REMOVED******REMOVED***markerImage: UIImage? = nil,
+***REMOVED******REMOVED***selectionViewpoint: Viewpoint? = nil
+***REMOVED***) {
+***REMOVED******REMOVED***self.displayTitle = displayTitle
+***REMOVED******REMOVED***self.owningSource = owningSource
+***REMOVED******REMOVED***self.displaySubtitle = displaySubtitle
+***REMOVED******REMOVED***self.geoElement = geoElement
+***REMOVED******REMOVED***self.markerImage = markerImage
+***REMOVED******REMOVED***self.selectionViewpoint = selectionViewpoint
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ The string to be shown whenever a result is displayed.
 ***REMOVED***public let displayTitle: String
 ***REMOVED***
 ***REMOVED******REMOVED***/ Reference to the search source that created this result.
 ***REMOVED***public let owningSource: SearchSource
 ***REMOVED***
-***REMOVED******REMOVED***/ Should be shown as a subtitle wherever results are shown.
-***REMOVED***public var displaySubtitle: String = ""
-
+***REMOVED******REMOVED***/ The string to be shown as a subtitle wherever results are shown.
+***REMOVED***public let displaySubtitle: String
+***REMOVED***
 ***REMOVED******REMOVED***/ For locator results, should be the graphic that was used to display the result on the map.
-***REMOVED******REMOVED***/ For feature layer results, should be the result feature. Can be null depending on the type of the
+***REMOVED******REMOVED***/ For feature layer results, should be the resulting feature. Can be `nil` depending on the type of the
 ***REMOVED******REMOVED***/ result, and can have `GeoElement`s without a defined geometry.
-***REMOVED***public var geoElement: GeoElement? = nil
+***REMOVED***public let geoElement: GeoElement?
 ***REMOVED***
 ***REMOVED******REMOVED***/ Image, in the native platform's format, for the result. This should be the marker that would be
 ***REMOVED******REMOVED***/ shown on the map, and also shown in the UI. This property is available for convenience so the
 ***REMOVED******REMOVED***/ UI doesn't have to worry about whether the `GeoElement` is a graphic or a feature when displaying
 ***REMOVED******REMOVED***/ the icon in the UI.
-***REMOVED***public var markerImage: UIImage? = nil
-
+***REMOVED***public let markerImage: UIImage?
+***REMOVED***
 ***REMOVED******REMOVED***/ The viewpoint to be used when the view zooms to a selected result. This property can be `nil`
 ***REMOVED******REMOVED***/ because not all valid results will have a geometry. E.g. feature results from non-spatial features.
-***REMOVED***public var selectionViewpoint: Viewpoint? = nil
-
+***REMOVED***public let selectionViewpoint: Viewpoint?
+***REMOVED***
 ***REMOVED***public let id = UUID()
 ***REMOVED***
 

@@ -12,7 +12,6 @@
 ***REMOVED*** limitations under the License.
 
 ***REMOVED***
-import Combine
 ***REMOVED***
 ***REMOVED***Toolkit
 
@@ -39,9 +38,6 @@ struct SearchExampleView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ The `GraphicsOverlay` used by the `SearchView` to display search results on the map.
 ***REMOVED***let searchResultsOverlay = GraphicsOverlay()
-***REMOVED***
-***REMOVED***@State
-***REMOVED***private var isNavigating: Bool = false
 
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***MapView(
@@ -49,13 +45,13 @@ struct SearchExampleView: View {
 ***REMOVED******REMOVED******REMOVED***viewpoint: searchResultViewpoint,
 ***REMOVED******REMOVED******REMOVED***graphicsOverlays: [searchResultsOverlay]
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***.onNavigatingChanged { isNavigating = $0 ***REMOVED***
+***REMOVED******REMOVED******REMOVED***.onNavigatingChanged { searchViewModel.isGeoViewNavigating = $0 ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onViewpointChanged(kind: .centerAndScale) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***searchViewModel.queryCenter = $0.targetGeometry as? Point
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Reset `searchResultViewpoint` here when the user pans/zooms
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** the map, so if the user commits the same search with the
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** same result, the Map will pan/zoom to the result.  Otherwise
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** same result, the Map will pan/zoom to the result. Otherwise,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** `searchResultViewpoint` doesn't change which doesn't
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** redraw the map with the new viewpoint.
 ***REMOVED******REMOVED******REMOVED******REMOVED***searchResultViewpoint = nil
@@ -66,18 +62,16 @@ struct SearchExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***searchViewModel.queryArea = newValue
 
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** For "Repeat Search Here" behavior, set the
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** `searchViewModel.extent` property when navigating.
-***REMOVED******REMOVED******REMOVED******REMOVED***if isNavigating || searchViewModel.geoViewExtent == nil {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***searchViewModel.geoViewExtent = newValue.extent
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** `searchViewModel.geoViewExtent` property when navigating.
+***REMOVED******REMOVED******REMOVED******REMOVED***searchViewModel.geoViewExtent = newValue.extent
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.overlay(alignment: .topTrailing) {
-***REMOVED******REMOVED******REMOVED******REMOVED***SearchView(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***searchViewModel: searchViewModel,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint: $searchResultViewpoint,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***resultsOverlay: searchResultsOverlay
-***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***SearchView(searchViewModel: searchViewModel)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.onAppear {
+***REMOVED******REMOVED******REMOVED******REMOVED***searchViewModel.viewpoint = $searchResultViewpoint
+***REMOVED******REMOVED******REMOVED******REMOVED***searchViewModel.resultsOverlay = searchResultsOverlay
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***

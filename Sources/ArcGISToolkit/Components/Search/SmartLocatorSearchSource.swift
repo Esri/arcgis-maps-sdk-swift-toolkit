@@ -15,25 +15,17 @@
 ***REMOVED***
 
 ***REMOVED***/ Extends `LocatorSearchSource` with intelligent search behaviors; adds support for features like
-***REMOVED***/ type-specific placemarks, repeated search, and more. Advanced functionality requires knowledge of the
-***REMOVED***/ underlying locator to be used well; this class implements behaviors that make assumptions about the
-***REMOVED***/ locator being the world geocode service.
+***REMOVED***/ type-specific placemarks, repeated search, and more on the world geocode service.
 public class SmartLocatorSearchSource: LocatorSearchSource {
 ***REMOVED******REMOVED***/ Creates a smart locator search source.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - name: Name to show when presenting this source in the UI.
-***REMOVED******REMOVED***/   - locatorTask: The `LocatorTask` to use for searching..
-***REMOVED******REMOVED***/   - maximumResults: The maximum results to return when performing a search. Most sources default to 6.
-***REMOVED******REMOVED***/   - maximumSuggestions: The maximum suggestions to return. Most sources default to 6.
+***REMOVED******REMOVED***/   - maximumResults: The maximum results to return when performing a search. Most sources default to `6`.
+***REMOVED******REMOVED***/   - maximumSuggestions: The maximum suggestions to return. Most sources default to `6`.
 ***REMOVED******REMOVED***/   - repeatSearchResultThreshold: The minimum number of search results to attempt to return.
 ***REMOVED******REMOVED***/   - repeatSuggestResultThreshold: The minimum number of suggestions to attempt to return.
 ***REMOVED***public init(
 ***REMOVED******REMOVED***name: String = "Smart Locator",
-***REMOVED******REMOVED***locatorTask: LocatorTask = LocatorTask(
-***REMOVED******REMOVED******REMOVED***url: URL(
-***REMOVED******REMOVED******REMOVED******REMOVED***string: "https:***REMOVED***geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer"
-***REMOVED******REMOVED******REMOVED***)!
-***REMOVED******REMOVED***),
 ***REMOVED******REMOVED***maximumResults: Int32 = 6,
 ***REMOVED******REMOVED***maximumSuggestions: Int32 = 6,
 ***REMOVED******REMOVED***repeatSearchResultThreshold: Int? = 1,
@@ -41,7 +33,11 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
 ***REMOVED***) {
 ***REMOVED******REMOVED***super.init(
 ***REMOVED******REMOVED******REMOVED***name: name,
-***REMOVED******REMOVED******REMOVED***locatorTask: locatorTask,
+***REMOVED******REMOVED******REMOVED***locatorTask: LocatorTask(
+***REMOVED******REMOVED******REMOVED******REMOVED***url: URL(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***string: "https:***REMOVED***geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer"
+***REMOVED******REMOVED******REMOVED******REMOVED***)!
+***REMOVED******REMOVED******REMOVED***),
 ***REMOVED******REMOVED******REMOVED***maximumResults: maximumResults,
 ***REMOVED******REMOVED******REMOVED***maximumSuggestions: maximumSuggestions
 ***REMOVED******REMOVED***)
@@ -63,13 +59,13 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
 ***REMOVED***public var repeatSuggestResultThreshold: Int? = 6
 ***REMOVED***
 ***REMOVED***public override func search(
-***REMOVED******REMOVED***_ queryString: String,
+***REMOVED******REMOVED***_ query: String,
 ***REMOVED******REMOVED***searchArea: Geometry? = nil,
 ***REMOVED******REMOVED***preferredSearchLocation: Point? = nil
 ***REMOVED***) async throws -> [SearchResult] {
 ***REMOVED******REMOVED******REMOVED*** First, peform super class search.
 ***REMOVED******REMOVED***var results = try await super.search(
-***REMOVED******REMOVED******REMOVED***queryString,
+***REMOVED******REMOVED******REMOVED***query,
 ***REMOVED******REMOVED******REMOVED***searchArea: searchArea,
 ***REMOVED******REMOVED******REMOVED***preferredSearchLocation: preferredSearchLocation
 ***REMOVED******REMOVED***)
@@ -84,7 +80,7 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
 ***REMOVED******REMOVED******REMOVED*** Remove geographic constraints and re-run search.
 ***REMOVED******REMOVED***geocodeParameters.searchArea = nil
 ***REMOVED******REMOVED***let geocodeResults = try await locatorTask.geocode(
-***REMOVED******REMOVED******REMOVED***searchText: queryString,
+***REMOVED******REMOVED******REMOVED***searchText: query,
 ***REMOVED******REMOVED******REMOVED***parameters: geocodeParameters
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
@@ -103,9 +99,8 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
 ***REMOVED******REMOVED***searchArea: Geometry? = nil,
 ***REMOVED******REMOVED***preferredSearchLocation: Point? = nil
 ***REMOVED***) async throws -> [SearchResult] {
-***REMOVED******REMOVED***guard let suggestResult = searchSuggestion.suggestResult else {
-***REMOVED******REMOVED******REMOVED***return []
-***REMOVED***
+***REMOVED******REMOVED***guard let suggestResult = searchSuggestion.suggestResult
+***REMOVED******REMOVED***else { return [] ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var results = try await super.search(
 ***REMOVED******REMOVED******REMOVED***searchSuggestion,
@@ -139,12 +134,12 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***public override func suggest(
-***REMOVED******REMOVED***_ queryString: String,
+***REMOVED******REMOVED***_ query: String,
 ***REMOVED******REMOVED***searchArea: Geometry? = nil,
 ***REMOVED******REMOVED***preferredSearchLocation: Point? = nil
 ***REMOVED***) async throws -> [SearchSuggestion] {
 ***REMOVED******REMOVED***var results = try await super.suggest(
-***REMOVED******REMOVED******REMOVED***queryString,
+***REMOVED******REMOVED******REMOVED***query,
 ***REMOVED******REMOVED******REMOVED***searchArea: searchArea,
 ***REMOVED******REMOVED******REMOVED***preferredSearchLocation: preferredSearchLocation
 ***REMOVED******REMOVED***)
@@ -159,7 +154,7 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
 ***REMOVED******REMOVED******REMOVED*** Remove geographic constraints and re-run search.
 ***REMOVED******REMOVED***suggestParameters.searchArea = nil
 ***REMOVED******REMOVED***let geocodeResults =  try await locatorTask.suggest(
-***REMOVED******REMOVED******REMOVED***searchText: queryString,
+***REMOVED******REMOVED******REMOVED***searchText: query,
 ***REMOVED******REMOVED******REMOVED***parameters: suggestParameters
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
