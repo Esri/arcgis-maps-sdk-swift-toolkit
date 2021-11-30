@@ -64,8 +64,6 @@ public struct SearchResult {
     /// because not all valid results will have a geometry. E.g. feature results from non-spatial features.
     public let selectionViewpoint: Viewpoint?
     
-    /// The stable identity of the entity associated with this instance.
-    /// Required by `Identifiable` protocol.
     public let id = UUID()
 }
 
