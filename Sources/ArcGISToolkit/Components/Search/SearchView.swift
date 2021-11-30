@@ -297,7 +297,7 @@ extension ResultRow {
     }
 }
 
-/// A modifier which displays a background and shadow for a view.  Used to represent a selected view.
+/// A modifier which displays a background and shadow for a view. Used to represent a selected view.
 struct SelectedModifier: ViewModifier {
     /// `true` if the view should display as selected, `false` otherwise.
     var isSelected: Bool
