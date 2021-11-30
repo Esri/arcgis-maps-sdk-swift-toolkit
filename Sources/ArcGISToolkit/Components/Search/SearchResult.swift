@@ -64,8 +64,6 @@ public struct SearchResult {
 ***REMOVED******REMOVED***/ because not all valid results will have a geometry. E.g. feature results from non-spatial features.
 ***REMOVED***public let selectionViewpoint: Viewpoint?
 ***REMOVED***
-***REMOVED******REMOVED***/ The stable identity of the entity associated with this instance.
-***REMOVED******REMOVED***/ Required by `Identifiable` protocol.
 ***REMOVED***public let id = UUID()
 ***REMOVED***
 
