@@ -297,7 +297,7 @@ extension ResultRow {
 ***REMOVED***
 ***REMOVED***
 
-***REMOVED***/ A modifier which displays a background and shadow for a view.  Used to represent a selected view.
+***REMOVED***/ A modifier which displays a background and shadow for a view. Used to represent a selected view.
 struct SelectedModifier: ViewModifier {
 ***REMOVED******REMOVED***/ `true` if the view should display as selected, `false` otherwise.
 ***REMOVED***var isSelected: Bool
