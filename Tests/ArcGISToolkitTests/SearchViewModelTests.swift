@@ -14,7 +14,6 @@
 import XCTest
 import ArcGIS
 import ArcGISToolkit
-import Combine
 
 @MainActor
 class SearchViewModelTests: XCTestCase {
@@ -39,29 +38,6 @@ class SearchViewModelTests: XCTestCase {
         
         // With only one result, model should set `selectedResult` property.
         XCTAssertEqual(result.first, model.selectedResult)
-    }
-    
-    func testActiveSource() async throws {
-        let activeSource = LocatorSearchSource()
-        activeSource.name = "Simple Locator"
-        let model = SearchViewModel(
-            activeSource: activeSource,
-            sources: [LocatorSearchSource()]
-        )
-        
-        model.currentQuery = "Magers & Quinn Booksellers"
-        
-        model.commitSearch()
-        
-        let results = try await searchResults(model)
-        let result = try XCTUnwrap(results?.first)
-        XCTAssertEqual(result.owningSource.name, activeSource.name)
-        
-        model.updateSuggestions()
-        
-        let suggestions = try await searchSuggestions(model, dropFirst: true)
-        let suggestion = try XCTUnwrap(suggestions?.first)
-        XCTAssertEqual(suggestion.owningSource.name, activeSource.name)
     }
     
     func testCommitSearch() async throws {
@@ -157,6 +133,9 @@ class SearchViewModelTests: XCTestCase {
         model.queryArea = Polygon.chippewaFalls
         model.geoViewExtent = Polygon.chippewaFalls.extent
         model.currentQuery = "Coffee"
+        
+        // This is necessary for the model to compute `isEligibleForRequery`.
+        model.isGeoViewNavigating = true
         
         model.commitSearch()
         

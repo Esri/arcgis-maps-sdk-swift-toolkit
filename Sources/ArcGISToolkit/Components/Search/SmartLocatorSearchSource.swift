@@ -15,25 +15,17 @@ import SwiftUI
 import ArcGIS
 
 /// Extends `LocatorSearchSource` with intelligent search behaviors; adds support for features like
-/// type-specific placemarks, repeated search, and more. Advanced functionality requires knowledge of the
-/// underlying locator to be used well; this class implements behaviors that make assumptions about the
-/// locator being the world geocode service.
+/// type-specific placemarks, repeated search, and more on the world geocode service.
 public class SmartLocatorSearchSource: LocatorSearchSource {
     /// Creates a smart locator search source.
     /// - Parameters:
     ///   - name: Name to show when presenting this source in the UI.
-    ///   - locatorTask: The `LocatorTask` to use for searching..
-    ///   - maximumResults: The maximum results to return when performing a search. Most sources default to 6.
-    ///   - maximumSuggestions: The maximum suggestions to return. Most sources default to 6.
+    ///   - maximumResults: The maximum results to return when performing a search. Most sources default to `6`.
+    ///   - maximumSuggestions: The maximum suggestions to return. Most sources default to `6`.
     ///   - repeatSearchResultThreshold: The minimum number of search results to attempt to return.
     ///   - repeatSuggestResultThreshold: The minimum number of suggestions to attempt to return.
     public init(
         name: String = "Smart Locator",
-        locatorTask: LocatorTask = LocatorTask(
-            url: URL(
-                string: "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer"
-            )!
-        ),
         maximumResults: Int32 = 6,
         maximumSuggestions: Int32 = 6,
         repeatSearchResultThreshold: Int? = 1,
@@ -41,7 +33,11 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
     ) {
         super.init(
             name: name,
-            locatorTask: locatorTask,
+            locatorTask: LocatorTask(
+                url: URL(
+                    string: "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer"
+                )!
+            ),
             maximumResults: maximumResults,
             maximumSuggestions: maximumSuggestions
         )
@@ -63,13 +59,13 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
     public var repeatSuggestResultThreshold: Int? = 6
     
     public override func search(
-        _ queryString: String,
+        _ query: String,
         searchArea: Geometry? = nil,
         preferredSearchLocation: Point? = nil
     ) async throws -> [SearchResult] {
         // First, peform super class search.
         var results = try await super.search(
-            queryString,
+            query,
             searchArea: searchArea,
             preferredSearchLocation: preferredSearchLocation
         )
@@ -84,7 +80,7 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
         // Remove geographic constraints and re-run search.
         geocodeParameters.searchArea = nil
         let geocodeResults = try await locatorTask.geocode(
-            searchText: queryString,
+            searchText: query,
             parameters: geocodeParameters
         )
         
@@ -103,9 +99,8 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
         searchArea: Geometry? = nil,
         preferredSearchLocation: Point? = nil
     ) async throws -> [SearchResult] {
-        guard let suggestResult = searchSuggestion.suggestResult else {
-            return []
-        }
+        guard let suggestResult = searchSuggestion.suggestResult
+        else { return [] }
         
         var results = try await super.search(
             searchSuggestion,
@@ -139,12 +134,12 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
     }
     
     public override func suggest(
-        _ queryString: String,
+        _ query: String,
         searchArea: Geometry? = nil,
         preferredSearchLocation: Point? = nil
     ) async throws -> [SearchSuggestion] {
         var results = try await super.suggest(
-            queryString,
+            query,
             searchArea: searchArea,
             preferredSearchLocation: preferredSearchLocation
         )
@@ -159,7 +154,7 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
         // Remove geographic constraints and re-run search.
         suggestParameters.searchArea = nil
         let geocodeResults =  try await locatorTask.suggest(
-            searchText: queryString,
+            searchText: query,
             parameters: suggestParameters
         )
         

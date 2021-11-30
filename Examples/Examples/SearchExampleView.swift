@@ -12,7 +12,6 @@
 // limitations under the License.
 
 import SwiftUI
-import Combine
 import ArcGIS
 import ArcGISToolkit
 
@@ -39,9 +38,6 @@ struct SearchExampleView: View {
     
     /// The `GraphicsOverlay` used by the `SearchView` to display search results on the map.
     let searchResultsOverlay = GraphicsOverlay()
-    
-    @State
-    private var isNavigating: Bool = false
 
     var body: some View {
         MapView(
@@ -49,13 +45,13 @@ struct SearchExampleView: View {
             viewpoint: searchResultViewpoint,
             graphicsOverlays: [searchResultsOverlay]
         )
-            .onNavigatingChanged { isNavigating = $0 }
+            .onNavigatingChanged { searchViewModel.isGeoViewNavigating = $0 }
             .onViewpointChanged(kind: .centerAndScale) {
                 searchViewModel.queryCenter = $0.targetGeometry as? Point
                 
                 // Reset `searchResultViewpoint` here when the user pans/zooms
                 // the map, so if the user commits the same search with the
-                // same result, the Map will pan/zoom to the result.  Otherwise
+                // same result, the Map will pan/zoom to the result. Otherwise,
                 // `searchResultViewpoint` doesn't change which doesn't
                 // redraw the map with the new viewpoint.
                 searchResultViewpoint = nil
@@ -66,18 +62,16 @@ struct SearchExampleView: View {
                 //searchViewModel.queryArea = newValue
 
                 // For "Repeat Search Here" behavior, set the
-                // `searchViewModel.extent` property when navigating.
-                if isNavigating || searchViewModel.geoViewExtent == nil {
-                    searchViewModel.geoViewExtent = newValue.extent
-                }
+                // `searchViewModel.geoViewExtent` property when navigating.
+                searchViewModel.geoViewExtent = newValue.extent
             }
             .overlay(alignment: .topTrailing) {
-                SearchView(
-                    searchViewModel: searchViewModel,
-                    viewpoint: $searchResultViewpoint,
-                    resultsOverlay: searchResultsOverlay
-                )
+                SearchView(searchViewModel: searchViewModel)
                     .padding()
+            }
+            .onAppear {
+                searchViewModel.viewpoint = $searchResultViewpoint
+                searchViewModel.resultsOverlay = searchResultsOverlay
             }
     }
 }

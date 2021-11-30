@@ -15,29 +15,49 @@ import Foundation
 import ArcGIS
 
 /// Wraps a suggestion for display.
-public struct SearchSuggestion {    
-    /// Title that should be used when displaying a suggestion.
+public struct SearchSuggestion {
+    /// Creates a `SearchSuggestion`.
+    /// - Parameters:
+    ///   - displayTitle: The string to be used when displaying a suggestion.
+    ///   - owningSource: Reference to the `SearchSource` that created this suggestion.
+    ///   - isCollection: `true` if the search from this suggestion should be treated like a collection search, `false` if the search would return a single result.
+    ///   - displaySubtitle: Optional subtitle that can be displayed when showing a suggestion.
+    ///   - suggestResult: Underlying suggest result if this suggestion was created by a LocatorTask.
+    public init(
+        displayTitle: String,
+        owningSource: SearchSource,
+        isCollection: Bool = false,
+        displaySubtitle: String = "",
+        suggestResult: SuggestResult? = nil
+    ) {
+        self.displayTitle = displayTitle
+        self.owningSource = owningSource
+        self.isCollection = isCollection
+        self.displaySubtitle = displaySubtitle
+        self.suggestResult = suggestResult
+    }
+    
+    /// The string to be used when displaying a suggestion.
     public let displayTitle: String
     
-    /// Reference to the `SearchSourceProtocol` that created this suggestion. This property is necessary for the
-    /// view model to be able to accept a suggestion, because a suggestion should only be used with the
+    /// Reference to the `SearchSource` that created this suggestion. This property is necessary for the
+    /// view model to be able to accept a suggestion because a suggestion should only be used with the
     /// locator that created it.
     public let owningSource: SearchSource
     
     /// `true` if the search from this suggestion should be treated like a collection search, `false` if the
     /// search would return a single result. This property should be used to display a different icon
     /// in the UI depending on if this is a category search (like 'Coffee', 'Pizza', or 'Starbucks') and
-    /// false if it is a search for a specific result (e.g. '380 New York St. Redlands CA').
+    /// `false` if it is a search for a specific result (e.g. '380 New York St. Redlands CA').
     public let isCollection: Bool
     
     /// Optional subtitle that can be displayed when showing a suggestion.
-    public var displaySubtitle: String = ""
+    public let displaySubtitle: String
     
     /// Underlying suggest result if this suggestion was created by a LocatorTask. This can be `nil`, and
-    /// is likely to be `nil` when using custom `SearchSourceProtocol` implementations.
-    public var suggestResult: SuggestResult? = nil
+    /// is likely to be `nil` when using custom `SearchSource` implementations.
+    public let suggestResult: SuggestResult?
     
-    /// The stable identity of the entity associated with this instance.
     public let id = UUID()
 }
 
@@ -50,7 +70,7 @@ extension SearchSuggestion: Equatable {
 }
 
 extension SearchSuggestion: Hashable {
-    /// Note:  we're not hashing `suggestResult` as `SearchSuggestion` is created from
+    /// Note: We're not hashing `suggestResult` as `SearchSuggestion` is created from
     /// a `SuggestResult` and `suggestResult` will be different for two sepate geocode
     /// operations even though they represent the same suggestion.
     public func hash(into hasher: inout Hasher) {

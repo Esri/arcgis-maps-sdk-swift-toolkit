@@ -11,12 +11,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import Swift
 import SwiftUI
 import ArcGIS
-import Combine
 
-/// Performs searches and manages search state for a Search, or optionally without a UI connection.
+/// Performs searches and manages search state for a search, or optionally without a UI connection.
 @MainActor
 public class SearchViewModel: ObservableObject {
     /// Defines how many results to return; one, many, or automatic based on circumstance.
@@ -39,24 +37,21 @@ public class SearchViewModel: ObservableObject {
     public enum SearchOutcome {
         case results([SearchResult])
         case suggestions([SearchSuggestion])
-        case failure(SearchError)
+        case failure(String)
     }
     
     /// Creates a `SearchViewModel`.
     /// - Parameters:
-    ///   - activeSource: Tracks the currently active search source.
     ///   - queryArea: The search area to be used for the current query.
     ///   - queryCenter: Defines the center for the search.
     ///   - resultMode: Defines how many results to return.
     ///   - sources: Collection of search sources to be used.
     public init(
-        activeSource: SearchSource? = nil,
         queryArea: Geometry? = nil,
         queryCenter: Point? = nil,
         resultMode: SearchResultMode = .automatic,
         sources: [SearchSource] = []
     ) {
-        self.activeSource = activeSource
         self.queryArea = queryArea
         self.queryCenter = queryCenter
         self.resultMode = resultMode
@@ -64,7 +59,7 @@ public class SearchViewModel: ObservableObject {
     }
     
     /// The active search source.  If `nil`, the first item in `sources` is used.
-    public var activeSource: SearchSource?
+    private var activeSource: SearchSource? = nil
     
     /// Tracks the current user-entered query. This property drives both suggestions and searches.
     @Published
@@ -84,10 +79,8 @@ public class SearchViewModel: ObservableObject {
         }
     }
     
-    /// The extent at the time of the last search.  This is primarily set by the model, but in certain
-    /// circumstances can be set by an external client, for example after a view zooms programmatically
-    /// to an extent based on results of a search.
-    public var lastSearchExtent: Envelope? = nil {
+    /// The extent at the time of the last search.
+    private var lastSearchExtent: Envelope? = nil {
         didSet {
             isEligibleForRequery = false
         }
@@ -100,11 +93,14 @@ public class SearchViewModel: ObservableObject {
     /// search here' behavior. If that behavior is not wanted, it should be left `nil`.
     public var geoViewExtent: Envelope? = nil {
         willSet {
-            guard !isEligibleForRequery,
+            guard isGeoViewNavigating,
+                  !isEligibleForRequery,
                   !currentQuery.isEmpty,
                   let lastExtent = lastSearchExtent,
                   let newExtent = newValue
             else { return }
+            
+            viewpoint?.wrappedValue = nil
             
             // Check extent difference.
             let widthDiff = abs(lastExtent.width - newExtent.width)
@@ -127,17 +123,32 @@ public class SearchViewModel: ObservableObject {
         }
     }
     
-    /// `true` if the extent has changed by a set amount after a `Search` or `AcceptSuggestion` call.
-    /// This property is used by the view to enable 'Repeat search here' functionality. This property is
+    /// `true` when the geoView is navigating, `false` otherwise. Set by the external client.
+    public var isGeoViewNavigating: Bool = false
+    
+    /// The `Viewpoint` used to pan/zoom to results. If `nil`, there will be no zooming to results.
+    public var viewpoint: Binding<Viewpoint?>? = nil
+    
+    /// The `GraphicsOverlay` used to display results. If `nil`, no results will be displayed.
+    public var resultsOverlay: GraphicsOverlay? = nil
+    
+    /// If `true`, will set the viewpoint to the extent of the results, plus a little buffer, which will
+    /// cause the geoView to zoom to the extent of the results. If `false`,
+    /// no setting of the viewpoint will occur.
+    @Published
+    private var shouldZoomToResults = true
+    
+    /// `true` if the extent has changed by a set amount after a `Search` or `AcceptSuggestion`
+    /// call. This property is used by the view to enable 'Repeat search here' functionality. This property is
     /// observable, and the view should use it to hide and show the 'repeat search' button.
-    /// Changes to this property are driven by changes to the `geoViewExtent` property.  This value will be
-    /// true if the extent center changes by more than 25% of the average of the extent's height and width
+    /// Changes to this property are driven by changes to the `geoViewExtent` property. This value will be
+    /// `true` if the extent center changes by more than 25% of the average of the extent's height and width
     /// at the time of the last search or if the extent width/height changes by the same amount.
     @Published
     public private(set) var isEligibleForRequery: Bool = false
     
     /// The search area to be used for the current query. Results will be limited to those
-    /// within `QueryArea`.  Defaults to `nil`.
+    /// within `QueryArea`. Defaults to `nil`.
     public var queryArea: Geometry? = nil
     
     /// Defines the center for the search. For most use cases, this should be updated by the view
@@ -149,14 +160,15 @@ public class SearchViewModel: ObservableObject {
     /// (driven by the `isCollection` property).
     public var resultMode: SearchResultMode = .automatic
     
-    /// The collection of search and suggestion results.  A `nil` value means no query has been made.
+    /// The collection of search and suggestion results. A `nil` value means no query has been made.
     @Published
     public private(set) var searchOutcome: SearchOutcome? {
         didSet {
-            if case let .results(results) = searchOutcome,
-               results.count == 1 {
-                selectedResult = results.first
+            if case let .results(results) = searchOutcome {
+                display(searchResults: results)
+                selectedResult = results.count == 1 ? results.first : nil
             } else {
+                display(searchResults: [])
                 selectedResult = nil
             }
         }
@@ -167,40 +179,54 @@ public class SearchViewModel: ObservableObject {
     /// this property upon user selection. This property is observable. The view should observe this
     /// property and update the associated GeoView's viewpoint, if configured.
     @Published
-    public var selectedResult: SearchResult?
+    public var selectedResult: SearchResult? {
+        willSet {
+            (selectedResult?.geoElement as? Graphic)?.isSelected = false
+        }
+        didSet {
+            (selectedResult?.geoElement as? Graphic)?.isSelected = true
+            display(selectedResult: selectedResult)
+        }
+    }
     
     /// Collection of search sources to be used. This list is maintained over time and is not nullable.
     /// The view should observe this list for changes. Consumers should add and remove sources from
     /// this list as needed.
-    /// NOTE:  only the first source is currently used; multiple sources are not yet supported.
+    /// NOTE: Only the first source is currently used; multiple sources are not yet supported.
     public var sources: [SearchSource] = []
     
-    /// The currently executing async task.  `currentTask` should be cancelled
+    /// The currently executing async task. `currentTask` will be cancelled
     /// prior to starting another async task.
-    private var currentTask: Task<Void, Never>?
+    private var currentTask: Task<Void, Never>? {
+        willSet {
+            currentTask?.cancel()
+        }
+    }
     
     /// Starts a search. `selectedResult` and `results`, among other properties, are set
     /// asynchronously. Other query properties are read to define the parameters of the search.
     public func commitSearch() {
-        kickoffTask { await self.doSearch() }
+        currentTask = Task { await self.doSearch() }
     }
     
     /// Repeats the last search, limiting results to the extent specified in `geoViewExtent`.
     public func repeatSearch() {
-        kickoffTask { await self.doRepeatSearch() }
+        currentTask = Task { await self.doRepeatSearch() }
     }
     
     /// Updates suggestions list asynchronously.
     public func updateSuggestions() {
-        guard currentSuggestion == nil else {
-            // don't update suggestions if currently searching for one
+        guard currentSuggestion == nil
+        else {
+            // Don't update suggestions if currently searching for one.
             return
         }
         
-        kickoffTask { await self.doUpdateSuggestions() }
+        currentTask = Task { await self.doUpdateSuggestions() }
     }
     
     @Published
+    /// The suggestion currently selected by the user.
     public var currentSuggestion: SearchSuggestion? {
         didSet {
             if let currentSuggestion = currentSuggestion {
@@ -212,27 +238,23 @@ public class SearchViewModel: ObservableObject {
     /// Commits a search from a specific suggestion. Results will be set asynchronously. Behavior is
     /// generally the same as `commitSearch`, except `searchSuggestion` is used instead of the
     /// `currentQuery` property.
-    /// - Parameters:
-    ///   - searchSuggestion: The suggestion to use to commit the search.
+    /// - Parameter searchSuggestion: The suggestion to use to commit the search.
     public func acceptSuggestion(_ searchSuggestion: SearchSuggestion) {
         currentQuery = searchSuggestion.displayTitle
-        kickoffTask { await self.doAcceptSuggestion(searchSuggestion) }
-    }
-    
-    private func kickoffTask(_ taskInit: @escaping () async -> Void) {
-        currentTask?.cancel()
-        currentTask = Task { await taskInit() }
+        currentTask = Task { await self.doAcceptSuggestion(searchSuggestion) }
     }
 }
 
 private extension SearchViewModel {
+    /// Method to execute an async `repeatSearch` operation.
     func doRepeatSearch() async {
         guard !currentQuery.trimmingCharacters(in: .whitespaces).isEmpty,
               let queryExtent = geoViewExtent,
-              let source = currentSource() else {
-                  return
-              }
+              let source = currentSource()
+        else { return }
         
+        // We're repeating a search, don't zoom to results.
+        shouldZoomToResults = false
         await search(with: {
             try await source.repeatSearch(
                 currentQuery,
@@ -241,9 +263,11 @@ private extension SearchViewModel {
         })
     }
     
+    /// Method to execute an async `search` operation.
     func doSearch() async {
         guard !currentQuery.trimmingCharacters(in: .whitespaces).isEmpty,
-              let source = currentSource() else { return }
+              let source = currentSource()
+        else { return }
         
         await search(with: {
             try await source.search(
@@ -254,11 +278,12 @@ private extension SearchViewModel {
         } )
     }
     
+    /// Method to execute an async `suggest` operation.
     func doUpdateSuggestions() async {
         guard !currentQuery.trimmingCharacters(in: .whitespaces).isEmpty,
-              let source = currentSource() else {
-                  return
-              }
+              let source = currentSource()
+        else { return }
+        
         do {
             let suggestions = try await source.suggest(
                 currentQuery,
@@ -269,36 +294,50 @@ private extension SearchViewModel {
         } catch is CancellationError {
             // Do nothing if user cancelled and let next task set searchOutcome.
         } catch {
-            searchOutcome = .failure(SearchError(error))
+            searchOutcome = .failure(error.localizedDescription)
         }
     }
     
+    /// Method to execute an async `search` operation using a search suggestion..
+    /// - Parameter searchSuggestion: The suggestion to search for.
     func doAcceptSuggestion(_ searchSuggestion: SearchSuggestion) async {
-        await search(with: {
-            try await searchSuggestion.owningSource.search(
-                searchSuggestion,
-                searchArea: queryArea,
-                preferredSearchLocation: queryCenter
-            )
-        })
+        await search(
+            with: {
+                try await searchSuggestion.owningSource.search(
+                    searchSuggestion,
+                    searchArea: queryArea,
+                    preferredSearchLocation: queryCenter
+                )
+            },
+            isCollection: searchSuggestion.isCollection
+        )
         
         // once we are done searching for the suggestion, then reset it to nil
         currentSuggestion = nil
     }
     
-    func search(with action: () async throws -> [SearchResult]) async {
-        do {
-            // User is performing a search, so set `lastSearchExtent`.
-            lastSearchExtent = geoViewExtent
-            try await process(searchResults: action())
-        } catch is CancellationError {
-            searchOutcome = nil
-        } catch {
-            searchOutcome = .failure(SearchError(error))
+    /// Method to execut a search action and process the results.
+    /// - Parameter action: The action to perform prior to processing results.
+    /// - Parameter isCollection: `true` if the results are based on a collection search.
+    func search(
+        with action: () async throws -> [SearchResult],
+        isCollection: Bool = true) async {
+            do {
+                // User is performing a search, so set `lastSearchExtent`.
+                lastSearchExtent = geoViewExtent
+                try await process(searchResults: action(), isCollection: isCollection)
+            } catch is CancellationError {
+                searchOutcome = nil
+            } catch {
+                searchOutcome = .failure(error.localizedDescription)
+            }
         }
-    }
     
-    func process(searchResults: [SearchResult], isCollection: Bool = true) {
+    /// Method to process search results based on the current `resultMode`.
+    /// - Parameters:
+    ///   - searchResults: The array of search results to process.
+    ///   - isCollection: `true` if the results are based on a collection search.
+    func process(searchResults: [SearchResult], isCollection: Bool) {
         let effectiveResults: [SearchResult]
         
         switch resultMode {
@@ -332,4 +371,67 @@ extension SearchViewModel {
     }
 }
 
+private extension SearchViewModel {
+    func display(searchResults: [SearchResult]) {
+        guard let resultsOverlay = resultsOverlay else { return }
+        let resultGraphics: [Graphic] = searchResults.compactMap { result in
+            guard let graphic = result.geoElement as? Graphic else { return nil }
+            graphic.update(with: result)
+            return graphic
+        }
+        resultsOverlay.removeAllGraphics()
+        resultsOverlay.addGraphics(resultGraphics)
+        
+        // Make sure we have a viewpoint to zoom to.
+        guard let viewpoint = viewpoint else { return }
+        
+        if !resultGraphics.isEmpty,
+           let envelope = resultsOverlay.extent,
+           shouldZoomToResults {
+            let builder = EnvelopeBuilder(envelope: envelope)
+            builder.expand(factor: 1.1)
+            let targetExtent = builder.toGeometry() as! Envelope
+            viewpoint.wrappedValue = Viewpoint(
+                targetExtent: targetExtent
+            )
+            lastSearchExtent = targetExtent
+        } else {
+            viewpoint.wrappedValue = nil
+        }
+        
+        if !shouldZoomToResults { shouldZoomToResults = true }
+    }
+    
+    func display(selectedResult: SearchResult?) {
+        guard let selectedResult = selectedResult else { return }
+        viewpoint?.wrappedValue = selectedResult.selectionViewpoint
+    }
+}
+
 extension SearchViewModel.SearchOutcome: Equatable {}
+
+private extension Graphic {
+    func update(with result: SearchResult) {
+        if symbol == nil {
+            symbol = Symbol.searchResult()
+        }
+        setAttributeValue(result.displayTitle, forKey: "displayTitle")
+        setAttributeValue(result.displaySubtitle, forKey: "displaySubtitle")
+    }
+}
+
+private extension Symbol {
+    /// A search result marker symbol.
+    static func searchResult() -> MarkerSymbol {
+        let image = UIImage.mapPin
+        let symbol = PictureMarkerSymbol(image: image)
+        symbol.offsetY = Float(image.size.height / 2.0)
+        return symbol
+    }
+}
+
+extension UIImage {
+    static var mapPin: UIImage {
+        return UIImage(named: "MapPin", in: Bundle.module, with: nil)!
+    }
+}
