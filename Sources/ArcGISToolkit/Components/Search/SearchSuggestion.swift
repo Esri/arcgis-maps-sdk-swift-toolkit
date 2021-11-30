@@ -58,8 +58,6 @@ public struct SearchSuggestion {
     /// is likely to be `nil` when using custom `SearchSource` implementations.
     public let suggestResult: SuggestResult?
     
-    /// The stable identity of the entity associated with this instance.
-    /// Required by `Identifiable` protocol.
     public let id = UUID()
 }
 
@@ -72,7 +70,7 @@ extension SearchSuggestion: Equatable {
 }
 
 extension SearchSuggestion: Hashable {
-    /// Note:  We're not hashing `suggestResult` as `SearchSuggestion` is created from
+    /// Note: We're not hashing `suggestResult` as `SearchSuggestion` is created from
     /// a `SuggestResult` and `suggestResult` will be different for two sepate geocode
     /// operations even though they represent the same suggestion.
     public func hash(into hasher: inout Hasher) {

@@ -13,7 +13,7 @@
 
 import SwiftUI
 
-/// A custom view implementing a SearchField.  It contains a search button, text field, delete text button,
+/// A custom view implementing a SearchField. It contains a search button, text field, delete text button,
 /// and a button to allow users to hide/show the search results list.
 public struct SearchField: View {
     /// Creates a `SearchField`.

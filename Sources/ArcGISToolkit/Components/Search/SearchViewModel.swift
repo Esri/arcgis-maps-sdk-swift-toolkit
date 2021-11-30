@@ -11,10 +11,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import Swift
 import SwiftUI
 import ArcGIS
-import Combine
 
 /// Performs searches and manages search state for a search, or optionally without a UI connection.
 @MainActor
@@ -125,32 +123,32 @@ public class SearchViewModel: ObservableObject {
         }
     }
     
-    /// `true` when the geoView is navigating, `false` otherwise.  Set by the external client.
+    /// `true` when the geoView is navigating, `false` otherwise. Set by the external client.
     public var isGeoViewNavigating: Bool = false
     
-    /// The `Viewpoint` used to pan/zoom to results.  If `nil`, there will be no zooming to results.
+    /// The `Viewpoint` used to pan/zoom to results. If `nil`, there will be no zooming to results.
     public var viewpoint: Binding<Viewpoint?>? = nil
     
-    /// The `GraphicsOverlay` used to display results.  If `nil`, no results will be displayed.
+    /// The `GraphicsOverlay` used to display results. If `nil`, no results will be displayed.
     public var resultsOverlay: GraphicsOverlay? = nil
     
     /// If `true`, will set the viewpoint to the extent of the results, plus a little buffer, which will
-    /// cause the geoView to zoom to the extent of the results.  If `false`,
+    /// cause the geoView to zoom to the extent of the results. If `false`,
     /// no setting of the viewpoint will occur.
     @Published
     private var shouldZoomToResults = true
     
-    /// `true` if the extent has changed by a set amount after a `Search` or `AcceptSuggestion` call.
-    /// This property is used by the view to enable 'Repeat search here' functionality. This property is
+    /// `true` if the extent has changed by a set amount after a `Search` or `AcceptSuggestion`
+    /// call. This property is used by the view to enable 'Repeat search here' functionality. This property is
     /// observable, and the view should use it to hide and show the 'repeat search' button.
-    /// Changes to this property are driven by changes to the `geoViewExtent` property.  This value will be
-    /// true if the extent center changes by more than 25% of the average of the extent's height and width
+    /// Changes to this property are driven by changes to the `geoViewExtent` property. This value will be
+    /// `true` if the extent center changes by more than 25% of the average of the extent's height and width
     /// at the time of the last search or if the extent width/height changes by the same amount.
     @Published
     public private(set) var isEligibleForRequery: Bool = false
     
     /// The search area to be used for the current query. Results will be limited to those
-    /// within `QueryArea`.  Defaults to `nil`.
+    /// within `QueryArea`. Defaults to `nil`.
     public var queryArea: Geometry? = nil
     
     /// Defines the center for the search. For most use cases, this should be updated by the view
@@ -162,7 +160,7 @@ public class SearchViewModel: ObservableObject {
     /// (driven by the `isCollection` property).
     public var resultMode: SearchResultMode = .automatic
     
-    /// The collection of search and suggestion results.  A `nil` value means no query has been made.
+    /// The collection of search and suggestion results. A `nil` value means no query has been made.
     @Published
     public private(set) var searchOutcome: SearchOutcome? {
         didSet {
@@ -171,6 +169,7 @@ public class SearchViewModel: ObservableObject {
                 selectedResult = results.count == 1 ? results.first : nil
             } else {
                 display(searchResults: [])
+                selectedResult = nil
             }
         }
     }
@@ -193,10 +192,10 @@ public class SearchViewModel: ObservableObject {
     /// Collection of search sources to be used. This list is maintained over time and is not nullable.
     /// The view should observe this list for changes. Consumers should add and remove sources from
     /// this list as needed.
-    /// NOTE:  only the first source is currently used; multiple sources are not yet supported.
+    /// NOTE: Only the first source is currently used; multiple sources are not yet supported.
     public var sources: [SearchSource] = []
     
-    /// The currently executing async task.  `currentTask` will be cancelled
+    /// The currently executing async task. `currentTask` will be cancelled
     /// prior to starting another async task.
     private var currentTask: Task<Void, Never>? {
         willSet {
@@ -219,7 +218,7 @@ public class SearchViewModel: ObservableObject {
     public func updateSuggestions() {
         guard currentSuggestion == nil
         else {
-            // don't update suggestions if currently searching for one
+            // Don't update suggestions if currently searching for one.
             return
         }
         
@@ -227,6 +226,7 @@ public class SearchViewModel: ObservableObject {
     }
     
     @Published
+    /// The suggestion currently selected by the user.
     public var currentSuggestion: SearchSuggestion? {
         didSet {
             if let currentSuggestion = currentSuggestion {
@@ -246,6 +246,7 @@ public class SearchViewModel: ObservableObject {
 }
 
 private extension SearchViewModel {
+    /// Method to execute an async `repeatSearch` operation.
     func doRepeatSearch() async {
         guard !currentQuery.trimmingCharacters(in: .whitespaces).isEmpty,
               let queryExtent = geoViewExtent,
@@ -262,6 +263,7 @@ private extension SearchViewModel {
         })
     }
     
+    /// Method to execute an async `search` operation.
     func doSearch() async {
         guard !currentQuery.trimmingCharacters(in: .whitespaces).isEmpty,
               let source = currentSource()
@@ -276,6 +278,7 @@ private extension SearchViewModel {
         } )
     }
     
+    /// Method to execute an async `suggest` operation.
     func doUpdateSuggestions() async {
         guard !currentQuery.trimmingCharacters(in: .whitespaces).isEmpty,
               let source = currentSource()
@@ -295,32 +298,46 @@ private extension SearchViewModel {
         }
     }
     
+    /// Method to execute an async `search` operation using a search suggestion..
+    /// - Parameter searchSuggestion: The suggestion to search for.
     func doAcceptSuggestion(_ searchSuggestion: SearchSuggestion) async {
-        await search(with: {
-            try await searchSuggestion.owningSource.search(
-                searchSuggestion,
-                searchArea: queryArea,
-                preferredSearchLocation: queryCenter
-            )
-        })
+        await search(
+            with: {
+                try await searchSuggestion.owningSource.search(
+                    searchSuggestion,
+                    searchArea: queryArea,
+                    preferredSearchLocation: queryCenter
+                )
+            },
+            isCollection: searchSuggestion.isCollection
+        )
         
         // once we are done searching for the suggestion, then reset it to nil
         currentSuggestion = nil
     }
     
-    func search(with action: () async throws -> [SearchResult]) async {
-        do {
-            // User is performing a search, so set `lastSearchExtent`.
-            lastSearchExtent = geoViewExtent
-            try await process(searchResults: action())
-        } catch is CancellationError {
-            searchOutcome = nil
-        } catch {
-            searchOutcome = .failure(error.localizedDescription)
+    /// Method to execut a search action and process the results.
+    /// - Parameter action: The action to perform prior to processing results.
+    /// - Parameter isCollection: `true` if the results are based on a collection search.
+    func search(
+        with action: () async throws -> [SearchResult],
+        isCollection: Bool = true) async {
+            do {
+                // User is performing a search, so set `lastSearchExtent`.
+                lastSearchExtent = geoViewExtent
+                try await process(searchResults: action(), isCollection: isCollection)
+            } catch is CancellationError {
+                searchOutcome = nil
+            } catch {
+                searchOutcome = .failure(error.localizedDescription)
+            }
         }
-    }
     
-    func process(searchResults: [SearchResult], isCollection: Bool = true) {
+    /// Method to process search results based on the current `resultMode`.
+    /// - Parameters:
+    ///   - searchResults: The array of search results to process.
+    ///   - isCollection: `true` if the results are based on a collection search.
+    func process(searchResults: [SearchResult], isCollection: Bool) {
         let effectiveResults: [SearchResult]
         
         switch resultMode {
