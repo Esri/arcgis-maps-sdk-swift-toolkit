@@ -225,8 +225,8 @@ public class SearchViewModel: ObservableObject {
         currentTask = Task { await self.doUpdateSuggestions() }
     }
     
-    @Published
     /// The suggestion currently selected by the user.
+    @Published
     public var currentSuggestion: SearchSuggestion? {
         didSet {
             if let currentSuggestion = currentSuggestion {
@@ -316,7 +316,7 @@ private extension SearchViewModel {
         currentSuggestion = nil
     }
     
-    /// Method to execut a search action and process the results.
+    /// Method to execute a search action and process the results.
     /// - Parameter action: The action to perform prior to processing results.
     /// - Parameter isCollection: `true` if the results are based on a collection search.
     func search(
