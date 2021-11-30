@@ -70,10 +70,11 @@ extension SearchSuggestion: Equatable {
 }
 
 extension SearchSuggestion: Hashable {
-    /// Note: We're not hashing `suggestResult` as `SearchSuggestion` is created from
-    /// a `SuggestResult` and `suggestResult` will be different for two sepate geocode
-    /// operations even though they represent the same suggestion.
     public func hash(into hasher: inout Hasher) {
+        // Note: We're not hashing `suggestResult` as `SearchSuggestion` is
+        // created from a `SuggestResult` and `suggestResult` will be different
+        // for two sepate geocode operations even though they represent the
+        // same suggestion.
         hasher.combine(id)
     }
 }
