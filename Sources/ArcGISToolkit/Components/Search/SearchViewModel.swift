@@ -225,8 +225,8 @@ public class SearchViewModel: ObservableObject {
 ***REMOVED******REMOVED***currentTask = Task { await self.doUpdateSuggestions() ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED***@Published
 ***REMOVED******REMOVED***/ The suggestion currently selected by the user.
+***REMOVED***@Published
 ***REMOVED***public var currentSuggestion: SearchSuggestion? {
 ***REMOVED******REMOVED***didSet {
 ***REMOVED******REMOVED******REMOVED***if let currentSuggestion = currentSuggestion {
@@ -316,7 +316,7 @@ private extension SearchViewModel {
 ***REMOVED******REMOVED***currentSuggestion = nil
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Method to execut a search action and process the results.
+***REMOVED******REMOVED***/ Method to execute a search action and process the results.
 ***REMOVED******REMOVED***/ - Parameter action: The action to perform prior to processing results.
 ***REMOVED******REMOVED***/ - Parameter isCollection: `true` if the results are based on a collection search.
 ***REMOVED***func search(
