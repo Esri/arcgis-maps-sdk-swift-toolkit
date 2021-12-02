@@ -22,10 +22,10 @@ import Combine
 ***REMOVED***
 ***REMOVED*** Test Design: https:***REMOVED***devtopia.esri.com/runtime/common-toolkit/blob/master/designs/BasemapGallery/BasemapGallery_Test_Design.md
 ***REMOVED***
-***REMOVED*** Note:  the iOS implementation uses the MVVM approach and SwiftUI.  This
+***REMOVED*** Note:  the iOS implementation uses the MVVM approach and SwiftUI. This
 ***REMOVED*** required a bit more properties/logic in the `BasemapGalleryViewModel` (such
 ***REMOVED*** as `geoModel.actualSpatialReference`) than the `BasemapGallery` design
-***REMOVED*** specifies.  Tests not present in the test design have been added to
+***REMOVED*** specifies. Tests not present in the test design have been added to
 ***REMOVED*** accomodate those differences.
 @MainActor
 class BasemapGalleryViewModelTests: XCTestCase {
@@ -79,7 +79,7 @@ class BasemapGalleryViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***let sortedDeveloperItems = developerBasemapItems.sorted { $0.name < $1.name ***REMOVED***
 ***REMOVED******REMOVED***XCTAssertNotEqual(sortedItems, sortedDeveloperItems)
 
-***REMOVED******REMOVED******REMOVED*** BasemapGalleryItems.  No basemaps are fetched from a portal.
+***REMOVED******REMOVED******REMOVED*** BasemapGalleryItems. No basemaps are fetched from a portal.
 ***REMOVED******REMOVED***let itemsViewModel = BasemapGalleryViewModel(
 ***REMOVED******REMOVED******REMOVED***basemapGalleryItems: defaultBasemapGalleryItems
 ***REMOVED******REMOVED***)
@@ -90,7 +90,7 @@ class BasemapGalleryViewModelTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***defaultBasemapGalleryItems.count
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Both Portal and BasemapGalleryItems.  Basemaps are fetched from
+***REMOVED******REMOVED******REMOVED*** Both Portal and BasemapGalleryItems. Basemaps are fetched from
 ***REMOVED******REMOVED******REMOVED*** the portal and appended to the list of basemapGalleryItems.
 ***REMOVED******REMOVED***let viewModel = BasemapGalleryViewModel(
 ***REMOVED******REMOVED******REMOVED***portal: Portal.arcGISOnline(isLoginRequired: false),

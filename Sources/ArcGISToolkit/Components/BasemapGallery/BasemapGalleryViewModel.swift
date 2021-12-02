@@ -11,54 +11,35 @@
 ***REMOVED*** See the License for the specific language governing permissions and
 ***REMOVED*** limitations under the License.
 
-import Swift
 ***REMOVED***
 ***REMOVED***
-import Combine
 
 ***REMOVED***/ Manages the state for a `BasemapGallery`.
 @MainActor
 public class BasemapGalleryViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ Creates a `BasemapGalleryViewModel`.
-***REMOVED******REMOVED***/ - Remark: If `portal` is non-nil, the portal's basemaps will be loaded.  If `portal` is
-***REMOVED******REMOVED***/ `nil`, ArcGISOnline's developer basemaps will be loaded.  In both cases, the basemaps
-***REMOVED******REMOVED***/ will be added to `basemapGalleryItems`.
+***REMOVED******REMOVED***/ - Remark: If `basemapGalleryItems` is empty, ArcGISOnline's developer basemaps will
+***REMOVED******REMOVED***/ be loaded and added to `basemapGalleryItems`.
 ***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - geoModel: The `GeoModel`.
-***REMOVED******REMOVED***/   - portal: The `Portal` to load base maps from.
 ***REMOVED******REMOVED***/   - basemapGalleryItems: A list of pre-defined base maps to display.
-***REMOVED***public init(
-***REMOVED******REMOVED***geoModel: GeoModel? = nil,
-***REMOVED******REMOVED***portal: Portal? = nil,
-***REMOVED******REMOVED***basemapGalleryItems: [BasemapGalleryItem] = []
-***REMOVED***) {
-***REMOVED******REMOVED***self.geoModel = geoModel
-***REMOVED******REMOVED***self.portal = portal
+***REMOVED***public init(_ basemapGalleryItems: [BasemapGalleryItem] = []) {
 ***REMOVED******REMOVED***self.basemapGalleryItems.append(contentsOf: basemapGalleryItems)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Note that we don't want to store this tasks and cancel it
-***REMOVED******REMOVED******REMOVED*** before kicking off another operation because these operations
-***REMOVED******REMOVED******REMOVED*** could have been started elsewhere as well as here.
-***REMOVED******REMOVED******REMOVED*** Canceling them here would also cancel those other operations,
-***REMOVED******REMOVED******REMOVED*** which we don't want to do.
-***REMOVED******REMOVED***Task {
-***REMOVED******REMOVED******REMOVED******REMOVED*** Load the geomodel.
-***REMOVED******REMOVED******REMOVED***await load(geoModel: geoModel)
-
-***REMOVED******REMOVED******REMOVED******REMOVED*** If we have a portal or no basemapGalleryItems were supplied,
-***REMOVED******REMOVED******REMOVED******REMOVED*** then load the default basemaps from the portal, if any, or AGOL.
-***REMOVED******REMOVED******REMOVED***if portal != nil || basemapGalleryItems.isEmpty {
-***REMOVED******REMOVED******REMOVED******REMOVED***var thePortal = portal
-***REMOVED******REMOVED******REMOVED******REMOVED***var useDeveloperBasemaps = false
-***REMOVED******REMOVED******REMOVED******REMOVED***if thePortal == nil {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***thePortal = Portal.arcGISOnline(isLoginRequired: false)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***useDeveloperBasemaps = true
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***if basemapGalleryItems.isEmpty {
+***REMOVED******REMOVED******REMOVED******REMOVED*** We have no basemap items, so fetch the
+***REMOVED******REMOVED******REMOVED******REMOVED***developer basemaps from AGOL.
+***REMOVED******REMOVED******REMOVED***fetchBasemapsTask = Task {
 ***REMOVED******REMOVED******REMOVED******REMOVED***await fetchBasemaps(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***from: thePortal,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***useDeveloperBasemaps: useDeveloperBasemaps
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***from: Portal.arcGISOnline(isLoginRequired: false),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***useDeveloperBasemaps: true
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***private var fetchBasemapsTask: Task<Void, Never>? {
+***REMOVED******REMOVED***willSet {
+***REMOVED******REMOVED******REMOVED***fetchBasemapsTask?.cancel()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -76,21 +57,23 @@ public class BasemapGalleryViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ The `Portal` object, if any.  Setting the portal will automatically fetch it's basemaps
-***REMOVED******REMOVED***/ and replace the`basemapGalleryItems` array with the fetched basemaps.
+***REMOVED******REMOVED***/ The `Portal` object, if any. Setting the portal will automatically fetch it's basemaps
+***REMOVED******REMOVED***/ and replace the`basemapGalleryItems` array items with the fetched basemaps.
 ***REMOVED***public var portal: Portal? {
 ***REMOVED******REMOVED***didSet {
-***REMOVED******REMOVED******REMOVED***Task { await fetchBasemaps(from: portal, append: false) ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED*** Remove all items from `basemapGalleryItems`.
+***REMOVED******REMOVED******REMOVED***basemapGalleryItems.removeAll()
+***REMOVED******REMOVED******REMOVED***fetchBasemapsTask = Task { await fetchBasemaps(from: portal) ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ The list of basemaps currently visible in the gallery.  It is comprised of items passed into
+***REMOVED******REMOVED***/ The list of basemaps currently visible in the gallery. It is comprised of items passed into
 ***REMOVED******REMOVED***/ the `BasemapGalleryItem` constructor property and items loaded either from `portal` or
 ***REMOVED******REMOVED***/ from ArcGISOnline if `portal` is `nil`.
 ***REMOVED***@Published
 ***REMOVED***public var basemapGalleryItems: [BasemapGalleryItem] = []
 ***REMOVED***
-***REMOVED******REMOVED***/ `BasemapGalleryItem` representing the `GeoModel`'s current base map. This may be a
+***REMOVED******REMOVED***/ The `BasemapGalleryItem` representing the `GeoModel`'s current base map. This may be a
 ***REMOVED******REMOVED***/ basemap which does not exist in the gallery.
 ***REMOVED***@Published
 ***REMOVED***public private(set) var currentBasemapGalleryItem: BasemapGalleryItem? = nil {
@@ -106,25 +89,30 @@ public class BasemapGalleryViewModel: ObservableObject {
 ***REMOVED***public private(set) var spatialReferenceMismatchError: SpatialReferenceMismatchError? = nil
 ***REMOVED***
 ***REMOVED******REMOVED***/ This attempts to set `currentBasemapGalleryItem`. `currentBasemapGalleryItem`
-***REMOVED******REMOVED***/ will be set if it's spatialReference matches that of the current geoModel.  If the spatialReferences
+***REMOVED******REMOVED***/ will be set if it's spatial reference matches that of the current geoModel. If the spatial references
 ***REMOVED******REMOVED***/ do not match, `currentBasemapGalleryItem` will be unchanged.
 ***REMOVED******REMOVED***/ - Parameter basemapGalleryItem: The new, potential, `BasemapGalleryItem`.
-***REMOVED***public func updateCurrentBasemapGalleryItem(_ basemapGalleryItem: BasemapGalleryItem) {
+***REMOVED***public func updateCurrentBasemapGalleryItem(
+***REMOVED******REMOVED***_ basemapGalleryItem: BasemapGalleryItem
+***REMOVED***) {
 ***REMOVED******REMOVED***Task {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Ensure the geoModel is loaded.
 ***REMOVED******REMOVED******REMOVED***try await geoModel?.load()
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Reset the mismatch error.
 ***REMOVED******REMOVED******REMOVED***spatialReferenceMismatchError = nil
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED*** Update the basemap gallery item's `spatialReferenceStatus`.
 ***REMOVED******REMOVED******REMOVED***try await basemapGalleryItem.updateSpatialReferenceStatus(
 ***REMOVED******REMOVED******REMOVED******REMOVED***geoModel?.actualSpatialReference
 ***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***await MainActor.run {
-***REMOVED******REMOVED******REMOVED******REMOVED***if basemapGalleryItem.spatialReferenceStatus == .match ||
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***basemapGalleryItem.spatialReferenceStatus == .unknown {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentBasemapGalleryItem = basemapGalleryItem
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***else {
+***REMOVED******REMOVED******REMOVED******REMOVED*** Update @State on the main thread.
+***REMOVED******REMOVED******REMOVED***await MainActor.run {
+***REMOVED******REMOVED******REMOVED******REMOVED***switch basemapGalleryItem.spatialReferenceStatus {
+***REMOVED******REMOVED******REMOVED******REMOVED***case .match, .unknown:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentBasemapGalleryItem = basemapGalleryItem
+***REMOVED******REMOVED******REMOVED******REMOVED***case .noMatch:
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***spatialReferenceMismatchError = SpatialReferenceMismatchError(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***basemapSR: basemapGalleryItem.spatialReference,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***geoModelSR: geoModel?.actualSpatialReference
@@ -136,6 +124,10 @@ public class BasemapGalleryViewModel: ObservableObject {
 ***REMOVED***
 
 internal extension GeoModel {
+***REMOVED******REMOVED***/ The actual spatial reference of the geoModel. For `Map`s, this is the map's
+***REMOVED******REMOVED***/ `spatialReference`. For `Scene`s, if the `sceneViewTilingScheme` is
+***REMOVED******REMOVED***/ `.webMercator`, the `actualSpatialReference` is `.webMercator`, otherwise
+***REMOVED******REMOVED***/ it is the `spatialReference` of the scene.
 ***REMOVED***var actualSpatialReference: SpatialReference? {
 ***REMOVED******REMOVED***(self as? ArcGIS.Scene)?.sceneViewTilingScheme == .webMercator ?
 ***REMOVED******REMOVED***SpatialReference.webMercator :
@@ -144,52 +136,44 @@ internal extension GeoModel {
 ***REMOVED***
 
 private extension BasemapGalleryViewModel {
-***REMOVED******REMOVED***/ Fetches the basemaps from the given portal and populates `basemapGalleryItems` with
+***REMOVED******REMOVED***/ Fetches the basemaps from the given portal and appends `basemapGalleryItems` with
 ***REMOVED******REMOVED***/ items created from the fetched basemaps.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - portal: Portal to fetch basemaps from
-***REMOVED******REMOVED***/   - useDeveloperBasemaps: If `true`, will always use the portal's developer basemaps.  If
+***REMOVED******REMOVED***/   - useDeveloperBasemaps: If `true`, will always use the portal's developer basemaps. If
 ***REMOVED******REMOVED***/   `false`, it will use either the portal's basemaps or vector basemaps, depending on the value of
 ***REMOVED******REMOVED***/   `portal.portalInfo.useVectorBasemaps`.
-***REMOVED******REMOVED***/   - append: If `true`, will appended fetched basemaps to `basemapGalleryItems`.
-***REMOVED******REMOVED***/   If `false`, it will clear `basemapGalleryItems` before adding the fetched basemaps.
 ***REMOVED***func fetchBasemaps(
 ***REMOVED******REMOVED***from portal: Portal?,
-***REMOVED******REMOVED***useDeveloperBasemaps: Bool = false,
-***REMOVED******REMOVED***append: Bool = true
+***REMOVED******REMOVED***useDeveloperBasemaps: Bool = false
 ***REMOVED***) async {
 ***REMOVED******REMOVED***guard let portal = portal else { return ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED***try await portal.load()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***var tmpItems = [BasemapGalleryItem]()
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***if useDeveloperBasemaps {
-***REMOVED******REMOVED******REMOVED******REMOVED***tmpItems += try await portal.developerBasemaps.map {
+***REMOVED******REMOVED******REMOVED******REMOVED***basemapGalleryItems += try await portal.developerBasemaps.map {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***BasemapGalleryItem(basemap: $0)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED*** else if let portalInfo = portal.portalInfo,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  portalInfo.useVectorBasemaps {
-***REMOVED******REMOVED******REMOVED******REMOVED***tmpItems += try await portal.vectorBasemaps.map {
+***REMOVED******REMOVED******REMOVED******REMOVED***basemapGalleryItems += try await portal.vectorBasemaps.map {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***BasemapGalleryItem(basemap: $0)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***tmpItems += try await portal.basemaps.map {
+***REMOVED******REMOVED******REMOVED******REMOVED***basemapGalleryItems += try await portal.basemaps.map {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***BasemapGalleryItem(basemap: $0)
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***if append {
-***REMOVED******REMOVED******REMOVED******REMOVED***basemapGalleryItems += tmpItems
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***else {
-***REMOVED******REMOVED******REMOVED******REMOVED***basemapGalleryItems = tmpItems
 ***REMOVED******REMOVED***
 ***REMOVED*** catch {
 ***REMOVED******REMOVED******REMOVED***fetchBasemapsError = error
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ Loads the given `GeoModel` then sets `currentBasemapGalleryItem` to an item
+***REMOVED******REMOVED***/ created with the geoModel's basemap.
+***REMOVED******REMOVED***/ - Parameter geoModel: The `GeoModel` to load.
 ***REMOVED***func load(geoModel: GeoModel?) async {
 ***REMOVED******REMOVED***guard let geoModel = geoModel else { return ***REMOVED***
 ***REMOVED******REMOVED***do {
@@ -204,11 +188,12 @@ private extension BasemapGalleryViewModel {
 ***REMOVED***
 ***REMOVED***
 
-***REMOVED***/ A value that represents a SpatialReference mismatch.
+***REMOVED***/ A value that represents an error ocurring because of a SpatialReference mismatch between
+***REMOVED***/ a geomodel and a basemap.
 public struct SpatialReferenceMismatchError: Error {
 ***REMOVED******REMOVED***/ The basemap's spatial reference
 ***REMOVED***public let basemapSR: SpatialReference?
-
+***REMOVED***
 ***REMOVED******REMOVED***/ The geomodel's spatial reference
 ***REMOVED***public let geoModelSR: SpatialReference?
 ***REMOVED***

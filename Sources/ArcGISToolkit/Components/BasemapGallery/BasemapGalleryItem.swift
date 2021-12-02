@@ -11,10 +11,9 @@
 ***REMOVED*** See the License for the specific language governing permissions and
 ***REMOVED*** limitations under the License.
 
-***REMOVED***
-***REMOVED***
-
 import Foundation
+import UIKit.UIImage
+***REMOVED***
 
 ***REMOVED***/  The `BasemapGalleryItem` encompasses an element in a `BasemapGallery`.
 public class BasemapGalleryItem: ObservableObject {
@@ -32,10 +31,10 @@ public class BasemapGalleryItem: ObservableObject {
 ***REMOVED******REMOVED***/ Creates a `BasemapGalleryItem`.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - basemap: The `Basemap` represented by the item.
-***REMOVED******REMOVED***/   - name: The item name.  If `nil`, `Basemap.name` is used, if available..
-***REMOVED******REMOVED***/   - description: The item description.  If `nil`, `Basemap.Item.description`
+***REMOVED******REMOVED***/   - name: The item name. If `nil`, `Basemap.name` is used, if available..
+***REMOVED******REMOVED***/   - description: The item description. If `nil`, `Basemap.Item.description`
 ***REMOVED******REMOVED***/   is used, if available.
-***REMOVED******REMOVED***/   - thumbnail: The thumbnail used to represent the item.  If `nil`,
+***REMOVED******REMOVED***/   - thumbnail: The thumbnail used to represent the item. If `nil`,
 ***REMOVED******REMOVED***/   `Basemap.Item.thumbnail` is used, if available.
 ***REMOVED***public init(
 ***REMOVED******REMOVED***basemap: Basemap,
@@ -58,7 +57,7 @@ public class BasemapGalleryItem: ObservableObject {
 ***REMOVED***@Published
 ***REMOVED***public private(set) var loadBasemapsError: RuntimeError? = nil
 ***REMOVED***
-***REMOVED******REMOVED***/ The basemap this `BasemapGalleryItem` represents.
+***REMOVED******REMOVED***/ The basemap represented by `BasemapGalleryItem`.
 ***REMOVED***public private(set) var basemap: Basemap
 ***REMOVED***
 ***REMOVED******REMOVED***/ The name of the `basemap`.
@@ -80,17 +79,18 @@ public class BasemapGalleryItem: ObservableObject {
 ***REMOVED***@Published
 ***REMOVED***public private(set) var isLoading = true
 ***REMOVED***
-***REMOVED******REMOVED***/ The `SpatialReferenceStatus` of the item.  This is set via a call to
-***REMOVED******REMOVED***/ `updateSpatialReferenceStatus()`
+***REMOVED******REMOVED***/ The `SpatialReferenceStatus` of the item. This is set via a call to
+***REMOVED******REMOVED***/ `updateSpatialReferenceStatus()`.
 ***REMOVED***@Published
 ***REMOVED***public private(set) var spatialReferenceStatus: SpatialReferenceStatus = .unknown
 ***REMOVED***
-***REMOVED******REMOVED***/ The `SpatialReference` of `basemap`.  This will be `nil` until the basemap's
+***REMOVED******REMOVED***/ The `SpatialReference` of `basemap`. This will be `nil` until the basemap's
 ***REMOVED******REMOVED***/ baseLayers have been loaded in `updateSpatialReferenceStatus()`.
 ***REMOVED***public private(set) var spatialReference: SpatialReference? = nil
 ***REMOVED***
 
 private extension BasemapGalleryItem {
+***REMOVED******REMOVED***/ Loads the basemap and the item's thumbnail, if available.
 ***REMOVED***func loadBasemap() async {
 ***REMOVED******REMOVED***var loadError: RuntimeError? = nil
 ***REMOVED******REMOVED***do {
@@ -174,7 +174,8 @@ extension BasemapGalleryItem: Equatable {
 ***REMOVED***
 
 private extension UIImage {
-***REMOVED******REMOVED***/ A search result marker symbol.
+***REMOVED******REMOVED***/ A default thumbnail image.
+***REMOVED******REMOVED***/ - Returns: The default thumbnail.
 ***REMOVED***static func defaultThumbnail() -> UIImage {
 ***REMOVED******REMOVED***return UIImage(named: "DefaultBasemap", in: Bundle.module, with: nil)!
 ***REMOVED***

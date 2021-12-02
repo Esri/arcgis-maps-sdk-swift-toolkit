@@ -14,7 +14,7 @@
 ***REMOVED***
 ***REMOVED***
 
-***REMOVED***/ The `BasemapGallery` tool displays a collection of images representing basemaps from
+***REMOVED***/ The `BasemapGallery` tool displays a collection  basemaps from
 ***REMOVED***/ ArcGIS Online, a user-defined portal, or an array of `Basemap`s.
 ***REMOVED***/ When a new basemap is selected from the `BasemapGallery` and the optional
 ***REMOVED***/ `BasemapGallery.geoModel` property is set, then the basemap of the geoModel is replaced
@@ -55,21 +55,35 @@ public struct BasemapGallery: View {
 ***REMOVED***private var style: Style = .automatic
 ***REMOVED***
 ***REMOVED******REMOVED***/ The size class used to determine if the basemap items should dispaly in a list or grid.
-***REMOVED******REMOVED***/ If the size class is `.regular`, they display in a grid.  If it is `.compact`, they display in a list.
+***REMOVED******REMOVED***/ If the size class is `.regular`, they display in a grid. If it is `.compact`, they display in a list.
 ***REMOVED***@Environment(\.horizontalSizeClass) var horizontalSizeClass
 ***REMOVED***
+***REMOVED******REMOVED***/ `true` if the horizontal size class is `.regular`, `false` if it's `.compact`.
+***REMOVED***private var isRegularWidth: Bool {
+***REMOVED******REMOVED***horizontalSizeClass == .regular
+***REMOVED***
+
+***REMOVED******REMOVED***/ The width of the gallery, taking into account the horizontal size class of the device.
+***REMOVED***private var galleryWidth: CGFloat? {
+***REMOVED******REMOVED***isRegularWidth ? 300 : 150
+***REMOVED***
+
+***REMOVED******REMOVED***/ The current alert item to display.
 ***REMOVED***@State
 ***REMOVED***private var alertItem: AlertItem?
 ***REMOVED***
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***GalleryView()
-***REMOVED******REMOVED******REMOVED***.onReceive(viewModel.$spatialReferenceMismatchError.dropFirst(), perform: { error in
-***REMOVED******REMOVED******REMOVED******REMOVED***guard let error = error else { return ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***alertItem = AlertItem(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***basemapSR: error.basemapSR,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***geoModelSR: error.geoModelSR
-***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***.frame(width: galleryWidth)
+***REMOVED******REMOVED******REMOVED***.onReceive(
+***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.$spatialReferenceMismatchError.dropFirst(),
+***REMOVED******REMOVED******REMOVED******REMOVED***perform: { error in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let error = error else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***alertItem = AlertItem(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***basemapSR: error.basemapSR,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***geoModelSR: error.geoModelSR
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***.alert(item: $alertItem) { alertItem in
 ***REMOVED******REMOVED******REMOVED******REMOVED***Alert(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title: Text(alertItem.title),
@@ -79,27 +93,14 @@ public struct BasemapGallery: View {
 ***REMOVED***
 ***REMOVED***
 
-***REMOVED*** MARK: Modifiers
-
-public extension BasemapGallery {
-***REMOVED******REMOVED***/ The style of the basemap gallery. Defaults to `.automatic`.
-***REMOVED******REMOVED***/ - Parameter style: The `Style` to use.
-***REMOVED******REMOVED***/ - Returns: The `BasemapGallery`.
-***REMOVED***func style(
-***REMOVED******REMOVED***_ newStyle: Style
-***REMOVED***) -> BasemapGallery {
-***REMOVED******REMOVED***var copy = self
-***REMOVED******REMOVED***copy.style = newStyle
-***REMOVED******REMOVED***return copy
-***REMOVED***
-***REMOVED***
-
 private extension BasemapGallery {
+***REMOVED******REMOVED***/ The gallery view, either displayed as a grid or a list depending on `BasemapGallery.style`.
+***REMOVED******REMOVED***/ - Returns: A view representing the basemap gallery.
 ***REMOVED***@ViewBuilder
 ***REMOVED***func GalleryView() -> some View {
 ***REMOVED******REMOVED***switch style {
 ***REMOVED******REMOVED***case .automatic:
-***REMOVED******REMOVED******REMOVED***if horizontalSizeClass == .regular {
+***REMOVED******REMOVED******REMOVED***if isRegularWidth {
 ***REMOVED******REMOVED******REMOVED******REMOVED***GridView()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***else {
@@ -112,26 +113,33 @@ private extension BasemapGallery {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ The gallery view, displayed as a grid.
+***REMOVED******REMOVED***/ - Returns: A view representing the basemap gallery grid.
 ***REMOVED***func GridView() -> some View {
-***REMOVED******REMOVED***let columns: [GridItem] = [
-***REMOVED******REMOVED******REMOVED***.init(.flexible(), spacing: 8.0, alignment: .top),
-***REMOVED******REMOVED******REMOVED***.init(.flexible(), spacing: 8.0, alignment: .top),
-***REMOVED******REMOVED******REMOVED***.init(.flexible(), spacing: 8.0, alignment: .top)
-***REMOVED******REMOVED***]
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***return InternalGalleryView(columns)
+***REMOVED******REMOVED***InternalGalleryView(
+***REMOVED******REMOVED******REMOVED***[
+***REMOVED******REMOVED******REMOVED******REMOVED***.init(.flexible(), spacing: 8.0, alignment: .top),
+***REMOVED******REMOVED******REMOVED******REMOVED***.init(.flexible(), spacing: 8.0, alignment: .top),
+***REMOVED******REMOVED******REMOVED******REMOVED***.init(.flexible(), spacing: 8.0, alignment: .top)
+***REMOVED******REMOVED******REMOVED***]
+***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ The gallery view, displayed as a list.
+***REMOVED******REMOVED***/ - Returns: A view representing the basemap gallery list.
 ***REMOVED***func ListView() -> some View {
-***REMOVED******REMOVED***let columns: [GridItem] = [
-***REMOVED******REMOVED******REMOVED***.init(.flexible(), spacing: 8.0, alignment: .top)
-***REMOVED******REMOVED***]
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***return InternalGalleryView(columns)
+***REMOVED******REMOVED***InternalGalleryView(
+***REMOVED******REMOVED******REMOVED***[
+***REMOVED******REMOVED******REMOVED******REMOVED***.init(.flexible(), spacing: 8.0, alignment: .top)
+***REMOVED******REMOVED******REMOVED***]
+***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ The gallery view, displayed in the specified columns.
+***REMOVED******REMOVED***/ - Parameter columns: The columns used to display the basemap items.
+***REMOVED******REMOVED***/ - Returns: A view representing the basemap gallery with the specified columns.
 ***REMOVED***func InternalGalleryView(_ columns: [GridItem]) -> some View {
-***REMOVED******REMOVED***return ScrollView {
+***REMOVED******REMOVED***ScrollView {
 ***REMOVED******REMOVED******REMOVED***LazyVGrid(columns: columns, spacing: 4) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ForEach(viewModel.basemapGalleryItems) { basemapGalleryItem in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***BasemapGalleryItemRow(
@@ -153,6 +161,7 @@ private extension BasemapGallery {
 ***REMOVED***
 ***REMOVED***
 
+***REMOVED***/ A row or grid element representing a basemap gallery item.
 private struct BasemapGalleryItemRow: View {
 ***REMOVED***@ObservedObject var basemapGalleryItem: BasemapGalleryItem
 ***REMOVED***let isSelected: Bool
@@ -160,6 +169,7 @@ private struct BasemapGalleryItemRow: View {
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***VStack {
 ***REMOVED******REMOVED******REMOVED***ZStack(alignment: .center) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Display the thumbnail, if available.
 ***REMOVED******REMOVED******REMOVED******REMOVED***if let thumbnailImage = basemapGalleryItem.thumbnail {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(uiImage: thumbnailImage)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.resizable()
@@ -169,6 +179,8 @@ private struct BasemapGalleryItemRow: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***width: 3.0)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Display an image representing either a load basemap error
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** or a spatial reference mismatch error.
 ***REMOVED******REMOVED******REMOVED******REMOVED***if basemapGalleryItem.loadBasemapsError != nil {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "minus.circle.fill")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.title)
@@ -178,6 +190,8 @@ private struct BasemapGalleryItemRow: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.title)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.red)
 ***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Display a progress view if the item is loading.
 ***REMOVED******REMOVED******REMOVED******REMOVED***if basemapGalleryItem.isLoading {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ProgressView()
@@ -187,6 +201,8 @@ private struct BasemapGalleryItemRow: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED*** Display the name of the item.
 ***REMOVED******REMOVED******REMOVED***Text(basemapGalleryItem.name)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.font(.footnote)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.multilineTextAlignment(.center)
@@ -197,6 +213,24 @@ private struct BasemapGalleryItemRow: View {
 ***REMOVED***
 ***REMOVED***
 
+***REMOVED*** MARK: Modifiers
+
+public extension BasemapGallery {
+***REMOVED******REMOVED***/ The style of the basemap gallery. Defaults to `.automatic`.
+***REMOVED******REMOVED***/ - Parameter style: The `Style` to use.
+***REMOVED******REMOVED***/ - Returns: The `BasemapGallery`.
+***REMOVED***func style(
+***REMOVED******REMOVED***_ newStyle: Style
+***REMOVED***) -> BasemapGallery {
+***REMOVED******REMOVED***var copy = self
+***REMOVED******REMOVED***copy.style = newStyle
+***REMOVED******REMOVED***return copy
+***REMOVED***
+***REMOVED***
+
+***REMOVED*** MARK: AlertItem
+
+***REMOVED***/ An item used to populate a displayed alert.
 struct AlertItem {
 ***REMOVED***var title: String = ""
 ***REMOVED***var message: String = ""

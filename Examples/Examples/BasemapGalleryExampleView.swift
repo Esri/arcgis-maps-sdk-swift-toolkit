@@ -16,98 +16,32 @@
 ***REMOVED***Toolkit
 
 struct BasemapGalleryExampleView: View {
-***REMOVED***var basemapGalleryItems: [BasemapGalleryItem] = [
-***REMOVED******REMOVED***BasemapGalleryItem(
-***REMOVED******REMOVED******REMOVED***basemap: Basemap(
-***REMOVED******REMOVED******REMOVED******REMOVED***item: PortalItem(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***url: URL(string: "https:***REMOVED***runtime.maps.arcgis.com/home/item.html?id=46a87c20f09e4fc48fa3c38081e0cae6")!
-***REMOVED******REMOVED******REMOVED******REMOVED***)!
-***REMOVED******REMOVED******REMOVED***),
-***REMOVED******REMOVED******REMOVED***name: "OpenStreetMap (Blueprint)",
-***REMOVED******REMOVED******REMOVED***description: "OpenStreetMap (OSM) is a collaborative project to create a free editable map of the world. This vector basemap is based on the Daylight map distribution of OSM data and is hosted by Esri. It presents the map in a cartographic style is like a blueprint technical drawing."
-***REMOVED******REMOVED***),
-***REMOVED******REMOVED***BasemapGalleryItem(
-***REMOVED******REMOVED******REMOVED***basemap: Basemap(
-***REMOVED******REMOVED******REMOVED******REMOVED***item: PortalItem(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***url: URL(string: "https:***REMOVED***runtime.maps.arcgis.com/home/item.html?id=f33a34de3a294590ab48f246e99958c9")!
-***REMOVED******REMOVED******REMOVED******REMOVED***)!
-***REMOVED******REMOVED******REMOVED***),
-***REMOVED******REMOVED******REMOVED***name: "National Geographic Style Map",
-***REMOVED******REMOVED******REMOVED***description: "This vector web map provides a detailed view of the world featuring beautiful political boundaries, labeling, and background that highlights the differences in the physical characteristics of the land."
-***REMOVED******REMOVED***),
-***REMOVED******REMOVED***BasemapGalleryItem(
-***REMOVED******REMOVED******REMOVED***basemap: Basemap(
-***REMOVED******REMOVED******REMOVED******REMOVED***item: PortalItem(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***url: URL(string: "https:***REMOVED***runtime.maps.arcgis.com/home/item.html?id=9e557abc61ce41c9b8ec8b15800c20d3")!
-***REMOVED******REMOVED******REMOVED******REMOVED***)!
-***REMOVED******REMOVED******REMOVED***),
-***REMOVED******REMOVED******REMOVED***name: "Firefly Imagery Hybrid",
-***REMOVED******REMOVED******REMOVED***description: "This map features an alternative view of the World Imagery map designed to be used as a neutral imagery basemap, with de-saturated colors, that is useful for overlaying other brightly styled layers.  The map also includes a reference layer."
-***REMOVED******REMOVED***),
-***REMOVED******REMOVED***BasemapGalleryItem(
-***REMOVED******REMOVED******REMOVED***basemap: Basemap(
-***REMOVED******REMOVED******REMOVED******REMOVED***item: PortalItem(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***url: URL(string: "https:***REMOVED***runtime.maps.arcgis.com/home/item.html?id=52bdc7ab7fb044d98add148764eaa30a")!
-***REMOVED******REMOVED******REMOVED******REMOVED***)!
-***REMOVED******REMOVED******REMOVED***),
-***REMOVED******REMOVED******REMOVED***name: nil,
-***REMOVED******REMOVED******REMOVED***description: "This web map features satellite imagery for the world and high-resolution aerial imagery for many areas. It uses WGS84 Geographic, version 2 tiling scheme.",
-***REMOVED******REMOVED******REMOVED***thumbnail: nil
-***REMOVED******REMOVED***),
-***REMOVED******REMOVED***BasemapGalleryItem(
-***REMOVED******REMOVED******REMOVED***basemap: Basemap(
-***REMOVED******REMOVED******REMOVED******REMOVED***item: PortalItem(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***url: URL(string: "https:***REMOVED***runtime.maps.arcgis.com/home/item.html?id=4a3922d6d15f405d8c2b7a448a7fbad2")!
-***REMOVED******REMOVED******REMOVED******REMOVED***)!
-***REMOVED******REMOVED******REMOVED***),
-***REMOVED******REMOVED******REMOVED***name: "Human Geography Dark Label",
-***REMOVED******REMOVED******REMOVED***description: "This (v2) vector tile layer provides a detailed basemap for the world, featuring a dark monochromatic style with content adjusted to support Human Geography information. This map is designed for use with Human Geography Dark Detail and Base layers.",
-***REMOVED******REMOVED******REMOVED***thumbnail: nil
-***REMOVED******REMOVED***)
-***REMOVED***]
+***REMOVED******REMOVED***/ The map displayed in the map view.
+***REMOVED***let map = Map(basemapStyle: .arcGISImagery)
 ***REMOVED***
-***REMOVED***let geoModel: GeoModel = Map(basemapStyle: .arcGISNova)
-***REMOVED******REMOVED******REMOVED***let geoModel: GeoModel = Scene(basemapStyle: .arcGISNova)
-***REMOVED***
+***REMOVED******REMOVED***/ The view model for the basemap gallery.
 ***REMOVED***@ObservedObject
 ***REMOVED***var viewModel = BasemapGalleryViewModel()
 ***REMOVED***
+***REMOVED******REMOVED***/ `true` if the basemap gallery should be displayed; `false` otherwise.
 ***REMOVED***@State
 ***REMOVED***var showBasemapGallery: Bool = true
 ***REMOVED***
+***REMOVED******REMOVED***/ The initial viewpoint of the map.
 ***REMOVED***let initialViewpoint: Viewpoint? = Viewpoint(
 ***REMOVED******REMOVED***center: Point(x: -93.258133, y: 44.986656, spatialReference: .wgs84),
 ***REMOVED******REMOVED***scale: 1000000
 ***REMOVED***)
 ***REMOVED***
-***REMOVED***@Environment(\.horizontalSizeClass) var horizontalSizeClass
-***REMOVED***
-***REMOVED***var galleryWidth: CGFloat {
-***REMOVED******REMOVED***get {
-***REMOVED******REMOVED******REMOVED***if horizontalSizeClass == .regular {
-***REMOVED******REMOVED******REMOVED******REMOVED***return 300.0
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***else {
-***REMOVED******REMOVED******REMOVED******REMOVED***return 150.0
-***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***ZStack(alignment: .topTrailing) {
-***REMOVED******REMOVED******REMOVED***MapView(map: geoModel as! Map, viewpoint: initialViewpoint)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***SceneView(scene: geoModel as! ArcGIS.Scene, viewpoint: initialViewpoint)
-***REMOVED******REMOVED******REMOVED******REMOVED***.overlay(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***VStack(alignment: .trailing) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if showBasemapGallery {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***BasemapGallery(viewModel: viewModel)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.style(.automatic)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: galleryWidth)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***MapView(map: map, viewpoint: initialViewpoint)
+***REMOVED******REMOVED******REMOVED******REMOVED***.overlay(alignment: .topTrailing) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if showBasemapGallery {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***BasemapGallery(viewModel: viewModel)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.style(.automatic)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(),
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***alignment: .topTrailing
-***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onAppear() {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***SetupViewModel()
 ***REMOVED******REMOVED******REMOVED***
@@ -124,8 +58,24 @@ struct BasemapGalleryExampleView: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***private func SetupViewModel() {
-***REMOVED******REMOVED***viewModel.geoModel = geoModel
-***REMOVED******REMOVED***viewModel.basemapGalleryItems = basemapGalleryItems
-***REMOVED******REMOVED***viewModel.portal = Portal.arcGISOnline(isLoginRequired: false)
+***REMOVED******REMOVED***viewModel.geoModel = map
+***REMOVED******REMOVED***viewModel.basemapGalleryItems.append(
+***REMOVED******REMOVED******REMOVED***contentsOf: BasemapGalleryExampleView.initialBasemaps()
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED*** TODO:  remove last one (bad url) before PR
+***REMOVED***static private func initialBasemaps() -> [BasemapGalleryItem] {
+***REMOVED******REMOVED***let itemURLs: [URL] = [
+***REMOVED******REMOVED******REMOVED***URL(string: "https:***REMOVED***runtime.maps.arcgis.com/home/item.html?id=46a87c20f09e4fc48fa3c38081e0cae6")!,
+***REMOVED******REMOVED******REMOVED***URL(string: "https:***REMOVED***runtime.maps.arcgis.com/home/item.html?id=f33a34de3a294590ab48f246e99958c9")!,
+***REMOVED******REMOVED******REMOVED***URL(string: "https:***REMOVED***runtime.maps.arcgis.com/home/item.html?id=9e557abc61ce41c9b8ec8b15800c20d3")!,
+***REMOVED******REMOVED******REMOVED***URL(string: "https:***REMOVED***runtime.maps.arcgis.com/home/item.html?id=52bdc7ab7fb044d98add148764eaa30a")!,
+***REMOVED******REMOVED******REMOVED***URL(string: "https:***REMOVED***runtime.maps.arcgis.com/home/item.html?id=4a3922d6d15f405d8c2b7a448a7fbad2")!
+***REMOVED******REMOVED***]
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***return itemURLs.map {
+***REMOVED******REMOVED******REMOVED***BasemapGalleryItem(basemap: Basemap(item: PortalItem(url: $0)!))
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
