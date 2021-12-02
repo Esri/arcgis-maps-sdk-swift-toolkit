@@ -22,10 +22,10 @@ import Combine
 //
 // Test Design: https://devtopia.esri.com/runtime/common-toolkit/blob/master/designs/BasemapGallery/BasemapGallery_Test_Design.md
 //
-// Note:  the iOS implementation uses the MVVM approach and SwiftUI.  This
+// Note:  the iOS implementation uses the MVVM approach and SwiftUI. This
 // required a bit more properties/logic in the `BasemapGalleryViewModel` (such
 // as `geoModel.actualSpatialReference`) than the `BasemapGallery` design
-// specifies.  Tests not present in the test design have been added to
+// specifies. Tests not present in the test design have been added to
 // accomodate those differences.
 @MainActor
 class BasemapGalleryViewModelTests: XCTestCase {
@@ -79,7 +79,7 @@ class BasemapGalleryViewModelTests: XCTestCase {
         let sortedDeveloperItems = developerBasemapItems.sorted { $0.name < $1.name }
         XCTAssertNotEqual(sortedItems, sortedDeveloperItems)
 
-        // BasemapGalleryItems.  No basemaps are fetched from a portal.
+        // BasemapGalleryItems. No basemaps are fetched from a portal.
         let itemsViewModel = BasemapGalleryViewModel(
             basemapGalleryItems: defaultBasemapGalleryItems
         )
@@ -90,7 +90,7 @@ class BasemapGalleryViewModelTests: XCTestCase {
             defaultBasemapGalleryItems.count
         )
         
-        // Both Portal and BasemapGalleryItems.  Basemaps are fetched from
+        // Both Portal and BasemapGalleryItems. Basemaps are fetched from
         // the portal and appended to the list of basemapGalleryItems.
         let viewModel = BasemapGalleryViewModel(
             portal: Portal.arcGISOnline(isLoginRequired: false),
