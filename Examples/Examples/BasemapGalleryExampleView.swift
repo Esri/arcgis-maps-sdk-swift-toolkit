@@ -16,98 +16,32 @@ import ArcGIS
 import ArcGISToolkit
 
 struct BasemapGalleryExampleView: View {
-    var basemapGalleryItems: [BasemapGalleryItem] = [
-        BasemapGalleryItem(
-            basemap: Basemap(
-                item: PortalItem(
-                    url: URL(string: "https://runtime.maps.arcgis.com/home/item.html?id=46a87c20f09e4fc48fa3c38081e0cae6")!
-                )!
-            ),
-            name: "OpenStreetMap (Blueprint)",
-            description: "OpenStreetMap (OSM) is a collaborative project to create a free editable map of the world. This vector basemap is based on the Daylight map distribution of OSM data and is hosted by Esri. It presents the map in a cartographic style is like a blueprint technical drawing."
-        ),
-        BasemapGalleryItem(
-            basemap: Basemap(
-                item: PortalItem(
-                    url: URL(string: "https://runtime.maps.arcgis.com/home/item.html?id=f33a34de3a294590ab48f246e99958c9")!
-                )!
-            ),
-            name: "National Geographic Style Map",
-            description: "This vector web map provides a detailed view of the world featuring beautiful political boundaries, labeling, and background that highlights the differences in the physical characteristics of the land."
-        ),
-        BasemapGalleryItem(
-            basemap: Basemap(
-                item: PortalItem(
-                    url: URL(string: "https://runtime.maps.arcgis.com/home/item.html?id=9e557abc61ce41c9b8ec8b15800c20d3")!
-                )!
-            ),
-            name: "Firefly Imagery Hybrid",
-            description: "This map features an alternative view of the World Imagery map designed to be used as a neutral imagery basemap, with de-saturated colors, that is useful for overlaying other brightly styled layers.  The map also includes a reference layer."
-        ),
-        BasemapGalleryItem(
-            basemap: Basemap(
-                item: PortalItem(
-                    url: URL(string: "https://runtime.maps.arcgis.com/home/item.html?id=52bdc7ab7fb044d98add148764eaa30a")!
-                )!
-            ),
-            name: nil,
-            description: "This web map features satellite imagery for the world and high-resolution aerial imagery for many areas. It uses WGS84 Geographic, version 2 tiling scheme.",
-            thumbnail: nil
-        ),
-        BasemapGalleryItem(
-            basemap: Basemap(
-                item: PortalItem(
-                    url: URL(string: "https://runtime.maps.arcgis.com/home/item.html?id=4a3922d6d15f405d8c2b7a448a7fbad2")!
-                )!
-            ),
-            name: "Human Geography Dark Label",
-            description: "This (v2) vector tile layer provides a detailed basemap for the world, featuring a dark monochromatic style with content adjusted to support Human Geography information. This map is designed for use with Human Geography Dark Detail and Base layers.",
-            thumbnail: nil
-        )
-    ]
+    /// The map displayed in the map view.
+    let map = Map(basemapStyle: .arcGISImagery)
     
-    let geoModel: GeoModel = Map(basemapStyle: .arcGISNova)
-    //    let geoModel: GeoModel = Scene(basemapStyle: .arcGISNova)
-    
+    /// The view model for the basemap gallery.
     @ObservedObject
     var viewModel = BasemapGalleryViewModel()
     
+    /// `true` if the basemap gallery should be displayed; `false` otherwise.
     @State
     var showBasemapGallery: Bool = true
     
+    /// The initial viewpoint of the map.
     let initialViewpoint: Viewpoint? = Viewpoint(
         center: Point(x: -93.258133, y: 44.986656, spatialReference: .wgs84),
         scale: 1000000
     )
     
-    @Environment(\.horizontalSizeClass) var horizontalSizeClass
-    
-    var galleryWidth: CGFloat {
-        get {
-            if horizontalSizeClass == .regular {
-                return 300.0
-            }
-            else {
-                return 150.0
-            }
-        }
-    }
-    
     var body: some View {
         ZStack(alignment: .topTrailing) {
-            MapView(map: geoModel as! Map, viewpoint: initialViewpoint)
-            //            SceneView(scene: geoModel as! ArcGIS.Scene, viewpoint: initialViewpoint)
-                .overlay(
-                    VStack(alignment: .trailing) {
-                        if showBasemapGallery {
-                            BasemapGallery(viewModel: viewModel)
-                                .style(.automatic)
-                                .frame(width: galleryWidth)
-                        }
+            MapView(map: map, viewpoint: initialViewpoint)
+                .overlay(alignment: .topTrailing) {
+                    if showBasemapGallery {
+                        BasemapGallery(viewModel: viewModel)
+                            .style(.automatic)
                     }
-                        .padding(),
-                    alignment: .topTrailing
-                )
+                }
                 .onAppear() {
                     SetupViewModel()
                 }
@@ -124,8 +58,24 @@ struct BasemapGalleryExampleView: View {
     }
     
     private func SetupViewModel() {
-        viewModel.geoModel = geoModel
-        viewModel.basemapGalleryItems = basemapGalleryItems
-        viewModel.portal = Portal.arcGISOnline(isLoginRequired: false)
+        viewModel.geoModel = map
+        viewModel.basemapGalleryItems.append(
+            contentsOf: BasemapGalleryExampleView.initialBasemaps()
+        )
+    }
+    
+    // TODO:  remove last one (bad url) before PR
+    static private func initialBasemaps() -> [BasemapGalleryItem] {
+        let itemURLs: [URL] = [
+            URL(string: "https://runtime.maps.arcgis.com/home/item.html?id=46a87c20f09e4fc48fa3c38081e0cae6")!,
+            URL(string: "https://runtime.maps.arcgis.com/home/item.html?id=f33a34de3a294590ab48f246e99958c9")!,
+            URL(string: "https://runtime.maps.arcgis.com/home/item.html?id=9e557abc61ce41c9b8ec8b15800c20d3")!,
+            URL(string: "https://runtime.maps.arcgis.com/home/item.html?id=52bdc7ab7fb044d98add148764eaa30a")!,
+            URL(string: "https://runtime.maps.arcgis.com/home/item.html?id=4a3922d6d15f405d8c2b7a448a7fbad2")!
+        ]
+        
+        return itemURLs.map {
+            BasemapGalleryItem(basemap: Basemap(item: PortalItem(url: $0)!))
+        }
     }
 }

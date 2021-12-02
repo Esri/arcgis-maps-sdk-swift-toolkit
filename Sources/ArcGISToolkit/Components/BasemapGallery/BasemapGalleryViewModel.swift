@@ -11,54 +11,35 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import Swift
 import SwiftUI
 import ArcGIS
-import Combine
 
 /// Manages the state for a `BasemapGallery`.
 @MainActor
 public class BasemapGalleryViewModel: ObservableObject {
     /// Creates a `BasemapGalleryViewModel`.
-    /// - Remark: If `portal` is non-nil, the portal's basemaps will be loaded.  If `portal` is
-    /// `nil`, ArcGISOnline's developer basemaps will be loaded.  In both cases, the basemaps
-    /// will be added to `basemapGalleryItems`.
+    /// - Remark: If `basemapGalleryItems` is empty, ArcGISOnline's developer basemaps will
+    /// be loaded and added to `basemapGalleryItems`.
     /// - Parameters:
-    ///   - geoModel: The `GeoModel`.
-    ///   - portal: The `Portal` to load base maps from.
     ///   - basemapGalleryItems: A list of pre-defined base maps to display.
-    public init(
-        geoModel: GeoModel? = nil,
-        portal: Portal? = nil,
-        basemapGalleryItems: [BasemapGalleryItem] = []
-    ) {
-        self.geoModel = geoModel
-        self.portal = portal
+    public init(_ basemapGalleryItems: [BasemapGalleryItem] = []) {
         self.basemapGalleryItems.append(contentsOf: basemapGalleryItems)
         
-        // Note that we don't want to store this tasks and cancel it
-        // before kicking off another operation because these operations
-        // could have been started elsewhere as well as here.
-        // Canceling them here would also cancel those other operations,
-        // which we don't want to do.
-        Task {
-            // Load the geomodel.
-            await load(geoModel: geoModel)
-
-            // If we have a portal or no basemapGalleryItems were supplied,
-            // then load the default basemaps from the portal, if any, or AGOL.
-            if portal != nil || basemapGalleryItems.isEmpty {
-                var thePortal = portal
-                var useDeveloperBasemaps = false
-                if thePortal == nil {
-                    thePortal = Portal.arcGISOnline(isLoginRequired: false)
-                    useDeveloperBasemaps = true
-                }
+        if basemapGalleryItems.isEmpty {
+            // We have no basemap items, so fetch the
+            //developer basemaps from AGOL.
+            fetchBasemapsTask = Task {
                 await fetchBasemaps(
-                    from: thePortal,
-                    useDeveloperBasemaps: useDeveloperBasemaps
+                    from: Portal.arcGISOnline(isLoginRequired: false),
+                    useDeveloperBasemaps: true
                 )
             }
+        }
+    }
+    
+    private var fetchBasemapsTask: Task<Void, Never>? {
+        willSet {
+            fetchBasemapsTask?.cancel()
         }
     }
     
@@ -76,21 +57,23 @@ public class BasemapGalleryViewModel: ObservableObject {
         }
     }
     
-    /// The `Portal` object, if any.  Setting the portal will automatically fetch it's basemaps
-    /// and replace the`basemapGalleryItems` array with the fetched basemaps.
+    /// The `Portal` object, if any. Setting the portal will automatically fetch it's basemaps
+    /// and replace the`basemapGalleryItems` array items with the fetched basemaps.
     public var portal: Portal? {
         didSet {
-            Task { await fetchBasemaps(from: portal, append: false) }
+            // Remove all items from `basemapGalleryItems`.
+            basemapGalleryItems.removeAll()
+            fetchBasemapsTask = Task { await fetchBasemaps(from: portal) }
         }
     }
     
-    /// The list of basemaps currently visible in the gallery.  It is comprised of items passed into
+    /// The list of basemaps currently visible in the gallery. It is comprised of items passed into
     /// the `BasemapGalleryItem` constructor property and items loaded either from `portal` or
     /// from ArcGISOnline if `portal` is `nil`.
     @Published
     public var basemapGalleryItems: [BasemapGalleryItem] = []
     
-    /// `BasemapGalleryItem` representing the `GeoModel`'s current base map. This may be a
+    /// The `BasemapGalleryItem` representing the `GeoModel`'s current base map. This may be a
     /// basemap which does not exist in the gallery.
     @Published
     public private(set) var currentBasemapGalleryItem: BasemapGalleryItem? = nil {
@@ -106,25 +89,30 @@ public class BasemapGalleryViewModel: ObservableObject {
     public private(set) var spatialReferenceMismatchError: SpatialReferenceMismatchError? = nil
     
     /// This attempts to set `currentBasemapGalleryItem`. `currentBasemapGalleryItem`
-    /// will be set if it's spatialReference matches that of the current geoModel.  If the spatialReferences
+    /// will be set if it's spatial reference matches that of the current geoModel. If the spatial references
     /// do not match, `currentBasemapGalleryItem` will be unchanged.
     /// - Parameter basemapGalleryItem: The new, potential, `BasemapGalleryItem`.
-    public func updateCurrentBasemapGalleryItem(_ basemapGalleryItem: BasemapGalleryItem) {
+    public func updateCurrentBasemapGalleryItem(
+        _ basemapGalleryItem: BasemapGalleryItem
+    ) {
         Task {
             // Ensure the geoModel is loaded.
             try await geoModel?.load()
             
             // Reset the mismatch error.
             spatialReferenceMismatchError = nil
+            
+            // Update the basemap gallery item's `spatialReferenceStatus`.
             try await basemapGalleryItem.updateSpatialReferenceStatus(
                 geoModel?.actualSpatialReference
             )
+            
+            // Update @State on the main thread.
             await MainActor.run {
-                if basemapGalleryItem.spatialReferenceStatus == .match ||
-                    basemapGalleryItem.spatialReferenceStatus == .unknown {
+                switch basemapGalleryItem.spatialReferenceStatus {
+                case .match, .unknown:
                     currentBasemapGalleryItem = basemapGalleryItem
-                }
-                else {
+                case .noMatch:
                     spatialReferenceMismatchError = SpatialReferenceMismatchError(
                         basemapSR: basemapGalleryItem.spatialReference,
                         geoModelSR: geoModel?.actualSpatialReference
@@ -136,6 +124,10 @@ public class BasemapGalleryViewModel: ObservableObject {
 }
 
 internal extension GeoModel {
+    /// The actual spatial reference of the geoModel. For `Map`s, this is the map's
+    /// `spatialReference`. For `Scene`s, if the `sceneViewTilingScheme` is
+    /// `.webMercator`, the `actualSpatialReference` is `.webMercator`, otherwise
+    /// it is the `spatialReference` of the scene.
     var actualSpatialReference: SpatialReference? {
         (self as? ArcGIS.Scene)?.sceneViewTilingScheme == .webMercator ?
         SpatialReference.webMercator :
@@ -144,52 +136,44 @@ internal extension GeoModel {
 }
 
 private extension BasemapGalleryViewModel {
-    /// Fetches the basemaps from the given portal and populates `basemapGalleryItems` with
+    /// Fetches the basemaps from the given portal and appends `basemapGalleryItems` with
     /// items created from the fetched basemaps.
     /// - Parameters:
     ///   - portal: Portal to fetch basemaps from
-    ///   - useDeveloperBasemaps: If `true`, will always use the portal's developer basemaps.  If
+    ///   - useDeveloperBasemaps: If `true`, will always use the portal's developer basemaps. If
     ///   `false`, it will use either the portal's basemaps or vector basemaps, depending on the value of
     ///   `portal.portalInfo.useVectorBasemaps`.
-    ///   - append: If `true`, will appended fetched basemaps to `basemapGalleryItems`.
-    ///   If `false`, it will clear `basemapGalleryItems` before adding the fetched basemaps.
     func fetchBasemaps(
         from portal: Portal?,
-        useDeveloperBasemaps: Bool = false,
-        append: Bool = true
+        useDeveloperBasemaps: Bool = false
     ) async {
         guard let portal = portal else { return }
         
         do {
             try await portal.load()
-        
-            var tmpItems = [BasemapGalleryItem]()
+            
             if useDeveloperBasemaps {
-                tmpItems += try await portal.developerBasemaps.map {
+                basemapGalleryItems += try await portal.developerBasemaps.map {
                     BasemapGalleryItem(basemap: $0)
                 }
             } else if let portalInfo = portal.portalInfo,
                       portalInfo.useVectorBasemaps {
-                tmpItems += try await portal.vectorBasemaps.map {
+                basemapGalleryItems += try await portal.vectorBasemaps.map {
                     BasemapGalleryItem(basemap: $0)
                 }
             } else {
-                tmpItems += try await portal.basemaps.map {
+                basemapGalleryItems += try await portal.basemaps.map {
                     BasemapGalleryItem(basemap: $0)
                 }
-            }
-            
-            if append {
-                basemapGalleryItems += tmpItems
-            }
-            else {
-                basemapGalleryItems = tmpItems
             }
         } catch {
             fetchBasemapsError = error
         }
     }
     
+    /// Loads the given `GeoModel` then sets `currentBasemapGalleryItem` to an item
+    /// created with the geoModel's basemap.
+    /// - Parameter geoModel: The `GeoModel` to load.
     func load(geoModel: GeoModel?) async {
         guard let geoModel = geoModel else { return }
         do {
@@ -204,11 +188,12 @@ private extension BasemapGalleryViewModel {
     }
 }
 
-/// A value that represents a SpatialReference mismatch.
+/// A value that represents an error ocurring because of a SpatialReference mismatch between
+/// a geomodel and a basemap.
 public struct SpatialReferenceMismatchError: Error {
     /// The basemap's spatial reference
     public let basemapSR: SpatialReference?
-
+    
     /// The geomodel's spatial reference
     public let geoModelSR: SpatialReference?
 }

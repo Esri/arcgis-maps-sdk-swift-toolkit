@@ -14,7 +14,7 @@
 import SwiftUI
 import ArcGIS
 
-/// The `BasemapGallery` tool displays a collection of images representing basemaps from
+/// The `BasemapGallery` tool displays a collection  basemaps from
 /// ArcGIS Online, a user-defined portal, or an array of `Basemap`s.
 /// When a new basemap is selected from the `BasemapGallery` and the optional
 /// `BasemapGallery.geoModel` property is set, then the basemap of the geoModel is replaced
@@ -55,21 +55,35 @@ public struct BasemapGallery: View {
     private var style: Style = .automatic
     
     /// The size class used to determine if the basemap items should dispaly in a list or grid.
-    /// If the size class is `.regular`, they display in a grid.  If it is `.compact`, they display in a list.
+    /// If the size class is `.regular`, they display in a grid. If it is `.compact`, they display in a list.
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
     
+    /// `true` if the horizontal size class is `.regular`, `false` if it's `.compact`.
+    private var isRegularWidth: Bool {
+        horizontalSizeClass == .regular
+    }
+
+    /// The width of the gallery, taking into account the horizontal size class of the device.
+    private var galleryWidth: CGFloat? {
+        isRegularWidth ? 300 : 150
+    }
+
+    /// The current alert item to display.
     @State
     private var alertItem: AlertItem?
     
     public var body: some View {
         GalleryView()
-            .onReceive(viewModel.$spatialReferenceMismatchError.dropFirst(), perform: { error in
-                guard let error = error else { return }
-                alertItem = AlertItem(
-                    basemapSR: error.basemapSR,
-                    geoModelSR: error.geoModelSR
-                )
-            })
+            .frame(width: galleryWidth)
+            .onReceive(
+                viewModel.$spatialReferenceMismatchError.dropFirst(),
+                perform: { error in
+                    guard let error = error else { return }
+                    alertItem = AlertItem(
+                        basemapSR: error.basemapSR,
+                        geoModelSR: error.geoModelSR
+                    )
+                })
             .alert(item: $alertItem) { alertItem in
                 Alert(
                     title: Text(alertItem.title),
@@ -79,27 +93,14 @@ public struct BasemapGallery: View {
     }
 }
 
-// MARK: Modifiers
-
-public extension BasemapGallery {
-    /// The style of the basemap gallery. Defaults to `.automatic`.
-    /// - Parameter style: The `Style` to use.
-    /// - Returns: The `BasemapGallery`.
-    func style(
-        _ newStyle: Style
-    ) -> BasemapGallery {
-        var copy = self
-        copy.style = newStyle
-        return copy
-    }
-}
-
 private extension BasemapGallery {
+    /// The gallery view, either displayed as a grid or a list depending on `BasemapGallery.style`.
+    /// - Returns: A view representing the basemap gallery.
     @ViewBuilder
     func GalleryView() -> some View {
         switch style {
         case .automatic:
-            if horizontalSizeClass == .regular {
+            if isRegularWidth {
                 GridView()
             }
             else {
@@ -112,26 +113,33 @@ private extension BasemapGallery {
         }
     }
     
+    /// The gallery view, displayed as a grid.
+    /// - Returns: A view representing the basemap gallery grid.
     func GridView() -> some View {
-        let columns: [GridItem] = [
-            .init(.flexible(), spacing: 8.0, alignment: .top),
-            .init(.flexible(), spacing: 8.0, alignment: .top),
-            .init(.flexible(), spacing: 8.0, alignment: .top)
-        ]
-        
-        return InternalGalleryView(columns)
+        InternalGalleryView(
+            [
+                .init(.flexible(), spacing: 8.0, alignment: .top),
+                .init(.flexible(), spacing: 8.0, alignment: .top),
+                .init(.flexible(), spacing: 8.0, alignment: .top)
+            ]
+        )
     }
     
+    /// The gallery view, displayed as a list.
+    /// - Returns: A view representing the basemap gallery list.
     func ListView() -> some View {
-        let columns: [GridItem] = [
-            .init(.flexible(), spacing: 8.0, alignment: .top)
-        ]
-        
-        return InternalGalleryView(columns)
+        InternalGalleryView(
+            [
+                .init(.flexible(), spacing: 8.0, alignment: .top)
+            ]
+        )
     }
     
+    /// The gallery view, displayed in the specified columns.
+    /// - Parameter columns: The columns used to display the basemap items.
+    /// - Returns: A view representing the basemap gallery with the specified columns.
     func InternalGalleryView(_ columns: [GridItem]) -> some View {
-        return ScrollView {
+        ScrollView {
             LazyVGrid(columns: columns, spacing: 4) {
                 ForEach(viewModel.basemapGalleryItems) { basemapGalleryItem in
                     BasemapGalleryItemRow(
@@ -153,6 +161,7 @@ private extension BasemapGallery {
     }
 }
 
+/// A row or grid element representing a basemap gallery item.
 private struct BasemapGalleryItemRow: View {
     @ObservedObject var basemapGalleryItem: BasemapGalleryItem
     let isSelected: Bool
@@ -160,6 +169,7 @@ private struct BasemapGalleryItemRow: View {
     var body: some View {
         VStack {
             ZStack(alignment: .center) {
+                // Display the thumbnail, if available.
                 if let thumbnailImage = basemapGalleryItem.thumbnail {
                     Image(uiImage: thumbnailImage)
                         .resizable()
@@ -169,6 +179,8 @@ private struct BasemapGalleryItemRow: View {
                             width: 3.0)
                 }
                 
+                // Display an image representing either a load basemap error
+                // or a spatial reference mismatch error.
                 if basemapGalleryItem.loadBasemapsError != nil {
                     Image(systemName: "minus.circle.fill")
                         .font(.title)
@@ -178,6 +190,8 @@ private struct BasemapGalleryItemRow: View {
                         .font(.title)
                         .foregroundColor(.red)
                 }
+                
+                // Display a progress view if the item is loading.
                 if basemapGalleryItem.isLoading {
                     Spacer()
                     ProgressView()
@@ -187,6 +201,8 @@ private struct BasemapGalleryItemRow: View {
                     
                 }
             }
+            
+            // Display the name of the item.
             Text(basemapGalleryItem.name)
                 .font(.footnote)
                 .multilineTextAlignment(.center)
@@ -197,6 +213,24 @@ private struct BasemapGalleryItemRow: View {
     }
 }
 
+// MARK: Modifiers
+
+public extension BasemapGallery {
+    /// The style of the basemap gallery. Defaults to `.automatic`.
+    /// - Parameter style: The `Style` to use.
+    /// - Returns: The `BasemapGallery`.
+    func style(
+        _ newStyle: Style
+    ) -> BasemapGallery {
+        var copy = self
+        copy.style = newStyle
+        return copy
+    }
+}
+
+// MARK: AlertItem
+
+/// An item used to populate a displayed alert.
 struct AlertItem {
     var title: String = ""
     var message: String = ""

@@ -11,10 +11,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import SwiftUI
-import ArcGIS
-
 import Foundation
+import UIKit.UIImage
+import ArcGIS
 
 ///  The `BasemapGalleryItem` encompasses an element in a `BasemapGallery`.
 public class BasemapGalleryItem: ObservableObject {
@@ -32,10 +31,10 @@ public class BasemapGalleryItem: ObservableObject {
     /// Creates a `BasemapGalleryItem`.
     /// - Parameters:
     ///   - basemap: The `Basemap` represented by the item.
-    ///   - name: The item name.  If `nil`, `Basemap.name` is used, if available..
-    ///   - description: The item description.  If `nil`, `Basemap.Item.description`
+    ///   - name: The item name. If `nil`, `Basemap.name` is used, if available..
+    ///   - description: The item description. If `nil`, `Basemap.Item.description`
     ///   is used, if available.
-    ///   - thumbnail: The thumbnail used to represent the item.  If `nil`,
+    ///   - thumbnail: The thumbnail used to represent the item. If `nil`,
     ///   `Basemap.Item.thumbnail` is used, if available.
     public init(
         basemap: Basemap,
@@ -58,7 +57,7 @@ public class BasemapGalleryItem: ObservableObject {
     @Published
     public private(set) var loadBasemapsError: RuntimeError? = nil
     
-    /// The basemap this `BasemapGalleryItem` represents.
+    /// The basemap represented by `BasemapGalleryItem`.
     public private(set) var basemap: Basemap
     
     /// The name of the `basemap`.
@@ -80,17 +79,18 @@ public class BasemapGalleryItem: ObservableObject {
     @Published
     public private(set) var isLoading = true
     
-    /// The `SpatialReferenceStatus` of the item.  This is set via a call to
-    /// `updateSpatialReferenceStatus()`
+    /// The `SpatialReferenceStatus` of the item. This is set via a call to
+    /// `updateSpatialReferenceStatus()`.
     @Published
     public private(set) var spatialReferenceStatus: SpatialReferenceStatus = .unknown
     
-    /// The `SpatialReference` of `basemap`.  This will be `nil` until the basemap's
+    /// The `SpatialReference` of `basemap`. This will be `nil` until the basemap's
     /// baseLayers have been loaded in `updateSpatialReferenceStatus()`.
     public private(set) var spatialReference: SpatialReference? = nil
 }
 
 private extension BasemapGalleryItem {
+    /// Loads the basemap and the item's thumbnail, if available.
     func loadBasemap() async {
         var loadError: RuntimeError? = nil
         do {
@@ -174,7 +174,8 @@ extension BasemapGalleryItem: Equatable {
 }
 
 private extension UIImage {
-    /// A search result marker symbol.
+    /// A default thumbnail image.
+    /// - Returns: The default thumbnail.
     static func defaultThumbnail() -> UIImage {
         return UIImage(named: "DefaultBasemap", in: Bundle.module, with: nil)!
     }

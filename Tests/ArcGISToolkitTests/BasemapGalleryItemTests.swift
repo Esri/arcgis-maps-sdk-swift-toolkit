@@ -22,10 +22,10 @@ import Combine
 //
 // Test Design: https://devtopia.esri.com/runtime/common-toolkit/blob/master/designs/BasemapGallery/BasemapGallery_Test_Design.md
 //
-// Note:  the iOS implementation uses the MVVM approach and SwiftUI.  This
+// Note:  the iOS implementation uses the MVVM approach and SwiftUI. This
 // required a bit more properties/logic in the `BasemapGalleryItem` (such
 // as the `loadBasemapError` and `spatialReferenceStatus` properties than
-// the `BasemapGallery` design specifies.  Tests not present in the
+// the `BasemapGallery` design specifies. Tests not present in the
 // test design have been added to accomodate those differences.
 @MainActor
 class BasemapGalleryItemTests: XCTestCase {
@@ -103,7 +103,7 @@ class BasemapGalleryItemTests: XCTestCase {
 
         XCTAssertEqual(item.spatialReferenceStatus, .unknown)
 
-        // Test if basemap matches.  Use a Task here so we can catch and test
+        // Test if basemap matches. Use a Task here so we can catch and test
         // the change to `item.isLoading` during the loading of the base layers.
         Task {
             try await item.updateSpatialReferenceStatus(SpatialReference.webMercator)
