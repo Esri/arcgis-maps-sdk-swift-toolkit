@@ -17,12 +17,25 @@
 ***REMOVED***/ Manages the state for a `BasemapGallery`.
 @MainActor
 public class BasemapGalleryViewModel: ObservableObject {
-***REMOVED******REMOVED***/ Creates a `BasemapGalleryViewModel`.
+***REMOVED******REMOVED***/ Creates a `BasemapGalleryViewModel`
+***REMOVED******REMOVED***/ - Remark: The ArcGISOnline's developer basemaps will
+***REMOVED******REMOVED***/ be loaded and added to `basemapGalleryItems`.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - geoModel: The `GeoModel`.
+***REMOVED***public convenience init(_ geoModel: GeoModel? = nil) {
+***REMOVED******REMOVED***self.init(geoModel, basemapGalleryItems: [])
+***REMOVED***
+
+***REMOVED******REMOVED***/ Creates a `BasemapGalleryViewModel`. Uses the given list of basemap gallery items.
 ***REMOVED******REMOVED***/ - Remark: If `basemapGalleryItems` is empty, ArcGISOnline's developer basemaps will
 ***REMOVED******REMOVED***/ be loaded and added to `basemapGalleryItems`.
 ***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - geoModel: The `GeoModel`.
 ***REMOVED******REMOVED***/   - basemapGalleryItems: A list of pre-defined base maps to display.
-***REMOVED***public init(_ basemapGalleryItems: [BasemapGalleryItem] = []) {
+***REMOVED***public init(
+***REMOVED******REMOVED***_ geoModel: GeoModel? = nil,
+***REMOVED******REMOVED***basemapGalleryItems: [BasemapGalleryItem]
+***REMOVED***) {
 ***REMOVED******REMOVED***self.basemapGalleryItems.append(contentsOf: basemapGalleryItems)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***if basemapGalleryItems.isEmpty {
@@ -35,8 +48,28 @@ public class BasemapGalleryViewModel: ObservableObject {
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***defer {
+***REMOVED******REMOVED******REMOVED******REMOVED*** Using `defer` allows the property `didSet` observers to be called.
+***REMOVED******REMOVED******REMOVED***self.geoModel = geoModel
 ***REMOVED***
 ***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Creates a `BasemapGalleryViewModel`. Uses the given `Portal` to retrieve basemaps.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - geoModel: The `GeoModel`.
+***REMOVED******REMOVED***/   - portal: The `Portal` used to load basemaps.
+***REMOVED***public init(
+***REMOVED******REMOVED***_ geoModel: GeoModel? = nil,
+***REMOVED******REMOVED***portal: Portal
+***REMOVED***) {
+***REMOVED******REMOVED***defer {
+***REMOVED******REMOVED******REMOVED******REMOVED*** Using `defer` allows the property `didSet` observers to be called.
+***REMOVED******REMOVED******REMOVED***self.geoModel = geoModel
+***REMOVED******REMOVED******REMOVED***self.portal = portal
+***REMOVED***
+***REMOVED***
+
 ***REMOVED***private var fetchBasemapsTask: Task<Void, Never>? {
 ***REMOVED******REMOVED***willSet {
 ***REMOVED******REMOVED******REMOVED***fetchBasemapsTask?.cancel()
@@ -53,6 +86,7 @@ public class BasemapGalleryViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ the geoModel will have its basemap replaced with the selected basemap.
 ***REMOVED***public var geoModel: GeoModel? {
 ***REMOVED******REMOVED***didSet {
+***REMOVED******REMOVED******REMOVED***guard let geoModel = geoModel else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***Task { await load(geoModel: geoModel) ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -63,6 +97,8 @@ public class BasemapGalleryViewModel: ObservableObject {
 ***REMOVED******REMOVED***didSet {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Remove all items from `basemapGalleryItems`.
 ***REMOVED******REMOVED******REMOVED***basemapGalleryItems.removeAll()
+
+***REMOVED******REMOVED******REMOVED***guard let portal = portal else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***fetchBasemapsTask = Task { await fetchBasemaps(from: portal) ***REMOVED***
 ***REMOVED***
 ***REMOVED***
