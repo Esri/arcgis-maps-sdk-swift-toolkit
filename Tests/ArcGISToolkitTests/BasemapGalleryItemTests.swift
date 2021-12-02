@@ -79,6 +79,7 @@ class BasemapGalleryItemTests: XCTestCase {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func testLoadBasemapError() async throws {
+***REMOVED******REMOVED******REMOVED*** Create item with bad portal item URL.
 ***REMOVED******REMOVED***let item = BasemapGalleryItem(
 ***REMOVED******REMOVED******REMOVED***basemap: Basemap(
 ***REMOVED******REMOVED******REMOVED******REMOVED***item: PortalItem(
