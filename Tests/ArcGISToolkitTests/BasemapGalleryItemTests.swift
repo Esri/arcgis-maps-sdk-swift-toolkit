@@ -79,6 +79,7 @@ class BasemapGalleryItemTests: XCTestCase {
     }
     
     func testLoadBasemapError() async throws {
+        // Create item with bad portal item URL.
         let item = BasemapGalleryItem(
             basemap: Basemap(
                 item: PortalItem(
