@@ -17,12 +17,25 @@ import ArcGIS
 /// Manages the state for a `BasemapGallery`.
 @MainActor
 public class BasemapGalleryViewModel: ObservableObject {
-    /// Creates a `BasemapGalleryViewModel`.
+    /// Creates a `BasemapGalleryViewModel`
+    /// - Remark: The ArcGISOnline's developer basemaps will
+    /// be loaded and added to `basemapGalleryItems`.
+    /// - Parameters:
+    ///   - geoModel: The `GeoModel`.
+    public convenience init(_ geoModel: GeoModel? = nil) {
+        self.init(geoModel, basemapGalleryItems: [])
+    }
+
+    /// Creates a `BasemapGalleryViewModel`. Uses the given list of basemap gallery items.
     /// - Remark: If `basemapGalleryItems` is empty, ArcGISOnline's developer basemaps will
     /// be loaded and added to `basemapGalleryItems`.
     /// - Parameters:
+    ///   - geoModel: The `GeoModel`.
     ///   - basemapGalleryItems: A list of pre-defined base maps to display.
-    public init(_ basemapGalleryItems: [BasemapGalleryItem] = []) {
+    public init(
+        _ geoModel: GeoModel? = nil,
+        basemapGalleryItems: [BasemapGalleryItem]
+    ) {
         self.basemapGalleryItems.append(contentsOf: basemapGalleryItems)
         
         if basemapGalleryItems.isEmpty {
@@ -35,8 +48,28 @@ public class BasemapGalleryViewModel: ObservableObject {
                 )
             }
         }
+        
+        defer {
+            // Using `defer` allows the property `didSet` observers to be called.
+            self.geoModel = geoModel
+        }
     }
     
+    /// Creates a `BasemapGalleryViewModel`. Uses the given `Portal` to retrieve basemaps.
+    /// - Parameters:
+    ///   - geoModel: The `GeoModel`.
+    ///   - portal: The `Portal` used to load basemaps.
+    public init(
+        _ geoModel: GeoModel? = nil,
+        portal: Portal
+    ) {
+        defer {
+            // Using `defer` allows the property `didSet` observers to be called.
+            self.geoModel = geoModel
+            self.portal = portal
+        }
+    }
+
     private var fetchBasemapsTask: Task<Void, Never>? {
         willSet {
             fetchBasemapsTask?.cancel()
@@ -53,6 +86,7 @@ public class BasemapGalleryViewModel: ObservableObject {
     /// the geoModel will have its basemap replaced with the selected basemap.
     public var geoModel: GeoModel? {
         didSet {
+            guard let geoModel = geoModel else { return }
             Task { await load(geoModel: geoModel) }
         }
     }
@@ -63,6 +97,8 @@ public class BasemapGalleryViewModel: ObservableObject {
         didSet {
             // Remove all items from `basemapGalleryItems`.
             basemapGalleryItems.removeAll()
+
+            guard let portal = portal else { return }
             fetchBasemapsTask = Task { await fetchBasemaps(from: portal) }
         }
     }
