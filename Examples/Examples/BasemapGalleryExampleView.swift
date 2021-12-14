@@ -64,14 +64,11 @@ struct BasemapGalleryExampleView: View {
         )
     }
     
-    // TODO:  remove last one (bad url) before PR
     static private func initialBasemaps() -> [BasemapGalleryItem] {
         let itemURLs: [URL] = [
             URL(string: "https://runtime.maps.arcgis.com/home/item.html?id=46a87c20f09e4fc48fa3c38081e0cae6")!,
             URL(string: "https://runtime.maps.arcgis.com/home/item.html?id=f33a34de3a294590ab48f246e99958c9")!,
-            URL(string: "https://runtime.maps.arcgis.com/home/item.html?id=9e557abc61ce41c9b8ec8b15800c20d3")!,
-            URL(string: "https://runtime.maps.arcgis.com/home/item.html?id=52bdc7ab7fb044d98add148764eaa30a")!,
-            URL(string: "https://runtime.maps.arcgis.com/home/item.html?id=4a3922d6d15f405d8c2b7a448a7fbad2")!
+            URL(string: "https://runtime.maps.arcgis.com/home/item.html?id=9e557abc61ce41c9b8ec8b15800c20d3")!
         ]
         
         return itemURLs.map {
