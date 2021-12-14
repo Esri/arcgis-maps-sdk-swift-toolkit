@@ -14,8 +14,8 @@
 import SwiftUI
 import ArcGIS
 
-/// The `BasemapGallery` tool displays a collection  basemaps from
-/// ArcGIS Online, a user-defined portal, or an array of `Basemap`s.
+/// The `BasemapGallery` tool displays a collection of basemaps from either
+/// ArcGIS Online, a user-defined portal, or an array of `BasemapGalleryItem`s.
 /// When a new basemap is selected from the `BasemapGallery` and the optional
 /// `BasemapGallery.geoModel` property is set, then the basemap of the geoModel is replaced
 /// with the basemap in the gallery.
