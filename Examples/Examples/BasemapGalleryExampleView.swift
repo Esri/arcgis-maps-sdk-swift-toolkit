@@ -64,14 +64,11 @@ struct BasemapGalleryExampleView: View {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED*** TODO:  remove last one (bad url) before PR
 ***REMOVED***static private func initialBasemaps() -> [BasemapGalleryItem] {
 ***REMOVED******REMOVED***let itemURLs: [URL] = [
 ***REMOVED******REMOVED******REMOVED***URL(string: "https:***REMOVED***runtime.maps.arcgis.com/home/item.html?id=46a87c20f09e4fc48fa3c38081e0cae6")!,
 ***REMOVED******REMOVED******REMOVED***URL(string: "https:***REMOVED***runtime.maps.arcgis.com/home/item.html?id=f33a34de3a294590ab48f246e99958c9")!,
-***REMOVED******REMOVED******REMOVED***URL(string: "https:***REMOVED***runtime.maps.arcgis.com/home/item.html?id=9e557abc61ce41c9b8ec8b15800c20d3")!,
-***REMOVED******REMOVED******REMOVED***URL(string: "https:***REMOVED***runtime.maps.arcgis.com/home/item.html?id=52bdc7ab7fb044d98add148764eaa30a")!,
-***REMOVED******REMOVED******REMOVED***URL(string: "https:***REMOVED***runtime.maps.arcgis.com/home/item.html?id=4a3922d6d15f405d8c2b7a448a7fbad2")!
+***REMOVED******REMOVED******REMOVED***URL(string: "https:***REMOVED***runtime.maps.arcgis.com/home/item.html?id=9e557abc61ce41c9b8ec8b15800c20d3")!
 ***REMOVED******REMOVED***]
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***return itemURLs.map {

@@ -14,8 +14,8 @@
 ***REMOVED***
 ***REMOVED***
 
-***REMOVED***/ The `BasemapGallery` tool displays a collection  basemaps from
-***REMOVED***/ ArcGIS Online, a user-defined portal, or an array of `Basemap`s.
+***REMOVED***/ The `BasemapGallery` tool displays a collection of basemaps from either
+***REMOVED***/ ArcGIS Online, a user-defined portal, or an array of `BasemapGalleryItem`s.
 ***REMOVED***/ When a new basemap is selected from the `BasemapGallery` and the optional
 ***REMOVED***/ `BasemapGallery.geoModel` property is set, then the basemap of the geoModel is replaced
 ***REMOVED***/ with the basemap in the gallery.
