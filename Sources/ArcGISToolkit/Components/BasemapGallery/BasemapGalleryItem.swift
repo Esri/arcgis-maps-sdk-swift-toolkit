@@ -67,9 +67,6 @@ public class BasemapGalleryItem: ObservableObject {
     /// Denotes whether the `basemap` or it's base layers are being loaded.
     @Published
     public private(set) var isLoading = true
-    
-    /// The `SpatialReference` of `basemap`.
-    public private(set) var spatialReference: SpatialReference? = nil
 }
 
 private extension BasemapGalleryItem {
