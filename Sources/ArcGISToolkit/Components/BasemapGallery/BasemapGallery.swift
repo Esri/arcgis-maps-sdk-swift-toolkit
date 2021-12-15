@@ -75,15 +75,6 @@ public struct BasemapGallery: View {
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***GalleryView()
 ***REMOVED******REMOVED******REMOVED***.frame(width: galleryWidth)
-***REMOVED******REMOVED******REMOVED***.onReceive(
-***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.$spatialReferenceMismatchError.dropFirst(),
-***REMOVED******REMOVED******REMOVED******REMOVED***perform: { error in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let error = error else { return ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***alertItem = AlertItem(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***basemapSR: error.basemapSR,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***geoModelSR: error.geoModelSR
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***.alert(item: $alertItem) { alertItem in
 ***REMOVED******REMOVED******REMOVED******REMOVED***Alert(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title: Text(alertItem.title),
@@ -151,7 +142,7 @@ private extension BasemapGallery {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***alertItem = AlertItem(loadBasemapError: loadError)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.updateCurrentBasemapGalleryItem(basemapGalleryItem)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.currentBasemapGalleryItem = basemapGalleryItem
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
@@ -185,10 +176,6 @@ private struct BasemapGalleryItemRow: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "minus.circle.fill")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.title)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.red)
-***REMOVED******REMOVED******REMOVED*** else if basemapGalleryItem.spatialReferenceStatus == .noMatch {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "x.circle.fill")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.title)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.red)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Display a progress view if the item is loading.
@@ -198,7 +185,6 @@ private struct BasemapGalleryItemRow: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.progressViewStyle(CircularProgressViewStyle())
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.esriBorder()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
@@ -241,17 +227,6 @@ extension AlertItem: Identifiable {
 ***REMOVED***
 
 extension AlertItem {
-***REMOVED******REMOVED***/ Creates an alert item based on a spatial reference mismatch.
-***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - basemapSR: The basemap's spatial reference.
-***REMOVED******REMOVED***/   - geoModelSR: The geomodel's spatial reference.
-***REMOVED***init(basemapSR: SpatialReference?, geoModelSR: SpatialReference?) {
-***REMOVED******REMOVED***self.init(
-***REMOVED******REMOVED******REMOVED***title: "Spatial reference mismatch.",
-***REMOVED******REMOVED******REMOVED***message: "The spatial reference of the basemap: \(basemapSR?.description ?? "") does not match that of the geomodel: \(geoModelSR?.description ?? "")."
-***REMOVED******REMOVED***)
-***REMOVED***
-***REMOVED***
 ***REMOVED******REMOVED***/ Creates an alert item based on an error generated loading a basemap.
 ***REMOVED******REMOVED***/ - Parameter loadBasemapError: The load basemap error.
 ***REMOVED***init(loadBasemapError: RuntimeError) {

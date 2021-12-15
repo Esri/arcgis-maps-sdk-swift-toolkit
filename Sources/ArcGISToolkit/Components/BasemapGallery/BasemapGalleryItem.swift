@@ -17,17 +17,6 @@ import UIKit.UIImage
 
 ***REMOVED***/  The `BasemapGalleryItem` encompasses an element in a `BasemapGallery`.
 public class BasemapGalleryItem: ObservableObject {
-***REMOVED******REMOVED***/ Indicates the status of the basemap's spatial reference in relation to a reference spatial reference.
-***REMOVED***public enum SpatialReferenceStatus {
-***REMOVED******REMOVED******REMOVED***/ The basemap's spatial reference status is unknown, either because the basemap's
-***REMOVED******REMOVED******REMOVED***/ base layers haven't been loaded yet or the status has yet to be updated.
-***REMOVED******REMOVED***case unknown
-***REMOVED******REMOVED******REMOVED***/ The basemap's spatial reference matches the reference spatial reference.
-***REMOVED******REMOVED***case match
-***REMOVED******REMOVED******REMOVED***/ The basemap's spatial reference does not match the reference spatial reference.
-***REMOVED******REMOVED***case noMatch
-***REMOVED***
-***REMOVED***
 ***REMOVED******REMOVED***/ Creates a `BasemapGalleryItem`.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - basemap: The `Basemap` represented by the item.
@@ -79,13 +68,7 @@ public class BasemapGalleryItem: ObservableObject {
 ***REMOVED***@Published
 ***REMOVED***public private(set) var isLoading = true
 ***REMOVED***
-***REMOVED******REMOVED***/ The `SpatialReferenceStatus` of the item. This is set via a call to
-***REMOVED******REMOVED***/ `updateSpatialReferenceStatus()`.
-***REMOVED***@Published
-***REMOVED***public private(set) var spatialReferenceStatus: SpatialReferenceStatus = .unknown
-***REMOVED***
-***REMOVED******REMOVED***/ The `SpatialReference` of `basemap`. This will be `nil` until the basemap's
-***REMOVED******REMOVED***/ baseLayers have been loaded in `updateSpatialReferenceStatus()`.
+***REMOVED******REMOVED***/ The `SpatialReference` of `basemap`.
 ***REMOVED***public private(set) var spatialReference: SpatialReference? = nil
 ***REMOVED***
 
@@ -114,48 +97,6 @@ private extension BasemapGalleryItem {
 ***REMOVED******REMOVED***(basemap.item?.thumbnail?.image ?? UIImage.defaultThumbnail())
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***loadBasemapsError = error
-***REMOVED******REMOVED***isLoading = false
-***REMOVED***
-***REMOVED***
-
-public extension BasemapGalleryItem {
-***REMOVED******REMOVED***/ Loads the first base layer of `basemap` and determines if it matches
-***REMOVED******REMOVED***/ `referenceSpatialReference`, setting the `spatialReferenceStatus`
-***REMOVED******REMOVED***/ property appropriately.
-***REMOVED******REMOVED***/ - Parameter referenceSpatialReference: The `SpatialReference to match to`.
-***REMOVED***func updateSpatialReferenceStatus(
-***REMOVED******REMOVED***_ spatialReference: SpatialReference?
-***REMOVED***) async throws {
-***REMOVED******REMOVED***guard basemap.loadStatus == .loaded else { return ***REMOVED***
-
-***REMOVED******REMOVED***if self.spatialReference == nil {
-***REMOVED******REMOVED******REMOVED***await MainActor.run {
-***REMOVED******REMOVED******REMOVED******REMOVED***isLoading = true
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***try await basemap.baseLayers.first?.load()
-***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***await finalizeUpdateSpatialReferenceStatus(with: spatialReference)
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ Updates the item's `spatialReference` and `spatialReferenceStatus` properties.
-***REMOVED******REMOVED***/ - Parameter referenceSpatialReference: The `SpatialReference` used to
-***REMOVED******REMOVED***/ compare to the `basemap`'s `SpatialReference`, represented by the first base layer's`
-***REMOVED******REMOVED***/ `SpatialReference`.
-***REMOVED***@MainActor
-***REMOVED***func finalizeUpdateSpatialReferenceStatus(
-***REMOVED******REMOVED***with referenceSpatialReference: SpatialReference?
-***REMOVED***) {
-***REMOVED******REMOVED***spatialReference = basemap.baseLayers.first?.spatialReference
-***REMOVED******REMOVED***if referenceSpatialReference == nil {
-***REMOVED******REMOVED******REMOVED***spatialReferenceStatus = .unknown
-***REMOVED***
-***REMOVED******REMOVED***else if spatialReference == referenceSpatialReference {
-***REMOVED******REMOVED******REMOVED***spatialReferenceStatus = .match
-***REMOVED***
-***REMOVED******REMOVED***else {
-***REMOVED******REMOVED******REMOVED***spatialReferenceStatus = .noMatch
-***REMOVED***
 ***REMOVED******REMOVED***isLoading = false
 ***REMOVED***
 ***REMOVED***

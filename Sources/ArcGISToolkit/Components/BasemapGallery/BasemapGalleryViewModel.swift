@@ -112,49 +112,10 @@ public class BasemapGalleryViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ The `BasemapGalleryItem` representing the `GeoModel`'s current base map. This may be a
 ***REMOVED******REMOVED***/ basemap which does not exist in the gallery.
 ***REMOVED***@Published
-***REMOVED***public private(set) var currentBasemapGalleryItem: BasemapGalleryItem? = nil {
+***REMOVED***public var currentBasemapGalleryItem: BasemapGalleryItem? = nil {
 ***REMOVED******REMOVED***didSet {
 ***REMOVED******REMOVED******REMOVED***guard let item = currentBasemapGalleryItem else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***geoModel?.basemap = item.basemap
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ The error signifying the spatial reference of the GeoModel and that of a potential
-***REMOVED******REMOVED***/ current `BasemapGalleryItem` do not match.
-***REMOVED***@Published
-***REMOVED***public private(set) var spatialReferenceMismatchError: SpatialReferenceMismatchError? = nil
-***REMOVED***
-***REMOVED******REMOVED***/ This attempts to set `currentBasemapGalleryItem`. `currentBasemapGalleryItem`
-***REMOVED******REMOVED***/ will be set if it's spatial reference matches that of the current geoModel. If the spatial references
-***REMOVED******REMOVED***/ do not match, `currentBasemapGalleryItem` will be unchanged.
-***REMOVED******REMOVED***/ - Parameter basemapGalleryItem: The new, potential, `BasemapGalleryItem`.
-***REMOVED***public func updateCurrentBasemapGalleryItem(
-***REMOVED******REMOVED***_ basemapGalleryItem: BasemapGalleryItem
-***REMOVED***) {
-***REMOVED******REMOVED***Task {
-***REMOVED******REMOVED******REMOVED******REMOVED*** Ensure the geoModel is loaded.
-***REMOVED******REMOVED******REMOVED***try await geoModel?.load()
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED*** Reset the mismatch error.
-***REMOVED******REMOVED******REMOVED***spatialReferenceMismatchError = nil
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED*** Update the basemap gallery item's `spatialReferenceStatus`.
-***REMOVED******REMOVED******REMOVED***try await basemapGalleryItem.updateSpatialReferenceStatus(
-***REMOVED******REMOVED******REMOVED******REMOVED***geoModel?.actualSpatialReference
-***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED*** Update @State on the main thread.
-***REMOVED******REMOVED******REMOVED***await MainActor.run {
-***REMOVED******REMOVED******REMOVED******REMOVED***switch basemapGalleryItem.spatialReferenceStatus {
-***REMOVED******REMOVED******REMOVED******REMOVED***case .match, .unknown:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentBasemapGalleryItem = basemapGalleryItem
-***REMOVED******REMOVED******REMOVED******REMOVED***case .noMatch:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***spatialReferenceMismatchError = SpatialReferenceMismatchError(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***basemapSR: basemapGalleryItem.spatialReference,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***geoModelSR: geoModel?.actualSpatialReference
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -223,15 +184,3 @@ private extension BasemapGalleryViewModel {
 ***REMOVED*** catch { ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-
-***REMOVED***/ A value that represents an error ocurring because of a SpatialReference mismatch between
-***REMOVED***/ a geomodel and a basemap.
-public struct SpatialReferenceMismatchError: Error {
-***REMOVED******REMOVED***/ The basemap's spatial reference
-***REMOVED***public let basemapSR: SpatialReference?
-***REMOVED***
-***REMOVED******REMOVED***/ The geomodel's spatial reference
-***REMOVED***public let geoModelSR: SpatialReference?
-***REMOVED***
-
-extension SpatialReferenceMismatchError: Equatable {***REMOVED***
