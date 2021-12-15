@@ -117,27 +117,6 @@ private extension BasemapGalleryItem {
 ***REMOVED******REMOVED***isLoading = false
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Updates the item's `spatialReference` and `spatialReferenceStatus` properties.
-***REMOVED******REMOVED***/ - Parameter referenceSpatialReference: The `SpatialReference` used to
-***REMOVED******REMOVED***/ compare to the `basemap`'s `SpatialReference`, represented by the first base layer's`
-***REMOVED******REMOVED***/ `SpatialReference`.
-***REMOVED***@MainActor
-***REMOVED***func finalizeUpdateSpatialReferenceStatus(
-***REMOVED******REMOVED***with referenceSpatialReference: SpatialReference?
-***REMOVED***) {
-***REMOVED******REMOVED***spatialReference = basemap.baseLayers.first?.spatialReference
-***REMOVED******REMOVED***if referenceSpatialReference == nil {
-***REMOVED******REMOVED******REMOVED***spatialReferenceStatus = .unknown
-***REMOVED***
-***REMOVED******REMOVED***else if spatialReference == referenceSpatialReference {
-***REMOVED******REMOVED******REMOVED***spatialReferenceStatus = .match
-***REMOVED***
-***REMOVED******REMOVED***else {
-***REMOVED******REMOVED******REMOVED***spatialReferenceStatus = .noMatch
-***REMOVED***
-***REMOVED******REMOVED***isLoading = false
-***REMOVED***
-***REMOVED***
 
 public extension BasemapGalleryItem {
 ***REMOVED******REMOVED***/ Loads the first base layer of `basemap` and determines if it matches
@@ -158,6 +137,29 @@ public extension BasemapGalleryItem {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***await finalizeUpdateSpatialReferenceStatus(with: spatialReference)
 ***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Updates the item's `spatialReference` and `spatialReferenceStatus` properties.
+***REMOVED******REMOVED***/ - Parameter referenceSpatialReference: The `SpatialReference` used to
+***REMOVED******REMOVED***/ compare to the `basemap`'s `SpatialReference`, represented by the first base layer's`
+***REMOVED******REMOVED***/ `SpatialReference`.
+***REMOVED***@MainActor
+***REMOVED***func finalizeUpdateSpatialReferenceStatus(
+***REMOVED******REMOVED***with referenceSpatialReference: SpatialReference?
+***REMOVED***) {
+***REMOVED******REMOVED***spatialReference = basemap.baseLayers.first?.spatialReference
+***REMOVED******REMOVED***if referenceSpatialReference == nil {
+***REMOVED******REMOVED******REMOVED***spatialReferenceStatus = .unknown
+***REMOVED***
+***REMOVED******REMOVED***else if spatialReference == referenceSpatialReference {
+***REMOVED******REMOVED******REMOVED***spatialReferenceStatus = .match
+***REMOVED***
+***REMOVED******REMOVED***else {
+***REMOVED******REMOVED******REMOVED***spatialReferenceStatus = .noMatch
+***REMOVED***
+***REMOVED******REMOVED***isLoading = false
+***REMOVED***
+
+
 ***REMOVED***
 
 extension BasemapGalleryItem: Identifiable {
