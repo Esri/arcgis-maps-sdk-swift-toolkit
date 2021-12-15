@@ -75,15 +75,6 @@ public struct BasemapGallery: View {
     public var body: some View {
         GalleryView()
             .frame(width: galleryWidth)
-            .onReceive(
-                viewModel.$spatialReferenceMismatchError.dropFirst(),
-                perform: { error in
-                    guard let error = error else { return }
-                    alertItem = AlertItem(
-                        basemapSR: error.basemapSR,
-                        geoModelSR: error.geoModelSR
-                    )
-                })
             .alert(item: $alertItem) { alertItem in
                 Alert(
                     title: Text(alertItem.title),
@@ -151,7 +142,7 @@ private extension BasemapGallery {
                                 alertItem = AlertItem(loadBasemapError: loadError)
                             }
                             else {
-                                viewModel.updateCurrentBasemapGalleryItem(basemapGalleryItem)
+                                viewModel.currentBasemapGalleryItem = basemapGalleryItem
                             }
                         }
                 }
@@ -185,10 +176,6 @@ private struct BasemapGalleryItemRow: View {
                     Image(systemName: "minus.circle.fill")
                         .font(.title)
                         .foregroundColor(.red)
-                } else if basemapGalleryItem.spatialReferenceStatus == .noMatch {
-                    Image(systemName: "x.circle.fill")
-                        .font(.title)
-                        .foregroundColor(.red)
                 }
                 
                 // Display a progress view if the item is loading.
@@ -198,7 +185,6 @@ private struct BasemapGalleryItemRow: View {
                         .progressViewStyle(CircularProgressViewStyle())
                         .esriBorder()
                     Spacer()
-                    
                 }
             }
             
@@ -241,17 +227,6 @@ extension AlertItem: Identifiable {
 }
 
 extension AlertItem {
-    /// Creates an alert item based on a spatial reference mismatch.
-    /// - Parameters:
-    ///   - basemapSR: The basemap's spatial reference.
-    ///   - geoModelSR: The geomodel's spatial reference.
-    init(basemapSR: SpatialReference?, geoModelSR: SpatialReference?) {
-        self.init(
-            title: "Spatial reference mismatch.",
-            message: "The spatial reference of the basemap: \(basemapSR?.description ?? "") does not match that of the geomodel: \(geoModelSR?.description ?? "")."
-        )
-    }
-    
     /// Creates an alert item based on an error generated loading a basemap.
     /// - Parameter loadBasemapError: The load basemap error.
     init(loadBasemapError: RuntimeError) {

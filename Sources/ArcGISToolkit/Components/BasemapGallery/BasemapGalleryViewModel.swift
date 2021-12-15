@@ -112,49 +112,10 @@ public class BasemapGalleryViewModel: ObservableObject {
     /// The `BasemapGalleryItem` representing the `GeoModel`'s current base map. This may be a
     /// basemap which does not exist in the gallery.
     @Published
-    public private(set) var currentBasemapGalleryItem: BasemapGalleryItem? = nil {
+    public var currentBasemapGalleryItem: BasemapGalleryItem? = nil {
         didSet {
             guard let item = currentBasemapGalleryItem else { return }
             geoModel?.basemap = item.basemap
-        }
-    }
-    
-    /// The error signifying the spatial reference of the GeoModel and that of a potential
-    /// current `BasemapGalleryItem` do not match.
-    @Published
-    public private(set) var spatialReferenceMismatchError: SpatialReferenceMismatchError? = nil
-    
-    /// This attempts to set `currentBasemapGalleryItem`. `currentBasemapGalleryItem`
-    /// will be set if it's spatial reference matches that of the current geoModel. If the spatial references
-    /// do not match, `currentBasemapGalleryItem` will be unchanged.
-    /// - Parameter basemapGalleryItem: The new, potential, `BasemapGalleryItem`.
-    public func updateCurrentBasemapGalleryItem(
-        _ basemapGalleryItem: BasemapGalleryItem
-    ) {
-        Task {
-            // Ensure the geoModel is loaded.
-            try await geoModel?.load()
-            
-            // Reset the mismatch error.
-            spatialReferenceMismatchError = nil
-            
-            // Update the basemap gallery item's `spatialReferenceStatus`.
-            try await basemapGalleryItem.updateSpatialReferenceStatus(
-                geoModel?.actualSpatialReference
-            )
-            
-            // Update @State on the main thread.
-            await MainActor.run {
-                switch basemapGalleryItem.spatialReferenceStatus {
-                case .match, .unknown:
-                    currentBasemapGalleryItem = basemapGalleryItem
-                case .noMatch:
-                    spatialReferenceMismatchError = SpatialReferenceMismatchError(
-                        basemapSR: basemapGalleryItem.spatialReference,
-                        geoModelSR: geoModel?.actualSpatialReference
-                    )
-                }
-            }
         }
     }
 }
@@ -223,15 +184,3 @@ private extension BasemapGalleryViewModel {
         } catch { }
     }
 }
-
-/// A value that represents an error ocurring because of a SpatialReference mismatch between
-/// a geomodel and a basemap.
-public struct SpatialReferenceMismatchError: Error {
-    /// The basemap's spatial reference
-    public let basemapSR: SpatialReference?
-    
-    /// The geomodel's spatial reference
-    public let geoModelSR: SpatialReference?
-}
-
-extension SpatialReferenceMismatchError: Equatable {}
