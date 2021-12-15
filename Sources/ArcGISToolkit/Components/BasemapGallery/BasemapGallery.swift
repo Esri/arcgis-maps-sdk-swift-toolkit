@@ -20,17 +20,6 @@ import ArcGIS
 /// `BasemapGallery.geoModel` property is set, then the basemap of the geoModel is replaced
 /// with the basemap in the gallery.
 public struct BasemapGallery: View {
-    /// The view style of the gallery.
-    public enum Style {
-        /// The `BasemapGallery` will display as a grid when there is appropriate
-        /// width available for the gallery to do so. Otherwise the gallery will display as a list.
-        case automatic
-        /// The `BasemapGallery` will display as a grid.
-        case grid
-        /// The `BasemapGallery` will display as a list.
-        case list
-    }
-    
     /// Creates a `BasemapGallery`.
     /// - Parameter viewModel: The view model used by the `BasemapGallery`.
     public init(viewModel: BasemapGalleryViewModel? = nil) {
@@ -48,25 +37,6 @@ public struct BasemapGallery: View {
     /// user action.
     @ObservedObject
     public var viewModel: BasemapGalleryViewModel
-    
-    /// The style of the basemap gallery. The gallery can be displayed as a list, grid, or automatically
-    /// switch between the two based on screen real estate. Defaults to `automatic`.
-    /// Set using the `style` modifier.
-    private var style: Style = .automatic
-    
-    /// The size class used to determine if the basemap items should dispaly in a list or grid.
-    /// If the size class is `.regular`, they display in a grid. If it is `.compact`, they display in a list.
-    @Environment(\.horizontalSizeClass) var horizontalSizeClass
-    
-    /// `true` if the horizontal size class is `.regular`, `false` if it's `.compact`.
-    private var isRegularWidth: Bool {
-        horizontalSizeClass == .regular
-    }
-
-    /// The width of the gallery, taking into account the horizontal size class of the device.
-    private var galleryWidth: CGFloat? {
-        isRegularWidth ? 300 : 150
-    }
 
     /// The current alert item to display.
     @State
@@ -74,7 +44,7 @@ public struct BasemapGallery: View {
     
     public var body: some View {
         GalleryView()
-            .frame(width: galleryWidth)
+            .frame(width: 300)
             .alert(item: $alertItem) { alertItem in
                 Alert(
                     title: Text(alertItem.title),
@@ -85,52 +55,16 @@ public struct BasemapGallery: View {
 }
 
 private extension BasemapGallery {
-    /// The gallery view, either displayed as a grid or a list depending on `BasemapGallery.style`.
-    /// - Returns: A view representing the basemap gallery.
-    @ViewBuilder
-    func GalleryView() -> some View {
-        switch style {
-        case .automatic:
-            if isRegularWidth {
-                GridView()
-            }
-            else {
-                ListView()
-            }
-        case .grid:
-            GridView()
-        case .list:
-            ListView()
-        }
-    }
-    
-    /// The gallery view, displayed as a grid.
-    /// - Returns: A view representing the basemap gallery grid.
-    func GridView() -> some View {
-        InternalGalleryView(
-            [
-                .init(.flexible(), spacing: 8.0, alignment: .top),
-                .init(.flexible(), spacing: 8.0, alignment: .top),
-                .init(.flexible(), spacing: 8.0, alignment: .top)
-            ]
-        )
-    }
-    
-    /// The gallery view, displayed as a list.
-    /// - Returns: A view representing the basemap gallery list.
-    func ListView() -> some View {
-        InternalGalleryView(
-            [
-                .init(.flexible(), spacing: 8.0, alignment: .top)
-            ]
-        )
-    }
-    
     /// The gallery view, displayed in the specified columns.
     /// - Parameter columns: The columns used to display the basemap items.
     /// - Returns: A view representing the basemap gallery with the specified columns.
-    func InternalGalleryView(_ columns: [GridItem]) -> some View {
+    func GalleryView() -> some View {
         ScrollView {
+            let columns: [GridItem] = [
+                .init(.flexible(), spacing: 8.0, alignment: .top),
+                .init(.flexible(), spacing: 8.0, alignment: .top),
+                .init(.flexible(), spacing: 8.0, alignment: .top)
+            ]
             LazyVGrid(columns: columns, spacing: 4) {
                 ForEach(viewModel.basemapGalleryItems) { basemapGalleryItem in
                     BasemapGalleryItemRow(
@@ -196,21 +130,6 @@ private struct BasemapGalleryItemRow: View {
         .allowsHitTesting(
             !basemapGalleryItem.isLoading
         )
-    }
-}
-
-// MARK: Modifiers
-
-public extension BasemapGallery {
-    /// The style of the basemap gallery. Defaults to `.automatic`.
-    /// - Parameter style: The `Style` to use.
-    /// - Returns: The `BasemapGallery`.
-    func style(
-        _ newStyle: Style
-    ) -> BasemapGallery {
-        var copy = self
-        copy.style = newStyle
-        return copy
     }
 }
 
