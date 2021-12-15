@@ -158,8 +158,6 @@ public extension BasemapGalleryItem {
 ***REMOVED***
 ***REMOVED******REMOVED***isLoading = false
 ***REMOVED***
-
-
 ***REMOVED***
 
 extension BasemapGalleryItem: Identifiable {
