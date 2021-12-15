@@ -68,9 +68,6 @@ public class BasemapGalleryItem: ObservableObject {
 ***REMOVED***@Published
 ***REMOVED***public private(set) var isLoading = true
 ***REMOVED***
-***REMOVED******REMOVED***/ The `SpatialReference` of `basemap`.
-***REMOVED***public private(set) var spatialReference: SpatialReference? = nil
-***REMOVED***
 
 private extension BasemapGalleryItem {
 ***REMOVED******REMOVED***/ Loads the basemap and the item's thumbnail, if available.
