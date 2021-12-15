@@ -116,27 +116,6 @@ private extension BasemapGalleryItem {
         loadBasemapsError = error
         isLoading = false
     }
-    
-    /// Updates the item's `spatialReference` and `spatialReferenceStatus` properties.
-    /// - Parameter referenceSpatialReference: The `SpatialReference` used to
-    /// compare to the `basemap`'s `SpatialReference`, represented by the first base layer's`
-    /// `SpatialReference`.
-    @MainActor
-    func finalizeUpdateSpatialReferenceStatus(
-        with referenceSpatialReference: SpatialReference?
-    ) {
-        spatialReference = basemap.baseLayers.first?.spatialReference
-        if referenceSpatialReference == nil {
-            spatialReferenceStatus = .unknown
-        }
-        else if spatialReference == referenceSpatialReference {
-            spatialReferenceStatus = .match
-        }
-        else {
-            spatialReferenceStatus = .noMatch
-        }
-        isLoading = false
-    }
 }
 
 public extension BasemapGalleryItem {
@@ -158,6 +137,29 @@ public extension BasemapGalleryItem {
         
         await finalizeUpdateSpatialReferenceStatus(with: spatialReference)
     }
+    
+    /// Updates the item's `spatialReference` and `spatialReferenceStatus` properties.
+    /// - Parameter referenceSpatialReference: The `SpatialReference` used to
+    /// compare to the `basemap`'s `SpatialReference`, represented by the first base layer's`
+    /// `SpatialReference`.
+    @MainActor
+    func finalizeUpdateSpatialReferenceStatus(
+        with referenceSpatialReference: SpatialReference?
+    ) {
+        spatialReference = basemap.baseLayers.first?.spatialReference
+        if referenceSpatialReference == nil {
+            spatialReferenceStatus = .unknown
+        }
+        else if spatialReference == referenceSpatialReference {
+            spatialReferenceStatus = .match
+        }
+        else {
+            spatialReferenceStatus = .noMatch
+        }
+        isLoading = false
+    }
+
+
 }
 
 extension BasemapGalleryItem: Identifiable {
