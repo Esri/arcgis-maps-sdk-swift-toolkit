@@ -158,8 +158,6 @@ public extension BasemapGalleryItem {
         }
         isLoading = false
     }
-
-
 }
 
 extension BasemapGalleryItem: Identifiable {
