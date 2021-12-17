@@ -16,7 +16,8 @@
 struct Examples: View {
 ***REMOVED******REMOVED***/ The list of example lists.  Allows for a hierarchical navigation model for examples.
 ***REMOVED***let lists: [ExampleList] = [
-***REMOVED******REMOVED***.geoview
+***REMOVED******REMOVED***.geoview,
+***REMOVED******REMOVED***.views
 ***REMOVED***]
 ***REMOVED***
 ***REMOVED***var body: some View {
@@ -36,6 +37,13 @@ extension ExampleList {
 ***REMOVED******REMOVED***examples: [
 ***REMOVED******REMOVED******REMOVED***AnyExample("Overview Map", content: OverviewMapExampleView()),
 ***REMOVED******REMOVED******REMOVED***AnyExample("Search", content: SearchExampleView())
+***REMOVED******REMOVED***]
+***REMOVED***)
+***REMOVED***
+***REMOVED***static let views = Self(
+***REMOVED******REMOVED***name: "Views",
+***REMOVED******REMOVED***examples: [
+***REMOVED******REMOVED******REMOVED***AnyExample("FloatingPanel", content: FloatingPanelExampleView())
 ***REMOVED******REMOVED***]
 ***REMOVED***)
 ***REMOVED***

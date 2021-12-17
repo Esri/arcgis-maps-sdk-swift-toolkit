@@ -18,6 +18,7 @@
 		E48A73452658227100F5C118 /* Examples.swift in Sources */ = {isa = PBXBuildFile; fileRef = E48A733D2658227000F5C118 /* Examples.swift */; ***REMOVED***;
 		E48A73462658227100F5C118 /* ExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E48A73422658227100F5C118 /* ExampleView.swift */; ***REMOVED***;
 		E48A73472658227100F5C118 /* ExampleList.swift in Sources */ = {isa = PBXBuildFile; fileRef = E48A733E2658227100F5C118 /* ExampleList.swift */; ***REMOVED***;
+		E4AA9316276BF5ED000E6289 /* FloatingPanelExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4AA9315276BF5ED000E6289 /* FloatingPanelExampleView.swift */; ***REMOVED***;
 		E4E57DC6265D8EB00077A093 /* ArcGISToolkit in Frameworks */ = {isa = PBXBuildFile; productRef = E4E57DC5265D8EB00077A093 /* ArcGISToolkit */; ***REMOVED***;
 		E4F9BC99265EFCAF001280FF /* OverviewMapExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4F9BC98265EFCAF001280FF /* OverviewMapExampleView.swift */; ***REMOVED***;
 /* End PBXBuildFile section */
@@ -50,6 +51,7 @@
 		E48A73402658227100F5C118 /* Example.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Example.swift; sourceTree = "<group>"; ***REMOVED***;
 		E48A73412658227100F5C118 /* AnyExample.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyExample.swift; sourceTree = "<group>"; ***REMOVED***;
 		E48A73422658227100F5C118 /* ExampleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExampleView.swift; sourceTree = "<group>"; ***REMOVED***;
+		E4AA9315276BF5ED000E6289 /* FloatingPanelExampleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingPanelExampleView.swift; sourceTree = "<group>"; ***REMOVED***;
 		E4F9BC98265EFCAF001280FF /* OverviewMapExampleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OverviewMapExampleView.swift; sourceTree = "<group>"; ***REMOVED***;
 /* End PBXFileReference section */
 
@@ -71,6 +73,7 @@
 			children = (
 				E4F9BC98265EFCAF001280FF /* OverviewMapExampleView.swift */,
 				E42BFBE82672BF9500159107 /* SearchExampleView.swift */,
+				E4AA9315276BF5ED000E6289 /* FloatingPanelExampleView.swift */,
 			);
 			name = Examples;
 			sourceTree = "<group>";
@@ -212,6 +215,7 @@
 				E48A73432658227100F5C118 /* Example.swift in Sources */,
 				E47ABE442652FE0900FD2FE3 /* ExamplesApp.swift in Sources */,
 				E4F9BC99265EFCAF001280FF /* OverviewMapExampleView.swift in Sources */,
+				E4AA9316276BF5ED000E6289 /* FloatingPanelExampleView.swift in Sources */,
 				E48A73442658227100F5C118 /* AnyExample.swift in Sources */,
 				E48A73472658227100F5C118 /* ExampleList.swift in Sources */,
 				E48A73462658227100F5C118 /* ExampleView.swift in Sources */,
