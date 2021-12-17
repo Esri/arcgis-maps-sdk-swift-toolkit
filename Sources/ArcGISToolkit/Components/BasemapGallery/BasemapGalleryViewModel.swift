@@ -20,13 +20,12 @@ public class BasemapGalleryViewModel: ObservableObject {
     /// Creates a `BasemapGalleryViewModel`
     /// - Remark: The ArcGISOnline's developer basemaps will
     /// be loaded and added to `basemapGalleryItems`.
-    /// - Parameters:
-    ///   - geoModel: The `GeoModel`.
+    /// - Parameter geoModel: The `GeoModel`.
     public convenience init(_ geoModel: GeoModel? = nil) {
         self.init(geoModel, basemapGalleryItems: [])
     }
 
-    /// Creates a `BasemapGalleryViewModel`. Uses the given list of basemap gallery items.
+    /// Creates a `BasemapGalleryViewModel`. Uses the given array of basemap gallery items.
     /// - Remark: If `basemapGalleryItems` is empty, ArcGISOnline's developer basemaps will
     /// be loaded and added to `basemapGalleryItems`.
     /// - Parameters:

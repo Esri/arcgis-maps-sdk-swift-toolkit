@@ -39,7 +39,9 @@ public class BasemapGalleryItem: ObservableObject {
         self.thumbnailOverride = thumbnail
         self.thumbnail = thumbnail
         
-        Task { await loadBasemap() }
+        if basemap.loadStatus != .loaded {
+            Task { await loadBasemap() }
+        }
     }
     
     /// The error generated loading the basemap, if any.
@@ -47,7 +49,7 @@ public class BasemapGalleryItem: ObservableObject {
     public private(set) var loadBasemapsError: RuntimeError? = nil
     
     /// The basemap represented by `BasemapGalleryItem`.
-    public private(set) var basemap: Basemap
+    public let basemap: Basemap
     
     /// The name of the `basemap`.
     @Published
@@ -64,7 +66,7 @@ public class BasemapGalleryItem: ObservableObject {
     public private(set) var thumbnail: UIImage? = nil
     private var thumbnailOverride: UIImage? = nil
     
-    /// Denotes whether the `basemap` or it's base layers are being loaded.
+    /// A Boolean value indicating whether the `basemap` or it's base layers are being loaded.
     @Published
     public private(set) var isLoading = true
 }
@@ -98,9 +100,7 @@ private extension BasemapGalleryItem {
     }
 }
 
-extension BasemapGalleryItem: Identifiable {
-    public var id: ObjectIdentifier { ObjectIdentifier(self) }
-}
+extension BasemapGalleryItem: Identifiable {}
 
 extension BasemapGalleryItem: Equatable {
     public static func == (lhs: BasemapGalleryItem, rhs: BasemapGalleryItem) -> Bool {
@@ -115,6 +115,6 @@ private extension UIImage {
     /// A default thumbnail image.
     /// - Returns: The default thumbnail.
     static func defaultThumbnail() -> UIImage {
-        return UIImage(named: "DefaultBasemap", in: Bundle.module, with: nil)!
+        return UIImage(named: "DefaultBasemap", in: .module, with: nil)!
     }
 }
