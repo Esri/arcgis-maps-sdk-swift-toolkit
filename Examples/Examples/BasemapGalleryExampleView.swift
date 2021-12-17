@@ -25,12 +25,12 @@ struct BasemapGalleryExampleView: View {
     
     /// `true` if the basemap gallery should be displayed; `false` otherwise.
     @State
-    var showBasemapGallery: Bool = true
+    private var showBasemapGallery: Bool = true
     
     /// The initial viewpoint of the map.
-    let initialViewpoint: Viewpoint? = Viewpoint(
+    let initialViewpoint = Viewpoint(
         center: Point(x: -93.258133, y: 44.986656, spatialReference: .wgs84),
-        scale: 1000000
+        scale: 1_000_000
     )
     
     var body: some View {
@@ -49,10 +49,7 @@ struct BasemapGalleryExampleView: View {
         .navigationBarItems(trailing: Button {
             showBasemapGallery.toggle()
         } label: {
-            HStack(alignment: .center) {
-                Image(uiImage: UIImage(named: "basemap")!)
-                Text(showBasemapGallery ? "Hide Basemaps" : "Show Basemaps")
-            }
+            Image("basemap", label: Text("Basemaps"))
         })
     }
     

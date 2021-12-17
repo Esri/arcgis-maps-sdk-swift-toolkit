@@ -23,12 +23,7 @@ public struct BasemapGallery: View {
     /// Creates a `BasemapGallery`.
     /// - Parameter viewModel: The view model used by the `BasemapGallery`.
     public init(viewModel: BasemapGalleryViewModel? = nil) {
-        if let viewModel = viewModel {
-            self.viewModel = viewModel
-        }
-        else {
-            self.viewModel = BasemapGalleryViewModel()
-        }
+        self.viewModel = viewModel ?? BasemapGalleryViewModel()
     }
     
     /// The view model used by the view. The `BasemapGalleryViewModel` manages the state
@@ -60,12 +55,8 @@ private extension BasemapGallery {
     /// - Returns: A view representing the basemap gallery with the specified columns.
     func GalleryView() -> some View {
         ScrollView {
-            let columns: [GridItem] = [
-                .init(.flexible(), spacing: 8.0, alignment: .top),
-                .init(.flexible(), spacing: 8.0, alignment: .top),
-                .init(.flexible(), spacing: 8.0, alignment: .top)
-            ]
-            LazyVGrid(columns: columns, spacing: 4) {
+            let columns = Array(repeating: GridItem(.flexible(), alignment: .top), count: 3)
+            LazyVGrid(columns: columns) {
                 ForEach(viewModel.basemapGalleryItems) { basemapGalleryItem in
                     BasemapGalleryItemRow(
                         basemapGalleryItem: basemapGalleryItem,
@@ -74,8 +65,7 @@ private extension BasemapGallery {
                         .onTapGesture {
                             if let loadError = basemapGalleryItem.loadBasemapsError {
                                 alertItem = AlertItem(loadBasemapError: loadError)
-                            }
-                            else {
+                            } else {
                                 viewModel.currentBasemapGalleryItem = basemapGalleryItem
                             }
                         }
@@ -114,11 +104,9 @@ private struct BasemapGalleryItemRow: View {
                 
                 // Display a progress view if the item is loading.
                 if basemapGalleryItem.isLoading {
-                    Spacer()
                     ProgressView()
                         .progressViewStyle(CircularProgressViewStyle())
                         .esriBorder()
-                    Spacer()
                 }
             }
             
