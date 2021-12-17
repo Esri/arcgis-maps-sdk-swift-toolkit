@@ -19,23 +19,23 @@ import ArcGIS
 public class BasemapGalleryViewModel: ObservableObject {
     /// Creates a `BasemapGalleryViewModel`
     /// - Remark: The ArcGISOnline's developer basemaps will
-    /// be loaded and added to `basemapGalleryItems`.
+    /// be loaded and added to `items`.
     /// - Parameter geoModel: The `GeoModel`.
     public convenience init(_ geoModel: GeoModel? = nil) {
-        self.init(geoModel, basemapGalleryItems: [])
+        self.init(geoModel, items: [])
     }
 
     /// Creates a `BasemapGalleryViewModel`. Uses the given array of basemap gallery items.
-    /// - Remark: If `basemapGalleryItems` is empty, ArcGISOnline's developer basemaps will
-    /// be loaded and added to `basemapGalleryItems`.
+    /// - Remark: If `items` is empty, ArcGISOnline's developer basemaps will
+    /// be loaded and added to `items`.
     /// - Parameters:
     ///   - geoModel: The `GeoModel`.
-    ///   - basemapGalleryItems: A list of pre-defined base maps to display.
+    ///   - items: A list of pre-defined base maps to display.
     public init(
         _ geoModel: GeoModel? = nil,
-        basemapGalleryItems: [BasemapGalleryItem]
+        items: [BasemapGalleryItem]
     ) {
-        self.basemapGalleryItems.append(contentsOf: basemapGalleryItems)
+        self.items.append(contentsOf: items)
         
         defer {
             // Using `defer` allows the property `didSet` observers to be called.
@@ -57,7 +57,7 @@ public class BasemapGalleryViewModel: ObservableObject {
     /// The list of basemaps currently visible in the gallery. It is comprised of items passed into
     /// the `BasemapGalleryItem` constructor property.
     @Published
-    public var basemapGalleryItems: [BasemapGalleryItem] = []
+    public var items: [BasemapGalleryItem] = []
     
     /// The `BasemapGalleryItem` representing the `GeoModel`'s current base map. This may be a
     /// basemap which does not exist in the gallery.
