@@ -33,19 +33,23 @@ public struct BasemapGallery: View {
     @ObservedObject
     public var viewModel: BasemapGalleryViewModel
 
+    /// A Boolean value indicating whether the error alert should be shown.
+    @State
+    private var showErrorAlert = false
+    
     /// The current alert item to display.
     @State
     private var alertItem: AlertItem?
     
     public var body: some View {
-        GalleryView()
+        makeGalleryView()
             .frame(width: 300)
-            .alert(item: $alertItem) { alertItem in
-                Alert(
-                    title: Text(alertItem.title),
-                    message: Text(alertItem.message)
-                )
-            }
+            .alert(
+                alertItem?.title ?? "",
+                isPresented: $showErrorAlert,
+                presenting: alertItem) { item in
+                    Text(item.message)
+                }
     }
 }
 
@@ -53,20 +57,21 @@ private extension BasemapGallery {
     /// The gallery view, displayed in the specified columns.
     /// - Parameter columns: The columns used to display the basemap items.
     /// - Returns: A view representing the basemap gallery with the specified columns.
-    func GalleryView() -> some View {
+    func makeGalleryView() -> some View {
         ScrollView {
             let columns = Array(repeating: GridItem(.flexible(), alignment: .top), count: 3)
             LazyVGrid(columns: columns) {
-                ForEach(viewModel.basemapGalleryItems) { basemapGalleryItem in
+                ForEach(viewModel.items) { item in
                     BasemapGalleryItemRow(
-                        basemapGalleryItem: basemapGalleryItem,
-                        isSelected: basemapGalleryItem == viewModel.currentBasemapGalleryItem
+                        item: item,
+                        isSelected: item == viewModel.currentBasemapGalleryItem
                     )
                         .onTapGesture {
-                            if let loadError = basemapGalleryItem.loadBasemapsError {
+                            if let loadError = item.loadBasemapsError {
                                 alertItem = AlertItem(loadBasemapError: loadError)
+                                showErrorAlert = true
                             } else {
-                                viewModel.currentBasemapGalleryItem = basemapGalleryItem
+                                viewModel.currentBasemapGalleryItem = item
                             }
                         }
                 }
@@ -78,14 +83,14 @@ private extension BasemapGallery {
 
 /// A row or grid element representing a basemap gallery item.
 private struct BasemapGalleryItemRow: View {
-    @ObservedObject var basemapGalleryItem: BasemapGalleryItem
+    @ObservedObject var item: BasemapGalleryItem
     let isSelected: Bool
     
     var body: some View {
         VStack {
             ZStack(alignment: .center) {
                 // Display the thumbnail, if available.
-                if let thumbnailImage = basemapGalleryItem.thumbnail {
+                if let thumbnailImage = item.thumbnail {
                     Image(uiImage: thumbnailImage)
                         .resizable()
                         .aspectRatio(contentMode: .fit)
@@ -96,14 +101,14 @@ private struct BasemapGalleryItemRow: View {
                 
                 // Display an image representing either a load basemap error
                 // or a spatial reference mismatch error.
-                if basemapGalleryItem.loadBasemapsError != nil {
+                if item.loadBasemapsError != nil {
                     Image(systemName: "minus.circle.fill")
                         .font(.title)
                         .foregroundColor(.red)
                 }
                 
                 // Display a progress view if the item is loading.
-                if basemapGalleryItem.isLoading {
+                if item.isLoading {
                     ProgressView()
                         .progressViewStyle(CircularProgressViewStyle())
                         .esriBorder()
@@ -111,12 +116,12 @@ private struct BasemapGalleryItemRow: View {
             }
             
             // Display the name of the item.
-            Text(basemapGalleryItem.name)
+            Text(item.name)
                 .font(.footnote)
                 .multilineTextAlignment(.center)
         }
         .allowsHitTesting(
-            !basemapGalleryItem.isLoading
+            !item.isLoading
         )
     }
 }
@@ -139,7 +144,7 @@ extension AlertItem {
     init(loadBasemapError: RuntimeError) {
         self.init(
             title: "Error loading basemap.",
-            message: "\(loadBasemapError.failureReason ?? "")"
+            message: "\(loadBasemapError.failureReason ?? "The basemap failed to load for an unknown reason.")"
         )
     }
 }

@@ -46,16 +46,20 @@ struct BasemapGalleryExampleView: View {
                 }
         }
         .navigationTitle("Basemap Gallery")
-        .navigationBarItems(trailing: Button {
-            showBasemapGallery.toggle()
-        } label: {
-            Image("basemap", label: Text("Basemaps"))
-        })
+        .toolbar {
+            ToolbarItemGroup(placement: .navigationBarTrailing) {
+                Button {
+                    showBasemapGallery.toggle()
+                } label: {
+                    Image("basemap", label: Text("Basemaps"))
+                }
+            }
+        }
     }
     
     private func SetupViewModel() {
         viewModel.geoModel = map
-        viewModel.basemapGalleryItems.append(
+        viewModel.items.append(
             contentsOf: BasemapGalleryExampleView.initialBasemaps()
         )
     }
