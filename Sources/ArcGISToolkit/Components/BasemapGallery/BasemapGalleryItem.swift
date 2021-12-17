@@ -39,7 +39,9 @@ public class BasemapGalleryItem: ObservableObject {
 ***REMOVED******REMOVED***self.thumbnailOverride = thumbnail
 ***REMOVED******REMOVED***self.thumbnail = thumbnail
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***Task { await loadBasemap() ***REMOVED***
+***REMOVED******REMOVED***if basemap.loadStatus != .loaded {
+***REMOVED******REMOVED******REMOVED***Task { await loadBasemap() ***REMOVED***
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The error generated loading the basemap, if any.
@@ -47,7 +49,7 @@ public class BasemapGalleryItem: ObservableObject {
 ***REMOVED***public private(set) var loadBasemapsError: RuntimeError? = nil
 ***REMOVED***
 ***REMOVED******REMOVED***/ The basemap represented by `BasemapGalleryItem`.
-***REMOVED***public private(set) var basemap: Basemap
+***REMOVED***public let basemap: Basemap
 ***REMOVED***
 ***REMOVED******REMOVED***/ The name of the `basemap`.
 ***REMOVED***@Published
@@ -64,7 +66,7 @@ public class BasemapGalleryItem: ObservableObject {
 ***REMOVED***public private(set) var thumbnail: UIImage? = nil
 ***REMOVED***private var thumbnailOverride: UIImage? = nil
 ***REMOVED***
-***REMOVED******REMOVED***/ Denotes whether the `basemap` or it's base layers are being loaded.
+***REMOVED******REMOVED***/ A Boolean value indicating whether the `basemap` or it's base layers are being loaded.
 ***REMOVED***@Published
 ***REMOVED***public private(set) var isLoading = true
 ***REMOVED***
@@ -98,9 +100,7 @@ private extension BasemapGalleryItem {
 ***REMOVED***
 ***REMOVED***
 
-extension BasemapGalleryItem: Identifiable {
-***REMOVED***public var id: ObjectIdentifier { ObjectIdentifier(self) ***REMOVED***
-***REMOVED***
+extension BasemapGalleryItem: Identifiable {***REMOVED***
 
 extension BasemapGalleryItem: Equatable {
 ***REMOVED***public static func == (lhs: BasemapGalleryItem, rhs: BasemapGalleryItem) -> Bool {
@@ -115,6 +115,6 @@ private extension UIImage {
 ***REMOVED******REMOVED***/ A default thumbnail image.
 ***REMOVED******REMOVED***/ - Returns: The default thumbnail.
 ***REMOVED***static func defaultThumbnail() -> UIImage {
-***REMOVED******REMOVED***return UIImage(named: "DefaultBasemap", in: Bundle.module, with: nil)!
+***REMOVED******REMOVED***return UIImage(named: "DefaultBasemap", in: .module, with: nil)!
 ***REMOVED***
 ***REMOVED***

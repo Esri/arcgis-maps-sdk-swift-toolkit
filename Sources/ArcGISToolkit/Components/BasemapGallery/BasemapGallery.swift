@@ -23,12 +23,7 @@ public struct BasemapGallery: View {
 ***REMOVED******REMOVED***/ Creates a `BasemapGallery`.
 ***REMOVED******REMOVED***/ - Parameter viewModel: The view model used by the `BasemapGallery`.
 ***REMOVED***public init(viewModel: BasemapGalleryViewModel? = nil) {
-***REMOVED******REMOVED***if let viewModel = viewModel {
-***REMOVED******REMOVED******REMOVED***self.viewModel = viewModel
-***REMOVED***
-***REMOVED******REMOVED***else {
-***REMOVED******REMOVED******REMOVED***self.viewModel = BasemapGalleryViewModel()
-***REMOVED***
+***REMOVED******REMOVED***self.viewModel = viewModel ?? BasemapGalleryViewModel()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The view model used by the view. The `BasemapGalleryViewModel` manages the state
@@ -60,12 +55,8 @@ private extension BasemapGallery {
 ***REMOVED******REMOVED***/ - Returns: A view representing the basemap gallery with the specified columns.
 ***REMOVED***func GalleryView() -> some View {
 ***REMOVED******REMOVED***ScrollView {
-***REMOVED******REMOVED******REMOVED***let columns: [GridItem] = [
-***REMOVED******REMOVED******REMOVED******REMOVED***.init(.flexible(), spacing: 8.0, alignment: .top),
-***REMOVED******REMOVED******REMOVED******REMOVED***.init(.flexible(), spacing: 8.0, alignment: .top),
-***REMOVED******REMOVED******REMOVED******REMOVED***.init(.flexible(), spacing: 8.0, alignment: .top)
-***REMOVED******REMOVED******REMOVED***]
-***REMOVED******REMOVED******REMOVED***LazyVGrid(columns: columns, spacing: 4) {
+***REMOVED******REMOVED******REMOVED***let columns = Array(repeating: GridItem(.flexible(), alignment: .top), count: 3)
+***REMOVED******REMOVED******REMOVED***LazyVGrid(columns: columns) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ForEach(viewModel.basemapGalleryItems) { basemapGalleryItem in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***BasemapGalleryItemRow(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***basemapGalleryItem: basemapGalleryItem,
@@ -74,8 +65,7 @@ private extension BasemapGallery {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onTapGesture {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let loadError = basemapGalleryItem.loadBasemapsError {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***alertItem = AlertItem(loadBasemapError: loadError)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.currentBasemapGalleryItem = basemapGalleryItem
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
@@ -114,11 +104,9 @@ private struct BasemapGalleryItemRow: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Display a progress view if the item is loading.
 ***REMOVED******REMOVED******REMOVED******REMOVED***if basemapGalleryItem.isLoading {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ProgressView()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.progressViewStyle(CircularProgressViewStyle())
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.esriBorder()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
