@@ -19,23 +19,23 @@
 public class BasemapGalleryViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ Creates a `BasemapGalleryViewModel`
 ***REMOVED******REMOVED***/ - Remark: The ArcGISOnline's developer basemaps will
-***REMOVED******REMOVED***/ be loaded and added to `basemapGalleryItems`.
+***REMOVED******REMOVED***/ be loaded and added to `items`.
 ***REMOVED******REMOVED***/ - Parameter geoModel: The `GeoModel`.
 ***REMOVED***public convenience init(_ geoModel: GeoModel? = nil) {
-***REMOVED******REMOVED***self.init(geoModel, basemapGalleryItems: [])
+***REMOVED******REMOVED***self.init(geoModel, items: [])
 ***REMOVED***
 
 ***REMOVED******REMOVED***/ Creates a `BasemapGalleryViewModel`. Uses the given array of basemap gallery items.
-***REMOVED******REMOVED***/ - Remark: If `basemapGalleryItems` is empty, ArcGISOnline's developer basemaps will
-***REMOVED******REMOVED***/ be loaded and added to `basemapGalleryItems`.
+***REMOVED******REMOVED***/ - Remark: If `items` is empty, ArcGISOnline's developer basemaps will
+***REMOVED******REMOVED***/ be loaded and added to `items`.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - geoModel: The `GeoModel`.
-***REMOVED******REMOVED***/   - basemapGalleryItems: A list of pre-defined base maps to display.
+***REMOVED******REMOVED***/   - items: A list of pre-defined base maps to display.
 ***REMOVED***public init(
 ***REMOVED******REMOVED***_ geoModel: GeoModel? = nil,
-***REMOVED******REMOVED***basemapGalleryItems: [BasemapGalleryItem]
+***REMOVED******REMOVED***items: [BasemapGalleryItem]
 ***REMOVED***) {
-***REMOVED******REMOVED***self.basemapGalleryItems.append(contentsOf: basemapGalleryItems)
+***REMOVED******REMOVED***self.items.append(contentsOf: items)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***defer {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Using `defer` allows the property `didSet` observers to be called.
@@ -57,7 +57,7 @@ public class BasemapGalleryViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ The list of basemaps currently visible in the gallery. It is comprised of items passed into
 ***REMOVED******REMOVED***/ the `BasemapGalleryItem` constructor property.
 ***REMOVED***@Published
-***REMOVED***public var basemapGalleryItems: [BasemapGalleryItem] = []
+***REMOVED***public var items: [BasemapGalleryItem] = []
 ***REMOVED***
 ***REMOVED******REMOVED***/ The `BasemapGalleryItem` representing the `GeoModel`'s current base map. This may be a
 ***REMOVED******REMOVED***/ basemap which does not exist in the gallery.

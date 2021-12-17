@@ -46,16 +46,20 @@ struct BasemapGalleryExampleView: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.navigationTitle("Basemap Gallery")
-***REMOVED******REMOVED***.navigationBarItems(trailing: Button {
-***REMOVED******REMOVED******REMOVED***showBasemapGallery.toggle()
-***REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED***Image("basemap", label: Text("Basemaps"))
-***REMOVED***)
+***REMOVED******REMOVED***.toolbar {
+***REMOVED******REMOVED******REMOVED***ToolbarItemGroup(placement: .navigationBarTrailing) {
+***REMOVED******REMOVED******REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***showBasemapGallery.toggle()
+***REMOVED******REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image("basemap", label: Text("Basemaps"))
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***private func SetupViewModel() {
 ***REMOVED******REMOVED***viewModel.geoModel = map
-***REMOVED******REMOVED***viewModel.basemapGalleryItems.append(
+***REMOVED******REMOVED***viewModel.items.append(
 ***REMOVED******REMOVED******REMOVED***contentsOf: BasemapGalleryExampleView.initialBasemaps()
 ***REMOVED******REMOVED***)
 ***REMOVED***
