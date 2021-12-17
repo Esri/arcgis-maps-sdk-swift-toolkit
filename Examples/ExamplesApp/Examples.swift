@@ -16,7 +16,8 @@ import SwiftUI
 struct Examples: View {
     /// The list of example lists.  Allows for a hierarchical navigation model for examples.
     let lists: [ExampleList] = [
-        .geoview
+        .geoview,
+        .views
     ]
     
     var body: some View {
@@ -36,6 +37,13 @@ extension ExampleList {
         examples: [
             AnyExample("Overview Map", content: OverviewMapExampleView()),
             AnyExample("Search", content: SearchExampleView())
+        ]
+    )
+    
+    static let views = Self(
+        name: "Views",
+        examples: [
+            AnyExample("FloatingPanel", content: FloatingPanelExampleView())
         ]
     )
 }
