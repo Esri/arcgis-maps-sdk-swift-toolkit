@@ -62,67 +62,21 @@ private extension BasemapGallery {
             let columns = Array(repeating: GridItem(.flexible(), alignment: .top), count: 3)
             LazyVGrid(columns: columns) {
                 ForEach(viewModel.items) { item in
-                    BasemapGalleryItemRow(
+                    BasemapGalleryCell(
                         item: item,
-                        isSelected: item == viewModel.currentBasemapGalleryItem
-                    )
-                        .onTapGesture {
-                            if let loadError = item.loadBasemapsError {
-                                alertItem = AlertItem(loadBasemapError: loadError)
-                                showErrorAlert = true
-                            } else {
-                                viewModel.currentBasemapGalleryItem = item
-                            }
+                        isSelected: item == viewModel.currentItem
+                    ) {
+                        if let loadError = item.loadBasemapsError {
+                            alertItem = AlertItem(loadBasemapError: loadError)
+                            showErrorAlert = true
+                        } else {
+                            viewModel.currentItem = item
                         }
+                    }
                 }
             }
         }
         .esriBorder()
-    }
-}
-
-/// A row or grid element representing a basemap gallery item.
-private struct BasemapGalleryItemRow: View {
-    @ObservedObject var item: BasemapGalleryItem
-    let isSelected: Bool
-    
-    var body: some View {
-        VStack {
-            ZStack(alignment: .center) {
-                // Display the thumbnail, if available.
-                if let thumbnailImage = item.thumbnail {
-                    Image(uiImage: thumbnailImage)
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .border(
-                            isSelected ? Color.accentColor: Color.clear,
-                            width: 3.0)
-                }
-                
-                // Display an image representing either a load basemap error
-                // or a spatial reference mismatch error.
-                if item.loadBasemapsError != nil {
-                    Image(systemName: "minus.circle.fill")
-                        .font(.title)
-                        .foregroundColor(.red)
-                }
-                
-                // Display a progress view if the item is loading.
-                if item.isLoading {
-                    ProgressView()
-                        .progressViewStyle(CircularProgressViewStyle())
-                        .esriBorder()
-                }
-            }
-            
-            // Display the name of the item.
-            Text(item.name)
-                .font(.footnote)
-                .multilineTextAlignment(.center)
-        }
-        .allowsHitTesting(
-            !item.isLoading
-        )
     }
 }
 
@@ -141,10 +95,10 @@ extension AlertItem: Identifiable {
 extension AlertItem {
     /// Creates an alert item based on an error generated loading a basemap.
     /// - Parameter loadBasemapError: The load basemap error.
-    init(loadBasemapError: RuntimeError) {
+    init(loadBasemapError: Error) {
         self.init(
             title: "Error loading basemap.",
-            message: "\(loadBasemapError.failureReason ?? "The basemap failed to load for an unknown reason.")"
+            message: "\((loadBasemapError as? RuntimeError)?.failureReason ?? "The basemap failed to load for an unknown reason.")"
         )
     }
 }
