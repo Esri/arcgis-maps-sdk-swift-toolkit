@@ -109,6 +109,6 @@ private extension UIImage {
 ***REMOVED******REMOVED***/ A default thumbnail image.
 ***REMOVED******REMOVED***/ - Returns: The default thumbnail.
 ***REMOVED***static func defaultThumbnail() -> UIImage {
-***REMOVED******REMOVED***return UIImage(named: "DefaultBasemap", in: .module, with: nil)!
+***REMOVED******REMOVED***return UIImage(named: "basemap", in: .module, with: nil)!
 ***REMOVED***
 ***REMOVED***
