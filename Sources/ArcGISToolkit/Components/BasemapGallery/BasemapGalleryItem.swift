@@ -32,11 +32,8 @@ public class BasemapGalleryItem: ObservableObject {
 ***REMOVED******REMOVED***thumbnail: UIImage? = nil
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.basemap = basemap
-***REMOVED******REMOVED***self.nameOverride = name
-***REMOVED******REMOVED***self.name = name ?? ""
-***REMOVED******REMOVED***self.descriptionOverride = description
+***REMOVED******REMOVED***self.name = name
 ***REMOVED******REMOVED***self.description = description
-***REMOVED******REMOVED***self.thumbnailOverride = thumbnail
 ***REMOVED******REMOVED***self.thumbnail = thumbnail
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***if basemap.loadStatus != .loaded {
@@ -46,42 +43,39 @@ public class BasemapGalleryItem: ObservableObject {
 ***REMOVED***
 ***REMOVED******REMOVED***/ The error generated loading the basemap, if any.
 ***REMOVED***@Published
-***REMOVED***public private(set) var loadBasemapsError: RuntimeError? = nil
+***REMOVED***private(set) var loadBasemapsError: Error? = nil
 ***REMOVED***
 ***REMOVED******REMOVED***/ The basemap represented by `BasemapGalleryItem`.
 ***REMOVED***public let basemap: Basemap
 ***REMOVED***
 ***REMOVED******REMOVED***/ The name of the `basemap`.
 ***REMOVED***@Published
-***REMOVED***public private(set) var name: String = ""
-***REMOVED***private var nameOverride: String? = nil
-***REMOVED***
+***REMOVED***public private(set) var name: String?
+
 ***REMOVED******REMOVED***/ The description of the `basemap`.
 ***REMOVED***@Published
-***REMOVED***public private(set) var description: String? = nil
-***REMOVED***private var descriptionOverride: String? = nil
+***REMOVED***public private(set) var description: String?
 ***REMOVED***
 ***REMOVED******REMOVED***/ The thumbnail used to represent the `basemap`.
 ***REMOVED***@Published
-***REMOVED***public private(set) var thumbnail: UIImage? = nil
-***REMOVED***private var thumbnailOverride: UIImage? = nil
+***REMOVED***public private(set) var thumbnail: UIImage?
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the `basemap` or it's base layers are being loaded.
 ***REMOVED***@Published
-***REMOVED***public private(set) var isLoading = true
+***REMOVED***private(set) var isBasemapLoading = true
 ***REMOVED***
 
 private extension BasemapGalleryItem {
 ***REMOVED******REMOVED***/ Loads the basemap and the item's thumbnail, if available.
 ***REMOVED***func loadBasemap() async {
-***REMOVED******REMOVED***var loadError: RuntimeError? = nil
+***REMOVED******REMOVED***var loadError: Error? = nil
 ***REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED***try await basemap.load()
 ***REMOVED******REMOVED******REMOVED***if let loadableImage = basemap.item?.thumbnail {
 ***REMOVED******REMOVED******REMOVED******REMOVED***try await loadableImage.load()
 ***REMOVED******REMOVED***
 ***REMOVED*** catch  {
-***REMOVED******REMOVED******REMOVED***loadError = error as? RuntimeError
+***REMOVED******REMOVED******REMOVED***loadError = error
 ***REMOVED***
 ***REMOVED******REMOVED***await finalizeLoading(error: loadError)
 ***REMOVED***
@@ -89,14 +83,14 @@ private extension BasemapGalleryItem {
 ***REMOVED******REMOVED***/ Updates the item in response to basemap loading completion.
 ***REMOVED******REMOVED***/ - Parameter error: The basemap load error, if any.
 ***REMOVED***@MainActor
-***REMOVED***func finalizeLoading(error: RuntimeError?) {
-***REMOVED******REMOVED***name = nameOverride ?? basemap.name
-***REMOVED******REMOVED***description = descriptionOverride ?? basemap.item?.description
-***REMOVED******REMOVED***thumbnail = thumbnailOverride ??
+***REMOVED***func finalizeLoading(error: Error?) {
+***REMOVED******REMOVED***name = name ?? basemap.name
+***REMOVED******REMOVED***description = description ?? basemap.item?.description
+***REMOVED******REMOVED***thumbnail = thumbnail ??
 ***REMOVED******REMOVED***(basemap.item?.thumbnail?.image ?? UIImage.defaultThumbnail())
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***loadBasemapsError = error
-***REMOVED******REMOVED***isLoading = false
+***REMOVED******REMOVED***isBasemapLoading = false
 ***REMOVED***
 ***REMOVED***
 

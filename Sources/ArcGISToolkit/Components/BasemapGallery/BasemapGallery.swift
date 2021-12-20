@@ -62,67 +62,21 @@ private extension BasemapGallery {
 ***REMOVED******REMOVED******REMOVED***let columns = Array(repeating: GridItem(.flexible(), alignment: .top), count: 3)
 ***REMOVED******REMOVED******REMOVED***LazyVGrid(columns: columns) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ForEach(viewModel.items) { item in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***BasemapGalleryItemRow(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***BasemapGalleryCell(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***item: item,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isSelected: item == viewModel.currentBasemapGalleryItem
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onTapGesture {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let loadError = item.loadBasemapsError {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***alertItem = AlertItem(loadBasemapError: loadError)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***showErrorAlert = true
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.currentBasemapGalleryItem = item
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isSelected: item == viewModel.currentItem
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let loadError = item.loadBasemapsError {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***alertItem = AlertItem(loadBasemapError: loadError)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***showErrorAlert = true
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.currentItem = item
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.esriBorder()
-***REMOVED***
-***REMOVED***
-
-***REMOVED***/ A row or grid element representing a basemap gallery item.
-private struct BasemapGalleryItemRow: View {
-***REMOVED***@ObservedObject var item: BasemapGalleryItem
-***REMOVED***let isSelected: Bool
-***REMOVED***
-***REMOVED***var body: some View {
-***REMOVED******REMOVED***VStack {
-***REMOVED******REMOVED******REMOVED***ZStack(alignment: .center) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Display the thumbnail, if available.
-***REMOVED******REMOVED******REMOVED******REMOVED***if let thumbnailImage = item.thumbnail {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(uiImage: thumbnailImage)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.resizable()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.aspectRatio(contentMode: .fit)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.border(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isSelected ? Color.accentColor: Color.clear,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***width: 3.0)
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Display an image representing either a load basemap error
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** or a spatial reference mismatch error.
-***REMOVED******REMOVED******REMOVED******REMOVED***if item.loadBasemapsError != nil {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "minus.circle.fill")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.title)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.red)
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Display a progress view if the item is loading.
-***REMOVED******REMOVED******REMOVED******REMOVED***if item.isLoading {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ProgressView()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.progressViewStyle(CircularProgressViewStyle())
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.esriBorder()
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED*** Display the name of the item.
-***REMOVED******REMOVED******REMOVED***Text(item.name)
-***REMOVED******REMOVED******REMOVED******REMOVED***.font(.footnote)
-***REMOVED******REMOVED******REMOVED******REMOVED***.multilineTextAlignment(.center)
-***REMOVED***
-***REMOVED******REMOVED***.allowsHitTesting(
-***REMOVED******REMOVED******REMOVED***!item.isLoading
-***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 
@@ -141,10 +95,10 @@ extension AlertItem: Identifiable {
 extension AlertItem {
 ***REMOVED******REMOVED***/ Creates an alert item based on an error generated loading a basemap.
 ***REMOVED******REMOVED***/ - Parameter loadBasemapError: The load basemap error.
-***REMOVED***init(loadBasemapError: RuntimeError) {
+***REMOVED***init(loadBasemapError: Error) {
 ***REMOVED******REMOVED***self.init(
 ***REMOVED******REMOVED******REMOVED***title: "Error loading basemap.",
-***REMOVED******REMOVED******REMOVED***message: "\(loadBasemapError.failureReason ?? "The basemap failed to load for an unknown reason.")"
+***REMOVED******REMOVED******REMOVED***message: "\((loadBasemapError as? RuntimeError)?.failureReason ?? "The basemap failed to load for an unknown reason.")"
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***

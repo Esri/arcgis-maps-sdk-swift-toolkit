@@ -21,8 +21,8 @@ public class BasemapGalleryViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ - Remark: The ArcGISOnline's developer basemaps will
 ***REMOVED******REMOVED***/ be loaded and added to `items`.
 ***REMOVED******REMOVED***/ - Parameter geoModel: The `GeoModel`.
-***REMOVED***public convenience init(_ geoModel: GeoModel? = nil) {
-***REMOVED******REMOVED***self.init(geoModel, items: [])
+***REMOVED***public convenience init(geoModel: GeoModel? = nil) {
+***REMOVED******REMOVED***self.init(geoModel: geoModel, items: [])
 ***REMOVED***
 
 ***REMOVED******REMOVED***/ Creates a `BasemapGalleryViewModel`. Uses the given array of basemap gallery items.
@@ -32,15 +32,12 @@ public class BasemapGalleryViewModel: ObservableObject {
 ***REMOVED******REMOVED***/   - geoModel: The `GeoModel`.
 ***REMOVED******REMOVED***/   - items: A list of pre-defined base maps to display.
 ***REMOVED***public init(
-***REMOVED******REMOVED***_ geoModel: GeoModel? = nil,
+***REMOVED******REMOVED***geoModel: GeoModel? = nil,
 ***REMOVED******REMOVED***items: [BasemapGalleryItem]
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.items.append(contentsOf: items)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***defer {
-***REMOVED******REMOVED******REMOVED******REMOVED*** Using `defer` allows the property `didSet` observers to be called.
-***REMOVED******REMOVED******REMOVED***self.geoModel = geoModel
-***REMOVED***
+***REMOVED******REMOVED***geoModelDidChange(nil)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ If the `GeoModel` is not loaded when passed to the `BasemapGalleryViewModel`, then
@@ -49,8 +46,7 @@ public class BasemapGalleryViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ the geoModel will have its basemap replaced with the selected basemap.
 ***REMOVED***public var geoModel: GeoModel? {
 ***REMOVED******REMOVED***didSet {
-***REMOVED******REMOVED******REMOVED***guard let geoModel = geoModel else { return ***REMOVED***
-***REMOVED******REMOVED******REMOVED***Task { await load(geoModel: geoModel) ***REMOVED***
+***REMOVED******REMOVED******REMOVED***geoModelDidChange(oldValue)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -62,16 +58,25 @@ public class BasemapGalleryViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ The `BasemapGalleryItem` representing the `GeoModel`'s current base map. This may be a
 ***REMOVED******REMOVED***/ basemap which does not exist in the gallery.
 ***REMOVED***@Published
-***REMOVED***public var currentBasemapGalleryItem: BasemapGalleryItem? = nil {
+***REMOVED***public var currentItem: BasemapGalleryItem? = nil {
 ***REMOVED******REMOVED***didSet {
-***REMOVED******REMOVED******REMOVED***guard let item = currentBasemapGalleryItem else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED***guard let item = currentItem else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***geoModel?.basemap = item.basemap
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Handles changes to the `geoModel` property.
+***REMOVED******REMOVED***/ - Parameter previousGeoModel: The previously set `geoModel`.
+***REMOVED***func geoModelDidChange(_ previousGeoModel: GeoModel?) {
+***REMOVED******REMOVED***guard let geoModel = geoModel else { return ***REMOVED***
+***REMOVED******REMOVED***if geoModel.loadStatus != .loaded {
+***REMOVED******REMOVED******REMOVED***Task { await load(geoModel: geoModel) ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
 private extension BasemapGalleryViewModel {
-***REMOVED******REMOVED***/ Loads the given `GeoModel` then sets `currentBasemapGalleryItem` to an item
+***REMOVED******REMOVED***/ Loads the given `GeoModel` then sets `currentItem` to an item
 ***REMOVED******REMOVED***/ created with the geoModel's basemap.
 ***REMOVED******REMOVED***/ - Parameter geoModel: The `GeoModel` to load.
 ***REMOVED***func load(geoModel: GeoModel?) async {
@@ -79,10 +84,10 @@ private extension BasemapGalleryViewModel {
 ***REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED***try await geoModel.load()
 ***REMOVED******REMOVED******REMOVED***if let basemap = geoModel.basemap {
-***REMOVED******REMOVED******REMOVED******REMOVED***currentBasemapGalleryItem = BasemapGalleryItem(basemap: basemap)
+***REMOVED******REMOVED******REMOVED******REMOVED***currentItem = BasemapGalleryItem(basemap: basemap)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***else {
-***REMOVED******REMOVED******REMOVED******REMOVED***currentBasemapGalleryItem = nil
+***REMOVED******REMOVED******REMOVED******REMOVED***currentItem = nil
 ***REMOVED******REMOVED***
 ***REMOVED*** catch { ***REMOVED***
 ***REMOVED***
