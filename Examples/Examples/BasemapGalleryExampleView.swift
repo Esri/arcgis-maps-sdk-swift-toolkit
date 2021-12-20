@@ -36,11 +36,6 @@ struct BasemapGalleryExampleView: View {
     var body: some View {
         ZStack(alignment: .topTrailing) {
             MapView(map: map, viewpoint: initialViewpoint)
-                .overlay(alignment: .topTrailing) {
-                    if showBasemapGallery {
-                        BasemapGallery(viewModel: viewModel)
-                    }
-                }
                 .onAppear() {
                     SetupViewModel()
                 }
@@ -51,10 +46,18 @@ struct BasemapGalleryExampleView: View {
                 Button {
                     showBasemapGallery.toggle()
                 } label: {
-                    Image("basemap", label: Text("Basemaps"))
+                    Image("basemap")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .background(Color(white: 1.0, opacity: 0.8))
+                        .clipShape(RoundedRectangle(cornerRadius: 4))
+                }
+                .popover(isPresented: $showBasemapGallery) {
+                    BasemapGallery(viewModel: viewModel)
                 }
             }
         }
+        
     }
     
     private func SetupViewModel() {

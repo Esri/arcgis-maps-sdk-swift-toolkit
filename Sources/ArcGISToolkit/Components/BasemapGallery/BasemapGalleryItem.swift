@@ -109,6 +109,6 @@ private extension UIImage {
     /// A default thumbnail image.
     /// - Returns: The default thumbnail.
     static func defaultThumbnail() -> UIImage {
-        return UIImage(named: "DefaultBasemap", in: .module, with: nil)!
+        return UIImage(named: "basemap", in: .module, with: nil)!
     }
 }
