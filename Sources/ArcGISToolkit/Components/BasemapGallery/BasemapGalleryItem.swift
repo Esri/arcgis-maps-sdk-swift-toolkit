@@ -32,11 +32,8 @@ public class BasemapGalleryItem: ObservableObject {
         thumbnail: UIImage? = nil
     ) {
         self.basemap = basemap
-        self.nameOverride = name
-        self.name = name ?? ""
-        self.descriptionOverride = description
+        self.name = name
         self.description = description
-        self.thumbnailOverride = thumbnail
         self.thumbnail = thumbnail
         
         if basemap.loadStatus != .loaded {
@@ -46,42 +43,39 @@ public class BasemapGalleryItem: ObservableObject {
     
     /// The error generated loading the basemap, if any.
     @Published
-    public private(set) var loadBasemapsError: RuntimeError? = nil
+    private(set) var loadBasemapsError: Error? = nil
     
     /// The basemap represented by `BasemapGalleryItem`.
     public let basemap: Basemap
     
     /// The name of the `basemap`.
     @Published
-    public private(set) var name: String = ""
-    private var nameOverride: String? = nil
-    
+    public private(set) var name: String?
+
     /// The description of the `basemap`.
     @Published
-    public private(set) var description: String? = nil
-    private var descriptionOverride: String? = nil
+    public private(set) var description: String?
     
     /// The thumbnail used to represent the `basemap`.
     @Published
-    public private(set) var thumbnail: UIImage? = nil
-    private var thumbnailOverride: UIImage? = nil
+    public private(set) var thumbnail: UIImage?
     
     /// A Boolean value indicating whether the `basemap` or it's base layers are being loaded.
     @Published
-    public private(set) var isLoading = true
+    private(set) var isBasemapLoading = true
 }
 
 private extension BasemapGalleryItem {
     /// Loads the basemap and the item's thumbnail, if available.
     func loadBasemap() async {
-        var loadError: RuntimeError? = nil
+        var loadError: Error? = nil
         do {
             try await basemap.load()
             if let loadableImage = basemap.item?.thumbnail {
                 try await loadableImage.load()
             }
         } catch  {
-            loadError = error as? RuntimeError
+            loadError = error
         }
         await finalizeLoading(error: loadError)
     }
@@ -89,14 +83,14 @@ private extension BasemapGalleryItem {
     /// Updates the item in response to basemap loading completion.
     /// - Parameter error: The basemap load error, if any.
     @MainActor
-    func finalizeLoading(error: RuntimeError?) {
-        name = nameOverride ?? basemap.name
-        description = descriptionOverride ?? basemap.item?.description
-        thumbnail = thumbnailOverride ??
+    func finalizeLoading(error: Error?) {
+        name = name ?? basemap.name
+        description = description ?? basemap.item?.description
+        thumbnail = thumbnail ??
         (basemap.item?.thumbnail?.image ?? UIImage.defaultThumbnail())
         
         loadBasemapsError = error
-        isLoading = false
+        isBasemapLoading = false
     }
 }
 

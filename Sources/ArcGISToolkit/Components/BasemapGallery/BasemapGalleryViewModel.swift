@@ -21,8 +21,8 @@ public class BasemapGalleryViewModel: ObservableObject {
     /// - Remark: The ArcGISOnline's developer basemaps will
     /// be loaded and added to `items`.
     /// - Parameter geoModel: The `GeoModel`.
-    public convenience init(_ geoModel: GeoModel? = nil) {
-        self.init(geoModel, items: [])
+    public convenience init(geoModel: GeoModel? = nil) {
+        self.init(geoModel: geoModel, items: [])
     }
 
     /// Creates a `BasemapGalleryViewModel`. Uses the given array of basemap gallery items.
@@ -32,15 +32,12 @@ public class BasemapGalleryViewModel: ObservableObject {
     ///   - geoModel: The `GeoModel`.
     ///   - items: A list of pre-defined base maps to display.
     public init(
-        _ geoModel: GeoModel? = nil,
+        geoModel: GeoModel? = nil,
         items: [BasemapGalleryItem]
     ) {
         self.items.append(contentsOf: items)
         
-        defer {
-            // Using `defer` allows the property `didSet` observers to be called.
-            self.geoModel = geoModel
-        }
+        geoModelDidChange(nil)
     }
     
     /// If the `GeoModel` is not loaded when passed to the `BasemapGalleryViewModel`, then
@@ -49,8 +46,7 @@ public class BasemapGalleryViewModel: ObservableObject {
     /// the geoModel will have its basemap replaced with the selected basemap.
     public var geoModel: GeoModel? {
         didSet {
-            guard let geoModel = geoModel else { return }
-            Task { await load(geoModel: geoModel) }
+            geoModelDidChange(oldValue)
         }
     }
     
@@ -62,16 +58,25 @@ public class BasemapGalleryViewModel: ObservableObject {
     /// The `BasemapGalleryItem` representing the `GeoModel`'s current base map. This may be a
     /// basemap which does not exist in the gallery.
     @Published
-    public var currentBasemapGalleryItem: BasemapGalleryItem? = nil {
+    public var currentItem: BasemapGalleryItem? = nil {
         didSet {
-            guard let item = currentBasemapGalleryItem else { return }
+            guard let item = currentItem else { return }
             geoModel?.basemap = item.basemap
+        }
+    }
+    
+    /// Handles changes to the `geoModel` property.
+    /// - Parameter previousGeoModel: The previously set `geoModel`.
+    func geoModelDidChange(_ previousGeoModel: GeoModel?) {
+        guard let geoModel = geoModel else { return }
+        if geoModel.loadStatus != .loaded {
+            Task { await load(geoModel: geoModel) }
         }
     }
 }
 
 private extension BasemapGalleryViewModel {
-    /// Loads the given `GeoModel` then sets `currentBasemapGalleryItem` to an item
+    /// Loads the given `GeoModel` then sets `currentItem` to an item
     /// created with the geoModel's basemap.
     /// - Parameter geoModel: The `GeoModel` to load.
     func load(geoModel: GeoModel?) async {
@@ -79,10 +84,10 @@ private extension BasemapGalleryViewModel {
         do {
             try await geoModel.load()
             if let basemap = geoModel.basemap {
-                currentBasemapGalleryItem = BasemapGalleryItem(basemap: basemap)
+                currentItem = BasemapGalleryItem(basemap: basemap)
             }
             else {
-                currentBasemapGalleryItem = nil
+                currentItem = nil
             }
         } catch { }
     }
