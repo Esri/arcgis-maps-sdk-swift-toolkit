@@ -85,10 +85,9 @@ private extension BasemapGalleryViewModel {
 ***REMOVED******REMOVED******REMOVED***try await geoModel.load()
 ***REMOVED******REMOVED******REMOVED***if let basemap = geoModel.basemap {
 ***REMOVED******REMOVED******REMOVED******REMOVED***currentItem = BasemapGalleryItem(basemap: basemap)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***else {
+***REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***currentItem = nil
 ***REMOVED******REMOVED***
-***REMOVED*** catch { ***REMOVED***
+***REMOVED*** catch {***REMOVED***
 ***REMOVED***
 ***REMOVED***

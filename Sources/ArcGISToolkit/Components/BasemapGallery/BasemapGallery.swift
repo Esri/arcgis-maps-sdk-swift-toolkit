@@ -88,10 +88,6 @@ struct AlertItem {
 ***REMOVED***var message: String = ""
 ***REMOVED***
 
-extension AlertItem: Identifiable {
-***REMOVED***public var id: UUID { UUID() ***REMOVED***
-***REMOVED***
-
 extension AlertItem {
 ***REMOVED******REMOVED***/ Creates an alert item based on an error generated loading a basemap.
 ***REMOVED******REMOVED***/ - Parameter loadBasemapError: The load basemap error.

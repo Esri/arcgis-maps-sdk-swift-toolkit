@@ -84,10 +84,15 @@ private extension BasemapGalleryItem {
 ***REMOVED******REMOVED***/ - Parameter error: The basemap load error, if any.
 ***REMOVED***@MainActor
 ***REMOVED***func finalizeLoading(error: Error?) {
-***REMOVED******REMOVED***name = name ?? basemap.name
-***REMOVED******REMOVED***description = description ?? basemap.item?.description
-***REMOVED******REMOVED***thumbnail = thumbnail ??
-***REMOVED******REMOVED***(basemap.item?.thumbnail?.image ?? UIImage.defaultThumbnail())
+***REMOVED******REMOVED***if name == nil {
+***REMOVED******REMOVED******REMOVED***name = basemap.name
+***REMOVED***
+***REMOVED******REMOVED***if description == nil {
+***REMOVED******REMOVED******REMOVED***description = basemap.item?.description
+***REMOVED***
+***REMOVED******REMOVED***if thumbnail == nil {
+***REMOVED******REMOVED******REMOVED***thumbnail = basemap.item?.thumbnail?.image ?? .defaultThumbnail()
+***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***loadBasemapsError = error
 ***REMOVED******REMOVED***isBasemapLoading = false

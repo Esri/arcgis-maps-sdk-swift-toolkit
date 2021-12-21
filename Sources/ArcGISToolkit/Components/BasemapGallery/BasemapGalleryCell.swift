@@ -16,7 +16,7 @@ struct BasemapGalleryCell: View {
 ***REMOVED***let isSelected: Bool
 ***REMOVED***
 ***REMOVED******REMOVED***/ The action executed when the item is selected.
-***REMOVED***var onSelection: () -> Void
+***REMOVED***let onSelection: () -> Void
 
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***VStack {
