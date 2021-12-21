@@ -88,10 +88,6 @@ struct AlertItem {
     var message: String = ""
 }
 
-extension AlertItem: Identifiable {
-    public var id: UUID { UUID() }
-}
-
 extension AlertItem {
     /// Creates an alert item based on an error generated loading a basemap.
     /// - Parameter loadBasemapError: The load basemap error.
