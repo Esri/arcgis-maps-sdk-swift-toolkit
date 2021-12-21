@@ -14,6 +14,8 @@ struct FloatingPanelExampleView: View {
 
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***FloatingPanel(content: MapView(map: map))
+***REMOVED******REMOVED******REMOVED***FloatingPanel(content: Rectangle().foregroundColor(.blue))
+***REMOVED******REMOVED******REMOVED***.padding()
 ***REMOVED***
 ***REMOVED***
 
