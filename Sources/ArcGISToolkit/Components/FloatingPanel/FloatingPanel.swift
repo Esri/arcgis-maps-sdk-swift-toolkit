@@ -24,21 +24,58 @@ public struct FloatingPanel<Content> : View where Content : View {
         self.content = content
     }
     
+    @State
+    var handleColor: Color = .secondary
+    
+    var drag: some Gesture {
+        DragGesture()
+        //            .onChanged { self.heightOffset = $0.translation.height}
+            .onChanged {
+                self.handleColor = .red
+                self.heightOffset = $0.translation.height
+                lastHeight = originalHeight + heightOffset
+            }
+            .onEnded { _ in
+                self.handleColor = .secondary
+                self.originalHeight = lastHeight
+            }
+    }
+    
+    @State
+    private var heightOffset: CGFloat = 0
+    
+    @State
+    private var originalHeight: CGFloat = 0
+    @State
+    private var lastHeight: CGFloat = 0
+
+    //    private var currentHeight: CGFloat = 0
+    
     public var body: some View {
         VStack(alignment: .center) {
-            Rectangle().foregroundColor(.blue)            //content
-//            Rectangle()
-//                .foregroundColor(.secondary)
-//                .frame(height: 1.0)
+            GeometryReader { geometry in
+                content
+                    .frame(height: originalHeight + heightOffset)
+                    .onAppear {
+                        if originalHeight == 0 {
+                            originalHeight = geometry.size.height
+                        }
+                    }
+            }
+            //            Rectangle()
+            //                .foregroundColor(.secondary)
+            //                .frame(height: 1.0)
             Rectangle()
-                .foregroundColor(.secondary)
+                .foregroundColor(handleColor)
                 .frame(width: 100, height: 8.0)
                 .cornerRadius(4.0)
                 .padding(EdgeInsets(top: 0, leading: 0, bottom: 10, trailing: 0))
+                .gesture(drag)
+            Text("\(self.heightOffset)")
         }
         .frame(width: 300)
         .esriBorder(padding: EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
-        .padding()
+        Spacer()
     }
 }
 

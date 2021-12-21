@@ -14,6 +14,8 @@ struct FloatingPanelExampleView: View {
 
     var body: some View {
         FloatingPanel(content: MapView(map: map))
+//        FloatingPanel(content: Rectangle().foregroundColor(.blue))
+            .padding()
     }
 }
 
