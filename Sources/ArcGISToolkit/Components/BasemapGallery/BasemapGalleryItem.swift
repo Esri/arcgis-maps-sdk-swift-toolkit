@@ -84,10 +84,15 @@ private extension BasemapGalleryItem {
     /// - Parameter error: The basemap load error, if any.
     @MainActor
     func finalizeLoading(error: Error?) {
-        name = name ?? basemap.name
-        description = description ?? basemap.item?.description
-        thumbnail = thumbnail ??
-        (basemap.item?.thumbnail?.image ?? UIImage.defaultThumbnail())
+        if name == nil {
+            name = basemap.name
+        }
+        if description == nil {
+            description = basemap.item?.description
+        }
+        if thumbnail == nil {
+            thumbnail = basemap.item?.thumbnail?.image ?? .defaultThumbnail()
+        }
         
         loadBasemapsError = error
         isBasemapLoading = false

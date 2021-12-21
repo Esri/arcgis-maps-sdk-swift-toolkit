@@ -85,10 +85,9 @@ private extension BasemapGalleryViewModel {
             try await geoModel.load()
             if let basemap = geoModel.basemap {
                 currentItem = BasemapGalleryItem(basemap: basemap)
-            }
-            else {
+            } else {
                 currentItem = nil
             }
-        } catch { }
+        } catch {}
     }
 }

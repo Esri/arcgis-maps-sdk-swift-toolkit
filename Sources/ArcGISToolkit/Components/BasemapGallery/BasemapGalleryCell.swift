@@ -16,7 +16,7 @@ struct BasemapGalleryCell: View {
     let isSelected: Bool
     
     /// The action executed when the item is selected.
-    var onSelection: () -> Void
+    let onSelection: () -> Void
 
     var body: some View {
         VStack {
