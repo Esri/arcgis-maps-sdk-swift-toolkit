@@ -53,6 +53,7 @@ struct BasemapGalleryExampleView: View {
                     }
                     .popover(isPresented: $showBasemapGallery) {
                         BasemapGallery(viewModel: viewModel)
+                            .padding()
                     }
                 }
             }
