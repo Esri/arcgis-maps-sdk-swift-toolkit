@@ -17,7 +17,7 @@ import ArcGISToolkit
 
 struct BasemapGalleryExampleView: View {
     /// The map displayed in the map view.
-    let map = Map(basemapStyle: .arcGISImagery)
+    let map: Map
     
     /// The view model for the basemap gallery.
     @ObservedObject
@@ -33,38 +33,29 @@ struct BasemapGalleryExampleView: View {
         scale: 1_000_000
     )
     
-    var body: some View {
-        ZStack(alignment: .topTrailing) {
-            MapView(map: map, viewpoint: initialViewpoint)
-                .onAppear() {
-                    SetupViewModel()
-                }
-        }
-        .navigationTitle("Basemap Gallery")
-        .toolbar {
-            ToolbarItemGroup(placement: .navigationBarTrailing) {
-                Button {
-                    showBasemapGallery.toggle()
-                } label: {
-                    Image("basemap")
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .background(Color(white: 1.0, opacity: 0.8))
-                        .clipShape(RoundedRectangle(cornerRadius: 4))
-                }
-                .popover(isPresented: $showBasemapGallery) {
-                    BasemapGallery(viewModel: viewModel)
-                }
-            }
-        }
-        
+    init() {
+        self.map = Map(basemapStyle: .arcGISImagery)
+        self.viewModel = BasemapGalleryViewModel(
+            geoModel: self.map,
+            items: Self.initialBasemaps()
+        )
     }
     
-    private func SetupViewModel() {
-        viewModel.geoModel = map
-        viewModel.items.append(
-            contentsOf: BasemapGalleryExampleView.initialBasemaps()
-        )
+    var body: some View {
+        MapView(map: map, viewpoint: initialViewpoint)
+            .navigationTitle("Basemap Gallery")
+            .toolbar {
+                ToolbarItemGroup(placement: .navigationBarTrailing) {
+                    Button {
+                        showBasemapGallery.toggle()
+                    } label: {
+                        Image("basemap")
+                    }
+                    .popover(isPresented: $showBasemapGallery) {
+                        BasemapGallery(viewModel: viewModel)
+                    }
+                }
+            }
     }
     
     static private func initialBasemaps() -> [BasemapGalleryItem] {

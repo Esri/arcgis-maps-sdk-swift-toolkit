@@ -17,14 +17,6 @@ import ArcGIS
 /// Manages the state for a `BasemapGallery`.
 @MainActor
 public class BasemapGalleryViewModel: ObservableObject {
-    /// Creates a `BasemapGalleryViewModel`
-    /// - Remark: The ArcGISOnline's developer basemaps will
-    /// be loaded and added to `items`.
-    /// - Parameter geoModel: The `GeoModel`.
-    public convenience init(geoModel: GeoModel? = nil) {
-        self.init(geoModel: geoModel, items: [])
-    }
-
     /// Creates a `BasemapGalleryViewModel`. Uses the given array of basemap gallery items.
     /// - Remark: If `items` is empty, ArcGISOnline's developer basemaps will
     /// be loaded and added to `items`.
@@ -33,10 +25,10 @@ public class BasemapGalleryViewModel: ObservableObject {
     ///   - items: A list of pre-defined base maps to display.
     public init(
         geoModel: GeoModel? = nil,
-        items: [BasemapGalleryItem]
+        items: [BasemapGalleryItem] = []
     ) {
-        self.items.append(contentsOf: items)
-        
+        self.items = items
+        self.geoModel = geoModel
         geoModelDidChange(nil)
     }
     
@@ -53,7 +45,7 @@ public class BasemapGalleryViewModel: ObservableObject {
     /// The list of basemaps currently visible in the gallery. It is comprised of items passed into
     /// the `BasemapGalleryItem` constructor property.
     @Published
-    public var items: [BasemapGalleryItem] = []
+    public var items: [BasemapGalleryItem]
     
     /// The `BasemapGalleryItem` representing the `GeoModel`'s current base map. This may be a
     /// basemap which does not exist in the gallery.
