@@ -43,7 +43,6 @@ public struct BasemapGallery: View {
 ***REMOVED***
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***makeGalleryView()
-***REMOVED******REMOVED******REMOVED***.frame(width: 300)
 ***REMOVED******REMOVED******REMOVED***.alert(
 ***REMOVED******REMOVED******REMOVED******REMOVED***alertItem?.title ?? "",
 ***REMOVED******REMOVED******REMOVED******REMOVED***isPresented: $showErrorAlert,
@@ -59,7 +58,13 @@ private extension BasemapGallery {
 ***REMOVED******REMOVED***/ - Returns: A view representing the basemap gallery with the specified columns.
 ***REMOVED***func makeGalleryView() -> some View {
 ***REMOVED******REMOVED***ScrollView {
-***REMOVED******REMOVED******REMOVED***let columns = Array(repeating: GridItem(.flexible(), alignment: .top), count: 3)
+***REMOVED******REMOVED******REMOVED***let columns = Array(
+***REMOVED******REMOVED******REMOVED******REMOVED***repeating: GridItem(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.flexible(minimum: 75, maximum: 100),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***alignment: .top
+***REMOVED******REMOVED******REMOVED******REMOVED***),
+***REMOVED******REMOVED******REMOVED******REMOVED***count: 3
+***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***LazyVGrid(columns: columns) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ForEach(viewModel.items) { item in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***BasemapGalleryCell(
@@ -76,7 +81,6 @@ private extension BasemapGallery {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.esriBorder()
 ***REMOVED***
 ***REMOVED***
 
