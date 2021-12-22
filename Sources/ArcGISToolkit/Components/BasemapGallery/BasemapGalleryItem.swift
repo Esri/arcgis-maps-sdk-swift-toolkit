@@ -36,8 +36,12 @@ public class BasemapGalleryItem: ObservableObject {
         self.description = description
         self.thumbnail = thumbnail
         
-        if basemap.loadStatus != .loaded {
-            Task { await loadBasemap() }
+        Task {
+            if basemap.loadStatus != .loaded {
+                await loadBasemap()
+            } else {
+                await finalizeLoading()
+            }
         }
     }
     
@@ -51,7 +55,7 @@ public class BasemapGalleryItem: ObservableObject {
     /// The name of the `basemap`.
     @Published
     public private(set) var name: String?
-
+    
     /// The description of the `basemap`.
     @Published
     public private(set) var description: String?
@@ -83,7 +87,7 @@ private extension BasemapGalleryItem {
     /// Updates the item in response to basemap loading completion.
     /// - Parameter error: The basemap load error, if any.
     @MainActor
-    func finalizeLoading(error: Error?) {
+    func finalizeLoading(error: Error? = nil) {
         if name == nil {
             name = basemap.name
         }
@@ -114,6 +118,6 @@ private extension UIImage {
     /// A default thumbnail image.
     /// - Returns: The default thumbnail.
     static func defaultThumbnail() -> UIImage {
-        return UIImage(named: "basemap", in: .module, with: nil)!
+        return UIImage(named: "defaultthumbnail", in: .module, with: nil)!
     }
 }
