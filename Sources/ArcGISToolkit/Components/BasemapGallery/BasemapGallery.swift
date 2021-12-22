@@ -43,7 +43,6 @@ public struct BasemapGallery: View {
     
     public var body: some View {
         makeGalleryView()
-            .frame(width: 300)
             .alert(
                 alertItem?.title ?? "",
                 isPresented: $showErrorAlert,
@@ -59,7 +58,13 @@ private extension BasemapGallery {
     /// - Returns: A view representing the basemap gallery with the specified columns.
     func makeGalleryView() -> some View {
         ScrollView {
-            let columns = Array(repeating: GridItem(.flexible(), alignment: .top), count: 3)
+            let columns = Array(
+                repeating: GridItem(
+                    .flexible(minimum: 75, maximum: 100),
+                    alignment: .top
+                ),
+                count: 3
+            )
             LazyVGrid(columns: columns) {
                 ForEach(viewModel.items) { item in
                     BasemapGalleryCell(
@@ -76,7 +81,6 @@ private extension BasemapGallery {
                 }
             }
         }
-        .esriBorder()
     }
 }
 
