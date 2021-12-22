@@ -36,8 +36,12 @@ public class BasemapGalleryItem: ObservableObject {
 ***REMOVED******REMOVED***self.description = description
 ***REMOVED******REMOVED***self.thumbnail = thumbnail
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***if basemap.loadStatus != .loaded {
-***REMOVED******REMOVED******REMOVED***Task { await loadBasemap() ***REMOVED***
+***REMOVED******REMOVED***Task {
+***REMOVED******REMOVED******REMOVED***if basemap.loadStatus != .loaded {
+***REMOVED******REMOVED******REMOVED******REMOVED***await loadBasemap()
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***await finalizeLoading()
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -51,7 +55,7 @@ public class BasemapGalleryItem: ObservableObject {
 ***REMOVED******REMOVED***/ The name of the `basemap`.
 ***REMOVED***@Published
 ***REMOVED***public private(set) var name: String?
-
+***REMOVED***
 ***REMOVED******REMOVED***/ The description of the `basemap`.
 ***REMOVED***@Published
 ***REMOVED***public private(set) var description: String?
@@ -83,7 +87,7 @@ private extension BasemapGalleryItem {
 ***REMOVED******REMOVED***/ Updates the item in response to basemap loading completion.
 ***REMOVED******REMOVED***/ - Parameter error: The basemap load error, if any.
 ***REMOVED***@MainActor
-***REMOVED***func finalizeLoading(error: Error?) {
+***REMOVED***func finalizeLoading(error: Error? = nil) {
 ***REMOVED******REMOVED***if name == nil {
 ***REMOVED******REMOVED******REMOVED***name = basemap.name
 ***REMOVED***
@@ -114,6 +118,6 @@ private extension UIImage {
 ***REMOVED******REMOVED***/ A default thumbnail image.
 ***REMOVED******REMOVED***/ - Returns: The default thumbnail.
 ***REMOVED***static func defaultThumbnail() -> UIImage {
-***REMOVED******REMOVED***return UIImage(named: "basemap", in: .module, with: nil)!
+***REMOVED******REMOVED***return UIImage(named: "defaultthumbnail", in: .module, with: nil)!
 ***REMOVED***
 ***REMOVED***

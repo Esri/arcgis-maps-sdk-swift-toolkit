@@ -17,14 +17,6 @@
 ***REMOVED***/ Manages the state for a `BasemapGallery`.
 @MainActor
 public class BasemapGalleryViewModel: ObservableObject {
-***REMOVED******REMOVED***/ Creates a `BasemapGalleryViewModel`
-***REMOVED******REMOVED***/ - Remark: The ArcGISOnline's developer basemaps will
-***REMOVED******REMOVED***/ be loaded and added to `items`.
-***REMOVED******REMOVED***/ - Parameter geoModel: The `GeoModel`.
-***REMOVED***public convenience init(geoModel: GeoModel? = nil) {
-***REMOVED******REMOVED***self.init(geoModel: geoModel, items: [])
-***REMOVED***
-
 ***REMOVED******REMOVED***/ Creates a `BasemapGalleryViewModel`. Uses the given array of basemap gallery items.
 ***REMOVED******REMOVED***/ - Remark: If `items` is empty, ArcGISOnline's developer basemaps will
 ***REMOVED******REMOVED***/ be loaded and added to `items`.
@@ -33,10 +25,10 @@ public class BasemapGalleryViewModel: ObservableObject {
 ***REMOVED******REMOVED***/   - items: A list of pre-defined base maps to display.
 ***REMOVED***public init(
 ***REMOVED******REMOVED***geoModel: GeoModel? = nil,
-***REMOVED******REMOVED***items: [BasemapGalleryItem]
+***REMOVED******REMOVED***items: [BasemapGalleryItem] = []
 ***REMOVED***) {
-***REMOVED******REMOVED***self.items.append(contentsOf: items)
-***REMOVED******REMOVED***
+***REMOVED******REMOVED***self.items = items
+***REMOVED******REMOVED***self.geoModel = geoModel
 ***REMOVED******REMOVED***geoModelDidChange(nil)
 ***REMOVED***
 ***REMOVED***
@@ -53,7 +45,7 @@ public class BasemapGalleryViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ The list of basemaps currently visible in the gallery. It is comprised of items passed into
 ***REMOVED******REMOVED***/ the `BasemapGalleryItem` constructor property.
 ***REMOVED***@Published
-***REMOVED***public var items: [BasemapGalleryItem] = []
+***REMOVED***public var items: [BasemapGalleryItem]
 ***REMOVED***
 ***REMOVED******REMOVED***/ The `BasemapGalleryItem` representing the `GeoModel`'s current base map. This may be a
 ***REMOVED******REMOVED***/ basemap which does not exist in the gallery.
