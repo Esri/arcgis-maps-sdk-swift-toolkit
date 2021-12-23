@@ -52,8 +52,21 @@ struct BasemapGalleryExampleView: View {
                         Image("basemap")
                     }
                     .popover(isPresented: $showBasemapGallery) {
-                        BasemapGallery(viewModel: viewModel)
-                            .padding()
+                        if UIDevice.current.userInterfaceIdiom == .phone {
+                            NavigationView {
+                                BasemapGallery(viewModel: viewModel)
+                                    .navigationTitle("Basemaps")
+                                    .navigationBarTitleDisplayMode(.inline)
+                                    .toolbar {
+                                        ToolbarItem(placement: .navigationBarTrailing) {
+                                            Button("Done") { showBasemapGallery = false }
+                                        }
+                                    }
+                            }
+                        } else {
+                            BasemapGallery(viewModel: viewModel)
+                                .padding()
+                        }
                     }
                 }
             }
