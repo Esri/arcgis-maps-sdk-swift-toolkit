@@ -60,13 +60,14 @@ struct BasemapGalleryExampleView: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***static private func initialBasemaps() -> [BasemapGalleryItem] {
-***REMOVED******REMOVED***let itemURLs: [URL] = [
-***REMOVED******REMOVED******REMOVED***URL(string: "https:***REMOVED***runtime.maps.arcgis.com/home/item.html?id=46a87c20f09e4fc48fa3c38081e0cae6")!,
-***REMOVED******REMOVED******REMOVED***URL(string: "https:***REMOVED***runtime.maps.arcgis.com/home/item.html?id=f33a34de3a294590ab48f246e99958c9")!
+***REMOVED******REMOVED***let identifiers = [
+***REMOVED******REMOVED******REMOVED***"46a87c20f09e4fc48fa3c38081e0cae6",
+***REMOVED******REMOVED******REMOVED***"f33a34de3a294590ab48f246e99958c9"
 ***REMOVED******REMOVED***]
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***return itemURLs.map {
-***REMOVED******REMOVED******REMOVED***BasemapGalleryItem(basemap: Basemap(item: PortalItem(url: $0)!))
+***REMOVED******REMOVED***return identifiers.map { identifier in
+***REMOVED******REMOVED******REMOVED***let url = URL(string: "https:***REMOVED***runtime.maps.arcgis.com/home/item.html?id=\(identifier)")!
+***REMOVED******REMOVED******REMOVED***return BasemapGalleryItem(basemap: Basemap(item: PortalItem(url: url)!))
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***

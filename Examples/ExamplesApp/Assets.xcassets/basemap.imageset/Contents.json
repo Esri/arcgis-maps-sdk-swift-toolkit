@@ -1,9 +1,6 @@
 {
   "images" : [
 ***REMOVED***{
-***REMOVED***  "idiom" : "universal"
-***REMOVED***,
-***REMOVED***{
 ***REMOVED***  "filename" : "basemap@1x.png",
 ***REMOVED***  "idiom" : "universal",
 ***REMOVED***  "scale" : "1x"
@@ -24,6 +21,7 @@
 ***REMOVED***"version" : 1
   ***REMOVED***,
   "properties" : {
+***REMOVED***"preserves-vector-representation" : true,
 ***REMOVED***"template-rendering-intent" : "template"
   ***REMOVED***
 ***REMOVED***
