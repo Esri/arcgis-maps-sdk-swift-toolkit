@@ -1,9 +1,6 @@
 {
   "images" : [
     {
-      "idiom" : "universal"
-    },
-    {
       "filename" : "basemap@1x.png",
       "idiom" : "universal",
       "scale" : "1x"

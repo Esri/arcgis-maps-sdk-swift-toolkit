@@ -60,13 +60,14 @@ struct BasemapGalleryExampleView: View {
     }
     
     static private func initialBasemaps() -> [BasemapGalleryItem] {
-        let itemURLs: [URL] = [
-            URL(string: "https://runtime.maps.arcgis.com/home/item.html?id=46a87c20f09e4fc48fa3c38081e0cae6")!,
-            URL(string: "https://runtime.maps.arcgis.com/home/item.html?id=f33a34de3a294590ab48f246e99958c9")!
+        let identifiers = [
+            "46a87c20f09e4fc48fa3c38081e0cae6",
+            "f33a34de3a294590ab48f246e99958c9"
         ]
         
-        return itemURLs.map {
-            BasemapGalleryItem(basemap: Basemap(item: PortalItem(url: $0)!))
+        return identifiers.map { identifier in
+            let url = URL(string: "https://runtime.maps.arcgis.com/home/item.html?id=\(identifier)")!
+            return BasemapGalleryItem(basemap: Basemap(item: PortalItem(url: url)!))
         }
     }
 }

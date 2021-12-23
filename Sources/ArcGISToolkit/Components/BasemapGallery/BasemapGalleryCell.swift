@@ -38,7 +38,8 @@ struct BasemapGalleryCell: View {
                                 .aspectRatio(contentMode: .fit)
                                 .border(
                                     isSelected ? Color.accentColor: Color.clear,
-                                    width: 3.0)
+                                    width: 3
+                                )
                         }
                         
                         // Display an image representing either a load basemap error
