@@ -56,10 +56,12 @@ public struct SearchView: View {
 ***REMOVED******REMOVED***/ The width of the search bar, taking into account the horizontal and vertical size classes
 ***REMOVED******REMOVED***/ of the device. This will cause the search field to display full-width on an iPhone in portrait
 ***REMOVED******REMOVED***/ orientation (and certain iPad multitasking configurations) and limit the width to `360` in other cases.
-***REMOVED***private var searchBarWidth: CGFloat? {
-***REMOVED******REMOVED***horizontalSizeClass == .compact && verticalSizeClass == .regular ? nil : 360
+***REMOVED***private var internalSearchBarWidth: CGFloat? {
+***REMOVED******REMOVED***horizontalSizeClass == .compact && verticalSizeClass == .regular ? nil : searchBarWidth
 ***REMOVED***
-***REMOVED***
+
+***REMOVED***private var searchBarWidth: CGFloat?
+
 ***REMOVED******REMOVED***/ If `true`, will draw the results list view at half height, exposing a portion of the
 ***REMOVED******REMOVED***/ underlying map below the list on an iPhone in portrait orientation (and certain iPad multitasking
 ***REMOVED******REMOVED***/ configurations).  If `false`, will draw the results list view full size.
@@ -109,7 +111,8 @@ public struct SearchView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.esriBorder(padding: EdgeInsets())
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.esriBorder(padding: EdgeInsets())
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: searchBarWidth)
@@ -326,5 +329,18 @@ extension View {
 ***REMOVED******REMOVED***_ isSelected: Bool = false
 ***REMOVED***) -> some View {
 ***REMOVED******REMOVED***modifier(SelectedModifier(isSelected: isSelected))
+***REMOVED***
+***REMOVED***
+
+extension SearchView {
+***REMOVED******REMOVED***/ The factor to multiply the main `GeoView`'s scale by.  The `OverviewMap` will display
+***REMOVED******REMOVED***/ at the a scale equal to: `viewpoint.targetScale` x `scaleFactor`.
+***REMOVED******REMOVED***/ The default value is `25.0`.
+***REMOVED******REMOVED***/ - Parameter scaleFactor: The new scale factor.
+***REMOVED******REMOVED***/ - Returns: The `OverviewMap`.
+***REMOVED***public func searchBarWidth(_ newWidth: CGFloat?) -> SearchView {
+***REMOVED******REMOVED***var copy = self
+***REMOVED******REMOVED***copy.searchBarWidth = newWidth
+***REMOVED******REMOVED***return copy
 ***REMOVED***
 ***REMOVED***

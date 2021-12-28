@@ -10,14 +10,79 @@
 ***REMOVED***
 
 struct FloatingPanelExampleView: View {
+***REMOVED******REMOVED***/ The `SearchViewModel` used to define behavior of the `SearchView`.
+***REMOVED***@ObservedObject
+***REMOVED***var searchViewModel = SearchViewModel(
+***REMOVED******REMOVED***sources: [SmartLocatorSearchSource(
+***REMOVED******REMOVED******REMOVED***name: "My locator",
+***REMOVED******REMOVED******REMOVED***maximumResults: 16,
+***REMOVED******REMOVED******REMOVED***maximumSuggestions: 16
+***REMOVED******REMOVED***)]
+***REMOVED***)
+***REMOVED***
 ***REMOVED***let map = Map(basemapStyle: .arcGISImagery)
+***REMOVED***
+***REMOVED******REMOVED***/ The map viewpoint used by the `SearchView` to pan/zoom the map
+***REMOVED******REMOVED***/ to the extent of the search results.
+***REMOVED***@State
+***REMOVED***private var searchResultViewpoint: Viewpoint? = Viewpoint(
+***REMOVED******REMOVED***center: Point(x: -93.258133, y: 44.986656, spatialReference: .wgs84),
+***REMOVED******REMOVED***scale: 1000000
+***REMOVED***)
+***REMOVED***
+***REMOVED******REMOVED***/ The `GraphicsOverlay` used by the `SearchView` to display search results on the map.
+***REMOVED***let searchResultsOverlay = GraphicsOverlay()
 
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***FloatingPanel(content: MapView(map: map))
-***REMOVED******REMOVED******REMOVED***FloatingPanel(content: Rectangle().foregroundColor(.blue))
-***REMOVED******REMOVED******REMOVED***.padding()
+***REMOVED******REMOVED***MapView(
+***REMOVED******REMOVED******REMOVED***map: map,
+***REMOVED******REMOVED******REMOVED***viewpoint: searchResultViewpoint,
+***REMOVED******REMOVED******REMOVED***graphicsOverlays: [searchResultsOverlay]
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***.onNavigatingChanged { searchViewModel.isGeoViewNavigating = $0 ***REMOVED***
+***REMOVED******REMOVED******REMOVED***.onViewpointChanged(kind: .centerAndScale) {
+***REMOVED******REMOVED******REMOVED******REMOVED***searchViewModel.queryCenter = $0.targetGeometry as? Point
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Reset `searchResultViewpoint` here when the user pans/zooms
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** the map, so if the user commits the same search with the
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** same result, the Map will pan/zoom to the result. Otherwise,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** `searchResultViewpoint` doesn't change which doesn't
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** redraw the map with the new viewpoint.
+***REMOVED******REMOVED******REMOVED******REMOVED***searchResultViewpoint = nil
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.onVisibleAreaChanged { newValue in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Setting `searchViewModel.queryArea` will limit the
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** results to `queryArea`.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***searchViewModel.queryArea = newValue
+
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** For "Repeat Search Here" behavior, set the
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** `searchViewModel.geoViewExtent` property when navigating.
+***REMOVED******REMOVED******REMOVED******REMOVED***searchViewModel.geoViewExtent = newValue.extent
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.overlay(alignment: .topTrailing) {
+***REMOVED******REMOVED******REMOVED******REMOVED***FloatingPanel(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***content:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***SearchView(searchViewModel: searchViewModel)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 360)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.onAppear {
+***REMOVED******REMOVED******REMOVED******REMOVED***searchViewModel.viewpoint = $searchResultViewpoint
+***REMOVED******REMOVED******REMOVED******REMOVED***searchViewModel.resultsOverlay = searchResultsOverlay
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
+
+***REMOVED***struct FloatingPanelExampleView: View {
+***REMOVED******REMOVED***let map = Map(basemapStyle: .arcGISImagery)
+***REMOVED***
+***REMOVED******REMOVED***var body: some View {
+***REMOVED******REMOVED******REMOVED***FloatingPanel(content: MapView(map: map))
+***REMOVED******REMOVED******REMOVED******REMOVED***FloatingPanel(content: Rectangle().foregroundColor(.blue))
+***REMOVED******REMOVED******REMOVED******REMOVED***.padding()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***
 
 struct FloatingPanelExampleView_Previews: PreviewProvider {
 ***REMOVED***static var previews: some View {

@@ -23,21 +23,11 @@ public struct FloatingPanel<Content> : View where Content : View {
 ***REMOVED***
 ***REMOVED***@State
 ***REMOVED***var handleColor: Color = .secondary
-***REMOVED***
-***REMOVED***var drag: some Gesture {
-***REMOVED******REMOVED***DragGesture()
-***REMOVED******REMOVED******REMOVED***.onChanged { value in
-***REMOVED******REMOVED******REMOVED******REMOVED***self.handleColor = .red
-***REMOVED******REMOVED******REMOVED******REMOVED***height = max(minHeight, (height ?? 0) + value.translation.height)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.onEnded { _ in
-***REMOVED******REMOVED******REMOVED******REMOVED***self.handleColor = .secondary
-***REMOVED******REMOVED***
-***REMOVED***
 
-***REMOVED***private let minHeight: CGFloat = 44
+***REMOVED***@State
+***REMOVED***var height: CGFloat? = nil
 ***REMOVED***
-***REMOVED***@State var height: CGFloat? = nil
+***REMOVED***private let minHeight: CGFloat = 66
 ***REMOVED***
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***VStack {
@@ -54,5 +44,16 @@ public struct FloatingPanel<Content> : View where Content : View {
 ***REMOVED******REMOVED******REMOVED***.esriBorder(padding: EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
 ***REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***var drag: some Gesture {
+***REMOVED******REMOVED***DragGesture()
+***REMOVED******REMOVED******REMOVED***.onChanged { value in
+***REMOVED******REMOVED******REMOVED******REMOVED***self.handleColor = .red
+***REMOVED******REMOVED******REMOVED******REMOVED***height = max(minHeight, (height ?? 0) + value.translation.height)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.onEnded { _ in
+***REMOVED******REMOVED******REMOVED******REMOVED***self.handleColor = .secondary
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
