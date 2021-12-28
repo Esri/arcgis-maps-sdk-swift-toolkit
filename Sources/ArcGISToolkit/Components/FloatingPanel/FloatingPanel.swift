@@ -23,21 +23,11 @@ public struct FloatingPanel<Content> : View where Content : View {
     
     @State
     var handleColor: Color = .secondary
-    
-    var drag: some Gesture {
-        DragGesture()
-            .onChanged { value in
-                self.handleColor = .red
-                height = max(minHeight, (height ?? 0) + value.translation.height)
-            }
-            .onEnded { _ in
-                self.handleColor = .secondary
-            }
-    }
 
-    private let minHeight: CGFloat = 44
+    @State
+    var height: CGFloat? = nil
     
-    @State var height: CGFloat? = nil
+    private let minHeight: CGFloat = 66
     
     public var body: some View {
         VStack {
@@ -54,5 +44,16 @@ public struct FloatingPanel<Content> : View where Content : View {
             .esriBorder(padding: EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
             Spacer()
         }
+    }
+    
+    var drag: some Gesture {
+        DragGesture()
+            .onChanged { value in
+                self.handleColor = .red
+                height = max(minHeight, (height ?? 0) + value.translation.height)
+            }
+            .onEnded { _ in
+                self.handleColor = .secondary
+            }
     }
 }
