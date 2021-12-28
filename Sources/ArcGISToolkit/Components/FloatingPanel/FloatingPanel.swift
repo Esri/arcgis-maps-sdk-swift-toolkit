@@ -12,15 +12,12 @@
 // limitations under the License.
 
 import SwiftUI
-//import ArcGIS
 
 public struct FloatingPanel<Content> : View where Content : View {
     /// The content that is to be housed in the floating panel.
     let content: Content
     
-    public init(
-        content: Content
-    ) {
+    public init(content: Content) {
         self.content = content
     }
     
@@ -29,58 +26,33 @@ public struct FloatingPanel<Content> : View where Content : View {
     
     var drag: some Gesture {
         DragGesture()
-        //            .onChanged { self.heightOffset = $0.translation.height}
-            .onChanged {
+            .onChanged { value in
                 self.handleColor = .red
-                self.heightOffset = $0.translation.height
-                lastHeight = originalHeight + heightOffset
+                height = max(minHeight, (height ?? 0) + value.translation.height)
             }
             .onEnded { _ in
                 self.handleColor = .secondary
-                self.originalHeight = lastHeight
             }
     }
-    
-    @State
-    private var heightOffset: CGFloat = 0
-    
-    @State
-    private var originalHeight: CGFloat = 0
-    @State
-    private var lastHeight: CGFloat = 0
 
-    //    private var currentHeight: CGFloat = 0
+    private let minHeight: CGFloat = 44
+    
+    @State var height: CGFloat? = nil
     
     public var body: some View {
-        VStack(alignment: .center) {
-            GeometryReader { geometry in
+        VStack {
+            VStack {
                 content
-                    .frame(height: originalHeight + heightOffset)
-                    .onAppear {
-                        if originalHeight == 0 {
-                            originalHeight = geometry.size.height
-                        }
-                    }
+                    .frame(minHeight: minHeight, maxHeight: height)
+                Rectangle()
+                    .foregroundColor(handleColor)
+                    .frame(width: 100, height: 8.0)
+                    .cornerRadius(4.0)
+                    .padding(EdgeInsets(top: 0, leading: 0, bottom: 10, trailing: 0))
+                    .gesture(drag)
             }
-            //            Rectangle()
-            //                .foregroundColor(.secondary)
-            //                .frame(height: 1.0)
-            Rectangle()
-                .foregroundColor(handleColor)
-                .frame(width: 100, height: 8.0)
-                .cornerRadius(4.0)
-                .padding(EdgeInsets(top: 0, leading: 0, bottom: 10, trailing: 0))
-                .gesture(drag)
-            Text("\(self.heightOffset)")
+            .esriBorder(padding: EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
+            Spacer()
         }
-        .frame(width: 300)
-        .esriBorder(padding: EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
-        Spacer()
-    }
-}
-
-struct FloatingPanel_Previews: PreviewProvider {
-    static var previews: some View {
-        FloatingPanel(content: Rectangle().foregroundColor(.blue))
     }
 }
