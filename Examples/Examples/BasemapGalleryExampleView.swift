@@ -21,7 +21,7 @@ struct BasemapGalleryExampleView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ The view model for the basemap gallery.
 ***REMOVED***@ObservedObject
-***REMOVED***var viewModel = BasemapGalleryViewModel()
+***REMOVED***var viewModel: BasemapGalleryViewModel
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether to show the basemap gallery.
 ***REMOVED***@State
