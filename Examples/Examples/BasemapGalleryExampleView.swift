@@ -21,7 +21,7 @@ struct BasemapGalleryExampleView: View {
     
     /// The view model for the basemap gallery.
     @ObservedObject
-    var viewModel = BasemapGalleryViewModel()
+    var viewModel: BasemapGalleryViewModel
     
     /// A Boolean value indicating whether to show the basemap gallery.
     @State
