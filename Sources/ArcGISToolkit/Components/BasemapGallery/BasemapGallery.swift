@@ -17,8 +17,8 @@ import ArcGIS
 /// The `BasemapGallery` tool displays a collection of basemaps from either
 /// ArcGIS Online, a user-defined portal, or an array of `BasemapGalleryItem`s.
 /// When a new basemap is selected from the `BasemapGallery` and the optional
-/// `BasemapGallery.geoModel` property is set, then the basemap of the geoModel is replaced
-/// with the basemap in the gallery.
+/// `BasemapGalleryViewModel.geoModel` property is set, then the basemap of the
+/// `geoModel` is replaced with the basemap in the gallery.
 public struct BasemapGallery: View {
     /// Creates a `BasemapGallery`.
     /// - Parameter viewModel: The view model used by the `BasemapGallery`.
@@ -33,7 +33,7 @@ public struct BasemapGallery: View {
     @ObservedObject
     public var viewModel: BasemapGalleryViewModel
 
-    /// A Boolean value indicating whether the error alert should be shown.
+    /// A Boolean value indicating whether to show an error alert.
     @State
     private var showErrorAlert = false
     

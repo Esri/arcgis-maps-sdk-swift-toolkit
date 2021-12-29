@@ -18,7 +18,7 @@ import ArcGIS
 @MainActor
 public class BasemapGalleryViewModel: ObservableObject {
     /// Creates a `BasemapGalleryViewModel`. Uses the given array of basemap gallery items.
-    /// - Remark: If `items` is empty, ArcGISOnline's developer basemaps will
+    /// - Remark: If `items` is empty, ArcGIS Online's developer basemaps will
     /// be loaded and added to `items`.
     /// - Parameters:
     ///   - geoModel: The `GeoModel`.
@@ -47,7 +47,7 @@ public class BasemapGalleryViewModel: ObservableObject {
     @Published
     public var items: [BasemapGalleryItem]
     
-    /// The `BasemapGalleryItem` representing the `GeoModel`'s current base map. This may be a
+    /// The `BasemapGalleryItem` representing the `GeoModel`'s current basemap. This may be a
     /// basemap which does not exist in the gallery.
     @Published
     public var currentItem: BasemapGalleryItem? = nil {
@@ -58,7 +58,7 @@ public class BasemapGalleryViewModel: ObservableObject {
     }
     
     /// Handles changes to the `geoModel` property.
-    /// - Parameter previousGeoModel: The previously set `geoModel`.
+    /// - Parameter previousGeoModel: The previously set `GeoModel`.
     func geoModelDidChange(_ previousGeoModel: GeoModel?) {
         guard let geoModel = geoModel else { return }
         if geoModel.loadStatus != .loaded {
@@ -71,15 +71,12 @@ private extension BasemapGalleryViewModel {
     /// Loads the given `GeoModel` then sets `currentItem` to an item
     /// created with the geoModel's basemap.
     /// - Parameter geoModel: The `GeoModel` to load.
-    func load(geoModel: GeoModel?) async {
-        guard let geoModel = geoModel else { return }
-        do {
-            try await geoModel.load()
-            if let basemap = geoModel.basemap {
-                currentItem = BasemapGalleryItem(basemap: basemap)
-            } else {
-                currentItem = nil
-            }
-        } catch {}
+    func load(geoModel: GeoModel) async {
+        try? await geoModel.load()
+        if let basemap = geoModel.basemap {
+            currentItem = BasemapGalleryItem(basemap: basemap)
+        } else {
+            currentItem = nil
+        }
     }
 }

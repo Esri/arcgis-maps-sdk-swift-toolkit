@@ -23,7 +23,7 @@ struct BasemapGalleryExampleView: View {
     @ObservedObject
     var viewModel = BasemapGalleryViewModel()
     
-    /// `true` if the basemap gallery should be displayed; `false` otherwise.
+    /// A Boolean value indicating whether to show the basemap gallery.
     @State
     private var showBasemapGallery: Bool = false
     

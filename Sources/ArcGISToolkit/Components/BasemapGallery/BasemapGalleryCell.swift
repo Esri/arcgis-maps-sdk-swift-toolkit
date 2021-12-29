@@ -18,7 +18,7 @@ struct BasemapGalleryCell: View {
     /// The displayed item.
     @ObservedObject var item: BasemapGalleryItem
     
-    /// A Boolean specifying if the item should be displayed ais selected.
+    /// A Boolean value indicating whether the item should be displayed is selected.
     let isSelected: Bool
     
     /// The action executed when the item is selected.
@@ -36,7 +36,7 @@ struct BasemapGalleryCell: View {
                             .resizable()
                             .aspectRatio(contentMode: .fit)
                             .border(
-                                isSelected ? Color.accentColor: Color.clear,
+                                isSelected ? Color.accentColor : Color.clear,
                                 width: 3
                             )
                     }
@@ -63,7 +63,6 @@ struct BasemapGalleryCell: View {
                     .multilineTextAlignment(.center)
                     .foregroundColor(.primary)
             }
-        })
-            .disabled(item.isBasemapLoading)
+        }).disabled(item.isBasemapLoading)
     }
 }
