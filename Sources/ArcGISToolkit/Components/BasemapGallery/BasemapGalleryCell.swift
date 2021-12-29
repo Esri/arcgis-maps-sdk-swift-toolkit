@@ -18,7 +18,7 @@ struct BasemapGalleryCell: View {
 ***REMOVED******REMOVED***/ The displayed item.
 ***REMOVED***@ObservedObject var item: BasemapGalleryItem
 ***REMOVED***
-***REMOVED******REMOVED***/ A Boolean specifying if the item should be displayed ais selected.
+***REMOVED******REMOVED***/ A Boolean value indicating whether the item should be displayed is selected.
 ***REMOVED***let isSelected: Bool
 ***REMOVED***
 ***REMOVED******REMOVED***/ The action executed when the item is selected.
@@ -36,7 +36,7 @@ struct BasemapGalleryCell: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.resizable()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.aspectRatio(contentMode: .fit)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.border(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isSelected ? Color.accentColor: Color.clear,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isSelected ? Color.accentColor : Color.clear,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***width: 3
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
@@ -63,7 +63,6 @@ struct BasemapGalleryCell: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.multilineTextAlignment(.center)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.primary)
 ***REMOVED******REMOVED***
-***REMOVED***)
-***REMOVED******REMOVED******REMOVED***.disabled(item.isBasemapLoading)
+***REMOVED***).disabled(item.isBasemapLoading)
 ***REMOVED***
 ***REMOVED***

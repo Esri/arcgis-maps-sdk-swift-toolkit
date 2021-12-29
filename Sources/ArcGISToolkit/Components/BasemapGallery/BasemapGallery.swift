@@ -17,8 +17,8 @@
 ***REMOVED***/ The `BasemapGallery` tool displays a collection of basemaps from either
 ***REMOVED***/ ArcGIS Online, a user-defined portal, or an array of `BasemapGalleryItem`s.
 ***REMOVED***/ When a new basemap is selected from the `BasemapGallery` and the optional
-***REMOVED***/ `BasemapGallery.geoModel` property is set, then the basemap of the geoModel is replaced
-***REMOVED***/ with the basemap in the gallery.
+***REMOVED***/ `BasemapGalleryViewModel.geoModel` property is set, then the basemap of the
+***REMOVED***/ `geoModel` is replaced with the basemap in the gallery.
 public struct BasemapGallery: View {
 ***REMOVED******REMOVED***/ Creates a `BasemapGallery`.
 ***REMOVED******REMOVED***/ - Parameter viewModel: The view model used by the `BasemapGallery`.
@@ -33,7 +33,7 @@ public struct BasemapGallery: View {
 ***REMOVED***@ObservedObject
 ***REMOVED***public var viewModel: BasemapGalleryViewModel
 
-***REMOVED******REMOVED***/ A Boolean value indicating whether the error alert should be shown.
+***REMOVED******REMOVED***/ A Boolean value indicating whether to show an error alert.
 ***REMOVED***@State
 ***REMOVED***private var showErrorAlert = false
 ***REMOVED***

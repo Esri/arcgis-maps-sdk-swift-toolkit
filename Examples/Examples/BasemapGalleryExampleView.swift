@@ -23,7 +23,7 @@ struct BasemapGalleryExampleView: View {
 ***REMOVED***@ObservedObject
 ***REMOVED***var viewModel = BasemapGalleryViewModel()
 ***REMOVED***
-***REMOVED******REMOVED***/ `true` if the basemap gallery should be displayed; `false` otherwise.
+***REMOVED******REMOVED***/ A Boolean value indicating whether to show the basemap gallery.
 ***REMOVED***@State
 ***REMOVED***private var showBasemapGallery: Bool = false
 ***REMOVED***
