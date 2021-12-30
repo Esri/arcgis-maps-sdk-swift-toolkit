@@ -71,7 +71,7 @@ private extension BasemapGallery {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***item: item,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isSelected: item == viewModel.currentItem
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let loadError = item.loadBasemapsError {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let loadError = item.loadBasemapError {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***alertItem = AlertItem(loadBasemapError: loadError)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***showErrorAlert = true
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** else {

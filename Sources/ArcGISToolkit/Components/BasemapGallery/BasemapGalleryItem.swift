@@ -47,7 +47,7 @@ public class BasemapGalleryItem: ObservableObject {
 ***REMOVED***
 ***REMOVED******REMOVED***/ The error generated loading the basemap, if any.
 ***REMOVED***@Published
-***REMOVED***private(set) var loadBasemapsError: Error? = nil
+***REMOVED***private(set) var loadBasemapError: Error? = nil
 ***REMOVED***
 ***REMOVED******REMOVED***/ The basemap represented by `BasemapGalleryItem`.
 ***REMOVED***public let basemap: Basemap
@@ -98,7 +98,7 @@ private extension BasemapGalleryItem {
 ***REMOVED******REMOVED******REMOVED***thumbnail = basemap.item?.thumbnail?.image ?? .defaultThumbnail()
 ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***loadBasemapsError = error
+***REMOVED******REMOVED***loadBasemapError = error
 ***REMOVED******REMOVED***isBasemapLoading = false
 ***REMOVED***
 ***REMOVED***
