@@ -20,7 +20,7 @@ public class BasemapGalleryItem: ObservableObject {
     /// Creates a `BasemapGalleryItem`.
     /// - Parameters:
     ///   - basemap: The `Basemap` represented by the item.
-    ///   - name: The item name. If `nil`, `Basemap.name` is used, if available..
+    ///   - name: The item name. If `nil`, `Basemap.name` is used, if available.
     ///   - description: The item description. If `nil`, `Basemap.Item.description`
     ///   is used, if available.
     ///   - thumbnail: The thumbnail used to represent the item. If `nil`,
