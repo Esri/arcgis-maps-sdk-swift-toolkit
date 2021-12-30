@@ -20,7 +20,7 @@ public class BasemapGalleryItem: ObservableObject {
 ***REMOVED******REMOVED***/ Creates a `BasemapGalleryItem`.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - basemap: The `Basemap` represented by the item.
-***REMOVED******REMOVED***/   - name: The item name. If `nil`, `Basemap.name` is used, if available..
+***REMOVED******REMOVED***/   - name: The item name. If `nil`, `Basemap.name` is used, if available.
 ***REMOVED******REMOVED***/   - description: The item description. If `nil`, `Basemap.Item.description`
 ***REMOVED******REMOVED***/   is used, if available.
 ***REMOVED******REMOVED***/   - thumbnail: The thumbnail used to represent the item. If `nil`,
