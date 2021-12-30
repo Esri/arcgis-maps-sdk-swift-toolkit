@@ -47,7 +47,7 @@ public class BasemapGalleryItem: ObservableObject {
     
     /// The error generated loading the basemap, if any.
     @Published
-    private(set) var loadBasemapsError: Error? = nil
+    private(set) var loadBasemapError: Error? = nil
     
     /// The basemap represented by `BasemapGalleryItem`.
     public let basemap: Basemap
@@ -98,7 +98,7 @@ private extension BasemapGalleryItem {
             thumbnail = basemap.item?.thumbnail?.image ?? .defaultThumbnail()
         }
         
-        loadBasemapsError = error
+        loadBasemapError = error
         isBasemapLoading = false
     }
 }
