@@ -71,7 +71,7 @@ private extension BasemapGallery {
                         item: item,
                         isSelected: item == viewModel.currentItem
                     ) {
-                        if let loadError = item.loadBasemapsError {
+                        if let loadError = item.loadBasemapError {
                             alertItem = AlertItem(loadBasemapError: loadError)
                             showErrorAlert = true
                         } else {

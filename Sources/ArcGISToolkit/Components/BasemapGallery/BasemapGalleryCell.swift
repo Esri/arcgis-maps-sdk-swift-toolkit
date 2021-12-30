@@ -43,7 +43,7 @@ struct BasemapGalleryCell: View {
                     
                     // Display an image representing either a load basemap error
                     // or a spatial reference mismatch error.
-                    if item.loadBasemapsError != nil {
+                    if item.loadBasemapError != nil {
                         Image(systemName: "minus.circle.fill")
                             .font(.title)
                             .foregroundColor(.red)
