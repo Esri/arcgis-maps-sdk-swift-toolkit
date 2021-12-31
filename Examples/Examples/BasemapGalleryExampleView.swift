@@ -36,8 +36,9 @@ struct BasemapGalleryExampleView: View {
     init() {
         self.map = Map(basemapStyle: .arcGISImagery)
         self.viewModel = BasemapGalleryViewModel(
-            geoModel: self.map,
-            items: Self.initialBasemaps()
+            geoModel: self.map
+            // You can add your own basemaps by passing them in here:
+            //items: Self.initialBasemaps()
         )
     }
     
