@@ -59,10 +59,16 @@ struct BasemapGalleryExampleView: View {
                                     .navigationBarTitleDisplayMode(.inline)
                                     .toolbar {
                                         ToolbarItem(placement: .navigationBarTrailing) {
-                                            Button("Done") { showBasemapGallery = false }
+                                            Button {
+                                                showBasemapGallery = false
+                                            } label: {
+                                                Text("Done")
+                                                    .bold()
+                                            }
                                         }
                                     }
                             }
+//                            .navigationViewStyle(.stack)
                         } else {
                             BasemapGallery(viewModel: viewModel)
                                 .padding()
