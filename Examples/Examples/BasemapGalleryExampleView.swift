@@ -68,7 +68,7 @@ struct BasemapGalleryExampleView: View {
                                         }
                                     }
                             }
-//                            .navigationViewStyle(.stack)
+                            .navigationViewStyle(.stack)
                         } else {
                             BasemapGallery(viewModel: viewModel)
                                 .padding()
