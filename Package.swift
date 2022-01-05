@@ -27,7 +27,7 @@ let package = Package(
 ***REMOVED******REMOVED***),
 ***REMOVED***],
 ***REMOVED***dependencies: [
-***REMOVED******REMOVED***.package(name: "ArcGIS", path: "../swift")
+***REMOVED******REMOVED***.package(name: "ArcGIS", path: "../swift/ArcGIS")
 ***REMOVED***],
 ***REMOVED***targets: [
 ***REMOVED******REMOVED***.target(
