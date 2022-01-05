@@ -1,4 +1,4 @@
-// Copyright 2021 Esri.
+// Copyright 2022 Esri.
 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -18,13 +18,13 @@ import SwiftUI
 /// Apple Maps, Google Maps, Windows 10, and Collector have floating panel
 /// implementations, sometimes referred to as a "bottom sheet".
 ///
-/// Floating Panels are non-modal and can be transient, only displaying
+/// Floating panels are non-modal and can be transient, only displaying
 /// information for a short period of time like identify results,
 /// or persistent, where the information is always displayed, for example a
 /// dedicated search panel. They will also be primarily simple containers
 /// that clients will fill with their own content.
 public struct FloatingPanel<Content> : View where Content : View {
-    /// The content that is to be housed in the floating panel.
+    /// The content shown in the floating panel.
     let content: Content
     
     /// Creates a `FloatingPanel`
@@ -35,7 +35,7 @@ public struct FloatingPanel<Content> : View where Content : View {
     
     @State
     private var handleColor: Color = defaultHandleColor
-
+    
     @State
     private var height: CGFloat? = nil
     
@@ -43,15 +43,13 @@ public struct FloatingPanel<Content> : View where Content : View {
     
     public var body: some View {
         VStack {
-            VStack {
-                content
-                    .frame(minHeight: minHeight, maxHeight: height)
-                Handle(color: handleColor)
-                    .gesture(drag)
-            }
-            .esriBorder()
-            Spacer()
+            content
+                .frame(minHeight: minHeight, maxHeight: height)
+            Divider()
+            Handle(color: handleColor)
+                .gesture(drag)
         }
+        .esriBorder()
     }
     
     var drag: some Gesture {
@@ -71,13 +69,14 @@ private extension FloatingPanel {
     static var activeHandleColor: Color { .primary }
 }
 
+/// The "Handle" view of the floating panel.
 private struct Handle: View {
+    /// The color of the handle.
     var color: Color
     var body: some View {
         Rectangle()
             .foregroundColor(color)
             .frame(width: 100, height: 8.0)
             .cornerRadius(4.0)
-            .padding(EdgeInsets(top: 0, leading: 0, bottom: 10, trailing: 0))
     }
 }
