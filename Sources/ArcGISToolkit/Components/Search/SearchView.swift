@@ -56,12 +56,10 @@ public struct SearchView: View {
     /// The width of the search bar, taking into account the horizontal and vertical size classes
     /// of the device. This will cause the search field to display full-width on an iPhone in portrait
     /// orientation (and certain iPad multitasking configurations) and limit the width to `360` in other cases.
-    private var internalSearchBarWidth: CGFloat? {
-        horizontalSizeClass == .compact && verticalSizeClass == .regular ? nil : searchBarWidth
+    private var searchBarWidth: CGFloat? {
+        horizontalSizeClass == .compact && verticalSizeClass == .regular ? nil : 360
     }
-
-    private var searchBarWidth: CGFloat?
-
+    
     /// If `true`, will draw the results list view at half height, exposing a portion of the
     /// underlying map below the list on an iPhone in portrait orientation (and certain iPad multitasking
     /// configurations).  If `false`, will draw the results list view full size.
@@ -111,8 +109,7 @@ public struct SearchView: View {
                                     }
                                 }
                             }
-//                            .padding()
-//                            .esriBorder(padding: EdgeInsets())
+                            .esriBorder(padding: EdgeInsets())
                         }
                     }
                     .frame(width: searchBarWidth)
@@ -329,18 +326,5 @@ extension View {
         _ isSelected: Bool = false
     ) -> some View {
         modifier(SelectedModifier(isSelected: isSelected))
-    }
-}
-
-extension SearchView {
-    /// The factor to multiply the main `GeoView`'s scale by.  The `OverviewMap` will display
-    /// at the a scale equal to: `viewpoint.targetScale` x `scaleFactor`.
-    /// The default value is `25.0`.
-    /// - Parameter scaleFactor: The new scale factor.
-    /// - Returns: The `OverviewMap`.
-    public func searchBarWidth(_ newWidth: CGFloat?) -> SearchView {
-        var copy = self
-        copy.searchBarWidth = newWidth
-        return copy
     }
 }
