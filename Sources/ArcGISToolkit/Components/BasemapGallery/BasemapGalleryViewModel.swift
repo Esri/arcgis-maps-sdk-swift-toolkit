@@ -43,10 +43,10 @@ public class BasemapGalleryViewModel: ObservableObject {
         }
     }
     
-    /// Creates a `BasemapGalleryViewModel`. Uses the given `Portal` to retrieve basemaps.
+    /// Creates an instance using the given portal to retrieve basemaps.
     /// - Parameters:
-    ///   - geoModel: The `GeoModel`.
-    ///   - portal: The `Portal` used to load basemaps.
+    ///   - geoModel: A geo model.
+    ///   - portal: The portal to use to load basemaps.
     public init(
         _ geoModel: GeoModel? = nil,
         portal: Portal
@@ -88,7 +88,7 @@ public class BasemapGalleryViewModel: ObservableObject {
     }
 
     /// The list of basemaps currently visible in the gallery. It is comprised of items passed into
-    /// the `BasemapGalleryItem` constructor property and items loaded either from `portal` or
+    /// the `BasemapGalleryItem` initializer and items loaded either from `portal` or
     /// from ArcGISOnline if `portal` is `nil`.
     @Published
     public var items: [BasemapGalleryItem]
@@ -132,28 +132,22 @@ private extension BasemapGalleryViewModel {
     ///   `false`, it will use either the portal's basemaps or vector basemaps, depending on the value of
     ///   `portal.portalInfo.useVectorBasemaps`.
     func fetchBasemaps(
-        from portal: Portal?,
+        from portal: Portal,
         useDeveloperBasemaps: Bool = false
     ) async {
-        guard let portal = portal else { return }
-        
         do {
             try await portal.load()
             
+            let basemaps: [Basemap]
             if useDeveloperBasemaps {
-                items += try await portal.developerBasemaps.map {
-                    BasemapGalleryItem(basemap: $0)
-                }
+                basemaps = try await portal.developerBasemaps
             } else if let portalInfo = portal.info,
                       portalInfo.useVectorBasemaps {
-                items += try await portal.vectorBasemaps.map {
-                    BasemapGalleryItem(basemap: $0)
-                }
+                basemaps = try await portal.vectorBasemaps
             } else {
-                items += try await portal.basemaps.map {
-                    BasemapGalleryItem(basemap: $0)
-                }
+                basemaps = try await portal.basemaps
             }
+            items += basemaps.map { BasemapGalleryItem(basemap: $0) }
         } catch {
             fetchBasemapsError = error
         }
