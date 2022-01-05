@@ -19,6 +19,7 @@
 		E48A73462658227100F5C118 /* ExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E48A73422658227100F5C118 /* ExampleView.swift */; };
 		E48A73472658227100F5C118 /* ExampleList.swift in Sources */ = {isa = PBXBuildFile; fileRef = E48A733E2658227100F5C118 /* ExampleList.swift */; };
 		E4AA9316276BF5ED000E6289 /* FloatingPanelExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4AA9315276BF5ED000E6289 /* FloatingPanelExampleView.swift */; };
+		E4C389D526B8A12C002BC255 /* BasemapGalleryExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4C389D426B8A12C002BC255 /* BasemapGalleryExampleView.swift */; };
 		E4E57DC6265D8EB00077A093 /* ArcGISToolkit in Frameworks */ = {isa = PBXBuildFile; productRef = E4E57DC5265D8EB00077A093 /* ArcGISToolkit */; };
 		E4F9BC99265EFCAF001280FF /* OverviewMapExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4F9BC98265EFCAF001280FF /* OverviewMapExampleView.swift */; };
 /* End PBXBuildFile section */
@@ -52,6 +53,7 @@
 		E48A73412658227100F5C118 /* AnyExample.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyExample.swift; sourceTree = "<group>"; };
 		E48A73422658227100F5C118 /* ExampleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExampleView.swift; sourceTree = "<group>"; };
 		E4AA9315276BF5ED000E6289 /* FloatingPanelExampleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloatingPanelExampleView.swift; sourceTree = "<group>"; };
+		E4C389D426B8A12C002BC255 /* BasemapGalleryExampleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasemapGalleryExampleView.swift; sourceTree = "<group>"; };
 		E4F9BC98265EFCAF001280FF /* OverviewMapExampleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OverviewMapExampleView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -71,6 +73,7 @@
 		E40F58042656E509006F5CB9 /* Examples */ = {
 			isa = PBXGroup;
 			children = (
+				E4C389D426B8A12C002BC255 /* BasemapGalleryExampleView.swift */,
 				E4F9BC98265EFCAF001280FF /* OverviewMapExampleView.swift */,
 				E42BFBE82672BF9500159107 /* SearchExampleView.swift */,
 				E4AA9315276BF5ED000E6289 /* FloatingPanelExampleView.swift */,
@@ -220,6 +223,7 @@
 				E48A73472658227100F5C118 /* ExampleList.swift in Sources */,
 				E48A73462658227100F5C118 /* ExampleView.swift in Sources */,
 				E42BFBE92672BF9500159107 /* SearchExampleView.swift in Sources */,
+				E4C389D526B8A12C002BC255 /* BasemapGalleryExampleView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
