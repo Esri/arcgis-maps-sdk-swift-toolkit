@@ -13,19 +13,31 @@
 
 ***REMOVED***
 
+***REMOVED***/ A floating panel is a view that overlays a view and supplies view-related
+***REMOVED***/ content. For a map view, for instance, it could display a legend, bookmarks, search results, etc..
+***REMOVED***/ Apple Maps, Google Maps, Windows 10, and Collector have floating panel
+***REMOVED***/ implementations, sometimes referred to as a "bottom sheet".
+***REMOVED***/
+***REMOVED***/ Floating Panels are non-modal and can be transient, only displaying
+***REMOVED***/ information for a short period of time like identify results,
+***REMOVED***/ or persistent, where the information is always displayed, for example a
+***REMOVED***/ dedicated search panel. They will also be primarily simple containers
+***REMOVED***/ that clients will fill with their own content.
 public struct FloatingPanel<Content> : View where Content : View {
 ***REMOVED******REMOVED***/ The content that is to be housed in the floating panel.
 ***REMOVED***let content: Content
 ***REMOVED***
+***REMOVED******REMOVED***/ Creates a `FloatingPanel`
+***REMOVED******REMOVED***/ - Parameter content: The view shown in the floating panel.
 ***REMOVED***public init(content: Content) {
 ***REMOVED******REMOVED***self.content = content
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@State
-***REMOVED***var handleColor: Color = .secondary
+***REMOVED***private var handleColor: Color = defaultHandleColor
 
 ***REMOVED***@State
-***REMOVED***var height: CGFloat? = nil
+***REMOVED***private var height: CGFloat? = nil
 ***REMOVED***
 ***REMOVED***private let minHeight: CGFloat = 66
 ***REMOVED***
@@ -34,14 +46,10 @@ public struct FloatingPanel<Content> : View where Content : View {
 ***REMOVED******REMOVED******REMOVED***VStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED***content
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(minHeight: minHeight, maxHeight: height)
-***REMOVED******REMOVED******REMOVED******REMOVED***Rectangle()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(handleColor)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 100, height: 8.0)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.cornerRadius(4.0)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(EdgeInsets(top: 0, leading: 0, bottom: 10, trailing: 0))
+***REMOVED******REMOVED******REMOVED******REMOVED***Handle(color: handleColor)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.gesture(drag)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.esriBorder(padding: EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
+***REMOVED******REMOVED******REMOVED***.esriBorder()
 ***REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED***
 ***REMOVED***
@@ -49,11 +57,27 @@ public struct FloatingPanel<Content> : View where Content : View {
 ***REMOVED***var drag: some Gesture {
 ***REMOVED******REMOVED***DragGesture()
 ***REMOVED******REMOVED******REMOVED***.onChanged { value in
-***REMOVED******REMOVED******REMOVED******REMOVED***self.handleColor = .red
+***REMOVED******REMOVED******REMOVED******REMOVED***self.handleColor = Self.activeHandleColor
 ***REMOVED******REMOVED******REMOVED******REMOVED***height = max(minHeight, (height ?? 0) + value.translation.height)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onEnded { _ in
-***REMOVED******REMOVED******REMOVED******REMOVED***self.handleColor = .secondary
+***REMOVED******REMOVED******REMOVED******REMOVED***self.handleColor = Self.defaultHandleColor
 ***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+
+private extension FloatingPanel {
+***REMOVED***static var defaultHandleColor: Color { .secondary ***REMOVED***
+***REMOVED***static var activeHandleColor: Color { .primary ***REMOVED***
+***REMOVED***
+
+private struct Handle: View {
+***REMOVED***var color: Color
+***REMOVED***var body: some View {
+***REMOVED******REMOVED***Rectangle()
+***REMOVED******REMOVED******REMOVED***.foregroundColor(color)
+***REMOVED******REMOVED******REMOVED***.frame(width: 100, height: 8.0)
+***REMOVED******REMOVED******REMOVED***.cornerRadius(4.0)
+***REMOVED******REMOVED******REMOVED***.padding(EdgeInsets(top: 0, leading: 0, bottom: 10, trailing: 0))
 ***REMOVED***
 ***REMOVED***
