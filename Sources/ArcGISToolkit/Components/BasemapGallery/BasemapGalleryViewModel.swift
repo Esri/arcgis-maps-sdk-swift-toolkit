@@ -43,10 +43,10 @@ public class BasemapGalleryViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Creates a `BasemapGalleryViewModel`. Uses the given `Portal` to retrieve basemaps.
+***REMOVED******REMOVED***/ Creates an instance using the given portal to retrieve basemaps.
 ***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - geoModel: The `GeoModel`.
-***REMOVED******REMOVED***/   - portal: The `Portal` used to load basemaps.
+***REMOVED******REMOVED***/   - geoModel: A geo model.
+***REMOVED******REMOVED***/   - portal: The portal to use to load basemaps.
 ***REMOVED***public init(
 ***REMOVED******REMOVED***_ geoModel: GeoModel? = nil,
 ***REMOVED******REMOVED***portal: Portal
@@ -88,7 +88,7 @@ public class BasemapGalleryViewModel: ObservableObject {
 ***REMOVED***
 
 ***REMOVED******REMOVED***/ The list of basemaps currently visible in the gallery. It is comprised of items passed into
-***REMOVED******REMOVED***/ the `BasemapGalleryItem` constructor property and items loaded either from `portal` or
+***REMOVED******REMOVED***/ the `BasemapGalleryItem` initializer and items loaded either from `portal` or
 ***REMOVED******REMOVED***/ from ArcGISOnline if `portal` is `nil`.
 ***REMOVED***@Published
 ***REMOVED***public var items: [BasemapGalleryItem]
@@ -132,28 +132,22 @@ private extension BasemapGalleryViewModel {
 ***REMOVED******REMOVED***/   `false`, it will use either the portal's basemaps or vector basemaps, depending on the value of
 ***REMOVED******REMOVED***/   `portal.portalInfo.useVectorBasemaps`.
 ***REMOVED***func fetchBasemaps(
-***REMOVED******REMOVED***from portal: Portal?,
+***REMOVED******REMOVED***from portal: Portal,
 ***REMOVED******REMOVED***useDeveloperBasemaps: Bool = false
 ***REMOVED***) async {
-***REMOVED******REMOVED***guard let portal = portal else { return ***REMOVED***
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED***try await portal.load()
 ***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***let basemaps: [Basemap]
 ***REMOVED******REMOVED******REMOVED***if useDeveloperBasemaps {
-***REMOVED******REMOVED******REMOVED******REMOVED***items += try await portal.developerBasemaps.map {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***BasemapGalleryItem(basemap: $0)
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***basemaps = try await portal.developerBasemaps
 ***REMOVED******REMOVED*** else if let portalInfo = portal.info,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  portalInfo.useVectorBasemaps {
-***REMOVED******REMOVED******REMOVED******REMOVED***items += try await portal.vectorBasemaps.map {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***BasemapGalleryItem(basemap: $0)
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***basemaps = try await portal.vectorBasemaps
 ***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***items += try await portal.basemaps.map {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***BasemapGalleryItem(basemap: $0)
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***basemaps = try await portal.basemaps
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***items += basemaps.map { BasemapGalleryItem(basemap: $0) ***REMOVED***
 ***REMOVED*** catch {
 ***REMOVED******REMOVED******REMOVED***fetchBasemapsError = error
 ***REMOVED***
