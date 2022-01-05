@@ -1,4 +1,4 @@
-***REMOVED***.
+***REMOVED*** Copyright 2022 Esri.
 
 ***REMOVED*** Licensed under the Apache License, Version 2.0 (the "License");
 ***REMOVED*** you may not use this file except in compliance with the License.
@@ -18,13 +18,13 @@
 ***REMOVED***/ Apple Maps, Google Maps, Windows 10, and Collector have floating panel
 ***REMOVED***/ implementations, sometimes referred to as a "bottom sheet".
 ***REMOVED***/
-***REMOVED***/ Floating Panels are non-modal and can be transient, only displaying
+***REMOVED***/ Floating panels are non-modal and can be transient, only displaying
 ***REMOVED***/ information for a short period of time like identify results,
 ***REMOVED***/ or persistent, where the information is always displayed, for example a
 ***REMOVED***/ dedicated search panel. They will also be primarily simple containers
 ***REMOVED***/ that clients will fill with their own content.
 public struct FloatingPanel<Content> : View where Content : View {
-***REMOVED******REMOVED***/ The content that is to be housed in the floating panel.
+***REMOVED******REMOVED***/ The content shown in the floating panel.
 ***REMOVED***let content: Content
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a `FloatingPanel`
@@ -35,7 +35,7 @@ public struct FloatingPanel<Content> : View where Content : View {
 ***REMOVED***
 ***REMOVED***@State
 ***REMOVED***private var handleColor: Color = defaultHandleColor
-
+***REMOVED***
 ***REMOVED***@State
 ***REMOVED***private var height: CGFloat? = nil
 ***REMOVED***
@@ -43,15 +43,13 @@ public struct FloatingPanel<Content> : View where Content : View {
 ***REMOVED***
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***VStack {
-***REMOVED******REMOVED******REMOVED***VStack {
-***REMOVED******REMOVED******REMOVED******REMOVED***content
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(minHeight: minHeight, maxHeight: height)
-***REMOVED******REMOVED******REMOVED******REMOVED***Handle(color: handleColor)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.gesture(drag)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.esriBorder()
-***REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED******REMOVED***content
+***REMOVED******REMOVED******REMOVED******REMOVED***.frame(minHeight: minHeight, maxHeight: height)
+***REMOVED******REMOVED******REMOVED***Divider()
+***REMOVED******REMOVED******REMOVED***Handle(color: handleColor)
+***REMOVED******REMOVED******REMOVED******REMOVED***.gesture(drag)
 ***REMOVED***
+***REMOVED******REMOVED***.esriBorder()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var drag: some Gesture {
@@ -71,13 +69,14 @@ private extension FloatingPanel {
 ***REMOVED***static var activeHandleColor: Color { .primary ***REMOVED***
 ***REMOVED***
 
+***REMOVED***/ The "Handle" view of the floating panel.
 private struct Handle: View {
+***REMOVED******REMOVED***/ The color of the handle.
 ***REMOVED***var color: Color
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***Rectangle()
 ***REMOVED******REMOVED******REMOVED***.foregroundColor(color)
 ***REMOVED******REMOVED******REMOVED***.frame(width: 100, height: 8.0)
 ***REMOVED******REMOVED******REMOVED***.cornerRadius(4.0)
-***REMOVED******REMOVED******REMOVED***.padding(EdgeInsets(top: 0, leading: 0, bottom: 10, trailing: 0))
 ***REMOVED***
 ***REMOVED***
