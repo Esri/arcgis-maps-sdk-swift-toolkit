@@ -33,7 +33,7 @@ public class BasemapGalleryViewModel: ObservableObject {
         
         if items.isEmpty {
             // We have no basemap items, so fetch the
-            //developer basemaps from AGOL.
+            // developer basemaps from AGOL.
             fetchBasemaps(
                 from: Portal.arcGISOnline(isLoginRequired: false),
                 useDeveloperBasemaps: true
