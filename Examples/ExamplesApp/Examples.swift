@@ -44,7 +44,7 @@ extension ExampleList {
     static let views = Self(
         name: "Views",
         examples: [
-            AnyExample("FloatingPanel", content: FloatingPanelExampleView())
+            AnyExample("Floating Panel", content: FloatingPanelExampleView())
         ]
     )
 }

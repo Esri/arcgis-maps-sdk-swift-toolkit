@@ -23,7 +23,7 @@ import SwiftUI
 /// or persistent, where the information is always displayed, for example a
 /// dedicated search panel. They will also be primarily simple containers
 /// that clients will fill with their own content.
-public struct FloatingPanel<Content> : View where Content : View {
+public struct FloatingPanel<Content>: View where Content: View {
     /// The content shown in the floating panel.
     let content: Content
     
@@ -53,7 +53,7 @@ public struct FloatingPanel<Content> : View where Content : View {
     }
     
     var drag: some Gesture {
-        DragGesture()
+        DragGesture(minimumDistance: 0)
             .onChanged { value in
                 self.handleColor = Self.activeHandleColor
                 height = max(minHeight, (height ?? 0) + value.translation.height)
@@ -73,6 +73,7 @@ private extension FloatingPanel {
 private struct Handle: View {
     /// The color of the handle.
     var color: Color
+    
     var body: some View {
         Rectangle()
             .foregroundColor(color)
