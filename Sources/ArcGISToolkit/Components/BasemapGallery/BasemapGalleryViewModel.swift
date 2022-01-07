@@ -74,7 +74,7 @@ public class BasemapGalleryViewModel: ObservableObject {
     }
     
     /// The `Portal` object, if any. Setting the portal will automatically fetch it's basemaps
-    /// and replace the`basemapGalleryItems` array items with the fetched basemaps.
+    /// and replace the ``items`` array with the fetched basemaps.
     public var portal: Portal? {
         didSet {
             portalDidChange(oldValue)
@@ -82,8 +82,8 @@ public class BasemapGalleryViewModel: ObservableObject {
     }
 
     /// The list of basemaps currently visible in the gallery. It is comprised of items passed into
-    /// the `BasemapGalleryItem` initializer and items loaded either from `portal` or
-    /// from ArcGISOnline if `portal` is `nil`.
+    /// the ``init(geoModel:items:)`` and items loaded either from `portal` or
+    /// from ArcGIS Online if `portal` is `nil`.
     @Published
     public var items: [BasemapGalleryItem]
     
@@ -118,7 +118,7 @@ public class BasemapGalleryViewModel: ObservableObject {
 }
 
 private extension BasemapGalleryViewModel {
-    /// Fetches the basemaps from the given portal and appends `basemapGalleryItems` with
+    /// Fetches the basemaps from the given portal and appends `items` with
     /// items created from the fetched basemaps.
     /// - Parameters:
     ///   - portal: Portal to fetch basemaps from
