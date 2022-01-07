@@ -29,7 +29,9 @@ struct FloatingPanelExampleView: View {
 ***REMOVED******REMOVED******REMOVED***viewpoint: initialViewpoint
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***.overlay(alignment: .topTrailing) {
-***REMOVED******REMOVED******REMOVED******REMOVED***FloatingPanel(content: SampleContent())
+***REMOVED******REMOVED******REMOVED******REMOVED***FloatingPanel {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***SampleContent()
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 360)
 ***REMOVED******REMOVED***
