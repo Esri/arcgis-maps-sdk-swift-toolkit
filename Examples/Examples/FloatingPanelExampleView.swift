@@ -29,7 +29,9 @@ struct FloatingPanelExampleView: View {
             viewpoint: initialViewpoint
         )
             .overlay(alignment: .topTrailing) {
-                FloatingPanel(content: SampleContent())
+                FloatingPanel {
+                    SampleContent()
+                }
                     .padding()
                     .frame(width: 360)
             }

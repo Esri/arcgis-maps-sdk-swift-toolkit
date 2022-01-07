@@ -24,27 +24,29 @@ import SwiftUI
 /// dedicated search panel. They will also be primarily simple containers
 /// that clients will fill with their own content.
 public struct FloatingPanel<Content>: View where Content: View {
+    // Note:  instead of the FloatingPanel being a view, it might be preferable
+    // to have it be a view modifier, similar to how SwiftUI doesn't have a
+    // SheetView, but a modifier that presents a sheet.
+    
     /// The content shown in the floating panel.
     let content: Content
     
     /// Creates a `FloatingPanel`
     /// - Parameter content: The view shown in the floating panel.
-    public init(content: Content) {
-        self.content = content
+    public init(@ViewBuilder content: () -> Content) {
+        self.content = content()
     }
     
     @State
-    private var handleColor: Color = defaultHandleColor
+    private var handleColor: Color = .defaultHandleColor
     
     @State
-    private var height: CGFloat? = nil
-    
-    private let minHeight: CGFloat = 66
+    private var height: CGFloat?
     
     public var body: some View {
         VStack {
             content
-                .frame(minHeight: minHeight, maxHeight: height)
+                .frame(minHeight: .minHeight, maxHeight: height)
             Divider()
             Handle(color: handleColor)
                 .gesture(drag)
@@ -55,18 +57,19 @@ public struct FloatingPanel<Content>: View where Content: View {
     var drag: some Gesture {
         DragGesture(minimumDistance: 0)
             .onChanged { value in
-                self.handleColor = Self.activeHandleColor
-                height = max(minHeight, (height ?? 0) + value.translation.height)
+                handleColor = .activeHandleColor
+                // Note:  There is a bug here where `height` can be set
+                // larger than the displayed height.  This occurs by continuing
+                // to drag down on the handle after the panel reaches it's max
+                // height.  When that happens subsequent "drag up" operations
+                // don't cause the panel to shrink immediately, but will
+                // ultimately snap to the correct height.
+                height = max(.minHeight, (height ?? 0) + value.translation.height)
             }
             .onEnded { _ in
-                self.handleColor = Self.defaultHandleColor
+                handleColor = .defaultHandleColor
             }
     }
-}
-
-private extension FloatingPanel {
-    static var defaultHandleColor: Color { .secondary }
-    static var activeHandleColor: Color { .primary }
 }
 
 /// The "Handle" view of the floating panel.
@@ -75,9 +78,17 @@ private struct Handle: View {
     var color: Color
     
     var body: some View {
-        Rectangle()
+        RoundedRectangle(cornerRadius: 4.0)
             .foregroundColor(color)
             .frame(width: 100, height: 8.0)
-            .cornerRadius(4.0)
     }
+}
+
+private extension CGFloat {
+    static let minHeight: CGFloat = 66
+}
+
+private extension Color {
+    static var defaultHandleColor: Color { .secondary }
+    static var activeHandleColor: Color { .primary }
 }
