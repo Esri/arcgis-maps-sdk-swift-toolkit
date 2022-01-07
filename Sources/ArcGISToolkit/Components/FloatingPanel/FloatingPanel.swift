@@ -23,7 +23,7 @@
 ***REMOVED***/ or persistent, where the information is always displayed, for example a
 ***REMOVED***/ dedicated search panel. They will also be primarily simple containers
 ***REMOVED***/ that clients will fill with their own content.
-public struct FloatingPanel<Content> : View where Content : View {
+public struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED******REMOVED***/ The content shown in the floating panel.
 ***REMOVED***let content: Content
 ***REMOVED***
@@ -53,7 +53,7 @@ public struct FloatingPanel<Content> : View where Content : View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var drag: some Gesture {
-***REMOVED******REMOVED***DragGesture()
+***REMOVED******REMOVED***DragGesture(minimumDistance: 0)
 ***REMOVED******REMOVED******REMOVED***.onChanged { value in
 ***REMOVED******REMOVED******REMOVED******REMOVED***self.handleColor = Self.activeHandleColor
 ***REMOVED******REMOVED******REMOVED******REMOVED***height = max(minHeight, (height ?? 0) + value.translation.height)
@@ -73,6 +73,7 @@ private extension FloatingPanel {
 private struct Handle: View {
 ***REMOVED******REMOVED***/ The color of the handle.
 ***REMOVED***var color: Color
+***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***Rectangle()
 ***REMOVED******REMOVED******REMOVED***.foregroundColor(color)
