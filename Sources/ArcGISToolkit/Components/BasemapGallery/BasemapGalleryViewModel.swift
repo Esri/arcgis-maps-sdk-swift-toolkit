@@ -74,7 +74,7 @@ public class BasemapGalleryViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The `Portal` object, if any. Setting the portal will automatically fetch it's basemaps
-***REMOVED******REMOVED***/ and replace the`basemapGalleryItems` array items with the fetched basemaps.
+***REMOVED******REMOVED***/ and replace the ``items`` array with the fetched basemaps.
 ***REMOVED***public var portal: Portal? {
 ***REMOVED******REMOVED***didSet {
 ***REMOVED******REMOVED******REMOVED***portalDidChange(oldValue)
@@ -82,8 +82,8 @@ public class BasemapGalleryViewModel: ObservableObject {
 ***REMOVED***
 
 ***REMOVED******REMOVED***/ The list of basemaps currently visible in the gallery. It is comprised of items passed into
-***REMOVED******REMOVED***/ the `BasemapGalleryItem` initializer and items loaded either from `portal` or
-***REMOVED******REMOVED***/ from ArcGISOnline if `portal` is `nil`.
+***REMOVED******REMOVED***/ the ``init(geoModel:items:)`` and items loaded either from `portal` or
+***REMOVED******REMOVED***/ from ArcGIS Online if `portal` is `nil`.
 ***REMOVED***@Published
 ***REMOVED***public var items: [BasemapGalleryItem]
 ***REMOVED***
@@ -118,7 +118,7 @@ public class BasemapGalleryViewModel: ObservableObject {
 ***REMOVED***
 
 private extension BasemapGalleryViewModel {
-***REMOVED******REMOVED***/ Fetches the basemaps from the given portal and appends `basemapGalleryItems` with
+***REMOVED******REMOVED***/ Fetches the basemaps from the given portal and appends `items` with
 ***REMOVED******REMOVED***/ items created from the fetched basemaps.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - portal: Portal to fetch basemaps from
