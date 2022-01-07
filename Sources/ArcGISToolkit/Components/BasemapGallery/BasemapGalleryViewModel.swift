@@ -107,7 +107,7 @@ public class BasemapGalleryViewModel: ObservableObject {
     /// Handles changes to the `portal` property.
     /// - Parameter previousPortal: The previously set `Portal`.
     func portalDidChange(_ previousPortal: Portal?) {
-        // Remove all items from `basemapGalleryItems`.
+        // Remove all items from `items`.
         items.removeAll()
 
         guard let portal = portal else { return }
