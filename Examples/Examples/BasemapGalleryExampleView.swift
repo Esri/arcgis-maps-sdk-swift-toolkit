@@ -36,8 +36,9 @@ struct BasemapGalleryExampleView: View {
 ***REMOVED***init() {
 ***REMOVED******REMOVED***self.map = Map(basemapStyle: .arcGISImagery)
 ***REMOVED******REMOVED***self.viewModel = BasemapGalleryViewModel(
-***REMOVED******REMOVED******REMOVED***geoModel: self.map,
-***REMOVED******REMOVED******REMOVED***items: Self.initialBasemaps()
+***REMOVED******REMOVED******REMOVED***geoModel: self.map
+***REMOVED******REMOVED******REMOVED******REMOVED*** You can add your own basemaps by passing them in here:
+***REMOVED******REMOVED******REMOVED******REMOVED***items: Self.initialBasemaps()
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
