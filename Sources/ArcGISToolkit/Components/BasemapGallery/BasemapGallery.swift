@@ -20,6 +20,17 @@ import ArcGIS
 /// `BasemapGalleryViewModel.geoModel` property is set, then the basemap of the
 /// `geoModel` is replaced with the basemap in the gallery.
 public struct BasemapGallery: View {
+    /// The view style of the gallery.
+    public enum Style {
+        /// The `BasemapGallery` will display as a grid when there is appropriate
+        /// width available for the gallery to do so. Otherwise the gallery will display as a list.
+        case automatic
+        /// The `BasemapGallery` will display as a grid.
+        case grid
+        /// The `BasemapGallery` will display as a list.
+        case list
+    }
+    
     /// Creates a `BasemapGallery`.
     /// - Parameter viewModel: The view model used by the `BasemapGallery`.
     public init(viewModel: BasemapGalleryViewModel? = nil) {
@@ -32,6 +43,25 @@ public struct BasemapGallery: View {
     /// user action.
     @ObservedObject
     public var viewModel: BasemapGalleryViewModel
+    
+    /// The style of the basemap gallery. The gallery can be displayed as a list, grid, or automatically
+    /// switch between the two based on screen real estate. Defaults to `automatic`.
+    /// Set using the `style` modifier.
+    private var style: Style = .automatic
+    
+    /// The size class used to determine if the basemap items should dispaly in a list or grid.
+    /// If the size class is `.regular`, they display in a grid. If it is `.compact`, they display in a list.
+    @Environment(\.horizontalSizeClass) var horizontalSizeClass
+    
+    /// `true` if the horizontal size class is `.regular`, `false` if it's not.
+    private var isRegularWidth: Bool {
+        horizontalSizeClass == .regular
+    }
+
+    /// The width of the gallery, taking into account the horizontal size class of the device.
+    private var galleryWidth: CGFloat? {
+        isRegularWidth ? 300 : 150
+    }
 
     /// A Boolean value indicating whether to show an error alert.
     @State
@@ -43,6 +73,7 @@ public struct BasemapGallery: View {
     
     public var body: some View {
         makeGalleryView()
+            .frame(width: galleryWidth)
             .alert(
                 alertItem?.title ?? "",
                 isPresented: $showErrorAlert,
@@ -58,29 +89,80 @@ private extension BasemapGallery {
     /// - Returns: A view representing the basemap gallery with the specified columns.
     func makeGalleryView() -> some View {
         ScrollView {
-            let columns = Array(
+            switch style {
+            case .automatic:
+                if isRegularWidth {
+                    makeGridView()
+                }
+                else {
+                    makeListView()
+                }
+            case .grid:
+                makeGridView()
+            case .list:
+                makeListView()
+            }
+        }
+    }
+    
+    /// The gallery view, displayed as a grid.
+    /// - Returns: A view representing the basemap gallery grid.
+    func makeGridView() -> some View {
+        internalMakeGalleryView(
+            Array(
                 repeating: GridItem(
-                    .flexible(minimum: 75, maximum: 100),
+                    .flexible(),
                     alignment: .top
                 ),
                 count: 3
             )
-            LazyVGrid(columns: columns) {
-                ForEach(viewModel.items) { item in
-                    BasemapGalleryCell(
-                        item: item,
-                        isSelected: item == viewModel.currentItem
-                    ) {
-                        if let loadError = item.loadBasemapError {
-                            alertItem = AlertItem(loadBasemapError: loadError)
-                            showErrorAlert = true
-                        } else {
-                            viewModel.currentItem = item
-                        }
+        )
+    }
+    
+    /// The gallery view, displayed as a list.
+    /// - Returns: A view representing the basemap gallery list.
+    func makeListView() -> some View {
+        internalMakeGalleryView(
+            [
+                .init(
+                    .flexible(),
+                    alignment: .top
+                )
+            ]
+        )
+    }
+    
+    func internalMakeGalleryView(_ columns: [GridItem]) -> some View {
+        LazyVGrid(columns: columns) {
+            ForEach(viewModel.items) { item in
+                BasemapGalleryCell(
+                    item: item,
+                    isSelected: item == viewModel.currentItem
+                ) {
+                    if let loadError = item.loadBasemapError {
+                        alertItem = AlertItem(loadBasemapError: loadError)
+                        showErrorAlert = true
+                    } else {
+                        viewModel.currentItem = item
                     }
                 }
             }
         }
+    }
+}
+
+// MARK: Modifiers
+
+public extension BasemapGallery {
+    /// The style of the basemap gallery. Defaults to `.automatic`.
+    /// - Parameter style: The `Style` to use.
+    /// - Returns: The `BasemapGallery`.
+    func style(
+        _ newStyle: Style
+    ) -> BasemapGallery {
+        var copy = self
+        copy.style = newStyle
+        return copy
     }
 }
 

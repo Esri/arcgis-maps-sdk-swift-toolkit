@@ -44,39 +44,23 @@ struct BasemapGalleryExampleView: View {
     
     var body: some View {
         MapView(map: map, viewpoint: initialViewpoint)
-            .navigationTitle("Basemap Gallery")
-            .toolbar {
-                ToolbarItemGroup(placement: .navigationBarTrailing) {
-                    Button {
-                        showBasemapGallery.toggle()
-                    } label: {
-                        Image("basemap")
-                    }
-                    .popover(isPresented: $showBasemapGallery) {
-                        if UIDevice.current.userInterfaceIdiom == .phone {
-                            NavigationView {
-                                BasemapGallery(viewModel: viewModel)
-                                    .navigationTitle("Basemaps")
-                                    .navigationBarTitleDisplayMode(.inline)
-                                    .toolbar {
-                                        ToolbarItem(placement: .navigationBarTrailing) {
-                                            Button {
-                                                showBasemapGallery = false
-                                            } label: {
-                                                Text("Done")
-                                                    .bold()
-                                            }
-                                        }
-                                    }
-                            }
-                            .navigationViewStyle(.stack)
-                        } else {
-                            BasemapGallery(viewModel: viewModel)
-                                .padding()
-                        }
-                    }
+            .overlay(alignment: .topTrailing) {
+                if showBasemapGallery {
+                    BasemapGallery(viewModel: viewModel)
+                        .style(.automatic)
+                        .esriBorder()
+                        .padding()
                 }
             }
+            .navigationTitle("Basemap Gallery")
+            .navigationBarItems(trailing: Button {
+                showBasemapGallery.toggle()
+            } label: {
+                HStack(alignment: .center) {
+                    Image(uiImage: UIImage(named: "basemap")!)
+                    Text(showBasemapGallery ? "Hide Basemaps" : "Show Basemaps")
+                }
+            })
     }
     
     static private func initialBasemaps() -> [BasemapGalleryItem] {
