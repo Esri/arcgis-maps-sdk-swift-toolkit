@@ -57,8 +57,11 @@ struct BasemapGalleryExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***showBasemapGallery.toggle()
 ***REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED***HStack(alignment: .center) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(uiImage: UIImage(named: "basemap")!)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(showBasemapGallery ? "Hide Basemaps" : "Show Basemaps")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if showBasemapGallery {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "xmark.circle")
+***REMOVED******REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(uiImage: UIImage(named: "basemap")!)
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***)
 ***REMOVED***

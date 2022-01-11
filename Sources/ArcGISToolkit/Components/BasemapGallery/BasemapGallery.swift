@@ -84,9 +84,8 @@ public struct BasemapGallery: View {
 ***REMOVED***
 
 private extension BasemapGallery {
-***REMOVED******REMOVED***/ The gallery view, displayed in the specified columns.
-***REMOVED******REMOVED***/ - Parameter columns: The columns used to display the basemap items.
-***REMOVED******REMOVED***/ - Returns: A view representing the basemap gallery with the specified columns.
+***REMOVED******REMOVED***/ The gallery view.
+***REMOVED******REMOVED***/ - Returns: A view representing the basemap gallery.
 ***REMOVED***func makeGalleryView() -> some View {
 ***REMOVED******REMOVED***ScrollView {
 ***REMOVED******REMOVED******REMOVED***switch style {
@@ -132,6 +131,9 @@ private extension BasemapGallery {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ The gallery view, displayed in the specified columns.
+***REMOVED******REMOVED***/ - Parameter columns: The columns used to display the basemap items.
+***REMOVED******REMOVED***/ - Returns: A view representing the basemap gallery with the specified columns.
 ***REMOVED***func internalMakeGalleryView(_ columns: [GridItem]) -> some View {
 ***REMOVED******REMOVED***LazyVGrid(columns: columns) {
 ***REMOVED******REMOVED******REMOVED***ForEach(viewModel.items) { item in
