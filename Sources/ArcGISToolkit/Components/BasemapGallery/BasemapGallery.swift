@@ -22,8 +22,8 @@ import ArcGIS
 public struct BasemapGallery: View {
     /// The view style of the gallery.
     public enum Style {
-        /// The `BasemapGallery` will display as a grid when there is appropriate
-        /// width available for the gallery to do so. Otherwise the gallery will display as a list.
+        /// The `BasemapGallery` will display as a grid when there is an appropriate
+        /// width available for the gallery to do so. Otherwise, the gallery will display as a list.
         case automatic
         /// The `BasemapGallery` will display as a grid.
         case grid
@@ -45,7 +45,7 @@ public struct BasemapGallery: View {
     public var viewModel: BasemapGalleryViewModel
     
     /// The style of the basemap gallery. The gallery can be displayed as a list, grid, or automatically
-    /// switch between the two based on screen real estate. Defaults to `automatic`.
+    /// switch between the two based on-screen real estate. Defaults to ``BasemapGallery/Style/automatic``.
     /// Set using the `style` modifier.
     private var style: Style = .automatic
     
