@@ -24,11 +24,12 @@ public struct BasemapGallery: View {
 ***REMOVED***public enum Style {
 ***REMOVED******REMOVED******REMOVED***/ The `BasemapGallery` will display as a grid when there is an appropriate
 ***REMOVED******REMOVED******REMOVED***/ width available for the gallery to do so. Otherwise, the gallery will display as a list.
-***REMOVED******REMOVED***case automatic
-***REMOVED******REMOVED******REMOVED***/ The `BasemapGallery` will display as a grid.
-***REMOVED******REMOVED***case grid
-***REMOVED******REMOVED******REMOVED***/ The `BasemapGallery` will display as a list.
-***REMOVED******REMOVED***case list
+***REMOVED******REMOVED******REMOVED***/ Defaults to 125 when displayed as a list, 300 when displayed as a grid.
+***REMOVED******REMOVED***case automatic(listWidth: CGFloat = 125, gridWidth: CGFloat = 300)
+***REMOVED******REMOVED******REMOVED***/ The `BasemapGallery` will display as a grid. Defaults to 300.
+***REMOVED******REMOVED***case grid(width: CGFloat = 300)
+***REMOVED******REMOVED******REMOVED***/ The `BasemapGallery` will display as a list. Defaults to 125.
+***REMOVED******REMOVED***case list(width: CGFloat = 125)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a `BasemapGallery`.
@@ -47,7 +48,7 @@ public struct BasemapGallery: View {
 ***REMOVED******REMOVED***/ The style of the basemap gallery. The gallery can be displayed as a list, grid, or automatically
 ***REMOVED******REMOVED***/ switch between the two based on-screen real estate. Defaults to ``BasemapGallery/Style/automatic``.
 ***REMOVED******REMOVED***/ Set using the `style` modifier.
-***REMOVED***private var style: Style = .automatic
+***REMOVED***private var style: Style = .automatic()
 ***REMOVED***
 ***REMOVED******REMOVED***/ The size class used to determine if the basemap items should dispaly in a list or grid.
 ***REMOVED******REMOVED***/ If the size class is `.regular`, they display in a grid. If it is `.compact`, they display in a list.
@@ -59,8 +60,15 @@ public struct BasemapGallery: View {
 ***REMOVED***
 
 ***REMOVED******REMOVED***/ The width of the gallery, taking into account the horizontal size class of the device.
-***REMOVED***private var galleryWidth: CGFloat? {
-***REMOVED******REMOVED***isRegularWidth ? 300 : 150
+***REMOVED***private var galleryWidth: CGFloat {
+***REMOVED******REMOVED***switch style {
+***REMOVED******REMOVED***case .list(let width):
+***REMOVED******REMOVED******REMOVED***return width
+***REMOVED******REMOVED***case .grid(let width):
+***REMOVED******REMOVED******REMOVED***return width
+***REMOVED******REMOVED***case .automatic(let listWidth, let gridWidth):
+***REMOVED******REMOVED******REMOVED***return isRegularWidth ? gridWidth : listWidth
+***REMOVED***
 ***REMOVED***
 
 ***REMOVED******REMOVED***/ A Boolean value indicating whether to show an error alert.
