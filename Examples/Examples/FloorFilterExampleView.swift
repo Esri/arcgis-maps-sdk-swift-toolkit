@@ -44,13 +44,6 @@ struct FloorFilterExampleView: View {
             .overlay(alignment: .bottomLeading) {
                 if let viewModel = floorFilterViewModel {
                     FloorFilter(viewModel)
-                        .esriBorder()
-                        .padding(floorFilterPadding)
-                }
-                else {
-                    ProgressView()
-                        .progressViewStyle(CircularProgressViewStyle())
-                        .esriBorder()
                         .padding(floorFilterPadding)
                 }
             }
@@ -59,17 +52,10 @@ struct FloorFilterExampleView: View {
                     try await map.load()
                     guard let floorManager = map.floorManager else { return }
                     floorFilterViewModel = FloorFilterViewModel(
-                        viewpoint: $viewpoint,
-                        floorManager: floorManager
+                        floorManager: floorManager,
+                        viewpoint: $viewpoint
                     )
                 } catch  { }
             }
     }
 }
-//
-//struct SampleContent: View {
-//    var body: some View {
-//        List(1..<21) { Text("\($0)") }
-//        .listStyle(.plain)
-//    }
-//}

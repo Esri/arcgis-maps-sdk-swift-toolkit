@@ -19,3 +19,5 @@ extension FloorFacility: Equatable {
         lhs.facilityId == rhs.facilityId
     }
 }
+
+extension FloorFacility: Identifiable { }
