@@ -84,9 +84,8 @@ public struct BasemapGallery: View {
 }
 
 private extension BasemapGallery {
-    /// The gallery view, displayed in the specified columns.
-    /// - Parameter columns: The columns used to display the basemap items.
-    /// - Returns: A view representing the basemap gallery with the specified columns.
+    /// The gallery view.
+    /// - Returns: A view representing the basemap gallery.
     func makeGalleryView() -> some View {
         ScrollView {
             switch style {
@@ -132,6 +131,9 @@ private extension BasemapGallery {
         )
     }
     
+    /// The gallery view, displayed in the specified columns.
+    /// - Parameter columns: The columns used to display the basemap items.
+    /// - Returns: A view representing the basemap gallery with the specified columns.
     func internalMakeGalleryView(_ columns: [GridItem]) -> some View {
         LazyVGrid(columns: columns) {
             ForEach(viewModel.items) { item in
