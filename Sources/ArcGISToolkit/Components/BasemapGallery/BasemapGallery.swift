@@ -24,11 +24,12 @@ public struct BasemapGallery: View {
     public enum Style {
         /// The `BasemapGallery` will display as a grid when there is an appropriate
         /// width available for the gallery to do so. Otherwise, the gallery will display as a list.
-        case automatic
-        /// The `BasemapGallery` will display as a grid.
-        case grid
-        /// The `BasemapGallery` will display as a list.
-        case list
+        /// Defaults to 125 when displayed as a list, 300 when displayed as a grid.
+        case automatic(listWidth: CGFloat = 125, gridWidth: CGFloat = 300)
+        /// The `BasemapGallery` will display as a grid. Defaults to 300.
+        case grid(width: CGFloat = 300)
+        /// The `BasemapGallery` will display as a list. Defaults to 125.
+        case list(width: CGFloat = 125)
     }
     
     /// Creates a `BasemapGallery`.
@@ -47,7 +48,7 @@ public struct BasemapGallery: View {
     /// The style of the basemap gallery. The gallery can be displayed as a list, grid, or automatically
     /// switch between the two based on-screen real estate. Defaults to ``BasemapGallery/Style/automatic``.
     /// Set using the `style` modifier.
-    private var style: Style = .automatic
+    private var style: Style = .automatic()
     
     /// The size class used to determine if the basemap items should dispaly in a list or grid.
     /// If the size class is `.regular`, they display in a grid. If it is `.compact`, they display in a list.
@@ -59,8 +60,15 @@ public struct BasemapGallery: View {
     }
 
     /// The width of the gallery, taking into account the horizontal size class of the device.
-    private var galleryWidth: CGFloat? {
-        isRegularWidth ? 300 : 150
+    private var galleryWidth: CGFloat {
+        switch style {
+        case .list(let width):
+            return width
+        case .grid(let width):
+            return width
+        case .automatic(let listWidth, let gridWidth):
+            return isRegularWidth ? gridWidth : listWidth
+        }
     }
 
     /// A Boolean value indicating whether to show an error alert.
