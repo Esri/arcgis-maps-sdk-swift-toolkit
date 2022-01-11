@@ -44,13 +44,6 @@ struct FloorFilterExampleView: View {
 ***REMOVED******REMOVED******REMOVED***.overlay(alignment: .bottomLeading) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if let viewModel = floorFilterViewModel {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FloorFilter(viewModel)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.esriBorder()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(floorFilterPadding)
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ProgressView()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.progressViewStyle(CircularProgressViewStyle())
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.esriBorder()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(floorFilterPadding)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
@@ -59,17 +52,10 @@ struct FloorFilterExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try await map.load()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let floorManager = map.floorManager else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***floorFilterViewModel = FloorFilterViewModel(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint: $viewpoint,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***floorManager: floorManager
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***floorManager: floorManager,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint: $viewpoint
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED*** catch  { ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED***
-***REMOVED***struct SampleContent: View {
-***REMOVED******REMOVED***var body: some View {
-***REMOVED******REMOVED******REMOVED***List(1..<21) { Text("\($0)") ***REMOVED***
-***REMOVED******REMOVED******REMOVED***.listStyle(.plain)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***

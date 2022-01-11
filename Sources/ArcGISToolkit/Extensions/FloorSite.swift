@@ -19,3 +19,5 @@ extension FloorSite: Equatable {
 ***REMOVED******REMOVED***lhs.siteId == rhs.siteId
 ***REMOVED***
 ***REMOVED***
+
+extension FloorSite: Identifiable { ***REMOVED***

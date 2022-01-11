@@ -19,3 +19,5 @@ extension FloorFacility: Equatable {
 ***REMOVED******REMOVED***lhs.facilityId == rhs.facilityId
 ***REMOVED***
 ***REMOVED***
+
+extension FloorFacility: Identifiable { ***REMOVED***

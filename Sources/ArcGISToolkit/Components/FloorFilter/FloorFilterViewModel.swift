@@ -30,31 +30,42 @@
  
  */
 
+@MainActor
 ***REMOVED***/ View Model class that contains the Data Model of the Floor Filter
 ***REMOVED***/ Also contains the business logic to filter and change the map extent based on selected site/level/facility
-public class FloorFilterViewModel {
+public class FloorFilterViewModel: ObservableObject {
 ***REMOVED***public init(
-***REMOVED******REMOVED***viewpoint: Binding<Viewpoint>? = nil,
-***REMOVED******REMOVED***floorManager: FloorManager
+***REMOVED******REMOVED***floorManager: FloorManager,
+***REMOVED******REMOVED***viewpoint: Binding<Viewpoint>? = nil
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.viewpoint = viewpoint
 ***REMOVED******REMOVED***self.floorManager = floorManager
+***REMOVED******REMOVED***Task {
+***REMOVED******REMOVED******REMOVED***do {
+***REMOVED******REMOVED******REMOVED******REMOVED***try await floorManager.load()
+***REMOVED******REMOVED******REMOVED******REMOVED***isLoading = false
+***REMOVED******REMOVED*** catch  { ***REMOVED***
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The `Viewpoint` used to pan/zoom to the floor level. If `nil`, there will be no zooming.
-***REMOVED***public var viewpoint: Binding<Viewpoint>? = nil
+***REMOVED***var viewpoint: Binding<Viewpoint>? = nil
 ***REMOVED***
-***REMOVED***public var floorManager: FloorManager
+***REMOVED***var floorManager: FloorManager
 ***REMOVED***
 ***REMOVED***public var sites: [FloorSite] {
-***REMOVED******REMOVED***return floorManager.sites
+***REMOVED******REMOVED***floorManager.sites
 ***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ `true` if the model is loading it's properties, `false` if not loading.
+***REMOVED***@Published
+***REMOVED***public var isLoading = true
 ***REMOVED***
 ***REMOVED******REMOVED***/ Facilities in the selected site
 ***REMOVED******REMOVED***/ If no site is selected then the list is empty
 ***REMOVED******REMOVED***/ If the sites data does not exist in the map, then use all the facilities in the map
 ***REMOVED***public var facilities: [FloorFacility] {
-***REMOVED******REMOVED***return sites.isEmpty ? floorManager.facilities : floorManager.facilities.filter {
+***REMOVED******REMOVED***sites.isEmpty ? floorManager.facilities : floorManager.facilities.filter {
 ***REMOVED******REMOVED******REMOVED***$0.site == selectedSite
 ***REMOVED***
 ***REMOVED***
@@ -62,14 +73,14 @@ public class FloorFilterViewModel {
 ***REMOVED******REMOVED***/ Levels that are visible in the expanded Floor Filter levels table view
 ***REMOVED******REMOVED***/ Reverse the order of the levels to make it in ascending order
 ***REMOVED***public var visibleLevelsInExpandedList: [FloorLevel] {
-***REMOVED******REMOVED***return facilities.isEmpty ? floorManager.levels : floorManager.levels.filter {
+***REMOVED******REMOVED***facilities.isEmpty ? floorManager.levels : floorManager.levels.filter {
 ***REMOVED******REMOVED******REMOVED***$0.facility == selectedFacility
 ***REMOVED***.reversed()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ All the levels in the map
 ***REMOVED***public var allLevels: [FloorLevel] {
-***REMOVED******REMOVED***return floorManager.levels
+***REMOVED******REMOVED***floorManager.levels
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The site, facility, and level that are selected by the user

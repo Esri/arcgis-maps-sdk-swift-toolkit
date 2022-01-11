@@ -18,13 +18,41 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED***/ Creates a `FloorFilter`
 ***REMOVED******REMOVED***/ - Parameter content: The view shown in the floating panel.
 ***REMOVED***public init(_ floorFilterViewModel: FloorFilterViewModel) {
-***REMOVED******REMOVED***self.floorFilterViewModel = floorFilterViewModel
+***REMOVED******REMOVED***self.viewModel = floorFilterViewModel
 ***REMOVED***
 ***REMOVED***
-***REMOVED***private let floorFilterViewModel: FloorFilterViewModel
+***REMOVED***@ObservedObject
+***REMOVED***private(set) var viewModel: FloorFilterViewModel
+***REMOVED***
+***REMOVED***@State
+***REMOVED***private var showSiteSelector: Bool = false
 ***REMOVED***
 ***REMOVED***public var body: some View {
-***REMOVED***TODO: turn this into a button...
-***REMOVED******REMOVED***Image(uiImage: .site)
+***REMOVED******REMOVED***HStack(alignment: .bottom) {
+***REMOVED******REMOVED******REMOVED***if viewModel.isLoading {
+***REMOVED******REMOVED******REMOVED******REMOVED***ProgressView()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.progressViewStyle(CircularProgressViewStyle())
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.esriBorder()
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***VStack {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** show levels and close button here
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***showSiteSelector.toggle()
+***REMOVED******REMOVED******REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(uiImage: .site)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.esriBorder()
+***REMOVED******REMOVED******REMOVED******REMOVED***if showSiteSelector {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***SiteSelector(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***showSiteSelector: $showSiteSelector
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 200)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
