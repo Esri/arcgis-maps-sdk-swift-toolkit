@@ -22,8 +22,8 @@
 public struct BasemapGallery: View {
 ***REMOVED******REMOVED***/ The view style of the gallery.
 ***REMOVED***public enum Style {
-***REMOVED******REMOVED******REMOVED***/ The `BasemapGallery` will display as a grid when there is appropriate
-***REMOVED******REMOVED******REMOVED***/ width available for the gallery to do so. Otherwise the gallery will display as a list.
+***REMOVED******REMOVED******REMOVED***/ The `BasemapGallery` will display as a grid when there is an appropriate
+***REMOVED******REMOVED******REMOVED***/ width available for the gallery to do so. Otherwise, the gallery will display as a list.
 ***REMOVED******REMOVED***case automatic
 ***REMOVED******REMOVED******REMOVED***/ The `BasemapGallery` will display as a grid.
 ***REMOVED******REMOVED***case grid
@@ -45,7 +45,7 @@ public struct BasemapGallery: View {
 ***REMOVED***public var viewModel: BasemapGalleryViewModel
 ***REMOVED***
 ***REMOVED******REMOVED***/ The style of the basemap gallery. The gallery can be displayed as a list, grid, or automatically
-***REMOVED******REMOVED***/ switch between the two based on screen real estate. Defaults to `automatic`.
+***REMOVED******REMOVED***/ switch between the two based on-screen real estate. Defaults to ``BasemapGallery/Style/automatic``.
 ***REMOVED******REMOVED***/ Set using the `style` modifier.
 ***REMOVED***private var style: Style = .automatic
 ***REMOVED***
