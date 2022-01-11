@@ -19,3 +19,5 @@ extension FloorSite: Equatable {
         lhs.siteId == rhs.siteId
     }
 }
+
+extension FloorSite: Identifiable { }

@@ -18,13 +18,41 @@ public struct FloorFilter: View {
     /// Creates a `FloorFilter`
     /// - Parameter content: The view shown in the floating panel.
     public init(_ floorFilterViewModel: FloorFilterViewModel) {
-        self.floorFilterViewModel = floorFilterViewModel
+        self.viewModel = floorFilterViewModel
     }
     
-    private let floorFilterViewModel: FloorFilterViewModel
+    @ObservedObject
+    private(set) var viewModel: FloorFilterViewModel
+    
+    @State
+    private var showSiteSelector: Bool = false
     
     public var body: some View {
-    TODO: turn this into a button...
-        Image(uiImage: .site)
+        HStack(alignment: .bottom) {
+            if viewModel.isLoading {
+                ProgressView()
+                    .progressViewStyle(CircularProgressViewStyle())
+                    .esriBorder()
+            } else {
+                VStack {
+                    //
+                    // show levels and close button here
+                    //
+                    Button {
+                        showSiteSelector.toggle()
+                    } label: {
+                        Image(uiImage: .site)
+                    }
+                }
+                .esriBorder()
+                if showSiteSelector {
+                    SiteSelector(
+                        viewModel,
+                        showSiteSelector: $showSiteSelector
+                    )
+                        .frame(width: 200)
+                }
+            }
+        }
     }
 }

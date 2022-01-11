@@ -30,31 +30,42 @@ import ArcGIS
  
  */
 
+@MainActor
 /// View Model class that contains the Data Model of the Floor Filter
 /// Also contains the business logic to filter and change the map extent based on selected site/level/facility
-public class FloorFilterViewModel {
+public class FloorFilterViewModel: ObservableObject {
     public init(
-        viewpoint: Binding<Viewpoint>? = nil,
-        floorManager: FloorManager
+        floorManager: FloorManager,
+        viewpoint: Binding<Viewpoint>? = nil
     ) {
         self.viewpoint = viewpoint
         self.floorManager = floorManager
+        Task {
+            do {
+                try await floorManager.load()
+                isLoading = false
+            } catch  { }
+        }
     }
     
     /// The `Viewpoint` used to pan/zoom to the floor level. If `nil`, there will be no zooming.
-    public var viewpoint: Binding<Viewpoint>? = nil
+    var viewpoint: Binding<Viewpoint>? = nil
     
-    public var floorManager: FloorManager
+    var floorManager: FloorManager
     
     public var sites: [FloorSite] {
-        return floorManager.sites
+        floorManager.sites
     }
+    
+    /// `true` if the model is loading it's properties, `false` if not loading.
+    @Published
+    public var isLoading = true
     
     /// Facilities in the selected site
     /// If no site is selected then the list is empty
     /// If the sites data does not exist in the map, then use all the facilities in the map
     public var facilities: [FloorFacility] {
-        return sites.isEmpty ? floorManager.facilities : floorManager.facilities.filter {
+        sites.isEmpty ? floorManager.facilities : floorManager.facilities.filter {
             $0.site == selectedSite
         }
     }
@@ -62,14 +73,14 @@ public class FloorFilterViewModel {
     /// Levels that are visible in the expanded Floor Filter levels table view
     /// Reverse the order of the levels to make it in ascending order
     public var visibleLevelsInExpandedList: [FloorLevel] {
-        return facilities.isEmpty ? floorManager.levels : floorManager.levels.filter {
+        facilities.isEmpty ? floorManager.levels : floorManager.levels.filter {
             $0.facility == selectedFacility
         }.reversed()
     }
     
     /// All the levels in the map
     public var allLevels: [FloorLevel] {
-        return floorManager.levels
+        floorManager.levels
     }
     
     /// The site, facility, and level that are selected by the user
