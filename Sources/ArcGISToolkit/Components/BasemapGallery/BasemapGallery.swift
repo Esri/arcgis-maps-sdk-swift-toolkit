@@ -50,16 +50,16 @@ public struct BasemapGallery: View {
     /// Set using the `style` modifier.
     private var style: Style = .automatic()
     
-    /// The size class used to determine if the basemap items should dispaly in a list or grid.
-    /// If the size class is `.regular`, they display in a grid. If it is `.compact`, they display in a list.
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
+    @Environment(\.verticalSizeClass) var verticalSizeClass
     
-    /// `true` if the horizontal size class is `.regular`, `false` if it's not.
+    /// If `true`, the gallery will display as if the device is in a regular-width orientation.
+    /// If `false`, the gallery will display as if the device is in a compact-width orientation.
     private var isRegularWidth: Bool {
-        horizontalSizeClass == .regular
+        !(horizontalSizeClass == .compact && verticalSizeClass == .regular)
     }
-
-    /// The width of the gallery, taking into account the horizontal size class of the device.
+    
+    /// The width of the gallery, taking into account the horizontal and vertical size classes of the device.
     private var galleryWidth: CGFloat {
         switch style {
         case .list(let width):
@@ -70,7 +70,7 @@ public struct BasemapGallery: View {
             return isRegularWidth ? gridWidth : listWidth
         }
     }
-
+    
     /// A Boolean value indicating whether to show an error alert.
     @State
     private var showErrorAlert = false
@@ -115,7 +115,7 @@ private extension BasemapGallery {
     /// - Returns: A view representing the basemap gallery grid.
     func makeGridView() -> some View {
         internalMakeGalleryView(
-            Array(
+            columns: Array(
                 repeating: GridItem(
                     .flexible(),
                     alignment: .top
@@ -129,7 +129,7 @@ private extension BasemapGallery {
     /// - Returns: A view representing the basemap gallery list.
     func makeListView() -> some View {
         internalMakeGalleryView(
-            [
+            columns: [
                 .init(
                     .flexible(),
                     alignment: .top
@@ -141,7 +141,7 @@ private extension BasemapGallery {
     /// The gallery view, displayed in the specified columns.
     /// - Parameter columns: The columns used to display the basemap items.
     /// - Returns: A view representing the basemap gallery with the specified columns.
-    func internalMakeGalleryView(_ columns: [GridItem]) -> some View {
+    func internalMakeGalleryView(columns: [GridItem]) -> some View {
         LazyVGrid(columns: columns) {
             ForEach(viewModel.items) { item in
                 BasemapGalleryCell(
