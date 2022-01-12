@@ -53,16 +53,8 @@ struct BasemapGalleryExampleView: View {
                 }
             }
             .navigationTitle("Basemap Gallery")
-            .navigationBarItems(trailing: Button {
-                showBasemapGallery.toggle()
-            } label: {
-                HStack(alignment: .center) {
-                    if showBasemapGallery {
-                        Image(systemName: "xmark.circle")
-                    } else {
-                        Image(uiImage: UIImage(named: "basemap")!)
-                    }
-                }
+            .navigationBarItems(trailing: Toggle(isOn: $showBasemapGallery) {
+                Image("basemap", label: Text("Show base map"))
             })
     }
     
