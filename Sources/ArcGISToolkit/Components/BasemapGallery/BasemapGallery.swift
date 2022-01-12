@@ -92,7 +92,7 @@ public struct BasemapGallery: View {
 ***REMOVED***
 
 private extension BasemapGallery {
-***REMOVED******REMOVED***/ The gallery view.
+***REMOVED******REMOVED***/ Creates a gallery view.
 ***REMOVED******REMOVED***/ - Returns: A view representing the basemap gallery.
 ***REMOVED***func makeGalleryView() -> some View {
 ***REMOVED******REMOVED***ScrollView {
@@ -100,8 +100,7 @@ private extension BasemapGallery {
 ***REMOVED******REMOVED******REMOVED***case .automatic:
 ***REMOVED******REMOVED******REMOVED******REMOVED***if isRegularWidth {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeGridView()
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***else {
+***REMOVED******REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeListView()
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***case .grid:
