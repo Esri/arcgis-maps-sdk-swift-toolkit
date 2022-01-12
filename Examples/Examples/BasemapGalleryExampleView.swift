@@ -53,16 +53,8 @@ struct BasemapGalleryExampleView: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.navigationTitle("Basemap Gallery")
-***REMOVED******REMOVED******REMOVED***.navigationBarItems(trailing: Button {
-***REMOVED******REMOVED******REMOVED******REMOVED***showBasemapGallery.toggle()
-***REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED***HStack(alignment: .center) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if showBasemapGallery {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "xmark.circle")
-***REMOVED******REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(uiImage: UIImage(named: "basemap")!)
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.navigationBarItems(trailing: Toggle(isOn: $showBasemapGallery) {
+***REMOVED******REMOVED******REMOVED******REMOVED***Image("basemap", label: Text("Show base map"))
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
