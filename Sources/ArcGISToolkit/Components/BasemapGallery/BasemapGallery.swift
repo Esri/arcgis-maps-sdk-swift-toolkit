@@ -92,7 +92,7 @@ public struct BasemapGallery: View {
 }
 
 private extension BasemapGallery {
-    /// The gallery view.
+    /// Creates a gallery view.
     /// - Returns: A view representing the basemap gallery.
     func makeGalleryView() -> some View {
         ScrollView {
@@ -100,8 +100,7 @@ private extension BasemapGallery {
             case .automatic:
                 if isRegularWidth {
                     makeGridView()
-                }
-                else {
+                } else {
                     makeListView()
                 }
             case .grid:
