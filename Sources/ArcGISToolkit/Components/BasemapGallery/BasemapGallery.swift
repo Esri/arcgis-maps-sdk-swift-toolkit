@@ -50,16 +50,16 @@ public struct BasemapGallery: View {
 ***REMOVED******REMOVED***/ Set using the `style` modifier.
 ***REMOVED***private var style: Style = .automatic()
 ***REMOVED***
-***REMOVED******REMOVED***/ The size class used to determine if the basemap items should dispaly in a list or grid.
-***REMOVED******REMOVED***/ If the size class is `.regular`, they display in a grid. If it is `.compact`, they display in a list.
 ***REMOVED***@Environment(\.horizontalSizeClass) var horizontalSizeClass
+***REMOVED***@Environment(\.verticalSizeClass) var verticalSizeClass
 ***REMOVED***
-***REMOVED******REMOVED***/ `true` if the horizontal size class is `.regular`, `false` if it's not.
+***REMOVED******REMOVED***/ If `true`, the gallery will display as if the device is in a regular-width orientation.
+***REMOVED******REMOVED***/ If `false`, the gallery will display as if the device is in a compact-width orientation.
 ***REMOVED***private var isRegularWidth: Bool {
-***REMOVED******REMOVED***horizontalSizeClass == .regular
+***REMOVED******REMOVED***!(horizontalSizeClass == .compact && verticalSizeClass == .regular)
 ***REMOVED***
-
-***REMOVED******REMOVED***/ The width of the gallery, taking into account the horizontal size class of the device.
+***REMOVED***
+***REMOVED******REMOVED***/ The width of the gallery, taking into account the horizontal and vertical size classes of the device.
 ***REMOVED***private var galleryWidth: CGFloat {
 ***REMOVED******REMOVED***switch style {
 ***REMOVED******REMOVED***case .list(let width):
@@ -70,7 +70,7 @@ public struct BasemapGallery: View {
 ***REMOVED******REMOVED******REMOVED***return isRegularWidth ? gridWidth : listWidth
 ***REMOVED***
 ***REMOVED***
-
+***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether to show an error alert.
 ***REMOVED***@State
 ***REMOVED***private var showErrorAlert = false
@@ -115,7 +115,7 @@ private extension BasemapGallery {
 ***REMOVED******REMOVED***/ - Returns: A view representing the basemap gallery grid.
 ***REMOVED***func makeGridView() -> some View {
 ***REMOVED******REMOVED***internalMakeGalleryView(
-***REMOVED******REMOVED******REMOVED***Array(
+***REMOVED******REMOVED******REMOVED***columns: Array(
 ***REMOVED******REMOVED******REMOVED******REMOVED***repeating: GridItem(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.flexible(),
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***alignment: .top
@@ -129,7 +129,7 @@ private extension BasemapGallery {
 ***REMOVED******REMOVED***/ - Returns: A view representing the basemap gallery list.
 ***REMOVED***func makeListView() -> some View {
 ***REMOVED******REMOVED***internalMakeGalleryView(
-***REMOVED******REMOVED******REMOVED***[
+***REMOVED******REMOVED******REMOVED***columns: [
 ***REMOVED******REMOVED******REMOVED******REMOVED***.init(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.flexible(),
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***alignment: .top
@@ -141,7 +141,7 @@ private extension BasemapGallery {
 ***REMOVED******REMOVED***/ The gallery view, displayed in the specified columns.
 ***REMOVED******REMOVED***/ - Parameter columns: The columns used to display the basemap items.
 ***REMOVED******REMOVED***/ - Returns: A view representing the basemap gallery with the specified columns.
-***REMOVED***func internalMakeGalleryView(_ columns: [GridItem]) -> some View {
+***REMOVED***func internalMakeGalleryView(columns: [GridItem]) -> some View {
 ***REMOVED******REMOVED***LazyVGrid(columns: columns) {
 ***REMOVED******REMOVED******REMOVED***ForEach(viewModel.items) { item in
 ***REMOVED******REMOVED******REMOVED******REMOVED***BasemapGalleryCell(
