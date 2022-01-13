@@ -17,6 +17,17 @@ import ArcGIS
 
 ///  The `BasemapGalleryItem` encompasses an element in a `BasemapGallery`.
 public class BasemapGalleryItem: ObservableObject {
+    /// Indicates the status of the basemap's spatial reference in relation to a reference spatial reference.
+    public enum SpatialReferenceStatus {
+        /// The basemap's spatial reference status is unknown, either because the basemap's
+        /// base layers haven't been loaded yet or the status has yet to be updated.
+        case unknown
+        /// The basemap's spatial reference matches the reference spatial reference.
+        case match
+        /// The basemap's spatial reference does not match the reference spatial reference.
+        case noMatch
+    }
+
     /// Creates a `BasemapGalleryItem`.
     /// - Parameters:
     ///   - basemap: The `Basemap` represented by the item.
@@ -67,6 +78,15 @@ public class BasemapGalleryItem: ObservableObject {
     /// A Boolean value indicating whether the `basemap` or it's base layers are being loaded.
     @Published
     private(set) var isBasemapLoading = true
+    
+    /// The `SpatialReferenceStatus` of the item. This is set via a call to
+    /// ``updateSpatialReferenceStatus()``.
+    @Published
+    public private(set) var spatialReferenceStatus: SpatialReferenceStatus = .unknown
+    
+    /// The `SpatialReference` of `basemap`. This will be `nil` until the basemap's
+    /// baseLayers have been loaded in ``updateSpatialReferenceStatus()``.
+    public private(set) var spatialReference: SpatialReference? = nil
 }
 
 private extension BasemapGalleryItem {
@@ -111,6 +131,49 @@ extension BasemapGalleryItem: Equatable {
         lhs.name == rhs.name &&
         lhs.description == rhs.description &&
         lhs.thumbnail === rhs.thumbnail
+    }
+}
+
+public extension BasemapGalleryItem {
+    /// Updats the `spatialReferenceStatus` by loading the first base layer of `basemap`
+    /// and determining if it matches `referenceSpatialReference`.
+    /// - Parameter referenceSpatialReference: The `SpatialReference` to match to.
+    func updateSpatialReferenceStatus(
+        _ referenceSpatialReference: SpatialReference?
+    ) async throws {
+        guard basemap.loadStatus == .loaded else { return }
+        
+        if spatialReference == nil {
+            await MainActor.run {
+                isBasemapLoading = true
+            }
+            try await basemap.baseLayers.first?.load()
+        }
+        
+        await finalizeUpdateSpatialReferenceStatus(
+            with: referenceSpatialReference
+        )
+    }
+    
+    /// Updates the item's `spatialReference` and `spatialReferenceStatus` properties.
+    /// - Parameter referenceSpatialReference: The `SpatialReference` used to
+    /// compare to the `basemap`'s `SpatialReference`, represented by the first base layer's`
+    /// `SpatialReference`.
+    @MainActor
+    func finalizeUpdateSpatialReferenceStatus(
+        with referenceSpatialReference: SpatialReference?
+    ) {
+        spatialReference = basemap.baseLayers.first?.spatialReference
+        if referenceSpatialReference == nil {
+            spatialReferenceStatus = .unknown
+        }
+        else if spatialReference == referenceSpatialReference {
+            spatialReferenceStatus = .match
+        }
+        else {
+            spatialReferenceStatus = .noMatch
+        }
+        isBasemapLoading = false
     }
 }
 
