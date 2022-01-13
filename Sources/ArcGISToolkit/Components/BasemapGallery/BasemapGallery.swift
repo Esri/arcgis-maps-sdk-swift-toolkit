@@ -203,9 +203,7 @@ extension AlertItem {
 ***REMOVED***
 
 ***REMOVED******REMOVED***/ Creates an alert item based on a spatial reference mismatch.
-***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - basemapSR: The basemap's spatial reference.
-***REMOVED******REMOVED***/   - geoModelSR: The geomodel's spatial reference.
+***REMOVED******REMOVED***/ - Parameter spatialReferenceMismatchError: The error associated with the mismatch.
 ***REMOVED***init(spatialReferenceMismatchError: SpatialReferenceMismatchError) {
 ***REMOVED******REMOVED***self.init(
 ***REMOVED******REMOVED******REMOVED***title: "Spatial reference mismatch.",
