@@ -17,29 +17,25 @@ import ArcGIS
 /// The `BasemapGallery` tool displays a collection of basemaps from either
 /// ArcGIS Online, a user-defined portal, or an array of `BasemapGalleryItem`s.
 /// When a new basemap is selected from the `BasemapGallery` and the optional
-/// `BasemapGallery.geoModel` property is set, then the basemap of the geoModel is replaced
-/// with the basemap in the gallery.
+/// `BasemapGalleryViewModel.geoModel` property is set, then the basemap of the
+/// `geoModel` is replaced with the basemap in the gallery.
 public struct BasemapGallery: View {
     /// The view style of the gallery.
     public enum Style {
-        /// The `BasemapGallery` will display as a grid when there is appropriate
-        /// width available for the gallery to do so. Otherwise the gallery will display as a list.
-        case automatic
-        /// The `BasemapGallery` will display as a grid.
-        case grid
-        /// The `BasemapGallery` will display as a list.
-        case list
+        /// The `BasemapGallery` will display as a grid when there is an appropriate
+        /// width available for the gallery to do so. Otherwise, the gallery will display as a list.
+        /// Defaults to `125` when displayed as a list, `300` when displayed as a grid.
+        case automatic(listWidth: CGFloat = 125, gridWidth: CGFloat = 300)
+        /// The `BasemapGallery` will display as a grid. Defaults to `300`.
+        case grid(width: CGFloat = 300)
+        /// The `BasemapGallery` will display as a list. Defaults to `125`.
+        case list(width: CGFloat = 125)
     }
     
     /// Creates a `BasemapGallery`.
     /// - Parameter viewModel: The view model used by the `BasemapGallery`.
     public init(viewModel: BasemapGalleryViewModel? = nil) {
-        if let viewModel = viewModel {
-            self.viewModel = viewModel
-        }
-        else {
-            self.viewModel = BasemapGalleryViewModel()
-        }
+        self.viewModel = viewModel ?? BasemapGalleryViewModel()
     }
     
     /// The view model used by the view. The `BasemapGalleryViewModel` manages the state
@@ -50,87 +46,94 @@ public struct BasemapGallery: View {
     public var viewModel: BasemapGalleryViewModel
     
     /// The style of the basemap gallery. The gallery can be displayed as a list, grid, or automatically
-    /// switch between the two based on screen real estate. Defaults to `automatic`.
+    /// switch between the two based on-screen real estate. Defaults to ``BasemapGallery/Style/automatic``.
     /// Set using the `style` modifier.
-    private var style: Style = .automatic
+    private var style: Style = .automatic()
     
-    /// The size class used to determine if the basemap items should dispaly in a list or grid.
-    /// If the size class is `.regular`, they display in a grid. If it is `.compact`, they display in a list.
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
+    @Environment(\.verticalSizeClass) var verticalSizeClass
     
-    /// `true` if the horizontal size class is `.regular`, `false` if it's `.compact`.
+    /// If `true`, the gallery will display as if the device is in a regular-width orientation.
+    /// If `false`, the gallery will display as if the device is in a compact-width orientation.
     private var isRegularWidth: Bool {
-        horizontalSizeClass == .regular
+        !(horizontalSizeClass == .compact && verticalSizeClass == .regular)
     }
-
-    /// The width of the gallery, taking into account the horizontal size class of the device.
-    private var galleryWidth: CGFloat? {
-        isRegularWidth ? 300 : 150
+    
+    /// The width of the gallery, taking into account the horizontal and vertical size classes of the device.
+    private var galleryWidth: CGFloat {
+        switch style {
+        case .list(let width):
+            return width
+        case .grid(let width):
+            return width
+        case .automatic(let listWidth, let gridWidth):
+            return isRegularWidth ? gridWidth : listWidth
+        }
     }
-
+    
+    /// A Boolean value indicating whether to show an error alert.
+    @State
+    private var showErrorAlert = false
+    
     /// The current alert item to display.
     @State
     private var alertItem: AlertItem?
     
     public var body: some View {
-        GalleryView()
+        makeGalleryView()
             .frame(width: galleryWidth)
-            .onReceive(
-                viewModel.$spatialReferenceMismatchError.dropFirst(),
-                perform: { error in
-                    guard let error = error else { return }
-                    alertItem = AlertItem(
-                        basemapSR: error.basemapSR,
-                        geoModelSR: error.geoModelSR
-                    )
-                })
-            .alert(item: $alertItem) { alertItem in
-                Alert(
-                    title: Text(alertItem.title),
-                    message: Text(alertItem.message)
-                )
-            }
+            .alert(
+                alertItem?.title ?? "",
+                isPresented: $showErrorAlert,
+                presenting: alertItem) { item in
+                    Text(item.message)
+                }
     }
 }
 
 private extension BasemapGallery {
-    /// The gallery view, either displayed as a grid or a list depending on `BasemapGallery.style`.
+    /// Creates a gallery view.
     /// - Returns: A view representing the basemap gallery.
-    @ViewBuilder
-    func GalleryView() -> some View {
-        switch style {
-        case .automatic:
-            if isRegularWidth {
-                GridView()
+    func makeGalleryView() -> some View {
+        ScrollView {
+            switch style {
+            case .automatic:
+                if isRegularWidth {
+                    makeGridView()
+                } else {
+                    makeListView()
+                }
+            case .grid:
+                makeGridView()
+            case .list:
+                makeListView()
             }
-            else {
-                ListView()
-            }
-        case .grid:
-            GridView()
-        case .list:
-            ListView()
         }
     }
     
     /// The gallery view, displayed as a grid.
     /// - Returns: A view representing the basemap gallery grid.
-    func GridView() -> some View {
-        InternalGalleryView(
-            [
-                .init(.flexible(), spacing: 8.0, alignment: .top),
-                .init(.flexible(), spacing: 8.0, alignment: .top),
-                .init(.flexible(), spacing: 8.0, alignment: .top)
-            ]
+    func makeGridView() -> some View {
+        internalMakeGalleryView(
+            columns: Array(
+                repeating: GridItem(
+                    .flexible(),
+                    alignment: .top
+                ),
+                count: 3
+            )
         )
     }
     
     /// The gallery view, displayed as a list.
     /// - Returns: A view representing the basemap gallery list.
-    func ListView() -> some View {
-        InternalGalleryView(
-            [
-                .init(.flexible(), spacing: 8.0, alignment: .top)
+    func makeListView() -> some View {
+        internalMakeGalleryView(
+            columns: [
+                .init(
+                    .flexible(),
+                    alignment: .top
+                )
             ]
         )
     }
@@ -138,85 +141,29 @@ private extension BasemapGallery {
     /// The gallery view, displayed in the specified columns.
     /// - Parameter columns: The columns used to display the basemap items.
     /// - Returns: A view representing the basemap gallery with the specified columns.
-    func InternalGalleryView(_ columns: [GridItem]) -> some View {
-        ScrollView {
-            LazyVGrid(columns: columns, spacing: 4) {
-                ForEach(viewModel.basemapGalleryItems) { basemapGalleryItem in
-                    BasemapGalleryItemRow(
-                        basemapGalleryItem: basemapGalleryItem,
-                        isSelected: basemapGalleryItem == viewModel.currentBasemapGalleryItem
-                    )
-                        .onTapGesture {
-                            if let loadError = basemapGalleryItem.loadBasemapsError {
-                                alertItem = AlertItem(loadBasemapError: loadError)
-                            }
-                            else {
-                                viewModel.updateCurrentBasemapGalleryItem(basemapGalleryItem)
-                            }
-                        }
+    func internalMakeGalleryView(columns: [GridItem]) -> some View {
+        LazyVGrid(columns: columns) {
+            ForEach(viewModel.items) { item in
+                BasemapGalleryCell(
+                    item: item,
+                    isSelected: item == viewModel.currentItem
+                ) {
+                    if let loadError = item.loadBasemapError {
+                        alertItem = AlertItem(loadBasemapError: loadError)
+                        showErrorAlert = true
+                    } else {
+                        viewModel.currentItem = item
+                    }
                 }
             }
         }
-        .esriBorder()
-    }
-}
-
-/// A row or grid element representing a basemap gallery item.
-private struct BasemapGalleryItemRow: View {
-    @ObservedObject var basemapGalleryItem: BasemapGalleryItem
-    let isSelected: Bool
-    
-    var body: some View {
-        VStack {
-            ZStack(alignment: .center) {
-                // Display the thumbnail, if available.
-                if let thumbnailImage = basemapGalleryItem.thumbnail {
-                    Image(uiImage: thumbnailImage)
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .border(
-                            isSelected ? Color.accentColor: Color.clear,
-                            width: 3.0)
-                }
-                
-                // Display an image representing either a load basemap error
-                // or a spatial reference mismatch error.
-                if basemapGalleryItem.loadBasemapsError != nil {
-                    Image(systemName: "minus.circle.fill")
-                        .font(.title)
-                        .foregroundColor(.red)
-                } else if basemapGalleryItem.spatialReferenceStatus == .noMatch {
-                    Image(systemName: "x.circle.fill")
-                        .font(.title)
-                        .foregroundColor(.red)
-                }
-                
-                // Display a progress view if the item is loading.
-                if basemapGalleryItem.isLoading {
-                    Spacer()
-                    ProgressView()
-                        .progressViewStyle(CircularProgressViewStyle())
-                        .esriBorder()
-                    Spacer()
-                    
-                }
-            }
-            
-            // Display the name of the item.
-            Text(basemapGalleryItem.name)
-                .font(.footnote)
-                .multilineTextAlignment(.center)
-        }
-        .allowsHitTesting(
-            !basemapGalleryItem.isLoading
-        )
     }
 }
 
 // MARK: Modifiers
 
 public extension BasemapGallery {
-    /// The style of the basemap gallery. Defaults to `.automatic`.
+    /// The style of the basemap gallery. Defaults to ``Style/automatic``.
     /// - Parameter style: The `Style` to use.
     /// - Returns: The `BasemapGallery`.
     func style(
@@ -236,28 +183,13 @@ struct AlertItem {
     var message: String = ""
 }
 
-extension AlertItem: Identifiable {
-    public var id: UUID { UUID() }
-}
-
 extension AlertItem {
-    /// Creates an alert item based on a spatial reference mismatch.
-    /// - Parameters:
-    ///   - basemapSR: The basemap's spatial reference.
-    ///   - geoModelSR: The geomodel's spatial reference.
-    init(basemapSR: SpatialReference?, geoModelSR: SpatialReference?) {
-        self.init(
-            title: "Spatial reference mismatch.",
-            message: "The spatial reference of the basemap: \(basemapSR?.description ?? "") does not match that of the geomodel: \(geoModelSR?.description ?? "")."
-        )
-    }
-    
     /// Creates an alert item based on an error generated loading a basemap.
     /// - Parameter loadBasemapError: The load basemap error.
-    init(loadBasemapError: RuntimeError) {
+    init(loadBasemapError: Error) {
         self.init(
             title: "Error loading basemap.",
-            message: "\(loadBasemapError.failureReason ?? "")"
+            message: "\((loadBasemapError as? RuntimeError)?.failureReason ?? "The basemap failed to load for an unknown reason.")"
         )
     }
 }

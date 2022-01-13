@@ -17,62 +17,56 @@ import ArcGISToolkit
 
 struct BasemapGalleryExampleView: View {
     /// The map displayed in the map view.
-    let map = Map(basemapStyle: .arcGISImagery)
+    let map: Map
     
     /// The view model for the basemap gallery.
     @ObservedObject
-    var viewModel = BasemapGalleryViewModel()
+    var viewModel: BasemapGalleryViewModel
     
-    /// `true` if the basemap gallery should be displayed; `false` otherwise.
+    /// A Boolean value indicating whether to show the basemap gallery.
     @State
-    var showBasemapGallery: Bool = true
+    private var showBasemapGallery: Bool = false
     
     /// The initial viewpoint of the map.
-    let initialViewpoint: Viewpoint? = Viewpoint(
+    let initialViewpoint = Viewpoint(
         center: Point(x: -93.258133, y: 44.986656, spatialReference: .wgs84),
-        scale: 1000000
+        scale: 1_000_000
     )
     
-    var body: some View {
-        ZStack(alignment: .topTrailing) {
-            MapView(map: map, viewpoint: initialViewpoint)
-                .overlay(alignment: .topTrailing) {
-                    if showBasemapGallery {
-                        BasemapGallery(viewModel: viewModel)
-                            .style(.automatic)
-                    }
-                }
-                .onAppear() {
-                    SetupViewModel()
-                }
-        }
-        .navigationTitle("Basemap Gallery")
-        .navigationBarItems(trailing: Button {
-            showBasemapGallery.toggle()
-        } label: {
-            HStack(alignment: .center) {
-                Image(uiImage: UIImage(named: "basemap")!)
-                Text(showBasemapGallery ? "Hide Basemaps" : "Show Basemaps")
-            }
-        })
-    }
-    
-    private func SetupViewModel() {
-        viewModel.geoModel = map
-        viewModel.basemapGalleryItems.append(
-            contentsOf: BasemapGalleryExampleView.initialBasemaps()
+    init() {
+        self.map = Map(basemapStyle: .arcGISImagery)
+        self.viewModel = BasemapGalleryViewModel(
+            geoModel: self.map
+            // You can add your own basemaps by passing them in here:
+            //items: Self.initialBasemaps()
         )
     }
     
+    var body: some View {
+        MapView(map: map, viewpoint: initialViewpoint)
+            .overlay(alignment: .topTrailing) {
+                if showBasemapGallery {
+                    BasemapGallery(viewModel: viewModel)
+                        .style(.automatic())
+                        .esriBorder()
+                        .padding()
+                }
+            }
+            .navigationTitle("Basemap Gallery")
+            .navigationBarItems(trailing: Toggle(isOn: $showBasemapGallery) {
+                Image("basemap", label: Text("Show base map"))
+            })
+    }
+    
     static private func initialBasemaps() -> [BasemapGalleryItem] {
-        let itemURLs: [URL] = [
-            URL(string: "https://runtime.maps.arcgis.com/home/item.html?id=46a87c20f09e4fc48fa3c38081e0cae6")!,
-            URL(string: "https://runtime.maps.arcgis.com/home/item.html?id=f33a34de3a294590ab48f246e99958c9")!,
-            URL(string: "https://runtime.maps.arcgis.com/home/item.html?id=9e557abc61ce41c9b8ec8b15800c20d3")!
+        let identifiers = [
+            "46a87c20f09e4fc48fa3c38081e0cae6",
+            "f33a34de3a294590ab48f246e99958c9"
         ]
         
-        return itemURLs.map {
-            BasemapGalleryItem(basemap: Basemap(item: PortalItem(url: $0)!))
+        return identifiers.map { identifier in
+            let url = URL(string: "https://runtime.maps.arcgis.com/home/item.html?id=\(identifier)")!
+            return BasemapGalleryItem(basemap: Basemap(item: PortalItem(url: url)!))
         }
     }
 }
