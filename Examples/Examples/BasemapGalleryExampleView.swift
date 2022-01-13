@@ -36,9 +36,9 @@ struct BasemapGalleryExampleView: View {
     init() {
         self.map = Map(basemapStyle: .arcGISImagery)
         self.viewModel = BasemapGalleryViewModel(
-            geoModel: self.map
+            geoModel: self.map,
             // You can add your own basemaps by passing them in here:
-            //items: Self.initialBasemaps()
+            items: Self.initialBasemaps()
         )
     }
     
@@ -61,7 +61,9 @@ struct BasemapGalleryExampleView: View {
     static private func initialBasemaps() -> [BasemapGalleryItem] {
         let identifiers = [
             "46a87c20f09e4fc48fa3c38081e0cae6",
-            "f33a34de3a294590ab48f246e99958c9"
+            "f33a34de3a294590ab48f246e99958c9",
+            "52bdc7ab7fb044d98add148764eaa30a",  //<<== mismatched spatial reference
+            "3a8d410a4a034a2ba9738bb0860d68c4"   //<<== incorrect portal item type
         ]
         
         return identifiers.map { identifier in
