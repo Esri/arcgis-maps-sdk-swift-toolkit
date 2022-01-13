@@ -20,6 +20,18 @@ import ArcGIS
 /// `BasemapGalleryViewModel.geoModel` property is set, then the basemap of the
 /// `geoModel` is replaced with the basemap in the gallery.
 public struct BasemapGallery: View {
+    /// The view style of the gallery.
+    public enum Style {
+        /// The `BasemapGallery` will display as a grid when there is an appropriate
+        /// width available for the gallery to do so. Otherwise, the gallery will display as a list.
+        /// Defaults to `125` when displayed as a list, `300` when displayed as a grid.
+        case automatic(listWidth: CGFloat = 125, gridWidth: CGFloat = 300)
+        /// The `BasemapGallery` will display as a grid. Defaults to `300`.
+        case grid(width: CGFloat = 300)
+        /// The `BasemapGallery` will display as a list. Defaults to `125`.
+        case list(width: CGFloat = 125)
+    }
+    
     /// Creates a `BasemapGallery`.
     /// - Parameter viewModel: The view model used by the `BasemapGallery`.
     public init(viewModel: BasemapGalleryViewModel? = nil) {
@@ -32,7 +44,33 @@ public struct BasemapGallery: View {
     /// user action.
     @ObservedObject
     public var viewModel: BasemapGalleryViewModel
-
+    
+    /// The style of the basemap gallery. The gallery can be displayed as a list, grid, or automatically
+    /// switch between the two based on-screen real estate. Defaults to ``BasemapGallery/Style/automatic``.
+    /// Set using the `style` modifier.
+    private var style: Style = .automatic()
+    
+    @Environment(\.horizontalSizeClass) var horizontalSizeClass
+    @Environment(\.verticalSizeClass) var verticalSizeClass
+    
+    /// If `true`, the gallery will display as if the device is in a regular-width orientation.
+    /// If `false`, the gallery will display as if the device is in a compact-width orientation.
+    private var isRegularWidth: Bool {
+        !(horizontalSizeClass == .compact && verticalSizeClass == .regular)
+    }
+    
+    /// The width of the gallery, taking into account the horizontal and vertical size classes of the device.
+    private var galleryWidth: CGFloat {
+        switch style {
+        case .list(let width):
+            return width
+        case .grid(let width):
+            return width
+        case .automatic(let listWidth, let gridWidth):
+            return isRegularWidth ? gridWidth : listWidth
+        }
+    }
+    
     /// A Boolean value indicating whether to show an error alert.
     @State
     private var showErrorAlert = false
@@ -43,6 +81,7 @@ public struct BasemapGallery: View {
     
     public var body: some View {
         makeGalleryView()
+            .frame(width: galleryWidth)
             .alert(
                 alertItem?.title ?? "",
                 isPresented: $showErrorAlert,
@@ -53,34 +92,86 @@ public struct BasemapGallery: View {
 }
 
 private extension BasemapGallery {
-    /// The gallery view, displayed in the specified columns.
-    /// - Parameter columns: The columns used to display the basemap items.
-    /// - Returns: A view representing the basemap gallery with the specified columns.
+    /// Creates a gallery view.
+    /// - Returns: A view representing the basemap gallery.
     func makeGalleryView() -> some View {
         ScrollView {
-            let columns = Array(
+            switch style {
+            case .automatic:
+                if isRegularWidth {
+                    makeGridView()
+                } else {
+                    makeListView()
+                }
+            case .grid:
+                makeGridView()
+            case .list:
+                makeListView()
+            }
+        }
+    }
+    
+    /// The gallery view, displayed as a grid.
+    /// - Returns: A view representing the basemap gallery grid.
+    func makeGridView() -> some View {
+        internalMakeGalleryView(
+            columns: Array(
                 repeating: GridItem(
-                    .flexible(minimum: 75, maximum: 100),
+                    .flexible(),
                     alignment: .top
                 ),
                 count: 3
             )
-            LazyVGrid(columns: columns) {
-                ForEach(viewModel.items) { item in
-                    BasemapGalleryCell(
-                        item: item,
-                        isSelected: item == viewModel.currentItem
-                    ) {
-                        if let loadError = item.loadBasemapError {
-                            alertItem = AlertItem(loadBasemapError: loadError)
-                            showErrorAlert = true
-                        } else {
-                            viewModel.currentItem = item
-                        }
+        )
+    }
+    
+    /// The gallery view, displayed as a list.
+    /// - Returns: A view representing the basemap gallery list.
+    func makeListView() -> some View {
+        internalMakeGalleryView(
+            columns: [
+                .init(
+                    .flexible(),
+                    alignment: .top
+                )
+            ]
+        )
+    }
+    
+    /// The gallery view, displayed in the specified columns.
+    /// - Parameter columns: The columns used to display the basemap items.
+    /// - Returns: A view representing the basemap gallery with the specified columns.
+    func internalMakeGalleryView(columns: [GridItem]) -> some View {
+        LazyVGrid(columns: columns) {
+            ForEach(viewModel.items) { item in
+                BasemapGalleryCell(
+                    item: item,
+                    isSelected: item == viewModel.currentItem
+                ) {
+                    if let loadError = item.loadBasemapError {
+                        alertItem = AlertItem(loadBasemapError: loadError)
+                        showErrorAlert = true
+                    } else {
+                        viewModel.currentItem = item
                     }
                 }
             }
         }
+    }
+}
+
+// MARK: Modifiers
+
+public extension BasemapGallery {
+    /// The style of the basemap gallery. Defaults to ``Style/automatic``.
+    /// - Parameter style: The `Style` to use.
+    /// - Returns: The `BasemapGallery`.
+    func style(
+        _ newStyle: Style
+    ) -> BasemapGallery {
+        var copy = self
+        copy.style = newStyle
+        return copy
     }
 }
 
