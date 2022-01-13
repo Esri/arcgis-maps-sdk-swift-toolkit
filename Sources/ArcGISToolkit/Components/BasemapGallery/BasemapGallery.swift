@@ -87,13 +87,16 @@ public struct BasemapGallery: View {
                 perform: { error in
                     guard let error = error else { return }
                     alertItem = AlertItem(spatialReferenceMismatchError: error)
+                    showErrorAlert = true
                 })
             .alert(
                 alertItem?.title ?? "",
                 isPresented: $showErrorAlert,
-                presenting: alertItem) { item in
-                    Text(item.message)
-                }
+                presenting: alertItem
+            ) { _ in
+            } message: { item in
+                Text(item.message)
+            }
     }
 }
 
@@ -206,12 +209,7 @@ extension AlertItem {
     init(spatialReferenceMismatchError: SpatialReferenceMismatchError) {
         self.init(
             title: "Spatial reference mismatch.",
-            message:
-                """
-            The spatial reference of the basemap:
-                \(spatialReferenceMismatchError.basemapSR?.description ?? "") does not match that of the geomodel:
-                \(spatialReferenceMismatchError.geoModelSR?.description ?? "").
-"""
+            message: "The spatial reference of the basemap: \(spatialReferenceMismatchError.basemapSR?.description ?? "") does not match that of the geomodel: \(spatialReferenceMismatchError.geoModelSR?.description ?? "")."
         )
     }
 }

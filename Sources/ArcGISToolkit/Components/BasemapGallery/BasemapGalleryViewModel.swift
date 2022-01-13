@@ -142,7 +142,7 @@ public class BasemapGalleryViewModel: ObservableObject {
             await MainActor.run {
                 switch basemapGalleryItem.spatialReferenceStatus {
                 case .match, .unknown:
-                    currentBasemapGalleryItem = basemapGalleryItem
+                    currentItem = basemapGalleryItem
                 case .noMatch:
                     spatialReferenceMismatchError = SpatialReferenceMismatchError(
                         basemapSR: basemapGalleryItem.spatialReference,
@@ -210,3 +210,15 @@ public struct SpatialReferenceMismatchError: Error {
 }
 
 extension SpatialReferenceMismatchError: Equatable {}
+
+extension GeoModel {
+    /// The actual spatial reference of the geoModel. For `Map`s, this is the map's
+    /// `spatialReference`. For `Scene`s, if the `sceneViewTilingScheme` is
+    /// `.webMercator`, the `actualSpatialReference` is `.webMercator`, otherwise
+    /// it is the `spatialReference` of the scene.
+    var actualSpatialReference: SpatialReference? {
+        (self as? ArcGIS.Scene)?.sceneViewTilingScheme == .webMercator ?
+        SpatialReference.webMercator :
+        spatialReference
+    }
+}
