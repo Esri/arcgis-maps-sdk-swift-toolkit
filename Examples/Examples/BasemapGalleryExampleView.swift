@@ -17,62 +17,56 @@
 
 struct BasemapGalleryExampleView: View {
 ***REMOVED******REMOVED***/ The map displayed in the map view.
-***REMOVED***let map = Map(basemapStyle: .arcGISImagery)
+***REMOVED***let map: Map
 ***REMOVED***
 ***REMOVED******REMOVED***/ The view model for the basemap gallery.
 ***REMOVED***@ObservedObject
-***REMOVED***var viewModel = BasemapGalleryViewModel()
+***REMOVED***var viewModel: BasemapGalleryViewModel
 ***REMOVED***
-***REMOVED******REMOVED***/ `true` if the basemap gallery should be displayed; `false` otherwise.
+***REMOVED******REMOVED***/ A Boolean value indicating whether to show the basemap gallery.
 ***REMOVED***@State
-***REMOVED***var showBasemapGallery: Bool = true
+***REMOVED***private var showBasemapGallery: Bool = false
 ***REMOVED***
 ***REMOVED******REMOVED***/ The initial viewpoint of the map.
-***REMOVED***let initialViewpoint: Viewpoint? = Viewpoint(
+***REMOVED***let initialViewpoint = Viewpoint(
 ***REMOVED******REMOVED***center: Point(x: -93.258133, y: 44.986656, spatialReference: .wgs84),
-***REMOVED******REMOVED***scale: 1000000
+***REMOVED******REMOVED***scale: 1_000_000
 ***REMOVED***)
+***REMOVED***
+***REMOVED***init() {
+***REMOVED******REMOVED***self.map = Map(basemapStyle: .arcGISImagery)
+***REMOVED******REMOVED***self.viewModel = BasemapGalleryViewModel(
+***REMOVED******REMOVED******REMOVED***geoModel: self.map
+***REMOVED******REMOVED******REMOVED******REMOVED*** You can add your own basemaps by passing them in here:
+***REMOVED******REMOVED******REMOVED******REMOVED***items: Self.initialBasemaps()
+***REMOVED******REMOVED***)
+***REMOVED***
 ***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***ZStack(alignment: .topTrailing) {
-***REMOVED******REMOVED******REMOVED***MapView(map: map, viewpoint: initialViewpoint)
-***REMOVED******REMOVED******REMOVED******REMOVED***.overlay(alignment: .topTrailing) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if showBasemapGallery {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***BasemapGallery(viewModel: viewModel)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.style(.automatic)
-***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***MapView(map: map, viewpoint: initialViewpoint)
+***REMOVED******REMOVED******REMOVED***.overlay(alignment: .topTrailing) {
+***REMOVED******REMOVED******REMOVED******REMOVED***if showBasemapGallery {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***BasemapGallery(viewModel: viewModel)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.style(.automatic())
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.esriBorder()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.onAppear() {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***SetupViewModel()
-***REMOVED******REMOVED******REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***.navigationTitle("Basemap Gallery")
-***REMOVED******REMOVED***.navigationBarItems(trailing: Button {
-***REMOVED******REMOVED******REMOVED***showBasemapGallery.toggle()
-***REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED***HStack(alignment: .center) {
-***REMOVED******REMOVED******REMOVED******REMOVED***Image(uiImage: UIImage(named: "basemap")!)
-***REMOVED******REMOVED******REMOVED******REMOVED***Text(showBasemapGallery ? "Hide Basemaps" : "Show Basemaps")
 ***REMOVED******REMOVED***
-***REMOVED***)
-***REMOVED***
-***REMOVED***
-***REMOVED***private func SetupViewModel() {
-***REMOVED******REMOVED***viewModel.geoModel = map
-***REMOVED******REMOVED***viewModel.basemapGalleryItems.append(
-***REMOVED******REMOVED******REMOVED***contentsOf: BasemapGalleryExampleView.initialBasemaps()
+***REMOVED******REMOVED******REMOVED***.navigationTitle("Basemap Gallery")
+***REMOVED******REMOVED******REMOVED***.navigationBarItems(trailing: Toggle(isOn: $showBasemapGallery) {
+***REMOVED******REMOVED******REMOVED******REMOVED***Image("basemap", label: Text("Show base map"))
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***static private func initialBasemaps() -> [BasemapGalleryItem] {
-***REMOVED******REMOVED***let itemURLs: [URL] = [
-***REMOVED******REMOVED******REMOVED***URL(string: "https:***REMOVED***runtime.maps.arcgis.com/home/item.html?id=46a87c20f09e4fc48fa3c38081e0cae6")!,
-***REMOVED******REMOVED******REMOVED***URL(string: "https:***REMOVED***runtime.maps.arcgis.com/home/item.html?id=f33a34de3a294590ab48f246e99958c9")!,
-***REMOVED******REMOVED******REMOVED***URL(string: "https:***REMOVED***runtime.maps.arcgis.com/home/item.html?id=9e557abc61ce41c9b8ec8b15800c20d3")!
+***REMOVED******REMOVED***let identifiers = [
+***REMOVED******REMOVED******REMOVED***"46a87c20f09e4fc48fa3c38081e0cae6",
+***REMOVED******REMOVED******REMOVED***"f33a34de3a294590ab48f246e99958c9"
 ***REMOVED******REMOVED***]
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***return itemURLs.map {
-***REMOVED******REMOVED******REMOVED***BasemapGalleryItem(basemap: Basemap(item: PortalItem(url: $0)!))
+***REMOVED******REMOVED***return identifiers.map { identifier in
+***REMOVED******REMOVED******REMOVED***let url = URL(string: "https:***REMOVED***runtime.maps.arcgis.com/home/item.html?id=\(identifier)")!
+***REMOVED******REMOVED******REMOVED***return BasemapGalleryItem(basemap: Basemap(item: PortalItem(url: url)!))
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
