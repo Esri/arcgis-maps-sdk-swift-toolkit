@@ -203,9 +203,7 @@ extension AlertItem {
     }
 
     /// Creates an alert item based on a spatial reference mismatch.
-    /// - Parameters:
-    ///   - basemapSR: The basemap's spatial reference.
-    ///   - geoModelSR: The geomodel's spatial reference.
+    /// - Parameter spatialReferenceMismatchError: The error associated with the mismatch.
     init(spatialReferenceMismatchError: SpatialReferenceMismatchError) {
         self.init(
             title: "Spatial reference mismatch.",
