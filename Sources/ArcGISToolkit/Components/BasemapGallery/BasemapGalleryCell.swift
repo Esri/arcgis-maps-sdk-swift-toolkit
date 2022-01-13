@@ -47,6 +47,10 @@ struct BasemapGalleryCell: View {
                         Image(systemName: "minus.circle.fill")
                             .font(.title)
                             .foregroundColor(.red)
+                    } else if item.spatialReferenceStatus == .noMatch {
+                        Image(systemName: "x.circle.fill")
+                            .font(.title)
+                            .foregroundColor(.red)
                     }
                     
                     // Display a progress view if the item is loading.

@@ -82,6 +82,12 @@ public struct BasemapGallery: View {
     public var body: some View {
         makeGalleryView()
             .frame(width: galleryWidth)
+            .onReceive(
+                viewModel.$spatialReferenceMismatchError.dropFirst(),
+                perform: { error in
+                    guard let error = error else { return }
+                    alertItem = AlertItem(spatialReferenceMismatchError: error)
+                })
             .alert(
                 alertItem?.title ?? "",
                 isPresented: $showErrorAlert,
@@ -152,7 +158,7 @@ private extension BasemapGallery {
                         alertItem = AlertItem(loadBasemapError: loadError)
                         showErrorAlert = true
                     } else {
-                        viewModel.currentItem = item
+                        viewModel.updateCurrentItem(item)
                     }
                 }
             }
@@ -190,6 +196,22 @@ extension AlertItem {
         self.init(
             title: "Error loading basemap.",
             message: "\((loadBasemapError as? RuntimeError)?.failureReason ?? "The basemap failed to load for an unknown reason.")"
+        )
+    }
+
+    /// Creates an alert item based on a spatial reference mismatch.
+    /// - Parameters:
+    ///   - basemapSR: The basemap's spatial reference.
+    ///   - geoModelSR: The geomodel's spatial reference.
+    init(spatialReferenceMismatchError: SpatialReferenceMismatchError) {
+        self.init(
+            title: "Spatial reference mismatch.",
+            message:
+                """
+            The spatial reference of the basemap:
+                \(spatialReferenceMismatchError.basemapSR?.description ?? "") does not match that of the geomodel:
+                \(spatialReferenceMismatchError.geoModelSR?.description ?? "").
+"""
         )
     }
 }
