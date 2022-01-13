@@ -87,13 +87,16 @@ public struct BasemapGallery: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***perform: { error in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let error = error else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***alertItem = AlertItem(spatialReferenceMismatchError: error)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***showErrorAlert = true
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***.alert(
 ***REMOVED******REMOVED******REMOVED******REMOVED***alertItem?.title ?? "",
 ***REMOVED******REMOVED******REMOVED******REMOVED***isPresented: $showErrorAlert,
-***REMOVED******REMOVED******REMOVED******REMOVED***presenting: alertItem) { item in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(item.message)
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***presenting: alertItem
+***REMOVED******REMOVED******REMOVED***) { _ in
+***REMOVED******REMOVED*** message: { item in
+***REMOVED******REMOVED******REMOVED******REMOVED***Text(item.message)
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 
@@ -206,12 +209,7 @@ extension AlertItem {
 ***REMOVED***init(spatialReferenceMismatchError: SpatialReferenceMismatchError) {
 ***REMOVED******REMOVED***self.init(
 ***REMOVED******REMOVED******REMOVED***title: "Spatial reference mismatch.",
-***REMOVED******REMOVED******REMOVED***message:
-***REMOVED******REMOVED******REMOVED******REMOVED***"""
-***REMOVED******REMOVED******REMOVED***The spatial reference of the basemap:
-***REMOVED******REMOVED******REMOVED******REMOVED***\(spatialReferenceMismatchError.basemapSR?.description ?? "") does not match that of the geomodel:
-***REMOVED******REMOVED******REMOVED******REMOVED***\(spatialReferenceMismatchError.geoModelSR?.description ?? "").
-"""
+***REMOVED******REMOVED******REMOVED***message: "The spatial reference of the basemap: \(spatialReferenceMismatchError.basemapSR?.description ?? "") does not match that of the geomodel: \(spatialReferenceMismatchError.geoModelSR?.description ?? "")."
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***

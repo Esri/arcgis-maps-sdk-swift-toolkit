@@ -142,7 +142,7 @@ public class BasemapGalleryViewModel: ObservableObject {
 ***REMOVED******REMOVED******REMOVED***await MainActor.run {
 ***REMOVED******REMOVED******REMOVED******REMOVED***switch basemapGalleryItem.spatialReferenceStatus {
 ***REMOVED******REMOVED******REMOVED******REMOVED***case .match, .unknown:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentBasemapGalleryItem = basemapGalleryItem
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentItem = basemapGalleryItem
 ***REMOVED******REMOVED******REMOVED******REMOVED***case .noMatch:
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***spatialReferenceMismatchError = SpatialReferenceMismatchError(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***basemapSR: basemapGalleryItem.spatialReference,
@@ -210,3 +210,15 @@ public struct SpatialReferenceMismatchError: Error {
 ***REMOVED***
 
 extension SpatialReferenceMismatchError: Equatable {***REMOVED***
+
+extension GeoModel {
+***REMOVED******REMOVED***/ The actual spatial reference of the geoModel. For `Map`s, this is the map's
+***REMOVED******REMOVED***/ `spatialReference`. For `Scene`s, if the `sceneViewTilingScheme` is
+***REMOVED******REMOVED***/ `.webMercator`, the `actualSpatialReference` is `.webMercator`, otherwise
+***REMOVED******REMOVED***/ it is the `spatialReference` of the scene.
+***REMOVED***var actualSpatialReference: SpatialReference? {
+***REMOVED******REMOVED***(self as? ArcGIS.Scene)?.sceneViewTilingScheme == .webMercator ?
+***REMOVED******REMOVED***SpatialReference.webMercator :
+***REMOVED******REMOVED***spatialReference
+***REMOVED***
+***REMOVED***
