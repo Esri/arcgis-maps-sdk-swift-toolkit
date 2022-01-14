@@ -88,7 +88,8 @@ public struct BasemapGallery: View {
                     guard let error = error else { return }
                     alertItem = AlertItem(spatialReferenceMismatchError: error)
                     showErrorAlert = true
-                })
+                }
+            )
             .alert(
                 alertItem?.title ?? "",
                 isPresented: $showErrorAlert,
@@ -202,7 +203,7 @@ extension AlertItem {
         )
     }
 
-    /// Creates an alert item based on a spatial reference mismatch.
+    /// Creates an alert item based on a spatial reference mismatch error.
     /// - Parameter spatialReferenceMismatchError: The error associated with the mismatch.
     init(spatialReferenceMismatchError: SpatialReferenceMismatchError) {
         self.init(

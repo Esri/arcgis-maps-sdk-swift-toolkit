@@ -84,7 +84,7 @@ public class BasemapGalleryItem: ObservableObject {
     @Published
     public private(set) var spatialReferenceStatus: SpatialReferenceStatus = .unknown
     
-    /// The `SpatialReference` of `basemap`. This will be `nil` until the basemap's
+    /// The `SpatialReference` of ``basemap``. This will be `nil` until the basemap's
     /// baseLayers have been loaded in ``updateSpatialReferenceStatus()``.
     public private(set) var spatialReference: SpatialReference? = nil
 }
@@ -135,8 +135,8 @@ extension BasemapGalleryItem: Equatable {
 }
 
 public extension BasemapGalleryItem {
-    /// Updats the `spatialReferenceStatus` by loading the first base layer of `basemap`
-    /// and determining if it matches `referenceSpatialReference`.
+    /// Updates the ``spatialReferenceStatus-swift.property`` by loading the first base layer of
+    /// the ``basemap`` and determining if it matches with the given `SpatialReference`.
     /// - Parameter referenceSpatialReference: The `SpatialReference` to match to.
     func updateSpatialReferenceStatus(
         _ referenceSpatialReference: SpatialReference?
@@ -155,7 +155,7 @@ public extension BasemapGalleryItem {
         )
     }
     
-    /// Updates the item's `spatialReference` and `spatialReferenceStatus` properties.
+    /// Updates the item's ``spatialReference`` and ``spatialReferenceStatus-swift.property`` properties.
     /// - Parameter referenceSpatialReference: The `SpatialReference` used to
     /// compare to the `basemap`'s `SpatialReference`, represented by the first base layer's`
     /// `SpatialReference`.
@@ -164,15 +164,9 @@ public extension BasemapGalleryItem {
         with referenceSpatialReference: SpatialReference?
     ) {
         spatialReference = basemap.baseLayers.first?.spatialReference
-        if referenceSpatialReference == nil {
-            spatialReferenceStatus = .unknown
-        }
-        else if spatialReference == referenceSpatialReference {
-            spatialReferenceStatus = .match
-        }
-        else {
-            spatialReferenceStatus = .noMatch
-        }
+        spatialReferenceStatus = referenceSpatialReference != nil ?
+        (spatialReference == referenceSpatialReference ? .match : .noMatch)
+        : .unknown
         isBasemapLoading = false
     }
 }

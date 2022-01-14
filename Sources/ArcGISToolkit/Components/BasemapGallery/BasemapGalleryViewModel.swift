@@ -61,8 +61,8 @@ public class BasemapGalleryViewModel: ObservableObject {
     @Published
     public var fetchBasemapsError: Error? = nil
     
-    /// The error signifying the spatial reference of the GeoModel and that of a potential
-    /// current `BasemapGalleryItem` do not match.
+    /// The error signifying the spatial reference of the ``geoModel`` and the spatial reference of
+    /// the ``currentItem`` do not match.
     @Published
     public private(set) var spatialReferenceMismatchError: SpatialReferenceMismatchError? = nil
 
@@ -119,9 +119,8 @@ public class BasemapGalleryViewModel: ObservableObject {
         fetchBasemaps(from: portal)
     }
     
-    /// This attempts to set `currentItem`. `currentItem` will be set if it's spatial reference
-    /// matches that of the `geoModel`. If the spatial references do not match, `currentItem`
-    /// will be unchanged.
+    /// This attempts to set the ``currentItem`` and it will be set only if it's spatial reference
+    /// matches with the ``geoModel``'s spatial reference. Otherwise ``currentItem`` will be unchanged.
     /// - Parameter basemapGalleryItem: The new, potential, `BasemapGalleryItem`.
     public func updateCurrentItem(
         _ basemapGalleryItem: BasemapGalleryItem
@@ -200,7 +199,7 @@ private extension BasemapGalleryViewModel {
     }
 }
 
-/// An error describing a SpatialReference mismatch between a geomodel and a basemap.
+/// An error describing a `SpatialReference` mismatch between a `GeoModel` and a `Basemap`.
 public struct SpatialReferenceMismatchError: Error {
     /// The basemap's spatial reference.
     public let basemapSR: SpatialReference?
@@ -212,10 +211,11 @@ public struct SpatialReferenceMismatchError: Error {
 extension SpatialReferenceMismatchError: Equatable {}
 
 extension GeoModel {
-    /// The actual spatial reference of the geoModel. For `Map`s, this is the map's
-    /// `spatialReference`. For `Scene`s, if the `sceneViewTilingScheme` is
-    /// `.webMercator`, the `actualSpatialReference` is `.webMercator`, otherwise
-    /// it is the `spatialReference` of the scene.
+    /// The actual spatial reference of the `GeoModel`.
+    /// - Remark:
+    /// - For `Map`, it is map's `spatialReference`.
+    /// - For `Scene`, if the `sceneViewTilingScheme` is `webMercator`, then `actualSpatialReference`
+    /// is `webMercator`. Otherwise scene's `spatialReference`.
     var actualSpatialReference: SpatialReference? {
         (self as? ArcGIS.Scene)?.sceneViewTilingScheme == .webMercator ?
         SpatialReference.webMercator :
