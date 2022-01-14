@@ -61,8 +61,8 @@ public class BasemapGalleryViewModel: ObservableObject {
 ***REMOVED***@Published
 ***REMOVED***public var fetchBasemapsError: Error? = nil
 ***REMOVED***
-***REMOVED******REMOVED***/ The error signifying the spatial reference of the GeoModel and that of a potential
-***REMOVED******REMOVED***/ current `BasemapGalleryItem` do not match.
+***REMOVED******REMOVED***/ The error signifying the spatial reference of the ``geoModel`` and the spatial reference of
+***REMOVED******REMOVED***/ the ``currentItem`` do not match.
 ***REMOVED***@Published
 ***REMOVED***public private(set) var spatialReferenceMismatchError: SpatialReferenceMismatchError? = nil
 
@@ -119,9 +119,8 @@ public class BasemapGalleryViewModel: ObservableObject {
 ***REMOVED******REMOVED***fetchBasemaps(from: portal)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ This attempts to set `currentItem`. `currentItem` will be set if it's spatial reference
-***REMOVED******REMOVED***/ matches that of the `geoModel`. If the spatial references do not match, `currentItem`
-***REMOVED******REMOVED***/ will be unchanged.
+***REMOVED******REMOVED***/ This attempts to set the ``currentItem`` and it will be set only if it's spatial reference
+***REMOVED******REMOVED***/ matches with the ``geoModel``'s spatial reference. Otherwise ``currentItem`` will be unchanged.
 ***REMOVED******REMOVED***/ - Parameter basemapGalleryItem: The new, potential, `BasemapGalleryItem`.
 ***REMOVED***public func updateCurrentItem(
 ***REMOVED******REMOVED***_ basemapGalleryItem: BasemapGalleryItem
@@ -200,7 +199,7 @@ private extension BasemapGalleryViewModel {
 ***REMOVED***
 ***REMOVED***
 
-***REMOVED***/ An error describing a SpatialReference mismatch between a geomodel and a basemap.
+***REMOVED***/ An error describing a `SpatialReference` mismatch between a `GeoModel` and a `Basemap`.
 public struct SpatialReferenceMismatchError: Error {
 ***REMOVED******REMOVED***/ The basemap's spatial reference.
 ***REMOVED***public let basemapSR: SpatialReference?
@@ -212,10 +211,11 @@ public struct SpatialReferenceMismatchError: Error {
 extension SpatialReferenceMismatchError: Equatable {***REMOVED***
 
 extension GeoModel {
-***REMOVED******REMOVED***/ The actual spatial reference of the geoModel. For `Map`s, this is the map's
-***REMOVED******REMOVED***/ `spatialReference`. For `Scene`s, if the `sceneViewTilingScheme` is
-***REMOVED******REMOVED***/ `.webMercator`, the `actualSpatialReference` is `.webMercator`, otherwise
-***REMOVED******REMOVED***/ it is the `spatialReference` of the scene.
+***REMOVED******REMOVED***/ The actual spatial reference of the `GeoModel`.
+***REMOVED******REMOVED***/ - Remark:
+***REMOVED******REMOVED***/ - For `Map`, it is map's `spatialReference`.
+***REMOVED******REMOVED***/ - For `Scene`, if the `sceneViewTilingScheme` is `webMercator`, then `actualSpatialReference`
+***REMOVED******REMOVED***/ is `webMercator`. Otherwise scene's `spatialReference`.
 ***REMOVED***var actualSpatialReference: SpatialReference? {
 ***REMOVED******REMOVED***(self as? ArcGIS.Scene)?.sceneViewTilingScheme == .webMercator ?
 ***REMOVED******REMOVED***SpatialReference.webMercator :

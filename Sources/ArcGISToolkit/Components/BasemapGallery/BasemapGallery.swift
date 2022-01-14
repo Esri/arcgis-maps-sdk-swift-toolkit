@@ -88,6 +88,7 @@ public struct BasemapGallery: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let error = error else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***alertItem = AlertItem(spatialReferenceMismatchError: error)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***showErrorAlert = true
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***.alert(
 ***REMOVED******REMOVED******REMOVED******REMOVED***alertItem?.title ?? "",
@@ -202,7 +203,7 @@ extension AlertItem {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 
-***REMOVED******REMOVED***/ Creates an alert item based on a spatial reference mismatch.
+***REMOVED******REMOVED***/ Creates an alert item based on a spatial reference mismatch error.
 ***REMOVED******REMOVED***/ - Parameter spatialReferenceMismatchError: The error associated with the mismatch.
 ***REMOVED***init(spatialReferenceMismatchError: SpatialReferenceMismatchError) {
 ***REMOVED******REMOVED***self.init(
