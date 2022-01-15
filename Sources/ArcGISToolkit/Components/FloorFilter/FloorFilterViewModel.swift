@@ -43,8 +43,15 @@ public class FloorFilterViewModel: ObservableObject {
         Task {
             do {
                 try await floorManager.load()
-                isLoading = false
-            } catch  { }
+                if sites.count == 1 {
+                    // If we have only one site, select it.
+                    selectedSite = sites.first
+                }
+//                viewpoint?.wrappedValue = floorManager
+            } catch  {
+                print("error: \(error)")
+            }
+            isLoading = false
         }
     }
     

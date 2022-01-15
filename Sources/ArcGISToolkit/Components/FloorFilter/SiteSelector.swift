@@ -22,56 +22,95 @@ struct SiteSelector: View {
         showSiteSelector: Binding<Bool>
     ) {
         self.viewModel = floorFilterViewModel
-        self.showSiteList = showSiteSelector
+        self.showSiteSelector = showSiteSelector
     }
-
+    
     private let viewModel: FloorFilterViewModel
     
     /// Binding allowing the user to toggle the visibility of the results list.
-    private var showSiteList: Binding<Bool>
-
-    // TODO: refactor if-else below.
+    private var showSiteSelector: Binding<Bool>
+    
     var body: some View {
-        if !viewModel.sites.isEmpty {
-            LazyVStack {
-                HStack {
-                    Text("Select a site...")
-                        .bold()
-                    Spacer()
-                    Button {
-                        showSiteList.wrappedValue.toggle()
-                    } label: {
-                        Image(systemName: "xmark.circle")
-                    }
-                }
-                Rectangle()
-                    .frame(height:1)
-                    .foregroundColor(.secondary)
-                ForEach(viewModel.sites) { site in
-                    Text("\(site.name)")
-                }
-            }
-            .esriBorder()
+        if viewModel.sites.count > 1 && !(viewModel.selectedSite == nil) {
+            // Only show site list if there is more than one site
+            // and the user has not yet selected a site.
+            FloorFilterList(
+                "Select a site...",
+                sites: viewModel.sites,
+                showSiteSelector: showSiteSelector
+            )
         } else {
-            LazyVStack {
-                HStack {
-                    Text("Select a facility...")
-                        .bold()
-                    Spacer()
-                    Button {
-                        showSiteList.wrappedValue.toggle()
-                    } label: {
-                        Image(systemName: "xmark.circle")
-                    }
-                }
-                Rectangle()
-                    .frame(height:1)
-                    .foregroundColor(.secondary)
-                ForEach(viewModel.facilities) { facility in
-                    Text("\(facility.name)")
-                }
-            }
-            .esriBorder()
+            FloorFilterList(
+                "Select a facility...",
+                facilities: viewModel.facilities,
+                showSiteSelector: showSiteSelector
+            )
         }
     }
+    
+    struct FloorFilterList: View {
+        private let title: String
+        private let sites: [FloorSite]?
+        private let facilities: [FloorFacility]?
+        
+        /// Binding allowing the user to toggle the visibility of the results list.
+        private var showSiteSelector: Binding<Bool>
+        
+        init(
+            _ title: String,
+            sites: [FloorSite],
+            showSiteSelector: Binding<Bool>
+        ) {
+            self.title = title
+            self.sites = sites
+            facilities = []
+            self.showSiteSelector = showSiteSelector
+        }
+        
+        init(
+            _ title: String,
+            facilities: [FloorFacility],
+            showSiteSelector: Binding<Bool>
+        ) {
+            self.title = title
+            self.facilities = facilities
+            sites = nil
+            self.showSiteSelector = showSiteSelector
+        }
+        
+        var body: some View {
+//            NavigationView {
+//            TODO: figure this navigation stuff out or at least get to a demo-able point
+                LazyVStack {
+                    HStack {
+                        Text(title)
+                            .bold()
+                        Spacer()
+                        Button {
+                            showSiteSelector.wrappedValue.toggle()
+                        } label: {
+                            Image(systemName: "xmark.circle")
+                        }
+                    }
+                    Rectangle()
+                        .frame(height:1)
+                        .foregroundColor(.secondary)
+                    ForEach(sites ?? []) { site in
+//                        NavigationLink(
+//                            destination: EmptyView()) {
+                                Text(site.name)
+//                            }
+                    }
+                    ForEach(facilities ?? []) { facility in
+//                        NavigationLink(
+//                            destination: EmptyView()) {
+                                Text(facility.name)
+//                            }
+                    }
+                }
+//            .navigationBarTitle("Mountain Airport")
+                .esriBorder()
+            }
+        }
+//    }
 }
