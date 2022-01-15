@@ -162,7 +162,7 @@ private extension BasemapGallery {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***alertItem = AlertItem(loadBasemapError: loadError)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***showErrorAlert = true
 ***REMOVED******REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.updateCurrentItem(item)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.setCurrentItem(item)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
@@ -206,9 +206,15 @@ extension AlertItem {
 ***REMOVED******REMOVED***/ Creates an alert item based on a spatial reference mismatch error.
 ***REMOVED******REMOVED***/ - Parameter spatialReferenceMismatchError: The error associated with the mismatch.
 ***REMOVED***init(spatialReferenceMismatchError: SpatialReferenceMismatchError) {
+***REMOVED******REMOVED***let message: String
+***REMOVED******REMOVED***if spatialReferenceMismatchError.basemapSpatialReference == nil {
+***REMOVED******REMOVED******REMOVED***message = "The basemap does not have a spatial reference."
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***message = "The spatial reference of the basemap: \(spatialReferenceMismatchError.basemapSpatialReference?.description ?? "") does not match that of the geomodel: \(spatialReferenceMismatchError.geoModelSpatialReference?.description ?? "")."
+***REMOVED***
 ***REMOVED******REMOVED***self.init(
 ***REMOVED******REMOVED******REMOVED***title: "Spatial reference mismatch.",
-***REMOVED******REMOVED******REMOVED***message: "The spatial reference of the basemap: \(spatialReferenceMismatchError.basemapSR?.description ?? "") does not match that of the geomodel: \(spatialReferenceMismatchError.geoModelSR?.description ?? "")."
+***REMOVED******REMOVED******REMOVED***message: message
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***

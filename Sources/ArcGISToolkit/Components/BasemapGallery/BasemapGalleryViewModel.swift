@@ -119,36 +119,40 @@ public class BasemapGalleryViewModel: ObservableObject {
 ***REMOVED******REMOVED***fetchBasemaps(from: portal)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ This attempts to set the ``currentItem`` and it will be set only if it's spatial reference
-***REMOVED******REMOVED***/ matches with the ``geoModel``'s spatial reference. Otherwise ``currentItem`` will be unchanged.
+***REMOVED******REMOVED***/ This attempts to set ``currentItem``; it will be set only if it's spatial reference
+***REMOVED******REMOVED***/ matches with the ``geoModel``'s spatial reference. Otherwise ``currentItem``
+***REMOVED******REMOVED***/ will be unchanged.
 ***REMOVED******REMOVED***/ - Parameter basemapGalleryItem: The new, potential, `BasemapGalleryItem`.
-***REMOVED***public func updateCurrentItem(
+***REMOVED***@MainActor
+***REMOVED***func setCurrentItem(
 ***REMOVED******REMOVED***_ basemapGalleryItem: BasemapGalleryItem
 ***REMOVED***) {
-***REMOVED******REMOVED***Task {
-***REMOVED******REMOVED******REMOVED******REMOVED*** Ensure the geoModel is loaded.
-***REMOVED******REMOVED******REMOVED***try await geoModel?.load()
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED*** Reset the mismatch error.
-***REMOVED******REMOVED******REMOVED***spatialReferenceMismatchError = nil
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED*** Update the basemap gallery item's `spatialReferenceStatus`.
-***REMOVED******REMOVED******REMOVED***try await basemapGalleryItem.updateSpatialReferenceStatus(
-***REMOVED******REMOVED******REMOVED******REMOVED***geoModel?.actualSpatialReference
-***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED*** Update @State on the main thread.
-***REMOVED******REMOVED******REMOVED***await MainActor.run {
+***REMOVED******REMOVED******REMOVED*** Reset the mismatch error.
+***REMOVED******REMOVED***spatialReferenceMismatchError = nil
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***if let geoModel = geoModel {
+***REMOVED******REMOVED******REMOVED***Task {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Ensure the geoModel is loaded.
+***REMOVED******REMOVED******REMOVED******REMOVED***try await geoModel.load()
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Update the basemap gallery item's `spatialReferenceStatus`.
+***REMOVED******REMOVED******REMOVED******REMOVED***try await basemapGalleryItem.updateSpatialReferenceStatus(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***geoModel.actualSpatialReference
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***switch basemapGalleryItem.spatialReferenceStatus {
 ***REMOVED******REMOVED******REMOVED******REMOVED***case .match, .unknown:
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentItem = basemapGalleryItem
 ***REMOVED******REMOVED******REMOVED******REMOVED***case .noMatch:
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***spatialReferenceMismatchError = SpatialReferenceMismatchError(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***basemapSR: basemapGalleryItem.spatialReference,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***geoModelSR: geoModel?.actualSpatialReference
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***basemapSpatialReference: basemapGalleryItem.spatialReference,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***geoModelSpatialReference: geoModel.actualSpatialReference
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED*** No geoModel so no SR checking possible; just set `currentItem`.
+***REMOVED******REMOVED******REMOVED***currentItem = basemapGalleryItem
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -202,10 +206,10 @@ private extension BasemapGalleryViewModel {
 ***REMOVED***/ An error describing a `SpatialReference` mismatch between a `GeoModel` and a `Basemap`.
 public struct SpatialReferenceMismatchError: Error {
 ***REMOVED******REMOVED***/ The basemap's spatial reference.
-***REMOVED***public let basemapSR: SpatialReference?
+***REMOVED***public let basemapSpatialReference: SpatialReference?
 ***REMOVED***
 ***REMOVED******REMOVED***/ The geomodel's spatial reference.
-***REMOVED***public let geoModelSR: SpatialReference?
+***REMOVED***public let geoModelSpatialReference: SpatialReference?
 ***REMOVED***
 
 extension SpatialReferenceMismatchError: Equatable {***REMOVED***
