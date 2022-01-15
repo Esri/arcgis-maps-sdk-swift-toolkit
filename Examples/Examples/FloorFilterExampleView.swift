@@ -16,7 +16,8 @@ import ArcGISToolkit
 import ArcGIS
 
 struct FloorFilterExampleView: View {
-    private let map: Map
+    @State
+    private var map: Map
     
     @State
     private var viewpoint = Viewpoint(
@@ -30,8 +31,30 @@ struct FloorFilterExampleView: View {
     init() {
         // Create the map from a portal item and assign to the mapView.
         let portal = Portal(url: URL(string: "https://indoors.maps.arcgis.com/")!, isLoginRequired: false)
-        let portalItem = PortalItem(portal: portal, itemId: "f133a698536f44c8884ad81f80b6cfc7")
+            let portalItem = PortalItem(portal: portal, itemId: "49520a67773842f1858602735ef538b5") //<= multiple sites/facilities
+//        let portalItem = PortalItem(portal: portal, itemId: "f133a698536f44c8884ad81f80b6cfc7") //<= single site/facility
         map = Map(item: portalItem)
+//        
+//        Task {
+//            do {
+//                let map2 = Map(item: portalItem)
+//                try await map2.load()
+//                print("map2.loadStatus = \(map2.loadStatus)")
+//            }
+//            catch {
+//                print("error: \(error)")
+//            }
+//        }
+        
+//        Task {
+//            // Create the map from a portal item and assign to the mapView.
+//            let portal = Portal(url: URL(string: "https://indoors.maps.arcgis.com/")!, isLoginRequired: false)
+//            let portalItem = PortalItem(portal: portal, itemId: "49520a67773842f1858602735ef538b5") //<= multiple sites/facilities
+//            //        let portalItem = PortalItem(portal: portal, itemId: "f133a698536f44c8884ad81f80b6cfc7") //<= single site/facility
+//            await ArcGISURLSession.credentialStore.add(try await .indoors)
+//            map = Map(item: portalItem)
+//        }
+            
     }
     
     private let floorFilterPadding: CGFloat = 48
@@ -48,14 +71,15 @@ struct FloorFilterExampleView: View {
                 }
             }
             .task {
+                var floorManager: FloorManager?
                 do {
                     try await map.load()
-                    guard let floorManager = map.floorManager else { return }
-                    floorFilterViewModel = FloorFilterViewModel(
-                        floorManager: floorManager,
-                        viewpoint: $viewpoint
-                    )
-                } catch  { }
+                    floorManager = map.floorManager
+                    try await floorManager?.load()
+                } catch {
+                    print("FloorManager.loadStatus = \(String(describing: floorManager?.loadStatus))")
+                    print("load error: \(error)")
+                }
             }
     }
 }
