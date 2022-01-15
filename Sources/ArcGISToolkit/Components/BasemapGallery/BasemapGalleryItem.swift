@@ -27,7 +27,7 @@ public class BasemapGalleryItem: ObservableObject {
         /// The basemap's spatial reference does not match the reference spatial reference.
         case noMatch
     }
-
+    
     /// Creates a `BasemapGalleryItem`.
     /// - Parameters:
     ///   - basemap: The `Basemap` represented by the item.
@@ -138,19 +138,18 @@ public extension BasemapGalleryItem {
     /// Updates the ``spatialReferenceStatus-swift.property`` by loading the first base layer of
     /// the ``basemap`` and determining if it matches with the given `SpatialReference`.
     /// - Parameter referenceSpatialReference: The `SpatialReference` to match to.
+    @MainActor
     func updateSpatialReferenceStatus(
         _ referenceSpatialReference: SpatialReference?
     ) async throws {
         guard basemap.loadStatus == .loaded else { return }
         
         if spatialReference == nil {
-            await MainActor.run {
-                isBasemapLoading = true
-            }
+            isBasemapLoading = true
             try await basemap.baseLayers.first?.load()
         }
         
-        await finalizeUpdateSpatialReferenceStatus(
+        finalizeUpdateSpatialReferenceStatus(
             with: referenceSpatialReference
         )
     }
@@ -160,7 +159,7 @@ public extension BasemapGalleryItem {
     /// compare to the `basemap`'s `SpatialReference`, represented by the first base layer's`
     /// `SpatialReference`.
     @MainActor
-    func finalizeUpdateSpatialReferenceStatus(
+    private func finalizeUpdateSpatialReferenceStatus(
         with referenceSpatialReference: SpatialReference?
     ) {
         spatialReference = basemap.baseLayers.first?.spatialReference
