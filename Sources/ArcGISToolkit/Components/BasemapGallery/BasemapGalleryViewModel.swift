@@ -221,8 +221,11 @@ extension GeoModel {
     /// - For `Scene`, if the `sceneViewTilingScheme` is `webMercator`, then `actualSpatialReference`
     /// is `webMercator`. Otherwise scene's `spatialReference`.
     var actualSpatialReference: SpatialReference? {
-        (self as? ArcGIS.Scene)?.sceneViewTilingScheme == .webMercator ?
-        SpatialReference.webMercator :
-        spatialReference
+        if let scene = self as? ArcGIS.Scene,
+           scene.sceneViewTilingScheme == .webMercator {
+            return .webMercator
+        } else {
+            return spatialReference
+        }
     }
 }
