@@ -162,7 +162,7 @@ private extension BasemapGallery {
                         alertItem = AlertItem(loadBasemapError: loadError)
                         showErrorAlert = true
                     } else {
-                        viewModel.updateCurrentItem(item)
+                        viewModel.setCurrentItem(item)
                     }
                 }
             }
@@ -206,9 +206,15 @@ extension AlertItem {
     /// Creates an alert item based on a spatial reference mismatch error.
     /// - Parameter spatialReferenceMismatchError: The error associated with the mismatch.
     init(spatialReferenceMismatchError: SpatialReferenceMismatchError) {
+        let message: String
+        if spatialReferenceMismatchError.basemapSpatialReference == nil {
+            message = "The basemap does not have a spatial reference."
+        } else {
+            message = "The spatial reference of the basemap: \(spatialReferenceMismatchError.basemapSpatialReference?.description ?? "") does not match that of the geomodel: \(spatialReferenceMismatchError.geoModelSpatialReference?.description ?? "")."
+        }
         self.init(
             title: "Spatial reference mismatch.",
-            message: "The spatial reference of the basemap: \(spatialReferenceMismatchError.basemapSR?.description ?? "") does not match that of the geomodel: \(spatialReferenceMismatchError.geoModelSR?.description ?? "")."
+            message: message
         )
     }
 }
