@@ -43,8 +43,15 @@ public class FloorFilterViewModel: ObservableObject {
 ***REMOVED******REMOVED***Task {
 ***REMOVED******REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED******REMOVED***try await floorManager.load()
-***REMOVED******REMOVED******REMOVED******REMOVED***isLoading = false
-***REMOVED******REMOVED*** catch  { ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***if sites.count == 1 {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** If we have only one site, select it.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedSite = sites.first
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint?.wrappedValue = floorManager
+***REMOVED******REMOVED*** catch  {
+***REMOVED******REMOVED******REMOVED******REMOVED***print("error: \(error)")
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***isLoading = false
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
