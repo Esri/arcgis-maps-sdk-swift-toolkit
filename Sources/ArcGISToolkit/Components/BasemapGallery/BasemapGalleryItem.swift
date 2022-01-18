@@ -17,7 +17,7 @@ import UIKit.UIImage
 
 ***REMOVED***/  The `BasemapGalleryItem` encompasses an element in a `BasemapGallery`.
 public class BasemapGalleryItem: ObservableObject {
-***REMOVED******REMOVED***/ Indicates the status of the basemap's spatial reference in relation to a reference spatial reference.
+***REMOVED******REMOVED***/ The status of a basemap's spatial reference in relation to a reference spatial reference.
 ***REMOVED***public enum SpatialReferenceStatus {
 ***REMOVED******REMOVED******REMOVED***/ The basemap's spatial reference status is unknown, either because the basemap's
 ***REMOVED******REMOVED******REMOVED***/ base layers haven't been loaded yet or the status has yet to be updated.
@@ -79,13 +79,14 @@ public class BasemapGalleryItem: ObservableObject {
 ***REMOVED***@Published
 ***REMOVED***private(set) var isBasemapLoading = true
 ***REMOVED***
-***REMOVED******REMOVED***/ The `SpatialReferenceStatus` of the item. This is set via a call to
-***REMOVED******REMOVED***/ ``updateSpatialReferenceStatus()``.
+***REMOVED******REMOVED***/ The spatial reference status of the item. This is set via a call to
+***REMOVED******REMOVED***/ ``updateSpatialReferenceStatus(_:)``.
 ***REMOVED***@Published
 ***REMOVED***public private(set) var spatialReferenceStatus: SpatialReferenceStatus = .unknown
 ***REMOVED***
-***REMOVED******REMOVED***/ The `SpatialReference` of ``basemap``. This will be `nil` until the basemap's
-***REMOVED******REMOVED***/ baseLayers have been loaded in ``updateSpatialReferenceStatus()``.
+***REMOVED******REMOVED***/ The spatial reference of ``basemap``. This will be `nil` until the
+***REMOVED******REMOVED***/ basemap's base layers have been loaded by
+***REMOVED******REMOVED***/ ``updateSpatialReferenceStatus(_:)``.
 ***REMOVED***public private(set) var spatialReference: SpatialReference? = nil
 ***REMOVED***
 
@@ -136,8 +137,8 @@ extension BasemapGalleryItem: Equatable {
 
 public extension BasemapGalleryItem {
 ***REMOVED******REMOVED***/ Updates the ``spatialReferenceStatus-swift.property`` by loading the first base layer of
-***REMOVED******REMOVED***/ the ``basemap`` and determining if it matches with the given `SpatialReference`.
-***REMOVED******REMOVED***/ - Parameter referenceSpatialReference: The `SpatialReference` to match to.
+***REMOVED******REMOVED***/ ``basemap`` and determining if it matches with the given spatial reference.
+***REMOVED******REMOVED***/ - Parameter referenceSpatialReference: The spatial reference to match to.
 ***REMOVED***@MainActor
 ***REMOVED***func updateSpatialReferenceStatus(
 ***REMOVED******REMOVED***_ referenceSpatialReference: SpatialReference?
@@ -155,9 +156,9 @@ public extension BasemapGalleryItem {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Updates the item's ``spatialReference`` and ``spatialReferenceStatus-swift.property`` properties.
-***REMOVED******REMOVED***/ - Parameter referenceSpatialReference: The `SpatialReference` used to
-***REMOVED******REMOVED***/ compare to the `basemap`'s `SpatialReference`, represented by the first base layer's`
-***REMOVED******REMOVED***/ `SpatialReference`.
+***REMOVED******REMOVED***/ - Parameter referenceSpatialReference: The spatial reference used to
+***REMOVED******REMOVED***/ compare to the `basemap`'s spatial reference, represented by the first base layer's
+***REMOVED******REMOVED***/ spatial reference.
 ***REMOVED***@MainActor
 ***REMOVED***private func finalizeUpdateSpatialReferenceStatus(
 ***REMOVED******REMOVED***with referenceSpatialReference: SpatialReference?

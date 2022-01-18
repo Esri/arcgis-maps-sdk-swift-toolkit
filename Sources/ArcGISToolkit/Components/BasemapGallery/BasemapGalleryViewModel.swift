@@ -61,8 +61,8 @@ public class BasemapGalleryViewModel: ObservableObject {
 ***REMOVED***@Published
 ***REMOVED***public var fetchBasemapsError: Error? = nil
 ***REMOVED***
-***REMOVED******REMOVED***/ The error signifying the spatial reference of the ``geoModel`` and the spatial reference of
-***REMOVED******REMOVED***/ the ``currentItem`` do not match.
+***REMOVED******REMOVED***/ The error signifying the spatial reference of ``geoModel`` and the spatial reference of
+***REMOVED******REMOVED***/ ``currentItem`` do not match.
 ***REMOVED***@Published
 ***REMOVED***public private(set) var spatialReferenceMismatchError: SpatialReferenceMismatchError? = nil
 
@@ -119,10 +119,10 @@ public class BasemapGalleryViewModel: ObservableObject {
 ***REMOVED******REMOVED***fetchBasemaps(from: portal)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ This attempts to set ``currentItem``; it will be set only if it's spatial reference
-***REMOVED******REMOVED***/ matches with the ``geoModel``'s spatial reference. Otherwise ``currentItem``
+***REMOVED******REMOVED***/ This attempts to set ``currentItem``; it will be set only if its spatial reference
+***REMOVED******REMOVED***/ matches with ``geoModel``'s spatial reference. Otherwise ``currentItem``
 ***REMOVED******REMOVED***/ will be unchanged.
-***REMOVED******REMOVED***/ - Parameter basemapGalleryItem: The new, potential, `BasemapGalleryItem`.
+***REMOVED******REMOVED***/ - Parameter basemapGalleryItem: The new, potential, basemap gallery item.
 ***REMOVED***@MainActor
 ***REMOVED***func setCurrentItem(
 ***REMOVED******REMOVED***_ basemapGalleryItem: BasemapGalleryItem
@@ -203,19 +203,19 @@ private extension BasemapGalleryViewModel {
 ***REMOVED***
 ***REMOVED***
 
-***REMOVED***/ An error describing a `SpatialReference` mismatch between a `GeoModel` and a `Basemap`.
+***REMOVED***/ An error describing a spatial reference mismatch between a geo model and a basemap.
 public struct SpatialReferenceMismatchError: Error {
 ***REMOVED******REMOVED***/ The basemap's spatial reference.
 ***REMOVED***public let basemapSpatialReference: SpatialReference?
 ***REMOVED***
-***REMOVED******REMOVED***/ The geomodel's spatial reference.
+***REMOVED******REMOVED***/ The geo model's spatial reference.
 ***REMOVED***public let geoModelSpatialReference: SpatialReference?
 ***REMOVED***
 
 extension SpatialReferenceMismatchError: Equatable {***REMOVED***
 
 extension GeoModel {
-***REMOVED******REMOVED***/ The actual spatial reference of the `GeoModel`.
+***REMOVED******REMOVED***/ The actual spatial reference of the geo model.
 ***REMOVED******REMOVED***/ - Remark:
 ***REMOVED******REMOVED***/ - For `Map`, it is map's `spatialReference`.
 ***REMOVED******REMOVED***/ - For `Scene`, if the `sceneViewTilingScheme` is `webMercator`, then `actualSpatialReference`
