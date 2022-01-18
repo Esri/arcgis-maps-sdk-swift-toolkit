@@ -207,11 +207,16 @@ extension AlertItem {
     /// - Parameter spatialReferenceMismatchError: The error associated with the mismatch.
     init(spatialReferenceMismatchError: SpatialReferenceMismatchError) {
         let message: String
-        if spatialReferenceMismatchError.basemapSpatialReference == nil {
+
+        switch (spatialReferenceMismatchError.basemapSpatialReference, spatialReferenceMismatchError.geoModelSpatialReference) {
+        case (.some(let basemapSpatialReference), .some(let geoModelSpatialReference)):
+            message = "The spatial reference of the basemap: \(basemapSpatialReference.description) does not match that of the geomodel: \(geoModelSpatialReference.description)."
+        case (_, .none):
+            message = "The geo model does not have a spatial reference."
+        case (.none, _):
             message = "The basemap does not have a spatial reference."
-        } else {
-            message = "The spatial reference of the basemap: \(spatialReferenceMismatchError.basemapSpatialReference?.description ?? "") does not match that of the geomodel: \(spatialReferenceMismatchError.geoModelSpatialReference?.description ?? "")."
         }
+
         self.init(
             title: "Spatial reference mismatch.",
             message: message

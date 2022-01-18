@@ -157,16 +157,24 @@ public extension BasemapGalleryItem {
     
     /// Updates the item's ``spatialReference`` and ``spatialReferenceStatus-swift.property`` properties.
     /// - Parameter referenceSpatialReference: The spatial reference used to
-    /// compare to the `basemap`'s spatial reference, represented by the first base layer's
+    /// compare to `basemap`'s spatial reference, represented by the first base layer's
     /// spatial reference.
     @MainActor
     private func finalizeUpdateSpatialReferenceStatus(
         with referenceSpatialReference: SpatialReference?
     ) {
         spatialReference = basemap.baseLayers.first?.spatialReference
-        spatialReferenceStatus = referenceSpatialReference != nil ?
-        (spatialReference == referenceSpatialReference ? .match : .noMatch)
-        : .unknown
+        
+        if referenceSpatialReference != nil {
+            spatialReferenceStatus = .unknown
+        }
+        else if spatialReference == referenceSpatialReference {
+            spatialReferenceStatus = .match
+        }
+        else {
+            spatialReferenceStatus = .noMatch
+        }
+        
         isBasemapLoading = false
     }
 }
