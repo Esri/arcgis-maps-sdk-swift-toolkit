@@ -82,12 +82,22 @@ public struct BasemapGallery: View {
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***makeGalleryView()
 ***REMOVED******REMOVED******REMOVED***.frame(width: galleryWidth)
+***REMOVED******REMOVED******REMOVED***.onReceive(
+***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.$spatialReferenceMismatchError.dropFirst(),
+***REMOVED******REMOVED******REMOVED******REMOVED***perform: { error in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let error = error else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***alertItem = AlertItem(spatialReferenceMismatchError: error)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***showErrorAlert = true
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***.alert(
 ***REMOVED******REMOVED******REMOVED******REMOVED***alertItem?.title ?? "",
 ***REMOVED******REMOVED******REMOVED******REMOVED***isPresented: $showErrorAlert,
-***REMOVED******REMOVED******REMOVED******REMOVED***presenting: alertItem) { item in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(item.message)
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***presenting: alertItem
+***REMOVED******REMOVED******REMOVED***) { _ in
+***REMOVED******REMOVED*** message: { item in
+***REMOVED******REMOVED******REMOVED******REMOVED***Text(item.message)
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 
@@ -152,7 +162,7 @@ private extension BasemapGallery {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***alertItem = AlertItem(loadBasemapError: loadError)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***showErrorAlert = true
 ***REMOVED******REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.currentItem = item
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.setCurrentItem(item)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
@@ -190,6 +200,26 @@ extension AlertItem {
 ***REMOVED******REMOVED***self.init(
 ***REMOVED******REMOVED******REMOVED***title: "Error loading basemap.",
 ***REMOVED******REMOVED******REMOVED***message: "\((loadBasemapError as? RuntimeError)?.failureReason ?? "The basemap failed to load for an unknown reason.")"
+***REMOVED******REMOVED***)
+***REMOVED***
+
+***REMOVED******REMOVED***/ Creates an alert item based on a spatial reference mismatch error.
+***REMOVED******REMOVED***/ - Parameter spatialReferenceMismatchError: The error associated with the mismatch.
+***REMOVED***init(spatialReferenceMismatchError: SpatialReferenceMismatchError) {
+***REMOVED******REMOVED***let message: String
+
+***REMOVED******REMOVED***switch (spatialReferenceMismatchError.basemapSpatialReference, spatialReferenceMismatchError.geoModelSpatialReference) {
+***REMOVED******REMOVED***case (.some(let basemapSpatialReference), .some(let geoModelSpatialReference)):
+***REMOVED******REMOVED******REMOVED***message = "The spatial reference of the basemap: \(basemapSpatialReference.description) does not match that of the geomodel: \(geoModelSpatialReference.description)."
+***REMOVED******REMOVED***case (_, .none):
+***REMOVED******REMOVED******REMOVED***message = "The geo model does not have a spatial reference."
+***REMOVED******REMOVED***case (.none, _):
+***REMOVED******REMOVED******REMOVED***message = "The basemap does not have a spatial reference."
+***REMOVED***
+
+***REMOVED******REMOVED***self.init(
+***REMOVED******REMOVED******REMOVED***title: "Spatial reference mismatch.",
+***REMOVED******REMOVED******REMOVED***message: message
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***

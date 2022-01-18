@@ -44,9 +44,9 @@ struct BasemapGalleryCell: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Display an image representing either a load basemap error
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** or a spatial reference mismatch error.
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if item.loadBasemapError != nil {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "minus.circle.fill")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.title)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.red)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeErrorImage(systemName: "minus")
+***REMOVED******REMOVED******REMOVED******REMOVED*** else if item.spatialReferenceStatus == .noMatch {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeErrorImage(systemName: "x")
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Display a progress view if the item is loading.
@@ -64,5 +64,12 @@ struct BasemapGalleryCell: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.primary)
 ***REMOVED******REMOVED***
 ***REMOVED***).disabled(item.isBasemapLoading)
+***REMOVED***
+
+***REMOVED***private func makeErrorImage(systemName: String) -> some View {
+***REMOVED******REMOVED***Image(systemName: systemName)
+***REMOVED******REMOVED******REMOVED***.symbolVariant(.circle.fill)
+***REMOVED******REMOVED******REMOVED***.font(.title)
+***REMOVED******REMOVED******REMOVED***.foregroundColor(.red)
 ***REMOVED***
 ***REMOVED***
