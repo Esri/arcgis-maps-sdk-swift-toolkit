@@ -61,8 +61,8 @@ public class BasemapGalleryViewModel: ObservableObject {
     @Published
     public var fetchBasemapsError: Error? = nil
     
-    /// The error signifying the spatial reference of the ``geoModel`` and the spatial reference of
-    /// the ``currentItem`` do not match.
+    /// The error signifying the spatial reference of ``geoModel`` and the spatial reference of
+    /// ``currentItem`` do not match.
     @Published
     public private(set) var spatialReferenceMismatchError: SpatialReferenceMismatchError? = nil
 
@@ -119,10 +119,10 @@ public class BasemapGalleryViewModel: ObservableObject {
         fetchBasemaps(from: portal)
     }
     
-    /// This attempts to set ``currentItem``; it will be set only if it's spatial reference
-    /// matches with the ``geoModel``'s spatial reference. Otherwise ``currentItem``
+    /// This attempts to set ``currentItem``; it will be set only if its spatial reference
+    /// matches with ``geoModel``'s spatial reference. Otherwise ``currentItem``
     /// will be unchanged.
-    /// - Parameter basemapGalleryItem: The new, potential, `BasemapGalleryItem`.
+    /// - Parameter basemapGalleryItem: The new, potential, basemap gallery item.
     @MainActor
     func setCurrentItem(
         _ basemapGalleryItem: BasemapGalleryItem
@@ -203,19 +203,19 @@ private extension BasemapGalleryViewModel {
     }
 }
 
-/// An error describing a `SpatialReference` mismatch between a `GeoModel` and a `Basemap`.
+/// An error describing a spatial reference mismatch between a geo model and a basemap.
 public struct SpatialReferenceMismatchError: Error {
     /// The basemap's spatial reference.
     public let basemapSpatialReference: SpatialReference?
     
-    /// The geomodel's spatial reference.
+    /// The geo model's spatial reference.
     public let geoModelSpatialReference: SpatialReference?
 }
 
 extension SpatialReferenceMismatchError: Equatable {}
 
 extension GeoModel {
-    /// The actual spatial reference of the `GeoModel`.
+    /// The actual spatial reference of the geo model.
     /// - Remark:
     /// - For `Map`, it is map's `spatialReference`.
     /// - For `Scene`, if the `sceneViewTilingScheme` is `webMercator`, then `actualSpatialReference`
