@@ -17,7 +17,7 @@ import ArcGIS
 
 ///  The `BasemapGalleryItem` encompasses an element in a `BasemapGallery`.
 public class BasemapGalleryItem: ObservableObject {
-    /// Indicates the status of the basemap's spatial reference in relation to a reference spatial reference.
+    /// The status of a basemap's spatial reference in relation to a reference spatial reference.
     public enum SpatialReferenceStatus {
         /// The basemap's spatial reference status is unknown, either because the basemap's
         /// base layers haven't been loaded yet or the status has yet to be updated.
@@ -79,13 +79,14 @@ public class BasemapGalleryItem: ObservableObject {
     @Published
     private(set) var isBasemapLoading = true
     
-    /// The `SpatialReferenceStatus` of the item. This is set via a call to
-    /// ``updateSpatialReferenceStatus()``.
+    /// The spatial reference status of the item. This is set via a call to
+    /// ``updateSpatialReferenceStatus(_:)``.
     @Published
     public private(set) var spatialReferenceStatus: SpatialReferenceStatus = .unknown
     
-    /// The `SpatialReference` of ``basemap``. This will be `nil` until the basemap's
-    /// baseLayers have been loaded in ``updateSpatialReferenceStatus()``.
+    /// The spatial reference of ``basemap``. This will be `nil` until the
+    /// basemap's base layers have been loaded by
+    /// ``updateSpatialReferenceStatus(_:)``.
     public private(set) var spatialReference: SpatialReference? = nil
 }
 
@@ -136,8 +137,8 @@ extension BasemapGalleryItem: Equatable {
 
 public extension BasemapGalleryItem {
     /// Updates the ``spatialReferenceStatus-swift.property`` by loading the first base layer of
-    /// the ``basemap`` and determining if it matches with the given `SpatialReference`.
-    /// - Parameter referenceSpatialReference: The `SpatialReference` to match to.
+    /// ``basemap`` and determining if it matches with the given spatial reference.
+    /// - Parameter referenceSpatialReference: The spatial reference to match to.
     @MainActor
     func updateSpatialReferenceStatus(
         _ referenceSpatialReference: SpatialReference?
@@ -155,9 +156,9 @@ public extension BasemapGalleryItem {
     }
     
     /// Updates the item's ``spatialReference`` and ``spatialReferenceStatus-swift.property`` properties.
-    /// - Parameter referenceSpatialReference: The `SpatialReference` used to
-    /// compare to the `basemap`'s `SpatialReference`, represented by the first base layer's`
-    /// `SpatialReference`.
+    /// - Parameter referenceSpatialReference: The spatial reference used to
+    /// compare to the `basemap`'s spatial reference, represented by the first base layer's
+    /// spatial reference.
     @MainActor
     private func finalizeUpdateSpatialReferenceStatus(
         with referenceSpatialReference: SpatialReference?
