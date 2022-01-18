@@ -167,8 +167,7 @@ public extension BasemapGalleryItem {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***if referenceSpatialReference != nil {
 ***REMOVED******REMOVED******REMOVED***spatialReferenceStatus = .unknown
-***REMOVED***
-***REMOVED******REMOVED***else if spatialReference == referenceSpatialReference {
+***REMOVED*** else if spatialReference == referenceSpatialReference {
 ***REMOVED******REMOVED******REMOVED***spatialReferenceStatus = .match
 ***REMOVED***
 ***REMOVED******REMOVED***else {
