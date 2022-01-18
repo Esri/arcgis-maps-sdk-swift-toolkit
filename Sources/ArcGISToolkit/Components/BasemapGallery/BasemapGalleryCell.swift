@@ -44,9 +44,9 @@ struct BasemapGalleryCell: View {
                     // Display an image representing either a load basemap error
                     // or a spatial reference mismatch error.
                     if item.loadBasemapError != nil {
-                        Image(systemName: "minus.circle.fill")
-                            .font(.title)
-                            .foregroundColor(.red)
+                        makeErrorImage(systemName: "minus")
+                    } else if item.spatialReferenceStatus == .noMatch {
+                        makeErrorImage(systemName: "x")
                     }
                     
                     // Display a progress view if the item is loading.
@@ -64,5 +64,12 @@ struct BasemapGalleryCell: View {
                     .foregroundColor(.primary)
             }
         }).disabled(item.isBasemapLoading)
+    }
+
+    private func makeErrorImage(systemName: String) -> some View {
+        Image(systemName: systemName)
+            .symbolVariant(.circle.fill)
+            .font(.title)
+            .foregroundColor(.red)
     }
 }

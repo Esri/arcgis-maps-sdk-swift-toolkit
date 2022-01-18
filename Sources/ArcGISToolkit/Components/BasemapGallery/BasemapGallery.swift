@@ -82,12 +82,22 @@ public struct BasemapGallery: View {
     public var body: some View {
         makeGalleryView()
             .frame(width: galleryWidth)
+            .onReceive(
+                viewModel.$spatialReferenceMismatchError.dropFirst(),
+                perform: { error in
+                    guard let error = error else { return }
+                    alertItem = AlertItem(spatialReferenceMismatchError: error)
+                    showErrorAlert = true
+                }
+            )
             .alert(
                 alertItem?.title ?? "",
                 isPresented: $showErrorAlert,
-                presenting: alertItem) { item in
-                    Text(item.message)
-                }
+                presenting: alertItem
+            ) { _ in
+            } message: { item in
+                Text(item.message)
+            }
     }
 }
 
@@ -152,7 +162,7 @@ private extension BasemapGallery {
                         alertItem = AlertItem(loadBasemapError: loadError)
                         showErrorAlert = true
                     } else {
-                        viewModel.currentItem = item
+                        viewModel.setCurrentItem(item)
                     }
                 }
             }
@@ -190,6 +200,26 @@ extension AlertItem {
         self.init(
             title: "Error loading basemap.",
             message: "\((loadBasemapError as? RuntimeError)?.failureReason ?? "The basemap failed to load for an unknown reason.")"
+        )
+    }
+
+    /// Creates an alert item based on a spatial reference mismatch error.
+    /// - Parameter spatialReferenceMismatchError: The error associated with the mismatch.
+    init(spatialReferenceMismatchError: SpatialReferenceMismatchError) {
+        let message: String
+
+        switch (spatialReferenceMismatchError.basemapSpatialReference, spatialReferenceMismatchError.geoModelSpatialReference) {
+        case (.some(let basemapSpatialReference), .some(let geoModelSpatialReference)):
+            message = "The spatial reference of the basemap: \(basemapSpatialReference.description) does not match that of the geomodel: \(geoModelSpatialReference.description)."
+        case (_, .none):
+            message = "The geo model does not have a spatial reference."
+        case (.none, _):
+            message = "The basemap does not have a spatial reference."
+        }
+
+        self.init(
+            title: "Spatial reference mismatch.",
+            message: message
         )
     }
 }
