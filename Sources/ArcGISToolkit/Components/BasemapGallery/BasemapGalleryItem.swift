@@ -169,8 +169,7 @@ public extension BasemapGalleryItem {
             spatialReferenceStatus = .unknown
         } else if spatialReference == referenceSpatialReference {
             spatialReferenceStatus = .match
-        }
-        else {
+        } else {
             spatialReferenceStatus = .noMatch
         }
         
