@@ -207,11 +207,16 @@ extension AlertItem {
 ***REMOVED******REMOVED***/ - Parameter spatialReferenceMismatchError: The error associated with the mismatch.
 ***REMOVED***init(spatialReferenceMismatchError: SpatialReferenceMismatchError) {
 ***REMOVED******REMOVED***let message: String
-***REMOVED******REMOVED***if spatialReferenceMismatchError.basemapSpatialReference == nil {
+
+***REMOVED******REMOVED***switch (spatialReferenceMismatchError.basemapSpatialReference, spatialReferenceMismatchError.geoModelSpatialReference) {
+***REMOVED******REMOVED***case (.some(let basemapSpatialReference), .some(let geoModelSpatialReference)):
+***REMOVED******REMOVED******REMOVED***message = "The spatial reference of the basemap: \(basemapSpatialReference.description) does not match that of the geomodel: \(geoModelSpatialReference.description)."
+***REMOVED******REMOVED***case (_, .none):
+***REMOVED******REMOVED******REMOVED***message = "The geo model does not have a spatial reference."
+***REMOVED******REMOVED***case (.none, _):
 ***REMOVED******REMOVED******REMOVED***message = "The basemap does not have a spatial reference."
-***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***message = "The spatial reference of the basemap: \(spatialReferenceMismatchError.basemapSpatialReference?.description ?? "") does not match that of the geomodel: \(spatialReferenceMismatchError.geoModelSpatialReference?.description ?? "")."
 ***REMOVED***
+
 ***REMOVED******REMOVED***self.init(
 ***REMOVED******REMOVED******REMOVED***title: "Spatial reference mismatch.",
 ***REMOVED******REMOVED******REMOVED***message: message

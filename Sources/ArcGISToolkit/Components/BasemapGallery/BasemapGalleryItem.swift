@@ -157,16 +157,24 @@ public extension BasemapGalleryItem {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Updates the item's ``spatialReference`` and ``spatialReferenceStatus-swift.property`` properties.
 ***REMOVED******REMOVED***/ - Parameter referenceSpatialReference: The spatial reference used to
-***REMOVED******REMOVED***/ compare to the `basemap`'s spatial reference, represented by the first base layer's
+***REMOVED******REMOVED***/ compare to `basemap`'s spatial reference, represented by the first base layer's
 ***REMOVED******REMOVED***/ spatial reference.
 ***REMOVED***@MainActor
 ***REMOVED***private func finalizeUpdateSpatialReferenceStatus(
 ***REMOVED******REMOVED***with referenceSpatialReference: SpatialReference?
 ***REMOVED***) {
 ***REMOVED******REMOVED***spatialReference = basemap.baseLayers.first?.spatialReference
-***REMOVED******REMOVED***spatialReferenceStatus = referenceSpatialReference != nil ?
-***REMOVED******REMOVED***(spatialReference == referenceSpatialReference ? .match : .noMatch)
-***REMOVED******REMOVED***: .unknown
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***if referenceSpatialReference != nil {
+***REMOVED******REMOVED******REMOVED***spatialReferenceStatus = .unknown
+***REMOVED***
+***REMOVED******REMOVED***else if spatialReference == referenceSpatialReference {
+***REMOVED******REMOVED******REMOVED***spatialReferenceStatus = .match
+***REMOVED***
+***REMOVED******REMOVED***else {
+***REMOVED******REMOVED******REMOVED***spatialReferenceStatus = .noMatch
+***REMOVED***
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***isBasemapLoading = false
 ***REMOVED***
 ***REMOVED***
