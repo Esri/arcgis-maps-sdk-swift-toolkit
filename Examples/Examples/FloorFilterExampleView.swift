@@ -30,31 +30,20 @@ struct FloorFilterExampleView: View {
 ***REMOVED***
 ***REMOVED***init() {
 ***REMOVED******REMOVED******REMOVED*** Create the map from a portal item and assign to the mapView.
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Multiple sites/facilities: Esri IST map with all buildings.
+***REMOVED******REMOVED******REMOVED***let portal = Portal(url: URL(string: "https:***REMOVED***indoors.maps.arcgis.com/")!, isLoginRequired: false)
+***REMOVED******REMOVED******REMOVED***let portalItem = PortalItem(portal: portal, itemId: "49520a67773842f1858602735ef538b5")
+
+***REMOVED******REMOVED******REMOVED*** Redlands Campus map.
+***REMOVED******REMOVED******REMOVED***let portal = Portal(url: URL(string: "https:***REMOVED***runtimecoretest.maps.arcgis.com/")!, isLoginRequired: false)
+***REMOVED******REMOVED******REMOVED***let portalItem = PortalItem(portal: portal, itemId: "7687805bd42549f5ba41237443d0c60a") ***REMOVED***<= another multiple sites/facilities
+
+***REMOVED******REMOVED******REMOVED*** Single site (ESRI Redlands Main) and facility (Building L).
 ***REMOVED******REMOVED***let portal = Portal(url: URL(string: "https:***REMOVED***indoors.maps.arcgis.com/")!, isLoginRequired: false)
-***REMOVED******REMOVED******REMOVED***let portalItem = PortalItem(portal: portal, itemId: "49520a67773842f1858602735ef538b5") ***REMOVED***<= multiple sites/facilities
-***REMOVED******REMOVED******REMOVED***let portalItem = PortalItem(portal: portal, itemId: "f133a698536f44c8884ad81f80b6cfc7") ***REMOVED***<= single site/facility
+***REMOVED******REMOVED***let portalItem = PortalItem(portal: portal, itemId: "f133a698536f44c8884ad81f80b6cfc7")
+
 ***REMOVED******REMOVED***map = Map(item: portalItem)
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***Task {
-***REMOVED******REMOVED******REMOVED******REMOVED***do {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let map2 = Map(item: portalItem)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try await map2.load()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print("map2.loadStatus = \(map2.loadStatus)")
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***catch {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print("error: \(error)")
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***Task {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Create the map from a portal item and assign to the mapView.
-***REMOVED******REMOVED******REMOVED******REMOVED***let portal = Portal(url: URL(string: "https:***REMOVED***indoors.maps.arcgis.com/")!, isLoginRequired: false)
-***REMOVED******REMOVED******REMOVED******REMOVED***let portalItem = PortalItem(portal: portal, itemId: "49520a67773842f1858602735ef538b5") ***REMOVED***<= multiple sites/facilities
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let portalItem = PortalItem(portal: portal, itemId: "f133a698536f44c8884ad81f80b6cfc7") ***REMOVED***<= single site/facility
-***REMOVED******REMOVED******REMOVED******REMOVED***await ArcGISURLSession.credentialStore.add(try await .indoors)
-***REMOVED******REMOVED******REMOVED******REMOVED***map = Map(item: portalItem)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***private let floorFilterPadding: CGFloat = 48
@@ -71,13 +60,15 @@ struct FloorFilterExampleView: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.task {
-***REMOVED******REMOVED******REMOVED******REMOVED***var floorManager: FloorManager?
 ***REMOVED******REMOVED******REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try await map.load()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***floorManager = map.floorManager
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try await floorManager?.load()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let floorManager = map.floorManager {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***floorFilterViewModel = FloorFilterViewModel(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***floorManager: floorManager,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint: $viewpoint
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** catch {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print("FloorManager.loadStatus = \(String(describing: floorManager?.loadStatus))")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print("load error: \(error)")
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***

@@ -47,7 +47,6 @@ public class FloorFilterViewModel: ObservableObject {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** If we have only one site, select it.
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedSite = sites.first
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint?.wrappedValue = floorManager
 ***REMOVED******REMOVED*** catch  {
 ***REMOVED******REMOVED******REMOVED******REMOVED***print("error: \(error)")
 ***REMOVED******REMOVED***
@@ -58,6 +57,7 @@ public class FloorFilterViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ The `Viewpoint` used to pan/zoom to the floor level. If `nil`, there will be no zooming.
 ***REMOVED***var viewpoint: Binding<Viewpoint>? = nil
 ***REMOVED***
+***REMOVED******REMOVED***/ The `FloorManager` containing the site, floor, and level information.
 ***REMOVED***var floorManager: FloorManager
 ***REMOVED***
 ***REMOVED***public var sites: [FloorSite] {
@@ -91,8 +91,21 @@ public class FloorFilterViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The site, facility, and level that are selected by the user
-***REMOVED***public var selectedSite: FloorSite? = nil
-***REMOVED***public var selectedFacility: FloorFacility? = nil
+***REMOVED***@Published
+***REMOVED***public var selectedSite: FloorSite? = nil {
+***REMOVED******REMOVED***didSet {
+***REMOVED******REMOVED******REMOVED***zoomToSite()
+***REMOVED***
+***REMOVED***
+
+***REMOVED***@Published
+***REMOVED***public var selectedFacility: FloorFacility? = nil {
+***REMOVED******REMOVED***didSet {
+***REMOVED******REMOVED******REMOVED***zoomToFacility()
+***REMOVED***
+***REMOVED***
+
+***REMOVED***@Published
 ***REMOVED***public var selectedLevel: FloorLevel? = nil
 ***REMOVED***
 ***REMOVED******REMOVED***/ The default vertical order is 0 according to Runtime 100.12 update for FloorManager
