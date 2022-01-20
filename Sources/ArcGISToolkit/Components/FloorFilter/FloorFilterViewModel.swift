@@ -47,7 +47,6 @@ public class FloorFilterViewModel: ObservableObject {
                     // If we have only one site, select it.
                     selectedSite = sites.first
                 }
-//                viewpoint?.wrappedValue = floorManager
             } catch  {
                 print("error: \(error)")
             }
@@ -58,6 +57,7 @@ public class FloorFilterViewModel: ObservableObject {
     /// The `Viewpoint` used to pan/zoom to the floor level. If `nil`, there will be no zooming.
     var viewpoint: Binding<Viewpoint>? = nil
     
+    /// The `FloorManager` containing the site, floor, and level information.
     var floorManager: FloorManager
     
     public var sites: [FloorSite] {
@@ -91,8 +91,21 @@ public class FloorFilterViewModel: ObservableObject {
     }
     
     /// The site, facility, and level that are selected by the user
-    public var selectedSite: FloorSite? = nil
-    public var selectedFacility: FloorFacility? = nil
+    @Published
+    public var selectedSite: FloorSite? = nil {
+        didSet {
+            zoomToSite()
+        }
+    }
+
+    @Published
+    public var selectedFacility: FloorFacility? = nil {
+        didSet {
+            zoomToFacility()
+        }
+    }
+
+    @Published
     public var selectedLevel: FloorLevel? = nil
     
     /// The default vertical order is 0 according to Runtime 100.12 update for FloorManager
