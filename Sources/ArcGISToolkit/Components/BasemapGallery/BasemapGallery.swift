@@ -20,6 +20,18 @@
 ***REMOVED***/ `BasemapGalleryViewModel.geoModel` property is set, then the basemap of the
 ***REMOVED***/ `geoModel` is replaced with the basemap in the gallery.
 public struct BasemapGallery: View {
+***REMOVED******REMOVED***/ The view style of the gallery.
+***REMOVED***public enum Style {
+***REMOVED******REMOVED******REMOVED***/ The `BasemapGallery` will display as a grid when there is an appropriate
+***REMOVED******REMOVED******REMOVED***/ width available for the gallery to do so. Otherwise, the gallery will display as a list.
+***REMOVED******REMOVED******REMOVED***/ Defaults to `125` when displayed as a list, `300` when displayed as a grid.
+***REMOVED******REMOVED***case automatic(listWidth: CGFloat = 125, gridWidth: CGFloat = 300)
+***REMOVED******REMOVED******REMOVED***/ The `BasemapGallery` will display as a grid. Defaults to `300`.
+***REMOVED******REMOVED***case grid(width: CGFloat = 300)
+***REMOVED******REMOVED******REMOVED***/ The `BasemapGallery` will display as a list. Defaults to `125`.
+***REMOVED******REMOVED***case list(width: CGFloat = 125)
+***REMOVED***
+***REMOVED***
 ***REMOVED******REMOVED***/ Creates a `BasemapGallery`.
 ***REMOVED******REMOVED***/ - Parameter viewModel: The view model used by the `BasemapGallery`.
 ***REMOVED***public init(viewModel: BasemapGalleryViewModel? = nil) {
@@ -32,7 +44,33 @@ public struct BasemapGallery: View {
 ***REMOVED******REMOVED***/ user action.
 ***REMOVED***@ObservedObject
 ***REMOVED***public var viewModel: BasemapGalleryViewModel
-
+***REMOVED***
+***REMOVED******REMOVED***/ The style of the basemap gallery. The gallery can be displayed as a list, grid, or automatically
+***REMOVED******REMOVED***/ switch between the two based on-screen real estate. Defaults to ``BasemapGallery/Style/automatic``.
+***REMOVED******REMOVED***/ Set using the `style` modifier.
+***REMOVED***private var style: Style = .automatic()
+***REMOVED***
+***REMOVED***@Environment(\.horizontalSizeClass) var horizontalSizeClass
+***REMOVED***@Environment(\.verticalSizeClass) var verticalSizeClass
+***REMOVED***
+***REMOVED******REMOVED***/ If `true`, the gallery will display as if the device is in a regular-width orientation.
+***REMOVED******REMOVED***/ If `false`, the gallery will display as if the device is in a compact-width orientation.
+***REMOVED***private var isRegularWidth: Bool {
+***REMOVED******REMOVED***!(horizontalSizeClass == .compact && verticalSizeClass == .regular)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ The width of the gallery, taking into account the horizontal and vertical size classes of the device.
+***REMOVED***private var galleryWidth: CGFloat {
+***REMOVED******REMOVED***switch style {
+***REMOVED******REMOVED***case .list(let width):
+***REMOVED******REMOVED******REMOVED***return width
+***REMOVED******REMOVED***case .grid(let width):
+***REMOVED******REMOVED******REMOVED***return width
+***REMOVED******REMOVED***case .automatic(let listWidth, let gridWidth):
+***REMOVED******REMOVED******REMOVED***return isRegularWidth ? gridWidth : listWidth
+***REMOVED***
+***REMOVED***
+***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether to show an error alert.
 ***REMOVED***@State
 ***REMOVED***private var showErrorAlert = false
@@ -43,44 +81,107 @@ public struct BasemapGallery: View {
 ***REMOVED***
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***makeGalleryView()
+***REMOVED******REMOVED******REMOVED***.frame(width: galleryWidth)
+***REMOVED******REMOVED******REMOVED***.onReceive(
+***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.$spatialReferenceMismatchError.dropFirst(),
+***REMOVED******REMOVED******REMOVED******REMOVED***perform: { error in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let error = error else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***alertItem = AlertItem(spatialReferenceMismatchError: error)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***showErrorAlert = true
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***.alert(
 ***REMOVED******REMOVED******REMOVED******REMOVED***alertItem?.title ?? "",
 ***REMOVED******REMOVED******REMOVED******REMOVED***isPresented: $showErrorAlert,
-***REMOVED******REMOVED******REMOVED******REMOVED***presenting: alertItem) { item in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(item.message)
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***presenting: alertItem
+***REMOVED******REMOVED******REMOVED***) { _ in
+***REMOVED******REMOVED*** message: { item in
+***REMOVED******REMOVED******REMOVED******REMOVED***Text(item.message)
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 
 private extension BasemapGallery {
-***REMOVED******REMOVED***/ The gallery view, displayed in the specified columns.
-***REMOVED******REMOVED***/ - Parameter columns: The columns used to display the basemap items.
-***REMOVED******REMOVED***/ - Returns: A view representing the basemap gallery with the specified columns.
+***REMOVED******REMOVED***/ Creates a gallery view.
+***REMOVED******REMOVED***/ - Returns: A view representing the basemap gallery.
 ***REMOVED***func makeGalleryView() -> some View {
 ***REMOVED******REMOVED***ScrollView {
-***REMOVED******REMOVED******REMOVED***let columns = Array(
+***REMOVED******REMOVED******REMOVED***switch style {
+***REMOVED******REMOVED******REMOVED***case .automatic:
+***REMOVED******REMOVED******REMOVED******REMOVED***if isRegularWidth {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeGridView()
+***REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeListView()
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***case .grid:
+***REMOVED******REMOVED******REMOVED******REMOVED***makeGridView()
+***REMOVED******REMOVED******REMOVED***case .list:
+***REMOVED******REMOVED******REMOVED******REMOVED***makeListView()
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ The gallery view, displayed as a grid.
+***REMOVED******REMOVED***/ - Returns: A view representing the basemap gallery grid.
+***REMOVED***func makeGridView() -> some View {
+***REMOVED******REMOVED***internalMakeGalleryView(
+***REMOVED******REMOVED******REMOVED***columns: Array(
 ***REMOVED******REMOVED******REMOVED******REMOVED***repeating: GridItem(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.flexible(minimum: 75, maximum: 100),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.flexible(),
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***alignment: .top
 ***REMOVED******REMOVED******REMOVED******REMOVED***),
 ***REMOVED******REMOVED******REMOVED******REMOVED***count: 3
 ***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***LazyVGrid(columns: columns) {
-***REMOVED******REMOVED******REMOVED******REMOVED***ForEach(viewModel.items) { item in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***BasemapGalleryCell(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***item: item,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isSelected: item == viewModel.currentItem
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let loadError = item.loadBasemapError {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***alertItem = AlertItem(loadBasemapError: loadError)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***showErrorAlert = true
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.currentItem = item
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ The gallery view, displayed as a list.
+***REMOVED******REMOVED***/ - Returns: A view representing the basemap gallery list.
+***REMOVED***func makeListView() -> some View {
+***REMOVED******REMOVED***internalMakeGalleryView(
+***REMOVED******REMOVED******REMOVED***columns: [
+***REMOVED******REMOVED******REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.flexible(),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***alignment: .top
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***]
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ The gallery view, displayed in the specified columns.
+***REMOVED******REMOVED***/ - Parameter columns: The columns used to display the basemap items.
+***REMOVED******REMOVED***/ - Returns: A view representing the basemap gallery with the specified columns.
+***REMOVED***func internalMakeGalleryView(columns: [GridItem]) -> some View {
+***REMOVED******REMOVED***LazyVGrid(columns: columns) {
+***REMOVED******REMOVED******REMOVED***ForEach(viewModel.items) { item in
+***REMOVED******REMOVED******REMOVED******REMOVED***BasemapGalleryCell(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***item: item,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isSelected: item == viewModel.currentItem
+***REMOVED******REMOVED******REMOVED******REMOVED***) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let loadError = item.loadBasemapError {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***alertItem = AlertItem(loadBasemapError: loadError)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***showErrorAlert = true
+***REMOVED******REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.setCurrentItem(item)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
+***REMOVED***
+***REMOVED***
+
+***REMOVED*** MARK: Modifiers
+
+public extension BasemapGallery {
+***REMOVED******REMOVED***/ The style of the basemap gallery. Defaults to ``Style/automatic``.
+***REMOVED******REMOVED***/ - Parameter style: The `Style` to use.
+***REMOVED******REMOVED***/ - Returns: The `BasemapGallery`.
+***REMOVED***func style(
+***REMOVED******REMOVED***_ newStyle: Style
+***REMOVED***) -> BasemapGallery {
+***REMOVED******REMOVED***var copy = self
+***REMOVED******REMOVED***copy.style = newStyle
+***REMOVED******REMOVED***return copy
 ***REMOVED***
 ***REMOVED***
 
@@ -99,6 +200,26 @@ extension AlertItem {
 ***REMOVED******REMOVED***self.init(
 ***REMOVED******REMOVED******REMOVED***title: "Error loading basemap.",
 ***REMOVED******REMOVED******REMOVED***message: "\((loadBasemapError as? RuntimeError)?.failureReason ?? "The basemap failed to load for an unknown reason.")"
+***REMOVED******REMOVED***)
+***REMOVED***
+
+***REMOVED******REMOVED***/ Creates an alert item based on a spatial reference mismatch error.
+***REMOVED******REMOVED***/ - Parameter spatialReferenceMismatchError: The error associated with the mismatch.
+***REMOVED***init(spatialReferenceMismatchError: SpatialReferenceMismatchError) {
+***REMOVED******REMOVED***let message: String
+
+***REMOVED******REMOVED***switch (spatialReferenceMismatchError.basemapSpatialReference, spatialReferenceMismatchError.geoModelSpatialReference) {
+***REMOVED******REMOVED***case (.some(let basemapSpatialReference), .some(let geoModelSpatialReference)):
+***REMOVED******REMOVED******REMOVED***message = "The spatial reference of the basemap: \(basemapSpatialReference.description) does not match that of the geomodel: \(geoModelSpatialReference.description)."
+***REMOVED******REMOVED***case (_, .none):
+***REMOVED******REMOVED******REMOVED***message = "The geo model does not have a spatial reference."
+***REMOVED******REMOVED***case (.none, _):
+***REMOVED******REMOVED******REMOVED***message = "The basemap does not have a spatial reference."
+***REMOVED***
+
+***REMOVED******REMOVED***self.init(
+***REMOVED******REMOVED******REMOVED***title: "Spatial reference mismatch.",
+***REMOVED******REMOVED******REMOVED***message: message
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
