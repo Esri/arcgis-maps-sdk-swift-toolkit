@@ -14,9 +14,11 @@
 ***REMOVED***
 ***REMOVED***
 
+***REMOVED***/ A view which allows selection of sites and facilities represented in a `FloorManager`.
 struct SiteSelector: View {
-***REMOVED******REMOVED***/ Creates a `FloorFilter`
-***REMOVED******REMOVED***/ - Parameter content: The view shown in the floating panel.
+***REMOVED******REMOVED***/ Creates a `SiteSelector`
+***REMOVED******REMOVED***/ - Parameter floorFilterViewModel: The view model used by the `SiteSelector`.
+***REMOVED******REMOVED***/ - Parameter showSiteSelector: A binding used to dismiss the site selector.
 ***REMOVED***public init(
 ***REMOVED******REMOVED***_ floorFilterViewModel: FloorFilterViewModel,
 ***REMOVED******REMOVED***showSiteSelector: Binding<Bool>
@@ -25,9 +27,11 @@ struct SiteSelector: View {
 ***REMOVED******REMOVED***self.showSiteSelector = showSiteSelector
 ***REMOVED***
 ***REMOVED***
-***REMOVED***private let viewModel: FloorFilterViewModel
+***REMOVED******REMOVED***/ The view model used by the `SiteSelector`.
+***REMOVED***@ObservedObject
+***REMOVED***private var viewModel: FloorFilterViewModel
 ***REMOVED***
-***REMOVED******REMOVED***/ Binding allowing the user to toggle the visibility of the results list.
+***REMOVED******REMOVED***/ Allows the user to toggle the visibility of the site selector.
 ***REMOVED***private var showSiteSelector: Binding<Bool>
 ***REMOVED***
 ***REMOVED***var body: some View {
@@ -48,6 +52,7 @@ struct SiteSelector: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ A view displaying either the sites or facilities contained in a `FloorManager`.
 ***REMOVED***struct FloorFilterList: View {
 ***REMOVED******REMOVED***private let title: String
 ***REMOVED******REMOVED***private let sites: [FloorSite]?
@@ -56,6 +61,11 @@ struct SiteSelector: View {
 ***REMOVED******REMOVED******REMOVED***/ Binding allowing the user to toggle the visibility of the results list.
 ***REMOVED******REMOVED***private var showSiteSelector: Binding<Bool>
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ Creates a `FloorFilterList`
+***REMOVED******REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED******REMOVED***/   - title: The title of the list.
+***REMOVED******REMOVED******REMOVED***/   - sites: The sites to display.
+***REMOVED******REMOVED******REMOVED***/   - showSiteSelector: A binding used to dismiss the site selector.
 ***REMOVED******REMOVED***init(
 ***REMOVED******REMOVED******REMOVED***_ title: String,
 ***REMOVED******REMOVED******REMOVED***sites: [FloorSite],
@@ -79,38 +89,28 @@ struct SiteSelector: View {
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var body: some View {
-***REMOVED******REMOVED******REMOVED******REMOVED***NavigationView {
-***REMOVED******REMOVED******REMOVED******REMOVED***TODO: figure this navigation stuff out or at least get to a demo-able point
-***REMOVED******REMOVED******REMOVED******REMOVED***LazyVStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(title)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.bold()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***showSiteSelector.wrappedValue.toggle()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "xmark.circle")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Rectangle()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(height:1)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(sites ?? []) { site in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***NavigationLink(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***destination: EmptyView()) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(site.name)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(facilities ?? []) { facility in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***NavigationLink(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***destination: EmptyView()) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(facility.name)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***LazyVStack(alignment: .leading) {
+***REMOVED******REMOVED******REMOVED******REMOVED***HStack {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(title)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.bold()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***showSiteSelector.wrappedValue.toggle()
+***REMOVED******REMOVED******REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "xmark.circle")
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.navigationBarTitle("Mountain Airport")
-***REMOVED******REMOVED******REMOVED******REMOVED***.esriBorder()
+***REMOVED******REMOVED******REMOVED******REMOVED***Rectangle()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(height:1)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
+***REMOVED******REMOVED******REMOVED******REMOVED***ForEach(sites ?? []) { site in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(site.name)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***ForEach(facilities ?? []) { facility in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(facility.name)
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.esriBorder()
 ***REMOVED***
-***REMOVED******REMOVED***
+***REMOVED***
 ***REMOVED***

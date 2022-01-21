@@ -14,26 +14,13 @@
 ***REMOVED***
 ***REMOVED***
 
-/*
- 
- ***REMOVED*** method that gets/sets the facility in the floor filter using the facility ID
- string selectedFacilityId()
- void setSelectedFacilityId(string facilityId)
- 
- ***REMOVED*** method that gets/sets the level in the floor filter using the level ID
- string selectedLevelId()
- void setSelectedtLevelId(String levelId)
- 
- ***REMOVED*** method that gets/sets the site in the floor filter using the site ID
- string selectedSiteId()
- void setSelectedSiteId(String siteId)
- 
- */
-
 @MainActor
-***REMOVED***/ View Model class that contains the Data Model of the Floor Filter
-***REMOVED***/ Also contains the business logic to filter and change the map extent based on selected site/level/facility
+***REMOVED***/ Manages the state for a `FloorFilter`.
 public class FloorFilterViewModel: ObservableObject {
+***REMOVED******REMOVED***/ Creates a `FloorFilterViewModel`.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - floorManager: A floor manager.
+***REMOVED******REMOVED***/   - viewpoint: Viewpoint updated when the selected site or facility changes.
 ***REMOVED***public init(
 ***REMOVED******REMOVED***floorManager: FloorManager,
 ***REMOVED******REMOVED***viewpoint: Binding<Viewpoint>? = nil
@@ -54,12 +41,14 @@ public class FloorFilterViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ The `Viewpoint` used to pan/zoom to the floor level. If `nil`, there will be no zooming.
+***REMOVED******REMOVED***/ The `Viewpoint` used to pan/zoom to the selected site/facilty.
+***REMOVED******REMOVED***/ If `nil`, there will be automatic no pan/zoom operations.
 ***REMOVED***var viewpoint: Binding<Viewpoint>? = nil
 ***REMOVED***
 ***REMOVED******REMOVED***/ The `FloorManager` containing the site, floor, and level information.
 ***REMOVED***var floorManager: FloorManager
 ***REMOVED***
+***REMOVED******REMOVED***/ The floor manager sites.
 ***REMOVED***public var sites: [FloorSite] {
 ***REMOVED******REMOVED***floorManager.sites
 ***REMOVED***
@@ -68,18 +57,18 @@ public class FloorFilterViewModel: ObservableObject {
 ***REMOVED***@Published
 ***REMOVED***public var isLoading = true
 ***REMOVED***
-***REMOVED******REMOVED***/ Facilities in the selected site
-***REMOVED******REMOVED***/ If no site is selected then the list is empty
-***REMOVED******REMOVED***/ If the sites data does not exist in the map, then use all the facilities in the map
+***REMOVED******REMOVED***/ Facilities in the selected site. If no site is selected then the list is empty.
+***REMOVED******REMOVED***/ If the sites list is empty, all facilities will be returned.
 ***REMOVED***public var facilities: [FloorFacility] {
 ***REMOVED******REMOVED***sites.isEmpty ? floorManager.facilities : floorManager.facilities.filter {
 ***REMOVED******REMOVED******REMOVED***$0.site == selectedSite
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Levels that are visible in the expanded Floor Filter levels table view
-***REMOVED******REMOVED***/ Reverse the order of the levels to make it in ascending order
-***REMOVED***public var visibleLevelsInExpandedList: [FloorLevel] {
+***REMOVED******REMOVED***/ Levels in the selected facility. If no facility is selected then the list is empty.
+***REMOVED******REMOVED***/ If the facilities list is empty, all levels will be returned. 
+***REMOVED******REMOVED***/ The levels are returned in ascending order.
+***REMOVED***public var levels: [FloorLevel] {
 ***REMOVED******REMOVED***facilities.isEmpty ? floorManager.levels : floorManager.levels.filter {
 ***REMOVED******REMOVED******REMOVED***$0.facility == selectedFacility
 ***REMOVED***.reversed()
@@ -90,7 +79,7 @@ public class FloorFilterViewModel: ObservableObject {
 ***REMOVED******REMOVED***floorManager.levels
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ The site, facility, and level that are selected by the user
+***REMOVED******REMOVED***/ The selected site.
 ***REMOVED***@Published
 ***REMOVED***public var selectedSite: FloorSite? = nil {
 ***REMOVED******REMOVED***didSet {
@@ -98,6 +87,7 @@ public class FloorFilterViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED***
 
+***REMOVED******REMOVED***/ The selected facility.
 ***REMOVED***@Published
 ***REMOVED***public var selectedFacility: FloorFacility? = nil {
 ***REMOVED******REMOVED***didSet {
@@ -105,46 +95,11 @@ public class FloorFilterViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED***
 
+***REMOVED******REMOVED***/ The selected level.
 ***REMOVED***@Published
 ***REMOVED***public var selectedLevel: FloorLevel? = nil
 ***REMOVED***
-***REMOVED******REMOVED***/ The default vertical order is 0 according to Runtime 100.12 update for FloorManager
-***REMOVED***public let defaultVerticalOrder: Int32 = 0
-***REMOVED***
-***REMOVED***public func reset() {
-***REMOVED******REMOVED***selectedSite = nil
-***REMOVED******REMOVED***selectedFacility = nil
-***REMOVED******REMOVED***selectedLevel = nil
-***REMOVED***
-***REMOVED***
-***REMOVED***public func getDefaultLevelForFacility(facility: FloorFacility?) -> FloorLevel? {
-***REMOVED******REMOVED***let candidateLevels = allLevels.filter {$0.facility == facility***REMOVED***
-***REMOVED******REMOVED***return candidateLevels.first {$0.verticalOrder == 0***REMOVED*** ?? getLowestLevel(levels: candidateLevels)
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ Returns the FloorLevel with the lowest verticalOrder.
-***REMOVED***private func getLowestLevel(levels: [FloorLevel]) -> FloorLevel? {
-***REMOVED******REMOVED***var lowestLevel: FloorLevel? = nil
-***REMOVED******REMOVED***allLevels.forEach {
-***REMOVED******REMOVED******REMOVED***if ($0.verticalOrder != Int.min && $0.verticalOrder != Int.max) {
-***REMOVED******REMOVED******REMOVED******REMOVED***let lowestVerticalOrder = lowestLevel?.verticalOrder
-***REMOVED******REMOVED******REMOVED******REMOVED***if (lowestVerticalOrder == nil || lowestVerticalOrder ?? defaultVerticalOrder > $0.verticalOrder) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***lowestLevel = $0
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***return lowestLevel
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ Sets the visibility of all the levels on the map based on the vertical order of the current selected level
-***REMOVED***public func filterMapToSelectedLevel() {
-***REMOVED******REMOVED***guard let selectedLevel = selectedLevel else { return ***REMOVED***
-***REMOVED******REMOVED***allLevels.forEach {
-***REMOVED******REMOVED******REMOVED***$0.isVisible = $0.verticalOrder == selectedLevel.verticalOrder
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ Zooms to the facility if there is a selected facility, otherwise zooms to the site.
+***REMOVED******REMOVED***/ Zooms to the selected facility; if there is no selected facility, zooms to the selected site.
 ***REMOVED***public func zoomToSelection() {
 ***REMOVED******REMOVED***if selectedFacility != nil {
 ***REMOVED******REMOVED******REMOVED***zoomToFacility()
@@ -175,11 +130,5 @@ public class FloorFilterViewModel: ObservableObject {
 ***REMOVED******REMOVED******REMOVED******REMOVED***targetExtent: targetExtent
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED***
-***REMOVED***
-***REMOVED***
-
-extension UIImage {
-***REMOVED***static var site: UIImage {
-***REMOVED******REMOVED***return UIImage(named: "Site", in: Bundle.module, with: nil)!
 ***REMOVED***
 ***REMOVED***

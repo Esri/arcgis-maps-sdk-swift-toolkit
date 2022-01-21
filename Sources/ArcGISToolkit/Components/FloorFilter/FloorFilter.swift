@@ -14,16 +14,21 @@
 ***REMOVED***
 ***REMOVED***
 
+***REMOVED***/ The `FloorFilter` component simplifies visualization of GIS data for a specific floor of a building
+***REMOVED***/ in your application. It allows you to filter the floor plan data displayed in your `GeoView`
+***REMOVED***/ to a site, a facility (building) in the site, or a floor in the facility.
 public struct FloorFilter: View {
 ***REMOVED******REMOVED***/ Creates a `FloorFilter`
-***REMOVED******REMOVED***/ - Parameter content: The view shown in the floating panel.
+***REMOVED******REMOVED***/ - Parameter floorFilterViewModel: The view model used by the `BasemapGallery`.
 ***REMOVED***public init(_ floorFilterViewModel: FloorFilterViewModel) {
 ***REMOVED******REMOVED***self.viewModel = floorFilterViewModel
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ The view model used by the `FloorFilter`.
 ***REMOVED***@ObservedObject
 ***REMOVED***private(set) var viewModel: FloorFilterViewModel
 ***REMOVED***
+***REMOVED******REMOVED***/ Allows the user to toggle the visibility of the site selector.
 ***REMOVED***@State
 ***REMOVED***private var showSiteSelector: Bool = false
 ***REMOVED***
@@ -35,9 +40,6 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.esriBorder()
 ***REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***VStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** show levels and close button here
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***showSiteSelector.toggle()
 ***REMOVED******REMOVED******REMOVED******REMOVED*** label: {
@@ -54,5 +56,11 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
+***REMOVED***
+***REMOVED***
+
+extension UIImage {
+***REMOVED***static var site: UIImage {
+***REMOVED******REMOVED***return UIImage(named: "Site", in: Bundle.module, with: nil)!
 ***REMOVED***
 ***REMOVED***
