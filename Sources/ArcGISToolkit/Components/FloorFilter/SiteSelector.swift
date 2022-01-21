@@ -14,9 +14,11 @@
 import SwiftUI
 import ArcGIS
 
+/// A view which allows selection of sites and facilities represented in a `FloorManager`.
 struct SiteSelector: View {
-    /// Creates a `FloorFilter`
-    /// - Parameter content: The view shown in the floating panel.
+    /// Creates a `SiteSelector`
+    /// - Parameter floorFilterViewModel: The view model used by the `SiteSelector`.
+    /// - Parameter showSiteSelector: A binding used to dismiss the site selector.
     public init(
         _ floorFilterViewModel: FloorFilterViewModel,
         showSiteSelector: Binding<Bool>
@@ -25,9 +27,11 @@ struct SiteSelector: View {
         self.showSiteSelector = showSiteSelector
     }
     
-    private let viewModel: FloorFilterViewModel
+    /// The view model used by the `SiteSelector`.
+    @ObservedObject
+    private var viewModel: FloorFilterViewModel
     
-    /// Binding allowing the user to toggle the visibility of the results list.
+    /// Allows the user to toggle the visibility of the site selector.
     private var showSiteSelector: Binding<Bool>
     
     var body: some View {
@@ -48,6 +52,7 @@ struct SiteSelector: View {
         }
     }
     
+    /// A view displaying either the sites or facilities contained in a `FloorManager`.
     struct FloorFilterList: View {
         private let title: String
         private let sites: [FloorSite]?
@@ -56,6 +61,11 @@ struct SiteSelector: View {
         /// Binding allowing the user to toggle the visibility of the results list.
         private var showSiteSelector: Binding<Bool>
         
+        /// Creates a `FloorFilterList`
+        /// - Parameters:
+        ///   - title: The title of the list.
+        ///   - sites: The sites to display.
+        ///   - showSiteSelector: A binding used to dismiss the site selector.
         init(
             _ title: String,
             sites: [FloorSite],
@@ -79,38 +89,28 @@ struct SiteSelector: View {
         }
         
         var body: some View {
-//            NavigationView {
-//            TODO: figure this navigation stuff out or at least get to a demo-able point
-                LazyVStack {
-                    HStack {
-                        Text(title)
-                            .bold()
-                        Spacer()
-                        Button {
-                            showSiteSelector.wrappedValue.toggle()
-                        } label: {
-                            Image(systemName: "xmark.circle")
-                        }
-                    }
-                    Rectangle()
-                        .frame(height:1)
-                        .foregroundColor(.secondary)
-                    ForEach(sites ?? []) { site in
-//                        NavigationLink(
-//                            destination: EmptyView()) {
-                                Text(site.name)
-//                            }
-                    }
-                    ForEach(facilities ?? []) { facility in
-//                        NavigationLink(
-//                            destination: EmptyView()) {
-                                Text(facility.name)
-//                            }
+            LazyVStack(alignment: .leading) {
+                HStack {
+                    Text(title)
+                        .bold()
+                    Spacer()
+                    Button {
+                        showSiteSelector.wrappedValue.toggle()
+                    } label: {
+                        Image(systemName: "xmark.circle")
                     }
                 }
-//            .navigationBarTitle("Mountain Airport")
-                .esriBorder()
+                Rectangle()
+                    .frame(height:1)
+                    .foregroundColor(.secondary)
+                ForEach(sites ?? []) { site in
+                    Text(site.name)
+                }
+                ForEach(facilities ?? []) { facility in
+                    Text(facility.name)
+                }
             }
+            .esriBorder()
         }
-//    }
+    }
 }
