@@ -23,12 +23,12 @@ import Combine
 // Test Design: https://devtopia.esri.com/runtime/common-toolkit/blob/master/designs/BasemapGallery/BasemapGallery_Test_Design.md
 //
 // Note:  the iOS implementation uses the MVVM approach and SwiftUI. This
-// required a bit more properties/logic in the `BasemapGalleryItem` (such
-// as the `loadBasemapError` and `spatialReferenceStatus` properties than
-// the `BasemapGallery` design specifies. Tests not present in the
+// required a bit more properties/logic in the 'BasemapGalleryItem' (such
+// as the 'loadBasemapError' and 'spatialReferenceStatus' properties than
+// the 'BasemapGallery' design specifies. Tests not present in the
 // test design have been added to accomodate those differences.
 @MainActor
-class BasemapGalleryItemTests: XCTestCase {
+final class BasemapGalleryItemTests: XCTestCase {
     func testInit() async throws {
         let basemap = Basemap.lightGrayCanvas()
         var item = BasemapGalleryItem(basemap: basemap)
@@ -36,15 +36,14 @@ class BasemapGalleryItemTests: XCTestCase {
         var isBasemapLoading = try await item.$isBasemapLoading.compactMap({ $0 }).dropFirst().first
         var loading = try XCTUnwrap(isBasemapLoading)
         XCTAssertFalse(loading, "Item is not loading.")
-        XCTAssertTrue(item.basemap === basemap)
+        XCTAssertIdentical(item.basemap, basemap)
         XCTAssertEqual(item.name, "Light Gray Canvas")
         XCTAssertNil(item.description)
         XCTAssertNotNil(item.thumbnail)
         XCTAssertNil(item.loadBasemapError)
         
         // Test with overrides.
-        let thumbnail = UIImage(systemName: "magnifyingglass")
-        XCTAssertNotNil(thumbnail)
+        let thumbnail = UIImage(systemName: "magnifyingglass")!
         item = BasemapGalleryItem(
             basemap: basemap,
             name: "My Basemap",
@@ -123,7 +122,7 @@ class BasemapGalleryItemTests: XCTestCase {
         XCTAssertFalse(item.isBasemapLoading)
         
         // Test if basemap doesn't match.
-        try await item.updateSpatialReferenceStatus(SpatialReference.wgs84)
+        try await item.updateSpatialReferenceStatus(.wgs84)
         
         // Since we've already called `updateSpatialReferenceStatus` once,
         // we should no longer internally need to load the baselayers.
@@ -134,7 +133,7 @@ class BasemapGalleryItemTests: XCTestCase {
         srStatus = try await item.$spatialReferenceStatus.compactMap({ $0 }).first
         status = try XCTUnwrap(srStatus)
         XCTAssertEqual(status, .noMatch)
-        XCTAssertEqual(item.spatialReference, SpatialReference.webMercator)
+        XCTAssertEqual(item.spatialReference, .webMercator)
         
         // Test WGS84 basemap.
         let otherItem = BasemapGalleryItem(
@@ -147,10 +146,10 @@ class BasemapGalleryItemTests: XCTestCase {
         
         _ = try await otherItem.$isBasemapLoading.compactMap({ $0 }).dropFirst().first
         
-        try await otherItem.updateSpatialReferenceStatus(SpatialReference.wgs84)
+        try await otherItem.updateSpatialReferenceStatus(.wgs84)
         srStatus = try await otherItem.$spatialReferenceStatus.compactMap({ $0 }).first
         status = try XCTUnwrap(srStatus)
         XCTAssertEqual(status, .match)
-        XCTAssertEqual(otherItem.spatialReference, SpatialReference.wgs84)
+        XCTAssertEqual(otherItem.spatialReference, .wgs84)
     }
 }

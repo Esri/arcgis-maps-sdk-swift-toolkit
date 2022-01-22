@@ -23,8 +23,8 @@ import Combine
 // Test Design: https://devtopia.esri.com/runtime/common-toolkit/blob/master/designs/BasemapGallery/BasemapGallery_Test_Design.md
 //
 // Note:  the iOS implementation uses the MVVM approach and SwiftUI. This
-// required a bit more properties/logic in the `BasemapGalleryViewModel` (such
-// as `geoModel.actualSpatialReference`) than the `BasemapGallery` design
+// required a bit more properties/logic in the 'BasemapGalleryViewModel' (such
+// as 'geoModel.actualSpatialReference') than the 'BasemapGallery' design
 // specifies. Tests not present in the test design have been added to
 // accomodate those differences.
 @MainActor
@@ -54,9 +54,9 @@ class BasemapGalleryViewModelTests: XCTestCase {
         //
         // GeoModel.
         //
-        var geoModel = Map(basemap: Basemap.lightGrayCanvas())
+        var geoModel = Map(basemap: .lightGrayCanvas())
         let geoModelViewModel = BasemapGalleryViewModel(geoModel: geoModel)
-        XCTAssertTrue(geoModel === geoModelViewModel.geoModel)
+        XCTAssertIdentical(geoModelViewModel.geoModel, geoModel)
         
         // With no portal, `basemapGalleryItems` are fetched from AGOL's
         // list of developer basemaps.
@@ -66,7 +66,7 @@ class BasemapGalleryViewModelTests: XCTestCase {
         
         // GeoModel should be loaded.
         XCTAssertEqual(geoModel.loadStatus, .loaded)
-        XCTAssertTrue(geoModel.basemap === geoModelViewModel.currentItem?.basemap)
+        XCTAssertIdentical(geoModelViewModel.currentItem?.basemap, geoModel.basemap)
         
         // Save the array of developer basemap items from AGOL.
         let developerBasemapItems = basemapGalleryItems
@@ -74,12 +74,12 @@ class BasemapGalleryViewModelTests: XCTestCase {
         //
         // Portal.
         //
-        geoModel = Map(basemap: Basemap.lightGrayCanvas())
+        geoModel = Map(basemap: .lightGrayCanvas())
         let portal = Portal.arcGISOnline(isLoginRequired: false)
         let portalViewModel = BasemapGalleryViewModel(geoModel, portal: portal)
         
-        XCTAssertTrue(geoModel === portalViewModel.geoModel)
-        XCTAssertTrue(portal === portalViewModel.portal)
+        XCTAssertIdentical(portalViewModel.geoModel, geoModel)
+        XCTAssertIdentical(portalViewModel.portal, portal)
         
         // With a portal, `basemapGalleryItems` are fetched from either the
         // portal's vector basemaps or regular basemaps.
@@ -88,7 +88,7 @@ class BasemapGalleryViewModelTests: XCTestCase {
         XCTAssertFalse(basemapGalleryItems.isEmpty)
         
         XCTAssertEqual(geoModel.loadStatus, .loaded)
-        XCTAssertTrue(geoModel.basemap === portalViewModel.currentItem?.basemap)
+        XCTAssertIdentical(portalViewModel.currentItem?.basemap, geoModel.basemap)
         
         // Sort the developer items from the "GeoModel" test above and the
         // items from the portal and make sure they are not equal.
@@ -105,7 +105,7 @@ class BasemapGalleryViewModelTests: XCTestCase {
         //
         // BasemapGalleryItems. No basemaps are fetched from a portal.
         //
-        geoModel = Map(basemap: Basemap.lightGrayCanvas())
+        geoModel = Map(basemap: .lightGrayCanvas())
         let itemsViewModel = BasemapGalleryViewModel(
             geoModel: geoModel,
             items: defaultBasemapGalleryItems
@@ -120,12 +120,12 @@ class BasemapGalleryViewModelTests: XCTestCase {
     
     /// Test the `GeoModel.actualSpatialReference` extension property.
     func testGeoModelActualSpatialReference() async throws {
-        // Map with .webMercator basemap.
-        let geoModel = Map(basemap: Basemap.lightGrayCanvas())
+        // Map with Web Mercator basemap.
+        let geoModel = Map(basemap: .lightGrayCanvas())
         try await geoModel.load()
         XCTAssertEqual(geoModel.actualSpatialReference, .webMercator)
         
-        // Map with .wgs84 basemap.
+        // Map with WGS 84 basemap.
         let geoModel2 = Map(
             basemap: Basemap(
                 item: PortalItem(
@@ -171,7 +171,7 @@ class BasemapGalleryViewModelTests: XCTestCase {
         // Verify current item is equal to map's basemap.
         var item = try await viewModel.$currentItem.compactMap({ $0 }).first
         var currentItem = try XCTUnwrap(item)
-        XCTAssertTrue(currentItem.basemap === basemap)
+        XCTAssertIdentical(currentItem.basemap, basemap)
         
         // Test valid basemap item (OpenStreetMap Vector Basemap (Blueprint)).
         let validItem = BasemapGalleryItem(
@@ -213,7 +213,7 @@ class BasemapGalleryViewModelTests: XCTestCase {
         viewModel.setCurrentItem(invalidItem)
         
         // The update will fail, so wait until the
-        // `$spatialReferenceMismatchError` is updated.
+        // `spatialReferenceMismatchError` is updated.
         let error = try await viewModel.$spatialReferenceMismatchError.compactMap({ $0 }).first
         XCTAssertNotNil(error, "Error is not nil.")
         
@@ -234,7 +234,7 @@ class BasemapGalleryViewModelTests: XCTestCase {
         // There are exactly two default items.
         XCTAssertEqual(basemapGalleryItems.count, 2)
         
-        // Set a portal on the model.  This should clear out the existing
+        // Set a portal on the model. This should clear out the existing
         // array of items and load basemaps from the portal.
         viewModel.portal = Portal.arcGISOnline(isLoginRequired: false)
         
@@ -248,10 +248,8 @@ class BasemapGalleryViewModelTests: XCTestCase {
         basemapGalleryItems = try XCTUnwrap(items)
         
         // There should be no default items in the basemap gallery.
-        let foundDefaultItem = basemapGalleryItems.first(where: {
-            $0 == defaultBasemapGalleryItems[0] ||
-            $0 == defaultBasemapGalleryItems[1]
-        })
-        XCTAssertNil(foundDefaultItem)
+        XCTAssertFalse(basemapGalleryItems.contains(where: { item in
+            defaultBasemapGalleryItems.contains(item)
+        }))
     }
 }
