@@ -19,9 +19,6 @@ import XCTest
 ***REMOVED***
 import Combine
 
-***REMOVED***
-***REMOVED*** Test Design: https:***REMOVED***devtopia.esri.com/runtime/common-toolkit/blob/master/designs/BasemapGallery/BasemapGallery_Test_Design.md
-***REMOVED***
 ***REMOVED*** Note:  the iOS implementation uses the MVVM approach and SwiftUI. This
 ***REMOVED*** required a bit more properties/logic in the `BasemapGalleryItem` (such
 ***REMOVED*** as the `loadBasemapError` and `spatialReferenceStatus` properties than
