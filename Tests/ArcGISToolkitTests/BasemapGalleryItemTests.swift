@@ -23,12 +23,12 @@ import Combine
 ***REMOVED*** Test Design: https:***REMOVED***devtopia.esri.com/runtime/common-toolkit/blob/master/designs/BasemapGallery/BasemapGallery_Test_Design.md
 ***REMOVED***
 ***REMOVED*** Note:  the iOS implementation uses the MVVM approach and SwiftUI. This
-***REMOVED*** required a bit more properties/logic in the `BasemapGalleryItem` (such
-***REMOVED*** as the `loadBasemapError` and `spatialReferenceStatus` properties than
-***REMOVED*** the `BasemapGallery` design specifies. Tests not present in the
+***REMOVED*** required a bit more properties/logic in the 'BasemapGalleryItem' (such
+***REMOVED*** as the 'loadBasemapError' and 'spatialReferenceStatus' properties than
+***REMOVED*** the 'BasemapGallery' design specifies. Tests not present in the
 ***REMOVED*** test design have been added to accomodate those differences.
 @MainActor
-class BasemapGalleryItemTests: XCTestCase {
+final class BasemapGalleryItemTests: XCTestCase {
 ***REMOVED***func testInit() async throws {
 ***REMOVED******REMOVED***let basemap = Basemap.lightGrayCanvas()
 ***REMOVED******REMOVED***var item = BasemapGalleryItem(basemap: basemap)
@@ -36,15 +36,14 @@ class BasemapGalleryItemTests: XCTestCase {
 ***REMOVED******REMOVED***var isBasemapLoading = try await item.$isBasemapLoading.compactMap({ $0 ***REMOVED***).dropFirst().first
 ***REMOVED******REMOVED***var loading = try XCTUnwrap(isBasemapLoading)
 ***REMOVED******REMOVED***XCTAssertFalse(loading, "Item is not loading.")
-***REMOVED******REMOVED***XCTAssertTrue(item.basemap === basemap)
+***REMOVED******REMOVED***XCTAssertIdentical(item.basemap, basemap)
 ***REMOVED******REMOVED***XCTAssertEqual(item.name, "Light Gray Canvas")
 ***REMOVED******REMOVED***XCTAssertNil(item.description)
 ***REMOVED******REMOVED***XCTAssertNotNil(item.thumbnail)
 ***REMOVED******REMOVED***XCTAssertNil(item.loadBasemapError)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Test with overrides.
-***REMOVED******REMOVED***let thumbnail = UIImage(systemName: "magnifyingglass")
-***REMOVED******REMOVED***XCTAssertNotNil(thumbnail)
+***REMOVED******REMOVED***let thumbnail = UIImage(systemName: "magnifyingglass")!
 ***REMOVED******REMOVED***item = BasemapGalleryItem(
 ***REMOVED******REMOVED******REMOVED***basemap: basemap,
 ***REMOVED******REMOVED******REMOVED***name: "My Basemap",
@@ -123,7 +122,7 @@ class BasemapGalleryItemTests: XCTestCase {
 ***REMOVED******REMOVED***XCTAssertFalse(item.isBasemapLoading)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Test if basemap doesn't match.
-***REMOVED******REMOVED***try await item.updateSpatialReferenceStatus(SpatialReference.wgs84)
+***REMOVED******REMOVED***try await item.updateSpatialReferenceStatus(.wgs84)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Since we've already called `updateSpatialReferenceStatus` once,
 ***REMOVED******REMOVED******REMOVED*** we should no longer internally need to load the baselayers.
@@ -134,7 +133,7 @@ class BasemapGalleryItemTests: XCTestCase {
 ***REMOVED******REMOVED***srStatus = try await item.$spatialReferenceStatus.compactMap({ $0 ***REMOVED***).first
 ***REMOVED******REMOVED***status = try XCTUnwrap(srStatus)
 ***REMOVED******REMOVED***XCTAssertEqual(status, .noMatch)
-***REMOVED******REMOVED***XCTAssertEqual(item.spatialReference, SpatialReference.webMercator)
+***REMOVED******REMOVED***XCTAssertEqual(item.spatialReference, .webMercator)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Test WGS84 basemap.
 ***REMOVED******REMOVED***let otherItem = BasemapGalleryItem(
@@ -147,10 +146,10 @@ class BasemapGalleryItemTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***_ = try await otherItem.$isBasemapLoading.compactMap({ $0 ***REMOVED***).dropFirst().first
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***try await otherItem.updateSpatialReferenceStatus(SpatialReference.wgs84)
+***REMOVED******REMOVED***try await otherItem.updateSpatialReferenceStatus(.wgs84)
 ***REMOVED******REMOVED***srStatus = try await otherItem.$spatialReferenceStatus.compactMap({ $0 ***REMOVED***).first
 ***REMOVED******REMOVED***status = try XCTUnwrap(srStatus)
 ***REMOVED******REMOVED***XCTAssertEqual(status, .match)
-***REMOVED******REMOVED***XCTAssertEqual(otherItem.spatialReference, SpatialReference.wgs84)
+***REMOVED******REMOVED***XCTAssertEqual(otherItem.spatialReference, .wgs84)
 ***REMOVED***
 ***REMOVED***
