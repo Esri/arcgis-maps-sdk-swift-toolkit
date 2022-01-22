@@ -19,9 +19,6 @@ import ArcGIS
 import SwiftUI
 import Combine
 
-//
-// Test Design: https://devtopia.esri.com/runtime/common-toolkit/blob/master/designs/BasemapGallery/BasemapGallery_Test_Design.md
-//
 // Note:  the iOS implementation uses the MVVM approach and SwiftUI. This
 // required a bit more properties/logic in the `BasemapGalleryItem` (such
 // as the `loadBasemapError` and `spatialReferenceStatus` properties than
