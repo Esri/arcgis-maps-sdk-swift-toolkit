@@ -19,9 +19,6 @@ import ArcGIS
 import SwiftUI
 import Combine
 
-//
-// Test Design: https://devtopia.esri.com/runtime/common-toolkit/blob/master/designs/BasemapGallery/BasemapGallery_Test_Design.md
-//
 // Note:  the iOS implementation uses the MVVM approach and SwiftUI. This
 // required a bit more properties/logic in the 'BasemapGalleryViewModel' (such
 // as 'geoModel.actualSpatialReference') than the 'BasemapGallery' design
@@ -137,7 +134,7 @@ class BasemapGalleryViewModelTests: XCTestCase {
         try await geoModel2.load()
         XCTAssertEqual(geoModel2.actualSpatialReference, .wgs84)
         
-        // Test with Scene that has a tiling scheme of .webMercator
+        // Test with Scene that has a tiling scheme of Web Mercator.
         let geoModel3 = Scene(
             basemap: Basemap(
                 item: PortalItem(
@@ -149,7 +146,7 @@ class BasemapGalleryViewModelTests: XCTestCase {
         try await geoModel3.load()
         XCTAssertEqual(geoModel3.actualSpatialReference, .webMercator)
         
-        // Test with Scene that has a tiling scheme of .wgs84
+        // Test with Scene that has a tiling scheme of WGS 84.
         let geoModel4 = Scene(
             basemap: Basemap(
                 item: PortalItem(
@@ -162,7 +159,7 @@ class BasemapGalleryViewModelTests: XCTestCase {
     }
     
     /// Test the `currentItem` property including valid and invalid basemaps.
-    func testcurrentItem() async throws {
+    func testCurrentItem() async throws {
         let basemap = Basemap.streets()
         let geoModel = Map(basemap: basemap)
         
