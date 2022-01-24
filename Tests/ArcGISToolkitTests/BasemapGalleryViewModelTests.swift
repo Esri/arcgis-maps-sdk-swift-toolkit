@@ -19,9 +19,6 @@ import XCTest
 ***REMOVED***
 import Combine
 
-***REMOVED***
-***REMOVED*** Test Design: https:***REMOVED***devtopia.esri.com/runtime/common-toolkit/blob/master/designs/BasemapGallery/BasemapGallery_Test_Design.md
-***REMOVED***
 ***REMOVED*** Note:  the iOS implementation uses the MVVM approach and SwiftUI. This
 ***REMOVED*** required a bit more properties/logic in the 'BasemapGalleryViewModel' (such
 ***REMOVED*** as 'geoModel.actualSpatialReference') than the 'BasemapGallery' design
@@ -137,7 +134,7 @@ class BasemapGalleryViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***try await geoModel2.load()
 ***REMOVED******REMOVED***XCTAssertEqual(geoModel2.actualSpatialReference, .wgs84)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Test with Scene that has a tiling scheme of .webMercator
+***REMOVED******REMOVED******REMOVED*** Test with Scene that has a tiling scheme of Web Mercator.
 ***REMOVED******REMOVED***let geoModel3 = Scene(
 ***REMOVED******REMOVED******REMOVED***basemap: Basemap(
 ***REMOVED******REMOVED******REMOVED******REMOVED***item: PortalItem(
@@ -149,7 +146,7 @@ class BasemapGalleryViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***try await geoModel3.load()
 ***REMOVED******REMOVED***XCTAssertEqual(geoModel3.actualSpatialReference, .webMercator)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Test with Scene that has a tiling scheme of .wgs84
+***REMOVED******REMOVED******REMOVED*** Test with Scene that has a tiling scheme of WGS 84.
 ***REMOVED******REMOVED***let geoModel4 = Scene(
 ***REMOVED******REMOVED******REMOVED***basemap: Basemap(
 ***REMOVED******REMOVED******REMOVED******REMOVED***item: PortalItem(
@@ -162,7 +159,7 @@ class BasemapGalleryViewModelTests: XCTestCase {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Test the `currentItem` property including valid and invalid basemaps.
-***REMOVED***func testcurrentItem() async throws {
+***REMOVED***func testCurrentItem() async throws {
 ***REMOVED******REMOVED***let basemap = Basemap.streets()
 ***REMOVED******REMOVED***let geoModel = Map(basemap: basemap)
 ***REMOVED******REMOVED***
