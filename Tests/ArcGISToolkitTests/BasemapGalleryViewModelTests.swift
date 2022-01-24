@@ -169,9 +169,9 @@ class BasemapGalleryViewModelTests: XCTestCase {
         let viewModel = BasemapGalleryViewModel(geoModel: geoModel)
         
         // Verify current item is equal to map's basemap.
-        let item = try await viewModel.$currentItem.compactMap({ $0 }).first
+        let item = try await viewModel.$currentItem.dropFirst().first
         let currentItem = try XCTUnwrap(item)
-        XCTAssertIdentical(currentItem.basemap, basemap)
+        XCTAssertIdentical(currentItem?.basemap, basemap)
         
         // Test valid basemap item (OpenStreetMap Vector Basemap (Blueprint)).
         let validItem = BasemapGalleryItem(
@@ -189,7 +189,7 @@ class BasemapGalleryViewModelTests: XCTestCase {
         viewModel.setCurrentItem(validItem)
         
         // Wait until the `currentItem` is updated.
-        let item2 = try await viewModel.$currentItem.compactMap({ $0 }).dropFirst().first
+        let item2 = try await viewModel.$currentItem.dropFirst().first
         let currentItem2 = try XCTUnwrap(item2)
         
         // Items should equal, meaning the `validItem` was set properly.
@@ -214,8 +214,9 @@ class BasemapGalleryViewModelTests: XCTestCase {
         
         // The update will fail, so wait until the
         // `spatialReferenceMismatchError` is updated.
-        let error = try await viewModel.$spatialReferenceMismatchError.first
-        XCTAssertNotNil(error, "Error is not nil.")
+        let error = try await viewModel.$spatialReferenceMismatchError.dropFirst().first
+        let unwrappedError = try XCTUnwrap(error)
+        XCTAssertNotNil(unwrappedError, "Error is not nil.")
         
         // Make sure the current item is still equal to the valid item.
         XCTAssertEqual(currentItem2, validItem)
