@@ -169,9 +169,9 @@ class BasemapGalleryViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***let viewModel = BasemapGalleryViewModel(geoModel: geoModel)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Verify current item is equal to map's basemap.
-***REMOVED******REMOVED***let item = try await viewModel.$currentItem.compactMap({ $0 ***REMOVED***).first
+***REMOVED******REMOVED***let item = try await viewModel.$currentItem.dropFirst().first
 ***REMOVED******REMOVED***let currentItem = try XCTUnwrap(item)
-***REMOVED******REMOVED***XCTAssertIdentical(currentItem.basemap, basemap)
+***REMOVED******REMOVED***XCTAssertIdentical(currentItem?.basemap, basemap)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Test valid basemap item (OpenStreetMap Vector Basemap (Blueprint)).
 ***REMOVED******REMOVED***let validItem = BasemapGalleryItem(
@@ -189,7 +189,7 @@ class BasemapGalleryViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***viewModel.setCurrentItem(validItem)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Wait until the `currentItem` is updated.
-***REMOVED******REMOVED***let item2 = try await viewModel.$currentItem.compactMap({ $0 ***REMOVED***).dropFirst().first
+***REMOVED******REMOVED***let item2 = try await viewModel.$currentItem.dropFirst().first
 ***REMOVED******REMOVED***let currentItem2 = try XCTUnwrap(item2)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Items should equal, meaning the `validItem` was set properly.
@@ -214,8 +214,9 @@ class BasemapGalleryViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** The update will fail, so wait until the
 ***REMOVED******REMOVED******REMOVED*** `spatialReferenceMismatchError` is updated.
-***REMOVED******REMOVED***let error = try await viewModel.$spatialReferenceMismatchError.first
-***REMOVED******REMOVED***XCTAssertNotNil(error, "Error is not nil.")
+***REMOVED******REMOVED***let error = try await viewModel.$spatialReferenceMismatchError.dropFirst().first
+***REMOVED******REMOVED***let unwrappedError = try XCTUnwrap(error)
+***REMOVED******REMOVED***XCTAssertNotNil(unwrappedError, "Error is not nil.")
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Make sure the current item is still equal to the valid item.
 ***REMOVED******REMOVED***XCTAssertEqual(currentItem2, validItem)
