@@ -108,7 +108,7 @@ final class BasemapGalleryItemTests: XCTestCase {
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Check if `isBasemapLoading` is set to true during first call
-***REMOVED******REMOVED******REMOVED*** to updateSpatialReferenceStatus.
+***REMOVED******REMOVED******REMOVED*** to `updateSpatialReferenceStatus`.
 ***REMOVED******REMOVED***let isBasemapLoading2 = try await item.$isBasemapLoading.dropFirst().first
 ***REMOVED******REMOVED***let loading2 = try XCTUnwrap(isBasemapLoading2)
 ***REMOVED******REMOVED***XCTAssertTrue(loading2, "Item base layers are loading.")
@@ -123,7 +123,7 @@ final class BasemapGalleryItemTests: XCTestCase {
 ***REMOVED******REMOVED***try await item.updateSpatialReferenceStatus(.wgs84)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Since we've already called `updateSpatialReferenceStatus` once,
-***REMOVED******REMOVED******REMOVED*** we should no longer internally need to load the baselayers.
+***REMOVED******REMOVED******REMOVED*** we should no longer internally need to load the base layers.
 ***REMOVED******REMOVED***let isBasemapLoading3 = try await item.$isBasemapLoading.first
 ***REMOVED******REMOVED***let loading3 = try XCTUnwrap(isBasemapLoading3)
 ***REMOVED******REMOVED***XCTAssertFalse(loading3, "Item base layers are not loading.")
