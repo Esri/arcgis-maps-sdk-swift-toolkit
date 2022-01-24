@@ -63,9 +63,7 @@ final class SmartLocatorSearchSourceTests: XCTestCase {
 
 private extension Envelope {
     static let edinburgh = Envelope(
-        xMin: -365155.60783391213,
-        yMin: 7536778.456812576,
-        xMax: -347494.47622280417,
-        yMax: 7559866.706991681
+        xRange: -365155.60783391213...(-347494.47622280417),
+        yRange: 7536778.456812576...7559866.706991681
     )
 }
