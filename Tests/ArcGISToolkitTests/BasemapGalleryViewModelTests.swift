@@ -54,14 +54,14 @@ class BasemapGalleryViewModelTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** GeoModel.
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***var geoModel = Map(basemap: .lightGrayCanvas())
+***REMOVED******REMOVED***let geoModel = Map(basemap: .lightGrayCanvas())
 ***REMOVED******REMOVED***let geoModelViewModel = BasemapGalleryViewModel(geoModel: geoModel)
 ***REMOVED******REMOVED***XCTAssertIdentical(geoModelViewModel.geoModel, geoModel)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** With no portal, `basemapGalleryItems` are fetched from AGOL's
 ***REMOVED******REMOVED******REMOVED*** list of developer basemaps.
-***REMOVED******REMOVED***var items = try await geoModelViewModel.$items.compactMap({ $0 ***REMOVED***).dropFirst().first
-***REMOVED******REMOVED***var basemapGalleryItems = try XCTUnwrap(items)
+***REMOVED******REMOVED***let items = try await geoModelViewModel.$items.dropFirst().first
+***REMOVED******REMOVED***let basemapGalleryItems = try XCTUnwrap(items)
 ***REMOVED******REMOVED***XCTAssertFalse(basemapGalleryItems.isEmpty)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** GeoModel should be loaded.
@@ -74,25 +74,25 @@ class BasemapGalleryViewModelTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Portal.
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***geoModel = Map(basemap: .lightGrayCanvas())
+***REMOVED******REMOVED***let geoModel2 = Map(basemap: .lightGrayCanvas())
 ***REMOVED******REMOVED***let portal = Portal.arcGISOnline(isLoginRequired: false)
-***REMOVED******REMOVED***let portalViewModel = BasemapGalleryViewModel(geoModel, portal: portal)
+***REMOVED******REMOVED***let portalViewModel = BasemapGalleryViewModel(geoModel2, portal: portal)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***XCTAssertIdentical(portalViewModel.geoModel, geoModel)
+***REMOVED******REMOVED***XCTAssertIdentical(portalViewModel.geoModel, geoModel2)
 ***REMOVED******REMOVED***XCTAssertIdentical(portalViewModel.portal, portal)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** With a portal, `basemapGalleryItems` are fetched from either the
 ***REMOVED******REMOVED******REMOVED*** portal's vector basemaps or regular basemaps.
-***REMOVED******REMOVED***items = try await portalViewModel.$items.compactMap({ $0 ***REMOVED***).dropFirst().first
-***REMOVED******REMOVED***basemapGalleryItems = try XCTUnwrap(items)
-***REMOVED******REMOVED***XCTAssertFalse(basemapGalleryItems.isEmpty)
+***REMOVED******REMOVED***let items2 = try await portalViewModel.$items.dropFirst().first
+***REMOVED******REMOVED***let basemapGalleryItems2 = try XCTUnwrap(items2)
+***REMOVED******REMOVED***XCTAssertFalse(basemapGalleryItems2.isEmpty)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***XCTAssertEqual(geoModel.loadStatus, .loaded)
-***REMOVED******REMOVED***XCTAssertIdentical(portalViewModel.currentItem?.basemap, geoModel.basemap)
+***REMOVED******REMOVED***XCTAssertEqual(geoModel2.loadStatus, .loaded)
+***REMOVED******REMOVED***XCTAssertIdentical(portalViewModel.currentItem?.basemap, geoModel2.basemap)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Sort the developer items from the "GeoModel" test above and the
 ***REMOVED******REMOVED******REMOVED*** items from the portal and make sure they are not equal.
-***REMOVED******REMOVED***let sortedItems = basemapGalleryItems.sorted {
+***REMOVED******REMOVED***let sortedItems = basemapGalleryItems2.sorted {
 ***REMOVED******REMOVED******REMOVED***guard let name0 = $0.name, let name1 = $1.name else { return false ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***return name0 < name1
 ***REMOVED***
@@ -105,9 +105,9 @@ class BasemapGalleryViewModelTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** BasemapGalleryItems. No basemaps are fetched from a portal.
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***geoModel = Map(basemap: .lightGrayCanvas())
+***REMOVED******REMOVED***let geoModel3 = Map(basemap: .lightGrayCanvas())
 ***REMOVED******REMOVED***let itemsViewModel = BasemapGalleryViewModel(
-***REMOVED******REMOVED******REMOVED***geoModel: geoModel,
+***REMOVED******REMOVED******REMOVED***geoModel: geoModel3,
 ***REMOVED******REMOVED******REMOVED***items: defaultBasemapGalleryItems
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
@@ -169,8 +169,8 @@ class BasemapGalleryViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***let viewModel = BasemapGalleryViewModel(geoModel: geoModel)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Verify current item is equal to map's basemap.
-***REMOVED******REMOVED***var item = try await viewModel.$currentItem.compactMap({ $0 ***REMOVED***).first
-***REMOVED******REMOVED***var currentItem = try XCTUnwrap(item)
+***REMOVED******REMOVED***let item = try await viewModel.$currentItem.compactMap({ $0 ***REMOVED***).first
+***REMOVED******REMOVED***let currentItem = try XCTUnwrap(item)
 ***REMOVED******REMOVED***XCTAssertIdentical(currentItem.basemap, basemap)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Test valid basemap item (OpenStreetMap Vector Basemap (Blueprint)).
@@ -183,17 +183,17 @@ class BasemapGalleryViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Wait until it loads.
-***REMOVED******REMOVED***_ = try await validItem.$isBasemapLoading.compactMap({ $0 ***REMOVED***).dropFirst().first
+***REMOVED******REMOVED***_ = try await validItem.$isBasemapLoading.dropFirst().first
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Update the item on the model.
 ***REMOVED******REMOVED***viewModel.setCurrentItem(validItem)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Wait until the `currentItem` is updated.
-***REMOVED******REMOVED***item = try await viewModel.$currentItem.compactMap({ $0 ***REMOVED***).dropFirst().first
-***REMOVED******REMOVED***currentItem = try XCTUnwrap(item)
+***REMOVED******REMOVED***let item2 = try await viewModel.$currentItem.compactMap({ $0 ***REMOVED***).dropFirst().first
+***REMOVED******REMOVED***let currentItem2 = try XCTUnwrap(item2)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Items should equal, meaning the `validItem` was set properly.
-***REMOVED******REMOVED***XCTAssertEqual(currentItem, validItem)
+***REMOVED******REMOVED***XCTAssertEqual(currentItem2, validItem)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Test WGS84 basemap item (Imagery (WGS84)).  This item is in a
 ***REMOVED******REMOVED******REMOVED*** different spatial reference than the geoModel, so it should
@@ -207,18 +207,18 @@ class BasemapGalleryViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Wait until it loads.
-***REMOVED******REMOVED***_ = try await invalidItem.$isBasemapLoading.compactMap({ $0 ***REMOVED***).dropFirst().first
+***REMOVED******REMOVED***_ = try await invalidItem.$isBasemapLoading.dropFirst().first
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Update the item on the model.
 ***REMOVED******REMOVED***viewModel.setCurrentItem(invalidItem)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** The update will fail, so wait until the
 ***REMOVED******REMOVED******REMOVED*** `spatialReferenceMismatchError` is updated.
-***REMOVED******REMOVED***let error = try await viewModel.$spatialReferenceMismatchError.compactMap({ $0 ***REMOVED***).first
+***REMOVED******REMOVED***let error = try await viewModel.$spatialReferenceMismatchError.first
 ***REMOVED******REMOVED***XCTAssertNotNil(error, "Error is not nil.")
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Make sure the current item is still equal to the valid item.
-***REMOVED******REMOVED***XCTAssertEqual(currentItem, validItem)
+***REMOVED******REMOVED***XCTAssertEqual(currentItem2, validItem)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Test setting the portal after the model has been created.
@@ -228,8 +228,8 @@ class BasemapGalleryViewModelTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***items: defaultBasemapGalleryItems
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***var items = try await viewModel.$items.compactMap({ $0 ***REMOVED***).first
-***REMOVED******REMOVED***var basemapGalleryItems = try XCTUnwrap(items)
+***REMOVED******REMOVED***let items = try await viewModel.$items.first
+***REMOVED******REMOVED***let basemapGalleryItems = try XCTUnwrap(items)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** There are exactly two default items.
 ***REMOVED******REMOVED***XCTAssertEqual(basemapGalleryItems.count, 2)
@@ -239,16 +239,16 @@ class BasemapGalleryViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***viewModel.portal = Portal.arcGISOnline(isLoginRequired: false)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** The items should be cleared prior to loading those from the portal.
-***REMOVED******REMOVED***items = try await viewModel.$items.compactMap({ $0 ***REMOVED***).first
-***REMOVED******REMOVED***basemapGalleryItems = try XCTUnwrap(items)
-***REMOVED******REMOVED***XCTAssertTrue(basemapGalleryItems.isEmpty)
+***REMOVED******REMOVED***let items2 = try await viewModel.$items.first
+***REMOVED******REMOVED***let basemapGalleryItems2 = try XCTUnwrap(items2)
+***REMOVED******REMOVED***XCTAssertTrue(basemapGalleryItems2.isEmpty)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Wait for the portal basemaps to load.
-***REMOVED******REMOVED***items = try await viewModel.$items.compactMap({ $0 ***REMOVED***).dropFirst().first
-***REMOVED******REMOVED***basemapGalleryItems = try XCTUnwrap(items)
+***REMOVED******REMOVED***let items3 = try await viewModel.$items.dropFirst().first
+***REMOVED******REMOVED***let basemapGalleryItems3 = try XCTUnwrap(items3)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** There should be no default items in the basemap gallery.
-***REMOVED******REMOVED***XCTAssertFalse(basemapGalleryItems.contains(where: { item in
+***REMOVED******REMOVED***XCTAssertFalse(basemapGalleryItems3.contains(where: { item in
 ***REMOVED******REMOVED******REMOVED***defaultBasemapGalleryItems.contains(item)
 ***REMOVED***))
 ***REMOVED***
