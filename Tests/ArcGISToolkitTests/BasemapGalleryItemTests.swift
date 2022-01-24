@@ -28,10 +28,10 @@ import Combine
 final class BasemapGalleryItemTests: XCTestCase {
     func testInit() async throws {
         let basemap = Basemap.lightGrayCanvas()
-        var item = BasemapGalleryItem(basemap: basemap)
+        let item = BasemapGalleryItem(basemap: basemap)
         
-        var isBasemapLoading = try await item.$isBasemapLoading.compactMap({ $0 }).dropFirst().first
-        var loading = try XCTUnwrap(isBasemapLoading)
+        let isBasemapLoading = try await item.$isBasemapLoading.dropFirst().first
+        let loading = try XCTUnwrap(isBasemapLoading)
         XCTAssertFalse(loading, "Item is not loading.")
         XCTAssertIdentical(item.basemap, basemap)
         XCTAssertEqual(item.name, "Light Gray Canvas")
@@ -41,23 +41,24 @@ final class BasemapGalleryItemTests: XCTestCase {
         
         // Test with overrides.
         let thumbnail = UIImage(systemName: "magnifyingglass")!
-        item = BasemapGalleryItem(
-            basemap: basemap,
+        let basemap2 = Basemap.lightGrayCanvas()
+        let item2 = BasemapGalleryItem(
+            basemap: basemap2,
             name: "My Basemap",
             description: "Basemap description",
             thumbnail: thumbnail
         )
         
-        isBasemapLoading = try await item.$isBasemapLoading.compactMap({ $0 }).dropFirst().first
-        loading = try XCTUnwrap(isBasemapLoading)
-        XCTAssertFalse(loading, "Item is not loading.")
-        XCTAssertEqual(item.name, "My Basemap")
-        XCTAssertEqual(item.description, "Basemap description")
-        XCTAssertEqual(item.thumbnail, thumbnail)
-        XCTAssertNil(item.loadBasemapError)
+        let isBasemapLoading2 = try await item2.$isBasemapLoading.dropFirst().first
+        let loading2 = try XCTUnwrap(isBasemapLoading2)
+        XCTAssertFalse(loading2, "Item is not loading.")
+        XCTAssertEqual(item2.name, "My Basemap")
+        XCTAssertEqual(item2.description, "Basemap description")
+        XCTAssertEqual(item2.thumbnail, thumbnail)
+        XCTAssertNil(item2.loadBasemapError)
         
         // Test with portal item.
-        item = BasemapGalleryItem(
+        let item3 = BasemapGalleryItem(
             basemap: Basemap(
                 item: PortalItem(
                     url: URL(string: "https://runtime.maps.arcgis.com/home/item.html?id=46a87c20f09e4fc48fa3c38081e0cae6")!
@@ -65,13 +66,13 @@ final class BasemapGalleryItemTests: XCTestCase {
             )
         )
         
-        isBasemapLoading = try await item.$isBasemapLoading.compactMap({ $0 }).dropFirst().first
-        loading = try XCTUnwrap(isBasemapLoading)
-        XCTAssertFalse(loading, "Item is not loading.")
-        XCTAssertEqual(item.name, "OpenStreetMap Blueprint")
-        XCTAssertEqual(item.description, "<div><div style=\'margin-bottom:3rem;\'><div><div style=\'max-width:100%; display:inherit;\'><p style=\'margin-top:0px; margin-bottom:1.5rem;\'><span style=\'font-family:&quot;Avenir Next W01&quot;, &quot;Avenir Next W00&quot;, &quot;Avenir Next&quot;, Avenir, &quot;Helvetica Neue&quot;, sans-serif; font-size:16px;\'>This web map presents a vector basemap of OpenStreetMap (OSM) data hosted by Esri. Esri created this vector tile basemap from the </span><a href=\'https://daylightmap.org/\' rel=\'nofollow ugc\' style=\'color:rgb(0, 121, 193); text-decoration-line:none; font-family:&quot;Avenir Next W01&quot;, &quot;Avenir Next W00&quot;, &quot;Avenir Next&quot;, Avenir, &quot;Helvetica Neue&quot;, sans-serif; font-size:16px;\'>Daylight map distribution</a><span style=\'font-family:&quot;Avenir Next W01&quot;, &quot;Avenir Next W00&quot;, &quot;Avenir Next&quot;, Avenir, &quot;Helvetica Neue&quot;, sans-serif; font-size:16px;\'> of OSM data, which is supported by </span><b><font style=\'font-family:inherit;\'><span style=\'font-family:inherit;\'>Facebook</span></font> </b><span style=\'font-family:&quot;Avenir Next W01&quot;, &quot;Avenir Next W00&quot;, &quot;Avenir Next&quot;, Avenir, &quot;Helvetica Neue&quot;, sans-serif; font-size:16px;\'>and supplemented with additional data from </span><font style=\'font-family:&quot;Avenir Next W01&quot;, &quot;Avenir Next W00&quot;, &quot;Avenir Next&quot;, Avenir, &quot;Helvetica Neue&quot;, sans-serif; font-size:16px;\'><b>Microsoft</b>. It presents the map in a cartographic style is like a blueprint technical drawing. The OSM Daylight map will be updated every month with the latest version of OSM Daylight data. </font></p><div style=\'font-family:&quot;Avenir Next W01&quot;, &quot;Avenir Next W00&quot;, &quot;Avenir Next&quot;, Avenir, &quot;Helvetica Neue&quot;, sans-serif; font-size:16px;\'>OpenStreetMap is an open collaborative project to create a free editable map of the world. Volunteers gather location data using GPS, local knowledge, and other free sources of information and upload it. The resulting free map can be viewed and downloaded from the OpenStreetMap site: <a href=\'https://www.openstreetmap.org/\' rel=\'nofollow ugc\' style=\'color:rgb(0, 121, 193); text-decoration-line:none; font-family:inherit;\' target=\'_blank\'>www.OpenStreetMap.org</a>. Esri is a supporter of the OSM project and is excited to make this enhanced vector basemap available to the ArcGIS user and developer communities.</div></div></div></div></div><div style=\'margin-bottom:3rem; display:inherit; font-family:&quot;Avenir Next W01&quot;, &quot;Avenir Next W00&quot;, &quot;Avenir Next&quot;, Avenir, &quot;Helvetica Neue&quot;, sans-serif; font-size:16px;\'><div style=\'display:inherit;\'></div></div>")
-        XCTAssertNotNil(item.thumbnail)
-        XCTAssertNil(item.loadBasemapError)
+        let isBasemapLoading3 = try await item3.$isBasemapLoading.dropFirst().first
+        let loading3 = try XCTUnwrap(isBasemapLoading3)
+        XCTAssertFalse(loading3, "Item is not loading.")
+        XCTAssertEqual(item3.name, "OpenStreetMap Blueprint")
+        XCTAssertEqual(item3.description, "<div><div style=\'margin-bottom:3rem;\'><div><div style=\'max-width:100%; display:inherit;\'><p style=\'margin-top:0px; margin-bottom:1.5rem;\'><span style=\'font-family:&quot;Avenir Next W01&quot;, &quot;Avenir Next W00&quot;, &quot;Avenir Next&quot;, Avenir, &quot;Helvetica Neue&quot;, sans-serif; font-size:16px;\'>This web map presents a vector basemap of OpenStreetMap (OSM) data hosted by Esri. Esri created this vector tile basemap from the </span><a href=\'https://daylightmap.org/\' rel=\'nofollow ugc\' style=\'color:rgb(0, 121, 193); text-decoration-line:none; font-family:&quot;Avenir Next W01&quot;, &quot;Avenir Next W00&quot;, &quot;Avenir Next&quot;, Avenir, &quot;Helvetica Neue&quot;, sans-serif; font-size:16px;\'>Daylight map distribution</a><span style=\'font-family:&quot;Avenir Next W01&quot;, &quot;Avenir Next W00&quot;, &quot;Avenir Next&quot;, Avenir, &quot;Helvetica Neue&quot;, sans-serif; font-size:16px;\'> of OSM data, which is supported by </span><b><font style=\'font-family:inherit;\'><span style=\'font-family:inherit;\'>Facebook</span></font> </b><span style=\'font-family:&quot;Avenir Next W01&quot;, &quot;Avenir Next W00&quot;, &quot;Avenir Next&quot;, Avenir, &quot;Helvetica Neue&quot;, sans-serif; font-size:16px;\'>and supplemented with additional data from </span><font style=\'font-family:&quot;Avenir Next W01&quot;, &quot;Avenir Next W00&quot;, &quot;Avenir Next&quot;, Avenir, &quot;Helvetica Neue&quot;, sans-serif; font-size:16px;\'><b>Microsoft</b>. It presents the map in a cartographic style is like a blueprint technical drawing. The OSM Daylight map will be updated every month with the latest version of OSM Daylight data. </font></p><div style=\'font-family:&quot;Avenir Next W01&quot;, &quot;Avenir Next W00&quot;, &quot;Avenir Next&quot;, Avenir, &quot;Helvetica Neue&quot;, sans-serif; font-size:16px;\'>OpenStreetMap is an open collaborative project to create a free editable map of the world. Volunteers gather location data using GPS, local knowledge, and other free sources of information and upload it. The resulting free map can be viewed and downloaded from the OpenStreetMap site: <a href=\'https://www.openstreetmap.org/\' rel=\'nofollow ugc\' style=\'color:rgb(0, 121, 193); text-decoration-line:none; font-family:inherit;\' target=\'_blank\'>www.OpenStreetMap.org</a>. Esri is a supporter of the OSM project and is excited to make this enhanced vector basemap available to the ArcGIS user and developer communities.</div></div></div></div></div><div style=\'margin-bottom:3rem; display:inherit; font-family:&quot;Avenir Next W01&quot;, &quot;Avenir Next W00&quot;, &quot;Avenir Next&quot;, Avenir, &quot;Helvetica Neue&quot;, sans-serif; font-size:16px;\'><div style=\'display:inherit;\'></div></div>")
+        XCTAssertNotNil(item3.thumbnail)
+        XCTAssertNil(item3.loadBasemapError)
     }
     
     func testLoadBasemapError() async throws {
@@ -84,7 +85,7 @@ final class BasemapGalleryItemTests: XCTestCase {
             )
         )
         
-        let isBasemapLoading = try await item.$isBasemapLoading.compactMap({ $0 }).dropFirst().first
+        let isBasemapLoading = try await item.$isBasemapLoading.dropFirst().first
         let loading = try XCTUnwrap(isBasemapLoading)
         XCTAssertFalse(loading, "Item is not loading.")
         XCTAssertNotNil(item.loadBasemapError)
@@ -94,8 +95,8 @@ final class BasemapGalleryItemTests: XCTestCase {
         let basemap = Basemap.lightGrayCanvas()
         let item = BasemapGalleryItem(basemap: basemap)
         
-        var isBasemapLoading = try await item.$isBasemapLoading.compactMap({ $0 }).dropFirst().first
-        var loading = try XCTUnwrap(isBasemapLoading)
+        let isBasemapLoading = try await item.$isBasemapLoading.dropFirst().first
+        let loading = try XCTUnwrap(isBasemapLoading)
         XCTAssertFalse(loading, "Item is not loading.")
         
         XCTAssertEqual(item.spatialReferenceStatus, .unknown)
@@ -108,12 +109,12 @@ final class BasemapGalleryItemTests: XCTestCase {
         
         // Check if `isBasemapLoading` is set to true during first call
         // to updateSpatialReferenceStatus.
-        isBasemapLoading = try await item.$isBasemapLoading.compactMap({ $0 }).dropFirst().first
-        loading = try XCTUnwrap(isBasemapLoading)
-        XCTAssertTrue(loading, "Item base layers are loading.")
+        let isBasemapLoading2 = try await item.$isBasemapLoading.dropFirst().first
+        let loading2 = try XCTUnwrap(isBasemapLoading2)
+        XCTAssertTrue(loading2, "Item base layers are loading.")
         
-        var srStatus = try await item.$spatialReferenceStatus.compactMap({ $0 }).dropFirst().first
-        var status = try XCTUnwrap(srStatus)
+        let srStatus = try await item.$spatialReferenceStatus.dropFirst().first
+        let status = try XCTUnwrap(srStatus)
         XCTAssertEqual(status, .match)
         XCTAssertEqual(item.spatialReference, SpatialReference.webMercator)
         XCTAssertFalse(item.isBasemapLoading)
@@ -123,13 +124,13 @@ final class BasemapGalleryItemTests: XCTestCase {
         
         // Since we've already called `updateSpatialReferenceStatus` once,
         // we should no longer internally need to load the baselayers.
-        isBasemapLoading = try await item.$isBasemapLoading.compactMap({ $0 }).first
-        loading = try XCTUnwrap(isBasemapLoading)
-        XCTAssertFalse(loading, "Item base layers are not loading.")
+        let isBasemapLoading3 = try await item.$isBasemapLoading.first
+        let loading3 = try XCTUnwrap(isBasemapLoading3)
+        XCTAssertFalse(loading3, "Item base layers are not loading.")
         
-        srStatus = try await item.$spatialReferenceStatus.compactMap({ $0 }).first
-        status = try XCTUnwrap(srStatus)
-        XCTAssertEqual(status, .noMatch)
+        let srStatus2 = try await item.$spatialReferenceStatus.first
+        let status2 = try XCTUnwrap(srStatus2)
+        XCTAssertEqual(status2, .noMatch)
         XCTAssertEqual(item.spatialReference, .webMercator)
         
         // Test WGS84 basemap.
@@ -141,12 +142,12 @@ final class BasemapGalleryItemTests: XCTestCase {
             )
         )
         
-        _ = try await otherItem.$isBasemapLoading.compactMap({ $0 }).dropFirst().first
+        _ = try await otherItem.$isBasemapLoading.dropFirst().first
         
         try await otherItem.updateSpatialReferenceStatus(.wgs84)
-        srStatus = try await otherItem.$spatialReferenceStatus.compactMap({ $0 }).first
-        status = try XCTUnwrap(srStatus)
-        XCTAssertEqual(status, .match)
+        let srStatus3 = try await otherItem.$spatialReferenceStatus.first
+        let status3 = try XCTUnwrap(srStatus3)
+        XCTAssertEqual(status3, .match)
         XCTAssertEqual(otherItem.spatialReference, .wgs84)
     }
 }
