@@ -16,7 +16,7 @@ import ArcGIS
 
 @MainActor
 /// Manages the state for a `FloorFilter`.
-public class FloorFilterViewModel: ObservableObject {
+final public class FloorFilterViewModel: ObservableObject {
     /// Creates a `FloorFilterViewModel`.
     /// - Parameters:
     ///   - floorManager: A floor manager.
