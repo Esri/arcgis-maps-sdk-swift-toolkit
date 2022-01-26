@@ -11,8 +11,6 @@
 		E47ABE442652FE0900FD2FE3 /* ExamplesApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E47ABE432652FE0900FD2FE3 /* ExamplesApp.swift */; ***REMOVED***;
 		E47ABE482652FE0C00FD2FE3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E47ABE472652FE0C00FD2FE3 /* Assets.xcassets */; ***REMOVED***;
 		E47ABE4B2652FE0C00FD2FE3 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E47ABE4A2652FE0C00FD2FE3 /* Preview Assets.xcassets */; ***REMOVED***;
-		E47ABE5C2652FF1200FD2FE3 /* ArcGIS in Frameworks */ = {isa = PBXBuildFile; productRef = E47ABE5B2652FF1200FD2FE3 /* ArcGIS */; ***REMOVED***;
-		E47ABE5D2652FF1200FD2FE3 /* ArcGIS in Embed Frameworks */ = {isa = PBXBuildFile; productRef = E47ABE5B2652FF1200FD2FE3 /* ArcGIS */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); ***REMOVED***; ***REMOVED***;
 		E48A73432658227100F5C118 /* Example.swift in Sources */ = {isa = PBXBuildFile; fileRef = E48A73402658227100F5C118 /* Example.swift */; ***REMOVED***;
 		E48A73442658227100F5C118 /* AnyExample.swift in Sources */ = {isa = PBXBuildFile; fileRef = E48A73412658227100F5C118 /* AnyExample.swift */; ***REMOVED***;
 		E48A73452658227100F5C118 /* Examples.swift in Sources */ = {isa = PBXBuildFile; fileRef = E48A733D2658227000F5C118 /* Examples.swift */; ***REMOVED***;
@@ -31,7 +29,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				E47ABE5D2652FF1200FD2FE3 /* ArcGIS in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -63,7 +60,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				E4E57DC6265D8EB00077A093 /* ArcGISToolkit in Frameworks */,
-				E47ABE5C2652FF1200FD2FE3 /* ArcGIS in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		***REMOVED***;
@@ -158,7 +154,6 @@
 			);
 			name = Examples;
 			packageProductDependencies = (
-				E47ABE5B2652FF1200FD2FE3 /* ArcGIS */,
 				E4E57DC5265D8EB00077A093 /* ArcGISToolkit */,
 			);
 			productName = Examples;
@@ -418,10 +413,6 @@
 /* End XCConfigurationList section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		E47ABE5B2652FF1200FD2FE3 /* ArcGIS */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = ArcGIS;
-		***REMOVED***;
 		E4E57DC5265D8EB00077A093 /* ArcGISToolkit */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = ArcGISToolkit;
