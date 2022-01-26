@@ -19,7 +19,7 @@ import ArcGIS
 /// to a site, a facility (building) in the site, or a floor in the facility.
 public struct FloorFilter: View {
     /// Creates a `FloorFilter`
-    /// - Parameter floorFilterViewModel: The view model used by the `BasemapGallery`.
+    /// - Parameter floorFilterViewModel: The view model used by the `FloorFilter`.
     public init(_ floorFilterViewModel: FloorFilterViewModel) {
         self.viewModel = floorFilterViewModel
     }
