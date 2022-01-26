@@ -165,7 +165,7 @@ public extension BasemapGalleryItem {
     ) {
         spatialReference = basemap.baseLayers.first?.spatialReference
         
-        if referenceSpatialReference != nil {
+        if referenceSpatialReference == nil {
             spatialReferenceStatus = .unknown
         } else if spatialReference == referenceSpatialReference {
             spatialReferenceStatus = .match
