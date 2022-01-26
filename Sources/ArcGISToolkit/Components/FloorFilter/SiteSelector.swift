@@ -55,8 +55,8 @@ struct SiteSelector: View {
 ***REMOVED******REMOVED***/ A view displaying either the sites or facilities contained in a `FloorManager`.
 ***REMOVED***struct FloorFilterList: View {
 ***REMOVED******REMOVED***private let title: String
-***REMOVED******REMOVED***private let sites: [FloorSite]?
-***REMOVED******REMOVED***private let facilities: [FloorFacility]?
+***REMOVED******REMOVED***private let sites: [FloorSite]
+***REMOVED******REMOVED***private let facilities: [FloorFacility]
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ Binding allowing the user to toggle the visibility of the results list.
 ***REMOVED******REMOVED***private var showSiteSelector: Binding<Bool>
@@ -84,7 +84,7 @@ struct SiteSelector: View {
 ***REMOVED******REMOVED***) {
 ***REMOVED******REMOVED******REMOVED***self.title = title
 ***REMOVED******REMOVED******REMOVED***self.facilities = facilities
-***REMOVED******REMOVED******REMOVED***sites = nil
+***REMOVED******REMOVED******REMOVED***sites = []
 ***REMOVED******REMOVED******REMOVED***self.showSiteSelector = showSiteSelector
 ***REMOVED***
 ***REMOVED******REMOVED***
@@ -103,10 +103,10 @@ struct SiteSelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Rectangle()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(height:1)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
-***REMOVED******REMOVED******REMOVED******REMOVED***ForEach(sites ?? []) { site in
+***REMOVED******REMOVED******REMOVED******REMOVED***ForEach(sites) { site in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(site.name)
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***ForEach(facilities ?? []) { facility in
+***REMOVED******REMOVED******REMOVED******REMOVED***ForEach(facilities) { facility in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(facility.name)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
