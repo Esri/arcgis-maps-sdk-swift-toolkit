@@ -16,7 +16,7 @@
 
 @MainActor
 ***REMOVED***/ Manages the state for a `FloorFilter`.
-public class FloorFilterViewModel: ObservableObject {
+final public class FloorFilterViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ Creates a `FloorFilterViewModel`.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - floorManager: A floor manager.
