@@ -42,7 +42,7 @@ public class FloorFilterViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The `Viewpoint` used to pan/zoom to the selected site/facilty.
-***REMOVED******REMOVED***/ If `nil`, there will be automatic no pan/zoom operations.
+***REMOVED******REMOVED***/ If `nil`, there will be no automatic pan/zoom operations.
 ***REMOVED***var viewpoint: Binding<Viewpoint>? = nil
 ***REMOVED***
 ***REMOVED******REMOVED***/ The `FloorManager` containing the site, floor, and level information.

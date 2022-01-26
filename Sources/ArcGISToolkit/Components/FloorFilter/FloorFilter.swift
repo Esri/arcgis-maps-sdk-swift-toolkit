@@ -19,7 +19,7 @@
 ***REMOVED***/ to a site, a facility (building) in the site, or a floor in the facility.
 public struct FloorFilter: View {
 ***REMOVED******REMOVED***/ Creates a `FloorFilter`
-***REMOVED******REMOVED***/ - Parameter floorFilterViewModel: The view model used by the `BasemapGallery`.
+***REMOVED******REMOVED***/ - Parameter floorFilterViewModel: The view model used by the `FloorFilter`.
 ***REMOVED***public init(_ floorFilterViewModel: FloorFilterViewModel) {
 ***REMOVED******REMOVED***self.viewModel = floorFilterViewModel
 ***REMOVED***
