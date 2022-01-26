@@ -55,8 +55,8 @@ struct SiteSelector: View {
     /// A view displaying either the sites or facilities contained in a `FloorManager`.
     struct FloorFilterList: View {
         private let title: String
-        private let sites: [FloorSite]?
-        private let facilities: [FloorFacility]?
+        private let sites: [FloorSite]
+        private let facilities: [FloorFacility]
         
         /// Binding allowing the user to toggle the visibility of the results list.
         private var showSiteSelector: Binding<Bool>
@@ -84,7 +84,7 @@ struct SiteSelector: View {
         ) {
             self.title = title
             self.facilities = facilities
-            sites = nil
+            sites = []
             self.showSiteSelector = showSiteSelector
         }
         
@@ -103,10 +103,10 @@ struct SiteSelector: View {
                 Rectangle()
                     .frame(height:1)
                     .foregroundColor(.secondary)
-                ForEach(sites ?? []) { site in
+                ForEach(sites) { site in
                     Text(site.name)
                 }
-                ForEach(facilities ?? []) { facility in
+                ForEach(facilities) { facility in
                     Text(facility.name)
                 }
             }
