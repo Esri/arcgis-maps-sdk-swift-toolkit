@@ -55,7 +55,7 @@ final public class FloorFilterViewModel: ObservableObject {
     
     /// `true` if the model is loading it's properties, `false` if not loading.
     @Published
-    public var isLoading = true
+    public private(set) var isLoading = true
     
     /// Facilities in the selected site. If no site is selected then the list is empty.
     /// If the sites list is empty, all facilities will be returned.
@@ -67,11 +67,19 @@ final public class FloorFilterViewModel: ObservableObject {
     
     /// Levels in the selected facility. If no facility is selected then the list is empty.
     /// If the facilities list is empty, all levels will be returned. 
-    /// The levels are returned in ascending order.
     public var levels: [FloorLevel] {
         facilities.isEmpty ? floorManager.levels : floorManager.levels.filter {
             $0.facility == selectedFacility
-        }.reversed()
+        }
+    }
+    
+    /// Levels in the selected facility. If no facility is selected then the list is empty.
+    /// If the facilities list is empty, all levels will be returned.
+    /// The levels are sorted by `verticalOrder` in descending order.
+    public var sortedLevels: [FloorLevel] {
+        levels.sorted {
+            $0.verticalOrder > $1.verticalOrder
+        }
     }
     
     /// All the levels in the map

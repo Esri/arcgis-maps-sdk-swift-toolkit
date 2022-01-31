@@ -18,13 +18,13 @@ import ArcGIS
 struct SiteSelector: View {
     /// Creates a `SiteSelector`
     /// - Parameter floorFilterViewModel: The view model used by the `SiteSelector`.
-    /// - Parameter showSiteSelector: A binding used to dismiss the site selector.
+    /// - Parameter isSelectorVisible: A binding used to dismiss the site selector.
     public init(
         _ floorFilterViewModel: FloorFilterViewModel,
-        showSiteSelector: Binding<Bool>
+        isSelectorVisible: Binding<Bool>
     ) {
         self.viewModel = floorFilterViewModel
-        self.showSiteSelector = showSiteSelector
+        self.isSelectorVisible = isSelectorVisible
     }
     
     /// The view model used by the `SiteSelector`.
@@ -32,7 +32,7 @@ struct SiteSelector: View {
     private var viewModel: FloorFilterViewModel
     
     /// Allows the user to toggle the visibility of the site selector.
-    private var showSiteSelector: Binding<Bool>
+    private var isSelectorVisible: Binding<Bool>
     
     var body: some View {
         if viewModel.sites.count > 1 && !(viewModel.selectedSite == nil) {
@@ -41,13 +41,13 @@ struct SiteSelector: View {
             FloorFilterList(
                 "Select a site…",
                 sites: viewModel.sites,
-                showSiteSelector: showSiteSelector
+                isSelectorVisible: isSelectorVisible
             )
         } else {
             FloorFilterList(
                 "Select a facility...",
                 facilities: viewModel.facilities,
-                showSiteSelector: showSiteSelector
+                isSelectorVisible: isSelectorVisible
             )
         }
     }
@@ -59,33 +59,33 @@ struct SiteSelector: View {
         private let facilities: [FloorFacility]
         
         /// Binding allowing the user to toggle the visibility of the results list.
-        private var showSiteSelector: Binding<Bool>
+        private var isSelectorVisible: Binding<Bool>
         
         /// Creates a `FloorFilterList`
         /// - Parameters:
         ///   - title: The title of the list.
         ///   - sites: The sites to display.
-        ///   - showSiteSelector: A binding used to dismiss the site selector.
+        ///   - isSelectorVisible: A binding used to dismiss the site selector.
         init(
             _ title: String,
             sites: [FloorSite],
-            showSiteSelector: Binding<Bool>
+            isSelectorVisible: Binding<Bool>
         ) {
             self.title = title
             self.sites = sites
             facilities = []
-            self.showSiteSelector = showSiteSelector
+            self.isSelectorVisible = isSelectorVisible
         }
         
         init(
             _ title: String,
             facilities: [FloorFacility],
-            showSiteSelector: Binding<Bool>
+            isSelectorVisible: Binding<Bool>
         ) {
             self.title = title
             self.facilities = facilities
             sites = []
-            self.showSiteSelector = showSiteSelector
+            self.isSelectorVisible = isSelectorVisible
         }
         
         var body: some View {
@@ -95,7 +95,7 @@ struct SiteSelector: View {
                         .bold()
                     Spacer()
                     Button {
-                        showSiteSelector.wrappedValue.toggle()
+                        isSelectorVisible.wrappedValue.toggle()
                     } label: {
                         Image(systemName: "xmark.circle")
                     }
