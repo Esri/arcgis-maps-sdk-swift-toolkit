@@ -14,8 +14,8 @@
 import SwiftUI
 import ArcGIS
 
-@MainActor
 /// Manages the state for a `FloorFilter`.
+@MainActor
 final public class FloorFilterViewModel: ObservableObject {
     /// Creates a `FloorFilterViewModel`.
     /// - Parameters:

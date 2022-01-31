@@ -20,4 +20,6 @@ extension FloorFacility: Equatable {
     }
 }
 
-extension FloorFacility: Identifiable { }
+extension FloorFacility: Identifiable {
+    public var id: String { facilityId }
+}
