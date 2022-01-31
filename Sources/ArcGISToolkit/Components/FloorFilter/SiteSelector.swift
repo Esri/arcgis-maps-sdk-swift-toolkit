@@ -39,7 +39,7 @@ struct SiteSelector: View {
             // Only show site list if there is more than one site
             // and the user has not yet selected a site.
             FloorFilterList(
-                "Select a site...",
+                "Select a site…",
                 sites: viewModel.sites,
                 showSiteSelector: showSiteSelector
             )
@@ -101,7 +101,7 @@ struct SiteSelector: View {
                     }
                 }
                 Rectangle()
-                    .frame(height:1)
+                    .frame(height: 1)
                     .foregroundColor(.secondary)
                 ForEach(sites) { site in
                     Text(site.name)
