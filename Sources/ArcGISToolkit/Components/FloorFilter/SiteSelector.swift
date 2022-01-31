@@ -39,7 +39,7 @@ struct SiteSelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Only show site list if there is more than one site
 ***REMOVED******REMOVED******REMOVED******REMOVED*** and the user has not yet selected a site.
 ***REMOVED******REMOVED******REMOVED***FloorFilterList(
-***REMOVED******REMOVED******REMOVED******REMOVED***"Select a site...",
+***REMOVED******REMOVED******REMOVED******REMOVED***"Select a site…",
 ***REMOVED******REMOVED******REMOVED******REMOVED***sites: viewModel.sites,
 ***REMOVED******REMOVED******REMOVED******REMOVED***showSiteSelector: showSiteSelector
 ***REMOVED******REMOVED******REMOVED***)
@@ -101,7 +101,7 @@ struct SiteSelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***Rectangle()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(height:1)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(height: 1)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
 ***REMOVED******REMOVED******REMOVED******REMOVED***ForEach(sites) { site in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(site.name)
