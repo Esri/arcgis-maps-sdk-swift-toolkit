@@ -19,9 +19,9 @@
 ***REMOVED***/ to a site, a facility (building) in the site, or a floor in the facility.
 public struct FloorFilter: View {
 ***REMOVED******REMOVED***/ Creates a `FloorFilter`
-***REMOVED******REMOVED***/ - Parameter floorFilterViewModel: The view model used by the `FloorFilter`.
-***REMOVED***public init(_ floorFilterViewModel: FloorFilterViewModel) {
-***REMOVED******REMOVED***self.viewModel = floorFilterViewModel
+***REMOVED******REMOVED***/ - Parameter viewModel: The view model used by the `FloorFilter`.
+***REMOVED***public init(_ viewModel: FloorFilterViewModel) {
+***REMOVED******REMOVED***self.viewModel = viewModel
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The view model used by the `FloorFilter`.
@@ -43,7 +43,7 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***showSiteSelector.toggle()
 ***REMOVED******REMOVED******REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(uiImage: .site)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image.init("Site", bundle: Bundle.module)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.esriBorder()
@@ -56,11 +56,5 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED***
-***REMOVED***
-
-extension UIImage {
-***REMOVED***static var site: UIImage {
-***REMOVED******REMOVED***return UIImage(named: "Site", in: Bundle.module, with: nil)!
 ***REMOVED***
 ***REMOVED***
