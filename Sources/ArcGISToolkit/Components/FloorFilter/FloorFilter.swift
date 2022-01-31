@@ -30,7 +30,7 @@ public struct FloorFilter: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Allows the user to toggle the visibility of the site selector.
 ***REMOVED***@State
-***REMOVED***private var showSiteSelector: Bool = false
+***REMOVED***private var isSelectorVisible: Bool = false
 ***REMOVED***
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***HStack(alignment: .bottom) {
@@ -41,16 +41,16 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***VStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***showSiteSelector.toggle()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isSelectorVisible.toggle()
 ***REMOVED******REMOVED******REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image.init("Site", bundle: Bundle.module)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.esriBorder()
-***REMOVED******REMOVED******REMOVED******REMOVED***if showSiteSelector {
+***REMOVED******REMOVED******REMOVED******REMOVED***if isSelectorVisible {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***SiteSelector(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***showSiteSelector: $showSiteSelector
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isSelectorVisible: $isSelectorVisible
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 200)
 ***REMOVED******REMOVED******REMOVED***

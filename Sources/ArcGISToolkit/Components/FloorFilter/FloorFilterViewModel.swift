@@ -55,7 +55,7 @@ final public class FloorFilterViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED******REMOVED***/ `true` if the model is loading it's properties, `false` if not loading.
 ***REMOVED***@Published
-***REMOVED***public var isLoading = true
+***REMOVED***public private(set) var isLoading = true
 ***REMOVED***
 ***REMOVED******REMOVED***/ Facilities in the selected site. If no site is selected then the list is empty.
 ***REMOVED******REMOVED***/ If the sites list is empty, all facilities will be returned.
@@ -67,11 +67,19 @@ final public class FloorFilterViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Levels in the selected facility. If no facility is selected then the list is empty.
 ***REMOVED******REMOVED***/ If the facilities list is empty, all levels will be returned. 
-***REMOVED******REMOVED***/ The levels are returned in ascending order.
 ***REMOVED***public var levels: [FloorLevel] {
 ***REMOVED******REMOVED***facilities.isEmpty ? floorManager.levels : floorManager.levels.filter {
 ***REMOVED******REMOVED******REMOVED***$0.facility == selectedFacility
-***REMOVED***.reversed()
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Levels in the selected facility. If no facility is selected then the list is empty.
+***REMOVED******REMOVED***/ If the facilities list is empty, all levels will be returned.
+***REMOVED******REMOVED***/ The levels are sorted by `verticalOrder` in descending order.
+***REMOVED***public var sortedLevels: [FloorLevel] {
+***REMOVED******REMOVED***levels.sorted {
+***REMOVED******REMOVED******REMOVED***$0.verticalOrder > $1.verticalOrder
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ All the levels in the map
