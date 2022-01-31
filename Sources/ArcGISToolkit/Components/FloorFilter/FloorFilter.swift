@@ -30,7 +30,7 @@ public struct FloorFilter: View {
     
     /// Allows the user to toggle the visibility of the site selector.
     @State
-    private var showSiteSelector: Bool = false
+    private var isSelectorVisible: Bool = false
     
     public var body: some View {
         HStack(alignment: .bottom) {
@@ -41,16 +41,16 @@ public struct FloorFilter: View {
             } else {
                 VStack {
                     Button {
-                        showSiteSelector.toggle()
+                        isSelectorVisible.toggle()
                     } label: {
                         Image.init("Site", bundle: Bundle.module)
                     }
                 }
                 .esriBorder()
-                if showSiteSelector {
+                if isSelectorVisible {
                     SiteSelector(
                         viewModel,
-                        showSiteSelector: $showSiteSelector
+                        isSelectorVisible: $isSelectorVisible
                     )
                         .frame(width: 200)
                 }
