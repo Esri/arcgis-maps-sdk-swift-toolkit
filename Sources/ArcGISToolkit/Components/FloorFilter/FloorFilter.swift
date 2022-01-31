@@ -19,9 +19,9 @@ import ArcGIS
 /// to a site, a facility (building) in the site, or a floor in the facility.
 public struct FloorFilter: View {
     /// Creates a `FloorFilter`
-    /// - Parameter floorFilterViewModel: The view model used by the `FloorFilter`.
-    public init(_ floorFilterViewModel: FloorFilterViewModel) {
-        self.viewModel = floorFilterViewModel
+    /// - Parameter viewModel: The view model used by the `FloorFilter`.
+    public init(_ viewModel: FloorFilterViewModel) {
+        self.viewModel = viewModel
     }
     
     /// The view model used by the `FloorFilter`.
@@ -43,7 +43,7 @@ public struct FloorFilter: View {
                     Button {
                         showSiteSelector.toggle()
                     } label: {
-                        Image(uiImage: .site)
+                        Image.init("Site", bundle: Bundle.module)
                     }
                 }
                 .esriBorder()
@@ -56,11 +56,5 @@ public struct FloorFilter: View {
                 }
             }
         }
-    }
-}
-
-extension UIImage {
-    static var site: UIImage {
-        return UIImage(named: "Site", in: Bundle.module, with: nil)!
     }
 }
