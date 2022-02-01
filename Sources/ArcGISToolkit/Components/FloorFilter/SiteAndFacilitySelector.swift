@@ -31,86 +31,70 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED***@ObservedObject
 ***REMOVED***private var viewModel: FloorFilterViewModel
 ***REMOVED***
-***REMOVED******REMOVED***/ Allows the user to toggle the visibility of the site selector.
+***REMOVED******REMOVED***/ Allows the user to toggle the visibility of the site and facility selector.
 ***REMOVED***private var isVisible: Binding<Bool>
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***if viewModel.sites.count > 1 && !(viewModel.selectedSite == nil) {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Only show site list if there is more than one site
 ***REMOVED******REMOVED******REMOVED******REMOVED*** and the user has not yet selected a site.
-***REMOVED******REMOVED******REMOVED***FloorFilterList(
-***REMOVED******REMOVED******REMOVED******REMOVED***"Select a site…",
-***REMOVED******REMOVED******REMOVED******REMOVED***sites: viewModel.sites,
-***REMOVED******REMOVED******REMOVED******REMOVED***isVisible: isVisible
-***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***Sites(sites: viewModel.sites, isVisible: isVisible)
 ***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***FloorFilterList(
-***REMOVED******REMOVED******REMOVED******REMOVED***"Select a facility…",
-***REMOVED******REMOVED******REMOVED******REMOVED***facilities: viewModel.facilities,
-***REMOVED******REMOVED******REMOVED******REMOVED***isVisible: isVisible
-***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***Facilities(facilities: viewModel.facilities, isVisible: isVisible)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ A view displaying either the sites or facilities contained in a `FloorManager`.
-***REMOVED***struct FloorFilterList: View {
-***REMOVED******REMOVED***private let title: String
-***REMOVED******REMOVED***private let sites: [FloorSite]
-***REMOVED******REMOVED***private let facilities: [FloorFacility]
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ Binding allowing the user to toggle the visibility of the results list.
-***REMOVED******REMOVED***private var isVisible: Binding<Bool>
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ Creates a `FloorFilterList`
-***REMOVED******REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED******REMOVED***/   - title: The title of the list.
-***REMOVED******REMOVED******REMOVED***/   - sites: The sites to display.
-***REMOVED******REMOVED******REMOVED***/   - isVisible: A binding used to dismiss the site selector.
-***REMOVED******REMOVED***init(
-***REMOVED******REMOVED******REMOVED***_ title: String,
-***REMOVED******REMOVED******REMOVED***sites: [FloorSite],
-***REMOVED******REMOVED******REMOVED***isVisible: Binding<Bool>
-***REMOVED******REMOVED***) {
-***REMOVED******REMOVED******REMOVED***self.title = title
-***REMOVED******REMOVED******REMOVED***self.sites = sites
-***REMOVED******REMOVED******REMOVED***facilities = []
-***REMOVED******REMOVED******REMOVED***self.isVisible = isVisible
-***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***init(
-***REMOVED******REMOVED******REMOVED***_ title: String,
-***REMOVED******REMOVED******REMOVED***facilities: [FloorFacility],
-***REMOVED******REMOVED******REMOVED***isVisible: Binding<Bool>
-***REMOVED******REMOVED***) {
-***REMOVED******REMOVED******REMOVED***self.title = title
-***REMOVED******REMOVED******REMOVED***self.facilities = facilities
-***REMOVED******REMOVED******REMOVED***sites = []
-***REMOVED******REMOVED******REMOVED***self.isVisible = isVisible
-***REMOVED***
-***REMOVED******REMOVED***
+***REMOVED******REMOVED***/ A view displaying the sites contained in a `FloorManager`.
+***REMOVED***struct Sites: View {
+***REMOVED******REMOVED***let sites: [FloorSite]
+***REMOVED******REMOVED***var isVisible: Binding<Bool>
+
 ***REMOVED******REMOVED***var body: some View {
 ***REMOVED******REMOVED******REMOVED***LazyVStack(alignment: .leading) {
-***REMOVED******REMOVED******REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(title)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.bold()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isVisible.wrappedValue.toggle()
-***REMOVED******REMOVED******REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "xmark.circle")
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***Rectangle()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(height: 1)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
+***REMOVED******REMOVED******REMOVED******REMOVED***Header(title: "Select a site…", isVisible: isVisible)
 ***REMOVED******REMOVED******REMOVED******REMOVED***ForEach(sites) { site in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(site.name)
 ***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.esriBorder()
+***REMOVED***
+***REMOVED***
+
+***REMOVED******REMOVED***/ A view displaying the facilities contained in a `FloorManager`.
+***REMOVED***struct Facilities: View {
+***REMOVED******REMOVED***let facilities: [FloorFacility]
+***REMOVED******REMOVED***var isVisible: Binding<Bool>
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***var body: some View {
+***REMOVED******REMOVED******REMOVED***LazyVStack(alignment: .leading) {
+***REMOVED******REMOVED******REMOVED******REMOVED***Header(title: "Select a facility…", isVisible: isVisible)
 ***REMOVED******REMOVED******REMOVED******REMOVED***ForEach(facilities) { facility in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(facility.name)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.esriBorder()
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ The header for a site or facility selector.
+***REMOVED***struct Header: View {
+***REMOVED******REMOVED***let title: String
+***REMOVED******REMOVED***var isVisible: Binding<Bool>
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***var body: some View {
+***REMOVED******REMOVED******REMOVED***HStack {
+***REMOVED******REMOVED******REMOVED******REMOVED***Text(title)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.bold()
+***REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED******REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isVisible.wrappedValue.toggle()
+***REMOVED******REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "xmark.circle")
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***Rectangle()
+***REMOVED******REMOVED******REMOVED******REMOVED***.frame(height: 1)
+***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***

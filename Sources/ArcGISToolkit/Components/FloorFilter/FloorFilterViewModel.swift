@@ -18,7 +18,7 @@
 @MainActor
 final public class FloorFilterViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ The current selection.
-***REMOVED***enum Selection {
+***REMOVED***public enum Selection {
 ***REMOVED******REMOVED******REMOVED***/ The selected site.
 ***REMOVED******REMOVED***case site(FloorSite)
 ***REMOVED******REMOVED******REMOVED***/ The selected facility.
@@ -42,7 +42,7 @@ final public class FloorFilterViewModel: ObservableObject {
 ***REMOVED******REMOVED******REMOVED******REMOVED***try await floorManager.load()
 ***REMOVED******REMOVED******REMOVED******REMOVED***if sites.count == 1 {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** If we have only one site, select it.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedSite = sites.first
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selection = .site(sites.first!)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED*** catch  {
 ***REMOVED******REMOVED******REMOVED******REMOVED***print("error: \(error)")
@@ -98,6 +98,7 @@ final public class FloorFilterViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The selected site, floor, or level.
+***REMOVED***@Published
 ***REMOVED***public var selection: Selection? {
 ***REMOVED******REMOVED***didSet {
 ***REMOVED******REMOVED******REMOVED***zoomToSelection()
@@ -105,7 +106,6 @@ final public class FloorFilterViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The selected site.
-***REMOVED***@Published
 ***REMOVED***var selectedSite: FloorSite? {
 ***REMOVED******REMOVED***guard let selection = selection else {
 ***REMOVED******REMOVED******REMOVED***return nil
