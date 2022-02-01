@@ -15,9 +15,9 @@ import SwiftUI
 import ArcGIS
 
 /// A view which allows selection of sites and facilities represented in a `FloorManager`.
-struct SiteSelector: View {
-    /// Creates a `SiteSelector`
-    /// - Parameter floorFilterViewModel: The view model used by the `SiteSelector`.
+struct SiteAndFacilitySelector: View {
+    /// Creates a `SiteAndFacilitySelector`
+    /// - Parameter floorFilterViewModel: The view model used by the `SiteAndFacilitySelector`.
     /// - Parameter isVisible: A binding used to dismiss the site selector.
     public init(
         _ floorFilterViewModel: FloorFilterViewModel,
@@ -27,7 +27,7 @@ struct SiteSelector: View {
         self.isVisible = isVisible
     }
     
-    /// The view model used by the `SiteSelector`.
+    /// The view model used by the `SiteAndFacilitySelector`.
     @ObservedObject
     private var viewModel: FloorFilterViewModel
     
@@ -45,7 +45,7 @@ struct SiteSelector: View {
             )
         } else {
             FloorFilterList(
-                "Select a facility...",
+                "Select a facility…",
                 facilities: viewModel.facilities,
                 isVisible: isVisible
             )

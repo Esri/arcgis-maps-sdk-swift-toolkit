@@ -48,7 +48,7 @@ public struct FloorFilter: View {
                 }
                 .esriBorder()
                 if isSelectorVisible {
-                    SiteSelector(
+                    SiteAndFacilitySelector(
                         viewModel,
                         isVisible: $isSelectorVisible
                     )
