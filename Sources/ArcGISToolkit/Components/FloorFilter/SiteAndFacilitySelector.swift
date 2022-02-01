@@ -31,86 +31,70 @@ struct SiteAndFacilitySelector: View {
     @ObservedObject
     private var viewModel: FloorFilterViewModel
     
-    /// Allows the user to toggle the visibility of the site selector.
+    /// Allows the user to toggle the visibility of the site and facility selector.
     private var isVisible: Binding<Bool>
     
     var body: some View {
         if viewModel.sites.count > 1 && !(viewModel.selectedSite == nil) {
             // Only show site list if there is more than one site
             // and the user has not yet selected a site.
-            FloorFilterList(
-                "Select a site…",
-                sites: viewModel.sites,
-                isVisible: isVisible
-            )
+            Sites(sites: viewModel.sites, isVisible: isVisible)
         } else {
-            FloorFilterList(
-                "Select a facility…",
-                facilities: viewModel.facilities,
-                isVisible: isVisible
-            )
+            Facilities(facilities: viewModel.facilities, isVisible: isVisible)
         }
     }
     
-    /// A view displaying either the sites or facilities contained in a `FloorManager`.
-    struct FloorFilterList: View {
-        private let title: String
-        private let sites: [FloorSite]
-        private let facilities: [FloorFacility]
-        
-        /// Binding allowing the user to toggle the visibility of the results list.
-        private var isVisible: Binding<Bool>
-        
-        /// Creates a `FloorFilterList`
-        /// - Parameters:
-        ///   - title: The title of the list.
-        ///   - sites: The sites to display.
-        ///   - isVisible: A binding used to dismiss the site selector.
-        init(
-            _ title: String,
-            sites: [FloorSite],
-            isVisible: Binding<Bool>
-        ) {
-            self.title = title
-            self.sites = sites
-            facilities = []
-            self.isVisible = isVisible
-        }
-        
-        init(
-            _ title: String,
-            facilities: [FloorFacility],
-            isVisible: Binding<Bool>
-        ) {
-            self.title = title
-            self.facilities = facilities
-            sites = []
-            self.isVisible = isVisible
-        }
-        
+    /// A view displaying the sites contained in a `FloorManager`.
+    struct Sites: View {
+        let sites: [FloorSite]
+        var isVisible: Binding<Bool>
+
         var body: some View {
             LazyVStack(alignment: .leading) {
-                HStack {
-                    Text(title)
-                        .bold()
-                    Spacer()
-                    Button {
-                        isVisible.wrappedValue.toggle()
-                    } label: {
-                        Image(systemName: "xmark.circle")
-                    }
-                }
-                Rectangle()
-                    .frame(height: 1)
-                    .foregroundColor(.secondary)
+                Header(title: "Select a site…", isVisible: isVisible)
                 ForEach(sites) { site in
                     Text(site.name)
                 }
+            }
+            .esriBorder()
+        }
+    }
+
+    /// A view displaying the facilities contained in a `FloorManager`.
+    struct Facilities: View {
+        let facilities: [FloorFacility]
+        var isVisible: Binding<Bool>
+        
+        var body: some View {
+            LazyVStack(alignment: .leading) {
+                Header(title: "Select a facility…", isVisible: isVisible)
                 ForEach(facilities) { facility in
                     Text(facility.name)
                 }
             }
             .esriBorder()
+        }
+    }
+    
+    /// The header for a site or facility selector.
+    struct Header: View {
+        let title: String
+        var isVisible: Binding<Bool>
+        
+        var body: some View {
+            HStack {
+                Text(title)
+                    .bold()
+                Spacer()
+                Button {
+                    isVisible.wrappedValue.toggle()
+                } label: {
+                    Image(systemName: "xmark.circle")
+                }
+            }
+            Rectangle()
+                .frame(height: 1)
+                .foregroundColor(.secondary)
         }
     }
 }

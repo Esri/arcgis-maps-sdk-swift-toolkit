@@ -18,7 +18,7 @@ import ArcGIS
 @MainActor
 final public class FloorFilterViewModel: ObservableObject {
     /// The current selection.
-    enum Selection {
+    public enum Selection {
         /// The selected site.
         case site(FloorSite)
         /// The selected facility.
@@ -42,7 +42,7 @@ final public class FloorFilterViewModel: ObservableObject {
                 try await floorManager.load()
                 if sites.count == 1 {
                     // If we have only one site, select it.
-                    selectedSite = sites.first
+                    selection = .site(sites.first!)
                 }
             } catch  {
                 print("error: \(error)")
@@ -98,6 +98,7 @@ final public class FloorFilterViewModel: ObservableObject {
     }
     
     /// The selected site, floor, or level.
+    @Published
     public var selection: Selection? {
         didSet {
             zoomToSelection()
@@ -105,7 +106,6 @@ final public class FloorFilterViewModel: ObservableObject {
     }
     
     /// The selected site.
-    @Published
     var selectedSite: FloorSite? {
         guard let selection = selection else {
             return nil
