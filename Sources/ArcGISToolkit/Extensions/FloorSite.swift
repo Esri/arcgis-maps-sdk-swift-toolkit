@@ -20,4 +20,6 @@ extension FloorSite: Equatable {
 ***REMOVED***
 ***REMOVED***
 
-extension FloorSite: Identifiable { ***REMOVED***
+extension FloorSite: Identifiable {
+***REMOVED***public var id: String { siteId ***REMOVED***
+***REMOVED***

@@ -55,7 +55,7 @@ final public class FloorFilterViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED******REMOVED***/ `true` if the model is loading it's properties, `false` if not loading.
 ***REMOVED***@Published
-***REMOVED***public private(set) var isLoading = true
+***REMOVED***private(set) var isLoading = true
 ***REMOVED***
 ***REMOVED******REMOVED***/ Facilities in the selected site. If no site is selected then the list is empty.
 ***REMOVED******REMOVED***/ If the sites list is empty, all facilities will be returned.
