@@ -48,7 +48,7 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.esriBorder()
 ***REMOVED******REMOVED******REMOVED******REMOVED***if isSelectorVisible {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***SiteSelector(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***SiteAndFacilitySelector(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isVisible: $isSelectorVisible
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)

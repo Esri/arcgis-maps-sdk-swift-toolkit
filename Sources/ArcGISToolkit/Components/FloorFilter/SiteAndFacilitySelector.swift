@@ -15,9 +15,9 @@
 ***REMOVED***
 
 ***REMOVED***/ A view which allows selection of sites and facilities represented in a `FloorManager`.
-struct SiteSelector: View {
-***REMOVED******REMOVED***/ Creates a `SiteSelector`
-***REMOVED******REMOVED***/ - Parameter floorFilterViewModel: The view model used by the `SiteSelector`.
+struct SiteAndFacilitySelector: View {
+***REMOVED******REMOVED***/ Creates a `SiteAndFacilitySelector`
+***REMOVED******REMOVED***/ - Parameter floorFilterViewModel: The view model used by the `SiteAndFacilitySelector`.
 ***REMOVED******REMOVED***/ - Parameter isVisible: A binding used to dismiss the site selector.
 ***REMOVED***public init(
 ***REMOVED******REMOVED***_ floorFilterViewModel: FloorFilterViewModel,
@@ -27,7 +27,7 @@ struct SiteSelector: View {
 ***REMOVED******REMOVED***self.isVisible = isVisible
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ The view model used by the `SiteSelector`.
+***REMOVED******REMOVED***/ The view model used by the `SiteAndFacilitySelector`.
 ***REMOVED***@ObservedObject
 ***REMOVED***private var viewModel: FloorFilterViewModel
 ***REMOVED***
@@ -45,7 +45,7 @@ struct SiteSelector: View {
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED***FloorFilterList(
-***REMOVED******REMOVED******REMOVED******REMOVED***"Select a facility...",
+***REMOVED******REMOVED******REMOVED******REMOVED***"Select a facility…",
 ***REMOVED******REMOVED******REMOVED******REMOVED***facilities: viewModel.facilities,
 ***REMOVED******REMOVED******REMOVED******REMOVED***isVisible: isVisible
 ***REMOVED******REMOVED******REMOVED***)
