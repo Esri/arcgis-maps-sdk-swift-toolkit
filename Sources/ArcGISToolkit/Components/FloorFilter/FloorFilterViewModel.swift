@@ -17,6 +17,16 @@ import ArcGIS
 /// Manages the state for a `FloorFilter`.
 @MainActor
 final public class FloorFilterViewModel: ObservableObject {
+    /// The current selection.
+    enum Selection {
+        /// The selected site.
+        case site(FloorSite)
+        /// The selected facility.
+        case facility(FloorFacility)
+        /// The selected level.
+        case level(FloorLevel)
+    }
+
     /// Creates a `FloorFilterViewModel`.
     /// - Parameters:
     ///   - floorManager: A floor manager.
@@ -87,41 +97,62 @@ final public class FloorFilterViewModel: ObservableObject {
         floorManager.levels
     }
     
+    /// The selected site, floor, or level.
+    public var selection: Selection? {
+        didSet {
+            zoomToSelection()
+        }
+    }
+    
     /// The selected site.
     @Published
-    public var selectedSite: FloorSite? = nil {
-        didSet {
-            zoomToSite()
+    var selectedSite: FloorSite? {
+        guard let selection = selection else {
+            return nil
+        }
+        
+        switch selection {
+        case .site(let site):
+            return site
+        case .facility(let facility):
+            return facility.site
+        case .level(let level):
+            return level.facility?.site
         }
     }
-
+    
     /// The selected facility.
-    @Published
-    public var selectedFacility: FloorFacility? = nil {
-        didSet {
-            zoomToFacility()
+    var selectedFacility: FloorFacility? {
+        guard let selection = selection else {
+            return nil
+        }
+        
+        switch selection {
+        case .site:
+            return nil
+        case .facility(let facility):
+            return facility
+        case .level(let level):
+            return level.facility
         }
     }
-
+    
     /// The selected level.
-    @Published
-    public var selectedLevel: FloorLevel? = nil
+    var selectedLevel: FloorLevel? {
+        if case let .level(level) = selection {
+            return level
+        } else {
+            return nil
+        }
+    }
     
     /// Zooms to the selected facility; if there is no selected facility, zooms to the selected site.
     public func zoomToSelection() {
-        if selectedFacility != nil {
-            zoomToFacility()
-        } else if selectedSite != nil {
-            zoomToSite()
+        if let selectedFacility = selectedFacility {
+            zoomToExtent(extent: selectedFacility.geometry?.extent)
+        } else if let selectedSite = selectedSite {
+            zoomToExtent(extent: selectedSite.geometry?.extent)
         }
-    }
-    
-    private func zoomToSite() {
-        zoomToExtent(extent: selectedSite?.geometry?.extent)
-    }
-    
-    private func zoomToFacility() {
-        zoomToExtent(extent: selectedFacility?.geometry?.extent)
     }
     
     private func zoomToExtent(extent: Envelope?) {
