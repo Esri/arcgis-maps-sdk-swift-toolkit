@@ -43,14 +43,14 @@ public struct FloorFilter: View {
                     Button {
                         isSelectorVisible.toggle()
                     } label: {
-                        Image.init("Site", bundle: Bundle.module)
+                        Image.init("Site", bundle: Bundle.module, label: Text("Site"))
                     }
                 }
                 .esriBorder()
                 if isSelectorVisible {
                     SiteSelector(
                         viewModel,
-                        isSelectorVisible: $isSelectorVisible
+                        isVisible: $isSelectorVisible
                     )
                         .frame(width: 200)
                 }

@@ -20,4 +20,6 @@ extension FloorSite: Equatable {
     }
 }
 
-extension FloorSite: Identifiable { }
+extension FloorSite: Identifiable {
+    public var id: String { siteId }
+}
