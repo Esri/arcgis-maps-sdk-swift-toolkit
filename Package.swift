@@ -27,12 +27,14 @@ let package = Package(
         ),
     ],
     dependencies: [
-        .package(name: "ArcGIS", path: "../swift/ArcGIS")
+        .package(name: "arcgis-runtime-swift", path: "../swift/ArcGIS")
     ],
     targets: [
         .target(
             name: "ArcGISToolkit",
-            dependencies: ["ArcGIS"]
+            dependencies: [
+                .product(name: "ArcGIS", package: "arcgis-runtime-swift")
+            ]
         ),
         .testTarget(
             name: "ArcGISToolkitTests",
