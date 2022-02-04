@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		75657E4827ABAC8400EE865B /* CompassExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75657E4727ABAC8400EE865B /* CompassExampleView.swift */; };
 		E42BFBE92672BF9500159107 /* SearchExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42BFBE82672BF9500159107 /* SearchExampleView.swift */; };
 		E47ABE442652FE0900FD2FE3 /* ExamplesApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E47ABE432652FE0900FD2FE3 /* ExamplesApp.swift */; };
 		E47ABE482652FE0C00FD2FE3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E47ABE472652FE0C00FD2FE3 /* Assets.xcassets */; };
@@ -36,6 +37,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		75657E4727ABAC8400EE865B /* CompassExampleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompassExampleView.swift; sourceTree = "<group>"; };
 		E42BFBE82672BF9500159107 /* SearchExampleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchExampleView.swift; sourceTree = "<group>"; };
 		E47ABE402652FE0900FD2FE3 /* Examples.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Examples.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E47ABE432652FE0900FD2FE3 /* ExamplesApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExamplesApp.swift; sourceTree = "<group>"; };
@@ -73,6 +75,7 @@
 				E4F9BC98265EFCAF001280FF /* OverviewMapExampleView.swift */,
 				E42BFBE82672BF9500159107 /* SearchExampleView.swift */,
 				E4AA9315276BF5ED000E6289 /* FloatingPanelExampleView.swift */,
+				75657E4727ABAC8400EE865B /* CompassExampleView.swift */,
 			);
 			name = Examples;
 			sourceTree = "<group>";
@@ -209,6 +212,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				75657E4827ABAC8400EE865B /* CompassExampleView.swift in Sources */,
 				E48A73452658227100F5C118 /* Examples.swift in Sources */,
 				E48A73432658227100F5C118 /* Example.swift in Sources */,
 				E47ABE442652FE0900FD2FE3 /* ExamplesApp.swift in Sources */,
