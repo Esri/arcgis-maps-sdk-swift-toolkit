@@ -23,24 +23,27 @@ struct SiteAndFacilitySelector: View {
         _ floorFilterViewModel: FloorFilterViewModel,
         isVisible: Binding<Bool>
     ) {
-        self.viewModel = floorFilterViewModel
+        self.floorFilterViewModel = floorFilterViewModel
         self.isVisible = isVisible
     }
     
     /// The view model used by the `SiteAndFacilitySelector`.
     @ObservedObject
-    private var viewModel: FloorFilterViewModel
+    private var floorFilterViewModel: FloorFilterViewModel
     
     /// Allows the user to toggle the visibility of the site and facility selector.
     private var isVisible: Binding<Bool>
     
     var body: some View {
-        if viewModel.sites.count > 1 && !(viewModel.selectedSite == nil) {
-            // Only show site list if there is more than one site
-            // and the user has not yet selected a site.
-            Sites(sites: viewModel.sites, isVisible: isVisible)
+        if let selectedSite = floorFilterViewModel.selectedSite {
+            Facilities(facilities: selectedSite.facilities, isVisible: isVisible)
+        } else if floorFilterViewModel.sites.count == 1 {
+            Facilities(
+                facilities: floorFilterViewModel.sites.first!.facilities,
+                isVisible: isVisible
+            )
         } else {
-            Facilities(facilities: viewModel.facilities, isVisible: isVisible)
+            Sites(sites: floorFilterViewModel.sites, isVisible: isVisible)
         }
     }
     
@@ -50,8 +53,9 @@ struct SiteAndFacilitySelector: View {
         var isVisible: Binding<Bool>
 
         var body: some View {
-            LazyVStack(alignment: .leading) {
+            VStack(alignment: .leading) {
                 Header(title: "Select a site…", isVisible: isVisible)
+                Divider()
                 ForEach(sites) { site in
                     Text(site.name)
                 }
@@ -66,8 +70,9 @@ struct SiteAndFacilitySelector: View {
         var isVisible: Binding<Bool>
         
         var body: some View {
-            LazyVStack(alignment: .leading) {
+            VStack(alignment: .leading) {
                 Header(title: "Select a facility…", isVisible: isVisible)
+                Divider()
                 ForEach(facilities) { facility in
                     Text(facility.name)
                 }
@@ -92,9 +97,6 @@ struct SiteAndFacilitySelector: View {
                     Image(systemName: "xmark.circle")
                 }
             }
-            Rectangle()
-                .frame(height: 1)
-                .foregroundColor(.secondary)
         }
     }
 }
