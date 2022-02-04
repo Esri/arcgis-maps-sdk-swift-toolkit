@@ -55,7 +55,7 @@ struct FloorFilterExampleView: View {
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***.overlay(alignment: .bottomLeading) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if let viewModel = floorFilterViewModel {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FloorFilter(viewModel)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FloorFilter(viewModel: viewModel)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(floorFilterPadding)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
