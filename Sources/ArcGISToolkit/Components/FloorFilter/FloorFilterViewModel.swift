@@ -17,13 +17,13 @@
 ***REMOVED***/ Manages the state for a `FloorFilter`.
 @MainActor
 final public class FloorFilterViewModel: ObservableObject {
-***REMOVED******REMOVED***/ The current selection.
+***REMOVED******REMOVED***/  A selected site, floor, or level.
 ***REMOVED***public enum Selection {
-***REMOVED******REMOVED******REMOVED***/ The selected site.
+***REMOVED******REMOVED******REMOVED***/ A selected site.
 ***REMOVED******REMOVED***case site(FloorSite)
-***REMOVED******REMOVED******REMOVED***/ The selected facility.
+***REMOVED******REMOVED******REMOVED***/ A selected facility.
 ***REMOVED******REMOVED***case facility(FloorFacility)
-***REMOVED******REMOVED******REMOVED***/ The selected level.
+***REMOVED******REMOVED******REMOVED***/ A selected level.
 ***REMOVED******REMOVED***case level(FloorLevel)
 ***REMOVED***
 
@@ -53,10 +53,10 @@ final public class FloorFilterViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED******REMOVED***/ The `Viewpoint` used to pan/zoom to the selected site/facilty.
 ***REMOVED******REMOVED***/ If `nil`, there will be no automatic pan/zoom operations.
-***REMOVED***var viewpoint: Binding<Viewpoint>? = nil
+***REMOVED***let viewpoint: Binding<Viewpoint>?
 ***REMOVED***
 ***REMOVED******REMOVED***/ The `FloorManager` containing the site, floor, and level information.
-***REMOVED***var floorManager: FloorManager
+***REMOVED***let floorManager: FloorManager
 ***REMOVED***
 ***REMOVED******REMOVED***/ The floor manager sites.
 ***REMOVED***public var sites: [FloorSite] {
@@ -128,10 +128,17 @@ final public class FloorFilterViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Zooms to the selected facility; if there is no selected facility, zooms to the selected site.
 ***REMOVED***public func zoomToSelection() {
-***REMOVED******REMOVED***if let selectedFacility = selectedFacility {
-***REMOVED******REMOVED******REMOVED***zoomToExtent(extent: selectedFacility.geometry?.extent)
-***REMOVED*** else if let selectedSite = selectedSite {
-***REMOVED******REMOVED******REMOVED***zoomToExtent(extent: selectedSite.geometry?.extent)
+***REMOVED******REMOVED***guard let selection = selection else {
+***REMOVED******REMOVED******REMOVED***return nil
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***switch selection {
+***REMOVED******REMOVED***case .site(let site):
+***REMOVED******REMOVED******REMOVED***zoomToExtent(extent: site.geometry?.extent)
+***REMOVED******REMOVED***case .facility(let facility):
+***REMOVED******REMOVED******REMOVED***zoomToExtent(extent: facility.geometry?.extent)
+***REMOVED******REMOVED***case .level:
+***REMOVED******REMOVED******REMOVED***break
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***

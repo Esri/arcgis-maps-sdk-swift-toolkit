@@ -15,12 +15,12 @@
 ***REMOVED***
 
 ***REMOVED***/ The `FloorFilter` component simplifies visualization of GIS data for a specific floor of a building
-***REMOVED***/ in your application. It allows you to filter the floor plan data displayed in your `GeoView`
+***REMOVED***/ in your application. It allows you to filter the floor plan data displayed in your map or scene view
 ***REMOVED***/ to a site, a facility (building) in the site, or a floor in the facility.
 public struct FloorFilter: View {
 ***REMOVED******REMOVED***/ Creates a `FloorFilter`
 ***REMOVED******REMOVED***/ - Parameter viewModel: The view model used by the `FloorFilter`.
-***REMOVED***public init(_ viewModel: FloorFilterViewModel) {
+***REMOVED***public init(viewModel: FloorFilterViewModel) {
 ***REMOVED******REMOVED***self.viewModel = viewModel
 ***REMOVED***
 ***REMOVED***
@@ -33,18 +33,16 @@ public struct FloorFilter: View {
 ***REMOVED***private var isSelectorVisible: Bool = false
 ***REMOVED***
 ***REMOVED***public var body: some View {
-***REMOVED******REMOVED***HStack(alignment: .bottom) {
-***REMOVED******REMOVED******REMOVED***if viewModel.isLoading {
-***REMOVED******REMOVED******REMOVED******REMOVED***ProgressView()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.progressViewStyle(CircularProgressViewStyle())
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.esriBorder()
-***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***VStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isSelectorVisible.toggle()
-***REMOVED******REMOVED******REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image.init("Site", bundle: Bundle.module, label: Text("Site"))
-***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***if viewModel.isLoading {
+***REMOVED******REMOVED******REMOVED***ProgressView()
+***REMOVED******REMOVED******REMOVED******REMOVED***.progressViewStyle(.circular)
+***REMOVED******REMOVED******REMOVED******REMOVED***.esriBorder()
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***HStack(alignment: .bottom) {
+***REMOVED******REMOVED******REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isSelectorVisible.toggle()
+***REMOVED******REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image("Site", bundle: .module, label: Text("Site"))
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.esriBorder()
 ***REMOVED******REMOVED******REMOVED******REMOVED***if isSelectorVisible {
