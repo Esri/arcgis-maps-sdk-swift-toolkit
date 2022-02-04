@@ -27,6 +27,7 @@ let package = Package(
         ),
     ],
     dependencies: [
+        // To use a daily build of the Swift API, change the path below to point to the daily build's `output` folder.
         .package(name: "arcgis-runtime-swift", path: "../swift/ArcGIS")
     ],
     targets: [
