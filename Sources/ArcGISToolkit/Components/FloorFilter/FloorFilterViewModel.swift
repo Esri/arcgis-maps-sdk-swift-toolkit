@@ -17,13 +17,13 @@ import ArcGIS
 /// Manages the state for a `FloorFilter`.
 @MainActor
 final public class FloorFilterViewModel: ObservableObject {
-    /// The current selection.
+    ///  A selected site, floor, or level.
     public enum Selection {
-        /// The selected site.
+        /// A selected site.
         case site(FloorSite)
-        /// The selected facility.
+        /// A selected facility.
         case facility(FloorFacility)
-        /// The selected level.
+        /// A selected level.
         case level(FloorLevel)
     }
 
@@ -53,10 +53,10 @@ final public class FloorFilterViewModel: ObservableObject {
     
     /// The `Viewpoint` used to pan/zoom to the selected site/facilty.
     /// If `nil`, there will be no automatic pan/zoom operations.
-    var viewpoint: Binding<Viewpoint>? = nil
+    let viewpoint: Binding<Viewpoint>?
     
     /// The `FloorManager` containing the site, floor, and level information.
-    var floorManager: FloorManager
+    let floorManager: FloorManager
     
     /// The floor manager sites.
     public var sites: [FloorSite] {
@@ -128,10 +128,17 @@ final public class FloorFilterViewModel: ObservableObject {
     
     /// Zooms to the selected facility; if there is no selected facility, zooms to the selected site.
     public func zoomToSelection() {
-        if let selectedFacility = selectedFacility {
-            zoomToExtent(extent: selectedFacility.geometry?.extent)
-        } else if let selectedSite = selectedSite {
-            zoomToExtent(extent: selectedSite.geometry?.extent)
+        guard let selection = selection else {
+            return nil
+        }
+        
+        switch selection {
+        case .site(let site):
+            zoomToExtent(extent: site.geometry?.extent)
+        case .facility(let facility):
+            zoomToExtent(extent: facility.geometry?.extent)
+        case .level:
+            break
         }
     }
     

@@ -19,8 +19,8 @@ struct SiteAndFacilitySelector: View {
     /// Creates a `SiteAndFacilitySelector`
     /// - Parameter floorFilterViewModel: The view model used by the `SiteAndFacilitySelector`.
     /// - Parameter isVisible: A binding used to dismiss the site selector.
-    public init(
-        _ floorFilterViewModel: FloorFilterViewModel,
+    init(
+        floorFilterViewModel: FloorFilterViewModel,
         isVisible: Binding<Bool>
     ) {
         self.floorFilterViewModel = floorFilterViewModel
@@ -94,7 +94,7 @@ struct SiteAndFacilitySelector: View {
                 Button {
                     isVisible.wrappedValue.toggle()
                 } label: {
-                    Image(systemName: "xmark.circle")
+                    Image(systemName: "xmark.circle", label: Text("Close"))
                 }
             }
         }

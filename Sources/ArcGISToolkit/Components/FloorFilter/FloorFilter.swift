@@ -15,12 +15,12 @@ import SwiftUI
 import ArcGIS
 
 /// The `FloorFilter` component simplifies visualization of GIS data for a specific floor of a building
-/// in your application. It allows you to filter the floor plan data displayed in your `GeoView`
+/// in your application. It allows you to filter the floor plan data displayed in your map or scene view
 /// to a site, a facility (building) in the site, or a floor in the facility.
 public struct FloorFilter: View {
     /// Creates a `FloorFilter`
     /// - Parameter viewModel: The view model used by the `FloorFilter`.
-    public init(_ viewModel: FloorFilterViewModel) {
+    public init(viewModel: FloorFilterViewModel) {
         self.viewModel = viewModel
     }
     
@@ -33,18 +33,16 @@ public struct FloorFilter: View {
     private var isSelectorVisible: Bool = false
     
     public var body: some View {
-        HStack(alignment: .bottom) {
-            if viewModel.isLoading {
-                ProgressView()
-                    .progressViewStyle(CircularProgressViewStyle())
-                    .esriBorder()
-            } else {
-                VStack {
-                    Button {
-                        isSelectorVisible.toggle()
-                    } label: {
-                        Image.init("Site", bundle: Bundle.module, label: Text("Site"))
-                    }
+        if viewModel.isLoading {
+            ProgressView()
+                .progressViewStyle(.circular)
+                .esriBorder()
+        } else {
+            HStack(alignment: .bottom) {
+                Button {
+                    isSelectorVisible.toggle()
+                } label: {
+                    Image("Site", bundle: .module, label: Text("Site"))
                 }
                 .esriBorder()
                 if isSelectorVisible {
