@@ -94,7 +94,7 @@ struct SiteAndFacilitySelector: View {
                 Button {
                     isVisible.wrappedValue.toggle()
                 } label: {
-                    Image(systemName: "xmark.circle", label: Text("Close"))
+                    Image(systemName: "xmark.circle")
                 }
             }
         }
