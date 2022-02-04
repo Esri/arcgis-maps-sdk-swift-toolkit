@@ -27,6 +27,7 @@ let package = Package(
 ***REMOVED******REMOVED***),
 ***REMOVED***],
 ***REMOVED***dependencies: [
+***REMOVED******REMOVED******REMOVED*** To use a daily build of the Swift API, change the path below to point to the daily build's `output` folder.
 ***REMOVED******REMOVED***.package(name: "arcgis-runtime-swift", path: "../swift/ArcGIS")
 ***REMOVED***],
 ***REMOVED***targets: [
