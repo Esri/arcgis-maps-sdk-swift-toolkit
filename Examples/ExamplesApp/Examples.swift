@@ -37,7 +37,8 @@ extension ExampleList {
         examples: [
             AnyExample("Basemap Gallery", content: BasemapGalleryExampleView()),
             AnyExample("Overview Map", content: OverviewMapExampleView()),
-            AnyExample("Search", content: SearchExampleView())
+            AnyExample("Search", content: SearchExampleView()),
+            AnyExample("Compass", content: CompassExampleView())
         ]
     )
     
