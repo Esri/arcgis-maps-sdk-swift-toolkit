@@ -63,39 +63,19 @@ final public class FloorFilterViewModel: ObservableObject {
         floorManager.sites
     }
     
+    /// The floor manager facilities.
+    public var facilities: [FloorFacility] {
+        floorManager.facilities
+    }
+    
+    /// The floor manager levels.
+    public var levels: [FloorLevel] {
+        floorManager.levels
+    }
+
     /// `true` if the model is loading it's properties, `false` if not loading.
     @Published
     private(set) var isLoading = true
-    
-    /// Facilities in the selected site. If no site is selected then the list is empty.
-    /// If the sites list is empty, all facilities will be returned.
-    public var facilities: [FloorFacility] {
-        sites.isEmpty ? floorManager.facilities : floorManager.facilities.filter {
-            $0.site == selectedSite
-        }
-    }
-    
-    /// Levels in the selected facility. If no facility is selected then the list is empty.
-    /// If the facilities list is empty, all levels will be returned. 
-    public var levels: [FloorLevel] {
-        facilities.isEmpty ? floorManager.levels : floorManager.levels.filter {
-            $0.facility == selectedFacility
-        }
-    }
-    
-    /// Levels in the selected facility. If no facility is selected then the list is empty.
-    /// If the facilities list is empty, all levels will be returned.
-    /// The levels are sorted by `verticalOrder` in descending order.
-    public var sortedLevels: [FloorLevel] {
-        levels.sorted {
-            $0.verticalOrder > $1.verticalOrder
-        }
-    }
-    
-    /// All the levels in the map
-    public var allLevels: [FloorLevel] {
-        floorManager.levels
-    }
     
     /// The selected site, floor, or level.
     @Published
