@@ -129,7 +129,7 @@ final public class FloorFilterViewModel: ObservableObject {
     /// Zooms to the selected facility; if there is no selected facility, zooms to the selected site.
     public func zoomToSelection() {
         guard let selection = selection else {
-            return nil
+            return
         }
         
         switch selection {

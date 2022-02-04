@@ -55,7 +55,7 @@ struct FloorFilterExampleView: View {
         )
             .overlay(alignment: .bottomLeading) {
                 if let viewModel = floorFilterViewModel {
-                    FloorFilter(viewModel)
+                    FloorFilter(viewModel: viewModel)
                         .padding(floorFilterPadding)
                 }
             }
