@@ -23,24 +23,27 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED***_ floorFilterViewModel: FloorFilterViewModel,
 ***REMOVED******REMOVED***isVisible: Binding<Bool>
 ***REMOVED***) {
-***REMOVED******REMOVED***self.viewModel = floorFilterViewModel
+***REMOVED******REMOVED***self.floorFilterViewModel = floorFilterViewModel
 ***REMOVED******REMOVED***self.isVisible = isVisible
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The view model used by the `SiteAndFacilitySelector`.
 ***REMOVED***@ObservedObject
-***REMOVED***private var viewModel: FloorFilterViewModel
+***REMOVED***private var floorFilterViewModel: FloorFilterViewModel
 ***REMOVED***
 ***REMOVED******REMOVED***/ Allows the user to toggle the visibility of the site and facility selector.
 ***REMOVED***private var isVisible: Binding<Bool>
 ***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***if viewModel.sites.count > 1 && !(viewModel.selectedSite == nil) {
-***REMOVED******REMOVED******REMOVED******REMOVED*** Only show site list if there is more than one site
-***REMOVED******REMOVED******REMOVED******REMOVED*** and the user has not yet selected a site.
-***REMOVED******REMOVED******REMOVED***Sites(sites: viewModel.sites, isVisible: isVisible)
+***REMOVED******REMOVED***if let selectedSite = floorFilterViewModel.selectedSite {
+***REMOVED******REMOVED******REMOVED***Facilities(facilities: selectedSite.facilities, isVisible: isVisible)
+***REMOVED*** else if floorFilterViewModel.sites.count == 1 {
+***REMOVED******REMOVED******REMOVED***Facilities(
+***REMOVED******REMOVED******REMOVED******REMOVED***facilities: floorFilterViewModel.sites.first!.facilities,
+***REMOVED******REMOVED******REMOVED******REMOVED***isVisible: isVisible
+***REMOVED******REMOVED******REMOVED***)
 ***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***Facilities(facilities: viewModel.facilities, isVisible: isVisible)
+***REMOVED******REMOVED******REMOVED***Sites(sites: floorFilterViewModel.sites, isVisible: isVisible)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -50,8 +53,9 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED***var isVisible: Binding<Bool>
 
 ***REMOVED******REMOVED***var body: some View {
-***REMOVED******REMOVED******REMOVED***LazyVStack(alignment: .leading) {
+***REMOVED******REMOVED******REMOVED***VStack(alignment: .leading) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Header(title: "Select a site…", isVisible: isVisible)
+***REMOVED******REMOVED******REMOVED******REMOVED***Divider()
 ***REMOVED******REMOVED******REMOVED******REMOVED***ForEach(sites) { site in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(site.name)
 ***REMOVED******REMOVED******REMOVED***
@@ -66,8 +70,9 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED***var isVisible: Binding<Bool>
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var body: some View {
-***REMOVED******REMOVED******REMOVED***LazyVStack(alignment: .leading) {
+***REMOVED******REMOVED******REMOVED***VStack(alignment: .leading) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Header(title: "Select a facility…", isVisible: isVisible)
+***REMOVED******REMOVED******REMOVED******REMOVED***Divider()
 ***REMOVED******REMOVED******REMOVED******REMOVED***ForEach(facilities) { facility in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(facility.name)
 ***REMOVED******REMOVED******REMOVED***
@@ -92,9 +97,6 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "xmark.circle")
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***Rectangle()
-***REMOVED******REMOVED******REMOVED******REMOVED***.frame(height: 1)
-***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
