@@ -19,7 +19,7 @@ struct CompassExampleView: View {
     /// The map displayed in the map view.
     private let map = Map(basemapStyle: .arcGISImagery)
 
-    /// Allows for communication between the Compass and MapView.
+    /// Allows for communication between the Compass and MapView or SceneView.
     @State
     private var viewpoint: Viewpoint
 
