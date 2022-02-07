@@ -13,9 +13,12 @@
 
 ***REMOVED***
 
+***REMOVED***/ Represents the circular housing which encompasses the spinning needle at the center of the compass.
 struct CompassBody: View {
+***REMOVED******REMOVED***/ The background color of the compass housing.
 ***REMOVED***private let fill = Color(red: 228, green: 240, blue: 244)
 
+***REMOVED******REMOVED***/ The outline color of the compass housing.
 ***REMOVED***private let outline = Color(red: 127, green: 127, blue: 127)
 
 ***REMOVED***var body: some View {

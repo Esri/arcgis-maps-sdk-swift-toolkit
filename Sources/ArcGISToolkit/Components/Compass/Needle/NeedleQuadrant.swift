@@ -13,7 +13,9 @@
 
 ***REMOVED***
 
+***REMOVED***/ Represents 1/4 (one triangle) of the spinning needle at the center of the compass.
 struct NeedleQuadrant: View {
+***REMOVED******REMOVED***/ The color of this needle quadrant.
 ***REMOVED***let color: Color
 
 ***REMOVED***var body: some View {

@@ -27,7 +27,7 @@ struct CompassExampleView: View {
 ***REMOVED******REMOVED***_viewpoint = State(initialValue: Viewpoint(
 ***REMOVED******REMOVED******REMOVED***center: Point(x: -117.19494, y: 34.05723, spatialReference: .wgs84),
 ***REMOVED******REMOVED******REMOVED***scale: 10_000,
-***REMOVED******REMOVED******REMOVED***rotation: 0.0
+***REMOVED******REMOVED******REMOVED***rotation: 0
 ***REMOVED******REMOVED***))
 ***REMOVED***
 
@@ -36,7 +36,7 @@ struct CompassExampleView: View {
 ***REMOVED******REMOVED******REMOVED***.snapToNorthThreshold(0)
 ***REMOVED******REMOVED******REMOVED***.onViewpointChanged(kind: .centerAndScale) { viewpoint = $0 ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***.overlay(alignment: .topTrailing) {
-***REMOVED******REMOVED******REMOVED******REMOVED***Compass(viewpoint: $viewpoint, size: 75, autoHide: true)
+***REMOVED******REMOVED******REMOVED******REMOVED***Compass(viewpoint: $viewpoint, size: 75)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
 ***REMOVED******REMOVED***
 ***REMOVED***

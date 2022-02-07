@@ -13,7 +13,9 @@
 
 ***REMOVED***
 
+***REMOVED***/ Represents the center of the spinning needle at the center of the compass.
 struct NeedleCenter: View {
+***REMOVED******REMOVED***/ The bronze color component of the compass needle.
 ***REMOVED***private let color = Color(red: 241, green: 169, blue: 59)
 
 ***REMOVED***var body: some View {

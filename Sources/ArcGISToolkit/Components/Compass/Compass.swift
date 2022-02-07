@@ -14,17 +14,25 @@
 ***REMOVED***
 ***REMOVED***
 
+***REMOVED***/ A Compass (alias North arrow) shows where north is in a MapView or SceneView.
 public struct Compass: View {
-***REMOVED***var autoHide: Bool
-
+***REMOVED******REMOVED***/ Acts as link between the compass and the parent map or scene view.
 ***REMOVED***@Binding var viewpoint: Viewpoint
 
+***REMOVED******REMOVED***/ Controls visibility of the compass such for when `autoHide` is enabled.
 ***REMOVED***@State var opacity: Double
 
+***REMOVED******REMOVED***/ Determines if the compass should automatically hide/show itself when the parent view is oriented
+***REMOVED******REMOVED***/ north.
+***REMOVED***@State public var autoHide: Bool
+
+***REMOVED******REMOVED***/ The height of the compass.
 ***REMOVED***@State public var height: Double
 
+***REMOVED******REMOVED***/ The width of the compass.
 ***REMOVED***@State public var width: Double
 
+***REMOVED******REMOVED***/ A text description of the current heading, sutiable for accessibility voiceover.
 ***REMOVED***private var heading: String {
 ***REMOVED******REMOVED***"Compass, heading "
 ***REMOVED******REMOVED***+ Int(viewpoint.adjustedRotation.rounded()).description
@@ -70,6 +78,7 @@ public struct Compass: View {
 ***REMOVED***
 
 fileprivate extension Int {
+***REMOVED******REMOVED***/ A representation of an integer's associated cardinal or intercardinal direction.
 ***REMOVED***var asCardinalOrIntercardinal: String {
 ***REMOVED******REMOVED***switch self {
 ***REMOVED******REMOVED***case 0...22, 338...360: return "north"
@@ -86,6 +95,7 @@ fileprivate extension Int {
 ***REMOVED***
 
 fileprivate extension Viewpoint {
+***REMOVED******REMOVED***/ The viewpoint's `rotation`  adjusted to offset any rotation applied to the parent view.
 ***REMOVED***var adjustedRotation: Double {
 ***REMOVED******REMOVED***self.rotation == 0 ? self.rotation : 360 - self.rotation
 ***REMOVED***
