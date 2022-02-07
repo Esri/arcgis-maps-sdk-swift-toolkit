@@ -87,8 +87,8 @@ fileprivate extension Int {
         case 113...157: return "southeast"
         case 158...202: return "south"
         case 203...247: return "southwest"
-        case 248...290: return "west"
-        case 291...337: return "northwest"
+        case 248...292: return "west"
+        case 293...337: return "northwest"
         default: return ""
         }
     }
