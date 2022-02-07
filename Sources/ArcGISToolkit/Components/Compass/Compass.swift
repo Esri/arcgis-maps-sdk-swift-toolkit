@@ -87,8 +87,8 @@ fileprivate extension Int {
 ***REMOVED******REMOVED***case 113...157: return "southeast"
 ***REMOVED******REMOVED***case 158...202: return "south"
 ***REMOVED******REMOVED***case 203...247: return "southwest"
-***REMOVED******REMOVED***case 248...290: return "west"
-***REMOVED******REMOVED***case 291...337: return "northwest"
+***REMOVED******REMOVED***case 248...292: return "west"
+***REMOVED******REMOVED***case 293...337: return "northwest"
 ***REMOVED******REMOVED***default: return ""
 ***REMOVED***
 ***REMOVED***
