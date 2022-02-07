@@ -95,7 +95,7 @@ fileprivate extension Int {
 }
 
 fileprivate extension Viewpoint {
-    /// The viewpoint's `rotation`  adjusted to offset any rotation applied to the parent view.
+    /// The viewpoint's `rotation` adjusted to offset any rotation applied to the parent view.
     var adjustedRotation: Double {
         self.rotation == 0 ? self.rotation : 360 - self.rotation
     }
