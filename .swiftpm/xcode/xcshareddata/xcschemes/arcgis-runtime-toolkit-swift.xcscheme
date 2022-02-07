@@ -74,19 +74,9 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "ArcGISToolkit-SwiftTests"
-               BuildableName = "ArcGISToolkit-SwiftTests"
-               BlueprintName = "ArcGISToolkit-SwiftTests"
-               ReferencedContainer = "container:">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "ArcGISToolkitSwiftTests"
-               BuildableName = "ArcGISToolkitSwiftTests"
-               BlueprintName = "ArcGISToolkitSwiftTests"
+               BlueprintIdentifier = "ArcGISToolkitTests"
+               BuildableName = "ArcGISToolkitTests"
+               BlueprintName = "ArcGISToolkitTests"
                ReferencedContainer = "container:">
             </BuildableReference>
          </TestableReference>
