@@ -74,19 +74,9 @@
 ***REMOVED******REMOVED******REMOVED***skipped = "NO">
 ***REMOVED******REMOVED******REMOVED***<BuildableReference
 ***REMOVED******REMOVED******REMOVED***   BuildableIdentifier = "primary"
-***REMOVED******REMOVED******REMOVED***   BlueprintIdentifier = "ArcGISToolkit-SwiftTests"
-***REMOVED******REMOVED******REMOVED***   BuildableName = "ArcGISToolkit-SwiftTests"
-***REMOVED******REMOVED******REMOVED***   BlueprintName = "ArcGISToolkit-SwiftTests"
-***REMOVED******REMOVED******REMOVED***   ReferencedContainer = "container:">
-***REMOVED******REMOVED******REMOVED***</BuildableReference>
-***REMOVED******REMOVED*** </TestableReference>
-***REMOVED******REMOVED*** <TestableReference
-***REMOVED******REMOVED******REMOVED***skipped = "NO">
-***REMOVED******REMOVED******REMOVED***<BuildableReference
-***REMOVED******REMOVED******REMOVED***   BuildableIdentifier = "primary"
-***REMOVED******REMOVED******REMOVED***   BlueprintIdentifier = "ArcGISToolkitSwiftTests"
-***REMOVED******REMOVED******REMOVED***   BuildableName = "ArcGISToolkitSwiftTests"
-***REMOVED******REMOVED******REMOVED***   BlueprintName = "ArcGISToolkitSwiftTests"
+***REMOVED******REMOVED******REMOVED***   BlueprintIdentifier = "ArcGISToolkitTests"
+***REMOVED******REMOVED******REMOVED***   BuildableName = "ArcGISToolkitTests"
+***REMOVED******REMOVED******REMOVED***   BlueprintName = "ArcGISToolkitTests"
 ***REMOVED******REMOVED******REMOVED***   ReferencedContainer = "container:">
 ***REMOVED******REMOVED******REMOVED***</BuildableReference>
 ***REMOVED******REMOVED*** </TestableReference>
