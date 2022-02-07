@@ -27,7 +27,7 @@ struct CompassExampleView: View {
         _viewpoint = State(initialValue: Viewpoint(
             center: Point(x: -117.19494, y: 34.05723, spatialReference: .wgs84),
             scale: 10_000,
-            rotation: 0.0
+            rotation: 0
         ))
     }
 
@@ -36,7 +36,7 @@ struct CompassExampleView: View {
             .snapToNorthThreshold(0)
             .onViewpointChanged(kind: .centerAndScale) { viewpoint = $0 }
             .overlay(alignment: .topTrailing) {
-                Compass(viewpoint: $viewpoint, size: 75, autoHide: true)
+                Compass(viewpoint: $viewpoint, size: 75)
                     .padding()
             }
     }

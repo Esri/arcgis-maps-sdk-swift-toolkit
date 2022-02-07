@@ -13,13 +13,18 @@
 
 import SwiftUI
 
+/// Represents the spinning needle at the center of the compass.
 struct Needle: View {
+    /// The dark gray color of the compass needle.
     private let grayDark = Color(red: 128, green: 128, blue: 128)
 
+    /// The light gray color of the compass needle.
     private let grayLight = Color(red: 169, green: 168, blue: 168)
 
+    /// The dark red color of the compass needle.
     private let redDark = Color(red: 124, green: 22, blue: 13)
 
+    /// The light red color of the compass needle.
     private let redLight = Color(red: 233, green: 51, blue: 35)
 
     var body: some View {

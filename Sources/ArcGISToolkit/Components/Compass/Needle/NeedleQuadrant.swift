@@ -13,7 +13,9 @@
 
 import SwiftUI
 
+/// Represents 1/4 (one triangle) of the spinning needle at the center of the compass.
 struct NeedleQuadrant: View {
+    /// The color of this needle quadrant.
     let color: Color
 
     var body: some View {
