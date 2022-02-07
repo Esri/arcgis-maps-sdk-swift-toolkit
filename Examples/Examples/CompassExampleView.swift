@@ -41,4 +41,3 @@ struct CompassExampleView: View {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
-

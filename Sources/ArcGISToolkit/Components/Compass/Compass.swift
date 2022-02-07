@@ -27,9 +27,9 @@ public struct Compass: View {
 
 ***REMOVED***private var heading: String {
 ***REMOVED******REMOVED***"Compass, heading "
-***REMOVED******REMOVED***+ Int(viewpoint.rotation.rounded()).description
+***REMOVED******REMOVED***+ Int(viewpoint.adjustedRotation.rounded()).description
 ***REMOVED******REMOVED***+ " degrees "
-***REMOVED******REMOVED***+ Int(viewpoint.rotation.rounded()).asCardinalOrIntercardinal
+***REMOVED******REMOVED***+ Int(viewpoint.adjustedRotation.rounded()).asCardinalOrIntercardinal
 ***REMOVED***
 
 ***REMOVED***public init(
@@ -48,7 +48,7 @@ public struct Compass: View {
 ***REMOVED******REMOVED***ZStack {
 ***REMOVED******REMOVED******REMOVED***CompassBody()
 ***REMOVED******REMOVED******REMOVED***Needle()
-***REMOVED******REMOVED******REMOVED******REMOVED***.rotationEffect(Angle(degrees: viewpoint.rotation))
+***REMOVED******REMOVED******REMOVED******REMOVED***.rotationEffect(Angle(degrees: viewpoint.adjustedRotation))
 ***REMOVED***
 ***REMOVED******REMOVED***.frame(width: width, height: height)
 ***REMOVED******REMOVED***.opacity(opacity)
@@ -69,17 +69,7 @@ public struct Compass: View {
 ***REMOVED***
 ***REMOVED***
 
-extension Color {
-***REMOVED***init(red: Int, green: Int, blue: Int) {
-***REMOVED******REMOVED***self.init(
-***REMOVED******REMOVED******REMOVED***red: Double(red)/255,
-***REMOVED******REMOVED******REMOVED***green: Double(green)/255,
-***REMOVED******REMOVED******REMOVED***blue: Double(blue)/255
-***REMOVED******REMOVED***)
-***REMOVED***
-***REMOVED***
-
-extension Int {
+fileprivate extension Int {
 ***REMOVED***var asCardinalOrIntercardinal: String {
 ***REMOVED******REMOVED***switch self {
 ***REMOVED******REMOVED***case 0...22, 338...360: return "north"
@@ -92,5 +82,11 @@ extension Int {
 ***REMOVED******REMOVED***case 291...337: return "northwest"
 ***REMOVED******REMOVED***default: return ""
 ***REMOVED***
+***REMOVED***
+***REMOVED***
+
+fileprivate extension Viewpoint {
+***REMOVED***var adjustedRotation: Double {
+***REMOVED******REMOVED***self.rotation == 0 ? self.rotation : 360 - self.rotation
 ***REMOVED***
 ***REMOVED***
