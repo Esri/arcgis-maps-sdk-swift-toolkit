@@ -15,7 +15,7 @@ import SwiftUI
 
 /// Represents the center of the spinning needle at the center of the compass.
 struct NeedleCenter: View {
-    /// The bronze color component of the compass needle.
+    /// The bronze color of the center of the compass needle.
     private let color = Color(red: 241, green: 169, blue: 59)
 
     var body: some View {
