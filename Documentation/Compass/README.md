@@ -21,4 +21,4 @@ MapView(map: map, viewpoint: viewpoint)
     }
 ```
 
-To see it in action, try out the [Examples](../../Examples) and refer to [CompassExampleView.swift](../../Examples/Examples/CompassExampleView.swift) in the project.
+To see it in action, try out the [Examples](../../Examples/Examples) and refer to [CompassExampleView.swift](../../Examples/Examples/CompassExampleView.swift) in the project.
