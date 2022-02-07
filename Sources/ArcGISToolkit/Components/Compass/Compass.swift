@@ -27,9 +27,9 @@ public struct Compass: View {
 
     private var heading: String {
         "Compass, heading "
-        + Int(viewpoint.rotation.rounded()).description
+        + Int(viewpoint.adjustedRotation.rounded()).description
         + " degrees "
-        + Int(viewpoint.rotation.rounded()).asCardinalOrIntercardinal
+        + Int(viewpoint.adjustedRotation.rounded()).asCardinalOrIntercardinal
     }
 
     public init(
@@ -48,7 +48,7 @@ public struct Compass: View {
         ZStack {
             CompassBody()
             Needle()
-                .rotationEffect(Angle(degrees: viewpoint.rotation))
+                .rotationEffect(Angle(degrees: viewpoint.adjustedRotation))
         }
         .frame(width: width, height: height)
         .opacity(opacity)
@@ -69,17 +69,7 @@ public struct Compass: View {
     }
 }
 
-extension Color {
-    init(red: Int, green: Int, blue: Int) {
-        self.init(
-            red: Double(red)/255,
-            green: Double(green)/255,
-            blue: Double(blue)/255
-        )
-    }
-}
-
-extension Int {
+fileprivate extension Int {
     var asCardinalOrIntercardinal: String {
         switch self {
         case 0...22, 338...360: return "north"
@@ -92,5 +82,11 @@ extension Int {
         case 291...337: return "northwest"
         default: return ""
         }
+    }
+}
+
+fileprivate extension Viewpoint {
+    var adjustedRotation: Double {
+        self.rotation == 0 ? self.rotation : 360 - self.rotation
     }
 }
