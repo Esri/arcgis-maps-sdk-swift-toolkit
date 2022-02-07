@@ -14,17 +14,25 @@
 import ArcGIS
 import SwiftUI
 
+/// A Compass (alias North arrow) shows where north is in a MapView or SceneView.
 public struct Compass: View {
-    var autoHide: Bool
-
+    /// Acts as link between the compass and the parent map or scene view.
     @Binding var viewpoint: Viewpoint
 
+    /// Controls visibility of the compass such for when `autoHide` is enabled.
     @State var opacity: Double
 
+    /// Determines if the compass should automatically hide/show itself when the parent view is oriented
+    /// north.
+    @State public var autoHide: Bool
+
+    /// The height of the compass.
     @State public var height: Double
 
+    /// The width of the compass.
     @State public var width: Double
 
+    /// A text description of the current heading, sutiable for accessibility voiceover.
     private var heading: String {
         "Compass, heading "
         + Int(viewpoint.adjustedRotation.rounded()).description
@@ -70,6 +78,7 @@ public struct Compass: View {
 }
 
 fileprivate extension Int {
+    /// A representation of an integer's associated cardinal or intercardinal direction.
     var asCardinalOrIntercardinal: String {
         switch self {
         case 0...22, 338...360: return "north"
@@ -86,6 +95,7 @@ fileprivate extension Int {
 }
 
 fileprivate extension Viewpoint {
+    /// The viewpoint's `rotation`  adjusted to offset any rotation applied to the parent view.
     var adjustedRotation: Double {
         self.rotation == 0 ? self.rotation : 360 - self.rotation
     }
