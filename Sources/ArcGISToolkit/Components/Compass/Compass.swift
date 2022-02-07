@@ -95,7 +95,7 @@ fileprivate extension Int {
 ***REMOVED***
 
 fileprivate extension Viewpoint {
-***REMOVED******REMOVED***/ The viewpoint's `rotation`  adjusted to offset any rotation applied to the parent view.
+***REMOVED******REMOVED***/ The viewpoint's `rotation` adjusted to offset any rotation applied to the parent view.
 ***REMOVED***var adjustedRotation: Double {
 ***REMOVED******REMOVED***self.rotation == 0 ? self.rotation : 360 - self.rotation
 ***REMOVED***
