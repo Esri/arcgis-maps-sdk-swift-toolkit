@@ -15,20 +15,22 @@
 
 ***REMOVED***/ Represents the circular housing which encompasses the spinning needle at the center of the compass.
 struct CompassBody: View {
-***REMOVED******REMOVED***/ The background color of the compass housing.
-***REMOVED***private let fill = Color(red: 228, green: 240, blue: 244)
-
-***REMOVED******REMOVED***/ The outline color of the compass housing.
-***REMOVED***private let outline = Color(red: 127, green: 127, blue: 127)
-
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***GeometryReader { geometry in
 ***REMOVED******REMOVED******REMOVED***let borderWidth = geometry.size.width * 0.025
 ***REMOVED******REMOVED******REMOVED***Circle()
 ***REMOVED******REMOVED******REMOVED******REMOVED***.inset(by: borderWidth / 2.0)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.stroke(lineWidth: borderWidth)
-***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(outline)
-***REMOVED******REMOVED******REMOVED******REMOVED***.background(Circle().foregroundColor(fill))
+***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(Color.outline)
+***REMOVED******REMOVED******REMOVED******REMOVED***.background(Circle().foregroundColor(Color.fill))
 ***REMOVED***
 ***REMOVED***
+***REMOVED***
+
+private extension Color {
+***REMOVED******REMOVED***/ The background color of the compass housing.
+***REMOVED***static let fill = Color(red: 228, green: 240, blue: 244)
+
+***REMOVED******REMOVED***/ The outline color of the compass housing.
+***REMOVED***static let outline = Color(red: 127, green: 127, blue: 127)
 ***REMOVED***

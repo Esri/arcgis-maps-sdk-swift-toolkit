@@ -15,34 +15,22 @@
 
 ***REMOVED***/ Represents the spinning needle at the center of the compass.
 struct Needle: View {
-***REMOVED******REMOVED***/ The dark gray color of the compass needle.
-***REMOVED***private let grayDark = Color(red: 128, green: 128, blue: 128)
-
-***REMOVED******REMOVED***/ The light gray color of the compass needle.
-***REMOVED***private let grayLight = Color(red: 169, green: 168, blue: 168)
-
-***REMOVED******REMOVED***/ The dark red color of the compass needle.
-***REMOVED***private let redDark = Color(red: 124, green: 22, blue: 13)
-
-***REMOVED******REMOVED***/ The light red color of the compass needle.
-***REMOVED***private let redLight = Color(red: 233, green: 51, blue: 35)
-
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***ZStack {
 ***REMOVED******REMOVED******REMOVED***VStack(spacing: 0) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***HStack(spacing: 0) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***NeedleQuadrant(color: redLight)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***NeedleQuadrant(color: redDark)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***NeedleQuadrant(color: Color.redLight)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***NeedleQuadrant(color: Color.redDark)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.rotation3DEffect(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Angle(degrees: 180),
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***axis: (x: 0, y: 1, z: 0))
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***HStack(spacing: 0) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***NeedleQuadrant(color: grayLight)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***NeedleQuadrant(color: Color.grayLight)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.rotation3DEffect(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Angle(degrees: 180),
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***axis: (x: 1, y: 0, z: 0))
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***NeedleQuadrant(color: grayDark)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***NeedleQuadrant(color: Color.grayDark)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.rotation3DEffect(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Angle(degrees: 180),
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***axis: (x: 0, y: 1, z: 0))
@@ -56,4 +44,18 @@ struct Needle: View {
 ***REMOVED******REMOVED***.aspectRatio(1.0/3.0, contentMode: .fit)
 ***REMOVED******REMOVED***.scaleEffect(0.6)
 ***REMOVED***
+***REMOVED***
+
+private extension Color {
+***REMOVED******REMOVED***/ The dark gray color of the compass needle.
+***REMOVED***static let grayDark = Color(red: 128, green: 128, blue: 128)
+
+***REMOVED******REMOVED***/ The light gray color of the compass needle.
+***REMOVED***static let grayLight = Color(red: 169, green: 168, blue: 168)
+
+***REMOVED******REMOVED***/ The dark red color of the compass needle.
+***REMOVED***static let redDark = Color(red: 124, green: 22, blue: 13)
+
+***REMOVED******REMOVED***/ The light red color of the compass needle.
+***REMOVED***static let redLight = Color(red: 233, green: 51, blue: 35)
 ***REMOVED***
