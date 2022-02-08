@@ -15,34 +15,22 @@ import SwiftUI
 
 /// Represents the spinning needle at the center of the compass.
 struct Needle: View {
-    /// The dark gray color of the compass needle.
-    private let grayDark = Color(red: 128, green: 128, blue: 128)
-
-    /// The light gray color of the compass needle.
-    private let grayLight = Color(red: 169, green: 168, blue: 168)
-
-    /// The dark red color of the compass needle.
-    private let redDark = Color(red: 124, green: 22, blue: 13)
-
-    /// The light red color of the compass needle.
-    private let redLight = Color(red: 233, green: 51, blue: 35)
-
     var body: some View {
         ZStack {
             VStack(spacing: 0) {
                 HStack(spacing: 0) {
-                    NeedleQuadrant(color: redLight)
-                    NeedleQuadrant(color: redDark)
+                    NeedleQuadrant(color: Color.redLight)
+                    NeedleQuadrant(color: Color.redDark)
                         .rotation3DEffect(
                             Angle(degrees: 180),
                             axis: (x: 0, y: 1, z: 0))
                 }
                 HStack(spacing: 0) {
-                    NeedleQuadrant(color: grayLight)
+                    NeedleQuadrant(color: Color.grayLight)
                         .rotation3DEffect(
                             Angle(degrees: 180),
                             axis: (x: 1, y: 0, z: 0))
-                    NeedleQuadrant(color: grayDark)
+                    NeedleQuadrant(color: Color.grayDark)
                         .rotation3DEffect(
                             Angle(degrees: 180),
                             axis: (x: 0, y: 1, z: 0))
@@ -56,4 +44,18 @@ struct Needle: View {
         .aspectRatio(1.0/3.0, contentMode: .fit)
         .scaleEffect(0.6)
     }
+}
+
+private extension Color {
+    /// The dark gray color of the compass needle.
+    static let grayDark = Color(red: 128, green: 128, blue: 128)
+
+    /// The light gray color of the compass needle.
+    static let grayLight = Color(red: 169, green: 168, blue: 168)
+
+    /// The dark red color of the compass needle.
+    static let redDark = Color(red: 124, green: 22, blue: 13)
+
+    /// The light red color of the compass needle.
+    static let redLight = Color(red: 233, green: 51, blue: 35)
 }

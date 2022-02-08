@@ -15,20 +15,22 @@ import SwiftUI
 
 /// Represents the circular housing which encompasses the spinning needle at the center of the compass.
 struct CompassBody: View {
-    /// The background color of the compass housing.
-    private let fill = Color(red: 228, green: 240, blue: 244)
-
-    /// The outline color of the compass housing.
-    private let outline = Color(red: 127, green: 127, blue: 127)
-
     var body: some View {
         GeometryReader { geometry in
             let borderWidth = geometry.size.width * 0.025
             Circle()
                 .inset(by: borderWidth / 2.0)
                 .stroke(lineWidth: borderWidth)
-                .foregroundColor(outline)
-                .background(Circle().foregroundColor(fill))
+                .foregroundColor(Color.outline)
+                .background(Circle().foregroundColor(Color.fill))
         }
     }
+}
+
+private extension Color {
+    /// The background color of the compass housing.
+    static let fill = Color(red: 228, green: 240, blue: 244)
+
+    /// The outline color of the compass housing.
+    static let outline = Color(red: 127, green: 127, blue: 127)
 }
