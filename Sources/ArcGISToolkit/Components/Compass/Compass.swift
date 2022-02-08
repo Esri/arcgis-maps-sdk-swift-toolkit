@@ -77,7 +77,7 @@ public struct Compass: View {
 ***REMOVED***
 ***REMOVED***
 
-fileprivate extension Int {
+private extension Int {
 ***REMOVED******REMOVED***/ A representation of an integer's associated cardinal or intercardinal direction.
 ***REMOVED***var asCardinalOrIntercardinal: String {
 ***REMOVED******REMOVED***switch self {
@@ -94,7 +94,7 @@ fileprivate extension Int {
 ***REMOVED***
 ***REMOVED***
 
-fileprivate extension Viewpoint {
+private extension Viewpoint {
 ***REMOVED******REMOVED***/ The viewpoint's `rotation` adjusted to offset any rotation applied to the parent view.
 ***REMOVED***var adjustedRotation: Double {
 ***REMOVED******REMOVED***self.rotation == 0 ? self.rotation : 360 - self.rotation
