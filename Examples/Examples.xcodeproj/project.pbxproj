@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		E42BFBE92672BF9500159107 /* SearchExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42BFBE82672BF9500159107 /* SearchExampleView.swift */; ***REMOVED***;
+		E4624A25278CE815000D2A38 /* FloorFilterExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4624A24278CE815000D2A38 /* FloorFilterExampleView.swift */; ***REMOVED***;
 		E47ABE442652FE0900FD2FE3 /* ExamplesApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E47ABE432652FE0900FD2FE3 /* ExamplesApp.swift */; ***REMOVED***;
 		E47ABE482652FE0C00FD2FE3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E47ABE472652FE0C00FD2FE3 /* Assets.xcassets */; ***REMOVED***;
 		E47ABE4B2652FE0C00FD2FE3 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E47ABE4A2652FE0C00FD2FE3 /* Preview Assets.xcassets */; ***REMOVED***;
@@ -37,6 +38,7 @@
 
 /* Begin PBXFileReference section */
 		E42BFBE82672BF9500159107 /* SearchExampleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchExampleView.swift; sourceTree = "<group>"; ***REMOVED***;
+		E4624A24278CE815000D2A38 /* FloorFilterExampleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloorFilterExampleView.swift; sourceTree = "<group>"; ***REMOVED***;
 		E47ABE402652FE0900FD2FE3 /* Examples.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Examples.app; sourceTree = BUILT_PRODUCTS_DIR; ***REMOVED***;
 		E47ABE432652FE0900FD2FE3 /* ExamplesApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExamplesApp.swift; sourceTree = "<group>"; ***REMOVED***;
 		E47ABE472652FE0C00FD2FE3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; ***REMOVED***;
@@ -73,6 +75,7 @@
 				E4F9BC98265EFCAF001280FF /* OverviewMapExampleView.swift */,
 				E42BFBE82672BF9500159107 /* SearchExampleView.swift */,
 				E4AA9315276BF5ED000E6289 /* FloatingPanelExampleView.swift */,
+				E4624A24278CE815000D2A38 /* FloorFilterExampleView.swift */,
 			);
 			name = Examples;
 			sourceTree = "<group>";
@@ -216,6 +219,7 @@
 				E4AA9316276BF5ED000E6289 /* FloatingPanelExampleView.swift in Sources */,
 				E48A73442658227100F5C118 /* AnyExample.swift in Sources */,
 				E48A73472658227100F5C118 /* ExampleList.swift in Sources */,
+				E4624A25278CE815000D2A38 /* FloorFilterExampleView.swift in Sources */,
 				E48A73462658227100F5C118 /* ExampleView.swift in Sources */,
 				E42BFBE92672BF9500159107 /* SearchExampleView.swift in Sources */,
 				E4C389D526B8A12C002BC255 /* BasemapGalleryExampleView.swift in Sources */,
