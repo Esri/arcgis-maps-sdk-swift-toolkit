@@ -14,7 +14,12 @@
 ***REMOVED***
 
 extension Color {
+***REMOVED******REMOVED***/ Initializes a new color with RGB integer values between 0 and 255 inclusive.
 ***REMOVED***init(red: Int, green: Int, blue: Int) {
+***REMOVED******REMOVED***let validRange = 0...255
+***REMOVED******REMOVED***precondition(validRange.contains(red))
+***REMOVED******REMOVED***precondition(validRange.contains(green))
+***REMOVED******REMOVED***precondition(validRange.contains(blue))
 ***REMOVED******REMOVED***self.init(
 ***REMOVED******REMOVED******REMOVED***red: Double(red)/255,
 ***REMOVED******REMOVED******REMOVED***green: Double(green)/255,
