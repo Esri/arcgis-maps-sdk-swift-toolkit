@@ -14,7 +14,12 @@
 import SwiftUI
 
 extension Color {
+    /// Initializes a new color with RGB integer values between 0 and 255 inclusive.
     init(red: Int, green: Int, blue: Int) {
+        let validRange = 0...255
+        precondition(validRange.contains(red))
+        precondition(validRange.contains(green))
+        precondition(validRange.contains(blue))
         self.init(
             red: Double(red)/255,
             green: Double(green)/255,
