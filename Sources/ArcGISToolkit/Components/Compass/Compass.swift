@@ -21,7 +21,8 @@ public struct Compass: View {
     public var viewModel: CompassViewModel
 
     /// Controls the visibility of the compass.
-    @State private var opacity = 0.0
+    @State
+    private var opacity = 0.0
 
     public init(
         viewpoint: Binding<Viewpoint>,
