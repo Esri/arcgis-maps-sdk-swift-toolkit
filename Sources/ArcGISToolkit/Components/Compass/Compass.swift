@@ -16,6 +16,8 @@ import SwiftUI
 
 /// A Compass (alias North arrow) shows where north is in a MapView or SceneView.
 public struct Compass: View {
+
+    /// The view model for the compass.
     @ObservedObject
     public var viewModel: CompassViewModel
 
