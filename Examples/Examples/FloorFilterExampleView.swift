@@ -26,8 +26,8 @@ struct FloorFilterExampleView: View {
 ***REMOVED***)
 ***REMOVED***
 ***REMOVED***@State
-***REMOVED***private var floorFilterViewModel: FloorFilterViewModel? = nil
-***REMOVED***
+***REMOVED***private var floorManager: FloorManager? = nil
+
 ***REMOVED***init() {
 ***REMOVED******REMOVED******REMOVED*** Create the map from a portal item and assign to the mapView.
 ***REMOVED******REMOVED***
@@ -54,20 +54,18 @@ struct FloorFilterExampleView: View {
 ***REMOVED******REMOVED******REMOVED***viewpoint: viewpoint
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***.overlay(alignment: .bottomLeading) {
-***REMOVED******REMOVED******REMOVED******REMOVED***if let viewModel = floorFilterViewModel {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FloorFilter(viewModel: viewModel)
+***REMOVED******REMOVED******REMOVED******REMOVED***if let floorManager = floorManager {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FloorFilter(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***floorManager: floorManager,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint: $viewpoint
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(floorFilterPadding)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.task {
 ***REMOVED******REMOVED******REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try await map.load()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let floorManager = map.floorManager {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***floorFilterViewModel = FloorFilterViewModel(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***floorManager: floorManager,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint: $viewpoint
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***floorManager = map.floorManager
 ***REMOVED******REMOVED******REMOVED*** catch {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print("load error: \(error)")
 ***REMOVED******REMOVED******REMOVED***

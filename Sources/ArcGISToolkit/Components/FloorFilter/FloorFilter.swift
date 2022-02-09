@@ -19,40 +19,57 @@
 ***REMOVED***/ to a site, a facility (building) in the site, or a floor in the facility.
 public struct FloorFilter: View {
 ***REMOVED******REMOVED***/ Creates a `FloorFilter`
-***REMOVED******REMOVED***/ - Parameter viewModel: The view model used by the `FloorFilter`.
-***REMOVED***public init(viewModel: FloorFilterViewModel) {
-***REMOVED******REMOVED***self.viewModel = viewModel
+***REMOVED******REMOVED***/ - Parameter floorManager: The floor manager used by the `FloorFilter`.
+***REMOVED******REMOVED***/ Creates a `FloorFilter`
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - floorManager: The floor manager used by the `FloorFilter`.
+***REMOVED******REMOVED***/   - viewpoint: Viewpoint updated when the selected site or facility changes.
+***REMOVED***public init(
+***REMOVED******REMOVED***floorManager: FloorManager,
+***REMOVED******REMOVED***viewpoint: Binding<Viewpoint>? = nil
+***REMOVED***) {
+***REMOVED******REMOVED***self.floorManager = floorManager
+***REMOVED******REMOVED***self.viewpoint = viewpoint
 ***REMOVED***
+***REMOVED***
+***REMOVED***let floorManager: FloorManager
+***REMOVED***let viewpoint: Binding<Viewpoint>?
 ***REMOVED***
 ***REMOVED******REMOVED***/ The view model used by the `FloorFilter`.
-***REMOVED***@ObservedObject
-***REMOVED***private(set) var viewModel: FloorFilterViewModel
-***REMOVED***
+***REMOVED***@StateObject
+***REMOVED***private var viewModel = FloorFilterViewModel()
+
 ***REMOVED******REMOVED***/ Allows the user to toggle the visibility of the site selector.
 ***REMOVED***@State
 ***REMOVED***private var isSelectorVisible: Bool = false
 ***REMOVED***
 ***REMOVED***public var body: some View {
-***REMOVED******REMOVED***if viewModel.isLoading {
-***REMOVED******REMOVED******REMOVED***ProgressView()
-***REMOVED******REMOVED******REMOVED******REMOVED***.progressViewStyle(.circular)
-***REMOVED******REMOVED******REMOVED******REMOVED***.esriBorder()
-***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***HStack(alignment: .bottom) {
-***REMOVED******REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isSelectorVisible.toggle()
-***REMOVED******REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image("Site", bundle: .module, label: Text("Site"))
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.esriBorder()
-***REMOVED******REMOVED******REMOVED******REMOVED***if isSelectorVisible {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***SiteAndFacilitySelector(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***floorFilterViewModel: viewModel,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isVisible: $isSelectorVisible
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 200)
+***REMOVED******REMOVED***Group {
+***REMOVED******REMOVED******REMOVED***if viewModel.isLoading {
+***REMOVED******REMOVED******REMOVED******REMOVED***ProgressView()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.progressViewStyle(.circular)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.esriBorder()
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***HStack(alignment: .bottom) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isSelectorVisible.toggle()
+***REMOVED******REMOVED******REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image("Site", bundle: .module, label: Text("Site"))
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.esriBorder()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if isSelectorVisible {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***SiteAndFacilitySelector(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***floorFilterViewModel: viewModel,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isVisible: $isSelectorVisible
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 200)
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***.onAppear {
+***REMOVED******REMOVED******REMOVED***viewModel.floorManager = floorManager
+***REMOVED******REMOVED******REMOVED***viewModel.viewpoint = viewpoint
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
