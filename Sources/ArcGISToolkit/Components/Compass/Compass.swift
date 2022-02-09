@@ -16,87 +16,37 @@
 
 ***REMOVED***/ A Compass (alias North arrow) shows where north is in a MapView or SceneView.
 public struct Compass: View {
-***REMOVED******REMOVED***/ Acts as link between the compass and the parent map or scene view.
-***REMOVED***@Binding var viewpoint: Viewpoint
-
-***REMOVED******REMOVED***/ Controls visibility of the compass such for when `autoHide` is enabled.
-***REMOVED***@State var opacity: Double
-
-***REMOVED******REMOVED***/ Determines if the compass should automatically hide/show itself when the parent view is oriented
-***REMOVED******REMOVED***/ north.
-***REMOVED***@State public var autoHide: Bool
-
-***REMOVED******REMOVED***/ The height of the compass.
-***REMOVED***@State public var height: Double
-
-***REMOVED******REMOVED***/ The width of the compass.
-***REMOVED***@State public var width: Double
-
-***REMOVED******REMOVED***/ A text description of the current heading, sutiable for accessibility voiceover.
-***REMOVED***private var heading: String {
-***REMOVED******REMOVED***"Compass, heading "
-***REMOVED******REMOVED***+ Int(viewpoint.adjustedRotation.rounded()).description
-***REMOVED******REMOVED***+ " degrees "
-***REMOVED******REMOVED***+ Int(viewpoint.adjustedRotation.rounded()).asCardinalOrIntercardinal
-***REMOVED***
+***REMOVED***@ObservedObject
+***REMOVED***public var viewModel: CompassViewModel
 
 ***REMOVED***public init(
 ***REMOVED******REMOVED***viewpoint: Binding<Viewpoint>,
 ***REMOVED******REMOVED***size: Double = 30.0,
 ***REMOVED******REMOVED***autoHide: Bool = true
 ***REMOVED***) {
-***REMOVED******REMOVED***self._viewpoint = viewpoint
-***REMOVED******REMOVED***self.autoHide = autoHide
-***REMOVED******REMOVED***height = size
-***REMOVED******REMOVED***width = size
-***REMOVED******REMOVED***opacity = viewpoint.wrappedValue.rotation.isZero ? 0 : 1
+***REMOVED******REMOVED***self.viewModel = CompassViewModel(
+***REMOVED******REMOVED******REMOVED***viewpoint: viewpoint,
+***REMOVED******REMOVED******REMOVED***size: size,
+***REMOVED******REMOVED******REMOVED***autoHide: autoHide)
 ***REMOVED***
 
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***ZStack {
 ***REMOVED******REMOVED******REMOVED***CompassBody()
 ***REMOVED******REMOVED******REMOVED***Needle()
-***REMOVED******REMOVED******REMOVED******REMOVED***.rotationEffect(Angle(degrees: viewpoint.adjustedRotation))
+***REMOVED******REMOVED******REMOVED******REMOVED***.rotationEffect(Angle(degrees: viewModel.viewpoint.adjustedRotation))
 ***REMOVED***
-***REMOVED******REMOVED***.frame(width: width, height: height)
-***REMOVED******REMOVED***.opacity(opacity)
+***REMOVED******REMOVED***.frame(width: viewModel.width, height: viewModel.height)
+***REMOVED******REMOVED***.opacity(viewModel.opacity)
 ***REMOVED******REMOVED***.onTapGesture {
-***REMOVED******REMOVED******REMOVED***viewpoint = Viewpoint(
-***REMOVED******REMOVED******REMOVED******REMOVED***center: viewpoint.targetGeometry.extent.center,
-***REMOVED******REMOVED******REMOVED******REMOVED***scale: viewpoint.targetScale,
-***REMOVED******REMOVED******REMOVED******REMOVED***rotation: 0.0
-***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***viewModel.resetHeading()
 ***REMOVED***
-***REMOVED******REMOVED***.onChange(of: viewpoint, perform: { _ in
-***REMOVED******REMOVED******REMOVED***let hide = viewpoint.rotation.isZero && autoHide
+***REMOVED******REMOVED***.onChange(of: viewModel.viewpoint, perform: { _ in
+***REMOVED******REMOVED******REMOVED***let hide = viewModel.viewpoint.rotation.isZero && viewModel.autoHide
 ***REMOVED******REMOVED******REMOVED***withAnimation(.default.delay(hide ? 0.25 : 0)) {
-***REMOVED******REMOVED******REMOVED******REMOVED***opacity = hide ? 0 : 1
+***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.opacity = hide ? 0 : 1
 ***REMOVED******REMOVED***
 ***REMOVED***)
-***REMOVED******REMOVED***.accessibilityLabel(heading)
-***REMOVED***
-***REMOVED***
-
-private extension Int {
-***REMOVED******REMOVED***/ A representation of an integer's associated cardinal or intercardinal direction.
-***REMOVED***var asCardinalOrIntercardinal: String {
-***REMOVED******REMOVED***switch self {
-***REMOVED******REMOVED***case 0...22, 338...360: return "north"
-***REMOVED******REMOVED***case 23...67: return "northeast"
-***REMOVED******REMOVED***case 68...112: return "east"
-***REMOVED******REMOVED***case 113...157: return "southeast"
-***REMOVED******REMOVED***case 158...202: return "south"
-***REMOVED******REMOVED***case 203...247: return "southwest"
-***REMOVED******REMOVED***case 248...292: return "west"
-***REMOVED******REMOVED***case 293...337: return "northwest"
-***REMOVED******REMOVED***default: return ""
-***REMOVED***
-***REMOVED***
-***REMOVED***
-
-private extension Viewpoint {
-***REMOVED******REMOVED***/ The viewpoint's `rotation` adjusted to offset any rotation applied to the parent view.
-***REMOVED***var adjustedRotation: Double {
-***REMOVED******REMOVED***self.rotation == 0 ? self.rotation : 360 - self.rotation
+***REMOVED******REMOVED***.accessibilityLabel(viewModel.viewpoint.heading)
 ***REMOVED***
 ***REMOVED***

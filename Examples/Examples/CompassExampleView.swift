@@ -21,19 +21,14 @@ struct CompassExampleView: View {
 
 ***REMOVED******REMOVED***/ Allows for communication between the Compass and MapView or SceneView.
 ***REMOVED***@State
-***REMOVED***private var viewpoint: Viewpoint
-
-***REMOVED***init() {
-***REMOVED******REMOVED***_viewpoint = State(initialValue: Viewpoint(
-***REMOVED******REMOVED******REMOVED***center: Point(x: -117.19494, y: 34.05723, spatialReference: .wgs84),
-***REMOVED******REMOVED******REMOVED***scale: 10_000,
-***REMOVED******REMOVED******REMOVED***rotation: 0
-***REMOVED******REMOVED***))
-***REMOVED***
+***REMOVED***private var viewpoint = Viewpoint(
+***REMOVED******REMOVED***center: Point(x: -117.19494, y: 34.05723, spatialReference: .wgs84),
+***REMOVED******REMOVED***scale: 10_000,
+***REMOVED******REMOVED***rotation: 0
+***REMOVED***)
 
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***MapView(map: map, viewpoint: viewpoint)
-***REMOVED******REMOVED******REMOVED***.snapToNorthThreshold(0)
 ***REMOVED******REMOVED******REMOVED***.onViewpointChanged(kind: .centerAndScale) { viewpoint = $0 ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***.overlay(alignment: .topTrailing) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Compass(viewpoint: $viewpoint, size: 75)
