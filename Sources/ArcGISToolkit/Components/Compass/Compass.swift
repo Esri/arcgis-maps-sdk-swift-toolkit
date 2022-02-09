@@ -16,87 +16,37 @@ import SwiftUI
 
 /// A Compass (alias North arrow) shows where north is in a MapView or SceneView.
 public struct Compass: View {
-    /// Acts as link between the compass and the parent map or scene view.
-    @Binding var viewpoint: Viewpoint
-
-    /// Controls visibility of the compass such for when `autoHide` is enabled.
-    @State var opacity: Double
-
-    /// Determines if the compass should automatically hide/show itself when the parent view is oriented
-    /// north.
-    @State public var autoHide: Bool
-
-    /// The height of the compass.
-    @State public var height: Double
-
-    /// The width of the compass.
-    @State public var width: Double
-
-    /// A text description of the current heading, sutiable for accessibility voiceover.
-    private var heading: String {
-        "Compass, heading "
-        + Int(viewpoint.adjustedRotation.rounded()).description
-        + " degrees "
-        + Int(viewpoint.adjustedRotation.rounded()).asCardinalOrIntercardinal
-    }
+    @ObservedObject
+    public var viewModel: CompassViewModel
 
     public init(
         viewpoint: Binding<Viewpoint>,
         size: Double = 30.0,
         autoHide: Bool = true
     ) {
-        self._viewpoint = viewpoint
-        self.autoHide = autoHide
-        height = size
-        width = size
-        opacity = viewpoint.wrappedValue.rotation.isZero ? 0 : 1
+        self.viewModel = CompassViewModel(
+            viewpoint: viewpoint,
+            size: size,
+            autoHide: autoHide)
     }
 
     public var body: some View {
         ZStack {
             CompassBody()
             Needle()
-                .rotationEffect(Angle(degrees: viewpoint.adjustedRotation))
+                .rotationEffect(Angle(degrees: viewModel.viewpoint.adjustedRotation))
         }
-        .frame(width: width, height: height)
-        .opacity(opacity)
+        .frame(width: viewModel.width, height: viewModel.height)
+        .opacity(viewModel.opacity)
         .onTapGesture {
-            viewpoint = Viewpoint(
-                center: viewpoint.targetGeometry.extent.center,
-                scale: viewpoint.targetScale,
-                rotation: 0.0
-            )
+            viewModel.resetHeading()
         }
-        .onChange(of: viewpoint, perform: { _ in
-            let hide = viewpoint.rotation.isZero && autoHide
+        .onChange(of: viewModel.viewpoint, perform: { _ in
+            let hide = viewModel.viewpoint.rotation.isZero && viewModel.autoHide
             withAnimation(.default.delay(hide ? 0.25 : 0)) {
-                opacity = hide ? 0 : 1
+                viewModel.opacity = hide ? 0 : 1
             }
         })
-        .accessibilityLabel(heading)
-    }
-}
-
-private extension Int {
-    /// A representation of an integer's associated cardinal or intercardinal direction.
-    var asCardinalOrIntercardinal: String {
-        switch self {
-        case 0...22, 338...360: return "north"
-        case 23...67: return "northeast"
-        case 68...112: return "east"
-        case 113...157: return "southeast"
-        case 158...202: return "south"
-        case 203...247: return "southwest"
-        case 248...292: return "west"
-        case 293...337: return "northwest"
-        default: return ""
-        }
-    }
-}
-
-private extension Viewpoint {
-    /// The viewpoint's `rotation` adjusted to offset any rotation applied to the parent view.
-    var adjustedRotation: Double {
-        self.rotation == 0 ? self.rotation : 360 - self.rotation
+        .accessibilityLabel(viewModel.viewpoint.heading)
     }
 }

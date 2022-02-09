@@ -21,19 +21,14 @@ struct CompassExampleView: View {
 
     /// Allows for communication between the Compass and MapView or SceneView.
     @State
-    private var viewpoint: Viewpoint
-
-    init() {
-        _viewpoint = State(initialValue: Viewpoint(
-            center: Point(x: -117.19494, y: 34.05723, spatialReference: .wgs84),
-            scale: 10_000,
-            rotation: 0
-        ))
-    }
+    private var viewpoint = Viewpoint(
+        center: Point(x: -117.19494, y: 34.05723, spatialReference: .wgs84),
+        scale: 10_000,
+        rotation: 0
+    )
 
     var body: some View {
         MapView(map: map, viewpoint: viewpoint)
-            .snapToNorthThreshold(0)
             .onViewpointChanged(kind: .centerAndScale) { viewpoint = $0 }
             .overlay(alignment: .topTrailing) {
                 Compass(viewpoint: $viewpoint, size: 75)
