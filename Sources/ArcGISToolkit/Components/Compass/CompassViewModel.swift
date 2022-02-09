@@ -57,23 +57,6 @@ final public class CompassViewModel: ObservableObject {
     }
 }
 
-internal extension Int {
-    /// A representation of an integer's associated cardinal or intercardinal direction.
-    var asCardinalOrIntercardinal: String {
-        switch self {
-        case 0...22, 338...360: return "north"
-        case 23...67: return "northeast"
-        case 68...112: return "east"
-        case 113...157: return "southeast"
-        case 158...202: return "south"
-        case 203...247: return "southwest"
-        case 248...292: return "west"
-        case 293...337: return "northwest"
-        default: return ""
-        }
-    }
-}
-
 internal extension Viewpoint {
     /// The viewpoint's `rotation` adjusted to offset any rotation applied to the parent view.
     var adjustedRotation: Double {
@@ -85,6 +68,6 @@ internal extension Viewpoint {
         "Compass, heading "
         + Int(self.adjustedRotation.rounded()).description
         + " degrees "
-        + Int(self.adjustedRotation.rounded()).asCardinalOrIntercardinal
+        + CompassDirection(self.adjustedRotation).rawValue
     }
 }
