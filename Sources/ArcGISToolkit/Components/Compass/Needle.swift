@@ -46,7 +46,38 @@ struct Needle: View {
     }
 }
 
+/// Represents the center of the spinning needle at the center of the compass.
+struct NeedleCenter: View {
+    var body: some View {
+        Circle()
+            .scale(0.25)
+            .foregroundColor(Color.bronze)
+    }
+}
+
+/// Represents 1/4 (one triangle) of the spinning needle at the center of the compass.
+struct NeedleQuadrant: View {
+    /// The color of this needle quadrant.
+    let color: Color
+
+    var body: some View {
+        GeometryReader { geometry in
+            Path { path in
+                let width = geometry.size.width
+                let height = geometry.size.height
+                path.move(to: CGPoint(x: 0, y: height))
+                path.addLine(to: CGPoint(x: width, y: 0))
+                path.addLine(to: CGPoint(x: width, y: height))
+            }
+            .fill(color)
+        }
+    }
+}
+
 private extension Color {
+    /// The bronze color of the center of the compass needle.
+    static let bronze = Color(red: 241, green: 169, blue: 59)
+
     /// The dark gray color of the compass needle.
     static let grayDark = Color(red: 128, green: 128, blue: 128)
 
