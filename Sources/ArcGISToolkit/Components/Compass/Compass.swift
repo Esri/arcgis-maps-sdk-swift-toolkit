@@ -37,7 +37,9 @@ public struct Compass: View {
 ***REMOVED******REMOVED***ZStack {
 ***REMOVED******REMOVED******REMOVED***CompassBody()
 ***REMOVED******REMOVED******REMOVED***Needle()
-***REMOVED******REMOVED******REMOVED******REMOVED***.rotationEffect(Angle(degrees: viewModel.viewpoint.adjustedRotation))
+***REMOVED******REMOVED******REMOVED******REMOVED***.rotationEffect(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Angle(degrees: viewModel.viewpoint.adjustedRotation)
+***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED******REMOVED***.frame(width: viewModel.width, height: viewModel.height)
 ***REMOVED******REMOVED***.opacity(opacity)
