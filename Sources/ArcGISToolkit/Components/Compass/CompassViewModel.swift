@@ -20,9 +20,6 @@ public class CompassViewModel: ObservableObject {
     /// Acts as link between the compass and the parent map or scene view.
     @Binding var viewpoint: Viewpoint
 
-    /// Controls visibility of the compass such for when `autoHide` is enabled.
-    @Published var opacity: Double
-
     /// Determines if the compass should automatically hide/show itself when the parent view is oriented
     /// north.
     @Published public var autoHide: Bool
@@ -33,6 +30,12 @@ public class CompassViewModel: ObservableObject {
     /// The width of the compass.
     @Published public var width: Double
 
+    /// Indicates if the compass should be hidden or visible based on the current viewpoint rotation and
+    /// autoHide preference.
+    public var hidden: Bool {
+        viewpoint.rotation.isZero && autoHide
+    }
+
     public init(
         viewpoint: Binding<Viewpoint>,
         size: Double = 30.0,
@@ -42,7 +45,6 @@ public class CompassViewModel: ObservableObject {
         self.autoHide = autoHide
         height = size
         width = size
-        opacity = viewpoint.wrappedValue.rotation.isZero ? 0 : 1
     }
 
     /// Resets the viewpoints `rotation` to zero.

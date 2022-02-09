@@ -19,6 +19,9 @@ public struct Compass: View {
     @ObservedObject
     public var viewModel: CompassViewModel
 
+    /// Controls the visibility of the compass.
+    @State private var opacity = 0.0
+
     public init(
         viewpoint: Binding<Viewpoint>,
         size: Double = 30.0,
@@ -37,16 +40,13 @@ public struct Compass: View {
                 .rotationEffect(Angle(degrees: viewModel.viewpoint.adjustedRotation))
         }
         .frame(width: viewModel.width, height: viewModel.height)
-        .opacity(viewModel.opacity)
-        .onTapGesture {
-            viewModel.resetHeading()
-        }
-        .onChange(of: viewModel.viewpoint, perform: { _ in
-            let hide = viewModel.viewpoint.rotation.isZero && viewModel.autoHide
-            withAnimation(.default.delay(hide ? 0.25 : 0)) {
-                viewModel.opacity = hide ? 0 : 1
+        .opacity(opacity)
+        .onTapGesture { viewModel.resetHeading() }
+        .onChange(of: viewModel.viewpoint) { _ in
+            withAnimation(.default.delay(viewModel.hidden ? 0.25 : 0)) {
+                opacity = viewModel.hidden ? 0 : 1
             }
-        })
+        }
         .accessibilityLabel(viewModel.viewpoint.heading)
     }
 }
