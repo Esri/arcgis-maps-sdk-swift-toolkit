@@ -37,7 +37,9 @@ public struct Compass: View {
         ZStack {
             CompassBody()
             Needle()
-                .rotationEffect(Angle(degrees: viewModel.viewpoint.adjustedRotation))
+                .rotationEffect(
+                    Angle(degrees: viewModel.viewpoint.adjustedRotation)
+                )
         }
         .frame(width: viewModel.width, height: viewModel.height)
         .opacity(opacity)
