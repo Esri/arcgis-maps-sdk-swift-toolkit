@@ -13,7 +13,7 @@
 
 import Foundation
 
-/// Represents a cardinal or intercardinal direction
+/// Represents a cardinal or intercardinal direction.
 internal enum CompassDirection: String {
     case north
     case northeast
