@@ -46,7 +46,38 @@ struct Needle: View {
 ***REMOVED***
 ***REMOVED***
 
+***REMOVED***/ Represents the center of the spinning needle at the center of the compass.
+struct NeedleCenter: View {
+***REMOVED***var body: some View {
+***REMOVED******REMOVED***Circle()
+***REMOVED******REMOVED******REMOVED***.scale(0.25)
+***REMOVED******REMOVED******REMOVED***.foregroundColor(Color.bronze)
+***REMOVED***
+***REMOVED***
+
+***REMOVED***/ Represents 1/4 (one triangle) of the spinning needle at the center of the compass.
+struct NeedleQuadrant: View {
+***REMOVED******REMOVED***/ The color of this needle quadrant.
+***REMOVED***let color: Color
+
+***REMOVED***var body: some View {
+***REMOVED******REMOVED***GeometryReader { geometry in
+***REMOVED******REMOVED******REMOVED***Path { path in
+***REMOVED******REMOVED******REMOVED******REMOVED***let width = geometry.size.width
+***REMOVED******REMOVED******REMOVED******REMOVED***let height = geometry.size.height
+***REMOVED******REMOVED******REMOVED******REMOVED***path.move(to: CGPoint(x: 0, y: height))
+***REMOVED******REMOVED******REMOVED******REMOVED***path.addLine(to: CGPoint(x: width, y: 0))
+***REMOVED******REMOVED******REMOVED******REMOVED***path.addLine(to: CGPoint(x: width, y: height))
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.fill(color)
+***REMOVED***
+***REMOVED***
+***REMOVED***
+
 private extension Color {
+***REMOVED******REMOVED***/ The bronze color of the center of the compass needle.
+***REMOVED***static let bronze = Color(red: 241, green: 169, blue: 59)
+
 ***REMOVED******REMOVED***/ The dark gray color of the compass needle.
 ***REMOVED***static let grayDark = Color(red: 128, green: 128, blue: 128)
 
