@@ -16,6 +16,8 @@
 
 ***REMOVED***/ A Compass (alias North arrow) shows where north is in a MapView or SceneView.
 public struct Compass: View {
+
+***REMOVED******REMOVED***/ The view model for the compass.
 ***REMOVED***@ObservedObject
 ***REMOVED***public var viewModel: CompassViewModel
 
