@@ -19,40 +19,57 @@ import ArcGIS
 /// to a site, a facility (building) in the site, or a floor in the facility.
 public struct FloorFilter: View {
     /// Creates a `FloorFilter`
-    /// - Parameter viewModel: The view model used by the `FloorFilter`.
-    public init(viewModel: FloorFilterViewModel) {
-        self.viewModel = viewModel
+    /// - Parameter floorManager: The floor manager used by the `FloorFilter`.
+    /// Creates a `FloorFilter`
+    /// - Parameters:
+    ///   - floorManager: The floor manager used by the `FloorFilter`.
+    ///   - viewpoint: Viewpoint updated when the selected site or facility changes.
+    public init(
+        floorManager: FloorManager,
+        viewpoint: Binding<Viewpoint>? = nil
+    ) {
+        self.floorManager = floorManager
+        self.viewpoint = viewpoint
     }
     
-    /// The view model used by the `FloorFilter`.
-    @ObservedObject
-    private(set) var viewModel: FloorFilterViewModel
+    let floorManager: FloorManager
+    let viewpoint: Binding<Viewpoint>?
     
+    /// The view model used by the `FloorFilter`.
+    @StateObject
+    private var viewModel = FloorFilterViewModel()
+
     /// Allows the user to toggle the visibility of the site selector.
     @State
     private var isSelectorVisible: Bool = false
     
     public var body: some View {
-        if viewModel.isLoading {
-            ProgressView()
-                .progressViewStyle(.circular)
-                .esriBorder()
-        } else {
-            HStack(alignment: .bottom) {
-                Button {
-                    isSelectorVisible.toggle()
-                } label: {
-                    Image("Site", bundle: .module, label: Text("Site"))
-                }
-                .esriBorder()
-                if isSelectorVisible {
-                    SiteAndFacilitySelector(
-                        floorFilterViewModel: viewModel,
-                        isVisible: $isSelectorVisible
-                    )
-                        .frame(width: 200)
+        Group {
+            if viewModel.isLoading {
+                ProgressView()
+                    .progressViewStyle(.circular)
+                    .esriBorder()
+            } else {
+                HStack(alignment: .bottom) {
+                    Button {
+                        isSelectorVisible.toggle()
+                    } label: {
+                        Image("Site", bundle: .module, label: Text("Site"))
+                    }
+                    .esriBorder()
+                    if isSelectorVisible {
+                        SiteAndFacilitySelector(
+                            floorFilterViewModel: viewModel,
+                            isVisible: $isSelectorVisible
+                        )
+                            .frame(width: 200)
+                    }
                 }
             }
+        }
+        .onAppear {
+            viewModel.floorManager = floorManager
+            viewModel.viewpoint = viewpoint
         }
     }
 }

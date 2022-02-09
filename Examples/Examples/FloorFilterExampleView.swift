@@ -26,8 +26,8 @@ struct FloorFilterExampleView: View {
     )
     
     @State
-    private var floorFilterViewModel: FloorFilterViewModel? = nil
-    
+    private var floorManager: FloorManager? = nil
+
     init() {
         // Create the map from a portal item and assign to the mapView.
         
@@ -54,20 +54,18 @@ struct FloorFilterExampleView: View {
             viewpoint: viewpoint
         )
             .overlay(alignment: .bottomLeading) {
-                if let viewModel = floorFilterViewModel {
-                    FloorFilter(viewModel: viewModel)
+                if let floorManager = floorManager {
+                    FloorFilter(
+                        floorManager: floorManager,
+                        viewpoint: $viewpoint
+                    )
                         .padding(floorFilterPadding)
                 }
             }
             .task {
                 do {
                     try await map.load()
-                    if let floorManager = map.floorManager {
-                        floorFilterViewModel = FloorFilterViewModel(
-                            floorManager: floorManager,
-                            viewpoint: $viewpoint
-                        )
-                    }
+                    floorManager = map.floorManager
                 } catch {
                     print("load error: \(error)")
                 }
