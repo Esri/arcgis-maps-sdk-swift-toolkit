@@ -19,6 +19,9 @@ public struct Compass: View {
 ***REMOVED***@ObservedObject
 ***REMOVED***public var viewModel: CompassViewModel
 
+***REMOVED******REMOVED***/ Controls the visibility of the compass.
+***REMOVED***@State private var opacity = 0.0
+
 ***REMOVED***public init(
 ***REMOVED******REMOVED***viewpoint: Binding<Viewpoint>,
 ***REMOVED******REMOVED***size: Double = 30.0,
@@ -37,16 +40,13 @@ public struct Compass: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.rotationEffect(Angle(degrees: viewModel.viewpoint.adjustedRotation))
 ***REMOVED***
 ***REMOVED******REMOVED***.frame(width: viewModel.width, height: viewModel.height)
-***REMOVED******REMOVED***.opacity(viewModel.opacity)
-***REMOVED******REMOVED***.onTapGesture {
-***REMOVED******REMOVED******REMOVED***viewModel.resetHeading()
-***REMOVED***
-***REMOVED******REMOVED***.onChange(of: viewModel.viewpoint, perform: { _ in
-***REMOVED******REMOVED******REMOVED***let hide = viewModel.viewpoint.rotation.isZero && viewModel.autoHide
-***REMOVED******REMOVED******REMOVED***withAnimation(.default.delay(hide ? 0.25 : 0)) {
-***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.opacity = hide ? 0 : 1
+***REMOVED******REMOVED***.opacity(opacity)
+***REMOVED******REMOVED***.onTapGesture { viewModel.resetHeading() ***REMOVED***
+***REMOVED******REMOVED***.onChange(of: viewModel.viewpoint) { _ in
+***REMOVED******REMOVED******REMOVED***withAnimation(.default.delay(viewModel.hidden ? 0.25 : 0)) {
+***REMOVED******REMOVED******REMOVED******REMOVED***opacity = viewModel.hidden ? 0 : 1
 ***REMOVED******REMOVED***
-***REMOVED***)
+***REMOVED***
 ***REMOVED******REMOVED***.accessibilityLabel(viewModel.viewpoint.heading)
 ***REMOVED***
 ***REMOVED***
