@@ -20,10 +20,16 @@ public struct Compass: View {
 ***REMOVED***@ObservedObject
 ***REMOVED***var viewModel: CompassViewModel
 
-***REMOVED******REMOVED***/ Controls the visibility of the compass.
+***REMOVED******REMOVED***/ Controls the current opacity of the compass.
 ***REMOVED***@State
 ***REMOVED***private var opacity = 0.0
 
+***REMOVED******REMOVED***/ Creates a `Compass`
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - viewpoint: Acts a communication link between the MapView or SceneView and the compass.
+***REMOVED******REMOVED***/   - size: Enables a custom size configuuration for the compass. Default is 30.
+***REMOVED******REMOVED***/   - autoHide: Determines if the compass automatically hides itself when the MapView or
+***REMOVED******REMOVED***/   SceneView is oriented north.
 ***REMOVED***public init(
 ***REMOVED******REMOVED***viewpoint: Binding<Viewpoint>,
 ***REMOVED******REMOVED***size: Double = 30.0,
