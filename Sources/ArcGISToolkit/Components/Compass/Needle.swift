@@ -19,8 +19,8 @@ struct Needle: View {
         ZStack {
             VStack(spacing: 0) {
                 HStack(spacing: 0) {
-                    NeedleQuadrant(color: Color.redLight)
-                    NeedleQuadrant(color: Color.redDark)
+                    NeedleQuadrant(color: .redLight)
+                    NeedleQuadrant(color: .redDark)
                         .rotation3DEffect(
                             Angle(degrees: 180),
                             axis: (x: 0, y: 1, z: 0))
