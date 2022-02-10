@@ -36,10 +36,10 @@ extension ExampleList {
 ***REMOVED******REMOVED***name: "GeoView",
 ***REMOVED******REMOVED***examples: [
 ***REMOVED******REMOVED******REMOVED***AnyExample("Basemap Gallery", content: BasemapGalleryExampleView()),
+***REMOVED******REMOVED******REMOVED***AnyExample("Compass", content: CompassExampleView()),
 ***REMOVED******REMOVED******REMOVED***AnyExample("Floor Filter", content: FloorFilterExampleView()),
 ***REMOVED******REMOVED******REMOVED***AnyExample("Overview Map", content: OverviewMapExampleView()),
-***REMOVED******REMOVED******REMOVED***AnyExample("Search", content: SearchExampleView()),
-***REMOVED******REMOVED******REMOVED***AnyExample("Compass", content: CompassExampleView())
+***REMOVED******REMOVED******REMOVED***AnyExample("Search", content: SearchExampleView())
 ***REMOVED******REMOVED***]
 ***REMOVED***)
 ***REMOVED***
