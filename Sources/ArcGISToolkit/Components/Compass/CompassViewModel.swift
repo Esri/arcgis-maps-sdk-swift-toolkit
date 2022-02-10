@@ -60,7 +60,7 @@ final internal class CompassViewModel: ObservableObject {
 internal extension Viewpoint {
     /// The viewpoint's `rotation` adjusted to offset any rotation applied to the parent view.
     var adjustedRotation: Double {
-        self.rotation == 0 ? self.rotation : 360 - self.rotation
+        rotation.isZero ? .zero : 360 - rotation
     }
 
     /// A text description of the current heading, sutiable for accessibility voiceover.
