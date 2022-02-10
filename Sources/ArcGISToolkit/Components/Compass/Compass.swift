@@ -18,7 +18,7 @@ import SwiftUI
 public struct Compass: View {
     /// The view model for the compass.
     @ObservedObject
-    public var viewModel: CompassViewModel
+    var viewModel: CompassViewModel
 
     /// Controls the visibility of the compass.
     @State
