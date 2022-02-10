@@ -21,8 +21,8 @@ struct CompassBody: View {
             Circle()
                 .inset(by: borderWidth / 2.0)
                 .stroke(lineWidth: borderWidth)
-                .foregroundColor(Color.outline)
-                .background(Circle().foregroundColor(Color.fill))
+                .foregroundColor(.outline)
+                .background(Circle().foregroundColor(.fill))
         }
     }
 }

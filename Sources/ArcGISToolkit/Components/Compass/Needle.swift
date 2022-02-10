@@ -51,7 +51,7 @@ struct NeedleCenter: View {
     var body: some View {
         Circle()
             .scale(0.25)
-            .foregroundColor(Color.bronze)
+            .foregroundColor(.bronze)
     }
 }
 
