@@ -16,7 +16,7 @@
 
 ***REMOVED***/ Manages the state for a `FloorFilter`.
 @MainActor
-final public class FloorFilterViewModel: ObservableObject {
+final class FloorFilterViewModel: ObservableObject {
 ***REMOVED******REMOVED***/  A selected site, floor, or level.
 ***REMOVED***enum Selection {
 ***REMOVED******REMOVED******REMOVED***/ A selected site.
@@ -27,7 +27,7 @@ final public class FloorFilterViewModel: ObservableObject {
 ***REMOVED******REMOVED***case level(FloorLevel)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Creates a `FloorFilterViewModel`
+***REMOVED******REMOVED***/ Creates a `FloorFilterViewModel`.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - floorManager: The floor manager used by the `FloorFilterViewModel`.
 ***REMOVED******REMOVED***/   - viewpoint: Viewpoint updated when the selected site or facility changes.
@@ -37,24 +37,10 @@ final public class FloorFilterViewModel: ObservableObject {
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.floorManager = floorManager
 ***REMOVED******REMOVED***self.viewpoint = viewpoint
-***REMOVED******REMOVED***floorManagerDidChange()
-***REMOVED***
 
-***REMOVED******REMOVED***/ The `Viewpoint` used to pan/zoom to the selected site/facilty.
-***REMOVED******REMOVED***/ If `nil`, there will be no automatic pan/zoom operations.
-***REMOVED***var viewpoint: Binding<Viewpoint>?
-***REMOVED***
-***REMOVED******REMOVED***/ The `FloorManager` containing the site, floor, and level information.
-***REMOVED***var floorManager: FloorManager? = nil {
-***REMOVED******REMOVED***didSet {
-***REMOVED******REMOVED******REMOVED***floorManagerDidChange()
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***func floorManagerDidChange() {
 ***REMOVED******REMOVED***Task {
 ***REMOVED******REMOVED******REMOVED***do {
-***REMOVED******REMOVED******REMOVED******REMOVED***try await floorManager?.load()
+***REMOVED******REMOVED******REMOVED******REMOVED***try await floorManager.load()
 ***REMOVED******REMOVED******REMOVED******REMOVED***if sites.count == 1 {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** If we have only one site, select it.
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selection = .site(sites.first!)
@@ -65,20 +51,27 @@ final public class FloorFilterViewModel: ObservableObject {
 ***REMOVED******REMOVED******REMOVED***isLoading = false
 ***REMOVED***
 ***REMOVED***
+
+***REMOVED******REMOVED***/ The `Viewpoint` used to pan/zoom to the selected site/facilty.
+***REMOVED******REMOVED***/ If `nil`, there will be no automatic pan/zoom operations.
+***REMOVED***let viewpoint: Binding<Viewpoint>?
+***REMOVED***
+***REMOVED******REMOVED***/ The `FloorManager` containing the site, floor, and level information.
+***REMOVED***let floorManager: FloorManager
 ***REMOVED***
 ***REMOVED******REMOVED***/ The floor manager sites.
-***REMOVED***public var sites: [FloorSite] {
-***REMOVED******REMOVED***floorManager?.sites ?? []
+***REMOVED***var sites: [FloorSite] {
+***REMOVED******REMOVED***floorManager.sites
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The floor manager facilities.
-***REMOVED***public var facilities: [FloorFacility] {
-***REMOVED******REMOVED***floorManager?.facilities ?? []
+***REMOVED***var facilities: [FloorFacility] {
+***REMOVED******REMOVED***floorManager.facilities
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The floor manager levels.
-***REMOVED***public var levels: [FloorLevel] {
-***REMOVED******REMOVED***floorManager?.levels ?? []
+***REMOVED***var levels: [FloorLevel] {
+***REMOVED******REMOVED***floorManager.levels
 ***REMOVED***
 
 ***REMOVED******REMOVED***/ `true` if the model is loading it's properties, `false` if not loading.
@@ -135,7 +128,7 @@ final public class FloorFilterViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Zooms to the selected facility; if there is no selected facility, zooms to the selected site.
-***REMOVED***public func zoomToSelection() {
+***REMOVED***func zoomToSelection() {
 ***REMOVED******REMOVED***guard let selection = selection else {
 ***REMOVED******REMOVED******REMOVED***return
 ***REMOVED***
