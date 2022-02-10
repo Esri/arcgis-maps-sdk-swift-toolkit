@@ -36,6 +36,12 @@ final internal class CompassViewModel: ObservableObject {
         viewpoint.rotation.isZero && autoHide
     }
 
+    /// Creates a `CompassViewModel`
+    /// - Parameters:
+    ///   - viewpoint: Acts a communication link between the MapView or SceneView and the compass.
+    ///   - size: Enables a custom size configuuration for the compass. Default is 30.
+    ///   - autoHide: Determines if the compass automatically hides itself when the MapView or
+    ///   SceneView is oriented north.
     public init(
         viewpoint: Binding<Viewpoint>,
         size: Double = 30.0,
