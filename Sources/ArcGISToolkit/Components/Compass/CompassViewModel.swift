@@ -16,7 +16,7 @@
 
 ***REMOVED***/ Manages the state for a `Compass`.
 @MainActor
-final public class CompassViewModel: ObservableObject {
+final internal class CompassViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ Acts as link between the compass and the parent map or scene view.
 ***REMOVED***@Binding var viewpoint: Viewpoint
 

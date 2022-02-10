@@ -18,7 +18,7 @@
 public struct Compass: View {
 ***REMOVED******REMOVED***/ The view model for the compass.
 ***REMOVED***@ObservedObject
-***REMOVED***public var viewModel: CompassViewModel
+***REMOVED***var viewModel: CompassViewModel
 
 ***REMOVED******REMOVED***/ Controls the visibility of the compass.
 ***REMOVED***@State
