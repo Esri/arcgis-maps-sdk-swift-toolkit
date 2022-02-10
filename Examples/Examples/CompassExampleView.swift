@@ -31,7 +31,7 @@ struct CompassExampleView: View {
         MapView(map: map, viewpoint: viewpoint)
             .onViewpointChanged(kind: .centerAndScale) { viewpoint = $0 }
             .overlay(alignment: .topTrailing) {
-                Compass(viewpoint: $viewpoint, size: 75)
+                Compass(viewpoint: $viewpoint, size: 40)
                     .padding()
             }
     }
