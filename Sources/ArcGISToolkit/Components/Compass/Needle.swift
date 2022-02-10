@@ -19,8 +19,8 @@ struct Needle: View {
 ***REMOVED******REMOVED***ZStack {
 ***REMOVED******REMOVED******REMOVED***VStack(spacing: 0) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***HStack(spacing: 0) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***NeedleQuadrant(color: Color.redLight)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***NeedleQuadrant(color: Color.redDark)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***NeedleQuadrant(color: .redLight)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***NeedleQuadrant(color: .redDark)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.rotation3DEffect(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Angle(degrees: 180),
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***axis: (x: 0, y: 1, z: 0))
