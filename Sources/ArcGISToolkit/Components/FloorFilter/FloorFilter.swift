@@ -19,8 +19,6 @@ import ArcGIS
 /// to a site, a facility (building) in the site, or a floor in the facility.
 public struct FloorFilter: View {
     /// Creates a `FloorFilter`
-    /// - Parameter floorManager: The floor manager used by the `FloorFilter`.
-    /// Creates a `FloorFilter`
     /// - Parameters:
     ///   - floorManager: The floor manager used by the `FloorFilter`.
     ///   - viewpoint: Viewpoint updated when the selected site or facility changes.
@@ -38,7 +36,7 @@ public struct FloorFilter: View {
     /// The view model used by the `FloorFilter`.
     @StateObject
     private var viewModel = FloorFilterViewModel()
-
+    
     /// Allows the user to toggle the visibility of the site selector.
     @State
     private var isSelectorVisible: Bool = false
