@@ -27,6 +27,19 @@ final public class FloorFilterViewModel: ObservableObject {
         case level(FloorLevel)
     }
     
+    /// Creates a `FloorFilterViewModel`
+    /// - Parameters:
+    ///   - floorManager: The floor manager used by the `FloorFilterViewModel`.
+    ///   - viewpoint: Viewpoint updated when the selected site or facility changes.
+    init(
+        floorManager: FloorManager,
+        viewpoint: Binding<Viewpoint>? = nil
+    ) {
+        self.floorManager = floorManager
+        self.viewpoint = viewpoint
+        floorManagerDidChange()
+    }
+
     /// The `Viewpoint` used to pan/zoom to the selected site/facilty.
     /// If `nil`, there will be no automatic pan/zoom operations.
     var viewpoint: Binding<Viewpoint>?
@@ -34,18 +47,22 @@ final public class FloorFilterViewModel: ObservableObject {
     /// The `FloorManager` containing the site, floor, and level information.
     var floorManager: FloorManager? = nil {
         didSet {
-            Task {
-                do {
-                    try await floorManager?.load()
-                    if sites.count == 1 {
-                        // If we have only one site, select it.
-                        selection = .site(sites.first!)
-                    }
-                } catch  {
-                    print("error: \(error)")
+            floorManagerDidChange()
+        }
+    }
+    
+    func floorManagerDidChange() {
+        Task {
+            do {
+                try await floorManager?.load()
+                if sites.count == 1 {
+                    // If we have only one site, select it.
+                    selection = .site(sites.first!)
                 }
-                isLoading = false
+            } catch  {
+                print("error: \(error)")
             }
+            isLoading = false
         }
     }
     
