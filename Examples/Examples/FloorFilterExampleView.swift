@@ -27,22 +27,22 @@ struct FloorFilterExampleView: View {
 ***REMOVED***
 ***REMOVED***@State
 ***REMOVED***private var floorManager: FloorManager? = nil
-
+***REMOVED***
 ***REMOVED***init() {
 ***REMOVED******REMOVED******REMOVED*** Create the map from a portal item and assign to the mapView.
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Multiple sites/facilities: Esri IST map with all buildings.
-***REMOVED******REMOVED******REMOVED***let portal = Portal(url: URL(string: "https:***REMOVED***indoors.maps.arcgis.com/")!, isLoginRequired: false)
-***REMOVED******REMOVED******REMOVED***let portalItem = PortalItem(portal: portal, id: Item.ID(rawValue: "49520a67773842f1858602735ef538b5")!)
-
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let portal = Portal(url: URL(string: "https:***REMOVED***indoors.maps.arcgis.com/")!, isLoginRequired: false)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let portalItem = PortalItem(portal: portal, id: Item.ID(rawValue: "49520a67773842f1858602735ef538b5")!)
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Redlands Campus map.
-***REMOVED******REMOVED******REMOVED***let portal = Portal(url: URL(string: "https:***REMOVED***runtimecoretest.maps.arcgis.com/")!, isLoginRequired: false)
-***REMOVED******REMOVED******REMOVED***let portalItem = PortalItem(portal: portal, id: Item.ID(rawValue: "7687805bd42549f5ba41237443d0c60a")!) ***REMOVED***<= another multiple sites/facilities
-
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let portal = Portal(url: URL(string: "https:***REMOVED***runtimecoretest.maps.arcgis.com/")!, isLoginRequired: false)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let portalItem = PortalItem(portal: portal, id: Item.ID(rawValue: "7687805bd42549f5ba41237443d0c60a")!) ***REMOVED***<= another multiple sites/facilities
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Single site (ESRI Redlands Main) and facility (Building L).
 ***REMOVED******REMOVED***let portal = Portal(url: URL(string: "https:***REMOVED***indoors.maps.arcgis.com/")!, isLoginRequired: false)
 ***REMOVED******REMOVED***let portalItem = PortalItem(portal: portal, id: Item.ID(rawValue: "f133a698536f44c8884ad81f80b6cfc7")!)
-
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***map = Map(item: portalItem)
 ***REMOVED***
 ***REMOVED***
