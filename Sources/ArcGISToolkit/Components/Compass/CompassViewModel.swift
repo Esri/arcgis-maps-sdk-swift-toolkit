@@ -52,7 +52,7 @@ final internal class CompassViewModel: ObservableObject {
 ***REMOVED******REMOVED***self.viewpoint = Viewpoint(
 ***REMOVED******REMOVED******REMOVED***center: viewpoint.targetGeometry.extent.center,
 ***REMOVED******REMOVED******REMOVED***scale: viewpoint.targetScale,
-***REMOVED******REMOVED******REMOVED***rotation: 0.0
+***REMOVED******REMOVED******REMOVED***rotation: .zero
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
