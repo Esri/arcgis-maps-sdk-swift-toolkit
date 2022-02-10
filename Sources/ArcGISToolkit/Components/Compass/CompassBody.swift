@@ -21,8 +21,8 @@ struct CompassBody: View {
 ***REMOVED******REMOVED******REMOVED***Circle()
 ***REMOVED******REMOVED******REMOVED******REMOVED***.inset(by: borderWidth / 2.0)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.stroke(lineWidth: borderWidth)
-***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(Color.outline)
-***REMOVED******REMOVED******REMOVED******REMOVED***.background(Circle().foregroundColor(Color.fill))
+***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.outline)
+***REMOVED******REMOVED******REMOVED******REMOVED***.background(Circle().foregroundColor(.fill))
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***

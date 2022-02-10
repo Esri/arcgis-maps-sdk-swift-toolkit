@@ -51,7 +51,7 @@ struct NeedleCenter: View {
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***Circle()
 ***REMOVED******REMOVED******REMOVED***.scale(0.25)
-***REMOVED******REMOVED******REMOVED***.foregroundColor(Color.bronze)
+***REMOVED******REMOVED******REMOVED***.foregroundColor(.bronze)
 ***REMOVED***
 ***REMOVED***
 
