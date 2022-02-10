@@ -24,7 +24,7 @@ struct CompassExampleView: View {
     private var viewpoint = Viewpoint(
         center: Point(x: -117.19494, y: 34.05723, spatialReference: .wgs84),
         scale: 10_000,
-        rotation: 0
+        rotation: -45
     )
 
     var body: some View {
