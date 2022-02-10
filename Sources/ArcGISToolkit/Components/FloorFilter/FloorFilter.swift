@@ -41,26 +41,24 @@ public struct FloorFilter: View {
     private var isSelectorVisible: Bool = false
     
     public var body: some View {
-        Group {
-            if viewModel.isLoading {
-                ProgressView()
-                    .progressViewStyle(.circular)
-                    .esriBorder()
-            } else {
-                HStack(alignment: .bottom) {
-                    Button {
-                        isSelectorVisible.toggle()
-                    } label: {
-                        Image("Site", bundle: .module, label: Text("Site"))
-                    }
-                    .esriBorder()
-                    if isSelectorVisible {
-                        SiteAndFacilitySelector(
-                            floorFilterViewModel: viewModel,
-                            isVisible: $isSelectorVisible
-                        )
-                            .frame(width: 200)
-                    }
+        if viewModel.isLoading {
+            ProgressView()
+                .progressViewStyle(.circular)
+                .esriBorder()
+        } else {
+            HStack(alignment: .bottom) {
+                Button {
+                    isSelectorVisible.toggle()
+                } label: {
+                    Image("Site", bundle: .module, label: Text("Site"))
+                }
+                .esriBorder()
+                if isSelectorVisible {
+                    SiteAndFacilitySelector(
+                        floorFilterViewModel: viewModel,
+                        isVisible: $isSelectorVisible
+                    )
+                        .frame(width: 200)
                 }
             }
         }
