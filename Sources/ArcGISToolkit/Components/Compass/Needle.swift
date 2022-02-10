@@ -26,7 +26,7 @@ struct Needle: View {
                             axis: (x: 0, y: 1, z: 0))
                 }
                 HStack(spacing: 0) {
-                    NeedleQuadrant(color: Color.grayLight)
+                    NeedleQuadrant(color: .grayLight)
                         .rotation3DEffect(
                             Angle(degrees: 180),
                             axis: (x: 1, y: 0, z: 0))
