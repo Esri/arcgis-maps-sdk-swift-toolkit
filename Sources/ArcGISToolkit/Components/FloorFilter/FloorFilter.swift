@@ -26,16 +26,15 @@ public struct FloorFilter: View {
         floorManager: FloorManager,
         viewpoint: Binding<Viewpoint>? = nil
     ) {
-        self.floorManager = floorManager
-        self.viewpoint = viewpoint
+        _viewModel = StateObject(wrappedValue: FloorFilterViewModel(
+            floorManager: floorManager,
+            viewpoint: viewpoint
+        ))
     }
-    
-    let floorManager: FloorManager
-    let viewpoint: Binding<Viewpoint>?
     
     /// The view model used by the `FloorFilter`.
     @StateObject
-    private var viewModel = FloorFilterViewModel()
+    private var viewModel: FloorFilterViewModel
     
     /// Allows the user to toggle the visibility of the site selector.
     @State
@@ -64,10 +63,6 @@ public struct FloorFilter: View {
                     }
                 }
             }
-        }
-        .onAppear {
-            viewModel.floorManager = floorManager
-            viewModel.viewpoint = viewpoint
         }
     }
 }
