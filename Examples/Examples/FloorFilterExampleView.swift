@@ -16,8 +16,7 @@ import ArcGISToolkit
 import ArcGIS
 
 struct FloorFilterExampleView: View {
-    @State
-    private var map: Map
+    private let map: Map
     
     @State
     private var viewpoint = Viewpoint(
@@ -26,7 +25,7 @@ struct FloorFilterExampleView: View {
     )
     
     @State
-    private var floorManager: FloorManager? = nil
+    private var isMapLoaded: Bool = false
     
     init() {
         // Create the map from a portal item and assign to the mapView.
@@ -54,7 +53,8 @@ struct FloorFilterExampleView: View {
             viewpoint: viewpoint
         )
             .overlay(alignment: .bottomLeading) {
-                if let floorManager = floorManager {
+                if isMapLoaded,
+                   let floorManager = map.floorManager {
                     FloorFilter(
                         floorManager: floorManager,
                         viewpoint: $viewpoint
@@ -65,7 +65,7 @@ struct FloorFilterExampleView: View {
             .task {
                 do {
                     try await map.load()
-                    floorManager = map.floorManager
+                    isMapLoaded = true
                 } catch {
                     print("load error: \(error)")
                 }

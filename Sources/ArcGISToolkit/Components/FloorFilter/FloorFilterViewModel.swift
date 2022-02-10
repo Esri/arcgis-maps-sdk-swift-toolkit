@@ -16,7 +16,7 @@ import ArcGIS
 
 /// Manages the state for a `FloorFilter`.
 @MainActor
-final public class FloorFilterViewModel: ObservableObject {
+final class FloorFilterViewModel: ObservableObject {
     ///  A selected site, floor, or level.
     enum Selection {
         /// A selected site.
@@ -27,7 +27,7 @@ final public class FloorFilterViewModel: ObservableObject {
         case level(FloorLevel)
     }
     
-    /// Creates a `FloorFilterViewModel`
+    /// Creates a `FloorFilterViewModel`.
     /// - Parameters:
     ///   - floorManager: The floor manager used by the `FloorFilterViewModel`.
     ///   - viewpoint: Viewpoint updated when the selected site or facility changes.
@@ -37,24 +37,10 @@ final public class FloorFilterViewModel: ObservableObject {
     ) {
         self.floorManager = floorManager
         self.viewpoint = viewpoint
-        floorManagerDidChange()
-    }
 
-    /// The `Viewpoint` used to pan/zoom to the selected site/facilty.
-    /// If `nil`, there will be no automatic pan/zoom operations.
-    var viewpoint: Binding<Viewpoint>?
-    
-    /// The `FloorManager` containing the site, floor, and level information.
-    var floorManager: FloorManager? = nil {
-        didSet {
-            floorManagerDidChange()
-        }
-    }
-    
-    func floorManagerDidChange() {
         Task {
             do {
-                try await floorManager?.load()
+                try await floorManager.load()
                 if sites.count == 1 {
                     // If we have only one site, select it.
                     selection = .site(sites.first!)
@@ -65,20 +51,27 @@ final public class FloorFilterViewModel: ObservableObject {
             isLoading = false
         }
     }
+
+    /// The `Viewpoint` used to pan/zoom to the selected site/facilty.
+    /// If `nil`, there will be no automatic pan/zoom operations.
+    let viewpoint: Binding<Viewpoint>?
+    
+    /// The `FloorManager` containing the site, floor, and level information.
+    let floorManager: FloorManager
     
     /// The floor manager sites.
-    public var sites: [FloorSite] {
-        floorManager?.sites ?? []
+    var sites: [FloorSite] {
+        floorManager.sites
     }
     
     /// The floor manager facilities.
-    public var facilities: [FloorFacility] {
-        floorManager?.facilities ?? []
+    var facilities: [FloorFacility] {
+        floorManager.facilities
     }
     
     /// The floor manager levels.
-    public var levels: [FloorLevel] {
-        floorManager?.levels ?? []
+    var levels: [FloorLevel] {
+        floorManager.levels
     }
 
     /// `true` if the model is loading it's properties, `false` if not loading.
@@ -135,7 +128,7 @@ final public class FloorFilterViewModel: ObservableObject {
     }
     
     /// Zooms to the selected facility; if there is no selected facility, zooms to the selected site.
-    public func zoomToSelection() {
+    func zoomToSelection() {
         guard let selection = selection else {
             return
         }
