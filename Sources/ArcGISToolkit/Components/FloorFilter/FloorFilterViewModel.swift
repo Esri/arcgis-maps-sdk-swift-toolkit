@@ -27,6 +27,19 @@ final public class FloorFilterViewModel: ObservableObject {
 ***REMOVED******REMOVED***case level(FloorLevel)
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ Creates a `FloorFilterViewModel`
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - floorManager: The floor manager used by the `FloorFilterViewModel`.
+***REMOVED******REMOVED***/   - viewpoint: Viewpoint updated when the selected site or facility changes.
+***REMOVED***init(
+***REMOVED******REMOVED***floorManager: FloorManager,
+***REMOVED******REMOVED***viewpoint: Binding<Viewpoint>? = nil
+***REMOVED***) {
+***REMOVED******REMOVED***self.floorManager = floorManager
+***REMOVED******REMOVED***self.viewpoint = viewpoint
+***REMOVED******REMOVED***floorManagerDidChange()
+***REMOVED***
+
 ***REMOVED******REMOVED***/ The `Viewpoint` used to pan/zoom to the selected site/facilty.
 ***REMOVED******REMOVED***/ If `nil`, there will be no automatic pan/zoom operations.
 ***REMOVED***var viewpoint: Binding<Viewpoint>?
@@ -34,18 +47,22 @@ final public class FloorFilterViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ The `FloorManager` containing the site, floor, and level information.
 ***REMOVED***var floorManager: FloorManager? = nil {
 ***REMOVED******REMOVED***didSet {
-***REMOVED******REMOVED******REMOVED***Task {
-***REMOVED******REMOVED******REMOVED******REMOVED***do {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try await floorManager?.load()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if sites.count == 1 {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** If we have only one site, select it.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selection = .site(sites.first!)
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** catch  {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print("error: \(error)")
+***REMOVED******REMOVED******REMOVED***floorManagerDidChange()
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***func floorManagerDidChange() {
+***REMOVED******REMOVED***Task {
+***REMOVED******REMOVED******REMOVED***do {
+***REMOVED******REMOVED******REMOVED******REMOVED***try await floorManager?.load()
+***REMOVED******REMOVED******REMOVED******REMOVED***if sites.count == 1 {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** If we have only one site, select it.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selection = .site(sites.first!)
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***isLoading = false
+***REMOVED******REMOVED*** catch  {
+***REMOVED******REMOVED******REMOVED******REMOVED***print("error: \(error)")
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***isLoading = false
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***

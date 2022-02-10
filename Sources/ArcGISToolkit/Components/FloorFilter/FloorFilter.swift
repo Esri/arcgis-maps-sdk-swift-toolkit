@@ -26,16 +26,15 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED***floorManager: FloorManager,
 ***REMOVED******REMOVED***viewpoint: Binding<Viewpoint>? = nil
 ***REMOVED***) {
-***REMOVED******REMOVED***self.floorManager = floorManager
-***REMOVED******REMOVED***self.viewpoint = viewpoint
+***REMOVED******REMOVED***_viewModel = StateObject(wrappedValue: FloorFilterViewModel(
+***REMOVED******REMOVED******REMOVED***floorManager: floorManager,
+***REMOVED******REMOVED******REMOVED***viewpoint: viewpoint
+***REMOVED******REMOVED***))
 ***REMOVED***
-***REMOVED***
-***REMOVED***let floorManager: FloorManager
-***REMOVED***let viewpoint: Binding<Viewpoint>?
 ***REMOVED***
 ***REMOVED******REMOVED***/ The view model used by the `FloorFilter`.
 ***REMOVED***@StateObject
-***REMOVED***private var viewModel = FloorFilterViewModel()
+***REMOVED***private var viewModel: FloorFilterViewModel
 ***REMOVED***
 ***REMOVED******REMOVED***/ Allows the user to toggle the visibility of the site selector.
 ***REMOVED***@State
@@ -64,10 +63,6 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***.onAppear {
-***REMOVED******REMOVED******REMOVED***viewModel.floorManager = floorManager
-***REMOVED******REMOVED******REMOVED***viewModel.viewpoint = viewpoint
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
