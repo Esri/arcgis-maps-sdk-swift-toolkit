@@ -31,21 +31,21 @@ internal extension CompassDirection {
     init(_ degrees: Double) {
         let angle = CompassDirection.normalizedAngle(degrees)
         switch angle {
-        case 0..<23, 338..<360:
+        case 0..<22.5, 337.5..<360:
             self = .north
-        case 23..<68:
+        case 22.5..<67.5:
             self = .northeast
-        case 68..<113:
+        case 67.5..<112.5:
             self = .east
-        case 113..<158:
+        case 112.5..<157.5:
             self = .southeast
-        case 158..<203:
+        case 157.5..<202.5:
             self = .south
-        case 203..<248:
+        case 202.5..<247.5:
             self = .southwest
-        case 248..<293:
+        case 247.5..<292.5:
             self = .west
-        case 293..<338:
+        case 292.5..<337.5:
             self = .northwest
         default:
             fatalError()
