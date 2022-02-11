@@ -18,11 +18,13 @@ import SwiftUI
 @MainActor
 final internal class CompassViewModel: ObservableObject {
     /// Acts as link between the compass and the parent map or scene view.
-    @Binding var viewpoint: Viewpoint
+    @Binding
+    var viewpoint: Viewpoint
 
     /// Determines if the compass should automatically hide/show itself when the parent view is oriented
     /// north.
-    @Published public var autoHide: Bool
+    @Published
+    public var autoHide: Bool
 
     /// Indicates if the compass should be hidden or visible based on the current viewpoint rotation and
     /// autoHide preference.
