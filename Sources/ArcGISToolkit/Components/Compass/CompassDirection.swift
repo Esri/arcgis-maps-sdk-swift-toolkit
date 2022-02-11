@@ -53,12 +53,12 @@ internal extension CompassDirection {
 ***REMOVED***
 
 ***REMOVED******REMOVED***/ Normalizes degree values between 0° and 360°.
-***REMOVED***static private func normalizedAngle(_ degrees: Double) -> Double {
+***REMOVED***static func normalizedAngle(_ degrees: Double) -> Double {
 ***REMOVED******REMOVED***let normalizded = degrees.truncatingRemainder(dividingBy: 360)
 ***REMOVED******REMOVED***if normalizded < 0 {
 ***REMOVED******REMOVED******REMOVED***return normalizded + 360
 ***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***return abs(normalizded)
+***REMOVED******REMOVED******REMOVED***return normalizded
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
