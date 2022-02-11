@@ -31,21 +31,21 @@ internal extension CompassDirection {
 ***REMOVED***init(_ degrees: Double) {
 ***REMOVED******REMOVED***let angle = CompassDirection.normalizedAngle(degrees)
 ***REMOVED******REMOVED***switch angle {
-***REMOVED******REMOVED***case 0..<23, 338..<360:
+***REMOVED******REMOVED***case 0..<22.5, 337.5..<360:
 ***REMOVED******REMOVED******REMOVED***self = .north
-***REMOVED******REMOVED***case 23..<68:
+***REMOVED******REMOVED***case 22.5..<67.5:
 ***REMOVED******REMOVED******REMOVED***self = .northeast
-***REMOVED******REMOVED***case 68..<113:
+***REMOVED******REMOVED***case 67.5..<112.5:
 ***REMOVED******REMOVED******REMOVED***self = .east
-***REMOVED******REMOVED***case 113..<158:
+***REMOVED******REMOVED***case 112.5..<157.5:
 ***REMOVED******REMOVED******REMOVED***self = .southeast
-***REMOVED******REMOVED***case 158..<203:
+***REMOVED******REMOVED***case 157.5..<202.5:
 ***REMOVED******REMOVED******REMOVED***self = .south
-***REMOVED******REMOVED***case 203..<248:
+***REMOVED******REMOVED***case 202.5..<247.5:
 ***REMOVED******REMOVED******REMOVED***self = .southwest
-***REMOVED******REMOVED***case 248..<293:
+***REMOVED******REMOVED***case 247.5..<292.5:
 ***REMOVED******REMOVED******REMOVED***self = .west
-***REMOVED******REMOVED***case 293..<338:
+***REMOVED******REMOVED***case 292.5..<337.5:
 ***REMOVED******REMOVED******REMOVED***self = .northwest
 ***REMOVED******REMOVED***default:
 ***REMOVED******REMOVED******REMOVED***fatalError()
