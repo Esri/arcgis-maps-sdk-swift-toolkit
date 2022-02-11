@@ -18,11 +18,13 @@
 @MainActor
 final internal class CompassViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ Acts as link between the compass and the parent map or scene view.
-***REMOVED***@Binding var viewpoint: Viewpoint
+***REMOVED***@Binding
+***REMOVED***var viewpoint: Viewpoint
 
 ***REMOVED******REMOVED***/ Determines if the compass should automatically hide/show itself when the parent view is oriented
 ***REMOVED******REMOVED***/ north.
-***REMOVED***@Published public var autoHide: Bool
+***REMOVED***@Published
+***REMOVED***public var autoHide: Bool
 
 ***REMOVED******REMOVED***/ Indicates if the compass should be hidden or visible based on the current viewpoint rotation and
 ***REMOVED******REMOVED***/ autoHide preference.
