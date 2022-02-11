@@ -16,33 +16,39 @@ import SwiftUI
 /// Represents the spinning needle at the center of the compass.
 struct Needle: View {
     var body: some View {
-        ZStack {
-            VStack(spacing: 0) {
-                HStack(spacing: 0) {
-                    NeedleQuadrant(color: .redLight)
-                    NeedleQuadrant(color: .redDark)
-                        .rotation3DEffect(
-                            Angle(degrees: 180),
-                            axis: (x: 0, y: 1, z: 0))
+        GeometryReader { geometry in
+            ZStack {
+                VStack(spacing: 0) {
+                    HStack(spacing: 0) {
+                        NeedleQuadrant(color: .redLight)
+                        NeedleQuadrant(color: .redDark)
+                            .rotation3DEffect(
+                                Angle(degrees: 180),
+                                axis: (x: 0, y: 1, z: 0))
+                    }
+                    HStack(spacing: 0) {
+                        NeedleQuadrant(color: .grayLight)
+                            .rotation3DEffect(
+                                Angle(degrees: 180),
+                                axis: (x: 1, y: 0, z: 0))
+                        NeedleQuadrant(color: .grayDark)
+                            .rotation3DEffect(
+                                Angle(degrees: 180),
+                                axis: (x: 0, y: 1, z: 0))
+                            .rotation3DEffect(
+                                Angle(degrees: 180),
+                                axis: (x: 1, y: 0, z: 0))
+                    }
                 }
-                HStack(spacing: 0) {
-                    NeedleQuadrant(color: .grayLight)
-                        .rotation3DEffect(
-                            Angle(degrees: 180),
-                            axis: (x: 1, y: 0, z: 0))
-                    NeedleQuadrant(color: .grayDark)
-                        .rotation3DEffect(
-                            Angle(degrees: 180),
-                            axis: (x: 0, y: 1, z: 0))
-                        .rotation3DEffect(
-                            Angle(degrees: 180),
-                            axis: (x: 1, y: 0, z: 0))
-                }
+                NeedleCenter()
             }
-            NeedleCenter()
+            .aspectRatio(1/3, contentMode: .fit)
+            .frame(
+                width: min(geometry.size.width, geometry.size.height),
+                height: min(geometry.size.width, geometry.size.height)
+            )
+            .scaleEffect(0.6)
         }
-        .aspectRatio(1.0/3.0, contentMode: .fit)
-        .scaleEffect(0.6)
     }
 }
 

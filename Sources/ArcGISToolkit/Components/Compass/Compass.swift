@@ -32,24 +32,27 @@ public struct Compass: View {
     ///   SceneView is oriented north.
     public init(
         viewpoint: Binding<Viewpoint>,
-        size: Double = 30.0,
         autoHide: Bool = true
     ) {
         self.viewModel = CompassViewModel(
             viewpoint: viewpoint,
-            size: size,
             autoHide: autoHide)
     }
 
     public var body: some View {
-        ZStack {
-            CompassBody()
-            Needle()
-                .rotationEffect(
-                    Angle(degrees: viewModel.viewpoint.adjustedRotation)
-                )
+        GeometryReader { geometry in
+            ZStack {
+                CompassBody()
+                Needle()
+                    .rotationEffect(
+                        Angle(degrees: viewModel.viewpoint.adjustedRotation)
+                    )
+            }
+            .frame(
+                width: min(geometry.size.width, geometry.size.height),
+                height: min(geometry.size.width, geometry.size.height)
+            )
         }
-        .frame(width: viewModel.width, height: viewModel.height)
         .opacity(opacity)
         .onTapGesture { viewModel.resetHeading() }
         .onChange(of: viewModel.viewpoint) { _ in
