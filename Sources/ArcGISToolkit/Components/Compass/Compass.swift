@@ -32,24 +32,27 @@ public struct Compass: View {
 ***REMOVED******REMOVED***/   SceneView is oriented north.
 ***REMOVED***public init(
 ***REMOVED******REMOVED***viewpoint: Binding<Viewpoint>,
-***REMOVED******REMOVED***size: Double = 30.0,
 ***REMOVED******REMOVED***autoHide: Bool = true
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.viewModel = CompassViewModel(
 ***REMOVED******REMOVED******REMOVED***viewpoint: viewpoint,
-***REMOVED******REMOVED******REMOVED***size: size,
 ***REMOVED******REMOVED******REMOVED***autoHide: autoHide)
 ***REMOVED***
 
 ***REMOVED***public var body: some View {
-***REMOVED******REMOVED***ZStack {
-***REMOVED******REMOVED******REMOVED***CompassBody()
-***REMOVED******REMOVED******REMOVED***Needle()
-***REMOVED******REMOVED******REMOVED******REMOVED***.rotationEffect(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Angle(degrees: viewModel.viewpoint.adjustedRotation)
-***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***GeometryReader { geometry in
+***REMOVED******REMOVED******REMOVED***ZStack {
+***REMOVED******REMOVED******REMOVED******REMOVED***CompassBody()
+***REMOVED******REMOVED******REMOVED******REMOVED***Needle()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.rotationEffect(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Angle(degrees: viewModel.viewpoint.adjustedRotation)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.frame(
+***REMOVED******REMOVED******REMOVED******REMOVED***width: min(geometry.size.width, geometry.size.height),
+***REMOVED******REMOVED******REMOVED******REMOVED***height: min(geometry.size.width, geometry.size.height)
+***REMOVED******REMOVED******REMOVED***)
 ***REMOVED***
-***REMOVED******REMOVED***.frame(width: viewModel.width, height: viewModel.height)
 ***REMOVED******REMOVED***.opacity(opacity)
 ***REMOVED******REMOVED***.onTapGesture { viewModel.resetHeading() ***REMOVED***
 ***REMOVED******REMOVED***.onChange(of: viewModel.viewpoint) { _ in

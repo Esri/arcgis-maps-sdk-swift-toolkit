@@ -16,33 +16,39 @@
 ***REMOVED***/ Represents the spinning needle at the center of the compass.
 struct Needle: View {
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***ZStack {
-***REMOVED******REMOVED******REMOVED***VStack(spacing: 0) {
-***REMOVED******REMOVED******REMOVED******REMOVED***HStack(spacing: 0) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***NeedleQuadrant(color: .redLight)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***NeedleQuadrant(color: .redDark)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.rotation3DEffect(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Angle(degrees: 180),
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***axis: (x: 0, y: 1, z: 0))
+***REMOVED******REMOVED***GeometryReader { geometry in
+***REMOVED******REMOVED******REMOVED***ZStack {
+***REMOVED******REMOVED******REMOVED******REMOVED***VStack(spacing: 0) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***HStack(spacing: 0) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***NeedleQuadrant(color: .redLight)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***NeedleQuadrant(color: .redDark)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.rotation3DEffect(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Angle(degrees: 180),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***axis: (x: 0, y: 1, z: 0))
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***HStack(spacing: 0) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***NeedleQuadrant(color: .grayLight)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.rotation3DEffect(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Angle(degrees: 180),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***axis: (x: 1, y: 0, z: 0))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***NeedleQuadrant(color: .grayDark)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.rotation3DEffect(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Angle(degrees: 180),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***axis: (x: 0, y: 1, z: 0))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.rotation3DEffect(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Angle(degrees: 180),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***axis: (x: 1, y: 0, z: 0))
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***HStack(spacing: 0) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***NeedleQuadrant(color: .grayLight)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.rotation3DEffect(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Angle(degrees: 180),
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***axis: (x: 1, y: 0, z: 0))
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***NeedleQuadrant(color: .grayDark)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.rotation3DEffect(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Angle(degrees: 180),
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***axis: (x: 0, y: 1, z: 0))
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.rotation3DEffect(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Angle(degrees: 180),
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***axis: (x: 1, y: 0, z: 0))
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***NeedleCenter()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***NeedleCenter()
+***REMOVED******REMOVED******REMOVED***.aspectRatio(1/3, contentMode: .fit)
+***REMOVED******REMOVED******REMOVED***.frame(
+***REMOVED******REMOVED******REMOVED******REMOVED***width: min(geometry.size.width, geometry.size.height),
+***REMOVED******REMOVED******REMOVED******REMOVED***height: min(geometry.size.width, geometry.size.height)
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***.scaleEffect(0.6)
 ***REMOVED***
-***REMOVED******REMOVED***.aspectRatio(1.0/3.0, contentMode: .fit)
-***REMOVED******REMOVED***.scaleEffect(0.6)
 ***REMOVED***
 ***REMOVED***
 

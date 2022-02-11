@@ -24,12 +24,6 @@ final internal class CompassViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ north.
 ***REMOVED***@Published public var autoHide: Bool
 
-***REMOVED******REMOVED***/ The height of the compass.
-***REMOVED***@Published public var height: Double
-
-***REMOVED******REMOVED***/ The width of the compass.
-***REMOVED***@Published public var width: Double
-
 ***REMOVED******REMOVED***/ Indicates if the compass should be hidden or visible based on the current viewpoint rotation and
 ***REMOVED******REMOVED***/ autoHide preference.
 ***REMOVED***public var hidden: Bool {
@@ -44,13 +38,10 @@ final internal class CompassViewModel: ObservableObject {
 ***REMOVED******REMOVED***/   SceneView is oriented north.
 ***REMOVED***public init(
 ***REMOVED******REMOVED***viewpoint: Binding<Viewpoint>,
-***REMOVED******REMOVED***size: Double = 30.0,
 ***REMOVED******REMOVED***autoHide: Bool = true
 ***REMOVED***) {
 ***REMOVED******REMOVED***self._viewpoint = viewpoint
 ***REMOVED******REMOVED***self.autoHide = autoHide
-***REMOVED******REMOVED***height = size
-***REMOVED******REMOVED***width = size
 ***REMOVED***
 
 ***REMOVED******REMOVED***/ Resets the viewpoints `rotation` to zero.
