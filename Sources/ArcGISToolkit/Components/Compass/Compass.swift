@@ -22,7 +22,7 @@ public struct Compass: View {
 
 ***REMOVED******REMOVED***/ Controls the current opacity of the compass.
 ***REMOVED***@State
-***REMOVED***private var opacity = 0.0
+***REMOVED***private var opacity: Double
 
 ***REMOVED******REMOVED***/ Creates a `Compass`
 ***REMOVED******REMOVED***/ - Parameters:
@@ -34,9 +34,11 @@ public struct Compass: View {
 ***REMOVED******REMOVED***viewpoint: Binding<Viewpoint>,
 ***REMOVED******REMOVED***autoHide: Bool = true
 ***REMOVED***) {
-***REMOVED******REMOVED***self.viewModel = CompassViewModel(
+***REMOVED******REMOVED***let viewModel = CompassViewModel(
 ***REMOVED******REMOVED******REMOVED***viewpoint: viewpoint,
 ***REMOVED******REMOVED******REMOVED***autoHide: autoHide)
+***REMOVED******REMOVED***self.viewModel = viewModel
+***REMOVED******REMOVED***opacity = viewModel.hidden ? 0.0 : 1.0
 ***REMOVED***
 
 ***REMOVED***public var body: some View {
