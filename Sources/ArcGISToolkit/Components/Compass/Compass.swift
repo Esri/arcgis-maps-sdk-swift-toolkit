@@ -16,29 +16,36 @@ import SwiftUI
 
 /// A Compass (alias North arrow) shows where north is in a MapView or SceneView.
 public struct Compass: View {
-    /// The view model for the compass.
-    @ObservedObject
-    var viewModel: CompassViewModel
+    /// Determines if the compass should automatically hide/show itself when the parent view is oriented
+    /// north.
+    public let autoHide: Bool
+
+    /// Indicates if the compass should be hidden or visible based on the current viewpoint rotation and
+    /// autoHide preference.
+    public var isHidden: Bool {
+        viewpoint.rotation.isZero && autoHide
+    }
 
     /// Controls the current opacity of the compass.
     @State
     private var opacity: Double
 
+    /// Acts as link between the compass and the parent map or scene view.
+    @Binding
+    private(set) var viewpoint: Viewpoint
+
     /// Creates a `Compass`
     /// - Parameters:
     ///   - viewpoint: Acts a communication link between the MapView or SceneView and the compass.
-    ///   - size: Enables a custom size configuuration for the compass. Default is 30.
     ///   - autoHide: Determines if the compass automatically hides itself when the MapView or
     ///   SceneView is oriented north.
     public init(
         viewpoint: Binding<Viewpoint>,
         autoHide: Bool = true
     ) {
-        let viewModel = CompassViewModel(
-            viewpoint: viewpoint,
-            autoHide: autoHide)
-        self.viewModel = viewModel
-        opacity = viewModel.hidden ? 0.0 : 1.0
+        _viewpoint = viewpoint
+        _opacity = State(initialValue: .zero)
+        self.autoHide = autoHide
     }
 
     public var body: some View {
@@ -47,7 +54,7 @@ public struct Compass: View {
                 CompassBody()
                 Needle()
                     .rotationEffect(
-                        Angle(degrees: viewModel.viewpoint.adjustedRotation)
+                        Angle(degrees: viewpoint.adjustedRotation)
                     )
             }
             .frame(
@@ -56,12 +63,37 @@ public struct Compass: View {
             )
         }
         .opacity(opacity)
-        .onTapGesture { viewModel.resetHeading() }
-        .onChange(of: viewModel.viewpoint) { _ in
-            withAnimation(.default.delay(viewModel.hidden ? 0.25 : 0)) {
-                opacity = viewModel.hidden ? 0 : 1
+        .onTapGesture { resetHeading() }
+        .onChange(of: viewpoint) { _ in
+            withAnimation(.default.delay(isHidden ? 0.25 : 0)) {
+                opacity = isHidden ? 0 : 1
             }
         }
-        .accessibilityLabel(viewModel.viewpoint.heading)
+        .onAppear { opacity = isHidden ? 0 : 1 }
+        .accessibilityLabel(viewpoint.heading)
+    }
+
+    /// Resets the viewpoints `rotation` to zero.
+    func resetHeading() {
+        self.viewpoint = Viewpoint(
+            center: viewpoint.targetGeometry.extent.center,
+            scale: viewpoint.targetScale,
+            rotation: .zero
+        )
+    }
+}
+
+internal extension Viewpoint {
+    /// The viewpoint's `rotation` adjusted to offset any rotation applied to the parent view.
+    var adjustedRotation: Double {
+        rotation.isZero ? .zero : 360 - rotation
+    }
+
+    /// A text description of the current heading, sutiable for accessibility voiceover.
+    var heading: String {
+        "Compass, heading "
+        + Int(self.adjustedRotation.rounded()).description
+        + " degrees "
+        + CompassDirection(self.adjustedRotation).rawValue
     }
 }
