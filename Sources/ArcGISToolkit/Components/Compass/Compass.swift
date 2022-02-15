@@ -18,7 +18,7 @@
 public struct Compass: View {
 ***REMOVED******REMOVED***/ Determines if the compass should automatically hide/show itself when the parent view is oriented
 ***REMOVED******REMOVED***/ north.
-***REMOVED***public let autoHide: Bool
+***REMOVED***private let autoHide: Bool
 
 ***REMOVED******REMOVED***/ Indicates if the compass should be hidden or visible based on the current viewpoint rotation and
 ***REMOVED******REMOVED***/ autoHide preference.
