@@ -18,7 +18,7 @@ import SwiftUI
 public struct Compass: View {
     /// Determines if the compass should automatically hide/show itself when the parent view is oriented
     /// north.
-    public let autoHide: Bool
+    private let autoHide: Bool
 
     /// Indicates if the compass should be hidden or visible based on the current viewpoint rotation and
     /// autoHide preference.
