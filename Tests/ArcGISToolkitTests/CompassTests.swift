@@ -105,9 +105,8 @@ class CompassTests: XCTestCase {
 
     /// Asserts that the model correctly initializes when given only a viewpoint.
     func testInitWithViewpointAndAutoHide() {
-        let rotationValue = 0.0
         let autoHide = false
-        var _viewpoint = getViewpoint(rotationValue)
+        var _viewpoint = getViewpoint(0)
         let viewpoint = Binding(get: { _viewpoint }, set: { _viewpoint = $0 })
         let compass = Compass(
             viewpoint: viewpoint,
