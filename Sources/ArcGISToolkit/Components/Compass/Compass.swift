@@ -20,7 +20,7 @@ public struct Compass: View {
 ***REMOVED******REMOVED***/ north.
 ***REMOVED***private let autoHide: Bool
 
-***REMOVED******REMOVED***/ Indicates if the compass should be hidden or visible based on the current viewpoint rotation and
+***REMOVED******REMOVED***/ Indicates if the compass is hidden based on the current viewpoint rotation and
 ***REMOVED******REMOVED***/ autoHide preference.
 ***REMOVED***public var isHidden: Bool {
 ***REMOVED******REMOVED***guard let viewpoint = viewpoint else { return autoHide ***REMOVED***
