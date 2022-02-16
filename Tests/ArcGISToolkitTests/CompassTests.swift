@@ -21,53 +21,53 @@ class CompassTests: XCTestCase {
     func testCardinalAndIntercardinals() {
         var viewpoint = getViewpoint(0.0)
         XCTAssertEqual(
-            viewpoint.heading,
+            viewpoint.compassHeadingDescription,
             "Compass, heading 0 degrees north"
         )
         viewpoint = getViewpoint(23)
         XCTAssertEqual(
-            viewpoint.heading,
+            viewpoint.compassHeadingDescription,
             "Compass, heading 337 degrees northwest"
         )
         viewpoint = getViewpoint(68)
         XCTAssertEqual(
-            viewpoint.heading,
+            viewpoint.compassHeadingDescription,
             "Compass, heading 292 degrees west"
         )
         viewpoint = getViewpoint(113)
         XCTAssertEqual(
-            viewpoint.heading,
+            viewpoint.compassHeadingDescription,
             "Compass, heading 247 degrees southwest"
         )
         viewpoint = getViewpoint(158)
         XCTAssertEqual(
-            viewpoint.heading,
+            viewpoint.compassHeadingDescription,
             "Compass, heading 202 degrees south"
         )
         viewpoint = getViewpoint(203)
         XCTAssertEqual(
-            viewpoint.heading,
+            viewpoint.compassHeadingDescription,
             "Compass, heading 157 degrees southeast"
         )
         viewpoint = getViewpoint(248)
         XCTAssertEqual(
-            viewpoint.heading,
+            viewpoint.compassHeadingDescription,
             "Compass, heading 112 degrees east"
         )
         viewpoint = getViewpoint(293)
         XCTAssertEqual(
-            viewpoint.heading,
+            viewpoint.compassHeadingDescription,
             "Compass, heading 67 degrees northeast"
         )
         viewpoint = getViewpoint(293)
         XCTAssertEqual(
-            viewpoint.heading,
+            viewpoint.compassHeadingDescription,
             "Compass, heading 67 degrees northeast"
         )
     }
 
-    /// Asserts that the compass accurately indicates when the compass should be hidden when autoHide is
-    /// disabled.
+    /// Asserts that the compass accurately indicates when the compass should be hidden when autoHide
+    /// is disabled.
     func testHiddenWithAutoHideOff() {
         let initialValue = 0.0
         let finalValue = 90.0
@@ -79,8 +79,8 @@ class CompassTests: XCTestCase {
         XCTAssertFalse(compass.isHidden)
     }
 
-    /// Asserts that the compass accurately indicates when the compass should be hidden when autoHide is
-    /// enabled.
+    /// Asserts that the compass accurately indicates when the compass should be hidden when autoHide
+    /// is enabled.
     func testHiddenWithAutoHideOn() {
         let initialValue = 0.0
         let finalValue = 90.0

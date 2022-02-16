@@ -72,7 +72,7 @@ public struct Compass: View {
             }
         }
         .onAppear { opacity = isHidden ? 0 : 1 }
-        .accessibilityLabel(viewpoint?.heading ?? "Compass")
+        .accessibilityLabel(viewpoint?.compassHeadingDescription ?? "Compass")
     }
 
     /// Resets the viewpoints `rotation` to zero.
@@ -93,7 +93,7 @@ internal extension Viewpoint {
     }
 
     /// A text description of the current heading, sutiable for accessibility voiceover.
-    var heading: String {
+    var compassHeadingDescription: String {
         "Compass, heading "
         + Int(self.adjustedRotation.rounded()).description
         + " degrees "
