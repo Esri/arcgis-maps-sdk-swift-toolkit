@@ -32,7 +32,7 @@ public struct Compass: View {
 
 ***REMOVED******REMOVED***/ Acts as link between the compass and the parent map or scene view.
 ***REMOVED***@Binding
-***REMOVED***private(set) var viewpoint: Viewpoint
+***REMOVED***private var viewpoint: Viewpoint
 
 ***REMOVED******REMOVED***/ Creates a `Compass`
 ***REMOVED******REMOVED***/ - Parameters:
