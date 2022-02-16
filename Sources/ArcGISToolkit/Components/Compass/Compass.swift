@@ -32,7 +32,7 @@ public struct Compass: View {
 
     /// Acts as link between the compass and the parent map or scene view.
     @Binding
-    private(set) var viewpoint: Viewpoint
+    private var viewpoint: Viewpoint
 
     /// Creates a `Compass`
     /// - Parameters:
