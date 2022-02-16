@@ -67,8 +67,10 @@ public struct Compass: View {
         .opacity(opacity)
         .onTapGesture { resetHeading() }
         .onChange(of: viewpoint) { _ in
+            let newOpacity: Double = isHidden ? .zero : 1
+            guard opacity != newOpacity else { return }
             withAnimation(.default.delay(isHidden ? 0.25 : 0)) {
-                opacity = isHidden ? 0 : 1
+                opacity = newOpacity
             }
         }
         .onAppear { opacity = isHidden ? 0 : 1 }
