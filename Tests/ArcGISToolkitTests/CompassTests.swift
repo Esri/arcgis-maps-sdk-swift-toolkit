@@ -18,7 +18,7 @@ import XCTest
 
 class CompassTests: XCTestCase {
 ***REMOVED******REMOVED***/ Asserts that accessibility labels are properly generated.
-***REMOVED***func testCardinalAndIntercardinals() {
+***REMOVED***func testCompassHeadingDescription() {
 ***REMOVED******REMOVED***var viewpoint = getViewpoint(0.0)
 ***REMOVED******REMOVED***XCTAssertEqual(
 ***REMOVED******REMOVED******REMOVED***viewpoint.compassHeadingDescription,
