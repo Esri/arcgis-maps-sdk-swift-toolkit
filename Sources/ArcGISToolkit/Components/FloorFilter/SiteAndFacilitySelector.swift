@@ -17,74 +17,136 @@ import ArcGIS
 /// A view which allows selection of sites and facilities represented in a `FloorManager`.
 struct SiteAndFacilitySelector: View {
     /// Creates a `SiteAndFacilitySelector`
-    /// - Parameter floorFilterViewModel: The view model used by the `SiteAndFacilitySelector`.
-    /// - Parameter isVisible: A binding used to dismiss the site selector.
-    init(
-        floorFilterViewModel: FloorFilterViewModel,
-        isVisible: Binding<Bool>
-    ) {
-        self.floorFilterViewModel = floorFilterViewModel
-        self.isVisible = isVisible
+    /// - Parameter isHidden: A binding used to dismiss the site selector.
+    init(isHidden: Binding<Bool>) {
+        self.isHidden = isHidden
     }
     
     /// The view model used by the `SiteAndFacilitySelector`.
-    @ObservedObject
-    private var floorFilterViewModel: FloorFilterViewModel
+    @EnvironmentObject var floorFilterViewModel: FloorFilterViewModel
     
     /// Allows the user to toggle the visibility of the site and facility selector.
-    private var isVisible: Binding<Bool>
+    private var isHidden: Binding<Bool>
     
     var body: some View {
         if let selectedSite = floorFilterViewModel.selectedSite {
-            Facilities(facilities: selectedSite.facilities, isVisible: isVisible)
+            Facilities(facilities: selectedSite.facilities, isHidden: isHidden)
         } else if floorFilterViewModel.sites.count == 1 {
             Facilities(
                 facilities: floorFilterViewModel.sites.first!.facilities,
-                isVisible: isVisible
+                isHidden: isHidden
             )
         } else {
-            Sites(sites: floorFilterViewModel.sites, isVisible: isVisible)
+            Sites(sites: floorFilterViewModel.sites, isHidden: isHidden)
         }
     }
     
     /// A view displaying the sites contained in a `FloorManager`.
     struct Sites: View {
         let sites: [FloorSite]
-        var isVisible: Binding<Bool>
+        var isHidden: Binding<Bool>
+        
+        @EnvironmentObject var floorFilterViewModel: FloorFilterViewModel
 
         var body: some View {
-            VStack(alignment: .leading) {
-                Header(title: "Select a site…", isVisible: isVisible)
+            VStack(alignment: .center) {
+                Header(title: "Select a site…", isHidden: isHidden)
                 Divider()
-                ForEach(sites) { site in
-                    Text(site.name)
+                
+                if sites.count > 5 {
+                    ScrollView {
+                        VStack {
+                            ForEach(sites) { site in
+                                HStack {
+                                    Text(site.name)
+                                    Spacer()
+                                }
+                                .onTapGesture {
+                                    floorFilterViewModel.selection = .site(site)
+                                }
+                                .padding(4)
+                                .selected(floorFilterViewModel.selectedSite == site)
+                            }
+                        }
+                    }
+                } else {
+                    VStack {
+                        ForEach(sites) { site in
+                            HStack {
+                                Text(site.name)
+                                Spacer()
+                            }
+                            .onTapGesture {
+                                floorFilterViewModel.selection = .site(site)
+                            }
+                            .padding(4)
+                            .selected(floorFilterViewModel.selectedSite == site)
+                        }
+                    }
+                }
+
+                Divider()
+                Button {
+                    // Set something so we display all facilities
+                } label: {
+                    Text("All sites")
                 }
             }
-            .esriBorder()
         }
     }
 
     /// A view displaying the facilities contained in a `FloorManager`.
     struct Facilities: View {
         let facilities: [FloorFacility]
-        var isVisible: Binding<Bool>
+        var isHidden: Binding<Bool>
         
+        @EnvironmentObject var floorFilterViewModel: FloorFilterViewModel
+
         var body: some View {
             VStack(alignment: .leading) {
-                Header(title: "Select a facility…", isVisible: isVisible)
+                Header(title: "Select a facility…", isHidden: isHidden)
                 Divider()
-                ForEach(facilities) { facility in
-                    Text(facility.name)
+                if facilities.count > 5 {
+                    ScrollView {
+                        VStack {
+                            ForEach(facilities) { facility in
+                                HStack {
+                                    Text(facility.name)
+                                    Spacer()
+                                }
+                                .onTapGesture {
+                                    floorFilterViewModel.selection = .facility(facility)
+                                    isHidden.wrappedValue = true
+                                }
+                                .padding(4 )
+                                .selected(floorFilterViewModel.selectedFacility == facility)
+                            }
+                        }
+                    }
+                } else {
+                    VStack {
+                        ForEach(facilities) { facility in
+                            HStack {
+                                Text(facility.name)
+                                Spacer()
+                            }
+                            .onTapGesture {
+                                floorFilterViewModel.selection = .facility(facility)
+                                isHidden.wrappedValue = true
+                            }
+                            .padding(4 )
+                            .selected(floorFilterViewModel.selectedFacility == facility)
+                        }
+                    }
                 }
             }
-            .esriBorder()
         }
     }
     
     /// The header for a site or facility selector.
     struct Header: View {
         let title: String
-        var isVisible: Binding<Bool>
+        var isHidden: Binding<Bool>
         
         var body: some View {
             HStack {
@@ -92,7 +154,7 @@ struct SiteAndFacilitySelector: View {
                     .bold()
                 Spacer()
                 Button {
-                    isVisible.wrappedValue.toggle()
+                    isHidden.wrappedValue.toggle()
                 } label: {
                     Image(systemName: "xmark.circle")
                 }

@@ -296,35 +296,3 @@ extension ResultRow {
         )
     }
 }
-
-/// A modifier which displays a background and shadow for a view. Used to represent a selected view.
-struct SelectedModifier: ViewModifier {
-    /// `true` if the view should display as selected, `false` otherwise.
-    var isSelected: Bool
-    
-    func body(content: Content) -> some View {
-        let roundedRect = RoundedRectangle(cornerRadius: 4)
-        if isSelected {
-            content
-                .background(Color.secondary.opacity(0.8))
-                .clipShape(roundedRect)
-                .shadow(
-                    color: Color.secondary.opacity(0.8),
-                    radius: 2
-                )
-        } else {
-            content
-        }
-    }
-}
-
-extension View {
-    /// View modifier used to denote the view is selected.
-    /// - Parameter isSelected: `true` if the view is selected, `false` otherwise.
-    /// - Returns: The view being modified.
-    func selected(
-        _ isSelected: Bool = false
-    ) -> some View {
-        modifier(SelectedModifier(isSelected: isSelected))
-    }
-}

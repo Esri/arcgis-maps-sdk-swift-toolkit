@@ -54,7 +54,7 @@ final class FloorFilterViewModel: ObservableObject {
 
     /// The `Viewpoint` used to pan/zoom to the selected site/facilty.
     /// If `nil`, there will be no automatic pan/zoom operations.
-    let viewpoint: Binding<Viewpoint>?
+    var viewpoint: Binding<Viewpoint>?
     
     /// The `FloorManager` containing the site, floor, and level information.
     let floorManager: FloorManager
@@ -78,10 +78,34 @@ final class FloorFilterViewModel: ObservableObject {
     @Published
     private(set) var isLoading = true
     
+    /// Gets the default level for a facility. Uses level with vertical order 0 otherwise gets the lowest level.
+    public func getDefaultLevelForFacility(
+        facility: FloorFacility?
+    ) -> FloorLevel? {
+        let candidateLevels = levels.filter { $0.facility == facility }
+        return candidateLevels.first { $0.verticalOrder == 0 } ?? getLowestLevel()
+    }
+    
+    /// Returns the AGSFloorLevel with the lowest verticalOrder.
+    private func getLowestLevel() -> FloorLevel? {
+        let sortedLevels = levels.sorted {
+            $0.verticalOrder < $1.verticalOrder
+        }
+        return sortedLevels.first {
+            $0.verticalOrder != .min && $0.verticalOrder != .max
+        }
+    }
+    
     /// The selected site, floor, or level.
     @Published
     var selection: Selection? {
         didSet {
+            if case let .facility(facility) = selection,
+               let level = getDefaultLevelForFacility(facility: facility) {
+                selection = .level(level)
+            } else {
+                filterMapToSelectedLevel()
+            }
             zoomToSelection()
         }
     }
@@ -138,8 +162,8 @@ final class FloorFilterViewModel: ObservableObject {
             zoomToExtent(extent: site.geometry?.extent)
         case .facility(let facility):
             zoomToExtent(extent: facility.geometry?.extent)
-        case .level:
-            break
+        case .level(let level):
+            zoomToExtent(extent: level.facility?.geometry?.extent)
         }
     }
     
@@ -156,6 +180,14 @@ final class FloorFilterViewModel: ObservableObject {
             viewpoint.wrappedValue = Viewpoint(
                 targetExtent: targetExtent
             )
+        }
+    }
+    
+    /// Sets the visibility of all the levels on the map based on the vertical order of the current selected level.
+    public func filterMapToSelectedLevel() {
+        guard let selectedLevel = selectedLevel else { return }
+        levels.forEach {
+            $0.isVisible = $0.verticalOrder == selectedLevel.verticalOrder
         }
     }
 }
