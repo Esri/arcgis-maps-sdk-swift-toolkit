@@ -21,7 +21,7 @@ struct CompassExampleView: View {
 
 ***REMOVED******REMOVED***/ Allows for communication between the Compass and MapView or SceneView.
 ***REMOVED***@State
-***REMOVED***private var viewpoint = Viewpoint(
+***REMOVED***private var viewpoint: Viewpoint? = Viewpoint(
 ***REMOVED******REMOVED***center: Point(x: -117.19494, y: 34.05723, spatialReference: .wgs84),
 ***REMOVED******REMOVED***scale: 10_000,
 ***REMOVED******REMOVED***rotation: -45
