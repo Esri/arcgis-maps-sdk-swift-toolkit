@@ -100,7 +100,7 @@ class CompassTests: XCTestCase {
 ***REMOVED******REMOVED***let viewpoint = Binding(get: { _viewpoint ***REMOVED***, set: { _viewpoint = $0 ***REMOVED***)
 ***REMOVED******REMOVED***let compass = Compass(viewpoint: viewpoint)
 ***REMOVED******REMOVED***XCTAssertTrue(compass.viewpoint.rotation.isZero)
-***REMOVED******REMOVED***XCTAssertEqual(compass.autoHide, true)
+***REMOVED******REMOVED***XCTAssertEqual(compass.isHidden, true)
 ***REMOVED***
 
 ***REMOVED******REMOVED***/ Asserts that the model correctly initializes when given only a viewpoint.
@@ -113,7 +113,7 @@ class CompassTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***autoHide: autoHide
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***XCTAssertTrue(compass.viewpoint.rotation.isZero)
-***REMOVED******REMOVED***XCTAssertEqual(compass.autoHide, autoHide)
+***REMOVED******REMOVED***XCTAssertEqual(compass.isHidden, false)
 ***REMOVED***
 
 ***REMOVED***func testResetHeading() {
