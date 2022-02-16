@@ -26,7 +26,7 @@ struct FloorFilterExampleView: View {
     
     @State
     private var isMapLoaded: Bool = false
-    
+
     init() {
         // Create the map from a portal item and assign to the mapView.
         
@@ -35,13 +35,13 @@ struct FloorFilterExampleView: View {
         //        let portalItem = PortalItem(portal: portal, id: Item.ID(rawValue: "49520a67773842f1858602735ef538b5")!)
         
         // Redlands Campus map.
-        //        let portal = Portal(url: URL(string: "https://runtimecoretest.maps.arcgis.com/")!, isLoginRequired: false)
-        //        let portalItem = PortalItem(portal: portal, id: Item.ID(rawValue: "7687805bd42549f5ba41237443d0c60a")!) //<= another multiple sites/facilities
-        
+        let portal = Portal(url: URL(string: "https://runtimecoretest.maps.arcgis.com/")!, isLoginRequired: false)
+        let portalItem = PortalItem(portal: portal, id: Item.ID(rawValue: "7687805bd42549f5ba41237443d0c60a")!) //<= another multiple sites/facilities
+
         // Single site (ESRI Redlands Main) and facility (Building L).
-        let portal = Portal(url: URL(string: "https://indoors.maps.arcgis.com/")!, isLoginRequired: false)
-        let portalItem = PortalItem(portal: portal, id: Item.ID(rawValue: "f133a698536f44c8884ad81f80b6cfc7")!)
-        
+//        let portal = Portal(url: URL(string: "https://indoors.maps.arcgis.com/")!, isLoginRequired: false)
+//        let portalItem = PortalItem(portal: portal, id: Item.ID(rawValue: "f133a698536f44c8884ad81f80b6cfc7")!)
+
         map = Map(item: portalItem)
     }
     
@@ -59,6 +59,7 @@ struct FloorFilterExampleView: View {
                         floorManager: floorManager,
                         viewpoint: $viewpoint
                     )
+                        .frame(idealHeight: 300)
                         .padding(floorFilterPadding)
                 }
             }
