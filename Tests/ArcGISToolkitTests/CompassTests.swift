@@ -19,51 +19,49 @@ import XCTest
 class CompassTests: XCTestCase {
     /// Asserts that accessibility labels are properly generated.
     func testCardinalAndIntercardinals() {
-        var _viewpoint = getViewpoint(0.0)
-        let viewpoint = Binding(get: { _viewpoint }, set: { _viewpoint = $0 })
-        let compass = Compass(viewpoint: viewpoint)
+        var viewpoint = getViewpoint(0.0)
         XCTAssertEqual(
-            compass.viewpoint.heading,
+            viewpoint.heading,
             "Compass, heading 0 degrees north"
         )
-        _viewpoint = getViewpoint(23)
+        viewpoint = getViewpoint(23)
         XCTAssertEqual(
-            compass.viewpoint.heading,
+            viewpoint.heading,
             "Compass, heading 337 degrees northwest"
         )
-        _viewpoint = getViewpoint(68)
+        viewpoint = getViewpoint(68)
         XCTAssertEqual(
-            compass.viewpoint.heading,
+            viewpoint.heading,
             "Compass, heading 292 degrees west"
         )
-        _viewpoint = getViewpoint(113)
+        viewpoint = getViewpoint(113)
         XCTAssertEqual(
-            compass.viewpoint.heading,
+            viewpoint.heading,
             "Compass, heading 247 degrees southwest"
         )
-        _viewpoint = getViewpoint(158)
+        viewpoint = getViewpoint(158)
         XCTAssertEqual(
-            compass.viewpoint.heading,
+            viewpoint.heading,
             "Compass, heading 202 degrees south"
         )
-        _viewpoint = getViewpoint(203)
+        viewpoint = getViewpoint(203)
         XCTAssertEqual(
-            compass.viewpoint.heading,
+            viewpoint.heading,
             "Compass, heading 157 degrees southeast"
         )
-        _viewpoint = getViewpoint(248)
+        viewpoint = getViewpoint(248)
         XCTAssertEqual(
-            compass.viewpoint.heading,
+            viewpoint.heading,
             "Compass, heading 112 degrees east"
         )
-        _viewpoint = getViewpoint(293)
+        viewpoint = getViewpoint(293)
         XCTAssertEqual(
-            compass.viewpoint.heading,
+            viewpoint.heading,
             "Compass, heading 67 degrees northeast"
         )
-        _viewpoint = getViewpoint(293)
+        viewpoint = getViewpoint(293)
         XCTAssertEqual(
-            compass.viewpoint.heading,
+            viewpoint.heading,
             "Compass, heading 67 degrees northeast"
         )
     }
@@ -99,7 +97,6 @@ class CompassTests: XCTestCase {
         var _viewpoint = getViewpoint(0.0)
         let viewpoint = Binding(get: { _viewpoint }, set: { _viewpoint = $0 })
         let compass = Compass(viewpoint: viewpoint)
-        XCTAssertTrue(compass.viewpoint.rotation.isZero)
         XCTAssertEqual(compass.isHidden, true)
     }
 
@@ -112,7 +109,6 @@ class CompassTests: XCTestCase {
             viewpoint: viewpoint,
             autoHide: autoHide
         )
-        XCTAssertTrue(compass.viewpoint.rotation.isZero)
         XCTAssertEqual(compass.isHidden, false)
     }
 
@@ -122,9 +118,9 @@ class CompassTests: XCTestCase {
         var _viewpoint = getViewpoint(initialValue)
         let viewpoint = Binding(get: { _viewpoint }, set: { _viewpoint = $0 })
         let compass = Compass(viewpoint: viewpoint)
-        XCTAssertEqual(compass.viewpoint.rotation, initialValue)
+        XCTAssertEqual(_viewpoint.rotation, initialValue)
         compass.resetHeading()
-        XCTAssertEqual(compass.viewpoint.rotation, finalValue)
+        XCTAssertEqual(_viewpoint.rotation, finalValue)
     }
 }
 
