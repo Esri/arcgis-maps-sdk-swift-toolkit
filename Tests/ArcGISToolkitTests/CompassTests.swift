@@ -19,51 +19,49 @@ import XCTest
 class CompassTests: XCTestCase {
 ***REMOVED******REMOVED***/ Asserts that accessibility labels are properly generated.
 ***REMOVED***func testCardinalAndIntercardinals() {
-***REMOVED******REMOVED***var _viewpoint = getViewpoint(0.0)
-***REMOVED******REMOVED***let viewpoint = Binding(get: { _viewpoint ***REMOVED***, set: { _viewpoint = $0 ***REMOVED***)
-***REMOVED******REMOVED***let compass = Compass(viewpoint: viewpoint)
+***REMOVED******REMOVED***var viewpoint = getViewpoint(0.0)
 ***REMOVED******REMOVED***XCTAssertEqual(
-***REMOVED******REMOVED******REMOVED***compass.viewpoint.heading,
+***REMOVED******REMOVED******REMOVED***viewpoint.heading,
 ***REMOVED******REMOVED******REMOVED***"Compass, heading 0 degrees north"
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED***_viewpoint = getViewpoint(23)
+***REMOVED******REMOVED***viewpoint = getViewpoint(23)
 ***REMOVED******REMOVED***XCTAssertEqual(
-***REMOVED******REMOVED******REMOVED***compass.viewpoint.heading,
+***REMOVED******REMOVED******REMOVED***viewpoint.heading,
 ***REMOVED******REMOVED******REMOVED***"Compass, heading 337 degrees northwest"
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED***_viewpoint = getViewpoint(68)
+***REMOVED******REMOVED***viewpoint = getViewpoint(68)
 ***REMOVED******REMOVED***XCTAssertEqual(
-***REMOVED******REMOVED******REMOVED***compass.viewpoint.heading,
+***REMOVED******REMOVED******REMOVED***viewpoint.heading,
 ***REMOVED******REMOVED******REMOVED***"Compass, heading 292 degrees west"
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED***_viewpoint = getViewpoint(113)
+***REMOVED******REMOVED***viewpoint = getViewpoint(113)
 ***REMOVED******REMOVED***XCTAssertEqual(
-***REMOVED******REMOVED******REMOVED***compass.viewpoint.heading,
+***REMOVED******REMOVED******REMOVED***viewpoint.heading,
 ***REMOVED******REMOVED******REMOVED***"Compass, heading 247 degrees southwest"
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED***_viewpoint = getViewpoint(158)
+***REMOVED******REMOVED***viewpoint = getViewpoint(158)
 ***REMOVED******REMOVED***XCTAssertEqual(
-***REMOVED******REMOVED******REMOVED***compass.viewpoint.heading,
+***REMOVED******REMOVED******REMOVED***viewpoint.heading,
 ***REMOVED******REMOVED******REMOVED***"Compass, heading 202 degrees south"
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED***_viewpoint = getViewpoint(203)
+***REMOVED******REMOVED***viewpoint = getViewpoint(203)
 ***REMOVED******REMOVED***XCTAssertEqual(
-***REMOVED******REMOVED******REMOVED***compass.viewpoint.heading,
+***REMOVED******REMOVED******REMOVED***viewpoint.heading,
 ***REMOVED******REMOVED******REMOVED***"Compass, heading 157 degrees southeast"
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED***_viewpoint = getViewpoint(248)
+***REMOVED******REMOVED***viewpoint = getViewpoint(248)
 ***REMOVED******REMOVED***XCTAssertEqual(
-***REMOVED******REMOVED******REMOVED***compass.viewpoint.heading,
+***REMOVED******REMOVED******REMOVED***viewpoint.heading,
 ***REMOVED******REMOVED******REMOVED***"Compass, heading 112 degrees east"
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED***_viewpoint = getViewpoint(293)
+***REMOVED******REMOVED***viewpoint = getViewpoint(293)
 ***REMOVED******REMOVED***XCTAssertEqual(
-***REMOVED******REMOVED******REMOVED***compass.viewpoint.heading,
+***REMOVED******REMOVED******REMOVED***viewpoint.heading,
 ***REMOVED******REMOVED******REMOVED***"Compass, heading 67 degrees northeast"
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED***_viewpoint = getViewpoint(293)
+***REMOVED******REMOVED***viewpoint = getViewpoint(293)
 ***REMOVED******REMOVED***XCTAssertEqual(
-***REMOVED******REMOVED******REMOVED***compass.viewpoint.heading,
+***REMOVED******REMOVED******REMOVED***viewpoint.heading,
 ***REMOVED******REMOVED******REMOVED***"Compass, heading 67 degrees northeast"
 ***REMOVED******REMOVED***)
 ***REMOVED***
@@ -99,7 +97,6 @@ class CompassTests: XCTestCase {
 ***REMOVED******REMOVED***var _viewpoint = getViewpoint(0.0)
 ***REMOVED******REMOVED***let viewpoint = Binding(get: { _viewpoint ***REMOVED***, set: { _viewpoint = $0 ***REMOVED***)
 ***REMOVED******REMOVED***let compass = Compass(viewpoint: viewpoint)
-***REMOVED******REMOVED***XCTAssertTrue(compass.viewpoint.rotation.isZero)
 ***REMOVED******REMOVED***XCTAssertEqual(compass.isHidden, true)
 ***REMOVED***
 
@@ -112,7 +109,6 @@ class CompassTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***viewpoint: viewpoint,
 ***REMOVED******REMOVED******REMOVED***autoHide: autoHide
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED***XCTAssertTrue(compass.viewpoint.rotation.isZero)
 ***REMOVED******REMOVED***XCTAssertEqual(compass.isHidden, false)
 ***REMOVED***
 
@@ -122,9 +118,9 @@ class CompassTests: XCTestCase {
 ***REMOVED******REMOVED***var _viewpoint = getViewpoint(initialValue)
 ***REMOVED******REMOVED***let viewpoint = Binding(get: { _viewpoint ***REMOVED***, set: { _viewpoint = $0 ***REMOVED***)
 ***REMOVED******REMOVED***let compass = Compass(viewpoint: viewpoint)
-***REMOVED******REMOVED***XCTAssertEqual(compass.viewpoint.rotation, initialValue)
+***REMOVED******REMOVED***XCTAssertEqual(_viewpoint.rotation, initialValue)
 ***REMOVED******REMOVED***compass.resetHeading()
-***REMOVED******REMOVED***XCTAssertEqual(compass.viewpoint.rotation, finalValue)
+***REMOVED******REMOVED***XCTAssertEqual(_viewpoint.rotation, finalValue)
 ***REMOVED***
 ***REMOVED***
 
