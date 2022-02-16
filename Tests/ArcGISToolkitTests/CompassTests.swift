@@ -21,53 +21,53 @@ class CompassTests: XCTestCase {
 ***REMOVED***func testCardinalAndIntercardinals() {
 ***REMOVED******REMOVED***var viewpoint = getViewpoint(0.0)
 ***REMOVED******REMOVED***XCTAssertEqual(
-***REMOVED******REMOVED******REMOVED***viewpoint.heading,
+***REMOVED******REMOVED******REMOVED***viewpoint.compassHeadingDescription,
 ***REMOVED******REMOVED******REMOVED***"Compass, heading 0 degrees north"
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***viewpoint = getViewpoint(23)
 ***REMOVED******REMOVED***XCTAssertEqual(
-***REMOVED******REMOVED******REMOVED***viewpoint.heading,
+***REMOVED******REMOVED******REMOVED***viewpoint.compassHeadingDescription,
 ***REMOVED******REMOVED******REMOVED***"Compass, heading 337 degrees northwest"
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***viewpoint = getViewpoint(68)
 ***REMOVED******REMOVED***XCTAssertEqual(
-***REMOVED******REMOVED******REMOVED***viewpoint.heading,
+***REMOVED******REMOVED******REMOVED***viewpoint.compassHeadingDescription,
 ***REMOVED******REMOVED******REMOVED***"Compass, heading 292 degrees west"
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***viewpoint = getViewpoint(113)
 ***REMOVED******REMOVED***XCTAssertEqual(
-***REMOVED******REMOVED******REMOVED***viewpoint.heading,
+***REMOVED******REMOVED******REMOVED***viewpoint.compassHeadingDescription,
 ***REMOVED******REMOVED******REMOVED***"Compass, heading 247 degrees southwest"
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***viewpoint = getViewpoint(158)
 ***REMOVED******REMOVED***XCTAssertEqual(
-***REMOVED******REMOVED******REMOVED***viewpoint.heading,
+***REMOVED******REMOVED******REMOVED***viewpoint.compassHeadingDescription,
 ***REMOVED******REMOVED******REMOVED***"Compass, heading 202 degrees south"
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***viewpoint = getViewpoint(203)
 ***REMOVED******REMOVED***XCTAssertEqual(
-***REMOVED******REMOVED******REMOVED***viewpoint.heading,
+***REMOVED******REMOVED******REMOVED***viewpoint.compassHeadingDescription,
 ***REMOVED******REMOVED******REMOVED***"Compass, heading 157 degrees southeast"
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***viewpoint = getViewpoint(248)
 ***REMOVED******REMOVED***XCTAssertEqual(
-***REMOVED******REMOVED******REMOVED***viewpoint.heading,
+***REMOVED******REMOVED******REMOVED***viewpoint.compassHeadingDescription,
 ***REMOVED******REMOVED******REMOVED***"Compass, heading 112 degrees east"
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***viewpoint = getViewpoint(293)
 ***REMOVED******REMOVED***XCTAssertEqual(
-***REMOVED******REMOVED******REMOVED***viewpoint.heading,
+***REMOVED******REMOVED******REMOVED***viewpoint.compassHeadingDescription,
 ***REMOVED******REMOVED******REMOVED***"Compass, heading 67 degrees northeast"
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***viewpoint = getViewpoint(293)
 ***REMOVED******REMOVED***XCTAssertEqual(
-***REMOVED******REMOVED******REMOVED***viewpoint.heading,
+***REMOVED******REMOVED******REMOVED***viewpoint.compassHeadingDescription,
 ***REMOVED******REMOVED******REMOVED***"Compass, heading 67 degrees northeast"
 ***REMOVED******REMOVED***)
 ***REMOVED***
 
-***REMOVED******REMOVED***/ Asserts that the compass accurately indicates when the compass should be hidden when autoHide is
-***REMOVED******REMOVED***/ disabled.
+***REMOVED******REMOVED***/ Asserts that the compass accurately indicates when the compass should be hidden when autoHide
+***REMOVED******REMOVED***/ is disabled.
 ***REMOVED***func testHiddenWithAutoHideOff() {
 ***REMOVED******REMOVED***let initialValue = 0.0
 ***REMOVED******REMOVED***let finalValue = 90.0
@@ -79,8 +79,8 @@ class CompassTests: XCTestCase {
 ***REMOVED******REMOVED***XCTAssertFalse(compass.isHidden)
 ***REMOVED***
 
-***REMOVED******REMOVED***/ Asserts that the compass accurately indicates when the compass should be hidden when autoHide is
-***REMOVED******REMOVED***/ enabled.
+***REMOVED******REMOVED***/ Asserts that the compass accurately indicates when the compass should be hidden when autoHide
+***REMOVED******REMOVED***/ is enabled.
 ***REMOVED***func testHiddenWithAutoHideOn() {
 ***REMOVED******REMOVED***let initialValue = 0.0
 ***REMOVED******REMOVED***let finalValue = 90.0
