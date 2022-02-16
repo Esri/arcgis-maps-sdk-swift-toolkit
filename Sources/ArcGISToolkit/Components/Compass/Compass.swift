@@ -14,7 +14,7 @@
 import ArcGIS
 import SwiftUI
 
-/// A Compass (alias North arrow) shows where north is in a MapView or SceneView.
+/// A Compass (alias North arrow) shows where north is in a `MapView` or `SceneView`.
 public struct Compass: View {
     /// Determines if the compass should automatically hide/show itself when the parent view is oriented
     /// north.
@@ -37,10 +37,10 @@ public struct Compass: View {
 
     /// Creates a `Compass`
     /// - Parameters:
-    ///   - viewpoint: Acts a communication link between the MapView or SceneView and the
+    ///   - viewpoint: Acts a communication link between the `MapView` or `SceneView` and the
     ///   compass.
-    ///   - autoHide: Determines if the compass automatically hides itself when the MapView or
-    ///   SceneView is oriented north.
+    ///   - autoHide: Determines if the compass automatically hides itself when the `MapView` or
+    ///   `SceneView` is oriented north.
     public init(
         viewpoint: Binding<Viewpoint?>,
         autoHide: Bool = true
