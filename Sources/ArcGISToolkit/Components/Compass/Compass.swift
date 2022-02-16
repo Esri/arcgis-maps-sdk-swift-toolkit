@@ -14,7 +14,7 @@
 ***REMOVED***
 ***REMOVED***
 
-***REMOVED***/ A Compass (alias North arrow) shows where north is in a MapView or SceneView.
+***REMOVED***/ A Compass (alias North arrow) shows where north is in a `MapView` or `SceneView`.
 public struct Compass: View {
 ***REMOVED******REMOVED***/ Determines if the compass should automatically hide/show itself when the parent view is oriented
 ***REMOVED******REMOVED***/ north.
@@ -37,10 +37,10 @@ public struct Compass: View {
 
 ***REMOVED******REMOVED***/ Creates a `Compass`
 ***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - viewpoint: Acts a communication link between the MapView or SceneView and the
+***REMOVED******REMOVED***/   - viewpoint: Acts a communication link between the `MapView` or `SceneView` and the
 ***REMOVED******REMOVED***/   compass.
-***REMOVED******REMOVED***/   - autoHide: Determines if the compass automatically hides itself when the MapView or
-***REMOVED******REMOVED***/   SceneView is oriented north.
+***REMOVED******REMOVED***/   - autoHide: Determines if the compass automatically hides itself when the `MapView` or
+***REMOVED******REMOVED***/   `SceneView` is oriented north.
 ***REMOVED***public init(
 ***REMOVED******REMOVED***viewpoint: Binding<Viewpoint?>,
 ***REMOVED******REMOVED***autoHide: Bool = true
