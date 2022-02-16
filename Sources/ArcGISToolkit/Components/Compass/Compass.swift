@@ -23,7 +23,8 @@ public struct Compass: View {
     /// Indicates if the compass should be hidden or visible based on the current viewpoint rotation and
     /// autoHide preference.
     public var isHidden: Bool {
-        viewpoint.rotation.isZero && autoHide
+        guard let viewpoint = viewpoint else { return autoHide }
+        return viewpoint.rotation.isZero && autoHide
     }
 
     /// Controls the current opacity of the compass.
@@ -32,15 +33,16 @@ public struct Compass: View {
 
     /// Acts as link between the compass and the parent map or scene view.
     @Binding
-    private var viewpoint: Viewpoint
+    private var viewpoint: Viewpoint?
 
     /// Creates a `Compass`
     /// - Parameters:
-    ///   - viewpoint: Acts a communication link between the MapView or SceneView and the compass.
+    ///   - viewpoint: Acts a communication link between the MapView or SceneView and the
+    ///   compass.
     ///   - autoHide: Determines if the compass automatically hides itself when the MapView or
     ///   SceneView is oriented north.
     public init(
-        viewpoint: Binding<Viewpoint>,
+        viewpoint: Binding<Viewpoint?>,
         autoHide: Bool = true
     ) {
         _viewpoint = viewpoint
@@ -54,7 +56,7 @@ public struct Compass: View {
                 CompassBody()
                 Needle()
                     .rotationEffect(
-                        Angle(degrees: viewpoint.adjustedRotation)
+                        Angle(degrees: viewpoint?.adjustedRotation ?? .zero)
                     )
             }
             .frame(
@@ -70,11 +72,12 @@ public struct Compass: View {
             }
         }
         .onAppear { opacity = isHidden ? 0 : 1 }
-        .accessibilityLabel(viewpoint.heading)
+        .accessibilityLabel(viewpoint?.heading ?? "Compass")
     }
 
     /// Resets the viewpoints `rotation` to zero.
     func resetHeading() {
+        guard let viewpoint = viewpoint else { return }
         self.viewpoint = Viewpoint(
             center: viewpoint.targetGeometry.extent.center,
             scale: viewpoint.targetScale,
