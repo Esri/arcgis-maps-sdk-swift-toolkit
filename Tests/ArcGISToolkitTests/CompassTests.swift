@@ -18,7 +18,7 @@ import XCTest
 
 class CompassTests: XCTestCase {
     /// Asserts that accessibility labels are properly generated.
-    func testCardinalAndIntercardinals() {
+    func testCompassHeadingDescription() {
         var viewpoint = getViewpoint(0.0)
         XCTAssertEqual(
             viewpoint.compassHeadingDescription,
