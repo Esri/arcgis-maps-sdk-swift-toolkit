@@ -54,7 +54,7 @@ final class FloorFilterViewModel: ObservableObject {
 
 ***REMOVED******REMOVED***/ The `Viewpoint` used to pan/zoom to the selected site/facilty.
 ***REMOVED******REMOVED***/ If `nil`, there will be no automatic pan/zoom operations.
-***REMOVED***let viewpoint: Binding<Viewpoint>?
+***REMOVED***var viewpoint: Binding<Viewpoint>?
 ***REMOVED***
 ***REMOVED******REMOVED***/ The `FloorManager` containing the site, floor, and level information.
 ***REMOVED***let floorManager: FloorManager
@@ -78,10 +78,34 @@ final class FloorFilterViewModel: ObservableObject {
 ***REMOVED***@Published
 ***REMOVED***private(set) var isLoading = true
 ***REMOVED***
+***REMOVED******REMOVED***/ Gets the default level for a facility. Uses level with vertical order 0 otherwise gets the lowest level.
+***REMOVED***public func getDefaultLevelForFacility(
+***REMOVED******REMOVED***facility: FloorFacility?
+***REMOVED***) -> FloorLevel? {
+***REMOVED******REMOVED***let candidateLevels = levels.filter { $0.facility == facility ***REMOVED***
+***REMOVED******REMOVED***return candidateLevels.first { $0.verticalOrder == 0 ***REMOVED*** ?? getLowestLevel()
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Returns the AGSFloorLevel with the lowest verticalOrder.
+***REMOVED***private func getLowestLevel() -> FloorLevel? {
+***REMOVED******REMOVED***let sortedLevels = levels.sorted {
+***REMOVED******REMOVED******REMOVED***$0.verticalOrder < $1.verticalOrder
+***REMOVED***
+***REMOVED******REMOVED***return sortedLevels.first {
+***REMOVED******REMOVED******REMOVED***$0.verticalOrder != .min && $0.verticalOrder != .max
+***REMOVED***
+***REMOVED***
+***REMOVED***
 ***REMOVED******REMOVED***/ The selected site, floor, or level.
 ***REMOVED***@Published
 ***REMOVED***var selection: Selection? {
 ***REMOVED******REMOVED***didSet {
+***REMOVED******REMOVED******REMOVED***if case let .facility(facility) = selection,
+***REMOVED******REMOVED******REMOVED***   let level = getDefaultLevelForFacility(facility: facility) {
+***REMOVED******REMOVED******REMOVED******REMOVED***selection = .level(level)
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***filterMapToSelectedLevel()
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***zoomToSelection()
 ***REMOVED***
 ***REMOVED***
@@ -138,8 +162,8 @@ final class FloorFilterViewModel: ObservableObject {
 ***REMOVED******REMOVED******REMOVED***zoomToExtent(extent: site.geometry?.extent)
 ***REMOVED******REMOVED***case .facility(let facility):
 ***REMOVED******REMOVED******REMOVED***zoomToExtent(extent: facility.geometry?.extent)
-***REMOVED******REMOVED***case .level:
-***REMOVED******REMOVED******REMOVED***break
+***REMOVED******REMOVED***case .level(let level):
+***REMOVED******REMOVED******REMOVED***zoomToExtent(extent: level.facility?.geometry?.extent)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -156,6 +180,14 @@ final class FloorFilterViewModel: ObservableObject {
 ***REMOVED******REMOVED******REMOVED***viewpoint.wrappedValue = Viewpoint(
 ***REMOVED******REMOVED******REMOVED******REMOVED***targetExtent: targetExtent
 ***REMOVED******REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Sets the visibility of all the levels on the map based on the vertical order of the current selected level.
+***REMOVED***public func filterMapToSelectedLevel() {
+***REMOVED******REMOVED***guard let selectedLevel = selectedLevel else { return ***REMOVED***
+***REMOVED******REMOVED***levels.forEach {
+***REMOVED******REMOVED******REMOVED***$0.isVisible = $0.verticalOrder == selectedLevel.verticalOrder
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***

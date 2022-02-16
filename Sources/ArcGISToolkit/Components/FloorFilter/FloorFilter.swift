@@ -36,31 +36,131 @@ public struct FloorFilter: View {
 ***REMOVED***@StateObject
 ***REMOVED***private var viewModel: FloorFilterViewModel
 ***REMOVED***
-***REMOVED******REMOVED***/ Allows the user to toggle the visibility of the site selector.
+***REMOVED******REMOVED***/ A Boolean value that indicates whether the site/facility selector is hidden.
 ***REMOVED***@State
-***REMOVED***private var isSelectorVisible: Bool = false
+***REMOVED***private var isSelectorHidden: Bool = true
+***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value that indicates whether the levels view is currently collapsed.
+***REMOVED***@State
+***REMOVED***private var isLevelsViewCollapsed: Bool = false
 ***REMOVED***
 ***REMOVED***public var body: some View {
-***REMOVED******REMOVED***if viewModel.isLoading {
-***REMOVED******REMOVED******REMOVED***ProgressView()
-***REMOVED******REMOVED******REMOVED******REMOVED***.progressViewStyle(.circular)
-***REMOVED******REMOVED******REMOVED******REMOVED***.esriBorder()
-***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***HStack(alignment: .bottom) {
-***REMOVED******REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isSelectorVisible.toggle()
-***REMOVED******REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image("Site", bundle: .module, label: Text("Site"))
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.esriBorder()
-***REMOVED******REMOVED******REMOVED******REMOVED***if isSelectorVisible {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***SiteAndFacilitySelector(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***floorFilterViewModel: viewModel,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isVisible: $isSelectorVisible
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 200)
+***REMOVED******REMOVED***Group {
+***REMOVED******REMOVED******REMOVED***if viewModel.isLoading {
+***REMOVED******REMOVED******REMOVED******REMOVED***ProgressView()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.progressViewStyle(.circular)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(12)
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***HStack(alignment: .bottom) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***VStack {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***LevelsView(isCollapsed: $isLevelsViewCollapsed)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isSelectorHidden.toggle()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "building.2")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.esriBorder()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if !isSelectorHidden {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***SiteAndFacilitySelector(isHidden: $isSelectorHidden)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.esriBorder()
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***.environmentObject(viewModel)
+***REMOVED***
+***REMOVED***
+
+struct LevelsView: View {
+***REMOVED******REMOVED***/ Allows the user to toggle the visibility of the site and facility selector.
+***REMOVED***var isCollapsed: Binding<Bool>
+***REMOVED***
+***REMOVED******REMOVED***/ The view model used by the `LevelsView`.
+***REMOVED***@EnvironmentObject var viewModel: FloorFilterViewModel
+***REMOVED***
+***REMOVED***private var sortedLevels: [FloorLevel] {
+***REMOVED******REMOVED***viewModel.selectedFacility?.levels.sorted() {
+***REMOVED******REMOVED******REMOVED***$0.verticalOrder > $1.verticalOrder
+***REMOVED*** ?? []
+***REMOVED***
+***REMOVED***
+***REMOVED***public var body: some View {
+***REMOVED******REMOVED***if viewModel.selectedFacility == nil ||
+***REMOVED******REMOVED******REMOVED***viewModel.selectedFacility!.levels.isEmpty{
+***REMOVED******REMOVED******REMOVED***EmptyView()
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***VStack {
+***REMOVED******REMOVED******REMOVED******REMOVED***if !isCollapsed.wrappedValue {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***CollapseButton(isCollapsed: isCollapsed)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Divider()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 30)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let levels = sortedLevels {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if  levels.count > 3 {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ScrollView {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***LevelsStack(levels: levels)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***LevelsStack(levels: levels)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***else if isCollapsed.wrappedValue {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Button for the selected level.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isCollapsed.wrappedValue.toggle()
+***REMOVED******REMOVED******REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(viewModel.selectedLevel?.shortName ?? (sortedLevels.first?.shortName ?? "None"))
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(8)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.selected(true)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***Divider()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 30)
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
+
+***REMOVED***/ A vertical list of floor levels.
+struct LevelsStack: View {
+***REMOVED***let levels: [FloorLevel]
+***REMOVED***
+***REMOVED******REMOVED***/ The view model used by the `LevelsView`.
+***REMOVED***@EnvironmentObject var viewModel: FloorFilterViewModel
+***REMOVED***
+***REMOVED***var body: some View {
+***REMOVED******REMOVED***VStack {
+***REMOVED******REMOVED******REMOVED***ForEach(levels) { level in
+***REMOVED******REMOVED******REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.selection = .level(level)
+***REMOVED******REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(level.shortName)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.padding(8)
+***REMOVED******REMOVED******REMOVED******REMOVED***.selected(level == viewModel.selectedLevel)
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
+
+***REMOVED***/ A button used to collapse the floor level list.
+struct CollapseButton: View {
+***REMOVED******REMOVED***/ Allows the user to toggle the visibility of the site and facility selector.
+***REMOVED***var isCollapsed: Binding<Bool>
+***REMOVED***
+***REMOVED***var body: some View {
+***REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED***isCollapsed.wrappedValue.toggle()
+***REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED***Image(systemName: "xmark")
+***REMOVED***
+***REMOVED******REMOVED***.padding(EdgeInsets(
+***REMOVED******REMOVED******REMOVED***top: 2,
+***REMOVED******REMOVED******REMOVED***leading: 4,
+***REMOVED******REMOVED******REMOVED***bottom: 2,
+***REMOVED******REMOVED******REMOVED***trailing: 4
+***REMOVED******REMOVED***))
 ***REMOVED***
 ***REMOVED***
