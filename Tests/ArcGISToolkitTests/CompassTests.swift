@@ -21,13 +21,13 @@ class CompassTests: XCTestCase {
     /// behavior.
     func testAdjustedRotation() {
         var viewpoint = getViewpoint(.zero)
-        XCTAssertEqual(viewpoint.adjustedRotation, .zero)
+        XCTAssertEqual(viewpoint.compassHeading, .zero)
         viewpoint = getViewpoint(45)
-        XCTAssertEqual(viewpoint.adjustedRotation, 315)
+        XCTAssertEqual(viewpoint.compassHeading, 315)
         viewpoint = getViewpoint(315)
-        XCTAssertEqual(viewpoint.adjustedRotation, 45)
+        XCTAssertEqual(viewpoint.compassHeading, 45)
         viewpoint = getViewpoint(180)
-        XCTAssertEqual(viewpoint.adjustedRotation, 180)
+        XCTAssertEqual(viewpoint.compassHeading, 180)
     }
 
     /// Asserts that accessibility labels are properly generated.

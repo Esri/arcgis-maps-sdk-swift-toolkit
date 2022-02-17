@@ -56,7 +56,7 @@ public struct Compass: View {
                 CompassBody()
                 Needle()
                     .rotationEffect(
-                        Angle(degrees: viewpoint?.adjustedRotation ?? .zero)
+                        Angle(degrees: viewpoint?.compassHeading ?? .zero)
                     )
             }
             .frame(
@@ -89,17 +89,17 @@ public struct Compass: View {
 }
 
 internal extension Viewpoint {
-    /// The viewpoint's `rotation` adjusted to offset any rotation applied to the parent view. This is
-    /// needed because the default viewpoint rotation is opposite the natural direction of a compass needle.
-    var adjustedRotation: Double {
+    /// The heading appropriate for displaying a compass.
+    /// - Remark: The viewpoint rotation is opposite of the direction of a compass needle.
+    var compassHeading: Double {
         rotation.isZero ? .zero : 360 - rotation
     }
 
     /// A text description of the current heading, sutiable for accessibility voiceover.
     var compassHeadingDescription: String {
         "Compass, heading "
-        + Int(self.adjustedRotation.rounded()).description
+        + Int(self.compassHeading.rounded()).description
         + " degrees "
-        + CompassDirection(self.adjustedRotation).rawValue
+        + CompassDirection(self.compassHeading).rawValue
     }
 }
