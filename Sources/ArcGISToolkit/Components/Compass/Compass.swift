@@ -89,7 +89,8 @@ public struct Compass: View {
 ***REMOVED***
 
 internal extension Viewpoint {
-***REMOVED******REMOVED***/ The viewpoint's `rotation` adjusted to offset any rotation applied to the parent view.
+***REMOVED******REMOVED***/ The viewpoint's `rotation` adjusted to offset any rotation applied to the parent view. This is
+***REMOVED******REMOVED***/ needed because the default viewpoint rotation is opposite the natural direction of a compass needle.
 ***REMOVED***var adjustedRotation: Double {
 ***REMOVED******REMOVED***rotation.isZero ? .zero : 360 - rotation
 ***REMOVED***
