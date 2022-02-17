@@ -32,17 +32,4 @@ class CompassDirectionTests: XCTestCase {
         XCTAssertEqual(CompassDirection(359), .north)
         XCTAssertEqual(CompassDirection(450), .east)
     }
-
-    /// Tests the behvaior of `CompassDirection.normalizedAngle(_ : Double)`
-    func testNormalizedAngle() {
-        XCTAssertEqual(CompassDirection.normalizedAngle(-361.0), 359)
-        XCTAssertEqual(CompassDirection.normalizedAngle(-360.0), 0)
-        XCTAssertEqual(CompassDirection.normalizedAngle(-180.0), 180)
-        XCTAssertEqual(CompassDirection.normalizedAngle(-0), 0)
-        XCTAssertEqual(CompassDirection.normalizedAngle(0), 0)
-        XCTAssertEqual(CompassDirection.normalizedAngle(45), 45)
-        XCTAssertEqual(CompassDirection.normalizedAngle(180), 180)
-        XCTAssertEqual(CompassDirection.normalizedAngle(360), 0)
-        XCTAssertEqual(CompassDirection.normalizedAngle(405), 45)
-    }
 }
