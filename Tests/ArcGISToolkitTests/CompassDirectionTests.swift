@@ -32,17 +32,4 @@ class CompassDirectionTests: XCTestCase {
 ***REMOVED******REMOVED***XCTAssertEqual(CompassDirection(359), .north)
 ***REMOVED******REMOVED***XCTAssertEqual(CompassDirection(450), .east)
 ***REMOVED***
-
-***REMOVED******REMOVED***/ Tests the behvaior of `CompassDirection.normalizedAngle(_ : Double)`
-***REMOVED***func testNormalizedAngle() {
-***REMOVED******REMOVED***XCTAssertEqual(CompassDirection.normalizedAngle(-361.0), 359)
-***REMOVED******REMOVED***XCTAssertEqual(CompassDirection.normalizedAngle(-360.0), 0)
-***REMOVED******REMOVED***XCTAssertEqual(CompassDirection.normalizedAngle(-180.0), 180)
-***REMOVED******REMOVED***XCTAssertEqual(CompassDirection.normalizedAngle(-0), 0)
-***REMOVED******REMOVED***XCTAssertEqual(CompassDirection.normalizedAngle(0), 0)
-***REMOVED******REMOVED***XCTAssertEqual(CompassDirection.normalizedAngle(45), 45)
-***REMOVED******REMOVED***XCTAssertEqual(CompassDirection.normalizedAngle(180), 180)
-***REMOVED******REMOVED***XCTAssertEqual(CompassDirection.normalizedAngle(360), 0)
-***REMOVED******REMOVED***XCTAssertEqual(CompassDirection.normalizedAngle(405), 45)
-***REMOVED***
 ***REMOVED***
