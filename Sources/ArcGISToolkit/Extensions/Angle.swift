@@ -15,7 +15,7 @@ import SwiftUI
 
 extension Angle {
     /// This angle's degree value normalized between 0° and 360°.
-    var normalized: Double {
+    var normalizedDegrees: Double {
         let normalized = self.degrees.truncatingRemainder(dividingBy: 360)
         if normalized < 0 {
             return normalized + 360
