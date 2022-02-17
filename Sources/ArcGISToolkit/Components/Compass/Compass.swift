@@ -56,7 +56,7 @@ public struct Compass: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***CompassBody()
 ***REMOVED******REMOVED******REMOVED******REMOVED***Needle()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.rotationEffect(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Angle(degrees: viewpoint?.adjustedRotation ?? .zero)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Angle(degrees: viewpoint?.compassHeading ?? .zero)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.frame(
@@ -89,17 +89,17 @@ public struct Compass: View {
 ***REMOVED***
 
 internal extension Viewpoint {
-***REMOVED******REMOVED***/ The viewpoint's `rotation` adjusted to offset any rotation applied to the parent view. This is
-***REMOVED******REMOVED***/ needed because the default viewpoint rotation is opposite the natural direction of a compass needle.
-***REMOVED***var adjustedRotation: Double {
+***REMOVED******REMOVED***/ The heading appropriate for displaying a compass.
+***REMOVED******REMOVED***/ - Remark: The viewpoint rotation is opposite of the direction of a compass needle.
+***REMOVED***var compassHeading: Double {
 ***REMOVED******REMOVED***rotation.isZero ? .zero : 360 - rotation
 ***REMOVED***
 
 ***REMOVED******REMOVED***/ A text description of the current heading, sutiable for accessibility voiceover.
 ***REMOVED***var compassHeadingDescription: String {
 ***REMOVED******REMOVED***"Compass, heading "
-***REMOVED******REMOVED***+ Int(self.adjustedRotation.rounded()).description
+***REMOVED******REMOVED***+ Int(self.compassHeading.rounded()).description
 ***REMOVED******REMOVED***+ " degrees "
-***REMOVED******REMOVED***+ CompassDirection(self.adjustedRotation).rawValue
+***REMOVED******REMOVED***+ CompassDirection(self.compassHeading).rawValue
 ***REMOVED***
 ***REMOVED***
