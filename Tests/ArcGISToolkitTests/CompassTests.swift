@@ -17,6 +17,19 @@ import XCTest
 @testable ***REMOVED***Toolkit
 
 class CompassTests: XCTestCase {
+***REMOVED******REMOVED***/ Asserts that viewpoint rotations are correctly adjusted to provide for natural compass rotation
+***REMOVED******REMOVED***/ behavior.
+***REMOVED***func testAdjustedRotation() {
+***REMOVED******REMOVED***var viewpoint = getViewpoint(.zero)
+***REMOVED******REMOVED***XCTAssertEqual(viewpoint.adjustedRotation, .zero)
+***REMOVED******REMOVED***viewpoint = getViewpoint(45)
+***REMOVED******REMOVED***XCTAssertEqual(viewpoint.adjustedRotation, 315)
+***REMOVED******REMOVED***viewpoint = getViewpoint(315)
+***REMOVED******REMOVED***XCTAssertEqual(viewpoint.adjustedRotation, 45)
+***REMOVED******REMOVED***viewpoint = getViewpoint(180)
+***REMOVED******REMOVED***XCTAssertEqual(viewpoint.adjustedRotation, 180)
+***REMOVED***
+
 ***REMOVED******REMOVED***/ Asserts that accessibility labels are properly generated.
 ***REMOVED***func testCompassHeadingDescription() {
 ***REMOVED******REMOVED***var viewpoint = getViewpoint(0.0)
