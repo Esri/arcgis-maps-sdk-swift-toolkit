@@ -20,16 +20,16 @@ public struct Compass: View {
 ***REMOVED******REMOVED***/ north.
 ***REMOVED***private let autoHide: Bool
 
-***REMOVED******REMOVED***/ Indicates if the compass is hidden based on the current viewpoint rotation and
-***REMOVED******REMOVED***/ autoHide preference.
-***REMOVED***public var isHidden: Bool {
-***REMOVED******REMOVED***guard let viewpoint = viewpoint else { return autoHide ***REMOVED***
-***REMOVED******REMOVED***return viewpoint.rotation.isZero && autoHide
-***REMOVED***
-
 ***REMOVED******REMOVED***/ Controls the current opacity of the compass.
 ***REMOVED***@State
 ***REMOVED***private var opacity: Double
+
+***REMOVED******REMOVED***/ Indicates if the compass should hide based on the current viewpoint rotation and autoHide
+***REMOVED******REMOVED***/ preference.
+***REMOVED***var shouldHide: Bool {
+***REMOVED******REMOVED***guard let viewpoint = viewpoint else { return autoHide ***REMOVED***
+***REMOVED******REMOVED***return viewpoint.rotation.isZero && autoHide
+***REMOVED***
 
 ***REMOVED******REMOVED***/ Acts as link between the compass and the parent map or scene view.
 ***REMOVED***@Binding
@@ -67,13 +67,13 @@ public struct Compass: View {
 ***REMOVED******REMOVED***.opacity(opacity)
 ***REMOVED******REMOVED***.onTapGesture { resetHeading() ***REMOVED***
 ***REMOVED******REMOVED***.onChange(of: viewpoint) { _ in
-***REMOVED******REMOVED******REMOVED***let newOpacity: Double = isHidden ? .zero : 1
+***REMOVED******REMOVED******REMOVED***let newOpacity: Double = shouldHide ? .zero : 1
 ***REMOVED******REMOVED******REMOVED***guard opacity != newOpacity else { return ***REMOVED***
-***REMOVED******REMOVED******REMOVED***withAnimation(.default.delay(isHidden ? 0.25 : 0)) {
+***REMOVED******REMOVED******REMOVED***withAnimation(.default.delay(shouldHide ? 0.25 : 0)) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***opacity = newOpacity
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.onAppear { opacity = isHidden ? 0 : 1 ***REMOVED***
+***REMOVED******REMOVED***.onAppear { opacity = shouldHide ? 0 : 1 ***REMOVED***
 ***REMOVED******REMOVED***.accessibilityLabel(viewpoint?.compassHeadingDescription ?? "Compass")
 ***REMOVED***
 
