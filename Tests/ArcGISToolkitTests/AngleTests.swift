@@ -18,14 +18,14 @@ import XCTest
 class AngleTests: XCTestCase {
 ***REMOVED******REMOVED***/ Tests the behvaior of `Angle`'s normalized member.
 ***REMOVED***func testNormalizedAngle() {
-***REMOVED******REMOVED***XCTAssertEqual(Angle(degrees: -361.0).normalized, 359)
-***REMOVED******REMOVED***XCTAssertEqual(Angle(degrees: -360.0).normalized, 0)
-***REMOVED******REMOVED***XCTAssertEqual(Angle(degrees: -180.0).normalized, 180)
-***REMOVED******REMOVED***XCTAssertEqual(Angle(degrees: -0).normalized, 0)
-***REMOVED******REMOVED***XCTAssertEqual(Angle(degrees: 0).normalized, 0)
-***REMOVED******REMOVED***XCTAssertEqual(Angle(degrees: 45).normalized, 45)
-***REMOVED******REMOVED***XCTAssertEqual(Angle(degrees: 180).normalized, 180)
-***REMOVED******REMOVED***XCTAssertEqual(Angle(degrees: 360).normalized, 0)
-***REMOVED******REMOVED***XCTAssertEqual(Angle(degrees: 405).normalized, 45)
+***REMOVED******REMOVED***XCTAssertEqual(Angle(degrees: -361.0).normalizedDegrees, 359)
+***REMOVED******REMOVED***XCTAssertEqual(Angle(degrees: -360.0).normalizedDegrees, 0)
+***REMOVED******REMOVED***XCTAssertEqual(Angle(degrees: -180.0).normalizedDegrees, 180)
+***REMOVED******REMOVED***XCTAssertEqual(Angle(degrees: -0).normalizedDegrees, 0)
+***REMOVED******REMOVED***XCTAssertEqual(Angle(degrees: 0).normalizedDegrees, 0)
+***REMOVED******REMOVED***XCTAssertEqual(Angle(degrees: 45).normalizedDegrees, 45)
+***REMOVED******REMOVED***XCTAssertEqual(Angle(degrees: 180).normalizedDegrees, 180)
+***REMOVED******REMOVED***XCTAssertEqual(Angle(degrees: 360).normalizedDegrees, 0)
+***REMOVED******REMOVED***XCTAssertEqual(Angle(degrees: 405).normalizedDegrees, 45)
 ***REMOVED***
 ***REMOVED***

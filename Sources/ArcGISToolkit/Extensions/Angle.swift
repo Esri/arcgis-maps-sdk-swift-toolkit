@@ -15,7 +15,7 @@
 
 extension Angle {
 ***REMOVED******REMOVED***/ This angle's degree value normalized between 0° and 360°.
-***REMOVED***var normalized: Double {
+***REMOVED***var normalizedDegrees: Double {
 ***REMOVED******REMOVED***let normalized = self.degrees.truncatingRemainder(dividingBy: 360)
 ***REMOVED******REMOVED***if normalized < 0 {
 ***REMOVED******REMOVED******REMOVED***return normalized + 360

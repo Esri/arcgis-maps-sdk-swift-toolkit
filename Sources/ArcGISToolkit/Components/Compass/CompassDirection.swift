@@ -29,7 +29,7 @@ internal extension CompassDirection {
 ***REMOVED******REMOVED***/ Initializes a `CompassDirection` from a given degree value. All values will be normalized
 ***REMOVED******REMOVED***/ between 0° and 360°.
 ***REMOVED***init(_ degrees: Double) {
-***REMOVED******REMOVED***let angle = Angle(degrees: degrees).normalized
+***REMOVED******REMOVED***let angle = Angle(degrees: degrees).normalizedDegrees
 ***REMOVED******REMOVED***switch angle {
 ***REMOVED******REMOVED***case 0..<22.5, 337.5..<360:
 ***REMOVED******REMOVED******REMOVED***self = .north
