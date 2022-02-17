@@ -20,16 +20,16 @@ public struct Compass: View {
     /// north.
     private let autoHide: Bool
 
-    /// Indicates if the compass is hidden based on the current viewpoint rotation and
-    /// autoHide preference.
-    public var isHidden: Bool {
-        guard let viewpoint = viewpoint else { return autoHide }
-        return viewpoint.rotation.isZero && autoHide
-    }
-
     /// Controls the current opacity of the compass.
     @State
     private var opacity: Double
+
+    /// Indicates if the compass should hide based on the current viewpoint rotation and autoHide
+    /// preference.
+    var shouldHide: Bool {
+        guard let viewpoint = viewpoint else { return autoHide }
+        return viewpoint.rotation.isZero && autoHide
+    }
 
     /// Acts as link between the compass and the parent map or scene view.
     @Binding
@@ -67,13 +67,13 @@ public struct Compass: View {
         .opacity(opacity)
         .onTapGesture { resetHeading() }
         .onChange(of: viewpoint) { _ in
-            let newOpacity: Double = isHidden ? .zero : 1
+            let newOpacity: Double = shouldHide ? .zero : 1
             guard opacity != newOpacity else { return }
-            withAnimation(.default.delay(isHidden ? 0.25 : 0)) {
+            withAnimation(.default.delay(shouldHide ? 0.25 : 0)) {
                 opacity = newOpacity
             }
         }
-        .onAppear { opacity = isHidden ? 0 : 1 }
+        .onAppear { opacity = shouldHide ? 0 : 1 }
         .accessibilityLabel(viewpoint?.compassHeadingDescription ?? "Compass")
     }
 
