@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import Foundation
+import SwiftUI
 
 /// Represents a cardinal or intercardinal direction.
 internal enum CompassDirection: String {
@@ -29,7 +29,7 @@ internal extension CompassDirection {
     /// Initializes a `CompassDirection` from a given degree value. All values will be normalized
     /// between 0° and 360°.
     init(_ degrees: Double) {
-        let angle = CompassDirection.normalizedAngle(degrees)
+        let angle = Angle(degrees: degrees).normalized
         switch angle {
         case 0..<22.5, 337.5..<360:
             self = .north
@@ -49,16 +49,6 @@ internal extension CompassDirection {
             self = .northwest
         default:
             fatalError()
-        }
-    }
-
-    /// Normalizes degree values between 0° and 360°.
-    static func normalizedAngle(_ degrees: Double) -> Double {
-        let normalized = degrees.truncatingRemainder(dividingBy: 360)
-        if normalized < 0 {
-            return normalized + 360
-        } else {
-            return normalized
         }
     }
 }
