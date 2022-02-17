@@ -18,14 +18,14 @@ import XCTest
 class AngleTests: XCTestCase {
     /// Tests the behvaior of `Angle`'s normalized member.
     func testNormalizedAngle() {
-        XCTAssertEqual(Angle(degrees: -361.0).normalized, 359)
-        XCTAssertEqual(Angle(degrees: -360.0).normalized, 0)
-        XCTAssertEqual(Angle(degrees: -180.0).normalized, 180)
-        XCTAssertEqual(Angle(degrees: -0).normalized, 0)
-        XCTAssertEqual(Angle(degrees: 0).normalized, 0)
-        XCTAssertEqual(Angle(degrees: 45).normalized, 45)
-        XCTAssertEqual(Angle(degrees: 180).normalized, 180)
-        XCTAssertEqual(Angle(degrees: 360).normalized, 0)
-        XCTAssertEqual(Angle(degrees: 405).normalized, 45)
+        XCTAssertEqual(Angle(degrees: -361.0).normalizedDegrees, 359)
+        XCTAssertEqual(Angle(degrees: -360.0).normalizedDegrees, 0)
+        XCTAssertEqual(Angle(degrees: -180.0).normalizedDegrees, 180)
+        XCTAssertEqual(Angle(degrees: -0).normalizedDegrees, 0)
+        XCTAssertEqual(Angle(degrees: 0).normalizedDegrees, 0)
+        XCTAssertEqual(Angle(degrees: 45).normalizedDegrees, 45)
+        XCTAssertEqual(Angle(degrees: 180).normalizedDegrees, 180)
+        XCTAssertEqual(Angle(degrees: 360).normalizedDegrees, 0)
+        XCTAssertEqual(Angle(degrees: 405).normalizedDegrees, 45)
     }
 }
