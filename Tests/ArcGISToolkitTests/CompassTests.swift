@@ -17,6 +17,19 @@ import XCTest
 @testable import ArcGISToolkit
 
 class CompassTests: XCTestCase {
+    /// Asserts that viewpoint rotations are correctly adjusted to provide for natural compass rotation
+    /// behavior.
+    func testAdjustedRotation() {
+        var viewpoint = getViewpoint(.zero)
+        XCTAssertEqual(viewpoint.adjustedRotation, .zero)
+        viewpoint = getViewpoint(45)
+        XCTAssertEqual(viewpoint.adjustedRotation, 315)
+        viewpoint = getViewpoint(315)
+        XCTAssertEqual(viewpoint.adjustedRotation, 45)
+        viewpoint = getViewpoint(180)
+        XCTAssertEqual(viewpoint.adjustedRotation, 180)
+    }
+
     /// Asserts that accessibility labels are properly generated.
     func testCompassHeadingDescription() {
         var viewpoint = getViewpoint(0.0)
