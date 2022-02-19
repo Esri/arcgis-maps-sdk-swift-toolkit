@@ -78,16 +78,18 @@ final class FloorFilterViewModel: ObservableObject {
     @Published
     private(set) var isLoading = true
     
-    /// Gets the default level for a facility. Uses level with vertical order 0 otherwise gets the lowest level.
-    public func getDefaultLevelForFacility(
-        facility: FloorFacility?
-    ) -> FloorLevel? {
-        let candidateLevels = levels.filter { $0.facility == facility }
-        return candidateLevels.first { $0.verticalOrder == 0 } ?? getLowestLevel()
+    /// Gets the default level for a facility.
+    /// - Parameter facility: The facility to get the default level for.
+    /// - Returns: The default level for the facility, which is the level with vertical order 0;
+    /// if there's no level with vertical order of 0, it returns the lowest level.
+    func defaultLevel(for facility: FloorFacility?) -> FloorLevel? {
+        return levels.first(where: { level in
+            level.facility == facility && level.verticalOrder == .zero
+        }) ?? lowestLevel()
     }
     
-    /// Returns the AGSFloorLevel with the lowest verticalOrder.
-    private func getLowestLevel() -> FloorLevel? {
+    /// Returns the level with the lowest vertical order.
+    private func lowestLevel() -> FloorLevel? {
         let sortedLevels = levels.sorted {
             $0.verticalOrder < $1.verticalOrder
         }
@@ -101,7 +103,7 @@ final class FloorFilterViewModel: ObservableObject {
     var selection: Selection? {
         didSet {
             if case let .facility(facility) = selection,
-               let level = getDefaultLevelForFacility(facility: facility) {
+               let level = defaultLevel(for: facility) {
                 selection = .level(level)
             } else {
                 filterMapToSelectedLevel()

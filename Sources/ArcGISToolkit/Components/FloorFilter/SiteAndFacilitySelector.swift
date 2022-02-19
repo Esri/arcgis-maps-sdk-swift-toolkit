@@ -48,28 +48,15 @@ struct SiteAndFacilitySelector: View {
         
         @EnvironmentObject var floorFilterViewModel: FloorFilterViewModel
 
+        /// The height of the scroll view's content.
+        @State
+        private var scrollViewContentHeight: CGFloat = .zero
+
         var body: some View {
             VStack(alignment: .center) {
                 Header(title: "Select a site…", isHidden: isHidden)
                 Divider()
-                
-                if sites.count > 5 {
-                    ScrollView {
-                        VStack {
-                            ForEach(sites) { site in
-                                HStack {
-                                    Text(site.name)
-                                    Spacer()
-                                }
-                                .onTapGesture {
-                                    floorFilterViewModel.selection = .site(site)
-                                }
-                                .padding(4)
-                                .selected(floorFilterViewModel.selectedSite == site)
-                            }
-                        }
-                    }
-                } else {
+                ScrollView {
                     VStack {
                         ForEach(sites) { site in
                             HStack {
@@ -83,47 +70,36 @@ struct SiteAndFacilitySelector: View {
                             .selected(floorFilterViewModel.selectedSite == site)
                         }
                     }
+                    .background(
+                        GeometryReader { geometry -> Color in
+                            DispatchQueue.main.async {
+                                scrollViewContentHeight = geometry.size.height
+                            }
+                            return .clear
+                        }
+                    )
                 }
-
-                Divider()
-                Button {
-                    // Set something so we display all facilities
-                } label: {
-                    Text("All sites")
-                }
+                .frame(maxHeight: scrollViewContentHeight)
             }
         }
     }
-
+    
     /// A view displaying the facilities contained in a `FloorManager`.
     struct Facilities: View {
         let facilities: [FloorFacility]
         var isHidden: Binding<Bool>
         
         @EnvironmentObject var floorFilterViewModel: FloorFilterViewModel
-
+        
+        /// The height of the scroll view's content.
+        @State
+        private var scrollViewContentHeight: CGFloat = .zero
+        
         var body: some View {
             VStack(alignment: .leading) {
                 Header(title: "Select a facility…", isHidden: isHidden)
                 Divider()
-                if facilities.count > 5 {
-                    ScrollView {
-                        VStack {
-                            ForEach(facilities) { facility in
-                                HStack {
-                                    Text(facility.name)
-                                    Spacer()
-                                }
-                                .onTapGesture {
-                                    floorFilterViewModel.selection = .facility(facility)
-                                    isHidden.wrappedValue = true
-                                }
-                                .padding(4 )
-                                .selected(floorFilterViewModel.selectedFacility == facility)
-                            }
-                        }
-                    }
-                } else {
+                ScrollView {
                     VStack {
                         ForEach(facilities) { facility in
                             HStack {
@@ -138,7 +114,16 @@ struct SiteAndFacilitySelector: View {
                             .selected(floorFilterViewModel.selectedFacility == facility)
                         }
                     }
+                    .background(
+                        GeometryReader { geometry -> Color in
+                            DispatchQueue.main.async {
+                                scrollViewContentHeight = geometry.size.height
+                            }
+                            return .clear
+                        }
+                    )
                 }
+                .frame(maxHeight: scrollViewContentHeight)
             }
         }
     }
