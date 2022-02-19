@@ -44,23 +44,52 @@ public struct FloorFilter: View {
     @State
     private var isLevelsViewCollapsed: Bool = false
     
+    /// A Boolean value that indicates whether there are levels to display.  This will be false if
+    /// there is no selected facility or if the selected facility has no levels.
+    private var hasLevelsToDisplay: Bool {
+        !(viewModel.selectedFacility == nil ||
+          viewModel.selectedFacility!.levels.isEmpty)
+    }
+    
+    /// The selected facility's levels, sorted by `level.verticalOrder`.
+    private var sortedLevels: [FloorLevel] {
+        viewModel.selectedFacility?.levels.sorted() {
+            $0.verticalOrder > $1.verticalOrder
+        } ?? []
+    }
+    
     public var body: some View {
         Group {
             if viewModel.isLoading {
-                ProgressView()
-                    .progressViewStyle(.circular)
-                    .padding(12)
+                VStack {
+                    Spacer()
+                    ProgressView()
+                        .progressViewStyle(.circular)
+                        .padding(12)
+                }
             } else {
                 HStack(alignment: .bottom) {
                     VStack {
-                        LevelsView(isCollapsed: $isLevelsViewCollapsed)
-                        Button {
-                            isSelectorHidden.toggle()
-                        } label: {
-                            Image(systemName: "building.2")
+                        Spacer()
+                        VStack {
+                            if hasLevelsToDisplay {
+                                LevelsView(
+                                    levels: sortedLevels,
+                                    isCollapsed: $isLevelsViewCollapsed
+                                )
+                                Divider()
+                                    .frame(width: 30)
+                            }
+                            // Site button.
+                            Button {
+                                isSelectorHidden.toggle()
+                            } label: {
+                                Image(systemName: "building.2")
+                            }
+                            .padding(4)
                         }
+                        .esriBorder()
                     }
-                    .esriBorder()
                     if !isSelectorHidden {
                         SiteAndFacilitySelector(isHidden: $isSelectorHidden)
                             .esriBorder()
@@ -72,52 +101,55 @@ public struct FloorFilter: View {
     }
 }
 
+/// A view displaying the levels in the selected facility.
 struct LevelsView: View {
-    /// Allows the user to toggle the visibility of the site and facility selector.
-    var isCollapsed: Binding<Bool>
+    /// The levels to display.
+    let levels: [FloorLevel]
+    
+    /// A Boolean value indicating the whether the view shows only the selected level or all levels.
+    /// If the value is`false`, the view will display all levels; if it is `true`, the view will only display
+    /// the selected level.
+    @Binding
+    var isCollapsed: Bool
     
     /// The view model used by the `LevelsView`.
     @EnvironmentObject var viewModel: FloorFilterViewModel
     
-    private var sortedLevels: [FloorLevel] {
-        viewModel.selectedFacility?.levels.sorted() {
-            $0.verticalOrder > $1.verticalOrder
-        } ?? []
-    }
+    /// The height of the scroll view's content.
+    @State
+    private var scrollViewContentHeight: CGFloat = .zero
     
     public var body: some View {
-        if viewModel.selectedFacility == nil ||
-            viewModel.selectedFacility!.levels.isEmpty{
-            EmptyView()
-        } else {
-            VStack {
-                if !isCollapsed.wrappedValue {
-                    CollapseButton(isCollapsed: isCollapsed)
-                    Divider()
-                        .frame(width: 30)
-                    if let levels = sortedLevels {
-                        if  levels.count > 3 {
-                            ScrollView {
-                                LevelsStack(levels: levels)
-                            }
-                        } else {
-                            LevelsStack(levels: levels)
-                        }
-                    }
-                }
-                else if isCollapsed.wrappedValue {
-                    // Button for the selected level.
-                    Button {
-                        isCollapsed.wrappedValue.toggle()
-                    } label: {
-                        Text(viewModel.selectedLevel?.shortName ?? (sortedLevels.first?.shortName ?? "None"))
-                    }
-                    .padding(8)
-                    .selected(true)
-                }
-                
+        VStack {
+            if !isCollapsed,
+               levels.count > 1 {
+                CollapseButton(isCollapsed: $isCollapsed)
                 Divider()
                     .frame(width: 30)
+                ScrollView {
+                    LevelsStack(levels: levels)
+                        .background(
+                            GeometryReader { geometry -> Color in
+                                DispatchQueue.main.async {
+                                    scrollViewContentHeight = geometry.size.height
+                                }
+                                return .clear
+                            }
+                        )
+                }
+                .frame(maxHeight: scrollViewContentHeight)
+            }
+            else {
+                // Button for the selected level.
+                Button {
+                    if levels.count > 1 {
+                        isCollapsed.toggle()
+                    }
+                } label: {
+                    Text(viewModel.selectedLevel?.shortName ?? (levels.first?.shortName ?? "None"))
+                }
+                .buttonSelected(true)
+                .padding(4)
             }
         }
     }
@@ -138,8 +170,8 @@ struct LevelsStack: View {
                 } label: {
                     Text(level.shortName)
                 }
-                .padding(8)
-                .selected(level == viewModel.selectedLevel)
+                .buttonSelected(level == viewModel.selectedLevel)
+                .padding(4)
             }
         }
     }
@@ -148,11 +180,12 @@ struct LevelsStack: View {
 /// A button used to collapse the floor level list.
 struct CollapseButton: View {
     /// Allows the user to toggle the visibility of the site and facility selector.
-    var isCollapsed: Binding<Bool>
+    @Binding
+    var isCollapsed: Bool
     
     var body: some View {
         Button {
-            isCollapsed.wrappedValue.toggle()
+            isCollapsed.toggle()
         } label: {
             Image(systemName: "xmark")
         }
