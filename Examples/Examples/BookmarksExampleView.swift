@@ -12,9 +12,118 @@
 ***REMOVED*** limitations under the License.
 
 ***REMOVED***
+***REMOVED***Toolkit
+***REMOVED***
 
 struct BookmarksExampleView: View {
+***REMOVED******REMOVED***/ The map displayed in the map view.
+***REMOVED***private let map = Map(basemapStyle: .arcGISImagery)
+
+***REMOVED******REMOVED***/ Indicates if the bookmarks list is shown or not.
+***REMOVED******REMOVED***/ - Remark: This allows a developer to control how the bookmarks menu is shown/hidden,
+***REMOVED******REMOVED***/ whether that be in a group of options or a standalone button.
+***REMOVED***@State
+***REMOVED***var showingBookmarks = false
+
+***REMOVED***@State
+***REMOVED***var viewpoint: Viewpoint?  = nil
+
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***EmptyView()
+***REMOVED******REMOVED***MapView(map: map, viewpoint: viewpoint)
+***REMOVED******REMOVED******REMOVED***.onTapGesture {
+***REMOVED******REMOVED******REMOVED******REMOVED***showingBookmarks = false
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED*** Show the bookmarks control as button
+***REMOVED******REMOVED******REMOVED***.overlay(alignment: .topLeading) {
+***REMOVED******REMOVED******REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***showingBookmarks.toggle()
+***REMOVED******REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***systemName:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***showingBookmarks ? "bookmark.fill" : "bookmark"
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.buttonStyle(.bordered)
+***REMOVED******REMOVED******REMOVED******REMOVED***.padding(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***EdgeInsets(top: 10, leading: 10, bottom: 0, trailing: 0)
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED*** Show the bookmarks control as an option within a group
+***REMOVED******REMOVED******REMOVED***.toolbar {
+***REMOVED******REMOVED******REMOVED******REMOVED***ToolbarItem(placement: .primaryAction) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Menu {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***showingBookmarks.toggle()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Label(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***showingBookmarks ?
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Hide Bookmarks" : "Show Bookmarks",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***systemImage: showingBookmarks ?
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"bookmark.fill" : "bookmark"
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("More Options")
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***label: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Label("Options", systemImage: "ellipsis")
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.overlay {
+***REMOVED******REMOVED******REMOVED******REMOVED***Bookmarks(sampleBookmarks, isPresented: $showingBookmarks)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onSelectionChanged {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print($0.name)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint = $0.viewpoint
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
 ***REMOVED***
+***REMOVED***
+
+extension BookmarksExampleView {
+***REMOVED***var sampleBookmarks: [Bookmark] {[
+***REMOVED******REMOVED***Bookmark(
+***REMOVED******REMOVED******REMOVED***name: "Yosemite National Park",
+***REMOVED******REMOVED******REMOVED***viewpoint: Viewpoint(
+***REMOVED******REMOVED******REMOVED******REMOVED***center: Point(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***x: -119.538330,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***y: 37.865101,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***spatialReference: .wgs84
+***REMOVED******REMOVED******REMOVED******REMOVED***),
+***REMOVED******REMOVED******REMOVED******REMOVED***scale: 250_000
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***),
+***REMOVED******REMOVED***Bookmark(
+***REMOVED******REMOVED******REMOVED***name: "Zion National Park",
+***REMOVED******REMOVED******REMOVED***viewpoint: Viewpoint(
+***REMOVED******REMOVED******REMOVED******REMOVED***center: Point(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***x: -113.028770,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***y: 37.297817,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***spatialReference: .wgs84
+***REMOVED******REMOVED******REMOVED******REMOVED***),
+***REMOVED******REMOVED******REMOVED******REMOVED***scale: 250_000
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***),
+***REMOVED******REMOVED***Bookmark(
+***REMOVED******REMOVED******REMOVED***name: "Yellowstone National Park",
+***REMOVED******REMOVED******REMOVED***viewpoint: Viewpoint(
+***REMOVED******REMOVED******REMOVED******REMOVED***center: Point(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***x: -110.584663,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***y: 44.429764,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***spatialReference: .wgs84
+***REMOVED******REMOVED******REMOVED******REMOVED***),
+***REMOVED******REMOVED******REMOVED******REMOVED***scale: 375_000
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***),
+***REMOVED******REMOVED***Bookmark(
+***REMOVED******REMOVED******REMOVED***name: "Grand Canyon National Park",
+***REMOVED******REMOVED******REMOVED***viewpoint: Viewpoint(
+***REMOVED******REMOVED******REMOVED******REMOVED***center: Point(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***x: -112.1129,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***y: 36.1069,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***spatialReference: .wgs84
+***REMOVED******REMOVED******REMOVED******REMOVED***),
+***REMOVED******REMOVED******REMOVED******REMOVED***scale: 375_000
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***),
+***REMOVED***]***REMOVED***
 ***REMOVED***
