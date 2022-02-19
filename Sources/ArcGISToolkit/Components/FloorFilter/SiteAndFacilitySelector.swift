@@ -48,28 +48,15 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***@EnvironmentObject var floorFilterViewModel: FloorFilterViewModel
 
+***REMOVED******REMOVED******REMOVED***/ The height of the scroll view's content.
+***REMOVED******REMOVED***@State
+***REMOVED******REMOVED***private var scrollViewContentHeight: CGFloat = .zero
+
 ***REMOVED******REMOVED***var body: some View {
 ***REMOVED******REMOVED******REMOVED***VStack(alignment: .center) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Header(title: "Select a site…", isHidden: isHidden)
 ***REMOVED******REMOVED******REMOVED******REMOVED***Divider()
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***if sites.count > 5 {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ScrollView {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***VStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(sites) { site in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(site.name)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onTapGesture {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***floorFilterViewModel.selection = .site(site)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(4)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.selected(floorFilterViewModel.selectedSite == site)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***ScrollView {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***VStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(sites) { site in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***HStack {
@@ -83,47 +70,36 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.selected(floorFilterViewModel.selectedSite == site)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.background(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***GeometryReader { geometry -> Color in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***DispatchQueue.main.async {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***scrollViewContentHeight = geometry.size.height
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return .clear
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***
-
-***REMOVED******REMOVED******REMOVED******REMOVED***Divider()
-***REMOVED******REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Set something so we display all facilities
-***REMOVED******REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("All sites")
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxHeight: scrollViewContentHeight)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
-
+***REMOVED***
 ***REMOVED******REMOVED***/ A view displaying the facilities contained in a `FloorManager`.
 ***REMOVED***struct Facilities: View {
 ***REMOVED******REMOVED***let facilities: [FloorFacility]
 ***REMOVED******REMOVED***var isHidden: Binding<Bool>
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***@EnvironmentObject var floorFilterViewModel: FloorFilterViewModel
-
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ The height of the scroll view's content.
+***REMOVED******REMOVED***@State
+***REMOVED******REMOVED***private var scrollViewContentHeight: CGFloat = .zero
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var body: some View {
 ***REMOVED******REMOVED******REMOVED***VStack(alignment: .leading) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Header(title: "Select a facility…", isHidden: isHidden)
 ***REMOVED******REMOVED******REMOVED******REMOVED***Divider()
-***REMOVED******REMOVED******REMOVED******REMOVED***if facilities.count > 5 {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ScrollView {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***VStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(facilities) { facility in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(facility.name)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onTapGesture {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***floorFilterViewModel.selection = .facility(facility)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isHidden.wrappedValue = true
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(4 )
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.selected(floorFilterViewModel.selectedFacility == facility)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***ScrollView {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***VStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(facilities) { facility in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***HStack {
@@ -138,7 +114,16 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.selected(floorFilterViewModel.selectedFacility == facility)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.background(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***GeometryReader { geometry -> Color in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***DispatchQueue.main.async {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***scrollViewContentHeight = geometry.size.height
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return .clear
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxHeight: scrollViewContentHeight)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***

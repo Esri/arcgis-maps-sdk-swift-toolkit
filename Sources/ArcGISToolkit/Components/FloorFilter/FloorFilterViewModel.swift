@@ -78,16 +78,18 @@ final class FloorFilterViewModel: ObservableObject {
 ***REMOVED***@Published
 ***REMOVED***private(set) var isLoading = true
 ***REMOVED***
-***REMOVED******REMOVED***/ Gets the default level for a facility. Uses level with vertical order 0 otherwise gets the lowest level.
-***REMOVED***public func getDefaultLevelForFacility(
-***REMOVED******REMOVED***facility: FloorFacility?
-***REMOVED***) -> FloorLevel? {
-***REMOVED******REMOVED***let candidateLevels = levels.filter { $0.facility == facility ***REMOVED***
-***REMOVED******REMOVED***return candidateLevels.first { $0.verticalOrder == 0 ***REMOVED*** ?? getLowestLevel()
+***REMOVED******REMOVED***/ Gets the default level for a facility.
+***REMOVED******REMOVED***/ - Parameter facility: The facility to get the default level for.
+***REMOVED******REMOVED***/ - Returns: The default level for the facility, which is the level with vertical order 0;
+***REMOVED******REMOVED***/ if there's no level with vertical order of 0, it returns the lowest level.
+***REMOVED***func defaultLevel(for facility: FloorFacility?) -> FloorLevel? {
+***REMOVED******REMOVED***return levels.first(where: { level in
+***REMOVED******REMOVED******REMOVED***level.facility == facility && level.verticalOrder == .zero
+***REMOVED***) ?? lowestLevel()
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Returns the AGSFloorLevel with the lowest verticalOrder.
-***REMOVED***private func getLowestLevel() -> FloorLevel? {
+***REMOVED******REMOVED***/ Returns the level with the lowest vertical order.
+***REMOVED***private func lowestLevel() -> FloorLevel? {
 ***REMOVED******REMOVED***let sortedLevels = levels.sorted {
 ***REMOVED******REMOVED******REMOVED***$0.verticalOrder < $1.verticalOrder
 ***REMOVED***
@@ -101,7 +103,7 @@ final class FloorFilterViewModel: ObservableObject {
 ***REMOVED***var selection: Selection? {
 ***REMOVED******REMOVED***didSet {
 ***REMOVED******REMOVED******REMOVED***if case let .facility(facility) = selection,
-***REMOVED******REMOVED******REMOVED***   let level = getDefaultLevelForFacility(facility: facility) {
+***REMOVED******REMOVED******REMOVED***   let level = defaultLevel(for: facility) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***selection = .level(level)
 ***REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***filterMapToSelectedLevel()
