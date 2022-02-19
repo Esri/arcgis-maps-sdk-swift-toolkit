@@ -45,8 +45,6 @@ struct FloorFilterExampleView: View {
         map = Map(item: portalItem)
     }
     
-    private let floorFilterPadding: CGFloat = 48
-    
     var body: some View {
         MapView(
             map: map,
@@ -59,8 +57,8 @@ struct FloorFilterExampleView: View {
                         floorManager: floorManager,
                         viewpoint: $viewpoint
                     )
-                        .frame(idealHeight: 300)
-                        .padding(floorFilterPadding)
+                        .frame(height: 300)
+                        .padding(36)
                 }
             }
             .task {
