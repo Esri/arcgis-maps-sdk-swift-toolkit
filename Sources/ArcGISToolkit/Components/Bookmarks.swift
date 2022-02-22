@@ -26,7 +26,11 @@ public struct Bookmarks: View {
 ***REMOVED***private var viewpoint: Binding<Viewpoint?>?
 
 ***REMOVED******REMOVED***/ Creates a `Bookmarks` component.
-***REMOVED***public init(_ bookmarks: [Bookmark], isPresented: Binding<Bool>, viewpoint: Binding<Viewpoint?>? = nil) {
+***REMOVED***public init(
+***REMOVED******REMOVED***_ bookmarks: [Bookmark],
+***REMOVED******REMOVED***isPresented: Binding<Bool>,
+***REMOVED******REMOVED***viewpoint: Binding<Viewpoint?>? = nil
+***REMOVED***) {
 ***REMOVED******REMOVED***self.bookmarks = bookmarks
 ***REMOVED******REMOVED***self.viewpoint = viewpoint
 ***REMOVED******REMOVED***_isPresented = isPresented
@@ -38,7 +42,9 @@ public struct Bookmarks: View {
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - kind: The kind of viewpoint passed to the `action` closure.
 ***REMOVED******REMOVED***/   - action: The closure to perform when the viewpoint has changed.
-***REMOVED***public func onSelectionChanged(perform action: @escaping (Bookmark) -> Void) -> Bookmarks {
+***REMOVED***public func onSelectionChanged(
+***REMOVED******REMOVED***perform action: @escaping (Bookmark) -> Void
+***REMOVED***) -> Bookmarks {
 ***REMOVED******REMOVED***var copy = self
 ***REMOVED******REMOVED***copy.selectionChangedActions = action
 ***REMOVED******REMOVED***return copy
@@ -49,6 +55,7 @@ public struct Bookmarks: View {
 ***REMOVED******REMOVED******REMOVED***FloatingPanel {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ForEach(bookmarks, id: \.viewpoint) { bookmark in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented = false
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint?.wrappedValue = bookmark.viewpoint
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectionChangedActions?(bookmark)
 ***REMOVED******REMOVED******REMOVED******REMOVED*** label: {
