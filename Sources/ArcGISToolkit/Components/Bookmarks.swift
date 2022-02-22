@@ -56,16 +56,16 @@ public struct Bookmarks: View {
                 ForEach(bookmarks, id: \.viewpoint) { bookmark in
                     Button {
                         isPresented = false
-                        viewpoint?.wrappedValue = bookmark.viewpoint
-                        selectionChangedActions?(bookmark)
+                        if let viewpoint = viewpoint {
+                            viewpoint.wrappedValue = bookmark.viewpoint
+                        } else {
+                            selectionChangedActions?(bookmark)
+                        }
                     } label: {
                         Text(bookmark.name)
                     }
                 }
             }
-            .frame(
-                width: 300, height: 600, alignment: .bottomLeading
-            )
         }
     }
 }
