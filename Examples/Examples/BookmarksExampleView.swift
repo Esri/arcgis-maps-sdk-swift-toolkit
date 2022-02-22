@@ -30,6 +30,9 @@ struct BookmarksExampleView: View {
 
     var body: some View {
         MapView(map: map, viewpoint: viewpoint)
+            .onViewpointChanged(kind: .centerAndScale) {
+                viewpoint = $0
+            }
             .onTapGesture {
                 showingBookmarks = false
             }
@@ -64,16 +67,29 @@ struct BookmarksExampleView: View {
                         }
                         Text("More Options")
                     }
-                    label: {
-                        Label("Options", systemImage: "ellipsis")
-                    }
+                label: { Label("Options", systemImage: "ellipsis") }
                 }
             }
-            .overlay {
-                Bookmarks(sampleBookmarks, isPresented: $showingBookmarks)
-                    .onSelectionChanged {
-                        viewpoint = $0.viewpoint
-                    }
+            .overlay(alignment: .topTrailing) {
+                // Let the bookmarks component control viewpoint changes:
+                Bookmarks(
+                    sampleBookmarks,
+                    isPresented: $showingBookmarks,
+                    viewpoint: $viewpoint
+                )
+                .padding()
+                .frame(width: 200)
+
+                // Or control viewpoint changes yourself:
+//                Bookmarks(
+//                    sampleBookmarks,
+//                    isPresented: $showingBookmarks
+//                )
+//                .onSelectionChanged {
+//                    viewpoint = $0.viewpoint
+//                }
+//                .padding()
+//                .frame(width: 200)
             }
     }
 }
