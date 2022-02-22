@@ -30,6 +30,9 @@ struct BookmarksExampleView: View {
 
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***MapView(map: map, viewpoint: viewpoint)
+***REMOVED******REMOVED******REMOVED***.onViewpointChanged(kind: .centerAndScale) {
+***REMOVED******REMOVED******REMOVED******REMOVED***viewpoint = $0
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onTapGesture {
 ***REMOVED******REMOVED******REMOVED******REMOVED***showingBookmarks = false
 ***REMOVED******REMOVED***
@@ -64,16 +67,29 @@ struct BookmarksExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("More Options")
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***label: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Label("Options", systemImage: "ellipsis")
-***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***label: { Label("Options", systemImage: "ellipsis") ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.overlay {
-***REMOVED******REMOVED******REMOVED******REMOVED***Bookmarks(sampleBookmarks, isPresented: $showingBookmarks)
+***REMOVED******REMOVED******REMOVED***.overlay(alignment: .topTrailing) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Let the bookmarks component control viewpoint changes:
+***REMOVED******REMOVED******REMOVED******REMOVED***Bookmarks(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***sampleBookmarks,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented: $showingBookmarks,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint: $viewpoint
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***.padding()
+***REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 200)
+
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Or control viewpoint changes yourself:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Bookmarks(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***sampleBookmarks,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented: $showingBookmarks
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onSelectionChanged {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint = $0.viewpoint
 ***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 200)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
