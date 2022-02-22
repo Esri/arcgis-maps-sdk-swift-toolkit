@@ -36,6 +36,7 @@ public struct Bookmarks: View {
         _isPresented = isPresented
     }
 
+    /// Actions to be performed when a bookmark is selected.
     var selectionChangedActions: ((Bookmark) -> Void)? = nil
 
     /// Sets a closure to perform when the viewpoint of the map view changes.
