@@ -72,7 +72,6 @@ struct BookmarksExampleView: View {
 ***REMOVED******REMOVED******REMOVED***.overlay {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Bookmarks(sampleBookmarks, isPresented: $showingBookmarks)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onSelectionChanged {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print($0.name)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint = $0.viewpoint
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
