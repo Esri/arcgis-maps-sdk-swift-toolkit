@@ -72,7 +72,6 @@ struct BookmarksExampleView: View {
             .overlay {
                 Bookmarks(sampleBookmarks, isPresented: $showingBookmarks)
                     .onSelectionChanged {
-                        print($0.name)
                         viewpoint = $0.viewpoint
                     }
             }
