@@ -26,7 +26,11 @@ public struct Bookmarks: View {
     private var viewpoint: Binding<Viewpoint?>?
 
     /// Creates a `Bookmarks` component.
-    public init(_ bookmarks: [Bookmark], isPresented: Binding<Bool>, viewpoint: Binding<Viewpoint?>? = nil) {
+    public init(
+        _ bookmarks: [Bookmark],
+        isPresented: Binding<Bool>,
+        viewpoint: Binding<Viewpoint?>? = nil
+    ) {
         self.bookmarks = bookmarks
         self.viewpoint = viewpoint
         _isPresented = isPresented
@@ -38,7 +42,9 @@ public struct Bookmarks: View {
     /// - Parameters:
     ///   - kind: The kind of viewpoint passed to the `action` closure.
     ///   - action: The closure to perform when the viewpoint has changed.
-    public func onSelectionChanged(perform action: @escaping (Bookmark) -> Void) -> Bookmarks {
+    public func onSelectionChanged(
+        perform action: @escaping (Bookmark) -> Void
+    ) -> Bookmarks {
         var copy = self
         copy.selectionChangedActions = action
         return copy
@@ -49,6 +55,7 @@ public struct Bookmarks: View {
             FloatingPanel {
                 ForEach(bookmarks, id: \.viewpoint) { bookmark in
                     Button {
+                        isPresented = false
                         viewpoint?.wrappedValue = bookmark.viewpoint
                         selectionChangedActions?(bookmark)
                     } label: {
