@@ -39,6 +39,7 @@ extension ExampleList {
             AnyExample("Compass", content: CompassExampleView()),
             AnyExample("Floor Filter", content: FloorFilterExampleView()),
             AnyExample("Overview Map", content: OverviewMapExampleView()),
+            AnyExample("Scalebar", content: ScalebarExampleView()),
             AnyExample("Search", content: SearchExampleView())
         ]
     )
