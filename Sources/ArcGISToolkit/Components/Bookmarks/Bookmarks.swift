@@ -16,6 +16,9 @@
 
 ***REMOVED***/ `Bookmarks` allows for a user to view and select from a set of bookmarks.
 public struct Bookmarks: View {
+***REMOVED******REMOVED***/ A list that displays bookmarks.
+***REMOVED***private var bookmarksList: BookmarksList
+
 ***REMOVED******REMOVED***/ Determines if the bookmarks list is currently shown or not.
 ***REMOVED***@Binding
 ***REMOVED***var isPresented: Bool
@@ -26,9 +29,6 @@ public struct Bookmarks: View {
 ***REMOVED******REMOVED******REMOVED***bookmarksList.selectionChangedActions = selectionChangedActions
 ***REMOVED***
 ***REMOVED***
-
-***REMOVED******REMOVED***/ A list that displays bookmarks.
-***REMOVED***private var bookmarksList: BookmarksList
 
 ***REMOVED******REMOVED***/ Creates a `Bookmarks` component.
 ***REMOVED******REMOVED***/ - precondition: `bookmarks` or `map` is non-nil.

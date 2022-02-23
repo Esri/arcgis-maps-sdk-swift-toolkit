@@ -34,7 +34,7 @@ struct BookmarksList: View {
 ***REMOVED***@Binding
 ***REMOVED***var isPresented: Bool
 
-***REMOVED******REMOVED***/ A map containing bookmarks
+***REMOVED******REMOVED***/ A map containing bookmarks.
 ***REMOVED***var map: Map?
 
 ***REMOVED******REMOVED***/ Indicates if bookmarks have loaded and are ready for display.
@@ -45,6 +45,21 @@ struct BookmarksList: View {
 
 ***REMOVED******REMOVED***/ If *non-nil*, this viewpoint is updated when a bookmark is pressed.
 ***REMOVED***var viewpoint: Binding<Viewpoint?>?
+
+***REMOVED******REMOVED***/ Performs the necessary actions when a bookmark is selected. This includes indicating that
+***REMOVED******REMOVED***/ bookmarks should be set to a hidden state, and changing the viewpoint if the user provided a
+***REMOVED******REMOVED***/ viewpoint or calling actions if the user used implemented a modifier.
+***REMOVED******REMOVED***/ - Parameter bookmark: The bookmark that was selected.
+***REMOVED***func makeSelection(_ bookmark: Bookmark) {
+***REMOVED******REMOVED***isPresented = false
+***REMOVED******REMOVED***if let viewpoint = viewpoint {
+***REMOVED******REMOVED******REMOVED***viewpoint.wrappedValue = bookmark.viewpoint
+***REMOVED*** else if let actions = selectionChangedActions {
+***REMOVED******REMOVED******REMOVED***actions(bookmark)
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***fatalError("No viewpoint or action provided")
+***REMOVED***
+***REMOVED***
 
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***if map == nil {
@@ -57,20 +72,15 @@ struct BookmarksList: View {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
+***REMOVED***
 
-***REMOVED******REMOVED***/ A list that is shown once bookmarks have been loaded.
+extension BookmarksList {
+***REMOVED******REMOVED***/ A list that is shown once bookmarks have loaded.
 ***REMOVED***var list: some View {
 ***REMOVED******REMOVED***List {
 ***REMOVED******REMOVED******REMOVED***ForEach(definedBookmarks, id: \.viewpoint) { bookmark in
 ***REMOVED******REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented = false
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let viewpoint = viewpoint {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint.wrappedValue = bookmark.viewpoint
-***REMOVED******REMOVED******REMOVED******REMOVED*** else if let actions = selectionChangedActions {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***actions(bookmark)
-***REMOVED******REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***fatalError("No viewpoint or action provided")
-***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeSelection(bookmark)
 ***REMOVED******REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(bookmark.name)
 ***REMOVED******REMOVED******REMOVED***
@@ -78,7 +88,7 @@ struct BookmarksList: View {
 ***REMOVED***
 ***REMOVED***
 
-***REMOVED******REMOVED***/ A view that is shown while a web map is being loaded.
+***REMOVED******REMOVED***/ A view that is shown while a web map is loading.
 ***REMOVED***var loading: some View {
 ***REMOVED******REMOVED***VStack {
 ***REMOVED******REMOVED******REMOVED***Spacer()
