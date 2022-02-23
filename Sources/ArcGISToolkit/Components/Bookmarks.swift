@@ -14,7 +14,7 @@
 ***REMOVED***
 ***REMOVED***
 
-***REMOVED***/ The bookmarks component allows for a user to select and navigate to defined set of "bookmarked"
+***REMOVED***/ The bookmarks component allows for a user to select and navigate to a defined set of "bookmarked"
 ***REMOVED***/ locations.
 public struct Bookmarks: View {
 ***REMOVED******REMOVED***/ A list of bookmarks that will be displayed
