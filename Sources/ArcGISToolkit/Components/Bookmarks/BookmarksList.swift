@@ -38,9 +38,10 @@ struct BookmarksList: View {
 ***REMOVED***var map: Map?
 
 ***REMOVED******REMOVED***/ Indicates if bookmarks have loaded and are ready for display.
-***REMOVED***@State var mapisLoaded = false
+***REMOVED***@State
+***REMOVED***var mapisLoaded = false
 
-***REMOVED******REMOVED***/ User defined actions to be performed when a bookmark is selected.
+***REMOVED******REMOVED***/ User defined action to be performed when a bookmark is selected.
 ***REMOVED***var selectionChangedActions: ((Bookmark) -> Void)? = nil
 
 ***REMOVED******REMOVED***/ If *non-nil*, this viewpoint is updated when a bookmark is pressed.
@@ -48,7 +49,7 @@ struct BookmarksList: View {
 
 ***REMOVED******REMOVED***/ Performs the necessary actions when a bookmark is selected. This includes indicating that
 ***REMOVED******REMOVED***/ bookmarks should be set to a hidden state, and changing the viewpoint if the user provided a
-***REMOVED******REMOVED***/ viewpoint or calling actions if the user used implemented a modifier.
+***REMOVED******REMOVED***/ viewpoint or calling actions if the user implemented the `selectionChangedActions` modifier.
 ***REMOVED******REMOVED***/ - Parameter bookmark: The bookmark that was selected.
 ***REMOVED***func makeSelection(_ bookmark: Bookmark) {
 ***REMOVED******REMOVED***isPresented = false

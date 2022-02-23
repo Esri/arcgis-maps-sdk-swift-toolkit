@@ -23,7 +23,9 @@ public struct Bookmarks: View {
 ***REMOVED***@Binding
 ***REMOVED***var isPresented: Bool
 
-***REMOVED******REMOVED***/ User defined actions to be performed when a bookmark is selected.
+***REMOVED******REMOVED***/ User defined action to be performed when a bookmark is selected. Use this when you prefer to
+***REMOVED******REMOVED***/ self-manage the response to a bookmark selection. Use either `onSelectionChangedActions`
+***REMOVED******REMOVED***/ or `viewpoint` exclusively.
 ***REMOVED***var selectionChangedActions: ((Bookmark) -> Void)? = nil {
 ***REMOVED******REMOVED***didSet {
 ***REMOVED******REMOVED******REMOVED***bookmarksList.selectionChangedActions = selectionChangedActions
@@ -32,6 +34,16 @@ public struct Bookmarks: View {
 
 ***REMOVED******REMOVED***/ Creates a `Bookmarks` component.
 ***REMOVED******REMOVED***/ - precondition: `bookmarks` or `map` is non-nil.
+***REMOVED******REMOVED***/ - precondition: `viewpoint` is non-nil or the `selectionChangedActions` modifier is
+***REMOVED******REMOVED***/ implemented.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - isPresented: Determines if the bookmarks list is presented.
+***REMOVED******REMOVED***/   - bookmarks: A list of bookmarks. Use this when displaying bookmarks defined at run-time.
+***REMOVED******REMOVED***/   Use either `bookmarks` or `map` exclusively.
+***REMOVED******REMOVED***/   - map: A web map authored with pre-existing bookmarks. Use either `map` or `bookmarks`
+***REMOVED******REMOVED***/   exclusively.
+***REMOVED******REMOVED***/   - viewpoint: A viewpoint binding that will be updated when a bookmark is selected. Use
+***REMOVED******REMOVED***/   either `viewpoint` or `selectionChangedActions` exclusively.
 ***REMOVED***public init(
 ***REMOVED******REMOVED***isPresented: Binding<Bool>,
 ***REMOVED******REMOVED***bookmarks: [Bookmark]? = nil,
