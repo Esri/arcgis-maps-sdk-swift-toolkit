@@ -21,7 +21,7 @@ public struct Bookmarks: View {
 
     /// Determines if the bookmarks list is currently shown or not.
     @Binding
-    var isPresented: Bool
+    private var isPresented: Bool
 
     /// User defined action to be performed when a bookmark is selected. Use this when you prefer to
     /// self-manage the response to a bookmark selection. Use either `onSelectionChangedActions`
