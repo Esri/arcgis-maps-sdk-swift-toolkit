@@ -34,7 +34,7 @@ struct BookmarksList: View {
     @Binding
     var isPresented: Bool
 
-    /// A map containing bookmarks
+    /// A map containing bookmarks.
     var map: Map?
 
     /// Indicates if bookmarks have loaded and are ready for display.
@@ -45,6 +45,21 @@ struct BookmarksList: View {
 
     /// If *non-nil*, this viewpoint is updated when a bookmark is pressed.
     var viewpoint: Binding<Viewpoint?>?
+
+    /// Performs the necessary actions when a bookmark is selected. This includes indicating that
+    /// bookmarks should be set to a hidden state, and changing the viewpoint if the user provided a
+    /// viewpoint or calling actions if the user used implemented a modifier.
+    /// - Parameter bookmark: The bookmark that was selected.
+    func makeSelection(_ bookmark: Bookmark) {
+        isPresented = false
+        if let viewpoint = viewpoint {
+            viewpoint.wrappedValue = bookmark.viewpoint
+        } else if let actions = selectionChangedActions {
+            actions(bookmark)
+        } else {
+            fatalError("No viewpoint or action provided")
+        }
+    }
 
     var body: some View {
         if map == nil {
@@ -57,20 +72,15 @@ struct BookmarksList: View {
             }
         }
     }
+}
 
-    /// A list that is shown once bookmarks have been loaded.
+extension BookmarksList {
+    /// A list that is shown once bookmarks have loaded.
     var list: some View {
         List {
             ForEach(definedBookmarks, id: \.viewpoint) { bookmark in
                 Button {
-                    isPresented = false
-                    if let viewpoint = viewpoint {
-                        viewpoint.wrappedValue = bookmark.viewpoint
-                    } else if let actions = selectionChangedActions {
-                        actions(bookmark)
-                    } else {
-                        fatalError("No viewpoint or action provided")
-                    }
+                    makeSelection(bookmark)
                 } label: {
                     Text(bookmark.name)
                 }
@@ -78,7 +88,7 @@ struct BookmarksList: View {
         }
     }
 
-    /// A view that is shown while a web map is being loaded.
+    /// A view that is shown while a web map is loading.
     var loading: some View {
         VStack {
             Spacer()
