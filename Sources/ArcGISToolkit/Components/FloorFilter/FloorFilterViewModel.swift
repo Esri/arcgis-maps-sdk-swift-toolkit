@@ -150,7 +150,7 @@ final public class FloorFilterViewModel: ObservableObject {
         
         let builder = EnvelopeBuilder(envelope: extent)
         builder.expand(factor: 1.5)
-        let targetExtent = builder.toGeometry() as! Envelope
+        let targetExtent = builder.toGeometry()
         if !targetExtent.isEmpty {
             viewpoint.wrappedValue = Viewpoint(
                 targetExtent: targetExtent
