@@ -24,6 +24,9 @@ public struct Bookmarks: View {
 ***REMOVED***@Binding
 ***REMOVED***var isPresented: Bool
 
+***REMOVED******REMOVED***/ Actions to be performed when a bookmark is selected.
+***REMOVED***var selectionChangedActions: ((Bookmark) -> Void)? = nil
+
 ***REMOVED******REMOVED***/ If *non-nil*, this viewpoint is updated when a bookmark is pressed.
 ***REMOVED***private var viewpoint: Binding<Viewpoint?>?
 
@@ -37,9 +40,6 @@ public struct Bookmarks: View {
 ***REMOVED******REMOVED***self.viewpoint = viewpoint
 ***REMOVED******REMOVED***_isPresented = isPresented
 ***REMOVED***
-
-***REMOVED******REMOVED***/ Actions to be performed when a bookmark is selected.
-***REMOVED***var selectionChangedActions: ((Bookmark) -> Void)? = nil
 
 ***REMOVED******REMOVED***/ Sets a closure to perform when the viewpoint of the map view changes.
 ***REMOVED******REMOVED***/ - Parameters:
@@ -58,22 +58,12 @@ public struct Bookmarks: View {
 ***REMOVED******REMOVED******REMOVED***.sheet(isPresented: $isPresented) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***BookmarksHeader(isPresented: $isPresented)
 ***REMOVED******REMOVED******REMOVED******REMOVED***Divider()
-***REMOVED******REMOVED******REMOVED******REMOVED***List {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(bookmarks, id: \.viewpoint) { bookmark in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented = false
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let viewpoint = viewpoint {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint.wrappedValue = bookmark.viewpoint
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** else if let actions = selectionChangedActions {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***actions(bookmark)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***fatalError("No viewpoint or action provided")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(bookmark.name)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***BookmarksList(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bookmarks: bookmarks,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented: $isPresented,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectionChangedActions: selectionChangedActions,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint: viewpoint
+***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***

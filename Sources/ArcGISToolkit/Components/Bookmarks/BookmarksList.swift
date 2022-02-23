@@ -1,0 +1,49 @@
+***REMOVED*** Copyright 2022 Esri.
+
+***REMOVED*** Licensed under the Apache License, Version 2.0 (the "License");
+***REMOVED*** you may not use this file except in compliance with the License.
+***REMOVED*** You may obtain a copy of the License at
+***REMOVED*** http:***REMOVED***www.apache.org/licenses/LICENSE-2.0
+
+***REMOVED*** Unless required by applicable law or agreed to in writing, software
+***REMOVED*** distributed under the License is distributed on an "AS IS" BASIS,
+***REMOVED*** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+***REMOVED*** See the License for the specific language governing permissions and
+***REMOVED*** limitations under the License.
+
+***REMOVED***
+***REMOVED***
+
+struct BookmarksList: View {
+***REMOVED******REMOVED***/ A list of bookmarks that will be displayed
+***REMOVED***var bookmarks: [Bookmark]
+
+***REMOVED******REMOVED***/ Determines if the bookmarks list is currently shown or not.
+***REMOVED***@Binding
+***REMOVED***var isPresented: Bool
+
+***REMOVED******REMOVED***/ Actions to be performed when a bookmark is selected.
+***REMOVED***var selectionChangedActions: ((Bookmark) -> Void)? = nil
+
+***REMOVED******REMOVED***/ If *non-nil*, this viewpoint is updated when a bookmark is pressed.
+***REMOVED***var viewpoint: Binding<Viewpoint?>?
+
+***REMOVED***var body: some View {
+***REMOVED******REMOVED***List {
+***REMOVED******REMOVED******REMOVED***ForEach(bookmarks, id: \.viewpoint) { bookmark in
+***REMOVED******REMOVED******REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented = false
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let viewpoint = viewpoint {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint.wrappedValue = bookmark.viewpoint
+***REMOVED******REMOVED******REMOVED******REMOVED*** else if let actions = selectionChangedActions {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***actions(bookmark)
+***REMOVED******REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***fatalError("No viewpoint or action provided")
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(bookmark.name)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
