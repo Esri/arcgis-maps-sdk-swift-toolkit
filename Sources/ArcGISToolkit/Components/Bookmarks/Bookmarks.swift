@@ -24,6 +24,9 @@ public struct Bookmarks: View {
     @Binding
     var isPresented: Bool
 
+    /// Actions to be performed when a bookmark is selected.
+    var selectionChangedActions: ((Bookmark) -> Void)? = nil
+
     /// If *non-nil*, this viewpoint is updated when a bookmark is pressed.
     private var viewpoint: Binding<Viewpoint?>?
 
@@ -37,9 +40,6 @@ public struct Bookmarks: View {
         self.viewpoint = viewpoint
         _isPresented = isPresented
     }
-
-    /// Actions to be performed when a bookmark is selected.
-    var selectionChangedActions: ((Bookmark) -> Void)? = nil
 
     /// Sets a closure to perform when the viewpoint of the map view changes.
     /// - Parameters:
@@ -58,22 +58,12 @@ public struct Bookmarks: View {
             .sheet(isPresented: $isPresented) {
                 BookmarksHeader(isPresented: $isPresented)
                 Divider()
-                List {
-                    ForEach(bookmarks, id: \.viewpoint) { bookmark in
-                        Button {
-                            isPresented = false
-                            if let viewpoint = viewpoint {
-                                viewpoint.wrappedValue = bookmark.viewpoint
-                            } else if let actions = selectionChangedActions {
-                                actions(bookmark)
-                            } else {
-                                fatalError("No viewpoint or action provided")
-                            }
-                        } label: {
-                            Text(bookmark.name)
-                        }
-                    }
-                }
+                BookmarksList(
+                    bookmarks: bookmarks,
+                    isPresented: $isPresented,
+                    selectionChangedActions: selectionChangedActions,
+                    viewpoint: viewpoint
+                )
             }
     }
 }
