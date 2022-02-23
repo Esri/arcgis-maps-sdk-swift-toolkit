@@ -77,7 +77,7 @@ struct BookmarksList: View {
 
 extension BookmarksList {
     /// A list that is shown once bookmarks have loaded.
-    var list: some View {
+    private var list: some View {
         List {
             ForEach(definedBookmarks, id: \.viewpoint) { bookmark in
                 Button {
@@ -90,7 +90,7 @@ extension BookmarksList {
     }
 
     /// A view that is shown while a web map is loading.
-    var loading: some View {
+    private var loading: some View {
         VStack {
             Spacer()
             HStack {
