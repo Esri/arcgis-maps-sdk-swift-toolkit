@@ -37,6 +37,9 @@ struct BookmarksList: View {
     /// A map containing bookmarks
     var map: Map?
 
+    /// Indicates if bookmarks have loaded and are ready for display.
+    @State var mapisLoaded = false
+
     /// User defined actions to be performed when a bookmark is selected.
     var selectionChangedActions: ((Bookmark) -> Void)? = nil
 
@@ -44,6 +47,19 @@ struct BookmarksList: View {
     var viewpoint: Binding<Viewpoint?>?
 
     var body: some View {
+        if map == nil {
+            list
+        } else {
+            if mapisLoaded {
+                list
+            } else {
+                loading
+            }
+        }
+    }
+
+    /// A list that is shown once bookmarks have been loaded.
+    var list: some View {
         List {
             ForEach(definedBookmarks, id: \.viewpoint) { bookmark in
                 Button {
@@ -59,6 +75,27 @@ struct BookmarksList: View {
                     Text(bookmark.name)
                 }
             }
+        }
+    }
+
+    /// A view that is shown while a web map is being loaded.
+    var loading: some View {
+        VStack {
+            Spacer()
+            HStack {
+                ProgressView()
+                    .progressViewStyle(CircularProgressViewStyle())
+                    .padding()
+                Text("Loading")
+            }.task {
+                do {
+                    try await map?.load()
+                    mapisLoaded = true
+                } catch {
+                    print(error.localizedDescription)
+                }
+            }
+            Spacer()
         }
     }
 }
