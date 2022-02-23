@@ -33,9 +33,6 @@ struct BookmarksExampleView: View {
             .onViewpointChanged(kind: .centerAndScale) {
                 viewpoint = $0
             }
-            .onTapGesture {
-                showingBookmarks = false
-            }
             // Show the bookmarks control as button
             .overlay(alignment: .topLeading) {
                 Button {
@@ -59,10 +56,8 @@ struct BookmarksExampleView: View {
                             showingBookmarks.toggle()
                         } label: {
                             Label(
-                                showingBookmarks ?
-                                "Hide Bookmarks" : "Show Bookmarks",
-                                systemImage: showingBookmarks ?
-                                "bookmark.fill" : "bookmark"
+                                "Show Bookmarks",
+                                systemImage: "bookmark"
                             )
                         }
                         Text("More Options")

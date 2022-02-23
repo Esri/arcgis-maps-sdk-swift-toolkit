@@ -17,12 +17,14 @@ import SwiftUI
 /// The bookmarks component allows for a user to select and navigate to defined set of "bookmarked"
 /// locations.
 public struct Bookmarks: View {
+    /// A list of bookmarks that will be displayed
     private var bookmarks: [Bookmark]
 
     /// Determines if the bookmarks list is currently shown or not.
     @Binding
     private var isPresented: Bool
 
+    /// If *non-nil*, this viewpoint is updated when a bookmark is pressed.
     private var viewpoint: Binding<Viewpoint?>?
 
     /// Creates a `Bookmarks` component.
@@ -52,21 +54,28 @@ public struct Bookmarks: View {
     }
 
     public var body: some View {
-        if isPresented {
-            FloatingPanel {
-                ForEach(bookmarks, id: \.viewpoint) { bookmark in
-                    Button {
-                        isPresented = false
-                        if let viewpoint = viewpoint {
-                            viewpoint.wrappedValue = bookmark.viewpoint
-                        } else {
-                            selectionChangedActions?(bookmark)
+        EmptyView()
+            .sheet(isPresented: $isPresented) {
+                List {
+                    ForEach(bookmarks, id: \.viewpoint) { bookmark in
+                        Button {
+                            isPresented = false
+                            if let viewpoint = viewpoint {
+                                viewpoint.wrappedValue = bookmark.viewpoint
+                            } else if let actions = selectionChangedActions {
+                                actions(bookmark)
+                            } else {
+                                fatalError("No viewpoint or action provided")
+                            }
+                        } label: {
+                            Text(bookmark.name)
                         }
-                    } label: {
-                        Text(bookmark.name)
                     }
                 }
+                Button("Dismiss") {
+                    isPresented = false
+                }
+                .padding()
             }
-        }
     }
 }
