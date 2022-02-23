@@ -17,12 +17,14 @@
 ***REMOVED***/ The bookmarks component allows for a user to select and navigate to defined set of "bookmarked"
 ***REMOVED***/ locations.
 public struct Bookmarks: View {
+***REMOVED******REMOVED***/ A list of bookmarks that will be displayed
 ***REMOVED***private var bookmarks: [Bookmark]
 
 ***REMOVED******REMOVED***/ Determines if the bookmarks list is currently shown or not.
 ***REMOVED***@Binding
 ***REMOVED***private var isPresented: Bool
 
+***REMOVED******REMOVED***/ If *non-nil*, this viewpoint is updated when a bookmark is pressed.
 ***REMOVED***private var viewpoint: Binding<Viewpoint?>?
 
 ***REMOVED******REMOVED***/ Creates a `Bookmarks` component.
@@ -52,21 +54,28 @@ public struct Bookmarks: View {
 ***REMOVED***
 
 ***REMOVED***public var body: some View {
-***REMOVED******REMOVED***if isPresented {
-***REMOVED******REMOVED******REMOVED***FloatingPanel {
-***REMOVED******REMOVED******REMOVED******REMOVED***ForEach(bookmarks, id: \.viewpoint) { bookmark in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented = false
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let viewpoint = viewpoint {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint.wrappedValue = bookmark.viewpoint
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectionChangedActions?(bookmark)
+***REMOVED******REMOVED***EmptyView()
+***REMOVED******REMOVED******REMOVED***.sheet(isPresented: $isPresented) {
+***REMOVED******REMOVED******REMOVED******REMOVED***List {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(bookmarks, id: \.viewpoint) { bookmark in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented = false
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let viewpoint = viewpoint {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint.wrappedValue = bookmark.viewpoint
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** else if let actions = selectionChangedActions {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***actions(bookmark)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***fatalError("No viewpoint or action provided")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(bookmark.name)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(bookmark.name)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***Button("Dismiss") {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented = false
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.padding()
 ***REMOVED******REMOVED***
-***REMOVED***
 ***REMOVED***
 ***REMOVED***
