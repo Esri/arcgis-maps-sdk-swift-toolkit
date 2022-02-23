@@ -14,7 +14,7 @@
 import ArcGIS
 import SwiftUI
 
-/// The bookmarks component allows for a user to select and navigate to defined set of "bookmarked"
+/// The bookmarks component allows for a user to select and navigate to a defined set of "bookmarked"
 /// locations.
 public struct Bookmarks: View {
     /// A list of bookmarks that will be displayed
