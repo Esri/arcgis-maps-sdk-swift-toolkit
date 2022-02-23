@@ -22,7 +22,7 @@ public struct Bookmarks: View {
 
     /// Determines if the bookmarks list is currently shown or not.
     @Binding
-    private var isPresented: Bool
+    var isPresented: Bool
 
     /// If *non-nil*, this viewpoint is updated when a bookmark is pressed.
     private var viewpoint: Binding<Viewpoint?>?
@@ -56,6 +56,8 @@ public struct Bookmarks: View {
     public var body: some View {
         EmptyView()
             .sheet(isPresented: $isPresented) {
+                BookmarksHeader(isPresented: $isPresented)
+                Divider()
                 List {
                     ForEach(bookmarks, id: \.viewpoint) { bookmark in
                         Button {
@@ -72,10 +74,6 @@ public struct Bookmarks: View {
                         }
                     }
                 }
-                Button("Dismiss") {
-                    isPresented = false
-                }
-                .padding()
             }
     }
 }
