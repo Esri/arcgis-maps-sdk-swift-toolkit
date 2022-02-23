@@ -17,11 +17,25 @@ import SwiftUI
 /// `BookmarksList` displays a list of selectable bookmarks.
 struct BookmarksList: View {
     /// A list of selectable bookmarks.
-    var bookmarks: [Bookmark]
+    var bookmarks: [Bookmark]?
+
+    /// A list of bookmarks derived either directly from `bookmarks` or from `map`.
+    private var definedBookmarks: [Bookmark] {
+        if let bookmarks = bookmarks {
+            return bookmarks
+        } else if let map = map {
+            return map.bookmarks
+        } else {
+            return []
+        }
+    }
 
     /// Determines if the list is currently shown or not.
     @Binding
     var isPresented: Bool
+
+    /// A map containing bookmarks
+    var map: Map?
 
     /// User defined actions to be performed when a bookmark is selected.
     var selectionChangedActions: ((Bookmark) -> Void)? = nil
@@ -31,7 +45,7 @@ struct BookmarksList: View {
 
     var body: some View {
         List {
-            ForEach(bookmarks, id: \.viewpoint) { bookmark in
+            ForEach(definedBookmarks, id: \.viewpoint) { bookmark in
                 Button {
                     isPresented = false
                     if let viewpoint = viewpoint {
