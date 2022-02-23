@@ -44,9 +44,7 @@ struct BookmarksExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.buttonStyle(.bordered)
-***REMOVED******REMOVED******REMOVED******REMOVED***.padding(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***EdgeInsets(top: 10, leading: 10, bottom: 0, trailing: 0)
-***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***.padding([.top, .leading], 10)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Show the bookmarks control as an option within a group
 ***REMOVED******REMOVED******REMOVED***.toolbar {
