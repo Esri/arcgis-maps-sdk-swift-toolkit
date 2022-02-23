@@ -22,7 +22,7 @@ public struct Bookmarks: View {
 
 ***REMOVED******REMOVED***/ Determines if the bookmarks list is currently shown or not.
 ***REMOVED***@Binding
-***REMOVED***private var isPresented: Bool
+***REMOVED***var isPresented: Bool
 
 ***REMOVED******REMOVED***/ If *non-nil*, this viewpoint is updated when a bookmark is pressed.
 ***REMOVED***private var viewpoint: Binding<Viewpoint?>?
@@ -56,6 +56,8 @@ public struct Bookmarks: View {
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***EmptyView()
 ***REMOVED******REMOVED******REMOVED***.sheet(isPresented: $isPresented) {
+***REMOVED******REMOVED******REMOVED******REMOVED***BookmarksHeader(isPresented: $isPresented)
+***REMOVED******REMOVED******REMOVED******REMOVED***Divider()
 ***REMOVED******REMOVED******REMOVED******REMOVED***List {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(bookmarks, id: \.viewpoint) { bookmark in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
@@ -72,10 +74,6 @@ public struct Bookmarks: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***Button("Dismiss") {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented = false
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.padding()
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
