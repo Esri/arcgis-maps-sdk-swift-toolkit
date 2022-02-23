@@ -38,9 +38,10 @@ struct BookmarksList: View {
     var map: Map?
 
     /// Indicates if bookmarks have loaded and are ready for display.
-    @State var mapisLoaded = false
+    @State
+    var mapisLoaded = false
 
-    /// User defined actions to be performed when a bookmark is selected.
+    /// User defined action to be performed when a bookmark is selected.
     var selectionChangedActions: ((Bookmark) -> Void)? = nil
 
     /// If *non-nil*, this viewpoint is updated when a bookmark is pressed.
@@ -48,7 +49,7 @@ struct BookmarksList: View {
 
     /// Performs the necessary actions when a bookmark is selected. This includes indicating that
     /// bookmarks should be set to a hidden state, and changing the viewpoint if the user provided a
-    /// viewpoint or calling actions if the user used implemented a modifier.
+    /// viewpoint or calling actions if the user implemented the `selectionChangedActions` modifier.
     /// - Parameter bookmark: The bookmark that was selected.
     func makeSelection(_ bookmark: Bookmark) {
         isPresented = false
