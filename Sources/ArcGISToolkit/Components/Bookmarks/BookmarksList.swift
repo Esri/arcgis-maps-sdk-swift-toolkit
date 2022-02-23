@@ -37,6 +37,9 @@ struct BookmarksList: View {
 ***REMOVED******REMOVED***/ A map containing bookmarks
 ***REMOVED***var map: Map?
 
+***REMOVED******REMOVED***/ Indicates if bookmarks have loaded and are ready for display.
+***REMOVED***@State var mapisLoaded = false
+
 ***REMOVED******REMOVED***/ User defined actions to be performed when a bookmark is selected.
 ***REMOVED***var selectionChangedActions: ((Bookmark) -> Void)? = nil
 
@@ -44,6 +47,19 @@ struct BookmarksList: View {
 ***REMOVED***var viewpoint: Binding<Viewpoint?>?
 
 ***REMOVED***var body: some View {
+***REMOVED******REMOVED***if map == nil {
+***REMOVED******REMOVED******REMOVED***list
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***if mapisLoaded {
+***REMOVED******REMOVED******REMOVED******REMOVED***list
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***loading
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+
+***REMOVED******REMOVED***/ A list that is shown once bookmarks have been loaded.
+***REMOVED***var list: some View {
 ***REMOVED******REMOVED***List {
 ***REMOVED******REMOVED******REMOVED***ForEach(definedBookmarks, id: \.viewpoint) { bookmark in
 ***REMOVED******REMOVED******REMOVED******REMOVED***Button {
@@ -59,6 +75,27 @@ struct BookmarksList: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(bookmark.name)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+
+***REMOVED******REMOVED***/ A view that is shown while a web map is being loaded.
+***REMOVED***var loading: some View {
+***REMOVED******REMOVED***VStack {
+***REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED******REMOVED***HStack {
+***REMOVED******REMOVED******REMOVED******REMOVED***ProgressView()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.progressViewStyle(CircularProgressViewStyle())
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
+***REMOVED******REMOVED******REMOVED******REMOVED***Text("Loading")
+***REMOVED******REMOVED***.task {
+***REMOVED******REMOVED******REMOVED******REMOVED***do {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try await map?.load()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mapisLoaded = true
+***REMOVED******REMOVED******REMOVED*** catch {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print(error.localizedDescription)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
