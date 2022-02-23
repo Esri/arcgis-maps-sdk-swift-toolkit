@@ -44,9 +44,7 @@ struct BookmarksExampleView: View {
                     )
                 }
                 .buttonStyle(.bordered)
-                .padding(
-                    EdgeInsets(top: 10, leading: 10, bottom: 0, trailing: 0)
-                )
+                .padding([.top, .leading], 10)
             }
             // Show the bookmarks control as an option within a group
             .toolbar {
