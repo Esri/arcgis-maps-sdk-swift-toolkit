@@ -16,6 +16,9 @@ import SwiftUI
 
 /// `Bookmarks` allows for a user to view and select from a set of bookmarks.
 public struct Bookmarks: View {
+    /// A list that displays bookmarks.
+    private var bookmarksList: BookmarksList
+
     /// Determines if the bookmarks list is currently shown or not.
     @Binding
     var isPresented: Bool
@@ -26,9 +29,6 @@ public struct Bookmarks: View {
             bookmarksList.selectionChangedActions = selectionChangedActions
         }
     }
-
-    /// A list that displays bookmarks.
-    private var bookmarksList: BookmarksList
 
     /// Creates a `Bookmarks` component.
     /// - precondition: `bookmarks` or `map` is non-nil.
