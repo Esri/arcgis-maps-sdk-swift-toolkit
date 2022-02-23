@@ -19,6 +19,9 @@ struct BookmarksExampleView: View {
 ***REMOVED******REMOVED***/ The map displayed in the map view.
 ***REMOVED***private let map = Map(basemapStyle: .arcGISImagery)
 
+***REMOVED******REMOVED***/ A web map with predefined bookmarks
+***REMOVED***private let webMap = Map(url: URL(string: "https:***REMOVED***runtime.maps.arcgis.com/home/item.html?id=16f1b8ba37b44dc3884afc8d5f454dd2")!)!
+
 ***REMOVED******REMOVED***/ Indicates if the bookmarks list is shown or not.
 ***REMOVED******REMOVED***/ - Remark: This allows a developer to control how the bookmarks menu is shown/hidden,
 ***REMOVED******REMOVED***/ whether that be in a group of options or a standalone button.
@@ -66,15 +69,15 @@ struct BookmarksExampleView: View {
 ***REMOVED******REMOVED******REMOVED***.overlay(alignment: .topTrailing) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Let the bookmarks component control viewpoint changes:
 ***REMOVED******REMOVED******REMOVED******REMOVED***Bookmarks(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***sampleBookmarks,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented: $showingBookmarks,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bookmarks: sampleBookmarks,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint: $viewpoint
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Or control viewpoint changes yourself:
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Bookmarks(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***sampleBookmarks,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented: $showingBookmarks
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented: $showingBookmarks,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***map: webMap
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onSelectionChanged {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint = $0.viewpoint

@@ -17,11 +17,25 @@
 ***REMOVED***/ `BookmarksList` displays a list of selectable bookmarks.
 struct BookmarksList: View {
 ***REMOVED******REMOVED***/ A list of selectable bookmarks.
-***REMOVED***var bookmarks: [Bookmark]
+***REMOVED***var bookmarks: [Bookmark]?
+
+***REMOVED******REMOVED***/ A list of bookmarks derived either directly from `bookmarks` or from `map`.
+***REMOVED***private var definedBookmarks: [Bookmark] {
+***REMOVED******REMOVED***if let bookmarks = bookmarks {
+***REMOVED******REMOVED******REMOVED***return bookmarks
+***REMOVED*** else if let map = map {
+***REMOVED******REMOVED******REMOVED***return map.bookmarks
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***return []
+***REMOVED***
+***REMOVED***
 
 ***REMOVED******REMOVED***/ Determines if the list is currently shown or not.
 ***REMOVED***@Binding
 ***REMOVED***var isPresented: Bool
+
+***REMOVED******REMOVED***/ A map containing bookmarks
+***REMOVED***var map: Map?
 
 ***REMOVED******REMOVED***/ User defined actions to be performed when a bookmark is selected.
 ***REMOVED***var selectionChangedActions: ((Bookmark) -> Void)? = nil
@@ -31,7 +45,7 @@ struct BookmarksList: View {
 
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***List {
-***REMOVED******REMOVED******REMOVED***ForEach(bookmarks, id: \.viewpoint) { bookmark in
+***REMOVED******REMOVED******REMOVED***ForEach(definedBookmarks, id: \.viewpoint) { bookmark in
 ***REMOVED******REMOVED******REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented = false
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let viewpoint = viewpoint {

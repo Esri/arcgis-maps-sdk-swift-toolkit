@@ -31,14 +31,18 @@ public struct Bookmarks: View {
 ***REMOVED***private var bookmarksList: BookmarksList
 
 ***REMOVED******REMOVED***/ Creates a `Bookmarks` component.
+***REMOVED******REMOVED***/ - precondition: `bookmarks` or `map` is non-nil.
 ***REMOVED***public init(
-***REMOVED******REMOVED***_ bookmarks: [Bookmark],
 ***REMOVED******REMOVED***isPresented: Binding<Bool>,
+***REMOVED******REMOVED***bookmarks: [Bookmark]? = nil,
+***REMOVED******REMOVED***map: Map? = nil,
 ***REMOVED******REMOVED***viewpoint: Binding<Viewpoint?>? = nil
 ***REMOVED***) {
+***REMOVED******REMOVED***precondition((bookmarks != nil) || (map != nil))
 ***REMOVED******REMOVED***bookmarksList = BookmarksList(
 ***REMOVED******REMOVED******REMOVED***bookmarks: bookmarks,
 ***REMOVED******REMOVED******REMOVED***isPresented: isPresented,
+***REMOVED******REMOVED******REMOVED***map: map,
 ***REMOVED******REMOVED******REMOVED***selectionChangedActions: selectionChangedActions,
 ***REMOVED******REMOVED******REMOVED***viewpoint: viewpoint
 ***REMOVED******REMOVED***)
