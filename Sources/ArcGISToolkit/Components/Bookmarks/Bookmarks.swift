@@ -21,7 +21,7 @@ public struct Bookmarks: View {
 
 ***REMOVED******REMOVED***/ Determines if the bookmarks list is currently shown or not.
 ***REMOVED***@Binding
-***REMOVED***var isPresented: Bool
+***REMOVED***private var isPresented: Bool
 
 ***REMOVED******REMOVED***/ User defined action to be performed when a bookmark is selected. Use this when you prefer to
 ***REMOVED******REMOVED***/ self-manage the response to a bookmark selection. Use either `onSelectionChangedActions`
