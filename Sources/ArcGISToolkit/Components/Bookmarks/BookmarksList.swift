@@ -77,7 +77,7 @@ struct BookmarksList: View {
 
 extension BookmarksList {
 ***REMOVED******REMOVED***/ A list that is shown once bookmarks have loaded.
-***REMOVED***var list: some View {
+***REMOVED***private var list: some View {
 ***REMOVED******REMOVED***List {
 ***REMOVED******REMOVED******REMOVED***ForEach(definedBookmarks, id: \.viewpoint) { bookmark in
 ***REMOVED******REMOVED******REMOVED******REMOVED***Button {
@@ -90,7 +90,7 @@ extension BookmarksList {
 ***REMOVED***
 
 ***REMOVED******REMOVED***/ A view that is shown while a web map is loading.
-***REMOVED***var loading: some View {
+***REMOVED***private var loading: some View {
 ***REMOVED******REMOVED***VStack {
 ***REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED***HStack {
