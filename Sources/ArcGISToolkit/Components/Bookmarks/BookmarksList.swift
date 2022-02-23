@@ -14,15 +14,16 @@
 import ArcGIS
 import SwiftUI
 
+/// `BookmarksList` displays a list of selectable bookmarks.
 struct BookmarksList: View {
-    /// A list of bookmarks that will be displayed
+    /// A list of selectable bookmarks.
     var bookmarks: [Bookmark]
 
-    /// Determines if the bookmarks list is currently shown or not.
+    /// Determines if the list is currently shown or not.
     @Binding
     var isPresented: Bool
 
-    /// Actions to be performed when a bookmark is selected.
+    /// User defined actions to be performed when a bookmark is selected.
     var selectionChangedActions: ((Bookmark) -> Void)? = nil
 
     /// If *non-nil*, this viewpoint is updated when a bookmark is pressed.
