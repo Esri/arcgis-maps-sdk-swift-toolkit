@@ -31,14 +31,18 @@ public struct Bookmarks: View {
     private var bookmarksList: BookmarksList
 
     /// Creates a `Bookmarks` component.
+    /// - precondition: `bookmarks` or `map` is non-nil.
     public init(
-        _ bookmarks: [Bookmark],
         isPresented: Binding<Bool>,
+        bookmarks: [Bookmark]? = nil,
+        map: Map? = nil,
         viewpoint: Binding<Viewpoint?>? = nil
     ) {
+        precondition((bookmarks != nil) || (map != nil))
         bookmarksList = BookmarksList(
             bookmarks: bookmarks,
             isPresented: isPresented,
+            map: map,
             selectionChangedActions: selectionChangedActions,
             viewpoint: viewpoint
         )
