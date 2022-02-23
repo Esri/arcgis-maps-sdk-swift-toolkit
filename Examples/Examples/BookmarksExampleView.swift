@@ -72,8 +72,6 @@ struct BookmarksExampleView: View {
                     isPresented: $showingBookmarks,
                     viewpoint: $viewpoint
                 )
-                .padding()
-                .frame(width: 200)
 
                 // Or control viewpoint changes yourself:
 //                Bookmarks(
@@ -83,8 +81,6 @@ struct BookmarksExampleView: View {
 //                .onSelectionChanged {
 //                    viewpoint = $0.viewpoint
 //                }
-//                .padding()
-//                .frame(width: 200)
             }
     }
 }
