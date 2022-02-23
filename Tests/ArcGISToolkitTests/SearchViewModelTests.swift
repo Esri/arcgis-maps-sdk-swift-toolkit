@@ -146,7 +146,7 @@ class SearchViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***var builder = EnvelopeBuilder(envelope: model.geoViewExtent)
 ***REMOVED******REMOVED***let tenPercentWidth = model.geoViewExtent!.width * 0.1
 ***REMOVED******REMOVED***builder.offsetBy(x: tenPercentWidth, y: 0.0)
-***REMOVED******REMOVED***var newExtent = builder.toGeometry() as! Envelope
+***REMOVED******REMOVED***var newExtent = builder.toGeometry()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***model.geoViewExtent = newExtent
 ***REMOVED******REMOVED***XCTAssertFalse(model.isEligibleForRequery)
@@ -155,7 +155,7 @@ class SearchViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***builder = EnvelopeBuilder(envelope: model.geoViewExtent)
 ***REMOVED******REMOVED***let fiftyPercentWidth = model.geoViewExtent!.width * 0.5
 ***REMOVED******REMOVED***builder.offsetBy(x: fiftyPercentWidth, y: 0.0)
-***REMOVED******REMOVED***newExtent = builder.toGeometry() as! Envelope
+***REMOVED******REMOVED***newExtent = builder.toGeometry()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***model.geoViewExtent = newExtent
 ***REMOVED******REMOVED***XCTAssertTrue(model.isEligibleForRequery)
@@ -172,7 +172,7 @@ class SearchViewModelTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED*** Expand extent by 1.1x - isEligibleForRequery should still be `false`.
 ***REMOVED******REMOVED***builder = EnvelopeBuilder(envelope: model.geoViewExtent)
 ***REMOVED******REMOVED***builder.expand(factor: 1.1)
-***REMOVED******REMOVED***newExtent = builder.toGeometry() as! Envelope
+***REMOVED******REMOVED***newExtent = builder.toGeometry()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***model.geoViewExtent = newExtent
 ***REMOVED******REMOVED***XCTAssertFalse(model.isEligibleForRequery)
@@ -180,7 +180,7 @@ class SearchViewModelTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED*** Expand extent by 1.5x - isEligibleForRequery should now be `true`.
 ***REMOVED******REMOVED***builder = EnvelopeBuilder(envelope: model.geoViewExtent)
 ***REMOVED******REMOVED***builder.expand(factor: 1.5)
-***REMOVED******REMOVED***newExtent = builder.toGeometry() as! Envelope
+***REMOVED******REMOVED***newExtent = builder.toGeometry()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***model.geoViewExtent = newExtent
 ***REMOVED******REMOVED***XCTAssertTrue(model.isEligibleForRequery)
@@ -456,7 +456,7 @@ extension Polygon {
 ***REMOVED******REMOVED***_ = builder.add(point: Point(x: -91.19322516572637, y: 44.74770908213401, spatialReference: .wgs84))
 ***REMOVED******REMOVED***_ = builder.add(point: Point(x: -91.19322516572637, y: 45.116100854348254, spatialReference: .wgs84))
 ***REMOVED******REMOVED***_ = builder.add(point: Point(x: -91.59127653822401, y: 45.116100854348254, spatialReference: .wgs84))
-***REMOVED******REMOVED***return builder.toGeometry() as! ArcGIS.Polygon
+***REMOVED******REMOVED***return builder.toGeometry()
 ***REMOVED***()
 ***REMOVED***
 ***REMOVED***static let minneapolis: Polygon = {
@@ -465,7 +465,7 @@ extension Polygon {
 ***REMOVED******REMOVED***_ = builder.add(point: Point(x: -94.170821328662, y: 44.13656401114444, spatialReference: .wgs84))
 ***REMOVED******REMOVED***_ = builder.add(point: Point(x: -92.34544467133114, y: 45.824325577904446, spatialReference: .wgs84))
 ***REMOVED******REMOVED***_ = builder.add(point: Point(x: -92.34544467133114, y: 45.824325577904446, spatialReference: .wgs84))
-***REMOVED******REMOVED***return builder.toGeometry() as! ArcGIS.Polygon
+***REMOVED******REMOVED***return builder.toGeometry()
 ***REMOVED***()
 ***REMOVED***
 
