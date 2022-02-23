@@ -14,21 +14,21 @@
 ***REMOVED***
 ***REMOVED***
 
-***REMOVED***/ The bookmarks component allows for a user to select and navigate to a defined set of "bookmarked"
-***REMOVED***/ locations.
+***REMOVED***/ `Bookmarks` allows for a user to view and select from a set of bookmarks.
 public struct Bookmarks: View {
-***REMOVED******REMOVED***/ A list of bookmarks that will be displayed
-***REMOVED***private var bookmarks: [Bookmark]
-
 ***REMOVED******REMOVED***/ Determines if the bookmarks list is currently shown or not.
 ***REMOVED***@Binding
 ***REMOVED***var isPresented: Bool
 
-***REMOVED******REMOVED***/ Actions to be performed when a bookmark is selected.
-***REMOVED***var selectionChangedActions: ((Bookmark) -> Void)? = nil
+***REMOVED******REMOVED***/ User defined actions to be performed when a bookmark is selected.
+***REMOVED***var selectionChangedActions: ((Bookmark) -> Void)? = nil {
+***REMOVED******REMOVED***didSet {
+***REMOVED******REMOVED******REMOVED***bookmarksList.selectionChangedActions = selectionChangedActions
+***REMOVED***
+***REMOVED***
 
-***REMOVED******REMOVED***/ If *non-nil*, this viewpoint is updated when a bookmark is pressed.
-***REMOVED***private var viewpoint: Binding<Viewpoint?>?
+***REMOVED******REMOVED***/ A list that displays bookmarks.
+***REMOVED***private var bookmarksList: BookmarksList
 
 ***REMOVED******REMOVED***/ Creates a `Bookmarks` component.
 ***REMOVED***public init(
@@ -36,8 +36,12 @@ public struct Bookmarks: View {
 ***REMOVED******REMOVED***isPresented: Binding<Bool>,
 ***REMOVED******REMOVED***viewpoint: Binding<Viewpoint?>? = nil
 ***REMOVED***) {
-***REMOVED******REMOVED***self.bookmarks = bookmarks
-***REMOVED******REMOVED***self.viewpoint = viewpoint
+***REMOVED******REMOVED***bookmarksList = BookmarksList(
+***REMOVED******REMOVED******REMOVED***bookmarks: bookmarks,
+***REMOVED******REMOVED******REMOVED***isPresented: isPresented,
+***REMOVED******REMOVED******REMOVED***selectionChangedActions: selectionChangedActions,
+***REMOVED******REMOVED******REMOVED***viewpoint: viewpoint
+***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***_isPresented = isPresented
 ***REMOVED***
 
@@ -58,12 +62,7 @@ public struct Bookmarks: View {
 ***REMOVED******REMOVED******REMOVED***.sheet(isPresented: $isPresented) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***BookmarksHeader(isPresented: $isPresented)
 ***REMOVED******REMOVED******REMOVED******REMOVED***Divider()
-***REMOVED******REMOVED******REMOVED******REMOVED***BookmarksList(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bookmarks: bookmarks,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented: $isPresented,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectionChangedActions: selectionChangedActions,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint: viewpoint
-***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***bookmarksList
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***

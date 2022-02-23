@@ -14,15 +14,16 @@
 ***REMOVED***
 ***REMOVED***
 
+***REMOVED***/ `BookmarksList` displays a list of selectable bookmarks.
 struct BookmarksList: View {
-***REMOVED******REMOVED***/ A list of bookmarks that will be displayed
+***REMOVED******REMOVED***/ A list of selectable bookmarks.
 ***REMOVED***var bookmarks: [Bookmark]
 
-***REMOVED******REMOVED***/ Determines if the bookmarks list is currently shown or not.
+***REMOVED******REMOVED***/ Determines if the list is currently shown or not.
 ***REMOVED***@Binding
 ***REMOVED***var isPresented: Bool
 
-***REMOVED******REMOVED***/ Actions to be performed when a bookmark is selected.
+***REMOVED******REMOVED***/ User defined actions to be performed when a bookmark is selected.
 ***REMOVED***var selectionChangedActions: ((Bookmark) -> Void)? = nil
 
 ***REMOVED******REMOVED***/ If *non-nil*, this viewpoint is updated when a bookmark is pressed.
