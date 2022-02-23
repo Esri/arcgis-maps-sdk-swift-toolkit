@@ -14,21 +14,21 @@
 import ArcGIS
 import SwiftUI
 
-/// The bookmarks component allows for a user to select and navigate to a defined set of "bookmarked"
-/// locations.
+/// `Bookmarks` allows for a user to view and select from a set of bookmarks.
 public struct Bookmarks: View {
-    /// A list of bookmarks that will be displayed
-    private var bookmarks: [Bookmark]
-
     /// Determines if the bookmarks list is currently shown or not.
     @Binding
     var isPresented: Bool
 
-    /// Actions to be performed when a bookmark is selected.
-    var selectionChangedActions: ((Bookmark) -> Void)? = nil
+    /// User defined actions to be performed when a bookmark is selected.
+    var selectionChangedActions: ((Bookmark) -> Void)? = nil {
+        didSet {
+            bookmarksList.selectionChangedActions = selectionChangedActions
+        }
+    }
 
-    /// If *non-nil*, this viewpoint is updated when a bookmark is pressed.
-    private var viewpoint: Binding<Viewpoint?>?
+    /// A list that displays bookmarks.
+    private var bookmarksList: BookmarksList
 
     /// Creates a `Bookmarks` component.
     public init(
@@ -36,8 +36,12 @@ public struct Bookmarks: View {
         isPresented: Binding<Bool>,
         viewpoint: Binding<Viewpoint?>? = nil
     ) {
-        self.bookmarks = bookmarks
-        self.viewpoint = viewpoint
+        bookmarksList = BookmarksList(
+            bookmarks: bookmarks,
+            isPresented: isPresented,
+            selectionChangedActions: selectionChangedActions,
+            viewpoint: viewpoint
+        )
         _isPresented = isPresented
     }
 
@@ -58,12 +62,7 @@ public struct Bookmarks: View {
             .sheet(isPresented: $isPresented) {
                 BookmarksHeader(isPresented: $isPresented)
                 Divider()
-                BookmarksList(
-                    bookmarks: bookmarks,
-                    isPresented: $isPresented,
-                    selectionChangedActions: selectionChangedActions,
-                    viewpoint: viewpoint
-                )
+                bookmarksList
             }
     }
 }
