@@ -390,7 +390,7 @@ private extension SearchViewModel {
            shouldZoomToResults {
             let builder = EnvelopeBuilder(envelope: envelope)
             builder.expand(factor: 1.1)
-            let targetExtent = builder.toGeometry() as! Envelope
+            let targetExtent = builder.toGeometry()
             viewpoint.wrappedValue = Viewpoint(
                 targetExtent: targetExtent
             )
