@@ -29,7 +29,7 @@ struct BookmarksExampleView: View {
     var showingBookmarks = false
 
     @State
-    var viewpoint: Viewpoint?  = nil
+    var viewpoint: Viewpoint? = nil
 
     var body: some View {
         MapView(map: map, viewpoint: viewpoint)
