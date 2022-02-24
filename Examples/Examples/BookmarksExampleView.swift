@@ -87,50 +87,52 @@ struct BookmarksExampleView: View {
 }
 
 private extension BookmarksExampleView {
-    var sampleBookmarks: [Bookmark] {[
-        Bookmark(
-            name: "Yosemite National Park",
-            viewpoint: Viewpoint(
-                center: Point(
-                    x: -119.538330,
-                    y: 37.865101,
-                    spatialReference: .wgs84
-                ),
-                scale: 250_000
-            )
-        ),
-        Bookmark(
-            name: "Zion National Park",
-            viewpoint: Viewpoint(
-                center: Point(
-                    x: -113.028770,
-                    y: 37.297817,
-                    spatialReference: .wgs84
-                ),
-                scale: 250_000
-            )
-        ),
-        Bookmark(
-            name: "Yellowstone National Park",
-            viewpoint: Viewpoint(
-                center: Point(
-                    x: -110.584663,
-                    y: 44.429764,
-                    spatialReference: .wgs84
-                ),
-                scale: 375_000
-            )
-        ),
-        Bookmark(
-            name: "Grand Canyon National Park",
-            viewpoint: Viewpoint(
-                center: Point(
-                    x: -112.1129,
-                    y: 36.1069,
-                    spatialReference: .wgs84
-                ),
-                scale: 375_000
-            )
-        ),
-    ]}
+    var sampleBookmarks: [Bookmark] {
+        [
+            Bookmark(
+                name: "Yosemite National Park",
+                viewpoint: Viewpoint(
+                    center: Point(
+                        x: -119.538330,
+                        y: 37.865101,
+                        spatialReference: .wgs84
+                    ),
+                    scale: 250_000
+                )
+            ),
+            Bookmark(
+                name: "Zion National Park",
+                viewpoint: Viewpoint(
+                    center: Point(
+                        x: -113.028770,
+                        y: 37.297817,
+                        spatialReference: .wgs84
+                    ),
+                    scale: 250_000
+                )
+            ),
+            Bookmark(
+                name: "Yellowstone National Park",
+                viewpoint: Viewpoint(
+                    center: Point(
+                        x: -110.584663,
+                        y: 44.429764,
+                        spatialReference: .wgs84
+                    ),
+                    scale: 375_000
+                )
+            ),
+            Bookmark(
+                name: "Grand Canyon National Park",
+                viewpoint: Viewpoint(
+                    center: Point(
+                        x: -112.1129,
+                        y: 36.1069,
+                        spatialReference: .wgs84
+                    ),
+                    scale: 375_000
+                )
+            ),
+        ]
+    }
 }
