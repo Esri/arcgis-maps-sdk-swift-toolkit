@@ -86,7 +86,7 @@ struct BookmarksExampleView: View {
     }
 }
 
-extension BookmarksExampleView {
+private extension BookmarksExampleView {
     var sampleBookmarks: [Bookmark] {[
         Bookmark(
             name: "Yosemite National Park",
