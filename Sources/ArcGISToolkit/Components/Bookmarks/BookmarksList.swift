@@ -53,7 +53,7 @@ struct BookmarksList: View {
     /// if the user provided a viewpoint or calling actions if the user implemented the
     /// `selectionChangedActions` modifier.
     /// - Parameter bookmark: The bookmark that was selected.
-    func makeSelection(_ bookmark: Bookmark) {
+    func selectBookmark(_ bookmark: Bookmark) {
         isPresented = false
         if let viewpoint = viewpoint {
             viewpoint.wrappedValue = bookmark.viewpoint
@@ -83,7 +83,7 @@ private extension BookmarksList {
         List {
             ForEach(definedBookmarks, id: \.viewpoint) { bookmark in
                 Button {
-                    makeSelection(bookmark)
+                    selectBookmark(bookmark)
                 } label: {
                     Text(bookmark.name)
                 }
