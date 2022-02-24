@@ -75,7 +75,7 @@ struct BookmarksList: View {
 ***REMOVED***
 ***REMOVED***
 
-extension BookmarksList {
+private extension BookmarksList {
 ***REMOVED******REMOVED***/ A list that is shown once bookmarks have loaded.
 ***REMOVED***private var list: some View {
 ***REMOVED******REMOVED***List {
