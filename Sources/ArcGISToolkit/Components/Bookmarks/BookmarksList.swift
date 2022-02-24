@@ -44,7 +44,7 @@ struct BookmarksList: View {
     /// User defined action to be performed when a bookmark is selected.
     var selectionChangedActions: ((Bookmark) -> Void)? = nil
 
-    /// If *non-nil*, this viewpoint is updated when a bookmark is pressed.
+    /// If non-`nil`, this viewpoint is updated when a bookmark is pressed.
     var viewpoint: Binding<Viewpoint?>?
 
     /// Performs the necessary actions when a bookmark is selected. This includes indicating that
