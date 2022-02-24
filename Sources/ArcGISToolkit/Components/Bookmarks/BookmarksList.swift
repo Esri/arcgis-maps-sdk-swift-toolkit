@@ -66,7 +66,7 @@ struct BookmarksList: View {
 ***REMOVED******REMOVED***if map == nil {
 ***REMOVED******REMOVED******REMOVED***list
 ***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***if mapisLoaded {
+***REMOVED******REMOVED******REMOVED***if mapIsLoaded {
 ***REMOVED******REMOVED******REMOVED******REMOVED***list
 ***REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***loading
@@ -101,7 +101,7 @@ extension BookmarksList {
 ***REMOVED******REMOVED***.task {
 ***REMOVED******REMOVED******REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try await map?.load()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mapisLoaded = true
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mapIsLoaded = true
 ***REMOVED******REMOVED******REMOVED*** catch {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print(error.localizedDescription)
 ***REMOVED******REMOVED******REMOVED***
