@@ -44,7 +44,7 @@ struct BookmarksList: View {
 ***REMOVED******REMOVED***/ User defined action to be performed when a bookmark is selected.
 ***REMOVED***var selectionChangedActions: ((Bookmark) -> Void)? = nil
 
-***REMOVED******REMOVED***/ If *non-nil*, this viewpoint is updated when a bookmark is pressed.
+***REMOVED******REMOVED***/ If non-`nil`, this viewpoint is updated when a bookmark is pressed.
 ***REMOVED***var viewpoint: Binding<Viewpoint?>?
 
 ***REMOVED******REMOVED***/ Performs the necessary actions when a bookmark is selected. This includes indicating that
