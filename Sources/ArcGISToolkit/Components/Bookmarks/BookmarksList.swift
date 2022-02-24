@@ -64,10 +64,10 @@ struct BookmarksList: View {
 
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***if map == nil {
-***REMOVED******REMOVED******REMOVED***list
+***REMOVED******REMOVED******REMOVED***bookmarkList
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED***if mapIsLoaded {
-***REMOVED******REMOVED******REMOVED******REMOVED***list
+***REMOVED******REMOVED******REMOVED******REMOVED***bookmarkList
 ***REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***loading
 ***REMOVED******REMOVED***
@@ -77,7 +77,7 @@ struct BookmarksList: View {
 
 private extension BookmarksList {
 ***REMOVED******REMOVED***/ A list that is shown once bookmarks have loaded.
-***REMOVED***private var list: some View {
+***REMOVED***private var bookmarkList: some View {
 ***REMOVED******REMOVED***List {
 ***REMOVED******REMOVED******REMOVED***ForEach(definedBookmarks, id: \.viewpoint) { bookmark in
 ***REMOVED******REMOVED******REMOVED******REMOVED***Button {
