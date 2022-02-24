@@ -39,7 +39,7 @@ struct BookmarksList: View {
 
 ***REMOVED******REMOVED***/ Indicates if bookmarks have loaded and are ready for display.
 ***REMOVED***@State
-***REMOVED***var mapisLoaded = false
+***REMOVED***var mapIsLoaded = false
 
 ***REMOVED******REMOVED***/ User defined action to be performed when a bookmark is selected.
 ***REMOVED***var selectionChangedActions: ((Bookmark) -> Void)? = nil
