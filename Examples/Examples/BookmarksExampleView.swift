@@ -36,7 +36,7 @@ struct BookmarksExampleView: View {
 ***REMOVED******REMOVED******REMOVED***.onViewpointChanged(kind: .centerAndScale) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***viewpoint = $0
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED*** Show the bookmarks control as button
+***REMOVED******REMOVED******REMOVED******REMOVED*** Show the bookmarks control as a button.
 ***REMOVED******REMOVED******REMOVED***.overlay(alignment: .topLeading) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***showingBookmarks.toggle()
