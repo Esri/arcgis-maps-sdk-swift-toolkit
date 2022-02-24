@@ -75,7 +75,7 @@ struct BookmarksList: View {
     }
 }
 
-extension BookmarksList {
+private extension BookmarksList {
     /// A list that is shown once bookmarks have loaded.
     private var list: some View {
         List {
