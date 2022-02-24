@@ -53,7 +53,7 @@ struct BookmarksList: View {
 ***REMOVED******REMOVED***/ if the user provided a viewpoint or calling actions if the user implemented the
 ***REMOVED******REMOVED***/ `selectionChangedActions` modifier.
 ***REMOVED******REMOVED***/ - Parameter bookmark: The bookmark that was selected.
-***REMOVED***func makeSelection(_ bookmark: Bookmark) {
+***REMOVED***func selectBookmark(_ bookmark: Bookmark) {
 ***REMOVED******REMOVED***isPresented = false
 ***REMOVED******REMOVED***if let viewpoint = viewpoint {
 ***REMOVED******REMOVED******REMOVED***viewpoint.wrappedValue = bookmark.viewpoint
@@ -83,7 +83,7 @@ private extension BookmarksList {
 ***REMOVED******REMOVED***List {
 ***REMOVED******REMOVED******REMOVED***ForEach(definedBookmarks, id: \.viewpoint) { bookmark in
 ***REMOVED******REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeSelection(bookmark)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectBookmark(bookmark)
 ***REMOVED******REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(bookmark.name)
 ***REMOVED******REMOVED******REMOVED***

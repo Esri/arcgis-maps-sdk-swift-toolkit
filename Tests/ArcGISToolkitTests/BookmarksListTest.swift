@@ -19,7 +19,7 @@ import XCTest
 
 class BookmarksListTest: XCTestCase {
 ***REMOVED******REMOVED***/ Assert that the list properly handles a selction when provided a modifier.
-***REMOVED***func testMakeSelectionWithModifier() {
+***REMOVED***func testSelectBookmarkWithModifier() {
 ***REMOVED******REMOVED***let expectation = XCTestExpectation(
 ***REMOVED******REMOVED******REMOVED***description: "Modifier action was performed"
 ***REMOVED******REMOVED***)
@@ -36,17 +36,17 @@ class BookmarksListTest: XCTestCase {
 ***REMOVED******REMOVED***let bookmarksList = BookmarksList(
 ***REMOVED******REMOVED******REMOVED***bookmarks: bookmarks,
 ***REMOVED******REMOVED******REMOVED***isPresented: isPresented,
-***REMOVED******REMOVED******REMOVED***mapisLoaded: true,
+***REMOVED******REMOVED******REMOVED***mapIsLoaded: true,
 ***REMOVED******REMOVED******REMOVED***selectionChangedActions: action
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***XCTAssertTrue(_isPresented)
-***REMOVED******REMOVED***bookmarksList.makeSelection(bookmarks.first!)
+***REMOVED******REMOVED***bookmarksList.selectBookmark(bookmarks.first!)
 ***REMOVED******REMOVED***XCTAssertFalse(_isPresented)
 ***REMOVED******REMOVED***wait(for: [expectation], timeout: 1.0)
 ***REMOVED***
 
 ***REMOVED******REMOVED***/ Assert that the list properly handles a selction when provided a modifier and web map.
-***REMOVED***func testMakeSelectionWithModifierAndWebMap() async {
+***REMOVED***func testSelectBookmarkWithModifierAndWebMap() async {
 ***REMOVED******REMOVED***let expectation = XCTestExpectation(
 ***REMOVED******REMOVED******REMOVED***description: "Modifier action was performed"
 ***REMOVED******REMOVED***)
@@ -68,17 +68,17 @@ class BookmarksListTest: XCTestCase {
 ***REMOVED******REMOVED***let bookmarksList = BookmarksList(
 ***REMOVED******REMOVED******REMOVED***isPresented: isPresented,
 ***REMOVED******REMOVED******REMOVED***map: webMap,
-***REMOVED******REMOVED******REMOVED***mapisLoaded: true,
+***REMOVED******REMOVED******REMOVED***mapIsLoaded: true,
 ***REMOVED******REMOVED******REMOVED***selectionChangedActions: action
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***XCTAssertTrue(_isPresented)
-***REMOVED******REMOVED***bookmarksList.makeSelection(webMap.bookmarks.first!)
+***REMOVED******REMOVED***bookmarksList.selectBookmark(webMap.bookmarks.first!)
 ***REMOVED******REMOVED***XCTAssertFalse(_isPresented)
 ***REMOVED******REMOVED***wait(for: [expectation], timeout: 1.0)
 ***REMOVED***
 
 ***REMOVED******REMOVED***/ Assert that the list properly handles a selction when provided a viewpoint.
-***REMOVED***func testMakeSelectionWithViewpoint() {
+***REMOVED***func testSelectBookmarkWithViewpoint() {
 ***REMOVED******REMOVED***let bookmarks = sampleBookmarks
 ***REMOVED******REMOVED***var _isPresented = true
 ***REMOVED******REMOVED***let isPresented = Binding(
@@ -93,18 +93,18 @@ class BookmarksListTest: XCTestCase {
 ***REMOVED******REMOVED***let bookmarksList = BookmarksList(
 ***REMOVED******REMOVED******REMOVED***bookmarks: bookmarks,
 ***REMOVED******REMOVED******REMOVED***isPresented: isPresented,
-***REMOVED******REMOVED******REMOVED***mapisLoaded: true,
+***REMOVED******REMOVED******REMOVED***mapIsLoaded: true,
 ***REMOVED******REMOVED******REMOVED***viewpoint: viewpoint
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***XCTAssertTrue(_isPresented)
 ***REMOVED******REMOVED***XCTAssertNotEqual(_viewpoint, bookmarks.first?.viewpoint)
-***REMOVED******REMOVED***bookmarksList.makeSelection(bookmarks.first!)
+***REMOVED******REMOVED***bookmarksList.selectBookmark(bookmarks.first!)
 ***REMOVED******REMOVED***XCTAssertFalse(_isPresented)
 ***REMOVED******REMOVED***XCTAssertEqual(_viewpoint, bookmarks.first?.viewpoint)
 ***REMOVED***
 
 ***REMOVED******REMOVED***/ Assert that the list properly handles a selction when provided a viewpoint and web map.
-***REMOVED***func testMakeSelectionWithViewpointAndWebMap() async {
+***REMOVED***func testSelectBookmarkWithViewpointAndWebMap() async {
 ***REMOVED******REMOVED***let webMap = webMap
 ***REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED***try await webMap.load()
@@ -124,12 +124,12 @@ class BookmarksListTest: XCTestCase {
 ***REMOVED******REMOVED***let bookmarksList = BookmarksList(
 ***REMOVED******REMOVED******REMOVED***isPresented: isPresented,
 ***REMOVED******REMOVED******REMOVED***map: webMap,
-***REMOVED******REMOVED******REMOVED***mapisLoaded: true,
+***REMOVED******REMOVED******REMOVED***mapIsLoaded: true,
 ***REMOVED******REMOVED******REMOVED***viewpoint: viewpoint
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***XCTAssertTrue(_isPresented)
 ***REMOVED******REMOVED***XCTAssertNotEqual(_viewpoint, webMap.bookmarks.first?.viewpoint)
-***REMOVED******REMOVED***bookmarksList.makeSelection(webMap.bookmarks.first!)
+***REMOVED******REMOVED***bookmarksList.selectBookmark(webMap.bookmarks.first!)
 ***REMOVED******REMOVED***XCTAssertFalse(_isPresented)
 ***REMOVED******REMOVED***XCTAssertEqual(_viewpoint, webMap.bookmarks.first?.viewpoint)
 ***REMOVED***
