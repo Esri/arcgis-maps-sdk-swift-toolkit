@@ -64,10 +64,10 @@ struct BookmarksList: View {
 
     var body: some View {
         if map == nil {
-            list
+            bookmarkList
         } else {
             if mapIsLoaded {
-                list
+                bookmarkList
             } else {
                 loading
             }
@@ -77,7 +77,7 @@ struct BookmarksList: View {
 
 private extension BookmarksList {
     /// A list that is shown once bookmarks have loaded.
-    private var list: some View {
+    private var bookmarkList: some View {
         List {
             ForEach(definedBookmarks, id: \.viewpoint) { bookmark in
                 Button {
