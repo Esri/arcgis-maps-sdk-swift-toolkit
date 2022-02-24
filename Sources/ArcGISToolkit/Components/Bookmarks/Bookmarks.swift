@@ -33,29 +33,42 @@ public struct Bookmarks: View {
 ***REMOVED***
 
 ***REMOVED******REMOVED***/ Creates a `Bookmarks` component.
-***REMOVED******REMOVED***/ - precondition: `bookmarks` or `map` is non-nil.
 ***REMOVED******REMOVED***/ - precondition: `viewpoint` is non-nil or the `selectionChangedActions` modifier is
 ***REMOVED******REMOVED***/ implemented.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - isPresented: Determines if the bookmarks list is presented.
 ***REMOVED******REMOVED***/   - bookmarks: A list of bookmarks. Use this when displaying bookmarks defined at run-time.
-***REMOVED******REMOVED***/   Use either `bookmarks` or `map` exclusively.
-***REMOVED******REMOVED***/   - map: A web map authored with pre-existing bookmarks. Use either `map` or `bookmarks`
-***REMOVED******REMOVED***/   exclusively.
 ***REMOVED******REMOVED***/   - viewpoint: A viewpoint binding that will be updated when a bookmark is selected. Use
 ***REMOVED******REMOVED***/   either `viewpoint` or `selectionChangedActions` exclusively.
 ***REMOVED***public init(
 ***REMOVED******REMOVED***isPresented: Binding<Bool>,
-***REMOVED******REMOVED***bookmarks: [Bookmark]? = nil,
-***REMOVED******REMOVED***map: Map? = nil,
+***REMOVED******REMOVED***bookmarks: [Bookmark],
 ***REMOVED******REMOVED***viewpoint: Binding<Viewpoint?>? = nil
 ***REMOVED***) {
-***REMOVED******REMOVED***precondition((bookmarks != nil) || (map != nil))
 ***REMOVED******REMOVED***bookmarksList = BookmarksList(
 ***REMOVED******REMOVED******REMOVED***bookmarks: bookmarks,
 ***REMOVED******REMOVED******REMOVED***isPresented: isPresented,
+***REMOVED******REMOVED******REMOVED***viewpoint: viewpoint
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***_isPresented = isPresented
+***REMOVED***
+
+***REMOVED******REMOVED***/ Creates a `Bookmarks` component.
+***REMOVED******REMOVED***/ - precondition: `viewpoint` is non-nil or the `selectionChangedActions` modifier is
+***REMOVED******REMOVED***/ implemented.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - isPresented: Determines if the bookmarks list is presented.
+***REMOVED******REMOVED***/   - map: A web map authored with pre-existing bookmarks.
+***REMOVED******REMOVED***/   - viewpoint: A viewpoint binding that will be updated when a bookmark is selected. Use
+***REMOVED******REMOVED***/   either `viewpoint` or `selectionChangedActions` exclusively.
+***REMOVED***public init(
+***REMOVED******REMOVED***isPresented: Binding<Bool>,
+***REMOVED******REMOVED***map: Map,
+***REMOVED******REMOVED***viewpoint: Binding<Viewpoint?>? = nil
+***REMOVED***) {
+***REMOVED******REMOVED***bookmarksList = BookmarksList(
+***REMOVED******REMOVED******REMOVED***isPresented: isPresented,
 ***REMOVED******REMOVED******REMOVED***map: map,
-***REMOVED******REMOVED******REMOVED***selectionChangedActions: selectionChangedActions,
 ***REMOVED******REMOVED******REMOVED***viewpoint: viewpoint
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***_isPresented = isPresented
