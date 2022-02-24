@@ -75,12 +75,11 @@ public struct Bookmarks: View {
     }
 
     public var body: some View {
-        EmptyView()
-            .sheet(isPresented: $isPresented) {
-                BookmarksHeader(isPresented: $isPresented)
-                Divider()
-                bookmarksList
-            }
+        Group {
+            BookmarksHeader(isPresented: $isPresented)
+            Divider()
+            bookmarksList
+        }
     }
 
     /// Sets a closure to perform when the viewpoint of the map view changes.

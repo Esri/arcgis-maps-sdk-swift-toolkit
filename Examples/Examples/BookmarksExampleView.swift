@@ -65,7 +65,7 @@ struct BookmarksExampleView: View {
                 label: { Label("Options", systemImage: "ellipsis") }
                 }
             }
-            .overlay(alignment: .topTrailing) {
+            .sheet(isPresented: $showingBookmarks) {
                 // Let the bookmarks component control viewpoint changes:
                 Bookmarks(
                     isPresented: $showingBookmarks,
