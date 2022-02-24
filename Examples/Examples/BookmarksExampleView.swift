@@ -36,7 +36,7 @@ struct BookmarksExampleView: View {
             .onViewpointChanged(kind: .centerAndScale) {
                 viewpoint = $0
             }
-            // Show the bookmarks control as button
+            // Show the bookmarks control as a button.
             .overlay(alignment: .topLeading) {
                 Button {
                     showingBookmarks.toggle()
