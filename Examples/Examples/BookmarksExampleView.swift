@@ -86,7 +86,7 @@ struct BookmarksExampleView: View {
 ***REMOVED***
 ***REMOVED***
 
-extension BookmarksExampleView {
+private extension BookmarksExampleView {
 ***REMOVED***var sampleBookmarks: [Bookmark] {[
 ***REMOVED******REMOVED***Bookmark(
 ***REMOVED******REMOVED******REMOVED***name: "Yosemite National Park",
