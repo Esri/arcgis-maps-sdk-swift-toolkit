@@ -42,8 +42,7 @@ struct BookmarksExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***showingBookmarks.toggle()
 ***REMOVED******REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***systemName:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***showingBookmarks ? "bookmark.fill" : "bookmark"
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***systemName: showingBookmarks ? "bookmark.fill" : "bookmark"
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.buttonStyle(.bordered)
