@@ -39,7 +39,7 @@ struct BookmarksList: View {
 
     /// Indicates if bookmarks have loaded and are ready for display.
     @State
-    var mapisLoaded = false
+    var mapIsLoaded = false
 
     /// User defined action to be performed when a bookmark is selected.
     var selectionChangedActions: ((Bookmark) -> Void)? = nil
