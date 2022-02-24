@@ -66,7 +66,7 @@ struct BookmarksList: View {
         if map == nil {
             list
         } else {
-            if mapisLoaded {
+            if mapIsLoaded {
                 list
             } else {
                 loading
@@ -101,7 +101,7 @@ extension BookmarksList {
             }.task {
                 do {
                     try await map?.load()
-                    mapisLoaded = true
+                    mapIsLoaded = true
                 } catch {
                     print(error.localizedDescription)
                 }
