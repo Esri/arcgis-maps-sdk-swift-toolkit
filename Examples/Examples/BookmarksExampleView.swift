@@ -87,50 +87,52 @@ struct BookmarksExampleView: View {
 ***REMOVED***
 
 private extension BookmarksExampleView {
-***REMOVED***var sampleBookmarks: [Bookmark] {[
-***REMOVED******REMOVED***Bookmark(
-***REMOVED******REMOVED******REMOVED***name: "Yosemite National Park",
-***REMOVED******REMOVED******REMOVED***viewpoint: Viewpoint(
-***REMOVED******REMOVED******REMOVED******REMOVED***center: Point(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***x: -119.538330,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***y: 37.865101,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***spatialReference: .wgs84
-***REMOVED******REMOVED******REMOVED******REMOVED***),
-***REMOVED******REMOVED******REMOVED******REMOVED***scale: 250_000
-***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED***),
-***REMOVED******REMOVED***Bookmark(
-***REMOVED******REMOVED******REMOVED***name: "Zion National Park",
-***REMOVED******REMOVED******REMOVED***viewpoint: Viewpoint(
-***REMOVED******REMOVED******REMOVED******REMOVED***center: Point(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***x: -113.028770,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***y: 37.297817,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***spatialReference: .wgs84
-***REMOVED******REMOVED******REMOVED******REMOVED***),
-***REMOVED******REMOVED******REMOVED******REMOVED***scale: 250_000
-***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED***),
-***REMOVED******REMOVED***Bookmark(
-***REMOVED******REMOVED******REMOVED***name: "Yellowstone National Park",
-***REMOVED******REMOVED******REMOVED***viewpoint: Viewpoint(
-***REMOVED******REMOVED******REMOVED******REMOVED***center: Point(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***x: -110.584663,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***y: 44.429764,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***spatialReference: .wgs84
-***REMOVED******REMOVED******REMOVED******REMOVED***),
-***REMOVED******REMOVED******REMOVED******REMOVED***scale: 375_000
-***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED***),
-***REMOVED******REMOVED***Bookmark(
-***REMOVED******REMOVED******REMOVED***name: "Grand Canyon National Park",
-***REMOVED******REMOVED******REMOVED***viewpoint: Viewpoint(
-***REMOVED******REMOVED******REMOVED******REMOVED***center: Point(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***x: -112.1129,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***y: 36.1069,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***spatialReference: .wgs84
-***REMOVED******REMOVED******REMOVED******REMOVED***),
-***REMOVED******REMOVED******REMOVED******REMOVED***scale: 375_000
-***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED***),
-***REMOVED***]***REMOVED***
+***REMOVED***var sampleBookmarks: [Bookmark] {
+***REMOVED******REMOVED***[
+***REMOVED******REMOVED******REMOVED***Bookmark(
+***REMOVED******REMOVED******REMOVED******REMOVED***name: "Yosemite National Park",
+***REMOVED******REMOVED******REMOVED******REMOVED***viewpoint: Viewpoint(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***center: Point(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***x: -119.538330,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***y: 37.865101,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***spatialReference: .wgs84
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***scale: 250_000
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***),
+***REMOVED******REMOVED******REMOVED***Bookmark(
+***REMOVED******REMOVED******REMOVED******REMOVED***name: "Zion National Park",
+***REMOVED******REMOVED******REMOVED******REMOVED***viewpoint: Viewpoint(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***center: Point(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***x: -113.028770,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***y: 37.297817,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***spatialReference: .wgs84
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***scale: 250_000
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***),
+***REMOVED******REMOVED******REMOVED***Bookmark(
+***REMOVED******REMOVED******REMOVED******REMOVED***name: "Yellowstone National Park",
+***REMOVED******REMOVED******REMOVED******REMOVED***viewpoint: Viewpoint(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***center: Point(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***x: -110.584663,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***y: 44.429764,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***spatialReference: .wgs84
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***scale: 375_000
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***),
+***REMOVED******REMOVED******REMOVED***Bookmark(
+***REMOVED******REMOVED******REMOVED******REMOVED***name: "Grand Canyon National Park",
+***REMOVED******REMOVED******REMOVED******REMOVED***viewpoint: Viewpoint(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***center: Point(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***x: -112.1129,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***y: 36.1069,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***spatialReference: .wgs84
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***scale: 375_000
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***),
+***REMOVED******REMOVED***]
+***REMOVED***
 ***REMOVED***
