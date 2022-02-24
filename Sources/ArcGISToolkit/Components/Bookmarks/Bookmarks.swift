@@ -61,6 +61,15 @@ public struct Bookmarks: View {
         _isPresented = isPresented
     }
 
+    public var body: some View {
+        EmptyView()
+            .sheet(isPresented: $isPresented) {
+                BookmarksHeader(isPresented: $isPresented)
+                Divider()
+                bookmarksList
+            }
+    }
+
     /// Sets a closure to perform when the viewpoint of the map view changes.
     /// - Parameters:
     ///   - kind: The kind of viewpoint passed to the `action` closure.
@@ -71,14 +80,5 @@ public struct Bookmarks: View {
         var copy = self
         copy.selectionChangedActions = action
         return copy
-    }
-
-    public var body: some View {
-        EmptyView()
-            .sheet(isPresented: $isPresented) {
-                BookmarksHeader(isPresented: $isPresented)
-                Divider()
-                bookmarksList
-            }
     }
 }
