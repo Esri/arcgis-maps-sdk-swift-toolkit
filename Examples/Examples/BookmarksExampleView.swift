@@ -19,7 +19,7 @@ struct BookmarksExampleView: View {
     /// The map displayed in the map view.
     private let map = Map(basemapStyle: .arcGISImagery)
 
-    /// A web map with predefined bookmarks
+    /// A web map with predefined bookmarks.
     private let webMap = Map(url: URL(string: "https://runtime.maps.arcgis.com/home/item.html?id=16f1b8ba37b44dc3884afc8d5f454dd2")!)!
 
     /// Indicates if the bookmarks list is shown or not.
