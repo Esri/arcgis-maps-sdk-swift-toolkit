@@ -61,6 +61,15 @@ public struct Bookmarks: View {
 ***REMOVED******REMOVED***_isPresented = isPresented
 ***REMOVED***
 
+***REMOVED***public var body: some View {
+***REMOVED******REMOVED***EmptyView()
+***REMOVED******REMOVED******REMOVED***.sheet(isPresented: $isPresented) {
+***REMOVED******REMOVED******REMOVED******REMOVED***BookmarksHeader(isPresented: $isPresented)
+***REMOVED******REMOVED******REMOVED******REMOVED***Divider()
+***REMOVED******REMOVED******REMOVED******REMOVED***bookmarksList
+***REMOVED******REMOVED***
+***REMOVED***
+
 ***REMOVED******REMOVED***/ Sets a closure to perform when the viewpoint of the map view changes.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - kind: The kind of viewpoint passed to the `action` closure.
@@ -71,14 +80,5 @@ public struct Bookmarks: View {
 ***REMOVED******REMOVED***var copy = self
 ***REMOVED******REMOVED***copy.selectionChangedActions = action
 ***REMOVED******REMOVED***return copy
-***REMOVED***
-
-***REMOVED***public var body: some View {
-***REMOVED******REMOVED***EmptyView()
-***REMOVED******REMOVED******REMOVED***.sheet(isPresented: $isPresented) {
-***REMOVED******REMOVED******REMOVED******REMOVED***BookmarksHeader(isPresented: $isPresented)
-***REMOVED******REMOVED******REMOVED******REMOVED***Divider()
-***REMOVED******REMOVED******REMOVED******REMOVED***bookmarksList
-***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
