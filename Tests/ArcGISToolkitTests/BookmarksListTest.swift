@@ -19,7 +19,7 @@ import XCTest
 
 class BookmarksListTest: XCTestCase {
     /// Assert that the list properly handles a selction when provided a modifier.
-    func testMakeSelectionWithModifier() {
+    func testSelectBookmarkWithModifier() {
         let expectation = XCTestExpectation(
             description: "Modifier action was performed"
         )
@@ -36,17 +36,17 @@ class BookmarksListTest: XCTestCase {
         let bookmarksList = BookmarksList(
             bookmarks: bookmarks,
             isPresented: isPresented,
-            mapisLoaded: true,
+            mapIsLoaded: true,
             selectionChangedActions: action
         )
         XCTAssertTrue(_isPresented)
-        bookmarksList.makeSelection(bookmarks.first!)
+        bookmarksList.selectBookmark(bookmarks.first!)
         XCTAssertFalse(_isPresented)
         wait(for: [expectation], timeout: 1.0)
     }
 
     /// Assert that the list properly handles a selction when provided a modifier and web map.
-    func testMakeSelectionWithModifierAndWebMap() async {
+    func testSelectBookmarkWithModifierAndWebMap() async {
         let expectation = XCTestExpectation(
             description: "Modifier action was performed"
         )
@@ -68,17 +68,17 @@ class BookmarksListTest: XCTestCase {
         let bookmarksList = BookmarksList(
             isPresented: isPresented,
             map: webMap,
-            mapisLoaded: true,
+            mapIsLoaded: true,
             selectionChangedActions: action
         )
         XCTAssertTrue(_isPresented)
-        bookmarksList.makeSelection(webMap.bookmarks.first!)
+        bookmarksList.selectBookmark(webMap.bookmarks.first!)
         XCTAssertFalse(_isPresented)
         wait(for: [expectation], timeout: 1.0)
     }
 
     /// Assert that the list properly handles a selction when provided a viewpoint.
-    func testMakeSelectionWithViewpoint() {
+    func testSelectBookmarkWithViewpoint() {
         let bookmarks = sampleBookmarks
         var _isPresented = true
         let isPresented = Binding(
@@ -93,18 +93,18 @@ class BookmarksListTest: XCTestCase {
         let bookmarksList = BookmarksList(
             bookmarks: bookmarks,
             isPresented: isPresented,
-            mapisLoaded: true,
+            mapIsLoaded: true,
             viewpoint: viewpoint
         )
         XCTAssertTrue(_isPresented)
         XCTAssertNotEqual(_viewpoint, bookmarks.first?.viewpoint)
-        bookmarksList.makeSelection(bookmarks.first!)
+        bookmarksList.selectBookmark(bookmarks.first!)
         XCTAssertFalse(_isPresented)
         XCTAssertEqual(_viewpoint, bookmarks.first?.viewpoint)
     }
 
     /// Assert that the list properly handles a selction when provided a viewpoint and web map.
-    func testMakeSelectionWithViewpointAndWebMap() async {
+    func testSelectBookmarkWithViewpointAndWebMap() async {
         let webMap = webMap
         do {
             try await webMap.load()
@@ -124,12 +124,12 @@ class BookmarksListTest: XCTestCase {
         let bookmarksList = BookmarksList(
             isPresented: isPresented,
             map: webMap,
-            mapisLoaded: true,
+            mapIsLoaded: true,
             viewpoint: viewpoint
         )
         XCTAssertTrue(_isPresented)
         XCTAssertNotEqual(_viewpoint, webMap.bookmarks.first?.viewpoint)
-        bookmarksList.makeSelection(webMap.bookmarks.first!)
+        bookmarksList.selectBookmark(webMap.bookmarks.first!)
         XCTAssertFalse(_isPresented)
         XCTAssertEqual(_viewpoint, webMap.bookmarks.first?.viewpoint)
     }
