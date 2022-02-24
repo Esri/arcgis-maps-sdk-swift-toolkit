@@ -47,9 +47,11 @@ struct BookmarksList: View {
 ***REMOVED******REMOVED***/ If non-`nil`, this viewpoint is updated when a bookmark is pressed.
 ***REMOVED***var viewpoint: Binding<Viewpoint?>?
 
-***REMOVED******REMOVED***/ Performs the necessary actions when a bookmark is selected. This includes indicating that
-***REMOVED******REMOVED***/ bookmarks should be set to a hidden state, and changing the viewpoint if the user provided a
-***REMOVED******REMOVED***/ viewpoint or calling actions if the user implemented the `selectionChangedActions` modifier.
+***REMOVED******REMOVED***/ Performs the necessary actions when a bookmark is selected.
+***REMOVED******REMOVED***/
+***REMOVED******REMOVED***/ This includes indicating that bookmarks should be set to a hidden state, and changing the viewpoint
+***REMOVED******REMOVED***/ if the user provided a viewpoint or calling actions if the user implemented the
+***REMOVED******REMOVED***/ `selectionChangedActions` modifier.
 ***REMOVED******REMOVED***/ - Parameter bookmark: The bookmark that was selected.
 ***REMOVED***func makeSelection(_ bookmark: Bookmark) {
 ***REMOVED******REMOVED***isPresented = false
