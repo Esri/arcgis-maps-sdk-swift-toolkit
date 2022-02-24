@@ -75,12 +75,11 @@ public struct Bookmarks: View {
 ***REMOVED***
 
 ***REMOVED***public var body: some View {
-***REMOVED******REMOVED***EmptyView()
-***REMOVED******REMOVED******REMOVED***.sheet(isPresented: $isPresented) {
-***REMOVED******REMOVED******REMOVED******REMOVED***BookmarksHeader(isPresented: $isPresented)
-***REMOVED******REMOVED******REMOVED******REMOVED***Divider()
-***REMOVED******REMOVED******REMOVED******REMOVED***bookmarksList
-***REMOVED******REMOVED***
+***REMOVED******REMOVED***Group {
+***REMOVED******REMOVED******REMOVED***BookmarksHeader(isPresented: $isPresented)
+***REMOVED******REMOVED******REMOVED***Divider()
+***REMOVED******REMOVED******REMOVED***bookmarksList
+***REMOVED***
 ***REMOVED***
 
 ***REMOVED******REMOVED***/ Sets a closure to perform when the viewpoint of the map view changes.

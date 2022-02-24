@@ -65,7 +65,7 @@ struct BookmarksExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***label: { Label("Options", systemImage: "ellipsis") ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.overlay(alignment: .topTrailing) {
+***REMOVED******REMOVED******REMOVED***.sheet(isPresented: $showingBookmarks) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Let the bookmarks component control viewpoint changes:
 ***REMOVED******REMOVED******REMOVED******REMOVED***Bookmarks(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented: $showingBookmarks,
