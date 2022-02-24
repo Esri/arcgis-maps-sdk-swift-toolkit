@@ -42,8 +42,7 @@ struct BookmarksExampleView: View {
                     showingBookmarks.toggle()
                 } label: {
                     Image(
-                        systemName:
-                            showingBookmarks ? "bookmark.fill" : "bookmark"
+                        systemName: showingBookmarks ? "bookmark.fill" : "bookmark"
                     )
                 }
                 .buttonStyle(.bordered)
