@@ -14,7 +14,7 @@
 import ArcGIS
 import SwiftUI
 
-/// `Bookmarks` allows for a user to view and select from a set of bookmarks.
+/// `Bookmarks` allows a user to view and select from a set of bookmarks.
 public struct Bookmarks: View {
     /// A list that displays bookmarks.
     private var bookmarksList: BookmarksList
