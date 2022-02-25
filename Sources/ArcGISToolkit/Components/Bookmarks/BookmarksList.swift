@@ -21,13 +21,15 @@ struct BookmarksList: View {
 
 ***REMOVED******REMOVED***/ A list of bookmarks derived either directly from `bookmarks` or from `map`.
 ***REMOVED***private var definedBookmarks: [Bookmark] {
+***REMOVED******REMOVED***var result: [Bookmark] = []
 ***REMOVED******REMOVED***if let bookmarks = bookmarks {
-***REMOVED******REMOVED******REMOVED***return bookmarks
+***REMOVED******REMOVED******REMOVED***result = bookmarks
 ***REMOVED*** else if let map = map {
-***REMOVED******REMOVED******REMOVED***return map.bookmarks
+***REMOVED******REMOVED******REMOVED***result = map.bookmarks
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED***return []
 ***REMOVED***
+***REMOVED******REMOVED***return result.sorted { $0.name < $1.name ***REMOVED***
 ***REMOVED***
 
 ***REMOVED******REMOVED***/ Determines if the list is currently shown or not.
@@ -78,17 +80,40 @@ struct BookmarksList: View {
 ***REMOVED***
 
 private extension BookmarksList {
+***REMOVED******REMOVED***/ The minimum height of a bookmark list item.
+***REMOVED******REMOVED***/
+***REMOVED******REMOVED***/ This number will be larger when them item's name consumes 2+ lines of text.
+***REMOVED***private var minimumRowHeight: Double {
+***REMOVED******REMOVED***44
+***REMOVED***
+
 ***REMOVED******REMOVED***/ A list that is shown once bookmarks have loaded.
 ***REMOVED***private var bookmarkList: some View {
 ***REMOVED******REMOVED***List {
-***REMOVED******REMOVED******REMOVED***ForEach(definedBookmarks, id: \.viewpoint) { bookmark in
-***REMOVED******REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectBookmark(bookmark)
-***REMOVED******REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(bookmark.name)
+***REMOVED******REMOVED******REMOVED***if bookmarks?.isEmpty ?? true {
+***REMOVED******REMOVED******REMOVED******REMOVED***Label {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("No bookmarks")
+***REMOVED******REMOVED******REMOVED*** icon: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "bookmark.slash")
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.primary)
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***ForEach(definedBookmarks, id: \.viewpoint) { bookmark in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectBookmark(bookmark)
+***REMOVED******REMOVED******REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(bookmark.name)
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***.listStyle(.plain)
+***REMOVED******REMOVED***.frame(
+***REMOVED******REMOVED******REMOVED***minHeight: minimumRowHeight,
+***REMOVED******REMOVED******REMOVED***idealHeight: minimumRowHeight * Double(
+***REMOVED******REMOVED******REMOVED******REMOVED***max(1, definedBookmarks.count)),
+***REMOVED******REMOVED******REMOVED***maxHeight: .infinity
+***REMOVED******REMOVED***)
 ***REMOVED***
 
 ***REMOVED******REMOVED***/ A view that is shown while a web map is loading.
@@ -97,8 +122,7 @@ private extension BookmarksList {
 ***REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ProgressView()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.progressViewStyle(CircularProgressViewStyle())
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding([.trailing], 5)
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text("Loading")
 ***REMOVED******REMOVED***.task {
 ***REMOVED******REMOVED******REMOVED******REMOVED***do {
@@ -110,5 +134,6 @@ private extension BookmarksList {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED***
+***REMOVED******REMOVED***.padding()
 ***REMOVED***
 ***REMOVED***

@@ -77,7 +77,6 @@ public struct Bookmarks: View {
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***Group {
 ***REMOVED******REMOVED******REMOVED***BookmarksHeader(isPresented: $isPresented)
-***REMOVED******REMOVED******REMOVED***Divider()
 ***REMOVED******REMOVED******REMOVED***bookmarksList
 ***REMOVED***
 ***REMOVED***
