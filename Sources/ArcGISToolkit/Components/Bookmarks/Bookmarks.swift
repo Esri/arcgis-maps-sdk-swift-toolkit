@@ -77,7 +77,6 @@ public struct Bookmarks: View {
     public var body: some View {
         Group {
             BookmarksHeader(isPresented: $isPresented)
-            Divider()
             bookmarksList
         }
     }

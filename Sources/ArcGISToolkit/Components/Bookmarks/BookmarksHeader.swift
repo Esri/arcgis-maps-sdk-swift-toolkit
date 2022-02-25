@@ -20,26 +20,23 @@ struct BookmarksHeader: View {
     var isPresented: Bool
 
     public var body: some View {
-        VStack {
-            HStack {
-                Label {
-                    Text("Bookmarks")
-                } icon: {
-                    Image(systemName: "bookmark")
-                }
-                .font(.title2)
-                Spacer()
-                Button {
-                    isPresented = false
-                } label: {
-                    Image(systemName: "xmark.circle")
-                }
+        HStack {
+            Image(systemName: "bookmark")
+            VStack {
+                Text("Bookmarks")
+                    .font(.headline)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                Text("Select a bookmark")
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
+                    .frame(maxWidth: .infinity, alignment: .leading)
             }
-            Text("Select a bookmark")
-                .font(.subheadline)
-                .foregroundColor(.secondary)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding([.top], 5)
+            Spacer()
+            Button {
+                isPresented = false
+            } label: {
+                Image(systemName: "xmark.circle")
+            }
         }
         .padding()
     }

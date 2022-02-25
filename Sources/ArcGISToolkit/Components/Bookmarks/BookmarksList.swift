@@ -21,13 +21,15 @@ struct BookmarksList: View {
 
     /// A list of bookmarks derived either directly from `bookmarks` or from `map`.
     private var definedBookmarks: [Bookmark] {
+        var result: [Bookmark] = []
         if let bookmarks = bookmarks {
-            return bookmarks
+            result = bookmarks
         } else if let map = map {
-            return map.bookmarks
+            result = map.bookmarks
         } else {
             return []
         }
+        return result.sorted { $0.name < $1.name }
     }
 
     /// Determines if the list is currently shown or not.
@@ -78,17 +80,40 @@ struct BookmarksList: View {
 }
 
 private extension BookmarksList {
+    /// The minimum height of a bookmark list item.
+    ///
+    /// This number will be larger when them item's name consumes 2+ lines of text.
+    private var minimumRowHeight: Double {
+        44
+    }
+
     /// A list that is shown once bookmarks have loaded.
     private var bookmarkList: some View {
         List {
-            ForEach(definedBookmarks, id: \.viewpoint) { bookmark in
-                Button {
-                    selectBookmark(bookmark)
-                } label: {
-                    Text(bookmark.name)
+            if bookmarks?.isEmpty ?? true {
+                Label {
+                    Text("No bookmarks")
+                } icon: {
+                    Image(systemName: "bookmark.slash")
+                }
+                .foregroundColor(.primary)
+            } else {
+                ForEach(definedBookmarks, id: \.viewpoint) { bookmark in
+                    Button {
+                        selectBookmark(bookmark)
+                    } label: {
+                        Text(bookmark.name)
+                    }
                 }
             }
         }
+        .listStyle(.plain)
+        .frame(
+            minHeight: minimumRowHeight,
+            idealHeight: minimumRowHeight * Double(
+                max(1, definedBookmarks.count)),
+            maxHeight: .infinity
+        )
     }
 
     /// A view that is shown while a web map is loading.
@@ -97,8 +122,7 @@ private extension BookmarksList {
             Spacer()
             HStack {
                 ProgressView()
-                    .progressViewStyle(CircularProgressViewStyle())
-                    .padding()
+                    .padding([.trailing], 5)
                 Text("Loading")
             }.task {
                 do {
@@ -110,5 +134,6 @@ private extension BookmarksList {
             }
             Spacer()
         }
+        .padding()
     }
 }
