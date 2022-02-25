@@ -58,17 +58,17 @@ public struct Bookmarks: View {
     /// implemented.
     /// - Parameters:
     ///   - isPresented: Determines if the bookmarks list is presented.
-    ///   - map: A web map authored with pre-existing bookmarks.
+    ///   - mapOrScene: A `GeoModel` authored with pre-existing bookmarks.
     ///   - viewpoint: A viewpoint binding that will be updated when a bookmark is selected. Use
     ///   either `viewpoint` or `selectionChangedActions` exclusively.
     public init(
         isPresented: Binding<Bool>,
-        map: Map,
+        mapOrScene: GeoModel,
         viewpoint: Binding<Viewpoint?>? = nil
     ) {
         bookmarksList = BookmarksList(
             isPresented: isPresented,
-            map: map,
+            mapOrScene: mapOrScene,
             viewpoint: viewpoint
         )
         _isPresented = isPresented
@@ -81,7 +81,7 @@ public struct Bookmarks: View {
         }
     }
 
-    /// Sets a closure to perform when the viewpoint of the map view changes.
+    /// Sets a closure to perform when the viewpoint of the `MapView` or `SceneView` changes.
     /// - Parameters:
     ///   - action: The closure to perform when the bookmark selection has changed.
     public func onSelectionChanged(

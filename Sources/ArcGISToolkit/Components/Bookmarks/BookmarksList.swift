@@ -19,13 +19,13 @@ struct BookmarksList: View {
     /// A list of selectable bookmarks.
     var bookmarks: [Bookmark]?
 
-    /// A list of bookmarks derived either directly from `bookmarks` or from `map`.
+    /// A list of bookmarks derived either directly from `bookmarks` or from `mapOrScene`.
     private var definedBookmarks: [Bookmark] {
         var result: [Bookmark] = []
         if let bookmarks = bookmarks {
             result = bookmarks
-        } else if let map = map {
-            result = map.bookmarks
+        } else if let geoModel = mapOrScene {
+            result = geoModel.bookmarks
         } else {
             return []
         }
@@ -36,12 +36,12 @@ struct BookmarksList: View {
     @Binding
     var isPresented: Bool
 
-    /// A map containing bookmarks.
-    var map: Map?
+    /// A map or scene containing bookmarks.
+    var mapOrScene: GeoModel?
 
     /// Indicates if bookmarks have loaded and are ready for display.
     @State
-    var mapIsLoaded = false
+    var geoModelIsLoaded = false
 
     /// User defined action to be performed when a bookmark is selected.
     var selectionChangedActions: ((Bookmark) -> Void)? = nil
@@ -67,10 +67,10 @@ struct BookmarksList: View {
     }
 
     var body: some View {
-        if map == nil {
+        if mapOrScene == nil {
             bookmarkList
         } else {
-            if mapIsLoaded {
+            if geoModelIsLoaded {
                 bookmarkList
             } else {
                 loading
@@ -116,7 +116,7 @@ private extension BookmarksList {
         )
     }
 
-    /// A view that is shown while a web map is loading.
+    /// A view that is shown while a `GeoModel` is loading.
     private var loading: some View {
         VStack {
             Spacer()
@@ -126,9 +126,8 @@ private extension BookmarksList {
                 Text("Loading")
             }.task {
                 do {
-                    try await map?.load()
-                    print(map?.bookmarks.count)
-                    mapIsLoaded = true
+                    try await mapOrScene?.load()
+                    geoModelIsLoaded = true
                 } catch {
                     print(error.localizedDescription)
                 }
