@@ -48,19 +48,19 @@ struct BookmarksExampleView: View {
                     }
                     .popover(isPresented: $showingBookmarks) {
                         // Let the bookmarks component control viewpoint changes:
-//                        Bookmarks(
-//                            isPresented: $showingBookmarks,
-//                            bookmarks: sampleBookmarks,
-//                            viewpoint: $viewpoint
-//                        )
-                        // Or control viewpoint changes yourself:
                         Bookmarks(
                             isPresented: $showingBookmarks,
-                            map: webMap
+                            bookmarks: sampleBookmarks,
+                            viewpoint: $viewpoint
                         )
-                        .onSelectionChanged {
-                            viewpoint = $0.viewpoint
-                        }
+                        // Or control viewpoint changes yourself:
+//                        Bookmarks(
+//                            isPresented: $showingBookmarks,
+//                            map: webMap
+//                        )
+//                        .onSelectionChanged {
+//                            viewpoint = $0.viewpoint
+//                        }
                     }
                 }
             }
