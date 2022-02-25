@@ -121,7 +121,7 @@ struct BookmarksExampleView: View {
                         // Or control viewpoint changes yourself:
 //                        Bookmarks(
 //                            isPresented: $showingBookmarks,
-//                            map: webMap
+//                            mapOrScene: webMap
 //                        )
 //                        .onSelectionChanged {
 //                            viewpoint = $0.viewpoint
