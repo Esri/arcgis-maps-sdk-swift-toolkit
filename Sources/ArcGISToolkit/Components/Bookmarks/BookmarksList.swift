@@ -90,7 +90,7 @@ private extension BookmarksList {
 ***REMOVED******REMOVED***/ A list that is shown once bookmarks have loaded.
 ***REMOVED***private var bookmarkList: some View {
 ***REMOVED******REMOVED***List {
-***REMOVED******REMOVED******REMOVED***if bookmarks?.isEmpty ?? true {
+***REMOVED******REMOVED******REMOVED***if definedBookmarks.isEmpty {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Label {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("No bookmarks")
 ***REMOVED******REMOVED******REMOVED*** icon: {
@@ -127,6 +127,7 @@ private extension BookmarksList {
 ***REMOVED******REMOVED***.task {
 ***REMOVED******REMOVED******REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try await map?.load()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print(map?.bookmarks.count)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mapIsLoaded = true
 ***REMOVED******REMOVED******REMOVED*** catch {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print(error.localizedDescription)
