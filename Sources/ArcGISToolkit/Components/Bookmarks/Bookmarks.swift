@@ -84,8 +84,7 @@ public struct Bookmarks: View {
 
     /// Sets a closure to perform when the viewpoint of the map view changes.
     /// - Parameters:
-    ///   - kind: The kind of viewpoint passed to the `action` closure.
-    ///   - action: The closure to perform when the viewpoint has changed.
+    ///   - action: The closure to perform when the bookmark selection has changed.
     public func onSelectionChanged(
         perform action: @escaping (Bookmark) -> Void
     ) -> Bookmarks {
