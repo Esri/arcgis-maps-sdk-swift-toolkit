@@ -16,8 +16,61 @@ import ArcGISToolkit
 import SwiftUI
 
 struct BookmarksExampleView: View {
+    /// Represents the number of bookmarks added during runtime.
+    @State
+    private var bookmarksAdded = 0
+
     /// The map displayed in the map view.
     private let map = Map(basemapStyle: .arcGISImagery)
+
+    /// Sample bookmarks for demonstration.
+    @State
+    var sampleBookmarks: [Bookmark] = [
+        Bookmark(
+            name: "Yosemite National Park",
+            viewpoint: Viewpoint(
+                center: Point(
+                    x: -119.538330,
+                    y: 37.865101,
+                    spatialReference: .wgs84
+                ),
+                scale: 250_000
+            )
+        ),
+        Bookmark(
+            name: "Zion National Park",
+            viewpoint: Viewpoint(
+                center: Point(
+                    x: -113.028770,
+                    y: 37.297817,
+                    spatialReference: .wgs84
+                ),
+                scale: 250_000
+            )
+        ),
+        Bookmark(
+            name: "Yellowstone National Park",
+            viewpoint: Viewpoint(
+                center: Point(
+                    x: -110.584663,
+                    y: 44.429764,
+                    spatialReference: .wgs84
+                ),
+                scale: 375_000
+            )
+        ),
+        Bookmark(
+            name: "Grand Canyon National Park",
+            viewpoint: Viewpoint(
+                center: Point(
+                    x: -112.1129,
+                    y: 36.1069,
+                    spatialReference: .wgs84
+                ),
+                scale: 375_000
+            )
+        )
+    ]
 
     /// A web map with predefined bookmarks.
     private let webMap = Map(url: URL(string: "https://runtime.maps.arcgis.com/home/item.html?id=16f1b8ba37b44dc3884afc8d5f454dd2")!)!
@@ -35,6 +88,18 @@ struct BookmarksExampleView: View {
         MapView(map: map, viewpoint: viewpoint)
             .onViewpointChanged(kind: .centerAndScale) {
                 viewpoint = $0
+            }
+            .onSingleTapGesture { _, point in
+                let newBookmark = Bookmark(
+                    name: "Added bookmark \(bookmarksAdded + 1)",
+                    viewpoint: Viewpoint(
+                        center: point,
+                        scale: viewpoint?.targetScale ?? 10_000
+                    )
+                )
+                webMap.addBookmark(newBookmark)
+                sampleBookmarks.append(newBookmark)
+                bookmarksAdded += 1
             }
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
@@ -64,56 +129,5 @@ struct BookmarksExampleView: View {
                     }
                 }
             }
-    }
-}
-
-private extension BookmarksExampleView {
-    var sampleBookmarks: [Bookmark] {
-        [
-            Bookmark(
-                name: "Yosemite National Park",
-                viewpoint: Viewpoint(
-                    center: Point(
-                        x: -119.538330,
-                        y: 37.865101,
-                        spatialReference: .wgs84
-                    ),
-                    scale: 250_000
-                )
-            ),
-            Bookmark(
-                name: "Zion National Park",
-                viewpoint: Viewpoint(
-                    center: Point(
-                        x: -113.028770,
-                        y: 37.297817,
-                        spatialReference: .wgs84
-                    ),
-                    scale: 250_000
-                )
-            ),
-            Bookmark(
-                name: "Yellowstone National Park",
-                viewpoint: Viewpoint(
-                    center: Point(
-                        x: -110.584663,
-                        y: 44.429764,
-                        spatialReference: .wgs84
-                    ),
-                    scale: 375_000
-                )
-            ),
-            Bookmark(
-                name: "Grand Canyon National Park",
-                viewpoint: Viewpoint(
-                    center: Point(
-                        x: -112.1129,
-                        y: 36.1069,
-                        spatialReference: .wgs84
-                    ),
-                    scale: 375_000
-                )
-            )
-        ]
     }
 }
