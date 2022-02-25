@@ -90,7 +90,7 @@ private extension BookmarksList {
     /// A list that is shown once bookmarks have loaded.
     private var bookmarkList: some View {
         List {
-            if bookmarks?.isEmpty ?? true {
+            if definedBookmarks.isEmpty {
                 Label {
                     Text("No bookmarks")
                 } icon: {
@@ -127,6 +127,7 @@ private extension BookmarksList {
             }.task {
                 do {
                     try await map?.load()
+                    print(map?.bookmarks.count)
                     mapIsLoaded = true
                 } catch {
                     print(error.localizedDescription)
