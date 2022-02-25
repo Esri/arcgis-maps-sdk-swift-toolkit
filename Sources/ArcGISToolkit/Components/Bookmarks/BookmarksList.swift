@@ -19,13 +19,13 @@ struct BookmarksList: View {
 ***REMOVED******REMOVED***/ A list of selectable bookmarks.
 ***REMOVED***var bookmarks: [Bookmark]?
 
-***REMOVED******REMOVED***/ A list of bookmarks derived either directly from `bookmarks` or from `map`.
+***REMOVED******REMOVED***/ A list of bookmarks derived either directly from `bookmarks` or from `mapOrScene`.
 ***REMOVED***private var definedBookmarks: [Bookmark] {
 ***REMOVED******REMOVED***var result: [Bookmark] = []
 ***REMOVED******REMOVED***if let bookmarks = bookmarks {
 ***REMOVED******REMOVED******REMOVED***result = bookmarks
-***REMOVED*** else if let map = map {
-***REMOVED******REMOVED******REMOVED***result = map.bookmarks
+***REMOVED*** else if let geoModel = mapOrScene {
+***REMOVED******REMOVED******REMOVED***result = geoModel.bookmarks
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED***return []
 ***REMOVED***
@@ -36,12 +36,12 @@ struct BookmarksList: View {
 ***REMOVED***@Binding
 ***REMOVED***var isPresented: Bool
 
-***REMOVED******REMOVED***/ A map containing bookmarks.
-***REMOVED***var map: Map?
+***REMOVED******REMOVED***/ A map or scene containing bookmarks.
+***REMOVED***var mapOrScene: GeoModel?
 
 ***REMOVED******REMOVED***/ Indicates if bookmarks have loaded and are ready for display.
 ***REMOVED***@State
-***REMOVED***var mapIsLoaded = false
+***REMOVED***var geoModelIsLoaded = false
 
 ***REMOVED******REMOVED***/ User defined action to be performed when a bookmark is selected.
 ***REMOVED***var selectionChangedActions: ((Bookmark) -> Void)? = nil
@@ -67,10 +67,10 @@ struct BookmarksList: View {
 ***REMOVED***
 
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***if map == nil {
+***REMOVED******REMOVED***if mapOrScene == nil {
 ***REMOVED******REMOVED******REMOVED***bookmarkList
 ***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***if mapIsLoaded {
+***REMOVED******REMOVED******REMOVED***if geoModelIsLoaded {
 ***REMOVED******REMOVED******REMOVED******REMOVED***bookmarkList
 ***REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***loading
@@ -116,7 +116,7 @@ private extension BookmarksList {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 
-***REMOVED******REMOVED***/ A view that is shown while a web map is loading.
+***REMOVED******REMOVED***/ A view that is shown while a `GeoModel` is loading.
 ***REMOVED***private var loading: some View {
 ***REMOVED******REMOVED***VStack {
 ***REMOVED******REMOVED******REMOVED***Spacer()
@@ -126,9 +126,8 @@ private extension BookmarksList {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text("Loading")
 ***REMOVED******REMOVED***.task {
 ***REMOVED******REMOVED******REMOVED******REMOVED***do {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try await map?.load()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print(map?.bookmarks.count)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mapIsLoaded = true
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try await mapOrScene?.load()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***geoModelIsLoaded = true
 ***REMOVED******REMOVED******REMOVED*** catch {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print(error.localizedDescription)
 ***REMOVED******REMOVED******REMOVED***

@@ -16,8 +16,61 @@
 ***REMOVED***
 
 struct BookmarksExampleView: View {
+***REMOVED******REMOVED***/ Represents the number of bookmarks added during runtime.
+***REMOVED***@State
+***REMOVED***private var bookmarksAdded = 0
+
 ***REMOVED******REMOVED***/ The map displayed in the map view.
 ***REMOVED***private let map = Map(basemapStyle: .arcGISImagery)
+
+***REMOVED******REMOVED***/ Sample bookmarks for demonstration.
+***REMOVED***@State
+***REMOVED***var sampleBookmarks: [Bookmark] = [
+***REMOVED******REMOVED***Bookmark(
+***REMOVED******REMOVED******REMOVED***name: "Yosemite National Park",
+***REMOVED******REMOVED******REMOVED***viewpoint: Viewpoint(
+***REMOVED******REMOVED******REMOVED******REMOVED***center: Point(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***x: -119.538330,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***y: 37.865101,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***spatialReference: .wgs84
+***REMOVED******REMOVED******REMOVED******REMOVED***),
+***REMOVED******REMOVED******REMOVED******REMOVED***scale: 250_000
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***),
+***REMOVED******REMOVED***Bookmark(
+***REMOVED******REMOVED******REMOVED***name: "Zion National Park",
+***REMOVED******REMOVED******REMOVED***viewpoint: Viewpoint(
+***REMOVED******REMOVED******REMOVED******REMOVED***center: Point(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***x: -113.028770,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***y: 37.297817,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***spatialReference: .wgs84
+***REMOVED******REMOVED******REMOVED******REMOVED***),
+***REMOVED******REMOVED******REMOVED******REMOVED***scale: 250_000
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***),
+***REMOVED******REMOVED***Bookmark(
+***REMOVED******REMOVED******REMOVED***name: "Yellowstone National Park",
+***REMOVED******REMOVED******REMOVED***viewpoint: Viewpoint(
+***REMOVED******REMOVED******REMOVED******REMOVED***center: Point(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***x: -110.584663,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***y: 44.429764,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***spatialReference: .wgs84
+***REMOVED******REMOVED******REMOVED******REMOVED***),
+***REMOVED******REMOVED******REMOVED******REMOVED***scale: 375_000
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***),
+***REMOVED******REMOVED***Bookmark(
+***REMOVED******REMOVED******REMOVED***name: "Grand Canyon National Park",
+***REMOVED******REMOVED******REMOVED***viewpoint: Viewpoint(
+***REMOVED******REMOVED******REMOVED******REMOVED***center: Point(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***x: -112.1129,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***y: 36.1069,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***spatialReference: .wgs84
+***REMOVED******REMOVED******REMOVED******REMOVED***),
+***REMOVED******REMOVED******REMOVED******REMOVED***scale: 375_000
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***)
+***REMOVED***]
 
 ***REMOVED******REMOVED***/ A web map with predefined bookmarks.
 ***REMOVED***private let webMap = Map(url: URL(string: "https:***REMOVED***runtime.maps.arcgis.com/home/item.html?id=16f1b8ba37b44dc3884afc8d5f454dd2")!)!
@@ -35,6 +88,18 @@ struct BookmarksExampleView: View {
 ***REMOVED******REMOVED***MapView(map: map, viewpoint: viewpoint)
 ***REMOVED******REMOVED******REMOVED***.onViewpointChanged(kind: .centerAndScale) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***viewpoint = $0
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.onSingleTapGesture { _, point in
+***REMOVED******REMOVED******REMOVED******REMOVED***let newBookmark = Bookmark(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***name: "Added bookmark \(bookmarksAdded + 1)",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint: Viewpoint(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***center: point,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***scale: viewpoint?.targetScale ?? 10_000
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***webMap.addBookmark(newBookmark)
+***REMOVED******REMOVED******REMOVED******REMOVED***sampleBookmarks.append(newBookmark)
+***REMOVED******REMOVED******REMOVED******REMOVED***bookmarksAdded += 1
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.toolbar {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ToolbarItem(placement: .primaryAction) {
@@ -64,56 +129,5 @@ struct BookmarksExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED***
-
-private extension BookmarksExampleView {
-***REMOVED***var sampleBookmarks: [Bookmark] {
-***REMOVED******REMOVED***[
-***REMOVED******REMOVED******REMOVED***Bookmark(
-***REMOVED******REMOVED******REMOVED******REMOVED***name: "Yosemite National Park",
-***REMOVED******REMOVED******REMOVED******REMOVED***viewpoint: Viewpoint(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***center: Point(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***x: -119.538330,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***y: 37.865101,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***spatialReference: .wgs84
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***),
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***scale: 250_000
-***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***),
-***REMOVED******REMOVED******REMOVED***Bookmark(
-***REMOVED******REMOVED******REMOVED******REMOVED***name: "Zion National Park",
-***REMOVED******REMOVED******REMOVED******REMOVED***viewpoint: Viewpoint(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***center: Point(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***x: -113.028770,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***y: 37.297817,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***spatialReference: .wgs84
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***),
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***scale: 250_000
-***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***),
-***REMOVED******REMOVED******REMOVED***Bookmark(
-***REMOVED******REMOVED******REMOVED******REMOVED***name: "Yellowstone National Park",
-***REMOVED******REMOVED******REMOVED******REMOVED***viewpoint: Viewpoint(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***center: Point(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***x: -110.584663,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***y: 44.429764,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***spatialReference: .wgs84
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***),
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***scale: 375_000
-***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***),
-***REMOVED******REMOVED******REMOVED***Bookmark(
-***REMOVED******REMOVED******REMOVED******REMOVED***name: "Grand Canyon National Park",
-***REMOVED******REMOVED******REMOVED******REMOVED***viewpoint: Viewpoint(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***center: Point(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***x: -112.1129,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***y: 36.1069,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***spatialReference: .wgs84
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***),
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***scale: 375_000
-***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED***]
 ***REMOVED***
 ***REMOVED***

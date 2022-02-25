@@ -58,17 +58,17 @@ public struct Bookmarks: View {
 ***REMOVED******REMOVED***/ implemented.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - isPresented: Determines if the bookmarks list is presented.
-***REMOVED******REMOVED***/   - map: A web map authored with pre-existing bookmarks.
+***REMOVED******REMOVED***/   - mapOrScene: A `GeoModel` authored with pre-existing bookmarks.
 ***REMOVED******REMOVED***/   - viewpoint: A viewpoint binding that will be updated when a bookmark is selected. Use
 ***REMOVED******REMOVED***/   either `viewpoint` or `selectionChangedActions` exclusively.
 ***REMOVED***public init(
 ***REMOVED******REMOVED***isPresented: Binding<Bool>,
-***REMOVED******REMOVED***map: Map,
+***REMOVED******REMOVED***mapOrScene: GeoModel,
 ***REMOVED******REMOVED***viewpoint: Binding<Viewpoint?>? = nil
 ***REMOVED***) {
 ***REMOVED******REMOVED***bookmarksList = BookmarksList(
 ***REMOVED******REMOVED******REMOVED***isPresented: isPresented,
-***REMOVED******REMOVED******REMOVED***map: map,
+***REMOVED******REMOVED******REMOVED***mapOrScene: mapOrScene,
 ***REMOVED******REMOVED******REMOVED***viewpoint: viewpoint
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***_isPresented = isPresented
@@ -81,7 +81,7 @@ public struct Bookmarks: View {
 ***REMOVED***
 ***REMOVED***
 
-***REMOVED******REMOVED***/ Sets a closure to perform when the viewpoint of the map view changes.
+***REMOVED******REMOVED***/ Sets a closure to perform when the viewpoint of the `MapView` or `SceneView` changes.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - action: The closure to perform when the bookmark selection has changed.
 ***REMOVED***public func onSelectionChanged(
