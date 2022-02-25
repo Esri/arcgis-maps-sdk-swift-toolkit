@@ -72,9 +72,6 @@ struct BookmarksExampleView: View {
 ***REMOVED******REMOVED***)
 ***REMOVED***]
 
-***REMOVED******REMOVED***/ A web map with predefined bookmarks.
-***REMOVED***private let webMap = Map(url: URL(string: "https:***REMOVED***runtime.maps.arcgis.com/home/item.html?id=16f1b8ba37b44dc3884afc8d5f454dd2")!)!
-
 ***REMOVED******REMOVED***/ Indicates if the bookmarks list is shown or not.
 ***REMOVED******REMOVED***/ - Remark: This allows a developer to control how the bookmarks menu is shown/hidden,
 ***REMOVED******REMOVED***/ whether that be in a group of options or a standalone button.
@@ -83,6 +80,9 @@ struct BookmarksExampleView: View {
 
 ***REMOVED***@State
 ***REMOVED***var viewpoint: Viewpoint? = nil
+
+***REMOVED******REMOVED***/ A web map with predefined bookmarks.
+***REMOVED***private let webMap = Map(url: URL(string: "https:***REMOVED***runtime.maps.arcgis.com/home/item.html?id=16f1b8ba37b44dc3884afc8d5f454dd2")!)!
 
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***MapView(map: map, viewpoint: viewpoint)
