@@ -36,51 +36,33 @@ struct BookmarksExampleView: View {
             .onViewpointChanged(kind: .centerAndScale) {
                 viewpoint = $0
             }
-            // Show the bookmarks control as a button.
-            .overlay(alignment: .topLeading) {
-                Button {
-                    showingBookmarks.toggle()
-                } label: {
-                    Image(
-                        systemName: showingBookmarks ? "bookmark.fill" : "bookmark"
-                    )
-                }
-                .buttonStyle(.bordered)
-                .padding([.top, .leading], 10)
-            }
-            // Show the bookmarks control as an option within a group
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
-                    Menu {
-                        Button {
-                            showingBookmarks.toggle()
-                        } label: {
-                            Label(
-                                "Show Bookmarks",
-                                systemImage: "bookmark"
-                            )
-                        }
-                        Text("More Options")
+                    Button {
+                        showingBookmarks.toggle()
+                    } label: {
+                        Label(
+                            "Show Bookmarks",
+                            systemImage: "bookmark"
+                        )
                     }
-                label: { Label("Options", systemImage: "ellipsis") }
+                    .popover(isPresented: $showingBookmarks) {
+                        // Let the bookmarks component control viewpoint changes:
+//                        Bookmarks(
+//                            isPresented: $showingBookmarks,
+//                            bookmarks: sampleBookmarks,
+//                            viewpoint: $viewpoint
+//                        )
+                        // Or control viewpoint changes yourself:
+                        Bookmarks(
+                            isPresented: $showingBookmarks,
+                            map: webMap
+                        )
+                        .onSelectionChanged {
+                            viewpoint = $0.viewpoint
+                        }
+                    }
                 }
-            }
-            .sheet(isPresented: $showingBookmarks) {
-                // Let the bookmarks component control viewpoint changes:
-                Bookmarks(
-                    isPresented: $showingBookmarks,
-                    bookmarks: sampleBookmarks,
-                    viewpoint: $viewpoint
-                )
-
-                // Or control viewpoint changes yourself:
-//                Bookmarks(
-//                    isPresented: $showingBookmarks,
-//                    map: webMap
-//                )
-//                .onSelectionChanged {
-//                    viewpoint = $0.viewpoint
-//                }
             }
     }
 }
@@ -131,7 +113,7 @@ private extension BookmarksExampleView {
                     ),
                     scale: 375_000
                 )
-            ),
+            )
         ]
     }
 }
