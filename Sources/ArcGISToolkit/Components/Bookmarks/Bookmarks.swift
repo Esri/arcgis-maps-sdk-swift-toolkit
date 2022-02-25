@@ -14,7 +14,7 @@
 ***REMOVED***
 ***REMOVED***
 
-***REMOVED***/ `Bookmarks` allows for a user to view and select from a set of bookmarks.
+***REMOVED***/ `Bookmarks` allows a user to view and select from a set of bookmarks.
 public struct Bookmarks: View {
 ***REMOVED******REMOVED***/ A list that displays bookmarks.
 ***REMOVED***private var bookmarksList: BookmarksList
