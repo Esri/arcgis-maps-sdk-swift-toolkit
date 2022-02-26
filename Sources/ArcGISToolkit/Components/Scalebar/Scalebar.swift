@@ -23,7 +23,7 @@ public struct Scalebar: View {
     private var viewpoint: Viewpoint?
 
     /// Acts as a data provider of the current scale.
-    var visibleArea: Polygon?
+    private var visibleArea: Polygon?
 
     public init(
         _ scale: Double?,
