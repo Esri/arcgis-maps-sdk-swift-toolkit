@@ -11,11 +11,41 @@
 ***REMOVED*** See the License for the specific language governing permissions and
 ***REMOVED*** limitations under the License.
 
+***REMOVED***
 ***REMOVED***Toolkit
 ***REMOVED***
 
 struct ScalebarExampleView: View {
+***REMOVED******REMOVED***/ The map displayed in the map view.
+***REMOVED***private let map = Map(basemapStyle: .arcGISImagery)
+
+***REMOVED***@State
+***REMOVED******REMOVED***/ Allows for communication between the Scalebar and MapView or SceneView.
+***REMOVED***private var scale: Double?
+
+***REMOVED******REMOVED***/ Allows for communication between the Scalebar and MapView or SceneView.
+***REMOVED***@State
+***REMOVED***private var viewpoint: Viewpoint? = Viewpoint(
+***REMOVED******REMOVED***center: Point(x: -117.19494, y: 34.05723, spatialReference: .wgs84),
+***REMOVED******REMOVED***scale: 10_000
+***REMOVED***)
+
+***REMOVED******REMOVED***/ Allows for communication between the Scalebar and MapView or SceneView.
+***REMOVED***@State
+***REMOVED***private var visibleArea: Polygon?
+
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***EmptyView()
+***REMOVED******REMOVED***MapView(map: map, viewpoint: viewpoint)
+***REMOVED******REMOVED******REMOVED***.onViewpointChanged(kind: .centerAndScale) { viewpoint = $0 ***REMOVED***
+***REMOVED******REMOVED******REMOVED***.onVisibleAreaChanged { visibleArea = $0 ***REMOVED***
+***REMOVED******REMOVED******REMOVED***.onScaleChanged { scale = $0 ***REMOVED***
+***REMOVED******REMOVED******REMOVED***.overlay(alignment: .bottomLeading) {
+***REMOVED******REMOVED******REMOVED******REMOVED***Scalebar(scale, viewpoint, visibleArea)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.border(.red, width: 2)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding([.leading], 10)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.border(.green, width: 2)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding([.bottom], 30)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.border(.blue, width: 2)
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
