@@ -32,14 +32,13 @@ class BookmarksListTest: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***get: { _isPresented ***REMOVED***,
 ***REMOVED******REMOVED******REMOVED***set: {_isPresented = $0 ***REMOVED***
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED***let bookmarksList = BookmarksList(
-***REMOVED******REMOVED******REMOVED***bookmarks: bookmarks,
+***REMOVED******REMOVED***var bookmarksManager = Bookmarks(
 ***REMOVED******REMOVED******REMOVED***isPresented: isPresented,
-***REMOVED******REMOVED******REMOVED***mapIsLoaded: true,
-***REMOVED******REMOVED******REMOVED***selectionChangedActions: action
+***REMOVED******REMOVED******REMOVED***bookmarks: bookmarks
 ***REMOVED******REMOVED***)
+***REMOVED******REMOVED***bookmarksManager.selectionChangedActions = action
 ***REMOVED******REMOVED***XCTAssertTrue(_isPresented)
-***REMOVED******REMOVED***bookmarksList.selectBookmark(bookmarks.first!)
+***REMOVED******REMOVED***bookmarksManager.selectBookmark(bookmarks.first!)
 ***REMOVED******REMOVED***XCTAssertFalse(_isPresented)
 ***REMOVED******REMOVED***wait(for: [expectation], timeout: 1.0)
 ***REMOVED***
@@ -64,14 +63,13 @@ class BookmarksListTest: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***expectation.fulfill()
 ***REMOVED******REMOVED******REMOVED***XCTAssertEqual($0.viewpoint, webMap.bookmarks.first?.viewpoint)
 ***REMOVED***
-***REMOVED******REMOVED***let bookmarksList = BookmarksList(
+***REMOVED******REMOVED***var bookmarksManager = Bookmarks(
 ***REMOVED******REMOVED******REMOVED***isPresented: isPresented,
-***REMOVED******REMOVED******REMOVED***map: webMap,
-***REMOVED******REMOVED******REMOVED***mapIsLoaded: true,
-***REMOVED******REMOVED******REMOVED***selectionChangedActions: action
+***REMOVED******REMOVED******REMOVED***mapOrScene: webMap
 ***REMOVED******REMOVED***)
+***REMOVED******REMOVED***bookmarksManager.selectionChangedActions = action
 ***REMOVED******REMOVED***XCTAssertTrue(_isPresented)
-***REMOVED******REMOVED***bookmarksList.selectBookmark(webMap.bookmarks.first!)
+***REMOVED******REMOVED***bookmarksManager.selectBookmark(webMap.bookmarks.first!)
 ***REMOVED******REMOVED***XCTAssertFalse(_isPresented)
 ***REMOVED******REMOVED***wait(for: [expectation], timeout: 1.0)
 ***REMOVED***
@@ -89,15 +87,14 @@ class BookmarksListTest: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***get: { _viewpoint ***REMOVED***,
 ***REMOVED******REMOVED******REMOVED***set: { _viewpoint = $0 ***REMOVED***
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED***let bookmarksList = BookmarksList(
-***REMOVED******REMOVED******REMOVED***bookmarks: bookmarks,
+***REMOVED******REMOVED***let bookmarksManager = Bookmarks(
 ***REMOVED******REMOVED******REMOVED***isPresented: isPresented,
-***REMOVED******REMOVED******REMOVED***mapIsLoaded: true,
+***REMOVED******REMOVED******REMOVED***bookmarks: bookmarks,
 ***REMOVED******REMOVED******REMOVED***viewpoint: viewpoint
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***XCTAssertTrue(_isPresented)
 ***REMOVED******REMOVED***XCTAssertNotEqual(_viewpoint, bookmarks.first?.viewpoint)
-***REMOVED******REMOVED***bookmarksList.selectBookmark(bookmarks.first!)
+***REMOVED******REMOVED***bookmarksManager.selectBookmark(bookmarks.first!)
 ***REMOVED******REMOVED***XCTAssertFalse(_isPresented)
 ***REMOVED******REMOVED***XCTAssertEqual(_viewpoint, bookmarks.first?.viewpoint)
 ***REMOVED***
@@ -120,15 +117,14 @@ class BookmarksListTest: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***get: { _viewpoint ***REMOVED***,
 ***REMOVED******REMOVED******REMOVED***set: { _viewpoint = $0 ***REMOVED***
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED***let bookmarksList = BookmarksList(
+***REMOVED******REMOVED***let bookmarksManager = Bookmarks(
 ***REMOVED******REMOVED******REMOVED***isPresented: isPresented,
-***REMOVED******REMOVED******REMOVED***map: webMap,
-***REMOVED******REMOVED******REMOVED***mapIsLoaded: true,
+***REMOVED******REMOVED******REMOVED***mapOrScene: webMap,
 ***REMOVED******REMOVED******REMOVED***viewpoint: viewpoint
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***XCTAssertTrue(_isPresented)
 ***REMOVED******REMOVED***XCTAssertNotEqual(_viewpoint, webMap.bookmarks.first?.viewpoint)
-***REMOVED******REMOVED***bookmarksList.selectBookmark(webMap.bookmarks.first!)
+***REMOVED******REMOVED***bookmarksManager.selectBookmark(webMap.bookmarks.first!)
 ***REMOVED******REMOVED***XCTAssertFalse(_isPresented)
 ***REMOVED******REMOVED***XCTAssertEqual(_viewpoint, webMap.bookmarks.first?.viewpoint)
 ***REMOVED***
