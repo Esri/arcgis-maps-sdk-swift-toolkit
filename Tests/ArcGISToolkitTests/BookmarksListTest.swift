@@ -32,14 +32,13 @@ class BookmarksListTest: XCTestCase {
             get: { _isPresented },
             set: {_isPresented = $0 }
         )
-        let bookmarksList = BookmarksList(
-            bookmarks: bookmarks,
+        var bookmarksManager = Bookmarks(
             isPresented: isPresented,
-            mapIsLoaded: true,
-            selectionChangedActions: action
+            bookmarks: bookmarks
         )
+        bookmarksManager.selectionChangedActions = action
         XCTAssertTrue(_isPresented)
-        bookmarksList.selectBookmark(bookmarks.first!)
+        bookmarksManager.selectBookmark(bookmarks.first!)
         XCTAssertFalse(_isPresented)
         wait(for: [expectation], timeout: 1.0)
     }
@@ -64,14 +63,13 @@ class BookmarksListTest: XCTestCase {
             expectation.fulfill()
             XCTAssertEqual($0.viewpoint, webMap.bookmarks.first?.viewpoint)
         }
-        let bookmarksList = BookmarksList(
+        var bookmarksManager = Bookmarks(
             isPresented: isPresented,
-            map: webMap,
-            mapIsLoaded: true,
-            selectionChangedActions: action
+            mapOrScene: webMap
         )
+        bookmarksManager.selectionChangedActions = action
         XCTAssertTrue(_isPresented)
-        bookmarksList.selectBookmark(webMap.bookmarks.first!)
+        bookmarksManager.selectBookmark(webMap.bookmarks.first!)
         XCTAssertFalse(_isPresented)
         wait(for: [expectation], timeout: 1.0)
     }
@@ -89,15 +87,14 @@ class BookmarksListTest: XCTestCase {
             get: { _viewpoint },
             set: { _viewpoint = $0 }
         )
-        let bookmarksList = BookmarksList(
-            bookmarks: bookmarks,
+        let bookmarksManager = Bookmarks(
             isPresented: isPresented,
-            mapIsLoaded: true,
+            bookmarks: bookmarks,
             viewpoint: viewpoint
         )
         XCTAssertTrue(_isPresented)
         XCTAssertNotEqual(_viewpoint, bookmarks.first?.viewpoint)
-        bookmarksList.selectBookmark(bookmarks.first!)
+        bookmarksManager.selectBookmark(bookmarks.first!)
         XCTAssertFalse(_isPresented)
         XCTAssertEqual(_viewpoint, bookmarks.first?.viewpoint)
     }
@@ -120,15 +117,14 @@ class BookmarksListTest: XCTestCase {
             get: { _viewpoint },
             set: { _viewpoint = $0 }
         )
-        let bookmarksList = BookmarksList(
+        let bookmarksManager = Bookmarks(
             isPresented: isPresented,
-            map: webMap,
-            mapIsLoaded: true,
+            mapOrScene: webMap,
             viewpoint: viewpoint
         )
         XCTAssertTrue(_isPresented)
         XCTAssertNotEqual(_viewpoint, webMap.bookmarks.first?.viewpoint)
-        bookmarksList.selectBookmark(webMap.bookmarks.first!)
+        bookmarksManager.selectBookmark(webMap.bookmarks.first!)
         XCTAssertFalse(_isPresented)
         XCTAssertEqual(_viewpoint, webMap.bookmarks.first?.viewpoint)
     }
