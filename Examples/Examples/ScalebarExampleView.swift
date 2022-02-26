@@ -11,11 +11,41 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import ArcGIS
 import ArcGISToolkit
 import SwiftUI
 
 struct ScalebarExampleView: View {
+    /// The map displayed in the map view.
+    private let map = Map(basemapStyle: .arcGISImagery)
+
+    @State
+    /// Allows for communication between the Scalebar and MapView or SceneView.
+    private var scale: Double?
+
+    /// Allows for communication between the Scalebar and MapView or SceneView.
+    @State
+    private var viewpoint: Viewpoint? = Viewpoint(
+        center: Point(x: -117.19494, y: 34.05723, spatialReference: .wgs84),
+        scale: 10_000
+    )
+
+    /// Allows for communication between the Scalebar and MapView or SceneView.
+    @State
+    private var visibleArea: Polygon?
+
     var body: some View {
-        EmptyView()
+        MapView(map: map, viewpoint: viewpoint)
+            .onViewpointChanged(kind: .centerAndScale) { viewpoint = $0 }
+            .onVisibleAreaChanged { visibleArea = $0 }
+            .onScaleChanged { scale = $0 }
+            .overlay(alignment: .bottomLeading) {
+                Scalebar(scale, viewpoint, visibleArea)
+                    .border(.red, width: 2)
+                    .padding([.leading], 10)
+                    .border(.green, width: 2)
+                    .padding([.bottom], 30)
+                    .border(.blue, width: 2)
+            }
     }
 }
