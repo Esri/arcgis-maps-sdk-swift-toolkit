@@ -23,7 +23,7 @@ public struct Scalebar: View {
 ***REMOVED***private var viewpoint: Viewpoint?
 
 ***REMOVED******REMOVED***/ Acts as a data provider of the current scale.
-***REMOVED***var visibleArea: Polygon?
+***REMOVED***private var visibleArea: Polygon?
 
 ***REMOVED***public init(
 ***REMOVED******REMOVED***_ scale: Double?,
