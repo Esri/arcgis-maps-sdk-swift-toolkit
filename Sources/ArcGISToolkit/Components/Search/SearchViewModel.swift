@@ -390,7 +390,7 @@ private extension SearchViewModel {
 ***REMOVED******REMOVED***   shouldZoomToResults {
 ***REMOVED******REMOVED******REMOVED***let builder = EnvelopeBuilder(envelope: envelope)
 ***REMOVED******REMOVED******REMOVED***builder.expand(factor: 1.1)
-***REMOVED******REMOVED******REMOVED***let targetExtent = builder.toGeometry() as! Envelope
+***REMOVED******REMOVED******REMOVED***let targetExtent = builder.toGeometry()
 ***REMOVED******REMOVED******REMOVED***viewpoint.wrappedValue = Viewpoint(
 ***REMOVED******REMOVED******REMOVED******REMOVED***targetExtent: targetExtent
 ***REMOVED******REMOVED******REMOVED***)
