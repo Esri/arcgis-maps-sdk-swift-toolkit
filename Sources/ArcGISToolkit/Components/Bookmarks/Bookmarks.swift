@@ -31,16 +31,17 @@ public struct Bookmarks: View {
     @Binding
     private var isPresented: Bool
 
+    /// User defined action to be performed when a bookmark is selected.
+    ///
+    /// Use this when you prefer to self-manage the response to a bookmark selection. Use either
+    /// `onSelectionChanged` or `viewpoint` exclusively.
+    var onSelectionChanged: ((Bookmark) -> Void)? = nil
+
     /// A bookmark that was selected.
     ///
     /// Used to listen for a selection.
     @State
     var selectedBookmark: Bookmark? = nil
-
-    /// User defined action to be performed when a bookmark is selected. Use this when you prefer to
-    /// self-manage the response to a bookmark selection. Use either `onSelectionChanged`
-    /// or `viewpoint` exclusively.
-    var selectionChangedActions: ((Bookmark) -> Void)? = nil
 
     /// If non-`nil`, this viewpoint is updated when a bookmark is pressed.
     var viewpoint: Binding<Viewpoint?>?
@@ -52,7 +53,7 @@ public struct Bookmarks: View {
         perform action: @escaping (Bookmark) -> Void
     ) -> Bookmarks {
         var copy = self
-        copy.selectionChangedActions = action
+        copy.onSelectionChanged = action
         return copy
     }
 
@@ -60,14 +61,14 @@ public struct Bookmarks: View {
     ///
     /// This includes indicating that bookmarks should be set to a hidden state, and changing the viewpoint
     /// if the user provided a viewpoint or calling actions if the user implemented the
-    /// `selectionChangedActions` modifier.
+    /// `onSelectionChanged` modifier.
     /// - Parameter bookmark: The bookmark that was selected.
     func selectBookmark(_ bookmark: Bookmark?) {
         guard bookmark != nil else { return }
         isPresented = false
         if let viewpoint = viewpoint {
             viewpoint.wrappedValue = bookmark!.viewpoint
-        } else if let actions = selectionChangedActions {
+        } else if let actions = onSelectionChanged {
             actions(bookmark!)
         } else {
             fatalError("No viewpoint or action provided")
@@ -75,13 +76,13 @@ public struct Bookmarks: View {
     }
 
     /// Creates a `Bookmarks` component.
-    /// - precondition: `viewpoint` is non-nil or the `selectionChangedActions` modifier is
+    /// - precondition: `viewpoint` is non-nil or the `onSelectionChanged` modifier is
     /// implemented.
     /// - Parameters:
     ///   - isPresented: Determines if the bookmarks list is presented.
     ///   - bookmarks: A list of bookmarks. Use this when displaying bookmarks defined at run-time.
     ///   - viewpoint: A viewpoint binding that will be updated when a bookmark is selected. Use
-    ///   either `viewpoint` or `selectionChangedActions` exclusively.
+    ///   either `viewpoint` or `onSelectionChanged` exclusively.
     public init(
         isPresented: Binding<Bool>,
         bookmarks: [Bookmark],
@@ -93,13 +94,13 @@ public struct Bookmarks: View {
     }
 
     /// Creates a `Bookmarks` component.
-    /// - precondition: `viewpoint` is non-nil or the `selectionChangedActions` modifier is
+    /// - precondition: `viewpoint` is non-nil or the `onSelectionChanged` modifier is
     /// implemented.
     /// - Parameters:
     ///   - isPresented: Determines if the bookmarks list is presented.
     ///   - mapOrScene: A `GeoModel` authored with pre-existing bookmarks.
     ///   - viewpoint: A viewpoint binding that will be updated when a bookmark is selected. Use
-    ///   either `viewpoint` or `selectionChangedActions` exclusively.
+    ///   either `viewpoint` or `onSelectionChanged` exclusively.
     public init(
         isPresented: Binding<Bool>,
         mapOrScene: GeoModel,
