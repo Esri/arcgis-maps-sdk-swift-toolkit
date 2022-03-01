@@ -20,57 +20,8 @@ struct BookmarksExampleView: View {
     @State
     private var bookmarksAdded = 0
 
-    /// The map displayed in the map view.
-    private let map = Map(basemapStyle: .arcGISImagery)
-
-    /// Sample bookmarks for demonstration.
-    @State
-    var sampleBookmarks: [Bookmark] = [
-        Bookmark(
-            name: "Yosemite National Park",
-            viewpoint: Viewpoint(
-                center: Point(
-                    x: -119.538330,
-                    y: 37.865101,
-                    spatialReference: .wgs84
-                ),
-                scale: 250_000
-            )
-        ),
-        Bookmark(
-            name: "Zion National Park",
-            viewpoint: Viewpoint(
-                center: Point(
-                    x: -113.028770,
-                    y: 37.297817,
-                    spatialReference: .wgs84
-                ),
-                scale: 250_000
-            )
-        ),
-        Bookmark(
-            name: "Yellowstone National Park",
-            viewpoint: Viewpoint(
-                center: Point(
-                    x: -110.584663,
-                    y: 44.429764,
-                    spatialReference: .wgs84
-                ),
-                scale: 375_000
-            )
-        ),
-        Bookmark(
-            name: "Grand Canyon National Park",
-            viewpoint: Viewpoint(
-                center: Point(
-                    x: -112.1129,
-                    y: 36.1069,
-                    spatialReference: .wgs84
-                ),
-                scale: 375_000
-            )
-        )
-    ]
+    /// A web map with predefined bookmarks.
+    private let map = Map(url: URL(string: "https://runtime.maps.arcgis.com/home/item.html?id=16f1b8ba37b44dc3884afc8d5f454dd2")!)!
 
     /// Indicates if the bookmarks list is shown or not.
     /// - Remark: This allows a developer to control how the bookmarks menu is shown/hidden,
@@ -80,9 +31,6 @@ struct BookmarksExampleView: View {
 
     @State
     var viewpoint: Viewpoint? = nil
-
-    /// A web map with predefined bookmarks.
-    private let webMap = Map(url: URL(string: "https://runtime.maps.arcgis.com/home/item.html?id=16f1b8ba37b44dc3884afc8d5f454dd2")!)!
 
     var body: some View {
         MapView(map: map, viewpoint: viewpoint)
@@ -97,8 +45,7 @@ struct BookmarksExampleView: View {
                         scale: viewpoint?.targetScale ?? 10_000
                     )
                 )
-                webMap.addBookmark(newBookmark)
-                sampleBookmarks.append(newBookmark)
+                map.addBookmark(newBookmark)
                 bookmarksAdded += 1
             }
             .toolbar {
@@ -115,13 +62,13 @@ struct BookmarksExampleView: View {
                         // Let the bookmarks component control viewpoint changes:
                         Bookmarks(
                             isPresented: $showingBookmarks,
-                            bookmarks: sampleBookmarks,
+                            mapOrScene: map,
                             viewpoint: $viewpoint
                         )
                         // Or control viewpoint changes yourself:
 //                        Bookmarks(
 //                            isPresented: $showingBookmarks,
-//                            mapOrScene: webMap
+//                            mapOrScene: map
 //                        )
 //                        .onSelectionChanged {
 //                            viewpoint = $0.viewpoint
