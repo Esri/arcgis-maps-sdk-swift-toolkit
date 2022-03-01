@@ -72,6 +72,8 @@ struct BookmarksExampleView: View {
 //                            isPresented: $showingBookmarks,
 //                            mapOrScene: map
 //                        )
+                        // In order to handle bookmark selection changes manually,
+                        // use `.onSelectionChanged`.
 //                        .onSelectionChanged {
 //                            viewpoint = $0.viewpoint
 //                        }
