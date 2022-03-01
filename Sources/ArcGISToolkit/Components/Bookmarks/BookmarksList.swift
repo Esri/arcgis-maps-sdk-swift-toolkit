@@ -31,15 +31,23 @@ struct BookmarksList: View {
         horizontalSizeClass == .compact || verticalSizeClass == .compact
     }
 
+    /// Action to be performed when a bookmark is selected.
+    var onSelectionChanged: ((Bookmark) -> Void)? = nil
+
     /// The height of the scroll view's content.
     @State
     private var scrollViewContentHeight: CGFloat = .zero
 
-    /// A bookmark that was selected.
-    ///
-    /// Indicates to the parent that a selection was made.
-    @Binding
-    var selectedBookmark: Bookmark?
+    /// Sets a closure to perform when the bookmark selection changes.
+    /// - Parameters:
+    ///   - action: The closure to perform when the bookmark selection has changed.
+    public func onSelectionChanged(
+        perform action: @escaping (Bookmark) -> Void
+    ) -> BookmarksList {
+        var copy = self
+        copy.onSelectionChanged = action
+        return copy
+    }
 
     var body: some View {
         Group {
@@ -58,7 +66,7 @@ struct BookmarksList: View {
                             id: \.viewpoint
                         ) { bookmark in
                             Button {
-                                selectedBookmark = bookmark
+                                onSelectionChanged?(bookmark)
                             } label: {
                                 Text(bookmark.name)
                                     .foregroundColor(.primary)

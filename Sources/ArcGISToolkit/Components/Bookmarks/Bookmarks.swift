@@ -109,12 +109,10 @@ public struct Bookmarks: View {
         Group {
             BookmarksHeader(isPresented: $isPresented)
             if geoModel == nil || geoModelIsLoaded {
-                BookmarksList(
-                    bookmarks: bookmarks,
-                    selectedBookmark: $selectedBookmark.onChange {
-                        selectBookmark($0)
-                    }
-                )
+                BookmarksList(bookmarks: bookmarks)
+                .onSelectionChanged {
+                    selectBookmark($0)
+                }
             } else {
                 loading
             }
