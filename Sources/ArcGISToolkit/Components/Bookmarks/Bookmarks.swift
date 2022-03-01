@@ -74,8 +74,6 @@ public struct Bookmarks: View {
 ***REMOVED***
 
 ***REMOVED******REMOVED***/ Creates a `Bookmarks` component.
-***REMOVED******REMOVED***/ - precondition: `viewpoint` is non-nil or the `onSelectionChanged` modifier is
-***REMOVED******REMOVED***/ implemented.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - isPresented: Determines if the bookmarks list is presented.
 ***REMOVED******REMOVED***/   - bookmarks: A list of bookmarks. Use this when displaying bookmarks defined at run-time.
