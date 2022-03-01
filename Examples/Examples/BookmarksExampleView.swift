@@ -67,7 +67,7 @@ struct BookmarksExampleView: View {
                             mapOrScene: map,
                             viewpoint: $viewpoint
                         )
-                        // Or control viewpoint changes yourself:
+                        // Display the Bookmarks view with the list of bookmarks in a map.
 //                        Bookmarks(
 //                            isPresented: $showingBookmarks,
 //                            mapOrScene: map
