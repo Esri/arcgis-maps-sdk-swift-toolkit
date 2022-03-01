@@ -266,7 +266,7 @@ class SearchViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** First result within 1500m of Portland.
-***REMOVED******REMOVED***XCTAssertLessThan(geodeticDistance.distance,  1500)
+***REMOVED******REMOVED***XCTAssertLessThan(geodeticDistance.distance.value,  1500)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Set queryCenter to Edinburgh
 ***REMOVED******REMOVED***model.queryCenter = .edinburgh
@@ -293,7 +293,7 @@ class SearchViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** First result within 100m of Edinburgh.
-***REMOVED******REMOVED***XCTAssertLessThan(geodeticDistance.distance,  100)
+***REMOVED******REMOVED***XCTAssertLessThan(geodeticDistance.distance.value,  100)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func testRepeatSearch() async throws {
