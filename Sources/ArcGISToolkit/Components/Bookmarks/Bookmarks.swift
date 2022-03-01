@@ -43,7 +43,7 @@ public struct Bookmarks: View {
 ***REMOVED***@State
 ***REMOVED***private var selectedBookmark: Bookmark? = nil
 
-***REMOVED******REMOVED***/ If non-`nil`, this viewpoint is updated when a bookmark is pressed.
+***REMOVED******REMOVED***/ If non-`nil`, this viewpoint is updated when a bookmark is selected.
 ***REMOVED***private var viewpoint: Binding<Viewpoint?>?
 
 ***REMOVED******REMOVED***/ Sets a closure to perform when the bookmark selection changes.
