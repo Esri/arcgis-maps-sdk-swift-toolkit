@@ -20,57 +20,8 @@ struct BookmarksExampleView: View {
 ***REMOVED***@State
 ***REMOVED***private var bookmarksAdded = 0
 
-***REMOVED******REMOVED***/ The map displayed in the map view.
-***REMOVED***private let map = Map(basemapStyle: .arcGISImagery)
-
-***REMOVED******REMOVED***/ Sample bookmarks for demonstration.
-***REMOVED***@State
-***REMOVED***var sampleBookmarks: [Bookmark] = [
-***REMOVED******REMOVED***Bookmark(
-***REMOVED******REMOVED******REMOVED***name: "Yosemite National Park",
-***REMOVED******REMOVED******REMOVED***viewpoint: Viewpoint(
-***REMOVED******REMOVED******REMOVED******REMOVED***center: Point(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***x: -119.538330,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***y: 37.865101,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***spatialReference: .wgs84
-***REMOVED******REMOVED******REMOVED******REMOVED***),
-***REMOVED******REMOVED******REMOVED******REMOVED***scale: 250_000
-***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED***),
-***REMOVED******REMOVED***Bookmark(
-***REMOVED******REMOVED******REMOVED***name: "Zion National Park",
-***REMOVED******REMOVED******REMOVED***viewpoint: Viewpoint(
-***REMOVED******REMOVED******REMOVED******REMOVED***center: Point(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***x: -113.028770,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***y: 37.297817,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***spatialReference: .wgs84
-***REMOVED******REMOVED******REMOVED******REMOVED***),
-***REMOVED******REMOVED******REMOVED******REMOVED***scale: 250_000
-***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED***),
-***REMOVED******REMOVED***Bookmark(
-***REMOVED******REMOVED******REMOVED***name: "Yellowstone National Park",
-***REMOVED******REMOVED******REMOVED***viewpoint: Viewpoint(
-***REMOVED******REMOVED******REMOVED******REMOVED***center: Point(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***x: -110.584663,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***y: 44.429764,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***spatialReference: .wgs84
-***REMOVED******REMOVED******REMOVED******REMOVED***),
-***REMOVED******REMOVED******REMOVED******REMOVED***scale: 375_000
-***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED***),
-***REMOVED******REMOVED***Bookmark(
-***REMOVED******REMOVED******REMOVED***name: "Grand Canyon National Park",
-***REMOVED******REMOVED******REMOVED***viewpoint: Viewpoint(
-***REMOVED******REMOVED******REMOVED******REMOVED***center: Point(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***x: -112.1129,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***y: 36.1069,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***spatialReference: .wgs84
-***REMOVED******REMOVED******REMOVED******REMOVED***),
-***REMOVED******REMOVED******REMOVED******REMOVED***scale: 375_000
-***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED***)
-***REMOVED***]
+***REMOVED******REMOVED***/ A web map with predefined bookmarks.
+***REMOVED***private let map = Map(url: URL(string: "https:***REMOVED***runtime.maps.arcgis.com/home/item.html?id=16f1b8ba37b44dc3884afc8d5f454dd2")!)!
 
 ***REMOVED******REMOVED***/ Indicates if the bookmarks list is shown or not.
 ***REMOVED******REMOVED***/ - Remark: This allows a developer to control how the bookmarks menu is shown/hidden,
@@ -80,9 +31,6 @@ struct BookmarksExampleView: View {
 
 ***REMOVED***@State
 ***REMOVED***var viewpoint: Viewpoint? = nil
-
-***REMOVED******REMOVED***/ A web map with predefined bookmarks.
-***REMOVED***private let webMap = Map(url: URL(string: "https:***REMOVED***runtime.maps.arcgis.com/home/item.html?id=16f1b8ba37b44dc3884afc8d5f454dd2")!)!
 
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***MapView(map: map, viewpoint: viewpoint)
@@ -97,8 +45,7 @@ struct BookmarksExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***scale: viewpoint?.targetScale ?? 10_000
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED***webMap.addBookmark(newBookmark)
-***REMOVED******REMOVED******REMOVED******REMOVED***sampleBookmarks.append(newBookmark)
+***REMOVED******REMOVED******REMOVED******REMOVED***map.addBookmark(newBookmark)
 ***REMOVED******REMOVED******REMOVED******REMOVED***bookmarksAdded += 1
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.toolbar {
@@ -115,13 +62,13 @@ struct BookmarksExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Let the bookmarks component control viewpoint changes:
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Bookmarks(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented: $showingBookmarks,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bookmarks: sampleBookmarks,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mapOrScene: map,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint: $viewpoint
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Or control viewpoint changes yourself:
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Bookmarks(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented: $showingBookmarks,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mapOrScene: webMap
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mapOrScene: map
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onSelectionChanged {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint = $0.viewpoint
