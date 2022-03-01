@@ -25,7 +25,7 @@ public struct Bookmarks: View {
 
     /// Indicates if bookmarks have loaded and are ready for display.
     @State
-    var geoModelIsLoaded = false
+    private var geoModelIsLoaded = false
 
     /// Determines if the bookmarks list is currently shown or not.
     @Binding
