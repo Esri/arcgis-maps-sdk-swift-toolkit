@@ -114,13 +114,13 @@ public struct Bookmarks: View {
                     selectBookmark($0)
                 }
             } else {
-                loading
+                loadingView
             }
         }
     }
 
     /// A view that is shown while a `GeoModel` is loading.
-    private var loading: some View {
+    private var loadingView: some View {
         VStack {
             Spacer()
             HStack {
