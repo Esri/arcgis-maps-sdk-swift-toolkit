@@ -43,7 +43,7 @@ public struct Bookmarks: View {
     @State
     private var selectedBookmark: Bookmark? = nil
 
-    /// If non-`nil`, this viewpoint is updated when a bookmark is pressed.
+    /// If non-`nil`, this viewpoint is updated when a bookmark is selected.
     private var viewpoint: Binding<Viewpoint?>?
 
     /// Sets a closure to perform when the bookmark selection changes.
