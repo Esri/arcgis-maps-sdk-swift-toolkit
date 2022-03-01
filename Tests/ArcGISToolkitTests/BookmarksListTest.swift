@@ -36,7 +36,7 @@ class BookmarksListTest: XCTestCase {
             isPresented: isPresented,
             bookmarks: bookmarks
         )
-        bookmarksManager.selectionChangedActions = action
+        bookmarksManager.onSelectionChanged = action
         XCTAssertTrue(_isPresented)
         bookmarksManager.selectBookmark(bookmarks.first!)
         XCTAssertFalse(_isPresented)
@@ -67,7 +67,7 @@ class BookmarksListTest: XCTestCase {
             isPresented: isPresented,
             mapOrScene: webMap
         )
-        bookmarksManager.selectionChangedActions = action
+        bookmarksManager.onSelectionChanged = action
         XCTAssertTrue(_isPresented)
         bookmarksManager.selectBookmark(webMap.bookmarks.first!)
         XCTAssertFalse(_isPresented)
