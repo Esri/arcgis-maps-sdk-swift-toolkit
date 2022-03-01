@@ -16,29 +16,29 @@
 import XCTest
 @testable ***REMOVED***Toolkit
 
-class BookmarksListTest: XCTestCase {
+class BookmarksTests: XCTestCase {
 ***REMOVED******REMOVED***/ Assert that the list properly handles a selction when provided a modifier.
 ***REMOVED***func testSelectBookmarkWithModifier() {
 ***REMOVED******REMOVED***let expectation = XCTestExpectation(
 ***REMOVED******REMOVED******REMOVED***description: "Modifier action was performed"
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED***let bookmarks = sampleBookmarks
+***REMOVED******REMOVED***let sampleBookmarks = sampleBookmarks
 ***REMOVED******REMOVED***var _isPresented = true
 ***REMOVED******REMOVED***let action: ((Bookmark) -> Void) = {
 ***REMOVED******REMOVED******REMOVED***expectation.fulfill()
-***REMOVED******REMOVED******REMOVED***XCTAssertEqual($0.viewpoint, bookmarks.first?.viewpoint)
+***REMOVED******REMOVED******REMOVED***XCTAssertEqual($0.viewpoint, sampleBookmarks.first?.viewpoint)
 ***REMOVED***
 ***REMOVED******REMOVED***let isPresented = Binding(
 ***REMOVED******REMOVED******REMOVED***get: { _isPresented ***REMOVED***,
 ***REMOVED******REMOVED******REMOVED***set: {_isPresented = $0 ***REMOVED***
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED***var bookmarksManager = Bookmarks(
+***REMOVED******REMOVED***var bookmarks = Bookmarks(
 ***REMOVED******REMOVED******REMOVED***isPresented: isPresented,
-***REMOVED******REMOVED******REMOVED***bookmarks: bookmarks
+***REMOVED******REMOVED******REMOVED***bookmarks: sampleBookmarks
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED***bookmarksManager.onSelectionChanged = action
+***REMOVED******REMOVED***bookmarks.onSelectionChanged = action
 ***REMOVED******REMOVED***XCTAssertTrue(_isPresented)
-***REMOVED******REMOVED***bookmarksManager.selectBookmark(bookmarks.first!)
+***REMOVED******REMOVED***bookmarks.selectBookmark(sampleBookmarks.first!)
 ***REMOVED******REMOVED***XCTAssertFalse(_isPresented)
 ***REMOVED******REMOVED***wait(for: [expectation], timeout: 1.0)
 ***REMOVED***
@@ -63,20 +63,20 @@ class BookmarksListTest: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***expectation.fulfill()
 ***REMOVED******REMOVED******REMOVED***XCTAssertEqual($0.viewpoint, webMap.bookmarks.first?.viewpoint)
 ***REMOVED***
-***REMOVED******REMOVED***var bookmarksManager = Bookmarks(
+***REMOVED******REMOVED***var bookmarks = Bookmarks(
 ***REMOVED******REMOVED******REMOVED***isPresented: isPresented,
 ***REMOVED******REMOVED******REMOVED***mapOrScene: webMap
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED***bookmarksManager.onSelectionChanged = action
+***REMOVED******REMOVED***bookmarks.onSelectionChanged = action
 ***REMOVED******REMOVED***XCTAssertTrue(_isPresented)
-***REMOVED******REMOVED***bookmarksManager.selectBookmark(webMap.bookmarks.first!)
+***REMOVED******REMOVED***bookmarks.selectBookmark(webMap.bookmarks.first!)
 ***REMOVED******REMOVED***XCTAssertFalse(_isPresented)
 ***REMOVED******REMOVED***wait(for: [expectation], timeout: 1.0)
 ***REMOVED***
 
 ***REMOVED******REMOVED***/ Assert that the list properly handles a selction when provided a viewpoint.
 ***REMOVED***func testSelectBookmarkWithViewpoint() {
-***REMOVED******REMOVED***let bookmarks = sampleBookmarks
+***REMOVED******REMOVED***let sampleBookmarks = sampleBookmarks
 ***REMOVED******REMOVED***var _isPresented = true
 ***REMOVED******REMOVED***let isPresented = Binding(
 ***REMOVED******REMOVED******REMOVED***get: { _isPresented ***REMOVED***,
@@ -87,16 +87,16 @@ class BookmarksListTest: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***get: { _viewpoint ***REMOVED***,
 ***REMOVED******REMOVED******REMOVED***set: { _viewpoint = $0 ***REMOVED***
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED***let bookmarksManager = Bookmarks(
+***REMOVED******REMOVED***let bookmarks = Bookmarks(
 ***REMOVED******REMOVED******REMOVED***isPresented: isPresented,
-***REMOVED******REMOVED******REMOVED***bookmarks: bookmarks,
+***REMOVED******REMOVED******REMOVED***bookmarks: sampleBookmarks,
 ***REMOVED******REMOVED******REMOVED***viewpoint: viewpoint
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***XCTAssertTrue(_isPresented)
-***REMOVED******REMOVED***XCTAssertNotEqual(_viewpoint, bookmarks.first?.viewpoint)
-***REMOVED******REMOVED***bookmarksManager.selectBookmark(bookmarks.first!)
+***REMOVED******REMOVED***XCTAssertNotEqual(_viewpoint, sampleBookmarks.first?.viewpoint)
+***REMOVED******REMOVED***bookmarks.selectBookmark(sampleBookmarks.first!)
 ***REMOVED******REMOVED***XCTAssertFalse(_isPresented)
-***REMOVED******REMOVED***XCTAssertEqual(_viewpoint, bookmarks.first?.viewpoint)
+***REMOVED******REMOVED***XCTAssertEqual(_viewpoint, sampleBookmarks.first?.viewpoint)
 ***REMOVED***
 
 ***REMOVED******REMOVED***/ Assert that the list properly handles a selction when provided a viewpoint and web map.
@@ -117,20 +117,20 @@ class BookmarksListTest: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***get: { _viewpoint ***REMOVED***,
 ***REMOVED******REMOVED******REMOVED***set: { _viewpoint = $0 ***REMOVED***
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED***let bookmarksManager = Bookmarks(
+***REMOVED******REMOVED***let bookmarks = Bookmarks(
 ***REMOVED******REMOVED******REMOVED***isPresented: isPresented,
 ***REMOVED******REMOVED******REMOVED***mapOrScene: webMap,
 ***REMOVED******REMOVED******REMOVED***viewpoint: viewpoint
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***XCTAssertTrue(_isPresented)
 ***REMOVED******REMOVED***XCTAssertNotEqual(_viewpoint, webMap.bookmarks.first?.viewpoint)
-***REMOVED******REMOVED***bookmarksManager.selectBookmark(webMap.bookmarks.first!)
+***REMOVED******REMOVED***bookmarks.selectBookmark(webMap.bookmarks.first!)
 ***REMOVED******REMOVED***XCTAssertFalse(_isPresented)
 ***REMOVED******REMOVED***XCTAssertEqual(_viewpoint, webMap.bookmarks.first?.viewpoint)
 ***REMOVED***
 ***REMOVED***
 
-extension BookmarksListTest {
+extension BookmarksTests {
 ***REMOVED******REMOVED***/ An arbitrary point to use for testing.
 ***REMOVED***var point: Point {
 ***REMOVED******REMOVED***Point(x: -117.19494, y: 34.05723, spatialReference: .wgs84)
