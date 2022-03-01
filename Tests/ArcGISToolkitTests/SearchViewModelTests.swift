@@ -146,7 +146,7 @@ class SearchViewModelTests: XCTestCase {
         var builder = EnvelopeBuilder(envelope: model.geoViewExtent)
         let tenPercentWidth = model.geoViewExtent!.width * 0.1
         builder.offsetBy(x: tenPercentWidth, y: 0.0)
-        var newExtent = builder.toGeometry() as! Envelope
+        var newExtent = builder.toGeometry()
         
         model.geoViewExtent = newExtent
         XCTAssertFalse(model.isEligibleForRequery)
@@ -155,7 +155,7 @@ class SearchViewModelTests: XCTestCase {
         builder = EnvelopeBuilder(envelope: model.geoViewExtent)
         let fiftyPercentWidth = model.geoViewExtent!.width * 0.5
         builder.offsetBy(x: fiftyPercentWidth, y: 0.0)
-        newExtent = builder.toGeometry() as! Envelope
+        newExtent = builder.toGeometry()
         
         model.geoViewExtent = newExtent
         XCTAssertTrue(model.isEligibleForRequery)
@@ -172,7 +172,7 @@ class SearchViewModelTests: XCTestCase {
         // Expand extent by 1.1x - isEligibleForRequery should still be `false`.
         builder = EnvelopeBuilder(envelope: model.geoViewExtent)
         builder.expand(factor: 1.1)
-        newExtent = builder.toGeometry() as! Envelope
+        newExtent = builder.toGeometry()
         
         model.geoViewExtent = newExtent
         XCTAssertFalse(model.isEligibleForRequery)
@@ -180,7 +180,7 @@ class SearchViewModelTests: XCTestCase {
         // Expand extent by 1.5x - isEligibleForRequery should now be `true`.
         builder = EnvelopeBuilder(envelope: model.geoViewExtent)
         builder.expand(factor: 1.5)
-        newExtent = builder.toGeometry() as! Envelope
+        newExtent = builder.toGeometry()
         
         model.geoViewExtent = newExtent
         XCTAssertTrue(model.isEligibleForRequery)
@@ -456,7 +456,7 @@ extension Polygon {
         _ = builder.add(point: Point(x: -91.19322516572637, y: 44.74770908213401, spatialReference: .wgs84))
         _ = builder.add(point: Point(x: -91.19322516572637, y: 45.116100854348254, spatialReference: .wgs84))
         _ = builder.add(point: Point(x: -91.59127653822401, y: 45.116100854348254, spatialReference: .wgs84))
-        return builder.toGeometry() as! ArcGIS.Polygon
+        return builder.toGeometry()
     }()
     
     static let minneapolis: Polygon = {
@@ -465,7 +465,7 @@ extension Polygon {
         _ = builder.add(point: Point(x: -94.170821328662, y: 44.13656401114444, spatialReference: .wgs84))
         _ = builder.add(point: Point(x: -92.34544467133114, y: 45.824325577904446, spatialReference: .wgs84))
         _ = builder.add(point: Point(x: -92.34544467133114, y: 45.824325577904446, spatialReference: .wgs84))
-        return builder.toGeometry() as! ArcGIS.Polygon
+        return builder.toGeometry()
     }()
 }
 
