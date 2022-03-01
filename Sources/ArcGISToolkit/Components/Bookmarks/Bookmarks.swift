@@ -77,8 +77,8 @@ public struct Bookmarks: View {
     /// - Parameters:
     ///   - isPresented: Determines if the bookmarks list is presented.
     ///   - bookmarks: A list of bookmarks. Use this when displaying bookmarks defined at run-time.
-    ///   - viewpoint: A viewpoint binding that will be updated when a bookmark is selected. Use
-    ///   either `viewpoint` or `onSelectionChanged` exclusively.
+    ///   - viewpoint: A viewpoint binding that will be updated when a bookmark is selected.
+    ///   Alternately, you can use the `.onSelectionChanged` modifier to handle bookmark selection.
     public init(
         isPresented: Binding<Bool>,
         bookmarks: [Bookmark],
@@ -95,8 +95,8 @@ public struct Bookmarks: View {
     /// - Parameters:
     ///   - isPresented: Determines if the bookmarks list is presented.
     ///   - mapOrScene: A `GeoModel` authored with pre-existing bookmarks.
-    ///   - viewpoint: A viewpoint binding that will be updated when a bookmark is selected. Use
-    ///   either `viewpoint` or `onSelectionChanged` exclusively.
+    ///   - viewpoint: A viewpoint binding that will be updated when a bookmark is selected.
+    ///   Alternately, you can use the `.onSelectionChanged` modifier to handle bookmark selection.
     public init(
         isPresented: Binding<Bool>,
         mapOrScene: GeoModel,
