@@ -25,7 +25,7 @@ public struct Bookmarks: View {
 
 ***REMOVED******REMOVED***/ Indicates if bookmarks have loaded and are ready for display.
 ***REMOVED***@State
-***REMOVED***var geoModelIsLoaded = false
+***REMOVED***private var geoModelIsLoaded = false
 
 ***REMOVED******REMOVED***/ Determines if the bookmarks list is currently shown or not.
 ***REMOVED***@Binding
