@@ -31,15 +31,23 @@ struct BookmarksList: View {
 ***REMOVED******REMOVED***horizontalSizeClass == .compact || verticalSizeClass == .compact
 ***REMOVED***
 
+***REMOVED******REMOVED***/ Action to be performed when a bookmark is selected.
+***REMOVED***var onSelectionChanged: ((Bookmark) -> Void)? = nil
+
 ***REMOVED******REMOVED***/ The height of the scroll view's content.
 ***REMOVED***@State
 ***REMOVED***private var scrollViewContentHeight: CGFloat = .zero
 
-***REMOVED******REMOVED***/ A bookmark that was selected.
-***REMOVED******REMOVED***/
-***REMOVED******REMOVED***/ Indicates to the parent that a selection was made.
-***REMOVED***@Binding
-***REMOVED***var selectedBookmark: Bookmark?
+***REMOVED******REMOVED***/ Sets a closure to perform when the bookmark selection changes.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - action: The closure to perform when the bookmark selection has changed.
+***REMOVED***public func onSelectionChanged(
+***REMOVED******REMOVED***perform action: @escaping (Bookmark) -> Void
+***REMOVED***) -> BookmarksList {
+***REMOVED******REMOVED***var copy = self
+***REMOVED******REMOVED***copy.onSelectionChanged = action
+***REMOVED******REMOVED***return copy
+***REMOVED***
 
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***Group {
@@ -58,7 +66,7 @@ struct BookmarksList: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***id: \.viewpoint
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***) { bookmark in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedBookmark = bookmark
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onSelectionChanged?(bookmark)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(bookmark.name)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.primary)

@@ -109,12 +109,10 @@ public struct Bookmarks: View {
 ***REMOVED******REMOVED***Group {
 ***REMOVED******REMOVED******REMOVED***BookmarksHeader(isPresented: $isPresented)
 ***REMOVED******REMOVED******REMOVED***if geoModel == nil || geoModelIsLoaded {
-***REMOVED******REMOVED******REMOVED******REMOVED***BookmarksList(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bookmarks: bookmarks,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedBookmark: $selectedBookmark.onChange {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectBookmark($0)
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***BookmarksList(bookmarks: bookmarks)
+***REMOVED******REMOVED******REMOVED******REMOVED***.onSelectionChanged {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectBookmark($0)
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***loading
 ***REMOVED******REMOVED***
