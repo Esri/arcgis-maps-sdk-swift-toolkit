@@ -68,8 +68,8 @@ public struct Bookmarks: View {
 ***REMOVED******REMOVED***isPresented = false
 ***REMOVED******REMOVED***if let viewpoint = viewpoint {
 ***REMOVED******REMOVED******REMOVED***viewpoint.wrappedValue = bookmark!.viewpoint
-***REMOVED*** else if let actions = onSelectionChanged {
-***REMOVED******REMOVED******REMOVED***actions(bookmark!)
+***REMOVED*** else if let onSelectionChanged = onSelectionChanged {
+***REMOVED******REMOVED******REMOVED***onSelectionChanged(bookmark!)
 ***REMOVED***
 ***REMOVED***
 
