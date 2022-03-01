@@ -16,15 +16,24 @@
 
 ***REMOVED***/ `BookmarksList` displays a list of selectable bookmarks.
 struct BookmarksList: View {
+***REMOVED***@Environment(\.horizontalSizeClass)
+***REMOVED***private var horizontalSizeClass: UserInterfaceSizeClass?
+
+***REMOVED***@Environment(\.verticalSizeClass)
+***REMOVED***private var verticalSizeClass: UserInterfaceSizeClass?
+
 ***REMOVED******REMOVED***/ A list of bookmarks for display.
 ***REMOVED***var bookmarks: [Bookmark]
 
-***REMOVED******REMOVED***/ The minimum height of a bookmark list item.
-***REMOVED******REMOVED***/
-***REMOVED******REMOVED***/ This number will be larger when them item's name consumes 2+ lines of text.
-***REMOVED***private var minimumRowHeight: Double {
-***REMOVED******REMOVED***44
+***REMOVED******REMOVED***/ If `true`, the device is in a compact-width or compact-height orientation.
+***REMOVED******REMOVED***/ If `false`, the device is in a regular-width and regular-height orientation.
+***REMOVED***private var isCompact: Bool {
+***REMOVED******REMOVED***horizontalSizeClass == .compact || verticalSizeClass == .compact
 ***REMOVED***
+
+***REMOVED******REMOVED***/ The height of the scroll view's content.
+***REMOVED***@State
+***REMOVED***private var scrollViewContentHeight: CGFloat = .zero
 
 ***REMOVED******REMOVED***/ A bookmark that was selected.
 ***REMOVED******REMOVED***/
@@ -33,7 +42,7 @@ struct BookmarksList: View {
 ***REMOVED***var selectedBookmark: Bookmark?
 
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***List {
+***REMOVED******REMOVED***Group {
 ***REMOVED******REMOVED******REMOVED***if bookmarks.isEmpty {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Label {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("No bookmarks")
@@ -42,24 +51,36 @@ struct BookmarksList: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.primary)
 ***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***ForEach(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bookmarks.sorted { $0.name <  $1.name ***REMOVED***,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***id: \.viewpoint
-***REMOVED******REMOVED******REMOVED******REMOVED***) { bookmark in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedBookmark = bookmark
-***REMOVED******REMOVED******REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(bookmark.name)
+***REMOVED******REMOVED******REMOVED******REMOVED***ScrollView {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***VStack(alignment: .leading) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bookmarks.sorted { $0.name <  $1.name ***REMOVED***,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***id: \.viewpoint
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***) { bookmark in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedBookmark = bookmark
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(bookmark.name)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.primary)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(4)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Divider()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.background(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***GeometryReader { geometry -> Color in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***DispatchQueue.main.async {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***scrollViewContentHeight = geometry.size.height
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return .clear
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.frame(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***maxHeight: isCompact ? .infinity : scrollViewContentHeight
+***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.listStyle(.plain)
-***REMOVED******REMOVED***.frame(
-***REMOVED******REMOVED******REMOVED***minHeight: minimumRowHeight,
-***REMOVED******REMOVED******REMOVED***idealHeight: minimumRowHeight * Double(
-***REMOVED******REMOVED******REMOVED******REMOVED***max(1, bookmarks.count)),
-***REMOVED******REMOVED******REMOVED***maxHeight: .infinity
-***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
