@@ -34,9 +34,9 @@ struct BookmarksList: View {
     /// Action to be performed when a bookmark is selected.
     var onSelectionChanged: ((Bookmark) -> Void)? = nil
 
-    /// The height of the scroll view's content.
+    /// The height of the list content.
     @State
-    private var scrollViewContentHeight: CGFloat = .zero
+    private var listContentHeight: CGFloat = .zero
 
     /// Sets a closure to perform when the bookmark selection changes.
     /// - Parameters:
@@ -76,17 +76,12 @@ struct BookmarksList: View {
                         }
                     }
                     .padding()
-                    .background(
-                        GeometryReader { geometry -> Color in
-                            DispatchQueue.main.async {
-                                scrollViewContentHeight = geometry.size.height
-                            }
-                            return .clear
-                        }
-                    )
+                    .onSizeChange {
+                        listContentHeight = $0.height
+                    }
                 }
                 .frame(
-                    maxHeight: isCompact ? .infinity : scrollViewContentHeight
+                    maxHeight: isCompact ? .infinity : listContentHeight
                 )
             }
         }
