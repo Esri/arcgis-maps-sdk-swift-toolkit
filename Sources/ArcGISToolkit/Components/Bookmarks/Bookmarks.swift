@@ -46,7 +46,7 @@ public struct Bookmarks: View {
     /// If non-`nil`, this viewpoint is updated when a bookmark is pressed.
     private var viewpoint: Binding<Viewpoint?>?
 
-    /// Sets a closure to perform when the viewpoint of the `MapView` or `SceneView` changes.
+    /// Sets a closure to perform when the bookmark selection changes.
     /// - Parameters:
     ///   - action: The closure to perform when the bookmark selection has changed.
     public func onSelectionChanged(
