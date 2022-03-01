@@ -20,7 +20,7 @@ struct BookmarksHeader: View {
     var isPresented: Bool
 
     public var body: some View {
-        HStack {
+        HStack(alignment: .top) {
             Image(systemName: "bookmark")
             VStack {
                 Text("Bookmarks")
