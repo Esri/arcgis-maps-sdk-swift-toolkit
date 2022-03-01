@@ -74,8 +74,6 @@ public struct Bookmarks: View {
     }
 
     /// Creates a `Bookmarks` component.
-    /// - precondition: `viewpoint` is non-nil or the `onSelectionChanged` modifier is
-    /// implemented.
     /// - Parameters:
     ///   - isPresented: Determines if the bookmarks list is presented.
     ///   - bookmarks: A list of bookmarks. Use this when displaying bookmarks defined at run-time.
