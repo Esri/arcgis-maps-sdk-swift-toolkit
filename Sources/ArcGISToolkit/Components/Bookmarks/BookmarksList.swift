@@ -16,15 +16,24 @@ import SwiftUI
 
 /// `BookmarksList` displays a list of selectable bookmarks.
 struct BookmarksList: View {
+    @Environment(\.horizontalSizeClass)
+    private var horizontalSizeClass: UserInterfaceSizeClass?
+
+    @Environment(\.verticalSizeClass)
+    private var verticalSizeClass: UserInterfaceSizeClass?
+
     /// A list of bookmarks for display.
     var bookmarks: [Bookmark]
 
-    /// The minimum height of a bookmark list item.
-    ///
-    /// This number will be larger when them item's name consumes 2+ lines of text.
-    private var minimumRowHeight: Double {
-        44
+    /// If `true`, the device is in a compact-width or compact-height orientation.
+    /// If `false`, the device is in a regular-width and regular-height orientation.
+    private var isCompact: Bool {
+        horizontalSizeClass == .compact || verticalSizeClass == .compact
     }
+
+    /// The height of the scroll view's content.
+    @State
+    private var scrollViewContentHeight: CGFloat = .zero
 
     /// A bookmark that was selected.
     ///
@@ -33,7 +42,7 @@ struct BookmarksList: View {
     var selectedBookmark: Bookmark?
 
     var body: some View {
-        List {
+        Group {
             if bookmarks.isEmpty {
                 Label {
                     Text("No bookmarks")
@@ -42,24 +51,36 @@ struct BookmarksList: View {
                 }
                 .foregroundColor(.primary)
             } else {
-                ForEach(
-                    bookmarks.sorted { $0.name <  $1.name },
-                    id: \.viewpoint
-                ) { bookmark in
-                    Button {
-                        selectedBookmark = bookmark
-                    } label: {
-                        Text(bookmark.name)
+                ScrollView {
+                    VStack(alignment: .leading) {
+                        ForEach(
+                            bookmarks.sorted { $0.name <  $1.name },
+                            id: \.viewpoint
+                        ) { bookmark in
+                            Button {
+                                selectedBookmark = bookmark
+                            } label: {
+                                Text(bookmark.name)
+                                    .foregroundColor(.primary)
+                            }
+                            .padding(4)
+                            Divider()
+                        }
                     }
+                    .padding()
+                    .background(
+                        GeometryReader { geometry -> Color in
+                            DispatchQueue.main.async {
+                                scrollViewContentHeight = geometry.size.height
+                            }
+                            return .clear
+                        }
+                    )
                 }
+                .frame(
+                    maxHeight: isCompact ? .infinity : scrollViewContentHeight
+                )
             }
         }
-        .listStyle(.plain)
-        .frame(
-            minHeight: minimumRowHeight,
-            idealHeight: minimumRowHeight * Double(
-                max(1, bookmarks.count)),
-            maxHeight: .infinity
-        )
     }
 }
