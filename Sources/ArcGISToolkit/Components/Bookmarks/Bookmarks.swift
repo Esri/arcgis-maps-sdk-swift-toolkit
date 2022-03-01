@@ -70,8 +70,6 @@ public struct Bookmarks: View {
             viewpoint.wrappedValue = bookmark!.viewpoint
         } else if let actions = onSelectionChanged {
             actions(bookmark!)
-        } else {
-            fatalError("No viewpoint or action provided")
         }
     }
 
