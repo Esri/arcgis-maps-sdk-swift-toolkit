@@ -60,7 +60,7 @@ public struct Bookmarks: View {
     /// Performs the necessary actions when a bookmark is selected.
     ///
     /// This includes indicating that bookmarks should be set to a hidden state, and changing the viewpoint
-    /// if the user provided a viewpoint or calling actions if the user implemented the
+    /// binding (if provided) or calling the closure provided by the `onSelectionChanged` modifier.
     /// `onSelectionChanged` modifier.
     /// - Parameter bookmark: The bookmark that was selected.
     func selectBookmark(_ bookmark: Bookmark?) {
