@@ -41,7 +41,7 @@ public struct Bookmarks: View {
 ***REMOVED******REMOVED***/
 ***REMOVED******REMOVED***/ Used to listen for a selection.
 ***REMOVED***@State
-***REMOVED***var selectedBookmark: Bookmark? = nil
+***REMOVED***private var selectedBookmark: Bookmark? = nil
 
 ***REMOVED******REMOVED***/ If non-`nil`, this viewpoint is updated when a bookmark is pressed.
 ***REMOVED***var viewpoint: Binding<Viewpoint?>?
