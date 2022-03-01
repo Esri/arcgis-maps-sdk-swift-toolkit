@@ -20,7 +20,7 @@ struct BookmarksHeader: View {
 ***REMOVED***var isPresented: Bool
 
 ***REMOVED***public var body: some View {
-***REMOVED******REMOVED***HStack {
+***REMOVED******REMOVED***HStack(alignment: .top) {
 ***REMOVED******REMOVED******REMOVED***Image(systemName: "bookmark")
 ***REMOVED******REMOVED******REMOVED***VStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text("Bookmarks")
