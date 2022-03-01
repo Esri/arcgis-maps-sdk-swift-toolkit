@@ -90,8 +90,6 @@ public struct Bookmarks: View {
     }
 
     /// Creates a `Bookmarks` component.
-    /// - precondition: `viewpoint` is non-nil or the `onSelectionChanged` modifier is
-    /// implemented.
     /// - Parameters:
     ///   - isPresented: Determines if the bookmarks list is presented.
     ///   - mapOrScene: A `GeoModel` authored with pre-existing bookmarks.
