@@ -77,8 +77,8 @@ public struct Bookmarks: View {
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - isPresented: Determines if the bookmarks list is presented.
 ***REMOVED******REMOVED***/   - bookmarks: A list of bookmarks. Use this when displaying bookmarks defined at run-time.
-***REMOVED******REMOVED***/   - viewpoint: A viewpoint binding that will be updated when a bookmark is selected. Use
-***REMOVED******REMOVED***/   either `viewpoint` or `onSelectionChanged` exclusively.
+***REMOVED******REMOVED***/   - viewpoint: A viewpoint binding that will be updated when a bookmark is selected.
+***REMOVED******REMOVED***/   Alternately, you can use the `.onSelectionChanged` modifier to handle bookmark selection.
 ***REMOVED***public init(
 ***REMOVED******REMOVED***isPresented: Binding<Bool>,
 ***REMOVED******REMOVED***bookmarks: [Bookmark],
@@ -95,8 +95,8 @@ public struct Bookmarks: View {
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - isPresented: Determines if the bookmarks list is presented.
 ***REMOVED******REMOVED***/   - mapOrScene: A `GeoModel` authored with pre-existing bookmarks.
-***REMOVED******REMOVED***/   - viewpoint: A viewpoint binding that will be updated when a bookmark is selected. Use
-***REMOVED******REMOVED***/   either `viewpoint` or `onSelectionChanged` exclusively.
+***REMOVED******REMOVED***/   - viewpoint: A viewpoint binding that will be updated when a bookmark is selected.
+***REMOVED******REMOVED***/   Alternately, you can use the `.onSelectionChanged` modifier to handle bookmark selection.
 ***REMOVED***public init(
 ***REMOVED******REMOVED***isPresented: Binding<Bool>,
 ***REMOVED******REMOVED***mapOrScene: GeoModel,
