@@ -16,29 +16,29 @@ import SwiftUI
 import XCTest
 @testable import ArcGISToolkit
 
-class BookmarksListTest: XCTestCase {
+class BookmarksTests: XCTestCase {
     /// Assert that the list properly handles a selction when provided a modifier.
     func testSelectBookmarkWithModifier() {
         let expectation = XCTestExpectation(
             description: "Modifier action was performed"
         )
-        let bookmarks = sampleBookmarks
+        let sampleBookmarks = sampleBookmarks
         var _isPresented = true
         let action: ((Bookmark) -> Void) = {
             expectation.fulfill()
-            XCTAssertEqual($0.viewpoint, bookmarks.first?.viewpoint)
+            XCTAssertEqual($0.viewpoint, sampleBookmarks.first?.viewpoint)
         }
         let isPresented = Binding(
             get: { _isPresented },
             set: {_isPresented = $0 }
         )
-        var bookmarksManager = Bookmarks(
+        var bookmarks = Bookmarks(
             isPresented: isPresented,
-            bookmarks: bookmarks
+            bookmarks: sampleBookmarks
         )
-        bookmarksManager.onSelectionChanged = action
+        bookmarks.onSelectionChanged = action
         XCTAssertTrue(_isPresented)
-        bookmarksManager.selectBookmark(bookmarks.first!)
+        bookmarks.selectBookmark(sampleBookmarks.first!)
         XCTAssertFalse(_isPresented)
         wait(for: [expectation], timeout: 1.0)
     }
@@ -63,20 +63,20 @@ class BookmarksListTest: XCTestCase {
             expectation.fulfill()
             XCTAssertEqual($0.viewpoint, webMap.bookmarks.first?.viewpoint)
         }
-        var bookmarksManager = Bookmarks(
+        var bookmarks = Bookmarks(
             isPresented: isPresented,
             mapOrScene: webMap
         )
-        bookmarksManager.onSelectionChanged = action
+        bookmarks.onSelectionChanged = action
         XCTAssertTrue(_isPresented)
-        bookmarksManager.selectBookmark(webMap.bookmarks.first!)
+        bookmarks.selectBookmark(webMap.bookmarks.first!)
         XCTAssertFalse(_isPresented)
         wait(for: [expectation], timeout: 1.0)
     }
 
     /// Assert that the list properly handles a selction when provided a viewpoint.
     func testSelectBookmarkWithViewpoint() {
-        let bookmarks = sampleBookmarks
+        let sampleBookmarks = sampleBookmarks
         var _isPresented = true
         let isPresented = Binding(
             get: { _isPresented },
@@ -87,16 +87,16 @@ class BookmarksListTest: XCTestCase {
             get: { _viewpoint },
             set: { _viewpoint = $0 }
         )
-        let bookmarksManager = Bookmarks(
+        let bookmarks = Bookmarks(
             isPresented: isPresented,
-            bookmarks: bookmarks,
+            bookmarks: sampleBookmarks,
             viewpoint: viewpoint
         )
         XCTAssertTrue(_isPresented)
-        XCTAssertNotEqual(_viewpoint, bookmarks.first?.viewpoint)
-        bookmarksManager.selectBookmark(bookmarks.first!)
+        XCTAssertNotEqual(_viewpoint, sampleBookmarks.first?.viewpoint)
+        bookmarks.selectBookmark(sampleBookmarks.first!)
         XCTAssertFalse(_isPresented)
-        XCTAssertEqual(_viewpoint, bookmarks.first?.viewpoint)
+        XCTAssertEqual(_viewpoint, sampleBookmarks.first?.viewpoint)
     }
 
     /// Assert that the list properly handles a selction when provided a viewpoint and web map.
@@ -117,20 +117,20 @@ class BookmarksListTest: XCTestCase {
             get: { _viewpoint },
             set: { _viewpoint = $0 }
         )
-        let bookmarksManager = Bookmarks(
+        let bookmarks = Bookmarks(
             isPresented: isPresented,
             mapOrScene: webMap,
             viewpoint: viewpoint
         )
         XCTAssertTrue(_isPresented)
         XCTAssertNotEqual(_viewpoint, webMap.bookmarks.first?.viewpoint)
-        bookmarksManager.selectBookmark(webMap.bookmarks.first!)
+        bookmarks.selectBookmark(webMap.bookmarks.first!)
         XCTAssertFalse(_isPresented)
         XCTAssertEqual(_viewpoint, webMap.bookmarks.first?.viewpoint)
     }
 }
 
-extension BookmarksListTest {
+extension BookmarksTests {
     /// An arbitrary point to use for testing.
     var point: Point {
         Point(x: -117.19494, y: 34.05723, spatialReference: .wgs84)
