@@ -70,8 +70,6 @@ public struct Bookmarks: View {
 ***REMOVED******REMOVED******REMOVED***viewpoint.wrappedValue = bookmark!.viewpoint
 ***REMOVED*** else if let actions = onSelectionChanged {
 ***REMOVED******REMOVED******REMOVED***actions(bookmark!)
-***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***fatalError("No viewpoint or action provided")
 ***REMOVED***
 ***REMOVED***
 
