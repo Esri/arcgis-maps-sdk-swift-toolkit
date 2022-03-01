@@ -31,16 +31,17 @@ public struct Bookmarks: View {
 ***REMOVED***@Binding
 ***REMOVED***private var isPresented: Bool
 
+***REMOVED******REMOVED***/ User defined action to be performed when a bookmark is selected.
+***REMOVED******REMOVED***/
+***REMOVED******REMOVED***/ Use this when you prefer to self-manage the response to a bookmark selection. Use either
+***REMOVED******REMOVED***/ `onSelectionChanged` or `viewpoint` exclusively.
+***REMOVED***var onSelectionChanged: ((Bookmark) -> Void)? = nil
+
 ***REMOVED******REMOVED***/ A bookmark that was selected.
 ***REMOVED******REMOVED***/
 ***REMOVED******REMOVED***/ Used to listen for a selection.
 ***REMOVED***@State
 ***REMOVED***var selectedBookmark: Bookmark? = nil
-
-***REMOVED******REMOVED***/ User defined action to be performed when a bookmark is selected. Use this when you prefer to
-***REMOVED******REMOVED***/ self-manage the response to a bookmark selection. Use either `onSelectionChanged`
-***REMOVED******REMOVED***/ or `viewpoint` exclusively.
-***REMOVED***var selectionChangedActions: ((Bookmark) -> Void)? = nil
 
 ***REMOVED******REMOVED***/ If non-`nil`, this viewpoint is updated when a bookmark is pressed.
 ***REMOVED***var viewpoint: Binding<Viewpoint?>?
@@ -52,7 +53,7 @@ public struct Bookmarks: View {
 ***REMOVED******REMOVED***perform action: @escaping (Bookmark) -> Void
 ***REMOVED***) -> Bookmarks {
 ***REMOVED******REMOVED***var copy = self
-***REMOVED******REMOVED***copy.selectionChangedActions = action
+***REMOVED******REMOVED***copy.onSelectionChanged = action
 ***REMOVED******REMOVED***return copy
 ***REMOVED***
 
@@ -60,14 +61,14 @@ public struct Bookmarks: View {
 ***REMOVED******REMOVED***/
 ***REMOVED******REMOVED***/ This includes indicating that bookmarks should be set to a hidden state, and changing the viewpoint
 ***REMOVED******REMOVED***/ if the user provided a viewpoint or calling actions if the user implemented the
-***REMOVED******REMOVED***/ `selectionChangedActions` modifier.
+***REMOVED******REMOVED***/ `onSelectionChanged` modifier.
 ***REMOVED******REMOVED***/ - Parameter bookmark: The bookmark that was selected.
 ***REMOVED***func selectBookmark(_ bookmark: Bookmark?) {
 ***REMOVED******REMOVED***guard bookmark != nil else { return ***REMOVED***
 ***REMOVED******REMOVED***isPresented = false
 ***REMOVED******REMOVED***if let viewpoint = viewpoint {
 ***REMOVED******REMOVED******REMOVED***viewpoint.wrappedValue = bookmark!.viewpoint
-***REMOVED*** else if let actions = selectionChangedActions {
+***REMOVED*** else if let actions = onSelectionChanged {
 ***REMOVED******REMOVED******REMOVED***actions(bookmark!)
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED***fatalError("No viewpoint or action provided")
@@ -75,13 +76,13 @@ public struct Bookmarks: View {
 ***REMOVED***
 
 ***REMOVED******REMOVED***/ Creates a `Bookmarks` component.
-***REMOVED******REMOVED***/ - precondition: `viewpoint` is non-nil or the `selectionChangedActions` modifier is
+***REMOVED******REMOVED***/ - precondition: `viewpoint` is non-nil or the `onSelectionChanged` modifier is
 ***REMOVED******REMOVED***/ implemented.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - isPresented: Determines if the bookmarks list is presented.
 ***REMOVED******REMOVED***/   - bookmarks: A list of bookmarks. Use this when displaying bookmarks defined at run-time.
 ***REMOVED******REMOVED***/   - viewpoint: A viewpoint binding that will be updated when a bookmark is selected. Use
-***REMOVED******REMOVED***/   either `viewpoint` or `selectionChangedActions` exclusively.
+***REMOVED******REMOVED***/   either `viewpoint` or `onSelectionChanged` exclusively.
 ***REMOVED***public init(
 ***REMOVED******REMOVED***isPresented: Binding<Bool>,
 ***REMOVED******REMOVED***bookmarks: [Bookmark],
@@ -93,13 +94,13 @@ public struct Bookmarks: View {
 ***REMOVED***
 
 ***REMOVED******REMOVED***/ Creates a `Bookmarks` component.
-***REMOVED******REMOVED***/ - precondition: `viewpoint` is non-nil or the `selectionChangedActions` modifier is
+***REMOVED******REMOVED***/ - precondition: `viewpoint` is non-nil or the `onSelectionChanged` modifier is
 ***REMOVED******REMOVED***/ implemented.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - isPresented: Determines if the bookmarks list is presented.
 ***REMOVED******REMOVED***/   - mapOrScene: A `GeoModel` authored with pre-existing bookmarks.
 ***REMOVED******REMOVED***/   - viewpoint: A viewpoint binding that will be updated when a bookmark is selected. Use
-***REMOVED******REMOVED***/   either `viewpoint` or `selectionChangedActions` exclusively.
+***REMOVED******REMOVED***/   either `viewpoint` or `onSelectionChanged` exclusively.
 ***REMOVED***public init(
 ***REMOVED******REMOVED***isPresented: Binding<Bool>,
 ***REMOVED******REMOVED***mapOrScene: GeoModel,
