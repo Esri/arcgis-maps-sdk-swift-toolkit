@@ -114,13 +114,13 @@ public struct Bookmarks: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectBookmark($0)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***loading
+***REMOVED******REMOVED******REMOVED******REMOVED***loadingView
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 
 ***REMOVED******REMOVED***/ A view that is shown while a `GeoModel` is loading.
-***REMOVED***private var loading: some View {
+***REMOVED***private var loadingView: some View {
 ***REMOVED******REMOVED***VStack {
 ***REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED***HStack {
