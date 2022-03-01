@@ -112,7 +112,9 @@ struct BookmarksExampleView: View {
                         )
                     }
                     .popover(isPresented: $showingBookmarks) {
-                        // Let the bookmarks component control viewpoint changes:
+                        // Display the Bookmarks view with a pre-defined list of bookmarks.
+                        // Passing in a viewpoint binding will allow the Bookmarks
+                        // view to handle bookmark selection.
                         Bookmarks(
                             isPresented: $showingBookmarks,
                             bookmarks: sampleBookmarks,
