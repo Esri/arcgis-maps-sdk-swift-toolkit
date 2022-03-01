@@ -38,7 +38,7 @@ public struct Bookmarks: View {
 ***REMOVED***var selectedBookmark: Bookmark? = nil
 
 ***REMOVED******REMOVED***/ User defined action to be performed when a bookmark is selected. Use this when you prefer to
-***REMOVED******REMOVED***/ self-manage the response to a bookmark selection. Use either `onSelectionChangedActions`
+***REMOVED******REMOVED***/ self-manage the response to a bookmark selection. Use either `onSelectionChanged`
 ***REMOVED******REMOVED***/ or `viewpoint` exclusively.
 ***REMOVED***var selectionChangedActions: ((Bookmark) -> Void)? = nil
 
