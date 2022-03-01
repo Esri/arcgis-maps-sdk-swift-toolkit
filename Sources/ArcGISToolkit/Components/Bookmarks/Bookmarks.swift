@@ -44,7 +44,7 @@ public struct Bookmarks: View {
     private var selectedBookmark: Bookmark? = nil
 
     /// If non-`nil`, this viewpoint is updated when a bookmark is pressed.
-    var viewpoint: Binding<Viewpoint?>?
+    private var viewpoint: Binding<Viewpoint?>?
 
     /// Sets a closure to perform when the viewpoint of the `MapView` or `SceneView` changes.
     /// - Parameters:
