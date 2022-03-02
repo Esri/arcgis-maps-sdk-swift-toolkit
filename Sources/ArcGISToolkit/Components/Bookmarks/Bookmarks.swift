@@ -118,13 +118,9 @@ public struct Bookmarks: View {
 
     /// A view that is shown while a `GeoModel` is loading.
     private var loadingView: some View {
-        VStack {
-            Spacer()
-            HStack {
-                ProgressView()
-                    .padding([.trailing], 5)
-                Text("Loading")
-            }.task {
+        ProgressView()
+            .padding()
+            .task {
                 do {
                     try await geoModel?.load()
                     geoModelIsLoaded = true
@@ -133,8 +129,5 @@ public struct Bookmarks: View {
                     print(error.localizedDescription)
                 }
             }
-            Spacer()
-        }
-        .padding()
     }
 }
