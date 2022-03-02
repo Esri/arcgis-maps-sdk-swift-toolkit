@@ -38,8 +38,6 @@ public struct Bookmarks: View {
 ***REMOVED***var onSelectionChanged: ((Bookmark) -> Void)? = nil
 
 ***REMOVED******REMOVED***/ A bookmark that was selected.
-***REMOVED******REMOVED***/
-***REMOVED******REMOVED***/ Used to listen for a selection.
 ***REMOVED***@State
 ***REMOVED***private var selectedBookmark: Bookmark? = nil
 
