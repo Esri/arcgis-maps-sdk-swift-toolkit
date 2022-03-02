@@ -39,8 +39,7 @@ struct BookmarksList: View {
     var onSelectionChanged: ((Bookmark) -> Void)? = nil
 
     /// Sets a closure to perform when the bookmark selection changes.
-    /// - Parameters:
-    ///   - action: The closure to perform when the bookmark selection has changed.
+    /// - Parameter action: The closure to perform when the bookmark selection has changed.
     public func onSelectionChanged(
         perform action: @escaping (Bookmark) -> Void
     ) -> BookmarksList {
