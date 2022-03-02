@@ -16,10 +16,6 @@
 ***REMOVED***
 
 struct BookmarksExampleView: View {
-***REMOVED******REMOVED***/ Represents the number of bookmarks added during runtime.
-***REMOVED***@State
-***REMOVED***private var bookmarksAdded = 0
-
 ***REMOVED******REMOVED***/ A web map with predefined bookmarks.
 ***REMOVED***private let map = Map(url: URL(string: "https:***REMOVED***runtime.maps.arcgis.com/home/item.html?id=16f1b8ba37b44dc3884afc8d5f454dd2")!)!
 
@@ -36,17 +32,6 @@ struct BookmarksExampleView: View {
 ***REMOVED******REMOVED***MapView(map: map, viewpoint: viewpoint)
 ***REMOVED******REMOVED******REMOVED***.onViewpointChanged(kind: .centerAndScale) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***viewpoint = $0
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.onSingleTapGesture { _, point in
-***REMOVED******REMOVED******REMOVED******REMOVED***let newBookmark = Bookmark(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***name: "Added bookmark \(bookmarksAdded + 1)",
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint: Viewpoint(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***center: point,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***scale: viewpoint?.targetScale ?? 10_000
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED***map.addBookmark(newBookmark)
-***REMOVED******REMOVED******REMOVED******REMOVED***bookmarksAdded += 1
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.toolbar {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ToolbarItem(placement: .primaryAction) {
