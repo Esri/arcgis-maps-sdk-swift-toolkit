@@ -15,6 +15,18 @@
 
 ***REMOVED***/ The header displayed at the top of the bookmarks menu.
 struct BookmarksHeader: View {
+***REMOVED***@Environment(\.horizontalSizeClass)
+***REMOVED***private var horizontalSizeClass: UserInterfaceSizeClass?
+
+***REMOVED***@Environment(\.verticalSizeClass)
+***REMOVED***private var verticalSizeClass: UserInterfaceSizeClass?
+
+***REMOVED******REMOVED***/ If `true`, the bookmarks will display as sheet.
+***REMOVED******REMOVED***/ If `false`, the bookmarks will display as a popover.
+***REMOVED***private var isCompact: Bool {
+***REMOVED******REMOVED***return horizontalSizeClass == .compact || verticalSizeClass == .compact
+***REMOVED***
+
 ***REMOVED******REMOVED***/ Determines if the bookmarks list is currently shown or not.
 ***REMOVED***@Binding
 ***REMOVED***var isPresented: Bool
@@ -31,11 +43,14 @@ struct BookmarksHeader: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .leading)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED***isPresented = false
-***REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "xmark.circle")
+***REMOVED******REMOVED******REMOVED***if isCompact {
+***REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED******REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented = false
+***REMOVED******REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Cancel")
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.red)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.padding()
