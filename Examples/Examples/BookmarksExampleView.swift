@@ -16,6 +16,12 @@ import ArcGISToolkit
 import SwiftUI
 
 struct BookmarksExampleView: View {
+    @Environment(\.horizontalSizeClass)
+    private var horizontalSizeClass: UserInterfaceSizeClass?
+
+    @Environment(\.verticalSizeClass)
+    private var verticalSizeClass: UserInterfaceSizeClass?
+
     /// A web map with predefined bookmarks.
     private let map = Map(url: URL(string: "https://runtime.maps.arcgis.com/home/item.html?id=16f1b8ba37b44dc3884afc8d5f454dd2")!)!
 
@@ -52,6 +58,8 @@ struct BookmarksExampleView: View {
                             mapOrScene: map,
                             viewpoint: $viewpoint
                         )
+                        .environment(\.horizontalSizeClass, horizontalSizeClass)
+                        .environment(\.verticalSizeClass, verticalSizeClass)
                         // Display the Bookmarks view with the list of bookmarks in a map.
 //                        Bookmarks(
 //                            isPresented: $showingBookmarks,
@@ -62,6 +70,8 @@ struct BookmarksExampleView: View {
 //                        .onSelectionChanged {
 //                            viewpoint = $0.viewpoint
 //                        }
+//                        .environment(\.horizontalSizeClass, horizontalSizeClass)
+//                        .environment(\.verticalSizeClass, verticalSizeClass)
                     }
                 }
             }

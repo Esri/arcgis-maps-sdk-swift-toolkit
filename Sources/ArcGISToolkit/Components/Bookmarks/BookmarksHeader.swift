@@ -15,6 +15,18 @@ import SwiftUI
 
 /// The header displayed at the top of the bookmarks menu.
 struct BookmarksHeader: View {
+    @Environment(\.horizontalSizeClass)
+    private var horizontalSizeClass: UserInterfaceSizeClass?
+
+    @Environment(\.verticalSizeClass)
+    private var verticalSizeClass: UserInterfaceSizeClass?
+
+    /// If `true`, the bookmarks will display as sheet.
+    /// If `false`, the bookmarks will display as a popover.
+    private var isCompact: Bool {
+        return horizontalSizeClass == .compact || verticalSizeClass == .compact
+    }
+
     /// Determines if the bookmarks list is currently shown or not.
     @Binding
     var isPresented: Bool
@@ -31,11 +43,14 @@ struct BookmarksHeader: View {
                     .foregroundColor(.secondary)
                     .frame(maxWidth: .infinity, alignment: .leading)
             }
-            Spacer()
-            Button {
-                isPresented = false
-            } label: {
-                Image(systemName: "xmark.circle")
+            if isCompact {
+                Spacer()
+                Button {
+                    isPresented = false
+                } label: {
+                    Text("Cancel")
+                }
+                .foregroundColor(.red)
             }
         }
         .padding()
