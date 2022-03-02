@@ -203,14 +203,14 @@ class SearchViewModelTests: XCTestCase {
         
         let resultGeometryUnion: Geometry = try XCTUnwrap(
             GeometryEngine.union(
-                geometries: result.compactMap { $0.geoElement?.geometry }
+                of: result.compactMap { $0.geoElement?.geometry }
             )
         )
         
         XCTAssertTrue(
-            GeometryEngine.contains(
-                geometry1: model.queryArea!,
-                geometry2: resultGeometryUnion
+            GeometryEngine.doesGeometry(
+                model.queryArea!,
+                contain: resultGeometryUnion
             )
         )
         
@@ -256,9 +256,9 @@ class SearchViewModelTests: XCTestCase {
         )
         
         var geodeticDistance = try XCTUnwrap (
-            GeometryEngine.distanceGeodetic(
-                point1: .portland,
-                point2: resultPoint,
+            GeometryEngine.geodeticDistance(
+                from: .portland,
+                to: resultPoint,
                 distanceUnit: .meters,
                 azimuthUnit: nil,
                 curveType: .geodesic
@@ -283,9 +283,9 @@ class SearchViewModelTests: XCTestCase {
         
         // Web Mercator distance between .edinburgh and first result.
         geodeticDistance = try XCTUnwrap (
-            GeometryEngine.distanceGeodetic(
-                point1: .edinburgh,
-                point2: resultPoint,
+            GeometryEngine.geodeticDistance(
+                from: .edinburgh,
+                to: resultPoint,
                 distanceUnit: .meters,
                 azimuthUnit: nil,
                 curveType: .geodesic
@@ -311,14 +311,14 @@ class SearchViewModelTests: XCTestCase {
         
         let resultGeometryUnion: Geometry = try XCTUnwrap(
             GeometryEngine.union(
-                geometries: result.compactMap { $0.geoElement?.geometry }
+                of: result.compactMap { $0.geoElement?.geometry }
             )
         )
         
         XCTAssertTrue(
-            GeometryEngine.contains(
-                geometry1: model.geoViewExtent!,
-                geometry2: resultGeometryUnion
+            GeometryEngine.doesGeometry(
+                model.geoViewExtent!,
+                contain: resultGeometryUnion
             )
         )
         
