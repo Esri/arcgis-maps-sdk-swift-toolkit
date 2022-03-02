@@ -25,18 +25,18 @@ struct BookmarksList: View {
     /// A list of bookmarks for display.
     var bookmarks: [Bookmark]
 
-    /// If `true`, the device is in a compact-width or compact-height orientation.
-    /// If `false`, the device is in a regular-width and regular-height orientation.
+    /// If `true`, the bookmarks will display as sheet.
+    /// If `false`, the bookmarks will display as a popover.
     private var isCompact: Bool {
-        horizontalSizeClass == .compact || verticalSizeClass == .compact
+        return horizontalSizeClass == .compact || verticalSizeClass == .compact
     }
-
-    /// Action to be performed when a bookmark is selected.
-    var onSelectionChanged: ((Bookmark) -> Void)? = nil
 
     /// The height of the list content.
     @State
     private var listContentHeight: CGFloat = .zero
+
+    /// Action to be performed when a bookmark is selected.
+    var onSelectionChanged: ((Bookmark) -> Void)? = nil
 
     /// Sets a closure to perform when the bookmark selection changes.
     /// - Parameters:
