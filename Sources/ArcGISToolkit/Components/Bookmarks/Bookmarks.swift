@@ -61,13 +61,12 @@ public struct Bookmarks: View {
 ***REMOVED******REMOVED***/ binding (if provided) or calling the closure provided by the `onSelectionChanged` modifier.
 ***REMOVED******REMOVED***/ `onSelectionChanged` modifier.
 ***REMOVED******REMOVED***/ - Parameter bookmark: The bookmark that was selected.
-***REMOVED***func selectBookmark(_ bookmark: Bookmark?) {
-***REMOVED******REMOVED***guard bookmark != nil else { return ***REMOVED***
+***REMOVED***func selectBookmark(_ bookmark: Bookmark) {
 ***REMOVED******REMOVED***isPresented = false
 ***REMOVED******REMOVED***if let viewpoint = viewpoint {
-***REMOVED******REMOVED******REMOVED***viewpoint.wrappedValue = bookmark!.viewpoint
+***REMOVED******REMOVED******REMOVED***viewpoint.wrappedValue = bookmark.viewpoint
 ***REMOVED*** else if let onSelectionChanged = onSelectionChanged {
-***REMOVED******REMOVED******REMOVED***onSelectionChanged(bookmark!)
+***REMOVED******REMOVED******REMOVED***onSelectionChanged(bookmark)
 ***REMOVED***
 ***REMOVED***
 
