@@ -16,10 +16,6 @@ import ArcGISToolkit
 import SwiftUI
 
 struct BookmarksExampleView: View {
-    /// Represents the number of bookmarks added during runtime.
-    @State
-    private var bookmarksAdded = 0
-
     /// A web map with predefined bookmarks.
     private let map = Map(url: URL(string: "https://runtime.maps.arcgis.com/home/item.html?id=16f1b8ba37b44dc3884afc8d5f454dd2")!)!
 
@@ -36,17 +32,6 @@ struct BookmarksExampleView: View {
         MapView(map: map, viewpoint: viewpoint)
             .onViewpointChanged(kind: .centerAndScale) {
                 viewpoint = $0
-            }
-            .onSingleTapGesture { _, point in
-                let newBookmark = Bookmark(
-                    name: "Added bookmark \(bookmarksAdded + 1)",
-                    viewpoint: Viewpoint(
-                        center: point,
-                        scale: viewpoint?.targetScale ?? 10_000
-                    )
-                )
-                map.addBookmark(newBookmark)
-                bookmarksAdded += 1
             }
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
