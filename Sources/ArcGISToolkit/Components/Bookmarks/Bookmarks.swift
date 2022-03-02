@@ -118,13 +118,9 @@ public struct Bookmarks: View {
 
 ***REMOVED******REMOVED***/ A view that is shown while a `GeoModel` is loading.
 ***REMOVED***private var loadingView: some View {
-***REMOVED******REMOVED***VStack {
-***REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED******REMOVED***ProgressView()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding([.trailing], 5)
-***REMOVED******REMOVED******REMOVED******REMOVED***Text("Loading")
-***REMOVED******REMOVED***.task {
+***REMOVED******REMOVED***ProgressView()
+***REMOVED******REMOVED******REMOVED***.padding()
+***REMOVED******REMOVED******REMOVED***.task {
 ***REMOVED******REMOVED******REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try await geoModel?.load()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***geoModelIsLoaded = true
@@ -133,8 +129,5 @@ public struct Bookmarks: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print(error.localizedDescription)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED***
-***REMOVED******REMOVED***.padding()
 ***REMOVED***
 ***REMOVED***
