@@ -61,13 +61,12 @@ public struct Bookmarks: View {
     /// binding (if provided) or calling the closure provided by the `onSelectionChanged` modifier.
     /// `onSelectionChanged` modifier.
     /// - Parameter bookmark: The bookmark that was selected.
-    func selectBookmark(_ bookmark: Bookmark?) {
-        guard bookmark != nil else { return }
+    func selectBookmark(_ bookmark: Bookmark) {
         isPresented = false
         if let viewpoint = viewpoint {
-            viewpoint.wrappedValue = bookmark!.viewpoint
+            viewpoint.wrappedValue = bookmark.viewpoint
         } else if let onSelectionChanged = onSelectionChanged {
-            onSelectionChanged(bookmark!)
+            onSelectionChanged(bookmark)
         }
     }
 
