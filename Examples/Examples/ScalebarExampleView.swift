@@ -17,18 +17,19 @@ import SwiftUI
 
 struct ScalebarExampleView: View {
     /// The map displayed in the map view.
-    private let map = Map(basemapStyle: .arcGISImagery)
+    private let map = Map(basemapStyle: .arcGISTopographic)
 
     @State
     /// Allows for communication between the Scalebar and MapView or SceneView.
     private var scale: Double?
 
+    @State
+    /// Allows for communication between the Scalebar and MapView or SceneView.
+    private var spatialReference: SpatialReference?
+
     /// Allows for communication between the Scalebar and MapView or SceneView.
     @State
-    private var viewpoint: Viewpoint? = Viewpoint(
-        center: Point(x: -117.19494, y: 34.05723, spatialReference: .wgs84),
-        scale: 10_000
-    )
+    private var viewpoint: Viewpoint?
 
     /// Allows for communication between the Scalebar and MapView or SceneView.
     @State
@@ -39,13 +40,9 @@ struct ScalebarExampleView: View {
             .onViewpointChanged(kind: .centerAndScale) { viewpoint = $0 }
             .onVisibleAreaChanged { visibleArea = $0 }
             .onScaleChanged { scale = $0 }
+            .onSpatialReferenceChanged { spatialReference = $0 }
             .overlay(alignment: .bottomLeading) {
-                Scalebar(scale, viewpoint, visibleArea)
-                    .border(.red, width: 2)
-                    .padding([.leading], 10)
-                    .border(.green, width: 2)
-                    .padding([.bottom], 30)
-                    .border(.blue, width: 2)
+                Scalebar(scale, spatialReference, 175, viewpoint, visibleArea, units: .imperial)
             }
     }
 }

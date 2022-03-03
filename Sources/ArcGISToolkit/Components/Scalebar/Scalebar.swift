@@ -16,8 +16,51 @@ import SwiftUI
 
 /// Displays the current scale on-screen
 public struct Scalebar: View {
+    private var alignment: ScalebarAlignment
+
+    private var alternateFillColor = Color.black
+
+    @State
+    private var displayLength: CGFloat = .zero
+
+    @State
+    private var extentWidth: CGFloat = .zero
+
+    private var fillColor = Color(uiColor: .lightGray).opacity(0.5)
+
+    private var font: Font
+
+    private var geodeticCurveType: GeometryEngine.GeodeticCurveType = .geodesic
+
+    private var lineColor = Color.white
+
+    @State
+    private var mapLengthString: String = "none"
+
     /// Acts as a data provider of the current scale.
     private var scale: Double?
+
+    private var shadowColor = Color(uiColor: .black).opacity(0.65)
+
+    private var spatialReference: SpatialReference?
+
+    private var style: ScalebarStyle
+
+    private var targetWidth: Double
+
+    private var textColor = Color.black
+
+    private var textShadowColor = Color.white
+
+    /// Unit of measure for the scalebar.
+    private var units: ScalebarUnits
+
+    private var unitsPerPoint: Double {
+        (visibleArea?.extent.width ?? .zero) / extentWidth
+    }
+
+    /// Allows a user to toggle geodetic calculations.
+    private var useGeodeticCalculations: Bool
 
     /// Acts as a data provider of the current scale.
     private var viewpoint: Viewpoint?
@@ -27,19 +70,140 @@ public struct Scalebar: View {
 
     public init(
         _ scale: Double?,
+        _ spatialReference: SpatialReference? = .wgs84,
+        _ targetWidth: Double,
         _ viewpoint: Viewpoint?,
-        _ visibleArea: Polygon?
+        _ visibleArea: Polygon?,
+
+        alignment: ScalebarAlignment = .left,
+        font: Font = .system(size: 9.0, weight: .semibold),
+        style: ScalebarStyle = .line,
+        units: ScalebarUnits = NSLocale.current.usesMetricSystem ? .metric : .imperial,
+        useGeodeticCalculations: Bool = true
     ) {
         self.scale = scale
+        self.targetWidth = targetWidth
         self.viewpoint = viewpoint
         self.visibleArea = visibleArea
+
+        self.alignment = alignment
+        self.font = font
+        self.spatialReference = spatialReference
+        self.style = style
+        self.units = units
+        self.useGeodeticCalculations = useGeodeticCalculations
     }
 
     public var body: some View {
-        VStack {
-            Text(scale?.description ?? "N/A")
-            Text(viewpoint?.targetScale.description ?? "N/A")
-            Text(visibleArea?.extent.width.description ?? "N/A")
+        GeometryReader { geometryProxy in
+            VStack {
+                Rectangle()
+                    .fill(.white)
+                    .border(.red)
+                    .frame(width: displayLength, height: 5, alignment: .leading)
+                Button {
+                    updateScaleDisplay(forceRedraw: false)
+                } label: {
+                    Text("Force Update")
+                }
+                Text(mapLengthString)
+
+            }
+            .onChange(of: scale, perform: { newValue in
+                updateScaleDisplay(forceRedraw: false)
+            })
+            .onChange(of: geometryProxy.size) {
+                extentWidth = $0.width
+                updateScaleDisplay(forceRedraw: false)
+            }
+            .onAppear {
+                extentWidth = geometryProxy.size.width
+                updateScaleDisplay(forceRedraw: false)
+            }
         }
+        .frame(height: 100, alignment: .bottomLeading)
+    }
+
+    internal static let labelYPad: CGFloat = 2.0
+    internal static let labelXPad: CGFloat = 4.0
+    internal static let tickHeight: CGFloat = 6.0
+    internal static let tick2Height: CGFloat = 4.5
+    internal static let notchHeight: CGFloat = 6.0
+    internal static var numberFormatter: NumberFormatter = {
+        let numberFormatter = NumberFormatter()
+        numberFormatter.numberStyle = .decimal
+        numberFormatter.formatterBehavior = .behavior10_4
+        numberFormatter.maximumFractionDigits = 2
+        numberFormatter.minimumFractionDigits = 0
+        return numberFormatter
+    }()
+
+    internal static let lineCap = CGLineCap.round
+
+    internal var fontHeight: CGFloat = 0
+    internal var zeroStringWidth: CGFloat = 0
+    internal var maxRightUnitsPad: CGFloat = 0
+
+    /// Set a minScale if you only want the scalebar to appear when you reach a large enough scale maybe
+    ///  something like 10_000_000. This could be useful because the scalebar is really only accurate for
+    ///  the center of the map on smaller scales (when zoomed way out). A minScale of 0 means it will
+    ///  always be visible
+    private let minScale: Double = 0
+
+    private func updateScaleDisplay(forceRedraw: Bool) {
+        guard let scale = scale else {
+            return
+        }
+        guard minScale <= 0 || scale < minScale else {
+            return
+        }
+        guard let visibleArea = visibleArea else {
+            return
+        }
+        guard let sr = spatialReference else {
+            return
+        }
+        let totalWidthAvailable = targetWidth
+
+        // TODO: - Removal of hardcoded sample renderer property (~16 - 2) derived from sample renderer
+        let maxLength =  totalWidthAvailable - 16.30243742465973 - 2
+
+        let lineMapLength: Double
+        let displayUnit: LinearUnit
+        let mapCenter = visibleArea.extent.center
+        let lineDisplayLength: CGFloat
+
+        if useGeodeticCalculations || spatialReference?.unit is AngularUnit {
+            let maxLengthPlanar = unitsPerPoint * Double(maxLength)
+            let p1 = Point(x: mapCenter.x - (maxLengthPlanar * 0.5), y: mapCenter.y, spatialReference: sr)
+            let p2 = Point(x: mapCenter.x + (maxLengthPlanar * 0.5), y: mapCenter.y, spatialReference: sr)
+            let polyline = Polyline(points: [p1, p2], spatialReference: spatialReference)
+            let baseUnits = units.baseUnits()
+            let maxLengthGeodetic = GeometryEngine.lengthGeodetic(geometry: polyline, lengthUnit: baseUnits, curveType: geodeticCurveType)
+            let roundNumberDistance = units.closestDistanceWithoutGoingOver(to: maxLengthGeodetic, units: baseUnits)
+            let planarToGeodeticFactor = maxLengthPlanar / maxLengthGeodetic
+            lineDisplayLength = CGFloat( (roundNumberDistance * planarToGeodeticFactor) / unitsPerPoint )
+            displayUnit = units.linearUnitsForDistance(distance: roundNumberDistance)
+            lineMapLength = baseUnits.convert(to: displayUnit, value: roundNumberDistance)
+        } else {
+            guard let srUnit = sr.unit as? LinearUnit else {
+                return
+            }
+            let unitsPerPoint = unitsPerPoint
+            let baseUnits = units.baseUnits()
+            let lenAvail = srUnit.convert(to: baseUnits, value: unitsPerPoint * Double(maxLength))
+            let closestLen = units.closestDistanceWithoutGoingOver(to: lenAvail, units: baseUnits)
+            lineDisplayLength = CGFloat(baseUnits.convert(to: srUnit, value: closestLen) / unitsPerPoint)
+            displayUnit = units.linearUnitsForDistance(distance: closestLen)
+            lineMapLength = baseUnits.convert(to: displayUnit, value: closestLen)
+        }
+
+        guard lineDisplayLength.isFinite, !lineDisplayLength.isNaN else {
+            return
+        }
+
+        displayLength = lineDisplayLength
+
+        mapLengthString = Scalebar.numberFormatter.string(from: NSNumber(value: lineMapLength)) ?? ""
     }
 }
