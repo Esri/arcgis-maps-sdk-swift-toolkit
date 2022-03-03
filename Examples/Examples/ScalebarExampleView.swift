@@ -17,18 +17,19 @@
 
 struct ScalebarExampleView: View {
 ***REMOVED******REMOVED***/ The map displayed in the map view.
-***REMOVED***private let map = Map(basemapStyle: .arcGISImagery)
+***REMOVED***private let map = Map(basemapStyle: .arcGISTopographic)
 
 ***REMOVED***@State
 ***REMOVED******REMOVED***/ Allows for communication between the Scalebar and MapView or SceneView.
 ***REMOVED***private var scale: Double?
 
+***REMOVED***@State
+***REMOVED******REMOVED***/ Allows for communication between the Scalebar and MapView or SceneView.
+***REMOVED***private var spatialReference: SpatialReference?
+
 ***REMOVED******REMOVED***/ Allows for communication between the Scalebar and MapView or SceneView.
 ***REMOVED***@State
-***REMOVED***private var viewpoint: Viewpoint? = Viewpoint(
-***REMOVED******REMOVED***center: Point(x: -117.19494, y: 34.05723, spatialReference: .wgs84),
-***REMOVED******REMOVED***scale: 10_000
-***REMOVED***)
+***REMOVED***private var viewpoint: Viewpoint?
 
 ***REMOVED******REMOVED***/ Allows for communication between the Scalebar and MapView or SceneView.
 ***REMOVED***@State
@@ -39,13 +40,9 @@ struct ScalebarExampleView: View {
 ***REMOVED******REMOVED******REMOVED***.onViewpointChanged(kind: .centerAndScale) { viewpoint = $0 ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onVisibleAreaChanged { visibleArea = $0 ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onScaleChanged { scale = $0 ***REMOVED***
+***REMOVED******REMOVED******REMOVED***.onSpatialReferenceChanged { spatialReference = $0 ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***.overlay(alignment: .bottomLeading) {
-***REMOVED******REMOVED******REMOVED******REMOVED***Scalebar(scale, viewpoint, visibleArea)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.border(.red, width: 2)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding([.leading], 10)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.border(.green, width: 2)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding([.bottom], 30)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.border(.blue, width: 2)
+***REMOVED******REMOVED******REMOVED******REMOVED***Scalebar(scale, spatialReference, 175, viewpoint, visibleArea, units: .imperial)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
