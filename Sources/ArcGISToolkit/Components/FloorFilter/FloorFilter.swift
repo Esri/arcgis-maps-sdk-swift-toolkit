@@ -64,7 +64,6 @@ public struct FloorFilter: View {
                 VStack {
                     Spacer()
                     ProgressView()
-                        .progressViewStyle(.circular)
                         .padding(12)
                 }
             } else {
