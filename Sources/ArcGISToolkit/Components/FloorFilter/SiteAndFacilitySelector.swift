@@ -70,14 +70,9 @@ struct SiteAndFacilitySelector: View {
                             .selected(floorFilterViewModel.selectedSite == site)
                         }
                     }
-                    .background(
-                        GeometryReader { geometry -> Color in
-                            DispatchQueue.main.async {
-                                scrollViewContentHeight = geometry.size.height
-                            }
-                            return .clear
-                        }
-                    )
+                    .onSizeChange {
+                        scrollViewContentHeight = $0.height
+                    }
                 }
                 .frame(maxHeight: scrollViewContentHeight)
             }
@@ -114,14 +109,9 @@ struct SiteAndFacilitySelector: View {
                             .selected(floorFilterViewModel.selectedFacility == facility)
                         }
                     }
-                    .background(
-                        GeometryReader { geometry -> Color in
-                            DispatchQueue.main.async {
-                                scrollViewContentHeight = geometry.size.height
-                            }
-                            return .clear
-                        }
-                    )
+                    .onSizeChange {
+                        scrollViewContentHeight = $0.height
+                    }
                 }
                 .frame(maxHeight: scrollViewContentHeight)
             }
