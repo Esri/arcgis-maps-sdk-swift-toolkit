@@ -35,6 +35,20 @@ struct SelectedModifier: ViewModifier {
 }
 
 extension View {
+    /// Returns a new `View` that allows a parent `View` to be informed of a child view's size.
+    /// - Parameter perform: The closure to be executed when the content size of the receiver
+    /// changes.
+    /// - Returns: A new `View`.
+    func onSizeChange(perform: @escaping (CGSize) -> Void) -> some View {
+        background(
+            GeometryReader { geometry in
+                Color.clear
+                    .preference(key: SizePreferenceKey.self, value: geometry.size)
+            }
+        )
+        .onPreferenceChange(SizePreferenceKey.self, perform: perform)
+    }
+
     /// View modifier used to denote the view is selected.
     /// - Parameter isSelected: `true` if the view is selected, `false` otherwise.
     /// - Returns: The view being modified.
