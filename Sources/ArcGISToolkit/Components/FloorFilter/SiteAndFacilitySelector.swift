@@ -27,17 +27,24 @@ struct SiteAndFacilitySelector: View {
     
     /// Allows the user to toggle the visibility of the site and facility selector.
     private var isHidden: Binding<Bool>
+
+    @State
+    var text: String = ""
     
     var body: some View {
-        if let selectedSite = floorFilterViewModel.selectedSite {
-            Facilities(facilities: selectedSite.facilities, isHidden: isHidden)
-        } else if floorFilterViewModel.sites.count == 1 {
-            Facilities(
-                facilities: floorFilterViewModel.sites.first!.facilities,
-                isHidden: isHidden
-            )
-        } else {
-            Sites(sites: floorFilterViewModel.sites, isHidden: isHidden)
+        VStack {
+            TextField("Enter site name", text: $text)
+                .border(.gray)
+            if let selectedSite = floorFilterViewModel.selectedSite {
+                Facilities(facilities: selectedSite.facilities, isHidden: isHidden)
+            } else if floorFilterViewModel.sites.count == 1 {
+                Facilities(
+                    facilities: floorFilterViewModel.sites.first!.facilities,
+                    isHidden: isHidden
+                )
+            } else {
+                Sites(sites: floorFilterViewModel.sites, isHidden: isHidden)
+            }
         }
     }
     
@@ -53,28 +60,39 @@ struct SiteAndFacilitySelector: View {
         private var scrollViewContentHeight: CGFloat = .zero
 
         var body: some View {
-            VStack(alignment: .center) {
-                Header(title: "Select a site…", isHidden: isHidden)
-                Divider()
-                ScrollView {
-                    VStack {
-                        ForEach(sites) { site in
-                            HStack {
-                                Text(site.name)
-                                Spacer()
-                            }
-                            .onTapGesture {
-                                floorFilterViewModel.selection = .site(site)
-                            }
-                            .padding(4)
-                            .selected(floorFilterViewModel.selectedSite == site)
-                        }
+            NavigationView {
+                VStack {
+                    List(sites) { (site) in
+                        NavigationLink(
+                            site.name,
+                            destination: Facilities(
+                                facilities: site.facilities,
+                                isHidden: isHidden
+                            )
+                        )
+//                        .onTapGesture {
+//                            floorFilterViewModel.selection = .site(site)
+//                        }
+//                        .selected(floorFilterViewModel.selectedSite == site)
                     }
-                    .onSizeChange {
-                        scrollViewContentHeight = $0.height
+                    .listStyle(.plain)
+                    NavigationLink(
+                        "All sites",
+                        destination: Facilities(
+                            facilities: sites.first!.facilities,
+                            isHidden: isHidden
+                        )
+                    )
+                    .padding([.top, .bottom], 4)
+                }
+                .navigationBarTitle(Text("Select a site…"), displayMode: .inline)
+                .toolbar {
+                    Button {
+                        isHidden.wrappedValue.toggle()
+                    } label: {
+                        Image(systemName: "xmark.circle")
                     }
                 }
-                .frame(maxHeight: scrollViewContentHeight)
             }
         }
     }
@@ -91,30 +109,20 @@ struct SiteAndFacilitySelector: View {
         private var scrollViewContentHeight: CGFloat = .zero
         
         var body: some View {
-            VStack(alignment: .leading) {
-                Header(title: "Select a facility…", isHidden: isHidden)
-                Divider()
-                ScrollView {
-                    VStack {
-                        ForEach(facilities) { facility in
-                            HStack {
-                                Text(facility.name)
-                                Spacer()
-                            }
-                            .onTapGesture {
-                                floorFilterViewModel.selection = .facility(facility)
-                                isHidden.wrappedValue = true
-                            }
-                            .padding(4 )
-                            .selected(floorFilterViewModel.selectedFacility == facility)
-                        }
-                    }
-                    .onSizeChange {
-                        scrollViewContentHeight = $0.height
-                    }
+            List(facilities) { facility in
+                Button {
+                    print(facility.name)
+                    floorFilterViewModel.selection = .facility(facility)
+                    isHidden.wrappedValue = true
+                } label: {
+                    Text(facility.name)
+                        .fontWeight(
+                            floorFilterViewModel.selectedFacility == facility ? .bold : .regular
+                        )
                 }
-                .frame(maxHeight: scrollViewContentHeight)
             }
+            .navigationTitle("Select a facility")
+            .listStyle(.plain)
         }
     }
     
