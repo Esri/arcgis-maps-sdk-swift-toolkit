@@ -27,17 +27,24 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Allows the user to toggle the visibility of the site and facility selector.
 ***REMOVED***private var isHidden: Binding<Bool>
+
+***REMOVED***@State
+***REMOVED***var text: String = ""
 ***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***if let selectedSite = floorFilterViewModel.selectedSite {
-***REMOVED******REMOVED******REMOVED***Facilities(facilities: selectedSite.facilities, isHidden: isHidden)
-***REMOVED*** else if floorFilterViewModel.sites.count == 1 {
-***REMOVED******REMOVED******REMOVED***Facilities(
-***REMOVED******REMOVED******REMOVED******REMOVED***facilities: floorFilterViewModel.sites.first!.facilities,
-***REMOVED******REMOVED******REMOVED******REMOVED***isHidden: isHidden
-***REMOVED******REMOVED******REMOVED***)
-***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***Sites(sites: floorFilterViewModel.sites, isHidden: isHidden)
+***REMOVED******REMOVED***VStack {
+***REMOVED******REMOVED******REMOVED***TextField("Enter site name", text: $text)
+***REMOVED******REMOVED******REMOVED******REMOVED***.border(.gray)
+***REMOVED******REMOVED******REMOVED***if let selectedSite = floorFilterViewModel.selectedSite {
+***REMOVED******REMOVED******REMOVED******REMOVED***Facilities(facilities: selectedSite.facilities, isHidden: isHidden)
+***REMOVED******REMOVED*** else if floorFilterViewModel.sites.count == 1 {
+***REMOVED******REMOVED******REMOVED******REMOVED***Facilities(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***facilities: floorFilterViewModel.sites.first!.facilities,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isHidden: isHidden
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***Sites(sites: floorFilterViewModel.sites, isHidden: isHidden)
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -53,28 +60,39 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED***private var scrollViewContentHeight: CGFloat = .zero
 
 ***REMOVED******REMOVED***var body: some View {
-***REMOVED******REMOVED******REMOVED***VStack(alignment: .center) {
-***REMOVED******REMOVED******REMOVED******REMOVED***Header(title: "Select a site…", isHidden: isHidden)
-***REMOVED******REMOVED******REMOVED******REMOVED***Divider()
-***REMOVED******REMOVED******REMOVED******REMOVED***ScrollView {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***VStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(sites) { site in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(site.name)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***NavigationView {
+***REMOVED******REMOVED******REMOVED******REMOVED***VStack {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***List(sites) { (site) in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***NavigationLink(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***site.name,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***destination: Facilities(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***facilities: site.facilities,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isHidden: isHidden
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onTapGesture {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***floorFilterViewModel.selection = .site(site)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(4)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.selected(floorFilterViewModel.selectedSite == site)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onSizeChange {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***scrollViewContentHeight = $0.height
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.listStyle(.plain)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***NavigationLink(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"All sites",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***destination: Facilities(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***facilities: sites.first!.facilities,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isHidden: isHidden
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding([.top, .bottom], 4)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.navigationBarTitle(Text("Select a site…"), displayMode: .inline)
+***REMOVED******REMOVED******REMOVED******REMOVED***.toolbar {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isHidden.wrappedValue.toggle()
+***REMOVED******REMOVED******REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "xmark.circle")
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxHeight: scrollViewContentHeight)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -91,30 +109,20 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED***private var scrollViewContentHeight: CGFloat = .zero
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var body: some View {
-***REMOVED******REMOVED******REMOVED***VStack(alignment: .leading) {
-***REMOVED******REMOVED******REMOVED******REMOVED***Header(title: "Select a facility…", isHidden: isHidden)
-***REMOVED******REMOVED******REMOVED******REMOVED***Divider()
-***REMOVED******REMOVED******REMOVED******REMOVED***ScrollView {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***VStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(facilities) { facility in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(facility.name)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onTapGesture {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***floorFilterViewModel.selection = .facility(facility)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isHidden.wrappedValue = true
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(4 )
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.selected(floorFilterViewModel.selectedFacility == facility)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onSizeChange {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***scrollViewContentHeight = $0.height
-***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***List(facilities) { facility in
+***REMOVED******REMOVED******REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print(facility.name)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***floorFilterViewModel.selection = .facility(facility)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isHidden.wrappedValue = true
+***REMOVED******REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(facility.name)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fontWeight(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***floorFilterViewModel.selectedFacility == facility ? .bold : .regular
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxHeight: scrollViewContentHeight)
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.navigationTitle("Select a facility")
+***REMOVED******REMOVED******REMOVED***.listStyle(.plain)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
