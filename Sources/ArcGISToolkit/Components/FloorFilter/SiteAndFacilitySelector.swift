@@ -35,12 +35,11 @@ struct SiteAndFacilitySelector: View {
         VStack {
             TextField("Enter site name", text: $text)
                 .border(.gray)
-            if let selectedSite = floorFilterViewModel.selectedSite {
-                Facilities(facilities: selectedSite.facilities, isHidden: isHidden)
-            } else if floorFilterViewModel.sites.count == 1 {
+            if floorFilterViewModel.sites.count == 1 {
                 Facilities(
                     facilities: floorFilterViewModel.sites.first!.facilities,
-                    isHidden: isHidden
+                    isHidden: isHidden,
+                    showSites: true
                 )
             } else {
                 Sites(sites: floorFilterViewModel.sites, isHidden: isHidden)
@@ -70,29 +69,19 @@ struct SiteAndFacilitySelector: View {
                                 isHidden: isHidden
                             )
                         )
-//                        .onTapGesture {
-//                            floorFilterViewModel.selection = .site(site)
-//                        }
-//                        .selected(floorFilterViewModel.selectedSite == site)
                     }
                     .listStyle(.plain)
                     NavigationLink(
                         "All sites",
                         destination: Facilities(
-                            facilities: sites.first!.facilities,
-                            isHidden: isHidden
+                            facilities: sites.flatMap({ $0.facilities }),
+                            isHidden: isHidden,
+                            showSites: true
                         )
                     )
                     .padding([.top, .bottom], 4)
                 }
-                .navigationBarTitle(Text("Select a site…"), displayMode: .inline)
-                .toolbar {
-                    Button {
-                        isHidden.wrappedValue.toggle()
-                    } label: {
-                        Image(systemName: "xmark.circle")
-                    }
-                }
+                .navigationBarTitle(Text("Select a site"), displayMode: .inline)
             }
         }
     }
@@ -100,7 +89,10 @@ struct SiteAndFacilitySelector: View {
     /// A view displaying the facilities contained in a `FloorManager`.
     struct Facilities: View {
         let facilities: [FloorFacility]
+
         var isHidden: Binding<Bool>
+
+        var showSites: Bool = false
         
         @EnvironmentObject var floorFilterViewModel: FloorFilterViewModel
         
@@ -113,16 +105,24 @@ struct SiteAndFacilitySelector: View {
                 Button {
                     print(facility.name)
                     floorFilterViewModel.selection = .facility(facility)
-                    isHidden.wrappedValue = true
+                    isHidden.wrappedValue.toggle()
                 } label: {
-                    Text(facility.name)
-                        .fontWeight(
-                            floorFilterViewModel.selectedFacility == facility ? .bold : .regular
-                        )
+                    VStack {
+                        Text(facility.name)
+                            .fontWeight(
+                                floorFilterViewModel.selectedFacility == facility ? .bold : .regular
+                            )
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                        if showSites, let siteName = facility.site?.name {
+                            Text(siteName)
+                                .fontWeight(.ultraLight)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                        }
+                    }
                 }
             }
-            .navigationTitle("Select a facility")
             .listStyle(.plain)
+            .navigationBarTitle("Select a facility")
         }
     }
     

@@ -89,10 +89,9 @@ public struct FloorFilter: View {
                         }
                         .esriBorder()
                     }
-                    if !isSelectorHidden {
-                        SiteAndFacilitySelector(isHidden: $isSelectorHidden)
-                            .esriBorder()
-                    }
+                    SiteAndFacilitySelector(isHidden: $isSelectorHidden)
+                        .esriBorder()
+                        .opacity(isSelectorHidden ? .zero : 1)
                 }
             }
         }
