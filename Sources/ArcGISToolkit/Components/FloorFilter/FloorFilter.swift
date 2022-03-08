@@ -197,3 +197,11 @@ struct CollapseButton: View {
         ))
     }
 }
+
+/// Defines selection behavior.
+enum AutomaticSelectionMode {
+    /// The selection is automatically synchronzied.
+    case Always
+    /// The selection is manually synchronzied.
+    case Never
+}
