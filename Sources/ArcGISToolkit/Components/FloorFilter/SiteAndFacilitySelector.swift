@@ -27,14 +27,9 @@ struct SiteAndFacilitySelector: View {
     
     /// Allows the user to toggle the visibility of the site and facility selector.
     private var isHidden: Binding<Bool>
-
-    @State
-    var text: String = ""
     
     var body: some View {
         VStack {
-            TextField("Enter site name", text: $text)
-                .border(.gray)
             if floorFilterViewModel.sites.count == 1 {
                 Facilities(
                     facilities: floorFilterViewModel.sites.first!.facilities,
@@ -42,17 +37,35 @@ struct SiteAndFacilitySelector: View {
                     showSites: true
                 )
             } else {
-                Sites(sites: floorFilterViewModel.sites, isHidden: isHidden)
+                Sites(isHidden: isHidden, sites: floorFilterViewModel.sites)
             }
         }
     }
     
     /// A view displaying the sites contained in a `FloorManager`.
     struct Sites: View {
-        let sites: [FloorSite]
-        var isHidden: Binding<Bool>
-        
+        /// The view model used by this selector.
         @EnvironmentObject var floorFilterViewModel: FloorFilterViewModel
+
+        /// Allows the user to toggle the visibility of the site and facility selector.
+        var isHidden: Binding<Bool>
+
+        /// A subset of `sites` that contain `searchPhrase`.
+        var matchingSites: [FloorSite] {
+            if searchPhrase.isEmpty {
+                return sites
+            }
+            return sites.filter { floorSite in
+                floorSite.name.lowercased().contains(searchPhrase.lowercased())
+            }
+        }
+
+        /// A site filtering phrase entered by the user.
+        @State
+        var searchPhrase: String = ""
+
+        /// Sites contained in a `FloorManager`.
+        let sites: [FloorSite]
 
         /// The height of the scroll view's content.
         @State
@@ -61,7 +74,8 @@ struct SiteAndFacilitySelector: View {
         var body: some View {
             NavigationView {
                 VStack {
-                    List(sites) { (site) in
+                    TextField("Filter sites", text: $searchPhrase)
+                    List(matchingSites) { (site) in
                         NavigationLink(
                             site.name,
                             destination: Facilities(
@@ -88,59 +102,59 @@ struct SiteAndFacilitySelector: View {
     
     /// A view displaying the facilities contained in a `FloorManager`.
     struct Facilities: View {
+        /// `FloorFacility`s to be displayed by this view.
         let facilities: [FloorFacility]
 
+        /// The view model used by this selector.
+        @EnvironmentObject var floorFilterViewModel: FloorFilterViewModel
+
+        /// Allows the user to toggle the visibility of the site and facility selector.
         var isHidden: Binding<Bool>
 
-        var showSites: Bool = false
-        
-        @EnvironmentObject var floorFilterViewModel: FloorFilterViewModel
-        
-        /// The height of the scroll view's content.
+        /// A subset of `facilities` that contain `searchPhrase`.
+        var matchingFacilities: [FloorFacility] {
+            if searchPhrase.isEmpty {
+                return facilities
+            }
+            return facilities.filter { floorFacility in
+                floorFacility.name.lowercased().contains(searchPhrase.lowercased())
+            }
+        }
+
+        /// A facility filtering phrase entered by the user.
         @State
-        private var scrollViewContentHeight: CGFloat = .zero
-        
+        var searchPhrase: String = ""
+
+        /// Indicates if site names should be shown as subtitles to the facility.
+        ///
+        /// Used when the user selects "All sites".
+        var showSites: Bool = false
+
         var body: some View {
-            List(facilities) { facility in
-                Button {
-                    print(facility.name)
-                    floorFilterViewModel.selection = .facility(facility)
-                    isHidden.wrappedValue.toggle()
-                } label: {
-                    VStack {
-                        Text(facility.name)
-                            .fontWeight(
-                                floorFilterViewModel.selectedFacility == facility ? .bold : .regular
-                            )
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                        if showSites, let siteName = facility.site?.name {
-                            Text(siteName)
-                                .fontWeight(.ultraLight)
+            VStack {
+                TextField("Filter facilities", text: $searchPhrase)
+                List(matchingFacilities) { facility in
+                    Button {
+                        print(facility.name)
+                        floorFilterViewModel.selection = .facility(facility)
+                        isHidden.wrappedValue.toggle()
+                    } label: {
+                        VStack {
+                            Text(facility.name)
+                                .fontWeight(
+                                    floorFilterViewModel.selectedFacility == facility ? .bold : .regular
+                                )
                                 .frame(maxWidth: .infinity, alignment: .leading)
+                            if showSites, let siteName = facility.site?.name {
+                                Text(siteName)
+                                    .fontWeight(.ultraLight)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                            }
                         }
                     }
                 }
-            }
-            .listStyle(.plain)
-            .navigationBarTitle("Select a facility")
-        }
-    }
-    
-    /// The header for a site or facility selector.
-    struct Header: View {
-        let title: String
-        var isHidden: Binding<Bool>
-        
-        var body: some View {
-            HStack {
-                Text(title)
-                    .bold()
-                Spacer()
-                Button {
-                    isHidden.wrappedValue.toggle()
-                } label: {
-                    Image(systemName: "xmark.circle")
-                }
+                .listStyle(.plain)
+                .navigationBarTitle("Select a facility")
             }
         }
     }
