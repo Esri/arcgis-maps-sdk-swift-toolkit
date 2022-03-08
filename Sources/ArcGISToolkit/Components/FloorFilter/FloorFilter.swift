@@ -95,6 +95,8 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED******REMOVED*** Ensure space for filter text field on small screens in landscape
+***REMOVED******REMOVED***.frame(minHeight: 100)
 ***REMOVED******REMOVED***.environmentObject(viewModel)
 ***REMOVED***
 ***REMOVED***
