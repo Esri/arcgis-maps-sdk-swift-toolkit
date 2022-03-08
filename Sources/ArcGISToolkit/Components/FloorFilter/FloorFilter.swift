@@ -197,3 +197,11 @@ struct CollapseButton: View {
 ***REMOVED******REMOVED***))
 ***REMOVED***
 ***REMOVED***
+
+***REMOVED***/ Defines selection behavior.
+enum AutomaticSelectionMode {
+***REMOVED******REMOVED***/ The selection is automatically synchronzied.
+***REMOVED***case Always
+***REMOVED******REMOVED***/ The selection is manually synchronzied.
+***REMOVED***case Never
+***REMOVED***
