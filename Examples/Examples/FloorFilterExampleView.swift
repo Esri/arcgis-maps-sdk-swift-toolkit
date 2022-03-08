@@ -57,7 +57,7 @@ struct FloorFilterExampleView: View {
                         floorManager: floorManager,
                         viewpoint: $viewpoint
                     )
-                        .frame(height: 300)
+                        .frame(maxHeight: 300)
                         .padding(36)
                 }
             }

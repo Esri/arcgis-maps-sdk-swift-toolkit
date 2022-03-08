@@ -95,6 +95,8 @@ public struct FloorFilter: View {
                 }
             }
         }
+        // Ensure space for filter text field on small screens in landscape
+        .frame(minHeight: 100)
         .environmentObject(viewModel)
     }
 }
