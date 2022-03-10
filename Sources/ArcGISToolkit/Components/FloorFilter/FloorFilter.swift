@@ -31,6 +31,9 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED******REMOVED***viewpoint: viewpoint
 ***REMOVED******REMOVED***))
 ***REMOVED***
+
+***REMOVED******REMOVED***/ The selection behavior of the floor filter.
+***REMOVED***var automaticSelectionMode: AutomaticSelectionMode = .always
 ***REMOVED***
 ***REMOVED******REMOVED***/ The view model used by the `FloorFilter`.
 ***REMOVED***@StateObject
@@ -201,9 +204,9 @@ struct CollapseButton: View {
 ***REMOVED***/ Defines selection behavior.
 enum AutomaticSelectionMode {
 ***REMOVED******REMOVED***/ The selection is automatically synchronzied.
-***REMOVED***case Always
+***REMOVED***case always
 ***REMOVED******REMOVED***/ N/A.
-***REMOVED***case AlwaysNotClearing
+***REMOVED***case alwaysNotClearing
 ***REMOVED******REMOVED***/ The selection is manually synchronzied.
-***REMOVED***case Never
+***REMOVED***case never
 ***REMOVED***
