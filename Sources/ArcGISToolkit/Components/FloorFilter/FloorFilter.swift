@@ -202,6 +202,8 @@ struct CollapseButton: View {
 enum AutomaticSelectionMode {
     /// The selection is automatically synchronzied.
     case Always
+    /// N/A.
+    case AlwaysNotClearing
     /// The selection is manually synchronzied.
     case Never
 }
