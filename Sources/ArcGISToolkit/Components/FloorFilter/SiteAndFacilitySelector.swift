@@ -18,26 +18,50 @@ import ArcGIS
 struct SiteAndFacilitySelector: View {
     /// Creates a `SiteAndFacilitySelector`
     /// - Parameter isHidden: A binding used to dismiss the site selector.
-    init(isHidden: Binding<Bool>) {
+    /// - Parameter selectedFacilityID: Indicates the implicity selected facility based on the
+    /// current viewpoint.
+    /// - Parameter selectedSiteID: Indicates the implicity selected site based on the current
+    /// viewpoint.
+    init(
+        isHidden: Binding<Bool>,
+        _ selectedFacilityID: Binding<String?>,
+        _ selectedSiteID: Binding<String?>
+    ) {
         self.isHidden = isHidden
+        _selectedFacilityID = selectedFacilityID
+        _selectedSiteID = selectedSiteID
     }
-    
+
     /// The view model used by the `SiteAndFacilitySelector`.
     @EnvironmentObject var floorFilterViewModel: FloorFilterViewModel
     
     /// Allows the user to toggle the visibility of the site and facility selector.
     private var isHidden: Binding<Bool>
-    
+
+    /// Indicates the implicity selected facility based on the current viewpoint.
+    @Binding
+    private var selectedFacilityID: String?
+
+    /// Indicates the implicity selected site based on the current viewpoint.
+    @Binding
+    private var selectedSiteID: String?
+
     var body: some View {
         VStack {
             if floorFilterViewModel.sites.count == 1 {
                 Facilities(
                     facilities: floorFilterViewModel.sites.first!.facilities,
                     isHidden: isHidden,
+                    selectedFacilityID: $selectedFacilityID,
                     showSites: true
                 )
             } else {
-                Sites(isHidden: isHidden, sites: floorFilterViewModel.sites)
+                Sites(
+                    isHidden: isHidden,
+                    selectedFacilityID: $selectedFacilityID,
+                    selectedSiteID: $selectedSiteID,
+                    sites: floorFilterViewModel.sites
+                )
             }
         }
     }
@@ -64,6 +88,14 @@ struct SiteAndFacilitySelector: View {
         @State
         var searchPhrase: String = ""
 
+        /// Indicates the implicity selected facility based on the current viewpoint.
+        @Binding
+        var selectedFacilityID: String?
+
+        /// Indicates the implicity selected site based on the current viewpoint.
+        @Binding
+        var selectedSiteID: String?
+
         /// Sites contained in a `FloorManager`.
         let sites: [FloorSite]
 
@@ -78,21 +110,24 @@ struct SiteAndFacilitySelector: View {
                     List(matchingSites) { (site) in
                         NavigationLink(
                             site.name,
-                            destination: Facilities(
-                                facilities: site.facilities,
-                                isHidden: isHidden
-                            )
-                        )
+                            tag: site.siteId,
+                            selection: $selectedSiteID) {
+                                Facilities(
+                                    facilities: site.facilities,
+                                    isHidden: isHidden,
+                                    selectedFacilityID: $selectedFacilityID
+                                )
+                            }
                     }
                     .listStyle(.plain)
-                    NavigationLink(
-                        "All sites",
-                        destination: Facilities(
+                    NavigationLink("All sites") {
+                        Facilities(
                             facilities: sites.flatMap({ $0.facilities }),
                             isHidden: isHidden,
+                            selectedFacilityID: $selectedFacilityID,
                             showSites: true
                         )
-                    )
+                    }
                     .padding([.top, .bottom], 4)
                 }
                 .navigationBarTitle(Text("Select a site"), displayMode: .inline)
@@ -125,6 +160,10 @@ struct SiteAndFacilitySelector: View {
         @State
         var searchPhrase: String = ""
 
+        /// Indicates the implicity selected facility based on the current viewpoint.
+        @Binding
+        var selectedFacilityID: String?
+
         /// Indicates if site names should be shown as subtitles to the facility.
         ///
         /// Used when the user selects "All sites".
@@ -142,7 +181,7 @@ struct SiteAndFacilitySelector: View {
                         VStack {
                             Text(facility.name)
                                 .fontWeight(
-                                    floorFilterViewModel.selectedFacility == facility ? .bold : .regular
+                                    selectedFacilityID == facility.facilityId ? .bold : .regular
                                 )
                                 .frame(maxWidth: .infinity, alignment: .leading)
                             if showSites, let siteName = facility.site?.name {
