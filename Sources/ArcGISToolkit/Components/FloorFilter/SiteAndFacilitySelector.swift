@@ -197,6 +197,9 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.listStyle(.plain)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.navigationBarTitle("Select a facility")
+***REMOVED******REMOVED******REMOVED******REMOVED***.navigationBarBackButtonHidden(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***floorFilterViewModel.sites.count == 1
+***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
