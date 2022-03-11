@@ -16,58 +16,63 @@ import ArcGISToolkit
 import ArcGIS
 
 struct FloorFilterExampleView: View {
-    private let map: Map
-    
-    @State
-    private var viewpoint = Viewpoint(
-        center: Point(x: -93.258133, y: 44.986656, spatialReference: .wgs84),
-        scale: 1_000_000
-    )
-    
-    @State
-    private var isMapLoaded: Bool = false
-
-    init() {
-        // Create the map from a portal item and assign to the mapView.
-        
+    /// Make a map from a portal item.
+    static func makeMap() -> Map {
         // Multiple sites/facilities: Esri IST map with all buildings.
-        //        let portal = Portal(url: URL(string: "https://indoors.maps.arcgis.com/")!, isLoginRequired: false)
-        //        let portalItem = PortalItem(portal: portal, id: Item.ID(rawValue: "49520a67773842f1858602735ef538b5")!)
+        // let portal = Portal(url: URL(string: "https://indoors.maps.arcgis.com/")!, isLoginRequired: false)
+        // let portalItem = PortalItem(portal: portal, id: Item.ID(rawValue: "49520a67773842f1858602735ef538b5")!)
         
         // Redlands Campus map.
         let portal = Portal(url: URL(string: "https://runtimecoretest.maps.arcgis.com/")!, isLoginRequired: false)
         let portalItem = PortalItem(portal: portal, id: Item.ID(rawValue: "7687805bd42549f5ba41237443d0c60a")!) //<= another multiple sites/facilities
-
+        
         // Single site (ESRI Redlands Main) and facility (Building L).
-//        let portal = Portal(url: URL(string: "https://indoors.maps.arcgis.com/")!, isLoginRequired: false)
-//        let portalItem = PortalItem(portal: portal, id: Item.ID(rawValue: "f133a698536f44c8884ad81f80b6cfc7")!)
-
-        map = Map(item: portalItem)
+        // let portal = Portal(url: URL(string: "https://indoors.maps.arcgis.com/")!, isLoginRequired: false)
+        // let portalItem = PortalItem(portal: portal, id: Item.ID(rawValue: "f133a698536f44c8884ad81f80b6cfc7")!)
+        
+        return Map(item: portalItem)
     }
     
+    private var map = makeMap()
+    @State private var mapLoadResult: Result<Map, Error>?
+    @State private var viewpoint = Viewpoint(
+        center: Point(x: -93.258133, y: 44.986656, spatialReference: .wgs84),
+        scale: 1_000_000
+    )
+    
     var body: some View {
-        MapView(
-            map: map,
-            viewpoint: viewpoint
-        )
-            .overlay(alignment: .bottomLeading) {
-                if isMapLoaded,
-                   let floorManager = map.floorManager {
-                    FloorFilter(
-                        floorManager: floorManager,
-                        viewpoint: $viewpoint
+        Group {
+            if let mapLoadResult = mapLoadResult {
+                switch mapLoadResult {
+                case .success(let value):
+                    MapView(
+                        map: value,
+                        viewpoint: viewpoint
                     )
-                        .frame(height: 300)
-                        .padding(36)
+                case .failure(let error):
+                    Text("Error loading map: \(error.localizedDescription)")
+                        .padding()
                 }
+            } else {
+                ProgressView()
             }
-            .task {
-                do {
-                    try await map.load()
-                    isMapLoaded = true
-                } catch {
-                    print("load error: \(error)")
-                }
+        }
+        .task {
+            mapLoadResult = await Result {
+                try await map.load()
+                return map
             }
+        }
+        .overlay(alignment: .bottomLeading) {
+            if map.loadStatus == .loaded,
+            let floorManager = map.floorManager {
+                FloorFilter(
+                    floorManager: floorManager,
+                    viewpoint: $viewpoint
+                )
+                .frame(height: 300)
+                .padding(36)
+            }
+        }
     }
 }

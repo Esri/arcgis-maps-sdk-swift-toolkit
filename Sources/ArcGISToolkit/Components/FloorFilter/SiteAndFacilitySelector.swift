@@ -16,7 +16,7 @@ import ArcGIS
 
 /// A view which allows selection of sites and facilities represented in a `FloorManager`.
 struct SiteAndFacilitySelector: View {
-    /// Creates a `SiteAndFacilitySelector`
+    /// Creates a `SiteAndFacilitySelector`.
     /// - Parameter isHidden: A binding used to dismiss the site selector.
     init(isHidden: Binding<Bool>) {
         self.isHidden = isHidden
@@ -43,18 +43,21 @@ struct SiteAndFacilitySelector: View {
     
     /// A view displaying the sites contained in a `FloorManager`.
     struct Sites: View {
+        /// The floor sites.
         let sites: [FloorSite]
+        
+        /// Allows the user to toggle the visibility of the sites.
         var isHidden: Binding<Bool>
         
+        /// The view model used by the `Sites`.
         @EnvironmentObject var floorFilterViewModel: FloorFilterViewModel
 
         /// The height of the scroll view's content.
-        @State
-        private var scrollViewContentHeight: CGFloat = .zero
+        @State private var scrollViewContentHeight: CGFloat = .zero
 
         var body: some View {
             VStack(alignment: .center) {
-                Header(title: "Select a site…", isHidden: isHidden)
+                Header(title: "Select a site", isHidden: isHidden)
                 Divider()
                 ScrollView {
                     VStack {
@@ -92,7 +95,7 @@ struct SiteAndFacilitySelector: View {
         
         var body: some View {
             VStack(alignment: .leading) {
-                Header(title: "Select a facility…", isHidden: isHidden)
+                Header(title: "Select a facility", isHidden: isHidden)
                 Divider()
                 ScrollView {
                     VStack {

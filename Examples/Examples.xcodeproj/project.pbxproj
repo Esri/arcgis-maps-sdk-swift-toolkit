@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2128C01A27DBB9F8001230F1 /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2128C01927DBB9F8001230F1 /* Result.swift */; };
 		75657E4827ABAC8400EE865B /* CompassExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75657E4727ABAC8400EE865B /* CompassExampleView.swift */; };
 		E42BFBE92672BF9500159107 /* SearchExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E42BFBE82672BF9500159107 /* SearchExampleView.swift */; };
 		E4624A25278CE815000D2A38 /* FloorFilterExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E4624A24278CE815000D2A38 /* FloorFilterExampleView.swift */; };
@@ -38,6 +39,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		2128C01927DBB9F8001230F1 /* Result.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
 		75657E4727ABAC8400EE865B /* CompassExampleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompassExampleView.swift; sourceTree = "<group>"; };
 		E42BFBE82672BF9500159107 /* SearchExampleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchExampleView.swift; sourceTree = "<group>"; };
 		E4624A24278CE815000D2A38 /* FloorFilterExampleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FloorFilterExampleView.swift; sourceTree = "<group>"; };
@@ -70,6 +72,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2128C01827DBB9F8001230F1 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				2128C01927DBB9F8001230F1 /* Result.swift */,
+			);
+			name = Extensions;
+			path = Examples/Extensions;
+			sourceTree = SOURCE_ROOT;
+		};
 		E40F58042656E509006F5CB9 /* Examples */ = {
 			isa = PBXGroup;
 			children = (
@@ -130,6 +141,7 @@
 		E47ABE562652FE7F00FD2FE3 /* Examples */ = {
 			isa = PBXGroup;
 			children = (
+				2128C01827DBB9F8001230F1 /* Extensions */,
 				E40F58042656E509006F5CB9 /* Examples */,
 			);
 			path = Examples;
@@ -216,6 +228,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				75657E4827ABAC8400EE865B /* CompassExampleView.swift in Sources */,
+				2128C01A27DBB9F8001230F1 /* Result.swift in Sources */,
 				E48A73452658227100F5C118 /* Examples.swift in Sources */,
 				E48A73432658227100F5C118 /* Example.swift in Sources */,
 				E47ABE442652FE0900FD2FE3 /* ExamplesApp.swift in Sources */,
