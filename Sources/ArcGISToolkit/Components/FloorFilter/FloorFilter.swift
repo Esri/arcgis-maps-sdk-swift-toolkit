@@ -110,8 +110,8 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***SiteAndFacilitySelector(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isHidden: $isSelectorHidden,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***$selectedSiteID,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***$selectedFacilityID
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***$selectedFacilityID,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***$selectedSiteID
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.esriBorder()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.opacity(isSelectorHidden ? .zero : 1)

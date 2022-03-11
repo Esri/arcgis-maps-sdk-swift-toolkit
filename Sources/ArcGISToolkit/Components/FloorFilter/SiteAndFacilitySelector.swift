@@ -18,26 +18,50 @@
 struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED***/ Creates a `SiteAndFacilitySelector`
 ***REMOVED******REMOVED***/ - Parameter isHidden: A binding used to dismiss the site selector.
-***REMOVED***init(isHidden: Binding<Bool>) {
+***REMOVED******REMOVED***/ - Parameter selectedFacilityID: Indicates the implicity selected facility based on the
+***REMOVED******REMOVED***/ current viewpoint.
+***REMOVED******REMOVED***/ - Parameter selectedSiteID: Indicates the implicity selected site based on the current
+***REMOVED******REMOVED***/ viewpoint.
+***REMOVED***init(
+***REMOVED******REMOVED***isHidden: Binding<Bool>,
+***REMOVED******REMOVED***_ selectedFacilityID: Binding<String?>,
+***REMOVED******REMOVED***_ selectedSiteID: Binding<String?>
+***REMOVED***) {
 ***REMOVED******REMOVED***self.isHidden = isHidden
+***REMOVED******REMOVED***_selectedFacilityID = selectedFacilityID
+***REMOVED******REMOVED***_selectedSiteID = selectedSiteID
 ***REMOVED***
-***REMOVED***
+
 ***REMOVED******REMOVED***/ The view model used by the `SiteAndFacilitySelector`.
 ***REMOVED***@EnvironmentObject var floorFilterViewModel: FloorFilterViewModel
 ***REMOVED***
 ***REMOVED******REMOVED***/ Allows the user to toggle the visibility of the site and facility selector.
 ***REMOVED***private var isHidden: Binding<Bool>
-***REMOVED***
+
+***REMOVED******REMOVED***/ Indicates the implicity selected facility based on the current viewpoint.
+***REMOVED***@Binding
+***REMOVED***private var selectedFacilityID: String?
+
+***REMOVED******REMOVED***/ Indicates the implicity selected site based on the current viewpoint.
+***REMOVED***@Binding
+***REMOVED***private var selectedSiteID: String?
+
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***VStack {
 ***REMOVED******REMOVED******REMOVED***if floorFilterViewModel.sites.count == 1 {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Facilities(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***facilities: floorFilterViewModel.sites.first!.facilities,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isHidden: isHidden,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedFacilityID: $selectedFacilityID,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***showSites: true
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***Sites(isHidden: isHidden, sites: floorFilterViewModel.sites)
+***REMOVED******REMOVED******REMOVED******REMOVED***Sites(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isHidden: isHidden,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedFacilityID: $selectedFacilityID,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedSiteID: $selectedSiteID,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***sites: floorFilterViewModel.sites
+***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -64,6 +88,14 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED***@State
 ***REMOVED******REMOVED***var searchPhrase: String = ""
 
+***REMOVED******REMOVED******REMOVED***/ Indicates the implicity selected facility based on the current viewpoint.
+***REMOVED******REMOVED***@Binding
+***REMOVED******REMOVED***var selectedFacilityID: String?
+
+***REMOVED******REMOVED******REMOVED***/ Indicates the implicity selected site based on the current viewpoint.
+***REMOVED******REMOVED***@Binding
+***REMOVED******REMOVED***var selectedSiteID: String?
+
 ***REMOVED******REMOVED******REMOVED***/ Sites contained in a `FloorManager`.
 ***REMOVED******REMOVED***let sites: [FloorSite]
 
@@ -78,21 +110,24 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***List(matchingSites) { (site) in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***NavigationLink(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***site.name,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***destination: Facilities(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***facilities: site.facilities,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isHidden: isHidden
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***tag: site.siteId,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selection: $selectedSiteID) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Facilities(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***facilities: site.facilities,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isHidden: isHidden,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedFacilityID: $selectedFacilityID
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.listStyle(.plain)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***NavigationLink(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"All sites",
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***destination: Facilities(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***NavigationLink("All sites") {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Facilities(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***facilities: sites.flatMap({ $0.facilities ***REMOVED***),
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isHidden: isHidden,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedFacilityID: $selectedFacilityID,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***showSites: true
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding([.top, .bottom], 4)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.navigationBarTitle(Text("Select a site"), displayMode: .inline)
@@ -125,6 +160,10 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED***@State
 ***REMOVED******REMOVED***var searchPhrase: String = ""
 
+***REMOVED******REMOVED******REMOVED***/ Indicates the implicity selected facility based on the current viewpoint.
+***REMOVED******REMOVED***@Binding
+***REMOVED******REMOVED***var selectedFacilityID: String?
+
 ***REMOVED******REMOVED******REMOVED***/ Indicates if site names should be shown as subtitles to the facility.
 ***REMOVED******REMOVED******REMOVED***/
 ***REMOVED******REMOVED******REMOVED***/ Used when the user selects "All sites".
@@ -142,7 +181,7 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***VStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(facility.name)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fontWeight(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***floorFilterViewModel.selectedFacility == facility ? .bold : .regular
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedFacilityID == facility.facilityId ? .bold : .regular
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .leading)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if showSites, let siteName = facility.site?.name {
