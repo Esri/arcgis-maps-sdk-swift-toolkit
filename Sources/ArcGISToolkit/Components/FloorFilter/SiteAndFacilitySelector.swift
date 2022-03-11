@@ -16,7 +16,7 @@
 
 ***REMOVED***/ A view which allows selection of sites and facilities represented in a `FloorManager`.
 struct SiteAndFacilitySelector: View {
-***REMOVED******REMOVED***/ Creates a `SiteAndFacilitySelector`
+***REMOVED******REMOVED***/ Creates a `SiteAndFacilitySelector`.
 ***REMOVED******REMOVED***/ - Parameter isHidden: A binding used to dismiss the site selector.
 ***REMOVED***init(isHidden: Binding<Bool>) {
 ***REMOVED******REMOVED***self.isHidden = isHidden
@@ -43,18 +43,21 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ A view displaying the sites contained in a `FloorManager`.
 ***REMOVED***struct Sites: View {
+***REMOVED******REMOVED******REMOVED***/ The floor sites.
 ***REMOVED******REMOVED***let sites: [FloorSite]
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ Allows the user to toggle the visibility of the sites.
 ***REMOVED******REMOVED***var isHidden: Binding<Bool>
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ The view model used by the `Sites`.
 ***REMOVED******REMOVED***@EnvironmentObject var floorFilterViewModel: FloorFilterViewModel
 
 ***REMOVED******REMOVED******REMOVED***/ The height of the scroll view's content.
-***REMOVED******REMOVED***@State
-***REMOVED******REMOVED***private var scrollViewContentHeight: CGFloat = .zero
+***REMOVED******REMOVED***@State private var scrollViewContentHeight: CGFloat = .zero
 
 ***REMOVED******REMOVED***var body: some View {
 ***REMOVED******REMOVED******REMOVED***VStack(alignment: .center) {
-***REMOVED******REMOVED******REMOVED******REMOVED***Header(title: "Select a site…", isHidden: isHidden)
+***REMOVED******REMOVED******REMOVED******REMOVED***Header(title: "Select a site", isHidden: isHidden)
 ***REMOVED******REMOVED******REMOVED******REMOVED***Divider()
 ***REMOVED******REMOVED******REMOVED******REMOVED***ScrollView {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***VStack {
@@ -92,7 +95,7 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var body: some View {
 ***REMOVED******REMOVED******REMOVED***VStack(alignment: .leading) {
-***REMOVED******REMOVED******REMOVED******REMOVED***Header(title: "Select a facility…", isHidden: isHidden)
+***REMOVED******REMOVED******REMOVED******REMOVED***Header(title: "Select a facility", isHidden: isHidden)
 ***REMOVED******REMOVED******REMOVED******REMOVED***Divider()
 ***REMOVED******REMOVED******REMOVED******REMOVED***ScrollView {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***VStack {

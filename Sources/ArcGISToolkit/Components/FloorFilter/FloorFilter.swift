@@ -18,7 +18,7 @@
 ***REMOVED***/ in your application. It allows you to filter the floor plan data displayed in your map or scene view
 ***REMOVED***/ to a site, a facility (building) in the site, or a floor in the facility.
 public struct FloorFilter: View {
-***REMOVED******REMOVED***/ Creates a `FloorFilter`
+***REMOVED******REMOVED***/ Creates a `FloorFilter`.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - floorManager: The floor manager used by the `FloorFilter`.
 ***REMOVED******REMOVED***/   - viewpoint: Viewpoint updated when the selected site or facility changes.
@@ -33,30 +33,13 @@ public struct FloorFilter: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The view model used by the `FloorFilter`.
-***REMOVED***@StateObject
-***REMOVED***private var viewModel: FloorFilterViewModel
+***REMOVED***@StateObject private var viewModel: FloorFilterViewModel
 ***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value that indicates whether the site/facility selector is hidden.
-***REMOVED***@State
-***REMOVED***private var isSelectorHidden: Bool = true
+***REMOVED******REMOVED***/ A Boolean value that indicates whether the site or facility selector is hidden.
+***REMOVED***@State private var isSelectorHidden: Bool = true
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value that indicates whether the levels view is currently collapsed.
-***REMOVED***@State
-***REMOVED***private var isLevelsViewCollapsed: Bool = false
-***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value that indicates whether there are levels to display.  This will be false if
-***REMOVED******REMOVED***/ there is no selected facility or if the selected facility has no levels.
-***REMOVED***private var hasLevelsToDisplay: Bool {
-***REMOVED******REMOVED***!(viewModel.selectedFacility == nil ||
-***REMOVED******REMOVED***  viewModel.selectedFacility!.levels.isEmpty)
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ The selected facility's levels, sorted by `level.verticalOrder`.
-***REMOVED***private var sortedLevels: [FloorLevel] {
-***REMOVED******REMOVED***viewModel.selectedFacility?.levels.sorted() {
-***REMOVED******REMOVED******REMOVED***$0.verticalOrder > $1.verticalOrder
-***REMOVED*** ?? []
-***REMOVED***
+***REMOVED***@State private var isLevelsViewCollapsed: Bool = false
 ***REMOVED***
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***Group {
@@ -71,9 +54,9 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***VStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***VStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if hasLevelsToDisplay {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if viewModel.hasLevelsToDisplay {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***LevelsView(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***levels: sortedLevels,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***levels: viewModel.sortedLevels,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isCollapsed: $isLevelsViewCollapsed
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Divider()
@@ -105,18 +88,16 @@ struct LevelsView: View {
 ***REMOVED******REMOVED***/ The levels to display.
 ***REMOVED***let levels: [FloorLevel]
 ***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value indicating the whether the view shows only the selected level or all levels.
-***REMOVED******REMOVED***/ If the value is`false`, the view will display all levels; if it is `true`, the view will only display
-***REMOVED******REMOVED***/ the selected level.
-***REMOVED***@Binding
-***REMOVED***var isCollapsed: Bool
+***REMOVED******REMOVED***/ A Boolean value that indicates whether the view shows only the selected level or all levels.
+***REMOVED******REMOVED***/ If the value is `false`, the view will display all levels. Otherwise, display only the
+***REMOVED******REMOVED***/ selected level.
+***REMOVED***@Binding var isCollapsed: Bool
 ***REMOVED***
 ***REMOVED******REMOVED***/ The view model used by the `LevelsView`.
 ***REMOVED***@EnvironmentObject var viewModel: FloorFilterViewModel
 ***REMOVED***
 ***REMOVED******REMOVED***/ The height of the scroll view's content.
-***REMOVED***@State
-***REMOVED***private var scrollViewContentHeight: CGFloat = .zero
+***REMOVED***@State private var scrollViewContentHeight: CGFloat = .zero
 ***REMOVED***
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***VStack {
@@ -129,6 +110,7 @@ struct LevelsView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***LevelsStack(levels: levels)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.background(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***GeometryReader { geometry -> Color in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***/ Note: There should be better way of doing this.
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***DispatchQueue.main.async {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***scrollViewContentHeight = geometry.size.height
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
@@ -137,8 +119,7 @@ struct LevelsView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxHeight: scrollViewContentHeight)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***else {
+***REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Button for the selected level.
 ***REMOVED******REMOVED******REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if levels.count > 1 {
@@ -147,7 +128,7 @@ struct LevelsView: View {
 ***REMOVED******REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(viewModel.selectedLevel?.shortName ?? (levels.first?.shortName ?? "None"))
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.buttonSelected(true)
+***REMOVED******REMOVED******REMOVED******REMOVED***.selected(true)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding(4)
 ***REMOVED******REMOVED***
 ***REMOVED***
@@ -169,7 +150,7 @@ struct LevelsStack: View {
 ***REMOVED******REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(level.shortName)
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.buttonSelected(level == viewModel.selectedLevel)
+***REMOVED******REMOVED******REMOVED******REMOVED***.selected(level == viewModel.selectedLevel)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding(4)
 ***REMOVED******REMOVED***
 ***REMOVED***
@@ -179,8 +160,7 @@ struct LevelsStack: View {
 ***REMOVED***/ A button used to collapse the floor level list.
 struct CollapseButton: View {
 ***REMOVED******REMOVED***/ Allows the user to toggle the visibility of the site and facility selector.
-***REMOVED***@Binding
-***REMOVED***var isCollapsed: Bool
+***REMOVED***@Binding var isCollapsed: Bool
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***Button {
