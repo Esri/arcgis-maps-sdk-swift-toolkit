@@ -21,23 +21,30 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED***/ Creates a `FloorFilter`
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - floorManager: The floor manager used by the `FloorFilter`.
+***REMOVED******REMOVED***/   - automaticSelectionMode: The selection behavior of the floor filter.
 ***REMOVED******REMOVED***/   - viewpoint: Viewpoint updated when the selected site or facility changes.
 ***REMOVED***public init(
 ***REMOVED******REMOVED***floorManager: FloorManager,
+***REMOVED******REMOVED***automaticSelectionMode: AutomaticSelectionMode = .always,
 ***REMOVED******REMOVED***viewpoint: Binding<Viewpoint>? = nil
 ***REMOVED***) {
 ***REMOVED******REMOVED***_viewModel = StateObject(wrappedValue: FloorFilterViewModel(
 ***REMOVED******REMOVED******REMOVED***floorManager: floorManager,
 ***REMOVED******REMOVED******REMOVED***viewpoint: viewpoint
 ***REMOVED******REMOVED***))
+***REMOVED******REMOVED***self.automaticSelectionMode = automaticSelectionMode
+***REMOVED******REMOVED***self.viewpoint = viewpoint
 ***REMOVED***
 
 ***REMOVED******REMOVED***/ The selection behavior of the floor filter.
-***REMOVED***var automaticSelectionMode: AutomaticSelectionMode = .always
+***REMOVED***private let automaticSelectionMode: AutomaticSelectionMode
+
+***REMOVED******REMOVED***/ A Boolean value that indicates whether there are levels to display.  This will be false if
+***REMOVED******REMOVED***/ there is no selected facility or if the selected facility has no levels.
+***REMOVED***private var hasLevelsToDisplay: Bool {
+***REMOVED******REMOVED***!(viewModel.selectedFacility == nil ||
+***REMOVED******REMOVED***  viewModel.selectedFacility!.levels.isEmpty)
 ***REMOVED***
-***REMOVED******REMOVED***/ The view model used by the `FloorFilter`.
-***REMOVED***@StateObject
-***REMOVED***private var viewModel: FloorFilterViewModel
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value that indicates whether the site/facility selector is hidden.
 ***REMOVED***@State
@@ -46,13 +53,14 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED***/ A Boolean value that indicates whether the levels view is currently collapsed.
 ***REMOVED***@State
 ***REMOVED***private var isLevelsViewCollapsed: Bool = false
-***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value that indicates whether there are levels to display.  This will be false if
-***REMOVED******REMOVED***/ there is no selected facility or if the selected facility has no levels.
-***REMOVED***private var hasLevelsToDisplay: Bool {
-***REMOVED******REMOVED***!(viewModel.selectedFacility == nil ||
-***REMOVED******REMOVED***  viewModel.selectedFacility!.levels.isEmpty)
-***REMOVED***
+
+***REMOVED******REMOVED***/ Indicates the implicity selected facility based on the current viewpoint.
+***REMOVED***@State
+***REMOVED***private var selectedFacilityID: String? = nil
+
+***REMOVED******REMOVED***/ Indicates the implicity selected site based on the current viewpoint.
+***REMOVED***@State
+***REMOVED***private var selectedSiteID: String? = nil
 ***REMOVED***
 ***REMOVED******REMOVED***/ The selected facility's levels, sorted by `level.verticalOrder`.
 ***REMOVED***private var sortedLevels: [FloorLevel] {
@@ -60,6 +68,14 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED******REMOVED***$0.verticalOrder > $1.verticalOrder
 ***REMOVED*** ?? []
 ***REMOVED***
+
+***REMOVED******REMOVED***/ The view model used by the `FloorFilter`.
+***REMOVED***@StateObject
+***REMOVED***private var viewModel: FloorFilterViewModel
+
+***REMOVED******REMOVED***/ The `Viewpoint` used to pan/zoom to the selected site/facilty.
+***REMOVED******REMOVED***/ If `nil`, there will be no automatic pan/zoom operations or automatic selection support.
+***REMOVED***private var viewpoint: Binding<Viewpoint>?
 ***REMOVED***
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***Group {
@@ -92,15 +108,98 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.esriBorder()
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***SiteAndFacilitySelector(isHidden: $isSelectorHidden)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***SiteAndFacilitySelector(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isHidden: $isSelectorHidden,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***$selectedSiteID,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***$selectedFacilityID
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.esriBorder()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.opacity(isSelectorHidden ? .zero : 1)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: viewpoint?.wrappedValue.targetGeometry) { _ in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***updateSelection()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Ensure space for filter text field on small screens in landscape
 ***REMOVED******REMOVED***.frame(minHeight: 100)
 ***REMOVED******REMOVED***.environmentObject(viewModel)
+***REMOVED***
+
+***REMOVED******REMOVED***/ Updates `selectedFacilityID` and `selectedSiteID` based on the most recent
+***REMOVED******REMOVED***/ viewpoint.
+***REMOVED***private func updateSelection() {
+***REMOVED******REMOVED***guard let viewpoint = viewpoint?.wrappedValue,
+***REMOVED******REMOVED******REMOVED******REMOVED***viewpoint.targetScale != .zero,
+***REMOVED******REMOVED******REMOVED******REMOVED***automaticSelectionMode != .never else {
+***REMOVED******REMOVED******REMOVED******REMOVED***  return
+***REMOVED***  ***REMOVED***
+
+***REMOVED******REMOVED******REMOVED*** Only take action if viewpoint is within minimum scale. Default
+***REMOVED******REMOVED******REMOVED*** minscale is 4300 or less (~zoom level 17 or greater)
+***REMOVED******REMOVED***var targetScale = viewModel.floorManager.siteLayer?.minScale ?? .zero
+***REMOVED******REMOVED***if targetScale.isZero {
+***REMOVED******REMOVED******REMOVED***targetScale = 4300
+***REMOVED***
+
+***REMOVED******REMOVED******REMOVED*** If viewpoint is out of range, reset selection (if not non-clearing)
+***REMOVED******REMOVED******REMOVED*** and return
+***REMOVED******REMOVED***if viewpoint.targetScale > targetScale {
+***REMOVED******REMOVED******REMOVED***if automaticSelectionMode == .always {
+***REMOVED******REMOVED******REMOVED******REMOVED***selectedSiteID = nil
+***REMOVED******REMOVED******REMOVED******REMOVED***selectedFacilityID = nil
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED*** Assumption: if too zoomed out to see sites, also too zoomed out
+***REMOVED******REMOVED******REMOVED******REMOVED*** to see facilities
+***REMOVED******REMOVED******REMOVED***return
+***REMOVED***
+
+***REMOVED******REMOVED******REMOVED*** If the centerpoint is within a site's geometry, select that site.
+***REMOVED******REMOVED******REMOVED*** This code gracefully skips selection if there are no sites or no
+***REMOVED******REMOVED******REMOVED*** matching sites
+***REMOVED******REMOVED***let siteResult = viewModel.floorManager.sites.first { site in
+***REMOVED******REMOVED******REMOVED***guard let siteExtent = site.geometry?.extent else {
+***REMOVED******REMOVED******REMOVED******REMOVED***return false
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***return GeometryEngine.intersects(
+***REMOVED******REMOVED******REMOVED******REMOVED***geometry1: siteExtent,
+***REMOVED******REMOVED******REMOVED******REMOVED***geometry2: viewpoint.targetGeometry
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED***
+
+***REMOVED******REMOVED***if let siteResult = siteResult {
+***REMOVED******REMOVED******REMOVED***selectedSiteID = siteResult.siteId
+***REMOVED*** else if automaticSelectionMode == .always {
+***REMOVED******REMOVED******REMOVED***selectedSiteID = nil
+***REMOVED***
+
+***REMOVED******REMOVED******REMOVED*** Move on to facility selection. Default to map-authored Facility
+***REMOVED******REMOVED******REMOVED*** MinScale. If MinScale not specified or is 0, default to 1500.
+***REMOVED******REMOVED***targetScale = viewModel.floorManager.facilityLayer?.minScale ?? .zero
+***REMOVED******REMOVED***if targetScale.isZero  {
+***REMOVED******REMOVED******REMOVED***targetScale = 1500
+***REMOVED***
+
+***REMOVED******REMOVED******REMOVED*** If out of scale, stop here
+***REMOVED******REMOVED***if viewpoint.targetScale > targetScale {
+***REMOVED******REMOVED******REMOVED***return
+***REMOVED***
+
+***REMOVED******REMOVED***let facilityResult = viewModel.floorManager.facilities.first { facility in
+***REMOVED******REMOVED******REMOVED***guard let facilityExtent = facility.geometry?.extent else {
+***REMOVED******REMOVED******REMOVED******REMOVED***return false
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***return GeometryEngine.intersects(
+***REMOVED******REMOVED******REMOVED******REMOVED***geometry1: facilityExtent,
+***REMOVED******REMOVED******REMOVED******REMOVED***geometry2: viewpoint.targetGeometry
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED***
+
+***REMOVED******REMOVED***if let facilityResult = facilityResult {
+***REMOVED******REMOVED******REMOVED***selectedFacilityID = facilityResult.facilityId
+***REMOVED*** else if automaticSelectionMode == .always {
+***REMOVED******REMOVED******REMOVED***selectedFacilityID = nil
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
@@ -201,12 +300,14 @@ struct CollapseButton: View {
 ***REMOVED***
 ***REMOVED***
 
-***REMOVED***/ Defines selection behavior.
-enum AutomaticSelectionMode {
-***REMOVED******REMOVED***/ The selection is automatically synchronzied.
+***REMOVED***/ Defines automatic selection behavior.
+public enum AutomaticSelectionMode {
+***REMOVED******REMOVED***/ Always update selection based on the current viewpoint; clear the selection when the user
+***REMOVED******REMOVED***/ navigates away.
 ***REMOVED***case always
-***REMOVED******REMOVED***/ N/A.
+***REMOVED******REMOVED***/ Only update the selection when there is a new site or facility in the current viewpoint; don't clear
+***REMOVED******REMOVED***/ selection when the user navigates away.
 ***REMOVED***case alwaysNotClearing
-***REMOVED******REMOVED***/ The selection is manually synchronzied.
+***REMOVED******REMOVED***/ Never update selection based on the GeoView's current viewpoint.
 ***REMOVED***case never
 ***REMOVED***
