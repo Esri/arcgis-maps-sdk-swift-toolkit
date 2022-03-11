@@ -20,8 +20,8 @@ struct FloorFilterExampleView: View {
     
     @State
     private var viewpoint = Viewpoint(
-        center: Point(x: -93.258133, y: 44.986656, spatialReference: .wgs84),
-        scale: 1_000_000
+        center: Point(x: -117.19496, y: 34.05713, spatialReference: .wgs84),
+        scale: 100_000
     )
     
     @State
@@ -50,6 +50,9 @@ struct FloorFilterExampleView: View {
             map: map,
             viewpoint: viewpoint
         )
+            .onViewpointChanged(kind: .centerAndScale) {
+                viewpoint = $0
+            }
             .overlay(alignment: .bottomLeading) {
                 if isMapLoaded,
                    let floorManager = map.floorManager {
