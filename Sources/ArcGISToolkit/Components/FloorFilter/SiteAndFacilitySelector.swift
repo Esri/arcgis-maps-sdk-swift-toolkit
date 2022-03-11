@@ -178,16 +178,19 @@ struct SiteAndFacilitySelector: View {
                         floorFilterViewModel.selection = .facility(facility)
                         isHidden.wrappedValue.toggle()
                     } label: {
-                        VStack {
-                            Text(facility.name)
-                                .fontWeight(
-                                    selectedFacilityID == facility.facilityId ? .bold : .regular
-                                )
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                            if showSites, let siteName = facility.site?.name {
-                                Text(siteName)
-                                    .fontWeight(.ultraLight)
+                        HStack {
+                            Image(
+                                systemName: selectedFacilityID == facility.facilityId ? "circle.fill" : "circle"
+                            )
+                            VStack {
+                                Text(facility.name)
+                                    .fontWeight(.regular)
                                     .frame(maxWidth: .infinity, alignment: .leading)
+                                if showSites, let siteName = facility.site?.name {
+                                    Text(siteName)
+                                        .fontWeight(.ultraLight)
+                                        .frame(maxWidth: .infinity, alignment: .leading)
+                                }
                             }
                         }
                     }
