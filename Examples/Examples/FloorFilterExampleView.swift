@@ -20,8 +20,8 @@ struct FloorFilterExampleView: View {
 ***REMOVED***
 ***REMOVED***@State
 ***REMOVED***private var viewpoint = Viewpoint(
-***REMOVED******REMOVED***center: Point(x: -93.258133, y: 44.986656, spatialReference: .wgs84),
-***REMOVED******REMOVED***scale: 1_000_000
+***REMOVED******REMOVED***center: Point(x: -117.19496, y: 34.05713, spatialReference: .wgs84),
+***REMOVED******REMOVED***scale: 100_000
 ***REMOVED***)
 ***REMOVED***
 ***REMOVED***@State
@@ -50,6 +50,9 @@ struct FloorFilterExampleView: View {
 ***REMOVED******REMOVED******REMOVED***map: map,
 ***REMOVED******REMOVED******REMOVED***viewpoint: viewpoint
 ***REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***.onViewpointChanged(kind: .centerAndScale) {
+***REMOVED******REMOVED******REMOVED******REMOVED***viewpoint = $0
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.overlay(alignment: .bottomLeading) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if isMapLoaded,
 ***REMOVED******REMOVED******REMOVED******REMOVED***   let floorManager = map.floorManager {
