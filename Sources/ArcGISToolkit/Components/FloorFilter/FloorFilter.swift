@@ -110,8 +110,8 @@ public struct FloorFilter: View {
                     }
                     SiteAndFacilitySelector(
                         isHidden: $isSelectorHidden,
-                        $selectedSiteID,
-                        $selectedFacilityID
+                        $selectedFacilityID,
+                        $selectedSiteID
                     )
                         .esriBorder()
                         .opacity(isSelectorHidden ? .zero : 1)
