@@ -197,6 +197,9 @@ struct SiteAndFacilitySelector: View {
                 }
                 .listStyle(.plain)
                 .navigationBarTitle("Select a facility")
+                .navigationBarBackButtonHidden(
+                    floorFilterViewModel.sites.count == 1
+                )
             }
         }
     }
