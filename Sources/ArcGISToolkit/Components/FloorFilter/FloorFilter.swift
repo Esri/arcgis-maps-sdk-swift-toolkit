@@ -21,23 +21,30 @@ public struct FloorFilter: View {
     /// Creates a `FloorFilter`
     /// - Parameters:
     ///   - floorManager: The floor manager used by the `FloorFilter`.
+    ///   - automaticSelectionMode: The selection behavior of the floor filter.
     ///   - viewpoint: Viewpoint updated when the selected site or facility changes.
     public init(
         floorManager: FloorManager,
+        automaticSelectionMode: AutomaticSelectionMode = .always,
         viewpoint: Binding<Viewpoint>? = nil
     ) {
         _viewModel = StateObject(wrappedValue: FloorFilterViewModel(
             floorManager: floorManager,
             viewpoint: viewpoint
         ))
+        self.automaticSelectionMode = automaticSelectionMode
+        self.viewpoint = viewpoint
     }
 
     /// The selection behavior of the floor filter.
-    var automaticSelectionMode: AutomaticSelectionMode = .always
-    
-    /// The view model used by the `FloorFilter`.
-    @StateObject
-    private var viewModel: FloorFilterViewModel
+    private let automaticSelectionMode: AutomaticSelectionMode
+
+    /// A Boolean value that indicates whether there are levels to display.  This will be false if
+    /// there is no selected facility or if the selected facility has no levels.
+    private var hasLevelsToDisplay: Bool {
+        !(viewModel.selectedFacility == nil ||
+          viewModel.selectedFacility!.levels.isEmpty)
+    }
     
     /// A Boolean value that indicates whether the site/facility selector is hidden.
     @State
@@ -46,13 +53,14 @@ public struct FloorFilter: View {
     /// A Boolean value that indicates whether the levels view is currently collapsed.
     @State
     private var isLevelsViewCollapsed: Bool = false
-    
-    /// A Boolean value that indicates whether there are levels to display.  This will be false if
-    /// there is no selected facility or if the selected facility has no levels.
-    private var hasLevelsToDisplay: Bool {
-        !(viewModel.selectedFacility == nil ||
-          viewModel.selectedFacility!.levels.isEmpty)
-    }
+
+    /// Indicates the implicity selected facility based on the current viewpoint.
+    @State
+    private var selectedFacilityID: String? = nil
+
+    /// Indicates the implicity selected site based on the current viewpoint.
+    @State
+    private var selectedSiteID: String? = nil
     
     /// The selected facility's levels, sorted by `level.verticalOrder`.
     private var sortedLevels: [FloorLevel] {
@@ -60,6 +68,14 @@ public struct FloorFilter: View {
             $0.verticalOrder > $1.verticalOrder
         } ?? []
     }
+
+    /// The view model used by the `FloorFilter`.
+    @StateObject
+    private var viewModel: FloorFilterViewModel
+
+    /// The `Viewpoint` used to pan/zoom to the selected site/facilty.
+    /// If `nil`, there will be no automatic pan/zoom operations or automatic selection support.
+    private var viewpoint: Binding<Viewpoint>?
     
     public var body: some View {
         Group {
@@ -92,15 +108,98 @@ public struct FloorFilter: View {
                         }
                         .esriBorder()
                     }
-                    SiteAndFacilitySelector(isHidden: $isSelectorHidden)
+                    SiteAndFacilitySelector(
+                        isHidden: $isSelectorHidden,
+                        $selectedSiteID,
+                        $selectedFacilityID
+                    )
                         .esriBorder()
                         .opacity(isSelectorHidden ? .zero : 1)
+                        .onChange(of: viewpoint?.wrappedValue.targetGeometry) { _ in
+                            updateSelection()
+                        }
                 }
             }
         }
         // Ensure space for filter text field on small screens in landscape
         .frame(minHeight: 100)
         .environmentObject(viewModel)
+    }
+
+    /// Updates `selectedFacilityID` and `selectedSiteID` based on the most recent
+    /// viewpoint.
+    private func updateSelection() {
+        guard let viewpoint = viewpoint?.wrappedValue,
+                viewpoint.targetScale != .zero,
+                automaticSelectionMode != .never else {
+                  return
+              }
+
+        // Only take action if viewpoint is within minimum scale. Default
+        // minscale is 4300 or less (~zoom level 17 or greater)
+        var targetScale = viewModel.floorManager.siteLayer?.minScale ?? .zero
+        if targetScale.isZero {
+            targetScale = 4300
+        }
+
+        // If viewpoint is out of range, reset selection (if not non-clearing)
+        // and return
+        if viewpoint.targetScale > targetScale {
+            if automaticSelectionMode == .always {
+                selectedSiteID = nil
+                selectedFacilityID = nil
+            }
+            // Assumption: if too zoomed out to see sites, also too zoomed out
+            // to see facilities
+            return
+        }
+
+        // If the centerpoint is within a site's geometry, select that site.
+        // This code gracefully skips selection if there are no sites or no
+        // matching sites
+        let siteResult = viewModel.floorManager.sites.first { site in
+            guard let siteExtent = site.geometry?.extent else {
+                return false
+            }
+            return GeometryEngine.intersects(
+                geometry1: siteExtent,
+                geometry2: viewpoint.targetGeometry
+            )
+        }
+
+        if let siteResult = siteResult {
+            selectedSiteID = siteResult.siteId
+        } else if automaticSelectionMode == .always {
+            selectedSiteID = nil
+        }
+
+        // Move on to facility selection. Default to map-authored Facility
+        // MinScale. If MinScale not specified or is 0, default to 1500.
+        targetScale = viewModel.floorManager.facilityLayer?.minScale ?? .zero
+        if targetScale.isZero  {
+            targetScale = 1500
+        }
+
+        // If out of scale, stop here
+        if viewpoint.targetScale > targetScale {
+            return
+        }
+
+        let facilityResult = viewModel.floorManager.facilities.first { facility in
+            guard let facilityExtent = facility.geometry?.extent else {
+                return false
+            }
+            return GeometryEngine.intersects(
+                geometry1: facilityExtent,
+                geometry2: viewpoint.targetGeometry
+            )
+        }
+
+        if let facilityResult = facilityResult {
+            selectedFacilityID = facilityResult.facilityId
+        } else if automaticSelectionMode == .always {
+            selectedFacilityID = nil
+        }
     }
 }
 
@@ -201,12 +300,14 @@ struct CollapseButton: View {
     }
 }
 
-/// Defines selection behavior.
-enum AutomaticSelectionMode {
-    /// The selection is automatically synchronzied.
+/// Defines automatic selection behavior.
+public enum AutomaticSelectionMode {
+    /// Always update selection based on the current viewpoint; clear the selection when the user
+    /// navigates away.
     case always
-    /// N/A.
+    /// Only update the selection when there is a new site or facility in the current viewpoint; don't clear
+    /// selection when the user navigates away.
     case alwaysNotClearing
-    /// The selection is manually synchronzied.
+    /// Never update selection based on the GeoView's current viewpoint.
     case never
 }
