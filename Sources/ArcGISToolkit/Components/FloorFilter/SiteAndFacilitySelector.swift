@@ -202,14 +202,14 @@ struct SiteAndFacilitySelector: View {
                         }
                         .listStyle(.plain)
                         .onChange(of: selectedFacilityID) { facilityID in
-                            guard let fac = floorFilterViewModel.facilities.first(where: { facility in
+                            guard let facility = floorFilterViewModel.facilities.first(where: { facility in
                                 facility.facilityId == facilityID
                             }) else {
                                 return
                             }
                             withAnimation {
                                 proxy.scrollTo(
-                                    fac.facilityId,
+                                    facility.facilityId,
                                     anchor: .center
                                 )
                             }
