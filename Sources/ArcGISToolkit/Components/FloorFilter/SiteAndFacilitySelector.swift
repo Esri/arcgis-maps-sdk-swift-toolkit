@@ -171,33 +171,52 @@ struct SiteAndFacilitySelector: View {
 
         var body: some View {
             VStack {
+                if !showSites, let siteName = facilities.first?.site?.name {
+                    Text(siteName)
+                        .fontWeight(.ultraLight)
+                }
                 TextField("Filter facilities", text: $searchPhrase)
-                List(matchingFacilities) { facility in
-                    Button {
-                        print(facility.name)
-                        floorFilterViewModel.selection = .facility(facility)
-                        isHidden.wrappedValue.toggle()
-                    } label: {
-                        HStack {
-                            Image(
-                                systemName: selectedFacilityID == facility.facilityId ? "circle.fill" : "circle"
-                            )
-                            VStack {
-                                Text(facility.name)
-                                    .fontWeight(.regular)
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-                                if showSites, let siteName = facility.site?.name {
-                                    Text(siteName)
-                                        .fontWeight(.ultraLight)
-                                        .frame(maxWidth: .infinity, alignment: .leading)
+                    ScrollViewReader { proxy in
+                        List(matchingFacilities, id: \.facilityId) { facility in
+                            Button {
+                                print(facility.name)
+                                floorFilterViewModel.selection = .facility(facility)
+                                isHidden.wrappedValue.toggle()
+                            } label: {
+                                HStack {
+                                    Image(
+                                        systemName: selectedFacilityID == facility.facilityId ? "circle.fill" : "circle"
+                                    )
+                                    VStack {
+                                        Text(facility.name)
+                                            .fontWeight(.regular)
+                                            .frame(maxWidth: .infinity, alignment: .leading)
+                                        if showSites, let siteName = facility.site?.name {
+                                            Text(siteName)
+                                                .fontWeight(.ultraLight)
+                                                .frame(maxWidth: .infinity, alignment: .leading)
+                                        }
+                                    }
                                 }
                             }
                         }
-                    }
+                        .listStyle(.plain)
+                        .onChange(of: selectedFacilityID) { facilityID in
+                            guard let fac = floorFilterViewModel.facilities.first(where: { facility in
+                                facility.facilityId == facilityID
+                            }) else {
+                                return
+                            }
+                            withAnimation {
+                                proxy.scrollTo(
+                                    fac.facilityId,
+                                    anchor: .center
+                                )
+                            }
+                        }
                 }
-                .listStyle(.plain)
-                .navigationBarTitle("Select a facility")
             }
+            .navigationBarTitle("Select a facility")
         }
     }
 }
