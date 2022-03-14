@@ -107,6 +107,8 @@ struct SiteAndFacilitySelector: View {
             NavigationView {
                 VStack {
                     TextField("Filter sites", text: $searchPhrase)
+                        .keyboardType(.alphabet)
+                        .disableAutocorrection(true)
                     List(matchingSites) { (site) in
                         NavigationLink(
                             site.name,
@@ -177,44 +179,46 @@ struct SiteAndFacilitySelector: View {
                         .fontWeight(.ultraLight)
                 }
                 TextField("Filter facilities", text: $searchPhrase)
-                    ScrollViewReader { proxy in
-                        List(matchingFacilities, id: \.facilityId) { facility in
-                            Button {
-                                print(facility.name)
-                                floorFilterViewModel.selection = .facility(facility)
-                                isHidden.wrappedValue.toggle()
-                            } label: {
-                                HStack {
-                                    Image(
-                                        systemName: selectedFacilityID == facility.facilityId ? "circle.fill" : "circle"
-                                    )
-                                    VStack {
-                                        Text(facility.name)
-                                            .fontWeight(.regular)
+                    .keyboardType(.alphabet)
+                    .disableAutocorrection(true)
+                ScrollViewReader { proxy in
+                    List(matchingFacilities, id: \.facilityId) { facility in
+                        Button {
+                            print(facility.name)
+                            floorFilterViewModel.selection = .facility(facility)
+                            isHidden.wrappedValue.toggle()
+                        } label: {
+                            HStack {
+                                Image(
+                                    systemName: selectedFacilityID == facility.facilityId ? "circle.fill" : "circle"
+                                )
+                                VStack {
+                                    Text(facility.name)
+                                        .fontWeight(.regular)
+                                        .frame(maxWidth: .infinity, alignment: .leading)
+                                    if showSites, let siteName = facility.site?.name {
+                                        Text(siteName)
+                                            .fontWeight(.ultraLight)
                                             .frame(maxWidth: .infinity, alignment: .leading)
-                                        if showSites, let siteName = facility.site?.name {
-                                            Text(siteName)
-                                                .fontWeight(.ultraLight)
-                                                .frame(maxWidth: .infinity, alignment: .leading)
-                                        }
                                     }
                                 }
                             }
                         }
-                        .listStyle(.plain)
-                        .onChange(of: selectedFacilityID) { facilityID in
-                            guard let facility = floorFilterViewModel.facilities.first(where: { facility in
-                                facility.facilityId == facilityID
-                            }) else {
-                                return
-                            }
-                            withAnimation {
-                                proxy.scrollTo(
-                                    facility.facilityId,
-                                    anchor: .center
-                                )
-                            }
+                    }
+                    .listStyle(.plain)
+                    .onChange(of: selectedFacilityID) { facilityID in
+                        guard let facility = floorFilterViewModel.facilities.first(where: { facility in
+                            facility.facilityId == facilityID
+                        }) else {
+                            return
                         }
+                        withAnimation {
+                            proxy.scrollTo(
+                                facility.facilityId,
+                                anchor: .center
+                            )
+                        }
+                    }
                 }
             }
             .navigationBarTitle("Select a facility")
