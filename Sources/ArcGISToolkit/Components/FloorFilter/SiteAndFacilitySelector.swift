@@ -132,6 +132,7 @@ struct SiteAndFacilitySelector: View {
                 }
                 .navigationBarTitle(Text("Select a site"), displayMode: .inline)
             }
+            .navigationViewStyle(.stack)
         }
     }
     
