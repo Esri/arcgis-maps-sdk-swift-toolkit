@@ -108,7 +108,7 @@ public struct FloorFilter: View {
     @State
     private var selectedSiteID: String? = nil
 
-    /// A configured SiteAndFacilitySelector view.
+    /// A configured `SiteAndFacilitySelector` view.
     private var siteAndFacilitySelectorView: some View {
         SiteAndFacilitySelector(
             isHidden: $isSelectorHidden,
