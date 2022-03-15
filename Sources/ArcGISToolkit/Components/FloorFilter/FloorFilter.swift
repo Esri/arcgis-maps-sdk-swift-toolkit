@@ -107,7 +107,7 @@ public struct FloorFilter: View {
     /// Indicates the implicity selected site based on the current viewpoint.
     @State
     private var selectedSiteID: String? = nil
-
+    
     /// A configured `SiteAndFacilitySelector` view.
     private var siteAndFacilitySelectorView: some View {
         SiteAndFacilitySelector(
@@ -115,18 +115,26 @@ public struct FloorFilter: View {
             $selectedFacilityID,
             $selectedSiteID
         )
-            .esriBorder()
-            .opacity(isSelectorHidden ? .zero : 1)
-            .onChange(of: viewpoint?.wrappedValue.targetGeometry) { _ in
-                updateSelection()
-            }
+        .esriBorder()
+        .opacity(isSelectorHidden ? .zero : 1)
+        .onChange(of: viewpoint?.wrappedValue.targetGeometry) { _ in
+            updateSelection()
+        }
     }
     
     /// The selected facility's levels, sorted by `level.verticalOrder`.
     private var sortedLevels: [FloorLevel] {
-        viewModel.selectedFacility?.levels.sorted() {
+        var levels: [FloorLevel]
+        if selectedFacilityID != nil {
+            levels = viewModel.facilities.first { facility in
+                facility.id == selectedFacilityID
+            }?.levels ?? []
+        } else {
+            levels = viewModel.selectedFacility?.levels ?? []
+        }
+        return levels.sorted() {
             $0.verticalOrder > $1.verticalOrder
-        } ?? []
+        }
     }
 
     /// Indicates that the selector should be presented with a top oriented aligment configuration.
