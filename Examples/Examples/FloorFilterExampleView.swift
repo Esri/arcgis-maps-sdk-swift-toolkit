@@ -21,7 +21,7 @@ struct FloorFilterExampleView: View {
 ***REMOVED***@State
 ***REMOVED***private var viewpoint = Viewpoint(
 ***REMOVED******REMOVED***center: Point(x: -117.19496, y: 34.05713, spatialReference: .wgs84),
-***REMOVED******REMOVED***scale: 100_000
+***REMOVED******REMOVED***scale: 10_000
 ***REMOVED***)
 ***REMOVED***
 ***REMOVED***@State
@@ -60,7 +60,7 @@ struct FloorFilterExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***floorManager: floorManager,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint: $viewpoint
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxHeight: 300)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: 300, maxHeight: 300)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(36)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
