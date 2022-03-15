@@ -107,7 +107,7 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED***/ Indicates the implicity selected site based on the current viewpoint.
 ***REMOVED***@State
 ***REMOVED***private var selectedSiteID: String? = nil
-
+***REMOVED***
 ***REMOVED******REMOVED***/ A configured `SiteAndFacilitySelector` view.
 ***REMOVED***private var siteAndFacilitySelectorView: some View {
 ***REMOVED******REMOVED***SiteAndFacilitySelector(
@@ -115,18 +115,26 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED******REMOVED***$selectedFacilityID,
 ***REMOVED******REMOVED******REMOVED***$selectedSiteID
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***.esriBorder()
-***REMOVED******REMOVED******REMOVED***.opacity(isSelectorHidden ? .zero : 1)
-***REMOVED******REMOVED******REMOVED***.onChange(of: viewpoint?.wrappedValue.targetGeometry) { _ in
-***REMOVED******REMOVED******REMOVED******REMOVED***updateSelection()
-***REMOVED******REMOVED***
+***REMOVED******REMOVED***.esriBorder()
+***REMOVED******REMOVED***.opacity(isSelectorHidden ? .zero : 1)
+***REMOVED******REMOVED***.onChange(of: viewpoint?.wrappedValue.targetGeometry) { _ in
+***REMOVED******REMOVED******REMOVED***updateSelection()
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The selected facility's levels, sorted by `level.verticalOrder`.
 ***REMOVED***private var sortedLevels: [FloorLevel] {
-***REMOVED******REMOVED***viewModel.selectedFacility?.levels.sorted() {
+***REMOVED******REMOVED***var levels: [FloorLevel]
+***REMOVED******REMOVED***if selectedFacilityID != nil {
+***REMOVED******REMOVED******REMOVED***levels = viewModel.facilities.first { facility in
+***REMOVED******REMOVED******REMOVED******REMOVED***facility.id == selectedFacilityID
+***REMOVED******REMOVED***?.levels ?? []
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***levels = viewModel.selectedFacility?.levels ?? []
+***REMOVED***
+***REMOVED******REMOVED***return levels.sorted() {
 ***REMOVED******REMOVED******REMOVED***$0.verticalOrder > $1.verticalOrder
-***REMOVED*** ?? []
+***REMOVED***
 ***REMOVED***
 
 ***REMOVED******REMOVED***/ Indicates that the selector should be presented with a top oriented aligment configuration.
