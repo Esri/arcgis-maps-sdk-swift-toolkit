@@ -13,13 +13,13 @@
 
 ***REMOVED***
 
-***REMOVED***/ A modifier which "selects" a button.  If selected the button will display with the
-***REMOVED***/ `BorderedProminentButtonStyle`.  If not selected, the button will display with the
+***REMOVED***/ A modifier which "selects" a button. If selected, the button will be displayed with the
+***REMOVED***/ `BorderedProminentButtonStyle`. Otherwise, the button will be displayed with the
 ***REMOVED***/ `BorderedButtonStyle`.
 struct ButtonSelectedModifier: ViewModifier {
-***REMOVED******REMOVED***/ `true` if the view should display as selected, `false` otherwise.
+***REMOVED******REMOVED***/ A Boolean value that indicates whether view should display as selected.
 ***REMOVED***var isSelected: Bool
-***REMOVED***
+
 ***REMOVED***func body(content: Content) -> some View {
 ***REMOVED******REMOVED***if isSelected {
 ***REMOVED******REMOVED******REMOVED***content
@@ -34,8 +34,8 @@ struct ButtonSelectedModifier: ViewModifier {
 extension Button {
 ***REMOVED******REMOVED***/ Button modifier used to denote the button is selected.
 ***REMOVED******REMOVED***/ - Parameter isSelected: `true` if the button is selected, `false` otherwise.
-***REMOVED******REMOVED***/ - Returns: The button being modified.
-***REMOVED***func buttonSelected(
+***REMOVED******REMOVED***/ - Returns: The modified button.
+***REMOVED***func selected(
 ***REMOVED******REMOVED***_ isSelected: Bool = false
 ***REMOVED***) -> some View {
 ***REMOVED******REMOVED***modifier(ButtonSelectedModifier(isSelected: isSelected))

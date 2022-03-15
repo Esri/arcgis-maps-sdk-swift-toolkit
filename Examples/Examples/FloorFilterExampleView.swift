@@ -16,58 +16,67 @@
 ***REMOVED***
 
 struct FloorFilterExampleView: View {
-***REMOVED***private let map: Map
-***REMOVED***
-***REMOVED***@State
-***REMOVED***private var viewpoint = Viewpoint(
-***REMOVED******REMOVED***center: Point(x: -93.258133, y: 44.986656, spatialReference: .wgs84),
-***REMOVED******REMOVED***scale: 1_000_000
-***REMOVED***)
-***REMOVED***
-***REMOVED***@State
-***REMOVED***private var isMapLoaded: Bool = false
-
-***REMOVED***init() {
-***REMOVED******REMOVED******REMOVED*** Create the map from a portal item and assign to the mapView.
-***REMOVED******REMOVED***
+***REMOVED******REMOVED***/ Make a map from a portal item.
+***REMOVED***static func makeMap() -> Map {
 ***REMOVED******REMOVED******REMOVED*** Multiple sites/facilities: Esri IST map with all buildings.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let portal = Portal(url: URL(string: "https:***REMOVED***indoors.maps.arcgis.com/")!, isLoginRequired: false)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let portalItem = PortalItem(portal: portal, id: Item.ID(rawValue: "49520a67773842f1858602735ef538b5")!)
-***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***let portal = Portal(url: URL(string: "https:***REMOVED***indoors.maps.arcgis.com/")!, isLoginRequired: false)
+***REMOVED******REMOVED******REMOVED***let portalItem = PortalItem(portal: portal, id: Item.ID(rawValue: "49520a67773842f1858602735ef538b5")!)
+
 ***REMOVED******REMOVED******REMOVED*** Redlands Campus map.
 ***REMOVED******REMOVED***let portal = Portal(url: URL(string: "https:***REMOVED***runtimecoretest.maps.arcgis.com/")!, isLoginRequired: false)
 ***REMOVED******REMOVED***let portalItem = PortalItem(portal: portal, id: Item.ID(rawValue: "7687805bd42549f5ba41237443d0c60a")!) ***REMOVED***<= another multiple sites/facilities
 
 ***REMOVED******REMOVED******REMOVED*** Single site (ESRI Redlands Main) and facility (Building L).
-***REMOVED******REMOVED******REMOVED***let portal = Portal(url: URL(string: "https:***REMOVED***indoors.maps.arcgis.com/")!, isLoginRequired: false)
-***REMOVED******REMOVED******REMOVED***let portalItem = PortalItem(portal: portal, id: Item.ID(rawValue: "f133a698536f44c8884ad81f80b6cfc7")!)
+***REMOVED******REMOVED******REMOVED*** let portal = Portal(url: URL(string: "https:***REMOVED***indoors.maps.arcgis.com/")!, isLoginRequired: false)
+***REMOVED******REMOVED******REMOVED*** let portalItem = PortalItem(portal: portal, id: Item.ID(rawValue: "f133a698536f44c8884ad81f80b6cfc7")!)
 
-***REMOVED******REMOVED***map = Map(item: portalItem)
+***REMOVED******REMOVED***return Map(item: portalItem)
 ***REMOVED***
-***REMOVED***
+
+***REMOVED***private var map = makeMap()
+
+***REMOVED***@State
+***REMOVED***private var mapLoadResult: Result<Map, Error>?
+
+***REMOVED***@State
+***REMOVED***private var viewpoint = Viewpoint(
+***REMOVED******REMOVED***center: Point(x: -117.19496, y: 34.05713, spatialReference: .wgs84),
+***REMOVED******REMOVED***scale: 100_000
+***REMOVED***)
+
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***MapView(
-***REMOVED******REMOVED******REMOVED***map: map,
-***REMOVED******REMOVED******REMOVED***viewpoint: viewpoint
-***REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***.overlay(alignment: .bottomLeading) {
-***REMOVED******REMOVED******REMOVED******REMOVED***if isMapLoaded,
-***REMOVED******REMOVED******REMOVED******REMOVED***   let floorManager = map.floorManager {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FloorFilter(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***floorManager: floorManager,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint: $viewpoint
+***REMOVED******REMOVED***Group {
+***REMOVED******REMOVED******REMOVED***if let mapLoadResult = mapLoadResult {
+***REMOVED******REMOVED******REMOVED******REMOVED***switch mapLoadResult {
+***REMOVED******REMOVED******REMOVED******REMOVED***case .success(let value):
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***MapView(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***map: value,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint: viewpoint
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(height: 300)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(36)
+***REMOVED******REMOVED******REMOVED******REMOVED***case .failure(let error):
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Error loading map: \(error.localizedDescription)")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
 ***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***ProgressView()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.task {
-***REMOVED******REMOVED******REMOVED******REMOVED***do {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try await map.load()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isMapLoaded = true
-***REMOVED******REMOVED******REMOVED*** catch {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print("load error: \(error)")
-***REMOVED******REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***.task {
+***REMOVED******REMOVED******REMOVED***mapLoadResult = await Result {
+***REMOVED******REMOVED******REMOVED******REMOVED***try await map.load()
+***REMOVED******REMOVED******REMOVED******REMOVED***return map
 ***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***.overlay(alignment: .bottomLeading) {
+***REMOVED******REMOVED******REMOVED***if map.loadStatus == .loaded,
+***REMOVED******REMOVED******REMOVED***let floorManager = map.floorManager {
+***REMOVED******REMOVED******REMOVED******REMOVED***FloorFilter(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***floorManager: floorManager,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint: $viewpoint
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***.frame(height: 300)
+***REMOVED******REMOVED******REMOVED******REMOVED***.padding(36)
+***REMOVED******REMOVED***
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
