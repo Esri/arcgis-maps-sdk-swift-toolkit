@@ -108,7 +108,7 @@ public struct FloorFilter: View {
 ***REMOVED***@State
 ***REMOVED***private var selectedSiteID: String? = nil
 
-***REMOVED******REMOVED***/ A configured SiteAndFacilitySelector view.
+***REMOVED******REMOVED***/ A configured `SiteAndFacilitySelector` view.
 ***REMOVED***private var siteAndFacilitySelectorView: some View {
 ***REMOVED******REMOVED***SiteAndFacilitySelector(
 ***REMOVED******REMOVED******REMOVED***isHidden: $isSelectorHidden,
