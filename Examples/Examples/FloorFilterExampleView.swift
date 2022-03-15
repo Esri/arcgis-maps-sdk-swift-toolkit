@@ -27,6 +27,8 @@ struct FloorFilterExampleView: View {
     @State
     private var isMapLoaded: Bool = false
 
+    private let filterAlignment = Alignment.bottomLeading
+
     init() {
         // Create the map from a portal item and assign to the mapView.
         
@@ -53,10 +55,11 @@ struct FloorFilterExampleView: View {
             .onViewpointChanged(kind: .centerAndScale) {
                 viewpoint = $0
             }
-            .overlay(alignment: .bottomLeading) {
+            .overlay(alignment: filterAlignment) {
                 if isMapLoaded,
                    let floorManager = map.floorManager {
                     FloorFilter(
+                        alignment: filterAlignment,
                         floorManager: floorManager,
                         viewpoint: $viewpoint
                     )
