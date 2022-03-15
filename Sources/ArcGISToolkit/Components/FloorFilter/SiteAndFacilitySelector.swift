@@ -188,7 +188,6 @@ struct SiteAndFacilitySelector: View {
                 ScrollViewReader { proxy in
                     List(matchingFacilities, id: \.facilityId) { facility in
                         Button {
-                            print(facility.name)
                             floorFilterViewModel.selection = .facility(facility)
                             isHidden.wrappedValue.toggle()
                         } label: {
