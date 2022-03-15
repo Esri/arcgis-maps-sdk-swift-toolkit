@@ -44,6 +44,13 @@ public struct FloorFilter: View {
     @State
     private var isLevelsViewCollapsed: Bool = false
 
+    /// The selected facility's levels, sorted by `level.verticalOrder`.
+    private var sortedLevels: [FloorLevel] {
+        viewModel.selectedFacility?.levels.sorted() {
+            $0.verticalOrder > $1.verticalOrder
+        } ?? []
+    }
+
     public var body: some View {
         Group {
             if viewModel.isLoading {
@@ -59,7 +66,7 @@ public struct FloorFilter: View {
                         VStack {
                             if viewModel.hasLevelsToDisplay {
                                 LevelsView(
-                                    levels: viewModel.sortedLevels,
+                                    levels: sortedLevels,
                                     isCollapsed: $isLevelsViewCollapsed
                                 )
                                 Divider()
