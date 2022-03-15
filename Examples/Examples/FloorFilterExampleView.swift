@@ -21,7 +21,7 @@ struct FloorFilterExampleView: View {
     @State
     private var viewpoint = Viewpoint(
         center: Point(x: -117.19496, y: 34.05713, spatialReference: .wgs84),
-        scale: 100_000
+        scale: 10_000
     )
     
     @State
@@ -60,7 +60,7 @@ struct FloorFilterExampleView: View {
                         floorManager: floorManager,
                         viewpoint: $viewpoint
                     )
-                        .frame(maxHeight: 300)
+                        .frame(maxWidth: 300, maxHeight: 300)
                         .padding(36)
                 }
             }
