@@ -44,6 +44,13 @@ public struct FloorFilter: View {
 ***REMOVED***@State
 ***REMOVED***private var isLevelsViewCollapsed: Bool = false
 
+***REMOVED******REMOVED***/ The selected facility's levels, sorted by `level.verticalOrder`.
+***REMOVED***private var sortedLevels: [FloorLevel] {
+***REMOVED******REMOVED***viewModel.selectedFacility?.levels.sorted() {
+***REMOVED******REMOVED******REMOVED***$0.verticalOrder > $1.verticalOrder
+***REMOVED*** ?? []
+***REMOVED***
+
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***Group {
 ***REMOVED******REMOVED******REMOVED***if viewModel.isLoading {
@@ -59,7 +66,7 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***VStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if viewModel.hasLevelsToDisplay {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***LevelsView(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***levels: viewModel.sortedLevels,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***levels: sortedLevels,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isCollapsed: $isLevelsViewCollapsed
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Divider()
