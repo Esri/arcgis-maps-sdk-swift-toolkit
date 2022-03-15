@@ -143,13 +143,6 @@ final class FloorFilterViewModel: ObservableObject {
 ***REMOVED******REMOVED***return !selectedFacility.levels.isEmpty
 ***REMOVED***
 
-***REMOVED******REMOVED***/ The selected facility's levels, sorted by `level.verticalOrder`.
-***REMOVED***var sortedLevels: [FloorLevel] {
-***REMOVED******REMOVED***selectedFacility?.levels.sorted() {
-***REMOVED******REMOVED******REMOVED***$0.verticalOrder > $1.verticalOrder
-***REMOVED*** ?? []
-***REMOVED***
-
 ***REMOVED******REMOVED*** Mark: Private Functions
 
 ***REMOVED******REMOVED***/ Zooms to the selected facility; if there is no selected facility, zooms to the selected site.
