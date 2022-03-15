@@ -291,7 +291,9 @@ struct LevelsView: View {
                 // Button for the selected level.
                 Button {
                     if levels.count > 1 {
-                        isCollapsed.toggle()
+                        withAnimation {
+                            isCollapsed.toggle()
+                        }
                     }
                 } label: {
                     Text(viewModel.selectedLevel?.shortName ?? (levels.first?.shortName ?? "None"))
