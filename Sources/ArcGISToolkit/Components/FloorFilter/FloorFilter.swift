@@ -24,17 +24,22 @@ public struct FloorFilter: View {
     ///   - automaticSelectionMode: The selection behavior of the floor filter.
     ///   - viewpoint: Viewpoint updated when the selected site or facility changes.
     public init(
-        floorManager: FloorManager,
+        alignment: Alignment,
         automaticSelectionMode: AutomaticSelectionMode = .always,
+        floorManager: FloorManager,
         viewpoint: Binding<Viewpoint>? = nil
     ) {
         _viewModel = StateObject(wrappedValue: FloorFilterViewModel(
             floorManager: floorManager,
             viewpoint: viewpoint
         ))
+        self.alignment = alignment
         self.automaticSelectionMode = automaticSelectionMode
         self.viewpoint = viewpoint
     }
+
+    /// The alignment configuration.
+    private let alignment: Alignment
 
     /// The selection behavior of the floor filter.
     private let automaticSelectionMode: AutomaticSelectionMode
@@ -54,6 +59,46 @@ public struct FloorFilter: View {
     @State
     private var isLevelsViewCollapsed: Bool = false
 
+    /// A view that allows selecting between levels.
+    private var levelSelectorView: some View {
+        VStack {
+            if !topAligned {
+                Spacer()
+            }
+            VStack {
+                if hasLevelsToDisplay {
+                    LevelsView(
+                        levels: sortedLevels,
+                        isCollapsed: $isLevelsViewCollapsed
+                    )
+                    Divider()
+                        .frame(width: 30)
+                }
+                // Site button.
+                Button {
+                    isSelectorHidden.toggle()
+                } label: {
+                    Image(systemName: "building.2")
+                }
+                .padding(4)
+            }
+                .esriBorder()
+            if topAligned {
+                Spacer()
+            }
+        }
+    }
+
+    /// Indicates that the selector should be presented with a right oriented aligment configuration.
+    private var rightAligned: Bool {
+        switch alignment {
+        case .topTrailing, .trailing, .bottomTrailing:
+            return true
+        default:
+            return false
+        }
+    }
+
     /// Indicates the implicity selected facility based on the current viewpoint.
     @State
     private var selectedFacilityID: String? = nil
@@ -61,12 +106,36 @@ public struct FloorFilter: View {
     /// Indicates the implicity selected site based on the current viewpoint.
     @State
     private var selectedSiteID: String? = nil
+
+    /// A configured SiteAndFacilitySelector view.
+    private var siteAndFacilitySelectorView: some View {
+        SiteAndFacilitySelector(
+            isHidden: $isSelectorHidden,
+            $selectedFacilityID,
+            $selectedSiteID
+        )
+            .esriBorder()
+            .opacity(isSelectorHidden ? .zero : 1)
+            .onChange(of: viewpoint?.wrappedValue.targetGeometry) { _ in
+                updateSelection()
+            }
+    }
     
     /// The selected facility's levels, sorted by `level.verticalOrder`.
     private var sortedLevels: [FloorLevel] {
         viewModel.selectedFacility?.levels.sorted() {
             $0.verticalOrder > $1.verticalOrder
         } ?? []
+    }
+
+    /// Indicates that the selector should be presented with a top oriented aligment configuration.
+    private var topAligned: Bool {
+        switch alignment {
+        case .topLeading, .top, .topTrailing:
+            return true
+        default:
+            return false
+        }
     }
 
     /// The view model used by the `FloorFilter`.
@@ -76,7 +145,7 @@ public struct FloorFilter: View {
     /// The `Viewpoint` used to pan/zoom to the selected site/facilty.
     /// If `nil`, there will be no automatic pan/zoom operations or automatic selection support.
     private var viewpoint: Binding<Viewpoint>?
-    
+
     public var body: some View {
         Group {
             if viewModel.isLoading {
@@ -87,37 +156,13 @@ public struct FloorFilter: View {
                 }
             } else {
                 HStack(alignment: .bottom) {
-                    VStack {
-                        Spacer()
-                        VStack {
-                            if hasLevelsToDisplay {
-                                LevelsView(
-                                    levels: sortedLevels,
-                                    isCollapsed: $isLevelsViewCollapsed
-                                )
-                                Divider()
-                                    .frame(width: 30)
-                            }
-                            // Site button.
-                            Button {
-                                isSelectorHidden.toggle()
-                            } label: {
-                                Image(systemName: "building.2")
-                            }
-                            .padding(4)
-                        }
-                        .esriBorder()
+                    if rightAligned {
+                        siteAndFacilitySelectorView
+                        levelSelectorView
+                    } else {
+                        levelSelectorView
+                        siteAndFacilitySelectorView
                     }
-                    SiteAndFacilitySelector(
-                        isHidden: $isSelectorHidden,
-                        $selectedFacilityID,
-                        $selectedSiteID
-                    )
-                        .esriBorder()
-                        .opacity(isSelectorHidden ? .zero : 1)
-                        .onChange(of: viewpoint?.wrappedValue.targetGeometry) { _ in
-                            updateSelection()
-                        }
                 }
             }
         }
