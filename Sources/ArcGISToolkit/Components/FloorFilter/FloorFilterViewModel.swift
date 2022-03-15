@@ -26,7 +26,7 @@ final class FloorFilterViewModel: ObservableObject {
         /// A selected level.
         case level(FloorLevel)
     }
-    
+
     /// Creates a `FloorFilterViewModel`.
     /// - Parameters:
     ///   - floorManager: The floor manager used by the `FloorFilterViewModel`.
@@ -41,63 +41,44 @@ final class FloorFilterViewModel: ObservableObject {
         Task {
             do {
                 try await floorManager.load()
-                if sites.count == 1 {
+                if sites.count == 1, let firstSite = sites.first {
                     // If we have only one site, select it.
-                    selection = .site(sites.first!)
+                    selection = .site(firstSite)
                 }
             } catch  {
+                // Note: Should user get to know about this error?
                 print("error: \(error)")
             }
             isLoading = false
         }
     }
 
-    /// The `Viewpoint` used to pan/zoom to the selected site/facilty.
+    /// The `Viewpoint` used to pan/zoom to the selected site or facility.
     /// If `nil`, there will be no automatic pan/zoom operations.
     var viewpoint: Binding<Viewpoint>?
-    
+
     /// The `FloorManager` containing the site, floor, and level information.
     let floorManager: FloorManager
-    
+
+    /// A Boolean value that indicates whether the model is loading.
+    @Published
+    private(set) var isLoading = true
+
     /// The floor manager sites.
     var sites: [FloorSite] {
         floorManager.sites
     }
-    
+
     /// The floor manager facilities.
     var facilities: [FloorFacility] {
         floorManager.facilities
     }
-    
+
     /// The floor manager levels.
     var levels: [FloorLevel] {
         floorManager.levels
     }
 
-    /// `true` if the model is loading it's properties, `false` if not loading.
-    @Published
-    private(set) var isLoading = true
-    
-    /// Gets the default level for a facility.
-    /// - Parameter facility: The facility to get the default level for.
-    /// - Returns: The default level for the facility, which is the level with vertical order 0;
-    /// if there's no level with vertical order of 0, it returns the lowest level.
-    func defaultLevel(for facility: FloorFacility?) -> FloorLevel? {
-        return levels.first(where: { level in
-            level.facility == facility && level.verticalOrder == .zero
-        }) ?? lowestLevel()
-    }
-    
-    /// Returns the level with the lowest vertical order.
-    private func lowestLevel() -> FloorLevel? {
-        let sortedLevels = levels.sorted {
-            $0.verticalOrder < $1.verticalOrder
-        }
-        return sortedLevels.first {
-            $0.verticalOrder != .min && $0.verticalOrder != .max
-        }
-    }
-    
     /// The selected site, floor, or level.
     @Published
     var selection: Selection? {
@@ -111,13 +92,13 @@ final class FloorFilterViewModel: ObservableObject {
             zoomToSelection()
         }
     }
-    
+
     /// The selected site.
     var selectedSite: FloorSite? {
         guard let selection = selection else {
             return nil
         }
-        
+
         switch selection {
         case .site(let site):
             return site
@@ -127,13 +108,13 @@ final class FloorFilterViewModel: ObservableObject {
             return level.facility?.site
         }
     }
-    
+
     /// The selected facility.
     var selectedFacility: FloorFacility? {
         guard let selection = selection else {
             return nil
         }
-        
+
         switch selection {
         case .site:
             return nil
@@ -143,7 +124,7 @@ final class FloorFilterViewModel: ObservableObject {
             return level.facility
         }
     }
-    
+
     /// The selected level.
     var selectedLevel: FloorLevel? {
         if case let .level(level) = selection {
@@ -152,29 +133,48 @@ final class FloorFilterViewModel: ObservableObject {
             return nil
         }
     }
-    
+
+    /// A Boolean value that indicates whether there are levels to display. This will be `false` if
+    /// there is no selected facility or if the selected facility has no levels.
+    var hasLevelsToDisplay: Bool {
+        guard let selectedFacility = selectedFacility else {
+            return false
+        }
+        return !selectedFacility.levels.isEmpty
+    }
+
+    /// The selected facility's levels, sorted by `level.verticalOrder`.
+    var sortedLevels: [FloorLevel] {
+        selectedFacility?.levels.sorted() {
+            $0.verticalOrder > $1.verticalOrder
+        } ?? []
+    }
+
+    // Mark: Private Functions
+
     /// Zooms to the selected facility; if there is no selected facility, zooms to the selected site.
-    func zoomToSelection() {
+    private func zoomToSelection() {
         guard let selection = selection else {
             return
         }
-        
+
         switch selection {
         case .site(let site):
-            zoomToExtent(extent: site.geometry?.extent)
+            zoomToExtent(site.geometry?.extent)
         case .facility(let facility):
-            zoomToExtent(extent: facility.geometry?.extent)
+            zoomToExtent(facility.geometry?.extent)
         case .level(let level):
-            zoomToExtent(extent: level.facility?.geometry?.extent)
+            zoomToExtent(level.facility?.geometry?.extent)
         }
     }
-    
-    private func zoomToExtent(extent: Envelope?) {
+
+    /// Zoom to given extent.
+    private func zoomToExtent(_ extent: Envelope?) {
         // Make sure we have an extent and viewpoint to zoom to.
         guard let extent = extent,
               let viewpoint = viewpoint
         else { return }
-        
+
         let builder = EnvelopeBuilder(envelope: extent)
         builder.expand(factor: 1.5)
         let targetExtent = builder.toGeometry()
@@ -184,12 +184,33 @@ final class FloorFilterViewModel: ObservableObject {
             )
         }
     }
-    
-    /// Sets the visibility of all the levels on the map based on the vertical order of the current selected level.
-    public func filterMapToSelectedLevel() {
+
+    /// Sets the visibility of all the levels on the map based on the vertical order of the current
+    /// selected level.
+    private func filterMapToSelectedLevel() {
         guard let selectedLevel = selectedLevel else { return }
         levels.forEach {
             $0.isVisible = $0.verticalOrder == selectedLevel.verticalOrder
+        }
+    }
+
+    /// Gets the default level for a facility.
+    /// - Parameter facility: The facility to get the default level for.
+    /// - Returns: The default level for the facility, which is the level with vertical order 0;
+    /// if there's no level with vertical order of 0, it returns the lowest level.
+    private func defaultLevel(for facility: FloorFacility?) -> FloorLevel? {
+        return levels.first(where: { level in
+            level.facility == facility && level.verticalOrder == .zero
+        }) ?? lowestLevel()
+    }
+
+    /// Returns the level with the lowest vertical order.
+    private func lowestLevel() -> FloorLevel? {
+        let sortedLevels = levels.sorted {
+            $0.verticalOrder < $1.verticalOrder
+        }
+        return sortedLevels.first {
+            $0.verticalOrder != .min && $0.verticalOrder != .max
         }
     }
 }
