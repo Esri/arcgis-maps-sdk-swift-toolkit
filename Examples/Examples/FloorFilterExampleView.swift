@@ -27,6 +27,8 @@ struct FloorFilterExampleView: View {
 ***REMOVED***@State
 ***REMOVED***private var isMapLoaded: Bool = false
 
+***REMOVED***private let filterAlignment = Alignment.bottomLeading
+
 ***REMOVED***init() {
 ***REMOVED******REMOVED******REMOVED*** Create the map from a portal item and assign to the mapView.
 ***REMOVED******REMOVED***
@@ -53,10 +55,11 @@ struct FloorFilterExampleView: View {
 ***REMOVED******REMOVED******REMOVED***.onViewpointChanged(kind: .centerAndScale) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***viewpoint = $0
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.overlay(alignment: .bottomLeading) {
+***REMOVED******REMOVED******REMOVED***.overlay(alignment: filterAlignment) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if isMapLoaded,
 ***REMOVED******REMOVED******REMOVED******REMOVED***   let floorManager = map.floorManager {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FloorFilter(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***alignment: filterAlignment,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***floorManager: floorManager,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint: $viewpoint
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
