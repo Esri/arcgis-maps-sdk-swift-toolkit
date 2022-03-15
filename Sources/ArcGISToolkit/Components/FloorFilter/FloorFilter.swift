@@ -24,17 +24,22 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED***/   - automaticSelectionMode: The selection behavior of the floor filter.
 ***REMOVED******REMOVED***/   - viewpoint: Viewpoint updated when the selected site or facility changes.
 ***REMOVED***public init(
-***REMOVED******REMOVED***floorManager: FloorManager,
+***REMOVED******REMOVED***alignment: Alignment,
 ***REMOVED******REMOVED***automaticSelectionMode: AutomaticSelectionMode = .always,
+***REMOVED******REMOVED***floorManager: FloorManager,
 ***REMOVED******REMOVED***viewpoint: Binding<Viewpoint>? = nil
 ***REMOVED***) {
 ***REMOVED******REMOVED***_viewModel = StateObject(wrappedValue: FloorFilterViewModel(
 ***REMOVED******REMOVED******REMOVED***floorManager: floorManager,
 ***REMOVED******REMOVED******REMOVED***viewpoint: viewpoint
 ***REMOVED******REMOVED***))
+***REMOVED******REMOVED***self.alignment = alignment
 ***REMOVED******REMOVED***self.automaticSelectionMode = automaticSelectionMode
 ***REMOVED******REMOVED***self.viewpoint = viewpoint
 ***REMOVED***
+
+***REMOVED******REMOVED***/ The alignment configuration.
+***REMOVED***private let alignment: Alignment
 
 ***REMOVED******REMOVED***/ The selection behavior of the floor filter.
 ***REMOVED***private let automaticSelectionMode: AutomaticSelectionMode
@@ -54,6 +59,46 @@ public struct FloorFilter: View {
 ***REMOVED***@State
 ***REMOVED***private var isLevelsViewCollapsed: Bool = false
 
+***REMOVED******REMOVED***/ A view that allows selecting between levels.
+***REMOVED***private var levelSelectorView: some View {
+***REMOVED******REMOVED***VStack {
+***REMOVED******REMOVED******REMOVED***if !topAligned {
+***REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***VStack {
+***REMOVED******REMOVED******REMOVED******REMOVED***if hasLevelsToDisplay {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***LevelsView(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***levels: sortedLevels,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isCollapsed: $isLevelsViewCollapsed
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Divider()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 30)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Site button.
+***REMOVED******REMOVED******REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isSelectorHidden.toggle()
+***REMOVED******REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "building.2")
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.padding(4)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.esriBorder()
+***REMOVED******REMOVED******REMOVED***if topAligned {
+***REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+
+***REMOVED******REMOVED***/ Indicates that the selector should be presented with a right oriented aligment configuration.
+***REMOVED***private var rightAligned: Bool {
+***REMOVED******REMOVED***switch alignment {
+***REMOVED******REMOVED***case .topTrailing, .trailing, .bottomTrailing:
+***REMOVED******REMOVED******REMOVED***return true
+***REMOVED******REMOVED***default:
+***REMOVED******REMOVED******REMOVED***return false
+***REMOVED***
+***REMOVED***
+
 ***REMOVED******REMOVED***/ Indicates the implicity selected facility based on the current viewpoint.
 ***REMOVED***@State
 ***REMOVED***private var selectedFacilityID: String? = nil
@@ -61,12 +106,36 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED***/ Indicates the implicity selected site based on the current viewpoint.
 ***REMOVED***@State
 ***REMOVED***private var selectedSiteID: String? = nil
+
+***REMOVED******REMOVED***/ A configured SiteAndFacilitySelector view.
+***REMOVED***private var siteAndFacilitySelectorView: some View {
+***REMOVED******REMOVED***SiteAndFacilitySelector(
+***REMOVED******REMOVED******REMOVED***isHidden: $isSelectorHidden,
+***REMOVED******REMOVED******REMOVED***$selectedFacilityID,
+***REMOVED******REMOVED******REMOVED***$selectedSiteID
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***.esriBorder()
+***REMOVED******REMOVED******REMOVED***.opacity(isSelectorHidden ? .zero : 1)
+***REMOVED******REMOVED******REMOVED***.onChange(of: viewpoint?.wrappedValue.targetGeometry) { _ in
+***REMOVED******REMOVED******REMOVED******REMOVED***updateSelection()
+***REMOVED******REMOVED***
+***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The selected facility's levels, sorted by `level.verticalOrder`.
 ***REMOVED***private var sortedLevels: [FloorLevel] {
 ***REMOVED******REMOVED***viewModel.selectedFacility?.levels.sorted() {
 ***REMOVED******REMOVED******REMOVED***$0.verticalOrder > $1.verticalOrder
 ***REMOVED*** ?? []
+***REMOVED***
+
+***REMOVED******REMOVED***/ Indicates that the selector should be presented with a top oriented aligment configuration.
+***REMOVED***private var topAligned: Bool {
+***REMOVED******REMOVED***switch alignment {
+***REMOVED******REMOVED***case .topLeading, .top, .topTrailing:
+***REMOVED******REMOVED******REMOVED***return true
+***REMOVED******REMOVED***default:
+***REMOVED******REMOVED******REMOVED***return false
+***REMOVED***
 ***REMOVED***
 
 ***REMOVED******REMOVED***/ The view model used by the `FloorFilter`.
@@ -76,7 +145,7 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED***/ The `Viewpoint` used to pan/zoom to the selected site/facilty.
 ***REMOVED******REMOVED***/ If `nil`, there will be no automatic pan/zoom operations or automatic selection support.
 ***REMOVED***private var viewpoint: Binding<Viewpoint>?
-***REMOVED***
+
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***Group {
 ***REMOVED******REMOVED******REMOVED***if viewModel.isLoading {
@@ -87,37 +156,13 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***HStack(alignment: .bottom) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***VStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***VStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if hasLevelsToDisplay {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***LevelsView(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***levels: sortedLevels,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isCollapsed: $isLevelsViewCollapsed
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Divider()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 30)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Site button.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isSelectorHidden.toggle()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "building.2")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(4)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.esriBorder()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if rightAligned {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***siteAndFacilitySelectorView
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***levelSelectorView
+***REMOVED******REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***levelSelectorView
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***siteAndFacilitySelectorView
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***SiteAndFacilitySelector(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isHidden: $isSelectorHidden,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***$selectedFacilityID,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***$selectedSiteID
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.esriBorder()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.opacity(isSelectorHidden ? .zero : 1)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: viewpoint?.wrappedValue.targetGeometry) { _ in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***updateSelection()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
