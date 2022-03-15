@@ -120,6 +120,10 @@ struct SiteAndFacilitySelector: View {
                                     selectedFacilityID: $selectedFacilityID
                                 )
                             }
+                            .onTapGesture {
+                                selectedSiteID = site.siteId
+                                floorFilterViewModel.selection = .site(site)
+                            }
                     }
                     .listStyle(.plain)
                     NavigationLink("All sites") {
