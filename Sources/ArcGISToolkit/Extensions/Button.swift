@@ -13,13 +13,13 @@
 
 import SwiftUI
 
-/// A modifier which "selects" a button.  If selected the button will display with the
-/// `BorderedProminentButtonStyle`.  If not selected, the button will display with the
+/// A modifier which "selects" a button. If selected, the button will be displayed with the
+/// `BorderedProminentButtonStyle`. Otherwise, the button will be displayed with the
 /// `BorderedButtonStyle`.
 struct ButtonSelectedModifier: ViewModifier {
-    /// `true` if the view should display as selected, `false` otherwise.
+    /// A Boolean value that indicates whether view should display as selected.
     var isSelected: Bool
-    
+
     func body(content: Content) -> some View {
         if isSelected {
             content
@@ -34,8 +34,8 @@ struct ButtonSelectedModifier: ViewModifier {
 extension Button {
     /// Button modifier used to denote the button is selected.
     /// - Parameter isSelected: `true` if the button is selected, `false` otherwise.
-    /// - Returns: The button being modified.
-    func buttonSelected(
+    /// - Returns: The modified button.
+    func selected(
         _ isSelected: Bool = false
     ) -> some View {
         modifier(ButtonSelectedModifier(isSelected: isSelected))

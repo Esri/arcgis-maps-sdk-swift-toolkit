@@ -16,18 +16,19 @@ import ArcGIS
 
 /// A view which allows selection of sites and facilities represented in a `FloorManager`.
 struct SiteAndFacilitySelector: View {
-    /// Creates a `SiteAndFacilitySelector`
+    /// Creates a `SiteAndFacilitySelector`.
     /// - Parameter isHidden: A binding used to dismiss the site selector.
     init(isHidden: Binding<Bool>) {
         self.isHidden = isHidden
     }
-    
+
     /// The view model used by the `SiteAndFacilitySelector`.
-    @EnvironmentObject var floorFilterViewModel: FloorFilterViewModel
-    
+    @EnvironmentObject
+    var floorFilterViewModel: FloorFilterViewModel
+
     /// Allows the user to toggle the visibility of the site and facility selector.
     private var isHidden: Binding<Bool>
-    
+
     var body: some View {
         if let selectedSite = floorFilterViewModel.selectedSite {
             Facilities(facilities: selectedSite.facilities, isHidden: isHidden)
@@ -40,13 +41,18 @@ struct SiteAndFacilitySelector: View {
             Sites(sites: floorFilterViewModel.sites, isHidden: isHidden)
         }
     }
-    
+
     /// A view displaying the sites contained in a `FloorManager`.
     struct Sites: View {
+        /// The floor sites.
         let sites: [FloorSite]
+
+        /// Allows the user to toggle the visibility of the sites.
         var isHidden: Binding<Bool>
-        
-        @EnvironmentObject var floorFilterViewModel: FloorFilterViewModel
+
+        /// The view model used by the `Sites`.
+        @EnvironmentObject
+        var floorFilterViewModel: FloorFilterViewModel
 
         /// The height of the scroll view's content.
         @State
@@ -54,7 +60,7 @@ struct SiteAndFacilitySelector: View {
 
         var body: some View {
             VStack(alignment: .center) {
-                Header(title: "Select a site…", isHidden: isHidden)
+                Header(title: "Select a site", isHidden: isHidden)
                 Divider()
                 ScrollView {
                     VStack {
@@ -78,21 +84,21 @@ struct SiteAndFacilitySelector: View {
             }
         }
     }
-    
+
     /// A view displaying the facilities contained in a `FloorManager`.
     struct Facilities: View {
         let facilities: [FloorFacility]
         var isHidden: Binding<Bool>
-        
+
         @EnvironmentObject var floorFilterViewModel: FloorFilterViewModel
-        
+
         /// The height of the scroll view's content.
         @State
         private var scrollViewContentHeight: CGFloat = .zero
-        
+
         var body: some View {
             VStack(alignment: .leading) {
-                Header(title: "Select a facility…", isHidden: isHidden)
+                Header(title: "Select a facility", isHidden: isHidden)
                 Divider()
                 ScrollView {
                     VStack {
@@ -117,12 +123,12 @@ struct SiteAndFacilitySelector: View {
             }
         }
     }
-    
+
     /// The header for a site or facility selector.
     struct Header: View {
         let title: String
         var isHidden: Binding<Bool>
-        
+
         var body: some View {
             HStack {
                 Text(title)
