@@ -333,7 +333,9 @@ struct CollapseButton: View {
     
     var body: some View {
         Button {
-            isCollapsed.toggle()
+            withAnimation {
+                isCollapsed.toggle()
+            }
         } label: {
             Image(systemName: "xmark")
         }
