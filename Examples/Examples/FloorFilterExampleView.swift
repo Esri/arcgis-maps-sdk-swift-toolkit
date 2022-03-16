@@ -16,26 +16,12 @@ import ArcGISToolkit
 import ArcGIS
 
 struct FloorFilterExampleView: View {
-    private let map: Map
-    
-    @State
-    private var viewpoint = Viewpoint(
-        center: Point(x: -117.19496, y: 34.05713, spatialReference: .wgs84),
-        scale: 10_000
-    )
-    
-    @State
-    private var isMapLoaded: Bool = false
-
-    private let filterAlignment = Alignment.bottomLeading
-
-    init() {
-        // Create the map from a portal item and assign to the mapView.
-        
+    /// Make a map from a portal item.
+    static func makeMap() -> Map {
         // Multiple sites/facilities: Esri IST map with all buildings.
 //        let portal = Portal(url: URL(string: "https://indoors.maps.arcgis.com/")!, isLoginRequired: false)
 //        let portalItem = PortalItem(portal: portal, id: Item.ID(rawValue: "49520a67773842f1858602735ef538b5")!)
-        
+
         // Redlands Campus map.
         let portal = Portal(url: URL(string: "https://runtimecoretest.maps.arcgis.com/")!, isLoginRequired: false)
         let portalItem = PortalItem(portal: portal, id: Item.ID(rawValue: "7687805bd42549f5ba41237443d0c60a")!) //<= another multiple sites/facilities
@@ -44,9 +30,22 @@ struct FloorFilterExampleView: View {
 //        let portal = Portal(url: URL(string: "https://indoors.maps.arcgis.com/")!, isLoginRequired: false)
 //        let portalItem = PortalItem(portal: portal, id: Item.ID(rawValue: "f133a698536f44c8884ad81f80b6cfc7")!)
 
-        map = Map(item: portalItem)
+        return Map(item: portalItem)
     }
-    
+
+    private let filterAlignment = Alignment.bottomLeading
+
+    @State
+    private var isMapLoaded: Bool = false
+
+    private var map = makeMap()
+
+    @State
+    private var viewpoint = Viewpoint(
+        center: Point(x: -117.19496, y: 34.05713, spatialReference: .wgs84),
+        scale: 100_000
+    )
+
     var body: some View {
         MapView(
             map: map,
@@ -63,8 +62,8 @@ struct FloorFilterExampleView: View {
                     floorManager: floorManager,
                     viewpoint: $viewpoint
                 )
-                    .frame(maxWidth: 300, maxHeight: 300)
-                    .padding(36)
+                .frame(maxWidth: 300, maxHeight: 300)
+                .padding(36)
             }
         }
         .task {
