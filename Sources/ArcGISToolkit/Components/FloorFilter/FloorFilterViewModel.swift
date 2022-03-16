@@ -17,16 +17,6 @@ import ArcGIS
 /// Manages the state for a `FloorFilter`.
 @MainActor
 final class FloorFilterViewModel: ObservableObject {
-    ///  A selected site, floor, or level.
-    enum Selection {
-        /// A selected site.
-        case site(FloorSite)
-        /// A selected facility.
-        case facility(FloorFacility)
-        /// A selected level.
-        case level(FloorLevel)
-    }
-    
     /// Creates a `FloorFilterViewModel`.
     /// - Parameters:
     ///   - floorManager: The floor manager used by the `FloorFilterViewModel`.
@@ -43,7 +33,7 @@ final class FloorFilterViewModel: ObservableObject {
                 try await floorManager.load()
                 if sites.count == 1 {
                     // If we have only one site, select it.
-                    selection = .site(sites.first!)
+                    setSite(sites.first!, zoomTo: true)
                 }
             } catch  {
                 print("error: \(error)")
@@ -97,78 +87,61 @@ final class FloorFilterViewModel: ObservableObject {
             $0.verticalOrder != .min && $0.verticalOrder != .max
         }
     }
-    
-    /// The selected site, floor, or level.
+
     @Published
-    var selection: Selection? {
-        didSet {
-            if case let .facility(facility) = selection,
-               let level = defaultLevel(for: facility) {
-                selection = .level(level)
-            } else {
-                filterMapToSelectedLevel()
-            }
-            zoomToSelection()
+    var selectedSite: FloorSite?
+
+    @Published
+    var selectedFacility: FloorFacility?
+
+    @Published
+    private(set) var selectedLevel: FloorLevel?
+
+    // MARK: Set selectionmethods
+
+    /// Updates the selected site, facility, and level based on a newly selected site.
+    /// - Parameters:
+    ///   - floorSite: The selected site.
+    ///   - zoomTo: The viewpoint should be updated to show to the extent of this site.
+    func setSite(
+        _ floorSite: FloorSite?,
+        zoomTo: Bool = false
+    ) {
+        selectedSite = floorSite
+        selectedFacility = nil
+        selectedLevel = nil
+        if zoomTo {
+            zoomToExtent(extent: floorSite?.geometry?.extent)
         }
     }
-    
-    /// The selected site.
-    var selectedSite: FloorSite? {
-        guard let selection = selection else {
-            return nil
-        }
-        
-        switch selection {
-        case .site(let site):
-            return site
-        case .facility(let facility):
-            return facility.site
-        case .level(let level):
-            return level.facility?.site
-        }
-    }
-    
-    /// The selected facility.
-    var selectedFacility: FloorFacility? {
-        guard let selection = selection else {
-            return nil
-        }
-        
-        switch selection {
-        case .site:
-            return nil
-        case .facility(let facility):
-            return facility
-        case .level(let level):
-            return level.facility
+
+    /// Updates the selected site, facility, and level based on a newly selected facility.
+    /// - Parameters:
+    ///   - floorFacility: The selected facility.
+    ///   - zoomTo: The viewpoint should be updated to show to the extent of this facility.
+    func setFacility(
+        _ floorFacility: FloorFacility?,
+        zoomTo: Bool = false
+    ) {
+        selectedSite = floorFacility?.site
+        selectedFacility = floorFacility
+        selectedLevel = defaultLevel(for: floorFacility)
+        if zoomTo {
+            zoomToExtent(extent: floorFacility?.geometry?.extent)
         }
     }
-    
-    /// The selected level.
-    var selectedLevel: FloorLevel? {
-        if case let .level(level) = selection {
-            return level
-        } else {
-            return nil
-        }
+
+    /// Updates the selected site, facility, and level based on a newly selected level.
+    /// - Parameter floorLevel: The selected level.
+    func setLevel(_ floorLevel: FloorLevel?) {
+        selectedSite = floorLevel?.facility?.site
+        selectedFacility = floorLevel?.facility
+        selectedLevel = floorLevel
+        filterMapToSelectedLevel()
     }
-    
-    /// Zooms to the selected facility; if there is no selected facility, zooms to the selected site.
-    func zoomToSelection() {
-        guard let selection = selection else {
-            return
-        }
-        
-        switch selection {
-        case .site(let site):
-            zoomToExtent(extent: site.geometry?.extent)
-        case .facility(let facility):
-            zoomToExtent(extent: facility.geometry?.extent)
-        case .level(let level):
-            zoomToExtent(extent: level.facility?.geometry?.extent)
-        }
-    }
-    
+
+    /// Updates the viewpoint to display a given extent.
+    /// - Parameter extent: The new extent to be shown.
     private func zoomToExtent(extent: Envelope?) {
         // Make sure we have an extent and viewpoint to zoom to.
         guard let extent = extent,
@@ -186,10 +159,17 @@ final class FloorFilterViewModel: ObservableObject {
     }
     
     /// Sets the visibility of all the levels on the map based on the vertical order of the current selected level.
-    public func filterMapToSelectedLevel() {
+    private func filterMapToSelectedLevel() {
         guard let selectedLevel = selectedLevel else { return }
         levels.forEach {
             $0.isVisible = $0.verticalOrder == selectedLevel.verticalOrder
         }
+    }
+}
+
+extension FloorSite: Hashable {
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(self.siteId)
+        hasher.combine(self.name)
     }
 }
