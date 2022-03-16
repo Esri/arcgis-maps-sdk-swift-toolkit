@@ -99,22 +99,10 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED******REMOVED***return false
 ***REMOVED***
 ***REMOVED***
-
-***REMOVED******REMOVED***/ Indicates the implicity selected facility based on the current viewpoint.
-***REMOVED***@State
-***REMOVED***private var selectedFacilityID: String? = nil
-
-***REMOVED******REMOVED***/ Indicates the implicity selected site based on the current viewpoint.
-***REMOVED***@State
-***REMOVED***private var selectedSiteID: String? = nil
 ***REMOVED***
 ***REMOVED******REMOVED***/ A configured `SiteAndFacilitySelector` view.
 ***REMOVED***private var siteAndFacilitySelectorView: some View {
-***REMOVED******REMOVED***SiteAndFacilitySelector(
-***REMOVED******REMOVED******REMOVED***isHidden: $isSelectorHidden,
-***REMOVED******REMOVED******REMOVED***$selectedFacilityID,
-***REMOVED******REMOVED******REMOVED***$selectedSiteID
-***REMOVED******REMOVED***)
+***REMOVED******REMOVED***SiteAndFacilitySelector(isHidden: $isSelectorHidden)
 ***REMOVED******REMOVED***.esriBorder()
 ***REMOVED******REMOVED***.opacity(isSelectorHidden ? .zero : 1)
 ***REMOVED******REMOVED***.onChange(of: viewpoint?.wrappedValue.targetGeometry) { _ in
@@ -124,15 +112,8 @@ public struct FloorFilter: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ The selected facility's levels, sorted by `level.verticalOrder`.
 ***REMOVED***private var sortedLevels: [FloorLevel] {
-***REMOVED******REMOVED***var levels: [FloorLevel]
-***REMOVED******REMOVED***if selectedFacilityID != nil {
-***REMOVED******REMOVED******REMOVED***levels = viewModel.facilities.first { facility in
-***REMOVED******REMOVED******REMOVED******REMOVED***facility.id == selectedFacilityID
-***REMOVED******REMOVED***?.levels ?? []
-***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***levels = viewModel.selectedFacility?.levels ?? []
-***REMOVED***
-***REMOVED******REMOVED***return levels.sorted() {
+***REMOVED******REMOVED***let levels = viewModel.selectedFacility?.levels ?? []
+***REMOVED******REMOVED***return levels.sorted {
 ***REMOVED******REMOVED******REMOVED***$0.verticalOrder > $1.verticalOrder
 ***REMOVED***
 ***REMOVED***
@@ -184,7 +165,7 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED***/ viewpoint.
 ***REMOVED***private func updateSelection() {
 ***REMOVED******REMOVED***guard let viewpoint = viewpoint?.wrappedValue,
-***REMOVED******REMOVED******REMOVED******REMOVED***viewpoint.targetScale != .zero,
+***REMOVED******REMOVED******REMOVED******REMOVED***  !viewpoint.targetScale.isZero,
 ***REMOVED******REMOVED******REMOVED******REMOVED***automaticSelectionMode != .never else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***  return
 ***REMOVED***  ***REMOVED***
@@ -200,13 +181,33 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED******REMOVED*** and return
 ***REMOVED******REMOVED***if viewpoint.targetScale > targetScale {
 ***REMOVED******REMOVED******REMOVED***if automaticSelectionMode == .always {
-***REMOVED******REMOVED******REMOVED******REMOVED***selectedSiteID = nil
-***REMOVED******REMOVED******REMOVED******REMOVED***selectedFacilityID = nil
+***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.setSite(nil)
+***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.setFacility(nil)
+***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.setLevel(nil)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Assumption: if too zoomed out to see sites, also too zoomed out
 ***REMOVED******REMOVED******REMOVED******REMOVED*** to see facilities
 ***REMOVED******REMOVED******REMOVED***return
 ***REMOVED***
+
+
+***REMOVED******REMOVED***let facilityResult = viewModel.floorManager.facilities.first { facility in
+***REMOVED******REMOVED******REMOVED***guard let facilityExtent = facility.geometry?.extent else {
+***REMOVED******REMOVED******REMOVED******REMOVED***return false
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***return GeometryEngine.intersects(
+***REMOVED******REMOVED******REMOVED******REMOVED***geometry1: facilityExtent,
+***REMOVED******REMOVED******REMOVED******REMOVED***geometry2: viewpoint.targetGeometry
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED***
+
+***REMOVED******REMOVED***if let facilityResult = facilityResult {
+***REMOVED******REMOVED******REMOVED***viewModel.setFacility(facilityResult)
+***REMOVED******REMOVED******REMOVED***return
+***REMOVED*** else if automaticSelectionMode == .always {
+***REMOVED******REMOVED******REMOVED***viewModel.setFacility(nil)
+***REMOVED***
+
 
 ***REMOVED******REMOVED******REMOVED*** If the centerpoint is within a site's geometry, select that site.
 ***REMOVED******REMOVED******REMOVED*** This code gracefully skips selection if there are no sites or no
@@ -222,37 +223,9 @@ public struct FloorFilter: View {
 ***REMOVED***
 
 ***REMOVED******REMOVED***if let siteResult = siteResult {
-***REMOVED******REMOVED******REMOVED***selectedSiteID = siteResult.siteId
+***REMOVED******REMOVED******REMOVED***viewModel.setSite(siteResult)
 ***REMOVED*** else if automaticSelectionMode == .always {
-***REMOVED******REMOVED******REMOVED***selectedSiteID = nil
-***REMOVED***
-
-***REMOVED******REMOVED******REMOVED*** Move on to facility selection. Default to map-authored Facility
-***REMOVED******REMOVED******REMOVED*** MinScale. If MinScale not specified or is 0, default to 1500.
-***REMOVED******REMOVED***targetScale = viewModel.floorManager.facilityLayer?.minScale ?? .zero
-***REMOVED******REMOVED***if targetScale.isZero  {
-***REMOVED******REMOVED******REMOVED***targetScale = 1500
-***REMOVED***
-
-***REMOVED******REMOVED******REMOVED*** If out of scale, stop here
-***REMOVED******REMOVED***if viewpoint.targetScale > targetScale {
-***REMOVED******REMOVED******REMOVED***return
-***REMOVED***
-
-***REMOVED******REMOVED***let facilityResult = viewModel.floorManager.facilities.first { facility in
-***REMOVED******REMOVED******REMOVED***guard let facilityExtent = facility.geometry?.extent else {
-***REMOVED******REMOVED******REMOVED******REMOVED***return false
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***return GeometryEngine.intersects(
-***REMOVED******REMOVED******REMOVED******REMOVED***geometry1: facilityExtent,
-***REMOVED******REMOVED******REMOVED******REMOVED***geometry2: viewpoint.targetGeometry
-***REMOVED******REMOVED******REMOVED***)
-***REMOVED***
-
-***REMOVED******REMOVED***if let facilityResult = facilityResult {
-***REMOVED******REMOVED******REMOVED***selectedFacilityID = facilityResult.facilityId
-***REMOVED*** else if automaticSelectionMode == .always {
-***REMOVED******REMOVED******REMOVED***selectedFacilityID = nil
+***REMOVED******REMOVED******REMOVED***viewModel.setSite(nil)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -324,7 +297,7 @@ struct LevelsStack: View {
 ***REMOVED******REMOVED***VStack {
 ***REMOVED******REMOVED******REMOVED***ForEach(levels) { level in
 ***REMOVED******REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.selection = .level(level)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.setLevel(level)
 ***REMOVED******REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(level.shortName)
 ***REMOVED******REMOVED******REMOVED***
