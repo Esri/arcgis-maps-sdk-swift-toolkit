@@ -51,11 +51,11 @@ public struct FloorFilter: View {
         !(viewModel.selectedFacility == nil ||
           viewModel.selectedFacility!.levels.isEmpty)
     }
-    
+
     /// A Boolean value that indicates whether the site/facility selector is hidden.
     @State
     private var isSelectorHidden: Bool = true
-    
+
     /// A Boolean value that indicates whether the levels view is currently collapsed.
     @State
     private var isLevelsViewCollapsed: Bool = false
@@ -99,7 +99,7 @@ public struct FloorFilter: View {
             return false
         }
     }
-    
+
     /// A configured `SiteAndFacilitySelector` view.
     private var siteAndFacilitySelectorView: some View {
         SiteAndFacilitySelector(isHidden: $isSelectorHidden)
@@ -109,7 +109,7 @@ public struct FloorFilter: View {
             updateSelection()
         }
     }
-    
+
     /// The selected facility's levels, sorted by `level.verticalOrder`.
     private var sortedLevels: [FloorLevel] {
         let levels = viewModel.selectedFacility?.levels ?? []
@@ -234,20 +234,20 @@ public struct FloorFilter: View {
 struct LevelsView: View {
     /// The levels to display.
     let levels: [FloorLevel]
-    
+
     /// A Boolean value indicating the whether the view shows only the selected level or all levels.
     /// If the value is`false`, the view will display all levels; if it is `true`, the view will only display
     /// the selected level.
     @Binding
     var isCollapsed: Bool
-    
+
     /// The view model used by the `LevelsView`.
     @EnvironmentObject var viewModel: FloorFilterViewModel
-    
+
     /// The height of the scroll view's content.
     @State
     private var scrollViewContentHeight: CGFloat = .zero
-    
+
     public var body: some View {
         VStack {
             if !isCollapsed,
@@ -279,7 +279,7 @@ struct LevelsView: View {
                 } label: {
                     Text(viewModel.selectedLevel?.shortName ?? (levels.first?.shortName ?? "None"))
                 }
-                .buttonSelected(true)
+                .selected(true)
                 .padding(4)
             }
         }
@@ -289,10 +289,10 @@ struct LevelsView: View {
 /// A vertical list of floor levels.
 struct LevelsStack: View {
     let levels: [FloorLevel]
-    
+
     /// The view model used by the `LevelsView`.
     @EnvironmentObject var viewModel: FloorFilterViewModel
-    
+
     var body: some View {
         VStack {
             ForEach(levels) { level in
@@ -301,7 +301,7 @@ struct LevelsStack: View {
                 } label: {
                     Text(level.shortName)
                 }
-                .buttonSelected(level == viewModel.selectedLevel)
+                .selected(level == viewModel.selectedLevel)
                 .padding(4)
             }
         }
@@ -313,7 +313,7 @@ struct CollapseButton: View {
     /// Allows the user to toggle the visibility of the site and facility selector.
     @Binding
     var isCollapsed: Bool
-    
+
     var body: some View {
         Button {
             withAnimation {

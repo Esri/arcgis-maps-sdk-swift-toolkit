@@ -28,7 +28,7 @@ struct SiteAndFacilitySelector: View {
 
     /// The view model used by the `SiteAndFacilitySelector`.
     @EnvironmentObject var floorFilterViewModel: FloorFilterViewModel
-    
+
     /// Allows the user to toggle the visibility of the site and facility selector.
     private var isHidden: Binding<Bool>
 
@@ -48,7 +48,7 @@ struct SiteAndFacilitySelector: View {
             }
         }
     }
-    
+
     /// A view displaying the sites contained in a `FloorManager`.
     struct Sites: View {
         /// The view model used by this selector.
@@ -116,7 +116,7 @@ struct SiteAndFacilitySelector: View {
             .navigationViewStyle(.stack)
         }
     }
-    
+
     /// A view displaying the facilities contained in a `FloorManager`.
     struct Facilities: View {
         /// `FloorFacility`s to be displayed by this view.

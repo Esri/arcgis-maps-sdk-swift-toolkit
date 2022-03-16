@@ -15,16 +15,17 @@ import SwiftUI
 
 /// A modifier which displays a background and shadow for a view. Used to represent a selected view.
 struct SelectedModifier: ViewModifier {
-    /// A Boolean value that indicates whether view should display as selected.
+    /// `true` if the view should display as selected, `false` otherwise.
     var isSelected: Bool
-
+    
     func body(content: Content) -> some View {
+        let roundedRect = RoundedRectangle(cornerRadius: 4)
         if isSelected {
             content
                 .background(Color.secondary.opacity(0.8))
-                .clipShape(RoundedRectangle(cornerRadius: 4))
+                .clipShape(roundedRect)
                 .shadow(
-                    color: .secondary.opacity(0.8),
+                    color: Color.secondary.opacity(0.8),
                     radius: 2
                 )
         } else {
@@ -42,9 +43,7 @@ extension View {
         background(
             GeometryReader { geometry in
                 Color.clear
-                    .preference(
-                        key: SizePreferenceKey.self, value: geometry.size
-                    )
+                    .preference(key: SizePreferenceKey.self, value: geometry.size)
             }
         )
         .onPreferenceChange(SizePreferenceKey.self, perform: perform)
@@ -52,7 +51,7 @@ extension View {
 
     /// View modifier used to denote the view is selected.
     /// - Parameter isSelected: `true` if the view is selected, `false` otherwise.
-    /// - Returns: The modified view.
+    /// - Returns: The view being modified.
     func selected(
         _ isSelected: Bool = false
     ) -> some View {
