@@ -35,7 +35,7 @@ final class FloorFilterViewModel: ObservableObject {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** If we have only one site, select it.
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***setSite(sites.first!, zoomTo: true)
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED*** catch  {
+***REMOVED******REMOVED*** catch {
 ***REMOVED******REMOVED******REMOVED******REMOVED***print("error: \(error)")
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***isLoading = false
