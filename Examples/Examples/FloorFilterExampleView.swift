@@ -33,6 +33,9 @@ struct FloorFilterExampleView: View {
         return Map(item: portalItem)
     }
 
+    @State
+    private var isMapLoaded: Bool = false
+
     private var map = makeMap()
 
     @State
@@ -45,37 +48,30 @@ struct FloorFilterExampleView: View {
     )
 
     var body: some View {
-        Group {
-            if let mapLoadResult = mapLoadResult {
-                switch mapLoadResult {
-                case .success(let value):
-                    MapView(
-                        map: value,
-                        viewpoint: viewpoint
-                    )
-                case .failure(let error):
-                    Text("Error loading map: \(error.localizedDescription)")
-                        .padding()
-                }
-            } else {
-                ProgressView()
-            }
-        }
-        .task {
-            mapLoadResult = await Result {
-                try await map.load()
-                return map
-            }
+        MapView(
+            map: map,
+            viewpoint: viewpoint
+        )
+        .onViewpointChanged(kind: .centerAndScale) {
+            viewpoint = $0
         }
         .overlay(alignment: .bottomLeading) {
-            if map.loadStatus == .loaded,
-            let floorManager = map.floorManager {
+            if isMapLoaded,
+               let floorManager = map.floorManager {
                 FloorFilter(
                     floorManager: floorManager,
                     viewpoint: $viewpoint
                 )
                 .frame(height: 300)
                 .padding(36)
+            }
+        }
+        .task {
+            do {
+                try await map.load()
+                isMapLoaded = true
+            } catch {
+                print("load error: \(error)")
             }
         }
     }
