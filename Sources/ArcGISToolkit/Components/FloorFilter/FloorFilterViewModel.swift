@@ -35,7 +35,7 @@ final class FloorFilterViewModel: ObservableObject {
                     // If we have only one site, select it.
                     setSite(sites.first!, zoomTo: true)
                 }
-            } catch  {
+            } catch {
                 print("error: \(error)")
             }
             isLoading = false
