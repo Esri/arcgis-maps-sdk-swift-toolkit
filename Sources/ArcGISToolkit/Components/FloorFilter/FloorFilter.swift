@@ -51,11 +51,11 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED***!(viewModel.selectedFacility == nil ||
 ***REMOVED******REMOVED***  viewModel.selectedFacility!.levels.isEmpty)
 ***REMOVED***
-***REMOVED***
+
 ***REMOVED******REMOVED***/ A Boolean value that indicates whether the site/facility selector is hidden.
 ***REMOVED***@State
 ***REMOVED***private var isSelectorHidden: Bool = true
-***REMOVED***
+
 ***REMOVED******REMOVED***/ A Boolean value that indicates whether the levels view is currently collapsed.
 ***REMOVED***@State
 ***REMOVED***private var isLevelsViewCollapsed: Bool = false
@@ -99,7 +99,7 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED******REMOVED***return false
 ***REMOVED***
 ***REMOVED***
-***REMOVED***
+
 ***REMOVED******REMOVED***/ A configured `SiteAndFacilitySelector` view.
 ***REMOVED***private var siteAndFacilitySelectorView: some View {
 ***REMOVED******REMOVED***SiteAndFacilitySelector(isHidden: $isSelectorHidden)
@@ -109,7 +109,7 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED******REMOVED***updateSelection()
 ***REMOVED***
 ***REMOVED***
-***REMOVED***
+
 ***REMOVED******REMOVED***/ The selected facility's levels, sorted by `level.verticalOrder`.
 ***REMOVED***private var sortedLevels: [FloorLevel] {
 ***REMOVED******REMOVED***let levels = viewModel.selectedFacility?.levels ?? []
@@ -234,20 +234,20 @@ public struct FloorFilter: View {
 struct LevelsView: View {
 ***REMOVED******REMOVED***/ The levels to display.
 ***REMOVED***let levels: [FloorLevel]
-***REMOVED***
+
 ***REMOVED******REMOVED***/ A Boolean value indicating the whether the view shows only the selected level or all levels.
 ***REMOVED******REMOVED***/ If the value is`false`, the view will display all levels; if it is `true`, the view will only display
 ***REMOVED******REMOVED***/ the selected level.
 ***REMOVED***@Binding
 ***REMOVED***var isCollapsed: Bool
-***REMOVED***
+
 ***REMOVED******REMOVED***/ The view model used by the `LevelsView`.
 ***REMOVED***@EnvironmentObject var viewModel: FloorFilterViewModel
-***REMOVED***
+
 ***REMOVED******REMOVED***/ The height of the scroll view's content.
 ***REMOVED***@State
 ***REMOVED***private var scrollViewContentHeight: CGFloat = .zero
-***REMOVED***
+
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***VStack {
 ***REMOVED******REMOVED******REMOVED***if !isCollapsed,
@@ -279,7 +279,7 @@ struct LevelsView: View {
 ***REMOVED******REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(viewModel.selectedLevel?.shortName ?? (levels.first?.shortName ?? "None"))
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.buttonSelected(true)
+***REMOVED******REMOVED******REMOVED******REMOVED***.selected(true)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding(4)
 ***REMOVED******REMOVED***
 ***REMOVED***
@@ -289,10 +289,10 @@ struct LevelsView: View {
 ***REMOVED***/ A vertical list of floor levels.
 struct LevelsStack: View {
 ***REMOVED***let levels: [FloorLevel]
-***REMOVED***
+
 ***REMOVED******REMOVED***/ The view model used by the `LevelsView`.
 ***REMOVED***@EnvironmentObject var viewModel: FloorFilterViewModel
-***REMOVED***
+
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***VStack {
 ***REMOVED******REMOVED******REMOVED***ForEach(levels) { level in
@@ -301,7 +301,7 @@ struct LevelsStack: View {
 ***REMOVED******REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(level.shortName)
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.buttonSelected(level == viewModel.selectedLevel)
+***REMOVED******REMOVED******REMOVED******REMOVED***.selected(level == viewModel.selectedLevel)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding(4)
 ***REMOVED******REMOVED***
 ***REMOVED***
@@ -313,7 +313,7 @@ struct CollapseButton: View {
 ***REMOVED******REMOVED***/ Allows the user to toggle the visibility of the site and facility selector.
 ***REMOVED***@Binding
 ***REMOVED***var isCollapsed: Bool
-***REMOVED***
+
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED***withAnimation {

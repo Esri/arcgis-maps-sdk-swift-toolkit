@@ -45,20 +45,20 @@ final class FloorFilterViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ The `Viewpoint` used to pan/zoom to the selected site/facilty.
 ***REMOVED******REMOVED***/ If `nil`, there will be no automatic pan/zoom operations.
 ***REMOVED***var viewpoint: Binding<Viewpoint>?
-***REMOVED***
+
 ***REMOVED******REMOVED***/ The `FloorManager` containing the site, floor, and level information.
 ***REMOVED***let floorManager: FloorManager
-***REMOVED***
+
 ***REMOVED******REMOVED***/ The floor manager sites.
 ***REMOVED***var sites: [FloorSite] {
 ***REMOVED******REMOVED***floorManager.sites
 ***REMOVED***
-***REMOVED***
+
 ***REMOVED******REMOVED***/ The floor manager facilities.
 ***REMOVED***var facilities: [FloorFacility] {
 ***REMOVED******REMOVED***floorManager.facilities
 ***REMOVED***
-***REMOVED***
+
 ***REMOVED******REMOVED***/ The floor manager levels.
 ***REMOVED***var levels: [FloorLevel] {
 ***REMOVED******REMOVED***floorManager.levels
@@ -67,7 +67,7 @@ final class FloorFilterViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ `true` if the model is loading it's properties, `false` if not loading.
 ***REMOVED***@Published
 ***REMOVED***private(set) var isLoading = true
-***REMOVED***
+
 ***REMOVED******REMOVED***/ Gets the default level for a facility.
 ***REMOVED******REMOVED***/ - Parameter facility: The facility to get the default level for.
 ***REMOVED******REMOVED***/ - Returns: The default level for the facility, which is the level with vertical order 0;
@@ -77,7 +77,7 @@ final class FloorFilterViewModel: ObservableObject {
 ***REMOVED******REMOVED******REMOVED***level.facility == facility && level.verticalOrder == .zero
 ***REMOVED***) ?? lowestLevel()
 ***REMOVED***
-***REMOVED***
+
 ***REMOVED******REMOVED***/ Returns the level with the lowest vertical order.
 ***REMOVED***private func lowestLevel() -> FloorLevel? {
 ***REMOVED******REMOVED***let sortedLevels = levels.sorted {
@@ -147,7 +147,7 @@ final class FloorFilterViewModel: ObservableObject {
 ***REMOVED******REMOVED***guard let extent = extent,
 ***REMOVED******REMOVED******REMOVED***  let viewpoint = viewpoint
 ***REMOVED******REMOVED***else { return ***REMOVED***
-***REMOVED******REMOVED***
+
 ***REMOVED******REMOVED***let builder = EnvelopeBuilder(envelope: extent)
 ***REMOVED******REMOVED***builder.expand(factor: 1.5)
 ***REMOVED******REMOVED***let targetExtent = builder.toGeometry()
@@ -157,7 +157,7 @@ final class FloorFilterViewModel: ObservableObject {
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***
+
 ***REMOVED******REMOVED***/ Sets the visibility of all the levels on the map based on the vertical order of the current selected level.
 ***REMOVED***private func filterMapToSelectedLevel() {
 ***REMOVED******REMOVED***guard let selectedLevel = selectedLevel else { return ***REMOVED***
