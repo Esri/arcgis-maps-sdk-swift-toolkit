@@ -22,9 +22,9 @@ struct FloorFilterExampleView: View {
 ***REMOVED******REMOVED******REMOVED***let portal = Portal(url: URL(string: "https:***REMOVED***indoors.maps.arcgis.com/")!, isLoginRequired: false)
 ***REMOVED******REMOVED******REMOVED***let portalItem = PortalItem(portal: portal, id: Item.ID(rawValue: "49520a67773842f1858602735ef538b5")!)
 
-***REMOVED******REMOVED******REMOVED*** Redlands Campus map.
+***REMOVED******REMOVED******REMOVED*** Redlands Campus map with multiple sites and facilities
 ***REMOVED******REMOVED***let portal = Portal(url: URL(string: "https:***REMOVED***runtimecoretest.maps.arcgis.com/")!, isLoginRequired: false)
-***REMOVED******REMOVED***let portalItem = PortalItem(portal: portal, id: Item.ID(rawValue: "7687805bd42549f5ba41237443d0c60a")!) ***REMOVED***<= another multiple sites/facilities
+***REMOVED******REMOVED***let portalItem = PortalItem(portal: portal, id: Item.ID(rawValue: "7687805bd42549f5ba41237443d0c60a")!)
 
 ***REMOVED******REMOVED******REMOVED*** Single site (ESRI Redlands Main) and facility (Building L).
 ***REMOVED******REMOVED******REMOVED***let portal = Portal(url: URL(string: "https:***REMOVED***indoors.maps.arcgis.com/")!, isLoginRequired: false)
