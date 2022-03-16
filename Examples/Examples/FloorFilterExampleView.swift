@@ -52,28 +52,28 @@ struct FloorFilterExampleView: View {
             map: map,
             viewpoint: viewpoint
         )
-            .onViewpointChanged(kind: .centerAndScale) {
-                viewpoint = $0
+        .onViewpointChanged(kind: .centerAndScale) {
+            viewpoint = $0
+        }
+        .overlay(alignment: filterAlignment) {
+            if isMapLoaded,
+               let floorManager = map.floorManager {
+                FloorFilter(
+                    alignment: filterAlignment,
+                    floorManager: floorManager,
+                    viewpoint: $viewpoint
+                )
+                    .frame(maxWidth: 300, maxHeight: 300)
+                    .padding(36)
             }
-            .overlay(alignment: filterAlignment) {
-                if isMapLoaded,
-                   let floorManager = map.floorManager {
-                    FloorFilter(
-                        alignment: filterAlignment,
-                        floorManager: floorManager,
-                        viewpoint: $viewpoint
-                    )
-                        .frame(maxWidth: 300, maxHeight: 300)
-                        .padding(36)
-                }
+        }
+        .task {
+            do {
+                try await map.load()
+                isMapLoaded = true
+            } catch {
+                print("load error: \(error)")
             }
-            .task {
-                do {
-                    try await map.load()
-                    isMapLoaded = true
-                } catch {
-                    print("load error: \(error)")
-                }
-            }
+        }
     }
 }
