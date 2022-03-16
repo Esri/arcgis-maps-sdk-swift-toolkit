@@ -17,16 +17,6 @@
 ***REMOVED***/ Manages the state for a `FloorFilter`.
 @MainActor
 final class FloorFilterViewModel: ObservableObject {
-***REMOVED******REMOVED***/  A selected site, floor, or level.
-***REMOVED***enum Selection {
-***REMOVED******REMOVED******REMOVED***/ A selected site.
-***REMOVED******REMOVED***case site(FloorSite)
-***REMOVED******REMOVED******REMOVED***/ A selected facility.
-***REMOVED******REMOVED***case facility(FloorFacility)
-***REMOVED******REMOVED******REMOVED***/ A selected level.
-***REMOVED******REMOVED***case level(FloorLevel)
-***REMOVED***
-***REMOVED***
 ***REMOVED******REMOVED***/ Creates a `FloorFilterViewModel`.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - floorManager: The floor manager used by the `FloorFilterViewModel`.
@@ -43,7 +33,7 @@ final class FloorFilterViewModel: ObservableObject {
 ***REMOVED******REMOVED******REMOVED******REMOVED***try await floorManager.load()
 ***REMOVED******REMOVED******REMOVED******REMOVED***if sites.count == 1 {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** If we have only one site, select it.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selection = .site(sites.first!)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***setSite(sites.first!, zoomTo: true)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED*** catch  {
 ***REMOVED******REMOVED******REMOVED******REMOVED***print("error: \(error)")
@@ -97,78 +87,61 @@ final class FloorFilterViewModel: ObservableObject {
 ***REMOVED******REMOVED******REMOVED***$0.verticalOrder != .min && $0.verticalOrder != .max
 ***REMOVED***
 ***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ The selected site, floor, or level.
+
 ***REMOVED***@Published
-***REMOVED***var selection: Selection? {
-***REMOVED******REMOVED***didSet {
-***REMOVED******REMOVED******REMOVED***if case let .facility(facility) = selection,
-***REMOVED******REMOVED******REMOVED***   let level = defaultLevel(for: facility) {
-***REMOVED******REMOVED******REMOVED******REMOVED***selection = .level(level)
-***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***filterMapToSelectedLevel()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***zoomToSelection()
+***REMOVED***var selectedSite: FloorSite?
+
+***REMOVED***@Published
+***REMOVED***var selectedFacility: FloorFacility?
+
+***REMOVED***@Published
+***REMOVED***private(set) var selectedLevel: FloorLevel?
+
+***REMOVED******REMOVED*** MARK: Set selectionmethods
+
+***REMOVED******REMOVED***/ Updates the selected site, facility, and level based on a newly selected site.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - floorSite: The selected site.
+***REMOVED******REMOVED***/   - zoomTo: The viewpoint should be updated to show to the extent of this site.
+***REMOVED***func setSite(
+***REMOVED******REMOVED***_ floorSite: FloorSite?,
+***REMOVED******REMOVED***zoomTo: Bool = false
+***REMOVED***) {
+***REMOVED******REMOVED***selectedSite = floorSite
+***REMOVED******REMOVED***selectedFacility = nil
+***REMOVED******REMOVED***selectedLevel = nil
+***REMOVED******REMOVED***if zoomTo {
+***REMOVED******REMOVED******REMOVED***zoomToExtent(extent: floorSite?.geometry?.extent)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ The selected site.
-***REMOVED***var selectedSite: FloorSite? {
-***REMOVED******REMOVED***guard let selection = selection else {
-***REMOVED******REMOVED******REMOVED***return nil
-***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***switch selection {
-***REMOVED******REMOVED***case .site(let site):
-***REMOVED******REMOVED******REMOVED***return site
-***REMOVED******REMOVED***case .facility(let facility):
-***REMOVED******REMOVED******REMOVED***return facility.site
-***REMOVED******REMOVED***case .level(let level):
-***REMOVED******REMOVED******REMOVED***return level.facility?.site
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ The selected facility.
-***REMOVED***var selectedFacility: FloorFacility? {
-***REMOVED******REMOVED***guard let selection = selection else {
-***REMOVED******REMOVED******REMOVED***return nil
-***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***switch selection {
-***REMOVED******REMOVED***case .site:
-***REMOVED******REMOVED******REMOVED***return nil
-***REMOVED******REMOVED***case .facility(let facility):
-***REMOVED******REMOVED******REMOVED***return facility
-***REMOVED******REMOVED***case .level(let level):
-***REMOVED******REMOVED******REMOVED***return level.facility
+
+***REMOVED******REMOVED***/ Updates the selected site, facility, and level based on a newly selected facility.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - floorFacility: The selected facility.
+***REMOVED******REMOVED***/   - zoomTo: The viewpoint should be updated to show to the extent of this facility.
+***REMOVED***func setFacility(
+***REMOVED******REMOVED***_ floorFacility: FloorFacility?,
+***REMOVED******REMOVED***zoomTo: Bool = false
+***REMOVED***) {
+***REMOVED******REMOVED***selectedSite = floorFacility?.site
+***REMOVED******REMOVED***selectedFacility = floorFacility
+***REMOVED******REMOVED***selectedLevel = defaultLevel(for: floorFacility)
+***REMOVED******REMOVED***if zoomTo {
+***REMOVED******REMOVED******REMOVED***zoomToExtent(extent: floorFacility?.geometry?.extent)
 ***REMOVED***
 ***REMOVED***
+
+***REMOVED******REMOVED***/ Updates the selected site, facility, and level based on a newly selected level.
+***REMOVED******REMOVED***/ - Parameter floorLevel: The selected level.
+***REMOVED***func setLevel(_ floorLevel: FloorLevel?) {
+***REMOVED******REMOVED***selectedSite = floorLevel?.facility?.site
+***REMOVED******REMOVED***selectedFacility = floorLevel?.facility
+***REMOVED******REMOVED***selectedLevel = floorLevel
+***REMOVED******REMOVED***filterMapToSelectedLevel()
 ***REMOVED***
-***REMOVED******REMOVED***/ The selected level.
-***REMOVED***var selectedLevel: FloorLevel? {
-***REMOVED******REMOVED***if case let .level(level) = selection {
-***REMOVED******REMOVED******REMOVED***return level
-***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***return nil
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ Zooms to the selected facility; if there is no selected facility, zooms to the selected site.
-***REMOVED***func zoomToSelection() {
-***REMOVED******REMOVED***guard let selection = selection else {
-***REMOVED******REMOVED******REMOVED***return
-***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***switch selection {
-***REMOVED******REMOVED***case .site(let site):
-***REMOVED******REMOVED******REMOVED***zoomToExtent(extent: site.geometry?.extent)
-***REMOVED******REMOVED***case .facility(let facility):
-***REMOVED******REMOVED******REMOVED***zoomToExtent(extent: facility.geometry?.extent)
-***REMOVED******REMOVED***case .level(let level):
-***REMOVED******REMOVED******REMOVED***zoomToExtent(extent: level.facility?.geometry?.extent)
-***REMOVED***
-***REMOVED***
-***REMOVED***
+
+***REMOVED******REMOVED***/ Updates the viewpoint to display a given extent.
+***REMOVED******REMOVED***/ - Parameter extent: The new extent to be shown.
 ***REMOVED***private func zoomToExtent(extent: Envelope?) {
 ***REMOVED******REMOVED******REMOVED*** Make sure we have an extent and viewpoint to zoom to.
 ***REMOVED******REMOVED***guard let extent = extent,
@@ -186,10 +159,17 @@ final class FloorFilterViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Sets the visibility of all the levels on the map based on the vertical order of the current selected level.
-***REMOVED***public func filterMapToSelectedLevel() {
+***REMOVED***private func filterMapToSelectedLevel() {
 ***REMOVED******REMOVED***guard let selectedLevel = selectedLevel else { return ***REMOVED***
 ***REMOVED******REMOVED***levels.forEach {
 ***REMOVED******REMOVED******REMOVED***$0.isVisible = $0.verticalOrder == selectedLevel.verticalOrder
 ***REMOVED***
+***REMOVED***
+***REMOVED***
+
+extension FloorSite: Hashable {
+***REMOVED***public func hash(into hasher: inout Hasher) {
+***REMOVED******REMOVED***hasher.combine(self.siteId)
+***REMOVED******REMOVED***hasher.combine(self.name)
 ***REMOVED***
 ***REMOVED***
