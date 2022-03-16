@@ -39,9 +39,6 @@ struct FloorFilterExampleView: View {
     private var map = makeMap()
 
     @State
-    private var mapLoadResult: Result<Map, Error>?
-
-    @State
     private var viewpoint = Viewpoint(
         center: Point(x: -117.19496, y: 34.05713, spatialReference: .wgs84),
         scale: 100_000
