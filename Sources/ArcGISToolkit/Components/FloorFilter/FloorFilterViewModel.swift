@@ -45,20 +45,20 @@ final class FloorFilterViewModel: ObservableObject {
     /// The `Viewpoint` used to pan/zoom to the selected site/facilty.
     /// If `nil`, there will be no automatic pan/zoom operations.
     var viewpoint: Binding<Viewpoint>?
-    
+
     /// The `FloorManager` containing the site, floor, and level information.
     let floorManager: FloorManager
-    
+
     /// The floor manager sites.
     var sites: [FloorSite] {
         floorManager.sites
     }
-    
+
     /// The floor manager facilities.
     var facilities: [FloorFacility] {
         floorManager.facilities
     }
-    
+
     /// The floor manager levels.
     var levels: [FloorLevel] {
         floorManager.levels
@@ -67,7 +67,7 @@ final class FloorFilterViewModel: ObservableObject {
     /// `true` if the model is loading it's properties, `false` if not loading.
     @Published
     private(set) var isLoading = true
-    
+
     /// Gets the default level for a facility.
     /// - Parameter facility: The facility to get the default level for.
     /// - Returns: The default level for the facility, which is the level with vertical order 0;
@@ -77,7 +77,7 @@ final class FloorFilterViewModel: ObservableObject {
             level.facility == facility && level.verticalOrder == .zero
         }) ?? lowestLevel()
     }
-    
+
     /// Returns the level with the lowest vertical order.
     private func lowestLevel() -> FloorLevel? {
         let sortedLevels = levels.sorted {
@@ -147,7 +147,7 @@ final class FloorFilterViewModel: ObservableObject {
         guard let extent = extent,
               let viewpoint = viewpoint
         else { return }
-        
+
         let builder = EnvelopeBuilder(envelope: extent)
         builder.expand(factor: 1.5)
         let targetExtent = builder.toGeometry()
@@ -157,7 +157,7 @@ final class FloorFilterViewModel: ObservableObject {
             )
         }
     }
-    
+
     /// Sets the visibility of all the levels on the map based on the vertical order of the current selected level.
     private func filterMapToSelectedLevel() {
         guard let selectedLevel = selectedLevel else { return }
