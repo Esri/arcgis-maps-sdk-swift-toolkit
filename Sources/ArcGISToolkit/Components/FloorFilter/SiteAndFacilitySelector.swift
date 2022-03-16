@@ -22,14 +22,8 @@ struct SiteAndFacilitySelector: View {
     /// current viewpoint.
     /// - Parameter selectedSiteID: Indicates the implicity selected site based on the current
     /// viewpoint.
-    init(
-        isHidden: Binding<Bool>,
-        _ selectedFacilityID: Binding<String?>,
-        _ selectedSiteID: Binding<String?>
-    ) {
+    init(isHidden: Binding<Bool>) {
         self.isHidden = isHidden
-        _selectedFacilityID = selectedFacilityID
-        _selectedSiteID = selectedSiteID
     }
 
     /// The view model used by the `SiteAndFacilitySelector`.
@@ -38,28 +32,17 @@ struct SiteAndFacilitySelector: View {
     /// Allows the user to toggle the visibility of the site and facility selector.
     private var isHidden: Binding<Bool>
 
-    /// Indicates the implicity selected facility based on the current viewpoint.
-    @Binding
-    private var selectedFacilityID: String?
-
-    /// Indicates the implicity selected site based on the current viewpoint.
-    @Binding
-    private var selectedSiteID: String?
-
     var body: some View {
         VStack {
             if floorFilterViewModel.sites.count == 1 {
                 Facilities(
                     facilities: floorFilterViewModel.sites.first!.facilities,
                     isHidden: isHidden,
-                    selectedFacilityID: $selectedFacilityID,
                     showSites: true
                 )
             } else {
                 Sites(
                     isHidden: isHidden,
-                    selectedFacilityID: $selectedFacilityID,
-                    selectedSiteID: $selectedSiteID,
                     sites: floorFilterViewModel.sites
                 )
             }
@@ -88,14 +71,6 @@ struct SiteAndFacilitySelector: View {
         @State
         var searchPhrase: String = ""
 
-        /// Indicates the implicity selected facility based on the current viewpoint.
-        @Binding
-        var selectedFacilityID: String?
-
-        /// Indicates the implicity selected site based on the current viewpoint.
-        @Binding
-        var selectedSiteID: String?
-
         /// Sites contained in a `FloorManager`.
         let sites: [FloorSite]
 
@@ -112,17 +87,18 @@ struct SiteAndFacilitySelector: View {
                     List(matchingSites) { (site) in
                         NavigationLink(
                             site.name,
-                            tag: site.siteId,
-                            selection: $selectedSiteID) {
+                            tag: site,
+                            selection: $floorFilterViewModel.selectedSite) {
                                 Facilities(
                                     facilities: site.facilities,
-                                    isHidden: isHidden,
-                                    selectedFacilityID: $selectedFacilityID
+                                    isHidden: isHidden
                                 )
                             }
                             .onTapGesture {
-                                selectedSiteID = site.siteId
-                                floorFilterViewModel.selection = .site(site)
+                                floorFilterViewModel.setSite(
+                                    site,
+                                    zoomTo: true
+                                )
                             }
                     }
                     .listStyle(.plain)
@@ -130,7 +106,6 @@ struct SiteAndFacilitySelector: View {
                         Facilities(
                             facilities: sites.flatMap({ $0.facilities }),
                             isHidden: isHidden,
-                            selectedFacilityID: $selectedFacilityID,
                             showSites: true
                         )
                     }
@@ -167,10 +142,6 @@ struct SiteAndFacilitySelector: View {
         @State
         var searchPhrase: String = ""
 
-        /// Indicates the implicity selected facility based on the current viewpoint.
-        @Binding
-        var selectedFacilityID: String?
-
         /// Indicates if site names should be shown as subtitles to the facility.
         ///
         /// Used when the user selects "All sites".
@@ -188,30 +159,40 @@ struct SiteAndFacilitySelector: View {
                 ScrollViewReader { proxy in
                     List(matchingFacilities, id: \.facilityId) { facility in
                         Button {
-                            floorFilterViewModel.selection = .facility(facility)
+                            floorFilterViewModel.setFacility(
+                                facility,
+                                zoomTo: true
+                            )
                             isHidden.wrappedValue.toggle()
                         } label: {
                             HStack {
                                 Image(
-                                    systemName: selectedFacilityID == facility.facilityId ? "circle.fill" : "circle"
+                                    systemName:
+                                        floorFilterViewModel.selectedFacility?.facilityId == facility.facilityId ? "circle.fill" : "circle"
                                 )
                                 VStack {
                                     Text(facility.name)
-                                        .fontWeight(.regular)
-                                        .frame(maxWidth: .infinity, alignment: .leading)
+                                    .fontWeight(.regular)
+                                    .frame(
+                                        maxWidth: .infinity,
+                                        alignment: .leading
+                                    )
                                     if showSites, let siteName = facility.site?.name {
                                         Text(siteName)
-                                            .fontWeight(.ultraLight)
-                                            .frame(maxWidth: .infinity, alignment: .leading)
+                                        .fontWeight(.ultraLight)
+                                        .frame(
+                                            maxWidth: .infinity,
+                                            alignment: .leading
+                                        )
                                     }
                                 }
                             }
                         }
                     }
                     .listStyle(.plain)
-                    .onChange(of: selectedFacilityID) { facilityID in
+                    .onChange(of: floorFilterViewModel.selectedFacility) { selectedFacility in
                         guard let facility = floorFilterViewModel.facilities.first(where: { facility in
-                            facility.facilityId == facilityID
+                            facility.facilityId == selectedFacility?.facilityId
                         }) else {
                             return
                         }
