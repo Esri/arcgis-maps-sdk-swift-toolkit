@@ -33,6 +33,9 @@ struct FloorFilterExampleView: View {
 ***REMOVED******REMOVED***return Map(item: portalItem)
 ***REMOVED***
 
+***REMOVED***@State
+***REMOVED***private var isMapLoaded: Bool = false
+
 ***REMOVED***private var map = makeMap()
 
 ***REMOVED***@State
@@ -45,37 +48,30 @@ struct FloorFilterExampleView: View {
 ***REMOVED***)
 
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***Group {
-***REMOVED******REMOVED******REMOVED***if let mapLoadResult = mapLoadResult {
-***REMOVED******REMOVED******REMOVED******REMOVED***switch mapLoadResult {
-***REMOVED******REMOVED******REMOVED******REMOVED***case .success(let value):
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***MapView(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***map: value,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint: viewpoint
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED***case .failure(let error):
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Error loading map: \(error.localizedDescription)")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***ProgressView()
-***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***.task {
-***REMOVED******REMOVED******REMOVED***mapLoadResult = await Result {
-***REMOVED******REMOVED******REMOVED******REMOVED***try await map.load()
-***REMOVED******REMOVED******REMOVED******REMOVED***return map
-***REMOVED******REMOVED***
+***REMOVED******REMOVED***MapView(
+***REMOVED******REMOVED******REMOVED***map: map,
+***REMOVED******REMOVED******REMOVED***viewpoint: viewpoint
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***.onViewpointChanged(kind: .centerAndScale) {
+***REMOVED******REMOVED******REMOVED***viewpoint = $0
 ***REMOVED***
 ***REMOVED******REMOVED***.overlay(alignment: .bottomLeading) {
-***REMOVED******REMOVED******REMOVED***if map.loadStatus == .loaded,
-***REMOVED******REMOVED******REMOVED***let floorManager = map.floorManager {
+***REMOVED******REMOVED******REMOVED***if isMapLoaded,
+***REMOVED******REMOVED******REMOVED***   let floorManager = map.floorManager {
 ***REMOVED******REMOVED******REMOVED******REMOVED***FloorFilter(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***floorManager: floorManager,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint: $viewpoint
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.frame(height: 300)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding(36)
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***.task {
+***REMOVED******REMOVED******REMOVED***do {
+***REMOVED******REMOVED******REMOVED******REMOVED***try await map.load()
+***REMOVED******REMOVED******REMOVED******REMOVED***isMapLoaded = true
+***REMOVED******REMOVED*** catch {
+***REMOVED******REMOVED******REMOVED******REMOVED***print("load error: \(error)")
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
