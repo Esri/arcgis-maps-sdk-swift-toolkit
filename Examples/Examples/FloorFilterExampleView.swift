@@ -45,7 +45,7 @@ struct FloorFilterExampleView: View {
 
 ***REMOVED******REMOVED***/ The initial viewpoint of the map.
 ***REMOVED***@State
-***REMOVED***private var viewpoint = Viewpoint(
+***REMOVED***private var viewpoint: Viewpoint? = Viewpoint(
 ***REMOVED******REMOVED***center: Point(x: -117.19496, y: 34.05713, spatialReference: .wgs84),
 ***REMOVED******REMOVED***scale: 100_000
 ***REMOVED***)
