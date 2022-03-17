@@ -57,6 +57,37 @@ public struct FloorFilter: View {
     @State
     private var isLevelsViewCollapsed: Bool = false
 
+    /// Displays the available levels.
+    private var levelsAndDividerView: some View {
+        Group {
+            if hasLevelsToDisplay {
+                if topAligned {
+                    Divider()
+                        .frame(width: 30)
+                }
+                LevelsView(
+                    topAligned: topAligned,
+                    levels: sortedLevels,
+                    isCollapsed: $isLevelsViewCollapsed
+                )
+                if !topAligned {
+                    Divider()
+                        .frame(width: 30)
+                }
+            }
+        }
+    }
+
+    /// Button to open and close the site and facility selector.
+    private var facilityButtonView: some View {
+        Button {
+            isSelectorHidden.toggle()
+        } label: {
+            Image(systemName: "building.2")
+        }
+            .padding(4)
+    }
+
     /// A view that allows selecting between levels.
     private var levelSelectorView: some View {
         VStack {
@@ -64,21 +95,13 @@ public struct FloorFilter: View {
                 Spacer()
             }
             VStack {
-                if hasLevelsToDisplay {
-                    LevelsView(
-                        levels: sortedLevels,
-                        isCollapsed: $isLevelsViewCollapsed
-                    )
-                    Divider()
-                        .frame(width: 30)
+                if topAligned {
+                    facilityButtonView
+                    levelsAndDividerView
+                } else {
+                    levelsAndDividerView
+                    facilityButtonView
                 }
-                // Site button.
-                Button {
-                    isSelectorHidden.toggle()
-                } label: {
-                    Image(systemName: "building.2")
-                }
-                    .padding(4)
             }
                 .esriBorder()
             if topAligned {
@@ -161,6 +184,9 @@ public struct FloorFilter: View {
 
 /// A view displaying the levels in the selected facility.
 struct LevelsView: View {
+    /// The alignment configuration.
+    var topAligned: Bool
+
     /// The levels to display.
     let levels: [FloorLevel]
 
@@ -192,10 +218,12 @@ struct LevelsView: View {
     public var body: some View {
         VStack {
             if !isCollapsed,
-               levels.count > 1 {
-                CollapseButton(isCollapsed: $isCollapsed)
-                Divider()
-                    .frame(width: 30)
+                levels.count > 1 {
+                if !topAligned {
+                    CollapseButton(isCollapsed: $isCollapsed)
+                    Divider()
+                        .frame(width: 30)
+                }
                 ScrollView {
                     LevelsStack(levels: levels)
                         .background(
@@ -208,6 +236,11 @@ struct LevelsView: View {
                         )
                 }
                     .frame(maxHeight: scrollViewContentHeight)
+                if topAligned {
+                    Divider()
+                        .frame(width: 30)
+                    CollapseButton(isCollapsed: $isCollapsed)
+                }
             } else {
                 // Button for the selected level.
                 Button {
