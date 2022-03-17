@@ -31,19 +31,16 @@ public struct FloorFilter: View {
         viewpoint: Binding<Viewpoint>? = nil
     ) {
         _viewModel = StateObject(wrappedValue: FloorFilterViewModel(
+            automaticSelectionMode: automaticSelectionMode,
             floorManager: floorManager,
             viewpoint: viewpoint
         ))
         self.alignment = alignment
-        self.automaticSelectionMode = automaticSelectionMode
         self.viewpoint = viewpoint
     }
 
     /// The alignment configuration.
     private let alignment: Alignment
-
-    /// The selection behavior of the floor filter.
-    private let automaticSelectionMode: AutomaticSelectionMode
 
     /// A Boolean value that indicates whether there are levels to display.  This will be false if
     /// there is no selected facility or if the selected facility has no levels.
@@ -106,7 +103,7 @@ public struct FloorFilter: View {
         .esriBorder()
         .opacity(isSelectorHidden ? .zero : 1)
         .onChange(of: viewpoint?.wrappedValue.targetGeometry) { _ in
-            updateSelection()
+            viewModel.updateSelection()
         }
     }
 
@@ -159,74 +156,6 @@ public struct FloorFilter: View {
         // Ensure space for filter text field on small screens in landscape
         .frame(minHeight: 100)
         .environmentObject(viewModel)
-    }
-
-    /// Updates `selectedFacilityID` and `selectedSiteID` based on the most recent
-    /// viewpoint.
-    private func updateSelection() {
-        guard let viewpoint = viewpoint?.wrappedValue,
-                  !viewpoint.targetScale.isZero,
-                automaticSelectionMode != .never else {
-                  return
-              }
-
-        // Only take action if viewpoint is within minimum scale. Default
-        // minscale is 4300 or less (~zoom level 17 or greater)
-        var targetScale = viewModel.floorManager.siteLayer?.minScale ?? .zero
-        if targetScale.isZero {
-            targetScale = 4300
-        }
-
-        // If viewpoint is out of range, reset selection (if not non-clearing)
-        // and return
-        if viewpoint.targetScale > targetScale {
-            if automaticSelectionMode == .always {
-                viewModel.setSite(nil)
-                viewModel.setFacility(nil)
-                viewModel.setLevel(nil)
-            }
-            // Assumption: if too zoomed out to see sites, also too zoomed out
-            // to see facilities
-            return
-        }
-
-
-        let facilityResult = viewModel.floorManager.facilities.first { facility in
-            guard let facilityExtent = facility.geometry?.extent else {
-                return false
-            }
-            return GeometryEngine.intersects(
-                geometry1: facilityExtent,
-                geometry2: viewpoint.targetGeometry
-            )
-        }
-
-        if let facilityResult = facilityResult {
-            viewModel.setFacility(facilityResult)
-            return
-        } else if automaticSelectionMode == .always {
-            viewModel.setFacility(nil)
-        }
-
-
-        // If the centerpoint is within a site's geometry, select that site.
-        // This code gracefully skips selection if there are no sites or no
-        // matching sites
-        let siteResult = viewModel.floorManager.sites.first { site in
-            guard let siteExtent = site.geometry?.extent else {
-                return false
-            }
-            return GeometryEngine.intersects(
-                geometry1: siteExtent,
-                geometry2: viewpoint.targetGeometry
-            )
-        }
-
-        if let siteResult = siteResult {
-            viewModel.setSite(siteResult)
-        } else if automaticSelectionMode == .always {
-            viewModel.setSite(nil)
-        }
     }
 }
 
@@ -329,16 +258,4 @@ struct CollapseButton: View {
             trailing: 4
         ))
     }
-}
-
-/// Defines automatic selection behavior.
-public enum AutomaticSelectionMode {
-    /// Always update selection based on the current viewpoint; clear the selection when the user
-    /// navigates away.
-    case always
-    /// Only update the selection when there is a new site or facility in the current viewpoint; don't clear
-    /// selection when the user navigates away.
-    case alwaysNotClearing
-    /// Never update selection based on the GeoView's current viewpoint.
-    case never
 }
