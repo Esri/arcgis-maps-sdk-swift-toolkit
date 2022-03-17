@@ -25,7 +25,7 @@ final class FloorFilterViewModel: ObservableObject {
     init(
         automaticSelectionMode: AutomaticSelectionMode = .always,
         floorManager: FloorManager,
-        viewpoint: Binding<Viewpoint>? = nil
+        viewpoint: Binding<Viewpoint?>
     ) {
         self.automaticSelectionMode = automaticSelectionMode
         self.floorManager = floorManager
@@ -50,7 +50,7 @@ final class FloorFilterViewModel: ObservableObject {
 
     /// The `Viewpoint` used to pan/zoom to the selected site/facilty.
     /// If `nil`, there will be no automatic pan/zoom operations.
-    var viewpoint: Binding<Viewpoint>?
+    var viewpoint: Binding<Viewpoint?>
 
     /// The `FloorManager` containing the site, floor, and level information.
     let floorManager: FloorManager
@@ -148,7 +148,7 @@ final class FloorFilterViewModel: ObservableObject {
 
     /// Updates `selectedSite` and `selectedFacility` based on the latest viewpoint position.
     func updateSelection() {
-        guard let viewpoint = viewpoint?.wrappedValue,
+        guard let viewpoint = viewpoint.wrappedValue,
                   !viewpoint.targetScale.isZero,
                 automaticSelectionMode != .never else {
                   return
@@ -223,9 +223,9 @@ final class FloorFilterViewModel: ObservableObject {
     /// - Parameter extent: The new extent to be shown.
     private func zoomToExtent(extent: Envelope?) {
         // Make sure we have an extent and viewpoint to zoom to.
-        guard let extent = extent,
-              let viewpoint = viewpoint
-        else { return }
+        guard let extent = extent else {
+            return
+        }
 
         let builder = EnvelopeBuilder(envelope: extent)
         builder.expand(factor: 1.5)
