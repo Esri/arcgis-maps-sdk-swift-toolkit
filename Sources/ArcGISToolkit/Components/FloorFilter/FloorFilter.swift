@@ -177,6 +177,18 @@ struct LevelsView: View {
     @State
     private var scrollViewContentHeight: CGFloat = .zero
 
+    /// Returns the short name of the currently selected level, the first level or "None" if none of the listed
+    /// are available.
+    private var selectedLevelName: String {
+        if let shortName = viewModel.selectedLevel?.shortName {
+            return shortName
+        } else if let firstLevelShortName = levels.first?.shortName {
+            return firstLevelShortName
+        } else {
+            return "None"
+        }
+    }
+
     public var body: some View {
         VStack {
             if !isCollapsed,
@@ -196,8 +208,7 @@ struct LevelsView: View {
                         )
                 }
                 .frame(maxHeight: scrollViewContentHeight)
-            }
-            else {
+            } else {
                 // Button for the selected level.
                 Button {
                     if levels.count > 1 {
@@ -206,7 +217,7 @@ struct LevelsView: View {
                         }
                     }
                 } label: {
-                    Text(viewModel.selectedLevel?.shortName ?? (levels.first?.shortName ?? "None"))
+                    Text(selectedLevelName)
                 }
                 .selected(true)
                 .padding(4)
