@@ -27,23 +27,23 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED***
 
 ***REMOVED******REMOVED***/ The view model used by the `SiteAndFacilitySelector`.
-***REMOVED***@EnvironmentObject var floorFilterViewModel: FloorFilterViewModel
+***REMOVED***@EnvironmentObject var viewModel: FloorFilterViewModel
 
 ***REMOVED******REMOVED***/ Allows the user to toggle the visibility of the site and facility selector.
 ***REMOVED***private var isHidden: Binding<Bool>
 
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***VStack {
-***REMOVED******REMOVED******REMOVED***if floorFilterViewModel.sites.count == 1 {
+***REMOVED******REMOVED******REMOVED***if viewModel.sites.count == 1 {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Facilities(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***facilities: floorFilterViewModel.sites.first!.facilities,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***facilities: viewModel.sites.first!.facilities,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isHidden: isHidden,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***showSites: true
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Sites(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isHidden: isHidden,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***sites: floorFilterViewModel.sites
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***sites: viewModel.sites
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED***
@@ -52,7 +52,7 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED***/ A view displaying the sites contained in a `FloorManager`.
 ***REMOVED***struct Sites: View {
 ***REMOVED******REMOVED******REMOVED***/ The view model used by this selector.
-***REMOVED******REMOVED***@EnvironmentObject var floorFilterViewModel: FloorFilterViewModel
+***REMOVED******REMOVED***@EnvironmentObject var viewModel: FloorFilterViewModel
 
 ***REMOVED******REMOVED******REMOVED***/ Allows the user to toggle the visibility of the site and facility selector.
 ***REMOVED******REMOVED***var isHidden: Binding<Bool>
@@ -88,14 +88,14 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***NavigationLink(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***site.name,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***tag: site,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selection: $floorFilterViewModel.selectedSite) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selection: $viewModel.selectedSite) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Facilities(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***facilities: site.facilities,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isHidden: isHidden
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onTapGesture {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***floorFilterViewModel.setSite(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.setSite(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***site,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***zoomTo: true
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
@@ -123,7 +123,7 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED***let facilities: [FloorFacility]
 
 ***REMOVED******REMOVED******REMOVED***/ The view model used by this selector.
-***REMOVED******REMOVED***@EnvironmentObject var floorFilterViewModel: FloorFilterViewModel
+***REMOVED******REMOVED***@EnvironmentObject var viewModel: FloorFilterViewModel
 
 ***REMOVED******REMOVED******REMOVED***/ Allows the user to toggle the visibility of the site and facility selector.
 ***REMOVED******REMOVED***var isHidden: Binding<Bool>
@@ -152,7 +152,7 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED***/ - Returns: `true` if the facility is marked as selected in the view model.
 ***REMOVED******REMOVED***func facilityIsSelected(_ facility: FloorFacility) -> Bool {
 ***REMOVED******REMOVED******REMOVED***return facility.facilityId ==
-***REMOVED******REMOVED******REMOVED******REMOVED***floorFilterViewModel.selectedFacility?.facilityId
+***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.selectedFacility?.facilityId
 ***REMOVED***
 
 ***REMOVED******REMOVED***var body: some View {
@@ -167,7 +167,7 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ScrollViewReader { proxy in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***List(matchingFacilities, id: \.facilityId) { facility in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***floorFilterViewModel.setFacility(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.setFacility(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***facility,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***zoomTo: true
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
@@ -198,7 +198,7 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.listStyle(.plain)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: floorFilterViewModel.selectedFacility) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: viewModel.selectedFacility) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let facility = $0 else {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
