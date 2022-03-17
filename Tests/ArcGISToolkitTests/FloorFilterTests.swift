@@ -77,19 +77,19 @@ class FloorFilterTests: XCTestCase {
             viewpoint: viewpoint
         )
         await verifyInitialization(viewModel)
-        let sites = await viewModel.sites
-        await viewModel.setSite(sites.first)
+        let site = await viewModel.sites.first
+        await viewModel.setSite(site)
         let selectedSite = await viewModel.selectedSite
         let selectedFacility = await viewModel.selectedFacility
         let selectedLevel = await viewModel.selectedLevel
-        XCTAssertEqual(selectedSite, sites.first)
+        XCTAssertEqual(selectedSite, site)
         XCTAssertNil(selectedFacility)
         XCTAssertNil(selectedLevel)
         XCTAssertEqual(
             _viewpoint.targetGeometry.extent.center.x,
             initialViewpoint.targetGeometry.extent.center.x
         )
-        await viewModel.setSite(sites.first, zoomTo: true)
+        await viewModel.setSite(site, zoomTo: true)
         XCTAssertEqual(
             _viewpoint.targetGeometry.extent.center.x,
             selectedSite?.geometry?.extent.center.x
@@ -110,24 +110,60 @@ class FloorFilterTests: XCTestCase {
             viewpoint: viewpoint
         )
         await verifyInitialization(viewModel)
-        let facilities = await viewModel.facilities
-        await viewModel.setFacility(facilities.first)
+        let facility = await viewModel.facilities.first
+        await viewModel.setFacility(facility)
         let selectedSite = await viewModel.selectedSite
         let selectedFacility = await viewModel.selectedFacility
         let selectedLevel = await viewModel.selectedLevel
         let defaultLevel = await viewModel.defaultLevel(for: selectedFacility)
         XCTAssertEqual(selectedSite, selectedFacility?.site)
-        XCTAssertEqual(selectedFacility, facilities.first)
+        XCTAssertEqual(selectedFacility, facility)
         XCTAssertEqual(selectedLevel, defaultLevel)
         XCTAssertEqual(
             _viewpoint.targetGeometry.extent.center.x,
             initialViewpoint.targetGeometry.extent.center.x
         )
-        await viewModel.setFacility(facilities.first, zoomTo: true)
+        await viewModel.setFacility(facility, zoomTo: true)
         XCTAssertEqual(
             _viewpoint.targetGeometry.extent.center.x,
             selectedFacility?.geometry?.extent.center.x
         )
+    }
+
+    /// Confirms that the selected site/facility/level properties and the viewpoint are correctly updated.
+    func testSetLevel() async {
+        guard let map = await makeMap(),
+              let floorManager = map.floorManager else {
+            return
+        }
+        let initialViewpoint = getViewpoint(.zero)
+        var _viewpoint = initialViewpoint
+        let viewpoint = Binding(get: { _viewpoint }, set: { _viewpoint = $0 })
+        let viewModel = await FloorFilterViewModel(
+            floorManager: floorManager,
+            viewpoint: viewpoint
+        )
+        await verifyInitialization(viewModel)
+        let levels = await viewModel.levels
+        let level = levels.first
+        await viewModel.setLevel(level)
+        let selectedSite = await viewModel.selectedSite
+        let selectedFacility = await viewModel.selectedFacility
+        let selectedLevel = await viewModel.selectedLevel
+        XCTAssertEqual(selectedSite, selectedFacility?.site)
+        XCTAssertEqual(selectedFacility, level?.facility)
+        XCTAssertEqual(selectedLevel, level)
+        XCTAssertEqual(
+            _viewpoint.targetGeometry.extent.center.x,
+            initialViewpoint.targetGeometry.extent.center.x
+        )
+        levels.forEach { level in
+            if level.verticalOrder == selectedLevel?.verticalOrder {
+                XCTAssertTrue(level.isVisible)
+            } else {
+                XCTAssertFalse(level.isVisible)
+            }
+        }
     }
 
     /// Get a map constructed from an ArcGIS portal item.
