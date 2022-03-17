@@ -19,21 +19,24 @@ import ArcGIS
 final class FloorFilterViewModel: ObservableObject {
     /// Creates a `FloorFilterViewModel`.
     /// - Parameters:
+    ///   - automaticSelectionMode: The selection behavior of the floor filter.
     ///   - floorManager: The floor manager used by the `FloorFilterViewModel`.
     ///   - viewpoint: Viewpoint updated when the selected site or facility changes.
     init(
+        automaticSelectionMode: AutomaticSelectionMode = .always,
         floorManager: FloorManager,
         viewpoint: Binding<Viewpoint>? = nil
     ) {
+        self.automaticSelectionMode = automaticSelectionMode
         self.floorManager = floorManager
         self.viewpoint = viewpoint
-
         Task {
             do {
                 try await floorManager.load()
-                if sites.count == 1 {
+                if sites.count == 1,
+                    let firstSite = sites.first {
                     // If we have only one site, select it.
-                    setSite(sites.first!, zoomTo: true)
+                    setSite(firstSite, zoomTo: true)
                 }
             } catch {
                 print("error: \(error)")
@@ -41,6 +44,9 @@ final class FloorFilterViewModel: ObservableObject {
             isLoading = false
         }
     }
+
+    /// The selection behavior of the floor filter.
+    private let automaticSelectionMode: AutomaticSelectionMode
 
     /// The `Viewpoint` used to pan/zoom to the selected site/facilty.
     /// If `nil`, there will be no automatic pan/zoom operations.
@@ -140,6 +146,80 @@ final class FloorFilterViewModel: ObservableObject {
         filterMapToSelectedLevel()
     }
 
+    /// Updates `selectedFacilityID` and `selectedSiteID` based on the most recent
+    /// viewpoint.
+    func updateSelection() {
+        guard let viewpoint = viewpoint?.wrappedValue,
+                  !viewpoint.targetScale.isZero,
+                automaticSelectionMode != .never else {
+                  return
+              }
+
+        // Only take action if viewpoint is within minimum scale. Default
+        // minscale is 4300 or less (~zoom level 17 or greater)
+        var targetScale = floorManager.siteLayer?.minScale ?? .zero
+        if targetScale.isZero {
+            targetScale = 4300
+        }
+
+        // If viewpoint is out of range, reset selection (if not non-clearing)
+        // and return
+        if viewpoint.targetScale > targetScale {
+            if automaticSelectionMode == .always {
+                setSite(nil)
+                setFacility(nil)
+                setLevel(nil)
+            }
+            // Assumption: if too zoomed out to see sites, also too zoomed out
+            // to see facilities
+            return
+        }
+
+        let facilityResult = floorManager.facilities.first { facility in
+            guard let facilityExtent = facility.geometry?.extent else {
+                return false
+            }
+            return GeometryEngine.intersects(
+                geometry1: facilityExtent,
+                geometry2: viewpoint.targetGeometry
+            )
+        }
+
+        if let facilityResult = facilityResult {
+            setFacility(facilityResult)
+            return
+        } else if automaticSelectionMode == .always {
+            setFacility(nil)
+        }
+
+        // If the centerpoint is within a site's geometry, select that site.
+        // This code gracefully skips selection if there are no sites or no
+        // matching sites
+        let siteResult = floorManager.sites.first { site in
+            guard let siteExtent = site.geometry?.extent else {
+                return false
+            }
+            return GeometryEngine.intersects(
+                geometry1: siteExtent,
+                geometry2: viewpoint.targetGeometry
+            )
+        }
+
+        if let siteResult = siteResult {
+            setSite(siteResult)
+        } else if automaticSelectionMode == .always {
+            setSite(nil)
+        }
+    }
+
+    /// Sets the visibility of all the levels on the map based on the vertical order of the current selected level.
+    private func filterMapToSelectedLevel() {
+        guard let selectedLevel = selectedLevel else { return }
+        levels.forEach {
+            $0.isVisible = $0.verticalOrder == selectedLevel.verticalOrder
+        }
+    }
+
     /// Updates the viewpoint to display a given extent.
     /// - Parameter extent: The new extent to be shown.
     private func zoomToExtent(extent: Envelope?) {
@@ -157,14 +237,6 @@ final class FloorFilterViewModel: ObservableObject {
             )
         }
     }
-
-    /// Sets the visibility of all the levels on the map based on the vertical order of the current selected level.
-    private func filterMapToSelectedLevel() {
-        guard let selectedLevel = selectedLevel else { return }
-        levels.forEach {
-            $0.isVisible = $0.verticalOrder == selectedLevel.verticalOrder
-        }
-    }
 }
 
 extension FloorSite: Hashable {
@@ -172,4 +244,16 @@ extension FloorSite: Hashable {
         hasher.combine(self.siteId)
         hasher.combine(self.name)
     }
+}
+
+/// Defines automatic selection behavior.
+public enum AutomaticSelectionMode {
+    /// Always update selection based on the current viewpoint; clear the selection when the user
+    /// navigates away.
+    case always
+    /// Only update the selection when there is a new site or facility in the current viewpoint; don't clear
+    /// selection when the user navigates away.
+    case alwaysNotClearing
+    /// Never update selection based on the GeoView's current viewpoint.
+    case never
 }
