@@ -69,7 +69,8 @@ class FloorFilterTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***  let floorManager = map.floorManager else {
 ***REMOVED******REMOVED******REMOVED***return
 ***REMOVED***
-***REMOVED******REMOVED***var _viewpoint: Viewpoint = getViewpoint(.zero)
+***REMOVED******REMOVED***let initialViewpoint = getViewpoint(.zero)
+***REMOVED******REMOVED***var _viewpoint = initialViewpoint
 ***REMOVED******REMOVED***let viewpoint = Binding(get: { _viewpoint ***REMOVED***, set: { _viewpoint = $0 ***REMOVED***)
 ***REMOVED******REMOVED***let viewModel = await FloorFilterViewModel(
 ***REMOVED******REMOVED******REMOVED***floorManager: floorManager,
@@ -81,19 +82,17 @@ class FloorFilterTests: XCTestCase {
 ***REMOVED******REMOVED***let selectedSite = await viewModel.selectedSite
 ***REMOVED******REMOVED***let selectedFacility = await viewModel.selectedFacility
 ***REMOVED******REMOVED***let selectedLevel = await viewModel.selectedLevel
-***REMOVED******REMOVED***var vmViewpoint = await viewModel.viewpoint
 ***REMOVED******REMOVED***XCTAssertEqual(selectedSite, sites.first)
 ***REMOVED******REMOVED***XCTAssertNil(selectedFacility)
 ***REMOVED******REMOVED***XCTAssertNil(selectedLevel)
 ***REMOVED******REMOVED***XCTAssertEqual(
 ***REMOVED******REMOVED******REMOVED***_viewpoint.targetGeometry.extent.center.x,
-***REMOVED******REMOVED******REMOVED***vmViewpoint?.wrappedValue.targetGeometry.extent.center.x
+***REMOVED******REMOVED******REMOVED***initialViewpoint.targetGeometry.extent.center.x
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***await viewModel.setSite(sites.first, zoomTo: true)
-***REMOVED******REMOVED***vmViewpoint = await viewModel.viewpoint
 ***REMOVED******REMOVED***XCTAssertEqual(
-***REMOVED******REMOVED******REMOVED***selectedSite?.geometry?.extent.center.x,
-***REMOVED******REMOVED******REMOVED***vmViewpoint?.wrappedValue.targetGeometry.extent.center.x
+***REMOVED******REMOVED******REMOVED***_viewpoint.targetGeometry.extent.center.x,
+***REMOVED******REMOVED******REMOVED***selectedSite?.geometry?.extent.center.x
 ***REMOVED******REMOVED***)
 ***REMOVED***
 
@@ -103,7 +102,8 @@ class FloorFilterTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***  let floorManager = map.floorManager else {
 ***REMOVED******REMOVED******REMOVED***return
 ***REMOVED***
-***REMOVED******REMOVED***var _viewpoint: Viewpoint = getViewpoint(.zero)
+***REMOVED******REMOVED***let initialViewpoint = getViewpoint(.zero)
+***REMOVED******REMOVED***var _viewpoint = initialViewpoint
 ***REMOVED******REMOVED***let viewpoint = Binding(get: { _viewpoint ***REMOVED***, set: { _viewpoint = $0 ***REMOVED***)
 ***REMOVED******REMOVED***let viewModel = await FloorFilterViewModel(
 ***REMOVED******REMOVED******REMOVED***floorManager: floorManager,
@@ -116,19 +116,17 @@ class FloorFilterTests: XCTestCase {
 ***REMOVED******REMOVED***let selectedFacility = await viewModel.selectedFacility
 ***REMOVED******REMOVED***let selectedLevel = await viewModel.selectedLevel
 ***REMOVED******REMOVED***let defaultLevel = await viewModel.defaultLevel(for: selectedFacility)
-***REMOVED******REMOVED***var vmViewpoint = await viewModel.viewpoint
 ***REMOVED******REMOVED***XCTAssertEqual(selectedSite, selectedFacility?.site)
 ***REMOVED******REMOVED***XCTAssertEqual(selectedFacility, facilities.first)
 ***REMOVED******REMOVED***XCTAssertEqual(selectedLevel, defaultLevel)
 ***REMOVED******REMOVED***XCTAssertEqual(
 ***REMOVED******REMOVED******REMOVED***_viewpoint.targetGeometry.extent.center.x,
-***REMOVED******REMOVED******REMOVED***vmViewpoint?.wrappedValue.targetGeometry.extent.center.x
+***REMOVED******REMOVED******REMOVED***initialViewpoint.targetGeometry.extent.center.x
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***await viewModel.setFacility(facilities.first, zoomTo: true)
-***REMOVED******REMOVED***vmViewpoint = await viewModel.viewpoint
 ***REMOVED******REMOVED***XCTAssertEqual(
-***REMOVED******REMOVED******REMOVED***selectedFacility?.geometry?.extent.center.x,
-***REMOVED******REMOVED******REMOVED***vmViewpoint?.wrappedValue.targetGeometry.extent.center.x
+***REMOVED******REMOVED******REMOVED***_viewpoint.targetGeometry.extent.center.x,
+***REMOVED******REMOVED******REMOVED***selectedFacility?.geometry?.extent.center.x
 ***REMOVED******REMOVED***)
 ***REMOVED***
 
