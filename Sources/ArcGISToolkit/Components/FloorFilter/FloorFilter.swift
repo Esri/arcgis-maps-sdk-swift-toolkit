@@ -177,6 +177,18 @@ struct LevelsView: View {
 ***REMOVED***@State
 ***REMOVED***private var scrollViewContentHeight: CGFloat = .zero
 
+***REMOVED******REMOVED***/ Returns the short name of the currently selected level, the first level or "None" if none of the listed
+***REMOVED******REMOVED***/ are available.
+***REMOVED***private var selectedLevelName: String {
+***REMOVED******REMOVED***if let shortName = viewModel.selectedLevel?.shortName {
+***REMOVED******REMOVED******REMOVED***return shortName
+***REMOVED*** else if let firstLevelShortName = levels.first?.shortName {
+***REMOVED******REMOVED******REMOVED***return firstLevelShortName
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***return "None"
+***REMOVED***
+***REMOVED***
+
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***VStack {
 ***REMOVED******REMOVED******REMOVED***if !isCollapsed,
@@ -196,8 +208,7 @@ struct LevelsView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxHeight: scrollViewContentHeight)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***else {
+***REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Button for the selected level.
 ***REMOVED******REMOVED******REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if levels.count > 1 {
@@ -206,7 +217,7 @@ struct LevelsView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(viewModel.selectedLevel?.shortName ?? (levels.first?.shortName ?? "None"))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(selectedLevelName)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.selected(true)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding(4)
