@@ -147,6 +147,14 @@ struct SiteAndFacilitySelector: View {
         /// Used when the user selects "All sites".
         var showSites: Bool = false
 
+        /// Determines  if a given site is the one marked as selected in the view model.
+        /// - Parameter facility: The facility of interest
+        /// - Returns: `true` if the facility is marked as selected in the view model.
+        func facilityIsSelected(_ facility: FloorFacility) -> Bool {
+            return facility.facilityId ==
+                floorFilterViewModel.selectedFacility?.facilityId
+        }
+
         var body: some View {
             VStack {
                 if !showSites, let siteName = facilities.first?.site?.name {
@@ -168,7 +176,7 @@ struct SiteAndFacilitySelector: View {
                             HStack {
                                 Image(
                                     systemName:
-                                        floorFilterViewModel.selectedFacility?.facilityId == facility.facilityId ? "circle.fill" : "circle"
+                                        facilityIsSelected(facility) ? "circle.fill" : "circle"
                                 )
                                 VStack {
                                     Text(facility.name)
@@ -190,10 +198,8 @@ struct SiteAndFacilitySelector: View {
                         }
                     }
                     .listStyle(.plain)
-                    .onChange(of: floorFilterViewModel.selectedFacility) { selectedFacility in
-                        guard let facility = floorFilterViewModel.facilities.first(where: { facility in
-                            facility.facilityId == selectedFacility?.facilityId
-                        }) else {
+                    .onChange(of: floorFilterViewModel.selectedFacility) {
+                        guard let facility = $0 else {
                             return
                         }
                         withAnimation {
