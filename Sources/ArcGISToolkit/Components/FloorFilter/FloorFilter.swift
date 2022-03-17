@@ -28,7 +28,7 @@ public struct FloorFilter: View {
         alignment: Alignment,
         automaticSelectionMode: AutomaticSelectionMode = .always,
         floorManager: FloorManager,
-        viewpoint: Binding<Viewpoint>? = nil
+        viewpoint: Binding<Viewpoint?>
     ) {
         _viewModel = StateObject(wrappedValue: FloorFilterViewModel(
             automaticSelectionMode: automaticSelectionMode,
@@ -102,7 +102,7 @@ public struct FloorFilter: View {
         SiteAndFacilitySelector(isHidden: $isSelectorHidden)
         .esriBorder()
         .opacity(isSelectorHidden ? .zero : 1)
-        .onChange(of: viewpoint?.wrappedValue.targetGeometry) { _ in
+        .onChange(of: viewpoint.wrappedValue?.targetGeometry) { _ in
             viewModel.updateSelection()
         }
     }
@@ -131,7 +131,7 @@ public struct FloorFilter: View {
 
     /// The `Viewpoint` used to pan/zoom to the selected site/facilty.
     /// If `nil`, there will be no automatic pan/zoom operations or automatic selection support.
-    private var viewpoint: Binding<Viewpoint>?
+    private var viewpoint: Binding<Viewpoint?>
 
     public var body: some View {
         Group {
