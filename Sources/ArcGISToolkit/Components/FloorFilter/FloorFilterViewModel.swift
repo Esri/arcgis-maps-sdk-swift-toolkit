@@ -146,8 +146,7 @@ final class FloorFilterViewModel: ObservableObject {
         filterMapToSelectedLevel()
     }
 
-    /// Updates `selectedFacilityID` and `selectedSiteID` based on the most recent
-    /// viewpoint.
+    /// Updates `selectedSite` and `selectedFacility` based on the latest viewpoint position.
     func updateSelection() {
         guard let viewpoint = viewpoint?.wrappedValue,
                   !viewpoint.targetScale.isZero,
