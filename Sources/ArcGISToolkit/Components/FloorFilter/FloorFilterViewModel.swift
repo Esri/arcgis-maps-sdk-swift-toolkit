@@ -19,21 +19,24 @@
 final class FloorFilterViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ Creates a `FloorFilterViewModel`.
 ***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - automaticSelectionMode: The selection behavior of the floor filter.
 ***REMOVED******REMOVED***/   - floorManager: The floor manager used by the `FloorFilterViewModel`.
 ***REMOVED******REMOVED***/   - viewpoint: Viewpoint updated when the selected site or facility changes.
 ***REMOVED***init(
+***REMOVED******REMOVED***automaticSelectionMode: AutomaticSelectionMode = .always,
 ***REMOVED******REMOVED***floorManager: FloorManager,
 ***REMOVED******REMOVED***viewpoint: Binding<Viewpoint>? = nil
 ***REMOVED***) {
+***REMOVED******REMOVED***self.automaticSelectionMode = automaticSelectionMode
 ***REMOVED******REMOVED***self.floorManager = floorManager
 ***REMOVED******REMOVED***self.viewpoint = viewpoint
-
 ***REMOVED******REMOVED***Task {
 ***REMOVED******REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED******REMOVED***try await floorManager.load()
-***REMOVED******REMOVED******REMOVED******REMOVED***if sites.count == 1 {
+***REMOVED******REMOVED******REMOVED******REMOVED***if sites.count == 1,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let firstSite = sites.first {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** If we have only one site, select it.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***setSite(sites.first!, zoomTo: true)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***setSite(firstSite, zoomTo: true)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED*** catch {
 ***REMOVED******REMOVED******REMOVED******REMOVED***print("error: \(error)")
@@ -41,6 +44,9 @@ final class FloorFilterViewModel: ObservableObject {
 ***REMOVED******REMOVED******REMOVED***isLoading = false
 ***REMOVED***
 ***REMOVED***
+
+***REMOVED******REMOVED***/ The selection behavior of the floor filter.
+***REMOVED***private let automaticSelectionMode: AutomaticSelectionMode
 
 ***REMOVED******REMOVED***/ The `Viewpoint` used to pan/zoom to the selected site/facilty.
 ***REMOVED******REMOVED***/ If `nil`, there will be no automatic pan/zoom operations.
@@ -140,6 +146,80 @@ final class FloorFilterViewModel: ObservableObject {
 ***REMOVED******REMOVED***filterMapToSelectedLevel()
 ***REMOVED***
 
+***REMOVED******REMOVED***/ Updates `selectedFacilityID` and `selectedSiteID` based on the most recent
+***REMOVED******REMOVED***/ viewpoint.
+***REMOVED***func updateSelection() {
+***REMOVED******REMOVED***guard let viewpoint = viewpoint?.wrappedValue,
+***REMOVED******REMOVED******REMOVED******REMOVED***  !viewpoint.targetScale.isZero,
+***REMOVED******REMOVED******REMOVED******REMOVED***automaticSelectionMode != .never else {
+***REMOVED******REMOVED******REMOVED******REMOVED***  return
+***REMOVED***  ***REMOVED***
+
+***REMOVED******REMOVED******REMOVED*** Only take action if viewpoint is within minimum scale. Default
+***REMOVED******REMOVED******REMOVED*** minscale is 4300 or less (~zoom level 17 or greater)
+***REMOVED******REMOVED***var targetScale = floorManager.siteLayer?.minScale ?? .zero
+***REMOVED******REMOVED***if targetScale.isZero {
+***REMOVED******REMOVED******REMOVED***targetScale = 4300
+***REMOVED***
+
+***REMOVED******REMOVED******REMOVED*** If viewpoint is out of range, reset selection (if not non-clearing)
+***REMOVED******REMOVED******REMOVED*** and return
+***REMOVED******REMOVED***if viewpoint.targetScale > targetScale {
+***REMOVED******REMOVED******REMOVED***if automaticSelectionMode == .always {
+***REMOVED******REMOVED******REMOVED******REMOVED***setSite(nil)
+***REMOVED******REMOVED******REMOVED******REMOVED***setFacility(nil)
+***REMOVED******REMOVED******REMOVED******REMOVED***setLevel(nil)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED*** Assumption: if too zoomed out to see sites, also too zoomed out
+***REMOVED******REMOVED******REMOVED******REMOVED*** to see facilities
+***REMOVED******REMOVED******REMOVED***return
+***REMOVED***
+
+***REMOVED******REMOVED***let facilityResult = floorManager.facilities.first { facility in
+***REMOVED******REMOVED******REMOVED***guard let facilityExtent = facility.geometry?.extent else {
+***REMOVED******REMOVED******REMOVED******REMOVED***return false
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***return GeometryEngine.intersects(
+***REMOVED******REMOVED******REMOVED******REMOVED***geometry1: facilityExtent,
+***REMOVED******REMOVED******REMOVED******REMOVED***geometry2: viewpoint.targetGeometry
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED***
+
+***REMOVED******REMOVED***if let facilityResult = facilityResult {
+***REMOVED******REMOVED******REMOVED***setFacility(facilityResult)
+***REMOVED******REMOVED******REMOVED***return
+***REMOVED*** else if automaticSelectionMode == .always {
+***REMOVED******REMOVED******REMOVED***setFacility(nil)
+***REMOVED***
+
+***REMOVED******REMOVED******REMOVED*** If the centerpoint is within a site's geometry, select that site.
+***REMOVED******REMOVED******REMOVED*** This code gracefully skips selection if there are no sites or no
+***REMOVED******REMOVED******REMOVED*** matching sites
+***REMOVED******REMOVED***let siteResult = floorManager.sites.first { site in
+***REMOVED******REMOVED******REMOVED***guard let siteExtent = site.geometry?.extent else {
+***REMOVED******REMOVED******REMOVED******REMOVED***return false
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***return GeometryEngine.intersects(
+***REMOVED******REMOVED******REMOVED******REMOVED***geometry1: siteExtent,
+***REMOVED******REMOVED******REMOVED******REMOVED***geometry2: viewpoint.targetGeometry
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED***
+
+***REMOVED******REMOVED***if let siteResult = siteResult {
+***REMOVED******REMOVED******REMOVED***setSite(siteResult)
+***REMOVED*** else if automaticSelectionMode == .always {
+***REMOVED******REMOVED******REMOVED***setSite(nil)
+***REMOVED***
+***REMOVED***
+
+***REMOVED******REMOVED***/ Sets the visibility of all the levels on the map based on the vertical order of the current selected level.
+***REMOVED***private func filterMapToSelectedLevel() {
+***REMOVED******REMOVED***guard let selectedLevel = selectedLevel else { return ***REMOVED***
+***REMOVED******REMOVED***levels.forEach {
+***REMOVED******REMOVED******REMOVED***$0.isVisible = $0.verticalOrder == selectedLevel.verticalOrder
+***REMOVED***
+***REMOVED***
+
 ***REMOVED******REMOVED***/ Updates the viewpoint to display a given extent.
 ***REMOVED******REMOVED***/ - Parameter extent: The new extent to be shown.
 ***REMOVED***private func zoomToExtent(extent: Envelope?) {
@@ -157,14 +237,6 @@ final class FloorFilterViewModel: ObservableObject {
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-
-***REMOVED******REMOVED***/ Sets the visibility of all the levels on the map based on the vertical order of the current selected level.
-***REMOVED***private func filterMapToSelectedLevel() {
-***REMOVED******REMOVED***guard let selectedLevel = selectedLevel else { return ***REMOVED***
-***REMOVED******REMOVED***levels.forEach {
-***REMOVED******REMOVED******REMOVED***$0.isVisible = $0.verticalOrder == selectedLevel.verticalOrder
-***REMOVED***
-***REMOVED***
 ***REMOVED***
 
 extension FloorSite: Hashable {
@@ -172,4 +244,16 @@ extension FloorSite: Hashable {
 ***REMOVED******REMOVED***hasher.combine(self.siteId)
 ***REMOVED******REMOVED***hasher.combine(self.name)
 ***REMOVED***
+***REMOVED***
+
+***REMOVED***/ Defines automatic selection behavior.
+public enum AutomaticSelectionMode {
+***REMOVED******REMOVED***/ Always update selection based on the current viewpoint; clear the selection when the user
+***REMOVED******REMOVED***/ navigates away.
+***REMOVED***case always
+***REMOVED******REMOVED***/ Only update the selection when there is a new site or facility in the current viewpoint; don't clear
+***REMOVED******REMOVED***/ selection when the user navigates away.
+***REMOVED***case alwaysNotClearing
+***REMOVED******REMOVED***/ Never update selection based on the GeoView's current viewpoint.
+***REMOVED***case never
 ***REMOVED***
