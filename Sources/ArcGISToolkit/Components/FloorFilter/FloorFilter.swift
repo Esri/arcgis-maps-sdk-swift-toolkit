@@ -78,7 +78,7 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "building.2")
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.padding(4)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(4)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.esriBorder()
 ***REMOVED******REMOVED******REMOVED***if topAligned {
@@ -100,11 +100,11 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED***/ A configured `SiteAndFacilitySelector` view.
 ***REMOVED***private var siteAndFacilitySelectorView: some View {
 ***REMOVED******REMOVED***SiteAndFacilitySelector(isHidden: $isSelectorHidden)
-***REMOVED******REMOVED***.esriBorder()
-***REMOVED******REMOVED***.opacity(isSelectorHidden ? .zero : 1)
-***REMOVED******REMOVED***.onChange(of: viewpoint.wrappedValue?.targetGeometry) { _ in
-***REMOVED******REMOVED******REMOVED***viewModel.updateSelection()
-***REMOVED***
+***REMOVED******REMOVED******REMOVED***.esriBorder()
+***REMOVED******REMOVED******REMOVED***.opacity(isSelectorHidden ? .zero : 1)
+***REMOVED******REMOVED******REMOVED***.onChange(of: viewpoint.wrappedValue?.targetGeometry) { _ in
+***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.updateSelection()
+***REMOVED******REMOVED***
 ***REMOVED***
 
 ***REMOVED******REMOVED***/ The selected facility's levels, sorted by `level.verticalOrder`.
@@ -153,9 +153,9 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED******REMOVED*** Ensure space for filter text field on small screens in landscape
-***REMOVED******REMOVED***.frame(minHeight: 100)
-***REMOVED******REMOVED***.environmentObject(viewModel)
+***REMOVED******REMOVED******REMOVED******REMOVED*** Ensure space for filter text field on small screens in landscape
+***REMOVED******REMOVED******REMOVED***.frame(minHeight: 100)
+***REMOVED******REMOVED******REMOVED***.environmentObject(viewModel)
 ***REMOVED***
 ***REMOVED***
 
@@ -207,7 +207,7 @@ struct LevelsView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxHeight: scrollViewContentHeight)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxHeight: scrollViewContentHeight)
 ***REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Button for the selected level.
 ***REMOVED******REMOVED******REMOVED******REMOVED***Button {
@@ -219,8 +219,8 @@ struct LevelsView: View {
 ***REMOVED******REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(selectedLevelName)
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.selected(true)
-***REMOVED******REMOVED******REMOVED******REMOVED***.padding(4)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.selected(true)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(4)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -241,8 +241,8 @@ struct LevelsStack: View {
 ***REMOVED******REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(level.shortName)
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.selected(level == viewModel.selectedLevel)
-***REMOVED******REMOVED******REMOVED******REMOVED***.padding(4)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.selected(level == viewModel.selectedLevel)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(4)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -262,11 +262,11 @@ struct CollapseButton: View {
 ***REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED***Image(systemName: "xmark")
 ***REMOVED***
-***REMOVED******REMOVED***.padding(EdgeInsets(
-***REMOVED******REMOVED******REMOVED***top: 2,
-***REMOVED******REMOVED******REMOVED***leading: 4,
-***REMOVED******REMOVED******REMOVED***bottom: 2,
-***REMOVED******REMOVED******REMOVED***trailing: 4
-***REMOVED******REMOVED***))
+***REMOVED******REMOVED******REMOVED***.padding(EdgeInsets(
+***REMOVED******REMOVED******REMOVED******REMOVED***top: 2,
+***REMOVED******REMOVED******REMOVED******REMOVED***leading: 4,
+***REMOVED******REMOVED******REMOVED******REMOVED***bottom: 2,
+***REMOVED******REMOVED******REMOVED******REMOVED***trailing: 4
+***REMOVED******REMOVED******REMOVED***))
 ***REMOVED***
 ***REMOVED***
