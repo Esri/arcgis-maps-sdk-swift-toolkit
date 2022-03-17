@@ -23,29 +23,113 @@ class FloorFilterTests: XCTestCase {
 ***REMOVED******REMOVED***await addCredentials()
 ***REMOVED***
 
-***REMOVED***private var cancellables = Set<AnyCancellable>()
-
-***REMOVED******REMOVED***/ Tests general behavior of `FloorFilterViewModel`.
-***REMOVED***func testFloorFilterViewModel() async {
-***REMOVED******REMOVED***guard let map = await makeMap() else {
-***REMOVED******REMOVED******REMOVED***return
-***REMOVED***
-***REMOVED******REMOVED***guard let floorManager = map.floorManager else {
-***REMOVED******REMOVED******REMOVED***XCTFail("No FloorManager available")
+***REMOVED******REMOVED***/ Tests that a `FloorFilterViewModel` succesfully initializes with a `FloorManager`.`
+***REMOVED***func testInitFloorFilterViewModelWithFloorManager() async {
+***REMOVED******REMOVED***guard let map = await makeMap(),
+***REMOVED******REMOVED******REMOVED***  let floorManager = map.floorManager else {
 ***REMOVED******REMOVED******REMOVED***return
 ***REMOVED***
 ***REMOVED******REMOVED***let viewModel = await FloorFilterViewModel(floorManager: floorManager)
-***REMOVED******REMOVED***let expectation = XCTestExpectation(
-***REMOVED******REMOVED******REMOVED***description: "View model successfully initialized"
+***REMOVED******REMOVED***await verifyInitialization(viewModel)
+***REMOVED******REMOVED***let sites = await viewModel.sites
+***REMOVED******REMOVED***let facilities = await viewModel.facilities
+***REMOVED******REMOVED***let levels = await viewModel.levels
+***REMOVED******REMOVED***XCTAssertFalse(sites.isEmpty)
+***REMOVED******REMOVED***XCTAssertFalse(facilities.isEmpty)
+***REMOVED******REMOVED***XCTAssertFalse(levels.isEmpty)
+***REMOVED***
+
+***REMOVED******REMOVED***/ Tests that a `FloorFilterViewModel` succesfully initializes with a `FloorManager` and
+***REMOVED******REMOVED***/ `Binding<Viewpoint>?`.`
+***REMOVED***func testInitFloorFilterViewModelWithFloorManagerAndViewpoint() async {
+***REMOVED******REMOVED***guard let map = await makeMap(),
+***REMOVED******REMOVED******REMOVED***  let floorManager = map.floorManager else {
+***REMOVED******REMOVED******REMOVED***return
+***REMOVED***
+***REMOVED******REMOVED***var _viewpoint: Viewpoint = getViewpoint(.zero)
+***REMOVED******REMOVED***let viewpoint = Binding(get: { _viewpoint ***REMOVED***, set: { _viewpoint = $0 ***REMOVED***)
+***REMOVED******REMOVED***let viewModel = await FloorFilterViewModel(
+***REMOVED******REMOVED******REMOVED***floorManager: floorManager,
+***REMOVED******REMOVED******REMOVED***viewpoint: viewpoint
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED***await viewModel.$isLoading
-***REMOVED******REMOVED******REMOVED***.sink { loading in
-***REMOVED******REMOVED******REMOVED******REMOVED***if !loading {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***expectation.fulfill()
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.store(in: &cancellables)
-***REMOVED******REMOVED***wait(for: [expectation], timeout: 10.0)
+***REMOVED******REMOVED***await verifyInitialization(viewModel)
+***REMOVED******REMOVED***let sites = await viewModel.sites
+***REMOVED******REMOVED***let facilities = await viewModel.facilities
+***REMOVED******REMOVED***let levels = await viewModel.levels
+***REMOVED******REMOVED***let vmViewpoint = await viewModel.viewpoint
+***REMOVED******REMOVED***XCTAssertFalse(sites.isEmpty)
+***REMOVED******REMOVED***XCTAssertFalse(facilities.isEmpty)
+***REMOVED******REMOVED***XCTAssertFalse(levels.isEmpty)
+***REMOVED******REMOVED***XCTAssertNotNil(vmViewpoint)
+***REMOVED***
+
+***REMOVED******REMOVED***/ Confirms that the selected site/facility/level properties and the viewpoint are correctly updated.
+***REMOVED***func testSetSite() async {
+***REMOVED******REMOVED***guard let map = await makeMap(),
+***REMOVED******REMOVED******REMOVED***  let floorManager = map.floorManager else {
+***REMOVED******REMOVED******REMOVED***return
+***REMOVED***
+***REMOVED******REMOVED***var _viewpoint: Viewpoint = getViewpoint(.zero)
+***REMOVED******REMOVED***let viewpoint = Binding(get: { _viewpoint ***REMOVED***, set: { _viewpoint = $0 ***REMOVED***)
+***REMOVED******REMOVED***let viewModel = await FloorFilterViewModel(
+***REMOVED******REMOVED******REMOVED***floorManager: floorManager,
+***REMOVED******REMOVED******REMOVED***viewpoint: viewpoint
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***await verifyInitialization(viewModel)
+***REMOVED******REMOVED***let sites = await viewModel.sites
+***REMOVED******REMOVED***await viewModel.setSite(sites.first)
+***REMOVED******REMOVED***let selectedSite = await viewModel.selectedSite
+***REMOVED******REMOVED***let selectedFacility = await viewModel.selectedFacility
+***REMOVED******REMOVED***let selectedLevel = await viewModel.selectedLevel
+***REMOVED******REMOVED***var vmViewpoint = await viewModel.viewpoint
+***REMOVED******REMOVED***XCTAssertEqual(selectedSite, sites.first)
+***REMOVED******REMOVED***XCTAssertNil(selectedFacility)
+***REMOVED******REMOVED***XCTAssertNil(selectedLevel)
+***REMOVED******REMOVED***XCTAssertEqual(
+***REMOVED******REMOVED******REMOVED***_viewpoint.targetGeometry.extent.center.x,
+***REMOVED******REMOVED******REMOVED***vmViewpoint?.wrappedValue.targetGeometry.extent.center.x
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***await viewModel.setSite(sites.first, zoomTo: true)
+***REMOVED******REMOVED***vmViewpoint = await viewModel.viewpoint
+***REMOVED******REMOVED***XCTAssertEqual(
+***REMOVED******REMOVED******REMOVED***selectedSite?.geometry?.extent.center.x,
+***REMOVED******REMOVED******REMOVED***vmViewpoint?.wrappedValue.targetGeometry.extent.center.x
+***REMOVED******REMOVED***)
+***REMOVED***
+
+***REMOVED******REMOVED***/ Confirms that the selected site/facility/level properties and the viewpoint are correctly updated.
+***REMOVED***func testSetFacility() async {
+***REMOVED******REMOVED***guard let map = await makeMap(),
+***REMOVED******REMOVED******REMOVED***  let floorManager = map.floorManager else {
+***REMOVED******REMOVED******REMOVED***return
+***REMOVED***
+***REMOVED******REMOVED***var _viewpoint: Viewpoint = getViewpoint(.zero)
+***REMOVED******REMOVED***let viewpoint = Binding(get: { _viewpoint ***REMOVED***, set: { _viewpoint = $0 ***REMOVED***)
+***REMOVED******REMOVED***let viewModel = await FloorFilterViewModel(
+***REMOVED******REMOVED******REMOVED***floorManager: floorManager,
+***REMOVED******REMOVED******REMOVED***viewpoint: viewpoint
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***await verifyInitialization(viewModel)
+***REMOVED******REMOVED***let facilities = await viewModel.facilities
+***REMOVED******REMOVED***await viewModel.setFacility(facilities.first)
+***REMOVED******REMOVED***let selectedSite = await viewModel.selectedSite
+***REMOVED******REMOVED***let selectedFacility = await viewModel.selectedFacility
+***REMOVED******REMOVED***let selectedLevel = await viewModel.selectedLevel
+***REMOVED******REMOVED***let defaultLevel = await viewModel.defaultLevel(for: selectedFacility)
+***REMOVED******REMOVED***var vmViewpoint = await viewModel.viewpoint
+***REMOVED******REMOVED***XCTAssertEqual(selectedSite, selectedFacility?.site)
+***REMOVED******REMOVED***XCTAssertEqual(selectedFacility, facilities.first)
+***REMOVED******REMOVED***XCTAssertEqual(selectedLevel, defaultLevel)
+***REMOVED******REMOVED***XCTAssertEqual(
+***REMOVED******REMOVED******REMOVED***_viewpoint.targetGeometry.extent.center.x,
+***REMOVED******REMOVED******REMOVED***vmViewpoint?.wrappedValue.targetGeometry.extent.center.x
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***await viewModel.setFacility(facilities.first, zoomTo: true)
+***REMOVED******REMOVED***vmViewpoint = await viewModel.viewpoint
+***REMOVED******REMOVED***XCTAssertEqual(
+***REMOVED******REMOVED******REMOVED***selectedFacility?.geometry?.extent.center.x,
+***REMOVED******REMOVED******REMOVED***vmViewpoint?.wrappedValue.targetGeometry.extent.center.x
+***REMOVED******REMOVED***)
 ***REMOVED***
 
 ***REMOVED******REMOVED***/ Get a map constructed from an ArcGIS portal item.
@@ -70,10 +154,41 @@ class FloorFilterTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***XCTFail("\(#fileID), \(#function), \(#line), \(error.localizedDescription)")
 ***REMOVED******REMOVED******REMOVED***return nil
 ***REMOVED***
-***REMOVED******REMOVED***guard map.loadStatus == .loaded else {
-***REMOVED******REMOVED******REMOVED***XCTFail("\(#fileID), \(#function), \(#line), Map not loaded")
-***REMOVED******REMOVED******REMOVED***return nil
-***REMOVED***
 ***REMOVED******REMOVED***return map
+***REMOVED***
+
+***REMOVED******REMOVED***/ Verifies that the `FloorFilterViewModel` has succesfully initialized.
+***REMOVED******REMOVED***/ - Parameter viewModel: The view model to analyze.
+***REMOVED***private func verifyInitialization(_ viewModel: FloorFilterViewModel) async {
+***REMOVED******REMOVED***let expectation = XCTestExpectation(
+***REMOVED******REMOVED******REMOVED***description: "View model successfully initialized"
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***let subscription = await viewModel.$isLoading
+***REMOVED******REMOVED******REMOVED***.sink { loading in
+***REMOVED******REMOVED******REMOVED******REMOVED***if !loading {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***expectation.fulfill()
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***wait(for: [expectation], timeout: 10.0)
+***REMOVED******REMOVED***subscription.cancel()
+***REMOVED***
+***REMOVED***
+
+extension FloorFilterTests {
+***REMOVED******REMOVED***/ An arbitrary point to use for testing.
+***REMOVED***var point: Point {
+***REMOVED******REMOVED***Point(x: -117.19494, y: 34.05723, spatialReference: .wgs84)
+***REMOVED***
+
+***REMOVED******REMOVED***/ An arbitrary scale to use for testing.
+***REMOVED***var scale: Double {
+***REMOVED******REMOVED***10_000.00
+***REMOVED***
+
+***REMOVED******REMOVED***/ Builds viewpoints to use for tests.
+***REMOVED******REMOVED***/ - Parameter rotation: The rotation to use for the resulting viewpoint.
+***REMOVED******REMOVED***/ - Returns: A viewpoint object for tests.
+***REMOVED***func getViewpoint(_ rotation: Double) -> Viewpoint {
+***REMOVED******REMOVED***return Viewpoint(center: point, scale: scale, rotation: rotation)
 ***REMOVED***
 ***REMOVED***
