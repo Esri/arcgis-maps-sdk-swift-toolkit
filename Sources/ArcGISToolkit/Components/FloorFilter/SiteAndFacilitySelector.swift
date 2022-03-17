@@ -147,6 +147,14 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED***/ Used when the user selects "All sites".
 ***REMOVED******REMOVED***var showSites: Bool = false
 
+***REMOVED******REMOVED******REMOVED***/ Determines  if a given site is the one marked as selected in the view model.
+***REMOVED******REMOVED******REMOVED***/ - Parameter facility: The facility of interest
+***REMOVED******REMOVED******REMOVED***/ - Returns: `true` if the facility is marked as selected in the view model.
+***REMOVED******REMOVED***func facilityIsSelected(_ facility: FloorFacility) -> Bool {
+***REMOVED******REMOVED******REMOVED***return facility.facilityId ==
+***REMOVED******REMOVED******REMOVED******REMOVED***floorFilterViewModel.selectedFacility?.facilityId
+***REMOVED***
+
 ***REMOVED******REMOVED***var body: some View {
 ***REMOVED******REMOVED******REMOVED***VStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if !showSites, let siteName = facilities.first?.site?.name {
@@ -168,7 +176,7 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***systemName:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***floorFilterViewModel.selectedFacility?.facilityId == facility.facilityId ? "circle.fill" : "circle"
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***facilityIsSelected(facility) ? "circle.fill" : "circle"
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***VStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(facility.name)
@@ -190,10 +198,8 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.listStyle(.plain)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: floorFilterViewModel.selectedFacility) { selectedFacility in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let facility = floorFilterViewModel.facilities.first(where: { facility in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***facility.facilityId == selectedFacility?.facilityId
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***) else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: floorFilterViewModel.selectedFacility) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let facility = $0 else {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***withAnimation {
