@@ -57,6 +57,37 @@ public struct FloorFilter: View {
 ***REMOVED***@State
 ***REMOVED***private var isLevelsViewCollapsed: Bool = false
 
+***REMOVED******REMOVED***/ Displays the available levels.
+***REMOVED***private var levelsAndDividerView: some View {
+***REMOVED******REMOVED***Group {
+***REMOVED******REMOVED******REMOVED***if hasLevelsToDisplay {
+***REMOVED******REMOVED******REMOVED******REMOVED***if topAligned {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Divider()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 30)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***LevelsView(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***topAligned: topAligned,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***levels: sortedLevels,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isCollapsed: $isLevelsViewCollapsed
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***if !topAligned {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Divider()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 30)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+
+***REMOVED******REMOVED***/ Button to open and close the site and facility selector.
+***REMOVED***private var facilityButtonView: some View {
+***REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED***isSelectorHidden.toggle()
+***REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED***Image(systemName: "building.2")
+***REMOVED***
+***REMOVED******REMOVED******REMOVED***.padding(4)
+***REMOVED***
+
 ***REMOVED******REMOVED***/ A view that allows selecting between levels.
 ***REMOVED***private var levelSelectorView: some View {
 ***REMOVED******REMOVED***VStack {
@@ -64,21 +95,13 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***VStack {
-***REMOVED******REMOVED******REMOVED******REMOVED***if hasLevelsToDisplay {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***LevelsView(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***levels: sortedLevels,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isCollapsed: $isLevelsViewCollapsed
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Divider()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 30)
+***REMOVED******REMOVED******REMOVED******REMOVED***if topAligned {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***facilityButtonView
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***levelsAndDividerView
+***REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***levelsAndDividerView
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***facilityButtonView
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Site button.
-***REMOVED******REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isSelectorHidden.toggle()
-***REMOVED******REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "building.2")
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(4)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.esriBorder()
 ***REMOVED******REMOVED******REMOVED***if topAligned {
@@ -161,6 +184,9 @@ public struct FloorFilter: View {
 
 ***REMOVED***/ A view displaying the levels in the selected facility.
 struct LevelsView: View {
+***REMOVED******REMOVED***/ The alignment configuration.
+***REMOVED***var topAligned: Bool
+
 ***REMOVED******REMOVED***/ The levels to display.
 ***REMOVED***let levels: [FloorLevel]
 
@@ -192,10 +218,12 @@ struct LevelsView: View {
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***VStack {
 ***REMOVED******REMOVED******REMOVED***if !isCollapsed,
-***REMOVED******REMOVED******REMOVED***   levels.count > 1 {
-***REMOVED******REMOVED******REMOVED******REMOVED***CollapseButton(isCollapsed: $isCollapsed)
-***REMOVED******REMOVED******REMOVED******REMOVED***Divider()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 30)
+***REMOVED******REMOVED******REMOVED******REMOVED***levels.count > 1 {
+***REMOVED******REMOVED******REMOVED******REMOVED***if !topAligned {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***CollapseButton(isCollapsed: $isCollapsed)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Divider()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 30)
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***ScrollView {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***LevelsStack(levels: levels)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.background(
@@ -208,6 +236,11 @@ struct LevelsView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxHeight: scrollViewContentHeight)
+***REMOVED******REMOVED******REMOVED******REMOVED***if topAligned {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Divider()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 30)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***CollapseButton(isCollapsed: $isCollapsed)
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Button for the selected level.
 ***REMOVED******REMOVED******REMOVED******REMOVED***Button {
