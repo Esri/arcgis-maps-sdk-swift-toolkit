@@ -25,7 +25,7 @@ final class FloorFilterViewModel: ObservableObject {
 ***REMOVED***init(
 ***REMOVED******REMOVED***automaticSelectionMode: AutomaticSelectionMode = .always,
 ***REMOVED******REMOVED***floorManager: FloorManager,
-***REMOVED******REMOVED***viewpoint: Binding<Viewpoint>? = nil
+***REMOVED******REMOVED***viewpoint: Binding<Viewpoint?>
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.automaticSelectionMode = automaticSelectionMode
 ***REMOVED******REMOVED***self.floorManager = floorManager
@@ -50,7 +50,7 @@ final class FloorFilterViewModel: ObservableObject {
 
 ***REMOVED******REMOVED***/ The `Viewpoint` used to pan/zoom to the selected site/facilty.
 ***REMOVED******REMOVED***/ If `nil`, there will be no automatic pan/zoom operations.
-***REMOVED***var viewpoint: Binding<Viewpoint>?
+***REMOVED***var viewpoint: Binding<Viewpoint?>
 
 ***REMOVED******REMOVED***/ The `FloorManager` containing the site, floor, and level information.
 ***REMOVED***let floorManager: FloorManager
@@ -148,7 +148,7 @@ final class FloorFilterViewModel: ObservableObject {
 
 ***REMOVED******REMOVED***/ Updates `selectedSite` and `selectedFacility` based on the latest viewpoint position.
 ***REMOVED***func updateSelection() {
-***REMOVED******REMOVED***guard let viewpoint = viewpoint?.wrappedValue,
+***REMOVED******REMOVED***guard let viewpoint = viewpoint.wrappedValue,
 ***REMOVED******REMOVED******REMOVED******REMOVED***  !viewpoint.targetScale.isZero,
 ***REMOVED******REMOVED******REMOVED******REMOVED***automaticSelectionMode != .never else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***  return
@@ -223,9 +223,9 @@ final class FloorFilterViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ - Parameter extent: The new extent to be shown.
 ***REMOVED***private func zoomToExtent(extent: Envelope?) {
 ***REMOVED******REMOVED******REMOVED*** Make sure we have an extent and viewpoint to zoom to.
-***REMOVED******REMOVED***guard let extent = extent,
-***REMOVED******REMOVED******REMOVED***  let viewpoint = viewpoint
-***REMOVED******REMOVED***else { return ***REMOVED***
+***REMOVED******REMOVED***guard let extent = extent else {
+***REMOVED******REMOVED******REMOVED***return
+***REMOVED***
 
 ***REMOVED******REMOVED***let builder = EnvelopeBuilder(envelope: extent)
 ***REMOVED******REMOVED***builder.expand(factor: 1.5)
