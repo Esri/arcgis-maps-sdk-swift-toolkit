@@ -17,7 +17,7 @@ import SwiftUI
 import XCTest
 @testable import ArcGISToolkit
 
-class FloorFilterTests: XCTestCase {
+class FloorFilterViewModelTests: XCTestCase {
     /// Applies credentials necessary to run tests.
     override func setUp() async throws {
         await addCredentials()
@@ -208,7 +208,7 @@ class FloorFilterTests: XCTestCase {
     }
 }
 
-extension FloorFilterTests {
+extension FloorFilterViewModelTests {
     /// An arbitrary point to use for testing.
     var point: Point {
         Point(x: -117.19494, y: 34.05723, spatialReference: .wgs84)
