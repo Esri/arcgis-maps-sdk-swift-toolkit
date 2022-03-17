@@ -33,13 +33,17 @@ struct FloorFilterExampleView: View {
 ***REMOVED******REMOVED***return Map(item: portalItem)
 ***REMOVED***
 
+***REMOVED******REMOVED***/ Determines the arrangement of the inner `FloorFilter` UI componenets.
 ***REMOVED***private let filterAlignment = Alignment.bottomLeading
 
+***REMOVED******REMOVED***/ Determines the appropriate time to initialize the `FloorFilter`.
 ***REMOVED***@State
 ***REMOVED***private var isMapLoaded: Bool = false
 
+***REMOVED******REMOVED***/ The `Map` that will be provided to the `MapView`.
 ***REMOVED***private var map = makeMap()
 
+***REMOVED******REMOVED***/ The initial viewpoint of the map.
 ***REMOVED***@State
 ***REMOVED***private var viewpoint = Viewpoint(
 ***REMOVED******REMOVED***center: Point(x: -117.19496, y: 34.05713, spatialReference: .wgs84),
