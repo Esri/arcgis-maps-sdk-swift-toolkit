@@ -88,12 +88,13 @@ struct SiteAndFacilitySelector: View {
                         NavigationLink(
                             site.name,
                             tag: site,
-                            selection: $viewModel.selectedSite) {
-                                Facilities(
-                                    facilities: site.facilities,
-                                    isHidden: isHidden
-                                )
-                            }
+                            selection: $viewModel.selectedSite
+                        ) {
+                            Facilities(
+                                facilities: site.facilities,
+                                isHidden: isHidden
+                            )
+                        }
                             .onTapGesture {
                                 viewModel.setSite(
                                     site,
@@ -101,7 +102,7 @@ struct SiteAndFacilitySelector: View {
                                 )
                             }
                     }
-                    .listStyle(.plain)
+                        .listStyle(.plain)
                     NavigationLink("All sites") {
                         Facilities(
                             facilities: sites.flatMap({ $0.facilities }),
@@ -109,11 +110,11 @@ struct SiteAndFacilitySelector: View {
                             showSites: true
                         )
                     }
-                    .padding([.top, .bottom], 4)
+                        .padding([.top, .bottom], 4)
                 }
-                .navigationBarTitle(Text("Select a site"), displayMode: .inline)
+                    .navigationBarTitle(Text("Select a site"), displayMode: .inline)
             }
-            .navigationViewStyle(.stack)
+                .navigationViewStyle(.stack)
         }
     }
 
@@ -197,21 +198,21 @@ struct SiteAndFacilitySelector: View {
                             }
                         }
                     }
-                    .listStyle(.plain)
-                    .onChange(of: viewModel.selectedFacility) {
-                        guard let facility = $0 else {
-                            return
+                        .listStyle(.plain)
+                        .onChange(of: viewModel.selectedFacility) {
+                            guard let facility = $0 else {
+                                return
+                            }
+                            withAnimation {
+                                proxy.scrollTo(
+                                    facility.facilityId,
+                                    anchor: .center
+                                )
+                            }
                         }
-                        withAnimation {
-                            proxy.scrollTo(
-                                facility.facilityId,
-                                anchor: .center
-                            )
-                        }
-                    }
                 }
             }
-            .navigationBarTitle("Select a facility")
+                .navigationBarTitle("Select a facility")
         }
     }
 }
