@@ -17,7 +17,7 @@ import Combine
 import XCTest
 @testable ***REMOVED***Toolkit
 
-class FloorFilterTests: XCTestCase {
+class FloorFilterViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***/ Applies credentials necessary to run tests.
 ***REMOVED***override func setUp() async throws {
 ***REMOVED******REMOVED***await addCredentials()
@@ -208,7 +208,7 @@ class FloorFilterTests: XCTestCase {
 ***REMOVED***
 ***REMOVED***
 
-extension FloorFilterTests {
+extension FloorFilterViewModelTests {
 ***REMOVED******REMOVED***/ An arbitrary point to use for testing.
 ***REMOVED***var point: Point {
 ***REMOVED******REMOVED***Point(x: -117.19494, y: 34.05723, spatialReference: .wgs84)
