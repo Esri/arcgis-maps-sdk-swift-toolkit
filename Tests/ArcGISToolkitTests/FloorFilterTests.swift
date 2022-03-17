@@ -23,29 +23,113 @@ class FloorFilterTests: XCTestCase {
         await addCredentials()
     }
 
-    private var cancellables = Set<AnyCancellable>()
-
-    /// Tests general behavior of `FloorFilterViewModel`.
-    func testFloorFilterViewModel() async {
-        guard let map = await makeMap() else {
-            return
-        }
-        guard let floorManager = map.floorManager else {
-            XCTFail("No FloorManager available")
+    /// Tests that a `FloorFilterViewModel` succesfully initializes with a `FloorManager`.`
+    func testInitFloorFilterViewModelWithFloorManager() async {
+        guard let map = await makeMap(),
+              let floorManager = map.floorManager else {
             return
         }
         let viewModel = await FloorFilterViewModel(floorManager: floorManager)
-        let expectation = XCTestExpectation(
-            description: "View model successfully initialized"
+        await verifyInitialization(viewModel)
+        let sites = await viewModel.sites
+        let facilities = await viewModel.facilities
+        let levels = await viewModel.levels
+        XCTAssertFalse(sites.isEmpty)
+        XCTAssertFalse(facilities.isEmpty)
+        XCTAssertFalse(levels.isEmpty)
+    }
+
+    /// Tests that a `FloorFilterViewModel` succesfully initializes with a `FloorManager` and
+    /// `Binding<Viewpoint>?`.`
+    func testInitFloorFilterViewModelWithFloorManagerAndViewpoint() async {
+        guard let map = await makeMap(),
+              let floorManager = map.floorManager else {
+            return
+        }
+        var _viewpoint: Viewpoint = getViewpoint(.zero)
+        let viewpoint = Binding(get: { _viewpoint }, set: { _viewpoint = $0 })
+        let viewModel = await FloorFilterViewModel(
+            floorManager: floorManager,
+            viewpoint: viewpoint
         )
-        await viewModel.$isLoading
-            .sink { loading in
-                if !loading {
-                    expectation.fulfill()
-                }
-            }
-            .store(in: &cancellables)
-        wait(for: [expectation], timeout: 10.0)
+        await verifyInitialization(viewModel)
+        let sites = await viewModel.sites
+        let facilities = await viewModel.facilities
+        let levels = await viewModel.levels
+        let vmViewpoint = await viewModel.viewpoint
+        XCTAssertFalse(sites.isEmpty)
+        XCTAssertFalse(facilities.isEmpty)
+        XCTAssertFalse(levels.isEmpty)
+        XCTAssertNotNil(vmViewpoint)
+    }
+
+    /// Confirms that the selected site/facility/level properties and the viewpoint are correctly updated.
+    func testSetSite() async {
+        guard let map = await makeMap(),
+              let floorManager = map.floorManager else {
+            return
+        }
+        var _viewpoint: Viewpoint = getViewpoint(.zero)
+        let viewpoint = Binding(get: { _viewpoint }, set: { _viewpoint = $0 })
+        let viewModel = await FloorFilterViewModel(
+            floorManager: floorManager,
+            viewpoint: viewpoint
+        )
+        await verifyInitialization(viewModel)
+        let sites = await viewModel.sites
+        await viewModel.setSite(sites.first)
+        let selectedSite = await viewModel.selectedSite
+        let selectedFacility = await viewModel.selectedFacility
+        let selectedLevel = await viewModel.selectedLevel
+        var vmViewpoint = await viewModel.viewpoint
+        XCTAssertEqual(selectedSite, sites.first)
+        XCTAssertNil(selectedFacility)
+        XCTAssertNil(selectedLevel)
+        XCTAssertEqual(
+            _viewpoint.targetGeometry.extent.center.x,
+            vmViewpoint?.wrappedValue.targetGeometry.extent.center.x
+        )
+        await viewModel.setSite(sites.first, zoomTo: true)
+        vmViewpoint = await viewModel.viewpoint
+        XCTAssertEqual(
+            selectedSite?.geometry?.extent.center.x,
+            vmViewpoint?.wrappedValue.targetGeometry.extent.center.x
+        )
+    }
+
+    /// Confirms that the selected site/facility/level properties and the viewpoint are correctly updated.
+    func testSetFacility() async {
+        guard let map = await makeMap(),
+              let floorManager = map.floorManager else {
+            return
+        }
+        var _viewpoint: Viewpoint = getViewpoint(.zero)
+        let viewpoint = Binding(get: { _viewpoint }, set: { _viewpoint = $0 })
+        let viewModel = await FloorFilterViewModel(
+            floorManager: floorManager,
+            viewpoint: viewpoint
+        )
+        await verifyInitialization(viewModel)
+        let facilities = await viewModel.facilities
+        await viewModel.setFacility(facilities.first)
+        let selectedSite = await viewModel.selectedSite
+        let selectedFacility = await viewModel.selectedFacility
+        let selectedLevel = await viewModel.selectedLevel
+        let defaultLevel = await viewModel.defaultLevel(for: selectedFacility)
+        var vmViewpoint = await viewModel.viewpoint
+        XCTAssertEqual(selectedSite, selectedFacility?.site)
+        XCTAssertEqual(selectedFacility, facilities.first)
+        XCTAssertEqual(selectedLevel, defaultLevel)
+        XCTAssertEqual(
+            _viewpoint.targetGeometry.extent.center.x,
+            vmViewpoint?.wrappedValue.targetGeometry.extent.center.x
+        )
+        await viewModel.setFacility(facilities.first, zoomTo: true)
+        vmViewpoint = await viewModel.viewpoint
+        XCTAssertEqual(
+            selectedFacility?.geometry?.extent.center.x,
+            vmViewpoint?.wrappedValue.targetGeometry.extent.center.x
+        )
     }
 
     /// Get a map constructed from an ArcGIS portal item.
@@ -70,10 +154,41 @@ class FloorFilterTests: XCTestCase {
             XCTFail("\(#fileID), \(#function), \(#line), \(error.localizedDescription)")
             return nil
         }
-        guard map.loadStatus == .loaded else {
-            XCTFail("\(#fileID), \(#function), \(#line), Map not loaded")
-            return nil
-        }
         return map
+    }
+
+    /// Verifies that the `FloorFilterViewModel` has succesfully initialized.
+    /// - Parameter viewModel: The view model to analyze.
+    private func verifyInitialization(_ viewModel: FloorFilterViewModel) async {
+        let expectation = XCTestExpectation(
+            description: "View model successfully initialized"
+        )
+        let subscription = await viewModel.$isLoading
+            .sink { loading in
+                if !loading {
+                    expectation.fulfill()
+                }
+            }
+        wait(for: [expectation], timeout: 10.0)
+        subscription.cancel()
+    }
+}
+
+extension FloorFilterTests {
+    /// An arbitrary point to use for testing.
+    var point: Point {
+        Point(x: -117.19494, y: 34.05723, spatialReference: .wgs84)
+    }
+
+    /// An arbitrary scale to use for testing.
+    var scale: Double {
+        10_000.00
+    }
+
+    /// Builds viewpoints to use for tests.
+    /// - Parameter rotation: The rotation to use for the resulting viewpoint.
+    /// - Returns: A viewpoint object for tests.
+    func getViewpoint(_ rotation: Double) -> Viewpoint {
+        return Viewpoint(center: point, scale: scale, rotation: rotation)
     }
 }
