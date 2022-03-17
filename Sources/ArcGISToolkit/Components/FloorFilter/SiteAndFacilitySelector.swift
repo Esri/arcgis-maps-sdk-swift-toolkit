@@ -27,23 +27,23 @@ struct SiteAndFacilitySelector: View {
     }
 
     /// The view model used by the `SiteAndFacilitySelector`.
-    @EnvironmentObject var floorFilterViewModel: FloorFilterViewModel
+    @EnvironmentObject var viewModel: FloorFilterViewModel
 
     /// Allows the user to toggle the visibility of the site and facility selector.
     private var isHidden: Binding<Bool>
 
     var body: some View {
         VStack {
-            if floorFilterViewModel.sites.count == 1 {
+            if viewModel.sites.count == 1 {
                 Facilities(
-                    facilities: floorFilterViewModel.sites.first!.facilities,
+                    facilities: viewModel.sites.first!.facilities,
                     isHidden: isHidden,
                     showSites: true
                 )
             } else {
                 Sites(
                     isHidden: isHidden,
-                    sites: floorFilterViewModel.sites
+                    sites: viewModel.sites
                 )
             }
         }
@@ -52,7 +52,7 @@ struct SiteAndFacilitySelector: View {
     /// A view displaying the sites contained in a `FloorManager`.
     struct Sites: View {
         /// The view model used by this selector.
-        @EnvironmentObject var floorFilterViewModel: FloorFilterViewModel
+        @EnvironmentObject var viewModel: FloorFilterViewModel
 
         /// Allows the user to toggle the visibility of the site and facility selector.
         var isHidden: Binding<Bool>
@@ -88,14 +88,14 @@ struct SiteAndFacilitySelector: View {
                         NavigationLink(
                             site.name,
                             tag: site,
-                            selection: $floorFilterViewModel.selectedSite) {
+                            selection: $viewModel.selectedSite) {
                                 Facilities(
                                     facilities: site.facilities,
                                     isHidden: isHidden
                                 )
                             }
                             .onTapGesture {
-                                floorFilterViewModel.setSite(
+                                viewModel.setSite(
                                     site,
                                     zoomTo: true
                                 )
@@ -123,7 +123,7 @@ struct SiteAndFacilitySelector: View {
         let facilities: [FloorFacility]
 
         /// The view model used by this selector.
-        @EnvironmentObject var floorFilterViewModel: FloorFilterViewModel
+        @EnvironmentObject var viewModel: FloorFilterViewModel
 
         /// Allows the user to toggle the visibility of the site and facility selector.
         var isHidden: Binding<Bool>
@@ -152,7 +152,7 @@ struct SiteAndFacilitySelector: View {
         /// - Returns: `true` if the facility is marked as selected in the view model.
         func facilityIsSelected(_ facility: FloorFacility) -> Bool {
             return facility.facilityId ==
-                floorFilterViewModel.selectedFacility?.facilityId
+                viewModel.selectedFacility?.facilityId
         }
 
         var body: some View {
@@ -167,7 +167,7 @@ struct SiteAndFacilitySelector: View {
                 ScrollViewReader { proxy in
                     List(matchingFacilities, id: \.facilityId) { facility in
                         Button {
-                            floorFilterViewModel.setFacility(
+                            viewModel.setFacility(
                                 facility,
                                 zoomTo: true
                             )
@@ -198,7 +198,7 @@ struct SiteAndFacilitySelector: View {
                         }
                     }
                     .listStyle(.plain)
-                    .onChange(of: floorFilterViewModel.selectedFacility) {
+                    .onChange(of: viewModel.selectedFacility) {
                         guard let facility = $0 else {
                             return
                         }
