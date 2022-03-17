@@ -78,7 +78,7 @@ public struct FloorFilter: View {
                 } label: {
                     Image(systemName: "building.2")
                 }
-                .padding(4)
+                    .padding(4)
             }
                 .esriBorder()
             if topAligned {
@@ -100,11 +100,11 @@ public struct FloorFilter: View {
     /// A configured `SiteAndFacilitySelector` view.
     private var siteAndFacilitySelectorView: some View {
         SiteAndFacilitySelector(isHidden: $isSelectorHidden)
-        .esriBorder()
-        .opacity(isSelectorHidden ? .zero : 1)
-        .onChange(of: viewpoint.wrappedValue?.targetGeometry) { _ in
-            viewModel.updateSelection()
-        }
+            .esriBorder()
+            .opacity(isSelectorHidden ? .zero : 1)
+            .onChange(of: viewpoint.wrappedValue?.targetGeometry) { _ in
+                viewModel.updateSelection()
+            }
     }
 
     /// The selected facility's levels, sorted by `level.verticalOrder`.
@@ -153,9 +153,9 @@ public struct FloorFilter: View {
                 }
             }
         }
-        // Ensure space for filter text field on small screens in landscape
-        .frame(minHeight: 100)
-        .environmentObject(viewModel)
+            // Ensure space for filter text field on small screens in landscape
+            .frame(minHeight: 100)
+            .environmentObject(viewModel)
     }
 }
 
@@ -207,7 +207,7 @@ struct LevelsView: View {
                             }
                         )
                 }
-                .frame(maxHeight: scrollViewContentHeight)
+                    .frame(maxHeight: scrollViewContentHeight)
             } else {
                 // Button for the selected level.
                 Button {
@@ -219,8 +219,8 @@ struct LevelsView: View {
                 } label: {
                     Text(selectedLevelName)
                 }
-                .selected(true)
-                .padding(4)
+                    .selected(true)
+                    .padding(4)
             }
         }
     }
@@ -241,8 +241,8 @@ struct LevelsStack: View {
                 } label: {
                     Text(level.shortName)
                 }
-                .selected(level == viewModel.selectedLevel)
-                .padding(4)
+                    .selected(level == viewModel.selectedLevel)
+                    .padding(4)
             }
         }
     }
@@ -262,11 +262,11 @@ struct CollapseButton: View {
         } label: {
             Image(systemName: "xmark")
         }
-        .padding(EdgeInsets(
-            top: 2,
-            leading: 4,
-            bottom: 2,
-            trailing: 4
-        ))
+            .padding(EdgeInsets(
+                top: 2,
+                leading: 4,
+                bottom: 2,
+                trailing: 4
+            ))
     }
 }
