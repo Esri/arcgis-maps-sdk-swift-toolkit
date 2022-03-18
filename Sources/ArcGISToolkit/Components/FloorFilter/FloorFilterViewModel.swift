@@ -101,9 +101,9 @@ final class FloorFilterViewModel: ObservableObject {
     var selectedFacility: FloorFacility?
 
     @Published
-    private(set) var selectedLevel: FloorLevel?
+    var selectedLevel: FloorLevel?
 
-    // MARK: Set selectionmethods
+    // MARK: Set selection methods
 
     /// Updates the selected site, facility, and level based on a newly selected site.
     /// - Parameters:
