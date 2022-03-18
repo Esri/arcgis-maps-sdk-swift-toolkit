@@ -78,5 +78,7 @@ struct FloorFilterExampleView: View {
                     print("load error: \(error)")
                 }
             }
+            /// Preserve the current viewpoint when a keyboard is presented in landscape.
+            .padding([.bottom], 0.1)
     }
 }
