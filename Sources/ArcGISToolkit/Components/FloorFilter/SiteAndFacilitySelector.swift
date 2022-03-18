@@ -38,7 +38,7 @@ struct SiteAndFacilitySelector: View {
                 Facilities(
                     facilities: viewModel.sites.first!.facilities,
                     isHidden: isHidden,
-                    showSites: true
+                    presentationStyle: .singleSite
                 )
             } else {
                 Sites(
@@ -92,7 +92,8 @@ struct SiteAndFacilitySelector: View {
                         ) {
                             Facilities(
                                 facilities: site.facilities,
-                                isHidden: isHidden
+                                isHidden: isHidden,
+                                presentationStyle: .standard
                             )
                         }
                             .onTapGesture {
@@ -107,12 +108,17 @@ struct SiteAndFacilitySelector: View {
                         Facilities(
                             facilities: sites.flatMap({ $0.facilities }),
                             isHidden: isHidden,
-                            showSites: true
+                            presentationStyle: .allSites
                         )
                     }
                         .padding([.top, .bottom], 4)
                 }
                     .navigationBarTitle(Text("Select a site"), displayMode: .inline)
+                    .navigationBarItems(trailing: Button(action: {
+                        isHidden.wrappedValue.toggle()
+                    }, label: {
+                        Image(systemName: "xmark.circle")
+                    }))
             }
                 .navigationViewStyle(.stack)
         }
@@ -120,6 +126,16 @@ struct SiteAndFacilitySelector: View {
 
     /// A view displaying the facilities contained in a `FloorManager`.
     struct Facilities: View {
+        /// Presentation styles for the facility list.
+        enum PresentationStyle {
+            /// A specific site was selected and the body is presented within a navigation view.
+            case standard
+            /// The all sites button was selcted and the body is presented within a navigation view.
+            case allSites
+            /// Only one site exists and the body is not presented within a navigation view.
+            case singleSite
+        }
+
         /// `FloorFacility`s to be displayed by this view.
         let facilities: [FloorFacility]
 
@@ -139,14 +155,12 @@ struct SiteAndFacilitySelector: View {
             }
         }
 
+        /// The selected presentation style for the facility list.
+        let presentationStyle: PresentationStyle
+
         /// A facility filtering phrase entered by the user.
         @State
         var searchPhrase: String = ""
-
-        /// Indicates if site names should be shown as subtitles to the facility.
-        ///
-        /// Used when the user selects "All sites".
-        var showSites: Bool = false
 
         /// Determines  if a given site is the one marked as selected in the view model.
         /// - Parameter facility: The facility of interest
@@ -157,10 +171,43 @@ struct SiteAndFacilitySelector: View {
         }
 
         var body: some View {
+            if presentationStyle == .standard ||
+                presentationStyle == .allSites {
+                facilityFilterAndListView
+                    // Only apply navigation modifiers if this is displayed
+                    // within a navigation view
+                    .navigationBarTitle("Select a facility")
+                    .navigationBarItems(trailing: closeButtonView)
+            } else {
+                facilityFilterAndListView
+            }
+        }
+
+        /// Closese the site and facility selector.
+        var closeButtonView: some View {
+            Button(action: {
+                isHidden.wrappedValue.toggle()
+            }, label: {
+                Image(systemName: "xmark.circle")
+            })
+        }
+
+        /// A view containing a label for the site name, a filter-via-name bar and a list of the facility names.
+        var facilityFilterAndListView: some View {
             VStack {
-                if !showSites, let siteName = facilities.first?.site?.name {
-                    Text(siteName)
-                        .fontWeight(.ultraLight)
+                HStack {
+                    if presentationStyle == .standard {
+                        Text(facilities.first?.site?.name ?? "N/A")
+                            .fontWeight(.ultraLight)
+                    } else if presentationStyle == .allSites {
+                        Text("All sites")
+                            .fontWeight(.ultraLight)
+                    } else if presentationStyle == .singleSite {
+                        Text(facilities.first?.site?.name ?? "N/A")
+                            .fontWeight(.ultraLight)
+                        Spacer()
+                        closeButtonView
+                    }
                 }
                 TextField("Filter facilities", text: $searchPhrase)
                     .keyboardType(.alphabet)
@@ -186,7 +233,8 @@ struct SiteAndFacilitySelector: View {
                                         maxWidth: .infinity,
                                         alignment: .leading
                                     )
-                                    if showSites, let siteName = facility.site?.name {
+                                    if presentationStyle == .allSites,
+                                       let siteName = facility.site?.name {
                                         Text(siteName)
                                         .fontWeight(.ultraLight)
                                         .frame(
@@ -212,7 +260,6 @@ struct SiteAndFacilitySelector: View {
                         }
                 }
             }
-                .navigationBarTitle("Select a facility")
         }
     }
 }
