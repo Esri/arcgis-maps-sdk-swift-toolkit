@@ -38,7 +38,7 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Facilities(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***facilities: viewModel.sites.first!.facilities,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isHidden: isHidden,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***showSites: true
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***presentationStyle: .singleSite
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Sites(
@@ -92,7 +92,8 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Facilities(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***facilities: site.facilities,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isHidden: isHidden
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isHidden: isHidden,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***presentationStyle: .standard
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onTapGesture {
@@ -107,12 +108,17 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Facilities(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***facilities: sites.flatMap({ $0.facilities ***REMOVED***),
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isHidden: isHidden,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***showSites: true
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***presentationStyle: .allSites
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding([.top, .bottom], 4)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.navigationBarTitle(Text("Select a site"), displayMode: .inline)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.navigationBarItems(trailing: Button(action: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isHidden.wrappedValue.toggle()
+***REMOVED******REMOVED******REMOVED******REMOVED***, label: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "xmark.circle")
+***REMOVED******REMOVED******REMOVED******REMOVED***))
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.navigationViewStyle(.stack)
 ***REMOVED***
@@ -120,6 +126,16 @@ struct SiteAndFacilitySelector: View {
 
 ***REMOVED******REMOVED***/ A view displaying the facilities contained in a `FloorManager`.
 ***REMOVED***struct Facilities: View {
+***REMOVED******REMOVED******REMOVED***/ Presentation styles for the facility list.
+***REMOVED******REMOVED***enum PresentationStyle {
+***REMOVED******REMOVED******REMOVED******REMOVED***/ A specific site was selected and the body is presented within a navigation view.
+***REMOVED******REMOVED******REMOVED***case standard
+***REMOVED******REMOVED******REMOVED******REMOVED***/ The all sites button was selcted and the body is presented within a navigation view.
+***REMOVED******REMOVED******REMOVED***case allSites
+***REMOVED******REMOVED******REMOVED******REMOVED***/ Only one site exists and the body is not presented within a navigation view.
+***REMOVED******REMOVED******REMOVED***case singleSite
+***REMOVED***
+
 ***REMOVED******REMOVED******REMOVED***/ `FloorFacility`s to be displayed by this view.
 ***REMOVED******REMOVED***let facilities: [FloorFacility]
 
@@ -139,14 +155,12 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED***
 ***REMOVED***
 
+***REMOVED******REMOVED******REMOVED***/ The selected presentation style for the facility list.
+***REMOVED******REMOVED***let presentationStyle: PresentationStyle
+
 ***REMOVED******REMOVED******REMOVED***/ A facility filtering phrase entered by the user.
 ***REMOVED******REMOVED***@State
 ***REMOVED******REMOVED***var searchPhrase: String = ""
-
-***REMOVED******REMOVED******REMOVED***/ Indicates if site names should be shown as subtitles to the facility.
-***REMOVED******REMOVED******REMOVED***/
-***REMOVED******REMOVED******REMOVED***/ Used when the user selects "All sites".
-***REMOVED******REMOVED***var showSites: Bool = false
 
 ***REMOVED******REMOVED******REMOVED***/ Determines  if a given site is the one marked as selected in the view model.
 ***REMOVED******REMOVED******REMOVED***/ - Parameter facility: The facility of interest
@@ -157,10 +171,43 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED***
 
 ***REMOVED******REMOVED***var body: some View {
+***REMOVED******REMOVED******REMOVED***if presentationStyle == .standard ||
+***REMOVED******REMOVED******REMOVED******REMOVED***presentationStyle == .allSites {
+***REMOVED******REMOVED******REMOVED******REMOVED***facilityFilterAndListView
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Only apply navigation modifiers if this is displayed
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** within a navigation view
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.navigationBarTitle("Select a facility")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.navigationBarItems(trailing: closeButtonView)
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***facilityFilterAndListView
+***REMOVED******REMOVED***
+***REMOVED***
+
+***REMOVED******REMOVED******REMOVED***/ Closese the site and facility selector.
+***REMOVED******REMOVED***var closeButtonView: some View {
+***REMOVED******REMOVED******REMOVED***Button(action: {
+***REMOVED******REMOVED******REMOVED******REMOVED***isHidden.wrappedValue.toggle()
+***REMOVED******REMOVED***, label: {
+***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "xmark.circle")
+***REMOVED******REMOVED***)
+***REMOVED***
+
+***REMOVED******REMOVED******REMOVED***/ A view containing a label for the site name, a filter-via-name bar and a list of the facility names.
+***REMOVED******REMOVED***var facilityFilterAndListView: some View {
 ***REMOVED******REMOVED******REMOVED***VStack {
-***REMOVED******REMOVED******REMOVED******REMOVED***if !showSites, let siteName = facilities.first?.site?.name {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(siteName)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fontWeight(.ultraLight)
+***REMOVED******REMOVED******REMOVED******REMOVED***HStack {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if presentationStyle == .standard {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(facilities.first?.site?.name ?? "N/A")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fontWeight(.ultraLight)
+***REMOVED******REMOVED******REMOVED******REMOVED*** else if presentationStyle == .allSites {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("All sites")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fontWeight(.ultraLight)
+***REMOVED******REMOVED******REMOVED******REMOVED*** else if presentationStyle == .singleSite {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(facilities.first?.site?.name ?? "N/A")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fontWeight(.ultraLight)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***closeButtonView
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***TextField("Filter facilities", text: $searchPhrase)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.keyboardType(.alphabet)
@@ -186,7 +233,8 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***maxWidth: .infinity,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***alignment: .leading
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if showSites, let siteName = facility.site?.name {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if presentationStyle == .allSites,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***   let siteName = facility.site?.name {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(siteName)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fontWeight(.ultraLight)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(
@@ -212,7 +260,6 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.navigationBarTitle("Select a facility")
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
