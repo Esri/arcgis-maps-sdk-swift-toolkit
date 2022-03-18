@@ -108,6 +108,7 @@ public struct FloorFilter: View {
                 Spacer()
             }
         }
+            .frame(width: 55)
     }
 
     /// Indicates that the selector should be presented with a right oriented aligment configuration.
@@ -243,17 +244,18 @@ struct LevelsView: View {
                 }
             } else {
                 // Button for the selected level.
-                Button {
-                    if levels.count > 1 {
+                Text(selectedLevelName)
+                    .lineLimit(1)
+                    .frame(maxWidth: 50)
+                    .padding([.top, .bottom], 2)
+                    .background(Color(uiColor: .systemBlue))
+                    .cornerRadius(4)
+                    .onTapGesture {
                         withAnimation {
                             isCollapsed.toggle()
                         }
                     }
-                } label: {
-                    Text(selectedLevelName)
-                }
-                    .selected(true)
-                    .padding(4)
+                    .padding([.top, .bottom], 3)
             }
         }
     }
@@ -269,13 +271,20 @@ struct LevelsStack: View {
     var body: some View {
         VStack {
             ForEach(levels) { level in
-                Button {
-                    viewModel.setLevel(level)
-                } label: {
-                    Text(level.shortName)
-                }
-                    .selected(level == viewModel.selectedLevel)
-                    .padding(4)
+                Text(level.shortName)
+                    .lineLimit(1)
+                    .frame(maxWidth: 50)
+                    .padding([.top, .bottom], 2)
+                    .background(
+                        level == viewModel.selectedLevel ?
+                            Color(uiColor: .systemBlue) :
+                            Color(uiColor: .systemGray2)
+                    )
+                    .cornerRadius(4)
+                    .onTapGesture {
+                        viewModel.setLevel(level)
+                    }
+                    .padding([.top, .bottom], 3)
             }
         }
     }
