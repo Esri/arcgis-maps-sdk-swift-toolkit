@@ -78,5 +78,7 @@ struct FloorFilterExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print("load error: \(error)")
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***/ Preserve the current viewpoint when a keyboard is presented in landscape.
+***REMOVED******REMOVED******REMOVED***.padding([.bottom], 0.1)
 ***REMOVED***
 ***REMOVED***
