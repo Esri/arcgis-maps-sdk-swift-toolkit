@@ -244,10 +244,7 @@ struct LevelsView: View {
                 }
             } else {
                 // Button for the selected level.
-                Text(selectedLevelName)
-                    .lineLimit(1)
-                    .frame(maxWidth: 50)
-                    .padding([.top, .bottom], 2)
+                LevelLabel(text: selectedLevelName)
                     .background(Color(uiColor: .systemBlue))
                     .cornerRadius(4)
                     .onTapGesture {
@@ -261,6 +258,19 @@ struct LevelsView: View {
     }
 }
 
+/// A label that display text in a view with a confined static width.
+struct LevelLabel: View {
+    /// The text to be displayed in the label.
+    var text: String
+
+    var body: some View {
+        Text(text)
+            .lineLimit(1)
+            .frame(maxWidth: 50)
+            .padding([.top, .bottom], 2)
+    }
+}
+
 /// A vertical list of floor levels.
 struct LevelsStack: View {
     let levels: [FloorLevel]
@@ -271,10 +281,7 @@ struct LevelsStack: View {
     var body: some View {
         VStack {
             ForEach(levels) { level in
-                Text(level.shortName)
-                    .lineLimit(1)
-                    .frame(maxWidth: 50)
-                    .padding([.top, .bottom], 2)
+                LevelLabel(text: level.shortName)
                     .background(
                         level == viewModel.selectedLevel ?
                             Color(uiColor: .systemBlue) :
