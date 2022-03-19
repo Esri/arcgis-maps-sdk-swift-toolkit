@@ -33,19 +33,17 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED***private var isHidden: Binding<Bool>
 
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***VStack {
-***REMOVED******REMOVED******REMOVED***if viewModel.sites.count == 1 {
-***REMOVED******REMOVED******REMOVED******REMOVED***Facilities(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***facilities: viewModel.sites.first!.facilities,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isHidden: isHidden,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***presentationStyle: .singleSite
-***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***Sites(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isHidden: isHidden,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***sites: viewModel.sites
-***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED***
+***REMOVED******REMOVED***if viewModel.sites.count == 1 {
+***REMOVED******REMOVED******REMOVED***Facilities(
+***REMOVED******REMOVED******REMOVED******REMOVED***facilities: viewModel.sites.first!.facilities,
+***REMOVED******REMOVED******REMOVED******REMOVED***isHidden: isHidden,
+***REMOVED******REMOVED******REMOVED******REMOVED***presentationStyle: .singleSite
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***Sites(
+***REMOVED******REMOVED******REMOVED******REMOVED***isHidden: isHidden,
+***REMOVED******REMOVED******REMOVED******REMOVED***sites: viewModel.sites
+***REMOVED******REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 
