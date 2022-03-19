@@ -155,22 +155,19 @@ final class FloorFilterViewModel: ObservableObject {
               }
 
         // Only take action if viewpoint is within minimum scale. Default
-        // minscale is 4300 or less (~zoom level 17 or greater)
-        var targetScale = floorManager.siteLayer?.minScale ?? .zero
-        if targetScale.isZero {
-            targetScale = 4300
+        // minScale is 4300 or less.
+        var minScale = floorManager.siteLayer?.minScale ?? .zero
+        if minScale.isZero {
+            minScale = 4300
         }
 
-        // If viewpoint is out of range, reset selection (if not non-clearing)
-        // and return
-        if viewpoint.targetScale > targetScale {
+        // If viewpoint is out of range, reset selection and return.
+        if viewpoint.targetScale > minScale {
             if automaticSelectionMode == .always {
                 setSite(nil)
                 setFacility(nil)
                 setLevel(nil)
             }
-            // Assumption: if too zoomed out to see sites, also too zoomed out
-            // to see facilities
             return
         }
 
