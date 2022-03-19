@@ -57,15 +57,12 @@ struct LevelSelector: View {
                         .frame(width: 30)
                 }
                 ScrollView {
-                    LevelsStack(levels: levels)
-                        .background(
-                            GeometryReader { geometry -> Color in
-                                DispatchQueue.main.async {
-                                    scrollViewContentHeight = geometry.size.height
-                                }
-                                return .clear
-                            }
-                        )
+                    VStack {
+                        LevelsStack(levels: levels)
+                    }
+                        .onSizeChange {
+                            scrollViewContentHeight = $0.height
+                        }
                 }
                     .frame(maxHeight: scrollViewContentHeight)
                 if topAligned {
