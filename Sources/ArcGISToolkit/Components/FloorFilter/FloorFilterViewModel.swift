@@ -155,14 +155,12 @@ final class FloorFilterViewModel: ObservableObject {
               automaticSelectionMode != .never else {
                   return
         }
-        if updateSelectedSite() {
-            updateSelectedFacility()
-        }
+        updateSelectedSite()
+        updateSelectedFacility()
     }
 
     /// Updates `selectedSite` if a good selection exists.
-    /// - Returns: `true` if a selection was made, `false` otherwise.
-    private func updateSelectedSite() -> Bool {
+    private func updateSelectedSite() {
         // Only select a facility if it is within minimum scale. Default at 4300.
         let siteMinScale: Double
         if let minScale = floorManager.siteLayer?.minScale,
@@ -179,7 +177,7 @@ final class FloorFilterViewModel: ObservableObject {
                 setFacility(nil)
                 setLevel(nil)
             }
-            return false
+            return
         }
 
         // If the centerpoint is within a site's geometry, select that site.
@@ -196,11 +194,9 @@ final class FloorFilterViewModel: ObservableObject {
 
         if let siteResult = siteResult {
             setSite(siteResult)
-            return true
         } else if automaticSelectionMode == .always {
             setSite(nil)
         }
-        return false
     }
 
     /// Updates `selectedFacility` if a good selection exists.
