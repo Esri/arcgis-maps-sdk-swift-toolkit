@@ -114,8 +114,6 @@ final class FloorFilterViewModel: ObservableObject {
         zoomTo: Bool = false
     ) {
         selectedSite = floorSite
-        selectedFacility = nil
-        selectedLevel = nil
         if zoomTo {
             zoomToExtent(extent: floorSite?.geometry?.extent)
         }
@@ -129,9 +127,15 @@ final class FloorFilterViewModel: ObservableObject {
         _ floorFacility: FloorFacility?,
         zoomTo: Bool = false
     ) {
-        selectedSite = floorFacility?.site
         selectedFacility = floorFacility
-        selectedLevel = defaultLevel(for: floorFacility)
+        if let currentVerticalOrder = selectedLevel?.verticalOrder,
+           let newLevel = floorFacility?.levels.first(where: { level in
+               level.verticalOrder == currentVerticalOrder
+           }) {
+            setLevel(newLevel)
+        } else {
+            setLevel(defaultLevel(for: floorFacility))
+        }
         if zoomTo {
             zoomToExtent(extent: floorFacility?.geometry?.extent)
         }
@@ -140,8 +144,6 @@ final class FloorFilterViewModel: ObservableObject {
     /// Updates the selected site, facility, and level based on a newly selected level.
     /// - Parameter floorLevel: The selected level.
     func setLevel(_ floorLevel: FloorLevel?) {
-        selectedSite = floorLevel?.facility?.site
-        selectedFacility = floorLevel?.facility
         selectedLevel = floorLevel
         filterMapToSelectedLevel()
     }
@@ -149,62 +151,89 @@ final class FloorFilterViewModel: ObservableObject {
     /// Updates `selectedSite` and `selectedFacility` based on the latest viewpoint position.
     func updateSelection() {
         guard let viewpoint = viewpoint.wrappedValue,
-                  !viewpoint.targetScale.isZero,
-                automaticSelectionMode != .never else {
+              !viewpoint.targetScale.isZero,
+              automaticSelectionMode != .never else {
                   return
-              }
+        }
+        if updateSelectedSite() {
+            updateSelectedFacility()
+        }
+    }
 
-        // Only take action if viewpoint is within minimum scale. Default
-        // minScale is 4300 or less.
-        var minScale = floorManager.siteLayer?.minScale ?? .zero
-        if minScale.isZero {
-            minScale = 4300
+    /// Updates `selectedSite` if a good selection exists.
+    /// - Returns: `true` if a selection was made, `false` otherwise.
+    private func updateSelectedSite() -> Bool {
+        // Only select a facility if it is within minimum scale. Default at 4300.
+        let siteMinScale: Double
+        if let minScale = floorManager.siteLayer?.minScale,
+               minScale != .zero {
+            siteMinScale = minScale
+        } else {
+            siteMinScale = 4300
         }
 
-        // If viewpoint is out of range, reset selection and return.
-        if viewpoint.targetScale > minScale {
+        // If viewpoint is out of range, reset selection and return early.
+        if viewpoint.wrappedValue?.targetScale ?? .zero > siteMinScale {
             if automaticSelectionMode == .always {
                 setSite(nil)
                 setFacility(nil)
                 setLevel(nil)
             }
-            return
-        }
-
-        let facilityResult = floorManager.facilities.first { facility in
-            guard let facilityExtent = facility.geometry?.extent else {
-                return false
-            }
-            return GeometryEngine.intersects(
-                geometry1: facilityExtent,
-                geometry2: viewpoint.targetGeometry
-            )
-        }
-
-        if let facilityResult = facilityResult {
-            setFacility(facilityResult)
-            return
-        } else if automaticSelectionMode == .always {
-            setFacility(nil)
+            return false
         }
 
         // If the centerpoint is within a site's geometry, select that site.
-        // This code gracefully skips selection if there are no sites or no
-        // matching sites
         let siteResult = floorManager.sites.first { site in
-            guard let siteExtent = site.geometry?.extent else {
+            guard let extent1 = viewpoint.wrappedValue?.targetGeometry.extent,
+                  let extent2 = site.geometry?.extent else {
                 return false
             }
             return GeometryEngine.intersects(
-                geometry1: siteExtent,
-                geometry2: viewpoint.targetGeometry
+                geometry1: extent1,
+                geometry2: extent2
             )
         }
 
         if let siteResult = siteResult {
             setSite(siteResult)
+            return true
         } else if automaticSelectionMode == .always {
             setSite(nil)
+        }
+        return false
+    }
+
+    /// Updates `selectedFacility` if a good selection exists.
+    private func updateSelectedFacility() {
+        // Only select a facility if it is within minimum scale. Default at 1500.
+        let facilityMinScale: Double
+        if let minScale = floorManager.facilityLayer?.minScale,
+               minScale != .zero {
+            facilityMinScale = minScale
+        } else {
+            facilityMinScale = 1500
+        }
+
+        if viewpoint.wrappedValue?.targetScale ?? .zero > facilityMinScale {
+            return
+        }
+
+        // If the centerpoint is within a facilities' geometry, select that site.
+        let facilityResult = floorManager.facilities.first { facility in
+            guard let extent1 = viewpoint.wrappedValue?.targetGeometry.extent,
+                  let extent2 = facility.geometry?.extent else {
+                return false
+            }
+            return GeometryEngine.intersects(
+                geometry1: extent1,
+                geometry2: extent2
+            )
+        }
+
+        if let facilityResult = facilityResult {
+            setFacility(facilityResult)
+        } else if automaticSelectionMode == .always {
+            setFacility(nil)
         }
     }
 
