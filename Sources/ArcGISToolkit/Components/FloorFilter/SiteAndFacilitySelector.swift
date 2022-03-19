@@ -33,19 +33,17 @@ struct SiteAndFacilitySelector: View {
     private var isHidden: Binding<Bool>
 
     var body: some View {
-        VStack {
-            if viewModel.sites.count == 1 {
-                Facilities(
-                    facilities: viewModel.sites.first!.facilities,
-                    isHidden: isHidden,
-                    presentationStyle: .singleSite
-                )
-            } else {
-                Sites(
-                    isHidden: isHidden,
-                    sites: viewModel.sites
-                )
-            }
+        if viewModel.sites.count == 1 {
+            Facilities(
+                facilities: viewModel.sites.first!.facilities,
+                isHidden: isHidden,
+                presentationStyle: .singleSite
+            )
+        } else {
+            Sites(
+                isHidden: isHidden,
+                sites: viewModel.sites
+            )
         }
     }
 
