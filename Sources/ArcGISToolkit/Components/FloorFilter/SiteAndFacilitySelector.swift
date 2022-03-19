@@ -57,6 +57,10 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED***/ Allows the user to toggle the visibility of the site and facility selector.
 ***REMOVED******REMOVED***var isHidden: Binding<Bool>
 
+***REMOVED******REMOVED******REMOVED***/ Indicates that the keyboard is animating and some views may require reload.
+***REMOVED******REMOVED***@State
+***REMOVED******REMOVED***private var keyboardAnimating = false
+
 ***REMOVED******REMOVED******REMOVED***/ A subset of `sites` that contain `searchPhrase`.
 ***REMOVED******REMOVED***var matchingSites: [FloorSite] {
 ***REMOVED******REMOVED******REMOVED***if searchPhrase.isEmpty {
@@ -73,10 +77,6 @@ struct SiteAndFacilitySelector: View {
 
 ***REMOVED******REMOVED******REMOVED***/ Sites contained in a `FloorManager`.
 ***REMOVED******REMOVED***let sites: [FloorSite]
-
-***REMOVED******REMOVED******REMOVED***/ The height of the scroll view's content.
-***REMOVED******REMOVED***@State
-***REMOVED******REMOVED***private var scrollViewContentHeight: CGFloat = .zero
 
 ***REMOVED******REMOVED***var body: some View {
 ***REMOVED******REMOVED******REMOVED***NavigationView {
@@ -128,7 +128,26 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "xmark.circle")
 ***REMOVED******REMOVED******REMOVED******REMOVED***))
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.opacity(keyboardAnimating ? 0.99 : 1.0)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.navigationViewStyle(.stack)
+***REMOVED******REMOVED******REMOVED******REMOVED***.onReceive(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***NotificationCenter.default.publisher(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for: UIResponder.keyboardWillChangeFrameNotification
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***) { _ in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***withAnimation {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***keyboardAnimating = true
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.onReceive(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***NotificationCenter.default.publisher(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for: UIResponder.keyboardDidChangeFrameNotification
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***) { _ in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***withAnimation {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***keyboardAnimating = false
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 
@@ -206,13 +225,10 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if presentationStyle == .standard {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(facilities.first?.site?.name ?? "N/A")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fontWeight(.ultraLight)
 ***REMOVED******REMOVED******REMOVED******REMOVED*** else if presentationStyle == .allSites {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("All sites")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fontWeight(.ultraLight)
 ***REMOVED******REMOVED******REMOVED******REMOVED*** else if presentationStyle == .singleSite {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(facilities.first?.site?.name ?? "N/A")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fontWeight(.ultraLight)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***closeButtonView
 ***REMOVED******REMOVED******REMOVED******REMOVED***
