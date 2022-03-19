@@ -84,26 +84,34 @@ struct SiteAndFacilitySelector: View {
                     TextField("Filter sites", text: $searchPhrase)
                         .keyboardType(.alphabet)
                         .disableAutocorrection(true)
-                    List(matchingSites) { (site) in
-                        NavigationLink(
-                            site.name,
-                            tag: site,
-                            selection: $viewModel.selectedSite
-                        ) {
-                            Facilities(
-                                facilities: site.facilities,
-                                isHidden: isHidden,
-                                presentationStyle: .standard
-                            )
+                    if matchingSites.isEmpty {
+                        VStack {
+                            Spacer()
+                            Text("No matches found")
+                            Spacer()
                         }
-                            .onTapGesture {
-                                viewModel.setSite(
-                                    site,
-                                    zoomTo: true
+                    } else {
+                        List(matchingSites) { site in
+                            NavigationLink(
+                                site.name,
+                                tag: site,
+                                selection: $viewModel.selectedSite
+                            ) {
+                                Facilities(
+                                    facilities: site.facilities,
+                                    isHidden: isHidden,
+                                    presentationStyle: .standard
                                 )
                             }
+                                .onTapGesture {
+                                    viewModel.setSite(
+                                        site,
+                                        zoomTo: true
+                                    )
+                                }
+                        }
+                            .listStyle(.plain)
                     }
-                        .listStyle(.plain)
                     NavigationLink("All sites") {
                         Facilities(
                             facilities: sites.flatMap({ $0.facilities }),
@@ -212,52 +220,60 @@ struct SiteAndFacilitySelector: View {
                 TextField("Filter facilities", text: $searchPhrase)
                     .keyboardType(.alphabet)
                     .disableAutocorrection(true)
-                ScrollViewReader { proxy in
-                    List(matchingFacilities, id: \.facilityId) { facility in
-                        Button {
-                            viewModel.setFacility(
-                                facility,
-                                zoomTo: true
-                            )
-                            isHidden.wrappedValue.toggle()
-                        } label: {
-                            HStack {
-                                Image(
-                                    systemName:
-                                        facilityIsSelected(facility) ? "circle.fill" : "circle"
+                if matchingFacilities.isEmpty {
+                    VStack {
+                        Spacer()
+                        Text("No matches found")
+                        Spacer()
+                    }
+                } else {
+                    ScrollViewReader { proxy in
+                        List(matchingFacilities, id: \.facilityId) { facility in
+                            Button {
+                                viewModel.setFacility(
+                                    facility,
+                                    zoomTo: true
                                 )
-                                VStack {
-                                    Text(facility.name)
-                                    .fontWeight(.regular)
-                                    .frame(
-                                        maxWidth: .infinity,
-                                        alignment: .leading
+                                isHidden.wrappedValue.toggle()
+                            } label: {
+                                HStack {
+                                    Image(
+                                        systemName:
+                                            facilityIsSelected(facility) ? "circle.fill" : "circle"
                                     )
-                                    if presentationStyle == .allSites,
-                                       let siteName = facility.site?.name {
-                                        Text(siteName)
-                                        .fontWeight(.ultraLight)
+                                    VStack {
+                                        Text(facility.name)
+                                        .fontWeight(.regular)
                                         .frame(
                                             maxWidth: .infinity,
                                             alignment: .leading
                                         )
+                                        if presentationStyle == .allSites,
+                                           let siteName = facility.site?.name {
+                                            Text(siteName)
+                                            .fontWeight(.ultraLight)
+                                            .frame(
+                                                maxWidth: .infinity,
+                                                alignment: .leading
+                                            )
+                                        }
                                     }
                                 }
                             }
                         }
+                            .listStyle(.plain)
+                            .onChange(of: viewModel.selectedFacility) {
+                                guard let facility = $0 else {
+                                    return
+                                }
+                                withAnimation {
+                                    proxy.scrollTo(
+                                        facility.facilityId,
+                                        anchor: .center
+                                    )
+                                }
+                            }
                     }
-                        .listStyle(.plain)
-                        .onChange(of: viewModel.selectedFacility) {
-                            guard let facility = $0 else {
-                                return
-                            }
-                            withAnimation {
-                                proxy.scrollTo(
-                                    facility.facilityId,
-                                    anchor: .center
-                                )
-                            }
-                        }
                 }
             }
         }
