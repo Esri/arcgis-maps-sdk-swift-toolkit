@@ -39,6 +39,10 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED***self.viewpoint = viewpoint
 ***REMOVED***
 
+***REMOVED******REMOVED***/ The view model used by the `FloorFilter`.
+***REMOVED***@StateObject
+***REMOVED***private var viewModel: FloorFilterViewModel
+
 ***REMOVED******REMOVED***/ A Boolean value that indicates whether the levels view is currently collapsed.
 ***REMOVED***@State
 ***REMOVED***private var isLevelsViewCollapsed: Bool = false
@@ -50,15 +54,25 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED***/ The alignment configuration.
 ***REMOVED***private let alignment: Alignment
 
-***REMOVED******REMOVED***/ A Boolean value that indicates whether there are levels to display.  This will be false if
-***REMOVED******REMOVED***/ there is no selected facility or if the selected facility has no levels.
+***REMOVED******REMOVED***/ Button to open and close the site and facility selector.
+***REMOVED***private var facilityButtonView: some View {
+***REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED***isSelectorHidden.toggle()
+***REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED***Image(systemName: "building.2")
+***REMOVED***
+***REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity)
+***REMOVED***
+
+***REMOVED******REMOVED***/ A Boolean value that indicates whether there are levels to display.  This will be false if there is no
+***REMOVED******REMOVED***/ selected facility or if the selected facility has no levels.
 ***REMOVED***private var hasLevelsToDisplay: Bool {
 ***REMOVED******REMOVED***!(viewModel.selectedFacility == nil ||
 ***REMOVED******REMOVED***  viewModel.selectedFacility!.levels.isEmpty)
 ***REMOVED***
 
 ***REMOVED******REMOVED***/ Displays the available levels.
-***REMOVED***private var levelsAndDividerView: some View {
+***REMOVED***private var levelsSelectorView: some View {
 ***REMOVED******REMOVED***Group {
 ***REMOVED******REMOVED******REMOVED***if hasLevelsToDisplay {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if topAligned {
@@ -78,16 +92,6 @@ public struct FloorFilter: View {
 ***REMOVED***
 ***REMOVED***
 
-***REMOVED******REMOVED***/ Button to open and close the site and facility selector.
-***REMOVED***private var facilityButtonView: some View {
-***REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED***isSelectorHidden.toggle()
-***REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED***Image(systemName: "building.2")
-***REMOVED***
-***REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity)
-***REMOVED***
-
 ***REMOVED******REMOVED***/ A view that allows selecting between levels.
 ***REMOVED***private var levelSelectorView: some View {
 ***REMOVED******REMOVED***VStack {
@@ -97,9 +101,9 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED******REMOVED***VStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if topAligned {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***facilityButtonView
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***levelsAndDividerView
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***levelsSelectorView
 ***REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***levelsAndDividerView
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***levelsSelectorView
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***facilityButtonView
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
@@ -148,10 +152,6 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED******REMOVED***return false
 ***REMOVED***
 ***REMOVED***
-
-***REMOVED******REMOVED***/ The view model used by the `FloorFilter`.
-***REMOVED***@StateObject
-***REMOVED***private var viewModel: FloorFilterViewModel
 
 ***REMOVED******REMOVED***/ The `Viewpoint` used to pan/zoom to the selected site/facilty.
 ***REMOVED******REMOVED***/ If `nil`, there will be no automatic pan/zoom operations or automatic selection support.
