@@ -85,7 +85,7 @@ public struct FloorFilter: View {
         } label: {
             Image(systemName: "building.2")
         }
-            .padding(4)
+            .frame(maxWidth: .infinity)
     }
 
     /// A view that allows selecting between levels.
@@ -108,7 +108,7 @@ public struct FloorFilter: View {
                 Spacer()
             }
         }
-            .frame(width: 55)
+            .frame(width: 75)
     }
 
     /// Indicates that the selector should be presented with a right oriented aligment configuration.
@@ -244,31 +244,17 @@ struct LevelsView: View {
                     CollapseButton(isCollapsed: $isCollapsed)
                 }
             } else {
-                // Button for the selected level.
-                LevelLabel(text: selectedLevelName)
-                    .background(Color(uiColor: .systemBlue))
-                    .cornerRadius(4)
-                    .onTapGesture {
-                        withAnimation {
-                            isCollapsed.toggle()
-                        }
+                Button {
+                    if levels.count > 1 {
+                        isCollapsed.toggle()
                     }
-                    .padding([.top, .bottom], 3)
+                } label: {
+                    Text(selectedLevelName)
+                        .lineLimit(1)
+                }
+                    .selected(true)
             }
         }
-    }
-}
-
-/// A label that display text in a view with a confined static width.
-struct LevelLabel: View {
-    /// The text to be displayed in the label.
-    var text: String
-
-    var body: some View {
-        Text(text)
-            .lineLimit(1)
-            .frame(maxWidth: 50)
-            .padding([.top, .bottom], 2)
     }
 }
 
@@ -282,17 +268,13 @@ struct LevelsStack: View {
     var body: some View {
         VStack {
             ForEach(levels) { level in
-                LevelLabel(text: level.shortName)
-                    .background(
-                        level == viewModel.selectedLevel ?
-                            Color(uiColor: .systemBlue) :
-                            Color(uiColor: .systemGray2)
-                    )
-                    .cornerRadius(4)
-                    .onTapGesture {
-                        viewModel.setLevel(level)
-                    }
-                    .padding([.top, .bottom], 3)
+                Button {
+                    viewModel.setLevel(level)
+                } label: {
+                    Text(level.shortName)
+                        .lineLimit(1)
+                }
+                    .selected(level == viewModel.selectedLevel)
             }
         }
     }
