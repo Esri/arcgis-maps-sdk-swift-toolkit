@@ -43,6 +43,9 @@ struct FloorFilterExampleView: View {
 ***REMOVED******REMOVED***/ The `Map` that will be provided to the `MapView`.
 ***REMOVED***private var map = makeMap()
 
+***REMOVED***@State
+***REMOVED***private var mapLoadError: Bool = false
+
 ***REMOVED******REMOVED***/ The initial viewpoint of the map.
 ***REMOVED***@State
 ***REMOVED***private var viewpoint: Viewpoint? = Viewpoint(
@@ -71,6 +74,17 @@ struct FloorFilterExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: 300, maxHeight: 300)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(36)
+***REMOVED******REMOVED******REMOVED*** else if mapLoadError {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Label(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Map load error!",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***systemImage: "exclamationmark.triangle"
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.red)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***maxWidth: .infinity,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***maxHeight: .infinity,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***alignment: .center
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.task {
@@ -78,7 +92,7 @@ struct FloorFilterExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try await map.load()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isMapLoaded = true
 ***REMOVED******REMOVED******REMOVED*** catch {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print("load error: \(error)")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mapLoadError = true
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
