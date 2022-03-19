@@ -117,7 +117,7 @@ struct SiteAndFacilitySelector: View {
                             presentationStyle: .allSites
                         )
                     }
-                        .padding([.top, .bottom], 4)
+                        .padding([.vertical], 4)
                 }
                     .navigationBarTitle(Text("Select a site"), displayMode: .inline)
                     .navigationBarItems(trailing: Button(action: {
