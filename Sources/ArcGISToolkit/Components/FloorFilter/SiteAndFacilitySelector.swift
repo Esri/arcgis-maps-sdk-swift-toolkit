@@ -18,10 +18,6 @@ import ArcGIS
 struct SiteAndFacilitySelector: View {
     /// Creates a `SiteAndFacilitySelector`
     /// - Parameter isHidden: A binding used to dismiss the site selector.
-    /// - Parameter selectedFacilityID: Indicates the implicity selected facility based on the
-    /// current viewpoint.
-    /// - Parameter selectedSiteID: Indicates the implicity selected site based on the current
-    /// viewpoint.
     init(isHidden: Binding<Bool>) {
         self.isHidden = isHidden
     }
@@ -52,12 +48,19 @@ struct SiteAndFacilitySelector: View {
         /// The view model used by this selector.
         @EnvironmentObject var viewModel: FloorFilterViewModel
 
-        /// Allows the user to toggle the visibility of the site and facility selector.
-        var isHidden: Binding<Bool>
-
         /// Indicates that the keyboard is animating and some views may require reload.
         @State
         private var keyboardAnimating = false
+
+        /// A site name filter phrase entered by the user.
+        @State
+        private var searchPhrase: String = ""
+
+        /// Sites contained in a `FloorManager`.
+        let sites: [FloorSite]
+
+        /// Allows the user to toggle the visibility of the site and facility selector.
+        var isHidden: Binding<Bool>
 
         /// A subset of `sites` with names containing `searchPhrase` or all `sites` if
         /// `searchPhrase` is empty.
@@ -70,15 +73,10 @@ struct SiteAndFacilitySelector: View {
             }
         }
 
-        /// A site filtering phrase entered by the user.
-        @State
-        var searchPhrase: String = ""
-
-        /// Sites contained in a `FloorManager`.
-        let sites: [FloorSite]
-
         var body: some View {
             siteListAndFilterView
+                // Trigger a reload on keyboard frame changes for proper layout
+                // across all devices.
                 .opacity(keyboardAnimating ? 0.99 : 1.0)
                 .navigationViewStyle(.stack)
                 .onReceive(
@@ -162,6 +160,9 @@ struct SiteAndFacilitySelector: View {
 
     /// A view displaying the facilities contained in a `FloorManager`.
     struct FacilitiesList: View {
+        /// The view model used by this selector.
+        @EnvironmentObject var viewModel: FloorFilterViewModel
+
         /// Presentation styles for the facility list.
         enum PresentationStyle {
             /// A specific site was selected and the body is presented within a navigation view.
@@ -172,23 +173,15 @@ struct SiteAndFacilitySelector: View {
             case singleSite
         }
 
+        /// A facility name filter phrase entered by the user.
+        @State
+        var searchPhrase: String = ""
+
         /// `FloorFacility`s to be displayed by this view.
         let facilities: [FloorFacility]
 
-        /// The view model used by this selector.
-        @EnvironmentObject var viewModel: FloorFilterViewModel
-
-        /// Determines the SF Symbols image name to represent selection/non-selection of a facility.
-        /// - Parameter facility: The facility of interest
-        /// - Returns: "circle.fill" if the facility is marked selected or "cirlce" if the facility is not selected
-        /// in the view model.
-        func imageFor(_ facility: FloorFacility) -> String {
-            if facility.facilityId == viewModel.selectedFacility?.facilityId {
-                return "circle.fill"
-            } else {
-                return "circle"
-            }
-        }
+        /// The selected presentation style for the facility list.
+        let presentationStyle: PresentationStyle
 
         /// Allows the user to toggle the visibility of the site and facility selector.
         var isHidden: Binding<Bool>
@@ -204,12 +197,17 @@ struct SiteAndFacilitySelector: View {
             }
         }
 
-        /// The selected presentation style for the facility list.
-        let presentationStyle: PresentationStyle
-
-        /// A facility filtering phrase entered by the user.
-        @State
-        var searchPhrase: String = ""
+        /// Determines the SF Symbols image name to represent selection/non-selection of a facility.
+        /// - Parameter facility: The facility of interest
+        /// - Returns: "circle.fill" if the facility is marked selected or "cirlce" if the facility is not selected
+        /// in the view model.
+        func imageFor(_ facility: FloorFacility) -> String {
+            if facility.facilityId == viewModel.selectedFacility?.facilityId {
+                return "circle.fill"
+            } else {
+                return "circle"
+            }
+        }
 
         var body: some View {
             if presentationStyle == .singleSite {
