@@ -34,13 +34,13 @@ struct SiteAndFacilitySelector: View {
 
     var body: some View {
         if viewModel.sites.count == 1 {
-            Facilities(
+            FacilitiesList(
                 facilities: viewModel.sites.first!.facilities,
                 isHidden: isHidden,
                 presentationStyle: .singleSite
             )
         } else {
-            Sites(
+            SitesList(
                 isHidden: isHidden,
                 sites: viewModel.sites
             )
@@ -48,7 +48,7 @@ struct SiteAndFacilitySelector: View {
     }
 
     /// A view displaying the sites contained in a `FloorManager`.
-    struct Sites: View {
+    struct SitesList: View {
         /// The view model used by this selector.
         @EnvironmentObject var viewModel: FloorFilterViewModel
 
@@ -59,13 +59,14 @@ struct SiteAndFacilitySelector: View {
         @State
         private var keyboardAnimating = false
 
-        /// A subset of `sites` that contain `searchPhrase`.
+        /// A subset of `sites` with names containing `searchPhrase` or all `sites` if
+        /// `searchPhrase` is empty.
         var matchingSites: [FloorSite] {
             if searchPhrase.isEmpty {
                 return sites
             }
-            return sites.filter { floorSite in
-                floorSite.name.lowercased().contains(searchPhrase.lowercased())
+            return sites.filter {
+                $0.name.lowercased().contains(searchPhrase.lowercased())
             }
         }
 
@@ -77,60 +78,7 @@ struct SiteAndFacilitySelector: View {
         let sites: [FloorSite]
 
         var body: some View {
-            NavigationView {
-                VStack {
-                    TextField("Filter sites", text: $searchPhrase)
-                        .keyboardType(.alphabet)
-                        .disableAutocorrection(true)
-                    if matchingSites.isEmpty {
-                        VStack {
-                            Spacer()
-                            Text("No matches found")
-                            Spacer()
-                        }
-                    } else {
-                        List(matchingSites) { site in
-                            NavigationLink(
-                                site.name,
-                                tag: site,
-                                selection: $viewModel.selectedSite
-                            ) {
-                                Facilities(
-                                    facilities: site.facilities,
-                                    isHidden: isHidden,
-                                    presentationStyle: .standard
-                                )
-                            }
-                                .onTapGesture {
-                                    viewModel.setSite(
-                                        site,
-                                        zoomTo: true
-                                    )
-                                }
-                        }
-                            .listStyle(.plain)
-                    }
-                    NavigationLink("All sites") {
-                        Facilities(
-                            facilities: sites.flatMap({ $0.facilities }),
-                            isHidden: isHidden,
-                            presentationStyle: .allSites
-                        )
-                    }
-                        .padding([.vertical], 4)
-                }
-                    .navigationBarTitle(
-                        Text("Select a site"),
-                        displayMode: .inline
-                    )
-                    .navigationBarItems(trailing:
-                        Button(action: {
-                            isHidden.wrappedValue.toggle()
-                        }, label: {
-                            Image(systemName: "xmark.circle")
-                        })
-                    )
-            }
+            siteListAndFilterView
                 .opacity(keyboardAnimating ? 0.99 : 1.0)
                 .navigationViewStyle(.stack)
                 .onReceive(
@@ -152,10 +100,68 @@ struct SiteAndFacilitySelector: View {
                     }
                 }
         }
+
+        /// A view containing a filter-via-name field, a list of the site names and an "All sites" button.
+        var siteListAndFilterView: some View {
+            NavigationView {
+                VStack {
+                    TextField("Filter sites", text: $searchPhrase)
+                        .keyboardType(.alphabet)
+                        .disableAutocorrection(true)
+                    if matchingSites.isEmpty {
+                        NoMatchesView()
+                    } else {
+                        siteListView
+                    }
+                    NavigationLink("All sites") {
+                        FacilitiesList(
+                            facilities: sites.flatMap({ $0.facilities }),
+                            isHidden: isHidden,
+                            presentationStyle: .allSites
+                        )
+                    }
+                        .padding([.vertical], 4)
+                }
+                    .navigationBarTitle(
+                        Text("Select a site"),
+                        displayMode: .inline
+                    )
+                    .navigationBarItems(trailing:
+                        CloseButton { isHidden.wrappedValue.toggle() }
+                    )
+            }
+        }
+
+        /// A view containing a list of the site names.
+        ///
+        /// If `AutomaticSelectionMode` mode is in use, items will automatically be
+        /// selected/deselected.
+        var siteListView: some View {
+            List(matchingSites) { site in
+                NavigationLink(
+                    site.name,
+                    tag: site,
+                    selection: $viewModel.selectedSite
+                ) {
+                    FacilitiesList(
+                        facilities: site.facilities,
+                        isHidden: isHidden,
+                        presentationStyle: .standard
+                    )
+                }
+                    .onTapGesture {
+                        viewModel.setSite(
+                            site,
+                            zoomTo: true
+                        )
+                    }
+            }
+                .listStyle(.plain)
+        }
     }
 
     /// A view displaying the facilities contained in a `FloorManager`.
-    struct Facilities: View {
+    struct FacilitiesList: View {
         /// Presentation styles for the facility list.
         enum PresentationStyle {
             /// A specific site was selected and the body is presented within a navigation view.
@@ -172,16 +178,29 @@ struct SiteAndFacilitySelector: View {
         /// The view model used by this selector.
         @EnvironmentObject var viewModel: FloorFilterViewModel
 
+        /// Determines the SF Symbols image name to represent selection/non-selection of a facility.
+        /// - Parameter facility: The facility of interest
+        /// - Returns: "circle.fill" if the facility is marked selected or "cirlce" if the facility is not selected
+        /// in the view model.
+        func imageFor(_ facility: FloorFacility) -> String {
+            if facility.facilityId == viewModel.selectedFacility?.facilityId {
+                return "circle.fill"
+            } else {
+                return "circle"
+            }
+        }
+
         /// Allows the user to toggle the visibility of the site and facility selector.
         var isHidden: Binding<Bool>
 
-        /// A subset of `facilities` that contain `searchPhrase`.
+        /// A subset of `facilities` with names containing `searchPhrase` or all
+        /// `facilities` if `searchPhrase` is empty.
         var matchingFacilities: [FloorFacility] {
             if searchPhrase.isEmpty {
                 return facilities
             }
-            return facilities.filter { floorFacility in
-                floorFacility.name.lowercased().contains(searchPhrase.lowercased())
+            return facilities.filter {
+                $0.name.lowercased().contains(searchPhrase.lowercased())
             }
         }
 
@@ -192,38 +211,22 @@ struct SiteAndFacilitySelector: View {
         @State
         var searchPhrase: String = ""
 
-        /// Determines  if a given site is the one marked as selected in the view model.
-        /// - Parameter facility: The facility of interest
-        /// - Returns: `true` if the facility is marked as selected in the view model.
-        func facilityIsSelected(_ facility: FloorFacility) -> Bool {
-            return facility.facilityId ==
-                viewModel.selectedFacility?.facilityId
-        }
-
         var body: some View {
-            if presentationStyle == .standard ||
-                presentationStyle == .allSites {
-                facilityFilterAndListView
+            if presentationStyle == .singleSite {
+                facilityListAndFilterView
+            } else {
+                facilityListAndFilterView
                     // Only apply navigation modifiers if this is displayed
                     // within a navigation view
                     .navigationBarTitle("Select a facility")
-                    .navigationBarItems(trailing: closeButtonView)
-            } else {
-                facilityFilterAndListView
+                    .navigationBarItems(trailing:
+                        CloseButton { isHidden.wrappedValue.toggle() }
+                    )
             }
         }
 
-        /// Closese the site and facility selector.
-        var closeButtonView: some View {
-            Button(action: {
-                isHidden.wrappedValue.toggle()
-            }, label: {
-                Image(systemName: "xmark.circle")
-            })
-        }
-
         /// A view containing a label for the site name, a filter-via-name bar and a list of the facility names.
-        var facilityFilterAndListView: some View {
+        var facilityListAndFilterView: some View {
             VStack {
                 HStack {
                     if presentationStyle == .standard {
@@ -233,68 +236,98 @@ struct SiteAndFacilitySelector: View {
                     } else if presentationStyle == .singleSite {
                         Text(facilities.first?.site?.name ?? "N/A")
                         Spacer()
-                        closeButtonView
+                        CloseButton { isHidden.wrappedValue.toggle() }
                     }
                 }
                 TextField("Filter facilities", text: $searchPhrase)
                     .keyboardType(.alphabet)
                     .disableAutocorrection(true)
                 if matchingFacilities.isEmpty {
-                    VStack {
-                        Spacer()
-                        Text("No matches found")
-                        Spacer()
-                    }
+                    NoMatchesView()
                 } else {
-                    ScrollViewReader { proxy in
-                        List(matchingFacilities, id: \.facilityId) { facility in
-                            Button {
-                                viewModel.setFacility(
-                                    facility,
-                                    zoomTo: true
+                    facilityListView
+                }
+            }
+        }
+
+        /// Displays a list of facilities matching the filter criteria as determined by
+        /// `matchingFacilities`.
+        ///
+        /// If a certain facility is indicated as selected by the view model, it will have a slighlty different
+        /// appearance.
+        ///
+        /// If `AutomaticSelectionMode` mode is in use, this list will automatically scroll to the
+        /// selected item.
+        var facilityListView: some View {
+            ScrollViewReader { proxy in
+                List(matchingFacilities, id: \.facilityId) { facility in
+                    Button {
+                        viewModel.setFacility(
+                            facility,
+                            zoomTo: true
+                        )
+                        isHidden.wrappedValue.toggle()
+                    } label: {
+                        HStack {
+                            Image(systemName: imageFor(facility))
+                            VStack {
+                                Text(facility.name)
+                                .fontWeight(.regular)
+                                .frame(
+                                    maxWidth: .infinity,
+                                    alignment: .leading
                                 )
-                                isHidden.wrappedValue.toggle()
-                            } label: {
-                                HStack {
-                                    Image(
-                                        systemName:
-                                            facilityIsSelected(facility) ? "circle.fill" : "circle"
+                                if presentationStyle == .allSites,
+                                   let siteName = facility.site?.name {
+                                    Text(siteName)
+                                    .fontWeight(.ultraLight)
+                                    .frame(
+                                        maxWidth: .infinity,
+                                        alignment: .leading
                                     )
-                                    VStack {
-                                        Text(facility.name)
-                                        .fontWeight(.regular)
-                                        .frame(
-                                            maxWidth: .infinity,
-                                            alignment: .leading
-                                        )
-                                        if presentationStyle == .allSites,
-                                           let siteName = facility.site?.name {
-                                            Text(siteName)
-                                            .fontWeight(.ultraLight)
-                                            .frame(
-                                                maxWidth: .infinity,
-                                                alignment: .leading
-                                            )
-                                        }
-                                    }
                                 }
                             }
                         }
-                            .listStyle(.plain)
-                            .onChange(of: viewModel.selectedFacility) {
-                                guard let facility = $0 else {
-                                    return
-                                }
-                                withAnimation {
-                                    proxy.scrollTo(
-                                        facility.facilityId,
-                                        anchor: .center
-                                    )
-                                }
-                            }
                     }
                 }
+                    .listStyle(.plain)
+                    .onChange(of: viewModel.selectedFacility) {
+                        guard let facility = $0 else {
+                            return
+                        }
+                        withAnimation {
+                            proxy.scrollTo(
+                                facility.facilityId,
+                                anchor: .center
+                            )
+                        }
+                    }
             }
+        }
+    }
+}
+
+/// Displays text "No matches found".
+struct NoMatchesView: View {
+    var body: some View {
+        VStack {
+            Spacer()
+            Text("No matches found")
+            Spacer()
+        }
+    }
+}
+
+/// A custom button with an "X" enclosed within a circle to be used as a "close" button.
+struct CloseButton: View {
+    /// The button's action to be performed when tapped.
+    var action: (() -> Void)
+
+    var body: some View {
+        Button {
+            action()
+        } label: {
+            Image(systemName: "xmark.circle")
         }
     }
 }
