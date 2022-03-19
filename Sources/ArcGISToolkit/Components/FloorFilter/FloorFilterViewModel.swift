@@ -155,22 +155,19 @@ final class FloorFilterViewModel: ObservableObject {
 ***REMOVED***  ***REMOVED***
 
 ***REMOVED******REMOVED******REMOVED*** Only take action if viewpoint is within minimum scale. Default
-***REMOVED******REMOVED******REMOVED*** minscale is 4300 or less (~zoom level 17 or greater)
-***REMOVED******REMOVED***var targetScale = floorManager.siteLayer?.minScale ?? .zero
-***REMOVED******REMOVED***if targetScale.isZero {
-***REMOVED******REMOVED******REMOVED***targetScale = 4300
+***REMOVED******REMOVED******REMOVED*** minScale is 4300 or less.
+***REMOVED******REMOVED***var minScale = floorManager.siteLayer?.minScale ?? .zero
+***REMOVED******REMOVED***if minScale.isZero {
+***REMOVED******REMOVED******REMOVED***minScale = 4300
 ***REMOVED***
 
-***REMOVED******REMOVED******REMOVED*** If viewpoint is out of range, reset selection (if not non-clearing)
-***REMOVED******REMOVED******REMOVED*** and return
-***REMOVED******REMOVED***if viewpoint.targetScale > targetScale {
+***REMOVED******REMOVED******REMOVED*** If viewpoint is out of range, reset selection and return.
+***REMOVED******REMOVED***if viewpoint.targetScale > minScale {
 ***REMOVED******REMOVED******REMOVED***if automaticSelectionMode == .always {
 ***REMOVED******REMOVED******REMOVED******REMOVED***setSite(nil)
 ***REMOVED******REMOVED******REMOVED******REMOVED***setFacility(nil)
 ***REMOVED******REMOVED******REMOVED******REMOVED***setLevel(nil)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED*** Assumption: if too zoomed out to see sites, also too zoomed out
-***REMOVED******REMOVED******REMOVED******REMOVED*** to see facilities
 ***REMOVED******REMOVED******REMOVED***return
 ***REMOVED***
 
