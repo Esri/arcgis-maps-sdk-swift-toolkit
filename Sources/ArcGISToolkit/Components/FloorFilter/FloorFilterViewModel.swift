@@ -114,8 +114,6 @@ final class FloorFilterViewModel: ObservableObject {
 ***REMOVED******REMOVED***zoomTo: Bool = false
 ***REMOVED***) {
 ***REMOVED******REMOVED***selectedSite = floorSite
-***REMOVED******REMOVED***selectedFacility = nil
-***REMOVED******REMOVED***selectedLevel = nil
 ***REMOVED******REMOVED***if zoomTo {
 ***REMOVED******REMOVED******REMOVED***zoomToExtent(extent: floorSite?.geometry?.extent)
 ***REMOVED***
@@ -129,9 +127,15 @@ final class FloorFilterViewModel: ObservableObject {
 ***REMOVED******REMOVED***_ floorFacility: FloorFacility?,
 ***REMOVED******REMOVED***zoomTo: Bool = false
 ***REMOVED***) {
-***REMOVED******REMOVED***selectedSite = floorFacility?.site
 ***REMOVED******REMOVED***selectedFacility = floorFacility
-***REMOVED******REMOVED***selectedLevel = defaultLevel(for: floorFacility)
+***REMOVED******REMOVED***if let currentVerticalOrder = selectedLevel?.verticalOrder,
+***REMOVED******REMOVED***   let newLevel = floorFacility?.levels.first(where: { level in
+***REMOVED******REMOVED******REMOVED***   level.verticalOrder == currentVerticalOrder
+   ***REMOVED***) {
+***REMOVED******REMOVED******REMOVED***setLevel(newLevel)
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***setLevel(defaultLevel(for: floorFacility))
+***REMOVED***
 ***REMOVED******REMOVED***if zoomTo {
 ***REMOVED******REMOVED******REMOVED***zoomToExtent(extent: floorFacility?.geometry?.extent)
 ***REMOVED***
@@ -140,8 +144,6 @@ final class FloorFilterViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ Updates the selected site, facility, and level based on a newly selected level.
 ***REMOVED******REMOVED***/ - Parameter floorLevel: The selected level.
 ***REMOVED***func setLevel(_ floorLevel: FloorLevel?) {
-***REMOVED******REMOVED***selectedSite = floorLevel?.facility?.site
-***REMOVED******REMOVED***selectedFacility = floorLevel?.facility
 ***REMOVED******REMOVED***selectedLevel = floorLevel
 ***REMOVED******REMOVED***filterMapToSelectedLevel()
 ***REMOVED***
@@ -149,62 +151,89 @@ final class FloorFilterViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ Updates `selectedSite` and `selectedFacility` based on the latest viewpoint position.
 ***REMOVED***func updateSelection() {
 ***REMOVED******REMOVED***guard let viewpoint = viewpoint.wrappedValue,
-***REMOVED******REMOVED******REMOVED******REMOVED***  !viewpoint.targetScale.isZero,
-***REMOVED******REMOVED******REMOVED******REMOVED***automaticSelectionMode != .never else {
+***REMOVED******REMOVED******REMOVED***  !viewpoint.targetScale.isZero,
+***REMOVED******REMOVED******REMOVED***  automaticSelectionMode != .never else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***  return
-***REMOVED***  ***REMOVED***
-
-***REMOVED******REMOVED******REMOVED*** Only take action if viewpoint is within minimum scale. Default
-***REMOVED******REMOVED******REMOVED*** minScale is 4300 or less.
-***REMOVED******REMOVED***var minScale = floorManager.siteLayer?.minScale ?? .zero
-***REMOVED******REMOVED***if minScale.isZero {
-***REMOVED******REMOVED******REMOVED***minScale = 4300
+***REMOVED***
+***REMOVED******REMOVED***if updateSelectedSite() {
+***REMOVED******REMOVED******REMOVED***updateSelectedFacility()
+***REMOVED***
 ***REMOVED***
 
-***REMOVED******REMOVED******REMOVED*** If viewpoint is out of range, reset selection and return.
-***REMOVED******REMOVED***if viewpoint.targetScale > minScale {
+***REMOVED******REMOVED***/ Updates `selectedSite` if a good selection exists.
+***REMOVED******REMOVED***/ - Returns: `true` if a selection was made, `false` otherwise.
+***REMOVED***private func updateSelectedSite() -> Bool {
+***REMOVED******REMOVED******REMOVED*** Only select a facility if it is within minimum scale. Default at 4300.
+***REMOVED******REMOVED***let siteMinScale: Double
+***REMOVED******REMOVED***if let minScale = floorManager.siteLayer?.minScale,
+***REMOVED******REMOVED******REMOVED***   minScale != .zero {
+***REMOVED******REMOVED******REMOVED***siteMinScale = minScale
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***siteMinScale = 4300
+***REMOVED***
+
+***REMOVED******REMOVED******REMOVED*** If viewpoint is out of range, reset selection and return early.
+***REMOVED******REMOVED***if viewpoint.wrappedValue?.targetScale ?? .zero > siteMinScale {
 ***REMOVED******REMOVED******REMOVED***if automaticSelectionMode == .always {
 ***REMOVED******REMOVED******REMOVED******REMOVED***setSite(nil)
 ***REMOVED******REMOVED******REMOVED******REMOVED***setFacility(nil)
 ***REMOVED******REMOVED******REMOVED******REMOVED***setLevel(nil)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***return
-***REMOVED***
-
-***REMOVED******REMOVED***let facilityResult = floorManager.facilities.first { facility in
-***REMOVED******REMOVED******REMOVED***guard let facilityExtent = facility.geometry?.extent else {
-***REMOVED******REMOVED******REMOVED******REMOVED***return false
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***return GeometryEngine.intersects(
-***REMOVED******REMOVED******REMOVED******REMOVED***geometry1: facilityExtent,
-***REMOVED******REMOVED******REMOVED******REMOVED***geometry2: viewpoint.targetGeometry
-***REMOVED******REMOVED******REMOVED***)
-***REMOVED***
-
-***REMOVED******REMOVED***if let facilityResult = facilityResult {
-***REMOVED******REMOVED******REMOVED***setFacility(facilityResult)
-***REMOVED******REMOVED******REMOVED***return
-***REMOVED*** else if automaticSelectionMode == .always {
-***REMOVED******REMOVED******REMOVED***setFacility(nil)
+***REMOVED******REMOVED******REMOVED***return false
 ***REMOVED***
 
 ***REMOVED******REMOVED******REMOVED*** If the centerpoint is within a site's geometry, select that site.
-***REMOVED******REMOVED******REMOVED*** This code gracefully skips selection if there are no sites or no
-***REMOVED******REMOVED******REMOVED*** matching sites
 ***REMOVED******REMOVED***let siteResult = floorManager.sites.first { site in
-***REMOVED******REMOVED******REMOVED***guard let siteExtent = site.geometry?.extent else {
+***REMOVED******REMOVED******REMOVED***guard let extent1 = viewpoint.wrappedValue?.targetGeometry.extent,
+***REMOVED******REMOVED******REMOVED******REMOVED***  let extent2 = site.geometry?.extent else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***return false
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***return GeometryEngine.intersects(
-***REMOVED******REMOVED******REMOVED******REMOVED***geometry1: siteExtent,
-***REMOVED******REMOVED******REMOVED******REMOVED***geometry2: viewpoint.targetGeometry
+***REMOVED******REMOVED******REMOVED******REMOVED***geometry1: extent1,
+***REMOVED******REMOVED******REMOVED******REMOVED***geometry2: extent2
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED***
 
 ***REMOVED******REMOVED***if let siteResult = siteResult {
 ***REMOVED******REMOVED******REMOVED***setSite(siteResult)
+***REMOVED******REMOVED******REMOVED***return true
 ***REMOVED*** else if automaticSelectionMode == .always {
 ***REMOVED******REMOVED******REMOVED***setSite(nil)
+***REMOVED***
+***REMOVED******REMOVED***return false
+***REMOVED***
+
+***REMOVED******REMOVED***/ Updates `selectedFacility` if a good selection exists.
+***REMOVED***private func updateSelectedFacility() {
+***REMOVED******REMOVED******REMOVED*** Only select a facility if it is within minimum scale. Default at 1500.
+***REMOVED******REMOVED***let facilityMinScale: Double
+***REMOVED******REMOVED***if let minScale = floorManager.facilityLayer?.minScale,
+***REMOVED******REMOVED******REMOVED***   minScale != .zero {
+***REMOVED******REMOVED******REMOVED***facilityMinScale = minScale
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***facilityMinScale = 1500
+***REMOVED***
+
+***REMOVED******REMOVED***if viewpoint.wrappedValue?.targetScale ?? .zero > facilityMinScale {
+***REMOVED******REMOVED******REMOVED***return
+***REMOVED***
+
+***REMOVED******REMOVED******REMOVED*** If the centerpoint is within a facilities' geometry, select that site.
+***REMOVED******REMOVED***let facilityResult = floorManager.facilities.first { facility in
+***REMOVED******REMOVED******REMOVED***guard let extent1 = viewpoint.wrappedValue?.targetGeometry.extent,
+***REMOVED******REMOVED******REMOVED******REMOVED***  let extent2 = facility.geometry?.extent else {
+***REMOVED******REMOVED******REMOVED******REMOVED***return false
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***return GeometryEngine.intersects(
+***REMOVED******REMOVED******REMOVED******REMOVED***geometry1: extent1,
+***REMOVED******REMOVED******REMOVED******REMOVED***geometry2: extent2
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED***
+
+***REMOVED******REMOVED***if let facilityResult = facilityResult {
+***REMOVED******REMOVED******REMOVED***setFacility(facilityResult)
+***REMOVED*** else if automaticSelectionMode == .always {
+***REMOVED******REMOVED******REMOVED***setFacility(nil)
 ***REMOVED***
 ***REMOVED***
 
