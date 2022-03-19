@@ -32,13 +32,13 @@ struct SiteAndFacilitySelector: View {
         if viewModel.sites.count == 1 {
             FacilitiesList(
                 facilities: viewModel.sites.first!.facilities,
-                isHidden: isHidden,
-                presentationStyle: .singleSite
+                presentationStyle: .singleSite,
+                isHidden: isHidden
             )
         } else {
             SitesList(
-                isHidden: isHidden,
-                sites: viewModel.sites
+                sites: viewModel.sites,
+                isHidden: isHidden
             )
         }
     }
@@ -114,8 +114,8 @@ struct SiteAndFacilitySelector: View {
                     NavigationLink("All sites") {
                         FacilitiesList(
                             facilities: sites.flatMap({ $0.facilities }),
-                            isHidden: isHidden,
-                            presentationStyle: .allSites
+                            presentationStyle: .allSites,
+                            isHidden: isHidden
                         )
                     }
                         .padding([.vertical], 4)
@@ -143,8 +143,8 @@ struct SiteAndFacilitySelector: View {
                 ) {
                     FacilitiesList(
                         facilities: site.facilities,
-                        isHidden: isHidden,
-                        presentationStyle: .standard
+                        presentationStyle: .standard,
+                        isHidden: isHidden
                     )
                 }
                     .onTapGesture {
