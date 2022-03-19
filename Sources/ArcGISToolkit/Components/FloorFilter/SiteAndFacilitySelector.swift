@@ -57,6 +57,10 @@ struct SiteAndFacilitySelector: View {
         /// Allows the user to toggle the visibility of the site and facility selector.
         var isHidden: Binding<Bool>
 
+        /// Indicates that the keyboard is animating and some views may require reload.
+        @State
+        private var keyboardAnimating = false
+
         /// A subset of `sites` that contain `searchPhrase`.
         var matchingSites: [FloorSite] {
             if searchPhrase.isEmpty {
@@ -73,10 +77,6 @@ struct SiteAndFacilitySelector: View {
 
         /// Sites contained in a `FloorManager`.
         let sites: [FloorSite]
-
-        /// The height of the scroll view's content.
-        @State
-        private var scrollViewContentHeight: CGFloat = .zero
 
         var body: some View {
             NavigationView {
@@ -128,7 +128,26 @@ struct SiteAndFacilitySelector: View {
                         Image(systemName: "xmark.circle")
                     }))
             }
+                .opacity(keyboardAnimating ? 0.99 : 1.0)
                 .navigationViewStyle(.stack)
+                .onReceive(
+                    NotificationCenter.default.publisher(
+                        for: UIResponder.keyboardWillChangeFrameNotification
+                    )
+                ) { _ in
+                    withAnimation {
+                        keyboardAnimating = true
+                    }
+                }
+                .onReceive(
+                    NotificationCenter.default.publisher(
+                        for: UIResponder.keyboardDidChangeFrameNotification
+                    )
+                ) { _ in
+                    withAnimation {
+                        keyboardAnimating = false
+                    }
+                }
         }
     }
 
@@ -206,13 +225,10 @@ struct SiteAndFacilitySelector: View {
                 HStack {
                     if presentationStyle == .standard {
                         Text(facilities.first?.site?.name ?? "N/A")
-                            .fontWeight(.ultraLight)
                     } else if presentationStyle == .allSites {
                         Text("All sites")
-                            .fontWeight(.ultraLight)
                     } else if presentationStyle == .singleSite {
                         Text(facilities.first?.site?.name ?? "N/A")
-                            .fontWeight(.ultraLight)
                         Spacer()
                         closeButtonView
                     }
