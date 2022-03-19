@@ -117,7 +117,7 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***presentationStyle: .allSites
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding([.top, .bottom], 4)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding([.vertical], 4)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.navigationBarTitle(Text("Select a site"), displayMode: .inline)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.navigationBarItems(trailing: Button(action: {
