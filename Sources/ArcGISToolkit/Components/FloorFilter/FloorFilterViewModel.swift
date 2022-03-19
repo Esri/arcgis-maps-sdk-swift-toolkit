@@ -94,6 +94,16 @@ final class FloorFilterViewModel: ObservableObject {
 
     // MARK: Public methods
 
+    /// Gets the default level for a facility.
+    /// - Parameter facility: The facility to get the default level for.
+    /// - Returns: The default level for the facility, which is the level with vertical order 0;
+    /// if there's no level with vertical order of 0, it returns the lowest level.
+    func defaultLevel(for facility: FloorFacility?) -> FloorLevel? {
+        return levels.first(where: { level in
+            level.facility == facility && level.verticalOrder == .zero
+        }) ?? lowestLevel()
+    }
+
     /// Updates the selected site, facility, and level based on a newly selected facility.
     /// - Parameters:
     ///   - floorFacility: The selected facility.
@@ -149,16 +159,6 @@ final class FloorFilterViewModel: ObservableObject {
     }
 
     // MARK: Private methods
-
-    /// Gets the default level for a facility.
-    /// - Parameter facility: The facility to get the default level for.
-    /// - Returns: The default level for the facility, which is the level with vertical order 0;
-    /// if there's no level with vertical order of 0, it returns the lowest level.
-    private func defaultLevel(for facility: FloorFacility?) -> FloorLevel? {
-        return levels.first(where: { level in
-            level.facility == facility && level.verticalOrder == .zero
-        }) ?? lowestLevel()
-    }
 
     /// Sets the visibility of all the levels on the map based on the vertical order of the current selected level.
     private func filterMapToSelectedLevel() {
