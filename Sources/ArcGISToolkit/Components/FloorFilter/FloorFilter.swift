@@ -80,9 +80,9 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 30)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***LevelSelector(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***topAligned: topAligned,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isCollapsed: $isLevelsViewCollapsed,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***levels: sortedLevels,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isCollapsed: $isLevelsViewCollapsed
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***topAligned: topAligned
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***if !topAligned {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Divider()
