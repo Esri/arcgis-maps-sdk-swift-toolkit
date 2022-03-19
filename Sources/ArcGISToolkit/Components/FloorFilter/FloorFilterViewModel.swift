@@ -94,6 +94,16 @@ final class FloorFilterViewModel: ObservableObject {
 
 ***REMOVED******REMOVED*** MARK: Public methods
 
+***REMOVED******REMOVED***/ Gets the default level for a facility.
+***REMOVED******REMOVED***/ - Parameter facility: The facility to get the default level for.
+***REMOVED******REMOVED***/ - Returns: The default level for the facility, which is the level with vertical order 0;
+***REMOVED******REMOVED***/ if there's no level with vertical order of 0, it returns the lowest level.
+***REMOVED***func defaultLevel(for facility: FloorFacility?) -> FloorLevel? {
+***REMOVED******REMOVED***return levels.first(where: { level in
+***REMOVED******REMOVED******REMOVED***level.facility == facility && level.verticalOrder == .zero
+***REMOVED***) ?? lowestLevel()
+***REMOVED***
+
 ***REMOVED******REMOVED***/ Updates the selected site, facility, and level based on a newly selected facility.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - floorFacility: The selected facility.
@@ -149,16 +159,6 @@ final class FloorFilterViewModel: ObservableObject {
 ***REMOVED***
 
 ***REMOVED******REMOVED*** MARK: Private methods
-
-***REMOVED******REMOVED***/ Gets the default level for a facility.
-***REMOVED******REMOVED***/ - Parameter facility: The facility to get the default level for.
-***REMOVED******REMOVED***/ - Returns: The default level for the facility, which is the level with vertical order 0;
-***REMOVED******REMOVED***/ if there's no level with vertical order of 0, it returns the lowest level.
-***REMOVED***private func defaultLevel(for facility: FloorFacility?) -> FloorLevel? {
-***REMOVED******REMOVED***return levels.first(where: { level in
-***REMOVED******REMOVED******REMOVED***level.facility == facility && level.verticalOrder == .zero
-***REMOVED***) ?? lowestLevel()
-***REMOVED***
 
 ***REMOVED******REMOVED***/ Sets the visibility of all the levels on the map based on the vertical order of the current selected level.
 ***REMOVED***private func filterMapToSelectedLevel() {
