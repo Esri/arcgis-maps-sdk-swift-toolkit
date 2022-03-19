@@ -39,6 +39,9 @@ struct FloorFilterExampleView: View {
     private var map = makeMap()
 
     @State
+    private var mapLoadError: Bool = false
+
+    @State
     private var viewpoint = Viewpoint(
         center: Point(x: -117.19496, y: 34.05713, spatialReference: .wgs84),
         scale: 100_000
@@ -49,27 +52,38 @@ struct FloorFilterExampleView: View {
             map: map,
             viewpoint: viewpoint
         )
-        .onViewpointChanged(kind: .centerAndScale) {
-            viewpoint = $0
-        }
-        .overlay(alignment: .bottomLeading) {
-            if isMapLoaded,
-               let floorManager = map.floorManager {
-                FloorFilter(
-                    floorManager: floorManager,
-                    viewpoint: $viewpoint
-                )
-                .frame(height: 300)
-                .padding(36)
+            .onViewpointChanged(kind: .centerAndScale) {
+                viewpoint = $0
             }
-        }
-        .task {
-            do {
-                try await map.load()
-                isMapLoaded = true
-            } catch {
-                print("load error: \(error)")
+            .overlay(alignment: .bottomLeading) {
+                if isMapLoaded,
+                   let floorManager = map.floorManager {
+                    FloorFilter(
+                        floorManager: floorManager,
+                        viewpoint: $viewpoint
+                    )
+                    .frame(height: 300)
+                    .padding(36)
+                } else if mapLoadError {
+                    Label(
+                        "Map load error!",
+                        systemImage: "exclamationmark.triangle"
+                    )
+                        .foregroundColor(.red)
+                        .frame(
+                            maxWidth: .infinity,
+                            maxHeight: .infinity,
+                            alignment: .center
+                        )
+                }
             }
-        }
+            .task {
+                do {
+                    try await map.load()
+                    isMapLoaded = true
+                } catch {
+                    mapLoadError = true
+                }
+            }
     }
 }
