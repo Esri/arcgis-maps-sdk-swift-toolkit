@@ -119,12 +119,17 @@ struct SiteAndFacilitySelector: View {
                     }
                         .padding([.vertical], 4)
                 }
-                    .navigationBarTitle(Text("Select a site"), displayMode: .inline)
-                    .navigationBarItems(trailing: Button(action: {
-                        isHidden.wrappedValue.toggle()
-                    }, label: {
-                        Image(systemName: "xmark.circle")
-                    }))
+                    .navigationBarTitle(
+                        Text("Select a site"),
+                        displayMode: .inline
+                    )
+                    .navigationBarItems(trailing:
+                        Button(action: {
+                            isHidden.wrappedValue.toggle()
+                        }, label: {
+                            Image(systemName: "xmark.circle")
+                        })
+                    )
             }
                 .opacity(keyboardAnimating ? 0.99 : 1.0)
                 .navigationViewStyle(.stack)
