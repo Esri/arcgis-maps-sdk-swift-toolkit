@@ -29,7 +29,12 @@ class FloorFilterViewModelTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***  let floorManager = map.floorManager else {
 ***REMOVED******REMOVED******REMOVED***return
 ***REMOVED***
-***REMOVED******REMOVED***let viewModel = await FloorFilterViewModel(floorManager: floorManager)
+***REMOVED******REMOVED***var _viewpoint: Viewpoint? = getViewpoint(.zero)
+***REMOVED******REMOVED***let viewpoint = Binding(get: { _viewpoint ***REMOVED***, set: { _viewpoint = $0 ***REMOVED***)
+***REMOVED******REMOVED***let viewModel = await FloorFilterViewModel(
+***REMOVED******REMOVED******REMOVED***floorManager: floorManager,
+***REMOVED******REMOVED******REMOVED***viewpoint: viewpoint
+***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***await verifyInitialization(viewModel)
 ***REMOVED******REMOVED***let sites = await viewModel.sites
 ***REMOVED******REMOVED***let facilities = await viewModel.facilities
@@ -46,7 +51,7 @@ class FloorFilterViewModelTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***  let floorManager = map.floorManager else {
 ***REMOVED******REMOVED******REMOVED***return
 ***REMOVED***
-***REMOVED******REMOVED***var _viewpoint: Viewpoint = getViewpoint(.zero)
+***REMOVED******REMOVED***var _viewpoint: Viewpoint? = getViewpoint(.zero)
 ***REMOVED******REMOVED***let viewpoint = Binding(get: { _viewpoint ***REMOVED***, set: { _viewpoint = $0 ***REMOVED***)
 ***REMOVED******REMOVED***let viewModel = await FloorFilterViewModel(
 ***REMOVED******REMOVED******REMOVED***floorManager: floorManager,
@@ -70,7 +75,7 @@ class FloorFilterViewModelTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***return
 ***REMOVED***
 ***REMOVED******REMOVED***let initialViewpoint = getViewpoint(.zero)
-***REMOVED******REMOVED***var _viewpoint = initialViewpoint
+***REMOVED******REMOVED***var _viewpoint: Viewpoint? = initialViewpoint
 ***REMOVED******REMOVED***let viewpoint = Binding(get: { _viewpoint ***REMOVED***, set: { _viewpoint = $0 ***REMOVED***)
 ***REMOVED******REMOVED***let viewModel = await FloorFilterViewModel(
 ***REMOVED******REMOVED******REMOVED***floorManager: floorManager,
@@ -86,12 +91,12 @@ class FloorFilterViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***XCTAssertNil(selectedFacility)
 ***REMOVED******REMOVED***XCTAssertNil(selectedLevel)
 ***REMOVED******REMOVED***XCTAssertEqual(
-***REMOVED******REMOVED******REMOVED***_viewpoint.targetGeometry.extent.center.x,
+***REMOVED******REMOVED******REMOVED***_viewpoint?.targetGeometry.extent.center.x,
 ***REMOVED******REMOVED******REMOVED***initialViewpoint.targetGeometry.extent.center.x
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***await viewModel.setSite(site, zoomTo: true)
 ***REMOVED******REMOVED***XCTAssertEqual(
-***REMOVED******REMOVED******REMOVED***_viewpoint.targetGeometry.extent.center.x,
+***REMOVED******REMOVED******REMOVED***_viewpoint?.targetGeometry.extent.center.x,
 ***REMOVED******REMOVED******REMOVED***selectedSite?.geometry?.extent.center.x
 ***REMOVED******REMOVED***)
 ***REMOVED***
@@ -103,29 +108,28 @@ class FloorFilterViewModelTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***return
 ***REMOVED***
 ***REMOVED******REMOVED***let initialViewpoint = getViewpoint(.zero)
-***REMOVED******REMOVED***var _viewpoint = initialViewpoint
+***REMOVED******REMOVED***var _viewpoint: Viewpoint? = initialViewpoint
 ***REMOVED******REMOVED***let viewpoint = Binding(get: { _viewpoint ***REMOVED***, set: { _viewpoint = $0 ***REMOVED***)
 ***REMOVED******REMOVED***let viewModel = await FloorFilterViewModel(
+***REMOVED******REMOVED******REMOVED***automaticSelectionMode: .never,
 ***REMOVED******REMOVED******REMOVED***floorManager: floorManager,
 ***REMOVED******REMOVED******REMOVED***viewpoint: viewpoint
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***await verifyInitialization(viewModel)
 ***REMOVED******REMOVED***let facility = await viewModel.facilities.first
 ***REMOVED******REMOVED***await viewModel.setFacility(facility)
-***REMOVED******REMOVED***let selectedSite = await viewModel.selectedSite
 ***REMOVED******REMOVED***let selectedFacility = await viewModel.selectedFacility
 ***REMOVED******REMOVED***let selectedLevel = await viewModel.selectedLevel
 ***REMOVED******REMOVED***let defaultLevel = await viewModel.defaultLevel(for: selectedFacility)
-***REMOVED******REMOVED***XCTAssertEqual(selectedSite, selectedFacility?.site)
 ***REMOVED******REMOVED***XCTAssertEqual(selectedFacility, facility)
 ***REMOVED******REMOVED***XCTAssertEqual(selectedLevel, defaultLevel)
 ***REMOVED******REMOVED***XCTAssertEqual(
-***REMOVED******REMOVED******REMOVED***_viewpoint.targetGeometry.extent.center.x,
+***REMOVED******REMOVED******REMOVED***_viewpoint?.targetGeometry.extent.center.x,
 ***REMOVED******REMOVED******REMOVED***initialViewpoint.targetGeometry.extent.center.x
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***await viewModel.setFacility(facility, zoomTo: true)
 ***REMOVED******REMOVED***XCTAssertEqual(
-***REMOVED******REMOVED******REMOVED***_viewpoint.targetGeometry.extent.center.x,
+***REMOVED******REMOVED******REMOVED***_viewpoint?.targetGeometry.extent.center.x,
 ***REMOVED******REMOVED******REMOVED***selectedFacility?.geometry?.extent.center.x
 ***REMOVED******REMOVED***)
 ***REMOVED***
@@ -137,7 +141,7 @@ class FloorFilterViewModelTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***return
 ***REMOVED***
 ***REMOVED******REMOVED***let initialViewpoint = getViewpoint(.zero)
-***REMOVED******REMOVED***var _viewpoint = initialViewpoint
+***REMOVED******REMOVED***var _viewpoint: Viewpoint? = initialViewpoint
 ***REMOVED******REMOVED***let viewpoint = Binding(get: { _viewpoint ***REMOVED***, set: { _viewpoint = $0 ***REMOVED***)
 ***REMOVED******REMOVED***let viewModel = await FloorFilterViewModel(
 ***REMOVED******REMOVED******REMOVED***floorManager: floorManager,
@@ -147,14 +151,10 @@ class FloorFilterViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***let levels = await viewModel.levels
 ***REMOVED******REMOVED***let level = levels.first
 ***REMOVED******REMOVED***await viewModel.setLevel(level)
-***REMOVED******REMOVED***let selectedSite = await viewModel.selectedSite
-***REMOVED******REMOVED***let selectedFacility = await viewModel.selectedFacility
 ***REMOVED******REMOVED***let selectedLevel = await viewModel.selectedLevel
-***REMOVED******REMOVED***XCTAssertEqual(selectedSite, selectedFacility?.site)
-***REMOVED******REMOVED***XCTAssertEqual(selectedFacility, level?.facility)
 ***REMOVED******REMOVED***XCTAssertEqual(selectedLevel, level)
 ***REMOVED******REMOVED***XCTAssertEqual(
-***REMOVED******REMOVED******REMOVED***_viewpoint.targetGeometry.extent.center.x,
+***REMOVED******REMOVED******REMOVED***_viewpoint?.targetGeometry.extent.center.x,
 ***REMOVED******REMOVED******REMOVED***initialViewpoint.targetGeometry.extent.center.x
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***levels.forEach { level in
