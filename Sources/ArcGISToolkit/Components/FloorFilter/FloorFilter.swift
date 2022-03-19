@@ -160,11 +160,12 @@ public struct FloorFilter: View {
     public var body: some View {
         Group {
             if viewModel.isLoading {
-                VStack {
-                    Spacer()
                     ProgressView()
-                        .padding(12)
-                }
+                        .frame(
+                            maxWidth: .infinity,
+                            maxHeight: .infinity,
+                            alignment: alignment
+                        )
             } else {
                 HStack(alignment: .bottom) {
                     if rightAligned {
