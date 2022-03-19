@@ -39,6 +39,10 @@ public struct FloorFilter: View {
         self.viewpoint = viewpoint
     }
 
+    /// The view model used by the `FloorFilter`.
+    @StateObject
+    private var viewModel: FloorFilterViewModel
+
     /// A Boolean value that indicates whether the levels view is currently collapsed.
     @State
     private var isLevelsViewCollapsed: Bool = false
@@ -50,15 +54,25 @@ public struct FloorFilter: View {
     /// The alignment configuration.
     private let alignment: Alignment
 
-    /// A Boolean value that indicates whether there are levels to display.  This will be false if
-    /// there is no selected facility or if the selected facility has no levels.
+    /// Button to open and close the site and facility selector.
+    private var facilityButtonView: some View {
+        Button {
+            isSelectorHidden.toggle()
+        } label: {
+            Image(systemName: "building.2")
+        }
+            .frame(maxWidth: .infinity)
+    }
+
+    /// A Boolean value that indicates whether there are levels to display.  This will be false if there is no
+    /// selected facility or if the selected facility has no levels.
     private var hasLevelsToDisplay: Bool {
         !(viewModel.selectedFacility == nil ||
           viewModel.selectedFacility!.levels.isEmpty)
     }
 
     /// Displays the available levels.
-    private var levelsAndDividerView: some View {
+    private var levelsSelectorView: some View {
         Group {
             if hasLevelsToDisplay {
                 if topAligned {
@@ -78,16 +92,6 @@ public struct FloorFilter: View {
         }
     }
 
-    /// Button to open and close the site and facility selector.
-    private var facilityButtonView: some View {
-        Button {
-            isSelectorHidden.toggle()
-        } label: {
-            Image(systemName: "building.2")
-        }
-            .frame(maxWidth: .infinity)
-    }
-
     /// A view that allows selecting between levels.
     private var levelSelectorView: some View {
         VStack {
@@ -97,9 +101,9 @@ public struct FloorFilter: View {
             VStack {
                 if topAligned {
                     facilityButtonView
-                    levelsAndDividerView
+                    levelsSelectorView
                 } else {
-                    levelsAndDividerView
+                    levelsSelectorView
                     facilityButtonView
                 }
             }
@@ -148,10 +152,6 @@ public struct FloorFilter: View {
             return false
         }
     }
-
-    /// The view model used by the `FloorFilter`.
-    @StateObject
-    private var viewModel: FloorFilterViewModel
 
     /// The `Viewpoint` used to pan/zoom to the selected site/facilty.
     /// If `nil`, there will be no automatic pan/zoom operations or automatic selection support.
