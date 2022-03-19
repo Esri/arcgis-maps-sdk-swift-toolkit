@@ -45,20 +45,33 @@ final class FloorFilterViewModel: ObservableObject {
         }
     }
 
+    // MARK: Published members
+
+    /// The currently selected `FloorFacility`.
+    @Published
+    var selectedFacility: FloorFacility?
+
+    /// The currently selected `FloorLevel`.
+    @Published
+    var selectedLevel: FloorLevel?
+
+    /// The currently selected `FloorSite`.
+    @Published
+    var selectedSite: FloorSite?
+
+    /// `true` if the model is loading it's properties, `false` if not loading.
+    @Published
+    private(set) var isLoading = true
+
+    // MARK: Constants
+
     /// The selection behavior of the floor filter.
     private let automaticSelectionMode: AutomaticSelectionMode
-
-    /// The `Viewpoint` used to pan/zoom to the selected site/facilty.
-    /// If `nil`, there will be no automatic pan/zoom operations.
-    var viewpoint: Binding<Viewpoint?>
 
     /// The `FloorManager` containing the site, floor, and level information.
     let floorManager: FloorManager
 
-    /// The floor manager sites.
-    var sites: [FloorSite] {
-        floorManager.sites
-    }
+    // MARK: Public members
 
     /// The floor manager facilities.
     var facilities: [FloorFacility] {
@@ -70,54 +83,16 @@ final class FloorFilterViewModel: ObservableObject {
         floorManager.levels
     }
 
-    /// `true` if the model is loading it's properties, `false` if not loading.
-    @Published
-    private(set) var isLoading = true
-
-    /// Gets the default level for a facility.
-    /// - Parameter facility: The facility to get the default level for.
-    /// - Returns: The default level for the facility, which is the level with vertical order 0;
-    /// if there's no level with vertical order of 0, it returns the lowest level.
-    func defaultLevel(for facility: FloorFacility?) -> FloorLevel? {
-        return levels.first(where: { level in
-            level.facility == facility && level.verticalOrder == .zero
-        }) ?? lowestLevel()
+    /// The floor manager sites.
+    var sites: [FloorSite] {
+        floorManager.sites
     }
 
-    /// Returns the level with the lowest vertical order.
-    private func lowestLevel() -> FloorLevel? {
-        let sortedLevels = levels.sorted {
-            $0.verticalOrder < $1.verticalOrder
-        }
-        return sortedLevels.first {
-            $0.verticalOrder != .min && $0.verticalOrder != .max
-        }
-    }
+    /// The `Viewpoint` used to pan/zoom to the selected site/facilty.
+    /// If `nil`, there will be no automatic pan/zoom operations.
+    var viewpoint: Binding<Viewpoint?>
 
-    @Published
-    var selectedSite: FloorSite?
-
-    @Published
-    var selectedFacility: FloorFacility?
-
-    @Published
-    var selectedLevel: FloorLevel?
-
-    // MARK: Set selection methods
-
-    /// Updates the selected site, facility, and level based on a newly selected site.
-    /// - Parameters:
-    ///   - floorSite: The selected site.
-    ///   - zoomTo: The viewpoint should be updated to show to the extent of this site.
-    func setSite(
-        _ floorSite: FloorSite?,
-        zoomTo: Bool = false
-    ) {
-        selectedSite = floorSite
-        if zoomTo {
-            zoomToExtent(extent: floorSite?.geometry?.extent)
-        }
-    }
+    // MARK: Public methods
 
     /// Updates the selected site, facility, and level based on a newly selected facility.
     /// - Parameters:
@@ -148,6 +123,20 @@ final class FloorFilterViewModel: ObservableObject {
         filterMapToSelectedLevel()
     }
 
+    /// Updates the selected site, facility, and level based on a newly selected site.
+    /// - Parameters:
+    ///   - floorSite: The selected site.
+    ///   - zoomTo: The viewpoint should be updated to show to the extent of this site.
+    func setSite(
+        _ floorSite: FloorSite?,
+        zoomTo: Bool = false
+    ) {
+        selectedSite = floorSite
+        if zoomTo {
+            zoomToExtent(extent: floorSite?.geometry?.extent)
+        }
+    }
+
     /// Updates `selectedSite` and `selectedFacility` based on the latest viewpoint position.
     func updateSelection() {
         guard let viewpoint = viewpoint.wrappedValue,
@@ -157,6 +146,70 @@ final class FloorFilterViewModel: ObservableObject {
         }
         updateSelectedSite()
         updateSelectedFacility()
+    }
+
+    // MARK: Private methods
+
+    /// Gets the default level for a facility.
+    /// - Parameter facility: The facility to get the default level for.
+    /// - Returns: The default level for the facility, which is the level with vertical order 0;
+    /// if there's no level with vertical order of 0, it returns the lowest level.
+    private func defaultLevel(for facility: FloorFacility?) -> FloorLevel? {
+        return levels.first(where: { level in
+            level.facility == facility && level.verticalOrder == .zero
+        }) ?? lowestLevel()
+    }
+
+    /// Sets the visibility of all the levels on the map based on the vertical order of the current selected level.
+    private func filterMapToSelectedLevel() {
+        guard let selectedLevel = selectedLevel else { return }
+        levels.forEach {
+            $0.isVisible = $0.verticalOrder == selectedLevel.verticalOrder
+        }
+    }
+
+    /// Returns the level with the lowest vertical order.
+    private func lowestLevel() -> FloorLevel? {
+        let sortedLevels = levels.sorted {
+            $0.verticalOrder < $1.verticalOrder
+        }
+        return sortedLevels.first {
+            $0.verticalOrder != .min && $0.verticalOrder != .max
+        }
+    }
+
+    /// Updates `selectedFacility` if a good selection exists.
+    private func updateSelectedFacility() {
+        // Only select a facility if it is within minimum scale. Default at 1500.
+        let facilityMinScale: Double
+        if let minScale = floorManager.facilityLayer?.minScale,
+               minScale != .zero {
+            facilityMinScale = minScale
+        } else {
+            facilityMinScale = 1500
+        }
+
+        if viewpoint.wrappedValue?.targetScale ?? .zero > facilityMinScale {
+            return
+        }
+
+        // If the centerpoint is within a facilities' geometry, select that site.
+        let facilityResult = floorManager.facilities.first { facility in
+            guard let extent1 = viewpoint.wrappedValue?.targetGeometry.extent,
+                  let extent2 = facility.geometry?.extent else {
+                return false
+            }
+            return GeometryEngine.intersects(
+                geometry1: extent1,
+                geometry2: extent2
+            )
+        }
+
+        if let facilityResult = facilityResult {
+            setFacility(facilityResult)
+        } else if automaticSelectionMode == .always {
+            setFacility(nil)
+        }
     }
 
     /// Updates `selectedSite` if a good selection exists.
@@ -196,48 +249,6 @@ final class FloorFilterViewModel: ObservableObject {
             setSite(siteResult)
         } else if automaticSelectionMode == .always {
             setSite(nil)
-        }
-    }
-
-    /// Updates `selectedFacility` if a good selection exists.
-    private func updateSelectedFacility() {
-        // Only select a facility if it is within minimum scale. Default at 1500.
-        let facilityMinScale: Double
-        if let minScale = floorManager.facilityLayer?.minScale,
-               minScale != .zero {
-            facilityMinScale = minScale
-        } else {
-            facilityMinScale = 1500
-        }
-
-        if viewpoint.wrappedValue?.targetScale ?? .zero > facilityMinScale {
-            return
-        }
-
-        // If the centerpoint is within a facilities' geometry, select that site.
-        let facilityResult = floorManager.facilities.first { facility in
-            guard let extent1 = viewpoint.wrappedValue?.targetGeometry.extent,
-                  let extent2 = facility.geometry?.extent else {
-                return false
-            }
-            return GeometryEngine.intersects(
-                geometry1: extent1,
-                geometry2: extent2
-            )
-        }
-
-        if let facilityResult = facilityResult {
-            setFacility(facilityResult)
-        } else if automaticSelectionMode == .always {
-            setFacility(nil)
-        }
-    }
-
-    /// Sets the visibility of all the levels on the map based on the vertical order of the current selected level.
-    private func filterMapToSelectedLevel() {
-        guard let selectedLevel = selectedLevel else { return }
-        levels.forEach {
-            $0.isVisible = $0.verticalOrder == selectedLevel.verticalOrder
         }
     }
 
