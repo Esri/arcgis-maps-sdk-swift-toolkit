@@ -80,9 +80,9 @@ public struct FloorFilter: View {
                         .frame(width: 30)
                 }
                 LevelSelector(
-                    topAligned: topAligned,
+                    isCollapsed: $isLevelsViewCollapsed,
                     levels: sortedLevels,
-                    isCollapsed: $isLevelsViewCollapsed
+                    topAligned: topAligned
                 )
                 if !topAligned {
                     Divider()
