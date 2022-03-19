@@ -16,11 +16,8 @@ import ArcGIS
 
 /// A view which allows selection of levels represented in `FloorFacility`.
 struct LevelSelector: View {
-    /// The alignment configuration.
-    var topAligned: Bool
-
-    /// The levels to display.
-    let levels: [FloorLevel]
+    /// The view model used by the `LevelsView`.
+    @EnvironmentObject var viewModel: FloorFilterViewModel
 
     /// A Boolean value indicating the whether the view shows only the selected level or all levels.
     /// If the value is`false`, the view will display all levels; if it is `true`, the view will only display
@@ -28,12 +25,12 @@ struct LevelSelector: View {
     @Binding
     var isCollapsed: Bool
 
-    /// The view model used by the `LevelsView`.
-    @EnvironmentObject var viewModel: FloorFilterViewModel
-
     /// The height of the scroll view's content.
     @State
     private var scrollViewContentHeight: CGFloat = .zero
+
+    /// The levels to display.
+    let levels: [FloorLevel]
 
     /// Returns the short name of the currently selected level, the first level or "None" if none of the listed
     /// are available.
@@ -46,6 +43,9 @@ struct LevelSelector: View {
             return "None"
         }
     }
+
+    /// The alignment configuration.
+    var topAligned: Bool
 
     public var body: some View {
         VStack {
@@ -90,10 +90,11 @@ struct LevelSelector: View {
 
 /// A vertical list of floor levels.
 struct LevelsStack: View {
-    let levels: [FloorLevel]
-
     /// The view model used by the `LevelsView`.
     @EnvironmentObject var viewModel: FloorFilterViewModel
+
+    /// The levels to display.
+    let levels: [FloorLevel]
 
     var body: some View {
         VStack {
