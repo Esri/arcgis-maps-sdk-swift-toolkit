@@ -18,10 +18,6 @@
 struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED***/ Creates a `SiteAndFacilitySelector`
 ***REMOVED******REMOVED***/ - Parameter isHidden: A binding used to dismiss the site selector.
-***REMOVED******REMOVED***/ - Parameter selectedFacilityID: Indicates the implicity selected facility based on the
-***REMOVED******REMOVED***/ current viewpoint.
-***REMOVED******REMOVED***/ - Parameter selectedSiteID: Indicates the implicity selected site based on the current
-***REMOVED******REMOVED***/ viewpoint.
 ***REMOVED***init(isHidden: Binding<Bool>) {
 ***REMOVED******REMOVED***self.isHidden = isHidden
 ***REMOVED***
@@ -52,12 +48,19 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED***/ The view model used by this selector.
 ***REMOVED******REMOVED***@EnvironmentObject var viewModel: FloorFilterViewModel
 
-***REMOVED******REMOVED******REMOVED***/ Allows the user to toggle the visibility of the site and facility selector.
-***REMOVED******REMOVED***var isHidden: Binding<Bool>
-
 ***REMOVED******REMOVED******REMOVED***/ Indicates that the keyboard is animating and some views may require reload.
 ***REMOVED******REMOVED***@State
 ***REMOVED******REMOVED***private var keyboardAnimating = false
+
+***REMOVED******REMOVED******REMOVED***/ A site name filter phrase entered by the user.
+***REMOVED******REMOVED***@State
+***REMOVED******REMOVED***private var searchPhrase: String = ""
+
+***REMOVED******REMOVED******REMOVED***/ Sites contained in a `FloorManager`.
+***REMOVED******REMOVED***let sites: [FloorSite]
+
+***REMOVED******REMOVED******REMOVED***/ Allows the user to toggle the visibility of the site and facility selector.
+***REMOVED******REMOVED***var isHidden: Binding<Bool>
 
 ***REMOVED******REMOVED******REMOVED***/ A subset of `sites` with names containing `searchPhrase` or all `sites` if
 ***REMOVED******REMOVED******REMOVED***/ `searchPhrase` is empty.
@@ -70,15 +73,10 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED***
 ***REMOVED***
 
-***REMOVED******REMOVED******REMOVED***/ A site filtering phrase entered by the user.
-***REMOVED******REMOVED***@State
-***REMOVED******REMOVED***var searchPhrase: String = ""
-
-***REMOVED******REMOVED******REMOVED***/ Sites contained in a `FloorManager`.
-***REMOVED******REMOVED***let sites: [FloorSite]
-
 ***REMOVED******REMOVED***var body: some View {
 ***REMOVED******REMOVED******REMOVED***siteListAndFilterView
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Trigger a reload on keyboard frame changes for proper layout
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** across all devices.
 ***REMOVED******REMOVED******REMOVED******REMOVED***.opacity(keyboardAnimating ? 0.99 : 1.0)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.navigationViewStyle(.stack)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onReceive(
@@ -162,6 +160,9 @@ struct SiteAndFacilitySelector: View {
 
 ***REMOVED******REMOVED***/ A view displaying the facilities contained in a `FloorManager`.
 ***REMOVED***struct FacilitiesList: View {
+***REMOVED******REMOVED******REMOVED***/ The view model used by this selector.
+***REMOVED******REMOVED***@EnvironmentObject var viewModel: FloorFilterViewModel
+
 ***REMOVED******REMOVED******REMOVED***/ Presentation styles for the facility list.
 ***REMOVED******REMOVED***enum PresentationStyle {
 ***REMOVED******REMOVED******REMOVED******REMOVED***/ A specific site was selected and the body is presented within a navigation view.
@@ -172,23 +173,15 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED***case singleSite
 ***REMOVED***
 
+***REMOVED******REMOVED******REMOVED***/ A facility name filter phrase entered by the user.
+***REMOVED******REMOVED***@State
+***REMOVED******REMOVED***var searchPhrase: String = ""
+
 ***REMOVED******REMOVED******REMOVED***/ `FloorFacility`s to be displayed by this view.
 ***REMOVED******REMOVED***let facilities: [FloorFacility]
 
-***REMOVED******REMOVED******REMOVED***/ The view model used by this selector.
-***REMOVED******REMOVED***@EnvironmentObject var viewModel: FloorFilterViewModel
-
-***REMOVED******REMOVED******REMOVED***/ Determines the SF Symbols image name to represent selection/non-selection of a facility.
-***REMOVED******REMOVED******REMOVED***/ - Parameter facility: The facility of interest
-***REMOVED******REMOVED******REMOVED***/ - Returns: "circle.fill" if the facility is marked selected or "cirlce" if the facility is not selected
-***REMOVED******REMOVED******REMOVED***/ in the view model.
-***REMOVED******REMOVED***func imageFor(_ facility: FloorFacility) -> String {
-***REMOVED******REMOVED******REMOVED***if facility.facilityId == viewModel.selectedFacility?.facilityId {
-***REMOVED******REMOVED******REMOVED******REMOVED***return "circle.fill"
-***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***return "circle"
-***REMOVED******REMOVED***
-***REMOVED***
+***REMOVED******REMOVED******REMOVED***/ The selected presentation style for the facility list.
+***REMOVED******REMOVED***let presentationStyle: PresentationStyle
 
 ***REMOVED******REMOVED******REMOVED***/ Allows the user to toggle the visibility of the site and facility selector.
 ***REMOVED******REMOVED***var isHidden: Binding<Bool>
@@ -204,12 +197,17 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED***
 ***REMOVED***
 
-***REMOVED******REMOVED******REMOVED***/ The selected presentation style for the facility list.
-***REMOVED******REMOVED***let presentationStyle: PresentationStyle
-
-***REMOVED******REMOVED******REMOVED***/ A facility filtering phrase entered by the user.
-***REMOVED******REMOVED***@State
-***REMOVED******REMOVED***var searchPhrase: String = ""
+***REMOVED******REMOVED******REMOVED***/ Determines the SF Symbols image name to represent selection/non-selection of a facility.
+***REMOVED******REMOVED******REMOVED***/ - Parameter facility: The facility of interest
+***REMOVED******REMOVED******REMOVED***/ - Returns: "circle.fill" if the facility is marked selected or "cirlce" if the facility is not selected
+***REMOVED******REMOVED******REMOVED***/ in the view model.
+***REMOVED******REMOVED***func imageFor(_ facility: FloorFacility) -> String {
+***REMOVED******REMOVED******REMOVED***if facility.facilityId == viewModel.selectedFacility?.facilityId {
+***REMOVED******REMOVED******REMOVED******REMOVED***return "circle.fill"
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***return "circle"
+***REMOVED******REMOVED***
+***REMOVED***
 
 ***REMOVED******REMOVED***var body: some View {
 ***REMOVED******REMOVED******REMOVED***if presentationStyle == .singleSite {
