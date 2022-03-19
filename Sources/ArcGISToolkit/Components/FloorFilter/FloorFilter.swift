@@ -85,7 +85,7 @@ public struct FloorFilter: View {
 ***REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED***Image(systemName: "building.2")
 ***REMOVED***
-***REMOVED******REMOVED******REMOVED***.padding(4)
+***REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity)
 ***REMOVED***
 
 ***REMOVED******REMOVED***/ A view that allows selecting between levels.
@@ -108,7 +108,7 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED******REMOVED***.frame(width: 55)
+***REMOVED******REMOVED******REMOVED***.frame(width: 75)
 ***REMOVED***
 
 ***REMOVED******REMOVED***/ Indicates that the selector should be presented with a right oriented aligment configuration.
@@ -244,31 +244,17 @@ struct LevelsView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***CollapseButton(isCollapsed: $isCollapsed)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Button for the selected level.
-***REMOVED******REMOVED******REMOVED******REMOVED***LevelLabel(text: selectedLevelName)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.background(Color(uiColor: .systemBlue))
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.cornerRadius(4)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onTapGesture {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***withAnimation {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isCollapsed.toggle()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if levels.count > 1 {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isCollapsed.toggle()
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding([.top, .bottom], 3)
+***REMOVED******REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(selectedLevelName)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.lineLimit(1)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.selected(true)
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED***
-***REMOVED***
-
-***REMOVED***/ A label that display text in a view with a confined static width.
-struct LevelLabel: View {
-***REMOVED******REMOVED***/ The text to be displayed in the label.
-***REMOVED***var text: String
-
-***REMOVED***var body: some View {
-***REMOVED******REMOVED***Text(text)
-***REMOVED******REMOVED******REMOVED***.lineLimit(1)
-***REMOVED******REMOVED******REMOVED***.frame(maxWidth: 50)
-***REMOVED******REMOVED******REMOVED***.padding([.top, .bottom], 2)
 ***REMOVED***
 ***REMOVED***
 
@@ -282,17 +268,13 @@ struct LevelsStack: View {
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***VStack {
 ***REMOVED******REMOVED******REMOVED***ForEach(levels) { level in
-***REMOVED******REMOVED******REMOVED******REMOVED***LevelLabel(text: level.shortName)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.background(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***level == viewModel.selectedLevel ?
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Color(uiColor: .systemBlue) :
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Color(uiColor: .systemGray2)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.cornerRadius(4)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onTapGesture {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.setLevel(level)
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding([.top, .bottom], 3)
+***REMOVED******REMOVED******REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.setLevel(level)
+***REMOVED******REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(level.shortName)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.lineLimit(1)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.selected(level == viewModel.selectedLevel)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
