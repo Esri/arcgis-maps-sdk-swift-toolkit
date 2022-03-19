@@ -58,11 +58,14 @@ struct FloorFilterExampleView: View {
             .onViewpointChanged(kind: .centerAndScale) {
                 viewpoint = $0
             }
+            /// Preserve the current viewpoint when a keyboard is presented in landscape.
+            .ignoresSafeArea(.keyboard, edges: .bottom)
             .overlay(alignment: filterAlignment) {
                 if isMapLoaded,
                    let floorManager = map.floorManager {
                     FloorFilter(
                         alignment: filterAlignment,
+                        automaticSelectionMode: .always,
                         floorManager: floorManager,
                         viewpoint: $viewpoint
                     )
@@ -78,7 +81,5 @@ struct FloorFilterExampleView: View {
                     print("load error: \(error)")
                 }
             }
-            /// Preserve the current viewpoint when a keyboard is presented in landscape.
-            .padding([.bottom], 0.1)
     }
 }
