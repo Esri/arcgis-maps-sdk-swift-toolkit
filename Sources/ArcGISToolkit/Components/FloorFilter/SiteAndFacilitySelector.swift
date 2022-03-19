@@ -32,13 +32,13 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED***if viewModel.sites.count == 1 {
 ***REMOVED******REMOVED******REMOVED***FacilitiesList(
 ***REMOVED******REMOVED******REMOVED******REMOVED***facilities: viewModel.sites.first!.facilities,
-***REMOVED******REMOVED******REMOVED******REMOVED***isHidden: isHidden,
-***REMOVED******REMOVED******REMOVED******REMOVED***presentationStyle: .singleSite
+***REMOVED******REMOVED******REMOVED******REMOVED***presentationStyle: .singleSite,
+***REMOVED******REMOVED******REMOVED******REMOVED***isHidden: isHidden
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED***SitesList(
-***REMOVED******REMOVED******REMOVED******REMOVED***isHidden: isHidden,
-***REMOVED******REMOVED******REMOVED******REMOVED***sites: viewModel.sites
+***REMOVED******REMOVED******REMOVED******REMOVED***sites: viewModel.sites,
+***REMOVED******REMOVED******REMOVED******REMOVED***isHidden: isHidden
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
@@ -114,8 +114,8 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***NavigationLink("All sites") {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FacilitiesList(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***facilities: sites.flatMap({ $0.facilities ***REMOVED***),
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isHidden: isHidden,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***presentationStyle: .allSites
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***presentationStyle: .allSites,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isHidden: isHidden
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding([.vertical], 4)
@@ -143,8 +143,8 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FacilitiesList(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***facilities: site.facilities,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isHidden: isHidden,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***presentationStyle: .standard
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***presentationStyle: .standard,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isHidden: isHidden
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onTapGesture {
