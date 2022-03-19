@@ -16,11 +16,8 @@
 
 ***REMOVED***/ A view which allows selection of levels represented in `FloorFacility`.
 struct LevelSelector: View {
-***REMOVED******REMOVED***/ The alignment configuration.
-***REMOVED***var topAligned: Bool
-
-***REMOVED******REMOVED***/ The levels to display.
-***REMOVED***let levels: [FloorLevel]
+***REMOVED******REMOVED***/ The view model used by the `LevelsView`.
+***REMOVED***@EnvironmentObject var viewModel: FloorFilterViewModel
 
 ***REMOVED******REMOVED***/ A Boolean value indicating the whether the view shows only the selected level or all levels.
 ***REMOVED******REMOVED***/ If the value is`false`, the view will display all levels; if it is `true`, the view will only display
@@ -28,12 +25,12 @@ struct LevelSelector: View {
 ***REMOVED***@Binding
 ***REMOVED***var isCollapsed: Bool
 
-***REMOVED******REMOVED***/ The view model used by the `LevelsView`.
-***REMOVED***@EnvironmentObject var viewModel: FloorFilterViewModel
-
 ***REMOVED******REMOVED***/ The height of the scroll view's content.
 ***REMOVED***@State
 ***REMOVED***private var scrollViewContentHeight: CGFloat = .zero
+
+***REMOVED******REMOVED***/ The levels to display.
+***REMOVED***let levels: [FloorLevel]
 
 ***REMOVED******REMOVED***/ Returns the short name of the currently selected level, the first level or "None" if none of the listed
 ***REMOVED******REMOVED***/ are available.
@@ -46,6 +43,9 @@ struct LevelSelector: View {
 ***REMOVED******REMOVED******REMOVED***return "None"
 ***REMOVED***
 ***REMOVED***
+
+***REMOVED******REMOVED***/ The alignment configuration.
+***REMOVED***var topAligned: Bool
 
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***VStack {
@@ -90,10 +90,11 @@ struct LevelSelector: View {
 
 ***REMOVED***/ A vertical list of floor levels.
 struct LevelsStack: View {
-***REMOVED***let levels: [FloorLevel]
-
 ***REMOVED******REMOVED***/ The view model used by the `LevelsView`.
 ***REMOVED***@EnvironmentObject var viewModel: FloorFilterViewModel
+
+***REMOVED******REMOVED***/ The levels to display.
+***REMOVED***let levels: [FloorLevel]
 
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***VStack {
