@@ -58,11 +58,14 @@ struct FloorFilterExampleView: View {
 ***REMOVED******REMOVED******REMOVED***.onViewpointChanged(kind: .centerAndScale) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***viewpoint = $0
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***/ Preserve the current viewpoint when a keyboard is presented in landscape.
+***REMOVED******REMOVED******REMOVED***.ignoresSafeArea(.keyboard, edges: .bottom)
 ***REMOVED******REMOVED******REMOVED***.overlay(alignment: filterAlignment) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if isMapLoaded,
 ***REMOVED******REMOVED******REMOVED******REMOVED***   let floorManager = map.floorManager {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FloorFilter(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***alignment: filterAlignment,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***automaticSelectionMode: .always,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***floorManager: floorManager,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint: $viewpoint
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
@@ -78,7 +81,5 @@ struct FloorFilterExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print("load error: \(error)")
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***/ Preserve the current viewpoint when a keyboard is presented in landscape.
-***REMOVED******REMOVED******REMOVED***.padding([.bottom], 0.1)
 ***REMOVED***
 ***REMOVED***
