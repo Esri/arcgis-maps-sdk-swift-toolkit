@@ -119,12 +119,17 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding([.vertical], 4)
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.navigationBarTitle(Text("Select a site"), displayMode: .inline)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.navigationBarItems(trailing: Button(action: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isHidden.wrappedValue.toggle()
-***REMOVED******REMOVED******REMOVED******REMOVED***, label: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "xmark.circle")
-***REMOVED******REMOVED******REMOVED******REMOVED***))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.navigationBarTitle(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Select a site"),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***displayMode: .inline
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.navigationBarItems(trailing:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button(action: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isHidden.wrappedValue.toggle()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***, label: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "xmark.circle")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.opacity(keyboardAnimating ? 0.99 : 1.0)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.navigationViewStyle(.stack)
