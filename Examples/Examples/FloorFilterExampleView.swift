@@ -43,6 +43,9 @@ struct FloorFilterExampleView: View {
     /// The `Map` that will be provided to the `MapView`.
     private var map = makeMap()
 
+    @State
+    private var mapLoadError: Bool = false
+
     /// The initial viewpoint of the map.
     @State
     private var viewpoint: Viewpoint? = Viewpoint(
@@ -71,6 +74,17 @@ struct FloorFilterExampleView: View {
                     )
                         .frame(maxWidth: 300, maxHeight: 300)
                         .padding(36)
+                } else if mapLoadError {
+                    Label(
+                        "Map load error!",
+                        systemImage: "exclamationmark.triangle"
+                    )
+                        .foregroundColor(.red)
+                        .frame(
+                            maxWidth: .infinity,
+                            maxHeight: .infinity,
+                            alignment: .center
+                        )
                 }
             }
             .task {
@@ -78,7 +92,7 @@ struct FloorFilterExampleView: View {
                     try await map.load()
                     isMapLoaded = true
                 } catch {
-                    print("load error: \(error)")
+                    mapLoadError = true
                 }
             }
     }
