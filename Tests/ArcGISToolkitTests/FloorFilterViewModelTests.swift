@@ -29,7 +29,12 @@ class FloorFilterViewModelTests: XCTestCase {
               let floorManager = map.floorManager else {
             return
         }
-        let viewModel = await FloorFilterViewModel(floorManager: floorManager)
+        var _viewpoint: Viewpoint? = getViewpoint(.zero)
+        let viewpoint = Binding(get: { _viewpoint }, set: { _viewpoint = $0 })
+        let viewModel = await FloorFilterViewModel(
+            floorManager: floorManager,
+            viewpoint: viewpoint
+        )
         await verifyInitialization(viewModel)
         let sites = await viewModel.sites
         let facilities = await viewModel.facilities
@@ -46,7 +51,7 @@ class FloorFilterViewModelTests: XCTestCase {
               let floorManager = map.floorManager else {
             return
         }
-        var _viewpoint: Viewpoint = getViewpoint(.zero)
+        var _viewpoint: Viewpoint? = getViewpoint(.zero)
         let viewpoint = Binding(get: { _viewpoint }, set: { _viewpoint = $0 })
         let viewModel = await FloorFilterViewModel(
             floorManager: floorManager,
@@ -70,7 +75,7 @@ class FloorFilterViewModelTests: XCTestCase {
             return
         }
         let initialViewpoint = getViewpoint(.zero)
-        var _viewpoint = initialViewpoint
+        var _viewpoint: Viewpoint? = initialViewpoint
         let viewpoint = Binding(get: { _viewpoint }, set: { _viewpoint = $0 })
         let viewModel = await FloorFilterViewModel(
             floorManager: floorManager,
@@ -86,12 +91,12 @@ class FloorFilterViewModelTests: XCTestCase {
         XCTAssertNil(selectedFacility)
         XCTAssertNil(selectedLevel)
         XCTAssertEqual(
-            _viewpoint.targetGeometry.extent.center.x,
+            _viewpoint?.targetGeometry.extent.center.x,
             initialViewpoint.targetGeometry.extent.center.x
         )
         await viewModel.setSite(site, zoomTo: true)
         XCTAssertEqual(
-            _viewpoint.targetGeometry.extent.center.x,
+            _viewpoint?.targetGeometry.extent.center.x,
             selectedSite?.geometry?.extent.center.x
         )
     }
@@ -103,29 +108,28 @@ class FloorFilterViewModelTests: XCTestCase {
             return
         }
         let initialViewpoint = getViewpoint(.zero)
-        var _viewpoint = initialViewpoint
+        var _viewpoint: Viewpoint? = initialViewpoint
         let viewpoint = Binding(get: { _viewpoint }, set: { _viewpoint = $0 })
         let viewModel = await FloorFilterViewModel(
+            automaticSelectionMode: .never,
             floorManager: floorManager,
             viewpoint: viewpoint
         )
         await verifyInitialization(viewModel)
         let facility = await viewModel.facilities.first
         await viewModel.setFacility(facility)
-        let selectedSite = await viewModel.selectedSite
         let selectedFacility = await viewModel.selectedFacility
         let selectedLevel = await viewModel.selectedLevel
         let defaultLevel = await viewModel.defaultLevel(for: selectedFacility)
-        XCTAssertEqual(selectedSite, selectedFacility?.site)
         XCTAssertEqual(selectedFacility, facility)
         XCTAssertEqual(selectedLevel, defaultLevel)
         XCTAssertEqual(
-            _viewpoint.targetGeometry.extent.center.x,
+            _viewpoint?.targetGeometry.extent.center.x,
             initialViewpoint.targetGeometry.extent.center.x
         )
         await viewModel.setFacility(facility, zoomTo: true)
         XCTAssertEqual(
-            _viewpoint.targetGeometry.extent.center.x,
+            _viewpoint?.targetGeometry.extent.center.x,
             selectedFacility?.geometry?.extent.center.x
         )
     }
@@ -137,7 +141,7 @@ class FloorFilterViewModelTests: XCTestCase {
             return
         }
         let initialViewpoint = getViewpoint(.zero)
-        var _viewpoint = initialViewpoint
+        var _viewpoint: Viewpoint? = initialViewpoint
         let viewpoint = Binding(get: { _viewpoint }, set: { _viewpoint = $0 })
         let viewModel = await FloorFilterViewModel(
             floorManager: floorManager,
@@ -147,14 +151,10 @@ class FloorFilterViewModelTests: XCTestCase {
         let levels = await viewModel.levels
         let level = levels.first
         await viewModel.setLevel(level)
-        let selectedSite = await viewModel.selectedSite
-        let selectedFacility = await viewModel.selectedFacility
         let selectedLevel = await viewModel.selectedLevel
-        XCTAssertEqual(selectedSite, selectedFacility?.site)
-        XCTAssertEqual(selectedFacility, level?.facility)
         XCTAssertEqual(selectedLevel, level)
         XCTAssertEqual(
-            _viewpoint.targetGeometry.extent.center.x,
+            _viewpoint?.targetGeometry.extent.center.x,
             initialViewpoint.targetGeometry.extent.center.x
         )
         levels.forEach { level in
