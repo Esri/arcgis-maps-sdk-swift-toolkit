@@ -31,15 +31,15 @@ public struct Bookmarks: View {
 ***REMOVED***@Binding
 ***REMOVED***private var isPresented: Bool
 
+***REMOVED******REMOVED***/ A bookmark that was selected.
+***REMOVED***@State
+***REMOVED***private var selectedBookmark: Bookmark? = nil
+
 ***REMOVED******REMOVED***/ User defined action to be performed when a bookmark is selected.
 ***REMOVED******REMOVED***/
 ***REMOVED******REMOVED***/ Use this when you prefer to self-manage the response to a bookmark selection. Use either
 ***REMOVED******REMOVED***/ `onSelectionChanged` or `viewpoint` exclusively.
-***REMOVED***var onSelectionChanged: ((Bookmark) -> Void)? = nil
-
-***REMOVED******REMOVED***/ A bookmark that was selected.
-***REMOVED***@State
-***REMOVED***private var selectedBookmark: Bookmark? = nil
+***REMOVED***var selectionChangedAction: ((Bookmark) -> Void)? = nil
 
 ***REMOVED******REMOVED***/ If non-`nil`, this viewpoint is updated when a bookmark is selected.
 ***REMOVED***private var viewpoint: Binding<Viewpoint?>?
@@ -51,7 +51,7 @@ public struct Bookmarks: View {
 ***REMOVED******REMOVED***perform action: @escaping (Bookmark) -> Void
 ***REMOVED***) -> Bookmarks {
 ***REMOVED******REMOVED***var copy = self
-***REMOVED******REMOVED***copy.onSelectionChanged = action
+***REMOVED******REMOVED***copy.selectionChangedAction = action
 ***REMOVED******REMOVED***return copy
 ***REMOVED***
 
@@ -64,7 +64,7 @@ public struct Bookmarks: View {
 ***REMOVED******REMOVED***isPresented = false
 ***REMOVED******REMOVED***if let viewpoint = viewpoint {
 ***REMOVED******REMOVED******REMOVED***viewpoint.wrappedValue = bookmark.viewpoint
-***REMOVED*** else if let onSelectionChanged = onSelectionChanged {
+***REMOVED*** else if let onSelectionChanged = selectionChangedAction {
 ***REMOVED******REMOVED******REMOVED***onSelectionChanged(bookmark)
 ***REMOVED***
 ***REMOVED***

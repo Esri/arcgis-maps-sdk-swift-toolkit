@@ -36,7 +36,7 @@ class BookmarksTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***isPresented: isPresented,
 ***REMOVED******REMOVED******REMOVED***bookmarks: sampleBookmarks
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED***bookmarks.onSelectionChanged = action
+***REMOVED******REMOVED***bookmarks.selectionChangedAction = action
 ***REMOVED******REMOVED***XCTAssertTrue(_isPresented)
 ***REMOVED******REMOVED***bookmarks.selectBookmark(sampleBookmarks.first!)
 ***REMOVED******REMOVED***XCTAssertFalse(_isPresented)
@@ -67,7 +67,7 @@ class BookmarksTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***isPresented: isPresented,
 ***REMOVED******REMOVED******REMOVED***mapOrScene: webMap
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED***bookmarks.onSelectionChanged = action
+***REMOVED******REMOVED***bookmarks.selectionChangedAction = action
 ***REMOVED******REMOVED***XCTAssertTrue(_isPresented)
 ***REMOVED******REMOVED***bookmarks.selectBookmark(webMap.bookmarks.first!)
 ***REMOVED******REMOVED***XCTAssertFalse(_isPresented)
