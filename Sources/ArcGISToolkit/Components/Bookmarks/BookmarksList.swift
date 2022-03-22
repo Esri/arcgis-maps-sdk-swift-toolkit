@@ -70,18 +70,18 @@ struct BookmarksList: View {
                                 Text(bookmark.name)
                                     .foregroundColor(.primary)
                             }
-                            .padding(4)
+                                .padding(4)
                             Divider()
                         }
                     }
-                    .padding()
-                    .onSizeChange {
-                        listContentHeight = $0.height
-                    }
+                        .padding()
+                        .onSizeChange {
+                            listContentHeight = $0.height
+                        }
                 }
-                .frame(
-                    maxHeight: isCompact ? .infinity : listContentHeight
-                )
+                    .frame(
+                        maxHeight: isCompact ? .infinity : listContentHeight
+                    )
             }
         }
     }
