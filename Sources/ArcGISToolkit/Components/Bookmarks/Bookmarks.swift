@@ -59,7 +59,6 @@ public struct Bookmarks: View {
     ///
     /// This includes indicating that bookmarks should be set to a hidden state, and changing the viewpoint
     /// binding (if provided) or calling the closure provided by the `onSelectionChanged` modifier.
-    /// `onSelectionChanged` modifier.
     /// - Parameter bookmark: The bookmark that was selected.
     func selectBookmark(_ bookmark: Bookmark) {
         isPresented = false
