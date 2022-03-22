@@ -104,6 +104,7 @@ public struct Bookmarks: View {
     public var body: some View {
         Group {
             BookmarksHeader(isPresented: $isPresented)
+                .padding()
             if geoModel == nil || geoModelIsLoaded {
                 BookmarksList(bookmarks: bookmarks)
                 .onSelectionChanged {
