@@ -104,12 +104,12 @@ public struct Bookmarks: View {
     public var body: some View {
         Group {
             BookmarksHeader(isPresented: $isPresented)
-                .padding()
+                .padding([.horizontal, .top])
             if geoModel == nil || geoModelIsLoaded {
                 BookmarksList(bookmarks: bookmarks)
-                .onSelectionChanged {
-                    selectBookmark($0)
-                }
+                    .onSelectionChanged {
+                        selectBookmark($0)
+                    }
             } else {
                 loadingView
             }
