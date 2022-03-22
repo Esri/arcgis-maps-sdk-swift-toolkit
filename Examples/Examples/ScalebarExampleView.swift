@@ -42,7 +42,14 @@ struct ScalebarExampleView: View {
 ***REMOVED******REMOVED******REMOVED***.onScaleChanged { scale = $0 ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onSpatialReferenceChanged { spatialReference = $0 ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***.overlay(alignment: .bottomLeading) {
-***REMOVED******REMOVED******REMOVED******REMOVED***Scalebar(scale, spatialReference, 175, viewpoint, visibleArea, units: .imperial)
+***REMOVED******REMOVED******REMOVED******REMOVED***Scalebar(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***scale,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***spatialReference,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***175,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***visibleArea,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***units: .imperial
+***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
