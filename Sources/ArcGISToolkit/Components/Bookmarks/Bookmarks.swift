@@ -31,15 +31,15 @@ public struct Bookmarks: View {
     @Binding
     private var isPresented: Bool
 
+    /// A bookmark that was selected.
+    @State
+    private var selectedBookmark: Bookmark? = nil
+
     /// User defined action to be performed when a bookmark is selected.
     ///
     /// Use this when you prefer to self-manage the response to a bookmark selection. Use either
     /// `onSelectionChanged` or `viewpoint` exclusively.
-    var onSelectionChanged: ((Bookmark) -> Void)? = nil
-
-    /// A bookmark that was selected.
-    @State
-    private var selectedBookmark: Bookmark? = nil
+    var selectionChangedAction: ((Bookmark) -> Void)? = nil
 
     /// If non-`nil`, this viewpoint is updated when a bookmark is selected.
     private var viewpoint: Binding<Viewpoint?>?
@@ -51,7 +51,7 @@ public struct Bookmarks: View {
         perform action: @escaping (Bookmark) -> Void
     ) -> Bookmarks {
         var copy = self
-        copy.onSelectionChanged = action
+        copy.selectionChangedAction = action
         return copy
     }
 
@@ -64,7 +64,7 @@ public struct Bookmarks: View {
         isPresented = false
         if let viewpoint = viewpoint {
             viewpoint.wrappedValue = bookmark.viewpoint
-        } else if let onSelectionChanged = onSelectionChanged {
+        } else if let onSelectionChanged = selectionChangedAction {
             onSelectionChanged(bookmark)
         }
     }
