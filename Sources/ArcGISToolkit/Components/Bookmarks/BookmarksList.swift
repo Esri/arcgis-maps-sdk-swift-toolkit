@@ -62,7 +62,7 @@ struct BookmarksList: View {
                     VStack(alignment: .leading) {
                         ForEach(
                             bookmarks.sorted { $0.name <  $1.name },
-                            id: \.viewpoint
+                            id: \.name
                         ) { bookmark in
                             Button {
                                 selectionChangedAction?(bookmark)
