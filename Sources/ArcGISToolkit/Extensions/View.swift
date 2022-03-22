@@ -15,7 +15,7 @@ import SwiftUI
 
 /// A modifier which displays a background and shadow for a view. Used to represent a selected view.
 struct SelectedModifier: ViewModifier {
-    /// `true` if the view should display as selected, `false` otherwise.
+    /// A Boolean value that indicates whether view should display as selected.
     var isSelected: Bool
 
     func body(content: Content) -> some View {
