@@ -44,9 +44,9 @@ public struct Bookmarks: View {
     /// If non-`nil`, this viewpoint is updated when a bookmark is selected.
     private var viewpoint: Binding<Viewpoint?>?
 
-    /// Sets a closure to perform when the bookmark selection changes.
+    /// Sets an action to perform when the bookmark selection changes.
     /// - Parameters:
-    ///   - action: The closure to perform when the bookmark selection has changed.
+    ///   - action: The action to perform when the bookmark selection has changed.
     public func onSelectionChanged(
         perform action: @escaping (Bookmark) -> Void
     ) -> Bookmarks {
