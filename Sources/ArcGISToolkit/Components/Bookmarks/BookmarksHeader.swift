@@ -53,6 +53,5 @@ struct BookmarksHeader: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.red)
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.padding()
 ***REMOVED***
 ***REMOVED***

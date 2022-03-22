@@ -104,6 +104,7 @@ public struct Bookmarks: View {
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***Group {
 ***REMOVED******REMOVED******REMOVED***BookmarksHeader(isPresented: $isPresented)
+***REMOVED******REMOVED******REMOVED******REMOVED***.padding()
 ***REMOVED******REMOVED******REMOVED***if geoModel == nil || geoModelIsLoaded {
 ***REMOVED******REMOVED******REMOVED******REMOVED***BookmarksList(bookmarks: bookmarks)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onSelectionChanged {
