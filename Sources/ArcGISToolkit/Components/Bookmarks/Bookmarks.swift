@@ -44,9 +44,9 @@ public struct Bookmarks: View {
 ***REMOVED******REMOVED***/ If non-`nil`, this viewpoint is updated when a bookmark is selected.
 ***REMOVED***private var viewpoint: Binding<Viewpoint?>?
 
-***REMOVED******REMOVED***/ Sets a closure to perform when the bookmark selection changes.
+***REMOVED******REMOVED***/ Sets an action to perform when the bookmark selection changes.
 ***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - action: The closure to perform when the bookmark selection has changed.
+***REMOVED******REMOVED***/   - action: The action to perform when the bookmark selection has changed.
 ***REMOVED***public func onSelectionChanged(
 ***REMOVED******REMOVED***perform action: @escaping (Bookmark) -> Void
 ***REMOVED***) -> Bookmarks {
