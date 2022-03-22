@@ -191,7 +191,7 @@ extension BookmarksTests {
 
     /// A web map authored with bookmarks for testing.
     var webMap: Map {
-        return Map(url: URL(string: "https://runtime.maps.arcgis.com/home/item.html?id=16f1b8ba37b44dc3884afc8d5f454dd2")!)!
+        return Map(url: URL(string: "https://www.arcgis.com/home/item.html?id=16f1b8ba37b44dc3884afc8d5f454dd2")!)!
     }
 
     /// Builds viewpoints to use for tests.
