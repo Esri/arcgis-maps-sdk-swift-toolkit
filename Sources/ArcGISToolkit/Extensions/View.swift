@@ -17,15 +17,14 @@
 struct SelectedModifier: ViewModifier {
 ***REMOVED******REMOVED***/ `true` if the view should display as selected, `false` otherwise.
 ***REMOVED***var isSelected: Bool
-***REMOVED***
+
 ***REMOVED***func body(content: Content) -> some View {
-***REMOVED******REMOVED***let roundedRect = RoundedRectangle(cornerRadius: 4)
 ***REMOVED******REMOVED***if isSelected {
 ***REMOVED******REMOVED******REMOVED***content
 ***REMOVED******REMOVED******REMOVED******REMOVED***.background(Color.secondary.opacity(0.8))
-***REMOVED******REMOVED******REMOVED******REMOVED***.clipShape(roundedRect)
+***REMOVED******REMOVED******REMOVED******REMOVED***.clipShape(RoundedRectangle(cornerRadius: 4))
 ***REMOVED******REMOVED******REMOVED******REMOVED***.shadow(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***color: Color.secondary.opacity(0.8),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***color: .secondary.opacity(0.8),
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***radius: 2
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED*** else {
@@ -43,7 +42,9 @@ extension View {
 ***REMOVED******REMOVED***background(
 ***REMOVED******REMOVED******REMOVED***GeometryReader { geometry in
 ***REMOVED******REMOVED******REMOVED******REMOVED***Color.clear
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.preference(key: SizePreferenceKey.self, value: geometry.size)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.preference(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***key: SizePreferenceKey.self, value: geometry.size
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***.onPreferenceChange(SizePreferenceKey.self, perform: perform)
@@ -51,7 +52,7 @@ extension View {
 
 ***REMOVED******REMOVED***/ View modifier used to denote the view is selected.
 ***REMOVED******REMOVED***/ - Parameter isSelected: `true` if the view is selected, `false` otherwise.
-***REMOVED******REMOVED***/ - Returns: The view being modified.
+***REMOVED******REMOVED***/ - Returns: The modified view.
 ***REMOVED***func selected(
 ***REMOVED******REMOVED***_ isSelected: Bool = false
 ***REMOVED***) -> some View {
