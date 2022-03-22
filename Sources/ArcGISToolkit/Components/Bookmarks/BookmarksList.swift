@@ -36,7 +36,7 @@ struct BookmarksList: View {
 ***REMOVED***private var listContentHeight: CGFloat = .zero
 
 ***REMOVED******REMOVED***/ Action to be performed when a bookmark is selected.
-***REMOVED***var onSelectionChanged: ((Bookmark) -> Void)? = nil
+***REMOVED***var selectionChangedAction: ((Bookmark) -> Void)? = nil
 
 ***REMOVED******REMOVED***/ Sets a closure to perform when the bookmark selection changes.
 ***REMOVED******REMOVED***/ - Parameter action: The closure to perform when the bookmark selection has changed.
@@ -44,7 +44,7 @@ struct BookmarksList: View {
 ***REMOVED******REMOVED***perform action: @escaping (Bookmark) -> Void
 ***REMOVED***) -> BookmarksList {
 ***REMOVED******REMOVED***var copy = self
-***REMOVED******REMOVED***copy.onSelectionChanged = action
+***REMOVED******REMOVED***copy.selectionChangedAction = action
 ***REMOVED******REMOVED***return copy
 ***REMOVED***
 
@@ -65,7 +65,7 @@ struct BookmarksList: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***id: \.viewpoint
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***) { bookmark in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onSelectionChanged?(bookmark)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectionChangedAction?(bookmark)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(bookmark.name)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.primary)
