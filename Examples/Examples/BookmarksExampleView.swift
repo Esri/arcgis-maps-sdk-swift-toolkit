@@ -59,8 +59,8 @@ struct BookmarksExampleView: View {
                             mapOrScene: map,
                             viewpoint: $viewpoint
                         )
-                        .environment(\.horizontalSizeClass, horizontalSizeClass)
-                        .environment(\.verticalSizeClass, verticalSizeClass)
+                            .environment(\.horizontalSizeClass, horizontalSizeClass)
+                            .environment(\.verticalSizeClass, verticalSizeClass)
                         // Display the Bookmarks view with the list of bookmarks in a map.
 //                        Bookmarks(
 //                            isPresented: $showingBookmarks,
@@ -68,11 +68,11 @@ struct BookmarksExampleView: View {
 //                        )
                         // In order to handle bookmark selection changes manually,
                         // use `.onSelectionChanged`.
-//                        .onSelectionChanged {
-//                            viewpoint = $0.viewpoint
-//                        }
-//                        .environment(\.horizontalSizeClass, horizontalSizeClass)
-//                        .environment(\.verticalSizeClass, verticalSizeClass)
+//                            .onSelectionChanged {
+//                                viewpoint = $0.viewpoint
+//                            }
+//                            .environment(\.horizontalSizeClass, horizontalSizeClass)
+//                            .environment(\.verticalSizeClass, verticalSizeClass)
                     }
                 }
             }
