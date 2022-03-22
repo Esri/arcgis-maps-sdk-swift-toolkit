@@ -42,7 +42,14 @@ struct ScalebarExampleView: View {
             .onScaleChanged { scale = $0 }
             .onSpatialReferenceChanged { spatialReference = $0 }
             .overlay(alignment: .bottomLeading) {
-                Scalebar(scale, spatialReference, 175, viewpoint, visibleArea, units: .imperial)
+                Scalebar(
+                    scale,
+                    spatialReference,
+                    175,
+                    viewpoint,
+                    visibleArea,
+                    units: .imperial
+                )
             }
     }
 }
