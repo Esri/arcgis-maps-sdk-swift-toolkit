@@ -15,7 +15,7 @@
 
 ***REMOVED***/ A modifier which displays a background and shadow for a view. Used to represent a selected view.
 struct SelectedModifier: ViewModifier {
-***REMOVED******REMOVED***/ `true` if the view should display as selected, `false` otherwise.
+***REMOVED******REMOVED***/ A Boolean value that indicates whether view should display as selected.
 ***REMOVED***var isSelected: Bool
 
 ***REMOVED***func body(content: Content) -> some View {
