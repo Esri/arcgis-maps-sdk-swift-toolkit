@@ -36,7 +36,7 @@ struct BookmarksList: View {
     private var listContentHeight: CGFloat = .zero
 
     /// Action to be performed when a bookmark is selected.
-    var onSelectionChanged: ((Bookmark) -> Void)? = nil
+    var selectionChangedAction: ((Bookmark) -> Void)? = nil
 
     /// Sets a closure to perform when the bookmark selection changes.
     /// - Parameter action: The closure to perform when the bookmark selection has changed.
@@ -44,7 +44,7 @@ struct BookmarksList: View {
         perform action: @escaping (Bookmark) -> Void
     ) -> BookmarksList {
         var copy = self
-        copy.onSelectionChanged = action
+        copy.selectionChangedAction = action
         return copy
     }
 
@@ -65,7 +65,7 @@ struct BookmarksList: View {
                             id: \.viewpoint
                         ) { bookmark in
                             Button {
-                                onSelectionChanged?(bookmark)
+                                selectionChangedAction?(bookmark)
                             } label: {
                                 Text(bookmark.name)
                                     .foregroundColor(.primary)
