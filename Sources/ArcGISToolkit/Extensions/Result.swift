@@ -12,6 +12,11 @@
 // limitations under the License.
 
 extension Result where Failure == Error {
+    /// Creates a result based on the outcome of the given task. If the task
+    /// succeeds, the result is `success`. If the task fails, the result is
+    /// `failure`.
+    ///
+    /// Returns `nil` in the event that the task was cancelled.
     init?(awaiting task: () async throws -> Success) async {
         do {
             self = .success(try await task())
