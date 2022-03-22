@@ -53,6 +53,5 @@ struct BookmarksHeader: View {
                 .foregroundColor(.red)
             }
         }
-        .padding()
     }
 }
