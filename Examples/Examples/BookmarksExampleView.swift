@@ -23,7 +23,7 @@ struct BookmarksExampleView: View {
     private var verticalSizeClass: UserInterfaceSizeClass?
 
     /// A web map with predefined bookmarks.
-    private let map = Map(url: URL(string: "https://runtime.maps.arcgis.com/home/item.html?id=16f1b8ba37b44dc3884afc8d5f454dd2")!)!
+    private let map = Map(url: URL(string: "https://www.arcgis.com/home/item.html?id=16f1b8ba37b44dc3884afc8d5f454dd2")!)!
 
     /// Indicates if the bookmarks list is shown or not.
     /// - Remark: This allows a developer to control how the bookmarks menu is shown/hidden,
