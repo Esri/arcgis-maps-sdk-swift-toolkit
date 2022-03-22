@@ -191,7 +191,7 @@ extension BookmarksTests {
 
 ***REMOVED******REMOVED***/ A web map authored with bookmarks for testing.
 ***REMOVED***var webMap: Map {
-***REMOVED******REMOVED***return Map(url: URL(string: "https:***REMOVED***runtime.maps.arcgis.com/home/item.html?id=16f1b8ba37b44dc3884afc8d5f454dd2")!)!
+***REMOVED******REMOVED***return Map(url: URL(string: "https:***REMOVED***www.arcgis.com/home/item.html?id=16f1b8ba37b44dc3884afc8d5f454dd2")!)!
 ***REMOVED***
 
 ***REMOVED******REMOVED***/ Builds viewpoints to use for tests.
