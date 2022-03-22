@@ -16,8 +16,7 @@ import ArcGISToolkit
 import ArcGIS
 
 struct FloorFilterExampleView: View {
-    @State
-    private var map: Map
+    private let map: Map
     
     @State
     private var viewpoint = Viewpoint(
@@ -26,23 +25,23 @@ struct FloorFilterExampleView: View {
     )
     
     @State
-    private var floorFilterViewModel: FloorFilterViewModel? = nil
+    private var isMapLoaded: Bool = false
     
     init() {
         // Create the map from a portal item and assign to the mapView.
         
         // Multiple sites/facilities: Esri IST map with all buildings.
-//        let portal = Portal(url: URL(string: "https://indoors.maps.arcgis.com/")!, isLoginRequired: false)
-//        let portalItem = PortalItem(portal: portal, id: Item.ID(rawValue: "49520a67773842f1858602735ef538b5")!)
-
+        //        let portal = Portal(url: URL(string: "https://indoors.maps.arcgis.com/")!, isLoginRequired: false)
+        //        let portalItem = PortalItem(portal: portal, id: Item.ID(rawValue: "49520a67773842f1858602735ef538b5")!)
+        
         // Redlands Campus map.
-//        let portal = Portal(url: URL(string: "https://runtimecoretest.maps.arcgis.com/")!, isLoginRequired: false)
-//        let portalItem = PortalItem(portal: portal, id: Item.ID(rawValue: "7687805bd42549f5ba41237443d0c60a")!) //<= another multiple sites/facilities
-
+        //        let portal = Portal(url: URL(string: "https://runtimecoretest.maps.arcgis.com/")!, isLoginRequired: false)
+        //        let portalItem = PortalItem(portal: portal, id: Item.ID(rawValue: "7687805bd42549f5ba41237443d0c60a")!) //<= another multiple sites/facilities
+        
         // Single site (ESRI Redlands Main) and facility (Building L).
         let portal = Portal(url: URL(string: "https://indoors.maps.arcgis.com/")!, isLoginRequired: false)
         let portalItem = PortalItem(portal: portal, id: Item.ID(rawValue: "f133a698536f44c8884ad81f80b6cfc7")!)
-
+        
         map = Map(item: portalItem)
     }
     
@@ -54,20 +53,19 @@ struct FloorFilterExampleView: View {
             viewpoint: viewpoint
         )
             .overlay(alignment: .bottomLeading) {
-                if let viewModel = floorFilterViewModel {
-                    FloorFilter(viewModel: viewModel)
+                if isMapLoaded,
+                   let floorManager = map.floorManager {
+                    FloorFilter(
+                        floorManager: floorManager,
+                        viewpoint: $viewpoint
+                    )
                         .padding(floorFilterPadding)
                 }
             }
             .task {
                 do {
                     try await map.load()
-                    if let floorManager = map.floorManager {
-                        floorFilterViewModel = FloorFilterViewModel(
-                            floorManager: floorManager,
-                            viewpoint: $viewpoint
-                        )
-                    }
+                    isMapLoaded = true
                 } catch {
                     print("load error: \(error)")
                 }
