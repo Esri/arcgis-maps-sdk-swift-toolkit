@@ -17,41 +17,35 @@ import SwiftUI
 /// `Bookmarks` allows a user to view and select from a set of bookmarks.
 public struct Bookmarks: View {
     /// A list of selectable bookmarks.
-    @State
-    private var bookmarks: [Bookmark] = []
-
+    @State private var bookmarks: [Bookmark] = []
+    
     /// A map or scene containing bookmarks.
     private var geoModel: GeoModel?
-
+    
     /// Indicates if bookmarks have loaded and are ready for display.
-    @State
-    private var geoModelIsLoaded = false
-
+    @State private var geoModelIsLoaded = false
+    
     /// The height of the header content.
-    @State
-    private var headerHeight: CGFloat = .zero
-
+    @State private var headerHeight: CGFloat = .zero
+    
     /// Determines if the bookmarks list is currently shown or not.
-    @Binding
-    private var isPresented: Bool
-
+    @Binding private var isPresented: Bool
+    
     /// The height of the list content.
-    @State
-    private var listHeight: CGFloat = .zero
-
+    @State private var listHeight: CGFloat = .zero
+    
     /// A bookmark that was selected.
-    @State
-    private var selectedBookmark: Bookmark? = nil
-
+    @State private var selectedBookmark: Bookmark? = nil
+    
     /// User defined action to be performed when a bookmark is selected.
     ///
     /// Use this when you prefer to self-manage the response to a bookmark selection. Use either
     /// `onSelectionChanged` or `viewpoint` exclusively.
     var selectionChangedAction: ((Bookmark) -> Void)? = nil
-
+    
     /// If non-`nil`, this viewpoint is updated when a bookmark is selected.
     private var viewpoint: Binding<Viewpoint?>?
-
+    
     /// Sets an action to perform when the bookmark selection changes.
     /// - Parameter action: The action to perform when the bookmark selection has changed.
     public func onSelectionChanged(
@@ -61,7 +55,7 @@ public struct Bookmarks: View {
         copy.selectionChangedAction = action
         return copy
     }
-
+    
     /// Performs the necessary actions when a bookmark is selected.
     ///
     /// This includes indicating that bookmarks should be set to a hidden state, and changing the viewpoint
@@ -75,7 +69,7 @@ public struct Bookmarks: View {
             onSelectionChanged(bookmark)
         }
     }
-
+    
     /// Creates a `Bookmarks` component.
     /// - Parameters:
     ///   - isPresented: Determines if the bookmarks list is presented.
@@ -92,7 +86,7 @@ public struct Bookmarks: View {
         self.viewpoint = viewpoint
         _isPresented = isPresented
     }
-
+    
     /// Creates a `Bookmarks` component.
     /// - Parameters:
     ///   - isPresented: Determines if the bookmarks list is presented.
@@ -109,7 +103,7 @@ public struct Bookmarks: View {
         self.viewpoint = viewpoint
         _isPresented = isPresented
     }
-
+    
     public var body: some View {
         VStack {
             BookmarksHeader(isPresented: $isPresented)
@@ -135,7 +129,7 @@ public struct Bookmarks: View {
         }
         .frame(idealHeight: headerHeight + listHeight)
     }
-
+    
     /// A view that is shown while a `GeoModel` is loading.
     private var loadingView: some View {
         ProgressView()
