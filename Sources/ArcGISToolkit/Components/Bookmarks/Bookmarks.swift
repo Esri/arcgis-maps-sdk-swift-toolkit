@@ -45,8 +45,7 @@ public struct Bookmarks: View {
 ***REMOVED***private var viewpoint: Binding<Viewpoint?>?
 
 ***REMOVED******REMOVED***/ Sets an action to perform when the bookmark selection changes.
-***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - action: The action to perform when the bookmark selection has changed.
+***REMOVED******REMOVED***/ - Parameter action: The action to perform when the bookmark selection has changed.
 ***REMOVED***public func onSelectionChanged(
 ***REMOVED******REMOVED***perform action: @escaping (Bookmark) -> Void
 ***REMOVED***) -> Bookmarks {
