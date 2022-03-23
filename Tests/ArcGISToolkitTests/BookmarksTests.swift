@@ -74,7 +74,7 @@ final class BookmarksTests: XCTestCase {
         wait(for: [expectation], timeout: 1.0)
     }
 
-    /// Assert that the list properly handles a selction when provided a viewpoint.
+    /// Asserts that the list properly handles a selection when provided a viewpoint.
     func testSelectBookmarkWithViewpoint() {
         let sampleBookmarks = sampleBookmarks
         var _isPresented = true
