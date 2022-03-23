@@ -31,19 +31,19 @@ struct SiteAndFacilitySelector: View {
 
     var body: some View {
         if let selectedSite = floorFilterViewModel.selectedSite {
-            Facilities(facilities: selectedSite.facilities, isHidden: isHidden)
+            FacilitiesView(facilities: selectedSite.facilities, isHidden: isHidden)
         } else if floorFilterViewModel.sites.count == 1 {
-            Facilities(
+            FacilitiesView(
                 facilities: floorFilterViewModel.sites.first!.facilities,
                 isHidden: isHidden
             )
         } else {
-            Sites(sites: floorFilterViewModel.sites, isHidden: isHidden)
+            SitesView(sites: floorFilterViewModel.sites, isHidden: isHidden)
         }
     }
 
     /// A view displaying the sites contained in a `FloorManager`.
-    struct Sites: View {
+    struct SitesView: View {
         /// The floor sites.
         let sites: [FloorSite]
 
@@ -86,7 +86,7 @@ struct SiteAndFacilitySelector: View {
     }
 
     /// A view displaying the facilities contained in a `FloorManager`.
-    struct Facilities: View {
+    struct FacilitiesView: View {
         let facilities: [FloorFacility]
         var isHidden: Binding<Bool>
 
