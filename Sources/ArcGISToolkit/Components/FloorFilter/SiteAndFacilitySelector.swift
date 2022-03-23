@@ -31,19 +31,19 @@ struct SiteAndFacilitySelector: View {
 
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***if let selectedSite = floorFilterViewModel.selectedSite {
-***REMOVED******REMOVED******REMOVED***Facilities(facilities: selectedSite.facilities, isHidden: isHidden)
+***REMOVED******REMOVED******REMOVED***FacilitiesView(facilities: selectedSite.facilities, isHidden: isHidden)
 ***REMOVED*** else if floorFilterViewModel.sites.count == 1 {
-***REMOVED******REMOVED******REMOVED***Facilities(
+***REMOVED******REMOVED******REMOVED***FacilitiesView(
 ***REMOVED******REMOVED******REMOVED******REMOVED***facilities: floorFilterViewModel.sites.first!.facilities,
 ***REMOVED******REMOVED******REMOVED******REMOVED***isHidden: isHidden
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***Sites(sites: floorFilterViewModel.sites, isHidden: isHidden)
+***REMOVED******REMOVED******REMOVED***SitesView(sites: floorFilterViewModel.sites, isHidden: isHidden)
 ***REMOVED***
 ***REMOVED***
 
 ***REMOVED******REMOVED***/ A view displaying the sites contained in a `FloorManager`.
-***REMOVED***struct Sites: View {
+***REMOVED***struct SitesView: View {
 ***REMOVED******REMOVED******REMOVED***/ The floor sites.
 ***REMOVED******REMOVED***let sites: [FloorSite]
 
@@ -86,7 +86,7 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED***
 
 ***REMOVED******REMOVED***/ A view displaying the facilities contained in a `FloorManager`.
-***REMOVED***struct Facilities: View {
+***REMOVED***struct FacilitiesView: View {
 ***REMOVED******REMOVED***let facilities: [FloorFacility]
 ***REMOVED******REMOVED***var isHidden: Binding<Bool>
 
