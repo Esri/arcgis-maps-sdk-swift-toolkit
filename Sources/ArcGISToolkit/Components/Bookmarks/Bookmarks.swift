@@ -27,9 +27,17 @@ public struct Bookmarks: View {
     @State
     private var geoModelIsLoaded = false
 
+    /// The height of the header content.
+    @State
+    private var headerHeight: CGFloat = .zero
+
     /// Determines if the bookmarks list is currently shown or not.
     @Binding
     private var isPresented: Bool
+
+    /// The height of the list content.
+    @State
+    private var listHeight: CGFloat = .zero
 
     /// A bookmark that was selected.
     @State
@@ -103,22 +111,29 @@ public struct Bookmarks: View {
     }
 
     public var body: some View {
-        Group {
+        VStack {
             BookmarksHeader(isPresented: $isPresented)
                 .padding([.horizontal, .top])
-            if geoModel == nil || geoModelIsLoaded {
-                BookmarksList(bookmarks: bookmarks)
-                    .onSelectionChanged {
-                        selectBookmark($0)
+                .onSizeChange {
+                    headerHeight = $0.height
+                }
+            ScrollView {
+                VStack {
+                    if geoModel == nil || geoModelIsLoaded {
+                        BookmarksList(bookmarks: bookmarks)
+                            .onSelectionChanged {
+                                selectBookmark($0)
+                            }
+                    } else {
+                        loadingView
                     }
-            } else {
-                loadingView
+                }
+                .onSizeChange {
+                    listHeight = $0.height
+                }
             }
         }
-            .frame(
-                maxHeight: .infinity,
-                alignment: .top
-            )
+        .frame(idealHeight: headerHeight + listHeight)
     }
 
     /// A view that is shown while a `GeoModel` is loading.
@@ -128,8 +143,8 @@ public struct Bookmarks: View {
             .task {
                 do {
                     try await geoModel?.load()
-                    geoModelIsLoaded = true
                     bookmarks = geoModel?.bookmarks ?? []
+                    geoModelIsLoaded = true
                 } catch {
                     print(error.localizedDescription)
                 }
