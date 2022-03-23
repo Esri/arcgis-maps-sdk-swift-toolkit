@@ -114,6 +114,10 @@ public struct Bookmarks: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***loadingView
 ***REMOVED******REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED******REMOVED***.frame(
+***REMOVED******REMOVED******REMOVED******REMOVED***maxHeight: .infinity,
+***REMOVED******REMOVED******REMOVED******REMOVED***alignment: .top
+***REMOVED******REMOVED******REMOVED***)
 ***REMOVED***
 
 ***REMOVED******REMOVED***/ A view that is shown while a `GeoModel` is loading.
