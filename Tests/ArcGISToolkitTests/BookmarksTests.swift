@@ -48,7 +48,7 @@ final class BookmarksTests: XCTestCase {
         let expectation = XCTestExpectation(
             description: "Modifier action was performed"
         )
-        let webMap = webMap
+        let webMap = Map.portlandTreeSurvey
         do {
             try await webMap.load()
         } catch {
@@ -82,7 +82,7 @@ final class BookmarksTests: XCTestCase {
             get: { _isPresented },
             set: {_isPresented = $0 }
         )
-        var _viewpoint: Viewpoint? = getViewpoint(0)
+        var _viewpoint: Viewpoint? = Viewpoint.esriRedlandsCampus
         let viewpoint = Binding(
             get: { _viewpoint },
             set: { _viewpoint = $0 }
@@ -101,7 +101,7 @@ final class BookmarksTests: XCTestCase {
 
     /// Asserts that the list properly handles a selection when provided a viewpoint and web map.
     func testSelectBookmarkWithViewpointAndWebMap() async {
-        let webMap = webMap
+        let webMap = Map.portlandTreeSurvey
         do {
             try await webMap.load()
         } catch {
@@ -112,7 +112,7 @@ final class BookmarksTests: XCTestCase {
             get: { _isPresented },
             set: {_isPresented = $0 }
         )
-        var _viewpoint: Viewpoint? = getViewpoint(0)
+        var _viewpoint: Viewpoint? = Viewpoint.esriRedlandsCampus
         let viewpoint = Binding(
             get: { _viewpoint },
             set: { _viewpoint = $0 }
@@ -131,11 +131,6 @@ final class BookmarksTests: XCTestCase {
 }
 
 private extension BookmarksTests {
-    /// An arbitrary point to use for testing.
-    var point: Point {
-        Point(x: -117.19494, y: 34.05723, spatialReference: .wgs84)
-    }
-
     /// A list of sample bookmarks for testing.
     var sampleBookmarks: [Bookmark] {[
         Bookmark(
@@ -183,21 +178,21 @@ private extension BookmarksTests {
             )
         ),
     ]}
+}
 
-    /// An arbitrary scale to use for testing.
-    var scale: Double {
-        10_000.00
-    }
-
+private extension Map {
     /// A web map authored with bookmarks for testing.
-    var webMap: Map {
-        return Map(url: URL(string: "https://www.arcgis.com/home/item.html?id=16f1b8ba37b44dc3884afc8d5f454dd2")!)!
-    }
+    static let portlandTreeSurvey = Map(url: URL(string: "https://www.arcgis.com/home/item.html?id=16f1b8ba37b44dc3884afc8d5f454dd2")!)!
+}
 
-    /// Builds viewpoints to use for tests.
-    /// - Parameter rotation: The rotation to use for the resulting viewpoint.
-    /// - Returns: A viewpoint object for tests.
-    func getViewpoint(_ rotation: Double) -> Viewpoint {
-        return Viewpoint(center: point, scale: scale, rotation: rotation)
-    }
+private extension Viewpoint {
+    static let esriRedlandsCampus = Viewpoint(
+        center: Point(
+            x: -117.19494,
+            y: 34.05723,
+            spatialReference: .wgs84
+        ),
+        scale: 10_000.00,
+        rotation: .zero
+    )
 }
