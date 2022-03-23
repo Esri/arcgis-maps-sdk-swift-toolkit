@@ -19,14 +19,22 @@ import ArcGIS
 /// to a site, a facility (building) in the site, or a floor in the facility.
 public struct FloorFilter: View {
     /// Creates a `FloorFilter`
-    /// - Parameter viewModel: The view model used by the `FloorFilter`.
-    public init(viewModel: FloorFilterViewModel) {
-        self.viewModel = viewModel
+    /// - Parameters:
+    ///   - floorManager: The floor manager used by the `FloorFilter`.
+    ///   - viewpoint: Viewpoint updated when the selected site or facility changes.
+    public init(
+        floorManager: FloorManager,
+        viewpoint: Binding<Viewpoint>? = nil
+    ) {
+        _viewModel = StateObject(wrappedValue: FloorFilterViewModel(
+            floorManager: floorManager,
+            viewpoint: viewpoint
+        ))
     }
     
     /// The view model used by the `FloorFilter`.
-    @ObservedObject
-    private(set) var viewModel: FloorFilterViewModel
+    @StateObject
+    private var viewModel: FloorFilterViewModel
     
     /// Allows the user to toggle the visibility of the site selector.
     @State
