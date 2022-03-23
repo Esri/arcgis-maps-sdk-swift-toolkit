@@ -203,14 +203,14 @@ class SearchViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let resultGeometryUnion: Geometry = try XCTUnwrap(
 ***REMOVED******REMOVED******REMOVED***GeometryEngine.union(
-***REMOVED******REMOVED******REMOVED******REMOVED***geometries: result.compactMap { $0.geoElement?.geometry ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***of: result.compactMap { $0.geoElement?.geometry ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
-***REMOVED******REMOVED******REMOVED***GeometryEngine.contains(
-***REMOVED******REMOVED******REMOVED******REMOVED***geometry1: model.queryArea!,
-***REMOVED******REMOVED******REMOVED******REMOVED***geometry2: resultGeometryUnion
+***REMOVED******REMOVED******REMOVED***GeometryEngine.doesGeometry(
+***REMOVED******REMOVED******REMOVED******REMOVED***model.queryArea!,
+***REMOVED******REMOVED******REMOVED******REMOVED***contain: resultGeometryUnion
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
@@ -256,9 +256,9 @@ class SearchViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var geodeticDistance = try XCTUnwrap (
-***REMOVED******REMOVED******REMOVED***GeometryEngine.distanceGeodetic(
-***REMOVED******REMOVED******REMOVED******REMOVED***point1: .portland,
-***REMOVED******REMOVED******REMOVED******REMOVED***point2: resultPoint,
+***REMOVED******REMOVED******REMOVED***GeometryEngine.geodeticDistance(
+***REMOVED******REMOVED******REMOVED******REMOVED***from: .portland,
+***REMOVED******REMOVED******REMOVED******REMOVED***to: resultPoint,
 ***REMOVED******REMOVED******REMOVED******REMOVED***distanceUnit: .meters,
 ***REMOVED******REMOVED******REMOVED******REMOVED***azimuthUnit: nil,
 ***REMOVED******REMOVED******REMOVED******REMOVED***curveType: .geodesic
@@ -266,7 +266,7 @@ class SearchViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** First result within 1500m of Portland.
-***REMOVED******REMOVED***XCTAssertLessThan(geodeticDistance.distance,  1500)
+***REMOVED******REMOVED***XCTAssertLessThan(geodeticDistance.distance.value,  1500)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Set queryCenter to Edinburgh
 ***REMOVED******REMOVED***model.queryCenter = .edinburgh
@@ -283,9 +283,9 @@ class SearchViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Web Mercator distance between .edinburgh and first result.
 ***REMOVED******REMOVED***geodeticDistance = try XCTUnwrap (
-***REMOVED******REMOVED******REMOVED***GeometryEngine.distanceGeodetic(
-***REMOVED******REMOVED******REMOVED******REMOVED***point1: .edinburgh,
-***REMOVED******REMOVED******REMOVED******REMOVED***point2: resultPoint,
+***REMOVED******REMOVED******REMOVED***GeometryEngine.geodeticDistance(
+***REMOVED******REMOVED******REMOVED******REMOVED***from: .edinburgh,
+***REMOVED******REMOVED******REMOVED******REMOVED***to: resultPoint,
 ***REMOVED******REMOVED******REMOVED******REMOVED***distanceUnit: .meters,
 ***REMOVED******REMOVED******REMOVED******REMOVED***azimuthUnit: nil,
 ***REMOVED******REMOVED******REMOVED******REMOVED***curveType: .geodesic
@@ -293,7 +293,7 @@ class SearchViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** First result within 100m of Edinburgh.
-***REMOVED******REMOVED***XCTAssertLessThan(geodeticDistance.distance,  100)
+***REMOVED******REMOVED***XCTAssertLessThan(geodeticDistance.distance.value,  100)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func testRepeatSearch() async throws {
@@ -311,14 +311,14 @@ class SearchViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let resultGeometryUnion: Geometry = try XCTUnwrap(
 ***REMOVED******REMOVED******REMOVED***GeometryEngine.union(
-***REMOVED******REMOVED******REMOVED******REMOVED***geometries: result.compactMap { $0.geoElement?.geometry ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***of: result.compactMap { $0.geoElement?.geometry ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(
-***REMOVED******REMOVED******REMOVED***GeometryEngine.contains(
-***REMOVED******REMOVED******REMOVED******REMOVED***geometry1: model.geoViewExtent!,
-***REMOVED******REMOVED******REMOVED******REMOVED***geometry2: resultGeometryUnion
+***REMOVED******REMOVED******REMOVED***GeometryEngine.doesGeometry(
+***REMOVED******REMOVED******REMOVED******REMOVED***model.geoViewExtent!,
+***REMOVED******REMOVED******REMOVED******REMOVED***contain: resultGeometryUnion
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
