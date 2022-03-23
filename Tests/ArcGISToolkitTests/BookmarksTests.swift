@@ -16,7 +16,7 @@ import SwiftUI
 import XCTest
 @testable import ArcGISToolkit
 
-class BookmarksTests: XCTestCase {
+final class BookmarksTests: XCTestCase {
     /// Assert that the list properly handles a selction when provided a modifier.
     func testSelectBookmarkWithModifier() {
         let expectation = XCTestExpectation(
