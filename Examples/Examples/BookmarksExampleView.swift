@@ -52,7 +52,7 @@ struct BookmarksExampleView: View {
                     }
                     .popover(isPresented: $showingBookmarks) {
                         // Display the Bookmarks view with a pre-defined list of bookmarks.
-                        // Passing in a viewpoint binding will allow the Bookmarks
+                        // Passing in a viewpoint binding will allow the `Bookmarks`
                         // view to handle bookmark selection.
                         Bookmarks(
                             isPresented: $showingBookmarks,
