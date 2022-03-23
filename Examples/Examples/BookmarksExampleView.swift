@@ -31,7 +31,7 @@ struct BookmarksExampleView: View {
 ***REMOVED***@State
 ***REMOVED***var showingBookmarks = false
 
-***REMOVED******REMOVED***/ Allows for communication between the Bookmarks and MapView or SceneView.
+***REMOVED******REMOVED***/ Allows for communication between the bookmarks component and MapView or SceneView.
 ***REMOVED***@State
 ***REMOVED***var viewpoint: Viewpoint? = nil
 
