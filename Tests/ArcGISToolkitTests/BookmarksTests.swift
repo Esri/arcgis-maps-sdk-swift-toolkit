@@ -136,7 +136,7 @@ private extension BookmarksTests {
         Point(x: -117.19494, y: 34.05723, spatialReference: .wgs84)
     }
 
-    /// A list of sample bookmarks for testing
+    /// A list of sample bookmarks for testing.
     var sampleBookmarks: [Bookmark] {[
         Bookmark(
             name: "Yosemite National Park",
