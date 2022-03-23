@@ -99,7 +99,7 @@ class BookmarksTests: XCTestCase {
 ***REMOVED******REMOVED***XCTAssertEqual(_viewpoint, sampleBookmarks.first?.viewpoint)
 ***REMOVED***
 
-***REMOVED******REMOVED***/ Assert that the list properly handles a selction when provided a viewpoint and web map.
+***REMOVED******REMOVED***/ Asserts that the list properly handles a selection when provided a viewpoint and web map.
 ***REMOVED***func testSelectBookmarkWithViewpointAndWebMap() async {
 ***REMOVED******REMOVED***let webMap = webMap
 ***REMOVED******REMOVED***do {
