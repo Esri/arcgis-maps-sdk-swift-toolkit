@@ -16,20 +16,8 @@ import SwiftUI
 
 /// `BookmarksList` displays a list of selectable bookmarks.
 struct BookmarksList: View {
-    @Environment(\.horizontalSizeClass)
-    private var horizontalSizeClass: UserInterfaceSizeClass?
-
-    @Environment(\.verticalSizeClass)
-    private var verticalSizeClass: UserInterfaceSizeClass?
-
     /// A list of bookmarks for display.
     var bookmarks: [Bookmark]
-
-    /// If `true`, the bookmarks will display as sheet.
-    /// If `false`, the bookmarks will display as a popover.
-    private var isCompact: Bool {
-        return horizontalSizeClass == .compact || verticalSizeClass == .compact
-    }
 
     /// The height of the list content.
     @State
@@ -80,7 +68,7 @@ struct BookmarksList: View {
                         }
                 }
                     .frame(
-                        maxHeight: isCompact ? .infinity : listContentHeight
+                        height: listContentHeight
                     )
             }
         }
