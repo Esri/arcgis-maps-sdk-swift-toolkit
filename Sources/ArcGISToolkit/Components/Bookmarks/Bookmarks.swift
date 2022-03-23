@@ -23,7 +23,7 @@ public struct Bookmarks: View {
     private var geoModel: GeoModel?
     
     /// Indicates if bookmarks have loaded and are ready for display.
-    @State private var geoModelIsLoaded = false
+    @State private var isGeoModelLoaded = false
     
     /// The height of the header content.
     @State private var headerHeight: CGFloat = .zero
@@ -113,7 +113,7 @@ public struct Bookmarks: View {
                 }
             ScrollView {
                 VStack {
-                    if geoModel == nil || geoModelIsLoaded {
+                    if geoModel == nil || isGeoModelLoaded {
                         BookmarksList(bookmarks: bookmarks)
                             .onSelectionChanged {
                                 selectBookmark($0)
@@ -138,7 +138,7 @@ public struct Bookmarks: View {
                 do {
                     try await geoModel?.load()
                     bookmarks = geoModel?.bookmarks ?? []
-                    geoModelIsLoaded = true
+                    isGeoModelLoaded = true
                 } catch {
                     print(error.localizedDescription)
                 }
