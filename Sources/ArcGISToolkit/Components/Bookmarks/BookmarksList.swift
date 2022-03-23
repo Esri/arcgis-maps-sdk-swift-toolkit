@@ -16,20 +16,8 @@
 
 ***REMOVED***/ `BookmarksList` displays a list of selectable bookmarks.
 struct BookmarksList: View {
-***REMOVED***@Environment(\.horizontalSizeClass)
-***REMOVED***private var horizontalSizeClass: UserInterfaceSizeClass?
-
-***REMOVED***@Environment(\.verticalSizeClass)
-***REMOVED***private var verticalSizeClass: UserInterfaceSizeClass?
-
 ***REMOVED******REMOVED***/ A list of bookmarks for display.
 ***REMOVED***var bookmarks: [Bookmark]
-
-***REMOVED******REMOVED***/ If `true`, the bookmarks will display as sheet.
-***REMOVED******REMOVED***/ If `false`, the bookmarks will display as a popover.
-***REMOVED***private var isCompact: Bool {
-***REMOVED******REMOVED***return horizontalSizeClass == .compact || verticalSizeClass == .compact
-***REMOVED***
 
 ***REMOVED******REMOVED***/ The height of the list content.
 ***REMOVED***@State
@@ -80,7 +68,7 @@ struct BookmarksList: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***maxHeight: isCompact ? .infinity : listContentHeight
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***height: listContentHeight
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED***
