@@ -33,15 +33,17 @@ struct BookmarksHeader: View {
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***HStack(alignment: .top) {
 ***REMOVED******REMOVED******REMOVED***Image(systemName: "bookmark")
-***REMOVED******REMOVED******REMOVED***VStack {
+***REMOVED******REMOVED******REMOVED***VStack(alignment: .leading) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text("Bookmarks")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.headline)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .leading)
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text("Select a bookmark")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.subheadline)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .leading)
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.frame(
+***REMOVED******REMOVED******REMOVED******REMOVED***maxWidth: .infinity,
+***REMOVED******REMOVED******REMOVED******REMOVED***alignment: .leading
+***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***if isCompact {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED******REMOVED***Button {

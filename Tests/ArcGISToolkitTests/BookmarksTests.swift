@@ -44,13 +44,13 @@ final class BookmarksTests: XCTestCase {
 ***REMOVED***
 
 ***REMOVED******REMOVED***/ Asserts that the list properly handles a selection when provided a modifier and web map.
-***REMOVED***func testSelectBookmarkWithModifierAndWebMap() async {
+***REMOVED***func testSelectBookmarkWithModifierAndMap() async {
 ***REMOVED******REMOVED***let expectation = XCTestExpectation(
 ***REMOVED******REMOVED******REMOVED***description: "Modifier action was performed"
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED***let webMap = Map.portlandTreeSurvey
+***REMOVED******REMOVED***let map = Map.portlandTreeSurvey
 ***REMOVED******REMOVED***do {
-***REMOVED******REMOVED******REMOVED***try await webMap.load()
+***REMOVED******REMOVED******REMOVED***try await map.load()
 ***REMOVED*** catch {
 ***REMOVED******REMOVED******REMOVED***XCTFail("Web map failed to load \(error.localizedDescription)")
 ***REMOVED***
@@ -61,15 +61,15 @@ final class BookmarksTests: XCTestCase {
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***let action: ((Bookmark) -> Void) = {
 ***REMOVED******REMOVED******REMOVED***expectation.fulfill()
-***REMOVED******REMOVED******REMOVED***XCTAssertEqual($0.viewpoint, webMap.bookmarks.first?.viewpoint)
+***REMOVED******REMOVED******REMOVED***XCTAssertEqual($0.viewpoint, map.bookmarks.first?.viewpoint)
 ***REMOVED***
 ***REMOVED******REMOVED***var bookmarks = Bookmarks(
 ***REMOVED******REMOVED******REMOVED***isPresented: isPresented,
-***REMOVED******REMOVED******REMOVED***mapOrScene: webMap
+***REMOVED******REMOVED******REMOVED***mapOrScene: map
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***bookmarks.selectionChangedAction = action
 ***REMOVED******REMOVED***XCTAssertTrue(_isPresented)
-***REMOVED******REMOVED***bookmarks.selectBookmark(webMap.bookmarks.first!)
+***REMOVED******REMOVED***bookmarks.selectBookmark(map.bookmarks.first!)
 ***REMOVED******REMOVED***XCTAssertFalse(_isPresented)
 ***REMOVED******REMOVED***wait(for: [expectation], timeout: 1.0)
 ***REMOVED***
@@ -100,10 +100,10 @@ final class BookmarksTests: XCTestCase {
 ***REMOVED***
 
 ***REMOVED******REMOVED***/ Asserts that the list properly handles a selection when provided a viewpoint and web map.
-***REMOVED***func testSelectBookmarkWithViewpointAndWebMap() async {
-***REMOVED******REMOVED***let webMap = Map.portlandTreeSurvey
+***REMOVED***func testSelectBookmarkWithViewpointAndMap() async {
+***REMOVED******REMOVED***let map = Map.portlandTreeSurvey
 ***REMOVED******REMOVED***do {
-***REMOVED******REMOVED******REMOVED***try await webMap.load()
+***REMOVED******REMOVED******REMOVED***try await map.load()
 ***REMOVED*** catch {
 ***REMOVED******REMOVED******REMOVED***XCTFail("Web map failed to load \(error.localizedDescription)")
 ***REMOVED***
@@ -119,14 +119,14 @@ final class BookmarksTests: XCTestCase {
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***let bookmarks = Bookmarks(
 ***REMOVED******REMOVED******REMOVED***isPresented: isPresented,
-***REMOVED******REMOVED******REMOVED***mapOrScene: webMap,
+***REMOVED******REMOVED******REMOVED***mapOrScene: map,
 ***REMOVED******REMOVED******REMOVED***viewpoint: viewpoint
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***XCTAssertTrue(_isPresented)
-***REMOVED******REMOVED***XCTAssertNotEqual(_viewpoint, webMap.bookmarks.first?.viewpoint)
-***REMOVED******REMOVED***bookmarks.selectBookmark(webMap.bookmarks.first!)
+***REMOVED******REMOVED***XCTAssertNotEqual(_viewpoint, map.bookmarks.first?.viewpoint)
+***REMOVED******REMOVED***bookmarks.selectBookmark(map.bookmarks.first!)
 ***REMOVED******REMOVED***XCTAssertFalse(_isPresented)
-***REMOVED******REMOVED***XCTAssertEqual(_viewpoint, webMap.bookmarks.first?.viewpoint)
+***REMOVED******REMOVED***XCTAssertEqual(_viewpoint, map.bookmarks.first?.viewpoint)
 ***REMOVED***
 ***REMOVED***
 
