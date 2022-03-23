@@ -43,7 +43,7 @@ final class BookmarksTests: XCTestCase {
         wait(for: [expectation], timeout: 1.0)
     }
 
-    /// Assert that the list properly handles a selction when provided a modifier and web map.
+    /// Asserts that the list properly handles a selection when provided a modifier and web map.
     func testSelectBookmarkWithModifierAndWebMap() async {
         let expectation = XCTestExpectation(
             description: "Modifier action was performed"
