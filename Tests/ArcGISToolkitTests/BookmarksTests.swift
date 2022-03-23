@@ -16,7 +16,7 @@
 import XCTest
 @testable ***REMOVED***Toolkit
 
-class BookmarksTests: XCTestCase {
+final class BookmarksTests: XCTestCase {
 ***REMOVED******REMOVED***/ Assert that the list properly handles a selction when provided a modifier.
 ***REMOVED***func testSelectBookmarkWithModifier() {
 ***REMOVED******REMOVED***let expectation = XCTestExpectation(
