@@ -48,7 +48,7 @@ final class BookmarksTests: XCTestCase {
 ***REMOVED******REMOVED***let expectation = XCTestExpectation(
 ***REMOVED******REMOVED******REMOVED***description: "Modifier action was performed"
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED***let webMap = webMap
+***REMOVED******REMOVED***let webMap = Map.portlandTreeSurvey
 ***REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED***try await webMap.load()
 ***REMOVED*** catch {
@@ -82,7 +82,7 @@ final class BookmarksTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***get: { _isPresented ***REMOVED***,
 ***REMOVED******REMOVED******REMOVED***set: {_isPresented = $0 ***REMOVED***
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED***var _viewpoint: Viewpoint? = getViewpoint(0)
+***REMOVED******REMOVED***var _viewpoint: Viewpoint? = Viewpoint.esriRedlandsCampus
 ***REMOVED******REMOVED***let viewpoint = Binding(
 ***REMOVED******REMOVED******REMOVED***get: { _viewpoint ***REMOVED***,
 ***REMOVED******REMOVED******REMOVED***set: { _viewpoint = $0 ***REMOVED***
@@ -101,7 +101,7 @@ final class BookmarksTests: XCTestCase {
 
 ***REMOVED******REMOVED***/ Asserts that the list properly handles a selection when provided a viewpoint and web map.
 ***REMOVED***func testSelectBookmarkWithViewpointAndWebMap() async {
-***REMOVED******REMOVED***let webMap = webMap
+***REMOVED******REMOVED***let webMap = Map.portlandTreeSurvey
 ***REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED***try await webMap.load()
 ***REMOVED*** catch {
@@ -112,7 +112,7 @@ final class BookmarksTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***get: { _isPresented ***REMOVED***,
 ***REMOVED******REMOVED******REMOVED***set: {_isPresented = $0 ***REMOVED***
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED***var _viewpoint: Viewpoint? = getViewpoint(0)
+***REMOVED******REMOVED***var _viewpoint: Viewpoint? = Viewpoint.esriRedlandsCampus
 ***REMOVED******REMOVED***let viewpoint = Binding(
 ***REMOVED******REMOVED******REMOVED***get: { _viewpoint ***REMOVED***,
 ***REMOVED******REMOVED******REMOVED***set: { _viewpoint = $0 ***REMOVED***
@@ -131,11 +131,6 @@ final class BookmarksTests: XCTestCase {
 ***REMOVED***
 
 private extension BookmarksTests {
-***REMOVED******REMOVED***/ An arbitrary point to use for testing.
-***REMOVED***var point: Point {
-***REMOVED******REMOVED***Point(x: -117.19494, y: 34.05723, spatialReference: .wgs84)
-***REMOVED***
-
 ***REMOVED******REMOVED***/ A list of sample bookmarks for testing.
 ***REMOVED***var sampleBookmarks: [Bookmark] {[
 ***REMOVED******REMOVED***Bookmark(
@@ -183,21 +178,21 @@ private extension BookmarksTests {
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***),
 ***REMOVED***]***REMOVED***
-
-***REMOVED******REMOVED***/ An arbitrary scale to use for testing.
-***REMOVED***var scale: Double {
-***REMOVED******REMOVED***10_000.00
 ***REMOVED***
 
+private extension Map {
 ***REMOVED******REMOVED***/ A web map authored with bookmarks for testing.
-***REMOVED***var webMap: Map {
-***REMOVED******REMOVED***return Map(url: URL(string: "https:***REMOVED***www.arcgis.com/home/item.html?id=16f1b8ba37b44dc3884afc8d5f454dd2")!)!
+***REMOVED***static let portlandTreeSurvey = Map(url: URL(string: "https:***REMOVED***www.arcgis.com/home/item.html?id=16f1b8ba37b44dc3884afc8d5f454dd2")!)!
 ***REMOVED***
 
-***REMOVED******REMOVED***/ Builds viewpoints to use for tests.
-***REMOVED******REMOVED***/ - Parameter rotation: The rotation to use for the resulting viewpoint.
-***REMOVED******REMOVED***/ - Returns: A viewpoint object for tests.
-***REMOVED***func getViewpoint(_ rotation: Double) -> Viewpoint {
-***REMOVED******REMOVED***return Viewpoint(center: point, scale: scale, rotation: rotation)
-***REMOVED***
+private extension Viewpoint {
+***REMOVED***static let esriRedlandsCampus = Viewpoint(
+***REMOVED******REMOVED***center: Point(
+***REMOVED******REMOVED******REMOVED***x: -117.19494,
+***REMOVED******REMOVED******REMOVED***y: 34.05723,
+***REMOVED******REMOVED******REMOVED***spatialReference: .wgs84
+***REMOVED******REMOVED***),
+***REMOVED******REMOVED***scale: 10_000.00,
+***REMOVED******REMOVED***rotation: .zero
+***REMOVED***)
 ***REMOVED***
