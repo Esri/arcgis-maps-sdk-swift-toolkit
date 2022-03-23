@@ -18,14 +18,13 @@ import SwiftUI
 struct BookmarksList: View {
     /// A list of bookmarks for display.
     var bookmarks: [Bookmark]
-
+    
     /// The height of the list content.
-    @State
-    private var listHeight: CGFloat = .zero
-
+    @State private var listHeight: CGFloat = .zero
+    
     /// Action to be performed when a bookmark is selected.
     var selectionChangedAction: ((Bookmark) -> Void)? = nil
-
+    
     /// Sets a closure to perform when the bookmark selection changes.
     /// - Parameter action: The closure to perform when the bookmark selection has changed.
     public func onSelectionChanged(
@@ -35,7 +34,7 @@ struct BookmarksList: View {
         copy.selectionChangedAction = action
         return copy
     }
-
+    
     var body: some View {
         Group {
             if bookmarks.isEmpty {
@@ -68,9 +67,7 @@ struct BookmarksList: View {
                         listHeight = $0.height
                     }
                 }
-                .frame(
-                    height: listHeight
-                )
+                .frame(height: listHeight)
             }
         }
     }
@@ -88,7 +85,7 @@ extension Bookmark: Hashable {
         self.hash(into: &hasher)
         return hasher.finalize()
     }
-
+    
     public func hash(into hasher: inout Hasher) {
         hasher.combine(name)
         hasher.combine(viewpoint)
