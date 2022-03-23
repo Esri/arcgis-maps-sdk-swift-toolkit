@@ -114,6 +114,10 @@ public struct Bookmarks: View {
                 loadingView
             }
         }
+            .frame(
+                maxHeight: .infinity,
+                alignment: .top
+            )
     }
 
     /// A view that is shown while a `GeoModel` is loading.
