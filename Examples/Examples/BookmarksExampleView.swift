@@ -31,7 +31,7 @@ struct BookmarksExampleView: View {
     @State
     var showingBookmarks = false
 
-    /// Allows for communication between the Bookmarks and MapView or SceneView.
+    /// Allows for communication between the bookmarks component and MapView or SceneView.
     @State
     var viewpoint: Viewpoint? = nil
 
