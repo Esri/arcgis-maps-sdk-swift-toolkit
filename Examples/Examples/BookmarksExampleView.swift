@@ -25,13 +25,14 @@ struct BookmarksExampleView: View {
     /// A web map with predefined bookmarks.
     private let map = Map(url: URL(string: "https://www.arcgis.com/home/item.html?id=16f1b8ba37b44dc3884afc8d5f454dd2")!)!
 
-    /// Indicates if the bookmarks list is shown or not.
-    /// - Remark: This allows a developer to control how the bookmarks menu is shown/hidden,
-    /// whether that be in a group of options or a standalone button.
+    /// Indicates if the `Bookmarks` component is shown or not.
+    /// - Remark: This allows a developer to control when the `Bookmarks` component is
+    /// shown/hidden, whether that be in a group of options or a standalone button.
     @State
     var showingBookmarks = false
 
-    /// Allows for communication between the bookmarks component and MapView or SceneView.
+    /// Allows for communication between the `Bookmarks` component and a `MapView` or
+    /// `SceneView`.
     @State
     var viewpoint: Viewpoint? = nil
 
@@ -51,9 +52,10 @@ struct BookmarksExampleView: View {
                         )
                     }
                     .popover(isPresented: $showingBookmarks) {
-                        // Display the Bookmarks view with a pre-defined list of bookmarks.
-                        // Passing in a viewpoint binding will allow the `Bookmarks`
-                        // view to handle bookmark selection.
+                        // Display the `Bookmarks` components with a pre-defined
+                        // list of bookmarks. Passing in a `Viewpoint` binding
+                        // will allow the `Bookmarks` component to handle
+                        // bookmark selection.
                         Bookmarks(
                             isPresented: $showingBookmarks,
                             mapOrScene: map,
@@ -61,13 +63,14 @@ struct BookmarksExampleView: View {
                         )
                             .environment(\.horizontalSizeClass, horizontalSizeClass)
                             .environment(\.verticalSizeClass, verticalSizeClass)
-                        // Display the Bookmarks view with the list of bookmarks in a map.
+                        // Display the `Bookmarks` component with the list of
+                        // bookmarks in a map.
 //                        Bookmarks(
 //                            isPresented: $showingBookmarks,
 //                            mapOrScene: map
 //                        )
-                        // In order to handle bookmark selection changes manually,
-                        // use `.onSelectionChanged`.
+                        // In order to handle bookmark selection changes
+                        // manually, use `onSelectionChanged(perform:)`.
 //                            .onSelectionChanged {
 //                                viewpoint = $0.viewpoint
 //                            }
