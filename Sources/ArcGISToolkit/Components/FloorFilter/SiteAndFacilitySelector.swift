@@ -87,9 +87,13 @@ struct SiteAndFacilitySelector: View {
 
     /// A view displaying the facilities contained in a `FloorManager`.
     struct FacilitiesView: View {
+        /// The floor facilities.
         let facilities: [FloorFacility]
+
+        /// Allows the user to toggle the visibility of the sites.
         var isHidden: Binding<Bool>
 
+        /// The view model used by the `SiteAndFacilitySelector`.
         @EnvironmentObject var floorFilterViewModel: FloorFilterViewModel
 
         /// The height of the scroll view's content.
