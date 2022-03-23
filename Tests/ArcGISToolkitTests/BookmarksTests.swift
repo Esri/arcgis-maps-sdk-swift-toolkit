@@ -99,7 +99,7 @@ class BookmarksTests: XCTestCase {
         XCTAssertEqual(_viewpoint, sampleBookmarks.first?.viewpoint)
     }
 
-    /// Assert that the list properly handles a selction when provided a viewpoint and web map.
+    /// Asserts that the list properly handles a selection when provided a viewpoint and web map.
     func testSelectBookmarkWithViewpointAndWebMap() async {
         let webMap = webMap
         do {
