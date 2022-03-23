@@ -43,7 +43,7 @@ final class BookmarksTests: XCTestCase {
 ***REMOVED******REMOVED***wait(for: [expectation], timeout: 1.0)
 ***REMOVED***
 
-***REMOVED******REMOVED***/ Assert that the list properly handles a selction when provided a modifier and web map.
+***REMOVED******REMOVED***/ Asserts that the list properly handles a selection when provided a modifier and web map.
 ***REMOVED***func testSelectBookmarkWithModifierAndWebMap() async {
 ***REMOVED******REMOVED***let expectation = XCTestExpectation(
 ***REMOVED******REMOVED******REMOVED***description: "Modifier action was performed"
