@@ -21,7 +21,7 @@ struct BookmarksList: View {
 
     /// The height of the list content.
     @State
-    private var listContentHeight: CGFloat = .zero
+    private var listHeight: CGFloat = .zero
 
     /// Action to be performed when a bookmark is selected.
     var selectionChangedAction: ((Bookmark) -> Void)? = nil
@@ -45,6 +45,7 @@ struct BookmarksList: View {
                     Image(systemName: "bookmark.slash")
                 }
                 .foregroundColor(.primary)
+                .padding()
             } else {
                 ScrollView {
                     VStack(alignment: .leading) {
@@ -58,18 +59,18 @@ struct BookmarksList: View {
                                 Text(bookmark.name)
                                     .foregroundColor(.primary)
                             }
-                                .padding(4)
+                            .padding(4)
                             Divider()
                         }
                     }
-                        .padding()
-                        .onSizeChange {
-                            listContentHeight = $0.height
-                        }
+                    .padding()
+                    .onSizeChange {
+                        listHeight = $0.height
+                    }
                 }
-                    .frame(
-                        height: listContentHeight
-                    )
+                .frame(
+                    height: listHeight
+                )
             }
         }
     }
