@@ -44,13 +44,13 @@ final class BookmarksTests: XCTestCase {
     }
 
     /// Asserts that the list properly handles a selection when provided a modifier and web map.
-    func testSelectBookmarkWithModifierAndWebMap() async {
+    func testSelectBookmarkWithModifierAndMap() async {
         let expectation = XCTestExpectation(
             description: "Modifier action was performed"
         )
-        let webMap = Map.portlandTreeSurvey
+        let map = Map.portlandTreeSurvey
         do {
-            try await webMap.load()
+            try await map.load()
         } catch {
             XCTFail("Web map failed to load \(error.localizedDescription)")
         }
@@ -61,15 +61,15 @@ final class BookmarksTests: XCTestCase {
         )
         let action: ((Bookmark) -> Void) = {
             expectation.fulfill()
-            XCTAssertEqual($0.viewpoint, webMap.bookmarks.first?.viewpoint)
+            XCTAssertEqual($0.viewpoint, map.bookmarks.first?.viewpoint)
         }
         var bookmarks = Bookmarks(
             isPresented: isPresented,
-            mapOrScene: webMap
+            mapOrScene: map
         )
         bookmarks.selectionChangedAction = action
         XCTAssertTrue(_isPresented)
-        bookmarks.selectBookmark(webMap.bookmarks.first!)
+        bookmarks.selectBookmark(map.bookmarks.first!)
         XCTAssertFalse(_isPresented)
         wait(for: [expectation], timeout: 1.0)
     }
@@ -100,10 +100,10 @@ final class BookmarksTests: XCTestCase {
     }
 
     /// Asserts that the list properly handles a selection when provided a viewpoint and web map.
-    func testSelectBookmarkWithViewpointAndWebMap() async {
-        let webMap = Map.portlandTreeSurvey
+    func testSelectBookmarkWithViewpointAndMap() async {
+        let map = Map.portlandTreeSurvey
         do {
-            try await webMap.load()
+            try await map.load()
         } catch {
             XCTFail("Web map failed to load \(error.localizedDescription)")
         }
@@ -119,14 +119,14 @@ final class BookmarksTests: XCTestCase {
         )
         let bookmarks = Bookmarks(
             isPresented: isPresented,
-            mapOrScene: webMap,
+            mapOrScene: map,
             viewpoint: viewpoint
         )
         XCTAssertTrue(_isPresented)
-        XCTAssertNotEqual(_viewpoint, webMap.bookmarks.first?.viewpoint)
-        bookmarks.selectBookmark(webMap.bookmarks.first!)
+        XCTAssertNotEqual(_viewpoint, map.bookmarks.first?.viewpoint)
+        bookmarks.selectBookmark(map.bookmarks.first!)
         XCTAssertFalse(_isPresented)
-        XCTAssertEqual(_viewpoint, webMap.bookmarks.first?.viewpoint)
+        XCTAssertEqual(_viewpoint, map.bookmarks.first?.viewpoint)
     }
 }
 

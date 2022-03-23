@@ -72,22 +72,3 @@ struct BookmarksList: View {
         }
     }
 }
-
-extension Bookmark: Equatable {
-    public static func == (lhs: Bookmark, rhs: Bookmark) -> Bool {
-        lhs.hashValue == rhs.hashValue
-    }
-}
-
-extension Bookmark: Hashable {
-    public var hashValue: Int {
-        var hasher = Hasher()
-        self.hash(into: &hasher)
-        return hasher.finalize()
-    }
-    
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(name)
-        hasher.combine(viewpoint)
-    }
-}

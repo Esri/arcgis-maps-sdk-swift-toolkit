@@ -33,15 +33,17 @@ struct BookmarksHeader: View {
     public var body: some View {
         HStack(alignment: .top) {
             Image(systemName: "bookmark")
-            VStack {
+            VStack(alignment: .leading) {
                 Text("Bookmarks")
                     .font(.headline)
-                    .frame(maxWidth: .infinity, alignment: .leading)
                 Text("Select a bookmark")
                     .font(.subheadline)
                     .foregroundColor(.secondary)
-                    .frame(maxWidth: .infinity, alignment: .leading)
             }
+            .frame(
+                maxWidth: .infinity,
+                alignment: .leading
+            )
             if isCompact {
                 Spacer()
                 Button {
