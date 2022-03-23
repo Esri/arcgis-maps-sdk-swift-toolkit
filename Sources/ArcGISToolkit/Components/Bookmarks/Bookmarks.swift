@@ -27,9 +27,17 @@ public struct Bookmarks: View {
 ***REMOVED***@State
 ***REMOVED***private var geoModelIsLoaded = false
 
+***REMOVED******REMOVED***/ The height of the header content.
+***REMOVED***@State
+***REMOVED***private var headerHeight: CGFloat = .zero
+
 ***REMOVED******REMOVED***/ Determines if the bookmarks list is currently shown or not.
 ***REMOVED***@Binding
 ***REMOVED***private var isPresented: Bool
+
+***REMOVED******REMOVED***/ The height of the list content.
+***REMOVED***@State
+***REMOVED***private var listHeight: CGFloat = .zero
 
 ***REMOVED******REMOVED***/ A bookmark that was selected.
 ***REMOVED***@State
@@ -103,22 +111,29 @@ public struct Bookmarks: View {
 ***REMOVED***
 
 ***REMOVED***public var body: some View {
-***REMOVED******REMOVED***Group {
+***REMOVED******REMOVED***VStack {
 ***REMOVED******REMOVED******REMOVED***BookmarksHeader(isPresented: $isPresented)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding([.horizontal, .top])
-***REMOVED******REMOVED******REMOVED***if geoModel == nil || geoModelIsLoaded {
-***REMOVED******REMOVED******REMOVED******REMOVED***BookmarksList(bookmarks: bookmarks)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onSelectionChanged {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectBookmark($0)
+***REMOVED******REMOVED******REMOVED******REMOVED***.onSizeChange {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***headerHeight = $0.height
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***ScrollView {
+***REMOVED******REMOVED******REMOVED******REMOVED***VStack {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if geoModel == nil || geoModelIsLoaded {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***BookmarksList(bookmarks: bookmarks)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onSelectionChanged {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectBookmark($0)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***loadingView
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***loadingView
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.onSizeChange {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***listHeight = $0.height
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED******REMOVED***.frame(
-***REMOVED******REMOVED******REMOVED******REMOVED***maxHeight: .infinity,
-***REMOVED******REMOVED******REMOVED******REMOVED***alignment: .top
-***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***.frame(idealHeight: headerHeight + listHeight)
 ***REMOVED***
 
 ***REMOVED******REMOVED***/ A view that is shown while a `GeoModel` is loading.
@@ -128,8 +143,8 @@ public struct Bookmarks: View {
 ***REMOVED******REMOVED******REMOVED***.task {
 ***REMOVED******REMOVED******REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try await geoModel?.load()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***geoModelIsLoaded = true
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bookmarks = geoModel?.bookmarks ?? []
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***geoModelIsLoaded = true
 ***REMOVED******REMOVED******REMOVED*** catch {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print(error.localizedDescription)
 ***REMOVED******REMOVED******REMOVED***
