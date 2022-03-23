@@ -16,9 +16,9 @@
 
 ***REMOVED***/ Manages the state for a `FloorFilter`.
 @MainActor
-final public class FloorFilterViewModel: ObservableObject {
+final class FloorFilterViewModel: ObservableObject {
 ***REMOVED******REMOVED***/  A selected site, floor, or level.
-***REMOVED***public enum Selection {
+***REMOVED***enum Selection {
 ***REMOVED******REMOVED******REMOVED***/ A selected site.
 ***REMOVED******REMOVED***case site(FloorSite)
 ***REMOVED******REMOVED******REMOVED***/ A selected facility.
@@ -26,17 +26,18 @@ final public class FloorFilterViewModel: ObservableObject {
 ***REMOVED******REMOVED******REMOVED***/ A selected level.
 ***REMOVED******REMOVED***case level(FloorLevel)
 ***REMOVED***
-
+***REMOVED***
 ***REMOVED******REMOVED***/ Creates a `FloorFilterViewModel`.
 ***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - floorManager: A floor manager.
+***REMOVED******REMOVED***/   - floorManager: The floor manager used by the `FloorFilterViewModel`.
 ***REMOVED******REMOVED***/   - viewpoint: Viewpoint updated when the selected site or facility changes.
-***REMOVED***public init(
+***REMOVED***init(
 ***REMOVED******REMOVED***floorManager: FloorManager,
 ***REMOVED******REMOVED***viewpoint: Binding<Viewpoint>? = nil
 ***REMOVED***) {
-***REMOVED******REMOVED***self.viewpoint = viewpoint
 ***REMOVED******REMOVED***self.floorManager = floorManager
+***REMOVED******REMOVED***self.viewpoint = viewpoint
+
 ***REMOVED******REMOVED***Task {
 ***REMOVED******REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED******REMOVED***try await floorManager.load()
@@ -50,7 +51,7 @@ final public class FloorFilterViewModel: ObservableObject {
 ***REMOVED******REMOVED******REMOVED***isLoading = false
 ***REMOVED***
 ***REMOVED***
-***REMOVED***
+
 ***REMOVED******REMOVED***/ The `Viewpoint` used to pan/zoom to the selected site/facilty.
 ***REMOVED******REMOVED***/ If `nil`, there will be no automatic pan/zoom operations.
 ***REMOVED***let viewpoint: Binding<Viewpoint>?
@@ -59,17 +60,17 @@ final public class FloorFilterViewModel: ObservableObject {
 ***REMOVED***let floorManager: FloorManager
 ***REMOVED***
 ***REMOVED******REMOVED***/ The floor manager sites.
-***REMOVED***public var sites: [FloorSite] {
+***REMOVED***var sites: [FloorSite] {
 ***REMOVED******REMOVED***floorManager.sites
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The floor manager facilities.
-***REMOVED***public var facilities: [FloorFacility] {
+***REMOVED***var facilities: [FloorFacility] {
 ***REMOVED******REMOVED***floorManager.facilities
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The floor manager levels.
-***REMOVED***public var levels: [FloorLevel] {
+***REMOVED***var levels: [FloorLevel] {
 ***REMOVED******REMOVED***floorManager.levels
 ***REMOVED***
 
@@ -79,7 +80,7 @@ final public class FloorFilterViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED******REMOVED***/ The selected site, floor, or level.
 ***REMOVED***@Published
-***REMOVED***public var selection: Selection? {
+***REMOVED***var selection: Selection? {
 ***REMOVED******REMOVED***didSet {
 ***REMOVED******REMOVED******REMOVED***zoomToSelection()
 ***REMOVED***
@@ -127,7 +128,7 @@ final public class FloorFilterViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Zooms to the selected facility; if there is no selected facility, zooms to the selected site.
-***REMOVED***public func zoomToSelection() {
+***REMOVED***func zoomToSelection() {
 ***REMOVED******REMOVED***guard let selection = selection else {
 ***REMOVED******REMOVED******REMOVED***return
 ***REMOVED***

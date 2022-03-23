@@ -114,8 +114,8 @@ public class SearchViewModel: ObservableObject {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Check center difference.
 ***REMOVED******REMOVED******REMOVED***let centerDiff = GeometryEngine.distance(
-***REMOVED******REMOVED******REMOVED******REMOVED***geometry1: lastExtent.center,
-***REMOVED******REMOVED******REMOVED******REMOVED***geometry2: newExtent.center
+***REMOVED******REMOVED******REMOVED******REMOVED***from: lastExtent.center,
+***REMOVED******REMOVED******REMOVED******REMOVED***to: newExtent.center
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***let currentExtentAvg = (lastExtent.width + lastExtent.height) / 2.0
 ***REMOVED******REMOVED******REMOVED***let threshold = currentExtentAvg * 0.25

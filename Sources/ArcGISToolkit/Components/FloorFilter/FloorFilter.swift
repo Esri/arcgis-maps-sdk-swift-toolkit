@@ -19,14 +19,22 @@
 ***REMOVED***/ to a site, a facility (building) in the site, or a floor in the facility.
 public struct FloorFilter: View {
 ***REMOVED******REMOVED***/ Creates a `FloorFilter`
-***REMOVED******REMOVED***/ - Parameter viewModel: The view model used by the `FloorFilter`.
-***REMOVED***public init(viewModel: FloorFilterViewModel) {
-***REMOVED******REMOVED***self.viewModel = viewModel
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - floorManager: The floor manager used by the `FloorFilter`.
+***REMOVED******REMOVED***/   - viewpoint: Viewpoint updated when the selected site or facility changes.
+***REMOVED***public init(
+***REMOVED******REMOVED***floorManager: FloorManager,
+***REMOVED******REMOVED***viewpoint: Binding<Viewpoint>? = nil
+***REMOVED***) {
+***REMOVED******REMOVED***_viewModel = StateObject(wrappedValue: FloorFilterViewModel(
+***REMOVED******REMOVED******REMOVED***floorManager: floorManager,
+***REMOVED******REMOVED******REMOVED***viewpoint: viewpoint
+***REMOVED******REMOVED***))
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The view model used by the `FloorFilter`.
-***REMOVED***@ObservedObject
-***REMOVED***private(set) var viewModel: FloorFilterViewModel
+***REMOVED***@StateObject
+***REMOVED***private var viewModel: FloorFilterViewModel
 ***REMOVED***
 ***REMOVED******REMOVED***/ Allows the user to toggle the visibility of the site selector.
 ***REMOVED***@State
