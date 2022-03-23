@@ -136,7 +136,7 @@ private extension BookmarksTests {
 ***REMOVED******REMOVED***Point(x: -117.19494, y: 34.05723, spatialReference: .wgs84)
 ***REMOVED***
 
-***REMOVED******REMOVED***/ A list of sample bookmarks for testing
+***REMOVED******REMOVED***/ A list of sample bookmarks for testing.
 ***REMOVED***var sampleBookmarks: [Bookmark] {[
 ***REMOVED******REMOVED***Bookmark(
 ***REMOVED******REMOVED******REMOVED***name: "Yosemite National Park",
