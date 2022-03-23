@@ -130,7 +130,7 @@ final class BookmarksTests: XCTestCase {
     }
 }
 
-extension BookmarksTests {
+private extension BookmarksTests {
     /// An arbitrary point to use for testing.
     var point: Point {
         Point(x: -117.19494, y: 34.05723, spatialReference: .wgs84)
