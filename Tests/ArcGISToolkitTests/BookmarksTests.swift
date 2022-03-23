@@ -74,7 +74,7 @@ final class BookmarksTests: XCTestCase {
 ***REMOVED******REMOVED***wait(for: [expectation], timeout: 1.0)
 ***REMOVED***
 
-***REMOVED******REMOVED***/ Assert that the list properly handles a selction when provided a viewpoint.
+***REMOVED******REMOVED***/ Asserts that the list properly handles a selection when provided a viewpoint.
 ***REMOVED***func testSelectBookmarkWithViewpoint() {
 ***REMOVED******REMOVED***let sampleBookmarks = sampleBookmarks
 ***REMOVED******REMOVED***var _isPresented = true
