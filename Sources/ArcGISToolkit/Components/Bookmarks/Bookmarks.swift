@@ -71,7 +71,7 @@ public struct Bookmarks: View {
 ***REMOVED******REMOVED***/ Creates a `Bookmarks` component.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - isPresented: Determines if the bookmarks list is presented.
-***REMOVED******REMOVED***/   - bookmarks: An array of bookmarks. Use this when displaying bookmarks defined at run-time.
+***REMOVED******REMOVED***/   - bookmarks: An array of bookmarks. Use this when displaying bookmarks defined at runtime.
 ***REMOVED******REMOVED***/   - viewpoint: A viewpoint binding that will be updated when a bookmark is selected.
 ***REMOVED******REMOVED***/   Alternately, you can use the `.onSelectionChanged` modifier to handle bookmark selection.
 ***REMOVED***public init(
