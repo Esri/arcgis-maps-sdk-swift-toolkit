@@ -17,41 +17,35 @@
 ***REMOVED***/ `Bookmarks` allows a user to view and select from a set of bookmarks.
 public struct Bookmarks: View {
 ***REMOVED******REMOVED***/ A list of selectable bookmarks.
-***REMOVED***@State
-***REMOVED***private var bookmarks: [Bookmark] = []
-
+***REMOVED***@State private var bookmarks: [Bookmark] = []
+***REMOVED***
 ***REMOVED******REMOVED***/ A map or scene containing bookmarks.
 ***REMOVED***private var geoModel: GeoModel?
-
+***REMOVED***
 ***REMOVED******REMOVED***/ Indicates if bookmarks have loaded and are ready for display.
-***REMOVED***@State
-***REMOVED***private var geoModelIsLoaded = false
-
+***REMOVED***@State private var geoModelIsLoaded = false
+***REMOVED***
 ***REMOVED******REMOVED***/ The height of the header content.
-***REMOVED***@State
-***REMOVED***private var headerHeight: CGFloat = .zero
-
+***REMOVED***@State private var headerHeight: CGFloat = .zero
+***REMOVED***
 ***REMOVED******REMOVED***/ Determines if the bookmarks list is currently shown or not.
-***REMOVED***@Binding
-***REMOVED***private var isPresented: Bool
-
+***REMOVED***@Binding private var isPresented: Bool
+***REMOVED***
 ***REMOVED******REMOVED***/ The height of the list content.
-***REMOVED***@State
-***REMOVED***private var listHeight: CGFloat = .zero
-
+***REMOVED***@State private var listHeight: CGFloat = .zero
+***REMOVED***
 ***REMOVED******REMOVED***/ A bookmark that was selected.
-***REMOVED***@State
-***REMOVED***private var selectedBookmark: Bookmark? = nil
-
+***REMOVED***@State private var selectedBookmark: Bookmark? = nil
+***REMOVED***
 ***REMOVED******REMOVED***/ User defined action to be performed when a bookmark is selected.
 ***REMOVED******REMOVED***/
 ***REMOVED******REMOVED***/ Use this when you prefer to self-manage the response to a bookmark selection. Use either
 ***REMOVED******REMOVED***/ `onSelectionChanged` or `viewpoint` exclusively.
 ***REMOVED***var selectionChangedAction: ((Bookmark) -> Void)? = nil
-
+***REMOVED***
 ***REMOVED******REMOVED***/ If non-`nil`, this viewpoint is updated when a bookmark is selected.
 ***REMOVED***private var viewpoint: Binding<Viewpoint?>?
-
+***REMOVED***
 ***REMOVED******REMOVED***/ Sets an action to perform when the bookmark selection changes.
 ***REMOVED******REMOVED***/ - Parameter action: The action to perform when the bookmark selection has changed.
 ***REMOVED***public func onSelectionChanged(
@@ -61,7 +55,7 @@ public struct Bookmarks: View {
 ***REMOVED******REMOVED***copy.selectionChangedAction = action
 ***REMOVED******REMOVED***return copy
 ***REMOVED***
-
+***REMOVED***
 ***REMOVED******REMOVED***/ Performs the necessary actions when a bookmark is selected.
 ***REMOVED******REMOVED***/
 ***REMOVED******REMOVED***/ This includes indicating that bookmarks should be set to a hidden state, and changing the viewpoint
@@ -75,7 +69,7 @@ public struct Bookmarks: View {
 ***REMOVED******REMOVED******REMOVED***onSelectionChanged(bookmark)
 ***REMOVED***
 ***REMOVED***
-
+***REMOVED***
 ***REMOVED******REMOVED***/ Creates a `Bookmarks` component.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - isPresented: Determines if the bookmarks list is presented.
@@ -92,7 +86,7 @@ public struct Bookmarks: View {
 ***REMOVED******REMOVED***self.viewpoint = viewpoint
 ***REMOVED******REMOVED***_isPresented = isPresented
 ***REMOVED***
-
+***REMOVED***
 ***REMOVED******REMOVED***/ Creates a `Bookmarks` component.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - isPresented: Determines if the bookmarks list is presented.
@@ -109,7 +103,7 @@ public struct Bookmarks: View {
 ***REMOVED******REMOVED***self.viewpoint = viewpoint
 ***REMOVED******REMOVED***_isPresented = isPresented
 ***REMOVED***
-
+***REMOVED***
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***VStack {
 ***REMOVED******REMOVED******REMOVED***BookmarksHeader(isPresented: $isPresented)
@@ -135,7 +129,7 @@ public struct Bookmarks: View {
 ***REMOVED***
 ***REMOVED******REMOVED***.frame(idealHeight: headerHeight + listHeight)
 ***REMOVED***
-
+***REMOVED***
 ***REMOVED******REMOVED***/ A view that is shown while a `GeoModel` is loading.
 ***REMOVED***private var loadingView: some View {
 ***REMOVED******REMOVED***ProgressView()

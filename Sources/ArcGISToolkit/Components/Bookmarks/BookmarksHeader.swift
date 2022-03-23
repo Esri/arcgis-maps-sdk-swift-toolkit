@@ -17,20 +17,19 @@
 struct BookmarksHeader: View {
 ***REMOVED***@Environment(\.horizontalSizeClass)
 ***REMOVED***private var horizontalSizeClass: UserInterfaceSizeClass?
-
+***REMOVED***
 ***REMOVED***@Environment(\.verticalSizeClass)
 ***REMOVED***private var verticalSizeClass: UserInterfaceSizeClass?
-
+***REMOVED***
 ***REMOVED******REMOVED***/ If `true`, the bookmarks will display as sheet.
 ***REMOVED******REMOVED***/ If `false`, the bookmarks will display as a popover.
 ***REMOVED***private var isCompact: Bool {
 ***REMOVED******REMOVED***return horizontalSizeClass == .compact || verticalSizeClass == .compact
 ***REMOVED***
-
+***REMOVED***
 ***REMOVED******REMOVED***/ Determines if the bookmarks list is currently shown or not.
-***REMOVED***@Binding
-***REMOVED***var isPresented: Bool
-
+***REMOVED***@Binding var isPresented: Bool
+***REMOVED***
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***HStack(alignment: .top) {
 ***REMOVED******REMOVED******REMOVED***Image(systemName: "bookmark")

@@ -18,14 +18,13 @@
 struct BookmarksList: View {
 ***REMOVED******REMOVED***/ A list of bookmarks for display.
 ***REMOVED***var bookmarks: [Bookmark]
-
+***REMOVED***
 ***REMOVED******REMOVED***/ The height of the list content.
-***REMOVED***@State
-***REMOVED***private var listHeight: CGFloat = .zero
-
+***REMOVED***@State private var listHeight: CGFloat = .zero
+***REMOVED***
 ***REMOVED******REMOVED***/ Action to be performed when a bookmark is selected.
 ***REMOVED***var selectionChangedAction: ((Bookmark) -> Void)? = nil
-
+***REMOVED***
 ***REMOVED******REMOVED***/ Sets a closure to perform when the bookmark selection changes.
 ***REMOVED******REMOVED***/ - Parameter action: The closure to perform when the bookmark selection has changed.
 ***REMOVED***public func onSelectionChanged(
@@ -35,7 +34,7 @@ struct BookmarksList: View {
 ***REMOVED******REMOVED***copy.selectionChangedAction = action
 ***REMOVED******REMOVED***return copy
 ***REMOVED***
-
+***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***Group {
 ***REMOVED******REMOVED******REMOVED***if bookmarks.isEmpty {
@@ -68,9 +67,7 @@ struct BookmarksList: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***listHeight = $0.height
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.frame(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***height: listHeight
-***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***.frame(height: listHeight)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -88,7 +85,7 @@ extension Bookmark: Hashable {
 ***REMOVED******REMOVED***self.hash(into: &hasher)
 ***REMOVED******REMOVED***return hasher.finalize()
 ***REMOVED***
-
+***REMOVED***
 ***REMOVED***public func hash(into hasher: inout Hasher) {
 ***REMOVED******REMOVED***hasher.combine(name)
 ***REMOVED******REMOVED***hasher.combine(viewpoint)

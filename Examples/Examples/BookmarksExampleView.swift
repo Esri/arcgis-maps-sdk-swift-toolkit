@@ -18,24 +18,22 @@
 struct BookmarksExampleView: View {
 ***REMOVED***@Environment(\.horizontalSizeClass)
 ***REMOVED***private var horizontalSizeClass: UserInterfaceSizeClass?
-
+***REMOVED***
 ***REMOVED***@Environment(\.verticalSizeClass)
 ***REMOVED***private var verticalSizeClass: UserInterfaceSizeClass?
-
+***REMOVED***
 ***REMOVED******REMOVED***/ A web map with predefined bookmarks.
 ***REMOVED***private let map = Map(url: URL(string: "https:***REMOVED***www.arcgis.com/home/item.html?id=16f1b8ba37b44dc3884afc8d5f454dd2")!)!
-
+***REMOVED***
 ***REMOVED******REMOVED***/ Indicates if the `Bookmarks` component is shown or not.
 ***REMOVED******REMOVED***/ - Remark: This allows a developer to control when the `Bookmarks` component is
 ***REMOVED******REMOVED***/ shown/hidden, whether that be in a group of options or a standalone button.
-***REMOVED***@State
-***REMOVED***var showingBookmarks = false
-
+***REMOVED***@State var showingBookmarks = false
+***REMOVED***
 ***REMOVED******REMOVED***/ Allows for communication between the `Bookmarks` component and a `MapView` or
 ***REMOVED******REMOVED***/ `SceneView`.
-***REMOVED***@State
-***REMOVED***var viewpoint: Viewpoint? = nil
-
+***REMOVED***@State var viewpoint: Viewpoint? = nil
+***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***MapView(map: map, viewpoint: viewpoint)
 ***REMOVED******REMOVED******REMOVED***.onViewpointChanged(kind: .centerAndScale) {
@@ -61,8 +59,9 @@ struct BookmarksExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mapOrScene: map,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint: $viewpoint
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.environment(\.horizontalSizeClass, horizontalSizeClass)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.environment(\.verticalSizeClass, verticalSizeClass)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.environment(\.horizontalSizeClass, horizontalSizeClass)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.environment(\.verticalSizeClass, verticalSizeClass)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Display the `Bookmarks` component with the list of
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** bookmarks in a map.
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Bookmarks(
@@ -71,11 +70,11 @@ struct BookmarksExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** In order to handle bookmark selection changes
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** manually, use `onSelectionChanged(perform:)`.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onSelectionChanged {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint = $0.viewpoint
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.environment(\.horizontalSizeClass, horizontalSizeClass)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.environment(\.verticalSizeClass, verticalSizeClass)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onSelectionChanged {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint = $0.viewpoint
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.environment(\.horizontalSizeClass, horizontalSizeClass)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.environment(\.verticalSizeClass, verticalSizeClass)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
