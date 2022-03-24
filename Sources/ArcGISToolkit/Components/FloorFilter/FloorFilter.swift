@@ -31,26 +31,23 @@ public struct FloorFilter: View {
             viewpoint: viewpoint
         ))
     }
-
+    
     /// The view model used by the `FloorFilter`.
-    @StateObject
-    private var viewModel: FloorFilterViewModel
-
+    @StateObject private var viewModel: FloorFilterViewModel
+    
     /// A Boolean value that indicates whether the site or facility selector is hidden.
-    @State
-    private var isSelectorHidden: Bool = true
-
+    @State private var isSelectorHidden: Bool = true
+    
     /// A Boolean value that indicates whether the levels view is currently collapsed.
-    @State
-    private var isLevelsViewCollapsed: Bool = false
-
+    @State private var isLevelsViewCollapsed: Bool = false
+    
     /// The selected facility's levels, sorted by `level.verticalOrder`.
     private var sortedLevels: [FloorLevel] {
         viewModel.selectedFacility?.levels.sorted() {
             $0.verticalOrder > $1.verticalOrder
         } ?? []
     }
-
+    
     public var body: some View {
         Group {
             if viewModel.isLoading {
@@ -97,21 +94,18 @@ public struct FloorFilter: View {
 struct LevelsView: View {
     /// The levels to display.
     let levels: [FloorLevel]
-
+    
     /// A Boolean value that indicates whether the view shows only the selected level or all levels.
     /// If the value is `false`, the view will display all levels. Otherwise, display only the
     /// selected level.
-    @Binding
-    var isCollapsed: Bool
-
+    @Binding var isCollapsed: Bool
+    
     /// The view model used by the `LevelsView`.
-    @EnvironmentObject
-    var viewModel: FloorFilterViewModel
-
+    @EnvironmentObject var viewModel: FloorFilterViewModel
+    
     /// The height of the scroll view's content.
-    @State
-    private var scrollViewContentHeight: CGFloat = .zero
-
+    @State private var scrollViewContentHeight: CGFloat = .zero
+    
     public var body: some View {
         VStack {
             if !isCollapsed,
@@ -150,11 +144,11 @@ struct LevelsView: View {
 /// A vertical list of floor levels.
 struct LevelsStack: View {
     let levels: [FloorLevel]
-
+    
     /// The view model used by the `LevelsView`.
     @EnvironmentObject
     var viewModel: FloorFilterViewModel
-
+    
     var body: some View {
         VStack {
             ForEach(levels) { level in
@@ -175,7 +169,7 @@ struct CollapseButton: View {
     /// Allows the user to toggle the visibility of the site and facility selector.
     @Binding
     var isCollapsed: Bool
-
+    
     var body: some View {
         Button {
             isCollapsed.toggle()
