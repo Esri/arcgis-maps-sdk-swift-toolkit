@@ -16,40 +16,40 @@ import ArcGISToolkit
 import SwiftUI
 
 struct ScalebarExampleView: View {
-    /// The map displayed in the map view.
+    /// Allows for communication between the `Scalebar` and `MapView` or `SceneView`.
+    @State private var scale: Double?
+    
+    /// Allows for communication between the `Scalebar` and `MapView` or `SceneView`.
+    @State private var spatialReference: SpatialReference?
+    
+    /// Allows for communication between the `Scalebar` and `MapView` or `SceneView`.
+    @State private var viewpoint: Viewpoint?
+    
+    /// Allows for communication between the `Scalebar` and `MapView` or `SceneView`.
+    @State private var visibleArea: Polygon?
+    
+    /// The `Map` displayed in the `MapView`.
     private let map = Map(basemapStyle: .arcGISTopographic)
-
-    @State
-    /// Allows for communication between the Scalebar and MapView or SceneView.
-    private var scale: Double?
-
-    @State
-    /// Allows for communication between the Scalebar and MapView or SceneView.
-    private var spatialReference: SpatialReference?
-
-    /// Allows for communication between the Scalebar and MapView or SceneView.
-    @State
-    private var viewpoint: Viewpoint?
-
-    /// Allows for communication between the Scalebar and MapView or SceneView.
-    @State
-    private var visibleArea: Polygon?
-
+    
     var body: some View {
         MapView(map: map, viewpoint: viewpoint)
             .onViewpointChanged(kind: .centerAndScale) { viewpoint = $0 }
             .onVisibleAreaChanged { visibleArea = $0 }
             .onScaleChanged { scale = $0 }
             .onSpatialReferenceChanged { spatialReference = $0 }
-            .overlay(alignment: .bottomLeading) {
-                Scalebar(
-                    scale,
-                    spatialReference,
-                    175,
-                    viewpoint,
-                    visibleArea,
-                    units: .imperial
-                )
+            .overlay(alignment: .bottomTrailing) {
+                if map.loadStatus == .loaded {
+                    Scalebar(
+                        scale,
+                        spatialReference,
+                        175,
+                        viewpoint,
+                        visibleArea,
+                        units: .imperial
+                    )
+                    .padding(.leading, 10)
+                    .padding(.bottom, 30)
+                }
             }
     }
 }
