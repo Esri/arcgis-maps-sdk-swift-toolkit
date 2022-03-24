@@ -26,7 +26,7 @@ final class FloorFilterViewModel: ObservableObject {
         /// A selected level.
         case level(FloorLevel)
     }
-
+    
     /// Creates a `FloorFilterViewModel`.
     /// - Parameters:
     ///   - floorManager: The floor manager used by the `FloorFilterViewModel`.
@@ -37,7 +37,7 @@ final class FloorFilterViewModel: ObservableObject {
     ) {
         self.floorManager = floorManager
         self.viewpoint = viewpoint
-
+        
         Task {
             do {
                 try await floorManager.load()
@@ -52,36 +52,34 @@ final class FloorFilterViewModel: ObservableObject {
             isLoading = false
         }
     }
-
+    
     /// The `Viewpoint` used to pan/zoom to the selected site or facility.
     /// If `nil`, there will be no automatic pan/zoom operations.
     var viewpoint: Binding<Viewpoint>?
-
+    
     /// The `FloorManager` containing the site, floor, and level information.
     let floorManager: FloorManager
-
+    
     /// A Boolean value that indicates whether the model is loading.
-    @Published
-    private(set) var isLoading = true
-
+    @Published private(set) var isLoading = true
+    
     /// The floor manager sites.
     var sites: [FloorSite] {
         floorManager.sites
     }
-
+    
     /// The floor manager facilities.
     var facilities: [FloorFacility] {
         floorManager.facilities
     }
-
+    
     /// The floor manager levels.
     var levels: [FloorLevel] {
         floorManager.levels
     }
-
+    
     /// The selected site, floor, or level.
-    @Published
-    var selection: Selection? {
+    @Published var selection: Selection? {
         didSet {
             if case let .facility(facility) = selection,
                let level = defaultLevel(for: facility) {
@@ -92,13 +90,13 @@ final class FloorFilterViewModel: ObservableObject {
             zoomToSelection()
         }
     }
-
+    
     /// The selected site.
     var selectedSite: FloorSite? {
         guard let selection = selection else {
             return nil
         }
-
+        
         switch selection {
         case .site(let site):
             return site
@@ -108,13 +106,13 @@ final class FloorFilterViewModel: ObservableObject {
             return level.facility?.site
         }
     }
-
+    
     /// The selected facility.
     var selectedFacility: FloorFacility? {
         guard let selection = selection else {
             return nil
         }
-
+        
         switch selection {
         case .site:
             return nil
@@ -124,7 +122,7 @@ final class FloorFilterViewModel: ObservableObject {
             return level.facility
         }
     }
-
+    
     /// The selected level.
     var selectedLevel: FloorLevel? {
         if case let .level(level) = selection {
@@ -133,7 +131,7 @@ final class FloorFilterViewModel: ObservableObject {
             return nil
         }
     }
-
+    
     /// A Boolean value that indicates whether there are levels to display. This will be `false` if
     /// there is no selected facility or if the selected facility has no levels.
     var hasLevelsToDisplay: Bool {
@@ -142,15 +140,15 @@ final class FloorFilterViewModel: ObservableObject {
         }
         return !selectedFacility.levels.isEmpty
     }
-
+    
     // Mark: Private Functions
-
+    
     /// Zooms to the selected facility; if there is no selected facility, zooms to the selected site.
     private func zoomToSelection() {
         guard let selection = selection else {
             return
         }
-
+        
         switch selection {
         case .site(let site):
             zoomToExtent(site.geometry?.extent)
@@ -160,14 +158,14 @@ final class FloorFilterViewModel: ObservableObject {
             zoomToExtent(level.facility?.geometry?.extent)
         }
     }
-
+    
     /// Zoom to given extent.
     private func zoomToExtent(_ extent: Envelope?) {
         // Make sure we have an extent and viewpoint to zoom to.
         guard let extent = extent,
               let viewpoint = viewpoint
         else { return }
-
+        
         let builder = EnvelopeBuilder(envelope: extent)
         builder.expand(factor: 1.5)
         let targetExtent = builder.toGeometry()
@@ -177,7 +175,7 @@ final class FloorFilterViewModel: ObservableObject {
             )
         }
     }
-
+    
     /// Sets the visibility of all the levels on the map based on the vertical order of the current
     /// selected level.
     private func filterMapToSelectedLevel() {
@@ -186,7 +184,7 @@ final class FloorFilterViewModel: ObservableObject {
             $0.isVisible = $0.verticalOrder == selectedLevel.verticalOrder
         }
     }
-
+    
     /// Gets the default level for a facility.
     /// - Parameter facility: The facility to get the default level for.
     /// - Returns: The default level for the facility, which is the level with vertical order 0;
@@ -196,7 +194,7 @@ final class FloorFilterViewModel: ObservableObject {
             level.facility == facility && level.verticalOrder == .zero
         }) ?? lowestLevel()
     }
-
+    
     /// Returns the level with the lowest vertical order.
     private func lowestLevel() -> FloorLevel? {
         let sortedLevels = levels.sorted {
