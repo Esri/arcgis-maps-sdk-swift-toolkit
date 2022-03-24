@@ -16,40 +16,40 @@
 ***REMOVED***
 
 struct ScalebarExampleView: View {
-***REMOVED******REMOVED***/ The map displayed in the map view.
+***REMOVED******REMOVED***/ Allows for communication between the `Scalebar` and `MapView` or `SceneView`.
+***REMOVED***@State private var scale: Double?
+***REMOVED***
+***REMOVED******REMOVED***/ Allows for communication between the `Scalebar` and `MapView` or `SceneView`.
+***REMOVED***@State private var spatialReference: SpatialReference?
+***REMOVED***
+***REMOVED******REMOVED***/ Allows for communication between the `Scalebar` and `MapView` or `SceneView`.
+***REMOVED***@State private var viewpoint: Viewpoint?
+***REMOVED***
+***REMOVED******REMOVED***/ Allows for communication between the `Scalebar` and `MapView` or `SceneView`.
+***REMOVED***@State private var visibleArea: Polygon?
+***REMOVED***
+***REMOVED******REMOVED***/ The `Map` displayed in the `MapView`.
 ***REMOVED***private let map = Map(basemapStyle: .arcGISTopographic)
-
-***REMOVED***@State
-***REMOVED******REMOVED***/ Allows for communication between the Scalebar and MapView or SceneView.
-***REMOVED***private var scale: Double?
-
-***REMOVED***@State
-***REMOVED******REMOVED***/ Allows for communication between the Scalebar and MapView or SceneView.
-***REMOVED***private var spatialReference: SpatialReference?
-
-***REMOVED******REMOVED***/ Allows for communication between the Scalebar and MapView or SceneView.
-***REMOVED***@State
-***REMOVED***private var viewpoint: Viewpoint?
-
-***REMOVED******REMOVED***/ Allows for communication between the Scalebar and MapView or SceneView.
-***REMOVED***@State
-***REMOVED***private var visibleArea: Polygon?
-
+***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***MapView(map: map, viewpoint: viewpoint)
 ***REMOVED******REMOVED******REMOVED***.onViewpointChanged(kind: .centerAndScale) { viewpoint = $0 ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onVisibleAreaChanged { visibleArea = $0 ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onScaleChanged { scale = $0 ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onSpatialReferenceChanged { spatialReference = $0 ***REMOVED***
-***REMOVED******REMOVED******REMOVED***.overlay(alignment: .bottomLeading) {
-***REMOVED******REMOVED******REMOVED******REMOVED***Scalebar(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***scale,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***spatialReference,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***175,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***visibleArea,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***units: .imperial
-***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***.overlay(alignment: .bottomTrailing) {
+***REMOVED******REMOVED******REMOVED******REMOVED***if map.loadStatus == .loaded {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Scalebar(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***scale,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***spatialReference,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***175,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***visibleArea,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***units: .imperial
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.leading, 10)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.bottom, 30)
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
