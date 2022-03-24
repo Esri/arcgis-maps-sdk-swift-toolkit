@@ -21,14 +21,13 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED***init(isHidden: Binding<Bool>) {
 ***REMOVED******REMOVED***self.isHidden = isHidden
 ***REMOVED***
-
+***REMOVED***
 ***REMOVED******REMOVED***/ The view model used by the `SiteAndFacilitySelector`.
-***REMOVED***@EnvironmentObject
-***REMOVED***var floorFilterViewModel: FloorFilterViewModel
-
+***REMOVED***@EnvironmentObject var floorFilterViewModel: FloorFilterViewModel
+***REMOVED***
 ***REMOVED******REMOVED***/ Allows the user to toggle the visibility of the site and facility selector.
 ***REMOVED***private var isHidden: Binding<Bool>
-
+***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***if let selectedSite = floorFilterViewModel.selectedSite {
 ***REMOVED******REMOVED******REMOVED***FacilitiesView(facilities: selectedSite.facilities, isHidden: isHidden)
@@ -41,23 +40,21 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED***SitesView(sites: floorFilterViewModel.sites, isHidden: isHidden)
 ***REMOVED***
 ***REMOVED***
-
+***REMOVED***
 ***REMOVED******REMOVED***/ A view displaying the sites contained in a `FloorManager`.
 ***REMOVED***struct SitesView: View {
 ***REMOVED******REMOVED******REMOVED***/ The floor sites.
 ***REMOVED******REMOVED***let sites: [FloorSite]
-
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ Allows the user to toggle the visibility of the sites.
 ***REMOVED******REMOVED***var isHidden: Binding<Bool>
-
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ The view model used by the `Sites`.
-***REMOVED******REMOVED***@EnvironmentObject
-***REMOVED******REMOVED***var floorFilterViewModel: FloorFilterViewModel
-
+***REMOVED******REMOVED***@EnvironmentObject var floorFilterViewModel: FloorFilterViewModel
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ The height of the scroll view's content.
-***REMOVED******REMOVED***@State
-***REMOVED******REMOVED***private var scrollViewContentHeight: CGFloat = .zero
-
+***REMOVED******REMOVED***@State private var scrollViewContentHeight: CGFloat = .zero
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var body: some View {
 ***REMOVED******REMOVED******REMOVED***VStack(alignment: .center) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Header(title: "Select a site", isHidden: isHidden)
@@ -84,22 +81,21 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
-
+***REMOVED***
 ***REMOVED******REMOVED***/ A view displaying the facilities contained in a `FloorManager`.
 ***REMOVED***struct FacilitiesView: View {
 ***REMOVED******REMOVED******REMOVED***/ The floor facilities.
 ***REMOVED******REMOVED***let facilities: [FloorFacility]
-
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ Allows the user to toggle the visibility of the sites.
 ***REMOVED******REMOVED***var isHidden: Binding<Bool>
-
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ The view model used by the `SiteAndFacilitySelector`.
 ***REMOVED******REMOVED***@EnvironmentObject var floorFilterViewModel: FloorFilterViewModel
-
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ The height of the scroll view's content.
-***REMOVED******REMOVED***@State
-***REMOVED******REMOVED***private var scrollViewContentHeight: CGFloat = .zero
-
+***REMOVED******REMOVED***@State private var scrollViewContentHeight: CGFloat = .zero
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var body: some View {
 ***REMOVED******REMOVED******REMOVED***VStack(alignment: .leading) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Header(title: "Select a facility", isHidden: isHidden)
@@ -127,12 +123,12 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
-
+***REMOVED***
 ***REMOVED******REMOVED***/ The header for a site or facility selector.
 ***REMOVED***struct Header: View {
 ***REMOVED******REMOVED***let title: String
 ***REMOVED******REMOVED***var isHidden: Binding<Bool>
-
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var body: some View {
 ***REMOVED******REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text(title)

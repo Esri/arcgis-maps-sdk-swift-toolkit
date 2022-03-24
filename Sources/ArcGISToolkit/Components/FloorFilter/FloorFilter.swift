@@ -31,26 +31,23 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED******REMOVED***viewpoint: viewpoint
 ***REMOVED******REMOVED***))
 ***REMOVED***
-
+***REMOVED***
 ***REMOVED******REMOVED***/ The view model used by the `FloorFilter`.
-***REMOVED***@StateObject
-***REMOVED***private var viewModel: FloorFilterViewModel
-
+***REMOVED***@StateObject private var viewModel: FloorFilterViewModel
+***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value that indicates whether the site or facility selector is hidden.
-***REMOVED***@State
-***REMOVED***private var isSelectorHidden: Bool = true
-
+***REMOVED***@State private var isSelectorHidden: Bool = true
+***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value that indicates whether the levels view is currently collapsed.
-***REMOVED***@State
-***REMOVED***private var isLevelsViewCollapsed: Bool = false
-
+***REMOVED***@State private var isLevelsViewCollapsed: Bool = false
+***REMOVED***
 ***REMOVED******REMOVED***/ The selected facility's levels, sorted by `level.verticalOrder`.
 ***REMOVED***private var sortedLevels: [FloorLevel] {
 ***REMOVED******REMOVED***viewModel.selectedFacility?.levels.sorted() {
 ***REMOVED******REMOVED******REMOVED***$0.verticalOrder > $1.verticalOrder
 ***REMOVED*** ?? []
 ***REMOVED***
-
+***REMOVED***
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***Group {
 ***REMOVED******REMOVED******REMOVED***if viewModel.isLoading {
@@ -97,21 +94,18 @@ public struct FloorFilter: View {
 struct LevelsView: View {
 ***REMOVED******REMOVED***/ The levels to display.
 ***REMOVED***let levels: [FloorLevel]
-
+***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value that indicates whether the view shows only the selected level or all levels.
 ***REMOVED******REMOVED***/ If the value is `false`, the view will display all levels. Otherwise, display only the
 ***REMOVED******REMOVED***/ selected level.
-***REMOVED***@Binding
-***REMOVED***var isCollapsed: Bool
-
+***REMOVED***@Binding var isCollapsed: Bool
+***REMOVED***
 ***REMOVED******REMOVED***/ The view model used by the `LevelsView`.
-***REMOVED***@EnvironmentObject
-***REMOVED***var viewModel: FloorFilterViewModel
-
+***REMOVED***@EnvironmentObject var viewModel: FloorFilterViewModel
+***REMOVED***
 ***REMOVED******REMOVED***/ The height of the scroll view's content.
-***REMOVED***@State
-***REMOVED***private var scrollViewContentHeight: CGFloat = .zero
-
+***REMOVED***@State private var scrollViewContentHeight: CGFloat = .zero
+***REMOVED***
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***VStack {
 ***REMOVED******REMOVED******REMOVED***if !isCollapsed,
@@ -150,11 +144,11 @@ struct LevelsView: View {
 ***REMOVED***/ A vertical list of floor levels.
 struct LevelsStack: View {
 ***REMOVED***let levels: [FloorLevel]
-
+***REMOVED***
 ***REMOVED******REMOVED***/ The view model used by the `LevelsView`.
 ***REMOVED***@EnvironmentObject
 ***REMOVED***var viewModel: FloorFilterViewModel
-
+***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***VStack {
 ***REMOVED******REMOVED******REMOVED***ForEach(levels) { level in
@@ -175,7 +169,7 @@ struct CollapseButton: View {
 ***REMOVED******REMOVED***/ Allows the user to toggle the visibility of the site and facility selector.
 ***REMOVED***@Binding
 ***REMOVED***var isCollapsed: Bool
-
+***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED***isCollapsed.toggle()
