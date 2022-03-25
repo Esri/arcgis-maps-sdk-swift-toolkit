@@ -22,6 +22,8 @@ struct ScalebarExampleView: View {
     /// Allows for communication between the `Scalebar` and `MapView` or `SceneView`.
     @State private var spatialReference: SpatialReference?
     
+    @State private var unitsPerPoint: Double?
+    
     /// Allows for communication between the `Scalebar` and `MapView` or `SceneView`.
     @State private var viewpoint: Viewpoint?
     
@@ -37,18 +39,21 @@ struct ScalebarExampleView: View {
             .onVisibleAreaChanged { visibleArea = $0 }
             .onScaleChanged { scale = $0 }
             .onSpatialReferenceChanged { spatialReference = $0 }
-            .overlay(alignment: .bottomTrailing) {
+            .onUnitsPerPointChanged { unitsPerPoint = $0 }
+            .overlay(alignment: .bottomLeading) {
                 if map.loadStatus == .loaded {
                     Scalebar(
-                        scale,
+                        .left,
                         spatialReference,
+                        .alternatingBar,
                         175,
+                        $unitsPerPoint,
                         viewpoint,
                         visibleArea,
                         units: .imperial
                     )
-                    .padding(.leading, 10)
-                    .padding(.bottom, 30)
+                    .padding(.horizontal, 10)
+                    .padding(.vertical, 30)
                 }
             }
     }
