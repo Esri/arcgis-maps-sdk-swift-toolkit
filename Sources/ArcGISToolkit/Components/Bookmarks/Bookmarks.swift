@@ -59,7 +59,7 @@ public struct Bookmarks: View {
 ***REMOVED******REMOVED***/ Performs the necessary actions when a bookmark is selected.
 ***REMOVED******REMOVED***/
 ***REMOVED******REMOVED***/ This includes indicating that bookmarks should be set to a hidden state, and changing the viewpoint
-***REMOVED******REMOVED***/ binding (if provided) or calling the action provided by the `onSelectionChanged` modifier.
+***REMOVED******REMOVED***/ binding (if provided) or calling the action provided by the `onSelectionChanged(perform:)` modifier.
 ***REMOVED******REMOVED***/ - Parameter bookmark: The bookmark that was selected.
 ***REMOVED***func selectBookmark(_ bookmark: Bookmark) {
 ***REMOVED******REMOVED***isPresented = false
