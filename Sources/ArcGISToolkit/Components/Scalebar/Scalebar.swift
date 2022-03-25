@@ -18,13 +18,14 @@
 public struct Scalebar: View {
 ***REMOVED***@State private var displayLength: CGFloat = .zero
 ***REMOVED***
+***REMOVED***@State private var displayUnit: LinearUnit? = nil
+***REMOVED***
 ***REMOVED******REMOVED***/ The vertical amount of space used by the scalebar.
 ***REMOVED***@State private var height: Double = 50
 ***REMOVED***
-***REMOVED***@available(*, deprecated)
-***REMOVED***@State private var extentWidth: CGFloat = .zero
-***REMOVED***
 ***REMOVED***@State private var mapLengthString: String = "none"
+***REMOVED***
+***REMOVED***@Binding private var unitsPerPoint: Double?
 ***REMOVED***
 ***REMOVED***private var alignment: ScalebarAlignment
 ***REMOVED***
@@ -37,9 +38,6 @@ public struct Scalebar: View {
 ***REMOVED***private var geodeticCurveType: GeometryEngine.GeodeticCurveType = .geodesic
 ***REMOVED***
 ***REMOVED***private var lineColor = Color.white
-***REMOVED***
-***REMOVED******REMOVED***/ Acts as a data provider of the current scale.
-***REMOVED***private var scale: Double?
 ***REMOVED***
 ***REMOVED***private var shadowColor = Color(uiColor: .black).opacity(0.65)
 ***REMOVED***
@@ -56,10 +54,6 @@ public struct Scalebar: View {
 ***REMOVED******REMOVED***/ Unit of measure in use.
 ***REMOVED***private var units: ScalebarUnits
 ***REMOVED***
-***REMOVED***private var unitsPerPoint: Double {
-***REMOVED******REMOVED***(visibleArea?.extent.width ?? .zero) / extentWidth
-***REMOVED***
-***REMOVED***
 ***REMOVED******REMOVED***/ Allows a user to toggle geodetic calculations.
 ***REMOVED***private var useGeodeticCalculations: Bool
 ***REMOVED***
@@ -69,20 +63,22 @@ public struct Scalebar: View {
 ***REMOVED******REMOVED***/ Acts as a data provider of the current scale.
 ***REMOVED***private var visibleArea: Polygon?
 ***REMOVED***
+***REMOVED***@State private var finalLengthWidth: Double = .zero
+***REMOVED***
 ***REMOVED***public init(
-***REMOVED******REMOVED***_ scale: Double?,
+***REMOVED******REMOVED***_ alignment: ScalebarAlignment = .left,
 ***REMOVED******REMOVED***_ spatialReference: SpatialReference? = .wgs84,
+***REMOVED******REMOVED***_ style: ScalebarStyle = .alternatingBar,
 ***REMOVED******REMOVED***_ targetWidth: Double,
+***REMOVED******REMOVED***_ unitsPerPoint: Binding<Double?>,
 ***REMOVED******REMOVED***_ viewpoint: Viewpoint?,
 ***REMOVED******REMOVED***_ visibleArea: Polygon?,
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***alignment: ScalebarAlignment = .left,
 ***REMOVED******REMOVED***font: Font = .system(size: 9.0, weight: .semibold),
-***REMOVED******REMOVED***style: ScalebarStyle = .line,
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***units: ScalebarUnits = NSLocale.current.usesMetricSystem ? .metric : .imperial,
 ***REMOVED******REMOVED***useGeodeticCalculations: Bool = true
 ***REMOVED***) {
-***REMOVED******REMOVED***self.scale = scale
 ***REMOVED******REMOVED***self.targetWidth = targetWidth
 ***REMOVED******REMOVED***self.viewpoint = viewpoint
 ***REMOVED******REMOVED***self.visibleArea = visibleArea
@@ -92,45 +88,34 @@ public struct Scalebar: View {
 ***REMOVED******REMOVED***self.spatialReference = spatialReference
 ***REMOVED******REMOVED***self.style = style
 ***REMOVED******REMOVED***self.units = units
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***self.useGeodeticCalculations = useGeodeticCalculations
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***self._unitsPerPoint = unitsPerPoint
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***public var body: some View {
-***REMOVED******REMOVED***GeometryReader { geometryProxy in
-***REMOVED******REMOVED******REMOVED***VStack {
-***REMOVED******REMOVED******REMOVED******REMOVED***Rectangle()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fill(.gray)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.border(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.white,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***width: 1.5
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***width: displayLength,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***height: 7,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***alignment: .leading
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.shadow(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***color: Color(uiColor: .lightGray),
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***radius: 1
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED***Text(mapLengthString)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.onChange(of: scale) { _ in
-***REMOVED******REMOVED******REMOVED******REMOVED***updateScaleDisplay()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.onChange(of: geometryProxy.size) {
-***REMOVED******REMOVED******REMOVED******REMOVED***extentWidth = $0.width
-***REMOVED******REMOVED******REMOVED******REMOVED***updateScaleDisplay()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.onAppear {
-***REMOVED******REMOVED******REMOVED******REMOVED***extentWidth = geometryProxy.size.width
-***REMOVED******REMOVED******REMOVED******REMOVED***updateScaleDisplay()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.onSizeChange {
-***REMOVED******REMOVED******REMOVED******REMOVED***height = $0.height
+***REMOVED******REMOVED***Group {
+***REMOVED******REMOVED******REMOVED***if style == .alternatingBar {
+***REMOVED******REMOVED******REMOVED******REMOVED***alternatingBarView
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***barView
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.frame(height: height)
+***REMOVED******REMOVED***.onChange(of: visibleArea) { _ in
+***REMOVED******REMOVED******REMOVED***updateScaleDisplay()
+***REMOVED***
+***REMOVED******REMOVED***.onAppear {
+***REMOVED******REMOVED******REMOVED***updateScaleDisplay()
+***REMOVED***
+***REMOVED******REMOVED***.onSizeChange {
+***REMOVED******REMOVED******REMOVED***height = $0.height
+***REMOVED***
+***REMOVED******REMOVED***.frame(
+***REMOVED******REMOVED******REMOVED***width: displayLength,
+***REMOVED******REMOVED******REMOVED***height: height
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***.border(.red)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***internal static let labelYPad: CGFloat = 2.0
@@ -160,10 +145,13 @@ public struct Scalebar: View {
 ***REMOVED***private let minScale: Double = 0
 ***REMOVED***
 ***REMOVED***private func updateScaleDisplay() {
-***REMOVED******REMOVED***guard let scale = scale else {
+***REMOVED******REMOVED***guard let scale = viewpoint?.targetScale else {
 ***REMOVED******REMOVED******REMOVED***return
 ***REMOVED***
 ***REMOVED******REMOVED***guard minScale <= 0 || scale < minScale else {
+***REMOVED******REMOVED******REMOVED***return
+***REMOVED***
+***REMOVED******REMOVED***guard let unitsPerPoint = unitsPerPoint else {
 ***REMOVED******REMOVED******REMOVED***return
 ***REMOVED***
 ***REMOVED******REMOVED***guard let visibleArea = visibleArea else {
@@ -180,7 +168,7 @@ public struct Scalebar: View {
 ***REMOVED******REMOVED***let lineMapLength: Double
 ***REMOVED******REMOVED***let displayUnit: LinearUnit
 ***REMOVED******REMOVED***let mapCenter = visibleArea.extent.center
-***REMOVED******REMOVED***let lineDisplayLength: CGFloat
+***REMOVED******REMOVED***let displayLength: CGFloat
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***if useGeodeticCalculations || spatialReference?.unit is AngularUnit {
 ***REMOVED******REMOVED******REMOVED***let maxLengthPlanar = unitsPerPoint * Double(maxLength)
@@ -208,7 +196,7 @@ public struct Scalebar: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***units: baseUnits
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***let planarToGeodeticFactor = maxLengthPlanar / maxLengthGeodetic
-***REMOVED******REMOVED******REMOVED***lineDisplayLength = CGFloat( (roundNumberDistance * planarToGeodeticFactor) / unitsPerPoint )
+***REMOVED******REMOVED******REMOVED***displayLength = CGFloat( (roundNumberDistance * planarToGeodeticFactor) / unitsPerPoint )
 ***REMOVED******REMOVED******REMOVED***displayUnit = units.linearUnitsForDistance(distance: roundNumberDistance)
 ***REMOVED******REMOVED******REMOVED***lineMapLength = baseUnits.convert(to: displayUnit, value: roundNumberDistance)
 ***REMOVED*** else {
@@ -225,7 +213,7 @@ public struct Scalebar: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***to: lenAvail,
 ***REMOVED******REMOVED******REMOVED******REMOVED***units: baseUnits
 ***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***lineDisplayLength = CGFloat(
+***REMOVED******REMOVED******REMOVED***displayLength = CGFloat(
 ***REMOVED******REMOVED******REMOVED******REMOVED***baseUnits.convert(to: srUnit, value: closestLen) / unitsPerPoint)
 ***REMOVED******REMOVED******REMOVED***displayUnit = units.linearUnitsForDistance(distance: closestLen)
 ***REMOVED******REMOVED******REMOVED***lineMapLength = baseUnits.convert(
@@ -234,15 +222,83 @@ public struct Scalebar: View {
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***guard lineDisplayLength.isFinite, !lineDisplayLength.isNaN else {
+***REMOVED******REMOVED***guard displayLength.isFinite, !displayLength.isNaN else {
 ***REMOVED******REMOVED******REMOVED***return
 ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***displayLength = lineDisplayLength
+***REMOVED******REMOVED***self.displayLength = displayLength
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***self.displayUnit = displayUnit
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***mapLengthString = Scalebar.numberFormatter.string(from: NSNumber(value: lineMapLength)) ?? ""
 ***REMOVED***
 ***REMOVED***
+
+extension Scalebar {
+***REMOVED***var alternatingBarView: some View {
+***REMOVED******REMOVED***VStack(spacing: 2) {
+***REMOVED******REMOVED******REMOVED***Rectangle()
+***REMOVED******REMOVED******REMOVED******REMOVED***.fill(.gray)
+***REMOVED******REMOVED******REMOVED******REMOVED***.border(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.white,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***width: 1.5
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***.frame(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***width: displayLength,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***height: 7,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***alignment: .leading
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***.shadow(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***color: Color(uiColor: .lightGray),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***radius: 1
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***HStack {
+***REMOVED******REMOVED******REMOVED******REMOVED***Text("0")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.system(size: 10))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fontWeight(.semibold)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .leading)
+***REMOVED******REMOVED******REMOVED******REMOVED***Text("\(mapLengthString) \(displayUnit?.abbreviation ?? "")")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.system(size: 10))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fontWeight(.semibold)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onSizeChange {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***finalLengthWidth = $0.width
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .trailing)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.offset(x: finalLengthWidth / 2)
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***var barView: some View {
+***REMOVED******REMOVED***VStack(spacing: 2) {
+***REMOVED******REMOVED******REMOVED***Rectangle()
+***REMOVED******REMOVED******REMOVED******REMOVED***.fill(.gray)
+***REMOVED******REMOVED******REMOVED******REMOVED***.border(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.white,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***width: 1.5
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***.frame(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***width: displayLength,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***height: 7,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***alignment: .leading
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***.shadow(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***color: Color(uiColor: .lightGray),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***radius: 1
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***HStack {
+***REMOVED******REMOVED******REMOVED******REMOVED***Text("\(mapLengthString) \(displayUnit?.abbreviation ?? "")")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.system(size: 10))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fontWeight(.semibold)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onSizeChange {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***finalLengthWidth = $0.width
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .center)
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
+
 
 ***REMOVED*** - TODO: Temporary as another PR in-flight contains this extension.
 extension View {

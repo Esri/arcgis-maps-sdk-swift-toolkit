@@ -22,6 +22,8 @@ struct ScalebarExampleView: View {
 ***REMOVED******REMOVED***/ Allows for communication between the `Scalebar` and `MapView` or `SceneView`.
 ***REMOVED***@State private var spatialReference: SpatialReference?
 ***REMOVED***
+***REMOVED***@State private var unitsPerPoint: Double?
+***REMOVED***
 ***REMOVED******REMOVED***/ Allows for communication between the `Scalebar` and `MapView` or `SceneView`.
 ***REMOVED***@State private var viewpoint: Viewpoint?
 ***REMOVED***
@@ -37,18 +39,21 @@ struct ScalebarExampleView: View {
 ***REMOVED******REMOVED******REMOVED***.onVisibleAreaChanged { visibleArea = $0 ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onScaleChanged { scale = $0 ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onSpatialReferenceChanged { spatialReference = $0 ***REMOVED***
-***REMOVED******REMOVED******REMOVED***.overlay(alignment: .bottomTrailing) {
+***REMOVED******REMOVED******REMOVED***.onUnitsPerPointChanged { unitsPerPoint = $0 ***REMOVED***
+***REMOVED******REMOVED******REMOVED***.overlay(alignment: .bottomLeading) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if map.loadStatus == .loaded {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Scalebar(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***scale,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.left,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***spatialReference,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.alternatingBar,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***175,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***$unitsPerPoint,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***visibleArea,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***units: .imperial
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.leading, 10)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.bottom, 30)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.horizontal, 10)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.vertical, 30)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
