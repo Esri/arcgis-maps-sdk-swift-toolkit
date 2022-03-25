@@ -40,7 +40,7 @@ public struct Bookmarks: View {
     /// User defined action to be performed when a bookmark is selected.
     ///
     /// Use this when you prefer to self-manage the response to a bookmark selection. Use either
-    /// `onSelectionChanged` or `viewpoint` exclusively.
+    /// `onSelectionChanged(perform:)` or `viewpoint` exclusively.
     var selectionChangedAction: ((Bookmark) -> Void)? = nil
     
     /// If non-`nil`, this viewpoint is updated when a bookmark is selected.
