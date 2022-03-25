@@ -18,13 +18,14 @@ import SwiftUI
 public struct Scalebar: View {
     @State private var displayLength: CGFloat = .zero
     
+    @State private var displayUnit: LinearUnit? = nil
+    
     /// The vertical amount of space used by the scalebar.
     @State private var height: Double = 50
     
-    @available(*, deprecated)
-    @State private var extentWidth: CGFloat = .zero
-    
     @State private var mapLengthString: String = "none"
+    
+    @Binding private var unitsPerPoint: Double?
     
     private var alignment: ScalebarAlignment
     
@@ -37,9 +38,6 @@ public struct Scalebar: View {
     private var geodeticCurveType: GeometryEngine.GeodeticCurveType = .geodesic
     
     private var lineColor = Color.white
-    
-    /// Acts as a data provider of the current scale.
-    private var scale: Double?
     
     private var shadowColor = Color(uiColor: .black).opacity(0.65)
     
@@ -56,10 +54,6 @@ public struct Scalebar: View {
     /// Unit of measure in use.
     private var units: ScalebarUnits
     
-    private var unitsPerPoint: Double {
-        (visibleArea?.extent.width ?? .zero) / extentWidth
-    }
-    
     /// Allows a user to toggle geodetic calculations.
     private var useGeodeticCalculations: Bool
     
@@ -69,20 +63,22 @@ public struct Scalebar: View {
     /// Acts as a data provider of the current scale.
     private var visibleArea: Polygon?
     
+    @State private var finalLengthWidth: Double = .zero
+    
     public init(
-        _ scale: Double?,
+        _ alignment: ScalebarAlignment = .left,
         _ spatialReference: SpatialReference? = .wgs84,
+        _ style: ScalebarStyle = .alternatingBar,
         _ targetWidth: Double,
+        _ unitsPerPoint: Binding<Double?>,
         _ viewpoint: Viewpoint?,
         _ visibleArea: Polygon?,
         
-        alignment: ScalebarAlignment = .left,
         font: Font = .system(size: 9.0, weight: .semibold),
-        style: ScalebarStyle = .line,
+        
         units: ScalebarUnits = NSLocale.current.usesMetricSystem ? .metric : .imperial,
         useGeodeticCalculations: Bool = true
     ) {
-        self.scale = scale
         self.targetWidth = targetWidth
         self.viewpoint = viewpoint
         self.visibleArea = visibleArea
@@ -92,45 +88,34 @@ public struct Scalebar: View {
         self.spatialReference = spatialReference
         self.style = style
         self.units = units
+        
         self.useGeodeticCalculations = useGeodeticCalculations
+        
+        self._unitsPerPoint = unitsPerPoint
     }
     
     public var body: some View {
-        GeometryReader { geometryProxy in
-            VStack {
-                Rectangle()
-                    .fill(.gray)
-                    .border(
-                        .white,
-                        width: 1.5
-                    )
-                    .frame(
-                        width: displayLength,
-                        height: 7,
-                        alignment: .leading
-                    )
-                    .shadow(
-                        color: Color(uiColor: .lightGray),
-                        radius: 1
-                    )
-                Text(mapLengthString)
-            }
-            .onChange(of: scale) { _ in
-                updateScaleDisplay()
-            }
-            .onChange(of: geometryProxy.size) {
-                extentWidth = $0.width
-                updateScaleDisplay()
-            }
-            .onAppear {
-                extentWidth = geometryProxy.size.width
-                updateScaleDisplay()
-            }
-            .onSizeChange {
-                height = $0.height
+        Group {
+            if style == .alternatingBar {
+                alternatingBarView
+            } else {
+                barView
             }
         }
-        .frame(height: height)
+        .onChange(of: visibleArea) { _ in
+            updateScaleDisplay()
+        }
+        .onAppear {
+            updateScaleDisplay()
+        }
+        .onSizeChange {
+            height = $0.height
+        }
+        .frame(
+            width: displayLength,
+            height: height
+        )
+//        .border(.red)
     }
     
     internal static let labelYPad: CGFloat = 2.0
@@ -160,10 +145,13 @@ public struct Scalebar: View {
     private let minScale: Double = 0
     
     private func updateScaleDisplay() {
-        guard let scale = scale else {
+        guard let scale = viewpoint?.targetScale else {
             return
         }
         guard minScale <= 0 || scale < minScale else {
+            return
+        }
+        guard let unitsPerPoint = unitsPerPoint else {
             return
         }
         guard let visibleArea = visibleArea else {
@@ -180,7 +168,7 @@ public struct Scalebar: View {
         let lineMapLength: Double
         let displayUnit: LinearUnit
         let mapCenter = visibleArea.extent.center
-        let lineDisplayLength: CGFloat
+        let displayLength: CGFloat
         
         if useGeodeticCalculations || spatialReference?.unit is AngularUnit {
             let maxLengthPlanar = unitsPerPoint * Double(maxLength)
@@ -208,7 +196,7 @@ public struct Scalebar: View {
                 units: baseUnits
             )
             let planarToGeodeticFactor = maxLengthPlanar / maxLengthGeodetic
-            lineDisplayLength = CGFloat( (roundNumberDistance * planarToGeodeticFactor) / unitsPerPoint )
+            displayLength = CGFloat( (roundNumberDistance * planarToGeodeticFactor) / unitsPerPoint )
             displayUnit = units.linearUnitsForDistance(distance: roundNumberDistance)
             lineMapLength = baseUnits.convert(to: displayUnit, value: roundNumberDistance)
         } else {
@@ -225,7 +213,7 @@ public struct Scalebar: View {
                 to: lenAvail,
                 units: baseUnits
             )
-            lineDisplayLength = CGFloat(
+            displayLength = CGFloat(
                 baseUnits.convert(to: srUnit, value: closestLen) / unitsPerPoint)
             displayUnit = units.linearUnitsForDistance(distance: closestLen)
             lineMapLength = baseUnits.convert(
@@ -234,15 +222,83 @@ public struct Scalebar: View {
             )
         }
         
-        guard lineDisplayLength.isFinite, !lineDisplayLength.isNaN else {
+        guard displayLength.isFinite, !displayLength.isNaN else {
             return
         }
         
-        displayLength = lineDisplayLength
+        self.displayLength = displayLength
+        
+        self.displayUnit = displayUnit
         
         mapLengthString = Scalebar.numberFormatter.string(from: NSNumber(value: lineMapLength)) ?? ""
     }
 }
+
+extension Scalebar {
+    var alternatingBarView: some View {
+        VStack(spacing: 2) {
+            Rectangle()
+                .fill(.gray)
+                .border(
+                    .white,
+                    width: 1.5
+                )
+                .frame(
+                    width: displayLength,
+                    height: 7,
+                    alignment: .leading
+                )
+                .shadow(
+                    color: Color(uiColor: .lightGray),
+                    radius: 1
+                )
+            HStack {
+                Text("0")
+                    .font(.system(size: 10))
+                    .fontWeight(.semibold)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                Text("\(mapLengthString) \(displayUnit?.abbreviation ?? "")")
+                    .font(.system(size: 10))
+                    .fontWeight(.semibold)
+                    .onSizeChange {
+                        finalLengthWidth = $0.width
+                    }
+                    .frame(maxWidth: .infinity, alignment: .trailing)
+                    .offset(x: finalLengthWidth / 2)
+            }
+        }
+    }
+    
+    var barView: some View {
+        VStack(spacing: 2) {
+            Rectangle()
+                .fill(.gray)
+                .border(
+                    .white,
+                    width: 1.5
+                )
+                .frame(
+                    width: displayLength,
+                    height: 7,
+                    alignment: .leading
+                )
+                .shadow(
+                    color: Color(uiColor: .lightGray),
+                    radius: 1
+                )
+            HStack {
+                Text("\(mapLengthString) \(displayUnit?.abbreviation ?? "")")
+                    .font(.system(size: 10))
+                    .fontWeight(.semibold)
+                    .onSizeChange {
+                        finalLengthWidth = $0.width
+                    }
+                    .frame(maxWidth: .infinity, alignment: .center)
+            }
+        }
+    }
+}
+
 
 // - TODO: Temporary as another PR in-flight contains this extension.
 extension View {
