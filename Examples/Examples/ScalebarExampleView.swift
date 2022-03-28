@@ -43,7 +43,7 @@ struct ScalebarExampleView: View {
 ***REMOVED******REMOVED******REMOVED***.overlay(alignment: .bottomLeading) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if map.loadStatus == .loaded {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Scalebar(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.left,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***alignment: .left,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***spatialReference,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.alternatingBar,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***175,
