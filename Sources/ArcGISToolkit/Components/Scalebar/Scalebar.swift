@@ -66,7 +66,7 @@ public struct Scalebar: View {
     @State private var finalLengthWidth: Double = .zero
     
     public init(
-        _ alignment: ScalebarAlignment = .left,
+        alignment: ScalebarAlignment = .left,
         _ spatialReference: SpatialReference? = .wgs84,
         _ style: ScalebarStyle = .alternatingBar,
         _ targetWidth: Double,
@@ -74,7 +74,7 @@ public struct Scalebar: View {
         _ viewpoint: Viewpoint?,
         _ visibleArea: Polygon?,
         
-        font: Font = .system(size: 9.0, weight: .semibold),
+        font: Font = .system(size: 10.0, weight: .semibold),
         
         units: ScalebarUnits = NSLocale.current.usesMetricSystem ? .metric : .imperial,
         useGeodeticCalculations: Bool = true
@@ -254,11 +254,11 @@ extension Scalebar {
                 )
             HStack {
                 Text("0")
-                    .font(.system(size: 10))
+                    .font(font)
                     .fontWeight(.semibold)
                     .frame(maxWidth: .infinity, alignment: .leading)
                 Text("\(mapLengthString) \(displayUnit?.abbreviation ?? "")")
-                    .font(.system(size: 10))
+                    .font(font)
                     .fontWeight(.semibold)
                     .onSizeChange {
                         finalLengthWidth = $0.width
@@ -288,7 +288,7 @@ extension Scalebar {
                 )
             HStack {
                 Text("\(mapLengthString) \(displayUnit?.abbreviation ?? "")")
-                    .font(.system(size: 10))
+                    .font(font)
                     .fontWeight(.semibold)
                     .onSizeChange {
                         finalLengthWidth = $0.width
