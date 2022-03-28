@@ -16,10 +16,6 @@
 
 extension FloorFacility: Equatable {
 ***REMOVED***public static func == (lhs: FloorFacility, rhs: FloorFacility) -> Bool {
-***REMOVED******REMOVED***lhs.facilityId == rhs.facilityId
+***REMOVED******REMOVED***lhs.id == rhs.id
 ***REMOVED***
-***REMOVED***
-
-extension FloorFacility: Identifiable {
-***REMOVED***public var id: String { facilityId ***REMOVED***
 ***REMOVED***
