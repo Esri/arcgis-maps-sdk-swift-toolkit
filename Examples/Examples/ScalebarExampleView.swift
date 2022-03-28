@@ -43,7 +43,7 @@ struct ScalebarExampleView: View {
             .overlay(alignment: .bottomLeading) {
                 if map.loadStatus == .loaded {
                     Scalebar(
-                        .left,
+                        alignment: .left,
                         spatialReference,
                         .alternatingBar,
                         175,
