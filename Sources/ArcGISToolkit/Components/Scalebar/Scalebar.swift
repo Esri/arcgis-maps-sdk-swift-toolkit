@@ -66,7 +66,7 @@ public struct Scalebar: View {
 ***REMOVED***@State private var finalLengthWidth: Double = .zero
 ***REMOVED***
 ***REMOVED***public init(
-***REMOVED******REMOVED***_ alignment: ScalebarAlignment = .left,
+***REMOVED******REMOVED***alignment: ScalebarAlignment = .left,
 ***REMOVED******REMOVED***_ spatialReference: SpatialReference? = .wgs84,
 ***REMOVED******REMOVED***_ style: ScalebarStyle = .alternatingBar,
 ***REMOVED******REMOVED***_ targetWidth: Double,
@@ -74,7 +74,7 @@ public struct Scalebar: View {
 ***REMOVED******REMOVED***_ viewpoint: Viewpoint?,
 ***REMOVED******REMOVED***_ visibleArea: Polygon?,
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***font: Font = .system(size: 9.0, weight: .semibold),
+***REMOVED******REMOVED***font: Font = .system(size: 10.0, weight: .semibold),
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***units: ScalebarUnits = NSLocale.current.usesMetricSystem ? .metric : .imperial,
 ***REMOVED******REMOVED***useGeodeticCalculations: Bool = true
@@ -254,11 +254,11 @@ extension Scalebar {
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text("0")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.system(size: 10))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(font)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fontWeight(.semibold)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .leading)
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text("\(mapLengthString) \(displayUnit?.abbreviation ?? "")")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.system(size: 10))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(font)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fontWeight(.semibold)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onSizeChange {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***finalLengthWidth = $0.width
@@ -288,7 +288,7 @@ extension Scalebar {
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text("\(mapLengthString) \(displayUnit?.abbreviation ?? "")")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.system(size: 10))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(font)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fontWeight(.semibold)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onSizeChange {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***finalLengthWidth = $0.width
