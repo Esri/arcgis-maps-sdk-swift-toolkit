@@ -16,59 +16,75 @@
 ***REMOVED***
 
 struct FloorFilterExampleView: View {
-***REMOVED***private let map: Map
-***REMOVED***
-***REMOVED***@State
-***REMOVED***private var viewpoint = Viewpoint(
-***REMOVED******REMOVED***center: Point(x: -93.258133, y: 44.986656, spatialReference: .wgs84),
-***REMOVED******REMOVED***scale: 1_000_000
-***REMOVED***)
-***REMOVED***
-***REMOVED***@State
-***REMOVED***private var isMapLoaded: Bool = false
-***REMOVED***
-***REMOVED***init() {
-***REMOVED******REMOVED******REMOVED*** Create the map from a portal item and assign to the mapView.
-***REMOVED******REMOVED***
+***REMOVED******REMOVED***/ Make a map from a portal item.
+***REMOVED***static func makeMap() -> Map {
 ***REMOVED******REMOVED******REMOVED*** Multiple sites/facilities: Esri IST map with all buildings.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let portal = Portal(url: URL(string: "https:***REMOVED***indoors.maps.arcgis.com/")!, isLoginRequired: false)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let portalItem = PortalItem(portal: portal, id: Item.ID(rawValue: "49520a67773842f1858602735ef538b5")!)
+***REMOVED******REMOVED******REMOVED***let portal = Portal(url: URL(string: "https:***REMOVED***indoors.maps.arcgis.com/")!, isLoginRequired: false)
+***REMOVED******REMOVED******REMOVED***let portalItem = PortalItem(portal: portal, id: Item.ID(rawValue: "49520a67773842f1858602735ef538b5")!)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Redlands Campus map.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let portal = Portal(url: URL(string: "https:***REMOVED***runtimecoretest.maps.arcgis.com/")!, isLoginRequired: false)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let portalItem = PortalItem(portal: portal, id: Item.ID(rawValue: "7687805bd42549f5ba41237443d0c60a")!) ***REMOVED***<= another multiple sites/facilities
+***REMOVED******REMOVED***let portal = Portal(url: URL(string: "https:***REMOVED***runtimecoretest.maps.arcgis.com/")!, isLoginRequired: false)
+***REMOVED******REMOVED***let portalItem = PortalItem(portal: portal, id: Item.ID(rawValue: "7687805bd42549f5ba41237443d0c60a")!) ***REMOVED***<= another multiple sites/facilities
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Single site (ESRI Redlands Main) and facility (Building L).
-***REMOVED******REMOVED***let portal = Portal(url: URL(string: "https:***REMOVED***indoors.maps.arcgis.com/")!, isLoginRequired: false)
-***REMOVED******REMOVED***let portalItem = PortalItem(portal: portal, id: Item.ID(rawValue: "f133a698536f44c8884ad81f80b6cfc7")!)
+***REMOVED******REMOVED******REMOVED*** let portal = Portal(url: URL(string: "https:***REMOVED***indoors.maps.arcgis.com/")!, isLoginRequired: false)
+***REMOVED******REMOVED******REMOVED*** let portalItem = PortalItem(portal: portal, id: Item.ID(rawValue: "f133a698536f44c8884ad81f80b6cfc7")!)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***map = Map(item: portalItem)
+***REMOVED******REMOVED***return Map(item: portalItem)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***private let floorFilterPadding: CGFloat = 48
+***REMOVED***@State private var isMapLoaded: Bool = false
+***REMOVED***
+***REMOVED***@State private var mapLoadError: Bool = false
+***REMOVED***
+***REMOVED***@State private var viewpoint = Viewpoint(
+***REMOVED******REMOVED***center: Point(
+***REMOVED******REMOVED******REMOVED***x: -117.19496,
+***REMOVED******REMOVED******REMOVED***y: 34.05713,
+***REMOVED******REMOVED******REMOVED***spatialReference: .wgs84
+***REMOVED******REMOVED***),
+***REMOVED******REMOVED***scale: 100_000
+***REMOVED***)
+***REMOVED***
+***REMOVED***private var map = makeMap()
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***MapView(
 ***REMOVED******REMOVED******REMOVED***map: map,
 ***REMOVED******REMOVED******REMOVED***viewpoint: viewpoint
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***.overlay(alignment: .bottomLeading) {
-***REMOVED******REMOVED******REMOVED******REMOVED***if isMapLoaded,
-***REMOVED******REMOVED******REMOVED******REMOVED***   let floorManager = map.floorManager {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FloorFilter(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***floorManager: floorManager,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint: $viewpoint
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(floorFilterPadding)
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***.onViewpointChanged(kind: .centerAndScale) {
+***REMOVED******REMOVED******REMOVED***viewpoint = $0
+***REMOVED***
+***REMOVED******REMOVED***.overlay(alignment: .bottomLeading) {
+***REMOVED******REMOVED******REMOVED***if isMapLoaded,
+***REMOVED******REMOVED******REMOVED***   let floorManager = map.floorManager {
+***REMOVED******REMOVED******REMOVED******REMOVED***FloorFilter(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***floorManager: floorManager,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint: $viewpoint
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***.frame(height: 300)
+***REMOVED******REMOVED******REMOVED******REMOVED***.padding(36)
+***REMOVED******REMOVED*** else if mapLoadError {
+***REMOVED******REMOVED******REMOVED******REMOVED***Label(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Map load error!",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***systemImage: "exclamationmark.triangle"
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.red)
+***REMOVED******REMOVED******REMOVED******REMOVED***.frame(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***maxWidth: .infinity,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***maxHeight: .infinity,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***alignment: .center
+***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.task {
-***REMOVED******REMOVED******REMOVED******REMOVED***do {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try await map.load()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isMapLoaded = true
-***REMOVED******REMOVED******REMOVED*** catch {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print("load error: \(error)")
-***REMOVED******REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***.task {
+***REMOVED******REMOVED******REMOVED***do {
+***REMOVED******REMOVED******REMOVED******REMOVED***try await map.load()
+***REMOVED******REMOVED******REMOVED******REMOVED***isMapLoaded = true
+***REMOVED******REMOVED*** catch {
+***REMOVED******REMOVED******REMOVED******REMOVED***mapLoadError = true
 ***REMOVED******REMOVED***
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
