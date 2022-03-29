@@ -13,6 +13,26 @@
 
 ***REMOVED***
 
+***REMOVED***/ A modifier which displays a background and shadow for a view. Used to represent a selected view.
+struct SelectedModifier: ViewModifier {
+***REMOVED******REMOVED***/ A Boolean value that indicates whether view should display as selected.
+***REMOVED***var isSelected: Bool
+
+***REMOVED***func body(content: Content) -> some View {
+***REMOVED******REMOVED***if isSelected {
+***REMOVED******REMOVED******REMOVED***content
+***REMOVED******REMOVED******REMOVED******REMOVED***.background(Color.secondary.opacity(0.8))
+***REMOVED******REMOVED******REMOVED******REMOVED***.clipShape(RoundedRectangle(cornerRadius: 4))
+***REMOVED******REMOVED******REMOVED******REMOVED***.shadow(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***color: .secondary.opacity(0.8),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***radius: 2
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***content
+***REMOVED***
+***REMOVED***
+***REMOVED***
+
 extension View {
 ***REMOVED******REMOVED***/ Returns a new `View` that allows a parent `View` to be informed of a child view's size.
 ***REMOVED******REMOVED***/ - Parameter perform: The closure to be executed when the content size of the receiver
@@ -22,9 +42,20 @@ extension View {
 ***REMOVED******REMOVED***background(
 ***REMOVED******REMOVED******REMOVED***GeometryReader { geometry in
 ***REMOVED******REMOVED******REMOVED******REMOVED***Color.clear
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.preference(key: SizePreferenceKey.self, value: geometry.size)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.preference(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***key: SizePreferenceKey.self, value: geometry.size
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***.onPreferenceChange(SizePreferenceKey.self, perform: perform)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ View modifier used to denote the view is selected.
+***REMOVED******REMOVED***/ - Parameter isSelected: `true` if the view is selected, `false` otherwise.
+***REMOVED******REMOVED***/ - Returns: The modified view.
+***REMOVED***func selected(
+***REMOVED******REMOVED***_ isSelected: Bool = false
+***REMOVED***) -> some View {
+***REMOVED******REMOVED***modifier(SelectedModifier(isSelected: isSelected))
 ***REMOVED***
 ***REMOVED***
