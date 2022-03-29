@@ -14,8 +14,10 @@
 import SwiftUI
 import ArcGIS
 
-extension FloorFacility: Equatable {
-    public static func == (lhs: FloorFacility, rhs: FloorFacility) -> Bool {
-        lhs.id == rhs.id
+extension FloorLevel: Equatable {
+    public static func == (lhs: FloorLevel, rhs: FloorLevel) -> Bool {
+        lhs.levelId == rhs.levelId
     }
 }
+
+extension FloorLevel: Identifiable { }
