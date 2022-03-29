@@ -18,7 +18,7 @@ import ArcGIS
 /// in your application. It allows you to filter the floor plan data displayed in your map or scene view
 /// to a site, a facility (building) in the site, or a floor in the facility.
 public struct FloorFilter: View {
-    /// Creates a `FloorFilter`
+    /// Creates a `FloorFilter`.
     /// - Parameters:
     ///   - floorManager: The floor manager used by the `FloorFilter`.
     ///   - viewpoint: Viewpoint updated when the selected site or facility changes.
@@ -33,34 +33,154 @@ public struct FloorFilter: View {
     }
     
     /// The view model used by the `FloorFilter`.
-    @StateObject
-    private var viewModel: FloorFilterViewModel
+    @StateObject private var viewModel: FloorFilterViewModel
     
-    /// Allows the user to toggle the visibility of the site selector.
-    @State
-    private var isSelectorVisible: Bool = false
+    /// A Boolean value that indicates whether the site or facility selector is hidden.
+    @State private var isSelectorHidden: Bool = true
+    
+    /// A Boolean value that indicates whether the levels view is currently collapsed.
+    @State private var isLevelsViewCollapsed: Bool = false
+    
+    /// The selected facility's levels, sorted by `level.verticalOrder`.
+    private var sortedLevels: [FloorLevel] {
+        viewModel.selectedFacility?.levels.sorted() {
+            $0.verticalOrder > $1.verticalOrder
+        } ?? []
+    }
     
     public var body: some View {
-        if viewModel.isLoading {
-            ProgressView()
-                .progressViewStyle(.circular)
-                .esriBorder()
-        } else {
-            HStack(alignment: .bottom) {
-                Button {
-                    isSelectorVisible.toggle()
-                } label: {
-                    Image("Site", bundle: .module, label: Text("Site"))
+        Group {
+            if viewModel.isLoading {
+                VStack {
+                    Spacer()
+                    ProgressView()
+                        .padding(12)
                 }
-                .esriBorder()
-                if isSelectorVisible {
-                    SiteAndFacilitySelector(
-                        floorFilterViewModel: viewModel,
-                        isVisible: $isSelectorVisible
-                    )
-                        .frame(width: 200)
+            } else {
+                HStack(alignment: .bottom) {
+                    VStack {
+                        Spacer()
+                        VStack {
+                            if viewModel.hasLevelsToDisplay {
+                                LevelsView(
+                                    levels: sortedLevels,
+                                    isCollapsed: $isLevelsViewCollapsed
+                                )
+                                Divider()
+                                    .frame(width: 30)
+                            }
+                            // Site button.
+                            Button {
+                                isSelectorHidden.toggle()
+                            } label: {
+                                Image(systemName: "building.2")
+                            }
+                            .padding(4)
+                        }
+                        .esriBorder()
+                    }
+                    if !isSelectorHidden {
+                        SiteAndFacilitySelector(isHidden: $isSelectorHidden)
+                            .esriBorder()
+                    }
                 }
             }
         }
+        .environmentObject(viewModel)
+    }
+}
+
+/// A view displaying the levels in the selected facility.
+struct LevelsView: View {
+    /// The levels to display.
+    let levels: [FloorLevel]
+    
+    /// A Boolean value that indicates whether the view shows only the selected level or all levels.
+    /// If the value is `false`, the view will display all levels. Otherwise, display only the
+    /// selected level.
+    @Binding var isCollapsed: Bool
+    
+    /// The view model used by the `LevelsView`.
+    @EnvironmentObject var viewModel: FloorFilterViewModel
+    
+    /// The height of the scroll view's content.
+    @State private var scrollViewContentHeight: CGFloat = .zero
+    
+    public var body: some View {
+        VStack {
+            if !isCollapsed,
+               levels.count > 1 {
+                CollapseButton(isCollapsed: $isCollapsed)
+                Divider()
+                    .frame(width: 30)
+                ScrollView {
+                    LevelsStack(levels: levels)
+                        .background(
+                            GeometryReader { geometry -> Color in
+                                DispatchQueue.main.async {
+                                    scrollViewContentHeight = geometry.size.height
+                                }
+                                return .clear
+                            }
+                        )
+                }
+                .frame(maxHeight: scrollViewContentHeight)
+            } else {
+                // Button for the selected level.
+                Button {
+                    if levels.count > 1 {
+                        isCollapsed.toggle()
+                    }
+                } label: {
+                    Text(viewModel.selectedLevel?.shortName ?? (levels.first?.shortName ?? "None"))
+                }
+                .selected(true)
+                .padding(4)
+            }
+        }
+    }
+}
+
+/// A vertical list of floor levels.
+struct LevelsStack: View {
+    let levels: [FloorLevel]
+    
+    /// The view model used by the `LevelsView`.
+    @EnvironmentObject
+    var viewModel: FloorFilterViewModel
+    
+    var body: some View {
+        VStack {
+            ForEach(levels) { level in
+                Button {
+                    viewModel.selection = .level(level)
+                } label: {
+                    Text(level.shortName)
+                }
+                .selected(level == viewModel.selectedLevel)
+                .padding(4)
+            }
+        }
+    }
+}
+
+/// A button used to collapse the floor level list.
+struct CollapseButton: View {
+    /// Allows the user to toggle the visibility of the site and facility selector.
+    @Binding
+    var isCollapsed: Bool
+    
+    var body: some View {
+        Button {
+            isCollapsed.toggle()
+        } label: {
+            Image(systemName: "xmark")
+        }
+        .padding(EdgeInsets(
+            top: 2,
+            leading: 4,
+            bottom: 2,
+            trailing: 4
+        ))
     }
 }
