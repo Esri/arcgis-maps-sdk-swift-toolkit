@@ -14,8 +14,10 @@
 ***REMOVED***
 ***REMOVED***
 
-extension FloorFacility: Equatable {
-***REMOVED***public static func == (lhs: FloorFacility, rhs: FloorFacility) -> Bool {
-***REMOVED******REMOVED***lhs.id == rhs.id
+extension FloorLevel: Equatable {
+***REMOVED***public static func == (lhs: FloorLevel, rhs: FloorLevel) -> Bool {
+***REMOVED******REMOVED***lhs.levelId == rhs.levelId
 ***REMOVED***
 ***REMOVED***
+
+extension FloorLevel: Identifiable { ***REMOVED***
