@@ -48,8 +48,8 @@ struct ScalebarExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.alternatingBar,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***175,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***$unitsPerPoint,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***visibleArea,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***$viewpoint,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***$visibleArea,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***units: .imperial
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.horizontal, 10)
