@@ -48,8 +48,8 @@ struct ScalebarExampleView: View {
                         .alternatingBar,
                         175,
                         $unitsPerPoint,
-                        viewpoint,
-                        visibleArea,
+                        $viewpoint,
+                        $visibleArea,
                         units: .imperial
                     )
                     .padding(.horizontal, 10)
