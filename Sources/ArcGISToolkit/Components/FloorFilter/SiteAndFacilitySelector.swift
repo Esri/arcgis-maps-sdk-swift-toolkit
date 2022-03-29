@@ -21,13 +21,13 @@ struct SiteAndFacilitySelector: View {
     init(isHidden: Binding<Bool>) {
         self.isHidden = isHidden
     }
-
+    
     /// The view model used by the `SiteAndFacilitySelector`.
     @EnvironmentObject var viewModel: FloorFilterViewModel
-
+    
     /// Allows the user to toggle the visibility of the site and facility selector.
     private var isHidden: Binding<Bool>
-
+    
     var body: some View {
         if viewModel.sites.count == 1 {
             FacilitiesList(
@@ -42,26 +42,26 @@ struct SiteAndFacilitySelector: View {
             )
         }
     }
-
+    
     /// A view displaying the sites contained in a `FloorManager`.
     struct SitesList: View {
         /// The view model used by this selector.
         @EnvironmentObject var viewModel: FloorFilterViewModel
-
+        
         /// Indicates that the keyboard is animating and some views may require reload.
         @State
         private var keyboardAnimating = false
-
+        
         /// A site name filter phrase entered by the user.
         @State
         private var searchPhrase: String = ""
-
+        
         /// Sites contained in a `FloorManager`.
         let sites: [FloorSite]
-
+        
         /// Allows the user to toggle the visibility of the site and facility selector.
         var isHidden: Binding<Bool>
-
+        
         /// A subset of `sites` with names containing `searchPhrase` or all `sites` if
         /// `searchPhrase` is empty.
         var matchingSites: [FloorSite] {
@@ -72,7 +72,7 @@ struct SiteAndFacilitySelector: View {
                 $0.name.lowercased().contains(searchPhrase.lowercased())
             }
         }
-
+        
         var body: some View {
             siteListAndFilterView
                 // Trigger a reload on keyboard frame changes for proper layout
@@ -98,7 +98,7 @@ struct SiteAndFacilitySelector: View {
                     }
                 }
         }
-
+        
         /// A view containing a filter-via-name field, a list of the site names and an "All sites" button.
         var siteListAndFilterView: some View {
             NavigationView {
@@ -129,7 +129,7 @@ struct SiteAndFacilitySelector: View {
                     )
             }
         }
-
+        
         /// A view containing a list of the site names.
         ///
         /// If `AutomaticSelectionMode` mode is in use, items will automatically be
@@ -157,12 +157,12 @@ struct SiteAndFacilitySelector: View {
                 .listStyle(.plain)
         }
     }
-
+    
     /// A view displaying the facilities contained in a `FloorManager`.
     struct FacilitiesList: View {
         /// The view model used by this selector.
         @EnvironmentObject var viewModel: FloorFilterViewModel
-
+        
         /// Presentation styles for the facility list.
         enum PresentationStyle {
             /// A specific site was selected and the body is presented within a navigation view.
@@ -172,20 +172,20 @@ struct SiteAndFacilitySelector: View {
             /// Only one site exists and the body is not presented within a navigation view.
             case singleSite
         }
-
+        
         /// A facility name filter phrase entered by the user.
         @State
         var searchPhrase: String = ""
-
+        
         /// `FloorFacility`s to be displayed by this view.
         let facilities: [FloorFacility]
-
+        
         /// The selected presentation style for the facility list.
         let presentationStyle: PresentationStyle
-
+        
         /// Allows the user to toggle the visibility of the site and facility selector.
         var isHidden: Binding<Bool>
-
+        
         /// A subset of `facilities` with names containing `searchPhrase` or all
         /// `facilities` if `searchPhrase` is empty.
         var matchingFacilities: [FloorFacility] {
@@ -196,19 +196,19 @@ struct SiteAndFacilitySelector: View {
                 $0.name.lowercased().contains(searchPhrase.lowercased())
             }
         }
-
+        
         /// Determines the SF Symbols image name to represent selection/non-selection of a facility.
         /// - Parameter facility: The facility of interest
         /// - Returns: "circle.fill" if the facility is marked selected or "cirlce" if the facility is not selected
         /// in the view model.
         func imageFor(_ facility: FloorFacility) -> String {
-            if facility.facilityId == viewModel.selectedFacility?.facilityId {
+            if facility.id == viewModel.selectedFacility?.id {
                 return "circle.fill"
             } else {
                 return "circle"
             }
         }
-
+        
         var body: some View {
             if presentationStyle == .singleSite {
                 facilityListAndFilterView
@@ -222,7 +222,7 @@ struct SiteAndFacilitySelector: View {
                     )
             }
         }
-
+        
         /// A view containing a label for the site name, a filter-via-name bar and a list of the facility names.
         var facilityListAndFilterView: some View {
             VStack {
@@ -247,7 +247,7 @@ struct SiteAndFacilitySelector: View {
                 }
             }
         }
-
+        
         /// Displays a list of facilities matching the filter criteria as determined by
         /// `matchingFacilities`.
         ///
@@ -258,7 +258,7 @@ struct SiteAndFacilitySelector: View {
         /// selected item.
         var facilityListView: some View {
             ScrollViewReader { proxy in
-                List(matchingFacilities, id: \.facilityId) { facility in
+                List(matchingFacilities, id: \.id) { facility in
                     Button {
                         viewModel.setFacility(
                             facility,
@@ -288,18 +288,18 @@ struct SiteAndFacilitySelector: View {
                         }
                     }
                 }
-                    .listStyle(.plain)
-                    .onChange(of: viewModel.selectedFacility) {
-                        guard let facility = $0 else {
-                            return
-                        }
-                        withAnimation {
-                            proxy.scrollTo(
-                                facility.facilityId,
-                                anchor: .center
-                            )
-                        }
+                .listStyle(.plain)
+                .onChange(of: viewModel.selectedFacility) {
+                    guard let facility = $0 else {
+                        return
                     }
+                    withAnimation {
+                        proxy.scrollTo(
+                            facility.id,
+                            anchor: .center
+                        )
+                    }
+                }
             }
         }
     }
@@ -320,7 +320,7 @@ struct NoMatchesView: View {
 struct CloseButton: View {
     /// The button's action to be performed when tapped.
     var action: (() -> Void)
-
+    
     var body: some View {
         Button {
             action()

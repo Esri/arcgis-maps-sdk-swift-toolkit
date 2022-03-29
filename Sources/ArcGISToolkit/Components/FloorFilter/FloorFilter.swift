@@ -38,22 +38,19 @@ public struct FloorFilter: View {
         self.alignment = alignment
         self.viewpoint = viewpoint
     }
-
+    
     /// The view model used by the `FloorFilter`.
-    @StateObject
-    private var viewModel: FloorFilterViewModel
-
+    @StateObject private var viewModel: FloorFilterViewModel
+    
     /// A Boolean value that indicates whether the levels view is currently collapsed.
-    @State
-    private var isLevelsViewCollapsed: Bool = false
-
+    @State private var isLevelsViewCollapsed: Bool = false
+    
     /// A Boolean value that indicates whether the site/facility selector is hidden.
-    @State
-    private var isSelectorHidden: Bool = true
-
+    @State private var isSelectorHidden: Bool = true
+    
     /// The alignment configuration.
     private let alignment: Alignment
-
+    
     /// Button to open and close the site and facility selector.
     private var facilityButtonView: some View {
         Button {
@@ -61,16 +58,16 @@ public struct FloorFilter: View {
         } label: {
             Image(systemName: "building.2")
         }
-            .frame(maxWidth: .infinity)
+        .frame(maxWidth: .infinity)
     }
-
+    
     /// A Boolean value that indicates whether there are levels to display.  This will be false if there is no
     /// selected facility or if the selected facility has no levels.
     private var hasLevelsToDisplay: Bool {
         !(viewModel.selectedFacility == nil ||
           viewModel.selectedFacility!.levels.isEmpty)
     }
-
+    
     /// Displays the available levels.
     private var levelsSelectorView: some View {
         Group {
@@ -91,7 +88,7 @@ public struct FloorFilter: View {
             }
         }
     }
-
+    
     /// A view that allows selecting between levels.
     private var levelSelectorView: some View {
         VStack {
@@ -112,9 +109,9 @@ public struct FloorFilter: View {
                 Spacer()
             }
         }
-            .frame(width: 75)
+        .frame(width: 75)
     }
-
+    
     /// Indicates that the selector should be presented with a right oriented aligment configuration.
     private var rightAligned: Bool {
         switch alignment {
@@ -124,7 +121,7 @@ public struct FloorFilter: View {
             return false
         }
     }
-
+    
     /// A configured `SiteAndFacilitySelector` view.
     private var siteAndFacilitySelectorView: some View {
         SiteAndFacilitySelector(isHidden: $isSelectorHidden)
@@ -134,7 +131,7 @@ public struct FloorFilter: View {
                 viewModel.updateSelection()
             }
     }
-
+    
     /// The selected facility's levels, sorted by `level.verticalOrder`.
     private var sortedLevels: [FloorLevel] {
         let levels = viewModel.selectedFacility?.levels ?? []
@@ -142,7 +139,7 @@ public struct FloorFilter: View {
             $0.verticalOrder > $1.verticalOrder
         }
     }
-
+    
     /// Indicates that the selector should be presented with a top oriented aligment configuration.
     private var topAligned: Bool {
         switch alignment {
@@ -152,11 +149,11 @@ public struct FloorFilter: View {
             return false
         }
     }
-
+    
     /// The `Viewpoint` used to pan/zoom to the selected site/facilty.
     /// If `nil`, there will be no automatic pan/zoom operations or automatic selection support.
     private var viewpoint: Binding<Viewpoint?>
-
+    
     public var body: some View {
         Group {
             if viewModel.isLoading {
@@ -178,8 +175,8 @@ public struct FloorFilter: View {
                 }
             }
         }
-            // Ensure space for filter text field on small screens in landscape
-            .frame(minHeight: 100)
-            .environmentObject(viewModel)
+        // Ensure space for filter text field on small screens in landscape
+        .frame(minHeight: 100)
+        .environmentObject(viewModel)
     }
 }
