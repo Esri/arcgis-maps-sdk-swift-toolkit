@@ -16,8 +16,6 @@
 
 extension FloorLevel: Equatable {
 ***REMOVED***public static func == (lhs: FloorLevel, rhs: FloorLevel) -> Bool {
-***REMOVED******REMOVED***lhs.levelId == rhs.levelId
+***REMOVED******REMOVED***lhs.id == rhs.id
 ***REMOVED***
 ***REMOVED***
-
-extension FloorLevel: Identifiable { ***REMOVED***

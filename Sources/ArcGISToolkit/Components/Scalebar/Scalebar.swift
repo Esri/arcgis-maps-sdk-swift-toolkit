@@ -195,31 +195,3 @@ extension Scalebar {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-
-
-***REMOVED*** - TODO: Temporary as another PR in-flight contains this extension.
-extension View {
-***REMOVED******REMOVED***/ Returns a new `View` that allows a parent `View` to be informed of a child view's size.
-***REMOVED******REMOVED***/ - Parameter perform: The closure to be executed when the content size of the receiver
-***REMOVED******REMOVED***/ changes.
-***REMOVED******REMOVED***/ - Returns: A new `View`.
-***REMOVED***func onSizeChange(perform: @escaping (CGSize) -> Void) -> some View {
-***REMOVED******REMOVED***background(
-***REMOVED******REMOVED******REMOVED***GeometryReader { geometry in
-***REMOVED******REMOVED******REMOVED******REMOVED***Color.clear
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.preference(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***key: SizePreferenceKey.self, value: geometry.size
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***)
-***REMOVED******REMOVED***.onPreferenceChange(SizePreferenceKey.self, perform: perform)
-***REMOVED***
-
-***REMOVED***
-
-***REMOVED*** - TODO: Temporary as another PR in-flight contains this extension.
-***REMOVED***/ A `PreferenceKey` that specifies a size.
-struct SizePreferenceKey: PreferenceKey {
-***REMOVED***static let defaultValue: CGSize = .zero
-***REMOVED***static func reduce(value: inout CGSize, nextValue: () -> CGSize) {***REMOVED***
-***REMOVED***
