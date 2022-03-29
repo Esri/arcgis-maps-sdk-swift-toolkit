@@ -16,8 +16,6 @@ import ArcGIS
 
 extension FloorLevel: Equatable {
     public static func == (lhs: FloorLevel, rhs: FloorLevel) -> Bool {
-        lhs.levelId == rhs.levelId
+        lhs.id == rhs.id
     }
 }
-
-extension FloorLevel: Identifiable { }
