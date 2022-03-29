@@ -38,22 +38,19 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED***self.alignment = alignment
 ***REMOVED******REMOVED***self.viewpoint = viewpoint
 ***REMOVED***
-
+***REMOVED***
 ***REMOVED******REMOVED***/ The view model used by the `FloorFilter`.
-***REMOVED***@StateObject
-***REMOVED***private var viewModel: FloorFilterViewModel
-
+***REMOVED***@StateObject private var viewModel: FloorFilterViewModel
+***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value that indicates whether the levels view is currently collapsed.
-***REMOVED***@State
-***REMOVED***private var isLevelsViewCollapsed: Bool = false
-
+***REMOVED***@State private var isLevelsViewCollapsed: Bool = false
+***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value that indicates whether the site/facility selector is hidden.
-***REMOVED***@State
-***REMOVED***private var isSelectorHidden: Bool = true
-
+***REMOVED***@State private var isSelectorHidden: Bool = true
+***REMOVED***
 ***REMOVED******REMOVED***/ The alignment configuration.
 ***REMOVED***private let alignment: Alignment
-
+***REMOVED***
 ***REMOVED******REMOVED***/ Button to open and close the site and facility selector.
 ***REMOVED***private var facilityButtonView: some View {
 ***REMOVED******REMOVED***Button {
@@ -61,16 +58,16 @@ public struct FloorFilter: View {
 ***REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED***Image(systemName: "building.2")
 ***REMOVED***
-***REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity)
+***REMOVED******REMOVED***.frame(maxWidth: .infinity)
 ***REMOVED***
-
+***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value that indicates whether there are levels to display.  This will be false if there is no
 ***REMOVED******REMOVED***/ selected facility or if the selected facility has no levels.
 ***REMOVED***private var hasLevelsToDisplay: Bool {
 ***REMOVED******REMOVED***!(viewModel.selectedFacility == nil ||
 ***REMOVED******REMOVED***  viewModel.selectedFacility!.levels.isEmpty)
 ***REMOVED***
-
+***REMOVED***
 ***REMOVED******REMOVED***/ Displays the available levels.
 ***REMOVED***private var levelsSelectorView: some View {
 ***REMOVED******REMOVED***Group {
@@ -91,7 +88,7 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
-
+***REMOVED***
 ***REMOVED******REMOVED***/ A view that allows selecting between levels.
 ***REMOVED***private var levelSelectorView: some View {
 ***REMOVED******REMOVED***VStack {
@@ -112,9 +109,9 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED******REMOVED***.frame(width: 75)
+***REMOVED******REMOVED***.frame(width: 75)
 ***REMOVED***
-
+***REMOVED***
 ***REMOVED******REMOVED***/ Indicates that the selector should be presented with a right oriented aligment configuration.
 ***REMOVED***private var rightAligned: Bool {
 ***REMOVED******REMOVED***switch alignment {
@@ -124,7 +121,7 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED******REMOVED***return false
 ***REMOVED***
 ***REMOVED***
-
+***REMOVED***
 ***REMOVED******REMOVED***/ A configured `SiteAndFacilitySelector` view.
 ***REMOVED***private var siteAndFacilitySelectorView: some View {
 ***REMOVED******REMOVED***SiteAndFacilitySelector(isHidden: $isSelectorHidden)
@@ -134,7 +131,7 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.updateSelection()
 ***REMOVED******REMOVED***
 ***REMOVED***
-
+***REMOVED***
 ***REMOVED******REMOVED***/ The selected facility's levels, sorted by `level.verticalOrder`.
 ***REMOVED***private var sortedLevels: [FloorLevel] {
 ***REMOVED******REMOVED***let levels = viewModel.selectedFacility?.levels ?? []
@@ -142,7 +139,7 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED******REMOVED***$0.verticalOrder > $1.verticalOrder
 ***REMOVED***
 ***REMOVED***
-
+***REMOVED***
 ***REMOVED******REMOVED***/ Indicates that the selector should be presented with a top oriented aligment configuration.
 ***REMOVED***private var topAligned: Bool {
 ***REMOVED******REMOVED***switch alignment {
@@ -152,11 +149,11 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED******REMOVED***return false
 ***REMOVED***
 ***REMOVED***
-
+***REMOVED***
 ***REMOVED******REMOVED***/ The `Viewpoint` used to pan/zoom to the selected site/facilty.
 ***REMOVED******REMOVED***/ If `nil`, there will be no automatic pan/zoom operations or automatic selection support.
 ***REMOVED***private var viewpoint: Binding<Viewpoint?>
-
+***REMOVED***
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***Group {
 ***REMOVED******REMOVED******REMOVED***if viewModel.isLoading {
@@ -178,8 +175,8 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED*** Ensure space for filter text field on small screens in landscape
-***REMOVED******REMOVED******REMOVED***.frame(minHeight: 100)
-***REMOVED******REMOVED******REMOVED***.environmentObject(viewModel)
+***REMOVED******REMOVED******REMOVED*** Ensure space for filter text field on small screens in landscape
+***REMOVED******REMOVED***.frame(minHeight: 100)
+***REMOVED******REMOVED***.environmentObject(viewModel)
 ***REMOVED***
 ***REMOVED***

@@ -21,13 +21,13 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED***init(isHidden: Binding<Bool>) {
 ***REMOVED******REMOVED***self.isHidden = isHidden
 ***REMOVED***
-
+***REMOVED***
 ***REMOVED******REMOVED***/ The view model used by the `SiteAndFacilitySelector`.
 ***REMOVED***@EnvironmentObject var viewModel: FloorFilterViewModel
-
+***REMOVED***
 ***REMOVED******REMOVED***/ Allows the user to toggle the visibility of the site and facility selector.
 ***REMOVED***private var isHidden: Binding<Bool>
-
+***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***if viewModel.sites.count == 1 {
 ***REMOVED******REMOVED******REMOVED***FacilitiesList(
@@ -42,26 +42,26 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-
+***REMOVED***
 ***REMOVED******REMOVED***/ A view displaying the sites contained in a `FloorManager`.
 ***REMOVED***struct SitesList: View {
 ***REMOVED******REMOVED******REMOVED***/ The view model used by this selector.
 ***REMOVED******REMOVED***@EnvironmentObject var viewModel: FloorFilterViewModel
-
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ Indicates that the keyboard is animating and some views may require reload.
 ***REMOVED******REMOVED***@State
 ***REMOVED******REMOVED***private var keyboardAnimating = false
-
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ A site name filter phrase entered by the user.
 ***REMOVED******REMOVED***@State
 ***REMOVED******REMOVED***private var searchPhrase: String = ""
-
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ Sites contained in a `FloorManager`.
 ***REMOVED******REMOVED***let sites: [FloorSite]
-
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ Allows the user to toggle the visibility of the site and facility selector.
 ***REMOVED******REMOVED***var isHidden: Binding<Bool>
-
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ A subset of `sites` with names containing `searchPhrase` or all `sites` if
 ***REMOVED******REMOVED******REMOVED***/ `searchPhrase` is empty.
 ***REMOVED******REMOVED***var matchingSites: [FloorSite] {
@@ -72,7 +72,7 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***$0.name.lowercased().contains(searchPhrase.lowercased())
 ***REMOVED******REMOVED***
 ***REMOVED***
-
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var body: some View {
 ***REMOVED******REMOVED******REMOVED***siteListAndFilterView
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Trigger a reload on keyboard frame changes for proper layout
@@ -98,7 +98,7 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED***
-
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ A view containing a filter-via-name field, a list of the site names and an "All sites" button.
 ***REMOVED******REMOVED***var siteListAndFilterView: some View {
 ***REMOVED******REMOVED******REMOVED***NavigationView {
@@ -129,7 +129,7 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED***
-
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ A view containing a list of the site names.
 ***REMOVED******REMOVED******REMOVED***/
 ***REMOVED******REMOVED******REMOVED***/ If `AutomaticSelectionMode` mode is in use, items will automatically be
@@ -157,12 +157,12 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.listStyle(.plain)
 ***REMOVED***
 ***REMOVED***
-
+***REMOVED***
 ***REMOVED******REMOVED***/ A view displaying the facilities contained in a `FloorManager`.
 ***REMOVED***struct FacilitiesList: View {
 ***REMOVED******REMOVED******REMOVED***/ The view model used by this selector.
 ***REMOVED******REMOVED***@EnvironmentObject var viewModel: FloorFilterViewModel
-
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ Presentation styles for the facility list.
 ***REMOVED******REMOVED***enum PresentationStyle {
 ***REMOVED******REMOVED******REMOVED******REMOVED***/ A specific site was selected and the body is presented within a navigation view.
@@ -172,20 +172,20 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***/ Only one site exists and the body is not presented within a navigation view.
 ***REMOVED******REMOVED******REMOVED***case singleSite
 ***REMOVED***
-
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ A facility name filter phrase entered by the user.
 ***REMOVED******REMOVED***@State
 ***REMOVED******REMOVED***var searchPhrase: String = ""
-
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ `FloorFacility`s to be displayed by this view.
 ***REMOVED******REMOVED***let facilities: [FloorFacility]
-
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ The selected presentation style for the facility list.
 ***REMOVED******REMOVED***let presentationStyle: PresentationStyle
-
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ Allows the user to toggle the visibility of the site and facility selector.
 ***REMOVED******REMOVED***var isHidden: Binding<Bool>
-
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ A subset of `facilities` with names containing `searchPhrase` or all
 ***REMOVED******REMOVED******REMOVED***/ `facilities` if `searchPhrase` is empty.
 ***REMOVED******REMOVED***var matchingFacilities: [FloorFacility] {
@@ -196,19 +196,19 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***$0.name.lowercased().contains(searchPhrase.lowercased())
 ***REMOVED******REMOVED***
 ***REMOVED***
-
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ Determines the SF Symbols image name to represent selection/non-selection of a facility.
 ***REMOVED******REMOVED******REMOVED***/ - Parameter facility: The facility of interest
 ***REMOVED******REMOVED******REMOVED***/ - Returns: "circle.fill" if the facility is marked selected or "cirlce" if the facility is not selected
 ***REMOVED******REMOVED******REMOVED***/ in the view model.
 ***REMOVED******REMOVED***func imageFor(_ facility: FloorFacility) -> String {
-***REMOVED******REMOVED******REMOVED***if facility.facilityId == viewModel.selectedFacility?.facilityId {
+***REMOVED******REMOVED******REMOVED***if facility.id == viewModel.selectedFacility?.id {
 ***REMOVED******REMOVED******REMOVED******REMOVED***return "circle.fill"
 ***REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***return "circle"
 ***REMOVED******REMOVED***
 ***REMOVED***
-
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var body: some View {
 ***REMOVED******REMOVED******REMOVED***if presentationStyle == .singleSite {
 ***REMOVED******REMOVED******REMOVED******REMOVED***facilityListAndFilterView
@@ -222,7 +222,7 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED***
-
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ A view containing a label for the site name, a filter-via-name bar and a list of the facility names.
 ***REMOVED******REMOVED***var facilityListAndFilterView: some View {
 ***REMOVED******REMOVED******REMOVED***VStack {
@@ -247,7 +247,7 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
-
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ Displays a list of facilities matching the filter criteria as determined by
 ***REMOVED******REMOVED******REMOVED***/ `matchingFacilities`.
 ***REMOVED******REMOVED******REMOVED***/
@@ -258,7 +258,7 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED***/ selected item.
 ***REMOVED******REMOVED***var facilityListView: some View {
 ***REMOVED******REMOVED******REMOVED***ScrollViewReader { proxy in
-***REMOVED******REMOVED******REMOVED******REMOVED***List(matchingFacilities, id: \.facilityId) { facility in
+***REMOVED******REMOVED******REMOVED******REMOVED***List(matchingFacilities, id: \.id) { facility in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.setFacility(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***facility,
@@ -288,18 +288,18 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.listStyle(.plain)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: viewModel.selectedFacility) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let facility = $0 else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***withAnimation {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***proxy.scrollTo(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***facility.facilityId,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***anchor: .center
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.listStyle(.plain)
+***REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: viewModel.selectedFacility) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let facility = $0 else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return
 ***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***withAnimation {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***proxy.scrollTo(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***facility.id,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***anchor: .center
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -320,7 +320,7 @@ struct NoMatchesView: View {
 struct CloseButton: View {
 ***REMOVED******REMOVED***/ The button's action to be performed when tapped.
 ***REMOVED***var action: (() -> Void)
-
+***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED***action()
