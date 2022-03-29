@@ -19,80 +19,81 @@ struct FloorFilterExampleView: View {
     /// Make a map from a portal item.
     static func makeMap() -> Map {
         // Multiple sites/facilities: Esri IST map with all buildings.
-//        let portal = Portal(url: URL(string: "https://indoors.maps.arcgis.com/")!, isLoginRequired: false)
-//        let portalItem = PortalItem(portal: portal, id: Item.ID(rawValue: "49520a67773842f1858602735ef538b5")!)
-
-        // Redlands Campus map with multiple sites and facilities
+        //        let portal = Portal(url: URL(string: "https://indoors.maps.arcgis.com/")!, isLoginRequired: false)
+        //        let portalItem = PortalItem(portal: portal, id: Item.ID(rawValue: "49520a67773842f1858602735ef538b5")!)
+        
+        // Redlands Campus map.
         let portal = Portal(url: URL(string: "https://runtimecoretest.maps.arcgis.com/")!, isLoginRequired: false)
-        let portalItem = PortalItem(portal: portal, id: Item.ID(rawValue: "7687805bd42549f5ba41237443d0c60a")!)
-
+        let portalItem = PortalItem(portal: portal, id: Item.ID(rawValue: "7687805bd42549f5ba41237443d0c60a")!) //<= another multiple sites/facilities
+        
         // Single site (ESRI Redlands Main) and facility (Building L).
-//        let portal = Portal(url: URL(string: "https://indoors.maps.arcgis.com/")!, isLoginRequired: false)
-//        let portalItem = PortalItem(portal: portal, id: Item.ID(rawValue: "f133a698536f44c8884ad81f80b6cfc7")!)
-
+        //         let portal = Portal(url: URL(string: "https://indoors.maps.arcgis.com/")!, isLoginRequired: false)
+        //         let portalItem = PortalItem(portal: portal, id: Item.ID(rawValue: "f133a698536f44c8884ad81f80b6cfc7")!)
+        
         return Map(item: portalItem)
     }
-
+    
     /// Determines the arrangement of the inner `FloorFilter` UI componenets.
     private let filterAlignment = Alignment.bottomLeading
-
+    
     /// Determines the appropriate time to initialize the `FloorFilter`.
-    @State
-    private var isMapLoaded: Bool = false
-
-    /// The `Map` that will be provided to the `MapView`.
-    private var map = makeMap()
-
-    @State
-    private var mapLoadError: Bool = false
-
+    @State private var isMapLoaded: Bool = false
+    
+    @State private var mapLoadError: Bool = false
+    
     /// The initial viewpoint of the map.
-    @State
-    private var viewpoint: Viewpoint? = Viewpoint(
-        center: Point(x: -117.19496, y: 34.05713, spatialReference: .wgs84),
+    @State private var viewpoint: Viewpoint? = Viewpoint(
+        center: Point(
+            x: -117.19496,
+            y: 34.05713,
+            spatialReference: .wgs84
+        ),
         scale: 100_000
     )
-
+    
+    private var map = makeMap()
+    
     var body: some View {
         MapView(
             map: map,
             viewpoint: viewpoint
         )
-            .onViewpointChanged(kind: .centerAndScale) {
-                viewpoint = $0
+        .onViewpointChanged(kind: .centerAndScale) {
+            viewpoint = $0
+        }
+        /// Preserve the current viewpoint when a keyboard is presented in landscape.
+        .ignoresSafeArea(.keyboard, edges: .bottom)
+        .overlay(alignment: filterAlignment) {
+            if isMapLoaded,
+               let floorManager = map.floorManager {
+                FloorFilter(
+                    alignment: filterAlignment,
+                    automaticSelectionMode: .alwaysNotClearing,
+                    floorManager: floorManager,
+                    viewpoint: $viewpoint
+                )
+                .frame(maxWidth: 300, maxHeight: 300)
+                .padding(36)
+            } else if mapLoadError {
+                Label(
+                    "Map load error!",
+                    systemImage: "exclamationmark.triangle"
+                )
+                .foregroundColor(.red)
+                .frame(
+                    maxWidth: .infinity,
+                    maxHeight: .infinity,
+                    alignment: .center
+                )
             }
-            /// Preserve the current viewpoint when a keyboard is presented in landscape.
-            .ignoresSafeArea(.keyboard, edges: .bottom)
-            .overlay(alignment: filterAlignment) {
-                if isMapLoaded,
-                   let floorManager = map.floorManager {
-                    FloorFilter(
-                        alignment: filterAlignment,
-                        floorManager: floorManager,
-                        viewpoint: $viewpoint
-                    )
-                        .frame(maxWidth: 300, maxHeight: 300)
-                        .padding(36)
-                } else if mapLoadError {
-                    Label(
-                        "Map load error!",
-                        systemImage: "exclamationmark.triangle"
-                    )
-                        .foregroundColor(.red)
-                        .frame(
-                            maxWidth: .infinity,
-                            maxHeight: .infinity,
-                            alignment: .center
-                        )
-                }
+        }
+        .task {
+            do {
+                try await map.load()
+                isMapLoaded = true
+            } catch {
+                mapLoadError = true
             }
-            .task {
-                do {
-                    try await map.load()
-                    isMapLoaded = true
-                } catch {
-                    mapLoadError = true
-                }
-            }
+        }
     }
 }
