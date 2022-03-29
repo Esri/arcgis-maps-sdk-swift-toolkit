@@ -16,10 +16,6 @@ import ArcGIS
 
 extension FloorFacility: Equatable {
     public static func == (lhs: FloorFacility, rhs: FloorFacility) -> Bool {
-        lhs.facilityId == rhs.facilityId
+        lhs.id == rhs.id
     }
-}
-
-extension FloorFacility: Identifiable {
-    public var id: String { facilityId }
 }
