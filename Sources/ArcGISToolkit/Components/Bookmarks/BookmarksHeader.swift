@@ -47,11 +47,11 @@ struct BookmarksHeader: View {
             if isCompact {
                 Spacer()
                 Button {
-                    isPresented = false
+                    isPresented.toggle()
                 } label: {
-                    Text("Cancel")
+                    Text("Done")
+                        .fontWeight(.semibold)
                 }
-                .foregroundColor(.red)
             }
         }
     }
