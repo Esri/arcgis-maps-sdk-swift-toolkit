@@ -68,7 +68,6 @@ struct FloorFilterExampleView: View {
 ***REMOVED******REMOVED******REMOVED***   let floorManager = map.floorManager {
 ***REMOVED******REMOVED******REMOVED******REMOVED***FloorFilter(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***alignment: filterAlignment,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***automaticSelectionMode: .alwaysNotClearing,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***floorManager: floorManager,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint: $viewpoint
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
