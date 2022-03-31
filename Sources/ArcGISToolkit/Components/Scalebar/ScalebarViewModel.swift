@@ -20,15 +20,13 @@ import Foundation
 final class ScalebarViewModel: ObservableObject {
 ***REMOVED***@Published var displayLength: CGFloat = .zero
 ***REMOVED***
+***REMOVED***@Published var displayLengthString = ""
+***REMOVED***
 ***REMOVED***@Published var displayUnit: LinearUnit? = nil
 ***REMOVED***
-***REMOVED***@Published var mapLengthString = ""
+***REMOVED***var visibleAreaSubject = PassthroughSubject<Polygon?, Never>()
 ***REMOVED***
-***REMOVED***var subject = PassthroughSubject<Polygon?, Never>()
-***REMOVED***
-***REMOVED***private var cancellable: AnyCancellable?
-***REMOVED***
-***REMOVED***private var cancellable2: AnyCancellable?
+***REMOVED***private var visibleAreaCancellable: AnyCancellable?
 ***REMOVED***
 ***REMOVED******REMOVED***/ The amount of time to wait between value calculations.
 ***REMOVED***private var delay = DispatchQueue.SchedulerTimeType.Stride.seconds(0.05)
@@ -77,7 +75,7 @@ final class ScalebarViewModel: ObservableObject {
 ***REMOVED******REMOVED***self.viewpoint = viewpoint
 ***REMOVED******REMOVED***self.visibleArea = visibleArea
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***cancellable = subject
+***REMOVED******REMOVED***visibleAreaCancellable = visibleAreaSubject
 ***REMOVED******REMOVED******REMOVED***.debounce(for: delay, scheduler: DispatchQueue.main)
 ***REMOVED******REMOVED******REMOVED***.sink(receiveValue: { [weak self] _ in
 ***REMOVED******REMOVED******REMOVED******REMOVED***self?.updateScaleDisplay()
@@ -172,6 +170,6 @@ final class ScalebarViewModel: ObservableObject {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***self.displayUnit = displayUnit
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***mapLengthString = Scalebar.numberFormatter.string(from: NSNumber(value: lineMapLength)) ?? ""
+***REMOVED******REMOVED***displayLengthString = Scalebar.numberFormatter.string(from: NSNumber(value: lineMapLength)) ?? ""
 ***REMOVED***
 ***REMOVED***

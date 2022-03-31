@@ -18,24 +18,22 @@
 public struct Scalebar: View {
 ***REMOVED******REMOVED***/ The view model used by the `Scalebar`.
 ***REMOVED***@StateObject
-***REMOVED***private var viewModel: ScalebarViewModel
+***REMOVED***internal var viewModel: ScalebarViewModel
 ***REMOVED***
 ***REMOVED******REMOVED***/ The vertical amount of space used by the scalebar.
 ***REMOVED***@State private var height: Double = 50
 ***REMOVED***
-***REMOVED***@State private var finalLengthWidth: Double = .zero
+***REMOVED***@State internal var finalLengthWidth: Double = .zero
 ***REMOVED***
 ***REMOVED***private var alignment: ScalebarAlignment
 ***REMOVED***
 ***REMOVED***private var alternateFillColor = Color.black
 ***REMOVED***
-***REMOVED***private var fillColor = Color(uiColor: .lightGray).opacity(0.5)
+***REMOVED***internal var fillColor = Color(uiColor: .lightGray).opacity(0.5)
 ***REMOVED***
-***REMOVED***private var font: Font
+***REMOVED***internal var shadowColor = Color(uiColor: .black).opacity(0.65)
 ***REMOVED***
-***REMOVED***private var lineColor = Color.white
-***REMOVED***
-***REMOVED***private var shadowColor = Color(uiColor: .black).opacity(0.65)
+***REMOVED***internal var font: Font
 ***REMOVED***
 ***REMOVED***private var style: ScalebarStyle
 ***REMOVED***
@@ -85,14 +83,24 @@ public struct Scalebar: View {
 ***REMOVED***
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***Group {
-***REMOVED******REMOVED******REMOVED***if style == .alternatingBar {
-***REMOVED******REMOVED******REMOVED******REMOVED***alternatingBarView
-***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***barView
+***REMOVED******REMOVED******REMOVED***switch style {
+***REMOVED******REMOVED******REMOVED***case .line:
+***REMOVED******REMOVED******REMOVED******REMOVED***lineStyleRender
+***REMOVED******REMOVED******REMOVED***case .bar:
+***REMOVED******REMOVED******REMOVED******REMOVED***barStyleRender
+***REMOVED******REMOVED******REMOVED***case .graduatedLine:
+***REMOVED******REMOVED******REMOVED******REMOVED***#warning(".graduatedLine not yet implemented")
+***REMOVED******REMOVED******REMOVED******REMOVED***EmptyView()
+***REMOVED******REMOVED******REMOVED***case .alternatingBar:
+***REMOVED******REMOVED******REMOVED******REMOVED***#warning(".alternatingBar not yet implemented")
+***REMOVED******REMOVED******REMOVED******REMOVED***EmptyView()
+***REMOVED******REMOVED******REMOVED***case .dualUnitLine:
+***REMOVED******REMOVED******REMOVED******REMOVED***#warning(".dualUnitLine not yet implemented")
+***REMOVED******REMOVED******REMOVED******REMOVED***EmptyView()
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.onChange(of: visibleArea.wrappedValue) {
-***REMOVED******REMOVED******REMOVED***viewModel.subject.send($0)
+***REMOVED******REMOVED******REMOVED***viewModel.visibleAreaSubject.send($0)
 ***REMOVED***
 ***REMOVED******REMOVED***.onSizeChange {
 ***REMOVED******REMOVED******REMOVED***height = $0.height
@@ -101,7 +109,6 @@ public struct Scalebar: View {
 ***REMOVED******REMOVED******REMOVED***width: $viewModel.displayLength.wrappedValue,
 ***REMOVED******REMOVED******REMOVED***height: height
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***.border(.red)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***internal static let labelYPad: CGFloat = 2.0
@@ -129,69 +136,4 @@ public struct Scalebar: View {
 ***REMOVED******REMOVED***/  the center of the map on smaller scales (when zoomed way out). A minScale of 0 means it will
 ***REMOVED******REMOVED***/  always be visible
 ***REMOVED***private let minScale: Double = 0
-***REMOVED***
-
-extension Scalebar {
-***REMOVED***var alternatingBarView: some View {
-***REMOVED******REMOVED***VStack(spacing: 2) {
-***REMOVED******REMOVED******REMOVED***Rectangle()
-***REMOVED******REMOVED******REMOVED******REMOVED***.fill(.gray)
-***REMOVED******REMOVED******REMOVED******REMOVED***.border(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.white,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***width: 1.5
-***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED***.frame(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***width: $viewModel.displayLength.wrappedValue,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***height: 7,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***alignment: .leading
-***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED***.shadow(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***color: Color(uiColor: .lightGray),
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***radius: 1
-***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED******REMOVED***Text("0")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(font)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fontWeight(.semibold)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .leading)
-***REMOVED******REMOVED******REMOVED******REMOVED***Text("\($viewModel.mapLengthString.wrappedValue) \($viewModel.displayUnit.wrappedValue?.abbreviation ?? "")")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(font)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fontWeight(.semibold)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onSizeChange {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***finalLengthWidth = $0.width
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .trailing)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.offset(x: finalLengthWidth / 2)
-***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***var barView: some View {
-***REMOVED******REMOVED***VStack(spacing: 2) {
-***REMOVED******REMOVED******REMOVED***Rectangle()
-***REMOVED******REMOVED******REMOVED******REMOVED***.fill(.gray)
-***REMOVED******REMOVED******REMOVED******REMOVED***.border(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.white,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***width: 1.5
-***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED***.frame(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***width: $viewModel.displayLength.wrappedValue,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***height: 7,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***alignment: .leading
-***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED***.shadow(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***color: Color(uiColor: .lightGray),
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***radius: 1
-***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED******REMOVED***Text("\($viewModel.mapLengthString.wrappedValue) \($viewModel.displayUnit.wrappedValue?.abbreviation ?? "")")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(font)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fontWeight(.semibold)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onSizeChange {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***finalLengthWidth = $0.width
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .center)
-***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED***
 ***REMOVED***

@@ -45,7 +45,7 @@ struct ScalebarExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Scalebar(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***alignment: .left,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***spatialReference,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.alternatingBar,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.line,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***175,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***$unitsPerPoint,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***$viewpoint,
