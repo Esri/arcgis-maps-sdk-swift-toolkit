@@ -18,24 +18,22 @@ import SwiftUI
 public struct Scalebar: View {
     /// The view model used by the `Scalebar`.
     @StateObject
-    private var viewModel: ScalebarViewModel
+    internal var viewModel: ScalebarViewModel
     
     /// The vertical amount of space used by the scalebar.
     @State private var height: Double = 50
     
-    @State private var finalLengthWidth: Double = .zero
+    @State internal var finalLengthWidth: Double = .zero
     
     private var alignment: ScalebarAlignment
     
     private var alternateFillColor = Color.black
     
-    private var fillColor = Color(uiColor: .lightGray).opacity(0.5)
+    internal var fillColor = Color(uiColor: .lightGray).opacity(0.5)
     
-    private var font: Font
+    internal var shadowColor = Color(uiColor: .black).opacity(0.65)
     
-    private var lineColor = Color.white
-    
-    private var shadowColor = Color(uiColor: .black).opacity(0.65)
+    internal var font: Font
     
     private var style: ScalebarStyle
     
@@ -85,14 +83,24 @@ public struct Scalebar: View {
     
     public var body: some View {
         Group {
-            if style == .alternatingBar {
-                alternatingBarView
-            } else {
-                barView
+            switch style {
+            case .line:
+                lineStyleRender
+            case .bar:
+                barStyleRender
+            case .graduatedLine:
+                #warning(".graduatedLine not yet implemented")
+                EmptyView()
+            case .alternatingBar:
+                #warning(".alternatingBar not yet implemented")
+                EmptyView()
+            case .dualUnitLine:
+                #warning(".dualUnitLine not yet implemented")
+                EmptyView()
             }
         }
         .onChange(of: visibleArea.wrappedValue) {
-            viewModel.subject.send($0)
+            viewModel.visibleAreaSubject.send($0)
         }
         .onSizeChange {
             height = $0.height
@@ -101,7 +109,6 @@ public struct Scalebar: View {
             width: $viewModel.displayLength.wrappedValue,
             height: height
         )
-//        .border(.red)
     }
     
     internal static let labelYPad: CGFloat = 2.0
@@ -129,69 +136,4 @@ public struct Scalebar: View {
     ///  the center of the map on smaller scales (when zoomed way out). A minScale of 0 means it will
     ///  always be visible
     private let minScale: Double = 0
-}
-
-extension Scalebar {
-    var alternatingBarView: some View {
-        VStack(spacing: 2) {
-            Rectangle()
-                .fill(.gray)
-                .border(
-                    .white,
-                    width: 1.5
-                )
-                .frame(
-                    width: $viewModel.displayLength.wrappedValue,
-                    height: 7,
-                    alignment: .leading
-                )
-                .shadow(
-                    color: Color(uiColor: .lightGray),
-                    radius: 1
-                )
-            HStack {
-                Text("0")
-                    .font(font)
-                    .fontWeight(.semibold)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                Text("\($viewModel.mapLengthString.wrappedValue) \($viewModel.displayUnit.wrappedValue?.abbreviation ?? "")")
-                    .font(font)
-                    .fontWeight(.semibold)
-                    .onSizeChange {
-                        finalLengthWidth = $0.width
-                    }
-                    .frame(maxWidth: .infinity, alignment: .trailing)
-                    .offset(x: finalLengthWidth / 2)
-            }
-        }
-    }
-    
-    var barView: some View {
-        VStack(spacing: 2) {
-            Rectangle()
-                .fill(.gray)
-                .border(
-                    .white,
-                    width: 1.5
-                )
-                .frame(
-                    width: $viewModel.displayLength.wrappedValue,
-                    height: 7,
-                    alignment: .leading
-                )
-                .shadow(
-                    color: Color(uiColor: .lightGray),
-                    radius: 1
-                )
-            HStack {
-                Text("\($viewModel.mapLengthString.wrappedValue) \($viewModel.displayUnit.wrappedValue?.abbreviation ?? "")")
-                    .font(font)
-                    .fontWeight(.semibold)
-                    .onSizeChange {
-                        finalLengthWidth = $0.width
-                    }
-                    .frame(maxWidth: .infinity, alignment: .center)
-            }
-        }
-    }
 }

@@ -45,7 +45,7 @@ struct ScalebarExampleView: View {
                     Scalebar(
                         alignment: .left,
                         spatialReference,
-                        .alternatingBar,
+                        .line,
                         175,
                         $unitsPerPoint,
                         $viewpoint,

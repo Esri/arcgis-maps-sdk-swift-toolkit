@@ -20,15 +20,13 @@ import SwiftUI
 final class ScalebarViewModel: ObservableObject {
     @Published var displayLength: CGFloat = .zero
     
+    @Published var displayLengthString = ""
+    
     @Published var displayUnit: LinearUnit? = nil
     
-    @Published var mapLengthString = ""
+    var visibleAreaSubject = PassthroughSubject<Polygon?, Never>()
     
-    var subject = PassthroughSubject<Polygon?, Never>()
-    
-    private var cancellable: AnyCancellable?
-    
-    private var cancellable2: AnyCancellable?
+    private var visibleAreaCancellable: AnyCancellable?
     
     /// The amount of time to wait between value calculations.
     private var delay = DispatchQueue.SchedulerTimeType.Stride.seconds(0.05)
@@ -77,7 +75,7 @@ final class ScalebarViewModel: ObservableObject {
         self.viewpoint = viewpoint
         self.visibleArea = visibleArea
         
-        cancellable = subject
+        visibleAreaCancellable = visibleAreaSubject
             .debounce(for: delay, scheduler: DispatchQueue.main)
             .sink(receiveValue: { [weak self] _ in
                 self?.updateScaleDisplay()
@@ -172,6 +170,6 @@ final class ScalebarViewModel: ObservableObject {
         
         self.displayUnit = displayUnit
         
-        mapLengthString = Scalebar.numberFormatter.string(from: NSNumber(value: lineMapLength)) ?? ""
+        displayLengthString = Scalebar.numberFormatter.string(from: NSNumber(value: lineMapLength)) ?? ""
     }
 }
