@@ -59,6 +59,16 @@ public enum ScalebarUnits {
 ***REMOVED******REMOVED***return roundNumber
 ***REMOVED***
 ***REMOVED***
+***REMOVED***internal static func numSegmentsForDistance(distance: Double, maxNumSegments: Int) -> Int {
+***REMOVED******REMOVED******REMOVED*** this function returns the best number of segments so that we get relatively round
+***REMOVED******REMOVED******REMOVED*** numbers when the distance is divided up.
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let mm = multiplierAndMagnitudeForDistance(distance: distance)
+***REMOVED******REMOVED***let options = segmentOptionsForMultiplier(multiplier: mm.multiplier)
+***REMOVED******REMOVED***let num = options.filter { $0 <= maxNumSegments ***REMOVED***.last ?? 1
+***REMOVED******REMOVED***return num
+***REMOVED***
+***REMOVED***
 ***REMOVED******REMOVED***/ This table must begin with 1 and end with 10.
 ***REMOVED***private static let roundNumberMultipliers: [Double] =
 ***REMOVED******REMOVED***[1, 1.2, 1.25, 1.5, 1.75, 2, 2.4, 2.5, 3, 3.75, 4, 5, 6, 7.5, 8, 9, 10]
@@ -78,6 +88,47 @@ public enum ScalebarUnits {
 ***REMOVED******REMOVED******REMOVED******REMOVED***return LinearUnit.kilometers
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***return LinearUnit.meters
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***private static func segmentOptionsForMultiplier(multiplier: Double) -> [Int] {
+***REMOVED******REMOVED***switch multiplier {
+***REMOVED******REMOVED***case 1:
+***REMOVED******REMOVED******REMOVED***return [1, 2, 4, 5]
+***REMOVED******REMOVED***case 1.2:
+***REMOVED******REMOVED******REMOVED***return [1, 2, 3, 4]
+***REMOVED******REMOVED***case 1.25:
+***REMOVED******REMOVED******REMOVED***return [1, 2]
+***REMOVED******REMOVED***case 1.5:
+***REMOVED******REMOVED******REMOVED***return [1, 2, 3, 5]
+***REMOVED******REMOVED***case 1.75:
+***REMOVED******REMOVED******REMOVED***return [1, 2]
+***REMOVED******REMOVED***case 2:
+***REMOVED******REMOVED******REMOVED***return [1, 2, 4, 5]
+***REMOVED******REMOVED***case 2.4:
+***REMOVED******REMOVED******REMOVED***return [1, 2, 3]
+***REMOVED******REMOVED***case 2.5:
+***REMOVED******REMOVED******REMOVED***return [1, 2, 5]
+***REMOVED******REMOVED***case 3:
+***REMOVED******REMOVED******REMOVED***return [1, 2, 3]
+***REMOVED******REMOVED***case 3.75:
+***REMOVED******REMOVED******REMOVED***return [1, 3]
+***REMOVED******REMOVED***case 4:
+***REMOVED******REMOVED******REMOVED***return [1, 2, 4]
+***REMOVED******REMOVED***case 5:
+***REMOVED******REMOVED******REMOVED***return [1, 2, 5]
+***REMOVED******REMOVED***case 6:
+***REMOVED******REMOVED******REMOVED***return [1, 2, 3]
+***REMOVED******REMOVED***case 7.5:
+***REMOVED******REMOVED******REMOVED***return [1, 2]
+***REMOVED******REMOVED***case 8:
+***REMOVED******REMOVED******REMOVED***return [1, 2, 4]
+***REMOVED******REMOVED***case 9:
+***REMOVED******REMOVED******REMOVED***return [1, 2, 3]
+***REMOVED******REMOVED***case 10:
+***REMOVED******REMOVED******REMOVED***return [1, 2, 5]
+***REMOVED******REMOVED***default:
+***REMOVED******REMOVED******REMOVED***return [1]
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***

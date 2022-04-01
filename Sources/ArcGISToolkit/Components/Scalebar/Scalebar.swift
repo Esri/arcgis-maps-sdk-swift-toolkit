@@ -27,19 +27,28 @@ public struct Scalebar: View {
 ***REMOVED***
 ***REMOVED***private var alignment: ScalebarAlignment
 ***REMOVED***
-***REMOVED***private var alternateFillColor = Color.black
+***REMOVED***internal var lineColor = Color.white
 ***REMOVED***
-***REMOVED***internal var fillColor = Color(uiColor: .lightGray).opacity(0.5)
+***REMOVED***internal var fillColor1 = Color.black
+***REMOVED***
+***REMOVED***internal var fillColor2 = Color(uiColor: .lightGray).opacity(0.5)
 ***REMOVED***
 ***REMOVED***internal var shadowColor = Color(uiColor: .black).opacity(0.65)
+***REMOVED***internal var shadowRadius = 1.0
 ***REMOVED***
-***REMOVED***internal var font: Font
+***REMOVED***internal var lineWidth = 3.0
+***REMOVED***
+***REMOVED***internal var lineFrameHeight = 6.0
+***REMOVED***
+***REMOVED***internal var barFrameHeight = 10.0
+***REMOVED***
+***REMOVED***internal var lineCornerRadius = 2.5
 ***REMOVED***
 ***REMOVED***private var style: ScalebarStyle
 ***REMOVED***
 ***REMOVED***private var textColor = Color.black
 ***REMOVED***
-***REMOVED***private var textShadowColor = Color.white
+***REMOVED***var textShadowColor = Color.white
 ***REMOVED***
 ***REMOVED******REMOVED***/ Acts as a data provider of the current scale.
 ***REMOVED***private var viewpoint: Binding<Viewpoint?>
@@ -48,24 +57,28 @@ public struct Scalebar: View {
 ***REMOVED***private var visibleArea: Binding<Polygon?>
 ***REMOVED***
 ***REMOVED***public init(
-***REMOVED******REMOVED***alignment: ScalebarAlignment = .left,
+***REMOVED******REMOVED***alignment: Alignment,
 ***REMOVED******REMOVED***_ spatialReference: SpatialReference? = .wgs84,
 ***REMOVED******REMOVED***_ style: ScalebarStyle = .alternatingBar,
 ***REMOVED******REMOVED***_ targetWidth: Double,
 ***REMOVED******REMOVED***_ unitsPerPoint: Binding<Double?>,
 ***REMOVED******REMOVED***_ viewpoint: Binding<Viewpoint?>,
 ***REMOVED******REMOVED***_ visibleArea: Binding<Polygon?>,
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***font: Font = .system(size: 10.0, weight: .semibold),
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED***units: ScalebarUnits = NSLocale.current.usesMetricSystem ? .metric : .imperial,
 ***REMOVED******REMOVED***useGeodeticCalculations: Bool = true
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.viewpoint = viewpoint
 ***REMOVED******REMOVED***self.visibleArea = visibleArea
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***self.alignment = alignment
-***REMOVED******REMOVED***self.font = font
+***REMOVED******REMOVED***switch alignment {
+***REMOVED******REMOVED***case .topTrailing, .trailing, .bottomTrailing:
+***REMOVED******REMOVED******REMOVED***self.alignment = .right
+***REMOVED******REMOVED***case .top, .center, .bottom:
+***REMOVED******REMOVED******REMOVED***self.alignment = .center
+***REMOVED******REMOVED***default:
+***REMOVED******REMOVED******REMOVED***self.alignment = .left
+***REMOVED***
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***self.style = style
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***_viewModel = StateObject(
@@ -84,19 +97,16 @@ public struct Scalebar: View {
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***Group {
 ***REMOVED******REMOVED******REMOVED***switch style {
-***REMOVED******REMOVED******REMOVED***case .line:
-***REMOVED******REMOVED******REMOVED******REMOVED***lineStyleRender
+***REMOVED******REMOVED******REMOVED***case .alternatingBar:
+***REMOVED******REMOVED******REMOVED******REMOVED***alternatingBarStyleRender
 ***REMOVED******REMOVED******REMOVED***case .bar:
 ***REMOVED******REMOVED******REMOVED******REMOVED***barStyleRender
-***REMOVED******REMOVED******REMOVED***case .graduatedLine:
-***REMOVED******REMOVED******REMOVED******REMOVED***#warning(".graduatedLine not yet implemented")
-***REMOVED******REMOVED******REMOVED******REMOVED***EmptyView()
-***REMOVED******REMOVED******REMOVED***case .alternatingBar:
-***REMOVED******REMOVED******REMOVED******REMOVED***#warning(".alternatingBar not yet implemented")
-***REMOVED******REMOVED******REMOVED******REMOVED***EmptyView()
 ***REMOVED******REMOVED******REMOVED***case .dualUnitLine:
-***REMOVED******REMOVED******REMOVED******REMOVED***#warning(".dualUnitLine not yet implemented")
-***REMOVED******REMOVED******REMOVED******REMOVED***EmptyView()
+***REMOVED******REMOVED******REMOVED******REMOVED***dualUnitLineStyleRender
+***REMOVED******REMOVED******REMOVED***case .graduatedLine:
+***REMOVED******REMOVED******REMOVED******REMOVED***graduatedLineStyleRender
+***REMOVED******REMOVED******REMOVED***case .line:
+***REMOVED******REMOVED******REMOVED******REMOVED***lineStyleRender
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.onChange(of: visibleArea.wrappedValue) {
@@ -111,7 +121,19 @@ public struct Scalebar: View {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
+***REMOVED***internal static var font: (Font: Font, UIFont: UIFont) {
+***REMOVED******REMOVED***let size = 10.0
+***REMOVED******REMOVED***let uiFont = UIFont.systemFont(
+***REMOVED******REMOVED******REMOVED***ofSize: size,
+***REMOVED******REMOVED******REMOVED***weight: .semibold
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***let font = Font(uiFont as CTFont)
+***REMOVED******REMOVED***return (font, uiFont)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ The spacing between labels and the scalebar.
 ***REMOVED***internal static let labelYPad: CGFloat = 2.0
+***REMOVED***
 ***REMOVED***internal static let labelXPad: CGFloat = 4.0
 ***REMOVED***internal static let tickHeight: CGFloat = 6.0
 ***REMOVED***internal static let tick2Height: CGFloat = 4.5
@@ -137,3 +159,4 @@ public struct Scalebar: View {
 ***REMOVED******REMOVED***/  always be visible
 ***REMOVED***private let minScale: Double = 0
 ***REMOVED***
+
