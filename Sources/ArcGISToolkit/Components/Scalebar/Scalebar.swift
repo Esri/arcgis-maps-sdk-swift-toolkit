@@ -27,19 +27,28 @@ public struct Scalebar: View {
     
     private var alignment: ScalebarAlignment
     
-    private var alternateFillColor = Color.black
+    internal var lineColor = Color.white
     
-    internal var fillColor = Color(uiColor: .lightGray).opacity(0.5)
+    internal var fillColor1 = Color.black
+    
+    internal var fillColor2 = Color(uiColor: .lightGray).opacity(0.5)
     
     internal var shadowColor = Color(uiColor: .black).opacity(0.65)
+    internal var shadowRadius = 1.0
     
-    internal var font: Font
+    internal var lineWidth = 3.0
+    
+    internal var lineFrameHeight = 6.0
+    
+    internal var barFrameHeight = 10.0
+    
+    internal var lineCornerRadius = 2.5
     
     private var style: ScalebarStyle
     
     private var textColor = Color.black
     
-    private var textShadowColor = Color.white
+    var textShadowColor = Color.white
     
     /// Acts as a data provider of the current scale.
     private var viewpoint: Binding<Viewpoint?>
@@ -48,24 +57,28 @@ public struct Scalebar: View {
     private var visibleArea: Binding<Polygon?>
     
     public init(
-        alignment: ScalebarAlignment = .left,
+        alignment: Alignment,
         _ spatialReference: SpatialReference? = .wgs84,
         _ style: ScalebarStyle = .alternatingBar,
         _ targetWidth: Double,
         _ unitsPerPoint: Binding<Double?>,
         _ viewpoint: Binding<Viewpoint?>,
         _ visibleArea: Binding<Polygon?>,
-        
-        font: Font = .system(size: 10.0, weight: .semibold),
-        
         units: ScalebarUnits = NSLocale.current.usesMetricSystem ? .metric : .imperial,
         useGeodeticCalculations: Bool = true
     ) {
         self.viewpoint = viewpoint
         self.visibleArea = visibleArea
         
-        self.alignment = alignment
-        self.font = font
+        switch alignment {
+        case .topTrailing, .trailing, .bottomTrailing:
+            self.alignment = .right
+        case .top, .center, .bottom:
+            self.alignment = .center
+        default:
+            self.alignment = .left
+        }
+        
         self.style = style
         
         _viewModel = StateObject(
@@ -84,19 +97,16 @@ public struct Scalebar: View {
     public var body: some View {
         Group {
             switch style {
-            case .line:
-                lineStyleRender
+            case .alternatingBar:
+                alternatingBarStyleRender
             case .bar:
                 barStyleRender
-            case .graduatedLine:
-                #warning(".graduatedLine not yet implemented")
-                EmptyView()
-            case .alternatingBar:
-                #warning(".alternatingBar not yet implemented")
-                EmptyView()
             case .dualUnitLine:
-                #warning(".dualUnitLine not yet implemented")
-                EmptyView()
+                dualUnitLineStyleRender
+            case .graduatedLine:
+                graduatedLineStyleRender
+            case .line:
+                lineStyleRender
             }
         }
         .onChange(of: visibleArea.wrappedValue) {
@@ -111,7 +121,19 @@ public struct Scalebar: View {
         )
     }
     
+    internal static var font: (Font: Font, UIFont: UIFont) {
+        let size = 10.0
+        let uiFont = UIFont.systemFont(
+            ofSize: size,
+            weight: .semibold
+        )
+        let font = Font(uiFont as CTFont)
+        return (font, uiFont)
+    }
+    
+    /// The spacing between labels and the scalebar.
     internal static let labelYPad: CGFloat = 2.0
+    
     internal static let labelXPad: CGFloat = 4.0
     internal static let tickHeight: CGFloat = 6.0
     internal static let tick2Height: CGFloat = 4.5
@@ -137,3 +159,4 @@ public struct Scalebar: View {
     ///  always be visible
     private let minScale: Double = 0
 }
+
