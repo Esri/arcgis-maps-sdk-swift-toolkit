@@ -32,18 +32,35 @@ public struct BasemapGallery: View {
         case list(width: CGFloat = 125)
     }
     
-    /// Creates a `BasemapGallery`.
-    /// - Parameter viewModel: The view model used by the `BasemapGallery`.
-    public init(viewModel: BasemapGalleryViewModel? = nil) {
-        self.viewModel = viewModel ?? BasemapGalleryViewModel()
+    /// Creates a `BasemapGallery`. Uses the given array of basemap gallery items.
+    /// - Remark: If `items` is empty, ArcGIS Online's developer basemaps will
+    /// be loaded and added to `items`.
+    /// - Parameters:
+    ///   - geoModel: A geo model.
+    ///   - items: A list of pre-defined base maps to display.
+    public init(
+        geoModel: GeoModel? = nil,
+        items: [BasemapGalleryItem] = []
+    ) {
+        viewModel = BasemapGalleryViewModel(geoModel: geoModel, items: items)
     }
     
+    /// Creates a `BasemapGallery`.  The portal will be used to to retrieve basemaps.
+    /// - Parameters:
+    ///   - geoModel: A geo model.
+    ///   - portal: The portal to use to load basemaps.
+    init(
+        _ geoModel: GeoModel? = nil,
+        portal: Portal
+    ) {
+        viewModel = BasemapGalleryViewModel(geoModel, portal: portal)
+    }
+
     /// The view model used by the view. The `BasemapGalleryViewModel` manages the state
     /// of the `BasemapGallery`. The view observes `BasemapGalleryViewModel` for changes
     /// in state. The view updates the state of the `BasemapGalleryViewModel` in response to
     /// user action.
-    @ObservedObject
-    public var viewModel: BasemapGalleryViewModel
+    @ObservedObject private var viewModel: BasemapGalleryViewModel
     
     /// The style of the basemap gallery. The gallery can be displayed as a list, grid, or automatically
     /// switch between the two based on-screen real estate. Defaults to ``BasemapGallery/Style/automatic``.
@@ -72,12 +89,10 @@ public struct BasemapGallery: View {
     }
     
     /// A Boolean value indicating whether to show an error alert.
-    @State
-    private var showErrorAlert = false
+    @State private var showErrorAlert = false
     
     /// The current alert item to display.
-    @State
-    private var alertItem: AlertItem?
+    @State private var alertItem: AlertItem?
     
     public var body: some View {
         makeGalleryView()
@@ -209,10 +224,10 @@ extension AlertItem {
         let message: String
 
         switch (spatialReferenceMismatchError.basemapSpatialReference, spatialReferenceMismatchError.geoModelSpatialReference) {
-        case (.some(let basemapSpatialReference), .some(let geoModelSpatialReference)):
-            message = "The spatial reference of the basemap: \(basemapSpatialReference.description) does not match that of the geomodel: \(geoModelSpatialReference.description)."
+        case (.some(_), .some(_)):
+            message = "The basemap has a spatial reference that is incompatible with the map."
         case (_, .none):
-            message = "The geo model does not have a spatial reference."
+            message = "The map does not have a spatial reference."
         case (.none, _):
             message = "The basemap does not have a spatial reference."
         }

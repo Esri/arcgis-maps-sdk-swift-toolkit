@@ -57,32 +57,26 @@ public class BasemapGalleryItem: ObservableObject {
     }
     
     /// The error generated loading the basemap, if any.
-    @Published
-    private(set) var loadBasemapError: Error? = nil
+    @Published private(set) var loadBasemapError: Error? = nil
     
     /// The basemap represented by `BasemapGalleryItem`.
     public let basemap: Basemap
     
     /// The name of the `basemap`.
-    @Published
-    public private(set) var name: String?
+    @Published public private(set) var name: String?
     
     /// The description of the `basemap`.
-    @Published
-    public private(set) var description: String?
+    @Published public private(set) var description: String?
     
     /// The thumbnail used to represent the `basemap`.
-    @Published
-    public private(set) var thumbnail: UIImage?
+    @Published public private(set) var thumbnail: UIImage?
     
     /// A Boolean value indicating whether the `basemap` or it's base layers are being loaded.
-    @Published
-    private(set) var isBasemapLoading = true
+    @Published private(set) var isBasemapLoading = true
     
     /// The spatial reference status of the item. This is set via a call to
     /// ``updateSpatialReferenceStatus(_:)``.
-    @Published
-    public private(set) var spatialReferenceStatus: SpatialReferenceStatus = .unknown
+    @Published public private(set) var spatialReferenceStatus: SpatialReferenceStatus = .unknown
     
     /// The spatial reference of ``basemap``. This will be `nil` until the
     /// basemap's base layers have been loaded by
@@ -107,8 +101,7 @@ private extension BasemapGalleryItem {
     
     /// Updates the item in response to basemap loading completion.
     /// - Parameter error: The basemap load error, if any.
-    @MainActor
-    func finalizeLoading(error: Error? = nil) {
+    @MainActor func finalizeLoading(error: Error? = nil) {
         if name == nil {
             name = basemap.name
         }
@@ -139,8 +132,7 @@ public extension BasemapGalleryItem {
     /// Updates the ``spatialReferenceStatus-swift.property`` by loading the first base layer of
     /// ``basemap`` and determining if it matches with the given spatial reference.
     /// - Parameter referenceSpatialReference: The spatial reference to match to.
-    @MainActor
-    func updateSpatialReferenceStatus(
+    @MainActor func updateSpatialReferenceStatus(
         _ referenceSpatialReference: SpatialReference?
     ) async throws {
         guard basemap.loadStatus == .loaded else { return }
@@ -159,8 +151,7 @@ public extension BasemapGalleryItem {
     /// - Parameter referenceSpatialReference: The spatial reference used to
     /// compare to `basemap`'s spatial reference, represented by the first base layer's
     /// spatial reference.
-    @MainActor
-    private func finalizeUpdateSpatialReferenceStatus(
+    @MainActor private func finalizeUpdateSpatialReferenceStatus(
         with referenceSpatialReference: SpatialReference?
     ) {
         spatialReference = basemap.baseLayers.first?.spatialReference

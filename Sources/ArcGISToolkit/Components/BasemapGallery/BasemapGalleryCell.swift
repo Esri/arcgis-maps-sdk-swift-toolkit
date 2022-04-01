@@ -41,35 +41,54 @@ struct BasemapGalleryCell: View {
                             )
                     }
                     
-                    // Display an image representing either a load basemap error
-                    // or a spatial reference mismatch error.
-                    if item.loadBasemapError != nil {
-                        makeErrorImage(systemName: "minus")
-                    } else if item.spatialReferenceStatus == .noMatch {
-                        makeErrorImage(systemName: "x")
+                    // Display an overlay if the item has an error.
+                    if item.hasError {
+                        makeErrorOverlay()
                     }
                     
                     // Display a progress view if the item is loading.
                     if item.isBasemapLoading {
-                        ProgressView()
-                            .progressViewStyle(CircularProgressViewStyle())
-                            .esriBorder()
+                        makeProgressView()
                     }
                 }
                 
                 // Display the name of the item.
                 Text(item.name ?? "")
-                    .font(.footnote)
+                    .font(Font.custom("AvenirNext-Regular", fixedSize: 12))
                     .multilineTextAlignment(.center)
-                    .foregroundColor(.primary)
+                    .foregroundColor(item.hasError ? .secondary : .primary)
             }
         }).disabled(item.isBasemapLoading)
     }
+    
+    /// Creates a partially transparent rectangle, used to denote a basemap with an error.
+    /// - Returns: A new transparent rectagle view.
+    private func makeErrorOverlay() -> some View {
+        Rectangle()
+            .foregroundColor(.secondary)
+            .opacity(0.75)
+    }
+    
+    /// Creates a circular progress view with a rounded rectangle background.
+    /// - Returns: A new progress view.
+    private func makeProgressView() -> some View {
+        ProgressView()
+            .progressViewStyle(.circular)
+            .padding(EdgeInsets(
+                top: 8,
+                leading: 12,
+                bottom: 8,
+                trailing: 12)
+            )
+            .background(Color(uiColor: .systemBackground))
+            .clipShape(RoundedRectangle(cornerRadius: 8))
+    }
+}
 
-    private func makeErrorImage(systemName: String) -> some View {
-        Image(systemName: systemName)
-            .symbolVariant(.circle.fill)
-            .font(.title)
-            .foregroundColor(.red)
+extension BasemapGalleryItem {
+    /// A Boolean denoting if the item has an error or not.
+    var hasError: Bool {
+        loadBasemapError != nil ||
+        spatialReferenceStatus == .noMatch
     }
 }

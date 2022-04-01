@@ -19,10 +19,6 @@ struct BasemapGalleryExampleView: View {
     /// The map displayed in the map view.
     let map: Map
     
-    /// The view model for the basemap gallery.
-    @ObservedObject
-    var viewModel: BasemapGalleryViewModel
-    
     /// A Boolean value indicating whether to show the basemap gallery.
     @State
     private var showBasemapGallery: Bool = false
@@ -33,20 +29,18 @@ struct BasemapGalleryExampleView: View {
         scale: 1_000_000
     )
     
+    /// The initial list of basemaps.
+    private let basemaps = Self.initialBasemaps()
+
     init() {
         self.map = Map(basemapStyle: .arcGISImagery)
-        self.viewModel = BasemapGalleryViewModel(
-            geoModel: self.map,
-            // You can add your own basemaps by passing them in here:
-            items: Self.initialBasemaps()
-        )
     }
     
     var body: some View {
         MapView(map: map, viewpoint: initialViewpoint)
             .overlay(alignment: .topTrailing) {
                 if showBasemapGallery {
-                    BasemapGallery(viewModel: viewModel)
+                    BasemapGallery(geoModel: self.map, items: basemaps)
                         .style(.automatic())
                         .esriBorder()
                         .padding()
@@ -67,7 +61,7 @@ struct BasemapGalleryExampleView: View {
         ]
         
         return identifiers.map { identifier in
-            let url = URL(string: "https://runtime.maps.arcgis.com/home/item.html?id=\(identifier)")!
+            let url = URL(string: "https://maps.arcgis.com/home/item.html?id=\(identifier)")!
             return BasemapGalleryItem(basemap: Basemap(item: PortalItem(url: url)!))
         }
     }
