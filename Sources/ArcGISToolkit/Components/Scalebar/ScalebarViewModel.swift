@@ -24,6 +24,10 @@ final class ScalebarViewModel: ObservableObject {
     
     @Published var displayUnit: LinearUnit? = nil
     
+    @Published var lineMapLength: Double = .zero
+    
+    @Published var segments = [Scalebar.Segment]()
+    
     var visibleAreaSubject = PassthroughSubject<Polygon?, Never>()
     
     private var visibleAreaCancellable: AnyCancellable?
@@ -154,7 +158,11 @@ final class ScalebarViewModel: ObservableObject {
                 units: baseUnits
             )
             displayLength = CGFloat(
-                baseUnits.convert(to: srUnit, value: closestLen) / unitsPerPoint)
+                baseUnits.convert(
+                    to: srUnit,
+                    value: closestLen
+                ) / unitsPerPoint
+            )
             displayUnit = units.linearUnitsForDistance(distance: closestLen)
             lineMapLength = baseUnits.convert(
                 to: displayUnit,
@@ -170,6 +178,73 @@ final class ScalebarViewModel: ObservableObject {
         
         self.displayUnit = displayUnit
         
-        displayLengthString = Scalebar.numberFormatter.string(from: NSNumber(value: lineMapLength)) ?? ""
+        self.lineMapLength = lineMapLength
+        
+        displayLengthString = Scalebar.numberFormatter.string(
+            from: NSNumber(value: lineMapLength)
+        ) ?? ""
+        
+        updateSegments()
+    }
+    
+    func updateSegments() {
+        let lineDisplayLength = displayLength
+        
+        // Use a string with at least a few characters in case the number string
+        // only has 1.
+        // The dividers will be decimal values and we want to make sure they all
+        // fit very basic hueristics.
+        let minSegmentTestString = (displayLengthString.count > 3) ? displayLengthString : "9.9"
+        // Use 1.5 because the last segment, the text is right justified insted
+        // of center, which makes it harder to squeeze text in.
+        let minSegmentWidth = (minSegmentTestString.size(withAttributes: [.font: Scalebar.font.UIFont]).width * 1.5) + (Scalebar.labelXPad * 2)
+        var maxNumSegments = Int(lineDisplayLength / minSegmentWidth)
+        maxNumSegments = min(maxNumSegments, 4) // cap it at 4
+        let numSegments: Int = ScalebarUnits.numSegmentsForDistance(distance: lineMapLength, maxNumSegments: maxNumSegments)
+        
+        let segmentScreenLength: CGFloat = (lineDisplayLength / CGFloat(numSegments))
+        var currSegmentX: CGFloat = 0
+        var segments = [Scalebar.Segment]()
+        
+        for index in 0..<numSegments {
+            currSegmentX += segmentScreenLength
+            let segmentMapLength = Double((segmentScreenLength * CGFloat(index + 1)) / lineDisplayLength) * lineMapLength
+            
+            var segmentText = Scalebar.numberFormatter.string(from: NSNumber(value: segmentMapLength)) ?? ""
+            if index == numSegments - 1, let displayUnit = displayUnit?.abbreviation {
+                segmentText += " \(displayUnit)"
+            }
+            
+            let segmentTextSize = segmentText.size(withAttributes: [.font: Scalebar.font.UIFont])
+            
+            let segment = Scalebar.Segment(
+                index: index,
+                segmentScreenLength: segmentScreenLength,
+                xOffset: currSegmentX,
+                yOffset: segmentTextSize.height / 2.0,
+                segmentMapLength: segmentMapLength,
+                text: segmentText,
+                textWidth: segmentTextSize.width
+            )
+            segments.append(segment)
+            
+        }
+        self.segments = segments
+    }
+    
+    var alternateUnitLength: CGFloat {
+        guard let displayUnit = displayUnit else {
+            return .zero
+        }
+        let otherUnit = (units == ScalebarUnits.imperial) ? ScalebarUnits.metric : ScalebarUnits.imperial
+        let otherMapBaseLength = displayUnit.convert(to: otherUnit.baseUnits(), value: lineMapLength)
+        let otherClosestBaseLength = otherUnit.closestDistanceWithoutGoingOver(to: otherMapBaseLength, units: otherUnit.baseUnits())
+        let otherDisplayUnits = otherUnit.linearUnitsForDistance(distance: otherClosestBaseLength)
+        let otherLineMapLength = otherUnit.baseUnits().convert(to: otherDisplayUnits, value: otherClosestBaseLength)
+        
+        let displayFactor = lineMapLength / Double(displayLength)
+        let convertedDisplayFactor = displayUnit.convert(to: otherDisplayUnits, value: displayFactor)
+        let otherLineScreenLength = CGFloat(otherLineMapLength / convertedDisplayFactor)
+        return otherLineScreenLength
     }
 }
