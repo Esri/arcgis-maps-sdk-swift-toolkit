@@ -41,35 +41,54 @@ struct BasemapGalleryCell: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Display an image representing either a load basemap error
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** or a spatial reference mismatch error.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if item.loadBasemapError != nil {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeErrorImage(systemName: "minus")
-***REMOVED******REMOVED******REMOVED******REMOVED*** else if item.spatialReferenceStatus == .noMatch {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeErrorImage(systemName: "x")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Display an overlay if the item has an error.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if item.hasError {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeErrorOverlay()
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Display a progress view if the item is loading.
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if item.isBasemapLoading {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ProgressView()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.progressViewStyle(CircularProgressViewStyle())
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.esriBorder()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeProgressView()
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Display the name of the item.
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text(item.name ?? "")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.footnote)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(Font.custom("AvenirNext-Regular", fixedSize: 12))
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.multilineTextAlignment(.center)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.primary)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(item.hasError ? .secondary : .primary)
 ***REMOVED******REMOVED***
 ***REMOVED***).disabled(item.isBasemapLoading)
 ***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Creates a partially transparent rectangle, used to denote a basemap with an error.
+***REMOVED******REMOVED***/ - Returns: A new transparent rectagle view.
+***REMOVED***private func makeErrorOverlay() -> some View {
+***REMOVED******REMOVED***Rectangle()
+***REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
+***REMOVED******REMOVED******REMOVED***.opacity(0.75)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Creates a circular progress view with a rounded rectangle background.
+***REMOVED******REMOVED***/ - Returns: A new progress view.
+***REMOVED***private func makeProgressView() -> some View {
+***REMOVED******REMOVED***ProgressView()
+***REMOVED******REMOVED******REMOVED***.progressViewStyle(.circular)
+***REMOVED******REMOVED******REMOVED***.padding(EdgeInsets(
+***REMOVED******REMOVED******REMOVED******REMOVED***top: 8,
+***REMOVED******REMOVED******REMOVED******REMOVED***leading: 12,
+***REMOVED******REMOVED******REMOVED******REMOVED***bottom: 8,
+***REMOVED******REMOVED******REMOVED******REMOVED***trailing: 12)
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***.background(Color(uiColor: .systemBackground))
+***REMOVED******REMOVED******REMOVED***.clipShape(RoundedRectangle(cornerRadius: 8))
+***REMOVED***
+***REMOVED***
 
-***REMOVED***private func makeErrorImage(systemName: String) -> some View {
-***REMOVED******REMOVED***Image(systemName: systemName)
-***REMOVED******REMOVED******REMOVED***.symbolVariant(.circle.fill)
-***REMOVED******REMOVED******REMOVED***.font(.title)
-***REMOVED******REMOVED******REMOVED***.foregroundColor(.red)
+extension BasemapGalleryItem {
+***REMOVED******REMOVED***/ A Boolean denoting if the item has an error or not.
+***REMOVED***var hasError: Bool {
+***REMOVED******REMOVED***loadBasemapError != nil ||
+***REMOVED******REMOVED***spatialReferenceStatus == .noMatch
 ***REMOVED***
 ***REMOVED***

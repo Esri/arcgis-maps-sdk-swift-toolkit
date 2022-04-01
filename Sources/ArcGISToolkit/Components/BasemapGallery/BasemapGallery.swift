@@ -32,18 +32,35 @@ public struct BasemapGallery: View {
 ***REMOVED******REMOVED***case list(width: CGFloat = 125)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Creates a `BasemapGallery`.
-***REMOVED******REMOVED***/ - Parameter viewModel: The view model used by the `BasemapGallery`.
-***REMOVED***public init(viewModel: BasemapGalleryViewModel? = nil) {
-***REMOVED******REMOVED***self.viewModel = viewModel ?? BasemapGalleryViewModel()
+***REMOVED******REMOVED***/ Creates a `BasemapGallery`. Uses the given array of basemap gallery items.
+***REMOVED******REMOVED***/ - Remark: If `items` is empty, ArcGIS Online's developer basemaps will
+***REMOVED******REMOVED***/ be loaded and added to `items`.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - geoModel: A geo model.
+***REMOVED******REMOVED***/   - items: A list of pre-defined base maps to display.
+***REMOVED***public init(
+***REMOVED******REMOVED***geoModel: GeoModel? = nil,
+***REMOVED******REMOVED***items: [BasemapGalleryItem] = []
+***REMOVED***) {
+***REMOVED******REMOVED***viewModel = BasemapGalleryViewModel(geoModel: geoModel, items: items)
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ Creates a `BasemapGallery`.  The portal will be used to to retrieve basemaps.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - geoModel: A geo model.
+***REMOVED******REMOVED***/   - portal: The portal to use to load basemaps.
+***REMOVED***init(
+***REMOVED******REMOVED***_ geoModel: GeoModel? = nil,
+***REMOVED******REMOVED***portal: Portal
+***REMOVED***) {
+***REMOVED******REMOVED***viewModel = BasemapGalleryViewModel(geoModel, portal: portal)
+***REMOVED***
+
 ***REMOVED******REMOVED***/ The view model used by the view. The `BasemapGalleryViewModel` manages the state
 ***REMOVED******REMOVED***/ of the `BasemapGallery`. The view observes `BasemapGalleryViewModel` for changes
 ***REMOVED******REMOVED***/ in state. The view updates the state of the `BasemapGalleryViewModel` in response to
 ***REMOVED******REMOVED***/ user action.
-***REMOVED***@ObservedObject
-***REMOVED***public var viewModel: BasemapGalleryViewModel
+***REMOVED***@ObservedObject private var viewModel: BasemapGalleryViewModel
 ***REMOVED***
 ***REMOVED******REMOVED***/ The style of the basemap gallery. The gallery can be displayed as a list, grid, or automatically
 ***REMOVED******REMOVED***/ switch between the two based on-screen real estate. Defaults to ``BasemapGallery/Style/automatic``.
@@ -72,12 +89,10 @@ public struct BasemapGallery: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether to show an error alert.
-***REMOVED***@State
-***REMOVED***private var showErrorAlert = false
+***REMOVED***@State private var showErrorAlert = false
 ***REMOVED***
 ***REMOVED******REMOVED***/ The current alert item to display.
-***REMOVED***@State
-***REMOVED***private var alertItem: AlertItem?
+***REMOVED***@State private var alertItem: AlertItem?
 ***REMOVED***
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***makeGalleryView()
@@ -209,10 +224,10 @@ extension AlertItem {
 ***REMOVED******REMOVED***let message: String
 
 ***REMOVED******REMOVED***switch (spatialReferenceMismatchError.basemapSpatialReference, spatialReferenceMismatchError.geoModelSpatialReference) {
-***REMOVED******REMOVED***case (.some(let basemapSpatialReference), .some(let geoModelSpatialReference)):
-***REMOVED******REMOVED******REMOVED***message = "The spatial reference of the basemap: \(basemapSpatialReference.description) does not match that of the geomodel: \(geoModelSpatialReference.description)."
+***REMOVED******REMOVED***case (.some(_), .some(_)):
+***REMOVED******REMOVED******REMOVED***message = "The basemap has a spatial reference that is incompatible with the map."
 ***REMOVED******REMOVED***case (_, .none):
-***REMOVED******REMOVED******REMOVED***message = "The geo model does not have a spatial reference."
+***REMOVED******REMOVED******REMOVED***message = "The map does not have a spatial reference."
 ***REMOVED******REMOVED***case (.none, _):
 ***REMOVED******REMOVED******REMOVED***message = "The basemap does not have a spatial reference."
 ***REMOVED***
