@@ -49,7 +49,7 @@ extension View {
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***.onPreferenceChange(SizePreferenceKey.self, perform: perform)
 ***REMOVED***
-
+***REMOVED***
 ***REMOVED******REMOVED***/ View modifier used to denote the view is selected.
 ***REMOVED******REMOVED***/ - Parameter isSelected: `true` if the view is selected, `false` otherwise.
 ***REMOVED******REMOVED***/ - Returns: The modified view.
