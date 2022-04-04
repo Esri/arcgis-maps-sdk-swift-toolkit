@@ -55,7 +55,7 @@ public struct BasemapGallery: View {
 ***REMOVED***) {
 ***REMOVED******REMOVED***viewModel = BasemapGalleryViewModel(geoModel, portal: portal)
 ***REMOVED***
-
+***REMOVED***
 ***REMOVED******REMOVED***/ The view model used by the view. The `BasemapGalleryViewModel` manages the state
 ***REMOVED******REMOVED***/ of the `BasemapGallery`. The view observes `BasemapGalleryViewModel` for changes
 ***REMOVED******REMOVED***/ in state. The view updates the state of the `BasemapGalleryViewModel` in response to
