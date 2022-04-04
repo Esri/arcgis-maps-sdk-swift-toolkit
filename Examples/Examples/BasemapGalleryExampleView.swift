@@ -20,8 +20,7 @@ struct BasemapGalleryExampleView: View {
 ***REMOVED***let map: Map
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether to show the basemap gallery.
-***REMOVED***@State
-***REMOVED***private var showBasemapGallery: Bool = false
+***REMOVED***@State private var showBasemapGallery: Bool = false
 ***REMOVED***
 ***REMOVED******REMOVED***/ The initial viewpoint of the map.
 ***REMOVED***let initialViewpoint = Viewpoint(
