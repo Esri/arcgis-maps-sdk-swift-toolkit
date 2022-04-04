@@ -20,8 +20,7 @@ struct BasemapGalleryExampleView: View {
     let map: Map
     
     /// A Boolean value indicating whether to show the basemap gallery.
-    @State
-    private var showBasemapGallery: Bool = false
+    @State private var showBasemapGallery: Bool = false
     
     /// The initial viewpoint of the map.
     let initialViewpoint = Viewpoint(
