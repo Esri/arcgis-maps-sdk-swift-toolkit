@@ -30,7 +30,7 @@ struct BasemapGalleryExampleView: View {
     
     /// The initial list of basemaps.
     private let basemaps = initialBasemaps()
-
+    
     init() {
         self.map = Map(basemapStyle: .arcGISImagery)
     }
