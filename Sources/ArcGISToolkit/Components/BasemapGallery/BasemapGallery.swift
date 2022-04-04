@@ -55,7 +55,7 @@ public struct BasemapGallery: View {
     ) {
         viewModel = BasemapGalleryViewModel(geoModel, portal: portal)
     }
-
+    
     /// The view model used by the view. The `BasemapGalleryViewModel` manages the state
     /// of the `BasemapGallery`. The view observes `BasemapGalleryViewModel` for changes
     /// in state. The view updates the state of the `BasemapGalleryViewModel` in response to
