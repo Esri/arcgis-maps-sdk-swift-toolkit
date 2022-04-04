@@ -29,7 +29,7 @@ struct BasemapGalleryExampleView: View {
 ***REMOVED***)
 ***REMOVED***
 ***REMOVED******REMOVED***/ The initial list of basemaps.
-***REMOVED***private let basemaps = Self.initialBasemaps()
+***REMOVED***private let basemaps = initialBasemaps()
 
 ***REMOVED***init() {
 ***REMOVED******REMOVED***self.map = Map(basemapStyle: .arcGISImagery)
