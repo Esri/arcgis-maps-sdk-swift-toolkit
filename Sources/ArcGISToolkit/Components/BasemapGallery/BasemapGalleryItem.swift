@@ -56,9 +56,6 @@ public class BasemapGalleryItem: ObservableObject {
         }
     }
     
-    /// The error generated loading the basemap, if any.
-    @Published private(set) var loadBasemapError: Error? = nil
-    
     /// The basemap represented by `BasemapGalleryItem`.
     public let basemap: Basemap
     
@@ -70,14 +67,17 @@ public class BasemapGalleryItem: ObservableObject {
     
     /// The thumbnail used to represent the `basemap`.
     @Published public private(set) var thumbnail: UIImage?
-    
-    /// A Boolean value indicating whether the `basemap` or it's base layers are being loaded.
-    @Published private(set) var isBasemapLoading = true
-    
+
     /// The spatial reference status of the item. This is set via a call to
     /// ``updateSpatialReferenceStatus(_:)``.
     @Published public private(set) var spatialReferenceStatus: SpatialReferenceStatus = .unknown
     
+    /// A Boolean value indicating whether the `basemap` or it's base layers are being loaded.
+    @Published private(set) var isBasemapLoading = true
+
+    /// The error generated loading the basemap, if any.
+    @Published private(set) var loadBasemapError: Error? = nil
+
     /// The spatial reference of ``basemap``. This will be `nil` until the
     /// basemap's base layers have been loaded by
     /// ``updateSpatialReferenceStatus(_:)``.
