@@ -23,7 +23,9 @@ public enum ScalebarUnits {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Get multiplier
-***REMOVED***private static func multiplierAndMagnitudeForDistance(distance: Double) -> (multiplier: Double, magnitude: Double) {
+***REMOVED***private static func multiplierAndMagnitudeForDistance(
+***REMOVED******REMOVED***distance: Double) -> (multiplier: Double, magnitude: Double
+***REMOVED***) {
 ***REMOVED******REMOVED***let magnitude = pow(10, floor(log10(distance)))
 ***REMOVED******REMOVED***let residual = distance / Double(magnitude)
 ***REMOVED******REMOVED***let multiplier: Double = ScalebarUnits.roundNumberMultipliers.filter { $0 <= residual ***REMOVED***.last ?? 0
@@ -59,10 +61,12 @@ public enum ScalebarUnits {
 ***REMOVED******REMOVED***return roundNumber
 ***REMOVED***
 ***REMOVED***
-***REMOVED***internal static func numSegmentsForDistance(distance: Double, maxNumSegments: Int) -> Int {
-***REMOVED******REMOVED******REMOVED*** this function returns the best number of segments so that we get relatively round
-***REMOVED******REMOVED******REMOVED*** numbers when the distance is divided up.
-***REMOVED******REMOVED***
+***REMOVED******REMOVED***/ This function returns the best number of segments so that we get relatively round numbers when the
+***REMOVED******REMOVED***/ distance is divided up.
+***REMOVED***internal static func numSegmentsForDistance(
+***REMOVED******REMOVED***distance: Double,
+***REMOVED******REMOVED***maxNumSegments: Int
+***REMOVED***) -> Int {
 ***REMOVED******REMOVED***let mm = multiplierAndMagnitudeForDistance(distance: distance)
 ***REMOVED******REMOVED***let options = segmentOptionsForMultiplier(multiplier: mm.multiplier)
 ***REMOVED******REMOVED***let num = options.filter { $0 <= maxNumSegments ***REMOVED***.last ?? 1
@@ -76,14 +80,11 @@ public enum ScalebarUnits {
 ***REMOVED***internal func linearUnitsForDistance(distance: Double) -> LinearUnit {
 ***REMOVED******REMOVED***switch self {
 ***REMOVED******REMOVED***case .imperial:
-***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***if distance >= 2640 {
 ***REMOVED******REMOVED******REMOVED******REMOVED***return LinearUnit.miles
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***return LinearUnit.feet
-***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***case .metric:
-***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***if distance >= 1000 {
 ***REMOVED******REMOVED******REMOVED******REMOVED***return LinearUnit.kilometers
 ***REMOVED******REMOVED***
@@ -91,7 +92,9 @@ public enum ScalebarUnits {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED***private static func segmentOptionsForMultiplier(multiplier: Double) -> [Int] {
+***REMOVED***private static func segmentOptionsForMultiplier(
+***REMOVED******REMOVED***multiplier: Double
+***REMOVED***) -> [Int] {
 ***REMOVED******REMOVED***switch multiplier {
 ***REMOVED******REMOVED***case 1:
 ***REMOVED******REMOVED******REMOVED***return [1, 2, 4, 5]

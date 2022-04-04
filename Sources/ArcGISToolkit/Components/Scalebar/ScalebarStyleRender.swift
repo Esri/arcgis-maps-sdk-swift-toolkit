@@ -17,7 +17,7 @@ extension Scalebar {
 ***REMOVED***var alternatingBarStyleRender: some View {
 ***REMOVED******REMOVED***VStack(spacing: Scalebar.labelYPad) {
 ***REMOVED******REMOVED******REMOVED***HStack(spacing: -lineWidth) {
-***REMOVED******REMOVED******REMOVED******REMOVED***ForEach(viewModel.segments, id: \Scalebar.Segment.index) {
+***REMOVED******REMOVED******REMOVED******REMOVED***ForEach(viewModel.labels.dropFirst(), id: \.index) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Rectangle()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fill($0.index % 2 == 0 ? fillColor1 : fillColor2)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.border(
@@ -37,11 +37,13 @@ extension Scalebar {
 ***REMOVED******REMOVED******REMOVED******REMOVED***radius: shadowRadius
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***ZStack {
-***REMOVED******REMOVED******REMOVED******REMOVED***ForEach(viewModel.segments, id: \Scalebar.Segment.index) {
+***REMOVED******REMOVED******REMOVED******REMOVED***ForEach(viewModel.labels, id: \.index) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text($0.text)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(Scalebar.font.Font)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.shadow(color: textShadowColor, radius: shadowRadius)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.position(x: $0.xOffset, y: $0.yOffset)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.scalebarText(self)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.position(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***x: $0.xOffset,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***y: ScalebarLabel.yOffset
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
@@ -59,20 +61,13 @@ extension Scalebar {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***height: barFrameHeight,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***alignment: .leading
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***.cornerRadius(lineCornerRadius)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.shadow(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***color: shadowColor,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***radius: shadowRadius
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED***.cornerRadius(lineCornerRadius)
-***REMOVED******REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED******REMOVED***Text("\($viewModel.displayLengthString.wrappedValue) \($viewModel.displayUnit.wrappedValue?.abbreviation ?? "")")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(Scalebar.font.Font)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.shadow(color: textShadowColor, radius: shadowRadius)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onSizeChange {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***finalLengthWidth = $0.width
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .center)
-***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***Text(viewModel.labels.last?.text ?? "")
+***REMOVED******REMOVED******REMOVED******REMOVED***.scalebarText(self)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -105,20 +100,22 @@ extension Scalebar {
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.frame(height: lineFrameHeight)
-***REMOVED******REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED******REMOVED***Text("\($viewModel.displayLengthString.wrappedValue) \($viewModel.displayUnit.wrappedValue?.abbreviation ?? "")")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(Scalebar.font.Font)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.shadow(color: textShadowColor, radius: shadowRadius)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onSizeChange {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***finalLengthWidth = $0.width
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .center)
-***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***Text(viewModel.labels.last?.text ?? "")
+***REMOVED******REMOVED******REMOVED******REMOVED***.scalebarText(self)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var dualUnitLineStyleRender: some View {
 ***REMOVED******REMOVED***VStack(spacing: Scalebar.labelYPad) {
+***REMOVED******REMOVED******REMOVED***ZStack {
+***REMOVED******REMOVED******REMOVED******REMOVED***Text(viewModel.labels.last?.text ?? "")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.scalebarText(self)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.position(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***x: viewModel.labels.last?.xOffset ?? .zero,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***y: ScalebarLabel.yOffset
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(height: Scalebar.fontHeight)
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***GeometryReader { geoProxy in
 ***REMOVED******REMOVED******REMOVED******REMOVED***ZStack(alignment: .bottom) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Path { path in
@@ -126,7 +123,7 @@ extension Scalebar {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let maxX = geoProxy.size.width
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let maxY = geoProxy.size.height
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let midY = maxY / 2
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let alternateUnitX = viewModel.alternateUnitLength
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let alternateUnitX = viewModel.alternateUnit.screenLength
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Leading vertical bar
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***path.move(to: CGPoint(x: zero, y: zero))
@@ -161,12 +158,14 @@ extension Scalebar {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.frame(height: barFrameHeight)
 ***REMOVED******REMOVED******REMOVED***ZStack {
-***REMOVED******REMOVED******REMOVED******REMOVED***Text("0")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(Scalebar.font.Font)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.shadow(color: textShadowColor, radius: shadowRadius)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.offset(x: -10)
+***REMOVED******REMOVED******REMOVED******REMOVED***Text(viewModel.alternateUnit.label)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.scalebarText(self)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.position(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***x: viewModel.alternateUnit.screenLength,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***y: ScalebarLabel.yOffset
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(height: Scalebar.fontHeight)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .leading)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -175,18 +174,13 @@ extension Scalebar {
 ***REMOVED******REMOVED******REMOVED***GeometryReader { geoProxy in
 ***REMOVED******REMOVED******REMOVED******REMOVED***ZStack(alignment: .bottom) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Path { path in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let segments = viewModel.segments
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let segments = viewModel.labels
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let zero = Double.zero
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let maxX = geoProxy.size.width
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let maxY = geoProxy.size.height
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***path.move(to: CGPoint(x: zero, y: zero))
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***path.addLine(to: CGPoint(x: zero, y: maxY))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***path.move(to: CGPoint(x: zero, y: maxY))
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***path.addLine(to: CGPoint(x: maxX, y: maxY))
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***path.addLine(to: CGPoint(x: maxX, y: zero))
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for segment in segments {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if segment.index == segments.last?.index {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***continue
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let segmentX = segment.xOffset
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***path.move(to: CGPoint(x: segmentX, y: zero))
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***path.addLine(to: CGPoint(x: segmentX, y: maxY))
@@ -209,25 +203,12 @@ extension Scalebar {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.frame(height: lineFrameHeight)
 ***REMOVED******REMOVED******REMOVED***ZStack {
-***REMOVED******REMOVED******REMOVED******REMOVED***ForEach(viewModel.segments, id: \Scalebar.Segment.index) {
+***REMOVED******REMOVED******REMOVED******REMOVED***ForEach(viewModel.labels, id: \.index) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text($0.text)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(Scalebar.font.Font)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.shadow(color: textShadowColor, radius: shadowRadius)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.position(x: $0.xOffset, y: $0.yOffset)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.scalebarText(self)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.position(x: $0.xOffset, y: ScalebarLabel.yOffset)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED***
-***REMOVED***
-
-extension Scalebar {
-***REMOVED***struct Segment {
-***REMOVED******REMOVED***var index: Int
-***REMOVED******REMOVED***var segmentScreenLength: CGFloat
-***REMOVED******REMOVED***var xOffset: CGFloat
-***REMOVED******REMOVED***var yOffset: CGFloat
-***REMOVED******REMOVED***var segmentMapLength: Double
-***REMOVED******REMOVED***var text: String
-***REMOVED******REMOVED***var textWidth: CGFloat
 ***REMOVED***
 ***REMOVED***

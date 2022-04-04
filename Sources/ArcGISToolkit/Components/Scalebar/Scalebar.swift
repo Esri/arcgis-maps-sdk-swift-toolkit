@@ -23,8 +23,6 @@ public struct Scalebar: View {
 ***REMOVED******REMOVED***/ The vertical amount of space used by the scalebar.
 ***REMOVED***@State private var height: Double = 50
 ***REMOVED***
-***REMOVED***@State internal var finalLengthWidth: Double = .zero
-***REMOVED***
 ***REMOVED***private var alignment: ScalebarAlignment
 ***REMOVED***
 ***REMOVED***internal var lineColor = Color.white
@@ -121,7 +119,7 @@ public struct Scalebar: View {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***internal static var font: (Font: Font, UIFont: UIFont) {
+***REMOVED***internal static var font: (font: Font, uiFont: UIFont) {
 ***REMOVED******REMOVED***let size = 10.0
 ***REMOVED******REMOVED***let uiFont = UIFont.systemFont(
 ***REMOVED******REMOVED******REMOVED***ofSize: size,
@@ -129,6 +127,10 @@ public struct Scalebar: View {
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***let font = Font(uiFont as CTFont)
 ***REMOVED******REMOVED***return (font, uiFont)
+***REMOVED***
+***REMOVED***
+***REMOVED***internal static var fontHeight: Double {
+***REMOVED******REMOVED***return "".size(withAttributes: [.font: Scalebar.font.uiFont]).height
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The spacing between labels and the scalebar.
@@ -149,7 +151,6 @@ public struct Scalebar: View {
 ***REMOVED***
 ***REMOVED***internal static let lineCap = CGLineCap.round
 ***REMOVED***
-***REMOVED***internal var fontHeight: CGFloat = 0
 ***REMOVED***internal var zeroStringWidth: CGFloat = 0
 ***REMOVED***internal var maxRightUnitsPad: CGFloat = 0
 ***REMOVED***
@@ -159,4 +160,3 @@ public struct Scalebar: View {
 ***REMOVED******REMOVED***/  always be visible
 ***REMOVED***private let minScale: Double = 0
 ***REMOVED***
-

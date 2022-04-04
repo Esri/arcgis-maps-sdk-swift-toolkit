@@ -24,20 +24,29 @@ final class ScalebarViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED***@Published var displayUnit: LinearUnit? = nil
 ***REMOVED***
-***REMOVED***@Published var lineMapLength: Double = .zero
+***REMOVED***@Published var labels = [ScalebarLabel]()
 ***REMOVED***
-***REMOVED***@Published var segments = [Scalebar.Segment]()
+***REMOVED***@Published var lineMapLength: Double = .zero
 ***REMOVED***
 ***REMOVED***var visibleAreaSubject = PassthroughSubject<Polygon?, Never>()
 ***REMOVED***
-***REMOVED***private var visibleAreaCancellable: AnyCancellable?
+***REMOVED******REMOVED***/ Set a minScale if you only want the scalebar to appear when you reach a large enough scale maybe
+***REMOVED******REMOVED***/  something like 10_000_000. This could be useful because the scalebar is really only accurate for
+***REMOVED******REMOVED***/  the center of the map on smaller scales (when zoomed way out). A minScale of 0 means it will
+***REMOVED******REMOVED***/  always be visible
+***REMOVED***private let minScale: Double = 0
 ***REMOVED***
 ***REMOVED******REMOVED***/ The amount of time to wait between value calculations.
 ***REMOVED***private var delay = DispatchQueue.SchedulerTimeType.Stride.seconds(0.05)
 ***REMOVED***
+***REMOVED***private var geodeticCurveType: GeometryEngine.GeodeticCurveType = .geodesic
+***REMOVED***
 ***REMOVED***private var spatialReference: SpatialReference? = .wgs84
 ***REMOVED***
 ***REMOVED***private var targetWidth: Double
+***REMOVED***
+***REMOVED******REMOVED***/ Unit of measure in use.
+***REMOVED***private var units: ScalebarUnits
 ***REMOVED***
 ***REMOVED***private var unitsPerPoint: Binding<Double?>
 ***REMOVED***
@@ -50,16 +59,7 @@ final class ScalebarViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ Acts as a data provider of the current scale.
 ***REMOVED***private var visibleArea: Binding<Polygon?>
 ***REMOVED***
-***REMOVED******REMOVED***/ Unit of measure in use.
-***REMOVED***private var units: ScalebarUnits
-***REMOVED***
-***REMOVED***private var geodeticCurveType: GeometryEngine.GeodeticCurveType = .geodesic
-***REMOVED***
-***REMOVED******REMOVED***/ Set a minScale if you only want the scalebar to appear when you reach a large enough scale maybe
-***REMOVED******REMOVED***/  something like 10_000_000. This could be useful because the scalebar is really only accurate for
-***REMOVED******REMOVED***/  the center of the map on smaller scales (when zoomed way out). A minScale of 0 means it will
-***REMOVED******REMOVED***/  always be visible
-***REMOVED***private let minScale: Double = 0
+***REMOVED***private var visibleAreaCancellable: AnyCancellable?
 ***REMOVED***
 ***REMOVED***init(
 ***REMOVED******REMOVED***_ spatialReference: SpatialReference? = .wgs84,
@@ -69,7 +69,6 @@ final class ScalebarViewModel: ObservableObject {
 ***REMOVED******REMOVED***_ useGeodeticCalculations: Bool = true,
 ***REMOVED******REMOVED***_ viewpoint: Binding<Viewpoint?>,
 ***REMOVED******REMOVED***_ visibleArea: Binding<Polygon?>
-***REMOVED******REMOVED***
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.spatialReference = spatialReference
 ***REMOVED******REMOVED***self.targetWidth = targetWidth
@@ -86,6 +85,52 @@ final class ScalebarViewModel: ObservableObject {
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***updateScaleDisplay()
+***REMOVED***
+***REMOVED***
+***REMOVED***private func updateLabels() {
+***REMOVED******REMOVED***let lineDisplayLength = displayLength
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Use a string with at least a few characters in case the number string
+***REMOVED******REMOVED******REMOVED*** only has 1.
+***REMOVED******REMOVED******REMOVED*** The dividers will be decimal values and we want to make sure they all
+***REMOVED******REMOVED******REMOVED*** fit very basic hueristics.
+***REMOVED******REMOVED***let minSegmentTestString = (displayLengthString.count > 3) ? displayLengthString : "9.9"
+***REMOVED******REMOVED******REMOVED*** Use 1.5 because the last segment, the text is right justified insted
+***REMOVED******REMOVED******REMOVED*** of center, which makes it harder to squeeze text in.
+***REMOVED******REMOVED***let minSegmentWidth = (minSegmentTestString.size(withAttributes: [.font: Scalebar.font.uiFont]).width * 1.5) + (Scalebar.labelXPad * 2)
+***REMOVED******REMOVED***var maxNumSegments = Int(lineDisplayLength / minSegmentWidth)
+***REMOVED******REMOVED***maxNumSegments = min(maxNumSegments, 4) ***REMOVED*** cap it at 4
+***REMOVED******REMOVED***let numSegments: Int = ScalebarUnits.numSegmentsForDistance(distance: lineMapLength, maxNumSegments: maxNumSegments)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let segmentScreenLength: CGFloat = (lineDisplayLength / CGFloat(numSegments))
+***REMOVED******REMOVED***var currSegmentX: CGFloat = 0
+***REMOVED******REMOVED***var labels = [ScalebarLabel]()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***labels.append(
+***REMOVED******REMOVED******REMOVED***ScalebarLabel(
+***REMOVED******REMOVED******REMOVED******REMOVED***index: -1,
+***REMOVED******REMOVED******REMOVED******REMOVED***xOffset: .zero,
+***REMOVED******REMOVED******REMOVED******REMOVED***text: "0"
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***for index in 0..<numSegments {
+***REMOVED******REMOVED******REMOVED***currSegmentX += segmentScreenLength
+***REMOVED******REMOVED******REMOVED***let segmentMapLength = Double((segmentScreenLength * CGFloat(index + 1)) / lineDisplayLength) * lineMapLength
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***var segmentText = Scalebar.numberFormatter.string(from: NSNumber(value: segmentMapLength)) ?? ""
+***REMOVED******REMOVED******REMOVED***if index == numSegments - 1, let displayUnit = displayUnit?.abbreviation {
+***REMOVED******REMOVED******REMOVED******REMOVED***segmentText += " \(displayUnit)"
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***let label = ScalebarLabel(
+***REMOVED******REMOVED******REMOVED******REMOVED***index: index,
+***REMOVED******REMOVED******REMOVED******REMOVED***xOffset: currSegmentX,
+***REMOVED******REMOVED******REMOVED******REMOVED***text: segmentText
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***labels.append(label)
+***REMOVED***
+***REMOVED******REMOVED***self.labels = labels
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***private func updateScaleDisplay() {
@@ -184,57 +229,12 @@ final class ScalebarViewModel: ObservableObject {
 ***REMOVED******REMOVED******REMOVED***from: NSNumber(value: lineMapLength)
 ***REMOVED******REMOVED***) ?? ""
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***updateSegments()
+***REMOVED******REMOVED***updateLabels()
 ***REMOVED***
 ***REMOVED***
-***REMOVED***func updateSegments() {
-***REMOVED******REMOVED***let lineDisplayLength = displayLength
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Use a string with at least a few characters in case the number string
-***REMOVED******REMOVED******REMOVED*** only has 1.
-***REMOVED******REMOVED******REMOVED*** The dividers will be decimal values and we want to make sure they all
-***REMOVED******REMOVED******REMOVED*** fit very basic hueristics.
-***REMOVED******REMOVED***let minSegmentTestString = (displayLengthString.count > 3) ? displayLengthString : "9.9"
-***REMOVED******REMOVED******REMOVED*** Use 1.5 because the last segment, the text is right justified insted
-***REMOVED******REMOVED******REMOVED*** of center, which makes it harder to squeeze text in.
-***REMOVED******REMOVED***let minSegmentWidth = (minSegmentTestString.size(withAttributes: [.font: Scalebar.font.UIFont]).width * 1.5) + (Scalebar.labelXPad * 2)
-***REMOVED******REMOVED***var maxNumSegments = Int(lineDisplayLength / minSegmentWidth)
-***REMOVED******REMOVED***maxNumSegments = min(maxNumSegments, 4) ***REMOVED*** cap it at 4
-***REMOVED******REMOVED***let numSegments: Int = ScalebarUnits.numSegmentsForDistance(distance: lineMapLength, maxNumSegments: maxNumSegments)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***let segmentScreenLength: CGFloat = (lineDisplayLength / CGFloat(numSegments))
-***REMOVED******REMOVED***var currSegmentX: CGFloat = 0
-***REMOVED******REMOVED***var segments = [Scalebar.Segment]()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***for index in 0..<numSegments {
-***REMOVED******REMOVED******REMOVED***currSegmentX += segmentScreenLength
-***REMOVED******REMOVED******REMOVED***let segmentMapLength = Double((segmentScreenLength * CGFloat(index + 1)) / lineDisplayLength) * lineMapLength
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***var segmentText = Scalebar.numberFormatter.string(from: NSNumber(value: segmentMapLength)) ?? ""
-***REMOVED******REMOVED******REMOVED***if index == numSegments - 1, let displayUnit = displayUnit?.abbreviation {
-***REMOVED******REMOVED******REMOVED******REMOVED***segmentText += " \(displayUnit)"
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***let segmentTextSize = segmentText.size(withAttributes: [.font: Scalebar.font.UIFont])
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***let segment = Scalebar.Segment(
-***REMOVED******REMOVED******REMOVED******REMOVED***index: index,
-***REMOVED******REMOVED******REMOVED******REMOVED***segmentScreenLength: segmentScreenLength,
-***REMOVED******REMOVED******REMOVED******REMOVED***xOffset: currSegmentX,
-***REMOVED******REMOVED******REMOVED******REMOVED***yOffset: segmentTextSize.height / 2.0,
-***REMOVED******REMOVED******REMOVED******REMOVED***segmentMapLength: segmentMapLength,
-***REMOVED******REMOVED******REMOVED******REMOVED***text: segmentText,
-***REMOVED******REMOVED******REMOVED******REMOVED***textWidth: segmentTextSize.width
-***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***segments.append(segment)
-***REMOVED******REMOVED******REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***self.segments = segments
-***REMOVED***
-***REMOVED***
-***REMOVED***var alternateUnitLength: CGFloat {
+***REMOVED***var alternateUnit: (screenLength: CGFloat, label: String) {
 ***REMOVED******REMOVED***guard let displayUnit = displayUnit else {
-***REMOVED******REMOVED******REMOVED***return .zero
+***REMOVED******REMOVED******REMOVED***return (.zero, "")
 ***REMOVED***
 ***REMOVED******REMOVED***let otherUnit = (units == ScalebarUnits.imperial) ? ScalebarUnits.metric : ScalebarUnits.imperial
 ***REMOVED******REMOVED***let otherMapBaseLength = displayUnit.convert(to: otherUnit.baseUnits(), value: lineMapLength)
@@ -245,6 +245,12 @@ final class ScalebarViewModel: ObservableObject {
 ***REMOVED******REMOVED***let displayFactor = lineMapLength / Double(displayLength)
 ***REMOVED******REMOVED***let convertedDisplayFactor = displayUnit.convert(to: otherDisplayUnits, value: displayFactor)
 ***REMOVED******REMOVED***let otherLineScreenLength = CGFloat(otherLineMapLength / convertedDisplayFactor)
-***REMOVED******REMOVED***return otherLineScreenLength
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let numberString = Scalebar.numberFormatter.string(from: NSNumber(value: otherLineMapLength)) ?? ""
+***REMOVED******REMOVED***let bottomUnitsText = " \(otherDisplayUnits.abbreviation)"
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***let bottomText = "\(numberString)\(bottomUnitsText)"
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***return (otherLineScreenLength, bottomText)
 ***REMOVED***
 ***REMOVED***
