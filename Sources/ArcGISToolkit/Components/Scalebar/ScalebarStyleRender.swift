@@ -17,7 +17,7 @@ extension Scalebar {
     var alternatingBarStyleRender: some View {
         VStack(spacing: Scalebar.labelYPad) {
             HStack(spacing: -lineWidth) {
-                ForEach(viewModel.segments, id: \Scalebar.Segment.index) {
+                ForEach(viewModel.labels.dropFirst(), id: \.index) {
                     Rectangle()
                         .fill($0.index % 2 == 0 ? fillColor1 : fillColor2)
                         .border(
@@ -37,11 +37,13 @@ extension Scalebar {
                 radius: shadowRadius
             )
             ZStack {
-                ForEach(viewModel.segments, id: \Scalebar.Segment.index) {
+                ForEach(viewModel.labels, id: \.index) {
                     Text($0.text)
-                        .font(Scalebar.font.Font)
-                        .shadow(color: textShadowColor, radius: shadowRadius)
-                        .position(x: $0.xOffset, y: $0.yOffset)
+                        .scalebarText(self)
+                        .position(
+                            x: $0.xOffset,
+                            y: ScalebarLabel.yOffset
+                        )
                 }
             }
         }
@@ -59,20 +61,13 @@ extension Scalebar {
                     height: barFrameHeight,
                     alignment: .leading
                 )
+                .cornerRadius(lineCornerRadius)
                 .shadow(
                     color: shadowColor,
                     radius: shadowRadius
                 )
-                .cornerRadius(lineCornerRadius)
-            HStack {
-                Text("\($viewModel.displayLengthString.wrappedValue) \($viewModel.displayUnit.wrappedValue?.abbreviation ?? "")")
-                    .font(Scalebar.font.Font)
-                    .shadow(color: textShadowColor, radius: shadowRadius)
-                    .onSizeChange {
-                        finalLengthWidth = $0.width
-                    }
-                    .frame(maxWidth: .infinity, alignment: .center)
-            }
+            Text(viewModel.labels.last?.text ?? "")
+                .scalebarText(self)
         }
     }
     
@@ -105,20 +100,22 @@ extension Scalebar {
                 )
             }
             .frame(height: lineFrameHeight)
-            HStack {
-                Text("\($viewModel.displayLengthString.wrappedValue) \($viewModel.displayUnit.wrappedValue?.abbreviation ?? "")")
-                    .font(Scalebar.font.Font)
-                    .shadow(color: textShadowColor, radius: shadowRadius)
-                    .onSizeChange {
-                        finalLengthWidth = $0.width
-                    }
-                    .frame(maxWidth: .infinity, alignment: .center)
-            }
+            Text(viewModel.labels.last?.text ?? "")
+                .scalebarText(self)
         }
     }
     
     var dualUnitLineStyleRender: some View {
         VStack(spacing: Scalebar.labelYPad) {
+            ZStack {
+                Text(viewModel.labels.last?.text ?? "")
+                    .scalebarText(self)
+                    .position(
+                        x: viewModel.labels.last?.xOffset ?? .zero,
+                        y: ScalebarLabel.yOffset
+                    )
+                    .frame(height: Scalebar.fontHeight)
+            }
             GeometryReader { geoProxy in
                 ZStack(alignment: .bottom) {
                     Path { path in
@@ -126,7 +123,7 @@ extension Scalebar {
                         let maxX = geoProxy.size.width
                         let maxY = geoProxy.size.height
                         let midY = maxY / 2
-                        let alternateUnitX = viewModel.alternateUnitLength
+                        let alternateUnitX = viewModel.alternateUnit.screenLength
                         
                         // Leading vertical bar
                         path.move(to: CGPoint(x: zero, y: zero))
@@ -161,12 +158,14 @@ extension Scalebar {
             }
             .frame(height: barFrameHeight)
             ZStack {
-                Text("0")
-                    .font(Scalebar.font.Font)
-                    .shadow(color: textShadowColor, radius: shadowRadius)
-                    .offset(x: -10)
+                Text(viewModel.alternateUnit.label)
+                    .scalebarText(self)
+                    .position(
+                        x: viewModel.alternateUnit.screenLength,
+                        y: ScalebarLabel.yOffset
+                    )
+                    .frame(height: Scalebar.fontHeight)
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
         }
     }
     
@@ -175,18 +174,13 @@ extension Scalebar {
             GeometryReader { geoProxy in
                 ZStack(alignment: .bottom) {
                     Path { path in
-                        let segments = viewModel.segments
+                        let segments = viewModel.labels
                         let zero = Double.zero
                         let maxX = geoProxy.size.width
                         let maxY = geoProxy.size.height
-                        path.move(to: CGPoint(x: zero, y: zero))
-                        path.addLine(to: CGPoint(x: zero, y: maxY))
+                        path.move(to: CGPoint(x: zero, y: maxY))
                         path.addLine(to: CGPoint(x: maxX, y: maxY))
-                        path.addLine(to: CGPoint(x: maxX, y: zero))
                         for segment in segments {
-                            if segment.index == segments.last?.index {
-                                continue
-                            }
                             let segmentX = segment.xOffset
                             path.move(to: CGPoint(x: segmentX, y: zero))
                             path.addLine(to: CGPoint(x: segmentX, y: maxY))
@@ -209,25 +203,12 @@ extension Scalebar {
             }
             .frame(height: lineFrameHeight)
             ZStack {
-                ForEach(viewModel.segments, id: \Scalebar.Segment.index) {
+                ForEach(viewModel.labels, id: \.index) {
                     Text($0.text)
-                        .font(Scalebar.font.Font)
-                        .shadow(color: textShadowColor, radius: shadowRadius)
-                        .position(x: $0.xOffset, y: $0.yOffset)
+                        .scalebarText(self)
+                        .position(x: $0.xOffset, y: ScalebarLabel.yOffset)
                 }
             }
         }
-    }
-}
-
-extension Scalebar {
-    struct Segment {
-        var index: Int
-        var segmentScreenLength: CGFloat
-        var xOffset: CGFloat
-        var yOffset: CGFloat
-        var segmentMapLength: Double
-        var text: String
-        var textWidth: CGFloat
     }
 }

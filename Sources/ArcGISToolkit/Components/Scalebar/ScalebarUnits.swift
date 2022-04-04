@@ -23,7 +23,9 @@ public enum ScalebarUnits {
     }
     
     /// Get multiplier
-    private static func multiplierAndMagnitudeForDistance(distance: Double) -> (multiplier: Double, magnitude: Double) {
+    private static func multiplierAndMagnitudeForDistance(
+        distance: Double) -> (multiplier: Double, magnitude: Double
+    ) {
         let magnitude = pow(10, floor(log10(distance)))
         let residual = distance / Double(magnitude)
         let multiplier: Double = ScalebarUnits.roundNumberMultipliers.filter { $0 <= residual }.last ?? 0
@@ -59,10 +61,12 @@ public enum ScalebarUnits {
         return roundNumber
     }
     
-    internal static func numSegmentsForDistance(distance: Double, maxNumSegments: Int) -> Int {
-        // this function returns the best number of segments so that we get relatively round
-        // numbers when the distance is divided up.
-        
+    /// This function returns the best number of segments so that we get relatively round numbers when the
+    /// distance is divided up.
+    internal static func numSegmentsForDistance(
+        distance: Double,
+        maxNumSegments: Int
+    ) -> Int {
         let mm = multiplierAndMagnitudeForDistance(distance: distance)
         let options = segmentOptionsForMultiplier(multiplier: mm.multiplier)
         let num = options.filter { $0 <= maxNumSegments }.last ?? 1
@@ -76,14 +80,11 @@ public enum ScalebarUnits {
     internal func linearUnitsForDistance(distance: Double) -> LinearUnit {
         switch self {
         case .imperial:
-            
             if distance >= 2640 {
                 return LinearUnit.miles
             }
             return LinearUnit.feet
-            
         case .metric:
-            
             if distance >= 1000 {
                 return LinearUnit.kilometers
             }
@@ -91,7 +92,9 @@ public enum ScalebarUnits {
         }
     }
     
-    private static func segmentOptionsForMultiplier(multiplier: Double) -> [Int] {
+    private static func segmentOptionsForMultiplier(
+        multiplier: Double
+    ) -> [Int] {
         switch multiplier {
         case 1:
             return [1, 2, 4, 5]
