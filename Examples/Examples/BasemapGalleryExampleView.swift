@@ -60,7 +60,7 @@ struct BasemapGalleryExampleView: View {
 ***REMOVED******REMOVED***]
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***return identifiers.map { identifier in
-***REMOVED******REMOVED******REMOVED***let url = URL(string: "https:***REMOVED***maps.arcgis.com/home/item.html?id=\(identifier)")!
+***REMOVED******REMOVED******REMOVED***let url = URL(string: "https:***REMOVED***www.arcgis.com/home/item.html?id=\(identifier)")!
 ***REMOVED******REMOVED******REMOVED***return BasemapGalleryItem(basemap: Basemap(item: PortalItem(url: url)!))
 ***REMOVED***
 ***REMOVED***
