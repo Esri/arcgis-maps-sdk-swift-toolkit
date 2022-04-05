@@ -60,7 +60,7 @@ struct BasemapGalleryExampleView: View {
         ]
         
         return identifiers.map { identifier in
-            let url = URL(string: "https://maps.arcgis.com/home/item.html?id=\(identifier)")!
+            let url = URL(string: "https://www.arcgis.com/home/item.html?id=\(identifier)")!
             return BasemapGalleryItem(basemap: Basemap(item: PortalItem(url: url)!))
         }
     }
