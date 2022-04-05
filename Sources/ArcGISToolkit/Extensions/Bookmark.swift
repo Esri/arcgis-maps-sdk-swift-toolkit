@@ -12,10 +12,17 @@
 ***REMOVED*** limitations under the License.
 
 ***REMOVED***
+import Foundation
+
+extension Bookmark: Equatable {
+***REMOVED***public static func == (lhs: Bookmark, rhs: Bookmark) -> Bool {
+***REMOVED******REMOVED***lhs.hashValue == rhs.hashValue
+***REMOVED***
 ***REMOVED***
 
-extension FloorLevel: Equatable {
-***REMOVED***public static func == (lhs: FloorLevel, rhs: FloorLevel) -> Bool {
-***REMOVED******REMOVED***lhs.id == rhs.id
+extension Bookmark: Hashable {
+***REMOVED***public func hash(into hasher: inout Hasher) {
+***REMOVED******REMOVED***hasher.combine(name)
+***REMOVED******REMOVED***hasher.combine(viewpoint)
 ***REMOVED***
 ***REMOVED***
