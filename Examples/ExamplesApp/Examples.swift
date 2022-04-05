@@ -36,6 +36,7 @@ extension ExampleList {
         name: "GeoView",
         examples: [
             AnyExample("Basemap Gallery", content: BasemapGalleryExampleView()),
+            AnyExample("Bookmarks", content: BookmarksExampleView()),
             AnyExample("Compass", content: CompassExampleView()),
             AnyExample("Floor Filter", content: FloorFilterExampleView()),
             AnyExample("Overview Map", content: OverviewMapExampleView()),
