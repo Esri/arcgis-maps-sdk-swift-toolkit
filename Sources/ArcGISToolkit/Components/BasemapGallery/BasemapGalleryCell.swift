@@ -86,7 +86,7 @@ struct BasemapGalleryCell: View {
 ***REMOVED***
 
 extension BasemapGalleryItem {
-***REMOVED******REMOVED***/ A Boolean denoting if the item has an error or not.
+***REMOVED******REMOVED***/ A Boolean value indicating whether the item has an error.
 ***REMOVED***var hasError: Bool {
 ***REMOVED******REMOVED***loadBasemapError != nil ||
 ***REMOVED******REMOVED***spatialReferenceStatus == .noMatch
