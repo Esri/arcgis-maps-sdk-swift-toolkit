@@ -18,91 +18,233 @@ import Foundation
 
 @MainActor
 final class ScalebarViewModel: ObservableObject {
+***REMOVED******REMOVED*** - MARK: Published vars
+***REMOVED***
+***REMOVED******REMOVED***/ The computed display length of the scalebar.
 ***REMOVED***@Published var displayLength: CGFloat = .zero
 ***REMOVED***
-***REMOVED***@Published var displayLengthString = ""
+***REMOVED******REMOVED***/ Indicates if the scalebar should be hidden or not.
+***REMOVED***@Published var isVisible: Bool
 ***REMOVED***
-***REMOVED***@Published var displayUnit: LinearUnit? = nil
-***REMOVED***
+***REMOVED******REMOVED***/ The current set of labels to be displayed by the scalebar.
 ***REMOVED***@Published var labels = [ScalebarLabel]()
 ***REMOVED***
-***REMOVED***@Published var lineMapLength: Double = .zero
+***REMOVED******REMOVED*** - MARK: Public vars
 ***REMOVED***
-***REMOVED***var visibleAreaSubject = PassthroughSubject<Polygon?, Never>()
+***REMOVED******REMOVED***/ A sreen length and displayable string for the equivalent length in the alternate unit.
+***REMOVED***var alternateUnit: (screenLength: CGFloat, label: String) {
+***REMOVED******REMOVED***guard let displayUnit = displayUnit else {
+***REMOVED******REMOVED******REMOVED***return (.zero, "")
 ***REMOVED***
-***REMOVED******REMOVED***/ Set a minScale if you only want the scalebar to appear when you reach a large enough scale maybe
-***REMOVED******REMOVED***/  something like 10_000_000. This could be useful because the scalebar is really only accurate for
-***REMOVED******REMOVED***/  the center of the map on smaller scales (when zoomed way out). A minScale of 0 means it will
-***REMOVED******REMOVED***/  always be visible
-***REMOVED***private let minScale: Double = 0
+***REMOVED******REMOVED***let altUnit: ScalebarUnits = units == .imperial ? .metric : .imperial
+***REMOVED******REMOVED***let altMapBaseLength = displayUnit.convert(
+***REMOVED******REMOVED******REMOVED***to: altUnit.baseLinearUnit,
+***REMOVED******REMOVED******REMOVED***value: lineMapLength
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***let altClosestBaseLength = altUnit.closestDistanceWithoutGoingOver(
+***REMOVED******REMOVED******REMOVED***to: altMapBaseLength,
+***REMOVED******REMOVED******REMOVED***units: altUnit.baseLinearUnit
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***let altDisplayUnits = altUnit.linearUnitsForDistance(
+***REMOVED******REMOVED******REMOVED***distance: altClosestBaseLength
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***let altMapLength = altUnit.baseLinearUnit.convert(
+***REMOVED******REMOVED******REMOVED***to: altDisplayUnits, value: altClosestBaseLength
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***let displayFactor = lineMapLength / displayLength
+***REMOVED******REMOVED***let convertedDisplayFactor = displayUnit.convert(
+***REMOVED******REMOVED******REMOVED***to: altDisplayUnits,
+***REMOVED******REMOVED******REMOVED***value: displayFactor
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***let altScreenLength = altMapLength / convertedDisplayFactor
+***REMOVED******REMOVED***let numberString = numberFormatter.string(
+***REMOVED******REMOVED******REMOVED***from: NSNumber(value: altMapLength)
+***REMOVED******REMOVED***) ?? ""
+***REMOVED******REMOVED***let bottomUnitsText = " \(altDisplayUnits.abbreviation)"
+***REMOVED******REMOVED***let label = "\(numberString)\(bottomUnitsText)"
+***REMOVED******REMOVED***return (altScreenLength, label)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ A subject to which viewpoint updates can be submitted.
+***REMOVED***var viewpointSubject = PassthroughSubject<Viewpoint?, Never>()
+***REMOVED***
+***REMOVED******REMOVED*** - MARK: Public methods
+***REMOVED***
+***REMOVED******REMOVED***/ A scalebar view model controls the underlying data used to render a scalebar.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - autoHide: Determines if the scalebar should automatically show & hide itself.
+***REMOVED******REMOVED***/   - minScale: A value of 0 indicates the scalebar segments should always recalculate.
+***REMOVED******REMOVED***/   - spatialReference: The map's spatial reference.
+***REMOVED******REMOVED***/   - style: The visual appearance of the scalebar.
+***REMOVED******REMOVED***/   - targetWidth: The screen width alloted to the scalebar.
+***REMOVED******REMOVED***/   - units: The units to be displayed in the scalebar.
+***REMOVED******REMOVED***/   - unitsPerPoint: The current number of device independent pixels to map display units.
+***REMOVED******REMOVED***/   - useGeodeticCalculations: Determines if a geodesic curve should be used to compute
+***REMOVED******REMOVED***/***REMOVED*** the scale.
+***REMOVED******REMOVED***/   - viewpoint: The map's current viewpoint.
+***REMOVED***init(
+***REMOVED******REMOVED***_ autoHide: Bool,
+***REMOVED******REMOVED***_ minScale: Double,
+***REMOVED******REMOVED***_ spatialReference: SpatialReference?,
+***REMOVED******REMOVED***_ style: ScalebarStyle,
+***REMOVED******REMOVED***_ targetWidth: Double,
+***REMOVED******REMOVED***_ units: ScalebarUnits,
+***REMOVED******REMOVED***_ unitsPerPoint: Binding<Double?>,
+***REMOVED******REMOVED***_ useGeodeticCalculations: Bool,
+***REMOVED******REMOVED***_ viewpoint: Viewpoint?
+***REMOVED***) {
+***REMOVED******REMOVED***self.isVisible = autoHide ? false : true
+***REMOVED******REMOVED***self.minScale = minScale
+***REMOVED******REMOVED***self.spatialReference = spatialReference
+***REMOVED******REMOVED***self.style = style
+***REMOVED******REMOVED***self.targetWidth = targetWidth
+***REMOVED******REMOVED***self.units = units
+***REMOVED******REMOVED***self.unitsPerPoint = unitsPerPoint
+***REMOVED******REMOVED***self.useGeodeticCalculations = useGeodeticCalculations
+***REMOVED******REMOVED***self.viewpoint = viewpoint
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***viewpointSubscription = viewpointSubject
+***REMOVED******REMOVED******REMOVED***.debounce(for: delay, scheduler: DispatchQueue.main)
+***REMOVED******REMOVED******REMOVED***.sink(receiveValue: { [weak self] in
+***REMOVED******REMOVED******REMOVED******REMOVED***guard let self = self else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***self.viewpoint = $0
+***REMOVED******REMOVED******REMOVED******REMOVED***self.updateScaleDisplay()
+***REMOVED******REMOVED******REMOVED******REMOVED***if autoHide {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.performVisibilityAnimation()
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***updateScaleDisplay()
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED*** - MARK: Private constants
 ***REMOVED***
 ***REMOVED******REMOVED***/ The amount of time to wait between value calculations.
-***REMOVED***private var delay = DispatchQueue.SchedulerTimeType.Stride.seconds(0.05)
+***REMOVED***private let delay = DispatchQueue.SchedulerTimeType.Stride.seconds(0.05)
 ***REMOVED***
-***REMOVED***private var geodeticCurveType: GeometryEngine.GeodeticCurveType = .geodesic
+***REMOVED******REMOVED***/ The speed at which to animate `isVisible` to `true`.
+***REMOVED***private let displaySpeed = 3.0
 ***REMOVED***
-***REMOVED***private var spatialReference: SpatialReference? = .wgs84
+***REMOVED******REMOVED***/ The curve type to use when performing scale calculations.
+***REMOVED***private let geodeticCurveType: GeometryEngine.GeodeticCurveType = .geodesic
 ***REMOVED***
+***REMOVED******REMOVED***/ The time to wait in seconds before animating `isVisible` to `false`.
+***REMOVED***private let hideTimeInterval = 1.75
+***REMOVED***
+***REMOVED******REMOVED***/ A `minScale` of 0 means the scalebar segments will always recalculate.
+***REMOVED***private let minScale: Double
+***REMOVED***
+***REMOVED******REMOVED***/ Converts numbers into a readable format.
+***REMOVED***private let numberFormatter: NumberFormatter = {
+***REMOVED******REMOVED***let numberFormatter = NumberFormatter()
+***REMOVED******REMOVED***numberFormatter.numberStyle = .decimal
+***REMOVED******REMOVED***numberFormatter.formatterBehavior = .behavior10_4
+***REMOVED******REMOVED***numberFormatter.maximumFractionDigits = 2
+***REMOVED******REMOVED***numberFormatter.minimumFractionDigits = 0
+***REMOVED******REMOVED***return numberFormatter
+***REMOVED***()
+***REMOVED***
+***REMOVED******REMOVED***/ The map's spatial reference.
+***REMOVED***private let spatialReference: SpatialReference?
+***REMOVED***
+***REMOVED******REMOVED***/ The visual appearance of the scalebar.
+***REMOVED***private let style: ScalebarStyle
+***REMOVED***
+***REMOVED******REMOVED*** - MARK: Private vars
+***REMOVED***
+***REMOVED******REMOVED***/ The timer to determine when to autohide the scalebar.
+***REMOVED***private var autoHideTimer: Timer?
+***REMOVED***
+***REMOVED******REMOVED***/ Determines the amount of display space to use based on the scalebar style.
+***REMOVED***private var availableLineDisplayLength: CGFloat {
+***REMOVED******REMOVED***switch style {
+***REMOVED******REMOVED***case .alternatingBar, .dualUnitLine, .graduatedLine:
+***REMOVED******REMOVED******REMOVED***let unitDisplayWidth = max(
+***REMOVED******REMOVED******REMOVED******REMOVED***" mi".size(withAttributes: [.font: Scalebar.font.uiFont]).width,
+***REMOVED******REMOVED******REMOVED******REMOVED***" km".size(withAttributes: [.font: Scalebar.font.uiFont]).width
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***return targetWidth - (Scalebar.lineWidth / 2.0) - unitDisplayWidth
+***REMOVED******REMOVED***case .bar, .line:
+***REMOVED******REMOVED******REMOVED***return targetWidth - Scalebar.lineWidth
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ The units to be displayed in the scalebar.
+***REMOVED***private var displayUnit: LinearUnit? = nil
+***REMOVED***
+***REMOVED******REMOVED***/ The length of the line to display in map units.
+***REMOVED***private var lineMapLength: Double = .zero
+***REMOVED***
+***REMOVED******REMOVED***/ The maximum width allowed for the scalebar.
 ***REMOVED***private var targetWidth: Double
 ***REMOVED***
 ***REMOVED******REMOVED***/ Unit of measure in use.
 ***REMOVED***private var units: ScalebarUnits
 ***REMOVED***
+***REMOVED******REMOVED***/ The current number of device independent pixels to map display units.
 ***REMOVED***private var unitsPerPoint: Binding<Double?>
 ***REMOVED***
 ***REMOVED******REMOVED***/ Allows a user to toggle geodetic calculations.
 ***REMOVED***private var useGeodeticCalculations: Bool
 ***REMOVED***
 ***REMOVED******REMOVED***/ Acts as a data provider of the current scale.
-***REMOVED***private var viewpoint: Binding<Viewpoint?>
+***REMOVED***private var viewpoint: Viewpoint?
 ***REMOVED***
-***REMOVED******REMOVED***/ Acts as a data provider of the current scale.
-***REMOVED***private var visibleArea: Binding<Polygon?>
+***REMOVED******REMOVED***/ A subscription to handle listening for viewpoint changes.
+***REMOVED***private var viewpointSubscription: AnyCancellable?
 ***REMOVED***
-***REMOVED***private var visibleAreaCancellable: AnyCancellable?
+***REMOVED******REMOVED*** - MARK: Private methods
 ***REMOVED***
-***REMOVED***init(
-***REMOVED******REMOVED***_ spatialReference: SpatialReference? = .wgs84,
-***REMOVED******REMOVED***_ targetWidth: Double,
-***REMOVED******REMOVED***_ units: ScalebarUnits = NSLocale.current.usesMetricSystem ? .metric : .imperial,
-***REMOVED******REMOVED***_ unitsPerPoint: Binding<Double?>,
-***REMOVED******REMOVED***_ useGeodeticCalculations: Bool = true,
-***REMOVED******REMOVED***_ viewpoint: Binding<Viewpoint?>,
-***REMOVED******REMOVED***_ visibleArea: Binding<Polygon?>
-***REMOVED***) {
-***REMOVED******REMOVED***self.spatialReference = spatialReference
-***REMOVED******REMOVED***self.targetWidth = targetWidth
-***REMOVED******REMOVED***self.units = units
-***REMOVED******REMOVED***self.unitsPerPoint = unitsPerPoint
-***REMOVED******REMOVED***self.useGeodeticCalculations = useGeodeticCalculations
-***REMOVED******REMOVED***self.viewpoint = viewpoint
-***REMOVED******REMOVED***self.visibleArea = visibleArea
+***REMOVED******REMOVED***/ Animates `isVisible` between `true` and `false` as necessary.
+***REMOVED***private func performVisibilityAnimation() {
+***REMOVED******REMOVED***self.autoHideTimer?.invalidate()
+***REMOVED******REMOVED***withAnimation(.easeInOut.speed(displaySpeed)) {
+***REMOVED******REMOVED******REMOVED***self.isVisible = true
+***REMOVED***
+***REMOVED******REMOVED***self.autoHideTimer = Timer.scheduledTimer(
+***REMOVED******REMOVED******REMOVED***withTimeInterval: hideTimeInterval,
+***REMOVED******REMOVED******REMOVED***repeats: false,
+***REMOVED******REMOVED******REMOVED***block: { _ in
+***REMOVED******REMOVED******REMOVED******REMOVED***withAnimation {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.isVisible = false
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***visibleAreaCancellable = visibleAreaSubject
-***REMOVED******REMOVED******REMOVED***.debounce(for: delay, scheduler: DispatchQueue.main)
-***REMOVED******REMOVED******REMOVED***.sink(receiveValue: { [weak self] _ in
-***REMOVED******REMOVED******REMOVED******REMOVED***self?.updateScaleDisplay()
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***updateScaleDisplay()
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ Updates the labels to be displayed by the scalebar.
 ***REMOVED***private func updateLabels() {
 ***REMOVED******REMOVED***let lineDisplayLength = displayLength
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Use a string with at least a few characters in case the number string
-***REMOVED******REMOVED******REMOVED*** only has 1.
-***REMOVED******REMOVED******REMOVED*** The dividers will be decimal values and we want to make sure they all
-***REMOVED******REMOVED******REMOVED*** fit very basic hueristics.
-***REMOVED******REMOVED***let minSegmentTestString = (displayLengthString.count > 3) ? displayLengthString : "9.9"
-***REMOVED******REMOVED******REMOVED*** Use 1.5 because the last segment, the text is right justified insted
-***REMOVED******REMOVED******REMOVED*** of center, which makes it harder to squeeze text in.
-***REMOVED******REMOVED***let minSegmentWidth = (minSegmentTestString.size(withAttributes: [.font: Scalebar.font.uiFont]).width * 1.5) + (Scalebar.labelXPad * 2)
-***REMOVED******REMOVED***var maxNumSegments = Int(lineDisplayLength / minSegmentWidth)
-***REMOVED******REMOVED***maxNumSegments = min(maxNumSegments, 4) ***REMOVED*** cap it at 4
-***REMOVED******REMOVED***let numSegments: Int = ScalebarUnits.numSegmentsForDistance(distance: lineMapLength, maxNumSegments: maxNumSegments)
+***REMOVED******REMOVED******REMOVED*** only has 1. The dividers will be decimal values and we want to make
+***REMOVED******REMOVED******REMOVED*** sure they all fit very basic hueristics.
+***REMOVED******REMOVED***let minSegmentTestString: String
+***REMOVED******REMOVED***if let longestString = labels.last?.text, longestString.count > 3 {
+***REMOVED******REMOVED******REMOVED***minSegmentTestString = longestString
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***minSegmentTestString = "9.9"
+***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***let segmentScreenLength: CGFloat = (lineDisplayLength / CGFloat(numSegments))
+***REMOVED******REMOVED******REMOVED*** Use 1.5 because in the text is longer in the last label
+***REMOVED******REMOVED***let minSegmentWidth =
+***REMOVED******REMOVED******REMOVED***minSegmentTestString.size(withAttributes: [.font: Scalebar.font.uiFont]).width * 1.5
+***REMOVED******REMOVED******REMOVED***+
+***REMOVED******REMOVED******REMOVED***Scalebar.labelXPad * 2
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let suggestedNumSegments = Int(lineDisplayLength / minSegmentWidth)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Cap segments at 4
+***REMOVED******REMOVED***let maxNumSegments = min(suggestedNumSegments, 4)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let numSegments: Int = ScalebarUnits.numSegmentsForDistance(
+***REMOVED******REMOVED******REMOVED***distance: lineMapLength,
+***REMOVED******REMOVED******REMOVED***maxNumSegments: maxNumSegments
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let segmentScreenLength = CGFloat(lineDisplayLength / CGFloat(numSegments))
 ***REMOVED******REMOVED***var currSegmentX: CGFloat = 0
 ***REMOVED******REMOVED***var labels = [ScalebarLabel]()
 ***REMOVED******REMOVED***
@@ -118,7 +260,7 @@ final class ScalebarViewModel: ObservableObject {
 ***REMOVED******REMOVED******REMOVED***currSegmentX += segmentScreenLength
 ***REMOVED******REMOVED******REMOVED***let segmentMapLength = Double((segmentScreenLength * CGFloat(index + 1)) / lineDisplayLength) * lineMapLength
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***var segmentText = Scalebar.numberFormatter.string(from: NSNumber(value: segmentMapLength)) ?? ""
+***REMOVED******REMOVED******REMOVED***var segmentText = numberFormatter.string(from: NSNumber(value: segmentMapLength)) ?? ""
 ***REMOVED******REMOVED******REMOVED***if index == numSegments - 1, let displayUnit = displayUnit?.abbreviation {
 ***REMOVED******REMOVED******REMOVED******REMOVED***segmentText += " \(displayUnit)"
 ***REMOVED******REMOVED***
@@ -133,48 +275,41 @@ final class ScalebarViewModel: ObservableObject {
 ***REMOVED******REMOVED***self.labels = labels
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ Updates the information necessary to render a scalebar based off the latest viewpoint and units per
+***REMOVED******REMOVED***/ point information.
 ***REMOVED***private func updateScaleDisplay() {
-***REMOVED******REMOVED***guard let scale = viewpoint.wrappedValue?.targetScale else {
+***REMOVED******REMOVED***guard let spatialReference = spatialReference,
+***REMOVED******REMOVED******REMOVED***  let unitsPerPoint = unitsPerPoint.wrappedValue,
+***REMOVED******REMOVED******REMOVED***  let viewpoint = viewpoint,
+***REMOVED******REMOVED******REMOVED***  minScale <= 0 || viewpoint.targetScale < minScale else {
 ***REMOVED******REMOVED******REMOVED***return
 ***REMOVED***
-***REMOVED******REMOVED***guard minScale <= 0 || scale < minScale else {
-***REMOVED******REMOVED******REMOVED***return
-***REMOVED***
-***REMOVED******REMOVED***guard let unitsPerPoint = unitsPerPoint.wrappedValue else {
-***REMOVED******REMOVED******REMOVED***return
-***REMOVED***
-***REMOVED******REMOVED***guard let visibleArea = visibleArea.wrappedValue else {
-***REMOVED******REMOVED******REMOVED***return
-***REMOVED***
-***REMOVED******REMOVED***guard let sr = spatialReference else {
-***REMOVED******REMOVED******REMOVED***return
-***REMOVED***
-***REMOVED******REMOVED***let totalWidthAvailable = targetWidth
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** TODO: - Removal of hardcoded sample renderer property (~16 - 2) derived from sample renderer
-***REMOVED******REMOVED***let maxLength =  totalWidthAvailable - 16.30243742465973 - 2
+***REMOVED******REMOVED***let mapCenter = viewpoint.targetGeometry.extent.center
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let maxLength =  availableLineDisplayLength
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let lineMapLength: Double
 ***REMOVED******REMOVED***let displayUnit: LinearUnit
-***REMOVED******REMOVED***let mapCenter = visibleArea.extent.center
 ***REMOVED******REMOVED***let displayLength: CGFloat
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***if useGeodeticCalculations || spatialReference?.unit is AngularUnit {
+***REMOVED******REMOVED***if useGeodeticCalculations || spatialReference.unit is AngularUnit {
 ***REMOVED******REMOVED******REMOVED***let maxLengthPlanar = unitsPerPoint * Double(maxLength)
 ***REMOVED******REMOVED******REMOVED***let p1 = Point(
 ***REMOVED******REMOVED******REMOVED******REMOVED***x: mapCenter.x - (maxLengthPlanar * 0.5),
 ***REMOVED******REMOVED******REMOVED******REMOVED***y: mapCenter.y,
-***REMOVED******REMOVED******REMOVED******REMOVED***spatialReference: sr
+***REMOVED******REMOVED******REMOVED******REMOVED***spatialReference: spatialReference
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***let p2 = Point(
 ***REMOVED******REMOVED******REMOVED******REMOVED***x: mapCenter.x + (maxLengthPlanar * 0.5),
 ***REMOVED******REMOVED******REMOVED******REMOVED***y: mapCenter.y,
-***REMOVED******REMOVED******REMOVED******REMOVED***spatialReference: sr
+***REMOVED******REMOVED******REMOVED******REMOVED***spatialReference: spatialReference
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***let polyline = Polyline(
-***REMOVED******REMOVED******REMOVED******REMOVED***points: [p1, p2], spatialReference: spatialReference
+***REMOVED******REMOVED******REMOVED******REMOVED***points: [p1, p2],
+***REMOVED******REMOVED******REMOVED******REMOVED***spatialReference: spatialReference
 ***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***let baseUnits = units.baseUnits()
+***REMOVED******REMOVED******REMOVED***let baseUnits = units.baseLinearUnit
 ***REMOVED******REMOVED******REMOVED***let maxLengthGeodetic = GeometryEngine.geodeticLength(
 ***REMOVED******REMOVED******REMOVED******REMOVED***of: polyline,
 ***REMOVED******REMOVED******REMOVED******REMOVED***lengthUnit: baseUnits,
@@ -189,11 +324,11 @@ final class ScalebarViewModel: ObservableObject {
 ***REMOVED******REMOVED******REMOVED***displayUnit = units.linearUnitsForDistance(distance: roundNumberDistance)
 ***REMOVED******REMOVED******REMOVED***lineMapLength = baseUnits.convert(to: displayUnit, value: roundNumberDistance)
 ***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***guard let srUnit = sr.unit as? LinearUnit else {
+***REMOVED******REMOVED******REMOVED***guard let srUnit = spatialReference.unit as? LinearUnit else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***return
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***let unitsPerPoint = unitsPerPoint
-***REMOVED******REMOVED******REMOVED***let baseUnits = units.baseUnits()
+***REMOVED******REMOVED******REMOVED***let baseUnits = units.baseLinearUnit
 ***REMOVED******REMOVED******REMOVED***let lenAvail = srUnit.convert(
 ***REMOVED******REMOVED******REMOVED******REMOVED***to: baseUnits,
 ***REMOVED******REMOVED******REMOVED******REMOVED***value: unitsPerPoint * Double(maxLength)
@@ -225,32 +360,6 @@ final class ScalebarViewModel: ObservableObject {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***self.lineMapLength = lineMapLength
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***displayLengthString = Scalebar.numberFormatter.string(
-***REMOVED******REMOVED******REMOVED***from: NSNumber(value: lineMapLength)
-***REMOVED******REMOVED***) ?? ""
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED***updateLabels()
-***REMOVED***
-***REMOVED***
-***REMOVED***var alternateUnit: (screenLength: CGFloat, label: String) {
-***REMOVED******REMOVED***guard let displayUnit = displayUnit else {
-***REMOVED******REMOVED******REMOVED***return (.zero, "")
-***REMOVED***
-***REMOVED******REMOVED***let otherUnit = (units == ScalebarUnits.imperial) ? ScalebarUnits.metric : ScalebarUnits.imperial
-***REMOVED******REMOVED***let otherMapBaseLength = displayUnit.convert(to: otherUnit.baseUnits(), value: lineMapLength)
-***REMOVED******REMOVED***let otherClosestBaseLength = otherUnit.closestDistanceWithoutGoingOver(to: otherMapBaseLength, units: otherUnit.baseUnits())
-***REMOVED******REMOVED***let otherDisplayUnits = otherUnit.linearUnitsForDistance(distance: otherClosestBaseLength)
-***REMOVED******REMOVED***let otherLineMapLength = otherUnit.baseUnits().convert(to: otherDisplayUnits, value: otherClosestBaseLength)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***let displayFactor = lineMapLength / Double(displayLength)
-***REMOVED******REMOVED***let convertedDisplayFactor = displayUnit.convert(to: otherDisplayUnits, value: displayFactor)
-***REMOVED******REMOVED***let otherLineScreenLength = CGFloat(otherLineMapLength / convertedDisplayFactor)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***let numberString = Scalebar.numberFormatter.string(from: NSNumber(value: otherLineMapLength)) ?? ""
-***REMOVED******REMOVED***let bottomUnitsText = " \(otherDisplayUnits.abbreviation)"
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***let bottomText = "\(numberString)\(bottomUnitsText)"
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***return (otherLineScreenLength, bottomText)
 ***REMOVED***
 ***REMOVED***

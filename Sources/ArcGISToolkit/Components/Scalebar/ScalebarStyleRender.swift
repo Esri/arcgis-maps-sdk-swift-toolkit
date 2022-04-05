@@ -14,102 +14,70 @@
 ***REMOVED***
 
 extension Scalebar {
+***REMOVED******REMOVED***/ Renders all of the scalebar labels.
+***REMOVED***var allLabelsView: some View {
+***REMOVED******REMOVED***ZStack {
+***REMOVED******REMOVED******REMOVED***ForEach(viewModel.labels, id: \.index) {
+***REMOVED******REMOVED******REMOVED******REMOVED***Text($0.text)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.scalebarText()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.position(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***x: $0.xOffset,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***y: ScalebarLabel.yOffset
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***.frame(height: Scalebar.fontHeight)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Renders a scalebar with `ScalebarStyle.alternatingBar`.
 ***REMOVED***var alternatingBarStyleRender: some View {
 ***REMOVED******REMOVED***VStack(spacing: Scalebar.labelYPad) {
-***REMOVED******REMOVED******REMOVED***HStack(spacing: -lineWidth) {
+***REMOVED******REMOVED******REMOVED***HStack(spacing: -Scalebar.lineWidth) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ForEach(viewModel.labels.dropFirst(), id: \.index) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Rectangle()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fill($0.index % 2 == 0 ? fillColor1 : fillColor2)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fill($0.index % 2 == 1 ? Scalebar.fillColor1 : Scalebar.fillColor2)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.border(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***lineColor,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***width: lineWidth
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Scalebar.lineColor,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***width: Scalebar.lineWidth
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.frame(
-***REMOVED******REMOVED******REMOVED******REMOVED***height: barFrameHeight,
+***REMOVED******REMOVED******REMOVED******REMOVED***height: Scalebar.barFrameHeight,
 ***REMOVED******REMOVED******REMOVED******REMOVED***alignment: .leading
 ***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***.compositingGroup()
-***REMOVED******REMOVED******REMOVED***.cornerRadius(lineCornerRadius)
-***REMOVED******REMOVED******REMOVED***.shadow(
-***REMOVED******REMOVED******REMOVED******REMOVED***color: shadowColor,
-***REMOVED******REMOVED******REMOVED******REMOVED***radius: shadowRadius
-***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***ZStack {
-***REMOVED******REMOVED******REMOVED******REMOVED***ForEach(viewModel.labels, id: \.index) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text($0.text)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.scalebarText(self)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.position(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***x: $0.xOffset,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***y: ScalebarLabel.yOffset
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.cornerRadius(Scalebar.barCornerRadius)
+***REMOVED******REMOVED******REMOVED***.scalebarShadow()
+***REMOVED******REMOVED******REMOVED***allLabelsView
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ Renders a scalebar with `ScalebarStyle.bar`.
 ***REMOVED***var barStyleRender: some View {
 ***REMOVED******REMOVED***VStack(spacing: Scalebar.labelYPad) {
 ***REMOVED******REMOVED******REMOVED***Rectangle()
-***REMOVED******REMOVED******REMOVED******REMOVED***.fill(fillColor2)
+***REMOVED******REMOVED******REMOVED******REMOVED***.fill(Scalebar.fillColor2)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.border(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***lineColor,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***width: lineWidth
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Scalebar.lineColor,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***width: Scalebar.lineWidth
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.frame(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***height: barFrameHeight,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***height: Scalebar.barFrameHeight,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***alignment: .leading
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED***.cornerRadius(lineCornerRadius)
-***REMOVED******REMOVED******REMOVED******REMOVED***.shadow(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***color: shadowColor,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***radius: shadowRadius
-***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***.cornerRadius(Scalebar.barCornerRadius)
+***REMOVED******REMOVED******REMOVED******REMOVED***.scalebarShadow()
 ***REMOVED******REMOVED******REMOVED***Text(viewModel.labels.last?.text ?? "")
-***REMOVED******REMOVED******REMOVED******REMOVED***.scalebarText(self)
+***REMOVED******REMOVED******REMOVED******REMOVED***.scalebarText()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED***var lineStyleRender: some View {
-***REMOVED******REMOVED***VStack(spacing: Scalebar.labelYPad) {
-***REMOVED******REMOVED******REMOVED***GeometryReader { geoProxy in
-***REMOVED******REMOVED******REMOVED******REMOVED***ZStack(alignment: .bottom) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Path { path in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let zero = Double.zero
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let maxX = geoProxy.size.width
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let maxY = geoProxy.size.height
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***path.move(to: CGPoint(x: zero, y: zero))
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***path.addLine(to: CGPoint(x: zero, y: maxY))
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***path.addLine(to: CGPoint(x: maxX, y: maxY))
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***path.addLine(to: CGPoint(x: maxX, y: zero))
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.stroke(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***style: .init(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***lineWidth: lineWidth,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***lineCap: .round,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***lineJoin: .round
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fill(lineColor)
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.compositingGroup()
-***REMOVED******REMOVED******REMOVED******REMOVED***.shadow(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***color: shadowColor,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***radius: shadowRadius
-***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.frame(height: lineFrameHeight)
-***REMOVED******REMOVED******REMOVED***Text(viewModel.labels.last?.text ?? "")
-***REMOVED******REMOVED******REMOVED******REMOVED***.scalebarText(self)
-***REMOVED***
-***REMOVED***
-***REMOVED***
+***REMOVED******REMOVED***/ Renders a scalebar with `ScalebarStyle.dualUnitLine`.
 ***REMOVED***var dualUnitLineStyleRender: some View {
 ***REMOVED******REMOVED***VStack(spacing: Scalebar.labelYPad) {
 ***REMOVED******REMOVED******REMOVED***ZStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text(viewModel.labels.last?.text ?? "")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.scalebarText(self)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.scalebarText()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.position(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***x: viewModel.labels.last?.xOffset ?? .zero,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***y: ScalebarLabel.yOffset
@@ -143,23 +111,19 @@ extension Scalebar {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.stroke(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***style: .init(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***lineWidth: lineWidth,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***lineWidth: Scalebar.lineWidth,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***lineCap: .round,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***lineJoin: .round
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fill(lineColor)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fill(Scalebar.lineColor)
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.compositingGroup()
-***REMOVED******REMOVED******REMOVED******REMOVED***.shadow(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***color: shadowColor,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***radius: shadowRadius
-***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***.scalebarShadow()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.frame(height: barFrameHeight)
+***REMOVED******REMOVED******REMOVED***.frame(height: Scalebar.barFrameHeight)
 ***REMOVED******REMOVED******REMOVED***ZStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text(viewModel.alternateUnit.label)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.scalebarText(self)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.scalebarText()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.position(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***x: viewModel.alternateUnit.screenLength,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***y: ScalebarLabel.yOffset
@@ -169,6 +133,7 @@ extension Scalebar {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ Renders a scalebar with `ScalebarStyle.graduatedLine`.
 ***REMOVED***var graduatedLineStyleRender: some View {
 ***REMOVED******REMOVED***VStack(spacing: Scalebar.labelYPad) {
 ***REMOVED******REMOVED******REMOVED***GeometryReader { geoProxy in
@@ -188,27 +153,48 @@ extension Scalebar {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.stroke(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***style: .init(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***lineWidth: lineWidth,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***lineWidth: Scalebar.lineWidth,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***lineCap: .round,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***lineJoin: .round
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fill(lineColor)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fill(Scalebar.lineColor)
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.compositingGroup()
-***REMOVED******REMOVED******REMOVED******REMOVED***.shadow(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***color: shadowColor,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***radius: shadowRadius
-***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***.scalebarShadow()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.frame(height: lineFrameHeight)
-***REMOVED******REMOVED******REMOVED***ZStack {
-***REMOVED******REMOVED******REMOVED******REMOVED***ForEach(viewModel.labels, id: \.index) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text($0.text)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.scalebarText(self)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.position(x: $0.xOffset, y: ScalebarLabel.yOffset)
+***REMOVED******REMOVED******REMOVED***.frame(height: Scalebar.lineFrameHeight)
+***REMOVED******REMOVED******REMOVED***allLabelsView
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Renders a scalebar with `ScalebarStyle.line`.
+***REMOVED***var lineStyleRender: some View {
+***REMOVED******REMOVED***VStack(spacing: Scalebar.labelYPad) {
+***REMOVED******REMOVED******REMOVED***GeometryReader { geoProxy in
+***REMOVED******REMOVED******REMOVED******REMOVED***ZStack(alignment: .bottom) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Path { path in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let zero = Double.zero
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let maxX = geoProxy.size.width
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let maxY = geoProxy.size.height
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***path.move(to: CGPoint(x: zero, y: zero))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***path.addLine(to: CGPoint(x: zero, y: maxY))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***path.addLine(to: CGPoint(x: maxX, y: maxY))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***path.addLine(to: CGPoint(x: maxX, y: zero))
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.stroke(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***style: .init(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***lineWidth: Scalebar.lineWidth,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***lineCap: .round,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***lineJoin: .round
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fill(Scalebar.lineColor)
 ***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.scalebarShadow()
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.frame(height: Scalebar.lineFrameHeight)
+***REMOVED******REMOVED******REMOVED***Text(viewModel.labels.last?.text ?? "")
+***REMOVED******REMOVED******REMOVED******REMOVED***.scalebarText()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***

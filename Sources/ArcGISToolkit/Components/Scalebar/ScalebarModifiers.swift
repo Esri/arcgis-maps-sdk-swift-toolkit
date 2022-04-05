@@ -15,22 +15,40 @@
 
 ***REMOVED***/ A modifier which "styles" a Text element's font, shadow color and radius.
 struct ScalebarTextModifier: ViewModifier {
-***REMOVED***let scalebar: Scalebar
-***REMOVED***
 ***REMOVED***func body(content: Content) -> some View {
 ***REMOVED******REMOVED***content
 ***REMOVED******REMOVED******REMOVED***.font(Scalebar.font.font)
 ***REMOVED******REMOVED******REMOVED***.shadow(
-***REMOVED******REMOVED******REMOVED******REMOVED***color: scalebar.textShadowColor,
-***REMOVED******REMOVED******REMOVED******REMOVED***radius: scalebar.shadowRadius
+***REMOVED******REMOVED******REMOVED******REMOVED***color: Scalebar.textShadowColor,
+***REMOVED******REMOVED******REMOVED******REMOVED***radius: Scalebar.shadowRadius
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 extension Text {
-***REMOVED***func scalebarText(_ scalebar: Scalebar) -> some View {
+***REMOVED***func scalebarText() -> some View {
 ***REMOVED******REMOVED***modifier(
-***REMOVED******REMOVED******REMOVED***ScalebarTextModifier(scalebar: scalebar)
+***REMOVED******REMOVED******REMOVED***ScalebarTextModifier()
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+
+***REMOVED***/ A modifier which "styles" a scalebar's shadow color and radius.
+struct ScalebarGroupShadowModifier: ViewModifier {
+***REMOVED***func body(content: Content) -> some View {
+***REMOVED******REMOVED***content
+***REMOVED******REMOVED******REMOVED***.compositingGroup()
+***REMOVED******REMOVED******REMOVED***.shadow(
+***REMOVED******REMOVED******REMOVED******REMOVED***color: Scalebar.shadowColor,
+***REMOVED******REMOVED******REMOVED******REMOVED***radius: Scalebar.shadowRadius
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED***
+extension View {
+***REMOVED***func scalebarShadow() -> some View {
+***REMOVED******REMOVED***modifier(
+***REMOVED******REMOVED******REMOVED***ScalebarGroupShadowModifier()
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***

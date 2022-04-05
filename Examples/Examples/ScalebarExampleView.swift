@@ -16,44 +16,39 @@
 ***REMOVED***
 
 struct ScalebarExampleView: View {
-***REMOVED******REMOVED***/ Allows for communication between the `Scalebar` and `MapView` or `SceneView`.
-***REMOVED***@State private var scale: Double?
-***REMOVED***
-***REMOVED******REMOVED***/ Allows for communication between the `Scalebar` and `MapView` or `SceneView`.
+***REMOVED******REMOVED***/ Allows for communication between the `Scalebar` and `MapView`.
 ***REMOVED***@State private var spatialReference: SpatialReference?
 ***REMOVED***
+***REMOVED******REMOVED***/ Allows for communication between the `Scalebar` and `MapView`.
 ***REMOVED***@State private var unitsPerPoint: Double?
 ***REMOVED***
-***REMOVED******REMOVED***/ Allows for communication between the `Scalebar` and `MapView` or `SceneView`.
+***REMOVED******REMOVED***/ Allows for communication between the `Scalebar` and `MapView`.
 ***REMOVED***@State private var viewpoint: Viewpoint?
 ***REMOVED***
-***REMOVED******REMOVED***/ Allows for communication between the `Scalebar` and `MapView` or `SceneView`.
-***REMOVED***@State private var visibleArea: Polygon?
+***REMOVED******REMOVED***/ The location of the scalebar on screen.
+***REMOVED***private let alignment: Alignment = .bottomLeading
 ***REMOVED***
 ***REMOVED******REMOVED***/ The `Map` displayed in the `MapView`.
 ***REMOVED***private let map = Map(basemapStyle: .arcGISTopographic)
 ***REMOVED***
+***REMOVED******REMOVED***/ The width of the scalebar.
+***REMOVED***private let width: Double = 175.0
+***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***MapView(map: map, viewpoint: viewpoint)
-***REMOVED******REMOVED******REMOVED***.onViewpointChanged(kind: .centerAndScale) { viewpoint = $0 ***REMOVED***
-***REMOVED******REMOVED******REMOVED***.onVisibleAreaChanged { visibleArea = $0 ***REMOVED***
-***REMOVED******REMOVED******REMOVED***.onScaleChanged { scale = $0 ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onSpatialReferenceChanged { spatialReference = $0 ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onUnitsPerPointChanged { unitsPerPoint = $0 ***REMOVED***
-***REMOVED******REMOVED******REMOVED***.overlay(alignment: .bottomLeading) {
+***REMOVED******REMOVED******REMOVED***.onViewpointChanged(kind: .centerAndScale) { viewpoint = $0 ***REMOVED***
+***REMOVED******REMOVED******REMOVED***.overlay(alignment: alignment) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if map.loadStatus == .loaded {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Scalebar(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***alignment: .left,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***spatialReference,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.line,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***175,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***$unitsPerPoint,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***$viewpoint,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***$visibleArea,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***units: .imperial
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***spatialReference: spatialReference,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***unitsPerPoint: $unitsPerPoint,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint: $viewpoint,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***width: width
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.horizontal, 10)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.vertical, 30)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.vertical, 50)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***

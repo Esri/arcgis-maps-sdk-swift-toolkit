@@ -15,83 +15,52 @@
 import Foundation
 
 public enum ScalebarUnits {
+***REMOVED******REMOVED***/ Imperial units (feet, miles, etc)
 ***REMOVED***case imperial
+***REMOVED***
+***REMOVED******REMOVED***/ Metric units (meters, etc)
 ***REMOVED***case metric
 ***REMOVED***
-***REMOVED***internal func baseUnits() -> LinearUnit {
-***REMOVED******REMOVED***return self == .imperial ? LinearUnit.feet : LinearUnit.meters
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ Get multiplier
-***REMOVED***private static func multiplierAndMagnitudeForDistance(
-***REMOVED******REMOVED***distance: Double) -> (multiplier: Double, magnitude: Double
-***REMOVED***) {
-***REMOVED******REMOVED***let magnitude = pow(10, floor(log10(distance)))
-***REMOVED******REMOVED***let residual = distance / Double(magnitude)
-***REMOVED******REMOVED***let multiplier: Double = ScalebarUnits.roundNumberMultipliers.filter { $0 <= residual ***REMOVED***.last ?? 0
-***REMOVED******REMOVED***return (multiplier, magnitude)
-***REMOVED***
-***REMOVED***
-***REMOVED***internal func closestDistanceWithoutGoingOver(
-***REMOVED******REMOVED***to distance: Double,
-***REMOVED******REMOVED***units: LinearUnit
-***REMOVED***) -> Double {
-***REMOVED******REMOVED***let mm = ScalebarUnits.multiplierAndMagnitudeForDistance(distance: distance)
-***REMOVED******REMOVED***let roundNumber = mm.multiplier * mm.magnitude
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Because feet and miles are not relationally multiples of 10 with
-***REMOVED******REMOVED******REMOVED*** each other, we have to convert to miles if we are dealing in miles.
-***REMOVED******REMOVED***if units == .feet {
-***REMOVED******REMOVED******REMOVED***let displayUnits = linearUnitsForDistance(distance: roundNumber)
-***REMOVED******REMOVED******REMOVED***if units != displayUnits {
-***REMOVED******REMOVED******REMOVED******REMOVED***let displayDistance = closestDistanceWithoutGoingOver(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***to: units.convert(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***to: displayUnits,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***value: distance
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***),
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***units: displayUnits
-***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED***return displayUnits.convert(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***to: units,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***value: displayDistance
-***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***return roundNumber
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ This function returns the best number of segments so that we get relatively round numbers when the
-***REMOVED******REMOVED***/ distance is divided up.
-***REMOVED***internal static func numSegmentsForDistance(
-***REMOVED******REMOVED***distance: Double,
-***REMOVED******REMOVED***maxNumSegments: Int
-***REMOVED***) -> Int {
-***REMOVED******REMOVED***let mm = multiplierAndMagnitudeForDistance(distance: distance)
-***REMOVED******REMOVED***let options = segmentOptionsForMultiplier(multiplier: mm.multiplier)
-***REMOVED******REMOVED***let num = options.filter { $0 <= maxNumSegments ***REMOVED***.last ?? 1
-***REMOVED******REMOVED***return num
-***REMOVED***
-***REMOVED***
+***REMOVED******REMOVED***/ Mulitplier options.
 ***REMOVED******REMOVED***/ This table must begin with 1 and end with 10.
 ***REMOVED***private static let roundNumberMultipliers: [Double] =
 ***REMOVED******REMOVED***[1, 1.2, 1.25, 1.5, 1.75, 2, 2.4, 2.5, 3, 3.75, 4, 5, 6, 7.5, 8, 9, 10]
 ***REMOVED***
-***REMOVED***internal func linearUnitsForDistance(distance: Double) -> LinearUnit {
-***REMOVED******REMOVED***switch self {
-***REMOVED******REMOVED***case .imperial:
-***REMOVED******REMOVED******REMOVED***if distance >= 2640 {
-***REMOVED******REMOVED******REMOVED******REMOVED***return LinearUnit.miles
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***return LinearUnit.feet
-***REMOVED******REMOVED***case .metric:
-***REMOVED******REMOVED******REMOVED***if distance >= 1000 {
-***REMOVED******REMOVED******REMOVED******REMOVED***return LinearUnit.kilometers
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***return LinearUnit.meters
+***REMOVED******REMOVED***/ Determines an appropriate base linear unit for this scalebar unit.
+***REMOVED******REMOVED***/ - Returns: `LinearUnit.feet` or `LinearUnit.meters` depending on this unit.
+***REMOVED******REMOVED***/
+***REMOVED******REMOVED***/ `ScalebarUnits.imperial` will return `LinearUnit.feet` as feet is the smallest linear
+***REMOVED******REMOVED***/ unit that will be displayed.
+***REMOVED******REMOVED***/ `ScalebarUnits.metric` will return `LinearUnit.meters` as meter is the smallest linear
+***REMOVED******REMOVED***/ unit that will be displayed.
+***REMOVED***internal var baseLinearUnit: LinearUnit {
+***REMOVED******REMOVED***return self == .imperial ? LinearUnit.feet : LinearUnit.meters
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ Calculates a magnitude for a given distance.
+***REMOVED******REMOVED***/ - Parameter distance: A distance to compute the magnitude for.
+***REMOVED******REMOVED***/ - Returns: A magnitude for a given distance.
+***REMOVED******REMOVED***/
+***REMOVED******REMOVED***/ For example:
+***REMOVED******REMOVED***/ A distance of 25 will return 10 as 10 is the highest power of 10 that will fit into 25.
+***REMOVED******REMOVED***/ A distance of 550 will return 100 as 100 is the highest power of 10 that will fit into 550.
+***REMOVED******REMOVED***/ A distance of 2,222 will return 1000 as 1000 is the highest power of 10 that will fit into 2,222.
+***REMOVED***private static func magnitudeForDistance(distance: Double) -> Double {
+***REMOVED******REMOVED***return pow(10, floor(log10(distance)))
 ***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Returns a multiplier for a given distance.
+***REMOVED******REMOVED***/ - Parameter distance: A distance to compute the multiplier for.
+***REMOVED******REMOVED***/ - Returns: A multiplier for a given distance.
+***REMOVED***private static func multiplierForDistance(distance: Double) -> Double {
+***REMOVED******REMOVED***let residual = distance / ScalebarUnits.magnitudeForDistance(distance: distance)
+***REMOVED******REMOVED***let multiplier = ScalebarUnits.roundNumberMultipliers.filter { $0 <= residual ***REMOVED***.last ?? 0
+***REMOVED******REMOVED***return multiplier
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Returns a list of segment options for a given multiplier.
+***REMOVED******REMOVED***/ - Parameter multiplier: A distance to compute the multiplier for.
+***REMOVED******REMOVED***/ - Returns: A list of segment options for a given multiplier.
 ***REMOVED***private static func segmentOptionsForMultiplier(
 ***REMOVED******REMOVED***multiplier: Double
 ***REMOVED***) -> [Int] {
@@ -132,6 +101,73 @@ public enum ScalebarUnits {
 ***REMOVED******REMOVED******REMOVED***return [1, 2, 5]
 ***REMOVED******REMOVED***default:
 ***REMOVED******REMOVED******REMOVED***return [1]
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ - Returns: The best number of segments so that we get relatively round numbers when the
+***REMOVED******REMOVED***/ distance is divided up.
+***REMOVED***internal static func numSegmentsForDistance(
+***REMOVED******REMOVED***distance: Double,
+***REMOVED******REMOVED***maxNumSegments: Int
+***REMOVED***) -> Int {
+***REMOVED******REMOVED***let multiplier = multiplierForDistance(distance: distance)
+***REMOVED******REMOVED***let options = segmentOptionsForMultiplier(multiplier: multiplier)
+***REMOVED******REMOVED***let num = options.filter { $0 <= maxNumSegments ***REMOVED***.last ?? 1
+***REMOVED******REMOVED***return num
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Calculates a round number suitable for display.
+***REMOVED******REMOVED***/ - Returns: A displayable round number.
+***REMOVED***internal func closestDistanceWithoutGoingOver(
+***REMOVED******REMOVED***to distance: Double,
+***REMOVED******REMOVED***units: LinearUnit
+***REMOVED***) -> Double {
+***REMOVED******REMOVED***let magnitude = ScalebarUnits.magnitudeForDistance(distance: distance)
+***REMOVED******REMOVED***let multiplier = ScalebarUnits.multiplierForDistance(distance: distance)
+***REMOVED******REMOVED***let roundNumber = multiplier * magnitude
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Because feet and miles are not relationally multiples of 10 with
+***REMOVED******REMOVED******REMOVED*** each other, we have to convert to miles if we are dealing in feet.
+***REMOVED******REMOVED***if units == .feet {
+***REMOVED******REMOVED******REMOVED***let displayUnits = linearUnitsForDistance(distance: roundNumber)
+***REMOVED******REMOVED******REMOVED***if units != displayUnits {
+***REMOVED******REMOVED******REMOVED******REMOVED***let displayDistance = closestDistanceWithoutGoingOver(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***to: units.convert(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***to: displayUnits,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***value: distance
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***units: displayUnits
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***return displayUnits.convert(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***to: units,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***value: displayDistance
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***return roundNumber
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Determines a suitable display unit for the given distance.
+***REMOVED******REMOVED***/ - Parameter distance: The distance to be displayed.
+***REMOVED******REMOVED***/ - Returns: A suitable linear unit.
+***REMOVED******REMOVED***/
+***REMOVED******REMOVED***/ `ScalebarUnits.imperial` will return `LinearUnit.miles` if the given distance is greater
+***REMOVED******REMOVED***/ than or equal to 1/2 mile, and `LinearUnit.feet` otherwise.
+***REMOVED******REMOVED***/ `ScalebarUnits.metric` will return `LinearUnit.kilometers` if the given distance is
+***REMOVED******REMOVED***/ greater than or equal to 1 kilometer, and `LinearUnit.meters` otherwise.
+***REMOVED***internal func linearUnitsForDistance(distance: Double) -> LinearUnit {
+***REMOVED******REMOVED***switch self {
+***REMOVED******REMOVED***case .imperial:
+***REMOVED******REMOVED******REMOVED***if distance >= 2640 {
+***REMOVED******REMOVED******REMOVED******REMOVED***return LinearUnit.miles
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***return LinearUnit.feet
+***REMOVED******REMOVED***case .metric:
+***REMOVED******REMOVED******REMOVED***if distance >= 1000 {
+***REMOVED******REMOVED******REMOVED******REMOVED***return LinearUnit.kilometers
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***return LinearUnit.meters
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***

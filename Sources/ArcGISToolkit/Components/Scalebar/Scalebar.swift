@@ -16,109 +16,15 @@
 
 ***REMOVED***/ Displays the current scale on-screen
 public struct Scalebar: View {
-***REMOVED******REMOVED***/ The view model used by the `Scalebar`.
-***REMOVED***@StateObject
-***REMOVED***internal var viewModel: ScalebarViewModel
+***REMOVED******REMOVED*** - MARK: Internal/Private vars
 ***REMOVED***
 ***REMOVED******REMOVED***/ The vertical amount of space used by the scalebar.
-***REMOVED***@State private var height: Double = 50
+***REMOVED***@State private var height: Double?
 ***REMOVED***
-***REMOVED***private var alignment: ScalebarAlignment
+***REMOVED******REMOVED***/ The view model used by the `Scalebar`.
+***REMOVED***@StateObject internal var viewModel: ScalebarViewModel
 ***REMOVED***
-***REMOVED***internal var lineColor = Color.white
-***REMOVED***
-***REMOVED***internal var fillColor1 = Color.black
-***REMOVED***
-***REMOVED***internal var fillColor2 = Color(uiColor: .lightGray).opacity(0.5)
-***REMOVED***
-***REMOVED***internal var shadowColor = Color(uiColor: .black).opacity(0.65)
-***REMOVED***internal var shadowRadius = 1.0
-***REMOVED***
-***REMOVED***internal var lineWidth = 3.0
-***REMOVED***
-***REMOVED***internal var lineFrameHeight = 6.0
-***REMOVED***
-***REMOVED***internal var barFrameHeight = 10.0
-***REMOVED***
-***REMOVED***internal var lineCornerRadius = 2.5
-***REMOVED***
-***REMOVED***private var style: ScalebarStyle
-***REMOVED***
-***REMOVED***private var textColor = Color.black
-***REMOVED***
-***REMOVED***var textShadowColor = Color.white
-***REMOVED***
-***REMOVED******REMOVED***/ Acts as a data provider of the current scale.
-***REMOVED***private var viewpoint: Binding<Viewpoint?>
-***REMOVED***
-***REMOVED******REMOVED***/ Acts as a data provider of the current scale.
-***REMOVED***private var visibleArea: Binding<Polygon?>
-***REMOVED***
-***REMOVED***public init(
-***REMOVED******REMOVED***alignment: Alignment,
-***REMOVED******REMOVED***_ spatialReference: SpatialReference? = .wgs84,
-***REMOVED******REMOVED***_ style: ScalebarStyle = .alternatingBar,
-***REMOVED******REMOVED***_ targetWidth: Double,
-***REMOVED******REMOVED***_ unitsPerPoint: Binding<Double?>,
-***REMOVED******REMOVED***_ viewpoint: Binding<Viewpoint?>,
-***REMOVED******REMOVED***_ visibleArea: Binding<Polygon?>,
-***REMOVED******REMOVED***units: ScalebarUnits = NSLocale.current.usesMetricSystem ? .metric : .imperial,
-***REMOVED******REMOVED***useGeodeticCalculations: Bool = true
-***REMOVED***) {
-***REMOVED******REMOVED***self.viewpoint = viewpoint
-***REMOVED******REMOVED***self.visibleArea = visibleArea
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***switch alignment {
-***REMOVED******REMOVED***case .topTrailing, .trailing, .bottomTrailing:
-***REMOVED******REMOVED******REMOVED***self.alignment = .right
-***REMOVED******REMOVED***case .top, .center, .bottom:
-***REMOVED******REMOVED******REMOVED***self.alignment = .center
-***REMOVED******REMOVED***default:
-***REMOVED******REMOVED******REMOVED***self.alignment = .left
-***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***self.style = style
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***_viewModel = StateObject(
-***REMOVED******REMOVED******REMOVED***wrappedValue: ScalebarViewModel(
-***REMOVED******REMOVED******REMOVED******REMOVED***spatialReference,
-***REMOVED******REMOVED******REMOVED******REMOVED***targetWidth,
-***REMOVED******REMOVED******REMOVED******REMOVED***units,
-***REMOVED******REMOVED******REMOVED******REMOVED***unitsPerPoint,
-***REMOVED******REMOVED******REMOVED******REMOVED***useGeodeticCalculations,
-***REMOVED******REMOVED******REMOVED******REMOVED***viewpoint,
-***REMOVED******REMOVED******REMOVED******REMOVED***visibleArea
-***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED***)
-***REMOVED***
-***REMOVED***
-***REMOVED***public var body: some View {
-***REMOVED******REMOVED***Group {
-***REMOVED******REMOVED******REMOVED***switch style {
-***REMOVED******REMOVED******REMOVED***case .alternatingBar:
-***REMOVED******REMOVED******REMOVED******REMOVED***alternatingBarStyleRender
-***REMOVED******REMOVED******REMOVED***case .bar:
-***REMOVED******REMOVED******REMOVED******REMOVED***barStyleRender
-***REMOVED******REMOVED******REMOVED***case .dualUnitLine:
-***REMOVED******REMOVED******REMOVED******REMOVED***dualUnitLineStyleRender
-***REMOVED******REMOVED******REMOVED***case .graduatedLine:
-***REMOVED******REMOVED******REMOVED******REMOVED***graduatedLineStyleRender
-***REMOVED******REMOVED******REMOVED***case .line:
-***REMOVED******REMOVED******REMOVED******REMOVED***lineStyleRender
-***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***.onChange(of: visibleArea.wrappedValue) {
-***REMOVED******REMOVED******REMOVED***viewModel.visibleAreaSubject.send($0)
-***REMOVED***
-***REMOVED******REMOVED***.onSizeChange {
-***REMOVED******REMOVED******REMOVED***height = $0.height
-***REMOVED***
-***REMOVED******REMOVED***.frame(
-***REMOVED******REMOVED******REMOVED***width: $viewModel.displayLength.wrappedValue,
-***REMOVED******REMOVED******REMOVED***height: height
-***REMOVED******REMOVED***)
-***REMOVED***
-***REMOVED***
+***REMOVED******REMOVED***/ The font used by the scalebar, available in both `Font` and `UIFont` types.
 ***REMOVED***internal static var font: (font: Font, uiFont: UIFont) {
 ***REMOVED******REMOVED***let size = 10.0
 ***REMOVED******REMOVED***let uiFont = UIFont.systemFont(
@@ -129,34 +35,128 @@ public struct Scalebar: View {
 ***REMOVED******REMOVED***return (font, uiFont)
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ The rendering height of the scalebar font.
 ***REMOVED***internal static var fontHeight: Double {
 ***REMOVED******REMOVED***return "".size(withAttributes: [.font: Scalebar.font.uiFont]).height
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ Acts as a data provider of the current scale.
+***REMOVED***private var viewpoint: Binding<Viewpoint?>
+***REMOVED***
+***REMOVED******REMOVED*** - MARK: Internal/Private constants
+***REMOVED***
+***REMOVED******REMOVED***/ The corner radius used by bar style scalebar renders.
+***REMOVED***internal static let barCornerRadius = 2.5
+***REMOVED***
+***REMOVED******REMOVED***/ The frame height alloted to bar style scalebar renders.
+***REMOVED***internal static let barFrameHeight = 10.0
+***REMOVED***
+***REMOVED******REMOVED***/ The darker fill color used by the alternating bar style render.
+***REMOVED***internal static let fillColor1 = Color.black
+***REMOVED***
+***REMOVED******REMOVED***/ The lighter fill color used by the bar style renders.
+***REMOVED***internal static let fillColor2 = Color(uiColor: .lightGray).opacity(0.5)
+***REMOVED***
 ***REMOVED******REMOVED***/ The spacing between labels and the scalebar.
 ***REMOVED***internal static let labelYPad: CGFloat = 2.0
 ***REMOVED***
+***REMOVED******REMOVED***/ The required padding between scalebar labels.
 ***REMOVED***internal static let labelXPad: CGFloat = 4.0
-***REMOVED***internal static let tickHeight: CGFloat = 6.0
-***REMOVED***internal static let tick2Height: CGFloat = 4.5
-***REMOVED***internal static let notchHeight: CGFloat = 6.0
-***REMOVED***internal static var numberFormatter: NumberFormatter = {
-***REMOVED******REMOVED***let numberFormatter = NumberFormatter()
-***REMOVED******REMOVED***numberFormatter.numberStyle = .decimal
-***REMOVED******REMOVED***numberFormatter.formatterBehavior = .behavior10_4
-***REMOVED******REMOVED***numberFormatter.maximumFractionDigits = 2
-***REMOVED******REMOVED***numberFormatter.minimumFractionDigits = 0
-***REMOVED******REMOVED***return numberFormatter
-***REMOVED***()
 ***REMOVED***
-***REMOVED***internal static let lineCap = CGLineCap.round
+***REMOVED******REMOVED***/ The color of the prominent scalebar line.
+***REMOVED***internal static let lineColor = Color.white
 ***REMOVED***
-***REMOVED***internal var zeroStringWidth: CGFloat = 0
-***REMOVED***internal var maxRightUnitsPad: CGFloat = 0
+***REMOVED******REMOVED***/ The line height alloted to line style scalebar renders.
+***REMOVED***internal static let lineFrameHeight = 6.0
 ***REMOVED***
-***REMOVED******REMOVED***/ Set a minScale if you only want the scalebar to appear when you reach a large enough scale maybe
-***REMOVED******REMOVED***/  something like 10_000_000. This could be useful because the scalebar is really only accurate for
-***REMOVED******REMOVED***/  the center of the map on smaller scales (when zoomed way out). A minScale of 0 means it will
-***REMOVED******REMOVED***/  always be visible
-***REMOVED***private let minScale: Double = 0
+***REMOVED******REMOVED***/ The width of the prominent scalebar line.
+***REMOVED***internal static let lineWidth = 3.0
+***REMOVED***
+***REMOVED******REMOVED***/ The shadow color used by all scalebar style renders.
+***REMOVED***internal static let shadowColor = Color(uiColor: .black).opacity(0.65)
+***REMOVED***
+***REMOVED******REMOVED***/ The shadow radius used by all scalebar style renders.
+***REMOVED***internal static let shadowRadius = 1.0
+***REMOVED***
+***REMOVED******REMOVED***/ The text shadow color used by all scalebar style renders.
+***REMOVED***internal static let textShadowColor = Color.white
+***REMOVED***
+***REMOVED******REMOVED***/ The render style for this `Scalebar`.
+***REMOVED***private let style: ScalebarStyle
+***REMOVED***
+***REMOVED******REMOVED*** - MARK: Public methods/vars
+***REMOVED***
+***REMOVED******REMOVED***/ A scalebar displays the current map scale.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - autoHide: Set this to `true` to have the scalebar automatically show & hide itself.
+***REMOVED******REMOVED***/   - minScale: Set a minScale if you only want the scalebar to appear when you reach a large
+***REMOVED******REMOVED***/***REMOVED*** enough scale maybe something like 10_000_000. This could be useful because the scalebar is
+***REMOVED******REMOVED***/***REMOVED*** really only accurate for the center of the map on smaller scales (when zoomed way out). A
+***REMOVED******REMOVED***/***REMOVED*** minScale of 0 means it will always be visible.
+***REMOVED******REMOVED***/   - spatialReference: The map's spatial reference.
+***REMOVED******REMOVED***/   - style: The visual appearance of the scalebar.
+***REMOVED******REMOVED***/   - units: The units to be displayed in the scalebar.
+***REMOVED******REMOVED***/   - unitsPerPoint: The current number of device independent pixels to map display units.
+***REMOVED******REMOVED***/   - useGeodeticCalculations: Set `false` to compute scale without a geodesic curve.
+***REMOVED******REMOVED***/   - viewpoint: The map's current viewpoint.
+***REMOVED******REMOVED***/   - width: The screen width alloted to the scalebar.
+***REMOVED***public init(
+***REMOVED******REMOVED***autoHide: Bool = false,
+***REMOVED******REMOVED***minScale: Double = .zero,
+***REMOVED******REMOVED***spatialReference: SpatialReference? = nil,
+***REMOVED******REMOVED***style: ScalebarStyle = .alternatingBar,
+***REMOVED******REMOVED***units: ScalebarUnits = NSLocale.current.usesMetricSystem ? .metric : .imperial,
+***REMOVED******REMOVED***unitsPerPoint: Binding<Double?>,
+***REMOVED******REMOVED***useGeodeticCalculations: Bool = true,
+***REMOVED******REMOVED***viewpoint: Binding<Viewpoint?>,
+***REMOVED******REMOVED***width: Double
+***REMOVED***) {
+***REMOVED******REMOVED***self.style = style
+***REMOVED******REMOVED***self.viewpoint = viewpoint
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***_viewModel = StateObject(
+***REMOVED******REMOVED******REMOVED***wrappedValue: ScalebarViewModel(
+***REMOVED******REMOVED******REMOVED******REMOVED***autoHide,
+***REMOVED******REMOVED******REMOVED******REMOVED***minScale,
+***REMOVED******REMOVED******REMOVED******REMOVED***spatialReference,
+***REMOVED******REMOVED******REMOVED******REMOVED***style,
+***REMOVED******REMOVED******REMOVED******REMOVED***width,
+***REMOVED******REMOVED******REMOVED******REMOVED***units,
+***REMOVED******REMOVED******REMOVED******REMOVED***unitsPerPoint,
+***REMOVED******REMOVED******REMOVED******REMOVED***useGeodeticCalculations,
+***REMOVED******REMOVED******REMOVED******REMOVED***viewpoint.wrappedValue
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED***public var body: some View {
+***REMOVED******REMOVED***Group {
+***REMOVED******REMOVED******REMOVED***if $viewModel.isVisible.wrappedValue {
+***REMOVED******REMOVED******REMOVED******REMOVED***switch style {
+***REMOVED******REMOVED******REMOVED******REMOVED***case .alternatingBar:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***alternatingBarStyleRender
+***REMOVED******REMOVED******REMOVED******REMOVED***case .bar:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***barStyleRender
+***REMOVED******REMOVED******REMOVED******REMOVED***case .dualUnitLine:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***dualUnitLineStyleRender
+***REMOVED******REMOVED******REMOVED******REMOVED***case .graduatedLine:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***graduatedLineStyleRender
+***REMOVED******REMOVED******REMOVED******REMOVED***case .line:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***lineStyleRender
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***EmptyView()
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***.onChange(of: viewpoint.wrappedValue) {
+***REMOVED******REMOVED******REMOVED***viewModel.viewpointSubject.send($0)
+***REMOVED***
+***REMOVED******REMOVED***.onSizeChange {
+***REMOVED******REMOVED******REMOVED***height = $0.height
+***REMOVED***
+***REMOVED******REMOVED***.frame(
+***REMOVED******REMOVED******REMOVED***width: $viewModel.displayLength.wrappedValue,
+***REMOVED******REMOVED******REMOVED***height: height ?? .zero
+***REMOVED******REMOVED***)
+***REMOVED***
 ***REMOVED***
