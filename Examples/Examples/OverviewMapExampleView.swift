@@ -23,33 +23,35 @@ struct OverviewMapExampleView: View {
 ***REMOVED******REMOVED***case scene
 ***REMOVED***
 ***REMOVED***
-***REMOVED***@State
-***REMOVED***private var mapOrScene: MapOrScene = .map
+***REMOVED***@State private var mapOrScene: MapOrScene = .map
 ***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***Picker("Map or Scene", selection: $mapOrScene, content: {
-***REMOVED******REMOVED******REMOVED***Text("Map").tag(MapOrScene.map)
-***REMOVED******REMOVED******REMOVED***Text("Scene").tag(MapOrScene.scene)
-***REMOVED***)
-***REMOVED******REMOVED******REMOVED***.pickerStyle(SegmentedPickerStyle())
-***REMOVED******REMOVED******REMOVED***.padding()
-***REMOVED******REMOVED***switch mapOrScene {
-***REMOVED******REMOVED***case .map:
-***REMOVED******REMOVED******REMOVED***OverviewMapForMapView()
-***REMOVED******REMOVED***case .scene:
-***REMOVED******REMOVED******REMOVED***OverviewMapForSceneView()
+***REMOVED******REMOVED***Group {
+***REMOVED******REMOVED******REMOVED***switch mapOrScene {
+***REMOVED******REMOVED******REMOVED***case .map:
+***REMOVED******REMOVED******REMOVED******REMOVED***OverviewMapForMapView()
+***REMOVED******REMOVED******REMOVED***case .scene:
+***REMOVED******REMOVED******REMOVED******REMOVED***OverviewMapForSceneView()
+***REMOVED******REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***.toolbar(content: {
+***REMOVED******REMOVED******REMOVED***ToolbarItem(placement: .navigationBarTrailing) {
+***REMOVED******REMOVED******REMOVED******REMOVED***Picker("Map or Scene", selection: $mapOrScene) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Map").tag(MapOrScene.map)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Scene").tag(MapOrScene.scene)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.pickerStyle(.menu)
+***REMOVED******REMOVED***
+***REMOVED***)
 ***REMOVED***
 ***REMOVED***
 
 struct OverviewMapForMapView: View {
 ***REMOVED***let map = Map(basemapStyle: .arcGISImagery)
 ***REMOVED***
-***REMOVED***@State
-***REMOVED***private var viewpoint: Viewpoint?
+***REMOVED***@State private var viewpoint: Viewpoint?
 ***REMOVED***
-***REMOVED***@State
-***REMOVED***private var visibleArea: ArcGIS.Polygon?
+***REMOVED***@State private var visibleArea: ArcGIS.Polygon?
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***MapView(map: map)
@@ -75,8 +77,7 @@ struct OverviewMapForMapView: View {
 struct OverviewMapForSceneView: View {
 ***REMOVED***let scene = Scene(basemapStyle: .arcGISImagery)
 ***REMOVED***
-***REMOVED***@State
-***REMOVED***private var viewpoint: Viewpoint?
+***REMOVED***@State private var viewpoint: Viewpoint?
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***SceneView(scene: scene)
