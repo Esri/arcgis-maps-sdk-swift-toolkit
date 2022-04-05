@@ -13,10 +13,20 @@
 
 import Foundation
 
+/// Visual scalebar styles.
 public enum ScalebarStyle {
-    case line
-    case bar
-    case graduatedLine
+    /// Displays a single unit with segemeted bars of alternating fill color.
     case alternatingBar
+    
+    /// Displays a single unit.
+    case bar
+    
+    /// Displays both metric and imperial units. The primary unit is displayed on top.
     case dualUnitLine
+    
+    /// Displays a single unit with tick marks.
+    case graduatedLine
+    
+    /// Displays a single unit with endpoint tick marks.
+    case line
 }

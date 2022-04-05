@@ -14,102 +14,70 @@
 import SwiftUI
 
 extension Scalebar {
+    /// Renders all of the scalebar labels.
+    var allLabelsView: some View {
+        ZStack {
+            ForEach(viewModel.labels, id: \.index) {
+                Text($0.text)
+                    .scalebarText()
+                    .position(
+                        x: $0.xOffset,
+                        y: ScalebarLabel.yOffset
+                    )
+            }
+        }
+        .frame(height: Scalebar.fontHeight)
+    }
+    
+    /// Renders a scalebar with `ScalebarStyle.alternatingBar`.
     var alternatingBarStyleRender: some View {
         VStack(spacing: Scalebar.labelYPad) {
-            HStack(spacing: -lineWidth) {
+            HStack(spacing: -Scalebar.lineWidth) {
                 ForEach(viewModel.labels.dropFirst(), id: \.index) {
                     Rectangle()
-                        .fill($0.index % 2 == 0 ? fillColor1 : fillColor2)
+                        .fill($0.index % 2 == 1 ? Scalebar.fillColor1 : Scalebar.fillColor2)
                         .border(
-                            lineColor,
-                            width: lineWidth
+                            Scalebar.lineColor,
+                            width: Scalebar.lineWidth
                         )
                 }
             }
             .frame(
-                height: barFrameHeight,
+                height: Scalebar.barFrameHeight,
                 alignment: .leading
             )
-            .compositingGroup()
-            .cornerRadius(lineCornerRadius)
-            .shadow(
-                color: shadowColor,
-                radius: shadowRadius
-            )
-            ZStack {
-                ForEach(viewModel.labels, id: \.index) {
-                    Text($0.text)
-                        .scalebarText(self)
-                        .position(
-                            x: $0.xOffset,
-                            y: ScalebarLabel.yOffset
-                        )
-                }
-            }
+            .cornerRadius(Scalebar.barCornerRadius)
+            .scalebarShadow()
+            allLabelsView
         }
     }
     
+    /// Renders a scalebar with `ScalebarStyle.bar`.
     var barStyleRender: some View {
         VStack(spacing: Scalebar.labelYPad) {
             Rectangle()
-                .fill(fillColor2)
+                .fill(Scalebar.fillColor2)
                 .border(
-                    lineColor,
-                    width: lineWidth
+                    Scalebar.lineColor,
+                    width: Scalebar.lineWidth
                 )
                 .frame(
-                    height: barFrameHeight,
+                    height: Scalebar.barFrameHeight,
                     alignment: .leading
                 )
-                .cornerRadius(lineCornerRadius)
-                .shadow(
-                    color: shadowColor,
-                    radius: shadowRadius
-                )
+                .cornerRadius(Scalebar.barCornerRadius)
+                .scalebarShadow()
             Text(viewModel.labels.last?.text ?? "")
-                .scalebarText(self)
+                .scalebarText()
         }
     }
     
-    var lineStyleRender: some View {
-        VStack(spacing: Scalebar.labelYPad) {
-            GeometryReader { geoProxy in
-                ZStack(alignment: .bottom) {
-                    Path { path in
-                        let zero = Double.zero
-                        let maxX = geoProxy.size.width
-                        let maxY = geoProxy.size.height
-                        path.move(to: CGPoint(x: zero, y: zero))
-                        path.addLine(to: CGPoint(x: zero, y: maxY))
-                        path.addLine(to: CGPoint(x: maxX, y: maxY))
-                        path.addLine(to: CGPoint(x: maxX, y: zero))
-                    }
-                    .stroke(
-                        style: .init(
-                            lineWidth: lineWidth,
-                            lineCap: .round,
-                            lineJoin: .round
-                        )
-                    )
-                    .fill(lineColor)
-                }
-                .compositingGroup()
-                .shadow(
-                    color: shadowColor,
-                    radius: shadowRadius
-                )
-            }
-            .frame(height: lineFrameHeight)
-            Text(viewModel.labels.last?.text ?? "")
-                .scalebarText(self)
-        }
-    }
-    
+    /// Renders a scalebar with `ScalebarStyle.dualUnitLine`.
     var dualUnitLineStyleRender: some View {
         VStack(spacing: Scalebar.labelYPad) {
             ZStack {
                 Text(viewModel.labels.last?.text ?? "")
-                    .scalebarText(self)
+                    .scalebarText()
                     .position(
                         x: viewModel.labels.last?.xOffset ?? .zero,
                         y: ScalebarLabel.yOffset
@@ -143,23 +111,19 @@ extension Scalebar {
                     }
                     .stroke(
                         style: .init(
-                            lineWidth: lineWidth,
+                            lineWidth: Scalebar.lineWidth,
                             lineCap: .round,
                             lineJoin: .round
                         )
                     )
-                    .fill(lineColor)
+                    .fill(Scalebar.lineColor)
                 }
-                .compositingGroup()
-                .shadow(
-                    color: shadowColor,
-                    radius: shadowRadius
-                )
+                .scalebarShadow()
             }
-            .frame(height: barFrameHeight)
+            .frame(height: Scalebar.barFrameHeight)
             ZStack {
                 Text(viewModel.alternateUnit.label)
-                    .scalebarText(self)
+                    .scalebarText()
                     .position(
                         x: viewModel.alternateUnit.screenLength,
                         y: ScalebarLabel.yOffset
@@ -169,6 +133,7 @@ extension Scalebar {
         }
     }
     
+    /// Renders a scalebar with `ScalebarStyle.graduatedLine`.
     var graduatedLineStyleRender: some View {
         VStack(spacing: Scalebar.labelYPad) {
             GeometryReader { geoProxy in
@@ -188,27 +153,48 @@ extension Scalebar {
                     }
                     .stroke(
                         style: .init(
-                            lineWidth: lineWidth,
+                            lineWidth: Scalebar.lineWidth,
                             lineCap: .round,
                             lineJoin: .round
                         )
                     )
-                    .fill(lineColor)
+                    .fill(Scalebar.lineColor)
                 }
-                .compositingGroup()
-                .shadow(
-                    color: shadowColor,
-                    radius: shadowRadius
-                )
+                .scalebarShadow()
             }
-            .frame(height: lineFrameHeight)
-            ZStack {
-                ForEach(viewModel.labels, id: \.index) {
-                    Text($0.text)
-                        .scalebarText(self)
-                        .position(x: $0.xOffset, y: ScalebarLabel.yOffset)
+            .frame(height: Scalebar.lineFrameHeight)
+            allLabelsView
+        }
+    }
+    
+    /// Renders a scalebar with `ScalebarStyle.line`.
+    var lineStyleRender: some View {
+        VStack(spacing: Scalebar.labelYPad) {
+            GeometryReader { geoProxy in
+                ZStack(alignment: .bottom) {
+                    Path { path in
+                        let zero = Double.zero
+                        let maxX = geoProxy.size.width
+                        let maxY = geoProxy.size.height
+                        path.move(to: CGPoint(x: zero, y: zero))
+                        path.addLine(to: CGPoint(x: zero, y: maxY))
+                        path.addLine(to: CGPoint(x: maxX, y: maxY))
+                        path.addLine(to: CGPoint(x: maxX, y: zero))
+                    }
+                    .stroke(
+                        style: .init(
+                            lineWidth: Scalebar.lineWidth,
+                            lineCap: .round,
+                            lineJoin: .round
+                        )
+                    )
+                    .fill(Scalebar.lineColor)
                 }
+                .scalebarShadow()
             }
+            .frame(height: Scalebar.lineFrameHeight)
+            Text(viewModel.labels.last?.text ?? "")
+                .scalebarText()
         }
     }
 }

@@ -15,22 +15,40 @@ import SwiftUI
 
 /// A modifier which "styles" a Text element's font, shadow color and radius.
 struct ScalebarTextModifier: ViewModifier {
-    let scalebar: Scalebar
-    
     func body(content: Content) -> some View {
         content
             .font(Scalebar.font.font)
             .shadow(
-                color: scalebar.textShadowColor,
-                radius: scalebar.shadowRadius
+                color: Scalebar.textShadowColor,
+                radius: Scalebar.shadowRadius
             )
     }
 }
     
 extension Text {
-    func scalebarText(_ scalebar: Scalebar) -> some View {
+    func scalebarText() -> some View {
         modifier(
-            ScalebarTextModifier(scalebar: scalebar)
+            ScalebarTextModifier()
+        )
+    }
+}
+
+/// A modifier which "styles" a scalebar's shadow color and radius.
+struct ScalebarGroupShadowModifier: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .compositingGroup()
+            .shadow(
+                color: Scalebar.shadowColor,
+                radius: Scalebar.shadowRadius
+            )
+    }
+}
+    
+extension View {
+    func scalebarShadow() -> some View {
+        modifier(
+            ScalebarGroupShadowModifier()
         )
     }
 }

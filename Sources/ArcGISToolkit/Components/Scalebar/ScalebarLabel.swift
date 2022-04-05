@@ -13,11 +13,18 @@
 
 import SwiftUI
 
+/// Models a label displayed along the edge of a scalebar
 struct ScalebarLabel {
+    /// The number of the label with the leftmost label ("0") starting at -1.
     let index: Int
+    
+    /// The horizontal offset of this label.
     let xOffset: CGFloat
+    
+    /// The text to be displayed by this label.
     let text: String
     
+    /// The vertical offset of this label.
     static var yOffset: CGFloat {
         return Scalebar.fontHeight / 2.0
     }
