@@ -16,44 +16,39 @@ import ArcGISToolkit
 import SwiftUI
 
 struct ScalebarExampleView: View {
-    /// Allows for communication between the `Scalebar` and `MapView` or `SceneView`.
-    @State private var scale: Double?
-    
-    /// Allows for communication between the `Scalebar` and `MapView` or `SceneView`.
+    /// Allows for communication between the `Scalebar` and `MapView`.
     @State private var spatialReference: SpatialReference?
     
+    /// Allows for communication between the `Scalebar` and `MapView`.
     @State private var unitsPerPoint: Double?
     
-    /// Allows for communication between the `Scalebar` and `MapView` or `SceneView`.
+    /// Allows for communication between the `Scalebar` and `MapView`.
     @State private var viewpoint: Viewpoint?
     
-    /// Allows for communication between the `Scalebar` and `MapView` or `SceneView`.
-    @State private var visibleArea: Polygon?
+    /// The location of the scalebar on screen.
+    private let alignment: Alignment = .bottomLeading
     
     /// The `Map` displayed in the `MapView`.
     private let map = Map(basemapStyle: .arcGISTopographic)
     
+    /// The width of the scalebar.
+    private let width: Double = 175.0
+    
     var body: some View {
         MapView(map: map, viewpoint: viewpoint)
-            .onViewpointChanged(kind: .centerAndScale) { viewpoint = $0 }
-            .onVisibleAreaChanged { visibleArea = $0 }
-            .onScaleChanged { scale = $0 }
             .onSpatialReferenceChanged { spatialReference = $0 }
             .onUnitsPerPointChanged { unitsPerPoint = $0 }
-            .overlay(alignment: .bottomLeading) {
+            .onViewpointChanged(kind: .centerAndScale) { viewpoint = $0 }
+            .overlay(alignment: alignment) {
                 if map.loadStatus == .loaded {
                     Scalebar(
-                        alignment: .left,
-                        spatialReference,
-                        .line,
-                        175,
-                        $unitsPerPoint,
-                        $viewpoint,
-                        $visibleArea,
-                        units: .imperial
+                        spatialReference: spatialReference,
+                        unitsPerPoint: $unitsPerPoint,
+                        viewpoint: $viewpoint,
+                        width: width
                     )
                     .padding(.horizontal, 10)
-                    .padding(.vertical, 30)
+                    .padding(.vertical, 50)
                 }
             }
     }
