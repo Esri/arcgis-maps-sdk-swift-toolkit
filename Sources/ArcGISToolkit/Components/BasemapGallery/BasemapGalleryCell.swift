@@ -86,7 +86,7 @@ struct BasemapGalleryCell: View {
 }
 
 extension BasemapGalleryItem {
-    /// A Boolean denoting if the item has an error or not.
+    /// A Boolean value indicating whether the item has an error.
     var hasError: Bool {
         loadBasemapError != nil ||
         spatialReferenceStatus == .noMatch
