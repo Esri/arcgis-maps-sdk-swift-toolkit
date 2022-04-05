@@ -32,7 +32,7 @@ public struct BasemapGallery: View {
 ***REMOVED******REMOVED***case list(width: CGFloat = 125)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Creates a `BasemapGallery`. Uses the given array of basemap gallery items.
+***REMOVED******REMOVED***/ Creates a `BasemapGallery` with the given geo model and array of basemap gallery items.
 ***REMOVED******REMOVED***/ - Remark: If `items` is empty, ArcGIS Online's developer basemaps will
 ***REMOVED******REMOVED***/ be loaded and added to `items`.
 ***REMOVED******REMOVED***/ - Parameters:
@@ -45,7 +45,8 @@ public struct BasemapGallery: View {
 ***REMOVED******REMOVED***viewModel = BasemapGalleryViewModel(geoModel: geoModel, items: items)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Creates a `BasemapGallery`.  The portal will be used to to retrieve basemaps.
+***REMOVED******REMOVED***/ Creates a `BasemapGallery` with the given geo model and portal.
+***REMOVED******REMOVED***/ The portal will be used to retrieve basemaps.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - geoModel: A geo model.
 ***REMOVED******REMOVED***/   - portal: The portal to use to load basemaps.
