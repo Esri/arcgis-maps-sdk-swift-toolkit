@@ -117,8 +117,7 @@ public struct OverviewMap: View {
 ***REMOVED******REMOVED***/ - Returns: The new `Viewpoint`.
 ***REMOVED***func makeOverviewViewpoint() -> Viewpoint? {
 ***REMOVED******REMOVED***guard let viewpoint = viewpoint,
-***REMOVED******REMOVED******REMOVED***  let center = viewpoint.targetGeometry as? Point
-***REMOVED******REMOVED***else { return nil ***REMOVED***
+***REMOVED******REMOVED******REMOVED***  let center = viewpoint.targetGeometry as? Point else { return nil ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***return Viewpoint(
 ***REMOVED******REMOVED******REMOVED***center: center,
