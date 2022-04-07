@@ -89,7 +89,10 @@ public struct OverviewMap: View {
         )
         .attributionText(hidden: true)
         .interactionModes([])
-        .border(.black, width: 1)
+        .border(
+            .black,
+            width: 1
+        )
         .onAppear {
             graphic.symbol = symbol
         }
