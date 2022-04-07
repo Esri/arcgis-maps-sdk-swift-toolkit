@@ -117,8 +117,7 @@ public struct OverviewMap: View {
     /// - Returns: The new `Viewpoint`.
     func makeOverviewViewpoint() -> Viewpoint? {
         guard let viewpoint = viewpoint,
-              let center = viewpoint.targetGeometry as? Point
-        else { return nil }
+              let center = viewpoint.targetGeometry as? Point else { return nil }
         
         return Viewpoint(
             center: center,
