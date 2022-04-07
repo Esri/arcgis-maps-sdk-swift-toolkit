@@ -48,13 +48,28 @@ struct SiteAndFacilitySelector: View {
         /// The view model used by this selector.
         @EnvironmentObject var viewModel: FloorFilterViewModel
         
+        /// Indicates whether the view model should be notified of the selection update.
+        @State private var updateViewModel = true
+        
         /// Indicates that the keyboard is animating and some views may require reload.
-        @State
-        private var keyboardAnimating = false
+        @State private var keyboardAnimating = false
         
         /// A site name filter phrase entered by the user.
-        @State
-        private var searchPhrase: String = ""
+        @State private var searchPhrase: String = ""
+        
+        /// A local record of the site selected in the view model.
+        ///
+        /// As the view model's selection will change to `.facility(FloorFacility)` and
+        /// `.level(FloorLevel)` over time, this is needed to keep track of the site at the top of the
+        /// hierarchy to keep the site selection persistent in the navigation view.
+        @State private var selectedSite: FloorSite? {
+            didSet {
+                if updateViewModel {
+                    viewModel.setSite(selectedSite)
+                }
+                updateViewModel = true
+            }
+        }
         
         /// Sites contained in a `FloorManager`.
         let sites: [FloorSite]
@@ -120,13 +135,13 @@ struct SiteAndFacilitySelector: View {
                     }
                         .padding([.vertical], 4)
                 }
-                    .navigationBarTitle(
-                        Text("Select a site"),
-                        displayMode: .inline
-                    )
-                    .navigationBarItems(trailing:
-                        CloseButton { isHidden.wrappedValue.toggle() }
-                    )
+                .navigationBarTitle(
+                    Text("Select a site"),
+                    displayMode: .inline
+                )
+                .navigationBarItems(trailing:
+                    CloseButton { isHidden.wrappedValue.toggle() }
+                )
             }
         }
         
@@ -139,7 +154,7 @@ struct SiteAndFacilitySelector: View {
                 NavigationLink(
                     site.name,
                     tag: site,
-                    selection: $viewModel.selectedSite
+                    selection: $selectedSite
                 ) {
                     FacilitiesList(
                         facilities: site.facilities,
@@ -147,14 +162,18 @@ struct SiteAndFacilitySelector: View {
                         isHidden: isHidden
                     )
                 }
-                    .onTapGesture {
-                        viewModel.setSite(
-                            site,
-                            zoomTo: true
-                        )
-                    }
+                .onTapGesture {
+                    viewModel.setSite(site)
+                }
             }
-                .listStyle(.plain)
+            .listStyle(.plain)
+            .onChange(of: $viewModel.selection.wrappedValue) { _ in
+                // Setting the `updateViewModel` flag false allows
+                // `selectedSite` to receive upstream updates from the view
+                // model without republishing them back up to the view model.
+                updateViewModel = false
+                selectedSite = viewModel.selectedSite
+            }
         }
     }
     
@@ -260,10 +279,7 @@ struct SiteAndFacilitySelector: View {
             ScrollViewReader { proxy in
                 List(matchingFacilities, id: \.id) { facility in
                     Button {
-                        viewModel.setFacility(
-                            facility,
-                            zoomTo: true
-                        )
+                        viewModel.setFacility(facility)
                         isHidden.wrappedValue.toggle()
                     } label: {
                         HStack {
@@ -289,15 +305,14 @@ struct SiteAndFacilitySelector: View {
                     }
                 }
                 .listStyle(.plain)
-                .onChange(of: viewModel.selectedFacility) {
-                    guard let facility = $0 else {
-                        return
-                    }
-                    withAnimation {
-                        proxy.scrollTo(
-                            facility.id,
-                            anchor: .center
-                        )
+                .onChange(of: viewModel.selection) { _ in
+                    if let floorFacility = viewModel.selectedFacility {
+                        withAnimation {
+                            proxy.scrollTo(
+                                floorFacility.id,
+                                anchor: .center
+                            )
+                        }
                     }
                 }
             }
