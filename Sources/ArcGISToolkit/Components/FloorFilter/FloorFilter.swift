@@ -61,24 +61,17 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED***.frame(maxWidth: .infinity)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value that indicates whether there are levels to display.  This will be false if there is no
-***REMOVED******REMOVED***/ selected facility or if the selected facility has no levels.
-***REMOVED***private var hasLevelsToDisplay: Bool {
-***REMOVED******REMOVED***!(viewModel.selectedFacility == nil ||
-***REMOVED******REMOVED***  viewModel.selectedFacility!.levels.isEmpty)
-***REMOVED***
-***REMOVED***
 ***REMOVED******REMOVED***/ Displays the available levels.
 ***REMOVED***private var levelsSelectorView: some View {
 ***REMOVED******REMOVED***Group {
-***REMOVED******REMOVED******REMOVED***if hasLevelsToDisplay {
+***REMOVED******REMOVED******REMOVED***if viewModel.hasLevelsToDisplay {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if topAligned {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Divider()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 30)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***LevelSelector(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isCollapsed: $isLevelsViewCollapsed,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***levels: sortedLevels,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***levels: viewModel.sortedLevels,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***topAligned: topAligned
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***if !topAligned {
@@ -128,16 +121,8 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED******REMOVED***.esriBorder()
 ***REMOVED******REMOVED******REMOVED***.opacity(isSelectorHidden ? .zero : 1)
 ***REMOVED******REMOVED******REMOVED***.onChange(of: viewpoint.wrappedValue?.targetGeometry) { _ in
-***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.updateSelection()
+***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.viewpointSubject.send(viewpoint.wrappedValue)
 ***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ The selected facility's levels, sorted by `level.verticalOrder`.
-***REMOVED***private var sortedLevels: [FloorLevel] {
-***REMOVED******REMOVED***let levels = viewModel.selectedFacility?.levels ?? []
-***REMOVED******REMOVED***return levels.sorted {
-***REMOVED******REMOVED******REMOVED***$0.verticalOrder > $1.verticalOrder
-***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Indicates that the selector should be presented with a top oriented aligment configuration.

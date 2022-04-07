@@ -48,13 +48,28 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED***/ The view model used by this selector.
 ***REMOVED******REMOVED***@EnvironmentObject var viewModel: FloorFilterViewModel
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ Indicates whether the view model should be notified of the selection update.
+***REMOVED******REMOVED***@State private var updateViewModel = true
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ Indicates that the keyboard is animating and some views may require reload.
-***REMOVED******REMOVED***@State
-***REMOVED******REMOVED***private var keyboardAnimating = false
+***REMOVED******REMOVED***@State private var keyboardAnimating = false
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ A site name filter phrase entered by the user.
-***REMOVED******REMOVED***@State
-***REMOVED******REMOVED***private var searchPhrase: String = ""
+***REMOVED******REMOVED***@State private var searchPhrase: String = ""
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ A local record of the site selected in the view model.
+***REMOVED******REMOVED******REMOVED***/
+***REMOVED******REMOVED******REMOVED***/ As the view model's selection will change to `.facility(FloorFacility)` and
+***REMOVED******REMOVED******REMOVED***/ `.level(FloorLevel)` over time, this is needed to keep track of the site at the top of the
+***REMOVED******REMOVED******REMOVED***/ hierarchy to keep the site selection persistent in the navigation view.
+***REMOVED******REMOVED***@State private var selectedSite: FloorSite? {
+***REMOVED******REMOVED******REMOVED***didSet {
+***REMOVED******REMOVED******REMOVED******REMOVED***if updateViewModel {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.setSite(selectedSite)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***updateViewModel = true
+***REMOVED******REMOVED***
+***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ Sites contained in a `FloorManager`.
 ***REMOVED******REMOVED***let sites: [FloorSite]
@@ -120,13 +135,13 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding([.vertical], 4)
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.navigationBarTitle(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Select a site"),
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***displayMode: .inline
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.navigationBarItems(trailing:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***CloseButton { isHidden.wrappedValue.toggle() ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***.navigationBarTitle(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Select a site"),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***displayMode: .inline
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***.navigationBarItems(trailing:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***CloseButton { isHidden.wrappedValue.toggle() ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***
@@ -139,7 +154,7 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***NavigationLink(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***site.name,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***tag: site,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selection: $viewModel.selectedSite
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selection: $selectedSite
 ***REMOVED******REMOVED******REMOVED******REMOVED***) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FacilitiesList(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***facilities: site.facilities,
@@ -147,14 +162,18 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isHidden: isHidden
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onTapGesture {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.setSite(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***site,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***zoomTo: true
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.onTapGesture {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.setSite(site)
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.listStyle(.plain)
+***REMOVED******REMOVED******REMOVED***.listStyle(.plain)
+***REMOVED******REMOVED******REMOVED***.onChange(of: $viewModel.selection.wrappedValue) { _ in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Setting the `updateViewModel` flag false allows
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** `selectedSite` to receive upstream updates from the view
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** model without republishing them back up to the view model.
+***REMOVED******REMOVED******REMOVED******REMOVED***updateViewModel = false
+***REMOVED******REMOVED******REMOVED******REMOVED***selectedSite = viewModel.selectedSite
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -260,10 +279,7 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED***ScrollViewReader { proxy in
 ***REMOVED******REMOVED******REMOVED******REMOVED***List(matchingFacilities, id: \.id) { facility in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.setFacility(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***facility,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***zoomTo: true
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.setFacility(facility)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isHidden.wrappedValue.toggle()
 ***REMOVED******REMOVED******REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***HStack {
@@ -289,15 +305,14 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.listStyle(.plain)
-***REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: viewModel.selectedFacility) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let facility = $0 else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***withAnimation {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***proxy.scrollTo(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***facility.id,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***anchor: .center
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: viewModel.selection) { _ in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let floorFacility = viewModel.selectedFacility {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***withAnimation {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***proxy.scrollTo(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***floorFacility.id,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***anchor: .center
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***

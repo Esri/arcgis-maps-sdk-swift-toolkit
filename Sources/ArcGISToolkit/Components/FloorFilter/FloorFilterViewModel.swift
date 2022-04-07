@@ -12,11 +12,21 @@
 ***REMOVED*** limitations under the License.
 
 ***REMOVED***
+import Combine
 ***REMOVED***
 
 ***REMOVED***/ Manages the state for a `FloorFilter`.
 @MainActor
 final class FloorFilterViewModel: ObservableObject {
+***REMOVED******REMOVED***/  A selected site, floor, or level.
+***REMOVED***enum Selection {
+***REMOVED******REMOVED******REMOVED***/ A selected site.
+***REMOVED******REMOVED***case site(FloorSite)
+***REMOVED******REMOVED******REMOVED***/ A selected facility.
+***REMOVED******REMOVED***case facility(FloorFacility)
+***REMOVED******REMOVED******REMOVED***/ A selected level.
+***REMOVED******REMOVED***case level(FloorLevel)
+***REMOVED***
 ***REMOVED******REMOVED***/ Creates a `FloorFilterViewModel`.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - automaticSelectionMode: The selection behavior of the floor filter.
@@ -31,13 +41,24 @@ final class FloorFilterViewModel: ObservableObject {
 ***REMOVED******REMOVED***self.floorManager = floorManager
 ***REMOVED******REMOVED***self.viewpoint = viewpoint
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED***viewpointSubscription = viewpointSubject
+***REMOVED******REMOVED******REMOVED***.debounce(for: delay, scheduler: DispatchQueue.main)
+***REMOVED******REMOVED******REMOVED***.sink(receiveValue: { [weak self] _ in
+***REMOVED******REMOVED******REMOVED******REMOVED***guard let self = self,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  let viewpoint = self.viewpoint.wrappedValue,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  !viewpoint.targetScale.isZero else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  return
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***self.makeAutoSelection()
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***Task {
 ***REMOVED******REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED******REMOVED***try await floorManager.load()
 ***REMOVED******REMOVED******REMOVED******REMOVED***if sites.count == 1,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let firstSite = sites.first {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** If we have only one site, select it.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***setSite(firstSite, zoomTo: true)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***setSite(firstSite)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED*** catch {
 ***REMOVED******REMOVED******REMOVED******REMOVED***print("error: \(error)")
@@ -48,26 +69,34 @@ final class FloorFilterViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED******REMOVED*** MARK: Published members
 ***REMOVED***
-***REMOVED******REMOVED***/ The currently selected `FloorFacility`.
-***REMOVED***@Published
-***REMOVED***var selectedFacility: FloorFacility?
-***REMOVED***
-***REMOVED******REMOVED***/ The currently selected `FloorLevel`.
-***REMOVED***@Published
-***REMOVED***var selectedLevel: FloorLevel?
-***REMOVED***
-***REMOVED******REMOVED***/ The currently selected `FloorSite`.
-***REMOVED***@Published
-***REMOVED***var selectedSite: FloorSite?
-***REMOVED***
 ***REMOVED******REMOVED***/ `true` if the model is loading it's properties, `false` if not loading.
-***REMOVED***@Published
-***REMOVED***private(set) var isLoading = true
+***REMOVED***@Published private(set) var isLoading = true
+***REMOVED***
+***REMOVED******REMOVED***/ The selected site, floor, or level.
+***REMOVED***@Published var selection: Selection? {
+***REMOVED******REMOVED***didSet {
+***REMOVED******REMOVED******REMOVED***if case let .level(oldLevel) = oldValue,
+***REMOVED******REMOVED******REMOVED***   case let .facility(facility) = selection,
+***REMOVED******REMOVED******REMOVED***   let newLevel = facility.levels.first(where: { level in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***   level.verticalOrder == oldLevel.verticalOrder
+***REMOVED******REMOVED******REMOVED***) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selection = .level(newLevel)
+***REMOVED******REMOVED*** else if case let .facility(facility) = selection,
+***REMOVED******REMOVED******REMOVED***   let level = defaultLevel(for: facility) {
+***REMOVED******REMOVED******REMOVED******REMOVED***selection = .level(level)
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***filterMapToSelectedLevel()
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED*** MARK: Constants
 ***REMOVED***
 ***REMOVED******REMOVED***/ The selection behavior of the floor filter.
 ***REMOVED***private let automaticSelectionMode: AutomaticSelectionMode
+***REMOVED***
+***REMOVED******REMOVED***/ The amount of time to wait between selection updates.
+***REMOVED***private let delay = DispatchQueue.SchedulerTimeType.Stride.seconds(0.20)
 ***REMOVED***
 ***REMOVED******REMOVED***/ The `FloorManager` containing the site, floor, and level information.
 ***REMOVED***let floorManager: FloorManager
@@ -79,9 +108,55 @@ final class FloorFilterViewModel: ObservableObject {
 ***REMOVED******REMOVED***floorManager.facilities
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value that indicates whether there are levels to display. This will be `false` if
+***REMOVED******REMOVED***/ there is no selected facility or if the selected facility has no levels.
+***REMOVED***var hasLevelsToDisplay: Bool {
+***REMOVED******REMOVED***guard let selectedFacility = selectedFacility else {
+***REMOVED******REMOVED******REMOVED***return false
+***REMOVED***
+***REMOVED******REMOVED***return !selectedFacility.levels.isEmpty
+***REMOVED***
+***REMOVED***
 ***REMOVED******REMOVED***/ The floor manager levels.
 ***REMOVED***var levels: [FloorLevel] {
 ***REMOVED******REMOVED***floorManager.levels
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ The selected site.
+***REMOVED***var selectedSite: FloorSite? {
+***REMOVED******REMOVED***switch selection {
+***REMOVED******REMOVED***case .site(let site):
+***REMOVED******REMOVED******REMOVED***return site
+***REMOVED******REMOVED***case .facility(let facility):
+***REMOVED******REMOVED******REMOVED***return facility.site
+***REMOVED******REMOVED***case .level(let level):
+***REMOVED******REMOVED******REMOVED***return level.facility?.site
+***REMOVED******REMOVED***default:
+***REMOVED******REMOVED******REMOVED***return nil
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ The selected facility.
+***REMOVED***var selectedFacility: FloorFacility? {
+***REMOVED******REMOVED***switch selection {
+***REMOVED******REMOVED***case .site:
+***REMOVED******REMOVED******REMOVED***return nil
+***REMOVED******REMOVED***case .facility(let facility):
+***REMOVED******REMOVED******REMOVED***return facility
+***REMOVED******REMOVED***case .level(let level):
+***REMOVED******REMOVED******REMOVED***return level.facility
+***REMOVED******REMOVED***default:
+***REMOVED******REMOVED******REMOVED***return nil
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ The selected level.
+***REMOVED***var selectedLevel: FloorLevel? {
+***REMOVED******REMOVED***if case let .level(level) = selection {
+***REMOVED******REMOVED******REMOVED***return level
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***return nil
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The floor manager sites.
@@ -89,9 +164,20 @@ final class FloorFilterViewModel: ObservableObject {
 ***REMOVED******REMOVED***floorManager.sites
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ The selected facility's levels, sorted by `level.verticalOrder`.
+***REMOVED***var sortedLevels: [FloorLevel] {
+***REMOVED******REMOVED***let levels = selectedFacility?.levels ?? []
+***REMOVED******REMOVED***return levels.sorted {
+***REMOVED******REMOVED******REMOVED***$0.verticalOrder > $1.verticalOrder
+***REMOVED***
+***REMOVED***
+***REMOVED***
 ***REMOVED******REMOVED***/ The `Viewpoint` used to pan/zoom to the selected site/facilty.
 ***REMOVED******REMOVED***/ If `nil`, there will be no automatic pan/zoom operations.
 ***REMOVED***var viewpoint: Binding<Viewpoint?>
+***REMOVED***
+***REMOVED******REMOVED***/ A subject to which viewpoint updates can be submitted.
+***REMOVED***var viewpointSubject = PassthroughSubject<Viewpoint?, Never>()
 ***REMOVED***
 ***REMOVED******REMOVED*** MARK: Public methods
 ***REMOVED***
@@ -102,85 +188,62 @@ final class FloorFilterViewModel: ObservableObject {
 ***REMOVED***func defaultLevel(for facility: FloorFacility?) -> FloorLevel? {
 ***REMOVED******REMOVED***return levels.first(where: { level in
 ***REMOVED******REMOVED******REMOVED***level.facility == facility && level.verticalOrder == .zero
-***REMOVED***) ?? lowestLevel()
+***REMOVED***) ?? nil
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Updates the selected site, facility, and level based on a newly selected facility.
-***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - floorFacility: The selected facility.
-***REMOVED******REMOVED***/   - zoomTo: The viewpoint should be updated to show to the extent of this facility.
-***REMOVED***func setFacility(
-***REMOVED******REMOVED***_ floorFacility: FloorFacility?,
-***REMOVED******REMOVED***zoomTo: Bool = false
-***REMOVED***) {
-***REMOVED******REMOVED***selectedFacility = floorFacility
-***REMOVED******REMOVED***if let currentVerticalOrder = selectedLevel?.verticalOrder,
-***REMOVED******REMOVED***   let newLevel = floorFacility?.levels.first(where: { level in
-***REMOVED******REMOVED******REMOVED***   level.verticalOrder == currentVerticalOrder
-   ***REMOVED***) {
-***REMOVED******REMOVED******REMOVED***setLevel(newLevel)
-***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***setLevel(defaultLevel(for: floorFacility))
+***REMOVED******REMOVED***/ - Parameter floorFacility: The selected facility.
+***REMOVED***func setFacility(_ floorFacility: FloorFacility?) {
+***REMOVED******REMOVED***if let floorFacility = floorFacility {
+***REMOVED******REMOVED******REMOVED***selection = .facility(floorFacility)
 ***REMOVED***
-***REMOVED******REMOVED***if zoomTo {
-***REMOVED******REMOVED******REMOVED***zoomToExtent(extent: floorFacility?.geometry?.extent)
-***REMOVED***
+***REMOVED******REMOVED***zoomToSelection()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Updates the selected site, facility, and level based on a newly selected level.
 ***REMOVED******REMOVED***/ - Parameter floorLevel: The selected level.
 ***REMOVED***func setLevel(_ floorLevel: FloorLevel?) {
-***REMOVED******REMOVED***selectedLevel = floorLevel
-***REMOVED******REMOVED***filterMapToSelectedLevel()
+***REMOVED******REMOVED***if let floorLevel = floorLevel {
+***REMOVED******REMOVED******REMOVED***selection = .level(floorLevel)
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Updates the selected site, facility, and level based on a newly selected site.
-***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - floorSite: The selected site.
-***REMOVED******REMOVED***/   - zoomTo: The viewpoint should be updated to show to the extent of this site.
-***REMOVED***func setSite(
-***REMOVED******REMOVED***_ floorSite: FloorSite?,
-***REMOVED******REMOVED***zoomTo: Bool = false
-***REMOVED***) {
-***REMOVED******REMOVED***selectedSite = floorSite
-***REMOVED******REMOVED***if zoomTo {
-***REMOVED******REMOVED******REMOVED***zoomToExtent(extent: floorSite?.geometry?.extent)
+***REMOVED******REMOVED***/ - Parameter floorSite: The selected site.
+***REMOVED***func setSite(_ floorSite: FloorSite?) {
+***REMOVED******REMOVED***if let floorSite = floorSite {
+***REMOVED******REMOVED******REMOVED***selection = .site(floorSite)
+***REMOVED***
+***REMOVED******REMOVED***zoomToSelection()
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED*** MARK: Private items
 ***REMOVED***
-***REMOVED******REMOVED***/ Updates `selectedSite` and `selectedFacility` based on the latest viewpoint position.
-***REMOVED***func updateSelection() {
-***REMOVED******REMOVED***guard let viewpoint = viewpoint.wrappedValue,
-***REMOVED******REMOVED******REMOVED***  !viewpoint.targetScale.isZero,
-***REMOVED******REMOVED******REMOVED***  automaticSelectionMode != .never else {
-***REMOVED******REMOVED******REMOVED******REMOVED***  return
+***REMOVED******REMOVED***/ Attempts to make an automated selection based on the current viewpoint.
+***REMOVED******REMOVED***/
+***REMOVED******REMOVED***/ This method first attempts to select a facility, if that fails, a site selection is attempted.
+***REMOVED***internal func makeAutoSelection() {
+***REMOVED******REMOVED***guard automaticSelectionMode != .never else {
+***REMOVED******REMOVED******REMOVED***return
 ***REMOVED***
-***REMOVED******REMOVED***updateSelectedSite()
-***REMOVED******REMOVED***updateSelectedFacility()
+***REMOVED******REMOVED***if !autoSelectFacility() {
+***REMOVED******REMOVED******REMOVED***autoSelectSite()
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED*** MARK: Private methods
 ***REMOVED***
 ***REMOVED******REMOVED***/ Sets the visibility of all the levels on the map based on the vertical order of the current selected level.
 ***REMOVED***private func filterMapToSelectedLevel() {
-***REMOVED******REMOVED***guard let selectedLevel = selectedLevel else { return ***REMOVED***
-***REMOVED******REMOVED***levels.forEach {
-***REMOVED******REMOVED******REMOVED***$0.isVisible = $0.verticalOrder == selectedLevel.verticalOrder
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ Returns the level with the lowest vertical order.
-***REMOVED***private func lowestLevel() -> FloorLevel? {
-***REMOVED******REMOVED***let sortedLevels = levels.sorted {
-***REMOVED******REMOVED******REMOVED***$0.verticalOrder < $1.verticalOrder
-***REMOVED***
-***REMOVED******REMOVED***return sortedLevels.first {
-***REMOVED******REMOVED******REMOVED***$0.verticalOrder != .min && $0.verticalOrder != .max
+***REMOVED******REMOVED***if let selectedLevel = selectedLevel {
+***REMOVED******REMOVED******REMOVED***levels.forEach {
+***REMOVED******REMOVED******REMOVED******REMOVED***$0.isVisible = $0.verticalOrder == selectedLevel.verticalOrder
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Updates `selectedFacility` if a good selection exists.
-***REMOVED***private func updateSelectedFacility() {
+***REMOVED******REMOVED***/ - Returns: `false` if a selection was not made.
+***REMOVED***@discardableResult
+***REMOVED***private func autoSelectFacility() -> Bool {
 ***REMOVED******REMOVED******REMOVED*** Only select a facility if it is within minimum scale. Default at 1500.
 ***REMOVED******REMOVED***let facilityMinScale: Double
 ***REMOVED******REMOVED***if let minScale = floorManager.facilityLayer?.minScale,
@@ -191,7 +254,7 @@ final class FloorFilterViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***if viewpoint.wrappedValue?.targetScale ?? .zero > facilityMinScale {
-***REMOVED******REMOVED******REMOVED***return
+***REMOVED******REMOVED******REMOVED***return false
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** If the centerpoint is within a facilities' geometry, select that site.
@@ -204,14 +267,17 @@ final class FloorFilterViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***if let facilityResult = facilityResult {
-***REMOVED******REMOVED******REMOVED***setFacility(facilityResult)
+***REMOVED******REMOVED******REMOVED***selection = .facility(facilityResult)
 ***REMOVED*** else if automaticSelectionMode == .always {
-***REMOVED******REMOVED******REMOVED***setFacility(nil)
+***REMOVED******REMOVED******REMOVED***return false
 ***REMOVED***
+***REMOVED******REMOVED***return true
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Updates `selectedSite` if a good selection exists.
-***REMOVED***private func updateSelectedSite() {
+***REMOVED******REMOVED***/ - Returns: `false` if a selection was not made.
+***REMOVED***@discardableResult
+***REMOVED***private func autoSelectSite() -> Bool {
 ***REMOVED******REMOVED******REMOVED*** Only select a facility if it is within minimum scale. Default at 4300.
 ***REMOVED******REMOVED***let siteMinScale: Double
 ***REMOVED******REMOVED***if let minScale = floorManager.siteLayer?.minScale,
@@ -224,11 +290,9 @@ final class FloorFilterViewModel: ObservableObject {
 ***REMOVED******REMOVED******REMOVED*** If viewpoint is out of range, reset selection and return early.
 ***REMOVED******REMOVED***if viewpoint.wrappedValue?.targetScale ?? .zero > siteMinScale {
 ***REMOVED******REMOVED******REMOVED***if automaticSelectionMode == .always {
-***REMOVED******REMOVED******REMOVED******REMOVED***setSite(nil)
-***REMOVED******REMOVED******REMOVED******REMOVED***setFacility(nil)
-***REMOVED******REMOVED******REMOVED******REMOVED***setLevel(nil)
+***REMOVED******REMOVED******REMOVED******REMOVED***selection = nil
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***return
+***REMOVED******REMOVED******REMOVED***return false
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** If the centerpoint is within a site's geometry, select that site.
@@ -241,19 +305,20 @@ final class FloorFilterViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***if let siteResult = siteResult {
-***REMOVED******REMOVED******REMOVED***setSite(siteResult)
+***REMOVED******REMOVED******REMOVED***selection = .site(siteResult)
 ***REMOVED*** else if automaticSelectionMode == .always {
-***REMOVED******REMOVED******REMOVED***setSite(nil)
+***REMOVED******REMOVED******REMOVED***selection = nil
+***REMOVED***
+***REMOVED******REMOVED***return true
 ***REMOVED***
 ***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ Updates the viewpoint to display a given extent.
-***REMOVED******REMOVED***/ - Parameter extent: The new extent to be shown.
-***REMOVED***private func zoomToExtent(extent: Envelope?) {
+***REMOVED******REMOVED***/ Zoom to given extent.
+***REMOVED***private func zoomToExtent(_ extent: Envelope?) {
 ***REMOVED******REMOVED******REMOVED*** Make sure we have an extent and viewpoint to zoom to.
 ***REMOVED******REMOVED***guard let extent = extent else {
 ***REMOVED******REMOVED******REMOVED***return
 ***REMOVED***
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let builder = EnvelopeBuilder(envelope: extent)
 ***REMOVED******REMOVED***builder.expand(factor: 1.5)
 ***REMOVED******REMOVED***let targetExtent = builder.toGeometry()
@@ -264,12 +329,22 @@ final class FloorFilterViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-
-extension FloorSite: Hashable {
-***REMOVED***public func hash(into hasher: inout Hasher) {
-***REMOVED******REMOVED***hasher.combine(self.id)
-***REMOVED******REMOVED***hasher.combine(self.name)
+***REMOVED******REMOVED***/ Zooms to the selected facility; if there is no selected facility, zooms to the selected site.
+***REMOVED***private func zoomToSelection() {
+***REMOVED******REMOVED***switch selection {
+***REMOVED******REMOVED***case .site(let site):
+***REMOVED******REMOVED******REMOVED***zoomToExtent(site.geometry?.extent)
+***REMOVED******REMOVED***case .facility(let facility):
+***REMOVED******REMOVED******REMOVED***zoomToExtent(facility.geometry?.extent)
+***REMOVED******REMOVED***case .level(let level):
+***REMOVED******REMOVED******REMOVED***zoomToExtent(level.facility?.geometry?.extent)
+***REMOVED******REMOVED***default:
+***REMOVED******REMOVED******REMOVED***break
 ***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ A subscription to handle listening for viewpoint changes.
+***REMOVED***private var viewpointSubscription: AnyCancellable?
 ***REMOVED***
 
 ***REMOVED***/ Defines automatic selection behavior.
@@ -282,4 +357,39 @@ public enum AutomaticSelectionMode {
 ***REMOVED***case alwaysNotClearing
 ***REMOVED******REMOVED***/ Never update selection based on the GeoView's current viewpoint.
 ***REMOVED***case never
+***REMOVED***
+
+extension FloorSite: Hashable {
+***REMOVED***public func hash(into hasher: inout Hasher) {
+***REMOVED******REMOVED***hasher.combine(self.id)
+***REMOVED******REMOVED***hasher.combine(self.name)
+***REMOVED***
+***REMOVED***
+
+extension FloorFilterViewModel.Selection: Hashable {
+***REMOVED***static func == (
+***REMOVED******REMOVED***lhs: FloorFilterViewModel.Selection,
+***REMOVED******REMOVED***rhs: FloorFilterViewModel.Selection
+***REMOVED***) -> Bool {
+***REMOVED******REMOVED***switch (lhs, rhs) {
+***REMOVED******REMOVED***case (.site(let a), .site(let b)):
+***REMOVED******REMOVED******REMOVED***return a.id == b.id
+***REMOVED******REMOVED***case (.facility(let a), .facility(let b)):
+***REMOVED******REMOVED******REMOVED***return a.id == b.id
+***REMOVED******REMOVED***case (.level(let a), .level(let b)):
+***REMOVED******REMOVED******REMOVED***return a.id == b.id
+***REMOVED******REMOVED***default: return false
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***func hash(into hasher: inout Hasher) {
+***REMOVED******REMOVED***switch self {
+***REMOVED******REMOVED***case .site(let site):
+***REMOVED******REMOVED******REMOVED***hasher.combine(site.id)
+***REMOVED******REMOVED***case.facility(let facility):
+***REMOVED******REMOVED******REMOVED***hasher.combine(facility.id)
+***REMOVED******REMOVED***case .level(let level):
+***REMOVED******REMOVED******REMOVED***hasher.combine(level.id)
+***REMOVED***
+***REMOVED***
 ***REMOVED***

@@ -18,20 +18,20 @@
 struct LevelSelector: View {
 ***REMOVED******REMOVED***/ The view model used by the `LevelsView`.
 ***REMOVED***@EnvironmentObject var viewModel: FloorFilterViewModel
-
+***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating the whether the view shows only the selected level or all levels.
 ***REMOVED******REMOVED***/ If the value is`false`, the view will display all levels; if it is `true`, the view will only display
 ***REMOVED******REMOVED***/ the selected level.
 ***REMOVED***@Binding
 ***REMOVED***var isCollapsed: Bool
-
+***REMOVED***
 ***REMOVED******REMOVED***/ The height of the scroll view's content.
 ***REMOVED***@State
 ***REMOVED***private var scrollViewContentHeight: CGFloat = .zero
-
+***REMOVED***
 ***REMOVED******REMOVED***/ The levels to display.
 ***REMOVED***let levels: [FloorLevel]
-
+***REMOVED***
 ***REMOVED******REMOVED***/ Returns the short name of the currently selected level, the first level or "None" if none of the listed
 ***REMOVED******REMOVED***/ are available.
 ***REMOVED***private var selectedLevelName: String {
@@ -43,10 +43,10 @@ struct LevelSelector: View {
 ***REMOVED******REMOVED******REMOVED***return "None"
 ***REMOVED***
 ***REMOVED***
-
+***REMOVED***
 ***REMOVED******REMOVED***/ The alignment configuration.
 ***REMOVED***var topAligned: Bool
-
+***REMOVED***
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***VStack {
 ***REMOVED******REMOVED******REMOVED***if !isCollapsed,
@@ -60,9 +60,9 @@ struct LevelSelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***VStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***LevelsStack(levels: levels)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onSizeChange {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***scrollViewContentHeight = $0.height
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onSizeChange {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***scrollViewContentHeight = $0.height
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxHeight: scrollViewContentHeight)
 ***REMOVED******REMOVED******REMOVED******REMOVED***if topAligned {
@@ -79,7 +79,7 @@ struct LevelSelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(selectedLevelName)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.lineLimit(1)
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.selected(true)
+***REMOVED******REMOVED******REMOVED******REMOVED***.selected(true)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -89,10 +89,10 @@ struct LevelSelector: View {
 struct LevelsStack: View {
 ***REMOVED******REMOVED***/ The view model used by the `LevelsView`.
 ***REMOVED***@EnvironmentObject var viewModel: FloorFilterViewModel
-
+***REMOVED***
 ***REMOVED******REMOVED***/ The levels to display.
 ***REMOVED***let levels: [FloorLevel]
-
+***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***VStack {
 ***REMOVED******REMOVED******REMOVED***ForEach(levels) { level in
@@ -102,7 +102,7 @@ struct LevelsStack: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(level.shortName)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.lineLimit(1)
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.selected(level == viewModel.selectedLevel)
+***REMOVED******REMOVED******REMOVED******REMOVED***.selected(level == viewModel.selectedLevel)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -113,7 +113,7 @@ struct CollapseButton: View {
 ***REMOVED******REMOVED***/ Allows the user to toggle the visibility of the site and facility selector.
 ***REMOVED***@Binding
 ***REMOVED***var isCollapsed: Bool
-
+***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED***withAnimation {
@@ -122,11 +122,11 @@ struct CollapseButton: View {
 ***REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED***Image(systemName: "xmark")
 ***REMOVED***
-***REMOVED******REMOVED******REMOVED***.padding(EdgeInsets(
-***REMOVED******REMOVED******REMOVED******REMOVED***top: 2,
-***REMOVED******REMOVED******REMOVED******REMOVED***leading: 4,
-***REMOVED******REMOVED******REMOVED******REMOVED***bottom: 2,
-***REMOVED******REMOVED******REMOVED******REMOVED***trailing: 4
-***REMOVED******REMOVED******REMOVED***))
+***REMOVED******REMOVED***.padding(EdgeInsets(
+***REMOVED******REMOVED******REMOVED***top: 2,
+***REMOVED******REMOVED******REMOVED***leading: 4,
+***REMOVED******REMOVED******REMOVED***bottom: 2,
+***REMOVED******REMOVED******REMOVED***trailing: 4
+***REMOVED******REMOVED***))
 ***REMOVED***
 ***REMOVED***
