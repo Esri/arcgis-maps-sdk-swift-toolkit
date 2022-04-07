@@ -61,24 +61,17 @@ public struct FloorFilter: View {
         .frame(maxWidth: .infinity)
     }
     
-    /// A Boolean value that indicates whether there are levels to display.  This will be false if there is no
-    /// selected facility or if the selected facility has no levels.
-    private var hasLevelsToDisplay: Bool {
-        !(viewModel.selectedFacility == nil ||
-          viewModel.selectedFacility!.levels.isEmpty)
-    }
-    
     /// Displays the available levels.
     private var levelsSelectorView: some View {
         Group {
-            if hasLevelsToDisplay {
+            if viewModel.hasLevelsToDisplay {
                 if topAligned {
                     Divider()
                         .frame(width: 30)
                 }
                 LevelSelector(
                     isCollapsed: $isLevelsViewCollapsed,
-                    levels: sortedLevels,
+                    levels: viewModel.sortedLevels,
                     topAligned: topAligned
                 )
                 if !topAligned {
@@ -128,16 +121,8 @@ public struct FloorFilter: View {
             .esriBorder()
             .opacity(isSelectorHidden ? .zero : 1)
             .onChange(of: viewpoint.wrappedValue?.targetGeometry) { _ in
-                viewModel.updateSelection()
+                viewModel.viewpointSubject.send(viewpoint.wrappedValue)
             }
-    }
-    
-    /// The selected facility's levels, sorted by `level.verticalOrder`.
-    private var sortedLevels: [FloorLevel] {
-        let levels = viewModel.selectedFacility?.levels ?? []
-        return levels.sorted {
-            $0.verticalOrder > $1.verticalOrder
-        }
     }
     
     /// Indicates that the selector should be presented with a top oriented aligment configuration.

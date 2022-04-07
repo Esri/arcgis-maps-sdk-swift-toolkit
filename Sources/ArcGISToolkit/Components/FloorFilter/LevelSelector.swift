@@ -18,20 +18,20 @@ import ArcGIS
 struct LevelSelector: View {
     /// The view model used by the `LevelsView`.
     @EnvironmentObject var viewModel: FloorFilterViewModel
-
+    
     /// A Boolean value indicating the whether the view shows only the selected level or all levels.
     /// If the value is`false`, the view will display all levels; if it is `true`, the view will only display
     /// the selected level.
     @Binding
     var isCollapsed: Bool
-
+    
     /// The height of the scroll view's content.
     @State
     private var scrollViewContentHeight: CGFloat = .zero
-
+    
     /// The levels to display.
     let levels: [FloorLevel]
-
+    
     /// Returns the short name of the currently selected level, the first level or "None" if none of the listed
     /// are available.
     private var selectedLevelName: String {
@@ -43,10 +43,10 @@ struct LevelSelector: View {
             return "None"
         }
     }
-
+    
     /// The alignment configuration.
     var topAligned: Bool
-
+    
     public var body: some View {
         VStack {
             if !isCollapsed,
@@ -60,9 +60,9 @@ struct LevelSelector: View {
                     VStack {
                         LevelsStack(levels: levels)
                     }
-                        .onSizeChange {
-                            scrollViewContentHeight = $0.height
-                        }
+                    .onSizeChange {
+                        scrollViewContentHeight = $0.height
+                    }
                 }
                     .frame(maxHeight: scrollViewContentHeight)
                 if topAligned {
@@ -79,7 +79,7 @@ struct LevelSelector: View {
                     Text(selectedLevelName)
                         .lineLimit(1)
                 }
-                    .selected(true)
+                .selected(true)
             }
         }
     }
@@ -89,10 +89,10 @@ struct LevelSelector: View {
 struct LevelsStack: View {
     /// The view model used by the `LevelsView`.
     @EnvironmentObject var viewModel: FloorFilterViewModel
-
+    
     /// The levels to display.
     let levels: [FloorLevel]
-
+    
     var body: some View {
         VStack {
             ForEach(levels) { level in
@@ -102,7 +102,7 @@ struct LevelsStack: View {
                     Text(level.shortName)
                         .lineLimit(1)
                 }
-                    .selected(level == viewModel.selectedLevel)
+                .selected(level == viewModel.selectedLevel)
             }
         }
     }
@@ -113,7 +113,7 @@ struct CollapseButton: View {
     /// Allows the user to toggle the visibility of the site and facility selector.
     @Binding
     var isCollapsed: Bool
-
+    
     var body: some View {
         Button {
             withAnimation {
@@ -122,11 +122,11 @@ struct CollapseButton: View {
         } label: {
             Image(systemName: "xmark")
         }
-            .padding(EdgeInsets(
-                top: 2,
-                leading: 4,
-                bottom: 2,
-                trailing: 4
-            ))
+        .padding(EdgeInsets(
+            top: 2,
+            leading: 4,
+            bottom: 2,
+            trailing: 4
+        ))
     }
 }
