@@ -89,7 +89,10 @@ public struct OverviewMap: View {
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***.attributionText(hidden: true)
 ***REMOVED******REMOVED***.interactionModes([])
-***REMOVED******REMOVED***.border(.black, width: 1)
+***REMOVED******REMOVED***.border(
+***REMOVED******REMOVED******REMOVED***.black,
+***REMOVED******REMOVED******REMOVED***width: 1
+***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***.onAppear {
 ***REMOVED******REMOVED******REMOVED***graphic.symbol = symbol
 ***REMOVED***
