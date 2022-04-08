@@ -16,21 +16,34 @@
 
 ***REMOVED***/ `SearchView` presents a search experience, powered by an underlying `SearchViewModel`.
 public struct SearchView: View {
-***REMOVED******REMOVED***/ Creates a new `SearchView`.
+***REMOVED******REMOVED***/ Creates a `SearchView`.
 ***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - searchViewModel: The view model used by `SearchView`.
-***REMOVED***public init(searchViewModel: SearchViewModel? = nil) {
-***REMOVED******REMOVED***self.searchViewModel = searchViewModel ?? SearchViewModel(
-***REMOVED******REMOVED******REMOVED***sources: [LocatorSearchSource()]
+***REMOVED******REMOVED***/   - queryArea: The search area to be used for the current query.
+***REMOVED******REMOVED***/   - queryCenter: Defines the center for the search.
+***REMOVED******REMOVED***/   - resultMode: Defines how many results to return.
+***REMOVED******REMOVED***/   - sources: Collection of search sources to be used.
+***REMOVED***init(
+***REMOVED******REMOVED***queryArea: Geometry? = nil,
+***REMOVED******REMOVED***queryCenter: Point? = nil,
+***REMOVED******REMOVED***resultMode: SearchResultMode = .automatic,
+***REMOVED******REMOVED***sources: [SearchSource] = []
+***REMOVED***) {
+***REMOVED******REMOVED***searchViewModel = SearchViewModel(
+***REMOVED******REMOVED******REMOVED***queryArea: queryArea,
+***REMOVED******REMOVED******REMOVED***queryCenter: queryCenter,
+***REMOVED******REMOVED******REMOVED***resultMode: resultMode,
+***REMOVED******REMOVED******REMOVED***sources: [sources.isEmpty ? [LocatorSearchSource()] : sources]
 ***REMOVED******REMOVED***)
 ***REMOVED***
-***REMOVED***
+
 ***REMOVED******REMOVED***/ The view model used by the view. The `SearchViewModel` manages state and handles the
 ***REMOVED******REMOVED***/ activity of searching. The view observes `SearchViewModel` for changes in state. The view
 ***REMOVED******REMOVED***/ calls methods on `SearchViewModel` in response to user action.
-***REMOVED***@ObservedObject
-***REMOVED***var searchViewModel: SearchViewModel
+***REMOVED***@ObservedObject var searchViewModel: SearchViewModel
 ***REMOVED***
+***REMOVED***@Environment(\.horizontalSizeClass) var horizontalSizeClass
+***REMOVED***@Environment(\.verticalSizeClass) var verticalSizeClass
+
 ***REMOVED******REMOVED***/ The string shown in the search view when no user query is entered.
 ***REMOVED******REMOVED***/ Defaults to "Find a place or address". Note: this is set using the
 ***REMOVED******REMOVED***/ `prompt` modifier.
@@ -46,13 +59,7 @@ public struct SearchView: View {
 ***REMOVED******REMOVED***/ Message to show when there are no results or suggestions. Defaults to "No results found".
 ***REMOVED******REMOVED***/ Note: this is set using the `noResultsMessage` modifier.
 ***REMOVED***private var noResultsMessage = "No results found"
-***REMOVED***
-***REMOVED***@Environment(\.horizontalSizeClass)
-***REMOVED***private var horizontalSizeClass: UserInterfaceSizeClass?
-***REMOVED***
-***REMOVED***@Environment(\.verticalSizeClass)
-***REMOVED***private var verticalSizeClass: UserInterfaceSizeClass?
-***REMOVED***
+
 ***REMOVED******REMOVED***/ The width of the search bar, taking into account the horizontal and vertical size classes
 ***REMOVED******REMOVED***/ of the device. This will cause the search field to display full-width on an iPhone in portrait
 ***REMOVED******REMOVED***/ orientation (and certain iPad multitasking configurations) and limit the width to `360` in other cases.
@@ -68,8 +75,7 @@ public struct SearchView: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Determines whether the results lists are displayed.
-***REMOVED***@State
-***REMOVED***private var isResultListHidden: Bool = false
+***REMOVED***@State private var isResultListHidden: Bool = false
 ***REMOVED***
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***VStack {
@@ -254,6 +260,7 @@ struct ResultRow: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if !subtitle.isEmpty {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(subtitle)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.caption)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
