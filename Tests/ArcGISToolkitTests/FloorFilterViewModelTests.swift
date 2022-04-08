@@ -19,25 +19,18 @@ import XCTest
 
 @MainActor
 class FloorFilterViewModelTests: XCTestCase {
-***REMOVED******REMOVED***/ Applies credentials necessary to run tests.
-***REMOVED***override func setUp() async throws {
-***REMOVED******REMOVED***await addCredentials()
-***REMOVED***
-***REMOVED***
 ***REMOVED******REMOVED***/ Tests that a `FloorFilterViewModel` succesfully initializes with a `FloorManager`.`
 ***REMOVED***func testInitFloorFilterViewModelWithFloorManager() async {
 ***REMOVED******REMOVED***guard let map = await makeMap(),
 ***REMOVED******REMOVED******REMOVED***  let floorManager = map.floorManager else {
 ***REMOVED******REMOVED******REMOVED***return
 ***REMOVED***
-***REMOVED******REMOVED***try? await floorManager.load()
-***REMOVED******REMOVED***var _viewpoint: Viewpoint? = getEsriRedlandsViewpoint(.zero)
+***REMOVED******REMOVED***var _viewpoint: Viewpoint? = nil
 ***REMOVED******REMOVED***let viewpoint = Binding(get: { _viewpoint ***REMOVED***, set: { _viewpoint = $0 ***REMOVED***)
 ***REMOVED******REMOVED***let viewModel = FloorFilterViewModel(
 ***REMOVED******REMOVED******REMOVED***floorManager: floorManager,
 ***REMOVED******REMOVED******REMOVED***viewpoint: viewpoint
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED***await verifyInitialization(viewModel)
 ***REMOVED******REMOVED***let sites = viewModel.sites
 ***REMOVED******REMOVED***let facilities = viewModel.facilities
 ***REMOVED******REMOVED***let levels = viewModel.levels
@@ -47,20 +40,18 @@ class FloorFilterViewModelTests: XCTestCase {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Tests that a `FloorFilterViewModel` succesfully initializes with a `FloorManager` and
-***REMOVED******REMOVED***/ `Binding<Viewpoint>?`.`
+***REMOVED******REMOVED***/ `Binding<Viewpoint?>`.`
 ***REMOVED***func testInitFloorFilterViewModelWithFloorManagerAndViewpoint() async {
 ***REMOVED******REMOVED***guard let map = await makeMap(),
 ***REMOVED******REMOVED******REMOVED***  let floorManager = map.floorManager else {
 ***REMOVED******REMOVED******REMOVED***return
 ***REMOVED***
-***REMOVED******REMOVED***try? await floorManager.load()
-***REMOVED******REMOVED***var _viewpoint: Viewpoint? = getEsriRedlandsViewpoint(.zero)
+***REMOVED******REMOVED***var _viewpoint: Viewpoint? = nil
 ***REMOVED******REMOVED***let viewpoint = Binding(get: { _viewpoint ***REMOVED***, set: { _viewpoint = $0 ***REMOVED***)
 ***REMOVED******REMOVED***let viewModel = FloorFilterViewModel(
 ***REMOVED******REMOVED******REMOVED***floorManager: floorManager,
 ***REMOVED******REMOVED******REMOVED***viewpoint: viewpoint
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED***await verifyInitialization(viewModel)
 ***REMOVED******REMOVED***let sites = viewModel.sites
 ***REMOVED******REMOVED***let facilities = viewModel.facilities
 ***REMOVED******REMOVED***let levels = viewModel.levels
@@ -77,15 +68,13 @@ class FloorFilterViewModelTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***  let floorManager = map.floorManager else {
 ***REMOVED******REMOVED******REMOVED***return
 ***REMOVED***
-***REMOVED******REMOVED***try? await floorManager.load()
-***REMOVED******REMOVED***let initialViewpoint = getEsriRedlandsViewpoint(.zero)
+***REMOVED******REMOVED***let initialViewpoint: Viewpoint = .site_ResearchAnnex_facility_Lattice
 ***REMOVED******REMOVED***var _viewpoint: Viewpoint? = initialViewpoint
 ***REMOVED******REMOVED***let viewpoint = Binding(get: { _viewpoint ***REMOVED***, set: { _viewpoint = $0 ***REMOVED***)
 ***REMOVED******REMOVED***let viewModel = FloorFilterViewModel(
 ***REMOVED******REMOVED******REMOVED***floorManager: floorManager,
 ***REMOVED******REMOVED******REMOVED***viewpoint: viewpoint
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED***await verifyInitialization(viewModel)
 ***REMOVED******REMOVED***guard let site = viewModel.sites.first else {
 ***REMOVED******REMOVED******REMOVED***XCTFail()
 ***REMOVED******REMOVED******REMOVED***return
@@ -114,8 +103,7 @@ class FloorFilterViewModelTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***  let floorManager = map.floorManager else {
 ***REMOVED******REMOVED******REMOVED***return
 ***REMOVED***
-***REMOVED******REMOVED***try? await floorManager.load()
-***REMOVED******REMOVED***let initialViewpoint = getEsriRedlandsViewpoint(.zero)
+***REMOVED******REMOVED***let initialViewpoint: Viewpoint = .site_ResearchAnnex_facility_Lattice
 ***REMOVED******REMOVED***var _viewpoint: Viewpoint? = initialViewpoint
 ***REMOVED******REMOVED***let viewpoint = Binding(get: { _viewpoint ***REMOVED***, set: { _viewpoint = $0 ***REMOVED***)
 ***REMOVED******REMOVED***let viewModel = FloorFilterViewModel(
@@ -123,7 +111,6 @@ class FloorFilterViewModelTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***floorManager: floorManager,
 ***REMOVED******REMOVED******REMOVED***viewpoint: viewpoint
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED***await verifyInitialization(viewModel)
 ***REMOVED******REMOVED***guard let facility = viewModel.facilities.first else {
 ***REMOVED******REMOVED******REMOVED***XCTFail()
 ***REMOVED******REMOVED******REMOVED***return
@@ -151,15 +138,13 @@ class FloorFilterViewModelTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***  let floorManager = map.floorManager else {
 ***REMOVED******REMOVED******REMOVED***return
 ***REMOVED***
-***REMOVED******REMOVED***try? await floorManager.load()
-***REMOVED******REMOVED***let initialViewpoint = getEsriRedlandsViewpoint(.zero)
+***REMOVED******REMOVED***let initialViewpoint: Viewpoint = .site_ResearchAnnex_facility_Lattice
 ***REMOVED******REMOVED***var _viewpoint: Viewpoint? = initialViewpoint
 ***REMOVED******REMOVED***let viewpoint = Binding(get: { _viewpoint ***REMOVED***, set: { _viewpoint = $0 ***REMOVED***)
 ***REMOVED******REMOVED***let viewModel = FloorFilterViewModel(
 ***REMOVED******REMOVED******REMOVED***floorManager: floorManager,
 ***REMOVED******REMOVED******REMOVED***viewpoint: viewpoint
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED***await verifyInitialization(viewModel)
 ***REMOVED******REMOVED***let levels = viewModel.levels
 ***REMOVED******REMOVED***let level = levels.first
 ***REMOVED******REMOVED***viewModel.setLevel(level)
@@ -184,15 +169,7 @@ class FloorFilterViewModelTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***  let floorManager = map.floorManager else {
 ***REMOVED******REMOVED******REMOVED***return
 ***REMOVED***
-***REMOVED******REMOVED***try? await floorManager.load()
-***REMOVED******REMOVED***let viewpointLosAngeles = Viewpoint(
-***REMOVED******REMOVED******REMOVED***center: Point(
-***REMOVED******REMOVED******REMOVED******REMOVED***x: -13164116.3284,
-***REMOVED******REMOVED******REMOVED******REMOVED***y: 4034465.8065,
-***REMOVED******REMOVED******REMOVED******REMOVED***spatialReference: .webMercator
-***REMOVED******REMOVED******REMOVED***),
-***REMOVED******REMOVED******REMOVED***scale: 10_000
-***REMOVED******REMOVED***)
+***REMOVED******REMOVED***let viewpointLosAngeles: Viewpoint = .losAngeles
 ***REMOVED******REMOVED***var _viewpoint: Viewpoint? = viewpointLosAngeles
 ***REMOVED******REMOVED***let viewpoint = Binding(get: { _viewpoint ***REMOVED***, set: { _viewpoint = $0 ***REMOVED***)
 ***REMOVED******REMOVED***let viewModel = FloorFilterViewModel(
@@ -200,25 +177,28 @@ class FloorFilterViewModelTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***floorManager: floorManager,
 ***REMOVED******REMOVED******REMOVED***viewpoint: viewpoint
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED***await verifyInitialization(viewModel)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Viewpoint is Los Angeles, selection should be nil
+***REMOVED******REMOVED***viewModel.makeAutoSelection()
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var selectedFacility = viewModel.selectedFacility
 ***REMOVED******REMOVED***var selectedSite = viewModel.selectedSite
 ***REMOVED******REMOVED***XCTAssertNil(selectedFacility)
 ***REMOVED******REMOVED***XCTAssertNil(selectedSite)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Viewpoint is Redlands Main Q
-***REMOVED******REMOVED***_viewpoint = getEsriRedlandsViewpoint(scale: 1000)
+***REMOVED******REMOVED***_viewpoint = .site_ResearchAnnex_facility_Lattice
 ***REMOVED******REMOVED***viewModel.makeAutoSelection()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Viewpoint is the Lattice facility at the Research Annex site
 ***REMOVED******REMOVED***selectedFacility = viewModel.selectedFacility
 ***REMOVED******REMOVED***selectedSite = viewModel.selectedSite
-***REMOVED******REMOVED***XCTAssertEqual(selectedSite?.name, "Redlands Main")
-***REMOVED******REMOVED***XCTAssertEqual(selectedFacility?.name, "Q")
+***REMOVED******REMOVED***XCTAssertEqual(selectedSite?.name, "Research Annex")
+***REMOVED******REMOVED***XCTAssertEqual(selectedFacility?.name, "Lattice")
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Viewpoint is Los Angeles, selection should be nil
 ***REMOVED******REMOVED***_viewpoint = viewpointLosAngeles
 ***REMOVED******REMOVED***viewModel.makeAutoSelection()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Viewpoint is Los Angeles, selection should be nil
 ***REMOVED******REMOVED***selectedFacility = viewModel.selectedFacility
 ***REMOVED******REMOVED***selectedSite = viewModel.selectedSite
 ***REMOVED******REMOVED***XCTAssertNil(selectedSite)
@@ -231,39 +211,31 @@ class FloorFilterViewModelTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***  let floorManager = map.floorManager else {
 ***REMOVED******REMOVED******REMOVED***return
 ***REMOVED***
-***REMOVED******REMOVED***try? await floorManager.load()
-***REMOVED******REMOVED***let viewpointLosAngeles = Viewpoint(
-***REMOVED******REMOVED******REMOVED***center: Point(
-***REMOVED******REMOVED******REMOVED******REMOVED***x: -13164116.3284,
-***REMOVED******REMOVED******REMOVED******REMOVED***y: 4034465.8065,
-***REMOVED******REMOVED******REMOVED******REMOVED***spatialReference: .webMercator
-***REMOVED******REMOVED******REMOVED***),
-***REMOVED******REMOVED******REMOVED***scale: 10_000
-***REMOVED******REMOVED***)
-***REMOVED******REMOVED***var _viewpoint: Viewpoint? = getEsriRedlandsViewpoint(scale: 1000)
+***REMOVED******REMOVED***let viewpointLosAngeles: Viewpoint = .losAngeles
+***REMOVED******REMOVED***var _viewpoint: Viewpoint? = .site_ResearchAnnex_facility_Lattice
 ***REMOVED******REMOVED***let viewpoint = Binding(get: { _viewpoint ***REMOVED***, set: { _viewpoint = $0 ***REMOVED***)
 ***REMOVED******REMOVED***let viewModel = FloorFilterViewModel(
 ***REMOVED******REMOVED******REMOVED***automaticSelectionMode: .alwaysNotClearing,
 ***REMOVED******REMOVED******REMOVED***floorManager: floorManager,
 ***REMOVED******REMOVED******REMOVED***viewpoint: viewpoint
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED***await verifyInitialization(viewModel)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Viewpoint is Redlands Main Q
-***REMOVED******REMOVED***_viewpoint = getEsriRedlandsViewpoint(scale: 1000)
 ***REMOVED******REMOVED***viewModel.makeAutoSelection()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Viewpoint is the Lattice facility at the Research Annex site
 ***REMOVED******REMOVED***var selectedFacility = viewModel.selectedFacility
 ***REMOVED******REMOVED***var selectedSite = viewModel.selectedSite
-***REMOVED******REMOVED***XCTAssertEqual(selectedSite?.name, "Redlands Main")
-***REMOVED******REMOVED***XCTAssertEqual(selectedFacility?.name, "Q")
+***REMOVED******REMOVED***XCTAssertEqual(selectedSite?.name, "Research Annex")
+***REMOVED******REMOVED***XCTAssertEqual(selectedFacility?.name, "Lattice")
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Viewpoint is Los Angeles, but selection should remain Redlands Main Q
 ***REMOVED******REMOVED***_viewpoint = viewpointLosAngeles
 ***REMOVED******REMOVED***viewModel.makeAutoSelection()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Viewpoint is Los Angeles, but selection should remain Redlands Main Q
 ***REMOVED******REMOVED***selectedFacility = viewModel.selectedFacility
 ***REMOVED******REMOVED***selectedSite = viewModel.selectedSite
-***REMOVED******REMOVED***XCTAssertEqual(selectedSite?.name, "Redlands Main")
-***REMOVED******REMOVED***XCTAssertEqual(selectedFacility?.name, "Q")
+***REMOVED******REMOVED***XCTAssertEqual(selectedSite?.name, "Research Annex")
+***REMOVED******REMOVED***XCTAssertEqual(selectedFacility?.name, "Lattice")
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Confirms that the selected site/facility/level properties and the viewpoint are correctly updated.
@@ -272,15 +244,7 @@ class FloorFilterViewModelTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***  let floorManager = map.floorManager else {
 ***REMOVED******REMOVED******REMOVED***return
 ***REMOVED***
-***REMOVED******REMOVED***try? await floorManager.load()
-***REMOVED******REMOVED***let viewpointLosAngeles = Viewpoint(
-***REMOVED******REMOVED******REMOVED***center: Point(
-***REMOVED******REMOVED******REMOVED******REMOVED***x: -13164116.3284,
-***REMOVED******REMOVED******REMOVED******REMOVED***y: 4034465.8065,
-***REMOVED******REMOVED******REMOVED******REMOVED***spatialReference: .webMercator
-***REMOVED******REMOVED******REMOVED***),
-***REMOVED******REMOVED******REMOVED***scale: 10_000
-***REMOVED******REMOVED***)
+***REMOVED******REMOVED***let viewpointLosAngeles: Viewpoint = .losAngeles
 ***REMOVED******REMOVED***var _viewpoint: Viewpoint? = viewpointLosAngeles
 ***REMOVED******REMOVED***let viewpoint = Binding(get: { _viewpoint ***REMOVED***, set: { _viewpoint = $0 ***REMOVED***)
 ***REMOVED******REMOVED***let viewModel = FloorFilterViewModel(
@@ -288,7 +252,8 @@ class FloorFilterViewModelTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***floorManager: floorManager,
 ***REMOVED******REMOVED******REMOVED***viewpoint: viewpoint
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED***await verifyInitialization(viewModel)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***viewModel.makeAutoSelection()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Viewpoint is Los Angeles, selection should be nil
 ***REMOVED******REMOVED***var selectedFacility = viewModel.selectedFacility
@@ -296,9 +261,10 @@ class FloorFilterViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***XCTAssertNil(selectedFacility)
 ***REMOVED******REMOVED***XCTAssertNil(selectedSite)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Viewpoint is Redlands Main Q but selection should still be nil
-***REMOVED******REMOVED***_viewpoint = getEsriRedlandsViewpoint(scale: 1000)
+***REMOVED******REMOVED***_viewpoint = .site_ResearchAnnex_facility_Lattice
 ***REMOVED******REMOVED***viewModel.makeAutoSelection()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Viewpoint is the Lattice facility at the Research Annex site
 ***REMOVED******REMOVED***selectedFacility = viewModel.selectedFacility
 ***REMOVED******REMOVED***selectedSite = viewModel.selectedSite
 ***REMOVED******REMOVED***XCTAssertNil(selectedFacility)
@@ -308,21 +274,13 @@ class FloorFilterViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***/ Get a map constructed from an ArcGIS portal item.
 ***REMOVED******REMOVED***/ - Returns: A map constructed from an ArcGIS portal item.
 ***REMOVED***private func makeMap() async -> Map? {
-***REMOVED******REMOVED******REMOVED*** Multiple sites/facilities: Esri IST map with all buildings.
-***REMOVED******REMOVED******REMOVED***let portal = Portal(url: URL(string: "https:***REMOVED***indoors.maps.arcgis.com/")!, isLoginRequired: false)
-***REMOVED******REMOVED******REMOVED***let portalItem = PortalItem(portal: portal, id: Item.ID(rawValue: "49520a67773842f1858602735ef538b5")!)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Redlands Campus map with multiple sites and facilities.
-***REMOVED******REMOVED***let portal = Portal(url: URL(string: "https:***REMOVED***runtimecoretest.maps.arcgis.com/")!, isLoginRequired: false)
-***REMOVED******REMOVED***let portalItem = PortalItem(portal: portal, id: Item.ID(rawValue: "7687805bd42549f5ba41237443d0c60a")!)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Single site (ESRI Redlands Main) and facility (Building L).
-***REMOVED******REMOVED******REMOVED***let portal = Portal(url: URL(string: "https:***REMOVED***indoors.maps.arcgis.com/")!, isLoginRequired: false)
-***REMOVED******REMOVED******REMOVED***let portalItem = PortalItem(portal: portal, id: Item.ID(rawValue: "f133a698536f44c8884ad81f80b6cfc7")!)
+***REMOVED******REMOVED***let portal = Portal(url: URL(string: "https:***REMOVED***www.arcgis.com/")!, isLoginRequired: false)
+***REMOVED******REMOVED***let portalItem = PortalItem(portal: portal, id: Item.ID(rawValue: "b4b599a43a474d33946cf0df526426f5")!)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let map = Map(item: portalItem)
 ***REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED***try await map.load()
+***REMOVED******REMOVED******REMOVED***try await map.floorManager?.load()
 ***REMOVED*** catch {
 ***REMOVED******REMOVED******REMOVED***XCTFail("\(#fileID), \(#function), \(#line), \(error.localizedDescription)")
 ***REMOVED******REMOVED******REMOVED***return nil
@@ -330,40 +288,28 @@ class FloorFilterViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***return map
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Verifies that the `FloorFilterViewModel` has succesfully initialized.
-***REMOVED******REMOVED***/ - Parameter viewModel: The view model to analyze.
-***REMOVED***private func verifyInitialization(_ viewModel: FloorFilterViewModel) async {
-***REMOVED******REMOVED***let expectation = XCTestExpectation(
-***REMOVED******REMOVED******REMOVED***description: "View model successfully initialized"
-***REMOVED******REMOVED***)
-***REMOVED******REMOVED***let subscription = viewModel.$isLoading
-***REMOVED******REMOVED******REMOVED***.sink { loading in
-***REMOVED******REMOVED******REMOVED******REMOVED***print(#function, loading)
-***REMOVED******REMOVED******REMOVED******REMOVED***if !loading {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***expectation.fulfill()
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***Task {
-***REMOVED******REMOVED******REMOVED***wait(for: [expectation], timeout: 30.0)
-***REMOVED******REMOVED******REMOVED***subscription.cancel()
-***REMOVED***
-***REMOVED***
-***REMOVED***
 
-extension FloorFilterViewModelTests {
-***REMOVED******REMOVED***/ The coordinates for the Redlands Esri campus.
-***REMOVED***var point: Point {
-***REMOVED******REMOVED***Point(
-***REMOVED******REMOVED******REMOVED***x: -13046157.242121734,
-***REMOVED******REMOVED******REMOVED***y: 4036329.622884897,
-***REMOVED******REMOVED******REMOVED***spatialReference: .webMercator
+extension Viewpoint {
+***REMOVED***static var losAngeles: Viewpoint {
+***REMOVED******REMOVED***Viewpoint(
+***REMOVED******REMOVED******REMOVED***center: Point(
+***REMOVED******REMOVED******REMOVED******REMOVED***x: -13164116.3284,
+***REMOVED******REMOVED******REMOVED******REMOVED***y: 4034465.8065,
+***REMOVED******REMOVED******REMOVED******REMOVED***spatialReference: .webMercator
+***REMOVED******REMOVED******REMOVED***),
+***REMOVED******REMOVED******REMOVED***scale: 10_000
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Builds viewpoints to use for tests.
-***REMOVED******REMOVED***/ - Parameter rotation: The rotation to use for the resulting viewpoint.
-***REMOVED******REMOVED***/ - Returns: A viewpoint object for tests.
-***REMOVED***func getEsriRedlandsViewpoint(_ rotation: Double = .zero, scale: Double = 10_000) -> Viewpoint {
-***REMOVED******REMOVED***return Viewpoint(center: point, scale: scale, rotation: rotation)
+***REMOVED***static var site_ResearchAnnex_facility_Lattice: Viewpoint {
+***REMOVED******REMOVED***Viewpoint(
+***REMOVED******REMOVED******REMOVED***center:
+***REMOVED******REMOVED******REMOVED******REMOVED***Point(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***x: -13045075.712950204,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***y: 4036858.6146756615,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***spatialReference: .webMercator
+***REMOVED******REMOVED******REMOVED******REMOVED***),
+***REMOVED******REMOVED******REMOVED***scale: 550.0
+***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***

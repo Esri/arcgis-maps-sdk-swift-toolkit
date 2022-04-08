@@ -139,9 +139,9 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Select a site"),
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***displayMode: .inline
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED***.navigationBarItems(trailing:
+***REMOVED******REMOVED******REMOVED******REMOVED***.toolbar {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***CloseButton { isHidden.wrappedValue.toggle() ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***
@@ -236,9 +236,9 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Only apply navigation modifiers if this is displayed
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** within a navigation view
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.navigationBarTitle("Select a facility")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.navigationBarItems(trailing:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.toolbar {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***CloseButton { isHidden.wrappedValue.toggle() ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***

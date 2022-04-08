@@ -52,19 +52,7 @@ final class FloorFilterViewModel: ObservableObject {
 ***REMOVED******REMOVED******REMOVED******REMOVED***self.makeAutoSelection()
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***Task {
-***REMOVED******REMOVED******REMOVED***do {
-***REMOVED******REMOVED******REMOVED******REMOVED***try await floorManager.load()
-***REMOVED******REMOVED******REMOVED******REMOVED***if sites.count == 1,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let firstSite = sites.first {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** If we have only one site, select it.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***setSite(firstSite)
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED*** catch {
-***REMOVED******REMOVED******REMOVED******REMOVED***print("error: \(error)")
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***isLoading = false
-***REMOVED***
+***REMOVED******REMOVED***loadFloorManager()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED*** MARK: Published members
@@ -231,15 +219,6 @@ final class FloorFilterViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Sets the visibility of all the levels on the map based on the vertical order of the current selected level.
-***REMOVED***private func filterMapToSelectedLevel() {
-***REMOVED******REMOVED***if let selectedLevel = selectedLevel {
-***REMOVED******REMOVED******REMOVED***levels.forEach {
-***REMOVED******REMOVED******REMOVED******REMOVED***$0.isVisible = $0.verticalOrder == selectedLevel.verticalOrder
-***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***
 ***REMOVED******REMOVED***/ Updates `selectedFacility` if a good selection exists.
 ***REMOVED******REMOVED***/ - Returns: `false` if a selection was not made.
 ***REMOVED***@discardableResult
@@ -310,6 +289,36 @@ final class FloorFilterViewModel: ObservableObject {
 ***REMOVED******REMOVED******REMOVED***selection = nil
 ***REMOVED***
 ***REMOVED******REMOVED***return true
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Sets the visibility of all the levels on the map based on the vertical order of the current selected level.
+***REMOVED***private func filterMapToSelectedLevel() {
+***REMOVED******REMOVED***if let selectedLevel = selectedLevel {
+***REMOVED******REMOVED******REMOVED***levels.forEach {
+***REMOVED******REMOVED******REMOVED******REMOVED***$0.isVisible = $0.verticalOrder == selectedLevel.verticalOrder
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Loads the given `FloorManager` if needed, then sets `isLoading` to `false`.
+***REMOVED***private func loadFloorManager() {
+***REMOVED******REMOVED***guard floorManager.loadStatus == .notLoaded else {
+***REMOVED******REMOVED******REMOVED***isLoading = false
+***REMOVED******REMOVED******REMOVED***return
+***REMOVED***
+***REMOVED******REMOVED***Task {
+***REMOVED******REMOVED******REMOVED***do {
+***REMOVED******REMOVED******REMOVED******REMOVED***try await floorManager.load()
+***REMOVED******REMOVED******REMOVED******REMOVED***if sites.count == 1,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let firstSite = sites.first {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** If we have only one site, select it.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***setSite(firstSite)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED*** catch {
+***REMOVED******REMOVED******REMOVED******REMOVED***print("error: \(error)")
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***isLoading = false
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Zoom to given extent.

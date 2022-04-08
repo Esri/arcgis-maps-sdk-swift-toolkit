@@ -120,7 +120,7 @@ struct CollapseButton: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***isCollapsed.toggle()
 ***REMOVED******REMOVED***
 ***REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED***Image(systemName: "xmark")
+***REMOVED******REMOVED******REMOVED***Image(systemName: "chevron.down.circle")
 ***REMOVED***
 ***REMOVED******REMOVED***.padding(EdgeInsets(
 ***REMOVED******REMOVED******REMOVED***top: 2,
