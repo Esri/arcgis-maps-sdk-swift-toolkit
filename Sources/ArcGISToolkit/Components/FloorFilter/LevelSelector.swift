@@ -120,7 +120,7 @@ struct CollapseButton: View {
                 isCollapsed.toggle()
             }
         } label: {
-            Image(systemName: "xmark")
+            Image(systemName: "chevron.down.circle")
         }
         .padding(EdgeInsets(
             top: 2,

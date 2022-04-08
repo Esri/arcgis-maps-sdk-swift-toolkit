@@ -52,19 +52,7 @@ final class FloorFilterViewModel: ObservableObject {
                 self.makeAutoSelection()
             })
         
-        Task {
-            do {
-                try await floorManager.load()
-                if sites.count == 1,
-                    let firstSite = sites.first {
-                    // If we have only one site, select it.
-                    setSite(firstSite)
-                }
-            } catch {
-                print("error: \(error)")
-            }
-            isLoading = false
-        }
+        loadFloorManager()
     }
     
     // MARK: Published members
@@ -231,15 +219,6 @@ final class FloorFilterViewModel: ObservableObject {
         }
     }
     
-    /// Sets the visibility of all the levels on the map based on the vertical order of the current selected level.
-    private func filterMapToSelectedLevel() {
-        if let selectedLevel = selectedLevel {
-            levels.forEach {
-                $0.isVisible = $0.verticalOrder == selectedLevel.verticalOrder
-            }
-        }
-    }
-    
     /// Updates `selectedFacility` if a good selection exists.
     /// - Returns: `false` if a selection was not made.
     @discardableResult
@@ -310,6 +289,36 @@ final class FloorFilterViewModel: ObservableObject {
             selection = nil
         }
         return true
+    }
+    
+    /// Sets the visibility of all the levels on the map based on the vertical order of the current selected level.
+    private func filterMapToSelectedLevel() {
+        if let selectedLevel = selectedLevel {
+            levels.forEach {
+                $0.isVisible = $0.verticalOrder == selectedLevel.verticalOrder
+            }
+        }
+    }
+    
+    /// Loads the given `FloorManager` if needed, then sets `isLoading` to `false`.
+    private func loadFloorManager() {
+        guard floorManager.loadStatus == .notLoaded else {
+            isLoading = false
+            return
+        }
+        Task {
+            do {
+                try await floorManager.load()
+                if sites.count == 1,
+                    let firstSite = sites.first {
+                    // If we have only one site, select it.
+                    setSite(firstSite)
+                }
+            } catch {
+                print("error: \(error)")
+            }
+            isLoading = false
+        }
     }
     
     /// Zoom to given extent.

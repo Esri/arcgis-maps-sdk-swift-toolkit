@@ -139,9 +139,9 @@ struct SiteAndFacilitySelector: View {
                     Text("Select a site"),
                     displayMode: .inline
                 )
-                .navigationBarItems(trailing:
+                .toolbar {
                     CloseButton { isHidden.wrappedValue.toggle() }
-                )
+                }
             }
         }
         
@@ -236,9 +236,9 @@ struct SiteAndFacilitySelector: View {
                     // Only apply navigation modifiers if this is displayed
                     // within a navigation view
                     .navigationBarTitle("Select a facility")
-                    .navigationBarItems(trailing:
+                    .toolbar {
                         CloseButton { isHidden.wrappedValue.toggle() }
-                    )
+                    }
             }
         }
         
