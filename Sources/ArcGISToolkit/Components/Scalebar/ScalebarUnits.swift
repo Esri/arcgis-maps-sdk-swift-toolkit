@@ -159,15 +159,9 @@ public enum ScalebarUnits {
     internal func linearUnitsForDistance(distance: Double) -> LinearUnit {
         switch self {
         case .imperial:
-            if distance >= 2640 {
-                return LinearUnit.miles
-            }
-            return LinearUnit.feet
+            return distance >= 2640 ? .miles : .feet
         case .metric:
-            if distance >= 1000 {
-                return LinearUnit.kilometers
-            }
-            return LinearUnit.meters
+            return distance >= 1000 ? .kilometers : .meters
         }
     }
 }
