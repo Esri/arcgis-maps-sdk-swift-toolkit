@@ -18,18 +18,8 @@ import ArcGIS
 struct FloorFilterExampleView: View {
     /// Make a map from a portal item.
     static func makeMap() -> Map {
-        // Multiple sites/facilities: Esri IST map with all buildings.
-        //        let portal = Portal(url: URL(string: "https://indoors.maps.arcgis.com/")!, isLoginRequired: false)
-        //        let portalItem = PortalItem(portal: portal, id: Item.ID(rawValue: "49520a67773842f1858602735ef538b5")!)
-        
-        // Redlands Campus map.
-        let portal = Portal(url: URL(string: "https://runtimecoretest.maps.arcgis.com/")!, isLoginRequired: false)
-        let portalItem = PortalItem(portal: portal, id: Item.ID(rawValue: "7687805bd42549f5ba41237443d0c60a")!) //<= another multiple sites/facilities
-        
-        // Single site (ESRI Redlands Main) and facility (Building L).
-        //         let portal = Portal(url: URL(string: "https://indoors.maps.arcgis.com/")!, isLoginRequired: false)
-        //         let portalItem = PortalItem(portal: portal, id: Item.ID(rawValue: "f133a698536f44c8884ad81f80b6cfc7")!)
-        
+        let portal = Portal(url: URL(string: "https://www.arcgis.com/")!, isLoginRequired: false)
+        let portalItem = PortalItem(portal: portal, id: Item.ID(rawValue: "b4b599a43a474d33946cf0df526426f5")!)
         return Map(item: portalItem)
     }
     
@@ -71,7 +61,10 @@ struct FloorFilterExampleView: View {
                     floorManager: floorManager,
                     viewpoint: $viewpoint
                 )
-                .frame(maxWidth: 300, maxHeight: 300)
+                .frame(
+                    maxWidth: 300,
+                    maxHeight: 300
+                )
                 .padding(36)
             } else if mapLoadError {
                 Label(
