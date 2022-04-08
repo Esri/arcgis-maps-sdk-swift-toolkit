@@ -16,21 +16,34 @@ import ArcGIS
 
 /// `SearchView` presents a search experience, powered by an underlying `SearchViewModel`.
 public struct SearchView: View {
-    /// Creates a new `SearchView`.
+    /// Creates a `SearchView`.
     /// - Parameters:
-    ///   - searchViewModel: The view model used by `SearchView`.
-    public init(searchViewModel: SearchViewModel? = nil) {
-        self.searchViewModel = searchViewModel ?? SearchViewModel(
-            sources: [LocatorSearchSource()]
+    ///   - queryArea: The search area to be used for the current query.
+    ///   - queryCenter: Defines the center for the search.
+    ///   - resultMode: Defines how many results to return.
+    ///   - sources: Collection of search sources to be used.
+    init(
+        queryArea: Geometry? = nil,
+        queryCenter: Point? = nil,
+        resultMode: SearchResultMode = .automatic,
+        sources: [SearchSource] = []
+    ) {
+        searchViewModel = SearchViewModel(
+            queryArea: queryArea,
+            queryCenter: queryCenter,
+            resultMode: resultMode,
+            sources: [sources.isEmpty ? [LocatorSearchSource()] : sources]
         )
     }
-    
+
     /// The view model used by the view. The `SearchViewModel` manages state and handles the
     /// activity of searching. The view observes `SearchViewModel` for changes in state. The view
     /// calls methods on `SearchViewModel` in response to user action.
-    @ObservedObject
-    var searchViewModel: SearchViewModel
+    @ObservedObject var searchViewModel: SearchViewModel
     
+    @Environment(\.horizontalSizeClass) var horizontalSizeClass
+    @Environment(\.verticalSizeClass) var verticalSizeClass
+
     /// The string shown in the search view when no user query is entered.
     /// Defaults to "Find a place or address". Note: this is set using the
     /// `prompt` modifier.
@@ -46,13 +59,7 @@ public struct SearchView: View {
     /// Message to show when there are no results or suggestions. Defaults to "No results found".
     /// Note: this is set using the `noResultsMessage` modifier.
     private var noResultsMessage = "No results found"
-    
-    @Environment(\.horizontalSizeClass)
-    private var horizontalSizeClass: UserInterfaceSizeClass?
-    
-    @Environment(\.verticalSizeClass)
-    private var verticalSizeClass: UserInterfaceSizeClass?
-    
+
     /// The width of the search bar, taking into account the horizontal and vertical size classes
     /// of the device. This will cause the search field to display full-width on an iPhone in portrait
     /// orientation (and certain iPad multitasking configurations) and limit the width to `360` in other cases.
@@ -68,8 +75,7 @@ public struct SearchView: View {
     }
     
     /// Determines whether the results lists are displayed.
-    @State
-    private var isResultListHidden: Bool = false
+    @State private var isResultListHidden: Bool = false
     
     public var body: some View {
         VStack {
@@ -254,6 +260,7 @@ struct ResultRow: View {
                 if !subtitle.isEmpty {
                     Text(subtitle)
                         .font(.caption)
+                        .foregroundColor(.secondary)
                 }
             }
         }
