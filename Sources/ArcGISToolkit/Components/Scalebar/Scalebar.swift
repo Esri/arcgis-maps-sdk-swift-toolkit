@@ -22,7 +22,7 @@ public struct Scalebar: View {
 ***REMOVED***@State private var height: Double?
 ***REMOVED***
 ***REMOVED******REMOVED***/ The view model used by the `Scalebar`.
-***REMOVED***@StateObject internal var viewModel: ScalebarViewModel
+***REMOVED***@StateObject var viewModel: ScalebarViewModel
 ***REMOVED***
 ***REMOVED******REMOVED***/ The font used by the scalebar, available in both `Font` and `UIFont` types.
 ***REMOVED***internal static var font: (font: Font, uiFont: UIFont) {

@@ -75,91 +75,83 @@ extension Scalebar {
 ***REMOVED******REMOVED***/ Renders a scalebar with `ScalebarStyle.dualUnitLine`.
 ***REMOVED***var dualUnitLineStyleRender: some View {
 ***REMOVED******REMOVED***VStack(spacing: Scalebar.labelYPad) {
-***REMOVED******REMOVED******REMOVED***ZStack {
-***REMOVED******REMOVED******REMOVED******REMOVED***Text(viewModel.labels.last?.text ?? "")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.scalebarText()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.position(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***x: viewModel.labels.last?.xOffset ?? .zero,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***y: ScalebarLabel.yOffset
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(height: Scalebar.fontHeight)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***GeometryReader { geoProxy in
-***REMOVED******REMOVED******REMOVED******REMOVED***ZStack(alignment: .bottom) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Path { path in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let zero = Double.zero
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let maxX = geoProxy.size.width
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let maxY = geoProxy.size.height
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let midY = maxY / 2
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let alternateUnitX = viewModel.alternateUnit.screenLength
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Leading vertical bar
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***path.move(to: CGPoint(x: zero, y: zero))
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***path.addLine(to: CGPoint(x: zero, y: maxY))
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Horiontal cross bar
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***path.move(to: CGPoint(x: zero, y: midY))
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***path.addLine(to: CGPoint(x: maxX, y: midY))
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Unit 1 vertical bar
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***path.move(to: CGPoint(x: maxX, y: zero))
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***path.addLine(to: CGPoint(x: maxX, y: midY))
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Unit 2 vertical bar
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***path.move(to: CGPoint(x: alternateUnitX, y: midY))
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***path.addLine(to: CGPoint(x: alternateUnitX, y: maxY))
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.stroke(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***style: .init(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***lineWidth: Scalebar.lineWidth,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***lineCap: .round,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***lineJoin: .round
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fill(Scalebar.lineColor)
+***REMOVED******REMOVED******REMOVED***Text(viewModel.labels.last?.text ?? "")
+***REMOVED******REMOVED******REMOVED******REMOVED***.scalebarText()
+***REMOVED******REMOVED******REMOVED******REMOVED***.position(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***x: viewModel.labels.last?.xOffset ?? .zero,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***y: ScalebarLabel.yOffset
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***.frame(height: Scalebar.fontHeight)
+***REMOVED******REMOVED******REMOVED***GeometryReader { geometry in
+***REMOVED******REMOVED******REMOVED******REMOVED***Path { path in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let zero = Double.zero
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let maxX = geometry.size.width
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let maxY = geometry.size.height
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let midY = maxY / 2
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let alternateUnitX = viewModel.alternateUnit.screenLength
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Leading vertical bar
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***path.move(to: CGPoint(x: zero, y: zero))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***path.addLine(to: CGPoint(x: zero, y: maxY))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Horiontal cross bar
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***path.move(to: CGPoint(x: zero, y: midY))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***path.addLine(to: CGPoint(x: maxX, y: midY))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Unit 1 vertical bar
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***path.move(to: CGPoint(x: maxX, y: zero))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***path.addLine(to: CGPoint(x: maxX, y: midY))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Unit 2 vertical bar
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***path.move(to: CGPoint(x: alternateUnitX, y: midY))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***path.addLine(to: CGPoint(x: alternateUnitX, y: maxY))
 ***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.stroke(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***style: .init(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***lineWidth: Scalebar.lineWidth,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***lineCap: .round,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***lineJoin: .round
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***.fill(Scalebar.lineColor)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.scalebarShadow()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.frame(height: Scalebar.barFrameHeight)
-***REMOVED******REMOVED******REMOVED***ZStack {
-***REMOVED******REMOVED******REMOVED******REMOVED***Text(viewModel.alternateUnit.label)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.scalebarText()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.position(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***x: viewModel.alternateUnit.screenLength,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***y: ScalebarLabel.yOffset
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(height: Scalebar.fontHeight)
-***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***Text(viewModel.alternateUnit.label)
+***REMOVED******REMOVED******REMOVED******REMOVED***.scalebarText()
+***REMOVED******REMOVED******REMOVED******REMOVED***.position(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***x: viewModel.alternateUnit.screenLength,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***y: ScalebarLabel.yOffset
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***.frame(height: Scalebar.fontHeight)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Renders a scalebar with `ScalebarStyle.graduatedLine`.
 ***REMOVED***var graduatedLineStyleRender: some View {
 ***REMOVED******REMOVED***VStack(spacing: Scalebar.labelYPad) {
-***REMOVED******REMOVED******REMOVED***GeometryReader { geoProxy in
-***REMOVED******REMOVED******REMOVED******REMOVED***ZStack(alignment: .bottom) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Path { path in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let segments = viewModel.labels
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let zero = Double.zero
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let maxX = geoProxy.size.width
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let maxY = geoProxy.size.height
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***path.move(to: CGPoint(x: zero, y: maxY))
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***path.addLine(to: CGPoint(x: maxX, y: maxY))
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for segment in segments {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let segmentX = segment.xOffset
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***path.move(to: CGPoint(x: segmentX, y: zero))
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***path.addLine(to: CGPoint(x: segmentX, y: maxY))
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***GeometryReader { geometry in
+***REMOVED******REMOVED******REMOVED******REMOVED***Path { path in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let segments = viewModel.labels
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let zero = Double.zero
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let maxX = geometry.size.width
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let maxY = geometry.size.height
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***path.move(to: CGPoint(x: zero, y: maxY))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***path.addLine(to: CGPoint(x: maxX, y: maxY))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for segment in segments {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let segmentX = segment.xOffset
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***path.move(to: CGPoint(x: segmentX, y: zero))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***path.addLine(to: CGPoint(x: segmentX, y: maxY))
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.stroke(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***style: .init(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***lineWidth: Scalebar.lineWidth,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***lineCap: .round,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***lineJoin: .round
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fill(Scalebar.lineColor)
 ***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.stroke(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***style: .init(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***lineWidth: Scalebar.lineWidth,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***lineCap: .round,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***lineJoin: .round
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***.fill(Scalebar.lineColor)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.scalebarShadow()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.frame(height: Scalebar.lineFrameHeight)
@@ -170,26 +162,24 @@ extension Scalebar {
 ***REMOVED******REMOVED***/ Renders a scalebar with `ScalebarStyle.line`.
 ***REMOVED***var lineStyleRender: some View {
 ***REMOVED******REMOVED***VStack(spacing: Scalebar.labelYPad) {
-***REMOVED******REMOVED******REMOVED***GeometryReader { geoProxy in
-***REMOVED******REMOVED******REMOVED******REMOVED***ZStack(alignment: .bottom) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Path { path in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let zero = Double.zero
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let maxX = geoProxy.size.width
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let maxY = geoProxy.size.height
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***path.move(to: CGPoint(x: zero, y: zero))
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***path.addLine(to: CGPoint(x: zero, y: maxY))
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***path.addLine(to: CGPoint(x: maxX, y: maxY))
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***path.addLine(to: CGPoint(x: maxX, y: zero))
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.stroke(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***style: .init(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***lineWidth: Scalebar.lineWidth,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***lineCap: .round,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***lineJoin: .round
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fill(Scalebar.lineColor)
+***REMOVED******REMOVED******REMOVED***GeometryReader { geometry in
+***REMOVED******REMOVED******REMOVED******REMOVED***Path { path in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let zero = Double.zero
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let maxX = geometry.size.width
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let maxY = geometry.size.height
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***path.move(to: CGPoint(x: zero, y: zero))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***path.addLine(to: CGPoint(x: zero, y: maxY))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***path.addLine(to: CGPoint(x: maxX, y: maxY))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***path.addLine(to: CGPoint(x: maxX, y: zero))
 ***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.stroke(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***style: .init(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***lineWidth: Scalebar.lineWidth,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***lineCap: .round,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***lineJoin: .round
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***.fill(Scalebar.lineColor)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.scalebarShadow()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.frame(height: Scalebar.lineFrameHeight)
