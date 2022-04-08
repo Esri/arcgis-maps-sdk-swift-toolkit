@@ -75,91 +75,83 @@ extension Scalebar {
     /// Renders a scalebar with `ScalebarStyle.dualUnitLine`.
     var dualUnitLineStyleRender: some View {
         VStack(spacing: Scalebar.labelYPad) {
-            ZStack {
-                Text(viewModel.labels.last?.text ?? "")
-                    .scalebarText()
-                    .position(
-                        x: viewModel.labels.last?.xOffset ?? .zero,
-                        y: ScalebarLabel.yOffset
-                    )
-                    .frame(height: Scalebar.fontHeight)
-            }
-            GeometryReader { geoProxy in
-                ZStack(alignment: .bottom) {
-                    Path { path in
-                        let zero = Double.zero
-                        let maxX = geoProxy.size.width
-                        let maxY = geoProxy.size.height
-                        let midY = maxY / 2
-                        let alternateUnitX = viewModel.alternateUnit.screenLength
-                        
-                        // Leading vertical bar
-                        path.move(to: CGPoint(x: zero, y: zero))
-                        path.addLine(to: CGPoint(x: zero, y: maxY))
-                        
-                        // Horiontal cross bar
-                        path.move(to: CGPoint(x: zero, y: midY))
-                        path.addLine(to: CGPoint(x: maxX, y: midY))
-                        
-                        // Unit 1 vertical bar
-                        path.move(to: CGPoint(x: maxX, y: zero))
-                        path.addLine(to: CGPoint(x: maxX, y: midY))
-                        
-                        // Unit 2 vertical bar
-                        path.move(to: CGPoint(x: alternateUnitX, y: midY))
-                        path.addLine(to: CGPoint(x: alternateUnitX, y: maxY))
-                    }
-                    .stroke(
-                        style: .init(
-                            lineWidth: Scalebar.lineWidth,
-                            lineCap: .round,
-                            lineJoin: .round
-                        )
-                    )
-                    .fill(Scalebar.lineColor)
+            Text(viewModel.labels.last?.text ?? "")
+                .scalebarText()
+                .position(
+                    x: viewModel.labels.last?.xOffset ?? .zero,
+                    y: ScalebarLabel.yOffset
+                )
+                .frame(height: Scalebar.fontHeight)
+            GeometryReader { geometry in
+                Path { path in
+                    let zero = Double.zero
+                    let maxX = geometry.size.width
+                    let maxY = geometry.size.height
+                    let midY = maxY / 2
+                    let alternateUnitX = viewModel.alternateUnit.screenLength
+                    
+                    // Leading vertical bar
+                    path.move(to: CGPoint(x: zero, y: zero))
+                    path.addLine(to: CGPoint(x: zero, y: maxY))
+                    
+                    // Horiontal cross bar
+                    path.move(to: CGPoint(x: zero, y: midY))
+                    path.addLine(to: CGPoint(x: maxX, y: midY))
+                    
+                    // Unit 1 vertical bar
+                    path.move(to: CGPoint(x: maxX, y: zero))
+                    path.addLine(to: CGPoint(x: maxX, y: midY))
+                    
+                    // Unit 2 vertical bar
+                    path.move(to: CGPoint(x: alternateUnitX, y: midY))
+                    path.addLine(to: CGPoint(x: alternateUnitX, y: maxY))
                 }
+                .stroke(
+                    style: .init(
+                        lineWidth: Scalebar.lineWidth,
+                        lineCap: .round,
+                        lineJoin: .round
+                    )
+                )
+                .fill(Scalebar.lineColor)
                 .scalebarShadow()
             }
             .frame(height: Scalebar.barFrameHeight)
-            ZStack {
-                Text(viewModel.alternateUnit.label)
-                    .scalebarText()
-                    .position(
-                        x: viewModel.alternateUnit.screenLength,
-                        y: ScalebarLabel.yOffset
-                    )
-                    .frame(height: Scalebar.fontHeight)
-            }
+            Text(viewModel.alternateUnit.label)
+                .scalebarText()
+                .position(
+                    x: viewModel.alternateUnit.screenLength,
+                    y: ScalebarLabel.yOffset
+                )
+                .frame(height: Scalebar.fontHeight)
         }
     }
     
     /// Renders a scalebar with `ScalebarStyle.graduatedLine`.
     var graduatedLineStyleRender: some View {
         VStack(spacing: Scalebar.labelYPad) {
-            GeometryReader { geoProxy in
-                ZStack(alignment: .bottom) {
-                    Path { path in
-                        let segments = viewModel.labels
-                        let zero = Double.zero
-                        let maxX = geoProxy.size.width
-                        let maxY = geoProxy.size.height
-                        path.move(to: CGPoint(x: zero, y: maxY))
-                        path.addLine(to: CGPoint(x: maxX, y: maxY))
-                        for segment in segments {
-                            let segmentX = segment.xOffset
-                            path.move(to: CGPoint(x: segmentX, y: zero))
-                            path.addLine(to: CGPoint(x: segmentX, y: maxY))
-                        }
+            GeometryReader { geometry in
+                Path { path in
+                    let segments = viewModel.labels
+                    let zero = Double.zero
+                    let maxX = geometry.size.width
+                    let maxY = geometry.size.height
+                    path.move(to: CGPoint(x: zero, y: maxY))
+                    path.addLine(to: CGPoint(x: maxX, y: maxY))
+                    for segment in segments {
+                        let segmentX = segment.xOffset
+                        path.move(to: CGPoint(x: segmentX, y: zero))
+                        path.addLine(to: CGPoint(x: segmentX, y: maxY))
                     }
-                    .stroke(
-                        style: .init(
-                            lineWidth: Scalebar.lineWidth,
-                            lineCap: .round,
-                            lineJoin: .round
-                        )
-                    )
-                    .fill(Scalebar.lineColor)
                 }
+                .stroke(
+                    style: .init(
+                        lineWidth: Scalebar.lineWidth,
+                        lineCap: .round,
+                        lineJoin: .round
+                    )
+                )
+                .fill(Scalebar.lineColor)
                 .scalebarShadow()
             }
             .frame(height: Scalebar.lineFrameHeight)
@@ -170,26 +162,24 @@ extension Scalebar {
     /// Renders a scalebar with `ScalebarStyle.line`.
     var lineStyleRender: some View {
         VStack(spacing: Scalebar.labelYPad) {
-            GeometryReader { geoProxy in
-                ZStack(alignment: .bottom) {
-                    Path { path in
-                        let zero = Double.zero
-                        let maxX = geoProxy.size.width
-                        let maxY = geoProxy.size.height
-                        path.move(to: CGPoint(x: zero, y: zero))
-                        path.addLine(to: CGPoint(x: zero, y: maxY))
-                        path.addLine(to: CGPoint(x: maxX, y: maxY))
-                        path.addLine(to: CGPoint(x: maxX, y: zero))
-                    }
-                    .stroke(
-                        style: .init(
-                            lineWidth: Scalebar.lineWidth,
-                            lineCap: .round,
-                            lineJoin: .round
-                        )
-                    )
-                    .fill(Scalebar.lineColor)
+            GeometryReader { geometry in
+                Path { path in
+                    let zero = Double.zero
+                    let maxX = geometry.size.width
+                    let maxY = geometry.size.height
+                    path.move(to: CGPoint(x: zero, y: zero))
+                    path.addLine(to: CGPoint(x: zero, y: maxY))
+                    path.addLine(to: CGPoint(x: maxX, y: maxY))
+                    path.addLine(to: CGPoint(x: maxX, y: zero))
                 }
+                .stroke(
+                    style: .init(
+                        lineWidth: Scalebar.lineWidth,
+                        lineCap: .round,
+                        lineJoin: .round
+                    )
+                )
+                .fill(Scalebar.lineColor)
                 .scalebarShadow()
             }
             .frame(height: Scalebar.lineFrameHeight)
