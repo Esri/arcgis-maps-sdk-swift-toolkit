@@ -176,29 +176,23 @@ final class FloorFilterViewModel: ObservableObject {
     // MARK: Public methods
     
     /// Updates the selected site, facility, and level based on a newly selected facility.
-    /// - Parameter floorFacility: The selected facility.
-    func setFacility(_ floorFacility: FloorFacility?) {
-        if let floorFacility = floorFacility {
-            selection = .facility(floorFacility)
-        }
-        zoomToExtent(floorFacility?.geometry?.extent)
+    /// - Parameter newFacility: The selected facility.
+    func setFacility(_ newFacility: FloorFacility) {
+        selection = .facility(newFacility)
+        zoomToExtent(newFacility.geometry?.extent)
     }
     
     /// Updates the selected site, facility, and level based on a newly selected level.
-    /// - Parameter floorLevel: The selected level.
-    func setLevel(_ floorLevel: FloorLevel?) {
-        if let floorLevel = floorLevel {
-            selection = .level(floorLevel)
-        }
+    /// - Parameter newLevel: The selected level.
+    func setLevel(_ newLevel: FloorLevel) {
+        selection = .level(newLevel)
     }
     
     /// Updates the selected site, facility, and level based on a newly selected site.
-    /// - Parameter floorSite: The selected site.
-    func setSite(_ floorSite: FloorSite?) {
-        if let floorSite = floorSite {
-            selection = .site(floorSite)
-        }
-        zoomToExtent(floorSite?.geometry?.extent)
+    /// - Parameter newSite: The selected site.
+    func setSite(_ newSite: FloorSite) {
+        selection = .site(newSite)
+        zoomToExtent(newSite.geometry?.extent)
     }
     
     // MARK: Private items
