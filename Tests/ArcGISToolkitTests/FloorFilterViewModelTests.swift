@@ -146,7 +146,10 @@ class FloorFilterViewModelTests: XCTestCase {
             viewpoint: viewpoint
         )
         let levels = viewModel.levels
-        let level = levels.first
+        guard let level = levels.first else {
+            XCTFail("A first level does not exist")
+            return
+        }
         viewModel.setLevel(level)
         let selectedLevel = viewModel.selectedLevel
         XCTAssertEqual(selectedLevel, level)

@@ -64,8 +64,8 @@ struct SiteAndFacilitySelector: View {
         /// hierarchy to keep the site selection persistent in the navigation view.
         @State private var selectedSite: FloorSite? {
             didSet {
-                if updateViewModel {
-                    viewModel.setSite(selectedSite)
+                if updateViewModel, let site = selectedSite {
+                    viewModel.setSite(site)
                 }
                 updateViewModel = true
             }
