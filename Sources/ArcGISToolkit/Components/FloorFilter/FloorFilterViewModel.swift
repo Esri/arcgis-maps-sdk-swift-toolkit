@@ -59,7 +59,7 @@ final class FloorFilterViewModel: ObservableObject {
                 if sites.count == 1,
                     let firstSite = sites.first {
                     // If we have only one site, select it.
-                    setSite(firstSite)
+                    setSite(firstSite, zoomTo: true)
                 }
             } catch {
                 print("error: \(error)")
@@ -74,22 +74,7 @@ final class FloorFilterViewModel: ObservableObject {
     @Published private(set) var isLoading = true
     
     /// The selected site, floor, or level.
-    @Published private(set) var selection: Selection? {
-        didSet {
-            if case let .level(oldLevel) = oldValue,
-               case let .facility(facility) = selection,
-               let newLevel = facility.levels.first(where: { level in
-                   level.verticalOrder == oldLevel.verticalOrder
-               }) {
-                selection = .level(newLevel)
-            } else if case let .facility(facility) = selection,
-                      let level = facility.defaultLevel {
-                selection = .level(level)
-            } else {
-                filterMapToSelectedLevel()
-            }
-        }
-    }
+    @Published private(set) var selection: Selection?
     
     // MARK: Constants
     
@@ -177,22 +162,39 @@ final class FloorFilterViewModel: ObservableObject {
     
     /// Updates the selected site, facility, and level based on a newly selected facility.
     /// - Parameter newFacility: The selected facility.
-    func setFacility(_ newFacility: FloorFacility) {
-        selection = .facility(newFacility)
-        zoomToExtent(newFacility.geometry?.extent)
+    func setFacility(_ newFacility: FloorFacility, zoomTo: Bool = false) {
+        if let oldLevel = selectedLevel,
+            let newLevel = newFacility.levels.first(
+            where: { $0.verticalOrder == oldLevel.verticalOrder }
+        ) {
+            setLevel(newLevel)
+        } else if let defaultLevel = newFacility.defaultLevel {
+            setLevel(defaultLevel)
+        } else {
+            selection = .facility(newFacility)
+        }
+        
+        if zoomTo {
+            zoomToExtent(newFacility.geometry?.extent)
+        }
     }
     
     /// Updates the selected site, facility, and level based on a newly selected level.
     /// - Parameter newLevel: The selected level.
     func setLevel(_ newLevel: FloorLevel) {
         selection = .level(newLevel)
+        levels.forEach {
+            $0.isVisible = $0.verticalOrder == newLevel.verticalOrder
+        }
     }
     
     /// Updates the selected site, facility, and level based on a newly selected site.
     /// - Parameter newSite: The selected site.
-    func setSite(_ newSite: FloorSite) {
+    func setSite(_ newSite: FloorSite, zoomTo: Bool = false) {
         selection = .site(newSite)
-        zoomToExtent(newSite.geometry?.extent)
+        if zoomTo {
+            zoomToExtent(newSite.geometry?.extent)
+        }
     }
     
     // MARK: Private items
@@ -206,15 +208,6 @@ final class FloorFilterViewModel: ObservableObject {
         }
         if !autoSelectFacility() {
             autoSelectSite()
-        }
-    }
-    
-    /// Sets the visibility of all the levels on the map based on the vertical order of the current selected level.
-    private func filterMapToSelectedLevel() {
-        if let selectedLevel = selectedLevel {
-            levels.forEach {
-                $0.isVisible = $0.verticalOrder == selectedLevel.verticalOrder
-            }
         }
     }
     
@@ -245,7 +238,7 @@ final class FloorFilterViewModel: ObservableObject {
         }
         
         if let facilityResult = facilityResult {
-            selection = .facility(facilityResult)
+            setFacility(facilityResult)
         } else if automaticSelectionMode == .always {
             return false
         }
@@ -283,7 +276,7 @@ final class FloorFilterViewModel: ObservableObject {
         }
         
         if let siteResult = siteResult {
-            selection = .site(siteResult)
+            setSite(siteResult)
         } else if automaticSelectionMode == .always {
             selection = nil
         }
