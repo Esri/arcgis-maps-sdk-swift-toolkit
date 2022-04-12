@@ -19,3 +19,10 @@ extension FloorSite: Equatable {
 ***REMOVED******REMOVED***lhs.id == rhs.id
 ***REMOVED***
 ***REMOVED***
+
+extension FloorSite: Hashable {
+***REMOVED***public func hash(into hasher: inout Hasher) {
+***REMOVED******REMOVED***hasher.combine(self.id)
+***REMOVED******REMOVED***hasher.combine(self.name)
+***REMOVED***
+***REMOVED***

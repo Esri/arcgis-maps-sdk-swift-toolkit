@@ -62,22 +62,21 @@ public struct FloorFilter: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Displays the available levels.
+***REMOVED***@ViewBuilder
 ***REMOVED***private var levelsSelectorView: some View {
-***REMOVED******REMOVED***Group {
-***REMOVED******REMOVED******REMOVED***if viewModel.hasLevelsToDisplay {
-***REMOVED******REMOVED******REMOVED******REMOVED***if topAligned {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Divider()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 30)
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***LevelSelector(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isCollapsed: $isLevelsViewCollapsed,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***levels: viewModel.sortedLevels,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***topAligned: topAligned
-***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED***if !topAligned {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Divider()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 30)
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***if viewModel.hasLevelsToDisplay {
+***REMOVED******REMOVED******REMOVED***if topAligned {
+***REMOVED******REMOVED******REMOVED******REMOVED***Divider()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 30)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***LevelSelector(
+***REMOVED******REMOVED******REMOVED******REMOVED***isCollapsed: $isLevelsViewCollapsed,
+***REMOVED******REMOVED******REMOVED******REMOVED***levels: viewModel.sortedLevels,
+***REMOVED******REMOVED******REMOVED******REMOVED***isTopAligned: topAligned
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***if !topAligned {
+***REMOVED******REMOVED******REMOVED******REMOVED***Divider()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 30)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***

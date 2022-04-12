@@ -64,8 +64,8 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED***/ hierarchy to keep the site selection persistent in the navigation view.
 ***REMOVED******REMOVED***@State private var selectedSite: FloorSite? {
 ***REMOVED******REMOVED******REMOVED***didSet {
-***REMOVED******REMOVED******REMOVED******REMOVED***if updateViewModel {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.setSite(selectedSite)
+***REMOVED******REMOVED******REMOVED******REMOVED***if updateViewModel, let site = selectedSite {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.setSite(site, zoomTo: true)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***updateViewModel = true
 ***REMOVED******REMOVED***
@@ -163,11 +163,11 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onTapGesture {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.setSite(site)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedSite = site
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.listStyle(.plain)
-***REMOVED******REMOVED******REMOVED***.onChange(of: $viewModel.selection.wrappedValue) { _ in
+***REMOVED******REMOVED******REMOVED***.onChange(of: viewModel.selection) { _ in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Setting the `updateViewModel` flag false allows
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** `selectedSite` to receive upstream updates from the view
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** model without republishing them back up to the view model.
@@ -279,7 +279,7 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED***ScrollViewReader { proxy in
 ***REMOVED******REMOVED******REMOVED******REMOVED***List(matchingFacilities, id: \.id) { facility in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.setFacility(facility)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.setFacility(facility, zoomTo: true)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isHidden.wrappedValue.toggle()
 ***REMOVED******REMOVED******REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***HStack {

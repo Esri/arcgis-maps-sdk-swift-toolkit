@@ -59,7 +59,7 @@ class FloorFilterViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***XCTAssertFalse(sites.isEmpty)
 ***REMOVED******REMOVED***XCTAssertFalse(facilities.isEmpty)
 ***REMOVED******REMOVED***XCTAssertFalse(levels.isEmpty)
-***REMOVED******REMOVED***XCTAssertNotNil(vmViewpoint)
+***REMOVED******REMOVED***XCTAssertNil(vmViewpoint)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Confirms that the selected site/facility/level properties and the viewpoint are correctly updated.
@@ -79,18 +79,13 @@ class FloorFilterViewModelTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***XCTFail()
 ***REMOVED******REMOVED******REMOVED***return
 ***REMOVED***
-***REMOVED******REMOVED***viewModel.selection = .site(site)
+***REMOVED******REMOVED***viewModel.setSite(site, zoomTo: true)
 ***REMOVED******REMOVED***let selectedSite = viewModel.selectedSite
 ***REMOVED******REMOVED***let selectedFacility = viewModel.selectedFacility
 ***REMOVED******REMOVED***let selectedLevel = viewModel.selectedLevel
 ***REMOVED******REMOVED***XCTAssertEqual(selectedSite, site)
 ***REMOVED******REMOVED***XCTAssertNil(selectedFacility)
 ***REMOVED******REMOVED***XCTAssertNil(selectedLevel)
-***REMOVED******REMOVED***XCTAssertEqual(
-***REMOVED******REMOVED******REMOVED***_viewpoint?.targetGeometry.extent.center.x,
-***REMOVED******REMOVED******REMOVED***initialViewpoint.targetGeometry.extent.center.x
-***REMOVED******REMOVED***)
-***REMOVED******REMOVED***viewModel.setSite(site)
 ***REMOVED******REMOVED***XCTAssertEqual(
 ***REMOVED******REMOVED******REMOVED***_viewpoint?.targetGeometry.extent.center.x,
 ***REMOVED******REMOVED******REMOVED***selectedSite?.geometry?.extent.center.x
@@ -115,17 +110,12 @@ class FloorFilterViewModelTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***XCTFail()
 ***REMOVED******REMOVED******REMOVED***return
 ***REMOVED***
-***REMOVED******REMOVED***viewModel.selection = .facility(facility)
+***REMOVED******REMOVED***viewModel.setFacility(facility, zoomTo: true)
 ***REMOVED******REMOVED***let selectedFacility = viewModel.selectedFacility
 ***REMOVED******REMOVED***let selectedLevel = viewModel.selectedLevel
-***REMOVED******REMOVED***let defaultLevel = viewModel.defaultLevel(for: selectedFacility)
+***REMOVED******REMOVED***let defaultLevel = selectedFacility?.defaultLevel
 ***REMOVED******REMOVED***XCTAssertEqual(selectedFacility, facility)
 ***REMOVED******REMOVED***XCTAssertEqual(selectedLevel, defaultLevel)
-***REMOVED******REMOVED***XCTAssertEqual(
-***REMOVED******REMOVED******REMOVED***_viewpoint?.targetGeometry.extent.center.x,
-***REMOVED******REMOVED******REMOVED***initialViewpoint.targetGeometry.extent.center.x
-***REMOVED******REMOVED***)
-***REMOVED******REMOVED***viewModel.setFacility(facility)
 ***REMOVED******REMOVED***XCTAssertEqual(
 ***REMOVED******REMOVED******REMOVED***_viewpoint?.targetGeometry.extent.center.x,
 ***REMOVED******REMOVED******REMOVED***selectedFacility?.geometry?.extent.center.x
@@ -146,7 +136,10 @@ class FloorFilterViewModelTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***viewpoint: viewpoint
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***let levels = viewModel.levels
-***REMOVED******REMOVED***let level = levels.first
+***REMOVED******REMOVED***guard let level = levels.first else {
+***REMOVED******REMOVED******REMOVED***XCTFail("A first level does not exist")
+***REMOVED******REMOVED******REMOVED***return
+***REMOVED***
 ***REMOVED******REMOVED***viewModel.setLevel(level)
 ***REMOVED******REMOVED***let selectedLevel = viewModel.selectedLevel
 ***REMOVED******REMOVED***XCTAssertEqual(selectedLevel, level)
@@ -179,7 +172,7 @@ class FloorFilterViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Viewpoint is Los Angeles, selection should be nil
-***REMOVED******REMOVED***viewModel.makeAutoSelection()
+***REMOVED******REMOVED***viewModel.automaticallySelectFacilityOrSite()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var selectedFacility = viewModel.selectedFacility
 ***REMOVED******REMOVED***var selectedSite = viewModel.selectedSite
@@ -187,7 +180,7 @@ class FloorFilterViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***XCTAssertNil(selectedSite)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***_viewpoint = .site_ResearchAnnex_facility_Lattice
-***REMOVED******REMOVED***viewModel.makeAutoSelection()
+***REMOVED******REMOVED***viewModel.automaticallySelectFacilityOrSite()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Viewpoint is the Lattice facility at the Research Annex site
 ***REMOVED******REMOVED***selectedFacility = viewModel.selectedFacility
@@ -196,7 +189,7 @@ class FloorFilterViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***XCTAssertEqual(selectedFacility?.name, "Lattice")
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***_viewpoint = viewpointLosAngeles
-***REMOVED******REMOVED***viewModel.makeAutoSelection()
+***REMOVED******REMOVED***viewModel.automaticallySelectFacilityOrSite()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Viewpoint is Los Angeles, selection should be nil
 ***REMOVED******REMOVED***selectedFacility = viewModel.selectedFacility
@@ -220,7 +213,7 @@ class FloorFilterViewModelTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***viewpoint: viewpoint
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***viewModel.makeAutoSelection()
+***REMOVED******REMOVED***viewModel.automaticallySelectFacilityOrSite()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Viewpoint is the Lattice facility at the Research Annex site
 ***REMOVED******REMOVED***var selectedFacility = viewModel.selectedFacility
@@ -229,7 +222,7 @@ class FloorFilterViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***XCTAssertEqual(selectedFacility?.name, "Lattice")
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***_viewpoint = viewpointLosAngeles
-***REMOVED******REMOVED***viewModel.makeAutoSelection()
+***REMOVED******REMOVED***viewModel.automaticallySelectFacilityOrSite()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Viewpoint is Los Angeles, but selection should remain Redlands Main Q
 ***REMOVED******REMOVED***selectedFacility = viewModel.selectedFacility
@@ -253,7 +246,7 @@ class FloorFilterViewModelTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***viewpoint: viewpoint
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***viewModel.makeAutoSelection()
+***REMOVED******REMOVED***viewModel.automaticallySelectFacilityOrSite()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Viewpoint is Los Angeles, selection should be nil
 ***REMOVED******REMOVED***var selectedFacility = viewModel.selectedFacility
@@ -262,7 +255,7 @@ class FloorFilterViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***XCTAssertNil(selectedSite)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***_viewpoint = .site_ResearchAnnex_facility_Lattice
-***REMOVED******REMOVED***viewModel.makeAutoSelection()
+***REMOVED******REMOVED***viewModel.automaticallySelectFacilityOrSite()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Viewpoint is the Lattice facility at the Research Annex site
 ***REMOVED******REMOVED***selectedFacility = viewModel.selectedFacility
