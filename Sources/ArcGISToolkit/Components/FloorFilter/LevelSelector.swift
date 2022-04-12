@@ -24,9 +24,6 @@ struct LevelSelector: View {
     /// the selected level.
     @Binding var isCollapsed: Bool
     
-    /// The height of the scroll view's content.
-    @State private var scrollViewContentHeight: CGFloat = .zero
-    
     /// The levels to display.
     let levels: [FloorLevel]
     
@@ -48,15 +45,7 @@ struct LevelSelector: View {
                     Divider()
                         .frame(width: 30)
                 }
-                ScrollView {
-                    VStack {
-                        LevelsStack(levels: levels)
-                    }
-                    .onSizeChange {
-                        scrollViewContentHeight = $0.height
-                    }
-                }
-                .frame(maxHeight: scrollViewContentHeight)
+                LevelsStack(levels: levels)
                 if isTopAligned {
                     Divider()
                         .frame(width: 30)
@@ -64,15 +53,11 @@ struct LevelSelector: View {
                 }
             }
         } else {
-            Button {
-                if levels.count > 1 {
-                    isCollapsed.toggle()
-                }
-            } label: {
+            Toggle(isOn: $isCollapsed) {
                 Text(selectedLevelName)
                     .lineLimit(1)
             }
-            .selected(true)
+            .toggleStyle(.button)
         }
     }
 }
@@ -82,29 +67,37 @@ struct LevelsStack: View {
     /// The view model used by the `LevelsView`.
     @EnvironmentObject var viewModel: FloorFilterViewModel
     
+    /// The height of the scroll view's content.
+    @State private var contentHeight: CGFloat = .zero
+    
     /// The levels to display.
     let levels: [FloorLevel]
     
     var body: some View {
-        VStack {
-            ForEach(levels) { level in
-                Button {
-                    viewModel.setLevel(level)
-                } label: {
-                    Text(level.shortName)
-                        .lineLimit(1)
+        ScrollView {
+            VStack {
+                ForEach(levels) { level in
+                    Button {
+                        viewModel.setLevel(level)
+                    } label: {
+                        Text(level.shortName)
+                            .lineLimit(1)
+                    }
+                    .selected(level == viewModel.selectedLevel)
                 }
-                .selected(level == viewModel.selectedLevel)
+            }
+            .onSizeChange {
+                contentHeight = $0.height
             }
         }
+        .frame(maxHeight: contentHeight)
     }
 }
 
 /// A button used to collapse the floor level list.
 struct CollapseButton: View {
     /// Allows the user to toggle the visibility of the site and facility selector.
-    @Binding
-    var isCollapsed: Bool
+    @Binding var isCollapsed: Bool
     
     var body: some View {
         Button {
