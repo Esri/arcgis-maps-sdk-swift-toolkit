@@ -87,7 +87,7 @@ class FloorFilterViewModelTests: XCTestCase {
             XCTFail()
             return
         }
-        viewModel.setSite(site)
+        viewModel.setSite(site, zoomTo: true)
         let selectedSite = viewModel.selectedSite
         let selectedFacility = viewModel.selectedFacility
         let selectedLevel = viewModel.selectedLevel
@@ -119,7 +119,7 @@ class FloorFilterViewModelTests: XCTestCase {
             XCTFail()
             return
         }
-        viewModel.setFacility(facility)
+        viewModel.setFacility(facility, zoomTo: true)
         let selectedFacility = viewModel.selectedFacility
         let selectedLevel = viewModel.selectedLevel
         let defaultLevel = selectedFacility?.defaultLevel

@@ -65,7 +65,7 @@ struct SiteAndFacilitySelector: View {
         @State private var selectedSite: FloorSite? {
             didSet {
                 if updateViewModel, let site = selectedSite {
-                    viewModel.setSite(site)
+                    viewModel.setSite(site, zoomTo: true)
                 }
                 updateViewModel = true
             }
@@ -163,7 +163,7 @@ struct SiteAndFacilitySelector: View {
                     )
                 }
                 .onTapGesture {
-                    viewModel.setSite(site)
+                    selectedSite = site
                 }
             }
             .listStyle(.plain)
@@ -279,7 +279,7 @@ struct SiteAndFacilitySelector: View {
             ScrollViewReader { proxy in
                 List(matchingFacilities, id: \.id) { facility in
                     Button {
-                        viewModel.setFacility(facility)
+                        viewModel.setFacility(facility, zoomTo: true)
                         isHidden.wrappedValue.toggle()
                     } label: {
                         HStack {
