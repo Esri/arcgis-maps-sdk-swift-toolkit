@@ -28,16 +28,13 @@ public struct OverviewMap: View {
 ***REMOVED***
 ***REMOVED***private var scaleFactor = 25.0
 ***REMOVED***
-***REMOVED***@StateObject
-***REMOVED***private var map = Map(basemapStyle: .arcGISTopographic)
+***REMOVED***@StateObject private var map = Map(basemapStyle: .arcGISTopographic)
 ***REMOVED***
 ***REMOVED******REMOVED***/ The `Graphic` displaying the visible area of the main `GeoView`.
-***REMOVED***@StateObject
-***REMOVED***private var graphic: Graphic
+***REMOVED***@StateObject private var graphic: Graphic
 ***REMOVED***
 ***REMOVED******REMOVED***/ The `GraphicsOverlay` used to display the visible area graphic.
-***REMOVED***@StateObject
-***REMOVED***private var graphicsOverlay: GraphicsOverlay
+***REMOVED***@StateObject private var graphicsOverlay: GraphicsOverlay
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates an `OverviewMap` for use on a `MapView`.
 ***REMOVED******REMOVED***/ - Parameters:
@@ -60,7 +57,7 @@ public struct OverviewMap: View {
 ***REMOVED***) -> OverviewMap {
 ***REMOVED******REMOVED***OverviewMap(viewpoint: viewpoint, symbol: .defaultMarker)
 ***REMOVED***
-
+***REMOVED***
 ***REMOVED******REMOVED***/ Creates an `OverviewMap`. Used for creating an `OverviewMap` for use on a `MapView`.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - viewpoint: Viewpoint of the main `GeoView` used to update the `OverviewMap` view.
@@ -75,7 +72,7 @@ public struct OverviewMap: View {
 ***REMOVED******REMOVED***self.symbol = symbol
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let graphic = Graphic(symbol: self.symbol)
-
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** It is necessary to set the graphic and graphicsOverlay this way
 ***REMOVED******REMOVED******REMOVED*** in order to prevent the main geoview from recreating the
 ***REMOVED******REMOVED******REMOVED*** graphicsOverlay every draw cycle. That was causing refresh issues
@@ -90,33 +87,38 @@ public struct OverviewMap: View {
 ***REMOVED******REMOVED******REMOVED***viewpoint: makeOverviewViewpoint(),
 ***REMOVED******REMOVED******REMOVED***graphicsOverlays: [graphicsOverlay]
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***.attributionText(hidden: true)
-***REMOVED******REMOVED******REMOVED***.interactionModes([])
-***REMOVED******REMOVED******REMOVED***.border(.black, width: 1)
-***REMOVED******REMOVED******REMOVED***.onAppear(perform: {
-***REMOVED******REMOVED******REMOVED******REMOVED***graphic.symbol = symbol
+***REMOVED******REMOVED***.attributionText(hidden: true)
+***REMOVED******REMOVED***.interactionModes([])
+***REMOVED******REMOVED***.border(
+***REMOVED******REMOVED******REMOVED***.black,
+***REMOVED******REMOVED******REMOVED***width: 1
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***.onChange(of: visibleArea, perform: { visibleArea in
-***REMOVED******REMOVED******REMOVED******REMOVED***if let visibleArea = visibleArea {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***graphic.geometry = visibleArea
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***.onChange(of: viewpoint, perform: { viewpoint in
-***REMOVED******REMOVED******REMOVED******REMOVED***if visibleArea == nil,
-***REMOVED******REMOVED******REMOVED******REMOVED***   let viewpoint = viewpoint,
-***REMOVED******REMOVED******REMOVED******REMOVED***   let point = viewpoint.targetGeometry as? Point {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***graphic.geometry = point
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***.onChange(of: symbol, perform: {
-***REMOVED******REMOVED******REMOVED******REMOVED***graphic.symbol = $0
-***REMOVED******REMOVED***)
+***REMOVED******REMOVED***.onAppear {
+***REMOVED******REMOVED******REMOVED***graphic.symbol = symbol
+***REMOVED***
+***REMOVED******REMOVED***.onChange(of: visibleArea) { visibleArea in
+***REMOVED******REMOVED******REMOVED***if let visibleArea = visibleArea {
+***REMOVED******REMOVED******REMOVED******REMOVED***graphic.geometry = visibleArea
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***.onChange(of: viewpoint) { viewpoint in
+***REMOVED******REMOVED******REMOVED***if visibleArea == nil,
+***REMOVED******REMOVED******REMOVED***   let viewpoint = viewpoint,
+***REMOVED******REMOVED******REMOVED***   let point = viewpoint.targetGeometry as? Point {
+***REMOVED******REMOVED******REMOVED******REMOVED***graphic.geometry = point
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***.onChange(of: symbol) {
+***REMOVED******REMOVED******REMOVED***graphic.symbol = $0
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates an overview viewpoint based on the observed `viewpoint` center, scale, and `scaleFactor`.
 ***REMOVED******REMOVED***/ - Returns: The new `Viewpoint`.
 ***REMOVED***func makeOverviewViewpoint() -> Viewpoint? {
-***REMOVED******REMOVED***guard let viewpoint = viewpoint, let center = viewpoint.targetGeometry as? Point else { return nil ***REMOVED***
+***REMOVED******REMOVED***guard let viewpoint = viewpoint,
+***REMOVED******REMOVED******REMOVED***  let center = viewpoint.targetGeometry as? Point else { return nil ***REMOVED***
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***return Viewpoint(
 ***REMOVED******REMOVED******REMOVED***center: center,
 ***REMOVED******REMOVED******REMOVED***scale: viewpoint.targetScale * scaleFactor

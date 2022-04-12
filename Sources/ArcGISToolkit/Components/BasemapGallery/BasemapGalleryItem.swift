@@ -56,34 +56,28 @@ public class BasemapGalleryItem: ObservableObject {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ The error generated loading the basemap, if any.
-***REMOVED***@Published
-***REMOVED***private(set) var loadBasemapError: Error? = nil
-***REMOVED***
 ***REMOVED******REMOVED***/ The basemap represented by `BasemapGalleryItem`.
 ***REMOVED***public let basemap: Basemap
 ***REMOVED***
 ***REMOVED******REMOVED***/ The name of the `basemap`.
-***REMOVED***@Published
-***REMOVED***public private(set) var name: String?
+***REMOVED***@Published public private(set) var name: String?
 ***REMOVED***
 ***REMOVED******REMOVED***/ The description of the `basemap`.
-***REMOVED***@Published
-***REMOVED***public private(set) var description: String?
+***REMOVED***@Published public private(set) var description: String?
 ***REMOVED***
 ***REMOVED******REMOVED***/ The thumbnail used to represent the `basemap`.
-***REMOVED***@Published
-***REMOVED***public private(set) var thumbnail: UIImage?
-***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value indicating whether the `basemap` or it's base layers are being loaded.
-***REMOVED***@Published
-***REMOVED***private(set) var isBasemapLoading = true
-***REMOVED***
+***REMOVED***@Published public private(set) var thumbnail: UIImage?
+
 ***REMOVED******REMOVED***/ The spatial reference status of the item. This is set via a call to
 ***REMOVED******REMOVED***/ ``updateSpatialReferenceStatus(_:)``.
-***REMOVED***@Published
-***REMOVED***public private(set) var spatialReferenceStatus: SpatialReferenceStatus = .unknown
+***REMOVED***@Published public private(set) var spatialReferenceStatus: SpatialReferenceStatus = .unknown
 ***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value indicating whether the `basemap` or it's base layers are being loaded.
+***REMOVED***@Published private(set) var isBasemapLoading = true
+
+***REMOVED******REMOVED***/ The error generated loading the basemap, if any.
+***REMOVED***@Published private(set) var loadBasemapError: Error? = nil
+
 ***REMOVED******REMOVED***/ The spatial reference of ``basemap``. This will be `nil` until the
 ***REMOVED******REMOVED***/ basemap's base layers have been loaded by
 ***REMOVED******REMOVED***/ ``updateSpatialReferenceStatus(_:)``.
@@ -107,8 +101,7 @@ private extension BasemapGalleryItem {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Updates the item in response to basemap loading completion.
 ***REMOVED******REMOVED***/ - Parameter error: The basemap load error, if any.
-***REMOVED***@MainActor
-***REMOVED***func finalizeLoading(error: Error? = nil) {
+***REMOVED***@MainActor func finalizeLoading(error: Error? = nil) {
 ***REMOVED******REMOVED***if name == nil {
 ***REMOVED******REMOVED******REMOVED***name = basemap.name
 ***REMOVED***
@@ -139,8 +132,7 @@ public extension BasemapGalleryItem {
 ***REMOVED******REMOVED***/ Updates the ``spatialReferenceStatus-swift.property`` by loading the first base layer of
 ***REMOVED******REMOVED***/ ``basemap`` and determining if it matches with the given spatial reference.
 ***REMOVED******REMOVED***/ - Parameter referenceSpatialReference: The spatial reference to match to.
-***REMOVED***@MainActor
-***REMOVED***func updateSpatialReferenceStatus(
+***REMOVED***@MainActor func updateSpatialReferenceStatus(
 ***REMOVED******REMOVED***_ referenceSpatialReference: SpatialReference?
 ***REMOVED***) async throws {
 ***REMOVED******REMOVED***guard basemap.loadStatus == .loaded else { return ***REMOVED***
@@ -159,8 +151,7 @@ public extension BasemapGalleryItem {
 ***REMOVED******REMOVED***/ - Parameter referenceSpatialReference: The spatial reference used to
 ***REMOVED******REMOVED***/ compare to `basemap`'s spatial reference, represented by the first base layer's
 ***REMOVED******REMOVED***/ spatial reference.
-***REMOVED***@MainActor
-***REMOVED***private func finalizeUpdateSpatialReferenceStatus(
+***REMOVED***@MainActor private func finalizeUpdateSpatialReferenceStatus(
 ***REMOVED******REMOVED***with referenceSpatialReference: SpatialReference?
 ***REMOVED***) {
 ***REMOVED******REMOVED***spatialReference = basemap.baseLayers.first?.spatialReference

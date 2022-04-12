@@ -19,13 +19,8 @@ struct BasemapGalleryExampleView: View {
 ***REMOVED******REMOVED***/ The map displayed in the map view.
 ***REMOVED***let map: Map
 ***REMOVED***
-***REMOVED******REMOVED***/ The view model for the basemap gallery.
-***REMOVED***@ObservedObject
-***REMOVED***var viewModel: BasemapGalleryViewModel
-***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether to show the basemap gallery.
-***REMOVED***@State
-***REMOVED***private var showBasemapGallery: Bool = false
+***REMOVED***@State private var showBasemapGallery: Bool = false
 ***REMOVED***
 ***REMOVED******REMOVED***/ The initial viewpoint of the map.
 ***REMOVED***let initialViewpoint = Viewpoint(
@@ -33,20 +28,18 @@ struct BasemapGalleryExampleView: View {
 ***REMOVED******REMOVED***scale: 1_000_000
 ***REMOVED***)
 ***REMOVED***
+***REMOVED******REMOVED***/ The initial list of basemaps.
+***REMOVED***private let basemaps = initialBasemaps()
+***REMOVED***
 ***REMOVED***init() {
 ***REMOVED******REMOVED***self.map = Map(basemapStyle: .arcGISImagery)
-***REMOVED******REMOVED***self.viewModel = BasemapGalleryViewModel(
-***REMOVED******REMOVED******REMOVED***geoModel: self.map,
-***REMOVED******REMOVED******REMOVED******REMOVED*** You can add your own basemaps by passing them in here:
-***REMOVED******REMOVED******REMOVED***items: Self.initialBasemaps()
-***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***MapView(map: map, viewpoint: initialViewpoint)
 ***REMOVED******REMOVED******REMOVED***.overlay(alignment: .topTrailing) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if showBasemapGallery {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***BasemapGallery(viewModel: viewModel)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***BasemapGallery(geoModel: map, items: basemaps)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.style(.automatic())
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.esriBorder()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
@@ -67,7 +60,7 @@ struct BasemapGalleryExampleView: View {
 ***REMOVED******REMOVED***]
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***return identifiers.map { identifier in
-***REMOVED******REMOVED******REMOVED***let url = URL(string: "https:***REMOVED***runtime.maps.arcgis.com/home/item.html?id=\(identifier)")!
+***REMOVED******REMOVED******REMOVED***let url = URL(string: "https:***REMOVED***www.arcgis.com/home/item.html?id=\(identifier)")!
 ***REMOVED******REMOVED******REMOVED***return BasemapGalleryItem(basemap: Basemap(item: PortalItem(url: url)!))
 ***REMOVED***
 ***REMOVED***
