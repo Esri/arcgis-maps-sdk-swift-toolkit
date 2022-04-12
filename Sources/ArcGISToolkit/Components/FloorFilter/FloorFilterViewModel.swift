@@ -161,7 +161,9 @@ final class FloorFilterViewModel: ObservableObject {
 ***REMOVED******REMOVED*** MARK: Public methods
 ***REMOVED***
 ***REMOVED******REMOVED***/ Updates the selected site, facility, and level based on a newly selected facility.
-***REMOVED******REMOVED***/ - Parameter newFacility: The selected facility.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - newFacility: The new facility to be selected.
+***REMOVED******REMOVED***/   - zoomTo: If `true`, changes the viewpoint to the extent of the new facility.
 ***REMOVED***func setFacility(_ newFacility: FloorFacility, zoomTo: Bool = false) {
 ***REMOVED******REMOVED***if let oldLevel = selectedLevel,
 ***REMOVED******REMOVED******REMOVED***let newLevel = newFacility.levels.first(
@@ -189,7 +191,9 @@ final class FloorFilterViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Updates the selected site, facility, and level based on a newly selected site.
-***REMOVED******REMOVED***/ - Parameter newSite: The selected site.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - newSite: The new site to be selected.
+***REMOVED******REMOVED***/   - zoomTo: If `true`, changes the viewpoint to the extent of the new site.
 ***REMOVED***func setSite(_ newSite: FloorSite, zoomTo: Bool = false) {
 ***REMOVED******REMOVED***selection = .site(newSite)
 ***REMOVED******REMOVED***if zoomTo {
