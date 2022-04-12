@@ -19,3 +19,9 @@ extension FloorLevel: Equatable {
 ***REMOVED******REMOVED***lhs.id == rhs.id
 ***REMOVED***
 ***REMOVED***
+
+extension FloorLevel: Hashable {
+***REMOVED***public func hash(into hasher: inout Hasher) {
+***REMOVED******REMOVED***hasher.combine(self.id)
+***REMOVED***
+***REMOVED***

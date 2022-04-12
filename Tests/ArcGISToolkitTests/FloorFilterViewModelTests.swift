@@ -37,7 +37,6 @@ class FloorFilterViewModelTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***floorManager: floorManager,
 ***REMOVED******REMOVED******REMOVED***viewpoint: viewpoint
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED***await verifyInitialization(viewModel)
 ***REMOVED******REMOVED***let sites = viewModel.sites
 ***REMOVED******REMOVED***let facilities = viewModel.facilities
 ***REMOVED******REMOVED***let levels = viewModel.levels
@@ -60,7 +59,6 @@ class FloorFilterViewModelTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***floorManager: floorManager,
 ***REMOVED******REMOVED******REMOVED***viewpoint: viewpoint
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED***await verifyInitialization(viewModel)
 ***REMOVED******REMOVED***let sites = viewModel.sites
 ***REMOVED******REMOVED***let facilities = viewModel.facilities
 ***REMOVED******REMOVED***let levels = viewModel.levels
@@ -85,23 +83,17 @@ class FloorFilterViewModelTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***floorManager: floorManager,
 ***REMOVED******REMOVED******REMOVED***viewpoint: viewpoint
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED***await verifyInitialization(viewModel)
 ***REMOVED******REMOVED***guard let site = viewModel.sites.first else {
 ***REMOVED******REMOVED******REMOVED***XCTFail()
 ***REMOVED******REMOVED******REMOVED***return
 ***REMOVED***
-***REMOVED******REMOVED***viewModel.selection = .site(site)
+***REMOVED******REMOVED***viewModel.setSite(site)
 ***REMOVED******REMOVED***let selectedSite = viewModel.selectedSite
 ***REMOVED******REMOVED***let selectedFacility = viewModel.selectedFacility
 ***REMOVED******REMOVED***let selectedLevel = viewModel.selectedLevel
 ***REMOVED******REMOVED***XCTAssertEqual(selectedSite, site)
 ***REMOVED******REMOVED***XCTAssertNil(selectedFacility)
 ***REMOVED******REMOVED***XCTAssertNil(selectedLevel)
-***REMOVED******REMOVED***XCTAssertEqual(
-***REMOVED******REMOVED******REMOVED***_viewpoint?.targetGeometry.extent.center.x,
-***REMOVED******REMOVED******REMOVED***initialViewpoint.targetGeometry.extent.center.x
-***REMOVED******REMOVED***)
-***REMOVED******REMOVED***viewModel.setSite(site)
 ***REMOVED******REMOVED***XCTAssertEqual(
 ***REMOVED******REMOVED******REMOVED***_viewpoint?.targetGeometry.extent.center.x,
 ***REMOVED******REMOVED******REMOVED***selectedSite?.geometry?.extent.center.x
@@ -123,22 +115,16 @@ class FloorFilterViewModelTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***floorManager: floorManager,
 ***REMOVED******REMOVED******REMOVED***viewpoint: viewpoint
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED***await verifyInitialization(viewModel)
 ***REMOVED******REMOVED***guard let facility = viewModel.facilities.first else {
 ***REMOVED******REMOVED******REMOVED***XCTFail()
 ***REMOVED******REMOVED******REMOVED***return
 ***REMOVED***
-***REMOVED******REMOVED***viewModel.selection = .facility(facility)
+***REMOVED******REMOVED***viewModel.setFacility(facility)
 ***REMOVED******REMOVED***let selectedFacility = viewModel.selectedFacility
 ***REMOVED******REMOVED***let selectedLevel = viewModel.selectedLevel
-***REMOVED******REMOVED***let defaultLevel = viewModel.defaultLevel(for: selectedFacility)
+***REMOVED******REMOVED***let defaultLevel = selectedFacility?.defaultLevel
 ***REMOVED******REMOVED***XCTAssertEqual(selectedFacility, facility)
 ***REMOVED******REMOVED***XCTAssertEqual(selectedLevel, defaultLevel)
-***REMOVED******REMOVED***XCTAssertEqual(
-***REMOVED******REMOVED******REMOVED***_viewpoint?.targetGeometry.extent.center.x,
-***REMOVED******REMOVED******REMOVED***initialViewpoint.targetGeometry.extent.center.x
-***REMOVED******REMOVED***)
-***REMOVED******REMOVED***viewModel.setFacility(facility)
 ***REMOVED******REMOVED***XCTAssertEqual(
 ***REMOVED******REMOVED******REMOVED***_viewpoint?.targetGeometry.extent.center.x,
 ***REMOVED******REMOVED******REMOVED***selectedFacility?.geometry?.extent.center.x
@@ -159,7 +145,6 @@ class FloorFilterViewModelTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***floorManager: floorManager,
 ***REMOVED******REMOVED******REMOVED***viewpoint: viewpoint
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED***await verifyInitialization(viewModel)
 ***REMOVED******REMOVED***let levels = viewModel.levels
 ***REMOVED******REMOVED***let level = levels.first
 ***REMOVED******REMOVED***viewModel.setLevel(level)
@@ -200,7 +185,6 @@ class FloorFilterViewModelTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***floorManager: floorManager,
 ***REMOVED******REMOVED******REMOVED***viewpoint: viewpoint
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED***await verifyInitialization(viewModel)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Viewpoint is Los Angeles, selection should be nil
 ***REMOVED******REMOVED***var selectedFacility = viewModel.selectedFacility
@@ -210,7 +194,7 @@ class FloorFilterViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Viewpoint is Redlands Main Q
 ***REMOVED******REMOVED***_viewpoint = getEsriRedlandsViewpoint(scale: 1000)
-***REMOVED******REMOVED***viewModel.makeAutoSelection()
+***REMOVED******REMOVED***viewModel.automaticallySelectFacilityOrSite()
 ***REMOVED******REMOVED***selectedFacility = viewModel.selectedFacility
 ***REMOVED******REMOVED***selectedSite = viewModel.selectedSite
 ***REMOVED******REMOVED***XCTAssertEqual(selectedSite?.name, "Redlands Main")
@@ -218,7 +202,7 @@ class FloorFilterViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Viewpoint is Los Angeles, selection should be nil
 ***REMOVED******REMOVED***_viewpoint = viewpointLosAngeles
-***REMOVED******REMOVED***viewModel.makeAutoSelection()
+***REMOVED******REMOVED***viewModel.automaticallySelectFacilityOrSite()
 ***REMOVED******REMOVED***selectedFacility = viewModel.selectedFacility
 ***REMOVED******REMOVED***selectedSite = viewModel.selectedSite
 ***REMOVED******REMOVED***XCTAssertNil(selectedSite)
@@ -247,11 +231,10 @@ class FloorFilterViewModelTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***floorManager: floorManager,
 ***REMOVED******REMOVED******REMOVED***viewpoint: viewpoint
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED***await verifyInitialization(viewModel)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Viewpoint is Redlands Main Q
 ***REMOVED******REMOVED***_viewpoint = getEsriRedlandsViewpoint(scale: 1000)
-***REMOVED******REMOVED***viewModel.makeAutoSelection()
+***REMOVED******REMOVED***viewModel.automaticallySelectFacilityOrSite()
 ***REMOVED******REMOVED***var selectedFacility = viewModel.selectedFacility
 ***REMOVED******REMOVED***var selectedSite = viewModel.selectedSite
 ***REMOVED******REMOVED***XCTAssertEqual(selectedSite?.name, "Redlands Main")
@@ -259,7 +242,7 @@ class FloorFilterViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Viewpoint is Los Angeles, but selection should remain Redlands Main Q
 ***REMOVED******REMOVED***_viewpoint = viewpointLosAngeles
-***REMOVED******REMOVED***viewModel.makeAutoSelection()
+***REMOVED******REMOVED***viewModel.automaticallySelectFacilityOrSite()
 ***REMOVED******REMOVED***selectedFacility = viewModel.selectedFacility
 ***REMOVED******REMOVED***selectedSite = viewModel.selectedSite
 ***REMOVED******REMOVED***XCTAssertEqual(selectedSite?.name, "Redlands Main")
@@ -288,7 +271,6 @@ class FloorFilterViewModelTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***floorManager: floorManager,
 ***REMOVED******REMOVED******REMOVED***viewpoint: viewpoint
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED***await verifyInitialization(viewModel)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Viewpoint is Los Angeles, selection should be nil
 ***REMOVED******REMOVED***var selectedFacility = viewModel.selectedFacility
@@ -298,7 +280,7 @@ class FloorFilterViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Viewpoint is Redlands Main Q but selection should still be nil
 ***REMOVED******REMOVED***_viewpoint = getEsriRedlandsViewpoint(scale: 1000)
-***REMOVED******REMOVED***viewModel.makeAutoSelection()
+***REMOVED******REMOVED***viewModel.automaticallySelectFacilityOrSite()
 ***REMOVED******REMOVED***selectedFacility = viewModel.selectedFacility
 ***REMOVED******REMOVED***selectedSite = viewModel.selectedSite
 ***REMOVED******REMOVED***XCTAssertNil(selectedFacility)
@@ -323,30 +305,12 @@ class FloorFilterViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***let map = Map(item: portalItem)
 ***REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED***try await map.load()
+***REMOVED******REMOVED******REMOVED***try await map.floorManager?.load()
 ***REMOVED*** catch {
 ***REMOVED******REMOVED******REMOVED***XCTFail("\(#fileID), \(#function), \(#line), \(error.localizedDescription)")
 ***REMOVED******REMOVED******REMOVED***return nil
 ***REMOVED***
 ***REMOVED******REMOVED***return map
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ Verifies that the `FloorFilterViewModel` has succesfully initialized.
-***REMOVED******REMOVED***/ - Parameter viewModel: The view model to analyze.
-***REMOVED***private func verifyInitialization(_ viewModel: FloorFilterViewModel) async {
-***REMOVED******REMOVED***let expectation = XCTestExpectation(
-***REMOVED******REMOVED******REMOVED***description: "View model successfully initialized"
-***REMOVED******REMOVED***)
-***REMOVED******REMOVED***let subscription = viewModel.$isLoading
-***REMOVED******REMOVED******REMOVED***.sink { loading in
-***REMOVED******REMOVED******REMOVED******REMOVED***print(#function, loading)
-***REMOVED******REMOVED******REMOVED******REMOVED***if !loading {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***expectation.fulfill()
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***Task {
-***REMOVED******REMOVED******REMOVED***wait(for: [expectation], timeout: 30.0)
-***REMOVED******REMOVED******REMOVED***subscription.cancel()
-***REMOVED***
 ***REMOVED***
 ***REMOVED***
 

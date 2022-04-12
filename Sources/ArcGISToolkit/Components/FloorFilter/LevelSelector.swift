@@ -22,12 +22,10 @@ struct LevelSelector: View {
 ***REMOVED******REMOVED***/ A Boolean value indicating the whether the view shows only the selected level or all levels.
 ***REMOVED******REMOVED***/ If the value is`false`, the view will display all levels; if it is `true`, the view will only display
 ***REMOVED******REMOVED***/ the selected level.
-***REMOVED***@Binding
-***REMOVED***var isCollapsed: Bool
+***REMOVED***@Binding var isCollapsed: Bool
 ***REMOVED***
 ***REMOVED******REMOVED***/ The height of the scroll view's content.
-***REMOVED***@State
-***REMOVED***private var scrollViewContentHeight: CGFloat = .zero
+***REMOVED***@State private var scrollViewContentHeight: CGFloat = .zero
 ***REMOVED***
 ***REMOVED******REMOVED***/ The levels to display.
 ***REMOVED***let levels: [FloorLevel]
@@ -35,23 +33,17 @@ struct LevelSelector: View {
 ***REMOVED******REMOVED***/ Returns the short name of the currently selected level, the first level or "None" if none of the listed
 ***REMOVED******REMOVED***/ are available.
 ***REMOVED***private var selectedLevelName: String {
-***REMOVED******REMOVED***if let shortName = viewModel.selectedLevel?.shortName {
-***REMOVED******REMOVED******REMOVED***return shortName
-***REMOVED*** else if let firstLevelShortName = levels.first?.shortName {
-***REMOVED******REMOVED******REMOVED***return firstLevelShortName
-***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***return "None"
-***REMOVED***
+***REMOVED******REMOVED***viewModel.selectedLevel?.shortName ?? ""
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The alignment configuration.
-***REMOVED***var topAligned: Bool
+***REMOVED***var isTopAligned: Bool
 ***REMOVED***
 ***REMOVED***public var body: some View {
-***REMOVED******REMOVED***VStack {
-***REMOVED******REMOVED******REMOVED***if !isCollapsed,
-***REMOVED******REMOVED******REMOVED******REMOVED***levels.count > 1 {
-***REMOVED******REMOVED******REMOVED******REMOVED***if !topAligned {
+***REMOVED******REMOVED***if !isCollapsed,
+***REMOVED******REMOVED******REMOVED***levels.count > 1 {
+***REMOVED******REMOVED******REMOVED***VStack {
+***REMOVED******REMOVED******REMOVED******REMOVED***if !isTopAligned {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***CollapseButton(isCollapsed: $isCollapsed)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Divider()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 30)
@@ -64,23 +56,23 @@ struct LevelSelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***scrollViewContentHeight = $0.height
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxHeight: scrollViewContentHeight)
-***REMOVED******REMOVED******REMOVED******REMOVED***if topAligned {
+***REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxHeight: scrollViewContentHeight)
+***REMOVED******REMOVED******REMOVED******REMOVED***if isTopAligned {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Divider()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 30)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***CollapseButton(isCollapsed: $isCollapsed)
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if levels.count > 1 {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isCollapsed.toggle()
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(selectedLevelName)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.lineLimit(1)
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.selected(true)
 ***REMOVED******REMOVED***
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED******REMOVED***if levels.count > 1 {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isCollapsed.toggle()
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED***Text(selectedLevelName)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.lineLimit(1)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.selected(true)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
