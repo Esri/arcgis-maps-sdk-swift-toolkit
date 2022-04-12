@@ -49,7 +49,7 @@ extension View {
         )
         .onPreferenceChange(SizePreferenceKey.self, perform: perform)
     }
-
+    
     /// View modifier used to denote the view is selected.
     /// - Parameter isSelected: `true` if the view is selected, `false` otherwise.
     /// - Returns: The modified view.

@@ -62,22 +62,21 @@ public struct FloorFilter: View {
     }
     
     /// Displays the available levels.
+    @ViewBuilder
     private var levelsSelectorView: some View {
-        Group {
-            if viewModel.hasLevelsToDisplay {
-                if topAligned {
-                    Divider()
-                        .frame(width: 30)
-                }
-                LevelSelector(
-                    isCollapsed: $isLevelsViewCollapsed,
-                    levels: viewModel.sortedLevels,
-                    topAligned: topAligned
-                )
-                if !topAligned {
-                    Divider()
-                        .frame(width: 30)
-                }
+        if viewModel.hasLevelsToDisplay {
+            if topAligned {
+                Divider()
+                    .frame(width: 30)
+            }
+            LevelSelector(
+                isCollapsed: $isLevelsViewCollapsed,
+                levels: viewModel.sortedLevels,
+                isTopAligned: topAligned
+            )
+            if !topAligned {
+                Divider()
+                    .frame(width: 30)
             }
         }
     }

@@ -64,8 +64,8 @@ struct SiteAndFacilitySelector: View {
         /// hierarchy to keep the site selection persistent in the navigation view.
         @State private var selectedSite: FloorSite? {
             didSet {
-                if updateViewModel {
-                    viewModel.setSite(selectedSite)
+                if updateViewModel, let site = selectedSite {
+                    viewModel.setSite(site, zoomTo: true)
                 }
                 updateViewModel = true
             }
@@ -163,11 +163,11 @@ struct SiteAndFacilitySelector: View {
                     )
                 }
                 .onTapGesture {
-                    viewModel.setSite(site)
+                    selectedSite = site
                 }
             }
             .listStyle(.plain)
-            .onChange(of: $viewModel.selection.wrappedValue) { _ in
+            .onChange(of: viewModel.selection) { _ in
                 // Setting the `updateViewModel` flag false allows
                 // `selectedSite` to receive upstream updates from the view
                 // model without republishing them back up to the view model.
@@ -279,7 +279,7 @@ struct SiteAndFacilitySelector: View {
             ScrollViewReader { proxy in
                 List(matchingFacilities, id: \.id) { facility in
                     Button {
-                        viewModel.setFacility(facility)
+                        viewModel.setFacility(facility, zoomTo: true)
                         isHidden.wrappedValue.toggle()
                     } label: {
                         HStack {
