@@ -37,7 +37,6 @@ class FloorFilterViewModelTests: XCTestCase {
             floorManager: floorManager,
             viewpoint: viewpoint
         )
-        await verifyInitialization(viewModel)
         let sites = viewModel.sites
         let facilities = viewModel.facilities
         let levels = viewModel.levels
@@ -60,7 +59,6 @@ class FloorFilterViewModelTests: XCTestCase {
             floorManager: floorManager,
             viewpoint: viewpoint
         )
-        await verifyInitialization(viewModel)
         let sites = viewModel.sites
         let facilities = viewModel.facilities
         let levels = viewModel.levels
@@ -85,23 +83,17 @@ class FloorFilterViewModelTests: XCTestCase {
             floorManager: floorManager,
             viewpoint: viewpoint
         )
-        await verifyInitialization(viewModel)
         guard let site = viewModel.sites.first else {
             XCTFail()
             return
         }
-        viewModel.selection = .site(site)
+        viewModel.setSite(site)
         let selectedSite = viewModel.selectedSite
         let selectedFacility = viewModel.selectedFacility
         let selectedLevel = viewModel.selectedLevel
         XCTAssertEqual(selectedSite, site)
         XCTAssertNil(selectedFacility)
         XCTAssertNil(selectedLevel)
-        XCTAssertEqual(
-            _viewpoint?.targetGeometry.extent.center.x,
-            initialViewpoint.targetGeometry.extent.center.x
-        )
-        viewModel.setSite(site)
         XCTAssertEqual(
             _viewpoint?.targetGeometry.extent.center.x,
             selectedSite?.geometry?.extent.center.x
@@ -123,22 +115,16 @@ class FloorFilterViewModelTests: XCTestCase {
             floorManager: floorManager,
             viewpoint: viewpoint
         )
-        await verifyInitialization(viewModel)
         guard let facility = viewModel.facilities.first else {
             XCTFail()
             return
         }
-        viewModel.selection = .facility(facility)
+        viewModel.setFacility(facility)
         let selectedFacility = viewModel.selectedFacility
         let selectedLevel = viewModel.selectedLevel
-        let defaultLevel = viewModel.defaultLevel(for: selectedFacility)
+        let defaultLevel = selectedFacility?.defaultLevel
         XCTAssertEqual(selectedFacility, facility)
         XCTAssertEqual(selectedLevel, defaultLevel)
-        XCTAssertEqual(
-            _viewpoint?.targetGeometry.extent.center.x,
-            initialViewpoint.targetGeometry.extent.center.x
-        )
-        viewModel.setFacility(facility)
         XCTAssertEqual(
             _viewpoint?.targetGeometry.extent.center.x,
             selectedFacility?.geometry?.extent.center.x
@@ -159,7 +145,6 @@ class FloorFilterViewModelTests: XCTestCase {
             floorManager: floorManager,
             viewpoint: viewpoint
         )
-        await verifyInitialization(viewModel)
         let levels = viewModel.levels
         let level = levels.first
         viewModel.setLevel(level)
@@ -200,7 +185,6 @@ class FloorFilterViewModelTests: XCTestCase {
             floorManager: floorManager,
             viewpoint: viewpoint
         )
-        await verifyInitialization(viewModel)
         
         // Viewpoint is Los Angeles, selection should be nil
         var selectedFacility = viewModel.selectedFacility
@@ -210,7 +194,7 @@ class FloorFilterViewModelTests: XCTestCase {
         
         // Viewpoint is Redlands Main Q
         _viewpoint = getEsriRedlandsViewpoint(scale: 1000)
-        viewModel.makeAutoSelection()
+        viewModel.automaticallySelectFacilityOrSite()
         selectedFacility = viewModel.selectedFacility
         selectedSite = viewModel.selectedSite
         XCTAssertEqual(selectedSite?.name, "Redlands Main")
@@ -218,7 +202,7 @@ class FloorFilterViewModelTests: XCTestCase {
         
         // Viewpoint is Los Angeles, selection should be nil
         _viewpoint = viewpointLosAngeles
-        viewModel.makeAutoSelection()
+        viewModel.automaticallySelectFacilityOrSite()
         selectedFacility = viewModel.selectedFacility
         selectedSite = viewModel.selectedSite
         XCTAssertNil(selectedSite)
@@ -247,11 +231,10 @@ class FloorFilterViewModelTests: XCTestCase {
             floorManager: floorManager,
             viewpoint: viewpoint
         )
-        await verifyInitialization(viewModel)
         
         // Viewpoint is Redlands Main Q
         _viewpoint = getEsriRedlandsViewpoint(scale: 1000)
-        viewModel.makeAutoSelection()
+        viewModel.automaticallySelectFacilityOrSite()
         var selectedFacility = viewModel.selectedFacility
         var selectedSite = viewModel.selectedSite
         XCTAssertEqual(selectedSite?.name, "Redlands Main")
@@ -259,7 +242,7 @@ class FloorFilterViewModelTests: XCTestCase {
         
         // Viewpoint is Los Angeles, but selection should remain Redlands Main Q
         _viewpoint = viewpointLosAngeles
-        viewModel.makeAutoSelection()
+        viewModel.automaticallySelectFacilityOrSite()
         selectedFacility = viewModel.selectedFacility
         selectedSite = viewModel.selectedSite
         XCTAssertEqual(selectedSite?.name, "Redlands Main")
@@ -288,7 +271,6 @@ class FloorFilterViewModelTests: XCTestCase {
             floorManager: floorManager,
             viewpoint: viewpoint
         )
-        await verifyInitialization(viewModel)
         
         // Viewpoint is Los Angeles, selection should be nil
         var selectedFacility = viewModel.selectedFacility
@@ -298,7 +280,7 @@ class FloorFilterViewModelTests: XCTestCase {
         
         // Viewpoint is Redlands Main Q but selection should still be nil
         _viewpoint = getEsriRedlandsViewpoint(scale: 1000)
-        viewModel.makeAutoSelection()
+        viewModel.automaticallySelectFacilityOrSite()
         selectedFacility = viewModel.selectedFacility
         selectedSite = viewModel.selectedSite
         XCTAssertNil(selectedFacility)
@@ -323,30 +305,12 @@ class FloorFilterViewModelTests: XCTestCase {
         let map = Map(item: portalItem)
         do {
             try await map.load()
+            try await map.floorManager?.load()
         } catch {
             XCTFail("\(#fileID), \(#function), \(#line), \(error.localizedDescription)")
             return nil
         }
         return map
-    }
-    
-    /// Verifies that the `FloorFilterViewModel` has succesfully initialized.
-    /// - Parameter viewModel: The view model to analyze.
-    private func verifyInitialization(_ viewModel: FloorFilterViewModel) async {
-        let expectation = XCTestExpectation(
-            description: "View model successfully initialized"
-        )
-        let subscription = viewModel.$isLoading
-            .sink { loading in
-                print(#function, loading)
-                if !loading {
-                    expectation.fulfill()
-                }
-            }
-        Task {
-            wait(for: [expectation], timeout: 30.0)
-            subscription.cancel()
-        }
     }
 }
 

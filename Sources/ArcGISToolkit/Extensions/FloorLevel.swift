@@ -19,3 +19,9 @@ extension FloorLevel: Equatable {
         lhs.id == rhs.id
     }
 }
+
+extension FloorLevel: Hashable {
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(self.id)
+    }
+}
