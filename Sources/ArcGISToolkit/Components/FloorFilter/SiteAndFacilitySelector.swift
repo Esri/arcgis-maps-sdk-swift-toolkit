@@ -64,8 +64,8 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED***/ hierarchy to keep the site selection persistent in the navigation view.
 ***REMOVED******REMOVED***@State private var selectedSite: FloorSite? {
 ***REMOVED******REMOVED******REMOVED***didSet {
-***REMOVED******REMOVED******REMOVED******REMOVED***if updateViewModel {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.setSite(selectedSite)
+***REMOVED******REMOVED******REMOVED******REMOVED***if updateViewModel, let site = selectedSite {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.setSite(site)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***updateViewModel = true
 ***REMOVED******REMOVED***

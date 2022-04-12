@@ -176,29 +176,23 @@ final class FloorFilterViewModel: ObservableObject {
 ***REMOVED******REMOVED*** MARK: Public methods
 ***REMOVED***
 ***REMOVED******REMOVED***/ Updates the selected site, facility, and level based on a newly selected facility.
-***REMOVED******REMOVED***/ - Parameter floorFacility: The selected facility.
-***REMOVED***func setFacility(_ floorFacility: FloorFacility?) {
-***REMOVED******REMOVED***if let floorFacility = floorFacility {
-***REMOVED******REMOVED******REMOVED***selection = .facility(floorFacility)
-***REMOVED***
-***REMOVED******REMOVED***zoomToExtent(floorFacility?.geometry?.extent)
+***REMOVED******REMOVED***/ - Parameter newFacility: The selected facility.
+***REMOVED***func setFacility(_ newFacility: FloorFacility) {
+***REMOVED******REMOVED***selection = .facility(newFacility)
+***REMOVED******REMOVED***zoomToExtent(newFacility.geometry?.extent)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Updates the selected site, facility, and level based on a newly selected level.
-***REMOVED******REMOVED***/ - Parameter floorLevel: The selected level.
-***REMOVED***func setLevel(_ floorLevel: FloorLevel?) {
-***REMOVED******REMOVED***if let floorLevel = floorLevel {
-***REMOVED******REMOVED******REMOVED***selection = .level(floorLevel)
-***REMOVED***
+***REMOVED******REMOVED***/ - Parameter newLevel: The selected level.
+***REMOVED***func setLevel(_ newLevel: FloorLevel) {
+***REMOVED******REMOVED***selection = .level(newLevel)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Updates the selected site, facility, and level based on a newly selected site.
-***REMOVED******REMOVED***/ - Parameter floorSite: The selected site.
-***REMOVED***func setSite(_ floorSite: FloorSite?) {
-***REMOVED******REMOVED***if let floorSite = floorSite {
-***REMOVED******REMOVED******REMOVED***selection = .site(floorSite)
-***REMOVED***
-***REMOVED******REMOVED***zoomToExtent(floorSite?.geometry?.extent)
+***REMOVED******REMOVED***/ - Parameter newSite: The selected site.
+***REMOVED***func setSite(_ newSite: FloorSite) {
+***REMOVED******REMOVED***selection = .site(newSite)
+***REMOVED******REMOVED***zoomToExtent(newSite.geometry?.extent)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED*** MARK: Private items
