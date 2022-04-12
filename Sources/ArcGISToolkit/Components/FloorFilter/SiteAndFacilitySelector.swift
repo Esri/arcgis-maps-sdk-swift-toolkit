@@ -167,7 +167,7 @@ struct SiteAndFacilitySelector: View {
                 }
             }
             .listStyle(.plain)
-            .onChange(of: $viewModel.selection.wrappedValue) { _ in
+            .onChange(of: viewModel.selection) { _ in
                 // Setting the `updateViewModel` flag false allows
                 // `selectedSite` to receive upstream updates from the view
                 // model without republishing them back up to the view model.
