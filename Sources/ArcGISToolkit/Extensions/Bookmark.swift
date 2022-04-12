@@ -11,17 +11,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import SwiftUI
 import ArcGIS
+import Foundation
 
-extension FloorLevel: Equatable {
-    public static func == (lhs: FloorLevel, rhs: FloorLevel) -> Bool {
-        lhs.id == rhs.id
+extension Bookmark: Equatable {
+    public static func == (lhs: Bookmark, rhs: Bookmark) -> Bool {
+        lhs.hashValue == rhs.hashValue
     }
 }
 
-extension FloorLevel: Hashable {
+extension Bookmark: Hashable {
     public func hash(into hasher: inout Hasher) {
-        hasher.combine(self.id)
+        hasher.combine(name)
+        hasher.combine(viewpoint)
     }
 }

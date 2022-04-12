@@ -22,12 +22,7 @@ struct LevelSelector: View {
     /// A Boolean value indicating the whether the view shows only the selected level or all levels.
     /// If the value is`false`, the view will display all levels; if it is `true`, the view will only display
     /// the selected level.
-    @Binding
-    var isCollapsed: Bool
-    
-    /// The height of the scroll view's content.
-    @State
-    private var scrollViewContentHeight: CGFloat = .zero
+    @Binding var isCollapsed: Bool
     
     /// The levels to display.
     let levels: [FloorLevel]
@@ -35,52 +30,34 @@ struct LevelSelector: View {
     /// Returns the short name of the currently selected level, the first level or "None" if none of the listed
     /// are available.
     private var selectedLevelName: String {
-        if let shortName = viewModel.selectedLevel?.shortName {
-            return shortName
-        } else if let firstLevelShortName = levels.first?.shortName {
-            return firstLevelShortName
-        } else {
-            return "None"
-        }
+        viewModel.selectedLevel?.shortName ?? ""
     }
     
     /// The alignment configuration.
-    var topAligned: Bool
+    var isTopAligned: Bool
     
     public var body: some View {
-        VStack {
-            if !isCollapsed,
-                levels.count > 1 {
-                if !topAligned {
+        if !isCollapsed,
+            levels.count > 1 {
+            VStack {
+                if !isTopAligned {
                     CollapseButton(isCollapsed: $isCollapsed)
                     Divider()
                         .frame(width: 30)
                 }
-                ScrollView {
-                    VStack {
-                        LevelsStack(levels: levels)
-                    }
-                    .onSizeChange {
-                        scrollViewContentHeight = $0.height
-                    }
-                }
-                    .frame(maxHeight: scrollViewContentHeight)
-                if topAligned {
+                LevelsStack(levels: levels)
+                if isTopAligned {
                     Divider()
                         .frame(width: 30)
                     CollapseButton(isCollapsed: $isCollapsed)
                 }
-            } else {
-                Button {
-                    if levels.count > 1 {
-                        isCollapsed.toggle()
-                    }
-                } label: {
-                    Text(selectedLevelName)
-                        .lineLimit(1)
-                }
-                .selected(true)
             }
+        } else {
+            Toggle(isOn: $isCollapsed) {
+                Text(selectedLevelName)
+                    .lineLimit(1)
+            }
+            .toggleStyle(.button)
         }
     }
 }
@@ -90,29 +67,37 @@ struct LevelsStack: View {
     /// The view model used by the `LevelsView`.
     @EnvironmentObject var viewModel: FloorFilterViewModel
     
+    /// The height of the scroll view's content.
+    @State private var contentHeight: CGFloat = .zero
+    
     /// The levels to display.
     let levels: [FloorLevel]
     
     var body: some View {
-        VStack {
-            ForEach(levels) { level in
-                Button {
-                    viewModel.setLevel(level)
-                } label: {
-                    Text(level.shortName)
-                        .lineLimit(1)
+        ScrollView {
+            VStack {
+                ForEach(levels) { level in
+                    Button {
+                        viewModel.setLevel(level)
+                    } label: {
+                        Text(level.shortName)
+                            .lineLimit(1)
+                    }
+                    .selected(level == viewModel.selectedLevel)
                 }
-                .selected(level == viewModel.selectedLevel)
+            }
+            .onSizeChange {
+                contentHeight = $0.height
             }
         }
+        .frame(maxHeight: contentHeight)
     }
 }
 
 /// A button used to collapse the floor level list.
 struct CollapseButton: View {
     /// Allows the user to toggle the visibility of the site and facility selector.
-    @Binding
-    var isCollapsed: Bool
+    @Binding var isCollapsed: Bool
     
     var body: some View {
         Button {

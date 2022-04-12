@@ -14,8 +14,22 @@
 import SwiftUI
 import ArcGIS
 
+extension FloorFacility {
+    /// - Returns: The default level for the facility, which is the level with vertical order 0.
+    var defaultLevel: FloorLevel? {
+        levels.first(where: { $0.verticalOrder == .zero })
+    }
+}
+
 extension FloorFacility: Equatable {
     public static func == (lhs: FloorFacility, rhs: FloorFacility) -> Bool {
         lhs.id == rhs.id
+    }
+}
+
+extension FloorFacility: Hashable {
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(self.id)
+        hasher.combine(self.name)
     }
 }

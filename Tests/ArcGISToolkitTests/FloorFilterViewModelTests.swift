@@ -59,7 +59,7 @@ class FloorFilterViewModelTests: XCTestCase {
         XCTAssertFalse(sites.isEmpty)
         XCTAssertFalse(facilities.isEmpty)
         XCTAssertFalse(levels.isEmpty)
-        XCTAssertNotNil(vmViewpoint)
+        XCTAssertNil(vmViewpoint)
     }
     
     /// Confirms that the selected site/facility/level properties and the viewpoint are correctly updated.
@@ -79,18 +79,13 @@ class FloorFilterViewModelTests: XCTestCase {
             XCTFail()
             return
         }
-        viewModel.selection = .site(site)
+        viewModel.setSite(site, zoomTo: true)
         let selectedSite = viewModel.selectedSite
         let selectedFacility = viewModel.selectedFacility
         let selectedLevel = viewModel.selectedLevel
         XCTAssertEqual(selectedSite, site)
         XCTAssertNil(selectedFacility)
         XCTAssertNil(selectedLevel)
-        XCTAssertEqual(
-            _viewpoint?.targetGeometry.extent.center.x,
-            initialViewpoint.targetGeometry.extent.center.x
-        )
-        viewModel.setSite(site)
         XCTAssertEqual(
             _viewpoint?.targetGeometry.extent.center.x,
             selectedSite?.geometry?.extent.center.x
@@ -115,17 +110,12 @@ class FloorFilterViewModelTests: XCTestCase {
             XCTFail()
             return
         }
-        viewModel.selection = .facility(facility)
+        viewModel.setFacility(facility, zoomTo: true)
         let selectedFacility = viewModel.selectedFacility
         let selectedLevel = viewModel.selectedLevel
-        let defaultLevel = viewModel.defaultLevel(for: selectedFacility)
+        let defaultLevel = selectedFacility?.defaultLevel
         XCTAssertEqual(selectedFacility, facility)
         XCTAssertEqual(selectedLevel, defaultLevel)
-        XCTAssertEqual(
-            _viewpoint?.targetGeometry.extent.center.x,
-            initialViewpoint.targetGeometry.extent.center.x
-        )
-        viewModel.setFacility(facility)
         XCTAssertEqual(
             _viewpoint?.targetGeometry.extent.center.x,
             selectedFacility?.geometry?.extent.center.x
@@ -146,7 +136,10 @@ class FloorFilterViewModelTests: XCTestCase {
             viewpoint: viewpoint
         )
         let levels = viewModel.levels
-        let level = levels.first
+        guard let level = levels.first else {
+            XCTFail("A first level does not exist")
+            return
+        }
         viewModel.setLevel(level)
         let selectedLevel = viewModel.selectedLevel
         XCTAssertEqual(selectedLevel, level)
@@ -179,7 +172,7 @@ class FloorFilterViewModelTests: XCTestCase {
         )
         
         // Viewpoint is Los Angeles, selection should be nil
-        viewModel.makeAutoSelection()
+        viewModel.automaticallySelectFacilityOrSite()
         
         var selectedFacility = viewModel.selectedFacility
         var selectedSite = viewModel.selectedSite
@@ -187,7 +180,7 @@ class FloorFilterViewModelTests: XCTestCase {
         XCTAssertNil(selectedSite)
         
         _viewpoint = .site_ResearchAnnex_facility_Lattice
-        viewModel.makeAutoSelection()
+        viewModel.automaticallySelectFacilityOrSite()
         
         // Viewpoint is the Lattice facility at the Research Annex site
         selectedFacility = viewModel.selectedFacility
@@ -196,7 +189,7 @@ class FloorFilterViewModelTests: XCTestCase {
         XCTAssertEqual(selectedFacility?.name, "Lattice")
         
         _viewpoint = viewpointLosAngeles
-        viewModel.makeAutoSelection()
+        viewModel.automaticallySelectFacilityOrSite()
         
         // Viewpoint is Los Angeles, selection should be nil
         selectedFacility = viewModel.selectedFacility
@@ -220,7 +213,7 @@ class FloorFilterViewModelTests: XCTestCase {
             viewpoint: viewpoint
         )
         
-        viewModel.makeAutoSelection()
+        viewModel.automaticallySelectFacilityOrSite()
         
         // Viewpoint is the Lattice facility at the Research Annex site
         var selectedFacility = viewModel.selectedFacility
@@ -229,7 +222,7 @@ class FloorFilterViewModelTests: XCTestCase {
         XCTAssertEqual(selectedFacility?.name, "Lattice")
         
         _viewpoint = viewpointLosAngeles
-        viewModel.makeAutoSelection()
+        viewModel.automaticallySelectFacilityOrSite()
         
         // Viewpoint is Los Angeles, but selection should remain Redlands Main Q
         selectedFacility = viewModel.selectedFacility
@@ -253,7 +246,7 @@ class FloorFilterViewModelTests: XCTestCase {
             viewpoint: viewpoint
         )
         
-        viewModel.makeAutoSelection()
+        viewModel.automaticallySelectFacilityOrSite()
         
         // Viewpoint is Los Angeles, selection should be nil
         var selectedFacility = viewModel.selectedFacility
@@ -262,7 +255,7 @@ class FloorFilterViewModelTests: XCTestCase {
         XCTAssertNil(selectedSite)
         
         _viewpoint = .site_ResearchAnnex_facility_Lattice
-        viewModel.makeAutoSelection()
+        viewModel.automaticallySelectFacilityOrSite()
         
         // Viewpoint is the Lattice facility at the Research Annex site
         selectedFacility = viewModel.selectedFacility
