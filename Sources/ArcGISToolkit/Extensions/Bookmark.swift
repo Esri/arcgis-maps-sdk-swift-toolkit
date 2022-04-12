@@ -12,9 +12,17 @@
 ***REMOVED*** limitations under the License.
 
 ***REMOVED***
+import Foundation
 
-***REMOVED***/ A `PreferenceKey` that specifies a size.
-struct SizePreferenceKey: PreferenceKey {
-***REMOVED***static let defaultValue: CGSize = .zero
-***REMOVED***static func reduce(value: inout CGSize, nextValue: () -> CGSize) {***REMOVED***
+extension Bookmark: Equatable {
+***REMOVED***public static func == (lhs: Bookmark, rhs: Bookmark) -> Bool {
+***REMOVED******REMOVED***lhs.hashValue == rhs.hashValue
+***REMOVED***
+***REMOVED***
+
+extension Bookmark: Hashable {
+***REMOVED***public func hash(into hasher: inout Hasher) {
+***REMOVED******REMOVED***hasher.combine(name)
+***REMOVED******REMOVED***hasher.combine(viewpoint)
+***REMOVED***
 ***REMOVED***
