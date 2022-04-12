@@ -24,9 +24,6 @@ struct LevelSelector: View {
 ***REMOVED******REMOVED***/ the selected level.
 ***REMOVED***@Binding var isCollapsed: Bool
 ***REMOVED***
-***REMOVED******REMOVED***/ The height of the scroll view's content.
-***REMOVED***@State private var scrollViewContentHeight: CGFloat = .zero
-***REMOVED***
 ***REMOVED******REMOVED***/ The levels to display.
 ***REMOVED***let levels: [FloorLevel]
 ***REMOVED***
@@ -48,15 +45,7 @@ struct LevelSelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Divider()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 30)
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***ScrollView {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***VStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***LevelsStack(levels: levels)
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onSizeChange {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***scrollViewContentHeight = $0.height
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxHeight: scrollViewContentHeight)
+***REMOVED******REMOVED******REMOVED******REMOVED***LevelsStack(levels: levels)
 ***REMOVED******REMOVED******REMOVED******REMOVED***if isTopAligned {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Divider()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 30)
@@ -64,15 +53,11 @@ struct LevelSelector: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED***if levels.count > 1 {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isCollapsed.toggle()
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED***Toggle(isOn: $isCollapsed) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text(selectedLevelName)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.lineLimit(1)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.selected(true)
+***REMOVED******REMOVED******REMOVED***.toggleStyle(.button)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -82,29 +67,37 @@ struct LevelsStack: View {
 ***REMOVED******REMOVED***/ The view model used by the `LevelsView`.
 ***REMOVED***@EnvironmentObject var viewModel: FloorFilterViewModel
 ***REMOVED***
+***REMOVED******REMOVED***/ The height of the scroll view's content.
+***REMOVED***@State private var contentHeight: CGFloat = .zero
+***REMOVED***
 ***REMOVED******REMOVED***/ The levels to display.
 ***REMOVED***let levels: [FloorLevel]
 ***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***VStack {
-***REMOVED******REMOVED******REMOVED***ForEach(levels) { level in
-***REMOVED******REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.setLevel(level)
-***REMOVED******REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(level.shortName)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.lineLimit(1)
+***REMOVED******REMOVED***ScrollView {
+***REMOVED******REMOVED******REMOVED***VStack {
+***REMOVED******REMOVED******REMOVED******REMOVED***ForEach(levels) { level in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.setLevel(level)
+***REMOVED******REMOVED******REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(level.shortName)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.lineLimit(1)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.selected(level == viewModel.selectedLevel)
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.selected(level == viewModel.selectedLevel)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.onSizeChange {
+***REMOVED******REMOVED******REMOVED******REMOVED***contentHeight = $0.height
 ***REMOVED******REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***.frame(maxHeight: contentHeight)
 ***REMOVED***
 ***REMOVED***
 
 ***REMOVED***/ A button used to collapse the floor level list.
 struct CollapseButton: View {
 ***REMOVED******REMOVED***/ Allows the user to toggle the visibility of the site and facility selector.
-***REMOVED***@Binding
-***REMOVED***var isCollapsed: Bool
+***REMOVED***@Binding var isCollapsed: Bool
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***Button {
