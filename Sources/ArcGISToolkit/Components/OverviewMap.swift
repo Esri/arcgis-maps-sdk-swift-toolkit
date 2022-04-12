@@ -28,16 +28,13 @@ public struct OverviewMap: View {
     
     private var scaleFactor = 25.0
     
-    @StateObject
-    private var map = Map(basemapStyle: .arcGISTopographic)
+    @StateObject private var map = Map(basemapStyle: .arcGISTopographic)
     
     /// The `Graphic` displaying the visible area of the main `GeoView`.
-    @StateObject
-    private var graphic: Graphic
+    @StateObject private var graphic: Graphic
     
     /// The `GraphicsOverlay` used to display the visible area graphic.
-    @StateObject
-    private var graphicsOverlay: GraphicsOverlay
+    @StateObject private var graphicsOverlay: GraphicsOverlay
     
     /// Creates an `OverviewMap` for use on a `MapView`.
     /// - Parameters:
@@ -60,7 +57,7 @@ public struct OverviewMap: View {
     ) -> OverviewMap {
         OverviewMap(viewpoint: viewpoint, symbol: .defaultMarker)
     }
-
+    
     /// Creates an `OverviewMap`. Used for creating an `OverviewMap` for use on a `MapView`.
     /// - Parameters:
     ///   - viewpoint: Viewpoint of the main `GeoView` used to update the `OverviewMap` view.
@@ -75,7 +72,7 @@ public struct OverviewMap: View {
         self.symbol = symbol
         
         let graphic = Graphic(symbol: self.symbol)
-
+        
         // It is necessary to set the graphic and graphicsOverlay this way
         // in order to prevent the main geoview from recreating the
         // graphicsOverlay every draw cycle. That was causing refresh issues
@@ -90,33 +87,38 @@ public struct OverviewMap: View {
             viewpoint: makeOverviewViewpoint(),
             graphicsOverlays: [graphicsOverlay]
         )
-            .attributionText(hidden: true)
-            .interactionModes([])
-            .border(.black, width: 1)
-            .onAppear(perform: {
-                graphic.symbol = symbol
-            })
-            .onChange(of: visibleArea, perform: { visibleArea in
-                if let visibleArea = visibleArea {
-                    graphic.geometry = visibleArea
-                }
-            })
-            .onChange(of: viewpoint, perform: { viewpoint in
-                if visibleArea == nil,
-                   let viewpoint = viewpoint,
-                   let point = viewpoint.targetGeometry as? Point {
-                    graphic.geometry = point
-                }
-            })
-            .onChange(of: symbol, perform: {
-                graphic.symbol = $0
-            })
+        .attributionText(hidden: true)
+        .interactionModes([])
+        .border(
+            .black,
+            width: 1
+        )
+        .onAppear {
+            graphic.symbol = symbol
+        }
+        .onChange(of: visibleArea) { visibleArea in
+            if let visibleArea = visibleArea {
+                graphic.geometry = visibleArea
+            }
+        }
+        .onChange(of: viewpoint) { viewpoint in
+            if visibleArea == nil,
+               let viewpoint = viewpoint,
+               let point = viewpoint.targetGeometry as? Point {
+                graphic.geometry = point
+            }
+        }
+        .onChange(of: symbol) {
+            graphic.symbol = $0
+        }
     }
     
     /// Creates an overview viewpoint based on the observed `viewpoint` center, scale, and `scaleFactor`.
     /// - Returns: The new `Viewpoint`.
     func makeOverviewViewpoint() -> Viewpoint? {
-        guard let viewpoint = viewpoint, let center = viewpoint.targetGeometry as? Point else { return nil }
+        guard let viewpoint = viewpoint,
+              let center = viewpoint.targetGeometry as? Point else { return nil }
+        
         return Viewpoint(
             center: center,
             scale: viewpoint.targetScale * scaleFactor
