@@ -10,6 +10,8 @@ To use Toolkit in your project:
 
 ## Toolkit Components
 
+* [Compass](./Documentation/Compass/README.md)
+
 * [OverviewMap](./Documentation/OverviewMap/README.md)
 
 ## Requirements
