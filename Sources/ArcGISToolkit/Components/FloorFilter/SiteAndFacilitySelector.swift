@@ -65,7 +65,7 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED***@State private var selectedSite: FloorSite? {
 ***REMOVED******REMOVED******REMOVED***didSet {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if updateViewModel, let site = selectedSite {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.setSite(site)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.setSite(site, zoomTo: true)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***updateViewModel = true
 ***REMOVED******REMOVED***
@@ -163,7 +163,7 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onTapGesture {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.setSite(site)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedSite = site
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.listStyle(.plain)
@@ -279,7 +279,7 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED***ScrollViewReader { proxy in
 ***REMOVED******REMOVED******REMOVED******REMOVED***List(matchingFacilities, id: \.id) { facility in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.setFacility(facility)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.setFacility(facility, zoomTo: true)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isHidden.wrappedValue.toggle()
 ***REMOVED******REMOVED******REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***HStack {

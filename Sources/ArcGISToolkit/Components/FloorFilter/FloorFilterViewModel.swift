@@ -59,7 +59,7 @@ final class FloorFilterViewModel: ObservableObject {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if sites.count == 1,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let firstSite = sites.first {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** If we have only one site, select it.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***setSite(firstSite)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***setSite(firstSite, zoomTo: true)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED*** catch {
 ***REMOVED******REMOVED******REMOVED******REMOVED***print("error: \(error)")
@@ -74,22 +74,7 @@ final class FloorFilterViewModel: ObservableObject {
 ***REMOVED***@Published private(set) var isLoading = true
 ***REMOVED***
 ***REMOVED******REMOVED***/ The selected site, floor, or level.
-***REMOVED***@Published private(set) var selection: Selection? {
-***REMOVED******REMOVED***didSet {
-***REMOVED******REMOVED******REMOVED***if case let .level(oldLevel) = oldValue,
-***REMOVED******REMOVED******REMOVED***   case let .facility(facility) = selection,
-***REMOVED******REMOVED******REMOVED***   let newLevel = facility.levels.first(where: { level in
-***REMOVED******REMOVED******REMOVED******REMOVED***   level.verticalOrder == oldLevel.verticalOrder
-***REMOVED***   ***REMOVED***) {
-***REMOVED******REMOVED******REMOVED******REMOVED***selection = .level(newLevel)
-***REMOVED******REMOVED*** else if case let .facility(facility) = selection,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  let level = facility.defaultLevel {
-***REMOVED******REMOVED******REMOVED******REMOVED***selection = .level(level)
-***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***filterMapToSelectedLevel()
-***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED***
+***REMOVED***@Published private(set) var selection: Selection?
 ***REMOVED***
 ***REMOVED******REMOVED*** MARK: Constants
 ***REMOVED***
@@ -177,22 +162,39 @@ final class FloorFilterViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Updates the selected site, facility, and level based on a newly selected facility.
 ***REMOVED******REMOVED***/ - Parameter newFacility: The selected facility.
-***REMOVED***func setFacility(_ newFacility: FloorFacility) {
-***REMOVED******REMOVED***selection = .facility(newFacility)
-***REMOVED******REMOVED***zoomToExtent(newFacility.geometry?.extent)
+***REMOVED***func setFacility(_ newFacility: FloorFacility, zoomTo: Bool = false) {
+***REMOVED******REMOVED***if let oldLevel = selectedLevel,
+***REMOVED******REMOVED******REMOVED***let newLevel = newFacility.levels.first(
+***REMOVED******REMOVED******REMOVED***where: { $0.verticalOrder == oldLevel.verticalOrder ***REMOVED***
+***REMOVED******REMOVED***) {
+***REMOVED******REMOVED******REMOVED***setLevel(newLevel)
+***REMOVED*** else if let defaultLevel = newFacility.defaultLevel {
+***REMOVED******REMOVED******REMOVED***setLevel(defaultLevel)
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***selection = .facility(newFacility)
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***if zoomTo {
+***REMOVED******REMOVED******REMOVED***zoomToExtent(newFacility.geometry?.extent)
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Updates the selected site, facility, and level based on a newly selected level.
 ***REMOVED******REMOVED***/ - Parameter newLevel: The selected level.
 ***REMOVED***func setLevel(_ newLevel: FloorLevel) {
 ***REMOVED******REMOVED***selection = .level(newLevel)
+***REMOVED******REMOVED***levels.forEach {
+***REMOVED******REMOVED******REMOVED***$0.isVisible = $0.verticalOrder == newLevel.verticalOrder
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Updates the selected site, facility, and level based on a newly selected site.
 ***REMOVED******REMOVED***/ - Parameter newSite: The selected site.
-***REMOVED***func setSite(_ newSite: FloorSite) {
+***REMOVED***func setSite(_ newSite: FloorSite, zoomTo: Bool = false) {
 ***REMOVED******REMOVED***selection = .site(newSite)
-***REMOVED******REMOVED***zoomToExtent(newSite.geometry?.extent)
+***REMOVED******REMOVED***if zoomTo {
+***REMOVED******REMOVED******REMOVED***zoomToExtent(newSite.geometry?.extent)
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED*** MARK: Private items
@@ -206,15 +208,6 @@ final class FloorFilterViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED******REMOVED***if !autoSelectFacility() {
 ***REMOVED******REMOVED******REMOVED***autoSelectSite()
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ Sets the visibility of all the levels on the map based on the vertical order of the current selected level.
-***REMOVED***private func filterMapToSelectedLevel() {
-***REMOVED******REMOVED***if let selectedLevel = selectedLevel {
-***REMOVED******REMOVED******REMOVED***levels.forEach {
-***REMOVED******REMOVED******REMOVED******REMOVED***$0.isVisible = $0.verticalOrder == selectedLevel.verticalOrder
-***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -245,7 +238,7 @@ final class FloorFilterViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***if let facilityResult = facilityResult {
-***REMOVED******REMOVED******REMOVED***selection = .facility(facilityResult)
+***REMOVED******REMOVED******REMOVED***setFacility(facilityResult)
 ***REMOVED*** else if automaticSelectionMode == .always {
 ***REMOVED******REMOVED******REMOVED***return false
 ***REMOVED***
@@ -283,7 +276,7 @@ final class FloorFilterViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***if let siteResult = siteResult {
-***REMOVED******REMOVED******REMOVED***selection = .site(siteResult)
+***REMOVED******REMOVED******REMOVED***setSite(siteResult)
 ***REMOVED*** else if automaticSelectionMode == .always {
 ***REMOVED******REMOVED******REMOVED***selection = nil
 ***REMOVED***

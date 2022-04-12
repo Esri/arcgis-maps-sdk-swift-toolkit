@@ -87,7 +87,7 @@ class FloorFilterViewModelTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***XCTFail()
 ***REMOVED******REMOVED******REMOVED***return
 ***REMOVED***
-***REMOVED******REMOVED***viewModel.setSite(site)
+***REMOVED******REMOVED***viewModel.setSite(site, zoomTo: true)
 ***REMOVED******REMOVED***let selectedSite = viewModel.selectedSite
 ***REMOVED******REMOVED***let selectedFacility = viewModel.selectedFacility
 ***REMOVED******REMOVED***let selectedLevel = viewModel.selectedLevel
@@ -119,7 +119,7 @@ class FloorFilterViewModelTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***XCTFail()
 ***REMOVED******REMOVED******REMOVED***return
 ***REMOVED***
-***REMOVED******REMOVED***viewModel.setFacility(facility)
+***REMOVED******REMOVED***viewModel.setFacility(facility, zoomTo: true)
 ***REMOVED******REMOVED***let selectedFacility = viewModel.selectedFacility
 ***REMOVED******REMOVED***let selectedLevel = viewModel.selectedLevel
 ***REMOVED******REMOVED***let defaultLevel = selectedFacility?.defaultLevel
