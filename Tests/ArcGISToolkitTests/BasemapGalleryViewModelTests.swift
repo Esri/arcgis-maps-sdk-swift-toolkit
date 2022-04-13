@@ -27,7 +27,6 @@ import Combine
 @MainActor
 class BasemapGalleryViewModelTests: XCTestCase {
     override func setUp() async throws {
-        #warning("Set your developer API key")
         ArcGISRuntimeEnvironment.apiKey = APIKey("<#API Key#>")
     }
     
@@ -165,7 +164,7 @@ class BasemapGalleryViewModelTests: XCTestCase {
     
     /// Test the `currentItem` property including valid and invalid basemaps.
     func testCurrentItem() async throws {
-        let basemap = Basemap.streets()
+        let basemap = Basemap(style: .arcGISStreets)
         let geoModel = Map(basemap: basemap)
         
         let viewModel = BasemapGalleryViewModel(geoModel: geoModel)
