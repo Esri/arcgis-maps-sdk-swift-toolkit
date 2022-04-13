@@ -113,7 +113,7 @@ public class SearchViewModel: ObservableObject {
 ***REMOVED******REMOVED******REMOVED***guard !isEligibleForRequery else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Check center difference.
-***REMOVED******REMOVED******REMOVED***let centerDiff = GeometryEngine.distance(
+***REMOVED******REMOVED******REMOVED***let centerDiff = try? GeometryEngine.distance(
 ***REMOVED******REMOVED******REMOVED******REMOVED***from: lastExtent.center,
 ***REMOVED******REMOVED******REMOVED******REMOVED***to: newExtent.center
 ***REMOVED******REMOVED******REMOVED***)
