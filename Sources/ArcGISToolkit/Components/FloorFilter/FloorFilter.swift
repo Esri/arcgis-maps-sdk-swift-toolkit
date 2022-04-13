@@ -26,7 +26,7 @@ public struct FloorFilter: View {
     ///   - viewpoint: Viewpoint updated when the selected site or facility changes.
     public init(
         alignment: Alignment,
-        automaticSelectionMode: AutomaticSelectionMode = .always,
+        automaticSelectionMode: FloorFilterAutomaticSelectionMode = .always,
         floorManager: FloorManager,
         viewpoint: Binding<Viewpoint?>
     ) {
