@@ -117,16 +117,20 @@ struct SiteAndFacilitySelector: View {
         /// A view containing a filter-via-name field, a list of the site names and an "All sites" button.
         var siteListAndFilterView: some View {
             NavigationView {
-                VStack {
-                    TextField("Filter sites", text: $searchPhrase)
-                        .keyboardType(.alphabet)
-                        .disableAutocorrection(true)
+                Group {
                     if matchingSites.isEmpty {
                         NoMatchesView()
                     } else {
                         siteListView
                     }
                 }
+                .searchable(
+                    text: $searchPhrase,
+                    placement: .navigationBarDrawer,
+                    prompt: "Filter sites"
+                )
+                .keyboardType(.alphabet)
+                .disableAutocorrection(true)
                 .navigationBarTitle(
                     Text("Select a site"),
                     displayMode: .inline
@@ -246,15 +250,19 @@ struct SiteAndFacilitySelector: View {
                         CloseButton { isHidden.wrappedValue.toggle() }
                     }
                 }
-                TextField("Filter facilities", text: $searchPhrase)
-                    .keyboardType(.alphabet)
-                    .disableAutocorrection(true)
                 if matchingFacilities.isEmpty {
                     NoMatchesView()
                 } else {
                     facilityListView
                 }
             }
+            .searchable(
+                text: $searchPhrase,
+                placement: .navigationBarDrawer,
+                prompt: "Filter facilities"
+            )
+            .keyboardType(.alphabet)
+            .disableAutocorrection(true)
         }
         
         /// Displays a list of facilities matching the filter criteria as determined by
@@ -312,11 +320,11 @@ struct SiteAndFacilitySelector: View {
 /// Displays text "No matches found".
 struct NoMatchesView: View {
     var body: some View {
-        VStack {
-            Spacer()
-            Text("No matches found")
-            Spacer()
-        }
+        Text("No matches found")
+            .frame(
+                maxHeight: .infinity,
+                alignment: .center
+            )
     }
 }
 
