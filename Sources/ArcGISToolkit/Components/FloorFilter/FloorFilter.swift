@@ -26,7 +26,7 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED***/   - viewpoint: Viewpoint updated when the selected site or facility changes.
 ***REMOVED***public init(
 ***REMOVED******REMOVED***alignment: Alignment,
-***REMOVED******REMOVED***automaticSelectionMode: AutomaticSelectionMode = .always,
+***REMOVED******REMOVED***automaticSelectionMode: FloorFilterAutomaticSelectionMode = .always,
 ***REMOVED******REMOVED***floorManager: FloorManager,
 ***REMOVED******REMOVED***viewpoint: Binding<Viewpoint?>
 ***REMOVED***) {
