@@ -117,16 +117,20 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED***/ A view containing a filter-via-name field, a list of the site names and an "All sites" button.
 ***REMOVED******REMOVED***var siteListAndFilterView: some View {
 ***REMOVED******REMOVED******REMOVED***NavigationView {
-***REMOVED******REMOVED******REMOVED******REMOVED***VStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***TextField("Filter sites", text: $searchPhrase)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.keyboardType(.alphabet)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.disableAutocorrection(true)
+***REMOVED******REMOVED******REMOVED******REMOVED***Group {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if matchingSites.isEmpty {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***NoMatchesView()
 ***REMOVED******REMOVED******REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***siteListView
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.searchable(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***text: $searchPhrase,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***placement: .navigationBarDrawer,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***prompt: "Filter sites"
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***.keyboardType(.alphabet)
+***REMOVED******REMOVED******REMOVED******REMOVED***.disableAutocorrection(true)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.navigationBarTitle(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Select a site"),
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***displayMode: .inline
@@ -246,15 +250,19 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***CloseButton { isHidden.wrappedValue.toggle() ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***TextField("Filter facilities", text: $searchPhrase)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.keyboardType(.alphabet)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.disableAutocorrection(true)
 ***REMOVED******REMOVED******REMOVED******REMOVED***if matchingFacilities.isEmpty {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***NoMatchesView()
 ***REMOVED******REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***facilityListView
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.searchable(
+***REMOVED******REMOVED******REMOVED******REMOVED***text: $searchPhrase,
+***REMOVED******REMOVED******REMOVED******REMOVED***placement: .navigationBarDrawer,
+***REMOVED******REMOVED******REMOVED******REMOVED***prompt: "Filter facilities"
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***.keyboardType(.alphabet)
+***REMOVED******REMOVED******REMOVED***.disableAutocorrection(true)
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ Displays a list of facilities matching the filter criteria as determined by
@@ -312,11 +320,11 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED***/ Displays text "No matches found".
 struct NoMatchesView: View {
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***VStack {
-***REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED***Text("No matches found")
-***REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED***
+***REMOVED******REMOVED***Text("No matches found")
+***REMOVED******REMOVED******REMOVED***.frame(
+***REMOVED******REMOVED******REMOVED******REMOVED***maxHeight: .infinity,
+***REMOVED******REMOVED******REMOVED******REMOVED***alignment: .center
+***REMOVED******REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 
