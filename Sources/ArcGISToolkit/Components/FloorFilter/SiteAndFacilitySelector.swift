@@ -193,8 +193,7 @@ struct SiteAndFacilitySelector: View {
         }
         
         /// A facility name filter phrase entered by the user.
-        @State
-        var searchPhrase: String = ""
+        @State var searchPhrase: String = ""
         
         /// `FloorFacility`s to be displayed by this view.
         let facilities: [FloorFacility]
@@ -213,18 +212,6 @@ struct SiteAndFacilitySelector: View {
             }
             return facilities.filter {
                 $0.name.lowercased().contains(searchPhrase.lowercased())
-            }
-        }
-        
-        /// Determines the SF Symbols image name to represent selection/non-selection of a facility.
-        /// - Parameter facility: The facility of interest
-        /// - Returns: "circle.fill" if the facility is marked selected or "cirlce" if the facility is not selected
-        /// in the view model.
-        func imageFor(_ facility: FloorFacility) -> String {
-            if facility.id == viewModel.selectedFacility?.id {
-                return "circle.fill"
-            } else {
-                return "circle"
             }
         }
         
@@ -282,27 +269,26 @@ struct SiteAndFacilitySelector: View {
                         viewModel.setFacility(facility, zoomTo: true)
                         isHidden.wrappedValue.toggle()
                     } label: {
-                        HStack {
-                            Image(systemName: imageFor(facility))
-                            VStack {
-                                Text(facility.name)
+                        VStack {
+                            Text(facility.name)
                                 .fontWeight(.regular)
                                 .frame(
                                     maxWidth: .infinity,
                                     alignment: .leading
                                 )
-                                if presentationStyle == .allSites,
-                                   let siteName = facility.site?.name {
-                                    Text(siteName)
+                            if presentationStyle == .allSites,
+                               let siteName = facility.site?.name {
+                                Text(siteName)
                                     .fontWeight(.ultraLight)
                                     .frame(
                                         maxWidth: .infinity,
                                         alignment: .leading
                                     )
-                                }
                             }
                         }
                     }
+                    .selected(facility.id == viewModel.selectedFacility?.id)
+                    .listRowSeparator(.hidden)
                 }
                 .listStyle(.plain)
                 .onChange(of: viewModel.selection) { _ in
