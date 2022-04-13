@@ -126,21 +126,24 @@ struct SiteAndFacilitySelector: View {
                     } else {
                         siteListView
                     }
-                    NavigationLink("All sites") {
-                        FacilitiesList(
-                            facilities: sites.flatMap({ $0.facilities }),
-                            presentationStyle: .allSites,
-                            isHidden: isHidden
-                        )
-                    }
-                        .padding([.vertical], 4)
                 }
                 .navigationBarTitle(
                     Text("Select a site"),
                     displayMode: .inline
                 )
                 .toolbar {
-                    CloseButton { isHidden.wrappedValue.toggle() }
+                    ToolbarItem {
+                        CloseButton { isHidden.wrappedValue.toggle() }
+                    }
+                    ToolbarItem(placement: .bottomBar) {
+                        NavigationLink("All sites") {
+                            FacilitiesList(
+                                facilities: sites.flatMap({ $0.facilities }),
+                                presentationStyle: .allSites,
+                                isHidden: isHidden
+                            )
+                        }
+                    }
                 }
             }
         }
