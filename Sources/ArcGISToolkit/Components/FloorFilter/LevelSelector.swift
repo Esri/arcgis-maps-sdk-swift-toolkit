@@ -77,13 +77,21 @@ struct LevelsStack: View {
         ScrollView {
             VStack {
                 ForEach(levels) { level in
-                    Button {
-                        viewModel.setLevel(level)
-                    } label: {
+                    Toggle(
+                        isOn: Binding(
+                            get: {
+                                viewModel.selectedLevel == level
+                            },
+                            set: { newIsOn in
+                                guard newIsOn else { return }
+                                viewModel.setLevel(level)
+                            }
+                        )
+                    ) {
                         Text(level.shortName)
                             .lineLimit(1)
                     }
-                    .selected(level == viewModel.selectedLevel)
+                    .toggleStyle(.button)
                 }
             }
             .onSizeChange {
