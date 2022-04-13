@@ -26,6 +26,11 @@ import Combine
 // accomodate those differences.
 @MainActor
 class BasemapGalleryViewModelTests: XCTestCase {
+    override func setUp() async throws {
+        #warning("Set your developer API key")
+        ArcGISRuntimeEnvironment.apiKey = APIKey("<#API Key#>")
+    }
+    
     let defaultBasemapGalleryItems: [BasemapGalleryItem] = [
         BasemapGalleryItem(
             basemap: Basemap(
@@ -51,7 +56,7 @@ class BasemapGalleryViewModelTests: XCTestCase {
         //
         // GeoModel.
         //
-        let geoModel = Map(basemap: .lightGrayCanvas())
+        let geoModel = Map(basemapStyle: .arcGISLightGray)
         let geoModelViewModel = BasemapGalleryViewModel(geoModel: geoModel)
         XCTAssertIdentical(geoModelViewModel.geoModel, geoModel)
         
@@ -71,7 +76,7 @@ class BasemapGalleryViewModelTests: XCTestCase {
         //
         // Portal.
         //
-        let geoModel2 = Map(basemap: .lightGrayCanvas())
+        let geoModel2 = Map(basemapStyle: .arcGISLightGray)
         let portal = Portal.arcGISOnline(isLoginRequired: false)
         let portalViewModel = BasemapGalleryViewModel(geoModel2, portal: portal)
         
@@ -102,7 +107,7 @@ class BasemapGalleryViewModelTests: XCTestCase {
         //
         // BasemapGalleryItems. No basemaps are fetched from a portal.
         //
-        let geoModel3 = Map(basemap: .lightGrayCanvas())
+        let geoModel3 = Map(basemapStyle: .arcGISLightGray)
         let itemsViewModel = BasemapGalleryViewModel(
             geoModel: geoModel3,
             items: defaultBasemapGalleryItems
@@ -118,7 +123,7 @@ class BasemapGalleryViewModelTests: XCTestCase {
     /// Test the `GeoModel.actualSpatialReference` extension property.
     func testGeoModelActualSpatialReference() async throws {
         // Map with Web Mercator basemap.
-        let geoModel = Map(basemap: .lightGrayCanvas())
+        let geoModel = Map(basemapStyle: .arcGISLightGray)
         try await geoModel.load()
         XCTAssertEqual(geoModel.actualSpatialReference, .webMercator)
         
