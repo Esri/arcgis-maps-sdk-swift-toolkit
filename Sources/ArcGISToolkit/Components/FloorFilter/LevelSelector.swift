@@ -53,11 +53,13 @@ struct LevelSelector: View {
                 }
             }
         } else {
-            Toggle(isOn: $isCollapsed) {
+            Button {
+                isCollapsed.toggle()
+            } label: {
                 Text(selectedLevelName)
                     .lineLimit(1)
             }
-            .toggleStyle(.button)
+            .selected(true)
         }
     }
 }
@@ -77,21 +79,13 @@ struct LevelsStack: View {
         ScrollView {
             VStack {
                 ForEach(levels) { level in
-                    Toggle(
-                        isOn: Binding(
-                            get: {
-                                viewModel.selectedLevel == level
-                            },
-                            set: { newIsOn in
-                                guard newIsOn else { return }
-                                viewModel.setLevel(level)
-                            }
-                        )
-                    ) {
+                    Button {
+                        viewModel.setLevel(level)
+                    } label: {
                         Text(level.shortName)
                             .lineLimit(1)
                     }
-                    .toggleStyle(.button)
+                    .selected(viewModel.selectedLevel == level)
                 }
             }
             .onSizeChange {
