@@ -26,6 +26,11 @@ import Combine
 ***REMOVED*** accomodate those differences.
 @MainActor
 class BasemapGalleryViewModelTests: XCTestCase {
+***REMOVED***override func setUp() async throws {
+***REMOVED******REMOVED***#warning("Set your developer API key")
+***REMOVED******REMOVED***ArcGISRuntimeEnvironment.apiKey = APIKey("<#API Key#>")
+***REMOVED***
+***REMOVED***
 ***REMOVED***let defaultBasemapGalleryItems: [BasemapGalleryItem] = [
 ***REMOVED******REMOVED***BasemapGalleryItem(
 ***REMOVED******REMOVED******REMOVED***basemap: Basemap(
@@ -51,7 +56,7 @@ class BasemapGalleryViewModelTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** GeoModel.
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***let geoModel = Map(basemap: .lightGrayCanvas())
+***REMOVED******REMOVED***let geoModel = Map(basemapStyle: .arcGISLightGray)
 ***REMOVED******REMOVED***let geoModelViewModel = BasemapGalleryViewModel(geoModel: geoModel)
 ***REMOVED******REMOVED***XCTAssertIdentical(geoModelViewModel.geoModel, geoModel)
 ***REMOVED******REMOVED***
@@ -71,7 +76,7 @@ class BasemapGalleryViewModelTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Portal.
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***let geoModel2 = Map(basemap: .lightGrayCanvas())
+***REMOVED******REMOVED***let geoModel2 = Map(basemapStyle: .arcGISLightGray)
 ***REMOVED******REMOVED***let portal = Portal.arcGISOnline(isLoginRequired: false)
 ***REMOVED******REMOVED***let portalViewModel = BasemapGalleryViewModel(geoModel2, portal: portal)
 ***REMOVED******REMOVED***
@@ -102,7 +107,7 @@ class BasemapGalleryViewModelTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** BasemapGalleryItems. No basemaps are fetched from a portal.
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***let geoModel3 = Map(basemap: .lightGrayCanvas())
+***REMOVED******REMOVED***let geoModel3 = Map(basemapStyle: .arcGISLightGray)
 ***REMOVED******REMOVED***let itemsViewModel = BasemapGalleryViewModel(
 ***REMOVED******REMOVED******REMOVED***geoModel: geoModel3,
 ***REMOVED******REMOVED******REMOVED***items: defaultBasemapGalleryItems
@@ -118,7 +123,7 @@ class BasemapGalleryViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***/ Test the `GeoModel.actualSpatialReference` extension property.
 ***REMOVED***func testGeoModelActualSpatialReference() async throws {
 ***REMOVED******REMOVED******REMOVED*** Map with Web Mercator basemap.
-***REMOVED******REMOVED***let geoModel = Map(basemap: .lightGrayCanvas())
+***REMOVED******REMOVED***let geoModel = Map(basemapStyle: .arcGISLightGray)
 ***REMOVED******REMOVED***try await geoModel.load()
 ***REMOVED******REMOVED***XCTAssertEqual(geoModel.actualSpatialReference, .webMercator)
 ***REMOVED******REMOVED***
