@@ -27,7 +27,6 @@ import Combine
 @MainActor
 class BasemapGalleryViewModelTests: XCTestCase {
 ***REMOVED***override func setUp() async throws {
-***REMOVED******REMOVED***#warning("Set your developer API key")
 ***REMOVED******REMOVED***ArcGISRuntimeEnvironment.apiKey = APIKey("<#API Key#>")
 ***REMOVED***
 ***REMOVED***
@@ -165,7 +164,7 @@ class BasemapGalleryViewModelTests: XCTestCase {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Test the `currentItem` property including valid and invalid basemaps.
 ***REMOVED***func testCurrentItem() async throws {
-***REMOVED******REMOVED***let basemap = Basemap.streets()
+***REMOVED******REMOVED***let basemap = Basemap(style: .arcGISStreets)
 ***REMOVED******REMOVED***let geoModel = Map(basemap: basemap)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let viewModel = BasemapGalleryViewModel(geoModel: geoModel)
