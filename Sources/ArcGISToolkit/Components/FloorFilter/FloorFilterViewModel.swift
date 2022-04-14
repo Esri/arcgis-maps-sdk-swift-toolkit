@@ -296,7 +296,7 @@ final class FloorFilterViewModel: ObservableObject {
                 if sites.count == 1,
                     let firstSite = sites.first {
                     // If we have only one site, select it.
-                    setSite(firstSite)
+                    setSite(firstSite, zoomTo: true)
                 }
             } catch {
                 print("error: \(error)")

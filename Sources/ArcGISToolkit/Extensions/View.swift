@@ -13,6 +13,27 @@
 
 import SwiftUI
 
+/// A modifier which proivdes conditional control over when a sheet is used.
+struct ConditionalSheetModifier<SheetContent: View>: ViewModifier {
+    /// A Boolean value that indicates whether `sheetContent` will be presented or not.
+    var isAllowed: Bool
+    
+    /// Determines when the sheet is presented or not.
+    var isPresented: Binding<Bool>
+    
+    /// Content to be shown in the sheet.
+    var sheetContent: () -> SheetContent
+    
+    func body(content: Content) -> some View {
+        if isAllowed {
+            content
+                .sheet(isPresented: isPresented, content: sheetContent)
+        } else {
+            content
+        }
+    }
+}
+
 /// A modifier which displays a background and shadow for a view. Used to represent a selected view.
 struct SelectedModifier: ViewModifier {
     /// A Boolean value that indicates whether view should display as selected.
@@ -57,5 +78,21 @@ extension View {
         _ isSelected: Bool = false
     ) -> some View {
         modifier(SelectedModifier(isSelected: isSelected))
+    }
+    
+    /// - Parameter isAllowed: Condition that determines if this sheet can be shown.
+    /// - Returns: Produces a sheet that is only shown if `isAllowed` is set `true`.
+    func sheet<SheetContent : View>(
+        isAllowed: Bool,
+        isPresented: Binding<Bool>,
+        content: @escaping () -> SheetContent
+    ) -> some View {
+        modifier(
+            ConditionalSheetModifier(
+                isAllowed: isAllowed,
+                isPresented: isPresented,
+                sheetContent: content
+            )
+        )
     }
 }
