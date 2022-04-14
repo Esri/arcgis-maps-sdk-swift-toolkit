@@ -34,7 +34,7 @@ final class FloorFilterViewModel: ObservableObject {
     ///   - floorManager: The floor manager used by the `FloorFilterViewModel`.
     ///   - viewpoint: Viewpoint updated when the selected site or facility changes.
     init(
-        automaticSelectionMode: AutomaticSelectionMode = .always,
+        automaticSelectionMode: FloorFilterAutomaticSelectionMode = .always,
         floorManager: FloorManager,
         viewpoint: Binding<Viewpoint?>
     ) {
@@ -67,7 +67,7 @@ final class FloorFilterViewModel: ObservableObject {
     // MARK: Constants
     
     /// The selection behavior of the floor filter.
-    private let automaticSelectionMode: AutomaticSelectionMode
+    private let automaticSelectionMode: FloorFilterAutomaticSelectionMode
     
     /// The amount of time to wait between selection updates.
     private let delay = DispatchQueue.SchedulerTimeType.Stride.seconds(0.20)
@@ -327,7 +327,7 @@ final class FloorFilterViewModel: ObservableObject {
 }
 
 /// Defines automatic selection behavior.
-public enum AutomaticSelectionMode {
+public enum FloorFilterAutomaticSelectionMode {
     /// Always update selection based on the current viewpoint; clear the selection when the user
     /// navigates away.
     case always
