@@ -62,14 +62,7 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED***/ As the view model's selection will change to `.facility(FloorFacility)` and
 ***REMOVED******REMOVED******REMOVED***/ `.level(FloorLevel)` over time, this is needed to keep track of the site at the top of the
 ***REMOVED******REMOVED******REMOVED***/ hierarchy to keep the site selection persistent in the navigation view.
-***REMOVED******REMOVED***@State private var selectedSite: FloorSite? {
-***REMOVED******REMOVED******REMOVED***didSet {
-***REMOVED******REMOVED******REMOVED******REMOVED***if updateViewModel, let site = selectedSite {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.setSite(site, zoomTo: true)
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***updateViewModel = true
-***REMOVED******REMOVED***
-***REMOVED***
+***REMOVED******REMOVED***@State private var selectedSite: FloorSite?
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ Sites contained in a `FloorManager`.
 ***REMOVED******REMOVED***let sites: [FloorSite]
@@ -162,9 +155,6 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isHidden: isHidden
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.onTapGesture {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedSite = site
-***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.listStyle(.plain)
 ***REMOVED******REMOVED******REMOVED***.onChange(of: viewModel.selection) { _ in
@@ -173,6 +163,12 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** model without republishing them back up to the view model.
 ***REMOVED******REMOVED******REMOVED******REMOVED***updateViewModel = false
 ***REMOVED******REMOVED******REMOVED******REMOVED***selectedSite = viewModel.selectedSite
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.onChange(of: selectedSite) { _ in  
+***REMOVED******REMOVED******REMOVED******REMOVED***   if updateViewModel, let site = selectedSite {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***   viewModel.setSite(site, zoomTo: true)
+***REMOVED******REMOVED***   ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***   updateViewModel = true
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
