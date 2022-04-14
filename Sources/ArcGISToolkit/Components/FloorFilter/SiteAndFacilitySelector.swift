@@ -111,10 +111,19 @@ struct SiteAndFacilitySelector: View {
         var siteListAndFilterView: some View {
             NavigationView {
                 Group {
-                    if matchingSites.isEmpty {
-                        NoMatchesView()
-                    } else {
-                        siteListView
+                    VStack {
+                        if matchingSites.isEmpty {
+                            NoMatchesView()
+                        } else {
+                            siteListView
+                        }
+                        NavigationLink("All sites") {
+                            FacilitiesList(
+                                facilities: sites.flatMap({ $0.facilities }),
+                                presentationStyle: .allSites,
+                                isHidden: isHidden
+                            )
+                        }
                     }
                 }
                 .searchable(
@@ -129,18 +138,7 @@ struct SiteAndFacilitySelector: View {
                     displayMode: .inline
                 )
                 .toolbar {
-                    ToolbarItem {
-                        CloseButton { isHidden.wrappedValue.toggle() }
-                    }
-                    ToolbarItem(placement: .bottomBar) {
-                        NavigationLink("All sites") {
-                            FacilitiesList(
-                                facilities: sites.flatMap({ $0.facilities }),
-                                presentationStyle: .allSites,
-                                isHidden: isHidden
-                            )
-                        }
-                    }
+                    CloseButton { isHidden.wrappedValue.toggle() }
                 }
             }
         }
@@ -161,7 +159,6 @@ struct SiteAndFacilitySelector: View {
                         presentationStyle: .standard,
                         isHidden: isHidden
                     )
-                    .navigationViewStyle(StackNavigationViewStyle())
                 }
             }
             .listStyle(.plain)
