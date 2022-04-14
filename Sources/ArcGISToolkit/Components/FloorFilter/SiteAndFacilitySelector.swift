@@ -161,6 +161,7 @@ struct SiteAndFacilitySelector: View {
                         presentationStyle: .standard,
                         isHidden: isHidden
                     )
+                    .navigationViewStyle(StackNavigationViewStyle())
                 }
             }
             .listStyle(.plain)
