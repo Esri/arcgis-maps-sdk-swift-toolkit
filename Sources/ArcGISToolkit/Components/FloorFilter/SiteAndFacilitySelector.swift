@@ -62,14 +62,7 @@ struct SiteAndFacilitySelector: View {
         /// As the view model's selection will change to `.facility(FloorFacility)` and
         /// `.level(FloorLevel)` over time, this is needed to keep track of the site at the top of the
         /// hierarchy to keep the site selection persistent in the navigation view.
-        @State private var selectedSite: FloorSite? {
-            didSet {
-                if updateViewModel, let site = selectedSite {
-                    viewModel.setSite(site, zoomTo: true)
-                }
-                updateViewModel = true
-            }
-        }
+        @State private var selectedSite: FloorSite?
         
         /// Sites contained in a `FloorManager`.
         let sites: [FloorSite]
@@ -162,9 +155,6 @@ struct SiteAndFacilitySelector: View {
                         isHidden: isHidden
                     )
                 }
-                .onTapGesture {
-                    selectedSite = site
-                }
             }
             .listStyle(.plain)
             .onChange(of: viewModel.selection) { _ in
@@ -173,6 +163,12 @@ struct SiteAndFacilitySelector: View {
                 // model without republishing them back up to the view model.
                 updateViewModel = false
                 selectedSite = viewModel.selectedSite
+            }
+            .onChange(of: selectedSite) { _ in  
+                   if updateViewModel, let site = selectedSite {
+                       viewModel.setSite(site, zoomTo: true)
+                   }
+                   updateViewModel = true
             }
         }
     }
