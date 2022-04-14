@@ -26,22 +26,26 @@ import Combine
 // test design have been added to accomodate those differences.
 @MainActor
 final class BasemapGalleryItemTests: XCTestCase {
+    override func setUp() async throws {
+        ArcGISRuntimeEnvironment.apiKey = APIKey("<#API Key#>")
+    }
+    
     func testInit() async throws {
-        let basemap = Basemap.lightGrayCanvas()
+        let basemap = Basemap(style: .arcGISLightGray)
         let item = BasemapGalleryItem(basemap: basemap)
         
         let isBasemapLoading = try await item.$isBasemapLoading.dropFirst().first
         let loading = try XCTUnwrap(isBasemapLoading)
         XCTAssertFalse(loading, "Item is not loading.")
         XCTAssertIdentical(item.basemap, basemap)
-        XCTAssertEqual(item.name, "Light Gray Canvas")
+        XCTAssertEqual(item.name, "ArcGIS:LightGray")
         XCTAssertNil(item.description)
         XCTAssertNotNil(item.thumbnail)
         XCTAssertNil(item.loadBasemapError)
         
         // Test with overrides.
         let thumbnail = UIImage(systemName: "magnifyingglass")!
-        let basemap2 = Basemap.lightGrayCanvas()
+        let basemap2 = Basemap(style: .arcGISLightGray)
         let item2 = BasemapGalleryItem(
             basemap: basemap2,
             name: "My Basemap",
@@ -92,7 +96,7 @@ final class BasemapGalleryItemTests: XCTestCase {
     }
     
     func testSpatialReferenceAndStatus() async throws {
-        let basemap = Basemap.lightGrayCanvas()
+        let basemap = Basemap(style: .arcGISLightGray)
         let item = BasemapGalleryItem(basemap: basemap)
         
         let isBasemapLoading = try await item.$isBasemapLoading.dropFirst().first
