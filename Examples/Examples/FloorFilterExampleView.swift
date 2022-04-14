@@ -24,7 +24,7 @@ struct FloorFilterExampleView: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Determines the arrangement of the inner `FloorFilter` UI componenets.
-***REMOVED***private let filterAlignment = Alignment.bottomLeading
+***REMOVED***private let filterAlignment: Alignment = .bottomLeading
 ***REMOVED***
 ***REMOVED******REMOVED***/ Determines the appropriate time to initialize the `FloorFilter`.
 ***REMOVED***@State private var isMapLoaded: Bool = false

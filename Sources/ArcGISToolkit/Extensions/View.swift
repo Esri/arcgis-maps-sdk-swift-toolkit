@@ -13,6 +13,27 @@
 
 ***REMOVED***
 
+***REMOVED***/ A modifier which proivdes conditional control over when a sheet is used.
+struct ConditionalSheetModifier<SheetContent: View>: ViewModifier {
+***REMOVED******REMOVED***/ A Boolean value that indicates whether `sheetContent` will be presented or not.
+***REMOVED***var isAllowed: Bool
+***REMOVED***
+***REMOVED******REMOVED***/ Determines when the sheet is presented or not.
+***REMOVED***var isPresented: Binding<Bool>
+***REMOVED***
+***REMOVED******REMOVED***/ Content to be shown in the sheet.
+***REMOVED***var sheetContent: () -> SheetContent
+***REMOVED***
+***REMOVED***func body(content: Content) -> some View {
+***REMOVED******REMOVED***if isAllowed {
+***REMOVED******REMOVED******REMOVED***content
+***REMOVED******REMOVED******REMOVED******REMOVED***.sheet(isPresented: isPresented, content: sheetContent)
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***content
+***REMOVED***
+***REMOVED***
+***REMOVED***
+
 ***REMOVED***/ A modifier which displays a background and shadow for a view. Used to represent a selected view.
 struct SelectedModifier: ViewModifier {
 ***REMOVED******REMOVED***/ A Boolean value that indicates whether view should display as selected.
@@ -57,5 +78,21 @@ extension View {
 ***REMOVED******REMOVED***_ isSelected: Bool = false
 ***REMOVED***) -> some View {
 ***REMOVED******REMOVED***modifier(SelectedModifier(isSelected: isSelected))
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ - Parameter isAllowed: Condition that determines if this sheet can be shown.
+***REMOVED******REMOVED***/ - Returns: Produces a sheet that is only shown if `isAllowed` is set `true`.
+***REMOVED***func sheet<SheetContent : View>(
+***REMOVED******REMOVED***isAllowed: Bool,
+***REMOVED******REMOVED***isPresented: Binding<Bool>,
+***REMOVED******REMOVED***content: @escaping () -> SheetContent
+***REMOVED***) -> some View {
+***REMOVED******REMOVED***modifier(
+***REMOVED******REMOVED******REMOVED***ConditionalSheetModifier(
+***REMOVED******REMOVED******REMOVED******REMOVED***isAllowed: isAllowed,
+***REMOVED******REMOVED******REMOVED******REMOVED***isPresented: isPresented,
+***REMOVED******REMOVED******REMOVED******REMOVED***sheetContent: content
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***

@@ -24,6 +24,12 @@ struct LevelSelector: View {
 ***REMOVED******REMOVED***/ the selected level.
 ***REMOVED***@Binding var isCollapsed: Bool
 ***REMOVED***
+***REMOVED******REMOVED***/ The width for buttons in the level selector.
+***REMOVED***let buttonWidth: Double
+***REMOVED***
+***REMOVED******REMOVED***/ The alignment configuration.
+***REMOVED***let isTopAligned: Bool
+***REMOVED***
 ***REMOVED******REMOVED***/ The levels to display.
 ***REMOVED***let levels: [FloorLevel]
 ***REMOVED***
@@ -33,23 +39,29 @@ struct LevelSelector: View {
 ***REMOVED******REMOVED***viewModel.selectedLevel?.shortName ?? ""
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ The alignment configuration.
-***REMOVED***var isTopAligned: Bool
-***REMOVED***
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***if !isCollapsed,
 ***REMOVED******REMOVED******REMOVED***levels.count > 1 {
 ***REMOVED******REMOVED******REMOVED***VStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if !isTopAligned {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***CollapseButton(isCollapsed: $isCollapsed)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***CollapseButton(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isCollapsed: $isCollapsed,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isTopAligned: isTopAligned
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Divider()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 30)
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***LevelsStack(levels: levels)
+***REMOVED******REMOVED******REMOVED******REMOVED***LevelsStack(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***buttonWidth: buttonWidth,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***levels: levels
+***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***if isTopAligned {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Divider()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 30)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***CollapseButton(isCollapsed: $isCollapsed)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***CollapseButton(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isCollapsed: $isCollapsed,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isTopAligned: isTopAligned
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED*** else {
@@ -58,6 +70,7 @@ struct LevelSelector: View {
 ***REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text(selectedLevelName)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.lineLimit(1)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: buttonWidth)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.selected(true)
 ***REMOVED***
@@ -72,6 +85,9 @@ struct LevelsStack: View {
 ***REMOVED******REMOVED***/ The height of the scroll view's content.
 ***REMOVED***@State private var contentHeight: CGFloat = .zero
 ***REMOVED***
+***REMOVED******REMOVED***/ The width for buttons in the level selector.
+***REMOVED***let buttonWidth: Double
+***REMOVED***
 ***REMOVED******REMOVED***/ The levels to display.
 ***REMOVED***let levels: [FloorLevel]
 ***REMOVED***
@@ -84,6 +100,7 @@ struct LevelsStack: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(level.shortName)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.lineLimit(1)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: buttonWidth)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.selected(viewModel.selectedLevel == level)
 ***REMOVED******REMOVED******REMOVED***
@@ -101,13 +118,16 @@ struct CollapseButton: View {
 ***REMOVED******REMOVED***/ Allows the user to toggle the visibility of the site and facility selector.
 ***REMOVED***@Binding var isCollapsed: Bool
 ***REMOVED***
+***REMOVED******REMOVED***/ The alignment configuration.
+***REMOVED***let isTopAligned: Bool
+***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED***withAnimation {
 ***REMOVED******REMOVED******REMOVED******REMOVED***isCollapsed.toggle()
 ***REMOVED******REMOVED***
 ***REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED***Image(systemName: "chevron.down.circle")
+***REMOVED******REMOVED******REMOVED***Image(systemName: isTopAligned ? "chevron.up.circle" : "chevron.down.circle")
 ***REMOVED***
 ***REMOVED******REMOVED***.padding(EdgeInsets(
 ***REMOVED******REMOVED******REMOVED***top: 2,

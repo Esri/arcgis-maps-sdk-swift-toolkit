@@ -29,18 +29,7 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED***private var isHidden: Binding<Bool>
 ***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***if viewModel.sites.count == 1 {
-***REMOVED******REMOVED******REMOVED***FacilitiesList(
-***REMOVED******REMOVED******REMOVED******REMOVED***facilities: viewModel.sites.first!.facilities,
-***REMOVED******REMOVED******REMOVED******REMOVED***presentationStyle: .singleSite,
-***REMOVED******REMOVED******REMOVED******REMOVED***isHidden: isHidden
-***REMOVED******REMOVED******REMOVED***)
-***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***SitesList(
-***REMOVED******REMOVED******REMOVED******REMOVED***sites: viewModel.sites,
-***REMOVED******REMOVED******REMOVED******REMOVED***isHidden: isHidden
-***REMOVED******REMOVED******REMOVED***)
-***REMOVED***
+***REMOVED******REMOVED***SitesList(isHidden: isHidden)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ A view displaying the sites contained in a `FloorManager`.
@@ -64,9 +53,6 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED***/ hierarchy to keep the site selection persistent in the navigation view.
 ***REMOVED******REMOVED***@State private var selectedSite: FloorSite?
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ Sites contained in a `FloorManager`.
-***REMOVED******REMOVED***let sites: [FloorSite]
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ Allows the user to toggle the visibility of the site and facility selector.
 ***REMOVED******REMOVED***var isHidden: Binding<Bool>
 ***REMOVED******REMOVED***
@@ -74,9 +60,9 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED***/ `searchPhrase` is empty.
 ***REMOVED******REMOVED***var matchingSites: [FloorSite] {
 ***REMOVED******REMOVED******REMOVED***if searchPhrase.isEmpty {
-***REMOVED******REMOVED******REMOVED******REMOVED***return sites
+***REMOVED******REMOVED******REMOVED******REMOVED***return viewModel.sites
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***return sites.filter {
+***REMOVED******REMOVED******REMOVED***return viewModel.sites.filter {
 ***REMOVED******REMOVED******REMOVED******REMOVED***$0.name.lowercased().contains(searchPhrase.lowercased())
 ***REMOVED******REMOVED***
 ***REMOVED***
@@ -110,17 +96,24 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED***/ A view containing a filter-via-name field, a list of the site names and an "All sites" button.
 ***REMOVED******REMOVED***var siteListAndFilterView: some View {
 ***REMOVED******REMOVED******REMOVED***NavigationView {
-***REMOVED******REMOVED******REMOVED******REMOVED***Group {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***VStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if matchingSites.isEmpty {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***NoMatchesView()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***siteListView
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***VStack {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if matchingSites.isEmpty {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***NoMatchesView()
+***REMOVED******REMOVED******REMOVED******REMOVED*** else if viewModel.sites.count == 1 {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FacilitiesList(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***allSiteStyle: false,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***facilities: viewModel.sites.first?.facilities ?? [],
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isHidden: isHidden
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.navigationBarBackButtonHidden(true)
+***REMOVED******REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***siteListView
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if viewModel.sites.count > 1 {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***NavigationLink("All sites") {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FacilitiesList(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***facilities: sites.flatMap({ $0.facilities ***REMOVED***),
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***presentationStyle: .allSites,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***allSiteStyle: true,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***facilities: viewModel.sites.flatMap({ $0.facilities ***REMOVED***),
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isHidden: isHidden
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
@@ -128,7 +121,7 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.searchable(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***text: $searchPhrase,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***placement: .navigationBarDrawer,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***placement: .navigationBarDrawer(displayMode: .always),
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***prompt: "Filter sites"
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.keyboardType(.alphabet)
@@ -155,8 +148,8 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selection: $selectedSite
 ***REMOVED******REMOVED******REMOVED******REMOVED***) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FacilitiesList(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***allSiteStyle: false,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***facilities: site.facilities,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***presentationStyle: .standard,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isHidden: isHidden
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***
@@ -183,24 +176,14 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED***/ The view model used by this selector.
 ***REMOVED******REMOVED***@EnvironmentObject var viewModel: FloorFilterViewModel
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ Presentation styles for the facility list.
-***REMOVED******REMOVED***enum PresentationStyle {
-***REMOVED******REMOVED******REMOVED******REMOVED***/ A specific site was selected and the body is presented within a navigation view.
-***REMOVED******REMOVED******REMOVED***case standard
-***REMOVED******REMOVED******REMOVED******REMOVED***/ The all sites button was selcted and the body is presented within a navigation view.
-***REMOVED******REMOVED******REMOVED***case allSites
-***REMOVED******REMOVED******REMOVED******REMOVED***/ Only one site exists and the body is not presented within a navigation view.
-***REMOVED******REMOVED******REMOVED***case singleSite
-***REMOVED***
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ A facility name filter phrase entered by the user.
 ***REMOVED******REMOVED***@State var searchPhrase: String = ""
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ When `true`, the facilites list will be display with all sites styling.
+***REMOVED******REMOVED***let allSiteStyle: Bool
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ `FloorFacility`s to be displayed by this view.
 ***REMOVED******REMOVED***let facilities: [FloorFacility]
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ The selected presentation style for the facility list.
-***REMOVED******REMOVED***let presentationStyle: PresentationStyle
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ Allows the user to toggle the visibility of the site and facility selector.
 ***REMOVED******REMOVED***var isHidden: Binding<Bool>
@@ -217,33 +200,7 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var body: some View {
-***REMOVED******REMOVED******REMOVED***if presentationStyle == .singleSite {
-***REMOVED******REMOVED******REMOVED******REMOVED***facilityListAndFilterView
-***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***facilityListAndFilterView
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Only apply navigation modifiers if this is displayed
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** within a navigation view
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.navigationBarTitle("Select a facility")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.toolbar {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***CloseButton { isHidden.wrappedValue.toggle() ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ A view containing a label for the site name, a filter-via-name bar and a list of the facility names.
-***REMOVED******REMOVED***var facilityListAndFilterView: some View {
-***REMOVED******REMOVED******REMOVED***VStack {
-***REMOVED******REMOVED******REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if presentationStyle == .standard {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(facilities.first?.site?.name ?? "N/A")
-***REMOVED******REMOVED******REMOVED******REMOVED*** else if presentationStyle == .allSites {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("All sites")
-***REMOVED******REMOVED******REMOVED******REMOVED*** else if presentationStyle == .singleSite {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(facilities.first?.site?.name ?? "N/A")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***CloseButton { isHidden.wrappedValue.toggle() ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***Group {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if matchingFacilities.isEmpty {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***NoMatchesView()
 ***REMOVED******REMOVED******REMOVED*** else {
@@ -252,11 +209,17 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.searchable(
 ***REMOVED******REMOVED******REMOVED******REMOVED***text: $searchPhrase,
-***REMOVED******REMOVED******REMOVED******REMOVED***placement: .navigationBarDrawer,
+***REMOVED******REMOVED******REMOVED******REMOVED***placement: .navigationBarDrawer(displayMode: .always),
 ***REMOVED******REMOVED******REMOVED******REMOVED***prompt: "Filter facilities"
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***.keyboardType(.alphabet)
 ***REMOVED******REMOVED******REMOVED***.disableAutocorrection(true)
+***REMOVED******REMOVED******REMOVED***.navigationBarTitle(
+***REMOVED******REMOVED******REMOVED******REMOVED***allSiteStyle ? "All sites" : viewModel.selectedSite?.name ?? "Select a facility"
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***.toolbar {
+***REMOVED******REMOVED******REMOVED******REMOVED***CloseButton { isHidden.wrappedValue.toggle() ***REMOVED***
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ Displays a list of facilities matching the filter criteria as determined by
@@ -281,8 +244,7 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***maxWidth: .infinity,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***alignment: .leading
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if presentationStyle == .allSites,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***   let siteName = facility.site?.name {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if allSiteStyle, let siteName = facility.site?.name {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(siteName)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fontWeight(.ultraLight)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(

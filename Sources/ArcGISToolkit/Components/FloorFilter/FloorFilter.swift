@@ -18,6 +18,18 @@
 ***REMOVED***/ in your application. It allows you to filter the floor plan data displayed in your map or scene view
 ***REMOVED***/ to a site, a facility (building) in the site, or a floor in the facility.
 public struct FloorFilter: View {
+***REMOVED***@Environment(\.horizontalSizeClass)
+***REMOVED***private var horizontalSizeClass: UserInterfaceSizeClass?
+***REMOVED***
+***REMOVED***@Environment(\.verticalSizeClass)
+***REMOVED***private var verticalSizeClass: UserInterfaceSizeClass?
+***REMOVED***
+***REMOVED******REMOVED***/ If `true`, the site and facility selector will appear as a sheet.
+***REMOVED******REMOVED***/ If `false`, the site and facility selector will appear as a popup modal alongside the level selector.
+***REMOVED***private var isCompact: Bool {
+***REMOVED******REMOVED***return horizontalSizeClass == .compact || verticalSizeClass == .compact
+***REMOVED***
+***REMOVED***
 ***REMOVED******REMOVED***/ Creates a `FloorFilter`
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - alignment: Determines the display configuration of Floor Filter elements.
@@ -45,25 +57,37 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED***/ A Boolean value that indicates whether the levels view is currently collapsed.
 ***REMOVED***@State private var isLevelsViewCollapsed: Bool = false
 ***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value that indicates whether the site/facility selector is hidden.
-***REMOVED***@State private var isSelectorHidden: Bool = true
+***REMOVED******REMOVED***/ A Boolean value that indicates whether the site and facility selector is presented.
+***REMOVED***@State private var siteAndFacilitySelectorIsPresented: Bool = false
 ***REMOVED***
 ***REMOVED******REMOVED***/ The alignment configuration.
 ***REMOVED***private let alignment: Alignment
 ***REMOVED***
+***REMOVED******REMOVED***/ The width for buttons in the level selector.
+***REMOVED***private let buttonWidth = 30.0
+***REMOVED***
 ***REMOVED******REMOVED***/ Button to open and close the site and facility selector.
 ***REMOVED***private var facilityButtonView: some View {
 ***REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED***isSelectorHidden.toggle()
+***REMOVED******REMOVED******REMOVED***siteAndFacilitySelectorIsPresented.toggle()
 ***REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED***Image(systemName: "building.2")
+***REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: buttonWidth)
+***REMOVED******REMOVED******REMOVED******REMOVED***.padding(.horizontal)
 ***REMOVED***
-***REMOVED******REMOVED***.frame(maxWidth: .infinity)
+***REMOVED******REMOVED***.sheet(
+***REMOVED******REMOVED******REMOVED***isAllowed: isCompact,
+***REMOVED******REMOVED******REMOVED***isPresented: $siteAndFacilitySelectorIsPresented
+***REMOVED******REMOVED***) {
+***REMOVED******REMOVED******REMOVED***SiteAndFacilitySelector(isHidden: $siteAndFacilitySelectorIsPresented)
+***REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: viewpoint.wrappedValue?.targetGeometry) { _ in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.viewpointSubject.send(viewpoint.wrappedValue)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Displays the available levels.
-***REMOVED***@ViewBuilder
-***REMOVED***private var levelsSelectorView: some View {
+***REMOVED***@ViewBuilder private var levelsSelectorView: some View {
 ***REMOVED******REMOVED***if viewModel.hasLevelsToDisplay {
 ***REMOVED******REMOVED******REMOVED***if topAligned {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Divider()
@@ -71,8 +95,9 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***LevelSelector(
 ***REMOVED******REMOVED******REMOVED******REMOVED***isCollapsed: $isLevelsViewCollapsed,
-***REMOVED******REMOVED******REMOVED******REMOVED***levels: viewModel.sortedLevels,
-***REMOVED******REMOVED******REMOVED******REMOVED***isTopAligned: topAligned
+***REMOVED******REMOVED******REMOVED******REMOVED***buttonWidth: buttonWidth,
+***REMOVED******REMOVED******REMOVED******REMOVED***isTopAligned: topAligned,
+***REMOVED******REMOVED******REMOVED******REMOVED***levels: viewModel.sortedLevels
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***if !topAligned {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Divider()
@@ -96,12 +121,12 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***facilityButtonView
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.esriBorder()
+***REMOVED******REMOVED******REMOVED***.esriBorder()
 ***REMOVED******REMOVED******REMOVED***if topAligned {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.frame(width: 75)
+***REMOVED******REMOVED***.frame(maxWidth: isCompact ? .infinity : nil, alignment: alignment)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Indicates that the selector should be presented with a right oriented aligment configuration.
@@ -116,12 +141,16 @@ public struct FloorFilter: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ A configured `SiteAndFacilitySelector` view.
 ***REMOVED***private var siteAndFacilitySelectorView: some View {
-***REMOVED******REMOVED***SiteAndFacilitySelector(isHidden: $isSelectorHidden)
-***REMOVED******REMOVED******REMOVED***.esriBorder()
-***REMOVED******REMOVED******REMOVED***.opacity(isSelectorHidden ? .zero : 1)
-***REMOVED******REMOVED******REMOVED***.onChange(of: viewpoint.wrappedValue?.targetGeometry) { _ in
-***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.viewpointSubject.send(viewpoint.wrappedValue)
+***REMOVED******REMOVED***Group {
+***REMOVED******REMOVED******REMOVED***if !isCompact {
+***REMOVED******REMOVED******REMOVED******REMOVED***SiteAndFacilitySelector(isHidden: $siteAndFacilitySelectorIsPresented)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.esriBorder()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.opacity(siteAndFacilitySelectorIsPresented ? 1 : .zero)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: viewpoint.wrappedValue?.targetGeometry) { _ in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.viewpointSubject.send(viewpoint.wrappedValue)
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Indicates that the selector should be presented with a top oriented aligment configuration.
