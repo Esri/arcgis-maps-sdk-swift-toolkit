@@ -24,6 +24,12 @@ struct LevelSelector: View {
     /// the selected level.
     @Binding var isCollapsed: Bool
     
+    /// The width for buttons in the level selector.
+    let buttonWidth: Double
+    
+    /// The alignment configuration.
+    let isTopAligned: Bool
+    
     /// The levels to display.
     let levels: [FloorLevel]
     
@@ -33,23 +39,29 @@ struct LevelSelector: View {
         viewModel.selectedLevel?.shortName ?? ""
     }
     
-    /// The alignment configuration.
-    var isTopAligned: Bool
-    
     public var body: some View {
         if !isCollapsed,
             levels.count > 1 {
             VStack {
                 if !isTopAligned {
-                    CollapseButton(isCollapsed: $isCollapsed)
+                    CollapseButton(
+                        isCollapsed: $isCollapsed,
+                        isTopAligned: isTopAligned
+                    )
                     Divider()
                         .frame(width: 30)
                 }
-                LevelsStack(levels: levels)
+                LevelsStack(
+                    buttonWidth: buttonWidth,
+                    levels: levels
+                )
                 if isTopAligned {
                     Divider()
                         .frame(width: 30)
-                    CollapseButton(isCollapsed: $isCollapsed)
+                    CollapseButton(
+                        isCollapsed: $isCollapsed,
+                        isTopAligned: isTopAligned
+                    )
                 }
             }
         } else {
@@ -58,6 +70,7 @@ struct LevelSelector: View {
             } label: {
                 Text(selectedLevelName)
                     .lineLimit(1)
+                    .frame(width: buttonWidth)
             }
             .selected(true)
         }
@@ -72,6 +85,9 @@ struct LevelsStack: View {
     /// The height of the scroll view's content.
     @State private var contentHeight: CGFloat = .zero
     
+    /// The width for buttons in the level selector.
+    let buttonWidth: Double
+    
     /// The levels to display.
     let levels: [FloorLevel]
     
@@ -84,6 +100,7 @@ struct LevelsStack: View {
                     } label: {
                         Text(level.shortName)
                             .lineLimit(1)
+                            .frame(width: buttonWidth)
                     }
                     .selected(viewModel.selectedLevel == level)
                 }
@@ -101,13 +118,16 @@ struct CollapseButton: View {
     /// Allows the user to toggle the visibility of the site and facility selector.
     @Binding var isCollapsed: Bool
     
+    /// The alignment configuration.
+    let isTopAligned: Bool
+    
     var body: some View {
         Button {
             withAnimation {
                 isCollapsed.toggle()
             }
         } label: {
-            Image(systemName: "chevron.down.circle")
+            Image(systemName: isTopAligned ? "chevron.up.circle" : "chevron.down.circle")
         }
         .padding(EdgeInsets(
             top: 2,
