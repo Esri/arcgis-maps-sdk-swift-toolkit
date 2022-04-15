@@ -28,7 +28,7 @@ public struct FloorFilter: View {
         alignment: Alignment,
         automaticSelectionMode: FloorFilterAutomaticSelectionMode = .always,
         floorManager: FloorManager,
-        viewpoint: Binding<Viewpoint?>
+        viewpoint: Binding<Viewpoint?> = .constant(nil)
     ) {
         _viewModel = StateObject(wrappedValue: FloorFilterViewModel(
             automaticSelectionMode: automaticSelectionMode,
@@ -42,19 +42,16 @@ public struct FloorFilter: View {
     /// The view model used by the `FloorFilter`.
     @StateObject private var viewModel: FloorFilterViewModel
     
-    /// A Boolean value that indicates whether the levels view is currently collapsed.
-    @State private var isLevelsViewCollapsed: Bool = false
-    
-    /// A Boolean value that indicates whether the site/facility selector is hidden.
-    @State private var isSelectorHidden: Bool = true
+    /// A Boolean value that indicates whether the site and facility selector is hidden.
+    @State private var isSitesAndFacilitiesHidden: Bool = true
     
     /// The alignment configuration.
     private let alignment: Alignment
     
     /// Button to open and close the site and facility selector.
-    private var facilityButtonView: some View {
+    private var sitesAndFacilitiesButton: some View {
         Button {
-            isSelectorHidden.toggle()
+            isSitesAndFacilitiesHidden.toggle()
         } label: {
             Image(systemName: "building.2")
         }
@@ -63,62 +60,39 @@ public struct FloorFilter: View {
     
     /// Displays the available levels.
     @ViewBuilder
-    private var levelsSelectorView: some View {
-        if viewModel.hasLevelsToDisplay {
-            if topAligned {
-                Divider()
-                    .frame(width: 30)
-            }
-            LevelSelector(
-                isCollapsed: $isLevelsViewCollapsed,
-                levels: viewModel.sortedLevels,
-                isTopAligned: topAligned
-            )
-            if !topAligned {
-                Divider()
-                    .frame(width: 30)
-            }
-        }
+    private var levelSelector: some View {
+        LevelSelector(
+            levels: viewModel.sortedLevels,
+            isTopAligned: topAligned
+        )
+        .hidden(!viewModel.hasLevelsToDisplay)
     }
     
     /// A view that allows selecting between levels.
-    private var levelSelectorView: some View {
+    private var floorFilter: some View {
         VStack {
-            if !topAligned {
-                Spacer()
-            }
-            VStack {
-                if topAligned {
-                    facilityButtonView
-                    levelsSelectorView
-                } else {
-                    levelsSelectorView
-                    facilityButtonView
-                }
-            }
-                .esriBorder()
             if topAligned {
-                Spacer()
+                sitesAndFacilitiesButton
+                Divider()
+                    .hidden(!viewModel.hasLevelsToDisplay)
+                levelSelector
+            } else {
+                levelSelector
+                Divider()
+                    .hidden(!viewModel.hasLevelsToDisplay)
+                sitesAndFacilitiesButton
             }
         }
+        .esriBorder()
         .frame(width: 75)
-    }
-    
-    /// Indicates that the selector should be presented with a right oriented aligment configuration.
-    private var rightAligned: Bool {
-        switch alignment {
-        case .topTrailing, .trailing, .bottomTrailing:
-            return true
-        default:
-            return false
-        }
+        .frame(maxHeight: .infinity, alignment: alignment)
     }
     
     /// A configured `SiteAndFacilitySelector` view.
-    private var siteAndFacilitySelectorView: some View {
-        SiteAndFacilitySelector(isHidden: $isSelectorHidden)
+    private var siteAndFacilitySelector: some View {
+        SiteAndFacilitySelector(isHidden: $isSitesAndFacilitiesHidden)
             .esriBorder()
-            .opacity(isSelectorHidden ? .zero : 1)
+            .opacity(isSitesAndFacilitiesHidden ? .zero : 1)
             .onChange(of: viewpoint.wrappedValue?.targetGeometry) { _ in
                 viewModel.viewpointSubject.send(viewpoint.wrappedValue)
             }
@@ -126,12 +100,7 @@ public struct FloorFilter: View {
     
     /// Indicates that the selector should be presented with a top oriented aligment configuration.
     private var topAligned: Bool {
-        switch alignment {
-        case .topLeading, .top, .topTrailing:
-            return true
-        default:
-            return false
-        }
+        alignment.vertical == .top
     }
     
     /// The `Viewpoint` used to pan/zoom to the selected site/facilty.
@@ -139,28 +108,18 @@ public struct FloorFilter: View {
     private var viewpoint: Binding<Viewpoint?>
     
     public var body: some View {
-        Group {
-            if viewModel.isLoading {
-                ProgressView()
-                    .frame(
-                        maxWidth: .infinity,
-                        maxHeight: .infinity,
-                        alignment: alignment
-                    )
+        HStack(alignment: .bottom) {
+            if alignment.horizontal == .trailing {
+                siteAndFacilitySelector
+                floorFilter
             } else {
-                HStack(alignment: .bottom) {
-                    if rightAligned {
-                        siteAndFacilitySelectorView
-                        levelSelectorView
-                    } else {
-                        levelSelectorView
-                        siteAndFacilitySelectorView
-                    }
-                }
+                floorFilter
+                siteAndFacilitySelector
             }
         }
         // Ensure space for filter text field on small screens in landscape
         .frame(minHeight: 100)
         .environmentObject(viewModel)
+        .disabled(viewModel.isLoading)
     }
 }
