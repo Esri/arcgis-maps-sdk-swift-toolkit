@@ -62,8 +62,8 @@ struct FloorFilterExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint: $viewpoint
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.frame(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***maxWidth: 300,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***maxHeight: 300
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***maxWidth: 400,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***maxHeight: 400
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding(36)
 ***REMOVED******REMOVED*** else if mapLoadError {

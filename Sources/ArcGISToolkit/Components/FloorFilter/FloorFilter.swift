@@ -40,6 +40,7 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED***alignment: Alignment,
 ***REMOVED******REMOVED***automaticSelectionMode: FloorFilterAutomaticSelectionMode = .always,
 ***REMOVED******REMOVED***floorManager: FloorManager,
+***REMOVED******REMOVED***levelSelectorWidth: Double = 30.0,
 ***REMOVED******REMOVED***viewpoint: Binding<Viewpoint?>
 ***REMOVED***) {
 ***REMOVED******REMOVED***_viewModel = StateObject(wrappedValue: FloorFilterViewModel(
@@ -48,6 +49,7 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED******REMOVED***viewpoint: viewpoint
 ***REMOVED******REMOVED***))
 ***REMOVED******REMOVED***self.alignment = alignment
+***REMOVED******REMOVED***self.levelSelectorWidth = levelSelectorWidth
 ***REMOVED******REMOVED***self.viewpoint = viewpoint
 ***REMOVED***
 ***REMOVED***
@@ -64,7 +66,7 @@ public struct FloorFilter: View {
 ***REMOVED***private let alignment: Alignment
 ***REMOVED***
 ***REMOVED******REMOVED***/ The width for buttons in the level selector.
-***REMOVED***private let buttonWidth = 30.0
+***REMOVED***private let levelSelectorWidth: Double
 ***REMOVED***
 ***REMOVED******REMOVED***/ Button to open and close the site and facility selector.
 ***REMOVED***private var facilityButtonView: some View {
@@ -72,7 +74,7 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED******REMOVED***siteAndFacilitySelectorIsPresented.toggle()
 ***REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED***Image(systemName: "building.2")
-***REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: buttonWidth)
+***REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: levelSelectorWidth)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding(.horizontal)
 ***REMOVED***
 ***REMOVED******REMOVED***.sheet(
@@ -91,17 +93,17 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED***if viewModel.hasLevelsToDisplay {
 ***REMOVED******REMOVED******REMOVED***if topAligned {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Divider()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 30)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: levelSelectorWidth)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***LevelSelector(
 ***REMOVED******REMOVED******REMOVED******REMOVED***isCollapsed: $isLevelsViewCollapsed,
-***REMOVED******REMOVED******REMOVED******REMOVED***buttonWidth: buttonWidth,
+***REMOVED******REMOVED******REMOVED******REMOVED***buttonWidth: levelSelectorWidth,
 ***REMOVED******REMOVED******REMOVED******REMOVED***isTopAligned: topAligned,
 ***REMOVED******REMOVED******REMOVED******REMOVED***levels: viewModel.sortedLevels
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***if !topAligned {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Divider()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 30)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: levelSelectorWidth)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
