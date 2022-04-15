@@ -92,24 +92,35 @@ struct LevelsStack: View {
     let levels: [FloorLevel]
     
     var body: some View {
-        ScrollView {
-            VStack {
-                ForEach(levels) { level in
-                    Button {
-                        viewModel.setLevel(level)
-                    } label: {
-                        Text(level.shortName)
-                            .lineLimit(1)
-                            .frame(width: buttonWidth)
+        ScrollViewReader { proxy in
+            ScrollView {
+                VStack {
+                    ForEach(levels, id: \.id) { level in
+                        Button {
+                            viewModel.setLevel(level)
+                        } label: {
+                            Text(level.shortName)
+                                .lineLimit(1)
+                                .frame(width: buttonWidth)
+                        }
+                        .selected(viewModel.selectedLevel == level)
                     }
-                    .selected(viewModel.selectedLevel == level)
+                }
+                .onSizeChange {
+                    contentHeight = $0.height
                 }
             }
-            .onSizeChange {
-                contentHeight = $0.height
+            .frame(maxHeight: contentHeight)
+            .onAppear {
+                if let floorLevel = viewModel.selectedLevel {
+                    withAnimation {
+                        proxy.scrollTo(
+                            floorLevel.id
+                        )
+                    }
+                }
             }
         }
-        .frame(maxHeight: contentHeight)
     }
 }
 

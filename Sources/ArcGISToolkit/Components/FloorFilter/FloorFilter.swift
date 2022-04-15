@@ -40,6 +40,7 @@ public struct FloorFilter: View {
         alignment: Alignment,
         automaticSelectionMode: FloorFilterAutomaticSelectionMode = .always,
         floorManager: FloorManager,
+        levelSelectorWidth: Double = 30.0,
         viewpoint: Binding<Viewpoint?>
     ) {
         _viewModel = StateObject(wrappedValue: FloorFilterViewModel(
@@ -48,6 +49,7 @@ public struct FloorFilter: View {
             viewpoint: viewpoint
         ))
         self.alignment = alignment
+        self.levelSelectorWidth = levelSelectorWidth
         self.viewpoint = viewpoint
     }
     
@@ -64,7 +66,7 @@ public struct FloorFilter: View {
     private let alignment: Alignment
     
     /// The width for buttons in the level selector.
-    private let buttonWidth = 30.0
+    private let levelSelectorWidth: Double
     
     /// Button to open and close the site and facility selector.
     private var facilityButtonView: some View {
@@ -72,7 +74,7 @@ public struct FloorFilter: View {
             siteAndFacilitySelectorIsPresented.toggle()
         } label: {
             Image(systemName: "building.2")
-                .frame(width: buttonWidth)
+                .frame(width: levelSelectorWidth)
                 .padding(.horizontal)
         }
         .sheet(
@@ -91,17 +93,17 @@ public struct FloorFilter: View {
         if viewModel.hasLevelsToDisplay {
             if topAligned {
                 Divider()
-                    .frame(width: 30)
+                    .frame(width: levelSelectorWidth)
             }
             LevelSelector(
                 isCollapsed: $isLevelsViewCollapsed,
-                buttonWidth: buttonWidth,
+                buttonWidth: levelSelectorWidth,
                 isTopAligned: topAligned,
                 levels: viewModel.sortedLevels
             )
             if !topAligned {
                 Divider()
-                    .frame(width: 30)
+                    .frame(width: levelSelectorWidth)
             }
         }
     }
