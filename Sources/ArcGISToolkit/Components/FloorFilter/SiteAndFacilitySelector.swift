@@ -128,13 +128,13 @@ struct SiteAndFacilitySelector: View {
                     }
                         .padding([.vertical], 4)
                 }
-                .navigationBarTitle(
-                    Text("Select a site"),
-                    displayMode: .inline
-                )
-                .navigationBarItems(trailing:
-                    CloseButton { isHidden.wrappedValue.toggle() }
-                )
+                .navigationTitle("Select a site")
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        CloseButton { isHidden.wrappedValue.toggle() }
+                    }
+                }
             }
         }
         
@@ -189,8 +189,7 @@ struct SiteAndFacilitySelector: View {
         }
         
         /// A facility name filter phrase entered by the user.
-        @State
-        var searchPhrase: String = ""
+        @State var searchPhrase: String = ""
         
         /// `FloorFacility`s to be displayed by this view.
         let facilities: [FloorFacility]
@@ -199,7 +198,7 @@ struct SiteAndFacilitySelector: View {
         let presentationStyle: PresentationStyle
         
         /// Allows the user to toggle the visibility of the site and facility selector.
-        var isHidden: Binding<Bool>
+        @Binding var isHidden: Bool
         
         /// A subset of `facilities` with names containing `searchPhrase` or all
         /// `facilities` if `searchPhrase` is empty.
@@ -231,10 +230,12 @@ struct SiteAndFacilitySelector: View {
                 facilityListAndFilterView
                     // Only apply navigation modifiers if this is displayed
                     // within a navigation view
-                    .navigationBarTitle("Select a facility")
-                    .navigationBarItems(trailing:
-                        CloseButton { isHidden.wrappedValue.toggle() }
-                    )
+                    .navigationTitle("Select a facility")
+                    .toolbar {
+                        ToolbarItem(placement: .navigationBarTrailing) {
+                            CloseButton { isHidden.toggle() }
+                        }
+                    }
             }
         }
         
@@ -249,7 +250,7 @@ struct SiteAndFacilitySelector: View {
                     } else if presentationStyle == .singleSite {
                         Text(facilities.first?.site?.name ?? "N/A")
                         Spacer()
-                        CloseButton { isHidden.wrappedValue.toggle() }
+                        CloseButton { isHidden.toggle() }
                     }
                 }
                 TextField("Filter facilities", text: $searchPhrase)
@@ -276,7 +277,7 @@ struct SiteAndFacilitySelector: View {
                 List(matchingFacilities, id: \.id) { facility in
                     Button {
                         viewModel.setFacility(facility, zoomTo: true)
-                        isHidden.wrappedValue.toggle()
+                        isHidden.toggle()
                     } label: {
                         HStack {
                             Image(systemName: imageFor(facility))
