@@ -62,8 +62,8 @@ struct FloorFilterExampleView: View {
                     viewpoint: $viewpoint
                 )
                 .frame(
-                    maxWidth: 300,
-                    maxHeight: 300
+                    maxWidth: 400,
+                    maxHeight: 400
                 )
                 .padding(36)
             } else if mapLoadError {

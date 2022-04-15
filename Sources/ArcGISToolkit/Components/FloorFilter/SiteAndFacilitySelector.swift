@@ -117,6 +117,7 @@ struct SiteAndFacilitySelector: View {
                                 isHidden: isHidden
                             )
                         }
+                        .buttonStyle(.bordered)
                     }
                 }
                 .searchable(
@@ -246,7 +247,7 @@ struct SiteAndFacilitySelector: View {
                                 )
                             if allSiteStyle, let siteName = facility.site?.name {
                                 Text(siteName)
-                                    .fontWeight(.ultraLight)
+                                    .fontWeight(.light)
                                     .frame(
                                         maxWidth: .infinity,
                                         alignment: .leading
@@ -262,8 +263,7 @@ struct SiteAndFacilitySelector: View {
                     if let floorFacility = viewModel.selectedFacility {
                         withAnimation {
                             proxy.scrollTo(
-                                floorFacility.id,
-                                anchor: .center
+                                floorFacility.id
                             )
                         }
                     }
