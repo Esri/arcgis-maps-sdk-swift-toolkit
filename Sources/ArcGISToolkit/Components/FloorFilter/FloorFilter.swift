@@ -59,8 +59,7 @@ public struct FloorFilter: View {
     }
     
     /// Displays the available levels.
-    @ViewBuilder
-    private var levelSelector: some View {
+    @ViewBuilder private var levelSelector: some View {
         LevelSelector(
             levels: viewModel.sortedLevels,
             isTopAligned: topAligned
