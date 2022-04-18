@@ -72,11 +72,9 @@ var body: some View {
 Note that for a `SceneView`, you need to provide the `OverviewMap` only a viewpoint.
 
 ```swift
-@StateObject
-var scene = Scene(basemap: .imageryWithLabels())
+@StateObject var scene = Scene(basemapStyle: .arcGISImageryLabels)
 ***REMOVED***
-@State
-private var viewpoint: Viewpoint?
+@State private var viewpoint: Viewpoint?
 
 var body: some View {
 ***REMOVED***SceneView(scene: scene)
