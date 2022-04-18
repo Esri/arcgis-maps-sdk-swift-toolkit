@@ -127,12 +127,12 @@ struct SiteAndFacilitySelector: View {
                 )
                 .keyboardType(.alphabet)
                 .disableAutocorrection(true)
-                .navigationBarTitle(
-                    Text("Select a site"),
-                    displayMode: .inline
-                )
+                .navigationTitle("Select a site")
+                .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
-                    CloseButton { isHidden.wrappedValue.toggle() }
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        CloseButton { isHidden.wrappedValue.toggle() }
+                    }
                 }
             }
         }
@@ -187,7 +187,7 @@ struct SiteAndFacilitySelector: View {
         let facilities: [FloorFacility]
         
         /// Allows the user to toggle the visibility of the site and facility selector.
-        var isHidden: Binding<Bool>
+        @Binding var isHidden: Bool
         
         /// A subset of `facilities` with names containing `searchPhrase` or all
         /// `facilities` if `searchPhrase` is empty.
@@ -215,11 +215,14 @@ struct SiteAndFacilitySelector: View {
             )
             .keyboardType(.alphabet)
             .disableAutocorrection(true)
-            .navigationBarTitle(
+            .navigationTitle(
                 allSiteStyle ? "All sites" : viewModel.selectedSite?.name ?? "Select a facility"
             )
+            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                CloseButton { isHidden.wrappedValue.toggle() }
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    CloseButton { isHidden.toggle() }
+                }
             }
         }
         
@@ -236,7 +239,7 @@ struct SiteAndFacilitySelector: View {
                 List(matchingFacilities, id: \.id) { facility in
                     Button {
                         viewModel.setFacility(facility, zoomTo: true)
-                        isHidden.wrappedValue.toggle()
+                        isHidden.toggle()
                     } label: {
                         VStack {
                             Text(facility.name)
