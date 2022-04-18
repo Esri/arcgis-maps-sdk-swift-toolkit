@@ -230,7 +230,10 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***facilityListAndFilterView
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Only apply navigation modifiers if this is displayed
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** within a navigation view
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.navigationTitle("Select a facility")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.navigationTitle(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***presentationStyle == .allSites ? "All sites" : viewModel.selectedSite?.name ?? "Select a facility"
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.navigationBarTitleDisplayMode(.inline)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.toolbar {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ToolbarItem(placement: .navigationBarTrailing) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***CloseButton { isHidden.toggle() ***REMOVED***
@@ -242,12 +245,8 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED***/ A view containing a label for the site name, a filter-via-name bar and a list of the facility names.
 ***REMOVED******REMOVED***var facilityListAndFilterView: some View {
 ***REMOVED******REMOVED******REMOVED***VStack {
-***REMOVED******REMOVED******REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if presentationStyle == .standard {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(facilities.first?.site?.name ?? "N/A")
-***REMOVED******REMOVED******REMOVED******REMOVED*** else if presentationStyle == .allSites {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("All sites")
-***REMOVED******REMOVED******REMOVED******REMOVED*** else if presentationStyle == .singleSite {
+***REMOVED******REMOVED******REMOVED******REMOVED***if presentationStyle == .singleSite {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(facilities.first?.site?.name ?? "N/A")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***CloseButton { isHidden.toggle() ***REMOVED***
