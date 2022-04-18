@@ -183,9 +183,3 @@ private extension Symbol {
 ***REMOVED******REMOVED***)
 ***REMOVED***)
 ***REMOVED***
-
-extension Symbol: Equatable {
-***REMOVED***public static func == (lhs: Symbol, rhs: Symbol) -> Bool {
-***REMOVED******REMOVED***lhs === rhs
-***REMOVED***
-***REMOVED***
