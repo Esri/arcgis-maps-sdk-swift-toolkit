@@ -57,8 +57,8 @@ struct FloorFilterExampleView: View {
             if isMapLoaded,
                let floorManager = map.floorManager {
                 FloorFilter(
-                    alignment: filterAlignment,
                     floorManager: floorManager,
+                    alignment: filterAlignment,
                     viewpoint: $viewpoint
                 )
                 .frame(
