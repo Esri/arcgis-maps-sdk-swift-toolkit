@@ -189,7 +189,7 @@ private extension BasemapGallery {
 // MARK: Modifiers
 
 public extension BasemapGallery {
-    /// The style of the basemap gallery. Defaults to ``Style/automatic``.
+    /// The style of the basemap gallery. Defaults to ``Style/automatic(listWidth:gridWidth:)``.
     /// - Parameter style: The `Style` to use.
     /// - Returns: The `BasemapGallery`.
     func style(
