@@ -25,9 +25,9 @@ public struct FloorFilter: View {
     ///   - floorManager: The floor manager used by the `FloorFilter`.
     ///   - viewpoint: Viewpoint updated when the selected site or facility changes.
     public init(
+        floorManager: FloorManager,
         alignment: Alignment,
         automaticSelectionMode: FloorFilterAutomaticSelectionMode = .always,
-        floorManager: FloorManager,
         viewpoint: Binding<Viewpoint?> = .constant(nil)
     ) {
         _viewModel = StateObject(wrappedValue: FloorFilterViewModel(
