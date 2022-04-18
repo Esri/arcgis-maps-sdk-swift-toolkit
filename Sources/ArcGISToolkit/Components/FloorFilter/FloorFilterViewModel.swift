@@ -326,16 +326,4 @@ final class FloorFilterViewModel: ObservableObject {
 ***REMOVED***private var viewpointSubscription: AnyCancellable?
 ***REMOVED***
 
-***REMOVED***/ Defines automatic selection behavior.
-public enum FloorFilterAutomaticSelectionMode {
-***REMOVED******REMOVED***/ Always update selection based on the current viewpoint; clear the selection when the user
-***REMOVED******REMOVED***/ navigates away.
-***REMOVED***case always
-***REMOVED******REMOVED***/ Only update the selection when there is a new site or facility in the current viewpoint; don't clear
-***REMOVED******REMOVED***/ selection when the user navigates away.
-***REMOVED***case alwaysNotClearing
-***REMOVED******REMOVED***/ Never update selection based on the GeoView's current viewpoint.
-***REMOVED***case never
-***REMOVED***
-
 extension FloorFilterViewModel.Selection: Hashable { ***REMOVED***

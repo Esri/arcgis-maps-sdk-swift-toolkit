@@ -127,12 +127,12 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.keyboardType(.alphabet)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.disableAutocorrection(true)
-***REMOVED******REMOVED******REMOVED******REMOVED***.navigationBarTitle(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Select a site"),
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***displayMode: .inline
-***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***.navigationTitle("Select a site")
+***REMOVED******REMOVED******REMOVED******REMOVED***.navigationBarTitleDisplayMode(.inline)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.toolbar {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***CloseButton { isHidden.wrappedValue.toggle() ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ToolbarItem(placement: .navigationBarTrailing) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***CloseButton { isHidden.wrappedValue.toggle() ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
@@ -187,7 +187,7 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED***let facilities: [FloorFacility]
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ Allows the user to toggle the visibility of the site and facility selector.
-***REMOVED******REMOVED***var isHidden: Binding<Bool>
+***REMOVED******REMOVED***@Binding var isHidden: Bool
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ A subset of `facilities` with names containing `searchPhrase` or all
 ***REMOVED******REMOVED******REMOVED***/ `facilities` if `searchPhrase` is empty.
@@ -215,11 +215,14 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***.keyboardType(.alphabet)
 ***REMOVED******REMOVED******REMOVED***.disableAutocorrection(true)
-***REMOVED******REMOVED******REMOVED***.navigationBarTitle(
+***REMOVED******REMOVED******REMOVED***.navigationTitle(
 ***REMOVED******REMOVED******REMOVED******REMOVED***allSiteStyle ? "All sites" : viewModel.selectedSite?.name ?? "Select a facility"
 ***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***.navigationBarTitleDisplayMode(.inline)
 ***REMOVED******REMOVED******REMOVED***.toolbar {
-***REMOVED******REMOVED******REMOVED******REMOVED***CloseButton { isHidden.wrappedValue.toggle() ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***ToolbarItem(placement: .navigationBarTrailing) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***CloseButton { isHidden.toggle() ***REMOVED***
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***
@@ -236,7 +239,7 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***List(matchingFacilities, id: \.id) { facility in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.setFacility(facility, zoomTo: true)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isHidden.wrappedValue.toggle()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isHidden.toggle()
 ***REMOVED******REMOVED******REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***VStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(facility.name)

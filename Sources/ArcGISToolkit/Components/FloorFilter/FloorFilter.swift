@@ -37,11 +37,11 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED***/   - floorManager: The floor manager used by the `FloorFilter`.
 ***REMOVED******REMOVED***/   - viewpoint: Viewpoint updated when the selected site or facility changes.
 ***REMOVED***public init(
+***REMOVED******REMOVED***floorManager: FloorManager,
 ***REMOVED******REMOVED***alignment: Alignment,
 ***REMOVED******REMOVED***automaticSelectionMode: FloorFilterAutomaticSelectionMode = .always,
-***REMOVED******REMOVED***floorManager: FloorManager,
 ***REMOVED******REMOVED***levelSelectorWidth: Double = 30.0,
-***REMOVED******REMOVED***viewpoint: Binding<Viewpoint?>
+***REMOVED******REMOVED***viewpoint: Binding<Viewpoint?> = .constant(nil)
 ***REMOVED***) {
 ***REMOVED******REMOVED***_viewModel = StateObject(wrappedValue: FloorFilterViewModel(
 ***REMOVED******REMOVED******REMOVED***automaticSelectionMode: automaticSelectionMode,
@@ -69,7 +69,7 @@ public struct FloorFilter: View {
 ***REMOVED***private let levelSelectorWidth: Double
 ***REMOVED***
 ***REMOVED******REMOVED***/ Button to open and close the site and facility selector.
-***REMOVED***private var facilityButtonView: some View {
+***REMOVED***private var sitesAndFacilitiesButton: some View {
 ***REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED***siteAndFacilitySelectorIsPresented.toggle()
 ***REMOVED*** label: {
@@ -89,80 +89,54 @@ public struct FloorFilter: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Displays the available levels.
-***REMOVED***@ViewBuilder private var levelsSelectorView: some View {
-***REMOVED******REMOVED***if viewModel.hasLevelsToDisplay {
-***REMOVED******REMOVED******REMOVED***if topAligned {
-***REMOVED******REMOVED******REMOVED******REMOVED***Divider()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: levelSelectorWidth)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***LevelSelector(
-***REMOVED******REMOVED******REMOVED******REMOVED***isCollapsed: $isLevelsViewCollapsed,
-***REMOVED******REMOVED******REMOVED******REMOVED***buttonWidth: levelSelectorWidth,
-***REMOVED******REMOVED******REMOVED******REMOVED***isTopAligned: topAligned,
-***REMOVED******REMOVED******REMOVED******REMOVED***levels: viewModel.sortedLevels
-***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***if !topAligned {
-***REMOVED******REMOVED******REMOVED******REMOVED***Divider()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: levelSelectorWidth)
-***REMOVED******REMOVED***
-***REMOVED***
+***REMOVED***@ViewBuilder private var levelSelector: some View {
+***REMOVED******REMOVED***LevelSelector(
+***REMOVED******REMOVED******REMOVED***buttonWidth: levelSelectorWidth,
+***REMOVED******REMOVED******REMOVED***isTopAligned: topAligned,
+***REMOVED******REMOVED******REMOVED***levels: viewModel.sortedLevels
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***.hidden(!viewModel.hasLevelsToDisplay)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ A view that allows selecting between levels.
-***REMOVED***private var levelSelectorView: some View {
+***REMOVED***private var floorFilter: some View {
 ***REMOVED******REMOVED***VStack {
-***REMOVED******REMOVED******REMOVED***if !topAligned {
-***REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***VStack {
-***REMOVED******REMOVED******REMOVED******REMOVED***if topAligned {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***facilityButtonView
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***levelsSelectorView
-***REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***levelsSelectorView
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***facilityButtonView
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.esriBorder()
 ***REMOVED******REMOVED******REMOVED***if topAligned {
-***REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED******REMOVED******REMOVED***sitesAndFacilitiesButton
+***REMOVED******REMOVED******REMOVED******REMOVED***Divider()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.hidden(!viewModel.hasLevelsToDisplay)
+***REMOVED******REMOVED******REMOVED******REMOVED***levelSelector
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***levelSelector
+***REMOVED******REMOVED******REMOVED******REMOVED***Divider()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.hidden(!viewModel.hasLevelsToDisplay)
+***REMOVED******REMOVED******REMOVED******REMOVED***sitesAndFacilitiesButton
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.frame(maxWidth: isCompact ? .infinity : nil, alignment: alignment)
+***REMOVED******REMOVED***.frame(width: 75)
+***REMOVED******REMOVED***.esriBorder()
+***REMOVED******REMOVED***.frame(
+***REMOVED******REMOVED******REMOVED***maxWidth: isCompact ? .infinity : nil,
+***REMOVED******REMOVED******REMOVED***maxHeight: .infinity,
+***REMOVED******REMOVED******REMOVED***alignment: alignment
+***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Indicates that the selector should be presented with a right oriented aligment configuration.
-***REMOVED***private var rightAligned: Bool {
-***REMOVED******REMOVED***switch alignment {
-***REMOVED******REMOVED***case .topTrailing, .trailing, .bottomTrailing:
-***REMOVED******REMOVED******REMOVED***return true
-***REMOVED******REMOVED***default:
-***REMOVED******REMOVED******REMOVED***return false
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ A configured `SiteAndFacilitySelector` view.
-***REMOVED***private var siteAndFacilitySelectorView: some View {
-***REMOVED******REMOVED***Group {
-***REMOVED******REMOVED******REMOVED***if !isCompact {
-***REMOVED******REMOVED******REMOVED******REMOVED***SiteAndFacilitySelector(isHidden: $siteAndFacilitySelectorIsPresented)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.esriBorder()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.opacity(siteAndFacilitySelectorIsPresented ? 1 : .zero)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: viewpoint.wrappedValue?.targetGeometry) { _ in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.viewpointSubject.send(viewpoint.wrappedValue)
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
+***REMOVED******REMOVED***/ A configured `SiteAndFacilitySelector`.
+***REMOVED***@ViewBuilder private var siteAndFacilitySelector: some View {
+***REMOVED******REMOVED***if !isCompact {
+***REMOVED******REMOVED******REMOVED***SiteAndFacilitySelector(isHidden: $siteAndFacilitySelectorIsPresented)
+***REMOVED******REMOVED******REMOVED******REMOVED***.esriBorder()
+***REMOVED******REMOVED******REMOVED******REMOVED***.opacity(siteAndFacilitySelectorIsPresented ? 1 : .zero)
+***REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: viewpoint.wrappedValue?.targetGeometry) { _ in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.viewpointSubject.send(viewpoint.wrappedValue)
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Indicates that the selector should be presented with a top oriented aligment configuration.
 ***REMOVED***private var topAligned: Bool {
-***REMOVED******REMOVED***switch alignment {
-***REMOVED******REMOVED***case .topLeading, .top, .topTrailing:
-***REMOVED******REMOVED******REMOVED***return true
-***REMOVED******REMOVED***default:
-***REMOVED******REMOVED******REMOVED***return false
-***REMOVED***
+***REMOVED******REMOVED***alignment.vertical == .top
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The `Viewpoint` used to pan/zoom to the selected site/facilty.
@@ -170,28 +144,18 @@ public struct FloorFilter: View {
 ***REMOVED***private var viewpoint: Binding<Viewpoint?>
 ***REMOVED***
 ***REMOVED***public var body: some View {
-***REMOVED******REMOVED***Group {
-***REMOVED******REMOVED******REMOVED***if viewModel.isLoading {
-***REMOVED******REMOVED******REMOVED******REMOVED***ProgressView()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***maxWidth: .infinity,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***maxHeight: .infinity,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***alignment: alignment
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***HStack(alignment: .bottom) {
+***REMOVED******REMOVED******REMOVED***if alignment.horizontal == .trailing {
+***REMOVED******REMOVED******REMOVED******REMOVED***siteAndFacilitySelector
+***REMOVED******REMOVED******REMOVED******REMOVED***floorFilter
 ***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***HStack(alignment: .bottom) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if rightAligned {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***siteAndFacilitySelectorView
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***levelSelectorView
-***REMOVED******REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***levelSelectorView
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***siteAndFacilitySelectorView
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***floorFilter
+***REMOVED******REMOVED******REMOVED******REMOVED***siteAndFacilitySelector
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Ensure space for filter text field on small screens in landscape
 ***REMOVED******REMOVED***.frame(minHeight: 100)
 ***REMOVED******REMOVED***.environmentObject(viewModel)
+***REMOVED******REMOVED***.disabled(viewModel.isLoading)
 ***REMOVED***
 ***REMOVED***
