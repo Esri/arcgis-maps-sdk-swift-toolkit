@@ -230,9 +230,7 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***facilityListAndFilterView
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Only apply navigation modifiers if this is displayed
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** within a navigation view
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.navigationTitle(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***presentationStyle == .allSites ? "All sites" : viewModel.selectedSite?.name ?? "Select a facility"
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.navigationTitle(navigationTitle)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.navigationBarTitleDisplayMode(.inline)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.toolbar {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ToolbarItem(placement: .navigationBarTrailing) {
@@ -247,7 +245,7 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED***VStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if presentationStyle == .singleSite {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(facilities.first?.site?.name ?? "N/A")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(navigationTitle)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***CloseButton { isHidden.toggle() ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
@@ -311,6 +309,16 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ A title to be displayed at the top of facility list.
+***REMOVED******REMOVED***private var navigationTitle: String {
+***REMOVED******REMOVED******REMOVED***switch presentationStyle {
+***REMOVED******REMOVED******REMOVED***case .allSites:
+***REMOVED******REMOVED******REMOVED******REMOVED***return "All Sites"
+***REMOVED******REMOVED******REMOVED***default:
+***REMOVED******REMOVED******REMOVED******REMOVED***return viewModel.selectedSite?.name ?? "Select a facility"
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
