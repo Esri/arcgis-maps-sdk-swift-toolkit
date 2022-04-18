@@ -33,9 +33,9 @@ struct ConditionalSheetModifier<SheetContent: View>: ViewModifier {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED******REMOVED***
+
 ***REMOVED***/ A modifier which conditionally hides its underlying view.
-struct ConditionallyHiddenModifier: ViewModifier {
+struct ConditionalHiddenModifier: ViewModifier {
 ***REMOVED******REMOVED***/ A Boolean value that indicates whether the underlying view should be hidden.
 ***REMOVED***var isHidden: Bool
 ***REMOVED***
@@ -73,7 +73,7 @@ extension View {
 ***REMOVED******REMOVED***/ - Parameter condition: A value of `true` will hide the underlying view.
 ***REMOVED******REMOVED***/ - Returns: A new `View`.
 ***REMOVED***func hidden(_ condition: Bool) -> some View {
-***REMOVED******REMOVED***modifier(ConditionallyHiddenModifier(isHidden: condition))
+***REMOVED******REMOVED***modifier(ConditionalHiddenModifier(isHidden: condition))
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Returns a new `View` that allows a parent `View` to be informed of a child view's size.
