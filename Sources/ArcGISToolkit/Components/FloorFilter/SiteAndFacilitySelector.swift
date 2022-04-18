@@ -230,9 +230,7 @@ struct SiteAndFacilitySelector: View {
                 facilityListAndFilterView
                     // Only apply navigation modifiers if this is displayed
                     // within a navigation view
-                    .navigationTitle(
-                        presentationStyle == .allSites ? "All sites" : viewModel.selectedSite?.name ?? "Select a facility"
-                    )
+                    .navigationTitle(navigationTitle)
                     .navigationBarTitleDisplayMode(.inline)
                     .toolbar {
                         ToolbarItem(placement: .navigationBarTrailing) {
@@ -247,7 +245,7 @@ struct SiteAndFacilitySelector: View {
             VStack {
                 if presentationStyle == .singleSite {
                     HStack {
-                        Text(facilities.first?.site?.name ?? "N/A")
+                        Text(navigationTitle)
                         Spacer()
                         CloseButton { isHidden.toggle() }
                     }
@@ -311,6 +309,16 @@ struct SiteAndFacilitySelector: View {
                         }
                     }
                 }
+            }
+        }
+        
+        /// A title to be displayed at the top of facility list.
+        private var navigationTitle: String {
+            switch presentationStyle {
+            case .allSites:
+                return "All Sites"
+            default:
+                return viewModel.selectedSite?.name ?? "Select a facility"
             }
         }
     }
