@@ -183,9 +183,3 @@ private extension Symbol {
         )
     )
 }
-
-extension Symbol: Equatable {
-    public static func == (lhs: Symbol, rhs: Symbol) -> Bool {
-        lhs === rhs
-    }
-}
