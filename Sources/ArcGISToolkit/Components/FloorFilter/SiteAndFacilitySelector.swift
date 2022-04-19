@@ -127,7 +127,7 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.keyboardType(.alphabet)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.disableAutocorrection(true)
-***REMOVED******REMOVED******REMOVED******REMOVED***.navigationTitle("Select a site")
+***REMOVED******REMOVED******REMOVED******REMOVED***.navigationTitle("Sites")
 ***REMOVED******REMOVED******REMOVED******REMOVED***.navigationBarTitleDisplayMode(.inline)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.toolbar {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ToolbarItem(placement: .navigationBarTrailing) {
@@ -216,7 +216,7 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED***.keyboardType(.alphabet)
 ***REMOVED******REMOVED******REMOVED***.disableAutocorrection(true)
 ***REMOVED******REMOVED******REMOVED***.navigationTitle(
-***REMOVED******REMOVED******REMOVED******REMOVED***allSiteStyle ? "All sites" : viewModel.selectedSite?.name ?? "Select a facility"
+***REMOVED******REMOVED******REMOVED******REMOVED***allSiteStyle ? "All Sites" : viewModel.selectedSite?.name ?? "Select a facility"
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***.navigationBarTitleDisplayMode(.inline)
 ***REMOVED******REMOVED******REMOVED***.toolbar {
