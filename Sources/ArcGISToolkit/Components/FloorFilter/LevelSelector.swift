@@ -57,7 +57,7 @@ struct LevelSelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text(selectedLevelName)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.lineLimit(1)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.toggleStyle(.button)
+***REMOVED******REMOVED******REMOVED***.toggleStyle(.selectedButton)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -91,7 +91,7 @@ struct LevelsStack: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(level.shortName)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.lineLimit(1)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.toggleStyle(.button)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.toggleStyle(.selectableButton)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onSizeChange {
