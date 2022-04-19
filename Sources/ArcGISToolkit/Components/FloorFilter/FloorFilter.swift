@@ -18,7 +18,7 @@ import ArcGIS
 /// in your application. It allows you to filter the floor plan data displayed in your map or scene view
 /// to a site, a facility (building) in the site, or a floor in the facility.
 public struct FloorFilter: View {
-    /// Creates a `FloorFilter`
+    /// Creates a `FloorFilter`.
     /// - Parameters:
     ///   - alignment: Determines the display configuration of Floor Filter elements.
     ///   - automaticSelectionMode: The selection behavior of the floor filter.
