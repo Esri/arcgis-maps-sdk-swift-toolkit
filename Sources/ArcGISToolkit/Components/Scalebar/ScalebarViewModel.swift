@@ -161,11 +161,9 @@ final class ScalebarViewModel: ObservableObject {
     private var availableLineDisplayLength: CGFloat {
         switch style {
         case .alternatingBar, .dualUnitLine, .graduatedLine:
-            let unitDisplayWidth = max(
-                " mi".size(withAttributes: [.font: Scalebar.font.uiFont]).width,
-                " km".size(withAttributes: [.font: Scalebar.font.uiFont]).width
-            )
-            return targetWidth - (Scalebar.lineWidth / 2.0) - unitDisplayWidth
+            // " km" will render wider than " mi"
+            let maxUnitDisplayWidth = " km".size(withAttributes: [.font: Scalebar.font.uiFont]).width
+            return targetWidth - (Scalebar.lineWidth / 2.0) - maxUnitDisplayWidth
         case .bar, .line:
             return targetWidth - Scalebar.lineWidth
         }
@@ -222,8 +220,8 @@ final class ScalebarViewModel: ObservableObject {
         // only has 1. The dividers will be decimal values and we want to make
         // sure they all fit very basic hueristics.
         let minSegmentTestString: String
-        if let longestString = labels.last?.text, longestString.count > 3 {
-            minSegmentTestString = longestString
+        if lineMapLength >= 100 {
+            minSegmentTestString = String(Int(lineMapLength))
         } else {
             minSegmentTestString = "9.9"
         }
@@ -272,7 +270,12 @@ final class ScalebarViewModel: ObservableObject {
             )
             labels.append(label)
         }
-        self.labels = labels
+        
+        if style == .bar || style == .line, let last = labels.last {
+            self.labels = [last]
+        } else {
+            self.labels = labels
+        }
     }
     
     /// Updates the information necessary to render a scalebar based off the latest viewpoint and units per
@@ -287,7 +290,7 @@ final class ScalebarViewModel: ObservableObject {
         
         let mapCenter = viewpoint.targetGeometry.extent.center
         
-        let maxLength =  availableLineDisplayLength
+        let maxLength = availableLineDisplayLength
         
         let lineMapLength: Double
         let displayUnit: LinearUnit

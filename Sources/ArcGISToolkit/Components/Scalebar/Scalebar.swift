@@ -26,7 +26,7 @@ public struct Scalebar: View {
     
     /// The font used by the scalebar, available in both `Font` and `UIFont` types.
     internal static var font: (font: Font, uiFont: UIFont) {
-        let size = 10.0
+        let size = 9.0
         let uiFont = UIFont.systemFont(
             ofSize: size,
             weight: .semibold
@@ -70,13 +70,16 @@ public struct Scalebar: View {
     internal static let lineFrameHeight = 6.0
     
     /// The width of the prominent scalebar line.
-    internal static let lineWidth = 3.0
+    internal static let lineWidth = 2.0
     
     /// The shadow color used by all scalebar style renders.
     internal static let shadowColor = Color(uiColor: .black).opacity(0.65)
     
     /// The shadow radius used by all scalebar style renders.
     internal static let shadowRadius = 1.0
+    
+    /// The text color used by all scalebar style renders.
+    internal static let textColor = Color.primary
     
     /// The text shadow color used by all scalebar style renders.
     internal static let textShadowColor = Color.white
@@ -144,8 +147,6 @@ public struct Scalebar: View {
                 case .line:
                     lineStyleRender
                 }
-            } else {
-                EmptyView()
             }
         }
         .onChange(of: viewpoint.wrappedValue) {
