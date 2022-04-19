@@ -39,12 +39,7 @@ struct EsriBorderViewModifier: ViewModifier {
 
 public extension View {
     func esriBorder(
-        padding: EdgeInsets = EdgeInsets(
-            top: 8,
-            leading: 12,
-            bottom: 8,
-            trailing: 12
-        )
+        padding: EdgeInsets = EdgeInsets.esriInsets
     ) -> some View {
         modifier(EsriBorderViewModifier(padding: padding))
     }
