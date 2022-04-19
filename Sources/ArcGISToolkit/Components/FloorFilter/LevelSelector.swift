@@ -114,12 +114,7 @@ struct CollapseButton: View {
             }
         } label: {
             Image(systemName: "xmark")
+                .padding(EdgeInsets.esriInsets)
         }
-        .padding(EdgeInsets(
-            top: 2,
-            leading: 4,
-            bottom: 2,
-            trailing: 4
-        ))
     }
 }
