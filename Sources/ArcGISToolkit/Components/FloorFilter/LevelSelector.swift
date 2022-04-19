@@ -114,12 +114,7 @@ struct CollapseButton: View {
 ***REMOVED******REMOVED***
 ***REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED***Image(systemName: "xmark")
+***REMOVED******REMOVED******REMOVED******REMOVED***.padding(EdgeInsets.esriInsets)
 ***REMOVED***
-***REMOVED******REMOVED***.padding(EdgeInsets(
-***REMOVED******REMOVED******REMOVED***top: 2,
-***REMOVED******REMOVED******REMOVED***leading: 4,
-***REMOVED******REMOVED******REMOVED***bottom: 2,
-***REMOVED******REMOVED******REMOVED***trailing: 4
-***REMOVED******REMOVED***))
 ***REMOVED***
 ***REMOVED***
