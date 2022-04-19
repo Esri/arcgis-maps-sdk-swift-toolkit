@@ -24,9 +24,6 @@ struct LevelSelector: View {
     /// the selected level.
     @State var isCollapsed: Bool = false
     
-    /// The width for buttons in the level selector.
-    let buttonWidth: Double
-    
     /// The alignment configuration.
     let isTopAligned: Bool
     
@@ -49,15 +46,10 @@ struct LevelSelector: View {
                         isTopAligned: isTopAligned
                     )
                     Divider()
-                        .frame(width: 30)
                 }
-                LevelsStack(
-                    buttonWidth: buttonWidth,
-                    levels: levels
-                )
+                LevelsStack(levels: levels)
                 if isTopAligned {
                     Divider()
-                        .frame(width: 30)
                     CollapseButton(
                         isCollapsed: $isCollapsed,
                         isTopAligned: isTopAligned
@@ -65,14 +57,12 @@ struct LevelSelector: View {
                 }
             }
         } else {
-            Button {
-                isCollapsed.toggle()
-            } label: {
+            Toggle(isOn: $isCollapsed) {
                 Text(selectedLevelName)
                     .lineLimit(1)
-                    .frame(width: buttonWidth)
+                    .frame(maxWidth: .infinity)
             }
-            .selected(true)
+            .toggleStyle(.selectedButton)
         }
     }
 }
@@ -85,9 +75,6 @@ struct LevelsStack: View {
     /// The height of the scroll view's content.
     @State private var contentHeight: CGFloat = .zero
     
-    /// The width for buttons in the level selector.
-    let buttonWidth: Double
-    
     /// The levels to display.
     let levels: [FloorLevel]
     
@@ -96,14 +83,22 @@ struct LevelsStack: View {
             ScrollView {
                 VStack {
                     ForEach(levels, id: \.id) { level in
-                        Button {
-                            viewModel.setLevel(level)
-                        } label: {
+                        Toggle(
+                            isOn: Binding(
+                                get: {
+                                    viewModel.selectedLevel == level
+                                },
+                                set: { newIsOn in
+                                    guard newIsOn else { return }
+                                    viewModel.setLevel(level)
+                                }
+                            )
+                        ) {
                             Text(level.shortName)
                                 .lineLimit(1)
-                                .frame(width: buttonWidth)
+                                .frame(maxWidth: .infinity)
                         }
-                        .selected(viewModel.selectedLevel == level)
+                        .toggleStyle(.selectableButton)
                     }
                 }
                 .onSizeChange {
