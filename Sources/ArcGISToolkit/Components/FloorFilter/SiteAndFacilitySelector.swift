@@ -127,7 +127,7 @@ struct SiteAndFacilitySelector: View {
                 )
                 .keyboardType(.alphabet)
                 .disableAutocorrection(true)
-                .navigationTitle("Select a site")
+                .navigationTitle("Sites")
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
                     ToolbarItem(placement: .navigationBarTrailing) {
@@ -216,7 +216,7 @@ struct SiteAndFacilitySelector: View {
             .keyboardType(.alphabet)
             .disableAutocorrection(true)
             .navigationTitle(
-                allSiteStyle ? "All sites" : viewModel.selectedSite?.name ?? "Select a facility"
+                allSiteStyle ? "All Sites" : viewModel.selectedSite?.name ?? "Select a facility"
             )
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {

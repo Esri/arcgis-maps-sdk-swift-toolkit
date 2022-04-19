@@ -139,12 +139,7 @@ struct CollapseButton: View {
             }
         } label: {
             Image(systemName: isTopAligned ? "chevron.up.circle" : "chevron.down.circle")
+                .padding(EdgeInsets.esriInsets)
         }
-        .padding(EdgeInsets(
-            top: 2,
-            leading: 4,
-            bottom: 2,
-            trailing: 4
-        ))
     }
 }

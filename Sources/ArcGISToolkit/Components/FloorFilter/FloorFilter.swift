@@ -30,7 +30,7 @@ public struct FloorFilter: View {
         return horizontalSizeClass == .compact || verticalSizeClass == .compact
     }
     
-    /// Creates a `FloorFilter`
+    /// Creates a `FloorFilter`.
     /// - Parameters:
     ///   - alignment: Determines the display configuration of Floor Filter elements.
     ///   - automaticSelectionMode: The selection behavior of the floor filter.
@@ -75,7 +75,7 @@ public struct FloorFilter: View {
         } label: {
             Image(systemName: "building.2")
                 .frame(width: levelSelectorWidth)
-                .padding(.horizontal)
+                .padding(EdgeInsets.esriInsets)
         }
         .sheet(
             isAllowed: isCompact,
