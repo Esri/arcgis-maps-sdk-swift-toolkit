@@ -24,9 +24,6 @@ struct LevelSelector: View {
 ***REMOVED******REMOVED***/ the selected level.
 ***REMOVED***@State var isCollapsed: Bool = false
 ***REMOVED***
-***REMOVED******REMOVED***/ The width for buttons in the level selector.
-***REMOVED***let buttonWidth: Double
-***REMOVED***
 ***REMOVED******REMOVED***/ The alignment configuration.
 ***REMOVED***let isTopAligned: Bool
 ***REMOVED***
@@ -49,15 +46,10 @@ struct LevelSelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isTopAligned: isTopAligned
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Divider()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 30)
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***LevelsStack(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***buttonWidth: buttonWidth,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***levels: levels
-***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***LevelsStack(levels: levels)
 ***REMOVED******REMOVED******REMOVED******REMOVED***if isTopAligned {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Divider()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 30)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***CollapseButton(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isCollapsed: $isCollapsed,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isTopAligned: isTopAligned
@@ -65,14 +57,12 @@ struct LevelSelector: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED***isCollapsed.toggle()
-***REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED***Toggle(isOn: $isCollapsed) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text(selectedLevelName)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.lineLimit(1)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: buttonWidth)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.selected(true)
+***REMOVED******REMOVED******REMOVED***.toggleStyle(.selectedButton)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -85,9 +75,6 @@ struct LevelsStack: View {
 ***REMOVED******REMOVED***/ The height of the scroll view's content.
 ***REMOVED***@State private var contentHeight: CGFloat = .zero
 ***REMOVED***
-***REMOVED******REMOVED***/ The width for buttons in the level selector.
-***REMOVED***let buttonWidth: Double
-***REMOVED***
 ***REMOVED******REMOVED***/ The levels to display.
 ***REMOVED***let levels: [FloorLevel]
 ***REMOVED***
@@ -96,14 +83,22 @@ struct LevelsStack: View {
 ***REMOVED******REMOVED******REMOVED***ScrollView {
 ***REMOVED******REMOVED******REMOVED******REMOVED***VStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(levels, id: \.id) { level in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.setLevel(level)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Toggle(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isOn: Binding(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***get: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.selectedLevel == level
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***set: { newIsOn in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard newIsOn else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.setLevel(level)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(level.shortName)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.lineLimit(1)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: buttonWidth)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.selected(viewModel.selectedLevel == level)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.toggleStyle(.selectableButton)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onSizeChange {

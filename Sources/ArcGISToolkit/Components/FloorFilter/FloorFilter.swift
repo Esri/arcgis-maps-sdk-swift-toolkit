@@ -40,7 +40,6 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED***floorManager: FloorManager,
 ***REMOVED******REMOVED***alignment: Alignment,
 ***REMOVED******REMOVED***automaticSelectionMode: FloorFilterAutomaticSelectionMode = .always,
-***REMOVED******REMOVED***levelSelectorWidth: Double = 30.0,
 ***REMOVED******REMOVED***viewpoint: Binding<Viewpoint?> = .constant(nil)
 ***REMOVED***) {
 ***REMOVED******REMOVED***_viewModel = StateObject(wrappedValue: FloorFilterViewModel(
@@ -49,7 +48,6 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED******REMOVED***viewpoint: viewpoint
 ***REMOVED******REMOVED***))
 ***REMOVED******REMOVED***self.alignment = alignment
-***REMOVED******REMOVED***self.levelSelectorWidth = levelSelectorWidth
 ***REMOVED******REMOVED***self.viewpoint = viewpoint
 ***REMOVED***
 ***REMOVED***
@@ -65,8 +63,12 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED***/ The alignment configuration.
 ***REMOVED***private let alignment: Alignment
 ***REMOVED***
-***REMOVED******REMOVED***/ The width for buttons in the level selector.
-***REMOVED***private let levelSelectorWidth: Double
+***REMOVED******REMOVED***/ The width of the level selector.
+***REMOVED***private var filterWidth: Double = 50
+***REMOVED***
+***REMOVED******REMOVED***/ The `Viewpoint` used to pan/zoom to the selected site/facilty.
+***REMOVED******REMOVED***/ If `nil`, there will be no automatic pan/zoom operations or automatic selection support.
+***REMOVED***private var viewpoint: Binding<Viewpoint?>
 ***REMOVED***
 ***REMOVED******REMOVED***/ Button to open and close the site and facility selector.
 ***REMOVED***private var sitesAndFacilitiesButton: some View {
@@ -74,7 +76,6 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED******REMOVED***siteAndFacilitySelectorIsPresented.toggle()
 ***REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED***Image(systemName: "building.2")
-***REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: levelSelectorWidth)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding(EdgeInsets.esriInsets)
 ***REMOVED***
 ***REMOVED******REMOVED***.sheet(
@@ -86,16 +87,6 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.viewpointSubject.send(viewpoint.wrappedValue)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ Displays the available levels.
-***REMOVED***@ViewBuilder private var levelSelector: some View {
-***REMOVED******REMOVED***LevelSelector(
-***REMOVED******REMOVED******REMOVED***buttonWidth: levelSelectorWidth,
-***REMOVED******REMOVED******REMOVED***isTopAligned: topAligned,
-***REMOVED******REMOVED******REMOVED***levels: viewModel.sortedLevels
-***REMOVED******REMOVED***)
-***REMOVED******REMOVED***.hidden(!viewModel.hasLevelsToDisplay)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ A view that allows selecting between levels.
@@ -113,13 +104,27 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***sitesAndFacilitiesButton
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.frame(width: 75)
+***REMOVED******REMOVED***.frame(width: filterWidth)
 ***REMOVED******REMOVED***.esriBorder()
 ***REMOVED******REMOVED***.frame(
 ***REMOVED******REMOVED******REMOVED***maxWidth: isCompact ? .infinity : nil,
 ***REMOVED******REMOVED******REMOVED***maxHeight: .infinity,
 ***REMOVED******REMOVED******REMOVED***alignment: alignment
 ***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Indicates that the selector should be presented with a top oriented aligment configuration.
+***REMOVED***private var topAligned: Bool {
+***REMOVED******REMOVED***alignment.vertical == .top
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Displays the available levels.
+***REMOVED***@ViewBuilder private var levelSelector: some View {
+***REMOVED******REMOVED***LevelSelector(
+***REMOVED******REMOVED******REMOVED***isTopAligned: topAligned,
+***REMOVED******REMOVED******REMOVED***levels: viewModel.sortedLevels
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***.hidden(!viewModel.hasLevelsToDisplay)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ A configured `SiteAndFacilitySelector`.
@@ -133,15 +138,6 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ Indicates that the selector should be presented with a top oriented aligment configuration.
-***REMOVED***private var topAligned: Bool {
-***REMOVED******REMOVED***alignment.vertical == .top
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ The `Viewpoint` used to pan/zoom to the selected site/facilty.
-***REMOVED******REMOVED***/ If `nil`, there will be no automatic pan/zoom operations or automatic selection support.
-***REMOVED***private var viewpoint: Binding<Viewpoint?>
 ***REMOVED***
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***HStack(alignment: .bottom) {
@@ -157,5 +153,12 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED***.frame(minHeight: 100)
 ***REMOVED******REMOVED***.environmentObject(viewModel)
 ***REMOVED******REMOVED***.disabled(viewModel.isLoading)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Modifies the width used by the level selector. Increase this value to lessen level name truncation.
+***REMOVED***public func filterWidth(_ newWidth: Double) -> FloorFilter {
+***REMOVED******REMOVED***var copy = self
+***REMOVED******REMOVED***copy.filterWidth = newWidth
+***REMOVED******REMOVED***return copy
 ***REMOVED***
 ***REMOVED***
