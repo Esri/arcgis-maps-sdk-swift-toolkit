@@ -128,7 +128,7 @@ struct SiteAndFacilitySelector: View {
                     }
                         .padding([.vertical], 4)
                 }
-                .navigationTitle("Select a site")
+                .navigationTitle("Sites")
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
                     ToolbarItem(placement: .navigationBarTrailing) {
