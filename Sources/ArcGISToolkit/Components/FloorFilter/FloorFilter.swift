@@ -18,7 +18,7 @@
 ***REMOVED***/ in your application. It allows you to filter the floor plan data displayed in your map or scene view
 ***REMOVED***/ to a site, a facility (building) in the site, or a floor in the facility.
 public struct FloorFilter: View {
-***REMOVED******REMOVED***/ Creates a `FloorFilter`
+***REMOVED******REMOVED***/ Creates a `FloorFilter`.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - alignment: Determines the display configuration of Floor Filter elements.
 ***REMOVED******REMOVED***/   - automaticSelectionMode: The selection behavior of the floor filter.
