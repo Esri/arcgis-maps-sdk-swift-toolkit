@@ -26,7 +26,7 @@ public struct Scalebar: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ The font used by the scalebar, available in both `Font` and `UIFont` types.
 ***REMOVED***internal static var font: (font: Font, uiFont: UIFont) {
-***REMOVED******REMOVED***let size = 10.0
+***REMOVED******REMOVED***let size = 9.0
 ***REMOVED******REMOVED***let uiFont = UIFont.systemFont(
 ***REMOVED******REMOVED******REMOVED***ofSize: size,
 ***REMOVED******REMOVED******REMOVED***weight: .semibold
@@ -70,13 +70,16 @@ public struct Scalebar: View {
 ***REMOVED***internal static let lineFrameHeight = 6.0
 ***REMOVED***
 ***REMOVED******REMOVED***/ The width of the prominent scalebar line.
-***REMOVED***internal static let lineWidth = 3.0
+***REMOVED***internal static let lineWidth = 2.0
 ***REMOVED***
 ***REMOVED******REMOVED***/ The shadow color used by all scalebar style renders.
 ***REMOVED***internal static let shadowColor = Color(uiColor: .black).opacity(0.65)
 ***REMOVED***
 ***REMOVED******REMOVED***/ The shadow radius used by all scalebar style renders.
 ***REMOVED***internal static let shadowRadius = 1.0
+***REMOVED***
+***REMOVED******REMOVED***/ The text color used by all scalebar style renders.
+***REMOVED***internal static let textColor = Color.primary
 ***REMOVED***
 ***REMOVED******REMOVED***/ The text shadow color used by all scalebar style renders.
 ***REMOVED***internal static let textShadowColor = Color.white
@@ -144,8 +147,6 @@ public struct Scalebar: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***case .line:
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***lineStyleRender
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***EmptyView()
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.onChange(of: viewpoint.wrappedValue) {

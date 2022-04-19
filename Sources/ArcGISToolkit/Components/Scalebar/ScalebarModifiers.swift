@@ -18,6 +18,7 @@ struct ScalebarTextModifier: ViewModifier {
 ***REMOVED***func body(content: Content) -> some View {
 ***REMOVED******REMOVED***content
 ***REMOVED******REMOVED******REMOVED***.font(Scalebar.font.font)
+***REMOVED******REMOVED******REMOVED***.foregroundColor(Scalebar.textColor)
 ***REMOVED******REMOVED******REMOVED***.shadow(
 ***REMOVED******REMOVED******REMOVED******REMOVED***color: Scalebar.textShadowColor,
 ***REMOVED******REMOVED******REMOVED******REMOVED***radius: Scalebar.shadowRadius

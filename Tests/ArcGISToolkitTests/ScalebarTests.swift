@@ -52,113 +52,75 @@ class ScalebarTests: XCTestCase {
 ***REMOVED******REMOVED***waitForExpectations(timeout: 5.0)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Asserts that the scalebar view model provides the correct label at a scale of 10,000,000.
-***REMOVED***func testScale_10000000() {
-***REMOVED******REMOVED***let correctImperialLabel = "200 mi"
-***REMOVED******REMOVED***let correctMetricLabel = "300 km"
-***REMOVED******REMOVED***let viewpoint = Viewpoint(
-***REMOVED******REMOVED******REMOVED***center: esriRedlands,
-***REMOVED******REMOVED******REMOVED***scale: 10_000_000.00
-***REMOVED******REMOVED***)
-***REMOVED******REMOVED***let unitsPerPoint = unitsPerPointBinding(2645.833333330476)
-***REMOVED******REMOVED***let viewModel = scalebarViewModel(
-***REMOVED******REMOVED******REMOVED***unitsPerPoint: unitsPerPoint,
-***REMOVED******REMOVED******REMOVED***viewpoint: viewpoint
-***REMOVED******REMOVED***)
-***REMOVED******REMOVED***let calculatedMetricLabel = viewModel.alternateUnit.label
-***REMOVED******REMOVED***if let calculatedImperialLabel = viewModel.labels.last?.text {
-***REMOVED******REMOVED******REMOVED***XCTAssertEqual(calculatedImperialLabel, correctImperialLabel)
-***REMOVED******REMOVED******REMOVED***XCTAssertEqual(calculatedMetricLabel, correctMetricLabel)
-***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***XCTFail()
+***REMOVED***struct ScalebarTestCase {
+***REMOVED******REMOVED***let x: Double
+***REMOVED******REMOVED***let y: Double
+***REMOVED******REMOVED***let sR: SpatialReference = .webMercator
+***REMOVED******REMOVED***let style: ScalebarStyle
+***REMOVED******REMOVED***let targetWidth: Double
+***REMOVED******REMOVED***let units: ScalebarUnits
+***REMOVED******REMOVED***let scale: Double
+***REMOVED******REMOVED***let upp: Double
+***REMOVED******REMOVED***let uGC: Bool
+***REMOVED******REMOVED***let dL: Double
+***REMOVED******REMOVED***let labels: [String]
 ***REMOVED***
 ***REMOVED***
+***REMOVED***var testCases: [ScalebarTestCase] {[
+***REMOVED******REMOVED******REMOVED*** Test metric vs imperial units
+***REMOVED******REMOVED***ScalebarTestCase(x: esriRedlands.x, y: esriRedlands.y, style: .alternatingBar, targetWidth: 175, units: .metric,   scale: 10_000_000, upp: 2645.833333330476, uGC: true, dL: 137, labels: ["0", "100", "200", "300 km"]),
+***REMOVED******REMOVED***ScalebarTestCase(x: esriRedlands.x, y: esriRedlands.y, style: .alternatingBar, targetWidth: 175, units: .imperial, scale: 10_000_000, upp: 2645.833333330476, uGC: true, dL: 147, labels: ["0", "50", "100", "150", "200 mi"]),
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Disable geodetic calculations
+***REMOVED******REMOVED***ScalebarTestCase(x: esriRedlands.x, y: esriRedlands.y, style: .alternatingBar, targetWidth: 175, units: .metric,   scale: 10_000_000, upp: 2645.833333330476, uGC: false, dL: 151, labels: ["0", "100", "200", "300", "400 km"]),
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Test all styles
+***REMOVED******REMOVED***ScalebarTestCase(x: esriRedlands.x, y: esriRedlands.y, style: .bar,***REMOVED******REMOVED***   targetWidth: 175, units: .metric, scale: 10_000_000, upp: 2645.833333330476, uGC: true, dL: 171, labels: ["375 km"]),
+***REMOVED******REMOVED***ScalebarTestCase(x: esriRedlands.x, y: esriRedlands.y, style: .dualUnitLine,  targetWidth: 175, units: .metric, scale: 10_000_000, upp: 2645.833333330476, uGC: true, dL: 137, labels: ["0", "100", "200", "300 km"]),
+***REMOVED******REMOVED***ScalebarTestCase(x: esriRedlands.x, y: esriRedlands.y, style: .graduatedLine, targetWidth: 175, units: .metric, scale: 10_000_000, upp: 2645.833333330476, uGC: true, dL: 137, labels: ["0", "100", "200", "300 km"]),
+***REMOVED******REMOVED***ScalebarTestCase(x: esriRedlands.x, y: esriRedlands.y, style: .line,***REMOVED******REMOVED***  targetWidth: 175, units: .metric, scale: 10_000_000, upp: 2645.833333330476, uGC: true, dL: 171, labels: ["375 km"]),
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Test alternate widths
+***REMOVED******REMOVED***ScalebarTestCase(x: esriRedlands.x, y: esriRedlands.y, style: .alternatingBar, targetWidth: 100, units: .metric, scale: 10_000_000, upp: 2645.833333330476, uGC: true, dL: 80,  labels: ["0", "87.5", "175 km"]),
+***REMOVED******REMOVED***ScalebarTestCase(x: esriRedlands.x, y: esriRedlands.y, style: .alternatingBar, targetWidth: 300, units: .metric, scale: 10_000_000, upp: 2645.833333330476, uGC: true, dL: 273, labels: ["0", "200", "400", "600 km"]),
+***REMOVED******REMOVED***ScalebarTestCase(x: esriRedlands.x, y: esriRedlands.y, style: .alternatingBar, targetWidth: 500, units: .metric, scale: 10_000_000, upp: 2645.833333330476, uGC: true, dL: 456, labels: ["0", "250", "500", "750", "1,000 km"]),
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Test alternate points
+***REMOVED******REMOVED***ScalebarTestCase(x: -24752697, y: 15406913,  style: .alternatingBar, targetWidth: 175, units: .metric, scale: 10_000_000, upp: 2645.833333330476, uGC: true, dL: 128, labels: ["0", "20", "40", "60 km"]), ***REMOVED*** Artic ocean
+***REMOVED******REMOVED***ScalebarTestCase(x: -35729271, y: -13943757, style: .alternatingBar, targetWidth: 175, units: .metric, scale: 10_000_000, upp: 2645.833333330476, uGC: true, dL: 153, labels: ["0", "30", "60", "90 km"]), ***REMOVED*** Near Antartica
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Test different scales
+***REMOVED******REMOVED***ScalebarTestCase(x: esriRedlands.x, y: esriRedlands.y, style: .alternatingBar, targetWidth: 175, units: .metric, scale: 100,***REMOVED******REMOVED***upp: 0.02645833333330476, uGC: true, dL: 137, labels: ["0", "1", "2", "3 m"]),
+***REMOVED******REMOVED***ScalebarTestCase(x: esriRedlands.x, y: esriRedlands.y, style: .alternatingBar, targetWidth: 175, units: .metric, scale: 1_000,***REMOVED***  upp: 0.26458333333304757, uGC: true, dL: 137, labels: ["0", "10", "20", "30 m"]),
+***REMOVED******REMOVED***ScalebarTestCase(x: esriRedlands.x, y: esriRedlands.y, style: .alternatingBar, targetWidth: 175, units: .metric, scale: 10_000,***REMOVED*** upp: 2.6458333333304758,  uGC: true, dL: 137, labels: ["0", "100", "200", "300 m"]),
+***REMOVED******REMOVED***ScalebarTestCase(x: esriRedlands.x, y: esriRedlands.y, style: .alternatingBar, targetWidth: 175, units: .metric, scale: 100_000,***REMOVED***upp: 26.458333333304758,  uGC: true, dL: 137, labels: ["0", "1", "2", "3 km"]),
+***REMOVED******REMOVED***ScalebarTestCase(x: esriRedlands.x, y: esriRedlands.y, style: .alternatingBar, targetWidth: 175, units: .metric, scale: 1_000_000,  upp: 264.58333333304756,  uGC: true, dL: 137, labels: ["0", "10", "20", "30 km"]),
+***REMOVED******REMOVED***ScalebarTestCase(x: esriRedlands.x, y: esriRedlands.y, style: .alternatingBar, targetWidth: 175, units: .metric, scale: 80_000_000, upp: 21166.666666643807,  uGC: true, dL: 143, labels: ["0", "1,250", "2,500 km"])
+***REMOVED***]***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Asserts that the scalebar view model provides the correct label at a scale of 1,000,000.
-***REMOVED***func testScale_1000000() {
-***REMOVED******REMOVED***let correctImperialLabel = "20 mi"
-***REMOVED******REMOVED***let correctMetricLabel = "30 km"
-***REMOVED******REMOVED***let viewpoint = Viewpoint(
-***REMOVED******REMOVED******REMOVED***center: esriRedlands,
-***REMOVED******REMOVED******REMOVED***scale: 1_000_000.00
-***REMOVED******REMOVED***)
-***REMOVED******REMOVED***let unitsPerPoint = unitsPerPointBinding(264.58333333304756)
-***REMOVED******REMOVED***let viewModel = scalebarViewModel(
-***REMOVED******REMOVED******REMOVED***unitsPerPoint: unitsPerPoint,
-***REMOVED******REMOVED******REMOVED***viewpoint: viewpoint
-***REMOVED******REMOVED***)
-***REMOVED******REMOVED***let calculatedMetricLabel = viewModel.alternateUnit.label
-***REMOVED******REMOVED***if let calculatedImperialLabel = viewModel.labels.last?.text {
-***REMOVED******REMOVED******REMOVED***XCTAssertEqual(calculatedImperialLabel, correctImperialLabel)
-***REMOVED******REMOVED******REMOVED***XCTAssertEqual(calculatedMetricLabel, correctMetricLabel)
-***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***XCTFail()
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ Asserts that the scalebar view model provides the correct label at a scale of 100,000.
-***REMOVED***func testScale_100000() {
-***REMOVED******REMOVED***let correctImperialLabel = "2 mi"
-***REMOVED******REMOVED***let correctMetricLabel = "3 km"
-***REMOVED******REMOVED***let viewpoint = Viewpoint(
-***REMOVED******REMOVED******REMOVED***center: esriRedlands,
-***REMOVED******REMOVED******REMOVED***scale: 100_000.00
-***REMOVED******REMOVED***)
-***REMOVED******REMOVED***let unitsPerPoint = unitsPerPointBinding(26.458333333304758)
-***REMOVED******REMOVED***let viewModel = scalebarViewModel(
-***REMOVED******REMOVED******REMOVED***unitsPerPoint: unitsPerPoint,
-***REMOVED******REMOVED******REMOVED***viewpoint: viewpoint
-***REMOVED******REMOVED***)
-***REMOVED******REMOVED***let calculatedMetricLabel = viewModel.alternateUnit.label
-***REMOVED******REMOVED***if let calculatedImperialLabel = viewModel.labels.last?.text {
-***REMOVED******REMOVED******REMOVED***XCTAssertEqual(calculatedImperialLabel, correctImperialLabel)
-***REMOVED******REMOVED******REMOVED***XCTAssertEqual(calculatedMetricLabel, correctMetricLabel)
-***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***XCTFail()
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ Asserts that the scalebar view model provides the correct label at a scale of 10,000.
-***REMOVED***func testScale_10000() {
-***REMOVED******REMOVED***let correctImperialLabel = "1,000 ft"
-***REMOVED******REMOVED***let correctMetricLabel = "300 m"
-***REMOVED******REMOVED***let viewpoint = Viewpoint(
-***REMOVED******REMOVED******REMOVED***center: esriRedlands,
-***REMOVED******REMOVED******REMOVED***scale: 10_000.00
-***REMOVED******REMOVED***)
-***REMOVED******REMOVED***let unitsPerPoint = unitsPerPointBinding(2.6458333333304758)
-***REMOVED******REMOVED***let viewModel = scalebarViewModel(
-***REMOVED******REMOVED******REMOVED***unitsPerPoint: unitsPerPoint,
-***REMOVED******REMOVED******REMOVED***viewpoint: viewpoint
-***REMOVED******REMOVED***)
-***REMOVED******REMOVED***let calculatedMetricLabel = viewModel.alternateUnit.label
-***REMOVED******REMOVED***if let calculatedImperialLabel = viewModel.labels.last?.text {
-***REMOVED******REMOVED******REMOVED***XCTAssertEqual(calculatedImperialLabel, correctImperialLabel)
-***REMOVED******REMOVED******REMOVED***XCTAssertEqual(calculatedMetricLabel, correctMetricLabel)
-***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***XCTFail()
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ Asserts that the scalebar view model provides the correct label at a scale of 100.
-***REMOVED***func testScale_100() {
-***REMOVED******REMOVED***let correctImperialLabel = "10 ft"
-***REMOVED******REMOVED***let correctMetricLabel = "3 m"
-***REMOVED******REMOVED***let viewpoint = Viewpoint(
-***REMOVED******REMOVED******REMOVED***center: esriRedlands,
-***REMOVED******REMOVED******REMOVED***scale: 100.00
-***REMOVED******REMOVED***)
-***REMOVED******REMOVED***let unitsPerPoint = unitsPerPointBinding(0.02645833333330476)
-***REMOVED******REMOVED***let viewModel = scalebarViewModel(
-***REMOVED******REMOVED******REMOVED***unitsPerPoint: unitsPerPoint,
-***REMOVED******REMOVED******REMOVED***viewpoint: viewpoint
-***REMOVED******REMOVED***)
-***REMOVED******REMOVED***let calculatedMetricLabel = viewModel.alternateUnit.label
-***REMOVED******REMOVED***if let calculatedImperialLabel = viewModel.labels.last?.text {
-***REMOVED******REMOVED******REMOVED***XCTAssertEqual(calculatedImperialLabel, correctImperialLabel)
-***REMOVED******REMOVED******REMOVED***XCTAssertEqual(calculatedMetricLabel, correctMetricLabel)
-***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***XCTFail()
+***REMOVED***func testAllCases() {
+***REMOVED******REMOVED***for test in testCases {
+***REMOVED******REMOVED******REMOVED***let viewpoint = Viewpoint(
+***REMOVED******REMOVED******REMOVED******REMOVED***center: Point(x: test.x, y: test.y, spatialReference: test.sR),
+***REMOVED******REMOVED******REMOVED******REMOVED***scale: test.scale
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***let unitsPerPoint = unitsPerPointBinding(test.upp)
+***REMOVED******REMOVED******REMOVED***let viewModel = ScalebarViewModel(
+***REMOVED******REMOVED******REMOVED******REMOVED***false,
+***REMOVED******REMOVED******REMOVED******REMOVED***0,
+***REMOVED******REMOVED******REMOVED******REMOVED***test.sR,
+***REMOVED******REMOVED******REMOVED******REMOVED***test.style,
+***REMOVED******REMOVED******REMOVED******REMOVED***test.targetWidth,
+***REMOVED******REMOVED******REMOVED******REMOVED***test.units,
+***REMOVED******REMOVED******REMOVED******REMOVED***unitsPerPoint,
+***REMOVED******REMOVED******REMOVED******REMOVED***test.uGC,
+***REMOVED******REMOVED******REMOVED******REMOVED***viewpoint
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***XCTAssertEqual(viewModel.displayLength.rounded(), test.dL)
+***REMOVED******REMOVED******REMOVED***XCTAssertEqual(viewModel.labels.count, test.labels.count)
+***REMOVED******REMOVED******REMOVED***for i in 0..<test.labels.count {
+***REMOVED******REMOVED******REMOVED******REMOVED***XCTAssertEqual(viewModel.labels[i].text, test.labels[i])
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***

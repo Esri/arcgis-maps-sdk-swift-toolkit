@@ -161,11 +161,9 @@ final class ScalebarViewModel: ObservableObject {
 ***REMOVED***private var availableLineDisplayLength: CGFloat {
 ***REMOVED******REMOVED***switch style {
 ***REMOVED******REMOVED***case .alternatingBar, .dualUnitLine, .graduatedLine:
-***REMOVED******REMOVED******REMOVED***let unitDisplayWidth = max(
-***REMOVED******REMOVED******REMOVED******REMOVED***" mi".size(withAttributes: [.font: Scalebar.font.uiFont]).width,
-***REMOVED******REMOVED******REMOVED******REMOVED***" km".size(withAttributes: [.font: Scalebar.font.uiFont]).width
-***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***return targetWidth - (Scalebar.lineWidth / 2.0) - unitDisplayWidth
+***REMOVED******REMOVED******REMOVED******REMOVED*** " km" will render wider than " mi"
+***REMOVED******REMOVED******REMOVED***let maxUnitDisplayWidth = " km".size(withAttributes: [.font: Scalebar.font.uiFont]).width
+***REMOVED******REMOVED******REMOVED***return targetWidth - (Scalebar.lineWidth / 2.0) - maxUnitDisplayWidth
 ***REMOVED******REMOVED***case .bar, .line:
 ***REMOVED******REMOVED******REMOVED***return targetWidth - Scalebar.lineWidth
 ***REMOVED***
@@ -222,8 +220,8 @@ final class ScalebarViewModel: ObservableObject {
 ***REMOVED******REMOVED******REMOVED*** only has 1. The dividers will be decimal values and we want to make
 ***REMOVED******REMOVED******REMOVED*** sure they all fit very basic hueristics.
 ***REMOVED******REMOVED***let minSegmentTestString: String
-***REMOVED******REMOVED***if let longestString = labels.last?.text, longestString.count > 3 {
-***REMOVED******REMOVED******REMOVED***minSegmentTestString = longestString
+***REMOVED******REMOVED***if lineMapLength >= 100 {
+***REMOVED******REMOVED******REMOVED***minSegmentTestString = String(Int(lineMapLength))
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED***minSegmentTestString = "9.9"
 ***REMOVED***
@@ -272,7 +270,12 @@ final class ScalebarViewModel: ObservableObject {
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***labels.append(label)
 ***REMOVED***
-***REMOVED******REMOVED***self.labels = labels
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***if style == .bar || style == .line, let last = labels.last {
+***REMOVED******REMOVED******REMOVED***self.labels = [last]
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***self.labels = labels
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Updates the information necessary to render a scalebar based off the latest viewpoint and units per
@@ -287,7 +290,7 @@ final class ScalebarViewModel: ObservableObject {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let mapCenter = viewpoint.targetGeometry.extent.center
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***let maxLength =  availableLineDisplayLength
+***REMOVED******REMOVED***let maxLength = availableLineDisplayLength
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let lineMapLength: Double
 ***REMOVED******REMOVED***let displayUnit: LinearUnit
