@@ -35,7 +35,7 @@ extension Scalebar {
             HStack(spacing: -Scalebar.lineWidth) {
                 ForEach(viewModel.labels.dropFirst(), id: \.index) {
                     Rectangle()
-                        .fill($0.index % 2 == 1 ? Scalebar.fillColor1 : Scalebar.fillColor2)
+                        .fill($0.index % 2 == 0 ? Scalebar.fillColor1 : Scalebar.fillColor2)
                         .border(
                             Scalebar.lineColor,
                             width: Scalebar.lineWidth
