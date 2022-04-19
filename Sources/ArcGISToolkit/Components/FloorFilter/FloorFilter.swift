@@ -40,7 +40,6 @@ public struct FloorFilter: View {
         floorManager: FloorManager,
         alignment: Alignment,
         automaticSelectionMode: FloorFilterAutomaticSelectionMode = .always,
-        levelSelectorWidth: Double = 30.0,
         viewpoint: Binding<Viewpoint?> = .constant(nil)
     ) {
         _viewModel = StateObject(wrappedValue: FloorFilterViewModel(
@@ -49,7 +48,6 @@ public struct FloorFilter: View {
             viewpoint: viewpoint
         ))
         self.alignment = alignment
-        self.levelSelectorWidth = levelSelectorWidth
         self.viewpoint = viewpoint
     }
     
@@ -65,8 +63,12 @@ public struct FloorFilter: View {
     /// The alignment configuration.
     private let alignment: Alignment
     
-    /// The width for buttons in the level selector.
-    private let levelSelectorWidth: Double
+    /// The width of the level selector.
+    private var filterWidth: Double = 50
+    
+    /// The `Viewpoint` used to pan/zoom to the selected site/facilty.
+    /// If `nil`, there will be no automatic pan/zoom operations or automatic selection support.
+    private var viewpoint: Binding<Viewpoint?>
     
     /// Button to open and close the site and facility selector.
     private var sitesAndFacilitiesButton: some View {
@@ -74,7 +76,6 @@ public struct FloorFilter: View {
             siteAndFacilitySelectorIsPresented.toggle()
         } label: {
             Image(systemName: "building.2")
-                .frame(width: levelSelectorWidth)
                 .padding(EdgeInsets.esriInsets)
         }
         .sheet(
@@ -86,16 +87,6 @@ public struct FloorFilter: View {
                     viewModel.viewpointSubject.send(viewpoint.wrappedValue)
                 }
         }
-    }
-    
-    /// Displays the available levels.
-    @ViewBuilder private var levelSelector: some View {
-        LevelSelector(
-            buttonWidth: levelSelectorWidth,
-            isTopAligned: topAligned,
-            levels: viewModel.sortedLevels
-        )
-        .hidden(!viewModel.hasLevelsToDisplay)
     }
     
     /// A view that allows selecting between levels.
@@ -113,13 +104,27 @@ public struct FloorFilter: View {
                 sitesAndFacilitiesButton
             }
         }
-        .frame(width: 75)
+        .frame(width: filterWidth)
         .esriBorder()
         .frame(
             maxWidth: isCompact ? .infinity : nil,
             maxHeight: .infinity,
             alignment: alignment
         )
+    }
+    
+    /// Indicates that the selector should be presented with a top oriented aligment configuration.
+    private var topAligned: Bool {
+        alignment.vertical == .top
+    }
+    
+    /// Displays the available levels.
+    @ViewBuilder private var levelSelector: some View {
+        LevelSelector(
+            isTopAligned: topAligned,
+            levels: viewModel.sortedLevels
+        )
+        .hidden(!viewModel.hasLevelsToDisplay)
     }
     
     /// A configured `SiteAndFacilitySelector`.
@@ -133,15 +138,6 @@ public struct FloorFilter: View {
                 }
         }
     }
-    
-    /// Indicates that the selector should be presented with a top oriented aligment configuration.
-    private var topAligned: Bool {
-        alignment.vertical == .top
-    }
-    
-    /// The `Viewpoint` used to pan/zoom to the selected site/facilty.
-    /// If `nil`, there will be no automatic pan/zoom operations or automatic selection support.
-    private var viewpoint: Binding<Viewpoint?>
     
     public var body: some View {
         HStack(alignment: .bottom) {
@@ -157,5 +153,12 @@ public struct FloorFilter: View {
         .frame(minHeight: 100)
         .environmentObject(viewModel)
         .disabled(viewModel.isLoading)
+    }
+    
+    /// Modifies the width used by the level selector. Increase this value to lessen level name truncation.
+    public func filterWidth(_ newWidth: Double) -> FloorFilter {
+        var copy = self
+        copy.filterWidth = newWidth
+        return copy
     }
 }
