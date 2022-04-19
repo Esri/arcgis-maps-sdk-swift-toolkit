@@ -57,7 +57,7 @@ struct LevelSelector: View {
                 Text(selectedLevelName)
                     .lineLimit(1)
             }
-            .toggleStyle(.button)
+            .toggleStyle(.selectedButton)
         }
     }
 }
@@ -91,7 +91,7 @@ struct LevelsStack: View {
                         Text(level.shortName)
                             .lineLimit(1)
                     }
-                    .toggleStyle(.button)
+                    .toggleStyle(.selectableButton)
                 }
             }
             .onSizeChange {
