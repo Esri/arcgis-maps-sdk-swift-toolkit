@@ -14,6 +14,17 @@ To use Toolkit in your project:
 
 * [OverviewMap](./Documentation/OverviewMap/README.md)
 
+* **[BasemapGallery](Documentation/BasemapGallery)** - Displays a collection of basemaps.
+* **[Bookmarks](Documentation/Bookmarks)** - Shows bookmarks, from a map, scene, or a list.
+* **[Compass](Documentation/Compass)** - Shows a compass direction when the map is rotated. Auto-hides when the map
+  points north up.
+* **[FloatingPanel](Documentation/FloatingPanel)** - Allows display of view-related content in a "bottom sheet". 
+* **[FloorFilter](Documentation/FloorFilter)** - Allows to filter floor plan data in a geo view by a site, a building in the site, or a floor in the building. 
+* **[OverviewMap](Documentation/OverviewMap)** - Displays the visible extent of a geo view in a small "inset" map.
+* **[Scalebar](Documentation/Scalebar)** - Displays current scale reference.
+* **[Search](Documentation/Search)** - Displays a search experience for geo views.
+
+
 ## Requirements
 * ArcGIS Runtime SDK for Swift
 * Xcode 13.0 (or higher)
