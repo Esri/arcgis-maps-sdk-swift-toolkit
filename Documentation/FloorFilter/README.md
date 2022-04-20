@@ -11,11 +11,6 @@ When the Site button is tapped, a prompt opens so the user can select a site and
 ### Usage
 
 ```swift
-
-addChild(floorFilterViewController)
-view.addSubview(floorFilterViewController.view)
-floorFilterViewController.didMove(toParent: self)
-
 ```
 
-To see it in action, try out the [Examples](../../Examples) and refer to [FloorFilterExample.swift](../../Examples/ArcGISToolkitExamples/FloorFilterExample.swift) in the project.
+To see it in action, try out the [Examples](../../Examples) and refer to [FloorFilterExampleView.swift](../../Examples/Examples/FloorFilterExampleView.swift) in the project.
