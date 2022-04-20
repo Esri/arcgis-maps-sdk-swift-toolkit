@@ -9,4 +9,4 @@ The scalebar uses geodetic calculations to provide accurate measurements for map
 ```swift
 ```
 
-To see it in action, try out the [Examples](../../Examples) and refer to [ScalebarExample.swift](../../Examples/Examples/ScalebarExampleView.swift) in the project.
+To see it in action, try out the [Examples](../../Examples) and refer to [ScalebarExampleView.swift](../../Examples/Examples/ScalebarExampleView.swift) in the project.
