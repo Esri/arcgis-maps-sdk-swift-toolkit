@@ -12,4 +12,4 @@ Floating panels are non-modal and can be transient, only displaying information 
 ```swift
 ```
 
-To see it in action, try out the [Examples](../../Examples) and refer to [FloatingPanelExampleView.swift](../../Examples/ArcGISToolkitExamples/FloatingPanelExampleView.swift) in the project.
+To see it in action, try out the [Examples](../../Examples) and refer to [FloatingPanelExampleView.swift](../../Examples/Examples/FloatingPanelExampleView.swift) in the project.
