@@ -10,10 +10,6 @@ To use Toolkit in your project:
 
 ## Toolkit Components
 
-* [Compass](./Documentation/Compass/README.md)
-
-* [OverviewMap](./Documentation/OverviewMap/README.md)
-
 * **[BasemapGallery](Documentation/BasemapGallery)** - Displays a collection of basemaps.
 * **[Bookmarks](Documentation/Bookmarks)** - Shows bookmarks, from a map, scene, or a list.
 * **[Compass](Documentation/Compass)** - Shows a compass direction when the map is rotated. Auto-hides when the map

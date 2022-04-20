@@ -9,4 +9,4 @@ The `BasemapGallery` tool displays a collection of basemaps from either ArcGIS O
 ```swift
 ```
 
-To see it in action, try out the [Examples](../../Examples) and refer to [BasemapGalleryExample.swift](../../Examples/Examples/BasemapGalleryExampleView.swift) in the project.
+To see it in action, try out the [Examples](../../Examples) and refer to [BasemapGalleryExampleView.swift](../../Examples/Examples/BasemapGalleryExampleView.swift) in the project.
