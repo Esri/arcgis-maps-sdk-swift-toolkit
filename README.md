@@ -35,7 +35,7 @@ The *ArcGIS Runtime Toolkit for Swift* has a *Target SDK* version of *15.0*, mea
 
 ## Configure API Key
 
-Some of the Toolkit components and examples utilize ArcGIS Platform location services and therefore require an API Key to be set in `ExamplesApp.swift`. Please see the [setup guide](https://developers.arcgis.com/documentation/) for more information.
+Some of the toolkit components and examples utilize a set of ready-to-use ArcGIS Platform services, including basemaps, and therefore require an API Key to be set in `ExamplesApp.swift`. Please see the [setup guide](https://developers.arcgis.com/documentation/) for more information.
 
 ## Additional Resources
 
