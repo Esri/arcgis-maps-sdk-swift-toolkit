@@ -7,45 +7,6 @@ The scalebar uses geodetic calculations to provide accurate measurements for map
 ### Usage
 
 ```swift
-***REMOVED******REMOVED***let scalebar = Scalebar(mapView: mapView)
-***REMOVED******REMOVED***scalebar.style = .alternatingBar
-***REMOVED******REMOVED***scalebar.units = .metric
-***REMOVED******REMOVED***scalebar.alignment = .left
-***REMOVED******REMOVED***view.addSubview(scalebar)
 ```
 
-To see it in action, try out the [Examples](../../Examples) and refer to [ScalebarExample.swift](../../Examples/ArcGISToolkitExamples/ScalebarExample.swift) in the project.
-
-
-### Styles
-
-| Style***REMOVED******REMOVED******REMOVED******REMOVED*** | Example***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***   |
-|-------------***REMOVED******REMOVED***  |--------***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***   |
-|`line`***REMOVED******REMOVED******REMOVED******REMOVED*** |![line](Images/line.png)***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***   |
-|`graduated line`***REMOVED***   |![graduated line](Images/graduated-line.png)   |
-|`bar`***REMOVED******REMOVED******REMOVED******REMOVED***  |![bar](Images/bar.png)	***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***|
-|`alternatingBar`***REMOVED***   |![alternating bar](Images/alternating-bar.png) |
-|`dualUnitLine`***REMOVED******REMOVED*** |![dual unit line](Images/dual-unit-line.png)   |
-
-
-
-### Units
-
-Two options are available - `metric` and `imperial`. Defaults to the option most appropriate for the device locale. `metric` displays distances in meters and kilometers depending on the map scale, and `imperial` displays distances in feet and miles.
-
-### Alignment
-
-As you pan & zoom the map, the scalebar automatically grows and shrinks to update its measurements for the new map extent. The `alignment` property indicates how the scalebar has been placed on the UI and which section of the scalebar should remain fixed. For example, if you place it in the lower-left corner of the UI, set the alignment to `left` which means that it will grow/shrink on the right side.
-
-### Customization
-
-You can customize many visual elements of the scalebar such as - 
-
-* `fillColor`
-* `alternateFillColor`
-* `lineColor`
-* `shadowColor`
-* `textColor`
-* `textShadowColor`
-* `font`
-
+To see it in action, try out the [Examples](../../Examples) and refer to [ScalebarExample.swift](../../Examples/Examples/ScalebarExampleView.swift) in the project.

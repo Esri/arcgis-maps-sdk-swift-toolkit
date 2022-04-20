@@ -1,6 +1,6 @@
 # Search
 
-***REMOVED***/ `SearchView` presents a search experience.
+`SearchView` presents a search experience.
 
 ## Features
 

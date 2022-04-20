@@ -4,7 +4,7 @@ The `FloorFilter` component simplifies visualization of GIS data for a specific 
 
 The ArcGIS Runtime SDK currently supports filtering a 2D floor aware map based on the sites, buildings, or levels in the map.
 
-###Behavior:
+### Behavior:
 
 When the Site button is tapped, a prompt opens so the user can select a site and then a facility. After selecting a site and facility, a list of levels is displayed either above or below the site button.
 
