@@ -33,6 +33,10 @@ The *ArcGIS Runtime Toolkit for Swift* has a *Target SDK* version of *15.0*, mea
 
  New to Swift Package Manager? Visit [swift.org/package-manager/](https:***REMOVED***swift.org/package-manager/).
 
+## Configure API Key
+
+Some of the toolkit components and examples utilize a set of ready-to-use ArcGIS Platform services, including basemaps, and therefore require an API Key to be set in `ExamplesApp.swift`. Please see the [setup guide](https:***REMOVED***developers.arcgis.com/documentation/) for more information.
+
 ## Additional Resources
 
 * [Developers guide documentation](https:***REMOVED***developers.arcgis.com/ios)
@@ -49,7 +53,7 @@ Find a bug or want to request a new feature?  Please let us know by [submitting 
 Esri welcomes contributions from anyone and everyone. Please see our [guidelines for contributing](https:***REMOVED***github.com/esri/contributing).
 
 ## Licensing
-Copyright 2017 - 2021 Esri
+Copyright 2017 - 2022 Esri
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
