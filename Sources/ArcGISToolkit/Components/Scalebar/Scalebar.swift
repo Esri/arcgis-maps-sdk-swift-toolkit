@@ -99,7 +99,7 @@ public struct Scalebar: View {
 ***REMOVED******REMOVED***/   - unitsPerPoint: The current number of device independent pixels to map display units.
 ***REMOVED******REMOVED***/   - useGeodeticCalculations: Set `false` to compute scale without a geodesic curve.
 ***REMOVED******REMOVED***/   - viewpoint: The map's current viewpoint.
-***REMOVED******REMOVED***/   - width: The screen width alloted to the scalebar.
+***REMOVED******REMOVED***/   - width: The screen width allotted to the scalebar.
 ***REMOVED***public init(
 ***REMOVED******REMOVED***autoHide: Bool = false,
 ***REMOVED******REMOVED***minScale: Double = .zero,
