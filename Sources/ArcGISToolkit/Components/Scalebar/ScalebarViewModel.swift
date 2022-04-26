@@ -154,6 +154,9 @@ final class ScalebarViewModel: ObservableObject {
     
     // - MARK: Private vars
     
+    /// Appearance settings.
+    @Environment(\.scalebarSettings) var settings
+    
     /// The timer to determine when to autohide the scalebar.
     private var autoHideTimer: Timer?
     
@@ -163,9 +166,9 @@ final class ScalebarViewModel: ObservableObject {
         case .alternatingBar, .dualUnitLine, .graduatedLine:
             // " km" will render wider than " mi"
             let maxUnitDisplayWidth = " km".size(withAttributes: [.font: Scalebar.font.uiFont]).width
-            return targetWidth - (Scalebar.lineWidth / 2.0) - maxUnitDisplayWidth
+            return targetWidth - (settings.lineWidth / 2.0) - maxUnitDisplayWidth
         case .bar, .line:
-            return targetWidth - Scalebar.lineWidth
+            return targetWidth - settings.lineWidth
         }
     }
     
