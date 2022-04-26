@@ -73,10 +73,10 @@ final class ScalebarViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ A scalebar view model controls the underlying data used to render a scalebar.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - autoHide: Determines if the scalebar should automatically show & hide itself.
+***REMOVED******REMOVED***/   - maxWidth: The maximum screen width allotted to the scalebar.
 ***REMOVED******REMOVED***/   - minScale: A value of 0 indicates the scalebar segments should always recalculate.
 ***REMOVED******REMOVED***/   - spatialReference: The map's spatial reference.
 ***REMOVED******REMOVED***/   - style: The visual appearance of the scalebar.
-***REMOVED******REMOVED***/   - targetWidth: The screen width allotted to the scalebar.
 ***REMOVED******REMOVED***/   - units: The units to be displayed in the scalebar.
 ***REMOVED******REMOVED***/   - unitsPerPoint: The current number of device independent pixels to map display units.
 ***REMOVED******REMOVED***/   - useGeodeticCalculations: Determines if a geodesic curve should be used to compute
@@ -84,20 +84,20 @@ final class ScalebarViewModel: ObservableObject {
 ***REMOVED******REMOVED***/   - viewpoint: The map's current viewpoint.
 ***REMOVED***init(
 ***REMOVED******REMOVED***_ autoHide: Bool,
+***REMOVED******REMOVED***_ maxWidth: Double,
 ***REMOVED******REMOVED***_ minScale: Double,
 ***REMOVED******REMOVED***_ spatialReference: SpatialReference?,
 ***REMOVED******REMOVED***_ style: ScalebarStyle,
-***REMOVED******REMOVED***_ targetWidth: Double,
 ***REMOVED******REMOVED***_ units: ScalebarUnits,
 ***REMOVED******REMOVED***_ unitsPerPoint: Binding<Double?>,
 ***REMOVED******REMOVED***_ useGeodeticCalculations: Bool,
 ***REMOVED******REMOVED***_ viewpoint: Viewpoint?
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.isVisible = autoHide ? false : true
+***REMOVED******REMOVED***self.maxWidth = maxWidth
 ***REMOVED******REMOVED***self.minScale = minScale
 ***REMOVED******REMOVED***self.spatialReference = spatialReference
 ***REMOVED******REMOVED***self.style = style
-***REMOVED******REMOVED***self.targetWidth = targetWidth
 ***REMOVED******REMOVED***self.units = units
 ***REMOVED******REMOVED***self.unitsPerPoint = unitsPerPoint
 ***REMOVED******REMOVED***self.useGeodeticCalculations = useGeodeticCalculations
@@ -154,9 +154,6 @@ final class ScalebarViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED******REMOVED*** - MARK: Private vars
 ***REMOVED***
-***REMOVED******REMOVED***/ Appearance settings.
-***REMOVED***@Environment(\.scalebarSettings) var settings
-***REMOVED***
 ***REMOVED******REMOVED***/ The timer to determine when to autohide the scalebar.
 ***REMOVED***private var autoHideTimer: Timer?
 ***REMOVED***
@@ -166,9 +163,9 @@ final class ScalebarViewModel: ObservableObject {
 ***REMOVED******REMOVED***case .alternatingBar, .dualUnitLine, .graduatedLine:
 ***REMOVED******REMOVED******REMOVED******REMOVED*** " km" will render wider than " mi"
 ***REMOVED******REMOVED******REMOVED***let maxUnitDisplayWidth = " km".size(withAttributes: [.font: Scalebar.font.uiFont]).width
-***REMOVED******REMOVED******REMOVED***return targetWidth - (settings.lineWidth / 2.0) - maxUnitDisplayWidth
+***REMOVED******REMOVED******REMOVED***return maxWidth - (Scalebar.lineWidth / 2.0) - maxUnitDisplayWidth
 ***REMOVED******REMOVED***case .bar, .line:
-***REMOVED******REMOVED******REMOVED***return targetWidth - settings.lineWidth
+***REMOVED******REMOVED******REMOVED***return maxWidth - Scalebar.lineWidth
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -178,8 +175,8 @@ final class ScalebarViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ The length of the line to display in map units.
 ***REMOVED***private var lineMapLength: Double = .zero
 ***REMOVED***
-***REMOVED******REMOVED***/ The maximum width allowed for the scalebar.
-***REMOVED***private var targetWidth: Double
+***REMOVED******REMOVED***/ The maximum screen width allotted to the scalebar.
+***REMOVED***private var maxWidth: Double
 ***REMOVED***
 ***REMOVED******REMOVED***/ Unit of measure in use.
 ***REMOVED***private var units: ScalebarUnits

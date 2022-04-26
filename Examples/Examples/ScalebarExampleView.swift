@@ -34,8 +34,8 @@ struct ScalebarExampleView: View {
 ***REMOVED******REMOVED***/ Customizes scalebar appearance. If not used, default styling will be applied.
 ***REMOVED***private let scalebarSettings = ScalebarSettings()
 ***REMOVED***
-***REMOVED******REMOVED***/ The width of the scalebar.
-***REMOVED***private let width: Double = 175.0
+***REMOVED******REMOVED***/ The maximum screen width allotted to the scalebar.
+***REMOVED***private let maxWidth: Double = 175.0
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***MapView(map: map, viewpoint: viewpoint)
@@ -45,10 +45,10 @@ struct ScalebarExampleView: View {
 ***REMOVED******REMOVED******REMOVED***.overlay(alignment: alignment) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if map.loadStatus == .loaded {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Scalebar(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***maxWidth: maxWidth,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***spatialReference: spatialReference,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***unitsPerPoint: $unitsPerPoint,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint: $viewpoint,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***width: width
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint: $viewpoint
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.horizontal, 10)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.vertical, 50)

@@ -60,6 +60,9 @@ public struct Scalebar: View {
 ***REMOVED******REMOVED***/ The line height allotted to line style scalebar renders.
 ***REMOVED***static let lineFrameHeight = 6.0
 ***REMOVED***
+***REMOVED******REMOVED***/ The width of the prominent scalebar line.
+***REMOVED***static let lineWidth: Double = 2.0
+***REMOVED***
 ***REMOVED******REMOVED***/ The render style for this `Scalebar`.
 ***REMOVED***private let style: ScalebarStyle
 ***REMOVED***
@@ -68,6 +71,7 @@ public struct Scalebar: View {
 ***REMOVED******REMOVED***/ A scalebar displays the current map scale.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - autoHide: Set this to `true` to have the scalebar automatically show & hide itself.
+***REMOVED******REMOVED***/   - maxWidth: The maximum screen width allotted to the scalebar.
 ***REMOVED******REMOVED***/   - minScale: Set a minScale if you only want the scalebar to appear when you reach a large
 ***REMOVED******REMOVED***/***REMOVED*** enough scale maybe something like 10_000_000. This could be useful because the scalebar is
 ***REMOVED******REMOVED***/***REMOVED*** really only accurate for the center of the map on smaller scales (when zoomed way out). A
@@ -78,17 +82,16 @@ public struct Scalebar: View {
 ***REMOVED******REMOVED***/   - unitsPerPoint: The current number of device independent pixels to map display units.
 ***REMOVED******REMOVED***/   - useGeodeticCalculations: Set `false` to compute scale without a geodesic curve.
 ***REMOVED******REMOVED***/   - viewpoint: The map's current viewpoint.
-***REMOVED******REMOVED***/   - width: The screen width allotted to the scalebar.
 ***REMOVED***public init(
 ***REMOVED******REMOVED***autoHide: Bool = false,
+***REMOVED******REMOVED***maxWidth: Double,
 ***REMOVED******REMOVED***minScale: Double = .zero,
 ***REMOVED******REMOVED***spatialReference: SpatialReference? = nil,
 ***REMOVED******REMOVED***style: ScalebarStyle = .alternatingBar,
 ***REMOVED******REMOVED***units: ScalebarUnits = NSLocale.current.usesMetricSystem ? .metric : .imperial,
 ***REMOVED******REMOVED***unitsPerPoint: Binding<Double?>,
 ***REMOVED******REMOVED***useGeodeticCalculations: Bool = true,
-***REMOVED******REMOVED***viewpoint: Binding<Viewpoint?>,
-***REMOVED******REMOVED***width: Double
+***REMOVED******REMOVED***viewpoint: Binding<Viewpoint?>
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.style = style
 ***REMOVED******REMOVED***self.viewpoint = viewpoint
@@ -96,10 +99,10 @@ public struct Scalebar: View {
 ***REMOVED******REMOVED***_viewModel = StateObject(
 ***REMOVED******REMOVED******REMOVED***wrappedValue: ScalebarViewModel(
 ***REMOVED******REMOVED******REMOVED******REMOVED***autoHide,
+***REMOVED******REMOVED******REMOVED******REMOVED***maxWidth,
 ***REMOVED******REMOVED******REMOVED******REMOVED***minScale,
 ***REMOVED******REMOVED******REMOVED******REMOVED***spatialReference,
 ***REMOVED******REMOVED******REMOVED******REMOVED***style,
-***REMOVED******REMOVED******REMOVED******REMOVED***width,
 ***REMOVED******REMOVED******REMOVED******REMOVED***units,
 ***REMOVED******REMOVED******REMOVED******REMOVED***unitsPerPoint,
 ***REMOVED******REMOVED******REMOVED******REMOVED***useGeodeticCalculations,

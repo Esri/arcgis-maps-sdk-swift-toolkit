@@ -27,9 +27,6 @@ public struct ScalebarSettings {
 ***REMOVED******REMOVED***/ The color of the prominent scalebar line.
 ***REMOVED***var lineColor: Color
 ***REMOVED***
-***REMOVED******REMOVED***/ The width of the prominent scalebar line.
-***REMOVED***var lineWidth: Double
-***REMOVED***
 ***REMOVED******REMOVED***/ The shadow color used by all scalebar style renders.
 ***REMOVED***var shadowColor: Color
 ***REMOVED***
@@ -42,12 +39,20 @@ public struct ScalebarSettings {
 ***REMOVED******REMOVED***/ The text shadow color used by all scalebar style renders.
 ***REMOVED***var textShadowColor: Color
 ***REMOVED***
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - barCornerRadius: The corner radius used by bar style scalebar renders.
+***REMOVED******REMOVED***/   - fillColor1: The darker fill color used by the alternating bar style render.
+***REMOVED******REMOVED***/   - fillColor2: The lighter fill color used by the bar style renders.
+***REMOVED******REMOVED***/   - lineColor: The color of the prominent scalebar line.
+***REMOVED******REMOVED***/   - shadowColor: The shadow color used by all scalebar style renders.
+***REMOVED******REMOVED***/   - shadowRadius: The shadow radius used by all scalebar style renders.
+***REMOVED******REMOVED***/   - textColor: The text color used by all scalebar style renders.
+***REMOVED******REMOVED***/   - textShadowColor: The text shadow color used by all scalebar style renders.
 ***REMOVED***public init(
 ***REMOVED******REMOVED***barCornerRadius: Double = 2.5,
 ***REMOVED******REMOVED***fillColor1: Color = .black,
 ***REMOVED******REMOVED***fillColor2: Color = Color(uiColor: .lightGray).opacity(0.5),
 ***REMOVED******REMOVED***lineColor: Color = .white,
-***REMOVED******REMOVED***lineWidth: Double = 2.0,
 ***REMOVED******REMOVED***shadowColor: Color = Color(uiColor: .black).opacity(0.65),
 ***REMOVED******REMOVED***shadowRadius: Double = 1.0,
 ***REMOVED******REMOVED***textColor: Color = .primary,
@@ -57,7 +62,6 @@ public struct ScalebarSettings {
 ***REMOVED******REMOVED***self.fillColor1 = fillColor1
 ***REMOVED******REMOVED***self.fillColor2 = fillColor2
 ***REMOVED******REMOVED***self.lineColor = lineColor
-***REMOVED******REMOVED***self.lineWidth = lineWidth
 ***REMOVED******REMOVED***self.shadowColor = shadowColor
 ***REMOVED******REMOVED***self.shadowRadius = shadowRadius
 ***REMOVED******REMOVED***self.textColor = textColor
