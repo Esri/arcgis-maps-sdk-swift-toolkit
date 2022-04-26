@@ -48,7 +48,7 @@ public struct Scalebar: View {
 ***REMOVED******REMOVED***/ The corner radius used by bar style scalebar renders.
 ***REMOVED***internal static let barCornerRadius = 2.5
 ***REMOVED***
-***REMOVED******REMOVED***/ The frame height alloted to bar style scalebar renders.
+***REMOVED******REMOVED***/ The frame height allotted to bar style scalebar renders.
 ***REMOVED***internal static let barFrameHeight = 10.0
 ***REMOVED***
 ***REMOVED******REMOVED***/ The darker fill color used by the alternating bar style render.
@@ -66,7 +66,7 @@ public struct Scalebar: View {
 ***REMOVED******REMOVED***/ The color of the prominent scalebar line.
 ***REMOVED***internal static let lineColor = Color.white
 ***REMOVED***
-***REMOVED******REMOVED***/ The line height alloted to line style scalebar renders.
+***REMOVED******REMOVED***/ The line height allotted to line style scalebar renders.
 ***REMOVED***internal static let lineFrameHeight = 6.0
 ***REMOVED***
 ***REMOVED******REMOVED***/ The width of the prominent scalebar line.
@@ -102,7 +102,7 @@ public struct Scalebar: View {
 ***REMOVED******REMOVED***/   - unitsPerPoint: The current number of device independent pixels to map display units.
 ***REMOVED******REMOVED***/   - useGeodeticCalculations: Set `false` to compute scale without a geodesic curve.
 ***REMOVED******REMOVED***/   - viewpoint: The map's current viewpoint.
-***REMOVED******REMOVED***/   - width: The screen width alloted to the scalebar.
+***REMOVED******REMOVED***/   - width: The screen width allotted to the scalebar.
 ***REMOVED***public init(
 ***REMOVED******REMOVED***autoHide: Bool = false,
 ***REMOVED******REMOVED***minScale: Double = .zero,
