@@ -76,7 +76,7 @@ final class ScalebarViewModel: ObservableObject {
     ///   - minScale: A value of 0 indicates the scalebar segments should always recalculate.
     ///   - spatialReference: The map's spatial reference.
     ///   - style: The visual appearance of the scalebar.
-    ///   - targetWidth: The screen width alloted to the scalebar.
+    ///   - targetWidth: The screen width allotted to the scalebar.
     ///   - units: The units to be displayed in the scalebar.
     ///   - unitsPerPoint: The current number of device independent pixels to map display units.
     ///   - useGeodeticCalculations: Determines if a geodesic curve should be used to compute
