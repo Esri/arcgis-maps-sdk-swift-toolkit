@@ -35,7 +35,7 @@ extension Scalebar {
 ***REMOVED******REMOVED******REMOVED***HStack(spacing: -Scalebar.lineWidth) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ForEach(viewModel.labels.dropFirst(), id: \.index) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Rectangle()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fill($0.index % 2 == 0 ? Scalebar.fillColor1 : Scalebar.fillColor2)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fill($0.index.isMultiple(of: 2) ? Scalebar.fillColor1 : Scalebar.fillColor2)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.border(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Scalebar.lineColor,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***width: Scalebar.lineWidth
