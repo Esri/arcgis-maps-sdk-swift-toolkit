@@ -21,11 +21,14 @@ public struct Scalebar: View {
     /// The vertical amount of space used by the scalebar.
     @State private var height: Double?
     
+    /// Appearance settings.
+    @Environment(\.scalebarSettings) var settings
+    
     /// The view model used by the `Scalebar`.
     @StateObject var viewModel: ScalebarViewModel
     
     /// The font used by the scalebar, available in both `Font` and `UIFont` types.
-    internal static var font: (font: Font, uiFont: UIFont) {
+    static var font: (font: Font, uiFont: UIFont) {
         let size = 9.0
         let uiFont = UIFont.systemFont(
             ofSize: size,
@@ -36,7 +39,7 @@ public struct Scalebar: View {
     }
     
     /// The rendering height of the scalebar font.
-    internal static var fontHeight: Double {
+    static var fontHeight: Double {
         return "".size(withAttributes: [.font: Scalebar.font.uiFont]).height
     }
     
@@ -45,44 +48,17 @@ public struct Scalebar: View {
     
     // - MARK: Internal/Private constants
     
-    /// The corner radius used by bar style scalebar renders.
-    internal static let barCornerRadius = 2.5
-    
     /// The frame height allotted to bar style scalebar renders.
-    internal static let barFrameHeight = 10.0
-    
-    /// The darker fill color used by the alternating bar style render.
-    internal static let fillColor1 = Color.black
-    
-    /// The lighter fill color used by the bar style renders.
-    internal static let fillColor2 = Color(uiColor: .lightGray).opacity(0.5)
+    static let barFrameHeight = 10.0
     
     /// The spacing between labels and the scalebar.
-    internal static let labelYPad: CGFloat = 2.0
+    static let labelYPad: CGFloat = 2.0
     
     /// The required padding between scalebar labels.
-    internal static let labelXPad: CGFloat = 4.0
-    
-    /// The color of the prominent scalebar line.
-    internal static let lineColor = Color.white
+    static let labelXPad: CGFloat = 4.0
     
     /// The line height allotted to line style scalebar renders.
-    internal static let lineFrameHeight = 6.0
-    
-    /// The width of the prominent scalebar line.
-    internal static let lineWidth = 2.0
-    
-    /// The shadow color used by all scalebar style renders.
-    internal static let shadowColor = Color(uiColor: .black).opacity(0.65)
-    
-    /// The shadow radius used by all scalebar style renders.
-    internal static let shadowRadius = 1.0
-    
-    /// The text color used by all scalebar style renders.
-    internal static let textColor = Color.primary
-    
-    /// The text shadow color used by all scalebar style renders.
-    internal static let textShadowColor = Color.white
+    static let lineFrameHeight = 6.0
     
     /// The render style for this `Scalebar`.
     private let style: ScalebarStyle

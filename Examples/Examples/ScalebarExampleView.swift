@@ -31,6 +31,9 @@ struct ScalebarExampleView: View {
     /// The `Map` displayed in the `MapView`.
     private let map = Map(basemapStyle: .arcGISTopographic)
     
+    /// Customizes scalebar appearance. If not used, default styling will be applied.
+    private let scalebarSettings = ScalebarSettings()
+    
     /// The width of the scalebar.
     private let width: Double = 175.0
     
@@ -51,5 +54,6 @@ struct ScalebarExampleView: View {
                     .padding(.vertical, 50)
                 }
             }
+            .environment(\.scalebarSettings, scalebarSettings)
     }
 }

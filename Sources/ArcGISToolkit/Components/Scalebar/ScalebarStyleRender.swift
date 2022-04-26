@@ -32,13 +32,13 @@ extension Scalebar {
     /// Renders a scalebar with `ScalebarStyle.alternatingBar`.
     var alternatingBarStyleRender: some View {
         VStack(spacing: Scalebar.labelYPad) {
-            HStack(spacing: -Scalebar.lineWidth) {
+            HStack(spacing: -settings.lineWidth) {
                 ForEach(viewModel.labels.dropFirst(), id: \.index) {
                     Rectangle()
-                        .fill($0.index.isMultiple(of: 2) ? Scalebar.fillColor1 : Scalebar.fillColor2)
+                        .fill($0.index.isMultiple(of: 2) ? settings.fillColor1 : settings.fillColor2)
                         .border(
-                            Scalebar.lineColor,
-                            width: Scalebar.lineWidth
+                            settings.lineColor,
+                            width: settings.lineWidth
                         )
                 }
             }
@@ -46,7 +46,7 @@ extension Scalebar {
                 height: Scalebar.barFrameHeight,
                 alignment: .leading
             )
-            .cornerRadius(Scalebar.barCornerRadius)
+            .cornerRadius(settings.barCornerRadius)
             .scalebarShadow()
             allLabelsView
         }
@@ -56,16 +56,16 @@ extension Scalebar {
     var barStyleRender: some View {
         VStack(spacing: Scalebar.labelYPad) {
             Rectangle()
-                .fill(Scalebar.fillColor2)
+                .fill(settings.fillColor2)
                 .border(
-                    Scalebar.lineColor,
-                    width: Scalebar.lineWidth
+                    settings.lineColor,
+                    width: settings.lineWidth
                 )
                 .frame(
                     height: Scalebar.barFrameHeight,
                     alignment: .leading
                 )
-                .cornerRadius(Scalebar.barCornerRadius)
+                .cornerRadius(settings.barCornerRadius)
                 .scalebarShadow()
             Text(viewModel.labels.last?.text ?? "")
                 .scalebarText()
@@ -108,12 +108,12 @@ extension Scalebar {
                 }
                 .stroke(
                     style: .init(
-                        lineWidth: Scalebar.lineWidth,
+                        lineWidth: settings.lineWidth,
                         lineCap: .round,
                         lineJoin: .round
                     )
                 )
-                .fill(Scalebar.lineColor)
+                .fill(settings.lineColor)
                 .scalebarShadow()
             }
             .frame(height: Scalebar.barFrameHeight)
@@ -146,12 +146,12 @@ extension Scalebar {
                 }
                 .stroke(
                     style: .init(
-                        lineWidth: Scalebar.lineWidth,
+                        lineWidth: settings.lineWidth,
                         lineCap: .round,
                         lineJoin: .round
                     )
                 )
-                .fill(Scalebar.lineColor)
+                .fill(settings.lineColor)
                 .scalebarShadow()
             }
             .frame(height: Scalebar.lineFrameHeight)
@@ -174,12 +174,12 @@ extension Scalebar {
                 }
                 .stroke(
                     style: .init(
-                        lineWidth: Scalebar.lineWidth,
+                        lineWidth: settings.lineWidth,
                         lineCap: .round,
                         lineJoin: .round
                     )
                 )
-                .fill(Scalebar.lineColor)
+                .fill(settings.lineColor)
                 .scalebarShadow()
             }
             .frame(height: Scalebar.lineFrameHeight)
