@@ -21,11 +21,14 @@ public struct Scalebar: View {
 ***REMOVED******REMOVED***/ The vertical amount of space used by the scalebar.
 ***REMOVED***@State private var height: Double?
 ***REMOVED***
+***REMOVED******REMOVED***/ Appearance settings.
+***REMOVED***@Environment(\.scalebarSettings) var settings
+***REMOVED***
 ***REMOVED******REMOVED***/ The view model used by the `Scalebar`.
 ***REMOVED***@StateObject var viewModel: ScalebarViewModel
 ***REMOVED***
 ***REMOVED******REMOVED***/ The font used by the scalebar, available in both `Font` and `UIFont` types.
-***REMOVED***internal static var font: (font: Font, uiFont: UIFont) {
+***REMOVED***static var font: (font: Font, uiFont: UIFont) {
 ***REMOVED******REMOVED***let size = 9.0
 ***REMOVED******REMOVED***let uiFont = UIFont.systemFont(
 ***REMOVED******REMOVED******REMOVED***ofSize: size,
@@ -36,7 +39,7 @@ public struct Scalebar: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The rendering height of the scalebar font.
-***REMOVED***internal static var fontHeight: Double {
+***REMOVED***static var fontHeight: Double {
 ***REMOVED******REMOVED***return "".size(withAttributes: [.font: Scalebar.font.uiFont]).height
 ***REMOVED***
 ***REMOVED***
@@ -45,44 +48,17 @@ public struct Scalebar: View {
 ***REMOVED***
 ***REMOVED******REMOVED*** - MARK: Internal/Private constants
 ***REMOVED***
-***REMOVED******REMOVED***/ The corner radius used by bar style scalebar renders.
-***REMOVED***internal static let barCornerRadius = 2.5
-***REMOVED***
 ***REMOVED******REMOVED***/ The frame height allotted to bar style scalebar renders.
-***REMOVED***internal static let barFrameHeight = 10.0
-***REMOVED***
-***REMOVED******REMOVED***/ The darker fill color used by the alternating bar style render.
-***REMOVED***internal static let fillColor1 = Color.black
-***REMOVED***
-***REMOVED******REMOVED***/ The lighter fill color used by the bar style renders.
-***REMOVED***internal static let fillColor2 = Color(uiColor: .lightGray).opacity(0.5)
+***REMOVED***static let barFrameHeight = 10.0
 ***REMOVED***
 ***REMOVED******REMOVED***/ The spacing between labels and the scalebar.
-***REMOVED***internal static let labelYPad: CGFloat = 2.0
+***REMOVED***static let labelYPad: CGFloat = 2.0
 ***REMOVED***
 ***REMOVED******REMOVED***/ The required padding between scalebar labels.
-***REMOVED***internal static let labelXPad: CGFloat = 4.0
-***REMOVED***
-***REMOVED******REMOVED***/ The color of the prominent scalebar line.
-***REMOVED***internal static let lineColor = Color.white
+***REMOVED***static let labelXPad: CGFloat = 4.0
 ***REMOVED***
 ***REMOVED******REMOVED***/ The line height allotted to line style scalebar renders.
-***REMOVED***internal static let lineFrameHeight = 6.0
-***REMOVED***
-***REMOVED******REMOVED***/ The width of the prominent scalebar line.
-***REMOVED***internal static let lineWidth = 2.0
-***REMOVED***
-***REMOVED******REMOVED***/ The shadow color used by all scalebar style renders.
-***REMOVED***internal static let shadowColor = Color(uiColor: .black).opacity(0.65)
-***REMOVED***
-***REMOVED******REMOVED***/ The shadow radius used by all scalebar style renders.
-***REMOVED***internal static let shadowRadius = 1.0
-***REMOVED***
-***REMOVED******REMOVED***/ The text color used by all scalebar style renders.
-***REMOVED***internal static let textColor = Color.primary
-***REMOVED***
-***REMOVED******REMOVED***/ The text shadow color used by all scalebar style renders.
-***REMOVED***internal static let textShadowColor = Color.white
+***REMOVED***static let lineFrameHeight = 6.0
 ***REMOVED***
 ***REMOVED******REMOVED***/ The render style for this `Scalebar`.
 ***REMOVED***private let style: ScalebarStyle

@@ -32,13 +32,13 @@ extension Scalebar {
 ***REMOVED******REMOVED***/ Renders a scalebar with `ScalebarStyle.alternatingBar`.
 ***REMOVED***var alternatingBarStyleRender: some View {
 ***REMOVED******REMOVED***VStack(spacing: Scalebar.labelYPad) {
-***REMOVED******REMOVED******REMOVED***HStack(spacing: -Scalebar.lineWidth) {
+***REMOVED******REMOVED******REMOVED***HStack(spacing: -settings.lineWidth) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ForEach(viewModel.labels.dropFirst(), id: \.index) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Rectangle()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fill($0.index.isMultiple(of: 2) ? Scalebar.fillColor1 : Scalebar.fillColor2)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fill($0.index.isMultiple(of: 2) ? settings.fillColor1 : settings.fillColor2)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.border(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Scalebar.lineColor,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***width: Scalebar.lineWidth
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***settings.lineColor,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***width: settings.lineWidth
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
@@ -46,7 +46,7 @@ extension Scalebar {
 ***REMOVED******REMOVED******REMOVED******REMOVED***height: Scalebar.barFrameHeight,
 ***REMOVED******REMOVED******REMOVED******REMOVED***alignment: .leading
 ***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***.cornerRadius(Scalebar.barCornerRadius)
+***REMOVED******REMOVED******REMOVED***.cornerRadius(settings.barCornerRadius)
 ***REMOVED******REMOVED******REMOVED***.scalebarShadow()
 ***REMOVED******REMOVED******REMOVED***allLabelsView
 ***REMOVED***
@@ -56,16 +56,16 @@ extension Scalebar {
 ***REMOVED***var barStyleRender: some View {
 ***REMOVED******REMOVED***VStack(spacing: Scalebar.labelYPad) {
 ***REMOVED******REMOVED******REMOVED***Rectangle()
-***REMOVED******REMOVED******REMOVED******REMOVED***.fill(Scalebar.fillColor2)
+***REMOVED******REMOVED******REMOVED******REMOVED***.fill(settings.fillColor2)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.border(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Scalebar.lineColor,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***width: Scalebar.lineWidth
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***settings.lineColor,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***width: settings.lineWidth
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.frame(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***height: Scalebar.barFrameHeight,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***alignment: .leading
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED***.cornerRadius(Scalebar.barCornerRadius)
+***REMOVED******REMOVED******REMOVED******REMOVED***.cornerRadius(settings.barCornerRadius)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.scalebarShadow()
 ***REMOVED******REMOVED******REMOVED***Text(viewModel.labels.last?.text ?? "")
 ***REMOVED******REMOVED******REMOVED******REMOVED***.scalebarText()
@@ -108,12 +108,12 @@ extension Scalebar {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.stroke(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***style: .init(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***lineWidth: Scalebar.lineWidth,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***lineWidth: settings.lineWidth,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***lineCap: .round,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***lineJoin: .round
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED***.fill(Scalebar.lineColor)
+***REMOVED******REMOVED******REMOVED******REMOVED***.fill(settings.lineColor)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.scalebarShadow()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.frame(height: Scalebar.barFrameHeight)
@@ -146,12 +146,12 @@ extension Scalebar {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.stroke(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***style: .init(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***lineWidth: Scalebar.lineWidth,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***lineWidth: settings.lineWidth,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***lineCap: .round,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***lineJoin: .round
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED***.fill(Scalebar.lineColor)
+***REMOVED******REMOVED******REMOVED******REMOVED***.fill(settings.lineColor)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.scalebarShadow()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.frame(height: Scalebar.lineFrameHeight)
@@ -174,12 +174,12 @@ extension Scalebar {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.stroke(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***style: .init(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***lineWidth: Scalebar.lineWidth,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***lineWidth: settings.lineWidth,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***lineCap: .round,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***lineJoin: .round
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED***.fill(Scalebar.lineColor)
+***REMOVED******REMOVED******REMOVED******REMOVED***.fill(settings.lineColor)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.scalebarShadow()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.frame(height: Scalebar.lineFrameHeight)
