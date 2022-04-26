@@ -66,7 +66,7 @@ public struct Scalebar: View {
     /// The color of the prominent scalebar line.
     internal static let lineColor = Color.white
     
-    /// The line height alloted to line style scalebar renders.
+    /// The line height allotted to line style scalebar renders.
     internal static let lineFrameHeight = 6.0
     
     /// The width of the prominent scalebar line.
