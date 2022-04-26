@@ -45,15 +45,15 @@ public enum ScalebarUnits {
     /// A distance of 25 will return 10 as 10 is the highest power of 10 that will fit into 25.
     /// A distance of 550 will return 100 as 100 is the highest power of 10 that will fit into 550.
     /// A distance of 2,222 will return 1000 as 1000 is the highest power of 10 that will fit into 2,222.
-    private static func magnitudeForDistance(distance: Double) -> Double {
+    private static func magnitude(forDistance distance: Double) -> Double {
         return pow(10, floor(log10(distance)))
     }
     
     /// Returns a multiplier for a given distance.
     /// - Parameter distance: A distance to compute the multiplier for.
     /// - Returns: A multiplier for a given distance.
-    private static func multiplierForDistance(distance: Double) -> Double {
-        let residual = distance / ScalebarUnits.magnitudeForDistance(distance: distance)
+    private static func multiplier(forDistance distance: Double) -> Double {
+        let residual = distance / ScalebarUnits.magnitude(forDistance: distance)
         let multiplier = ScalebarUnits.roundNumberMultipliers.filter { $0 <= residual }.last ?? 0
         return multiplier
     }
@@ -61,9 +61,7 @@ public enum ScalebarUnits {
     /// Returns a list of segment options for a given multiplier.
     /// - Parameter multiplier: A distance to compute the multiplier for.
     /// - Returns: A list of segment options for a given multiplier.
-    private static func segmentOptionsForMultiplier(
-        multiplier: Double
-    ) -> [Int] {
+    private static func segmentOptions(forMultiplier multiplier: Double) -> [Int] {
         switch multiplier {
         case 1:
             return [1, 2, 4, 5]
@@ -106,12 +104,12 @@ public enum ScalebarUnits {
     
     /// - Returns: The best number of segments so that we get relatively round numbers when the
     /// distance is divided up.
-    internal static func numSegmentsForDistance(
-        distance: Double,
+    internal static func numSegments(
+        forDistance distance: Double,
         maxNumSegments: Int
     ) -> Int {
-        let multiplier = multiplierForDistance(distance: distance)
-        let options = segmentOptionsForMultiplier(multiplier: multiplier)
+        let multiplier = multiplier(forDistance: distance)
+        let options = segmentOptions(forMultiplier: multiplier)
         let num = options.filter { $0 <= maxNumSegments }.last ?? 1
         return num
     }
@@ -122,8 +120,8 @@ public enum ScalebarUnits {
         to distance: Double,
         units: LinearUnit
     ) -> Double {
-        let magnitude = ScalebarUnits.magnitudeForDistance(distance: distance)
-        let multiplier = ScalebarUnits.multiplierForDistance(distance: distance)
+        let magnitude = ScalebarUnits.magnitude(forDistance: distance)
+        let multiplier = ScalebarUnits.multiplier(forDistance: distance)
         let roundNumber = multiplier * magnitude
         
         // Because feet and miles are not relationally multiples of 10 with

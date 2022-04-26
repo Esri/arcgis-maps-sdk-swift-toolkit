@@ -31,7 +31,7 @@ final class ScalebarViewModel: ObservableObject {
     
     // - MARK: Public vars
     
-    /// A sreen length and displayable string for the equivalent length in the alternate unit.
+    /// A screen length and displayable string for the equivalent length in the alternate unit.
     var alternateUnit: (screenLength: CGFloat, label: String) {
         guard let displayUnit = displayUnit else {
             return (.zero, "")
@@ -226,7 +226,7 @@ final class ScalebarViewModel: ObservableObject {
             minSegmentTestString = "9.9"
         }
         
-        // Use 1.5 because in the text is longer in the last label
+        // Multiply by 1.5 to accommodate the units in the last label
         let minSegmentWidth =
             minSegmentTestString.size(withAttributes: [.font: Scalebar.font.uiFont]).width * 1.5
             +
@@ -237,8 +237,8 @@ final class ScalebarViewModel: ObservableObject {
         // Cap segments at 4
         let maxNumSegments = min(suggestedNumSegments, 4)
         
-        let numSegments: Int = ScalebarUnits.numSegmentsForDistance(
-            distance: lineMapLength,
+        let numSegments: Int = ScalebarUnits.numSegments(
+            forDistance: lineMapLength,
             maxNumSegments: maxNumSegments
         )
         
