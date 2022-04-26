@@ -48,7 +48,7 @@ public struct Scalebar: View {
     /// The corner radius used by bar style scalebar renders.
     internal static let barCornerRadius = 2.5
     
-    /// The frame height alloted to bar style scalebar renders.
+    /// The frame height allotted to bar style scalebar renders.
     internal static let barFrameHeight = 10.0
     
     /// The darker fill color used by the alternating bar style render.
