@@ -27,9 +27,6 @@ public struct ScalebarSettings {
     /// The color of the prominent scalebar line.
     var lineColor: Color
     
-    /// The width of the prominent scalebar line.
-    var lineWidth: Double
-    
     /// The shadow color used by all scalebar style renders.
     var shadowColor: Color
     
@@ -42,12 +39,20 @@ public struct ScalebarSettings {
     /// The text shadow color used by all scalebar style renders.
     var textShadowColor: Color
     
+    /// - Parameters:
+    ///   - barCornerRadius: The corner radius used by bar style scalebar renders.
+    ///   - fillColor1: The darker fill color used by the alternating bar style render.
+    ///   - fillColor2: The lighter fill color used by the bar style renders.
+    ///   - lineColor: The color of the prominent scalebar line.
+    ///   - shadowColor: The shadow color used by all scalebar style renders.
+    ///   - shadowRadius: The shadow radius used by all scalebar style renders.
+    ///   - textColor: The text color used by all scalebar style renders.
+    ///   - textShadowColor: The text shadow color used by all scalebar style renders.
     public init(
         barCornerRadius: Double = 2.5,
         fillColor1: Color = .black,
         fillColor2: Color = Color(uiColor: .lightGray).opacity(0.5),
         lineColor: Color = .white,
-        lineWidth: Double = 2.0,
         shadowColor: Color = Color(uiColor: .black).opacity(0.65),
         shadowRadius: Double = 1.0,
         textColor: Color = .primary,
@@ -57,7 +62,6 @@ public struct ScalebarSettings {
         self.fillColor1 = fillColor1
         self.fillColor2 = fillColor2
         self.lineColor = lineColor
-        self.lineWidth = lineWidth
         self.shadowColor = shadowColor
         self.shadowRadius = shadowRadius
         self.textColor = textColor

@@ -32,13 +32,13 @@ extension Scalebar {
     /// Renders a scalebar with `ScalebarStyle.alternatingBar`.
     var alternatingBarStyleRender: some View {
         VStack(spacing: Scalebar.labelYPad) {
-            HStack(spacing: -settings.lineWidth) {
+            HStack(spacing: -Scalebar.lineWidth) {
                 ForEach(viewModel.labels.dropFirst(), id: \.index) {
                     Rectangle()
                         .fill($0.index.isMultiple(of: 2) ? settings.fillColor1 : settings.fillColor2)
                         .border(
                             settings.lineColor,
-                            width: settings.lineWidth
+                            width: Scalebar.lineWidth
                         )
                 }
             }
@@ -59,7 +59,7 @@ extension Scalebar {
                 .fill(settings.fillColor2)
                 .border(
                     settings.lineColor,
-                    width: settings.lineWidth
+                    width: Scalebar.lineWidth
                 )
                 .frame(
                     height: Scalebar.barFrameHeight,
@@ -108,7 +108,7 @@ extension Scalebar {
                 }
                 .stroke(
                     style: .init(
-                        lineWidth: settings.lineWidth,
+                        lineWidth: Scalebar.lineWidth,
                         lineCap: .round,
                         lineJoin: .round
                     )
@@ -146,7 +146,7 @@ extension Scalebar {
                 }
                 .stroke(
                     style: .init(
-                        lineWidth: settings.lineWidth,
+                        lineWidth: Scalebar.lineWidth,
                         lineCap: .round,
                         lineJoin: .round
                     )
@@ -174,7 +174,7 @@ extension Scalebar {
                 }
                 .stroke(
                     style: .init(
-                        lineWidth: settings.lineWidth,
+                        lineWidth: Scalebar.lineWidth,
                         lineCap: .round,
                         lineJoin: .round
                     )

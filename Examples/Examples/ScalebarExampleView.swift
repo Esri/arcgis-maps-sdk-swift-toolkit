@@ -34,8 +34,8 @@ struct ScalebarExampleView: View {
     /// Customizes scalebar appearance. If not used, default styling will be applied.
     private let scalebarSettings = ScalebarSettings()
     
-    /// The width of the scalebar.
-    private let width: Double = 175.0
+    /// The maximum screen width allotted to the scalebar.
+    private let maxWidth: Double = 175.0
     
     var body: some View {
         MapView(map: map, viewpoint: viewpoint)
@@ -45,10 +45,10 @@ struct ScalebarExampleView: View {
             .overlay(alignment: alignment) {
                 if map.loadStatus == .loaded {
                     Scalebar(
+                        maxWidth: maxWidth,
                         spatialReference: spatialReference,
                         unitsPerPoint: $unitsPerPoint,
-                        viewpoint: $viewpoint,
-                        width: width
+                        viewpoint: $viewpoint
                     )
                     .padding(.horizontal, 10)
                     .padding(.vertical, 50)
