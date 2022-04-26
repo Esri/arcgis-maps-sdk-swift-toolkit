@@ -73,10 +73,10 @@ final class ScalebarViewModel: ObservableObject {
     /// A scalebar view model controls the underlying data used to render a scalebar.
     /// - Parameters:
     ///   - autoHide: Determines if the scalebar should automatically show & hide itself.
+    ///   - maxWidth: The maximum screen width allotted to the scalebar.
     ///   - minScale: A value of 0 indicates the scalebar segments should always recalculate.
     ///   - spatialReference: The map's spatial reference.
     ///   - style: The visual appearance of the scalebar.
-    ///   - targetWidth: The screen width allotted to the scalebar.
     ///   - units: The units to be displayed in the scalebar.
     ///   - unitsPerPoint: The current number of device independent pixels to map display units.
     ///   - useGeodeticCalculations: Determines if a geodesic curve should be used to compute
@@ -84,20 +84,20 @@ final class ScalebarViewModel: ObservableObject {
     ///   - viewpoint: The map's current viewpoint.
     init(
         _ autoHide: Bool,
+        _ maxWidth: Double,
         _ minScale: Double,
         _ spatialReference: SpatialReference?,
         _ style: ScalebarStyle,
-        _ targetWidth: Double,
         _ units: ScalebarUnits,
         _ unitsPerPoint: Binding<Double?>,
         _ useGeodeticCalculations: Bool,
         _ viewpoint: Viewpoint?
     ) {
         self.isVisible = autoHide ? false : true
+        self.maxWidth = maxWidth
         self.minScale = minScale
         self.spatialReference = spatialReference
         self.style = style
-        self.targetWidth = targetWidth
         self.units = units
         self.unitsPerPoint = unitsPerPoint
         self.useGeodeticCalculations = useGeodeticCalculations
@@ -154,9 +154,6 @@ final class ScalebarViewModel: ObservableObject {
     
     // - MARK: Private vars
     
-    /// Appearance settings.
-    @Environment(\.scalebarSettings) var settings
-    
     /// The timer to determine when to autohide the scalebar.
     private var autoHideTimer: Timer?
     
@@ -166,9 +163,9 @@ final class ScalebarViewModel: ObservableObject {
         case .alternatingBar, .dualUnitLine, .graduatedLine:
             // " km" will render wider than " mi"
             let maxUnitDisplayWidth = " km".size(withAttributes: [.font: Scalebar.font.uiFont]).width
-            return targetWidth - (settings.lineWidth / 2.0) - maxUnitDisplayWidth
+            return maxWidth - (Scalebar.lineWidth / 2.0) - maxUnitDisplayWidth
         case .bar, .line:
-            return targetWidth - settings.lineWidth
+            return maxWidth - Scalebar.lineWidth
         }
     }
     
@@ -178,8 +175,8 @@ final class ScalebarViewModel: ObservableObject {
     /// The length of the line to display in map units.
     private var lineMapLength: Double = .zero
     
-    /// The maximum width allowed for the scalebar.
-    private var targetWidth: Double
+    /// The maximum screen width allotted to the scalebar.
+    private var maxWidth: Double
     
     /// Unit of measure in use.
     private var units: ScalebarUnits

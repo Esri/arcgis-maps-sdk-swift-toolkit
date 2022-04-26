@@ -60,6 +60,9 @@ public struct Scalebar: View {
     /// The line height allotted to line style scalebar renders.
     static let lineFrameHeight = 6.0
     
+    /// The width of the prominent scalebar line.
+    static let lineWidth: Double = 2.0
+    
     /// The render style for this `Scalebar`.
     private let style: ScalebarStyle
     
@@ -68,6 +71,7 @@ public struct Scalebar: View {
     /// A scalebar displays the current map scale.
     /// - Parameters:
     ///   - autoHide: Set this to `true` to have the scalebar automatically show & hide itself.
+    ///   - maxWidth: The maximum screen width allotted to the scalebar.
     ///   - minScale: Set a minScale if you only want the scalebar to appear when you reach a large
     ///     enough scale maybe something like 10_000_000. This could be useful because the scalebar is
     ///     really only accurate for the center of the map on smaller scales (when zoomed way out). A
@@ -78,17 +82,16 @@ public struct Scalebar: View {
     ///   - unitsPerPoint: The current number of device independent pixels to map display units.
     ///   - useGeodeticCalculations: Set `false` to compute scale without a geodesic curve.
     ///   - viewpoint: The map's current viewpoint.
-    ///   - width: The screen width allotted to the scalebar.
     public init(
         autoHide: Bool = false,
+        maxWidth: Double,
         minScale: Double = .zero,
         spatialReference: SpatialReference? = nil,
         style: ScalebarStyle = .alternatingBar,
         units: ScalebarUnits = NSLocale.current.usesMetricSystem ? .metric : .imperial,
         unitsPerPoint: Binding<Double?>,
         useGeodeticCalculations: Bool = true,
-        viewpoint: Binding<Viewpoint?>,
-        width: Double
+        viewpoint: Binding<Viewpoint?>
     ) {
         self.style = style
         self.viewpoint = viewpoint
@@ -96,10 +99,10 @@ public struct Scalebar: View {
         _viewModel = StateObject(
             wrappedValue: ScalebarViewModel(
                 autoHide,
+                maxWidth,
                 minScale,
                 spatialReference,
                 style,
-                width,
                 units,
                 unitsPerPoint,
                 useGeodeticCalculations,
