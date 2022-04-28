@@ -30,7 +30,7 @@ extension Scalebar {
     }
     
     /// Renders a scalebar with `ScalebarStyle.alternatingBar`.
-    var alternatingBarStyleRender: some View {
+    var alternatingBarStyleRenderer: some View {
         VStack(spacing: Scalebar.labelYPad) {
             HStack(spacing: -Scalebar.lineWidth) {
                 ForEach(viewModel.labels.dropFirst(), id: \.index) {
@@ -53,7 +53,7 @@ extension Scalebar {
     }
     
     /// Renders a scalebar with `ScalebarStyle.bar`.
-    var barStyleRender: some View {
+    var barStyleRenderer: some View {
         VStack(spacing: Scalebar.labelYPad) {
             Rectangle()
                 .fill(settings.fillColor2)
@@ -73,7 +73,7 @@ extension Scalebar {
     }
     
     /// Renders a scalebar with `ScalebarStyle.dualUnitLine`.
-    var dualUnitLineStyleRender: some View {
+    var dualUnitLineStyleRenderer: some View {
         VStack(spacing: Scalebar.labelYPad) {
             Text(viewModel.labels.last?.text ?? "")
                 .scalebarText()
@@ -128,7 +128,7 @@ extension Scalebar {
     }
     
     /// Renders a scalebar with `ScalebarStyle.graduatedLine`.
-    var graduatedLineStyleRender: some View {
+    var graduatedLineStyleRenderer: some View {
         VStack(spacing: Scalebar.labelYPad) {
             GeometryReader { geometry in
                 Path { path in
@@ -160,7 +160,7 @@ extension Scalebar {
     }
     
     /// Renders a scalebar with `ScalebarStyle.line`.
-    var lineStyleRender: some View {
+    var lineStyleRenderer: some View {
         VStack(spacing: Scalebar.labelYPad) {
             GeometryReader { geometry in
                 Path { path in
