@@ -116,15 +116,15 @@ public struct Scalebar: View {
             if $viewModel.isVisible.wrappedValue {
                 switch style {
                 case .alternatingBar:
-                    alternatingBarStyleRender
+                    alternatingBarStyleRenderer
                 case .bar:
-                    barStyleRender
+                    barStyleRenderer
                 case .dualUnitLine:
-                    dualUnitLineStyleRender
+                    dualUnitLineStyleRenderer
                 case .graduatedLine:
-                    graduatedLineStyleRender
+                    graduatedLineStyleRenderer
                 case .line:
-                    lineStyleRender
+                    lineStyleRenderer
                 }
             }
         }
