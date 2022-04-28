@@ -30,7 +30,7 @@ extension Scalebar {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Renders a scalebar with `ScalebarStyle.alternatingBar`.
-***REMOVED***var alternatingBarStyleRender: some View {
+***REMOVED***var alternatingBarStyleRenderer: some View {
 ***REMOVED******REMOVED***VStack(spacing: Scalebar.labelYPad) {
 ***REMOVED******REMOVED******REMOVED***HStack(spacing: -Scalebar.lineWidth) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ForEach(viewModel.labels.dropFirst(), id: \.index) {
@@ -53,7 +53,7 @@ extension Scalebar {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Renders a scalebar with `ScalebarStyle.bar`.
-***REMOVED***var barStyleRender: some View {
+***REMOVED***var barStyleRenderer: some View {
 ***REMOVED******REMOVED***VStack(spacing: Scalebar.labelYPad) {
 ***REMOVED******REMOVED******REMOVED***Rectangle()
 ***REMOVED******REMOVED******REMOVED******REMOVED***.fill(settings.fillColor2)
@@ -73,7 +73,7 @@ extension Scalebar {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Renders a scalebar with `ScalebarStyle.dualUnitLine`.
-***REMOVED***var dualUnitLineStyleRender: some View {
+***REMOVED***var dualUnitLineStyleRenderer: some View {
 ***REMOVED******REMOVED***VStack(spacing: Scalebar.labelYPad) {
 ***REMOVED******REMOVED******REMOVED***Text(viewModel.labels.last?.text ?? "")
 ***REMOVED******REMOVED******REMOVED******REMOVED***.scalebarText()
@@ -128,7 +128,7 @@ extension Scalebar {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Renders a scalebar with `ScalebarStyle.graduatedLine`.
-***REMOVED***var graduatedLineStyleRender: some View {
+***REMOVED***var graduatedLineStyleRenderer: some View {
 ***REMOVED******REMOVED***VStack(spacing: Scalebar.labelYPad) {
 ***REMOVED******REMOVED******REMOVED***GeometryReader { geometry in
 ***REMOVED******REMOVED******REMOVED******REMOVED***Path { path in
@@ -160,7 +160,7 @@ extension Scalebar {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Renders a scalebar with `ScalebarStyle.line`.
-***REMOVED***var lineStyleRender: some View {
+***REMOVED***var lineStyleRenderer: some View {
 ***REMOVED******REMOVED***VStack(spacing: Scalebar.labelYPad) {
 ***REMOVED******REMOVED******REMOVED***GeometryReader { geometry in
 ***REMOVED******REMOVED******REMOVED******REMOVED***Path { path in

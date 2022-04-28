@@ -116,15 +116,15 @@ public struct Scalebar: View {
 ***REMOVED******REMOVED******REMOVED***if $viewModel.isVisible.wrappedValue {
 ***REMOVED******REMOVED******REMOVED******REMOVED***switch style {
 ***REMOVED******REMOVED******REMOVED******REMOVED***case .alternatingBar:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***alternatingBarStyleRender
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***alternatingBarStyleRenderer
 ***REMOVED******REMOVED******REMOVED******REMOVED***case .bar:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***barStyleRender
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***barStyleRenderer
 ***REMOVED******REMOVED******REMOVED******REMOVED***case .dualUnitLine:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***dualUnitLineStyleRender
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***dualUnitLineStyleRenderer
 ***REMOVED******REMOVED******REMOVED******REMOVED***case .graduatedLine:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***graduatedLineStyleRender
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***graduatedLineStyleRenderer
 ***REMOVED******REMOVED******REMOVED******REMOVED***case .line:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***lineStyleRender
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***lineStyleRenderer
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
