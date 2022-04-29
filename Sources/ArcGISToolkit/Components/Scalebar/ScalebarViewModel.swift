@@ -23,9 +23,6 @@ final class ScalebarViewModel: ObservableObject {
     /// The computed display length of the scalebar.
     @Published var displayLength: CGFloat = .zero
     
-    /// Indicates if the scalebar should be hidden or not.
-    @Published var isVisible: Bool
-    
     /// The current set of labels to be displayed by the scalebar.
     @Published var labels = [ScalebarLabel]()
     
@@ -72,7 +69,6 @@ final class ScalebarViewModel: ObservableObject {
     
     /// A scalebar view model controls the underlying data used to render a scalebar.
     /// - Parameters:
-    ///   - autoHide: Determines if the scalebar should automatically show & hide itself.
     ///   - maxWidth: The maximum screen width allotted to the scalebar.
     ///   - minScale: A value of 0 indicates the scalebar segments should always recalculate.
     ///   - spatialReference: The map's spatial reference.
@@ -83,7 +79,6 @@ final class ScalebarViewModel: ObservableObject {
     ///     the scale.
     ///   - viewpoint: The map's current viewpoint.
     init(
-        _ autoHide: Bool,
         _ maxWidth: Double,
         _ minScale: Double,
         _ spatialReference: Binding<SpatialReference?>,
@@ -93,7 +88,6 @@ final class ScalebarViewModel: ObservableObject {
         _ useGeodeticCalculations: Bool,
         _ viewpoint: Viewpoint?
     ) {
-        self.isVisible = autoHide ? false : true
         self.maxWidth = maxWidth
         self.minScale = minScale
         self.spatialReference = spatialReference
@@ -111,9 +105,6 @@ final class ScalebarViewModel: ObservableObject {
                 }
                 self.viewpoint = $0
                 self.updateScaleDisplay()
-                if autoHide {
-                    self.performVisibilityAnimation()
-                }
             })
         
         updateScaleDisplay()
@@ -124,14 +115,8 @@ final class ScalebarViewModel: ObservableObject {
     /// The amount of time to wait between value calculations.
     private let delay = DispatchQueue.SchedulerTimeType.Stride.seconds(0.05)
     
-    /// The speed at which to animate `isVisible` to `true`.
-    private let displaySpeed = 3.0
-    
     /// The curve type to use when performing scale calculations.
     private let geodeticCurveType: GeometryEngine.GeodeticCurveType = .geodesic
-    
-    /// The time to wait in seconds before animating `isVisible` to `false`.
-    private let hideTimeInterval = 1.75
     
     /// A `minScale` of 0 means the scalebar segments will always recalculate.
     private let minScale: Double
@@ -150,9 +135,6 @@ final class ScalebarViewModel: ObservableObject {
     private let style: ScalebarStyle
     
     // - MARK: Private vars
-    
-    /// The timer to determine when to autohide the scalebar.
-    private var autoHideTimer: Timer?
     
     /// Determines the amount of display space to use based on the scalebar style.
     private var availableLineDisplayLength: CGFloat {
@@ -194,23 +176,6 @@ final class ScalebarViewModel: ObservableObject {
     private var viewpointSubscription: AnyCancellable?
     
     // - MARK: Private methods
-    
-    /// Animates `isVisible` between `true` and `false` as necessary.
-    private func performVisibilityAnimation() {
-        self.autoHideTimer?.invalidate()
-        withAnimation(.easeInOut.speed(displaySpeed)) {
-            self.isVisible = true
-        }
-        self.autoHideTimer = Timer.scheduledTimer(
-            withTimeInterval: hideTimeInterval,
-            repeats: false,
-            block: { _ in
-                withAnimation {
-                    self.isVisible = false
-                }
-            }
-        )
-    }
     
     /// Updates the labels to be displayed by the scalebar.
     private func updateLabels() {
@@ -358,9 +323,7 @@ final class ScalebarViewModel: ObservableObject {
         }
         
         self.displayLength = displayLength
-        
         self.displayUnit = displayUnit
-        
         self.lineMapLength = lineMapLength
         
         updateLabels()

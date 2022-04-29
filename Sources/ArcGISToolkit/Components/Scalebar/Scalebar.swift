@@ -21,6 +21,9 @@ public struct Scalebar: View {
     /// The vertical amount of space used by the scalebar.
     @State private var height: Double?
     
+    /// Controls the current opacity of the scalebar.
+    @State var opacity: Double
+    
     /// The view model used by the `Scalebar`.
     @StateObject var viewModel: ScalebarViewModel
     
@@ -70,7 +73,6 @@ public struct Scalebar: View {
     
     /// A scalebar displays the current map scale.
     /// - Parameters:
-    ///   - autoHide: Set this to `true` to have the scalebar automatically show & hide itself.
     ///   - maxWidth: The maximum screen width allotted to the scalebar.
     ///   - minScale: Set a minScale if you only want the scalebar to appear when you reach a large
     ///     enough scale maybe something like 10_000_000. This could be useful because the scalebar is
@@ -84,7 +86,6 @@ public struct Scalebar: View {
     ///   - useGeodeticCalculations: Set `false` to compute scale without a geodesic curve.
     ///   - viewpoint: The map's current viewpoint.
     public init(
-        autoHide: Bool = false,
         maxWidth: Double,
         minScale: Double = .zero,
         settings: ScalebarSettings = ScalebarSettings(),
@@ -95,13 +96,13 @@ public struct Scalebar: View {
         useGeodeticCalculations: Bool = true,
         viewpoint: Binding<Viewpoint?>
     ) {
+        self.opacity = settings.autoHide ? .zero : 1
         self.settings = settings
         self.style = style
         self.viewpoint = viewpoint
         
         _viewModel = StateObject(
             wrappedValue: ScalebarViewModel(
-                autoHide,
                 maxWidth,
                 minScale,
                 spatialReference,
@@ -116,23 +117,30 @@ public struct Scalebar: View {
     
     public var body: some View {
         Group {
-            if $viewModel.isVisible.wrappedValue {
-                switch style {
-                case .alternatingBar:
-                    alternatingBarStyleRenderer
-                case .bar:
-                    barStyleRenderer
-                case .dualUnitLine:
-                    dualUnitLineStyleRenderer
-                case .graduatedLine:
-                    graduatedLineStyleRenderer
-                case .line:
-                    lineStyleRenderer
-                }
+            switch style {
+            case .alternatingBar:
+                alternatingBarStyleRenderer
+            case .bar:
+                barStyleRenderer
+            case .dualUnitLine:
+                dualUnitLineStyleRenderer
+            case .graduatedLine:
+                graduatedLineStyleRenderer
+            case .line:
+                lineStyleRenderer
             }
         }
+        .opacity(opacity)
         .onChange(of: viewpoint.wrappedValue) {
             viewModel.viewpointSubject.send($0)
+            if settings.autoHide {
+                withAnimation {
+                    opacity = 1
+                }
+                withAnimation(.default.delay(settings.hideTimeInterval)) {
+                    opacity = .zero
+                }
+            }
         }
         .onSizeChange {
             height = $0.height
