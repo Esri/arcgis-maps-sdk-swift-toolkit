@@ -137,7 +137,7 @@ public struct Scalebar: View {
                 withAnimation {
                     opacity = 1
                 }
-                withAnimation(.default.delay(settings.hideTimeInterval)) {
+                withAnimation(.default.delay(settings.autoHideDelay)) {
                     opacity = .zero
                 }
             }

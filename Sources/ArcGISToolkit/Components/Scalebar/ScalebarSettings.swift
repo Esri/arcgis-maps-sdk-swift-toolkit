@@ -18,6 +18,9 @@ public struct ScalebarSettings {
     /// Determines if the scalebar should automatically hide/show itself.
     var autoHide: Bool
     
+    /// The time to wait in seconds before the scalebar hides itself.
+    var autoHideDelay: TimeInterval
+    
     /// The corner radius used by bar style scalebar renders.
     var barCornerRadius: Double
     
@@ -26,9 +29,6 @@ public struct ScalebarSettings {
     
     /// The lighter fill color used by the bar style renders.
     var fillColor2: Color
-    
-    /// The time to wait in seconds before the scalebar hides itself.
-    var hideTimeInterval: TimeInterval = 1.75
     
     /// The color of the prominent scalebar line.
     var lineColor: Color
@@ -47,10 +47,10 @@ public struct ScalebarSettings {
     
     /// - Parameters:
     ///   - autoHide: Determines if the scalebar should automatically hide/show itself.
+    ///   - autoHideDelay: The time to wait in seconds before the scalebar hides itself.
     ///   - barCornerRadius: The corner radius used by bar style scalebar renders.
     ///   - fillColor1: The darker fill color used by the alternating bar style render.
     ///   - fillColor2: The lighter fill color used by the bar style renders.
-    ///   - hideTimeInterval: The time to wait in seconds before the scalebar hides itself.
     ///   - lineColor: The color of the prominent scalebar line.
     ///   - shadowColor: The shadow color used by all scalebar style renders.
     ///   - shadowRadius: The shadow radius used by all scalebar style renders.
@@ -58,10 +58,10 @@ public struct ScalebarSettings {
     ///   - textShadowColor: The text shadow color used by all scalebar style renders.
     public init(
         autoHide: Bool = false,
+        autoHideDelay: TimeInterval = 1.75,
         barCornerRadius: Double = 2.5,
         fillColor1: Color = .black,
         fillColor2: Color = Color(uiColor: .lightGray).opacity(0.5),
-        hideTimeInterval: TimeInterval = 1.75,
         lineColor: Color = .white,
         shadowColor: Color = Color(uiColor: .black).opacity(0.65),
         shadowRadius: Double = 1.0,
@@ -69,10 +69,10 @@ public struct ScalebarSettings {
         textShadowColor: Color = .white
     ) {
         self.autoHide = autoHide
+        self.autoHideDelay = autoHideDelay
         self.barCornerRadius = barCornerRadius
         self.fillColor1 = fillColor1
         self.fillColor2 = fillColor2
-        self.hideTimeInterval = hideTimeInterval
         self.lineColor = lineColor
         self.shadowColor = shadowColor
         self.shadowRadius = shadowRadius
