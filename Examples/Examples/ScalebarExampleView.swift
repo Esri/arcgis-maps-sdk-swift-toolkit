@@ -31,9 +31,6 @@ struct ScalebarExampleView: View {
     /// The `Map` displayed in the `MapView`.
     private let map = Map(basemapStyle: .arcGISTopographic)
     
-    /// Customizes scalebar appearance. If not used, default styling will be applied.
-    private let scalebarSettings = ScalebarSettings()
-    
     /// The maximum screen width allotted to the scalebar.
     private let maxWidth: Double = 175.0
     
@@ -52,6 +49,5 @@ struct ScalebarExampleView: View {
                 .padding(.horizontal, 10)
                 .padding(.vertical, 50)
             }
-            .environment(\.scalebarSettings, scalebarSettings)
     }
 }

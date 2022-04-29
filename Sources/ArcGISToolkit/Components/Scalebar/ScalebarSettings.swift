@@ -74,7 +74,7 @@ struct ScalebarSettingsKey: EnvironmentKey {
 }
 
 extension EnvironmentValues {
-    public var scalebarSettings: ScalebarSettings {
+    var scalebarSettings: ScalebarSettings {
         get { self[ScalebarSettingsKey.self] }
         set { self[ScalebarSettingsKey.self] = newValue }
     }

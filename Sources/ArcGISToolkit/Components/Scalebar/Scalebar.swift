@@ -21,9 +21,6 @@ public struct Scalebar: View {
     /// The vertical amount of space used by the scalebar.
     @State private var height: Double?
     
-    /// Appearance settings.
-    @Environment(\.scalebarSettings) var settings
-    
     /// The view model used by the `Scalebar`.
     @StateObject var viewModel: ScalebarViewModel
     
@@ -63,6 +60,9 @@ public struct Scalebar: View {
     /// The width of the prominent scalebar line.
     static let lineWidth: Double = 2.0
     
+    /// Appearance settings.
+    let settings: ScalebarSettings
+    
     /// The render style for this `Scalebar`.
     private let style: ScalebarStyle
     
@@ -76,6 +76,7 @@ public struct Scalebar: View {
     ///     enough scale maybe something like 10_000_000. This could be useful because the scalebar is
     ///     really only accurate for the center of the map on smaller scales (when zoomed way out). A
     ///     minScale of 0 means it will always be visible.
+    ///   - settings: Appearance settings.
     ///   - spatialReference: The map's spatial reference.
     ///   - style: The visual appearance of the scalebar.
     ///   - units: The units to be displayed in the scalebar.
@@ -86,6 +87,7 @@ public struct Scalebar: View {
         autoHide: Bool = false,
         maxWidth: Double,
         minScale: Double = .zero,
+        settings: ScalebarSettings = ScalebarSettings(),
         spatialReference: Binding<SpatialReference?>,
         style: ScalebarStyle = .alternatingBar,
         units: ScalebarUnits = NSLocale.current.usesMetricSystem ? .metric : .imperial,
@@ -93,6 +95,7 @@ public struct Scalebar: View {
         useGeodeticCalculations: Bool = true,
         viewpoint: Binding<Viewpoint?>
     ) {
+        self.settings = settings
         self.style = style
         self.viewpoint = viewpoint
         
@@ -138,5 +141,6 @@ public struct Scalebar: View {
             width: $viewModel.displayLength.wrappedValue,
             height: height ?? .zero
         )
+        .environment(\.scalebarSettings, settings)
     }
 }
