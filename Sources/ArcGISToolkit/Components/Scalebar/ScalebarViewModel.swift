@@ -86,7 +86,7 @@ final class ScalebarViewModel: ObservableObject {
         _ autoHide: Bool,
         _ maxWidth: Double,
         _ minScale: Double,
-        _ spatialReference: SpatialReference?,
+        _ spatialReference: Binding<SpatialReference?>,
         _ style: ScalebarStyle,
         _ units: ScalebarUnits,
         _ unitsPerPoint: Binding<Double?>,
@@ -146,9 +146,6 @@ final class ScalebarViewModel: ObservableObject {
         return numberFormatter
     }()
     
-    /// The map's spatial reference.
-    private let spatialReference: SpatialReference?
-    
     /// The visual appearance of the scalebar.
     private let style: ScalebarStyle
     
@@ -177,6 +174,9 @@ final class ScalebarViewModel: ObservableObject {
     
     /// The maximum screen width allotted to the scalebar.
     private var maxWidth: Double
+    
+    /// The map's spatial reference.
+    private var spatialReference: Binding<SpatialReference?>
     
     /// Unit of measure in use.
     private var units: ScalebarUnits
@@ -281,7 +281,7 @@ final class ScalebarViewModel: ObservableObject {
     /// Updates the information necessary to render a scalebar based off the latest viewpoint and units per
     /// point information.
     private func updateScaleDisplay() {
-        guard let spatialReference = spatialReference,
+        guard let spatialReference = spatialReference.wrappedValue,
               let unitsPerPoint = unitsPerPoint.wrappedValue,
               let viewpoint = viewpoint,
               minScale <= 0 || viewpoint.targetScale < minScale else {

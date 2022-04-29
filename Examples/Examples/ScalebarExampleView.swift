@@ -43,16 +43,14 @@ struct ScalebarExampleView: View {
             .onUnitsPerPointChanged { unitsPerPoint = $0 }
             .onViewpointChanged(kind: .centerAndScale) { viewpoint = $0 }
             .overlay(alignment: alignment) {
-                if spatialReference != nil {
-                    Scalebar(
-                        maxWidth: maxWidth,
-                        spatialReference: spatialReference,
-                        unitsPerPoint: $unitsPerPoint,
-                        viewpoint: $viewpoint
-                    )
-                    .padding(.horizontal, 10)
-                    .padding(.vertical, 50)
-                }
+                Scalebar(
+                    maxWidth: maxWidth,
+                    spatialReference: $spatialReference,
+                    unitsPerPoint: $unitsPerPoint,
+                    viewpoint: $viewpoint
+                )
+                .padding(.horizontal, 10)
+                .padding(.vertical, 50)
             }
             .environment(\.scalebarSettings, scalebarSettings)
     }

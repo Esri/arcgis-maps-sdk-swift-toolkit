@@ -86,7 +86,7 @@ public struct Scalebar: View {
         autoHide: Bool = false,
         maxWidth: Double,
         minScale: Double = .zero,
-        spatialReference: SpatialReference? = nil,
+        spatialReference: Binding<SpatialReference?>,
         style: ScalebarStyle = .alternatingBar,
         units: ScalebarUnits = NSLocale.current.usesMetricSystem ? .metric : .imperial,
         unitsPerPoint: Binding<Double?>,

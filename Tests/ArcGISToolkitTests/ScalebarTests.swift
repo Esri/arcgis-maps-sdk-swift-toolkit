@@ -38,7 +38,7 @@ class ScalebarTests: XCTestCase {
             true,
             0,
             175,
-            .webMercator,
+            spatialReferenceBinding(.webMercator),
             .alternatingBar,
             .imperial,
             unitsPerPoint,
@@ -119,7 +119,7 @@ class ScalebarTests: XCTestCase {
                 false,
                 test.maxWidth,
                 0,
-                test.spatialReference,
+                spatialReferenceBinding(test.spatialReference),
                 test.style,
                 test.units,
                 unitsPerPoint,
@@ -151,6 +151,19 @@ extension ScalebarTests {
         return Binding(
             get: { _value },
             set: { _value = $0 ?? .zero }
+        )
+    }
+    
+    /// Generates a binding to a provided units per point value.
+    func spatialReferenceBinding(_ value: SpatialReference) -> Binding<SpatialReference?> {
+        var _value = value
+        return Binding(
+            get: { _value },
+            set: {
+                if let newValue = $0 {
+                    _value = newValue
+                }
+            }
         )
     }
 }
