@@ -45,8 +45,8 @@ final class ScalebarViewModel: ObservableObject {
 ***REMOVED******REMOVED******REMOVED***to: altMapBaseLength,
 ***REMOVED******REMOVED******REMOVED***units: altUnit.baseLinearUnit
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED***let altDisplayUnits = altUnit.linearUnitsForDistance(
-***REMOVED******REMOVED******REMOVED***distance: altClosestBaseLength
+***REMOVED******REMOVED***let altDisplayUnits = altUnit.linearUnits(
+***REMOVED******REMOVED******REMOVED***forDistance: altClosestBaseLength
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***let altMapLength = altUnit.baseLinearUnit.convert(
 ***REMOVED******REMOVED******REMOVED***to: altDisplayUnits, value: altClosestBaseLength
@@ -324,7 +324,7 @@ final class ScalebarViewModel: ObservableObject {
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***let planarToGeodeticFactor = maxLengthPlanar / maxLengthGeodetic
 ***REMOVED******REMOVED******REMOVED***displayLength = CGFloat( (roundNumberDistance * planarToGeodeticFactor) / unitsPerPoint )
-***REMOVED******REMOVED******REMOVED***displayUnit = units.linearUnitsForDistance(distance: roundNumberDistance)
+***REMOVED******REMOVED******REMOVED***displayUnit = units.linearUnits(forDistance: roundNumberDistance)
 ***REMOVED******REMOVED******REMOVED***lineMapLength = baseUnits.convert(to: displayUnit, value: roundNumberDistance)
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED***guard let srUnit = spatialReference.unit as? LinearUnit else {
@@ -346,7 +346,7 @@ final class ScalebarViewModel: ObservableObject {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***value: closestLen
 ***REMOVED******REMOVED******REMOVED******REMOVED***) / unitsPerPoint
 ***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***displayUnit = units.linearUnitsForDistance(distance: closestLen)
+***REMOVED******REMOVED******REMOVED***displayUnit = units.linearUnits(forDistance: closestLen)
 ***REMOVED******REMOVED******REMOVED***lineMapLength = baseUnits.convert(
 ***REMOVED******REMOVED******REMOVED******REMOVED***to: displayUnit,
 ***REMOVED******REMOVED******REMOVED******REMOVED***value: closestLen
