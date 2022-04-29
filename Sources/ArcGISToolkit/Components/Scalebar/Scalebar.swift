@@ -21,9 +21,6 @@ public struct Scalebar: View {
 ***REMOVED******REMOVED***/ The vertical amount of space used by the scalebar.
 ***REMOVED***@State private var height: Double?
 ***REMOVED***
-***REMOVED******REMOVED***/ Appearance settings.
-***REMOVED***@Environment(\.scalebarSettings) var settings
-***REMOVED***
 ***REMOVED******REMOVED***/ The view model used by the `Scalebar`.
 ***REMOVED***@StateObject var viewModel: ScalebarViewModel
 ***REMOVED***
@@ -63,6 +60,9 @@ public struct Scalebar: View {
 ***REMOVED******REMOVED***/ The width of the prominent scalebar line.
 ***REMOVED***static let lineWidth: Double = 2.0
 ***REMOVED***
+***REMOVED******REMOVED***/ Appearance settings.
+***REMOVED***let settings: ScalebarSettings
+***REMOVED***
 ***REMOVED******REMOVED***/ The render style for this `Scalebar`.
 ***REMOVED***private let style: ScalebarStyle
 ***REMOVED***
@@ -76,6 +76,7 @@ public struct Scalebar: View {
 ***REMOVED******REMOVED***/***REMOVED*** enough scale maybe something like 10_000_000. This could be useful because the scalebar is
 ***REMOVED******REMOVED***/***REMOVED*** really only accurate for the center of the map on smaller scales (when zoomed way out). A
 ***REMOVED******REMOVED***/***REMOVED*** minScale of 0 means it will always be visible.
+***REMOVED******REMOVED***/   - settings: Appearance settings.
 ***REMOVED******REMOVED***/   - spatialReference: The map's spatial reference.
 ***REMOVED******REMOVED***/   - style: The visual appearance of the scalebar.
 ***REMOVED******REMOVED***/   - units: The units to be displayed in the scalebar.
@@ -86,6 +87,7 @@ public struct Scalebar: View {
 ***REMOVED******REMOVED***autoHide: Bool = false,
 ***REMOVED******REMOVED***maxWidth: Double,
 ***REMOVED******REMOVED***minScale: Double = .zero,
+***REMOVED******REMOVED***settings: ScalebarSettings = ScalebarSettings(),
 ***REMOVED******REMOVED***spatialReference: Binding<SpatialReference?>,
 ***REMOVED******REMOVED***style: ScalebarStyle = .alternatingBar,
 ***REMOVED******REMOVED***units: ScalebarUnits = NSLocale.current.usesMetricSystem ? .metric : .imperial,
@@ -93,6 +95,7 @@ public struct Scalebar: View {
 ***REMOVED******REMOVED***useGeodeticCalculations: Bool = true,
 ***REMOVED******REMOVED***viewpoint: Binding<Viewpoint?>
 ***REMOVED***) {
+***REMOVED******REMOVED***self.settings = settings
 ***REMOVED******REMOVED***self.style = style
 ***REMOVED******REMOVED***self.viewpoint = viewpoint
 ***REMOVED******REMOVED***
@@ -138,5 +141,6 @@ public struct Scalebar: View {
 ***REMOVED******REMOVED******REMOVED***width: $viewModel.displayLength.wrappedValue,
 ***REMOVED******REMOVED******REMOVED***height: height ?? .zero
 ***REMOVED******REMOVED***)
+***REMOVED******REMOVED***.environment(\.scalebarSettings, settings)
 ***REMOVED***
 ***REMOVED***
