@@ -19,45 +19,6 @@ import XCTest
 
 @MainActor
 class ScalebarTests: XCTestCase {
-***REMOVED******REMOVED***/ Asserts that the scalebar view model correctly changes `isVisible`.
-***REMOVED***func testAutohide() {
-***REMOVED******REMOVED***var subscriptions = Set<AnyCancellable>()
-***REMOVED******REMOVED***let expectation1 = expectation(description: "Went visible")
-***REMOVED******REMOVED***let expectation2 = expectation(description: "Went hidden")
-***REMOVED******REMOVED***var changedToVisible = false
-***REMOVED******REMOVED***let viewpoint1 = Viewpoint(
-***REMOVED******REMOVED******REMOVED***center: esriRedlands,
-***REMOVED******REMOVED******REMOVED***scale: 1
-***REMOVED******REMOVED***)
-***REMOVED******REMOVED***let viewpoint2 = Viewpoint(
-***REMOVED******REMOVED******REMOVED***center: esriRedlands,
-***REMOVED******REMOVED******REMOVED***scale: 2
-***REMOVED******REMOVED***)
-***REMOVED******REMOVED***let unitsPerPoint = unitsPerPointBinding(1)
-***REMOVED******REMOVED***let viewModel = ScalebarViewModel(
-***REMOVED******REMOVED******REMOVED***true,
-***REMOVED******REMOVED******REMOVED***0,
-***REMOVED******REMOVED******REMOVED***175,
-***REMOVED******REMOVED******REMOVED***spatialReferenceBinding(.webMercator),
-***REMOVED******REMOVED******REMOVED***.alternatingBar,
-***REMOVED******REMOVED******REMOVED***.imperial,
-***REMOVED******REMOVED******REMOVED***unitsPerPoint,
-***REMOVED******REMOVED******REMOVED***true,
-***REMOVED******REMOVED******REMOVED***viewpoint1
-***REMOVED******REMOVED***)
-***REMOVED******REMOVED***viewModel.$isVisible.sink { isVisible in
-***REMOVED******REMOVED******REMOVED***if isVisible && !changedToVisible {
-***REMOVED******REMOVED******REMOVED******REMOVED***changedToVisible = true
-***REMOVED******REMOVED******REMOVED******REMOVED***expectation1.fulfill()
-***REMOVED******REMOVED*** else if !isVisible && changedToVisible {
-***REMOVED******REMOVED******REMOVED******REMOVED***expectation2.fulfill()
-***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***.store(in: &subscriptions)
-***REMOVED******REMOVED***viewModel.viewpointSubject.send(viewpoint2)
-***REMOVED******REMOVED***waitForExpectations(timeout: 5.0)
-***REMOVED***
-***REMOVED***
 ***REMOVED***struct ScalebarTestCase {
 ***REMOVED******REMOVED***let x: Double
 ***REMOVED******REMOVED***let y: Double
@@ -116,7 +77,6 @@ class ScalebarTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***let unitsPerPoint = unitsPerPointBinding(test.upp)
 ***REMOVED******REMOVED******REMOVED***let viewModel = ScalebarViewModel(
-***REMOVED******REMOVED******REMOVED******REMOVED***false,
 ***REMOVED******REMOVED******REMOVED******REMOVED***test.maxWidth,
 ***REMOVED******REMOVED******REMOVED******REMOVED***0,
 ***REMOVED******REMOVED******REMOVED******REMOVED***spatialReferenceBinding(test.spatialReference),

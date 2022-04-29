@@ -21,6 +21,9 @@ public struct Scalebar: View {
 ***REMOVED******REMOVED***/ The vertical amount of space used by the scalebar.
 ***REMOVED***@State private var height: Double?
 ***REMOVED***
+***REMOVED******REMOVED***/ Controls the current opacity of the scalebar.
+***REMOVED***@State var opacity: Double
+***REMOVED***
 ***REMOVED******REMOVED***/ The view model used by the `Scalebar`.
 ***REMOVED***@StateObject var viewModel: ScalebarViewModel
 ***REMOVED***
@@ -70,7 +73,6 @@ public struct Scalebar: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ A scalebar displays the current map scale.
 ***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - autoHide: Set this to `true` to have the scalebar automatically show & hide itself.
 ***REMOVED******REMOVED***/   - maxWidth: The maximum screen width allotted to the scalebar.
 ***REMOVED******REMOVED***/   - minScale: Set a minScale if you only want the scalebar to appear when you reach a large
 ***REMOVED******REMOVED***/***REMOVED*** enough scale maybe something like 10_000_000. This could be useful because the scalebar is
@@ -84,7 +86,6 @@ public struct Scalebar: View {
 ***REMOVED******REMOVED***/   - useGeodeticCalculations: Set `false` to compute scale without a geodesic curve.
 ***REMOVED******REMOVED***/   - viewpoint: The map's current viewpoint.
 ***REMOVED***public init(
-***REMOVED******REMOVED***autoHide: Bool = false,
 ***REMOVED******REMOVED***maxWidth: Double,
 ***REMOVED******REMOVED***minScale: Double = .zero,
 ***REMOVED******REMOVED***settings: ScalebarSettings = ScalebarSettings(),
@@ -95,13 +96,13 @@ public struct Scalebar: View {
 ***REMOVED******REMOVED***useGeodeticCalculations: Bool = true,
 ***REMOVED******REMOVED***viewpoint: Binding<Viewpoint?>
 ***REMOVED***) {
+***REMOVED******REMOVED***self.opacity = settings.autoHide ? .zero : 1
 ***REMOVED******REMOVED***self.settings = settings
 ***REMOVED******REMOVED***self.style = style
 ***REMOVED******REMOVED***self.viewpoint = viewpoint
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***_viewModel = StateObject(
 ***REMOVED******REMOVED******REMOVED***wrappedValue: ScalebarViewModel(
-***REMOVED******REMOVED******REMOVED******REMOVED***autoHide,
 ***REMOVED******REMOVED******REMOVED******REMOVED***maxWidth,
 ***REMOVED******REMOVED******REMOVED******REMOVED***minScale,
 ***REMOVED******REMOVED******REMOVED******REMOVED***spatialReference,
@@ -116,23 +117,30 @@ public struct Scalebar: View {
 ***REMOVED***
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***Group {
-***REMOVED******REMOVED******REMOVED***if $viewModel.isVisible.wrappedValue {
-***REMOVED******REMOVED******REMOVED******REMOVED***switch style {
-***REMOVED******REMOVED******REMOVED******REMOVED***case .alternatingBar:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***alternatingBarStyleRenderer
-***REMOVED******REMOVED******REMOVED******REMOVED***case .bar:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***barStyleRenderer
-***REMOVED******REMOVED******REMOVED******REMOVED***case .dualUnitLine:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***dualUnitLineStyleRenderer
-***REMOVED******REMOVED******REMOVED******REMOVED***case .graduatedLine:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***graduatedLineStyleRenderer
-***REMOVED******REMOVED******REMOVED******REMOVED***case .line:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***lineStyleRenderer
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***switch style {
+***REMOVED******REMOVED******REMOVED***case .alternatingBar:
+***REMOVED******REMOVED******REMOVED******REMOVED***alternatingBarStyleRenderer
+***REMOVED******REMOVED******REMOVED***case .bar:
+***REMOVED******REMOVED******REMOVED******REMOVED***barStyleRenderer
+***REMOVED******REMOVED******REMOVED***case .dualUnitLine:
+***REMOVED******REMOVED******REMOVED******REMOVED***dualUnitLineStyleRenderer
+***REMOVED******REMOVED******REMOVED***case .graduatedLine:
+***REMOVED******REMOVED******REMOVED******REMOVED***graduatedLineStyleRenderer
+***REMOVED******REMOVED******REMOVED***case .line:
+***REMOVED******REMOVED******REMOVED******REMOVED***lineStyleRenderer
 ***REMOVED******REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***.opacity(opacity)
 ***REMOVED******REMOVED***.onChange(of: viewpoint.wrappedValue) {
 ***REMOVED******REMOVED******REMOVED***viewModel.viewpointSubject.send($0)
+***REMOVED******REMOVED******REMOVED***if settings.autoHide {
+***REMOVED******REMOVED******REMOVED******REMOVED***withAnimation {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***opacity = 1
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***withAnimation(.default.delay(settings.hideTimeInterval)) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***opacity = .zero
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.onSizeChange {
 ***REMOVED******REMOVED******REMOVED***height = $0.height

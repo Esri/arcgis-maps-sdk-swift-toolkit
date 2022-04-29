@@ -23,9 +23,6 @@ final class ScalebarViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ The computed display length of the scalebar.
 ***REMOVED***@Published var displayLength: CGFloat = .zero
 ***REMOVED***
-***REMOVED******REMOVED***/ Indicates if the scalebar should be hidden or not.
-***REMOVED***@Published var isVisible: Bool
-***REMOVED***
 ***REMOVED******REMOVED***/ The current set of labels to be displayed by the scalebar.
 ***REMOVED***@Published var labels = [ScalebarLabel]()
 ***REMOVED***
@@ -72,7 +69,6 @@ final class ScalebarViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED******REMOVED***/ A scalebar view model controls the underlying data used to render a scalebar.
 ***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - autoHide: Determines if the scalebar should automatically show & hide itself.
 ***REMOVED******REMOVED***/   - maxWidth: The maximum screen width allotted to the scalebar.
 ***REMOVED******REMOVED***/   - minScale: A value of 0 indicates the scalebar segments should always recalculate.
 ***REMOVED******REMOVED***/   - spatialReference: The map's spatial reference.
@@ -83,7 +79,6 @@ final class ScalebarViewModel: ObservableObject {
 ***REMOVED******REMOVED***/***REMOVED*** the scale.
 ***REMOVED******REMOVED***/   - viewpoint: The map's current viewpoint.
 ***REMOVED***init(
-***REMOVED******REMOVED***_ autoHide: Bool,
 ***REMOVED******REMOVED***_ maxWidth: Double,
 ***REMOVED******REMOVED***_ minScale: Double,
 ***REMOVED******REMOVED***_ spatialReference: Binding<SpatialReference?>,
@@ -93,7 +88,6 @@ final class ScalebarViewModel: ObservableObject {
 ***REMOVED******REMOVED***_ useGeodeticCalculations: Bool,
 ***REMOVED******REMOVED***_ viewpoint: Viewpoint?
 ***REMOVED***) {
-***REMOVED******REMOVED***self.isVisible = autoHide ? false : true
 ***REMOVED******REMOVED***self.maxWidth = maxWidth
 ***REMOVED******REMOVED***self.minScale = minScale
 ***REMOVED******REMOVED***self.spatialReference = spatialReference
@@ -111,9 +105,6 @@ final class ScalebarViewModel: ObservableObject {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***self.viewpoint = $0
 ***REMOVED******REMOVED******REMOVED******REMOVED***self.updateScaleDisplay()
-***REMOVED******REMOVED******REMOVED******REMOVED***if autoHide {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.performVisibilityAnimation()
-***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***updateScaleDisplay()
@@ -124,14 +115,8 @@ final class ScalebarViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ The amount of time to wait between value calculations.
 ***REMOVED***private let delay = DispatchQueue.SchedulerTimeType.Stride.seconds(0.05)
 ***REMOVED***
-***REMOVED******REMOVED***/ The speed at which to animate `isVisible` to `true`.
-***REMOVED***private let displaySpeed = 3.0
-***REMOVED***
 ***REMOVED******REMOVED***/ The curve type to use when performing scale calculations.
 ***REMOVED***private let geodeticCurveType: GeometryEngine.GeodeticCurveType = .geodesic
-***REMOVED***
-***REMOVED******REMOVED***/ The time to wait in seconds before animating `isVisible` to `false`.
-***REMOVED***private let hideTimeInterval = 1.75
 ***REMOVED***
 ***REMOVED******REMOVED***/ A `minScale` of 0 means the scalebar segments will always recalculate.
 ***REMOVED***private let minScale: Double
@@ -150,9 +135,6 @@ final class ScalebarViewModel: ObservableObject {
 ***REMOVED***private let style: ScalebarStyle
 ***REMOVED***
 ***REMOVED******REMOVED*** - MARK: Private vars
-***REMOVED***
-***REMOVED******REMOVED***/ The timer to determine when to autohide the scalebar.
-***REMOVED***private var autoHideTimer: Timer?
 ***REMOVED***
 ***REMOVED******REMOVED***/ Determines the amount of display space to use based on the scalebar style.
 ***REMOVED***private var availableLineDisplayLength: CGFloat {
@@ -194,23 +176,6 @@ final class ScalebarViewModel: ObservableObject {
 ***REMOVED***private var viewpointSubscription: AnyCancellable?
 ***REMOVED***
 ***REMOVED******REMOVED*** - MARK: Private methods
-***REMOVED***
-***REMOVED******REMOVED***/ Animates `isVisible` between `true` and `false` as necessary.
-***REMOVED***private func performVisibilityAnimation() {
-***REMOVED******REMOVED***self.autoHideTimer?.invalidate()
-***REMOVED******REMOVED***withAnimation(.easeInOut.speed(displaySpeed)) {
-***REMOVED******REMOVED******REMOVED***self.isVisible = true
-***REMOVED***
-***REMOVED******REMOVED***self.autoHideTimer = Timer.scheduledTimer(
-***REMOVED******REMOVED******REMOVED***withTimeInterval: hideTimeInterval,
-***REMOVED******REMOVED******REMOVED***repeats: false,
-***REMOVED******REMOVED******REMOVED***block: { _ in
-***REMOVED******REMOVED******REMOVED******REMOVED***withAnimation {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.isVisible = false
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***)
-***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Updates the labels to be displayed by the scalebar.
 ***REMOVED***private func updateLabels() {
@@ -358,9 +323,7 @@ final class ScalebarViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***self.displayLength = displayLength
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED***self.displayUnit = displayUnit
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED***self.lineMapLength = lineMapLength
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***updateLabels()
