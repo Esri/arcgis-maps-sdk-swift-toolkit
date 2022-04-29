@@ -18,6 +18,9 @@ public struct ScalebarSettings {
 ***REMOVED******REMOVED***/ Determines if the scalebar should automatically hide/show itself.
 ***REMOVED***var autoHide: Bool
 ***REMOVED***
+***REMOVED******REMOVED***/ The time to wait in seconds before the scalebar hides itself.
+***REMOVED***var autoHideDelay: TimeInterval
+***REMOVED***
 ***REMOVED******REMOVED***/ The corner radius used by bar style scalebar renders.
 ***REMOVED***var barCornerRadius: Double
 ***REMOVED***
@@ -26,9 +29,6 @@ public struct ScalebarSettings {
 ***REMOVED***
 ***REMOVED******REMOVED***/ The lighter fill color used by the bar style renders.
 ***REMOVED***var fillColor2: Color
-***REMOVED***
-***REMOVED******REMOVED***/ The time to wait in seconds before the scalebar hides itself.
-***REMOVED***var hideTimeInterval: TimeInterval = 1.75
 ***REMOVED***
 ***REMOVED******REMOVED***/ The color of the prominent scalebar line.
 ***REMOVED***var lineColor: Color
@@ -47,10 +47,10 @@ public struct ScalebarSettings {
 ***REMOVED***
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - autoHide: Determines if the scalebar should automatically hide/show itself.
+***REMOVED******REMOVED***/   - autoHideDelay: The time to wait in seconds before the scalebar hides itself.
 ***REMOVED******REMOVED***/   - barCornerRadius: The corner radius used by bar style scalebar renders.
 ***REMOVED******REMOVED***/   - fillColor1: The darker fill color used by the alternating bar style render.
 ***REMOVED******REMOVED***/   - fillColor2: The lighter fill color used by the bar style renders.
-***REMOVED******REMOVED***/   - hideTimeInterval: The time to wait in seconds before the scalebar hides itself.
 ***REMOVED******REMOVED***/   - lineColor: The color of the prominent scalebar line.
 ***REMOVED******REMOVED***/   - shadowColor: The shadow color used by all scalebar style renders.
 ***REMOVED******REMOVED***/   - shadowRadius: The shadow radius used by all scalebar style renders.
@@ -58,10 +58,10 @@ public struct ScalebarSettings {
 ***REMOVED******REMOVED***/   - textShadowColor: The text shadow color used by all scalebar style renders.
 ***REMOVED***public init(
 ***REMOVED******REMOVED***autoHide: Bool = false,
+***REMOVED******REMOVED***autoHideDelay: TimeInterval = 1.75,
 ***REMOVED******REMOVED***barCornerRadius: Double = 2.5,
 ***REMOVED******REMOVED***fillColor1: Color = .black,
 ***REMOVED******REMOVED***fillColor2: Color = Color(uiColor: .lightGray).opacity(0.5),
-***REMOVED******REMOVED***hideTimeInterval: TimeInterval = 1.75,
 ***REMOVED******REMOVED***lineColor: Color = .white,
 ***REMOVED******REMOVED***shadowColor: Color = Color(uiColor: .black).opacity(0.65),
 ***REMOVED******REMOVED***shadowRadius: Double = 1.0,
@@ -69,10 +69,10 @@ public struct ScalebarSettings {
 ***REMOVED******REMOVED***textShadowColor: Color = .white
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.autoHide = autoHide
+***REMOVED******REMOVED***self.autoHideDelay = autoHideDelay
 ***REMOVED******REMOVED***self.barCornerRadius = barCornerRadius
 ***REMOVED******REMOVED***self.fillColor1 = fillColor1
 ***REMOVED******REMOVED***self.fillColor2 = fillColor2
-***REMOVED******REMOVED***self.hideTimeInterval = hideTimeInterval
 ***REMOVED******REMOVED***self.lineColor = lineColor
 ***REMOVED******REMOVED***self.shadowColor = shadowColor
 ***REMOVED******REMOVED***self.shadowRadius = shadowRadius
