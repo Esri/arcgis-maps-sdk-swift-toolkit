@@ -38,12 +38,12 @@ struct ScalebarExampleView: View {
     private let maxWidth: Double = 175.0
     
     var body: some View {
-        MapView(map: map, viewpoint: viewpoint)
+        MapView(map: map)
             .onSpatialReferenceChanged { spatialReference = $0 }
             .onUnitsPerPointChanged { unitsPerPoint = $0 }
             .onViewpointChanged(kind: .centerAndScale) { viewpoint = $0 }
             .overlay(alignment: alignment) {
-                if map.loadStatus == .loaded {
+                if spatialReference != nil {
                     Scalebar(
                         maxWidth: maxWidth,
                         spatialReference: spatialReference,
