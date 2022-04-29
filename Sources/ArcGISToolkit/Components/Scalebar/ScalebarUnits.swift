@@ -127,7 +127,7 @@ public enum ScalebarUnits {
         // Because feet and miles are not relationally multiples of 10 with
         // each other, we have to convert to miles if we are dealing in feet.
         if units == .feet {
-            let displayUnits = linearUnitsForDistance(distance: roundNumber)
+            let displayUnits = linearUnits(forDistance: roundNumber)
             if units != displayUnits {
                 let displayDistance = closestDistanceWithoutGoingOver(
                     to: units.convert(
@@ -154,7 +154,7 @@ public enum ScalebarUnits {
     /// than or equal to 1/2 mile, and `LinearUnit.feet` otherwise.
     /// `ScalebarUnits.metric` will return `LinearUnit.kilometers` if the given distance is
     /// greater than or equal to 1 kilometer, and `LinearUnit.meters` otherwise.
-    internal func linearUnitsForDistance(distance: Double) -> LinearUnit {
+    internal func linearUnits(forDistance distance: Double) -> LinearUnit {
         switch self {
         case .imperial:
             return distance >= 2640 ? .miles : .feet
