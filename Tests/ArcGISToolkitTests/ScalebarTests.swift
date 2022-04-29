@@ -19,45 +19,6 @@ import XCTest
 
 @MainActor
 class ScalebarTests: XCTestCase {
-    /// Asserts that the scalebar view model correctly changes `isVisible`.
-    func testAutohide() {
-        var subscriptions = Set<AnyCancellable>()
-        let expectation1 = expectation(description: "Went visible")
-        let expectation2 = expectation(description: "Went hidden")
-        var changedToVisible = false
-        let viewpoint1 = Viewpoint(
-            center: esriRedlands,
-            scale: 1
-        )
-        let viewpoint2 = Viewpoint(
-            center: esriRedlands,
-            scale: 2
-        )
-        let unitsPerPoint = unitsPerPointBinding(1)
-        let viewModel = ScalebarViewModel(
-            true,
-            0,
-            175,
-            spatialReferenceBinding(.webMercator),
-            .alternatingBar,
-            .imperial,
-            unitsPerPoint,
-            true,
-            viewpoint1
-        )
-        viewModel.$isVisible.sink { isVisible in
-            if isVisible && !changedToVisible {
-                changedToVisible = true
-                expectation1.fulfill()
-            } else if !isVisible && changedToVisible {
-                expectation2.fulfill()
-            }
-        }
-        .store(in: &subscriptions)
-        viewModel.viewpointSubject.send(viewpoint2)
-        waitForExpectations(timeout: 5.0)
-    }
-    
     struct ScalebarTestCase {
         let x: Double
         let y: Double
@@ -116,7 +77,6 @@ class ScalebarTests: XCTestCase {
             )
             let unitsPerPoint = unitsPerPointBinding(test.upp)
             let viewModel = ScalebarViewModel(
-                false,
                 test.maxWidth,
                 0,
                 spatialReferenceBinding(test.spatialReference),
