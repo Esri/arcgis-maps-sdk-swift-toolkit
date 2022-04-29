@@ -43,16 +43,14 @@ struct ScalebarExampleView: View {
 ***REMOVED******REMOVED******REMOVED***.onUnitsPerPointChanged { unitsPerPoint = $0 ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onViewpointChanged(kind: .centerAndScale) { viewpoint = $0 ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***.overlay(alignment: alignment) {
-***REMOVED******REMOVED******REMOVED******REMOVED***if spatialReference != nil {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Scalebar(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***maxWidth: maxWidth,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***spatialReference: spatialReference,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***unitsPerPoint: $unitsPerPoint,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint: $viewpoint
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.horizontal, 10)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.vertical, 50)
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***Scalebar(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***maxWidth: maxWidth,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***spatialReference: $spatialReference,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***unitsPerPoint: $unitsPerPoint,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint: $viewpoint
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***.padding(.horizontal, 10)
+***REMOVED******REMOVED******REMOVED******REMOVED***.padding(.vertical, 50)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.environment(\.scalebarSettings, scalebarSettings)
 ***REMOVED***

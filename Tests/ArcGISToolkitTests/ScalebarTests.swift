@@ -38,7 +38,7 @@ class ScalebarTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***true,
 ***REMOVED******REMOVED******REMOVED***0,
 ***REMOVED******REMOVED******REMOVED***175,
-***REMOVED******REMOVED******REMOVED***.webMercator,
+***REMOVED******REMOVED******REMOVED***spatialReferenceBinding(.webMercator),
 ***REMOVED******REMOVED******REMOVED***.alternatingBar,
 ***REMOVED******REMOVED******REMOVED***.imperial,
 ***REMOVED******REMOVED******REMOVED***unitsPerPoint,
@@ -119,7 +119,7 @@ class ScalebarTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED******REMOVED***false,
 ***REMOVED******REMOVED******REMOVED******REMOVED***test.maxWidth,
 ***REMOVED******REMOVED******REMOVED******REMOVED***0,
-***REMOVED******REMOVED******REMOVED******REMOVED***test.spatialReference,
+***REMOVED******REMOVED******REMOVED******REMOVED***spatialReferenceBinding(test.spatialReference),
 ***REMOVED******REMOVED******REMOVED******REMOVED***test.style,
 ***REMOVED******REMOVED******REMOVED******REMOVED***test.units,
 ***REMOVED******REMOVED******REMOVED******REMOVED***unitsPerPoint,
@@ -151,6 +151,19 @@ extension ScalebarTests {
 ***REMOVED******REMOVED***return Binding(
 ***REMOVED******REMOVED******REMOVED***get: { _value ***REMOVED***,
 ***REMOVED******REMOVED******REMOVED***set: { _value = $0 ?? .zero ***REMOVED***
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Generates a binding to a provided units per point value.
+***REMOVED***func spatialReferenceBinding(_ value: SpatialReference) -> Binding<SpatialReference?> {
+***REMOVED******REMOVED***var _value = value
+***REMOVED******REMOVED***return Binding(
+***REMOVED******REMOVED******REMOVED***get: { _value ***REMOVED***,
+***REMOVED******REMOVED******REMOVED***set: {
+***REMOVED******REMOVED******REMOVED******REMOVED***if let newValue = $0 {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***_value = newValue
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***

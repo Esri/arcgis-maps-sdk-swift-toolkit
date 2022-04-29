@@ -86,7 +86,7 @@ final class ScalebarViewModel: ObservableObject {
 ***REMOVED******REMOVED***_ autoHide: Bool,
 ***REMOVED******REMOVED***_ maxWidth: Double,
 ***REMOVED******REMOVED***_ minScale: Double,
-***REMOVED******REMOVED***_ spatialReference: SpatialReference?,
+***REMOVED******REMOVED***_ spatialReference: Binding<SpatialReference?>,
 ***REMOVED******REMOVED***_ style: ScalebarStyle,
 ***REMOVED******REMOVED***_ units: ScalebarUnits,
 ***REMOVED******REMOVED***_ unitsPerPoint: Binding<Double?>,
@@ -146,9 +146,6 @@ final class ScalebarViewModel: ObservableObject {
 ***REMOVED******REMOVED***return numberFormatter
 ***REMOVED***()
 ***REMOVED***
-***REMOVED******REMOVED***/ The map's spatial reference.
-***REMOVED***private let spatialReference: SpatialReference?
-***REMOVED***
 ***REMOVED******REMOVED***/ The visual appearance of the scalebar.
 ***REMOVED***private let style: ScalebarStyle
 ***REMOVED***
@@ -177,6 +174,9 @@ final class ScalebarViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED******REMOVED***/ The maximum screen width allotted to the scalebar.
 ***REMOVED***private var maxWidth: Double
+***REMOVED***
+***REMOVED******REMOVED***/ The map's spatial reference.
+***REMOVED***private var spatialReference: Binding<SpatialReference?>
 ***REMOVED***
 ***REMOVED******REMOVED***/ Unit of measure in use.
 ***REMOVED***private var units: ScalebarUnits
@@ -281,7 +281,7 @@ final class ScalebarViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ Updates the information necessary to render a scalebar based off the latest viewpoint and units per
 ***REMOVED******REMOVED***/ point information.
 ***REMOVED***private func updateScaleDisplay() {
-***REMOVED******REMOVED***guard let spatialReference = spatialReference,
+***REMOVED******REMOVED***guard let spatialReference = spatialReference.wrappedValue,
 ***REMOVED******REMOVED******REMOVED***  let unitsPerPoint = unitsPerPoint.wrappedValue,
 ***REMOVED******REMOVED******REMOVED***  let viewpoint = viewpoint,
 ***REMOVED******REMOVED******REMOVED***  minScale <= 0 || viewpoint.targetScale < minScale else {
