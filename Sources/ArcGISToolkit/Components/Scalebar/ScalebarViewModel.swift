@@ -45,8 +45,8 @@ final class ScalebarViewModel: ObservableObject {
             to: altMapBaseLength,
             units: altUnit.baseLinearUnit
         )
-        let altDisplayUnits = altUnit.linearUnitsForDistance(
-            distance: altClosestBaseLength
+        let altDisplayUnits = altUnit.linearUnits(
+            forDistance: altClosestBaseLength
         )
         let altMapLength = altUnit.baseLinearUnit.convert(
             to: altDisplayUnits, value: altClosestBaseLength
@@ -324,7 +324,7 @@ final class ScalebarViewModel: ObservableObject {
             )
             let planarToGeodeticFactor = maxLengthPlanar / maxLengthGeodetic
             displayLength = CGFloat( (roundNumberDistance * planarToGeodeticFactor) / unitsPerPoint )
-            displayUnit = units.linearUnitsForDistance(distance: roundNumberDistance)
+            displayUnit = units.linearUnits(forDistance: roundNumberDistance)
             lineMapLength = baseUnits.convert(to: displayUnit, value: roundNumberDistance)
         } else {
             guard let srUnit = spatialReference.unit as? LinearUnit else {
@@ -346,7 +346,7 @@ final class ScalebarViewModel: ObservableObject {
                     value: closestLen
                 ) / unitsPerPoint
             )
-            displayUnit = units.linearUnitsForDistance(distance: closestLen)
+            displayUnit = units.linearUnits(forDistance: closestLen)
             lineMapLength = baseUnits.convert(
                 to: displayUnit,
                 value: closestLen
