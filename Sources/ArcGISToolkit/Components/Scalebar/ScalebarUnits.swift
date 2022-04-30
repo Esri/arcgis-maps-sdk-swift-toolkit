@@ -33,7 +33,7 @@ public enum ScalebarUnits {
     /// unit that will be displayed.
     /// `ScalebarUnits.metric` will return `LinearUnit.meters` as meter is the smallest linear
     /// unit that will be displayed.
-    internal var baseLinearUnit: LinearUnit {
+    var baseLinearUnit: LinearUnit {
         return self == .imperial ? LinearUnit.feet : LinearUnit.meters
     }
     
@@ -104,7 +104,7 @@ public enum ScalebarUnits {
     
     /// - Returns: The best number of segments so that we get relatively round numbers when the
     /// distance is divided up.
-    internal static func numSegments(
+    static func numSegments(
         forDistance distance: Double,
         maxNumSegments: Int
     ) -> Int {
@@ -116,7 +116,7 @@ public enum ScalebarUnits {
     
     /// Calculates a round number suitable for display.
     /// - Returns: A displayable round number.
-    internal func closestDistanceWithoutGoingOver(
+    func closestDistanceWithoutGoingOver(
         to distance: Double,
         units: LinearUnit
     ) -> Double {
@@ -154,7 +154,7 @@ public enum ScalebarUnits {
     /// than or equal to 1/2 mile, and `LinearUnit.feet` otherwise.
     /// `ScalebarUnits.metric` will return `LinearUnit.kilometers` if the given distance is
     /// greater than or equal to 1 kilometer, and `LinearUnit.meters` otherwise.
-    internal func linearUnits(forDistance distance: Double) -> LinearUnit {
+    func linearUnits(forDistance distance: Double) -> LinearUnit {
         switch self {
         case .imperial:
             return distance >= 2640 ? .miles : .feet
