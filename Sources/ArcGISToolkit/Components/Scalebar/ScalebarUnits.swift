@@ -33,7 +33,7 @@ public enum ScalebarUnits {
 ***REMOVED******REMOVED***/ unit that will be displayed.
 ***REMOVED******REMOVED***/ `ScalebarUnits.metric` will return `LinearUnit.meters` as meter is the smallest linear
 ***REMOVED******REMOVED***/ unit that will be displayed.
-***REMOVED***internal var baseLinearUnit: LinearUnit {
+***REMOVED***var baseLinearUnit: LinearUnit {
 ***REMOVED******REMOVED***return self == .imperial ? LinearUnit.feet : LinearUnit.meters
 ***REMOVED***
 ***REMOVED***
@@ -104,7 +104,7 @@ public enum ScalebarUnits {
 ***REMOVED***
 ***REMOVED******REMOVED***/ - Returns: The best number of segments so that we get relatively round numbers when the
 ***REMOVED******REMOVED***/ distance is divided up.
-***REMOVED***internal static func numSegments(
+***REMOVED***static func numSegments(
 ***REMOVED******REMOVED***forDistance distance: Double,
 ***REMOVED******REMOVED***maxNumSegments: Int
 ***REMOVED***) -> Int {
@@ -116,7 +116,7 @@ public enum ScalebarUnits {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Calculates a round number suitable for display.
 ***REMOVED******REMOVED***/ - Returns: A displayable round number.
-***REMOVED***internal func closestDistanceWithoutGoingOver(
+***REMOVED***func closestDistanceWithoutGoingOver(
 ***REMOVED******REMOVED***to distance: Double,
 ***REMOVED******REMOVED***units: LinearUnit
 ***REMOVED***) -> Double {
@@ -154,7 +154,7 @@ public enum ScalebarUnits {
 ***REMOVED******REMOVED***/ than or equal to 1/2 mile, and `LinearUnit.feet` otherwise.
 ***REMOVED******REMOVED***/ `ScalebarUnits.metric` will return `LinearUnit.kilometers` if the given distance is
 ***REMOVED******REMOVED***/ greater than or equal to 1 kilometer, and `LinearUnit.meters` otherwise.
-***REMOVED***internal func linearUnits(forDistance distance: Double) -> LinearUnit {
+***REMOVED***func linearUnits(forDistance distance: Double) -> LinearUnit {
 ***REMOVED******REMOVED***switch self {
 ***REMOVED******REMOVED***case .imperial:
 ***REMOVED******REMOVED******REMOVED***return distance >= 2640 ? .miles : .feet
