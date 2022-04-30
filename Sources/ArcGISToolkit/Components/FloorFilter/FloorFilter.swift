@@ -48,6 +48,9 @@ public struct FloorFilter: View {
     /// The alignment configuration.
     private let alignment: Alignment
     
+    /// The width of the level selector.
+    private var filterWidth: Double = 50
+    
     /// Button to open and close the site and facility selector.
     private var sitesAndFacilitiesButton: some View {
         Button {
@@ -83,8 +86,8 @@ public struct FloorFilter: View {
                 sitesAndFacilitiesButton
             }
         }
+        .frame(width: filterWidth)
         .esriBorder()
-        .frame(width: 75)
         .frame(maxHeight: .infinity, alignment: alignment)
     }
     
@@ -121,5 +124,12 @@ public struct FloorFilter: View {
         .frame(minHeight: 100)
         .environmentObject(viewModel)
         .disabled(viewModel.isLoading)
+    }
+    
+    /// Modifies the width used by the level selector. Increase this value to lessen level name truncation.
+    public func filterWidth(_ newWidth: Double) -> FloorFilter {
+        var copy = self
+        copy.filterWidth = newWidth
+        return copy
     }
 }
