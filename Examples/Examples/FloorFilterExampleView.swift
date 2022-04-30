@@ -71,7 +71,11 @@ struct FloorFilterExampleView: View {
                     alignment: filterAlignment,
                     viewpoint: $viewpoint
                 )
-                .frame(maxWidth: 300, maxHeight: 300)
+                .filterWidth(50)
+                .frame(
+                    maxWidth: 300,
+                    maxHeight: 300
+                )
                 .padding(36)
             } else if mapLoadError {
                 Label(
