@@ -26,22 +26,26 @@ import Combine
 ***REMOVED*** test design have been added to accomodate those differences.
 @MainActor
 final class BasemapGalleryItemTests: XCTestCase {
+***REMOVED***override func setUp() async throws {
+***REMOVED******REMOVED***ArcGISRuntimeEnvironment.apiKey = APIKey("<#API Key#>")
+***REMOVED***
+***REMOVED***
 ***REMOVED***func testInit() async throws {
-***REMOVED******REMOVED***let basemap = Basemap.lightGrayCanvas()
+***REMOVED******REMOVED***let basemap = Basemap(style: .arcGISLightGray)
 ***REMOVED******REMOVED***let item = BasemapGalleryItem(basemap: basemap)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let isBasemapLoading = try await item.$isBasemapLoading.dropFirst().first
 ***REMOVED******REMOVED***let loading = try XCTUnwrap(isBasemapLoading)
 ***REMOVED******REMOVED***XCTAssertFalse(loading, "Item is not loading.")
 ***REMOVED******REMOVED***XCTAssertIdentical(item.basemap, basemap)
-***REMOVED******REMOVED***XCTAssertEqual(item.name, "Light Gray Canvas")
+***REMOVED******REMOVED***XCTAssertEqual(item.name, "ArcGIS:LightGray")
 ***REMOVED******REMOVED***XCTAssertNil(item.description)
 ***REMOVED******REMOVED***XCTAssertNotNil(item.thumbnail)
 ***REMOVED******REMOVED***XCTAssertNil(item.loadBasemapError)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Test with overrides.
 ***REMOVED******REMOVED***let thumbnail = UIImage(systemName: "magnifyingglass")!
-***REMOVED******REMOVED***let basemap2 = Basemap.lightGrayCanvas()
+***REMOVED******REMOVED***let basemap2 = Basemap(style: .arcGISLightGray)
 ***REMOVED******REMOVED***let item2 = BasemapGalleryItem(
 ***REMOVED******REMOVED******REMOVED***basemap: basemap2,
 ***REMOVED******REMOVED******REMOVED***name: "My Basemap",
@@ -92,7 +96,7 @@ final class BasemapGalleryItemTests: XCTestCase {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func testSpatialReferenceAndStatus() async throws {
-***REMOVED******REMOVED***let basemap = Basemap.lightGrayCanvas()
+***REMOVED******REMOVED***let basemap = Basemap(style: .arcGISLightGray)
 ***REMOVED******REMOVED***let item = BasemapGalleryItem(basemap: basemap)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let isBasemapLoading = try await item.$isBasemapLoading.dropFirst().first
