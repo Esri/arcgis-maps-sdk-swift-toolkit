@@ -23,33 +23,35 @@ struct OverviewMapExampleView: View {
         case scene
     }
     
-    @State
-    private var mapOrScene: MapOrScene = .map
+    @State private var mapOrScene: MapOrScene = .map
     
     var body: some View {
-        Picker("Map or Scene", selection: $mapOrScene, content: {
-            Text("Map").tag(MapOrScene.map)
-            Text("Scene").tag(MapOrScene.scene)
-        })
-            .pickerStyle(SegmentedPickerStyle())
-            .padding()
-        switch mapOrScene {
-        case .map:
-            OverviewMapForMapView()
-        case .scene:
-            OverviewMapForSceneView()
+        Group {
+            switch mapOrScene {
+            case .map:
+                OverviewMapForMapView()
+            case .scene:
+                OverviewMapForSceneView()
+            }
         }
+        .toolbar(content: {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Picker("Map or Scene", selection: $mapOrScene) {
+                    Text("Map").tag(MapOrScene.map)
+                    Text("Scene").tag(MapOrScene.scene)
+                }
+                .pickerStyle(.menu)
+            }
+        })
     }
 }
 
 struct OverviewMapForMapView: View {
     let map = Map(basemapStyle: .arcGISImagery)
     
-    @State
-    private var viewpoint: Viewpoint?
+    @State private var viewpoint: Viewpoint?
     
-    @State
-    private var visibleArea: ArcGIS.Polygon?
+    @State private var visibleArea: ArcGIS.Polygon?
     
     var body: some View {
         MapView(map: map)
@@ -75,8 +77,7 @@ struct OverviewMapForMapView: View {
 struct OverviewMapForSceneView: View {
     let scene = Scene(basemapStyle: .arcGISImagery)
     
-    @State
-    private var viewpoint: Viewpoint?
+    @State private var viewpoint: Viewpoint?
     
     var body: some View {
         SceneView(scene: scene)
