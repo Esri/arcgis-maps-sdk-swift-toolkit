@@ -16,14 +16,10 @@ import ArcGIS
 import ArcGISToolkit
 
 struct SearchExampleView: View {
-    /// The `SearchViewModel` used to define behavior of the `SearchView`.
-    @ObservedObject
-    var searchViewModel = SearchViewModel(
-        sources: [SmartLocatorSearchSource(
-            name: "My locator",
-            maximumResults: 16,
-            maximumSuggestions: 16
-        )]
+    let locatorDataSource = SmartLocatorSearchSource(
+        name: "My locator",
+        maximumResults: 16,
+        maximumSuggestions: 16
     )
     
     let map = Map(basemapStyle: .arcGISImagery)
@@ -39,15 +35,19 @@ struct SearchExampleView: View {
     /// The `GraphicsOverlay` used by the `SearchView` to display search results on the map.
     let searchResultsOverlay = GraphicsOverlay()
 
+    @State var isGeoViewNavigating: Bool = false
+    @State var geoViewExtent: Envelope? = nil
+    @State var queryCenter: Point? = nil
+
     var body: some View {
         MapView(
             map: map,
             viewpoint: searchResultViewpoint,
             graphicsOverlays: [searchResultsOverlay]
         )
-            .onNavigatingChanged { searchViewModel.isGeoViewNavigating = $0 }
+            .onNavigatingChanged { isGeoViewNavigating = $0 }
             .onViewpointChanged(kind: .centerAndScale) {
-                searchViewModel.queryCenter = $0.targetGeometry as? Point
+                queryCenter = $0.targetGeometry as? Point
                 
                 // Reset `searchResultViewpoint` here when the user pans/zooms
                 // the map, so if the user commits the same search with the
@@ -63,15 +63,18 @@ struct SearchExampleView: View {
 
                 // For "Repeat Search Here" behavior, set the
                 // `searchViewModel.geoViewExtent` property when navigating.
-                searchViewModel.geoViewExtent = newValue.extent
+                geoViewExtent = newValue.extent
             }
             .overlay(alignment: .topTrailing) {
-                SearchView(searchViewModel: searchViewModel)
+                SearchView(
+                    queryCenter: queryCenter,
+                    sources: [locatorDataSource]
+                )
+                    .isGeoViewNavigating(isGeoViewNavigating)
+                    .geoViewExtent(geoViewExtent)
+                    .viewpoint($searchResultViewpoint)
+                    .resultsOverlay(searchResultsOverlay)
                     .padding()
-            }
-            .onAppear {
-                searchViewModel.viewpoint = $searchResultViewpoint
-                searchViewModel.resultsOverlay = searchResultsOverlay
             }
     }
 }
