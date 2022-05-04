@@ -16,14 +16,10 @@
 ***REMOVED***Toolkit
 
 struct SearchExampleView: View {
-***REMOVED******REMOVED***/ The `SearchViewModel` used to define behavior of the `SearchView`.
-***REMOVED***@ObservedObject
-***REMOVED***var searchViewModel = SearchViewModel(
-***REMOVED******REMOVED***sources: [SmartLocatorSearchSource(
-***REMOVED******REMOVED******REMOVED***name: "My locator",
-***REMOVED******REMOVED******REMOVED***maximumResults: 16,
-***REMOVED******REMOVED******REMOVED***maximumSuggestions: 16
-***REMOVED******REMOVED***)]
+***REMOVED***let locatorDataSource = SmartLocatorSearchSource(
+***REMOVED******REMOVED***name: "My locator",
+***REMOVED******REMOVED***maximumResults: 16,
+***REMOVED******REMOVED***maximumSuggestions: 16
 ***REMOVED***)
 ***REMOVED***
 ***REMOVED***let map = Map(basemapStyle: .arcGISImagery)
@@ -39,15 +35,19 @@ struct SearchExampleView: View {
 ***REMOVED******REMOVED***/ The `GraphicsOverlay` used by the `SearchView` to display search results on the map.
 ***REMOVED***let searchResultsOverlay = GraphicsOverlay()
 
+***REMOVED***@State var isGeoViewNavigating: Bool = false
+***REMOVED***@State var geoViewExtent: Envelope? = nil
+***REMOVED***@State var queryCenter: Point? = nil
+
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***MapView(
 ***REMOVED******REMOVED******REMOVED***map: map,
 ***REMOVED******REMOVED******REMOVED***viewpoint: searchResultViewpoint,
 ***REMOVED******REMOVED******REMOVED***graphicsOverlays: [searchResultsOverlay]
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***.onNavigatingChanged { searchViewModel.isGeoViewNavigating = $0 ***REMOVED***
+***REMOVED******REMOVED******REMOVED***.onNavigatingChanged { isGeoViewNavigating = $0 ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onViewpointChanged(kind: .centerAndScale) {
-***REMOVED******REMOVED******REMOVED******REMOVED***searchViewModel.queryCenter = $0.targetGeometry as? Point
+***REMOVED******REMOVED******REMOVED******REMOVED***queryCenter = $0.targetGeometry as? Point
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Reset `searchResultViewpoint` here when the user pans/zooms
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** the map, so if the user commits the same search with the
@@ -63,15 +63,18 @@ struct SearchExampleView: View {
 
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** For "Repeat Search Here" behavior, set the
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** `searchViewModel.geoViewExtent` property when navigating.
-***REMOVED******REMOVED******REMOVED******REMOVED***searchViewModel.geoViewExtent = newValue.extent
+***REMOVED******REMOVED******REMOVED******REMOVED***geoViewExtent = newValue.extent
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.overlay(alignment: .topTrailing) {
-***REMOVED******REMOVED******REMOVED******REMOVED***SearchView(searchViewModel: searchViewModel)
+***REMOVED******REMOVED******REMOVED******REMOVED***SearchView(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***queryCenter: queryCenter,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***sources: [locatorDataSource]
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.isGeoViewNavigating(isGeoViewNavigating)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.geoViewExtent(geoViewExtent)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.viewpoint($searchResultViewpoint)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.resultsOverlay(searchResultsOverlay)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.onAppear {
-***REMOVED******REMOVED******REMOVED******REMOVED***searchViewModel.viewpoint = $searchResultViewpoint
-***REMOVED******REMOVED******REMOVED******REMOVED***searchViewModel.resultsOverlay = searchResultsOverlay
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***

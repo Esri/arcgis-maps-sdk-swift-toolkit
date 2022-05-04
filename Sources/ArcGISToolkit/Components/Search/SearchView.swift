@@ -22,24 +22,93 @@ public struct SearchView: View {
 ***REMOVED******REMOVED***/   - queryCenter: Defines the center for the search.
 ***REMOVED******REMOVED***/   - resultMode: Defines how many results to return.
 ***REMOVED******REMOVED***/   - sources: Collection of search sources to be used.
-***REMOVED***init(
+***REMOVED***public init(
 ***REMOVED******REMOVED***queryArea: Geometry? = nil,
 ***REMOVED******REMOVED***queryCenter: Point? = nil,
 ***REMOVED******REMOVED***resultMode: SearchResultMode = .automatic,
 ***REMOVED******REMOVED***sources: [SearchSource] = []
 ***REMOVED***) {
-***REMOVED******REMOVED***searchViewModel = SearchViewModel(
+***REMOVED******REMOVED***_viewModel = StateObject(wrappedValue: SearchViewModel(
 ***REMOVED******REMOVED******REMOVED***queryArea: queryArea,
 ***REMOVED******REMOVED******REMOVED***queryCenter: queryCenter,
 ***REMOVED******REMOVED******REMOVED***resultMode: resultMode,
-***REMOVED******REMOVED******REMOVED***sources: [sources.isEmpty ? [LocatorSearchSource()] : sources]
-***REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***sources: sources.isEmpty ? [LocatorSearchSource()] : sources
+***REMOVED******REMOVED***))
 ***REMOVED***
-
+***REMOVED***
 ***REMOVED******REMOVED***/ The view model used by the view. The `SearchViewModel` manages state and handles the
 ***REMOVED******REMOVED***/ activity of searching. The view observes `SearchViewModel` for changes in state. The view
 ***REMOVED******REMOVED***/ calls methods on `SearchViewModel` in response to user action.
-***REMOVED***@ObservedObject var searchViewModel: SearchViewModel
+***REMOVED***@StateObject private var viewModel: SearchViewModel
+
+***REMOVED******REMOVED***/ Tracks the current user-entered query. This property drives both suggestions and searches.
+***REMOVED***public var currentQuery: String {
+***REMOVED******REMOVED***viewModel.currentQuery
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ The current map/scene view extent. Defaults to `nil`.
+***REMOVED******REMOVED***/
+***REMOVED******REMOVED***/ This should be updated via `geoViewExtent(:)`as the user navigates the map/scene. It will be
+***REMOVED******REMOVED***/ used to determine the value of `isEligibleForRequery` for the 'Repeat
+***REMOVED******REMOVED***/ search here' behavior. If that behavior is not wanted, it should be left `nil`.
+***REMOVED***public var geoViewExtent: Envelope? {
+***REMOVED******REMOVED***viewModel.geoViewExtent
+***REMOVED***
+
+***REMOVED******REMOVED***/ The `Viewpoint` used to pan/zoom to results. If `nil`, there will be no zooming to results.
+***REMOVED***public var viewpoint: Binding<Viewpoint?>? {
+***REMOVED******REMOVED***viewModel.viewpoint
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ The `GraphicsOverlay` used to display results. If `nil`, no results will be displayed.
+***REMOVED***public var resultsOverlay: GraphicsOverlay? {
+***REMOVED******REMOVED***viewModel.resultsOverlay
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ The search area to be used for the current query. Results will be limited to those.
+***REMOVED******REMOVED***/ within `QueryArea`. Defaults to `nil`.
+***REMOVED***public var queryArea: Geometry? {
+***REMOVED******REMOVED***viewModel.queryArea
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Defines the center for the search. For most use cases, this should be updated by the view
+***REMOVED******REMOVED***/ every time the user navigates the map.
+***REMOVED***public var queryCenter: Point? {
+***REMOVED******REMOVED***viewModel.queryCenter
+***REMOVED***
+
+***REMOVED******REMOVED***/ Defines how many results to return. Defaults to Automatic. In automatic mode, an appropriate
+***REMOVED******REMOVED***/ number of results is returned based on the type of suggestion chosen
+***REMOVED******REMOVED***/ (driven by the suggestion's `isCollection` property).
+***REMOVED***public var resultMode: SearchResultMode {
+***REMOVED******REMOVED***viewModel.resultMode
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ The collection of search and suggestion results. A `nil` value means no query has been made.
+***REMOVED***var searchOutcome: SearchOutcome? {
+***REMOVED******REMOVED***viewModel.searchOutcome
+***REMOVED***
+
+***REMOVED******REMOVED***/ Tracks selection of results from the `results` collection. When there is only one result,
+***REMOVED******REMOVED***/ that result is automatically assigned to this property. If there are multiple results, the view sets
+***REMOVED******REMOVED***/ this property upon user selection. This property is observable. The view should observe this
+***REMOVED******REMOVED***/ property and update the associated GeoView's viewpoint, if configured.
+***REMOVED***public var selectedResult: SearchResult? {
+***REMOVED******REMOVED***viewModel.selectedResult
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Collection of search sources to be used. This list is maintained over time and is not nullable.
+***REMOVED******REMOVED***/ The view should observe this list for changes. Consumers should add and remove sources from
+***REMOVED******REMOVED***/ this list as needed.
+***REMOVED******REMOVED***/ NOTE: Only the first source is currently used; multiple sources are not yet supported.
+***REMOVED***public var sources: [SearchSource] {
+***REMOVED******REMOVED***viewModel.sources
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ The suggestion currently selected by the user.
+***REMOVED***public var currentSuggestion: SearchSuggestion? {
+***REMOVED******REMOVED***viewModel.currentSuggestion
+***REMOVED***
 ***REMOVED***
 ***REMOVED***@Environment(\.horizontalSizeClass) var horizontalSizeClass
 ***REMOVED***@Environment(\.verticalSizeClass) var verticalSizeClass
@@ -84,29 +153,29 @@ public struct SearchView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***VStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***SearchField(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***query: $searchViewModel.currentQuery,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***query: $viewModel.currentQuery,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***prompt: prompt,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isResultsButtonHidden: !enableResultListView,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isResultListHidden: $isResultListHidden
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onSubmit { searchViewModel.commitSearch() ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onSubmit { viewModel.commitSearch() ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.submitLabel(.search)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if enableResultListView,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***   !isResultListHidden,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***   let searchOutcome = searchViewModel.searchOutcome {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***   let searchOutcome = viewModel.searchOutcome {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Group {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***switch searchOutcome {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .results(let results):
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***SearchResultList(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***searchResults: results,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedResult: $searchViewModel.selectedResult,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedResult: $viewModel.selectedResult,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***noResultsMessage: noResultsMessage
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(height: useHalfHeightResults ? geometry.size.height / 2 : nil)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .suggestions(let suggestions):
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***SearchSuggestionList(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***suggestionResults: suggestions,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentSuggestion: $searchViewModel.currentSuggestion,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentSuggestion: $viewModel.currentSuggestion,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***noResultsMessage: noResultsMessage
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .failure(let errorString):
@@ -122,16 +191,16 @@ public struct SearchView: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED***if searchViewModel.isEligibleForRequery {
+***REMOVED******REMOVED******REMOVED***if viewModel.isEligibleForRequery {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Button("Repeat Search Here") {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***searchViewModel.repeatSearch()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.repeatSearch()
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.esriBorder()
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.listStyle(.plain)
-***REMOVED******REMOVED***.onReceive(searchViewModel.$currentQuery) { _ in
-***REMOVED******REMOVED******REMOVED***searchViewModel.updateSuggestions()
+***REMOVED******REMOVED***.onReceive(viewModel.$currentQuery) { _ in
+***REMOVED******REMOVED******REMOVED***viewModel.updateSuggestions()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -169,6 +238,50 @@ extension SearchView {
 ***REMOVED******REMOVED***var copy = self
 ***REMOVED******REMOVED***copy.noResultsMessage = newNoResultsMessage
 ***REMOVED******REMOVED***return copy
+***REMOVED***
+
+***REMOVED******REMOVED***/ Sets the current query.
+***REMOVED******REMOVED***/ - Parameter newQueryString: The new value.
+***REMOVED******REMOVED***/ - Returns: The `SearchView`.
+***REMOVED***public func currentQuery(_ newQuery: String) -> Self {
+***REMOVED******REMOVED***viewModel.currentQuery = newQuery
+***REMOVED******REMOVED***return self
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ The current map/scene view extent. Defaults to `nil`.
+***REMOVED******REMOVED***/
+***REMOVED******REMOVED***/ This should be updated as the user navigates the map/scene. It will be
+***REMOVED******REMOVED***/ used to determine the value of `isEligibleForRequery` for the 'Repeat
+***REMOVED******REMOVED***/ search here' behavior. If that behavior is not wanted, it should be left `nil`.
+***REMOVED******REMOVED***/ - Parameter newExtent: The new value.
+***REMOVED******REMOVED***/ - Returns: The `SearchView`.
+***REMOVED***public func geoViewExtent(_ newExtent: Envelope?) -> Self {
+***REMOVED******REMOVED***viewModel.geoViewExtent = newExtent
+***REMOVED******REMOVED***return self
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ `true` when the geoView is navigating, `false` otherwise. Set by the external client.
+***REMOVED******REMOVED***/ - Parameter newIsGeoViewNavigating: The new value.
+***REMOVED******REMOVED***/ - Returns: The `SearchView`.
+***REMOVED***public func isGeoViewNavigating(_ newIsGeoViewNavigating: Bool) -> Self {
+***REMOVED******REMOVED***viewModel.isGeoViewNavigating = newIsGeoViewNavigating
+***REMOVED******REMOVED***return self
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ The `Viewpoint` used to pan/zoom to results. If `nil`, there will be no zooming to results.
+***REMOVED******REMOVED***/ - Parameter newViewpoint: The new value.
+***REMOVED******REMOVED***/ - Returns: The `SearchView`.
+***REMOVED***public func viewpoint(_ newViewpoint: Binding<Viewpoint?>?) -> Self {
+***REMOVED******REMOVED***viewModel.viewpoint = newViewpoint
+***REMOVED******REMOVED***return self
+***REMOVED***
+
+***REMOVED******REMOVED***/ The `GraphicsOverlay` used to display results. If `nil`, no results will be displayed.
+***REMOVED******REMOVED***/ - Parameter newResultsOverlay: The new value.
+***REMOVED******REMOVED***/ - Returns: The `SearchView`.
+***REMOVED***public func resultsOverlay(_ newResultsOverlay: GraphicsOverlay?) -> Self {
+***REMOVED******REMOVED***viewModel.resultsOverlay = newResultsOverlay
+***REMOVED******REMOVED***return self
 ***REMOVED***
 ***REMOVED***
 
