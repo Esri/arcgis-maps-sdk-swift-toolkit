@@ -68,7 +68,6 @@ public struct FloorFilter: View {
             levels: viewModel.sortedLevels,
             isTopAligned: topAligned
         )
-        .hidden(!viewModel.hasLevelsToDisplay)
     }
     
     /// A view that allows selecting between levels.
@@ -76,13 +75,15 @@ public struct FloorFilter: View {
         VStack {
             if topAligned {
                 sitesAndFacilitiesButton
-                Divider()
-                    .hidden(!viewModel.hasLevelsToDisplay)
-                levelSelector
+                if viewModel.hasLevelsToDisplay {
+                    Divider()
+                    levelSelector
+                }
             } else {
-                levelSelector
-                Divider()
-                    .hidden(!viewModel.hasLevelsToDisplay)
+                if viewModel.hasLevelsToDisplay {
+                    levelSelector
+                    Divider()
+                }
                 sitesAndFacilitiesButton
             }
         }
