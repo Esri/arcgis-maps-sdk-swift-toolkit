@@ -221,7 +221,7 @@ final class FloorFilterViewModel: ObservableObject {
 ***REMOVED***private func autoSelectFacility() -> Bool {
 ***REMOVED******REMOVED******REMOVED*** Only select a facility if it is within minimum scale. Default at 1500.
 ***REMOVED******REMOVED***let facilityMinScale: Double
-***REMOVED******REMOVED***if let minScale = floorManager.facilityLayer?.scaleRange?.lowerBound.inverseRatio,
+***REMOVED******REMOVED***if let minScale = floorManager.facilityLayer?.minScale,
 ***REMOVED******REMOVED******REMOVED***   minScale != .zero {
 ***REMOVED******REMOVED******REMOVED***facilityMinScale = minScale
 ***REMOVED*** else {
@@ -255,7 +255,7 @@ final class FloorFilterViewModel: ObservableObject {
 ***REMOVED***private func autoSelectSite() -> Bool {
 ***REMOVED******REMOVED******REMOVED*** Only select a facility if it is within minimum scale. Default at 4300.
 ***REMOVED******REMOVED***let siteMinScale: Double
-***REMOVED******REMOVED***if let minScale = floorManager.siteLayer?.scaleRange?.lowerBound.inverseRatio,
+***REMOVED******REMOVED***if let minScale = floorManager.siteLayer?.minScale,
 ***REMOVED******REMOVED******REMOVED***   minScale != .zero {
 ***REMOVED******REMOVED******REMOVED***siteMinScale = minScale
 ***REMOVED*** else {
