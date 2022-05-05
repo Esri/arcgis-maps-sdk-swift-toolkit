@@ -67,7 +67,7 @@ struct BasemapGalleryCell: View {
 ***REMOVED***).disabled(item.isBasemapLoading)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Creates a partially transparent rectangle, used to denote a basemap with an error.
+***REMOVED******REMOVED***/ Creates a red exclamation mark, used to denote a basemap with an error.
 ***REMOVED******REMOVED***/ - Returns: A new transparent rectagle view.
 ***REMOVED***private func makeErrorOverlay() -> some View {
 ***REMOVED******REMOVED***HStack {
