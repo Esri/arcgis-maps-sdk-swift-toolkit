@@ -67,7 +67,7 @@ struct BasemapGalleryCell: View {
         }).disabled(item.isBasemapLoading)
     }
     
-    /// Creates a partially transparent rectangle, used to denote a basemap with an error.
+    /// Creates a red exclamation mark, used to denote a basemap with an error.
     /// - Returns: A new transparent rectagle view.
     private func makeErrorOverlay() -> some View {
         HStack {
