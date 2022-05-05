@@ -19,22 +19,20 @@ public struct Compass: View {
     /// Determines if the compass should automatically hide/show itself when the parent view is oriented
     /// north.
     private let autoHide: Bool
-
+    
     /// Controls the current opacity of the compass.
-    @State
-    private var opacity: Double
-
+    @State private var opacity: Double
+    
     /// Indicates if the compass should hide based on the current viewpoint rotation and autoHide
     /// preference.
     var shouldHide: Bool {
         guard let viewpoint = viewpoint else { return autoHide }
         return viewpoint.rotation.isZero && autoHide
     }
-
+    
     /// Acts as link between the compass and the parent map or scene view.
-    @Binding
-    private var viewpoint: Viewpoint?
-
+    @Binding private var viewpoint: Viewpoint?
+    
     /// Creates a `Compass`
     /// - Parameters:
     ///   - viewpoint: Acts a communication link between the `MapView` or `SceneView` and the
@@ -49,7 +47,7 @@ public struct Compass: View {
         _opacity = State(initialValue: .zero)
         self.autoHide = autoHide
     }
-
+    
     public var body: some View {
         GeometryReader { geometry in
             ZStack {
@@ -76,7 +74,7 @@ public struct Compass: View {
         .onAppear { opacity = shouldHide ? 0 : 1 }
         .accessibilityLabel(viewpoint?.compassHeadingDescription ?? "Compass")
     }
-
+    
     /// Resets the viewpoints `rotation` to zero.
     func resetHeading() {
         guard let viewpoint = viewpoint else { return }
@@ -94,7 +92,7 @@ internal extension Viewpoint {
     var compassHeading: Double {
         rotation.isZero ? .zero : 360 - rotation
     }
-
+    
     /// A text description of the current heading, sutiable for accessibility voiceover.
     var compassHeadingDescription: String {
         "Compass, heading "
