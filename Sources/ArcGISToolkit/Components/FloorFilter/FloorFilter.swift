@@ -94,13 +94,15 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED***VStack {
 ***REMOVED******REMOVED******REMOVED***if topAligned {
 ***REMOVED******REMOVED******REMOVED******REMOVED***sitesAndFacilitiesButton
-***REMOVED******REMOVED******REMOVED******REMOVED***Divider()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.hidden(!viewModel.hasLevelsToDisplay)
-***REMOVED******REMOVED******REMOVED******REMOVED***levelSelector
+***REMOVED******REMOVED******REMOVED******REMOVED***if viewModel.hasLevelsToDisplay {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Divider()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***levelSelector
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***levelSelector
-***REMOVED******REMOVED******REMOVED******REMOVED***Divider()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.hidden(!viewModel.hasLevelsToDisplay)
+***REMOVED******REMOVED******REMOVED******REMOVED***if viewModel.hasLevelsToDisplay {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***levelSelector
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Divider()
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***sitesAndFacilitiesButton
 ***REMOVED******REMOVED***
 ***REMOVED***
@@ -124,7 +126,6 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED******REMOVED***isTopAligned: topAligned,
 ***REMOVED******REMOVED******REMOVED***levels: viewModel.sortedLevels
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED***.hidden(!viewModel.hasLevelsToDisplay)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ A configured `SiteAndFacilitySelector`.
