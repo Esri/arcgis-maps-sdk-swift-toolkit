@@ -24,7 +24,7 @@ struct FloorFilterExampleView: View {
     }
     
     /// Determines the arrangement of the inner `FloorFilter` UI componenets.
-    private let filterAlignment: Alignment = .bottomLeading
+    private let floorFilterAlignment = Alignment.bottomLeading
     
     /// Determines the appropriate time to initialize the `FloorFilter`.
     @State private var isMapLoaded: Bool = false
@@ -53,12 +53,12 @@ struct FloorFilterExampleView: View {
         }
         /// Preserve the current viewpoint when a keyboard is presented in landscape.
         .ignoresSafeArea(.keyboard, edges: .bottom)
-        .overlay(alignment: filterAlignment) {
+        .overlay(alignment: floorFilterAlignment) {
             if isMapLoaded,
                let floorManager = map.floorManager {
                 FloorFilter(
                     floorManager: floorManager,
-                    alignment: filterAlignment,
+                    alignment: floorFilterAlignment,
                     viewpoint: $viewpoint
                 )
                 .filterWidth(50)
