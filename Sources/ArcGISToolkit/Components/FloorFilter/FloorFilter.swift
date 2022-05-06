@@ -94,13 +94,15 @@ public struct FloorFilter: View {
         VStack {
             if topAligned {
                 sitesAndFacilitiesButton
-                Divider()
-                    .hidden(!viewModel.hasLevelsToDisplay)
-                levelSelector
+                if viewModel.hasLevelsToDisplay {
+                    Divider()
+                    levelSelector
+                }
             } else {
-                levelSelector
-                Divider()
-                    .hidden(!viewModel.hasLevelsToDisplay)
+                if viewModel.hasLevelsToDisplay {
+                    levelSelector
+                    Divider()
+                }
                 sitesAndFacilitiesButton
             }
         }
@@ -124,7 +126,6 @@ public struct FloorFilter: View {
             isTopAligned: topAligned,
             levels: viewModel.sortedLevels
         )
-        .hidden(!viewModel.hasLevelsToDisplay)
     }
     
     /// A configured `SiteAndFacilitySelector`.
