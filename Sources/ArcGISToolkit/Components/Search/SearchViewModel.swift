@@ -47,8 +47,8 @@ final class SearchViewModel: ObservableObject {
     ///   - resultMode: Defines how many results to return.
     ///   - sources: Collection of search sources to be used.
     init(
-        queryArea: Geometry? = nil,
-        queryCenter: Point? = nil,
+        queryArea: Binding<Geometry?>? = nil,
+        queryCenter: Binding<Point?>? = nil,
         resultMode: SearchResultMode = .automatic,
         sources: [SearchSource] = []
     ) {
@@ -149,11 +149,11 @@ final class SearchViewModel: ObservableObject {
     
     /// The search area to be used for the current query. Results will be limited to those.
     /// within `QueryArea`. Defaults to `nil`.
-    var queryArea: Geometry? = nil
+    var queryArea: Binding<Geometry?>? = nil
     
     /// Defines the center for the search. For most use cases, this should be updated by the view
     /// every time the user navigates the map.
-    var queryCenter: Point?
+    var queryCenter: Binding<Point?>?
     
     /// Defines how many results to return. Defaults to Automatic. In automatic mode, an appropriate
     /// number of results is returned based on the type of suggestion chosen
@@ -272,8 +272,8 @@ private extension SearchViewModel {
         await search(with: {
             try await source.search(
                 currentQuery,
-                searchArea: queryArea,
-                preferredSearchLocation: queryCenter
+                searchArea: queryArea?.wrappedValue,
+                preferredSearchLocation: queryCenter?.wrappedValue
             )
         } )
     }
@@ -287,8 +287,8 @@ private extension SearchViewModel {
         do {
             let suggestions = try await source.suggest(
                 currentQuery,
-                searchArea: queryArea,
-                preferredSearchLocation: queryCenter
+                searchArea: queryArea?.wrappedValue,
+                preferredSearchLocation: queryCenter?.wrappedValue
             )
             searchOutcome = .suggestions(suggestions)
         } catch is CancellationError {
@@ -305,8 +305,8 @@ private extension SearchViewModel {
             with: {
                 try await searchSuggestion.owningSource.search(
                     searchSuggestion,
-                    searchArea: queryArea,
-                    preferredSearchLocation: queryCenter
+                    searchArea: queryArea?.wrappedValue,
+                    preferredSearchLocation: queryCenter?.wrappedValue
                 )
             },
             isCollection: searchSuggestion.isCollection

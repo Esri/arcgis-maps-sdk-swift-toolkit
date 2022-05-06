@@ -23,8 +23,8 @@ public struct SearchView: View {
     ///   - resultMode: Defines how many results to return.
     ///   - sources: Collection of search sources to be used.
     public init(
-        queryArea: Geometry? = nil,
-        queryCenter: Point? = nil,
+        queryArea: Binding<Geometry?>? = nil,
+        queryCenter: Binding<Point?>? = nil,
         resultMode: SearchResultMode = .automatic,
         sources: [SearchSource] = []
     ) {
@@ -42,47 +42,20 @@ public struct SearchView: View {
     @StateObject private var viewModel: SearchViewModel
 
     /// Tracks the current user-entered query. This property drives both suggestions and searches.
-    public var currentQuery: String {
-        viewModel.currentQuery
-    }
+    var currentQuery: String = ""
     
     /// The current map/scene view extent. Defaults to `nil`.
     ///
     /// This should be updated via `geoViewExtent(:)`as the user navigates the map/scene. It will be
     /// used to determine the value of `isEligibleForRequery` for the 'Repeat
     /// search here' behavior. If that behavior is not wanted, it should be left `nil`.
-    public var geoViewExtent: Envelope? {
-        viewModel.geoViewExtent
-    }
+    var geoViewExtent: Envelope? = nil
 
     /// The `Viewpoint` used to pan/zoom to results. If `nil`, there will be no zooming to results.
-    public var viewpoint: Binding<Viewpoint?>? {
-        viewModel.viewpoint
-    }
+    var viewpoint: Binding<Viewpoint?>? = nil
     
     /// The `GraphicsOverlay` used to display results. If `nil`, no results will be displayed.
-    public var resultsOverlay: GraphicsOverlay? {
-        viewModel.resultsOverlay
-    }
-    
-    /// The search area to be used for the current query. Results will be limited to those.
-    /// within `QueryArea`. Defaults to `nil`.
-    public var queryArea: Geometry? {
-        viewModel.queryArea
-    }
-    
-    /// Defines the center for the search. For most use cases, this should be updated by the view
-    /// every time the user navigates the map.
-    public var queryCenter: Point? {
-        viewModel.queryCenter
-    }
-
-    /// Defines how many results to return. Defaults to Automatic. In automatic mode, an appropriate
-    /// number of results is returned based on the type of suggestion chosen
-    /// (driven by the suggestion's `isCollection` property).
-    public var resultMode: SearchResultMode {
-        viewModel.resultMode
-    }
+    var resultsOverlay: GraphicsOverlay? = nil
     
     /// The collection of search and suggestion results. A `nil` value means no query has been made.
     var searchOutcome: SearchOutcome? {
@@ -93,21 +66,25 @@ public struct SearchView: View {
     /// that result is automatically assigned to this property. If there are multiple results, the view sets
     /// this property upon user selection. This property is observable. The view should observe this
     /// property and update the associated GeoView's viewpoint, if configured.
-    public var selectedResult: SearchResult? {
-        viewModel.selectedResult
+    @State public var selectedResult: SearchResult? {
+        didSet {
+            viewModel.selectedResult = selectedResult
+        }
     }
     
     /// Collection of search sources to be used. This list is maintained over time and is not nullable.
     /// The view should observe this list for changes. Consumers should add and remove sources from
     /// this list as needed.
     /// NOTE: Only the first source is currently used; multiple sources are not yet supported.
-    public var sources: [SearchSource] {
+    var sources: [SearchSource] {
         viewModel.sources
     }
     
     /// The suggestion currently selected by the user.
-    public var currentSuggestion: SearchSuggestion? {
-        viewModel.currentSuggestion
+    @State public var currentSuggestion: SearchSuggestion? {
+        didSet {
+            viewModel.currentSuggestion = currentSuggestion
+        }
     }
     
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
@@ -146,6 +123,9 @@ public struct SearchView: View {
     /// Determines whether the results lists are displayed.
     @State private var isResultListHidden: Bool = false
     
+    private var isGeoViewNavigating: Bool = false
+
+    
     public var body: some View {
         VStack {
             GeometryReader { geometry in
@@ -162,20 +142,20 @@ public struct SearchView: View {
                             .submitLabel(.search)
                         if enableResultListView,
                            !isResultListHidden,
-                           let searchOutcome = viewModel.searchOutcome {
+                           let searchOutcome = searchOutcome {
                             Group {
                                 switch searchOutcome {
                                 case .results(let results):
                                     SearchResultList(
                                         searchResults: results,
-                                        selectedResult: $viewModel.selectedResult,
+                                        selectedResult: $selectedResult,
                                         noResultsMessage: noResultsMessage
                                     )
                                         .frame(height: useHalfHeightResults ? geometry.size.height / 2 : nil)
                                 case .suggestions(let suggestions):
                                     SearchSuggestionList(
                                         suggestionResults: suggestions,
-                                        currentSuggestion: $viewModel.currentSuggestion,
+                                        currentSuggestion: $currentSuggestion,
                                         noResultsMessage: noResultsMessage
                                     )
                                 case .failure(let errorString):
@@ -201,6 +181,12 @@ public struct SearchView: View {
         .listStyle(.plain)
         .onReceive(viewModel.$currentQuery) { _ in
             viewModel.updateSuggestions()
+        }
+        .onAppear() {
+            viewModel.currentQuery = currentQuery
+            viewModel.geoViewExtent = geoViewExtent
+            viewModel.viewpoint = viewpoint
+            viewModel.resultsOverlay = resultsOverlay
         }
     }
 }
@@ -244,8 +230,9 @@ extension SearchView {
     /// - Parameter newQueryString: The new value.
     /// - Returns: The `SearchView`.
     public func currentQuery(_ newQuery: String) -> Self {
-        viewModel.currentQuery = newQuery
-        return self
+        var copy = self
+        copy.currentQuery = newQuery
+        return copy
     }
     
     /// The current map/scene view extent. Defaults to `nil`.
@@ -256,32 +243,36 @@ extension SearchView {
     /// - Parameter newExtent: The new value.
     /// - Returns: The `SearchView`.
     public func geoViewExtent(_ newExtent: Envelope?) -> Self {
-        viewModel.geoViewExtent = newExtent
-        return self
+        var copy = self
+        copy.geoViewExtent = newExtent
+        return copy
     }
     
     /// `true` when the geoView is navigating, `false` otherwise. Set by the external client.
     /// - Parameter newIsGeoViewNavigating: The new value.
     /// - Returns: The `SearchView`.
     public func isGeoViewNavigating(_ newIsGeoViewNavigating: Bool) -> Self {
-        viewModel.isGeoViewNavigating = newIsGeoViewNavigating
-        return self
+        var copy = self
+        copy.isGeoViewNavigating = newIsGeoViewNavigating
+        return copy
     }
     
     /// The `Viewpoint` used to pan/zoom to results. If `nil`, there will be no zooming to results.
     /// - Parameter newViewpoint: The new value.
     /// - Returns: The `SearchView`.
     public func viewpoint(_ newViewpoint: Binding<Viewpoint?>?) -> Self {
-        viewModel.viewpoint = newViewpoint
-        return self
+        var copy = self
+        copy.viewpoint = newViewpoint
+        return copy
     }
 
     /// The `GraphicsOverlay` used to display results. If `nil`, no results will be displayed.
     /// - Parameter newResultsOverlay: The new value.
     /// - Returns: The `SearchView`.
     public func resultsOverlay(_ newResultsOverlay: GraphicsOverlay?) -> Self {
-        viewModel.resultsOverlay = newResultsOverlay
-        return self
+        var copy = self
+        copy.resultsOverlay = newResultsOverlay
+        return copy
     }
 }
 
