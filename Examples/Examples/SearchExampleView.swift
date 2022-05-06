@@ -67,7 +67,7 @@ struct SearchExampleView: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.overlay(alignment: .topTrailing) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***SearchView(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***queryCenter: queryCenter,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***queryCenter: $queryCenter,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***sources: [locatorDataSource]
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.isGeoViewNavigating(isGeoViewNavigating)

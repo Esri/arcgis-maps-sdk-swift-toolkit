@@ -47,8 +47,8 @@ final class SearchViewModel: ObservableObject {
 ***REMOVED******REMOVED***/   - resultMode: Defines how many results to return.
 ***REMOVED******REMOVED***/   - sources: Collection of search sources to be used.
 ***REMOVED***init(
-***REMOVED******REMOVED***queryArea: Geometry? = nil,
-***REMOVED******REMOVED***queryCenter: Point? = nil,
+***REMOVED******REMOVED***queryArea: Binding<Geometry?>? = nil,
+***REMOVED******REMOVED***queryCenter: Binding<Point?>? = nil,
 ***REMOVED******REMOVED***resultMode: SearchResultMode = .automatic,
 ***REMOVED******REMOVED***sources: [SearchSource] = []
 ***REMOVED***) {
@@ -149,11 +149,11 @@ final class SearchViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED******REMOVED***/ The search area to be used for the current query. Results will be limited to those.
 ***REMOVED******REMOVED***/ within `QueryArea`. Defaults to `nil`.
-***REMOVED***var queryArea: Geometry? = nil
+***REMOVED***var queryArea: Binding<Geometry?>? = nil
 ***REMOVED***
 ***REMOVED******REMOVED***/ Defines the center for the search. For most use cases, this should be updated by the view
 ***REMOVED******REMOVED***/ every time the user navigates the map.
-***REMOVED***var queryCenter: Point?
+***REMOVED***var queryCenter: Binding<Point?>?
 ***REMOVED***
 ***REMOVED******REMOVED***/ Defines how many results to return. Defaults to Automatic. In automatic mode, an appropriate
 ***REMOVED******REMOVED***/ number of results is returned based on the type of suggestion chosen
@@ -272,8 +272,8 @@ private extension SearchViewModel {
 ***REMOVED******REMOVED***await search(with: {
 ***REMOVED******REMOVED******REMOVED***try await source.search(
 ***REMOVED******REMOVED******REMOVED******REMOVED***currentQuery,
-***REMOVED******REMOVED******REMOVED******REMOVED***searchArea: queryArea,
-***REMOVED******REMOVED******REMOVED******REMOVED***preferredSearchLocation: queryCenter
+***REMOVED******REMOVED******REMOVED******REMOVED***searchArea: queryArea?.wrappedValue,
+***REMOVED******REMOVED******REMOVED******REMOVED***preferredSearchLocation: queryCenter?.wrappedValue
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED*** )
 ***REMOVED***
@@ -287,8 +287,8 @@ private extension SearchViewModel {
 ***REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED***let suggestions = try await source.suggest(
 ***REMOVED******REMOVED******REMOVED******REMOVED***currentQuery,
-***REMOVED******REMOVED******REMOVED******REMOVED***searchArea: queryArea,
-***REMOVED******REMOVED******REMOVED******REMOVED***preferredSearchLocation: queryCenter
+***REMOVED******REMOVED******REMOVED******REMOVED***searchArea: queryArea?.wrappedValue,
+***REMOVED******REMOVED******REMOVED******REMOVED***preferredSearchLocation: queryCenter?.wrappedValue
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***searchOutcome = .suggestions(suggestions)
 ***REMOVED*** catch is CancellationError {
@@ -305,8 +305,8 @@ private extension SearchViewModel {
 ***REMOVED******REMOVED******REMOVED***with: {
 ***REMOVED******REMOVED******REMOVED******REMOVED***try await searchSuggestion.owningSource.search(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***searchSuggestion,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***searchArea: queryArea,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***preferredSearchLocation: queryCenter
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***searchArea: queryArea?.wrappedValue,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***preferredSearchLocation: queryCenter?.wrappedValue
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***,
 ***REMOVED******REMOVED******REMOVED***isCollection: searchSuggestion.isCollection
