@@ -67,7 +67,7 @@ struct SearchExampleView: View {
             }
             .overlay(alignment: .topTrailing) {
                 SearchView(
-                    queryCenter: queryCenter,
+                    queryCenter: $queryCenter,
                     sources: [locatorDataSource]
                 )
                     .isGeoViewNavigating(isGeoViewNavigating)
