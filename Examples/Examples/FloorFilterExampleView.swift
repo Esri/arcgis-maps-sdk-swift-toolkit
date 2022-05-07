@@ -71,7 +71,6 @@ struct FloorFilterExampleView: View {
                     alignment: floorFilterAlignment,
                     viewpoint: $viewpoint
                 )
-                .filterWidth(50)
                 .frame(
                     maxWidth: 300,
                     maxHeight: 300
