@@ -43,19 +43,16 @@ struct LevelSelector: View {
                 if !isTopAligned {
                     CollapseButton(isCollapsed: $isCollapsed)
                     Divider()
-                        .frame(width: 30)
                 }
                 LevelsStack(levels: levels)
                 if isTopAligned {
                     Divider()
-                        .frame(width: 30)
                     CollapseButton(isCollapsed: $isCollapsed)
                 }
             }
         } else {
             Toggle(isOn: $isCollapsed) {
-                Text(selectedLevelName)
-                    .lineLimit(1)
+                LevelText(levelName: selectedLevelName)
             }
             .toggleStyle(.selectedButton)
         }
@@ -88,8 +85,7 @@ struct LevelsStack: View {
                             }
                         )
                     ) {
-                        Text(level.shortName)
-                            .lineLimit(1)
+                        LevelText(levelName: level.shortName)
                     }
                     .toggleStyle(.selectableButton)
                 }
@@ -99,6 +95,19 @@ struct LevelsStack: View {
             }
         }
         .frame(maxHeight: contentHeight)
+    }
+}
+
+/// Intended to display the name of a level.
+struct LevelText: View {
+    /// The name of the level to be displayed.
+    var levelName: String
+    
+    var body: some View {
+        Text(levelName)
+            .lineLimit(1)
+            .fixedSize()
+            .frame(minWidth: 40)
     }
 }
 
