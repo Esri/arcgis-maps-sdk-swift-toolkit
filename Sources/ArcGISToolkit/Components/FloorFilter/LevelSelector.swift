@@ -58,9 +58,7 @@ struct LevelSelector: View {
             }
         } else {
             Toggle(isOn: $isCollapsed) {
-                Text(selectedLevelName)
-                    .lineLimit(1)
-                    .frame(maxWidth: .infinity)
+                LevelText(levelName: selectedLevelName)
             }
             .toggleStyle(.selectedButton)
         }
@@ -94,9 +92,7 @@ struct LevelsStack: View {
                                 }
                             )
                         ) {
-                            Text(level.shortName)
-                                .lineLimit(1)
-                                .frame(maxWidth: .infinity)
+                            LevelText(levelName: level.shortName)
                         }
                         .toggleStyle(.selectableButton)
                     }
@@ -116,6 +112,19 @@ struct LevelsStack: View {
                 }
             }
         }
+    }
+}
+
+/// Intended to display the name of a level.
+struct LevelText: View {
+    /// The name of the level to be displayed.
+    var levelName: String
+    
+    var body: some View {
+        Text(levelName)
+            .lineLimit(1)
+            .fixedSize()
+            .frame(minWidth: 40)
     }
 }
 
