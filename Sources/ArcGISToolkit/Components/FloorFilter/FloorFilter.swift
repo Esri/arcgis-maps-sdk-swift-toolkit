@@ -64,7 +64,7 @@ public struct FloorFilter: View {
     private let alignment: Alignment
     
     /// The width of the level selector.
-    private var filterWidth: Double = 50
+    private var filterWidth: Double = 60
     
     /// The `Viewpoint` used to pan/zoom to the selected site/facilty.
     /// If `nil`, there will be no automatic pan/zoom operations or automatic selection support.
@@ -154,12 +154,5 @@ public struct FloorFilter: View {
         .frame(minHeight: 100)
         .environmentObject(viewModel)
         .disabled(viewModel.isLoading)
-    }
-    
-    /// Modifies the width used by the level selector. Increase this value to lessen level name truncation.
-    public func filterWidth(_ newWidth: Double) -> FloorFilter {
-        var copy = self
-        copy.filterWidth = newWidth
-        return copy
     }
 }
