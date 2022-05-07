@@ -43,19 +43,16 @@ struct LevelSelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if !isTopAligned {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***CollapseButton(isCollapsed: $isCollapsed)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Divider()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 30)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***LevelsStack(levels: levels)
 ***REMOVED******REMOVED******REMOVED******REMOVED***if isTopAligned {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Divider()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 30)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***CollapseButton(isCollapsed: $isCollapsed)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED***Toggle(isOn: $isCollapsed) {
-***REMOVED******REMOVED******REMOVED******REMOVED***Text(selectedLevelName)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.lineLimit(1)
+***REMOVED******REMOVED******REMOVED******REMOVED***LevelText(levelName: selectedLevelName)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.toggleStyle(.selectedButton)
 ***REMOVED***
@@ -88,8 +85,7 @@ struct LevelsStack: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(level.shortName)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.lineLimit(1)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***LevelText(levelName: level.shortName)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.toggleStyle(.selectableButton)
 ***REMOVED******REMOVED******REMOVED***
@@ -99,6 +95,19 @@ struct LevelsStack: View {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.frame(maxHeight: contentHeight)
+***REMOVED***
+***REMOVED***
+
+***REMOVED***/ Intended to display the name of a level.
+struct LevelText: View {
+***REMOVED******REMOVED***/ The name of the level to be displayed.
+***REMOVED***var levelName: String
+***REMOVED***
+***REMOVED***var body: some View {
+***REMOVED******REMOVED***Text(levelName)
+***REMOVED******REMOVED******REMOVED***.lineLimit(1)
+***REMOVED******REMOVED******REMOVED***.fixedSize()
+***REMOVED******REMOVED******REMOVED***.frame(minWidth: 40)
 ***REMOVED***
 ***REMOVED***
 

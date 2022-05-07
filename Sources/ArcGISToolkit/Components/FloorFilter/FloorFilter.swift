@@ -49,7 +49,7 @@ public struct FloorFilter: View {
 ***REMOVED***private let alignment: Alignment
 ***REMOVED***
 ***REMOVED******REMOVED***/ The width of the level selector.
-***REMOVED***private var filterWidth: Double = 50
+***REMOVED***private var filterWidth: Double = 60
 ***REMOVED***
 ***REMOVED******REMOVED***/ Button to open and close the site and facility selector.
 ***REMOVED***private var sitesAndFacilitiesButton: some View {
@@ -125,12 +125,5 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED***.frame(minHeight: 100)
 ***REMOVED******REMOVED***.environmentObject(viewModel)
 ***REMOVED******REMOVED***.disabled(viewModel.isLoading)
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ Modifies the width used by the level selector. Increase this value to lessen level name truncation.
-***REMOVED***public func filterWidth(_ newWidth: Double) -> FloorFilter {
-***REMOVED******REMOVED***var copy = self
-***REMOVED******REMOVED***copy.filterWidth = newWidth
-***REMOVED******REMOVED***return copy
 ***REMOVED***
 ***REMOVED***
