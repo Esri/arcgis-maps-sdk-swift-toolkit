@@ -26,7 +26,9 @@ public struct SearchView: View {
         queryArea: Binding<Geometry?>? = nil,
         queryCenter: Binding<Point?>? = nil,
         resultMode: SearchResultMode = .automatic,
-        sources: [SearchSource] = []
+        sources: [SearchSource] = [],
+        geoViewExtent: Binding<Envelope?>? = nil,
+        isGeoViewNavigating: Binding<Bool>? = nil
     ) {
         _viewModel = StateObject(wrappedValue: SearchViewModel(
             queryArea: queryArea,
@@ -34,6 +36,9 @@ public struct SearchView: View {
             resultMode: resultMode,
             sources: sources.isEmpty ? [LocatorSearchSource()] : sources
         ))
+  
+        _geoViewExtent = geoViewExtent ?? Binding.constant(nil)
+        _isGeoViewNavigating = isGeoViewNavigating ?? Binding.constant(false)
     }
     
     /// The view model used by the view. The `SearchViewModel` manages state and handles the
@@ -49,7 +54,7 @@ public struct SearchView: View {
     /// This should be updated via `geoViewExtent(:)`as the user navigates the map/scene. It will be
     /// used to determine the value of `isEligibleForRequery` for the 'Repeat
     /// search here' behavior. If that behavior is not wanted, it should be left `nil`.
-    var geoViewExtent: Envelope? = nil
+    @Binding var geoViewExtent: Envelope?
 
     /// The `Viewpoint` used to pan/zoom to results. If `nil`, there will be no zooming to results.
     var viewpoint: Binding<Viewpoint?>? = nil
@@ -57,34 +62,12 @@ public struct SearchView: View {
     /// The `GraphicsOverlay` used to display results. If `nil`, no results will be displayed.
     var resultsOverlay: GraphicsOverlay? = nil
     
-    /// The collection of search and suggestion results. A `nil` value means no query has been made.
-    var searchOutcome: SearchOutcome? {
-        viewModel.searchOutcome
-    }
-
-    /// Tracks selection of results from the `results` collection. When there is only one result,
-    /// that result is automatically assigned to this property. If there are multiple results, the view sets
-    /// this property upon user selection. This property is observable. The view should observe this
-    /// property and update the associated GeoView's viewpoint, if configured.
-    @State public var selectedResult: SearchResult? {
-        didSet {
-            viewModel.selectedResult = selectedResult
-        }
-    }
-    
     /// Collection of search sources to be used. This list is maintained over time and is not nullable.
     /// The view should observe this list for changes. Consumers should add and remove sources from
     /// this list as needed.
     /// NOTE: Only the first source is currently used; multiple sources are not yet supported.
     var sources: [SearchSource] {
         viewModel.sources
-    }
-    
-    /// The suggestion currently selected by the user.
-    @State public var currentSuggestion: SearchSuggestion? {
-        didSet {
-            viewModel.currentSuggestion = currentSuggestion
-        }
     }
     
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
@@ -123,9 +106,9 @@ public struct SearchView: View {
     /// Determines whether the results lists are displayed.
     @State private var isResultListHidden: Bool = false
     
-    private var isGeoViewNavigating: Bool = false
+    /// Determines whether the geoView is navigating in response to user interaction.
+    @Binding private var isGeoViewNavigating: Bool
 
-    
     public var body: some View {
         VStack {
             GeometryReader { geometry in
@@ -142,20 +125,20 @@ public struct SearchView: View {
                             .submitLabel(.search)
                         if enableResultListView,
                            !isResultListHidden,
-                           let searchOutcome = searchOutcome {
+                           let searchOutcome = viewModel.searchOutcome {
                             Group {
                                 switch searchOutcome {
                                 case .results(let results):
                                     SearchResultList(
                                         searchResults: results,
-                                        selectedResult: $selectedResult,
+                                        selectedResult: $viewModel.selectedResult,
                                         noResultsMessage: noResultsMessage
                                     )
                                         .frame(height: useHalfHeightResults ? geometry.size.height / 2 : nil)
                                 case .suggestions(let suggestions):
                                     SearchSuggestionList(
                                         suggestionResults: suggestions,
-                                        currentSuggestion: $currentSuggestion,
+                                        currentSuggestion: $viewModel.currentSuggestion,
                                         noResultsMessage: noResultsMessage
                                     )
                                 case .failure(let errorString):
@@ -182,9 +165,14 @@ public struct SearchView: View {
         .onReceive(viewModel.$currentQuery) { _ in
             viewModel.updateSuggestions()
         }
+        .onChange(of: geoViewExtent) { _ in
+            viewModel.geoViewExtent = geoViewExtent
+        }
+        .onChange(of: isGeoViewNavigating) { _ in
+            viewModel.isGeoViewNavigating = isGeoViewNavigating
+        }
         .onAppear() {
             viewModel.currentQuery = currentQuery
-            viewModel.geoViewExtent = geoViewExtent
             viewModel.viewpoint = viewpoint
             viewModel.resultsOverlay = resultsOverlay
         }
@@ -232,28 +220,6 @@ extension SearchView {
     public func currentQuery(_ newQuery: String) -> Self {
         var copy = self
         copy.currentQuery = newQuery
-        return copy
-    }
-    
-    /// The current map/scene view extent. Defaults to `nil`.
-    ///
-    /// This should be updated as the user navigates the map/scene. It will be
-    /// used to determine the value of `isEligibleForRequery` for the 'Repeat
-    /// search here' behavior. If that behavior is not wanted, it should be left `nil`.
-    /// - Parameter newExtent: The new value.
-    /// - Returns: The `SearchView`.
-    public func geoViewExtent(_ newExtent: Envelope?) -> Self {
-        var copy = self
-        copy.geoViewExtent = newExtent
-        return copy
-    }
-    
-    /// `true` when the geoView is navigating, `false` otherwise. Set by the external client.
-    /// - Parameter newIsGeoViewNavigating: The new value.
-    /// - Returns: The `SearchView`.
-    public func isGeoViewNavigating(_ newIsGeoViewNavigating: Bool) -> Self {
-        var copy = self
-        copy.isGeoViewNavigating = newIsGeoViewNavigating
         return copy
     }
     
