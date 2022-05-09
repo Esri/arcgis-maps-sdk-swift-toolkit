@@ -26,7 +26,9 @@ public struct SearchView: View {
 ***REMOVED******REMOVED***queryArea: Binding<Geometry?>? = nil,
 ***REMOVED******REMOVED***queryCenter: Binding<Point?>? = nil,
 ***REMOVED******REMOVED***resultMode: SearchResultMode = .automatic,
-***REMOVED******REMOVED***sources: [SearchSource] = []
+***REMOVED******REMOVED***sources: [SearchSource] = [],
+***REMOVED******REMOVED***geoViewExtent: Binding<Envelope?>? = nil,
+***REMOVED******REMOVED***isGeoViewNavigating: Binding<Bool>? = nil
 ***REMOVED***) {
 ***REMOVED******REMOVED***_viewModel = StateObject(wrappedValue: SearchViewModel(
 ***REMOVED******REMOVED******REMOVED***queryArea: queryArea,
@@ -34,6 +36,9 @@ public struct SearchView: View {
 ***REMOVED******REMOVED******REMOVED***resultMode: resultMode,
 ***REMOVED******REMOVED******REMOVED***sources: sources.isEmpty ? [LocatorSearchSource()] : sources
 ***REMOVED******REMOVED***))
+  
+***REMOVED******REMOVED***_geoViewExtent = geoViewExtent ?? Binding.constant(nil)
+***REMOVED******REMOVED***_isGeoViewNavigating = isGeoViewNavigating ?? Binding.constant(false)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The view model used by the view. The `SearchViewModel` manages state and handles the
@@ -49,7 +54,7 @@ public struct SearchView: View {
 ***REMOVED******REMOVED***/ This should be updated via `geoViewExtent(:)`as the user navigates the map/scene. It will be
 ***REMOVED******REMOVED***/ used to determine the value of `isEligibleForRequery` for the 'Repeat
 ***REMOVED******REMOVED***/ search here' behavior. If that behavior is not wanted, it should be left `nil`.
-***REMOVED***var geoViewExtent: Envelope? = nil
+***REMOVED***@Binding var geoViewExtent: Envelope?
 
 ***REMOVED******REMOVED***/ The `Viewpoint` used to pan/zoom to results. If `nil`, there will be no zooming to results.
 ***REMOVED***var viewpoint: Binding<Viewpoint?>? = nil
@@ -57,34 +62,12 @@ public struct SearchView: View {
 ***REMOVED******REMOVED***/ The `GraphicsOverlay` used to display results. If `nil`, no results will be displayed.
 ***REMOVED***var resultsOverlay: GraphicsOverlay? = nil
 ***REMOVED***
-***REMOVED******REMOVED***/ The collection of search and suggestion results. A `nil` value means no query has been made.
-***REMOVED***var searchOutcome: SearchOutcome? {
-***REMOVED******REMOVED***viewModel.searchOutcome
-***REMOVED***
-
-***REMOVED******REMOVED***/ Tracks selection of results from the `results` collection. When there is only one result,
-***REMOVED******REMOVED***/ that result is automatically assigned to this property. If there are multiple results, the view sets
-***REMOVED******REMOVED***/ this property upon user selection. This property is observable. The view should observe this
-***REMOVED******REMOVED***/ property and update the associated GeoView's viewpoint, if configured.
-***REMOVED***@State public var selectedResult: SearchResult? {
-***REMOVED******REMOVED***didSet {
-***REMOVED******REMOVED******REMOVED***viewModel.selectedResult = selectedResult
-***REMOVED***
-***REMOVED***
-***REMOVED***
 ***REMOVED******REMOVED***/ Collection of search sources to be used. This list is maintained over time and is not nullable.
 ***REMOVED******REMOVED***/ The view should observe this list for changes. Consumers should add and remove sources from
 ***REMOVED******REMOVED***/ this list as needed.
 ***REMOVED******REMOVED***/ NOTE: Only the first source is currently used; multiple sources are not yet supported.
 ***REMOVED***var sources: [SearchSource] {
 ***REMOVED******REMOVED***viewModel.sources
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ The suggestion currently selected by the user.
-***REMOVED***@State public var currentSuggestion: SearchSuggestion? {
-***REMOVED******REMOVED***didSet {
-***REMOVED******REMOVED******REMOVED***viewModel.currentSuggestion = currentSuggestion
-***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@Environment(\.horizontalSizeClass) var horizontalSizeClass
@@ -123,9 +106,9 @@ public struct SearchView: View {
 ***REMOVED******REMOVED***/ Determines whether the results lists are displayed.
 ***REMOVED***@State private var isResultListHidden: Bool = false
 ***REMOVED***
-***REMOVED***private var isGeoViewNavigating: Bool = false
+***REMOVED******REMOVED***/ Determines whether the geoView is navigating in response to user interaction.
+***REMOVED***@Binding private var isGeoViewNavigating: Bool
 
-***REMOVED***
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***VStack {
 ***REMOVED******REMOVED******REMOVED***GeometryReader { geometry in
@@ -142,20 +125,20 @@ public struct SearchView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.submitLabel(.search)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if enableResultListView,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***   !isResultListHidden,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***   let searchOutcome = searchOutcome {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***   let searchOutcome = viewModel.searchOutcome {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Group {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***switch searchOutcome {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .results(let results):
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***SearchResultList(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***searchResults: results,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedResult: $selectedResult,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedResult: $viewModel.selectedResult,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***noResultsMessage: noResultsMessage
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(height: useHalfHeightResults ? geometry.size.height / 2 : nil)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .suggestions(let suggestions):
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***SearchSuggestionList(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***suggestionResults: suggestions,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentSuggestion: $currentSuggestion,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentSuggestion: $viewModel.currentSuggestion,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***noResultsMessage: noResultsMessage
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .failure(let errorString):
@@ -182,9 +165,14 @@ public struct SearchView: View {
 ***REMOVED******REMOVED***.onReceive(viewModel.$currentQuery) { _ in
 ***REMOVED******REMOVED******REMOVED***viewModel.updateSuggestions()
 ***REMOVED***
+***REMOVED******REMOVED***.onChange(of: geoViewExtent) { _ in
+***REMOVED******REMOVED******REMOVED***viewModel.geoViewExtent = geoViewExtent
+***REMOVED***
+***REMOVED******REMOVED***.onChange(of: isGeoViewNavigating) { _ in
+***REMOVED******REMOVED******REMOVED***viewModel.isGeoViewNavigating = isGeoViewNavigating
+***REMOVED***
 ***REMOVED******REMOVED***.onAppear() {
 ***REMOVED******REMOVED******REMOVED***viewModel.currentQuery = currentQuery
-***REMOVED******REMOVED******REMOVED***viewModel.geoViewExtent = geoViewExtent
 ***REMOVED******REMOVED******REMOVED***viewModel.viewpoint = viewpoint
 ***REMOVED******REMOVED******REMOVED***viewModel.resultsOverlay = resultsOverlay
 ***REMOVED***
@@ -232,28 +220,6 @@ extension SearchView {
 ***REMOVED***public func currentQuery(_ newQuery: String) -> Self {
 ***REMOVED******REMOVED***var copy = self
 ***REMOVED******REMOVED***copy.currentQuery = newQuery
-***REMOVED******REMOVED***return copy
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ The current map/scene view extent. Defaults to `nil`.
-***REMOVED******REMOVED***/
-***REMOVED******REMOVED***/ This should be updated as the user navigates the map/scene. It will be
-***REMOVED******REMOVED***/ used to determine the value of `isEligibleForRequery` for the 'Repeat
-***REMOVED******REMOVED***/ search here' behavior. If that behavior is not wanted, it should be left `nil`.
-***REMOVED******REMOVED***/ - Parameter newExtent: The new value.
-***REMOVED******REMOVED***/ - Returns: The `SearchView`.
-***REMOVED***public func geoViewExtent(_ newExtent: Envelope?) -> Self {
-***REMOVED******REMOVED***var copy = self
-***REMOVED******REMOVED***copy.geoViewExtent = newExtent
-***REMOVED******REMOVED***return copy
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ `true` when the geoView is navigating, `false` otherwise. Set by the external client.
-***REMOVED******REMOVED***/ - Parameter newIsGeoViewNavigating: The new value.
-***REMOVED******REMOVED***/ - Returns: The `SearchView`.
-***REMOVED***public func isGeoViewNavigating(_ newIsGeoViewNavigating: Bool) -> Self {
-***REMOVED******REMOVED***var copy = self
-***REMOVED******REMOVED***copy.isGeoViewNavigating = newIsGeoViewNavigating
 ***REMOVED******REMOVED***return copy
 ***REMOVED***
 ***REMOVED***

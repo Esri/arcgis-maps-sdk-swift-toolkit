@@ -37,6 +37,7 @@ struct SearchExampleView: View {
 
 ***REMOVED***@State var isGeoViewNavigating: Bool = false
 ***REMOVED***@State var geoViewExtent: Envelope? = nil
+***REMOVED***@State var queryArea: Geometry? = nil
 ***REMOVED***@State var queryCenter: Point? = nil
 
 ***REMOVED***var body: some View {
@@ -57,21 +58,23 @@ struct SearchExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***searchResultViewpoint = nil
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onVisibleAreaChanged { newValue in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Setting `searchViewModel.queryArea` will limit the
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** results to `queryArea`.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***searchViewModel.queryArea = newValue
-
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** For "Repeat Search Here" behavior, set the
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** `searchViewModel.geoViewExtent` property when navigating.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** For "Repeat Search Here" behavior, pass the `geoViewExtent`
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** to the `searchView.geoViewExtent` modifier.
 ***REMOVED******REMOVED******REMOVED******REMOVED***geoViewExtent = newValue.extent
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** You can also use the visible area in the `SearchView`
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** initializer to limit the results to `queryArea`
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** to limit the search results.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***queryArea = newValue
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.overlay(alignment: .topTrailing) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***SearchView(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***queryArea: $queryArea,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***queryCenter: $queryCenter,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***sources: [locatorDataSource]
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***sources: [locatorDataSource],
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***geoViewExtent: $geoViewExtent,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isGeoViewNavigating: $isGeoViewNavigating
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.isGeoViewNavigating(isGeoViewNavigating)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.geoViewExtent(geoViewExtent)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.viewpoint($searchResultViewpoint)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.resultsOverlay(searchResultsOverlay)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
