@@ -7,6 +7,18 @@ The scalebar uses geodetic calculations to provide accurate measurements for map
 ### Usage
 
 ```swift
+MapView(map: map)
+    .onSpatialReferenceChanged { spatialReference = $0 }
+    .onUnitsPerPointChanged { unitsPerPoint = $0 }
+    .onViewpointChanged(kind: .centerAndScale) { viewpoint = $0 }
+    .overlay(alignment: alignment) {
+        Scalebar(
+            maxWidth: maxWidth,
+            spatialReference: $spatialReference,
+            unitsPerPoint: $unitsPerPoint,
+            viewpoint: $viewpoint
+        )
+    }
 ```
 
 To see it in action, try out the [Examples](../../Examples) and refer to [ScalebarExampleView.swift](../../Examples/Examples/ScalebarExampleView.swift) in the project.
