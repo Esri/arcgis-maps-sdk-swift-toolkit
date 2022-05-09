@@ -37,6 +37,7 @@ struct SearchExampleView: View {
 
     @State var isGeoViewNavigating: Bool = false
     @State var geoViewExtent: Envelope? = nil
+    @State var queryArea: Geometry? = nil
     @State var queryCenter: Point? = nil
 
     var body: some View {
@@ -57,21 +58,23 @@ struct SearchExampleView: View {
                 searchResultViewpoint = nil
             }
             .onVisibleAreaChanged { newValue in
-                // Setting `searchViewModel.queryArea` will limit the
-                // results to `queryArea`.
-                //searchViewModel.queryArea = newValue
-
-                // For "Repeat Search Here" behavior, set the
-                // `searchViewModel.geoViewExtent` property when navigating.
+                // For "Repeat Search Here" behavior, pass the `geoViewExtent`
+                // to the `searchView.geoViewExtent` modifier.
                 geoViewExtent = newValue.extent
+                
+                // You can also use the visible area in the `SearchView`
+                // initializer to limit the results to `queryArea`
+                // to limit the search results.
+//                queryArea = newValue
             }
             .overlay(alignment: .topTrailing) {
                 SearchView(
+//                    queryArea: $queryArea,
                     queryCenter: $queryCenter,
-                    sources: [locatorDataSource]
+                    sources: [locatorDataSource],
+                    geoViewExtent: $geoViewExtent,
+                    isGeoViewNavigating: $isGeoViewNavigating
                 )
-                    .isGeoViewNavigating(isGeoViewNavigating)
-                    .geoViewExtent(geoViewExtent)
                     .viewpoint($searchResultViewpoint)
                     .resultsOverlay(searchResultsOverlay)
                     .padding()

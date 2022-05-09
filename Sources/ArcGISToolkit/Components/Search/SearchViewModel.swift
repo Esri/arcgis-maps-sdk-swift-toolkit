@@ -125,7 +125,7 @@ final class SearchViewModel: ObservableObject {
     
     /// `true` when the geoView is navigating, `false` otherwise. Set by the external client.
     var isGeoViewNavigating: Bool = false
-    
+
     /// The `Viewpoint` used to pan/zoom to results. If `nil`, there will be no zooming to results.
     var viewpoint: Binding<Viewpoint?>? = nil
     
@@ -135,7 +135,6 @@ final class SearchViewModel: ObservableObject {
     /// If `true`, will set the viewpoint to the extent of the results, plus a little buffer, which will
     /// cause the geoView to zoom to the extent of the results. If `false`,
     /// no setting of the viewpoint will occur.
-    @Published
     private var shouldZoomToResults = true
     
     /// `true` if the extent has changed by a set amount after a `Search` or `AcceptSuggestion`
@@ -178,7 +177,6 @@ final class SearchViewModel: ObservableObject {
     /// that result is automatically assigned to this property. If there are multiple results, the view sets
     /// this property upon user selection. This property is observable. The view should observe this
     /// property and update the associated GeoView's viewpoint, if configured.
-    @Published
     var selectedResult: SearchResult? {
         willSet {
             (selectedResult?.geoElement as? Graphic)?.isSelected = false
@@ -226,7 +224,6 @@ final class SearchViewModel: ObservableObject {
     }
     
     /// The suggestion currently selected by the user.
-    @Published
     var currentSuggestion: SearchSuggestion? {
         didSet {
             if let currentSuggestion = currentSuggestion {
