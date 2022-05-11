@@ -49,13 +49,6 @@ struct SearchExampleView: View {
             .onNavigatingChanged { isGeoViewNavigating = $0 }
             .onViewpointChanged(kind: .centerAndScale) {
                 queryCenter = $0.targetGeometry as? Point
-                
-                // Reset `searchResultViewpoint` here when the user pans/zooms
-                // the map, so if the user commits the same search with the
-                // same result, the Map will pan/zoom to the result. Otherwise,
-                // `searchResultViewpoint` doesn't change which doesn't
-                // redraw the map with the new viewpoint.
-                searchResultViewpoint = nil
             }
             .onVisibleAreaChanged { newValue in
                 // For "Repeat Search Here" behavior, pass the `geoViewExtent`
@@ -69,14 +62,14 @@ struct SearchExampleView: View {
             }
             .overlay(alignment: .topTrailing) {
                 SearchView(
-//                    queryArea: $queryArea,
                     queryCenter: $queryCenter,
                     sources: [locatorDataSource],
+                    viewpoint: $searchResultViewpoint,
                     geoViewExtent: $geoViewExtent,
                     isGeoViewNavigating: $isGeoViewNavigating
                 )
-                    .viewpoint($searchResultViewpoint)
                     .resultsOverlay(searchResultsOverlay)
+//                    .queryArea($queryArea)
                     .padding()
             }
     }

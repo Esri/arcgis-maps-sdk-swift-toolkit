@@ -18,23 +18,25 @@ import ArcGIS
 public struct SearchView: View {
     /// Creates a `SearchView`.
     /// - Parameters:
-    ///   - queryArea: The search area to be used for the current query.
     ///   - queryCenter: Defines the center for the search.
-    ///   - resultMode: Defines how many results to return.
     ///   - sources: Collection of search sources to be used.
+    ///   - viewpoint: The `Viewpoint` used to pan/zoom to results. If `nil`, there will be
+    ///   no zooming to results.
+    ///   - geoViewExtent: The current map/scene view extent.  Defaults to `nil`.  Used to allow
+    ///   repeat searches after panning/zooming the map.  Set to nil if repeat search behavior is not wanted.
+    ///   - isGeoViewNavigating: Denotes whether the geoview is navigating.  Used for the
+    ///   repeat search behavior.
     public init(
-        queryArea: Binding<Geometry?>? = nil,
         queryCenter: Binding<Point?>? = nil,
-        resultMode: SearchResultMode = .automatic,
         sources: [SearchSource] = [],
+        viewpoint: Binding<Viewpoint?>? = nil,
         geoViewExtent: Binding<Envelope?>? = nil,
         isGeoViewNavigating: Binding<Bool>? = nil
     ) {
         _viewModel = StateObject(wrappedValue: SearchViewModel(
-            queryArea: queryArea,
             queryCenter: queryCenter,
-            resultMode: resultMode,
-            sources: sources.isEmpty ? [LocatorSearchSource()] : sources
+            sources: sources.isEmpty ? [LocatorSearchSource()] : sources,
+            viewpoint: viewpoint
         ))
   
         _geoViewExtent = geoViewExtent ?? Binding.constant(nil)
@@ -48,16 +50,19 @@ public struct SearchView: View {
 
     /// Tracks the current user-entered query. This property drives both suggestions and searches.
     var currentQuery: String = ""
-    
+
+    /// Tracks the current user-entered query. This property drives both suggestions and searches.
+    var resultMode: SearchResultMode = .automatic
+
+    /// The search area to be used for the current query.
+    var queryArea: Binding<Geometry?>? = nil
+
     /// The current map/scene view extent. Defaults to `nil`.
     ///
     /// This should be updated via `geoViewExtent(:)`as the user navigates the map/scene. It will be
     /// used to determine the value of `isEligibleForRequery` for the 'Repeat
     /// search here' behavior. If that behavior is not wanted, it should be left `nil`.
     @Binding var geoViewExtent: Envelope?
-
-    /// The `Viewpoint` used to pan/zoom to results. If `nil`, there will be no zooming to results.
-    var viewpoint: Binding<Viewpoint?>? = nil
     
     /// The `GraphicsOverlay` used to display results. If `nil`, no results will be displayed.
     var resultsOverlay: GraphicsOverlay? = nil
@@ -173,8 +178,9 @@ public struct SearchView: View {
         }
         .onAppear() {
             viewModel.currentQuery = currentQuery
-            viewModel.viewpoint = viewpoint
             viewModel.resultsOverlay = resultsOverlay
+            viewModel.resultMode = resultMode
+            viewModel.queryArea = queryArea
         }
     }
 }
@@ -223,21 +229,30 @@ extension SearchView {
         return copy
     }
     
-    /// The `Viewpoint` used to pan/zoom to results. If `nil`, there will be no zooming to results.
-    /// - Parameter newViewpoint: The new value.
-    /// - Returns: The `SearchView`.
-    public func viewpoint(_ newViewpoint: Binding<Viewpoint?>?) -> Self {
-        var copy = self
-        copy.viewpoint = newViewpoint
-        return copy
-    }
-
     /// The `GraphicsOverlay` used to display results. If `nil`, no results will be displayed.
     /// - Parameter newResultsOverlay: The new value.
     /// - Returns: The `SearchView`.
     public func resultsOverlay(_ newResultsOverlay: GraphicsOverlay?) -> Self {
         var copy = self
         copy.resultsOverlay = newResultsOverlay
+        return copy
+    }
+
+    /// Defines how many results to return.
+    /// - Parameter newResultMode: The new value.
+    /// - Returns: The `SearchView`.
+    public func resultMode(_ newResultMode: SearchResultMode) -> Self {
+        var copy = self
+        copy.resultMode = newResultMode
+        return copy
+    }
+
+    /// The search area to be used for the current query.
+    /// - Parameter newQueryArea: The new value.
+    /// - Returns: The `SearchView`.
+    public func queryArea(_ newQueryArea: Binding<Geometry?>?) -> Self {
+        var copy = self
+        copy.queryArea = newQueryArea
         return copy
     }
 }
