@@ -42,20 +42,18 @@ public enum SearchOutcome {
 final class SearchViewModel: ObservableObject {
     /// Creates a `SearchViewModel`.
     /// - Parameters:
-    ///   - queryArea: The search area to be used for the current query.
     ///   - queryCenter: Defines the center for the search.
-    ///   - resultMode: Defines how many results to return.
     ///   - sources: Collection of search sources to be used.
+    ///   - viewpoint: The `Viewpoint` used to pan/zoom to results. If `nil`, there will be
+    ///   no zooming to results.
     init(
-        queryArea: Binding<Geometry?>? = nil,
         queryCenter: Binding<Point?>? = nil,
-        resultMode: SearchResultMode = .automatic,
-        sources: [SearchSource] = []
+        sources: [SearchSource] = [],
+        viewpoint: Binding<Viewpoint?>? = nil
     ) {
-        self.queryArea = queryArea
         self.queryCenter = queryCenter
-        self.resultMode = resultMode
         self.sources = sources
+        self.viewpoint = viewpoint
     }
     
     /// The active search source.  If `nil`, the first item in `sources` is used.
