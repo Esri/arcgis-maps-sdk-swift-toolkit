@@ -42,20 +42,18 @@ public enum SearchOutcome {
 final class SearchViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ Creates a `SearchViewModel`.
 ***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - queryArea: The search area to be used for the current query.
 ***REMOVED******REMOVED***/   - queryCenter: Defines the center for the search.
-***REMOVED******REMOVED***/   - resultMode: Defines how many results to return.
 ***REMOVED******REMOVED***/   - sources: Collection of search sources to be used.
+***REMOVED******REMOVED***/   - viewpoint: The `Viewpoint` used to pan/zoom to results. If `nil`, there will be
+***REMOVED******REMOVED***/   no zooming to results.
 ***REMOVED***init(
-***REMOVED******REMOVED***queryArea: Binding<Geometry?>? = nil,
 ***REMOVED******REMOVED***queryCenter: Binding<Point?>? = nil,
-***REMOVED******REMOVED***resultMode: SearchResultMode = .automatic,
-***REMOVED******REMOVED***sources: [SearchSource] = []
+***REMOVED******REMOVED***sources: [SearchSource] = [],
+***REMOVED******REMOVED***viewpoint: Binding<Viewpoint?>? = nil
 ***REMOVED***) {
-***REMOVED******REMOVED***self.queryArea = queryArea
 ***REMOVED******REMOVED***self.queryCenter = queryCenter
-***REMOVED******REMOVED***self.resultMode = resultMode
 ***REMOVED******REMOVED***self.sources = sources
+***REMOVED******REMOVED***self.viewpoint = viewpoint
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The active search source.  If `nil`, the first item in `sources` is used.

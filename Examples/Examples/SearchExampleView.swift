@@ -49,13 +49,6 @@ struct SearchExampleView: View {
 ***REMOVED******REMOVED******REMOVED***.onNavigatingChanged { isGeoViewNavigating = $0 ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onViewpointChanged(kind: .centerAndScale) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***queryCenter = $0.targetGeometry as? Point
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Reset `searchResultViewpoint` here when the user pans/zooms
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** the map, so if the user commits the same search with the
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** same result, the Map will pan/zoom to the result. Otherwise,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** `searchResultViewpoint` doesn't change which doesn't
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** redraw the map with the new viewpoint.
-***REMOVED******REMOVED******REMOVED******REMOVED***searchResultViewpoint = nil
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onVisibleAreaChanged { newValue in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** For "Repeat Search Here" behavior, pass the `geoViewExtent`
@@ -69,14 +62,14 @@ struct SearchExampleView: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.overlay(alignment: .topTrailing) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***SearchView(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***queryArea: $queryArea,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***queryCenter: $queryCenter,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***sources: [locatorDataSource],
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint: $searchResultViewpoint,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***geoViewExtent: $geoViewExtent,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isGeoViewNavigating: $isGeoViewNavigating
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.viewpoint($searchResultViewpoint)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.resultsOverlay(searchResultsOverlay)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.queryArea($queryArea)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
 ***REMOVED******REMOVED***
 ***REMOVED***

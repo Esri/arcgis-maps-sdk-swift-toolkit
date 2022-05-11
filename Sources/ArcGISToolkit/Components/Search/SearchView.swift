@@ -18,23 +18,25 @@
 public struct SearchView: View {
 ***REMOVED******REMOVED***/ Creates a `SearchView`.
 ***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - queryArea: The search area to be used for the current query.
 ***REMOVED******REMOVED***/   - queryCenter: Defines the center for the search.
-***REMOVED******REMOVED***/   - resultMode: Defines how many results to return.
 ***REMOVED******REMOVED***/   - sources: Collection of search sources to be used.
+***REMOVED******REMOVED***/   - viewpoint: The `Viewpoint` used to pan/zoom to results. If `nil`, there will be
+***REMOVED******REMOVED***/   no zooming to results.
+***REMOVED******REMOVED***/   - geoViewExtent: The current map/scene view extent.  Defaults to `nil`.  Used to allow
+***REMOVED******REMOVED***/   repeat searches after panning/zooming the map.  Set to nil if repeat search behavior is not wanted.
+***REMOVED******REMOVED***/   - isGeoViewNavigating: Denotes whether the geoview is navigating.  Used for the
+***REMOVED******REMOVED***/   repeat search behavior.
 ***REMOVED***public init(
-***REMOVED******REMOVED***queryArea: Binding<Geometry?>? = nil,
 ***REMOVED******REMOVED***queryCenter: Binding<Point?>? = nil,
-***REMOVED******REMOVED***resultMode: SearchResultMode = .automatic,
 ***REMOVED******REMOVED***sources: [SearchSource] = [],
+***REMOVED******REMOVED***viewpoint: Binding<Viewpoint?>? = nil,
 ***REMOVED******REMOVED***geoViewExtent: Binding<Envelope?>? = nil,
 ***REMOVED******REMOVED***isGeoViewNavigating: Binding<Bool>? = nil
 ***REMOVED***) {
 ***REMOVED******REMOVED***_viewModel = StateObject(wrappedValue: SearchViewModel(
-***REMOVED******REMOVED******REMOVED***queryArea: queryArea,
 ***REMOVED******REMOVED******REMOVED***queryCenter: queryCenter,
-***REMOVED******REMOVED******REMOVED***resultMode: resultMode,
-***REMOVED******REMOVED******REMOVED***sources: sources.isEmpty ? [LocatorSearchSource()] : sources
+***REMOVED******REMOVED******REMOVED***sources: sources.isEmpty ? [LocatorSearchSource()] : sources,
+***REMOVED******REMOVED******REMOVED***viewpoint: viewpoint
 ***REMOVED******REMOVED***))
   
 ***REMOVED******REMOVED***_geoViewExtent = geoViewExtent ?? Binding.constant(nil)
@@ -48,16 +50,19 @@ public struct SearchView: View {
 
 ***REMOVED******REMOVED***/ Tracks the current user-entered query. This property drives both suggestions and searches.
 ***REMOVED***var currentQuery: String = ""
-***REMOVED***
+
+***REMOVED******REMOVED***/ Tracks the current user-entered query. This property drives both suggestions and searches.
+***REMOVED***var resultMode: SearchResultMode = .automatic
+
+***REMOVED******REMOVED***/ The search area to be used for the current query.
+***REMOVED***var queryArea: Binding<Geometry?>? = nil
+
 ***REMOVED******REMOVED***/ The current map/scene view extent. Defaults to `nil`.
 ***REMOVED******REMOVED***/
 ***REMOVED******REMOVED***/ This should be updated via `geoViewExtent(:)`as the user navigates the map/scene. It will be
 ***REMOVED******REMOVED***/ used to determine the value of `isEligibleForRequery` for the 'Repeat
 ***REMOVED******REMOVED***/ search here' behavior. If that behavior is not wanted, it should be left `nil`.
 ***REMOVED***@Binding var geoViewExtent: Envelope?
-
-***REMOVED******REMOVED***/ The `Viewpoint` used to pan/zoom to results. If `nil`, there will be no zooming to results.
-***REMOVED***var viewpoint: Binding<Viewpoint?>? = nil
 ***REMOVED***
 ***REMOVED******REMOVED***/ The `GraphicsOverlay` used to display results. If `nil`, no results will be displayed.
 ***REMOVED***var resultsOverlay: GraphicsOverlay? = nil
@@ -173,8 +178,9 @@ public struct SearchView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***.onAppear() {
 ***REMOVED******REMOVED******REMOVED***viewModel.currentQuery = currentQuery
-***REMOVED******REMOVED******REMOVED***viewModel.viewpoint = viewpoint
 ***REMOVED******REMOVED******REMOVED***viewModel.resultsOverlay = resultsOverlay
+***REMOVED******REMOVED******REMOVED***viewModel.resultMode = resultMode
+***REMOVED******REMOVED******REMOVED***viewModel.queryArea = queryArea
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -223,21 +229,30 @@ extension SearchView {
 ***REMOVED******REMOVED***return copy
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ The `Viewpoint` used to pan/zoom to results. If `nil`, there will be no zooming to results.
-***REMOVED******REMOVED***/ - Parameter newViewpoint: The new value.
-***REMOVED******REMOVED***/ - Returns: The `SearchView`.
-***REMOVED***public func viewpoint(_ newViewpoint: Binding<Viewpoint?>?) -> Self {
-***REMOVED******REMOVED***var copy = self
-***REMOVED******REMOVED***copy.viewpoint = newViewpoint
-***REMOVED******REMOVED***return copy
-***REMOVED***
-
 ***REMOVED******REMOVED***/ The `GraphicsOverlay` used to display results. If `nil`, no results will be displayed.
 ***REMOVED******REMOVED***/ - Parameter newResultsOverlay: The new value.
 ***REMOVED******REMOVED***/ - Returns: The `SearchView`.
 ***REMOVED***public func resultsOverlay(_ newResultsOverlay: GraphicsOverlay?) -> Self {
 ***REMOVED******REMOVED***var copy = self
 ***REMOVED******REMOVED***copy.resultsOverlay = newResultsOverlay
+***REMOVED******REMOVED***return copy
+***REMOVED***
+
+***REMOVED******REMOVED***/ Defines how many results to return.
+***REMOVED******REMOVED***/ - Parameter newResultMode: The new value.
+***REMOVED******REMOVED***/ - Returns: The `SearchView`.
+***REMOVED***public func resultMode(_ newResultMode: SearchResultMode) -> Self {
+***REMOVED******REMOVED***var copy = self
+***REMOVED******REMOVED***copy.resultMode = newResultMode
+***REMOVED******REMOVED***return copy
+***REMOVED***
+
+***REMOVED******REMOVED***/ The search area to be used for the current query.
+***REMOVED******REMOVED***/ - Parameter newQueryArea: The new value.
+***REMOVED******REMOVED***/ - Returns: The `SearchView`.
+***REMOVED***public func queryArea(_ newQueryArea: Binding<Geometry?>?) -> Self {
+***REMOVED******REMOVED***var copy = self
+***REMOVED******REMOVED***copy.queryArea = newQueryArea
 ***REMOVED******REMOVED***return copy
 ***REMOVED***
 ***REMOVED***
