@@ -56,7 +56,7 @@ extension ExampleList {
     static let authentication = Self(
         name: "Authentication",
         examples: [
-            AnyExample("Token", content: AuthenticationExampleView())
+            AnyExample("All Authentication Types", content: AuthenticationExampleView())
         ]
     )
 }
