@@ -29,6 +29,12 @@ struct AuthenticationExampleView: View {
 ***REMOVED***.onAppear {
 ***REMOVED******REMOVED******REMOVED***ArcGISURLSession.challengeHandler = authenticator
 ***REMOVED***
+***REMOVED******REMOVED******REMOVED*** Save and restore the API Key.
+***REMOVED******REMOVED******REMOVED*** Note: This is only necessary in this example. Other examples make use of the global
+***REMOVED******REMOVED******REMOVED*** api key that is set when the app starts up. Using an api key will prevent an
+***REMOVED******REMOVED******REMOVED*** authentication challenge prompt for certain services. Since this example highlights
+***REMOVED******REMOVED******REMOVED*** the usage of authentication challenge prompts, we want to set the api key to `nil`
+***REMOVED******REMOVED******REMOVED*** when this example appears and restore it when this example disappears.
 ***REMOVED******REMOVED***.onAppear {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Save off the api key
 ***REMOVED******REMOVED******REMOVED***previousApiKey = ArcGISRuntimeEnvironment.apiKey
