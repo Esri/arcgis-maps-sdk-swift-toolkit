@@ -29,6 +29,12 @@ struct AuthenticationExampleView: View {
         }.onAppear {
             ArcGISURLSession.challengeHandler = authenticator
         }
+        // Save and restore the API Key.
+        // Note: This is only necessary in this example. Other examples make use of the global
+        // api key that is set when the app starts up. Using an api key will prevent an
+        // authentication challenge prompt for certain services. Since this example highlights
+        // the usage of authentication challenge prompts, we want to set the api key to `nil`
+        // when this example appears and restore it when this example disappears.
         .onAppear {
             // Save off the api key
             previousApiKey = ArcGISRuntimeEnvironment.apiKey
