@@ -19,8 +19,7 @@
 ***REMOVED***
 ***REMOVED***
 
-@MainActor
-class UsernamePasswordViewModel: ObservableObject {
+@MainActor class UsernamePasswordViewModel: ObservableObject {
 ***REMOVED***init(challengingHost: String) {
 ***REMOVED******REMOVED***self.challengingHost = challengingHost
 ***REMOVED******REMOVED***continuation = nil
@@ -50,7 +49,7 @@ class UsernamePasswordViewModel: ObservableObject {
 ***REMOVED***func signIn() {
 ***REMOVED******REMOVED***if let continuation = continuation {
 ***REMOVED******REMOVED******REMOVED***Task {
-***REMOVED******REMOVED******REMOVED******REMOVED***let disposition: Task<ArcGISAuthenticationChallenge.Disposition, Error> = Task {
+***REMOVED******REMOVED******REMOVED******REMOVED***continuation.resume(with: await Result {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.useCredential(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try await .token(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***challenge: continuation.challenge,
@@ -58,8 +57,7 @@ class UsernamePasswordViewModel: ObservableObject {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***password: password
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***continuation.resume(with: await disposition.result)
+***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -71,12 +69,12 @@ class UsernamePasswordViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED***
 
-struct UsernamePasswordView: View {
+@MainActor struct UsernamePasswordView: View {
 ***REMOVED***init(viewModel: UsernamePasswordViewModel) {
 ***REMOVED******REMOVED***self.viewModel = viewModel
 ***REMOVED***
 ***REMOVED***
-***REMOVED***var viewModel: UsernamePasswordViewModel
+***REMOVED***private var viewModel: UsernamePasswordViewModel
 ***REMOVED***
 ***REMOVED******REMOVED***/ The focused field.
 ***REMOVED***@FocusState private var focusedField: Field?
@@ -86,21 +84,13 @@ struct UsernamePasswordView: View {
 
 ***REMOVED******REMOVED***/ The password to be entered by the user.
 ***REMOVED***@State private var password = ""
-
+***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***NavigationView {
 ***REMOVED******REMOVED******REMOVED***Form {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Section {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***VStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "person.circle")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.resizable()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 150, height: 150)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.shadow(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***color: .gray.opacity(0.4),
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***radius: 3,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***x: 1,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***y: 2
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***person
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("You need to sign in to access '\(viewModel.challengingHost)'")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fixedSize(horizontal: false, vertical: true)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
@@ -124,15 +114,7 @@ struct UsernamePasswordView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.disableAutocorrection(true)
 
 ***REMOVED******REMOVED******REMOVED******REMOVED***Section {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button(action: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.signIn()
-***REMOVED******REMOVED******REMOVED******REMOVED***, label: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Sign In")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .center)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.white)
-***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.disabled(!viewModel.signinButtonEnabled)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.listRowBackground(viewModel.signinButtonEnabled ? Color.accentColor : Color.gray)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***signinButton
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.navigationTitle("Sign In")
@@ -152,6 +134,30 @@ struct UsernamePasswordView: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
+***REMOVED***private var person: some View {
+***REMOVED******REMOVED***Image(systemName: "person.circle")
+***REMOVED******REMOVED******REMOVED***.resizable()
+***REMOVED******REMOVED******REMOVED***.frame(width: 150, height: 150)
+***REMOVED******REMOVED******REMOVED***.shadow(
+***REMOVED******REMOVED******REMOVED******REMOVED***color: .gray.opacity(0.4),
+***REMOVED******REMOVED******REMOVED******REMOVED***radius: 3,
+***REMOVED******REMOVED******REMOVED******REMOVED***x: 1,
+***REMOVED******REMOVED******REMOVED******REMOVED***y: 2
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED***private var signinButton: some View {
+***REMOVED******REMOVED***Button(action: {
+***REMOVED******REMOVED******REMOVED***viewModel.signIn()
+***REMOVED***, label: {
+***REMOVED******REMOVED******REMOVED***Text("Sign In")
+***REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .center)
+***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.white)
+***REMOVED***)
+***REMOVED******REMOVED******REMOVED***.disabled(!viewModel.signinButtonEnabled)
+***REMOVED******REMOVED******REMOVED***.listRowBackground(viewModel.signinButtonEnabled ? Color.accentColor : Color.gray)
+***REMOVED***
+***REMOVED***
 
 struct UsernamePasswordView_Previews: PreviewProvider {
 ***REMOVED***static var previews: some View {
@@ -160,7 +166,7 @@ struct UsernamePasswordView_Previews: PreviewProvider {
 ***REMOVED***
 
 private extension UsernamePasswordView {
-***REMOVED******REMOVED***/ The field to set the focus.
+***REMOVED******REMOVED***/ A type that represents the fields in the user name and password sign-in form.
 ***REMOVED***enum Field: Hashable {
 ***REMOVED******REMOVED***case username
 ***REMOVED******REMOVED***case password

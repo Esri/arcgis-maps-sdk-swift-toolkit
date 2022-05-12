@@ -15,13 +15,9 @@ extension Result where Failure == Error {
 ***REMOVED******REMOVED***/ Creates a result based on the outcome of the given task. If the task
 ***REMOVED******REMOVED***/ succeeds, the result is `success`. If the task fails, the result is
 ***REMOVED******REMOVED***/ `failure`.
-***REMOVED******REMOVED***/
-***REMOVED******REMOVED***/ Returns `nil` in the event that the task was cancelled.
-***REMOVED***init?(awaiting task: () async throws -> Success) async {
+***REMOVED***init(awaiting task: () async throws -> Success) async {
 ***REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED***self = .success(try await task())
-***REMOVED*** catch is CancellationError {
-***REMOVED******REMOVED******REMOVED***return nil
 ***REMOVED*** catch {
 ***REMOVED******REMOVED******REMOVED***self = .failure(error)
 ***REMOVED***
