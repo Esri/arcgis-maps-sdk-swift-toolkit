@@ -34,6 +34,7 @@ import ArcGIS
         didSet { updateSigninButtonEnabled() }
     }
     @Published var signinButtonEnabled = false
+    @Published var isDismissed = false
     
     private func updateSigninButtonEnabled() {
         signinButtonEnabled = !username.isEmpty && !password.isEmpty
@@ -42,6 +43,7 @@ import ArcGIS
     let challengingHost: String
     
     func signIn() {
+        isDismissed = true
         if let continuation = continuation {
             Task {
                 continuation.resume(with: await Result {
@@ -58,6 +60,7 @@ import ArcGIS
     }
     
     func cancel() {
+        isDismissed = true
         if let continuation = continuation {
             continuation.cancel()
         }
@@ -66,19 +69,13 @@ import ArcGIS
 
 @MainActor struct UsernamePasswordView: View {
     init(viewModel: UsernamePasswordViewModel) {
-        self.viewModel = viewModel
+        _viewModel = StateObject(wrappedValue: viewModel)
     }
     
-    private var viewModel: UsernamePasswordViewModel
+    @StateObject private var viewModel: UsernamePasswordViewModel
     
     /// The focused field.
     @FocusState private var focusedField: Field?
-
-    /// The username to be entered by the user.
-    @State private var username = ""
-
-    /// The password to be entered by the user.
-    @State private var password = ""
     
     var body: some View {
         NavigationView {
@@ -94,12 +91,12 @@ import ArcGIS
                 }
 
                 Section {
-                    TextField("Username", text: $username)
+                    TextField("Username", text: $viewModel.username)
                         .focused($focusedField, equals: .username)
                         .textContentType(.username)
                         .submitLabel(.next)
                         .onSubmit { focusedField = .password }
-                    SecureField("Password", text: $password)
+                    SecureField("Password", text: $viewModel.password)
                         .focused($focusedField, equals: .password)
                         .textContentType(.password)
                         .submitLabel(.go)
