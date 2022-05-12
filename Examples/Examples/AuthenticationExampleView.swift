@@ -13,71 +13,103 @@
 
 import SwiftUI
 import ArcGIS
-
-private extension URL {
-    static let worldImageryMapServer = URL(string: "https://ibasemaps-api.arcgis.com/arcgis/rest/services/World_Imagery/MapServer")!
-}
+import ArcGISToolkit
 
 struct AuthenticationExampleView: View {
-    @State private var mapLoadResult: Result<Map, Error>?
-    //@StateObject private var authenticator = Authenticator()
-    
-    static func makeMap() -> Map {
-        let basemap = Basemap(baseLayer: ArcGISTiledLayer(url: .worldImageryMapServer))
-        return Map(basemap: basemap)
-    }
+    @StateObject var authenticator = Authenticator()
+    @State var previousApiKey: APIKey?
     
     var body: some View {
-        Group {
-            if let mapLoadResult = mapLoadResult {
-                switch mapLoadResult {
-                case .success(let value):
-                    MapView(map: value)
-                case .failure(let error):
-                    Text("Error loading map: \(errorString(for: error))")
-                        .padding()
-                }
-            } else {
-                ProgressView()
-            }
+        List(AuthenticationItem.all, id: \.title) { item in
+            AuthenticationItemView(item: item)
         }
-        .task {
-            do {
-                let map = Self.makeMap()
-                try await map.load()
-                mapLoadResult = .success(map)
-            } catch {
-                mapLoadResult = .failure(error)
-            }
+        .navigationBarTitle(Text("Authentication"), displayMode: .inline)
+        .sheet(item: $authenticator.continuation) {
+            AuthenticationView(continuation: $0)
+        }.onAppear {
+            ArcGISURLSession.challengeHandler = authenticator
         }
-//        .sheet(isPresented: authenticator) {
-//            SignInSheet(model: signInModel)
-//        }
-//        .onAppear {
-//            ArcGISURLSession.challengeHandler = signInModel
-//        }
-//        .onDisappear {
-//            ArcGISURLSession.challengeHandler = nil
-//        }
+        .onAppear {
+            // Save off the api key
+            previousApiKey = ArcGISRuntimeEnvironment.apiKey
+            // Set the api key to nil so that the authenticated services will prompt.
+            ArcGISRuntimeEnvironment.apiKey = nil
+        }
+        .onDisappear {
+            // Restore api key when exiting this example.
+            ArcGISRuntimeEnvironment.apiKey = previousApiKey
+        }
     }
     
     private func errorString(for error: Error) -> String {
         switch error {
-        case let authenticationError as ArcGISAuthenticationChallenge.Error:
-            switch authenticationError {
-            case .userCancelled(_):
-                return "User cancelled error"
-            case .credentialCannotBeShared:
-                return "Provided credential cannot be shared"
-            }
+        case is ArcGISAuthenticationChallenge.Error:
+            return "Authentication error"
         default:
             return error.localizedDescription
         }
     }
 }
 
-struct AuthenticationExampleView_Previews: PreviewProvider {
-    static var previews: some View {
-        AuthenticationExampleView()
+private struct AuthenticationItemView: View {
+    let loadable: Loadable
+    let title: String
+    @State var status = LoadStatus.notLoaded
+    
+    init(item: AuthenticationItem) {
+        self.loadable = item.loadable
+        self.title = item.title
     }
+    
+    var body: some View {
+        Button {
+            Task {
+                status = .loading
+                try? await loadable.load()
+                status = loadable.loadStatus
+            }
+        } label: {
+            buttonContent
+        }
+    }
+    
+    var buttonContent: some View {
+        HStack {
+            Text(title)
+            Spacer()
+            switch status {
+            case .loading:
+                ProgressView()
+            case .loaded:
+                Text("Loaded")
+                    .foregroundColor(.green)
+            case .notLoaded:
+                Text("Tap to load")
+                    .foregroundColor(.secondary)
+            case .failed:
+                Text("Failed to laod")
+                    .foregroundColor(.red)
+            }
+        }
+    }
+}
+
+private extension URL {
+    static let worldImageryMapServer = URL(string: "https://ibasemaps-api.arcgis.com/arcgis/rest/services/World_Imagery/MapServer")!
+}
+
+private struct AuthenticationItem {
+    let title: String
+    let loadable: Loadable
+}
+
+extension AuthenticationItem {
+    static let token = AuthenticationItem(
+        title: "Token secured resource",
+        loadable: ArcGISTiledLayer(url: .worldImageryMapServer)
+    )
+    
+    static let all: [AuthenticationItem] = [
+        .token
+    ]
 }
