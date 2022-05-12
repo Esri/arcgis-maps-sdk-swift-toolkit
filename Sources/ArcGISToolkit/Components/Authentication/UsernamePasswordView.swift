@@ -34,6 +34,7 @@
 ***REMOVED******REMOVED***didSet { updateSigninButtonEnabled() ***REMOVED***
 ***REMOVED***
 ***REMOVED***@Published var signinButtonEnabled = false
+***REMOVED***@Published var isDismissed = false
 ***REMOVED***
 ***REMOVED***private func updateSigninButtonEnabled() {
 ***REMOVED******REMOVED***signinButtonEnabled = !username.isEmpty && !password.isEmpty
@@ -42,6 +43,7 @@
 ***REMOVED***let challengingHost: String
 ***REMOVED***
 ***REMOVED***func signIn() {
+***REMOVED******REMOVED***isDismissed = true
 ***REMOVED******REMOVED***if let continuation = continuation {
 ***REMOVED******REMOVED******REMOVED***Task {
 ***REMOVED******REMOVED******REMOVED******REMOVED***continuation.resume(with: await Result {
@@ -58,6 +60,7 @@
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func cancel() {
+***REMOVED******REMOVED***isDismissed = true
 ***REMOVED******REMOVED***if let continuation = continuation {
 ***REMOVED******REMOVED******REMOVED***continuation.cancel()
 ***REMOVED***
@@ -66,19 +69,13 @@
 
 @MainActor struct UsernamePasswordView: View {
 ***REMOVED***init(viewModel: UsernamePasswordViewModel) {
-***REMOVED******REMOVED***self.viewModel = viewModel
+***REMOVED******REMOVED***_viewModel = StateObject(wrappedValue: viewModel)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***private var viewModel: UsernamePasswordViewModel
+***REMOVED***@StateObject private var viewModel: UsernamePasswordViewModel
 ***REMOVED***
 ***REMOVED******REMOVED***/ The focused field.
 ***REMOVED***@FocusState private var focusedField: Field?
-
-***REMOVED******REMOVED***/ The username to be entered by the user.
-***REMOVED***@State private var username = ""
-
-***REMOVED******REMOVED***/ The password to be entered by the user.
-***REMOVED***@State private var password = ""
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***NavigationView {
@@ -94,12 +91,12 @@
 ***REMOVED******REMOVED******REMOVED***
 
 ***REMOVED******REMOVED******REMOVED******REMOVED***Section {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***TextField("Username", text: $username)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***TextField("Username", text: $viewModel.username)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.focused($focusedField, equals: .username)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.textContentType(.username)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.submitLabel(.next)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onSubmit { focusedField = .password ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***SecureField("Password", text: $password)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***SecureField("Password", text: $viewModel.password)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.focused($focusedField, equals: .password)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.textContentType(.password)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.submitLabel(.go)

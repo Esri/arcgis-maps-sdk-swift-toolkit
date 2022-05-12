@@ -16,19 +16,21 @@
 
 public final class ChallengeContinuation {
 ***REMOVED***let challenge: ArcGISAuthenticationChallenge
-***REMOVED***let continuation: UnsafeContinuation<ArcGISAuthenticationChallenge.Disposition, Error>
+***REMOVED***var continuation: CheckedContinuation<ArcGISAuthenticationChallenge.Disposition, Error>?
 ***REMOVED***
-***REMOVED***init(challenge: ArcGISAuthenticationChallenge, continuation: UnsafeContinuation<ArcGISAuthenticationChallenge.Disposition, Error>) {
+***REMOVED***init(challenge: ArcGISAuthenticationChallenge, continuation: CheckedContinuation<ArcGISAuthenticationChallenge.Disposition, Error>) {
 ***REMOVED******REMOVED***self.challenge = challenge
 ***REMOVED******REMOVED***self.continuation = continuation
 ***REMOVED***
 
 ***REMOVED***func resume(with result: Result<ArcGISAuthenticationChallenge.Disposition, Error>) {
-***REMOVED******REMOVED***continuation.resume(with: result)
+***REMOVED******REMOVED***continuation?.resume(with: result)
+***REMOVED******REMOVED***continuation = nil
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func cancel() {
-***REMOVED******REMOVED***continuation.resume(throwing: CancellationError())
+***REMOVED******REMOVED***continuation?.resume(throwing: CancellationError())
+***REMOVED******REMOVED***continuation = nil
 ***REMOVED***
 ***REMOVED***
 
@@ -50,8 +52,7 @@ extension Authenticator: AuthenticationChallengeHandler {
 ***REMOVED******REMOVED******REMOVED***return .performDefaultHandling
 ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***return try await withUnsafeThrowingContinuation { continuation in
-***REMOVED******REMOVED******REMOVED***print("-- auth challenge: \(challenge.request.url!)")
+***REMOVED******REMOVED***return try await withCheckedThrowingContinuation { continuation in
 ***REMOVED******REMOVED******REMOVED***self.continuation = ChallengeContinuation(challenge: challenge, continuation: continuation)
 ***REMOVED***
 ***REMOVED***
