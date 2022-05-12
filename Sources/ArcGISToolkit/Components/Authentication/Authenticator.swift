@@ -16,19 +16,21 @@ import SwiftUI
 
 public final class ChallengeContinuation {
     let challenge: ArcGISAuthenticationChallenge
-    let continuation: UnsafeContinuation<ArcGISAuthenticationChallenge.Disposition, Error>
+    var continuation: CheckedContinuation<ArcGISAuthenticationChallenge.Disposition, Error>?
     
-    init(challenge: ArcGISAuthenticationChallenge, continuation: UnsafeContinuation<ArcGISAuthenticationChallenge.Disposition, Error>) {
+    init(challenge: ArcGISAuthenticationChallenge, continuation: CheckedContinuation<ArcGISAuthenticationChallenge.Disposition, Error>) {
         self.challenge = challenge
         self.continuation = continuation
     }
 
     func resume(with result: Result<ArcGISAuthenticationChallenge.Disposition, Error>) {
-        continuation.resume(with: result)
+        continuation?.resume(with: result)
+        continuation = nil
     }
     
     func cancel() {
-        continuation.resume(throwing: CancellationError())
+        continuation?.resume(throwing: CancellationError())
+        continuation = nil
     }
 }
 
@@ -50,8 +52,7 @@ extension Authenticator: AuthenticationChallengeHandler {
             return .performDefaultHandling
         }
         
-        return try await withUnsafeThrowingContinuation { continuation in
-            print("-- auth challenge: \(challenge.request.url!)")
+        return try await withCheckedThrowingContinuation { continuation in
             self.continuation = ChallengeContinuation(challenge: challenge, continuation: continuation)
         }
     }
