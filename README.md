@@ -10,9 +10,16 @@ To use Toolkit in your project:
 
 ## Toolkit Components
 
-* [Compass](./Documentation/Compass/README.md)
+* **[BasemapGallery](Documentation/BasemapGallery)** - Displays a collection of basemaps.
+* **[Bookmarks](Documentation/Bookmarks)** - Shows bookmarks, from a map, scene, or a list.
+* **[Compass](Documentation/Compass)** - Shows a compass direction when the map is rotated. Auto-hides when the map
+  points north up.
+* **[FloatingPanel](Documentation/FloatingPanel)** - Allows display of view-related content in a "bottom sheet". 
+* **[FloorFilter](Documentation/FloorFilter)** - Allows to filter floor plan data in a geo view by a site, a building in the site, or a floor in the building. 
+* **[OverviewMap](Documentation/OverviewMap)** - Displays the visible extent of a geo view in a small "inset" map.
+* **[Scalebar](Documentation/Scalebar)** - Displays current scale reference.
+* **[Search](Documentation/Search)** - Displays a search experience for geo views.
 
-* [OverviewMap](./Documentation/OverviewMap/README.md)
 
 ## Requirements
 * ArcGIS Runtime SDK for Swift
@@ -33,6 +40,10 @@ The *ArcGIS Runtime Toolkit for Swift* has a *Target SDK* version of *15.0*, mea
 
  New to Swift Package Manager? Visit [swift.org/package-manager/](https://swift.org/package-manager/).
 
+## Configure API Key
+
+Some of the toolkit components and examples utilize a set of ready-to-use ArcGIS Platform services, including basemaps, and therefore require an API Key to be set in `ExamplesApp.swift`. Please see the [setup guide](https://developers.arcgis.com/documentation/) for more information.
+
 ## Additional Resources
 
 * [Developers guide documentation](https://developers.arcgis.com/ios)
@@ -49,7 +60,7 @@ Find a bug or want to request a new feature?  Please let us know by [submitting 
 Esri welcomes contributions from anyone and everyone. Please see our [guidelines for contributing](https://github.com/esri/contributing).
 
 ## Licensing
-Copyright 2017 - 2021 Esri
+Copyright 2017 - 2022 Esri
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
