@@ -17,7 +17,8 @@ struct Examples: View {
     /// The list of example lists.  Allows for a hierarchical navigation model for examples.
     let lists: [ExampleList] = [
         .geoview,
-        .views
+        .views,
+        .authentication
     ]
     
     var body: some View {
@@ -49,6 +50,13 @@ extension ExampleList {
         name: "Views",
         examples: [
             AnyExample("Floating Panel", content: FloatingPanelExampleView())
+        ]
+    )
+    
+    static let authentication = Self(
+        name: "Authentication",
+        examples: [
+            AnyExample("Token", content: AuthenticationExampleView())
         ]
     )
 }
