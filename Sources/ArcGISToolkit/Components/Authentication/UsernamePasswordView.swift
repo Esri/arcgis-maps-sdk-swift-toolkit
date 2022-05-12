@@ -19,8 +19,7 @@
 import SwiftUI
 import ArcGIS
 
-@MainActor
-class UsernamePasswordViewModel: ObservableObject {
+@MainActor class UsernamePasswordViewModel: ObservableObject {
     init(challengingHost: String) {
         self.challengingHost = challengingHost
         continuation = nil
@@ -50,7 +49,7 @@ class UsernamePasswordViewModel: ObservableObject {
     func signIn() {
         if let continuation = continuation {
             Task {
-                let disposition: Task<ArcGISAuthenticationChallenge.Disposition, Error> = Task {
+                continuation.resume(with: await Result {
                     .useCredential(
                         try await .token(
                             challenge: continuation.challenge,
@@ -58,8 +57,7 @@ class UsernamePasswordViewModel: ObservableObject {
                             password: password
                         )
                     )
-                }
-                continuation.resume(with: await disposition.result)
+                })
             }
         }
     }
@@ -71,12 +69,12 @@ class UsernamePasswordViewModel: ObservableObject {
     }
 }
 
-struct UsernamePasswordView: View {
+@MainActor struct UsernamePasswordView: View {
     init(viewModel: UsernamePasswordViewModel) {
         self.viewModel = viewModel
     }
     
-    var viewModel: UsernamePasswordViewModel
+    private var viewModel: UsernamePasswordViewModel
     
     /// The focused field.
     @FocusState private var focusedField: Field?
@@ -86,21 +84,13 @@ struct UsernamePasswordView: View {
 
     /// The password to be entered by the user.
     @State private var password = ""
-
+    
     var body: some View {
         NavigationView {
             Form {
                 Section {
                     VStack {
-                        Image(systemName: "person.circle")
-                            .resizable()
-                            .frame(width: 150, height: 150)
-                            .shadow(
-                                color: .gray.opacity(0.4),
-                                radius: 3,
-                                x: 1,
-                                y: 2
-                            )
+                        person
                         Text("You need to sign in to access '\(viewModel.challengingHost)'")
                             .fixedSize(horizontal: false, vertical: true)
                     }
@@ -124,15 +114,7 @@ struct UsernamePasswordView: View {
                 .disableAutocorrection(true)
 
                 Section {
-                    Button(action: {
-                        viewModel.signIn()
-                    }, label: {
-                        Text("Sign In")
-                            .frame(maxWidth: .infinity, alignment: .center)
-                            .foregroundColor(.white)
-                    })
-                        .disabled(!viewModel.signinButtonEnabled)
-                        .listRowBackground(viewModel.signinButtonEnabled ? Color.accentColor : Color.gray)
+                    signinButton
                 }
             }
             .navigationTitle("Sign In")
@@ -151,6 +133,30 @@ struct UsernamePasswordView: View {
             }
         }
     }
+    
+    private var person: some View {
+        Image(systemName: "person.circle")
+            .resizable()
+            .frame(width: 150, height: 150)
+            .shadow(
+                color: .gray.opacity(0.4),
+                radius: 3,
+                x: 1,
+                y: 2
+            )
+    }
+    
+    private var signinButton: some View {
+        Button(action: {
+            viewModel.signIn()
+        }, label: {
+            Text("Sign In")
+                .frame(maxWidth: .infinity, alignment: .center)
+                .foregroundColor(.white)
+        })
+            .disabled(!viewModel.signinButtonEnabled)
+            .listRowBackground(viewModel.signinButtonEnabled ? Color.accentColor : Color.gray)
+    }
 }
 
 struct UsernamePasswordView_Previews: PreviewProvider {
@@ -160,7 +166,7 @@ struct UsernamePasswordView_Previews: PreviewProvider {
 }
 
 private extension UsernamePasswordView {
-    /// The field to set the focus.
+    /// A type that represents the fields in the user name and password sign-in form.
     enum Field: Hashable {
         case username
         case password
