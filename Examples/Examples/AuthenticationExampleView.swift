@@ -13,71 +13,103 @@
 
 ***REMOVED***
 ***REMOVED***
-
-private extension URL {
-***REMOVED***static let worldImageryMapServer = URL(string: "https:***REMOVED***ibasemaps-api.arcgis.com/arcgis/rest/services/World_Imagery/MapServer")!
-***REMOVED***
+***REMOVED***Toolkit
 
 struct AuthenticationExampleView: View {
-***REMOVED***@State private var mapLoadResult: Result<Map, Error>?
-***REMOVED******REMOVED***@StateObject private var authenticator = Authenticator()
-***REMOVED***
-***REMOVED***static func makeMap() -> Map {
-***REMOVED******REMOVED***let basemap = Basemap(baseLayer: ArcGISTiledLayer(url: .worldImageryMapServer))
-***REMOVED******REMOVED***return Map(basemap: basemap)
-***REMOVED***
+***REMOVED***@StateObject var authenticator = Authenticator()
+***REMOVED***@State var previousApiKey: APIKey?
 ***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***Group {
-***REMOVED******REMOVED******REMOVED***if let mapLoadResult = mapLoadResult {
-***REMOVED******REMOVED******REMOVED******REMOVED***switch mapLoadResult {
-***REMOVED******REMOVED******REMOVED******REMOVED***case .success(let value):
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***MapView(map: value)
-***REMOVED******REMOVED******REMOVED******REMOVED***case .failure(let error):
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Error loading map: \(errorString(for: error))")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***ProgressView()
-***REMOVED******REMOVED***
+***REMOVED******REMOVED***List(AuthenticationItem.all, id: \.title) { item in
+***REMOVED******REMOVED******REMOVED***AuthenticationItemView(item: item)
 ***REMOVED***
-***REMOVED******REMOVED***.task {
-***REMOVED******REMOVED******REMOVED***do {
-***REMOVED******REMOVED******REMOVED******REMOVED***let map = Self.makeMap()
-***REMOVED******REMOVED******REMOVED******REMOVED***try await map.load()
-***REMOVED******REMOVED******REMOVED******REMOVED***mapLoadResult = .success(map)
-***REMOVED******REMOVED*** catch {
-***REMOVED******REMOVED******REMOVED******REMOVED***mapLoadResult = .failure(error)
-***REMOVED******REMOVED***
+***REMOVED******REMOVED***.navigationBarTitle(Text("Authentication"), displayMode: .inline)
+***REMOVED******REMOVED***.sheet(item: $authenticator.continuation) {
+***REMOVED******REMOVED******REMOVED***AuthenticationView(continuation: $0)
+***REMOVED***.onAppear {
+***REMOVED******REMOVED******REMOVED***ArcGISURLSession.challengeHandler = authenticator
 ***REMOVED***
-***REMOVED******REMOVED******REMOVED***.sheet(isPresented: authenticator) {
-***REMOVED******REMOVED******REMOVED******REMOVED***SignInSheet(model: signInModel)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.onAppear {
-***REMOVED******REMOVED******REMOVED******REMOVED***ArcGISURLSession.challengeHandler = signInModel
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.onDisappear {
-***REMOVED******REMOVED******REMOVED******REMOVED***ArcGISURLSession.challengeHandler = nil
-***REMOVED******REMOVED***
+***REMOVED******REMOVED***.onAppear {
+***REMOVED******REMOVED******REMOVED******REMOVED*** Save off the api key
+***REMOVED******REMOVED******REMOVED***previousApiKey = ArcGISRuntimeEnvironment.apiKey
+***REMOVED******REMOVED******REMOVED******REMOVED*** Set the api key to nil so that the authenticated services will prompt.
+***REMOVED******REMOVED******REMOVED***ArcGISRuntimeEnvironment.apiKey = nil
+***REMOVED***
+***REMOVED******REMOVED***.onDisappear {
+***REMOVED******REMOVED******REMOVED******REMOVED*** Restore api key when exiting this example.
+***REMOVED******REMOVED******REMOVED***ArcGISRuntimeEnvironment.apiKey = previousApiKey
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***private func errorString(for error: Error) -> String {
 ***REMOVED******REMOVED***switch error {
-***REMOVED******REMOVED***case let authenticationError as ArcGISAuthenticationChallenge.Error:
-***REMOVED******REMOVED******REMOVED***switch authenticationError {
-***REMOVED******REMOVED******REMOVED***case .userCancelled(_):
-***REMOVED******REMOVED******REMOVED******REMOVED***return "User cancelled error"
-***REMOVED******REMOVED******REMOVED***case .credentialCannotBeShared:
-***REMOVED******REMOVED******REMOVED******REMOVED***return "Provided credential cannot be shared"
-***REMOVED******REMOVED***
+***REMOVED******REMOVED***case is ArcGISAuthenticationChallenge.Error:
+***REMOVED******REMOVED******REMOVED***return "Authentication error"
 ***REMOVED******REMOVED***default:
 ***REMOVED******REMOVED******REMOVED***return error.localizedDescription
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
-struct AuthenticationExampleView_Previews: PreviewProvider {
-***REMOVED***static var previews: some View {
-***REMOVED******REMOVED***AuthenticationExampleView()
+private struct AuthenticationItemView: View {
+***REMOVED***let loadable: Loadable
+***REMOVED***let title: String
+***REMOVED***@State var status = LoadStatus.notLoaded
 ***REMOVED***
+***REMOVED***init(item: AuthenticationItem) {
+***REMOVED******REMOVED***self.loadable = item.loadable
+***REMOVED******REMOVED***self.title = item.title
+***REMOVED***
+***REMOVED***
+***REMOVED***var body: some View {
+***REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED***Task {
+***REMOVED******REMOVED******REMOVED******REMOVED***status = .loading
+***REMOVED******REMOVED******REMOVED******REMOVED***try? await loadable.load()
+***REMOVED******REMOVED******REMOVED******REMOVED***status = loadable.loadStatus
+***REMOVED******REMOVED***
+***REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED***buttonContent
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***var buttonContent: some View {
+***REMOVED******REMOVED***HStack {
+***REMOVED******REMOVED******REMOVED***Text(title)
+***REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED******REMOVED***switch status {
+***REMOVED******REMOVED******REMOVED***case .loading:
+***REMOVED******REMOVED******REMOVED******REMOVED***ProgressView()
+***REMOVED******REMOVED******REMOVED***case .loaded:
+***REMOVED******REMOVED******REMOVED******REMOVED***Text("Loaded")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.green)
+***REMOVED******REMOVED******REMOVED***case .notLoaded:
+***REMOVED******REMOVED******REMOVED******REMOVED***Text("Tap to load")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
+***REMOVED******REMOVED******REMOVED***case .failed:
+***REMOVED******REMOVED******REMOVED******REMOVED***Text("Failed to laod")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.red)
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
+
+private extension URL {
+***REMOVED***static let worldImageryMapServer = URL(string: "https:***REMOVED***ibasemaps-api.arcgis.com/arcgis/rest/services/World_Imagery/MapServer")!
+***REMOVED***
+
+private struct AuthenticationItem {
+***REMOVED***let title: String
+***REMOVED***let loadable: Loadable
+***REMOVED***
+
+extension AuthenticationItem {
+***REMOVED***static let token = AuthenticationItem(
+***REMOVED******REMOVED***title: "Token secured resource",
+***REMOVED******REMOVED***loadable: ArcGISTiledLayer(url: .worldImageryMapServer)
+***REMOVED***)
+***REMOVED***
+***REMOVED***static let all: [AuthenticationItem] = [
+***REMOVED******REMOVED***.token
+***REMOVED***]
 ***REMOVED***

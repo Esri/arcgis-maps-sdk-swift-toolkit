@@ -56,7 +56,7 @@ extension ExampleList {
 ***REMOVED***static let authentication = Self(
 ***REMOVED******REMOVED***name: "Authentication",
 ***REMOVED******REMOVED***examples: [
-***REMOVED******REMOVED******REMOVED***AnyExample("Token", content: AuthenticationExampleView())
+***REMOVED******REMOVED******REMOVED***AnyExample("All Authentication Types", content: AuthenticationExampleView())
 ***REMOVED******REMOVED***]
 ***REMOVED***)
 ***REMOVED***
