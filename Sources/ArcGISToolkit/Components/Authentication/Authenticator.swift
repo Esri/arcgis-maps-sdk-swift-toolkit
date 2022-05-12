@@ -1,25 +1,20 @@
-//
-// COPYRIGHT 1995-2022 ESRI
-//
-// TRADE SECRETS: ESRI PROPRIETARY AND CONFIDENTIAL
-// Unpublished material - all rights reserved under the
-// Copyright Laws of the United States and applicable international
-// laws, treaties, and conventions.
-//
-// For additional information, contact:
-// Environmental Systems Research Institute, Inc.
-// Attn: Contracts and Legal Services Department
-// 380 New York Street
-// Redlands, California, 92373
-// USA
-//
-// email: contracts@esri.com
-//
+// Copyright 2022 Esri.
+
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// http://www.apache.org/licenses/LICENSE-2.0
+
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 
 import ArcGIS
 import SwiftUI
 
-final class ChallengeContinuation {
+public final class ChallengeContinuation {
     let challenge: ArcGISAuthenticationChallenge
     let continuation: UnsafeContinuation<ArcGISAuthenticationChallenge.Disposition, Error>
     
@@ -37,16 +32,18 @@ final class ChallengeContinuation {
     }
 }
 
+extension ChallengeContinuation: Identifiable {}
+
 @MainActor
-final class Authenticator: ObservableObject {
-    init() {}
+public final class Authenticator: ObservableObject {
+    public init() {}
 
     @Published
-    var continuation: ChallengeContinuation?
+    public var continuation: ChallengeContinuation?
 }
 
 extension Authenticator: AuthenticationChallengeHandler {
-    func handleArcGISChallenge(
+    public func handleArcGISChallenge(
         _ challenge: ArcGISAuthenticationChallenge
     ) async throws -> ArcGISAuthenticationChallenge.Disposition {
         guard challenge.proposedCredential == nil else {
@@ -54,6 +51,7 @@ extension Authenticator: AuthenticationChallengeHandler {
         }
         
         return try await withUnsafeThrowingContinuation { continuation in
+            print("-- auth challenge: \(challenge.request.url!)")
             self.continuation = ChallengeContinuation(challenge: challenge, continuation: continuation)
         }
     }
