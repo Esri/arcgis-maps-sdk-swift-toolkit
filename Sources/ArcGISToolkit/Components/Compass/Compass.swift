@@ -19,22 +19,20 @@ public struct Compass: View {
 ***REMOVED******REMOVED***/ Determines if the compass should automatically hide/show itself when the parent view is oriented
 ***REMOVED******REMOVED***/ north.
 ***REMOVED***private let autoHide: Bool
-
+***REMOVED***
 ***REMOVED******REMOVED***/ Controls the current opacity of the compass.
-***REMOVED***@State
-***REMOVED***private var opacity: Double
-
+***REMOVED***@State private var opacity: Double
+***REMOVED***
 ***REMOVED******REMOVED***/ Indicates if the compass should hide based on the current viewpoint rotation and autoHide
 ***REMOVED******REMOVED***/ preference.
 ***REMOVED***var shouldHide: Bool {
 ***REMOVED******REMOVED***guard let viewpoint = viewpoint else { return autoHide ***REMOVED***
 ***REMOVED******REMOVED***return viewpoint.rotation.isZero && autoHide
 ***REMOVED***
-
+***REMOVED***
 ***REMOVED******REMOVED***/ Acts as link between the compass and the parent map or scene view.
-***REMOVED***@Binding
-***REMOVED***private var viewpoint: Viewpoint?
-
+***REMOVED***@Binding private var viewpoint: Viewpoint?
+***REMOVED***
 ***REMOVED******REMOVED***/ Creates a `Compass`
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - viewpoint: Acts a communication link between the `MapView` or `SceneView` and the
@@ -49,7 +47,7 @@ public struct Compass: View {
 ***REMOVED******REMOVED***_opacity = State(initialValue: .zero)
 ***REMOVED******REMOVED***self.autoHide = autoHide
 ***REMOVED***
-
+***REMOVED***
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***GeometryReader { geometry in
 ***REMOVED******REMOVED******REMOVED***ZStack {
@@ -76,7 +74,7 @@ public struct Compass: View {
 ***REMOVED******REMOVED***.onAppear { opacity = shouldHide ? 0 : 1 ***REMOVED***
 ***REMOVED******REMOVED***.accessibilityLabel(viewpoint?.compassHeadingDescription ?? "Compass")
 ***REMOVED***
-
+***REMOVED***
 ***REMOVED******REMOVED***/ Resets the viewpoints `rotation` to zero.
 ***REMOVED***func resetHeading() {
 ***REMOVED******REMOVED***guard let viewpoint = viewpoint else { return ***REMOVED***
@@ -94,7 +92,7 @@ internal extension Viewpoint {
 ***REMOVED***var compassHeading: Double {
 ***REMOVED******REMOVED***rotation.isZero ? .zero : 360 - rotation
 ***REMOVED***
-
+***REMOVED***
 ***REMOVED******REMOVED***/ A text description of the current heading, sutiable for accessibility voiceover.
 ***REMOVED***var compassHeadingDescription: String {
 ***REMOVED******REMOVED***"Compass, heading "
