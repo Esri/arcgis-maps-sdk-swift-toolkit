@@ -17,14 +17,14 @@
 @MainActor class UsernamePasswordViewModel: ObservableObject {
 ***REMOVED***init(challengingHost: String) {
 ***REMOVED******REMOVED***self.challengingHost = challengingHost
-***REMOVED******REMOVED***continuation = nil
+***REMOVED******REMOVED***foo = nil
 ***REMOVED***
 ***REMOVED***
-***REMOVED***private let continuation: ChallengeContinuation?
+***REMOVED***private let foo: Foo?
 ***REMOVED***
-***REMOVED***init(continuation: ChallengeContinuation) {
-***REMOVED******REMOVED***self.continuation = continuation
-***REMOVED******REMOVED***self.challengingHost = continuation.challenge.request.url!.host!
+***REMOVED***init(foo: Foo) {
+***REMOVED******REMOVED***self.foo = foo
+***REMOVED******REMOVED***self.challengingHost = foo.challenge.request.url!.host!
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@Published var username = "" {
@@ -44,12 +44,12 @@
 ***REMOVED***
 ***REMOVED***func signIn() {
 ***REMOVED******REMOVED***isDismissed = true
-***REMOVED******REMOVED***if let continuation = continuation {
+***REMOVED******REMOVED***if let foo = foo {
 ***REMOVED******REMOVED******REMOVED***Task {
-***REMOVED******REMOVED******REMOVED******REMOVED***continuation.resume(with: await Result {
+***REMOVED******REMOVED******REMOVED******REMOVED***foo.resume(with: await Result {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.useCredential(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try await .token(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***challenge: continuation.challenge,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***challenge: foo.challenge,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***username: username,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***password: password
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
@@ -61,8 +61,8 @@
 ***REMOVED***
 ***REMOVED***func cancel() {
 ***REMOVED******REMOVED***isDismissed = true
-***REMOVED******REMOVED***if let continuation = continuation {
-***REMOVED******REMOVED******REMOVED***continuation.cancel()
+***REMOVED******REMOVED***if let foo = foo {
+***REMOVED******REMOVED******REMOVED***foo.cancel()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
