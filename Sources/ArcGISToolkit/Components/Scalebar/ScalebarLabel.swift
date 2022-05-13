@@ -13,18 +13,19 @@
 
 import SwiftUI
 
-extension Color {
-    /// Initializes a new color with RGB integer values.
-    /// - Precondition: `red`, `green` and `blue` are values between 0 and 255 inclusive.
-    init(red: Int, green: Int, blue: Int) {
-        let validRange = 0...255
-        precondition(validRange.contains(red))
-        precondition(validRange.contains(green))
-        precondition(validRange.contains(blue))
-        self.init(
-            red: Double(red)/255,
-            green: Double(green)/255,
-            blue: Double(blue)/255
-        )
+/// Models a label displayed along the edge of a scalebar
+struct ScalebarLabel {
+    /// The number of the label with the leftmost label ("0") starting at -1.
+    let index: Int
+    
+    /// The horizontal offset of this label.
+    let xOffset: CGFloat
+    
+    /// The text to be displayed by this label.
+    let text: String
+    
+    /// The vertical offset of this label.
+    static var yOffset: CGFloat {
+        return Scalebar.fontHeight / 2.0
     }
 }

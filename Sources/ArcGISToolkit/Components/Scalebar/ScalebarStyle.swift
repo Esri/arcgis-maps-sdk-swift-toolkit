@@ -11,20 +11,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import SwiftUI
+import Foundation
 
-extension Color {
-    /// Initializes a new color with RGB integer values.
-    /// - Precondition: `red`, `green` and `blue` are values between 0 and 255 inclusive.
-    init(red: Int, green: Int, blue: Int) {
-        let validRange = 0...255
-        precondition(validRange.contains(red))
-        precondition(validRange.contains(green))
-        precondition(validRange.contains(blue))
-        self.init(
-            red: Double(red)/255,
-            green: Double(green)/255,
-            blue: Double(blue)/255
-        )
-    }
+/// Visual scalebar styles.
+public enum ScalebarStyle {
+    /// Displays a single unit with segemeted bars of alternating fill color.
+    case alternatingBar
+    
+    /// Displays a single unit.
+    case bar
+    
+    /// Displays both metric and imperial units. The primary unit is displayed on top.
+    case dualUnitLine
+    
+    /// Displays a single unit with tick marks.
+    case graduatedLine
+    
+    /// Displays a single unit with endpoint tick marks.
+    case line
 }
