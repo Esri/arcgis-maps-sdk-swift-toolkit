@@ -32,6 +32,8 @@ public final class QueuedChallenge {
         _result = .failure(CancellationError())
     }
     
+    /// Use a streamed property because we need to support multiple listeners
+    /// to know when the challenge completed.
     @Streamed
     private var _result: Result<ArcGISAuthenticationChallenge.Disposition, Error>?
     
@@ -90,8 +92,11 @@ extension Authenticator: AuthenticationChallengeHandler {
             return .performDefaultHandling
         }
         
+        // Queue up the challenge.
         let queuedChallenge = QueuedChallenge(challenge: challenge)
         subject.send(queuedChallenge)
+        
+        // Wait for it to complete and return the resulting disposition.
         return try await queuedChallenge.disposition
     }
     
