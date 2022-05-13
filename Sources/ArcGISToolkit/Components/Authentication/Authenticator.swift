@@ -35,9 +35,12 @@ public final class QueuedChallenge {
 ***REMOVED***@Streamed
 ***REMOVED***private var _result: Result<ArcGISAuthenticationChallenge.Disposition, Error>?
 ***REMOVED***
-***REMOVED***var result: Result<ArcGISAuthenticationChallenge.Disposition, Error> {
-***REMOVED******REMOVED***get async {
-***REMOVED******REMOVED******REMOVED***await $_result.compactMap({ $0 ***REMOVED***).first(where: { _ in true ***REMOVED***)!
+***REMOVED***var disposition: ArcGISAuthenticationChallenge.Disposition {
+***REMOVED******REMOVED***get async throws {
+***REMOVED******REMOVED******REMOVED***try await $_result
+***REMOVED******REMOVED******REMOVED******REMOVED***.compactMap({ $0 ***REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***.first(where: { _ in true ***REMOVED***)!
+***REMOVED******REMOVED******REMOVED******REMOVED***.get()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -53,8 +56,11 @@ public final class Authenticator: ObservableObject {
 ***REMOVED***private func observeChallengeQueue() async {
 ***REMOVED******REMOVED***for await queuedChallenge in challengeQueue {
 ***REMOVED******REMOVED******REMOVED***print("  -- handing challenge")
+***REMOVED******REMOVED******REMOVED******REMOVED*** Set the current challenge, this should show the challenge view.
 ***REMOVED******REMOVED******REMOVED***currentChallenge = queuedChallenge
-***REMOVED******REMOVED******REMOVED***_ = await queuedChallenge.result
+***REMOVED******REMOVED******REMOVED******REMOVED*** Wait for the queued challenge to finish.
+***REMOVED******REMOVED******REMOVED***_ = try? await queuedChallenge.disposition
+***REMOVED******REMOVED******REMOVED******REMOVED*** Set the current challenge to `nil`, this should dismiss the challenge view.
 ***REMOVED******REMOVED******REMOVED***currentChallenge = nil
 ***REMOVED***
 ***REMOVED***
@@ -86,7 +92,7 @@ extension Authenticator: AuthenticationChallengeHandler {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let queuedChallenge = QueuedChallenge(challenge: challenge)
 ***REMOVED******REMOVED***subject.send(queuedChallenge)
-***REMOVED******REMOVED***return try await queuedChallenge.result.get()
+***REMOVED******REMOVED***return try await queuedChallenge.disposition
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***public func handleURLSessionChallenge(
