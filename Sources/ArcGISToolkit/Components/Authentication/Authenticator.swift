@@ -17,25 +17,27 @@ import Combine
 
 public final class Foo {
 ***REMOVED***let challenge: ArcGISAuthenticationChallenge
-***REMOVED***var continuation: CheckedContinuation<ArcGISAuthenticationChallenge.Disposition, Error>?
 ***REMOVED***
 ***REMOVED***init(challenge: ArcGISAuthenticationChallenge) {
 ***REMOVED******REMOVED***self.challenge = challenge
 ***REMOVED***
 
 ***REMOVED***func resume(with result: Result<ArcGISAuthenticationChallenge.Disposition, Error>) {
-***REMOVED******REMOVED***continuation?.resume(with: result)
-***REMOVED******REMOVED***continuation = nil
+***REMOVED******REMOVED***guard _result == nil else { return ***REMOVED***
+***REMOVED******REMOVED***_result = result
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func cancel() {
-***REMOVED******REMOVED***continuation?.resume(throwing: CancellationError())
-***REMOVED******REMOVED***continuation = nil
+***REMOVED******REMOVED***guard _result == nil else { return ***REMOVED***
+***REMOVED******REMOVED***_result = .failure(CancellationError())
 ***REMOVED***
 ***REMOVED***
-***REMOVED***func waitForChallengeToBeHandled() async throws -> ArcGISAuthenticationChallenge.Disposition {
-***REMOVED******REMOVED***return try await withCheckedThrowingContinuation { continuation in
-***REMOVED******REMOVED******REMOVED***self.continuation = continuation
+***REMOVED***@Streamed
+***REMOVED***private var _result: Result<ArcGISAuthenticationChallenge.Disposition, Error>?
+***REMOVED***
+***REMOVED***var result: Result<ArcGISAuthenticationChallenge.Disposition, Error> {
+***REMOVED******REMOVED***get async {
+***REMOVED******REMOVED******REMOVED***await $_result.compactMap({ $0 ***REMOVED***).first(where: { _ in true ***REMOVED***)!
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -68,7 +70,7 @@ public final class Authenticator: ObservableObject {
 ***REMOVED******REMOVED******REMOVED***let foo = Foo(challenge: queuedChallenge.challenge)
 ***REMOVED******REMOVED******REMOVED***currentFoo = foo
 ***REMOVED******REMOVED******REMOVED***queuedChallenge.continuation.resume(
-***REMOVED******REMOVED******REMOVED******REMOVED***with: await Result { try await foo.waitForChallengeToBeHandled() ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***with: await foo.result
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***currentFoo = nil
 ***REMOVED***
