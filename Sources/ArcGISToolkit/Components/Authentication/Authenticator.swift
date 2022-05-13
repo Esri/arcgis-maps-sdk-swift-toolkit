@@ -40,9 +40,13 @@ public final class Foo {
     }
 }
 
-extension Foo: Identifiable {}
+extension Foo: Identifiable {
+    public var id: ObjectIdentifier {
+        ObjectIdentifier(self)
+    }
+}
 
-private struct QueuedChallenge {
+private class QueuedChallenge {
     let challenge: ArcGISAuthenticationChallenge
     var continuation: CheckedContinuation<ArcGISAuthenticationChallenge.Disposition, Error>
     
@@ -60,12 +64,14 @@ public final class Authenticator: ObservableObject {
     
     private func observeChallengeQueue() async {
         for await queuedChallenge in challengeQueue {
+            print("  -- handing challenge")
             let foo = Foo(challenge: queuedChallenge.challenge)
             currentFoo = foo
-            queuedChallenge.continuation.resume(
-                with: await Result { try await foo.waitForChallengeToBeHandled() }
-            )
+            let result = await Result { try await foo.waitForChallengeToBeHandled() }
             currentFoo = nil
+            queuedChallenge.continuation.resume(
+                with: result
+            )
         }
     }
 
@@ -73,8 +79,12 @@ public final class Authenticator: ObservableObject {
     public var currentFoo: Foo?
     
     private var subject = PassthroughSubject<QueuedChallenge, Never>()
-    private var challengeQueue: AsyncPublisher<PassthroughSubject<QueuedChallenge, Never>> {
-        AsyncPublisher(subject)
+    private var challengeQueue: AsyncPublisher<AnyPublisher<QueuedChallenge, Never>> {
+        AsyncPublisher(
+            subject
+                .buffer(size: .max, prefetch: .byRequest, whenFull: .dropOldest)
+                .eraseToAnyPublisher()
+        )
     }
 }
 
@@ -82,12 +92,29 @@ extension Authenticator: AuthenticationChallengeHandler {
     public func handleArcGISChallenge(
         _ challenge: ArcGISAuthenticationChallenge
     ) async throws -> ArcGISAuthenticationChallenge.Disposition {
+        print("-- high level challenge receieved")
+        await Task.yield()
+        
         guard challenge.proposedCredential == nil else {
+            print("  -- performing default handling")
             return .performDefaultHandling
         }
         
         return try await withCheckedThrowingContinuation { continuation in
             subject.send(QueuedChallenge(challenge: challenge, continuation: continuation))
+        }
+    }
+    
+    public func handleURLSessionChallenge(
+        _ challenge: URLAuthenticationChallenge,
+        scope: URLAuthenticationChallengeScope
+    ) async -> (URLSession.AuthChallengeDisposition, URLCredential?) {
+        if challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodServerTrust,
+           let trust = challenge.protectionSpace.serverTrust {
+            // This will cause a self-signed certificate to be trusted.
+            return (.useCredential, URLCredential(trust: trust))
+        } else {
+            return (.performDefaultHandling, nil)
         }
     }
 }
