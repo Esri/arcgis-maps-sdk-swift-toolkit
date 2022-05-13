@@ -53,9 +53,13 @@ extension QueuedChallenge: Identifiable {}
 public final class Authenticator: ObservableObject {
     let oAuthConfigurations: [OAuthConfiguration]
     
+    let logger = ConsoleNetworkLogger()
+    
     public init(oAuthConfigurations: [OAuthConfiguration] = []) {
         self.oAuthConfigurations = oAuthConfigurations
         Task { await observeChallengeQueue() }
+        logger.shouldLogResponseData = true
+        logger.startLogging()
     }
     
     private func observeChallengeQueue() async {
