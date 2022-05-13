@@ -120,7 +120,7 @@ final class SearchViewModel: ObservableObject {
     
     /// `true` when the geoView is navigating, `false` otherwise. Set by the external client.
     var isGeoViewNavigating: Bool = false
-
+    
     /// The `Viewpoint` used to pan/zoom to results. If `nil`, there will be no zooming to results.
     var viewpoint: Binding<Viewpoint?>? = nil
     
