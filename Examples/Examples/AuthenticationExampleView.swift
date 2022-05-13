@@ -172,11 +172,20 @@ extension AuthenticationItem {
         )
     }
     
+    static func makePortal() -> AuthenticationItem {
+        AuthenticationItem(
+            title: "Portal",
+            loadables: [
+                Portal.arcGISOnline(isLoginRequired: true)
+            ]
+        )
+    }
     static func makeAll() -> [AuthenticationItem]  {
         [
             .makeToken(),
             .makeMultipleToken(),
-            .makeMultipleTokenSame()
+            .makeMultipleTokenSame(),
+            .makePortal()
         ]
     }
 }
