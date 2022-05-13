@@ -30,7 +30,7 @@ struct CompassBody: View {
 private extension Color {
 ***REMOVED******REMOVED***/ The background color of the compass housing.
 ***REMOVED***static let fill = Color(red: 228, green: 240, blue: 244)
-
+***REMOVED***
 ***REMOVED******REMOVED***/ The outline color of the compass housing.
 ***REMOVED***static let outline = Color(red: 127, green: 127, blue: 127)
 ***REMOVED***

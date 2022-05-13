@@ -65,7 +65,7 @@ struct NeedleCenter: View {
 struct NeedleQuadrant: View {
 ***REMOVED******REMOVED***/ The color of this needle quadrant.
 ***REMOVED***let color: Color
-
+***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***GeometryReader { geometry in
 ***REMOVED******REMOVED******REMOVED***Path { path in
@@ -83,16 +83,16 @@ struct NeedleQuadrant: View {
 private extension Color {
 ***REMOVED******REMOVED***/ The bronze color of the center of the compass needle.
 ***REMOVED***static let bronze = Color(red: 241, green: 169, blue: 59)
-
+***REMOVED***
 ***REMOVED******REMOVED***/ The dark gray color of the compass needle.
 ***REMOVED***static let darkGray = Color(red: 128, green: 128, blue: 128)
-
+***REMOVED***
 ***REMOVED******REMOVED***/ The dark red color of the compass needle.
 ***REMOVED***static let darkRed = Color(red: 124, green: 22, blue: 13)
-
+***REMOVED***
 ***REMOVED******REMOVED***/ The light gray color of the compass needle.
 ***REMOVED***static let lightGray = Color(red: 169, green: 168, blue: 168)
-
+***REMOVED***
 ***REMOVED******REMOVED***/ The light red color of the compass needle.
 ***REMOVED***static let lightRed = Color(red: 233, green: 51, blue: 35)
 ***REMOVED***
