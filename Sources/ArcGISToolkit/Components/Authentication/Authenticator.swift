@@ -59,15 +59,12 @@ public final class Authenticator: ObservableObject {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***private func observeChallengeQueue() async {
-***REMOVED******REMOVED***for await challengeContinuation in challengeQueue {
-***REMOVED******REMOVED******REMOVED***let foo = Foo(challenge: challengeContinuation.challenge)
+***REMOVED******REMOVED***for await queuedChallenge in challengeQueue {
+***REMOVED******REMOVED******REMOVED***let foo = Foo(challenge: queuedChallenge.challenge)
 ***REMOVED******REMOVED******REMOVED***currentFoo = foo
-***REMOVED******REMOVED******REMOVED***do {
-***REMOVED******REMOVED******REMOVED******REMOVED***let disposition = try await foo.waitForChallengeToBeHandled()
-***REMOVED******REMOVED******REMOVED******REMOVED***challengeContinuation.continuation.resume(returning: disposition)
-***REMOVED******REMOVED*** catch {
-***REMOVED******REMOVED******REMOVED******REMOVED***challengeContinuation.continuation.resume(throwing: error)
-***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***queuedChallenge.continuation.resume(
+***REMOVED******REMOVED******REMOVED******REMOVED***with: await Result { try await foo.waitForChallengeToBeHandled() ***REMOVED***
+***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***currentFoo = nil
 ***REMOVED***
 ***REMOVED***
