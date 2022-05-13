@@ -16,7 +16,11 @@ import ArcGIS
 import ArcGISToolkit
 
 struct AuthenticationExampleView: View {
-    @ObservedObject var authenticator = Authenticator()
+    @ObservedObject var authenticator = Authenticator(
+        oAuthConfigurations: [
+            .arcgisDotCom
+        ]
+    )
     @State var previousApiKey: APIKey?
     @State private var items = AuthenticationItem.makeAll()
     
@@ -175,4 +179,16 @@ extension AuthenticationItem {
             .makeMultipleTokenSame()
         ]
     }
+}
+
+private extension OAuthConfiguration {
+    static let arcgisDotCom =  OAuthConfiguration(
+        portalURL: .arcgisDotCom,
+        clientID: "W0DOrjQjPCL1C6LA",
+        redirectURL: URL(string: "runtimeswiftexamples://auth")!
+    )
+}
+
+private extension URL {
+    static let arcgisDotCom = URL(string: "https://www.arcgis.com")!
 }

@@ -51,19 +51,32 @@ extension QueuedChallenge: Identifiable {}
 
 @MainActor
 public final class Authenticator: ObservableObject {
-    public init() {
+    let oAuthConfigurations: [OAuthConfiguration]
+    
+    public init(oAuthConfigurations: [OAuthConfiguration] = []) {
+        self.oAuthConfigurations = oAuthConfigurations
         Task { await observeChallengeQueue() }
     }
     
     private func observeChallengeQueue() async {
         for await queuedChallenge in challengeQueue {
-            print("  -- handing challenge")
-            // Set the current challenge, this should show the challenge view.
-            currentChallenge = queuedChallenge
-            // Wait for the queued challenge to finish.
-            _ = try? await queuedChallenge.disposition
-            // Set the current challenge to `nil`, this should dismiss the challenge view.
-            currentChallenge = nil
+            if let url = queuedChallenge.challenge.request.url,
+               let config = oAuthConfigurations.first(where: { $0.canBeUsed(for: url) }) {
+                // For an OAuth challenge, we create the credential and resume.
+                // Creating the OAuth credential will present the OAuth login view.
+                queuedChallenge.resume(
+                    with: await Result {
+                        .useCredential(try await .oauth(configuration: config))
+                    }
+                )
+            } else {
+                // Set the current challenge, this should show the challenge view.
+                currentChallenge = queuedChallenge
+                // Wait for the queued challenge to finish.
+                _ = try? await queuedChallenge.disposition
+                // Set the current challenge to `nil`, this should dismiss the challenge view.
+                currentChallenge = nil
+            }
         }
     }
 
@@ -84,11 +97,7 @@ extension Authenticator: AuthenticationChallengeHandler {
     public func handleArcGISChallenge(
         _ challenge: ArcGISAuthenticationChallenge
     ) async throws -> ArcGISAuthenticationChallenge.Disposition {
-        print("-- high level challenge receieved")
-        await Task.yield()
-        
         guard challenge.proposedCredential == nil else {
-            print("  -- performing default handling")
             return .performDefaultHandling
         }
         
