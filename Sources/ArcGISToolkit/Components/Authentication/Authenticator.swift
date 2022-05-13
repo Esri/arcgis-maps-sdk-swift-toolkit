@@ -35,9 +35,12 @@ public final class QueuedChallenge {
     @Streamed
     private var _result: Result<ArcGISAuthenticationChallenge.Disposition, Error>?
     
-    var result: Result<ArcGISAuthenticationChallenge.Disposition, Error> {
-        get async {
-            await $_result.compactMap({ $0 }).first(where: { _ in true })!
+    var disposition: ArcGISAuthenticationChallenge.Disposition {
+        get async throws {
+            try await $_result
+                .compactMap({ $0 })
+                .first(where: { _ in true })!
+                .get()
         }
     }
 }
@@ -53,8 +56,11 @@ public final class Authenticator: ObservableObject {
     private func observeChallengeQueue() async {
         for await queuedChallenge in challengeQueue {
             print("  -- handing challenge")
+            // Set the current challenge, this should show the challenge view.
             currentChallenge = queuedChallenge
-            _ = await queuedChallenge.result
+            // Wait for the queued challenge to finish.
+            _ = try? await queuedChallenge.disposition
+            // Set the current challenge to `nil`, this should dismiss the challenge view.
             currentChallenge = nil
         }
     }
@@ -86,7 +92,7 @@ extension Authenticator: AuthenticationChallengeHandler {
         
         let queuedChallenge = QueuedChallenge(challenge: challenge)
         subject.send(queuedChallenge)
-        return try await queuedChallenge.result.get()
+        return try await queuedChallenge.disposition
     }
     
     public func handleURLSessionChallenge(
