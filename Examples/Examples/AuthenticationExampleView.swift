@@ -172,11 +172,20 @@ extension AuthenticationItem {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
+***REMOVED***static func makePortal() -> AuthenticationItem {
+***REMOVED******REMOVED***AuthenticationItem(
+***REMOVED******REMOVED******REMOVED***title: "Portal",
+***REMOVED******REMOVED******REMOVED***loadables: [
+***REMOVED******REMOVED******REMOVED******REMOVED***Portal.arcGISOnline(isLoginRequired: true)
+***REMOVED******REMOVED******REMOVED***]
+***REMOVED******REMOVED***)
+***REMOVED***
 ***REMOVED***static func makeAll() -> [AuthenticationItem]  {
 ***REMOVED******REMOVED***[
 ***REMOVED******REMOVED******REMOVED***.makeToken(),
 ***REMOVED******REMOVED******REMOVED***.makeMultipleToken(),
-***REMOVED******REMOVED******REMOVED***.makeMultipleTokenSame()
+***REMOVED******REMOVED******REMOVED***.makeMultipleTokenSame(),
+***REMOVED******REMOVED******REMOVED***.makePortal()
 ***REMOVED******REMOVED***]
 ***REMOVED***
 ***REMOVED***
