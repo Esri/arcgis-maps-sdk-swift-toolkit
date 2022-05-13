@@ -17,25 +17,27 @@ import Combine
 
 public final class Foo {
     let challenge: ArcGISAuthenticationChallenge
-    var continuation: CheckedContinuation<ArcGISAuthenticationChallenge.Disposition, Error>?
     
     init(challenge: ArcGISAuthenticationChallenge) {
         self.challenge = challenge
     }
 
     func resume(with result: Result<ArcGISAuthenticationChallenge.Disposition, Error>) {
-        continuation?.resume(with: result)
-        continuation = nil
+        guard _result == nil else { return }
+        _result = result
     }
     
     func cancel() {
-        continuation?.resume(throwing: CancellationError())
-        continuation = nil
+        guard _result == nil else { return }
+        _result = .failure(CancellationError())
     }
     
-    func waitForChallengeToBeHandled() async throws -> ArcGISAuthenticationChallenge.Disposition {
-        return try await withCheckedThrowingContinuation { continuation in
-            self.continuation = continuation
+    @Streamed
+    private var _result: Result<ArcGISAuthenticationChallenge.Disposition, Error>?
+    
+    var result: Result<ArcGISAuthenticationChallenge.Disposition, Error> {
+        get async {
+            await $_result.compactMap({ $0 }).first(where: { _ in true })!
         }
     }
 }
@@ -68,7 +70,7 @@ public final class Authenticator: ObservableObject {
             let foo = Foo(challenge: queuedChallenge.challenge)
             currentFoo = foo
             queuedChallenge.continuation.resume(
-                with: await Result { try await foo.waitForChallengeToBeHandled() }
+                with: await foo.result
             )
             currentFoo = nil
         }
