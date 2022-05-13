@@ -20,6 +20,7 @@ public final class Foo {
 ***REMOVED***var continuation: CheckedContinuation<ArcGISAuthenticationChallenge.Disposition, Error>?
 ***REMOVED***
 ***REMOVED***init(challenge: ArcGISAuthenticationChallenge) {
+***REMOVED******REMOVED***print("***REMOVED***-- initing foo: \(challenge.request.url!)")
 ***REMOVED******REMOVED***self.challenge = challenge
 ***REMOVED***
 
@@ -67,11 +68,10 @@ public final class Authenticator: ObservableObject {
 ***REMOVED******REMOVED******REMOVED***print("  -- handing challenge")
 ***REMOVED******REMOVED******REMOVED***let foo = Foo(challenge: queuedChallenge.challenge)
 ***REMOVED******REMOVED******REMOVED***currentFoo = foo
-***REMOVED******REMOVED******REMOVED***let result = await Result { try await foo.waitForChallengeToBeHandled() ***REMOVED***
-***REMOVED******REMOVED******REMOVED***currentFoo = nil
 ***REMOVED******REMOVED******REMOVED***queuedChallenge.continuation.resume(
-***REMOVED******REMOVED******REMOVED******REMOVED***with: result
+***REMOVED******REMOVED******REMOVED******REMOVED***with: await Result { try await foo.waitForChallengeToBeHandled() ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***currentFoo = nil
 ***REMOVED***
 ***REMOVED***
 

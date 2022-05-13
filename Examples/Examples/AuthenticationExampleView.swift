@@ -16,12 +16,26 @@
 ***REMOVED***Toolkit
 
 struct AuthenticationExampleView: View {
-***REMOVED***@StateObject var authenticator = Authenticator()
+***REMOVED***@ObservedObject var authenticator = Authenticator()
 ***REMOVED***@State var previousApiKey: APIKey?
+***REMOVED***@State private var items = AuthenticationItem.makeAll()
 ***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***List(AuthenticationItem.all, id: \.title) { item in
-***REMOVED******REMOVED******REMOVED***AuthenticationItemView(item: item)
+***REMOVED******REMOVED***VStack {
+***REMOVED******REMOVED******REMOVED***if items.isEmpty {
+***REMOVED******REMOVED******REMOVED******REMOVED***ProgressView()
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***List(items) { item in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AuthenticationItemView(item: item)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***Button("Clear Credentials") {
+***REMOVED******REMOVED******REMOVED******REMOVED***items = []
+***REMOVED******REMOVED******REMOVED******REMOVED***Task {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await ArcGISURLSession.credentialStore.removeAll()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***items = AuthenticationItem.makeAll()
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.navigationBarTitle(Text("Authentication"), displayMode: .inline)
 ***REMOVED******REMOVED***.sheet(item: $authenticator.currentFoo) {
@@ -116,34 +130,49 @@ private extension URL {
 ***REMOVED***static let hostedPointsLayer = URL(string: "https:***REMOVED***rt-server107a.esri.com/server/rest/services/Hosted/PointsLayer/FeatureServer/0")!
 ***REMOVED***
 
-private struct AuthenticationItem {
+private class AuthenticationItem {
 ***REMOVED***let title: String
 ***REMOVED***let loadables: [Loadable]
 ***REMOVED***
+***REMOVED***init(title: String, loadables: [Loadable]) {
+***REMOVED******REMOVED***self.title = title
+***REMOVED******REMOVED***self.loadables = loadables
+***REMOVED***
+***REMOVED***
+
+extension AuthenticationItem: Identifiable {***REMOVED***
 
 extension AuthenticationItem {
-***REMOVED***static let token = AuthenticationItem(
-***REMOVED******REMOVED***title: "Token secured resource",
-***REMOVED******REMOVED***loadables: [ArcGISTiledLayer(url: .worldImageryMapServer)]
-***REMOVED***)
-***REMOVED***static let multipleToken = AuthenticationItem(
-***REMOVED******REMOVED***title: "Multiple token secured resources",
-***REMOVED******REMOVED***loadables: [
-***REMOVED******REMOVED******REMOVED***ArcGISTiledLayer(url: .worldImageryMapServer),
-***REMOVED******REMOVED******REMOVED***ServiceFeatureTable(url: .hostedPointsLayer)
-***REMOVED******REMOVED***]
-***REMOVED***)
-***REMOVED***static let multipleTokenSame = AuthenticationItem(
-***REMOVED******REMOVED***title: "Two of same token secured resources",
-***REMOVED******REMOVED***loadables: [
-***REMOVED******REMOVED******REMOVED***ArcGISTiledLayer(url: .worldImageryMapServer),
-***REMOVED******REMOVED******REMOVED***ArcGISTiledLayer(url: .worldImageryMapServer)
-***REMOVED******REMOVED***]
-***REMOVED***)
+***REMOVED***static func makeToken() -> AuthenticationItem {
+***REMOVED******REMOVED***AuthenticationItem(
+***REMOVED******REMOVED******REMOVED***title: "Token secured resource",
+***REMOVED******REMOVED******REMOVED***loadables: [ArcGISTiledLayer(url: .worldImageryMapServer)]
+***REMOVED******REMOVED***)
 ***REMOVED***
-***REMOVED***static let all: [AuthenticationItem] = [
-***REMOVED******REMOVED***.token,
-***REMOVED******REMOVED***.multipleToken,
-***REMOVED******REMOVED***.multipleTokenSame
-***REMOVED***]
+***REMOVED***static func makeMultipleToken() -> AuthenticationItem {
+***REMOVED******REMOVED***AuthenticationItem(
+***REMOVED******REMOVED******REMOVED***title: "Multiple token secured resources",
+***REMOVED******REMOVED******REMOVED***loadables: [
+***REMOVED******REMOVED******REMOVED******REMOVED***ArcGISTiledLayer(url: .worldImageryMapServer),
+***REMOVED******REMOVED******REMOVED******REMOVED***ServiceFeatureTable(url: .hostedPointsLayer)
+***REMOVED******REMOVED******REMOVED***]
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***static func makeMultipleTokenSame() -> AuthenticationItem {
+***REMOVED******REMOVED***AuthenticationItem(
+***REMOVED******REMOVED******REMOVED***title: "Two of same token secured resources",
+***REMOVED******REMOVED******REMOVED***loadables: [
+***REMOVED******REMOVED******REMOVED******REMOVED***ArcGISTiledLayer(url: .worldImageryMapServer),
+***REMOVED******REMOVED******REMOVED******REMOVED***ArcGISTiledLayer(url: .worldImageryMapServer)
+***REMOVED******REMOVED******REMOVED***]
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED***static func makeAll() -> [AuthenticationItem]  {
+***REMOVED******REMOVED***[
+***REMOVED******REMOVED******REMOVED***.makeToken(),
+***REMOVED******REMOVED******REMOVED***.makeMultipleToken(),
+***REMOVED******REMOVED******REMOVED***.makeMultipleTokenSame()
+***REMOVED******REMOVED***]
+***REMOVED***
 ***REMOVED***

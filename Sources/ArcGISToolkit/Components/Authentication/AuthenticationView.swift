@@ -16,6 +16,7 @@
 public struct AuthenticationView: View {
 ***REMOVED***public init(foo: Foo) {
 ***REMOVED******REMOVED***self.foo = foo
+***REMOVED******REMOVED***print("***REMOVED***-- initing auth view: \(foo.challenge.request.url!)")
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var foo: Foo
