@@ -16,7 +16,11 @@
 ***REMOVED***Toolkit
 
 struct AuthenticationExampleView: View {
-***REMOVED***@ObservedObject var authenticator = Authenticator()
+***REMOVED***@ObservedObject var authenticator = Authenticator(
+***REMOVED******REMOVED***oAuthConfigurations: [
+***REMOVED******REMOVED******REMOVED***.arcgisDotCom
+***REMOVED******REMOVED***]
+***REMOVED***)
 ***REMOVED***@State var previousApiKey: APIKey?
 ***REMOVED***@State private var items = AuthenticationItem.makeAll()
 ***REMOVED***
@@ -175,4 +179,16 @@ extension AuthenticationItem {
 ***REMOVED******REMOVED******REMOVED***.makeMultipleTokenSame()
 ***REMOVED******REMOVED***]
 ***REMOVED***
+***REMOVED***
+
+private extension OAuthConfiguration {
+***REMOVED***static let arcgisDotCom =  OAuthConfiguration(
+***REMOVED******REMOVED***portalURL: .arcgisDotCom,
+***REMOVED******REMOVED***clientID: "W0DOrjQjPCL1C6LA",
+***REMOVED******REMOVED***redirectURL: URL(string: "runtimeswiftexamples:***REMOVED***auth")!
+***REMOVED***)
+***REMOVED***
+
+private extension URL {
+***REMOVED***static let arcgisDotCom = URL(string: "https:***REMOVED***www.arcgis.com")!
 ***REMOVED***

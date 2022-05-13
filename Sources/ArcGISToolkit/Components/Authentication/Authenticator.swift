@@ -51,19 +51,32 @@ extension QueuedChallenge: Identifiable {***REMOVED***
 
 @MainActor
 public final class Authenticator: ObservableObject {
-***REMOVED***public init() {
+***REMOVED***let oAuthConfigurations: [OAuthConfiguration]
+***REMOVED***
+***REMOVED***public init(oAuthConfigurations: [OAuthConfiguration] = []) {
+***REMOVED******REMOVED***self.oAuthConfigurations = oAuthConfigurations
 ***REMOVED******REMOVED***Task { await observeChallengeQueue() ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***private func observeChallengeQueue() async {
 ***REMOVED******REMOVED***for await queuedChallenge in challengeQueue {
-***REMOVED******REMOVED******REMOVED***print("  -- handing challenge")
-***REMOVED******REMOVED******REMOVED******REMOVED*** Set the current challenge, this should show the challenge view.
-***REMOVED******REMOVED******REMOVED***currentChallenge = queuedChallenge
-***REMOVED******REMOVED******REMOVED******REMOVED*** Wait for the queued challenge to finish.
-***REMOVED******REMOVED******REMOVED***_ = try? await queuedChallenge.disposition
-***REMOVED******REMOVED******REMOVED******REMOVED*** Set the current challenge to `nil`, this should dismiss the challenge view.
-***REMOVED******REMOVED******REMOVED***currentChallenge = nil
+***REMOVED******REMOVED******REMOVED***if let url = queuedChallenge.challenge.request.url,
+***REMOVED******REMOVED******REMOVED***   let config = oAuthConfigurations.first(where: { $0.canBeUsed(for: url) ***REMOVED***) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** For an OAuth challenge, we create the credential and resume.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Creating the OAuth credential will present the OAuth login view.
+***REMOVED******REMOVED******REMOVED******REMOVED***queuedChallenge.resume(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***with: await Result {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.useCredential(try await .oauth(configuration: config))
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Set the current challenge, this should show the challenge view.
+***REMOVED******REMOVED******REMOVED******REMOVED***currentChallenge = queuedChallenge
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Wait for the queued challenge to finish.
+***REMOVED******REMOVED******REMOVED******REMOVED***_ = try? await queuedChallenge.disposition
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Set the current challenge to `nil`, this should dismiss the challenge view.
+***REMOVED******REMOVED******REMOVED******REMOVED***currentChallenge = nil
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 
@@ -84,11 +97,7 @@ extension Authenticator: AuthenticationChallengeHandler {
 ***REMOVED***public func handleArcGISChallenge(
 ***REMOVED******REMOVED***_ challenge: ArcGISAuthenticationChallenge
 ***REMOVED***) async throws -> ArcGISAuthenticationChallenge.Disposition {
-***REMOVED******REMOVED***print("-- high level challenge receieved")
-***REMOVED******REMOVED***await Task.yield()
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED***guard challenge.proposedCredential == nil else {
-***REMOVED******REMOVED******REMOVED***print("  -- performing default handling")
 ***REMOVED******REMOVED******REMOVED***return .performDefaultHandling
 ***REMOVED***
 ***REMOVED******REMOVED***
