@@ -20,7 +20,6 @@ public final class Foo {
 ***REMOVED***var continuation: CheckedContinuation<ArcGISAuthenticationChallenge.Disposition, Error>?
 ***REMOVED***
 ***REMOVED***init(challenge: ArcGISAuthenticationChallenge) {
-***REMOVED******REMOVED***print("***REMOVED***-- initing foo: \(challenge.request.url!)")
 ***REMOVED******REMOVED***self.challenge = challenge
 ***REMOVED***
 

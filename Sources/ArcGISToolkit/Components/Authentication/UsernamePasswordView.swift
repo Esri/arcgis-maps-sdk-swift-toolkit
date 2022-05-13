@@ -25,7 +25,6 @@
 ***REMOVED***init(foo: Foo) {
 ***REMOVED******REMOVED***self.foo = foo
 ***REMOVED******REMOVED***self.challengingHost = foo.challenge.request.url!.host!
-***REMOVED******REMOVED***print("***REMOVED***-- initing view model: \(challengingHost)")
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@Published var username = "" {
@@ -70,9 +69,7 @@
 
 @MainActor struct UsernamePasswordView: View {
 ***REMOVED***init(viewModel: UsernamePasswordViewModel) {
-***REMOVED******REMOVED******REMOVED***_viewModel = StateObject(wrappedValue: viewModel)
 ***REMOVED******REMOVED***self.viewModel = viewModel
-***REMOVED******REMOVED***print("***REMOVED***-- initing username/pw view: \(viewModel.challengingHost)")
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@ObservedObject private var viewModel: UsernamePasswordViewModel
