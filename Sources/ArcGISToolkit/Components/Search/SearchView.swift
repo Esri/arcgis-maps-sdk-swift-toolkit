@@ -18,7 +18,7 @@ import ArcGIS
 public struct SearchView: View {
     /// Creates a `SearchView`.
     /// - Parameters:
-    ///   - sources: Collection of search sources to be used.
+    ///   - sources: A collection of search sources to be used.
     ///   - viewpoint: The `Viewpoint` used to pan/zoom to results. If `nil`, there will be
     ///   no zooming to results.
     public init(
@@ -42,17 +42,17 @@ public struct SearchView: View {
     @StateObject private var viewModel: SearchViewModel
 
     /// Tracks the current user-entered query. This property drives both suggestions and searches.
-    var currentQuery: String = ""
+    var currentQuery = ""
 
     /// Tracks the current user-entered query. This property drives both suggestions and searches.
     var resultMode: SearchResultMode = .automatic
 
-    /// The search area to be used for the current query.  Defaults to `nil`.
+    /// The search area to be used for the current query. Defaults to `nil`.
     ///
     /// If `nil`, then there is no limiting of the search results to a given area.
     @Binding var queryArea: Geometry?
 
-    /// Defines the center for the search.  Defaults to `nil`.
+    /// Defines the center for the search. Defaults to `nil`.
     ///
     /// If `nil`, does not prioritize the search results around any point.
     @Binding var queryCenter: Point?
@@ -60,16 +60,16 @@ public struct SearchView: View {
     /// The current map/scene view extent. Defaults to `nil`.
     ///
     /// This will be used to determine the value of `isEligibleForRequery` for the 'Repeat
-    /// search here' behavior. If that behavior is not wanted, it should be left `nil`.
+    /// search here' behavior. If that behavior is not wanted, it should be left as `nil`.
     @Binding var geoViewExtent: Envelope?
     
-    /// Determines whether the geoView is navigating in response to user interaction.
+    /// Determines whether the `geoView` is navigating in response to user interaction.
     @Binding private var isGeoViewNavigating: Bool
 
     /// The `GraphicsOverlay` used to display results. If `nil`, no results will be displayed.
     var resultsOverlay: GraphicsOverlay? = nil
     
-    /// Collection of search sources to be used. This list is maintained over time and is not nullable.
+    /// A collection of search sources to be used. This list is maintained over time.
     /// The view should observe this list for changes. Consumers should add and remove sources from
     /// this list as needed.
     /// NOTE: Only the first source is currently used; multiple sources are not yet supported.
@@ -287,8 +287,6 @@ extension SearchView {
         copy._isGeoViewNavigating = newIsGeoViewNavigating
         return copy
     }
-
-    
 }
 
 /// A View displaying the list of search results.

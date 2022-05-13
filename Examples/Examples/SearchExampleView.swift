@@ -22,30 +22,29 @@ struct SearchExampleView: View {
         maximumSuggestions: 16
     )
     
-    let map = Map(basemapStyle: .arcGISImagery)
+    @StateObject private var map = Map(basemapStyle: .arcGISImagery)
     
+    /// The `GraphicsOverlay` used by the `SearchView` to display search results on the map.
+    private let searchResultsOverlay = GraphicsOverlay()
+
     /// The map viewpoint used by the `SearchView` to pan/zoom the map
     /// to the extent of the search results.
-    @State
-    private var searchResultViewpoint: Viewpoint? = Viewpoint(
+    @State private var searchResultViewpoint: Viewpoint? = Viewpoint(
         center: Point(x: -93.258133, y: 44.986656, spatialReference: .wgs84),
         scale: 1000000
     )
     
-    /// The `GraphicsOverlay` used by the `SearchView` to display search results on the map.
-    let searchResultsOverlay = GraphicsOverlay()
-    
     /// Denotes whether the geoview is navigating.  Used for the repeat search behavior.
-    @State var isGeoViewNavigating: Bool = false
+    @State private var isGeoViewNavigating: Bool = false
     
     /// The current map/scene view extent.  Used to allow repeat searches after panning/zooming the map.
-    @State var geoViewExtent: Envelope? = nil
+    @State private var geoViewExtent: Envelope? = nil
 
     /// The search area to be used for the current query
-    @State var queryArea: Geometry? = nil
+    @State private var queryArea: Geometry? = nil
 
     /// Defines the center for the search.
-    @State var queryCenter: Point? = nil
+    @State private var queryCenter: Point? = nil
 
     var body: some View {
         MapView(
