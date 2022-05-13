@@ -25,7 +25,6 @@ import ArcGIS
     init(foo: Foo) {
         self.foo = foo
         self.challengingHost = foo.challenge.request.url!.host!
-        print("    -- initing view model: \(challengingHost)")
     }
     
     @Published var username = "" {
@@ -70,9 +69,7 @@ import ArcGIS
 
 @MainActor struct UsernamePasswordView: View {
     init(viewModel: UsernamePasswordViewModel) {
-        //_viewModel = StateObject(wrappedValue: viewModel)
         self.viewModel = viewModel
-        print("    -- initing username/pw view: \(viewModel.challengingHost)")
     }
     
     @ObservedObject private var viewModel: UsernamePasswordViewModel
