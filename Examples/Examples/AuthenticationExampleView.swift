@@ -29,7 +29,7 @@ struct AuthenticationExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AuthenticationItemView(item: item)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***Button("Clear Credentials") {
+***REMOVED******REMOVED******REMOVED***Button("Clear Credential Store") {
 ***REMOVED******REMOVED******REMOVED******REMOVED***items = []
 ***REMOVED******REMOVED******REMOVED******REMOVED***Task {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await ArcGISURLSession.credentialStore.removeAll()
