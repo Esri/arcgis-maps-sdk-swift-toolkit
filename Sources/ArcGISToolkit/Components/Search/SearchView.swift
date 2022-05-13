@@ -18,29 +18,22 @@
 public struct SearchView: View {
 ***REMOVED******REMOVED***/ Creates a `SearchView`.
 ***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - queryCenter: Defines the center for the search.
 ***REMOVED******REMOVED***/   - sources: Collection of search sources to be used.
 ***REMOVED******REMOVED***/   - viewpoint: The `Viewpoint` used to pan/zoom to results. If `nil`, there will be
 ***REMOVED******REMOVED***/   no zooming to results.
-***REMOVED******REMOVED***/   - geoViewExtent: The current map/scene view extent.  Defaults to `nil`.  Used to allow
-***REMOVED******REMOVED***/   repeat searches after panning/zooming the map.  Set to nil if repeat search behavior is not wanted.
-***REMOVED******REMOVED***/   - isGeoViewNavigating: Denotes whether the geoview is navigating.  Used for the
-***REMOVED******REMOVED***/   repeat search behavior.
 ***REMOVED***public init(
-***REMOVED******REMOVED***queryCenter: Binding<Point?>? = nil,
 ***REMOVED******REMOVED***sources: [SearchSource] = [],
-***REMOVED******REMOVED***viewpoint: Binding<Viewpoint?>? = nil,
-***REMOVED******REMOVED***geoViewExtent: Binding<Envelope?>? = nil,
-***REMOVED******REMOVED***isGeoViewNavigating: Binding<Bool>? = nil
+***REMOVED******REMOVED***viewpoint: Binding<Viewpoint?>? = nil
 ***REMOVED***) {
 ***REMOVED******REMOVED***_viewModel = StateObject(wrappedValue: SearchViewModel(
-***REMOVED******REMOVED******REMOVED***queryCenter: queryCenter,
 ***REMOVED******REMOVED******REMOVED***sources: sources.isEmpty ? [LocatorSearchSource()] : sources,
 ***REMOVED******REMOVED******REMOVED***viewpoint: viewpoint
 ***REMOVED******REMOVED***))
-  
-***REMOVED******REMOVED***_geoViewExtent = geoViewExtent ?? Binding.constant(nil)
-***REMOVED******REMOVED***_isGeoViewNavigating = isGeoViewNavigating ?? Binding.constant(false)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***_queryArea = Binding.constant(nil)
+***REMOVED******REMOVED***_queryCenter = Binding.constant(nil)
+***REMOVED******REMOVED***_geoViewExtent = Binding.constant(nil)
+***REMOVED******REMOVED***_isGeoViewNavigating = Binding.constant(false)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The view model used by the view. The `SearchViewModel` manages state and handles the
@@ -54,16 +47,25 @@ public struct SearchView: View {
 ***REMOVED******REMOVED***/ Tracks the current user-entered query. This property drives both suggestions and searches.
 ***REMOVED***var resultMode: SearchResultMode = .automatic
 
-***REMOVED******REMOVED***/ The search area to be used for the current query.
-***REMOVED***var queryArea: Binding<Geometry?>? = nil
+***REMOVED******REMOVED***/ The search area to be used for the current query.  Defaults to `nil`.
+***REMOVED******REMOVED***/
+***REMOVED******REMOVED***/ If `nil`, then there is no limiting of the search results to a given area.
+***REMOVED***@Binding var queryArea: Geometry?
+
+***REMOVED******REMOVED***/ Defines the center for the search.  Defaults to `nil`.
+***REMOVED******REMOVED***/
+***REMOVED******REMOVED***/ If `nil`, does not prioritize the search results around any point.
+***REMOVED***@Binding var queryCenter: Point?
 
 ***REMOVED******REMOVED***/ The current map/scene view extent. Defaults to `nil`.
 ***REMOVED******REMOVED***/
-***REMOVED******REMOVED***/ This should be updated via `geoViewExtent(:)`as the user navigates the map/scene. It will be
-***REMOVED******REMOVED***/ used to determine the value of `isEligibleForRequery` for the 'Repeat
+***REMOVED******REMOVED***/ This will be used to determine the value of `isEligibleForRequery` for the 'Repeat
 ***REMOVED******REMOVED***/ search here' behavior. If that behavior is not wanted, it should be left `nil`.
 ***REMOVED***@Binding var geoViewExtent: Envelope?
 ***REMOVED***
+***REMOVED******REMOVED***/ Determines whether the geoView is navigating in response to user interaction.
+***REMOVED***@Binding private var isGeoViewNavigating: Bool
+
 ***REMOVED******REMOVED***/ The `GraphicsOverlay` used to display results. If `nil`, no results will be displayed.
 ***REMOVED***var resultsOverlay: GraphicsOverlay? = nil
 ***REMOVED***
@@ -110,9 +112,6 @@ public struct SearchView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Determines whether the results lists are displayed.
 ***REMOVED***@State private var isResultListHidden: Bool = false
-***REMOVED***
-***REMOVED******REMOVED***/ Determines whether the geoView is navigating in response to user interaction.
-***REMOVED***@Binding private var isGeoViewNavigating: Bool
 
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***VStack {
@@ -176,11 +175,16 @@ public struct SearchView: View {
 ***REMOVED******REMOVED***.onChange(of: isGeoViewNavigating) { _ in
 ***REMOVED******REMOVED******REMOVED***viewModel.isGeoViewNavigating = isGeoViewNavigating
 ***REMOVED***
+***REMOVED******REMOVED***.onChange(of: queryCenter) { _ in
+***REMOVED******REMOVED******REMOVED***viewModel.queryCenter = queryCenter
+***REMOVED***
+***REMOVED******REMOVED***.onChange(of: queryArea) { _ in
+***REMOVED******REMOVED******REMOVED***viewModel.queryArea = queryArea
+***REMOVED***
 ***REMOVED******REMOVED***.onAppear() {
 ***REMOVED******REMOVED******REMOVED***viewModel.currentQuery = currentQuery
 ***REMOVED******REMOVED******REMOVED***viewModel.resultsOverlay = resultsOverlay
 ***REMOVED******REMOVED******REMOVED***viewModel.resultMode = resultMode
-***REMOVED******REMOVED******REMOVED***viewModel.queryArea = queryArea
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -250,10 +254,40 @@ extension SearchView {
 ***REMOVED******REMOVED***/ The search area to be used for the current query.
 ***REMOVED******REMOVED***/ - Parameter newQueryArea: The new value.
 ***REMOVED******REMOVED***/ - Returns: The `SearchView`.
-***REMOVED***public func queryArea(_ newQueryArea: Binding<Geometry?>?) -> Self {
+***REMOVED***public func queryArea(_ newQueryArea: Binding<Geometry?>) -> Self {
 ***REMOVED******REMOVED***var copy = self
-***REMOVED******REMOVED***copy.queryArea = newQueryArea
+***REMOVED******REMOVED***copy._queryArea = newQueryArea
 ***REMOVED******REMOVED***return copy
+***REMOVED***
+
+***REMOVED******REMOVED***/ Defines the center for the search.
+***REMOVED******REMOVED***/ - Parameter newQueryCenter: The new value.
+***REMOVED******REMOVED***/ - Returns: The `SearchView`.
+***REMOVED***public func queryCenter(_ newQueryCenter: Binding<Point?>) -> Self {
+***REMOVED******REMOVED***var copy = self
+***REMOVED******REMOVED***copy._queryCenter = newQueryCenter
+***REMOVED******REMOVED***return copy
+***REMOVED***
+
+***REMOVED******REMOVED***/ The current map/scene view extent.  Defaults to `nil`.  Used to allow repeat searches after
+***REMOVED******REMOVED***/ panning/zooming the map.  Set to `nil` if repeat search behavior is not wanted.
+***REMOVED******REMOVED***/ - Parameter newGeoViewExtent: The new value.
+***REMOVED******REMOVED***/ - Returns: The `SearchView`.
+***REMOVED***public func geoViewExtent(_ newGeoViewExtent: Binding<Envelope?>) -> Self {
+***REMOVED******REMOVED***var copy = self
+***REMOVED******REMOVED***copy._geoViewExtent = newGeoViewExtent
+***REMOVED******REMOVED***return copy
+***REMOVED***
+
+***REMOVED******REMOVED***/ Denotes whether the geoview is navigating.  Used for the repeat search behavior.
+***REMOVED******REMOVED***/ - Parameter newIsGeoViewNavigating: The new value.
+***REMOVED******REMOVED***/ - Returns: The `SearchView`.
+***REMOVED***public func isGeoViewNavigating(_ newIsGeoViewNavigating: Binding<Bool>) -> Self {
+***REMOVED******REMOVED***var copy = self
+***REMOVED******REMOVED***copy._isGeoViewNavigating = newIsGeoViewNavigating
+***REMOVED******REMOVED***return copy
+***REMOVED***
+
 ***REMOVED***
 ***REMOVED***
 

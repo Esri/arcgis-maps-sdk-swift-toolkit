@@ -34,10 +34,17 @@ struct SearchExampleView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ The `GraphicsOverlay` used by the `SearchView` to display search results on the map.
 ***REMOVED***let searchResultsOverlay = GraphicsOverlay()
-
+***REMOVED***
+***REMOVED******REMOVED***/ Denotes whether the geoview is navigating.  Used for the repeat search behavior.
 ***REMOVED***@State var isGeoViewNavigating: Bool = false
+***REMOVED***
+***REMOVED******REMOVED***/ The current map/scene view extent.  Used to allow repeat searches after panning/zooming the map.
 ***REMOVED***@State var geoViewExtent: Envelope? = nil
+
+***REMOVED******REMOVED***/ The search area to be used for the current query
 ***REMOVED***@State var queryArea: Geometry? = nil
+
+***REMOVED******REMOVED***/ Defines the center for the search.
 ***REMOVED***@State var queryCenter: Point? = nil
 
 ***REMOVED***var body: some View {
@@ -51,25 +58,24 @@ struct SearchExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***queryCenter = $0.targetGeometry as? Point
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onVisibleAreaChanged { newValue in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** For "Repeat Search Here" behavior, pass the `geoViewExtent`
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** to the `searchView.geoViewExtent` modifier.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** For "Repeat Search Here" behavior, use the `geoViewExtent` and
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** `isGeoViewNavigating` modifiers on the `SearchView`.
 ***REMOVED******REMOVED******REMOVED******REMOVED***geoViewExtent = newValue.extent
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** You can also use the visible area in the `SearchView`
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** initializer to limit the results to `queryArea`
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** to limit the search results.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** The visible area can be used to limit the results by
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** using the `queryArea` modifier on the `SearchView`.
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***queryArea = newValue
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.overlay(alignment: .topTrailing) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***SearchView(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***queryCenter: $queryCenter,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***sources: [locatorDataSource],
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint: $searchResultViewpoint,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***geoViewExtent: $geoViewExtent,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isGeoViewNavigating: $isGeoViewNavigating
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint: $searchResultViewpoint
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.resultsOverlay(searchResultsOverlay)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.queryArea($queryArea)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.queryArea(queryArea)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.queryCenter($queryCenter)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.geoViewExtent($geoViewExtent)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.isGeoViewNavigating($isGeoViewNavigating)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
 ***REMOVED******REMOVED***
 ***REMOVED***
