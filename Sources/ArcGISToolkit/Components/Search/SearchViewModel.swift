@@ -149,12 +149,13 @@ final class SearchViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ every time the user navigates the map.
 ***REMOVED***var queryCenter: Point? = nil
 ***REMOVED***
-***REMOVED******REMOVED***/ Defines how many results to return. Defaults to Automatic. In automatic mode, an appropriate
-***REMOVED******REMOVED***/ number of results is returned based on the type of suggestion chosen
-***REMOVED******REMOVED***/ (driven by the suggestion's `isCollection` property).
+***REMOVED******REMOVED***/ Defines how many results to return. Defaults to ``SearchResultMode/automatic``.
+***REMOVED******REMOVED***/ In automatic mode, an appropriate number of results is returned based on the type of suggestion
+***REMOVED******REMOVED***/ chosen (driven by the suggestion's `isCollection` property).
 ***REMOVED***var resultMode: SearchResultMode = .automatic
 ***REMOVED***
-***REMOVED******REMOVED***/ The collection of search and suggestion results. A `nil` value means no query has been made.
+***REMOVED******REMOVED***/ A search outcome that contains the search and suggestion results. A `nil` value means no
+***REMOVED******REMOVED***/ query has been made.
 ***REMOVED***@Published
 ***REMOVED***private(set) var searchOutcome: SearchOutcome? {
 ***REMOVED******REMOVED***didSet {

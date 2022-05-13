@@ -22,30 +22,29 @@ struct SearchExampleView: View {
 ***REMOVED******REMOVED***maximumSuggestions: 16
 ***REMOVED***)
 ***REMOVED***
-***REMOVED***let map = Map(basemapStyle: .arcGISImagery)
+***REMOVED***@StateObject private var map = Map(basemapStyle: .arcGISImagery)
 ***REMOVED***
+***REMOVED******REMOVED***/ The `GraphicsOverlay` used by the `SearchView` to display search results on the map.
+***REMOVED***private let searchResultsOverlay = GraphicsOverlay()
+
 ***REMOVED******REMOVED***/ The map viewpoint used by the `SearchView` to pan/zoom the map
 ***REMOVED******REMOVED***/ to the extent of the search results.
-***REMOVED***@State
-***REMOVED***private var searchResultViewpoint: Viewpoint? = Viewpoint(
+***REMOVED***@State private var searchResultViewpoint: Viewpoint? = Viewpoint(
 ***REMOVED******REMOVED***center: Point(x: -93.258133, y: 44.986656, spatialReference: .wgs84),
 ***REMOVED******REMOVED***scale: 1000000
 ***REMOVED***)
 ***REMOVED***
-***REMOVED******REMOVED***/ The `GraphicsOverlay` used by the `SearchView` to display search results on the map.
-***REMOVED***let searchResultsOverlay = GraphicsOverlay()
-***REMOVED***
 ***REMOVED******REMOVED***/ Denotes whether the geoview is navigating.  Used for the repeat search behavior.
-***REMOVED***@State var isGeoViewNavigating: Bool = false
+***REMOVED***@State private var isGeoViewNavigating: Bool = false
 ***REMOVED***
 ***REMOVED******REMOVED***/ The current map/scene view extent.  Used to allow repeat searches after panning/zooming the map.
-***REMOVED***@State var geoViewExtent: Envelope? = nil
+***REMOVED***@State private var geoViewExtent: Envelope? = nil
 
 ***REMOVED******REMOVED***/ The search area to be used for the current query
-***REMOVED***@State var queryArea: Geometry? = nil
+***REMOVED***@State private var queryArea: Geometry? = nil
 
 ***REMOVED******REMOVED***/ Defines the center for the search.
-***REMOVED***@State var queryCenter: Point? = nil
+***REMOVED***@State private var queryCenter: Point? = nil
 
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***MapView(

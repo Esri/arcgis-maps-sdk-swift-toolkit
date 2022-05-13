@@ -18,7 +18,7 @@
 public struct SearchView: View {
 ***REMOVED******REMOVED***/ Creates a `SearchView`.
 ***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - sources: Collection of search sources to be used.
+***REMOVED******REMOVED***/   - sources: A collection of search sources to be used.
 ***REMOVED******REMOVED***/   - viewpoint: The `Viewpoint` used to pan/zoom to results. If `nil`, there will be
 ***REMOVED******REMOVED***/   no zooming to results.
 ***REMOVED***public init(
@@ -42,17 +42,17 @@ public struct SearchView: View {
 ***REMOVED***@StateObject private var viewModel: SearchViewModel
 
 ***REMOVED******REMOVED***/ Tracks the current user-entered query. This property drives both suggestions and searches.
-***REMOVED***var currentQuery: String = ""
+***REMOVED***var currentQuery = ""
 
 ***REMOVED******REMOVED***/ Tracks the current user-entered query. This property drives both suggestions and searches.
 ***REMOVED***var resultMode: SearchResultMode = .automatic
 
-***REMOVED******REMOVED***/ The search area to be used for the current query.  Defaults to `nil`.
+***REMOVED******REMOVED***/ The search area to be used for the current query. Defaults to `nil`.
 ***REMOVED******REMOVED***/
 ***REMOVED******REMOVED***/ If `nil`, then there is no limiting of the search results to a given area.
 ***REMOVED***@Binding var queryArea: Geometry?
 
-***REMOVED******REMOVED***/ Defines the center for the search.  Defaults to `nil`.
+***REMOVED******REMOVED***/ Defines the center for the search. Defaults to `nil`.
 ***REMOVED******REMOVED***/
 ***REMOVED******REMOVED***/ If `nil`, does not prioritize the search results around any point.
 ***REMOVED***@Binding var queryCenter: Point?
@@ -60,16 +60,16 @@ public struct SearchView: View {
 ***REMOVED******REMOVED***/ The current map/scene view extent. Defaults to `nil`.
 ***REMOVED******REMOVED***/
 ***REMOVED******REMOVED***/ This will be used to determine the value of `isEligibleForRequery` for the 'Repeat
-***REMOVED******REMOVED***/ search here' behavior. If that behavior is not wanted, it should be left `nil`.
+***REMOVED******REMOVED***/ search here' behavior. If that behavior is not wanted, it should be left as `nil`.
 ***REMOVED***@Binding var geoViewExtent: Envelope?
 ***REMOVED***
-***REMOVED******REMOVED***/ Determines whether the geoView is navigating in response to user interaction.
+***REMOVED******REMOVED***/ Determines whether the `geoView` is navigating in response to user interaction.
 ***REMOVED***@Binding private var isGeoViewNavigating: Bool
 
 ***REMOVED******REMOVED***/ The `GraphicsOverlay` used to display results. If `nil`, no results will be displayed.
 ***REMOVED***var resultsOverlay: GraphicsOverlay? = nil
 ***REMOVED***
-***REMOVED******REMOVED***/ Collection of search sources to be used. This list is maintained over time and is not nullable.
+***REMOVED******REMOVED***/ A collection of search sources to be used. This list is maintained over time.
 ***REMOVED******REMOVED***/ The view should observe this list for changes. Consumers should add and remove sources from
 ***REMOVED******REMOVED***/ this list as needed.
 ***REMOVED******REMOVED***/ NOTE: Only the first source is currently used; multiple sources are not yet supported.
@@ -286,8 +286,6 @@ extension SearchView {
 ***REMOVED******REMOVED***var copy = self
 ***REMOVED******REMOVED***copy._isGeoViewNavigating = newIsGeoViewNavigating
 ***REMOVED******REMOVED***return copy
-***REMOVED***
-
 ***REMOVED***
 ***REMOVED***
 
