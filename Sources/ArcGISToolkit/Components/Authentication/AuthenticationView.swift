@@ -14,13 +14,13 @@
 import SwiftUI
 
 public struct AuthenticationView: View {
-    public init(continuation: ChallengeContinuation) {
-        self.continuation = continuation
+    public init(foo: Foo) {
+        self.foo = foo
     }
     
-    var continuation: ChallengeContinuation
+    var foo: Foo
     
     public var body: some View {
-        UsernamePasswordView(viewModel: UsernamePasswordViewModel(continuation: continuation))
+        UsernamePasswordView(viewModel: UsernamePasswordViewModel(foo: foo))
     }
 }
