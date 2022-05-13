@@ -59,15 +59,12 @@ public final class Authenticator: ObservableObject {
     }
     
     private func observeChallengeQueue() async {
-        for await challengeContinuation in challengeQueue {
-            let foo = Foo(challenge: challengeContinuation.challenge)
+        for await queuedChallenge in challengeQueue {
+            let foo = Foo(challenge: queuedChallenge.challenge)
             currentFoo = foo
-            do {
-                let disposition = try await foo.waitForChallengeToBeHandled()
-                challengeContinuation.continuation.resume(returning: disposition)
-            } catch {
-                challengeContinuation.continuation.resume(throwing: error)
-            }
+            queuedChallenge.continuation.resume(
+                with: await Result { try await foo.waitForChallengeToBeHandled() }
+            )
             currentFoo = nil
         }
     }
