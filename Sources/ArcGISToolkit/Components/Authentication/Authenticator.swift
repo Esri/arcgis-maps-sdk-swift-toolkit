@@ -15,7 +15,7 @@
 ***REMOVED***
 import Combine
 
-public final class Foo {
+public final class QueuedChallenge {
 ***REMOVED***let challenge: ArcGISAuthenticationChallenge
 ***REMOVED***
 ***REMOVED***init(challenge: ArcGISAuthenticationChallenge) {
@@ -42,21 +42,7 @@ public final class Foo {
 ***REMOVED***
 ***REMOVED***
 
-extension Foo: Identifiable {
-***REMOVED***public var id: ObjectIdentifier {
-***REMOVED******REMOVED***ObjectIdentifier(self)
-***REMOVED***
-***REMOVED***
-
-private class QueuedChallenge {
-***REMOVED***let challenge: ArcGISAuthenticationChallenge
-***REMOVED***var continuation: CheckedContinuation<ArcGISAuthenticationChallenge.Disposition, Error>
-***REMOVED***
-***REMOVED***init(challenge: ArcGISAuthenticationChallenge, continuation: CheckedContinuation<ArcGISAuthenticationChallenge.Disposition, Error>) {
-***REMOVED******REMOVED***self.challenge = challenge
-***REMOVED******REMOVED***self.continuation = continuation
-***REMOVED***
-***REMOVED***
+extension QueuedChallenge: Identifiable {***REMOVED***
 
 @MainActor
 public final class Authenticator: ObservableObject {
@@ -67,17 +53,14 @@ public final class Authenticator: ObservableObject {
 ***REMOVED***private func observeChallengeQueue() async {
 ***REMOVED******REMOVED***for await queuedChallenge in challengeQueue {
 ***REMOVED******REMOVED******REMOVED***print("  -- handing challenge")
-***REMOVED******REMOVED******REMOVED***let foo = Foo(challenge: queuedChallenge.challenge)
-***REMOVED******REMOVED******REMOVED***currentFoo = foo
-***REMOVED******REMOVED******REMOVED***queuedChallenge.continuation.resume(
-***REMOVED******REMOVED******REMOVED******REMOVED***with: await foo.result
-***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***currentFoo = nil
+***REMOVED******REMOVED******REMOVED***currentChallenge = queuedChallenge
+***REMOVED******REMOVED******REMOVED***_ = await queuedChallenge.result
+***REMOVED******REMOVED******REMOVED***currentChallenge = nil
 ***REMOVED***
 ***REMOVED***
 
 ***REMOVED***@Published
-***REMOVED***public var currentFoo: Foo?
+***REMOVED***public var currentChallenge: QueuedChallenge?
 ***REMOVED***
 ***REMOVED***private var subject = PassthroughSubject<QueuedChallenge, Never>()
 ***REMOVED***private var challengeQueue: AsyncPublisher<AnyPublisher<QueuedChallenge, Never>> {
@@ -101,9 +84,9 @@ extension Authenticator: AuthenticationChallengeHandler {
 ***REMOVED******REMOVED******REMOVED***return .performDefaultHandling
 ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***return try await withCheckedThrowingContinuation { continuation in
-***REMOVED******REMOVED******REMOVED***subject.send(QueuedChallenge(challenge: challenge, continuation: continuation))
-***REMOVED***
+***REMOVED******REMOVED***let queuedChallenge = QueuedChallenge(challenge: challenge)
+***REMOVED******REMOVED***subject.send(queuedChallenge)
+***REMOVED******REMOVED***return try await queuedChallenge.result.get()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***public func handleURLSessionChallenge(

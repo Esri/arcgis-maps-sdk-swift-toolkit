@@ -17,14 +17,14 @@
 @MainActor class UsernamePasswordViewModel: ObservableObject {
 ***REMOVED***init(challengingHost: String) {
 ***REMOVED******REMOVED***self.challengingHost = challengingHost
-***REMOVED******REMOVED***foo = nil
+***REMOVED******REMOVED***challenge = nil
 ***REMOVED***
 ***REMOVED***
-***REMOVED***private let foo: Foo?
+***REMOVED***private let challenge: QueuedChallenge?
 ***REMOVED***
-***REMOVED***init(foo: Foo) {
-***REMOVED******REMOVED***self.foo = foo
-***REMOVED******REMOVED***self.challengingHost = foo.challenge.request.url!.host!
+***REMOVED***init(challenge: QueuedChallenge) {
+***REMOVED******REMOVED***self.challenge = challenge
+***REMOVED******REMOVED***self.challengingHost = challenge.challenge.request.url!.host!
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@Published var username = "" {
@@ -44,12 +44,12 @@
 ***REMOVED***
 ***REMOVED***func signIn() {
 ***REMOVED******REMOVED***isDismissed = true
-***REMOVED******REMOVED***if let foo = foo {
+***REMOVED******REMOVED***if let challenge = challenge {
 ***REMOVED******REMOVED******REMOVED***Task {
-***REMOVED******REMOVED******REMOVED******REMOVED***foo.resume(with: await Result {
+***REMOVED******REMOVED******REMOVED******REMOVED***challenge.resume(with: await Result {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.useCredential(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try await .token(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***challenge: foo.challenge,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***challenge: challenge.challenge,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***username: username,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***password: password
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
@@ -61,8 +61,8 @@
 ***REMOVED***
 ***REMOVED***func cancel() {
 ***REMOVED******REMOVED***isDismissed = true
-***REMOVED******REMOVED***if let foo = foo {
-***REMOVED******REMOVED******REMOVED***foo.cancel()
+***REMOVED******REMOVED***if let challenge = challenge {
+***REMOVED******REMOVED******REMOVED***challenge.cancel()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***

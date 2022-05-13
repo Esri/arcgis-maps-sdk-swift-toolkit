@@ -14,13 +14,13 @@
 ***REMOVED***
 
 public struct AuthenticationView: View {
-***REMOVED***public init(foo: Foo) {
-***REMOVED******REMOVED***self.foo = foo
+***REMOVED***public init(challenge: QueuedChallenge) {
+***REMOVED******REMOVED***self.challenge = challenge
 ***REMOVED***
 ***REMOVED***
-***REMOVED***var foo: Foo
+***REMOVED***var challenge: QueuedChallenge
 ***REMOVED***
 ***REMOVED***public var body: some View {
-***REMOVED******REMOVED***UsernamePasswordView(viewModel: UsernamePasswordViewModel(foo: foo))
+***REMOVED******REMOVED***UsernamePasswordView(viewModel: UsernamePasswordViewModel(challenge: challenge))
 ***REMOVED***
 ***REMOVED***
