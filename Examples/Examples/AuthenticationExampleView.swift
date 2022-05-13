@@ -58,12 +58,12 @@ struct AuthenticationExampleView: View {
 }
 
 private struct AuthenticationItemView: View {
-    let loadable: Loadable
+    let loadables: [Loadable]
     let title: String
     @State var status = LoadStatus.notLoaded
     
     init(item: AuthenticationItem) {
-        self.loadable = item.loadable
+        self.loadables = item.loadables
         self.title = item.title
     }
     
@@ -71,8 +71,19 @@ private struct AuthenticationItemView: View {
         Button {
             Task {
                 status = .loading
-                try? await loadable.load()
-                status = loadable.loadStatus
+                do {
+                    try await withThrowingTaskGroup(of: Void.self) { group in
+                        for loadable in loadables {
+                            group.addTask {
+                                try await loadable.load()
+                            }
+                        }
+                        try await group.waitForAll()
+                    }
+                    status = .loaded
+                } catch {
+                    status = .failed
+                }
             }
         } label: {
             buttonContent
@@ -102,20 +113,37 @@ private struct AuthenticationItemView: View {
 
 private extension URL {
     static let worldImageryMapServer = URL(string: "https://ibasemaps-api.arcgis.com/arcgis/rest/services/World_Imagery/MapServer")!
+    static let hostedPointsLayer = URL(string: "https://rt-server107a.esri.com/server/rest/services/Hosted/PointsLayer/FeatureServer/0")!
 }
 
 private struct AuthenticationItem {
     let title: String
-    let loadable: Loadable
+    let loadables: [Loadable]
 }
 
 extension AuthenticationItem {
     static let token = AuthenticationItem(
         title: "Token secured resource",
-        loadable: ArcGISTiledLayer(url: .worldImageryMapServer)
+        loadables: [ArcGISTiledLayer(url: .worldImageryMapServer)]
+    )
+    static let multipleToken = AuthenticationItem(
+        title: "Multiple token secured resources",
+        loadables: [
+            ArcGISTiledLayer(url: .worldImageryMapServer),
+            ServiceFeatureTable(url: .hostedPointsLayer)
+        ]
+    )
+    static let multipleTokenSame = AuthenticationItem(
+        title: "Two of same token secured resources",
+        loadables: [
+            ArcGISTiledLayer(url: .worldImageryMapServer),
+            ArcGISTiledLayer(url: .worldImageryMapServer)
+        ]
     )
     
     static let all: [AuthenticationItem] = [
-        .token
+        .token,
+        .multipleToken,
+        .multipleTokenSame
     ]
 }
