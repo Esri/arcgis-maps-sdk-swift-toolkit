@@ -16,7 +16,6 @@ import SwiftUI
 public struct AuthenticationView: View {
     public init(foo: Foo) {
         self.foo = foo
-        print("    -- initing auth view: \(foo.challenge.request.url!)")
     }
     
     var foo: Foo
