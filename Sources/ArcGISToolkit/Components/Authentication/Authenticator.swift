@@ -20,6 +20,7 @@ public final class Foo {
     var continuation: CheckedContinuation<ArcGISAuthenticationChallenge.Disposition, Error>?
     
     init(challenge: ArcGISAuthenticationChallenge) {
+        print("    -- initing foo: \(challenge.request.url!)")
         self.challenge = challenge
     }
 
@@ -67,11 +68,10 @@ public final class Authenticator: ObservableObject {
             print("  -- handing challenge")
             let foo = Foo(challenge: queuedChallenge.challenge)
             currentFoo = foo
-            let result = await Result { try await foo.waitForChallengeToBeHandled() }
-            currentFoo = nil
             queuedChallenge.continuation.resume(
-                with: result
+                with: await Result { try await foo.waitForChallengeToBeHandled() }
             )
+            currentFoo = nil
         }
     }
 
