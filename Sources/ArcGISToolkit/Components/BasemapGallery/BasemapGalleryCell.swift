@@ -25,6 +25,7 @@ struct BasemapGalleryCell: View {
     let onSelection: () -> Void
     
     var body: some View {
+        let roundedRect = RoundedRectangle(cornerRadius: 8)
         Button(action: {
             onSelection()
         }, label: {
@@ -32,13 +33,18 @@ struct BasemapGalleryCell: View {
                 ZStack(alignment: .center) {
                     // Display the thumbnail, if available.
                     if let thumbnailImage = item.thumbnail {
-                        Image(uiImage: thumbnailImage)
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .border(
-                                isSelected ? Color.accentColor : Color.clear,
-                                width: 3
-                            )
+                        Group {
+                            Image(uiImage: thumbnailImage)
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .clipShape(roundedRect)
+                            if isSelected {
+                                roundedRect
+                                    .stroke(lineWidth: 2)
+                                    .foregroundColor(Color.accentColor)
+                            }
+                        }
+                        .padding(.all, 4)
                     }
                     
                     // Display an overlay if the item has an error.
@@ -61,12 +67,26 @@ struct BasemapGalleryCell: View {
         }).disabled(item.isBasemapLoading)
     }
     
-    /// Creates a partially transparent rectangle, used to denote a basemap with an error.
+    /// Creates a red exclamation mark, used to denote a basemap with an error.
     /// - Returns: A new transparent rectagle view.
     private func makeErrorOverlay() -> some View {
-        Rectangle()
-            .foregroundColor(.secondary)
-            .opacity(0.75)
+        HStack {
+            Spacer()
+            VStack{
+                ZStack {
+                    // For a white background behind the exclamation mark.
+                    Circle()
+                        .foregroundColor(.white)
+                        .frame(width: 16, height: 16)
+                    Image(systemName: "exclamationmark.circle.fill")
+                        .foregroundColor(.red)
+                        .background(Color.clear)
+                        .frame(width: 32, height: 32)
+                }
+                Spacer()
+            }
+        }
+        .padding(.all, -6)
     }
     
     /// Creates a circular progress view with a rounded rectangle background.
