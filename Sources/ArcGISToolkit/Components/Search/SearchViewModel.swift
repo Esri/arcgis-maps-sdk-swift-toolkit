@@ -42,16 +42,13 @@ public enum SearchOutcome {
 final class SearchViewModel: ObservableObject {
     /// Creates a `SearchViewModel`.
     /// - Parameters:
-    ///   - queryCenter: Defines the center for the search.
     ///   - sources: Collection of search sources to be used.
     ///   - viewpoint: The `Viewpoint` used to pan/zoom to results. If `nil`, there will be
     ///   no zooming to results.
     init(
-        queryCenter: Binding<Point?>? = nil,
         sources: [SearchSource] = [],
         viewpoint: Binding<Viewpoint?>? = nil
     ) {
-        self.queryCenter = queryCenter
         self.sources = sources
         self.viewpoint = viewpoint
     }
@@ -146,11 +143,11 @@ final class SearchViewModel: ObservableObject {
     
     /// The search area to be used for the current query. Results will be limited to those.
     /// within `QueryArea`. Defaults to `nil`.
-    var queryArea: Binding<Geometry?>? = nil
+    var queryArea: Geometry? = nil
     
     /// Defines the center for the search. For most use cases, this should be updated by the view
     /// every time the user navigates the map.
-    var queryCenter: Binding<Point?>?
+    var queryCenter: Point? = nil
     
     /// Defines how many results to return. Defaults to Automatic. In automatic mode, an appropriate
     /// number of results is returned based on the type of suggestion chosen
@@ -267,8 +264,8 @@ private extension SearchViewModel {
         await search(with: {
             try await source.search(
                 currentQuery,
-                searchArea: queryArea?.wrappedValue,
-                preferredSearchLocation: queryCenter?.wrappedValue
+                searchArea: queryArea,
+                preferredSearchLocation: queryCenter
             )
         } )
     }
@@ -282,8 +279,8 @@ private extension SearchViewModel {
         do {
             let suggestions = try await source.suggest(
                 currentQuery,
-                searchArea: queryArea?.wrappedValue,
-                preferredSearchLocation: queryCenter?.wrappedValue
+                searchArea: queryArea,
+                preferredSearchLocation: queryCenter
             )
             searchOutcome = .suggestions(suggestions)
         } catch is CancellationError {
@@ -300,8 +297,8 @@ private extension SearchViewModel {
             with: {
                 try await searchSuggestion.owningSource.search(
                     searchSuggestion,
-                    searchArea: queryArea?.wrappedValue,
-                    preferredSearchLocation: queryCenter?.wrappedValue
+                    searchArea: queryArea,
+                    preferredSearchLocation: queryCenter
                 )
             },
             isCollection: searchSuggestion.isCollection
