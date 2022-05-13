@@ -58,12 +58,12 @@ struct AuthenticationExampleView: View {
 ***REMOVED***
 
 private struct AuthenticationItemView: View {
-***REMOVED***let loadable: Loadable
+***REMOVED***let loadables: [Loadable]
 ***REMOVED***let title: String
 ***REMOVED***@State var status = LoadStatus.notLoaded
 ***REMOVED***
 ***REMOVED***init(item: AuthenticationItem) {
-***REMOVED******REMOVED***self.loadable = item.loadable
+***REMOVED******REMOVED***self.loadables = item.loadables
 ***REMOVED******REMOVED***self.title = item.title
 ***REMOVED***
 ***REMOVED***
@@ -71,8 +71,19 @@ private struct AuthenticationItemView: View {
 ***REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED***Task {
 ***REMOVED******REMOVED******REMOVED******REMOVED***status = .loading
-***REMOVED******REMOVED******REMOVED******REMOVED***try? await loadable.load()
-***REMOVED******REMOVED******REMOVED******REMOVED***status = loadable.loadStatus
+***REMOVED******REMOVED******REMOVED******REMOVED***do {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try await withThrowingTaskGroup(of: Void.self) { group in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for loadable in loadables {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***group.addTask {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try await loadable.load()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try await group.waitForAll()
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***status = .loaded
+***REMOVED******REMOVED******REMOVED*** catch {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***status = .failed
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED***buttonContent
@@ -102,20 +113,37 @@ private struct AuthenticationItemView: View {
 
 private extension URL {
 ***REMOVED***static let worldImageryMapServer = URL(string: "https:***REMOVED***ibasemaps-api.arcgis.com/arcgis/rest/services/World_Imagery/MapServer")!
+***REMOVED***static let hostedPointsLayer = URL(string: "https:***REMOVED***rt-server107a.esri.com/server/rest/services/Hosted/PointsLayer/FeatureServer/0")!
 ***REMOVED***
 
 private struct AuthenticationItem {
 ***REMOVED***let title: String
-***REMOVED***let loadable: Loadable
+***REMOVED***let loadables: [Loadable]
 ***REMOVED***
 
 extension AuthenticationItem {
 ***REMOVED***static let token = AuthenticationItem(
 ***REMOVED******REMOVED***title: "Token secured resource",
-***REMOVED******REMOVED***loadable: ArcGISTiledLayer(url: .worldImageryMapServer)
+***REMOVED******REMOVED***loadables: [ArcGISTiledLayer(url: .worldImageryMapServer)]
+***REMOVED***)
+***REMOVED***static let multipleToken = AuthenticationItem(
+***REMOVED******REMOVED***title: "Multiple token secured resources",
+***REMOVED******REMOVED***loadables: [
+***REMOVED******REMOVED******REMOVED***ArcGISTiledLayer(url: .worldImageryMapServer),
+***REMOVED******REMOVED******REMOVED***ServiceFeatureTable(url: .hostedPointsLayer)
+***REMOVED******REMOVED***]
+***REMOVED***)
+***REMOVED***static let multipleTokenSame = AuthenticationItem(
+***REMOVED******REMOVED***title: "Two of same token secured resources",
+***REMOVED******REMOVED***loadables: [
+***REMOVED******REMOVED******REMOVED***ArcGISTiledLayer(url: .worldImageryMapServer),
+***REMOVED******REMOVED******REMOVED***ArcGISTiledLayer(url: .worldImageryMapServer)
+***REMOVED******REMOVED***]
 ***REMOVED***)
 ***REMOVED***
 ***REMOVED***static let all: [AuthenticationItem] = [
-***REMOVED******REMOVED***.token
+***REMOVED******REMOVED***.token,
+***REMOVED******REMOVED***.multipleToken,
+***REMOVED******REMOVED***.multipleTokenSame
 ***REMOVED***]
 ***REMOVED***

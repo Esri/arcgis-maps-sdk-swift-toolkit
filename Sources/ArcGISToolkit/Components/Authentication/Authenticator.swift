@@ -40,9 +40,13 @@ public final class Foo {
 ***REMOVED***
 ***REMOVED***
 
-extension Foo: Identifiable {***REMOVED***
+extension Foo: Identifiable {
+***REMOVED***public var id: ObjectIdentifier {
+***REMOVED******REMOVED***ObjectIdentifier(self)
+***REMOVED***
+***REMOVED***
 
-private struct QueuedChallenge {
+private class QueuedChallenge {
 ***REMOVED***let challenge: ArcGISAuthenticationChallenge
 ***REMOVED***var continuation: CheckedContinuation<ArcGISAuthenticationChallenge.Disposition, Error>
 ***REMOVED***
@@ -60,12 +64,14 @@ public final class Authenticator: ObservableObject {
 ***REMOVED***
 ***REMOVED***private func observeChallengeQueue() async {
 ***REMOVED******REMOVED***for await queuedChallenge in challengeQueue {
+***REMOVED******REMOVED******REMOVED***print("  -- handing challenge")
 ***REMOVED******REMOVED******REMOVED***let foo = Foo(challenge: queuedChallenge.challenge)
 ***REMOVED******REMOVED******REMOVED***currentFoo = foo
-***REMOVED******REMOVED******REMOVED***queuedChallenge.continuation.resume(
-***REMOVED******REMOVED******REMOVED******REMOVED***with: await Result { try await foo.waitForChallengeToBeHandled() ***REMOVED***
-***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***let result = await Result { try await foo.waitForChallengeToBeHandled() ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***currentFoo = nil
+***REMOVED******REMOVED******REMOVED***queuedChallenge.continuation.resume(
+***REMOVED******REMOVED******REMOVED******REMOVED***with: result
+***REMOVED******REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 
@@ -73,8 +79,12 @@ public final class Authenticator: ObservableObject {
 ***REMOVED***public var currentFoo: Foo?
 ***REMOVED***
 ***REMOVED***private var subject = PassthroughSubject<QueuedChallenge, Never>()
-***REMOVED***private var challengeQueue: AsyncPublisher<PassthroughSubject<QueuedChallenge, Never>> {
-***REMOVED******REMOVED***AsyncPublisher(subject)
+***REMOVED***private var challengeQueue: AsyncPublisher<AnyPublisher<QueuedChallenge, Never>> {
+***REMOVED******REMOVED***AsyncPublisher(
+***REMOVED******REMOVED******REMOVED***subject
+***REMOVED******REMOVED******REMOVED******REMOVED***.buffer(size: .max, prefetch: .byRequest, whenFull: .dropOldest)
+***REMOVED******REMOVED******REMOVED******REMOVED***.eraseToAnyPublisher()
+***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 
@@ -82,12 +92,29 @@ extension Authenticator: AuthenticationChallengeHandler {
 ***REMOVED***public func handleArcGISChallenge(
 ***REMOVED******REMOVED***_ challenge: ArcGISAuthenticationChallenge
 ***REMOVED***) async throws -> ArcGISAuthenticationChallenge.Disposition {
+***REMOVED******REMOVED***print("-- high level challenge receieved")
+***REMOVED******REMOVED***await Task.yield()
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***guard challenge.proposedCredential == nil else {
+***REMOVED******REMOVED******REMOVED***print("  -- performing default handling")
 ***REMOVED******REMOVED******REMOVED***return .performDefaultHandling
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***return try await withCheckedThrowingContinuation { continuation in
 ***REMOVED******REMOVED******REMOVED***subject.send(QueuedChallenge(challenge: challenge, continuation: continuation))
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***public func handleURLSessionChallenge(
+***REMOVED******REMOVED***_ challenge: URLAuthenticationChallenge,
+***REMOVED******REMOVED***scope: URLAuthenticationChallengeScope
+***REMOVED***) async -> (URLSession.AuthChallengeDisposition, URLCredential?) {
+***REMOVED******REMOVED***if challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodServerTrust,
+***REMOVED******REMOVED***   let trust = challenge.protectionSpace.serverTrust {
+***REMOVED******REMOVED******REMOVED******REMOVED*** This will cause a self-signed certificate to be trusted.
+***REMOVED******REMOVED******REMOVED***return (.useCredential, URLCredential(trust: trust))
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***return (.performDefaultHandling, nil)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
