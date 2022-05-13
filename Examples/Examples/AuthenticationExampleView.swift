@@ -16,12 +16,26 @@ import ArcGIS
 import ArcGISToolkit
 
 struct AuthenticationExampleView: View {
-    @StateObject var authenticator = Authenticator()
+    @ObservedObject var authenticator = Authenticator()
     @State var previousApiKey: APIKey?
+    @State private var items = AuthenticationItem.makeAll()
     
     var body: some View {
-        List(AuthenticationItem.all, id: \.title) { item in
-            AuthenticationItemView(item: item)
+        VStack {
+            if items.isEmpty {
+                ProgressView()
+            } else {
+                List(items) { item in
+                    AuthenticationItemView(item: item)
+                }
+            }
+            Button("Clear Credentials") {
+                items = []
+                Task {
+                    await ArcGISURLSession.credentialStore.removeAll()
+                    items = AuthenticationItem.makeAll()
+                }
+            }
         }
         .navigationBarTitle(Text("Authentication"), displayMode: .inline)
         .sheet(item: $authenticator.currentFoo) {
@@ -116,34 +130,49 @@ private extension URL {
     static let hostedPointsLayer = URL(string: "https://rt-server107a.esri.com/server/rest/services/Hosted/PointsLayer/FeatureServer/0")!
 }
 
-private struct AuthenticationItem {
+private class AuthenticationItem {
     let title: String
     let loadables: [Loadable]
+    
+    init(title: String, loadables: [Loadable]) {
+        self.title = title
+        self.loadables = loadables
+    }
 }
 
+extension AuthenticationItem: Identifiable {}
+
 extension AuthenticationItem {
-    static let token = AuthenticationItem(
-        title: "Token secured resource",
-        loadables: [ArcGISTiledLayer(url: .worldImageryMapServer)]
-    )
-    static let multipleToken = AuthenticationItem(
-        title: "Multiple token secured resources",
-        loadables: [
-            ArcGISTiledLayer(url: .worldImageryMapServer),
-            ServiceFeatureTable(url: .hostedPointsLayer)
-        ]
-    )
-    static let multipleTokenSame = AuthenticationItem(
-        title: "Two of same token secured resources",
-        loadables: [
-            ArcGISTiledLayer(url: .worldImageryMapServer),
-            ArcGISTiledLayer(url: .worldImageryMapServer)
-        ]
-    )
+    static func makeToken() -> AuthenticationItem {
+        AuthenticationItem(
+            title: "Token secured resource",
+            loadables: [ArcGISTiledLayer(url: .worldImageryMapServer)]
+        )
+    }
+    static func makeMultipleToken() -> AuthenticationItem {
+        AuthenticationItem(
+            title: "Multiple token secured resources",
+            loadables: [
+                ArcGISTiledLayer(url: .worldImageryMapServer),
+                ServiceFeatureTable(url: .hostedPointsLayer)
+            ]
+        )
+    }
+    static func makeMultipleTokenSame() -> AuthenticationItem {
+        AuthenticationItem(
+            title: "Two of same token secured resources",
+            loadables: [
+                ArcGISTiledLayer(url: .worldImageryMapServer),
+                ArcGISTiledLayer(url: .worldImageryMapServer)
+            ]
+        )
+    }
     
-    static let all: [AuthenticationItem] = [
-        .token,
-        .multipleToken,
-        .multipleTokenSame
-    ]
+    static func makeAll() -> [AuthenticationItem]  {
+        [
+            .makeToken(),
+            .makeMultipleToken(),
+            .makeMultipleTokenSame()
+        ]
+    }
 }

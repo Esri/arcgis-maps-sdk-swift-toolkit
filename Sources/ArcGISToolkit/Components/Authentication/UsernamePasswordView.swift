@@ -25,6 +25,7 @@ import ArcGIS
     init(foo: Foo) {
         self.foo = foo
         self.challengingHost = foo.challenge.request.url!.host!
+        print("    -- initing view model: \(challengingHost)")
     }
     
     @Published var username = "" {
@@ -69,10 +70,12 @@ import ArcGIS
 
 @MainActor struct UsernamePasswordView: View {
     init(viewModel: UsernamePasswordViewModel) {
-        _viewModel = StateObject(wrappedValue: viewModel)
+        //_viewModel = StateObject(wrappedValue: viewModel)
+        self.viewModel = viewModel
+        print("    -- initing username/pw view: \(viewModel.challengingHost)")
     }
     
-    @StateObject private var viewModel: UsernamePasswordViewModel
+    @ObservedObject private var viewModel: UsernamePasswordViewModel
     
     /// The focused field.
     @FocusState private var focusedField: Field?
