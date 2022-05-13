@@ -32,6 +32,8 @@ public final class QueuedChallenge {
 ***REMOVED******REMOVED***_result = .failure(CancellationError())
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ Use a streamed property because we need to support multiple listeners
+***REMOVED******REMOVED***/ to know when the challenge completed.
 ***REMOVED***@Streamed
 ***REMOVED***private var _result: Result<ArcGISAuthenticationChallenge.Disposition, Error>?
 ***REMOVED***
@@ -90,8 +92,11 @@ extension Authenticator: AuthenticationChallengeHandler {
 ***REMOVED******REMOVED******REMOVED***return .performDefaultHandling
 ***REMOVED***
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Queue up the challenge.
 ***REMOVED******REMOVED***let queuedChallenge = QueuedChallenge(challenge: challenge)
 ***REMOVED******REMOVED***subject.send(queuedChallenge)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Wait for it to complete and return the resulting disposition.
 ***REMOVED******REMOVED***return try await queuedChallenge.disposition
 ***REMOVED***
 ***REMOVED***
