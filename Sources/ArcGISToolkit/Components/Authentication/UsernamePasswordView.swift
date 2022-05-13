@@ -17,14 +17,14 @@ import ArcGIS
 @MainActor class UsernamePasswordViewModel: ObservableObject {
     init(challengingHost: String) {
         self.challengingHost = challengingHost
-        continuation = nil
+        foo = nil
     }
     
-    private let continuation: ChallengeContinuation?
+    private let foo: Foo?
     
-    init(continuation: ChallengeContinuation) {
-        self.continuation = continuation
-        self.challengingHost = continuation.challenge.request.url!.host!
+    init(foo: Foo) {
+        self.foo = foo
+        self.challengingHost = foo.challenge.request.url!.host!
     }
     
     @Published var username = "" {
@@ -44,12 +44,12 @@ import ArcGIS
     
     func signIn() {
         isDismissed = true
-        if let continuation = continuation {
+        if let foo = foo {
             Task {
-                continuation.resume(with: await Result {
+                foo.resume(with: await Result {
                     .useCredential(
                         try await .token(
-                            challenge: continuation.challenge,
+                            challenge: foo.challenge,
                             username: username,
                             password: password
                         )
@@ -61,8 +61,8 @@ import ArcGIS
     
     func cancel() {
         isDismissed = true
-        if let continuation = continuation {
-            continuation.cancel()
+        if let foo = foo {
+            foo.cancel()
         }
     }
 }

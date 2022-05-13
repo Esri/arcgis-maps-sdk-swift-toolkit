@@ -13,14 +13,14 @@
 
 import ArcGIS
 import SwiftUI
+import Combine
 
-public final class ChallengeContinuation {
+public final class Foo {
     let challenge: ArcGISAuthenticationChallenge
     var continuation: CheckedContinuation<ArcGISAuthenticationChallenge.Disposition, Error>?
     
-    init(challenge: ArcGISAuthenticationChallenge, continuation: CheckedContinuation<ArcGISAuthenticationChallenge.Disposition, Error>) {
+    init(challenge: ArcGISAuthenticationChallenge) {
         self.challenge = challenge
-        self.continuation = continuation
     }
 
     func resume(with result: Result<ArcGISAuthenticationChallenge.Disposition, Error>) {
@@ -32,16 +32,53 @@ public final class ChallengeContinuation {
         continuation?.resume(throwing: CancellationError())
         continuation = nil
     }
+    
+    func waitForChallengeToBeHandled() async throws -> ArcGISAuthenticationChallenge.Disposition {
+        return try await withCheckedThrowingContinuation { continuation in
+            self.continuation = continuation
+        }
+    }
 }
 
-extension ChallengeContinuation: Identifiable {}
+extension Foo: Identifiable {}
+
+private struct QueuedChallenge {
+    let challenge: ArcGISAuthenticationChallenge
+    var continuation: CheckedContinuation<ArcGISAuthenticationChallenge.Disposition, Error>
+    
+    init(challenge: ArcGISAuthenticationChallenge, continuation: CheckedContinuation<ArcGISAuthenticationChallenge.Disposition, Error>) {
+        self.challenge = challenge
+        self.continuation = continuation
+    }
+}
 
 @MainActor
 public final class Authenticator: ObservableObject {
-    public init() {}
+    public init() {
+        Task { await observeChallengeQueue() }
+    }
+    
+    private func observeChallengeQueue() async {
+        for await challengeContinuation in challengeQueue {
+            let foo = Foo(challenge: challengeContinuation.challenge)
+            currentFoo = foo
+            do {
+                let disposition = try await foo.waitForChallengeToBeHandled()
+                challengeContinuation.continuation.resume(returning: disposition)
+            } catch {
+                challengeContinuation.continuation.resume(throwing: error)
+            }
+            currentFoo = nil
+        }
+    }
 
     @Published
-    public var continuation: ChallengeContinuation?
+    public var currentFoo: Foo?
+    
+    private var subject = PassthroughSubject<QueuedChallenge, Never>()
+    private var challengeQueue: AsyncPublisher<PassthroughSubject<QueuedChallenge, Never>> {
+        AsyncPublisher(subject)
+    }
 }
 
 extension Authenticator: AuthenticationChallengeHandler {
@@ -53,7 +90,7 @@ extension Authenticator: AuthenticationChallengeHandler {
         }
         
         return try await withCheckedThrowingContinuation { continuation in
-            self.continuation = ChallengeContinuation(challenge: challenge, continuation: continuation)
+            subject.send(QueuedChallenge(challenge: challenge, continuation: continuation))
         }
     }
 }
