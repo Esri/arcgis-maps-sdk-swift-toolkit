@@ -15,7 +15,7 @@ import ArcGIS
 import SwiftUI
 import Combine
 
-public final class Foo {
+public final class QueuedChallenge {
     let challenge: ArcGISAuthenticationChallenge
     
     init(challenge: ArcGISAuthenticationChallenge) {
@@ -42,21 +42,7 @@ public final class Foo {
     }
 }
 
-extension Foo: Identifiable {
-    public var id: ObjectIdentifier {
-        ObjectIdentifier(self)
-    }
-}
-
-private class QueuedChallenge {
-    let challenge: ArcGISAuthenticationChallenge
-    var continuation: CheckedContinuation<ArcGISAuthenticationChallenge.Disposition, Error>
-    
-    init(challenge: ArcGISAuthenticationChallenge, continuation: CheckedContinuation<ArcGISAuthenticationChallenge.Disposition, Error>) {
-        self.challenge = challenge
-        self.continuation = continuation
-    }
-}
+extension QueuedChallenge: Identifiable {}
 
 @MainActor
 public final class Authenticator: ObservableObject {
@@ -67,17 +53,14 @@ public final class Authenticator: ObservableObject {
     private func observeChallengeQueue() async {
         for await queuedChallenge in challengeQueue {
             print("  -- handing challenge")
-            let foo = Foo(challenge: queuedChallenge.challenge)
-            currentFoo = foo
-            queuedChallenge.continuation.resume(
-                with: await foo.result
-            )
-            currentFoo = nil
+            currentChallenge = queuedChallenge
+            _ = await queuedChallenge.result
+            currentChallenge = nil
         }
     }
 
     @Published
-    public var currentFoo: Foo?
+    public var currentChallenge: QueuedChallenge?
     
     private var subject = PassthroughSubject<QueuedChallenge, Never>()
     private var challengeQueue: AsyncPublisher<AnyPublisher<QueuedChallenge, Never>> {
@@ -101,9 +84,9 @@ extension Authenticator: AuthenticationChallengeHandler {
             return .performDefaultHandling
         }
         
-        return try await withCheckedThrowingContinuation { continuation in
-            subject.send(QueuedChallenge(challenge: challenge, continuation: continuation))
-        }
+        let queuedChallenge = QueuedChallenge(challenge: challenge)
+        subject.send(queuedChallenge)
+        return try await queuedChallenge.result.get()
     }
     
     public func handleURLSessionChallenge(
