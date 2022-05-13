@@ -18,29 +18,22 @@ import ArcGIS
 public struct SearchView: View {
     /// Creates a `SearchView`.
     /// - Parameters:
-    ///   - queryCenter: Defines the center for the search.
     ///   - sources: Collection of search sources to be used.
     ///   - viewpoint: The `Viewpoint` used to pan/zoom to results. If `nil`, there will be
     ///   no zooming to results.
-    ///   - geoViewExtent: The current map/scene view extent.  Defaults to `nil`.  Used to allow
-    ///   repeat searches after panning/zooming the map.  Set to nil if repeat search behavior is not wanted.
-    ///   - isGeoViewNavigating: Denotes whether the geoview is navigating.  Used for the
-    ///   repeat search behavior.
     public init(
-        queryCenter: Binding<Point?>? = nil,
         sources: [SearchSource] = [],
-        viewpoint: Binding<Viewpoint?>? = nil,
-        geoViewExtent: Binding<Envelope?>? = nil,
-        isGeoViewNavigating: Binding<Bool>? = nil
+        viewpoint: Binding<Viewpoint?>? = nil
     ) {
         _viewModel = StateObject(wrappedValue: SearchViewModel(
-            queryCenter: queryCenter,
             sources: sources.isEmpty ? [LocatorSearchSource()] : sources,
             viewpoint: viewpoint
         ))
-  
-        _geoViewExtent = geoViewExtent ?? Binding.constant(nil)
-        _isGeoViewNavigating = isGeoViewNavigating ?? Binding.constant(false)
+        
+        _queryArea = Binding.constant(nil)
+        _queryCenter = Binding.constant(nil)
+        _geoViewExtent = Binding.constant(nil)
+        _isGeoViewNavigating = Binding.constant(false)
     }
     
     /// The view model used by the view. The `SearchViewModel` manages state and handles the
@@ -54,16 +47,25 @@ public struct SearchView: View {
     /// Tracks the current user-entered query. This property drives both suggestions and searches.
     var resultMode: SearchResultMode = .automatic
 
-    /// The search area to be used for the current query.
-    var queryArea: Binding<Geometry?>? = nil
+    /// The search area to be used for the current query.  Defaults to `nil`.
+    ///
+    /// If `nil`, then there is no limiting of the search results to a given area.
+    @Binding var queryArea: Geometry?
+
+    /// Defines the center for the search.  Defaults to `nil`.
+    ///
+    /// If `nil`, does not prioritize the search results around any point.
+    @Binding var queryCenter: Point?
 
     /// The current map/scene view extent. Defaults to `nil`.
     ///
-    /// This should be updated via `geoViewExtent(:)`as the user navigates the map/scene. It will be
-    /// used to determine the value of `isEligibleForRequery` for the 'Repeat
+    /// This will be used to determine the value of `isEligibleForRequery` for the 'Repeat
     /// search here' behavior. If that behavior is not wanted, it should be left `nil`.
     @Binding var geoViewExtent: Envelope?
     
+    /// Determines whether the geoView is navigating in response to user interaction.
+    @Binding private var isGeoViewNavigating: Bool
+
     /// The `GraphicsOverlay` used to display results. If `nil`, no results will be displayed.
     var resultsOverlay: GraphicsOverlay? = nil
     
@@ -110,9 +112,6 @@ public struct SearchView: View {
     
     /// Determines whether the results lists are displayed.
     @State private var isResultListHidden: Bool = false
-    
-    /// Determines whether the geoView is navigating in response to user interaction.
-    @Binding private var isGeoViewNavigating: Bool
 
     public var body: some View {
         VStack {
@@ -176,11 +175,16 @@ public struct SearchView: View {
         .onChange(of: isGeoViewNavigating) { _ in
             viewModel.isGeoViewNavigating = isGeoViewNavigating
         }
+        .onChange(of: queryCenter) { _ in
+            viewModel.queryCenter = queryCenter
+        }
+        .onChange(of: queryArea) { _ in
+            viewModel.queryArea = queryArea
+        }
         .onAppear() {
             viewModel.currentQuery = currentQuery
             viewModel.resultsOverlay = resultsOverlay
             viewModel.resultMode = resultMode
-            viewModel.queryArea = queryArea
         }
     }
 }
@@ -250,11 +254,41 @@ extension SearchView {
     /// The search area to be used for the current query.
     /// - Parameter newQueryArea: The new value.
     /// - Returns: The `SearchView`.
-    public func queryArea(_ newQueryArea: Binding<Geometry?>?) -> Self {
+    public func queryArea(_ newQueryArea: Binding<Geometry?>) -> Self {
         var copy = self
-        copy.queryArea = newQueryArea
+        copy._queryArea = newQueryArea
         return copy
     }
+
+    /// Defines the center for the search.
+    /// - Parameter newQueryCenter: The new value.
+    /// - Returns: The `SearchView`.
+    public func queryCenter(_ newQueryCenter: Binding<Point?>) -> Self {
+        var copy = self
+        copy._queryCenter = newQueryCenter
+        return copy
+    }
+
+    /// The current map/scene view extent.  Defaults to `nil`.  Used to allow repeat searches after
+    /// panning/zooming the map.  Set to `nil` if repeat search behavior is not wanted.
+    /// - Parameter newGeoViewExtent: The new value.
+    /// - Returns: The `SearchView`.
+    public func geoViewExtent(_ newGeoViewExtent: Binding<Envelope?>) -> Self {
+        var copy = self
+        copy._geoViewExtent = newGeoViewExtent
+        return copy
+    }
+
+    /// Denotes whether the geoview is navigating.  Used for the repeat search behavior.
+    /// - Parameter newIsGeoViewNavigating: The new value.
+    /// - Returns: The `SearchView`.
+    public func isGeoViewNavigating(_ newIsGeoViewNavigating: Binding<Bool>) -> Self {
+        var copy = self
+        copy._isGeoViewNavigating = newIsGeoViewNavigating
+        return copy
+    }
+
+    
 }
 
 /// A View displaying the list of search results.

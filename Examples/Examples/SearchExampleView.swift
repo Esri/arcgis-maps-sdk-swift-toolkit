@@ -34,10 +34,17 @@ struct SearchExampleView: View {
     
     /// The `GraphicsOverlay` used by the `SearchView` to display search results on the map.
     let searchResultsOverlay = GraphicsOverlay()
-
+    
+    /// Denotes whether the geoview is navigating.  Used for the repeat search behavior.
     @State var isGeoViewNavigating: Bool = false
+    
+    /// The current map/scene view extent.  Used to allow repeat searches after panning/zooming the map.
     @State var geoViewExtent: Envelope? = nil
+
+    /// The search area to be used for the current query
     @State var queryArea: Geometry? = nil
+
+    /// Defines the center for the search.
     @State var queryCenter: Point? = nil
 
     var body: some View {
@@ -51,25 +58,24 @@ struct SearchExampleView: View {
                 queryCenter = $0.targetGeometry as? Point
             }
             .onVisibleAreaChanged { newValue in
-                // For "Repeat Search Here" behavior, pass the `geoViewExtent`
-                // to the `searchView.geoViewExtent` modifier.
+                // For "Repeat Search Here" behavior, use the `geoViewExtent` and
+                // `isGeoViewNavigating` modifiers on the `SearchView`.
                 geoViewExtent = newValue.extent
                 
-                // You can also use the visible area in the `SearchView`
-                // initializer to limit the results to `queryArea`
-                // to limit the search results.
+                // The visible area can be used to limit the results by
+                // using the `queryArea` modifier on the `SearchView`.
 //                queryArea = newValue
             }
             .overlay(alignment: .topTrailing) {
                 SearchView(
-                    queryCenter: $queryCenter,
                     sources: [locatorDataSource],
-                    viewpoint: $searchResultViewpoint,
-                    geoViewExtent: $geoViewExtent,
-                    isGeoViewNavigating: $isGeoViewNavigating
+                    viewpoint: $searchResultViewpoint
                 )
                     .resultsOverlay(searchResultsOverlay)
-//                    .queryArea($queryArea)
+//                    .queryArea(queryArea)
+                    .queryCenter($queryCenter)
+                    .geoViewExtent($geoViewExtent)
+                    .isGeoViewNavigating($isGeoViewNavigating)
                     .padding()
             }
     }
