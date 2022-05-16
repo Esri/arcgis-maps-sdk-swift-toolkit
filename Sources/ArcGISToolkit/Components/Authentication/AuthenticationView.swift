@@ -21,6 +21,6 @@ public struct AuthenticationView: View {
     var challenge: QueuedChallenge
     
     public var body: some View {
-        UsernamePasswordView(viewModel: UsernamePasswordViewModel(challenge: challenge))
+        UsernamePasswordView(viewModel: TokenCredentialViewModel(challenge: challenge as! QueuedArcGISChallenge))
     }
 }

@@ -17,9 +17,8 @@ import ArcGISToolkit
 
 struct AuthenticationExampleView: View {
     @ObservedObject var authenticator = Authenticator(
-        oAuthConfigurations: [
-            .arcgisDotCom
-        ]
+        oAuthConfigurations: [.arcgisDotCom],
+        trustedHosts: ["rt-server107a.esri.com"]
     )
     @State var previousApiKey: APIKey?
     @State private var items = AuthenticationItem.makeAll()
@@ -180,12 +179,20 @@ extension AuthenticationItem {
             ]
         )
     }
+    static func makeIWAPortal() -> AuthenticationItem {
+        AuthenticationItem(
+            title: "IWA Portal",
+            loadables: [Portal.init(url: URL(string: "https://dev0004327.esri.com/portal")!)]
+        )
+    }
+    
     static func makeAll() -> [AuthenticationItem]  {
         [
-            .makeToken(),
-            .makeMultipleToken(),
-            .makeMultipleTokenSame(),
-            .makePortal()
+            makeToken(),
+            makeMultipleToken(),
+            makeMultipleTokenSame(),
+            makePortal(),
+            makeIWAPortal()
         ]
     }
 }
