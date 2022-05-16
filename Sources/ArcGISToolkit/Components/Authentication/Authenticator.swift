@@ -58,7 +58,7 @@ public final class QueuedURLChallenge: QueuedChallenge {
         self.urlChallenge = urlChallenge
     }
 
-    func resume(with result: Result<URLSession.AuthChallengeDisposition, Error>) {
+    func resume(with result: Result<(URLSession.AuthChallengeDisposition, URLCredential?), Error>) {
         guard _result == nil else { return }
         _result = result
     }
@@ -71,9 +71,9 @@ public final class QueuedURLChallenge: QueuedChallenge {
     /// Use a streamed property because we need to support multiple listeners
     /// to know when the challenge completed.
     @Streamed
-    private var _result: Result<URLSession.AuthChallengeDisposition, Error>?
+    private var _result: Result<(URLSession.AuthChallengeDisposition, URLCredential?), Error>?
     
-    var disposition: URLSession.AuthChallengeDisposition {
+    var dispositionAndCredential: (URLSession.AuthChallengeDisposition, URLCredential?) {
         get async throws {
             try await $_result
                 .compactMap({ $0 })
@@ -83,7 +83,7 @@ public final class QueuedURLChallenge: QueuedChallenge {
     }
     
     public func complete() async {
-        _ = try? await disposition
+        _ = try? await dispositionAndCredential
     }
 }
 
