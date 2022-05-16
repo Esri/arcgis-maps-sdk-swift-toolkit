@@ -45,7 +45,7 @@ struct SearchExampleView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Defines the center for the search.
 ***REMOVED***@State private var queryCenter: Point? = nil
-
+    
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***MapView(
 ***REMOVED******REMOVED******REMOVED***map: map,
