@@ -21,6 +21,13 @@ public struct AuthenticationView: View {
 ***REMOVED***var challenge: QueuedChallenge
 ***REMOVED***
 ***REMOVED***public var body: some View {
-***REMOVED******REMOVED***UsernamePasswordView(viewModel: TokenCredentialViewModel(challenge: challenge as! QueuedArcGISChallenge))
+***REMOVED******REMOVED***switch challenge {
+***REMOVED******REMOVED***case let challenge as QueuedArcGISChallenge:
+***REMOVED******REMOVED******REMOVED***UsernamePasswordView(viewModel: TokenCredentialViewModel(challenge: challenge))
+***REMOVED******REMOVED***case let challenge as QueuedURLChallenge:
+***REMOVED******REMOVED******REMOVED***UsernamePasswordView(viewModel: URLCredentialUsernamePasswordViewModel(challenge: challenge))
+***REMOVED******REMOVED***default:
+***REMOVED******REMOVED******REMOVED***fatalError()
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
