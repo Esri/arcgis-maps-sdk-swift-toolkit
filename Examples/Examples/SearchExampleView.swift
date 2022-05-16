@@ -16,6 +16,7 @@ import ArcGIS
 import ArcGISToolkit
 
 struct SearchExampleView: View {
+    /// Provides search behavior customization.
     let locatorDataSource = SmartLocatorSearchSource(
         name: "My locator",
         maximumResults: 16,
