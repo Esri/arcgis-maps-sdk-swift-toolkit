@@ -58,32 +58,31 @@ public final class QueuedURLChallenge: QueuedChallenge {
 ***REMOVED******REMOVED***self.urlChallenge = urlChallenge
 ***REMOVED***
 
-***REMOVED***func resume(with result: Result<(URLSession.AuthChallengeDisposition, URLCredential?), Error>) {
-***REMOVED******REMOVED***guard _result == nil else { return ***REMOVED***
-***REMOVED******REMOVED***_result = result
+***REMOVED***func resume(with dispositionAndCredential: (URLSession.AuthChallengeDisposition, URLCredential?)) {
+***REMOVED******REMOVED***guard _dispositionAndCredential == nil else { return ***REMOVED***
+***REMOVED******REMOVED***_dispositionAndCredential = dispositionAndCredential
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func cancel() {
-***REMOVED******REMOVED***guard _result == nil else { return ***REMOVED***
-***REMOVED******REMOVED***_result = .failure(CancellationError())
+***REMOVED******REMOVED***guard _dispositionAndCredential == nil else { return ***REMOVED***
+***REMOVED******REMOVED***_dispositionAndCredential = (.cancelAuthenticationChallenge, nil)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Use a streamed property because we need to support multiple listeners
 ***REMOVED******REMOVED***/ to know when the challenge completed.
 ***REMOVED***@Streamed
-***REMOVED***private var _result: Result<(URLSession.AuthChallengeDisposition, URLCredential?), Error>?
+***REMOVED***private var _dispositionAndCredential: (URLSession.AuthChallengeDisposition, URLCredential?)?
 ***REMOVED***
 ***REMOVED***var dispositionAndCredential: (URLSession.AuthChallengeDisposition, URLCredential?) {
-***REMOVED******REMOVED***get async throws {
-***REMOVED******REMOVED******REMOVED***try await $_result
+***REMOVED******REMOVED***get async {
+***REMOVED******REMOVED******REMOVED***await $_dispositionAndCredential
 ***REMOVED******REMOVED******REMOVED******REMOVED***.compactMap({ $0 ***REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.first(where: { _ in true ***REMOVED***)!
-***REMOVED******REMOVED******REMOVED******REMOVED***.get()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***public func complete() async {
-***REMOVED******REMOVED***_ = try? await dispositionAndCredential
+***REMOVED******REMOVED***_ = await dispositionAndCredential
 ***REMOVED***
 ***REMOVED***
 
@@ -170,17 +169,20 @@ extension Authenticator: AuthenticationChallengeHandler {
 ***REMOVED******REMOVED***scope: URLAuthenticationChallengeScope
 ***REMOVED***) async -> (URLSession.AuthChallengeDisposition, URLCredential?) {
 ***REMOVED******REMOVED***if challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodServerTrust,
-***REMOVED******REMOVED***   let trust = challenge.protectionSpace.serverTrust,
-***REMOVED******REMOVED***   trustedHosts.contains(challenge.protectionSpace.host) {
-***REMOVED******REMOVED******REMOVED******REMOVED*** This will cause a self-signed certificate to be trusted.
-***REMOVED******REMOVED******REMOVED***return (.useCredential, URLCredential(trust: trust))
+***REMOVED******REMOVED***   let trust = challenge.protectionSpace.serverTrust {
+***REMOVED******REMOVED******REMOVED***if trustedHosts.contains(challenge.protectionSpace.host) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** This will cause a self-signed certificate to be trusted.
+***REMOVED******REMOVED******REMOVED******REMOVED***return (.useCredential, URLCredential(trust: trust))
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***return (.performDefaultHandling, nil)
+***REMOVED******REMOVED***
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Queue up the challenge.
 ***REMOVED******REMOVED******REMOVED***let queuedChallenge = QueuedURLChallenge(urlChallenge: challenge)
 ***REMOVED******REMOVED******REMOVED***subject.send(queuedChallenge)
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***return (.performDefaultHandling, nil)
+***REMOVED******REMOVED******REMOVED***return await queuedChallenge.dispositionAndCredential
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***

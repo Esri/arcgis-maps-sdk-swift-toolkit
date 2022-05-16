@@ -225,9 +225,9 @@ private extension UsernamePasswordView {
 ***REMOVED***func signIn() {
 ***REMOVED******REMOVED***isDismissed = true
 ***REMOVED******REMOVED***Task {
-***REMOVED******REMOVED******REMOVED***challenge.resume(with: Result {
-***REMOVED******REMOVED******REMOVED******REMOVED***(.useCredential, URLCredential(user: username, password: password, persistence: .forSession))
-***REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***challenge.resume(
+***REMOVED******REMOVED******REMOVED******REMOVED***with: (.useCredential, URLCredential(user: username, password: password, persistence: .forSession))
+***REMOVED******REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
