@@ -70,6 +70,45 @@
 ***REMOVED***
 ***REMOVED***
 
+@MainActor class URLCredentialUsernamePasswordViewModel: UsernamePasswordViewModel {
+***REMOVED***private let challenge: QueuedURLChallenge
+***REMOVED***
+***REMOVED***init(challenge: QueuedURLChallenge) {
+***REMOVED******REMOVED***self.challenge = challenge
+***REMOVED***
+***REMOVED***
+***REMOVED***@Published var username = "" {
+***REMOVED******REMOVED***didSet { updateSigninButtonEnabled() ***REMOVED***
+***REMOVED***
+***REMOVED***@Published var password = "" {
+***REMOVED******REMOVED***didSet { updateSigninButtonEnabled() ***REMOVED***
+***REMOVED***
+***REMOVED***@Published var signinButtonEnabled = false
+***REMOVED***@Published var isDismissed = false
+***REMOVED***
+***REMOVED***private func updateSigninButtonEnabled() {
+***REMOVED******REMOVED***signinButtonEnabled = !username.isEmpty && !password.isEmpty
+***REMOVED***
+***REMOVED***
+***REMOVED***var challengingHost: String {
+***REMOVED******REMOVED***challenge.urlChallenge.protectionSpace.host
+***REMOVED***
+***REMOVED***
+***REMOVED***func signIn() {
+***REMOVED******REMOVED***isDismissed = true
+***REMOVED******REMOVED***Task {
+***REMOVED******REMOVED******REMOVED***challenge.resume(with: Result {
+***REMOVED******REMOVED******REMOVED******REMOVED***(.useCredential, URLCredential(user: username, password: password, persistence: .forSession))
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***func cancel() {
+***REMOVED******REMOVED***isDismissed = true
+***REMOVED******REMOVED***challenge.cancel()
+***REMOVED***
+***REMOVED***
+
 @MainActor struct UsernamePasswordView<ViewModel: UsernamePasswordViewModel>: View {
 ***REMOVED***init(viewModel: ViewModel) {
 ***REMOVED******REMOVED***self.viewModel = viewModel

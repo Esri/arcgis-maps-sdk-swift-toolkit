@@ -58,7 +58,7 @@ public final class QueuedURLChallenge: QueuedChallenge {
 ***REMOVED******REMOVED***self.urlChallenge = urlChallenge
 ***REMOVED***
 
-***REMOVED***func resume(with result: Result<URLSession.AuthChallengeDisposition, Error>) {
+***REMOVED***func resume(with result: Result<(URLSession.AuthChallengeDisposition, URLCredential?), Error>) {
 ***REMOVED******REMOVED***guard _result == nil else { return ***REMOVED***
 ***REMOVED******REMOVED***_result = result
 ***REMOVED***
@@ -71,9 +71,9 @@ public final class QueuedURLChallenge: QueuedChallenge {
 ***REMOVED******REMOVED***/ Use a streamed property because we need to support multiple listeners
 ***REMOVED******REMOVED***/ to know when the challenge completed.
 ***REMOVED***@Streamed
-***REMOVED***private var _result: Result<URLSession.AuthChallengeDisposition, Error>?
+***REMOVED***private var _result: Result<(URLSession.AuthChallengeDisposition, URLCredential?), Error>?
 ***REMOVED***
-***REMOVED***var disposition: URLSession.AuthChallengeDisposition {
+***REMOVED***var dispositionAndCredential: (URLSession.AuthChallengeDisposition, URLCredential?) {
 ***REMOVED******REMOVED***get async throws {
 ***REMOVED******REMOVED******REMOVED***try await $_result
 ***REMOVED******REMOVED******REMOVED******REMOVED***.compactMap({ $0 ***REMOVED***)
@@ -83,7 +83,7 @@ public final class QueuedURLChallenge: QueuedChallenge {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***public func complete() async {
-***REMOVED******REMOVED***_ = try? await disposition
+***REMOVED******REMOVED***_ = try? await dispositionAndCredential
 ***REMOVED***
 ***REMOVED***
 
