@@ -25,7 +25,7 @@ import ArcGIS
     func cancel()
 }
 
-@MainActor struct UsernamePasswordView<ViewModel: UsernamePasswordViewModel>: View {
+struct UsernamePasswordView<ViewModel: UsernamePasswordViewModel>: View {
     init(viewModel: ViewModel) {
         self.viewModel = viewModel
     }
@@ -123,8 +123,7 @@ private extension UsernamePasswordView {
     }
 }
 
-
-@MainActor class MockUsernamePasswordViewModel: UsernamePasswordViewModel {
+class MockUsernamePasswordViewModel: UsernamePasswordViewModel {
     init(challengingHost: String) {
         self.challengingHost = challengingHost
     }
@@ -153,7 +152,7 @@ private extension UsernamePasswordView {
     }
 }
 
-@MainActor class TokenCredentialViewModel: UsernamePasswordViewModel {
+class TokenCredentialViewModel: UsernamePasswordViewModel {
     private let challenge: QueuedArcGISChallenge
     
     init(challenge: QueuedArcGISChallenge) {
@@ -198,7 +197,7 @@ private extension UsernamePasswordView {
     }
 }
 
-@MainActor class URLCredentialUsernamePasswordViewModel: UsernamePasswordViewModel {
+class URLCredentialUsernamePasswordViewModel: UsernamePasswordViewModel {
     private let challenge: QueuedURLChallenge
     
     init(challenge: QueuedURLChallenge) {

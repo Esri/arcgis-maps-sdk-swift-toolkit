@@ -25,6 +25,26 @@ public struct AuthenticationView: View {
         case let challenge as QueuedArcGISChallenge:
             UsernamePasswordView(viewModel: TokenCredentialViewModel(challenge: challenge))
         case let challenge as QueuedURLChallenge:
+            view(forURLChallenge: challenge)
+        default:
+            fatalError()
+        }
+    }
+    
+    @MainActor
+    @ViewBuilder
+    func view(forURLChallenge challenge: QueuedURLChallenge) -> some View {
+        switch challenge.urlChallenge.protectionSpace.authenticationMethod {
+        case NSURLAuthenticationMethodServerTrust:
+            TrustHostView(viewModel: TrustHostChallengeViewModel(challenge: challenge))
+        case NSURLAuthenticationMethodClientCertificate:
+            // TODO: Show certificate picker
+            fatalError()
+        case NSURLAuthenticationMethodDefault,
+            NSURLAuthenticationMethodNTLM,
+            NSURLAuthenticationMethodHTMLForm,
+            NSURLAuthenticationMethodHTTPBasic,
+        NSURLAuthenticationMethodHTTPDigest:
             UsernamePasswordView(viewModel: URLCredentialUsernamePasswordViewModel(challenge: challenge))
         default:
             fatalError()
