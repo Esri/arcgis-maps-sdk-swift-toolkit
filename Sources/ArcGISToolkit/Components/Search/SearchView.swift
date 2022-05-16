@@ -380,6 +380,8 @@ struct ResultRow: View {
                         .foregroundColor(.secondary)
                 }
             }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .contentShape(Rectangle())
         }
         .padding(EdgeInsets(top: 2, leading: 0, bottom: 2, trailing: 0))
     }
