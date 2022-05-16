@@ -26,7 +26,7 @@ struct SearchExampleView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ The `GraphicsOverlay` used by the `SearchView` to display search results on the map.
 ***REMOVED***private let searchResultsOverlay = GraphicsOverlay()
-
+***REMOVED***
 ***REMOVED******REMOVED***/ The map viewpoint used by the `SearchView` to pan/zoom the map
 ***REMOVED******REMOVED***/ to the extent of the search results.
 ***REMOVED***@State private var searchResultViewpoint: Viewpoint? = Viewpoint(
