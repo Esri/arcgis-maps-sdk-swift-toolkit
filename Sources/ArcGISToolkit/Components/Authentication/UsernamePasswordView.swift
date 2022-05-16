@@ -25,90 +25,6 @@ import ArcGIS
     func cancel()
 }
 
-@MainActor class TokenCredentialViewModel: UsernamePasswordViewModel {
-    private let challenge: QueuedArcGISChallenge
-    
-    init(challenge: QueuedArcGISChallenge) {
-        self.challenge = challenge
-    }
-    
-    @Published var username = "" {
-        didSet { updateSigninButtonEnabled() }
-    }
-    @Published var password = "" {
-        didSet { updateSigninButtonEnabled() }
-    }
-    @Published var signinButtonEnabled = false
-    @Published var isDismissed = false
-    
-    private func updateSigninButtonEnabled() {
-        signinButtonEnabled = !username.isEmpty && !password.isEmpty
-    }
-    
-    var challengingHost: String {
-        challenge.arcGISChallenge.request.url!.host!
-    }
-    
-    func signIn() {
-        isDismissed = true
-        Task {
-            challenge.resume(with: await Result {
-                .useCredential(
-                    try await .token(
-                        challenge: challenge.arcGISChallenge,
-                        username: username,
-                        password: password
-                    )
-                )
-            })
-        }
-    }
-    
-    func cancel() {
-        isDismissed = true
-        challenge.cancel()
-    }
-}
-
-@MainActor class URLCredentialUsernamePasswordViewModel: UsernamePasswordViewModel {
-    private let challenge: QueuedURLChallenge
-    
-    init(challenge: QueuedURLChallenge) {
-        self.challenge = challenge
-    }
-    
-    @Published var username = "" {
-        didSet { updateSigninButtonEnabled() }
-    }
-    @Published var password = "" {
-        didSet { updateSigninButtonEnabled() }
-    }
-    @Published var signinButtonEnabled = false
-    @Published var isDismissed = false
-    
-    private func updateSigninButtonEnabled() {
-        signinButtonEnabled = !username.isEmpty && !password.isEmpty
-    }
-    
-    var challengingHost: String {
-        challenge.urlChallenge.protectionSpace.host
-    }
-    
-    func signIn() {
-        isDismissed = true
-        Task {
-            challenge.resume(with: Result {
-                (.useCredential, URLCredential(user: username, password: password, persistence: .forSession))
-            })
-        }
-    }
-    
-    func cancel() {
-        isDismissed = true
-        challenge.cancel()
-    }
-}
-
 @MainActor struct UsernamePasswordView<ViewModel: UsernamePasswordViewModel>: View {
     init(viewModel: ViewModel) {
         self.viewModel = viewModel
@@ -193,16 +109,130 @@ import ArcGIS
     }
 }
 
-//struct UsernamePasswordView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        UsernamePasswordView(viewModel: UsernamePasswordViewModel(challengingHost: "arcgis.com"))
-//    }
-//}
+struct UsernamePasswordView_Previews: PreviewProvider {
+    static var previews: some View {
+        UsernamePasswordView(viewModel: MockUsernamePasswordViewModel(challengingHost: "arcgis.com"))
+    }
+}
 
 private extension UsernamePasswordView {
     /// A type that represents the fields in the user name and password sign-in form.
     enum Field: Hashable {
         case username
         case password
+    }
+}
+
+
+@MainActor class MockUsernamePasswordViewModel: UsernamePasswordViewModel {
+    init(challengingHost: String) {
+        self.challengingHost = challengingHost
+    }
+    
+    @Published var username = "" {
+        didSet { updateSigninButtonEnabled() }
+    }
+    @Published var password = "" {
+        didSet { updateSigninButtonEnabled() }
+    }
+    @Published var signinButtonEnabled = false
+    @Published var isDismissed = false
+    
+    private func updateSigninButtonEnabled() {
+        signinButtonEnabled = !username.isEmpty && !password.isEmpty
+    }
+    
+    let challengingHost: String
+    
+    func signIn() {
+        isDismissed = true
+    }
+    
+    func cancel() {
+        isDismissed = true
+    }
+}
+
+@MainActor class TokenCredentialViewModel: UsernamePasswordViewModel {
+    private let challenge: QueuedArcGISChallenge
+    
+    init(challenge: QueuedArcGISChallenge) {
+        self.challenge = challenge
+    }
+    
+    @Published var username = "" {
+        didSet { updateSigninButtonEnabled() }
+    }
+    @Published var password = "" {
+        didSet { updateSigninButtonEnabled() }
+    }
+    @Published var signinButtonEnabled = false
+    @Published var isDismissed = false
+    
+    private func updateSigninButtonEnabled() {
+        signinButtonEnabled = !username.isEmpty && !password.isEmpty
+    }
+    
+    var challengingHost: String {
+        challenge.arcGISChallenge.request.url!.host!
+    }
+    
+    func signIn() {
+        isDismissed = true
+        Task {
+            challenge.resume(with: await Result {
+                .useCredential(
+                    try await .token(
+                        challenge: challenge.arcGISChallenge,
+                        username: username,
+                        password: password
+                    )
+                )
+            })
+        }
+    }
+    
+    func cancel() {
+        isDismissed = true
+        challenge.cancel()
+    }
+}
+
+@MainActor class URLCredentialUsernamePasswordViewModel: UsernamePasswordViewModel {
+    private let challenge: QueuedURLChallenge
+    
+    init(challenge: QueuedURLChallenge) {
+        self.challenge = challenge
+    }
+    
+    @Published var username = "" {
+        didSet { updateSigninButtonEnabled() }
+    }
+    @Published var password = "" {
+        didSet { updateSigninButtonEnabled() }
+    }
+    @Published var signinButtonEnabled = false
+    @Published var isDismissed = false
+    
+    private func updateSigninButtonEnabled() {
+        signinButtonEnabled = !username.isEmpty && !password.isEmpty
+    }
+    
+    var challengingHost: String {
+        challenge.urlChallenge.protectionSpace.host
+    }
+    
+    func signIn() {
+        isDismissed = true
+        Task {
+            challenge.resume(with: Result {
+                (.useCredential, URLCredential(user: username, password: password, persistence: .forSession))
+            })
+        }
+    }
+    
+    func cancel() {
+        isDismissed = true
+        challenge.cancel()
     }
 }

@@ -21,6 +21,13 @@ public struct AuthenticationView: View {
     var challenge: QueuedChallenge
     
     public var body: some View {
-        UsernamePasswordView(viewModel: TokenCredentialViewModel(challenge: challenge as! QueuedArcGISChallenge))
+        switch challenge {
+        case let challenge as QueuedArcGISChallenge:
+            UsernamePasswordView(viewModel: TokenCredentialViewModel(challenge: challenge))
+        case let challenge as QueuedURLChallenge:
+            UsernamePasswordView(viewModel: URLCredentialUsernamePasswordViewModel(challenge: challenge))
+        default:
+            fatalError()
+        }
     }
 }
