@@ -16,6 +16,7 @@
 ***REMOVED***Toolkit
 
 struct SearchExampleView: View {
+***REMOVED******REMOVED***/ Provides search behavior customization.
 ***REMOVED***let locatorDataSource = SmartLocatorSearchSource(
 ***REMOVED******REMOVED***name: "My locator",
 ***REMOVED******REMOVED***maximumResults: 16,
