@@ -42,7 +42,7 @@ struct SearchExampleView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ The search area to be used for the current query
 ***REMOVED***@State private var queryArea: Geometry? = nil
-
+***REMOVED***
 ***REMOVED******REMOVED***/ Defines the center for the search.
 ***REMOVED***@State private var queryCenter: Point? = nil
 
