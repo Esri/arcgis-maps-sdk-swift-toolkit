@@ -87,7 +87,7 @@ public final class QueuedURLChallenge: QueuedChallenge {
 ***REMOVED***
 ***REMOVED***
 
-public protocol QueuedChallenge: Identifiable {
+public protocol QueuedChallenge: AnyObject {
 ***REMOVED***func complete() async
 ***REMOVED***
 
@@ -119,7 +119,7 @@ public final class Authenticator: ObservableObject {
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Set the current challenge, this should show the challenge view.
-***REMOVED******REMOVED******REMOVED******REMOVED***currentChallenge = queuedChallenge
+***REMOVED******REMOVED******REMOVED******REMOVED***currentChallenge = IdentifiableQueuedChallenge(queuedChallenge: queuedChallenge)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Wait for the queued challenge to finish.
 ***REMOVED******REMOVED******REMOVED******REMOVED***await queuedChallenge.complete()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Set the current challenge to `nil`, this should dismiss the challenge view.
@@ -129,7 +129,7 @@ public final class Authenticator: ObservableObject {
 ***REMOVED***
 
 ***REMOVED***@Published
-***REMOVED***public var currentChallenge: QueuedChallenge?
+***REMOVED***public var currentChallenge: IdentifiableQueuedChallenge?
 ***REMOVED***
 ***REMOVED***private var subject = PassthroughSubject<QueuedChallenge, Never>()
 ***REMOVED***private var challengeQueue: AsyncPublisher<AnyPublisher<QueuedChallenge, Never>> {
@@ -139,6 +139,14 @@ public final class Authenticator: ObservableObject {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.eraseToAnyPublisher()
 ***REMOVED******REMOVED***)
 ***REMOVED***
+***REMOVED***
+
+public struct IdentifiableQueuedChallenge {
+***REMOVED***public let queuedChallenge: QueuedChallenge
+***REMOVED***
+
+extension IdentifiableQueuedChallenge: Identifiable {
+***REMOVED***public var id: ObjectIdentifier { ObjectIdentifier(queuedChallenge) ***REMOVED***
 ***REMOVED***
 
 extension Authenticator: AuthenticationChallengeHandler {

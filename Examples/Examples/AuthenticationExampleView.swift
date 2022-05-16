@@ -42,7 +42,7 @@ struct AuthenticationExampleView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***.navigationBarTitle(Text("Authentication"), displayMode: .inline)
 ***REMOVED******REMOVED***.sheet(item: $authenticator.currentChallenge) {
-***REMOVED******REMOVED******REMOVED***AuthenticationView(challenge: $0)
+***REMOVED******REMOVED******REMOVED***AuthenticationView(challenge: $0.queuedChallenge)
 ***REMOVED***.onAppear {
 ***REMOVED******REMOVED******REMOVED***ArcGISURLSession.challengeHandler = authenticator
 ***REMOVED***
