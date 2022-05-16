@@ -17,9 +17,8 @@
 
 struct AuthenticationExampleView: View {
 ***REMOVED***@ObservedObject var authenticator = Authenticator(
-***REMOVED******REMOVED***oAuthConfigurations: [
-***REMOVED******REMOVED******REMOVED***.arcgisDotCom
-***REMOVED******REMOVED***]
+***REMOVED******REMOVED***oAuthConfigurations: [.arcgisDotCom],
+***REMOVED******REMOVED***trustedHosts: ["rt-server107a.esri.com"]
 ***REMOVED***)
 ***REMOVED***@State var previousApiKey: APIKey?
 ***REMOVED***@State private var items = AuthenticationItem.makeAll()
@@ -180,12 +179,20 @@ extension AuthenticationItem {
 ***REMOVED******REMOVED******REMOVED***]
 ***REMOVED******REMOVED***)
 ***REMOVED***
+***REMOVED***static func makeIWAPortal() -> AuthenticationItem {
+***REMOVED******REMOVED***AuthenticationItem(
+***REMOVED******REMOVED******REMOVED***title: "IWA Portal",
+***REMOVED******REMOVED******REMOVED***loadables: [Portal.init(url: URL(string: "https:***REMOVED***dev0004327.esri.com/portal")!)]
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
 ***REMOVED***static func makeAll() -> [AuthenticationItem]  {
 ***REMOVED******REMOVED***[
-***REMOVED******REMOVED******REMOVED***.makeToken(),
-***REMOVED******REMOVED******REMOVED***.makeMultipleToken(),
-***REMOVED******REMOVED******REMOVED***.makeMultipleTokenSame(),
-***REMOVED******REMOVED******REMOVED***.makePortal()
+***REMOVED******REMOVED******REMOVED***makeToken(),
+***REMOVED******REMOVED******REMOVED***makeMultipleToken(),
+***REMOVED******REMOVED******REMOVED***makeMultipleTokenSame(),
+***REMOVED******REMOVED******REMOVED***makePortal(),
+***REMOVED******REMOVED******REMOVED***makeIWAPortal()
 ***REMOVED******REMOVED***]
 ***REMOVED***
 ***REMOVED***

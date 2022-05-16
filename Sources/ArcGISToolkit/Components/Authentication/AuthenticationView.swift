@@ -21,6 +21,6 @@ public struct AuthenticationView: View {
 ***REMOVED***var challenge: QueuedChallenge
 ***REMOVED***
 ***REMOVED***public var body: some View {
-***REMOVED******REMOVED***UsernamePasswordView(viewModel: UsernamePasswordViewModel(challenge: challenge))
+***REMOVED******REMOVED***UsernamePasswordView(viewModel: TokenCredentialViewModel(challenge: challenge as! QueuedArcGISChallenge))
 ***REMOVED***
 ***REMOVED***

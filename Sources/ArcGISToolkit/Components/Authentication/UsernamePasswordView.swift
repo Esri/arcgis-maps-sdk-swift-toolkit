@@ -14,17 +14,22 @@
 ***REMOVED***
 ***REMOVED***
 
-@MainActor class UsernamePasswordViewModel: ObservableObject {
-***REMOVED***init(challengingHost: String) {
-***REMOVED******REMOVED***self.challengingHost = challengingHost
-***REMOVED******REMOVED***challenge = nil
+@MainActor protocol UsernamePasswordViewModel: ObservableObject {
+***REMOVED***var username: String { get set ***REMOVED***
+***REMOVED***var password: String { get set ***REMOVED***
+***REMOVED***var signinButtonEnabled: Bool { get ***REMOVED***
+***REMOVED***var isDismissed: Bool { get ***REMOVED***
+***REMOVED***var challengingHost: String { get ***REMOVED***
 ***REMOVED***
+***REMOVED***func signIn()
+***REMOVED***func cancel()
 ***REMOVED***
-***REMOVED***private let challenge: QueuedChallenge?
+
+@MainActor class TokenCredentialViewModel: UsernamePasswordViewModel {
+***REMOVED***private let challenge: QueuedArcGISChallenge
 ***REMOVED***
-***REMOVED***init(challenge: QueuedChallenge) {
+***REMOVED***init(challenge: QueuedArcGISChallenge) {
 ***REMOVED******REMOVED***self.challenge = challenge
-***REMOVED******REMOVED***self.challengingHost = challenge.challenge.request.url!.host!
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@Published var username = "" {
@@ -40,39 +45,37 @@
 ***REMOVED******REMOVED***signinButtonEnabled = !username.isEmpty && !password.isEmpty
 ***REMOVED***
 ***REMOVED***
-***REMOVED***let challengingHost: String
+***REMOVED***var challengingHost: String {
+***REMOVED******REMOVED***challenge.arcGISChallenge.request.url!.host!
+***REMOVED***
 ***REMOVED***
 ***REMOVED***func signIn() {
 ***REMOVED******REMOVED***isDismissed = true
-***REMOVED******REMOVED***if let challenge = challenge {
-***REMOVED******REMOVED******REMOVED***Task {
-***REMOVED******REMOVED******REMOVED******REMOVED***challenge.resume(with: await Result {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.useCredential(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try await .token(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***challenge: challenge.challenge,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***username: username,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***password: password
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***Task {
+***REMOVED******REMOVED******REMOVED***challenge.resume(with: await Result {
+***REMOVED******REMOVED******REMOVED******REMOVED***.useCredential(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try await .token(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***challenge: challenge.arcGISChallenge,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***username: username,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***password: password
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func cancel() {
 ***REMOVED******REMOVED***isDismissed = true
-***REMOVED******REMOVED***if let challenge = challenge {
-***REMOVED******REMOVED******REMOVED***challenge.cancel()
-***REMOVED***
+***REMOVED******REMOVED***challenge.cancel()
 ***REMOVED***
 ***REMOVED***
 
-@MainActor struct UsernamePasswordView: View {
-***REMOVED***init(viewModel: UsernamePasswordViewModel) {
+@MainActor struct UsernamePasswordView<ViewModel: UsernamePasswordViewModel>: View {
+***REMOVED***init(viewModel: ViewModel) {
 ***REMOVED******REMOVED***self.viewModel = viewModel
 ***REMOVED***
 ***REMOVED***
-***REMOVED***@ObservedObject private var viewModel: UsernamePasswordViewModel
+***REMOVED***@ObservedObject private var viewModel: ViewModel
 ***REMOVED***
 ***REMOVED******REMOVED***/ The focused field.
 ***REMOVED***@FocusState private var focusedField: Field?
@@ -151,11 +154,11 @@
 ***REMOVED***
 ***REMOVED***
 
-struct UsernamePasswordView_Previews: PreviewProvider {
-***REMOVED***static var previews: some View {
-***REMOVED******REMOVED***UsernamePasswordView(viewModel: UsernamePasswordViewModel(challengingHost: "arcgis.com"))
-***REMOVED***
-***REMOVED***
+***REMOVED***struct UsernamePasswordView_Previews: PreviewProvider {
+***REMOVED******REMOVED***static var previews: some View {
+***REMOVED******REMOVED******REMOVED***UsernamePasswordView(viewModel: UsernamePasswordViewModel(challengingHost: "arcgis.com"))
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***
 
 private extension UsernamePasswordView {
 ***REMOVED******REMOVED***/ A type that represents the fields in the user name and password sign-in form.
