@@ -87,7 +87,7 @@ public final class QueuedURLChallenge: QueuedChallenge {
     }
 }
 
-public protocol QueuedChallenge: Identifiable {
+public protocol QueuedChallenge: AnyObject {
     func complete() async
 }
 
@@ -119,7 +119,7 @@ public final class Authenticator: ObservableObject {
                 )
             } else {
                 // Set the current challenge, this should show the challenge view.
-                currentChallenge = queuedChallenge
+                currentChallenge = IdentifiableQueuedChallenge(queuedChallenge: queuedChallenge)
                 // Wait for the queued challenge to finish.
                 await queuedChallenge.complete()
                 // Set the current challenge to `nil`, this should dismiss the challenge view.
@@ -129,7 +129,7 @@ public final class Authenticator: ObservableObject {
     }
 
     @Published
-    public var currentChallenge: QueuedChallenge?
+    public var currentChallenge: IdentifiableQueuedChallenge?
     
     private var subject = PassthroughSubject<QueuedChallenge, Never>()
     private var challengeQueue: AsyncPublisher<AnyPublisher<QueuedChallenge, Never>> {
@@ -139,6 +139,14 @@ public final class Authenticator: ObservableObject {
                 .eraseToAnyPublisher()
         )
     }
+}
+
+public struct IdentifiableQueuedChallenge {
+    public let queuedChallenge: QueuedChallenge
+}
+
+extension IdentifiableQueuedChallenge: Identifiable {
+    public var id: ObjectIdentifier { ObjectIdentifier(queuedChallenge) }
 }
 
 extension Authenticator: AuthenticationChallengeHandler {

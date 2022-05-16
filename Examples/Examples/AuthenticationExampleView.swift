@@ -42,7 +42,7 @@ struct AuthenticationExampleView: View {
         }
         .navigationBarTitle(Text("Authentication"), displayMode: .inline)
         .sheet(item: $authenticator.currentChallenge) {
-            AuthenticationView(challenge: $0)
+            AuthenticationView(challenge: $0.queuedChallenge)
         }.onAppear {
             ArcGISURLSession.challengeHandler = authenticator
         }
