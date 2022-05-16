@@ -25,6 +25,26 @@ public struct AuthenticationView: View {
 ***REMOVED******REMOVED***case let challenge as QueuedArcGISChallenge:
 ***REMOVED******REMOVED******REMOVED***UsernamePasswordView(viewModel: TokenCredentialViewModel(challenge: challenge))
 ***REMOVED******REMOVED***case let challenge as QueuedURLChallenge:
+***REMOVED******REMOVED******REMOVED***view(forURLChallenge: challenge)
+***REMOVED******REMOVED***default:
+***REMOVED******REMOVED******REMOVED***fatalError()
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***@MainActor
+***REMOVED***@ViewBuilder
+***REMOVED***func view(forURLChallenge challenge: QueuedURLChallenge) -> some View {
+***REMOVED******REMOVED***switch challenge.urlChallenge.protectionSpace.authenticationMethod {
+***REMOVED******REMOVED***case NSURLAuthenticationMethodServerTrust:
+***REMOVED******REMOVED******REMOVED***TrustHostView(viewModel: TrustHostChallengeViewModel(challenge: challenge))
+***REMOVED******REMOVED***case NSURLAuthenticationMethodClientCertificate:
+***REMOVED******REMOVED******REMOVED******REMOVED*** TODO: Show certificate picker
+***REMOVED******REMOVED******REMOVED***fatalError()
+***REMOVED******REMOVED***case NSURLAuthenticationMethodDefault,
+***REMOVED******REMOVED******REMOVED***NSURLAuthenticationMethodNTLM,
+***REMOVED******REMOVED******REMOVED***NSURLAuthenticationMethodHTMLForm,
+***REMOVED******REMOVED******REMOVED***NSURLAuthenticationMethodHTTPBasic,
+***REMOVED******REMOVED***NSURLAuthenticationMethodHTTPDigest:
 ***REMOVED******REMOVED******REMOVED***UsernamePasswordView(viewModel: URLCredentialUsernamePasswordViewModel(challenge: challenge))
 ***REMOVED******REMOVED***default:
 ***REMOVED******REMOVED******REMOVED***fatalError()

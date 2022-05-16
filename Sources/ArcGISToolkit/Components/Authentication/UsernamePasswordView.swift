@@ -25,7 +25,7 @@
 ***REMOVED***func cancel()
 ***REMOVED***
 
-@MainActor struct UsernamePasswordView<ViewModel: UsernamePasswordViewModel>: View {
+struct UsernamePasswordView<ViewModel: UsernamePasswordViewModel>: View {
 ***REMOVED***init(viewModel: ViewModel) {
 ***REMOVED******REMOVED***self.viewModel = viewModel
 ***REMOVED***
@@ -123,8 +123,7 @@ private extension UsernamePasswordView {
 ***REMOVED***
 ***REMOVED***
 
-
-@MainActor class MockUsernamePasswordViewModel: UsernamePasswordViewModel {
+class MockUsernamePasswordViewModel: UsernamePasswordViewModel {
 ***REMOVED***init(challengingHost: String) {
 ***REMOVED******REMOVED***self.challengingHost = challengingHost
 ***REMOVED***
@@ -153,7 +152,7 @@ private extension UsernamePasswordView {
 ***REMOVED***
 ***REMOVED***
 
-@MainActor class TokenCredentialViewModel: UsernamePasswordViewModel {
+class TokenCredentialViewModel: UsernamePasswordViewModel {
 ***REMOVED***private let challenge: QueuedArcGISChallenge
 ***REMOVED***
 ***REMOVED***init(challenge: QueuedArcGISChallenge) {
@@ -198,7 +197,7 @@ private extension UsernamePasswordView {
 ***REMOVED***
 ***REMOVED***
 
-@MainActor class URLCredentialUsernamePasswordViewModel: UsernamePasswordViewModel {
+class URLCredentialUsernamePasswordViewModel: UsernamePasswordViewModel {
 ***REMOVED***private let challenge: QueuedURLChallenge
 ***REMOVED***
 ***REMOVED***init(challenge: QueuedURLChallenge) {

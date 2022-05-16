@@ -168,21 +168,39 @@ extension Authenticator: AuthenticationChallengeHandler {
 ***REMOVED******REMOVED***_ challenge: URLAuthenticationChallenge,
 ***REMOVED******REMOVED***scope: URLAuthenticationChallengeScope
 ***REMOVED***) async -> (URLSession.AuthChallengeDisposition, URLCredential?) {
-***REMOVED******REMOVED***if challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodServerTrust,
-***REMOVED******REMOVED***   let trust = challenge.protectionSpace.serverTrust {
-***REMOVED******REMOVED******REMOVED***if trustedHosts.contains(challenge.protectionSpace.host) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** This will cause a self-signed certificate to be trusted.
-***REMOVED******REMOVED******REMOVED******REMOVED***return (.useCredential, URLCredential(trust: trust))
-***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***return (.performDefaultHandling, nil)
-***REMOVED******REMOVED***
-***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED*** Queue up the challenge.
-***REMOVED******REMOVED******REMOVED***let queuedChallenge = QueuedURLChallenge(urlChallenge: challenge)
-***REMOVED******REMOVED******REMOVED***subject.send(queuedChallenge)
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***return await queuedChallenge.dispositionAndCredential
+***REMOVED******REMOVED***guard challenge.protectionSpace.authenticationMethod != NSURLAuthenticationMethodDefault else {
+***REMOVED******REMOVED******REMOVED***return (.performDefaultHandling, nil)
 ***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Queue up the url challenge.
+***REMOVED******REMOVED***let queuedChallenge = QueuedURLChallenge(urlChallenge: challenge)
+***REMOVED******REMOVED***subject.send(queuedChallenge)
+***REMOVED******REMOVED***return await queuedChallenge.dispositionAndCredential
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***switch challenge.protectionSpace.authenticationMethod {
+***REMOVED******REMOVED******REMOVED***case NSURLAuthenticationMethodServerTrust:
+***REMOVED******REMOVED******REMOVED******REMOVED***if let trust = challenge.protectionSpace.serverTrust {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if trustedHosts.contains(challenge.protectionSpace.host) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Ryan - TODO: Show alert
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** This will cause a self-signed certificate to be trusted.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return (.useCredential, URLCredential(trust: trust))
+***REMOVED******REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return (.performDefaultHandling, nil)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***case NSURLAuthenticationMethodClientCertificate:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Show certificate picker?
+***REMOVED******REMOVED******REMOVED******REMOVED***UIDocumentPickerViewController()
+***REMOVED******REMOVED******REMOVED******REMOVED***fatalError()
+***REMOVED******REMOVED******REMOVED***case NSURLAuthenticationMethodDefault:
+***REMOVED******REMOVED******REMOVED***case NSURLAuthenticationMethodNTLM:
+***REMOVED******REMOVED******REMOVED***case NSURLAuthenticationMethodHTMLForm:
+***REMOVED******REMOVED******REMOVED***case NSURLAuthenticationMethodHTTPBasic:
+***REMOVED******REMOVED******REMOVED***case NSURLAuthenticationMethodHTTPDigest:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Queue up the username and password challenge.
+***REMOVED******REMOVED******REMOVED******REMOVED***let queuedChallenge = QueuedURLChallenge(urlChallenge: challenge)
+***REMOVED******REMOVED******REMOVED******REMOVED***subject.send(queuedChallenge)
+***REMOVED******REMOVED******REMOVED******REMOVED***return await queuedChallenge.dispositionAndCredential
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
