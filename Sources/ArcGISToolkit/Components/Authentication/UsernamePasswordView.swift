@@ -70,6 +70,45 @@ import ArcGIS
     }
 }
 
+@MainActor class URLCredentialUsernamePasswordViewModel: UsernamePasswordViewModel {
+    private let challenge: QueuedURLChallenge
+    
+    init(challenge: QueuedURLChallenge) {
+        self.challenge = challenge
+    }
+    
+    @Published var username = "" {
+        didSet { updateSigninButtonEnabled() }
+    }
+    @Published var password = "" {
+        didSet { updateSigninButtonEnabled() }
+    }
+    @Published var signinButtonEnabled = false
+    @Published var isDismissed = false
+    
+    private func updateSigninButtonEnabled() {
+        signinButtonEnabled = !username.isEmpty && !password.isEmpty
+    }
+    
+    var challengingHost: String {
+        challenge.urlChallenge.protectionSpace.host
+    }
+    
+    func signIn() {
+        isDismissed = true
+        Task {
+            challenge.resume(with: Result {
+                (.useCredential, URLCredential(user: username, password: password, persistence: .forSession))
+            })
+        }
+    }
+    
+    func cancel() {
+        isDismissed = true
+        challenge.cancel()
+    }
+}
+
 @MainActor struct UsernamePasswordView<ViewModel: UsernamePasswordViewModel>: View {
     init(viewModel: ViewModel) {
         self.viewModel = viewModel
