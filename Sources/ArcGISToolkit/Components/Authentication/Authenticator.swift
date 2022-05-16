@@ -58,32 +58,31 @@ public final class QueuedURLChallenge: QueuedChallenge {
         self.urlChallenge = urlChallenge
     }
 
-    func resume(with result: Result<(URLSession.AuthChallengeDisposition, URLCredential?), Error>) {
-        guard _result == nil else { return }
-        _result = result
+    func resume(with dispositionAndCredential: (URLSession.AuthChallengeDisposition, URLCredential?)) {
+        guard _dispositionAndCredential == nil else { return }
+        _dispositionAndCredential = dispositionAndCredential
     }
     
     func cancel() {
-        guard _result == nil else { return }
-        _result = .failure(CancellationError())
+        guard _dispositionAndCredential == nil else { return }
+        _dispositionAndCredential = (.cancelAuthenticationChallenge, nil)
     }
     
     /// Use a streamed property because we need to support multiple listeners
     /// to know when the challenge completed.
     @Streamed
-    private var _result: Result<(URLSession.AuthChallengeDisposition, URLCredential?), Error>?
+    private var _dispositionAndCredential: (URLSession.AuthChallengeDisposition, URLCredential?)?
     
     var dispositionAndCredential: (URLSession.AuthChallengeDisposition, URLCredential?) {
-        get async throws {
-            try await $_result
+        get async {
+            await $_dispositionAndCredential
                 .compactMap({ $0 })
                 .first(where: { _ in true })!
-                .get()
         }
     }
     
     public func complete() async {
-        _ = try? await dispositionAndCredential
+        _ = await dispositionAndCredential
     }
 }
 
@@ -170,17 +169,20 @@ extension Authenticator: AuthenticationChallengeHandler {
         scope: URLAuthenticationChallengeScope
     ) async -> (URLSession.AuthChallengeDisposition, URLCredential?) {
         if challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodServerTrust,
-           let trust = challenge.protectionSpace.serverTrust,
-           trustedHosts.contains(challenge.protectionSpace.host) {
-            // This will cause a self-signed certificate to be trusted.
-            return (.useCredential, URLCredential(trust: trust))
+           let trust = challenge.protectionSpace.serverTrust {
+            if trustedHosts.contains(challenge.protectionSpace.host) {
+                // This will cause a self-signed certificate to be trusted.
+                return (.useCredential, URLCredential(trust: trust))
+            } else {
+                return (.performDefaultHandling, nil)
+            }
         } else {
             
             // Queue up the challenge.
             let queuedChallenge = QueuedURLChallenge(urlChallenge: challenge)
             subject.send(queuedChallenge)
             
-            return (.performDefaultHandling, nil)
+            return await queuedChallenge.dispositionAndCredential
         }
     }
 }

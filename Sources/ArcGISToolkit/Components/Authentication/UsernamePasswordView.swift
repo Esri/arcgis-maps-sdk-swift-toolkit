@@ -225,9 +225,9 @@ private extension UsernamePasswordView {
     func signIn() {
         isDismissed = true
         Task {
-            challenge.resume(with: Result {
-                (.useCredential, URLCredential(user: username, password: password, persistence: .forSession))
-            })
+            challenge.resume(
+                with: (.useCredential, URLCredential(user: username, password: password, persistence: .forSession))
+            )
         }
     }
     
