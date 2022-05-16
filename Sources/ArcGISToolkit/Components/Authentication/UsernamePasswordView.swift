@@ -14,17 +14,22 @@
 import SwiftUI
 import ArcGIS
 
-@MainActor class UsernamePasswordViewModel: ObservableObject {
-    init(challengingHost: String) {
-        self.challengingHost = challengingHost
-        challenge = nil
-    }
+@MainActor protocol UsernamePasswordViewModel: ObservableObject {
+    var username: String { get set }
+    var password: String { get set }
+    var signinButtonEnabled: Bool { get }
+    var isDismissed: Bool { get }
+    var challengingHost: String { get }
     
-    private let challenge: QueuedChallenge?
+    func signIn()
+    func cancel()
+}
+
+@MainActor class TokenCredentialViewModel: UsernamePasswordViewModel {
+    private let challenge: QueuedArcGISChallenge
     
-    init(challenge: QueuedChallenge) {
+    init(challenge: QueuedArcGISChallenge) {
         self.challenge = challenge
-        self.challengingHost = challenge.challenge.request.url!.host!
     }
     
     @Published var username = "" {
@@ -40,39 +45,37 @@ import ArcGIS
         signinButtonEnabled = !username.isEmpty && !password.isEmpty
     }
     
-    let challengingHost: String
+    var challengingHost: String {
+        challenge.arcGISChallenge.request.url!.host!
+    }
     
     func signIn() {
         isDismissed = true
-        if let challenge = challenge {
-            Task {
-                challenge.resume(with: await Result {
-                    .useCredential(
-                        try await .token(
-                            challenge: challenge.challenge,
-                            username: username,
-                            password: password
-                        )
+        Task {
+            challenge.resume(with: await Result {
+                .useCredential(
+                    try await .token(
+                        challenge: challenge.arcGISChallenge,
+                        username: username,
+                        password: password
                     )
-                })
-            }
+                )
+            })
         }
     }
     
     func cancel() {
         isDismissed = true
-        if let challenge = challenge {
-            challenge.cancel()
-        }
+        challenge.cancel()
     }
 }
 
-@MainActor struct UsernamePasswordView: View {
-    init(viewModel: UsernamePasswordViewModel) {
+@MainActor struct UsernamePasswordView<ViewModel: UsernamePasswordViewModel>: View {
+    init(viewModel: ViewModel) {
         self.viewModel = viewModel
     }
     
-    @ObservedObject private var viewModel: UsernamePasswordViewModel
+    @ObservedObject private var viewModel: ViewModel
     
     /// The focused field.
     @FocusState private var focusedField: Field?
@@ -151,11 +154,11 @@ import ArcGIS
     }
 }
 
-struct UsernamePasswordView_Previews: PreviewProvider {
-    static var previews: some View {
-        UsernamePasswordView(viewModel: UsernamePasswordViewModel(challengingHost: "arcgis.com"))
-    }
-}
+//struct UsernamePasswordView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        UsernamePasswordView(viewModel: UsernamePasswordViewModel(challengingHost: "arcgis.com"))
+//    }
+//}
 
 private extension UsernamePasswordView {
     /// A type that represents the fields in the user name and password sign-in form.
