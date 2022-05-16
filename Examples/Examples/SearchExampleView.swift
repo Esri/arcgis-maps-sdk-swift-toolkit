@@ -39,7 +39,7 @@ struct SearchExampleView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ The current map/scene view extent.  Used to allow repeat searches after panning/zooming the map.
 ***REMOVED***@State private var geoViewExtent: Envelope? = nil
-
+***REMOVED***
 ***REMOVED******REMOVED***/ The search area to be used for the current query
 ***REMOVED***@State private var queryArea: Geometry? = nil
 
