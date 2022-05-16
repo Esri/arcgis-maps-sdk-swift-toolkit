@@ -18,7 +18,7 @@ import ArcGISToolkit
 struct AuthenticationExampleView: View {
     @ObservedObject var authenticator = Authenticator(
         oAuthConfigurations: [.arcgisDotCom],
-        trustedHosts: ["rt-server107a.esri.com"]
+        trustedHosts: ["rt-server107a.esri.com", "dev0004327.esri.com"]
     )
     @State var previousApiKey: APIKey?
     @State private var items = AuthenticationItem.makeAll()
