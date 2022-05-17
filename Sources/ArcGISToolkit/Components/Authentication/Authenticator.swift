@@ -22,32 +22,36 @@ public final class QueuedArcGISChallenge: QueuedChallenge {
 ***REMOVED******REMOVED***self.arcGISChallenge = arcGISChallenge
 ***REMOVED***
 
-***REMOVED***func resume(with result: Result<ArcGISAuthenticationChallenge.Disposition, Error>) {
-***REMOVED******REMOVED***guard _result == nil else { return ***REMOVED***
-***REMOVED******REMOVED***_result = result
+***REMOVED***func resume(with response: Response) {
+***REMOVED******REMOVED***guard _response == nil else { return ***REMOVED***
+***REMOVED******REMOVED***_response = response
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func cancel() {
-***REMOVED******REMOVED***guard _result == nil else { return ***REMOVED***
-***REMOVED******REMOVED***_result = .failure(CancellationError())
+***REMOVED******REMOVED***guard _response == nil else { return ***REMOVED***
+***REMOVED******REMOVED***_response = .cancel
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Use a streamed property because we need to support multiple listeners
 ***REMOVED******REMOVED***/ to know when the challenge completed.
 ***REMOVED***@Streamed
-***REMOVED***private var _result: Result<ArcGISAuthenticationChallenge.Disposition, Error>?
+***REMOVED***private var _response: Response?
 ***REMOVED***
-***REMOVED***var disposition: ArcGISAuthenticationChallenge.Disposition {
-***REMOVED******REMOVED***get async throws {
-***REMOVED******REMOVED******REMOVED***try await $_result
+***REMOVED***var response: Response {
+***REMOVED******REMOVED***get async {
+***REMOVED******REMOVED******REMOVED***await $_response
 ***REMOVED******REMOVED******REMOVED******REMOVED***.compactMap({ $0 ***REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.first(where: { _ in true ***REMOVED***)!
-***REMOVED******REMOVED******REMOVED******REMOVED***.get()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***public func complete() async {
-***REMOVED******REMOVED***_ = try? await disposition
+***REMOVED******REMOVED***_ = await response
+***REMOVED***
+***REMOVED***
+***REMOVED***enum Response {
+***REMOVED******REMOVED***case tokenCredential(username: String, password: String)
+***REMOVED******REMOVED***case cancel
 ***REMOVED***
 ***REMOVED***
 
@@ -115,11 +119,12 @@ public final class Authenticator: ObservableObject {
 ***REMOVED******REMOVED******REMOVED***   let config = oAuthConfigurations.first(where: { $0.canBeUsed(for: url) ***REMOVED***) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** For an OAuth challenge, we create the credential and resume.
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Creating the OAuth credential will present the OAuth login view.
-***REMOVED******REMOVED******REMOVED******REMOVED***queuedArcGISChallenge.resume(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***with: await Result {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.useCredential(try await .oauth(configuration: config))
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***fatalError()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***queuedArcGISChallenge.resume(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***with: await Result {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.useCredential(try await .oauth(configuration: config))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Set the current challenge, this should show the challenge view.
 ***REMOVED******REMOVED******REMOVED******REMOVED***currentChallenge = IdentifiableQueuedChallenge(queuedChallenge: queuedChallenge)
@@ -165,14 +170,18 @@ extension Authenticator: AuthenticationChallengeHandler {
 ***REMOVED******REMOVED***subject.send(queuedChallenge)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Wait for it to complete and return the resulting disposition.
-***REMOVED******REMOVED***return try await queuedChallenge.disposition
+***REMOVED******REMOVED***switch await queuedChallenge.response {
+***REMOVED******REMOVED***case .tokenCredential(let username, let password):
+***REMOVED******REMOVED******REMOVED***return try await .useCredential(.token(challenge: challenge, username: username, password: password))
+***REMOVED******REMOVED***case .cancel:
+***REMOVED******REMOVED******REMOVED***return .continueWithoutCredential
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***public func handleURLSessionChallenge(
 ***REMOVED******REMOVED***_ challenge: URLAuthenticationChallenge,
 ***REMOVED******REMOVED***scope: URLAuthenticationChallengeScope
 ***REMOVED***) async -> (URLSession.AuthChallengeDisposition, URLCredential?) {
-***REMOVED******REMOVED******REMOVED***return (.performDefaultHandling, nil)
 ***REMOVED******REMOVED***guard challenge.protectionSpace.authenticationMethod != NSURLAuthenticationMethodDefault else {
 ***REMOVED******REMOVED******REMOVED***return (.performDefaultHandling, nil)
 ***REMOVED***
