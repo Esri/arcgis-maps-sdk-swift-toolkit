@@ -51,6 +51,7 @@ public final class QueuedArcGISChallenge: QueuedChallenge {
 ***REMOVED***
 ***REMOVED***enum Response {
 ***REMOVED******REMOVED***case tokenCredential(username: String, password: String)
+***REMOVED******REMOVED***case oAuth(configuration: OAuthConfiguration)
 ***REMOVED******REMOVED***case cancel
 ***REMOVED***
 ***REMOVED***
@@ -119,12 +120,7 @@ public final class Authenticator: ObservableObject {
 ***REMOVED******REMOVED******REMOVED***   let config = oAuthConfigurations.first(where: { $0.canBeUsed(for: url) ***REMOVED***) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** For an OAuth challenge, we create the credential and resume.
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Creating the OAuth credential will present the OAuth login view.
-***REMOVED******REMOVED******REMOVED******REMOVED***fatalError()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***queuedArcGISChallenge.resume(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***with: await Result {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.useCredential(try await .oauth(configuration: config))
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***queuedArcGISChallenge.resume(with: .oAuth(configuration: config))
 ***REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Set the current challenge, this should show the challenge view.
 ***REMOVED******REMOVED******REMOVED******REMOVED***currentChallenge = IdentifiableQueuedChallenge(queuedChallenge: queuedChallenge)
@@ -173,6 +169,8 @@ extension Authenticator: AuthenticationChallengeHandler {
 ***REMOVED******REMOVED***switch await queuedChallenge.response {
 ***REMOVED******REMOVED***case .tokenCredential(let username, let password):
 ***REMOVED******REMOVED******REMOVED***return try await .useCredential(.token(challenge: challenge, username: username, password: password))
+***REMOVED******REMOVED***case .oAuth(let configuration):
+***REMOVED******REMOVED******REMOVED***return try await .useCredential(.oauth(configuration: configuration))
 ***REMOVED******REMOVED***case .cancel:
 ***REMOVED******REMOVED******REMOVED***return .continueWithoutCredential
 ***REMOVED***
@@ -190,16 +188,28 @@ extension Authenticator: AuthenticationChallengeHandler {
 ***REMOVED******REMOVED******REMOVED***return (.performDefaultHandling, nil)
 ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** If the host is already trusted, then continue trusting it.
-***REMOVED******REMOVED***if let trust = challenge.protectionSpace.serverTrust,
-***REMOVED******REMOVED***   trustedHosts.contains(challenge.protectionSpace.host) {
-***REMOVED******REMOVED******REMOVED***return (.useCredential, URLCredential(trust: trust))
+***REMOVED******REMOVED******REMOVED*** Check for server trust challenge.
+***REMOVED******REMOVED***if challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodServerTrust,
+***REMOVED******REMOVED***   let trust = challenge.protectionSpace.serverTrust {
+***REMOVED******REMOVED******REMOVED***if trustedHosts.contains(challenge.protectionSpace.host) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** If the host is already trusted, then continue trusting it.
+***REMOVED******REMOVED******REMOVED******REMOVED***return (.useCredential, URLCredential(trust: trust))
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** See if the challenge is a recoverable trust failure, if so then we can
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** challenge the user.  If not, then we perform default handling.
+***REMOVED******REMOVED******REMOVED******REMOVED***var secResult = SecTrustResultType.invalid
+***REMOVED******REMOVED******REMOVED******REMOVED***SecTrustGetTrustResult(trust, &secResult)
+***REMOVED******REMOVED******REMOVED******REMOVED***if secResult != .recoverableTrustFailure {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return (.performDefaultHandling, nil)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Queue up the url challenge.
 ***REMOVED******REMOVED***let queuedChallenge = QueuedURLChallenge(urlChallenge: challenge)
 ***REMOVED******REMOVED***subject.send(queuedChallenge)
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Respond accordingly.
 ***REMOVED******REMOVED***switch await queuedChallenge.response {
 ***REMOVED******REMOVED***case .cancel:
 ***REMOVED******REMOVED******REMOVED***return (.cancelAuthenticationChallenge, nil)
