@@ -172,6 +172,7 @@ extension Authenticator: AuthenticationChallengeHandler {
         _ challenge: URLAuthenticationChallenge,
         scope: URLAuthenticationChallengeScope
     ) async -> (URLSession.AuthChallengeDisposition, URLCredential?) {
+        //return (.performDefaultHandling, nil)
         guard challenge.protectionSpace.authenticationMethod != NSURLAuthenticationMethodDefault else {
             return (.performDefaultHandling, nil)
         }
@@ -203,47 +204,5 @@ extension Authenticator: AuthenticationChallengeHandler {
         case .userCredential(let user, let password):
             return (.useCredential, URLCredential(user: user, password: password, persistence: .forSession))
         }
-        
-        //return await queuedChallenge.dispositionAndCredential
-        
-//        // If we trusted a host, then add it to the list of trusted hosts.
-//        if let trust = challenge.protectionSpace.serverTrust,
-//           disposition == .useCredential,
-//        let credential = credential {
-//            if credential.
-//            if trustedHosts.contains(challenge.protectionSpace.host) {
-//                // Ryan - TODO: Show alert
-//                // This will cause a self-signed certificate to be trusted.
-//                return (.useCredential, URLCredential(trust: trust))
-//            } else {
-//                return (.performDefaultHandling, nil)
-//            }
-//        }
-        
-//        switch challenge.protectionSpace.authenticationMethod {
-//        case NSURLAuthenticationMethodServerTrust:
-//            if let trust = challenge.protectionSpace.serverTrust {
-//                if trustedHosts.contains(challenge.protectionSpace.host) {
-//                    // Ryan - TODO: Show alert
-//                    // This will cause a self-signed certificate to be trusted.
-//                    return (.useCredential, URLCredential(trust: trust))
-//                } else {
-//                    return (.performDefaultHandling, nil)
-//                }
-//            }
-//        case NSURLAuthenticationMethodClientCertificate:
-//            // Show certificate picker?
-//            UIDocumentPickerViewController()
-//            fatalError()
-//        case NSURLAuthenticationMethodDefault:
-//        case NSURLAuthenticationMethodNTLM:
-//        case NSURLAuthenticationMethodHTMLForm:
-//        case NSURLAuthenticationMethodHTTPBasic:
-//        case NSURLAuthenticationMethodHTTPDigest:
-//            // Queue up the username and password challenge.
-//            let queuedChallenge = QueuedURLChallenge(urlChallenge: challenge)
-//            subject.send(queuedChallenge)
-//            return await queuedChallenge.dispositionAndCredential
-//        }
     }
 }
