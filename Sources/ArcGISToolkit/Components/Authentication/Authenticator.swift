@@ -19,12 +19,47 @@ import Combine
 public final class Authenticator: ObservableObject {
     let oAuthConfigurations: [OAuthConfiguration]
     var trustedHosts: [String] = []
+    let hasPersistentStore: Bool
     
     public init(
         oAuthConfigurations: [OAuthConfiguration] = []
     ) {
         self.oAuthConfigurations = oAuthConfigurations
+        hasPersistentStore = false
         Task { await observeChallengeQueue() }
+    }
+    
+    /// Foo...
+    /// - Parameters:
+    ///   - oAuthConfigurations: Foo...
+    ///   - access: When the item can be accessed.
+    ///   - accessGroup: The access group that the item will be in.
+    ///   - isSynchronizable: A value indicating whether the item is synchronized with iCloud.
+    public init(
+        oAuthConfigurations: [OAuthConfiguration] = [],
+        access: KeychainAccess,
+        accessGroup: String,
+        isSynchronizable: Bool
+    ) async throws {
+        ArcGISURLSession.credentialStore = try await .makePersistent(
+            access: .whenUnlockedThisDeviceOnly,
+            accessGroup: "",
+            isSynchronizable: false
+        )
+        self.oAuthConfigurations = oAuthConfigurations
+        hasPersistentStore = true
+    }
+    
+    public func clearCredentialStores() async {
+        // Clear ArcGIS Credentials.
+        await ArcGISURLSession.credentialStore.removeAll()
+        
+        // Clear URLCredentials.
+        URLCredentialStorage.shared.removeAllCredentials()
+        
+        // We have to reset the sessions for URLCredential storage to respect the removed credentials
+        ArcGISURLSession.shared = ArcGISURLSession.makeDefaultSharedSession()
+        ArcGISURLSession.sharedBackground = ArcGISURLSession.makeDefaultSharedBackgroundSession()
     }
     
     private func observeChallengeQueue() async {
@@ -133,5 +168,25 @@ extension SecTrust {
         var result = SecTrustResultType.invalid
         SecTrustGetTrustResult(self, &result)
         return result == .recoverableTrustFailure
+    }
+}
+
+extension URLCredentialStorage {
+//    func removeCredentials(for host: String) {
+//        allCredentials.forEach { (protectionSpace: URLProtectionSpace, usernamesToCredentials: [String : URLCredential]) in
+//            guard protectionSpace.host.lowercased() == host.lowercased() else {
+//                return
+//            }
+//            for credential in usernamesToCredentials.values {
+//                remove(credential, for: protectionSpace)
+//            }
+//        }
+//    }
+    func removeAllCredentials() {
+        allCredentials.forEach { (protectionSpace: URLProtectionSpace, usernamesToCredentials: [String : URLCredential]) in
+            for credential in usernamesToCredentials.values {
+                remove(credential, for: protectionSpace)
+            }
+        }
     }
 }
