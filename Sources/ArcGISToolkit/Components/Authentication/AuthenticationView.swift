@@ -14,8 +14,8 @@
 import SwiftUI
 
 public struct AuthenticationView: View {
-    public init(challenge: QueuedChallenge) {
-        self.challenge = challenge
+    public init(challenge: IdentifiableQueuedChallenge) {
+        self.challenge = challenge.queuedChallenge
     }
 
     let challenge: QueuedChallenge

@@ -15,92 +15,6 @@ import ArcGIS
 import SwiftUI
 import Combine
 
-public final class QueuedArcGISChallenge: QueuedChallenge {
-    let arcGISChallenge: ArcGISAuthenticationChallenge
-    
-    init(arcGISChallenge: ArcGISAuthenticationChallenge) {
-        self.arcGISChallenge = arcGISChallenge
-    }
-
-    func resume(with response: Response) {
-        guard _response == nil else { return }
-        _response = response
-    }
-    
-    func cancel() {
-        guard _response == nil else { return }
-        _response = .cancel
-    }
-    
-    /// Use a streamed property because we need to support multiple listeners
-    /// to know when the challenge completed.
-    @Streamed
-    private var _response: Response?
-    
-    var response: Response {
-        get async {
-            await $_response
-                .compactMap({ $0 })
-                .first(where: { _ in true })!
-        }
-    }
-    
-    public func complete() async {
-        _ = await response
-    }
-    
-    enum Response {
-        case tokenCredential(username: String, password: String)
-        case oAuth(configuration: OAuthConfiguration)
-        case cancel
-    }
-}
-
-public final class QueuedURLChallenge: QueuedChallenge {
-    let urlChallenge: URLAuthenticationChallenge
-    
-    init(urlChallenge: URLAuthenticationChallenge) {
-        self.urlChallenge = urlChallenge
-    }
-
-    func resume(with response: Response) {
-        guard _response == nil else { return }
-        _response = response
-    }
-    
-    func cancel() {
-        guard _response == nil else { return }
-        _response = .cancel
-    }
-    
-    /// Use a streamed property because we need to support multiple listeners
-    /// to know when the challenge completed.
-    @Streamed
-    private var _response: (Response)?
-    
-    var response: Response {
-        get async {
-            await $_response
-                .compactMap({ $0 })
-                .first(where: { _ in true })!
-        }
-    }
-    
-    public func complete() async {
-        _ = await response
-    }
-    
-    enum Response {
-        case userCredential(username: String, password: String)
-        case trustHost
-        case cancel
-    }
-}
-
-public protocol QueuedChallenge: AnyObject {
-    func complete() async
-}
-
 @MainActor
 public final class Authenticator: ObservableObject {
     let oAuthConfigurations: [OAuthConfiguration]
@@ -143,14 +57,6 @@ public final class Authenticator: ObservableObject {
                 .eraseToAnyPublisher()
         )
     }
-}
-
-public struct IdentifiableQueuedChallenge {
-    public let queuedChallenge: QueuedChallenge
-}
-
-extension IdentifiableQueuedChallenge: Identifiable {
-    public var id: ObjectIdentifier { ObjectIdentifier(queuedChallenge) }
 }
 
 extension Authenticator: AuthenticationChallengeHandler {
