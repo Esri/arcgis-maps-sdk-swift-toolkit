@@ -17,11 +17,11 @@ import ArcGISToolkit
 
 struct AuthenticationExampleView: View {
     @ObservedObject var authenticator = Authenticator(
-        //oAuthConfigurations: [.arcgisDotCom],
-        //trustedHosts: ["rt-server107a.esri.com", "dev0004327.esri.com"]
+        oAuthConfigurations: [.arcgisDotCom]
     )
     @State var previousApiKey: APIKey?
     @State private var items = AuthenticationItem.makeAll()
+    var logger = ConsoleNetworkLogger(shouldLogResponseData: true)
     
     var body: some View {
         VStack {
@@ -45,6 +45,7 @@ struct AuthenticationExampleView: View {
             AuthenticationView(challenge: $0.queuedChallenge)
         }.onAppear {
             ArcGISURLSession.challengeHandler = authenticator
+            logger.startLogging()
         }
         // Save and restore the API Key.
         // Note: This is only necessary in this example. Other examples make use of the global

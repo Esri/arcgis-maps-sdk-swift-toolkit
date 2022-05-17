@@ -18,7 +18,6 @@ import ArcGIS
     var username: String { get set }
     var password: String { get set }
     var signinButtonEnabled: Bool { get }
-    var isDismissed: Bool { get }
     var challengingHost: String { get }
     
     func signIn()
@@ -135,23 +134,26 @@ class MockUsernamePasswordViewModel: UsernamePasswordViewModel {
         didSet { updateSigninButtonEnabled() }
     }
     @Published var signinButtonEnabled = false
-    @Published var isDismissed = false
+    var respondedToChallenge = false
     
     private func updateSigninButtonEnabled() {
-        signinButtonEnabled = !username.isEmpty && !password.isEmpty
+        signinButtonEnabled = !respondedToChallenge && !username.isEmpty && !password.isEmpty
     }
     
     let challengingHost: String
     
     func signIn() {
-        isDismissed = true
+        respondedToChallenge = true
+        updateSigninButtonEnabled()
     }
     
     func cancel() {
-        isDismissed = true
+        respondedToChallenge = true
+        updateSigninButtonEnabled()
     }
 }
 
+@MainActor
 class TokenCredentialViewModel: UsernamePasswordViewModel {
     private let challenge: QueuedArcGISChallenge
     
@@ -166,10 +168,10 @@ class TokenCredentialViewModel: UsernamePasswordViewModel {
         didSet { updateSigninButtonEnabled() }
     }
     @Published var signinButtonEnabled = false
-    @Published var isDismissed = false
+    var respondedToChallenge = false
     
     private func updateSigninButtonEnabled() {
-        signinButtonEnabled = !username.isEmpty && !password.isEmpty
+        signinButtonEnabled = !respondedToChallenge && !username.isEmpty && !password.isEmpty
     }
     
     var challengingHost: String {
@@ -177,8 +179,19 @@ class TokenCredentialViewModel: UsernamePasswordViewModel {
     }
     
     func signIn() {
-        isDismissed = true
+    
         Task {
+            do {
+                let tokenCredential = try await ArcGISCredential.token(
+                    challenge: challenge.arcGISChallenge,
+                    username: username,
+                    password: password
+                )
+                print("-- tc: \(tokenCredential)")
+            } catch {
+                print("-- error: \(error)")
+            }
+            
             challenge.resume(with: await Result {
                 .useCredential(
                     try await .token(
@@ -192,7 +205,8 @@ class TokenCredentialViewModel: UsernamePasswordViewModel {
     }
     
     func cancel() {
-        isDismissed = true
+        respondedToChallenge = true
+        updateSigninButtonEnabled()
         challenge.cancel()
     }
 }
@@ -211,10 +225,10 @@ class URLCredentialUsernamePasswordViewModel: UsernamePasswordViewModel {
         didSet { updateSigninButtonEnabled() }
     }
     @Published var signinButtonEnabled = false
-    @Published var isDismissed = false
+    var respondedToChallenge = false
     
     private func updateSigninButtonEnabled() {
-        signinButtonEnabled = !username.isEmpty && !password.isEmpty
+        signinButtonEnabled = !respondedToChallenge && !username.isEmpty && !password.isEmpty
     }
     
     var challengingHost: String {
@@ -222,14 +236,16 @@ class URLCredentialUsernamePasswordViewModel: UsernamePasswordViewModel {
     }
     
     func signIn() {
-        isDismissed = true
+        respondedToChallenge = true
+        updateSigninButtonEnabled()
         Task {
             challenge.resume(with: .userCredential(username: username, password: password))
         }
     }
     
     func cancel() {
-        isDismissed = true
+        respondedToChallenge = true
+        updateSigninButtonEnabled()
         challenge.cancel()
     }
 }
