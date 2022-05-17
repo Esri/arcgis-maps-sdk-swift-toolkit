@@ -32,16 +32,11 @@ final class TrustHostChallengeViewModel: TrustHostViewModel {
     }
     
     func allowConnection() {
-        challenge.resume(
-            with: (
-                .useCredential,
-                URLCredential(trust: challenge.urlChallenge.protectionSpace.serverTrust!)
-            )
-        )
+        challenge.resume(with: .trustHost)
     }
     
     func cancel() {
-        challenge.resume(with: (.performDefaultHandling, nil))
+        challenge.cancel()
     }
 }
 

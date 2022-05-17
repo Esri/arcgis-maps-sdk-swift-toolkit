@@ -17,8 +17,8 @@ public struct AuthenticationView: View {
     public init(challenge: QueuedChallenge) {
         self.challenge = challenge
     }
-    
-    var challenge: QueuedChallenge
+
+    let challenge: QueuedChallenge
     
     public var body: some View {
         switch challenge {
