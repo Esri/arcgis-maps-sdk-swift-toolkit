@@ -22,32 +22,36 @@ public final class QueuedArcGISChallenge: QueuedChallenge {
         self.arcGISChallenge = arcGISChallenge
     }
 
-    func resume(with result: Result<ArcGISAuthenticationChallenge.Disposition, Error>) {
-        guard _result == nil else { return }
-        _result = result
+    func resume(with response: Response) {
+        guard _response == nil else { return }
+        _response = response
     }
     
     func cancel() {
-        guard _result == nil else { return }
-        _result = .failure(CancellationError())
+        guard _response == nil else { return }
+        _response = .cancel
     }
     
     /// Use a streamed property because we need to support multiple listeners
     /// to know when the challenge completed.
     @Streamed
-    private var _result: Result<ArcGISAuthenticationChallenge.Disposition, Error>?
+    private var _response: Response?
     
-    var disposition: ArcGISAuthenticationChallenge.Disposition {
-        get async throws {
-            try await $_result
+    var response: Response {
+        get async {
+            await $_response
                 .compactMap({ $0 })
                 .first(where: { _ in true })!
-                .get()
         }
     }
     
     public func complete() async {
-        _ = try? await disposition
+        _ = await response
+    }
+    
+    enum Response {
+        case tokenCredential(username: String, password: String)
+        case cancel
     }
 }
 
@@ -115,11 +119,12 @@ public final class Authenticator: ObservableObject {
                let config = oAuthConfigurations.first(where: { $0.canBeUsed(for: url) }) {
                 // For an OAuth challenge, we create the credential and resume.
                 // Creating the OAuth credential will present the OAuth login view.
-                queuedArcGISChallenge.resume(
-                    with: await Result {
-                        .useCredential(try await .oauth(configuration: config))
-                    }
-                )
+                fatalError()
+//                queuedArcGISChallenge.resume(
+//                    with: await Result {
+//                        .useCredential(try await .oauth(configuration: config))
+//                    }
+//                )
             } else {
                 // Set the current challenge, this should show the challenge view.
                 currentChallenge = IdentifiableQueuedChallenge(queuedChallenge: queuedChallenge)
@@ -165,14 +170,18 @@ extension Authenticator: AuthenticationChallengeHandler {
         subject.send(queuedChallenge)
         
         // Wait for it to complete and return the resulting disposition.
-        return try await queuedChallenge.disposition
+        switch await queuedChallenge.response {
+        case .tokenCredential(let username, let password):
+            return try await .useCredential(.token(challenge: challenge, username: username, password: password))
+        case .cancel:
+            return .continueWithoutCredential
+        }
     }
     
     public func handleURLSessionChallenge(
         _ challenge: URLAuthenticationChallenge,
         scope: URLAuthenticationChallengeScope
     ) async -> (URLSession.AuthChallengeDisposition, URLCredential?) {
-        //return (.performDefaultHandling, nil)
         guard challenge.protectionSpace.authenticationMethod != NSURLAuthenticationMethodDefault else {
             return (.performDefaultHandling, nil)
         }
