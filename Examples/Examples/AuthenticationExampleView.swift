@@ -65,15 +65,6 @@ struct AuthenticationExampleView: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED***private func errorString(for error: Error) -> String {
-***REMOVED******REMOVED***switch error {
-***REMOVED******REMOVED***case is ArcGISAuthenticationChallenge.Error:
-***REMOVED******REMOVED******REMOVED***return "Authentication error"
-***REMOVED******REMOVED***default:
-***REMOVED******REMOVED******REMOVED***return error.localizedDescription
-***REMOVED***
-***REMOVED***
-***REMOVED***
 
 private struct AuthenticationItemView: View {
 ***REMOVED***let loadables: [Loadable]
