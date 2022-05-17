@@ -18,6 +18,7 @@ import ArcGIS
     var username: String { get set }
     var password: String { get set }
     var signinButtonEnabled: Bool { get }
+    var formEnabled: Bool { get }
     var challengingHost: String { get }
     
     func signIn()
@@ -66,6 +67,7 @@ struct UsernamePasswordView<ViewModel: UsernamePasswordViewModel>: View {
                     signinButton
                 }
             }
+            .disabled(!viewModel.formEnabled)
             .navigationTitle("Sign In")
             .navigationBarTitleDisplayMode(.inline)
             .interactiveDismissDisabled()
@@ -99,9 +101,15 @@ struct UsernamePasswordView<ViewModel: UsernamePasswordViewModel>: View {
         Button(action: {
             viewModel.signIn()
         }, label: {
-            Text("Sign In")
-                .frame(maxWidth: .infinity, alignment: .center)
-                .foregroundColor(.white)
+            if viewModel.formEnabled {
+                Text("Sign In")
+                    .frame(maxWidth: .infinity, alignment: .center)
+                    .foregroundColor(.white)
+            } else {
+                ProgressView()
+                    .frame(maxWidth: .infinity, alignment: .center)
+                    .tint(.white)
+            }
         })
             .disabled(!viewModel.signinButtonEnabled)
             .listRowBackground(viewModel.signinButtonEnabled ? Color.accentColor : Color.gray)
@@ -134,22 +142,20 @@ class MockUsernamePasswordViewModel: UsernamePasswordViewModel {
         didSet { updateSigninButtonEnabled() }
     }
     @Published var signinButtonEnabled = false
-    var respondedToChallenge = false
+    @Published var formEnabled: Bool = true
     
     private func updateSigninButtonEnabled() {
-        signinButtonEnabled = !respondedToChallenge && !username.isEmpty && !password.isEmpty
+        signinButtonEnabled = !username.isEmpty && !password.isEmpty
     }
     
     let challengingHost: String
     
     func signIn() {
-        respondedToChallenge = true
-        updateSigninButtonEnabled()
+        formEnabled = false
     }
     
     func cancel() {
-        respondedToChallenge = true
-        updateSigninButtonEnabled()
+        formEnabled = false
     }
 }
 
@@ -168,10 +174,10 @@ class TokenCredentialViewModel: UsernamePasswordViewModel {
         didSet { updateSigninButtonEnabled() }
     }
     @Published var signinButtonEnabled = false
-    var respondedToChallenge = false
+    @Published var formEnabled: Bool = true
     
     private func updateSigninButtonEnabled() {
-        signinButtonEnabled = !respondedToChallenge && !username.isEmpty && !password.isEmpty
+        signinButtonEnabled = !username.isEmpty && !password.isEmpty
     }
     
     var challengingHost: String {
@@ -179,19 +185,8 @@ class TokenCredentialViewModel: UsernamePasswordViewModel {
     }
     
     func signIn() {
-    
+        formEnabled = false
         Task {
-            do {
-                let tokenCredential = try await ArcGISCredential.token(
-                    challenge: challenge.arcGISChallenge,
-                    username: username,
-                    password: password
-                )
-                print("-- tc: \(tokenCredential)")
-            } catch {
-                print("-- error: \(error)")
-            }
-            
             challenge.resume(with: await Result {
                 .useCredential(
                     try await .token(
@@ -205,8 +200,7 @@ class TokenCredentialViewModel: UsernamePasswordViewModel {
     }
     
     func cancel() {
-        respondedToChallenge = true
-        updateSigninButtonEnabled()
+        formEnabled = false
         challenge.cancel()
     }
 }
@@ -225,10 +219,10 @@ class URLCredentialUsernamePasswordViewModel: UsernamePasswordViewModel {
         didSet { updateSigninButtonEnabled() }
     }
     @Published var signinButtonEnabled = false
-    var respondedToChallenge = false
+    @Published var formEnabled: Bool = true
     
     private func updateSigninButtonEnabled() {
-        signinButtonEnabled = !respondedToChallenge && !username.isEmpty && !password.isEmpty
+        signinButtonEnabled = !username.isEmpty && !password.isEmpty
     }
     
     var challengingHost: String {
@@ -236,16 +230,14 @@ class URLCredentialUsernamePasswordViewModel: UsernamePasswordViewModel {
     }
     
     func signIn() {
-        respondedToChallenge = true
-        updateSigninButtonEnabled()
+        formEnabled = false
         Task {
             challenge.resume(with: .userCredential(username: username, password: password))
         }
     }
     
     func cancel() {
-        respondedToChallenge = true
-        updateSigninButtonEnabled()
+        formEnabled = false
         challenge.cancel()
     }
 }
