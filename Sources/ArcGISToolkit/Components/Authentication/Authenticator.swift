@@ -51,6 +51,7 @@ public final class QueuedArcGISChallenge: QueuedChallenge {
     
     enum Response {
         case tokenCredential(username: String, password: String)
+        case oAuth(configuration: OAuthConfiguration)
         case cancel
     }
 }
@@ -119,12 +120,7 @@ public final class Authenticator: ObservableObject {
                let config = oAuthConfigurations.first(where: { $0.canBeUsed(for: url) }) {
                 // For an OAuth challenge, we create the credential and resume.
                 // Creating the OAuth credential will present the OAuth login view.
-                fatalError()
-//                queuedArcGISChallenge.resume(
-//                    with: await Result {
-//                        .useCredential(try await .oauth(configuration: config))
-//                    }
-//                )
+                queuedArcGISChallenge.resume(with: .oAuth(configuration: config))
             } else {
                 // Set the current challenge, this should show the challenge view.
                 currentChallenge = IdentifiableQueuedChallenge(queuedChallenge: queuedChallenge)
@@ -173,6 +169,8 @@ extension Authenticator: AuthenticationChallengeHandler {
         switch await queuedChallenge.response {
         case .tokenCredential(let username, let password):
             return try await .useCredential(.token(challenge: challenge, username: username, password: password))
+        case .oAuth(let configuration):
+            return try await .useCredential(.oauth(configuration: configuration))
         case .cancel:
             return .continueWithoutCredential
         }
@@ -190,16 +188,28 @@ extension Authenticator: AuthenticationChallengeHandler {
             return (.performDefaultHandling, nil)
         }
         
-        // If the host is already trusted, then continue trusting it.
-        if let trust = challenge.protectionSpace.serverTrust,
-           trustedHosts.contains(challenge.protectionSpace.host) {
-            return (.useCredential, URLCredential(trust: trust))
+        // Check for server trust challenge.
+        if challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodServerTrust,
+           let trust = challenge.protectionSpace.serverTrust {
+            if trustedHosts.contains(challenge.protectionSpace.host) {
+                // If the host is already trusted, then continue trusting it.
+                return (.useCredential, URLCredential(trust: trust))
+            } else {
+                // See if the challenge is a recoverable trust failure, if so then we can
+                // challenge the user.  If not, then we perform default handling.
+                var secResult = SecTrustResultType.invalid
+                SecTrustGetTrustResult(trust, &secResult)
+                if secResult != .recoverableTrustFailure {
+                    return (.performDefaultHandling, nil)
+                }
+            }
         }
         
         // Queue up the url challenge.
         let queuedChallenge = QueuedURLChallenge(urlChallenge: challenge)
         subject.send(queuedChallenge)
         
+        // Respond accordingly.
         switch await queuedChallenge.response {
         case .cancel:
             return (.cancelAuthenticationChallenge, nil)
