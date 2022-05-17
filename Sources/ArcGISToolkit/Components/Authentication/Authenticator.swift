@@ -19,12 +19,47 @@ import Combine
 public final class Authenticator: ObservableObject {
 ***REMOVED***let oAuthConfigurations: [OAuthConfiguration]
 ***REMOVED***var trustedHosts: [String] = []
+***REMOVED***let hasPersistentStore: Bool
 ***REMOVED***
 ***REMOVED***public init(
 ***REMOVED******REMOVED***oAuthConfigurations: [OAuthConfiguration] = []
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.oAuthConfigurations = oAuthConfigurations
+***REMOVED******REMOVED***hasPersistentStore = false
 ***REMOVED******REMOVED***Task { await observeChallengeQueue() ***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Foo...
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - oAuthConfigurations: Foo...
+***REMOVED******REMOVED***/   - access: When the item can be accessed.
+***REMOVED******REMOVED***/   - accessGroup: The access group that the item will be in.
+***REMOVED******REMOVED***/   - isSynchronizable: A value indicating whether the item is synchronized with iCloud.
+***REMOVED***public init(
+***REMOVED******REMOVED***oAuthConfigurations: [OAuthConfiguration] = [],
+***REMOVED******REMOVED***access: KeychainAccess,
+***REMOVED******REMOVED***accessGroup: String,
+***REMOVED******REMOVED***isSynchronizable: Bool
+***REMOVED***) async throws {
+***REMOVED******REMOVED***ArcGISURLSession.credentialStore = try await .makePersistent(
+***REMOVED******REMOVED******REMOVED***access: .whenUnlockedThisDeviceOnly,
+***REMOVED******REMOVED******REMOVED***accessGroup: "",
+***REMOVED******REMOVED******REMOVED***isSynchronizable: false
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***self.oAuthConfigurations = oAuthConfigurations
+***REMOVED******REMOVED***hasPersistentStore = true
+***REMOVED***
+***REMOVED***
+***REMOVED***public func clearCredentialStores() async {
+***REMOVED******REMOVED******REMOVED*** Clear ArcGIS Credentials.
+***REMOVED******REMOVED***await ArcGISURLSession.credentialStore.removeAll()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Clear URLCredentials.
+***REMOVED******REMOVED***URLCredentialStorage.shared.removeAllCredentials()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** We have to reset the sessions for URLCredential storage to respect the removed credentials
+***REMOVED******REMOVED***ArcGISURLSession.shared = ArcGISURLSession.makeDefaultSharedSession()
+***REMOVED******REMOVED***ArcGISURLSession.sharedBackground = ArcGISURLSession.makeDefaultSharedBackgroundSession()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***private func observeChallengeQueue() async {
@@ -133,5 +168,25 @@ extension SecTrust {
 ***REMOVED******REMOVED***var result = SecTrustResultType.invalid
 ***REMOVED******REMOVED***SecTrustGetTrustResult(self, &result)
 ***REMOVED******REMOVED***return result == .recoverableTrustFailure
+***REMOVED***
+***REMOVED***
+
+extension URLCredentialStorage {
+***REMOVED******REMOVED***func removeCredentials(for host: String) {
+***REMOVED******REMOVED******REMOVED***allCredentials.forEach { (protectionSpace: URLProtectionSpace, usernamesToCredentials: [String : URLCredential]) in
+***REMOVED******REMOVED******REMOVED******REMOVED***guard protectionSpace.host.lowercased() == host.lowercased() else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***for credential in usernamesToCredentials.values {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***remove(credential, for: protectionSpace)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED***func removeAllCredentials() {
+***REMOVED******REMOVED***allCredentials.forEach { (protectionSpace: URLProtectionSpace, usernamesToCredentials: [String : URLCredential]) in
+***REMOVED******REMOVED******REMOVED***for credential in usernamesToCredentials.values {
+***REMOVED******REMOVED******REMOVED******REMOVED***remove(credential, for: protectionSpace)
+***REMOVED******REMOVED***
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
