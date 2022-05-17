@@ -18,7 +18,6 @@
 ***REMOVED***var username: String { get set ***REMOVED***
 ***REMOVED***var password: String { get set ***REMOVED***
 ***REMOVED***var signinButtonEnabled: Bool { get ***REMOVED***
-***REMOVED***var isDismissed: Bool { get ***REMOVED***
 ***REMOVED***var challengingHost: String { get ***REMOVED***
 ***REMOVED***
 ***REMOVED***func signIn()
@@ -135,23 +134,26 @@ class MockUsernamePasswordViewModel: UsernamePasswordViewModel {
 ***REMOVED******REMOVED***didSet { updateSigninButtonEnabled() ***REMOVED***
 ***REMOVED***
 ***REMOVED***@Published var signinButtonEnabled = false
-***REMOVED***@Published var isDismissed = false
+***REMOVED***var respondedToChallenge = false
 ***REMOVED***
 ***REMOVED***private func updateSigninButtonEnabled() {
-***REMOVED******REMOVED***signinButtonEnabled = !username.isEmpty && !password.isEmpty
+***REMOVED******REMOVED***signinButtonEnabled = !respondedToChallenge && !username.isEmpty && !password.isEmpty
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***let challengingHost: String
 ***REMOVED***
 ***REMOVED***func signIn() {
-***REMOVED******REMOVED***isDismissed = true
+***REMOVED******REMOVED***respondedToChallenge = true
+***REMOVED******REMOVED***updateSigninButtonEnabled()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func cancel() {
-***REMOVED******REMOVED***isDismissed = true
+***REMOVED******REMOVED***respondedToChallenge = true
+***REMOVED******REMOVED***updateSigninButtonEnabled()
 ***REMOVED***
 ***REMOVED***
 
+@MainActor
 class TokenCredentialViewModel: UsernamePasswordViewModel {
 ***REMOVED***private let challenge: QueuedArcGISChallenge
 ***REMOVED***
@@ -166,10 +168,10 @@ class TokenCredentialViewModel: UsernamePasswordViewModel {
 ***REMOVED******REMOVED***didSet { updateSigninButtonEnabled() ***REMOVED***
 ***REMOVED***
 ***REMOVED***@Published var signinButtonEnabled = false
-***REMOVED***@Published var isDismissed = false
+***REMOVED***var respondedToChallenge = false
 ***REMOVED***
 ***REMOVED***private func updateSigninButtonEnabled() {
-***REMOVED******REMOVED***signinButtonEnabled = !username.isEmpty && !password.isEmpty
+***REMOVED******REMOVED***signinButtonEnabled = !respondedToChallenge && !username.isEmpty && !password.isEmpty
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var challengingHost: String {
@@ -177,8 +179,19 @@ class TokenCredentialViewModel: UsernamePasswordViewModel {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func signIn() {
-***REMOVED******REMOVED***isDismissed = true
+***REMOVED***
 ***REMOVED******REMOVED***Task {
+***REMOVED******REMOVED******REMOVED***do {
+***REMOVED******REMOVED******REMOVED******REMOVED***let tokenCredential = try await ArcGISCredential.token(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***challenge: challenge.arcGISChallenge,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***username: username,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***password: password
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***print("-- tc: \(tokenCredential)")
+***REMOVED******REMOVED*** catch {
+***REMOVED******REMOVED******REMOVED******REMOVED***print("-- error: \(error)")
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***challenge.resume(with: await Result {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.useCredential(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try await .token(
@@ -192,7 +205,8 @@ class TokenCredentialViewModel: UsernamePasswordViewModel {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func cancel() {
-***REMOVED******REMOVED***isDismissed = true
+***REMOVED******REMOVED***respondedToChallenge = true
+***REMOVED******REMOVED***updateSigninButtonEnabled()
 ***REMOVED******REMOVED***challenge.cancel()
 ***REMOVED***
 ***REMOVED***
@@ -211,10 +225,10 @@ class URLCredentialUsernamePasswordViewModel: UsernamePasswordViewModel {
 ***REMOVED******REMOVED***didSet { updateSigninButtonEnabled() ***REMOVED***
 ***REMOVED***
 ***REMOVED***@Published var signinButtonEnabled = false
-***REMOVED***@Published var isDismissed = false
+***REMOVED***var respondedToChallenge = false
 ***REMOVED***
 ***REMOVED***private func updateSigninButtonEnabled() {
-***REMOVED******REMOVED***signinButtonEnabled = !username.isEmpty && !password.isEmpty
+***REMOVED******REMOVED***signinButtonEnabled = !respondedToChallenge && !username.isEmpty && !password.isEmpty
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var challengingHost: String {
@@ -222,14 +236,16 @@ class URLCredentialUsernamePasswordViewModel: UsernamePasswordViewModel {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func signIn() {
-***REMOVED******REMOVED***isDismissed = true
+***REMOVED******REMOVED***respondedToChallenge = true
+***REMOVED******REMOVED***updateSigninButtonEnabled()
 ***REMOVED******REMOVED***Task {
 ***REMOVED******REMOVED******REMOVED***challenge.resume(with: .userCredential(username: username, password: password))
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func cancel() {
-***REMOVED******REMOVED***isDismissed = true
+***REMOVED******REMOVED***respondedToChallenge = true
+***REMOVED******REMOVED***updateSigninButtonEnabled()
 ***REMOVED******REMOVED***challenge.cancel()
 ***REMOVED***
 ***REMOVED***

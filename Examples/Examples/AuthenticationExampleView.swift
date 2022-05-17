@@ -17,11 +17,11 @@
 
 struct AuthenticationExampleView: View {
 ***REMOVED***@ObservedObject var authenticator = Authenticator(
-***REMOVED******REMOVED******REMOVED***oAuthConfigurations: [.arcgisDotCom],
-***REMOVED******REMOVED******REMOVED***trustedHosts: ["rt-server107a.esri.com", "dev0004327.esri.com"]
+***REMOVED******REMOVED***oAuthConfigurations: [.arcgisDotCom]
 ***REMOVED***)
 ***REMOVED***@State var previousApiKey: APIKey?
 ***REMOVED***@State private var items = AuthenticationItem.makeAll()
+***REMOVED***var logger = ConsoleNetworkLogger(shouldLogResponseData: true)
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***VStack {
@@ -45,6 +45,7 @@ struct AuthenticationExampleView: View {
 ***REMOVED******REMOVED******REMOVED***AuthenticationView(challenge: $0.queuedChallenge)
 ***REMOVED***.onAppear {
 ***REMOVED******REMOVED******REMOVED***ArcGISURLSession.challengeHandler = authenticator
+***REMOVED******REMOVED******REMOVED***logger.startLogging()
 ***REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Save and restore the API Key.
 ***REMOVED******REMOVED******REMOVED*** Note: This is only necessary in this example. Other examples make use of the global
