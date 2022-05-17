@@ -58,31 +58,37 @@ public final class QueuedURLChallenge: QueuedChallenge {
         self.urlChallenge = urlChallenge
     }
 
-    func resume(with dispositionAndCredential: (URLSession.AuthChallengeDisposition, URLCredential?)) {
-        guard _dispositionAndCredential == nil else { return }
-        _dispositionAndCredential = dispositionAndCredential
+    func resume(with response: Response) {
+        guard _response == nil else { return }
+        _response = response
     }
     
     func cancel() {
-        guard _dispositionAndCredential == nil else { return }
-        _dispositionAndCredential = (.cancelAuthenticationChallenge, nil)
+        guard _response == nil else { return }
+        _response = .cancel
     }
     
     /// Use a streamed property because we need to support multiple listeners
     /// to know when the challenge completed.
     @Streamed
-    private var _dispositionAndCredential: (URLSession.AuthChallengeDisposition, URLCredential?)?
+    private var _response: (Response)?
     
-    var dispositionAndCredential: (URLSession.AuthChallengeDisposition, URLCredential?) {
+    var response: Response {
         get async {
-            await $_dispositionAndCredential
+            await $_response
                 .compactMap({ $0 })
                 .first(where: { _ in true })!
         }
     }
     
     public func complete() async {
-        _ = await dispositionAndCredential
+        _ = await response
+    }
+    
+    enum Response {
+        case userCredential(username: String, password: String)
+        case trustHost
+        case cancel
     }
 }
 
@@ -93,14 +99,12 @@ public protocol QueuedChallenge: AnyObject {
 @MainActor
 public final class Authenticator: ObservableObject {
     let oAuthConfigurations: [OAuthConfiguration]
-    let trustedHosts: [String]
+    var trustedHosts: [String] = []
     
     public init(
-        oAuthConfigurations: [OAuthConfiguration] = [],
-        trustedHosts: [String] = []
+        oAuthConfigurations: [OAuthConfiguration] = []
     ) {
         self.oAuthConfigurations = oAuthConfigurations
-        self.trustedHosts = trustedHosts
         Task { await observeChallengeQueue() }
     }
     
@@ -172,10 +176,49 @@ extension Authenticator: AuthenticationChallengeHandler {
             return (.performDefaultHandling, nil)
         }
         
+        guard challenge.proposedCredential == nil else {
+            return (.performDefaultHandling, nil)
+        }
+        
+        // If the host is already trusted, then continue trusting it.
+        if let trust = challenge.protectionSpace.serverTrust,
+           trustedHosts.contains(challenge.protectionSpace.host) {
+            return (.useCredential, URLCredential(trust: trust))
+        }
+        
         // Queue up the url challenge.
         let queuedChallenge = QueuedURLChallenge(urlChallenge: challenge)
         subject.send(queuedChallenge)
-        return await queuedChallenge.dispositionAndCredential
+        
+        switch await queuedChallenge.response {
+        case .cancel:
+            return (.cancelAuthenticationChallenge, nil)
+        case .trustHost:
+            if let trust = challenge.protectionSpace.serverTrust {
+                trustedHosts.append(challenge.protectionSpace.host)
+                return (.useCredential, URLCredential(trust: trust))
+            } else {
+                return (.performDefaultHandling, nil)
+            }
+        case .userCredential(let user, let password):
+            return (.useCredential, URLCredential(user: user, password: password, persistence: .forSession))
+        }
+        
+        //return await queuedChallenge.dispositionAndCredential
+        
+//        // If we trusted a host, then add it to the list of trusted hosts.
+//        if let trust = challenge.protectionSpace.serverTrust,
+//           disposition == .useCredential,
+//        let credential = credential {
+//            if credential.
+//            if trustedHosts.contains(challenge.protectionSpace.host) {
+//                // Ryan - TODO: Show alert
+//                // This will cause a self-signed certificate to be trusted.
+//                return (.useCredential, URLCredential(trust: trust))
+//            } else {
+//                return (.performDefaultHandling, nil)
+//            }
+//        }
         
 //        switch challenge.protectionSpace.authenticationMethod {
 //        case NSURLAuthenticationMethodServerTrust:
