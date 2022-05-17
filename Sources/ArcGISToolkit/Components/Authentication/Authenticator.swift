@@ -51,6 +51,9 @@ public final class Authenticator: ObservableObject {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***public func clearCredentialStores() async {
+***REMOVED******REMOVED******REMOVED*** Clear trusted hosts
+***REMOVED******REMOVED***trustedHosts.removeAll()
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Clear ArcGIS Credentials.
 ***REMOVED******REMOVED***await ArcGISURLSession.credentialStore.removeAll()
 ***REMOVED******REMOVED***
@@ -146,6 +149,8 @@ extension Authenticator: AuthenticationChallengeHandler {
 ***REMOVED******REMOVED***let queuedChallenge = QueuedURLChallenge(urlChallenge: challenge)
 ***REMOVED******REMOVED***subject.send(queuedChallenge)
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED***let persistence: URLCredential.Persistence = hasPersistentStore ? .permanent : .forSession
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Respond accordingly.
 ***REMOVED******REMOVED***switch await queuedChallenge.response {
 ***REMOVED******REMOVED***case .cancel:
@@ -158,7 +163,7 @@ extension Authenticator: AuthenticationChallengeHandler {
 ***REMOVED******REMOVED******REMOVED******REMOVED***return (.performDefaultHandling, nil)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***case .userCredential(let user, let password):
-***REMOVED******REMOVED******REMOVED***return (.useCredential, URLCredential(user: user, password: password, persistence: .forSession))
+***REMOVED******REMOVED******REMOVED***return (.useCredential, URLCredential(user: user, password: password, persistence: persistence))
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
