@@ -100,14 +100,10 @@ extension Authenticator: AuthenticationChallengeHandler {
 ***REMOVED******REMOVED******REMOVED***if trustedHosts.contains(challenge.protectionSpace.host) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** If the host is already trusted, then continue trusting it.
 ***REMOVED******REMOVED******REMOVED******REMOVED***return (.useCredential, URLCredential(trust: trust))
-***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED*** else if !trust.isRecoverableTrustFailure {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** See if the challenge is a recoverable trust failure, if so then we can
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** challenge the user.  If not, then we perform default handling.
-***REMOVED******REMOVED******REMOVED******REMOVED***var secResult = SecTrustResultType.invalid
-***REMOVED******REMOVED******REMOVED******REMOVED***SecTrustGetTrustResult(trust, &secResult)
-***REMOVED******REMOVED******REMOVED******REMOVED***if secResult != .recoverableTrustFailure {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return (.performDefaultHandling, nil)
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***return (.performDefaultHandling, nil)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***
@@ -129,5 +125,13 @@ extension Authenticator: AuthenticationChallengeHandler {
 ***REMOVED******REMOVED***case .userCredential(let user, let password):
 ***REMOVED******REMOVED******REMOVED***return (.useCredential, URLCredential(user: user, password: password, persistence: .forSession))
 ***REMOVED***
+***REMOVED***
+***REMOVED***
+
+extension SecTrust {
+***REMOVED***var isRecoverableTrustFailure: Bool {
+***REMOVED******REMOVED***var result = SecTrustResultType.invalid
+***REMOVED******REMOVED***SecTrustGetTrustResult(self, &result)
+***REMOVED******REMOVED***return result == .recoverableTrustFailure
 ***REMOVED***
 ***REMOVED***
