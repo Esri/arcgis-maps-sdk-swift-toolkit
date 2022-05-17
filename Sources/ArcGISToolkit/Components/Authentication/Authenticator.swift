@@ -100,14 +100,10 @@ extension Authenticator: AuthenticationChallengeHandler {
             if trustedHosts.contains(challenge.protectionSpace.host) {
                 // If the host is already trusted, then continue trusting it.
                 return (.useCredential, URLCredential(trust: trust))
-            } else {
+            } else if !trust.isRecoverableTrustFailure {
                 // See if the challenge is a recoverable trust failure, if so then we can
                 // challenge the user.  If not, then we perform default handling.
-                var secResult = SecTrustResultType.invalid
-                SecTrustGetTrustResult(trust, &secResult)
-                if secResult != .recoverableTrustFailure {
-                    return (.performDefaultHandling, nil)
-                }
+                return (.performDefaultHandling, nil)
             }
         }
         
@@ -129,5 +125,13 @@ extension Authenticator: AuthenticationChallengeHandler {
         case .userCredential(let user, let password):
             return (.useCredential, URLCredential(user: user, password: password, persistence: .forSession))
         }
+    }
+}
+
+extension SecTrust {
+    var isRecoverableTrustFailure: Bool {
+        var result = SecTrustResultType.invalid
+        SecTrustGetTrustResult(self, &result)
+        return result == .recoverableTrustFailure
     }
 }
