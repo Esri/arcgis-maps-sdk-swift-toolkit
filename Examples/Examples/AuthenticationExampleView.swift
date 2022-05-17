@@ -64,15 +64,6 @@ struct AuthenticationExampleView: View {
             ArcGISRuntimeEnvironment.apiKey = previousApiKey
         }
     }
-    
-    private func errorString(for error: Error) -> String {
-        switch error {
-        case is ArcGISAuthenticationChallenge.Error:
-            return "Authentication error"
-        default:
-            return error.localizedDescription
-        }
-    }
 }
 
 private struct AuthenticationItemView: View {
