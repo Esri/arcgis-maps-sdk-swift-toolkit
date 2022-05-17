@@ -172,7 +172,7 @@ extension Authenticator: AuthenticationChallengeHandler {
         case .oAuth(let configuration):
             return try await .useCredential(.oauth(configuration: configuration))
         case .cancel:
-            return .continueWithoutCredential
+            return .cancelAuthenticationChallenge
         }
     }
     
