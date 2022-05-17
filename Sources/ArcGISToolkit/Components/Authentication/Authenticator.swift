@@ -51,6 +51,9 @@ public final class Authenticator: ObservableObject {
     }
     
     public func clearCredentialStores() async {
+        // Clear trusted hosts
+        trustedHosts.removeAll()
+        
         // Clear ArcGIS Credentials.
         await ArcGISURLSession.credentialStore.removeAll()
         
@@ -146,6 +149,8 @@ extension Authenticator: AuthenticationChallengeHandler {
         let queuedChallenge = QueuedURLChallenge(urlChallenge: challenge)
         subject.send(queuedChallenge)
         
+        let persistence: URLCredential.Persistence = hasPersistentStore ? .permanent : .forSession
+        
         // Respond accordingly.
         switch await queuedChallenge.response {
         case .cancel:
@@ -158,7 +163,7 @@ extension Authenticator: AuthenticationChallengeHandler {
                 return (.performDefaultHandling, nil)
             }
         case .userCredential(let user, let password):
-            return (.useCredential, URLCredential(user: user, password: password, persistence: .forSession))
+            return (.useCredential, URLCredential(user: user, password: password, persistence: persistence))
         }
     }
 }
