@@ -14,8 +14,8 @@
 ***REMOVED***
 
 public struct AuthenticationView: View {
-***REMOVED***public init(challenge: QueuedChallenge) {
-***REMOVED******REMOVED***self.challenge = challenge
+***REMOVED***public init(challenge: IdentifiableQueuedChallenge) {
+***REMOVED******REMOVED***self.challenge = challenge.queuedChallenge
 ***REMOVED***
 
 ***REMOVED***let challenge: QueuedChallenge
