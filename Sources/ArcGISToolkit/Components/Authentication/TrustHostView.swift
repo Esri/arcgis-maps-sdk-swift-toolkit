@@ -32,16 +32,11 @@ final class TrustHostChallengeViewModel: TrustHostViewModel {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func allowConnection() {
-***REMOVED******REMOVED***challenge.resume(
-***REMOVED******REMOVED******REMOVED***with: (
-***REMOVED******REMOVED******REMOVED******REMOVED***.useCredential,
-***REMOVED******REMOVED******REMOVED******REMOVED***URLCredential(trust: challenge.urlChallenge.protectionSpace.serverTrust!)
-***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED***)
+***REMOVED******REMOVED***challenge.resume(with: .trustHost)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func cancel() {
-***REMOVED******REMOVED***challenge.resume(with: (.performDefaultHandling, nil))
+***REMOVED******REMOVED***challenge.cancel()
 ***REMOVED***
 ***REMOVED***
 

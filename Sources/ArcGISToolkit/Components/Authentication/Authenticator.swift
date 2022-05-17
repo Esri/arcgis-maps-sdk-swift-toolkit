@@ -58,31 +58,37 @@ public final class QueuedURLChallenge: QueuedChallenge {
 ***REMOVED******REMOVED***self.urlChallenge = urlChallenge
 ***REMOVED***
 
-***REMOVED***func resume(with dispositionAndCredential: (URLSession.AuthChallengeDisposition, URLCredential?)) {
-***REMOVED******REMOVED***guard _dispositionAndCredential == nil else { return ***REMOVED***
-***REMOVED******REMOVED***_dispositionAndCredential = dispositionAndCredential
+***REMOVED***func resume(with response: Response) {
+***REMOVED******REMOVED***guard _response == nil else { return ***REMOVED***
+***REMOVED******REMOVED***_response = response
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func cancel() {
-***REMOVED******REMOVED***guard _dispositionAndCredential == nil else { return ***REMOVED***
-***REMOVED******REMOVED***_dispositionAndCredential = (.cancelAuthenticationChallenge, nil)
+***REMOVED******REMOVED***guard _response == nil else { return ***REMOVED***
+***REMOVED******REMOVED***_response = .cancel
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Use a streamed property because we need to support multiple listeners
 ***REMOVED******REMOVED***/ to know when the challenge completed.
 ***REMOVED***@Streamed
-***REMOVED***private var _dispositionAndCredential: (URLSession.AuthChallengeDisposition, URLCredential?)?
+***REMOVED***private var _response: (Response)?
 ***REMOVED***
-***REMOVED***var dispositionAndCredential: (URLSession.AuthChallengeDisposition, URLCredential?) {
+***REMOVED***var response: Response {
 ***REMOVED******REMOVED***get async {
-***REMOVED******REMOVED******REMOVED***await $_dispositionAndCredential
+***REMOVED******REMOVED******REMOVED***await $_response
 ***REMOVED******REMOVED******REMOVED******REMOVED***.compactMap({ $0 ***REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.first(where: { _ in true ***REMOVED***)!
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***public func complete() async {
-***REMOVED******REMOVED***_ = await dispositionAndCredential
+***REMOVED******REMOVED***_ = await response
+***REMOVED***
+***REMOVED***
+***REMOVED***enum Response {
+***REMOVED******REMOVED***case userCredential(username: String, password: String)
+***REMOVED******REMOVED***case trustHost
+***REMOVED******REMOVED***case cancel
 ***REMOVED***
 ***REMOVED***
 
@@ -93,14 +99,12 @@ public protocol QueuedChallenge: AnyObject {
 @MainActor
 public final class Authenticator: ObservableObject {
 ***REMOVED***let oAuthConfigurations: [OAuthConfiguration]
-***REMOVED***let trustedHosts: [String]
+***REMOVED***var trustedHosts: [String] = []
 ***REMOVED***
 ***REMOVED***public init(
-***REMOVED******REMOVED***oAuthConfigurations: [OAuthConfiguration] = [],
-***REMOVED******REMOVED***trustedHosts: [String] = []
+***REMOVED******REMOVED***oAuthConfigurations: [OAuthConfiguration] = []
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.oAuthConfigurations = oAuthConfigurations
-***REMOVED******REMOVED***self.trustedHosts = trustedHosts
 ***REMOVED******REMOVED***Task { await observeChallengeQueue() ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -172,10 +176,49 @@ extension Authenticator: AuthenticationChallengeHandler {
 ***REMOVED******REMOVED******REMOVED***return (.performDefaultHandling, nil)
 ***REMOVED***
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED***guard challenge.proposedCredential == nil else {
+***REMOVED******REMOVED******REMOVED***return (.performDefaultHandling, nil)
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** If the host is already trusted, then continue trusting it.
+***REMOVED******REMOVED***if let trust = challenge.protectionSpace.serverTrust,
+***REMOVED******REMOVED***   trustedHosts.contains(challenge.protectionSpace.host) {
+***REMOVED******REMOVED******REMOVED***return (.useCredential, URLCredential(trust: trust))
+***REMOVED***
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Queue up the url challenge.
 ***REMOVED******REMOVED***let queuedChallenge = QueuedURLChallenge(urlChallenge: challenge)
 ***REMOVED******REMOVED***subject.send(queuedChallenge)
-***REMOVED******REMOVED***return await queuedChallenge.dispositionAndCredential
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***switch await queuedChallenge.response {
+***REMOVED******REMOVED***case .cancel:
+***REMOVED******REMOVED******REMOVED***return (.cancelAuthenticationChallenge, nil)
+***REMOVED******REMOVED***case .trustHost:
+***REMOVED******REMOVED******REMOVED***if let trust = challenge.protectionSpace.serverTrust {
+***REMOVED******REMOVED******REMOVED******REMOVED***trustedHosts.append(challenge.protectionSpace.host)
+***REMOVED******REMOVED******REMOVED******REMOVED***return (.useCredential, URLCredential(trust: trust))
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***return (.performDefaultHandling, nil)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***case .userCredential(let user, let password):
+***REMOVED******REMOVED******REMOVED***return (.useCredential, URLCredential(user: user, password: password, persistence: .forSession))
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***return await queuedChallenge.dispositionAndCredential
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED*** If we trusted a host, then add it to the list of trusted hosts.
+***REMOVED******REMOVED******REMOVED***if let trust = challenge.protectionSpace.serverTrust,
+***REMOVED******REMOVED******REMOVED***   disposition == .useCredential,
+***REMOVED******REMOVED******REMOVED***let credential = credential {
+***REMOVED******REMOVED******REMOVED******REMOVED***if credential.
+***REMOVED******REMOVED******REMOVED******REMOVED***if trustedHosts.contains(challenge.protectionSpace.host) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Ryan - TODO: Show alert
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** This will cause a self-signed certificate to be trusted.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return (.useCredential, URLCredential(trust: trust))
+***REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return (.performDefaultHandling, nil)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***switch challenge.protectionSpace.authenticationMethod {
 ***REMOVED******REMOVED******REMOVED***case NSURLAuthenticationMethodServerTrust:
