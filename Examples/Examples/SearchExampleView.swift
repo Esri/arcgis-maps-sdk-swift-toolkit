@@ -35,7 +35,7 @@ struct SearchExampleView: View {
 ***REMOVED******REMOVED***scale: 1000000
 ***REMOVED***)
 ***REMOVED***
-***REMOVED******REMOVED***/ Denotes whether the geoview is navigating.  Used for the repeat search behavior.
+***REMOVED******REMOVED***/ Denotes whether the geoview is navigating. Used for the repeat search behavior.
 ***REMOVED***@State private var isGeoViewNavigating = false
 ***REMOVED***
 ***REMOVED******REMOVED***/ The current map/scene view extent.  Used to allow repeat searches after panning/zooming the map.
