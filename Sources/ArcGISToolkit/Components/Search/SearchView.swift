@@ -181,7 +181,7 @@ public struct SearchView: View {
 ***REMOVED******REMOVED***.onChange(of: queryArea) { _ in
 ***REMOVED******REMOVED******REMOVED***viewModel.queryArea = queryArea
 ***REMOVED***
-***REMOVED******REMOVED***.onAppear() {
+***REMOVED******REMOVED***.onAppear {
 ***REMOVED******REMOVED******REMOVED***viewModel.currentQuery = currentQuery
 ***REMOVED******REMOVED******REMOVED***viewModel.resultsOverlay = resultsOverlay
 ***REMOVED******REMOVED******REMOVED***viewModel.resultMode = resultMode
