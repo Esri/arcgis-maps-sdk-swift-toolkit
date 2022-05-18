@@ -30,10 +30,10 @@ public struct SearchView: View {
 ***REMOVED******REMOVED******REMOVED***viewpoint: viewpoint
 ***REMOVED******REMOVED***))
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***_queryArea = Binding.constant(nil)
-***REMOVED******REMOVED***_queryCenter = Binding.constant(nil)
-***REMOVED******REMOVED***_geoViewExtent = Binding.constant(nil)
-***REMOVED******REMOVED***_isGeoViewNavigating = Binding.constant(false)
+***REMOVED******REMOVED***_queryArea = .constant(nil)
+***REMOVED******REMOVED***_queryCenter = .constant(nil)
+***REMOVED******REMOVED***_geoViewExtent = .constant(nil)
+***REMOVED******REMOVED***_isGeoViewNavigating = .constant(false)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The view model used by the view. The `SearchViewModel` manages state and handles the
