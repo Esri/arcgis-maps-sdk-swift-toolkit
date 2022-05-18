@@ -147,7 +147,7 @@ final class SearchViewModel: ObservableObject {
     
     /// Defines the center for the search. For most use cases, this should be updated by the view
     /// every time the user navigates the map.
-    var queryCenter: Point? = nil
+    var queryCenter: Point?
     
     /// Defines how many results to return. Defaults to ``SearchResultMode/automatic``.
     /// In automatic mode, an appropriate number of results is returned based on the type of suggestion
