@@ -32,8 +32,7 @@ public struct FloorFilter: View {
     ) {
         _viewModel = StateObject(wrappedValue: FloorFilterViewModel(
             automaticSelectionMode: automaticSelectionMode,
-            floorManager: floorManager,
-            viewpoint: viewpoint
+            floorManager: floorManager
         ))
         self.alignment = alignment
         self.viewpoint = viewpoint
@@ -97,8 +96,14 @@ public struct FloorFilter: View {
         SiteAndFacilitySelector(isHidden: $isSitesAndFacilitiesHidden)
             .esriBorder()
             .opacity(isSitesAndFacilitiesHidden ? .zero : 1)
-            .onChange(of: viewpoint.wrappedValue?.targetGeometry) { _ in
-                viewModel.viewpointSubject.send(viewpoint.wrappedValue)
+            .onChange(of: viewpoint.wrappedValue) {
+                viewModel.viewpoint = $0
+            }
+            .onChange(of: viewModel.viewpoint) { newValue in
+                guard newValue != viewpoint.wrappedValue else {
+                    return
+                }
+                viewpoint.wrappedValue = newValue
             }
     }
     

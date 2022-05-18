@@ -31,42 +31,10 @@ class FloorFilterViewModelTests: XCTestCase {
             return
         }
         try? await floorManager.load()
-        var _viewpoint: Viewpoint? = getEsriRedlandsViewpoint(.zero)
-        let viewpoint = Binding(get: { _viewpoint }, set: { _viewpoint = $0 })
-        let viewModel = FloorFilterViewModel(
-            floorManager: floorManager,
-            viewpoint: viewpoint
-        )
-        let sites = viewModel.sites
-        let facilities = viewModel.facilities
-        let levels = viewModel.levels
-        XCTAssertFalse(sites.isEmpty)
-        XCTAssertFalse(facilities.isEmpty)
-        XCTAssertFalse(levels.isEmpty)
-    }
-    
-    /// Tests that a `FloorFilterViewModel` succesfully initializes with a `FloorManager` and
-    /// `Binding<Viewpoint>?`.`
-    func testInitFloorFilterViewModelWithFloorManagerAndViewpoint() async {
-        guard let map = await makeMap(),
-              let floorManager = map.floorManager else {
-            return
-        }
-        try? await floorManager.load()
-        var _viewpoint: Viewpoint? = getEsriRedlandsViewpoint(.zero)
-        let viewpoint = Binding(get: { _viewpoint }, set: { _viewpoint = $0 })
-        let viewModel = FloorFilterViewModel(
-            floorManager: floorManager,
-            viewpoint: viewpoint
-        )
-        let sites = viewModel.sites
-        let facilities = viewModel.facilities
-        let levels = viewModel.levels
-        let vmViewpoint = viewModel.viewpoint
-        XCTAssertFalse(sites.isEmpty)
-        XCTAssertFalse(facilities.isEmpty)
-        XCTAssertFalse(levels.isEmpty)
-        XCTAssertNotNil(vmViewpoint)
+        let viewModel = FloorFilterViewModel(floorManager: floorManager)
+        XCTAssertFalse(viewModel.sites.isEmpty)
+        XCTAssertFalse(viewModel.facilities.isEmpty)
+        XCTAssertFalse(viewModel.levels.isEmpty)
     }
     
     /// Confirms that the selected site/facility/level properties and the viewpoint are correctly updated.
@@ -76,13 +44,7 @@ class FloorFilterViewModelTests: XCTestCase {
             return
         }
         try? await floorManager.load()
-        let initialViewpoint = getEsriRedlandsViewpoint(.zero)
-        var _viewpoint: Viewpoint? = initialViewpoint
-        let viewpoint = Binding(get: { _viewpoint }, set: { _viewpoint = $0 })
-        let viewModel = FloorFilterViewModel(
-            floorManager: floorManager,
-            viewpoint: viewpoint
-        )
+        let viewModel = FloorFilterViewModel(floorManager: floorManager)
         guard let site = viewModel.sites.first else {
             XCTFail()
             return
@@ -95,7 +57,7 @@ class FloorFilterViewModelTests: XCTestCase {
         XCTAssertNil(selectedFacility)
         XCTAssertNil(selectedLevel)
         XCTAssertEqual(
-            _viewpoint?.targetGeometry.extent.center.x,
+            viewModel.viewpoint?.targetGeometry.extent.center.x,
             selectedSite?.geometry?.extent.center.x
         )
     }
@@ -107,13 +69,9 @@ class FloorFilterViewModelTests: XCTestCase {
             return
         }
         try? await floorManager.load()
-        let initialViewpoint = getEsriRedlandsViewpoint(.zero)
-        var _viewpoint: Viewpoint? = initialViewpoint
-        let viewpoint = Binding(get: { _viewpoint }, set: { _viewpoint = $0 })
         let viewModel = FloorFilterViewModel(
             automaticSelectionMode: .never,
-            floorManager: floorManager,
-            viewpoint: viewpoint
+            floorManager: floorManager
         )
         guard let facility = viewModel.facilities.first else {
             XCTFail()
@@ -126,7 +84,7 @@ class FloorFilterViewModelTests: XCTestCase {
         XCTAssertEqual(selectedFacility, facility)
         XCTAssertEqual(selectedLevel, defaultLevel)
         XCTAssertEqual(
-            _viewpoint?.targetGeometry.extent.center.x,
+            viewModel.viewpoint?.targetGeometry.extent.center.x,
             selectedFacility?.geometry?.extent.center.x
         )
     }
@@ -138,13 +96,7 @@ class FloorFilterViewModelTests: XCTestCase {
             return
         }
         try? await floorManager.load()
-        let initialViewpoint = getEsriRedlandsViewpoint(.zero)
-        var _viewpoint: Viewpoint? = initialViewpoint
-        let viewpoint = Binding(get: { _viewpoint }, set: { _viewpoint = $0 })
-        let viewModel = FloorFilterViewModel(
-            floorManager: floorManager,
-            viewpoint: viewpoint
-        )
+        let viewModel = FloorFilterViewModel(floorManager: floorManager)
         let levels = viewModel.levels
         guard let level = levels.first else {
             XCTFail("A first level does not exist")
@@ -153,10 +105,6 @@ class FloorFilterViewModelTests: XCTestCase {
         viewModel.setLevel(level)
         let selectedLevel = viewModel.selectedLevel
         XCTAssertEqual(selectedLevel, level)
-        XCTAssertEqual(
-            _viewpoint?.targetGeometry.extent.center.x,
-            initialViewpoint.targetGeometry.extent.center.x
-        )
         levels.forEach { level in
             if level.verticalOrder == selectedLevel?.verticalOrder {
                 XCTAssertTrue(level.isVisible)
@@ -181,12 +129,9 @@ class FloorFilterViewModelTests: XCTestCase {
             ),
             scale: 10_000
         )
-        var _viewpoint: Viewpoint? = viewpointLosAngeles
-        let viewpoint = Binding(get: { _viewpoint }, set: { _viewpoint = $0 })
         let viewModel = FloorFilterViewModel(
             automaticSelectionMode: .always,
-            floorManager: floorManager,
-            viewpoint: viewpoint
+            floorManager: floorManager
         )
         
         // Viewpoint is Los Angeles, selection should be nil
@@ -196,7 +141,7 @@ class FloorFilterViewModelTests: XCTestCase {
         XCTAssertNil(selectedSite)
         
         // Viewpoint is Redlands Main Q
-        _viewpoint = getEsriRedlandsViewpoint(scale: 1000)
+        viewModel.viewpoint = getEsriRedlandsViewpoint(scale: 1000)
         viewModel.automaticallySelectFacilityOrSite()
         selectedFacility = viewModel.selectedFacility
         selectedSite = viewModel.selectedSite
@@ -204,7 +149,7 @@ class FloorFilterViewModelTests: XCTestCase {
         XCTAssertEqual(selectedFacility?.name, "Q")
         
         // Viewpoint is Los Angeles, selection should be nil
-        _viewpoint = viewpointLosAngeles
+        viewModel.viewpoint = viewpointLosAngeles
         viewModel.automaticallySelectFacilityOrSite()
         selectedFacility = viewModel.selectedFacility
         selectedSite = viewModel.selectedSite
@@ -227,16 +172,13 @@ class FloorFilterViewModelTests: XCTestCase {
             ),
             scale: 10_000
         )
-        var _viewpoint: Viewpoint? = getEsriRedlandsViewpoint(scale: 1000)
-        let viewpoint = Binding(get: { _viewpoint }, set: { _viewpoint = $0 })
         let viewModel = FloorFilterViewModel(
             automaticSelectionMode: .alwaysNotClearing,
-            floorManager: floorManager,
-            viewpoint: viewpoint
+            floorManager: floorManager
         )
         
         // Viewpoint is Redlands Main Q
-        _viewpoint = getEsriRedlandsViewpoint(scale: 1000)
+        viewModel.viewpoint = getEsriRedlandsViewpoint(scale: 1000)
         viewModel.automaticallySelectFacilityOrSite()
         var selectedFacility = viewModel.selectedFacility
         var selectedSite = viewModel.selectedSite
@@ -244,7 +186,7 @@ class FloorFilterViewModelTests: XCTestCase {
         XCTAssertEqual(selectedFacility?.name, "Q")
         
         // Viewpoint is Los Angeles, but selection should remain Redlands Main Q
-        _viewpoint = viewpointLosAngeles
+        viewModel.viewpoint = viewpointLosAngeles
         viewModel.automaticallySelectFacilityOrSite()
         selectedFacility = viewModel.selectedFacility
         selectedSite = viewModel.selectedSite
@@ -259,20 +201,9 @@ class FloorFilterViewModelTests: XCTestCase {
             return
         }
         try? await floorManager.load()
-        let viewpointLosAngeles = Viewpoint(
-            center: Point(
-                x: -13164116.3284,
-                y: 4034465.8065,
-                spatialReference: .webMercator
-            ),
-            scale: 10_000
-        )
-        var _viewpoint: Viewpoint? = viewpointLosAngeles
-        let viewpoint = Binding(get: { _viewpoint }, set: { _viewpoint = $0 })
         let viewModel = FloorFilterViewModel(
             automaticSelectionMode: .never,
-            floorManager: floorManager,
-            viewpoint: viewpoint
+            floorManager: floorManager
         )
         
         // Viewpoint is Los Angeles, selection should be nil
@@ -282,7 +213,7 @@ class FloorFilterViewModelTests: XCTestCase {
         XCTAssertNil(selectedSite)
         
         // Viewpoint is Redlands Main Q but selection should still be nil
-        _viewpoint = getEsriRedlandsViewpoint(scale: 1000)
+        viewModel.viewpoint = getEsriRedlandsViewpoint(scale: 1000)
         viewModel.automaticallySelectFacilityOrSite()
         selectedFacility = viewModel.selectedFacility
         selectedSite = viewModel.selectedSite
@@ -294,16 +225,16 @@ class FloorFilterViewModelTests: XCTestCase {
     /// - Returns: A map constructed from an ArcGIS portal item.
     private func makeMap() async -> Map? {
         // Multiple sites/facilities: Esri IST map with all buildings.
-//        let portal = Portal(url: URL(string: "https://indoors.maps.arcgis.com/")!, isLoginRequired: false)
-//        let portalItem = PortalItem(portal: portal, id: Item.ID(rawValue: "49520a67773842f1858602735ef538b5")!)
+        //        let portal = Portal(url: URL(string: "https://indoors.maps.arcgis.com/")!, isLoginRequired: false)
+        //        let portalItem = PortalItem(portal: portal, id: Item.ID(rawValue: "49520a67773842f1858602735ef538b5")!)
         
         // Redlands Campus map with multiple sites and facilities.
         let portal = Portal(url: URL(string: "https://runtimecoretest.maps.arcgis.com/")!, isLoginRequired: false)
         let portalItem = PortalItem(portal: portal, id: Item.ID(rawValue: "7687805bd42549f5ba41237443d0c60a")!)
         
         // Single site (ESRI Redlands Main) and facility (Building L).
-//        let portal = Portal(url: URL(string: "https://indoors.maps.arcgis.com/")!, isLoginRequired: false)
-//        let portalItem = PortalItem(portal: portal, id: Item.ID(rawValue: "f133a698536f44c8884ad81f80b6cfc7")!)
+        //        let portal = Portal(url: URL(string: "https://indoors.maps.arcgis.com/")!, isLoginRequired: false)
+        //        let portalItem = PortalItem(portal: portal, id: Item.ID(rawValue: "f133a698536f44c8884ad81f80b6cfc7")!)
         
         let map = Map(item: portalItem)
         do {

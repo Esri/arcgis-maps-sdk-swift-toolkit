@@ -35,12 +35,10 @@ final class FloorFilterViewModel: ObservableObject {
     ///   - viewpoint: Viewpoint updated when the selected site or facility changes.
     init(
         automaticSelectionMode: FloorFilterAutomaticSelectionMode = .always,
-        floorManager: FloorManager,
-        viewpoint: Binding<Viewpoint?>
+        floorManager: FloorManager
     ) {
         self.automaticSelectionMode = automaticSelectionMode
         self.floorManager = floorManager
-        self._viewpoint = viewpoint
         
         viewpointSubscription = viewpointSubject
             .debounce(for: delay, scheduler: DispatchQueue.main)
@@ -75,6 +73,14 @@ final class FloorFilterViewModel: ObservableObject {
     
     /// The selected site, floor, or level.
     @Published private(set) var selection: Selection?
+    
+    /// The `Viewpoint` used to pan/zoom to the selected site/facilty.
+    /// If `nil`, there will be no automatic pan/zoom operations.
+    @Published var viewpoint: Viewpoint? {
+        willSet {
+            viewpointSubject.send(newValue)
+        }
+    }
     
     // MARK: Constants
     
@@ -150,13 +156,6 @@ final class FloorFilterViewModel: ObservableObject {
         selectedFacility?.levels
             .sorted(by: { $0.verticalOrder > $1.verticalOrder }) ?? []
     }
-    
-    /// The `Viewpoint` used to pan/zoom to the selected site/facilty.
-    /// If `nil`, there will be no automatic pan/zoom operations.
-    @Binding var viewpoint: Viewpoint?
-    
-    /// A subject to which viewpoint updates can be submitted.
-    var viewpointSubject = PassthroughSubject<Viewpoint?, Never>()
     
     // MARK: Public methods
     
@@ -303,6 +302,9 @@ final class FloorFilterViewModel: ObservableObject {
             )
         }
     }
+    
+    /// A subject to which viewpoint updates can be submitted.
+    private var viewpointSubject = PassthroughSubject<Viewpoint?, Never>()
     
     /// A subscription to handle listening for viewpoint changes.
     private var viewpointSubscription: AnyCancellable?
