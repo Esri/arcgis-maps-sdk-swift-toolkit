@@ -270,7 +270,7 @@ extension SearchView {
 ***REMOVED***
 
 ***REMOVED******REMOVED***/ The current map/scene view extent. Defaults to `nil`. Used to allow repeat searches after
-***REMOVED******REMOVED***/ panning/zooming the map.  Set to `nil` if repeat search behavior is not wanted.
+***REMOVED******REMOVED***/ panning/zooming the map. Set to `nil` if repeat search behavior is not wanted.
 ***REMOVED******REMOVED***/ - Parameter newGeoViewExtent: The new value.
 ***REMOVED******REMOVED***/ - Returns: The `SearchView`.
 ***REMOVED***public func geoViewExtent(_ newGeoViewExtent: Binding<Envelope?>) -> Self {
