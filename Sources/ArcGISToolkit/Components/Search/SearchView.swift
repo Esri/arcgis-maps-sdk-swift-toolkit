@@ -279,7 +279,7 @@ extension SearchView {
 ***REMOVED******REMOVED***return copy
 ***REMOVED***
 
-***REMOVED******REMOVED***/ Denotes whether the geoview is navigating.  Used for the repeat search behavior.
+***REMOVED******REMOVED***/ Denotes whether the `GeoView` is navigating. Used for the repeat search behavior.
 ***REMOVED******REMOVED***/ - Parameter newIsGeoViewNavigating: The new value.
 ***REMOVED******REMOVED***/ - Returns: The `SearchView`.
 ***REMOVED***public func isGeoViewNavigating(_ newIsGeoViewNavigating: Binding<Bool>) -> Self {
