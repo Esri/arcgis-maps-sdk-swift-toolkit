@@ -30,10 +30,10 @@ public struct SearchView: View {
             viewpoint: viewpoint
         ))
         
-        _queryArea = Binding.constant(nil)
-        _queryCenter = Binding.constant(nil)
-        _geoViewExtent = Binding.constant(nil)
-        _isGeoViewNavigating = Binding.constant(false)
+        _queryArea = .constant(nil)
+        _queryCenter = .constant(nil)
+        _geoViewExtent = .constant(nil)
+        _isGeoViewNavigating = .constant(false)
     }
     
     /// The view model used by the view. The `SearchViewModel` manages state and handles the
