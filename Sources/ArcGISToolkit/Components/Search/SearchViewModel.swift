@@ -38,8 +38,7 @@ public enum SearchOutcome {
 }
 
 /// Performs searches and manages search state for a search, or optionally without a UI connection.
-@MainActor
-final class SearchViewModel: ObservableObject {
+@MainActor final class SearchViewModel: ObservableObject {
     /// Creates a `SearchViewModel`.
     /// - Parameters:
     ///   - sources: Collection of search sources to be used.
@@ -57,8 +56,7 @@ final class SearchViewModel: ObservableObject {
     private var activeSource: SearchSource? = nil
     
     /// Tracks the current user-entered query. This property drives both suggestions and searches.
-    @Published
-    var currentQuery: String = "" {
+    @Published var currentQuery: String = "" {
         willSet {
             isEligibleForRequery = false
             
@@ -138,8 +136,7 @@ final class SearchViewModel: ObservableObject {
     /// Changes to this property are driven by changes to the `geoViewExtent` property. This value will be
     /// `true` if the extent center changes by more than 25% of the average of the extent's height and width
     /// at the time of the last search or if the extent width/height changes by the same amount.
-    @Published
-    private(set) var isEligibleForRequery: Bool = false
+    @Published private(set) var isEligibleForRequery: Bool = false
     
     /// The search area to be used for the current query. Results will be limited to those.
     /// within `QueryArea`. Defaults to `nil`.
@@ -156,8 +153,7 @@ final class SearchViewModel: ObservableObject {
     
     /// A search outcome that contains the search and suggestion results. A `nil` value means no
     /// query has been made.
-    @Published
-    private(set) var searchOutcome: SearchOutcome? {
+    @Published private(set) var searchOutcome: SearchOutcome? {
         didSet {
             if case let .results(results) = searchOutcome {
                 display(searchResults: results)
