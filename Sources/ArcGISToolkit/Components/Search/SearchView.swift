@@ -125,8 +125,8 @@ public struct SearchView: View {
                             isResultsButtonHidden: !enableResultListView,
                             isResultListHidden: $isResultListHidden
                         )
-                            .onSubmit { viewModel.commitSearch() }
-                            .submitLabel(.search)
+                        .onSubmit { viewModel.commitSearch() }
+                        .submitLabel(.search)
                         if enableResultListView,
                            !isResultListHidden,
                            let searchOutcome = viewModel.searchOutcome {
