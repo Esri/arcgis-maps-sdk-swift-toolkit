@@ -35,21 +35,12 @@ final class FloorFilterViewModel: ObservableObject {
 ***REMOVED******REMOVED***/   - viewpoint: Viewpoint updated when the selected site or facility changes.
 ***REMOVED***init(
 ***REMOVED******REMOVED***automaticSelectionMode: FloorFilterAutomaticSelectionMode = .always,
-***REMOVED******REMOVED***floorManager: FloorManager
+***REMOVED******REMOVED***floorManager: FloorManager,
+***REMOVED******REMOVED***viewpoint: Binding<Viewpoint?>
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.automaticSelectionMode = automaticSelectionMode
 ***REMOVED******REMOVED***self.floorManager = floorManager
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***viewpointSubscription = viewpointSubject
-***REMOVED******REMOVED******REMOVED***.debounce(for: delay, scheduler: DispatchQueue.main)
-***REMOVED******REMOVED******REMOVED***.sink(receiveValue: { [weak self] _ in
-***REMOVED******REMOVED******REMOVED******REMOVED***guard let self = self,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  let viewpoint = self.viewpoint,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  !viewpoint.targetScale.isZero else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  return
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***self.automaticallySelectFacilityOrSite()
-***REMOVED******REMOVED***)
+***REMOVED******REMOVED***self.viewpoint = viewpoint
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***Task {
 ***REMOVED******REMOVED******REMOVED***do {
@@ -76,10 +67,14 @@ final class FloorFilterViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED******REMOVED***/ The `Viewpoint` used to pan/zoom to the selected site/facilty.
 ***REMOVED******REMOVED***/ If `nil`, there will be no automatic pan/zoom operations.
-***REMOVED***@Published var viewpoint: Viewpoint? {
-***REMOVED******REMOVED***willSet {
-***REMOVED******REMOVED******REMOVED***viewpointSubject.send(newValue)
+***REMOVED***private var viewpoint: Binding<Viewpoint?>
 ***REMOVED***
+***REMOVED***func onViewpointChanged(_ viewpoint: Viewpoint?) {
+***REMOVED******REMOVED***guard let viewpoint = viewpoint,
+***REMOVED******REMOVED******REMOVED***  !viewpoint.targetScale.isZero else {
+***REMOVED******REMOVED******REMOVED******REMOVED***  return
+***REMOVED***  ***REMOVED***
+***REMOVED******REMOVED***automaticallySelectFacilityOrSite()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED*** MARK: Constants
@@ -227,13 +222,13 @@ final class FloorFilterViewModel: ObservableObject {
 ***REMOVED******REMOVED******REMOVED***facilityMinScale = 1500
 ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***if viewpoint?.targetScale ?? .zero > facilityMinScale {
+***REMOVED******REMOVED***if viewpoint.wrappedValue?.targetScale ?? .zero > facilityMinScale {
 ***REMOVED******REMOVED******REMOVED***return false
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** If the centerpoint is within a facilities' geometry, select that site.
 ***REMOVED******REMOVED***let facilityResult = floorManager.facilities.first { facility in
-***REMOVED******REMOVED******REMOVED***guard let extent1 = viewpoint?.targetGeometry.extent,
+***REMOVED******REMOVED******REMOVED***guard let extent1 = viewpoint.wrappedValue?.targetGeometry.extent,
 ***REMOVED******REMOVED******REMOVED******REMOVED***  let extent2 = facility.geometry?.extent else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***return false
 ***REMOVED******REMOVED***
@@ -262,7 +257,7 @@ final class FloorFilterViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** If viewpoint is out of range, reset selection and return early.
-***REMOVED******REMOVED***if viewpoint?.targetScale ?? .zero > siteMinScale {
+***REMOVED******REMOVED***if viewpoint.wrappedValue?.targetScale ?? .zero > siteMinScale {
 ***REMOVED******REMOVED******REMOVED***if automaticSelectionMode == .always {
 ***REMOVED******REMOVED******REMOVED******REMOVED***selection = nil
 ***REMOVED******REMOVED***
@@ -271,7 +266,7 @@ final class FloorFilterViewModel: ObservableObject {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** If the centerpoint is within a site's geometry, select that site.
 ***REMOVED******REMOVED***let siteResult = floorManager.sites.first { site in
-***REMOVED******REMOVED******REMOVED***guard let extent1 = viewpoint?.targetGeometry.extent,
+***REMOVED******REMOVED******REMOVED***guard let extent1 = viewpoint.wrappedValue?.targetGeometry.extent,
 ***REMOVED******REMOVED******REMOVED******REMOVED***  let extent2 = site.geometry?.extent else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***return false
 ***REMOVED******REMOVED***
@@ -297,17 +292,11 @@ final class FloorFilterViewModel: ObservableObject {
 ***REMOVED******REMOVED***builder.expand(factor: 1.5)
 ***REMOVED******REMOVED***let targetExtent = builder.toGeometry()
 ***REMOVED******REMOVED***if !targetExtent.isEmpty {
-***REMOVED******REMOVED******REMOVED***viewpoint = Viewpoint(
+***REMOVED******REMOVED******REMOVED***viewpoint.wrappedValue = Viewpoint(
 ***REMOVED******REMOVED******REMOVED******REMOVED***targetExtent: targetExtent
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ A subject to which viewpoint updates can be submitted.
-***REMOVED***private var viewpointSubject = PassthroughSubject<Viewpoint?, Never>()
-***REMOVED***
-***REMOVED******REMOVED***/ A subscription to handle listening for viewpoint changes.
-***REMOVED***private var viewpointSubscription: AnyCancellable?
 ***REMOVED***
 
 extension FloorFilterViewModel.Selection: Hashable { ***REMOVED***
