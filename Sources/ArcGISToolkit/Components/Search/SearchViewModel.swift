@@ -147,7 +147,7 @@ final class SearchViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Defines the center for the search. For most use cases, this should be updated by the view
 ***REMOVED******REMOVED***/ every time the user navigates the map.
-***REMOVED***var queryCenter: Point? = nil
+***REMOVED***var queryCenter: Point?
 ***REMOVED***
 ***REMOVED******REMOVED***/ Defines how many results to return. Defaults to ``SearchResultMode/automatic``.
 ***REMOVED******REMOVED***/ In automatic mode, an appropriate number of results is returned based on the type of suggestion
