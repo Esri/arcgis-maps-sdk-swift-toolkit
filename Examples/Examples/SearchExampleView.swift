@@ -66,7 +66,7 @@ struct SearchExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** using the `queryArea` modifier on the `SearchView`.
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***queryArea = newValue
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.overlay(alignment: .topTrailing) {
+***REMOVED******REMOVED******REMOVED***.overlay {
 ***REMOVED******REMOVED******REMOVED******REMOVED***SearchView(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***sources: [locatorDataSource],
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint: $searchResultViewpoint
