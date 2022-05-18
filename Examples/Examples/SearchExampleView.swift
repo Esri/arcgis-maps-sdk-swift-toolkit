@@ -72,7 +72,7 @@ struct SearchExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint: $searchResultViewpoint
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.resultsOverlay(searchResultsOverlay)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.queryArea(queryArea)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.queryArea($queryArea)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.queryCenter($queryCenter)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.geoViewExtent($geoViewExtent)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.isGeoViewNavigating($isGeoViewNavigating)
