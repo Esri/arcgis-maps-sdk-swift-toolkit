@@ -138,7 +138,7 @@ public struct SearchView: View {
                                         selectedResult: $viewModel.selectedResult,
                                         noResultsMessage: noResultsMessage
                                     )
-                                        .frame(height: useHalfHeightResults ? geometry.size.height / 2 : nil)
+                                    .frame(height: useHalfHeightResults ? geometry.size.height / 2 : nil)
                                 case .suggestions(let suggestions):
                                     SearchSuggestionList(
                                         suggestionResults: suggestions,
