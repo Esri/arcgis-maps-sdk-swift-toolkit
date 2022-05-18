@@ -269,7 +269,7 @@ extension SearchView {
         return copy
     }
 
-    /// The current map/scene view extent.  Defaults to `nil`.  Used to allow repeat searches after
+    /// The current map/scene view extent. Defaults to `nil`. Used to allow repeat searches after
     /// panning/zooming the map.  Set to `nil` if repeat search behavior is not wanted.
     /// - Parameter newGeoViewExtent: The new value.
     /// - Returns: The `SearchView`.
