@@ -35,12 +35,10 @@ final class FloorFilterViewModel: ObservableObject {
 ***REMOVED******REMOVED***/   - viewpoint: Viewpoint updated when the selected site or facility changes.
 ***REMOVED***init(
 ***REMOVED******REMOVED***automaticSelectionMode: FloorFilterAutomaticSelectionMode = .always,
-***REMOVED******REMOVED***floorManager: FloorManager,
-***REMOVED******REMOVED***viewpoint: Binding<Viewpoint?>
+***REMOVED******REMOVED***floorManager: FloorManager
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.automaticSelectionMode = automaticSelectionMode
 ***REMOVED******REMOVED***self.floorManager = floorManager
-***REMOVED******REMOVED***self._viewpoint = viewpoint
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***viewpointSubscription = viewpointSubject
 ***REMOVED******REMOVED******REMOVED***.debounce(for: delay, scheduler: DispatchQueue.main)
@@ -75,6 +73,14 @@ final class FloorFilterViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED******REMOVED***/ The selected site, floor, or level.
 ***REMOVED***@Published private(set) var selection: Selection?
+***REMOVED***
+***REMOVED******REMOVED***/ The `Viewpoint` used to pan/zoom to the selected site/facilty.
+***REMOVED******REMOVED***/ If `nil`, there will be no automatic pan/zoom operations.
+***REMOVED***@Published var viewpoint: Viewpoint? {
+***REMOVED******REMOVED***willSet {
+***REMOVED******REMOVED******REMOVED***viewpointSubject.send(newValue)
+***REMOVED***
+***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED*** MARK: Constants
 ***REMOVED***
@@ -150,13 +156,6 @@ final class FloorFilterViewModel: ObservableObject {
 ***REMOVED******REMOVED***selectedFacility?.levels
 ***REMOVED******REMOVED******REMOVED***.sorted(by: { $0.verticalOrder > $1.verticalOrder ***REMOVED***) ?? []
 ***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ The `Viewpoint` used to pan/zoom to the selected site/facilty.
-***REMOVED******REMOVED***/ If `nil`, there will be no automatic pan/zoom operations.
-***REMOVED***@Binding var viewpoint: Viewpoint?
-***REMOVED***
-***REMOVED******REMOVED***/ A subject to which viewpoint updates can be submitted.
-***REMOVED***var viewpointSubject = PassthroughSubject<Viewpoint?, Never>()
 ***REMOVED***
 ***REMOVED******REMOVED*** MARK: Public methods
 ***REMOVED***
@@ -303,6 +302,9 @@ final class FloorFilterViewModel: ObservableObject {
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ A subject to which viewpoint updates can be submitted.
+***REMOVED***private var viewpointSubject = PassthroughSubject<Viewpoint?, Never>()
 ***REMOVED***
 ***REMOVED******REMOVED***/ A subscription to handle listening for viewpoint changes.
 ***REMOVED***private var viewpointSubscription: AnyCancellable?

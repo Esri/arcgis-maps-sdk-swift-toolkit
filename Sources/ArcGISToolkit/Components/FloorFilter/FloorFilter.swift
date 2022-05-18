@@ -32,8 +32,7 @@ public struct FloorFilter: View {
 ***REMOVED***) {
 ***REMOVED******REMOVED***_viewModel = StateObject(wrappedValue: FloorFilterViewModel(
 ***REMOVED******REMOVED******REMOVED***automaticSelectionMode: automaticSelectionMode,
-***REMOVED******REMOVED******REMOVED***floorManager: floorManager,
-***REMOVED******REMOVED******REMOVED***viewpoint: viewpoint
+***REMOVED******REMOVED******REMOVED***floorManager: floorManager
 ***REMOVED******REMOVED***))
 ***REMOVED******REMOVED***self.alignment = alignment
 ***REMOVED******REMOVED***self.viewpoint = viewpoint
@@ -97,8 +96,14 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED***SiteAndFacilitySelector(isHidden: $isSitesAndFacilitiesHidden)
 ***REMOVED******REMOVED******REMOVED***.esriBorder()
 ***REMOVED******REMOVED******REMOVED***.opacity(isSitesAndFacilitiesHidden ? .zero : 1)
-***REMOVED******REMOVED******REMOVED***.onChange(of: viewpoint.wrappedValue?.targetGeometry) { _ in
-***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.viewpointSubject.send(viewpoint.wrappedValue)
+***REMOVED******REMOVED******REMOVED***.onChange(of: viewpoint.wrappedValue) {
+***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.viewpoint = $0
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.onChange(of: viewModel.viewpoint) { newValue in
+***REMOVED******REMOVED******REMOVED******REMOVED***guard newValue != viewpoint.wrappedValue else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***viewpoint.wrappedValue = newValue
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
