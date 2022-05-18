@@ -35,7 +35,7 @@ struct SearchExampleView: View {
         scale: 1000000
     )
     
-    /// Denotes whether the geoview is navigating.  Used for the repeat search behavior.
+    /// Denotes whether the geoview is navigating. Used for the repeat search behavior.
     @State private var isGeoViewNavigating = false
     
     /// The current map/scene view extent.  Used to allow repeat searches after panning/zooming the map.
