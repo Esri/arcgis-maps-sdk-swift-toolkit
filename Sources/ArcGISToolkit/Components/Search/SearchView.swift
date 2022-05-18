@@ -47,9 +47,8 @@ public struct SearchView: View {
     /// Tracks the current user-entered query. This property drives both suggestions and searches.
     var resultMode: SearchResultMode = .automatic
 
-    /// The search area to be used for the current query. Defaults to `nil`.
-    ///
-    /// If `nil`, then there is no limiting of the search results to a given area.
+    /// The search area to be used for the current query. If `nil`, then there is no limiting of the
+    /// search results to a given area.
     @Binding var queryArea: Geometry?
 
     /// Defines the center for the search. Defaults to `nil`.
@@ -95,7 +94,7 @@ public struct SearchView: View {
     /// Message to show when there are no results or suggestions. Defaults to "No results found".
     /// Note: this is set using the `noResultsMessage` modifier.
     private var noResultsMessage = "No results found"
-
+    
     /// The width of the search bar, taking into account the horizontal and vertical size classes
     /// of the device. This will cause the search field to display full-width on an iPhone in portrait
     /// orientation (and certain iPad multitasking configurations) and limit the width to `360` in other cases.
@@ -112,7 +111,7 @@ public struct SearchView: View {
     
     /// Determines whether the results lists are displayed.
     @State private var isResultListHidden: Bool = false
-
+    
     public var body: some View {
         VStack {
             GeometryReader { geometry in
@@ -223,7 +222,7 @@ extension SearchView {
         copy.noResultsMessage = newNoResultsMessage
         return copy
     }
-
+    
     /// Sets the current query.
     /// - Parameter newQueryString: The new value.
     /// - Returns: The `SearchView`.
@@ -241,7 +240,7 @@ extension SearchView {
         copy.resultsOverlay = newResultsOverlay
         return copy
     }
-
+    
     /// Defines how many results to return.
     /// - Parameter newResultMode: The new value.
     /// - Returns: The `SearchView`.
@@ -250,7 +249,7 @@ extension SearchView {
         copy.resultMode = newResultMode
         return copy
     }
-
+    
     /// The search area to be used for the current query.
     /// - Parameter newQueryArea: The new value.
     /// - Returns: The `SearchView`.
@@ -259,7 +258,7 @@ extension SearchView {
         copy._queryArea = newQueryArea
         return copy
     }
-
+    
     /// Defines the center for the search.
     /// - Parameter newQueryCenter: The new value.
     /// - Returns: The `SearchView`.
@@ -268,7 +267,7 @@ extension SearchView {
         copy._queryCenter = newQueryCenter
         return copy
     }
-
+    
     /// The current map/scene view extent. Defaults to `nil`. Used to allow repeat searches after
     /// panning/zooming the map. Set to `nil` if repeat search behavior is not wanted.
     /// - Parameter newGeoViewExtent: The new value.
@@ -278,7 +277,7 @@ extension SearchView {
         copy._geoViewExtent = newGeoViewExtent
         return copy
     }
-
+    
     /// Denotes whether the `GeoView` is navigating. Used for the repeat search behavior.
     /// - Parameter newIsGeoViewNavigating: The new value.
     /// - Returns: The `SearchView`.
