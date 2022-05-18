@@ -181,7 +181,7 @@ public struct SearchView: View {
         .onChange(of: queryArea) { _ in
             viewModel.queryArea = queryArea
         }
-        .onAppear() {
+        .onAppear {
             viewModel.currentQuery = currentQuery
             viewModel.resultsOverlay = resultsOverlay
             viewModel.resultMode = resultMode
