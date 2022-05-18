@@ -36,7 +36,7 @@ struct SearchExampleView: View {
     )
     
     /// Denotes whether the geoview is navigating.  Used for the repeat search behavior.
-    @State private var isGeoViewNavigating: Bool = false
+    @State private var isGeoViewNavigating = false
     
     /// The current map/scene view extent.  Used to allow repeat searches after panning/zooming the map.
     @State private var geoViewExtent: Envelope? = nil
