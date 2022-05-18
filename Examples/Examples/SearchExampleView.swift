@@ -46,37 +46,37 @@ struct SearchExampleView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Defines the center for the search.
 ***REMOVED***@State private var queryCenter: Point? = nil
-    
+***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***MapView(
 ***REMOVED******REMOVED******REMOVED***map: map,
 ***REMOVED******REMOVED******REMOVED***viewpoint: searchResultViewpoint,
 ***REMOVED******REMOVED******REMOVED***graphicsOverlays: [searchResultsOverlay]
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***.onNavigatingChanged { isGeoViewNavigating = $0 ***REMOVED***
-***REMOVED******REMOVED******REMOVED***.onViewpointChanged(kind: .centerAndScale) {
-***REMOVED******REMOVED******REMOVED******REMOVED***queryCenter = $0.targetGeometry as? Point
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.onVisibleAreaChanged { newValue in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** For "Repeat Search Here" behavior, use the `geoViewExtent` and
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** `isGeoViewNavigating` modifiers on the `SearchView`.
-***REMOVED******REMOVED******REMOVED******REMOVED***geoViewExtent = newValue.extent
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** The visible area can be used to limit the results by
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** using the `queryArea` modifier on the `SearchView`.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***queryArea = newValue
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.overlay {
-***REMOVED******REMOVED******REMOVED******REMOVED***SearchView(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***sources: [locatorDataSource],
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint: $searchResultViewpoint
-***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.resultsOverlay(searchResultsOverlay)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.queryArea($queryArea)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.queryCenter($queryCenter)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.geoViewExtent($geoViewExtent)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.isGeoViewNavigating($isGeoViewNavigating)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
-***REMOVED******REMOVED***
+***REMOVED******REMOVED***.onNavigatingChanged { isGeoViewNavigating = $0 ***REMOVED***
+***REMOVED******REMOVED***.onViewpointChanged(kind: .centerAndScale) {
+***REMOVED******REMOVED******REMOVED***queryCenter = $0.targetGeometry as? Point
+***REMOVED***
+***REMOVED******REMOVED***.onVisibleAreaChanged { newValue in
+***REMOVED******REMOVED******REMOVED******REMOVED*** For "Repeat Search Here" behavior, use the `geoViewExtent` and
+***REMOVED******REMOVED******REMOVED******REMOVED*** `isGeoViewNavigating` modifiers on the `SearchView`.
+***REMOVED******REMOVED******REMOVED***geoViewExtent = newValue.extent
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED*** The visible area can be used to limit the results by
+***REMOVED******REMOVED******REMOVED******REMOVED*** using the `queryArea` modifier on the `SearchView`.
+***REMOVED******REMOVED******REMOVED******REMOVED***queryArea = newValue
+***REMOVED***
+***REMOVED******REMOVED***.overlay {
+***REMOVED******REMOVED******REMOVED***SearchView(
+***REMOVED******REMOVED******REMOVED******REMOVED***sources: [locatorDataSource],
+***REMOVED******REMOVED******REMOVED******REMOVED***viewpoint: $searchResultViewpoint
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***.resultsOverlay(searchResultsOverlay)
+***REMOVED******REMOVED******REMOVED******REMOVED***.queryArea($queryArea)
+***REMOVED******REMOVED******REMOVED***.queryCenter($queryCenter)
+***REMOVED******REMOVED******REMOVED***.geoViewExtent($geoViewExtent)
+***REMOVED******REMOVED******REMOVED***.isGeoViewNavigating($isGeoViewNavigating)
+***REMOVED******REMOVED******REMOVED***.padding()
+***REMOVED***
 ***REMOVED***
 ***REMOVED***

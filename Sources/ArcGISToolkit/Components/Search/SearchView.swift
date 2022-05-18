@@ -47,9 +47,8 @@ public struct SearchView: View {
 ***REMOVED******REMOVED***/ Tracks the current user-entered query. This property drives both suggestions and searches.
 ***REMOVED***var resultMode: SearchResultMode = .automatic
 
-***REMOVED******REMOVED***/ The search area to be used for the current query. Defaults to `nil`.
-***REMOVED******REMOVED***/
-***REMOVED******REMOVED***/ If `nil`, then there is no limiting of the search results to a given area.
+***REMOVED******REMOVED***/ The search area to be used for the current query. If `nil`, then there is no limiting of the
+***REMOVED******REMOVED***/ search results to a given area.
 ***REMOVED***@Binding var queryArea: Geometry?
 
 ***REMOVED******REMOVED***/ Defines the center for the search. Defaults to `nil`.
@@ -95,7 +94,7 @@ public struct SearchView: View {
 ***REMOVED******REMOVED***/ Message to show when there are no results or suggestions. Defaults to "No results found".
 ***REMOVED******REMOVED***/ Note: this is set using the `noResultsMessage` modifier.
 ***REMOVED***private var noResultsMessage = "No results found"
-
+***REMOVED***
 ***REMOVED******REMOVED***/ The width of the search bar, taking into account the horizontal and vertical size classes
 ***REMOVED******REMOVED***/ of the device. This will cause the search field to display full-width on an iPhone in portrait
 ***REMOVED******REMOVED***/ orientation (and certain iPad multitasking configurations) and limit the width to `360` in other cases.
@@ -112,7 +111,7 @@ public struct SearchView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Determines whether the results lists are displayed.
 ***REMOVED***@State private var isResultListHidden: Bool = false
-
+***REMOVED***
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***VStack {
 ***REMOVED******REMOVED******REMOVED***GeometryReader { geometry in
@@ -223,7 +222,7 @@ extension SearchView {
 ***REMOVED******REMOVED***copy.noResultsMessage = newNoResultsMessage
 ***REMOVED******REMOVED***return copy
 ***REMOVED***
-
+***REMOVED***
 ***REMOVED******REMOVED***/ Sets the current query.
 ***REMOVED******REMOVED***/ - Parameter newQueryString: The new value.
 ***REMOVED******REMOVED***/ - Returns: The `SearchView`.
@@ -241,7 +240,7 @@ extension SearchView {
 ***REMOVED******REMOVED***copy.resultsOverlay = newResultsOverlay
 ***REMOVED******REMOVED***return copy
 ***REMOVED***
-
+***REMOVED***
 ***REMOVED******REMOVED***/ Defines how many results to return.
 ***REMOVED******REMOVED***/ - Parameter newResultMode: The new value.
 ***REMOVED******REMOVED***/ - Returns: The `SearchView`.
@@ -250,7 +249,7 @@ extension SearchView {
 ***REMOVED******REMOVED***copy.resultMode = newResultMode
 ***REMOVED******REMOVED***return copy
 ***REMOVED***
-
+***REMOVED***
 ***REMOVED******REMOVED***/ The search area to be used for the current query.
 ***REMOVED******REMOVED***/ - Parameter newQueryArea: The new value.
 ***REMOVED******REMOVED***/ - Returns: The `SearchView`.
@@ -259,7 +258,7 @@ extension SearchView {
 ***REMOVED******REMOVED***copy._queryArea = newQueryArea
 ***REMOVED******REMOVED***return copy
 ***REMOVED***
-
+***REMOVED***
 ***REMOVED******REMOVED***/ Defines the center for the search.
 ***REMOVED******REMOVED***/ - Parameter newQueryCenter: The new value.
 ***REMOVED******REMOVED***/ - Returns: The `SearchView`.
@@ -268,7 +267,7 @@ extension SearchView {
 ***REMOVED******REMOVED***copy._queryCenter = newQueryCenter
 ***REMOVED******REMOVED***return copy
 ***REMOVED***
-
+***REMOVED***
 ***REMOVED******REMOVED***/ The current map/scene view extent. Defaults to `nil`. Used to allow repeat searches after
 ***REMOVED******REMOVED***/ panning/zooming the map. Set to `nil` if repeat search behavior is not wanted.
 ***REMOVED******REMOVED***/ - Parameter newGeoViewExtent: The new value.
@@ -278,7 +277,7 @@ extension SearchView {
 ***REMOVED******REMOVED***copy._geoViewExtent = newGeoViewExtent
 ***REMOVED******REMOVED***return copy
 ***REMOVED***
-
+***REMOVED***
 ***REMOVED******REMOVED***/ Denotes whether the `GeoView` is navigating. Used for the repeat search behavior.
 ***REMOVED******REMOVED***/ - Parameter newIsGeoViewNavigating: The new value.
 ***REMOVED******REMOVED***/ - Returns: The `SearchView`.

@@ -38,8 +38,7 @@ public enum SearchOutcome {
 ***REMOVED***
 
 ***REMOVED***/ Performs searches and manages search state for a search, or optionally without a UI connection.
-@MainActor
-final class SearchViewModel: ObservableObject {
+@MainActor final class SearchViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ Creates a `SearchViewModel`.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - sources: Collection of search sources to be used.
@@ -57,8 +56,7 @@ final class SearchViewModel: ObservableObject {
 ***REMOVED***private var activeSource: SearchSource? = nil
 ***REMOVED***
 ***REMOVED******REMOVED***/ Tracks the current user-entered query. This property drives both suggestions and searches.
-***REMOVED***@Published
-***REMOVED***var currentQuery: String = "" {
+***REMOVED***@Published var currentQuery: String = "" {
 ***REMOVED******REMOVED***willSet {
 ***REMOVED******REMOVED******REMOVED***isEligibleForRequery = false
 ***REMOVED******REMOVED******REMOVED***
@@ -138,8 +136,7 @@ final class SearchViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ Changes to this property are driven by changes to the `geoViewExtent` property. This value will be
 ***REMOVED******REMOVED***/ `true` if the extent center changes by more than 25% of the average of the extent's height and width
 ***REMOVED******REMOVED***/ at the time of the last search or if the extent width/height changes by the same amount.
-***REMOVED***@Published
-***REMOVED***private(set) var isEligibleForRequery: Bool = false
+***REMOVED***@Published private(set) var isEligibleForRequery: Bool = false
 ***REMOVED***
 ***REMOVED******REMOVED***/ The search area to be used for the current query. Results will be limited to those.
 ***REMOVED******REMOVED***/ within `QueryArea`. Defaults to `nil`.
@@ -156,8 +153,7 @@ final class SearchViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED******REMOVED***/ A search outcome that contains the search and suggestion results. A `nil` value means no
 ***REMOVED******REMOVED***/ query has been made.
-***REMOVED***@Published
-***REMOVED***private(set) var searchOutcome: SearchOutcome? {
+***REMOVED***@Published private(set) var searchOutcome: SearchOutcome? {
 ***REMOVED******REMOVED***didSet {
 ***REMOVED******REMOVED******REMOVED***if case let .results(results) = searchOutcome {
 ***REMOVED******REMOVED******REMOVED******REMOVED***display(searchResults: results)
