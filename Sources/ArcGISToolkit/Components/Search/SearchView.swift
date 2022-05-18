@@ -279,7 +279,7 @@ extension SearchView {
         return copy
     }
 
-    /// Denotes whether the geoview is navigating.  Used for the repeat search behavior.
+    /// Denotes whether the `GeoView` is navigating. Used for the repeat search behavior.
     /// - Parameter newIsGeoViewNavigating: The new value.
     /// - Returns: The `SearchView`.
     public func isGeoViewNavigating(_ newIsGeoViewNavigating: Binding<Bool>) -> Self {
