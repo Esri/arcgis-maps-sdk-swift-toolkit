@@ -72,7 +72,7 @@ struct SearchExampleView: View {
                     viewpoint: $searchResultViewpoint
                 )
                     .resultsOverlay(searchResultsOverlay)
-//                    .queryArea(queryArea)
+//                    .queryArea($queryArea)
                     .queryCenter($queryCenter)
                     .geoViewExtent($geoViewExtent)
                     .isGeoViewNavigating($isGeoViewNavigating)
