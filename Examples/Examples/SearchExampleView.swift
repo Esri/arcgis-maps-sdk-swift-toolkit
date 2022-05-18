@@ -66,7 +66,7 @@ struct SearchExampleView: View {
                 // using the `queryArea` modifier on the `SearchView`.
 //                queryArea = newValue
             }
-            .overlay(alignment: .topTrailing) {
+            .overlay {
                 SearchView(
                     sources: [locatorDataSource],
                     viewpoint: $searchResultViewpoint
