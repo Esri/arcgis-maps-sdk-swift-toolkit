@@ -56,7 +56,7 @@ public enum SearchOutcome {
     private var activeSource: SearchSource? = nil
     
     /// Tracks the current user-entered query. This property drives both suggestions and searches.
-    @Published var currentQuery: String = "" {
+    @Published var currentQuery = "" {
         willSet {
             isEligibleForRequery = false
             
