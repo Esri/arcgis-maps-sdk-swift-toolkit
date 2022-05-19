@@ -82,7 +82,7 @@ public struct SearchView: View {
 ***REMOVED******REMOVED***/ The string shown in the search view when no user query is entered.
 ***REMOVED******REMOVED***/ Defaults to "Find a place or address". Note: this is set using the
 ***REMOVED******REMOVED***/ `prompt` modifier.
-***REMOVED***private var prompt: String = "Find a place or address"
+***REMOVED***private var prompt = "Find a place or address"
 ***REMOVED***
 ***REMOVED******REMOVED***/ Determines whether a built-in result view will be shown. Defaults to `true`.
 ***REMOVED******REMOVED***/ If `false`, the result display/selection list is not shown. Set to false if you want to hide the results
@@ -110,7 +110,7 @@ public struct SearchView: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Determines whether the results lists are displayed.
-***REMOVED***@State private var isResultListHidden: Bool = false
+***REMOVED***@State private var isResultListHidden = false
 ***REMOVED***
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***VStack {

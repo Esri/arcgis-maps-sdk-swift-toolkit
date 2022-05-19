@@ -117,7 +117,7 @@ public enum SearchOutcome {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ `true` when the geoView is navigating, `false` otherwise. Set by the external client.
-***REMOVED***var isGeoViewNavigating: Bool = false
+***REMOVED***var isGeoViewNavigating = false
 ***REMOVED***
 ***REMOVED******REMOVED***/ The `Viewpoint` used to pan/zoom to results. If `nil`, there will be no zooming to results.
 ***REMOVED***var viewpoint: Binding<Viewpoint?>? = nil
