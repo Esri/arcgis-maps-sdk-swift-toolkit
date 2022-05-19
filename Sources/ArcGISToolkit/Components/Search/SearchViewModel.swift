@@ -117,7 +117,7 @@ public enum SearchOutcome {
     }
     
     /// `true` when the geoView is navigating, `false` otherwise. Set by the external client.
-    var isGeoViewNavigating: Bool = false
+    var isGeoViewNavigating = false
     
     /// The `Viewpoint` used to pan/zoom to results. If `nil`, there will be no zooming to results.
     var viewpoint: Binding<Viewpoint?>? = nil
