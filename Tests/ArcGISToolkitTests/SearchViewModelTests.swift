@@ -13,7 +13,7 @@
 
 import XCTest
 ***REMOVED***
-***REMOVED***Toolkit
+@testable ***REMOVED***Toolkit
 
 @MainActor
 class SearchViewModelTests: XCTestCase {
