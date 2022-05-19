@@ -16,62 +16,67 @@ import ArcGIS
 import ArcGISToolkit
 
 struct SearchExampleView: View {
-    /// The `SearchViewModel` used to define behavior of the `SearchView`.
-    @ObservedObject
-    var searchViewModel = SearchViewModel(
-        sources: [SmartLocatorSearchSource(
-            name: "My locator",
-            maximumResults: 16,
-            maximumSuggestions: 16
-        )]
+    /// Provides search behavior customization.
+    let locatorDataSource = SmartLocatorSearchSource(
+        name: "My locator",
+        maximumResults: 16,
+        maximumSuggestions: 16
     )
     
-    let map = Map(basemapStyle: .arcGISImagery)
+    @StateObject private var map = Map(basemapStyle: .arcGISImagery)
+    
+    /// The `GraphicsOverlay` used by the `SearchView` to display search results on the map.
+    private let searchResultsOverlay = GraphicsOverlay()
     
     /// The map viewpoint used by the `SearchView` to pan/zoom the map
     /// to the extent of the search results.
-    @State
-    private var searchResultViewpoint: Viewpoint? = Viewpoint(
+    @State private var searchResultViewpoint: Viewpoint? = Viewpoint(
         center: Point(x: -93.258133, y: 44.986656, spatialReference: .wgs84),
         scale: 1000000
     )
     
-    /// The `GraphicsOverlay` used by the `SearchView` to display search results on the map.
-    let searchResultsOverlay = GraphicsOverlay()
-
+    /// Denotes whether the geoview is navigating. Used for the repeat search behavior.
+    @State private var isGeoViewNavigating = false
+    
+    /// The current map/scene view extent. Used to allow repeat searches after panning/zooming the map.
+    @State private var geoViewExtent: Envelope?
+    
+    /// The search area to be used for the current query.
+    @State private var queryArea: Geometry?
+    
+    /// Defines the center for the search.
+    @State private var queryCenter: Point?
+    
     var body: some View {
         MapView(
             map: map,
             viewpoint: searchResultViewpoint,
             graphicsOverlays: [searchResultsOverlay]
         )
-            .onNavigatingChanged { searchViewModel.isGeoViewNavigating = $0 }
-            .onViewpointChanged(kind: .centerAndScale) {
-                searchViewModel.queryCenter = $0.targetGeometry as? Point
-                
-                // Reset `searchResultViewpoint` here when the user pans/zooms
-                // the map, so if the user commits the same search with the
-                // same result, the Map will pan/zoom to the result. Otherwise,
-                // `searchResultViewpoint` doesn't change which doesn't
-                // redraw the map with the new viewpoint.
-                searchResultViewpoint = nil
-            }
-            .onVisibleAreaChanged { newValue in
-                // Setting `searchViewModel.queryArea` will limit the
-                // results to `queryArea`.
-                //searchViewModel.queryArea = newValue
-
-                // For "Repeat Search Here" behavior, set the
-                // `searchViewModel.geoViewExtent` property when navigating.
-                searchViewModel.geoViewExtent = newValue.extent
-            }
-            .overlay(alignment: .topTrailing) {
-                SearchView(searchViewModel: searchViewModel)
-                    .padding()
-            }
-            .onAppear {
-                searchViewModel.viewpoint = $searchResultViewpoint
-                searchViewModel.resultsOverlay = searchResultsOverlay
-            }
+        .onNavigatingChanged { isGeoViewNavigating = $0 }
+        .onViewpointChanged(kind: .centerAndScale) {
+            queryCenter = $0.targetGeometry as? Point
+        }
+        .onVisibleAreaChanged { newValue in
+            // For "Repeat Search Here" behavior, use the `geoViewExtent` and
+            // `isGeoViewNavigating` modifiers on the `SearchView`.
+            geoViewExtent = newValue.extent
+            
+            // The visible area can be used to limit the results by
+            // using the `queryArea` modifier on the `SearchView`.
+//            queryArea = newValue
+        }
+        .overlay {
+            SearchView(
+                sources: [locatorDataSource],
+                viewpoint: $searchResultViewpoint
+            )
+            .resultsOverlay(searchResultsOverlay)
+//            .queryArea($queryArea)
+            .queryCenter($queryCenter)
+            .geoViewExtent($geoViewExtent)
+            .isGeoViewNavigating($isGeoViewNavigating)
+            .padding()
+        }
     }
 }
