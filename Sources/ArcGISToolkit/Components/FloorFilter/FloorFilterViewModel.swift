@@ -35,21 +35,12 @@ final class FloorFilterViewModel: ObservableObject {
     ///   - viewpoint: Viewpoint updated when the selected site or facility changes.
     init(
         automaticSelectionMode: FloorFilterAutomaticSelectionMode = .always,
-        floorManager: FloorManager
+        floorManager: FloorManager,
+        viewpoint: Binding<Viewpoint?>
     ) {
         self.automaticSelectionMode = automaticSelectionMode
         self.floorManager = floorManager
-        
-        viewpointSubscription = viewpointSubject
-            .debounce(for: delay, scheduler: DispatchQueue.main)
-            .sink(receiveValue: { [weak self] _ in
-                guard let self = self,
-                      let viewpoint = self.viewpoint,
-                      !viewpoint.targetScale.isZero else {
-                          return
-                }
-                self.automaticallySelectFacilityOrSite()
-            })
+        self.viewpoint = viewpoint
         
         Task {
             do {
@@ -76,10 +67,14 @@ final class FloorFilterViewModel: ObservableObject {
     
     /// The `Viewpoint` used to pan/zoom to the selected site/facilty.
     /// If `nil`, there will be no automatic pan/zoom operations.
-    @Published var viewpoint: Viewpoint? {
-        willSet {
-            viewpointSubject.send(newValue)
-        }
+    private var viewpoint: Binding<Viewpoint?>
+    
+    func onViewpointChanged(_ viewpoint: Viewpoint?) {
+        guard let viewpoint = viewpoint,
+              !viewpoint.targetScale.isZero else {
+                  return
+              }
+        automaticallySelectFacilityOrSite()
     }
     
     // MARK: Constants
@@ -227,13 +222,13 @@ final class FloorFilterViewModel: ObservableObject {
             facilityMinScale = 1500
         }
         
-        if viewpoint?.targetScale ?? .zero > facilityMinScale {
+        if viewpoint.wrappedValue?.targetScale ?? .zero > facilityMinScale {
             return false
         }
         
         // If the centerpoint is within a facilities' geometry, select that site.
         let facilityResult = floorManager.facilities.first { facility in
-            guard let extent1 = viewpoint?.targetGeometry.extent,
+            guard let extent1 = viewpoint.wrappedValue?.targetGeometry.extent,
                   let extent2 = facility.geometry?.extent else {
                 return false
             }
@@ -262,7 +257,7 @@ final class FloorFilterViewModel: ObservableObject {
         }
         
         // If viewpoint is out of range, reset selection and return early.
-        if viewpoint?.targetScale ?? .zero > siteMinScale {
+        if viewpoint.wrappedValue?.targetScale ?? .zero > siteMinScale {
             if automaticSelectionMode == .always {
                 selection = nil
             }
@@ -271,7 +266,7 @@ final class FloorFilterViewModel: ObservableObject {
         
         // If the centerpoint is within a site's geometry, select that site.
         let siteResult = floorManager.sites.first { site in
-            guard let extent1 = viewpoint?.targetGeometry.extent,
+            guard let extent1 = viewpoint.wrappedValue?.targetGeometry.extent,
                   let extent2 = site.geometry?.extent else {
                 return false
             }
@@ -297,17 +292,11 @@ final class FloorFilterViewModel: ObservableObject {
         builder.expand(factor: 1.5)
         let targetExtent = builder.toGeometry()
         if !targetExtent.isEmpty {
-            viewpoint = Viewpoint(
+            viewpoint.wrappedValue = Viewpoint(
                 targetExtent: targetExtent
             )
         }
     }
-    
-    /// A subject to which viewpoint updates can be submitted.
-    private var viewpointSubject = PassthroughSubject<Viewpoint?, Never>()
-    
-    /// A subscription to handle listening for viewpoint changes.
-    private var viewpointSubscription: AnyCancellable?
 }
 
 extension FloorFilterViewModel.Selection: Hashable { }
