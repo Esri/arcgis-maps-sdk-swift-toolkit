@@ -39,13 +39,13 @@ struct SearchExampleView: View {
 ***REMOVED***@State private var isGeoViewNavigating = false
 ***REMOVED***
 ***REMOVED******REMOVED***/ The current map/scene view extent. Used to allow repeat searches after panning/zooming the map.
-***REMOVED***@State private var geoViewExtent: Envelope? = nil
+***REMOVED***@State private var geoViewExtent: Envelope?
 ***REMOVED***
-***REMOVED******REMOVED***/ The search area to be used for the current query
-***REMOVED***@State private var queryArea: Geometry? = nil
+***REMOVED******REMOVED***/ The search area to be used for the current query.
+***REMOVED***@State private var queryArea: Geometry?
 ***REMOVED***
 ***REMOVED******REMOVED***/ Defines the center for the search.
-***REMOVED***@State private var queryCenter: Point? = nil
+***REMOVED***@State private var queryCenter: Point?
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***MapView(
