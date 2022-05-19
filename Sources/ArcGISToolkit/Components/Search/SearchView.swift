@@ -16,25 +16,73 @@ import ArcGIS
 
 /// `SearchView` presents a search experience, powered by an underlying `SearchViewModel`.
 public struct SearchView: View {
-    /// Creates a new `SearchView`.
+    /// Creates a `SearchView`.
     /// - Parameters:
-    ///   - searchViewModel: The view model used by `SearchView`.
-    public init(searchViewModel: SearchViewModel? = nil) {
-        self.searchViewModel = searchViewModel ?? SearchViewModel(
-            sources: [LocatorSearchSource()]
-        )
+    ///   - sources: A collection of search sources to be used.
+    ///   - viewpoint: The `Viewpoint` used to pan/zoom to results. If `nil`, there will be
+    ///   no zooming to results.
+    public init(
+        sources: [SearchSource] = [],
+        viewpoint: Binding<Viewpoint?>? = nil
+    ) {
+        _viewModel = StateObject(wrappedValue: SearchViewModel(
+            sources: sources.isEmpty ? [LocatorSearchSource()] : sources,
+            viewpoint: viewpoint
+        ))
+        
+        _queryArea = .constant(nil)
+        _queryCenter = .constant(nil)
+        _geoViewExtent = .constant(nil)
+        _isGeoViewNavigating = .constant(false)
     }
     
     /// The view model used by the view. The `SearchViewModel` manages state and handles the
     /// activity of searching. The view observes `SearchViewModel` for changes in state. The view
     /// calls methods on `SearchViewModel` in response to user action.
-    @ObservedObject
-    var searchViewModel: SearchViewModel
+    @StateObject private var viewModel: SearchViewModel
+
+    /// Tracks the current user-entered query. This property drives both suggestions and searches.
+    var currentQuery = ""
+
+    /// Tracks the current user-entered query. This property drives both suggestions and searches.
+    var resultMode: SearchResultMode = .automatic
+
+    /// The search area to be used for the current query. If `nil`, then there is no limiting of the
+    /// search results to a given area.
+    @Binding var queryArea: Geometry?
+
+    /// Defines the center for the search. Defaults to `nil`.
+    ///
+    /// If `nil`, does not prioritize the search results around any point.
+    @Binding var queryCenter: Point?
+
+    /// The current map/scene view extent. Defaults to `nil`.
+    ///
+    /// This will be used to determine the value of `isEligibleForRequery` for the 'Repeat
+    /// search here' behavior. If that behavior is not wanted, it should be left as `nil`.
+    @Binding var geoViewExtent: Envelope?
     
+    /// Determines whether the `geoView` is navigating in response to user interaction.
+    @Binding private var isGeoViewNavigating: Bool
+
+    /// The `GraphicsOverlay` used to display results. If `nil`, no results will be displayed.
+    var resultsOverlay: GraphicsOverlay? = nil
+    
+    /// A collection of search sources to be used. This list is maintained over time.
+    /// The view should observe this list for changes. Consumers should add and remove sources from
+    /// this list as needed.
+    /// NOTE: Only the first source is currently used; multiple sources are not yet supported.
+    var sources: [SearchSource] {
+        viewModel.sources
+    }
+    
+    @Environment(\.horizontalSizeClass) var horizontalSizeClass
+    @Environment(\.verticalSizeClass) var verticalSizeClass
+
     /// The string shown in the search view when no user query is entered.
     /// Defaults to "Find a place or address". Note: this is set using the
     /// `prompt` modifier.
-    private var prompt: String = "Find a place or address"
+    private var prompt = "Find a place or address"
     
     /// Determines whether a built-in result view will be shown. Defaults to `true`.
     /// If `false`, the result display/selection list is not shown. Set to false if you want to hide the results
@@ -46,12 +94,6 @@ public struct SearchView: View {
     /// Message to show when there are no results or suggestions. Defaults to "No results found".
     /// Note: this is set using the `noResultsMessage` modifier.
     private var noResultsMessage = "No results found"
-    
-    @Environment(\.horizontalSizeClass)
-    private var horizontalSizeClass: UserInterfaceSizeClass?
-    
-    @Environment(\.verticalSizeClass)
-    private var verticalSizeClass: UserInterfaceSizeClass?
     
     /// The width of the search bar, taking into account the horizontal and vertical size classes
     /// of the device. This will cause the search field to display full-width on an iPhone in portrait
@@ -68,8 +110,7 @@ public struct SearchView: View {
     }
     
     /// Determines whether the results lists are displayed.
-    @State
-    private var isResultListHidden: Bool = false
+    @State private var isResultListHidden = false
     
     public var body: some View {
         VStack {
@@ -78,29 +119,29 @@ public struct SearchView: View {
                     Spacer()
                     VStack {
                         SearchField(
-                            query: $searchViewModel.currentQuery,
+                            query: $viewModel.currentQuery,
                             prompt: prompt,
                             isResultsButtonHidden: !enableResultListView,
                             isResultListHidden: $isResultListHidden
                         )
-                            .onSubmit { searchViewModel.commitSearch() }
-                            .submitLabel(.search)
+                        .onSubmit { viewModel.commitSearch() }
+                        .submitLabel(.search)
                         if enableResultListView,
                            !isResultListHidden,
-                           let searchOutcome = searchViewModel.searchOutcome {
+                           let searchOutcome = viewModel.searchOutcome {
                             Group {
                                 switch searchOutcome {
                                 case .results(let results):
                                     SearchResultList(
                                         searchResults: results,
-                                        selectedResult: $searchViewModel.selectedResult,
+                                        selectedResult: $viewModel.selectedResult,
                                         noResultsMessage: noResultsMessage
                                     )
-                                        .frame(height: useHalfHeightResults ? geometry.size.height / 2 : nil)
+                                    .frame(height: useHalfHeightResults ? geometry.size.height / 2 : nil)
                                 case .suggestions(let suggestions):
                                     SearchSuggestionList(
                                         suggestionResults: suggestions,
-                                        currentSuggestion: $searchViewModel.currentSuggestion,
+                                        currentSuggestion: $viewModel.currentSuggestion,
                                         noResultsMessage: noResultsMessage
                                     )
                                 case .failure(let errorString):
@@ -116,16 +157,33 @@ public struct SearchView: View {
                 }
             }
             Spacer()
-            if searchViewModel.isEligibleForRequery {
+            if viewModel.isEligibleForRequery {
                 Button("Repeat Search Here") {
-                    searchViewModel.repeatSearch()
+                    viewModel.repeatSearch()
                 }
                 .esriBorder()
             }
         }
         .listStyle(.plain)
-        .onReceive(searchViewModel.$currentQuery) { _ in
-            searchViewModel.updateSuggestions()
+        .onReceive(viewModel.$currentQuery) { _ in
+            viewModel.updateSuggestions()
+        }
+        .onChange(of: geoViewExtent) { _ in
+            viewModel.geoViewExtent = geoViewExtent
+        }
+        .onChange(of: isGeoViewNavigating) { _ in
+            viewModel.isGeoViewNavigating = isGeoViewNavigating
+        }
+        .onChange(of: queryCenter) { _ in
+            viewModel.queryCenter = queryCenter
+        }
+        .onChange(of: queryArea) { _ in
+            viewModel.queryArea = queryArea
+        }
+        .onAppear {
+            viewModel.currentQuery = currentQuery
+            viewModel.resultsOverlay = resultsOverlay
+            viewModel.resultMode = resultMode
         }
     }
 }
@@ -162,6 +220,70 @@ extension SearchView {
     public func noResultsMessage(_ newNoResultsMessage: String) -> Self {
         var copy = self
         copy.noResultsMessage = newNoResultsMessage
+        return copy
+    }
+    
+    /// Sets the current query.
+    /// - Parameter newQueryString: The new value.
+    /// - Returns: The `SearchView`.
+    public func currentQuery(_ newQuery: String) -> Self {
+        var copy = self
+        copy.currentQuery = newQuery
+        return copy
+    }
+    
+    /// The `GraphicsOverlay` used to display results. If `nil`, no results will be displayed.
+    /// - Parameter newResultsOverlay: The new value.
+    /// - Returns: The `SearchView`.
+    public func resultsOverlay(_ newResultsOverlay: GraphicsOverlay?) -> Self {
+        var copy = self
+        copy.resultsOverlay = newResultsOverlay
+        return copy
+    }
+    
+    /// Defines how many results to return.
+    /// - Parameter newResultMode: The new value.
+    /// - Returns: The `SearchView`.
+    public func resultMode(_ newResultMode: SearchResultMode) -> Self {
+        var copy = self
+        copy.resultMode = newResultMode
+        return copy
+    }
+    
+    /// The search area to be used for the current query.
+    /// - Parameter newQueryArea: The new value.
+    /// - Returns: The `SearchView`.
+    public func queryArea(_ newQueryArea: Binding<Geometry?>) -> Self {
+        var copy = self
+        copy._queryArea = newQueryArea
+        return copy
+    }
+    
+    /// Defines the center for the search.
+    /// - Parameter newQueryCenter: The new value.
+    /// - Returns: The `SearchView`.
+    public func queryCenter(_ newQueryCenter: Binding<Point?>) -> Self {
+        var copy = self
+        copy._queryCenter = newQueryCenter
+        return copy
+    }
+    
+    /// The current map/scene view extent. Defaults to `nil`. Used to allow repeat searches after
+    /// panning/zooming the map. Set to `nil` if repeat search behavior is not wanted.
+    /// - Parameter newGeoViewExtent: The new value.
+    /// - Returns: The `SearchView`.
+    public func geoViewExtent(_ newGeoViewExtent: Binding<Envelope?>) -> Self {
+        var copy = self
+        copy._geoViewExtent = newGeoViewExtent
+        return copy
+    }
+    
+    /// Denotes whether the `GeoView` is navigating. Used for the repeat search behavior.
+    /// - Parameter newIsGeoViewNavigating: The new value.
+    /// - Returns: The `SearchView`.
+    public func isGeoViewNavigating(_ newIsGeoViewNavigating: Binding<Bool>) -> Self {
+        var copy = self
+        copy._isGeoViewNavigating = newIsGeoViewNavigating
         return copy
     }
 }
@@ -254,8 +376,11 @@ struct ResultRow: View {
                 if !subtitle.isEmpty {
                     Text(subtitle)
                         .font(.caption)
+                        .foregroundColor(.secondary)
                 }
             }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .contentShape(Rectangle())
         }
         .padding(EdgeInsets(top: 2, leading: 0, bottom: 2, trailing: 0))
     }
