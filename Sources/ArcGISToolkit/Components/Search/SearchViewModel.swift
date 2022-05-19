@@ -56,7 +56,7 @@ public enum SearchOutcome {
 ***REMOVED***private var activeSource: SearchSource? = nil
 ***REMOVED***
 ***REMOVED******REMOVED***/ Tracks the current user-entered query. This property drives both suggestions and searches.
-***REMOVED***@Published var currentQuery: String = "" {
+***REMOVED***@Published var currentQuery = "" {
 ***REMOVED******REMOVED***willSet {
 ***REMOVED******REMOVED******REMOVED***isEligibleForRequery = false
 ***REMOVED******REMOVED******REMOVED***
