@@ -16,62 +16,67 @@
 ***REMOVED***Toolkit
 
 struct SearchExampleView: View {
-***REMOVED******REMOVED***/ The `SearchViewModel` used to define behavior of the `SearchView`.
-***REMOVED***@ObservedObject
-***REMOVED***var searchViewModel = SearchViewModel(
-***REMOVED******REMOVED***sources: [SmartLocatorSearchSource(
-***REMOVED******REMOVED******REMOVED***name: "My locator",
-***REMOVED******REMOVED******REMOVED***maximumResults: 16,
-***REMOVED******REMOVED******REMOVED***maximumSuggestions: 16
-***REMOVED******REMOVED***)]
+***REMOVED******REMOVED***/ Provides search behavior customization.
+***REMOVED***let locatorDataSource = SmartLocatorSearchSource(
+***REMOVED******REMOVED***name: "My locator",
+***REMOVED******REMOVED***maximumResults: 16,
+***REMOVED******REMOVED***maximumSuggestions: 16
 ***REMOVED***)
 ***REMOVED***
-***REMOVED***let map = Map(basemapStyle: .arcGISImagery)
+***REMOVED***@StateObject private var map = Map(basemapStyle: .arcGISImagery)
+***REMOVED***
+***REMOVED******REMOVED***/ The `GraphicsOverlay` used by the `SearchView` to display search results on the map.
+***REMOVED***private let searchResultsOverlay = GraphicsOverlay()
 ***REMOVED***
 ***REMOVED******REMOVED***/ The map viewpoint used by the `SearchView` to pan/zoom the map
 ***REMOVED******REMOVED***/ to the extent of the search results.
-***REMOVED***@State
-***REMOVED***private var searchResultViewpoint: Viewpoint? = Viewpoint(
+***REMOVED***@State private var searchResultViewpoint: Viewpoint? = Viewpoint(
 ***REMOVED******REMOVED***center: Point(x: -93.258133, y: 44.986656, spatialReference: .wgs84),
 ***REMOVED******REMOVED***scale: 1000000
 ***REMOVED***)
 ***REMOVED***
-***REMOVED******REMOVED***/ The `GraphicsOverlay` used by the `SearchView` to display search results on the map.
-***REMOVED***let searchResultsOverlay = GraphicsOverlay()
-
+***REMOVED******REMOVED***/ Denotes whether the geoview is navigating. Used for the repeat search behavior.
+***REMOVED***@State private var isGeoViewNavigating = false
+***REMOVED***
+***REMOVED******REMOVED***/ The current map/scene view extent. Used to allow repeat searches after panning/zooming the map.
+***REMOVED***@State private var geoViewExtent: Envelope?
+***REMOVED***
+***REMOVED******REMOVED***/ The search area to be used for the current query.
+***REMOVED***@State private var queryArea: Geometry?
+***REMOVED***
+***REMOVED******REMOVED***/ Defines the center for the search.
+***REMOVED***@State private var queryCenter: Point?
+***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***MapView(
 ***REMOVED******REMOVED******REMOVED***map: map,
 ***REMOVED******REMOVED******REMOVED***viewpoint: searchResultViewpoint,
 ***REMOVED******REMOVED******REMOVED***graphicsOverlays: [searchResultsOverlay]
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***.onNavigatingChanged { searchViewModel.isGeoViewNavigating = $0 ***REMOVED***
-***REMOVED******REMOVED******REMOVED***.onViewpointChanged(kind: .centerAndScale) {
-***REMOVED******REMOVED******REMOVED******REMOVED***searchViewModel.queryCenter = $0.targetGeometry as? Point
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Reset `searchResultViewpoint` here when the user pans/zooms
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** the map, so if the user commits the same search with the
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** same result, the Map will pan/zoom to the result. Otherwise,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** `searchResultViewpoint` doesn't change which doesn't
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** redraw the map with the new viewpoint.
-***REMOVED******REMOVED******REMOVED******REMOVED***searchResultViewpoint = nil
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.onVisibleAreaChanged { newValue in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Setting `searchViewModel.queryArea` will limit the
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** results to `queryArea`.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***searchViewModel.queryArea = newValue
-
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** For "Repeat Search Here" behavior, set the
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** `searchViewModel.geoViewExtent` property when navigating.
-***REMOVED******REMOVED******REMOVED******REMOVED***searchViewModel.geoViewExtent = newValue.extent
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.overlay(alignment: .topTrailing) {
-***REMOVED******REMOVED******REMOVED******REMOVED***SearchView(searchViewModel: searchViewModel)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.onAppear {
-***REMOVED******REMOVED******REMOVED******REMOVED***searchViewModel.viewpoint = $searchResultViewpoint
-***REMOVED******REMOVED******REMOVED******REMOVED***searchViewModel.resultsOverlay = searchResultsOverlay
-***REMOVED******REMOVED***
+***REMOVED******REMOVED***.onNavigatingChanged { isGeoViewNavigating = $0 ***REMOVED***
+***REMOVED******REMOVED***.onViewpointChanged(kind: .centerAndScale) {
+***REMOVED******REMOVED******REMOVED***queryCenter = $0.targetGeometry as? Point
+***REMOVED***
+***REMOVED******REMOVED***.onVisibleAreaChanged { newValue in
+***REMOVED******REMOVED******REMOVED******REMOVED*** For "Repeat Search Here" behavior, use the `geoViewExtent` and
+***REMOVED******REMOVED******REMOVED******REMOVED*** `isGeoViewNavigating` modifiers on the `SearchView`.
+***REMOVED******REMOVED******REMOVED***geoViewExtent = newValue.extent
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED*** The visible area can be used to limit the results by
+***REMOVED******REMOVED******REMOVED******REMOVED*** using the `queryArea` modifier on the `SearchView`.
+***REMOVED******REMOVED******REMOVED******REMOVED***queryArea = newValue
+***REMOVED***
+***REMOVED******REMOVED***.overlay {
+***REMOVED******REMOVED******REMOVED***SearchView(
+***REMOVED******REMOVED******REMOVED******REMOVED***sources: [locatorDataSource],
+***REMOVED******REMOVED******REMOVED******REMOVED***viewpoint: $searchResultViewpoint
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***.resultsOverlay(searchResultsOverlay)
+***REMOVED******REMOVED******REMOVED******REMOVED***.queryArea($queryArea)
+***REMOVED******REMOVED******REMOVED***.queryCenter($queryCenter)
+***REMOVED******REMOVED******REMOVED***.geoViewExtent($geoViewExtent)
+***REMOVED******REMOVED******REMOVED***.isGeoViewNavigating($isGeoViewNavigating)
+***REMOVED******REMOVED******REMOVED***.padding()
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
