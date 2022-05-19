@@ -136,7 +136,7 @@ public enum SearchOutcome {
 ***REMOVED******REMOVED***/ Changes to this property are driven by changes to the `geoViewExtent` property. This value will be
 ***REMOVED******REMOVED***/ `true` if the extent center changes by more than 25% of the average of the extent's height and width
 ***REMOVED******REMOVED***/ at the time of the last search or if the extent width/height changes by the same amount.
-***REMOVED***@Published private(set) var isEligibleForRequery: Bool = false
+***REMOVED***@Published private(set) var isEligibleForRequery = false
 ***REMOVED***
 ***REMOVED******REMOVED***/ The search area to be used for the current query. Results will be limited to those.
 ***REMOVED******REMOVED***/ within `QueryArea`. Defaults to `nil`.
