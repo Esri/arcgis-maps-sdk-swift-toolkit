@@ -30,11 +30,9 @@ class FloorFilterViewModelTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***  let floorManager = map.floorManager else {
 ***REMOVED******REMOVED******REMOVED***return
 ***REMOVED***
-***REMOVED******REMOVED***try? await floorManager.load()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var _viewpoint: Viewpoint? = getEsriRedlandsViewpoint()
 ***REMOVED******REMOVED***let viewpoint = Binding(get: { _viewpoint ***REMOVED***, set: { _viewpoint = $0 ***REMOVED***)
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let viewModel = FloorFilterViewModel(
 ***REMOVED******REMOVED******REMOVED***floorManager: floorManager,
 ***REMOVED******REMOVED******REMOVED***viewpoint: viewpoint
@@ -51,15 +49,14 @@ class FloorFilterViewModelTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***  let floorManager = map.floorManager else {
 ***REMOVED******REMOVED******REMOVED***return
 ***REMOVED***
-***REMOVED******REMOVED***try? await floorManager.load()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var _viewpoint: Viewpoint? = getEsriRedlandsViewpoint()
 ***REMOVED******REMOVED***let viewpoint = Binding(get: { _viewpoint ***REMOVED***, set: { _viewpoint = $0 ***REMOVED***)
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let viewModel = FloorFilterViewModel(
 ***REMOVED******REMOVED******REMOVED***floorManager: floorManager,
 ***REMOVED******REMOVED******REMOVED***viewpoint: viewpoint
 ***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***guard let site = viewModel.sites.first else {
 ***REMOVED******REMOVED******REMOVED***XCTFail()
 ***REMOVED******REMOVED******REMOVED***return
@@ -82,15 +79,15 @@ class FloorFilterViewModelTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***  let floorManager = map.floorManager else {
 ***REMOVED******REMOVED******REMOVED***return
 ***REMOVED***
-***REMOVED******REMOVED***try? await floorManager.load()
-***REMOVED******REMOVED***let initialViewpoint = getEsriRedlandsViewpoint(.zero)
-***REMOVED******REMOVED***var _viewpoint: Viewpoint? = initialViewpoint
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***var _viewpoint: Viewpoint? = getEsriRedlandsViewpoint(.zero)
 ***REMOVED******REMOVED***let viewpoint = Binding(get: { _viewpoint ***REMOVED***, set: { _viewpoint = $0 ***REMOVED***)
 ***REMOVED******REMOVED***let viewModel = FloorFilterViewModel(
 ***REMOVED******REMOVED******REMOVED***automaticSelectionMode: .never,
 ***REMOVED******REMOVED******REMOVED***floorManager: floorManager,
 ***REMOVED******REMOVED******REMOVED***viewpoint: viewpoint
 ***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***guard let facility = viewModel.facilities.first else {
 ***REMOVED******REMOVED******REMOVED***XCTFail()
 ***REMOVED******REMOVED******REMOVED***return
@@ -113,7 +110,7 @@ class FloorFilterViewModelTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***  let floorManager = map.floorManager else {
 ***REMOVED******REMOVED******REMOVED***return
 ***REMOVED***
-***REMOVED******REMOVED***try? await floorManager.load()
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let initialViewpoint = getEsriRedlandsViewpoint(.zero)
 ***REMOVED******REMOVED***var _viewpoint: Viewpoint? = initialViewpoint
 ***REMOVED******REMOVED***let viewpoint = Binding(get: { _viewpoint ***REMOVED***, set: { _viewpoint = $0 ***REMOVED***)
@@ -121,6 +118,7 @@ class FloorFilterViewModelTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***floorManager: floorManager,
 ***REMOVED******REMOVED******REMOVED***viewpoint: viewpoint
 ***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let levels = viewModel.levels
 ***REMOVED******REMOVED***guard let level = levels.first else {
 ***REMOVED******REMOVED******REMOVED***XCTFail("A first level does not exist")
@@ -148,7 +146,7 @@ class FloorFilterViewModelTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***  let floorManager = map.floorManager else {
 ***REMOVED******REMOVED******REMOVED***return
 ***REMOVED***
-***REMOVED******REMOVED***try? await floorManager.load()
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let viewpointLosAngeles = Viewpoint(
 ***REMOVED******REMOVED******REMOVED***center: Point(
 ***REMOVED******REMOVED******REMOVED******REMOVED***x: -13164116.3284,
@@ -194,15 +192,7 @@ class FloorFilterViewModelTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***  let floorManager = map.floorManager else {
 ***REMOVED******REMOVED******REMOVED***return
 ***REMOVED***
-***REMOVED******REMOVED***try? await floorManager.load()
-***REMOVED******REMOVED***let viewpointLosAngeles = Viewpoint(
-***REMOVED******REMOVED******REMOVED***center: Point(
-***REMOVED******REMOVED******REMOVED******REMOVED***x: -13164116.3284,
-***REMOVED******REMOVED******REMOVED******REMOVED***y: 4034465.8065,
-***REMOVED******REMOVED******REMOVED******REMOVED***spatialReference: .webMercator
-***REMOVED******REMOVED******REMOVED***),
-***REMOVED******REMOVED******REMOVED***scale: 10_000
-***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var _viewpoint: Viewpoint? = getEsriRedlandsViewpoint(scale: 1000)
 ***REMOVED******REMOVED***let viewpoint = Binding(get: { _viewpoint ***REMOVED***, set: { _viewpoint = $0 ***REMOVED***)
 ***REMOVED******REMOVED***let viewModel = FloorFilterViewModel(
@@ -220,7 +210,7 @@ class FloorFilterViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***XCTAssertEqual(selectedFacility?.name, "Q")
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Viewpoint is Los Angeles, but selection should remain Redlands Main Q
-***REMOVED******REMOVED***_viewpoint = viewpointLosAngeles
+***REMOVED******REMOVED***_viewpoint = .losAngeles
 ***REMOVED******REMOVED***viewModel.automaticallySelectFacilityOrSite()
 ***REMOVED******REMOVED***selectedFacility = viewModel.selectedFacility
 ***REMOVED******REMOVED***selectedSite = viewModel.selectedSite
@@ -234,16 +224,8 @@ class FloorFilterViewModelTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***  let floorManager = map.floorManager else {
 ***REMOVED******REMOVED******REMOVED***return
 ***REMOVED***
-***REMOVED******REMOVED***try? await floorManager.load()
-***REMOVED******REMOVED***let viewpointLosAngeles = Viewpoint(
-***REMOVED******REMOVED******REMOVED***center: Point(
-***REMOVED******REMOVED******REMOVED******REMOVED***x: -13164116.3284,
-***REMOVED******REMOVED******REMOVED******REMOVED***y: 4034465.8065,
-***REMOVED******REMOVED******REMOVED******REMOVED***spatialReference: .webMercator
-***REMOVED******REMOVED******REMOVED***),
-***REMOVED******REMOVED******REMOVED***scale: 10_000
-***REMOVED******REMOVED***)
-***REMOVED******REMOVED***var _viewpoint: Viewpoint? = viewpointLosAngeles
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***var _viewpoint: Viewpoint? = .losAngeles
 ***REMOVED******REMOVED***let viewpoint = Binding(get: { _viewpoint ***REMOVED***, set: { _viewpoint = $0 ***REMOVED***)
 ***REMOVED******REMOVED***let viewModel = FloorFilterViewModel(
 ***REMOVED******REMOVED******REMOVED***automaticSelectionMode: .never,
@@ -306,7 +288,23 @@ extension FloorFilterViewModelTests {
 ***REMOVED******REMOVED***/ Builds viewpoints to use for tests.
 ***REMOVED******REMOVED***/ - Parameter rotation: The rotation to use for the resulting viewpoint.
 ***REMOVED******REMOVED***/ - Returns: A viewpoint object for tests.
-***REMOVED***func getEsriRedlandsViewpoint(_ rotation: Double = .zero, scale: Double = 10_000) -> Viewpoint {
+***REMOVED***func getEsriRedlandsViewpoint(
+***REMOVED******REMOVED***_ rotation: Double = .zero,
+***REMOVED******REMOVED***scale: Double = 10_000
+***REMOVED***) -> Viewpoint {
 ***REMOVED******REMOVED***return Viewpoint(center: point, scale: scale, rotation: rotation)
+***REMOVED***
+***REMOVED***
+
+private extension Viewpoint {
+***REMOVED***static var losAngeles: Viewpoint {
+***REMOVED******REMOVED***Viewpoint(
+***REMOVED******REMOVED******REMOVED***center: Point(
+***REMOVED******REMOVED******REMOVED******REMOVED***x: -13164116.3284,
+***REMOVED******REMOVED******REMOVED******REMOVED***y: 4034465.8065,
+***REMOVED******REMOVED******REMOVED******REMOVED***spatialReference: .webMercator
+***REMOVED******REMOVED******REMOVED***),
+***REMOVED******REMOVED******REMOVED***scale: 10_000
+***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
