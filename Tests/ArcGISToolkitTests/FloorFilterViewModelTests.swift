@@ -30,11 +30,9 @@ class FloorFilterViewModelTests: XCTestCase {
               let floorManager = map.floorManager else {
             return
         }
-        try? await floorManager.load()
         
         var _viewpoint: Viewpoint? = getEsriRedlandsViewpoint()
         let viewpoint = Binding(get: { _viewpoint }, set: { _viewpoint = $0 })
-        
         let viewModel = FloorFilterViewModel(
             floorManager: floorManager,
             viewpoint: viewpoint
@@ -51,15 +49,14 @@ class FloorFilterViewModelTests: XCTestCase {
               let floorManager = map.floorManager else {
             return
         }
-        try? await floorManager.load()
         
         var _viewpoint: Viewpoint? = getEsriRedlandsViewpoint()
         let viewpoint = Binding(get: { _viewpoint }, set: { _viewpoint = $0 })
-        
         let viewModel = FloorFilterViewModel(
             floorManager: floorManager,
             viewpoint: viewpoint
         )
+        
         guard let site = viewModel.sites.first else {
             XCTFail()
             return
@@ -82,15 +79,15 @@ class FloorFilterViewModelTests: XCTestCase {
               let floorManager = map.floorManager else {
             return
         }
-        try? await floorManager.load()
-        let initialViewpoint = getEsriRedlandsViewpoint(.zero)
-        var _viewpoint: Viewpoint? = initialViewpoint
+        
+        var _viewpoint: Viewpoint? = getEsriRedlandsViewpoint(.zero)
         let viewpoint = Binding(get: { _viewpoint }, set: { _viewpoint = $0 })
         let viewModel = FloorFilterViewModel(
             automaticSelectionMode: .never,
             floorManager: floorManager,
             viewpoint: viewpoint
         )
+        
         guard let facility = viewModel.facilities.first else {
             XCTFail()
             return
@@ -113,7 +110,7 @@ class FloorFilterViewModelTests: XCTestCase {
               let floorManager = map.floorManager else {
             return
         }
-        try? await floorManager.load()
+        
         let initialViewpoint = getEsriRedlandsViewpoint(.zero)
         var _viewpoint: Viewpoint? = initialViewpoint
         let viewpoint = Binding(get: { _viewpoint }, set: { _viewpoint = $0 })
@@ -121,6 +118,7 @@ class FloorFilterViewModelTests: XCTestCase {
             floorManager: floorManager,
             viewpoint: viewpoint
         )
+        
         let levels = viewModel.levels
         guard let level = levels.first else {
             XCTFail("A first level does not exist")
@@ -148,7 +146,7 @@ class FloorFilterViewModelTests: XCTestCase {
               let floorManager = map.floorManager else {
             return
         }
-        try? await floorManager.load()
+        
         let viewpointLosAngeles = Viewpoint(
             center: Point(
                 x: -13164116.3284,
@@ -194,15 +192,7 @@ class FloorFilterViewModelTests: XCTestCase {
               let floorManager = map.floorManager else {
             return
         }
-        try? await floorManager.load()
-        let viewpointLosAngeles = Viewpoint(
-            center: Point(
-                x: -13164116.3284,
-                y: 4034465.8065,
-                spatialReference: .webMercator
-            ),
-            scale: 10_000
-        )
+        
         var _viewpoint: Viewpoint? = getEsriRedlandsViewpoint(scale: 1000)
         let viewpoint = Binding(get: { _viewpoint }, set: { _viewpoint = $0 })
         let viewModel = FloorFilterViewModel(
@@ -220,7 +210,7 @@ class FloorFilterViewModelTests: XCTestCase {
         XCTAssertEqual(selectedFacility?.name, "Q")
         
         // Viewpoint is Los Angeles, but selection should remain Redlands Main Q
-        _viewpoint = viewpointLosAngeles
+        _viewpoint = .losAngeles
         viewModel.automaticallySelectFacilityOrSite()
         selectedFacility = viewModel.selectedFacility
         selectedSite = viewModel.selectedSite
@@ -234,16 +224,8 @@ class FloorFilterViewModelTests: XCTestCase {
               let floorManager = map.floorManager else {
             return
         }
-        try? await floorManager.load()
-        let viewpointLosAngeles = Viewpoint(
-            center: Point(
-                x: -13164116.3284,
-                y: 4034465.8065,
-                spatialReference: .webMercator
-            ),
-            scale: 10_000
-        )
-        var _viewpoint: Viewpoint? = viewpointLosAngeles
+        
+        var _viewpoint: Viewpoint? = .losAngeles
         let viewpoint = Binding(get: { _viewpoint }, set: { _viewpoint = $0 })
         let viewModel = FloorFilterViewModel(
             automaticSelectionMode: .never,
@@ -306,7 +288,23 @@ extension FloorFilterViewModelTests {
     /// Builds viewpoints to use for tests.
     /// - Parameter rotation: The rotation to use for the resulting viewpoint.
     /// - Returns: A viewpoint object for tests.
-    func getEsriRedlandsViewpoint(_ rotation: Double = .zero, scale: Double = 10_000) -> Viewpoint {
+    func getEsriRedlandsViewpoint(
+        _ rotation: Double = .zero,
+        scale: Double = 10_000
+    ) -> Viewpoint {
         return Viewpoint(center: point, scale: scale, rotation: rotation)
+    }
+}
+
+private extension Viewpoint {
+    static var losAngeles: Viewpoint {
+        Viewpoint(
+            center: Point(
+                x: -13164116.3284,
+                y: 4034465.8065,
+                spatialReference: .webMercator
+            ),
+            scale: 10_000
+        )
     }
 }
