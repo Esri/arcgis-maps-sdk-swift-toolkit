@@ -250,13 +250,13 @@ class FloorFilterViewModelTests: XCTestCase {
             floorManager: floorManager,
             viewpoint: viewpoint
         )
-
+        
         // Viewpoint is Los Angeles, selection should be nil
         var selectedFacility = viewModel.selectedFacility
         var selectedSite = viewModel.selectedSite
         XCTAssertNil(selectedFacility)
         XCTAssertNil(selectedSite)
-
+        
         // Viewpoint is Redlands Main Q but selection should still be nil
         _viewpoint = getEsriRedlandsViewpoint(scale: 1000)
         viewModel.automaticallySelectFacilityOrSite()
