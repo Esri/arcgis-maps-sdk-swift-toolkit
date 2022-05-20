@@ -95,6 +95,7 @@ public final class QueuedURLChallenge: QueuedChallenge {
 ***REMOVED***
 ***REMOVED***enum Response {
 ***REMOVED******REMOVED***case userCredential(username: String, password: String)
+***REMOVED******REMOVED***case certificate(url: URL, passsword: String)
 ***REMOVED******REMOVED***case trustHost
 ***REMOVED******REMOVED***case cancel
 ***REMOVED***

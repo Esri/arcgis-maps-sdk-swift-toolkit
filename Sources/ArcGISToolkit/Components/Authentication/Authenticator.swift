@@ -165,6 +165,15 @@ extension Authenticator: AuthenticationChallengeHandler {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***case .userCredential(let user, let password):
 ***REMOVED******REMOVED******REMOVED***return (.useCredential, URLCredential(user: user, password: password, persistence: persistence))
+***REMOVED******REMOVED***case .certificate(let url, let password):
+***REMOVED******REMOVED******REMOVED***do {
+***REMOVED******REMOVED******REMOVED******REMOVED***return (
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.useCredential,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try URLCredential.urlCredentialForCertificate(at: url, password: password, persistence: persistence)
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED*** catch {
+***REMOVED******REMOVED******REMOVED******REMOVED***return (.performDefaultHandling, nil)
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -178,21 +187,64 @@ extension SecTrust {
 ***REMOVED***
 
 extension URLCredentialStorage {
-***REMOVED******REMOVED***func removeCredentials(for host: String) {
-***REMOVED******REMOVED******REMOVED***allCredentials.forEach { (protectionSpace: URLProtectionSpace, usernamesToCredentials: [String : URLCredential]) in
-***REMOVED******REMOVED******REMOVED******REMOVED***guard protectionSpace.host.lowercased() == host.lowercased() else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***for credential in usernamesToCredentials.values {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***remove(credential, for: protectionSpace)
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***
 ***REMOVED***func removeAllCredentials() {
 ***REMOVED******REMOVED***allCredentials.forEach { (protectionSpace: URLProtectionSpace, usernamesToCredentials: [String : URLCredential]) in
 ***REMOVED******REMOVED******REMOVED***for credential in usernamesToCredentials.values {
 ***REMOVED******REMOVED******REMOVED******REMOVED***remove(credential, for: protectionSpace)
 ***REMOVED******REMOVED***
 ***REMOVED***
+***REMOVED***
+***REMOVED***
+
+private extension URLCredential {
+***REMOVED******REMOVED***/ An error that can occur when importing a certificate.
+***REMOVED***struct CertificateImportError: Error, Hashable {
+***REMOVED******REMOVED******REMOVED***/ The backing status code for this error.
+***REMOVED******REMOVED***let status: OSStatus
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ Initializes a certificate import error. This init will fail if the specified status is a success
+***REMOVED******REMOVED******REMOVED***/ status value.
+***REMOVED******REMOVED******REMOVED***/ - Parameter status: An `OSStatus`, usually the return value of a keychain operation.
+***REMOVED******REMOVED***init?(status: OSStatus) {
+***REMOVED******REMOVED******REMOVED***guard status != errSecSuccess else { return nil ***REMOVED***
+***REMOVED******REMOVED******REMOVED***self.status = status
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***static func urlCredentialForCertificate(
+***REMOVED******REMOVED***at fileURL: URL,
+***REMOVED******REMOVED***password: String,
+***REMOVED******REMOVED***persistence: URLCredential.Persistence
+***REMOVED***) throws -> URLCredential {
+***REMOVED******REMOVED***let data = try Data(contentsOf: fileURL)
+***REMOVED******REMOVED***let options = [kSecImportExportPassphrase: password]
+***REMOVED******REMOVED***var rawItems: CFArray?
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let status = SecPKCS12Import(
+***REMOVED******REMOVED******REMOVED***data as CFData,
+***REMOVED******REMOVED******REMOVED***options as CFDictionary,
+***REMOVED******REMOVED******REMOVED***&rawItems
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***guard status == errSecSuccess else {
+***REMOVED******REMOVED******REMOVED***throw CertificateImportError(status: status)!
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let items = rawItems! as! [[CFString: Any]]
+***REMOVED******REMOVED***let identity = items[0][kSecImportItemIdentity] as! SecIdentity
+***REMOVED******REMOVED***let certificates = items[0][kSecImportItemCertChain] as! [SecTrust]
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***return URLCredential(
+***REMOVED******REMOVED******REMOVED***identity: identity,
+***REMOVED******REMOVED******REMOVED***certificates: certificates,
+***REMOVED******REMOVED******REMOVED***persistence: persistence
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+
+extension URLCredential.CertificateImportError {
+***REMOVED******REMOVED*** The message for this error.
+***REMOVED***var message: String {
+***REMOVED******REMOVED***(SecCopyErrorMessageString(status, nil) as String?) ?? ""
 ***REMOVED***
 ***REMOVED***
