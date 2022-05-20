@@ -14,16 +14,7 @@
 ***REMOVED***
 import UniformTypeIdentifiers
 
-@MainActor protocol CertificatePickerViewModelProtocol: ObservableObject {
-***REMOVED***var challengingHost: String { get ***REMOVED***
-***REMOVED***
-***REMOVED***var certificateURL: URL? { get set ***REMOVED***
-***REMOVED***
-***REMOVED***func signIn()
-***REMOVED***func cancel()
-***REMOVED***
-
-final class CertificatePickerViewModel: CertificatePickerViewModelProtocol {
+@MainActor final class CertificatePickerViewModel: ObservableObject {
 ***REMOVED***let challengingHost: String
 ***REMOVED***let challenge: QueuedURLChallenge
 ***REMOVED***
@@ -49,11 +40,144 @@ final class CertificatePickerViewModel: CertificatePickerViewModelProtocol {
 ***REMOVED***
 
 struct CertificatePickerView: View {
+***REMOVED***enum Step {
+***REMOVED******REMOVED***case browsePrompt
+***REMOVED******REMOVED***case documentPicker
+***REMOVED******REMOVED***case enterPassword
+***REMOVED***
+***REMOVED***
+***REMOVED***@ObservedObject var viewModel: CertificatePickerViewModel
+***REMOVED***@State var step: Step = .browsePrompt
+***REMOVED***
+***REMOVED***@State var showPicker: Bool = false
+***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***VStack {
-***REMOVED******REMOVED******REMOVED***Text("Choose a certificate for host")
-***REMOVED******REMOVED******REMOVED***DocumentPickerView(contentTypes: [.image])
+***REMOVED******REMOVED***Group {
+***REMOVED******REMOVED******REMOVED***switch step {
+***REMOVED******REMOVED******REMOVED***case .browsePrompt:
+***REMOVED******REMOVED******REMOVED******REMOVED***PromptBrowseCertificateView(host: viewModel.challengingHost) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.cancel()
+***REMOVED******REMOVED******REMOVED*** onContinue: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***step = .documentPicker
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***showPicker = true
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***case .documentPicker:
+***REMOVED******REMOVED******REMOVED******REMOVED***Text("picker")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***DocumentPickerView(contentTypes: [.pfx]) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print("-- here!!! \($0)")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.certificateURL = $0
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***step = .enterYPassword
+***REMOVED******REMOVED******REMOVED******REMOVED*** onCancel: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.cancel()
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***case .enterPassword:
+***REMOVED******REMOVED******REMOVED******REMOVED***EnterPasswordView(password: $viewModel.password) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.cancel()
+***REMOVED******REMOVED******REMOVED*** onContinue: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.signIn()
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***.sheet(isPresented: $showPicker) {
+***REMOVED******REMOVED******REMOVED***DocumentPickerView(contentTypes: [.pfx]) {
+***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.certificateURL = $0
+***REMOVED******REMOVED******REMOVED******REMOVED***step = .enterPassword
+***REMOVED******REMOVED*** onCancel: {
+***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.cancel()
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.edgesIgnoringSafeArea(.bottom)
+***REMOVED******REMOVED***.interactiveDismissDisabled()
 ***REMOVED***
 ***REMOVED***
+
+private extension UTType {
+***REMOVED***static let pfx = UTType(filenameExtension: "pfx")!
+***REMOVED***
+
+struct PromptBrowseCertificateView: View {
+***REMOVED***var host: String
+***REMOVED***var onCancel: () -> Void
+***REMOVED***var onContinue: () -> Void
+***REMOVED***
+***REMOVED***var body: some View {
+***REMOVED******REMOVED***VStack {
+***REMOVED******REMOVED******REMOVED***Text("A certificate is required to access content on \(host)")
+***REMOVED******REMOVED******REMOVED******REMOVED***.font(.body)
+***REMOVED******REMOVED******REMOVED******REMOVED***.padding([.bottom])
+***REMOVED******REMOVED******REMOVED******REMOVED***.multilineTextAlignment(.center)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***Button(role: .cancel) {
+***REMOVED******REMOVED******REMOVED******REMOVED***onCancel()
+***REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED***Text("Cancel")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.buttonStyle(.bordered)
+***REMOVED******REMOVED******REMOVED***.controlSize(.large)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED******REMOVED***onContinue()
+***REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED***Text("Browse for a certificate")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.buttonStyle(.bordered)
+***REMOVED******REMOVED******REMOVED***.controlSize(.large)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED***
+***REMOVED******REMOVED***.padding()
+***REMOVED******REMOVED***.navigationTitle("Certificate Required")
+***REMOVED***
+***REMOVED***
+
+struct EnterPasswordView: View {
+***REMOVED***@Binding var password: String
+***REMOVED***var onCancel: () -> Void
+***REMOVED***var onContinue: () -> Void
+***REMOVED***
+***REMOVED***
+***REMOVED***var body: some View {
+***REMOVED******REMOVED***VStack {
+***REMOVED******REMOVED******REMOVED***Text("Please enter a password for the chosen certificate.")
+***REMOVED******REMOVED******REMOVED******REMOVED***.font(.body)
+***REMOVED******REMOVED******REMOVED******REMOVED***.padding([.bottom])
+***REMOVED******REMOVED******REMOVED******REMOVED***.multilineTextAlignment(.center)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***SecureField(text: $password, prompt: Text("Password")) {
+***REMOVED******REMOVED******REMOVED******REMOVED***Text("label")
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.textInputAutocapitalization(.never)
+***REMOVED******REMOVED******REMOVED***.disableAutocorrection(true)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***HStack {
+***REMOVED******REMOVED******REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onContinue()
+***REMOVED******REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("OK")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.buttonStyle(.bordered)
+***REMOVED******REMOVED******REMOVED******REMOVED***.controlSize(.large)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***Button(role: .cancel) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onCancel()
+***REMOVED******REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Cancel")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.buttonStyle(.bordered)
+***REMOVED******REMOVED******REMOVED******REMOVED***.controlSize(.large)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED***
+***REMOVED******REMOVED***.padding()
+***REMOVED******REMOVED***.navigationTitle("Certificate Required")
+***REMOVED***
+***REMOVED***
+

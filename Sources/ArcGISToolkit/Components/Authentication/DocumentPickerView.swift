@@ -16,11 +16,38 @@ import UniformTypeIdentifiers
 
 struct DocumentPickerView: UIViewControllerRepresentable {
 ***REMOVED***var contentTypes: [UTType]
+***REMOVED***var onPickDocument: (URL) -> Void
+***REMOVED***var onCancel: () -> Void
+***REMOVED***
+***REMOVED***func makeCoordinator() -> Coordinator {
+***REMOVED******REMOVED***Coordinator(onPickDocument: onPickDocument, onCancel: onCancel)
+***REMOVED***
 ***REMOVED***
 ***REMOVED***func makeUIViewController(context: Context) -> UIDocumentPickerViewController {
 ***REMOVED******REMOVED***let documentPicker = UIDocumentPickerViewController(forOpeningContentTypes: contentTypes)
+***REMOVED******REMOVED***documentPicker.delegate = context.coordinator
 ***REMOVED******REMOVED***return documentPicker
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func updateUIViewController(_ uiViewController: UIDocumentPickerViewController, context: Context) {***REMOVED***
+***REMOVED***
+
+extension DocumentPickerView {
+***REMOVED***final class Coordinator: NSObject, UIDocumentPickerDelegate {
+***REMOVED******REMOVED***var onPickDocument: (URL) -> Void
+***REMOVED******REMOVED***var onCancel: () -> Void
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***init(onPickDocument: @escaping (URL) -> Void, onCancel: @escaping () -> Void) {
+***REMOVED******REMOVED******REMOVED***self.onPickDocument = onPickDocument
+***REMOVED******REMOVED******REMOVED***self.onCancel = onCancel
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***func documentPickerWasCancelled(_ controller: UIDocumentPickerViewController) {
+***REMOVED******REMOVED******REMOVED***onCancel()
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentAt url: URL) {
+***REMOVED******REMOVED******REMOVED***onPickDocument(url)
+***REMOVED***
+***REMOVED***
 ***REMOVED***

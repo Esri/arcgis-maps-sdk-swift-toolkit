@@ -38,7 +38,7 @@ public struct AuthenticationView: View {
 ***REMOVED******REMOVED***case NSURLAuthenticationMethodServerTrust:
 ***REMOVED******REMOVED******REMOVED***TrustHostView(viewModel: TrustHostChallengeViewModel(challenge: challenge))
 ***REMOVED******REMOVED***case NSURLAuthenticationMethodClientCertificate:
-***REMOVED******REMOVED******REMOVED***CertificatePickerView()
+***REMOVED******REMOVED******REMOVED***CertificatePickerView(viewModel: CertificatePickerViewModel(challenge: challenge))
 ***REMOVED******REMOVED***case NSURLAuthenticationMethodDefault,
 ***REMOVED******REMOVED******REMOVED***NSURLAuthenticationMethodNTLM,
 ***REMOVED******REMOVED******REMOVED***NSURLAuthenticationMethodHTMLForm,
