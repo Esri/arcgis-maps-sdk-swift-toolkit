@@ -19,7 +19,7 @@ import Combine
 public final class Authenticator: ObservableObject {
     let oAuthConfigurations: [OAuthConfiguration]
     var trustedHosts: [String] = []
-    let hasPersistentStore: Bool
+    var hasPersistentStore: Bool
     
     public init(
         oAuthConfigurations: [OAuthConfiguration] = []
@@ -31,22 +31,19 @@ public final class Authenticator: ObservableObject {
     
     /// Foo...
     /// - Parameters:
-    ///   - oAuthConfigurations: Foo...
     ///   - access: When the item can be accessed.
     ///   - accessGroup: The access group that the item will be in.
     ///   - isSynchronizable: A value indicating whether the item is synchronized with iCloud.
-    public init(
-        oAuthConfigurations: [OAuthConfiguration] = [],
+    public func synchronizeWithKeychain(
         access: KeychainAccess,
-        accessGroup: String,
-        isSynchronizable: Bool
+        accessGroup: String? = nil,
+        isSynchronizable: Bool = false
     ) async throws {
         ArcGISURLSession.credentialStore = try await .makePersistent(
-            access: .whenUnlockedThisDeviceOnly,
-            accessGroup: "",
-            isSynchronizable: false
+            access: access,
+            accessGroup: accessGroup,
+            isSynchronizable: isSynchronizable
         )
-        self.oAuthConfigurations = oAuthConfigurations
         hasPersistentStore = true
     }
     
