@@ -142,6 +142,7 @@ extension AuthenticationItem {
             loadables: [ArcGISTiledLayer(url: .worldImageryMapServer)]
         )
     }
+    
     static func makeMultipleToken() -> AuthenticationItem {
         AuthenticationItem(
             title: "Multiple token secured resources",
@@ -151,6 +152,7 @@ extension AuthenticationItem {
             ]
         )
     }
+    
     static func makeMultipleTokenSame() -> AuthenticationItem {
         AuthenticationItem(
             title: "Two of same token secured resources",
@@ -169,10 +171,18 @@ extension AuthenticationItem {
             ]
         )
     }
+    
     static func makeIWAPortal() -> AuthenticationItem {
         AuthenticationItem(
             title: "IWA Portal",
             loadables: [Portal.init(url: URL(string: "https://dev0004327.esri.com/portal")!)]
+        )
+    }
+    
+    static func makePKIMap() -> AuthenticationItem {
+        AuthenticationItem(
+            title: "PKI Map",
+            loadables: [Map(url: URL(string: "https://dev0002028.esri.com/portal/home/item.html?id=7fd418d5de2e4752b616a6463318cc4e")!)!]
         )
     }
     
@@ -182,7 +192,8 @@ extension AuthenticationItem {
             makeMultipleToken(),
             makeMultipleTokenSame(),
             makePortal(),
-            makeIWAPortal()
+            makeIWAPortal(),
+            makePKIMap()
         ]
     }
 }
