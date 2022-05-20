@@ -21,7 +21,6 @@ struct AuthenticationExampleView: View {
     )
     @State var previousApiKey: APIKey?
     @State private var items = AuthenticationItem.makeAll()
-    var logger = ConsoleNetworkLogger(shouldLogResponseData: true)
     
     var body: some View {
         VStack {
@@ -45,7 +44,6 @@ struct AuthenticationExampleView: View {
             AuthenticationView(challenge: $0)
         }.onAppear {
             ArcGISURLSession.challengeHandler = authenticator
-            logger.startLogging()
         }
         // Save and restore the API Key.
         // Note: This is only necessary in this example. Other examples make use of the global
