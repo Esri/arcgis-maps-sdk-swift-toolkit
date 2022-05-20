@@ -29,20 +29,24 @@ public final class Authenticator: ObservableObject {
 ***REMOVED******REMOVED***Task { await observeChallengeQueue() ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Foo...
+***REMOVED******REMOVED***/ Sets up a credential store that is synchronized with the keychain.
+***REMOVED******REMOVED***/ - Remark: If no group is specified then the item will be stored in the default group.
+***REMOVED******REMOVED***/ To know more about what the default group would be you can find information about that here:
+***REMOVED******REMOVED***/ https:***REMOVED***developer.apple.com/documentation/security/keychain_services/keychain_items/sharing_access_to_keychain_items_among_a_collection_of_apps.
 ***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - access: When the item can be accessed.
-***REMOVED******REMOVED***/   - accessGroup: The access group that the item will be in.
+***REMOVED******REMOVED***/   - access: When the credentials stored in the keychain can be accessed.
+***REMOVED******REMOVED***/   - groupIdentifier: The identifier of the group that credentials should be persisted to
+***REMOVED******REMOVED***/   within the keychain.
 ***REMOVED******REMOVED***/   - isSynchronizable: A value indicating whether the item is synchronized with iCloud.
 ***REMOVED***public func synchronizeWithKeychain(
 ***REMOVED******REMOVED***access: KeychainAccess,
-***REMOVED******REMOVED***accessGroup: String? = nil,
-***REMOVED******REMOVED***isSynchronizable: Bool = false
+***REMOVED******REMOVED***groupIdentifier: String? = nil,
+***REMOVED******REMOVED***isCloudSynchronizable: Bool = false
 ***REMOVED***) async throws {
 ***REMOVED******REMOVED***ArcGISURLSession.credentialStore = try await .makePersistent(
 ***REMOVED******REMOVED******REMOVED***access: access,
-***REMOVED******REMOVED******REMOVED***accessGroup: accessGroup,
-***REMOVED******REMOVED******REMOVED***isSynchronizable: isSynchronizable
+***REMOVED******REMOVED******REMOVED***groupIdentifier: groupIdentifier,
+***REMOVED******REMOVED******REMOVED***isSynchronizable: isCloudSynchronizable
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***hasPersistentStore = true
 ***REMOVED***
