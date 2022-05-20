@@ -165,6 +165,15 @@ extension Authenticator: AuthenticationChallengeHandler {
             }
         case .userCredential(let user, let password):
             return (.useCredential, URLCredential(user: user, password: password, persistence: persistence))
+        case .certificate(let url, let password):
+            do {
+                return (
+                    .useCredential,
+                    try URLCredential.urlCredentialForCertificate(at: url, password: password, persistence: persistence)
+                )
+            } catch {
+                return (.performDefaultHandling, nil)
+            }
         }
     }
 }
@@ -178,21 +187,64 @@ extension SecTrust {
 }
 
 extension URLCredentialStorage {
-//    func removeCredentials(for host: String) {
-//        allCredentials.forEach { (protectionSpace: URLProtectionSpace, usernamesToCredentials: [String : URLCredential]) in
-//            guard protectionSpace.host.lowercased() == host.lowercased() else {
-//                return
-//            }
-//            for credential in usernamesToCredentials.values {
-//                remove(credential, for: protectionSpace)
-//            }
-//        }
-//    }
     func removeAllCredentials() {
         allCredentials.forEach { (protectionSpace: URLProtectionSpace, usernamesToCredentials: [String : URLCredential]) in
             for credential in usernamesToCredentials.values {
                 remove(credential, for: protectionSpace)
             }
         }
+    }
+}
+
+private extension URLCredential {
+    /// An error that can occur when importing a certificate.
+    struct CertificateImportError: Error, Hashable {
+        /// The backing status code for this error.
+        let status: OSStatus
+        
+        /// Initializes a certificate import error. This init will fail if the specified status is a success
+        /// status value.
+        /// - Parameter status: An `OSStatus`, usually the return value of a keychain operation.
+        init?(status: OSStatus) {
+            guard status != errSecSuccess else { return nil }
+            self.status = status
+        }
+    }
+    
+    static func urlCredentialForCertificate(
+        at fileURL: URL,
+        password: String,
+        persistence: URLCredential.Persistence
+    ) throws -> URLCredential {
+        let data = try Data(contentsOf: fileURL)
+        let options = [kSecImportExportPassphrase: password]
+        var rawItems: CFArray?
+        
+        let status = SecPKCS12Import(
+            data as CFData,
+            options as CFDictionary,
+            &rawItems
+        )
+        
+        guard status == errSecSuccess else {
+            throw CertificateImportError(status: status)!
+        }
+        
+        let items = rawItems! as! [[CFString: Any]]
+        let identity = items[0][kSecImportItemIdentity] as! SecIdentity
+        let certificates = items[0][kSecImportItemCertChain] as! [SecTrust]
+        
+        return URLCredential(
+            identity: identity,
+            certificates: certificates,
+            persistence: persistence
+        )
+    }
+}
+
+extension URLCredential.CertificateImportError {
+    // The message for this error.
+    var message: String {
+        (SecCopyErrorMessageString(status, nil) as String?) ?? ""
     }
 }

@@ -95,6 +95,7 @@ public final class QueuedURLChallenge: QueuedChallenge {
     
     enum Response {
         case userCredential(username: String, password: String)
+        case certificate(url: URL, passsword: String)
         case trustHost
         case cancel
     }
