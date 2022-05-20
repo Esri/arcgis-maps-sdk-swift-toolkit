@@ -13,7 +13,7 @@
 
 import XCTest
 import ArcGIS
-import ArcGISToolkit
+@testable import ArcGISToolkit
 
 @MainActor
 class SearchViewModelTests: XCTestCase {

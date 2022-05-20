@@ -19,26 +19,6 @@ import XCTest
 
 @MainActor
 class FloorFilterViewModelTests: XCTestCase {
-    /// Tests that a `FloorFilterViewModel` succesfully initializes with a `FloorManager`.`
-    func testInitFloorFilterViewModelWithFloorManager() async {
-        guard let map = await makeMap(),
-              let floorManager = map.floorManager else {
-            return
-        }
-        var _viewpoint: Viewpoint? = nil
-        let viewpoint = Binding(get: { _viewpoint }, set: { _viewpoint = $0 })
-        let viewModel = FloorFilterViewModel(
-            floorManager: floorManager,
-            viewpoint: viewpoint
-        )
-        let sites = viewModel.sites
-        let facilities = viewModel.facilities
-        let levels = viewModel.levels
-        XCTAssertFalse(sites.isEmpty)
-        XCTAssertFalse(facilities.isEmpty)
-        XCTAssertFalse(levels.isEmpty)
-    }
-    
     /// Tests that a `FloorFilterViewModel` succesfully initializes with a `FloorManager` and
     /// `Binding<Viewpoint?>`.`
     func testInitFloorFilterViewModelWithFloorManagerAndViewpoint() async {
@@ -46,20 +26,17 @@ class FloorFilterViewModelTests: XCTestCase {
               let floorManager = map.floorManager else {
             return
         }
+        
         var _viewpoint: Viewpoint? = nil
         let viewpoint = Binding(get: { _viewpoint }, set: { _viewpoint = $0 })
         let viewModel = FloorFilterViewModel(
             floorManager: floorManager,
             viewpoint: viewpoint
         )
-        let sites = viewModel.sites
-        let facilities = viewModel.facilities
-        let levels = viewModel.levels
-        let vmViewpoint = viewModel.viewpoint
-        XCTAssertFalse(sites.isEmpty)
-        XCTAssertFalse(facilities.isEmpty)
-        XCTAssertFalse(levels.isEmpty)
-        XCTAssertNil(vmViewpoint)
+        
+        XCTAssertFalse(viewModel.sites.isEmpty)
+        XCTAssertFalse(viewModel.facilities.isEmpty)
+        XCTAssertFalse(viewModel.levels.isEmpty)
     }
     
     /// Confirms that the selected site/facility/level properties and the viewpoint are correctly updated.
@@ -68,13 +45,14 @@ class FloorFilterViewModelTests: XCTestCase {
               let floorManager = map.floorManager else {
             return
         }
-        let initialViewpoint: Viewpoint = .site_ResearchAnnex_facility_Lattice
-        var _viewpoint: Viewpoint? = initialViewpoint
+        
+        var _viewpoint: Viewpoint? = .site_ResearchAnnex_facility_Lattice
         let viewpoint = Binding(get: { _viewpoint }, set: { _viewpoint = $0 })
         let viewModel = FloorFilterViewModel(
             floorManager: floorManager,
             viewpoint: viewpoint
         )
+        
         guard let site = viewModel.sites.first else {
             XCTFail()
             return
@@ -92,20 +70,20 @@ class FloorFilterViewModelTests: XCTestCase {
         )
     }
     
-    /// Confirms that the selected site/facility/level properties and the viewpoint are correctly updated.
     func testSetFacility() async {
         guard let map = await makeMap(),
               let floorManager = map.floorManager else {
             return
         }
-        let initialViewpoint: Viewpoint = .site_ResearchAnnex_facility_Lattice
-        var _viewpoint: Viewpoint? = initialViewpoint
+        
+        var _viewpoint: Viewpoint? = .site_ResearchAnnex_facility_Lattice
         let viewpoint = Binding(get: { _viewpoint }, set: { _viewpoint = $0 })
         let viewModel = FloorFilterViewModel(
             automaticSelectionMode: .never,
             floorManager: floorManager,
             viewpoint: viewpoint
         )
+        
         guard let facility = viewModel.facilities.first else {
             XCTFail()
             return
@@ -128,6 +106,7 @@ class FloorFilterViewModelTests: XCTestCase {
               let floorManager = map.floorManager else {
             return
         }
+        
         let initialViewpoint: Viewpoint = .site_ResearchAnnex_facility_Lattice
         var _viewpoint: Viewpoint? = initialViewpoint
         let viewpoint = Binding(get: { _viewpoint }, set: { _viewpoint = $0 })
@@ -135,6 +114,7 @@ class FloorFilterViewModelTests: XCTestCase {
             floorManager: floorManager,
             viewpoint: viewpoint
         )
+        
         let levels = viewModel.levels
         guard let level = levels.first else {
             XCTFail("A first level does not exist")
@@ -162,8 +142,8 @@ class FloorFilterViewModelTests: XCTestCase {
               let floorManager = map.floorManager else {
             return
         }
-        let viewpointLosAngeles: Viewpoint = .losAngeles
-        var _viewpoint: Viewpoint? = viewpointLosAngeles
+        
+        var _viewpoint: Viewpoint? = .losAngeles
         let viewpoint = Binding(get: { _viewpoint }, set: { _viewpoint = $0 })
         let viewModel = FloorFilterViewModel(
             automaticSelectionMode: .always,
@@ -188,7 +168,7 @@ class FloorFilterViewModelTests: XCTestCase {
         XCTAssertEqual(selectedSite?.name, "Research Annex")
         XCTAssertEqual(selectedFacility?.name, "Lattice")
         
-        _viewpoint = viewpointLosAngeles
+        _viewpoint = .losAngeles
         viewModel.automaticallySelectFacilityOrSite()
         
         // Viewpoint is Los Angeles, selection should be nil
@@ -204,7 +184,7 @@ class FloorFilterViewModelTests: XCTestCase {
               let floorManager = map.floorManager else {
             return
         }
-        let viewpointLosAngeles: Viewpoint = .losAngeles
+        
         var _viewpoint: Viewpoint? = .site_ResearchAnnex_facility_Lattice
         let viewpoint = Binding(get: { _viewpoint }, set: { _viewpoint = $0 })
         let viewModel = FloorFilterViewModel(
@@ -221,7 +201,8 @@ class FloorFilterViewModelTests: XCTestCase {
         XCTAssertEqual(selectedSite?.name, "Research Annex")
         XCTAssertEqual(selectedFacility?.name, "Lattice")
         
-        _viewpoint = viewpointLosAngeles
+        // Viewpoint is Los Angeles, but selection should remain Redlands Main Q
+        _viewpoint = .losAngeles
         viewModel.automaticallySelectFacilityOrSite()
         
         // Viewpoint is Los Angeles, but selection should remain Redlands Main Q
@@ -237,8 +218,8 @@ class FloorFilterViewModelTests: XCTestCase {
               let floorManager = map.floorManager else {
             return
         }
-        let viewpointLosAngeles: Viewpoint = .losAngeles
-        var _viewpoint: Viewpoint? = viewpointLosAngeles
+        
+        var _viewpoint: Viewpoint? = .losAngeles
         let viewpoint = Binding(get: { _viewpoint }, set: { _viewpoint = $0 })
         let viewModel = FloorFilterViewModel(
             automaticSelectionMode: .never,
@@ -282,7 +263,7 @@ class FloorFilterViewModelTests: XCTestCase {
     }
 }
 
-extension Viewpoint {
+private extension Viewpoint {
     static var losAngeles: Viewpoint {
         Viewpoint(
             center: Point(

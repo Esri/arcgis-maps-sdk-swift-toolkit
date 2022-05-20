@@ -40,18 +40,7 @@ final class FloorFilterViewModel: ObservableObject {
     ) {
         self.automaticSelectionMode = automaticSelectionMode
         self.floorManager = floorManager
-        self._viewpoint = viewpoint
-        
-        viewpointSubscription = viewpointSubject
-            .debounce(for: delay, scheduler: DispatchQueue.main)
-            .sink(receiveValue: { [weak self] _ in
-                guard let self = self,
-                      let viewpoint = self.viewpoint,
-                      !viewpoint.targetScale.isZero else {
-                          return
-                }
-                self.automaticallySelectFacilityOrSite()
-            })
+        self.viewpoint = viewpoint
         
         loadFloorManager()
     }
@@ -63,6 +52,18 @@ final class FloorFilterViewModel: ObservableObject {
     
     /// The selected site, floor, or level.
     @Published private(set) var selection: Selection?
+    
+    /// The `Viewpoint` used to pan/zoom to the selected site/facilty.
+    /// If `nil`, there will be no automatic pan/zoom operations.
+    private var viewpoint: Binding<Viewpoint?>
+    
+    func onViewpointChanged(_ viewpoint: Viewpoint?) {
+        guard let viewpoint = viewpoint,
+              !viewpoint.targetScale.isZero else {
+                  return
+              }
+        automaticallySelectFacilityOrSite()
+    }
     
     // MARK: Constants
     
@@ -139,13 +140,6 @@ final class FloorFilterViewModel: ObservableObject {
             .sorted(by: { $0.verticalOrder > $1.verticalOrder }) ?? []
     }
     
-    /// The `Viewpoint` used to pan/zoom to the selected site/facilty.
-    /// If `nil`, there will be no automatic pan/zoom operations.
-    @Binding var viewpoint: Viewpoint?
-    
-    /// A subject to which viewpoint updates can be submitted.
-    var viewpointSubject = PassthroughSubject<Viewpoint?, Never>()
-    
     // MARK: Public methods
     
     /// Updates the selected site, facility, and level based on a newly selected facility.
@@ -216,13 +210,13 @@ final class FloorFilterViewModel: ObservableObject {
             facilityMinScale = 1500
         }
         
-        if viewpoint?.targetScale ?? .zero > facilityMinScale {
+        if viewpoint.wrappedValue?.targetScale ?? .zero > facilityMinScale {
             return false
         }
         
         // If the centerpoint is within a facilities' geometry, select that site.
         let facilityResult = floorManager.facilities.first { facility in
-            guard let extent1 = viewpoint?.targetGeometry.extent,
+            guard let extent1 = viewpoint.wrappedValue?.targetGeometry.extent,
                   let extent2 = facility.geometry?.extent else {
                 return false
             }
@@ -251,7 +245,7 @@ final class FloorFilterViewModel: ObservableObject {
         }
         
         // If viewpoint is out of range, reset selection and return early.
-        if viewpoint?.targetScale ?? .zero > siteMinScale {
+        if viewpoint.wrappedValue?.targetScale ?? .zero > siteMinScale {
             if automaticSelectionMode == .always {
                 selection = nil
             }
@@ -260,7 +254,7 @@ final class FloorFilterViewModel: ObservableObject {
         
         // If the centerpoint is within a site's geometry, select that site.
         let siteResult = floorManager.sites.first { site in
-            guard let extent1 = viewpoint?.targetGeometry.extent,
+            guard let extent1 = viewpoint.wrappedValue?.targetGeometry.extent,
                   let extent2 = site.geometry?.extent else {
                 return false
             }
@@ -316,14 +310,11 @@ final class FloorFilterViewModel: ObservableObject {
         builder.expand(factor: 1.5)
         let targetExtent = builder.toGeometry()
         if !targetExtent.isEmpty {
-            viewpoint = Viewpoint(
+            viewpoint.wrappedValue = Viewpoint(
                 targetExtent: targetExtent
             )
         }
     }
-    
-    /// A subscription to handle listening for viewpoint changes.
-    private var viewpointSubscription: AnyCancellable?
 }
 
 extension FloorFilterViewModel.Selection: Hashable { }
