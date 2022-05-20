@@ -142,6 +142,7 @@ extension AuthenticationItem {
 ***REMOVED******REMOVED******REMOVED***loadables: [ArcGISTiledLayer(url: .worldImageryMapServer)]
 ***REMOVED******REMOVED***)
 ***REMOVED***
+***REMOVED***
 ***REMOVED***static func makeMultipleToken() -> AuthenticationItem {
 ***REMOVED******REMOVED***AuthenticationItem(
 ***REMOVED******REMOVED******REMOVED***title: "Multiple token secured resources",
@@ -150,6 +151,7 @@ extension AuthenticationItem {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ServiceFeatureTable(url: .hostedPointsLayer)
 ***REMOVED******REMOVED******REMOVED***]
 ***REMOVED******REMOVED***)
+***REMOVED***
 ***REMOVED***
 ***REMOVED***static func makeMultipleTokenSame() -> AuthenticationItem {
 ***REMOVED******REMOVED***AuthenticationItem(
@@ -169,10 +171,18 @@ extension AuthenticationItem {
 ***REMOVED******REMOVED******REMOVED***]
 ***REMOVED******REMOVED***)
 ***REMOVED***
+***REMOVED***
 ***REMOVED***static func makeIWAPortal() -> AuthenticationItem {
 ***REMOVED******REMOVED***AuthenticationItem(
 ***REMOVED******REMOVED******REMOVED***title: "IWA Portal",
 ***REMOVED******REMOVED******REMOVED***loadables: [Portal.init(url: URL(string: "https:***REMOVED***dev0004327.esri.com/portal")!)]
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED***static func makePKIMap() -> AuthenticationItem {
+***REMOVED******REMOVED***AuthenticationItem(
+***REMOVED******REMOVED******REMOVED***title: "PKI Map",
+***REMOVED******REMOVED******REMOVED***loadables: [Map(url: URL(string: "https:***REMOVED***dev0002028.esri.com/portal/home/item.html?id=7fd418d5de2e4752b616a6463318cc4e")!)!]
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
@@ -182,7 +192,8 @@ extension AuthenticationItem {
 ***REMOVED******REMOVED******REMOVED***makeMultipleToken(),
 ***REMOVED******REMOVED******REMOVED***makeMultipleTokenSame(),
 ***REMOVED******REMOVED******REMOVED***makePortal(),
-***REMOVED******REMOVED******REMOVED***makeIWAPortal()
+***REMOVED******REMOVED******REMOVED***makeIWAPortal(),
+***REMOVED******REMOVED******REMOVED***makePKIMap()
 ***REMOVED******REMOVED***]
 ***REMOVED***
 ***REMOVED***
