@@ -83,8 +83,8 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED******REMOVED***isPresented: $siteAndFacilitySelectorIsPresented
 ***REMOVED******REMOVED***) {
 ***REMOVED******REMOVED******REMOVED***SiteAndFacilitySelector(isHidden: $siteAndFacilitySelectorIsPresented)
-***REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: viewpoint.wrappedValue?.targetGeometry) { _ in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.viewpointSubject.send(viewpoint.wrappedValue)
+***REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: viewpoint.wrappedValue) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.onViewpointChanged($0)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -134,8 +134,8 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED******REMOVED***SiteAndFacilitySelector(isHidden: $siteAndFacilitySelectorIsPresented)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.esriBorder()
 ***REMOVED******REMOVED******REMOVED******REMOVED***.opacity(siteAndFacilitySelectorIsPresented ? 1 : .zero)
-***REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: viewpoint.wrappedValue?.targetGeometry) { _ in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.viewpointSubject.send(viewpoint.wrappedValue)
+***REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: viewpoint.wrappedValue) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.onViewpointChanged($0)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
