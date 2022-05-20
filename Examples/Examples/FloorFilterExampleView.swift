@@ -41,7 +41,7 @@ struct FloorFilterExampleView: View {
 ***REMOVED******REMOVED***scale: 100_000
 ***REMOVED***)
 ***REMOVED***
-***REMOVED***private var map = makeMap()
+***REMOVED***@StateObject private var map = makeMap()
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***MapView(
