@@ -19,7 +19,7 @@ import Combine
 public final class Authenticator: ObservableObject {
 ***REMOVED***let oAuthConfigurations: [OAuthConfiguration]
 ***REMOVED***var trustedHosts: [String] = []
-***REMOVED***let hasPersistentStore: Bool
+***REMOVED***var hasPersistentStore: Bool
 ***REMOVED***
 ***REMOVED***public init(
 ***REMOVED******REMOVED***oAuthConfigurations: [OAuthConfiguration] = []
@@ -31,22 +31,19 @@ public final class Authenticator: ObservableObject {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Foo...
 ***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - oAuthConfigurations: Foo...
 ***REMOVED******REMOVED***/   - access: When the item can be accessed.
 ***REMOVED******REMOVED***/   - accessGroup: The access group that the item will be in.
 ***REMOVED******REMOVED***/   - isSynchronizable: A value indicating whether the item is synchronized with iCloud.
-***REMOVED***public init(
-***REMOVED******REMOVED***oAuthConfigurations: [OAuthConfiguration] = [],
+***REMOVED***public func synchronizeWithKeychain(
 ***REMOVED******REMOVED***access: KeychainAccess,
-***REMOVED******REMOVED***accessGroup: String,
-***REMOVED******REMOVED***isSynchronizable: Bool
+***REMOVED******REMOVED***accessGroup: String? = nil,
+***REMOVED******REMOVED***isSynchronizable: Bool = false
 ***REMOVED***) async throws {
 ***REMOVED******REMOVED***ArcGISURLSession.credentialStore = try await .makePersistent(
-***REMOVED******REMOVED******REMOVED***access: .whenUnlockedThisDeviceOnly,
-***REMOVED******REMOVED******REMOVED***accessGroup: "",
-***REMOVED******REMOVED******REMOVED***isSynchronizable: false
+***REMOVED******REMOVED******REMOVED***access: access,
+***REMOVED******REMOVED******REMOVED***accessGroup: accessGroup,
+***REMOVED******REMOVED******REMOVED***isSynchronizable: isSynchronizable
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED***self.oAuthConfigurations = oAuthConfigurations
 ***REMOVED******REMOVED***hasPersistentStore = true
 ***REMOVED***
 ***REMOVED***

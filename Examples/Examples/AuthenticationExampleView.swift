@@ -21,7 +21,6 @@ struct AuthenticationExampleView: View {
 ***REMOVED***)
 ***REMOVED***@State var previousApiKey: APIKey?
 ***REMOVED***@State private var items = AuthenticationItem.makeAll()
-***REMOVED***var logger = ConsoleNetworkLogger(shouldLogResponseData: true)
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***VStack {
@@ -45,7 +44,6 @@ struct AuthenticationExampleView: View {
 ***REMOVED******REMOVED******REMOVED***AuthenticationView(challenge: $0)
 ***REMOVED***.onAppear {
 ***REMOVED******REMOVED******REMOVED***ArcGISURLSession.challengeHandler = authenticator
-***REMOVED******REMOVED******REMOVED***logger.startLogging()
 ***REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Save and restore the API Key.
 ***REMOVED******REMOVED******REMOVED*** Note: This is only necessary in this example. Other examples make use of the global
