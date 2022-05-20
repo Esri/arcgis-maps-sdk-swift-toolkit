@@ -16,11 +16,38 @@ import UniformTypeIdentifiers
 
 struct DocumentPickerView: UIViewControllerRepresentable {
     var contentTypes: [UTType]
+    var onPickDocument: (URL) -> Void
+    var onCancel: () -> Void
+    
+    func makeCoordinator() -> Coordinator {
+        Coordinator(onPickDocument: onPickDocument, onCancel: onCancel)
+    }
     
     func makeUIViewController(context: Context) -> UIDocumentPickerViewController {
         let documentPicker = UIDocumentPickerViewController(forOpeningContentTypes: contentTypes)
+        documentPicker.delegate = context.coordinator
         return documentPicker
     }
     
     func updateUIViewController(_ uiViewController: UIDocumentPickerViewController, context: Context) {}
+}
+
+extension DocumentPickerView {
+    final class Coordinator: NSObject, UIDocumentPickerDelegate {
+        var onPickDocument: (URL) -> Void
+        var onCancel: () -> Void
+        
+        init(onPickDocument: @escaping (URL) -> Void, onCancel: @escaping () -> Void) {
+            self.onPickDocument = onPickDocument
+            self.onCancel = onCancel
+        }
+        
+        func documentPickerWasCancelled(_ controller: UIDocumentPickerViewController) {
+            onCancel()
+        }
+        
+        func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentAt url: URL) {
+            onPickDocument(url)
+        }
+    }
 }

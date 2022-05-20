@@ -14,16 +14,7 @@
 import SwiftUI
 import UniformTypeIdentifiers
 
-@MainActor protocol CertificatePickerViewModelProtocol: ObservableObject {
-    var challengingHost: String { get }
-    
-    var certificateURL: URL? { get set }
-    
-    func signIn()
-    func cancel()
-}
-
-final class CertificatePickerViewModel: CertificatePickerViewModelProtocol {
+@MainActor final class CertificatePickerViewModel: ObservableObject {
     let challengingHost: String
     let challenge: QueuedURLChallenge
     
@@ -49,11 +40,144 @@ final class CertificatePickerViewModel: CertificatePickerViewModelProtocol {
 }
 
 struct CertificatePickerView: View {
+    enum Step {
+        case browsePrompt
+        case documentPicker
+        case enterPassword
+    }
+    
+    @ObservedObject var viewModel: CertificatePickerViewModel
+    @State var step: Step = .browsePrompt
+    
+    @State var showPicker: Bool = false
+    
     var body: some View {
-        VStack {
-            Text("Choose a certificate for host")
-            DocumentPickerView(contentTypes: [.image])
+        Group {
+            switch step {
+            case .browsePrompt:
+                PromptBrowseCertificateView(host: viewModel.challengingHost) {
+                    viewModel.cancel()
+                } onContinue: {
+                    step = .documentPicker
+                    showPicker = true
+                }
+            case .documentPicker:
+                Text("picker")
+//                DocumentPickerView(contentTypes: [.pfx]) {
+//                    print("-- here!!! \($0)")
+//                    viewModel.certificateURL = $0
+//                    step = .enterYPassword
+//                } onCancel: {
+//                    viewModel.cancel()
+//                }
+            case .enterPassword:
+                EnterPasswordView(password: $viewModel.password) {
+                    viewModel.cancel()
+                } onContinue: {
+                    viewModel.signIn()
+                }
+            }
+        }
+        .sheet(isPresented: $showPicker) {
+            DocumentPickerView(contentTypes: [.pfx]) {
+                viewModel.certificateURL = $0
+                step = .enterPassword
+            } onCancel: {
+                viewModel.cancel()
+            }
         }
         .edgesIgnoringSafeArea(.bottom)
+        .interactiveDismissDisabled()
     }
 }
+
+private extension UTType {
+    static let pfx = UTType(filenameExtension: "pfx")!
+}
+
+struct PromptBrowseCertificateView: View {
+    var host: String
+    var onCancel: () -> Void
+    var onContinue: () -> Void
+    
+    var body: some View {
+        VStack {
+            Text("A certificate is required to access content on \(host)")
+                .font(.body)
+                .padding([.bottom])
+                .multilineTextAlignment(.center)
+            
+            Button(role: .cancel) {
+                onCancel()
+            } label: {
+                Text("Cancel")
+                    .frame(maxWidth: .infinity)
+            }
+            .buttonStyle(.bordered)
+            .controlSize(.large)
+            
+            Button {
+                onContinue()
+            } label: {
+                Text("Browse for a certificate")
+                    .frame(maxWidth: .infinity)
+                
+            }
+            .buttonStyle(.bordered)
+            .controlSize(.large)
+            
+            Spacer()
+        }
+        .padding()
+        .navigationTitle("Certificate Required")
+    }
+}
+
+struct EnterPasswordView: View {
+    @Binding var password: String
+    var onCancel: () -> Void
+    var onContinue: () -> Void
+    
+    
+    var body: some View {
+        VStack {
+            Text("Please enter a password for the chosen certificate.")
+                .font(.body)
+                .padding([.bottom])
+                .multilineTextAlignment(.center)
+            
+            SecureField(text: $password, prompt: Text("Password")) {
+                Text("label")
+            }
+            .textInputAutocapitalization(.never)
+            .disableAutocorrection(true)
+            
+            HStack {
+                Button {
+                    onContinue()
+                } label: {
+                    Text("OK")
+                        .frame(maxWidth: .infinity)
+                    
+                }
+                .buttonStyle(.bordered)
+                .controlSize(.large)
+                
+                Button(role: .cancel) {
+                    onCancel()
+                } label: {
+                    Text("Cancel")
+                        .frame(maxWidth: .infinity)
+                }
+                .buttonStyle(.bordered)
+                .controlSize(.large)
+            }
+            
+            
+            Spacer()
+        }
+        .padding()
+        .navigationTitle("Certificate Required")
+    }
+}
+
