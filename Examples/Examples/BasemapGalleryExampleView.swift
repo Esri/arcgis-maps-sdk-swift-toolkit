@@ -17,7 +17,7 @@
 
 struct BasemapGalleryExampleView: View {
 ***REMOVED******REMOVED***/ The map displayed in the map view.
-***REMOVED***let map: Map
+***REMOVED***@StateObject private var map: Map
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether to show the basemap gallery.
 ***REMOVED***@State private var showBasemapGallery: Bool = false
@@ -32,7 +32,7 @@ struct BasemapGalleryExampleView: View {
 ***REMOVED***private let basemaps = initialBasemaps()
 ***REMOVED***
 ***REMOVED***init() {
-***REMOVED******REMOVED***self.map = Map(basemapStyle: .arcGISImagery)
+***REMOVED******REMOVED***_map = StateObject(wrappedValue: Map(basemapStyle: .arcGISImagery))
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var body: some View {
