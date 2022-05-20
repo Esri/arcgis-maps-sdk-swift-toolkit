@@ -51,7 +51,7 @@ struct FloorFilterExampleView: View {
         scale: 100_000
     )
     
-    private var map = makeMap()
+    @StateObject private var map = makeMap()
     
     var body: some View {
         MapView(
