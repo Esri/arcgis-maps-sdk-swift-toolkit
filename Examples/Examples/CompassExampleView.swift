@@ -17,16 +17,15 @@ import SwiftUI
 
 struct CompassExampleView: View {
     /// The map displayed in the map view.
-    private let map = Map(basemapStyle: .arcGISImagery)
-
+    @StateObject private var map = Map(basemapStyle: .arcGISImagery)
+    
     /// Allows for communication between the Compass and MapView or SceneView.
-    @State
-    private var viewpoint: Viewpoint? = Viewpoint(
+    @State private var viewpoint: Viewpoint? = Viewpoint(
         center: Point(x: -117.19494, y: 34.05723, spatialReference: .wgs84),
         scale: 10_000,
         rotation: -45
     )
-
+    
     var body: some View {
         MapView(map: map, viewpoint: viewpoint)
             .onViewpointChanged(kind: .centerAndScale) { viewpoint = $0 }

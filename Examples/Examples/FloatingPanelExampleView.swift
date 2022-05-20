@@ -16,7 +16,7 @@ import ArcGISToolkit
 import ArcGIS
 
 struct FloatingPanelExampleView: View {
-    let map = Map(basemapStyle: .arcGISImagery)
+    @StateObject private var map = Map(basemapStyle: .arcGISImagery)
     
     private let initialViewpoint = Viewpoint(
         center: Point(x: -93.258133, y: 44.986656, spatialReference: .wgs84),
