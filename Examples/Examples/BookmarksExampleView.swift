@@ -23,7 +23,7 @@ struct BookmarksExampleView: View {
     private var verticalSizeClass: UserInterfaceSizeClass?
     
     /// A web map with predefined bookmarks.
-    private let map = Map(url: URL(string: "https://www.arcgis.com/home/item.html?id=16f1b8ba37b44dc3884afc8d5f454dd2")!)!
+    @StateObject private var map = Map(url: URL(string: "https://www.arcgis.com/home/item.html?id=16f1b8ba37b44dc3884afc8d5f454dd2")!)!
     
     /// Indicates if the `Bookmarks` component is shown or not.
     /// - Remark: This allows a developer to control when the `Bookmarks` component is
