@@ -23,7 +23,7 @@ struct BookmarksExampleView: View {
 ***REMOVED***private var verticalSizeClass: UserInterfaceSizeClass?
 ***REMOVED***
 ***REMOVED******REMOVED***/ A web map with predefined bookmarks.
-***REMOVED***private let map = Map(url: URL(string: "https:***REMOVED***www.arcgis.com/home/item.html?id=16f1b8ba37b44dc3884afc8d5f454dd2")!)!
+***REMOVED***@StateObject private var map = Map(url: URL(string: "https:***REMOVED***www.arcgis.com/home/item.html?id=16f1b8ba37b44dc3884afc8d5f454dd2")!)!
 ***REMOVED***
 ***REMOVED******REMOVED***/ Indicates if the `Bookmarks` component is shown or not.
 ***REMOVED******REMOVED***/ - Remark: This allows a developer to control when the `Bookmarks` component is

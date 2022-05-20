@@ -29,7 +29,7 @@ struct ScalebarExampleView: View {
 ***REMOVED***private let alignment: Alignment = .bottomLeading
 ***REMOVED***
 ***REMOVED******REMOVED***/ The `Map` displayed in the `MapView`.
-***REMOVED***private let map = Map(basemapStyle: .arcGISTopographic)
+***REMOVED***@StateObject private var map = Map(basemapStyle: .arcGISTopographic)
 ***REMOVED***
 ***REMOVED******REMOVED***/ The maximum screen width allotted to the scalebar.
 ***REMOVED***private let maxWidth: Double = 175.0
