@@ -38,8 +38,7 @@ public struct AuthenticationView: View {
         case NSURLAuthenticationMethodServerTrust:
             TrustHostView(viewModel: TrustHostChallengeViewModel(challenge: challenge))
         case NSURLAuthenticationMethodClientCertificate:
-            // TODO: Show certificate picker
-            fatalError()
+            CertificatePickerView()
         case NSURLAuthenticationMethodDefault,
             NSURLAuthenticationMethodNTLM,
             NSURLAuthenticationMethodHTMLForm,
