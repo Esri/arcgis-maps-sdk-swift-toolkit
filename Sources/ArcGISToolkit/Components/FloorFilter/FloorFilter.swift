@@ -83,8 +83,8 @@ public struct FloorFilter: View {
             isPresented: $siteAndFacilitySelectorIsPresented
         ) {
             SiteAndFacilitySelector(isHidden: $siteAndFacilitySelectorIsPresented)
-                .onChange(of: viewpoint.wrappedValue?.targetGeometry) { _ in
-                    viewModel.viewpointSubject.send(viewpoint.wrappedValue)
+                .onChange(of: viewpoint.wrappedValue) {
+                    viewModel.onViewpointChanged($0)
                 }
         }
     }
@@ -134,8 +134,8 @@ public struct FloorFilter: View {
             SiteAndFacilitySelector(isHidden: $siteAndFacilitySelectorIsPresented)
                 .esriBorder()
                 .opacity(siteAndFacilitySelectorIsPresented ? 1 : .zero)
-                .onChange(of: viewpoint.wrappedValue?.targetGeometry) { _ in
-                    viewModel.viewpointSubject.send(viewpoint.wrappedValue)
+                .onChange(of: viewpoint.wrappedValue) {
+                    viewModel.onViewpointChanged($0)
                 }
         }
     }
