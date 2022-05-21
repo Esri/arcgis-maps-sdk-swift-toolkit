@@ -58,32 +58,10 @@ public extension View {
 ***REMOVED******REMOVED***modifier(AuthenticationModifier(authenticator: authenticator))
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***func authentication(authenticator: Authenticator) -> some View {
-***REMOVED******REMOVED******REMOVED***ZStack {
-***REMOVED******REMOVED******REMOVED******REMOVED***if let challenge = authenticator.currentChallenge {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AuthenticationView(challenge: challenge)
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***func authentication(authenticator: Authenticator) -> some View {
-***REMOVED******REMOVED******REMOVED***if let challenge = authenticator.currentChallenge {
-***REMOVED******REMOVED******REMOVED******REMOVED***overlay(AuthenticationView(challenge: challenge))
-***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***overlay(EmptyView())
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED***
 
 struct AuthenticationModifier: ViewModifier {
 ***REMOVED***@ObservedObject var authenticator: Authenticator
 ***REMOVED***
-***REMOVED******REMOVED***func body(content: Content) -> some View {
-***REMOVED******REMOVED******REMOVED***if let challenge = authenticator.currentChallenge {
-***REMOVED******REMOVED******REMOVED******REMOVED***content.overlay(AuthenticationView(challenge: challenge))
-***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***content
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***
 ***REMOVED***func body(content: Content) -> some View {
 ***REMOVED******REMOVED***ZStack {
 ***REMOVED******REMOVED******REMOVED***content
