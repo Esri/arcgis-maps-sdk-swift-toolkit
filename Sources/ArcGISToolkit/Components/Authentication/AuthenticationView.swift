@@ -36,7 +36,7 @@ public struct AuthenticationView: View {
 ***REMOVED***func view(forURLChallenge challenge: QueuedURLChallenge) -> some View {
 ***REMOVED******REMOVED***switch challenge.urlChallenge.protectionSpace.authenticationMethod {
 ***REMOVED******REMOVED***case NSURLAuthenticationMethodServerTrust:
-***REMOVED******REMOVED******REMOVED***TrustHostView(viewModel: TrustHostChallengeViewModel(challenge: challenge))
+***REMOVED******REMOVED******REMOVED***TrustHostView(challenge: challenge)
 ***REMOVED******REMOVED***case NSURLAuthenticationMethodClientCertificate:
 ***REMOVED******REMOVED******REMOVED***CertificatePickerView(viewModel: CertificatePickerViewModel(challenge: challenge))
 ***REMOVED******REMOVED***case NSURLAuthenticationMethodDefault,

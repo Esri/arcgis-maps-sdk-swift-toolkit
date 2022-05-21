@@ -13,88 +13,29 @@
 
 ***REMOVED***
 
-@MainActor protocol TrustHostViewModel: ObservableObject {
-***REMOVED***var challengingHost: String { get ***REMOVED***
-***REMOVED***
-***REMOVED***func allowConnection()
-***REMOVED***func cancel()
-***REMOVED***
-
-final class TrustHostChallengeViewModel: TrustHostViewModel {
+struct TrustHostView: View {
 ***REMOVED***init(challenge: QueuedURLChallenge) {
 ***REMOVED******REMOVED***self.challenge = challenge
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***let challenge: QueuedURLChallenge
 ***REMOVED***
-***REMOVED***var challengingHost: String {
+***REMOVED***var host: String {
 ***REMOVED******REMOVED***challenge.urlChallenge.protectionSpace.host
 ***REMOVED***
 ***REMOVED***
-***REMOVED***func allowConnection() {
-***REMOVED******REMOVED***challenge.resume(with: .trustHost)
-***REMOVED***
-***REMOVED***
-***REMOVED***func cancel() {
-***REMOVED******REMOVED***challenge.cancel()
-***REMOVED***
-***REMOVED***
-
-final class MockTrustHostViewModel: TrustHostViewModel {
-***REMOVED***let challengingHost: String
-***REMOVED***init(challengingHost: String) {
-***REMOVED******REMOVED***self.challengingHost = challengingHost
-***REMOVED***
-***REMOVED***func allowConnection() {***REMOVED***
-***REMOVED***func cancel() {***REMOVED***
-***REMOVED***
-
-struct TrustHostView<ViewModel: TrustHostViewModel>: View {
-***REMOVED***init(viewModel: ViewModel) {
-***REMOVED******REMOVED***self.viewModel = viewModel
-***REMOVED***
-***REMOVED***
-***REMOVED***@ObservedObject private var viewModel: ViewModel
-***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***VStack {
-***REMOVED******REMOVED******REMOVED***Text("Certificate Trust Warning")
-***REMOVED******REMOVED******REMOVED******REMOVED***.font(.title)
-***REMOVED******REMOVED******REMOVED******REMOVED***.padding([.bottom])
-***REMOVED******REMOVED******REMOVED******REMOVED***.multilineTextAlignment(.center)
+***REMOVED******REMOVED***Color.clear
+***REMOVED******REMOVED******REMOVED***.frame(width: 0, height: 0)
+***REMOVED******REMOVED******REMOVED***.alert("Certificate Trust Warning", isPresented: .constant(true), presenting: challenge) { _ in
+***REMOVED******REMOVED******REMOVED******REMOVED***Button("Dangerous: Allow Connection", role: .destructive) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***challenge.resume(with: .trustHost)
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***Text("The certificate provided by '\(viewModel.challengingHost)' is not signed by a trusted authority.")
-***REMOVED******REMOVED******REMOVED******REMOVED***.font(.body)
-***REMOVED******REMOVED******REMOVED******REMOVED***.padding([.bottom])
+***REMOVED******REMOVED******REMOVED******REMOVED***Button("Cancel", role: .cancel) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***challenge.cancel()
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***Button(role: .cancel) {
-***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.cancel()
-***REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED***Text("Cancel")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity)
+***REMOVED******REMOVED*** message: { _ in
+***REMOVED******REMOVED******REMOVED******REMOVED***Text("The certificate provided by '\(host)' is not signed by a trusted authority.")
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.buttonStyle(.bordered)
-***REMOVED******REMOVED******REMOVED***.controlSize(.large)
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***Button(role: .destructive) {
-***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.allowConnection()
-***REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED***Text("Dangerous: Allow Connection")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity)
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.buttonStyle(.bordered)
-***REMOVED******REMOVED******REMOVED***.controlSize(.large)
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED***
-***REMOVED******REMOVED***.padding()
-***REMOVED******REMOVED***.interactiveDismissDisabled()
-***REMOVED***
-***REMOVED***
-
-struct TrustHostView_Previews: PreviewProvider {
-***REMOVED***static var previews: some View {
-***REMOVED******REMOVED***TrustHostView(viewModel: MockTrustHostViewModel(challengingHost: "arcgis.com"))
 ***REMOVED***
 ***REMOVED***
