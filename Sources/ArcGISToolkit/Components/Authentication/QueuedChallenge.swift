@@ -19,7 +19,7 @@ protocol QueuedChallenge {
 ***REMOVED***
 
 ***REMOVED*** TODO: Ryan - Can these be structs?
-public final class QueuedArcGISChallenge: QueuedChallenge {
+final class QueuedArcGISChallenge: QueuedChallenge {
 ***REMOVED***let arcGISChallenge: ArcGISAuthenticationChallenge
 ***REMOVED***
 ***REMOVED***init(arcGISChallenge: ArcGISAuthenticationChallenge) {
@@ -60,7 +60,7 @@ public final class QueuedArcGISChallenge: QueuedChallenge {
 ***REMOVED***
 ***REMOVED***
 
-public final class QueuedURLChallenge: QueuedChallenge {
+final class QueuedURLChallenge: QueuedChallenge {
 ***REMOVED***let urlChallenge: URLAuthenticationChallenge
 ***REMOVED***
 ***REMOVED***init(urlChallenge: URLAuthenticationChallenge) {

@@ -25,12 +25,10 @@
 ***REMOVED***func cancel()
 ***REMOVED***
 
-struct UsernamePasswordView<ViewModel: UsernamePasswordViewModel>: ChallengeView, View {
+struct UsernamePasswordView<ViewModel: UsernamePasswordViewModel>: View {
 ***REMOVED***init(viewModel: ViewModel) {
 ***REMOVED******REMOVED***self.viewModel = viewModel
 ***REMOVED***
-***REMOVED***
-***REMOVED***var style: ChallengeViewStyle { .sheet ***REMOVED***
 ***REMOVED***
 ***REMOVED***@ObservedObject private var viewModel: ViewModel
 ***REMOVED***
