@@ -44,7 +44,9 @@ struct AuthenticationView: View {
 ***REMOVED******REMOVED******REMOVED***NSURLAuthenticationMethodHTMLForm,
 ***REMOVED******REMOVED******REMOVED***NSURLAuthenticationMethodHTTPBasic,
 ***REMOVED******REMOVED***NSURLAuthenticationMethodHTTPDigest:
-***REMOVED******REMOVED******REMOVED***UsernamePasswordView(viewModel: URLCredentialUsernamePasswordViewModel(challenge: challenge))
+***REMOVED******REMOVED******REMOVED***InvisibleView().sheet(isPresented: .constant(true)) {
+***REMOVED******REMOVED******REMOVED******REMOVED***UsernamePasswordView(viewModel: URLCredentialUsernamePasswordViewModel(challenge: challenge))
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***default:
 ***REMOVED******REMOVED******REMOVED***fatalError()
 ***REMOVED***

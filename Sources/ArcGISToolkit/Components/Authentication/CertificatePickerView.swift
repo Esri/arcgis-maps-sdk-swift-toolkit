@@ -30,7 +30,7 @@ import UniformTypeIdentifiers
 ***REMOVED******REMOVED***guard let certificateURL = certificateURL else {
 ***REMOVED******REMOVED******REMOVED***preconditionFailure()
 ***REMOVED***
-
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***challenge.resume(with: .certificate(url: certificateURL, passsword: password))
 ***REMOVED***
 ***REMOVED***
@@ -42,38 +42,39 @@ import UniformTypeIdentifiers
 struct CertificatePickerView: View {
 ***REMOVED***@ObservedObject var viewModel: CertificatePickerViewModel
 ***REMOVED***
-***REMOVED***@State var showPrompt: Bool = false
-***REMOVED***@State var showPicker: Bool = true
+***REMOVED***@State var showPrompt: Bool = true
+***REMOVED***@State var showPicker: Bool = false
 ***REMOVED***@State var showPassword: Bool = false
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***InvisibleView()
-***REMOVED******REMOVED******REMOVED******REMOVED***PromptBrowseCertificateView(host: viewModel.challengingHost) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***step = .documentPicker
+***REMOVED******REMOVED******REMOVED***.promptBrowseCertificateView(
+***REMOVED******REMOVED******REMOVED******REMOVED***isPresented: $showPrompt,
+***REMOVED******REMOVED******REMOVED******REMOVED***host: viewModel.challengingHost,
+***REMOVED******REMOVED******REMOVED******REMOVED***onContinue: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***showPicker = true
+***REMOVED******REMOVED******REMOVED***, onCancel: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.cancel()
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***.sheet(isPresented: $showPicker) {
+***REMOVED******REMOVED******REMOVED******REMOVED***DocumentPickerView(contentTypes: [.pfx]) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.certificateURL = $0
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***showPassword = true
 ***REMOVED******REMOVED******REMOVED*** onCancel: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.cancel()
 ***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.edgesIgnoringSafeArea(.bottom)
+***REMOVED******REMOVED******REMOVED******REMOVED***.interactiveDismissDisabled()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***.sheet(isPresented: $showPicker) {
-***REMOVED******REMOVED******REMOVED***DocumentPickerView(contentTypes: [.pfx]) {
-***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.certificateURL = $0
-***REMOVED******REMOVED******REMOVED******REMOVED***showPassword = true
-***REMOVED******REMOVED*** onCancel: {
-***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.cancel()
+***REMOVED******REMOVED******REMOVED***.sheet(isPresented: $showPassword) {
+***REMOVED******REMOVED******REMOVED******REMOVED***EnterPasswordView(password: $viewModel.password) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.signIn()
+***REMOVED******REMOVED******REMOVED*** onCancel: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.cancel()
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.edgesIgnoringSafeArea(.bottom)
+***REMOVED******REMOVED******REMOVED******REMOVED***.interactiveDismissDisabled()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.edgesIgnoringSafeArea(.bottom)
-***REMOVED******REMOVED******REMOVED***.interactiveDismissDisabled()
-***REMOVED***
-***REMOVED******REMOVED***.sheet(isPresented: $showPassword) {
-***REMOVED******REMOVED******REMOVED***EnterPasswordView(password: $viewModel.password) {
-***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.signIn()
-***REMOVED******REMOVED*** onCancel: {
-***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.cancel()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.edgesIgnoringSafeArea(.bottom)
-***REMOVED******REMOVED******REMOVED***.interactiveDismissDisabled()
-***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
@@ -81,23 +82,25 @@ private extension UTType {
 ***REMOVED***static let pfx = UTType(filenameExtension: "pfx")!
 ***REMOVED***
 
-struct PromptBrowseCertificateView: View {
-***REMOVED***var host: String
-***REMOVED***var onContinue: () -> Void
-***REMOVED***var onCancel: () -> Void
-***REMOVED***
-***REMOVED***var body: some View {
-***REMOVED******REMOVED***InvisibleView()
-***REMOVED******REMOVED******REMOVED***.alert("Certificate Required", isPresented: .constant(true), presenting: host) { _ in
-***REMOVED******REMOVED******REMOVED******REMOVED***Button("Browse for a certificate") {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onContinue()
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***Button("Cancel", role: .cancel) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onCancel()
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED*** message: { _ in
-***REMOVED******REMOVED******REMOVED******REMOVED***Text("A certificate is required to access content on \(host)")
+private extension View {
+***REMOVED***@MainActor
+***REMOVED***@ViewBuilder
+***REMOVED***func promptBrowseCertificateView(
+***REMOVED******REMOVED***isPresented: Binding<Bool>,
+***REMOVED******REMOVED***host: String,
+***REMOVED******REMOVED***onContinue: @escaping () -> Void,
+***REMOVED******REMOVED***onCancel: @escaping () -> Void
+***REMOVED***) -> some View {
+***REMOVED******REMOVED***alert("Certificate Required", isPresented: isPresented, presenting: host) { _ in
+***REMOVED******REMOVED******REMOVED***Button("Browse For Certificate") {
+***REMOVED******REMOVED******REMOVED******REMOVED***onContinue()
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***Button("Cancel", role: .cancel) {
+***REMOVED******REMOVED******REMOVED******REMOVED***onCancel()
+***REMOVED******REMOVED***
+***REMOVED*** message: { _ in
+***REMOVED******REMOVED******REMOVED***Text("A certificate is required to access content on \(host).")
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
