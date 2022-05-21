@@ -36,7 +36,7 @@ public struct AuthenticationView: View {
     func view(forURLChallenge challenge: QueuedURLChallenge) -> some View {
         switch challenge.urlChallenge.protectionSpace.authenticationMethod {
         case NSURLAuthenticationMethodServerTrust:
-            TrustHostView(viewModel: TrustHostChallengeViewModel(challenge: challenge))
+            TrustHostView(challenge: challenge)
         case NSURLAuthenticationMethodClientCertificate:
             CertificatePickerView(viewModel: CertificatePickerViewModel(challenge: challenge))
         case NSURLAuthenticationMethodDefault,
