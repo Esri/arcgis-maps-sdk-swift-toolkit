@@ -39,15 +39,9 @@ struct AuthenticationExampleView: View {
                     items = AuthenticationItem.makeAll()
                 }
             }
-            
-            if let challenge = authenticator.currentChallenge {
-                AuthenticationView(challenge: challenge)
-            }
         }
+        .authentication(authenticator: authenticator)
         .navigationBarTitle(Text("Authentication"), displayMode: .inline)
-//        .sheet(isPresented: $authenticator.isSheetPresented) {
-//            authenticator.currentSheet
-//        }
         .onAppear {
             ArcGISURLSession.challengeHandler = authenticator
         }

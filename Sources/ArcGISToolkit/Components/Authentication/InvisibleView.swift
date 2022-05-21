@@ -15,7 +15,6 @@ import SwiftUI
 
 struct InvisibleView: View {
     var body: some View {
-        Color.clear
-            .frame(width: 0, height: 0)
+        Color.clear.frame(width: 0, height: 0, alignment: .bottom)
     }
 }

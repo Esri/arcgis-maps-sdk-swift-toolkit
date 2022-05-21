@@ -13,14 +13,14 @@
 
 import SwiftUI
 
-public struct AuthenticationView: View {
-    public init(challenge: IdentifiableQueuedChallenge) {
+struct AuthenticationView: View {
+    init(challenge: IdentifiableQueuedChallenge) {
         self.challenge = challenge.queuedChallenge
     }
 
     let challenge: QueuedChallenge
     
-    public var body: some View {
+    var body: some View {
         switch challenge {
         case let challenge as QueuedArcGISChallenge:
             UsernamePasswordView(viewModel: TokenCredentialViewModel(challenge: challenge))
@@ -47,6 +47,49 @@ public struct AuthenticationView: View {
             UsernamePasswordView(viewModel: URLCredentialUsernamePasswordViewModel(challenge: challenge))
         default:
             fatalError()
+        }
+    }
+}
+
+public extension View {
+    @MainActor
+    @ViewBuilder
+    func authentication(authenticator: Authenticator) -> some View {
+        modifier(AuthenticationModifier(authenticator: authenticator))
+    }
+    
+//    func authentication(authenticator: Authenticator) -> some View {
+//        ZStack {
+//            if let challenge = authenticator.currentChallenge {
+//                AuthenticationView(challenge: challenge)
+//            }
+//        }
+//    }
+//    func authentication(authenticator: Authenticator) -> some View {
+//        if let challenge = authenticator.currentChallenge {
+//            overlay(AuthenticationView(challenge: challenge))
+//        } else {
+//            overlay(EmptyView())
+//        }
+//    }
+}
+
+struct AuthenticationModifier: ViewModifier {
+    @ObservedObject var authenticator: Authenticator
+    
+//    func body(content: Content) -> some View {
+//        if let challenge = authenticator.currentChallenge {
+//            content.overlay(AuthenticationView(challenge: challenge))
+//        } else {
+//            content
+//        }
+//    }
+    func body(content: Content) -> some View {
+        ZStack {
+            content
+            if let challenge = authenticator.currentChallenge {
+                AuthenticationView(challenge: challenge)
+            }
         }
     }
 }
