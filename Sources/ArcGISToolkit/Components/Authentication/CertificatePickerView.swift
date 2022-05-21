@@ -30,7 +30,7 @@ import UniformTypeIdentifiers
         guard let certificateURL = certificateURL else {
             preconditionFailure()
         }
-
+        
         challenge.resume(with: .certificate(url: certificateURL, passsword: password))
     }
     
@@ -42,38 +42,39 @@ import UniformTypeIdentifiers
 struct CertificatePickerView: View {
     @ObservedObject var viewModel: CertificatePickerViewModel
     
-    @State var showPrompt: Bool = false
-    @State var showPicker: Bool = true
+    @State var showPrompt: Bool = true
+    @State var showPicker: Bool = false
     @State var showPassword: Bool = false
     
     var body: some View {
         InvisibleView()
-//            PromptBrowseCertificateView(host: viewModel.challengingHost) {
-//                step = .documentPicker
-//                showPicker = true
-//            } onCancel: {
-//                viewModel.cancel()
-//            }
-//        }
-        .sheet(isPresented: $showPicker) {
-            DocumentPickerView(contentTypes: [.pfx]) {
-                viewModel.certificateURL = $0
-                showPassword = true
-            } onCancel: {
-                viewModel.cancel()
+            .promptBrowseCertificateView(
+                isPresented: $showPrompt,
+                host: viewModel.challengingHost,
+                onContinue: {
+                    showPicker = true
+                }, onCancel: {
+                    viewModel.cancel()
+                })
+            .sheet(isPresented: $showPicker) {
+                DocumentPickerView(contentTypes: [.pfx]) {
+                    viewModel.certificateURL = $0
+                    showPassword = true
+                } onCancel: {
+                    viewModel.cancel()
+                }
+                .edgesIgnoringSafeArea(.bottom)
+                .interactiveDismissDisabled()
             }
-            .edgesIgnoringSafeArea(.bottom)
-            .interactiveDismissDisabled()
-        }
-        .sheet(isPresented: $showPassword) {
-            EnterPasswordView(password: $viewModel.password) {
-                viewModel.signIn()
-            } onCancel: {
-                viewModel.cancel()
+            .sheet(isPresented: $showPassword) {
+                EnterPasswordView(password: $viewModel.password) {
+                    viewModel.signIn()
+                } onCancel: {
+                    viewModel.cancel()
+                }
+                .edgesIgnoringSafeArea(.bottom)
+                .interactiveDismissDisabled()
             }
-            .edgesIgnoringSafeArea(.bottom)
-            .interactiveDismissDisabled()
-        }
     }
 }
 
@@ -81,23 +82,25 @@ private extension UTType {
     static let pfx = UTType(filenameExtension: "pfx")!
 }
 
-struct PromptBrowseCertificateView: View {
-    var host: String
-    var onContinue: () -> Void
-    var onCancel: () -> Void
-    
-    var body: some View {
-        InvisibleView()
-            .alert("Certificate Required", isPresented: .constant(true), presenting: host) { _ in
-                Button("Browse for a certificate") {
-                    onContinue()
-                }
-                Button("Cancel", role: .cancel) {
-                    onCancel()
-                }
-            } message: { _ in
-                Text("A certificate is required to access content on \(host)")
+private extension View {
+    @MainActor
+    @ViewBuilder
+    func promptBrowseCertificateView(
+        isPresented: Binding<Bool>,
+        host: String,
+        onContinue: @escaping () -> Void,
+        onCancel: @escaping () -> Void
+    ) -> some View {
+        alert("Certificate Required", isPresented: isPresented, presenting: host) { _ in
+            Button("Browse For Certificate") {
+                onContinue()
             }
+            Button("Cancel", role: .cancel) {
+                onCancel()
+            }
+        } message: { _ in
+            Text("A certificate is required to access content on \(host).")
+        }
     }
 }
 

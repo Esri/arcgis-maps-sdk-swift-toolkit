@@ -44,7 +44,9 @@ struct AuthenticationView: View {
             NSURLAuthenticationMethodHTMLForm,
             NSURLAuthenticationMethodHTTPBasic,
         NSURLAuthenticationMethodHTTPDigest:
-            UsernamePasswordView(viewModel: URLCredentialUsernamePasswordViewModel(challenge: challenge))
+            InvisibleView().sheet(isPresented: .constant(true)) {
+                UsernamePasswordView(viewModel: URLCredentialUsernamePasswordViewModel(challenge: challenge))
+            }
         default:
             fatalError()
         }
