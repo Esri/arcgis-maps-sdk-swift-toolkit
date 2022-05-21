@@ -41,10 +41,13 @@ struct AuthenticationExampleView: View {
         }
         .navigationBarTitle(Text("Authentication"), displayMode: .inline)
         .sheet(isPresented: $authenticator.isSheetPresented) {
-            authenticator.currentView
+            authenticator.currentSheet
         }
-        .alert("foo", isPresented: $authenticator.isAlertPresented) {
-            authenticator.currentView
+        .alert("hello", isPresented: $authenticator.isSheetPresented, presenting: "data", actions: { d in
+            
+        })
+        .alert(isPresented: $authenticator.isAlertPresented) {
+            Alert(title: Text("title.."), message: Text("massage"), dismissButton: .cancel())
         }
         .onAppear {
             ArcGISURLSession.challengeHandler = authenticator
