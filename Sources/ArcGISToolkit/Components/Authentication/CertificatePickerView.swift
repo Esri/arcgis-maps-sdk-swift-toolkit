@@ -40,54 +40,40 @@ import UniformTypeIdentifiers
 }
 
 struct CertificatePickerView: View {
-    enum Step {
-        case browsePrompt
-        case documentPicker
-        case enterPassword
-    }
-    
     @ObservedObject var viewModel: CertificatePickerViewModel
-    @State var step: Step = .browsePrompt
     
-    @State var showPicker: Bool = false
+    @State var showPrompt: Bool = false
+    @State var showPicker: Bool = true
+    @State var showPassword: Bool = false
     
     var body: some View {
-        Group {
-            switch step {
-            case .browsePrompt:
-                PromptBrowseCertificateView(host: viewModel.challengingHost) {
-                    viewModel.cancel()
-                } onContinue: {
-                    step = .documentPicker
-                    showPicker = true
-                }
-            case .documentPicker:
-                Text("picker")
-//                DocumentPickerView(contentTypes: [.pfx]) {
-//                    print("-- here!!! \($0)")
-//                    viewModel.certificateURL = $0
-//                    step = .enterYPassword
-//                } onCancel: {
-//                    viewModel.cancel()
-//                }
-            case .enterPassword:
-                EnterPasswordView(password: $viewModel.password) {
-                    viewModel.cancel()
-                } onContinue: {
-                    viewModel.signIn()
-                }
-            }
-        }
+        InvisibleView()
+//            PromptBrowseCertificateView(host: viewModel.challengingHost) {
+//                step = .documentPicker
+//                showPicker = true
+//            } onCancel: {
+//                viewModel.cancel()
+//            }
+//        }
         .sheet(isPresented: $showPicker) {
             DocumentPickerView(contentTypes: [.pfx]) {
                 viewModel.certificateURL = $0
-                step = .enterPassword
+                showPassword = true
             } onCancel: {
                 viewModel.cancel()
             }
+            .edgesIgnoringSafeArea(.bottom)
+            .interactiveDismissDisabled()
         }
-        .edgesIgnoringSafeArea(.bottom)
-        .interactiveDismissDisabled()
+        .sheet(isPresented: $showPassword) {
+            EnterPasswordView(password: $viewModel.password) {
+                viewModel.signIn()
+            } onCancel: {
+                viewModel.cancel()
+            }
+            .edgesIgnoringSafeArea(.bottom)
+            .interactiveDismissDisabled()
+        }
     }
 }
 
@@ -97,47 +83,28 @@ private extension UTType {
 
 struct PromptBrowseCertificateView: View {
     var host: String
-    var onCancel: () -> Void
     var onContinue: () -> Void
+    var onCancel: () -> Void
     
     var body: some View {
-        VStack {
-            Text("A certificate is required to access content on \(host)")
-                .font(.body)
-                .padding([.bottom])
-                .multilineTextAlignment(.center)
-            
-            Button(role: .cancel) {
-                onCancel()
-            } label: {
-                Text("Cancel")
-                    .frame(maxWidth: .infinity)
+        InvisibleView()
+            .alert("Certificate Required", isPresented: .constant(true), presenting: host) { _ in
+                Button("Browse for a certificate") {
+                    onContinue()
+                }
+                Button("Cancel", role: .cancel) {
+                    onCancel()
+                }
+            } message: { _ in
+                Text("A certificate is required to access content on \(host)")
             }
-            .buttonStyle(.bordered)
-            .controlSize(.large)
-            
-            Button {
-                onContinue()
-            } label: {
-                Text("Browse for a certificate")
-                    .frame(maxWidth: .infinity)
-                
-            }
-            .buttonStyle(.bordered)
-            .controlSize(.large)
-            
-            Spacer()
-        }
-        .padding()
-        .navigationTitle("Certificate Required")
     }
 }
 
 struct EnterPasswordView: View {
     @Binding var password: String
-    var onCancel: () -> Void
     var onContinue: () -> Void
-    
+    var onCancel: () -> Void
     
     var body: some View {
         VStack {
@@ -180,4 +147,3 @@ struct EnterPasswordView: View {
         .navigationTitle("Certificate Required")
     }
 }
-
