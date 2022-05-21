@@ -14,12 +14,11 @@
 import Foundation
 import ArcGIS
 
-protocol QueuedChallenge {
+protocol QueuedChallenge: AnyObject {
     func complete() async
 }
 
-// TODO: Ryan - Can these be structs?
-final class QueuedArcGISChallenge: QueuedChallenge {
+public final class QueuedArcGISChallenge: QueuedChallenge {
     let arcGISChallenge: ArcGISAuthenticationChallenge
     
     init(arcGISChallenge: ArcGISAuthenticationChallenge) {
@@ -60,7 +59,7 @@ final class QueuedArcGISChallenge: QueuedChallenge {
     }
 }
 
-final class QueuedURLChallenge: QueuedChallenge {
+public final class QueuedURLChallenge: QueuedChallenge {
     let urlChallenge: URLAuthenticationChallenge
     
     init(urlChallenge: URLAuthenticationChallenge) {
@@ -100,4 +99,12 @@ final class QueuedURLChallenge: QueuedChallenge {
         case trustHost
         case cancel
     }
+}
+
+public struct IdentifiableQueuedChallenge {
+    let queuedChallenge: QueuedChallenge
+}
+
+extension IdentifiableQueuedChallenge: Identifiable {
+    public var id: ObjectIdentifier { ObjectIdentifier(queuedChallenge) }
 }
