@@ -15,7 +15,6 @@
 
 struct InvisibleView: View {
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***Color.clear
-***REMOVED******REMOVED******REMOVED***.frame(width: 0, height: 0)
+***REMOVED******REMOVED***Color.clear.frame(width: 0, height: 0, alignment: .bottom)
 ***REMOVED***
 ***REMOVED***

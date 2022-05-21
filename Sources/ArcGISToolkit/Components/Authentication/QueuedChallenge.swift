@@ -18,7 +18,7 @@ protocol QueuedChallenge: AnyObject {
 ***REMOVED***func complete() async
 ***REMOVED***
 
-public final class QueuedArcGISChallenge: QueuedChallenge {
+final class QueuedArcGISChallenge: QueuedChallenge {
 ***REMOVED***let arcGISChallenge: ArcGISAuthenticationChallenge
 ***REMOVED***
 ***REMOVED***init(arcGISChallenge: ArcGISAuthenticationChallenge) {
@@ -59,7 +59,7 @@ public final class QueuedArcGISChallenge: QueuedChallenge {
 ***REMOVED***
 ***REMOVED***
 
-public final class QueuedURLChallenge: QueuedChallenge {
+final class QueuedURLChallenge: QueuedChallenge {
 ***REMOVED***let urlChallenge: URLAuthenticationChallenge
 ***REMOVED***
 ***REMOVED***init(urlChallenge: URLAuthenticationChallenge) {
@@ -101,7 +101,7 @@ public final class QueuedURLChallenge: QueuedChallenge {
 ***REMOVED***
 ***REMOVED***
 
-public struct IdentifiableQueuedChallenge {
+struct IdentifiableQueuedChallenge {
 ***REMOVED***let queuedChallenge: QueuedChallenge
 ***REMOVED***
 

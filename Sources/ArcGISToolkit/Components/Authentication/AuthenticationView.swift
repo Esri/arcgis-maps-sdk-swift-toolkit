@@ -13,14 +13,14 @@
 
 ***REMOVED***
 
-public struct AuthenticationView: View {
-***REMOVED***public init(challenge: IdentifiableQueuedChallenge) {
+struct AuthenticationView: View {
+***REMOVED***init(challenge: IdentifiableQueuedChallenge) {
 ***REMOVED******REMOVED***self.challenge = challenge.queuedChallenge
 ***REMOVED***
 
 ***REMOVED***let challenge: QueuedChallenge
 ***REMOVED***
-***REMOVED***public var body: some View {
+***REMOVED***var body: some View {
 ***REMOVED******REMOVED***switch challenge {
 ***REMOVED******REMOVED***case let challenge as QueuedArcGISChallenge:
 ***REMOVED******REMOVED******REMOVED***UsernamePasswordView(viewModel: TokenCredentialViewModel(challenge: challenge))
@@ -47,6 +47,49 @@ public struct AuthenticationView: View {
 ***REMOVED******REMOVED******REMOVED***UsernamePasswordView(viewModel: URLCredentialUsernamePasswordViewModel(challenge: challenge))
 ***REMOVED******REMOVED***default:
 ***REMOVED******REMOVED******REMOVED***fatalError()
+***REMOVED***
+***REMOVED***
+***REMOVED***
+
+public extension View {
+***REMOVED***@MainActor
+***REMOVED***@ViewBuilder
+***REMOVED***func authentication(authenticator: Authenticator) -> some View {
+***REMOVED******REMOVED***modifier(AuthenticationModifier(authenticator: authenticator))
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***func authentication(authenticator: Authenticator) -> some View {
+***REMOVED******REMOVED******REMOVED***ZStack {
+***REMOVED******REMOVED******REMOVED******REMOVED***if let challenge = authenticator.currentChallenge {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AuthenticationView(challenge: challenge)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***func authentication(authenticator: Authenticator) -> some View {
+***REMOVED******REMOVED******REMOVED***if let challenge = authenticator.currentChallenge {
+***REMOVED******REMOVED******REMOVED******REMOVED***overlay(AuthenticationView(challenge: challenge))
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***overlay(EmptyView())
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED***
+
+struct AuthenticationModifier: ViewModifier {
+***REMOVED***@ObservedObject var authenticator: Authenticator
+***REMOVED***
+***REMOVED******REMOVED***func body(content: Content) -> some View {
+***REMOVED******REMOVED******REMOVED***if let challenge = authenticator.currentChallenge {
+***REMOVED******REMOVED******REMOVED******REMOVED***content.overlay(AuthenticationView(challenge: challenge))
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***content
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED***func body(content: Content) -> some View {
+***REMOVED******REMOVED***ZStack {
+***REMOVED******REMOVED******REMOVED***content
+***REMOVED******REMOVED******REMOVED***if let challenge = authenticator.currentChallenge {
+***REMOVED******REMOVED******REMOVED******REMOVED***AuthenticationView(challenge: challenge)
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***

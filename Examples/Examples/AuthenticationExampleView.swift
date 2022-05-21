@@ -39,15 +39,9 @@ struct AuthenticationExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***items = AuthenticationItem.makeAll()
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***if let challenge = authenticator.currentChallenge {
-***REMOVED******REMOVED******REMOVED******REMOVED***AuthenticationView(challenge: challenge)
-***REMOVED******REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***.authentication(authenticator: authenticator)
 ***REMOVED******REMOVED***.navigationBarTitle(Text("Authentication"), displayMode: .inline)
-***REMOVED******REMOVED******REMOVED***.sheet(isPresented: $authenticator.isSheetPresented) {
-***REMOVED******REMOVED******REMOVED******REMOVED***authenticator.currentSheet
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED***.onAppear {
 ***REMOVED******REMOVED******REMOVED***ArcGISURLSession.challengeHandler = authenticator
 ***REMOVED***
