@@ -98,68 +98,6 @@ public final class Authenticator: ObservableObject {
     
     @Published
     public var currentChallenge: IdentifiableQueuedChallenge?
-    
-//    @Published
-//    public var isSheetPresented: Bool = false
-//
-//    public var currentSheet: AnyView = AnyView(EmptyView())
-//
-//    @Published
-//    public var isAlertPresented: Bool = false
-//
-//    public var currentAlert: AnyView = AnyView(EmptyView())
-//
-//    func dismiss() {
-//        isSheetPresented = false
-//        isAlertPresented = false
-//    }
-//
-//    func present<Content: View>(sheet: Content) {
-//        dismiss()
-//        currentSheet = AnyView(sheet)
-//        isSheetPresented = true
-//    }
-//
-//    func present<Content: View>(alert: Content) {
-//        dismiss()
-//        currentAlert = AnyView(alert)
-//        isAlertPresented = true
-//    }
-//
-//    func presentView(for challenge: QueuedChallenge) {
-//        switch challenge {
-//        case let challenge as QueuedArcGISChallenge:
-//            present(sheet: UsernamePasswordView(viewModel: TokenCredentialViewModel(challenge: challenge)))
-//        case let challenge as QueuedURLChallenge:
-//            switch challenge.urlChallenge.protectionSpace.authenticationMethod {
-//            case NSURLAuthenticationMethodServerTrust:
-//                present(alert: TrustHostView(viewModel: TrustHostChallengeViewModel(challenge: challenge)))
-//            case NSURLAuthenticationMethodClientCertificate:
-//                present(sheet: CertificatePickerView(viewModel: CertificatePickerViewModel(challenge: challenge)))
-//            case NSURLAuthenticationMethodDefault,
-//                NSURLAuthenticationMethodNTLM,
-//                NSURLAuthenticationMethodHTMLForm,
-//                NSURLAuthenticationMethodHTTPBasic,
-//            NSURLAuthenticationMethodHTTPDigest:
-//                present(sheet: UsernamePasswordView(viewModel: URLCredentialUsernamePasswordViewModel(challenge: challenge)))
-//            default:
-//                fatalError()
-//            }
-//        default:
-//            fatalError()
-//        }
-//    }
-}
-
-struct ChallengeView: View {
-    var style: ChallengeViewStyle
-    var content: AnyView
-    var body: some View { content }
-}
-
-enum ChallengeViewStyle {
-    case sheet
-    case alert
 }
 
 extension Authenticator: AuthenticationChallengeHandler {
