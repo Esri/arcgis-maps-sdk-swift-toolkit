@@ -75,8 +75,12 @@ public final class Authenticator: ObservableObject {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Creating the OAuth credential will present the OAuth login view.
 ***REMOVED******REMOVED******REMOVED******REMOVED***queuedArcGISChallenge.resume(with: .oAuth(configuration: config))
 ***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Set the current challenge, this should show the challenge view.
-***REMOVED******REMOVED******REMOVED******REMOVED***currentChallenge = IdentifiableQueuedChallenge(queuedChallenge: queuedChallenge)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Set the current challenge
+***REMOVED******REMOVED******REMOVED******REMOVED***currentChallenge = queuedChallenge
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Show the challenge view
+***REMOVED******REMOVED******REMOVED******REMOVED***showChallengeView(makeView(for: queuedChallenge))
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Wait for the queued challenge to finish.
 ***REMOVED******REMOVED******REMOVED******REMOVED***await queuedChallenge.complete()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Set the current challenge to `nil`, this should dismiss the challenge view.
@@ -85,8 +89,7 @@ public final class Authenticator: ObservableObject {
 ***REMOVED***
 ***REMOVED***
 
-***REMOVED***@Published
-***REMOVED***public var currentChallenge: IdentifiableQueuedChallenge?
+***REMOVED***var currentChallenge: QueuedChallenge?
 ***REMOVED***
 ***REMOVED***private var subject = PassthroughSubject<QueuedChallenge, Never>()
 ***REMOVED***private var challengeQueue: AsyncPublisher<AnyPublisher<QueuedChallenge, Never>> {
@@ -96,6 +99,70 @@ public final class Authenticator: ObservableObject {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.eraseToAnyPublisher()
 ***REMOVED******REMOVED***)
 ***REMOVED***
+***REMOVED***
+***REMOVED***@Published
+***REMOVED***public var showSheet: Bool = false
+***REMOVED***
+***REMOVED***@Published
+***REMOVED***public var showAlert: Bool = false
+***REMOVED***
+***REMOVED***public var currentView: AnyView = AnyView(EmptyView())
+***REMOVED***
+***REMOVED***func showChallengeView<Content: View>(_ content: Content) {
+***REMOVED******REMOVED***showSheet = false
+***REMOVED******REMOVED***showAlert = false
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***currentView = AnyView(content)
+***REMOVED******REMOVED***guard let content = content as? ChallengeView else {
+***REMOVED******REMOVED******REMOVED***preconditionFailure()
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***switch content.style {
+***REMOVED******REMOVED***case .alert:
+***REMOVED******REMOVED******REMOVED***showAlert = true
+***REMOVED******REMOVED***case .sheet:
+***REMOVED******REMOVED******REMOVED***showSheet = true
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***@ViewBuilder
+***REMOVED***func makeView(for challenge: QueuedChallenge) -> some View {
+***REMOVED******REMOVED***switch challenge {
+***REMOVED******REMOVED***case let challenge as QueuedArcGISChallenge:
+***REMOVED******REMOVED******REMOVED***UsernamePasswordView(viewModel: TokenCredentialViewModel(challenge: challenge))
+***REMOVED******REMOVED***case let challenge as QueuedURLChallenge:
+***REMOVED******REMOVED******REMOVED***makeView(forURLChallenge: challenge)
+***REMOVED******REMOVED***default:
+***REMOVED******REMOVED******REMOVED***fatalError()
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***@ViewBuilder
+***REMOVED***func makeView(forURLChallenge challenge: QueuedURLChallenge) -> some View {
+***REMOVED******REMOVED***switch challenge.urlChallenge.protectionSpace.authenticationMethod {
+***REMOVED******REMOVED***case NSURLAuthenticationMethodServerTrust:
+***REMOVED******REMOVED******REMOVED***TrustHostView(viewModel: TrustHostChallengeViewModel(challenge: challenge))
+***REMOVED******REMOVED***case NSURLAuthenticationMethodClientCertificate:
+***REMOVED******REMOVED******REMOVED***return CertificatePickerView(viewModel: CertificatePickerViewModel(challenge: challenge))
+***REMOVED******REMOVED***case NSURLAuthenticationMethodDefault,
+***REMOVED******REMOVED******REMOVED***NSURLAuthenticationMethodNTLM,
+***REMOVED******REMOVED******REMOVED***NSURLAuthenticationMethodHTMLForm,
+***REMOVED******REMOVED******REMOVED***NSURLAuthenticationMethodHTTPBasic,
+***REMOVED******REMOVED***NSURLAuthenticationMethodHTTPDigest:
+***REMOVED******REMOVED******REMOVED***UsernamePasswordView(viewModel: URLCredentialUsernamePasswordViewModel(challenge: challenge))
+***REMOVED******REMOVED***default:
+***REMOVED******REMOVED******REMOVED***fatalError()
+***REMOVED***
+***REMOVED***
+***REMOVED***
+
+protocol ChallengeView {
+***REMOVED***var style: ChallengeViewStyle { get ***REMOVED***
+***REMOVED***
+
+enum ChallengeViewStyle {
+***REMOVED***case sheet
+***REMOVED***case alert
 ***REMOVED***
 
 extension Authenticator: AuthenticationChallengeHandler {

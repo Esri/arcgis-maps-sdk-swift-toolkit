@@ -40,9 +40,13 @@ struct AuthenticationExampleView: View {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.navigationBarTitle(Text("Authentication"), displayMode: .inline)
-***REMOVED******REMOVED***.sheet(item: $authenticator.currentChallenge) {
-***REMOVED******REMOVED******REMOVED***AuthenticationView(challenge: $0)
-***REMOVED***.onAppear {
+***REMOVED******REMOVED***.sheet(isPresented: $authenticator.showSheet) {
+***REMOVED******REMOVED******REMOVED***authenticator.currentView
+***REMOVED***
+***REMOVED******REMOVED***.alert("foo", isPresented: $authenticator.showAlert) {
+***REMOVED******REMOVED******REMOVED***authenticator.currentView
+***REMOVED***
+***REMOVED******REMOVED***.onAppear {
 ***REMOVED******REMOVED******REMOVED***ArcGISURLSession.challengeHandler = authenticator
 ***REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Save and restore the API Key.

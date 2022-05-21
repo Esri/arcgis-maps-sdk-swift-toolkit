@@ -49,10 +49,12 @@ final class MockTrustHostViewModel: TrustHostViewModel {
 ***REMOVED***func cancel() {***REMOVED***
 ***REMOVED***
 
-struct TrustHostView<ViewModel: TrustHostViewModel>: View {
+struct TrustHostView<ViewModel: TrustHostViewModel>: ChallengeView, View {
 ***REMOVED***init(viewModel: ViewModel) {
 ***REMOVED******REMOVED***self.viewModel = viewModel
 ***REMOVED***
+***REMOVED***
+***REMOVED***var style: ChallengeViewStyle { .alert ***REMOVED***
 ***REMOVED***
 ***REMOVED***@ObservedObject private var viewModel: ViewModel
 ***REMOVED***
