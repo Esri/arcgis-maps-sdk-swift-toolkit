@@ -82,7 +82,7 @@ public final class Authenticator: ObservableObject {
 ***REMOVED******REMOVED******REMOVED******REMOVED***await queuedChallenge.complete()
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Dismiss the view.
-***REMOVED******REMOVED******REMOVED******REMOVED***dismissView()
+***REMOVED******REMOVED******REMOVED******REMOVED***dismiss()
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -99,55 +99,46 @@ public final class Authenticator: ObservableObject {
 ***REMOVED***@Published
 ***REMOVED***public var isSheetPresented: Bool = false
 ***REMOVED***
+***REMOVED***public var currentSheet: AnyView = AnyView(EmptyView())
+***REMOVED***
 ***REMOVED***@Published
 ***REMOVED***public var isAlertPresented: Bool = false
 ***REMOVED***
-***REMOVED***public var currentView: AnyView = AnyView(EmptyView())
+***REMOVED***public var currentAlert: AnyView = AnyView(EmptyView())
 ***REMOVED***
-***REMOVED***func dismissView() {
+***REMOVED***func dismiss() {
 ***REMOVED******REMOVED***isSheetPresented = false
 ***REMOVED******REMOVED***isAlertPresented = false
 ***REMOVED***
 ***REMOVED***
-***REMOVED***func presentView<Content: View>(with style: ChallengeViewStyle, content: Content) {
-***REMOVED******REMOVED***currentView = AnyView(content)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***switch style {
-***REMOVED******REMOVED***case .alert:
-***REMOVED******REMOVED******REMOVED***isAlertPresented = true
-***REMOVED******REMOVED***case .sheet:
-***REMOVED******REMOVED******REMOVED***isSheetPresented = true
+***REMOVED***func present<Content: View>(sheet: Content) {
+***REMOVED******REMOVED***dismiss()
+***REMOVED******REMOVED***currentSheet = AnyView(sheet)
+***REMOVED******REMOVED***isSheetPresented = true
 ***REMOVED***
+***REMOVED***
+***REMOVED***func present<Content: View>(alert: Content) {
+***REMOVED******REMOVED***dismiss()
+***REMOVED******REMOVED***currentAlert = AnyView(alert)
+***REMOVED******REMOVED***isAlertPresented = true
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func presentView(for challenge: QueuedChallenge) {
 ***REMOVED******REMOVED***switch challenge {
 ***REMOVED******REMOVED***case let challenge as QueuedArcGISChallenge:
-***REMOVED******REMOVED******REMOVED***presentView(
-***REMOVED******REMOVED******REMOVED******REMOVED***with: .sheet,
-***REMOVED******REMOVED******REMOVED******REMOVED***content: UsernamePasswordView(viewModel: TokenCredentialViewModel(challenge: challenge))
-***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***present(sheet: UsernamePasswordView(viewModel: TokenCredentialViewModel(challenge: challenge)))
 ***REMOVED******REMOVED***case let challenge as QueuedURLChallenge:
 ***REMOVED******REMOVED******REMOVED***switch challenge.urlChallenge.protectionSpace.authenticationMethod {
 ***REMOVED******REMOVED******REMOVED***case NSURLAuthenticationMethodServerTrust:
-***REMOVED******REMOVED******REMOVED******REMOVED***presentView(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***with: .alert,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***content: TrustHostView(viewModel: TrustHostChallengeViewModel(challenge: challenge))
-***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***present(alert: TrustHostView(viewModel: TrustHostChallengeViewModel(challenge: challenge)))
 ***REMOVED******REMOVED******REMOVED***case NSURLAuthenticationMethodClientCertificate:
-***REMOVED******REMOVED******REMOVED******REMOVED***presentView(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***with: .alert,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***content: CertificatePickerView(viewModel: CertificatePickerViewModel(challenge: challenge))
-***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***present(sheet: CertificatePickerView(viewModel: CertificatePickerViewModel(challenge: challenge)))
 ***REMOVED******REMOVED******REMOVED***case NSURLAuthenticationMethodDefault,
 ***REMOVED******REMOVED******REMOVED******REMOVED***NSURLAuthenticationMethodNTLM,
 ***REMOVED******REMOVED******REMOVED******REMOVED***NSURLAuthenticationMethodHTMLForm,
 ***REMOVED******REMOVED******REMOVED******REMOVED***NSURLAuthenticationMethodHTTPBasic,
 ***REMOVED******REMOVED******REMOVED***NSURLAuthenticationMethodHTTPDigest:
-***REMOVED******REMOVED******REMOVED******REMOVED***presentView(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***with: .sheet,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***content: UsernamePasswordView(viewModel: URLCredentialUsernamePasswordViewModel(challenge: challenge))
-***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***present(sheet: UsernamePasswordView(viewModel: URLCredentialUsernamePasswordViewModel(challenge: challenge)))
 ***REMOVED******REMOVED******REMOVED***default:
 ***REMOVED******REMOVED******REMOVED******REMOVED***fatalError()
 ***REMOVED******REMOVED***

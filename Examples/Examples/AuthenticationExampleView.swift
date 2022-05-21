@@ -41,10 +41,13 @@ struct AuthenticationExampleView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***.navigationBarTitle(Text("Authentication"), displayMode: .inline)
 ***REMOVED******REMOVED***.sheet(isPresented: $authenticator.isSheetPresented) {
-***REMOVED******REMOVED******REMOVED***authenticator.currentView
+***REMOVED******REMOVED******REMOVED***authenticator.currentSheet
 ***REMOVED***
-***REMOVED******REMOVED***.alert("foo", isPresented: $authenticator.isAlertPresented) {
-***REMOVED******REMOVED******REMOVED***authenticator.currentView
+***REMOVED******REMOVED***.alert("hello", isPresented: $authenticator.isSheetPresented, presenting: "data", actions: { d in
+***REMOVED******REMOVED******REMOVED***
+***REMOVED***)
+***REMOVED******REMOVED***.alert(isPresented: $authenticator.isAlertPresented) {
+***REMOVED******REMOVED******REMOVED***Alert(title: Text("title.."), message: Text("massage"), dismissButton: .cancel())
 ***REMOVED***
 ***REMOVED******REMOVED***.onAppear {
 ***REMOVED******REMOVED******REMOVED***ArcGISURLSession.challengeHandler = authenticator
