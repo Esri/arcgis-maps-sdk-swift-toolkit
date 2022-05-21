@@ -49,12 +49,10 @@ final class MockTrustHostViewModel: TrustHostViewModel {
     func cancel() {}
 }
 
-struct TrustHostView<ViewModel: TrustHostViewModel>: ChallengeView, View {
+struct TrustHostView<ViewModel: TrustHostViewModel>: View {
     init(viewModel: ViewModel) {
         self.viewModel = viewModel
     }
-    
-    var style: ChallengeViewStyle { .alert }
     
     @ObservedObject private var viewModel: ViewModel
     

@@ -25,12 +25,10 @@ import ArcGIS
     func cancel()
 }
 
-struct UsernamePasswordView<ViewModel: UsernamePasswordViewModel>: ChallengeView, View {
+struct UsernamePasswordView<ViewModel: UsernamePasswordViewModel>: View {
     init(viewModel: ViewModel) {
         self.viewModel = viewModel
     }
-    
-    var style: ChallengeViewStyle { .sheet }
     
     @ObservedObject private var viewModel: ViewModel
     
