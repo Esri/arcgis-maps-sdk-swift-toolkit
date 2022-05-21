@@ -75,25 +75,17 @@ public final class Authenticator: ObservableObject {
                 // Creating the OAuth credential will present the OAuth login view.
                 queuedArcGISChallenge.resume(with: .oAuth(configuration: config))
             } else {
-                // Set the current challenge
-                currentChallenge = queuedChallenge
-                
-                // Show the challenge view
-                showChallengeView(makeView(for: queuedChallenge))
+                // Present the challenge view
+                presentView(for: queuedChallenge)
                 
                 // Wait for the queued challenge to finish.
                 await queuedChallenge.complete()
                 
-                // Set the current challenge to `nil`.
-                currentChallenge = nil
-                
-                // Hide the view.
-                hideChallengeView()
+                // Dismiss the view.
+                dismissView()
             }
         }
     }
-
-    var currentChallenge: QueuedChallenge?
     
     private var subject = PassthroughSubject<QueuedChallenge, Never>()
     private var challengeQueue: AsyncPublisher<AnyPublisher<QueuedChallenge, Never>> {
@@ -105,73 +97,60 @@ public final class Authenticator: ObservableObject {
     }
     
     @Published
-    public var showSheet: Bool = false
+    public var isSheetPresented: Bool = false
     
     @Published
-    public var showAlert: Bool = false
+    public var isAlertPresented: Bool = false
     
     public var currentView: AnyView = AnyView(EmptyView())
     
-    func hideChallengeView() {
-        showSheet = false
-        showAlert = false
+    func dismissView() {
+        isSheetPresented = false
+        isAlertPresented = false
     }
     
-    func showChallengeView<Content: View>(_ content: Content) {
+    func presentView<Content: View>(with style: ChallengeViewStyle, content: Content) {
         currentView = AnyView(content)
-        guard let content = content as? ChallengeView else {
-            preconditionFailure()
-        }
         
-        switch content.style {
+        switch style {
         case .alert:
-            showAlert = true
+            isAlertPresented = true
         case .sheet:
-            showSheet = true
+            isSheetPresented = true
         }
     }
     
-    func makeView(for challenge: QueuedChallenge) -> ChallengeView {
+    func presentView(for challenge: QueuedChallenge) {
         switch challenge {
         case let challenge as QueuedArcGISChallenge:
-            return ChallengeView(
-                style: .sheet,
-                content: AnyView(UsernamePasswordView(viewModel: TokenCredentialViewModel(challenge: challenge)))
+            presentView(
+                with: .sheet,
+                content: UsernamePasswordView(viewModel: TokenCredentialViewModel(challenge: challenge))
             )
         case let challenge as QueuedURLChallenge:
-            return makeView(forURLChallenge: challenge)
-        default:
-            fatalError()
-        }
-    }
-    
-    func makeView(forURLChallenge challenge: QueuedURLChallenge) -> ChallengeView {
-        switch challenge.urlChallenge.protectionSpace.authenticationMethod {
-        case NSURLAuthenticationMethodServerTrust:
-            return ChallengeView(
-                style: .alert,
-                content: AnyView(
-                    TrustHostView(viewModel: TrustHostChallengeViewModel(challenge: challenge))
+            switch challenge.urlChallenge.protectionSpace.authenticationMethod {
+            case NSURLAuthenticationMethodServerTrust:
+                presentView(
+                    with: .alert,
+                    content: TrustHostView(viewModel: TrustHostChallengeViewModel(challenge: challenge))
                 )
-            )
-        case NSURLAuthenticationMethodClientCertificate:
-            return ChallengeView(
-                style: .alert,
-                content: AnyView(
-                    CertificatePickerView(viewModel: CertificatePickerViewModel(challenge: challenge))
+            case NSURLAuthenticationMethodClientCertificate:
+                presentView(
+                    with: .alert,
+                    content: CertificatePickerView(viewModel: CertificatePickerViewModel(challenge: challenge))
                 )
-            )
-        case NSURLAuthenticationMethodDefault,
-            NSURLAuthenticationMethodNTLM,
-            NSURLAuthenticationMethodHTMLForm,
-            NSURLAuthenticationMethodHTTPBasic,
-        NSURLAuthenticationMethodHTTPDigest:
-            return ChallengeView(
-                style: .sheet,
-                content: AnyView(
-                    UsernamePasswordView(viewModel: URLCredentialUsernamePasswordViewModel(challenge: challenge))
+            case NSURLAuthenticationMethodDefault,
+                NSURLAuthenticationMethodNTLM,
+                NSURLAuthenticationMethodHTMLForm,
+                NSURLAuthenticationMethodHTTPBasic,
+            NSURLAuthenticationMethodHTTPDigest:
+                presentView(
+                    with: .sheet,
+                    content: UsernamePasswordView(viewModel: URLCredentialUsernamePasswordViewModel(challenge: challenge))
                 )
-            )
+            default:
+                fatalError()
+            }
         default:
             fatalError()
         }

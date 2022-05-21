@@ -40,10 +40,10 @@ struct AuthenticationExampleView: View {
             }
         }
         .navigationBarTitle(Text("Authentication"), displayMode: .inline)
-        .sheet(isPresented: $authenticator.showSheet) {
+        .sheet(isPresented: $authenticator.isSheetPresented) {
             authenticator.currentView
         }
-        .alert("foo", isPresented: $authenticator.showAlert) {
+        .alert("foo", isPresented: $authenticator.isAlertPresented) {
             authenticator.currentView
         }
         .onAppear {
