@@ -13,40 +13,40 @@
 
 import SwiftUI
 
-public struct AuthenticationView: View {
-    public init(challenge: IdentifiableQueuedChallenge) {
-        self.challenge = challenge.queuedChallenge
-    }
-
-    let challenge: QueuedChallenge
-    
-    public var body: some View {
-        switch challenge {
-        case let challenge as QueuedArcGISChallenge:
-            UsernamePasswordView(viewModel: TokenCredentialViewModel(challenge: challenge))
-        case let challenge as QueuedURLChallenge:
-            view(forURLChallenge: challenge)
-        default:
-            fatalError()
-        }
-    }
-    
-    @MainActor
-    @ViewBuilder
-    func view(forURLChallenge challenge: QueuedURLChallenge) -> some View {
-        switch challenge.urlChallenge.protectionSpace.authenticationMethod {
-        case NSURLAuthenticationMethodServerTrust:
-            TrustHostView(viewModel: TrustHostChallengeViewModel(challenge: challenge))
-        case NSURLAuthenticationMethodClientCertificate:
-            CertificatePickerView(viewModel: CertificatePickerViewModel(challenge: challenge))
-        case NSURLAuthenticationMethodDefault,
-            NSURLAuthenticationMethodNTLM,
-            NSURLAuthenticationMethodHTMLForm,
-            NSURLAuthenticationMethodHTTPBasic,
-        NSURLAuthenticationMethodHTTPDigest:
-            UsernamePasswordView(viewModel: URLCredentialUsernamePasswordViewModel(challenge: challenge))
-        default:
-            fatalError()
-        }
-    }
-}
+//public struct AuthenticationView: View {
+//    public init(challenge: QueuedChallenge) {
+//        self.challenge = challenge.queuedChallenge
+//    }
+//
+//    let challenge: QueuedChallenge
+//
+//    public var body: some View {
+//        switch challenge {
+//        case let challenge as QueuedArcGISChallenge:
+//            UsernamePasswordView(viewModel: TokenCredentialViewModel(challenge: challenge))
+//        case let challenge as QueuedURLChallenge:
+//            view(forURLChallenge: challenge)
+//        default:
+//            fatalError()
+//        }
+//    }
+//
+//    @MainActor
+//    @ViewBuilder
+//    func view(forURLChallenge challenge: QueuedURLChallenge) -> some View {
+//        switch challenge.urlChallenge.protectionSpace.authenticationMethod {
+//        case NSURLAuthenticationMethodServerTrust:
+//            TrustHostView(viewModel: TrustHostChallengeViewModel(challenge: challenge))
+//        case NSURLAuthenticationMethodClientCertificate:
+//            CertificatePickerView(viewModel: CertificatePickerViewModel(challenge: challenge))
+//        case NSURLAuthenticationMethodDefault,
+//            NSURLAuthenticationMethodNTLM,
+//            NSURLAuthenticationMethodHTMLForm,
+//            NSURLAuthenticationMethodHTTPBasic,
+//        NSURLAuthenticationMethodHTTPDigest:
+//            UsernamePasswordView(viewModel: URLCredentialUsernamePasswordViewModel(challenge: challenge))
+//        default:
+//            fatalError()
+//        }
+//    }
+//}

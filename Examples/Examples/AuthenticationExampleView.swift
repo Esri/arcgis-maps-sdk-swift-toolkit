@@ -40,9 +40,13 @@ struct AuthenticationExampleView: View {
             }
         }
         .navigationBarTitle(Text("Authentication"), displayMode: .inline)
-        .sheet(item: $authenticator.currentChallenge) {
-            AuthenticationView(challenge: $0)
-        }.onAppear {
+        .sheet(isPresented: $authenticator.showSheet) {
+            authenticator.currentView
+        }
+        .alert("foo", isPresented: $authenticator.showAlert) {
+            authenticator.currentView
+        }
+        .onAppear {
             ArcGISURLSession.challengeHandler = authenticator
         }
         // Save and restore the API Key.

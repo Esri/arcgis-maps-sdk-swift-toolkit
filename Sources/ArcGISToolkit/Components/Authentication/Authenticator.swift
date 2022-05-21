@@ -75,8 +75,12 @@ public final class Authenticator: ObservableObject {
                 // Creating the OAuth credential will present the OAuth login view.
                 queuedArcGISChallenge.resume(with: .oAuth(configuration: config))
             } else {
-                // Set the current challenge, this should show the challenge view.
-                currentChallenge = IdentifiableQueuedChallenge(queuedChallenge: queuedChallenge)
+                // Set the current challenge
+                currentChallenge = queuedChallenge
+                
+                // Show the challenge view
+                showChallengeView(makeView(for: queuedChallenge))
+                
                 // Wait for the queued challenge to finish.
                 await queuedChallenge.complete()
                 // Set the current challenge to `nil`, this should dismiss the challenge view.
@@ -85,8 +89,7 @@ public final class Authenticator: ObservableObject {
         }
     }
 
-    @Published
-    public var currentChallenge: IdentifiableQueuedChallenge?
+    var currentChallenge: QueuedChallenge?
     
     private var subject = PassthroughSubject<QueuedChallenge, Never>()
     private var challengeQueue: AsyncPublisher<AnyPublisher<QueuedChallenge, Never>> {
@@ -96,6 +99,70 @@ public final class Authenticator: ObservableObject {
                 .eraseToAnyPublisher()
         )
     }
+    
+    @Published
+    public var showSheet: Bool = false
+    
+    @Published
+    public var showAlert: Bool = false
+    
+    public var currentView: AnyView = AnyView(EmptyView())
+    
+    func showChallengeView<Content: View>(_ content: Content) {
+        showSheet = false
+        showAlert = false
+        
+        currentView = AnyView(content)
+        guard let content = content as? ChallengeView else {
+            preconditionFailure()
+        }
+        
+        switch content.style {
+        case .alert:
+            showAlert = true
+        case .sheet:
+            showSheet = true
+        }
+    }
+    
+    @ViewBuilder
+    func makeView(for challenge: QueuedChallenge) -> some View {
+        switch challenge {
+        case let challenge as QueuedArcGISChallenge:
+            UsernamePasswordView(viewModel: TokenCredentialViewModel(challenge: challenge))
+        case let challenge as QueuedURLChallenge:
+            makeView(forURLChallenge: challenge)
+        default:
+            fatalError()
+        }
+    }
+    
+    @ViewBuilder
+    func makeView(forURLChallenge challenge: QueuedURLChallenge) -> some View {
+        switch challenge.urlChallenge.protectionSpace.authenticationMethod {
+        case NSURLAuthenticationMethodServerTrust:
+            TrustHostView(viewModel: TrustHostChallengeViewModel(challenge: challenge))
+        case NSURLAuthenticationMethodClientCertificate:
+            return CertificatePickerView(viewModel: CertificatePickerViewModel(challenge: challenge))
+        case NSURLAuthenticationMethodDefault,
+            NSURLAuthenticationMethodNTLM,
+            NSURLAuthenticationMethodHTMLForm,
+            NSURLAuthenticationMethodHTTPBasic,
+        NSURLAuthenticationMethodHTTPDigest:
+            UsernamePasswordView(viewModel: URLCredentialUsernamePasswordViewModel(challenge: challenge))
+        default:
+            fatalError()
+        }
+    }
+}
+
+protocol ChallengeView {
+    var style: ChallengeViewStyle { get }
+}
+
+enum ChallengeViewStyle {
+    case sheet
+    case alert
 }
 
 extension Authenticator: AuthenticationChallengeHandler {
