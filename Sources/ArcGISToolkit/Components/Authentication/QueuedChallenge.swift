@@ -18,7 +18,7 @@ protocol QueuedChallenge: AnyObject {
     func complete() async
 }
 
-public final class QueuedArcGISChallenge: QueuedChallenge {
+final class QueuedArcGISChallenge: QueuedChallenge {
     let arcGISChallenge: ArcGISAuthenticationChallenge
     
     init(arcGISChallenge: ArcGISAuthenticationChallenge) {
@@ -59,7 +59,7 @@ public final class QueuedArcGISChallenge: QueuedChallenge {
     }
 }
 
-public final class QueuedURLChallenge: QueuedChallenge {
+final class QueuedURLChallenge: QueuedChallenge {
     let urlChallenge: URLAuthenticationChallenge
     
     init(urlChallenge: URLAuthenticationChallenge) {
@@ -101,7 +101,7 @@ public final class QueuedURLChallenge: QueuedChallenge {
     }
 }
 
-public struct IdentifiableQueuedChallenge {
+struct IdentifiableQueuedChallenge {
     let queuedChallenge: QueuedChallenge
 }
 
