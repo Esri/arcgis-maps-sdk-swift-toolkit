@@ -31,6 +31,7 @@ struct AuthenticationExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AuthenticationItemView(item: item)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***Button("Clear Credential Store") {
 ***REMOVED******REMOVED******REMOVED******REMOVED***items = []
 ***REMOVED******REMOVED******REMOVED******REMOVED***Task {
@@ -38,17 +39,15 @@ struct AuthenticationExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***items = AuthenticationItem.makeAll()
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***if let challenge = authenticator.currentChallenge {
+***REMOVED******REMOVED******REMOVED******REMOVED***AuthenticationView(challenge: challenge)
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.navigationBarTitle(Text("Authentication"), displayMode: .inline)
-***REMOVED******REMOVED***.sheet(isPresented: $authenticator.isSheetPresented) {
-***REMOVED******REMOVED******REMOVED***authenticator.currentSheet
-***REMOVED***
-***REMOVED******REMOVED***.alert("hello", isPresented: $authenticator.isSheetPresented, presenting: "data", actions: { d in
-***REMOVED******REMOVED******REMOVED***
-***REMOVED***)
-***REMOVED******REMOVED***.alert(isPresented: $authenticator.isAlertPresented) {
-***REMOVED******REMOVED******REMOVED***Alert(title: Text("title.."), message: Text("massage"), dismissButton: .cancel())
-***REMOVED***
+***REMOVED******REMOVED******REMOVED***.sheet(isPresented: $authenticator.isSheetPresented) {
+***REMOVED******REMOVED******REMOVED******REMOVED***authenticator.currentSheet
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***.onAppear {
 ***REMOVED******REMOVED******REMOVED***ArcGISURLSession.challengeHandler = authenticator
 ***REMOVED***

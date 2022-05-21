@@ -14,12 +14,11 @@
 import Foundation
 ***REMOVED***
 
-protocol QueuedChallenge {
+protocol QueuedChallenge: AnyObject {
 ***REMOVED***func complete() async
 ***REMOVED***
 
-***REMOVED*** TODO: Ryan - Can these be structs?
-final class QueuedArcGISChallenge: QueuedChallenge {
+public final class QueuedArcGISChallenge: QueuedChallenge {
 ***REMOVED***let arcGISChallenge: ArcGISAuthenticationChallenge
 ***REMOVED***
 ***REMOVED***init(arcGISChallenge: ArcGISAuthenticationChallenge) {
@@ -60,7 +59,7 @@ final class QueuedArcGISChallenge: QueuedChallenge {
 ***REMOVED***
 ***REMOVED***
 
-final class QueuedURLChallenge: QueuedChallenge {
+public final class QueuedURLChallenge: QueuedChallenge {
 ***REMOVED***let urlChallenge: URLAuthenticationChallenge
 ***REMOVED***
 ***REMOVED***init(urlChallenge: URLAuthenticationChallenge) {
@@ -100,4 +99,12 @@ final class QueuedURLChallenge: QueuedChallenge {
 ***REMOVED******REMOVED***case trustHost
 ***REMOVED******REMOVED***case cancel
 ***REMOVED***
+***REMOVED***
+
+public struct IdentifiableQueuedChallenge {
+***REMOVED***let queuedChallenge: QueuedChallenge
+***REMOVED***
+
+extension IdentifiableQueuedChallenge: Identifiable {
+***REMOVED***public var id: ObjectIdentifier { ObjectIdentifier(queuedChallenge) ***REMOVED***
 ***REMOVED***
