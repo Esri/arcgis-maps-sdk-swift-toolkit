@@ -25,8 +25,7 @@ struct TrustHostView: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***Color.clear
-***REMOVED******REMOVED******REMOVED***.frame(width: 0, height: 0)
+***REMOVED******REMOVED***InvisibleView()
 ***REMOVED******REMOVED******REMOVED***.alert("Certificate Trust Warning", isPresented: .constant(true), presenting: challenge) { _ in
 ***REMOVED******REMOVED******REMOVED******REMOVED***Button("Dangerous: Allow Connection", role: .destructive) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***challenge.resume(with: .trustHost)

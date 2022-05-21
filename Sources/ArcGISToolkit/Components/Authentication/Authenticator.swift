@@ -99,68 +99,6 @@ public final class Authenticator: ObservableObject {
 ***REMOVED***@Published
 ***REMOVED***public var currentChallenge: IdentifiableQueuedChallenge?
 ***REMOVED***
-***REMOVED******REMOVED***@Published
-***REMOVED******REMOVED***public var isSheetPresented: Bool = false
-***REMOVED***
-***REMOVED******REMOVED***public var currentSheet: AnyView = AnyView(EmptyView())
-***REMOVED***
-***REMOVED******REMOVED***@Published
-***REMOVED******REMOVED***public var isAlertPresented: Bool = false
-***REMOVED***
-***REMOVED******REMOVED***public var currentAlert: AnyView = AnyView(EmptyView())
-***REMOVED***
-***REMOVED******REMOVED***func dismiss() {
-***REMOVED******REMOVED******REMOVED***isSheetPresented = false
-***REMOVED******REMOVED******REMOVED***isAlertPresented = false
-***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***func present<Content: View>(sheet: Content) {
-***REMOVED******REMOVED******REMOVED***dismiss()
-***REMOVED******REMOVED******REMOVED***currentSheet = AnyView(sheet)
-***REMOVED******REMOVED******REMOVED***isSheetPresented = true
-***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***func present<Content: View>(alert: Content) {
-***REMOVED******REMOVED******REMOVED***dismiss()
-***REMOVED******REMOVED******REMOVED***currentAlert = AnyView(alert)
-***REMOVED******REMOVED******REMOVED***isAlertPresented = true
-***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***func presentView(for challenge: QueuedChallenge) {
-***REMOVED******REMOVED******REMOVED***switch challenge {
-***REMOVED******REMOVED******REMOVED***case let challenge as QueuedArcGISChallenge:
-***REMOVED******REMOVED******REMOVED******REMOVED***present(sheet: UsernamePasswordView(viewModel: TokenCredentialViewModel(challenge: challenge)))
-***REMOVED******REMOVED******REMOVED***case let challenge as QueuedURLChallenge:
-***REMOVED******REMOVED******REMOVED******REMOVED***switch challenge.urlChallenge.protectionSpace.authenticationMethod {
-***REMOVED******REMOVED******REMOVED******REMOVED***case NSURLAuthenticationMethodServerTrust:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***present(alert: TrustHostView(viewModel: TrustHostChallengeViewModel(challenge: challenge)))
-***REMOVED******REMOVED******REMOVED******REMOVED***case NSURLAuthenticationMethodClientCertificate:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***present(sheet: CertificatePickerView(viewModel: CertificatePickerViewModel(challenge: challenge)))
-***REMOVED******REMOVED******REMOVED******REMOVED***case NSURLAuthenticationMethodDefault,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***NSURLAuthenticationMethodNTLM,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***NSURLAuthenticationMethodHTMLForm,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***NSURLAuthenticationMethodHTTPBasic,
-***REMOVED******REMOVED******REMOVED******REMOVED***NSURLAuthenticationMethodHTTPDigest:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***present(sheet: UsernamePasswordView(viewModel: URLCredentialUsernamePasswordViewModel(challenge: challenge)))
-***REMOVED******REMOVED******REMOVED******REMOVED***default:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***fatalError()
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***default:
-***REMOVED******REMOVED******REMOVED******REMOVED***fatalError()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED***
-
-struct ChallengeView: View {
-***REMOVED***var style: ChallengeViewStyle
-***REMOVED***var content: AnyView
-***REMOVED***var body: some View { content ***REMOVED***
-***REMOVED***
-
-enum ChallengeViewStyle {
-***REMOVED***case sheet
-***REMOVED***case alert
-***REMOVED***
 
 extension Authenticator: AuthenticationChallengeHandler {
 ***REMOVED***public func handleArcGISChallenge(

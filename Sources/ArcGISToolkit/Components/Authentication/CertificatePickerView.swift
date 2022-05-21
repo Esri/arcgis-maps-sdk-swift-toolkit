@@ -40,54 +40,40 @@ import UniformTypeIdentifiers
 ***REMOVED***
 
 struct CertificatePickerView: View {
-***REMOVED***enum Step {
-***REMOVED******REMOVED***case browsePrompt
-***REMOVED******REMOVED***case documentPicker
-***REMOVED******REMOVED***case enterPassword
-***REMOVED***
-***REMOVED***
 ***REMOVED***@ObservedObject var viewModel: CertificatePickerViewModel
-***REMOVED***@State var step: Step = .browsePrompt
 ***REMOVED***
-***REMOVED***@State var showPicker: Bool = false
+***REMOVED***@State var showPrompt: Bool = false
+***REMOVED***@State var showPicker: Bool = true
+***REMOVED***@State var showPassword: Bool = false
 ***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***Group {
-***REMOVED******REMOVED******REMOVED***switch step {
-***REMOVED******REMOVED******REMOVED***case .browsePrompt:
+***REMOVED******REMOVED***InvisibleView()
 ***REMOVED******REMOVED******REMOVED******REMOVED***PromptBrowseCertificateView(host: viewModel.challengingHost) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.cancel()
-***REMOVED******REMOVED******REMOVED*** onContinue: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***step = .documentPicker
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***showPicker = true
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***case .documentPicker:
-***REMOVED******REMOVED******REMOVED******REMOVED***Text("picker")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***DocumentPickerView(contentTypes: [.pfx]) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print("-- here!!! \($0)")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.certificateURL = $0
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***step = .enterYPassword
-***REMOVED******REMOVED******REMOVED******REMOVED*** onCancel: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.cancel()
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***case .enterPassword:
-***REMOVED******REMOVED******REMOVED******REMOVED***EnterPasswordView(password: $viewModel.password) {
+***REMOVED******REMOVED******REMOVED*** onCancel: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.cancel()
-***REMOVED******REMOVED******REMOVED*** onContinue: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.signIn()
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED***
 ***REMOVED******REMOVED***.sheet(isPresented: $showPicker) {
 ***REMOVED******REMOVED******REMOVED***DocumentPickerView(contentTypes: [.pfx]) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.certificateURL = $0
-***REMOVED******REMOVED******REMOVED******REMOVED***step = .enterPassword
+***REMOVED******REMOVED******REMOVED******REMOVED***showPassword = true
 ***REMOVED******REMOVED*** onCancel: {
 ***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.cancel()
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.edgesIgnoringSafeArea(.bottom)
+***REMOVED******REMOVED******REMOVED***.interactiveDismissDisabled()
 ***REMOVED***
-***REMOVED******REMOVED***.edgesIgnoringSafeArea(.bottom)
-***REMOVED******REMOVED***.interactiveDismissDisabled()
+***REMOVED******REMOVED***.sheet(isPresented: $showPassword) {
+***REMOVED******REMOVED******REMOVED***EnterPasswordView(password: $viewModel.password) {
+***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.signIn()
+***REMOVED******REMOVED*** onCancel: {
+***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.cancel()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.edgesIgnoringSafeArea(.bottom)
+***REMOVED******REMOVED******REMOVED***.interactiveDismissDisabled()
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
@@ -97,47 +83,28 @@ private extension UTType {
 
 struct PromptBrowseCertificateView: View {
 ***REMOVED***var host: String
-***REMOVED***var onCancel: () -> Void
 ***REMOVED***var onContinue: () -> Void
+***REMOVED***var onCancel: () -> Void
 ***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***VStack {
-***REMOVED******REMOVED******REMOVED***Text("A certificate is required to access content on \(host)")
-***REMOVED******REMOVED******REMOVED******REMOVED***.font(.body)
-***REMOVED******REMOVED******REMOVED******REMOVED***.padding([.bottom])
-***REMOVED******REMOVED******REMOVED******REMOVED***.multilineTextAlignment(.center)
+***REMOVED******REMOVED***InvisibleView()
+***REMOVED******REMOVED******REMOVED***.alert("Certificate Required", isPresented: .constant(true), presenting: host) { _ in
+***REMOVED******REMOVED******REMOVED******REMOVED***Button("Browse for a certificate") {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onContinue()
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***Button(role: .cancel) {
-***REMOVED******REMOVED******REMOVED******REMOVED***onCancel()
-***REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED***Text("Cancel")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity)
+***REMOVED******REMOVED******REMOVED******REMOVED***Button("Cancel", role: .cancel) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onCancel()
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED*** message: { _ in
+***REMOVED******REMOVED******REMOVED******REMOVED***Text("A certificate is required to access content on \(host)")
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.buttonStyle(.bordered)
-***REMOVED******REMOVED******REMOVED***.controlSize(.large)
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED***onContinue()
-***REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED***Text("Browse for a certificate")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity)
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.buttonStyle(.bordered)
-***REMOVED******REMOVED******REMOVED***.controlSize(.large)
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED***
-***REMOVED******REMOVED***.padding()
-***REMOVED******REMOVED***.navigationTitle("Certificate Required")
 ***REMOVED***
 ***REMOVED***
 
 struct EnterPasswordView: View {
 ***REMOVED***@Binding var password: String
-***REMOVED***var onCancel: () -> Void
 ***REMOVED***var onContinue: () -> Void
-***REMOVED***
+***REMOVED***var onCancel: () -> Void
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***VStack {
@@ -180,4 +147,3 @@ struct EnterPasswordView: View {
 ***REMOVED******REMOVED***.navigationTitle("Certificate Required")
 ***REMOVED***
 ***REMOVED***
-
