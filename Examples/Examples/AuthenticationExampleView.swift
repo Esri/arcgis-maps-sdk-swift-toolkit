@@ -31,6 +31,7 @@ struct AuthenticationExampleView: View {
                     AuthenticationItemView(item: item)
                 }
             }
+            
             Button("Clear Credential Store") {
                 items = []
                 Task {
@@ -38,17 +39,15 @@ struct AuthenticationExampleView: View {
                     items = AuthenticationItem.makeAll()
                 }
             }
+            
+            if let challenge = authenticator.currentChallenge {
+                AuthenticationView(challenge: challenge)
+            }
         }
         .navigationBarTitle(Text("Authentication"), displayMode: .inline)
-        .sheet(isPresented: $authenticator.isSheetPresented) {
-            authenticator.currentSheet
-        }
-        .alert("hello", isPresented: $authenticator.isSheetPresented, presenting: "data", actions: { d in
-            
-        })
-        .alert(isPresented: $authenticator.isAlertPresented) {
-            Alert(title: Text("title.."), message: Text("massage"), dismissButton: .cancel())
-        }
+//        .sheet(isPresented: $authenticator.isSheetPresented) {
+//            authenticator.currentSheet
+//        }
         .onAppear {
             ArcGISURLSession.challengeHandler = authenticator
         }
