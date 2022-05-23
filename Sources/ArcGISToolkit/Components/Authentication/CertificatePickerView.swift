@@ -104,7 +104,7 @@ private extension View {
 ***REMOVED***
 ***REMOVED***
 
-struct EnterPasswordView: View {
+struct EnterPasswordView1: View {
 ***REMOVED***@Binding var password: String
 ***REMOVED***var onContinue: () -> Void
 ***REMOVED***var onCancel: () -> Void
@@ -148,5 +148,68 @@ struct EnterPasswordView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***.padding()
 ***REMOVED******REMOVED***.navigationTitle("Certificate Required")
+***REMOVED***
+***REMOVED***
+
+struct EnterPasswordView: View {
+***REMOVED***@Binding var password: String
+***REMOVED***var onContinue: () -> Void
+***REMOVED***var onCancel: () -> Void
+***REMOVED***@FocusState var isPasswordFocused: Bool
+***REMOVED***
+***REMOVED***var body: some View {
+***REMOVED******REMOVED***NavigationView {
+***REMOVED******REMOVED******REMOVED***Form {
+***REMOVED******REMOVED******REMOVED******REMOVED***Section {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***VStack {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***person
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Please enter a password for the chosen certificate.")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fixedSize(horizontal: false, vertical: true)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.listRowBackground(Color.clear)
+***REMOVED******REMOVED******REMOVED***
+
+***REMOVED******REMOVED******REMOVED******REMOVED***Section {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***SecureField("Password", text: $password)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.focused($isPasswordFocused)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.textContentType(.password)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.submitLabel(.go)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onSubmit { onContinue() ***REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.autocapitalization(.none)
+***REMOVED******REMOVED******REMOVED******REMOVED***.disableAutocorrection(true)
+
+***REMOVED******REMOVED******REMOVED******REMOVED***Section {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***okButton
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.navigationTitle("Certificate")
+***REMOVED******REMOVED******REMOVED***.navigationBarTitleDisplayMode(.inline)
+***REMOVED******REMOVED******REMOVED***.interactiveDismissDisabled()
+***REMOVED******REMOVED******REMOVED***.toolbar {
+***REMOVED******REMOVED******REMOVED******REMOVED***ToolbarItem(placement: .cancellationAction) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Cancel") { onCancel() ***REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.onAppear {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Workaround for Apple bug - FB9676178.
+***REMOVED******REMOVED******REMOVED******REMOVED***DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPasswordFocused = true
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***private var okButton: some View {
+***REMOVED******REMOVED***Button(action: {
+***REMOVED******REMOVED******REMOVED***onContinue()
+***REMOVED***, label: {
+***REMOVED******REMOVED******REMOVED***Text("OK")
+***REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .center)
+***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.white)
+***REMOVED***)
+***REMOVED******REMOVED******REMOVED***.disabled(!password.isEmpty)
+***REMOVED******REMOVED******REMOVED***.listRowBackground(!password.isEmpty ? Color.accentColor : Color.gray)
 ***REMOVED***
 ***REMOVED***
