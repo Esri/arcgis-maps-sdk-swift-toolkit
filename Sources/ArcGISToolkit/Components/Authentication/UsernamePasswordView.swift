@@ -25,10 +25,9 @@ import ArcGIS
     func cancel()
 }
 
-struct UsernamePasswordView<ViewModel: UsernamePasswordViewModel>: View {
-    init(challengingHost: String) where ViewModel == MockUsernamePasswordViewModel {
-        viewModel = MockUsernamePasswordViewModel(challengingHost: challengingHost)
-    }
+@MainActor
+struct UsernamePasswordViewModifier<ViewModel: UsernamePasswordViewModel>: ViewModifier {
+    let viewModel: ViewModel
     
     init(challenge: QueuedURLChallenge) where ViewModel == URLCredentialUsernamePasswordViewModel {
         viewModel = URLCredentialUsernamePasswordViewModel(challenge: challenge)
@@ -36,6 +35,18 @@ struct UsernamePasswordView<ViewModel: UsernamePasswordViewModel>: View {
     
     init(challenge: QueuedArcGISChallenge) where ViewModel == TokenCredentialViewModel {
         viewModel = TokenCredentialViewModel(challenge: challenge)
+    }
+    
+    func body(content: Content) -> some View {
+        content.sheet(isPresented: .constant(true)) {
+            UsernamePasswordView(viewModel: viewModel)
+        }
+    }
+}
+
+private struct UsernamePasswordView<ViewModel: UsernamePasswordViewModel>: View {
+    init(viewModel: ViewModel) {
+        _viewModel = ObservedObject(initialValue: viewModel)
     }
     
     @ObservedObject private var viewModel: ViewModel
@@ -126,7 +137,7 @@ struct UsernamePasswordView<ViewModel: UsernamePasswordViewModel>: View {
 
 struct UsernamePasswordView_Previews: PreviewProvider {
     static var previews: some View {
-        UsernamePasswordView(challengingHost: "arcgis.com")
+        UsernamePasswordView(viewModel: MockUsernamePasswordViewModel(challengingHost: "arcgis.com"))
     }
 }
 

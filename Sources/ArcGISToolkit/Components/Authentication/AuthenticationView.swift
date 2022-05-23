@@ -21,29 +21,31 @@ struct AuthenticationView: View {
     let challenge: QueuedChallenge
     
     var body: some View {
-        switch challenge {
-        case let challenge as QueuedArcGISChallenge:
-            Sheet {
-                UsernamePasswordView(challenge: challenge)
-            }
-        case let challenge as QueuedURLChallenge:
-            switch challenge.urlChallenge.protectionSpace.authenticationMethod {
-            case NSURLAuthenticationMethodServerTrust:
-                TrustHostView(challenge: challenge)
-            case NSURLAuthenticationMethodClientCertificate:
-                CertificatePickerView(challenge: challenge)
-            case NSURLAuthenticationMethodDefault,
-                NSURLAuthenticationMethodNTLM,
-                NSURLAuthenticationMethodHTMLForm,
-                NSURLAuthenticationMethodHTTPBasic,
-            NSURLAuthenticationMethodHTTPDigest:
-                UsernamePasswordView(challenge: challenge)
-            default:
-                fatalError()
-            }
-        default:
-            fatalError()
-        }
+        fatalError()
+//        switch challenge {
+//        case let challenge as QueuedArcGISChallenge:
+////            Sheet {
+////                UsernamePasswordView(challenge: challenge)
+////            }
+//        case let challenge as QueuedURLChallenge:
+//            switch challenge.urlChallenge.protectionSpace.authenticationMethod {
+//            case NSURLAuthenticationMethodServerTrust:
+//                //TrustHostView(challenge: challenge)
+//                fatalError()
+//            case NSURLAuthenticationMethodClientCertificate:
+//                CertificatePickerView(challenge: challenge)
+//            case NSURLAuthenticationMethodDefault,
+//                NSURLAuthenticationMethodNTLM,
+//                NSURLAuthenticationMethodHTMLForm,
+//                NSURLAuthenticationMethodHTTPBasic,
+//            NSURLAuthenticationMethodHTTPDigest:
+//                UsernamePasswordView(challenge: challenge)
+//            default:
+//                fatalError()
+//            }
+//        default:
+//            fatalError()
+//        }
     }
 }
 
@@ -57,13 +59,35 @@ public extension View {
 
 struct AuthenticationModifier: ViewModifier {
     @ObservedObject var authenticator: Authenticator
+    @State private var isPresented = false
     
     func body(content: Content) -> some View {
-        ZStack {
-            content
-            if let challenge = authenticator.currentChallenge {
-                AuthenticationView(challenge: challenge)
+        guard let challenge = authenticator.currentChallenge else {
+            return AnyView(content)
+        }
+        
+        switch challenge {
+        case let challenge as QueuedArcGISChallenge:
+            return AnyView(content.modifier(UsernamePasswordViewModifier(challenge: challenge)))
+        case let challenge as QueuedURLChallenge:
+            switch challenge.urlChallenge.protectionSpace.authenticationMethod {
+            case NSURLAuthenticationMethodServerTrust:
+                return AnyView(content.modifier(TrustHostViewModifier(challenge: challenge)))
+            case NSURLAuthenticationMethodClientCertificate:
+                return AnyView(content.modifier(CertificatePickerViewModifier(challenge: challenge)))
+            case NSURLAuthenticationMethodDefault,
+                NSURLAuthenticationMethodNTLM,
+                NSURLAuthenticationMethodHTMLForm,
+                NSURLAuthenticationMethodHTTPBasic,
+            NSURLAuthenticationMethodHTTPDigest:
+                return AnyView(content.modifier(UsernamePasswordViewModifier(challenge: challenge)))
+            default:
+                fatalError()
             }
+        default:
+            fatalError()
         }
     }
 }
+
+extension Authenticator: Identifiable {}

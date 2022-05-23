@@ -14,7 +14,7 @@
 import SwiftUI
 import UniformTypeIdentifiers
 
-@MainActor final class CertificatePickerViewModel: ObservableObject {
+@MainActor final private class CertificatePickerViewModel: ObservableObject {
     let challengingHost: String
     let challenge: QueuedURLChallenge
     
@@ -39,7 +39,18 @@ import UniformTypeIdentifiers
     }
 }
 
-struct CertificatePickerView: View {
+
+@MainActor
+struct CertificatePickerViewModifier: ViewModifier {
+    let challenge: QueuedURLChallenge
+    
+    func body(content: Content) -> some View {
+        content.sheet(isPresented: .constant(true)) {
+            CertificatePickerView(challenge: challenge)
+    }
+}
+
+private struct CertificatePickerView: View {
     init(challenge: QueuedURLChallenge) {
         viewModel = CertificatePickerViewModel(challenge: challenge)
     }
