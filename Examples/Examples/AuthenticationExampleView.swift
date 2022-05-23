@@ -17,7 +17,7 @@ import ArcGISToolkit
 
 struct AuthenticationExampleView: View {
     @ObservedObject var authenticator = Authenticator(
-        oAuthConfigurations: [.arcgisDotCom]
+        //oAuthConfigurations: [.arcgisDotCom]
     )
     @State var previousApiKey: APIKey?
     @State private var items = AuthenticationItem.makeAll()

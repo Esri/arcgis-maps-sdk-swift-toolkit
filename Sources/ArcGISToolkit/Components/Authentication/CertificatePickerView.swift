@@ -40,6 +40,10 @@ import UniformTypeIdentifiers
 }
 
 struct CertificatePickerView: View {
+    init(challenge: QueuedURLChallenge) {
+        viewModel = CertificatePickerViewModel(challenge: challenge)
+    }
+    
     @ObservedObject var viewModel: CertificatePickerViewModel
     
     @State var showPrompt: Bool = true

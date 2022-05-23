@@ -100,11 +100,3 @@ final class QueuedURLChallenge: QueuedChallenge {
         case cancel
     }
 }
-
-struct IdentifiableQueuedChallenge {
-    let queuedChallenge: QueuedChallenge
-}
-
-extension IdentifiableQueuedChallenge: Identifiable {
-    public var id: ObjectIdentifier { ObjectIdentifier(queuedChallenge) }
-}

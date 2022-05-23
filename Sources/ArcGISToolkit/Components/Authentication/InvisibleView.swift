@@ -18,3 +18,33 @@ struct InvisibleView: View {
         Color.clear.frame(width: 0, height: 0, alignment: .bottom)
     }
 }
+
+struct Sheet<Content: View>: View {
+    @State private var isPresented: Bool = true
+    var onDismiss: (() -> Void)?
+    var content: () -> Content
+    
+    var body: some View {
+        InvisibleView()
+            .onAppear { isPresented = true }
+            .sheet(
+                isPresented: $isPresented,
+                onDismiss: onDismiss,
+                content: content
+            )
+    }
+}
+
+//public extension View {
+//    @MainActor
+//    @ViewBuilder
+//    func asSheet() -> some View {
+//        modifier(SheetModifier())
+//    }
+//}
+//
+//struct SheetModifier: ViewModifier {
+//    func body(content: Content) -> some View {
+//        Sheet(isPresented: true, content: { content } )
+//    }
+//}
