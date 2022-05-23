@@ -21,7 +21,6 @@ struct AuthenticationView: View {
     let challenge: QueuedChallenge
     
     var body: some View {
-        fatalError()
 //        switch challenge {
 //        case let challenge as QueuedArcGISChallenge:
 ////            Sheet {
@@ -46,6 +45,28 @@ struct AuthenticationView: View {
 //        default:
 //            fatalError()
 //        }
+        
+        switch challenge {
+        case let challenge as QueuedArcGISChallenge:
+            modifier(UsernamePasswordViewModifier(challenge: challenge))
+        case let challenge as QueuedURLChallenge:
+            switch challenge.urlChallenge.protectionSpace.authenticationMethod {
+            case NSURLAuthenticationMethodServerTrust:
+                modifier(TrustHostViewModifier(challenge: challenge))
+            case NSURLAuthenticationMethodClientCertificate:
+                modifier(CertificatePickerViewModifier(challenge: challenge))
+            case NSURLAuthenticationMethodDefault,
+                NSURLAuthenticationMethodNTLM,
+                NSURLAuthenticationMethodHTMLForm,
+                NSURLAuthenticationMethodHTTPBasic,
+            NSURLAuthenticationMethodHTTPDigest:
+                modifier(UsernamePasswordViewModifier(challenge: challenge))
+            default:
+                fatalError()
+            }
+        default:
+            fatalError()
+        }
     }
 }
 
@@ -59,7 +80,6 @@ public extension View {
 
 struct AuthenticationModifier: ViewModifier {
     @ObservedObject var authenticator: Authenticator
-    @State private var isPresented = false
     
     @ViewBuilder
     func body(content: Content) -> some View {
