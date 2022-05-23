@@ -13,7 +13,7 @@
 
 import SwiftUI
 
-struct TrustHostView: View {
+struct TrustHostViewModifier: ViewModifier {
     init(challenge: QueuedURLChallenge) {
         self.challenge = challenge
     }
@@ -24,8 +24,8 @@ struct TrustHostView: View {
         challenge.urlChallenge.protectionSpace.host
     }
     
-    var body: some View {
-        InvisibleView()
+    func body(content: Content) -> some View {
+        content
             .alert("Certificate Trust Warning", isPresented: .constant(true), presenting: challenge) { _ in
                 Button("Dangerous: Allow Connection", role: .destructive) {
                     challenge.resume(with: .trustHost)
