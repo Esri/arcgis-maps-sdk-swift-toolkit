@@ -41,7 +41,7 @@ struct UsernamePasswordView<ViewModel: UsernamePasswordViewModel>: View {
                 Section {
                     VStack {
                         person
-                        Text("You need to sign in to access '\(viewModel.challengingHost)'")
+                        Text("You must sign in to access '\(viewModel.challengingHost)'")
                             .fixedSize(horizontal: false, vertical: true)
                     }
                     .frame(maxWidth: .infinity)

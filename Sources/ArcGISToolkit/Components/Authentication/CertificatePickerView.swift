@@ -104,7 +104,7 @@ private extension View {
     }
 }
 
-struct EnterPasswordView: View {
+struct EnterPasswordView1: View {
     @Binding var password: String
     var onContinue: () -> Void
     var onCancel: () -> Void
@@ -148,5 +148,68 @@ struct EnterPasswordView: View {
         }
         .padding()
         .navigationTitle("Certificate Required")
+    }
+}
+
+struct EnterPasswordView: View {
+    @Binding var password: String
+    var onContinue: () -> Void
+    var onCancel: () -> Void
+    @FocusState var isPasswordFocused: Bool
+    
+    var body: some View {
+        NavigationView {
+            Form {
+                Section {
+                    VStack {
+                        //person
+                        Text("Please enter a password for the chosen certificate.")
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
+                    .frame(maxWidth: .infinity)
+                    .listRowBackground(Color.clear)
+                }
+
+                Section {
+                    SecureField("Password", text: $password)
+                        .focused($isPasswordFocused)
+                        .textContentType(.password)
+                        .submitLabel(.go)
+                        .onSubmit { onContinue() }
+                }
+                .autocapitalization(.none)
+                .disableAutocorrection(true)
+
+                Section {
+                    okButton
+                }
+            }
+            .navigationTitle("Certificate")
+            .navigationBarTitleDisplayMode(.inline)
+            .interactiveDismissDisabled()
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Cancel") { onCancel() }
+                }
+            }
+            .onAppear {
+                // Workaround for Apple bug - FB9676178.
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+                    isPasswordFocused = true
+                }
+            }
+        }
+    }
+    
+    private var okButton: some View {
+        Button(action: {
+            onContinue()
+        }, label: {
+            Text("OK")
+                .frame(maxWidth: .infinity, alignment: .center)
+                .foregroundColor(.white)
+        })
+            .disabled(!password.isEmpty)
+            .listRowBackground(!password.isEmpty ? Color.accentColor : Color.gray)
     }
 }
