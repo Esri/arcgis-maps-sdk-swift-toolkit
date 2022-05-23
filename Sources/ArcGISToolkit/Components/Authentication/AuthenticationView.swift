@@ -21,7 +21,6 @@ struct AuthenticationView: View {
 ***REMOVED***let challenge: QueuedChallenge
 ***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***fatalError()
 ***REMOVED******REMOVED******REMOVED***switch challenge {
 ***REMOVED******REMOVED******REMOVED***case let challenge as QueuedArcGISChallenge:
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Sheet {
@@ -46,6 +45,28 @@ struct AuthenticationView: View {
 ***REMOVED******REMOVED******REMOVED***default:
 ***REMOVED******REMOVED******REMOVED******REMOVED***fatalError()
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***switch challenge {
+***REMOVED******REMOVED***case let challenge as QueuedArcGISChallenge:
+***REMOVED******REMOVED******REMOVED***modifier(UsernamePasswordViewModifier(challenge: challenge))
+***REMOVED******REMOVED***case let challenge as QueuedURLChallenge:
+***REMOVED******REMOVED******REMOVED***switch challenge.urlChallenge.protectionSpace.authenticationMethod {
+***REMOVED******REMOVED******REMOVED***case NSURLAuthenticationMethodServerTrust:
+***REMOVED******REMOVED******REMOVED******REMOVED***modifier(TrustHostViewModifier(challenge: challenge))
+***REMOVED******REMOVED******REMOVED***case NSURLAuthenticationMethodClientCertificate:
+***REMOVED******REMOVED******REMOVED******REMOVED***modifier(CertificatePickerViewModifier(challenge: challenge))
+***REMOVED******REMOVED******REMOVED***case NSURLAuthenticationMethodDefault,
+***REMOVED******REMOVED******REMOVED******REMOVED***NSURLAuthenticationMethodNTLM,
+***REMOVED******REMOVED******REMOVED******REMOVED***NSURLAuthenticationMethodHTMLForm,
+***REMOVED******REMOVED******REMOVED******REMOVED***NSURLAuthenticationMethodHTTPBasic,
+***REMOVED******REMOVED******REMOVED***NSURLAuthenticationMethodHTTPDigest:
+***REMOVED******REMOVED******REMOVED******REMOVED***modifier(UsernamePasswordViewModifier(challenge: challenge))
+***REMOVED******REMOVED******REMOVED***default:
+***REMOVED******REMOVED******REMOVED******REMOVED***fatalError()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***default:
+***REMOVED******REMOVED******REMOVED***fatalError()
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
@@ -59,7 +80,6 @@ public extension View {
 
 struct AuthenticationModifier: ViewModifier {
 ***REMOVED***@ObservedObject var authenticator: Authenticator
-***REMOVED***@State private var isPresented = false
 ***REMOVED***
 ***REMOVED***@ViewBuilder
 ***REMOVED***func body(content: Content) -> some View {
