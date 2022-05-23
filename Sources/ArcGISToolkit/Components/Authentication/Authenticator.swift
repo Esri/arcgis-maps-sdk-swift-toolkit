@@ -77,7 +77,7 @@ public final class Authenticator: ObservableObject {
                 queuedArcGISChallenge.resume(with: .oAuth(configuration: config))
             } else {
                 // Set the current challenge, this should present the appropriate view.
-                currentChallenge = IdentifiableQueuedChallenge(queuedChallenge: queuedChallenge)
+                currentChallenge = queuedChallenge
 
                 // Wait for the queued challenge to finish.
                 await queuedChallenge.complete()
@@ -98,7 +98,7 @@ public final class Authenticator: ObservableObject {
     }
     
     @Published
-    var currentChallenge: IdentifiableQueuedChallenge?
+    var currentChallenge: QueuedChallenge?
 }
 
 extension Authenticator: AuthenticationChallengeHandler {

@@ -26,8 +26,16 @@ import ArcGIS
 }
 
 struct UsernamePasswordView<ViewModel: UsernamePasswordViewModel>: View {
-    init(viewModel: ViewModel) {
-        self.viewModel = viewModel
+    init(challengingHost: String) where ViewModel == MockUsernamePasswordViewModel {
+        viewModel = MockUsernamePasswordViewModel(challengingHost: challengingHost)
+    }
+    
+    init(challenge: QueuedURLChallenge) where ViewModel == URLCredentialUsernamePasswordViewModel {
+        viewModel = URLCredentialUsernamePasswordViewModel(challenge: challenge)
+    }
+    
+    init(challenge: QueuedArcGISChallenge) where ViewModel == TokenCredentialViewModel {
+        viewModel = TokenCredentialViewModel(challenge: challenge)
     }
     
     @ObservedObject private var viewModel: ViewModel
@@ -118,7 +126,7 @@ struct UsernamePasswordView<ViewModel: UsernamePasswordViewModel>: View {
 
 struct UsernamePasswordView_Previews: PreviewProvider {
     static var previews: some View {
-        UsernamePasswordView(viewModel: MockUsernamePasswordViewModel(challengingHost: "arcgis.com"))
+        UsernamePasswordView(challengingHost: "arcgis.com")
     }
 }
 

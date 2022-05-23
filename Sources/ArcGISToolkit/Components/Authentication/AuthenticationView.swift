@@ -14,8 +14,8 @@
 import SwiftUI
 
 struct AuthenticationView: View {
-    init(challenge: IdentifiableQueuedChallenge) {
-        self.challenge = challenge.queuedChallenge
+    init(challenge: QueuedChallenge) {
+        self.challenge = challenge
     }
 
     let challenge: QueuedChallenge
@@ -23,29 +23,23 @@ struct AuthenticationView: View {
     var body: some View {
         switch challenge {
         case let challenge as QueuedArcGISChallenge:
-            UsernamePasswordView(viewModel: TokenCredentialViewModel(challenge: challenge))
+            Sheet {
+                UsernamePasswordView(challenge: challenge)
+            }
         case let challenge as QueuedURLChallenge:
-            view(forURLChallenge: challenge)
-        default:
-            fatalError()
-        }
-    }
-    
-    @MainActor
-    @ViewBuilder
-    func view(forURLChallenge challenge: QueuedURLChallenge) -> some View {
-        switch challenge.urlChallenge.protectionSpace.authenticationMethod {
-        case NSURLAuthenticationMethodServerTrust:
-            TrustHostView(challenge: challenge)
-        case NSURLAuthenticationMethodClientCertificate:
-            CertificatePickerView(viewModel: CertificatePickerViewModel(challenge: challenge))
-        case NSURLAuthenticationMethodDefault,
-            NSURLAuthenticationMethodNTLM,
-            NSURLAuthenticationMethodHTMLForm,
-            NSURLAuthenticationMethodHTTPBasic,
-        NSURLAuthenticationMethodHTTPDigest:
-            InvisibleView().sheet(isPresented: .constant(true)) {
-                UsernamePasswordView(viewModel: URLCredentialUsernamePasswordViewModel(challenge: challenge))
+            switch challenge.urlChallenge.protectionSpace.authenticationMethod {
+            case NSURLAuthenticationMethodServerTrust:
+                TrustHostView(challenge: challenge)
+            case NSURLAuthenticationMethodClientCertificate:
+                CertificatePickerView(challenge: challenge)
+            case NSURLAuthenticationMethodDefault,
+                NSURLAuthenticationMethodNTLM,
+                NSURLAuthenticationMethodHTMLForm,
+                NSURLAuthenticationMethodHTTPBasic,
+            NSURLAuthenticationMethodHTTPDigest:
+                UsernamePasswordView(challenge: challenge)
+            default:
+                fatalError()
             }
         default:
             fatalError()
