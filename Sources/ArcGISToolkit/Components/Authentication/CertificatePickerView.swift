@@ -42,27 +42,18 @@ import UniformTypeIdentifiers
 
 @MainActor
 struct CertificatePickerViewModifier: ViewModifier {
-    let challenge: QueuedURLChallenge
-    
-    func body(content: Content) -> some View {
-        content.sheet(isPresented: .constant(true)) {
-            CertificatePickerView(challenge: challenge)
-    }
-}
-
-private struct CertificatePickerView: View {
     init(challenge: QueuedURLChallenge) {
         viewModel = CertificatePickerViewModel(challenge: challenge)
     }
     
-    @ObservedObject var viewModel: CertificatePickerViewModel
+    @ObservedObject private var viewModel: CertificatePickerViewModel
     
     @State var showPrompt: Bool = true
     @State var showPicker: Bool = false
     @State var showPassword: Bool = false
-    
-    var body: some View {
-        InvisibleView()
+
+    func body(content: Content) -> some View {
+        content
             .promptBrowseCertificateView(
                 isPresented: $showPrompt,
                 host: viewModel.challengingHost,

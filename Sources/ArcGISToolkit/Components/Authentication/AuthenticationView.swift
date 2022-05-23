@@ -61,33 +61,33 @@ struct AuthenticationModifier: ViewModifier {
     @ObservedObject var authenticator: Authenticator
     @State private var isPresented = false
     
+    @ViewBuilder
     func body(content: Content) -> some View {
-        guard let challenge = authenticator.currentChallenge else {
-            return AnyView(content)
-        }
-        
-        switch challenge {
-        case let challenge as QueuedArcGISChallenge:
-            return AnyView(content.modifier(UsernamePasswordViewModifier(challenge: challenge)))
-        case let challenge as QueuedURLChallenge:
-            switch challenge.urlChallenge.protectionSpace.authenticationMethod {
-            case NSURLAuthenticationMethodServerTrust:
-                return AnyView(content.modifier(TrustHostViewModifier(challenge: challenge)))
-            case NSURLAuthenticationMethodClientCertificate:
-                return AnyView(content.modifier(CertificatePickerViewModifier(challenge: challenge)))
-            case NSURLAuthenticationMethodDefault,
-                NSURLAuthenticationMethodNTLM,
-                NSURLAuthenticationMethodHTMLForm,
-                NSURLAuthenticationMethodHTTPBasic,
-            NSURLAuthenticationMethodHTTPDigest:
-                return AnyView(content.modifier(UsernamePasswordViewModifier(challenge: challenge)))
+        if let challenge = authenticator.currentChallenge {
+            switch challenge {
+            case let challenge as QueuedArcGISChallenge:
+                content.modifier(UsernamePasswordViewModifier(challenge: challenge))
+            case let challenge as QueuedURLChallenge:
+                switch challenge.urlChallenge.protectionSpace.authenticationMethod {
+                case NSURLAuthenticationMethodServerTrust:
+                    content.modifier(TrustHostViewModifier(challenge: challenge))
+                case NSURLAuthenticationMethodClientCertificate:
+                    content.modifier(CertificatePickerViewModifier(challenge: challenge))
+                case NSURLAuthenticationMethodDefault,
+                    NSURLAuthenticationMethodNTLM,
+                    NSURLAuthenticationMethodHTMLForm,
+                    NSURLAuthenticationMethodHTTPBasic,
+                NSURLAuthenticationMethodHTTPDigest:
+                    content.modifier(UsernamePasswordViewModifier(challenge: challenge))
+                default:
+                    fatalError()
+                }
             default:
                 fatalError()
             }
-        default:
-            fatalError()
+        }
+        else {
+            content
         }
     }
 }
-
-extension Authenticator: Identifiable {}
