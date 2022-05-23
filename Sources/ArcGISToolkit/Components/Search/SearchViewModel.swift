@@ -106,7 +106,7 @@ public enum SearchOutcome {
             guard !isEligibleForRequery else { return }
             
             // Check center difference.
-            let centerDiff = try? GeometryEngine.distance(
+            let centerDiff = GeometryEngine.distance(
                 from: lastExtent.center,
                 to: newExtent.center
             )
