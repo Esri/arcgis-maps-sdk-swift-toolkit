@@ -14,8 +14,8 @@
 ***REMOVED***
 
 struct AuthenticationView: View {
-***REMOVED***init(challenge: IdentifiableQueuedChallenge) {
-***REMOVED******REMOVED***self.challenge = challenge.queuedChallenge
+***REMOVED***init(challenge: QueuedChallenge) {
+***REMOVED******REMOVED***self.challenge = challenge
 ***REMOVED***
 
 ***REMOVED***let challenge: QueuedChallenge
@@ -23,29 +23,23 @@ struct AuthenticationView: View {
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***switch challenge {
 ***REMOVED******REMOVED***case let challenge as QueuedArcGISChallenge:
-***REMOVED******REMOVED******REMOVED***UsernamePasswordView(viewModel: TokenCredentialViewModel(challenge: challenge))
+***REMOVED******REMOVED******REMOVED***Sheet {
+***REMOVED******REMOVED******REMOVED******REMOVED***UsernamePasswordView(challenge: challenge)
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***case let challenge as QueuedURLChallenge:
-***REMOVED******REMOVED******REMOVED***view(forURLChallenge: challenge)
-***REMOVED******REMOVED***default:
-***REMOVED******REMOVED******REMOVED***fatalError()
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***@MainActor
-***REMOVED***@ViewBuilder
-***REMOVED***func view(forURLChallenge challenge: QueuedURLChallenge) -> some View {
-***REMOVED******REMOVED***switch challenge.urlChallenge.protectionSpace.authenticationMethod {
-***REMOVED******REMOVED***case NSURLAuthenticationMethodServerTrust:
-***REMOVED******REMOVED******REMOVED***TrustHostView(challenge: challenge)
-***REMOVED******REMOVED***case NSURLAuthenticationMethodClientCertificate:
-***REMOVED******REMOVED******REMOVED***CertificatePickerView(viewModel: CertificatePickerViewModel(challenge: challenge))
-***REMOVED******REMOVED***case NSURLAuthenticationMethodDefault,
-***REMOVED******REMOVED******REMOVED***NSURLAuthenticationMethodNTLM,
-***REMOVED******REMOVED******REMOVED***NSURLAuthenticationMethodHTMLForm,
-***REMOVED******REMOVED******REMOVED***NSURLAuthenticationMethodHTTPBasic,
-***REMOVED******REMOVED***NSURLAuthenticationMethodHTTPDigest:
-***REMOVED******REMOVED******REMOVED***InvisibleView().sheet(isPresented: .constant(true)) {
-***REMOVED******REMOVED******REMOVED******REMOVED***UsernamePasswordView(viewModel: URLCredentialUsernamePasswordViewModel(challenge: challenge))
+***REMOVED******REMOVED******REMOVED***switch challenge.urlChallenge.protectionSpace.authenticationMethod {
+***REMOVED******REMOVED******REMOVED***case NSURLAuthenticationMethodServerTrust:
+***REMOVED******REMOVED******REMOVED******REMOVED***TrustHostView(challenge: challenge)
+***REMOVED******REMOVED******REMOVED***case NSURLAuthenticationMethodClientCertificate:
+***REMOVED******REMOVED******REMOVED******REMOVED***CertificatePickerView(challenge: challenge)
+***REMOVED******REMOVED******REMOVED***case NSURLAuthenticationMethodDefault,
+***REMOVED******REMOVED******REMOVED******REMOVED***NSURLAuthenticationMethodNTLM,
+***REMOVED******REMOVED******REMOVED******REMOVED***NSURLAuthenticationMethodHTMLForm,
+***REMOVED******REMOVED******REMOVED******REMOVED***NSURLAuthenticationMethodHTTPBasic,
+***REMOVED******REMOVED******REMOVED***NSURLAuthenticationMethodHTTPDigest:
+***REMOVED******REMOVED******REMOVED******REMOVED***UsernamePasswordView(challenge: challenge)
+***REMOVED******REMOVED******REMOVED***default:
+***REMOVED******REMOVED******REMOVED******REMOVED***fatalError()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***default:
 ***REMOVED******REMOVED******REMOVED***fatalError()

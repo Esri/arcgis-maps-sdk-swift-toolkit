@@ -40,6 +40,10 @@ import UniformTypeIdentifiers
 ***REMOVED***
 
 struct CertificatePickerView: View {
+***REMOVED***init(challenge: QueuedURLChallenge) {
+***REMOVED******REMOVED***viewModel = CertificatePickerViewModel(challenge: challenge)
+***REMOVED***
+***REMOVED***
 ***REMOVED***@ObservedObject var viewModel: CertificatePickerViewModel
 ***REMOVED***
 ***REMOVED***@State var showPrompt: Bool = true

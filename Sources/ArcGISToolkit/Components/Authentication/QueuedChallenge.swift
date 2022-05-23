@@ -100,11 +100,3 @@ final class QueuedURLChallenge: QueuedChallenge {
 ***REMOVED******REMOVED***case cancel
 ***REMOVED***
 ***REMOVED***
-
-struct IdentifiableQueuedChallenge {
-***REMOVED***let queuedChallenge: QueuedChallenge
-***REMOVED***
-
-extension IdentifiableQueuedChallenge: Identifiable {
-***REMOVED***public var id: ObjectIdentifier { ObjectIdentifier(queuedChallenge) ***REMOVED***
-***REMOVED***

@@ -77,7 +77,7 @@ public final class Authenticator: ObservableObject {
 ***REMOVED******REMOVED******REMOVED******REMOVED***queuedArcGISChallenge.resume(with: .oAuth(configuration: config))
 ***REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Set the current challenge, this should present the appropriate view.
-***REMOVED******REMOVED******REMOVED******REMOVED***currentChallenge = IdentifiableQueuedChallenge(queuedChallenge: queuedChallenge)
+***REMOVED******REMOVED******REMOVED******REMOVED***currentChallenge = queuedChallenge
 
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Wait for the queued challenge to finish.
 ***REMOVED******REMOVED******REMOVED******REMOVED***await queuedChallenge.complete()
@@ -98,7 +98,7 @@ public final class Authenticator: ObservableObject {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@Published
-***REMOVED***var currentChallenge: IdentifiableQueuedChallenge?
+***REMOVED***var currentChallenge: QueuedChallenge?
 ***REMOVED***
 
 extension Authenticator: AuthenticationChallengeHandler {

@@ -26,8 +26,16 @@
 ***REMOVED***
 
 struct UsernamePasswordView<ViewModel: UsernamePasswordViewModel>: View {
-***REMOVED***init(viewModel: ViewModel) {
-***REMOVED******REMOVED***self.viewModel = viewModel
+***REMOVED***init(challengingHost: String) where ViewModel == MockUsernamePasswordViewModel {
+***REMOVED******REMOVED***viewModel = MockUsernamePasswordViewModel(challengingHost: challengingHost)
+***REMOVED***
+***REMOVED***
+***REMOVED***init(challenge: QueuedURLChallenge) where ViewModel == URLCredentialUsernamePasswordViewModel {
+***REMOVED******REMOVED***viewModel = URLCredentialUsernamePasswordViewModel(challenge: challenge)
+***REMOVED***
+***REMOVED***
+***REMOVED***init(challenge: QueuedArcGISChallenge) where ViewModel == TokenCredentialViewModel {
+***REMOVED******REMOVED***viewModel = TokenCredentialViewModel(challenge: challenge)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@ObservedObject private var viewModel: ViewModel
@@ -118,7 +126,7 @@ struct UsernamePasswordView<ViewModel: UsernamePasswordViewModel>: View {
 
 struct UsernamePasswordView_Previews: PreviewProvider {
 ***REMOVED***static var previews: some View {
-***REMOVED******REMOVED***UsernamePasswordView(viewModel: MockUsernamePasswordViewModel(challengingHost: "arcgis.com"))
+***REMOVED******REMOVED***UsernamePasswordView(challengingHost: "arcgis.com")
 ***REMOVED***
 ***REMOVED***
 
