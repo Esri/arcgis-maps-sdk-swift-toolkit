@@ -14,7 +14,7 @@
 ***REMOVED***
 import UniformTypeIdentifiers
 
-@MainActor final class CertificatePickerViewModel: ObservableObject {
+@MainActor final private class CertificatePickerViewModel: ObservableObject {
 ***REMOVED***let challengingHost: String
 ***REMOVED***let challenge: QueuedURLChallenge
 ***REMOVED***
@@ -39,7 +39,18 @@ import UniformTypeIdentifiers
 ***REMOVED***
 ***REMOVED***
 
-struct CertificatePickerView: View {
+
+@MainActor
+struct CertificatePickerViewModifier: ViewModifier {
+***REMOVED***let challenge: QueuedURLChallenge
+***REMOVED***
+***REMOVED***func body(content: Content) -> some View {
+***REMOVED******REMOVED***content.sheet(isPresented: .constant(true)) {
+***REMOVED******REMOVED******REMOVED***CertificatePickerView(challenge: challenge)
+***REMOVED***
+***REMOVED***
+
+private struct CertificatePickerView: View {
 ***REMOVED***init(challenge: QueuedURLChallenge) {
 ***REMOVED******REMOVED***viewModel = CertificatePickerViewModel(challenge: challenge)
 ***REMOVED***

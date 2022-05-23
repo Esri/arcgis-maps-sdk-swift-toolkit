@@ -25,10 +25,9 @@
 ***REMOVED***func cancel()
 ***REMOVED***
 
-struct UsernamePasswordView<ViewModel: UsernamePasswordViewModel>: View {
-***REMOVED***init(challengingHost: String) where ViewModel == MockUsernamePasswordViewModel {
-***REMOVED******REMOVED***viewModel = MockUsernamePasswordViewModel(challengingHost: challengingHost)
-***REMOVED***
+@MainActor
+struct UsernamePasswordViewModifier<ViewModel: UsernamePasswordViewModel>: ViewModifier {
+***REMOVED***let viewModel: ViewModel
 ***REMOVED***
 ***REMOVED***init(challenge: QueuedURLChallenge) where ViewModel == URLCredentialUsernamePasswordViewModel {
 ***REMOVED******REMOVED***viewModel = URLCredentialUsernamePasswordViewModel(challenge: challenge)
@@ -36,6 +35,18 @@ struct UsernamePasswordView<ViewModel: UsernamePasswordViewModel>: View {
 ***REMOVED***
 ***REMOVED***init(challenge: QueuedArcGISChallenge) where ViewModel == TokenCredentialViewModel {
 ***REMOVED******REMOVED***viewModel = TokenCredentialViewModel(challenge: challenge)
+***REMOVED***
+***REMOVED***
+***REMOVED***func body(content: Content) -> some View {
+***REMOVED******REMOVED***content.sheet(isPresented: .constant(true)) {
+***REMOVED******REMOVED******REMOVED***UsernamePasswordView(viewModel: viewModel)
+***REMOVED***
+***REMOVED***
+***REMOVED***
+
+private struct UsernamePasswordView<ViewModel: UsernamePasswordViewModel>: View {
+***REMOVED***init(viewModel: ViewModel) {
+***REMOVED******REMOVED***_viewModel = ObservedObject(initialValue: viewModel)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@ObservedObject private var viewModel: ViewModel
@@ -126,7 +137,7 @@ struct UsernamePasswordView<ViewModel: UsernamePasswordViewModel>: View {
 
 struct UsernamePasswordView_Previews: PreviewProvider {
 ***REMOVED***static var previews: some View {
-***REMOVED******REMOVED***UsernamePasswordView(challengingHost: "arcgis.com")
+***REMOVED******REMOVED***UsernamePasswordView(viewModel: MockUsernamePasswordViewModel(challengingHost: "arcgis.com"))
 ***REMOVED***
 ***REMOVED***
 

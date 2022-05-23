@@ -21,29 +21,31 @@ struct AuthenticationView: View {
 ***REMOVED***let challenge: QueuedChallenge
 ***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***switch challenge {
-***REMOVED******REMOVED***case let challenge as QueuedArcGISChallenge:
-***REMOVED******REMOVED******REMOVED***Sheet {
-***REMOVED******REMOVED******REMOVED******REMOVED***UsernamePasswordView(challenge: challenge)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***case let challenge as QueuedURLChallenge:
-***REMOVED******REMOVED******REMOVED***switch challenge.urlChallenge.protectionSpace.authenticationMethod {
-***REMOVED******REMOVED******REMOVED***case NSURLAuthenticationMethodServerTrust:
-***REMOVED******REMOVED******REMOVED******REMOVED***TrustHostView(challenge: challenge)
-***REMOVED******REMOVED******REMOVED***case NSURLAuthenticationMethodClientCertificate:
-***REMOVED******REMOVED******REMOVED******REMOVED***CertificatePickerView(challenge: challenge)
-***REMOVED******REMOVED******REMOVED***case NSURLAuthenticationMethodDefault,
-***REMOVED******REMOVED******REMOVED******REMOVED***NSURLAuthenticationMethodNTLM,
-***REMOVED******REMOVED******REMOVED******REMOVED***NSURLAuthenticationMethodHTMLForm,
-***REMOVED******REMOVED******REMOVED******REMOVED***NSURLAuthenticationMethodHTTPBasic,
-***REMOVED******REMOVED******REMOVED***NSURLAuthenticationMethodHTTPDigest:
-***REMOVED******REMOVED******REMOVED******REMOVED***UsernamePasswordView(challenge: challenge)
+***REMOVED******REMOVED***fatalError()
+***REMOVED******REMOVED******REMOVED***switch challenge {
+***REMOVED******REMOVED******REMOVED***case let challenge as QueuedArcGISChallenge:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Sheet {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***UsernamePasswordView(challenge: challenge)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***case let challenge as QueuedURLChallenge:
+***REMOVED******REMOVED******REMOVED******REMOVED***switch challenge.urlChallenge.protectionSpace.authenticationMethod {
+***REMOVED******REMOVED******REMOVED******REMOVED***case NSURLAuthenticationMethodServerTrust:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***TrustHostView(challenge: challenge)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***fatalError()
+***REMOVED******REMOVED******REMOVED******REMOVED***case NSURLAuthenticationMethodClientCertificate:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***CertificatePickerView(challenge: challenge)
+***REMOVED******REMOVED******REMOVED******REMOVED***case NSURLAuthenticationMethodDefault,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***NSURLAuthenticationMethodNTLM,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***NSURLAuthenticationMethodHTMLForm,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***NSURLAuthenticationMethodHTTPBasic,
+***REMOVED******REMOVED******REMOVED******REMOVED***NSURLAuthenticationMethodHTTPDigest:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***UsernamePasswordView(challenge: challenge)
+***REMOVED******REMOVED******REMOVED******REMOVED***default:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***fatalError()
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***default:
 ***REMOVED******REMOVED******REMOVED******REMOVED***fatalError()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***default:
-***REMOVED******REMOVED******REMOVED***fatalError()
-***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
@@ -57,13 +59,35 @@ public extension View {
 
 struct AuthenticationModifier: ViewModifier {
 ***REMOVED***@ObservedObject var authenticator: Authenticator
+***REMOVED***@State private var isPresented = false
 ***REMOVED***
 ***REMOVED***func body(content: Content) -> some View {
-***REMOVED******REMOVED***ZStack {
-***REMOVED******REMOVED******REMOVED***content
-***REMOVED******REMOVED******REMOVED***if let challenge = authenticator.currentChallenge {
-***REMOVED******REMOVED******REMOVED******REMOVED***AuthenticationView(challenge: challenge)
+***REMOVED******REMOVED***guard let challenge = authenticator.currentChallenge else {
+***REMOVED******REMOVED******REMOVED***return AnyView(content)
+***REMOVED***
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED***switch challenge {
+***REMOVED******REMOVED***case let challenge as QueuedArcGISChallenge:
+***REMOVED******REMOVED******REMOVED***return AnyView(content.modifier(UsernamePasswordViewModifier(challenge: challenge)))
+***REMOVED******REMOVED***case let challenge as QueuedURLChallenge:
+***REMOVED******REMOVED******REMOVED***switch challenge.urlChallenge.protectionSpace.authenticationMethod {
+***REMOVED******REMOVED******REMOVED***case NSURLAuthenticationMethodServerTrust:
+***REMOVED******REMOVED******REMOVED******REMOVED***return AnyView(content.modifier(TrustHostViewModifier(challenge: challenge)))
+***REMOVED******REMOVED******REMOVED***case NSURLAuthenticationMethodClientCertificate:
+***REMOVED******REMOVED******REMOVED******REMOVED***return AnyView(content.modifier(CertificatePickerViewModifier(challenge: challenge)))
+***REMOVED******REMOVED******REMOVED***case NSURLAuthenticationMethodDefault,
+***REMOVED******REMOVED******REMOVED******REMOVED***NSURLAuthenticationMethodNTLM,
+***REMOVED******REMOVED******REMOVED******REMOVED***NSURLAuthenticationMethodHTMLForm,
+***REMOVED******REMOVED******REMOVED******REMOVED***NSURLAuthenticationMethodHTTPBasic,
+***REMOVED******REMOVED******REMOVED***NSURLAuthenticationMethodHTTPDigest:
+***REMOVED******REMOVED******REMOVED******REMOVED***return AnyView(content.modifier(UsernamePasswordViewModifier(challenge: challenge)))
+***REMOVED******REMOVED******REMOVED***default:
+***REMOVED******REMOVED******REMOVED******REMOVED***fatalError()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***default:
+***REMOVED******REMOVED******REMOVED***fatalError()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
+
+extension Authenticator: Identifiable {***REMOVED***

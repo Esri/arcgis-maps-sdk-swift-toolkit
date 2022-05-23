@@ -13,7 +13,7 @@
 
 ***REMOVED***
 
-struct TrustHostView: View {
+struct TrustHostViewModifier: ViewModifier {
 ***REMOVED***init(challenge: QueuedURLChallenge) {
 ***REMOVED******REMOVED***self.challenge = challenge
 ***REMOVED***
@@ -24,8 +24,8 @@ struct TrustHostView: View {
 ***REMOVED******REMOVED***challenge.urlChallenge.protectionSpace.host
 ***REMOVED***
 ***REMOVED***
-***REMOVED***var body: some View {
-***REMOVED******REMOVED***InvisibleView()
+***REMOVED***func body(content: Content) -> some View {
+***REMOVED******REMOVED***content
 ***REMOVED******REMOVED******REMOVED***.alert("Certificate Trust Warning", isPresented: .constant(true), presenting: challenge) { _ in
 ***REMOVED******REMOVED******REMOVED******REMOVED***Button("Dangerous: Allow Connection", role: .destructive) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***challenge.resume(with: .trustHost)
