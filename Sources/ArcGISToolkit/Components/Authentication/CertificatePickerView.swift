@@ -104,53 +104,6 @@ private extension View {
 ***REMOVED***
 ***REMOVED***
 
-struct EnterPasswordView1: View {
-***REMOVED***@Binding var password: String
-***REMOVED***var onContinue: () -> Void
-***REMOVED***var onCancel: () -> Void
-***REMOVED***
-***REMOVED***var body: some View {
-***REMOVED******REMOVED***VStack {
-***REMOVED******REMOVED******REMOVED***Text("Please enter a password for the chosen certificate.")
-***REMOVED******REMOVED******REMOVED******REMOVED***.font(.body)
-***REMOVED******REMOVED******REMOVED******REMOVED***.padding([.bottom])
-***REMOVED******REMOVED******REMOVED******REMOVED***.multilineTextAlignment(.center)
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***SecureField(text: $password, prompt: Text("Password")) {
-***REMOVED******REMOVED******REMOVED******REMOVED***Text("label")
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.textInputAutocapitalization(.never)
-***REMOVED******REMOVED******REMOVED***.disableAutocorrection(true)
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onContinue()
-***REMOVED******REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("OK")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.buttonStyle(.bordered)
-***REMOVED******REMOVED******REMOVED******REMOVED***.controlSize(.large)
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***Button(role: .cancel) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onCancel()
-***REMOVED******REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Cancel")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity)
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.buttonStyle(.bordered)
-***REMOVED******REMOVED******REMOVED******REMOVED***.controlSize(.large)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED***
-***REMOVED******REMOVED***.padding()
-***REMOVED******REMOVED***.navigationTitle("Certificate Required")
-***REMOVED***
-***REMOVED***
-
 struct EnterPasswordView: View {
 ***REMOVED***@Binding var password: String
 ***REMOVED***var onContinue: () -> Void
