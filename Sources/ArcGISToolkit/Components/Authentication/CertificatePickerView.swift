@@ -104,53 +104,6 @@ private extension View {
     }
 }
 
-struct EnterPasswordView1: View {
-    @Binding var password: String
-    var onContinue: () -> Void
-    var onCancel: () -> Void
-    
-    var body: some View {
-        VStack {
-            Text("Please enter a password for the chosen certificate.")
-                .font(.body)
-                .padding([.bottom])
-                .multilineTextAlignment(.center)
-            
-            SecureField(text: $password, prompt: Text("Password")) {
-                Text("label")
-            }
-            .textInputAutocapitalization(.never)
-            .disableAutocorrection(true)
-            
-            HStack {
-                Button {
-                    onContinue()
-                } label: {
-                    Text("OK")
-                        .frame(maxWidth: .infinity)
-                    
-                }
-                .buttonStyle(.bordered)
-                .controlSize(.large)
-                
-                Button(role: .cancel) {
-                    onCancel()
-                } label: {
-                    Text("Cancel")
-                        .frame(maxWidth: .infinity)
-                }
-                .buttonStyle(.bordered)
-                .controlSize(.large)
-            }
-            
-            
-            Spacer()
-        }
-        .padding()
-        .navigationTitle("Certificate Required")
-    }
-}
-
 struct EnterPasswordView: View {
     @Binding var password: String
     var onContinue: () -> Void
