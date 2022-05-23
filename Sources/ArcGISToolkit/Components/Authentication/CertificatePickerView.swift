@@ -42,27 +42,18 @@ import UniformTypeIdentifiers
 
 @MainActor
 struct CertificatePickerViewModifier: ViewModifier {
-***REMOVED***let challenge: QueuedURLChallenge
-***REMOVED***
-***REMOVED***func body(content: Content) -> some View {
-***REMOVED******REMOVED***content.sheet(isPresented: .constant(true)) {
-***REMOVED******REMOVED******REMOVED***CertificatePickerView(challenge: challenge)
-***REMOVED***
-***REMOVED***
-
-private struct CertificatePickerView: View {
 ***REMOVED***init(challenge: QueuedURLChallenge) {
 ***REMOVED******REMOVED***viewModel = CertificatePickerViewModel(challenge: challenge)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***@ObservedObject var viewModel: CertificatePickerViewModel
+***REMOVED***@ObservedObject private var viewModel: CertificatePickerViewModel
 ***REMOVED***
 ***REMOVED***@State var showPrompt: Bool = true
 ***REMOVED***@State var showPicker: Bool = false
 ***REMOVED***@State var showPassword: Bool = false
-***REMOVED***
-***REMOVED***var body: some View {
-***REMOVED******REMOVED***InvisibleView()
+
+***REMOVED***func body(content: Content) -> some View {
+***REMOVED******REMOVED***content
 ***REMOVED******REMOVED******REMOVED***.promptBrowseCertificateView(
 ***REMOVED******REMOVED******REMOVED******REMOVED***isPresented: $showPrompt,
 ***REMOVED******REMOVED******REMOVED******REMOVED***host: viewModel.challengingHost,
