@@ -14,7 +14,7 @@
 import SwiftUI
 import ArcGIS
 
-@MainActor protocol UsernamePasswordViewModel: ObservableObject {
+protocol UsernamePasswordViewModel: ObservableObject {
     var username: String { get set }
     var password: String { get set }
     var signinButtonEnabled: Bool { get }
@@ -25,7 +25,6 @@ import ArcGIS
     func cancel()
 }
 
-@MainActor
 struct UsernamePasswordViewModifier<ViewModel: UsernamePasswordViewModel>: ViewModifier {
     let viewModel: ViewModel
     
@@ -181,7 +180,6 @@ class MockUsernamePasswordViewModel: UsernamePasswordViewModel {
     }
 }
 
-@MainActor
 class TokenCredentialViewModel: UsernamePasswordViewModel {
     private let challenge: QueuedArcGISChallenge
     

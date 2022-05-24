@@ -71,9 +71,9 @@ struct AuthenticationView: View {
 }
 
 public extension View {
-    @MainActor
     @ViewBuilder
     func authentication(authenticator: Authenticator) -> some View {
+//        overlay(Color.clear.frame(width: 0, height: 0, alignment: .bottom) .modifier(AuthenticationModifier(authenticator: authenticator)))
         modifier(AuthenticationModifier(authenticator: authenticator))
     }
 }
