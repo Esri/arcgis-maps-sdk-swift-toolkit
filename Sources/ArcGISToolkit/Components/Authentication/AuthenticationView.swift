@@ -84,30 +84,36 @@ struct AuthenticationModifier: ViewModifier {
     @ViewBuilder
     func body(content: Content) -> some View {
         if let challenge = authenticator.currentChallenge {
-            switch challenge {
-            case let challenge as QueuedArcGISChallenge:
-                content.modifier(UsernamePasswordViewModifier(challenge: challenge))
-            case let challenge as QueuedURLChallenge:
-                switch challenge.urlChallenge.protectionSpace.authenticationMethod {
-                case NSURLAuthenticationMethodServerTrust:
-                    content.modifier(TrustHostViewModifier(challenge: challenge))
-                case NSURLAuthenticationMethodClientCertificate:
-                    content.modifier(CertificatePickerViewModifier(challenge: challenge))
-                case NSURLAuthenticationMethodDefault,
-                    NSURLAuthenticationMethodNTLM,
-                    NSURLAuthenticationMethodHTMLForm,
-                    NSURLAuthenticationMethodHTTPBasic,
-                NSURLAuthenticationMethodHTTPDigest:
-                    content.modifier(UsernamePasswordViewModifier(challenge: challenge))
-                default:
-                    fatalError()
-                }
-            default:
-                fatalError()
-            }
+            authenticationView(for: challenge, content: content)
         }
         else {
             content
         }
     }
+    
+    @ViewBuilder
+    func authenticationView(for challenge: QueuedChallenge, content: Content) -> some View {
+        switch challenge {
+        case let challenge as QueuedArcGISChallenge:
+            content.modifier(UsernamePasswordViewModifier(challenge: challenge))
+        case let challenge as QueuedURLChallenge:
+            switch challenge.urlChallenge.protectionSpace.authenticationMethod {
+            case NSURLAuthenticationMethodServerTrust:
+                content.modifier(TrustHostViewModifier(challenge: challenge))
+            case NSURLAuthenticationMethodClientCertificate:
+                content.modifier(CertificatePickerViewModifier(challenge: challenge))
+            case NSURLAuthenticationMethodDefault,
+                NSURLAuthenticationMethodNTLM,
+                NSURLAuthenticationMethodHTMLForm,
+                NSURLAuthenticationMethodHTTPBasic,
+            NSURLAuthenticationMethodHTTPDigest:
+                content.modifier(UsernamePasswordViewModifier(challenge: challenge))
+            default:
+                fatalError()
+            }
+        default:
+            fatalError()
+        }
+    }
+    
 }
