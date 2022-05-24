@@ -40,9 +40,7 @@ struct UsernamePasswordViewModifier<ViewModel: UsernamePasswordViewModel>: ViewM
 ***REMOVED***
 ***REMOVED***func body(content: Content) -> some View {
 ***REMOVED******REMOVED***content
-***REMOVED******REMOVED******REMOVED***.sheet {
-***REMOVED******REMOVED******REMOVED******REMOVED***UsernamePasswordView(viewModel: viewModel)
-***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.sheet { UsernamePasswordView(viewModel: viewModel) ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
