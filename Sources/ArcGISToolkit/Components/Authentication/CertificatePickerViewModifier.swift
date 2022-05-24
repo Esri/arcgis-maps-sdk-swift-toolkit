@@ -56,15 +56,19 @@ struct CertificatePickerViewModifier: ViewModifier {
 ***REMOVED******REMOVED******REMOVED******REMOVED***isPresented: $showPrompt,
 ***REMOVED******REMOVED******REMOVED******REMOVED***host: viewModel.challengingHost,
 ***REMOVED******REMOVED******REMOVED******REMOVED***onContinue: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***showPrompt = false
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***showPicker = true
 ***REMOVED******REMOVED******REMOVED***, onCancel: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***showPrompt = false
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.cancel()
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***.sheet(isPresented: $showPicker) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***DocumentPickerView(contentTypes: [.pfx]) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.certificateURL = $0
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***showPicker = false
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***showPassword = true
 ***REMOVED******REMOVED******REMOVED*** onCancel: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***showPicker = false
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.cancel()
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.edgesIgnoringSafeArea(.bottom)
@@ -72,8 +76,10 @@ struct CertificatePickerViewModifier: ViewModifier {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.sheet(isPresented: $showPassword) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***EnterPasswordView(password: $viewModel.password) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***showPassword = false
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.signIn()
 ***REMOVED******REMOVED******REMOVED*** onCancel: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***showPassword = false
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.cancel()
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.edgesIgnoringSafeArea(.bottom)

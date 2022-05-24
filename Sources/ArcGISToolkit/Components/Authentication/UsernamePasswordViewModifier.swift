@@ -40,16 +40,19 @@ struct UsernamePasswordViewModifier<ViewModel: UsernamePasswordViewModel>: ViewM
 ***REMOVED***
 ***REMOVED***func body(content: Content) -> some View {
 ***REMOVED******REMOVED***content
-***REMOVED******REMOVED******REMOVED***.sheet { UsernamePasswordView(viewModel: viewModel) ***REMOVED***
+***REMOVED******REMOVED******REMOVED***.task { isPresented = true ***REMOVED***
+***REMOVED******REMOVED******REMOVED***.sheet(isPresented: $isPresented) { UsernamePasswordView(viewModel: viewModel, isPresented: $isPresented) ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
 private struct UsernamePasswordView<ViewModel: UsernamePasswordViewModel>: View {
-***REMOVED***init(viewModel: ViewModel) {
+***REMOVED***init(viewModel: ViewModel, isPresented: Binding<Bool>) {
 ***REMOVED******REMOVED***_viewModel = ObservedObject(initialValue: viewModel)
+***REMOVED******REMOVED***self.isPresented = isPresented
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@ObservedObject private var viewModel: ViewModel
+***REMOVED***private var isPresented: Binding<Bool>
 ***REMOVED***
 ***REMOVED******REMOVED***/ The focused field.
 ***REMOVED***@FocusState private var focusedField: Field?
@@ -92,7 +95,10 @@ private struct UsernamePasswordView<ViewModel: UsernamePasswordViewModel>: View 
 ***REMOVED******REMOVED******REMOVED***.interactiveDismissDisabled()
 ***REMOVED******REMOVED******REMOVED***.toolbar {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ToolbarItem(placement: .cancellationAction) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Cancel") { viewModel.cancel() ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Cancel") {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented.wrappedValue = false
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.cancel()
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onAppear {
@@ -118,6 +124,7 @@ private struct UsernamePasswordView<ViewModel: UsernamePasswordViewModel>: View 
 ***REMOVED***
 ***REMOVED***private var signinButton: some View {
 ***REMOVED******REMOVED***Button(action: {
+***REMOVED******REMOVED******REMOVED***isPresented.wrappedValue = false
 ***REMOVED******REMOVED******REMOVED***viewModel.signIn()
 ***REMOVED***, label: {
 ***REMOVED******REMOVED******REMOVED***if viewModel.formEnabled {
@@ -137,7 +144,7 @@ private struct UsernamePasswordView<ViewModel: UsernamePasswordViewModel>: View 
 
 struct UsernamePasswordView_Previews: PreviewProvider {
 ***REMOVED***static var previews: some View {
-***REMOVED******REMOVED***UsernamePasswordView(viewModel: MockUsernamePasswordViewModel(challengingHost: "arcgis.com"))
+***REMOVED******REMOVED***UsernamePasswordView(viewModel: MockUsernamePasswordViewModel(challengingHost: "arcgis.com"), isPresented: .constant(true))
 ***REMOVED***
 ***REMOVED***
 
