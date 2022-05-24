@@ -40,9 +40,7 @@ struct UsernamePasswordViewModifier<ViewModel: UsernamePasswordViewModel>: ViewM
     
     func body(content: Content) -> some View {
         content
-            .sheet {
-                UsernamePasswordView(viewModel: viewModel)
-            }
+            .sheet { UsernamePasswordView(viewModel: viewModel) }
     }
 }
 
