@@ -37,8 +37,7 @@ final class QueuedArcGISChallenge: QueuedChallenge {
     
     /// Use a streamed property because we need to support multiple listeners
     /// to know when the challenge completed.
-    @Streamed
-    private var _response: Response?
+    @Streamed private var _response: Response?
     
     var response: Response {
         get async {
@@ -78,8 +77,7 @@ final class QueuedURLChallenge: QueuedChallenge {
     
     /// Use a streamed property because we need to support multiple listeners
     /// to know when the challenge completed.
-    @Streamed
-    private var _response: (Response)?
+    @Streamed private var _response: (Response)?
     
     var response: Response {
         get async {

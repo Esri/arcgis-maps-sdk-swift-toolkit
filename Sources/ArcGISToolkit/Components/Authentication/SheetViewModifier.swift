@@ -14,8 +14,7 @@
 import SwiftUI
 
 struct SheetViewModifier<SheetContent: View>: ViewModifier {
-    @State
-    private var isPresented = false
+    @State private var isPresented = false
     var sheetContent: () -> SheetContent
 
     func body(content: Content) -> some View {
