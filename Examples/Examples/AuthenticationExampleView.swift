@@ -35,7 +35,7 @@ struct AuthenticationExampleView: View {
             Button("Clear Credential Store") {
                 items = []
                 Task {
-                    await ArcGISURLSession.credentialStore.removeAll()
+                    await authenticator.clearCredentialStores()
                     items = AuthenticationItem.makeAll()
                 }
             }
