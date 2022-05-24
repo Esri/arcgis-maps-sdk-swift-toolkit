@@ -13,72 +13,32 @@
 
 ***REMOVED***
 
-struct AuthenticationView: View {
-***REMOVED***init(challenge: QueuedChallenge) {
-***REMOVED******REMOVED***self.challenge = challenge
-***REMOVED***
-
-***REMOVED***let challenge: QueuedChallenge
-***REMOVED***
-***REMOVED***var body: some View {
-***REMOVED******REMOVED******REMOVED***switch challenge {
-***REMOVED******REMOVED******REMOVED***case let challenge as QueuedArcGISChallenge:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Sheet {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***UsernamePasswordView(challenge: challenge)
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***case let challenge as QueuedURLChallenge:
-***REMOVED******REMOVED******REMOVED******REMOVED***switch challenge.urlChallenge.protectionSpace.authenticationMethod {
-***REMOVED******REMOVED******REMOVED******REMOVED***case NSURLAuthenticationMethodServerTrust:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***TrustHostView(challenge: challenge)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***fatalError()
-***REMOVED******REMOVED******REMOVED******REMOVED***case NSURLAuthenticationMethodClientCertificate:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***CertificatePickerView(challenge: challenge)
-***REMOVED******REMOVED******REMOVED******REMOVED***case NSURLAuthenticationMethodDefault,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***NSURLAuthenticationMethodNTLM,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***NSURLAuthenticationMethodHTMLForm,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***NSURLAuthenticationMethodHTTPBasic,
-***REMOVED******REMOVED******REMOVED******REMOVED***NSURLAuthenticationMethodHTTPDigest:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***UsernamePasswordView(challenge: challenge)
-***REMOVED******REMOVED******REMOVED******REMOVED***default:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***fatalError()
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***default:
-***REMOVED******REMOVED******REMOVED******REMOVED***fatalError()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***switch challenge {
-***REMOVED******REMOVED***case let challenge as QueuedArcGISChallenge:
-***REMOVED******REMOVED******REMOVED***modifier(UsernamePasswordViewModifier(challenge: challenge))
-***REMOVED******REMOVED***case let challenge as QueuedURLChallenge:
-***REMOVED******REMOVED******REMOVED***switch challenge.urlChallenge.protectionSpace.authenticationMethod {
-***REMOVED******REMOVED******REMOVED***case NSURLAuthenticationMethodServerTrust:
-***REMOVED******REMOVED******REMOVED******REMOVED***modifier(TrustHostViewModifier(challenge: challenge))
-***REMOVED******REMOVED******REMOVED***case NSURLAuthenticationMethodClientCertificate:
-***REMOVED******REMOVED******REMOVED******REMOVED***modifier(CertificatePickerViewModifier(challenge: challenge))
-***REMOVED******REMOVED******REMOVED***case NSURLAuthenticationMethodDefault,
-***REMOVED******REMOVED******REMOVED******REMOVED***NSURLAuthenticationMethodNTLM,
-***REMOVED******REMOVED******REMOVED******REMOVED***NSURLAuthenticationMethodHTMLForm,
-***REMOVED******REMOVED******REMOVED******REMOVED***NSURLAuthenticationMethodHTTPBasic,
-***REMOVED******REMOVED******REMOVED***NSURLAuthenticationMethodHTTPDigest:
-***REMOVED******REMOVED******REMOVED******REMOVED***modifier(UsernamePasswordViewModifier(challenge: challenge))
-***REMOVED******REMOVED******REMOVED***default:
-***REMOVED******REMOVED******REMOVED******REMOVED***fatalError()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***default:
-***REMOVED******REMOVED******REMOVED***fatalError()
-***REMOVED***
-***REMOVED***
-***REMOVED***
-
 public extension View {
 ***REMOVED***@ViewBuilder
 ***REMOVED***func authentication(authenticator: Authenticator) -> some View {
-***REMOVED******REMOVED******REMOVED***overlay(Color.clear.frame(width: 0, height: 0, alignment: .bottom) .modifier(AuthenticationModifier(authenticator: authenticator)))
-***REMOVED******REMOVED***modifier(AuthenticationModifier(authenticator: authenticator))
+***REMOVED******REMOVED***modifier(InvisibleOverlayModifier(authenticator: authenticator))
 ***REMOVED***
 ***REMOVED***
 
-struct AuthenticationModifier: ViewModifier {
+***REMOVED***/ This is an intermediate modifier that overlays an always present invisible view.
+***REMOVED***/ This view is necessary because of SwiftUI behavior that prevent the UI from functioning
+***REMOVED***/ properly when showing and hiding sheets. The sheets need to be off of a view that is always
+***REMOVED***/ present.
+private struct InvisibleOverlayModifier: ViewModifier {
+***REMOVED***@ObservedObject var authenticator: Authenticator
+***REMOVED***
+***REMOVED***@ViewBuilder
+***REMOVED***func body(content: Content) -> some View {
+***REMOVED******REMOVED***ZStack {
+***REMOVED******REMOVED******REMOVED***content
+***REMOVED******REMOVED******REMOVED***Color.clear
+***REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 0, height: 0)
+***REMOVED******REMOVED******REMOVED******REMOVED***.modifier(AuthenticationModifier(authenticator: authenticator))
+***REMOVED***
+***REMOVED***
+***REMOVED***
+
+private struct AuthenticationModifier: ViewModifier {
 ***REMOVED***@ObservedObject var authenticator: Authenticator
 ***REMOVED***
 ***REMOVED***@ViewBuilder
