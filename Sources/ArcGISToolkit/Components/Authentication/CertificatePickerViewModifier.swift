@@ -56,15 +56,19 @@ struct CertificatePickerViewModifier: ViewModifier {
                 isPresented: $showPrompt,
                 host: viewModel.challengingHost,
                 onContinue: {
+                    showPrompt = false
                     showPicker = true
                 }, onCancel: {
+                    showPrompt = false
                     viewModel.cancel()
                 })
             .sheet(isPresented: $showPicker) {
                 DocumentPickerView(contentTypes: [.pfx]) {
                     viewModel.certificateURL = $0
+                    showPicker = false
                     showPassword = true
                 } onCancel: {
+                    showPicker = false
                     viewModel.cancel()
                 }
                 .edgesIgnoringSafeArea(.bottom)
@@ -72,8 +76,10 @@ struct CertificatePickerViewModifier: ViewModifier {
             }
             .sheet(isPresented: $showPassword) {
                 EnterPasswordView(password: $viewModel.password) {
+                    showPassword = false
                     viewModel.signIn()
                 } onCancel: {
+                    showPassword = false
                     viewModel.cancel()
                 }
                 .edgesIgnoringSafeArea(.bottom)
