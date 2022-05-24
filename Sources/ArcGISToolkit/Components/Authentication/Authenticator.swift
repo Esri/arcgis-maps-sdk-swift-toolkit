@@ -20,10 +20,13 @@ public final class Authenticator: ObservableObject {
     let oAuthConfigurations: [OAuthConfiguration]
     var trustedHosts: [String] = []
     var hasPersistentStore: Bool
+    var promptForUntrustedHosts: Bool
     
     public init(
+        promptForUntrustedHosts: Bool = false,
         oAuthConfigurations: [OAuthConfiguration] = []
     ) {
+        self.promptForUntrustedHosts = promptForUntrustedHosts
         self.oAuthConfigurations = oAuthConfigurations
         hasPersistentStore = false
         Task { await observeChallengeQueue() }
@@ -142,8 +145,10 @@ extension Authenticator: AuthenticationChallengeHandler {
                 // If the host is already trusted, then continue trusting it.
                 return (.useCredential, URLCredential(trust: trust))
             } else if !trust.isRecoverableTrustFailure {
-                // See if the challenge is a recoverable trust failure, if so then we can
-                // challenge the user.  If not, then we perform default handling.
+                // If not a recoverable trust failure then we perform default handling.
+                return (.performDefaultHandling, nil)
+            } else if !promptForUntrustedHosts {
+                // If we aren't allowed to prompt for untrusted hosts then perform default handling.
                 return (.performDefaultHandling, nil)
             }
         }
