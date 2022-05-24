@@ -17,8 +17,7 @@ import ArcGISToolkit
 
 struct AuthenticationExampleView: View {
     @ObservedObject var authenticator = Authenticator(
-        promptForUntrustedHosts: true
-        //oAuthConfigurations: [.arcgisDotCom]
+        promptForUntrustedHosts: true//, oAuthConfigurations: [.arcgisDotCom]
     )
     @State var previousApiKey: APIKey?
     @State private var items = AuthenticationItem.makeAll()
