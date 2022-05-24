@@ -35,9 +35,11 @@ struct TrustHostViewModifier: ViewModifier {
             .task { isPresented = true } // Present the alert right away
             .alert("Certificate Trust Warning", isPresented: $isPresented, presenting: challenge) { _ in
                 Button("Dangerous: Allow Connection", role: .destructive) {
+                    isPresented = false
                     challenge.resume(with: .trustHost)
                 }
                 Button("Cancel", role: .cancel) {
+                    isPresented = false
                     challenge.cancel()
                 }
             } message: { _ in
