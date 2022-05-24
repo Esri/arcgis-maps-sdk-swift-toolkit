@@ -20,10 +20,13 @@ public final class Authenticator: ObservableObject {
 ***REMOVED***let oAuthConfigurations: [OAuthConfiguration]
 ***REMOVED***var trustedHosts: [String] = []
 ***REMOVED***var hasPersistentStore: Bool
+***REMOVED***var promptForUntrustedHosts: Bool
 ***REMOVED***
 ***REMOVED***public init(
+***REMOVED******REMOVED***promptForUntrustedHosts: Bool = false,
 ***REMOVED******REMOVED***oAuthConfigurations: [OAuthConfiguration] = []
 ***REMOVED***) {
+***REMOVED******REMOVED***self.promptForUntrustedHosts = promptForUntrustedHosts
 ***REMOVED******REMOVED***self.oAuthConfigurations = oAuthConfigurations
 ***REMOVED******REMOVED***hasPersistentStore = false
 ***REMOVED******REMOVED***Task { await observeChallengeQueue() ***REMOVED***
@@ -142,8 +145,10 @@ extension Authenticator: AuthenticationChallengeHandler {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** If the host is already trusted, then continue trusting it.
 ***REMOVED******REMOVED******REMOVED******REMOVED***return (.useCredential, URLCredential(trust: trust))
 ***REMOVED******REMOVED*** else if !trust.isRecoverableTrustFailure {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** See if the challenge is a recoverable trust failure, if so then we can
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** challenge the user.  If not, then we perform default handling.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** If not a recoverable trust failure then we perform default handling.
+***REMOVED******REMOVED******REMOVED******REMOVED***return (.performDefaultHandling, nil)
+***REMOVED******REMOVED*** else if !promptForUntrustedHosts {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** If we aren't allowed to prompt for untrusted hosts then perform default handling.
 ***REMOVED******REMOVED******REMOVED******REMOVED***return (.performDefaultHandling, nil)
 ***REMOVED******REMOVED***
 ***REMOVED***
