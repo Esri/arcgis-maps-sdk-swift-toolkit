@@ -13,72 +13,32 @@
 
 import SwiftUI
 
-struct AuthenticationView: View {
-    init(challenge: QueuedChallenge) {
-        self.challenge = challenge
+public extension View {
+    @ViewBuilder
+    func authentication(authenticator: Authenticator) -> some View {
+        modifier(InvisibleOverlayModifier(authenticator: authenticator))
     }
+}
 
-    let challenge: QueuedChallenge
+/// This is an intermediate modifier that overlays an always present invisible view.
+/// This view is necessary because of SwiftUI behavior that prevent the UI from functioning
+/// properly when showing and hiding sheets. The sheets need to be off of a view that is always
+/// present.
+private struct InvisibleOverlayModifier: ViewModifier {
+    @ObservedObject var authenticator: Authenticator
     
-    var body: some View {
-//        switch challenge {
-//        case let challenge as QueuedArcGISChallenge:
-////            Sheet {
-////                UsernamePasswordView(challenge: challenge)
-////            }
-//        case let challenge as QueuedURLChallenge:
-//            switch challenge.urlChallenge.protectionSpace.authenticationMethod {
-//            case NSURLAuthenticationMethodServerTrust:
-//                //TrustHostView(challenge: challenge)
-//                fatalError()
-//            case NSURLAuthenticationMethodClientCertificate:
-//                CertificatePickerView(challenge: challenge)
-//            case NSURLAuthenticationMethodDefault,
-//                NSURLAuthenticationMethodNTLM,
-//                NSURLAuthenticationMethodHTMLForm,
-//                NSURLAuthenticationMethodHTTPBasic,
-//            NSURLAuthenticationMethodHTTPDigest:
-//                UsernamePasswordView(challenge: challenge)
-//            default:
-//                fatalError()
-//            }
-//        default:
-//            fatalError()
-//        }
-        
-        switch challenge {
-        case let challenge as QueuedArcGISChallenge:
-            modifier(UsernamePasswordViewModifier(challenge: challenge))
-        case let challenge as QueuedURLChallenge:
-            switch challenge.urlChallenge.protectionSpace.authenticationMethod {
-            case NSURLAuthenticationMethodServerTrust:
-                modifier(TrustHostViewModifier(challenge: challenge))
-            case NSURLAuthenticationMethodClientCertificate:
-                modifier(CertificatePickerViewModifier(challenge: challenge))
-            case NSURLAuthenticationMethodDefault,
-                NSURLAuthenticationMethodNTLM,
-                NSURLAuthenticationMethodHTMLForm,
-                NSURLAuthenticationMethodHTTPBasic,
-            NSURLAuthenticationMethodHTTPDigest:
-                modifier(UsernamePasswordViewModifier(challenge: challenge))
-            default:
-                fatalError()
-            }
-        default:
-            fatalError()
+    @ViewBuilder
+    func body(content: Content) -> some View {
+        ZStack {
+            content
+            Color.clear
+                .frame(width: 0, height: 0)
+                .modifier(AuthenticationModifier(authenticator: authenticator))
         }
     }
 }
 
-public extension View {
-    @ViewBuilder
-    func authentication(authenticator: Authenticator) -> some View {
-//        overlay(Color.clear.frame(width: 0, height: 0, alignment: .bottom) .modifier(AuthenticationModifier(authenticator: authenticator)))
-        modifier(AuthenticationModifier(authenticator: authenticator))
-    }
-}
-
-struct AuthenticationModifier: ViewModifier {
+private struct AuthenticationModifier: ViewModifier {
     @ObservedObject var authenticator: Authenticator
     
     @ViewBuilder
