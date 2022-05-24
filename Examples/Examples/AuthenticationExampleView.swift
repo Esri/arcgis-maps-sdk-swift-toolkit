@@ -17,8 +17,7 @@
 
 struct AuthenticationExampleView: View {
 ***REMOVED***@ObservedObject var authenticator = Authenticator(
-***REMOVED******REMOVED***promptForUntrustedHosts: true
-***REMOVED******REMOVED******REMOVED***oAuthConfigurations: [.arcgisDotCom]
+***REMOVED******REMOVED***promptForUntrustedHosts: true***REMOVED***, oAuthConfigurations: [.arcgisDotCom]
 ***REMOVED***)
 ***REMOVED***@State var previousApiKey: APIKey?
 ***REMOVED***@State private var items = AuthenticationItem.makeAll()
