@@ -71,9 +71,9 @@ struct AuthenticationView: View {
 ***REMOVED***
 
 public extension View {
-***REMOVED***@MainActor
 ***REMOVED***@ViewBuilder
 ***REMOVED***func authentication(authenticator: Authenticator) -> some View {
+***REMOVED******REMOVED******REMOVED***overlay(Color.clear.frame(width: 0, height: 0, alignment: .bottom) .modifier(AuthenticationModifier(authenticator: authenticator)))
 ***REMOVED******REMOVED***modifier(AuthenticationModifier(authenticator: authenticator))
 ***REMOVED***
 ***REMOVED***

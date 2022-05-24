@@ -14,7 +14,7 @@
 ***REMOVED***
 ***REMOVED***
 
-@MainActor protocol UsernamePasswordViewModel: ObservableObject {
+protocol UsernamePasswordViewModel: ObservableObject {
 ***REMOVED***var username: String { get set ***REMOVED***
 ***REMOVED***var password: String { get set ***REMOVED***
 ***REMOVED***var signinButtonEnabled: Bool { get ***REMOVED***
@@ -25,7 +25,6 @@
 ***REMOVED***func cancel()
 ***REMOVED***
 
-@MainActor
 struct UsernamePasswordViewModifier<ViewModel: UsernamePasswordViewModel>: ViewModifier {
 ***REMOVED***let viewModel: ViewModel
 ***REMOVED***
@@ -181,7 +180,6 @@ class MockUsernamePasswordViewModel: UsernamePasswordViewModel {
 ***REMOVED***
 ***REMOVED***
 
-@MainActor
 class TokenCredentialViewModel: UsernamePasswordViewModel {
 ***REMOVED***private let challenge: QueuedArcGISChallenge
 ***REMOVED***

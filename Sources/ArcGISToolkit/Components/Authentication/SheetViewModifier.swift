@@ -14,7 +14,8 @@
 ***REMOVED***
 
 struct SheetViewModifier<SheetContent: View>: ViewModifier {
-***REMOVED***@State private var isPresented = false
+***REMOVED***@State
+***REMOVED***private var isPresented = false
 ***REMOVED***var sheetContent: () -> SheetContent
 
 ***REMOVED***func body(content: Content) -> some View {
@@ -27,7 +28,8 @@ struct SheetViewModifier<SheetContent: View>: ViewModifier {
 ***REMOVED***
 
 extension View {
-***REMOVED***@ViewBuilder func sheet<Content: View>(content: @escaping () -> Content) -> some View {
+***REMOVED***@ViewBuilder
+***REMOVED***func sheet<Content: View>(content: @escaping () -> Content) -> some View {
 ***REMOVED******REMOVED***modifier(SheetViewModifier(sheetContent: content))
 ***REMOVED***
 ***REMOVED***

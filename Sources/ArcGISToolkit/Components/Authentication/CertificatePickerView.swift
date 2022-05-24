@@ -14,7 +14,7 @@
 ***REMOVED***
 import UniformTypeIdentifiers
 
-@MainActor final private class CertificatePickerViewModel: ObservableObject {
+final private class CertificatePickerViewModel: ObservableObject {
 ***REMOVED***let challengingHost: String
 ***REMOVED***let challenge: QueuedURLChallenge
 ***REMOVED***
@@ -39,8 +39,6 @@ import UniformTypeIdentifiers
 ***REMOVED***
 ***REMOVED***
 
-
-@MainActor
 struct CertificatePickerViewModifier: ViewModifier {
 ***REMOVED***init(challenge: QueuedURLChallenge) {
 ***REMOVED******REMOVED***viewModel = CertificatePickerViewModel(challenge: challenge)
@@ -54,7 +52,7 @@ struct CertificatePickerViewModifier: ViewModifier {
 
 ***REMOVED***func body(content: Content) -> some View {
 ***REMOVED******REMOVED***content
-***REMOVED******REMOVED******REMOVED***.promptBrowseCertificateView(
+***REMOVED******REMOVED******REMOVED***.promptBrowseCertificate(
 ***REMOVED******REMOVED******REMOVED******REMOVED***isPresented: $showPrompt,
 ***REMOVED******REMOVED******REMOVED******REMOVED***host: viewModel.challengingHost,
 ***REMOVED******REMOVED******REMOVED******REMOVED***onContinue: {
@@ -89,9 +87,8 @@ private extension UTType {
 ***REMOVED***
 
 private extension View {
-***REMOVED***@MainActor
 ***REMOVED***@ViewBuilder
-***REMOVED***func promptBrowseCertificateView(
+***REMOVED***func promptBrowseCertificate(
 ***REMOVED******REMOVED***isPresented: Binding<Bool>,
 ***REMOVED******REMOVED***host: String,
 ***REMOVED******REMOVED***onContinue: @escaping () -> Void,
