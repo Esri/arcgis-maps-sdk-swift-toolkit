@@ -204,9 +204,7 @@ class TokenCredentialViewModel: UsernamePasswordViewModel {
     
     func signIn() {
         formEnabled = false
-        Task {
-            challenge.resume(with: .tokenCredential(username: username, password: password))
-        }
+        challenge.resume(with: .tokenCredential(username: username, password: password))
     }
     
     func cancel() {
@@ -241,9 +239,7 @@ class URLCredentialUsernamePasswordViewModel: UsernamePasswordViewModel {
     
     func signIn() {
         formEnabled = false
-        Task {
-            challenge.resume(with: .userCredential(username: username, password: password))
-        }
+        challenge.resume(with: .userCredential(username: username, password: password))
     }
     
     func cancel() {
