@@ -47,7 +47,7 @@ struct OverviewMapExampleView: View {
 ***REMOVED***
 
 struct OverviewMapForMapView: View {
-***REMOVED***let map = Map(basemapStyle: .arcGISImagery)
+***REMOVED***@StateObject private var map = Map(basemapStyle: .arcGISImagery)
 ***REMOVED***
 ***REMOVED***@State private var viewpoint: Viewpoint?
 ***REMOVED***
@@ -75,7 +75,7 @@ struct OverviewMapForMapView: View {
 ***REMOVED***
 
 struct OverviewMapForSceneView: View {
-***REMOVED***let scene = Scene(basemapStyle: .arcGISImagery)
+***REMOVED***@StateObject private var scene = Scene(basemapStyle: .arcGISImagery)
 ***REMOVED***
 ***REMOVED***@State private var viewpoint: Viewpoint?
 ***REMOVED***

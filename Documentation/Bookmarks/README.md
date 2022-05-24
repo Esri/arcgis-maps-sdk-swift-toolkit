@@ -7,6 +7,11 @@ The Bookmarks component will display a list of bookmarks and allows the user to 
 ## Usage
 
 ```swift
+Bookmarks(
+***REMOVED***isPresented: $showingBookmarks,
+***REMOVED***mapOrScene: map,
+***REMOVED***viewpoint: $viewpoint
+)
 ```
 
 To see it in action, try out the [Examples](../../Examples) and refer to [BookmarksExampleView.swift](../../Examples/Examples/BookmarksExampleView.swift) in the project.
