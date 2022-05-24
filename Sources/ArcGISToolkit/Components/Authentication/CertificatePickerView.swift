@@ -14,7 +14,7 @@
 import SwiftUI
 import UniformTypeIdentifiers
 
-@MainActor final private class CertificatePickerViewModel: ObservableObject {
+final private class CertificatePickerViewModel: ObservableObject {
     let challengingHost: String
     let challenge: QueuedURLChallenge
     
@@ -39,8 +39,6 @@ import UniformTypeIdentifiers
     }
 }
 
-
-@MainActor
 struct CertificatePickerViewModifier: ViewModifier {
     init(challenge: QueuedURLChallenge) {
         viewModel = CertificatePickerViewModel(challenge: challenge)
@@ -54,7 +52,7 @@ struct CertificatePickerViewModifier: ViewModifier {
 
     func body(content: Content) -> some View {
         content
-            .promptBrowseCertificateView(
+            .promptBrowseCertificate(
                 isPresented: $showPrompt,
                 host: viewModel.challengingHost,
                 onContinue: {
@@ -89,9 +87,8 @@ private extension UTType {
 }
 
 private extension View {
-    @MainActor
     @ViewBuilder
-    func promptBrowseCertificateView(
+    func promptBrowseCertificate(
         isPresented: Binding<Bool>,
         host: String,
         onContinue: @escaping () -> Void,

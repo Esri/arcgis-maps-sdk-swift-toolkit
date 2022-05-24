@@ -14,7 +14,8 @@
 import SwiftUI
 
 struct SheetViewModifier<SheetContent: View>: ViewModifier {
-    @State private var isPresented = false
+    @State
+    private var isPresented = false
     var sheetContent: () -> SheetContent
 
     func body(content: Content) -> some View {
@@ -27,7 +28,8 @@ struct SheetViewModifier<SheetContent: View>: ViewModifier {
 }
 
 extension View {
-    @ViewBuilder func sheet<Content: View>(content: @escaping () -> Content) -> some View {
+    @ViewBuilder
+    func sheet<Content: View>(content: @escaping () -> Content) -> some View {
         modifier(SheetViewModifier(sheetContent: content))
     }
 }
