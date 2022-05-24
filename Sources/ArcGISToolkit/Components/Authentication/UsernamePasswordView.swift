@@ -37,10 +37,13 @@ struct UsernamePasswordViewModifier<ViewModel: UsernamePasswordViewModel>: ViewM
         viewModel = TokenCredentialViewModel(challenge: challenge)
     }
     
+    @State var isPresented = false
+    
     func body(content: Content) -> some View {
-        content.sheet(isPresented: .constant(true)) {
-            UsernamePasswordView(viewModel: viewModel)
-        }
+        content
+            .sheet {
+                UsernamePasswordView(viewModel: viewModel)
+            }
     }
 }
 

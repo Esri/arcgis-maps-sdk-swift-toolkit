@@ -13,38 +13,24 @@
 
 import SwiftUI
 
-struct InvisibleView: View {
-    var body: some View {
-        Color.clear.frame(width: 0, height: 0, alignment: .bottom)
+@MainActor
+struct SheetViewModifier<SheetContent: View>: ViewModifier {
+    @State private var isPresented = false
+    var sheetContent: () -> SheetContent
+
+    func body(content: Content) -> some View {
+        withAnimation {
+            content
+                .task { isPresented = true }
+                .sheet(isPresented: $isPresented, content: sheetContent)
+        }
     }
 }
 
-struct Sheet<Content: View>: View {
-    @State private var isPresented: Bool = true
-    var onDismiss: (() -> Void)?
-    var content: () -> Content
-    
-    var body: some View {
-        InvisibleView()
-            .onAppear { isPresented = true }
-            .sheet(
-                isPresented: $isPresented,
-                onDismiss: onDismiss,
-                content: content
-            )
+extension View {
+    @MainActor
+    @ViewBuilder
+    func sheet<Content: View>(content: @escaping () -> Content) -> some View {
+        modifier(SheetViewModifier(sheetContent: content))
     }
 }
-
-//public extension View {
-//    @MainActor
-//    @ViewBuilder
-//    func asSheet() -> some View {
-//        modifier(SheetModifier())
-//    }
-//}
-//
-//struct SheetModifier: ViewModifier {
-//    func body(content: Content) -> some View {
-//        Sheet(isPresented: true, content: { content } )
-//    }
-//}
