@@ -68,6 +68,9 @@ public final class Authenticator: ObservableObject {
 ***REMOVED***
 ***REMOVED***private func observeChallengeQueue() async {
 ***REMOVED******REMOVED***for await queuedChallenge in challengeQueue {
+***REMOVED******REMOVED******REMOVED******REMOVED*** Give chance to stop presenting last view for the case of queued up challenges.
+***REMOVED******REMOVED******REMOVED***try? await Task.sleep(nanoseconds: 250 * 1_000_000)
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***if let queuedArcGISChallenge = queuedChallenge as? QueuedArcGISChallenge,
 ***REMOVED******REMOVED******REMOVED***   let url = queuedArcGISChallenge.arcGISChallenge.request.url,
 ***REMOVED******REMOVED******REMOVED***   let config = oAuthConfigurations.first(where: { $0.canBeUsed(for: url) ***REMOVED***) {
