@@ -37,8 +37,7 @@ final class QueuedArcGISChallenge: QueuedChallenge {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Use a streamed property because we need to support multiple listeners
 ***REMOVED******REMOVED***/ to know when the challenge completed.
-***REMOVED***@Streamed
-***REMOVED***private var _response: Response?
+***REMOVED***@Streamed private var _response: Response?
 ***REMOVED***
 ***REMOVED***var response: Response {
 ***REMOVED******REMOVED***get async {
@@ -78,8 +77,7 @@ final class QueuedURLChallenge: QueuedChallenge {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Use a streamed property because we need to support multiple listeners
 ***REMOVED******REMOVED***/ to know when the challenge completed.
-***REMOVED***@Streamed
-***REMOVED***private var _response: (Response)?
+***REMOVED***@Streamed private var _response: (Response)?
 ***REMOVED***
 ***REMOVED***var response: Response {
 ***REMOVED******REMOVED***get async {

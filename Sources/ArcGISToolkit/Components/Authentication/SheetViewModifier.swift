@@ -14,8 +14,7 @@
 ***REMOVED***
 
 struct SheetViewModifier<SheetContent: View>: ViewModifier {
-***REMOVED***@State
-***REMOVED***private var isPresented = false
+***REMOVED***@State private var isPresented = false
 ***REMOVED***var sheetContent: () -> SheetContent
 
 ***REMOVED***func body(content: Content) -> some View {
