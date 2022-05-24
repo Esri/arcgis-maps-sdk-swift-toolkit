@@ -414,7 +414,7 @@ private extension Symbol {
     static func searchResult() -> MarkerSymbol {
         let image = UIImage.mapPin
         let symbol = PictureMarkerSymbol(image: image)
-        symbol.offsetY = Float(image.size.height / 2.0)
+        symbol.offsetY = CGFloat(image.size.height / 2.0)
         return symbol
     }
 }

@@ -40,16 +40,19 @@ struct UsernamePasswordViewModifier<ViewModel: UsernamePasswordViewModel>: ViewM
     
     func body(content: Content) -> some View {
         content
-            .sheet { UsernamePasswordView(viewModel: viewModel) }
+            .task { isPresented = true }
+            .sheet(isPresented: $isPresented) { UsernamePasswordView(viewModel: viewModel, isPresented: $isPresented) }
     }
 }
 
 private struct UsernamePasswordView<ViewModel: UsernamePasswordViewModel>: View {
-    init(viewModel: ViewModel) {
+    init(viewModel: ViewModel, isPresented: Binding<Bool>) {
         _viewModel = ObservedObject(initialValue: viewModel)
+        self.isPresented = isPresented
     }
     
     @ObservedObject private var viewModel: ViewModel
+    private var isPresented: Binding<Bool>
     
     /// The focused field.
     @FocusState private var focusedField: Field?
@@ -92,7 +95,10 @@ private struct UsernamePasswordView<ViewModel: UsernamePasswordViewModel>: View 
             .interactiveDismissDisabled()
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel") { viewModel.cancel() }
+                    Button("Cancel") {
+                        isPresented.wrappedValue = false
+                        viewModel.cancel()
+                    }
                 }
             }
             .onAppear {
@@ -118,6 +124,7 @@ private struct UsernamePasswordView<ViewModel: UsernamePasswordViewModel>: View 
     
     private var signinButton: some View {
         Button(action: {
+            isPresented.wrappedValue = false
             viewModel.signIn()
         }, label: {
             if viewModel.formEnabled {
@@ -137,7 +144,7 @@ private struct UsernamePasswordView<ViewModel: UsernamePasswordViewModel>: View 
 
 struct UsernamePasswordView_Previews: PreviewProvider {
     static var previews: some View {
-        UsernamePasswordView(viewModel: MockUsernamePasswordViewModel(challengingHost: "arcgis.com"))
+        UsernamePasswordView(viewModel: MockUsernamePasswordViewModel(challengingHost: "arcgis.com"), isPresented: .constant(true))
     }
 }
 
