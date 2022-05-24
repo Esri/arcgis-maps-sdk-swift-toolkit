@@ -24,9 +24,16 @@ struct TrustHostViewModifier: ViewModifier {
         challenge.urlChallenge.protectionSpace.host
     }
     
+    // Even though we will present it right away we need to use a state variable for this.
+    // Using a constant has 2 issues. One, it won't animate. Two, when challenging for multiple
+    // endpoints at a time, and the challenges stack up, you can end up with a "already presenting"
+    // error.
+    @State private var isPresented: Bool = false
+    
     func body(content: Content) -> some View {
         content
-            .alert("Certificate Trust Warning", isPresented: .constant(true), presenting: challenge) { _ in
+            .task { isPresented = true } // Present the alert right away
+            .alert("Certificate Trust Warning", isPresented: $isPresented, presenting: challenge) { _ in
                 Button("Dangerous: Allow Connection", role: .destructive) {
                     challenge.resume(with: .trustHost)
                 }
