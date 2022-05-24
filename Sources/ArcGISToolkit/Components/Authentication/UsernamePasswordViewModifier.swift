@@ -204,9 +204,7 @@ class TokenCredentialViewModel: UsernamePasswordViewModel {
 ***REMOVED***
 ***REMOVED***func signIn() {
 ***REMOVED******REMOVED***formEnabled = false
-***REMOVED******REMOVED***Task {
-***REMOVED******REMOVED******REMOVED***challenge.resume(with: .tokenCredential(username: username, password: password))
-***REMOVED***
+***REMOVED******REMOVED***challenge.resume(with: .tokenCredential(username: username, password: password))
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func cancel() {
@@ -241,9 +239,7 @@ class URLCredentialUsernamePasswordViewModel: UsernamePasswordViewModel {
 ***REMOVED***
 ***REMOVED***func signIn() {
 ***REMOVED******REMOVED***formEnabled = false
-***REMOVED******REMOVED***Task {
-***REMOVED******REMOVED******REMOVED***challenge.resume(with: .userCredential(username: username, password: password))
-***REMOVED***
+***REMOVED******REMOVED***challenge.resume(with: .userCredential(username: username, password: password))
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func cancel() {

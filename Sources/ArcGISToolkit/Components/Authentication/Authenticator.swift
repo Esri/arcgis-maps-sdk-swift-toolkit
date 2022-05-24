@@ -71,6 +71,9 @@ public final class Authenticator: ObservableObject {
 ***REMOVED***
 ***REMOVED***private func observeChallengeQueue() async {
 ***REMOVED******REMOVED***for await queuedChallenge in challengeQueue {
+***REMOVED******REMOVED******REMOVED******REMOVED*** A yield here alleviate the already presenting bug.
+***REMOVED******REMOVED******REMOVED***await Task.yield()
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***if let queuedArcGISChallenge = queuedChallenge as? QueuedArcGISChallenge,
 ***REMOVED******REMOVED******REMOVED***   let url = queuedArcGISChallenge.arcGISChallenge.request.url,
 ***REMOVED******REMOVED******REMOVED***   let config = oAuthConfigurations.first(where: { $0.canBeUsed(for: url) ***REMOVED***) {
