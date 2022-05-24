@@ -116,4 +116,3 @@ struct AuthenticationModifier: ViewModifier {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED***

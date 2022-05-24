@@ -13,7 +13,6 @@
 
 ***REMOVED***
 
-@MainActor
 struct SheetViewModifier<SheetContent: View>: ViewModifier {
 ***REMOVED***@State private var isPresented = false
 ***REMOVED***var sheetContent: () -> SheetContent
@@ -28,9 +27,7 @@ struct SheetViewModifier<SheetContent: View>: ViewModifier {
 ***REMOVED***
 
 extension View {
-***REMOVED***@MainActor
-***REMOVED***@ViewBuilder
-***REMOVED***func sheet<Content: View>(content: @escaping () -> Content) -> some View {
+***REMOVED***@ViewBuilder func sheet<Content: View>(content: @escaping () -> Content) -> some View {
 ***REMOVED******REMOVED***modifier(SheetViewModifier(sheetContent: content))
 ***REMOVED***
 ***REMOVED***
