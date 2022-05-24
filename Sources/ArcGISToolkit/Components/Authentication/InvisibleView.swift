@@ -13,38 +13,24 @@
 
 ***REMOVED***
 
-struct InvisibleView: View {
-***REMOVED***var body: some View {
-***REMOVED******REMOVED***Color.clear.frame(width: 0, height: 0, alignment: .bottom)
+@MainActor
+struct SheetViewModifier<SheetContent: View>: ViewModifier {
+***REMOVED***@State private var isPresented = false
+***REMOVED***var sheetContent: () -> SheetContent
+
+***REMOVED***func body(content: Content) -> some View {
+***REMOVED******REMOVED***withAnimation {
+***REMOVED******REMOVED******REMOVED***content
+***REMOVED******REMOVED******REMOVED******REMOVED***.task { isPresented = true ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.sheet(isPresented: $isPresented, content: sheetContent)
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
-struct Sheet<Content: View>: View {
-***REMOVED***@State private var isPresented: Bool = true
-***REMOVED***var onDismiss: (() -> Void)?
-***REMOVED***var content: () -> Content
-***REMOVED***
-***REMOVED***var body: some View {
-***REMOVED******REMOVED***InvisibleView()
-***REMOVED******REMOVED******REMOVED***.onAppear { isPresented = true ***REMOVED***
-***REMOVED******REMOVED******REMOVED***.sheet(
-***REMOVED******REMOVED******REMOVED******REMOVED***isPresented: $isPresented,
-***REMOVED******REMOVED******REMOVED******REMOVED***onDismiss: onDismiss,
-***REMOVED******REMOVED******REMOVED******REMOVED***content: content
-***REMOVED******REMOVED******REMOVED***)
+extension View {
+***REMOVED***@MainActor
+***REMOVED***@ViewBuilder
+***REMOVED***func sheet<Content: View>(content: @escaping () -> Content) -> some View {
+***REMOVED******REMOVED***modifier(SheetViewModifier(sheetContent: content))
 ***REMOVED***
 ***REMOVED***
-
-***REMOVED***public extension View {
-***REMOVED******REMOVED***@MainActor
-***REMOVED******REMOVED***@ViewBuilder
-***REMOVED******REMOVED***func asSheet() -> some View {
-***REMOVED******REMOVED******REMOVED***modifier(SheetModifier())
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED***struct SheetModifier: ViewModifier {
-***REMOVED******REMOVED***func body(content: Content) -> some View {
-***REMOVED******REMOVED******REMOVED***Sheet(isPresented: true, content: { content ***REMOVED*** )
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***

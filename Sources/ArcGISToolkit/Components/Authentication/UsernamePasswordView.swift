@@ -37,10 +37,13 @@ struct UsernamePasswordViewModifier<ViewModel: UsernamePasswordViewModel>: ViewM
 ***REMOVED******REMOVED***viewModel = TokenCredentialViewModel(challenge: challenge)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***func body(content: Content) -> some View {
-***REMOVED******REMOVED***content.sheet(isPresented: .constant(true)) {
-***REMOVED******REMOVED******REMOVED***UsernamePasswordView(viewModel: viewModel)
+***REMOVED***@State var isPresented = false
 ***REMOVED***
+***REMOVED***func body(content: Content) -> some View {
+***REMOVED******REMOVED***content
+***REMOVED******REMOVED******REMOVED***.sheet {
+***REMOVED******REMOVED******REMOVED******REMOVED***UsernamePasswordView(viewModel: viewModel)
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 
