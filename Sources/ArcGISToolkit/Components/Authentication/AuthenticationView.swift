@@ -115,5 +115,4 @@ struct AuthenticationModifier: ViewModifier {
             fatalError()
         }
     }
-    
 }
