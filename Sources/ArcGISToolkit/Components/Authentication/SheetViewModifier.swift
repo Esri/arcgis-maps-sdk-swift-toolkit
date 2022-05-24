@@ -14,6 +14,10 @@
 ***REMOVED***
 
 struct SheetViewModifier<SheetContent: View>: ViewModifier {
+***REMOVED******REMOVED*** Even though we will present it right away we need to use a state variable for this.
+***REMOVED******REMOVED*** Using a constant has 2 issues. One, it won't animate. Two, when challenging for multiple
+***REMOVED******REMOVED*** endpoints at a time, and the challenges stack up, you can end up with a "already presenting"
+***REMOVED******REMOVED*** error.
 ***REMOVED***@State private var isPresented = false
 ***REMOVED***var sheetContent: () -> SheetContent
 

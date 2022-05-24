@@ -24,9 +24,16 @@ struct TrustHostViewModifier: ViewModifier {
 ***REMOVED******REMOVED***challenge.urlChallenge.protectionSpace.host
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED*** Even though we will present it right away we need to use a state variable for this.
+***REMOVED******REMOVED*** Using a constant has 2 issues. One, it won't animate. Two, when challenging for multiple
+***REMOVED******REMOVED*** endpoints at a time, and the challenges stack up, you can end up with a "already presenting"
+***REMOVED******REMOVED*** error.
+***REMOVED***@State private var isPresented: Bool = false
+***REMOVED***
 ***REMOVED***func body(content: Content) -> some View {
 ***REMOVED******REMOVED***content
-***REMOVED******REMOVED******REMOVED***.alert("Certificate Trust Warning", isPresented: .constant(true), presenting: challenge) { _ in
+***REMOVED******REMOVED******REMOVED***.task { isPresented = true ***REMOVED*** ***REMOVED*** Present the alert right away
+***REMOVED******REMOVED******REMOVED***.alert("Certificate Trust Warning", isPresented: $isPresented, presenting: challenge) { _ in
 ***REMOVED******REMOVED******REMOVED******REMOVED***Button("Dangerous: Allow Connection", role: .destructive) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***challenge.resume(with: .trustHost)
 ***REMOVED******REMOVED******REMOVED***
