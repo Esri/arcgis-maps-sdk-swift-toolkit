@@ -68,6 +68,9 @@ public final class Authenticator: ObservableObject {
     
     private func observeChallengeQueue() async {
         for await queuedChallenge in challengeQueue {
+            // Give chance to stop presenting last view for the case of queued up challenges.
+            try? await Task.sleep(nanoseconds: 250 * 1_000_000)
+            
             if let queuedArcGISChallenge = queuedChallenge as? QueuedArcGISChallenge,
                let url = queuedArcGISChallenge.arcGISChallenge.request.url,
                let config = oAuthConfigurations.first(where: { $0.canBeUsed(for: url) }) {
