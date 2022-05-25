@@ -41,6 +41,9 @@ struct AuthenticationExampleView: View {
             }
         }
         .authentication(authenticator: authenticator)
+        .task {
+            try? await authenticator.synchronizeWithKeychain(access: .whenUnlockedThisDeviceOnly)
+        }
         .navigationBarTitle(Text("Authentication"), displayMode: .inline)
         .onAppear {
             ArcGISURLSession.challengeHandler = authenticator

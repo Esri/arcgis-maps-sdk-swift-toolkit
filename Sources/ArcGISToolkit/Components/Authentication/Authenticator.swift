@@ -21,7 +21,7 @@ public final class Authenticator: ObservableObject {
     var trustedHosts: [String] = []
     var urlCredentialPersistence: URLCredential.Persistence = .forSession
     var promptForUntrustedHosts: Bool
-//    var foo: AnyObject
+    var certificateStore: CertificateCredentialStore?
     
     public init(
         promptForUntrustedHosts: Bool = false,
@@ -29,9 +29,7 @@ public final class Authenticator: ObservableObject {
     ) {
         self.promptForUntrustedHosts = promptForUntrustedHosts
         self.oAuthConfigurations = oAuthConfigurations
-//        foo = NotificationCenter.default.addObserver(forName: .NSURLCredentialStorageChanged, object: URLCredentialStorage.shared, queue: .main) { notification in
-//            print("-- creds changed: \(notification.userInfo)")
-//        }
+        self.certificateStore = nil
         Task { await observeChallengeQueue() }
     }
     
@@ -54,7 +52,12 @@ public final class Authenticator: ObservableObject {
             groupIdentifier: groupIdentifier,
             isSynchronizable: isCloudSynchronizable
         )
-        urlCredentialPersistence = isCloudSynchronizable ? .synchronizable : .forSession
+        certificateStore = try await CertificateCredentialStore(
+            access: .whenUnlockedThisDeviceOnly,
+            groupIdentifier: nil,
+            isSynchronizable: isCloudSynchronizable
+        )
+        urlCredentialPersistence = isCloudSynchronizable ? .synchronizable : .permanent
     }
     
     public func clearCredentialStores() async {
@@ -63,6 +66,9 @@ public final class Authenticator: ObservableObject {
         
         // Clear ArcGIS Credentials.
         await ArcGISURLSession.credentialStore.removeAll()
+        
+        // Clear certificate store.
+        await certificateStore?.clear()
         
         // Clear URLCredentials.
         URLCredentialStorage.shared.removeAllCredentials()
@@ -165,8 +171,10 @@ extension Authenticator: AuthenticationChallengeHandler {
             }
         }
         
-        defer {
-            URLCredentialStorage.shared.printAll()
+        // Look in certificate store, use that credential if available.
+        if let certificateCredential = await certificateStore?.credential(for: challenge.protectionSpace),
+           let urlCredential = try? URLCredential.withCertificateCredential(certificateCredential) {
+            return (.useCredential, urlCredential)
         }
         
         // Queue up the url challenge.
@@ -188,9 +196,11 @@ extension Authenticator: AuthenticationChallengeHandler {
             return (.useCredential, URLCredential(user: user, password: password, persistence: urlCredentialPersistence))
         case .certificate(let url, let password):
             do {
+                let data = try await Data(asyncWithContentsOf: url)
+                await certificateStore?.add(credential: .init(host: challenge.protectionSpace.host, data: data, password: password))
                 return (
                     .useCredential,
-                    try await URLCredential.urlCredential(forCertificateAt: url, password: password)
+                    try URLCredential.urlCredential(forCertificateWithData: data, password: password)
                 )
             } catch {
                 return (.performDefaultHandling, nil)
@@ -212,17 +222,6 @@ extension URLCredentialStorage {
         allCredentials.forEach { (protectionSpace: URLProtectionSpace, usernamesToCredentials: [String : URLCredential]) in
             for credential in usernamesToCredentials.values {
                 remove(credential, for: protectionSpace)
-            }
-        }
-    }
-    
-    func printAll() {
-        allCredentials.forEach { (protectionSpace: URLProtectionSpace, usernamesToCredentials: [String : URLCredential]) in
-            for credential in usernamesToCredentials.values {
-                print(" -- credential: \(credential)")
-                print("   -- certificates: \(credential.certificates)")
-                print("   -- identity: \(credential.identity)")
-                print("   -- password: \(credential.password)")
             }
         }
     }
@@ -299,10 +298,8 @@ extension URLCredential.CertificateImportError {
     }
 }
 
-struct CertificateCredential {
-    let host: String
-    let data: Data
-    let password: String
+extension URLCredential {
+    static func withCertificateCredential(_ certificateCredential: CertificateCredential) throws -> URLCredential {
+        try URLCredential.urlCredential(forCertificateWithData: certificateCredential.data, password: certificateCredential.password)
+    }
 }
-
-extension CertificateCredential: Codable {}
