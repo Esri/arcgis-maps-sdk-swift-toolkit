@@ -19,8 +19,9 @@ import Combine
 public final class Authenticator: ObservableObject {
 ***REMOVED***let oAuthConfigurations: [OAuthConfiguration]
 ***REMOVED***var trustedHosts: [String] = []
-***REMOVED***var hasPersistentStore: Bool
+***REMOVED***var urlCredentialPersistence: URLCredential.Persistence = .forSession
 ***REMOVED***var promptForUntrustedHosts: Bool
+***REMOVED******REMOVED***var foo: AnyObject
 ***REMOVED***
 ***REMOVED***public init(
 ***REMOVED******REMOVED***promptForUntrustedHosts: Bool = false,
@@ -28,7 +29,9 @@ public final class Authenticator: ObservableObject {
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.promptForUntrustedHosts = promptForUntrustedHosts
 ***REMOVED******REMOVED***self.oAuthConfigurations = oAuthConfigurations
-***REMOVED******REMOVED***hasPersistentStore = false
+***REMOVED******REMOVED******REMOVED***foo = NotificationCenter.default.addObserver(forName: .NSURLCredentialStorageChanged, object: URLCredentialStorage.shared, queue: .main) { notification in
+***REMOVED******REMOVED******REMOVED******REMOVED***print("-- creds changed: \(notification.userInfo)")
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***Task { await observeChallengeQueue() ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -42,7 +45,7 @@ public final class Authenticator: ObservableObject {
 ***REMOVED******REMOVED***/   within the keychain.
 ***REMOVED******REMOVED***/   - isSynchronizable: A value indicating whether the item is synchronized with iCloud.
 ***REMOVED***public func synchronizeWithKeychain(
-***REMOVED******REMOVED***access: KeychainAccess,
+***REMOVED******REMOVED***access: ArcGIS.KeychainAccess,
 ***REMOVED******REMOVED***groupIdentifier: String? = nil,
 ***REMOVED******REMOVED***isCloudSynchronizable: Bool = false
 ***REMOVED***) async throws {
@@ -51,7 +54,7 @@ public final class Authenticator: ObservableObject {
 ***REMOVED******REMOVED******REMOVED***groupIdentifier: groupIdentifier,
 ***REMOVED******REMOVED******REMOVED***isSynchronizable: isCloudSynchronizable
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED***hasPersistentStore = true
+***REMOVED******REMOVED***urlCredentialPersistence = isCloudSynchronizable ? .synchronizable : .forSession
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***public func clearCredentialStores() async {
@@ -81,6 +84,12 @@ public final class Authenticator: ObservableObject {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Creating the OAuth credential will present the OAuth login view.
 ***REMOVED******REMOVED******REMOVED******REMOVED***queuedArcGISChallenge.resume(with: .oAuth(configuration: config))
 ***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***if let challenge = queuedChallenge as? QueuedArcGISChallenge,
+***REMOVED******REMOVED******REMOVED******REMOVED***   let previous = await ArcGISURLSession.credentialStore.credential(for: challenge.arcGISChallenge.request.url!) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print("-- previous: \(previous)")
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Set the current challenge, this should present the appropriate view.
 ***REMOVED******REMOVED******REMOVED******REMOVED***currentChallenge = queuedChallenge
 
@@ -156,11 +165,13 @@ extension Authenticator: AuthenticationChallengeHandler {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED***defer {
+***REMOVED******REMOVED******REMOVED***URLCredentialStorage.shared.printAll()
+***REMOVED***
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Queue up the url challenge.
 ***REMOVED******REMOVED***let queuedChallenge = QueuedURLChallenge(urlChallenge: challenge)
 ***REMOVED******REMOVED***subject.send(queuedChallenge)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***let persistence: URLCredential.Persistence = hasPersistentStore ? .permanent : .forSession
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Respond accordingly.
 ***REMOVED******REMOVED***switch await queuedChallenge.response {
@@ -174,12 +185,12 @@ extension Authenticator: AuthenticationChallengeHandler {
 ***REMOVED******REMOVED******REMOVED******REMOVED***return (.performDefaultHandling, nil)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***case .userCredential(let user, let password):
-***REMOVED******REMOVED******REMOVED***return (.useCredential, URLCredential(user: user, password: password, persistence: persistence))
+***REMOVED******REMOVED******REMOVED***return (.useCredential, URLCredential(user: user, password: password, persistence: urlCredentialPersistence))
 ***REMOVED******REMOVED***case .certificate(let url, let password):
 ***REMOVED******REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED******REMOVED***return (
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.useCredential,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try URLCredential.urlCredentialForCertificate(at: url, password: password, persistence: persistence)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try await URLCredential.urlCredential(forCertificateAt: url, password: password)
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED*** catch {
 ***REMOVED******REMOVED******REMOVED******REMOVED***return (.performDefaultHandling, nil)
@@ -205,6 +216,17 @@ extension URLCredentialStorage {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
+***REMOVED***func printAll() {
+***REMOVED******REMOVED***allCredentials.forEach { (protectionSpace: URLProtectionSpace, usernamesToCredentials: [String : URLCredential]) in
+***REMOVED******REMOVED******REMOVED***for credential in usernamesToCredentials.values {
+***REMOVED******REMOVED******REMOVED******REMOVED***print(" -- credential: \(credential)")
+***REMOVED******REMOVED******REMOVED******REMOVED***print("   -- certificates: \(credential.certificates)")
+***REMOVED******REMOVED******REMOVED******REMOVED***print("   -- identity: \(credential.identity)")
+***REMOVED******REMOVED******REMOVED******REMOVED***print("   -- password: \(credential.password)")
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
 
 private extension URLCredential {
 ***REMOVED******REMOVED***/ An error that can occur when importing a certificate.
@@ -221,12 +243,19 @@ private extension URLCredential {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED***static func urlCredentialForCertificate(
-***REMOVED******REMOVED***at fileURL: URL,
-***REMOVED******REMOVED***password: String,
-***REMOVED******REMOVED***persistence: URLCredential.Persistence
+***REMOVED***static func urlCredential(
+***REMOVED******REMOVED***forCertificateAt fileURL: URL,
+***REMOVED******REMOVED***password: String
+***REMOVED***) async throws -> URLCredential {
+***REMOVED******REMOVED***return try urlCredential(
+***REMOVED******REMOVED******REMOVED***forCertificateWithData: try await Data(asyncWithContentsOf: fileURL),
+***REMOVED******REMOVED******REMOVED***password: password
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***static func urlCredential(
+***REMOVED******REMOVED***forCertificateWithData data: Data,
+***REMOVED******REMOVED***password: String
 ***REMOVED***) throws -> URLCredential {
-***REMOVED******REMOVED***let data = try Data(contentsOf: fileURL)
 ***REMOVED******REMOVED***let options = [kSecImportExportPassphrase: password]
 ***REMOVED******REMOVED***var rawItems: CFArray?
 ***REMOVED******REMOVED***
@@ -247,8 +276,19 @@ private extension URLCredential {
 ***REMOVED******REMOVED***return URLCredential(
 ***REMOVED******REMOVED******REMOVED***identity: identity,
 ***REMOVED******REMOVED******REMOVED***certificates: certificates,
-***REMOVED******REMOVED******REMOVED***persistence: persistence
+***REMOVED******REMOVED******REMOVED******REMOVED*** Persistence is not supported at all at this point by apple for certificate credentials.
+***REMOVED******REMOVED******REMOVED******REMOVED*** So we can just pass `.none`.
+***REMOVED******REMOVED******REMOVED***persistence: .none
 ***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+
+extension Data {
+***REMOVED***init(asyncWithContentsOf fileURL: URL) async throws {
+***REMOVED******REMOVED***let task = Task {
+***REMOVED******REMOVED******REMOVED***try Data(contentsOf: fileURL)
+***REMOVED***
+***REMOVED******REMOVED***self = try await task.value
 ***REMOVED***
 ***REMOVED***
 
@@ -258,3 +298,11 @@ extension URLCredential.CertificateImportError {
 ***REMOVED******REMOVED***(SecCopyErrorMessageString(status, nil) as String?) ?? ""
 ***REMOVED***
 ***REMOVED***
+
+struct CertificateCredential {
+***REMOVED***let host: String
+***REMOVED***let data: Data
+***REMOVED***let password: String
+***REMOVED***
+
+extension CertificateCredential: Codable {***REMOVED***
