@@ -41,6 +41,9 @@ struct AuthenticationExampleView: View {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.authentication(authenticator: authenticator)
+***REMOVED******REMOVED***.task {
+***REMOVED******REMOVED******REMOVED***try? await authenticator.synchronizeWithKeychain(access: .whenUnlockedThisDeviceOnly)
+***REMOVED***
 ***REMOVED******REMOVED***.navigationBarTitle(Text("Authentication"), displayMode: .inline)
 ***REMOVED******REMOVED***.onAppear {
 ***REMOVED******REMOVED******REMOVED***ArcGISURLSession.challengeHandler = authenticator
