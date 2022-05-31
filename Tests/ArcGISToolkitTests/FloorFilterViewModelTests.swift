@@ -45,7 +45,7 @@ final class FloorFilterViewModelTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***forWebMapWithIdentifier: .testMap
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***var _viewpoint: Viewpoint? = .site_ResearchAnnex_facility_Lattice
+***REMOVED******REMOVED***var _viewpoint: Viewpoint? = .researchAnnexLattice
 ***REMOVED******REMOVED***let viewpoint = Binding(get: { _viewpoint ***REMOVED***, set: { _viewpoint = $0 ***REMOVED***)
 ***REMOVED******REMOVED***let viewModel = FloorFilterViewModel(
 ***REMOVED******REMOVED******REMOVED***floorManager: floorManager,
@@ -74,7 +74,7 @@ final class FloorFilterViewModelTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***forWebMapWithIdentifier: .testMap
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***var _viewpoint: Viewpoint? = .site_ResearchAnnex_facility_Lattice
+***REMOVED******REMOVED***var _viewpoint: Viewpoint? = .researchAnnexLattice
 ***REMOVED******REMOVED***let viewpoint = Binding(get: { _viewpoint ***REMOVED***, set: { _viewpoint = $0 ***REMOVED***)
 ***REMOVED******REMOVED***let viewModel = FloorFilterViewModel(
 ***REMOVED******REMOVED******REMOVED***automaticSelectionMode: .never,
@@ -104,7 +104,7 @@ final class FloorFilterViewModelTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***forWebMapWithIdentifier: .testMap
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***let initialViewpoint: Viewpoint = .site_ResearchAnnex_facility_Lattice
+***REMOVED******REMOVED***let initialViewpoint: Viewpoint = .researchAnnexLattice
 ***REMOVED******REMOVED***var _viewpoint: Viewpoint? = initialViewpoint
 ***REMOVED******REMOVED***let viewpoint = Binding(get: { _viewpoint ***REMOVED***, set: { _viewpoint = $0 ***REMOVED***)
 ***REMOVED******REMOVED***let viewModel = FloorFilterViewModel(
@@ -155,7 +155,7 @@ final class FloorFilterViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***XCTAssertNil(selectedFacility)
 ***REMOVED******REMOVED***XCTAssertNil(selectedSite)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***_viewpoint = .site_ResearchAnnex_facility_Lattice
+***REMOVED******REMOVED***_viewpoint = .researchAnnexLattice
 ***REMOVED******REMOVED***viewModel.automaticallySelectFacilityOrSite()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Viewpoint is the Lattice facility at the Research Annex site
@@ -180,7 +180,7 @@ final class FloorFilterViewModelTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***forWebMapWithIdentifier: .testMap
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***var _viewpoint: Viewpoint? = .site_ResearchAnnex_facility_Lattice
+***REMOVED******REMOVED***var _viewpoint: Viewpoint? = .researchAnnexLattice
 ***REMOVED******REMOVED***let viewpoint = Binding(get: { _viewpoint ***REMOVED***, set: { _viewpoint = $0 ***REMOVED***)
 ***REMOVED******REMOVED***let viewModel = FloorFilterViewModel(
 ***REMOVED******REMOVED******REMOVED***automaticSelectionMode: .alwaysNotClearing,
@@ -229,7 +229,7 @@ final class FloorFilterViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***XCTAssertNil(selectedFacility)
 ***REMOVED******REMOVED***XCTAssertNil(selectedSite)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***_viewpoint = .site_ResearchAnnex_facility_Lattice
+***REMOVED******REMOVED***_viewpoint = .researchAnnexLattice
 ***REMOVED******REMOVED***viewModel.automaticallySelectFacilityOrSite()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Viewpoint is the Lattice facility at the Research Annex site
@@ -270,7 +270,7 @@ private extension Viewpoint {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***static var site_ResearchAnnex_facility_Lattice: Viewpoint {
+***REMOVED***static var researchAnnexLattice: Viewpoint {
 ***REMOVED******REMOVED***Viewpoint(
 ***REMOVED******REMOVED******REMOVED***center:
 ***REMOVED******REMOVED******REMOVED******REMOVED***Point(
