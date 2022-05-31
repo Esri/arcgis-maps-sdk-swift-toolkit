@@ -52,7 +52,8 @@ struct LevelSelector: View {
             }
         } else {
             Toggle(isOn: $isCollapsed) {
-                LevelText(levelName: selectedLevelName)
+                Text(selectedLevelName)
+                    .modifier(LevelNameFormat())
             }
             .toggleStyle(.selectedButton)
         }
@@ -85,7 +86,8 @@ struct LevelsStack: View {
                             }
                         )
                     ) {
-                        LevelText(levelName: level.shortName)
+                        Text(level.shortName)
+                            .modifier(LevelNameFormat())
                     }
                     .toggleStyle(.selectableButton)
                 }
@@ -95,19 +97,6 @@ struct LevelsStack: View {
             }
         }
         .frame(maxHeight: contentHeight)
-    }
-}
-
-/// Intended to display the name of a level.
-struct LevelText: View {
-    /// The name of the level to be displayed.
-    var levelName: String
-    
-    var body: some View {
-        Text(levelName)
-            .lineLimit(1)
-            .fixedSize()
-            .frame(minWidth: 40)
     }
 }
 
@@ -125,5 +114,14 @@ struct CollapseButton: View {
             Image(systemName: "xmark")
                 .padding(EdgeInsets.esriInsets)
         }
+    }
+}
+
+struct LevelNameFormat: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .lineLimit(1)
+            .fixedSize()
+            .frame(minWidth: 40)
     }
 }
