@@ -322,7 +322,7 @@ private struct NoMatchesView: View {
 ***REMOVED***
 
 ***REMOVED***/ A custom button with an "X" enclosed within a circle to be used as a "close" button.
-struct CloseButton: View {
+private struct CloseButton: View {
 ***REMOVED******REMOVED***/ The button's action to be performed when tapped.
 ***REMOVED***var action: (() -> Void)
 ***REMOVED***
