@@ -327,9 +327,7 @@ private struct CloseButton: View {
 ***REMOVED***var action: (() -> Void)
 ***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED***action()
-***REMOVED*** label: {
+***REMOVED******REMOVED***Button(action: action) {
 ***REMOVED******REMOVED******REMOVED***Image(systemName: "xmark.circle")
 ***REMOVED***
 ***REMOVED***
