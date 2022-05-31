@@ -106,7 +106,7 @@ public enum SearchOutcome {
 ***REMOVED******REMOVED******REMOVED***guard !isEligibleForRequery else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Check center difference.
-***REMOVED******REMOVED******REMOVED***let centerDiff = try? GeometryEngine.distance(
+***REMOVED******REMOVED******REMOVED***let centerDiff = GeometryEngine.distance(
 ***REMOVED******REMOVED******REMOVED******REMOVED***from: lastExtent.center,
 ***REMOVED******REMOVED******REMOVED******REMOVED***to: newExtent.center
 ***REMOVED******REMOVED******REMOVED***)
@@ -414,7 +414,7 @@ private extension Symbol {
 ***REMOVED***static func searchResult() -> MarkerSymbol {
 ***REMOVED******REMOVED***let image = UIImage.mapPin
 ***REMOVED******REMOVED***let symbol = PictureMarkerSymbol(image: image)
-***REMOVED******REMOVED***symbol.offsetY = Float(image.size.height / 2.0)
+***REMOVED******REMOVED***symbol.offsetY = image.size.height / 2.0
 ***REMOVED******REMOVED***return symbol
 ***REMOVED***
 ***REMOVED***
