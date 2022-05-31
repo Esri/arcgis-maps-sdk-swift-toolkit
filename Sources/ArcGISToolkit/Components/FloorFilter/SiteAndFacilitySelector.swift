@@ -290,9 +290,7 @@ private struct CloseButton: View {
     var action: (() -> Void)
     
     var body: some View {
-        Button {
-            action()
-        } label: {
+        Button(action: action) {
             Image(systemName: "xmark.circle")
         }
     }
