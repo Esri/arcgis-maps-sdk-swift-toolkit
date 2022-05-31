@@ -20,9 +20,9 @@
 public struct FloorFilter: View {
 ***REMOVED******REMOVED***/ Creates a `FloorFilter`.
 ***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - floorManager: The floor manager used by the `FloorFilter`.
 ***REMOVED******REMOVED***/   - alignment: Determines the display configuration of Floor Filter elements.
 ***REMOVED******REMOVED***/   - automaticSelectionMode: The selection behavior of the floor filter.
-***REMOVED******REMOVED***/   - floorManager: The floor manager used by the `FloorFilter`.
 ***REMOVED******REMOVED***/   - viewpoint: Viewpoint updated when the selected site or facility changes.
 ***REMOVED***public init(
 ***REMOVED******REMOVED***floorManager: FloorManager,
