@@ -52,7 +52,7 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED***@State private var shouldUpdateViewModel = true
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ Indicates that the keyboard is animating and some views may require reload.
-***REMOVED******REMOVED***@State private var keyboardAnimating = false
+***REMOVED******REMOVED***@State private var isKeyboardAnimating = false
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ A site name filter phrase entered by the user.
 ***REMOVED******REMOVED***@State private var searchPhrase: String = ""
@@ -85,7 +85,7 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED***siteListAndFilterView
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Trigger a reload on keyboard frame changes for proper layout
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** across all devices.
-***REMOVED******REMOVED******REMOVED******REMOVED***.opacity(keyboardAnimating ? 0.99 : 1.0)
+***REMOVED******REMOVED******REMOVED******REMOVED***.opacity(isKeyboardAnimating ? 0.99 : 1.0)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.navigationViewStyle(.stack)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onReceive(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***NotificationCenter.default.publisher(
@@ -93,7 +93,7 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***) { _ in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***withAnimation {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***keyboardAnimating = true
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isKeyboardAnimating = true
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onReceive(
@@ -102,7 +102,7 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***) { _ in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***withAnimation {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***keyboardAnimating = false
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isKeyboardAnimating = false
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED***
