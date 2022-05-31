@@ -269,19 +269,19 @@ struct SiteAndFacilitySelector: View {
                                 .symbolVariant(facility.id == viewModel.selectedFacility?.id ? .fill : .none)
                             VStack {
                                 Text(facility.name)
-                                .fontWeight(.regular)
-                                .frame(
-                                    maxWidth: .infinity,
-                                    alignment: .leading
-                                )
-                                if presentationStyle == .allSites,
-                                   let siteName = facility.site?.name {
-                                    Text(siteName)
-                                    .fontWeight(.ultraLight)
+                                    .fontWeight(.regular)
                                     .frame(
                                         maxWidth: .infinity,
                                         alignment: .leading
                                     )
+                                if presentationStyle == .allSites,
+                                   let siteName = facility.site?.name {
+                                    Text(siteName)
+                                        .fontWeight(.ultraLight)
+                                        .frame(
+                                            maxWidth: .infinity,
+                                            alignment: .leading
+                                        )
                                 }
                             }
                         }
