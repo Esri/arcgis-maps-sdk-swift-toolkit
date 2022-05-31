@@ -19,7 +19,7 @@ import SwiftUI
 @MainActor
 final class FloorFilterViewModel: ObservableObject {
     ///  A selected site, floor, or level.
-    enum Selection {
+    enum Selection: Hashable {
         /// A selected site.
         case site(FloorSite)
         /// A selected facility.
@@ -316,5 +316,3 @@ final class FloorFilterViewModel: ObservableObject {
         }
     }
 }
-
-extension FloorFilterViewModel.Selection: Hashable { }

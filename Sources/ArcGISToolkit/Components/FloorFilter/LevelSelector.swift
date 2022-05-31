@@ -22,7 +22,7 @@ struct LevelSelector: View {
     /// A Boolean value indicating the whether the view shows only the selected level or all levels.
     /// If the value is`false`, the view will display all levels; if it is `true`, the view will only display
     /// the selected level.
-    @State var isCollapsed: Bool = false
+    @State private var isCollapsed: Bool = false
     
     /// The alignment configuration.
     let isTopAligned: Bool
@@ -30,7 +30,7 @@ struct LevelSelector: View {
     /// The levels to display.
     let levels: [FloorLevel]
     
-    /// Returns the short name of the currently selected level, the first level or "None" if none of the listed
+    /// The short name of the currently selected level, the first level, or "None" if none of the levels
     /// are available.
     private var selectedLevelName: String {
         viewModel.selectedLevel?.shortName ?? ""
@@ -41,32 +41,39 @@ struct LevelSelector: View {
             levels.count > 1 {
             VStack {
                 if !isTopAligned {
-                    CollapseButton(
-                        isCollapsed: $isCollapsed,
-                        isTopAligned: isTopAligned
-                    )
+                    makeCollapseButton()
                     Divider()
                 }
                 LevelsStack(levels: levels)
                 if isTopAligned {
                     Divider()
-                    CollapseButton(
-                        isCollapsed: $isCollapsed,
-                        isTopAligned: isTopAligned
-                    )
+                    makeCollapseButton()
                 }
             }
         } else {
             Toggle(isOn: $isCollapsed) {
-                LevelText(levelName: selectedLevelName)
+                Text(selectedLevelName)
+                    .modifier(LevelNameFormat())
             }
             .toggleStyle(.selectedButton)
+        }
+    }
+    
+    /// A button used to collapse the floor level list.
+    @ViewBuilder func makeCollapseButton() -> some View {
+        Button {
+            withAnimation {
+                isCollapsed.toggle()
+            }
+        } label: {
+            Image(systemName: isTopAligned ? "chevron.up.circle" : "chevron.down.circle")
+                .padding(.esriInsets)
         }
     }
 }
 
 /// A vertical list of floor levels.
-struct LevelsStack: View {
+private struct LevelsStack: View {
     /// The view model used by the `LevelsView`.
     @EnvironmentObject var viewModel: FloorFilterViewModel
     
@@ -92,7 +99,8 @@ struct LevelsStack: View {
                                 }
                             )
                         ) {
-                            LevelText(levelName: level.shortName)
+                            Text(level.shortName)
+                                .modifier(LevelNameFormat())
                         }
                         .toggleStyle(.selectableButton)
                     }
@@ -115,35 +123,11 @@ struct LevelsStack: View {
     }
 }
 
-/// Intended to display the name of a level.
-struct LevelText: View {
-    /// The name of the level to be displayed.
-    var levelName: String
-    
-    var body: some View {
-        Text(levelName)
+struct LevelNameFormat: ViewModifier {
+    func body(content: Content) -> some View {
+        content
             .lineLimit(1)
             .fixedSize()
             .frame(minWidth: 40)
-    }
-}
-
-/// A button used to collapse the floor level list.
-struct CollapseButton: View {
-    /// Allows the user to toggle the visibility of the site and facility selector.
-    @Binding var isCollapsed: Bool
-    
-    /// The alignment configuration.
-    let isTopAligned: Bool
-    
-    var body: some View {
-        Button {
-            withAnimation {
-                isCollapsed.toggle()
-            }
-        } label: {
-            Image(systemName: isTopAligned ? "chevron.up.circle" : "chevron.down.circle")
-                .padding(EdgeInsets.esriInsets)
-        }
     }
 }

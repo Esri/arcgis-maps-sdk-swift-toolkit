@@ -16,7 +16,7 @@ import ArcGIS
 
 /// A view which allows selection of sites and facilities represented in a `FloorManager`.
 struct SiteAndFacilitySelector: View {
-    /// Creates a `SiteAndFacilitySelector`
+    /// Creates a `SiteAndFacilitySelector`.
     /// - Parameter isHidden: A binding used to dismiss the site selector.
     init(isHidden: Binding<Bool>) {
         self.isHidden = isHidden
@@ -38,13 +38,13 @@ struct SiteAndFacilitySelector: View {
         @EnvironmentObject var viewModel: FloorFilterViewModel
         
         /// Indicates whether the view model should be notified of the selection update.
-        @State private var updateViewModel = true
+        @State private var shouldUpdateViewModel = true
         
         /// Indicates that the keyboard is animating and some views may require reload.
-        @State private var keyboardAnimating = false
+        @State private var isKeyboardAnimating = false
         
         /// A site name filter phrase entered by the user.
-        @State private var searchPhrase: String = ""
+        @State private var query: String = ""
         
         /// A local record of the site selected in the view model.
         ///
@@ -59,11 +59,11 @@ struct SiteAndFacilitySelector: View {
         /// A subset of `sites` with names containing `searchPhrase` or all `sites` if
         /// `searchPhrase` is empty.
         var matchingSites: [FloorSite] {
-            if searchPhrase.isEmpty {
+            if query.isEmpty {
                 return viewModel.sites
             }
             return viewModel.sites.filter {
-                $0.name.lowercased().contains(searchPhrase.lowercased())
+                $0.name.lowercased().contains(query.lowercased())
             }
         }
         
@@ -71,7 +71,7 @@ struct SiteAndFacilitySelector: View {
             siteListAndFilterView
                 // Trigger a reload on keyboard frame changes for proper layout
                 // across all devices.
-                .opacity(keyboardAnimating ? 0.99 : 1.0)
+                .opacity(isKeyboardAnimating ? 0.99 : 1.0)
                 .navigationViewStyle(.stack)
                 .onReceive(
                     NotificationCenter.default.publisher(
@@ -79,7 +79,7 @@ struct SiteAndFacilitySelector: View {
                     )
                 ) { _ in
                     withAnimation {
-                        keyboardAnimating = true
+                        isKeyboardAnimating = true
                     }
                 }
                 .onReceive(
@@ -88,7 +88,7 @@ struct SiteAndFacilitySelector: View {
                     )
                 ) { _ in
                     withAnimation {
-                        keyboardAnimating = false
+                        isKeyboardAnimating = false
                     }
                 }
         }
@@ -113,7 +113,7 @@ struct SiteAndFacilitySelector: View {
                         NavigationLink("All sites") {
                             FacilitiesList(
                                 allSiteStyle: true,
-                                facilities: viewModel.sites.flatMap({ $0.facilities }),
+                                facilities: viewModel.sites.flatMap(\.facilities),
                                 isHidden: isHidden
                             )
                         }
@@ -121,7 +121,7 @@ struct SiteAndFacilitySelector: View {
                     }
                 }
                 .searchable(
-                    text: $searchPhrase,
+                    text: $query,
                     placement: .navigationBarDrawer(displayMode: .always),
                     prompt: "Filter sites"
                 )
@@ -160,14 +160,14 @@ struct SiteAndFacilitySelector: View {
                 // Setting the `updateViewModel` flag false allows
                 // `selectedSite` to receive upstream updates from the view
                 // model without republishing them back up to the view model.
-                updateViewModel = false
+                shouldUpdateViewModel = false
                 selectedSite = viewModel.selectedSite
             }
             .onChange(of: selectedSite) { _ in  
-                   if updateViewModel, let site = selectedSite {
+                   if shouldUpdateViewModel, let site = selectedSite {
                        viewModel.setSite(site, zoomTo: true)
                    }
-                   updateViewModel = true
+                   shouldUpdateViewModel = true
             }
         }
     }
@@ -178,7 +178,7 @@ struct SiteAndFacilitySelector: View {
         @EnvironmentObject var viewModel: FloorFilterViewModel
         
         /// A facility name filter phrase entered by the user.
-        @State var searchPhrase: String = ""
+        @State var query: String = ""
         
         /// When `true`, the facilites list will be display with all sites styling.
         let allSiteStyle: Bool
@@ -192,11 +192,11 @@ struct SiteAndFacilitySelector: View {
         /// A subset of `facilities` with names containing `searchPhrase` or all
         /// `facilities` if `searchPhrase` is empty.
         var matchingFacilities: [FloorFacility] {
-            if searchPhrase.isEmpty {
+            if query.isEmpty {
                 return facilities
             }
             return facilities.filter {
-                $0.name.lowercased().contains(searchPhrase.lowercased())
+                $0.name.lowercased().contains(query.lowercased())
             }
         }
         
@@ -209,7 +209,7 @@ struct SiteAndFacilitySelector: View {
                 }
             }
             .searchable(
-                text: $searchPhrase,
+                text: $query,
                 placement: .navigationBarDrawer(displayMode: .always),
                 prompt: "Filter facilities"
             )
@@ -250,7 +250,7 @@ struct SiteAndFacilitySelector: View {
                                 )
                             if allSiteStyle, let siteName = facility.site?.name {
                                 Text(siteName)
-                                    .fontWeight(.light)
+                                    .fontWeight(.regular)
                                     .frame(
                                         maxWidth: .infinity,
                                         alignment: .leading

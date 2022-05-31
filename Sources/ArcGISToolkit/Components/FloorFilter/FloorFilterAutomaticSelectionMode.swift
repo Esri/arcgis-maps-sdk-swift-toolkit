@@ -19,6 +19,6 @@ public enum FloorFilterAutomaticSelectionMode {
     /// Only update the selection when there is a new site or facility in the current viewpoint; don't clear
     /// selection when the user navigates away.
     case alwaysNotClearing
-    /// Never update selection based on the GeoView's current viewpoint.
+    /// Never update selection based on the map or scene view's current viewpoint.
     case never
 }
