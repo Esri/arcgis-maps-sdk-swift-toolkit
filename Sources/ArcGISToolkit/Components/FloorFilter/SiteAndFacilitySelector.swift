@@ -189,7 +189,7 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ A facility name filter phrase entered by the user.
-***REMOVED******REMOVED***@State var searchPhrase: String = ""
+***REMOVED******REMOVED***@State var query: String = ""
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ `FloorFacility`s to be displayed by this view.
 ***REMOVED******REMOVED***let facilities: [FloorFacility]
@@ -203,11 +203,11 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED***/ A subset of `facilities` with names containing `searchPhrase` or all
 ***REMOVED******REMOVED******REMOVED***/ `facilities` if `searchPhrase` is empty.
 ***REMOVED******REMOVED***var matchingFacilities: [FloorFacility] {
-***REMOVED******REMOVED******REMOVED***if searchPhrase.isEmpty {
+***REMOVED******REMOVED******REMOVED***if query.isEmpty {
 ***REMOVED******REMOVED******REMOVED******REMOVED***return facilities
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***return facilities.filter {
-***REMOVED******REMOVED******REMOVED******REMOVED***$0.name.lowercased().contains(searchPhrase.lowercased())
+***REMOVED******REMOVED******REMOVED******REMOVED***$0.name.lowercased().contains(query.lowercased())
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***
@@ -250,7 +250,7 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***CloseButton { isHidden.toggle() ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***TextField("Filter facilities", text: $searchPhrase)
+***REMOVED******REMOVED******REMOVED******REMOVED***TextField("Filter facilities", text: $query)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.keyboardType(.alphabet)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.disableAutocorrection(true)
 ***REMOVED******REMOVED******REMOVED******REMOVED***if matchingFacilities.isEmpty {
