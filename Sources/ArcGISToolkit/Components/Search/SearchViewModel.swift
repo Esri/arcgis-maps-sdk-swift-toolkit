@@ -106,7 +106,7 @@ public enum SearchOutcome {
             guard !isEligibleForRequery else { return }
             
             // Check center difference.
-            let centerDiff = try? GeometryEngine.distance(
+            let centerDiff = GeometryEngine.distance(
                 from: lastExtent.center,
                 to: newExtent.center
             )
@@ -414,7 +414,7 @@ private extension Symbol {
     static func searchResult() -> MarkerSymbol {
         let image = UIImage.mapPin
         let symbol = PictureMarkerSymbol(image: image)
-        symbol.offsetY = Float(image.size.height / 2.0)
+        symbol.offsetY = image.size.height / 2.0
         return symbol
     }
 }
