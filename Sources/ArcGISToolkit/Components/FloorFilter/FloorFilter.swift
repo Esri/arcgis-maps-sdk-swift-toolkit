@@ -66,14 +66,14 @@ public struct FloorFilter: View {
 ***REMOVED***@ViewBuilder private var levelSelector: some View {
 ***REMOVED******REMOVED***LevelSelector(
 ***REMOVED******REMOVED******REMOVED***levels: viewModel.sortedLevels,
-***REMOVED******REMOVED******REMOVED***isTopAligned: topAligned
+***REMOVED******REMOVED******REMOVED***isTopAligned: isTopAligned
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ A view that allows selecting between levels.
 ***REMOVED***private var floorFilter: some View {
 ***REMOVED******REMOVED***VStack {
-***REMOVED******REMOVED******REMOVED***if topAligned {
+***REMOVED******REMOVED******REMOVED***if isTopAligned {
 ***REMOVED******REMOVED******REMOVED******REMOVED***sitesAndFacilitiesButton
 ***REMOVED******REMOVED******REMOVED******REMOVED***if viewModel.hasLevelsToDisplay {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Divider()
@@ -103,7 +103,7 @@ public struct FloorFilter: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Indicates that the selector should be presented with a top oriented aligment configuration.
-***REMOVED***private var topAligned: Bool {
+***REMOVED***private var isTopAligned: Bool {
 ***REMOVED******REMOVED***alignment.vertical == .top
 ***REMOVED***
 ***REMOVED***
