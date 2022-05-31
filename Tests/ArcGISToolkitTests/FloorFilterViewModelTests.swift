@@ -27,11 +27,9 @@ final class FloorFilterViewModelTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***forWebMapWithIdentifier: .testMap
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***var _viewpoint: Viewpoint? = nil
-***REMOVED******REMOVED***let viewpoint = Binding(get: { _viewpoint ***REMOVED***, set: { _viewpoint = $0 ***REMOVED***)
 ***REMOVED******REMOVED***let viewModel = FloorFilterViewModel(
 ***REMOVED******REMOVED******REMOVED***floorManager: floorManager,
-***REMOVED******REMOVED******REMOVED***viewpoint: viewpoint
+***REMOVED******REMOVED******REMOVED***viewpoint: .constant(.researchAnnexLattice)
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertFalse(viewModel.sites.isEmpty)
