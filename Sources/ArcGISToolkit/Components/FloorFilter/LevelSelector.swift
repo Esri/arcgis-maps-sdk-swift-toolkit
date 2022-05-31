@@ -38,7 +38,7 @@ struct LevelSelector: View {
     
     public var body: some View {
         if !isCollapsed,
-            levels.count > 1 {
+           levels.count > 1 {
             VStack {
                 if !isTopAligned {
                     makeCollapseButton()
@@ -112,7 +112,7 @@ private struct LevelsStack: View {
     }
 }
 
-struct LevelNameFormat: ViewModifier {
+private struct LevelNameFormat: ViewModifier {
     func body(content: Content) -> some View {
         content
             .lineLimit(1)
