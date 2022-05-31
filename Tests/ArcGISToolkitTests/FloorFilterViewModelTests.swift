@@ -18,7 +18,7 @@ import XCTest
 @testable import ArcGISToolkit
 
 @MainActor
-class FloorFilterViewModelTests: XCTestCase {
+final class FloorFilterViewModelTests: XCTestCase {
     /// Tests that a `FloorFilterViewModel` succesfully initializes with a `FloorManager` and
     /// `Binding<Viewpoint?>`.`
     func testInitFloorFilterViewModelWithFloorManagerAndViewpoint() async {
