@@ -19,7 +19,7 @@ import Combine
 @MainActor
 final class FloorFilterViewModel: ObservableObject {
 ***REMOVED******REMOVED***/  A selected site, floor, or level.
-***REMOVED***enum Selection {
+***REMOVED***enum Selection: Hashable {
 ***REMOVED******REMOVED******REMOVED***/ A selected site.
 ***REMOVED******REMOVED***case site(FloorSite)
 ***REMOVED******REMOVED******REMOVED***/ A selected facility.
@@ -316,5 +316,3 @@ final class FloorFilterViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-
-extension FloorFilterViewModel.Selection: Hashable { ***REMOVED***

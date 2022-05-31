@@ -22,7 +22,7 @@ struct LevelSelector: View {
 ***REMOVED******REMOVED***/ A Boolean value indicating the whether the view shows only the selected level or all levels.
 ***REMOVED******REMOVED***/ If the value is`false`, the view will display all levels; if it is `true`, the view will only display
 ***REMOVED******REMOVED***/ the selected level.
-***REMOVED***@State var isCollapsed: Bool = false
+***REMOVED***@State private var isCollapsed: Bool = false
 ***REMOVED***
 ***REMOVED******REMOVED***/ The alignment configuration.
 ***REMOVED***let isTopAligned: Bool
@@ -30,7 +30,7 @@ struct LevelSelector: View {
 ***REMOVED******REMOVED***/ The levels to display.
 ***REMOVED***let levels: [FloorLevel]
 ***REMOVED***
-***REMOVED******REMOVED***/ Returns the short name of the currently selected level, the first level or "None" if none of the listed
+***REMOVED******REMOVED***/ The short name of the currently selected level, the first level, or "None" if none of the levels
 ***REMOVED******REMOVED***/ are available.
 ***REMOVED***private var selectedLevelName: String {
 ***REMOVED******REMOVED***viewModel.selectedLevel?.shortName ?? ""
@@ -41,32 +41,39 @@ struct LevelSelector: View {
 ***REMOVED******REMOVED******REMOVED***levels.count > 1 {
 ***REMOVED******REMOVED******REMOVED***VStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if !isTopAligned {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***CollapseButton(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isCollapsed: $isCollapsed,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isTopAligned: isTopAligned
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeCollapseButton()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Divider()
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***LevelsStack(levels: levels)
 ***REMOVED******REMOVED******REMOVED******REMOVED***if isTopAligned {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Divider()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***CollapseButton(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isCollapsed: $isCollapsed,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isTopAligned: isTopAligned
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeCollapseButton()
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED***Toggle(isOn: $isCollapsed) {
-***REMOVED******REMOVED******REMOVED******REMOVED***LevelText(levelName: selectedLevelName)
+***REMOVED******REMOVED******REMOVED******REMOVED***Text(selectedLevelName)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.modifier(LevelNameFormat())
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.toggleStyle(.selectedButton)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ A button used to collapse the floor level list.
+***REMOVED***@ViewBuilder func makeCollapseButton() -> some View {
+***REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED***withAnimation {
+***REMOVED******REMOVED******REMOVED******REMOVED***isCollapsed.toggle()
+***REMOVED******REMOVED***
+***REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED***Image(systemName: isTopAligned ? "chevron.up.circle" : "chevron.down.circle")
+***REMOVED******REMOVED******REMOVED******REMOVED***.padding(.esriInsets)
+***REMOVED***
+***REMOVED***
+***REMOVED***
 
 ***REMOVED***/ A vertical list of floor levels.
-struct LevelsStack: View {
+private struct LevelsStack: View {
 ***REMOVED******REMOVED***/ The view model used by the `LevelsView`.
 ***REMOVED***@EnvironmentObject var viewModel: FloorFilterViewModel
 ***REMOVED***
@@ -92,7 +99,8 @@ struct LevelsStack: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***LevelText(levelName: level.shortName)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(level.shortName)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.modifier(LevelNameFormat())
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.toggleStyle(.selectableButton)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
@@ -115,35 +123,11 @@ struct LevelsStack: View {
 ***REMOVED***
 ***REMOVED***
 
-***REMOVED***/ Intended to display the name of a level.
-struct LevelText: View {
-***REMOVED******REMOVED***/ The name of the level to be displayed.
-***REMOVED***var levelName: String
-***REMOVED***
-***REMOVED***var body: some View {
-***REMOVED******REMOVED***Text(levelName)
+struct LevelNameFormat: ViewModifier {
+***REMOVED***func body(content: Content) -> some View {
+***REMOVED******REMOVED***content
 ***REMOVED******REMOVED******REMOVED***.lineLimit(1)
 ***REMOVED******REMOVED******REMOVED***.fixedSize()
 ***REMOVED******REMOVED******REMOVED***.frame(minWidth: 40)
-***REMOVED***
-***REMOVED***
-
-***REMOVED***/ A button used to collapse the floor level list.
-struct CollapseButton: View {
-***REMOVED******REMOVED***/ Allows the user to toggle the visibility of the site and facility selector.
-***REMOVED***@Binding var isCollapsed: Bool
-***REMOVED***
-***REMOVED******REMOVED***/ The alignment configuration.
-***REMOVED***let isTopAligned: Bool
-***REMOVED***
-***REMOVED***var body: some View {
-***REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED***withAnimation {
-***REMOVED******REMOVED******REMOVED******REMOVED***isCollapsed.toggle()
-***REMOVED******REMOVED***
-***REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED***Image(systemName: isTopAligned ? "chevron.up.circle" : "chevron.down.circle")
-***REMOVED******REMOVED******REMOVED******REMOVED***.padding(EdgeInsets.esriInsets)
-***REMOVED***
 ***REMOVED***
 ***REMOVED***

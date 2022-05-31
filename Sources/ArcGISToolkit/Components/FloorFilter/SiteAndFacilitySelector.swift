@@ -16,7 +16,7 @@
 
 ***REMOVED***/ A view which allows selection of sites and facilities represented in a `FloorManager`.
 struct SiteAndFacilitySelector: View {
-***REMOVED******REMOVED***/ Creates a `SiteAndFacilitySelector`
+***REMOVED******REMOVED***/ Creates a `SiteAndFacilitySelector`.
 ***REMOVED******REMOVED***/ - Parameter isHidden: A binding used to dismiss the site selector.
 ***REMOVED***init(isHidden: Binding<Bool>) {
 ***REMOVED******REMOVED***self.isHidden = isHidden
@@ -38,13 +38,13 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED***@EnvironmentObject var viewModel: FloorFilterViewModel
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ Indicates whether the view model should be notified of the selection update.
-***REMOVED******REMOVED***@State private var updateViewModel = true
+***REMOVED******REMOVED***@State private var shouldUpdateViewModel = true
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ Indicates that the keyboard is animating and some views may require reload.
-***REMOVED******REMOVED***@State private var keyboardAnimating = false
+***REMOVED******REMOVED***@State private var isKeyboardAnimating = false
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ A site name filter phrase entered by the user.
-***REMOVED******REMOVED***@State private var searchPhrase: String = ""
+***REMOVED******REMOVED***@State private var query: String = ""
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ A local record of the site selected in the view model.
 ***REMOVED******REMOVED******REMOVED***/
@@ -59,11 +59,11 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED***/ A subset of `sites` with names containing `searchPhrase` or all `sites` if
 ***REMOVED******REMOVED******REMOVED***/ `searchPhrase` is empty.
 ***REMOVED******REMOVED***var matchingSites: [FloorSite] {
-***REMOVED******REMOVED******REMOVED***if searchPhrase.isEmpty {
+***REMOVED******REMOVED******REMOVED***if query.isEmpty {
 ***REMOVED******REMOVED******REMOVED******REMOVED***return viewModel.sites
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***return viewModel.sites.filter {
-***REMOVED******REMOVED******REMOVED******REMOVED***$0.name.lowercased().contains(searchPhrase.lowercased())
+***REMOVED******REMOVED******REMOVED******REMOVED***$0.name.lowercased().contains(query.lowercased())
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***
@@ -71,7 +71,7 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED***siteListAndFilterView
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Trigger a reload on keyboard frame changes for proper layout
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** across all devices.
-***REMOVED******REMOVED******REMOVED******REMOVED***.opacity(keyboardAnimating ? 0.99 : 1.0)
+***REMOVED******REMOVED******REMOVED******REMOVED***.opacity(isKeyboardAnimating ? 0.99 : 1.0)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.navigationViewStyle(.stack)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onReceive(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***NotificationCenter.default.publisher(
@@ -79,7 +79,7 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***) { _ in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***withAnimation {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***keyboardAnimating = true
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isKeyboardAnimating = true
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onReceive(
@@ -88,7 +88,7 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***) { _ in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***withAnimation {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***keyboardAnimating = false
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isKeyboardAnimating = false
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED***
@@ -113,7 +113,7 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***NavigationLink("All sites") {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FacilitiesList(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***allSiteStyle: true,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***facilities: viewModel.sites.flatMap({ $0.facilities ***REMOVED***),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***facilities: viewModel.sites.flatMap(\.facilities),
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isHidden: isHidden
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
@@ -121,7 +121,7 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.searchable(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***text: $searchPhrase,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***text: $query,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***placement: .navigationBarDrawer(displayMode: .always),
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***prompt: "Filter sites"
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
@@ -160,14 +160,14 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Setting the `updateViewModel` flag false allows
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** `selectedSite` to receive upstream updates from the view
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** model without republishing them back up to the view model.
-***REMOVED******REMOVED******REMOVED******REMOVED***updateViewModel = false
+***REMOVED******REMOVED******REMOVED******REMOVED***shouldUpdateViewModel = false
 ***REMOVED******REMOVED******REMOVED******REMOVED***selectedSite = viewModel.selectedSite
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onChange(of: selectedSite) { _ in  
-***REMOVED******REMOVED******REMOVED******REMOVED***   if updateViewModel, let site = selectedSite {
+***REMOVED******REMOVED******REMOVED******REMOVED***   if shouldUpdateViewModel, let site = selectedSite {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***   viewModel.setSite(site, zoomTo: true)
 ***REMOVED******REMOVED***   ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***   updateViewModel = true
+***REMOVED******REMOVED******REMOVED******REMOVED***   shouldUpdateViewModel = true
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -178,7 +178,7 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED***@EnvironmentObject var viewModel: FloorFilterViewModel
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ A facility name filter phrase entered by the user.
-***REMOVED******REMOVED***@State var searchPhrase: String = ""
+***REMOVED******REMOVED***@State var query: String = ""
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ When `true`, the facilites list will be display with all sites styling.
 ***REMOVED******REMOVED***let allSiteStyle: Bool
@@ -192,11 +192,11 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED***/ A subset of `facilities` with names containing `searchPhrase` or all
 ***REMOVED******REMOVED******REMOVED***/ `facilities` if `searchPhrase` is empty.
 ***REMOVED******REMOVED***var matchingFacilities: [FloorFacility] {
-***REMOVED******REMOVED******REMOVED***if searchPhrase.isEmpty {
+***REMOVED******REMOVED******REMOVED***if query.isEmpty {
 ***REMOVED******REMOVED******REMOVED******REMOVED***return facilities
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***return facilities.filter {
-***REMOVED******REMOVED******REMOVED******REMOVED***$0.name.lowercased().contains(searchPhrase.lowercased())
+***REMOVED******REMOVED******REMOVED******REMOVED***$0.name.lowercased().contains(query.lowercased())
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***
@@ -209,7 +209,7 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.searchable(
-***REMOVED******REMOVED******REMOVED******REMOVED***text: $searchPhrase,
+***REMOVED******REMOVED******REMOVED******REMOVED***text: $query,
 ***REMOVED******REMOVED******REMOVED******REMOVED***placement: .navigationBarDrawer(displayMode: .always),
 ***REMOVED******REMOVED******REMOVED******REMOVED***prompt: "Filter facilities"
 ***REMOVED******REMOVED******REMOVED***)
@@ -250,7 +250,7 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if allSiteStyle, let siteName = facility.site?.name {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(siteName)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fontWeight(.light)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fontWeight(.regular)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***maxWidth: .infinity,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***alignment: .leading
