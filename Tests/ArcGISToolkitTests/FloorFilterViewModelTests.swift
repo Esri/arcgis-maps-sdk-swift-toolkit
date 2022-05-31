@@ -27,11 +27,9 @@ final class FloorFilterViewModelTests: XCTestCase {
             forWebMapWithIdentifier: .testMap
         )
         
-        var _viewpoint: Viewpoint? = nil
-        let viewpoint = Binding(get: { _viewpoint }, set: { _viewpoint = $0 })
         let viewModel = FloorFilterViewModel(
             floorManager: floorManager,
-            viewpoint: viewpoint
+            viewpoint: .constant(.researchAnnexLattice)
         )
         
         XCTAssertFalse(viewModel.sites.isEmpty)
