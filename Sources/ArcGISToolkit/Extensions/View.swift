@@ -37,7 +37,7 @@ extension View {
     /// Returns a new `View` that allows a parent `View` to be informed of a child view's size.
     /// - Parameter perform: The closure to be executed when the content size of the receiver
     /// changes.
-    /// - Returns: The modified view.
+    /// - Returns: A new `View`.
     func onSizeChange(perform: @escaping (CGSize) -> Void) -> some View {
         background(
             GeometryReader { geometry in
@@ -52,7 +52,7 @@ extension View {
     
     /// View modifier used to denote the view is selected.
     /// - Parameter isSelected: `true` if the view is selected, `false` otherwise.
-    /// - Returns: A new `View`.
+    /// - Returns: The modified view.
     func selected(
         _ isSelected: Bool = false
     ) -> some View {
