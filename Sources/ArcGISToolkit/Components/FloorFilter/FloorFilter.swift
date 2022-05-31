@@ -76,7 +76,7 @@ public struct FloorFilter: View {
             siteAndFacilitySelectorIsPresented.toggle()
         } label: {
             Image(systemName: "building.2")
-                .padding(.esriInsets)
+                .padding(.toolkitDefault)
         }
         .sheet(
             isAllowed: isCompact,
