@@ -211,18 +211,6 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ Determines the SF Symbols image name to represent selection/non-selection of a facility.
-***REMOVED******REMOVED******REMOVED***/ - Parameter facility: The facility of interest
-***REMOVED******REMOVED******REMOVED***/ - Returns: "circle.fill" if the facility is marked selected or "cirlce" if the facility is not selected
-***REMOVED******REMOVED******REMOVED***/ in the view model.
-***REMOVED******REMOVED***func imageFor(_ facility: FloorFacility) -> String {
-***REMOVED******REMOVED******REMOVED***if facility.id == viewModel.selectedFacility?.id {
-***REMOVED******REMOVED******REMOVED******REMOVED***return "circle.fill"
-***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***return "circle"
-***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var body: some View {
 ***REMOVED******REMOVED******REMOVED***if presentationStyle == .singleSite {
 ***REMOVED******REMOVED******REMOVED******REMOVED***facilityListAndFilterView
@@ -277,7 +265,8 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isHidden.toggle()
 ***REMOVED******REMOVED******REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: imageFor(facility))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "circle")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.symbolVariant(facility.id == viewModel.selectedFacility?.id ? .fill : .none)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***VStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(facility.name)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fontWeight(.regular)
