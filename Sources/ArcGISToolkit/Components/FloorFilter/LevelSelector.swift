@@ -55,7 +55,7 @@ struct LevelSelector: View {
                 Text(selectedLevelName)
                     .modifier(LevelNameFormat())
             }
-            .toggleStyle(.button)
+            .toggleStyle(.selectedButton)
         }
     }
     
@@ -102,7 +102,7 @@ private struct LevelsStack: View {
                             Text(level.shortName)
                                 .modifier(LevelNameFormat())
                         }
-                        .toggleStyle(.button)
+                        .toggleStyle(.selectableButton)
                     }
                 }
                 .onSizeChange {
