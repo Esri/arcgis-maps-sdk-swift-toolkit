@@ -49,7 +49,7 @@ struct SiteAndFacilitySelector: View {
         @EnvironmentObject var viewModel: FloorFilterViewModel
         
         /// Indicates whether the view model should be notified of the selection update.
-        @State private var updateViewModel = true
+        @State private var shouldUpdateViewModel = true
         
         /// Indicates that the keyboard is animating and some views may require reload.
         @State private var keyboardAnimating = false
@@ -161,14 +161,14 @@ struct SiteAndFacilitySelector: View {
                 // Setting the `updateViewModel` flag false allows
                 // `selectedSite` to receive upstream updates from the view
                 // model without republishing them back up to the view model.
-                updateViewModel = false
+                shouldUpdateViewModel = false
                 selectedSite = viewModel.selectedSite
             }
             .onChange(of: selectedSite) { _ in  
-                   if updateViewModel, let site = selectedSite {
+                   if shouldUpdateViewModel, let site = selectedSite {
                        viewModel.setSite(site, zoomTo: true)
                    }
-                   updateViewModel = true
+                   shouldUpdateViewModel = true
             }
         }
     }
