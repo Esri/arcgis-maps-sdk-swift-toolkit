@@ -73,7 +73,7 @@ struct LevelSelector: View {
 ***REMOVED***
 
 ***REMOVED***/ A vertical list of floor levels.
-struct LevelsStack: View {
+private struct LevelsStack: View {
 ***REMOVED******REMOVED***/ The view model used by the `LevelsView`.
 ***REMOVED***@EnvironmentObject var viewModel: FloorFilterViewModel
 ***REMOVED***
