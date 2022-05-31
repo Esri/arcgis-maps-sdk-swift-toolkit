@@ -67,7 +67,7 @@ struct LevelSelector: View {
             }
         } label: {
             Image(systemName: isTopAligned ? "chevron.up.circle" : "chevron.down.circle")
-                .padding(.esriInsets)
+                .padding(.toolkitDefault)
         }
     }
 }
