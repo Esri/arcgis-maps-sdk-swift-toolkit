@@ -53,7 +53,9 @@ extension View {
 ***REMOVED******REMOVED***/ View modifier used to denote the view is selected.
 ***REMOVED******REMOVED***/ - Parameter isSelected: `true` if the view is selected, `false` otherwise.
 ***REMOVED******REMOVED***/ - Returns: A new `View`.
-***REMOVED***func selected(_ isSelected: Bool = false) -> some View {
+***REMOVED***func selected(
+***REMOVED******REMOVED***_ isSelected: Bool = false
+***REMOVED***) -> some View {
 ***REMOVED******REMOVED***modifier(SelectedModifier(isSelected: isSelected))
 ***REMOVED***
 ***REMOVED***
