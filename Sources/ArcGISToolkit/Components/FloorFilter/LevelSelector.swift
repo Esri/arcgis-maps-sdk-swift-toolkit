@@ -27,7 +27,7 @@ struct LevelSelector: View {
     /// The levels to display.
     let levels: [FloorLevel]
     
-    /// Returns the short name of the currently selected level, the first level or "None" if none of the listed
+    /// The short name of the currently selected level, the first level, or "None" if none of the levels
     /// are available.
     private var selectedLevelName: String {
         viewModel.selectedLevel?.shortName ?? ""
