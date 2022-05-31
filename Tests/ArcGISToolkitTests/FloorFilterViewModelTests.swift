@@ -48,10 +48,8 @@ final class FloorFilterViewModelTests: XCTestCase {
             viewpoint: viewpoint
         )
         
-        guard let site = viewModel.sites.first else {
-            XCTFail()
-            return
-        }
+        let site = try XCTUnwrap(viewModel.sites.first)
+        
         viewModel.setSite(site, zoomTo: true)
         let selectedSite = viewModel.selectedSite
         let selectedFacility = viewModel.selectedFacility
@@ -78,10 +76,8 @@ final class FloorFilterViewModelTests: XCTestCase {
             viewpoint: viewpoint
         )
         
-        guard let facility = viewModel.facilities.first else {
-            XCTFail()
-            return
-        }
+        let facility = try XCTUnwrap(viewModel.facilities.first)
+        
         viewModel.setFacility(facility, zoomTo: true)
         let selectedFacility = viewModel.selectedFacility
         let selectedLevel = viewModel.selectedLevel
@@ -109,10 +105,8 @@ final class FloorFilterViewModelTests: XCTestCase {
         )
         
         let levels = viewModel.levels
-        guard let level = levels.first else {
-            XCTFail("A first level does not exist")
-            return
-        }
+        let level = try XCTUnwrap(levels.first)
+        
         viewModel.setLevel(level)
         let selectedLevel = viewModel.selectedLevel
         XCTAssertEqual(selectedLevel, level)
@@ -135,14 +129,7 @@ final class FloorFilterViewModelTests: XCTestCase {
             forWebMapWithIdentifier: .redlandsCampusMap
         )
         
-        let viewpointLosAngeles = Viewpoint(
-            center: Point(
-                x: -13164116.3284,
-                y: 4034465.8065,
-                spatialReference: .webMercator
-            ),
-            scale: 10_000
-        )
+        let viewpointLosAngeles: Viewpoint = .losAngeles
         var _viewpoint: Viewpoint? = viewpointLosAngeles
         let viewpoint = Binding(get: { _viewpoint }, set: { _viewpoint = $0 })
         let viewModel = FloorFilterViewModel(
