@@ -16,7 +16,7 @@ import ArcGIS
 
 /// A view which allows selection of sites and facilities represented in a `FloorManager`.
 struct SiteAndFacilitySelector: View {
-    /// Creates a `SiteAndFacilitySelector`
+    /// Creates a `SiteAndFacilitySelector`.
     /// - Parameter isHidden: A binding used to dismiss the site selector.
     init(isHidden: Binding<Bool>) {
         self.isHidden = isHidden
