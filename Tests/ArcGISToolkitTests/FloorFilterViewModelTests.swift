@@ -18,7 +18,7 @@ import XCTest
 @testable ***REMOVED***Toolkit
 
 @MainActor
-class FloorFilterViewModelTests: XCTestCase {
+final class FloorFilterViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***/ Tests that a `FloorFilterViewModel` succesfully initializes with a `FloorManager` and
 ***REMOVED******REMOVED***/ `Binding<Viewpoint?>`.`
 ***REMOVED***func testInitFloorFilterViewModelWithFloorManagerAndViewpoint() async {
