@@ -55,7 +55,7 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED***@State private var isKeyboardAnimating = false
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ A site name filter phrase entered by the user.
-***REMOVED******REMOVED***@State private var searchPhrase: String = ""
+***REMOVED******REMOVED***@State private var query: String = ""
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ A local record of the site selected in the view model.
 ***REMOVED******REMOVED******REMOVED***/
@@ -73,11 +73,11 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED***/ A subset of `sites` with names containing `searchPhrase` or all `sites` if
 ***REMOVED******REMOVED******REMOVED***/ `searchPhrase` is empty.
 ***REMOVED******REMOVED***var matchingSites: [FloorSite] {
-***REMOVED******REMOVED******REMOVED***if searchPhrase.isEmpty {
+***REMOVED******REMOVED******REMOVED***if query.isEmpty {
 ***REMOVED******REMOVED******REMOVED******REMOVED***return sites
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***return sites.filter {
-***REMOVED******REMOVED******REMOVED******REMOVED***$0.name.lowercased().contains(searchPhrase.lowercased())
+***REMOVED******REMOVED******REMOVED******REMOVED***$0.name.lowercased().contains(query.lowercased())
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***
@@ -111,7 +111,7 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED***var siteListAndFilterView: some View {
 ***REMOVED******REMOVED******REMOVED***NavigationView {
 ***REMOVED******REMOVED******REMOVED******REMOVED***VStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***TextField("Filter sites", text: $searchPhrase)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***TextField("Filter sites", text: $query)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.keyboardType(.alphabet)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.disableAutocorrection(true)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if matchingSites.isEmpty {
