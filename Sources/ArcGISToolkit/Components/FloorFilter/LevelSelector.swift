@@ -73,7 +73,7 @@ struct LevelSelector: View {
 }
 
 /// A vertical list of floor levels.
-struct LevelsStack: View {
+private struct LevelsStack: View {
     /// The view model used by the `LevelsView`.
     @EnvironmentObject var viewModel: FloorFilterViewModel
     
