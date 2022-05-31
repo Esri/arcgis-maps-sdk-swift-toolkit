@@ -53,7 +53,9 @@ extension View {
     /// View modifier used to denote the view is selected.
     /// - Parameter isSelected: `true` if the view is selected, `false` otherwise.
     /// - Returns: A new `View`.
-    func selected(_ isSelected: Bool = false) -> some View {
+    func selected(
+        _ isSelected: Bool = false
+    ) -> some View {
         modifier(SelectedModifier(isSelected: isSelected))
     }
 }
