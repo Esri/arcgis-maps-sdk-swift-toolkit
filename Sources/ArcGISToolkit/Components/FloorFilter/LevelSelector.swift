@@ -41,13 +41,13 @@ struct LevelSelector: View {
             levels.count > 1 {
             VStack {
                 if !isTopAligned {
-                    CollapseButton(isCollapsed: $isCollapsed)
+                    makeCollapseButton()
                     Divider()
                 }
                 LevelsStack(levels: levels)
                 if isTopAligned {
                     Divider()
-                    CollapseButton(isCollapsed: $isCollapsed)
+                    makeCollapseButton()
                 }
             }
         } else {
@@ -56,6 +56,18 @@ struct LevelSelector: View {
                     .modifier(LevelNameFormat())
             }
             .toggleStyle(.selectedButton)
+        }
+    }
+    
+    /// A button used to collapse the floor level list.
+    @ViewBuilder func makeCollapseButton() -> some View {
+        Button {
+            withAnimation {
+                isCollapsed.toggle()
+            }
+        } label: {
+            Image(systemName: "xmark")
+                .padding(EdgeInsets.esriInsets)
         }
     }
 }
@@ -97,23 +109,6 @@ struct LevelsStack: View {
             }
         }
         .frame(maxHeight: contentHeight)
-    }
-}
-
-/// A button used to collapse the floor level list.
-struct CollapseButton: View {
-    /// Allows the user to toggle the visibility of the site and facility selector.
-    @Binding var isCollapsed: Bool
-    
-    var body: some View {
-        Button {
-            withAnimation {
-                isCollapsed.toggle()
-            }
-        } label: {
-            Image(systemName: "xmark")
-                .padding(EdgeInsets.esriInsets)
-        }
     }
 }
 
