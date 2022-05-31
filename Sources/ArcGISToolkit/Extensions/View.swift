@@ -13,25 +13,11 @@
 
 import SwiftUI
 
-/// A modifier which conditionally hides its underlying view.
-struct ConditionallyHiddenModifier: ViewModifier {
-    /// A Boolean value that indicates whether the underlying view should be hidden.
-    var isHidden: Bool
-    
-    func body(content: Content) -> some View {
-        if isHidden {
-            EmptyView()
-        } else {
-            content
-        }
-    }
-}
-
 /// A modifier which displays a background and shadow for a view. Used to represent a selected view.
 struct SelectedModifier: ViewModifier {
     /// A Boolean value that indicates whether view should display as selected.
     var isSelected: Bool
-
+    
     func body(content: Content) -> some View {
         if isSelected {
             content
@@ -48,13 +34,6 @@ struct SelectedModifier: ViewModifier {
 }
 
 extension View {
-    /// View modifier used to conditionally hide a view.
-    /// - Parameter condition: A value of `true` will hide the underlying view.
-    /// - Returns: A new `View`.
-    func hidden(_ condition: Bool) -> some View {
-        modifier(ConditionallyHiddenModifier(isHidden: condition))
-    }
-    
     /// Returns a new `View` that allows a parent `View` to be informed of a child view's size.
     /// - Parameter perform: The closure to be executed when the content size of the receiver
     /// changes.
