@@ -20,7 +20,7 @@ import XCTest
 @MainActor
 final class FloorFilterViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***/ Tests that a `FloorFilterViewModel` succesfully initializes with a `FloorManager`.`
-***REMOVED***func testInitFloorFilterViewModelWithFloorManager() async {
+***REMOVED***func testInitWithFloorManager() async {
 ***REMOVED******REMOVED***guard let map = await makeMap(),
 ***REMOVED******REMOVED******REMOVED***  let floorManager = map.floorManager else {
 ***REMOVED******REMOVED******REMOVED***return
