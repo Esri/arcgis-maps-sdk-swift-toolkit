@@ -22,7 +22,7 @@ struct LevelSelector: View {
 ***REMOVED******REMOVED***/ A Boolean value indicating the whether the view shows only the selected level or all levels.
 ***REMOVED******REMOVED***/ If the value is`false`, the view will display all levels; if it is `true`, the view will only display
 ***REMOVED******REMOVED***/ the selected level.
-***REMOVED***@State var isCollapsed: Bool = false
+***REMOVED***@State private var isCollapsed: Bool = false
 ***REMOVED***
 ***REMOVED******REMOVED***/ The levels to display.
 ***REMOVED***let levels: [FloorLevel]
