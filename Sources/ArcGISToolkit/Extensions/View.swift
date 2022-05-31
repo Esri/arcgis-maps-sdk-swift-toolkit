@@ -38,7 +38,7 @@ struct ConditionalSheetModifier<SheetContent: View>: ViewModifier {
 struct SelectedModifier: ViewModifier {
     /// A Boolean value that indicates whether view should display as selected.
     var isSelected: Bool
-    
+
     func body(content: Content) -> some View {
         if isSelected {
             content
@@ -58,7 +58,7 @@ extension View {
     /// Returns a new `View` that allows a parent `View` to be informed of a child view's size.
     /// - Parameter perform: The closure to be executed when the content size of the receiver
     /// changes.
-    /// - Returns: A new `View`.
+    /// - Returns: The modified view.
     func onSizeChange(perform: @escaping (CGSize) -> Void) -> some View {
         background(
             GeometryReader { geometry in
