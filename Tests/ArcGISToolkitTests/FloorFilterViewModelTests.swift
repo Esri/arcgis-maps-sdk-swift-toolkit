@@ -25,7 +25,7 @@ final class FloorFilterViewModelTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***forWebMapWithIdentifier: .redlandsCampusMap
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***var _viewpoint: Viewpoint? = getEsriRedlandsViewpoint()
+***REMOVED******REMOVED***var _viewpoint: Viewpoint? = .esriRedlands()
 ***REMOVED******REMOVED***let viewpoint = Binding(get: { _viewpoint ***REMOVED***, set: { _viewpoint = $0 ***REMOVED***)
 ***REMOVED******REMOVED***let viewModel = FloorFilterViewModel(
 ***REMOVED******REMOVED******REMOVED***floorManager: floorManager,
@@ -43,7 +43,7 @@ final class FloorFilterViewModelTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***forWebMapWithIdentifier: .redlandsCampusMap
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***var _viewpoint: Viewpoint? = getEsriRedlandsViewpoint()
+***REMOVED******REMOVED***var _viewpoint: Viewpoint? = .esriRedlands()
 ***REMOVED******REMOVED***let viewpoint = Binding(get: { _viewpoint ***REMOVED***, set: { _viewpoint = $0 ***REMOVED***)
 ***REMOVED******REMOVED***let viewModel = FloorFilterViewModel(
 ***REMOVED******REMOVED******REMOVED***floorManager: floorManager,
@@ -72,7 +72,7 @@ final class FloorFilterViewModelTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***forWebMapWithIdentifier: .redlandsCampusMap
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***var _viewpoint: Viewpoint? = getEsriRedlandsViewpoint(.zero)
+***REMOVED******REMOVED***var _viewpoint: Viewpoint? = .esriRedlands()
 ***REMOVED******REMOVED***let viewpoint = Binding(get: { _viewpoint ***REMOVED***, set: { _viewpoint = $0 ***REMOVED***)
 ***REMOVED******REMOVED***let viewModel = FloorFilterViewModel(
 ***REMOVED******REMOVED******REMOVED***automaticSelectionMode: .never,
@@ -102,7 +102,7 @@ final class FloorFilterViewModelTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***forWebMapWithIdentifier: .redlandsCampusMap
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***let initialViewpoint = getEsriRedlandsViewpoint(.zero)
+***REMOVED******REMOVED***let initialViewpoint: Viewpoint = .esriRedlands()
 ***REMOVED******REMOVED***var _viewpoint: Viewpoint? = initialViewpoint
 ***REMOVED******REMOVED***let viewpoint = Binding(get: { _viewpoint ***REMOVED***, set: { _viewpoint = $0 ***REMOVED***)
 ***REMOVED******REMOVED***let viewModel = FloorFilterViewModel(
@@ -160,7 +160,7 @@ final class FloorFilterViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***XCTAssertNil(selectedSite)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Viewpoint is Redlands Main Q
-***REMOVED******REMOVED***_viewpoint = getEsriRedlandsViewpoint(scale: 1000)
+***REMOVED******REMOVED***_viewpoint = .esriRedlands(scale: 1000)
 ***REMOVED******REMOVED***viewModel.automaticallySelectFacilityOrSite()
 ***REMOVED******REMOVED***selectedFacility = viewModel.selectedFacility
 ***REMOVED******REMOVED***selectedSite = viewModel.selectedSite
@@ -182,7 +182,7 @@ final class FloorFilterViewModelTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***forWebMapWithIdentifier: .redlandsCampusMap
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***var _viewpoint: Viewpoint? = getEsriRedlandsViewpoint(scale: 1000)
+***REMOVED******REMOVED***var _viewpoint: Viewpoint? = .esriRedlands(scale: 1000)
 ***REMOVED******REMOVED***let viewpoint = Binding(get: { _viewpoint ***REMOVED***, set: { _viewpoint = $0 ***REMOVED***)
 ***REMOVED******REMOVED***let viewModel = FloorFilterViewModel(
 ***REMOVED******REMOVED******REMOVED***automaticSelectionMode: .alwaysNotClearing,
@@ -191,7 +191,7 @@ final class FloorFilterViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Viewpoint is Redlands Main Q
-***REMOVED******REMOVED***_viewpoint = getEsriRedlandsViewpoint(scale: 1000)
+***REMOVED******REMOVED***_viewpoint = .esriRedlands(scale: 1000)
 ***REMOVED******REMOVED***viewModel.automaticallySelectFacilityOrSite()
 ***REMOVED******REMOVED***var selectedFacility = viewModel.selectedFacility
 ***REMOVED******REMOVED***var selectedSite = viewModel.selectedSite
@@ -228,7 +228,7 @@ final class FloorFilterViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***XCTAssertNil(selectedSite)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Viewpoint is Redlands Main Q but selection should still be nil
-***REMOVED******REMOVED***_viewpoint = getEsriRedlandsViewpoint(scale: 1000)
+***REMOVED******REMOVED***_viewpoint = .esriRedlands(scale: 1000)
 ***REMOVED******REMOVED***viewModel.automaticallySelectFacilityOrSite()
 ***REMOVED******REMOVED***selectedFacility = viewModel.selectedFacility
 ***REMOVED******REMOVED***selectedSite = viewModel.selectedSite
@@ -255,28 +255,23 @@ private extension PortalItem.ID {
 ***REMOVED***static let redlandsCampusMap = Self("7687805bd42549f5ba41237443d0c60a")!
 ***REMOVED***
 
-extension FloorFilterViewModelTests {
+private extension Point {
 ***REMOVED******REMOVED***/ The coordinates for the Redlands Esri campus.
-***REMOVED***var point: Point {
-***REMOVED******REMOVED***Point(
-***REMOVED******REMOVED******REMOVED***x: -13046157.242121734,
-***REMOVED******REMOVED******REMOVED***y: 4036329.622884897,
-***REMOVED******REMOVED******REMOVED***spatialReference: .webMercator
-***REMOVED******REMOVED***)
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ Builds viewpoints to use for tests.
-***REMOVED******REMOVED***/ - Parameter rotation: The rotation to use for the resulting viewpoint.
-***REMOVED******REMOVED***/ - Returns: A viewpoint object for tests.
-***REMOVED***func getEsriRedlandsViewpoint(
-***REMOVED******REMOVED***_ rotation: Double = .zero,
-***REMOVED******REMOVED***scale: Double = 10_000
-***REMOVED***) -> Viewpoint {
-***REMOVED******REMOVED***return Viewpoint(center: point, scale: scale, rotation: rotation)
-***REMOVED***
+***REMOVED***static let esriRedlands = Point(
+***REMOVED******REMOVED***x: -13046157.242121734,
+***REMOVED******REMOVED***y: 4036329.622884897,
+***REMOVED******REMOVED***spatialReference: .webMercator
+***REMOVED***)
 ***REMOVED***
 
 private extension Viewpoint {
+***REMOVED***static func esriRedlands(
+***REMOVED******REMOVED***scale: Double = 10_000,
+***REMOVED******REMOVED***rotation: Double = .zero
+***REMOVED***) -> Viewpoint {
+***REMOVED******REMOVED***.init(center: .esriRedlands, scale: scale, rotation: rotation)
+***REMOVED***
+***REMOVED***
 ***REMOVED***static var losAngeles: Viewpoint {
 ***REMOVED******REMOVED***Viewpoint(
 ***REMOVED******REMOVED******REMOVED***center: Point(
