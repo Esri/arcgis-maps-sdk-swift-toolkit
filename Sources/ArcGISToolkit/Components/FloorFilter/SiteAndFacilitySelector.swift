@@ -189,7 +189,7 @@ struct SiteAndFacilitySelector: View {
         }
         
         /// A facility name filter phrase entered by the user.
-        @State var searchPhrase: String = ""
+        @State var query: String = ""
         
         /// `FloorFacility`s to be displayed by this view.
         let facilities: [FloorFacility]
@@ -203,11 +203,11 @@ struct SiteAndFacilitySelector: View {
         /// A subset of `facilities` with names containing `searchPhrase` or all
         /// `facilities` if `searchPhrase` is empty.
         var matchingFacilities: [FloorFacility] {
-            if searchPhrase.isEmpty {
+            if query.isEmpty {
                 return facilities
             }
             return facilities.filter {
-                $0.name.lowercased().contains(searchPhrase.lowercased())
+                $0.name.lowercased().contains(query.lowercased())
             }
         }
         
@@ -250,7 +250,7 @@ struct SiteAndFacilitySelector: View {
                         CloseButton { isHidden.toggle() }
                     }
                 }
-                TextField("Filter facilities", text: $searchPhrase)
+                TextField("Filter facilities", text: $query)
                     .keyboardType(.alphabet)
                     .disableAutocorrection(true)
                 if matchingFacilities.isEmpty {
