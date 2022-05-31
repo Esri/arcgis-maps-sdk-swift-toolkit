@@ -38,7 +38,7 @@ struct LevelSelector: View {
 ***REMOVED***
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***if !isCollapsed,
-***REMOVED******REMOVED******REMOVED***levels.count > 1 {
+***REMOVED******REMOVED***   levels.count > 1 {
 ***REMOVED******REMOVED******REMOVED***VStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if !isTopAligned {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeCollapseButton()
@@ -112,7 +112,7 @@ private struct LevelsStack: View {
 ***REMOVED***
 ***REMOVED***
 
-struct LevelNameFormat: ViewModifier {
+private struct LevelNameFormat: ViewModifier {
 ***REMOVED***func body(content: Content) -> some View {
 ***REMOVED******REMOVED***content
 ***REMOVED******REMOVED******REMOVED***.lineLimit(1)
