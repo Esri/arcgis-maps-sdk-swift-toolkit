@@ -19,11 +19,6 @@ import XCTest
 
 @MainActor
 class FloorFilterViewModelTests: XCTestCase {
-    /// Applies credentials necessary to run tests.
-    override func setUp() async throws {
-        await addCredentials()
-    }
-    
     /// Tests that a `FloorFilterViewModel` succesfully initializes with a `FloorManager`.`
     func testInitFloorFilterViewModelWithFloorManager() async {
         guard let map = await makeMap(),
