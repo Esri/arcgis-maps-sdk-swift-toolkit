@@ -32,9 +32,9 @@ public struct FloorFilter: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a `FloorFilter`.
 ***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - floorManager: The floor manager used by the `FloorFilter`.
 ***REMOVED******REMOVED***/   - alignment: Determines the display configuration of Floor Filter elements.
 ***REMOVED******REMOVED***/   - automaticSelectionMode: The selection behavior of the floor filter.
-***REMOVED******REMOVED***/   - floorManager: The floor manager used by the `FloorFilter`.
 ***REMOVED******REMOVED***/   - viewpoint: Viewpoint updated when the selected site or facility changes.
 ***REMOVED***public init(
 ***REMOVED******REMOVED***floorManager: FloorManager,
@@ -64,7 +64,7 @@ public struct FloorFilter: View {
 ***REMOVED***private let alignment: Alignment
 ***REMOVED***
 ***REMOVED******REMOVED***/ The width of the level selector.
-***REMOVED***private var filterWidth: Double = 60
+***REMOVED***private let filterWidth: CGFloat = 60
 ***REMOVED***
 ***REMOVED******REMOVED***/ The `Viewpoint` used to pan/zoom to the selected site/facilty.
 ***REMOVED******REMOVED***/ If `nil`, there will be no automatic pan/zoom operations or automatic selection support.
@@ -76,7 +76,7 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED******REMOVED***siteAndFacilitySelectorIsPresented.toggle()
 ***REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED***Image(systemName: "building.2")
-***REMOVED******REMOVED******REMOVED******REMOVED***.padding(EdgeInsets.esriInsets)
+***REMOVED******REMOVED******REMOVED******REMOVED***.padding(.esriInsets)
 ***REMOVED***
 ***REMOVED******REMOVED***.sheet(
 ***REMOVED******REMOVED******REMOVED***isAllowed: isCompact,
