@@ -16,7 +16,7 @@
 
 ***REMOVED***/ A view which allows selection of sites and facilities represented in a `FloorManager`.
 struct SiteAndFacilitySelector: View {
-***REMOVED******REMOVED***/ Creates a `SiteAndFacilitySelector`
+***REMOVED******REMOVED***/ Creates a `SiteAndFacilitySelector`.
 ***REMOVED******REMOVED***/ - Parameter isHidden: A binding used to dismiss the site selector.
 ***REMOVED***init(isHidden: Binding<Bool>) {
 ***REMOVED******REMOVED***self.isHidden = isHidden
