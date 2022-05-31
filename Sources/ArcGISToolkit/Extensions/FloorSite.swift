@@ -22,7 +22,6 @@ extension FloorSite: Equatable {
 
 extension FloorSite: Hashable {
     public func hash(into hasher: inout Hasher) {
-        hasher.combine(self.id)
-        hasher.combine(self.name)
+        hasher.combine(id)
     }
 }
