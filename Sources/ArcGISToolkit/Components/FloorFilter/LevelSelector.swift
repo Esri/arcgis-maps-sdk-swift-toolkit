@@ -41,13 +41,13 @@ struct LevelSelector: View {
 ***REMOVED******REMOVED******REMOVED***levels.count > 1 {
 ***REMOVED******REMOVED******REMOVED***VStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if !isTopAligned {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***CollapseButton(isCollapsed: $isCollapsed)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeCollapseButton()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Divider()
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***LevelsStack(levels: levels)
 ***REMOVED******REMOVED******REMOVED******REMOVED***if isTopAligned {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Divider()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***CollapseButton(isCollapsed: $isCollapsed)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeCollapseButton()
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED*** else {
@@ -56,6 +56,18 @@ struct LevelSelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.modifier(LevelNameFormat())
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.toggleStyle(.selectedButton)
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ A button used to collapse the floor level list.
+***REMOVED***@ViewBuilder func makeCollapseButton() -> some View {
+***REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED***withAnimation {
+***REMOVED******REMOVED******REMOVED******REMOVED***isCollapsed.toggle()
+***REMOVED******REMOVED***
+***REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED***Image(systemName: "xmark")
+***REMOVED******REMOVED******REMOVED******REMOVED***.padding(EdgeInsets.esriInsets)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -97,23 +109,6 @@ struct LevelsStack: View {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.frame(maxHeight: contentHeight)
-***REMOVED***
-***REMOVED***
-
-***REMOVED***/ A button used to collapse the floor level list.
-struct CollapseButton: View {
-***REMOVED******REMOVED***/ Allows the user to toggle the visibility of the site and facility selector.
-***REMOVED***@Binding var isCollapsed: Bool
-***REMOVED***
-***REMOVED***var body: some View {
-***REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED***withAnimation {
-***REMOVED******REMOVED******REMOVED******REMOVED***isCollapsed.toggle()
-***REMOVED******REMOVED***
-***REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED***Image(systemName: "xmark")
-***REMOVED******REMOVED******REMOVED******REMOVED***.padding(EdgeInsets.esriInsets)
-***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
