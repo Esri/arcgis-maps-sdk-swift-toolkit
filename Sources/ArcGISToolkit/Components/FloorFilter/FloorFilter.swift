@@ -92,7 +92,7 @@ public struct FloorFilter: View {
     /// A view that allows selecting between levels.
     private var floorFilter: some View {
         VStack {
-            if topAligned {
+            if isTopAligned {
                 sitesAndFacilitiesButton
                 if viewModel.hasLevelsToDisplay {
                     Divider()
@@ -116,14 +116,14 @@ public struct FloorFilter: View {
     }
     
     /// Indicates that the selector should be presented with a top oriented aligment configuration.
-    private var topAligned: Bool {
+    private var isTopAligned: Bool {
         alignment.vertical == .top
     }
     
     /// Displays the available levels.
     @ViewBuilder private var levelSelector: some View {
         LevelSelector(
-            isTopAligned: topAligned,
+            isTopAligned: isTopAligned,
             levels: viewModel.sortedLevels
         )
     }
