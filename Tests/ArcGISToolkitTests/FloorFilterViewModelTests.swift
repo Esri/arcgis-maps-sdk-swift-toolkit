@@ -21,7 +21,7 @@ import XCTest
 final class FloorFilterViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***/ Tests that a `FloorFilterViewModel` succesfully initializes with a `FloorManager`.`
 ***REMOVED***func testInitWithFloorManagerAndViewpoint() async throws {
-***REMOVED******REMOVED***let floorManager = try  await floorManager(
+***REMOVED******REMOVED***let floorManager = try await floorManager(
 ***REMOVED******REMOVED******REMOVED***forWebMapWithIdentifier: .redlandsCampusMap
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
@@ -39,7 +39,7 @@ final class FloorFilterViewModelTests: XCTestCase {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Confirms that the selected site/facility/level properties and the viewpoint are correctly updated.
 ***REMOVED***func testSetSite() async throws {
-***REMOVED******REMOVED***let floorManager = try  await floorManager(
+***REMOVED******REMOVED***let floorManager = try await floorManager(
 ***REMOVED******REMOVED******REMOVED***forWebMapWithIdentifier: .redlandsCampusMap
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
@@ -68,7 +68,7 @@ final class FloorFilterViewModelTests: XCTestCase {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func testSetFacility() async throws {
-***REMOVED******REMOVED***let floorManager = try  await floorManager(
+***REMOVED******REMOVED***let floorManager = try await floorManager(
 ***REMOVED******REMOVED******REMOVED***forWebMapWithIdentifier: .redlandsCampusMap
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
@@ -98,7 +98,7 @@ final class FloorFilterViewModelTests: XCTestCase {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Confirms that the selected site/facility/level properties and the viewpoint are correctly updated.
 ***REMOVED***func testSetLevel() async throws {
-***REMOVED******REMOVED***let floorManager = try  await floorManager(
+***REMOVED******REMOVED***let floorManager = try await floorManager(
 ***REMOVED******REMOVED******REMOVED***forWebMapWithIdentifier: .redlandsCampusMap
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
@@ -133,7 +133,7 @@ final class FloorFilterViewModelTests: XCTestCase {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Confirms that the selected site/facility/level properties and the viewpoint are correctly updated.
 ***REMOVED***func testAutoSelectAlways() async throws {
-***REMOVED******REMOVED***let floorManager = try  await floorManager(
+***REMOVED******REMOVED***let floorManager = try await floorManager(
 ***REMOVED******REMOVED******REMOVED***forWebMapWithIdentifier: .redlandsCampusMap
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
@@ -178,7 +178,7 @@ final class FloorFilterViewModelTests: XCTestCase {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Confirms that the selected site/facility/level properties and the viewpoint are correctly updated.
 ***REMOVED***func testAutoSelectAlwaysNotClearing() async throws {
-***REMOVED******REMOVED***let floorManager = try  await floorManager(
+***REMOVED******REMOVED***let floorManager = try await floorManager(
 ***REMOVED******REMOVED******REMOVED***forWebMapWithIdentifier: .redlandsCampusMap
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
@@ -209,7 +209,7 @@ final class FloorFilterViewModelTests: XCTestCase {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Confirms that the selected site/facility/level properties and the viewpoint are correctly updated.
 ***REMOVED***func testAutoSelectNever() async throws {
-***REMOVED******REMOVED***let floorManager = try  await floorManager(
+***REMOVED******REMOVED***let floorManager = try await floorManager(
 ***REMOVED******REMOVED******REMOVED***forWebMapWithIdentifier: .redlandsCampusMap
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
