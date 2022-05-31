@@ -32,9 +32,9 @@ public struct FloorFilter: View {
     
     /// Creates a `FloorFilter`.
     /// - Parameters:
+    ///   - floorManager: The floor manager used by the `FloorFilter`.
     ///   - alignment: Determines the display configuration of Floor Filter elements.
     ///   - automaticSelectionMode: The selection behavior of the floor filter.
-    ///   - floorManager: The floor manager used by the `FloorFilter`.
     ///   - viewpoint: Viewpoint updated when the selected site or facility changes.
     public init(
         floorManager: FloorManager,
@@ -64,7 +64,7 @@ public struct FloorFilter: View {
     private let alignment: Alignment
     
     /// The width of the level selector.
-    private var filterWidth: Double = 60
+    private let filterWidth: CGFloat = 60
     
     /// The `Viewpoint` used to pan/zoom to the selected site/facilty.
     /// If `nil`, there will be no automatic pan/zoom operations or automatic selection support.
@@ -76,7 +76,7 @@ public struct FloorFilter: View {
             siteAndFacilitySelectorIsPresented.toggle()
         } label: {
             Image(systemName: "building.2")
-                .padding(EdgeInsets.esriInsets)
+                .padding(.esriInsets)
         }
         .sheet(
             isAllowed: isCompact,
