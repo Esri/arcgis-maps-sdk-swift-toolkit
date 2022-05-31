@@ -25,11 +25,9 @@ final class FloorFilterViewModelTests: XCTestCase {
             forWebMapWithIdentifier: .redlandsCampusMap
         )
         
-        var _viewpoint: Viewpoint? = .esriRedlands()
-        let viewpoint = Binding(get: { _viewpoint }, set: { _viewpoint = $0 })
         let viewModel = FloorFilterViewModel(
             floorManager: floorManager,
-            viewpoint: viewpoint
+            viewpoint: .constant(.esriRedlands())
         )
         
         XCTAssertFalse(viewModel.sites.isEmpty)
