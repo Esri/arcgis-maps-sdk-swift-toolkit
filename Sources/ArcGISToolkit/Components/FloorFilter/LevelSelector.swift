@@ -27,7 +27,7 @@ struct LevelSelector: View {
 ***REMOVED******REMOVED***/ The levels to display.
 ***REMOVED***let levels: [FloorLevel]
 ***REMOVED***
-***REMOVED******REMOVED***/ Returns the short name of the currently selected level, the first level or "None" if none of the listed
+***REMOVED******REMOVED***/ The short name of the currently selected level, the first level, or "None" if none of the levels
 ***REMOVED******REMOVED***/ are available.
 ***REMOVED***private var selectedLevelName: String {
 ***REMOVED******REMOVED***viewModel.selectedLevel?.shortName ?? ""
