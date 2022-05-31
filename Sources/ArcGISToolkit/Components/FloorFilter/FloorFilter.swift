@@ -49,7 +49,7 @@ public struct FloorFilter: View {
     private let alignment: Alignment
     
     /// The width of the level selector.
-    private var filterWidth: Double = 60
+    private let filterWidth: CGFloat = 60
     
     /// Button to open and close the site and facility selector.
     private var sitesAndFacilitiesButton: some View {
