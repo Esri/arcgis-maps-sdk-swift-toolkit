@@ -20,11 +20,10 @@ import XCTest
 @MainActor
 final class FloorFilterViewModelTests: XCTestCase {
     /// Tests that a `FloorFilterViewModel` succesfully initializes with a `FloorManager`.`
-    func testInitWithFloorManagerAndViewpoint() async {
-        guard let map = await makeMap(),
-              let floorManager = map.floorManager else {
-            return
-        }
+    func testInitWithFloorManagerAndViewpoint() async throws {
+        let floorManager = try  await floorManager(
+            forWebMapWithIdentifier: .redlandsCampusMap
+        )
         
         var _viewpoint: Viewpoint? = getEsriRedlandsViewpoint()
         let viewpoint = Binding(get: { _viewpoint }, set: { _viewpoint = $0 })
@@ -39,11 +38,10 @@ final class FloorFilterViewModelTests: XCTestCase {
     }
     
     /// Confirms that the selected site/facility/level properties and the viewpoint are correctly updated.
-    func testSetSite() async {
-        guard let map = await makeMap(),
-              let floorManager = map.floorManager else {
-            return
-        }
+    func testSetSite() async throws {
+        let floorManager = try  await floorManager(
+            forWebMapWithIdentifier: .redlandsCampusMap
+        )
         
         var _viewpoint: Viewpoint? = getEsriRedlandsViewpoint()
         let viewpoint = Binding(get: { _viewpoint }, set: { _viewpoint = $0 })
@@ -69,11 +67,10 @@ final class FloorFilterViewModelTests: XCTestCase {
         )
     }
     
-    func testSetFacility() async {
-        guard let map = await makeMap(),
-              let floorManager = map.floorManager else {
-            return
-        }
+    func testSetFacility() async throws {
+        let floorManager = try  await floorManager(
+            forWebMapWithIdentifier: .redlandsCampusMap
+        )
         
         var _viewpoint: Viewpoint? = getEsriRedlandsViewpoint(.zero)
         let viewpoint = Binding(get: { _viewpoint }, set: { _viewpoint = $0 })
@@ -100,11 +97,10 @@ final class FloorFilterViewModelTests: XCTestCase {
     }
     
     /// Confirms that the selected site/facility/level properties and the viewpoint are correctly updated.
-    func testSetLevel() async {
-        guard let map = await makeMap(),
-              let floorManager = map.floorManager else {
-            return
-        }
+    func testSetLevel() async throws {
+        let floorManager = try  await floorManager(
+            forWebMapWithIdentifier: .redlandsCampusMap
+        )
         
         let initialViewpoint = getEsriRedlandsViewpoint(.zero)
         var _viewpoint: Viewpoint? = initialViewpoint
@@ -136,11 +132,10 @@ final class FloorFilterViewModelTests: XCTestCase {
     }
     
     /// Confirms that the selected site/facility/level properties and the viewpoint are correctly updated.
-    func testAutoSelectAlways() async {
-        guard let map = await makeMap(),
-              let floorManager = map.floorManager else {
-            return
-        }
+    func testAutoSelectAlways() async throws {
+        let floorManager = try  await floorManager(
+            forWebMapWithIdentifier: .redlandsCampusMap
+        )
         
         let viewpointLosAngeles = Viewpoint(
             center: Point(
@@ -182,11 +177,10 @@ final class FloorFilterViewModelTests: XCTestCase {
     }
     
     /// Confirms that the selected site/facility/level properties and the viewpoint are correctly updated.
-    func testAutoSelectAlwaysNotClearing() async {
-        guard let map = await makeMap(),
-              let floorManager = map.floorManager else {
-            return
-        }
+    func testAutoSelectAlwaysNotClearing() async throws {
+        let floorManager = try  await floorManager(
+            forWebMapWithIdentifier: .redlandsCampusMap
+        )
         
         var _viewpoint: Viewpoint? = getEsriRedlandsViewpoint(scale: 1000)
         let viewpoint = Binding(get: { _viewpoint }, set: { _viewpoint = $0 })
@@ -214,11 +208,10 @@ final class FloorFilterViewModelTests: XCTestCase {
     }
     
     /// Confirms that the selected site/facility/level properties and the viewpoint are correctly updated.
-    func testAutoSelectNever() async {
-        guard let map = await makeMap(),
-              let floorManager = map.floorManager else {
-            return
-        }
+    func testAutoSelectNever() async throws {
+        let floorManager = try  await floorManager(
+            forWebMapWithIdentifier: .redlandsCampusMap
+        )
         
         var _viewpoint: Viewpoint? = .losAngeles
         let viewpoint = Binding(get: { _viewpoint }, set: { _viewpoint = $0 })
@@ -243,31 +236,23 @@ final class FloorFilterViewModelTests: XCTestCase {
         XCTAssertNil(selectedSite)
     }
     
-    /// Get a map constructed from an ArcGIS portal item.
-    /// - Returns: A map constructed from an ArcGIS portal item.
-    private func makeMap() async -> Map? {
-        // Multiple sites/facilities: Esri IST map with all buildings.
-        // let portal = Portal(url: URL(string: "https://indoors.maps.arcgis.com/")!, isLoginRequired: false)
-        // let portalItem = PortalItem(portal: portal, id: Item.ID(rawValue: "49520a67773842f1858602735ef538b5")!)
-        
-        // Redlands Campus map with multiple sites and facilities.
+    private func floorManager(
+        forWebMapWithIdentifier id: PortalItem.ID,
+        file: StaticString = #filePath,
+        line: UInt = #line
+    ) async throws -> FloorManager {
         let portal = Portal(url: URL(string: "https://runtimecoretest.maps.arcgis.com/")!, isLoginRequired: false)
-        let portalItem = PortalItem(portal: portal, id: Item.ID(rawValue: "7687805bd42549f5ba41237443d0c60a")!)
-        
-        // Single site (ESRI Redlands Main) and facility (Building L).
-        // let portal = Portal(url: URL(string: "https://indoors.maps.arcgis.com/")!, isLoginRequired: false)
-        // let portalItem = PortalItem(portal: portal, id: Item.ID(rawValue: "f133a698536f44c8884ad81f80b6cfc7")!)
-        
-        let map = Map(item: portalItem)
-        do {
-            try await map.load()
-            try await map.floorManager?.load()
-        } catch {
-            XCTFail("\(#fileID), \(#function), \(#line), \(error.localizedDescription)")
-            return nil
-        }
-        return map
+        let item = PortalItem(portal: portal, id: id)
+        let map = Map(item: item)
+        try await map.load()
+        let floorManager = try XCTUnwrap(map.floorManager, file: file, line: line)
+        try await floorManager.load()
+        return floorManager
     }
+}
+
+private extension PortalItem.ID {
+    static let redlandsCampusMap = Self("7687805bd42549f5ba41237443d0c60a")!
 }
 
 extension FloorFilterViewModelTests {
