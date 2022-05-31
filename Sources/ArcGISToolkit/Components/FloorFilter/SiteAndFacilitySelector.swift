@@ -119,7 +119,7 @@ struct SiteAndFacilitySelector: View {
                     } else {
                         siteListView
                     }
-                    NavigationLink("All sites") {
+                    NavigationLink("All Sites") {
                         FacilitiesList(
                             facilities: sites.flatMap(\.facilities),
                             presentationStyle: .allSites,
