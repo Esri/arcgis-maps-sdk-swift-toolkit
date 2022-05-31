@@ -15,12 +15,10 @@
 
 extension EdgeInsets {
 ***REMOVED******REMOVED***/ A reusable set of edge insets for use across toolkit components.
-***REMOVED***public static var esriInsets: EdgeInsets {
-***REMOVED******REMOVED***EdgeInsets(
-***REMOVED******REMOVED******REMOVED***top: 8,
-***REMOVED******REMOVED******REMOVED***leading: 12,
-***REMOVED******REMOVED******REMOVED***bottom: 8,
-***REMOVED******REMOVED******REMOVED***trailing: 12
-***REMOVED******REMOVED***)
-***REMOVED***
+***REMOVED***public static let toolkitDefault = Self(
+***REMOVED******REMOVED***top: 8,
+***REMOVED******REMOVED***leading: 12,
+***REMOVED******REMOVED***bottom: 8,
+***REMOVED******REMOVED***trailing: 12
+***REMOVED***)
 ***REMOVED***

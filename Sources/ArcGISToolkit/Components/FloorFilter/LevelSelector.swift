@@ -67,7 +67,7 @@ struct LevelSelector: View {
 ***REMOVED******REMOVED***
 ***REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED***Image(systemName: "xmark")
-***REMOVED******REMOVED******REMOVED******REMOVED***.padding(EdgeInsets.esriInsets)
+***REMOVED******REMOVED******REMOVED******REMOVED***.padding(.toolkitDefault)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
