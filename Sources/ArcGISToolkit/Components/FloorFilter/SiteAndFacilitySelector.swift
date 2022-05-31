@@ -49,7 +49,7 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED***@EnvironmentObject var viewModel: FloorFilterViewModel
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ Indicates whether the view model should be notified of the selection update.
-***REMOVED******REMOVED***@State private var updateViewModel = true
+***REMOVED******REMOVED***@State private var shouldUpdateViewModel = true
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ Indicates that the keyboard is animating and some views may require reload.
 ***REMOVED******REMOVED***@State private var keyboardAnimating = false
@@ -161,14 +161,14 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Setting the `updateViewModel` flag false allows
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** `selectedSite` to receive upstream updates from the view
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** model without republishing them back up to the view model.
-***REMOVED******REMOVED******REMOVED******REMOVED***updateViewModel = false
+***REMOVED******REMOVED******REMOVED******REMOVED***shouldUpdateViewModel = false
 ***REMOVED******REMOVED******REMOVED******REMOVED***selectedSite = viewModel.selectedSite
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onChange(of: selectedSite) { _ in  
-***REMOVED******REMOVED******REMOVED******REMOVED***   if updateViewModel, let site = selectedSite {
+***REMOVED******REMOVED******REMOVED******REMOVED***   if shouldUpdateViewModel, let site = selectedSite {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***   viewModel.setSite(site, zoomTo: true)
 ***REMOVED******REMOVED***   ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***   updateViewModel = true
+***REMOVED******REMOVED******REMOVED******REMOVED***   shouldUpdateViewModel = true
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
