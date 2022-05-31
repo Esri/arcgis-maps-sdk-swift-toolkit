@@ -25,7 +25,7 @@ final class FloorFilterViewModelTests: XCTestCase {
             forWebMapWithIdentifier: .redlandsCampusMap
         )
         
-        var _viewpoint: Viewpoint? = getEsriRedlandsViewpoint()
+        var _viewpoint: Viewpoint? = .esriRedlands()
         let viewpoint = Binding(get: { _viewpoint }, set: { _viewpoint = $0 })
         let viewModel = FloorFilterViewModel(
             floorManager: floorManager,
@@ -43,7 +43,7 @@ final class FloorFilterViewModelTests: XCTestCase {
             forWebMapWithIdentifier: .redlandsCampusMap
         )
         
-        var _viewpoint: Viewpoint? = getEsriRedlandsViewpoint()
+        var _viewpoint: Viewpoint? = .esriRedlands()
         let viewpoint = Binding(get: { _viewpoint }, set: { _viewpoint = $0 })
         let viewModel = FloorFilterViewModel(
             floorManager: floorManager,
@@ -72,7 +72,7 @@ final class FloorFilterViewModelTests: XCTestCase {
             forWebMapWithIdentifier: .redlandsCampusMap
         )
         
-        var _viewpoint: Viewpoint? = getEsriRedlandsViewpoint(.zero)
+        var _viewpoint: Viewpoint? = .esriRedlands()
         let viewpoint = Binding(get: { _viewpoint }, set: { _viewpoint = $0 })
         let viewModel = FloorFilterViewModel(
             automaticSelectionMode: .never,
@@ -102,7 +102,7 @@ final class FloorFilterViewModelTests: XCTestCase {
             forWebMapWithIdentifier: .redlandsCampusMap
         )
         
-        let initialViewpoint = getEsriRedlandsViewpoint(.zero)
+        let initialViewpoint: Viewpoint = .esriRedlands()
         var _viewpoint: Viewpoint? = initialViewpoint
         let viewpoint = Binding(get: { _viewpoint }, set: { _viewpoint = $0 })
         let viewModel = FloorFilterViewModel(
@@ -160,7 +160,7 @@ final class FloorFilterViewModelTests: XCTestCase {
         XCTAssertNil(selectedSite)
         
         // Viewpoint is Redlands Main Q
-        _viewpoint = getEsriRedlandsViewpoint(scale: 1000)
+        _viewpoint = .esriRedlands(scale: 1000)
         viewModel.automaticallySelectFacilityOrSite()
         selectedFacility = viewModel.selectedFacility
         selectedSite = viewModel.selectedSite
@@ -182,7 +182,7 @@ final class FloorFilterViewModelTests: XCTestCase {
             forWebMapWithIdentifier: .redlandsCampusMap
         )
         
-        var _viewpoint: Viewpoint? = getEsriRedlandsViewpoint(scale: 1000)
+        var _viewpoint: Viewpoint? = .esriRedlands(scale: 1000)
         let viewpoint = Binding(get: { _viewpoint }, set: { _viewpoint = $0 })
         let viewModel = FloorFilterViewModel(
             automaticSelectionMode: .alwaysNotClearing,
@@ -191,7 +191,7 @@ final class FloorFilterViewModelTests: XCTestCase {
         )
         
         // Viewpoint is Redlands Main Q
-        _viewpoint = getEsriRedlandsViewpoint(scale: 1000)
+        _viewpoint = .esriRedlands(scale: 1000)
         viewModel.automaticallySelectFacilityOrSite()
         var selectedFacility = viewModel.selectedFacility
         var selectedSite = viewModel.selectedSite
@@ -228,7 +228,7 @@ final class FloorFilterViewModelTests: XCTestCase {
         XCTAssertNil(selectedSite)
         
         // Viewpoint is Redlands Main Q but selection should still be nil
-        _viewpoint = getEsriRedlandsViewpoint(scale: 1000)
+        _viewpoint = .esriRedlands(scale: 1000)
         viewModel.automaticallySelectFacilityOrSite()
         selectedFacility = viewModel.selectedFacility
         selectedSite = viewModel.selectedSite
@@ -255,28 +255,23 @@ private extension PortalItem.ID {
     static let redlandsCampusMap = Self("7687805bd42549f5ba41237443d0c60a")!
 }
 
-extension FloorFilterViewModelTests {
+private extension Point {
     /// The coordinates for the Redlands Esri campus.
-    var point: Point {
-        Point(
-            x: -13046157.242121734,
-            y: 4036329.622884897,
-            spatialReference: .webMercator
-        )
-    }
-    
-    /// Builds viewpoints to use for tests.
-    /// - Parameter rotation: The rotation to use for the resulting viewpoint.
-    /// - Returns: A viewpoint object for tests.
-    func getEsriRedlandsViewpoint(
-        _ rotation: Double = .zero,
-        scale: Double = 10_000
-    ) -> Viewpoint {
-        return Viewpoint(center: point, scale: scale, rotation: rotation)
-    }
+    static let esriRedlands = Point(
+        x: -13046157.242121734,
+        y: 4036329.622884897,
+        spatialReference: .webMercator
+    )
 }
 
 private extension Viewpoint {
+    static func esriRedlands(
+        scale: Double = 10_000,
+        rotation: Double = .zero
+    ) -> Viewpoint {
+        .init(center: .esriRedlands, scale: scale, rotation: rotation)
+    }
+    
     static var losAngeles: Viewpoint {
         Viewpoint(
             center: Point(
