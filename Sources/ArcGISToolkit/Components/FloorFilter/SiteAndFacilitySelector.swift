@@ -277,13 +277,10 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED***
 
 ***REMOVED***/ Displays text "No matches found".
-struct NoMatchesView: View {
+private struct NoMatchesView: View {
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***Text("No matches found")
-***REMOVED******REMOVED******REMOVED***.frame(
-***REMOVED******REMOVED******REMOVED******REMOVED***maxHeight: .infinity,
-***REMOVED******REMOVED******REMOVED******REMOVED***alignment: .center
-***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***.frame(maxHeight: .infinity)
 ***REMOVED***
 ***REMOVED***
 
