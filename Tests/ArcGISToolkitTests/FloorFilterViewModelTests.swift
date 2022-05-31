@@ -257,14 +257,12 @@ private extension Viewpoint {
 ***REMOVED******REMOVED***.init(center: .esriRedlands, scale: scale, rotation: rotation)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***static var losAngeles: Viewpoint {
-***REMOVED******REMOVED***Viewpoint(
-***REMOVED******REMOVED******REMOVED***center: Point(
-***REMOVED******REMOVED******REMOVED******REMOVED***x: -13164116.3284,
-***REMOVED******REMOVED******REMOVED******REMOVED***y: 4034465.8065,
-***REMOVED******REMOVED******REMOVED******REMOVED***spatialReference: .webMercator
-***REMOVED******REMOVED******REMOVED***),
-***REMOVED******REMOVED******REMOVED***scale: 10_000
-***REMOVED******REMOVED***)
-***REMOVED***
+***REMOVED***static let losAngeles = Viewpoint(
+***REMOVED******REMOVED***center: Point(
+***REMOVED******REMOVED******REMOVED***x: -13164116.3284,
+***REMOVED******REMOVED******REMOVED***y: 4034465.8065,
+***REMOVED******REMOVED******REMOVED***spatialReference: .webMercator
+***REMOVED******REMOVED***),
+***REMOVED******REMOVED***scale: 10_000
+***REMOVED***)
 ***REMOVED***
