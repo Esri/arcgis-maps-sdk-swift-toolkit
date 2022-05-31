@@ -19,6 +19,6 @@ public enum FloorFilterAutomaticSelectionMode {
 ***REMOVED******REMOVED***/ Only update the selection when there is a new site or facility in the current viewpoint; don't clear
 ***REMOVED******REMOVED***/ selection when the user navigates away.
 ***REMOVED***case alwaysNotClearing
-***REMOVED******REMOVED***/ Never update selection based on the GeoView's current viewpoint.
+***REMOVED******REMOVED***/ Never update selection based on the map or scene view's current viewpoint.
 ***REMOVED***case never
 ***REMOVED***
