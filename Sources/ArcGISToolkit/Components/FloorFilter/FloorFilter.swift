@@ -57,7 +57,7 @@ public struct FloorFilter: View {
             isSitesAndFacilitiesHidden.toggle()
         } label: {
             Image(systemName: "building.2")
-                .padding(.esriInsets)
+                .padding(.toolkitDefault)
         }
         .frame(maxWidth: .infinity)
     }
