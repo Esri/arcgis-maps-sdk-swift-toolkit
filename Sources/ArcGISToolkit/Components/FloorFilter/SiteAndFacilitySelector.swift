@@ -52,7 +52,7 @@ struct SiteAndFacilitySelector: View {
         @State private var shouldUpdateViewModel = true
         
         /// Indicates that the keyboard is animating and some views may require reload.
-        @State private var keyboardAnimating = false
+        @State private var isKeyboardAnimating = false
         
         /// A site name filter phrase entered by the user.
         @State private var searchPhrase: String = ""
@@ -85,7 +85,7 @@ struct SiteAndFacilitySelector: View {
             siteListAndFilterView
                 // Trigger a reload on keyboard frame changes for proper layout
                 // across all devices.
-                .opacity(keyboardAnimating ? 0.99 : 1.0)
+                .opacity(isKeyboardAnimating ? 0.99 : 1.0)
                 .navigationViewStyle(.stack)
                 .onReceive(
                     NotificationCenter.default.publisher(
@@ -93,7 +93,7 @@ struct SiteAndFacilitySelector: View {
                     )
                 ) { _ in
                     withAnimation {
-                        keyboardAnimating = true
+                        isKeyboardAnimating = true
                     }
                 }
                 .onReceive(
@@ -102,7 +102,7 @@ struct SiteAndFacilitySelector: View {
                     )
                 ) { _ in
                     withAnimation {
-                        keyboardAnimating = false
+                        isKeyboardAnimating = false
                     }
                 }
         }
