@@ -252,17 +252,6 @@ private extension PortalItem.ID {
 ***REMOVED***
 
 private extension Viewpoint {
-***REMOVED***static var losAngeles: Viewpoint {
-***REMOVED******REMOVED***Viewpoint(
-***REMOVED******REMOVED******REMOVED***center: Point(
-***REMOVED******REMOVED******REMOVED******REMOVED***x: -13164116.3284,
-***REMOVED******REMOVED******REMOVED******REMOVED***y: 4034465.8065,
-***REMOVED******REMOVED******REMOVED******REMOVED***spatialReference: .webMercator
-***REMOVED******REMOVED******REMOVED***),
-***REMOVED******REMOVED******REMOVED***scale: 10_000
-***REMOVED******REMOVED***)
-***REMOVED***
-***REMOVED***
 ***REMOVED***static var researchAnnexLattice: Viewpoint {
 ***REMOVED******REMOVED***Viewpoint(
 ***REMOVED******REMOVED******REMOVED***center:
@@ -274,4 +263,13 @@ private extension Viewpoint {
 ***REMOVED******REMOVED******REMOVED***scale: 550.0
 ***REMOVED******REMOVED***)
 ***REMOVED***
+***REMOVED***
+***REMOVED***static let losAngeles = Viewpoint(
+***REMOVED******REMOVED***center: Point(
+***REMOVED******REMOVED******REMOVED***x: -13164116.3284,
+***REMOVED******REMOVED******REMOVED***y: 4034465.8065,
+***REMOVED******REMOVED******REMOVED***spatialReference: .webMercator
+***REMOVED******REMOVED***),
+***REMOVED******REMOVED***scale: 10_000
+***REMOVED***)
 ***REMOVED***
