@@ -20,9 +20,9 @@ import ArcGIS
 public struct FloorFilter: View {
     /// Creates a `FloorFilter`.
     /// - Parameters:
+    ///   - floorManager: The floor manager used by the `FloorFilter`.
     ///   - alignment: Determines the display configuration of Floor Filter elements.
     ///   - automaticSelectionMode: The selection behavior of the floor filter.
-    ///   - floorManager: The floor manager used by the `FloorFilter`.
     ///   - viewpoint: Viewpoint updated when the selected site or facility changes.
     public init(
         floorManager: FloorManager,
