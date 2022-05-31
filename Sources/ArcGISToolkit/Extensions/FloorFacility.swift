@@ -29,7 +29,6 @@ extension FloorFacility: Equatable {
 
 extension FloorFacility: Hashable {
     public func hash(into hasher: inout Hasher) {
-        hasher.combine(self.id)
-        hasher.combine(self.name)
+        hasher.combine(id)
     }
 }
