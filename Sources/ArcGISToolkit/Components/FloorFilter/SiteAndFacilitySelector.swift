@@ -121,7 +121,7 @@ struct SiteAndFacilitySelector: View {
                     }
                     NavigationLink("All sites") {
                         FacilitiesList(
-                            facilities: sites.flatMap({ $0.facilities }),
+                            facilities: sites.flatMap(\.facilities),
                             presentationStyle: .allSites,
                             isHidden: isHidden
                         )
