@@ -45,7 +45,7 @@ final class FloorFilterViewModelTests: XCTestCase {
             forWebMapWithIdentifier: .testMap
         )
         
-        var _viewpoint: Viewpoint? = .site_ResearchAnnex_facility_Lattice
+        var _viewpoint: Viewpoint? = .researchAnnexLattice
         let viewpoint = Binding(get: { _viewpoint }, set: { _viewpoint = $0 })
         let viewModel = FloorFilterViewModel(
             floorManager: floorManager,
@@ -74,7 +74,7 @@ final class FloorFilterViewModelTests: XCTestCase {
             forWebMapWithIdentifier: .testMap
         )
         
-        var _viewpoint: Viewpoint? = .site_ResearchAnnex_facility_Lattice
+        var _viewpoint: Viewpoint? = .researchAnnexLattice
         let viewpoint = Binding(get: { _viewpoint }, set: { _viewpoint = $0 })
         let viewModel = FloorFilterViewModel(
             automaticSelectionMode: .never,
@@ -104,7 +104,7 @@ final class FloorFilterViewModelTests: XCTestCase {
             forWebMapWithIdentifier: .testMap
         )
         
-        let initialViewpoint: Viewpoint = .site_ResearchAnnex_facility_Lattice
+        let initialViewpoint: Viewpoint = .researchAnnexLattice
         var _viewpoint: Viewpoint? = initialViewpoint
         let viewpoint = Binding(get: { _viewpoint }, set: { _viewpoint = $0 })
         let viewModel = FloorFilterViewModel(
@@ -155,7 +155,7 @@ final class FloorFilterViewModelTests: XCTestCase {
         XCTAssertNil(selectedFacility)
         XCTAssertNil(selectedSite)
         
-        _viewpoint = .site_ResearchAnnex_facility_Lattice
+        _viewpoint = .researchAnnexLattice
         viewModel.automaticallySelectFacilityOrSite()
         
         // Viewpoint is the Lattice facility at the Research Annex site
@@ -180,7 +180,7 @@ final class FloorFilterViewModelTests: XCTestCase {
             forWebMapWithIdentifier: .testMap
         )
         
-        var _viewpoint: Viewpoint? = .site_ResearchAnnex_facility_Lattice
+        var _viewpoint: Viewpoint? = .researchAnnexLattice
         let viewpoint = Binding(get: { _viewpoint }, set: { _viewpoint = $0 })
         let viewModel = FloorFilterViewModel(
             automaticSelectionMode: .alwaysNotClearing,
@@ -229,7 +229,7 @@ final class FloorFilterViewModelTests: XCTestCase {
         XCTAssertNil(selectedFacility)
         XCTAssertNil(selectedSite)
         
-        _viewpoint = .site_ResearchAnnex_facility_Lattice
+        _viewpoint = .researchAnnexLattice
         viewModel.automaticallySelectFacilityOrSite()
         
         // Viewpoint is the Lattice facility at the Research Annex site
@@ -270,7 +270,7 @@ private extension Viewpoint {
         )
     }
     
-    static var site_ResearchAnnex_facility_Lattice: Viewpoint {
+    static var researchAnnexLattice: Viewpoint {
         Viewpoint(
             center:
                 Point(
