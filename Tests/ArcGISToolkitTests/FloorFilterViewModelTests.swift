@@ -48,10 +48,8 @@ final class FloorFilterViewModelTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***viewpoint: viewpoint
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***guard let site = viewModel.sites.first else {
-***REMOVED******REMOVED******REMOVED***XCTFail()
-***REMOVED******REMOVED******REMOVED***return
-***REMOVED***
+***REMOVED******REMOVED***let site = try XCTUnwrap(viewModel.sites.first)
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***viewModel.setSite(site, zoomTo: true)
 ***REMOVED******REMOVED***let selectedSite = viewModel.selectedSite
 ***REMOVED******REMOVED***let selectedFacility = viewModel.selectedFacility
@@ -78,10 +76,8 @@ final class FloorFilterViewModelTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***viewpoint: viewpoint
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***guard let facility = viewModel.facilities.first else {
-***REMOVED******REMOVED******REMOVED***XCTFail()
-***REMOVED******REMOVED******REMOVED***return
-***REMOVED***
+***REMOVED******REMOVED***let facility = try XCTUnwrap(viewModel.facilities.first)
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***viewModel.setFacility(facility, zoomTo: true)
 ***REMOVED******REMOVED***let selectedFacility = viewModel.selectedFacility
 ***REMOVED******REMOVED***let selectedLevel = viewModel.selectedLevel
@@ -109,10 +105,8 @@ final class FloorFilterViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let levels = viewModel.levels
-***REMOVED******REMOVED***guard let level = levels.first else {
-***REMOVED******REMOVED******REMOVED***XCTFail("A first level does not exist")
-***REMOVED******REMOVED******REMOVED***return
-***REMOVED***
+***REMOVED******REMOVED***let level = try XCTUnwrap(levels.first)
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***viewModel.setLevel(level)
 ***REMOVED******REMOVED***let selectedLevel = viewModel.selectedLevel
 ***REMOVED******REMOVED***XCTAssertEqual(selectedLevel, level)
@@ -135,14 +129,7 @@ final class FloorFilterViewModelTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***forWebMapWithIdentifier: .redlandsCampusMap
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***let viewpointLosAngeles = Viewpoint(
-***REMOVED******REMOVED******REMOVED***center: Point(
-***REMOVED******REMOVED******REMOVED******REMOVED***x: -13164116.3284,
-***REMOVED******REMOVED******REMOVED******REMOVED***y: 4034465.8065,
-***REMOVED******REMOVED******REMOVED******REMOVED***spatialReference: .webMercator
-***REMOVED******REMOVED******REMOVED***),
-***REMOVED******REMOVED******REMOVED***scale: 10_000
-***REMOVED******REMOVED***)
+***REMOVED******REMOVED***let viewpointLosAngeles: Viewpoint = .losAngeles
 ***REMOVED******REMOVED***var _viewpoint: Viewpoint? = viewpointLosAngeles
 ***REMOVED******REMOVED***let viewpoint = Binding(get: { _viewpoint ***REMOVED***, set: { _viewpoint = $0 ***REMOVED***)
 ***REMOVED******REMOVED***let viewModel = FloorFilterViewModel(
