@@ -67,7 +67,7 @@ struct LevelSelector: View {
             }
         } label: {
             Image(systemName: "xmark")
-                .padding(EdgeInsets.esriInsets)
+                .padding(.toolkitDefault)
         }
     }
 }
