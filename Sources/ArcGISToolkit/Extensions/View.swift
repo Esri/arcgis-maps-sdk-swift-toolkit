@@ -37,7 +37,7 @@ extension View {
 ***REMOVED******REMOVED***/ Returns a new `View` that allows a parent `View` to be informed of a child view's size.
 ***REMOVED******REMOVED***/ - Parameter perform: The closure to be executed when the content size of the receiver
 ***REMOVED******REMOVED***/ changes.
-***REMOVED******REMOVED***/ - Returns: The modified view.
+***REMOVED******REMOVED***/ - Returns: A new `View`.
 ***REMOVED***func onSizeChange(perform: @escaping (CGSize) -> Void) -> some View {
 ***REMOVED******REMOVED***background(
 ***REMOVED******REMOVED******REMOVED***GeometryReader { geometry in
@@ -52,7 +52,7 @@ extension View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ View modifier used to denote the view is selected.
 ***REMOVED******REMOVED***/ - Parameter isSelected: `true` if the view is selected, `false` otherwise.
-***REMOVED******REMOVED***/ - Returns: A new `View`.
+***REMOVED******REMOVED***/ - Returns: The modified view.
 ***REMOVED***func selected(
 ***REMOVED******REMOVED***_ isSelected: Bool = false
 ***REMOVED***) -> some View {
