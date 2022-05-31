@@ -211,18 +211,6 @@ struct SiteAndFacilitySelector: View {
             }
         }
         
-        /// Determines the SF Symbols image name to represent selection/non-selection of a facility.
-        /// - Parameter facility: The facility of interest
-        /// - Returns: "circle.fill" if the facility is marked selected or "cirlce" if the facility is not selected
-        /// in the view model.
-        func imageFor(_ facility: FloorFacility) -> String {
-            if facility.id == viewModel.selectedFacility?.id {
-                return "circle.fill"
-            } else {
-                return "circle"
-            }
-        }
-        
         var body: some View {
             if presentationStyle == .singleSite {
                 facilityListAndFilterView
@@ -277,7 +265,8 @@ struct SiteAndFacilitySelector: View {
                         isHidden.toggle()
                     } label: {
                         HStack {
-                            Image(systemName: imageFor(facility))
+                            Image(systemName: "circle")
+                                .symbolVariant(facility.id == viewModel.selectedFacility?.id ? .fill : .none)
                             VStack {
                                 Text(facility.name)
                                 .fontWeight(.regular)
