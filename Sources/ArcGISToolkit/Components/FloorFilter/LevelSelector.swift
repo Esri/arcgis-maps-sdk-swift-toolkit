@@ -67,7 +67,7 @@ struct LevelSelector: View {
 ***REMOVED******REMOVED***
 ***REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED***Image(systemName: isTopAligned ? "chevron.up.circle" : "chevron.down.circle")
-***REMOVED******REMOVED******REMOVED******REMOVED***.padding(.esriInsets)
+***REMOVED******REMOVED******REMOVED******REMOVED***.padding(.toolkitDefault)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***

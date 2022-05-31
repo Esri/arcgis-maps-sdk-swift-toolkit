@@ -76,7 +76,7 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED******REMOVED***siteAndFacilitySelectorIsPresented.toggle()
 ***REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED***Image(systemName: "building.2")
-***REMOVED******REMOVED******REMOVED******REMOVED***.padding(.esriInsets)
+***REMOVED******REMOVED******REMOVED******REMOVED***.padding(.toolkitDefault)
 ***REMOVED***
 ***REMOVED******REMOVED***.sheet(
 ***REMOVED******REMOVED******REMOVED***isAllowed: isCompact,
