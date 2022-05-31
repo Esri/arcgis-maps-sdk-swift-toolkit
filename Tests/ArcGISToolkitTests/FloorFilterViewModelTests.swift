@@ -252,17 +252,6 @@ private extension PortalItem.ID {
 }
 
 private extension Viewpoint {
-    static var losAngeles: Viewpoint {
-        Viewpoint(
-            center: Point(
-                x: -13164116.3284,
-                y: 4034465.8065,
-                spatialReference: .webMercator
-            ),
-            scale: 10_000
-        )
-    }
-    
     static var researchAnnexLattice: Viewpoint {
         Viewpoint(
             center:
@@ -274,4 +263,13 @@ private extension Viewpoint {
             scale: 550.0
         )
     }
+    
+    static let losAngeles = Viewpoint(
+        center: Point(
+            x: -13164116.3284,
+            y: 4034465.8065,
+            spatialReference: .webMercator
+        ),
+        scale: 10_000
+    )
 }
