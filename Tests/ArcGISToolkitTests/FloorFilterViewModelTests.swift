@@ -22,11 +22,10 @@ final class FloorFilterViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***/ Tests that a `FloorFilterViewModel` succesfully initializes with a `FloorManager` and
 ***REMOVED******REMOVED***/ `Binding<Viewpoint?>`.`
 ***REMOVED******REMOVED***/ Tests that a `FloorFilterViewModel` succesfully initializes with a `FloorManager`.`
-***REMOVED***func testInitWithFloorManagerAndViewpoint() async {
-***REMOVED******REMOVED***guard let map = await makeMap(),
-***REMOVED******REMOVED******REMOVED***  let floorManager = map.floorManager else {
-***REMOVED******REMOVED******REMOVED***return
-***REMOVED***
+***REMOVED***func testInitWithFloorManagerAndViewpoint() async throws {
+***REMOVED******REMOVED***let floorManager = try await floorManager(
+***REMOVED******REMOVED******REMOVED***forWebMapWithIdentifier: .testMap
+***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var _viewpoint: Viewpoint? = nil
 ***REMOVED******REMOVED***let viewpoint = Binding(get: { _viewpoint ***REMOVED***, set: { _viewpoint = $0 ***REMOVED***)
@@ -41,11 +40,10 @@ final class FloorFilterViewModelTests: XCTestCase {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Confirms that the selected site/facility/level properties and the viewpoint are correctly updated.
-***REMOVED***func testSetSite() async {
-***REMOVED******REMOVED***guard let map = await makeMap(),
-***REMOVED******REMOVED******REMOVED***  let floorManager = map.floorManager else {
-***REMOVED******REMOVED******REMOVED***return
-***REMOVED***
+***REMOVED***func testSetSite() async throws {
+***REMOVED******REMOVED***let floorManager = try await floorManager(
+***REMOVED******REMOVED******REMOVED***forWebMapWithIdentifier: .testMap
+***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var _viewpoint: Viewpoint? = .site_ResearchAnnex_facility_Lattice
 ***REMOVED******REMOVED***let viewpoint = Binding(get: { _viewpoint ***REMOVED***, set: { _viewpoint = $0 ***REMOVED***)
@@ -71,11 +69,10 @@ final class FloorFilterViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***func testSetFacility() async {
-***REMOVED******REMOVED***guard let map = await makeMap(),
-***REMOVED******REMOVED******REMOVED***  let floorManager = map.floorManager else {
-***REMOVED******REMOVED******REMOVED***return
-***REMOVED***
+***REMOVED***func testSetFacility() async throws {
+***REMOVED******REMOVED***let floorManager = try await floorManager(
+***REMOVED******REMOVED******REMOVED***forWebMapWithIdentifier: .testMap
+***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var _viewpoint: Viewpoint? = .site_ResearchAnnex_facility_Lattice
 ***REMOVED******REMOVED***let viewpoint = Binding(get: { _viewpoint ***REMOVED***, set: { _viewpoint = $0 ***REMOVED***)
@@ -102,11 +99,10 @@ final class FloorFilterViewModelTests: XCTestCase {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Confirms that the selected site/facility/level properties and the viewpoint are correctly updated.
-***REMOVED***func testSetLevel() async {
-***REMOVED******REMOVED***guard let map = await makeMap(),
-***REMOVED******REMOVED******REMOVED***  let floorManager = map.floorManager else {
-***REMOVED******REMOVED******REMOVED***return
-***REMOVED***
+***REMOVED***func testSetLevel() async throws {
+***REMOVED******REMOVED***let floorManager = try await floorManager(
+***REMOVED******REMOVED******REMOVED***forWebMapWithIdentifier: .testMap
+***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let initialViewpoint: Viewpoint = .site_ResearchAnnex_facility_Lattice
 ***REMOVED******REMOVED***var _viewpoint: Viewpoint? = initialViewpoint
@@ -138,11 +134,10 @@ final class FloorFilterViewModelTests: XCTestCase {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Confirms that the selected site/facility/level properties and the viewpoint are correctly updated.
-***REMOVED***func testAutoSelectAlways() async {
-***REMOVED******REMOVED***guard let map = await makeMap(),
-***REMOVED******REMOVED******REMOVED***  let floorManager = map.floorManager else {
-***REMOVED******REMOVED******REMOVED***return
-***REMOVED***
+***REMOVED***func testAutoSelectAlways() async throws {
+***REMOVED******REMOVED***let floorManager = try await floorManager(
+***REMOVED******REMOVED******REMOVED***forWebMapWithIdentifier: .testMap
+***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var _viewpoint: Viewpoint? = .losAngeles
 ***REMOVED******REMOVED***let viewpoint = Binding(get: { _viewpoint ***REMOVED***, set: { _viewpoint = $0 ***REMOVED***)
@@ -180,11 +175,10 @@ final class FloorFilterViewModelTests: XCTestCase {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Confirms that the selected site/facility/level properties and the viewpoint are correctly updated.
-***REMOVED***func testAutoSelectAlwaysNotClearing() async {
-***REMOVED******REMOVED***guard let map = await makeMap(),
-***REMOVED******REMOVED******REMOVED***  let floorManager = map.floorManager else {
-***REMOVED******REMOVED******REMOVED***return
-***REMOVED***
+***REMOVED***func testAutoSelectAlwaysNotClearing() async throws {
+***REMOVED******REMOVED***let floorManager = try await floorManager(
+***REMOVED******REMOVED******REMOVED***forWebMapWithIdentifier: .testMap
+***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var _viewpoint: Viewpoint? = .site_ResearchAnnex_facility_Lattice
 ***REMOVED******REMOVED***let viewpoint = Binding(get: { _viewpoint ***REMOVED***, set: { _viewpoint = $0 ***REMOVED***)
@@ -214,11 +208,10 @@ final class FloorFilterViewModelTests: XCTestCase {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Confirms that the selected site/facility/level properties and the viewpoint are correctly updated.
-***REMOVED***func testAutoSelectNever() async {
-***REMOVED******REMOVED***guard let map = await makeMap(),
-***REMOVED******REMOVED******REMOVED***  let floorManager = map.floorManager else {
-***REMOVED******REMOVED******REMOVED***return
-***REMOVED***
+***REMOVED***func testAutoSelectNever() async throws {
+***REMOVED******REMOVED***let floorManager = try await floorManager(
+***REMOVED******REMOVED******REMOVED***forWebMapWithIdentifier: .testMap
+***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var _viewpoint: Viewpoint? = .losAngeles
 ***REMOVED******REMOVED***let viewpoint = Binding(get: { _viewpoint ***REMOVED***, set: { _viewpoint = $0 ***REMOVED***)
@@ -246,22 +239,23 @@ final class FloorFilterViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***XCTAssertNil(selectedSite)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Get a map constructed from an ArcGIS portal item.
-***REMOVED******REMOVED***/ - Returns: A map constructed from an ArcGIS portal item.
-***REMOVED***private func makeMap() async -> Map? {
+***REMOVED***private func floorManager(
+***REMOVED******REMOVED***forWebMapWithIdentifier id: PortalItem.ID,
+***REMOVED******REMOVED***file: StaticString = #filePath,
+***REMOVED******REMOVED***line: UInt = #line
+***REMOVED***) async throws -> FloorManager {
 ***REMOVED******REMOVED***let portal = Portal(url: URL(string: "https:***REMOVED***www.arcgis.com/")!, isLoginRequired: false)
-***REMOVED******REMOVED***let portalItem = PortalItem(portal: portal, id: Item.ID(rawValue: "b4b599a43a474d33946cf0df526426f5")!)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***let map = Map(item: portalItem)
-***REMOVED******REMOVED***do {
-***REMOVED******REMOVED******REMOVED***try await map.load()
-***REMOVED******REMOVED******REMOVED***try await map.floorManager?.load()
-***REMOVED*** catch {
-***REMOVED******REMOVED******REMOVED***XCTFail("\(#fileID), \(#function), \(#line), \(error.localizedDescription)")
-***REMOVED******REMOVED******REMOVED***return nil
+***REMOVED******REMOVED***let item = PortalItem(portal: portal, id: id)
+***REMOVED******REMOVED***let map = Map(item: item)
+***REMOVED******REMOVED***try await map.load()
+***REMOVED******REMOVED***let floorManager = try XCTUnwrap(map.floorManager, file: file, line: line)
+***REMOVED******REMOVED***try await floorManager.load()
+***REMOVED******REMOVED***return floorManager
 ***REMOVED***
-***REMOVED******REMOVED***return map
 ***REMOVED***
+
+private extension PortalItem.ID {
+***REMOVED***static let testMap = Self("b4b599a43a474d33946cf0df526426f5")!
 ***REMOVED***
 
 private extension Viewpoint {
