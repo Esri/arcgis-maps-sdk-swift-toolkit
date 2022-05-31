@@ -21,7 +21,7 @@ import XCTest
 final class FloorFilterViewModelTests: XCTestCase {
     /// Tests that a `FloorFilterViewModel` succesfully initializes with a `FloorManager`.`
     func testInitWithFloorManagerAndViewpoint() async throws {
-        let floorManager = try  await floorManager(
+        let floorManager = try await floorManager(
             forWebMapWithIdentifier: .redlandsCampusMap
         )
         
@@ -39,7 +39,7 @@ final class FloorFilterViewModelTests: XCTestCase {
     
     /// Confirms that the selected site/facility/level properties and the viewpoint are correctly updated.
     func testSetSite() async throws {
-        let floorManager = try  await floorManager(
+        let floorManager = try await floorManager(
             forWebMapWithIdentifier: .redlandsCampusMap
         )
         
@@ -68,7 +68,7 @@ final class FloorFilterViewModelTests: XCTestCase {
     }
     
     func testSetFacility() async throws {
-        let floorManager = try  await floorManager(
+        let floorManager = try await floorManager(
             forWebMapWithIdentifier: .redlandsCampusMap
         )
         
@@ -98,7 +98,7 @@ final class FloorFilterViewModelTests: XCTestCase {
     
     /// Confirms that the selected site/facility/level properties and the viewpoint are correctly updated.
     func testSetLevel() async throws {
-        let floorManager = try  await floorManager(
+        let floorManager = try await floorManager(
             forWebMapWithIdentifier: .redlandsCampusMap
         )
         
@@ -133,7 +133,7 @@ final class FloorFilterViewModelTests: XCTestCase {
     
     /// Confirms that the selected site/facility/level properties and the viewpoint are correctly updated.
     func testAutoSelectAlways() async throws {
-        let floorManager = try  await floorManager(
+        let floorManager = try await floorManager(
             forWebMapWithIdentifier: .redlandsCampusMap
         )
         
@@ -178,7 +178,7 @@ final class FloorFilterViewModelTests: XCTestCase {
     
     /// Confirms that the selected site/facility/level properties and the viewpoint are correctly updated.
     func testAutoSelectAlwaysNotClearing() async throws {
-        let floorManager = try  await floorManager(
+        let floorManager = try await floorManager(
             forWebMapWithIdentifier: .redlandsCampusMap
         )
         
@@ -209,7 +209,7 @@ final class FloorFilterViewModelTests: XCTestCase {
     
     /// Confirms that the selected site/facility/level properties and the viewpoint are correctly updated.
     func testAutoSelectNever() async throws {
-        let floorManager = try  await floorManager(
+        let floorManager = try await floorManager(
             forWebMapWithIdentifier: .redlandsCampusMap
         )
         
