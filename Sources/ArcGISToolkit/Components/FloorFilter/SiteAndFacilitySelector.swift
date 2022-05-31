@@ -314,13 +314,10 @@ struct SiteAndFacilitySelector: View {
 }
 
 /// Displays text "No matches found".
-struct NoMatchesView: View {
+private struct NoMatchesView: View {
     var body: some View {
-        VStack {
-            Spacer()
-            Text("No matches found")
-            Spacer()
-        }
+        Text("No matches found")
+            .frame(maxHeight: .infinity)
     }
 }
 
