@@ -38,7 +38,7 @@ struct ConditionalSheetModifier<SheetContent: View>: ViewModifier {
 struct SelectedModifier: ViewModifier {
 ***REMOVED******REMOVED***/ A Boolean value that indicates whether view should display as selected.
 ***REMOVED***var isSelected: Bool
-***REMOVED***
+
 ***REMOVED***func body(content: Content) -> some View {
 ***REMOVED******REMOVED***if isSelected {
 ***REMOVED******REMOVED******REMOVED***content
@@ -58,7 +58,7 @@ extension View {
 ***REMOVED******REMOVED***/ Returns a new `View` that allows a parent `View` to be informed of a child view's size.
 ***REMOVED******REMOVED***/ - Parameter perform: The closure to be executed when the content size of the receiver
 ***REMOVED******REMOVED***/ changes.
-***REMOVED******REMOVED***/ - Returns: A new `View`.
+***REMOVED******REMOVED***/ - Returns: The modified view.
 ***REMOVED***func onSizeChange(perform: @escaping (CGSize) -> Void) -> some View {
 ***REMOVED******REMOVED***background(
 ***REMOVED******REMOVED******REMOVED***GeometryReader { geometry in
