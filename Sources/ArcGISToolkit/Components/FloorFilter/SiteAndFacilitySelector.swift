@@ -55,7 +55,7 @@ struct SiteAndFacilitySelector: View {
         @State private var isKeyboardAnimating = false
         
         /// A site name filter phrase entered by the user.
-        @State private var searchPhrase: String = ""
+        @State private var query: String = ""
         
         /// A local record of the site selected in the view model.
         ///
@@ -73,11 +73,11 @@ struct SiteAndFacilitySelector: View {
         /// A subset of `sites` with names containing `searchPhrase` or all `sites` if
         /// `searchPhrase` is empty.
         var matchingSites: [FloorSite] {
-            if searchPhrase.isEmpty {
+            if query.isEmpty {
                 return sites
             }
             return sites.filter {
-                $0.name.lowercased().contains(searchPhrase.lowercased())
+                $0.name.lowercased().contains(query.lowercased())
             }
         }
         
@@ -111,7 +111,7 @@ struct SiteAndFacilitySelector: View {
         var siteListAndFilterView: some View {
             NavigationView {
                 VStack {
-                    TextField("Filter sites", text: $searchPhrase)
+                    TextField("Filter sites", text: $query)
                         .keyboardType(.alphabet)
                         .disableAutocorrection(true)
                     if matchingSites.isEmpty {
