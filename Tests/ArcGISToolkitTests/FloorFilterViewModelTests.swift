@@ -21,7 +21,8 @@ import XCTest
 final class FloorFilterViewModelTests: XCTestCase {
     /// Tests that a `FloorFilterViewModel` succesfully initializes with a `FloorManager` and
     /// `Binding<Viewpoint?>`.`
-    func testInitFloorFilterViewModelWithFloorManagerAndViewpoint() async {
+    /// Tests that a `FloorFilterViewModel` succesfully initializes with a `FloorManager`.`
+    func testInitWithFloorManagerAndViewpoint() async {
         guard let map = await makeMap(),
               let floorManager = map.floorManager else {
             return
