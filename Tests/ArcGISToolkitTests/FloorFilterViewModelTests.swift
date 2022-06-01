@@ -19,120 +19,13 @@ import XCTest
 
 @MainActor
 final class FloorFilterViewModelTests: XCTestCase {
-    /// Tests that a `FloorFilterViewModel` succesfully initializes with a `FloorManager` and
-    /// `Binding<Viewpoint?>`.`
-    /// Tests that a `FloorFilterViewModel` succesfully initializes with a `FloorManager`.`
-    func testInitWithFloorManagerAndViewpoint() async throws {
-        let floorManager = try await floorManager(
-            forWebMapWithIdentifier: .testMap
-        )
-        
-        let viewModel = FloorFilterViewModel(
-            floorManager: floorManager,
-            viewpoint: .constant(.researchAnnexLattice)
-        )
-        
-        XCTAssertFalse(viewModel.sites.isEmpty)
-        XCTAssertFalse(viewModel.facilities.isEmpty)
-        XCTAssertFalse(viewModel.levels.isEmpty)
-    }
-    
-    /// Confirms that the selected site/facility/level properties and the viewpoint are correctly updated.
-    func testSetSite() async throws {
-        let floorManager = try await floorManager(
-            forWebMapWithIdentifier: .testMap
-        )
-        
-        var _viewpoint: Viewpoint? = .researchAnnexLattice
-        let viewpoint = Binding(get: { _viewpoint }, set: { _viewpoint = $0 })
-        let viewModel = FloorFilterViewModel(
-            floorManager: floorManager,
-            viewpoint: viewpoint
-        )
-        
-        let site = try XCTUnwrap(viewModel.sites.first)
-        
-        viewModel.setSite(site, zoomTo: true)
-        let selectedSite = viewModel.selectedSite
-        let selectedFacility = viewModel.selectedFacility
-        let selectedLevel = viewModel.selectedLevel
-        XCTAssertEqual(selectedSite, site)
-        XCTAssertNil(selectedFacility)
-        XCTAssertNil(selectedLevel)
-        XCTAssertEqual(
-            _viewpoint?.targetGeometry.extent.center.x,
-            selectedSite?.geometry?.extent.center.x
-        )
-    }
-    
-    func testSetFacility() async throws {
-        let floorManager = try await floorManager(
-            forWebMapWithIdentifier: .testMap
-        )
-        
-        var _viewpoint: Viewpoint? = .researchAnnexLattice
-        let viewpoint = Binding(get: { _viewpoint }, set: { _viewpoint = $0 })
-        let viewModel = FloorFilterViewModel(
-            automaticSelectionMode: .never,
-            floorManager: floorManager,
-            viewpoint: viewpoint
-        )
-        
-        let facility = try XCTUnwrap(viewModel.facilities.first)
-        
-        viewModel.setFacility(facility, zoomTo: true)
-        let selectedFacility = viewModel.selectedFacility
-        let selectedLevel = viewModel.selectedLevel
-        let defaultLevel = selectedFacility?.defaultLevel
-        XCTAssertEqual(selectedFacility, facility)
-        XCTAssertEqual(selectedLevel, defaultLevel)
-        XCTAssertEqual(
-            _viewpoint?.targetGeometry.extent.center.x,
-            selectedFacility?.geometry?.extent.center.x
-        )
-    }
-    
-    /// Confirms that the selected site/facility/level properties and the viewpoint are correctly updated.
-    func testSetLevel() async throws {
-        let floorManager = try await floorManager(
-            forWebMapWithIdentifier: .testMap
-        )
-        
-        let initialViewpoint: Viewpoint = .researchAnnexLattice
-        var _viewpoint: Viewpoint? = initialViewpoint
-        let viewpoint = Binding(get: { _viewpoint }, set: { _viewpoint = $0 })
-        let viewModel = FloorFilterViewModel(
-            floorManager: floorManager,
-            viewpoint: viewpoint
-        )
-        
-        let levels = viewModel.levels
-        let level = try XCTUnwrap(levels.first)
-        
-        viewModel.setLevel(level)
-        let selectedLevel = viewModel.selectedLevel
-        XCTAssertEqual(selectedLevel, level)
-        XCTAssertEqual(
-            _viewpoint?.targetGeometry.extent.center.x,
-            initialViewpoint.targetGeometry.extent.center.x
-        )
-        levels.forEach { level in
-            if level.verticalOrder == selectedLevel?.verticalOrder {
-                XCTAssertTrue(level.isVisible)
-            } else {
-                XCTAssertFalse(level.isVisible)
-            }
-        }
-    }
-    
     /// Confirms that the selected site/facility/level properties and the viewpoint are correctly updated.
     func testAutoSelectAlways() async throws {
         let floorManager = try await floorManager(
             forWebMapWithIdentifier: .testMap
         )
         
-        let viewpointLosAngeles: Viewpoint = .losAngeles
-        var _viewpoint: Viewpoint? = viewpointLosAngeles
+        var _viewpoint: Viewpoint? = .losAngeles
         let viewpoint = Binding(get: { _viewpoint }, set: { _viewpoint = $0 })
         let viewModel = FloorFilterViewModel(
             automaticSelectionMode: .always,
@@ -141,30 +34,20 @@ final class FloorFilterViewModelTests: XCTestCase {
         )
         
         // Viewpoint is Los Angeles, selection should be nil
-        viewModel.automaticallySelectFacilityOrSite()
+        XCTAssertNil(viewModel.selectedFacility)
+        XCTAssertNil(viewModel.selectedSite)
         
-        var selectedFacility = viewModel.selectedFacility
-        var selectedSite = viewModel.selectedSite
-        XCTAssertNil(selectedFacility)
-        XCTAssertNil(selectedSite)
-        
+        // Viewpoint is Research Annex Lattice
         _viewpoint = .researchAnnexLattice
         viewModel.automaticallySelectFacilityOrSite()
-        
-        // Viewpoint is the Lattice facility at the Research Annex site
-        selectedFacility = viewModel.selectedFacility
-        selectedSite = viewModel.selectedSite
-        XCTAssertEqual(selectedSite?.name, "Research Annex")
-        XCTAssertEqual(selectedFacility?.name, "Lattice")
-        
-        _viewpoint = .losAngeles
-        viewModel.automaticallySelectFacilityOrSite()
+        XCTAssertEqual(viewModel.selectedSite?.name, "Research Annex")
+        XCTAssertEqual(viewModel.selectedFacility?.name, "Lattice")
         
         // Viewpoint is Los Angeles, selection should be nil
-        selectedFacility = viewModel.selectedFacility
-        selectedSite = viewModel.selectedSite
-        XCTAssertNil(selectedSite)
-        XCTAssertNil(selectedFacility)
+        _viewpoint = .losAngeles
+        viewModel.automaticallySelectFacilityOrSite()
+        XCTAssertNil(viewModel.selectedSite)
+        XCTAssertNil(viewModel.selectedFacility)
     }
     
     /// Confirms that the selected site/facility/level properties and the viewpoint are correctly updated.
@@ -181,23 +64,17 @@ final class FloorFilterViewModelTests: XCTestCase {
             viewpoint: viewpoint
         )
         
+        // Viewpoint is Research Annex Lattice
+        _viewpoint = .researchAnnexLattice
         viewModel.automaticallySelectFacilityOrSite()
+        XCTAssertEqual(viewModel.selectedSite?.name, "Research Annex")
+        XCTAssertEqual(viewModel.selectedFacility?.name, "Lattice")
         
-        // Viewpoint is the Lattice facility at the Research Annex site
-        var selectedFacility = viewModel.selectedFacility
-        var selectedSite = viewModel.selectedSite
-        XCTAssertEqual(selectedSite?.name, "Research Annex")
-        XCTAssertEqual(selectedFacility?.name, "Lattice")
-        
-        // Viewpoint is Los Angeles, but selection should remain Redlands Main Q
+        // Viewpoint is Los Angeles, but selection should remain Research Annex Lattice
         _viewpoint = .losAngeles
         viewModel.automaticallySelectFacilityOrSite()
-        
-        // Viewpoint is Los Angeles, but selection should remain Redlands Main Q
-        selectedFacility = viewModel.selectedFacility
-        selectedSite = viewModel.selectedSite
-        XCTAssertEqual(selectedSite?.name, "Research Annex")
-        XCTAssertEqual(selectedFacility?.name, "Lattice")
+        XCTAssertEqual(viewModel.selectedSite?.name, "Research Annex")
+        XCTAssertEqual(viewModel.selectedFacility?.name, "Lattice")
     }
     
     /// Confirms that the selected site/facility/level properties and the viewpoint are correctly updated.
@@ -214,22 +91,156 @@ final class FloorFilterViewModelTests: XCTestCase {
             viewpoint: viewpoint
         )
         
-        viewModel.automaticallySelectFacilityOrSite()
-        
         // Viewpoint is Los Angeles, selection should be nil
-        var selectedFacility = viewModel.selectedFacility
-        var selectedSite = viewModel.selectedSite
-        XCTAssertNil(selectedFacility)
-        XCTAssertNil(selectedSite)
+        XCTAssertNil(viewModel.selectedFacility)
+        XCTAssertNil(viewModel.selectedSite)
         
+        // Viewpoint is Research Annex Lattice but selection should remain nil
         _viewpoint = .researchAnnexLattice
         viewModel.automaticallySelectFacilityOrSite()
+        XCTAssertNil(viewModel.selectedFacility)
+        XCTAssertNil(viewModel.selectedSite)
+    }
+    
+    /// Tests that a `FloorFilterViewModel` succesfully initializes.
+    func testInitWithFloorManagerAndViewpoint() async throws {
+        let floorManager = try await floorManager(
+            forWebMapWithIdentifier: .testMap
+        )
+        let viewModel = FloorFilterViewModel(
+            floorManager: floorManager,
+            viewpoint: .constant(.researchAnnexLattice)
+        )
+        XCTAssertFalse(viewModel.sites.isEmpty)
+        XCTAssertFalse(viewModel.facilities.isEmpty)
+        XCTAssertFalse(viewModel.levels.isEmpty)
+    }
+    
+    /// Confirms that the proper level is visible and all others are hidden.
+    func testLevelVisibility() async throws {
+        let floorManager = try await floorManager(
+            forWebMapWithIdentifier: .testMap
+        )
+        let viewModel = FloorFilterViewModel(
+            floorManager: floorManager,
+            viewpoint: .constant(.researchAnnexLattice)
+        )
+        let levels = viewModel.levels
+        let firstLevel = try XCTUnwrap(levels.first)
+        viewModel.setLevel(firstLevel)
+        levels.forEach { level in
+            if level.verticalOrder == firstLevel.verticalOrder {
+                XCTAssertTrue(level.isVisible)
+            } else {
+                XCTAssertFalse(level.isVisible)
+            }
+        }
+    }
+    
+    /// Confirms that the selected site/facility/level properties are correctly updated.
+    func testSelectedProperties() async throws {
+        let floorManager = try await floorManager(
+            forWebMapWithIdentifier: .testMap
+        )
+        let viewModel = FloorFilterViewModel(
+            floorManager: floorManager,
+            viewpoint: .constant(.researchAnnexLattice)
+        )
+        let site = try XCTUnwrap(viewModel.sites.first)
+        let facility = try XCTUnwrap(viewModel.facilities.first)
+        let level = try XCTUnwrap(viewModel.levels.first)
         
-        // Viewpoint is the Lattice facility at the Research Annex site
-        selectedFacility = viewModel.selectedFacility
-        selectedSite = viewModel.selectedSite
-        XCTAssertNil(selectedFacility)
-        XCTAssertNil(selectedSite)
+        viewModel.setSite(site, zoomTo: true)
+        XCTAssertEqual(viewModel.selectedSite, site)
+        XCTAssertNil(viewModel.selectedFacility)
+        XCTAssertNil(viewModel.selectedLevel)
+        
+        viewModel.setFacility(facility, zoomTo: true)
+        XCTAssertEqual(viewModel.selectedSite, facility.site)
+        XCTAssertEqual(viewModel.selectedFacility, facility)
+        XCTAssertEqual(viewModel.selectedLevel, facility.defaultLevel)
+        
+        viewModel.setLevel(level)
+        XCTAssertEqual(viewModel.selectedSite, level.facility?.site)
+        XCTAssertEqual(viewModel.selectedFacility, level.facility)
+        XCTAssertEqual(viewModel.selectedLevel, level)
+    }
+    
+    /// Confirms that the selection property indicates the correct facility (and therefore level) value.
+    func testSelectionOfFacility() async throws {
+        let floorManager = try await floorManager(
+            forWebMapWithIdentifier: .testMap
+        )
+        let viewModel = FloorFilterViewModel(
+            floorManager: floorManager,
+            viewpoint: .constant(.researchAnnexLattice)
+        )
+        let facility = try XCTUnwrap(viewModel.facilities[4])
+        let level = try XCTUnwrap(facility.defaultLevel)
+        viewModel.setFacility(facility, zoomTo: true)
+        XCTAssertEqual(
+            viewModel.selection, .level(level)
+        )
+    }
+    
+    /// Confirms that the selection property indicates the correct level value.
+    func testSelectionOfLevel() async throws {
+        let floorManager = try await floorManager(
+            forWebMapWithIdentifier: .testMap
+        )
+        let viewModel = FloorFilterViewModel(
+            floorManager: floorManager,
+            viewpoint: .constant(.researchAnnexLattice)
+        )
+        let level = try XCTUnwrap(viewModel.levels.first)
+        viewModel.setLevel(level)
+        XCTAssertEqual(
+            viewModel.selection, .level(level)
+        )
+    }
+    
+    /// Confirms that the selection property indicates the correct site value.
+    func testSelectionOfSite() async throws {
+        let floorManager = try await floorManager(
+            forWebMapWithIdentifier: .testMap
+        )
+        let viewModel = FloorFilterViewModel(
+            floorManager: floorManager,
+            viewpoint: .constant(.researchAnnexLattice)
+        )
+        let site = try XCTUnwrap(viewModel.sites.first)
+        viewModel.setSite(site, zoomTo: true)
+        XCTAssertEqual(
+            viewModel.selection, .site(site)
+        )
+    }
+    
+    /// Confirms that the  viewpoint is correctly updated.
+    func testViewpointUpdates() async throws {
+        var _viewpoint: Viewpoint? = .researchAnnexLattice
+        let viewpoint = Binding(get: { _viewpoint }, set: { _viewpoint = $0 })
+        let floorManager = try await floorManager(
+            forWebMapWithIdentifier: .testMap
+        )
+        let viewModel = FloorFilterViewModel(
+            floorManager: floorManager,
+            viewpoint: viewpoint
+        )
+        
+        let site = try XCTUnwrap(viewModel.sites.first)
+        let facility = try XCTUnwrap(viewModel.facilities.first)
+        
+        viewModel.setSite(site, zoomTo: true)
+        XCTAssertEqual(
+            _viewpoint?.targetGeometry.extent.center.x,
+            site.geometry?.extent.center.x
+        )
+        
+        viewModel.setFacility(facility, zoomTo: true)
+        XCTAssertEqual(
+            _viewpoint?.targetGeometry.extent.center.x,
+            facility.geometry?.extent.center.x
+        )
     }
     
     private func floorManager(
@@ -252,17 +263,15 @@ private extension PortalItem.ID {
 }
 
 private extension Viewpoint {
-    static var researchAnnexLattice: Viewpoint {
-        Viewpoint(
-            center:
-                Point(
-                    x: -13045075.712950204,
-                    y: 4036858.6146756615,
-                    spatialReference: .webMercator
-                ),
-            scale: 550.0
-        )
-    }
+    static let researchAnnexLattice = Viewpoint(
+        center:
+            Point(
+                x: -13045075.712950204,
+                y: 4036858.6146756615,
+                spatialReference: .webMercator
+            ),
+        scale: 550.0
+    )
     
     static let losAngeles = Viewpoint(
         center: Point(
