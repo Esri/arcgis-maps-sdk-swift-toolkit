@@ -163,11 +163,11 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***shouldUpdateViewModel = false
 ***REMOVED******REMOVED******REMOVED******REMOVED***selectedSite = viewModel.selectedSite
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.onChange(of: selectedSite) { _ in  
-***REMOVED******REMOVED******REMOVED******REMOVED***   if shouldUpdateViewModel, let site = selectedSite {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***   viewModel.setSite(site, zoomTo: true)
-***REMOVED******REMOVED***   ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***   shouldUpdateViewModel = true
+***REMOVED******REMOVED******REMOVED***.onChange(of: selectedSite) { _ in
+***REMOVED******REMOVED******REMOVED******REMOVED***if shouldUpdateViewModel, let site = selectedSite {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.setSite(site, zoomTo: true)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***shouldUpdateViewModel = true
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
