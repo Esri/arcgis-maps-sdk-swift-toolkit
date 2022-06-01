@@ -19,118 +19,13 @@ import XCTest
 
 @MainActor
 final class FloorFilterViewModelTests: XCTestCase {
-    /// Tests that a `FloorFilterViewModel` succesfully initializes with a `FloorManager`.`
-    func testInitWithFloorManagerAndViewpoint() async throws {
-        let floorManager = try await floorManager(
-            forWebMapWithIdentifier: .redlandsCampusMap
-        )
-        
-        let viewModel = FloorFilterViewModel(
-            floorManager: floorManager,
-            viewpoint: .constant(.esriRedlands())
-        )
-        
-        XCTAssertFalse(viewModel.sites.isEmpty)
-        XCTAssertFalse(viewModel.facilities.isEmpty)
-        XCTAssertFalse(viewModel.levels.isEmpty)
-    }
-    
-    /// Confirms that the selected site/facility/level properties and the viewpoint are correctly updated.
-    func testSetSite() async throws {
-        let floorManager = try await floorManager(
-            forWebMapWithIdentifier: .redlandsCampusMap
-        )
-        
-        var _viewpoint: Viewpoint? = .esriRedlands()
-        let viewpoint = Binding(get: { _viewpoint }, set: { _viewpoint = $0 })
-        let viewModel = FloorFilterViewModel(
-            floorManager: floorManager,
-            viewpoint: viewpoint
-        )
-        
-        let site = try XCTUnwrap(viewModel.sites.first)
-        
-        viewModel.setSite(site, zoomTo: true)
-        let selectedSite = viewModel.selectedSite
-        let selectedFacility = viewModel.selectedFacility
-        let selectedLevel = viewModel.selectedLevel
-        XCTAssertEqual(selectedSite, site)
-        XCTAssertNil(selectedFacility)
-        XCTAssertNil(selectedLevel)
-        XCTAssertEqual(
-            _viewpoint?.targetGeometry.extent.center.x,
-            selectedSite?.geometry?.extent.center.x
-        )
-    }
-    
-    func testSetFacility() async throws {
-        let floorManager = try await floorManager(
-            forWebMapWithIdentifier: .redlandsCampusMap
-        )
-        
-        var _viewpoint: Viewpoint? = .esriRedlands()
-        let viewpoint = Binding(get: { _viewpoint }, set: { _viewpoint = $0 })
-        let viewModel = FloorFilterViewModel(
-            automaticSelectionMode: .never,
-            floorManager: floorManager,
-            viewpoint: viewpoint
-        )
-        
-        let facility = try XCTUnwrap(viewModel.facilities.first)
-        
-        viewModel.setFacility(facility, zoomTo: true)
-        let selectedFacility = viewModel.selectedFacility
-        let selectedLevel = viewModel.selectedLevel
-        let defaultLevel = selectedFacility?.defaultLevel
-        XCTAssertEqual(selectedFacility, facility)
-        XCTAssertEqual(selectedLevel, defaultLevel)
-        XCTAssertEqual(
-            _viewpoint?.targetGeometry.extent.center.x,
-            selectedFacility?.geometry?.extent.center.x
-        )
-    }
-    
-    /// Confirms that the selected site/facility/level properties and the viewpoint are correctly updated.
-    func testSetLevel() async throws {
-        let floorManager = try await floorManager(
-            forWebMapWithIdentifier: .redlandsCampusMap
-        )
-        
-        let initialViewpoint: Viewpoint = .esriRedlands()
-        var _viewpoint: Viewpoint? = initialViewpoint
-        let viewpoint = Binding(get: { _viewpoint }, set: { _viewpoint = $0 })
-        let viewModel = FloorFilterViewModel(
-            floorManager: floorManager,
-            viewpoint: viewpoint
-        )
-        
-        let levels = viewModel.levels
-        let level = try XCTUnwrap(levels.first)
-        
-        viewModel.setLevel(level)
-        let selectedLevel = viewModel.selectedLevel
-        XCTAssertEqual(selectedLevel, level)
-        XCTAssertEqual(
-            _viewpoint?.targetGeometry.extent.center.x,
-            initialViewpoint.targetGeometry.extent.center.x
-        )
-        levels.forEach { level in
-            if level.verticalOrder == selectedLevel?.verticalOrder {
-                XCTAssertTrue(level.isVisible)
-            } else {
-                XCTAssertFalse(level.isVisible)
-            }
-        }
-    }
-    
     /// Confirms that the selected site/facility/level properties and the viewpoint are correctly updated.
     func testAutoSelectAlways() async throws {
         let floorManager = try await floorManager(
             forWebMapWithIdentifier: .redlandsCampusMap
         )
         
-        let viewpointLosAngeles: Viewpoint = .losAngeles
-        var _viewpoint: Viewpoint? = viewpointLosAngeles
+        var _viewpoint: Viewpoint? = .losAngeles
         let viewpoint = Binding(get: { _viewpoint }, set: { _viewpoint = $0 })
         let viewModel = FloorFilterViewModel(
             automaticSelectionMode: .always,
@@ -139,26 +34,20 @@ final class FloorFilterViewModelTests: XCTestCase {
         )
         
         // Viewpoint is Los Angeles, selection should be nil
-        var selectedFacility = viewModel.selectedFacility
-        var selectedSite = viewModel.selectedSite
-        XCTAssertNil(selectedFacility)
-        XCTAssertNil(selectedSite)
+        XCTAssertNil(viewModel.selectedFacility)
+        XCTAssertNil(viewModel.selectedSite)
         
         // Viewpoint is Redlands Main Q
         _viewpoint = .esriRedlands(scale: 1000)
         viewModel.automaticallySelectFacilityOrSite()
-        selectedFacility = viewModel.selectedFacility
-        selectedSite = viewModel.selectedSite
-        XCTAssertEqual(selectedSite?.name, "Redlands Main")
-        XCTAssertEqual(selectedFacility?.name, "Q")
+        XCTAssertEqual(viewModel.selectedSite?.name, "Redlands Main")
+        XCTAssertEqual(viewModel.selectedFacility?.name, "Q")
         
         // Viewpoint is Los Angeles, selection should be nil
-        _viewpoint = viewpointLosAngeles
+        _viewpoint = .losAngeles
         viewModel.automaticallySelectFacilityOrSite()
-        selectedFacility = viewModel.selectedFacility
-        selectedSite = viewModel.selectedSite
-        XCTAssertNil(selectedSite)
-        XCTAssertNil(selectedFacility)
+        XCTAssertNil(viewModel.selectedSite)
+        XCTAssertNil(viewModel.selectedFacility)
     }
     
     /// Confirms that the selected site/facility/level properties and the viewpoint are correctly updated.
@@ -178,18 +67,14 @@ final class FloorFilterViewModelTests: XCTestCase {
         // Viewpoint is Redlands Main Q
         _viewpoint = .esriRedlands(scale: 1000)
         viewModel.automaticallySelectFacilityOrSite()
-        var selectedFacility = viewModel.selectedFacility
-        var selectedSite = viewModel.selectedSite
-        XCTAssertEqual(selectedSite?.name, "Redlands Main")
-        XCTAssertEqual(selectedFacility?.name, "Q")
+        XCTAssertEqual(viewModel.selectedSite?.name, "Redlands Main")
+        XCTAssertEqual(viewModel.selectedFacility?.name, "Q")
         
         // Viewpoint is Los Angeles, but selection should remain Redlands Main Q
         _viewpoint = .losAngeles
         viewModel.automaticallySelectFacilityOrSite()
-        selectedFacility = viewModel.selectedFacility
-        selectedSite = viewModel.selectedSite
-        XCTAssertEqual(selectedSite?.name, "Redlands Main")
-        XCTAssertEqual(selectedFacility?.name, "Q")
+        XCTAssertEqual(viewModel.selectedSite?.name, "Redlands Main")
+        XCTAssertEqual(viewModel.selectedFacility?.name, "Q")
     }
     
     /// Confirms that the selected site/facility/level properties and the viewpoint are correctly updated.
@@ -207,18 +92,155 @@ final class FloorFilterViewModelTests: XCTestCase {
         )
         
         // Viewpoint is Los Angeles, selection should be nil
-        var selectedFacility = viewModel.selectedFacility
-        var selectedSite = viewModel.selectedSite
-        XCTAssertNil(selectedFacility)
-        XCTAssertNil(selectedSite)
+        XCTAssertNil(viewModel.selectedFacility)
+        XCTAssertNil(viewModel.selectedSite)
         
         // Viewpoint is Redlands Main Q but selection should still be nil
         _viewpoint = .esriRedlands(scale: 1000)
         viewModel.automaticallySelectFacilityOrSite()
-        selectedFacility = viewModel.selectedFacility
-        selectedSite = viewModel.selectedSite
-        XCTAssertNil(selectedFacility)
-        XCTAssertNil(selectedSite)
+        XCTAssertNil(viewModel.selectedFacility)
+        XCTAssertNil(viewModel.selectedSite)
+    }
+    
+    /// Tests that a `FloorFilterViewModel` succesfully initializes.
+    func testInitWithFloorManagerAndViewpoint() async throws {
+        let floorManager = try await floorManager(
+            forWebMapWithIdentifier: .redlandsCampusMap
+        )
+        let viewModel = FloorFilterViewModel(
+            floorManager: floorManager,
+            viewpoint: .constant(.esriRedlands())
+        )
+        XCTAssertFalse(viewModel.sites.isEmpty)
+        XCTAssertFalse(viewModel.facilities.isEmpty)
+        XCTAssertFalse(viewModel.levels.isEmpty)
+    }
+    
+    /// Confirms that the proper level is visible and all others are hidden.
+    func testLevelVisibility() async throws {
+        let floorManager = try await floorManager(
+            forWebMapWithIdentifier: .redlandsCampusMap
+        )
+        let viewModel = FloorFilterViewModel(
+            floorManager: floorManager,
+            viewpoint: .constant(.esriRedlands())
+        )
+        let levels = viewModel.levels
+        let firstLevel = try XCTUnwrap(levels.first)
+        viewModel.setLevel(firstLevel)
+        levels.forEach { level in
+            if level.verticalOrder == firstLevel.verticalOrder {
+                XCTAssertTrue(level.isVisible)
+            } else {
+                XCTAssertFalse(level.isVisible)
+            }
+        }
+    }
+    
+    /// Confirms that the selected site/facility/level properties are correctly updated.
+    func testSelectedProperties() async throws {
+        let floorManager = try await floorManager(
+            forWebMapWithIdentifier: .redlandsCampusMap
+        )
+        let viewModel = FloorFilterViewModel(
+            floorManager: floorManager,
+            viewpoint: .constant(.esriRedlands())
+        )
+        let site = try XCTUnwrap(viewModel.sites.first)
+        let facility = try XCTUnwrap(viewModel.facilities.first)
+        let level = try XCTUnwrap(viewModel.levels.first)
+        
+        viewModel.setSite(site, zoomTo: true)
+        XCTAssertEqual(viewModel.selectedSite, site)
+        XCTAssertNil(viewModel.selectedFacility)
+        XCTAssertNil(viewModel.selectedLevel)
+        
+        viewModel.setFacility(facility, zoomTo: true)
+        XCTAssertEqual(viewModel.selectedSite, facility.site)
+        XCTAssertEqual(viewModel.selectedFacility, facility)
+        XCTAssertEqual(viewModel.selectedLevel, facility.defaultLevel)
+        
+        viewModel.setLevel(level)
+        XCTAssertEqual(viewModel.selectedSite, level.facility?.site)
+        XCTAssertEqual(viewModel.selectedFacility, level.facility)
+        XCTAssertEqual(viewModel.selectedLevel, level)
+    }
+    
+    /// Confirms that the selection property indicates the correct facility (and therefore level) value.
+    func testSelectionOfFacility() async throws {
+        let floorManager = try await floorManager(
+            forWebMapWithIdentifier: .redlandsCampusMap
+        )
+        let viewModel = FloorFilterViewModel(
+            floorManager: floorManager,
+            viewpoint: .constant(.esriRedlands())
+        )
+        let facility = try XCTUnwrap(viewModel.facilities.first)
+        let level = try XCTUnwrap(facility.defaultLevel)
+        viewModel.setFacility(facility, zoomTo: true)
+        XCTAssertEqual(
+            viewModel.selection, .level(level)
+        )
+    }
+    
+    /// Confirms that the selection property indicates the correct level value.
+    func testSelectionOfLevel() async throws {
+        let floorManager = try await floorManager(
+            forWebMapWithIdentifier: .redlandsCampusMap
+        )
+        let viewModel = FloorFilterViewModel(
+            floorManager: floorManager,
+            viewpoint: .constant(.esriRedlands())
+        )
+        let level = try XCTUnwrap(viewModel.levels.first)
+        viewModel.setLevel(level)
+        XCTAssertEqual(
+            viewModel.selection, .level(level)
+        )
+    }
+    
+    /// Confirms that the selection property indicates the correct site value.
+    func testSelectionOfSite() async throws {
+        let floorManager = try await floorManager(
+            forWebMapWithIdentifier: .redlandsCampusMap
+        )
+        let viewModel = FloorFilterViewModel(
+            floorManager: floorManager,
+            viewpoint: .constant(.esriRedlands())
+        )
+        let site = try XCTUnwrap(viewModel.sites.first)
+        viewModel.setSite(site, zoomTo: true)
+        XCTAssertEqual(
+            viewModel.selection, .site(site)
+        )
+    }
+    
+    /// Confirms that the  viewpoint is correctly updated.
+    func testViewpointUpdates() async throws {
+        var _viewpoint: Viewpoint? = .esriRedlands()
+        let viewpoint = Binding(get: { _viewpoint }, set: { _viewpoint = $0 })
+        let floorManager = try await floorManager(
+            forWebMapWithIdentifier: .redlandsCampusMap
+        )
+        let viewModel = FloorFilterViewModel(
+            floorManager: floorManager,
+            viewpoint: viewpoint
+        )
+        
+        let site = try XCTUnwrap(viewModel.sites.first)
+        let facility = try XCTUnwrap(viewModel.facilities.first)
+        
+        viewModel.setSite(site, zoomTo: true)
+        XCTAssertEqual(
+            _viewpoint?.targetGeometry.extent.center.x,
+            site.geometry?.extent.center.x
+        )
+        
+        viewModel.setFacility(facility, zoomTo: true)
+        XCTAssertEqual(
+            _viewpoint?.targetGeometry.extent.center.x,
+            facility.geometry?.extent.center.x
+        )
     }
     
     private func floorManager(
