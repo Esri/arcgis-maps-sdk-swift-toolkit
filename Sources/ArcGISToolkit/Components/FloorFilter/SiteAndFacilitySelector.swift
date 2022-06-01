@@ -164,11 +164,11 @@ struct SiteAndFacilitySelector: View {
                 shouldUpdateViewModel = false
                 selectedSite = viewModel.selectedSite
             }
-            .onChange(of: selectedSite) { _ in  
-                   if shouldUpdateViewModel, let site = selectedSite {
-                       viewModel.setSite(site, zoomTo: true)
-                   }
-                   shouldUpdateViewModel = true
+            .onChange(of: selectedSite) { _ in
+                if shouldUpdateViewModel, let site = selectedSite {
+                    viewModel.setSite(site, zoomTo: true)
+                }
+                shouldUpdateViewModel = true
             }
         }
     }
