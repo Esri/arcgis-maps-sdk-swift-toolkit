@@ -158,7 +158,7 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.listStyle(.plain)
 ***REMOVED******REMOVED******REMOVED***.onChange(of: viewModel.selection) { _ in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Setting the `updateViewModel` flag false allows
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Setting the `shouldUpdateViewModel` flag false allows
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** `selectedSite` to receive upstream updates from the view
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** model without republishing them back up to the view model.
 ***REMOVED******REMOVED******REMOVED******REMOVED***shouldUpdateViewModel = false
