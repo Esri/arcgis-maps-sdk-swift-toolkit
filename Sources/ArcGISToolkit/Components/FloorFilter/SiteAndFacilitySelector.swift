@@ -157,7 +157,7 @@ struct SiteAndFacilitySelector: View {
             }
             .listStyle(.plain)
             .onChange(of: viewModel.selection) { _ in
-                // Setting the `updateViewModel` flag false allows
+                // Setting the `shouldUpdateViewModel` flag false allows
                 // `selectedSite` to receive upstream updates from the view
                 // model without republishing them back up to the view model.
                 shouldUpdateViewModel = false
