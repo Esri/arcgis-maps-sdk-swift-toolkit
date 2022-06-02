@@ -119,7 +119,7 @@ struct SiteAndFacilitySelector: View {
                             isHidden: isHidden
                         )
                     }
-                        .padding([.vertical], 4)
+                    .padding([.vertical], 4)
                 }
                 .navigationTitle("Sites")
                 .navigationBarTitleDisplayMode(.inline)
