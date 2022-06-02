@@ -37,21 +37,14 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED***/ The view model used by this selector.
 ***REMOVED******REMOVED***@EnvironmentObject var viewModel: FloorFilterViewModel
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ Indicates whether the view model should be notified of the selection update.
-***REMOVED******REMOVED***@State private var shouldUpdateViewModel = true
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ Indicates that the keyboard is animating and some views may require reload.
 ***REMOVED******REMOVED***@State private var isKeyboardAnimating = false
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ A site name filter phrase entered by the user.
 ***REMOVED******REMOVED***@State private var query: String = ""
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ A local record of the site selected in the view model.
-***REMOVED******REMOVED******REMOVED***/
-***REMOVED******REMOVED******REMOVED***/ As the view model's selection will change to `.facility(FloorFacility)` and
-***REMOVED******REMOVED******REMOVED***/ `.level(FloorLevel)` over time, this is needed to keep track of the site at the top of the
-***REMOVED******REMOVED******REMOVED***/ hierarchy to keep the site selection persistent in the navigation view.
-***REMOVED******REMOVED***@State private var selectedSite: FloorSite?
+***REMOVED******REMOVED******REMOVED***/ Indicates whether a site entry should be considered "selected" in the list.
+***REMOVED******REMOVED***@State var shouldAutoSelect = false
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ Allows the user to toggle the visibility of the site and facility selector.
 ***REMOVED******REMOVED***var isHidden: Binding<Bool>
@@ -146,28 +139,29 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***NavigationLink(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***site.name,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***tag: site,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selection: $selectedSite
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selection: Binding(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***get: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return shouldAutoSelect ? viewModel.selectedSite : nil
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***set: { newSite in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let newSite = newSite else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.setSite(newSite, zoomTo: true)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FacilitiesList(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***allSiteStyle: false,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***facilities: site.facilities,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isHidden: isHidden
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onDisappear {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***shouldAutoSelect = false
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.listStyle(.plain)
 ***REMOVED******REMOVED******REMOVED***.onChange(of: viewModel.selection) { _ in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Setting the `shouldUpdateViewModel` flag false allows
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** `selectedSite` to receive upstream updates from the view
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** model without republishing them back up to the view model.
-***REMOVED******REMOVED******REMOVED******REMOVED***shouldUpdateViewModel = false
-***REMOVED******REMOVED******REMOVED******REMOVED***selectedSite = viewModel.selectedSite
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.onChange(of: selectedSite) { _ in
-***REMOVED******REMOVED******REMOVED******REMOVED***if shouldUpdateViewModel, let site = selectedSite {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.setSite(site, zoomTo: true)
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***shouldUpdateViewModel = true
+***REMOVED******REMOVED******REMOVED******REMOVED***shouldAutoSelect = true
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
