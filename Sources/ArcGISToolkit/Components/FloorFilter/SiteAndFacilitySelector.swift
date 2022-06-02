@@ -37,21 +37,14 @@ struct SiteAndFacilitySelector: View {
         /// The view model used by this selector.
         @EnvironmentObject var viewModel: FloorFilterViewModel
         
-        /// Indicates whether the view model should be notified of the selection update.
-        @State private var shouldUpdateViewModel = true
-        
         /// Indicates that the keyboard is animating and some views may require reload.
         @State private var isKeyboardAnimating = false
         
         /// A site name filter phrase entered by the user.
         @State private var query: String = ""
         
-        /// A local record of the site selected in the view model.
-        ///
-        /// As the view model's selection will change to `.facility(FloorFacility)` and
-        /// `.level(FloorLevel)` over time, this is needed to keep track of the site at the top of the
-        /// hierarchy to keep the site selection persistent in the navigation view.
-        @State private var selectedSite: FloorSite?
+        /// Indicates whether a site entry should be considered "selected" in the list.
+        @State var shouldAutoSelect = false
         
         /// Allows the user to toggle the visibility of the site and facility selector.
         var isHidden: Binding<Bool>
@@ -146,28 +139,29 @@ struct SiteAndFacilitySelector: View {
                 NavigationLink(
                     site.name,
                     tag: site,
-                    selection: $selectedSite
+                    selection: Binding(
+                        get: {
+                            return shouldAutoSelect ? viewModel.selectedSite : nil
+                        },
+                        set: { newSite in
+                            guard let newSite = newSite else { return }
+                            viewModel.setSite(newSite, zoomTo: true)
+                        }
+                    )
                 ) {
                     FacilitiesList(
                         allSiteStyle: false,
                         facilities: site.facilities,
                         isHidden: isHidden
                     )
+                    .onDisappear {
+                        shouldAutoSelect = false
+                    }
                 }
             }
             .listStyle(.plain)
             .onChange(of: viewModel.selection) { _ in
-                // Setting the `shouldUpdateViewModel` flag false allows
-                // `selectedSite` to receive upstream updates from the view
-                // model without republishing them back up to the view model.
-                shouldUpdateViewModel = false
-                selectedSite = viewModel.selectedSite
-            }
-            .onChange(of: selectedSite) { _ in
-                if shouldUpdateViewModel, let site = selectedSite {
-                    viewModel.setSite(site, zoomTo: true)
-                }
-                shouldUpdateViewModel = true
+                shouldAutoSelect = true
             }
         }
     }
