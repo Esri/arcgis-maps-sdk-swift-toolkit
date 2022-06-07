@@ -48,9 +48,6 @@ struct SiteAndFacilitySelector: View {
         /// The view model used by this selector.
         @EnvironmentObject var viewModel: FloorFilterViewModel
         
-        /// Indicates that the keyboard is animating and some views may require reload.
-        @State private var isKeyboardAnimating = false
-        
         /// A site name filter phrase entered by the user.
         @State private var query: String = ""
         
@@ -74,34 +71,8 @@ struct SiteAndFacilitySelector: View {
             }
         }
         
-        var body: some View {
-            siteListAndFilterView
-                // Trigger a reload on keyboard frame changes for proper layout
-                // across all devices.
-                .opacity(isKeyboardAnimating ? 0.99 : 1.0)
-                .navigationViewStyle(.stack)
-                .onReceive(
-                    NotificationCenter.default.publisher(
-                        for: UIResponder.keyboardWillChangeFrameNotification
-                    )
-                ) { _ in
-                    withAnimation {
-                        isKeyboardAnimating = true
-                    }
-                }
-                .onReceive(
-                    NotificationCenter.default.publisher(
-                        for: UIResponder.keyboardDidChangeFrameNotification
-                    )
-                ) { _ in
-                    withAnimation {
-                        isKeyboardAnimating = false
-                    }
-                }
-        }
-        
         /// A view containing a filter-via-name field, a list of the site names and an "All sites" button.
-        var siteListAndFilterView: some View {
+        var body: some View {
             NavigationView {
                 VStack {
                     TextField("Filter sites", text: $query)
@@ -129,6 +100,7 @@ struct SiteAndFacilitySelector: View {
                     }
                 }
             }
+            .navigationViewStyle(.stack)
         }
         
         /// A view containing a list of the site names.
