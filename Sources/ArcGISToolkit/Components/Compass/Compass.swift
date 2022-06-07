@@ -31,7 +31,9 @@ public struct Compass: View {
     /// The heading of the compass in degrees.
     @Binding private var heading: Double
     
-    /// Creates a compass with a binding to a heading.
+    /// Creates a compass with a binding to a heading based on compass
+    /// directions (0° indicates a direction toward true North, 90° indicates a
+    /// direction toward true East, etc.).
     /// - Parameters:
     ///   - heading: The heading of the compass.
     ///   - autoHide: A Boolean value that determines whether the compass
@@ -68,7 +70,9 @@ public struct Compass: View {
 }
 
 public extension Compass {
-    /// Creates a compass with a binding to a viewpoint rotation.
+    /// Creates a compass with a binding to a viewpoint rotation (0° indicates
+    /// a direction toward true North, 90° indicates a direction toward true
+    /// West, etc.).
     /// - Parameters:
     ///   - viewpointRotation: The viewpoint rotation whose value determines the
     ///   heading of the compass.
