@@ -13,9 +13,9 @@
 
 ***REMOVED***
 
-extension EdgeInsets {
+public extension EdgeInsets {
 ***REMOVED******REMOVED***/ A reusable set of edge insets for use across toolkit components.
-***REMOVED***public static let toolkitDefault = Self(
+***REMOVED***static let toolkitDefault = Self(
 ***REMOVED******REMOVED***top: 8,
 ***REMOVED******REMOVED***leading: 12,
 ***REMOVED******REMOVED***bottom: 8,
