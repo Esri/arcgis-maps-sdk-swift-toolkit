@@ -93,13 +93,23 @@ public struct FloorFilter: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ A configured `SiteAndFacilitySelector` view.
+***REMOVED******REMOVED***/
+***REMOVED******REMOVED***/ The layering of the `SiteAndFacilitySelector` over a `RoundedRectangle` is needed to
+***REMOVED******REMOVED***/ produce a rounded corners effect. We can not simply use `.esriBorder()` here because
+***REMOVED******REMOVED***/ applying the `cornerRadius()` modifier on `SiteAndFacilitySelector`'s underlying
+***REMOVED******REMOVED***/ `NavigationView` causes a rendering bug. This bug remains in iOS 16 with
+***REMOVED******REMOVED***/ `NavigationStack` and has been reported to Apple as FB10034457.
 ***REMOVED***private var siteAndFacilitySelector: some View {
-***REMOVED******REMOVED***SiteAndFacilitySelector(isHidden: $isSitesAndFacilitiesHidden)
-***REMOVED******REMOVED******REMOVED***.esriBorder()
-***REMOVED******REMOVED******REMOVED***.opacity(isSitesAndFacilitiesHidden ? .zero : 1)
-***REMOVED******REMOVED******REMOVED***.onChange(of: viewpoint.wrappedValue) {
-***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.onViewpointChanged($0)
-***REMOVED******REMOVED***
+***REMOVED******REMOVED***ZStack {
+***REMOVED******REMOVED******REMOVED***RoundedRectangle(cornerRadius: 8)
+***REMOVED******REMOVED******REMOVED******REMOVED***.fill(Color(uiColor: .systemBackground))
+***REMOVED******REMOVED******REMOVED***SiteAndFacilitySelector(isHidden: $isSitesAndFacilitiesHidden)
+***REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: viewpoint.wrappedValue) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.onViewpointChanged($0)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.padding()
+***REMOVED***
+***REMOVED******REMOVED***.opacity(isSitesAndFacilitiesHidden ? .zero : 1)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Indicates that the selector should be presented with a top oriented aligment configuration.
