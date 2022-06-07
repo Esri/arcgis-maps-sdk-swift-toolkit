@@ -65,30 +65,15 @@ final class FloorFilterViewModel: ObservableObject {
     /// The selected site, floor, or level.
     @Published private(set) var selection: Selection?
     
-    /// The `Viewpoint` used to pan/zoom to the selected site/facilty.
-    /// If `nil`, there will be no automatic pan/zoom operations.
-    private var viewpoint: Binding<Viewpoint?>
-    
-    func onViewpointChanged(_ viewpoint: Viewpoint?) {
-        guard let viewpoint = viewpoint,
-              !viewpoint.targetScale.isZero else {
-                  return
-              }
-        automaticallySelectFacilityOrSite()
-    }
-    
     // MARK: Constants
     
     /// The selection behavior of the floor filter.
     private let automaticSelectionMode: FloorFilterAutomaticSelectionMode
     
-    /// The amount of time to wait between selection updates.
-    private let delay = DispatchQueue.SchedulerTimeType.Stride.seconds(0.20)
-    
     /// The `FloorManager` containing the site, floor, and level information.
     let floorManager: FloorManager
     
-    // MARK: Public members
+    // MARK: Properties
     
     /// The floor manager facilities.
     var facilities: [FloorFacility] {
@@ -152,7 +137,16 @@ final class FloorFilterViewModel: ObservableObject {
             .sorted(by: { $0.verticalOrder > $1.verticalOrder }) ?? []
     }
     
-    // MARK: Public methods
+    // MARK: Methods
+    
+    /// Allows model users to alert the model that the viewpoint has changed.
+    func onViewpointChanged(_ viewpoint: Viewpoint?) {
+        guard let viewpoint = viewpoint,
+              !viewpoint.targetScale.isZero else {
+                  return
+              }
+        automaticallySelectFacilityOrSite()
+    }
     
     /// Updates the selected site, facility, and level based on a newly selected facility.
     /// - Parameters:
@@ -195,8 +189,6 @@ final class FloorFilterViewModel: ObservableObject {
         }
     }
     
-    // MARK: Private items
-    
     /// Attempts to make an automated selection based on the current viewpoint.
     ///
     /// This method first attempts to select a facility, if that fails, a site selection is attempted.
@@ -208,6 +200,12 @@ final class FloorFilterViewModel: ObservableObject {
             autoSelectSite()
         }
     }
+    
+    // MARK: Private items
+    
+    /// The `Viewpoint` used to pan/zoom to the selected site/facilty.
+    /// If `nil`, there will be no automatic pan/zoom operations.
+    private var viewpoint: Binding<Viewpoint?>
     
     /// Updates `selectedFacility` if a good selection exists.
     /// - Returns: `false` if a selection was not made.
