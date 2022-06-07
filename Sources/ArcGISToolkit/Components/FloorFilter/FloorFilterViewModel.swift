@@ -53,30 +53,15 @@ final class FloorFilterViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ The selected site, floor, or level.
 ***REMOVED***@Published private(set) var selection: Selection?
 ***REMOVED***
-***REMOVED******REMOVED***/ The `Viewpoint` used to pan/zoom to the selected site/facilty.
-***REMOVED******REMOVED***/ If `nil`, there will be no automatic pan/zoom operations.
-***REMOVED***private var viewpoint: Binding<Viewpoint?>
-***REMOVED***
-***REMOVED***func onViewpointChanged(_ viewpoint: Viewpoint?) {
-***REMOVED******REMOVED***guard let viewpoint = viewpoint,
-***REMOVED******REMOVED******REMOVED***  !viewpoint.targetScale.isZero else {
-***REMOVED******REMOVED******REMOVED******REMOVED***  return
-***REMOVED***  ***REMOVED***
-***REMOVED******REMOVED***automaticallySelectFacilityOrSite()
-***REMOVED***
-***REMOVED***
 ***REMOVED******REMOVED*** MARK: Constants
 ***REMOVED***
 ***REMOVED******REMOVED***/ The selection behavior of the floor filter.
 ***REMOVED***private let automaticSelectionMode: FloorFilterAutomaticSelectionMode
 ***REMOVED***
-***REMOVED******REMOVED***/ The amount of time to wait between selection updates.
-***REMOVED***private let delay = DispatchQueue.SchedulerTimeType.Stride.seconds(0.20)
-***REMOVED***
 ***REMOVED******REMOVED***/ The `FloorManager` containing the site, floor, and level information.
 ***REMOVED***let floorManager: FloorManager
 ***REMOVED***
-***REMOVED******REMOVED*** MARK: Public members
+***REMOVED******REMOVED*** MARK: Properties
 ***REMOVED***
 ***REMOVED******REMOVED***/ The floor manager facilities.
 ***REMOVED***var facilities: [FloorFacility] {
@@ -140,7 +125,16 @@ final class FloorFilterViewModel: ObservableObject {
 ***REMOVED******REMOVED******REMOVED***.sorted(by: { $0.verticalOrder > $1.verticalOrder ***REMOVED***) ?? []
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED*** MARK: Public methods
+***REMOVED******REMOVED*** MARK: Methods
+***REMOVED***
+***REMOVED******REMOVED***/ Allows model users to alert the model that the viewpoint has changed.
+***REMOVED***func onViewpointChanged(_ viewpoint: Viewpoint?) {
+***REMOVED******REMOVED***guard let viewpoint = viewpoint,
+***REMOVED******REMOVED******REMOVED***  !viewpoint.targetScale.isZero else {
+***REMOVED******REMOVED******REMOVED******REMOVED***  return
+***REMOVED***  ***REMOVED***
+***REMOVED******REMOVED***automaticallySelectFacilityOrSite()
+***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Updates the selected site, facility, and level based on a newly selected facility.
 ***REMOVED******REMOVED***/ - Parameters:
@@ -183,8 +177,6 @@ final class FloorFilterViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED*** MARK: Private items
-***REMOVED***
 ***REMOVED******REMOVED***/ Attempts to make an automated selection based on the current viewpoint.
 ***REMOVED******REMOVED***/
 ***REMOVED******REMOVED***/ This method first attempts to select a facility, if that fails, a site selection is attempted.
@@ -196,6 +188,12 @@ final class FloorFilterViewModel: ObservableObject {
 ***REMOVED******REMOVED******REMOVED***autoSelectSite()
 ***REMOVED***
 ***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED*** MARK: Private items
+***REMOVED***
+***REMOVED******REMOVED***/ The `Viewpoint` used to pan/zoom to the selected site/facilty.
+***REMOVED******REMOVED***/ If `nil`, there will be no automatic pan/zoom operations.
+***REMOVED***private var viewpoint: Binding<Viewpoint?>
 ***REMOVED***
 ***REMOVED******REMOVED***/ Updates `selectedFacility` if a good selection exists.
 ***REMOVED******REMOVED***/ - Returns: `false` if a selection was not made.
