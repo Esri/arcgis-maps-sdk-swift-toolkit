@@ -140,6 +140,7 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED******REMOVED***ZStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED***RoundedRectangle(cornerRadius: 8)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fill(Color(uiColor: .systemBackground))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.esriBorder()
 ***REMOVED******REMOVED******REMOVED******REMOVED***SiteAndFacilitySelector(isHidden: $siteAndFacilitySelectorIsPresented)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: viewpoint.wrappedValue) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.onViewpointChanged($0)
