@@ -14,90 +14,102 @@
 ***REMOVED***
 ***REMOVED***
 
-***REMOVED***/ A Compass (alias North arrow) shows where north is in a `MapView` or `SceneView`.
+***REMOVED***/ A `Compass` (alias North arrow) shows where north is in a `MapView` or
+***REMOVED***/ `SceneView`.
 public struct Compass: View {
-***REMOVED******REMOVED***/ Determines if the compass should automatically hide/show itself when the parent view is oriented
-***REMOVED******REMOVED***/ north.
+***REMOVED******REMOVED***/ A Boolean value indicating whether  the compass should automatically
+***REMOVED******REMOVED***/ hide/show itself when the heading is `0`.
 ***REMOVED***private let autoHide: Bool
 ***REMOVED***
-***REMOVED******REMOVED***/ Controls the current opacity of the compass.
-***REMOVED***@State private var opacity: Double
+***REMOVED******REMOVED***/ The opacity of the compass.
+***REMOVED***@State private var opacity: Double = .zero
 ***REMOVED***
-***REMOVED******REMOVED***/ Indicates if the compass should hide based on the current viewpoint rotation and autoHide
-***REMOVED******REMOVED***/ preference.
-***REMOVED***var shouldHide: Bool {
-***REMOVED******REMOVED***guard let viewpoint = viewpoint else { return autoHide ***REMOVED***
-***REMOVED******REMOVED***return viewpoint.rotation.isZero && autoHide
+***REMOVED******REMOVED***/ A Boolean value indicating whether the compass should hide based on the
+***REMOVED******REMOVED***/  current heading and whether the compass automatically hides.
+***REMOVED***private var shouldHide: Bool { heading.isZero && autoHide ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ The heading of the compass in degrees.
+***REMOVED***@Binding private var heading: Double
 ***REMOVED***
-***REMOVED******REMOVED***/ Acts as link between the compass and the parent map or scene view.
-***REMOVED***@Binding private var viewpoint: Viewpoint?
-***REMOVED***
-***REMOVED******REMOVED***/ Creates a `Compass`
+***REMOVED******REMOVED***/ Creates a compass with a binding to a heading based on compass
+***REMOVED******REMOVED***/ directions (0° indicates a direction toward true North, 90° indicates a
+***REMOVED******REMOVED***/ direction toward true East, etc.).
 ***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - viewpoint: Acts a communication link between the `MapView` or `SceneView` and the
-***REMOVED******REMOVED***/   compass.
-***REMOVED******REMOVED***/   - autoHide: Determines if the compass automatically hides itself when the `MapView` or
-***REMOVED******REMOVED***/   `SceneView` is oriented north.
+***REMOVED******REMOVED***/   - heading: The heading of the compass.
+***REMOVED******REMOVED***/   - autoHide: A Boolean value that determines whether the compass
+***REMOVED******REMOVED***/   automatically hides itself when the heading is `0`.
 ***REMOVED***public init(
-***REMOVED******REMOVED***viewpoint: Binding<Viewpoint?>,
+***REMOVED******REMOVED***heading: Binding<Double>,
 ***REMOVED******REMOVED***autoHide: Bool = true
 ***REMOVED***) {
-***REMOVED******REMOVED***_viewpoint = viewpoint
-***REMOVED******REMOVED***_opacity = State(initialValue: .zero)
+***REMOVED******REMOVED***_heading = heading
 ***REMOVED******REMOVED***self.autoHide = autoHide
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***public var body: some View {
-***REMOVED******REMOVED***GeometryReader { geometry in
-***REMOVED******REMOVED******REMOVED***ZStack {
-***REMOVED******REMOVED******REMOVED******REMOVED***CompassBody()
-***REMOVED******REMOVED******REMOVED******REMOVED***Needle()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.rotationEffect(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Angle(degrees: viewpoint?.compassHeading ?? .zero)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.frame(
-***REMOVED******REMOVED******REMOVED******REMOVED***width: min(geometry.size.width, geometry.size.height),
-***REMOVED******REMOVED******REMOVED******REMOVED***height: min(geometry.size.width, geometry.size.height)
-***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***if !heading.isNaN {
+***REMOVED******REMOVED******REMOVED***CompassBody()
+***REMOVED******REMOVED******REMOVED******REMOVED***.overlay {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Needle()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.rotationEffect(.degrees(heading))
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.aspectRatio(1, contentMode: .fit)
+***REMOVED******REMOVED******REMOVED******REMOVED***.opacity(opacity)
+***REMOVED******REMOVED******REMOVED******REMOVED***.onTapGesture { heading = .zero ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: heading) { _ in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let newOpacity: Double = shouldHide ? .zero : 1
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard opacity != newOpacity else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***withAnimation(.default.delay(shouldHide ? 0.25 : 0)) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***opacity = newOpacity
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.onAppear { opacity = shouldHide ? 0 : 1 ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityLabel("Compass, heading \(Int(heading.rounded())) degrees \(CompassDirection(heading).rawValue)")
 ***REMOVED***
-***REMOVED******REMOVED***.opacity(opacity)
-***REMOVED******REMOVED***.onTapGesture { resetHeading() ***REMOVED***
-***REMOVED******REMOVED***.onChange(of: viewpoint) { _ in
-***REMOVED******REMOVED******REMOVED***let newOpacity: Double = shouldHide ? .zero : 1
-***REMOVED******REMOVED******REMOVED***guard opacity != newOpacity else { return ***REMOVED***
-***REMOVED******REMOVED******REMOVED***withAnimation(.default.delay(shouldHide ? 0.25 : 0)) {
-***REMOVED******REMOVED******REMOVED******REMOVED***opacity = newOpacity
-***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***.onAppear { opacity = shouldHide ? 0 : 1 ***REMOVED***
-***REMOVED******REMOVED***.accessibilityLabel(viewpoint?.compassHeadingDescription ?? "Compass")
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ Resets the viewpoints `rotation` to zero.
-***REMOVED***func resetHeading() {
-***REMOVED******REMOVED***guard let viewpoint = viewpoint else { return ***REMOVED***
-***REMOVED******REMOVED***self.viewpoint = Viewpoint(
-***REMOVED******REMOVED******REMOVED***center: viewpoint.targetGeometry.extent.center,
-***REMOVED******REMOVED******REMOVED***scale: viewpoint.targetScale,
-***REMOVED******REMOVED******REMOVED***rotation: .zero
-***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 
-internal extension Viewpoint {
-***REMOVED******REMOVED***/ The heading appropriate for displaying a compass.
-***REMOVED******REMOVED***/ - Remark: The viewpoint rotation is opposite of the direction of a compass needle.
-***REMOVED***var compassHeading: Double {
-***REMOVED******REMOVED***rotation.isZero ? .zero : 360 - rotation
+public extension Compass {
+***REMOVED******REMOVED***/ Creates a compass with a binding to a viewpoint rotation (0° indicates
+***REMOVED******REMOVED***/ a direction toward true North, 90° indicates a direction toward true
+***REMOVED******REMOVED***/ West, etc.).
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - viewpointRotation: The viewpoint rotation whose value determines the
+***REMOVED******REMOVED***/   heading of the compass.
+***REMOVED******REMOVED***/   - autoHide: A Boolean value that determines whether the compass
+***REMOVED******REMOVED***/   automatically hides itself when the viewpoint rotation is 0 degrees.
+***REMOVED***init(
+***REMOVED******REMOVED***viewpointRotation: Binding<Double>,
+***REMOVED******REMOVED***autoHide: Bool = true
+***REMOVED***) {
+***REMOVED******REMOVED***let heading = Binding(get: {
+***REMOVED******REMOVED******REMOVED***viewpointRotation.wrappedValue.isZero ? .zero : 360 - viewpointRotation.wrappedValue
+***REMOVED***, set: { newHeading in
+***REMOVED******REMOVED******REMOVED***viewpointRotation.wrappedValue = newHeading.isZero ? .zero : 360 - newHeading
+***REMOVED***)
+***REMOVED******REMOVED***self.init(heading: heading, autoHide: autoHide)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ A text description of the current heading, sutiable for accessibility voiceover.
-***REMOVED***var compassHeadingDescription: String {
-***REMOVED******REMOVED***"Compass, heading "
-***REMOVED******REMOVED***+ Int(self.compassHeading.rounded()).description
-***REMOVED******REMOVED***+ " degrees "
-***REMOVED******REMOVED***+ CompassDirection(self.compassHeading).rawValue
+***REMOVED******REMOVED***/ Creates a compass with a binding to an optional viewpoint.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - viewpoint: The viewopint whose rotation determines the heading of
+***REMOVED******REMOVED***/   the compass.
+***REMOVED******REMOVED***/   - autoHide: A Boolean value that determines whether the compass
+***REMOVED******REMOVED***/   automatically hides itself when the viewpoint's rotation is 0 degrees.
+***REMOVED***init(
+***REMOVED******REMOVED***viewpoint: Binding<Viewpoint?>,
+***REMOVED******REMOVED***autoHide: Bool = true
+***REMOVED***) {
+***REMOVED******REMOVED***let viewpointRotation = Binding {
+***REMOVED******REMOVED******REMOVED***viewpoint.wrappedValue?.rotation ?? .nan
+***REMOVED*** set: { newViewpointRotation in
+***REMOVED******REMOVED******REMOVED***guard let oldViewopint = viewpoint.wrappedValue else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED***viewpoint.wrappedValue = Viewpoint(
+***REMOVED******REMOVED******REMOVED******REMOVED***center: oldViewopint.targetGeometry.extent.center,
+***REMOVED******REMOVED******REMOVED******REMOVED***scale: oldViewopint.targetScale,
+***REMOVED******REMOVED******REMOVED******REMOVED***rotation: newViewpointRotation
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED******REMOVED***self.init(viewpointRotation: viewpointRotation, autoHide: autoHide)
 ***REMOVED***
 ***REMOVED***
