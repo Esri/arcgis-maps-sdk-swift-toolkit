@@ -14,90 +14,102 @@
 import ArcGIS
 import SwiftUI
 
-/// A Compass (alias North arrow) shows where north is in a `MapView` or `SceneView`.
+/// A `Compass` (alias North arrow) shows where north is in a `MapView` or
+/// `SceneView`.
 public struct Compass: View {
-    /// Determines if the compass should automatically hide/show itself when the parent view is oriented
-    /// north.
+    /// A Boolean value indicating whether  the compass should automatically
+    /// hide/show itself when the heading is `0`.
     private let autoHide: Bool
     
-    /// Controls the current opacity of the compass.
-    @State private var opacity: Double
+    /// The opacity of the compass.
+    @State private var opacity: Double = .zero
     
-    /// Indicates if the compass should hide based on the current viewpoint rotation and autoHide
-    /// preference.
-    var shouldHide: Bool {
-        guard let viewpoint = viewpoint else { return autoHide }
-        return viewpoint.rotation.isZero && autoHide
-    }
+    /// A Boolean value indicating whether the compass should hide based on the
+    ///  current heading and whether the compass automatically hides.
+    private var shouldHide: Bool { heading.isZero && autoHide }
     
-    /// Acts as link between the compass and the parent map or scene view.
-    @Binding private var viewpoint: Viewpoint?
+    /// The heading of the compass in degrees.
+    @Binding private var heading: Double
     
-    /// Creates a `Compass`
+    /// Creates a compass with a binding to a heading based on compass
+    /// directions (0° indicates a direction toward true North, 90° indicates a
+    /// direction toward true East, etc.).
     /// - Parameters:
-    ///   - viewpoint: Acts a communication link between the `MapView` or `SceneView` and the
-    ///   compass.
-    ///   - autoHide: Determines if the compass automatically hides itself when the `MapView` or
-    ///   `SceneView` is oriented north.
+    ///   - heading: The heading of the compass.
+    ///   - autoHide: A Boolean value that determines whether the compass
+    ///   automatically hides itself when the heading is `0`.
     public init(
-        viewpoint: Binding<Viewpoint?>,
+        heading: Binding<Double>,
         autoHide: Bool = true
     ) {
-        _viewpoint = viewpoint
-        _opacity = State(initialValue: .zero)
+        _heading = heading
         self.autoHide = autoHide
     }
     
     public var body: some View {
-        GeometryReader { geometry in
-            ZStack {
-                CompassBody()
-                Needle()
-                    .rotationEffect(
-                        Angle(degrees: viewpoint?.compassHeading ?? .zero)
-                    )
-            }
-            .frame(
-                width: min(geometry.size.width, geometry.size.height),
-                height: min(geometry.size.width, geometry.size.height)
-            )
+        if !heading.isNaN {
+            CompassBody()
+                .overlay {
+                    Needle()
+                        .rotationEffect(.degrees(heading))
+                }
+                .aspectRatio(1, contentMode: .fit)
+                .opacity(opacity)
+                .onTapGesture { heading = .zero }
+                .onChange(of: heading) { _ in
+                    let newOpacity: Double = shouldHide ? .zero : 1
+                    guard opacity != newOpacity else { return }
+                    withAnimation(.default.delay(shouldHide ? 0.25 : 0)) {
+                        opacity = newOpacity
+                    }
+                }
+                .onAppear { opacity = shouldHide ? 0 : 1 }
+                .accessibilityLabel("Compass, heading \(Int(heading.rounded())) degrees \(CompassDirection(heading).rawValue)")
         }
-        .opacity(opacity)
-        .onTapGesture { resetHeading() }
-        .onChange(of: viewpoint) { _ in
-            let newOpacity: Double = shouldHide ? .zero : 1
-            guard opacity != newOpacity else { return }
-            withAnimation(.default.delay(shouldHide ? 0.25 : 0)) {
-                opacity = newOpacity
-            }
-        }
-        .onAppear { opacity = shouldHide ? 0 : 1 }
-        .accessibilityLabel(viewpoint?.compassHeadingDescription ?? "Compass")
-    }
-    
-    /// Resets the viewpoints `rotation` to zero.
-    func resetHeading() {
-        guard let viewpoint = viewpoint else { return }
-        self.viewpoint = Viewpoint(
-            center: viewpoint.targetGeometry.extent.center,
-            scale: viewpoint.targetScale,
-            rotation: .zero
-        )
     }
 }
 
-internal extension Viewpoint {
-    /// The heading appropriate for displaying a compass.
-    /// - Remark: The viewpoint rotation is opposite of the direction of a compass needle.
-    var compassHeading: Double {
-        rotation.isZero ? .zero : 360 - rotation
+public extension Compass {
+    /// Creates a compass with a binding to a viewpoint rotation (0° indicates
+    /// a direction toward true North, 90° indicates a direction toward true
+    /// West, etc.).
+    /// - Parameters:
+    ///   - viewpointRotation: The viewpoint rotation whose value determines the
+    ///   heading of the compass.
+    ///   - autoHide: A Boolean value that determines whether the compass
+    ///   automatically hides itself when the viewpoint rotation is 0 degrees.
+    init(
+        viewpointRotation: Binding<Double>,
+        autoHide: Bool = true
+    ) {
+        let heading = Binding(get: {
+            viewpointRotation.wrappedValue.isZero ? .zero : 360 - viewpointRotation.wrappedValue
+        }, set: { newHeading in
+            viewpointRotation.wrappedValue = newHeading.isZero ? .zero : 360 - newHeading
+        })
+        self.init(heading: heading, autoHide: autoHide)
     }
     
-    /// A text description of the current heading, sutiable for accessibility voiceover.
-    var compassHeadingDescription: String {
-        "Compass, heading "
-        + Int(self.compassHeading.rounded()).description
-        + " degrees "
-        + CompassDirection(self.compassHeading).rawValue
+    /// Creates a compass with a binding to an optional viewpoint.
+    /// - Parameters:
+    ///   - viewpoint: The viewopint whose rotation determines the heading of
+    ///   the compass.
+    ///   - autoHide: A Boolean value that determines whether the compass
+    ///   automatically hides itself when the viewpoint's rotation is 0 degrees.
+    init(
+        viewpoint: Binding<Viewpoint?>,
+        autoHide: Bool = true
+    ) {
+        let viewpointRotation = Binding {
+            viewpoint.wrappedValue?.rotation ?? .nan
+        } set: { newViewpointRotation in
+            guard let oldViewopint = viewpoint.wrappedValue else { return }
+            viewpoint.wrappedValue = Viewpoint(
+                center: oldViewopint.targetGeometry.extent.center,
+                scale: oldViewopint.targetScale,
+                rotation: newViewpointRotation
+            )
+        }
+        self.init(viewpointRotation: viewpointRotation, autoHide: autoHide)
     }
 }
