@@ -37,9 +37,6 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED***/ The view model used by this selector.
 ***REMOVED******REMOVED***@EnvironmentObject var viewModel: FloorFilterViewModel
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ Indicates that the keyboard is animating and some views may require reload.
-***REMOVED******REMOVED***@State private var isKeyboardAnimating = false
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ A site name filter phrase entered by the user.
 ***REMOVED******REMOVED***@State private var query: String = ""
 ***REMOVED******REMOVED***
@@ -60,34 +57,8 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***var body: some View {
-***REMOVED******REMOVED******REMOVED***siteListAndFilterView
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Trigger a reload on keyboard frame changes for proper layout
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** across all devices.
-***REMOVED******REMOVED******REMOVED******REMOVED***.opacity(isKeyboardAnimating ? 0.99 : 1.0)
-***REMOVED******REMOVED******REMOVED******REMOVED***.navigationViewStyle(.stack)
-***REMOVED******REMOVED******REMOVED******REMOVED***.onReceive(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***NotificationCenter.default.publisher(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for: UIResponder.keyboardWillChangeFrameNotification
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED***) { _ in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***withAnimation {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isKeyboardAnimating = true
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.onReceive(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***NotificationCenter.default.publisher(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for: UIResponder.keyboardDidChangeFrameNotification
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED***) { _ in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***withAnimation {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isKeyboardAnimating = false
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ A view containing a filter-via-name field, a list of the site names and an "All sites" button.
-***REMOVED******REMOVED***var siteListAndFilterView: some View {
+***REMOVED******REMOVED***var body: some View {
 ***REMOVED******REMOVED******REMOVED***NavigationView {
 ***REMOVED******REMOVED******REMOVED******REMOVED***VStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if matchingSites.isEmpty {
@@ -128,6 +99,7 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.navigationViewStyle(.stack)
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ A view containing a list of the site names.
