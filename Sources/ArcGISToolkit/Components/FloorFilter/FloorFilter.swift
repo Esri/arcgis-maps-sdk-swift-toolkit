@@ -140,6 +140,7 @@ public struct FloorFilter: View {
             ZStack {
                 RoundedRectangle(cornerRadius: 8)
                     .fill(Color(uiColor: .systemBackground))
+                    .esriBorder()
                 SiteAndFacilitySelector(isHidden: $siteAndFacilitySelectorIsPresented)
                     .onChange(of: viewpoint.wrappedValue) {
                         viewModel.onViewpointChanged($0)
