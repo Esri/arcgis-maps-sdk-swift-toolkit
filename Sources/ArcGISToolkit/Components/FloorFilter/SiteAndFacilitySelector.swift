@@ -63,11 +63,11 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED***/ A subset of `sites` with names containing `searchPhrase` or all `sites` if
 ***REMOVED******REMOVED******REMOVED***/ `searchPhrase` is empty.
 ***REMOVED******REMOVED***var matchingSites: [FloorSite] {
-***REMOVED******REMOVED******REMOVED***if query.isEmpty {
+***REMOVED******REMOVED******REMOVED***guard !query.isEmpty else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***return sites
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***return sites.filter {
-***REMOVED******REMOVED******REMOVED******REMOVED***$0.name.lowercased().contains(query.lowercased())
+***REMOVED******REMOVED******REMOVED******REMOVED***$0.name.localizedStandardContains(query)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***
@@ -169,11 +169,11 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED***/ A subset of `facilities` with names containing `searchPhrase` or all
 ***REMOVED******REMOVED******REMOVED***/ `facilities` if `searchPhrase` is empty.
 ***REMOVED******REMOVED***var matchingFacilities: [FloorFacility] {
-***REMOVED******REMOVED******REMOVED***if query.isEmpty {
+***REMOVED******REMOVED******REMOVED***guard !query.isEmpty else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***return facilities
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***return facilities.filter {
-***REMOVED******REMOVED******REMOVED******REMOVED***$0.name.lowercased().contains(query.lowercased())
+***REMOVED******REMOVED******REMOVED******REMOVED***$0.name.localizedStandardContains(query)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***
@@ -218,7 +218,7 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED***/ Displays a list of facilities matching the filter criteria as determined by
 ***REMOVED******REMOVED******REMOVED***/ `matchingFacilities`.
 ***REMOVED******REMOVED******REMOVED***/
-***REMOVED******REMOVED******REMOVED***/ If a certain facility is indicated as selected by the view model, it will have a slighlty different
+***REMOVED******REMOVED******REMOVED***/ If a certain facility is indicated as selected by the view model, it will have a slightly different
 ***REMOVED******REMOVED******REMOVED***/ appearance.
 ***REMOVED******REMOVED******REMOVED***/
 ***REMOVED******REMOVED******REMOVED***/ If `AutomaticSelectionMode` mode is in use, this list will automatically scroll to the
