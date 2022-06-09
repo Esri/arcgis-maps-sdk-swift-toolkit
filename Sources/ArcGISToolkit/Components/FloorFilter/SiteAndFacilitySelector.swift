@@ -49,11 +49,11 @@ struct SiteAndFacilitySelector: View {
         /// A subset of `sites` with names containing `searchPhrase` or all `sites` if
         /// `searchPhrase` is empty.
         var matchingSites: [FloorSite] {
-            if query.isEmpty {
-                return viewModel.sites
+            guard !query.isEmpty else {
+                return sites
             }
-            return viewModel.sites.filter {
-                $0.name.lowercased().contains(query.lowercased())
+            return sites.filter {
+                $0.name.localizedStandardContains(query)
             }
         }
         
@@ -158,11 +158,11 @@ struct SiteAndFacilitySelector: View {
         /// A subset of `facilities` with names containing `searchPhrase` or all
         /// `facilities` if `searchPhrase` is empty.
         var matchingFacilities: [FloorFacility] {
-            if query.isEmpty {
+            guard !query.isEmpty else {
                 return facilities
             }
             return facilities.filter {
-                $0.name.lowercased().contains(query.lowercased())
+                $0.name.localizedStandardContains(query)
             }
         }
         
@@ -195,7 +195,7 @@ struct SiteAndFacilitySelector: View {
         /// Displays a list of facilities matching the filter criteria as determined by
         /// `matchingFacilities`.
         ///
-        /// If a certain facility is indicated as selected by the view model, it will have a slighlty different
+        /// If a certain facility is indicated as selected by the view model, it will have a slightly different
         /// appearance.
         ///
         /// If `AutomaticSelectionMode` mode is in use, this list will automatically scroll to the
