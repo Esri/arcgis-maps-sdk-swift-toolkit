@@ -48,7 +48,8 @@ extension ExampleList {
 ***REMOVED***static let views = Self(
 ***REMOVED******REMOVED***name: "Views",
 ***REMOVED******REMOVED***examples: [
-***REMOVED******REMOVED******REMOVED***AnyExample("Floating Panel", content: FloatingPanelExampleView())
+***REMOVED******REMOVED******REMOVED***AnyExample("Floating Panel", content: FloatingPanelExampleView()),
+***REMOVED******REMOVED******REMOVED***AnyExample("Partial Sheet", content: PartialSheetExampleView())
 ***REMOVED******REMOVED***]
 ***REMOVED***)
 ***REMOVED***

@@ -15,8 +15,10 @@
 ***REMOVED***Toolkit
 ***REMOVED***
 
-struct FloatingPanelExampleView: View {
+struct PartialSheetExampleView: View {
 ***REMOVED***@StateObject private var map = Map(basemapStyle: .arcGISImagery)
+***REMOVED***
+***REMOVED***@State var preset: PartialSheetPreset? = .mid
 ***REMOVED***
 ***REMOVED***private let initialViewpoint = Viewpoint(
 ***REMOVED******REMOVED***center: Point(x: -93.258133, y: 44.986656, spatialReference: .wgs84),
@@ -28,19 +30,17 @@ struct FloatingPanelExampleView: View {
 ***REMOVED******REMOVED******REMOVED***map: map,
 ***REMOVED******REMOVED******REMOVED***viewpoint: initialViewpoint
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***.overlay(alignment: .topTrailing) {
-***REMOVED******REMOVED******REMOVED******REMOVED***FloatingPanel {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***SampleContent()
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 360)
+***REMOVED******REMOVED***.overlay {
+***REMOVED******REMOVED******REMOVED***PartialSheet(preset: $preset) {
+***REMOVED******REMOVED******REMOVED******REMOVED***SampleContent()
 ***REMOVED******REMOVED***
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
 private struct SampleContent: View {
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***List(1..<21) { Text("\($0)") ***REMOVED***
-***REMOVED******REMOVED***.listStyle(.plain)
+***REMOVED******REMOVED******REMOVED***.listStyle(.plain)
 ***REMOVED***
 ***REMOVED***
