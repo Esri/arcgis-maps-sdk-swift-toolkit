@@ -11,12 +11,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import SwiftUI
-import ArcGISToolkit
 import ArcGIS
+import ArcGISToolkit
+import SwiftUI
 
-struct FloatingPanelExampleView: View {
+struct PartialSheetExampleView: View {
     @StateObject private var map = Map(basemapStyle: .arcGISImagery)
+    
+    @State var preset: PartialSheetPreset? = .mid
     
     private let initialViewpoint = Viewpoint(
         center: Point(x: -93.258133, y: 44.986656, spatialReference: .wgs84),
@@ -28,19 +30,17 @@ struct FloatingPanelExampleView: View {
             map: map,
             viewpoint: initialViewpoint
         )
-            .overlay(alignment: .topTrailing) {
-                FloatingPanel {
-                    SampleContent()
-                }
-                    .padding()
-                    .frame(width: 360)
+        .overlay {
+            PartialSheet(preset: $preset) {
+                SampleContent()
             }
+        }
     }
 }
 
 private struct SampleContent: View {
     var body: some View {
         List(1..<21) { Text("\($0)") }
-        .listStyle(.plain)
+            .listStyle(.plain)
     }
 }
