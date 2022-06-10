@@ -50,9 +50,9 @@ struct SiteAndFacilitySelector: View {
         /// `searchPhrase` is empty.
         var matchingSites: [FloorSite] {
             guard !query.isEmpty else {
-                return sites
+                return viewModel.sites
             }
-            return sites.filter {
+            return viewModel.sites.filter {
                 $0.name.localizedStandardContains(query)
             }
         }
