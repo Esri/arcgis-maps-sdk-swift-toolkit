@@ -58,7 +58,7 @@ public struct FloorFilter: View {
 ***REMOVED***@State private var isLevelsViewCollapsed: Bool = false
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value that indicates whether the site and facility selector is presented.
-***REMOVED***@State private var siteAndFacilitySelectorIsPresented: Bool = false
+***REMOVED***@State private var isSitesAndFacilitiesHidden: Bool = false
 ***REMOVED***
 ***REMOVED******REMOVED***/ The alignment configuration.
 ***REMOVED***private let alignment: Alignment
@@ -73,16 +73,16 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED***/ Button to open and close the site and facility selector.
 ***REMOVED***private var sitesAndFacilitiesButton: some View {
 ***REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED***siteAndFacilitySelectorIsPresented.toggle()
+***REMOVED******REMOVED******REMOVED***isSitesAndFacilitiesHidden.toggle()
 ***REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED***Image(systemName: "building.2")
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding(.toolkitDefault)
 ***REMOVED***
 ***REMOVED******REMOVED***.sheet(
 ***REMOVED******REMOVED******REMOVED***isAllowed: isCompact,
-***REMOVED******REMOVED******REMOVED***isPresented: $siteAndFacilitySelectorIsPresented
+***REMOVED******REMOVED******REMOVED***isPresented: $isSitesAndFacilitiesHidden
 ***REMOVED******REMOVED***) {
-***REMOVED******REMOVED******REMOVED***SiteAndFacilitySelector(isHidden: $siteAndFacilitySelectorIsPresented)
+***REMOVED******REMOVED******REMOVED***SiteAndFacilitySelector(isHidden: $isSitesAndFacilitiesHidden)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: viewpoint.wrappedValue) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.onViewpointChanged($0)
 ***REMOVED******REMOVED******REMOVED***
@@ -141,13 +141,13 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***RoundedRectangle(cornerRadius: 8)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fill(Color(uiColor: .systemBackground))
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.esriBorder()
-***REMOVED******REMOVED******REMOVED******REMOVED***SiteAndFacilitySelector(isHidden: $siteAndFacilitySelectorIsPresented)
+***REMOVED******REMOVED******REMOVED******REMOVED***SiteAndFacilitySelector(isHidden: $isSitesAndFacilitiesHidden)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: viewpoint.wrappedValue) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.onViewpointChanged($0)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.opacity(siteAndFacilitySelectorIsPresented ? .zero : 1)
+***REMOVED******REMOVED******REMOVED***.opacity(isSitesAndFacilitiesHidden ? .zero : 1)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
