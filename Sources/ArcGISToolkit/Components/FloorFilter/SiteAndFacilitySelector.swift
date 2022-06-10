@@ -82,6 +82,7 @@ struct SiteAndFacilitySelector: View {
                             )
                         }
                         .buttonStyle(.bordered)
+                        .padding([.bottom])
                     }
                 }
                 .searchable(
