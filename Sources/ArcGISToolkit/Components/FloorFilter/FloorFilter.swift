@@ -58,7 +58,7 @@ public struct FloorFilter: View {
     @State private var isLevelsViewCollapsed: Bool = false
     
     /// A Boolean value that indicates whether the site and facility selector is presented.
-    @State private var siteAndFacilitySelectorIsPresented: Bool = false
+    @State private var isSitesAndFacilitiesHidden: Bool = false
     
     /// The alignment configuration.
     private let alignment: Alignment
@@ -73,16 +73,16 @@ public struct FloorFilter: View {
     /// Button to open and close the site and facility selector.
     private var sitesAndFacilitiesButton: some View {
         Button {
-            siteAndFacilitySelectorIsPresented.toggle()
+            isSitesAndFacilitiesHidden.toggle()
         } label: {
             Image(systemName: "building.2")
                 .padding(.toolkitDefault)
         }
         .sheet(
             isAllowed: isCompact,
-            isPresented: $siteAndFacilitySelectorIsPresented
+            isPresented: $isSitesAndFacilitiesHidden
         ) {
-            SiteAndFacilitySelector(isHidden: $siteAndFacilitySelectorIsPresented)
+            SiteAndFacilitySelector(isHidden: $isSitesAndFacilitiesHidden)
                 .onChange(of: viewpoint.wrappedValue) {
                     viewModel.onViewpointChanged($0)
                 }
@@ -141,13 +141,13 @@ public struct FloorFilter: View {
                 RoundedRectangle(cornerRadius: 8)
                     .fill(Color(uiColor: .systemBackground))
                     .esriBorder()
-                SiteAndFacilitySelector(isHidden: $siteAndFacilitySelectorIsPresented)
+                SiteAndFacilitySelector(isHidden: $isSitesAndFacilitiesHidden)
                     .onChange(of: viewpoint.wrappedValue) {
                         viewModel.onViewpointChanged($0)
                     }
                     .padding()
             }
-            .opacity(siteAndFacilitySelectorIsPresented ? .zero : 1)
+            .opacity(isSitesAndFacilitiesHidden ? .zero : 1)
         }
     }
     
