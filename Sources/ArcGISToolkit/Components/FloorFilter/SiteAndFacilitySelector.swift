@@ -50,9 +50,9 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED***/ `searchPhrase` is empty.
 ***REMOVED******REMOVED***var matchingSites: [FloorSite] {
 ***REMOVED******REMOVED******REMOVED***guard !query.isEmpty else {
-***REMOVED******REMOVED******REMOVED******REMOVED***return sites
+***REMOVED******REMOVED******REMOVED******REMOVED***return viewModel.sites
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***return sites.filter {
+***REMOVED******REMOVED******REMOVED***return viewModel.sites.filter {
 ***REMOVED******REMOVED******REMOVED******REMOVED***$0.name.localizedStandardContains(query)
 ***REMOVED******REMOVED***
 ***REMOVED***
