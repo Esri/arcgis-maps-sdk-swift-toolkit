@@ -11,24 +11,14 @@
 ***REMOVED*** See the License for the specific language governing permissions and
 ***REMOVED*** limitations under the License.
 
-***REMOVED***
-***REMOVED***
-
-extension FloorFacility {
-***REMOVED******REMOVED***/ - Returns: The default level for the facility, which is the level with vertical order 0.
-***REMOVED***var defaultLevel: FloorLevel? {
-***REMOVED******REMOVED***levels.first(where: { $0.verticalOrder == .zero ***REMOVED***)
-***REMOVED***
-***REMOVED***
-
-extension FloorFacility: Equatable {
-***REMOVED***public static func == (lhs: FloorFacility, rhs: FloorFacility) -> Bool {
-***REMOVED******REMOVED***lhs.id == rhs.id
-***REMOVED***
-***REMOVED***
-
-extension FloorFacility: Hashable {
-***REMOVED***public func hash(into hasher: inout Hasher) {
-***REMOVED******REMOVED***hasher.combine(id)
-***REMOVED***
+***REMOVED***/ Defines automatic selection behavior.
+public enum FloorFilterAutomaticSelectionMode {
+***REMOVED******REMOVED***/ Always update selection based on the current viewpoint; clear the selection when the user
+***REMOVED******REMOVED***/ navigates away.
+***REMOVED***case always
+***REMOVED******REMOVED***/ Only update the selection when there is a new site or facility in the current viewpoint; don't clear
+***REMOVED******REMOVED***/ selection when the user navigates away.
+***REMOVED***case alwaysNotClearing
+***REMOVED******REMOVED***/ Never update selection based on the map or scene view's current viewpoint.
+***REMOVED***case never
 ***REMOVED***
