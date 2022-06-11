@@ -29,6 +29,9 @@ struct FloorFilterExampleView: View {
     /// Determines the appropriate time to initialize the `FloorFilter`.
     @State private var isMapLoaded: Bool = false
     
+    /// The map is currently being navigated.
+    @State private var isNavigating: Bool = false
+    
     @State private var mapLoadError: Bool = false
     
     /// The initial viewpoint of the map.
@@ -48,6 +51,9 @@ struct FloorFilterExampleView: View {
             map: map,
             viewpoint: viewpoint
         )
+        .onNavigatingChanged {
+            isNavigating = $0
+        }
         .onViewpointChanged(kind: .centerAndScale) {
             viewpoint = $0
         }
@@ -59,7 +65,8 @@ struct FloorFilterExampleView: View {
                 FloorFilter(
                     floorManager: floorManager,
                     alignment: floorFilterAlignment,
-                    viewpoint: $viewpoint
+                    viewpoint: $viewpoint,
+                    isNavigating: $isNavigating
                 )
                 .frame(
                     maxWidth: 400,
