@@ -36,11 +36,13 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED***/   - alignment: Determines the display configuration of Floor Filter elements.
 ***REMOVED******REMOVED***/   - automaticSelectionMode: The selection behavior of the floor filter.
 ***REMOVED******REMOVED***/   - viewpoint: Viewpoint updated when the selected site or facility changes.
+***REMOVED******REMOVED***/   - isNavigating: The map is currently being navigated.
 ***REMOVED***public init(
 ***REMOVED******REMOVED***floorManager: FloorManager,
 ***REMOVED******REMOVED***alignment: Alignment,
 ***REMOVED******REMOVED***automaticSelectionMode: FloorFilterAutomaticSelectionMode = .always,
-***REMOVED******REMOVED***viewpoint: Binding<Viewpoint?> = .constant(nil)
+***REMOVED******REMOVED***viewpoint: Binding<Viewpoint?> = .constant(nil),
+***REMOVED******REMOVED***isNavigating: Binding<Bool>
 ***REMOVED***) {
 ***REMOVED******REMOVED***_viewModel = StateObject(wrappedValue: FloorFilterViewModel(
 ***REMOVED******REMOVED******REMOVED***automaticSelectionMode: automaticSelectionMode,
@@ -48,6 +50,7 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED******REMOVED***viewpoint: viewpoint
 ***REMOVED******REMOVED***))
 ***REMOVED******REMOVED***self.alignment = alignment
+***REMOVED******REMOVED***self.isNavigating = isNavigating
 ***REMOVED******REMOVED***self.viewpoint = viewpoint
 ***REMOVED***
 ***REMOVED***
@@ -83,8 +86,8 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED******REMOVED***isPresented: $isSitesAndFacilitiesHidden
 ***REMOVED******REMOVED***) {
 ***REMOVED******REMOVED******REMOVED***SiteAndFacilitySelector(isHidden: $isSitesAndFacilitiesHidden)
-***REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: viewpoint.wrappedValue) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.onViewpointChanged($0)
+***REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: viewpoint.wrappedValue) { viewpoint in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***reportChange(of: viewpoint)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -115,9 +118,18 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ The map is currently being navigated.
+***REMOVED***private var isNavigating: Binding<Bool>
+***REMOVED***
 ***REMOVED******REMOVED***/ Indicates that the selector should be presented with a top oriented aligment configuration.
 ***REMOVED***private var isTopAligned: Bool {
 ***REMOVED******REMOVED***alignment.vertical == .top
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Reports a viewpoint change to the view model if the map is not navigating.
+***REMOVED***private func reportChange(of viewpoint: Viewpoint?) {
+***REMOVED******REMOVED***guard isNavigating.wrappedValue else { return ***REMOVED***
+***REMOVED******REMOVED***viewModel.onViewpointChanged(viewpoint)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Displays the available levels.
@@ -142,8 +154,8 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fill(Color(uiColor: .systemBackground))
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.esriBorder()
 ***REMOVED******REMOVED******REMOVED******REMOVED***SiteAndFacilitySelector(isHidden: $isSitesAndFacilitiesHidden)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: viewpoint.wrappedValue) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.onViewpointChanged($0)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: viewpoint.wrappedValue) { viewpoint in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***reportChange(of: viewpoint)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
 ***REMOVED******REMOVED***
@@ -163,6 +175,7 @@ public struct FloorFilter: View {
 ***REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Ensure space for filter text field on small screens in landscape
 ***REMOVED******REMOVED***.frame(minHeight: 100)
+***REMOVED******REMOVED***.environment(\.isCompact, isCompact)
 ***REMOVED******REMOVED***.environmentObject(viewModel)
 ***REMOVED******REMOVED***.disabled(viewModel.isLoading)
 ***REMOVED***
