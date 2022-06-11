@@ -34,6 +34,8 @@ struct SiteAndFacilitySelector: View {
     
     /// A view displaying the sites contained in a `FloorManager`.
     struct SitesList: View {
+        @Environment(\.isCompact) var isCompact: Bool
+        
         /// The view model used by this selector.
         @EnvironmentObject var viewModel: FloorFilterViewModel
         
@@ -82,7 +84,7 @@ struct SiteAndFacilitySelector: View {
                             )
                         }
                         .buttonStyle(.bordered)
-                        .padding([.bottom])
+                        .padding([.bottom], isCompact ? 5 : 0)
                     }
                 }
                 .searchable(
@@ -141,6 +143,8 @@ struct SiteAndFacilitySelector: View {
     
     /// A view displaying the facilities contained in a `FloorManager`.
     struct FacilitiesList: View {
+        @Environment(\.isCompact) var isCompact: Bool
+        
         /// The view model used by this selector.
         @EnvironmentObject var viewModel: FloorFilterViewModel
         
@@ -206,7 +210,9 @@ struct SiteAndFacilitySelector: View {
                 List(matchingFacilities, id: \.id) { facility in
                     Button {
                         viewModel.setFacility(facility, zoomTo: true)
-                        isHidden.toggle()
+                        if isCompact {
+                            isHidden.toggle()
+                        }
                     } label: {
                         VStack {
                             Text(facility.name)
