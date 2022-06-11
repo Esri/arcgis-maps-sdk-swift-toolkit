@@ -29,6 +29,9 @@ struct FloorFilterExampleView: View {
 ***REMOVED******REMOVED***/ Determines the appropriate time to initialize the `FloorFilter`.
 ***REMOVED***@State private var isMapLoaded: Bool = false
 ***REMOVED***
+***REMOVED******REMOVED***/ The map is currently being navigated.
+***REMOVED***@State private var isNavigating: Bool = false
+***REMOVED***
 ***REMOVED***@State private var mapLoadError: Bool = false
 ***REMOVED***
 ***REMOVED******REMOVED***/ The initial viewpoint of the map.
@@ -48,6 +51,9 @@ struct FloorFilterExampleView: View {
 ***REMOVED******REMOVED******REMOVED***map: map,
 ***REMOVED******REMOVED******REMOVED***viewpoint: viewpoint
 ***REMOVED******REMOVED***)
+***REMOVED******REMOVED***.onNavigatingChanged {
+***REMOVED******REMOVED******REMOVED***isNavigating = $0
+***REMOVED***
 ***REMOVED******REMOVED***.onViewpointChanged(kind: .centerAndScale) {
 ***REMOVED******REMOVED******REMOVED***viewpoint = $0
 ***REMOVED***
@@ -59,7 +65,8 @@ struct FloorFilterExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***FloorFilter(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***floorManager: floorManager,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***alignment: floorFilterAlignment,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint: $viewpoint
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint: $viewpoint,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isNavigating: $isNavigating
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.frame(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***maxWidth: 400,
