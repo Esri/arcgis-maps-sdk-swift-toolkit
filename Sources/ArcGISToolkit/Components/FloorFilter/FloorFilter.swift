@@ -36,11 +36,13 @@ public struct FloorFilter: View {
     ///   - alignment: Determines the display configuration of Floor Filter elements.
     ///   - automaticSelectionMode: The selection behavior of the floor filter.
     ///   - viewpoint: Viewpoint updated when the selected site or facility changes.
+    ///   - isNavigating: The map is currently being navigated.
     public init(
         floorManager: FloorManager,
         alignment: Alignment,
         automaticSelectionMode: FloorFilterAutomaticSelectionMode = .always,
-        viewpoint: Binding<Viewpoint?> = .constant(nil)
+        viewpoint: Binding<Viewpoint?> = .constant(nil),
+        isNavigating: Binding<Bool>
     ) {
         _viewModel = StateObject(wrappedValue: FloorFilterViewModel(
             automaticSelectionMode: automaticSelectionMode,
@@ -48,6 +50,7 @@ public struct FloorFilter: View {
             viewpoint: viewpoint
         ))
         self.alignment = alignment
+        self.isNavigating = isNavigating
         self.viewpoint = viewpoint
     }
     
@@ -83,8 +86,8 @@ public struct FloorFilter: View {
             isPresented: $isSitesAndFacilitiesHidden
         ) {
             SiteAndFacilitySelector(isHidden: $isSitesAndFacilitiesHidden)
-                .onChange(of: viewpoint.wrappedValue) {
-                    viewModel.onViewpointChanged($0)
+                .onChange(of: viewpoint.wrappedValue) { viewpoint in
+                    reportChange(of: viewpoint)
                 }
         }
     }
@@ -115,9 +118,18 @@ public struct FloorFilter: View {
         )
     }
     
+    /// The map is currently being navigated.
+    private var isNavigating: Binding<Bool>
+    
     /// Indicates that the selector should be presented with a top oriented aligment configuration.
     private var isTopAligned: Bool {
         alignment.vertical == .top
+    }
+    
+    /// Reports a viewpoint change to the view model if the map is not navigating.
+    private func reportChange(of viewpoint: Viewpoint?) {
+        guard isNavigating.wrappedValue else { return }
+        viewModel.onViewpointChanged(viewpoint)
     }
     
     /// Displays the available levels.
@@ -142,8 +154,8 @@ public struct FloorFilter: View {
                     .fill(Color(uiColor: .systemBackground))
                     .esriBorder()
                 SiteAndFacilitySelector(isHidden: $isSitesAndFacilitiesHidden)
-                    .onChange(of: viewpoint.wrappedValue) {
-                        viewModel.onViewpointChanged($0)
+                    .onChange(of: viewpoint.wrappedValue) { viewpoint in
+                        reportChange(of: viewpoint)
                     }
                     .padding()
             }
@@ -163,6 +175,7 @@ public struct FloorFilter: View {
         }
         // Ensure space for filter text field on small screens in landscape
         .frame(minHeight: 100)
+        .environment(\.isCompact, isCompact)
         .environmentObject(viewModel)
         .disabled(viewModel.isLoading)
     }
