@@ -16,7 +16,7 @@
 ***REMOVED***Toolkit
 
 struct AuthenticationExampleView: View {
-***REMOVED***@ObservedObject var authenticator = Authenticator(
+***REMOVED***@MainActor var authenticator = Authenticator(
 ***REMOVED******REMOVED***promptForUntrustedHosts: true***REMOVED***, oAuthConfigurations: [.arcgisDotCom]
 ***REMOVED***)
 ***REMOVED***@State var previousApiKey: APIKey?
@@ -42,7 +42,7 @@ struct AuthenticationExampleView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***.authentication(authenticator: authenticator)
 ***REMOVED******REMOVED***.task {
-***REMOVED******REMOVED******REMOVED***try? await authenticator.synchronizeWithKeychain(access: .whenUnlockedThisDeviceOnly)
+***REMOVED******REMOVED******REMOVED******REMOVED***try? await authenticator.synchronizeWithKeychain(access: .whenUnlockedThisDeviceOnly)
 ***REMOVED***
 ***REMOVED******REMOVED***.navigationBarTitle(Text("Authentication"), displayMode: .inline)
 ***REMOVED******REMOVED***.onAppear {
