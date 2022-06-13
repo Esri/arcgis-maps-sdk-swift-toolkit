@@ -16,7 +16,7 @@ import ArcGIS
 import ArcGISToolkit
 
 struct AuthenticationExampleView: View {
-    @ObservedObject var authenticator = Authenticator(
+    @MainActor var authenticator = Authenticator(
         promptForUntrustedHosts: true//, oAuthConfigurations: [.arcgisDotCom]
     )
     @State var previousApiKey: APIKey?
@@ -42,7 +42,7 @@ struct AuthenticationExampleView: View {
         }
         .authentication(authenticator: authenticator)
         .task {
-            try? await authenticator.synchronizeWithKeychain(access: .whenUnlockedThisDeviceOnly)
+            //try? await authenticator.synchronizeWithKeychain(access: .whenUnlockedThisDeviceOnly)
         }
         .navigationBarTitle(Text("Authentication"), displayMode: .inline)
         .onAppear {

@@ -34,22 +34,18 @@ public final class Authenticator: ObservableObject {
     }
     
     /// Sets up a credential store that is synchronized with the keychain.
-    /// - Remark: If no group is specified then the item will be stored in the default group.
+    /// - Remark: The item will be stored in the default access group.
     /// To know more about what the default group would be you can find information about that here:
     /// https://developer.apple.com/documentation/security/keychain_services/keychain_items/sharing_access_to_keychain_items_among_a_collection_of_apps.
     /// - Parameters:
     ///   - access: When the credentials stored in the keychain can be accessed.
-    ///   - groupIdentifier: The identifier of the group that credentials should be persisted to
-    ///   within the keychain.
     ///   - isSynchronizable: A value indicating whether the item is synchronized with iCloud.
     public func synchronizeWithKeychain(
         access: ArcGIS.KeychainAccess,
-        groupIdentifier: String? = nil,
         isCloudSynchronizable: Bool = false
     ) async throws {
         ArcGISURLSession.credentialStore = try await .makePersistent(
             access: access,
-            groupIdentifier: groupIdentifier,
             isSynchronizable: isCloudSynchronizable
         )
         certificateStore = try await CertificateCredentialStore(
@@ -125,10 +121,6 @@ extension Authenticator: AuthenticationChallengeHandler {
     public func handleArcGISChallenge(
         _ challenge: ArcGISAuthenticationChallenge
     ) async throws -> ArcGISAuthenticationChallenge.Disposition {
-        guard challenge.proposedCredential == nil else {
-            return .performDefaultHandling
-        }
-        
         // Queue up the challenge.
         let queuedChallenge = QueuedArcGISChallenge(arcGISChallenge: challenge)
         subject.send(queuedChallenge)
