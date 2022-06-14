@@ -30,7 +30,7 @@ struct FloorFilterExampleView: View {
     /// Determines the appropriate time to initialize the `FloorFilter`.
     @State private var isMapLoaded = false
     
-    /// The map is currently being navigated.
+    /// A Boolean value indicating if the map is currently being navigated.
     @State private var isNavigating = false
     
     @State private var mapLoadError = false
