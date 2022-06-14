@@ -31,7 +31,7 @@ struct FloorFilterExampleView: View {
 ***REMOVED***@State private var isMapLoaded: Bool = false
 ***REMOVED***
 ***REMOVED******REMOVED***/ The map is currently being navigated.
-***REMOVED***@State private var isNavigating: Bool = false
+***REMOVED***@State private var isNavigating = false
 ***REMOVED***
 ***REMOVED***@State private var mapLoadError: Bool = false
 ***REMOVED***
