@@ -28,12 +28,12 @@ struct FloorFilterExampleView: View {
     private let floorFilterAlignment = Alignment.bottomLeading
     
     /// Determines the appropriate time to initialize the `FloorFilter`.
-    @State private var isMapLoaded: Bool = false
+    @State private var isMapLoaded = false
     
     /// The map is currently being navigated.
     @State private var isNavigating = false
     
-    @State private var mapLoadError: Bool = false
+    @State private var mapLoadError = false
     
     /// The initial viewpoint of the map.
     @State private var viewpoint: Viewpoint? = Viewpoint(
