@@ -18,7 +18,7 @@ import SwiftUI
 /// `BorderedButtonStyle`.
 struct ButtonSelectedModifier: ViewModifier {
     /// A Boolean value that indicates whether view should display as selected.
-    var isSelected: Bool
+    let isSelected: Bool
     
     func body(content: Content) -> some View {
         if isSelected {
