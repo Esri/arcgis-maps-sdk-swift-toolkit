@@ -22,7 +22,7 @@ struct ConditionalSheetModifier<SheetContent: View>: ViewModifier {
     var isPresented: Binding<Bool>
     
     /// Content to be shown in the sheet.
-    var sheetContent: () -> SheetContent
+    let sheetContent: () -> SheetContent
     
     func body(content: Content) -> some View {
         if isAllowed {
