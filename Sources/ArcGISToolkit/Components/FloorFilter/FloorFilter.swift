@@ -27,7 +27,7 @@ public struct FloorFilter: View {
     /// If `true`, the site and facility selector will appear as a sheet.
     /// If `false`, the site and facility selector will appear as a popup modal alongside the level selector.
     private var isCompact: Bool {
-        return horizontalSizeClass == .compact || verticalSizeClass == .compact
+        horizontalSizeClass == .compact || verticalSizeClass == .compact
     }
     
     /// Creates a `FloorFilter`.
