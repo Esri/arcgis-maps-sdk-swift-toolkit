@@ -80,7 +80,7 @@ extension View {
 ***REMOVED******REMOVED***modifier(SelectedModifier(isSelected: isSelected))
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ - Parameter isAllowed: Condition that determines if this sheet can be shown.
+***REMOVED******REMOVED***/ - Parameter isAllowed: A Boolean that indicates if this sheet can be shown.
 ***REMOVED******REMOVED***/ - Returns: Produces a sheet that is only shown if `isAllowed` is set `true`.
 ***REMOVED***func sheet<SheetContent : View>(
 ***REMOVED******REMOVED***isAllowed: Bool,
