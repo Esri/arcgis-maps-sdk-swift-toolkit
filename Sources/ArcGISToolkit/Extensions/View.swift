@@ -80,7 +80,7 @@ extension View {
         modifier(SelectedModifier(isSelected: isSelected))
     }
     
-    /// - Parameter isAllowed: Condition that determines if this sheet can be shown.
+    /// - Parameter isAllowed: A Boolean that indicates if this sheet can be shown.
     /// - Returns: Produces a sheet that is only shown if `isAllowed` is set `true`.
     func sheet<SheetContent : View>(
         isAllowed: Bool,
