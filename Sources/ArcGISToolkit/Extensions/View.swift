@@ -22,7 +22,7 @@ struct ConditionalSheetModifier<SheetContent: View>: ViewModifier {
 ***REMOVED***var isPresented: Binding<Bool>
 ***REMOVED***
 ***REMOVED******REMOVED***/ Content to be shown in the sheet.
-***REMOVED***var sheetContent: () -> SheetContent
+***REMOVED***let sheetContent: () -> SheetContent
 ***REMOVED***
 ***REMOVED***func body(content: Content) -> some View {
 ***REMOVED******REMOVED***if isAllowed {
