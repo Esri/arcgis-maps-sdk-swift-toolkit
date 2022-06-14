@@ -18,9 +18,10 @@ import ArcGIS
 struct FloorFilterExampleView: View {
     /// Make a map from a portal item.
     static func makeMap() -> Map {
-        let portal = Portal(url: URL(string: "https://www.arcgis.com/")!, isLoginRequired: false)
-        let portalItem = PortalItem(portal: portal, id: Item.ID(rawValue: "b4b599a43a474d33946cf0df526426f5")!)
-        return Map(item: portalItem)
+        Map(item: PortalItem(
+            portal: .arcGISOnline(isLoginRequired: false),
+            id: Item.ID("b4b599a43a474d33946cf0df526426f5")!
+        ))
     }
     
     /// Determines the arrangement of the inner `FloorFilter` UI componenets.
