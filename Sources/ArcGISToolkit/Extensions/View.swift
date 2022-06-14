@@ -16,7 +16,7 @@ import SwiftUI
 /// A modifier that provides conditional control over when a sheet is used.
 struct ConditionalSheetModifier<SheetContent: View>: ViewModifier {
     /// A Boolean value that indicates whether `sheetContent` will be presented or not.
-    var isAllowed: Bool
+    let isAllowed: Bool
     
     /// Determines when the sheet is presented or not.
     var isPresented: Binding<Bool>
