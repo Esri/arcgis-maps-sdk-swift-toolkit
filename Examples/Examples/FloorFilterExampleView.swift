@@ -31,7 +31,7 @@ struct FloorFilterExampleView: View {
     @State private var isMapLoaded: Bool = false
     
     /// The map is currently being navigated.
-    @State private var isNavigating: Bool = false
+    @State private var isNavigating = false
     
     @State private var mapLoadError: Bool = false
     
