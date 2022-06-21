@@ -12,23 +12,13 @@
 // limitations under the License.
 
 import SwiftUI
-import ArcGIS
 
-extension FloorFacility {
-    /// - Returns: The default level for the facility, which is the level with vertical order 0.
-    var defaultLevel: FloorLevel? {
-        levels.first(where: { $0.verticalOrder == .zero })
-    }
-}
-
-extension FloorFacility: Equatable {
-    public static func == (lhs: FloorFacility, rhs: FloorFacility) -> Bool {
-        lhs.id == rhs.id
-    }
-}
-
-extension FloorFacility: Hashable {
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(id)
-    }
+public extension EdgeInsets {
+    /// A reusable set of edge insets for use across toolkit components.
+    static let toolkitDefault = Self(
+        top: 8,
+        leading: 12,
+        bottom: 8,
+        trailing: 12
+    )
 }

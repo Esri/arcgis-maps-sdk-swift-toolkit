@@ -19,3 +19,9 @@ extension FloorSite: Equatable {
         lhs.id == rhs.id
     }
 }
+
+extension FloorSite: Hashable {
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
+}

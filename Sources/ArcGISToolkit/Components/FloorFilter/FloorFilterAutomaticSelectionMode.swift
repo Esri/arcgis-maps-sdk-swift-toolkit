@@ -11,24 +11,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import SwiftUI
-import ArcGIS
-
-extension FloorFacility {
-    /// - Returns: The default level for the facility, which is the level with vertical order 0.
-    var defaultLevel: FloorLevel? {
-        levels.first(where: { $0.verticalOrder == .zero })
-    }
-}
-
-extension FloorFacility: Equatable {
-    public static func == (lhs: FloorFacility, rhs: FloorFacility) -> Bool {
-        lhs.id == rhs.id
-    }
-}
-
-extension FloorFacility: Hashable {
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(id)
-    }
+/// Defines automatic selection behavior.
+public enum FloorFilterAutomaticSelectionMode {
+    /// Always update selection based on the current viewpoint; clear the selection when the user
+    /// navigates away.
+    case always
+    /// Only update the selection when there is a new site or facility in the current viewpoint; don't clear
+    /// selection when the user navigates away.
+    case alwaysNotClearing
+    /// Never update selection based on the map or scene view's current viewpoint.
+    case never
 }
