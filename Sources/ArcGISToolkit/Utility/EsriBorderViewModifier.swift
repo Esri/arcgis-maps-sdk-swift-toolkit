@@ -39,12 +39,7 @@ struct EsriBorderViewModifier: ViewModifier {
 
 public extension View {
 ***REMOVED***func esriBorder(
-***REMOVED******REMOVED***padding: EdgeInsets = EdgeInsets(
-***REMOVED******REMOVED******REMOVED***top: 8,
-***REMOVED******REMOVED******REMOVED***leading: 12,
-***REMOVED******REMOVED******REMOVED***bottom: 8,
-***REMOVED******REMOVED******REMOVED***trailing: 12
-***REMOVED******REMOVED***)
+***REMOVED******REMOVED***padding: EdgeInsets = .toolkitDefault
 ***REMOVED***) -> some View {
 ***REMOVED******REMOVED***modifier(EsriBorderViewModifier(padding: padding))
 ***REMOVED***

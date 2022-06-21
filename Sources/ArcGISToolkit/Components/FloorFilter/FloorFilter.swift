@@ -21,166 +21,120 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED***/ Creates a `FloorFilter`.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - floorManager: The floor manager used by the `FloorFilter`.
+***REMOVED******REMOVED***/   - alignment: Determines the display configuration of Floor Filter elements.
+***REMOVED******REMOVED***/   - automaticSelectionMode: The selection behavior of the floor filter.
 ***REMOVED******REMOVED***/   - viewpoint: Viewpoint updated when the selected site or facility changes.
 ***REMOVED***public init(
 ***REMOVED******REMOVED***floorManager: FloorManager,
-***REMOVED******REMOVED***viewpoint: Binding<Viewpoint>? = nil
+***REMOVED******REMOVED***alignment: Alignment,
+***REMOVED******REMOVED***automaticSelectionMode: FloorFilterAutomaticSelectionMode = .always,
+***REMOVED******REMOVED***viewpoint: Binding<Viewpoint?> = .constant(nil)
 ***REMOVED***) {
 ***REMOVED******REMOVED***_viewModel = StateObject(wrappedValue: FloorFilterViewModel(
+***REMOVED******REMOVED******REMOVED***automaticSelectionMode: automaticSelectionMode,
 ***REMOVED******REMOVED******REMOVED***floorManager: floorManager,
 ***REMOVED******REMOVED******REMOVED***viewpoint: viewpoint
 ***REMOVED******REMOVED***))
+***REMOVED******REMOVED***self.alignment = alignment
+***REMOVED******REMOVED***self.viewpoint = viewpoint
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The view model used by the `FloorFilter`.
 ***REMOVED***@StateObject private var viewModel: FloorFilterViewModel
 ***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value that indicates whether the site or facility selector is hidden.
-***REMOVED***@State private var isSelectorHidden: Bool = true
+***REMOVED******REMOVED***/ A Boolean value that indicates whether the site and facility selector is hidden.
+***REMOVED***@State private var isSitesAndFacilitiesHidden: Bool = true
 ***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value that indicates whether the levels view is currently collapsed.
-***REMOVED***@State private var isLevelsViewCollapsed: Bool = false
+***REMOVED******REMOVED***/ The alignment configuration.
+***REMOVED***private let alignment: Alignment
 ***REMOVED***
-***REMOVED******REMOVED***/ The selected facility's levels, sorted by `level.verticalOrder`.
-***REMOVED***private var sortedLevels: [FloorLevel] {
-***REMOVED******REMOVED***viewModel.selectedFacility?.levels.sorted() {
-***REMOVED******REMOVED******REMOVED***$0.verticalOrder > $1.verticalOrder
-***REMOVED*** ?? []
+***REMOVED******REMOVED***/ The width of the level selector.
+***REMOVED***private let filterWidth: CGFloat = 60
 ***REMOVED***
-***REMOVED***
-***REMOVED***public var body: some View {
-***REMOVED******REMOVED***Group {
-***REMOVED******REMOVED******REMOVED***if viewModel.isLoading {
-***REMOVED******REMOVED******REMOVED******REMOVED***VStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ProgressView()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(12)
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***HStack(alignment: .bottom) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***VStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***VStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if viewModel.hasLevelsToDisplay {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***LevelsView(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***levels: sortedLevels,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isCollapsed: $isLevelsViewCollapsed
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Divider()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 30)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Site button.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isSelectorHidden.toggle()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "building.2")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(4)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.esriBorder()
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if !isSelectorHidden {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***SiteAndFacilitySelector(isHidden: $isSelectorHidden)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.esriBorder()
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***.environmentObject(viewModel)
-***REMOVED***
-***REMOVED***
-
-***REMOVED***/ A view displaying the levels in the selected facility.
-struct LevelsView: View {
-***REMOVED******REMOVED***/ The levels to display.
-***REMOVED***let levels: [FloorLevel]
-***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value that indicates whether the view shows only the selected level or all levels.
-***REMOVED******REMOVED***/ If the value is `false`, the view will display all levels. Otherwise, display only the
-***REMOVED******REMOVED***/ selected level.
-***REMOVED***@Binding var isCollapsed: Bool
-***REMOVED***
-***REMOVED******REMOVED***/ The view model used by the `LevelsView`.
-***REMOVED***@EnvironmentObject var viewModel: FloorFilterViewModel
-***REMOVED***
-***REMOVED******REMOVED***/ The height of the scroll view's content.
-***REMOVED***@State private var scrollViewContentHeight: CGFloat = .zero
-***REMOVED***
-***REMOVED***public var body: some View {
-***REMOVED******REMOVED***VStack {
-***REMOVED******REMOVED******REMOVED***if !isCollapsed,
-***REMOVED******REMOVED******REMOVED***   levels.count > 1 {
-***REMOVED******REMOVED******REMOVED******REMOVED***CollapseButton(isCollapsed: $isCollapsed)
-***REMOVED******REMOVED******REMOVED******REMOVED***Divider()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 30)
-***REMOVED******REMOVED******REMOVED******REMOVED***ScrollView {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***LevelsStack(levels: levels)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.background(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***GeometryReader { geometry -> Color in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***DispatchQueue.main.async {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***scrollViewContentHeight = geometry.size.height
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return .clear
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxHeight: scrollViewContentHeight)
-***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Button for the selected level.
-***REMOVED******REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if levels.count > 1 {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isCollapsed.toggle()
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(viewModel.selectedLevel?.shortName ?? (levels.first?.shortName ?? "None"))
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.selected(true)
-***REMOVED******REMOVED******REMOVED******REMOVED***.padding(4)
-***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***
-
-***REMOVED***/ A vertical list of floor levels.
-struct LevelsStack: View {
-***REMOVED***let levels: [FloorLevel]
-***REMOVED***
-***REMOVED******REMOVED***/ The view model used by the `LevelsView`.
-***REMOVED***@EnvironmentObject
-***REMOVED***var viewModel: FloorFilterViewModel
-***REMOVED***
-***REMOVED***var body: some View {
-***REMOVED******REMOVED***VStack {
-***REMOVED******REMOVED******REMOVED***ForEach(levels) { level in
-***REMOVED******REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.selection = .level(level)
-***REMOVED******REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(level.shortName)
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.selected(level == viewModel.selectedLevel)
-***REMOVED******REMOVED******REMOVED******REMOVED***.padding(4)
-***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***
-
-***REMOVED***/ A button used to collapse the floor level list.
-struct CollapseButton: View {
-***REMOVED******REMOVED***/ Allows the user to toggle the visibility of the site and facility selector.
-***REMOVED***@Binding
-***REMOVED***var isCollapsed: Bool
-***REMOVED***
-***REMOVED***var body: some View {
+***REMOVED******REMOVED***/ Button to open and close the site and facility selector.
+***REMOVED***private var sitesAndFacilitiesButton: some View {
 ***REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED***isCollapsed.toggle()
+***REMOVED******REMOVED******REMOVED***isSitesAndFacilitiesHidden.toggle()
 ***REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED***Image(systemName: "xmark")
+***REMOVED******REMOVED******REMOVED***Image(systemName: "building.2")
+***REMOVED******REMOVED******REMOVED******REMOVED***.padding(.toolkitDefault)
 ***REMOVED***
-***REMOVED******REMOVED***.padding(EdgeInsets(
-***REMOVED******REMOVED******REMOVED***top: 2,
-***REMOVED******REMOVED******REMOVED***leading: 4,
-***REMOVED******REMOVED******REMOVED***bottom: 2,
-***REMOVED******REMOVED******REMOVED***trailing: 4
-***REMOVED******REMOVED***))
+***REMOVED******REMOVED***.frame(maxWidth: .infinity)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Displays the available levels.
+***REMOVED***@ViewBuilder private var levelSelector: some View {
+***REMOVED******REMOVED***LevelSelector(
+***REMOVED******REMOVED******REMOVED***levels: viewModel.sortedLevels,
+***REMOVED******REMOVED******REMOVED***isTopAligned: isTopAligned
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ A view that allows selecting between levels.
+***REMOVED***private var floorFilter: some View {
+***REMOVED******REMOVED***VStack {
+***REMOVED******REMOVED******REMOVED***if isTopAligned {
+***REMOVED******REMOVED******REMOVED******REMOVED***sitesAndFacilitiesButton
+***REMOVED******REMOVED******REMOVED******REMOVED***if viewModel.hasLevelsToDisplay {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Divider()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***levelSelector
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***if viewModel.hasLevelsToDisplay {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***levelSelector
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Divider()
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***sitesAndFacilitiesButton
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***.frame(width: filterWidth)
+***REMOVED******REMOVED***.esriBorder()
+***REMOVED******REMOVED***.frame(maxHeight: .infinity, alignment: alignment)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ A configured `SiteAndFacilitySelector` view.
+***REMOVED******REMOVED***/
+***REMOVED******REMOVED***/ The layering of the `SiteAndFacilitySelector` over a `RoundedRectangle` is needed to
+***REMOVED******REMOVED***/ produce a rounded corners effect. We can not simply use `.esriBorder()` here because
+***REMOVED******REMOVED***/ applying the `cornerRadius()` modifier on `SiteAndFacilitySelector`'s underlying
+***REMOVED******REMOVED***/ `NavigationView` causes a rendering bug. This bug remains in iOS 16 with
+***REMOVED******REMOVED***/ `NavigationStack` and has been reported to Apple as FB10034457.
+***REMOVED***private var siteAndFacilitySelector: some View {
+***REMOVED******REMOVED***ZStack {
+***REMOVED******REMOVED******REMOVED***RoundedRectangle(cornerRadius: 8)
+***REMOVED******REMOVED******REMOVED******REMOVED***.fill(Color(uiColor: .systemBackground))
+***REMOVED******REMOVED******REMOVED******REMOVED***.esriBorder()
+***REMOVED******REMOVED******REMOVED***SiteAndFacilitySelector(isHidden: $isSitesAndFacilitiesHidden)
+***REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: viewpoint.wrappedValue) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.onViewpointChanged($0)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.padding()
+***REMOVED***
+***REMOVED******REMOVED***.opacity(isSitesAndFacilitiesHidden ? .zero : 1)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Indicates that the selector should be presented with a top oriented aligment configuration.
+***REMOVED***private var isTopAligned: Bool {
+***REMOVED******REMOVED***alignment.vertical == .top
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ The `Viewpoint` used to pan/zoom to the selected site/facilty.
+***REMOVED******REMOVED***/ If `nil`, there will be no automatic pan/zoom operations or automatic selection support.
+***REMOVED***private var viewpoint: Binding<Viewpoint?>
+***REMOVED***
+***REMOVED***public var body: some View {
+***REMOVED******REMOVED***HStack(alignment: .bottom) {
+***REMOVED******REMOVED******REMOVED***if alignment.horizontal == .trailing {
+***REMOVED******REMOVED******REMOVED******REMOVED***siteAndFacilitySelector
+***REMOVED******REMOVED******REMOVED******REMOVED***floorFilter
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***floorFilter
+***REMOVED******REMOVED******REMOVED******REMOVED***siteAndFacilitySelector
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED******REMOVED*** Ensure space for filter text field on small screens in landscape
+***REMOVED******REMOVED***.frame(minHeight: 100)
+***REMOVED******REMOVED***.environmentObject(viewModel)
+***REMOVED******REMOVED***.disabled(viewModel.isLoading)
 ***REMOVED***
 ***REMOVED***
