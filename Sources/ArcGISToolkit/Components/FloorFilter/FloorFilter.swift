@@ -21,166 +21,120 @@ public struct FloorFilter: View {
     /// Creates a `FloorFilter`.
     /// - Parameters:
     ///   - floorManager: The floor manager used by the `FloorFilter`.
+    ///   - alignment: Determines the display configuration of Floor Filter elements.
+    ///   - automaticSelectionMode: The selection behavior of the floor filter.
     ///   - viewpoint: Viewpoint updated when the selected site or facility changes.
     public init(
         floorManager: FloorManager,
-        viewpoint: Binding<Viewpoint>? = nil
+        alignment: Alignment,
+        automaticSelectionMode: FloorFilterAutomaticSelectionMode = .always,
+        viewpoint: Binding<Viewpoint?> = .constant(nil)
     ) {
         _viewModel = StateObject(wrappedValue: FloorFilterViewModel(
+            automaticSelectionMode: automaticSelectionMode,
             floorManager: floorManager,
             viewpoint: viewpoint
         ))
+        self.alignment = alignment
+        self.viewpoint = viewpoint
     }
     
     /// The view model used by the `FloorFilter`.
     @StateObject private var viewModel: FloorFilterViewModel
     
-    /// A Boolean value that indicates whether the site or facility selector is hidden.
-    @State private var isSelectorHidden: Bool = true
+    /// A Boolean value that indicates whether the site and facility selector is hidden.
+    @State private var isSitesAndFacilitiesHidden: Bool = true
     
-    /// A Boolean value that indicates whether the levels view is currently collapsed.
-    @State private var isLevelsViewCollapsed: Bool = false
+    /// The alignment configuration.
+    private let alignment: Alignment
     
-    /// The selected facility's levels, sorted by `level.verticalOrder`.
-    private var sortedLevels: [FloorLevel] {
-        viewModel.selectedFacility?.levels.sorted() {
-            $0.verticalOrder > $1.verticalOrder
-        } ?? []
-    }
+    /// The width of the level selector.
+    private let filterWidth: CGFloat = 60
     
-    public var body: some View {
-        Group {
-            if viewModel.isLoading {
-                VStack {
-                    Spacer()
-                    ProgressView()
-                        .padding(12)
-                }
-            } else {
-                HStack(alignment: .bottom) {
-                    VStack {
-                        Spacer()
-                        VStack {
-                            if viewModel.hasLevelsToDisplay {
-                                LevelsView(
-                                    levels: sortedLevels,
-                                    isCollapsed: $isLevelsViewCollapsed
-                                )
-                                Divider()
-                                    .frame(width: 30)
-                            }
-                            // Site button.
-                            Button {
-                                isSelectorHidden.toggle()
-                            } label: {
-                                Image(systemName: "building.2")
-                            }
-                            .padding(4)
-                        }
-                        .esriBorder()
-                    }
-                    if !isSelectorHidden {
-                        SiteAndFacilitySelector(isHidden: $isSelectorHidden)
-                            .esriBorder()
-                    }
-                }
-            }
-        }
-        .environmentObject(viewModel)
-    }
-}
-
-/// A view displaying the levels in the selected facility.
-struct LevelsView: View {
-    /// The levels to display.
-    let levels: [FloorLevel]
-    
-    /// A Boolean value that indicates whether the view shows only the selected level or all levels.
-    /// If the value is `false`, the view will display all levels. Otherwise, display only the
-    /// selected level.
-    @Binding var isCollapsed: Bool
-    
-    /// The view model used by the `LevelsView`.
-    @EnvironmentObject var viewModel: FloorFilterViewModel
-    
-    /// The height of the scroll view's content.
-    @State private var scrollViewContentHeight: CGFloat = .zero
-    
-    public var body: some View {
-        VStack {
-            if !isCollapsed,
-               levels.count > 1 {
-                CollapseButton(isCollapsed: $isCollapsed)
-                Divider()
-                    .frame(width: 30)
-                ScrollView {
-                    LevelsStack(levels: levels)
-                        .background(
-                            GeometryReader { geometry -> Color in
-                                DispatchQueue.main.async {
-                                    scrollViewContentHeight = geometry.size.height
-                                }
-                                return .clear
-                            }
-                        )
-                }
-                .frame(maxHeight: scrollViewContentHeight)
-            } else {
-                // Button for the selected level.
-                Button {
-                    if levels.count > 1 {
-                        isCollapsed.toggle()
-                    }
-                } label: {
-                    Text(viewModel.selectedLevel?.shortName ?? (levels.first?.shortName ?? "None"))
-                }
-                .selected(true)
-                .padding(4)
-            }
-        }
-    }
-}
-
-/// A vertical list of floor levels.
-struct LevelsStack: View {
-    let levels: [FloorLevel]
-    
-    /// The view model used by the `LevelsView`.
-    @EnvironmentObject
-    var viewModel: FloorFilterViewModel
-    
-    var body: some View {
-        VStack {
-            ForEach(levels) { level in
-                Button {
-                    viewModel.selection = .level(level)
-                } label: {
-                    Text(level.shortName)
-                }
-                .selected(level == viewModel.selectedLevel)
-                .padding(4)
-            }
-        }
-    }
-}
-
-/// A button used to collapse the floor level list.
-struct CollapseButton: View {
-    /// Allows the user to toggle the visibility of the site and facility selector.
-    @Binding
-    var isCollapsed: Bool
-    
-    var body: some View {
+    /// Button to open and close the site and facility selector.
+    private var sitesAndFacilitiesButton: some View {
         Button {
-            isCollapsed.toggle()
+            isSitesAndFacilitiesHidden.toggle()
         } label: {
-            Image(systemName: "xmark")
+            Image(systemName: "building.2")
+                .padding(.toolkitDefault)
         }
-        .padding(EdgeInsets(
-            top: 2,
-            leading: 4,
-            bottom: 2,
-            trailing: 4
-        ))
+        .frame(maxWidth: .infinity)
+    }
+    
+    /// Displays the available levels.
+    @ViewBuilder private var levelSelector: some View {
+        LevelSelector(
+            levels: viewModel.sortedLevels,
+            isTopAligned: isTopAligned
+        )
+    }
+    
+    /// A view that allows selecting between levels.
+    private var floorFilter: some View {
+        VStack {
+            if isTopAligned {
+                sitesAndFacilitiesButton
+                if viewModel.hasLevelsToDisplay {
+                    Divider()
+                    levelSelector
+                }
+            } else {
+                if viewModel.hasLevelsToDisplay {
+                    levelSelector
+                    Divider()
+                }
+                sitesAndFacilitiesButton
+            }
+        }
+        .frame(width: filterWidth)
+        .esriBorder()
+        .frame(maxHeight: .infinity, alignment: alignment)
+    }
+    
+    /// A configured `SiteAndFacilitySelector` view.
+    ///
+    /// The layering of the `SiteAndFacilitySelector` over a `RoundedRectangle` is needed to
+    /// produce a rounded corners effect. We can not simply use `.esriBorder()` here because
+    /// applying the `cornerRadius()` modifier on `SiteAndFacilitySelector`'s underlying
+    /// `NavigationView` causes a rendering bug. This bug remains in iOS 16 with
+    /// `NavigationStack` and has been reported to Apple as FB10034457.
+    private var siteAndFacilitySelector: some View {
+        ZStack {
+            RoundedRectangle(cornerRadius: 8)
+                .fill(Color(uiColor: .systemBackground))
+                .esriBorder()
+            SiteAndFacilitySelector(isHidden: $isSitesAndFacilitiesHidden)
+                .onChange(of: viewpoint.wrappedValue) {
+                    viewModel.onViewpointChanged($0)
+                }
+                .padding()
+        }
+        .opacity(isSitesAndFacilitiesHidden ? .zero : 1)
+    }
+    
+    /// Indicates that the selector should be presented with a top oriented aligment configuration.
+    private var isTopAligned: Bool {
+        alignment.vertical == .top
+    }
+    
+    /// The `Viewpoint` used to pan/zoom to the selected site/facilty.
+    /// If `nil`, there will be no automatic pan/zoom operations or automatic selection support.
+    private var viewpoint: Binding<Viewpoint?>
+    
+    public var body: some View {
+        HStack(alignment: .bottom) {
+            if alignment.horizontal == .trailing {
+                siteAndFacilitySelector
+                floorFilter
+            } else {
+                floorFilter
+                siteAndFacilitySelector
+            }
+        }
+        // Ensure space for filter text field on small screens in landscape
+        .frame(minHeight: 100)
+        .environmentObject(viewModel)
+        .disabled(viewModel.isLoading)
     }
 }
