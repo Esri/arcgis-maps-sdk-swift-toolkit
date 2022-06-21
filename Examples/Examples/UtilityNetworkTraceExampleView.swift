@@ -1,0 +1,78 @@
+***REMOVED*** Copyright 2022 Esri.
+
+***REMOVED*** Licensed under the Apache License, Version 2.0 (the "License");
+***REMOVED*** you may not use this file except in compliance with the License.
+***REMOVED*** You may obtain a copy of the License at
+***REMOVED*** http:***REMOVED***www.apache.org/licenses/LICENSE-2.0
+
+***REMOVED*** Unless required by applicable law or agreed to in writing, software
+***REMOVED*** distributed under the License is distributed on an "AS IS" BASIS,
+***REMOVED*** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+***REMOVED*** See the License for the specific language governing permissions and
+***REMOVED*** limitations under the License.
+
+***REMOVED***
+***REMOVED***Toolkit
+***REMOVED***
+
+struct UtilityNetworkTraceExampleView: View {
+***REMOVED***@StateObject private var map = makeMap()
+***REMOVED***
+***REMOVED******REMOVED***/ Provides the ability to inspect map components.
+***REMOVED***@State var mapViewProxy: MapViewProxy?
+***REMOVED***
+***REMOVED******REMOVED***/ Provides the ability to detect tap locations in the context of the map view.
+***REMOVED***@State var pointInMap: Point?
+***REMOVED***
+***REMOVED******REMOVED***/ Provides the ability to detect tap locations in the context of the screen.
+***REMOVED***@State var pointInScreen: CGPoint?
+***REMOVED***
+***REMOVED******REMOVED***/ A container for graphical trace results.
+***REMOVED***@State var resultGraphicsOverlay = GraphicsOverlay()
+***REMOVED***
+***REMOVED***@State var viewpoint: Viewpoint?
+***REMOVED***
+***REMOVED***var body: some View {
+***REMOVED******REMOVED***MapViewReader { mapViewProxy in
+***REMOVED******REMOVED******REMOVED***MapView(
+***REMOVED******REMOVED******REMOVED******REMOVED***map: map,
+***REMOVED******REMOVED******REMOVED******REMOVED***viewpoint: viewpoint,
+***REMOVED******REMOVED******REMOVED******REMOVED***graphicsOverlays: [resultGraphicsOverlay]
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***.onSingleTapGesture { pointInScreen, pointInMap in
+***REMOVED******REMOVED******REMOVED******REMOVED***self.pointInScreen = pointInScreen
+***REMOVED******REMOVED******REMOVED******REMOVED***self.pointInMap = pointInMap
+***REMOVED******REMOVED******REMOVED******REMOVED***self.mapViewProxy = mapViewProxy
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.edgesIgnoringSafeArea(.bottom)
+***REMOVED******REMOVED******REMOVED***.overlay {
+***REMOVED******REMOVED******REMOVED******REMOVED***UtilityNetworkTrace(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***$resultGraphicsOverlay,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***map,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***$pointInMap,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***$pointInScreen,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***$mapViewProxy,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***$viewpoint
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***.frame(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***maxWidth: .infinity,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***maxHeight: .infinity,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***alignment: .bottomLeading
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Make a map from a portal item.
+***REMOVED***static func makeMap() -> Map {
+***REMOVED******REMOVED***let portal = Portal(
+***REMOVED******REMOVED******REMOVED***url: URL(string: "https:***REMOVED***www.arcgis.com/")!,
+***REMOVED******REMOVED******REMOVED***isLoginRequired: false
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***let portalItem = PortalItem(
+***REMOVED******REMOVED******REMOVED***portal: portal,
+***REMOVED******REMOVED******REMOVED***id: Item.ID(rawValue: "471eb0bf37074b1fbb972b1da70fb310")!
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***return Map(item: portalItem)
+***REMOVED***
+***REMOVED***

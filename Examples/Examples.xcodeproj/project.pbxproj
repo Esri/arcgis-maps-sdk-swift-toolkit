@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		75230DAC2861392B009AF501 /* PartialSheetExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75230DAB2861392B009AF501 /* PartialSheetExampleView.swift */; ***REMOVED***;
+		75230DAE28614369009AF501 /* UtilityNetworkTraceExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75230DAD28614369009AF501 /* UtilityNetworkTraceExampleView.swift */; ***REMOVED***;
 		75657E4827ABAC8400EE865B /* CompassExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75657E4727ABAC8400EE865B /* CompassExampleView.swift */; ***REMOVED***;
 		75C37C9227BEDBD800FC9DCE /* BookmarksExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C37C9127BEDBD800FC9DCE /* BookmarksExampleView.swift */; ***REMOVED***;
 		75D41B2B27C6F21400624D7C /* ScalebarExampleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D41B2A27C6F21400624D7C /* ScalebarExampleView.swift */; ***REMOVED***;
@@ -42,6 +43,7 @@
 
 /* Begin PBXFileReference section */
 		75230DAB2861392B009AF501 /* PartialSheetExampleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PartialSheetExampleView.swift; sourceTree = "<group>"; ***REMOVED***;
+		75230DAD28614369009AF501 /* UtilityNetworkTraceExampleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UtilityNetworkTraceExampleView.swift; sourceTree = "<group>"; ***REMOVED***;
 		75657E4727ABAC8400EE865B /* CompassExampleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompassExampleView.swift; sourceTree = "<group>"; ***REMOVED***;
 		75C37C9127BEDBD800FC9DCE /* BookmarksExampleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookmarksExampleView.swift; sourceTree = "<group>"; ***REMOVED***;
 		75D41B2A27C6F21400624D7C /* ScalebarExampleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScalebarExampleView.swift; sourceTree = "<group>"; ***REMOVED***;
@@ -88,6 +90,7 @@
 				75657E4727ABAC8400EE865B /* CompassExampleView.swift */,
 				E4624A24278CE815000D2A38 /* FloorFilterExampleView.swift */,
 				75230DAB2861392B009AF501 /* PartialSheetExampleView.swift */,
+				75230DAD28614369009AF501 /* UtilityNetworkTraceExampleView.swift */,
 			);
 			name = Examples;
 			sourceTree = "<group>";
@@ -227,6 +230,7 @@
 				75657E4827ABAC8400EE865B /* CompassExampleView.swift in Sources */,
 				E48A73452658227100F5C118 /* Examples.swift in Sources */,
 				75C37C9227BEDBD800FC9DCE /* BookmarksExampleView.swift in Sources */,
+				75230DAE28614369009AF501 /* UtilityNetworkTraceExampleView.swift in Sources */,
 				E48A73432658227100F5C118 /* Example.swift in Sources */,
 				75230DAC2861392B009AF501 /* PartialSheetExampleView.swift in Sources */,
 				E47ABE442652FE0900FD2FE3 /* ExamplesApp.swift in Sources */,
