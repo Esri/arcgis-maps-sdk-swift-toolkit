@@ -58,10 +58,10 @@ public struct FloorFilter: View {
 ***REMOVED***@StateObject private var viewModel: FloorFilterViewModel
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value that indicates whether the levels view is currently collapsed.
-***REMOVED***@State private var isLevelsViewCollapsed: Bool = false
+***REMOVED***@State private var isLevelsViewCollapsed = false
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value that indicates whether the site and facility selector is presented.
-***REMOVED***@State private var isSitesAndFacilitiesHidden: Bool = false
+***REMOVED***@State private var isSitesAndFacilitiesHidden = false
 ***REMOVED***
 ***REMOVED******REMOVED***/ The alignment configuration.
 ***REMOVED***private let alignment: Alignment
