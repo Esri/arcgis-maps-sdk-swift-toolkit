@@ -278,7 +278,8 @@ final class FloorFilterViewModel: ObservableObject {
     
     /// Loads the given `FloorManager` if needed, then sets `isLoading` to `false`.
     private func loadFloorManager() {
-        guard floorManager.loadStatus == .notLoaded else {
+        guard floorManager.loadStatus == .notLoaded,
+              floorManager.loadStatus != .loading else {
             isLoading = false
             return
         }
