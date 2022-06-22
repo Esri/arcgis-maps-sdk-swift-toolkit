@@ -109,7 +109,7 @@ public struct FloorFilter: View {
         )
     }
     
-    /// The map is currently being navigated.
+    /// A Boolean value indicating whether the map is currently being navigated.
     private var isNavigating: Binding<Bool>
     
     /// Indicates that the selector should be presented with a top oriented aligment configuration.
