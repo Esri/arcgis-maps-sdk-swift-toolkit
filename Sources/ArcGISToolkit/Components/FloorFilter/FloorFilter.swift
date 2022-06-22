@@ -72,15 +72,6 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED******REMOVED***Image(systemName: "building.2")
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding(.toolkitDefault)
 ***REMOVED***
-***REMOVED******REMOVED***.sheet(
-***REMOVED******REMOVED******REMOVED***isAllowed: horizontalSizeClass == .compact,
-***REMOVED******REMOVED******REMOVED***isPresented: $isSitesAndFacilitiesHidden
-***REMOVED******REMOVED***) {
-***REMOVED******REMOVED******REMOVED***SiteAndFacilitySelector(isHidden: $isSitesAndFacilitiesHidden)
-***REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: viewpoint.wrappedValue) { viewpoint in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***reportChange(of: viewpoint)
-***REMOVED******REMOVED******REMOVED***
-***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ A view that allows selecting between levels.
@@ -139,7 +130,15 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED***/ `NavigationView` causes a rendering bug. This bug remains in iOS 16 with
 ***REMOVED******REMOVED***/ `NavigationStack` and has been reported to Apple as FB10034457.
 ***REMOVED***@ViewBuilder private var siteAndFacilitySelector: some View {
-***REMOVED******REMOVED***if !(horizontalSizeClass == .compact) {
+***REMOVED******REMOVED***if horizontalSizeClass == .compact {
+***REMOVED******REMOVED******REMOVED***Color.clear
+***REMOVED******REMOVED******REMOVED******REMOVED***.sheet(isPresented: $isSitesAndFacilitiesHidden) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***SiteAndFacilitySelector(isHidden: $isSitesAndFacilitiesHidden)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: viewpoint.wrappedValue) { viewpoint in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***reportChange(of: viewpoint)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED***ZStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED***RoundedRectangle(cornerRadius: 8)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fill(Color(uiColor: .systemBackground))
