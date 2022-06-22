@@ -21,15 +21,6 @@ public struct FloorFilter: View {
     @Environment(\.horizontalSizeClass)
     private var horizontalSizeClass: UserInterfaceSizeClass?
     
-    @Environment(\.verticalSizeClass)
-    private var verticalSizeClass: UserInterfaceSizeClass?
-    
-    /// If `true`, the site and facility selector will appear as a sheet.
-    /// If `false`, the site and facility selector will appear as a popup modal alongside the level selector.
-    private var isCompact: Bool {
-        horizontalSizeClass == .compact || verticalSizeClass == .compact
-    }
-    
     /// Creates a `FloorFilter`.
     /// - Parameters:
     ///   - floorManager: The floor manager used by the `FloorFilter`.
@@ -82,7 +73,7 @@ public struct FloorFilter: View {
                 .padding(.toolkitDefault)
         }
         .sheet(
-            isAllowed: isCompact,
+            isAllowed: horizontalSizeClass == .compact,
             isPresented: $isSitesAndFacilitiesHidden
         ) {
             SiteAndFacilitySelector(isHidden: $isSitesAndFacilitiesHidden)
@@ -112,7 +103,7 @@ public struct FloorFilter: View {
         .frame(width: filterWidth)
         .esriBorder()
         .frame(
-            maxWidth: isCompact ? .infinity : nil,
+            maxWidth: horizontalSizeClass == .compact ? .infinity : nil,
             maxHeight: .infinity,
             alignment: alignment
         )
@@ -148,7 +139,7 @@ public struct FloorFilter: View {
     /// `NavigationView` causes a rendering bug. This bug remains in iOS 16 with
     /// `NavigationStack` and has been reported to Apple as FB10034457.
     @ViewBuilder private var siteAndFacilitySelector: some View {
-        if !isCompact {
+        if !(horizontalSizeClass == .compact) {
             ZStack {
                 RoundedRectangle(cornerRadius: 8)
                     .fill(Color(uiColor: .systemBackground))
@@ -175,7 +166,6 @@ public struct FloorFilter: View {
         }
         // Ensure space for filter text field on small screens in landscape
         .frame(minHeight: 100)
-        .environment(\.isCompact, isCompact)
         .environmentObject(viewModel)
         .disabled(viewModel.isLoading)
     }
