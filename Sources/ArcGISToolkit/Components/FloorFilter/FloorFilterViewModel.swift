@@ -278,7 +278,8 @@ final class FloorFilterViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Loads the given `FloorManager` if needed, then sets `isLoading` to `false`.
 ***REMOVED***private func loadFloorManager() {
-***REMOVED******REMOVED***guard floorManager.loadStatus == .notLoaded else {
+***REMOVED******REMOVED***guard floorManager.loadStatus == .notLoaded,
+***REMOVED******REMOVED******REMOVED***  floorManager.loadStatus != .loading else {
 ***REMOVED******REMOVED******REMOVED***isLoading = false
 ***REMOVED******REMOVED******REMOVED***return
 ***REMOVED***
