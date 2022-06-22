@@ -109,7 +109,7 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ The map is currently being navigated.
+***REMOVED******REMOVED***/ A Boolean value indicating whether the map is currently being navigated.
 ***REMOVED***private var isNavigating: Binding<Bool>
 ***REMOVED***
 ***REMOVED******REMOVED***/ Indicates that the selector should be presented with a top oriented aligment configuration.
