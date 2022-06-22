@@ -131,8 +131,8 @@ final class FloorFilterViewModel: ObservableObject {
 ***REMOVED***func onViewpointChanged(_ viewpoint: Viewpoint?) {
 ***REMOVED******REMOVED***guard let viewpoint = viewpoint,
 ***REMOVED******REMOVED******REMOVED***  !viewpoint.targetScale.isZero else {
-***REMOVED******REMOVED******REMOVED******REMOVED***  return
-***REMOVED***  ***REMOVED***
+***REMOVED******REMOVED******REMOVED***return
+***REMOVED***
 ***REMOVED******REMOVED***automaticallySelectFacilityOrSite()
 ***REMOVED***
 ***REMOVED***
@@ -142,9 +142,9 @@ final class FloorFilterViewModel: ObservableObject {
 ***REMOVED******REMOVED***/   - zoomTo: If `true`, changes the viewpoint to the extent of the new facility.
 ***REMOVED***func setFacility(_ newFacility: FloorFacility, zoomTo: Bool = false) {
 ***REMOVED******REMOVED***if let oldLevel = selectedLevel,
-***REMOVED******REMOVED******REMOVED***let newLevel = newFacility.levels.first(
+***REMOVED******REMOVED***   let newLevel = newFacility.levels.first(
 ***REMOVED******REMOVED******REMOVED***where: { $0.verticalOrder == oldLevel.verticalOrder ***REMOVED***
-***REMOVED******REMOVED***) {
+***REMOVED******REMOVED***   ) {
 ***REMOVED******REMOVED******REMOVED***setLevel(newLevel)
 ***REMOVED*** else if let defaultLevel = newFacility.defaultLevel {
 ***REMOVED******REMOVED******REMOVED***setLevel(defaultLevel)
@@ -202,7 +202,7 @@ final class FloorFilterViewModel: ObservableObject {
 ***REMOVED******REMOVED******REMOVED*** Only select a facility if it is within minimum scale. Default at 1500.
 ***REMOVED******REMOVED***let facilityMinScale: Double
 ***REMOVED******REMOVED***if let minScale = floorManager.facilityLayer?.minScale,
-***REMOVED******REMOVED******REMOVED***   minScale != .zero {
+***REMOVED******REMOVED***   minScale != .zero {
 ***REMOVED******REMOVED******REMOVED***facilityMinScale = minScale
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED***facilityMinScale = 1500
@@ -236,7 +236,7 @@ final class FloorFilterViewModel: ObservableObject {
 ***REMOVED******REMOVED******REMOVED*** Only select a facility if it is within minimum scale. Default at 4300.
 ***REMOVED******REMOVED***let siteMinScale: Double
 ***REMOVED******REMOVED***if let minScale = floorManager.siteLayer?.minScale,
-***REMOVED******REMOVED******REMOVED***   minScale != .zero {
+***REMOVED******REMOVED***   minScale != .zero {
 ***REMOVED******REMOVED******REMOVED***siteMinScale = minScale
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED***siteMinScale = 4300
@@ -287,7 +287,7 @@ final class FloorFilterViewModel: ObservableObject {
 ***REMOVED******REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED******REMOVED***try await floorManager.load()
 ***REMOVED******REMOVED******REMOVED******REMOVED***if sites.count == 1,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let firstSite = sites.first {
+***REMOVED******REMOVED******REMOVED******REMOVED***   let firstSite = sites.first {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** If we have only one site, select it.
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***setSite(firstSite, zoomTo: true)
 ***REMOVED******REMOVED******REMOVED***
