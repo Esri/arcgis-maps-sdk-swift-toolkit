@@ -34,7 +34,8 @@ struct SiteAndFacilitySelector: View {
     
     /// A view displaying the sites contained in a `FloorManager`.
     struct SitesList: View {
-        @Environment(\.isCompact) var isCompact: Bool
+        @Environment(\.horizontalSizeClass)
+        private var horizontalSizeClass: UserInterfaceSizeClass?
         
         /// The view model used by this selector.
         @EnvironmentObject var viewModel: FloorFilterViewModel
@@ -84,7 +85,7 @@ struct SiteAndFacilitySelector: View {
                             )
                         }
                         .buttonStyle(.bordered)
-                        .padding([.bottom], isCompact ? 5 : 0)
+                        .padding([.bottom], horizontalSizeClass == .compact ? 5 : 0)
                     }
                 }
                 .searchable(
@@ -143,7 +144,8 @@ struct SiteAndFacilitySelector: View {
     
     /// A view displaying the facilities contained in a `FloorManager`.
     struct FacilitiesList: View {
-        @Environment(\.isCompact) var isCompact: Bool
+        @Environment(\.horizontalSizeClass)
+        private var horizontalSizeClass: UserInterfaceSizeClass?
         
         /// The view model used by this selector.
         @EnvironmentObject var viewModel: FloorFilterViewModel
@@ -210,7 +212,7 @@ struct SiteAndFacilitySelector: View {
                 List(matchingFacilities, id: \.id) { facility in
                     Button {
                         viewModel.setFacility(facility, zoomTo: true)
-                        if isCompact {
+                        if horizontalSizeClass == .compact {
                             isHidden.toggle()
                         }
                     } label: {
