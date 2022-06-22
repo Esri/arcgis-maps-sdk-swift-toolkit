@@ -34,7 +34,8 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ A view displaying the sites contained in a `FloorManager`.
 ***REMOVED***struct SitesList: View {
-***REMOVED******REMOVED***@Environment(\.isCompact) var isCompact: Bool
+***REMOVED******REMOVED***@Environment(\.horizontalSizeClass)
+***REMOVED******REMOVED***private var horizontalSizeClass: UserInterfaceSizeClass?
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ The view model used by this selector.
 ***REMOVED******REMOVED***@EnvironmentObject var viewModel: FloorFilterViewModel
@@ -84,7 +85,7 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.buttonStyle(.bordered)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding([.bottom], isCompact ? 5 : 0)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding([.bottom], horizontalSizeClass == .compact ? 5 : 0)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.searchable(
@@ -143,7 +144,8 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ A view displaying the facilities contained in a `FloorManager`.
 ***REMOVED***struct FacilitiesList: View {
-***REMOVED******REMOVED***@Environment(\.isCompact) var isCompact: Bool
+***REMOVED******REMOVED***@Environment(\.horizontalSizeClass)
+***REMOVED******REMOVED***private var horizontalSizeClass: UserInterfaceSizeClass?
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ The view model used by this selector.
 ***REMOVED******REMOVED***@EnvironmentObject var viewModel: FloorFilterViewModel
@@ -210,7 +212,7 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***List(matchingFacilities, id: \.id) { facility in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.setFacility(facility, zoomTo: true)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if isCompact {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if horizontalSizeClass == .compact {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isHidden.toggle()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** label: {

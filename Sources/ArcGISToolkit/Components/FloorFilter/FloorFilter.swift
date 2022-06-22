@@ -21,15 +21,6 @@ public struct FloorFilter: View {
 ***REMOVED***@Environment(\.horizontalSizeClass)
 ***REMOVED***private var horizontalSizeClass: UserInterfaceSizeClass?
 ***REMOVED***
-***REMOVED***@Environment(\.verticalSizeClass)
-***REMOVED***private var verticalSizeClass: UserInterfaceSizeClass?
-***REMOVED***
-***REMOVED******REMOVED***/ If `true`, the site and facility selector will appear as a sheet.
-***REMOVED******REMOVED***/ If `false`, the site and facility selector will appear as a popup modal alongside the level selector.
-***REMOVED***private var isCompact: Bool {
-***REMOVED******REMOVED***horizontalSizeClass == .compact || verticalSizeClass == .compact
-***REMOVED***
-***REMOVED***
 ***REMOVED******REMOVED***/ Creates a `FloorFilter`.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - floorManager: The floor manager used by the `FloorFilter`.
@@ -82,7 +73,7 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding(.toolkitDefault)
 ***REMOVED***
 ***REMOVED******REMOVED***.sheet(
-***REMOVED******REMOVED******REMOVED***isAllowed: isCompact,
+***REMOVED******REMOVED******REMOVED***isAllowed: horizontalSizeClass == .compact,
 ***REMOVED******REMOVED******REMOVED***isPresented: $isSitesAndFacilitiesHidden
 ***REMOVED******REMOVED***) {
 ***REMOVED******REMOVED******REMOVED***SiteAndFacilitySelector(isHidden: $isSitesAndFacilitiesHidden)
@@ -112,7 +103,7 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED***.frame(width: filterWidth)
 ***REMOVED******REMOVED***.esriBorder()
 ***REMOVED******REMOVED***.frame(
-***REMOVED******REMOVED******REMOVED***maxWidth: isCompact ? .infinity : nil,
+***REMOVED******REMOVED******REMOVED***maxWidth: horizontalSizeClass == .compact ? .infinity : nil,
 ***REMOVED******REMOVED******REMOVED***maxHeight: .infinity,
 ***REMOVED******REMOVED******REMOVED***alignment: alignment
 ***REMOVED******REMOVED***)
@@ -148,7 +139,7 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED***/ `NavigationView` causes a rendering bug. This bug remains in iOS 16 with
 ***REMOVED******REMOVED***/ `NavigationStack` and has been reported to Apple as FB10034457.
 ***REMOVED***@ViewBuilder private var siteAndFacilitySelector: some View {
-***REMOVED******REMOVED***if !isCompact {
+***REMOVED******REMOVED***if !(horizontalSizeClass == .compact) {
 ***REMOVED******REMOVED******REMOVED***ZStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED***RoundedRectangle(cornerRadius: 8)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fill(Color(uiColor: .systemBackground))
@@ -175,7 +166,6 @@ public struct FloorFilter: View {
 ***REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Ensure space for filter text field on small screens in landscape
 ***REMOVED******REMOVED***.frame(minHeight: 100)
-***REMOVED******REMOVED***.environment(\.isCompact, isCompact)
 ***REMOVED******REMOVED***.environmentObject(viewModel)
 ***REMOVED******REMOVED***.disabled(viewModel.isLoading)
 ***REMOVED***
