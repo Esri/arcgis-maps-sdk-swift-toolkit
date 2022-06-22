@@ -30,7 +30,7 @@ struct FloorFilterExampleView: View {
 ***REMOVED******REMOVED***/ Determines the appropriate time to initialize the `FloorFilter`.
 ***REMOVED***@State private var isMapLoaded = false
 ***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value indicating if the map is currently being navigated.
+***REMOVED******REMOVED***/ A Boolean value indicating whether the map is currently being navigated.
 ***REMOVED***@State private var isNavigating = false
 ***REMOVED***
 ***REMOVED***@State private var mapLoadError = false
