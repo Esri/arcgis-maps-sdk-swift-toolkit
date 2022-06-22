@@ -131,8 +131,8 @@ final class FloorFilterViewModel: ObservableObject {
     func onViewpointChanged(_ viewpoint: Viewpoint?) {
         guard let viewpoint = viewpoint,
               !viewpoint.targetScale.isZero else {
-                  return
-              }
+            return
+        }
         automaticallySelectFacilityOrSite()
     }
     
@@ -142,9 +142,9 @@ final class FloorFilterViewModel: ObservableObject {
     ///   - zoomTo: If `true`, changes the viewpoint to the extent of the new facility.
     func setFacility(_ newFacility: FloorFacility, zoomTo: Bool = false) {
         if let oldLevel = selectedLevel,
-            let newLevel = newFacility.levels.first(
+           let newLevel = newFacility.levels.first(
             where: { $0.verticalOrder == oldLevel.verticalOrder }
-        ) {
+           ) {
             setLevel(newLevel)
         } else if let defaultLevel = newFacility.defaultLevel {
             setLevel(defaultLevel)
@@ -202,7 +202,7 @@ final class FloorFilterViewModel: ObservableObject {
         // Only select a facility if it is within minimum scale. Default at 1500.
         let facilityMinScale: Double
         if let minScale = floorManager.facilityLayer?.minScale,
-               minScale != .zero {
+           minScale != .zero {
             facilityMinScale = minScale
         } else {
             facilityMinScale = 1500
@@ -236,7 +236,7 @@ final class FloorFilterViewModel: ObservableObject {
         // Only select a facility if it is within minimum scale. Default at 4300.
         let siteMinScale: Double
         if let minScale = floorManager.siteLayer?.minScale,
-               minScale != .zero {
+           minScale != .zero {
             siteMinScale = minScale
         } else {
             siteMinScale = 4300
@@ -287,7 +287,7 @@ final class FloorFilterViewModel: ObservableObject {
             do {
                 try await floorManager.load()
                 if sites.count == 1,
-                    let firstSite = sites.first {
+                   let firstSite = sites.first {
                     // If we have only one site, select it.
                     setSite(firstSite, zoomTo: true)
                 }
