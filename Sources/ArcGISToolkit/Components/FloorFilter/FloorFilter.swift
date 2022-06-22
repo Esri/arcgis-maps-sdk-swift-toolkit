@@ -72,15 +72,6 @@ public struct FloorFilter: View {
             Image(systemName: "building.2")
                 .padding(.toolkitDefault)
         }
-        .sheet(
-            isAllowed: horizontalSizeClass == .compact,
-            isPresented: $isSitesAndFacilitiesHidden
-        ) {
-            SiteAndFacilitySelector(isHidden: $isSitesAndFacilitiesHidden)
-                .onChange(of: viewpoint.wrappedValue) { viewpoint in
-                    reportChange(of: viewpoint)
-                }
-        }
     }
     
     /// A view that allows selecting between levels.
@@ -139,7 +130,15 @@ public struct FloorFilter: View {
     /// `NavigationView` causes a rendering bug. This bug remains in iOS 16 with
     /// `NavigationStack` and has been reported to Apple as FB10034457.
     @ViewBuilder private var siteAndFacilitySelector: some View {
-        if !(horizontalSizeClass == .compact) {
+        if horizontalSizeClass == .compact {
+            Color.clear
+                .sheet(isPresented: $isSitesAndFacilitiesHidden) {
+                    SiteAndFacilitySelector(isHidden: $isSitesAndFacilitiesHidden)
+                        .onChange(of: viewpoint.wrappedValue) { viewpoint in
+                            reportChange(of: viewpoint)
+                        }
+                }
+        } else {
             ZStack {
                 RoundedRectangle(cornerRadius: 8)
                     .fill(Color(uiColor: .systemBackground))
