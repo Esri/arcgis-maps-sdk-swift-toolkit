@@ -27,7 +27,7 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED***/   - alignment: Determines the display configuration of Floor Filter elements.
 ***REMOVED******REMOVED***/   - automaticSelectionMode: The selection behavior of the floor filter.
 ***REMOVED******REMOVED***/   - viewpoint: Viewpoint updated when the selected site or facility changes.
-***REMOVED******REMOVED***/   - isNavigating: The map is currently being navigated.
+***REMOVED******REMOVED***/   - isNavigating: A Boolean value indicating whether the map is currently being navigated.
 ***REMOVED***public init(
 ***REMOVED******REMOVED***floorManager: FloorManager,
 ***REMOVED******REMOVED***alignment: Alignment,
@@ -100,7 +100,7 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ The map is currently being navigated.
+***REMOVED******REMOVED***/ A Boolean value indicating whether the map is currently being navigated.
 ***REMOVED***private var isNavigating: Binding<Bool>
 ***REMOVED***
 ***REMOVED******REMOVED***/ Indicates that the selector should be presented with a top oriented aligment configuration.
