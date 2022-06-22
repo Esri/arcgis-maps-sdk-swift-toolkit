@@ -218,14 +218,13 @@ struct SiteAndFacilitySelector: View {
                     } label: {
                         VStack {
                             Text(facility.name)
-                                .fontWeight(.regular)
                                 .frame(
                                     maxWidth: .infinity,
                                     alignment: .leading
                                 )
                             if allSiteStyle, let siteName = facility.site?.name {
                                 Text(siteName)
-                                    .fontWeight(.regular)
+                                    .font(.caption)
                                     .frame(
                                         maxWidth: .infinity,
                                         alignment: .leading
