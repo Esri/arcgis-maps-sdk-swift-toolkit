@@ -38,8 +38,8 @@ public struct PartialSheet<Content: View>: View {
     /// The content shown in the partial sheet.
     private let content: Content
     
-    /// Creates a `FloatingPanel`
-    /// - Parameter content: The view shown in the floating panel.
+    /// Creates a `PartialSheet`
+    /// - Parameter content: The view shown in the partial sheet.
     public init(preset: Binding<PartialSheetPreset?>, @ViewBuilder content: () -> Content) {
         self.content = content()
         _preset = preset
