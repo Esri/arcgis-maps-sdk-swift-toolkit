@@ -35,7 +35,7 @@ public struct PartialSheet<Content: View>: View {
     /// Allows the parent to control the height of the sheet.
     @Binding var preset: PartialSheetPreset?
     
-    /// The content shown in the floating panel.
+    /// The content shown in the partial sheet.
     private let content: Content
     
     /// Creates a `FloatingPanel`
