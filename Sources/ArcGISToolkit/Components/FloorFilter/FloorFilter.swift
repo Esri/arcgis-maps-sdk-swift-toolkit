@@ -132,7 +132,7 @@ public struct FloorFilter: View {
 ***REMOVED***@ViewBuilder private var siteAndFacilitySelector: some View {
 ***REMOVED******REMOVED***if horizontalSizeClass == .compact {
 ***REMOVED******REMOVED******REMOVED***Color.clear
-***REMOVED******REMOVED******REMOVED******REMOVED***.sheet(isPresented: $isSitesAndFacilitiesHidden) {
+***REMOVED******REMOVED******REMOVED******REMOVED***.sheet(isPresented: .constant(!$isSitesAndFacilitiesHidden.wrappedValue)) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***SiteAndFacilitySelector(isHidden: $isSitesAndFacilitiesHidden)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: viewpoint.wrappedValue) { viewpoint in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***reportChange(of: viewpoint)
