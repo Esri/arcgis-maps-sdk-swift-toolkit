@@ -45,20 +45,19 @@ struct UtilityNetworkTraceExampleView: View {
                 self.mapViewProxy = mapViewProxy
             }
             .edgesIgnoringSafeArea(.bottom)
-            .overlay {
-                UtilityNetworkTrace(
-                    $resultGraphicsOverlay,
-                    map,
-                    $pointInMap,
-                    $pointInScreen,
-                    $mapViewProxy,
-                    $viewpoint
-                )
-                .frame(
-                    maxWidth: .infinity,
-                    maxHeight: .infinity,
-                    alignment: .bottomLeading
-                )
+            .overlay(alignment: .topTrailing) {
+                FloatingPanel {
+                    UtilityNetworkTrace(
+                        $resultGraphicsOverlay,
+                        map,
+                        $pointInMap,
+                        $pointInScreen,
+                        $mapViewProxy,
+                        $viewpoint
+                    )
+                }
+                .padding()
+                .frame(width: 360)
             }
         }
     }
