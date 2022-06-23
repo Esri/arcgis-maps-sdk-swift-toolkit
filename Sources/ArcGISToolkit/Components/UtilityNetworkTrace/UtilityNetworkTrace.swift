@@ -131,50 +131,6 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ The main contents of Utility Network Trace Tool.
-***REMOVED***@ViewBuilder private var innerBody: some View {
-***REMOVED******REMOVED***VStack {
-***REMOVED******REMOVED******REMOVED***if !viewModel.completedTraces.isEmpty && !isAddingStartingPoints {
-***REMOVED******REMOVED******REMOVED******REMOVED***activityPicker
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***switch currentActivity {
-***REMOVED******REMOVED******REMOVED***case .creatingTrace(let activity):
-***REMOVED******REMOVED******REMOVED******REMOVED***switch activity {
-***REMOVED******REMOVED******REMOVED******REMOVED***case .inspectingStartingPoint:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***startingPointDetail
-***REMOVED******REMOVED******REMOVED******REMOVED***default:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***newTraceTab
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***case .viewingTraces:
-***REMOVED******REMOVED******REMOVED******REMOVED***resultsTab
-***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***.animation(.default, value: currentActivity)
-***REMOVED******REMOVED***.onChange(of: pointInScreen) { newValue in
-***REMOVED******REMOVED******REMOVED***guard isAddingStartingPoints,
-***REMOVED******REMOVED******REMOVED******REMOVED***  let mapViewProxy = mapViewProxy,
-***REMOVED******REMOVED******REMOVED******REMOVED***  let pointInMap = pointInMap,
-***REMOVED******REMOVED******REMOVED******REMOVED***  let pointInScreen = pointInScreen else {
-***REMOVED******REMOVED******REMOVED******REMOVED***return
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***currentActivity = .creatingTrace(.viewingStartingPoints)
-***REMOVED******REMOVED******REMOVED***Task {
-***REMOVED******REMOVED******REMOVED******REMOVED***await viewModel.setStartingPoint(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***at: pointInScreen,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mapPoint: pointInMap,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***with: mapViewProxy
-***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***.onChange(of: isAddingStartingPoints) { newValue in
-***REMOVED******REMOVED******REMOVED***if newValue {
-***REMOVED******REMOVED******REMOVED******REMOVED***sheetHeight = .min
-***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***sheetHeight = .mid
-***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***
 ***REMOVED******REMOVED***/ The tab that allows for a new trace to be configured.
 ***REMOVED***@ViewBuilder private var newTraceTab: some View {
 ***REMOVED******REMOVED***List {
@@ -406,18 +362,45 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***public var body: some View {
-***REMOVED******REMOVED***if isCompact {
-***REMOVED******REMOVED******REMOVED***PartialSheet(preset: $sheetHeight) {
-***REMOVED******REMOVED******REMOVED******REMOVED***innerBody
+***REMOVED******REMOVED***VStack {
+***REMOVED******REMOVED******REMOVED***if !viewModel.completedTraces.isEmpty && !isAddingStartingPoints {
+***REMOVED******REMOVED******REMOVED******REMOVED***activityPicker
 ***REMOVED******REMOVED***
-***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***innerBody
-***REMOVED******REMOVED******REMOVED******REMOVED***.esriBorder()
-***REMOVED******REMOVED******REMOVED******REMOVED***.frame(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***width: 400,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***height: 450
+***REMOVED******REMOVED******REMOVED***switch currentActivity {
+***REMOVED******REMOVED******REMOVED***case .creatingTrace(let activity):
+***REMOVED******REMOVED******REMOVED******REMOVED***switch activity {
+***REMOVED******REMOVED******REMOVED******REMOVED***case .inspectingStartingPoint:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***startingPointDetail
+***REMOVED******REMOVED******REMOVED******REMOVED***default:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***newTraceTab
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***case .viewingTraces:
+***REMOVED******REMOVED******REMOVED******REMOVED***resultsTab
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***.animation(.default, value: currentActivity)
+***REMOVED******REMOVED***.onChange(of: pointInScreen) { newValue in
+***REMOVED******REMOVED******REMOVED***guard isAddingStartingPoints,
+***REMOVED******REMOVED******REMOVED******REMOVED***  let mapViewProxy = mapViewProxy,
+***REMOVED******REMOVED******REMOVED******REMOVED***  let pointInMap = pointInMap,
+***REMOVED******REMOVED******REMOVED******REMOVED***  let pointInScreen = pointInScreen else {
+***REMOVED******REMOVED******REMOVED******REMOVED***return
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***currentActivity = .creatingTrace(.viewingStartingPoints)
+***REMOVED******REMOVED******REMOVED***Task {
+***REMOVED******REMOVED******REMOVED******REMOVED***await viewModel.setStartingPoint(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***at: pointInScreen,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mapPoint: pointInMap,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***with: mapViewProxy
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED***.padding(30)
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***.onChange(of: isAddingStartingPoints) { newValue in
+***REMOVED******REMOVED******REMOVED***if newValue {
+***REMOVED******REMOVED******REMOVED******REMOVED***sheetHeight = .min
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***sheetHeight = .mid
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***

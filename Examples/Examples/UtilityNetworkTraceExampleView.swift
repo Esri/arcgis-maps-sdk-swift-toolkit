@@ -45,20 +45,19 @@ struct UtilityNetworkTraceExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***self.mapViewProxy = mapViewProxy
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.edgesIgnoringSafeArea(.bottom)
-***REMOVED******REMOVED******REMOVED***.overlay {
-***REMOVED******REMOVED******REMOVED******REMOVED***UtilityNetworkTrace(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***$resultGraphicsOverlay,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***map,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***$pointInMap,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***$pointInScreen,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***$mapViewProxy,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***$viewpoint
-***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED***.frame(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***maxWidth: .infinity,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***maxHeight: .infinity,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***alignment: .bottomLeading
-***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***.overlay(alignment: .topTrailing) {
+***REMOVED******REMOVED******REMOVED******REMOVED***FloatingPanel {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***UtilityNetworkTrace(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***$resultGraphicsOverlay,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***map,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***$pointInMap,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***$pointInScreen,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***$mapViewProxy,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***$viewpoint
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.padding()
+***REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 360)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
