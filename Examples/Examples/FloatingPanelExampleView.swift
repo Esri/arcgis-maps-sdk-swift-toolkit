@@ -38,7 +38,7 @@ struct FloatingPanelExampleView: View {
     }
 }
 
-private struct SampleContent: View {
+struct SampleContent: View {
     var body: some View {
         List(1..<21) { Text("\($0)") }
         .listStyle(.plain)
