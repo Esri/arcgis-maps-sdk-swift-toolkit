@@ -45,7 +45,7 @@ public struct PartialSheet<Content: View>: View {
         _preset = preset
     }
     
-    /// Determines the current of the sheet, either from the preset value or `yOffset`.
+    /// Determines the current height of the sheet, either from the preset value or `yOffset`.
     private func heightFromPreset(with geometryProxy: GeometryProxy) -> CGFloat {
         switch preset {
         case .min:
