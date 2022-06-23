@@ -210,30 +210,29 @@ struct SiteAndFacilitySelector: View {
         var facilityListView: some View {
             ScrollViewReader { proxy in
                 List(matchingFacilities, id: \.id) { facility in
-                    Button {
-                        viewModel.setFacility(facility, zoomTo: true)
-                        if horizontalSizeClass == .compact {
-                            isHidden.toggle()
-                        }
-                    } label: {
-                        VStack {
-                            Text(facility.name)
+                    VStack {
+                        Text(facility.name)
+                            .frame(
+                                maxWidth: .infinity,
+                                alignment: .leading
+                            )
+                        if allSiteStyle, let siteName = facility.site?.name {
+                            Text(siteName)
+                                .font(.caption)
                                 .frame(
                                     maxWidth: .infinity,
                                     alignment: .leading
                                 )
-                            if allSiteStyle, let siteName = facility.site?.name {
-                                Text(siteName)
-                                    .font(.caption)
-                                    .frame(
-                                        maxWidth: .infinity,
-                                        alignment: .leading
-                                    )
-                            }
                         }
                     }
-                    .selected(facility.id == viewModel.selectedFacility?.id)
-                    .listRowSeparator(.hidden)
+                    .contentShape(Rectangle())
+                    .listRowBackground(facility.id == viewModel.selectedFacility?.id ? Color.secondary.opacity(0.5) : Color.clear)
+                    .onTapGesture {
+                        viewModel.setFacility(facility, zoomTo: true)
+                        if horizontalSizeClass == .compact {
+                            isHidden.toggle()
+                        }
+                    }
                 }
                 .listStyle(.plain)
                 .onChange(of: viewModel.selection) { _ in
