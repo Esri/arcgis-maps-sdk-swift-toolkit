@@ -131,50 +131,6 @@ public struct UtilityNetworkTrace: View {
         }
     }
     
-    /// The main contents of Utility Network Trace Tool.
-    @ViewBuilder private var innerBody: some View {
-        VStack {
-            if !viewModel.completedTraces.isEmpty && !isAddingStartingPoints {
-                activityPicker
-            }
-            switch currentActivity {
-            case .creatingTrace(let activity):
-                switch activity {
-                case .inspectingStartingPoint:
-                    startingPointDetail
-                default:
-                    newTraceTab
-                }
-            case .viewingTraces:
-                resultsTab
-            }
-        }
-        .animation(.default, value: currentActivity)
-        .onChange(of: pointInScreen) { newValue in
-            guard isAddingStartingPoints,
-                  let mapViewProxy = mapViewProxy,
-                  let pointInMap = pointInMap,
-                  let pointInScreen = pointInScreen else {
-                return
-            }
-            currentActivity = .creatingTrace(.viewingStartingPoints)
-            Task {
-                await viewModel.setStartingPoint(
-                    at: pointInScreen,
-                    mapPoint: pointInMap,
-                    with: mapViewProxy
-                )
-            }
-        }
-        .onChange(of: isAddingStartingPoints) { newValue in
-            if newValue {
-                sheetHeight = .min
-            } else {
-                sheetHeight = .mid
-            }
-        }
-    }
-    
     /// The tab that allows for a new trace to be configured.
     @ViewBuilder private var newTraceTab: some View {
         List {
@@ -406,18 +362,45 @@ public struct UtilityNetworkTrace: View {
     }
     
     public var body: some View {
-        if isCompact {
-            PartialSheet(preset: $sheetHeight) {
-                innerBody
+        VStack {
+            if !viewModel.completedTraces.isEmpty && !isAddingStartingPoints {
+                activityPicker
             }
-        } else {
-            innerBody
-                .esriBorder()
-                .frame(
-                    width: 400,
-                    height: 450
+            switch currentActivity {
+            case .creatingTrace(let activity):
+                switch activity {
+                case .inspectingStartingPoint:
+                    startingPointDetail
+                default:
+                    newTraceTab
+                }
+            case .viewingTraces:
+                resultsTab
+            }
+        }
+        .animation(.default, value: currentActivity)
+        .onChange(of: pointInScreen) { newValue in
+            guard isAddingStartingPoints,
+                  let mapViewProxy = mapViewProxy,
+                  let pointInMap = pointInMap,
+                  let pointInScreen = pointInScreen else {
+                return
+            }
+            currentActivity = .creatingTrace(.viewingStartingPoints)
+            Task {
+                await viewModel.setStartingPoint(
+                    at: pointInScreen,
+                    mapPoint: pointInMap,
+                    with: mapViewProxy
                 )
-                .padding(30)
+            }
+        }
+        .onChange(of: isAddingStartingPoints) { newValue in
+            if newValue {
+                sheetHeight = .min
+            } else {
+                sheetHeight = .mid
+            }
         }
     }
     
