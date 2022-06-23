@@ -132,7 +132,7 @@ public struct FloorFilter: View {
     @ViewBuilder private var siteAndFacilitySelector: some View {
         if horizontalSizeClass == .compact {
             Color.clear
-                .sheet(isPresented: $isSitesAndFacilitiesHidden) {
+                .sheet(isPresented: .constant(!$isSitesAndFacilitiesHidden.wrappedValue)) {
                     SiteAndFacilitySelector(isHidden: $isSitesAndFacilitiesHidden)
                         .onChange(of: viewpoint.wrappedValue) { viewpoint in
                             reportChange(of: viewpoint)
