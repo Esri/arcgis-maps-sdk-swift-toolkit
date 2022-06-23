@@ -38,7 +38,7 @@ struct FloatingPanelExampleView: View {
 ***REMOVED***
 ***REMOVED***
 
-private struct SampleContent: View {
+struct SampleContent: View {
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***List(1..<21) { Text("\($0)") ***REMOVED***
 ***REMOVED******REMOVED***.listStyle(.plain)
