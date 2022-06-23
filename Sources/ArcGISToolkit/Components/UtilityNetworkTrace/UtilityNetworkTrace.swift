@@ -54,9 +54,6 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED***/ The current user activity.
 ***REMOVED***@State private var currentActivity: UserActivity = .creatingTrace(nil)
 ***REMOVED***
-***REMOVED******REMOVED***/ The current height of the partial sheet displaying the Utility Network Trace Tool.
-***REMOVED***@State private var sheetHeight: PartialSheetPreset? = .mid
-***REMOVED***
 ***REMOVED******REMOVED***/ Indicates if the warning that all traces will be deleted is presented.
 ***REMOVED***@State private var warningIsPresented = false
 ***REMOVED***
@@ -289,7 +286,6 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED***sheetHeight = .min
 ***REMOVED******REMOVED******REMOVED***if let selectedStartingPoint {
 ***REMOVED******REMOVED******REMOVED******REMOVED***viewpoint = Viewpoint(targetExtent: selectedStartingPoint.extent)
 ***REMOVED******REMOVED***
@@ -393,13 +389,6 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mapPoint: pointInMap,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***with: mapViewProxy
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***.onChange(of: isAddingStartingPoints) { newValue in
-***REMOVED******REMOVED******REMOVED***if newValue {
-***REMOVED******REMOVED******REMOVED******REMOVED***sheetHeight = .min
-***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***sheetHeight = .mid
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***

@@ -72,6 +72,23 @@ public struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED***
 ***REMOVED***
 
+***REMOVED***/ The "Handle" view of the floating panel.
+private struct Handle: View {
+***REMOVED******REMOVED***/ The color of the handle.
+***REMOVED***var color: Color
+***REMOVED***
+***REMOVED***var body: some View {
+***REMOVED******REMOVED***RoundedRectangle(cornerRadius: 4.0)
+***REMOVED******REMOVED******REMOVED***.foregroundColor(color)
+***REMOVED******REMOVED******REMOVED***.frame(width: 100, height: 8.0)
+***REMOVED***
+***REMOVED***
+
 private extension CGFloat {
 ***REMOVED***static let minHeight: CGFloat = 66
+***REMOVED***
+
+private extension Color {
+***REMOVED***static var defaultHandleColor: Color { .secondary ***REMOVED***
+***REMOVED***static var activeHandleColor: Color { .primary ***REMOVED***
 ***REMOVED***
