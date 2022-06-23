@@ -160,7 +160,7 @@ struct SiteAndFacilitySelector: View {
         let facilities: [FloorFacility]
         
         /// Allows the user to toggle the visibility of the site and facility selector.
-        @Binding var isHidden: Bool
+        var isHidden: Binding<Bool>
         
         /// A subset of `facilities` with names containing `searchPhrase` or all
         /// `facilities` if `searchPhrase` is empty.
@@ -194,7 +194,7 @@ struct SiteAndFacilitySelector: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    CloseButton { isHidden.toggle() }
+                    CloseButton { isHidden.wrappedValue.toggle() }
                 }
             }
         }
@@ -230,7 +230,7 @@ struct SiteAndFacilitySelector: View {
                     .onTapGesture {
                         viewModel.setFacility(facility, zoomTo: true)
                         if horizontalSizeClass == .compact {
-                            isHidden.toggle()
+                            isHidden.wrappedValue.toggle()
                         }
                     }
                 }
