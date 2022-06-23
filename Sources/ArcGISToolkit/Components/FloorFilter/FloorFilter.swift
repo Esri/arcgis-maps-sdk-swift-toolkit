@@ -140,14 +140,14 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED***ZStack {
-***REMOVED******REMOVED******REMOVED******REMOVED***RoundedRectangle(cornerRadius: 8)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fill(Color(uiColor: .systemBackground))
+***REMOVED******REMOVED******REMOVED******REMOVED***Color.clear
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.esriBorder()
 ***REMOVED******REMOVED******REMOVED******REMOVED***SiteAndFacilitySelector(isHidden: $isSitesAndFacilitiesHidden)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: viewpoint.wrappedValue) { viewpoint in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***reportChange(of: viewpoint)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding([.top, .leading, .trailing], 2.5)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.bottom)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.opacity(isSitesAndFacilitiesHidden ? .zero : 1)
 ***REMOVED***
