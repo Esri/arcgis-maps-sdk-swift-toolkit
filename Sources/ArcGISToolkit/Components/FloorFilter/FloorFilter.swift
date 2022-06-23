@@ -140,14 +140,14 @@ public struct FloorFilter: View {
                 }
         } else {
             ZStack {
-                RoundedRectangle(cornerRadius: 8)
-                    .fill(Color(uiColor: .systemBackground))
+                Color.clear
                     .esriBorder()
                 SiteAndFacilitySelector(isHidden: $isSitesAndFacilitiesHidden)
                     .onChange(of: viewpoint.wrappedValue) { viewpoint in
                         reportChange(of: viewpoint)
                     }
-                    .padding()
+                    .padding([.top, .leading, .trailing], 2.5)
+                    .padding(.bottom)
             }
             .opacity(isSitesAndFacilitiesHidden ? .zero : 1)
         }
