@@ -77,7 +77,7 @@ import Foundation
 ***REMOVED***init(map: Map, graphicsOverlay: GraphicsOverlay) {
 ***REMOVED******REMOVED***self.graphicsOverlay = graphicsOverlay
 ***REMOVED******REMOVED***Task {
-***REMOVED******REMOVED******REMOVED***await loadMap(map)
+***REMOVED******REMOVED******REMOVED***try? await map.load()
 ***REMOVED******REMOVED******REMOVED***network = map.utilityNetworks.first
 ***REMOVED******REMOVED******REMOVED***await loadNamedTraceConfigurations(map)
 ***REMOVED***
@@ -269,12 +269,6 @@ import Foundation
 ***REMOVED******REMOVED***completedTraces[index].startingPoints.forEach({ startingPoint in
 ***REMOVED******REMOVED******REMOVED***startingPoint.graphic.isSelected = isSelected
 ***REMOVED***)
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ Loads the provided map.
-***REMOVED******REMOVED***/ - Parameter map: The map to be loaded.
-***REMOVED***private func loadMap(_ map: Map) async {
-***REMOVED******REMOVED***try? await map.load()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Loads the named trace configurations in the network on the provided map.
