@@ -28,13 +28,13 @@ struct FloatingPanelExampleView: View {
             map: map,
             viewpoint: initialViewpoint
         )
-            .overlay(alignment: .topTrailing) {
-                FloatingPanel {
-                    SampleContent()
-                }
-                    .padding()
-                    .frame(width: 360)
+        .overlay {
+            FloatingPanel(alignment: .topLeading) {
+                SampleContent()
             }
+            .padding([.leading, .top, .trailing])
+            .padding(.bottom, 50)
+        }
     }
 }
 
