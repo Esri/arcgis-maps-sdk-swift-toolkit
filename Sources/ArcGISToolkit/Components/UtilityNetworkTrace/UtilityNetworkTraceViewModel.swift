@@ -274,7 +274,6 @@ import Foundation
 ***REMOVED******REMOVED***/ Loads the provided map.
 ***REMOVED******REMOVED***/ - Parameter map: The map to be loaded.
 ***REMOVED***private func loadMap(_ map: Map) async {
-***REMOVED******REMOVED***guard map.loadStatus != .loaded else { return ***REMOVED***
 ***REMOVED******REMOVED***try? await map.load()
 ***REMOVED***
 ***REMOVED***
