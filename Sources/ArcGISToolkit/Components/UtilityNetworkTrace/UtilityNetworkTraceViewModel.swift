@@ -77,7 +77,7 @@ import SwiftUI
     init(map: Map, graphicsOverlay: GraphicsOverlay) {
         self.graphicsOverlay = graphicsOverlay
         Task {
-            await loadMap(map)
+            try? await map.load()
             network = map.utilityNetworks.first
             await loadNamedTraceConfigurations(map)
         }
@@ -269,12 +269,6 @@ import SwiftUI
         completedTraces[index].startingPoints.forEach({ startingPoint in
             startingPoint.graphic.isSelected = isSelected
         })
-    }
-    
-    /// Loads the provided map.
-    /// - Parameter map: The map to be loaded.
-    private func loadMap(_ map: Map) async {
-        try? await map.load()
     }
     
     /// Loads the named trace configurations in the network on the provided map.
