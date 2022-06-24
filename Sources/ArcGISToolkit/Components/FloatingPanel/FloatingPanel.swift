@@ -32,39 +32,95 @@ public struct FloatingPanel<Content>: View where Content: View {
     let content: Content
     
     /// Creates a `FloatingPanel`
+    /// - Parameter alignment: Alignment of the floating panel within the parent view.
+    /// - Parameter initialHeight: The initial height given to the content of the floating panel.
+    /// Default is 200.
+    /// - Parameter width: The width given to the content of the floating panel. Default is 360.
     /// - Parameter content: The view shown in the floating panel.
-    public init(@ViewBuilder content: () -> Content) {
+    public init(
+        alignment: Alignment,
+        initialHeight: CGFloat = 200,
+        width: CGFloat = 360,
+        @ViewBuilder content: () -> Content
+    ) {
+        self.alignment = alignment
+        self.width = width
         self.content = content()
+        _height = State(initialValue: initialHeight)
     }
     
-    @State
-    private var handleColor: Color = .defaultHandleColor
+    /// Alignment of the floating panel within the parent view.
+    private let alignment: Alignment
     
-    @State
-    private var height: CGFloat?
+    /// The width given to the content of the floating panel.
+    private let width: CGFloat
+    
+    /// The color of the handle.
+    @State private var handleColor: Color = .defaultHandleColor
+    
+    /// The height of the content.
+    @State private var height: CGFloat
+    
+    /// The maximum allowed height of the content.
+    @State private var maximumHeight: CGFloat = .infinity
+    
+    /// The vertical alignment of the floating panel with the parent view is `VerticalAlignment.top`
+    private var isTopAligned: Bool {
+        return alignment.vertical == .top
+    }
     
     public var body: some View {
-        VStack {
-            content
-                .frame(minHeight: .minHeight, maxHeight: height)
-            Divider()
-            Handle(color: handleColor)
-                .gesture(drag)
+        GeometryReader { geometryProxy in
+            VStack {
+                if isTopAligned {
+                    content
+                        .frame(minHeight: .minHeight, maxHeight: height)
+                    Divider()
+                    Handle(color: handleColor)
+                        .gesture(drag)
+                } else {
+                    Handle(color: handleColor)
+                        .gesture(drag)
+                    Divider()
+                    content
+                        .frame(minHeight: .minHeight, maxHeight: height)
+                }
+            }
+            .frame(width: width)
+            .esriBorder()
+            .frame(
+                width: geometryProxy.size.width,
+                height: geometryProxy.size.height,
+                alignment: alignment
+            )
+            .onSizeChange {
+                maximumHeight = $0.height
+                if height > maximumHeight {
+                    height = maximumHeight
+                }
+            }
         }
-        .esriBorder()
     }
     
     var drag: some Gesture {
         DragGesture(minimumDistance: 0)
             .onChanged { value in
                 handleColor = .activeHandleColor
-                // Note:  There is a bug here where `height` can be set
-                // larger than the displayed height.  This occurs by continuing
-                // to drag down on the handle after the panel reaches it's max
-                // height.  When that happens subsequent "drag up" operations
-                // don't cause the panel to shrink immediately, but will
-                // ultimately snap to the correct height.
-                height = max(.minHeight, (height ?? 0) + value.translation.height)
+                let proposedHeight: CGFloat
+                if isTopAligned {
+                    proposedHeight = max(
+                        .minHeight,
+                        height + value.translation.height
+                    )
+                } else {
+                    proposedHeight = max(
+                        .minHeight,
+                        height - value.translation.height
+                    )
+                }
+                if proposedHeight <= maximumHeight {
+                    height = proposedHeight
+                }
             }
             .onEnded { _ in
                 handleColor = .defaultHandleColor
