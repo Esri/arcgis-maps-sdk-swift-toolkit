@@ -274,7 +274,6 @@ import SwiftUI
     /// Loads the provided map.
     /// - Parameter map: The map to be loaded.
     private func loadMap(_ map: Map) async {
-        guard map.loadStatus != .loaded else { return }
         try? await map.load()
     }
     
