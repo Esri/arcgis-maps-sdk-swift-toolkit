@@ -118,9 +118,7 @@ public struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***height - value.translation.height
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***if proposedHeight <= maximumHeight {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***height = proposedHeight
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***height = min(proposedHeight, maximumHeight)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onEnded { _ in
 ***REMOVED******REMOVED******REMOVED******REMOVED***handleColor = .defaultHandleColor
