@@ -187,7 +187,6 @@ public struct UtilityNetworkTrace: View {
                 Text("Trace")
             }
             .buttonStyle(.bordered)
-            .padding()
             .disabled(!viewModel.canRunTrace)
         }
     }

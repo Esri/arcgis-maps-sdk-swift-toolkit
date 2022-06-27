@@ -15,6 +15,11 @@ import ArcGIS
 import ArcGISToolkit
 import SwiftUI
 
+/// A demonstration of the Utility Network Trace tool which runs traces on a web map published with a utility
+/// network and trace configurations.
+///
+/// - Note: An ``ArcGISCredential`` is needed to interact with this sample. This can be done within
+/// `init()` in `ExamplesApp.swift`. The public credentials can be found [here](https://developers.arcgis.com/javascript/latest/sample-code/widgets-untrace).
 struct UtilityNetworkTraceExampleView: View {
     @StateObject private var map = makeMap()
     
