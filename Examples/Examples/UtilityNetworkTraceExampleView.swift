@@ -15,6 +15,11 @@
 ***REMOVED***Toolkit
 ***REMOVED***
 
+***REMOVED***/ A demonstration of the Utility Network Trace tool which runs traces on a web map published with a utility
+***REMOVED***/ network and trace configurations.
+***REMOVED***/
+***REMOVED***/ - Note: An ``ArcGISCredential`` is needed to interact with this sample. This can be done within
+***REMOVED***/ `init()` in `ExamplesApp.swift`. The public credentials can be found [here](https:***REMOVED***developers.arcgis.com/javascript/latest/sample-code/widgets-untrace).
 struct UtilityNetworkTraceExampleView: View {
 ***REMOVED***@StateObject private var map = makeMap()
 ***REMOVED***
