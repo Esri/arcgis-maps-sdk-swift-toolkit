@@ -24,6 +24,8 @@ public extension View {
 /// This view is necessary because of SwiftUI behavior that prevent the UI from functioning
 /// properly when showing and hiding sheets. The sheets need to be off of a view that is always
 /// present.
+/// The problem that I was seeing without this is content in lists not updating properly
+/// after a sheet was dismissed.
 private struct InvisibleOverlayModifier: ViewModifier {
     @ObservedObject var authenticator: Authenticator
     
