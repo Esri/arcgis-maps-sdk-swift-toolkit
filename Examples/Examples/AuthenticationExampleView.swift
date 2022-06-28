@@ -40,7 +40,7 @@ struct AuthenticationExampleView: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.authenticator(authenticator: authenticator)
+***REMOVED******REMOVED***.authenticator(authenticator)
 ***REMOVED******REMOVED***.task {
 ***REMOVED******REMOVED******REMOVED***try? await authenticator.synchronizeWithKeychain(access: .whenUnlockedThisDeviceOnly)
 ***REMOVED***

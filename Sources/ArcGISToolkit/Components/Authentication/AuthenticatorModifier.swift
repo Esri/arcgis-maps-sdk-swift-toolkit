@@ -15,7 +15,7 @@
 
 public extension View {
 ***REMOVED***@ViewBuilder
-***REMOVED***func authentication(authenticator: Authenticator) -> some View {
+***REMOVED***func authenticator(_ authenticator: Authenticator) -> some View {
 ***REMOVED******REMOVED***modifier(InvisibleOverlayModifier(authenticator: authenticator))
 ***REMOVED***
 ***REMOVED***
