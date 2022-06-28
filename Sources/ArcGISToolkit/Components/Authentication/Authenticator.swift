@@ -74,12 +74,6 @@ public final class Authenticator: ObservableObject {
                 // Creating the OAuth credential will present the OAuth login view.
                 queuedArcGISChallenge.resume(with: .oAuth(configuration: config))
             } else {
-                
-                if let challenge = queuedChallenge as? QueuedArcGISChallenge,
-                   let previous = await ArcGISURLSession.credentialStore.credential(for: challenge.arcGISChallenge.request.url!) {
-                    print("-- previous: \(previous)")
-                }
-                    
                 // Set the current challenge, this should present the appropriate view.
                 currentChallenge = queuedChallenge
 
@@ -127,6 +121,12 @@ extension Authenticator: AuthenticationChallengeHandler {
     public func handleNetworkChallenge(
         _ challenge: NetworkAuthenticationChallenge
     ) async -> NetworkAuthenticationChallengeDisposition {
+        // If `promptForUntrustedHosts` is `false` then perform default handling
+        // for server trust challenges.
+        guard promptForUntrustedHosts || challenge.kind != .serverTrust else {
+            return .performDefaultHandling
+        }
+        
         // Queue up the url challenge.
         let queuedChallenge = QueuedNetworkChallenge(networkChallenge: challenge)
         subject.send(queuedChallenge)

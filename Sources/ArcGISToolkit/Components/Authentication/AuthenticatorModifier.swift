@@ -33,12 +33,12 @@ private struct InvisibleOverlayModifier: ViewModifier {
             content
             Color.clear
                 .frame(width: 0, height: 0)
-                .modifier(AuthenticationModifier(authenticator: authenticator))
+                .modifier(AuthenticatorModifier(authenticator: authenticator))
         }
     }
 }
 
-private struct AuthenticationModifier: ViewModifier {
+private struct AuthenticatorModifier: ViewModifier {
     @ObservedObject var authenticator: Authenticator
     
     @ViewBuilder
