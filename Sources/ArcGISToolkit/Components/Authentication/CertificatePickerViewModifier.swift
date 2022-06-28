@@ -16,14 +16,14 @@ import UniformTypeIdentifiers
 
 final private class CertificatePickerViewModel: ObservableObject {
 ***REMOVED***let challengingHost: String
-***REMOVED***let challenge: QueuedURLChallenge
+***REMOVED***let challenge: QueuedNetworkChallenge
 ***REMOVED***
 ***REMOVED***@Published var certificateURL: URL?
 ***REMOVED***@Published var password: String = ""
 ***REMOVED***
-***REMOVED***init(challenge: QueuedURLChallenge) {
+***REMOVED***init(challenge: QueuedNetworkChallenge) {
 ***REMOVED******REMOVED***self.challenge = challenge
-***REMOVED******REMOVED***challengingHost = challenge.urlChallenge.protectionSpace.host
+***REMOVED******REMOVED***challengingHost = challenge.networkChallenge.host
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func signIn() {
@@ -40,7 +40,7 @@ final private class CertificatePickerViewModel: ObservableObject {
 ***REMOVED***
 
 struct CertificatePickerViewModifier: ViewModifier {
-***REMOVED***init(challenge: QueuedURLChallenge) {
+***REMOVED***init(challenge: QueuedNetworkChallenge) {
 ***REMOVED******REMOVED***viewModel = CertificatePickerViewModel(challenge: challenge)
 ***REMOVED***
 ***REMOVED***

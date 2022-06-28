@@ -28,8 +28,8 @@ protocol UsernamePasswordViewModel: ObservableObject {
 struct UsernamePasswordViewModifier<ViewModel: UsernamePasswordViewModel>: ViewModifier {
 ***REMOVED***let viewModel: ViewModel
 ***REMOVED***
-***REMOVED***init(challenge: QueuedURLChallenge) where ViewModel == URLCredentialUsernamePasswordViewModel {
-***REMOVED******REMOVED***viewModel = URLCredentialUsernamePasswordViewModel(challenge: challenge)
+***REMOVED***init(challenge: QueuedNetworkChallenge) where ViewModel == NetworkCredentialUsernamePasswordViewModel {
+***REMOVED******REMOVED***viewModel = NetworkCredentialUsernamePasswordViewModel(challenge: challenge)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***init(challenge: QueuedArcGISChallenge) where ViewModel == TokenCredentialViewModel {
@@ -220,10 +220,10 @@ class TokenCredentialViewModel: UsernamePasswordViewModel {
 ***REMOVED***
 ***REMOVED***
 
-class URLCredentialUsernamePasswordViewModel: UsernamePasswordViewModel {
-***REMOVED***private let challenge: QueuedURLChallenge
+class NetworkCredentialUsernamePasswordViewModel: UsernamePasswordViewModel {
+***REMOVED***private let challenge: QueuedNetworkChallenge
 ***REMOVED***
-***REMOVED***init(challenge: QueuedURLChallenge) {
+***REMOVED***init(challenge: QueuedNetworkChallenge) {
 ***REMOVED******REMOVED***self.challenge = challenge
 ***REMOVED***
 ***REMOVED***
@@ -241,12 +241,12 @@ class URLCredentialUsernamePasswordViewModel: UsernamePasswordViewModel {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var challengingHost: String {
-***REMOVED******REMOVED***challenge.urlChallenge.protectionSpace.host
+***REMOVED******REMOVED***challenge.networkChallenge.host
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func signIn() {
 ***REMOVED******REMOVED***formEnabled = false
-***REMOVED******REMOVED***challenge.resume(with: .userCredential(username: username, password: password))
+***REMOVED******REMOVED***challenge.resume(with: .login(username: username, password: password))
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func cancel() {

@@ -14,14 +14,14 @@
 ***REMOVED***
 
 struct TrustHostViewModifier: ViewModifier {
-***REMOVED***init(challenge: QueuedURLChallenge) {
+***REMOVED***init(challenge: QueuedNetworkChallenge) {
 ***REMOVED******REMOVED***self.challenge = challenge
 ***REMOVED***
 ***REMOVED***
-***REMOVED***let challenge: QueuedURLChallenge
+***REMOVED***let challenge: QueuedNetworkChallenge
 ***REMOVED***
 ***REMOVED***var host: String {
-***REMOVED******REMOVED***challenge.urlChallenge.protectionSpace.host
+***REMOVED******REMOVED***challenge.networkChallenge.host
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED*** Even though we will present it right away we need to use a state variable for this.

@@ -58,11 +58,11 @@ final class QueuedArcGISChallenge: QueuedChallenge {
 ***REMOVED***
 ***REMOVED***
 
-final class QueuedURLChallenge: QueuedChallenge {
-***REMOVED***let urlChallenge: URLAuthenticationChallenge
+final class QueuedNetworkChallenge: QueuedChallenge {
+***REMOVED***let networkChallenge: NetworkAuthenticationChallenge
 ***REMOVED***
-***REMOVED***init(urlChallenge: URLAuthenticationChallenge) {
-***REMOVED******REMOVED***self.urlChallenge = urlChallenge
+***REMOVED***init(networkChallenge: NetworkAuthenticationChallenge) {
+***REMOVED******REMOVED***self.networkChallenge = networkChallenge
 ***REMOVED***
 
 ***REMOVED***func resume(with response: Response) {
@@ -92,9 +92,28 @@ final class QueuedURLChallenge: QueuedChallenge {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***enum Response {
-***REMOVED******REMOVED***case userCredential(username: String, password: String)
+***REMOVED******REMOVED***case login(username: String, password: String)
 ***REMOVED******REMOVED***case certificate(url: URL, passsword: String)
 ***REMOVED******REMOVED***case trustHost
 ***REMOVED******REMOVED***case cancel
+***REMOVED***
+***REMOVED***
+***REMOVED***enum Kind {
+***REMOVED******REMOVED***case serverTrust
+***REMOVED******REMOVED***case login
+***REMOVED******REMOVED***case certificate
+***REMOVED***
+***REMOVED***
+***REMOVED***var kind: Kind {
+***REMOVED******REMOVED***switch networkChallenge.kind {
+***REMOVED******REMOVED***case .serverTrust:
+***REMOVED******REMOVED******REMOVED***return .serverTrust
+***REMOVED******REMOVED***case .ntlm, .basic, .digest:
+***REMOVED******REMOVED******REMOVED***return .login
+***REMOVED******REMOVED***case .pki:
+***REMOVED******REMOVED******REMOVED***return .certificate
+***REMOVED******REMOVED***case .htmlForm, .negotiate:
+***REMOVED******REMOVED******REMOVED***fatalError("TODO: ")
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
