@@ -117,6 +117,17 @@ import Foundation
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ Updates the pending trace's configuration and name, if applicable.
+***REMOVED******REMOVED***/
+***REMOVED******REMOVED***/ The pending trace's name will only be updated if the user hasn't specified one already.
+***REMOVED******REMOVED***/ - Parameter configuration: The selected configuration for the pending trace.
+***REMOVED***func setPendingTrace(configuration: UtilityNamedTraceConfiguration) {
+***REMOVED******REMOVED***pendingTrace.configuration = configuration
+***REMOVED******REMOVED***if !pendingTrace.userDidSpecifyName {
+***REMOVED******REMOVED******REMOVED***pendingTrace.name = "\(configuration.name) \((completedTraces.filter({ $0.configuration == configuration ***REMOVED***).count + 1).description)"
+***REMOVED***
+***REMOVED***
+***REMOVED***
 ***REMOVED******REMOVED***/ Selects the previous trace from the list of completed traces.
 ***REMOVED***func selectPreviousTrace() {
 ***REMOVED******REMOVED***if let current = selectedTraceIndex {

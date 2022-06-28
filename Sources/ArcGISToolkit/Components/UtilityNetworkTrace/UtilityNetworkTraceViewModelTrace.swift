@@ -45,6 +45,9 @@ extension UtilityNetworkTraceViewModel {
 ***REMOVED******REMOVED******REMOVED***/ A collection of starting points for the trace.
 ***REMOVED******REMOVED***var startingPoints = [UtilityNetworkTraceStartingPoint]()
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ Indicates that the user has specified a name for the trace.
+***REMOVED******REMOVED***var userDidSpecifyName: Bool = false
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ A trace result set comprised of an collection of UtilityElement objects.
 ***REMOVED******REMOVED***var utilityElementTraceResult: UtilityElementTraceResult?
 ***REMOVED******REMOVED***
