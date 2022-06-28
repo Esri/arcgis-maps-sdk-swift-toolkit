@@ -33,12 +33,12 @@ private struct InvisibleOverlayModifier: ViewModifier {
 ***REMOVED******REMOVED******REMOVED***content
 ***REMOVED******REMOVED******REMOVED***Color.clear
 ***REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 0, height: 0)
-***REMOVED******REMOVED******REMOVED******REMOVED***.modifier(AuthenticationModifier(authenticator: authenticator))
+***REMOVED******REMOVED******REMOVED******REMOVED***.modifier(AuthenticatorModifier(authenticator: authenticator))
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
-private struct AuthenticationModifier: ViewModifier {
+private struct AuthenticatorModifier: ViewModifier {
 ***REMOVED***@ObservedObject var authenticator: Authenticator
 ***REMOVED***
 ***REMOVED***@ViewBuilder

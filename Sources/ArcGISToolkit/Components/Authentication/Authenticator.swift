@@ -74,12 +74,6 @@ public final class Authenticator: ObservableObject {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Creating the OAuth credential will present the OAuth login view.
 ***REMOVED******REMOVED******REMOVED******REMOVED***queuedArcGISChallenge.resume(with: .oAuth(configuration: config))
 ***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***if let challenge = queuedChallenge as? QueuedArcGISChallenge,
-***REMOVED******REMOVED******REMOVED******REMOVED***   let previous = await ArcGISURLSession.credentialStore.credential(for: challenge.arcGISChallenge.request.url!) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print("-- previous: \(previous)")
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Set the current challenge, this should present the appropriate view.
 ***REMOVED******REMOVED******REMOVED******REMOVED***currentChallenge = queuedChallenge
 
@@ -127,6 +121,12 @@ extension Authenticator: AuthenticationChallengeHandler {
 ***REMOVED***public func handleNetworkChallenge(
 ***REMOVED******REMOVED***_ challenge: NetworkAuthenticationChallenge
 ***REMOVED***) async -> NetworkAuthenticationChallengeDisposition {
+***REMOVED******REMOVED******REMOVED*** If `promptForUntrustedHosts` is `false` then perform default handling
+***REMOVED******REMOVED******REMOVED*** for server trust challenges.
+***REMOVED******REMOVED***guard promptForUntrustedHosts || challenge.kind != .serverTrust else {
+***REMOVED******REMOVED******REMOVED***return .performDefaultHandling
+***REMOVED***
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Queue up the url challenge.
 ***REMOVED******REMOVED***let queuedChallenge = QueuedNetworkChallenge(networkChallenge: challenge)
 ***REMOVED******REMOVED***subject.send(queuedChallenge)
