@@ -40,7 +40,7 @@ struct AuthenticationExampleView: View {
                 }
             }
         }
-        .authenticator(authenticator: authenticator)
+        .authenticator(authenticator)
         .task {
             try? await authenticator.synchronizeWithKeychain(access: .whenUnlockedThisDeviceOnly)
         }
