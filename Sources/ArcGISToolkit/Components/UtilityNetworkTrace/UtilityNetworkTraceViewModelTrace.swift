@@ -45,6 +45,9 @@ extension UtilityNetworkTraceViewModel {
         /// A collection of starting points for the trace.
         var startingPoints = [UtilityNetworkTraceStartingPoint]()
         
+        /// Indicates that the user has specified a name for the trace.
+        var userDidSpecifyName: Bool = false
+        
         /// A trace result set comprised of an collection of UtilityElement objects.
         var utilityElementTraceResult: UtilityElementTraceResult?
         
