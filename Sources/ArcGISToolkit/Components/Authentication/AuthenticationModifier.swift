@@ -56,20 +56,14 @@ private struct AuthenticationModifier: ViewModifier {
         switch challenge {
         case let challenge as QueuedArcGISChallenge:
             content.modifier(UsernamePasswordViewModifier(challenge: challenge))
-        case let challenge as QueuedURLChallenge:
-            switch challenge.urlChallenge.protectionSpace.authenticationMethod {
-            case NSURLAuthenticationMethodServerTrust:
+        case let challenge as QueuedNetworkChallenge:
+            switch challenge.kind {
+            case .serverTrust:
                 content.modifier(TrustHostViewModifier(challenge: challenge))
-            case NSURLAuthenticationMethodClientCertificate:
+            case .certificate:
                 content.modifier(CertificatePickerViewModifier(challenge: challenge))
-            case NSURLAuthenticationMethodDefault,
-                NSURLAuthenticationMethodNTLM,
-                NSURLAuthenticationMethodHTMLForm,
-                NSURLAuthenticationMethodHTTPBasic,
-            NSURLAuthenticationMethodHTTPDigest:
+            case .login:
                 content.modifier(UsernamePasswordViewModifier(challenge: challenge))
-            default:
-                fatalError()
             }
         default:
             fatalError()

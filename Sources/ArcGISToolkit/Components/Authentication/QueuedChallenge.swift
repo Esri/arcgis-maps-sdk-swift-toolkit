@@ -58,11 +58,11 @@ final class QueuedArcGISChallenge: QueuedChallenge {
     }
 }
 
-final class QueuedURLChallenge: QueuedChallenge {
-    let urlChallenge: URLAuthenticationChallenge
+final class QueuedNetworkChallenge: QueuedChallenge {
+    let networkChallenge: NetworkAuthenticationChallenge
     
-    init(urlChallenge: URLAuthenticationChallenge) {
-        self.urlChallenge = urlChallenge
+    init(networkChallenge: NetworkAuthenticationChallenge) {
+        self.networkChallenge = networkChallenge
     }
 
     func resume(with response: Response) {
@@ -92,9 +92,28 @@ final class QueuedURLChallenge: QueuedChallenge {
     }
     
     enum Response {
-        case userCredential(username: String, password: String)
+        case login(username: String, password: String)
         case certificate(url: URL, passsword: String)
         case trustHost
         case cancel
+    }
+    
+    enum Kind {
+        case serverTrust
+        case login
+        case certificate
+    }
+    
+    var kind: Kind {
+        switch networkChallenge.kind {
+        case .serverTrust:
+            return .serverTrust
+        case .ntlm, .basic, .digest:
+            return .login
+        case .pki:
+            return .certificate
+        case .htmlForm, .negotiate:
+            fatalError("TODO: ")
+        }
     }
 }

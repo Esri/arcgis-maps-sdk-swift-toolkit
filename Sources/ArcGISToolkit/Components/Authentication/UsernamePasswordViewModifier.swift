@@ -28,8 +28,8 @@ protocol UsernamePasswordViewModel: ObservableObject {
 struct UsernamePasswordViewModifier<ViewModel: UsernamePasswordViewModel>: ViewModifier {
     let viewModel: ViewModel
     
-    init(challenge: QueuedURLChallenge) where ViewModel == URLCredentialUsernamePasswordViewModel {
-        viewModel = URLCredentialUsernamePasswordViewModel(challenge: challenge)
+    init(challenge: QueuedNetworkChallenge) where ViewModel == NetworkCredentialUsernamePasswordViewModel {
+        viewModel = NetworkCredentialUsernamePasswordViewModel(challenge: challenge)
     }
     
     init(challenge: QueuedArcGISChallenge) where ViewModel == TokenCredentialViewModel {
@@ -220,10 +220,10 @@ class TokenCredentialViewModel: UsernamePasswordViewModel {
     }
 }
 
-class URLCredentialUsernamePasswordViewModel: UsernamePasswordViewModel {
-    private let challenge: QueuedURLChallenge
+class NetworkCredentialUsernamePasswordViewModel: UsernamePasswordViewModel {
+    private let challenge: QueuedNetworkChallenge
     
-    init(challenge: QueuedURLChallenge) {
+    init(challenge: QueuedNetworkChallenge) {
         self.challenge = challenge
     }
     
@@ -241,12 +241,12 @@ class URLCredentialUsernamePasswordViewModel: UsernamePasswordViewModel {
     }
     
     var challengingHost: String {
-        challenge.urlChallenge.protectionSpace.host
+        challenge.networkChallenge.host
     }
     
     func signIn() {
         formEnabled = false
-        challenge.resume(with: .userCredential(username: username, password: password))
+        challenge.resume(with: .login(username: username, password: password))
     }
     
     func cancel() {
