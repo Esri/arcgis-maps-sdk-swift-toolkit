@@ -112,7 +112,7 @@ public struct UtilityNetworkTrace: View {
             ForEach(viewModel.configurations, id: \.name) { configuration in
                 Button {
                     withAnimation {
-                        viewModel.pendingTrace.configuration = configuration
+                        viewModel.setPendingTrace(configuration: configuration)
                         currentActivity = .creatingTrace(nil)
                     }
                 } label: {
@@ -175,6 +175,9 @@ public struct UtilityNetworkTrace: View {
                             "Trace Name",
                             text: $viewModel.pendingTrace.name
                         )
+                        .onSubmit {
+                            viewModel.pendingTrace.userDidSpecifyName = true
+                        }
                     }
                 }
             }

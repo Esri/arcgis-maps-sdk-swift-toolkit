@@ -117,6 +117,17 @@ import SwiftUI
         }
     }
     
+    /// Updates the pending trace's configuration and name, if applicable.
+    ///
+    /// The pending trace's name will only be updated if the user hasn't specified one already.
+    /// - Parameter configuration: The selected configuration for the pending trace.
+    func setPendingTrace(configuration: UtilityNamedTraceConfiguration) {
+        pendingTrace.configuration = configuration
+        if !pendingTrace.userDidSpecifyName {
+            pendingTrace.name = "\(configuration.name) \((completedTraces.filter({ $0.configuration == configuration }).count + 1).description)"
+        }
+    }
+    
     /// Selects the previous trace from the list of completed traces.
     func selectPreviousTrace() {
         if let current = selectedTraceIndex {
