@@ -15,7 +15,7 @@ import SwiftUI
 
 public extension View {
     @ViewBuilder
-    func authentication(authenticator: Authenticator) -> some View {
+    func authenticator(_ authenticator: Authenticator) -> some View {
         modifier(InvisibleOverlayModifier(authenticator: authenticator))
     }
 }
