@@ -24,6 +24,8 @@ public extension View {
 ***REMOVED***/ This view is necessary because of SwiftUI behavior that prevent the UI from functioning
 ***REMOVED***/ properly when showing and hiding sheets. The sheets need to be off of a view that is always
 ***REMOVED***/ present.
+***REMOVED***/ The problem that I was seeing without this is content in lists not updating properly
+***REMOVED***/ after a sheet was dismissed.
 private struct InvisibleOverlayModifier: ViewModifier {
 ***REMOVED***@ObservedObject var authenticator: Authenticator
 ***REMOVED***
