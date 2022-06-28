@@ -14,14 +14,14 @@
 import SwiftUI
 
 struct TrustHostViewModifier: ViewModifier {
-    init(challenge: QueuedURLChallenge) {
+    init(challenge: QueuedNetworkChallenge) {
         self.challenge = challenge
     }
     
-    let challenge: QueuedURLChallenge
+    let challenge: QueuedNetworkChallenge
     
     var host: String {
-        challenge.urlChallenge.protectionSpace.host
+        challenge.networkChallenge.host
     }
     
     // Even though we will present it right away we need to use a state variable for this.

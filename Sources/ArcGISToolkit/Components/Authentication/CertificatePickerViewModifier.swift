@@ -16,14 +16,14 @@ import UniformTypeIdentifiers
 
 final private class CertificatePickerViewModel: ObservableObject {
     let challengingHost: String
-    let challenge: QueuedURLChallenge
+    let challenge: QueuedNetworkChallenge
     
     @Published var certificateURL: URL?
     @Published var password: String = ""
     
-    init(challenge: QueuedURLChallenge) {
+    init(challenge: QueuedNetworkChallenge) {
         self.challenge = challenge
-        challengingHost = challenge.urlChallenge.protectionSpace.host
+        challengingHost = challenge.networkChallenge.host
     }
     
     func signIn() {
@@ -40,7 +40,7 @@ final private class CertificatePickerViewModel: ObservableObject {
 }
 
 struct CertificatePickerViewModifier: ViewModifier {
-    init(challenge: QueuedURLChallenge) {
+    init(challenge: QueuedNetworkChallenge) {
         viewModel = CertificatePickerViewModel(challenge: challenge)
     }
     

@@ -18,10 +18,7 @@ import Combine
 @MainActor
 public final class Authenticator: ObservableObject {
     let oAuthConfigurations: [OAuthConfiguration]
-    var trustedHosts: [String] = []
-    var urlCredentialPersistence: URLCredential.Persistence = .forSession
     var promptForUntrustedHosts: Bool
-    var certificateStore: CertificateCredentialStore?
     
     public init(
         promptForUntrustedHosts: Bool = false,
@@ -29,7 +26,6 @@ public final class Authenticator: ObservableObject {
     ) {
         self.promptForUntrustedHosts = promptForUntrustedHosts
         self.oAuthConfigurations = oAuthConfigurations
-        self.certificateStore = nil
         Task { await observeChallengeQueue() }
     }
     
@@ -48,26 +44,18 @@ public final class Authenticator: ObservableObject {
             access: access,
             isSynchronizable: isCloudSynchronizable
         )
-        certificateStore = try await CertificateCredentialStore(
-            access: .whenUnlockedThisDeviceOnly,
-            groupIdentifier: nil,
-            isSynchronizable: isCloudSynchronizable
+        
+        NetworkCredentialStore.setShared(
+            try await .makePersistent(access: access, isSynchronizable: isCloudSynchronizable)
         )
-        urlCredentialPersistence = isCloudSynchronizable ? .synchronizable : .permanent
     }
     
     public func clearCredentialStores() async {
-        // Clear trusted hosts
-        trustedHosts.removeAll()
-        
         // Clear ArcGIS Credentials.
         await ArcGISURLSession.credentialStore.removeAll()
         
-        // Clear certificate store.
-        await certificateStore?.clear()
-        
-        // Clear URLCredentials.
-        URLCredentialStorage.shared.removeAllCredentials()
+        // Clear network credentials.
+        await NetworkCredentialStore.shared.removeAll()
         
         // We have to reset the sessions for URLCredential storage to respect the removed credentials
         ArcGISURLSession.shared = ArcGISURLSession.makeDefaultSharedSession()
@@ -136,162 +124,28 @@ extension Authenticator: AuthenticationChallengeHandler {
         }
     }
     
-    public func handleURLSessionChallenge(
-        _ challenge: URLAuthenticationChallenge,
-        scope: URLAuthenticationChallengeScope
-    ) async -> (URLSession.AuthChallengeDisposition, URLCredential?) {
-        guard challenge.protectionSpace.authenticationMethod != NSURLAuthenticationMethodDefault else {
-            return (.performDefaultHandling, nil)
-        }
-        
-        guard challenge.proposedCredential == nil else {
-            return (.performDefaultHandling, nil)
-        }
-        
-        // Check for server trust challenge.
-        if challenge.protectionSpace.authenticationMethod == NSURLAuthenticationMethodServerTrust,
-           let trust = challenge.protectionSpace.serverTrust {
-            if trustedHosts.contains(challenge.protectionSpace.host) {
-                // If the host is already trusted, then continue trusting it.
-                return (.useCredential, URLCredential(trust: trust))
-            } else if !trust.isRecoverableTrustFailure {
-                // If not a recoverable trust failure then we perform default handling.
-                return (.performDefaultHandling, nil)
-            } else if !promptForUntrustedHosts {
-                // If we aren't allowed to prompt for untrusted hosts then perform default handling.
-                return (.performDefaultHandling, nil)
-            }
-        }
-        
-        // Look in certificate store, use that credential if available.
-        if let certificateCredential = await certificateStore?.credential(for: challenge.protectionSpace),
-           let urlCredential = try? URLCredential.withCertificateCredential(certificateCredential) {
-            return (.useCredential, urlCredential)
-        }
-        
+    public func handleNetworkChallenge(
+        _ challenge: NetworkAuthenticationChallenge
+    ) async -> NetworkAuthenticationChallengeDisposition {
         // Queue up the url challenge.
-        let queuedChallenge = QueuedURLChallenge(urlChallenge: challenge)
+        let queuedChallenge = QueuedNetworkChallenge(networkChallenge: challenge)
         subject.send(queuedChallenge)
         
         // Respond accordingly.
         switch await queuedChallenge.response {
         case .cancel:
-            return (.cancelAuthenticationChallenge, nil)
+            return .cancelAuthenticationChallenge
         case .trustHost:
-            if let trust = challenge.protectionSpace.serverTrust {
-                trustedHosts.append(challenge.protectionSpace.host)
-                return (.useCredential, URLCredential(trust: trust))
-            } else {
-                return (.performDefaultHandling, nil)
-            }
-        case .userCredential(let user, let password):
-            return (.useCredential, URLCredential(user: user, password: password, persistence: urlCredentialPersistence))
+            return .useCredential(.serverTrust)
+        case .login(let user, let password):
+            return .useCredential(.login(username: user, password: password))
         case .certificate(let url, let password):
             do {
-                let data = try await Data(asyncWithContentsOf: url)
-                await certificateStore?.add(credential: .init(host: challenge.protectionSpace.host, data: data, password: password))
-                return (
-                    .useCredential,
-                    try URLCredential.urlCredential(forCertificateWithData: data, password: password)
-                )
+                return .useCredential(try .certificate(at: url, password: password))
             } catch {
-                return (.performDefaultHandling, nil)
+                // TODO: handle error
+                fatalError()
             }
         }
-    }
-}
-
-extension SecTrust {
-    var isRecoverableTrustFailure: Bool {
-        var result = SecTrustResultType.invalid
-        SecTrustGetTrustResult(self, &result)
-        return result == .recoverableTrustFailure
-    }
-}
-
-extension URLCredentialStorage {
-    func removeAllCredentials() {
-        allCredentials.forEach { (protectionSpace: URLProtectionSpace, usernamesToCredentials: [String : URLCredential]) in
-            for credential in usernamesToCredentials.values {
-                remove(credential, for: protectionSpace)
-            }
-        }
-    }
-}
-
-private extension URLCredential {
-    /// An error that can occur when importing a certificate.
-    struct CertificateImportError: Error, Hashable {
-        /// The backing status code for this error.
-        let status: OSStatus
-        
-        /// Initializes a certificate import error. This init will fail if the specified status is a success
-        /// status value.
-        /// - Parameter status: An `OSStatus`, usually the return value of a keychain operation.
-        init?(status: OSStatus) {
-            guard status != errSecSuccess else { return nil }
-            self.status = status
-        }
-    }
-    
-    static func urlCredential(
-        forCertificateAt fileURL: URL,
-        password: String
-    ) async throws -> URLCredential {
-        return try urlCredential(
-            forCertificateWithData: try await Data(asyncWithContentsOf: fileURL),
-            password: password
-        )
-    }
-    static func urlCredential(
-        forCertificateWithData data: Data,
-        password: String
-    ) throws -> URLCredential {
-        let options = [kSecImportExportPassphrase: password]
-        var rawItems: CFArray?
-        
-        let status = SecPKCS12Import(
-            data as CFData,
-            options as CFDictionary,
-            &rawItems
-        )
-        
-        guard status == errSecSuccess else {
-            throw CertificateImportError(status: status)!
-        }
-        
-        let items = rawItems! as! [[CFString: Any]]
-        let identity = items[0][kSecImportItemIdentity] as! SecIdentity
-        let certificates = items[0][kSecImportItemCertChain] as! [SecTrust]
-        
-        return URLCredential(
-            identity: identity,
-            certificates: certificates,
-            // Persistence is not supported at all at this point by apple for certificate credentials.
-            // So we can just pass `.none`.
-            persistence: .none
-        )
-    }
-}
-
-extension Data {
-    init(asyncWithContentsOf fileURL: URL) async throws {
-        let task = Task {
-            try Data(contentsOf: fileURL)
-        }
-        self = try await task.value
-    }
-}
-
-extension URLCredential.CertificateImportError {
-    // The message for this error.
-    var message: String {
-        (SecCopyErrorMessageString(status, nil) as String?) ?? ""
-    }
-}
-
-extension URLCredential {
-    static func withCertificateCredential(_ certificateCredential: CertificateCredential) throws -> URLCredential {
-        try URLCredential.urlCredential(forCertificateWithData: certificateCredential.data, password: certificateCredential.password)
     }
 }
