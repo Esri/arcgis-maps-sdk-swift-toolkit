@@ -13,6 +13,7 @@
 
 ***REMOVED***
 
+***REMOVED***/ A view modifier that presents a sheet without waiting for a condition.
 struct SheetViewModifier<SheetContent: View>: ViewModifier {
 ***REMOVED******REMOVED*** Even though we will present it right away we need to use a state variable for this.
 ***REMOVED******REMOVED*** Using a constant has 2 issues. One, it won't animate. Two, when challenging for multiple
@@ -31,6 +32,7 @@ struct SheetViewModifier<SheetContent: View>: ViewModifier {
 ***REMOVED***
 
 extension View {
+***REMOVED******REMOVED***/ Presents a sheet without waiting for a condition.
 ***REMOVED***@ViewBuilder
 ***REMOVED***func sheet<Content: View>(content: @escaping () -> Content) -> some View {
 ***REMOVED******REMOVED***modifier(SheetViewModifier(sheetContent: content))
