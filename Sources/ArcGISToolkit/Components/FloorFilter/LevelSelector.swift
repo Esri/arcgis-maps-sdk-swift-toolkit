@@ -24,6 +24,9 @@ struct LevelSelector: View {
     /// the selected level.
     @State private var isCollapsed: Bool = false
     
+    /// The alignment configuration.
+    let isTopAligned: Bool
+    
     /// The levels to display.
     let levels: [FloorLevel]
     
@@ -32,9 +35,6 @@ struct LevelSelector: View {
     private var selectedLevelName: String {
         viewModel.selectedLevel?.shortName ?? ""
     }
-    
-    /// The alignment configuration.
-    var isTopAligned: Bool
     
     public var body: some View {
         if !isCollapsed,
@@ -66,7 +66,7 @@ struct LevelSelector: View {
                 isCollapsed.toggle()
             }
         } label: {
-            Image(systemName: "xmark")
+            Image(systemName: isTopAligned ? "chevron.up.circle" : "chevron.down.circle")
                 .padding(.toolkitDefault)
         }
     }
@@ -84,31 +84,42 @@ private struct LevelsStack: View {
     let levels: [FloorLevel]
     
     var body: some View {
-        ScrollView {
-            VStack {
-                ForEach(levels) { level in
-                    Toggle(
-                        isOn: Binding(
-                            get: {
-                                viewModel.selectedLevel == level
-                            },
-                            set: { newIsOn in
-                                guard newIsOn else { return }
-                                viewModel.setLevel(level)
-                            }
-                        )
-                    ) {
-                        Text(level.shortName)
-                            .modifier(LevelNameFormat())
+        ScrollViewReader { proxy in
+            ScrollView {
+                VStack {
+                    ForEach(levels, id: \.id) { level in
+                        Toggle(
+                            isOn: Binding(
+                                get: {
+                                    viewModel.selectedLevel == level
+                                },
+                                set: { newIsOn in
+                                    guard newIsOn else { return }
+                                    viewModel.setLevel(level)
+                                }
+                            )
+                        ) {
+                            Text(level.shortName)
+                                .modifier(LevelNameFormat())
+                        }
+                        .toggleStyle(.selectableButton)
                     }
-                    .toggleStyle(.selectableButton)
+                }
+                .onSizeChange {
+                    contentHeight = $0.height
                 }
             }
-            .onSizeChange {
-                contentHeight = $0.height
+            .frame(maxHeight: contentHeight)
+            .onAppear {
+                if let floorLevel = viewModel.selectedLevel {
+                    withAnimation {
+                        proxy.scrollTo(
+                            floorLevel.id
+                        )
+                    }
+                }
             }
         }
-        .frame(maxHeight: contentHeight)
     }
 }
 
