@@ -14,19 +14,23 @@
 import SwiftUI
 
 public extension View {
+    /// Presents user experiences for collecting network authentication credentials from the
+    /// user.
+    /// - Parameter authenticator: The authenticator for which credentials will be prompted.
     @ViewBuilder
     func authenticator(_ authenticator: Authenticator) -> some View {
-        modifier(InvisibleOverlayModifier(authenticator: authenticator))
+        modifier(AuthenticatorOverlayModifier(authenticator: authenticator))
     }
 }
 
-/// This is an intermediate modifier that overlays an always present invisible view.
+/// A view modifier that overlays an always present invisible view for which the
+/// authenticator view modifiers can modify.
 /// This view is necessary because of SwiftUI behavior that prevent the UI from functioning
 /// properly when showing and hiding sheets. The sheets need to be off of a view that is always
 /// present.
 /// The problem that I was seeing without this is content in lists not updating properly
 /// after a sheet was dismissed.
-private struct InvisibleOverlayModifier: ViewModifier {
+private struct AuthenticatorOverlayModifier: ViewModifier {
     @ObservedObject var authenticator: Authenticator
     
     @ViewBuilder
@@ -40,22 +44,13 @@ private struct InvisibleOverlayModifier: ViewModifier {
     }
 }
 
+/// A view modifier that prompts for credentials.
 private struct AuthenticatorModifier: ViewModifier {
     @ObservedObject var authenticator: Authenticator
     
     @ViewBuilder
     func body(content: Content) -> some View {
-        if let challenge = authenticator.currentChallenge {
-            authenticationView(for: challenge, content: content)
-        }
-        else {
-            content
-        }
-    }
-    
-    @ViewBuilder
-    func authenticationView(for challenge: QueuedChallenge, content: Content) -> some View {
-        switch challenge {
+        switch authenticator.currentChallenge {
         case let challenge as QueuedArcGISChallenge:
             content.modifier(UsernamePasswordViewModifier(challenge: challenge))
         case let challenge as QueuedNetworkChallenge:
@@ -67,6 +62,8 @@ private struct AuthenticatorModifier: ViewModifier {
             case .login:
                 content.modifier(UsernamePasswordViewModifier(challenge: challenge))
             }
+        case .none:
+            content
         default:
             fatalError()
         }
