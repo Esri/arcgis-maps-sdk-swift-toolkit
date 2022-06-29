@@ -14,9 +14,14 @@
 ***REMOVED***
 import UniformTypeIdentifiers
 
+***REMOVED***/ A view that allows the user to browse to and select a document.
+***REMOVED***/ This view wraps a `UIDocumentPickerViewController`.
 struct DocumentPickerView: UIViewControllerRepresentable {
+***REMOVED******REMOVED***/ The content types that are allowed to be selected.
 ***REMOVED***var contentTypes: [UTType]
+***REMOVED******REMOVED***/ The closure called when a document is selected.
 ***REMOVED***var onPickDocument: (URL) -> Void
+***REMOVED******REMOVED***/ The closure called when the user cancels.
 ***REMOVED***var onCancel: () -> Void
 ***REMOVED***
 ***REMOVED***func makeCoordinator() -> Coordinator {
@@ -33,6 +38,8 @@ struct DocumentPickerView: UIViewControllerRepresentable {
 ***REMOVED***
 
 extension DocumentPickerView {
+***REMOVED******REMOVED***/ The coordinator for the document picker view that acts as a delegate to the underlying
+***REMOVED******REMOVED***/ `UIDocumentPickerViewController`.
 ***REMOVED***final class Coordinator: NSObject, UIDocumentPickerDelegate {
 ***REMOVED******REMOVED***var onPickDocument: (URL) -> Void
 ***REMOVED******REMOVED***var onCancel: () -> Void
