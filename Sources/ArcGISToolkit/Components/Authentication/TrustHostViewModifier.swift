@@ -13,13 +13,18 @@
 
 import SwiftUI
 
+/// Prompts the user when encountering an untrusted host.
 struct TrustHostViewModifier: ViewModifier {
+    /// Creates a `TrustHostViewModifier`.
+    /// - Parameter challenge: The network authentication challenge for the untrusted host.
     init(challenge: QueuedNetworkChallenge) {
         self.challenge = challenge
     }
     
+    /// The network authentication challenge for the untrusted host.
     let challenge: QueuedNetworkChallenge
     
+    /// The untrusted host.
     var host: String {
         challenge.networkChallenge.host
     }
@@ -32,7 +37,7 @@ struct TrustHostViewModifier: ViewModifier {
     
     func body(content: Content) -> some View {
         content
-            .task { isPresented = true } // Present the alert right away
+            .task { isPresented = true } // Present the alert right away.
             .alert("Certificate Trust Warning", isPresented: $isPresented, presenting: challenge) { _ in
                 Button("Dangerous: Allow Connection", role: .destructive) {
                     isPresented = false
