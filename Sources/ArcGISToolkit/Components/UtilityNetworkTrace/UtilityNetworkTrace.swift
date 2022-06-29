@@ -278,6 +278,40 @@ public struct UtilityNetworkTrace: View {
             .lineLimit(1)
             .frame(maxWidth: .infinity, alignment: .center)
         List {
+            if selectedStartingPoint?.utilityElement.networkSource.kind == .edge {
+                Section("Fraction Along Edge") {
+                    Slider(value: Binding(get: {
+                        viewModel.pendingTrace.startingPoints.first { sp in
+                            sp.utilityElement.globalID == selectedStartingPoint?.utilityElement.globalID
+                        }?.utilityElement.fractionAlongEdge ?? .zero
+                    }, set: { newValue in
+                        if let selectedStartingPoint {
+                            viewModel.setFractionAlongEdgeFor(
+                                startingPoint: selectedStartingPoint,
+                                to: newValue
+                            )
+                        }
+                    }))
+                }
+            } else if selectedStartingPoint?.utilityElement.networkSource.kind == .junction &&
+                        !(selectedStartingPoint?.utilityElement.assetType.terminalConfiguration?.terminals.isEmpty ?? true) {
+                Section {
+                    Picker(
+                        "Terminal Configuration",
+                        selection: Binding(get: {
+                            selectedStartingPoint!.utilityElement.terminal!
+                        }, set: { newValue in
+                            viewModel.setTerminalConfigurationFor(startingPoint: selectedStartingPoint!, to: newValue)
+                        })
+                    ) {
+                        ForEach(viewModel.pendingTrace.startingPoints.first { sp in
+                            sp.utilityElement.globalID == selectedStartingPoint?.utilityElement.globalID
+                        }?.utilityElement.assetType.terminalConfiguration?.terminals ?? [], id: \.self) {
+                            Text($0.name)
+                        }
+                    }
+                }
+            }
             Text(selectedStartingPoint?.utilityElement.globalID.uuidString ?? "N/A")
             ForEach(Array(selectedStartingPoint!.geoElement.attributes.sorted(by: { $0.key < $1.key})), id: \.key) { item in
                 HStack{

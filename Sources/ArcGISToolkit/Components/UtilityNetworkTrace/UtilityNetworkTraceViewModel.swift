@@ -158,12 +158,23 @@ import SwiftUI
                 Task {
                     guard let network = network,
                           let feature = geoElement as? ArcGISFeature,
-                          let extent = feature.geometry?.extent,
+                          let geometry = feature.geometry,
                           let symbol = try? await (feature.featureTable?.layer as? FeatureLayer)?
                         .renderer?
                         .symbol(for: feature)?
                         .makeSwatch(scale: 1.0),
                           let utilityElement = network.createElement(arcGISFeature: feature) else { return }
+                    
+                    if utilityElement.networkSource.kind == .edge && geometry is Polyline {
+                        utilityElement.fractionAlongEdge = fractionAlongEdge(
+                            of: geometry,
+                            at: mapPoint
+                        )
+                    } else if utilityElement.networkSource.kind == .junction &&
+                                utilityElement.assetType.terminalConfiguration?.terminals.count ?? 0 > 1 {
+                        utilityElement.terminal = utilityElement.assetType.terminalConfiguration?.terminals.first
+                    }
+                    
                     let graphic = Graphic(
                         geometry: mapPoint,
                         symbol: SimpleMarkerSymbol(
@@ -172,7 +183,7 @@ import SwiftUI
                         )
                     )
                     let startingPoint = UtilityNetworkTraceStartingPoint(
-                        extent: extent,
+                        extent: geometry.extent,
                         geoElement: geoElement,
                         graphic: graphic,
                         image: symbol,
@@ -183,6 +194,32 @@ import SwiftUI
                 }
             }
         }
+    }
+    
+    func setFractionAlongEdgeFor(
+        startingPoint: UtilityNetworkTraceStartingPoint,
+        to newValue: Double
+    ) {
+        pendingTrace.startingPoints.first {
+            $0.utilityElement.globalID == startingPoint.utilityElement.globalID
+        }?.utilityElement.fractionAlongEdge = newValue
+        if let geometry = startingPoint.geoElement.geometry,
+           let polyline = geometry as? Polyline  {
+            startingPoint.graphic.geometry = GeometryEngine.point(
+                along: polyline,
+                atDistance: GeometryEngine.length(of: geometry) * newValue
+            )
+        }
+    }
+    
+    func setTerminalConfigurationFor(
+        startingPoint: UtilityNetworkTraceStartingPoint,
+        to newValue: UtilityTerminal
+    ) {
+        pendingTrace.startingPoints.first {
+            $0.utilityElement.globalID == startingPoint.utilityElement.globalID
+        }?.utilityElement.terminal = newValue
+        objectWillChange.send()
     }
     
     /// Runs the pending trace and stores it into the list of completed traces.
@@ -286,5 +323,42 @@ import SwiftUI
     private func loadNamedTraceConfigurations(_ map: Map) async {
         guard let network = network else { return }
         configurations = (try? await map.getNamedTraceConfigurations(from: network)) ?? []
+    }
+}
+
+extension UtilityNetworkTraceViewModel {
+    /// Finds the location on the line nearest the input point, expressed as the fraction along the line’s total
+    /// geodesic length.
+    /// - Parameters:
+    ///   - inputGeometry: The line to be measured.
+    ///   - point: A location along the line.
+    private func fractionAlongEdge(
+        of inputGeometry: Geometry,
+        at point: Point
+    ) -> Double {
+        var geometry = inputGeometry
+        // Remove Z
+        if geometry.hasZ {
+            geometry = GeometryEngine.makeGeometry(
+                from: geometry,
+                z: nil
+            )
+        }
+        
+        // Confirm spatial references match
+        if let spatialReference = point.spatialReference,
+           spatialReference != geometry.spatialReference,
+           let projectedGeometry = GeometryEngine.project(
+            geometry,
+            into: spatialReference
+           ) {
+            geometry = projectedGeometry
+        }
+        
+        return GeometryEngine.polyline(
+            geometry as! Polyline,
+            fractionalLengthClosestTo: point,
+            tolerance: 10
+        )
     }
 }
