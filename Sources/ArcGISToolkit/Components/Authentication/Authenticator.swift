@@ -15,27 +15,37 @@ import ArcGIS
 import SwiftUI
 import Combine
 
+/// A configurable object that handles authentication challenges.
 @MainActor
 public final class Authenticator: ObservableObject {
+    /// The OAuth configurations that this authenticator can work with.
     let oAuthConfigurations: [OAuthConfiguration]
+    
+    /// A value indicating whether we should prompt the user when encountering an untrusted host.
     var promptForUntrustedHosts: Bool
     
+    /// Creates an authenticator.
+    /// - Parameters:
+    ///   - promptForUntrustedHosts: A value indicating whether we should prompt the user when
+    ///   encountering an untrusted host.
+    ///   - oAuthConfigurations: The OAuth configurations that this authenticator can work with.
     public init(
         promptForUntrustedHosts: Bool = false,
         oAuthConfigurations: [OAuthConfiguration] = []
     ) {
         self.promptForUntrustedHosts = promptForUntrustedHosts
         self.oAuthConfigurations = oAuthConfigurations
+        // TODO: how to cancel this task?
         Task { await observeChallengeQueue() }
     }
     
-    /// Sets up a credential store that is synchronized with the keychain.
-    /// - Remark: The item will be stored in the default access group.
+    /// Sets up credential stores that are synchronized with the keychain.
+    /// - Remark: The credentials will be stored in the default access group.
     /// To know more about what the default group would be you can find information about that here:
     /// https://developer.apple.com/documentation/security/keychain_services/keychain_items/sharing_access_to_keychain_items_among_a_collection_of_apps.
     /// - Parameters:
     ///   - access: When the credentials stored in the keychain can be accessed.
-    ///   - isSynchronizable: A value indicating whether the item is synchronized with iCloud.
+    ///   - isCloudSynchronizable: A value indicating whether the credentials are synchronized with iCloud.
     public func synchronizeWithKeychain(
         access: ArcGIS.KeychainAccess,
         isCloudSynchronizable: Bool = false
@@ -50,6 +60,8 @@ public final class Authenticator: ObservableObject {
         )
     }
     
+    /// Clears all ArcGIS and network credentials from the stores and resets the backing `URLSessions`
+    /// so that removed network credentials are respected right away.
     public func clearCredentialStores() async {
         // Clear ArcGIS Credentials.
         await ArcGISURLSession.credentialStore.removeAll()
@@ -62,6 +74,7 @@ public final class Authenticator: ObservableObject {
         ArcGISURLSession.sharedBackground = ArcGISURLSession.makeDefaultSharedBackgroundSession()
     }
     
+    /// Observes the challenge queue and sets the current challenge.
     private func observeChallengeQueue() async {
         for await queuedChallenge in challengeQueue {
             // A yield here helps alleviate the already presenting bug.
@@ -87,6 +100,8 @@ public final class Authenticator: ObservableObject {
     }
     
     private var subject = PassthroughSubject<QueuedChallenge, Never>()
+    
+    /// A serial queue for authentication challenges.
     private var challengeQueue: AsyncPublisher<AnyPublisher<QueuedChallenge, Never>> {
         AsyncPublisher(
             subject
@@ -95,6 +110,7 @@ public final class Authenticator: ObservableObject {
         )
     }
     
+    /// The current queued challenge.
     @Published
     var currentChallenge: QueuedChallenge?
 }
