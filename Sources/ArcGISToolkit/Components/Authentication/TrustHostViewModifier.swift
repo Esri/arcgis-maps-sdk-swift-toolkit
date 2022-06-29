@@ -13,13 +13,18 @@
 
 ***REMOVED***
 
+***REMOVED***/ Prompts the user when encountering an untrusted host.
 struct TrustHostViewModifier: ViewModifier {
+***REMOVED******REMOVED***/ Creates a `TrustHostViewModifier`.
+***REMOVED******REMOVED***/ - Parameter challenge: The network authentication challenge for the untrusted host.
 ***REMOVED***init(challenge: QueuedNetworkChallenge) {
 ***REMOVED******REMOVED***self.challenge = challenge
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ The network authentication challenge for the untrusted host.
 ***REMOVED***let challenge: QueuedNetworkChallenge
 ***REMOVED***
+***REMOVED******REMOVED***/ The untrusted host.
 ***REMOVED***var host: String {
 ***REMOVED******REMOVED***challenge.networkChallenge.host
 ***REMOVED***
@@ -32,7 +37,7 @@ struct TrustHostViewModifier: ViewModifier {
 ***REMOVED***
 ***REMOVED***func body(content: Content) -> some View {
 ***REMOVED******REMOVED***content
-***REMOVED******REMOVED******REMOVED***.task { isPresented = true ***REMOVED*** ***REMOVED*** Present the alert right away
+***REMOVED******REMOVED******REMOVED***.task { isPresented = true ***REMOVED*** ***REMOVED*** Present the alert right away.
 ***REMOVED******REMOVED******REMOVED***.alert("Certificate Trust Warning", isPresented: $isPresented, presenting: challenge) { _ in
 ***REMOVED******REMOVED******REMOVED******REMOVED***Button("Dangerous: Allow Connection", role: .destructive) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented = false
