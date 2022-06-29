@@ -158,12 +158,23 @@ import Foundation
 ***REMOVED******REMOVED******REMOVED******REMOVED***Task {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let network = network,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  let feature = geoElement as? ArcGISFeature,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  let extent = feature.geometry?.extent,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  let geometry = feature.geometry,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  let symbol = try? await (feature.featureTable?.layer as? FeatureLayer)?
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.renderer?
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.symbol(for: feature)?
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.makeSwatch(scale: 1.0),
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  let utilityElement = network.createElement(arcGISFeature: feature) else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if utilityElement.networkSource.kind == .edge && geometry is Polyline {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***utilityElement.fractionAlongEdge = fractionAlongEdge(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***of: geometry,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***at: mapPoint
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED*** else if utilityElement.networkSource.kind == .junction &&
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***utilityElement.assetType.terminalConfiguration?.terminals.count ?? 0 > 1 {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***utilityElement.terminal = utilityElement.assetType.terminalConfiguration?.terminals.first
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let graphic = Graphic(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***geometry: mapPoint,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***symbol: SimpleMarkerSymbol(
@@ -172,7 +183,7 @@ import Foundation
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let startingPoint = UtilityNetworkTraceStartingPoint(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***extent: extent,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***extent: geometry.extent,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***geoElement: geoElement,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***graphic: graphic,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***image: symbol,
@@ -183,6 +194,32 @@ import Foundation
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***func setFractionAlongEdgeFor(
+***REMOVED******REMOVED***startingPoint: UtilityNetworkTraceStartingPoint,
+***REMOVED******REMOVED***to newValue: Double
+***REMOVED***) {
+***REMOVED******REMOVED***pendingTrace.startingPoints.first {
+***REMOVED******REMOVED******REMOVED***$0.utilityElement.globalID == startingPoint.utilityElement.globalID
+***REMOVED***?.utilityElement.fractionAlongEdge = newValue
+***REMOVED******REMOVED***if let geometry = startingPoint.geoElement.geometry,
+***REMOVED******REMOVED***   let polyline = geometry as? Polyline  {
+***REMOVED******REMOVED******REMOVED***startingPoint.graphic.geometry = GeometryEngine.point(
+***REMOVED******REMOVED******REMOVED******REMOVED***along: polyline,
+***REMOVED******REMOVED******REMOVED******REMOVED***atDistance: GeometryEngine.length(of: geometry) * newValue
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***func setTerminalConfigurationFor(
+***REMOVED******REMOVED***startingPoint: UtilityNetworkTraceStartingPoint,
+***REMOVED******REMOVED***to newValue: UtilityTerminal
+***REMOVED***) {
+***REMOVED******REMOVED***pendingTrace.startingPoints.first {
+***REMOVED******REMOVED******REMOVED***$0.utilityElement.globalID == startingPoint.utilityElement.globalID
+***REMOVED***?.utilityElement.terminal = newValue
+***REMOVED******REMOVED***objectWillChange.send()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Runs the pending trace and stores it into the list of completed traces.
@@ -286,5 +323,42 @@ import Foundation
 ***REMOVED***private func loadNamedTraceConfigurations(_ map: Map) async {
 ***REMOVED******REMOVED***guard let network = network else { return ***REMOVED***
 ***REMOVED******REMOVED***configurations = (try? await map.getNamedTraceConfigurations(from: network)) ?? []
+***REMOVED***
+***REMOVED***
+
+extension UtilityNetworkTraceViewModel {
+***REMOVED******REMOVED***/ Finds the location on the line nearest the input point, expressed as the fraction along the line’s total
+***REMOVED******REMOVED***/ geodesic length.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - inputGeometry: The line to be measured.
+***REMOVED******REMOVED***/   - point: A location along the line.
+***REMOVED***private func fractionAlongEdge(
+***REMOVED******REMOVED***of inputGeometry: Geometry,
+***REMOVED******REMOVED***at point: Point
+***REMOVED***) -> Double {
+***REMOVED******REMOVED***var geometry = inputGeometry
+***REMOVED******REMOVED******REMOVED*** Remove Z
+***REMOVED******REMOVED***if geometry.hasZ {
+***REMOVED******REMOVED******REMOVED***geometry = GeometryEngine.makeGeometry(
+***REMOVED******REMOVED******REMOVED******REMOVED***from: geometry,
+***REMOVED******REMOVED******REMOVED******REMOVED***z: nil
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Confirm spatial references match
+***REMOVED******REMOVED***if let spatialReference = point.spatialReference,
+***REMOVED******REMOVED***   spatialReference != geometry.spatialReference,
+***REMOVED******REMOVED***   let projectedGeometry = GeometryEngine.project(
+***REMOVED******REMOVED******REMOVED***geometry,
+***REMOVED******REMOVED******REMOVED***into: spatialReference
+***REMOVED******REMOVED***   ) {
+***REMOVED******REMOVED******REMOVED***geometry = projectedGeometry
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***return GeometryEngine.polyline(
+***REMOVED******REMOVED******REMOVED***geometry as! Polyline,
+***REMOVED******REMOVED******REMOVED***fractionalLengthClosestTo: point,
+***REMOVED******REMOVED******REMOVED***tolerance: 10
+***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
