@@ -21,6 +21,7 @@ struct AuthenticationExampleView: View {
 ***REMOVED***)
 ***REMOVED***@State var previousApiKey: APIKey?
 ***REMOVED***@State private var items = AuthenticationItem.makeAll()
+***REMOVED***let logger = ConsoleNetworkLogger(shouldLogResponseData: false)
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***VStack {
@@ -43,6 +44,7 @@ struct AuthenticationExampleView: View {
 ***REMOVED******REMOVED***.authenticator(authenticator)
 ***REMOVED******REMOVED***.task {
 ***REMOVED******REMOVED******REMOVED***try? await authenticator.synchronizeWithKeychain(access: .whenUnlockedThisDeviceOnly)
+***REMOVED******REMOVED******REMOVED***logger.startLogging()
 ***REMOVED***
 ***REMOVED******REMOVED***.navigationBarTitle(Text("Authentication"), displayMode: .inline)
 ***REMOVED******REMOVED***.onAppear {
@@ -189,6 +191,13 @@ extension AuthenticationItem {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
+***REMOVED***static func makeEricPKIMap() -> AuthenticationItem {
+***REMOVED******REMOVED***AuthenticationItem(
+***REMOVED******REMOVED******REMOVED***title: "Eric PKI Map",
+***REMOVED******REMOVED******REMOVED***loadables: [Map(url: URL(string: "https:***REMOVED***enterprise.esrigxdev.com/portal1091/sharing/rest/content/items/3e3b4cec95d143478cf187ba6ea4f7c4")!)!]
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
 ***REMOVED***static func makeAll() -> [AuthenticationItem]  {
 ***REMOVED******REMOVED***[
 ***REMOVED******REMOVED******REMOVED***makeToken(),
@@ -196,7 +205,8 @@ extension AuthenticationItem {
 ***REMOVED******REMOVED******REMOVED***makeMultipleTokenSame(),
 ***REMOVED******REMOVED******REMOVED***makePortal(),
 ***REMOVED******REMOVED******REMOVED***makeIWAPortal(),
-***REMOVED******REMOVED******REMOVED***makePKIMap()
+***REMOVED******REMOVED******REMOVED***makePKIMap(),
+***REMOVED******REMOVED******REMOVED***makeEricPKIMap()
 ***REMOVED******REMOVED***]
 ***REMOVED***
 ***REMOVED***
