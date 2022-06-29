@@ -15,27 +15,37 @@
 ***REMOVED***
 import Combine
 
+***REMOVED***/ A configurable object that handles authentication challenges.
 @MainActor
 public final class Authenticator: ObservableObject {
+***REMOVED******REMOVED***/ The OAuth configurations that this authenticator can work with.
 ***REMOVED***let oAuthConfigurations: [OAuthConfiguration]
+***REMOVED***
+***REMOVED******REMOVED***/ A value indicating whether we should prompt the user when encountering an untrusted host.
 ***REMOVED***var promptForUntrustedHosts: Bool
 ***REMOVED***
+***REMOVED******REMOVED***/ Creates an authenticator.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - promptForUntrustedHosts: A value indicating whether we should prompt the user when
+***REMOVED******REMOVED***/   encountering an untrusted host.
+***REMOVED******REMOVED***/   - oAuthConfigurations: The OAuth configurations that this authenticator can work with.
 ***REMOVED***public init(
 ***REMOVED******REMOVED***promptForUntrustedHosts: Bool = false,
 ***REMOVED******REMOVED***oAuthConfigurations: [OAuthConfiguration] = []
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.promptForUntrustedHosts = promptForUntrustedHosts
 ***REMOVED******REMOVED***self.oAuthConfigurations = oAuthConfigurations
+***REMOVED******REMOVED******REMOVED*** TODO: how to cancel this task?
 ***REMOVED******REMOVED***Task { await observeChallengeQueue() ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Sets up a credential store that is synchronized with the keychain.
-***REMOVED******REMOVED***/ - Remark: The item will be stored in the default access group.
+***REMOVED******REMOVED***/ Sets up credential stores that are synchronized with the keychain.
+***REMOVED******REMOVED***/ - Remark: The credentials will be stored in the default access group.
 ***REMOVED******REMOVED***/ To know more about what the default group would be you can find information about that here:
 ***REMOVED******REMOVED***/ https:***REMOVED***developer.apple.com/documentation/security/keychain_services/keychain_items/sharing_access_to_keychain_items_among_a_collection_of_apps.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - access: When the credentials stored in the keychain can be accessed.
-***REMOVED******REMOVED***/   - isSynchronizable: A value indicating whether the item is synchronized with iCloud.
+***REMOVED******REMOVED***/   - isCloudSynchronizable: A value indicating whether the credentials are synchronized with iCloud.
 ***REMOVED***public func synchronizeWithKeychain(
 ***REMOVED******REMOVED***access: ArcGIS.KeychainAccess,
 ***REMOVED******REMOVED***isCloudSynchronizable: Bool = false
@@ -50,6 +60,8 @@ public final class Authenticator: ObservableObject {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ Clears all ArcGIS and network credentials from the stores and resets the backing `URLSessions`
+***REMOVED******REMOVED***/ so that removed network credentials are respected right away.
 ***REMOVED***public func clearCredentialStores() async {
 ***REMOVED******REMOVED******REMOVED*** Clear ArcGIS Credentials.
 ***REMOVED******REMOVED***await ArcGISURLSession.credentialStore.removeAll()
@@ -62,6 +74,7 @@ public final class Authenticator: ObservableObject {
 ***REMOVED******REMOVED***ArcGISURLSession.sharedBackground = ArcGISURLSession.makeDefaultSharedBackgroundSession()
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ Observes the challenge queue and sets the current challenge.
 ***REMOVED***private func observeChallengeQueue() async {
 ***REMOVED******REMOVED***for await queuedChallenge in challengeQueue {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** A yield here helps alleviate the already presenting bug.
@@ -87,6 +100,8 @@ public final class Authenticator: ObservableObject {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***private var subject = PassthroughSubject<QueuedChallenge, Never>()
+***REMOVED***
+***REMOVED******REMOVED***/ A serial queue for authentication challenges.
 ***REMOVED***private var challengeQueue: AsyncPublisher<AnyPublisher<QueuedChallenge, Never>> {
 ***REMOVED******REMOVED***AsyncPublisher(
 ***REMOVED******REMOVED******REMOVED***subject
@@ -95,6 +110,7 @@ public final class Authenticator: ObservableObject {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ The current queued challenge.
 ***REMOVED***@Published
 ***REMOVED***var currentChallenge: QueuedChallenge?
 ***REMOVED***
