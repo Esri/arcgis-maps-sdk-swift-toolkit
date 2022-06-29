@@ -21,6 +21,7 @@ struct AuthenticationExampleView: View {
     )
     @State var previousApiKey: APIKey?
     @State private var items = AuthenticationItem.makeAll()
+    let logger = ConsoleNetworkLogger(shouldLogResponseData: false)
     
     var body: some View {
         VStack {
@@ -43,6 +44,7 @@ struct AuthenticationExampleView: View {
         .authenticator(authenticator)
         .task {
             try? await authenticator.synchronizeWithKeychain(access: .whenUnlockedThisDeviceOnly)
+            logger.startLogging()
         }
         .navigationBarTitle(Text("Authentication"), displayMode: .inline)
         .onAppear {
@@ -189,6 +191,13 @@ extension AuthenticationItem {
         )
     }
     
+    static func makeEricPKIMap() -> AuthenticationItem {
+        AuthenticationItem(
+            title: "Eric PKI Map",
+            loadables: [Map(url: URL(string: "https://enterprise.esrigxdev.com/portal1091/sharing/rest/content/items/3e3b4cec95d143478cf187ba6ea4f7c4")!)!]
+        )
+    }
+    
     static func makeAll() -> [AuthenticationItem]  {
         [
             makeToken(),
@@ -196,7 +205,8 @@ extension AuthenticationItem {
             makeMultipleTokenSame(),
             makePortal(),
             makeIWAPortal(),
-            makePKIMap()
+            makePKIMap(),
+            makeEricPKIMap()
         ]
     }
 }
