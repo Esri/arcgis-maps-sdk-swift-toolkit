@@ -17,9 +17,6 @@ import SwiftUI
 
 /// A demonstration of the Utility Network Trace tool which runs traces on a web map published with a utility
 /// network and trace configurations.
-///
-/// - Note: An ``ArcGISCredential`` is needed to interact with this sample. This can be done within
-/// `init()` in `ExamplesApp.swift`. The public credentials can be found [here](https://developers.arcgis.com/javascript/latest/sample-code/widgets-untrace).
 struct UtilityNetworkTraceExampleView: View {
     @StateObject private var map = makeMap()
     
@@ -59,6 +56,9 @@ struct UtilityNetworkTraceExampleView: View {
                         $mapViewProxy,
                         $viewpoint
                     )
+                    .task {
+                        await ArcGISURLSession.credentialStore.add(try! await .publicSample)
+                    }
                 }
                 .padding()
                 .frame(width: 360)
@@ -77,5 +77,17 @@ struct UtilityNetworkTraceExampleView: View {
             id: Item.ID(rawValue: "471eb0bf37074b1fbb972b1da70fb310")!
         )
         return Map(item: portalItem)
+    }
+}
+
+private extension ArcGISCredential {
+    static var publicSample: ArcGISCredential {
+        get async throws {
+            try await .token(
+                url: URL(string: "https://sampleserver7.arcgisonline.com/portal/sharing/rest")!,
+                username: "viewer01",
+                password: "I68VGU^nMurF"
+            )
+        }
     }
 }
