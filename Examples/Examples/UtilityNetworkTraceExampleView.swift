@@ -49,7 +49,6 @@ struct UtilityNetworkTraceExampleView: View {
                 self.pointInMap = pointInMap
                 self.mapViewProxy = mapViewProxy
             }
-            .edgesIgnoringSafeArea(.bottom)
             .overlay(alignment: .topTrailing) {
                 FloatingPanel {
                     UtilityNetworkTrace(
