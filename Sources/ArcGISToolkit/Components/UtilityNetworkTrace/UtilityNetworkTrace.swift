@@ -332,7 +332,6 @@ public struct UtilityNetworkTrace: View {
                 Image(systemName: "scope")
             }
         }
-        .padding()
     }
     
     /// Displays the chosen starting points for the new trace.
