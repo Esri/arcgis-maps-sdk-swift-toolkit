@@ -49,7 +49,6 @@ struct UtilityNetworkTraceExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***self.pointInMap = pointInMap
 ***REMOVED******REMOVED******REMOVED******REMOVED***self.mapViewProxy = mapViewProxy
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.edgesIgnoringSafeArea(.bottom)
 ***REMOVED******REMOVED******REMOVED***.overlay(alignment: .topTrailing) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***FloatingPanel {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***UtilityNetworkTrace(
