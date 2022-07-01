@@ -149,20 +149,6 @@ extension Authenticator: AuthenticationChallengeHandler {
 ***REMOVED******REMOVED***subject.send(queuedChallenge)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Respond accordingly.
-***REMOVED******REMOVED***switch await queuedChallenge.response {
-***REMOVED******REMOVED***case .cancel:
-***REMOVED******REMOVED******REMOVED***return .cancelAuthenticationChallenge
-***REMOVED******REMOVED***case .trustHost:
-***REMOVED******REMOVED******REMOVED***return .useCredential(.serverTrust)
-***REMOVED******REMOVED***case .login(let user, let password):
-***REMOVED******REMOVED******REMOVED***return .useCredential(.login(username: user, password: password))
-***REMOVED******REMOVED***case .certificate(let url, let password):
-***REMOVED******REMOVED******REMOVED***do {
-***REMOVED******REMOVED******REMOVED******REMOVED***return .useCredential(try .certificate(at: url, password: password))
-***REMOVED******REMOVED*** catch {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** TODO: handle error
-***REMOVED******REMOVED******REMOVED******REMOVED***fatalError()
-***REMOVED******REMOVED***
-***REMOVED***
+***REMOVED******REMOVED***return await queuedChallenge.response
 ***REMOVED***
 ***REMOVED***

@@ -31,11 +31,12 @@ final private class CertificatePickerViewModel: ObservableObject {
 ***REMOVED******REMOVED******REMOVED***preconditionFailure()
 ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***challenge.resume(with: .certificate(url: certificateURL, passsword: password))
+***REMOVED******REMOVED******REMOVED*** TODO: handle error
+***REMOVED******REMOVED***challenge.resume(with: .useCredential(try! .certificate(at: certificateURL, password: password)))
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func cancel() {
-***REMOVED******REMOVED***challenge.cancel()
+***REMOVED******REMOVED***challenge.resume(with: .cancelAuthenticationChallenge)
 ***REMOVED***
 ***REMOVED***
 

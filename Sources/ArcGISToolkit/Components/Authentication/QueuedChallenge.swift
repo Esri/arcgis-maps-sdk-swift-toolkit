@@ -65,21 +65,16 @@ final class QueuedNetworkChallenge: QueuedChallenge {
 ***REMOVED******REMOVED***self.networkChallenge = networkChallenge
 ***REMOVED***
 
-***REMOVED***func resume(with response: Response) {
+***REMOVED***func resume(with response: NetworkAuthenticationChallengeDisposition) {
 ***REMOVED******REMOVED***guard _response == nil else { return ***REMOVED***
 ***REMOVED******REMOVED***_response = response
 ***REMOVED***
 ***REMOVED***
-***REMOVED***func cancel() {
-***REMOVED******REMOVED***guard _response == nil else { return ***REMOVED***
-***REMOVED******REMOVED***_response = .cancel
-***REMOVED***
-***REMOVED***
 ***REMOVED******REMOVED***/ Use a streamed property because we need to support multiple listeners
 ***REMOVED******REMOVED***/ to know when the challenge completed.
-***REMOVED***@Streamed private var _response: (Response)?
+***REMOVED***@Streamed private var _response: (NetworkAuthenticationChallengeDisposition)?
 ***REMOVED***
-***REMOVED***var response: Response {
+***REMOVED***var response: NetworkAuthenticationChallengeDisposition {
 ***REMOVED******REMOVED***get async {
 ***REMOVED******REMOVED******REMOVED***await $_response
 ***REMOVED******REMOVED******REMOVED******REMOVED***.compactMap({ $0 ***REMOVED***)
@@ -89,13 +84,6 @@ final class QueuedNetworkChallenge: QueuedChallenge {
 ***REMOVED***
 ***REMOVED***public func complete() async {
 ***REMOVED******REMOVED***_ = await response
-***REMOVED***
-***REMOVED***
-***REMOVED***enum Response {
-***REMOVED******REMOVED***case login(username: String, password: String)
-***REMOVED******REMOVED***case certificate(url: URL, passsword: String)
-***REMOVED******REMOVED***case trustHost
-***REMOVED******REMOVED***case cancel
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***enum Kind {

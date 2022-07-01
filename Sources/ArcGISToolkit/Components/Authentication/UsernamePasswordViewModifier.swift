@@ -246,11 +246,11 @@ class NetworkCredentialUsernamePasswordViewModel: UsernamePasswordViewModel {
 ***REMOVED***
 ***REMOVED***func signIn() {
 ***REMOVED******REMOVED***formEnabled = false
-***REMOVED******REMOVED***challenge.resume(with: .login(username: username, password: password))
+***REMOVED******REMOVED***challenge.resume(with: .useCredential(.login(username: username, password: password)))
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func cancel() {
 ***REMOVED******REMOVED***formEnabled = false
-***REMOVED******REMOVED***challenge.cancel()
+***REMOVED******REMOVED***challenge.resume(with: .cancelAuthenticationChallenge)
 ***REMOVED***
 ***REMOVED***
