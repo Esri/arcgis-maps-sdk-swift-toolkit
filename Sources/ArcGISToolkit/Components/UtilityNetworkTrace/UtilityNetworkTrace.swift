@@ -243,7 +243,6 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED***Text("Clear All Results")
 ***REMOVED******REMOVED******REMOVED******REMOVED***.tint(.red)
 ***REMOVED***
-***REMOVED******REMOVED***.padding()
 ***REMOVED******REMOVED***.alert("Clear All Results", isPresented: $warningIsPresented) {
 ***REMOVED******REMOVED******REMOVED***Button(role: .destructive) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.deleteAllTraces()
@@ -371,6 +370,7 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***resultsTab
 ***REMOVED******REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***.background(Color(uiColor: .systemGroupedBackground))
 ***REMOVED******REMOVED***.animation(.default, value: currentActivity)
 ***REMOVED******REMOVED***.onChange(of: pointInScreen) { newValue in
 ***REMOVED******REMOVED******REMOVED***guard isAddingStartingPoints,
