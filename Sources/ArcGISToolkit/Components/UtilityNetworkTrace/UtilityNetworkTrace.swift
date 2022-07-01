@@ -78,10 +78,10 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED***/ Allows the Utility Network Trace Tool to update the parent map view's viewpoint.
 ***REMOVED***@Binding private var viewpoint: Viewpoint?
 ***REMOVED***
-***REMOVED******REMOVED*** MARK: ViewBuilders
+***REMOVED******REMOVED*** MARK: Subviews
 ***REMOVED***
 ***REMOVED******REMOVED***/ Allows the user to switch between the trace creation and viewing tabs.
-***REMOVED***@ViewBuilder private var activityPicker: some View {
+***REMOVED***private var activityPicker: some View {
 ***REMOVED******REMOVED***Picker(
 ***REMOVED******REMOVED******REMOVED***"Mode",
 ***REMOVED******REMOVED******REMOVED***selection: Binding<UserActivity>(
@@ -102,6 +102,15 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED***
 ***REMOVED******REMOVED***.pickerStyle(.segmented)
 ***REMOVED******REMOVED***.padding()
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Allows the user to cancel out of selecting a new starting point.
+***REMOVED***private var cancelAddStartingPoints: some View {
+***REMOVED******REMOVED***Button(role: .destructive) {
+***REMOVED******REMOVED******REMOVED***currentActivity = .creatingTrace(nil)
+***REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED***Text("Cancel starting point selection")
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Displays the list of available named trace configurations.
@@ -130,28 +139,22 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ The tab that allows for a new trace to be configured.
 ***REMOVED***@ViewBuilder private var newTraceTab: some View {
-***REMOVED******REMOVED***if isAddingStartingPoints {
-***REMOVED******REMOVED******REMOVED***Button(role: .destructive) {
-***REMOVED******REMOVED******REMOVED******REMOVED***currentActivity = .creatingTrace(nil)
-***REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED***Text("Cancel starting point selection")
-***REMOVED******REMOVED***
-***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***List {
-***REMOVED******REMOVED******REMOVED******REMOVED***Section("Trace Configuration") {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***DisclosureGroup(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.pendingTrace.configuration?.name ?? "None selected",
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isExpanded: configurationOptionsIsExpanded
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***configurationsList
-***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***List {
+***REMOVED******REMOVED******REMOVED***Section("Trace Configuration") {
+***REMOVED******REMOVED******REMOVED******REMOVED***DisclosureGroup(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.pendingTrace.configuration?.name ?? "None selected",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isExpanded: configurationOptionsIsExpanded
+***REMOVED******REMOVED******REMOVED******REMOVED***) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***configurationsList
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***Section("Starting Points") {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentActivity = .creatingTrace(.addingStartingPoints)
-***REMOVED******REMOVED******REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Add new starting point")
-***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***Section("Starting Points") {
+***REMOVED******REMOVED******REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentActivity = .creatingTrace(.addingStartingPoints)
+***REMOVED******REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Add new")
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***if !viewModel.pendingTrace.startingPoints.isEmpty {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***DisclosureGroup(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"\(viewModel.pendingTrace.startingPoints.count) selected",
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isExpanded: startingPointsListIsExpanded
@@ -159,34 +162,32 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***startingPointsList
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***Section("Advanced") {
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***Section {
+***REMOVED******REMOVED******REMOVED******REMOVED***DisclosureGroup("Advanced Options") {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ColorPicker(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selection: $viewModel.pendingTrace.color
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Trace Color")
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if !isCompact {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***TextField(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Trace Name",
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***text: $viewModel.pendingTrace.name
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onSubmit {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.pendingTrace.userDidSpecifyName = true
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***TextField(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Trace Name",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***text: $viewModel.pendingTrace.name
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onSubmit {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.pendingTrace.userDidSpecifyName = true
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***if !isAddingStartingPoints {
-***REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.trace()
-***REMOVED******REMOVED******REMOVED******REMOVED***currentActivity = .viewingTraces
-***REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED***Text("Trace")
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.buttonStyle(.bordered)
-***REMOVED******REMOVED******REMOVED***.disabled(!viewModel.canRunTrace)
+***REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED***viewModel.trace()
+***REMOVED******REMOVED******REMOVED***currentActivity = .viewingTraces
+***REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED***Text("Trace")
 ***REMOVED***
+***REMOVED******REMOVED***.buttonStyle(.bordered)
+***REMOVED******REMOVED***.disabled(!viewModel.canRunTrace)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The tab that allows for viewing completed traces.
@@ -329,7 +330,7 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Displays the chosen starting points for the new trace.
-***REMOVED***@ViewBuilder private var startingPointsList: some View {
+***REMOVED***private var startingPointsList: some View {
 ***REMOVED******REMOVED***ForEach(viewModel.pendingTrace.startingPoints, id: \.utilityElement.globalID) { startingPoint in
 ***REMOVED******REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED******REMOVED***currentActivity = .creatingTrace(
@@ -394,6 +395,8 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED***switch currentActivity {
 ***REMOVED******REMOVED******REMOVED***case .creatingTrace(let activity):
 ***REMOVED******REMOVED******REMOVED******REMOVED***switch activity {
+***REMOVED******REMOVED******REMOVED******REMOVED***case .addingStartingPoints:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***cancelAddStartingPoints
 ***REMOVED******REMOVED******REMOVED******REMOVED***case .inspectingStartingPoint:
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***startingPointDetail
 ***REMOVED******REMOVED******REMOVED******REMOVED***default:
