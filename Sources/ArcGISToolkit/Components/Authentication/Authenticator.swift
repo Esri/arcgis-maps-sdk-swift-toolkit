@@ -149,20 +149,6 @@ extension Authenticator: AuthenticationChallengeHandler {
         subject.send(queuedChallenge)
         
         // Respond accordingly.
-        switch await queuedChallenge.response {
-        case .cancel:
-            return .cancelAuthenticationChallenge
-        case .trustHost:
-            return .useCredential(.serverTrust)
-        case .login(let user, let password):
-            return .useCredential(.login(username: user, password: password))
-        case .certificate(let url, let password):
-            do {
-                return .useCredential(try .certificate(at: url, password: password))
-            } catch {
-                // TODO: handle error
-                fatalError()
-            }
-        }
+        return await queuedChallenge.response
     }
 }

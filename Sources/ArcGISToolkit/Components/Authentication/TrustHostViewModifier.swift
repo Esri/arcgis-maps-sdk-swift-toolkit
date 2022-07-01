@@ -41,11 +41,11 @@ struct TrustHostViewModifier: ViewModifier {
             .alert("Certificate Trust Warning", isPresented: $isPresented, presenting: challenge) { _ in
                 Button("Dangerous: Allow Connection", role: .destructive) {
                     isPresented = false
-                    challenge.resume(with: .trustHost)
+                    challenge.resume(with: .useCredential(.serverTrust))
                 }
                 Button("Cancel", role: .cancel) {
                     isPresented = false
-                    challenge.cancel()
+                    challenge.resume(with: .cancelAuthenticationChallenge)
                 }
             } message: { _ in
                 Text("The certificate provided by '\(host)' is not signed by a trusted authority.")

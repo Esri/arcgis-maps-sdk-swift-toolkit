@@ -246,11 +246,11 @@ class NetworkCredentialUsernamePasswordViewModel: UsernamePasswordViewModel {
     
     func signIn() {
         formEnabled = false
-        challenge.resume(with: .login(username: username, password: password))
+        challenge.resume(with: .useCredential(.login(username: username, password: password)))
     }
     
     func cancel() {
         formEnabled = false
-        challenge.cancel()
+        challenge.resume(with: .cancelAuthenticationChallenge)
     }
 }

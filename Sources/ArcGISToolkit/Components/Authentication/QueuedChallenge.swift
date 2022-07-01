@@ -65,21 +65,16 @@ final class QueuedNetworkChallenge: QueuedChallenge {
         self.networkChallenge = networkChallenge
     }
 
-    func resume(with response: Response) {
+    func resume(with response: NetworkAuthenticationChallengeDisposition) {
         guard _response == nil else { return }
         _response = response
     }
     
-    func cancel() {
-        guard _response == nil else { return }
-        _response = .cancel
-    }
-    
     /// Use a streamed property because we need to support multiple listeners
     /// to know when the challenge completed.
-    @Streamed private var _response: (Response)?
+    @Streamed private var _response: (NetworkAuthenticationChallengeDisposition)?
     
-    var response: Response {
+    var response: NetworkAuthenticationChallengeDisposition {
         get async {
             await $_response
                 .compactMap({ $0 })
@@ -89,13 +84,6 @@ final class QueuedNetworkChallenge: QueuedChallenge {
     
     public func complete() async {
         _ = await response
-    }
-    
-    enum Response {
-        case login(username: String, password: String)
-        case certificate(url: URL, passsword: String)
-        case trustHost
-        case cancel
     }
     
     enum Kind {
