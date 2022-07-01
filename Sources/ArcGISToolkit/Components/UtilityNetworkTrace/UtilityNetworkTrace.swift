@@ -78,10 +78,10 @@ public struct UtilityNetworkTrace: View {
     /// Allows the Utility Network Trace Tool to update the parent map view's viewpoint.
     @Binding private var viewpoint: Viewpoint?
     
-    // MARK: ViewBuilders
+    // MARK: Subviews
     
     /// Allows the user to switch between the trace creation and viewing tabs.
-    @ViewBuilder private var activityPicker: some View {
+    private var activityPicker: some View {
         Picker(
             "Mode",
             selection: Binding<UserActivity>(
@@ -102,6 +102,15 @@ public struct UtilityNetworkTrace: View {
         }
         .pickerStyle(.segmented)
         .padding()
+    }
+    
+    /// Allows the user to cancel out of selecting a new starting point.
+    private var cancelAddStartingPoints: some View {
+        Button(role: .destructive) {
+            currentActivity = .creatingTrace(nil)
+        } label: {
+            Text("Cancel starting point selection")
+        }
     }
     
     /// Displays the list of available named trace configurations.
@@ -130,60 +139,50 @@ public struct UtilityNetworkTrace: View {
     
     /// The tab that allows for a new trace to be configured.
     @ViewBuilder private var newTraceTab: some View {
-        if isAddingStartingPoints {
-            Button(role: .destructive) {
-                currentActivity = .creatingTrace(nil)
-            } label: {
-                Text("Cancel starting point selection")
+        List {
+            Section("Trace Configuration") {
+                DisclosureGroup(
+                    viewModel.pendingTrace.configuration?.name ?? "None selected",
+                    isExpanded: configurationOptionsIsExpanded
+                ) {
+                    configurationsList
+                }
             }
-        } else {
-            List {
-                Section("Trace Configuration") {
-                    DisclosureGroup(
-                        viewModel.pendingTrace.configuration?.name ?? "None selected",
-                        isExpanded: configurationOptionsIsExpanded
-                    ) {
-                        configurationsList
-                    }
+            Section("Starting Points") {
+                Button {
+                    currentActivity = .creatingTrace(.addingStartingPoints)
+                } label: {
+                    Text("Add new starting point")
                 }
-                Section("Starting Points") {
-                    Button {
-                        currentActivity = .creatingTrace(.addingStartingPoints)
-                    } label: {
-                        Text("Add new starting point")
-                    }
-                    DisclosureGroup(
-                        "\(viewModel.pendingTrace.startingPoints.count) selected",
-                        isExpanded: startingPointsListIsExpanded
-                    ) {
-                        startingPointsList
-                    }
+                DisclosureGroup(
+                    "\(viewModel.pendingTrace.startingPoints.count) selected",
+                    isExpanded: startingPointsListIsExpanded
+                ) {
+                    startingPointsList
                 }
-                Section("Advanced") {
-                    ColorPicker(
-                        selection: $viewModel.pendingTrace.color
-                    ) {
-                        Text("Trace Color")
-                    }
-                    if !isCompact {
-                        TextField(
-                            "Trace Name",
-                            text: $viewModel.pendingTrace.name
-                        )
-                    }
+            }
+            Section("Advanced") {
+                ColorPicker(
+                    selection: $viewModel.pendingTrace.color
+                ) {
+                    Text("Trace Color")
+                }
+                if !isCompact {
+                    TextField(
+                        "Trace Name",
+                        text: $viewModel.pendingTrace.name
+                    )
                 }
             }
         }
-        if !isAddingStartingPoints {
-            Button {
-                viewModel.trace()
-                currentActivity = .viewingTraces
-            } label: {
-                Text("Trace")
-            }
-            .buttonStyle(.bordered)
-            .disabled(!viewModel.canRunTrace)
+        Button {
+            viewModel.trace()
+            currentActivity = .viewingTraces
+        } label: {
+            Text("Trace")
         }
+        .buttonStyle(.bordered)
+        .disabled(!viewModel.canRunTrace)
     }
     
     /// The tab that allows for viewing completed traces.
@@ -292,7 +291,7 @@ public struct UtilityNetworkTrace: View {
     }
     
     /// Displays the chosen starting points for the new trace.
-    @ViewBuilder private var startingPointsList: some View {
+    private var startingPointsList: some View {
         ForEach(viewModel.pendingTrace.startingPoints, id: \.utilityElement.globalID) { startingPoint in
             Button {
                 currentActivity = .creatingTrace(
@@ -357,6 +356,8 @@ public struct UtilityNetworkTrace: View {
             switch currentActivity {
             case .creatingTrace(let activity):
                 switch activity {
+                case .addingStartingPoints:
+                    cancelAddStartingPoints
                 case .inspectingStartingPoint:
                     startingPointDetail
                 default:
