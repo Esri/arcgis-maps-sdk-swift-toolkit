@@ -24,6 +24,9 @@ struct LevelSelector: View {
 ***REMOVED******REMOVED***/ the selected level.
 ***REMOVED***@State private var isCollapsed: Bool = false
 ***REMOVED***
+***REMOVED******REMOVED***/ The alignment configuration.
+***REMOVED***let isTopAligned: Bool
+***REMOVED***
 ***REMOVED******REMOVED***/ The levels to display.
 ***REMOVED***let levels: [FloorLevel]
 ***REMOVED***
@@ -32,9 +35,6 @@ struct LevelSelector: View {
 ***REMOVED***private var selectedLevelName: String {
 ***REMOVED******REMOVED***viewModel.selectedLevel?.shortName ?? ""
 ***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ The alignment configuration.
-***REMOVED***var isTopAligned: Bool
 ***REMOVED***
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***if !isCollapsed,
@@ -66,7 +66,7 @@ struct LevelSelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***isCollapsed.toggle()
 ***REMOVED******REMOVED***
 ***REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED***Image(systemName: "xmark")
+***REMOVED******REMOVED******REMOVED***Image(systemName: isTopAligned ? "chevron.up.circle" : "chevron.down.circle")
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding(.toolkitDefault)
 ***REMOVED***
 ***REMOVED***
@@ -84,31 +84,42 @@ private struct LevelsStack: View {
 ***REMOVED***let levels: [FloorLevel]
 ***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***ScrollView {
-***REMOVED******REMOVED******REMOVED***VStack {
-***REMOVED******REMOVED******REMOVED******REMOVED***ForEach(levels) { level in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Toggle(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isOn: Binding(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***get: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.selectedLevel == level
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***set: { newIsOn in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard newIsOn else { return ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.setLevel(level)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(level.shortName)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.modifier(LevelNameFormat())
+***REMOVED******REMOVED***ScrollViewReader { proxy in
+***REMOVED******REMOVED******REMOVED***ScrollView {
+***REMOVED******REMOVED******REMOVED******REMOVED***VStack {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(levels, id: \.id) { level in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Toggle(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isOn: Binding(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***get: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.selectedLevel == level
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***set: { newIsOn in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard newIsOn else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.setLevel(level)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(level.shortName)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.modifier(LevelNameFormat())
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.toggleStyle(.selectableButton)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.toggleStyle(.selectableButton)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.onSizeChange {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***contentHeight = $0.height
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.onSizeChange {
-***REMOVED******REMOVED******REMOVED******REMOVED***contentHeight = $0.height
+***REMOVED******REMOVED******REMOVED***.frame(maxHeight: contentHeight)
+***REMOVED******REMOVED******REMOVED***.onAppear {
+***REMOVED******REMOVED******REMOVED******REMOVED***if let floorLevel = viewModel.selectedLevel {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***withAnimation {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***proxy.scrollTo(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***floorLevel.id
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.frame(maxHeight: contentHeight)
 ***REMOVED***
 ***REMOVED***
 
