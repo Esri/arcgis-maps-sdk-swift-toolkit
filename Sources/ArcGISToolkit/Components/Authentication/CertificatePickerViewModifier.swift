@@ -171,7 +171,7 @@ struct EnterPasswordView: View {
                 .frame(maxWidth: .infinity, alignment: .center)
                 .foregroundColor(.white)
         })
-            .disabled(!password.isEmpty)
-            .listRowBackground(!password.isEmpty ? Color.accentColor : Color.gray)
+        .disabled(password.isEmpty)
+        .listRowBackground(!password.isEmpty ? Color.accentColor : Color.gray)
     }
 }
