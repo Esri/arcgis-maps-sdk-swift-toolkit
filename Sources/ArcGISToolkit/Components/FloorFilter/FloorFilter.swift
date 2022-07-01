@@ -18,17 +18,22 @@
 ***REMOVED***/ in your application. It allows you to filter the floor plan data displayed in your map or scene view
 ***REMOVED***/ to a site, a facility (building) in the site, or a floor in the facility.
 public struct FloorFilter: View {
+***REMOVED***@Environment(\.horizontalSizeClass)
+***REMOVED***private var horizontalSizeClass: UserInterfaceSizeClass?
+***REMOVED***
 ***REMOVED******REMOVED***/ Creates a `FloorFilter`.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - floorManager: The floor manager used by the `FloorFilter`.
 ***REMOVED******REMOVED***/   - alignment: Determines the display configuration of Floor Filter elements.
 ***REMOVED******REMOVED***/   - automaticSelectionMode: The selection behavior of the floor filter.
 ***REMOVED******REMOVED***/   - viewpoint: Viewpoint updated when the selected site or facility changes.
+***REMOVED******REMOVED***/   - isNavigating: A Boolean value indicating whether the map is currently being navigated.
 ***REMOVED***public init(
 ***REMOVED******REMOVED***floorManager: FloorManager,
 ***REMOVED******REMOVED***alignment: Alignment,
 ***REMOVED******REMOVED***automaticSelectionMode: FloorFilterAutomaticSelectionMode = .always,
-***REMOVED******REMOVED***viewpoint: Binding<Viewpoint?> = .constant(nil)
+***REMOVED******REMOVED***viewpoint: Binding<Viewpoint?> = .constant(nil),
+***REMOVED******REMOVED***isNavigating: Binding<Bool>
 ***REMOVED***) {
 ***REMOVED******REMOVED***_viewModel = StateObject(wrappedValue: FloorFilterViewModel(
 ***REMOVED******REMOVED******REMOVED***automaticSelectionMode: automaticSelectionMode,
@@ -36,20 +41,28 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED******REMOVED***viewpoint: viewpoint
 ***REMOVED******REMOVED***))
 ***REMOVED******REMOVED***self.alignment = alignment
+***REMOVED******REMOVED***self.isNavigating = isNavigating
 ***REMOVED******REMOVED***self.viewpoint = viewpoint
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The view model used by the `FloorFilter`.
 ***REMOVED***@StateObject private var viewModel: FloorFilterViewModel
 ***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value that indicates whether the site and facility selector is hidden.
-***REMOVED***@State private var isSitesAndFacilitiesHidden: Bool = true
+***REMOVED******REMOVED***/ A Boolean value that indicates whether the levels view is currently collapsed.
+***REMOVED***@State private var isLevelsViewCollapsed = false
+***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value that indicates whether the site and facility selector is presented.
+***REMOVED***@State private var isSitesAndFacilitiesHidden = false
 ***REMOVED***
 ***REMOVED******REMOVED***/ The alignment configuration.
 ***REMOVED***private let alignment: Alignment
 ***REMOVED***
 ***REMOVED******REMOVED***/ The width of the level selector.
 ***REMOVED***private let filterWidth: CGFloat = 60
+***REMOVED***
+***REMOVED******REMOVED***/ The `Viewpoint` used to pan/zoom to the selected site/facilty.
+***REMOVED******REMOVED***/ If `nil`, there will be no automatic pan/zoom operations or automatic selection support.
+***REMOVED***private var viewpoint: Binding<Viewpoint?>
 ***REMOVED***
 ***REMOVED******REMOVED***/ Button to open and close the site and facility selector.
 ***REMOVED***private var sitesAndFacilitiesButton: some View {
@@ -59,15 +72,6 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED******REMOVED***Image(systemName: "building.2")
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding(.toolkitDefault)
 ***REMOVED***
-***REMOVED******REMOVED***.frame(maxWidth: .infinity)
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ Displays the available levels.
-***REMOVED***@ViewBuilder private var levelSelector: some View {
-***REMOVED******REMOVED***LevelSelector(
-***REMOVED******REMOVED******REMOVED***levels: viewModel.sortedLevels,
-***REMOVED******REMOVED******REMOVED***isTopAligned: isTopAligned
-***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ A view that allows selecting between levels.
@@ -89,7 +93,33 @@ public struct FloorFilter: View {
 ***REMOVED***
 ***REMOVED******REMOVED***.frame(width: filterWidth)
 ***REMOVED******REMOVED***.esriBorder()
-***REMOVED******REMOVED***.frame(maxHeight: .infinity, alignment: alignment)
+***REMOVED******REMOVED***.frame(
+***REMOVED******REMOVED******REMOVED***maxWidth: horizontalSizeClass == .compact ? .infinity : nil,
+***REMOVED******REMOVED******REMOVED***maxHeight: .infinity,
+***REMOVED******REMOVED******REMOVED***alignment: alignment
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value indicating whether the map is currently being navigated.
+***REMOVED***private var isNavigating: Binding<Bool>
+***REMOVED***
+***REMOVED******REMOVED***/ Indicates that the selector should be presented with a top oriented aligment configuration.
+***REMOVED***private var isTopAligned: Bool {
+***REMOVED******REMOVED***alignment.vertical == .top
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Reports a viewpoint change to the view model if the map is not navigating.
+***REMOVED***private func reportChange(of viewpoint: Viewpoint?) {
+***REMOVED******REMOVED***guard isNavigating.wrappedValue else { return ***REMOVED***
+***REMOVED******REMOVED***viewModel.onViewpointChanged(viewpoint)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Displays the available levels.
+***REMOVED***@ViewBuilder private var levelSelector: some View {
+***REMOVED******REMOVED***LevelSelector(
+***REMOVED******REMOVED******REMOVED***isTopAligned: isTopAligned,
+***REMOVED******REMOVED******REMOVED***levels: viewModel.sortedLevels
+***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ A configured `SiteAndFacilitySelector` view.
@@ -99,28 +129,29 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED***/ applying the `cornerRadius()` modifier on `SiteAndFacilitySelector`'s underlying
 ***REMOVED******REMOVED***/ `NavigationView` causes a rendering bug. This bug remains in iOS 16 with
 ***REMOVED******REMOVED***/ `NavigationStack` and has been reported to Apple as FB10034457.
-***REMOVED***private var siteAndFacilitySelector: some View {
-***REMOVED******REMOVED***ZStack {
-***REMOVED******REMOVED******REMOVED***RoundedRectangle(cornerRadius: 8)
-***REMOVED******REMOVED******REMOVED******REMOVED***.fill(Color(uiColor: .systemBackground))
-***REMOVED******REMOVED******REMOVED******REMOVED***.esriBorder()
-***REMOVED******REMOVED******REMOVED***SiteAndFacilitySelector(isHidden: $isSitesAndFacilitiesHidden)
-***REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: viewpoint.wrappedValue) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.onViewpointChanged($0)
+***REMOVED***@ViewBuilder private var siteAndFacilitySelector: some View {
+***REMOVED******REMOVED***if horizontalSizeClass == .compact {
+***REMOVED******REMOVED******REMOVED***Color.clear
+***REMOVED******REMOVED******REMOVED******REMOVED***.sheet(isPresented: .constant(!$isSitesAndFacilitiesHidden.wrappedValue)) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***SiteAndFacilitySelector(isHidden: $isSitesAndFacilitiesHidden)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: viewpoint.wrappedValue) { viewpoint in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***reportChange(of: viewpoint)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.padding()
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***ZStack {
+***REMOVED******REMOVED******REMOVED******REMOVED***Color.clear
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.esriBorder()
+***REMOVED******REMOVED******REMOVED******REMOVED***SiteAndFacilitySelector(isHidden: $isSitesAndFacilitiesHidden)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: viewpoint.wrappedValue) { viewpoint in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***reportChange(of: viewpoint)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding([.top, .leading, .trailing], 2.5)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.bottom)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.opacity(isSitesAndFacilitiesHidden ? .zero : 1)
 ***REMOVED***
-***REMOVED******REMOVED***.opacity(isSitesAndFacilitiesHidden ? .zero : 1)
 ***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ Indicates that the selector should be presented with a top oriented aligment configuration.
-***REMOVED***private var isTopAligned: Bool {
-***REMOVED******REMOVED***alignment.vertical == .top
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ The `Viewpoint` used to pan/zoom to the selected site/facilty.
-***REMOVED******REMOVED***/ If `nil`, there will be no automatic pan/zoom operations or automatic selection support.
-***REMOVED***private var viewpoint: Binding<Viewpoint?>
 ***REMOVED***
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***HStack(alignment: .bottom) {

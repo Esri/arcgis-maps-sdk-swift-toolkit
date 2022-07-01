@@ -42,19 +42,7 @@ final class FloorFilterViewModel: ObservableObject {
 ***REMOVED******REMOVED***self.floorManager = floorManager
 ***REMOVED******REMOVED***self.viewpoint = viewpoint
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***Task {
-***REMOVED******REMOVED******REMOVED***do {
-***REMOVED******REMOVED******REMOVED******REMOVED***try await floorManager.load()
-***REMOVED******REMOVED******REMOVED******REMOVED***if sites.count == 1,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let firstSite = sites.first {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** If we have only one site, select it.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***setSite(firstSite, zoomTo: true)
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED*** catch {
-***REMOVED******REMOVED******REMOVED******REMOVED***print("error: \(error)")
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***isLoading = false
-***REMOVED***
+***REMOVED******REMOVED***loadFloorManager()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED*** MARK: Published members
@@ -143,8 +131,8 @@ final class FloorFilterViewModel: ObservableObject {
 ***REMOVED***func onViewpointChanged(_ viewpoint: Viewpoint?) {
 ***REMOVED******REMOVED***guard let viewpoint = viewpoint,
 ***REMOVED******REMOVED******REMOVED***  !viewpoint.targetScale.isZero else {
-***REMOVED******REMOVED******REMOVED******REMOVED***  return
-***REMOVED***  ***REMOVED***
+***REMOVED******REMOVED******REMOVED***return
+***REMOVED***
 ***REMOVED******REMOVED***automaticallySelectFacilityOrSite()
 ***REMOVED***
 ***REMOVED***
@@ -154,9 +142,9 @@ final class FloorFilterViewModel: ObservableObject {
 ***REMOVED******REMOVED***/   - zoomTo: If `true`, changes the viewpoint to the extent of the new facility.
 ***REMOVED***func setFacility(_ newFacility: FloorFacility, zoomTo: Bool = false) {
 ***REMOVED******REMOVED***if let oldLevel = selectedLevel,
-***REMOVED******REMOVED******REMOVED***let newLevel = newFacility.levels.first(
+***REMOVED******REMOVED***   let newLevel = newFacility.levels.first(
 ***REMOVED******REMOVED******REMOVED***where: { $0.verticalOrder == oldLevel.verticalOrder ***REMOVED***
-***REMOVED******REMOVED***) {
+***REMOVED******REMOVED***   ) {
 ***REMOVED******REMOVED******REMOVED***setLevel(newLevel)
 ***REMOVED*** else if let defaultLevel = newFacility.defaultLevel {
 ***REMOVED******REMOVED******REMOVED***setLevel(defaultLevel)
@@ -214,7 +202,7 @@ final class FloorFilterViewModel: ObservableObject {
 ***REMOVED******REMOVED******REMOVED*** Only select a facility if it is within minimum scale. Default at 1500.
 ***REMOVED******REMOVED***let facilityMinScale: Double
 ***REMOVED******REMOVED***if let minScale = floorManager.facilityLayer?.minScale,
-***REMOVED******REMOVED******REMOVED***   minScale != .zero {
+***REMOVED******REMOVED***   minScale != .zero {
 ***REMOVED******REMOVED******REMOVED***facilityMinScale = minScale
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED***facilityMinScale = 1500
@@ -248,7 +236,7 @@ final class FloorFilterViewModel: ObservableObject {
 ***REMOVED******REMOVED******REMOVED*** Only select a facility if it is within minimum scale. Default at 4300.
 ***REMOVED******REMOVED***let siteMinScale: Double
 ***REMOVED******REMOVED***if let minScale = floorManager.siteLayer?.minScale,
-***REMOVED******REMOVED******REMOVED***   minScale != .zero {
+***REMOVED******REMOVED***   minScale != .zero {
 ***REMOVED******REMOVED******REMOVED***siteMinScale = minScale
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED***siteMinScale = 4300
@@ -277,6 +265,37 @@ final class FloorFilterViewModel: ObservableObject {
 ***REMOVED******REMOVED******REMOVED***selection = nil
 ***REMOVED***
 ***REMOVED******REMOVED***return true
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Sets the visibility of all the levels on the map based on the vertical order of the current selected level.
+***REMOVED***private func filterMapToSelectedLevel() {
+***REMOVED******REMOVED***if let selectedLevel = selectedLevel {
+***REMOVED******REMOVED******REMOVED***levels.forEach {
+***REMOVED******REMOVED******REMOVED******REMOVED***$0.isVisible = $0.verticalOrder == selectedLevel.verticalOrder
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Loads the given `FloorManager` if needed, then sets `isLoading` to `false`.
+***REMOVED***private func loadFloorManager() {
+***REMOVED******REMOVED***guard floorManager.loadStatus == .notLoaded,
+***REMOVED******REMOVED******REMOVED***  floorManager.loadStatus != .loading else {
+***REMOVED******REMOVED******REMOVED***isLoading = false
+***REMOVED******REMOVED******REMOVED***return
+***REMOVED***
+***REMOVED******REMOVED***Task {
+***REMOVED******REMOVED******REMOVED***do {
+***REMOVED******REMOVED******REMOVED******REMOVED***try await floorManager.load()
+***REMOVED******REMOVED******REMOVED******REMOVED***if sites.count == 1,
+***REMOVED******REMOVED******REMOVED******REMOVED***   let firstSite = sites.first {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** If we have only one site, select it.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***setSite(firstSite, zoomTo: true)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED*** catch {
+***REMOVED******REMOVED******REMOVED******REMOVED***print("error: \(error)")
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***isLoading = false
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Zoom to given extent.

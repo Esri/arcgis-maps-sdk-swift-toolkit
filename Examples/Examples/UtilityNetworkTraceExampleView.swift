@@ -15,11 +15,8 @@
 ***REMOVED***Toolkit
 ***REMOVED***
 
-***REMOVED***/ A demonstration of the Utility Network Trace tool which runs traces on a web map published with a utility
+***REMOVED***/ A demonstration of the utility network trace tool which runs traces on a web map published with a utility
 ***REMOVED***/ network and trace configurations.
-***REMOVED***/
-***REMOVED***/ - Note: An ``ArcGISCredential`` is needed to interact with this sample. This can be done within
-***REMOVED***/ `init()` in `ExamplesApp.swift`. The public credentials can be found [here](https:***REMOVED***developers.arcgis.com/javascript/latest/sample-code/widgets-untrace).
 struct UtilityNetworkTraceExampleView: View {
 ***REMOVED***@StateObject private var map = makeMap()
 ***REMOVED***
@@ -35,6 +32,7 @@ struct UtilityNetworkTraceExampleView: View {
 ***REMOVED******REMOVED***/ A container for graphical trace results.
 ***REMOVED***@State var resultGraphicsOverlay = GraphicsOverlay()
 ***REMOVED***
+***REMOVED******REMOVED***/ The map viewpoint used by the `UtilityNetworkTrace` to pan/zoom the map to selected features.
 ***REMOVED***@State var viewpoint: Viewpoint?
 ***REMOVED***
 ***REMOVED***var body: some View {
@@ -59,6 +57,9 @@ struct UtilityNetworkTraceExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***$mapViewProxy,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***$viewpoint
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.task {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await ArcGISURLSession.credentialStore.add(try! await .publicSample)
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding()
 ***REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 360)
@@ -66,16 +67,24 @@ struct UtilityNetworkTraceExampleView: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Make a map from a portal item.
+***REMOVED******REMOVED***/ Makes a map from a portal item.
 ***REMOVED***static func makeMap() -> Map {
-***REMOVED******REMOVED***let portal = Portal(
-***REMOVED******REMOVED******REMOVED***url: URL(string: "https:***REMOVED***www.arcgis.com/")!,
-***REMOVED******REMOVED******REMOVED***isLoginRequired: false
-***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***let portalItem = PortalItem(
-***REMOVED******REMOVED******REMOVED***portal: portal,
+***REMOVED******REMOVED******REMOVED***portal: .arcGISOnline(isLoginRequired: false),
 ***REMOVED******REMOVED******REMOVED***id: Item.ID(rawValue: "471eb0bf37074b1fbb972b1da70fb310")!
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***return Map(item: portalItem)
+***REMOVED***
+***REMOVED***
+
+private extension ArcGISCredential {
+***REMOVED***static var publicSample: ArcGISCredential {
+***REMOVED******REMOVED***get async throws {
+***REMOVED******REMOVED******REMOVED***try await .token(
+***REMOVED******REMOVED******REMOVED******REMOVED***url: URL(string: "https:***REMOVED***sampleserver7.arcgisonline.com/portal/sharing/rest")!,
+***REMOVED******REMOVED******REMOVED******REMOVED***username: "viewer01",
+***REMOVED******REMOVED******REMOVED******REMOVED***password: "I68VGU^nMurF"
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED***
 ***REMOVED***
 ***REMOVED***

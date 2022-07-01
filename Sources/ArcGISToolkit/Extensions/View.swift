@@ -17,7 +17,7 @@
 struct SelectedModifier: ViewModifier {
 ***REMOVED******REMOVED***/ A Boolean value that indicates whether view should display as selected.
 ***REMOVED***var isSelected: Bool
-
+***REMOVED***
 ***REMOVED***func body(content: Content) -> some View {
 ***REMOVED******REMOVED***if isSelected {
 ***REMOVED******REMOVED******REMOVED***content
