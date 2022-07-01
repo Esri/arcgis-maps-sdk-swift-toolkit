@@ -171,7 +171,7 @@ struct EnterPasswordView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .center)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.white)
 ***REMOVED***)
-***REMOVED******REMOVED******REMOVED***.disabled(!password.isEmpty)
-***REMOVED******REMOVED******REMOVED***.listRowBackground(!password.isEmpty ? Color.accentColor : Color.gray)
+***REMOVED******REMOVED***.disabled(password.isEmpty)
+***REMOVED******REMOVED***.listRowBackground(!password.isEmpty ? Color.accentColor : Color.gray)
 ***REMOVED***
 ***REMOVED***
