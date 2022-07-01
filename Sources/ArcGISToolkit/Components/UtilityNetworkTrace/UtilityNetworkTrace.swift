@@ -35,6 +35,8 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED***case addingStartingPoints
 ***REMOVED******REMOVED******REMOVED***/ The user is inspecting details of a chosen starting point.
 ***REMOVED******REMOVED***case inspectingStartingPoint(UtilityNetworkTraceStartingPoint)
+***REMOVED******REMOVED******REMOVED***/ The user is viewing the list of advanced options.
+***REMOVED******REMOVED***case viewingAdvancedOptions
 ***REMOVED******REMOVED******REMOVED***/ The user is viewing the list of chosen starting points.
 ***REMOVED******REMOVED***case viewingStartingPoints
 ***REMOVED******REMOVED******REMOVED***/ The user is viewing the list of available trace configurations.
@@ -164,7 +166,10 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***Section {
-***REMOVED******REMOVED******REMOVED******REMOVED***DisclosureGroup("Advanced Options") {
+***REMOVED******REMOVED******REMOVED******REMOVED***DisclosureGroup(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Advanced Options",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isExpanded: advancedOptionsIsExpanded
+***REMOVED******REMOVED******REMOVED******REMOVED***) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ColorPicker(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selection: $viewModel.pendingTrace.color
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***) {
@@ -427,6 +432,29 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED*** MARK: Computed Properties
+***REMOVED***
+***REMOVED******REMOVED***/ Indicates if the list of advanced options is expanded.
+***REMOVED***private var advancedOptionsIsExpanded: Binding<Bool> {
+***REMOVED******REMOVED***Binding(get: {
+***REMOVED******REMOVED******REMOVED***switch currentActivity {
+***REMOVED******REMOVED******REMOVED***case .creatingTrace(let activity):
+***REMOVED******REMOVED******REMOVED******REMOVED***switch activity {
+***REMOVED******REMOVED******REMOVED******REMOVED***case .viewingAdvancedOptions:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return true
+***REMOVED******REMOVED******REMOVED******REMOVED***default:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return false
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***default:
+***REMOVED******REMOVED******REMOVED******REMOVED***return false
+***REMOVED******REMOVED***
+***REMOVED***, set: { val in
+***REMOVED******REMOVED******REMOVED***if val {
+***REMOVED******REMOVED******REMOVED******REMOVED***currentActivity = .creatingTrace(.viewingAdvancedOptions)
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***currentActivity = .creatingTrace(nil)
+***REMOVED******REMOVED***
+***REMOVED***)
+***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Indicates if the list of trace configuration options is expanded.
 ***REMOVED***private var configurationOptionsIsExpanded: Binding<Bool> {
