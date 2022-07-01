@@ -45,9 +45,7 @@ import SwiftUI
         }
     }
     
-    // MARK: Other Properties
-    
-    /// Indicates that the pending trace is configured to the point that it can be ran.
+    /// A Boolean value indicating if the pending trace is configured to the point that it can be run.
     var canRunTrace: Bool {
         pendingTrace.configuration != nil && !pendingTrace.startingPoints.isEmpty
     }
@@ -66,8 +64,6 @@ import SwiftUI
             return nil
         }
     }
-    
-    // MARK: Public Methods
     
     /// Performs required setup.
     ///
@@ -237,9 +233,7 @@ import SwiftUI
                 case let result as UtilityFunctionTraceResult:
                     let functionOutputs = result.functionOutputs
                     functionOutputs.forEach { functionOutput in
-                        pendingTrace.functionOutputs.append(
-                            UtilityNetworkTraceFunctionOutput(output: functionOutput)
-                        )
+                        pendingTrace.functionOutputs.append(functionOutput)
                     }
                     pendingTrace.utilityFunctionTraceResult = result
                 default:
@@ -272,8 +266,11 @@ import SwiftUI
     }
     
     /// Loads the named trace configurations in the network on the provided map.
+    /// - Parameter map: A web map containing one or more utility networks.
     private func loadNamedTraceConfigurations(_ map: Map) async {
         guard let network = network else { return }
         configurations = (try? await map.getNamedTraceConfigurations(from: network)) ?? []
     }
 }
+
+extension UtilityTraceFunctionOutput: Identifiable { }
