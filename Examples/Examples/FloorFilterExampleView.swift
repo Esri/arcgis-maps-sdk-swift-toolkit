@@ -18,28 +18,22 @@ import ArcGIS
 struct FloorFilterExampleView: View {
     /// Make a map from a portal item.
     static func makeMap() -> Map {
-        // Multiple sites/facilities: Esri IST map with all buildings.
-        //        let portal = Portal(url: URL(string: "https://indoors.maps.arcgis.com/")!, isLoginRequired: false)
-        //        let portalItem = PortalItem(portal: portal, id: Item.ID(rawValue: "49520a67773842f1858602735ef538b5")!)
-        
-        // Redlands Campus map.
-        let portal = Portal(url: URL(string: "https://runtimecoretest.maps.arcgis.com/")!, isLoginRequired: false)
-        let portalItem = PortalItem(portal: portal, id: Item.ID(rawValue: "7687805bd42549f5ba41237443d0c60a")!) //<= another multiple sites/facilities
-        
-        // Single site (ESRI Redlands Main) and facility (Building L).
-        //         let portal = Portal(url: URL(string: "https://indoors.maps.arcgis.com/")!, isLoginRequired: false)
-        //         let portalItem = PortalItem(portal: portal, id: Item.ID(rawValue: "f133a698536f44c8884ad81f80b6cfc7")!)
-        
-        return Map(item: portalItem)
+        Map(item: PortalItem(
+            portal: .arcGISOnline(isLoginRequired: false),
+            id: Item.ID("b4b599a43a474d33946cf0df526426f5")!
+        ))
     }
     
     /// Determines the arrangement of the inner `FloorFilter` UI componenets.
     private let floorFilterAlignment = Alignment.bottomLeading
     
     /// Determines the appropriate time to initialize the `FloorFilter`.
-    @State private var isMapLoaded: Bool = false
+    @State private var isMapLoaded = false
     
-    @State private var mapLoadError: Bool = false
+    /// A Boolean value indicating whether the map is currently being navigated.
+    @State private var isNavigating = false
+    
+    @State private var mapLoadError = false
     
     /// The initial viewpoint of the map.
     @State private var viewpoint: Viewpoint? = Viewpoint(
@@ -58,6 +52,9 @@ struct FloorFilterExampleView: View {
             map: map,
             viewpoint: viewpoint
         )
+        .onNavigatingChanged {
+            isNavigating = $0
+        }
         .onViewpointChanged(kind: .centerAndScale) {
             viewpoint = $0
         }
@@ -69,11 +66,12 @@ struct FloorFilterExampleView: View {
                 FloorFilter(
                     floorManager: floorManager,
                     alignment: floorFilterAlignment,
-                    viewpoint: $viewpoint
+                    viewpoint: $viewpoint,
+                    isNavigating: $isNavigating
                 )
                 .frame(
-                    maxWidth: 300,
-                    maxHeight: 300
+                    maxWidth: 400,
+                    maxHeight: 400
                 )
                 .padding(36)
             } else if mapLoadError {
