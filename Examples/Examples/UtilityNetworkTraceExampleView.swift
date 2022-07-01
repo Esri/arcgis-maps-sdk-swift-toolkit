@@ -67,14 +67,10 @@ struct UtilityNetworkTraceExampleView: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Make a map from a portal item.
+***REMOVED******REMOVED***/ Makes a map from a portal item.
 ***REMOVED***static func makeMap() -> Map {
-***REMOVED******REMOVED***let portal = Portal(
-***REMOVED******REMOVED******REMOVED***url: URL(string: "https:***REMOVED***www.arcgis.com/")!,
-***REMOVED******REMOVED******REMOVED***isLoginRequired: false
-***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***let portalItem = PortalItem(
-***REMOVED******REMOVED******REMOVED***portal: portal,
+***REMOVED******REMOVED******REMOVED***portal: .arcGISOnline(isLoginRequired: false),
 ***REMOVED******REMOVED******REMOVED***id: Item.ID(rawValue: "471eb0bf37074b1fbb972b1da70fb310")!
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***return Map(item: portalItem)

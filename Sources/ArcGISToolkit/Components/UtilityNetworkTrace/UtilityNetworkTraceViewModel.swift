@@ -45,9 +45,7 @@ import Foundation
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED*** MARK: Other Properties
-***REMOVED***
-***REMOVED******REMOVED***/ Indicates that the pending trace is configured to the point that it can be ran.
+***REMOVED******REMOVED***/ A Boolean value indicating if the pending trace is configured to the point that it can be run.
 ***REMOVED***var canRunTrace: Bool {
 ***REMOVED******REMOVED***pendingTrace.configuration != nil && !pendingTrace.startingPoints.isEmpty
 ***REMOVED***
@@ -66,8 +64,6 @@ import Foundation
 ***REMOVED******REMOVED******REMOVED***return nil
 ***REMOVED***
 ***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED*** MARK: Public Methods
 ***REMOVED***
 ***REMOVED******REMOVED***/ Performs required setup.
 ***REMOVED******REMOVED***/
@@ -237,9 +233,7 @@ import Foundation
 ***REMOVED******REMOVED******REMOVED******REMOVED***case let result as UtilityFunctionTraceResult:
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let functionOutputs = result.functionOutputs
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***functionOutputs.forEach { functionOutput in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***pendingTrace.functionOutputs.append(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***UtilityNetworkTraceFunctionOutput(output: functionOutput)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***pendingTrace.functionOutputs.append(functionOutput)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***pendingTrace.utilityFunctionTraceResult = result
 ***REMOVED******REMOVED******REMOVED******REMOVED***default:
@@ -272,8 +266,11 @@ import Foundation
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Loads the named trace configurations in the network on the provided map.
+***REMOVED******REMOVED***/ - Parameter map: A web map containing one or more utility networks.
 ***REMOVED***private func loadNamedTraceConfigurations(_ map: Map) async {
 ***REMOVED******REMOVED***guard let network = network else { return ***REMOVED***
 ***REMOVED******REMOVED***configurations = (try? await map.getNamedTraceConfigurations(from: network)) ?? []
 ***REMOVED***
 ***REMOVED***
+
+extension UtilityTraceFunctionOutput: Identifiable { ***REMOVED***

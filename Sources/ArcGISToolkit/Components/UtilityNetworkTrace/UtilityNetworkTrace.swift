@@ -143,12 +143,11 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***Section("Starting Points") {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if isAddingStartingPoints {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button(role: .destructive) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentActivity = .creatingTrace(nil)
 ***REMOVED******REMOVED******REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Cancel starting point selection")
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.tint(.red)
 ***REMOVED******REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentActivity = .creatingTrace(.addingStartingPoints)
@@ -209,7 +208,7 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED***
 ***REMOVED******REMOVED***.font(.title3)
 ***REMOVED******REMOVED***.padding()
-***REMOVED******REMOVED***if let traceName = viewModel.selectedTrace?.name, traceName != "" {
+***REMOVED******REMOVED***if let traceName = viewModel.selectedTrace?.name, !traceName.isEmpty {
 ***REMOVED******REMOVED******REMOVED***Text(traceName)
 ***REMOVED***
 ***REMOVED******REMOVED***List {
@@ -230,9 +229,9 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.functionOutputs.count.description ?? "0") {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(viewModel.selectedTrace?.functionOutputs ?? [], id: \.id) { item in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(item.output.function.networkAttribute?.name ?? "Unnamed")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(item.function.networkAttribute?.name ?? "Unnamed")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text((item.output.result as? Double)?.description ?? "N/A")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text((item.result as? Double)?.description ?? "N/A")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
@@ -253,7 +252,7 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text("OK")
 ***REMOVED******REMOVED***
 ***REMOVED*** message: {
-***REMOVED******REMOVED******REMOVED***Text("Are you sure? All the trace Inputs and Results will be lost.")
+***REMOVED******REMOVED******REMOVED***Text("Are you sure? All the trace inputs and results will be lost.")
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -326,13 +325,13 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - graphicsOverlay: The graphics overlay to hold generated starting point and trace
 ***REMOVED******REMOVED***/   graphics.
-***REMOVED******REMOVED***/   - map: The parent map view.
+***REMOVED******REMOVED***/   - map: The parent map.
 ***REMOVED******REMOVED***/   - pointInMap: Acts as the point at which newly selected starting point graphics will be
 ***REMOVED******REMOVED***/   created.
 ***REMOVED******REMOVED***/   - pointInScreen: Acts as the point of identification for items tapped in the utility network.
 ***REMOVED******REMOVED***/   - mapViewProxy: Provides a method of layer identification when starting points are being
 ***REMOVED******REMOVED***/   chosen.
-***REMOVED******REMOVED***/   - viewpoint: Allows the Utility Network Trace Tool to update the parent map view's viewpoint.
+***REMOVED******REMOVED***/   - viewpoint: Allows the utility network trace tool to update the parent map view's viewpoint.
 ***REMOVED***public init(
 ***REMOVED******REMOVED***_ graphicsOverlay: Binding<GraphicsOverlay>,
 ***REMOVED******REMOVED***_ map: Map,
@@ -352,7 +351,7 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***graphicsOverlay: graphicsOverlay.wrappedValue
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED***UITableView.appearance().backgroundColor = UIColor.systemGroupedBackground
+***REMOVED******REMOVED***UITableView.appearance().backgroundColor = .systemGroupedBackground
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***public var body: some View {
