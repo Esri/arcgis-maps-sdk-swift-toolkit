@@ -39,14 +39,14 @@ public final class Authenticator: ObservableObject {
         Task { await observeChallengeQueue() }
     }
     
-    /// Sets up credential stores that are synchronized with the keychain.
+    /// Sets up credential stores so that they are persisted to the keychain.
     /// - Remark: The credentials will be stored in the default access group.
     /// To know more about what the default group would be you can find information about that here:
     /// https://developer.apple.com/documentation/security/keychain_services/keychain_items/sharing_access_to_keychain_items_among_a_collection_of_apps.
     /// - Parameters:
     ///   - access: When the credentials stored in the keychain can be accessed.
     ///   - isCloudSynchronizable: A value indicating whether the credentials are synchronized with iCloud.
-    public func synchronizeWithKeychain(
+    public func makePersistent(
         access: ArcGIS.KeychainAccess,
         isCloudSynchronizable: Bool = false
     ) async throws {
@@ -55,7 +55,7 @@ public final class Authenticator: ObservableObject {
             isSynchronizable: isCloudSynchronizable
         )
         
-        NetworkCredentialStore.setShared(
+        await NetworkCredentialStore.setShared(
             try await .makePersistent(access: access, isSynchronizable: isCloudSynchronizable)
         )
     }
