@@ -35,6 +35,8 @@ public struct UtilityNetworkTrace: View {
         case addingStartingPoints
         /// The user is inspecting details of a chosen starting point.
         case inspectingStartingPoint(UtilityNetworkTraceStartingPoint)
+        /// The user is viewing the list of advanced options.
+        case viewingAdvancedOptions
         /// The user is viewing the list of chosen starting points.
         case viewingStartingPoints
         /// The user is viewing the list of available trace configurations.
@@ -164,7 +166,10 @@ public struct UtilityNetworkTrace: View {
                 }
             }
             Section {
-                DisclosureGroup("Advanced Options") {
+                DisclosureGroup(
+                    "Advanced Options",
+                    isExpanded: advancedOptionsIsExpanded
+                ) {
                     ColorPicker(
                         selection: $viewModel.pendingTrace.color
                     ) {
@@ -427,6 +432,29 @@ public struct UtilityNetworkTrace: View {
     }
     
     // MARK: Computed Properties
+    
+    /// Indicates if the list of advanced options is expanded.
+    private var advancedOptionsIsExpanded: Binding<Bool> {
+        Binding(get: {
+            switch currentActivity {
+            case .creatingTrace(let activity):
+                switch activity {
+                case .viewingAdvancedOptions:
+                    return true
+                default:
+                    return false
+                }
+            default:
+                return false
+            }
+        }, set: { val in
+            if val {
+                currentActivity = .creatingTrace(.viewingAdvancedOptions)
+            } else {
+                currentActivity = .creatingTrace(nil)
+            }
+        })
+    }
     
     /// Indicates if the list of trace configuration options is expanded.
     private var configurationOptionsIsExpanded: Binding<Bool> {
