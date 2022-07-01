@@ -143,12 +143,11 @@ public struct UtilityNetworkTrace: View {
             }
             Section("Starting Points") {
                 if isAddingStartingPoints {
-                    Button {
+                    Button(role: .destructive) {
                         currentActivity = .creatingTrace(nil)
                     } label: {
                         Text("Cancel starting point selection")
                     }
-                    .tint(.red)
                 } else {
                     Button {
                         currentActivity = .creatingTrace(.addingStartingPoints)
@@ -212,7 +211,7 @@ public struct UtilityNetworkTrace: View {
         }
         .font(.title3)
         .padding()
-        if let traceName = viewModel.selectedTrace?.name, traceName != "" {
+        if let traceName = viewModel.selectedTrace?.name, !traceName.isEmpty {
             Text(traceName)
         }
         List {
@@ -233,9 +232,9 @@ public struct UtilityNetworkTrace: View {
                     .functionOutputs.count.description ?? "0") {
                         ForEach(viewModel.selectedTrace?.functionOutputs ?? [], id: \.id) { item in
                             HStack {
-                                Text(item.output.function.networkAttribute?.name ?? "Unnamed")
+                                Text(item.function.networkAttribute?.name ?? "Unnamed")
                                 Spacer()
-                                Text((item.output.result as? Double)?.description ?? "N/A")
+                                Text((item.result as? Double)?.description ?? "N/A")
                             }
                         }
                     }
@@ -256,7 +255,7 @@ public struct UtilityNetworkTrace: View {
                 Text("OK")
             }
         } message: {
-            Text("Are you sure? All the trace Inputs and Results will be lost.")
+            Text("Are you sure? All the trace inputs and results will be lost.")
         }
     }
     
@@ -363,13 +362,13 @@ public struct UtilityNetworkTrace: View {
     /// - Parameters:
     ///   - graphicsOverlay: The graphics overlay to hold generated starting point and trace
     ///   graphics.
-    ///   - map: The parent map view.
+    ///   - map: The parent map.
     ///   - pointInMap: Acts as the point at which newly selected starting point graphics will be
     ///   created.
     ///   - pointInScreen: Acts as the point of identification for items tapped in the utility network.
     ///   - mapViewProxy: Provides a method of layer identification when starting points are being
     ///   chosen.
-    ///   - viewpoint: Allows the Utility Network Trace Tool to update the parent map view's viewpoint.
+    ///   - viewpoint: Allows the utility network trace tool to update the parent map view's viewpoint.
     public init(
         _ graphicsOverlay: Binding<GraphicsOverlay>,
         _ map: Map,
@@ -389,7 +388,7 @@ public struct UtilityNetworkTrace: View {
                 graphicsOverlay: graphicsOverlay.wrappedValue
             )
         )
-        UITableView.appearance().backgroundColor = UIColor.systemGroupedBackground
+        UITableView.appearance().backgroundColor = .systemGroupedBackground
     }
     
     public var body: some View {

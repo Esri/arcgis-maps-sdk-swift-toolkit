@@ -34,7 +34,8 @@ extension UtilityNetworkTraceViewModel {
         /// The chosen named trace configuration.
         var configuration: UtilityNamedTraceConfiguration?
         
-        var functionOutputs = [UtilityNetworkTraceFunctionOutput]()
+        /// A collection of utility trace function outputs.
+        var functionOutputs = [UtilityTraceFunctionOutput]()
         
         /// A collection of graphics generated from the trace.
         var graphics = [Graphic]()

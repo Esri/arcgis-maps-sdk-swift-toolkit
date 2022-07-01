@@ -17,7 +17,7 @@ import SwiftUI
 struct SelectedModifier: ViewModifier {
     /// A Boolean value that indicates whether view should display as selected.
     var isSelected: Bool
-
+    
     func body(content: Content) -> some View {
         if isSelected {
             content

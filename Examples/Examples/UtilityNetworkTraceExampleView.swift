@@ -15,11 +15,8 @@ import ArcGIS
 import ArcGISToolkit
 import SwiftUI
 
-/// A demonstration of the Utility Network Trace tool which runs traces on a web map published with a utility
+/// A demonstration of the utility network trace tool which runs traces on a web map published with a utility
 /// network and trace configurations.
-///
-/// - Note: An ``ArcGISCredential`` is needed to interact with this sample. This can be done within
-/// `init()` in `ExamplesApp.swift`. The public credentials can be found [here](https://developers.arcgis.com/javascript/latest/sample-code/widgets-untrace).
 struct UtilityNetworkTraceExampleView: View {
     @StateObject private var map = makeMap()
     
@@ -35,6 +32,7 @@ struct UtilityNetworkTraceExampleView: View {
     /// A container for graphical trace results.
     @State var resultGraphicsOverlay = GraphicsOverlay()
     
+    /// The map viewpoint used by the `UtilityNetworkTrace` to pan/zoom the map to selected features.
     @State var viewpoint: Viewpoint?
     
     var body: some View {
@@ -59,6 +57,9 @@ struct UtilityNetworkTraceExampleView: View {
                         $mapViewProxy,
                         $viewpoint
                     )
+                    .task {
+                        await ArcGISURLSession.credentialStore.add(try! await .publicSample)
+                    }
                 }
                 .padding()
                 .frame(width: 360)
@@ -66,16 +67,24 @@ struct UtilityNetworkTraceExampleView: View {
         }
     }
     
-    /// Make a map from a portal item.
+    /// Makes a map from a portal item.
     static func makeMap() -> Map {
-        let portal = Portal(
-            url: URL(string: "https://www.arcgis.com/")!,
-            isLoginRequired: false
-        )
         let portalItem = PortalItem(
-            portal: portal,
+            portal: .arcGISOnline(isLoginRequired: false),
             id: Item.ID(rawValue: "471eb0bf37074b1fbb972b1da70fb310")!
         )
         return Map(item: portalItem)
+    }
+}
+
+private extension ArcGISCredential {
+    static var publicSample: ArcGISCredential {
+        get async throws {
+            try await .token(
+                url: URL(string: "https://sampleserver7.arcgisonline.com/portal/sharing/rest")!,
+                username: "viewer01",
+                password: "I68VGU^nMurF"
+            )
+        }
     }
 }
