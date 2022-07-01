@@ -15,7 +15,7 @@ import ArcGIS
 import ArcGISToolkit
 import SwiftUI
 
-/// A demonstration of the Utility Network Trace tool which runs traces on a web map published with a utility
+/// A demonstration of the utility network trace tool which runs traces on a web map published with a utility
 /// network and trace configurations.
 struct UtilityNetworkTraceExampleView: View {
     @StateObject private var map = makeMap()
@@ -32,6 +32,7 @@ struct UtilityNetworkTraceExampleView: View {
     /// A container for graphical trace results.
     @State var resultGraphicsOverlay = GraphicsOverlay()
     
+    /// The map viewpoint used by the `UtilityNetworkTrace` to pan/zoom the map to selected features.
     @State var viewpoint: Viewpoint?
     
     var body: some View {
