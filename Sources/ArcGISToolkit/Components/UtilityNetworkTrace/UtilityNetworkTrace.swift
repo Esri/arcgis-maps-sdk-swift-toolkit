@@ -130,8 +130,14 @@ public struct UtilityNetworkTrace: View {
     
     /// The tab that allows for a new trace to be configured.
     @ViewBuilder private var newTraceTab: some View {
-        List {
-            if !isAddingStartingPoints {
+        if isAddingStartingPoints {
+            Button(role: .destructive) {
+                currentActivity = .creatingTrace(nil)
+            } label: {
+                Text("Cancel starting point selection")
+            }
+        } else {
+            List {
                 Section("Trace Configuration") {
                     DisclosureGroup(
                         viewModel.pendingTrace.configuration?.name ?? "None selected",
@@ -140,15 +146,7 @@ public struct UtilityNetworkTrace: View {
                         configurationsList
                     }
                 }
-            }
-            Section("Starting Points") {
-                if isAddingStartingPoints {
-                    Button(role: .destructive) {
-                        currentActivity = .creatingTrace(nil)
-                    } label: {
-                        Text("Cancel starting point selection")
-                    }
-                } else {
+                Section("Starting Points") {
                     Button {
                         currentActivity = .creatingTrace(.addingStartingPoints)
                     } label: {
@@ -161,8 +159,6 @@ public struct UtilityNetworkTrace: View {
                         startingPointsList
                     }
                 }
-            }
-            if !isAddingStartingPoints {
                 Section("Advanced") {
                     ColorPicker(
                         selection: $viewModel.pendingTrace.color
