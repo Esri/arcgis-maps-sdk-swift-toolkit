@@ -21,7 +21,6 @@ struct AuthenticationExampleView: View {
 ***REMOVED***)
 ***REMOVED***@State var previousApiKey: APIKey?
 ***REMOVED***@State private var items = AuthenticationItem.makeAll()
-***REMOVED***let logger = ConsoleNetworkLogger(shouldLogResponseData: false)
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***VStack {
@@ -43,8 +42,7 @@ struct AuthenticationExampleView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***.authenticator(authenticator)
 ***REMOVED******REMOVED***.task {
-***REMOVED******REMOVED******REMOVED***try? await authenticator.synchronizeWithKeychain(access: .whenUnlockedThisDeviceOnly)
-***REMOVED******REMOVED******REMOVED***logger.startLogging()
+***REMOVED******REMOVED******REMOVED***try? await authenticator.makePersistent(access: .whenUnlockedThisDeviceOnly)
 ***REMOVED***
 ***REMOVED******REMOVED***.navigationBarTitle(Text("Authentication"), displayMode: .inline)
 ***REMOVED******REMOVED***.onAppear {
