@@ -15,7 +15,7 @@
 ***REMOVED***Toolkit
 ***REMOVED***
 
-***REMOVED***/ A demonstration of the Utility Network Trace tool which runs traces on a web map published with a utility
+***REMOVED***/ A demonstration of the utility network trace tool which runs traces on a web map published with a utility
 ***REMOVED***/ network and trace configurations.
 struct UtilityNetworkTraceExampleView: View {
 ***REMOVED***@StateObject private var map = makeMap()
@@ -32,6 +32,7 @@ struct UtilityNetworkTraceExampleView: View {
 ***REMOVED******REMOVED***/ A container for graphical trace results.
 ***REMOVED***@State var resultGraphicsOverlay = GraphicsOverlay()
 ***REMOVED***
+***REMOVED******REMOVED***/ The map viewpoint used by the `UtilityNetworkTrace` to pan/zoom the map to selected features.
 ***REMOVED***@State var viewpoint: Viewpoint?
 ***REMOVED***
 ***REMOVED***var body: some View {
