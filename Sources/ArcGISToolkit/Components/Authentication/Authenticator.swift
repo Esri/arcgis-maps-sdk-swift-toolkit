@@ -39,29 +39,30 @@ public final class Authenticator: ObservableObject {
         Task { await observeChallengeQueue() }
     }
     
-    /// Sets up credential stores so that they are persisted to the keychain.
-    /// - Remark: The credentials will be stored in the default access group.
+    /// Sets up new credential stores that will be persisted to the keychain.
+    /// - Remark: The credentials will be stored in the default access group of the keychain.
     /// To know more about what the default group would be you can find information about that here:
     /// https://developer.apple.com/documentation/security/keychain_services/keychain_items/sharing_access_to_keychain_items_among_a_collection_of_apps.
     /// - Parameters:
     ///   - access: When the credentials stored in the keychain can be accessed.
-    ///   - isCloudSynchronizable: A value indicating whether the credentials are synchronized with iCloud.
+    ///   - isSynchronizable: A value indicating whether the credentials are synchronized with iCloud.
     public func makePersistent(
         access: ArcGIS.KeychainAccess,
-        isCloudSynchronizable: Bool = false
+        isSynchronizable: Bool = false
     ) async throws {
         ArcGISURLSession.credentialStore = try await .makePersistent(
             access: access,
-            isSynchronizable: isCloudSynchronizable
+            isSynchronizable: isSynchronizable
         )
         
         await NetworkCredentialStore.setShared(
-            try await .makePersistent(access: access, isSynchronizable: isCloudSynchronizable)
+            try await .makePersistent(access: access, isSynchronizable: isSynchronizable)
         )
     }
     
-    /// Clears all ArcGIS and network credentials from the stores and resets the backing `URLSessions`
-    /// so that removed network credentials are respected right away.
+    /// Clears all ArcGIS and network credentials from the respective stores.
+    /// Note: This sets up new `URLSessions` so that removed network credentials are respected
+    /// right away.
     public func clearCredentialStores() async {
         // Clear ArcGIS Credentials.
         await ArcGISURLSession.credentialStore.removeAll()
