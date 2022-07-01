@@ -31,11 +31,12 @@ final private class CertificatePickerViewModel: ObservableObject {
             preconditionFailure()
         }
         
-        challenge.resume(with: .certificate(url: certificateURL, passsword: password))
+        // TODO: handle error
+        challenge.resume(with: .useCredential(try! .certificate(at: certificateURL, password: password)))
     }
     
     func cancel() {
-        challenge.cancel()
+        challenge.resume(with: .cancelAuthenticationChallenge)
     }
 }
 
