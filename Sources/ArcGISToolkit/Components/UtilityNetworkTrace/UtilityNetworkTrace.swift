@@ -246,7 +246,6 @@ public struct UtilityNetworkTrace: View {
             Text("Clear All Results")
                 .tint(.red)
         }
-        .padding()
         .alert("Clear All Results", isPresented: $warningIsPresented) {
             Button(role: .destructive) {
                 viewModel.deleteAllTraces()
@@ -408,6 +407,7 @@ public struct UtilityNetworkTrace: View {
                 resultsTab
             }
         }
+        .background(Color(uiColor: .systemGroupedBackground))
         .animation(.default, value: currentActivity)
         .onChange(of: pointInScreen) { newValue in
             guard isAddingStartingPoints,
