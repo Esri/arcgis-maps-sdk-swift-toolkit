@@ -66,24 +66,24 @@ final class QueuedNetworkChallenge: QueuedChallenge {
 ***REMOVED***
 
 ***REMOVED***func resume(with response: NetworkAuthenticationChallengeDisposition) {
-***REMOVED******REMOVED***guard _response == nil else { return ***REMOVED***
-***REMOVED******REMOVED***_response = response
+***REMOVED******REMOVED***guard _disposition == nil else { return ***REMOVED***
+***REMOVED******REMOVED***_disposition = response
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Use a streamed property because we need to support multiple listeners
 ***REMOVED******REMOVED***/ to know when the challenge completed.
-***REMOVED***@Streamed private var _response: (NetworkAuthenticationChallengeDisposition)?
+***REMOVED***@Streamed private var _disposition: (NetworkAuthenticationChallengeDisposition)?
 ***REMOVED***
-***REMOVED***var response: NetworkAuthenticationChallengeDisposition {
+***REMOVED***var disposition: NetworkAuthenticationChallengeDisposition {
 ***REMOVED******REMOVED***get async {
-***REMOVED******REMOVED******REMOVED***await $_response
+***REMOVED******REMOVED******REMOVED***await $_disposition
 ***REMOVED******REMOVED******REMOVED******REMOVED***.compactMap({ $0 ***REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.first(where: { _ in true ***REMOVED***)!
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***public func complete() async {
-***REMOVED******REMOVED***_ = await response
+***REMOVED******REMOVED***_ = await disposition
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***enum Kind {

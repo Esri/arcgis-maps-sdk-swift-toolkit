@@ -149,6 +149,6 @@ extension Authenticator: AuthenticationChallengeHandler {
 ***REMOVED******REMOVED***subject.send(queuedChallenge)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Respond accordingly.
-***REMOVED******REMOVED***return await queuedChallenge.response
+***REMOVED******REMOVED***return await queuedChallenge.disposition
 ***REMOVED***
 ***REMOVED***
