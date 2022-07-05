@@ -45,6 +45,9 @@ import Foundation
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ Warning message presented to the user
+***REMOVED***@Published var userWarning = ""
+***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating if the pending trace is configured to the point that it can be run.
 ***REMOVED***var canRunTrace: Bool {
 ***REMOVED******REMOVED***pendingTrace.configuration != nil && !pendingTrace.startingPoints.isEmpty
@@ -157,7 +160,10 @@ import Foundation
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  let globalid = feature.attributes["globalid"] as? UUID,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  !pendingTrace.startingPoints.contains(where: { startingPoint in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  return startingPoint.utilityElement.globalID == globalid
-***REMOVED******REMOVED******REMOVED***  ***REMOVED***) else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED***  ***REMOVED***) else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***userWarning = "Duplicate starting points cannot be added "
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***Task {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let network = network,

@@ -429,6 +429,15 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***.alert(
+***REMOVED******REMOVED******REMOVED***"Warning",
+***REMOVED******REMOVED******REMOVED***isPresented: Binding(
+***REMOVED******REMOVED******REMOVED******REMOVED***get: { !viewModel.userWarning.isEmpty ***REMOVED***,
+***REMOVED******REMOVED******REMOVED******REMOVED***set: { _ in viewModel.userWarning = "" ***REMOVED***
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***) { ***REMOVED*** message: {
+***REMOVED******REMOVED******REMOVED***Text(viewModel.userWarning)
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED*** MARK: Computed Properties
