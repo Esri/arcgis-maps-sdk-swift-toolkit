@@ -95,42 +95,20 @@ struct CertificatePickerViewModifier: ViewModifier {
         content
             .promptBrowseCertificate(
                 isPresented: $viewModel.showPrompt,
-                host: viewModel.challengingHost,
-                onContinue: {
-                    viewModel.proceedFromPrompt()
-                }, onCancel: {
-                    viewModel.cancel()
-                }
+                viewModel: viewModel
             )
-            .sheet(isPresented: $viewModel.showPicker) {
-                DocumentPickerView(contentTypes: [.pfx]) {
-                    viewModel.proceed(withCertificateURL: $0)
-                } onCancel: {
-                    viewModel.cancel()
-                }
-                .edgesIgnoringSafeArea(.bottom)
-                .interactiveDismissDisabled()
-            }
-            .sheet(isPresented: $viewModel.showPassword) {
-                EnterPasswordView() { password in
-                    viewModel.proceed(withPassword: password)
-                } onCancel: {
-                    viewModel.cancel()
-                }
-                .edgesIgnoringSafeArea(.bottom)
-                .interactiveDismissDisabled()
-            }
-            .alert("Error importing certificate", isPresented: $viewModel.showCertificateImportError) {
-                Button("Try Again") {
-                    viewModel.proceedFromPrompt()
-                }
-                Button("Cancel", role: .cancel) {
-                    viewModel.cancel()
-                }
-            } message: {
-                Text("The certificate file or password was invalid.")
-            }
-
+            .certificateFilePicker(
+                isPresented: $viewModel.showPicker,
+                viewModel: viewModel
+            )
+            .passwordSheet(
+                isPresented: $viewModel.showPassword,
+                viewModel: viewModel
+            )
+            .alertCertificateImportError(
+                isPresented: $viewModel.showCertificateImportError,
+                viewModel: viewModel
+            )
     }
 }
 
@@ -140,23 +118,83 @@ private extension UTType {
 }
 
 private extension View {
-    @ViewBuilder
     /// Displays a prompt to the user to let them know that picking a certificate is required.
+    @MainActor
+    @ViewBuilder
     func promptBrowseCertificate(
         isPresented: Binding<Bool>,
-        host: String,
-        onContinue: @escaping () -> Void,
-        onCancel: @escaping () -> Void
+        viewModel: CertificatePickerViewModel
     ) -> some View {
-        alert("Certificate Required", isPresented: isPresented, presenting: host) { _ in
+        alert("Certificate Required", isPresented: isPresented, presenting: viewModel.challengingHost) { _ in
             Button("Browse For Certificate") {
-                onContinue()
+                viewModel.proceedFromPrompt()
             }
             Button("Cancel", role: .cancel) {
-                onCancel()
+                viewModel.cancel()
             }
         } message: { _ in
-            Text("A certificate is required to access content on \(host).")
+            Text("A certificate is required to access content on \(viewModel.challengingHost).")
+        }
+    }
+}
+
+private extension View {
+    /// Displays a sheet that allows the user to select a certificate file.
+    @MainActor
+    @ViewBuilder
+    func certificateFilePicker(
+        isPresented: Binding<Bool>,
+        viewModel: CertificatePickerViewModel
+    ) -> some View {
+        sheet(isPresented: isPresented) {
+            DocumentPickerView(contentTypes: [.pfx]) {
+                viewModel.proceed(withCertificateURL: $0)
+            } onCancel: {
+                viewModel.cancel()
+            }
+            .edgesIgnoringSafeArea(.bottom)
+            .interactiveDismissDisabled()
+        }
+    }
+}
+
+private extension View {
+    /// Displays a sheet that allows the user to enter a password.
+    @MainActor
+    @ViewBuilder
+    func passwordSheet(
+        isPresented: Binding<Bool>,
+        viewModel: CertificatePickerViewModel
+    ) -> some View {
+        sheet(isPresented: isPresented) {
+            EnterPasswordView() { password in
+                viewModel.proceed(withPassword: password)
+            } onCancel: {
+                viewModel.cancel()
+            }
+            .edgesIgnoringSafeArea(.bottom)
+            .interactiveDismissDisabled()
+        }
+    }
+}
+
+private extension View {
+    /// Displays an alert to notify that there was an error importing the certificate.
+    @MainActor
+    @ViewBuilder
+    func alertCertificateImportError(
+        isPresented: Binding<Bool>,
+        viewModel: CertificatePickerViewModel
+    ) -> some View {
+        alert("Error importing certificate", isPresented: isPresented) {
+            Button("Try Again") {
+                viewModel.proceedFromPrompt()
+            }
+            Button("Cancel", role: .cancel) {
+                viewModel.cancel()
+            }
+        } message: {
+            Text("The certificate file or password was invalid.")
         }
     }
 }
