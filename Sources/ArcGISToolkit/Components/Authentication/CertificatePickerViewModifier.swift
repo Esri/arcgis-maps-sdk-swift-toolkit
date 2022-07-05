@@ -119,6 +119,9 @@ private extension UTType {
 
 private extension View {
     /// Displays a prompt to the user to let them know that picking a certificate is required.
+    /// - Parameters:
+    ///   - isPresented: A Boolean value indicating if the view is presented.
+    ///   - viewModel: The view model associated with the view.
     @MainActor
     @ViewBuilder
     func promptBrowseCertificate(
@@ -140,6 +143,9 @@ private extension View {
 
 private extension View {
     /// Displays a sheet that allows the user to select a certificate file.
+    /// - Parameters:
+    ///   - isPresented: A Boolean value indicating if the view is presented.
+    ///   - viewModel: The view model associated with the view.
     @MainActor
     @ViewBuilder
     func certificateFilePicker(
@@ -160,6 +166,9 @@ private extension View {
 
 private extension View {
     /// Displays a sheet that allows the user to enter a password.
+    /// - Parameters:
+    ///   - isPresented: A Boolean value indicating if the view is presented.
+    ///   - viewModel: The view model associated with the view.
     @MainActor
     @ViewBuilder
     func passwordSheet(
@@ -180,6 +189,9 @@ private extension View {
 
 private extension View {
     /// Displays an alert to notify that there was an error importing the certificate.
+    /// - Parameters:
+    ///   - isPresented: A Boolean value indicating if the view is presented.
+    ///   - viewModel: The view model associated with the view.
     @MainActor
     @ViewBuilder
     func alertCertificateImportError(
@@ -199,11 +211,20 @@ private extension View {
     }
 }
 
+/// A view that allows the user to enter a password.
 struct EnterPasswordView: View {
-    @Environment(\.dismiss) var dismiss
+    @Environment(\.dismiss) var dismissAction
+    
+    /// The password that the user entered.
     @State var password: String = ""
+    
+    /// The action to call once the user has completed entering the password.
     var onContinue: (String) -> Void
+    
+    /// The action to call if the user cancels.
     var onCancel: () -> Void
+    
+    /// A Boolean value indicating whether the password field has focus.
     @FocusState var isPasswordFocused: Bool
     
     var body: some View {
@@ -224,7 +245,7 @@ struct EnterPasswordView: View {
                         .textContentType(.password)
                         .submitLabel(.go)
                         .onSubmit {
-                            dismiss()
+                            dismissAction()
                             onContinue(password)
                         }
                 }
@@ -240,7 +261,7 @@ struct EnterPasswordView: View {
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel") {
-                        dismiss()
+                        dismissAction()
                         onCancel()
                     }
                 }
@@ -254,9 +275,10 @@ struct EnterPasswordView: View {
         }
     }
     
+    /// The "OK" button.
     private var okButton: some View {
         Button(action: {
-            dismiss()
+            dismissAction()
             onContinue(password)
         }, label: {
             Text("OK")
