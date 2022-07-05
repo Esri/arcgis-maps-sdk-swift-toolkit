@@ -47,6 +47,9 @@ struct UtilityNetworkTraceExampleView: View {
                 self.pointInMap = pointInMap
                 self.mapViewProxy = mapViewProxy
             }
+            .onViewpointChanged(kind: .centerAndScale) {
+                viewpoint = $0
+            }
             .overlay(alignment: .topTrailing) {
                 FloatingPanel {
                     UtilityNetworkTrace(
