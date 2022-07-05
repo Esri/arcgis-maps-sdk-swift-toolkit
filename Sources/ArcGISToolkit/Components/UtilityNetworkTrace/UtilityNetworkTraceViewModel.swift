@@ -151,9 +151,16 @@ import SwiftUI
         )
         identifyLayerResults?.forEach { identifyLayerResult in
             identifyLayerResult.geoElements.forEach { geoElement in
+                
+                // Block duplicate starting point selection
+                guard let feature = geoElement as? ArcGISFeature,
+                      let globalid = feature.attributes["globalid"] as? UUID,
+                      !pendingTrace.startingPoints.contains(where: { startingPoint in
+                          return startingPoint.utilityElement.globalID == globalid
+                      }) else { return }
+                
                 Task {
                     guard let network = network,
-                          let feature = geoElement as? ArcGISFeature,
                           let geometry = feature.geometry,
                           let symbol = try? await (feature.featureTable?.layer as? FeatureLayer)?
                         .renderer?
