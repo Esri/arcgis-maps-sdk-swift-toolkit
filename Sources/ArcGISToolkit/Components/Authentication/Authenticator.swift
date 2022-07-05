@@ -86,7 +86,11 @@ public final class Authenticator: ObservableObject {
 ***REMOVED******REMOVED******REMOVED***   let config = oAuthConfigurations.first(where: { $0.canBeUsed(for: url) ***REMOVED***) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** For an OAuth challenge, we create the credential and resume.
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Creating the OAuth credential will present the OAuth login view.
-***REMOVED******REMOVED******REMOVED******REMOVED***queuedArcGISChallenge.resume(with: .oAuth(configuration: config))
+***REMOVED******REMOVED******REMOVED******REMOVED***queuedArcGISChallenge.resume(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***with: await Result {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.useCredential(try await .oauth(configuration: config))
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Set the current challenge, this should present the appropriate view.
 ***REMOVED******REMOVED******REMOVED******REMOVED***currentChallenge = queuedChallenge
@@ -125,14 +129,7 @@ extension Authenticator: AuthenticationChallengeHandler {
 ***REMOVED******REMOVED***subject.send(queuedChallenge)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Wait for it to complete and return the resulting disposition.
-***REMOVED******REMOVED***switch await queuedChallenge.response {
-***REMOVED******REMOVED***case .tokenCredential(let username, let password):
-***REMOVED******REMOVED******REMOVED***return try await .useCredential(.token(challenge: challenge, username: username, password: password))
-***REMOVED******REMOVED***case .oAuth(let configuration):
-***REMOVED******REMOVED******REMOVED***return try await .useCredential(.oauth(configuration: configuration))
-***REMOVED******REMOVED***case .cancel:
-***REMOVED******REMOVED******REMOVED***return .cancelAuthenticationChallenge
-***REMOVED***
+***REMOVED******REMOVED***return try await queuedChallenge.result.get()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***public func handleNetworkChallenge(

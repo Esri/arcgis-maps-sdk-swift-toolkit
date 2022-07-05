@@ -31,36 +31,30 @@ final class QueuedArcGISChallenge: QueuedChallenge {
 ***REMOVED******REMOVED***self.arcGISChallenge = arcGISChallenge
 ***REMOVED***
 
-***REMOVED***func resume(with response: Response) {
-***REMOVED******REMOVED***guard _response == nil else { return ***REMOVED***
-***REMOVED******REMOVED***_response = response
+***REMOVED***func resume(with result: Result<ArcGISAuthenticationChallenge.Disposition, Error>) {
+***REMOVED******REMOVED***guard _result == nil else { return ***REMOVED***
+***REMOVED******REMOVED***_result = result
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func cancel() {
-***REMOVED******REMOVED***guard _response == nil else { return ***REMOVED***
-***REMOVED******REMOVED***_response = .cancel
+***REMOVED******REMOVED***guard _result == nil else { return ***REMOVED***
+***REMOVED******REMOVED***_result = .success(.cancelAuthenticationChallenge)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Use a streamed property because we need to support multiple listeners
 ***REMOVED******REMOVED***/ to know when the challenge completed.
-***REMOVED***@Streamed private var _response: Response?
+***REMOVED***@Streamed private var _result: Result<ArcGISAuthenticationChallenge.Disposition, Error>?
 ***REMOVED***
-***REMOVED***var response: Response {
+***REMOVED***var result: Result<ArcGISAuthenticationChallenge.Disposition, Error> {
 ***REMOVED******REMOVED***get async {
-***REMOVED******REMOVED******REMOVED***await $_response
+***REMOVED******REMOVED******REMOVED***await $_result
 ***REMOVED******REMOVED******REMOVED******REMOVED***.compactMap({ $0 ***REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.first(where: { _ in true ***REMOVED***)!
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***public func complete() async {
-***REMOVED******REMOVED***_ = await response
-***REMOVED***
-***REMOVED***
-***REMOVED***enum Response {
-***REMOVED******REMOVED***case tokenCredential(username: String, password: String)
-***REMOVED******REMOVED***case oAuth(configuration: OAuthConfiguration)
-***REMOVED******REMOVED***case cancel
+***REMOVED******REMOVED***_ = await result
 ***REMOVED***
 ***REMOVED***
 

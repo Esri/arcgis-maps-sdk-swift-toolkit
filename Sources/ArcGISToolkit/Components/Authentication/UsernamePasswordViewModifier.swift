@@ -211,7 +211,15 @@ class TokenCredentialViewModel: UsernamePasswordViewModel {
 ***REMOVED***
 ***REMOVED***func signIn() {
 ***REMOVED******REMOVED***formEnabled = false
-***REMOVED******REMOVED***challenge.resume(with: .tokenCredential(username: username, password: password))
+***REMOVED******REMOVED***Task {
+***REMOVED******REMOVED******REMOVED***challenge.resume(
+***REMOVED******REMOVED******REMOVED******REMOVED***with: await Result {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.useCredential(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try await .token(challenge: challenge.arcGISChallenge, username: username, password: password)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func cancel() {

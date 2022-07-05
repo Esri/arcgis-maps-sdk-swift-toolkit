@@ -114,7 +114,7 @@ private struct AuthenticationItemView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text("Tap to load")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
 ***REMOVED******REMOVED******REMOVED***case .failed:
-***REMOVED******REMOVED******REMOVED******REMOVED***Text("Failed to laod")
+***REMOVED******REMOVED******REMOVED******REMOVED***Text("Failed to load")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.red)
 ***REMOVED******REMOVED***
 ***REMOVED***
