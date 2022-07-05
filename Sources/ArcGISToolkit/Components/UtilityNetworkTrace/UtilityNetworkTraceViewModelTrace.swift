@@ -28,6 +28,10 @@ extension UtilityNetworkTraceViewModel {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let symbol = startingPoint.graphic.symbol as? SimpleMarkerSymbol else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***symbol.color = UIColor(color)
 ***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***graphics.forEach { graphic in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let symbol = graphic.symbol as? SimpleLineSymbol else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***symbol.color = UIColor(color)
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***
@@ -39,6 +43,9 @@ extension UtilityNetworkTraceViewModel {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ A collection of graphics generated from the trace.
 ***REMOVED******REMOVED***var graphics = [Graphic]()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ A unique identifier for the trace.
+***REMOVED******REMOVED***let id = UUID()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ A user given name for the trace.
 ***REMOVED******REMOVED***var name: String = ""
@@ -58,5 +65,9 @@ extension UtilityNetworkTraceViewModel {
 ***REMOVED******REMOVED******REMOVED***/ The trace result comprised of a set of Geometry objects representing the network elements
 ***REMOVED******REMOVED******REMOVED***/ identified by the trace.
 ***REMOVED******REMOVED***var utilityGeometryTraceResult: UtilityGeometryTraceResult?
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***static func == (lhs: UtilityNetworkTraceViewModel.Trace, rhs: UtilityNetworkTraceViewModel.Trace) -> Bool {
+***REMOVED******REMOVED******REMOVED***return lhs.id == rhs.id
+***REMOVED***
 ***REMOVED***
 ***REMOVED***

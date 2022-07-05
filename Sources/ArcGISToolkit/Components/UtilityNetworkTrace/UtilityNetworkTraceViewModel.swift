@@ -318,6 +318,15 @@ import Foundation
 ***REMOVED******REMOVED***return true
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ Updates the matching completed trace.
+***REMOVED******REMOVED***/ - Parameter newValue: The new completed trace.
+***REMOVED***func update(completedTrace newValue: Trace) {
+***REMOVED******REMOVED***guard let traceIndex = completedTraces.firstIndex( where: { trace in
+***REMOVED******REMOVED******REMOVED***trace == newValue
+***REMOVED***) else { return ***REMOVED***
+***REMOVED******REMOVED***completedTraces[traceIndex] = newValue
+***REMOVED***
+***REMOVED***
 ***REMOVED******REMOVED*** MARK: Private Items
 ***REMOVED***
 ***REMOVED******REMOVED***/ Changes the selected state of the graphics for the completed trace at the provided index.
