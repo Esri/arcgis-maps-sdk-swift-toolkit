@@ -86,7 +86,11 @@ public final class Authenticator: ObservableObject {
                let config = oAuthConfigurations.first(where: { $0.canBeUsed(for: url) }) {
                 // For an OAuth challenge, we create the credential and resume.
                 // Creating the OAuth credential will present the OAuth login view.
-                queuedArcGISChallenge.resume(with: .oAuth(configuration: config))
+                queuedArcGISChallenge.resume(
+                    with: await Result {
+                        .useCredential(try await .oauth(configuration: config))
+                    }
+                )
             } else {
                 // Set the current challenge, this should present the appropriate view.
                 currentChallenge = queuedChallenge
@@ -125,14 +129,7 @@ extension Authenticator: AuthenticationChallengeHandler {
         subject.send(queuedChallenge)
         
         // Wait for it to complete and return the resulting disposition.
-        switch await queuedChallenge.response {
-        case .tokenCredential(let username, let password):
-            return try await .useCredential(.token(challenge: challenge, username: username, password: password))
-        case .oAuth(let configuration):
-            return try await .useCredential(.oauth(configuration: configuration))
-        case .cancel:
-            return .cancelAuthenticationChallenge
-        }
+        return try await queuedChallenge.result.get()
     }
     
     public func handleNetworkChallenge(
