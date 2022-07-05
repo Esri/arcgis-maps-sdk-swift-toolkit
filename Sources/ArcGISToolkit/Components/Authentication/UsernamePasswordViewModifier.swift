@@ -71,6 +71,8 @@ private struct UsernamePasswordView<ViewModel: UsernamePasswordViewModel>: View 
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@Environment(\.dismiss) var dismissAction
+***REMOVED***
+***REMOVED******REMOVED***/ The view model.
 ***REMOVED***@ObservedObject private var viewModel: ViewModel
 ***REMOVED***
 ***REMOVED******REMOVED***/ The focused field.
@@ -129,6 +131,7 @@ private struct UsernamePasswordView<ViewModel: UsernamePasswordViewModel>: View 
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ An image used in the form.
 ***REMOVED***private var person: some View {
 ***REMOVED******REMOVED***Image(systemName: "person.circle")
 ***REMOVED******REMOVED******REMOVED***.resizable()
@@ -141,6 +144,7 @@ private struct UsernamePasswordView<ViewModel: UsernamePasswordViewModel>: View 
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ The sign-in button.
 ***REMOVED***private var signinButton: some View {
 ***REMOVED******REMOVED***Button(action: {
 ***REMOVED******REMOVED******REMOVED***dismissAction()
@@ -171,9 +175,13 @@ private extension UsernamePasswordView {
 ***REMOVED***
 ***REMOVED***
 
+***REMOVED***/ A view model that has the business logic for handling a token challenge.
 class TokenCredentialUsernamePasswordViewModel: UsernamePasswordViewModel {
+***REMOVED******REMOVED***/ The associated challenge.
 ***REMOVED***private let challenge: QueuedArcGISChallenge
 ***REMOVED***
+***REMOVED******REMOVED***/ Creates a `TokenCredentialUsernamePasswordViewModel`.
+***REMOVED******REMOVED***/ - Parameter challenge: The associated challenge.
 ***REMOVED***init(challenge: QueuedArcGISChallenge) {
 ***REMOVED******REMOVED***self.challenge = challenge
 ***REMOVED***
@@ -214,9 +222,13 @@ class TokenCredentialUsernamePasswordViewModel: UsernamePasswordViewModel {
 ***REMOVED***
 ***REMOVED***
 
+***REMOVED***/ A view model that has the business logic for handling a network challenge.
 class NetworkCredentialUsernamePasswordViewModel: UsernamePasswordViewModel {
+***REMOVED******REMOVED***/ The associated challenge.
 ***REMOVED***private let challenge: QueuedNetworkChallenge
 ***REMOVED***
+***REMOVED******REMOVED***/ Creates a `NetworkCredentialUsernamePasswordViewModel`.
+***REMOVED******REMOVED***/ - Parameter challenge: The associated challenge.
 ***REMOVED***init(challenge: QueuedNetworkChallenge) {
 ***REMOVED******REMOVED***self.challenge = challenge
 ***REMOVED***
