@@ -95,42 +95,20 @@ struct CertificatePickerViewModifier: ViewModifier {
 ***REMOVED******REMOVED***content
 ***REMOVED******REMOVED******REMOVED***.promptBrowseCertificate(
 ***REMOVED******REMOVED******REMOVED******REMOVED***isPresented: $viewModel.showPrompt,
-***REMOVED******REMOVED******REMOVED******REMOVED***host: viewModel.challengingHost,
-***REMOVED******REMOVED******REMOVED******REMOVED***onContinue: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.proceedFromPrompt()
-***REMOVED******REMOVED******REMOVED***, onCancel: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.cancel()
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***viewModel: viewModel
 ***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***.sheet(isPresented: $viewModel.showPicker) {
-***REMOVED******REMOVED******REMOVED******REMOVED***DocumentPickerView(contentTypes: [.pfx]) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.proceed(withCertificateURL: $0)
-***REMOVED******REMOVED******REMOVED*** onCancel: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.cancel()
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.edgesIgnoringSafeArea(.bottom)
-***REMOVED******REMOVED******REMOVED******REMOVED***.interactiveDismissDisabled()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.sheet(isPresented: $viewModel.showPassword) {
-***REMOVED******REMOVED******REMOVED******REMOVED***EnterPasswordView() { password in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.proceed(withPassword: password)
-***REMOVED******REMOVED******REMOVED*** onCancel: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.cancel()
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.edgesIgnoringSafeArea(.bottom)
-***REMOVED******REMOVED******REMOVED******REMOVED***.interactiveDismissDisabled()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.alert("Error importing certificate", isPresented: $viewModel.showCertificateImportError) {
-***REMOVED******REMOVED******REMOVED******REMOVED***Button("Try Again") {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.proceedFromPrompt()
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***Button("Cancel", role: .cancel) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.cancel()
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED*** message: {
-***REMOVED******REMOVED******REMOVED******REMOVED***Text("The certificate file or password was invalid.")
-***REMOVED******REMOVED***
-
+***REMOVED******REMOVED******REMOVED***.certificateFilePicker(
+***REMOVED******REMOVED******REMOVED******REMOVED***isPresented: $viewModel.showPicker,
+***REMOVED******REMOVED******REMOVED******REMOVED***viewModel: viewModel
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***.passwordSheet(
+***REMOVED******REMOVED******REMOVED******REMOVED***isPresented: $viewModel.showPassword,
+***REMOVED******REMOVED******REMOVED******REMOVED***viewModel: viewModel
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***.alertCertificateImportError(
+***REMOVED******REMOVED******REMOVED******REMOVED***isPresented: $viewModel.showCertificateImportError,
+***REMOVED******REMOVED******REMOVED******REMOVED***viewModel: viewModel
+***REMOVED******REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 
@@ -140,23 +118,83 @@ private extension UTType {
 ***REMOVED***
 
 private extension View {
-***REMOVED***@ViewBuilder
 ***REMOVED******REMOVED***/ Displays a prompt to the user to let them know that picking a certificate is required.
+***REMOVED***@MainActor
+***REMOVED***@ViewBuilder
 ***REMOVED***func promptBrowseCertificate(
 ***REMOVED******REMOVED***isPresented: Binding<Bool>,
-***REMOVED******REMOVED***host: String,
-***REMOVED******REMOVED***onContinue: @escaping () -> Void,
-***REMOVED******REMOVED***onCancel: @escaping () -> Void
+***REMOVED******REMOVED***viewModel: CertificatePickerViewModel
 ***REMOVED***) -> some View {
-***REMOVED******REMOVED***alert("Certificate Required", isPresented: isPresented, presenting: host) { _ in
+***REMOVED******REMOVED***alert("Certificate Required", isPresented: isPresented, presenting: viewModel.challengingHost) { _ in
 ***REMOVED******REMOVED******REMOVED***Button("Browse For Certificate") {
-***REMOVED******REMOVED******REMOVED******REMOVED***onContinue()
+***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.proceedFromPrompt()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***Button("Cancel", role: .cancel) {
-***REMOVED******REMOVED******REMOVED******REMOVED***onCancel()
+***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.cancel()
 ***REMOVED******REMOVED***
 ***REMOVED*** message: { _ in
-***REMOVED******REMOVED******REMOVED***Text("A certificate is required to access content on \(host).")
+***REMOVED******REMOVED******REMOVED***Text("A certificate is required to access content on \(viewModel.challengingHost).")
+***REMOVED***
+***REMOVED***
+***REMOVED***
+
+private extension View {
+***REMOVED******REMOVED***/ Displays a sheet that allows the user to select a certificate file.
+***REMOVED***@MainActor
+***REMOVED***@ViewBuilder
+***REMOVED***func certificateFilePicker(
+***REMOVED******REMOVED***isPresented: Binding<Bool>,
+***REMOVED******REMOVED***viewModel: CertificatePickerViewModel
+***REMOVED***) -> some View {
+***REMOVED******REMOVED***sheet(isPresented: isPresented) {
+***REMOVED******REMOVED******REMOVED***DocumentPickerView(contentTypes: [.pfx]) {
+***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.proceed(withCertificateURL: $0)
+***REMOVED******REMOVED*** onCancel: {
+***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.cancel()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.edgesIgnoringSafeArea(.bottom)
+***REMOVED******REMOVED******REMOVED***.interactiveDismissDisabled()
+***REMOVED***
+***REMOVED***
+***REMOVED***
+
+private extension View {
+***REMOVED******REMOVED***/ Displays a sheet that allows the user to enter a password.
+***REMOVED***@MainActor
+***REMOVED***@ViewBuilder
+***REMOVED***func passwordSheet(
+***REMOVED******REMOVED***isPresented: Binding<Bool>,
+***REMOVED******REMOVED***viewModel: CertificatePickerViewModel
+***REMOVED***) -> some View {
+***REMOVED******REMOVED***sheet(isPresented: isPresented) {
+***REMOVED******REMOVED******REMOVED***EnterPasswordView() { password in
+***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.proceed(withPassword: password)
+***REMOVED******REMOVED*** onCancel: {
+***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.cancel()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.edgesIgnoringSafeArea(.bottom)
+***REMOVED******REMOVED******REMOVED***.interactiveDismissDisabled()
+***REMOVED***
+***REMOVED***
+***REMOVED***
+
+private extension View {
+***REMOVED******REMOVED***/ Displays an alert to notify that there was an error importing the certificate.
+***REMOVED***@MainActor
+***REMOVED***@ViewBuilder
+***REMOVED***func alertCertificateImportError(
+***REMOVED******REMOVED***isPresented: Binding<Bool>,
+***REMOVED******REMOVED***viewModel: CertificatePickerViewModel
+***REMOVED***) -> some View {
+***REMOVED******REMOVED***alert("Error importing certificate", isPresented: isPresented) {
+***REMOVED******REMOVED******REMOVED***Button("Try Again") {
+***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.proceedFromPrompt()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***Button("Cancel", role: .cancel) {
+***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.cancel()
+***REMOVED******REMOVED***
+***REMOVED*** message: {
+***REMOVED******REMOVED******REMOVED***Text("The certificate file or password was invalid.")
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
