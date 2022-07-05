@@ -20,19 +20,30 @@ final private class CertificatePickerViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED***@Published var certificateURL: URL?
 ***REMOVED***@Published var password: String = ""
+***REMOVED***@Published var certificateImportFailed = false
 ***REMOVED***
 ***REMOVED***init(challenge: QueuedNetworkChallenge) {
 ***REMOVED******REMOVED***self.challenge = challenge
 ***REMOVED******REMOVED***challengingHost = challenge.networkChallenge.host
 ***REMOVED***
 ***REMOVED***
+***REMOVED***@MainActor
 ***REMOVED***func signIn() {
 ***REMOVED******REMOVED***guard let certificateURL = certificateURL else {
 ***REMOVED******REMOVED******REMOVED***preconditionFailure()
 ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** TODO: handle error
-***REMOVED******REMOVED***challenge.resume(with: .useCredential(try! .certificate(at: certificateURL, password: password)))
+***REMOVED******REMOVED***Task {
+***REMOVED******REMOVED******REMOVED***do {
+***REMOVED******REMOVED******REMOVED******REMOVED***challenge.resume(with: .useCredential(try .certificate(at: certificateURL, password: password)))
+***REMOVED******REMOVED*** catch {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** TODO: Why is this required?
+***REMOVED******REMOVED******REMOVED******REMOVED***try await Task.sleep(nanoseconds: 1_000_000_000)
+***REMOVED******REMOVED******REMOVED******REMOVED***certificateImportFailed = true
+***REMOVED******REMOVED******REMOVED******REMOVED***certificateURL = nil
+***REMOVED******REMOVED******REMOVED******REMOVED***password = ""
+***REMOVED******REMOVED***
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func cancel() {
@@ -47,12 +58,23 @@ struct CertificatePickerViewModifier: ViewModifier {
 ***REMOVED***
 ***REMOVED***@ObservedObject private var viewModel: CertificatePickerViewModel
 ***REMOVED***
+***REMOVED******REMOVED*** TODO: These should be in the view model?
 ***REMOVED***@State var showPrompt: Bool = true
 ***REMOVED***@State var showPicker: Bool = false
 ***REMOVED***@State var showPassword: Bool = false
 
 ***REMOVED***func body(content: Content) -> some View {
 ***REMOVED******REMOVED***content
+***REMOVED******REMOVED******REMOVED***.alert("Error importing certificate", isPresented: $viewModel.certificateImportFailed) {
+***REMOVED******REMOVED******REMOVED******REMOVED***Button("Try Again") {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***showPicker = true
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***Button("Cancel", role: .cancel) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.cancel()
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED*** message: {
+***REMOVED******REMOVED******REMOVED******REMOVED***Text("The certificate file or password was invalid.")
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.promptBrowseCertificate(
 ***REMOVED******REMOVED******REMOVED******REMOVED***isPresented: $showPrompt,
 ***REMOVED******REMOVED******REMOVED******REMOVED***host: viewModel.challengingHost,
@@ -62,6 +84,7 @@ struct CertificatePickerViewModifier: ViewModifier {
 ***REMOVED******REMOVED******REMOVED***, onCancel: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***showPrompt = false
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.cancel()
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***.sheet(isPresented: $showPicker) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***DocumentPickerView(contentTypes: [.pfx]) {
@@ -86,6 +109,10 @@ struct CertificatePickerViewModifier: ViewModifier {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.edgesIgnoringSafeArea(.bottom)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.interactiveDismissDisabled()
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.sheet(isPresented: $viewModel.showError) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Error importing certificate. The certificate file or password was invalid.")
+***REMOVED******REMOVED******REMOVED***
+
 ***REMOVED***
 ***REMOVED***
 
