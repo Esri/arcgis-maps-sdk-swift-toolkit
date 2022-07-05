@@ -119,6 +119,9 @@ private extension UTType {
 
 private extension View {
 ***REMOVED******REMOVED***/ Displays a prompt to the user to let them know that picking a certificate is required.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - isPresented: A Boolean value indicating if the view is presented.
+***REMOVED******REMOVED***/   - viewModel: The view model associated with the view.
 ***REMOVED***@MainActor
 ***REMOVED***@ViewBuilder
 ***REMOVED***func promptBrowseCertificate(
@@ -140,6 +143,9 @@ private extension View {
 
 private extension View {
 ***REMOVED******REMOVED***/ Displays a sheet that allows the user to select a certificate file.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - isPresented: A Boolean value indicating if the view is presented.
+***REMOVED******REMOVED***/   - viewModel: The view model associated with the view.
 ***REMOVED***@MainActor
 ***REMOVED***@ViewBuilder
 ***REMOVED***func certificateFilePicker(
@@ -160,6 +166,9 @@ private extension View {
 
 private extension View {
 ***REMOVED******REMOVED***/ Displays a sheet that allows the user to enter a password.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - isPresented: A Boolean value indicating if the view is presented.
+***REMOVED******REMOVED***/   - viewModel: The view model associated with the view.
 ***REMOVED***@MainActor
 ***REMOVED***@ViewBuilder
 ***REMOVED***func passwordSheet(
@@ -180,6 +189,9 @@ private extension View {
 
 private extension View {
 ***REMOVED******REMOVED***/ Displays an alert to notify that there was an error importing the certificate.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - isPresented: A Boolean value indicating if the view is presented.
+***REMOVED******REMOVED***/   - viewModel: The view model associated with the view.
 ***REMOVED***@MainActor
 ***REMOVED***@ViewBuilder
 ***REMOVED***func alertCertificateImportError(
@@ -199,11 +211,20 @@ private extension View {
 ***REMOVED***
 ***REMOVED***
 
+***REMOVED***/ A view that allows the user to enter a password.
 struct EnterPasswordView: View {
-***REMOVED***@Environment(\.dismiss) var dismiss
+***REMOVED***@Environment(\.dismiss) var dismissAction
+***REMOVED***
+***REMOVED******REMOVED***/ The password that the user entered.
 ***REMOVED***@State var password: String = ""
+***REMOVED***
+***REMOVED******REMOVED***/ The action to call once the user has completed entering the password.
 ***REMOVED***var onContinue: (String) -> Void
+***REMOVED***
+***REMOVED******REMOVED***/ The action to call if the user cancels.
 ***REMOVED***var onCancel: () -> Void
+***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value indicating whether the password field has focus.
 ***REMOVED***@FocusState var isPasswordFocused: Bool
 ***REMOVED***
 ***REMOVED***var body: some View {
@@ -224,7 +245,7 @@ struct EnterPasswordView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.textContentType(.password)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.submitLabel(.go)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onSubmit {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***dismiss()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***dismissAction()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onContinue(password)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
@@ -240,7 +261,7 @@ struct EnterPasswordView: View {
 ***REMOVED******REMOVED******REMOVED***.toolbar {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ToolbarItem(placement: .cancellationAction) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Cancel") {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***dismiss()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***dismissAction()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onCancel()
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
@@ -254,9 +275,10 @@ struct EnterPasswordView: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ The "OK" button.
 ***REMOVED***private var okButton: some View {
 ***REMOVED******REMOVED***Button(action: {
-***REMOVED******REMOVED******REMOVED***dismiss()
+***REMOVED******REMOVED******REMOVED***dismissAction()
 ***REMOVED******REMOVED******REMOVED***onContinue(password)
 ***REMOVED***, label: {
 ***REMOVED******REMOVED******REMOVED***Text("OK")
