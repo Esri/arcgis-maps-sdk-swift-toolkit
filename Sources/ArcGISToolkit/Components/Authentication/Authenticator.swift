@@ -149,6 +149,6 @@ extension Authenticator: AuthenticationChallengeHandler {
         subject.send(queuedChallenge)
         
         // Respond accordingly.
-        return await queuedChallenge.response
+        return await queuedChallenge.disposition
     }
 }

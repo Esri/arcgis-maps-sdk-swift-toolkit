@@ -66,24 +66,24 @@ final class QueuedNetworkChallenge: QueuedChallenge {
     }
 
     func resume(with response: NetworkAuthenticationChallengeDisposition) {
-        guard _response == nil else { return }
-        _response = response
+        guard _disposition == nil else { return }
+        _disposition = response
     }
     
     /// Use a streamed property because we need to support multiple listeners
     /// to know when the challenge completed.
-    @Streamed private var _response: (NetworkAuthenticationChallengeDisposition)?
+    @Streamed private var _disposition: (NetworkAuthenticationChallengeDisposition)?
     
-    var response: NetworkAuthenticationChallengeDisposition {
+    var disposition: NetworkAuthenticationChallengeDisposition {
         get async {
-            await $_response
+            await $_disposition
                 .compactMap({ $0 })
                 .first(where: { _ in true })!
         }
     }
     
     public func complete() async {
-        _ = await response
+        _ = await disposition
     }
     
     enum Kind {
