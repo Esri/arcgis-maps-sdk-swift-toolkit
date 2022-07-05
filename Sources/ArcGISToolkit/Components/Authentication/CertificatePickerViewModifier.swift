@@ -14,21 +14,32 @@
 import SwiftUI
 import UniformTypeIdentifiers
 
+@MainActor
 final private class CertificatePickerViewModel: ObservableObject {
     let challengingHost: String
     let challenge: QueuedNetworkChallenge
     
-    @Published var certificateURL: URL?
-    @Published var password: String = ""
-    @Published var certificateImportFailed = false
+    @Published private(set) var certificateURL: URL?
+    @Published var showPrompt = true
+    @Published var showPicker = false
+    @Published var showPassword = false
+    @Published var showCertificateImportError = false
     
     init(challenge: QueuedNetworkChallenge) {
         self.challenge = challenge
         challengingHost = challenge.networkChallenge.host
     }
     
-    @MainActor
-    func signIn() {
+    func proceedFromPrompt() {
+        showPicker = true
+    }
+    
+    func proceed(withCertificateURL url: URL) {
+        certificateURL = url
+        showPassword = true
+    }
+    
+    func proceed(withPassword password: String) {
         guard let certificateURL = certificateURL else {
             preconditionFailure()
         }
@@ -37,11 +48,9 @@ final private class CertificatePickerViewModel: ObservableObject {
             do {
                 challenge.resume(with: .useCredential(try .certificate(at: certificateURL, password: password)))
             } catch {
-                // TODO: Why is this required?
-                try await Task.sleep(nanoseconds: 1_000_000_000)
-                certificateImportFailed = true
-                certificateURL = nil
-                password = ""
+                // This is required to prevent an "already presenting" error.
+                await Task.yield()
+                showCertificateImportError = true
             }
         }
     }
@@ -57,17 +66,39 @@ struct CertificatePickerViewModifier: ViewModifier {
     }
     
     @ObservedObject private var viewModel: CertificatePickerViewModel
-    
-    // TODO: These should be in the view model?
-    @State var showPrompt: Bool = true
-    @State var showPicker: Bool = false
-    @State var showPassword: Bool = false
 
     func body(content: Content) -> some View {
         content
-            .alert("Error importing certificate", isPresented: $viewModel.certificateImportFailed) {
+            .promptBrowseCertificate(
+                isPresented: $viewModel.showPrompt,
+                host: viewModel.challengingHost,
+                onContinue: {
+                    viewModel.proceedFromPrompt()
+                }, onCancel: {
+                    viewModel.cancel()
+                }
+            )
+            .sheet(isPresented: $viewModel.showPicker) {
+                DocumentPickerView(contentTypes: [.pfx]) {
+                    viewModel.proceed(withCertificateURL: $0)
+                } onCancel: {
+                    viewModel.cancel()
+                }
+                .edgesIgnoringSafeArea(.bottom)
+                .interactiveDismissDisabled()
+            }
+            .sheet(isPresented: $viewModel.showPassword) {
+                EnterPasswordView() { password in
+                    viewModel.proceed(withPassword: password)
+                } onCancel: {
+                    viewModel.cancel()
+                }
+                .edgesIgnoringSafeArea(.bottom)
+                .interactiveDismissDisabled()
+            }
+            .alert("Error importing certificate", isPresented: $viewModel.showCertificateImportError) {
                 Button("Try Again") {
-                    showPicker = true
+                    viewModel.proceedFromPrompt()
                 }
                 Button("Cancel", role: .cancel) {
                     viewModel.cancel()
@@ -75,43 +106,6 @@ struct CertificatePickerViewModifier: ViewModifier {
             } message: {
                 Text("The certificate file or password was invalid.")
             }
-            .promptBrowseCertificate(
-                isPresented: $showPrompt,
-                host: viewModel.challengingHost,
-                onContinue: {
-                    showPrompt = false
-                    showPicker = true
-                }, onCancel: {
-                    showPrompt = false
-                    viewModel.cancel()
-                }
-            )
-            .sheet(isPresented: $showPicker) {
-                DocumentPickerView(contentTypes: [.pfx]) {
-                    viewModel.certificateURL = $0
-                    showPicker = false
-                    showPassword = true
-                } onCancel: {
-                    showPicker = false
-                    viewModel.cancel()
-                }
-                .edgesIgnoringSafeArea(.bottom)
-                .interactiveDismissDisabled()
-            }
-            .sheet(isPresented: $showPassword) {
-                EnterPasswordView(password: $viewModel.password) {
-                    showPassword = false
-                    viewModel.signIn()
-                } onCancel: {
-                    showPassword = false
-                    viewModel.cancel()
-                }
-                .edgesIgnoringSafeArea(.bottom)
-                .interactiveDismissDisabled()
-            }
-//            .sheet(isPresented: $viewModel.showError) {
-//                Text("Error importing certificate. The certificate file or password was invalid.")
-//            }
 
     }
 }
@@ -142,8 +136,9 @@ private extension View {
 }
 
 struct EnterPasswordView: View {
-    @Binding var password: String
-    var onContinue: () -> Void
+    @Environment(\.dismiss) var dismiss
+    @State var password: String = ""
+    var onContinue: (String) -> Void
     var onCancel: () -> Void
     @FocusState var isPasswordFocused: Bool
     
@@ -152,7 +147,6 @@ struct EnterPasswordView: View {
             Form {
                 Section {
                     VStack {
-                        //person
                         Text("Please enter a password for the chosen certificate.")
                             .fixedSize(horizontal: false, vertical: true)
                     }
@@ -165,7 +159,10 @@ struct EnterPasswordView: View {
                         .focused($isPasswordFocused)
                         .textContentType(.password)
                         .submitLabel(.go)
-                        .onSubmit { onContinue() }
+                        .onSubmit {
+                            dismiss()
+                            onContinue(password)
+                        }
                 }
                 .autocapitalization(.none)
                 .disableAutocorrection(true)
@@ -176,10 +173,12 @@ struct EnterPasswordView: View {
             }
             .navigationTitle("Certificate")
             .navigationBarTitleDisplayMode(.inline)
-            .interactiveDismissDisabled()
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel") { onCancel() }
+                    Button("Cancel") {
+                        dismiss()
+                        onCancel()
+                    }
                 }
             }
             .onAppear {
@@ -193,7 +192,8 @@ struct EnterPasswordView: View {
     
     private var okButton: some View {
         Button(action: {
-            onContinue()
+            dismiss()
+            onContinue(password)
         }, label: {
             Text("OK")
                 .frame(maxWidth: .infinity, alignment: .center)
