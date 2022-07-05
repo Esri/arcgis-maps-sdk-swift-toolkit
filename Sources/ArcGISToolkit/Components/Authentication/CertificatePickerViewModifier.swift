@@ -14,21 +14,32 @@
 ***REMOVED***
 import UniformTypeIdentifiers
 
+@MainActor
 final private class CertificatePickerViewModel: ObservableObject {
 ***REMOVED***let challengingHost: String
 ***REMOVED***let challenge: QueuedNetworkChallenge
 ***REMOVED***
-***REMOVED***@Published var certificateURL: URL?
-***REMOVED***@Published var password: String = ""
-***REMOVED***@Published var certificateImportFailed = false
+***REMOVED***@Published private(set) var certificateURL: URL?
+***REMOVED***@Published var showPrompt = true
+***REMOVED***@Published var showPicker = false
+***REMOVED***@Published var showPassword = false
+***REMOVED***@Published var showCertificateImportError = false
 ***REMOVED***
 ***REMOVED***init(challenge: QueuedNetworkChallenge) {
 ***REMOVED******REMOVED***self.challenge = challenge
 ***REMOVED******REMOVED***challengingHost = challenge.networkChallenge.host
 ***REMOVED***
 ***REMOVED***
-***REMOVED***@MainActor
-***REMOVED***func signIn() {
+***REMOVED***func proceedFromPrompt() {
+***REMOVED******REMOVED***showPicker = true
+***REMOVED***
+***REMOVED***
+***REMOVED***func proceed(withCertificateURL url: URL) {
+***REMOVED******REMOVED***certificateURL = url
+***REMOVED******REMOVED***showPassword = true
+***REMOVED***
+***REMOVED***
+***REMOVED***func proceed(withPassword password: String) {
 ***REMOVED******REMOVED***guard let certificateURL = certificateURL else {
 ***REMOVED******REMOVED******REMOVED***preconditionFailure()
 ***REMOVED***
@@ -37,11 +48,9 @@ final private class CertificatePickerViewModel: ObservableObject {
 ***REMOVED******REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED******REMOVED***challenge.resume(with: .useCredential(try .certificate(at: certificateURL, password: password)))
 ***REMOVED******REMOVED*** catch {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** TODO: Why is this required?
-***REMOVED******REMOVED******REMOVED******REMOVED***try await Task.sleep(nanoseconds: 1_000_000_000)
-***REMOVED******REMOVED******REMOVED******REMOVED***certificateImportFailed = true
-***REMOVED******REMOVED******REMOVED******REMOVED***certificateURL = nil
-***REMOVED******REMOVED******REMOVED******REMOVED***password = ""
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** This is required to prevent an "already presenting" error.
+***REMOVED******REMOVED******REMOVED******REMOVED***await Task.yield()
+***REMOVED******REMOVED******REMOVED******REMOVED***showCertificateImportError = true
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -57,17 +66,39 @@ struct CertificatePickerViewModifier: ViewModifier {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@ObservedObject private var viewModel: CertificatePickerViewModel
-***REMOVED***
-***REMOVED******REMOVED*** TODO: These should be in the view model?
-***REMOVED***@State var showPrompt: Bool = true
-***REMOVED***@State var showPicker: Bool = false
-***REMOVED***@State var showPassword: Bool = false
 
 ***REMOVED***func body(content: Content) -> some View {
 ***REMOVED******REMOVED***content
-***REMOVED******REMOVED******REMOVED***.alert("Error importing certificate", isPresented: $viewModel.certificateImportFailed) {
+***REMOVED******REMOVED******REMOVED***.promptBrowseCertificate(
+***REMOVED******REMOVED******REMOVED******REMOVED***isPresented: $viewModel.showPrompt,
+***REMOVED******REMOVED******REMOVED******REMOVED***host: viewModel.challengingHost,
+***REMOVED******REMOVED******REMOVED******REMOVED***onContinue: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.proceedFromPrompt()
+***REMOVED******REMOVED******REMOVED***, onCancel: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.cancel()
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***.sheet(isPresented: $viewModel.showPicker) {
+***REMOVED******REMOVED******REMOVED******REMOVED***DocumentPickerView(contentTypes: [.pfx]) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.proceed(withCertificateURL: $0)
+***REMOVED******REMOVED******REMOVED*** onCancel: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.cancel()
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.edgesIgnoringSafeArea(.bottom)
+***REMOVED******REMOVED******REMOVED******REMOVED***.interactiveDismissDisabled()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.sheet(isPresented: $viewModel.showPassword) {
+***REMOVED******REMOVED******REMOVED******REMOVED***EnterPasswordView() { password in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.proceed(withPassword: password)
+***REMOVED******REMOVED******REMOVED*** onCancel: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.cancel()
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.edgesIgnoringSafeArea(.bottom)
+***REMOVED******REMOVED******REMOVED******REMOVED***.interactiveDismissDisabled()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.alert("Error importing certificate", isPresented: $viewModel.showCertificateImportError) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Button("Try Again") {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***showPicker = true
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.proceedFromPrompt()
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***Button("Cancel", role: .cancel) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.cancel()
@@ -75,43 +106,6 @@ struct CertificatePickerViewModifier: ViewModifier {
 ***REMOVED******REMOVED*** message: {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text("The certificate file or password was invalid.")
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.promptBrowseCertificate(
-***REMOVED******REMOVED******REMOVED******REMOVED***isPresented: $showPrompt,
-***REMOVED******REMOVED******REMOVED******REMOVED***host: viewModel.challengingHost,
-***REMOVED******REMOVED******REMOVED******REMOVED***onContinue: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***showPrompt = false
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***showPicker = true
-***REMOVED******REMOVED******REMOVED***, onCancel: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***showPrompt = false
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.cancel()
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***.sheet(isPresented: $showPicker) {
-***REMOVED******REMOVED******REMOVED******REMOVED***DocumentPickerView(contentTypes: [.pfx]) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.certificateURL = $0
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***showPicker = false
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***showPassword = true
-***REMOVED******REMOVED******REMOVED*** onCancel: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***showPicker = false
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.cancel()
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.edgesIgnoringSafeArea(.bottom)
-***REMOVED******REMOVED******REMOVED******REMOVED***.interactiveDismissDisabled()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.sheet(isPresented: $showPassword) {
-***REMOVED******REMOVED******REMOVED******REMOVED***EnterPasswordView(password: $viewModel.password) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***showPassword = false
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.signIn()
-***REMOVED******REMOVED******REMOVED*** onCancel: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***showPassword = false
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.cancel()
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.edgesIgnoringSafeArea(.bottom)
-***REMOVED******REMOVED******REMOVED******REMOVED***.interactiveDismissDisabled()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.sheet(isPresented: $viewModel.showError) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Error importing certificate. The certificate file or password was invalid.")
-***REMOVED******REMOVED******REMOVED***
 
 ***REMOVED***
 ***REMOVED***
@@ -142,8 +136,9 @@ private extension View {
 ***REMOVED***
 
 struct EnterPasswordView: View {
-***REMOVED***@Binding var password: String
-***REMOVED***var onContinue: () -> Void
+***REMOVED***@Environment(\.dismiss) var dismiss
+***REMOVED***@State var password: String = ""
+***REMOVED***var onContinue: (String) -> Void
 ***REMOVED***var onCancel: () -> Void
 ***REMOVED***@FocusState var isPasswordFocused: Bool
 ***REMOVED***
@@ -152,7 +147,6 @@ struct EnterPasswordView: View {
 ***REMOVED******REMOVED******REMOVED***Form {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Section {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***VStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***person
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Please enter a password for the chosen certificate.")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fixedSize(horizontal: false, vertical: true)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
@@ -165,7 +159,10 @@ struct EnterPasswordView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.focused($isPasswordFocused)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.textContentType(.password)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.submitLabel(.go)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onSubmit { onContinue() ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onSubmit {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***dismiss()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onContinue(password)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.autocapitalization(.none)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.disableAutocorrection(true)
@@ -176,10 +173,12 @@ struct EnterPasswordView: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.navigationTitle("Certificate")
 ***REMOVED******REMOVED******REMOVED***.navigationBarTitleDisplayMode(.inline)
-***REMOVED******REMOVED******REMOVED***.interactiveDismissDisabled()
 ***REMOVED******REMOVED******REMOVED***.toolbar {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ToolbarItem(placement: .cancellationAction) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Cancel") { onCancel() ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Cancel") {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***dismiss()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onCancel()
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onAppear {
@@ -193,7 +192,8 @@ struct EnterPasswordView: View {
 ***REMOVED***
 ***REMOVED***private var okButton: some View {
 ***REMOVED******REMOVED***Button(action: {
-***REMOVED******REMOVED******REMOVED***onContinue()
+***REMOVED******REMOVED******REMOVED***dismiss()
+***REMOVED******REMOVED******REMOVED***onContinue(password)
 ***REMOVED***, label: {
 ***REMOVED******REMOVED******REMOVED***Text("OK")
 ***REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .center)
