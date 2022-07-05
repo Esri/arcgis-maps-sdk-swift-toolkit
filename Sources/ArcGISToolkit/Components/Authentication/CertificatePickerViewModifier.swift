@@ -14,31 +14,50 @@
 import SwiftUI
 import UniformTypeIdentifiers
 
+/// An object that provides the business logic for the workflow of prompting the user for a
+/// certificate and a password.
 @MainActor
 final private class CertificatePickerViewModel: ObservableObject {
+    /// The host that prompted the challenge.
     let challengingHost: String
+    /// The challenge that requires a certificate to proceed.
     let challenge: QueuedNetworkChallenge
     
+    /// The URL of the certificate that the user chose.
     private var certificateURL: URL?
+    
+    /// A Boolean value indicating whether to show the prompt.
     @Published var showPrompt = true
+    /// A Boolean value indicating whether to show the certificate file picker.
     @Published var showPicker = false
+    /// A Boolean value indicating whether to show the password field view.
     @Published var showPassword = false
+    /// A Boolean value indicating whether to display the error.
     @Published var showCertificateImportError = false
     
+    /// Creates a certificate picker view model.
+    /// - Parameter challenge: The challenge that requires a certificate.
     init(challenge: QueuedNetworkChallenge) {
         self.challenge = challenge
         challengingHost = challenge.networkChallenge.host
     }
     
+    /// Proceeds to show the file picker. This should be called after the prompt that notifies the
+    /// user that a certificate must be selected.
     func proceedFromPrompt() {
         showPicker = true
     }
     
+    /// Proceeds to show the user the password form. This should be called after the user selects
+    /// a certificate.
+    /// - Parameter url: The URL of the certificate that the user chose.
     func proceed(withCertificateURL url: URL) {
         certificateURL = url
         showPassword = true
     }
     
+    /// Attempts to use the certificate and password to respond to the challenge.
+    /// - Parameter password: The password for the certificate.
     func proceed(withPassword password: String) {
         guard let certificateURL = certificateURL else {
             preconditionFailure()
@@ -55,16 +74,21 @@ final private class CertificatePickerViewModel: ObservableObject {
         }
     }
     
+    /// Cancels the challenge.
     func cancel() {
         challenge.resume(with: .cancelAuthenticationChallenge)
     }
 }
 
+/// A view modifier that presents a certificate picker workflow.
 struct CertificatePickerViewModifier: ViewModifier {
+    /// Creates a certificate picker view modifier.
+    /// - Parameter challenge: The challenge that requires a certificate.
     init(challenge: QueuedNetworkChallenge) {
         viewModel = CertificatePickerViewModel(challenge: challenge)
     }
     
+    /// The view model.
     @ObservedObject private var viewModel: CertificatePickerViewModel
 
     func body(content: Content) -> some View {
@@ -111,11 +135,13 @@ struct CertificatePickerViewModifier: ViewModifier {
 }
 
 private extension UTType {
+    /// A `UTType` that represents a pfx file.
     static let pfx = UTType(filenameExtension: "pfx")!
 }
 
 private extension View {
     @ViewBuilder
+    /// Displays a prompt to the user to let them know that picking a certificate is required.
     func promptBrowseCertificate(
         isPresented: Binding<Bool>,
         host: String,
