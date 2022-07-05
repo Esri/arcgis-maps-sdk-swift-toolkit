@@ -14,31 +14,50 @@
 ***REMOVED***
 import UniformTypeIdentifiers
 
+***REMOVED***/ An object that provides the business logic for the workflow of prompting the user for a
+***REMOVED***/ certificate and a password.
 @MainActor
 final private class CertificatePickerViewModel: ObservableObject {
+***REMOVED******REMOVED***/ The host that prompted the challenge.
 ***REMOVED***let challengingHost: String
+***REMOVED******REMOVED***/ The challenge that requires a certificate to proceed.
 ***REMOVED***let challenge: QueuedNetworkChallenge
 ***REMOVED***
+***REMOVED******REMOVED***/ The URL of the certificate that the user chose.
 ***REMOVED***private var certificateURL: URL?
+***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value indicating whether to show the prompt.
 ***REMOVED***@Published var showPrompt = true
+***REMOVED******REMOVED***/ A Boolean value indicating whether to show the certificate file picker.
 ***REMOVED***@Published var showPicker = false
+***REMOVED******REMOVED***/ A Boolean value indicating whether to show the password field view.
 ***REMOVED***@Published var showPassword = false
+***REMOVED******REMOVED***/ A Boolean value indicating whether to display the error.
 ***REMOVED***@Published var showCertificateImportError = false
 ***REMOVED***
+***REMOVED******REMOVED***/ Creates a certificate picker view model.
+***REMOVED******REMOVED***/ - Parameter challenge: The challenge that requires a certificate.
 ***REMOVED***init(challenge: QueuedNetworkChallenge) {
 ***REMOVED******REMOVED***self.challenge = challenge
 ***REMOVED******REMOVED***challengingHost = challenge.networkChallenge.host
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ Proceeds to show the file picker. This should be called after the prompt that notifies the
+***REMOVED******REMOVED***/ user that a certificate must be selected.
 ***REMOVED***func proceedFromPrompt() {
 ***REMOVED******REMOVED***showPicker = true
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ Proceeds to show the user the password form. This should be called after the user selects
+***REMOVED******REMOVED***/ a certificate.
+***REMOVED******REMOVED***/ - Parameter url: The URL of the certificate that the user chose.
 ***REMOVED***func proceed(withCertificateURL url: URL) {
 ***REMOVED******REMOVED***certificateURL = url
 ***REMOVED******REMOVED***showPassword = true
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ Attempts to use the certificate and password to respond to the challenge.
+***REMOVED******REMOVED***/ - Parameter password: The password for the certificate.
 ***REMOVED***func proceed(withPassword password: String) {
 ***REMOVED******REMOVED***guard let certificateURL = certificateURL else {
 ***REMOVED******REMOVED******REMOVED***preconditionFailure()
@@ -55,16 +74,21 @@ final private class CertificatePickerViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ Cancels the challenge.
 ***REMOVED***func cancel() {
 ***REMOVED******REMOVED***challenge.resume(with: .cancelAuthenticationChallenge)
 ***REMOVED***
 ***REMOVED***
 
+***REMOVED***/ A view modifier that presents a certificate picker workflow.
 struct CertificatePickerViewModifier: ViewModifier {
+***REMOVED******REMOVED***/ Creates a certificate picker view modifier.
+***REMOVED******REMOVED***/ - Parameter challenge: The challenge that requires a certificate.
 ***REMOVED***init(challenge: QueuedNetworkChallenge) {
 ***REMOVED******REMOVED***viewModel = CertificatePickerViewModel(challenge: challenge)
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ The view model.
 ***REMOVED***@ObservedObject private var viewModel: CertificatePickerViewModel
 
 ***REMOVED***func body(content: Content) -> some View {
@@ -111,11 +135,13 @@ struct CertificatePickerViewModifier: ViewModifier {
 ***REMOVED***
 
 private extension UTType {
+***REMOVED******REMOVED***/ A `UTType` that represents a pfx file.
 ***REMOVED***static let pfx = UTType(filenameExtension: "pfx")!
 ***REMOVED***
 
 private extension View {
 ***REMOVED***@ViewBuilder
+***REMOVED******REMOVED***/ Displays a prompt to the user to let them know that picking a certificate is required.
 ***REMOVED***func promptBrowseCertificate(
 ***REMOVED******REMOVED***isPresented: Binding<Bool>,
 ***REMOVED******REMOVED***host: String,
