@@ -232,79 +232,90 @@ import Foundation
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Runs the pending trace and stores it into the list of completed traces.
-***REMOVED***func trace() {
+***REMOVED******REMOVED***/ - Returns: A Boolean value indicating whether the trace was successful or not.
+***REMOVED***func trace() async -> Bool {
 ***REMOVED******REMOVED***guard let config = pendingTrace.configuration,
-***REMOVED******REMOVED******REMOVED***  let network = network else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED***  let network = network else { return false ***REMOVED***
 ***REMOVED******REMOVED***let params = UtilityTraceParameters(
 ***REMOVED******REMOVED******REMOVED***namedTraceConfiguration: config,
 ***REMOVED******REMOVED******REMOVED***startingLocations: pendingTrace.startingPoints.compactMap{ $0.utilityElement ***REMOVED***
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED***Task {
-***REMOVED******REMOVED******REMOVED***let traceResults = try await network.trace(traceParameters: params)
-***REMOVED******REMOVED******REMOVED***var assetGroups = [String: Int]()
-***REMOVED******REMOVED******REMOVED***for result in traceResults {
-***REMOVED******REMOVED******REMOVED******REMOVED***switch result {
-***REMOVED******REMOVED******REMOVED******REMOVED***case let result as UtilityElementTraceResult:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***result.elements.forEach({ element in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let count = assetGroups[element.assetGroup.name] ?? 0 + 1
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***assetGroups.updateValue(count, forKey: element.assetGroup.name)
-***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***assetGroups.forEach { (key, value) in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***pendingTrace.assetLabels.append("\(key): \(value)")
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***pendingTrace.utilityElementTraceResult = result
-***REMOVED******REMOVED******REMOVED******REMOVED***case let result as UtilityGeometryTraceResult:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let polygon = result.polygon {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let graphic = Graphic(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***geometry: polygon,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***symbol: SimpleLineSymbol(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***style: .solid,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***color: UIColor(pendingTrace.color),
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***width: 5.0
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***graphicsOverlay.addGraphic(graphic)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***pendingTrace.graphics.append(graphic)
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let polyline = result.polyline {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let graphic = Graphic(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***geometry: polyline,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***symbol: SimpleLineSymbol(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***style: .dash,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***color: UIColor(pendingTrace.color),
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***width: 5.0
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***graphicsOverlay.addGraphic(graphic)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***pendingTrace.graphics.append(graphic)
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let multipoint = result.multipoint {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let graphic = Graphic(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***geometry: multipoint,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***symbol: SimpleLineSymbol(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***style: .dot,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***color: UIColor(pendingTrace.color),
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***width: 5.0
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***graphicsOverlay.addGraphic(graphic)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***pendingTrace.graphics.append(graphic)
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***pendingTrace.utilityGeometryTraceResult = result
-***REMOVED******REMOVED******REMOVED******REMOVED***case let result as UtilityFunctionTraceResult:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let functionOutputs = result.functionOutputs
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***functionOutputs.forEach { functionOutput in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***pendingTrace.functionOutputs.append(functionOutput)
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***pendingTrace.utilityFunctionTraceResult = result
-***REMOVED******REMOVED******REMOVED******REMOVED***default:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***break
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***let traceResults: [UtilityTraceResult]
+***REMOVED******REMOVED***do {
+***REMOVED******REMOVED******REMOVED***traceResults = try await network.trace(traceParameters: params)
+***REMOVED*** catch(let serviceError as ServiceError) {
+***REMOVED******REMOVED******REMOVED***if let reason = serviceError.failureReason {
+***REMOVED******REMOVED******REMOVED******REMOVED***userWarning = reason
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***completedTraces.append(pendingTrace)
-***REMOVED******REMOVED******REMOVED***selectedTraceIndex = completedTraces.count - 1
-***REMOVED******REMOVED******REMOVED***pendingTrace = Trace()
+***REMOVED******REMOVED******REMOVED***return false
+***REMOVED*** catch {
+***REMOVED******REMOVED******REMOVED***userWarning = "An unknown error occurred"
+***REMOVED******REMOVED******REMOVED***return false
 ***REMOVED***
+***REMOVED******REMOVED***var assetGroups = [String: Int]()
+***REMOVED******REMOVED***for result in traceResults {
+***REMOVED******REMOVED******REMOVED***switch result {
+***REMOVED******REMOVED******REMOVED***case let result as UtilityElementTraceResult:
+***REMOVED******REMOVED******REMOVED******REMOVED***result.elements.forEach({ element in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let count = assetGroups[element.assetGroup.name] ?? 0 + 1
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***assetGroups.updateValue(count, forKey: element.assetGroup.name)
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***assetGroups.forEach { (key, value) in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***pendingTrace.assetLabels.append("\(key): \(value)")
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***pendingTrace.utilityElementTraceResult = result
+***REMOVED******REMOVED******REMOVED***case let result as UtilityGeometryTraceResult:
+***REMOVED******REMOVED******REMOVED******REMOVED***if let polygon = result.polygon {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let graphic = Graphic(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***geometry: polygon,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***symbol: SimpleLineSymbol(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***style: .solid,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***color: UIColor(pendingTrace.color),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***width: 5.0
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***graphicsOverlay.addGraphic(graphic)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***pendingTrace.graphics.append(graphic)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***if let polyline = result.polyline {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let graphic = Graphic(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***geometry: polyline,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***symbol: SimpleLineSymbol(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***style: .dash,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***color: UIColor(pendingTrace.color),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***width: 5.0
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***graphicsOverlay.addGraphic(graphic)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***pendingTrace.graphics.append(graphic)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***if let multipoint = result.multipoint {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let graphic = Graphic(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***geometry: multipoint,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***symbol: SimpleLineSymbol(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***style: .dot,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***color: UIColor(pendingTrace.color),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***width: 5.0
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***graphicsOverlay.addGraphic(graphic)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***pendingTrace.graphics.append(graphic)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***pendingTrace.utilityGeometryTraceResult = result
+***REMOVED******REMOVED******REMOVED***case let result as UtilityFunctionTraceResult:
+***REMOVED******REMOVED******REMOVED******REMOVED***let functionOutputs = result.functionOutputs
+***REMOVED******REMOVED******REMOVED******REMOVED***functionOutputs.forEach { functionOutput in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***pendingTrace.functionOutputs.append(functionOutput)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***pendingTrace.utilityFunctionTraceResult = result
+***REMOVED******REMOVED******REMOVED***default:
+***REMOVED******REMOVED******REMOVED******REMOVED***break
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***completedTraces.append(pendingTrace)
+***REMOVED******REMOVED***selectedTraceIndex = completedTraces.count - 1
+***REMOVED******REMOVED***pendingTrace = Trace()
+***REMOVED******REMOVED***return true
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED*** MARK: Private Items

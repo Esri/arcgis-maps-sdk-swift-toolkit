@@ -186,8 +186,12 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED***viewModel.trace()
-***REMOVED******REMOVED******REMOVED***currentActivity = .viewingTraces
+***REMOVED******REMOVED******REMOVED***Task {
+***REMOVED******REMOVED******REMOVED******REMOVED***let traceSuccess = await viewModel.trace()
+***REMOVED******REMOVED******REMOVED******REMOVED***if traceSuccess {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentActivity = .viewingTraces
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
 ***REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED***Text("Trace")
 ***REMOVED***
