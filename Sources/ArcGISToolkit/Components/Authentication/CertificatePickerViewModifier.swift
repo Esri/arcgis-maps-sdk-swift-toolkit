@@ -20,19 +20,30 @@ final private class CertificatePickerViewModel: ObservableObject {
     
     @Published var certificateURL: URL?
     @Published var password: String = ""
+    @Published var certificateImportFailed = false
     
     init(challenge: QueuedNetworkChallenge) {
         self.challenge = challenge
         challengingHost = challenge.networkChallenge.host
     }
     
+    @MainActor
     func signIn() {
         guard let certificateURL = certificateURL else {
             preconditionFailure()
         }
         
-        // TODO: handle error
-        challenge.resume(with: .useCredential(try! .certificate(at: certificateURL, password: password)))
+        Task {
+            do {
+                challenge.resume(with: .useCredential(try .certificate(at: certificateURL, password: password)))
+            } catch {
+                // TODO: Why is this required?
+                try await Task.sleep(nanoseconds: 1_000_000_000)
+                certificateImportFailed = true
+                certificateURL = nil
+                password = ""
+            }
+        }
     }
     
     func cancel() {
@@ -47,12 +58,23 @@ struct CertificatePickerViewModifier: ViewModifier {
     
     @ObservedObject private var viewModel: CertificatePickerViewModel
     
+    // TODO: These should be in the view model?
     @State var showPrompt: Bool = true
     @State var showPicker: Bool = false
     @State var showPassword: Bool = false
 
     func body(content: Content) -> some View {
         content
+            .alert("Error importing certificate", isPresented: $viewModel.certificateImportFailed) {
+                Button("Try Again") {
+                    showPicker = true
+                }
+                Button("Cancel", role: .cancel) {
+                    viewModel.cancel()
+                }
+            } message: {
+                Text("The certificate file or password was invalid.")
+            }
             .promptBrowseCertificate(
                 isPresented: $showPrompt,
                 host: viewModel.challengingHost,
@@ -62,7 +84,8 @@ struct CertificatePickerViewModifier: ViewModifier {
                 }, onCancel: {
                     showPrompt = false
                     viewModel.cancel()
-                })
+                }
+            )
             .sheet(isPresented: $showPicker) {
                 DocumentPickerView(contentTypes: [.pfx]) {
                     viewModel.certificateURL = $0
@@ -86,6 +109,10 @@ struct CertificatePickerViewModifier: ViewModifier {
                 .edgesIgnoringSafeArea(.bottom)
                 .interactiveDismissDisabled()
             }
+//            .sheet(isPresented: $viewModel.showError) {
+//                Text("Error importing certificate. The certificate file or password was invalid.")
+//            }
+
     }
 }
 
