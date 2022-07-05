@@ -245,6 +245,22 @@ public struct UtilityNetworkTrace: View {
                         }
                     }
             }
+            Section {
+                DisclosureGroup("Advanced Options") {
+                    ColorPicker(
+                        selection: Binding(get: {
+                            viewModel.selectedTrace?.color ?? Color.clear
+                        }, set: { newValue in
+                            if var trace = viewModel.selectedTrace {
+                                trace.color = newValue
+                                viewModel.update(completedTrace: trace)
+                            }
+                        })
+                    ) {
+                        Text("Trace Color")
+                    }
+                }
+            }
         }
         Button {
             warningIsPresented.toggle()

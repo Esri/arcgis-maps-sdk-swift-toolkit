@@ -28,6 +28,10 @@ extension UtilityNetworkTraceViewModel {
                     guard let symbol = startingPoint.graphic.symbol as? SimpleMarkerSymbol else { return }
                     symbol.color = UIColor(color)
                 }
+                graphics.forEach { graphic in
+                    guard let symbol = graphic.symbol as? SimpleLineSymbol else { return }
+                    symbol.color = UIColor(color)
+                }
             }
         }
         
@@ -39,6 +43,9 @@ extension UtilityNetworkTraceViewModel {
         
         /// A collection of graphics generated from the trace.
         var graphics = [Graphic]()
+        
+        /// A unique identifier for the trace.
+        let id = UUID()
         
         /// A user given name for the trace.
         var name: String = ""
@@ -58,5 +65,9 @@ extension UtilityNetworkTraceViewModel {
         /// The trace result comprised of a set of Geometry objects representing the network elements
         /// identified by the trace.
         var utilityGeometryTraceResult: UtilityGeometryTraceResult?
+        
+        static func == (lhs: UtilityNetworkTraceViewModel.Trace, rhs: UtilityNetworkTraceViewModel.Trace) -> Bool {
+            return lhs.id == rhs.id
+        }
     }
 }

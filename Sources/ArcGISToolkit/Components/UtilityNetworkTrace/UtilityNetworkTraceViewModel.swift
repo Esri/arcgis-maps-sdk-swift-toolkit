@@ -318,6 +318,15 @@ import SwiftUI
         return true
     }
     
+    /// Updates the matching completed trace.
+    /// - Parameter newValue: The new completed trace.
+    func update(completedTrace newValue: Trace) {
+        guard let traceIndex = completedTraces.firstIndex( where: { trace in
+            trace == newValue
+        }) else { return }
+        completedTraces[traceIndex] = newValue
+    }
+    
     // MARK: Private Items
     
     /// Changes the selected state of the graphics for the completed trace at the provided index.
