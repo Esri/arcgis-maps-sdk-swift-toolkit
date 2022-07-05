@@ -30,12 +30,15 @@ final class QueuedArcGISChallenge: QueuedChallenge {
     init(arcGISChallenge: ArcGISAuthenticationChallenge) {
         self.arcGISChallenge = arcGISChallenge
     }
-
+    
+    /// Resumes the challenge with a result.
+    /// - Parameter result: The result of the challenge.
     func resume(with result: Result<ArcGISAuthenticationChallenge.Disposition, Error>) {
         guard _result == nil else { return }
         _result = result
     }
     
+    /// Cancels the challenge.
     func cancel() {
         guard _result == nil else { return }
         _result = .success(.cancelAuthenticationChallenge)
@@ -45,6 +48,7 @@ final class QueuedArcGISChallenge: QueuedChallenge {
     /// to know when the challenge completed.
     @Streamed private var _result: Result<ArcGISAuthenticationChallenge.Disposition, Error>?
     
+    /// The result of the challenge.
     var result: Result<ArcGISAuthenticationChallenge.Disposition, Error> {
         get async {
             await $_result
