@@ -71,6 +71,8 @@ private struct UsernamePasswordView<ViewModel: UsernamePasswordViewModel>: View 
     }
     
     @Environment(\.dismiss) var dismissAction
+    
+    /// The view model.
     @ObservedObject private var viewModel: ViewModel
     
     /// The focused field.
@@ -129,6 +131,7 @@ private struct UsernamePasswordView<ViewModel: UsernamePasswordViewModel>: View 
         }
     }
     
+    /// An image used in the form.
     private var person: some View {
         Image(systemName: "person.circle")
             .resizable()
@@ -141,6 +144,7 @@ private struct UsernamePasswordView<ViewModel: UsernamePasswordViewModel>: View 
             )
     }
     
+    /// The sign-in button.
     private var signinButton: some View {
         Button(action: {
             dismissAction()
@@ -171,9 +175,13 @@ private extension UsernamePasswordView {
     }
 }
 
+/// A view model that has the business logic for handling a token challenge.
 class TokenCredentialUsernamePasswordViewModel: UsernamePasswordViewModel {
+    /// The associated challenge.
     private let challenge: QueuedArcGISChallenge
     
+    /// Creates a `TokenCredentialUsernamePasswordViewModel`.
+    /// - Parameter challenge: The associated challenge.
     init(challenge: QueuedArcGISChallenge) {
         self.challenge = challenge
     }
@@ -214,9 +222,13 @@ class TokenCredentialUsernamePasswordViewModel: UsernamePasswordViewModel {
     }
 }
 
+/// A view model that has the business logic for handling a network challenge.
 class NetworkCredentialUsernamePasswordViewModel: UsernamePasswordViewModel {
+    /// The associated challenge.
     private let challenge: QueuedNetworkChallenge
     
+    /// Creates a `NetworkCredentialUsernamePasswordViewModel`.
+    /// - Parameter challenge: The associated challenge.
     init(challenge: QueuedNetworkChallenge) {
         self.challenge = challenge
     }
