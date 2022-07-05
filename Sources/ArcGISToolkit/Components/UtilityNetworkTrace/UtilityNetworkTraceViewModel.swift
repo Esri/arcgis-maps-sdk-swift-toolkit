@@ -45,6 +45,9 @@ import SwiftUI
         }
     }
     
+    /// Warning message presented to the user
+    @Published var userWarning = ""
+    
     /// A Boolean value indicating if the pending trace is configured to the point that it can be run.
     var canRunTrace: Bool {
         pendingTrace.configuration != nil && !pendingTrace.startingPoints.isEmpty
@@ -157,7 +160,10 @@ import SwiftUI
                       let globalid = feature.attributes["globalid"] as? UUID,
                       !pendingTrace.startingPoints.contains(where: { startingPoint in
                           return startingPoint.utilityElement.globalID == globalid
-                      }) else { return }
+                      }) else {
+                    userWarning = "Duplicate starting points cannot be added "
+                    return
+                }
                 
                 Task {
                     guard let network = network,

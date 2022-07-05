@@ -429,6 +429,15 @@ public struct UtilityNetworkTrace: View {
                 )
             }
         }
+        .alert(
+            "Warning",
+            isPresented: Binding(
+                get: { !viewModel.userWarning.isEmpty },
+                set: { _ in viewModel.userWarning = "" }
+            )
+        ) { } message: {
+            Text(viewModel.userWarning)
+        }
     }
     
     // MARK: Computed Properties
