@@ -14,45 +14,64 @@
 import SwiftUI
 import ArcGIS
 
+/// A type that provides the business logic for a view that prompts the user to login with a
+/// username and password.
 protocol UsernamePasswordViewModel: ObservableObject {
+    /// The username.
     var username: String { get set }
+    /// The password.
     var password: String { get set }
+    /// A Boolean value indicating if the sign-in button is enabled.
     var signinButtonEnabled: Bool { get }
+    /// A Boolean value indicating if the form is enabled.
     var formEnabled: Bool { get }
+    /// The host that initiated the challenge.
     var challengingHost: String { get }
     
+    /// Attempts to log in with a username and password.
     func signIn()
+    /// Cancels the challenge.
     func cancel()
 }
 
+/// A view modifier that prompts a user to login with a username and password.
 struct UsernamePasswordViewModifier<ViewModel: UsernamePasswordViewModel>: ViewModifier {
+    /// The view model.
     let viewModel: ViewModel
     
+    /// Creates a `UsernamePasswordViewModifier` with a queued network challenge.
     init(challenge: QueuedNetworkChallenge) where ViewModel == NetworkCredentialUsernamePasswordViewModel {
         viewModel = NetworkCredentialUsernamePasswordViewModel(challenge: challenge)
     }
     
-    init(challenge: QueuedArcGISChallenge) where ViewModel == TokenCredentialViewModel {
-        viewModel = TokenCredentialViewModel(challenge: challenge)
+    /// Creates a `UsernamePasswordViewModifier` with a queued ArcGIS challenge.
+    init(challenge: QueuedArcGISChallenge) where ViewModel == TokenCredentialUsernamePasswordViewModel {
+        viewModel = TokenCredentialUsernamePasswordViewModel(challenge: challenge)
     }
     
+    /// A Boolean value indicating whether or not the prompt to login is displayed.
     @State var isPresented = false
     
     func body(content: Content) -> some View {
         content
             .task { isPresented = true }
-            .sheet(isPresented: $isPresented) { UsernamePasswordView(viewModel: viewModel, isPresented: $isPresented) }
+            .sheet(isPresented: $isPresented) {
+                UsernamePasswordView(viewModel: viewModel)
+            }
     }
 }
 
+/// A view that prompts a user to login with a username and password.
 private struct UsernamePasswordView<ViewModel: UsernamePasswordViewModel>: View {
-    init(viewModel: ViewModel, isPresented: Binding<Bool>) {
+    /// Creates the view.
+    /// - Parameters:
+    ///   - viewModel: The view model.
+    init(viewModel: ViewModel) {
         _viewModel = ObservedObject(initialValue: viewModel)
-        self.isPresented = isPresented
     }
     
+    @Environment(\.dismiss) var dismissAction
     @ObservedObject private var viewModel: ViewModel
-    private var isPresented: Binding<Bool>
     
     /// The focused field.
     @FocusState private var focusedField: Field?
@@ -96,7 +115,7 @@ private struct UsernamePasswordView<ViewModel: UsernamePasswordViewModel>: View 
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel") {
-                        isPresented.wrappedValue = false
+                        dismissAction()
                         viewModel.cancel()
                     }
                 }
@@ -124,7 +143,7 @@ private struct UsernamePasswordView<ViewModel: UsernamePasswordViewModel>: View 
     
     private var signinButton: some View {
         Button(action: {
-            isPresented.wrappedValue = false
+            dismissAction()
             viewModel.signIn()
         }, label: {
             if viewModel.formEnabled {
@@ -137,55 +156,22 @@ private struct UsernamePasswordView<ViewModel: UsernamePasswordViewModel>: View 
                     .tint(.white)
             }
         })
-            .disabled(!viewModel.signinButtonEnabled)
-            .listRowBackground(viewModel.signinButtonEnabled ? Color.accentColor : Color.gray)
-    }
-}
-
-struct UsernamePasswordView_Previews: PreviewProvider {
-    static var previews: some View {
-        UsernamePasswordView(viewModel: MockUsernamePasswordViewModel(challengingHost: "arcgis.com"), isPresented: .constant(true))
+        .disabled(!viewModel.signinButtonEnabled)
+        .listRowBackground(viewModel.signinButtonEnabled ? Color.accentColor : Color.gray)
     }
 }
 
 private extension UsernamePasswordView {
     /// A type that represents the fields in the user name and password sign-in form.
     enum Field: Hashable {
+        /// The username field.
         case username
+        /// The password field.
         case password
     }
 }
 
-class MockUsernamePasswordViewModel: UsernamePasswordViewModel {
-    init(challengingHost: String) {
-        self.challengingHost = challengingHost
-    }
-    
-    @Published var username = "" {
-        didSet { updateSigninButtonEnabled() }
-    }
-    @Published var password = "" {
-        didSet { updateSigninButtonEnabled() }
-    }
-    @Published var signinButtonEnabled = false
-    @Published var formEnabled: Bool = true
-    
-    private func updateSigninButtonEnabled() {
-        signinButtonEnabled = !username.isEmpty && !password.isEmpty
-    }
-    
-    let challengingHost: String
-    
-    func signIn() {
-        formEnabled = false
-    }
-    
-    func cancel() {
-        formEnabled = false
-    }
-}
-
-class TokenCredentialViewModel: UsernamePasswordViewModel {
+class TokenCredentialUsernamePasswordViewModel: UsernamePasswordViewModel {
     private let challenge: QueuedArcGISChallenge
     
     init(challenge: QueuedArcGISChallenge) {
