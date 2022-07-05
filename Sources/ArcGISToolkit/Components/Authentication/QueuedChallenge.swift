@@ -30,12 +30,15 @@ final class QueuedArcGISChallenge: QueuedChallenge {
 ***REMOVED***init(arcGISChallenge: ArcGISAuthenticationChallenge) {
 ***REMOVED******REMOVED***self.arcGISChallenge = arcGISChallenge
 ***REMOVED***
-
+***REMOVED***
+***REMOVED******REMOVED***/ Resumes the challenge with a result.
+***REMOVED******REMOVED***/ - Parameter result: The result of the challenge.
 ***REMOVED***func resume(with result: Result<ArcGISAuthenticationChallenge.Disposition, Error>) {
 ***REMOVED******REMOVED***guard _result == nil else { return ***REMOVED***
 ***REMOVED******REMOVED***_result = result
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ Cancels the challenge.
 ***REMOVED***func cancel() {
 ***REMOVED******REMOVED***guard _result == nil else { return ***REMOVED***
 ***REMOVED******REMOVED***_result = .success(.cancelAuthenticationChallenge)
@@ -45,6 +48,7 @@ final class QueuedArcGISChallenge: QueuedChallenge {
 ***REMOVED******REMOVED***/ to know when the challenge completed.
 ***REMOVED***@Streamed private var _result: Result<ArcGISAuthenticationChallenge.Disposition, Error>?
 ***REMOVED***
+***REMOVED******REMOVED***/ The result of the challenge.
 ***REMOVED***var result: Result<ArcGISAuthenticationChallenge.Disposition, Error> {
 ***REMOVED******REMOVED***get async {
 ***REMOVED******REMOVED******REMOVED***await $_result
