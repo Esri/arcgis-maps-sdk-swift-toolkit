@@ -114,7 +114,7 @@ private struct AuthenticationItemView: View {
                 Text("Tap to load")
                     .foregroundColor(.secondary)
             case .failed:
-                Text("Failed to laod")
+                Text("Failed to load")
                     .foregroundColor(.red)
             }
         }

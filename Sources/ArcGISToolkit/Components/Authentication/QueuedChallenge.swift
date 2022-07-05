@@ -31,36 +31,30 @@ final class QueuedArcGISChallenge: QueuedChallenge {
         self.arcGISChallenge = arcGISChallenge
     }
 
-    func resume(with response: Response) {
-        guard _response == nil else { return }
-        _response = response
+    func resume(with result: Result<ArcGISAuthenticationChallenge.Disposition, Error>) {
+        guard _result == nil else { return }
+        _result = result
     }
     
     func cancel() {
-        guard _response == nil else { return }
-        _response = .cancel
+        guard _result == nil else { return }
+        _result = .success(.cancelAuthenticationChallenge)
     }
     
     /// Use a streamed property because we need to support multiple listeners
     /// to know when the challenge completed.
-    @Streamed private var _response: Response?
+    @Streamed private var _result: Result<ArcGISAuthenticationChallenge.Disposition, Error>?
     
-    var response: Response {
+    var result: Result<ArcGISAuthenticationChallenge.Disposition, Error> {
         get async {
-            await $_response
+            await $_result
                 .compactMap({ $0 })
                 .first(where: { _ in true })!
         }
     }
     
     public func complete() async {
-        _ = await response
-    }
-    
-    enum Response {
-        case tokenCredential(username: String, password: String)
-        case oAuth(configuration: OAuthConfiguration)
-        case cancel
+        _ = await result
     }
 }
 

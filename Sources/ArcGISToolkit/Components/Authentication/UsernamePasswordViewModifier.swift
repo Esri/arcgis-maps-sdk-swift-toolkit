@@ -211,7 +211,15 @@ class TokenCredentialViewModel: UsernamePasswordViewModel {
     
     func signIn() {
         formEnabled = false
-        challenge.resume(with: .tokenCredential(username: username, password: password))
+        Task {
+            challenge.resume(
+                with: await Result {
+                    .useCredential(
+                        try await .token(challenge: challenge.arcGISChallenge, username: username, password: password)
+                    )
+                }
+            )
+        }
     }
     
     func cancel() {
