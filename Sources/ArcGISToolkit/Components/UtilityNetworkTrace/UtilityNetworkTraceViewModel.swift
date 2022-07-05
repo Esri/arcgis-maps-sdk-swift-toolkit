@@ -232,79 +232,90 @@ import SwiftUI
     }
     
     /// Runs the pending trace and stores it into the list of completed traces.
-    func trace() {
+    /// - Returns: A Boolean value indicating whether the trace was successful or not.
+    func trace() async -> Bool {
         guard let config = pendingTrace.configuration,
-              let network = network else { return }
+              let network = network else { return false }
         let params = UtilityTraceParameters(
             namedTraceConfiguration: config,
             startingLocations: pendingTrace.startingPoints.compactMap{ $0.utilityElement }
         )
-        Task {
-            let traceResults = try await network.trace(traceParameters: params)
-            var assetGroups = [String: Int]()
-            for result in traceResults {
-                switch result {
-                case let result as UtilityElementTraceResult:
-                    result.elements.forEach({ element in
-                        let count = assetGroups[element.assetGroup.name] ?? 0 + 1
-                        assetGroups.updateValue(count, forKey: element.assetGroup.name)
-                    })
-                    assetGroups.forEach { (key, value) in
-                        pendingTrace.assetLabels.append("\(key): \(value)")
-                    }
-                    pendingTrace.utilityElementTraceResult = result
-                case let result as UtilityGeometryTraceResult:
-                    if let polygon = result.polygon {
-                        let graphic = Graphic(
-                            geometry: polygon,
-                            symbol: SimpleLineSymbol(
-                                style: .solid,
-                                color: UIColor(pendingTrace.color),
-                                width: 5.0
-                            )
-                        )
-                        graphicsOverlay.addGraphic(graphic)
-                        pendingTrace.graphics.append(graphic)
-                    }
-                    if let polyline = result.polyline {
-                        let graphic = Graphic(
-                            geometry: polyline,
-                            symbol: SimpleLineSymbol(
-                                style: .dash,
-                                color: UIColor(pendingTrace.color),
-                                width: 5.0
-                            )
-                        )
-                        graphicsOverlay.addGraphic(graphic)
-                        pendingTrace.graphics.append(graphic)
-                    }
-                    if let multipoint = result.multipoint {
-                        let graphic = Graphic(
-                            geometry: multipoint,
-                            symbol: SimpleLineSymbol(
-                                style: .dot,
-                                color: UIColor(pendingTrace.color),
-                                width: 5.0
-                            )
-                        )
-                        graphicsOverlay.addGraphic(graphic)
-                        pendingTrace.graphics.append(graphic)
-                    }
-                    pendingTrace.utilityGeometryTraceResult = result
-                case let result as UtilityFunctionTraceResult:
-                    let functionOutputs = result.functionOutputs
-                    functionOutputs.forEach { functionOutput in
-                        pendingTrace.functionOutputs.append(functionOutput)
-                    }
-                    pendingTrace.utilityFunctionTraceResult = result
-                default:
-                    break
-                }
+        let traceResults: [UtilityTraceResult]
+        do {
+            traceResults = try await network.trace(traceParameters: params)
+        } catch(let serviceError as ServiceError) {
+            if let reason = serviceError.failureReason {
+                userWarning = reason
             }
-            completedTraces.append(pendingTrace)
-            selectedTraceIndex = completedTraces.count - 1
-            pendingTrace = Trace()
+            return false
+        } catch {
+            userWarning = "An unknown error occurred"
+            return false
         }
+        var assetGroups = [String: Int]()
+        for result in traceResults {
+            switch result {
+            case let result as UtilityElementTraceResult:
+                result.elements.forEach({ element in
+                    let count = assetGroups[element.assetGroup.name] ?? 0 + 1
+                    assetGroups.updateValue(count, forKey: element.assetGroup.name)
+                })
+                assetGroups.forEach { (key, value) in
+                    pendingTrace.assetLabels.append("\(key): \(value)")
+                }
+                pendingTrace.utilityElementTraceResult = result
+            case let result as UtilityGeometryTraceResult:
+                if let polygon = result.polygon {
+                    let graphic = Graphic(
+                        geometry: polygon,
+                        symbol: SimpleLineSymbol(
+                            style: .solid,
+                            color: UIColor(pendingTrace.color),
+                            width: 5.0
+                        )
+                    )
+                    graphicsOverlay.addGraphic(graphic)
+                    pendingTrace.graphics.append(graphic)
+                }
+                if let polyline = result.polyline {
+                    let graphic = Graphic(
+                        geometry: polyline,
+                        symbol: SimpleLineSymbol(
+                            style: .dash,
+                            color: UIColor(pendingTrace.color),
+                            width: 5.0
+                        )
+                    )
+                    graphicsOverlay.addGraphic(graphic)
+                    pendingTrace.graphics.append(graphic)
+                }
+                if let multipoint = result.multipoint {
+                    let graphic = Graphic(
+                        geometry: multipoint,
+                        symbol: SimpleLineSymbol(
+                            style: .dot,
+                            color: UIColor(pendingTrace.color),
+                            width: 5.0
+                        )
+                    )
+                    graphicsOverlay.addGraphic(graphic)
+                    pendingTrace.graphics.append(graphic)
+                }
+                pendingTrace.utilityGeometryTraceResult = result
+            case let result as UtilityFunctionTraceResult:
+                let functionOutputs = result.functionOutputs
+                functionOutputs.forEach { functionOutput in
+                    pendingTrace.functionOutputs.append(functionOutput)
+                }
+                pendingTrace.utilityFunctionTraceResult = result
+            default:
+                break
+            }
+        }
+        completedTraces.append(pendingTrace)
+        selectedTraceIndex = completedTraces.count - 1
+        pendingTrace = Trace()
+        return true
     }
     
     // MARK: Private Items

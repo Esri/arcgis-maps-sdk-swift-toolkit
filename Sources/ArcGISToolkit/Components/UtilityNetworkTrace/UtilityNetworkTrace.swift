@@ -186,8 +186,12 @@ public struct UtilityNetworkTrace: View {
             }
         }
         Button {
-            viewModel.trace()
-            currentActivity = .viewingTraces
+            Task {
+                let traceSuccess = await viewModel.trace()
+                if traceSuccess {
+                    currentActivity = .viewingTraces
+                }
+            }
         } label: {
             Text("Trace")
         }
