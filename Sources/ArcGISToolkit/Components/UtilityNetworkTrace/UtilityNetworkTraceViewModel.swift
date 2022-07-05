@@ -151,9 +151,16 @@ import Foundation
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***identifyLayerResults?.forEach { identifyLayerResult in
 ***REMOVED******REMOVED******REMOVED***identifyLayerResult.geoElements.forEach { geoElement in
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Block duplicate starting point selection
+***REMOVED******REMOVED******REMOVED******REMOVED***guard let feature = geoElement as? ArcGISFeature,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  let globalid = feature.attributes["globalid"] as? UUID,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  !pendingTrace.startingPoints.contains(where: { startingPoint in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  return startingPoint.utilityElement.globalID == globalid
+***REMOVED******REMOVED******REMOVED***  ***REMOVED***) else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***Task {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let network = network,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  let feature = geoElement as? ArcGISFeature,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  let geometry = feature.geometry,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  let symbol = try? await (feature.featureTable?.layer as? FeatureLayer)?
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.renderer?
