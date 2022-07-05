@@ -102,7 +102,7 @@ final class FloorFilterViewModelTests: XCTestCase {
         XCTAssertNil(viewModel.selectedSite)
     }
     
-    /// Tests that a `FloorFilterViewModel` succesfully initializes.
+    /// Tests that a `FloorFilterViewModel` successfully initializes.
     func testInitWithFloorManagerAndViewpoint() async throws {
         let floorManager = try await floorManager(
             forWebMapWithIdentifier: .testMap
