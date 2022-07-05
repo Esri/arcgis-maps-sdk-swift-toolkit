@@ -236,6 +236,14 @@ import SwiftUI
     func trace() async -> Bool {
         guard let config = pendingTrace.configuration,
               let network = network else { return false }
+        
+        let minStartingPoints = config.minimumStartingLocations.rawValue
+        
+        guard pendingTrace.startingPoints.count >= minStartingPoints else {
+            userWarning = "Please set at least \(minStartingPoints) starting location\(minStartingPoints > 1 ? "s" : "")."
+            return false
+        }
+        
         let params = UtilityTraceParameters(
             namedTraceConfiguration: config,
             startingLocations: pendingTrace.startingPoints.compactMap{ $0.utilityElement }
