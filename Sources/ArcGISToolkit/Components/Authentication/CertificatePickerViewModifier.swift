@@ -19,7 +19,7 @@ final private class CertificatePickerViewModel: ObservableObject {
     let challengingHost: String
     let challenge: QueuedNetworkChallenge
     
-    @Published private(set) var certificateURL: URL?
+    private var certificateURL: URL?
     @Published var showPrompt = true
     @Published var showPicker = false
     @Published var showPassword = false
@@ -49,7 +49,7 @@ final private class CertificatePickerViewModel: ObservableObject {
                 challenge.resume(with: .useCredential(try .certificate(at: certificateURL, password: password)))
             } catch {
                 // This is required to prevent an "already presenting" error.
-                await Task.yield()
+                try? await Task.sleep(nanoseconds: 100_000)
                 showCertificateImportError = true
             }
         }
