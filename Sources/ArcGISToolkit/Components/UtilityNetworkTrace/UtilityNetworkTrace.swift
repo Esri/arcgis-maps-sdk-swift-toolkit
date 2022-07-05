@@ -294,6 +294,7 @@ public struct UtilityNetworkTrace: View {
                     }))
                 }
             } else if selectedStartingPoint?.utilityElement.networkSource.kind == .junction &&
+                        selectedStartingPoint?.utilityElement.terminal != nil &&
                         !(selectedStartingPoint?.utilityElement.assetType.terminalConfiguration?.terminals.isEmpty ?? true) {
                 Section {
                     Picker(
