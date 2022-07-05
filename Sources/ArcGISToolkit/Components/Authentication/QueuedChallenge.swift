@@ -14,13 +14,19 @@
 import Foundation
 ***REMOVED***
 
+***REMOVED***/ A type that represents a challenge in the queue of authentication challenges.
 protocol QueuedChallenge: AnyObject {
+***REMOVED******REMOVED***/ Waits for the challenge to complete.
 ***REMOVED***func complete() async
 ***REMOVED***
 
+***REMOVED***/ An object that represents an ArcGIS authentication challenge in the queue of challenges.
 final class QueuedArcGISChallenge: QueuedChallenge {
+***REMOVED******REMOVED***/ The ArcGIS authentication challenge.
 ***REMOVED***let arcGISChallenge: ArcGISAuthenticationChallenge
 ***REMOVED***
+***REMOVED******REMOVED***/ Creates a `QueuedArcGISChallenge`.
+***REMOVED******REMOVED***/ - Parameter arcGISChallenge: The associated ArcGIS authentication challenge.
 ***REMOVED***init(arcGISChallenge: ArcGISAuthenticationChallenge) {
 ***REMOVED******REMOVED***self.arcGISChallenge = arcGISChallenge
 ***REMOVED***
@@ -58,22 +64,29 @@ final class QueuedArcGISChallenge: QueuedChallenge {
 ***REMOVED***
 ***REMOVED***
 
+***REMOVED***/ An object that represents a network authentication challenge in the queue of challenges.
 final class QueuedNetworkChallenge: QueuedChallenge {
+***REMOVED******REMOVED***/ The associated network authentication challenge.
 ***REMOVED***let networkChallenge: NetworkAuthenticationChallenge
 ***REMOVED***
+***REMOVED******REMOVED***/ Creates a `QueuedNetworkChallenge`.
+***REMOVED******REMOVED***/ - Parameter networkChallenge: The associated network authentication challenge.
 ***REMOVED***init(networkChallenge: NetworkAuthenticationChallenge) {
 ***REMOVED******REMOVED***self.networkChallenge = networkChallenge
 ***REMOVED***
-
-***REMOVED***func resume(with response: NetworkAuthenticationChallengeDisposition) {
+***REMOVED***
+***REMOVED******REMOVED***/ Resumes the queued challenge.
+***REMOVED******REMOVED***/ - Parameter disposition: The disposition to resume with.
+***REMOVED***func resume(with disposition: NetworkAuthenticationChallengeDisposition) {
 ***REMOVED******REMOVED***guard _disposition == nil else { return ***REMOVED***
-***REMOVED******REMOVED***_disposition = response
+***REMOVED******REMOVED***_disposition = disposition
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Use a streamed property because we need to support multiple listeners
 ***REMOVED******REMOVED***/ to know when the challenge completed.
 ***REMOVED***@Streamed private var _disposition: (NetworkAuthenticationChallengeDisposition)?
 ***REMOVED***
+***REMOVED******REMOVED***/ The resulting disposition of the challenge.
 ***REMOVED***var disposition: NetworkAuthenticationChallengeDisposition {
 ***REMOVED******REMOVED***get async {
 ***REMOVED******REMOVED******REMOVED***await $_disposition
@@ -86,12 +99,17 @@ final class QueuedNetworkChallenge: QueuedChallenge {
 ***REMOVED******REMOVED***_ = await disposition
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ An enumeration that describes the kind of challenge.
 ***REMOVED***enum Kind {
+***REMOVED******REMOVED******REMOVED***/ A challenge for an untrusted host.
 ***REMOVED******REMOVED***case serverTrust
+***REMOVED******REMOVED******REMOVED***/ A challenge that requires a login via username and password.
 ***REMOVED******REMOVED***case login
+***REMOVED******REMOVED******REMOVED***/ A challenge that requires a client certificate.
 ***REMOVED******REMOVED***case certificate
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ The kind of challenge.
 ***REMOVED***var kind: Kind {
 ***REMOVED******REMOVED***switch networkChallenge.kind {
 ***REMOVED******REMOVED***case .serverTrust:
