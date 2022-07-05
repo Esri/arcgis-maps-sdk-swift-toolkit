@@ -236,6 +236,14 @@ import Foundation
 ***REMOVED***func trace() async -> Bool {
 ***REMOVED******REMOVED***guard let config = pendingTrace.configuration,
 ***REMOVED******REMOVED******REMOVED***  let network = network else { return false ***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let minStartingPoints = config.minimumStartingLocations.rawValue
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***guard pendingTrace.startingPoints.count >= minStartingPoints else {
+***REMOVED******REMOVED******REMOVED***userWarning = "Please set at least \(minStartingPoints) starting location\(minStartingPoints > 1 ? "s" : "")."
+***REMOVED******REMOVED******REMOVED***return false
+***REMOVED***
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let params = UtilityTraceParameters(
 ***REMOVED******REMOVED******REMOVED***namedTraceConfiguration: config,
 ***REMOVED******REMOVED******REMOVED***startingLocations: pendingTrace.startingPoints.compactMap{ $0.utilityElement ***REMOVED***
