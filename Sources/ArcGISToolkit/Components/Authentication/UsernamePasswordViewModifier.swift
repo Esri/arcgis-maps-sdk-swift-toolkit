@@ -14,45 +14,64 @@
 ***REMOVED***
 ***REMOVED***
 
+***REMOVED***/ A type that provides the business logic for a view that prompts the user to login with a
+***REMOVED***/ username and password.
 protocol UsernamePasswordViewModel: ObservableObject {
+***REMOVED******REMOVED***/ The username.
 ***REMOVED***var username: String { get set ***REMOVED***
+***REMOVED******REMOVED***/ The password.
 ***REMOVED***var password: String { get set ***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value indicating if the sign-in button is enabled.
 ***REMOVED***var signinButtonEnabled: Bool { get ***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value indicating if the form is enabled.
 ***REMOVED***var formEnabled: Bool { get ***REMOVED***
+***REMOVED******REMOVED***/ The host that initiated the challenge.
 ***REMOVED***var challengingHost: String { get ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ Attempts to log in with a username and password.
 ***REMOVED***func signIn()
+***REMOVED******REMOVED***/ Cancels the challenge.
 ***REMOVED***func cancel()
 ***REMOVED***
 
+***REMOVED***/ A view modifier that prompts a user to login with a username and password.
 struct UsernamePasswordViewModifier<ViewModel: UsernamePasswordViewModel>: ViewModifier {
+***REMOVED******REMOVED***/ The view model.
 ***REMOVED***let viewModel: ViewModel
 ***REMOVED***
+***REMOVED******REMOVED***/ Creates a `UsernamePasswordViewModifier` with a queued network challenge.
 ***REMOVED***init(challenge: QueuedNetworkChallenge) where ViewModel == NetworkCredentialUsernamePasswordViewModel {
 ***REMOVED******REMOVED***viewModel = NetworkCredentialUsernamePasswordViewModel(challenge: challenge)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***init(challenge: QueuedArcGISChallenge) where ViewModel == TokenCredentialViewModel {
-***REMOVED******REMOVED***viewModel = TokenCredentialViewModel(challenge: challenge)
+***REMOVED******REMOVED***/ Creates a `UsernamePasswordViewModifier` with a queued ArcGIS challenge.
+***REMOVED***init(challenge: QueuedArcGISChallenge) where ViewModel == TokenCredentialUsernamePasswordViewModel {
+***REMOVED******REMOVED***viewModel = TokenCredentialUsernamePasswordViewModel(challenge: challenge)
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value indicating whether or not the prompt to login is displayed.
 ***REMOVED***@State var isPresented = false
 ***REMOVED***
 ***REMOVED***func body(content: Content) -> some View {
 ***REMOVED******REMOVED***content
 ***REMOVED******REMOVED******REMOVED***.task { isPresented = true ***REMOVED***
-***REMOVED******REMOVED******REMOVED***.sheet(isPresented: $isPresented) { UsernamePasswordView(viewModel: viewModel, isPresented: $isPresented) ***REMOVED***
+***REMOVED******REMOVED******REMOVED***.sheet(isPresented: $isPresented) {
+***REMOVED******REMOVED******REMOVED******REMOVED***UsernamePasswordView(viewModel: viewModel)
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 
+***REMOVED***/ A view that prompts a user to login with a username and password.
 private struct UsernamePasswordView<ViewModel: UsernamePasswordViewModel>: View {
-***REMOVED***init(viewModel: ViewModel, isPresented: Binding<Bool>) {
+***REMOVED******REMOVED***/ Creates the view.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - viewModel: The view model.
+***REMOVED***init(viewModel: ViewModel) {
 ***REMOVED******REMOVED***_viewModel = ObservedObject(initialValue: viewModel)
-***REMOVED******REMOVED***self.isPresented = isPresented
 ***REMOVED***
 ***REMOVED***
+***REMOVED***@Environment(\.dismiss) var dismissAction
 ***REMOVED***@ObservedObject private var viewModel: ViewModel
-***REMOVED***private var isPresented: Binding<Bool>
 ***REMOVED***
 ***REMOVED******REMOVED***/ The focused field.
 ***REMOVED***@FocusState private var focusedField: Field?
@@ -96,7 +115,7 @@ private struct UsernamePasswordView<ViewModel: UsernamePasswordViewModel>: View 
 ***REMOVED******REMOVED******REMOVED***.toolbar {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ToolbarItem(placement: .cancellationAction) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Cancel") {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented.wrappedValue = false
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***dismissAction()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.cancel()
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
@@ -124,7 +143,7 @@ private struct UsernamePasswordView<ViewModel: UsernamePasswordViewModel>: View 
 ***REMOVED***
 ***REMOVED***private var signinButton: some View {
 ***REMOVED******REMOVED***Button(action: {
-***REMOVED******REMOVED******REMOVED***isPresented.wrappedValue = false
+***REMOVED******REMOVED******REMOVED***dismissAction()
 ***REMOVED******REMOVED******REMOVED***viewModel.signIn()
 ***REMOVED***, label: {
 ***REMOVED******REMOVED******REMOVED***if viewModel.formEnabled {
@@ -137,55 +156,22 @@ private struct UsernamePasswordView<ViewModel: UsernamePasswordViewModel>: View 
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.tint(.white)
 ***REMOVED******REMOVED***
 ***REMOVED***)
-***REMOVED******REMOVED******REMOVED***.disabled(!viewModel.signinButtonEnabled)
-***REMOVED******REMOVED******REMOVED***.listRowBackground(viewModel.signinButtonEnabled ? Color.accentColor : Color.gray)
-***REMOVED***
-***REMOVED***
-
-struct UsernamePasswordView_Previews: PreviewProvider {
-***REMOVED***static var previews: some View {
-***REMOVED******REMOVED***UsernamePasswordView(viewModel: MockUsernamePasswordViewModel(challengingHost: "arcgis.com"), isPresented: .constant(true))
+***REMOVED******REMOVED***.disabled(!viewModel.signinButtonEnabled)
+***REMOVED******REMOVED***.listRowBackground(viewModel.signinButtonEnabled ? Color.accentColor : Color.gray)
 ***REMOVED***
 ***REMOVED***
 
 private extension UsernamePasswordView {
 ***REMOVED******REMOVED***/ A type that represents the fields in the user name and password sign-in form.
 ***REMOVED***enum Field: Hashable {
+***REMOVED******REMOVED******REMOVED***/ The username field.
 ***REMOVED******REMOVED***case username
+***REMOVED******REMOVED******REMOVED***/ The password field.
 ***REMOVED******REMOVED***case password
 ***REMOVED***
 ***REMOVED***
 
-class MockUsernamePasswordViewModel: UsernamePasswordViewModel {
-***REMOVED***init(challengingHost: String) {
-***REMOVED******REMOVED***self.challengingHost = challengingHost
-***REMOVED***
-***REMOVED***
-***REMOVED***@Published var username = "" {
-***REMOVED******REMOVED***didSet { updateSigninButtonEnabled() ***REMOVED***
-***REMOVED***
-***REMOVED***@Published var password = "" {
-***REMOVED******REMOVED***didSet { updateSigninButtonEnabled() ***REMOVED***
-***REMOVED***
-***REMOVED***@Published var signinButtonEnabled = false
-***REMOVED***@Published var formEnabled: Bool = true
-***REMOVED***
-***REMOVED***private func updateSigninButtonEnabled() {
-***REMOVED******REMOVED***signinButtonEnabled = !username.isEmpty && !password.isEmpty
-***REMOVED***
-***REMOVED***
-***REMOVED***let challengingHost: String
-***REMOVED***
-***REMOVED***func signIn() {
-***REMOVED******REMOVED***formEnabled = false
-***REMOVED***
-***REMOVED***
-***REMOVED***func cancel() {
-***REMOVED******REMOVED***formEnabled = false
-***REMOVED***
-***REMOVED***
-
-class TokenCredentialViewModel: UsernamePasswordViewModel {
+class TokenCredentialUsernamePasswordViewModel: UsernamePasswordViewModel {
 ***REMOVED***private let challenge: QueuedArcGISChallenge
 ***REMOVED***
 ***REMOVED***init(challenge: QueuedArcGISChallenge) {
