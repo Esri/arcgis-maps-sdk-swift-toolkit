@@ -19,7 +19,7 @@ final private class CertificatePickerViewModel: ObservableObject {
 ***REMOVED***let challengingHost: String
 ***REMOVED***let challenge: QueuedNetworkChallenge
 ***REMOVED***
-***REMOVED***@Published private(set) var certificateURL: URL?
+***REMOVED***private var certificateURL: URL?
 ***REMOVED***@Published var showPrompt = true
 ***REMOVED***@Published var showPicker = false
 ***REMOVED***@Published var showPassword = false
@@ -49,7 +49,7 @@ final private class CertificatePickerViewModel: ObservableObject {
 ***REMOVED******REMOVED******REMOVED******REMOVED***challenge.resume(with: .useCredential(try .certificate(at: certificateURL, password: password)))
 ***REMOVED******REMOVED*** catch {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** This is required to prevent an "already presenting" error.
-***REMOVED******REMOVED******REMOVED******REMOVED***await Task.yield()
+***REMOVED******REMOVED******REMOVED******REMOVED***try? await Task.sleep(nanoseconds: 100_000)
 ***REMOVED******REMOVED******REMOVED******REMOVED***showCertificateImportError = true
 ***REMOVED******REMOVED***
 ***REMOVED***
