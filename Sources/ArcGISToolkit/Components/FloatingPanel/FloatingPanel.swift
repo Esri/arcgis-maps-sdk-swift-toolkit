@@ -28,32 +28,23 @@ public struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED******REMOVED*** to have it be a view modifier, similar to how SwiftUI doesn't have a
 ***REMOVED******REMOVED*** SheetView, but a modifier that presents a sheet.
 ***REMOVED***
+***REMOVED***@Environment(\.horizontalSizeClass)
+***REMOVED***private var horizontalSizeClass: UserInterfaceSizeClass?
+***REMOVED***
 ***REMOVED******REMOVED***/ The content shown in the floating panel.
 ***REMOVED***let content: Content
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a `FloatingPanel`
-***REMOVED******REMOVED***/ - Parameter alignment: Alignment of the floating panel within the parent view.
 ***REMOVED******REMOVED***/ - Parameter initialHeight: The initial height given to the content of the floating panel.
 ***REMOVED******REMOVED***/ Default is 200.
-***REMOVED******REMOVED***/ - Parameter width: The width given to the content of the floating panel. Default is 360.
 ***REMOVED******REMOVED***/ - Parameter content: The view shown in the floating panel.
 ***REMOVED***public init(
-***REMOVED******REMOVED***alignment: Alignment,
 ***REMOVED******REMOVED***initialHeight: CGFloat = 200,
-***REMOVED******REMOVED***width: CGFloat = 360,
 ***REMOVED******REMOVED***@ViewBuilder content: () -> Content
 ***REMOVED***) {
-***REMOVED******REMOVED***self.alignment = alignment
-***REMOVED******REMOVED***self.width = width
 ***REMOVED******REMOVED***self.content = content()
 ***REMOVED******REMOVED***_height = State(initialValue: initialHeight)
 ***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ Alignment of the floating panel within the parent view.
-***REMOVED***private let alignment: Alignment
-***REMOVED***
-***REMOVED******REMOVED***/ The width given to the content of the floating panel.
-***REMOVED***private let width: CGFloat
 ***REMOVED***
 ***REMOVED******REMOVED***/ The color of the handle.
 ***REMOVED***@State private var handleColor: Color = .defaultHandleColor
@@ -64,34 +55,33 @@ public struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED******REMOVED***/ The maximum allowed height of the content.
 ***REMOVED***@State private var maximumHeight: CGFloat = .infinity
 ***REMOVED***
-***REMOVED******REMOVED***/ The vertical alignment of the floating panel with the parent view is `VerticalAlignment.top`
-***REMOVED***private var isTopAligned: Bool {
-***REMOVED******REMOVED***return alignment.vertical == .top
+***REMOVED******REMOVED***/ A Boolean value indicating whether the panel should be configured for a compact environment.
+***REMOVED***private var isCompact: Bool {
+***REMOVED******REMOVED***horizontalSizeClass == .compact ? true : false
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***GeometryReader { geometryProxy in
 ***REMOVED******REMOVED******REMOVED***VStack {
-***REMOVED******REMOVED******REMOVED******REMOVED***if isTopAligned {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***content
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(minHeight: .minHeight, maxHeight: height)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Divider()
+***REMOVED******REMOVED******REMOVED******REMOVED***if isCompact {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Handle(color: handleColor)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.gesture(drag)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Divider()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***content
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(minHeight: .minHeight, maxHeight: height)
 ***REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Handle(color: handleColor)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.gesture(drag)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Divider()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***content
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(minHeight: .minHeight, maxHeight: height)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Divider()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Handle(color: handleColor)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.gesture(drag)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.frame(width: width)
 ***REMOVED******REMOVED******REMOVED***.esriBorder()
 ***REMOVED******REMOVED******REMOVED***.frame(
 ***REMOVED******REMOVED******REMOVED******REMOVED***width: geometryProxy.size.width,
 ***REMOVED******REMOVED******REMOVED******REMOVED***height: geometryProxy.size.height,
-***REMOVED******REMOVED******REMOVED******REMOVED***alignment: alignment
+***REMOVED******REMOVED******REMOVED******REMOVED***alignment: isCompact ? .bottom : .top
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***.onSizeChange {
 ***REMOVED******REMOVED******REMOVED******REMOVED***maximumHeight = $0.height
@@ -107,15 +97,15 @@ public struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED******REMOVED******REMOVED***.onChanged { value in
 ***REMOVED******REMOVED******REMOVED******REMOVED***handleColor = .activeHandleColor
 ***REMOVED******REMOVED******REMOVED******REMOVED***let proposedHeight: CGFloat
-***REMOVED******REMOVED******REMOVED******REMOVED***if isTopAligned {
+***REMOVED******REMOVED******REMOVED******REMOVED***if isCompact {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***proposedHeight = max(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.minHeight,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***height + value.translation.height
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***height - value.translation.height
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***proposedHeight = max(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.minHeight,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***height - value.translation.height
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***height + value.translation.height
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***height = min(proposedHeight, maximumHeight)
