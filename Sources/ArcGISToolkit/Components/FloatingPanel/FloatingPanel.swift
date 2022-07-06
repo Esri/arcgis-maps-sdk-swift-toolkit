@@ -35,15 +35,10 @@ public struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED***let content: Content
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a `FloatingPanel`
-***REMOVED******REMOVED***/ - Parameter initialHeight: The initial height given to the content of the floating panel.
-***REMOVED******REMOVED***/ Default is 200.
 ***REMOVED******REMOVED***/ - Parameter content: The view shown in the floating panel.
-***REMOVED***public init(
-***REMOVED******REMOVED***initialHeight: CGFloat = 200,
-***REMOVED******REMOVED***@ViewBuilder content: () -> Content
-***REMOVED***) {
+***REMOVED***public init(@ViewBuilder content: () -> Content) {
 ***REMOVED******REMOVED***self.content = content()
-***REMOVED******REMOVED***_height = State(initialValue: initialHeight)
+***REMOVED******REMOVED***_height = State(initialValue: .infinity)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The color of the handle.
