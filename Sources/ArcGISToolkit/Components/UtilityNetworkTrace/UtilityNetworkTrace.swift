@@ -184,7 +184,10 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED***Section {
 ***REMOVED******REMOVED******REMOVED******REMOVED***DisclosureGroup(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Advanced Options",
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isExpanded: advancedOptionsIsExpanded
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isExpanded: Binding(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***get: { isFocused(traceCreationActivity: .viewingAdvancedOptions) ***REMOVED***,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***set: { _ in currentActivity = .creatingTrace(.viewingAdvancedOptions) ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ColorPicker(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selection: $viewModel.pendingTrace.color
@@ -487,29 +490,6 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED***) { ***REMOVED*** message: {
 ***REMOVED******REMOVED******REMOVED***Text(viewModel.userWarning)
 ***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ Indicates if the list of advanced options is expanded.
-***REMOVED***private var advancedOptionsIsExpanded: Binding<Bool> {
-***REMOVED******REMOVED***Binding(get: {
-***REMOVED******REMOVED******REMOVED***switch currentActivity {
-***REMOVED******REMOVED******REMOVED***case .creatingTrace(let activity):
-***REMOVED******REMOVED******REMOVED******REMOVED***switch activity {
-***REMOVED******REMOVED******REMOVED******REMOVED***case .viewingAdvancedOptions:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return true
-***REMOVED******REMOVED******REMOVED******REMOVED***default:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return false
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***default:
-***REMOVED******REMOVED******REMOVED******REMOVED***return false
-***REMOVED******REMOVED***
-***REMOVED***, set: { val in
-***REMOVED******REMOVED******REMOVED***if val {
-***REMOVED******REMOVED******REMOVED******REMOVED***currentActivity = .creatingTrace(.viewingAdvancedOptions)
-***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***currentActivity = .creatingTrace(nil)
-***REMOVED******REMOVED***
-***REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Indicates the number of the trace currently being viewed out the total number of traces.
