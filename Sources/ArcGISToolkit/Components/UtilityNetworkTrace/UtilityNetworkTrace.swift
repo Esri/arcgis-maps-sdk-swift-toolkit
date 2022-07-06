@@ -157,7 +157,7 @@ public struct UtilityNetworkTrace: View {
                     viewModel.pendingTrace.configuration?.name ?? "None selected",
                     isExpanded: Binding(
                         get: { isFocused(traceCreationActivity: .viewingTraceConfigurations) },
-                        set: { _ in currentActivity = .creatingTrace(.viewingTraceConfigurations) }
+                        set: { currentActivity = .creatingTrace($0 ? .viewingTraceConfigurations : nil) }
                     )
                 ) {
                     configurationsList
@@ -174,7 +174,7 @@ public struct UtilityNetworkTrace: View {
                         "\(viewModel.pendingTrace.startingPoints.count) selected",
                         isExpanded: Binding(
                             get: { isFocused(traceCreationActivity: .viewingStartingPoints) },
-                            set: { _ in currentActivity = .creatingTrace(.viewingStartingPoints) }
+                            set: { currentActivity = .creatingTrace($0 ? .viewingStartingPoints : nil) }
                         )
                     ) {
                         startingPointsList
@@ -186,7 +186,7 @@ public struct UtilityNetworkTrace: View {
                     "Advanced Options",
                     isExpanded: Binding(
                         get: { isFocused(traceCreationActivity: .viewingAdvancedOptions) },
-                        set: { _ in currentActivity = .creatingTrace(.viewingAdvancedOptions) }
+                        set: { currentActivity = .creatingTrace($0 ? .viewingAdvancedOptions : nil) }
                     )
                 ) {
                     ColorPicker(
@@ -245,7 +245,7 @@ public struct UtilityNetworkTrace: View {
                     viewModel.selectedTrace?.utilityElementTraceResult?.elements.count.description ?? "0",
                     isExpanded: Binding(
                         get: { isFocused(traceViewingActivity: .viewingElementResults) },
-                        set: { _ in currentActivity = .viewingTraces(.viewingElementResults) }
+                        set: { currentActivity = .viewingTraces($0 ? .viewingElementResults : nil) }
                     )
                 ) {
                     ForEach(viewModel.selectedTrace?.assetLabels ?? [], id: \.self) { label in
@@ -258,7 +258,7 @@ public struct UtilityNetworkTrace: View {
                     viewModel.selectedTrace?.utilityFunctionTraceResult?.functionOutputs.count.description ?? "0",
                     isExpanded: Binding(
                         get: { isFocused(traceViewingActivity: .viewingFunctionResults) },
-                        set: { _ in currentActivity = .viewingTraces(.viewingFunctionResults) }
+                        set: { currentActivity = .viewingTraces($0 ? .viewingFunctionResults : nil) }
                     )
                 ) {
                     ForEach(viewModel.selectedTrace?.functionOutputs ?? [], id: \.id) { item in
@@ -275,7 +275,7 @@ public struct UtilityNetworkTrace: View {
                     "Advanced Options",
                     isExpanded: Binding(
                         get: { isFocused(traceViewingActivity: .viewingAdvancedOptions) },
-                        set: { _ in currentActivity = .viewingTraces(.viewingAdvancedOptions) }
+                        set: { currentActivity = .viewingTraces($0 ? .viewingAdvancedOptions : nil) }
                     )
                 ) {
                     ColorPicker(
