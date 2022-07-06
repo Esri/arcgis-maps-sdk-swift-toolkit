@@ -141,11 +141,11 @@ extension Authenticator: AuthenticationChallengeHandler {
 ***REMOVED******REMOVED******REMOVED***return .performDefaultHandling
 ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Queue up the url challenge.
+***REMOVED******REMOVED******REMOVED*** Queue up the challenge.
 ***REMOVED******REMOVED***let queuedChallenge = QueuedNetworkChallenge(networkChallenge: challenge)
 ***REMOVED******REMOVED***subject.send(queuedChallenge)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Respond accordingly.
+***REMOVED******REMOVED******REMOVED*** Wait for it to complete and return the resulting disposition.
 ***REMOVED******REMOVED***return await queuedChallenge.disposition
 ***REMOVED***
 ***REMOVED***
