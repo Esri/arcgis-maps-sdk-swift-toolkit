@@ -141,11 +141,11 @@ extension Authenticator: AuthenticationChallengeHandler {
             return .performDefaultHandling
         }
         
-        // Queue up the url challenge.
+        // Queue up the challenge.
         let queuedChallenge = QueuedNetworkChallenge(networkChallenge: challenge)
         subject.send(queuedChallenge)
         
-        // Respond accordingly.
+        // Wait for it to complete and return the resulting disposition.
         return await queuedChallenge.disposition
     }
 }
