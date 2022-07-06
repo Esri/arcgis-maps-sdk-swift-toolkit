@@ -43,12 +43,22 @@ public struct UtilityNetworkTrace: View {
         case viewingTraceConfigurations
     }
     
+    /// Activities users will perform while viewing completed traces.
+    private enum TraceViewingActivity: Hashable {
+        /// The user is viewing the list of available trace options.
+        case viewingAdvancedOptions
+        /// The user is viewing the list of element results.
+        case viewingElementResults
+        /// The user is viewing the list of function results.
+        case viewingFunctionResults
+    }
+    
     /// Activities users will perform while using the Utility Network Trace tool.
     private enum UserActivity: Hashable {
         /// The user is creating a new trace.
         case creatingTrace(TraceCreationActivity?)
         /// The user is viewing traces that have been created.
-        case viewingTraces
+        case viewingTraces(TraceViewingActivity?)
     }
     
     // MARK: States
@@ -92,7 +102,7 @@ public struct UtilityNetworkTrace: View {
                     case .creatingTrace(_):
                         return UserActivity.creatingTrace(nil)
                     case .viewingTraces:
-                        return UserActivity.viewingTraces
+                        return UserActivity.viewingTraces(nil)
                     }
                 }, set: { newActivity, _ in
                     currentActivity = newActivity
@@ -100,7 +110,7 @@ public struct UtilityNetworkTrace: View {
             )
         ) {
             Text("New trace").tag(UserActivity.creatingTrace(nil))
-            Text("Results").tag(UserActivity.viewingTraces)
+            Text("Results").tag(UserActivity.viewingTraces(nil))
         }
         .pickerStyle(.segmented)
         .padding()
@@ -189,7 +199,7 @@ public struct UtilityNetworkTrace: View {
             Task {
                 let traceSuccess = await viewModel.trace()
                 if traceSuccess {
-                    currentActivity = .viewingTraces
+                    currentActivity = .viewingTraces(nil)
                 }
             }
         } label: {
@@ -222,31 +232,43 @@ public struct UtilityNetworkTrace: View {
         }
         List {
             Section("Element Result") {
-                DisclosureGroup(viewModel
-                    .selectedTrace?
-                    .utilityElementTraceResult?
-                    .elements.count.description ?? "0") {
-                        ForEach(viewModel.selectedTrace?.assetLabels ?? [], id: \.self) { label in
-                            Text(label)
-                        }
+                DisclosureGroup(
+                    viewModel.selectedTrace?.utilityElementTraceResult?.elements.count.description ?? "0",
+                    isExpanded: Binding(
+                        get: { isFocused(traceViewingActivity: .viewingElementResults) },
+                        set: { _ in currentActivity = .viewingTraces(.viewingElementResults) }
+                    )
+                ) {
+                    ForEach(viewModel.selectedTrace?.assetLabels ?? [], id: \.self) { label in
+                        Text(label)
                     }
+                }
             }
             Section("Function Result") {
-                DisclosureGroup(viewModel
-                    .selectedTrace?
-                    .utilityFunctionTraceResult?
-                    .functionOutputs.count.description ?? "0") {
-                        ForEach(viewModel.selectedTrace?.functionOutputs ?? [], id: \.id) { item in
-                            HStack {
-                                Text(item.function.networkAttribute?.name ?? "Unnamed")
-                                Spacer()
-                                Text((item.result as? Double)?.description ?? "N/A")
-                            }
+                DisclosureGroup(
+                    viewModel.selectedTrace?.utilityFunctionTraceResult?.functionOutputs.count.description ?? "0",
+                    isExpanded: Binding(
+                        get: { isFocused(traceViewingActivity: .viewingFunctionResults) },
+                        set: { _ in currentActivity = .viewingTraces(.viewingFunctionResults) }
+                    )
+                ) {
+                    ForEach(viewModel.selectedTrace?.functionOutputs ?? [], id: \.id) { item in
+                        HStack {
+                            Text(item.function.networkAttribute?.name ?? "Unnamed")
+                            Spacer()
+                            Text((item.result as? Double)?.description ?? "N/A")
                         }
                     }
+                }
             }
             Section {
-                DisclosureGroup("Advanced Options") {
+                DisclosureGroup(
+                    "Advanced Options",
+                    isExpanded: Binding(
+                        get: { isFocused(traceViewingActivity: .viewingAdvancedOptions) },
+                        set: { _ in currentActivity = .viewingTraces(.viewingAdvancedOptions) }
+                    )
+                ) {
                     ColorPicker(
                         selection: Binding(get: {
                             viewModel.selectedTrace?.color ?? Color.clear
@@ -461,8 +483,6 @@ public struct UtilityNetworkTrace: View {
         }
     }
     
-    // MARK: Computed Properties
-    
     /// Indicates if the list of advanced options is expanded.
     private var advancedOptionsIsExpanded: Binding<Bool> {
         Binding(get: {
@@ -565,6 +585,18 @@ public struct UtilityNetworkTrace: View {
             }
         default:
             return nil
+        }
+    }
+    
+    /// Determines if the provided viewing activity is the currently focused viewing activity.
+    /// - Parameter traceViewingActivity: A possible focus activity when viewing traces.
+    /// - Returns: A Boolean value indicating whether the provided activity is the currently focused
+    /// viewing activity.
+    private func isFocused(traceViewingActivity: TraceViewingActivity) -> Bool {
+        switch currentActivity {
+        case .viewingTraces(let currentActivity):
+            return traceViewingActivity == currentActivity
+        default: return false
         }
     }
 }
