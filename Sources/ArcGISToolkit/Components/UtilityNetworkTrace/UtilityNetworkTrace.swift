@@ -184,7 +184,10 @@ public struct UtilityNetworkTrace: View {
             Section {
                 DisclosureGroup(
                     "Advanced Options",
-                    isExpanded: advancedOptionsIsExpanded
+                    isExpanded: Binding(
+                        get: { isFocused(traceCreationActivity: .viewingAdvancedOptions) },
+                        set: { _ in currentActivity = .creatingTrace(.viewingAdvancedOptions) }
+                    )
                 ) {
                     ColorPicker(
                         selection: $viewModel.pendingTrace.color
@@ -487,29 +490,6 @@ public struct UtilityNetworkTrace: View {
         ) { } message: {
             Text(viewModel.userWarning)
         }
-    }
-    
-    /// Indicates if the list of advanced options is expanded.
-    private var advancedOptionsIsExpanded: Binding<Bool> {
-        Binding(get: {
-            switch currentActivity {
-            case .creatingTrace(let activity):
-                switch activity {
-                case .viewingAdvancedOptions:
-                    return true
-                default:
-                    return false
-                }
-            default:
-                return false
-            }
-        }, set: { val in
-            if val {
-                currentActivity = .creatingTrace(.viewingAdvancedOptions)
-            } else {
-                currentActivity = .creatingTrace(nil)
-            }
-        })
     }
     
     /// Indicates the number of the trace currently being viewed out the total number of traces.
