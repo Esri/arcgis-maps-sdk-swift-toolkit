@@ -50,14 +50,19 @@ public final class Authenticator: ObservableObject {
         access: ArcGIS.KeychainAccess,
         isSynchronizable: Bool = false
     ) async throws {
-        ArcGISURLSession.credentialStore = try await .makePersistent(
+        ArcGISCredentialStore.shared = try await .makePersistent(
             access: access,
             isSynchronizable: isSynchronizable
         )
         
-        await NetworkCredentialStore.setShared(
-            try await .makePersistent(access: access, isSynchronizable: isSynchronizable)
-        )
+        do {
+            await NetworkCredentialStore.setShared(
+                try await .makePersistent(access: access, isSynchronizable: isSynchronizable)
+            )
+        } catch {
+            // If cannot make 
+            throw error
+        }
     }
     
     /// Clears all ArcGIS and network credentials from the respective stores.
@@ -65,7 +70,7 @@ public final class Authenticator: ObservableObject {
     /// right away.
     public func clearCredentialStores() async {
         // Clear ArcGIS Credentials.
-        await ArcGISURLSession.credentialStore.removeAll()
+        await ArcGISCredentialStore.shared.removeAll()
         
         // Clear network credentials.
         await NetworkCredentialStore.shared.removeAll()
