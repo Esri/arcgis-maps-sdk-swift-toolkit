@@ -234,23 +234,25 @@ import SwiftUI
     /// Runs the pending trace and stores it into the list of completed traces.
     /// - Returns: A Boolean value indicating whether the trace was successful or not.
     func trace() async -> Bool {
-        guard let config = pendingTrace.configuration,
+        guard let configuration = pendingTrace.configuration,
               let network = network else { return false }
         
-        let minStartingPoints = config.minimumStartingLocations.rawValue
+        let minStartingPoints = configuration.minimumStartingLocations.rawValue
         
         guard pendingTrace.startingPoints.count >= minStartingPoints else {
             userWarning = "Please set at least \(minStartingPoints) starting location\(minStartingPoints > 1 ? "s" : "")."
             return false
         }
         
-        let params = UtilityTraceParameters(
-            namedTraceConfiguration: config,
+        let parameters = UtilityTraceParameters(
+            namedTraceConfiguration: configuration,
             startingLocations: pendingTrace.startingPoints.compactMap{ $0.utilityElement }
         )
+        
         let traceResults: [UtilityTraceResult]
+        
         do {
-            traceResults = try await network.trace(traceParameters: params)
+            traceResults = try await network.trace(traceParameters: parameters)
         } catch(let serviceError as ServiceError) {
             if let reason = serviceError.failureReason {
                 userWarning = reason
@@ -260,6 +262,7 @@ import SwiftUI
             userWarning = "An unknown error occurred"
             return false
         }
+        
         var assetGroups = [String: Int]()
         for result in traceResults {
             switch result {
@@ -273,46 +276,34 @@ import SwiftUI
                 }
                 pendingTrace.utilityElementTraceResult = result
             case let result as UtilityGeometryTraceResult:
-                if let polygon = result.polygon {
-                    let graphic = Graphic(
-                        geometry: polygon,
+                let createGraphic: ((Geometry, SimpleLineSymbol.Style, Color) -> (Graphic)) = { geometry, style, color in
+                    return Graphic(
+                        geometry: geometry,
                         symbol: SimpleLineSymbol(
-                            style: .solid,
-                            color: UIColor(pendingTrace.color),
+                            style: style,
+                            color: UIColor(color),
                             width: 5.0
                         )
                     )
+                }
+                if let polygon = result.polygon {
+                    let graphic = createGraphic(polygon, .solid, pendingTrace.color)
                     graphicsOverlay.addGraphic(graphic)
                     pendingTrace.graphics.append(graphic)
                 }
                 if let polyline = result.polyline {
-                    let graphic = Graphic(
-                        geometry: polyline,
-                        symbol: SimpleLineSymbol(
-                            style: .dash,
-                            color: UIColor(pendingTrace.color),
-                            width: 5.0
-                        )
-                    )
+                    let graphic = createGraphic(polyline, .dash, pendingTrace.color)
                     graphicsOverlay.addGraphic(graphic)
                     pendingTrace.graphics.append(graphic)
                 }
                 if let multipoint = result.multipoint {
-                    let graphic = Graphic(
-                        geometry: multipoint,
-                        symbol: SimpleLineSymbol(
-                            style: .dot,
-                            color: UIColor(pendingTrace.color),
-                            width: 5.0
-                        )
-                    )
+                    let graphic = createGraphic(multipoint, .dot, pendingTrace.color)
                     graphicsOverlay.addGraphic(graphic)
                     pendingTrace.graphics.append(graphic)
                 }
                 pendingTrace.utilityGeometryTraceResult = result
             case let result as UtilityFunctionTraceResult:
-                let functionOutputs = result.functionOutputs
-                functionOutputs.forEach { functionOutput in
+                result.functionOutputs.forEach { functionOutput in
                     pendingTrace.functionOutputs.append(functionOutput)
                 }
                 pendingTrace.utilityFunctionTraceResult = result
