@@ -35,15 +35,10 @@ public struct FloatingPanel<Content>: View where Content: View {
     let content: Content
     
     /// Creates a `FloatingPanel`
-    /// - Parameter initialHeight: The initial height given to the content of the floating panel.
-    /// Default is 200.
     /// - Parameter content: The view shown in the floating panel.
-    public init(
-        initialHeight: CGFloat = 200,
-        @ViewBuilder content: () -> Content
-    ) {
+    public init(@ViewBuilder content: () -> Content) {
         self.content = content()
-        _height = State(initialValue: initialHeight)
+        _height = State(initialValue: .infinity)
     }
     
     /// The color of the handle.
