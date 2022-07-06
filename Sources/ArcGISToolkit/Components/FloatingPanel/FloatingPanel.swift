@@ -28,32 +28,23 @@ public struct FloatingPanel<Content>: View where Content: View {
     // to have it be a view modifier, similar to how SwiftUI doesn't have a
     // SheetView, but a modifier that presents a sheet.
     
+    @Environment(\.horizontalSizeClass)
+    private var horizontalSizeClass: UserInterfaceSizeClass?
+    
     /// The content shown in the floating panel.
     let content: Content
     
     /// Creates a `FloatingPanel`
-    /// - Parameter alignment: Alignment of the floating panel within the parent view.
     /// - Parameter initialHeight: The initial height given to the content of the floating panel.
     /// Default is 200.
-    /// - Parameter width: The width given to the content of the floating panel. Default is 360.
     /// - Parameter content: The view shown in the floating panel.
     public init(
-        alignment: Alignment,
         initialHeight: CGFloat = 200,
-        width: CGFloat = 360,
         @ViewBuilder content: () -> Content
     ) {
-        self.alignment = alignment
-        self.width = width
         self.content = content()
         _height = State(initialValue: initialHeight)
     }
-    
-    /// Alignment of the floating panel within the parent view.
-    private let alignment: Alignment
-    
-    /// The width given to the content of the floating panel.
-    private let width: CGFloat
     
     /// The color of the handle.
     @State private var handleColor: Color = .defaultHandleColor
@@ -64,34 +55,33 @@ public struct FloatingPanel<Content>: View where Content: View {
     /// The maximum allowed height of the content.
     @State private var maximumHeight: CGFloat = .infinity
     
-    /// The vertical alignment of the floating panel with the parent view is `VerticalAlignment.top`
-    private var isTopAligned: Bool {
-        return alignment.vertical == .top
+    /// A Boolean value indicating whether the panel should be configured for a compact environment.
+    private var isCompact: Bool {
+        horizontalSizeClass == .compact ? true : false
     }
     
     public var body: some View {
         GeometryReader { geometryProxy in
             VStack {
-                if isTopAligned {
-                    content
-                        .frame(minHeight: .minHeight, maxHeight: height)
-                    Divider()
+                if isCompact {
                     Handle(color: handleColor)
                         .gesture(drag)
+                    Divider()
+                    content
+                        .frame(minHeight: .minHeight, maxHeight: height)
                 } else {
-                    Handle(color: handleColor)
-                        .gesture(drag)
-                    Divider()
                     content
                         .frame(minHeight: .minHeight, maxHeight: height)
+                    Divider()
+                    Handle(color: handleColor)
+                        .gesture(drag)
                 }
             }
-            .frame(width: width)
             .esriBorder()
             .frame(
                 width: geometryProxy.size.width,
                 height: geometryProxy.size.height,
-                alignment: alignment
+                alignment: isCompact ? .bottom : .top
             )
             .onSizeChange {
                 maximumHeight = $0.height
@@ -107,15 +97,15 @@ public struct FloatingPanel<Content>: View where Content: View {
             .onChanged { value in
                 handleColor = .activeHandleColor
                 let proposedHeight: CGFloat
-                if isTopAligned {
+                if isCompact {
                     proposedHeight = max(
                         .minHeight,
-                        height + value.translation.height
+                        height - value.translation.height
                     )
                 } else {
                     proposedHeight = max(
                         .minHeight,
-                        height - value.translation.height
+                        height + value.translation.height
                     )
                 }
                 height = min(proposedHeight, maximumHeight)
