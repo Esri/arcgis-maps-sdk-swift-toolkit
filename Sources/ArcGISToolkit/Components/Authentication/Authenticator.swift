@@ -50,6 +50,8 @@ public final class Authenticator: ObservableObject {
         access: ArcGIS.KeychainAccess,
         isSynchronizable: Bool = false
     ) async throws {
+        let previousArcGISCredentialStore = ArcGISCredentialStore.shared
+        
         ArcGISCredentialStore.shared = try await .makePersistent(
             access: access,
             isSynchronizable: isSynchronizable
@@ -60,7 +62,9 @@ public final class Authenticator: ObservableObject {
                 try await .makePersistent(access: access, isSynchronizable: isSynchronizable)
             )
         } catch {
-            // If cannot make 
+            // If making the shared network credential store persistent fails,
+            // then restore the ArcGIS credential store.
+            ArcGISCredentialStore.shared = previousArcGISCredentialStore
             throw error
         }
     }
