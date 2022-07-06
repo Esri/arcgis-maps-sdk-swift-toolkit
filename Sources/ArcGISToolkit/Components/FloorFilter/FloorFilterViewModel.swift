@@ -42,19 +42,7 @@ final class FloorFilterViewModel: ObservableObject {
         self.floorManager = floorManager
         self.viewpoint = viewpoint
         
-        Task {
-            do {
-                try await floorManager.load()
-                if sites.count == 1,
-                    let firstSite = sites.first {
-                    // If we have only one site, select it.
-                    setSite(firstSite, zoomTo: true)
-                }
-            } catch {
-                print("error: \(error)")
-            }
-            isLoading = false
-        }
+        loadFloorManager()
     }
     
     // MARK: Published members
@@ -143,8 +131,8 @@ final class FloorFilterViewModel: ObservableObject {
     func onViewpointChanged(_ viewpoint: Viewpoint?) {
         guard let viewpoint = viewpoint,
               !viewpoint.targetScale.isZero else {
-                  return
-              }
+            return
+        }
         automaticallySelectFacilityOrSite()
     }
     
@@ -154,9 +142,9 @@ final class FloorFilterViewModel: ObservableObject {
     ///   - zoomTo: If `true`, changes the viewpoint to the extent of the new facility.
     func setFacility(_ newFacility: FloorFacility, zoomTo: Bool = false) {
         if let oldLevel = selectedLevel,
-            let newLevel = newFacility.levels.first(
+           let newLevel = newFacility.levels.first(
             where: { $0.verticalOrder == oldLevel.verticalOrder }
-        ) {
+           ) {
             setLevel(newLevel)
         } else if let defaultLevel = newFacility.defaultLevel {
             setLevel(defaultLevel)
@@ -214,7 +202,7 @@ final class FloorFilterViewModel: ObservableObject {
         // Only select a facility if it is within minimum scale. Default at 1500.
         let facilityMinScale: Double
         if let minScale = floorManager.facilityLayer?.minScale,
-               minScale != .zero {
+           minScale != .zero {
             facilityMinScale = minScale
         } else {
             facilityMinScale = 1500
@@ -248,7 +236,7 @@ final class FloorFilterViewModel: ObservableObject {
         // Only select a facility if it is within minimum scale. Default at 4300.
         let siteMinScale: Double
         if let minScale = floorManager.siteLayer?.minScale,
-               minScale != .zero {
+           minScale != .zero {
             siteMinScale = minScale
         } else {
             siteMinScale = 4300
@@ -277,6 +265,37 @@ final class FloorFilterViewModel: ObservableObject {
             selection = nil
         }
         return true
+    }
+    
+    /// Sets the visibility of all the levels on the map based on the vertical order of the current selected level.
+    private func filterMapToSelectedLevel() {
+        if let selectedLevel = selectedLevel {
+            levels.forEach {
+                $0.isVisible = $0.verticalOrder == selectedLevel.verticalOrder
+            }
+        }
+    }
+    
+    /// Loads the given `FloorManager` if needed, then sets `isLoading` to `false`.
+    private func loadFloorManager() {
+        guard floorManager.loadStatus == .notLoaded,
+              floorManager.loadStatus != .loading else {
+            isLoading = false
+            return
+        }
+        Task {
+            do {
+                try await floorManager.load()
+                if sites.count == 1,
+                   let firstSite = sites.first {
+                    // If we have only one site, select it.
+                    setSite(firstSite, zoomTo: true)
+                }
+            } catch {
+                print("error: \(error)")
+            }
+            isLoading = false
+        }
     }
     
     /// Zoom to given extent.
