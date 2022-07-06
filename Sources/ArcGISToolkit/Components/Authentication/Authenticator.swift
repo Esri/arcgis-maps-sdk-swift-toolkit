@@ -50,6 +50,8 @@ public final class Authenticator: ObservableObject {
 ***REMOVED******REMOVED***access: ArcGIS.KeychainAccess,
 ***REMOVED******REMOVED***isSynchronizable: Bool = false
 ***REMOVED***) async throws {
+***REMOVED******REMOVED***let previousArcGISCredentialStore = ArcGISCredentialStore.shared
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***ArcGISCredentialStore.shared = try await .makePersistent(
 ***REMOVED******REMOVED******REMOVED***access: access,
 ***REMOVED******REMOVED******REMOVED***isSynchronizable: isSynchronizable
@@ -60,7 +62,9 @@ public final class Authenticator: ObservableObject {
 ***REMOVED******REMOVED******REMOVED******REMOVED***try await .makePersistent(access: access, isSynchronizable: isSynchronizable)
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED*** catch {
-***REMOVED******REMOVED******REMOVED******REMOVED*** If cannot make 
+***REMOVED******REMOVED******REMOVED******REMOVED*** If making the shared network credential store persistent fails,
+***REMOVED******REMOVED******REMOVED******REMOVED*** then restore the ArcGIS credential store.
+***REMOVED******REMOVED******REMOVED***ArcGISCredentialStore.shared = previousArcGISCredentialStore
 ***REMOVED******REMOVED******REMOVED***throw error
 ***REMOVED***
 ***REMOVED***
