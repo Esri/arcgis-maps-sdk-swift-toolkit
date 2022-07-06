@@ -45,3 +45,27 @@ class AuthenticatorTests: XCTestCase {
 ***REMOVED*** catch {***REMOVED***
 ***REMOVED***
 ***REMOVED***
+***REMOVED***@MainActor
+***REMOVED***func testClearCredentialStores() async {
+***REMOVED******REMOVED***await ArcGISCredentialStore.shared.add(
+***REMOVED******REMOVED******REMOVED***.staticToken(
+***REMOVED******REMOVED******REMOVED******REMOVED***url: URL(string: "www.arcgis.com")!,
+***REMOVED******REMOVED******REMOVED******REMOVED***tokenInfo: .init(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***accessToken: "token",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isSSLRequired: false,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***expirationDate: .distantFuture
+***REMOVED******REMOVED******REMOVED******REMOVED***)!
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let authenticator = Authenticator()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***var arcGISCreds = await ArcGISCredentialStore.shared.credentials
+***REMOVED******REMOVED***XCTAssertEqual(arcGISCreds.count, 1)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***await authenticator.clearCredentialStores()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***arcGISCreds = await ArcGISCredentialStore.shared.credentials
+***REMOVED******REMOVED***XCTAssertTrue(arcGISCreds.isEmpty)
+***REMOVED***
+***REMOVED***
