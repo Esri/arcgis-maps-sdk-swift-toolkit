@@ -234,23 +234,25 @@ import Foundation
 ***REMOVED******REMOVED***/ Runs the pending trace and stores it into the list of completed traces.
 ***REMOVED******REMOVED***/ - Returns: A Boolean value indicating whether the trace was successful or not.
 ***REMOVED***func trace() async -> Bool {
-***REMOVED******REMOVED***guard let config = pendingTrace.configuration,
+***REMOVED******REMOVED***guard let configuration = pendingTrace.configuration,
 ***REMOVED******REMOVED******REMOVED***  let network = network else { return false ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***let minStartingPoints = config.minimumStartingLocations.rawValue
+***REMOVED******REMOVED***let minStartingPoints = configuration.minimumStartingLocations.rawValue
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***guard pendingTrace.startingPoints.count >= minStartingPoints else {
 ***REMOVED******REMOVED******REMOVED***userWarning = "Please set at least \(minStartingPoints) starting location\(minStartingPoints > 1 ? "s" : "")."
 ***REMOVED******REMOVED******REMOVED***return false
 ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***let params = UtilityTraceParameters(
-***REMOVED******REMOVED******REMOVED***namedTraceConfiguration: config,
+***REMOVED******REMOVED***let parameters = UtilityTraceParameters(
+***REMOVED******REMOVED******REMOVED***namedTraceConfiguration: configuration,
 ***REMOVED******REMOVED******REMOVED***startingLocations: pendingTrace.startingPoints.compactMap{ $0.utilityElement ***REMOVED***
 ***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let traceResults: [UtilityTraceResult]
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***do {
-***REMOVED******REMOVED******REMOVED***traceResults = try await network.trace(traceParameters: params)
+***REMOVED******REMOVED******REMOVED***traceResults = try await network.trace(traceParameters: parameters)
 ***REMOVED*** catch(let serviceError as ServiceError) {
 ***REMOVED******REMOVED******REMOVED***if let reason = serviceError.failureReason {
 ***REMOVED******REMOVED******REMOVED******REMOVED***userWarning = reason
@@ -260,6 +262,7 @@ import Foundation
 ***REMOVED******REMOVED******REMOVED***userWarning = "An unknown error occurred"
 ***REMOVED******REMOVED******REMOVED***return false
 ***REMOVED***
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var assetGroups = [String: Int]()
 ***REMOVED******REMOVED***for result in traceResults {
 ***REMOVED******REMOVED******REMOVED***switch result {
@@ -273,46 +276,34 @@ import Foundation
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***pendingTrace.utilityElementTraceResult = result
 ***REMOVED******REMOVED******REMOVED***case let result as UtilityGeometryTraceResult:
-***REMOVED******REMOVED******REMOVED******REMOVED***if let polygon = result.polygon {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let graphic = Graphic(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***geometry: polygon,
+***REMOVED******REMOVED******REMOVED******REMOVED***let createGraphic: ((Geometry, SimpleLineSymbol.Style, Color) -> (Graphic)) = { geometry, style, color in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return Graphic(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***geometry: geometry,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***symbol: SimpleLineSymbol(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***style: .solid,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***color: UIColor(pendingTrace.color),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***style: style,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***color: UIColor(color),
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***width: 5.0
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***if let polygon = result.polygon {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let graphic = createGraphic(polygon, .solid, pendingTrace.color)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***graphicsOverlay.addGraphic(graphic)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***pendingTrace.graphics.append(graphic)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***if let polyline = result.polyline {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let graphic = Graphic(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***geometry: polyline,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***symbol: SimpleLineSymbol(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***style: .dash,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***color: UIColor(pendingTrace.color),
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***width: 5.0
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let graphic = createGraphic(polyline, .dash, pendingTrace.color)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***graphicsOverlay.addGraphic(graphic)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***pendingTrace.graphics.append(graphic)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***if let multipoint = result.multipoint {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let graphic = Graphic(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***geometry: multipoint,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***symbol: SimpleLineSymbol(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***style: .dot,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***color: UIColor(pendingTrace.color),
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***width: 5.0
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let graphic = createGraphic(multipoint, .dot, pendingTrace.color)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***graphicsOverlay.addGraphic(graphic)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***pendingTrace.graphics.append(graphic)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***pendingTrace.utilityGeometryTraceResult = result
 ***REMOVED******REMOVED******REMOVED***case let result as UtilityFunctionTraceResult:
-***REMOVED******REMOVED******REMOVED******REMOVED***let functionOutputs = result.functionOutputs
-***REMOVED******REMOVED******REMOVED******REMOVED***functionOutputs.forEach { functionOutput in
+***REMOVED******REMOVED******REMOVED******REMOVED***result.functionOutputs.forEach { functionOutput in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***pendingTrace.functionOutputs.append(functionOutput)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***pendingTrace.utilityFunctionTraceResult = result
