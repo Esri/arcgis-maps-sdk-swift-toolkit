@@ -16,6 +16,9 @@ import ArcGISToolkit
 import ArcGIS
 
 struct FloatingPanelExampleView: View {
+    @Environment(\.horizontalSizeClass)
+    private var horizontalSizeClass: UserInterfaceSizeClass?
+    
     @StateObject private var map = Map(basemapStyle: .arcGISImagery)
     
     private let initialViewpoint = Viewpoint(
@@ -28,12 +31,13 @@ struct FloatingPanelExampleView: View {
             map: map,
             viewpoint: initialViewpoint
         )
-        .overlay {
-            FloatingPanel(alignment: .topLeading) {
+        .overlay(alignment: .topTrailing) {
+            FloatingPanel {
                 SampleContent()
             }
-            .padding([.leading, .top, .trailing])
-            .padding(.bottom, 50)
+            .padding(horizontalSizeClass == .compact ? [] : [.leading, .top, .trailing])
+            .padding(.bottom, horizontalSizeClass == .compact ? 0 : 50)
+            .frame(width: horizontalSizeClass == .compact ? nil : 360)
         }
     }
 }
@@ -41,6 +45,6 @@ struct FloatingPanelExampleView: View {
 struct SampleContent: View {
     var body: some View {
         List(1..<21) { Text("\($0)") }
-        .listStyle(.plain)
+            .listStyle(.plain)
     }
 }
