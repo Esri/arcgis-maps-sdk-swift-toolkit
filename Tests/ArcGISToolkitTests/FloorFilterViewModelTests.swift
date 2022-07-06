@@ -22,7 +22,7 @@ final class FloorFilterViewModelTests: XCTestCase {
     /// Confirms that the selected site/facility/level properties and the viewpoint are correctly updated.
     func testAutoSelectAlways() async throws {
         let floorManager = try await floorManager(
-            forWebMapWithIdentifier: .redlandsCampusMap
+            forWebMapWithIdentifier: .testMap
         )
         
         var _viewpoint: Viewpoint? = .losAngeles
@@ -37,11 +37,11 @@ final class FloorFilterViewModelTests: XCTestCase {
         XCTAssertNil(viewModel.selectedFacility)
         XCTAssertNil(viewModel.selectedSite)
         
-        // Viewpoint is Redlands Main Q
-        _viewpoint = .esriRedlands(scale: 1000)
+        // Viewpoint is Research Annex Lattice
+        _viewpoint = .researchAnnexLattice
         viewModel.automaticallySelectFacilityOrSite()
-        XCTAssertEqual(viewModel.selectedSite?.name, "Redlands Main")
-        XCTAssertEqual(viewModel.selectedFacility?.name, "Q")
+        XCTAssertEqual(viewModel.selectedSite?.name, "Research Annex")
+        XCTAssertEqual(viewModel.selectedFacility?.name, "Lattice")
         
         // Viewpoint is Los Angeles, selection should be nil
         _viewpoint = .losAngeles
@@ -53,10 +53,10 @@ final class FloorFilterViewModelTests: XCTestCase {
     /// Confirms that the selected site/facility/level properties and the viewpoint are correctly updated.
     func testAutoSelectAlwaysNotClearing() async throws {
         let floorManager = try await floorManager(
-            forWebMapWithIdentifier: .redlandsCampusMap
+            forWebMapWithIdentifier: .testMap
         )
         
-        var _viewpoint: Viewpoint? = .esriRedlands(scale: 1000)
+        var _viewpoint: Viewpoint? = .researchAnnexLattice
         let viewpoint = Binding(get: { _viewpoint }, set: { _viewpoint = $0 })
         let viewModel = FloorFilterViewModel(
             automaticSelectionMode: .alwaysNotClearing,
@@ -64,23 +64,23 @@ final class FloorFilterViewModelTests: XCTestCase {
             viewpoint: viewpoint
         )
         
-        // Viewpoint is Redlands Main Q
-        _viewpoint = .esriRedlands(scale: 1000)
+        // Viewpoint is Research Annex Lattice
+        _viewpoint = .researchAnnexLattice
         viewModel.automaticallySelectFacilityOrSite()
-        XCTAssertEqual(viewModel.selectedSite?.name, "Redlands Main")
-        XCTAssertEqual(viewModel.selectedFacility?.name, "Q")
+        XCTAssertEqual(viewModel.selectedSite?.name, "Research Annex")
+        XCTAssertEqual(viewModel.selectedFacility?.name, "Lattice")
         
-        // Viewpoint is Los Angeles, but selection should remain Redlands Main Q
+        // Viewpoint is Los Angeles, but selection should remain Research Annex Lattice
         _viewpoint = .losAngeles
         viewModel.automaticallySelectFacilityOrSite()
-        XCTAssertEqual(viewModel.selectedSite?.name, "Redlands Main")
-        XCTAssertEqual(viewModel.selectedFacility?.name, "Q")
+        XCTAssertEqual(viewModel.selectedSite?.name, "Research Annex")
+        XCTAssertEqual(viewModel.selectedFacility?.name, "Lattice")
     }
     
     /// Confirms that the selected site/facility/level properties and the viewpoint are correctly updated.
     func testAutoSelectNever() async throws {
         let floorManager = try await floorManager(
-            forWebMapWithIdentifier: .redlandsCampusMap
+            forWebMapWithIdentifier: .testMap
         )
         
         var _viewpoint: Viewpoint? = .losAngeles
@@ -95,21 +95,21 @@ final class FloorFilterViewModelTests: XCTestCase {
         XCTAssertNil(viewModel.selectedFacility)
         XCTAssertNil(viewModel.selectedSite)
         
-        // Viewpoint is Redlands Main Q but selection should still be nil
-        _viewpoint = .esriRedlands(scale: 1000)
+        // Viewpoint is Research Annex Lattice but selection should remain nil
+        _viewpoint = .researchAnnexLattice
         viewModel.automaticallySelectFacilityOrSite()
         XCTAssertNil(viewModel.selectedFacility)
         XCTAssertNil(viewModel.selectedSite)
     }
     
-    /// Tests that a `FloorFilterViewModel` succesfully initializes.
+    /// Tests that a `FloorFilterViewModel` successfully initializes.
     func testInitWithFloorManagerAndViewpoint() async throws {
         let floorManager = try await floorManager(
-            forWebMapWithIdentifier: .redlandsCampusMap
+            forWebMapWithIdentifier: .testMap
         )
         let viewModel = FloorFilterViewModel(
             floorManager: floorManager,
-            viewpoint: .constant(.esriRedlands())
+            viewpoint: .constant(.researchAnnexLattice)
         )
         XCTAssertFalse(viewModel.sites.isEmpty)
         XCTAssertFalse(viewModel.facilities.isEmpty)
@@ -119,11 +119,11 @@ final class FloorFilterViewModelTests: XCTestCase {
     /// Confirms that the proper level is visible and all others are hidden.
     func testLevelVisibility() async throws {
         let floorManager = try await floorManager(
-            forWebMapWithIdentifier: .redlandsCampusMap
+            forWebMapWithIdentifier: .testMap
         )
         let viewModel = FloorFilterViewModel(
             floorManager: floorManager,
-            viewpoint: .constant(.esriRedlands())
+            viewpoint: .constant(.researchAnnexLattice)
         )
         let levels = viewModel.levels
         let firstLevel = try XCTUnwrap(levels.first)
@@ -140,11 +140,11 @@ final class FloorFilterViewModelTests: XCTestCase {
     /// Confirms that the selected site/facility/level properties are correctly updated.
     func testSelectedProperties() async throws {
         let floorManager = try await floorManager(
-            forWebMapWithIdentifier: .redlandsCampusMap
+            forWebMapWithIdentifier: .testMap
         )
         let viewModel = FloorFilterViewModel(
             floorManager: floorManager,
-            viewpoint: .constant(.esriRedlands())
+            viewpoint: .constant(.researchAnnexLattice)
         )
         let site = try XCTUnwrap(viewModel.sites.first)
         let facility = try XCTUnwrap(viewModel.facilities.first)
@@ -169,13 +169,13 @@ final class FloorFilterViewModelTests: XCTestCase {
     /// Confirms that the selection property indicates the correct facility (and therefore level) value.
     func testSelectionOfFacility() async throws {
         let floorManager = try await floorManager(
-            forWebMapWithIdentifier: .redlandsCampusMap
+            forWebMapWithIdentifier: .testMap
         )
         let viewModel = FloorFilterViewModel(
             floorManager: floorManager,
-            viewpoint: .constant(.esriRedlands())
+            viewpoint: .constant(.researchAnnexLattice)
         )
-        let facility = try XCTUnwrap(viewModel.facilities.first)
+        let facility = try XCTUnwrap(viewModel.facilities[4])
         let level = try XCTUnwrap(facility.defaultLevel)
         viewModel.setFacility(facility, zoomTo: true)
         XCTAssertEqual(
@@ -186,11 +186,11 @@ final class FloorFilterViewModelTests: XCTestCase {
     /// Confirms that the selection property indicates the correct level value.
     func testSelectionOfLevel() async throws {
         let floorManager = try await floorManager(
-            forWebMapWithIdentifier: .redlandsCampusMap
+            forWebMapWithIdentifier: .testMap
         )
         let viewModel = FloorFilterViewModel(
             floorManager: floorManager,
-            viewpoint: .constant(.esriRedlands())
+            viewpoint: .constant(.researchAnnexLattice)
         )
         let level = try XCTUnwrap(viewModel.levels.first)
         viewModel.setLevel(level)
@@ -202,11 +202,11 @@ final class FloorFilterViewModelTests: XCTestCase {
     /// Confirms that the selection property indicates the correct site value.
     func testSelectionOfSite() async throws {
         let floorManager = try await floorManager(
-            forWebMapWithIdentifier: .redlandsCampusMap
+            forWebMapWithIdentifier: .testMap
         )
         let viewModel = FloorFilterViewModel(
             floorManager: floorManager,
-            viewpoint: .constant(.esriRedlands())
+            viewpoint: .constant(.researchAnnexLattice)
         )
         let site = try XCTUnwrap(viewModel.sites.first)
         viewModel.setSite(site, zoomTo: true)
@@ -217,10 +217,10 @@ final class FloorFilterViewModelTests: XCTestCase {
     
     /// Confirms that the  viewpoint is correctly updated.
     func testViewpointUpdates() async throws {
-        var _viewpoint: Viewpoint? = .esriRedlands()
+        var _viewpoint: Viewpoint? = .researchAnnexLattice
         let viewpoint = Binding(get: { _viewpoint }, set: { _viewpoint = $0 })
         let floorManager = try await floorManager(
-            forWebMapWithIdentifier: .redlandsCampusMap
+            forWebMapWithIdentifier: .testMap
         )
         let viewModel = FloorFilterViewModel(
             floorManager: floorManager,
@@ -248,7 +248,7 @@ final class FloorFilterViewModelTests: XCTestCase {
         file: StaticString = #filePath,
         line: UInt = #line
     ) async throws -> FloorManager {
-        let portal = Portal(url: URL(string: "https://runtimecoretest.maps.arcgis.com/")!, isLoginRequired: false)
+        let portal = Portal(url: URL(string: "https://www.arcgis.com/")!, isLoginRequired: false)
         let item = PortalItem(portal: portal, id: id)
         let map = Map(item: item)
         try await map.load()
@@ -259,25 +259,19 @@ final class FloorFilterViewModelTests: XCTestCase {
 }
 
 private extension PortalItem.ID {
-    static let redlandsCampusMap = Self("7687805bd42549f5ba41237443d0c60a")!
-}
-
-private extension Point {
-    /// The coordinates for the Redlands Esri campus.
-    static let esriRedlands = Point(
-        x: -13046157.242121734,
-        y: 4036329.622884897,
-        spatialReference: .webMercator
-    )
+    static let testMap = Self("b4b599a43a474d33946cf0df526426f5")!
 }
 
 private extension Viewpoint {
-    static func esriRedlands(
-        scale: Double = 10_000,
-        rotation: Double = .zero
-    ) -> Viewpoint {
-        .init(center: .esriRedlands, scale: scale, rotation: rotation)
-    }
+    static let researchAnnexLattice = Viewpoint(
+        center:
+            Point(
+                x: -13045075.712950204,
+                y: 4036858.6146756615,
+                spatialReference: .webMercator
+            ),
+        scale: 550.0
+    )
     
     static let losAngeles = Viewpoint(
         center: Point(
