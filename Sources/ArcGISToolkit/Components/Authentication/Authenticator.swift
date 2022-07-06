@@ -50,14 +50,19 @@ public final class Authenticator: ObservableObject {
 ***REMOVED******REMOVED***access: ArcGIS.KeychainAccess,
 ***REMOVED******REMOVED***isSynchronizable: Bool = false
 ***REMOVED***) async throws {
-***REMOVED******REMOVED***ArcGISURLSession.credentialStore = try await .makePersistent(
+***REMOVED******REMOVED***ArcGISCredentialStore.shared = try await .makePersistent(
 ***REMOVED******REMOVED******REMOVED***access: access,
 ***REMOVED******REMOVED******REMOVED***isSynchronizable: isSynchronizable
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***await NetworkCredentialStore.setShared(
-***REMOVED******REMOVED******REMOVED***try await .makePersistent(access: access, isSynchronizable: isSynchronizable)
-***REMOVED******REMOVED***)
+***REMOVED******REMOVED***do {
+***REMOVED******REMOVED******REMOVED***await NetworkCredentialStore.setShared(
+***REMOVED******REMOVED******REMOVED******REMOVED***try await .makePersistent(access: access, isSynchronizable: isSynchronizable)
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED*** catch {
+***REMOVED******REMOVED******REMOVED******REMOVED*** If cannot make 
+***REMOVED******REMOVED******REMOVED***throw error
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Clears all ArcGIS and network credentials from the respective stores.
@@ -65,7 +70,7 @@ public final class Authenticator: ObservableObject {
 ***REMOVED******REMOVED***/ right away.
 ***REMOVED***public func clearCredentialStores() async {
 ***REMOVED******REMOVED******REMOVED*** Clear ArcGIS Credentials.
-***REMOVED******REMOVED***await ArcGISURLSession.credentialStore.removeAll()
+***REMOVED******REMOVED***await ArcGISCredentialStore.shared.removeAll()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Clear network credentials.
 ***REMOVED******REMOVED***await NetworkCredentialStore.shared.removeAll()
