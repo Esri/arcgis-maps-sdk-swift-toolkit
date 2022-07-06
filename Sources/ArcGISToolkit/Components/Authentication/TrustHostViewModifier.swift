@@ -37,7 +37,10 @@ struct TrustHostViewModifier: ViewModifier {
     
     func body(content: Content) -> some View {
         content
-            .task { isPresented = true } // Present the alert right away.
+            .task {
+                // Present the alert right away. This makes it animated.
+                isPresented = true
+            }
             .alert("Certificate Trust Warning", isPresented: $isPresented, presenting: challenge) { _ in
                 Button("Dangerous: Allow Connection", role: .destructive) {
                     isPresented = false
