@@ -44,4 +44,28 @@ class AuthenticatorTests: XCTestCase {
             XCTFail("Expected an error to be thrown as unit tests should not have access to the keychain")
         } catch {}
     }
+    
+    @MainActor
+    func testClearCredentialStores() async {
+        await ArcGISCredentialStore.shared.add(
+            .staticToken(
+                url: URL(string: "www.arcgis.com")!,
+                tokenInfo: .init(
+                    accessToken: "token",
+                    isSSLRequired: false,
+                    expirationDate: .distantFuture
+                )!
+            )
+        )
+        
+        let authenticator = Authenticator()
+        
+        var arcGISCreds = await ArcGISCredentialStore.shared.credentials
+        XCTAssertEqual(arcGISCreds.count, 1)
+        
+        await authenticator.clearCredentialStores()
+        
+        arcGISCreds = await ArcGISCredentialStore.shared.credentials
+        XCTAssertTrue(arcGISCreds.isEmpty)
+    }
 }
