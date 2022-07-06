@@ -43,12 +43,22 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED***case viewingTraceConfigurations
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ Activities users will perform while viewing completed traces.
+***REMOVED***private enum TraceViewingActivity: Hashable {
+***REMOVED******REMOVED******REMOVED***/ The user is viewing the list of available trace options.
+***REMOVED******REMOVED***case viewingAdvancedOptions
+***REMOVED******REMOVED******REMOVED***/ The user is viewing the list of element results.
+***REMOVED******REMOVED***case viewingElementResults
+***REMOVED******REMOVED******REMOVED***/ The user is viewing the list of function results.
+***REMOVED******REMOVED***case viewingFunctionResults
+***REMOVED***
+***REMOVED***
 ***REMOVED******REMOVED***/ Activities users will perform while using the Utility Network Trace tool.
 ***REMOVED***private enum UserActivity: Hashable {
 ***REMOVED******REMOVED******REMOVED***/ The user is creating a new trace.
 ***REMOVED******REMOVED***case creatingTrace(TraceCreationActivity?)
 ***REMOVED******REMOVED******REMOVED***/ The user is viewing traces that have been created.
-***REMOVED******REMOVED***case viewingTraces
+***REMOVED******REMOVED***case viewingTraces(TraceViewingActivity?)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED*** MARK: States
@@ -92,7 +102,7 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .creatingTrace(_):
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return UserActivity.creatingTrace(nil)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .viewingTraces:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return UserActivity.viewingTraces
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return UserActivity.viewingTraces(nil)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***, set: { newActivity, _ in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentActivity = newActivity
@@ -100,7 +110,7 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***) {
 ***REMOVED******REMOVED******REMOVED***Text("New trace").tag(UserActivity.creatingTrace(nil))
-***REMOVED******REMOVED******REMOVED***Text("Results").tag(UserActivity.viewingTraces)
+***REMOVED******REMOVED******REMOVED***Text("Results").tag(UserActivity.viewingTraces(nil))
 ***REMOVED***
 ***REMOVED******REMOVED***.pickerStyle(.segmented)
 ***REMOVED******REMOVED***.padding()
@@ -189,7 +199,7 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED***Task {
 ***REMOVED******REMOVED******REMOVED******REMOVED***let traceSuccess = await viewModel.trace()
 ***REMOVED******REMOVED******REMOVED******REMOVED***if traceSuccess {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentActivity = .viewingTraces
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentActivity = .viewingTraces(nil)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED*** label: {
@@ -222,31 +232,43 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED***
 ***REMOVED******REMOVED***List {
 ***REMOVED******REMOVED******REMOVED***Section("Element Result") {
-***REMOVED******REMOVED******REMOVED******REMOVED***DisclosureGroup(viewModel
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.selectedTrace?
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.utilityElementTraceResult?
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.elements.count.description ?? "0") {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(viewModel.selectedTrace?.assetLabels ?? [], id: \.self) { label in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(label)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***DisclosureGroup(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.selectedTrace?.utilityElementTraceResult?.elements.count.description ?? "0",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isExpanded: Binding(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***get: { isFocused(traceViewingActivity: .viewingElementResults) ***REMOVED***,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***set: { _ in currentActivity = .viewingTraces(.viewingElementResults) ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(viewModel.selectedTrace?.assetLabels ?? [], id: \.self) { label in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(label)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***Section("Function Result") {
-***REMOVED******REMOVED******REMOVED******REMOVED***DisclosureGroup(viewModel
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.selectedTrace?
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.utilityFunctionTraceResult?
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.functionOutputs.count.description ?? "0") {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(viewModel.selectedTrace?.functionOutputs ?? [], id: \.id) { item in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(item.function.networkAttribute?.name ?? "Unnamed")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text((item.result as? Double)?.description ?? "N/A")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***DisclosureGroup(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.selectedTrace?.utilityFunctionTraceResult?.functionOutputs.count.description ?? "0",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isExpanded: Binding(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***get: { isFocused(traceViewingActivity: .viewingFunctionResults) ***REMOVED***,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***set: { _ in currentActivity = .viewingTraces(.viewingFunctionResults) ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(viewModel.selectedTrace?.functionOutputs ?? [], id: \.id) { item in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***HStack {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(item.function.networkAttribute?.name ?? "Unnamed")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text((item.result as? Double)?.description ?? "N/A")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***Section {
-***REMOVED******REMOVED******REMOVED******REMOVED***DisclosureGroup("Advanced Options") {
+***REMOVED******REMOVED******REMOVED******REMOVED***DisclosureGroup(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Advanced Options",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isExpanded: Binding(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***get: { isFocused(traceViewingActivity: .viewingAdvancedOptions) ***REMOVED***,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***set: { _ in currentActivity = .viewingTraces(.viewingAdvancedOptions) ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ColorPicker(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selection: Binding(get: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.selectedTrace?.color ?? Color.clear
@@ -461,8 +483,6 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED*** MARK: Computed Properties
-***REMOVED***
 ***REMOVED******REMOVED***/ Indicates if the list of advanced options is expanded.
 ***REMOVED***private var advancedOptionsIsExpanded: Binding<Bool> {
 ***REMOVED******REMOVED***Binding(get: {
@@ -565,6 +585,18 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***default:
 ***REMOVED******REMOVED******REMOVED***return nil
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Determines if the provided viewing activity is the currently focused viewing activity.
+***REMOVED******REMOVED***/ - Parameter traceViewingActivity: A possible focus activity when viewing traces.
+***REMOVED******REMOVED***/ - Returns: A Boolean value indicating whether the provided activity is the currently focused
+***REMOVED******REMOVED***/ viewing activity.
+***REMOVED***private func isFocused(traceViewingActivity: TraceViewingActivity) -> Bool {
+***REMOVED******REMOVED***switch currentActivity {
+***REMOVED******REMOVED***case .viewingTraces(let currentActivity):
+***REMOVED******REMOVED******REMOVED***return traceViewingActivity == currentActivity
+***REMOVED******REMOVED***default: return false
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
