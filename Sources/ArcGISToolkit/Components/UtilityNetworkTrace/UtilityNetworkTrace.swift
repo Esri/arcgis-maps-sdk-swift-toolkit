@@ -143,7 +143,10 @@ public struct UtilityNetworkTrace: View {
             Section("Trace Configuration") {
                 DisclosureGroup(
                     viewModel.pendingTrace.configuration?.name ?? "None selected",
-                    isExpanded: configurationOptionsIsExpanded
+                    isExpanded: Binding(
+                        get: { isFocused(traceCreationActivity: .viewingTraceConfigurations) },
+                        set: { _ in currentActivity = .creatingTrace(.viewingTraceConfigurations) }
+                    )
                 ) {
                     configurationsList
                 }
@@ -156,7 +159,10 @@ public struct UtilityNetworkTrace: View {
                 }
                 DisclosureGroup(
                     "\(viewModel.pendingTrace.startingPoints.count) selected",
-                    isExpanded: startingPointsListIsExpanded
+                    isExpanded: Binding(
+                        get: { isFocused(traceCreationActivity: .viewingStartingPoints) },
+                        set: { _ in currentActivity = .creatingTrace(.viewingStartingPoints) }
+                    )
                 ) {
                     startingPointsList
                 }
@@ -202,7 +208,7 @@ public struct UtilityNetworkTrace: View {
             }
         }
         .font(.title3)
-        .padding()
+        .padding(2.5)
         if let traceName = viewModel.selectedTrace?.name, !traceName.isEmpty {
             Text(traceName)
         }
@@ -389,52 +395,6 @@ public struct UtilityNetworkTrace: View {
     
     // MARK: Computed Properties
     
-    /// Indicates if the list of trace configuration options is expanded.
-    private var configurationOptionsIsExpanded: Binding<Bool> {
-        Binding(get: {
-            switch currentActivity {
-            case .creatingTrace(let activity):
-                switch activity {
-                case .viewingTraceConfigurations:
-                    return true
-                default:
-                    return false
-                }
-            default:
-                return false
-            }
-        }, set: { val in
-            if val {
-                currentActivity = .creatingTrace(.viewingTraceConfigurations)
-            } else {
-                currentActivity = .creatingTrace(nil)
-            }
-        })
-    }
-    
-    /// Indicates if the list of chosen starting points is expanded.
-    private var startingPointsListIsExpanded: Binding<Bool> {
-        Binding(get: {
-            switch currentActivity {
-            case .creatingTrace(let activity):
-                switch activity {
-                case .viewingStartingPoints:
-                    return true
-                default:
-                    return false
-                }
-            default:
-                return false
-            }
-        }, set: { val in
-            if val {
-                currentActivity = .creatingTrace(.viewingStartingPoints)
-            } else {
-                currentActivity = .creatingTrace(nil)
-            }
-        })
-    }
-    
     /// Indicates the number of the trace currently being viewed out the total number of traces.
     private var currentTraceLabel: String {
         guard let index = viewModel.selectedTraceIndex else { return "Error" }
@@ -468,6 +428,18 @@ public struct UtilityNetworkTrace: View {
             }
         default:
             return nil
+        }
+    }
+    
+    /// Determines if the provided creation activity is the currently focused creation activity.
+    /// - Parameter traceCreationActivity: A possible focus activity when creating traces.
+    /// - Returns: A Boolean value indicating whether the provided activity is the currently focused
+    /// creation activity.
+    private func isFocused(traceCreationActivity: TraceCreationActivity) -> Bool {
+        switch currentActivity {
+        case .creatingTrace(let currentActivity):
+            return traceCreationActivity == currentActivity
+        default: return false
         }
     }
 }
