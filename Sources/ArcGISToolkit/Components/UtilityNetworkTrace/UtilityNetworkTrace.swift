@@ -155,7 +155,10 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED***Section("Trace Configuration") {
 ***REMOVED******REMOVED******REMOVED******REMOVED***DisclosureGroup(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.pendingTrace.configuration?.name ?? "None selected",
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isExpanded: configurationOptionsIsExpanded
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isExpanded: Binding(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***get: { isFocused(traceCreationActivity: .viewingTraceConfigurations) ***REMOVED***,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***set: { _ in currentActivity = .creatingTrace(.viewingTraceConfigurations) ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***configurationsList
 ***REMOVED******REMOVED******REMOVED***
@@ -169,7 +172,10 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if !viewModel.pendingTrace.startingPoints.isEmpty {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***DisclosureGroup(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"\(viewModel.pendingTrace.startingPoints.count) selected",
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isExpanded: startingPointsListIsExpanded
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isExpanded: Binding(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***get: { isFocused(traceCreationActivity: .viewingStartingPoints) ***REMOVED***,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***set: { _ in currentActivity = .creatingTrace(.viewingStartingPoints) ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***startingPointsList
 ***REMOVED******REMOVED******REMOVED******REMOVED***
@@ -226,7 +232,7 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.font(.title3)
-***REMOVED******REMOVED***.padding()
+***REMOVED******REMOVED***.padding(2.5)
 ***REMOVED******REMOVED***if let traceName = viewModel.selectedTrace?.name, !traceName.isEmpty {
 ***REMOVED******REMOVED******REMOVED***Text(traceName)
 ***REMOVED***
@@ -506,52 +512,6 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Indicates if the list of trace configuration options is expanded.
-***REMOVED***private var configurationOptionsIsExpanded: Binding<Bool> {
-***REMOVED******REMOVED***Binding(get: {
-***REMOVED******REMOVED******REMOVED***switch currentActivity {
-***REMOVED******REMOVED******REMOVED***case .creatingTrace(let activity):
-***REMOVED******REMOVED******REMOVED******REMOVED***switch activity {
-***REMOVED******REMOVED******REMOVED******REMOVED***case .viewingTraceConfigurations:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return true
-***REMOVED******REMOVED******REMOVED******REMOVED***default:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return false
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***default:
-***REMOVED******REMOVED******REMOVED******REMOVED***return false
-***REMOVED******REMOVED***
-***REMOVED***, set: { val in
-***REMOVED******REMOVED******REMOVED***if val {
-***REMOVED******REMOVED******REMOVED******REMOVED***currentActivity = .creatingTrace(.viewingTraceConfigurations)
-***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***currentActivity = .creatingTrace(nil)
-***REMOVED******REMOVED***
-***REMOVED***)
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ Indicates if the list of chosen starting points is expanded.
-***REMOVED***private var startingPointsListIsExpanded: Binding<Bool> {
-***REMOVED******REMOVED***Binding(get: {
-***REMOVED******REMOVED******REMOVED***switch currentActivity {
-***REMOVED******REMOVED******REMOVED***case .creatingTrace(let activity):
-***REMOVED******REMOVED******REMOVED******REMOVED***switch activity {
-***REMOVED******REMOVED******REMOVED******REMOVED***case .viewingStartingPoints:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return true
-***REMOVED******REMOVED******REMOVED******REMOVED***default:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return false
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***default:
-***REMOVED******REMOVED******REMOVED******REMOVED***return false
-***REMOVED******REMOVED***
-***REMOVED***, set: { val in
-***REMOVED******REMOVED******REMOVED***if val {
-***REMOVED******REMOVED******REMOVED******REMOVED***currentActivity = .creatingTrace(.viewingStartingPoints)
-***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***currentActivity = .creatingTrace(nil)
-***REMOVED******REMOVED***
-***REMOVED***)
-***REMOVED***
-***REMOVED***
 ***REMOVED******REMOVED***/ Indicates the number of the trace currently being viewed out the total number of traces.
 ***REMOVED***private var currentTraceLabel: String {
 ***REMOVED******REMOVED***guard let index = viewModel.selectedTraceIndex else { return "Error" ***REMOVED***
@@ -585,6 +545,18 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***default:
 ***REMOVED******REMOVED******REMOVED***return nil
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Determines if the provided creation activity is the currently focused creation activity.
+***REMOVED******REMOVED***/ - Parameter traceCreationActivity: A possible focus activity when creating traces.
+***REMOVED******REMOVED***/ - Returns: A Boolean value indicating whether the provided activity is the currently focused
+***REMOVED******REMOVED***/ creation activity.
+***REMOVED***private func isFocused(traceCreationActivity: TraceCreationActivity) -> Bool {
+***REMOVED******REMOVED***switch currentActivity {
+***REMOVED******REMOVED***case .creatingTrace(let currentActivity):
+***REMOVED******REMOVED******REMOVED***return traceCreationActivity == currentActivity
+***REMOVED******REMOVED***default: return false
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
