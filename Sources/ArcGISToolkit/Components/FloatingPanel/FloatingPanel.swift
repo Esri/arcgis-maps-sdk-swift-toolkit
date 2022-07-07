@@ -73,6 +73,8 @@ public struct FloatingPanel<Content>: View where Content: View {
                 }
             }
             .esriBorder()
+            .padding(isCompact ? [] : [.leading, .top, .trailing])
+            .padding(.bottom, isCompact ? 0 : 50)
             .frame(
                 width: geometryProxy.size.width,
                 height: geometryProxy.size.height,
