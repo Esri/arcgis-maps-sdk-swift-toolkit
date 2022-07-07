@@ -35,7 +35,7 @@ struct FloatingPanelExampleView: View {
             FloatingPanel {
                 SampleContent()
             }
-            .frame(width: horizontalSizeClass == .compact ? nil : 360)
+            .frame(maxWidth: horizontalSizeClass == .regular ? 360 : .infinity)
         }
     }
 }
