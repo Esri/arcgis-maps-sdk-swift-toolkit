@@ -35,8 +35,6 @@ struct FloatingPanelExampleView: View {
             FloatingPanel {
                 SampleContent()
             }
-            .padding(horizontalSizeClass == .compact ? [] : [.leading, .top, .trailing])
-            .padding(.bottom, horizontalSizeClass == .compact ? 0 : 50)
             .frame(width: horizontalSizeClass == .compact ? nil : 360)
         }
     }
