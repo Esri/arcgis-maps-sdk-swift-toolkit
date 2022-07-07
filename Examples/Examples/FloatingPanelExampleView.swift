@@ -35,8 +35,6 @@ struct FloatingPanelExampleView: View {
 ***REMOVED******REMOVED******REMOVED***FloatingPanel {
 ***REMOVED******REMOVED******REMOVED******REMOVED***SampleContent()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.padding(horizontalSizeClass == .compact ? [] : [.leading, .top, .trailing])
-***REMOVED******REMOVED******REMOVED***.padding(.bottom, horizontalSizeClass == .compact ? 0 : 50)
 ***REMOVED******REMOVED******REMOVED***.frame(width: horizontalSizeClass == .compact ? nil : 360)
 ***REMOVED***
 ***REMOVED***

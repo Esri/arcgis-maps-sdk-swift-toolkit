@@ -73,6 +73,8 @@ public struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.esriBorder()
+***REMOVED******REMOVED******REMOVED***.padding(isCompact ? [] : [.leading, .top, .trailing])
+***REMOVED******REMOVED******REMOVED***.padding(.bottom, isCompact ? 0 : 50)
 ***REMOVED******REMOVED******REMOVED***.frame(
 ***REMOVED******REMOVED******REMOVED******REMOVED***width: geometryProxy.size.width,
 ***REMOVED******REMOVED******REMOVED******REMOVED***height: geometryProxy.size.height,
