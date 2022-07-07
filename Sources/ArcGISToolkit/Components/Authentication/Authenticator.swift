@@ -50,21 +50,23 @@ public final class Authenticator: ObservableObject {
 ***REMOVED******REMOVED***access: ArcGIS.KeychainAccess,
 ***REMOVED******REMOVED***isSynchronizable: Bool = false
 ***REMOVED***) async throws {
-***REMOVED******REMOVED***let previousArcGISCredentialStore = ArcGISCredentialStore.shared
+***REMOVED******REMOVED***let previousArcGISCredentialStore = ArcGISRuntimeEnvironment.credentialStore
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***ArcGISCredentialStore.shared = try await .makePersistent(
+***REMOVED******REMOVED******REMOVED*** Set a persistent ArcGIS credential store on the ArcGIS environment.
+***REMOVED******REMOVED***ArcGISRuntimeEnvironment.credentialStore = try await .makePersistent(
 ***REMOVED******REMOVED******REMOVED***access: access,
 ***REMOVED******REMOVED******REMOVED***isSynchronizable: isSynchronizable
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***do {
-***REMOVED******REMOVED******REMOVED***await NetworkCredentialStore.setShared(
+***REMOVED******REMOVED******REMOVED******REMOVED*** Set a persistent network credential store on the ArcGIS environment.
+***REMOVED******REMOVED******REMOVED***await ArcGISRuntimeEnvironment.setNetworkCredentialStore(
 ***REMOVED******REMOVED******REMOVED******REMOVED***try await .makePersistent(access: access, isSynchronizable: isSynchronizable)
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED*** catch {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** If making the shared network credential store persistent fails,
 ***REMOVED******REMOVED******REMOVED******REMOVED*** then restore the ArcGIS credential store.
-***REMOVED******REMOVED******REMOVED***ArcGISCredentialStore.shared = previousArcGISCredentialStore
+***REMOVED******REMOVED******REMOVED***ArcGISRuntimeEnvironment.credentialStore = previousArcGISCredentialStore
 ***REMOVED******REMOVED******REMOVED***throw error
 ***REMOVED***
 ***REMOVED***
@@ -74,14 +76,15 @@ public final class Authenticator: ObservableObject {
 ***REMOVED******REMOVED***/ right away.
 ***REMOVED***public func clearCredentialStores() async {
 ***REMOVED******REMOVED******REMOVED*** Clear ArcGIS Credentials.
-***REMOVED******REMOVED***await ArcGISCredentialStore.shared.removeAll()
+***REMOVED******REMOVED***await ArcGISRuntimeEnvironment.credentialStore.removeAll()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Clear network credentials.
-***REMOVED******REMOVED***await NetworkCredentialStore.shared.removeAll()
+***REMOVED******REMOVED***await ArcGISRuntimeEnvironment.networkCredentialStore.removeAll()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** We have to reset the sessions for URLCredential storage to respect the removed credentials
-***REMOVED******REMOVED***ArcGISURLSession.shared = ArcGISURLSession.makeDefaultSharedSession()
-***REMOVED******REMOVED***ArcGISURLSession.sharedBackground = ArcGISURLSession.makeDefaultSharedBackgroundSession()
+***REMOVED******REMOVED******REMOVED*** We have to set new sessions for URLCredential storage to respect the removed credentials
+***REMOVED******REMOVED******REMOVED*** right away.
+***REMOVED******REMOVED***ArcGISRuntimeEnvironment.urlSession = .makeDefault()
+***REMOVED******REMOVED***ArcGISRuntimeEnvironment.backgroundURLSession = .makeDefaultBackground()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Observes the challenge queue and sets the current challenge.

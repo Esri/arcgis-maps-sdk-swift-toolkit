@@ -46,7 +46,7 @@ struct AuthenticationExampleView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***.navigationBarTitle(Text("Authentication"), displayMode: .inline)
 ***REMOVED******REMOVED***.onAppear {
-***REMOVED******REMOVED******REMOVED***ArcGISURLSession.challengeHandler = authenticator
+***REMOVED******REMOVED******REMOVED***ArcGISRuntimeEnvironment.authenticationChallengeHandler = authenticator
 ***REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Save and restore the API Key.
 ***REMOVED******REMOVED******REMOVED*** Note: This is only necessary in this example. Other examples make use of the global
