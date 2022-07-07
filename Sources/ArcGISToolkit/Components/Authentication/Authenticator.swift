@@ -50,21 +50,23 @@ public final class Authenticator: ObservableObject {
         access: ArcGIS.KeychainAccess,
         isSynchronizable: Bool = false
     ) async throws {
-        let previousArcGISCredentialStore = ArcGISCredentialStore.shared
+        let previousArcGISCredentialStore = ArcGISRuntimeEnvironment.credentialStore
         
-        ArcGISCredentialStore.shared = try await .makePersistent(
+        // Set a persistent ArcGIS credential store on the ArcGIS environment.
+        ArcGISRuntimeEnvironment.credentialStore = try await .makePersistent(
             access: access,
             isSynchronizable: isSynchronizable
         )
         
         do {
-            await NetworkCredentialStore.setShared(
+            // Set a persistent network credential store on the ArcGIS environment.
+            await ArcGISRuntimeEnvironment.setNetworkCredentialStore(
                 try await .makePersistent(access: access, isSynchronizable: isSynchronizable)
             )
         } catch {
             // If making the shared network credential store persistent fails,
             // then restore the ArcGIS credential store.
-            ArcGISCredentialStore.shared = previousArcGISCredentialStore
+            ArcGISRuntimeEnvironment.credentialStore = previousArcGISCredentialStore
             throw error
         }
     }
@@ -74,14 +76,15 @@ public final class Authenticator: ObservableObject {
     /// right away.
     public func clearCredentialStores() async {
         // Clear ArcGIS Credentials.
-        await ArcGISCredentialStore.shared.removeAll()
+        await ArcGISRuntimeEnvironment.credentialStore.removeAll()
         
         // Clear network credentials.
-        await NetworkCredentialStore.shared.removeAll()
+        await ArcGISRuntimeEnvironment.networkCredentialStore.removeAll()
         
-        // We have to reset the sessions for URLCredential storage to respect the removed credentials
-        ArcGISURLSession.shared = ArcGISURLSession.makeDefaultSharedSession()
-        ArcGISURLSession.sharedBackground = ArcGISURLSession.makeDefaultSharedBackgroundSession()
+        // We have to set new sessions for URLCredential storage to respect the removed credentials
+        // right away.
+        ArcGISRuntimeEnvironment.urlSession = .makeDefault()
+        ArcGISRuntimeEnvironment.backgroundURLSession = .makeDefaultBackground()
     }
     
     /// Observes the challenge queue and sets the current challenge.
