@@ -60,9 +60,8 @@ public final class Authenticator: ObservableObject {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Set a persistent network credential store on the ArcGIS environment.
-***REMOVED******REMOVED******REMOVED***await ArcGISRuntimeEnvironment.setNetworkCredentialStore(
+***REMOVED******REMOVED******REMOVED***ArcGISRuntimeEnvironment.networkCredentialStore =
 ***REMOVED******REMOVED******REMOVED******REMOVED***try await .makePersistent(access: access, isSynchronizable: isSynchronizable)
-***REMOVED******REMOVED******REMOVED***)
 ***REMOVED*** catch {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** If making the shared network credential store persistent fails,
 ***REMOVED******REMOVED******REMOVED******REMOVED*** then restore the ArcGIS credential store.
