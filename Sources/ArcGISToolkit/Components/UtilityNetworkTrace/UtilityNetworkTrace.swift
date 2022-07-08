@@ -48,8 +48,8 @@ public struct UtilityNetworkTrace: View {
     /// The current user activity.
     @State private var currentActivity: UserActivity = .creatingTrace(nil)
     
-    /// Indicates if the warning that all traces will be deleted is presented.
-    @State private var warningIsPresented = false
+    /// A Boolean value indicating if the warning that all traces will be deleted is presented.
+    @State private var showWarningAlert = false
     
     /// The view model used by the view. The `UtilityNetworkTraceViewModel` manages state.
     /// The view observes `UtilityNetworkTraceViewModel` for changes in state.
@@ -231,12 +231,12 @@ public struct UtilityNetworkTrace: View {
             }
         }
         Button {
-            warningIsPresented.toggle()
+            showWarningAlert.toggle()
         } label: {
             Text("Clear All Results")
                 .tint(.red)
         }
-        .alert("Clear All Results", isPresented: $warningIsPresented) {
+        .alert("Clear All Results", isPresented: $showWarningAlert) {
             Button(role: .destructive) {
                 viewModel.deleteAllTraces()
                 currentActivity = .creatingTrace(nil)
