@@ -429,7 +429,6 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***graphicsOverlay: graphicsOverlay.wrappedValue
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED***UITableView.appearance().backgroundColor = .systemGroupedBackground
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***public var body: some View {
