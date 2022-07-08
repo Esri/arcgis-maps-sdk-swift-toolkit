@@ -407,7 +407,7 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - graphicsOverlay: The graphics overlay to hold generated starting point and trace
 ***REMOVED******REMOVED***/   graphics.
-***REMOVED******REMOVED***/   - map: The parent map.
+***REMOVED******REMOVED***/   - map: The map containing the utility network(s).
 ***REMOVED******REMOVED***/   - pointInMap: Acts as the point at which newly selected starting point graphics will be
 ***REMOVED******REMOVED***/   created.
 ***REMOVED******REMOVED***/   - pointInScreen: Acts as the point of identification for items tapped in the utility network.
