@@ -437,7 +437,8 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED***
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***VStack {
-***REMOVED******REMOVED******REMOVED***if !viewModel.completedTraces.isEmpty && !isAddingStartingPoints {
+***REMOVED******REMOVED******REMOVED***if !viewModel.completedTraces.isEmpty &&
+***REMOVED******REMOVED******REMOVED******REMOVED***!isFocused(traceCreationActivity: .addingStartingPoints) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***activityPicker
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***switch currentActivity {
@@ -457,7 +458,7 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED***.background(Color(uiColor: .systemGroupedBackground))
 ***REMOVED******REMOVED***.animation(.default, value: currentActivity)
 ***REMOVED******REMOVED***.onChange(of: viewPoint) { newValue in
-***REMOVED******REMOVED******REMOVED***guard isAddingStartingPoints,
+***REMOVED******REMOVED******REMOVED***guard isFocused(traceCreationActivity: .addingStartingPoints),
 ***REMOVED******REMOVED******REMOVED******REMOVED***  let mapViewProxy = mapViewProxy,
 ***REMOVED******REMOVED******REMOVED******REMOVED***  let mapPoint = mapPoint,
 ***REMOVED******REMOVED******REMOVED******REMOVED***  let viewPoint = viewPoint else {
@@ -487,21 +488,6 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED***private var currentTraceLabel: String {
 ***REMOVED******REMOVED***guard let index = viewModel.selectedTraceIndex else { return "Error" ***REMOVED***
 ***REMOVED******REMOVED***return "Trace \(index+1) of \(viewModel.completedTraces.count.description)"
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ Indicates if the user is currently adding starting points.
-***REMOVED***private var isAddingStartingPoints: Bool {
-***REMOVED******REMOVED***switch currentActivity {
-***REMOVED******REMOVED***case .creatingTrace(let activity):
-***REMOVED******REMOVED******REMOVED***switch activity {
-***REMOVED******REMOVED******REMOVED***case .addingStartingPoints:
-***REMOVED******REMOVED******REMOVED******REMOVED***return true
-***REMOVED******REMOVED******REMOVED***default:
-***REMOVED******REMOVED******REMOVED******REMOVED***return false
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***default:
-***REMOVED******REMOVED******REMOVED***return false
-***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The starting point being inspected (if one exists).
