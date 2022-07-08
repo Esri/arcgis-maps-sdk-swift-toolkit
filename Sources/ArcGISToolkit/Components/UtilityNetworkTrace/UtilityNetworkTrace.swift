@@ -117,6 +117,7 @@ public struct UtilityNetworkTrace: View {
         } label: {
             Text("Cancel starting point selection")
         }
+        .buttonStyle(.bordered)
     }
     
     /// Displays the list of available named trace configurations.
