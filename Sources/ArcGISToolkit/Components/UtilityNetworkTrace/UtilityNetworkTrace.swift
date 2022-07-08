@@ -393,17 +393,11 @@ public struct UtilityNetworkTrace: View {
     
     /// The starting point being inspected (if one exists).
     private var selectedStartingPoint: UtilityNetworkTraceStartingPoint? {
-        switch currentActivity {
-        case .creatingTrace(let activity):
-            switch activity {
-            case .inspectingStartingPoint(let startingPoint):
-                return startingPoint
-            default:
-                return nil
-            }
-        default:
-            return nil
+        if case let .creatingTrace(activity) = currentActivity,
+           case let .inspectingStartingPoint(startingPoint) = activity {
+            return startingPoint
         }
+        return nil
     }
     
     /// Determines if the provided creation activity is the currently focused creation activity.
