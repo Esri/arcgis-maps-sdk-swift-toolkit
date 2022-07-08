@@ -133,7 +133,7 @@ public struct UtilityNetworkTrace: View {
                     viewModel.pendingTrace.configuration?.name ?? "None selected",
                     isExpanded: Binding(
                         get: { isFocused(traceCreationActivity: .viewingTraceConfigurations) },
-                        set: { _ in currentActivity = .creatingTrace(.viewingTraceConfigurations) }
+                        set: { currentActivity = .creatingTrace($0 ? .viewingTraceConfigurations : nil) }
                     )
                 ) {
                     configurationsList
@@ -149,7 +149,7 @@ public struct UtilityNetworkTrace: View {
                     "\(viewModel.pendingTrace.startingPoints.count) selected",
                     isExpanded: Binding(
                         get: { isFocused(traceCreationActivity: .viewingStartingPoints) },
-                        set: { _ in currentActivity = .creatingTrace(.viewingStartingPoints) }
+                        set: { currentActivity = .creatingTrace($0 ? .viewingStartingPoints : nil) }
                     )
                 ) {
                     startingPointsList
