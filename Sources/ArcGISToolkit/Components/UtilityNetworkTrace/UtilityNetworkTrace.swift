@@ -76,10 +76,10 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED***@Binding private var mapViewProxy: MapViewProxy?
 ***REMOVED***
 ***REMOVED******REMOVED***/ Acts as the point of identification for items tapped in the utility network.
-***REMOVED***@Binding private var pointInScreen: CGPoint?
+***REMOVED***@Binding private var viewPoint: CGPoint?
 ***REMOVED***
 ***REMOVED******REMOVED***/ Acts as the point at which newly selected starting point graphics will be created.
-***REMOVED***@Binding private var pointInMap: Point?
+***REMOVED***@Binding private var mapPoint: Point?
 ***REMOVED***
 ***REMOVED******REMOVED***/ Allows the Utility Network Trace Tool to update the parent map view's viewpoint.
 ***REMOVED***@Binding private var viewpoint: Viewpoint?
@@ -408,22 +408,22 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED***/   - graphicsOverlay: The graphics overlay to hold generated starting point and trace
 ***REMOVED******REMOVED***/   graphics.
 ***REMOVED******REMOVED***/   - map: The map containing the utility network(s).
-***REMOVED******REMOVED***/   - pointInMap: Acts as the point at which newly selected starting point graphics will be
+***REMOVED******REMOVED***/   - mapPoint: Acts as the point at which newly selected starting point graphics will be
 ***REMOVED******REMOVED***/   created.
-***REMOVED******REMOVED***/   - pointInScreen: Acts as the point of identification for items tapped in the utility network.
+***REMOVED******REMOVED***/   - viewPoint: Acts as the point of identification for items tapped in the utility network.
 ***REMOVED******REMOVED***/   - mapViewProxy: Provides a method of layer identification when starting points are being
 ***REMOVED******REMOVED***/   chosen.
 ***REMOVED******REMOVED***/   - viewpoint: Allows the utility network trace tool to update the parent map view's viewpoint.
 ***REMOVED***public init(
 ***REMOVED******REMOVED***_ graphicsOverlay: Binding<GraphicsOverlay>,
 ***REMOVED******REMOVED***_ map: Map,
-***REMOVED******REMOVED***_ pointInMap: Binding<Point?>,
-***REMOVED******REMOVED***_ pointInScreen: Binding<CGPoint?>,
+***REMOVED******REMOVED***_ mapPoint: Binding<Point?>,
+***REMOVED******REMOVED***_ viewPoint: Binding<CGPoint?>,
 ***REMOVED******REMOVED***_ mapViewProxy: Binding<MapViewProxy?>,
 ***REMOVED******REMOVED***_ viewpoint: Binding<Viewpoint?>
 ***REMOVED***) {
-***REMOVED******REMOVED***_pointInScreen = pointInScreen
-***REMOVED******REMOVED***_pointInMap = pointInMap
+***REMOVED******REMOVED***_viewPoint = viewPoint
+***REMOVED******REMOVED***_mapPoint = mapPoint
 ***REMOVED******REMOVED***_mapViewProxy = mapViewProxy
 ***REMOVED******REMOVED***_graphicsOverlay = graphicsOverlay
 ***REMOVED******REMOVED***_viewpoint = viewpoint
@@ -456,18 +456,18 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED***
 ***REMOVED******REMOVED***.background(Color(uiColor: .systemGroupedBackground))
 ***REMOVED******REMOVED***.animation(.default, value: currentActivity)
-***REMOVED******REMOVED***.onChange(of: pointInScreen) { newValue in
+***REMOVED******REMOVED***.onChange(of: viewPoint) { newValue in
 ***REMOVED******REMOVED******REMOVED***guard isAddingStartingPoints,
 ***REMOVED******REMOVED******REMOVED******REMOVED***  let mapViewProxy = mapViewProxy,
-***REMOVED******REMOVED******REMOVED******REMOVED***  let pointInMap = pointInMap,
-***REMOVED******REMOVED******REMOVED******REMOVED***  let pointInScreen = pointInScreen else {
+***REMOVED******REMOVED******REMOVED******REMOVED***  let mapPoint = mapPoint,
+***REMOVED******REMOVED******REMOVED******REMOVED***  let viewPoint = viewPoint else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***return
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***currentActivity = .creatingTrace(.viewingStartingPoints)
 ***REMOVED******REMOVED******REMOVED***Task {
 ***REMOVED******REMOVED******REMOVED******REMOVED***await viewModel.setStartingPoint(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***at: pointInScreen,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mapPoint: pointInMap,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***at: viewPoint,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mapPoint: mapPoint,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***with: mapViewProxy
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
