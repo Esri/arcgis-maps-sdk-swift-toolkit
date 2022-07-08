@@ -133,7 +133,7 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.pendingTrace.configuration?.name ?? "None selected",
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isExpanded: Binding(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***get: { isFocused(traceCreationActivity: .viewingTraceConfigurations) ***REMOVED***,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***set: { _ in currentActivity = .creatingTrace(.viewingTraceConfigurations) ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***set: { currentActivity = .creatingTrace($0 ? .viewingTraceConfigurations : nil) ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***configurationsList
@@ -149,7 +149,7 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"\(viewModel.pendingTrace.startingPoints.count) selected",
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isExpanded: Binding(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***get: { isFocused(traceCreationActivity: .viewingStartingPoints) ***REMOVED***,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***set: { _ in currentActivity = .creatingTrace(.viewingStartingPoints) ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***set: { currentActivity = .creatingTrace($0 ? .viewingStartingPoints : nil) ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***startingPointsList
