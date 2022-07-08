@@ -25,3 +25,5 @@ extension UtilityNamedTraceConfiguration: Hashable {
 ***REMOVED******REMOVED***hasher.combine(globalID)
 ***REMOVED***
 ***REMOVED***
+
+extension UtilityNamedTraceConfiguration: Identifiable {***REMOVED***
