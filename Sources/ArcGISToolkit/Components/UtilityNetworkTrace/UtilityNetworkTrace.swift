@@ -345,7 +345,8 @@ public struct UtilityNetworkTrace: View {
     
     public var body: some View {
         VStack {
-            if !viewModel.completedTraces.isEmpty && !isAddingStartingPoints {
+            if !viewModel.completedTraces.isEmpty &&
+                !isFocused(traceCreationActivity: .addingStartingPoints) {
                 activityPicker
             }
             switch currentActivity {
@@ -365,7 +366,7 @@ public struct UtilityNetworkTrace: View {
         .background(Color(uiColor: .systemGroupedBackground))
         .animation(.default, value: currentActivity)
         .onChange(of: viewPoint) { newValue in
-            guard isAddingStartingPoints,
+            guard isFocused(traceCreationActivity: .addingStartingPoints),
                   let mapViewProxy = mapViewProxy,
                   let mapPoint = mapPoint,
                   let viewPoint = viewPoint else {
@@ -388,21 +389,6 @@ public struct UtilityNetworkTrace: View {
     private var currentTraceLabel: String {
         guard let index = viewModel.selectedTraceIndex else { return "Error" }
         return "Trace \(index+1) of \(viewModel.completedTraces.count.description)"
-    }
-    
-    /// Indicates if the user is currently adding starting points.
-    private var isAddingStartingPoints: Bool {
-        switch currentActivity {
-        case .creatingTrace(let activity):
-            switch activity {
-            case .addingStartingPoints:
-                return true
-            default:
-                return false
-            }
-        default:
-            return false
-        }
     }
     
     /// The starting point being inspected (if one exists).
