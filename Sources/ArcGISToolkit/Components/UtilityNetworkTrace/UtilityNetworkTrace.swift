@@ -180,17 +180,21 @@ public struct UtilityNetworkTrace: View {
     /// The tab that allows for viewing completed traces.
     @ViewBuilder private var resultsTab: some View {
         HStack {
-            Button {
-                viewModel.selectPreviousTrace()
-            } label: {
-                Image(systemName: "chevron.backward")
+            if viewModel.completedTraces.count > 1 {
+                Button {
+                    viewModel.selectPreviousTrace()
+                } label: {
+                    Image(systemName: "chevron.backward")
+                }
             }
             Text(currentTraceLabel)
                 .padding(.horizontal)
-            Button {
-                viewModel.selectNextTrace()
-            } label: {
-                Image(systemName: "chevron.forward")
+            if viewModel.completedTraces.count > 1 {
+                Button {
+                    viewModel.selectNextTrace()
+                } label: {
+                    Image(systemName: "chevron.forward")
+                }
             }
         }
         .font(.title3)
