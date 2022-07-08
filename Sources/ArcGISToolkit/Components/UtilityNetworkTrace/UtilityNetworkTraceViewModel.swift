@@ -263,10 +263,10 @@ import Foundation
 ***REMOVED******REMOVED***for result in traceResults {
 ***REMOVED******REMOVED******REMOVED***switch result {
 ***REMOVED******REMOVED******REMOVED***case let result as UtilityElementTraceResult:
-***REMOVED******REMOVED******REMOVED******REMOVED***result.elements.forEach({ element in
+***REMOVED******REMOVED******REMOVED******REMOVED***result.elements.forEach { element in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let count = assetGroups[element.assetGroup.name] ?? 0 + 1
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***assetGroups.updateValue(count, forKey: element.assetGroup.name)
-***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***assetGroups.forEach { (key, value) in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***pendingTrace.assetLabels.append("\(key): \(value)")
 ***REMOVED******REMOVED******REMOVED***
