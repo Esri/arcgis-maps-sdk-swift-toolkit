@@ -429,7 +429,6 @@ public struct UtilityNetworkTrace: View {
                 graphicsOverlay: graphicsOverlay.wrappedValue
             )
         )
-        UITableView.appearance().backgroundColor = .systemGroupedBackground
     }
     
     public var body: some View {
