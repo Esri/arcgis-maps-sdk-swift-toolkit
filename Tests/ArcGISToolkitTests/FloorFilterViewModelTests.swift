@@ -102,7 +102,7 @@ final class FloorFilterViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***XCTAssertNil(viewModel.selectedSite)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Tests that a `FloorFilterViewModel` succesfully initializes.
+***REMOVED******REMOVED***/ Tests that a `FloorFilterViewModel` successfully initializes.
 ***REMOVED***func testInitWithFloorManagerAndViewpoint() async throws {
 ***REMOVED******REMOVED***let floorManager = try await floorManager(
 ***REMOVED******REMOVED******REMOVED***forWebMapWithIdentifier: .testMap
