@@ -60,9 +60,8 @@ public final class Authenticator: ObservableObject {
         
         do {
             // Set a persistent network credential store on the ArcGIS environment.
-            await ArcGISRuntimeEnvironment.setNetworkCredentialStore(
+            ArcGISRuntimeEnvironment.networkCredentialStore =
                 try await .makePersistent(access: access, isSynchronizable: isSynchronizable)
-            )
         } catch {
             // If making the shared network credential store persistent fails,
             // then restore the ArcGIS credential store.
