@@ -21,12 +21,6 @@ public struct UtilityNetworkTrace: View {
     @Environment(\.verticalSizeClass)
     private var verticalSizeClass: UserInterfaceSizeClass?
     
-    /// If `true`, the site and facility selector will appear as a sheet.
-    /// If `false`, the site and facility selector will appear as a popup modal alongside the level selector.
-    private var isCompact: Bool {
-        return horizontalSizeClass == .compact || verticalSizeClass == .compact
-    }
-    
     // MARK: Enums
     
     /// Activities users will perform while creating a new trace.
