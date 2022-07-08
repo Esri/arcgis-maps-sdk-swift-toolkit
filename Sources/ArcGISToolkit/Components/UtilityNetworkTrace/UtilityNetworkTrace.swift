@@ -105,6 +105,7 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED***Text("Cancel starting point selection")
 ***REMOVED***
+***REMOVED******REMOVED***.buttonStyle(.bordered)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Displays the list of available named trace configurations.
