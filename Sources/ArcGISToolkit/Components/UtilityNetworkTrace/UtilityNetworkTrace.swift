@@ -60,8 +60,8 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED***/ The current user activity.
 ***REMOVED***@State private var currentActivity: UserActivity = .creatingTrace(nil)
 ***REMOVED***
-***REMOVED******REMOVED***/ Indicates if the warning that all traces will be deleted is presented.
-***REMOVED***@State private var warningIsPresented = false
+***REMOVED******REMOVED***/ A Boolean value indicating if the warning that all traces will be deleted is presented.
+***REMOVED***@State private var showWarningAlert = false
 ***REMOVED***
 ***REMOVED******REMOVED***/ The view model used by the view. The `UtilityNetworkTraceViewModel` manages state.
 ***REMOVED******REMOVED***/ The view observes `UtilityNetworkTraceViewModel` for changes in state.
@@ -288,12 +288,12 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED***warningIsPresented.toggle()
+***REMOVED******REMOVED******REMOVED***showWarningAlert.toggle()
 ***REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED***Text("Clear All Results")
 ***REMOVED******REMOVED******REMOVED******REMOVED***.tint(.red)
 ***REMOVED***
-***REMOVED******REMOVED***.alert("Clear All Results", isPresented: $warningIsPresented) {
+***REMOVED******REMOVED***.alert("Clear All Results", isPresented: $showWarningAlert) {
 ***REMOVED******REMOVED******REMOVED***Button(role: .destructive) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.deleteAllTraces()
 ***REMOVED******REMOVED******REMOVED******REMOVED***currentActivity = .creatingTrace(nil)
