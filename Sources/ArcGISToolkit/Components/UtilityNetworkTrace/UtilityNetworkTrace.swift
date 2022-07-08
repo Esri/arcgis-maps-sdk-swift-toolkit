@@ -126,20 +126,13 @@ public struct UtilityNetworkTrace: View {
             Text("No configurations available")
         } else {
             ForEach(viewModel.configurations, id: \.name) { configuration in
-                Button {
-                    withAnimation {
+                Text(configuration.name)
+                    .lineLimit(1)
+                    .listRowBackground(configuration == viewModel.pendingTrace.configuration ? Color.secondary.opacity(0.5) : nil)
+                    .onTapGesture {
                         viewModel.setPendingTrace(configuration: configuration)
                         currentActivity = .creatingTrace(nil)
                     }
-                } label: {
-                    Label {
-                        Text(configuration.name)
-                            .lineLimit(1)
-                    } icon: {
-                        Image(systemName: "circle")
-                            .symbolVariant(configuration == viewModel.pendingTrace.configuration ? .fill: .none)
-                    }
-                }
             }
         }
     }
