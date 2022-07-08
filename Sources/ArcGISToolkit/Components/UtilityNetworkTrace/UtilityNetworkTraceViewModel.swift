@@ -95,12 +95,8 @@ import Foundation
 ***REMOVED***func deleteAllTraces() {
 ***REMOVED******REMOVED***selectedTraceIndex = nil
 ***REMOVED******REMOVED***completedTraces.forEach { traceResult in
-***REMOVED******REMOVED******REMOVED***traceResult.startingPoints.forEach { startingPoint in
-***REMOVED******REMOVED******REMOVED******REMOVED***graphicsOverlay.removeGraphic(startingPoint.graphic)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***traceResult.graphics.forEach { graphic in
-***REMOVED******REMOVED******REMOVED******REMOVED***graphicsOverlay.removeGraphic(graphic)
-***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***graphicsOverlay.removeGraphics(traceResult.startingPoints.map({ $0.graphic ***REMOVED***))
+***REMOVED******REMOVED******REMOVED***graphicsOverlay.removeGraphics(traceResult.graphics)
 ***REMOVED***
 ***REMOVED******REMOVED***completedTraces.removeAll()
 ***REMOVED***
