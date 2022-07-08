@@ -25,3 +25,5 @@ extension UtilityNamedTraceConfiguration: Hashable {
         hasher.combine(globalID)
     }
 }
+
+extension UtilityNamedTraceConfiguration: Identifiable {}
