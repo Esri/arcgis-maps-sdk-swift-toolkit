@@ -24,10 +24,10 @@ struct UtilityNetworkTraceExampleView: View {
     @State var mapViewProxy: MapViewProxy?
     
     /// Provides the ability to detect tap locations in the context of the map view.
-    @State var pointInMap: Point?
+    @State var mapPoint: Point?
     
     /// Provides the ability to detect tap locations in the context of the screen.
-    @State var pointInScreen: CGPoint?
+    @State var viewPoint: CGPoint?
     
     /// A container for graphical trace results.
     @State var resultGraphicsOverlay = GraphicsOverlay()
@@ -42,9 +42,9 @@ struct UtilityNetworkTraceExampleView: View {
                 viewpoint: viewpoint,
                 graphicsOverlays: [resultGraphicsOverlay]
             )
-            .onSingleTapGesture { pointInScreen, pointInMap in
-                self.pointInScreen = pointInScreen
-                self.pointInMap = pointInMap
+            .onSingleTapGesture { viewPoint, mapPoint in
+                self.viewPoint = viewPoint
+                self.mapPoint = mapPoint
                 self.mapViewProxy = mapViewProxy
             }
             .onViewpointChanged(kind: .centerAndScale) {
@@ -55,8 +55,8 @@ struct UtilityNetworkTraceExampleView: View {
                     UtilityNetworkTrace(
                         $resultGraphicsOverlay,
                         map,
-                        $pointInMap,
-                        $pointInScreen,
+                        $mapPoint,
+                        $viewPoint,
                         $mapViewProxy,
                         $viewpoint
                     )

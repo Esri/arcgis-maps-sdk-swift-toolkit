@@ -76,10 +76,10 @@ public struct UtilityNetworkTrace: View {
     @Binding private var mapViewProxy: MapViewProxy?
     
     /// Acts as the point of identification for items tapped in the utility network.
-    @Binding private var pointInScreen: CGPoint?
+    @Binding private var viewPoint: CGPoint?
     
     /// Acts as the point at which newly selected starting point graphics will be created.
-    @Binding private var pointInMap: Point?
+    @Binding private var mapPoint: Point?
     
     /// Allows the Utility Network Trace Tool to update the parent map view's viewpoint.
     @Binding private var viewpoint: Viewpoint?
@@ -408,22 +408,22 @@ public struct UtilityNetworkTrace: View {
     ///   - graphicsOverlay: The graphics overlay to hold generated starting point and trace
     ///   graphics.
     ///   - map: The map containing the utility network(s).
-    ///   - pointInMap: Acts as the point at which newly selected starting point graphics will be
+    ///   - mapPoint: Acts as the point at which newly selected starting point graphics will be
     ///   created.
-    ///   - pointInScreen: Acts as the point of identification for items tapped in the utility network.
+    ///   - viewPoint: Acts as the point of identification for items tapped in the utility network.
     ///   - mapViewProxy: Provides a method of layer identification when starting points are being
     ///   chosen.
     ///   - viewpoint: Allows the utility network trace tool to update the parent map view's viewpoint.
     public init(
         _ graphicsOverlay: Binding<GraphicsOverlay>,
         _ map: Map,
-        _ pointInMap: Binding<Point?>,
-        _ pointInScreen: Binding<CGPoint?>,
+        _ mapPoint: Binding<Point?>,
+        _ viewPoint: Binding<CGPoint?>,
         _ mapViewProxy: Binding<MapViewProxy?>,
         _ viewpoint: Binding<Viewpoint?>
     ) {
-        _pointInScreen = pointInScreen
-        _pointInMap = pointInMap
+        _viewPoint = viewPoint
+        _mapPoint = mapPoint
         _mapViewProxy = mapViewProxy
         _graphicsOverlay = graphicsOverlay
         _viewpoint = viewpoint
@@ -456,18 +456,18 @@ public struct UtilityNetworkTrace: View {
         }
         .background(Color(uiColor: .systemGroupedBackground))
         .animation(.default, value: currentActivity)
-        .onChange(of: pointInScreen) { newValue in
+        .onChange(of: viewPoint) { newValue in
             guard isAddingStartingPoints,
                   let mapViewProxy = mapViewProxy,
-                  let pointInMap = pointInMap,
-                  let pointInScreen = pointInScreen else {
+                  let mapPoint = mapPoint,
+                  let viewPoint = viewPoint else {
                 return
             }
             currentActivity = .creatingTrace(.viewingStartingPoints)
             Task {
                 await viewModel.setStartingPoint(
-                    at: pointInScreen,
-                    mapPoint: pointInMap,
+                    at: viewPoint,
+                    mapPoint: mapPoint,
                     with: mapViewProxy
                 )
             }
