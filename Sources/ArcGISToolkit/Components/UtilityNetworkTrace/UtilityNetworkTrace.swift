@@ -393,17 +393,11 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ The starting point being inspected (if one exists).
 ***REMOVED***private var selectedStartingPoint: UtilityNetworkTraceStartingPoint? {
-***REMOVED******REMOVED***switch currentActivity {
-***REMOVED******REMOVED***case .creatingTrace(let activity):
-***REMOVED******REMOVED******REMOVED***switch activity {
-***REMOVED******REMOVED******REMOVED***case .inspectingStartingPoint(let startingPoint):
-***REMOVED******REMOVED******REMOVED******REMOVED***return startingPoint
-***REMOVED******REMOVED******REMOVED***default:
-***REMOVED******REMOVED******REMOVED******REMOVED***return nil
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***default:
-***REMOVED******REMOVED******REMOVED***return nil
+***REMOVED******REMOVED***if case let .creatingTrace(activity) = currentActivity,
+***REMOVED******REMOVED***   case let .inspectingStartingPoint(startingPoint) = activity {
+***REMOVED******REMOVED******REMOVED***return startingPoint
 ***REMOVED***
+***REMOVED******REMOVED***return nil
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Determines if the provided creation activity is the currently focused creation activity.
