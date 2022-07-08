@@ -504,11 +504,10 @@ public struct UtilityNetworkTrace: View {
     /// - Returns: A Boolean value indicating whether the provided activity is the currently focused
     /// creation activity.
     private func isFocused(traceCreationActivity: TraceCreationActivity) -> Bool {
-        switch currentActivity {
-        case .creatingTrace(let currentActivity):
-            return traceCreationActivity == currentActivity
-        default: return false
+        if case let .creatingTrace(activity) = currentActivity{
+            return traceCreationActivity == activity
         }
+        return false
     }
     
     /// Determines if the provided viewing activity is the currently focused viewing activity.
