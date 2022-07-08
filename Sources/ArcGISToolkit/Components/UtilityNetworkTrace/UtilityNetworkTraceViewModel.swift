@@ -263,10 +263,10 @@ import SwiftUI
         for result in traceResults {
             switch result {
             case let result as UtilityElementTraceResult:
-                result.elements.forEach({ element in
+                result.elements.forEach { element in
                     let count = assetGroups[element.assetGroup.name] ?? 0 + 1
                     assetGroups.updateValue(count, forKey: element.assetGroup.name)
-                })
+                }
                 assetGroups.forEach { (key, value) in
                     pendingTrace.assetLabels.append("\(key): \(value)")
                 }
