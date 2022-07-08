@@ -125,7 +125,7 @@ public struct UtilityNetworkTrace: View {
         if viewModel.configurations.isEmpty {
             Text("No configurations available")
         } else {
-            ForEach(viewModel.configurations, id: \.name) { configuration in
+            ForEach(viewModel.configurations) { configuration in
                 Text(configuration.name)
                     .lineLimit(1)
                     .listRowBackground(configuration == viewModel.pendingTrace.configuration ? Color.secondary.opacity(0.5) : nil)
