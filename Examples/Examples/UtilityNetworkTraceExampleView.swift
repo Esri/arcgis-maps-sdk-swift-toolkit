@@ -24,10 +24,10 @@ struct UtilityNetworkTraceExampleView: View {
 ***REMOVED***@State var mapViewProxy: MapViewProxy?
 ***REMOVED***
 ***REMOVED******REMOVED***/ Provides the ability to detect tap locations in the context of the map view.
-***REMOVED***@State var pointInMap: Point?
+***REMOVED***@State var mapPoint: Point?
 ***REMOVED***
 ***REMOVED******REMOVED***/ Provides the ability to detect tap locations in the context of the screen.
-***REMOVED***@State var pointInScreen: CGPoint?
+***REMOVED***@State var viewPoint: CGPoint?
 ***REMOVED***
 ***REMOVED******REMOVED***/ A container for graphical trace results.
 ***REMOVED***@State var resultGraphicsOverlay = GraphicsOverlay()
@@ -42,9 +42,9 @@ struct UtilityNetworkTraceExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***viewpoint: viewpoint,
 ***REMOVED******REMOVED******REMOVED******REMOVED***graphicsOverlays: [resultGraphicsOverlay]
 ***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***.onSingleTapGesture { pointInScreen, pointInMap in
-***REMOVED******REMOVED******REMOVED******REMOVED***self.pointInScreen = pointInScreen
-***REMOVED******REMOVED******REMOVED******REMOVED***self.pointInMap = pointInMap
+***REMOVED******REMOVED******REMOVED***.onSingleTapGesture { viewPoint, mapPoint in
+***REMOVED******REMOVED******REMOVED******REMOVED***self.viewPoint = viewPoint
+***REMOVED******REMOVED******REMOVED******REMOVED***self.mapPoint = mapPoint
 ***REMOVED******REMOVED******REMOVED******REMOVED***self.mapViewProxy = mapViewProxy
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.overlay(alignment: .topTrailing) {
@@ -52,8 +52,8 @@ struct UtilityNetworkTraceExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***UtilityNetworkTrace(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***$resultGraphicsOverlay,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***map,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***$pointInMap,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***$pointInScreen,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***$mapPoint,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***$viewPoint,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***$mapViewProxy,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***$viewpoint
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
