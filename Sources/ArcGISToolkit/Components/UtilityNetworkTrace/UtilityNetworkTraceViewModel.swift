@@ -253,12 +253,8 @@ import Foundation
 ***REMOVED******REMOVED***to isSelected: Bool
 ***REMOVED***) {
 ***REMOVED******REMOVED***guard index >= 0, index <= completedTraces.count - 1 else { return ***REMOVED***
-***REMOVED******REMOVED***completedTraces[index].graphics.forEach({ graphic in
-***REMOVED******REMOVED******REMOVED***graphic.isSelected = isSelected
-***REMOVED***)
-***REMOVED******REMOVED***completedTraces[index].startingPoints.forEach({ startingPoint in
-***REMOVED******REMOVED******REMOVED***startingPoint.graphic.isSelected = isSelected
-***REMOVED***)
+***REMOVED******REMOVED***_ = completedTraces[index].graphics.map { $0.isSelected = isSelected***REMOVED***
+***REMOVED******REMOVED***_ = completedTraces[index].startingPoints.map { $0.graphic.isSelected = isSelected***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Loads the named trace configurations in the network on the provided map.
