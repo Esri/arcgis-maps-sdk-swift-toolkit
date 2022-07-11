@@ -283,6 +283,16 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***makeZoomToButtom {
+***REMOVED******REMOVED******REMOVED***if let resultEnvelope = GeometryEngine.combineExtents(of: [
+***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.selectedTrace?.utilityGeometryTraceResult?.multipoint,
+***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.selectedTrace?.utilityGeometryTraceResult?.polygon,
+***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.selectedTrace?.utilityGeometryTraceResult?.polyline
+***REMOVED******REMOVED******REMOVED***].compactMap { $0 ***REMOVED***) {
+***REMOVED******REMOVED******REMOVED******REMOVED***viewpoint = Viewpoint(targetExtent: resultEnvelope.extent)
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***.padding([.vertical], 2)
 ***REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED***showWarningAlert.toggle()
 ***REMOVED*** label: {
@@ -363,15 +373,9 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***Button {
+***REMOVED******REMOVED***makeZoomToButtom {
 ***REMOVED******REMOVED******REMOVED***if let selectedStartingPoint {
 ***REMOVED******REMOVED******REMOVED******REMOVED***viewpoint = Viewpoint(targetExtent: selectedStartingPoint.extent)
-***REMOVED******REMOVED***
-***REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED***Label {
-***REMOVED******REMOVED******REMOVED******REMOVED***Text("Zoom To")
-***REMOVED******REMOVED*** icon: {
-***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "scope")
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -519,5 +523,20 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED***return traceViewingActivity == activity
 ***REMOVED***
 ***REMOVED******REMOVED***return false
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Returns a "Zoom To" button that performs a specified action when pressed.
+***REMOVED******REMOVED***/ - Parameter action: The action to be performed.
+***REMOVED******REMOVED***/ - Returns: The configured button.
+***REMOVED***private func makeZoomToButtom(_ action: @escaping () -> Void) -> some View {
+***REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED***action()
+***REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED***Label {
+***REMOVED******REMOVED******REMOVED******REMOVED***Text("Zoom To")
+***REMOVED******REMOVED*** icon: {
+***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "scope")
+***REMOVED******REMOVED***
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
