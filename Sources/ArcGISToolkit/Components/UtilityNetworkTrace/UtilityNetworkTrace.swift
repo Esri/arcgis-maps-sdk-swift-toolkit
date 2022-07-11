@@ -156,9 +156,7 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***Section("Advanced") {
-***REMOVED******REMOVED******REMOVED******REMOVED***ColorPicker(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selection: $viewModel.pendingTrace.color
-***REMOVED******REMOVED******REMOVED******REMOVED***) {
+***REMOVED******REMOVED******REMOVED******REMOVED***ColorPicker(selection: $viewModel.pendingTrace.color) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Trace Color")
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***TextField(
