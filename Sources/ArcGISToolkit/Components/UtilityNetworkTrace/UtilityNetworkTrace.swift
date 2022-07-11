@@ -359,7 +359,6 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***Text(selectedStartingPoint?.utilityElement.globalID.uuidString ?? "N/A")
 ***REMOVED******REMOVED******REMOVED***ForEach(Array(selectedStartingPoint!.geoElement.attributes.sorted(by: { $0.key < $1.key***REMOVED***)), id: \.key) { item in
 ***REMOVED******REMOVED******REMOVED******REMOVED***HStack{
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(item.key)
