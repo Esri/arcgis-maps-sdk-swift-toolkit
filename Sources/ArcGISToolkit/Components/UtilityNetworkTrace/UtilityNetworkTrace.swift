@@ -359,7 +359,6 @@ public struct UtilityNetworkTrace: View {
                     }
                 }
             }
-            Text(selectedStartingPoint?.utilityElement.globalID.uuidString ?? "N/A")
             ForEach(Array(selectedStartingPoint!.geoElement.attributes.sorted(by: { $0.key < $1.key})), id: \.key) { item in
                 HStack{
                     Text(item.key)
