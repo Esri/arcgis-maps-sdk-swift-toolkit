@@ -283,6 +283,16 @@ public struct UtilityNetworkTrace: View {
                 }
             }
         }
+        makeZoomToButtom {
+            if let resultEnvelope = GeometryEngine.combineExtents(of: [
+                viewModel.selectedTrace?.utilityGeometryTraceResult?.multipoint,
+                viewModel.selectedTrace?.utilityGeometryTraceResult?.polygon,
+                viewModel.selectedTrace?.utilityGeometryTraceResult?.polyline
+            ].compactMap { $0 }) {
+                viewpoint = Viewpoint(targetExtent: resultEnvelope.extent)
+            }
+        }
+        .padding([.vertical], 2)
         Button {
             showWarningAlert.toggle()
         } label: {
@@ -363,15 +373,9 @@ public struct UtilityNetworkTrace: View {
                 }
             }
         }
-        Button {
+        makeZoomToButtom {
             if let selectedStartingPoint {
                 viewpoint = Viewpoint(targetExtent: selectedStartingPoint.extent)
-            }
-        } label: {
-            Label {
-                Text("Zoom To")
-            } icon: {
-                Image(systemName: "scope")
             }
         }
     }
@@ -519,5 +523,20 @@ public struct UtilityNetworkTrace: View {
             return traceViewingActivity == activity
         }
         return false
+    }
+    
+    /// Returns a "Zoom To" button that performs a specified action when pressed.
+    /// - Parameter action: The action to be performed.
+    /// - Returns: The configured button.
+    private func makeZoomToButtom(_ action: @escaping () -> Void) -> some View {
+        Button {
+            action()
+        } label: {
+            Label {
+                Text("Zoom To")
+            } icon: {
+                Image(systemName: "scope")
+            }
+        }
     }
 }
