@@ -82,8 +82,8 @@ public final class Authenticator: ObservableObject {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** We have to set new sessions for URLCredential storage to respect the removed credentials
 ***REMOVED******REMOVED******REMOVED*** right away.
-***REMOVED******REMOVED***ArcGISRuntimeEnvironment.urlSession = .makeDefault()
-***REMOVED******REMOVED***ArcGISRuntimeEnvironment.backgroundURLSession = .makeDefaultBackground()
+***REMOVED******REMOVED***ArcGISRuntimeEnvironment.urlSession = ArcGISURLSession(configuration: .default)
+***REMOVED******REMOVED***ArcGISRuntimeEnvironment.backgroundURLSession = ArcGISURLSession(configuration: .background(withIdentifier: "com.esri.com.arcgis.toolkit." + UUID().uuidString))
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Observes the challenge queue and sets the current challenge.

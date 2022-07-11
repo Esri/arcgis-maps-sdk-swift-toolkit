@@ -16,8 +16,8 @@ import XCTest
 @testable ***REMOVED***Toolkit
 ***REMOVED***
 
+@MainActor
 class AuthenticatorTests: XCTestCase {
-***REMOVED***@MainActor
 ***REMOVED***func testInit() {
 ***REMOVED******REMOVED***let config = OAuthConfiguration(
 ***REMOVED******REMOVED******REMOVED***portalURL: URL(string:"www.arcgis.com")!,
@@ -29,12 +29,11 @@ class AuthenticatorTests: XCTestCase {
 ***REMOVED******REMOVED***XCTAssertEqual(authenticator.oAuthConfigurations, [config])
 ***REMOVED***
 ***REMOVED***
-***REMOVED***@MainActor
 ***REMOVED***func testMakePersistent() async throws {
 ***REMOVED******REMOVED******REMOVED*** Make sure credential stores are restored.
 ***REMOVED******REMOVED***addTeardownBlock {
-***REMOVED******REMOVED******REMOVED***ArcGISCredentialStore.shared = ArcGISCredentialStore()
-***REMOVED******REMOVED******REMOVED***await NetworkCredentialStore.setShared(await NetworkCredentialStore())
+***REMOVED******REMOVED******REMOVED***ArcGISRuntimeEnvironment.credentialStore = ArcGISCredentialStore()
+***REMOVED******REMOVED******REMOVED***ArcGISRuntimeEnvironment.networkCredentialStore = NetworkCredentialStore()
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** This tests that calling makePersistent tries to sync with the keychain.
@@ -45,9 +44,8 @@ class AuthenticatorTests: XCTestCase {
 ***REMOVED*** catch {***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED***@MainActor
 ***REMOVED***func testClearCredentialStores() async {
-***REMOVED******REMOVED***await ArcGISCredentialStore.shared.add(
+***REMOVED******REMOVED***await ArcGISRuntimeEnvironment.credentialStore.add(
 ***REMOVED******REMOVED******REMOVED***.staticToken(
 ***REMOVED******REMOVED******REMOVED******REMOVED***url: URL(string: "www.arcgis.com")!,
 ***REMOVED******REMOVED******REMOVED******REMOVED***tokenInfo: .init(
@@ -60,12 +58,24 @@ class AuthenticatorTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let authenticator = Authenticator()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***var arcGISCreds = await ArcGISCredentialStore.shared.credentials
+***REMOVED******REMOVED***var arcGISCreds = await ArcGISRuntimeEnvironment.credentialStore.credentials
 ***REMOVED******REMOVED***XCTAssertEqual(arcGISCreds.count, 1)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***await authenticator.clearCredentialStores()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***arcGISCreds = await ArcGISCredentialStore.shared.credentials
+***REMOVED******REMOVED***arcGISCreds = await ArcGISRuntimeEnvironment.credentialStore.credentials
 ***REMOVED******REMOVED***XCTAssertTrue(arcGISCreds.isEmpty)
+***REMOVED***
+***REMOVED***
+***REMOVED***func testChallengeQueue() async throws {
+***REMOVED******REMOVED***class MockQueuedChallenge: QueuedChallenge {
+***REMOVED******REMOVED******REMOVED***func complete() async {
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let authenticator = Authenticator()
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
