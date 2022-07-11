@@ -156,9 +156,7 @@ public struct UtilityNetworkTrace: View {
                 }
             }
             Section("Advanced") {
-                ColorPicker(
-                    selection: $viewModel.pendingTrace.color
-                ) {
+                ColorPicker(selection: $viewModel.pendingTrace.color) {
                     Text("Trace Color")
                 }
                 TextField(
