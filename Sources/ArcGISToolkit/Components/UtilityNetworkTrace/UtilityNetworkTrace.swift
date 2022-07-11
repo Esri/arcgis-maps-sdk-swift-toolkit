@@ -159,7 +159,10 @@ public struct UtilityNetworkTrace: View {
                 }
                 if !viewModel.pendingTrace.startingPoints.isEmpty {
                     DisclosureGroup(
-                        "\(viewModel.pendingTrace.startingPoints.count) selected",
+                        String(
+                            localized: "\(viewModel.pendingTrace.startingPoints.count) selected",
+                            comment: "The number of selected starting points."
+                        ),
                         isExpanded: Binding(
                             get: { isFocused(traceCreationActivity: .viewingStartingPoints) },
                             set: { currentActivity = .creatingTrace($0 ? .viewingStartingPoints : nil) }
