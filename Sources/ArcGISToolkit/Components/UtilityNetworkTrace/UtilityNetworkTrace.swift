@@ -352,6 +352,7 @@ public struct UtilityNetworkTrace: View {
                             Text($0.name)
                         }
                     }
+                    .foregroundColor(.blue)
                 }
             }
             ForEach(Array(selectedStartingPoint!.geoElement.attributes.sorted(by: { $0.key < $1.key})), id: \.key) { item in
