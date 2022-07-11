@@ -485,13 +485,10 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED***
 ***REMOVED******REMOVED*** MARK: Computed Properties
 ***REMOVED***
-***REMOVED******REMOVED***/ The index of the trace currently being viewed out of the total number of traces.
+***REMOVED******REMOVED***/ Indicates the number of the trace currently being viewed out the total number of traces.
 ***REMOVED***private var currentTraceLabel: String {
 ***REMOVED******REMOVED***guard let index = viewModel.selectedTraceIndex else { return "Error" ***REMOVED***
-***REMOVED******REMOVED***return String(
-***REMOVED******REMOVED******REMOVED***localized: "Trace \(index+1) of \(viewModel.completedTraces.count)",
-***REMOVED******REMOVED******REMOVED***comment: "The index of the trace currently being viewed out of the total number of traces."
-***REMOVED******REMOVED***)
+***REMOVED******REMOVED***return "Trace \(index+1) of \(viewModel.completedTraces.count.description)"
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The starting point being inspected (if one exists).
