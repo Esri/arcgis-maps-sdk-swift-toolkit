@@ -146,10 +146,7 @@ public struct UtilityNetworkTrace: View {
                     Text("Add new starting point")
                 }
                 DisclosureGroup(
-                    String(
-                        localized: "\(viewModel.pendingTrace.startingPoints.count) selected",
-                        comment: "The number of selected starting points."
-                    ),
+                    "\(viewModel.pendingTrace.startingPoints.count) selected",
                     isExpanded: Binding(
                         get: { isFocused(traceCreationActivity: .viewingStartingPoints) },
                         set: { currentActivity = .creatingTrace($0 ? .viewingStartingPoints : nil) }
