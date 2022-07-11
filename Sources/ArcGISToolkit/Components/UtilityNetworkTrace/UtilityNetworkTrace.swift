@@ -177,9 +177,7 @@ public struct UtilityNetworkTrace: View {
                         set: { currentActivity = .creatingTrace($0 ? .viewingAdvancedOptions : nil) }
                     )
                 ) {
-                    ColorPicker(
-                        selection: $viewModel.pendingTrace.color
-                    ) {
+                    ColorPicker(selection: $viewModel.pendingTrace.color) {
                         Text("Trace Color")
                     }
                     TextField(
