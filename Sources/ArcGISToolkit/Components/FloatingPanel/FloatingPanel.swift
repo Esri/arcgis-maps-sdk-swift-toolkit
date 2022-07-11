@@ -52,7 +52,7 @@ public struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the panel should be configured for a compact environment.
 ***REMOVED***private var isCompact: Bool {
-***REMOVED******REMOVED***horizontalSizeClass == .compact ? true : false
+***REMOVED******REMOVED***horizontalSizeClass == .compact
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***public var body: some View {
