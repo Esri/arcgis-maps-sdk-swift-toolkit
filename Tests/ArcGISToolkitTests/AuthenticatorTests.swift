@@ -16,8 +16,8 @@ import XCTest
 @testable import ArcGISToolkit
 import ArcGIS
 
+@MainActor
 class AuthenticatorTests: XCTestCase {
-    @MainActor
     func testInit() {
         let config = OAuthConfiguration(
             portalURL: URL(string:"www.arcgis.com")!,
@@ -29,12 +29,11 @@ class AuthenticatorTests: XCTestCase {
         XCTAssertEqual(authenticator.oAuthConfigurations, [config])
     }
     
-    @MainActor
     func testMakePersistent() async throws {
         // Make sure credential stores are restored.
         addTeardownBlock {
-            ArcGISCredentialStore.shared = ArcGISCredentialStore()
-            await NetworkCredentialStore.setShared(await NetworkCredentialStore())
+            ArcGISRuntimeEnvironment.credentialStore = ArcGISCredentialStore()
+            ArcGISRuntimeEnvironment.networkCredentialStore = NetworkCredentialStore()
         }
         
         // This tests that calling makePersistent tries to sync with the keychain.
@@ -45,9 +44,8 @@ class AuthenticatorTests: XCTestCase {
         } catch {}
     }
     
-    @MainActor
     func testClearCredentialStores() async {
-        await ArcGISCredentialStore.shared.add(
+        await ArcGISRuntimeEnvironment.credentialStore.add(
             .staticToken(
                 url: URL(string: "www.arcgis.com")!,
                 tokenInfo: .init(
@@ -60,12 +58,24 @@ class AuthenticatorTests: XCTestCase {
         
         let authenticator = Authenticator()
         
-        var arcGISCreds = await ArcGISCredentialStore.shared.credentials
+        var arcGISCreds = await ArcGISRuntimeEnvironment.credentialStore.credentials
         XCTAssertEqual(arcGISCreds.count, 1)
         
         await authenticator.clearCredentialStores()
         
-        arcGISCreds = await ArcGISCredentialStore.shared.credentials
+        arcGISCreds = await ArcGISRuntimeEnvironment.credentialStore.credentials
         XCTAssertTrue(arcGISCreds.isEmpty)
+    }
+    
+    func testChallengeQueue() async throws {
+        class MockQueuedChallenge: QueuedChallenge {
+            func complete() async {
+                
+            }
+        }
+        
+        
+        let authenticator = Authenticator()
+        
     }
 }
