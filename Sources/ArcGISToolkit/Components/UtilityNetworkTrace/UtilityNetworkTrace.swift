@@ -484,10 +484,15 @@ public struct UtilityNetworkTrace: View {
         }
     }
     
-    /// Indicates the number of the trace currently being viewed out the total number of traces.
+    // MARK: Computed Properties
+    
+    /// The index of the trace currently being viewed out of the total number of traces.
     private var currentTraceLabel: String {
         guard let index = viewModel.selectedTraceIndex else { return "Error" }
-        return "Trace \(index+1) of \(viewModel.completedTraces.count.description)"
+        return String(
+            localized: "Trace \(index+1) of \(viewModel.completedTraces.count)",
+            comment: "The index of the trace currently being viewed out of the total number of traces."
+        )
     }
     
     /// The starting point being inspected (if one exists).
