@@ -15,9 +15,10 @@ import SwiftUI
 import XCTest
 @testable import ArcGISToolkit
 import ArcGIS
+import Combine
 
-@MainActor
 class AuthenticatorTests: XCTestCase {
+    @MainActor
     func testInit() {
         let config = OAuthConfiguration(
             portalURL: URL(string:"www.arcgis.com")!,
@@ -29,6 +30,7 @@ class AuthenticatorTests: XCTestCase {
         XCTAssertEqual(authenticator.oAuthConfigurations, [config])
     }
     
+    @MainActor
     func testMakePersistent() async throws {
         // Make sure credential stores are restored.
         addTeardownBlock {
@@ -44,6 +46,7 @@ class AuthenticatorTests: XCTestCase {
         } catch {}
     }
     
+    @MainActor
     func testClearCredentialStores() async {
         await ArcGISRuntimeEnvironment.credentialStore.add(
             .staticToken(
@@ -67,15 +70,72 @@ class AuthenticatorTests: XCTestCase {
         XCTAssertTrue(arcGISCreds.isEmpty)
     }
     
+    @MainActor
     func testChallengeQueue() async throws {
-        class MockQueuedChallenge: QueuedChallenge {
+        actor MockQueuedChallenge: QueuedChallenge {
+            nonisolated let id: Int
+            init(id: Int) {
+                self.id = id
+            }
+            private var isComplete: Bool = false
+            func setCompleted() {
+                isComplete = true
+            }
+            
             func complete() async {
-                
+                while !isComplete {
+                    await Task.yield()
+                }
             }
         }
         
-        
         let authenticator = Authenticator()
         
+        // Give chance for authenticator to start observation
+        await Task.yield()
+        
+        XCTAssertNil(authenticator.currentChallenge)
+        
+        // Create and enqueue first challenge.
+        let challenge = MockQueuedChallenge(id: 1)
+        authenticator.subject.send(challenge)
+        
+        // Make sure first challenge is published as the current challenge.
+        let currentChallenge = await AsyncPublisher(authenticator.$currentChallenge)
+            .compactMap( { $0 as? MockQueuedChallenge })
+            .first(where: { _ in true })
+        
+        XCTAssertEqual(currentChallenge?.id, 1)
+        XCTAssertNotNil(authenticator.currentChallenge)
+        
+        // Create and enqueue second challenge.
+        let challenge2 = MockQueuedChallenge(id: 2)
+        authenticator.subject.send(challenge2)
+        
+        // Make sure first challenge is still the current challenge
+        let mockedCurrentChallenge = try XCTUnwrap(authenticator.currentChallenge as? MockQueuedChallenge)
+        XCTAssertEqual(mockedCurrentChallenge.id, 1)
+        
+        // Complete first challenge.
+        await challenge.setCompleted()
+        
+        // Check next queued challenge
+        let currentChallenge2 = await AsyncPublisher(authenticator.$currentChallenge)
+            .compactMap( { $0 as? MockQueuedChallenge })
+            .dropFirst()
+            .first(where: { _ in true })
+        
+        XCTAssertEqual(currentChallenge2?.id, 2)
+        XCTAssertNotNil(authenticator.currentChallenge)
+        
+        // Complete second challenge.
+        await challenge2.setCompleted()
+        
+        // Check next queued challenge, should be nil
+        let currentChallenge3 = await AsyncPublisher(authenticator.$currentChallenge)
+            .dropFirst()
+            .first(where: { _ in true })
+        // nil coalescing seems required because currentChallenge3 is Optional<Optional<QueuedChallenge>>
+        XCTAssertNil(currentChallenge3 ?? nil)
     }
 }
