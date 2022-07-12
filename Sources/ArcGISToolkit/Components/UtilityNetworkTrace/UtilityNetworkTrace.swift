@@ -31,6 +31,8 @@ public struct UtilityNetworkTrace: View {
         case inspectingStartingPoint(UtilityNetworkTraceStartingPoint)
         /// The user is viewing the list of advanced options.
         case viewingAdvancedOptions
+        /// The user is viewing the list of available networks.
+        case viewingNetworkOptions
         /// The user is viewing the list of chosen starting points.
         case viewingStartingPoints
         /// The user is viewing the list of available trace configurations.
@@ -137,9 +139,35 @@ public struct UtilityNetworkTrace: View {
         }
     }
     
+    /// Displays the list of available networks.
+    @ViewBuilder private var networksList: some View {
+        ForEach(viewModel.networks, id: \.self) { network in
+            Text(network.name)
+                .lineLimit(1)
+                .listRowBackground(network == viewModel.network ? Color.secondary.opacity(0.5) : nil)
+                .onTapGesture {
+                    viewModel.setNetwork(network)
+                    currentActivity = .creatingTrace(nil)
+                }
+        }
+    }
+    
     /// The tab that allows for a new trace to be configured.
     @ViewBuilder private var newTraceTab: some View {
         List {
+            if viewModel.networks.count > 1 {
+                Section("Network") {
+                    DisclosureGroup(
+                        viewModel.network?.name ?? "None selected",
+                        isExpanded: Binding(
+                            get: { isFocused(traceCreationActivity: .viewingNetworkOptions) },
+                            set: { currentActivity = .creatingTrace($0 ? .viewingNetworkOptions : nil) }
+                        )
+                    ) {
+                        networksList
+                    }
+                }
+            }
             Section("Trace Configuration") {
                 DisclosureGroup(
                     viewModel.pendingTrace.configuration?.name ?? "None selected",
