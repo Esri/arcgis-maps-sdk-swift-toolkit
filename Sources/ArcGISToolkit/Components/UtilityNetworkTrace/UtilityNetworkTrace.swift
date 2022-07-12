@@ -31,6 +31,8 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED***case inspectingStartingPoint(UtilityNetworkTraceStartingPoint)
 ***REMOVED******REMOVED******REMOVED***/ The user is viewing the list of advanced options.
 ***REMOVED******REMOVED***case viewingAdvancedOptions
+***REMOVED******REMOVED******REMOVED***/ The user is viewing the list of available networks.
+***REMOVED******REMOVED***case viewingNetworkOptions
 ***REMOVED******REMOVED******REMOVED***/ The user is viewing the list of chosen starting points.
 ***REMOVED******REMOVED***case viewingStartingPoints
 ***REMOVED******REMOVED******REMOVED***/ The user is viewing the list of available trace configurations.
@@ -137,9 +139,35 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ Displays the list of available networks.
+***REMOVED***@ViewBuilder private var networksList: some View {
+***REMOVED******REMOVED***ForEach(viewModel.networks, id: \.self) { network in
+***REMOVED******REMOVED******REMOVED***Text(network.name)
+***REMOVED******REMOVED******REMOVED******REMOVED***.lineLimit(1)
+***REMOVED******REMOVED******REMOVED******REMOVED***.listRowBackground(network == viewModel.network ? Color.secondary.opacity(0.5) : nil)
+***REMOVED******REMOVED******REMOVED******REMOVED***.onTapGesture {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.setNetwork(network)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentActivity = .creatingTrace(nil)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
 ***REMOVED******REMOVED***/ The tab that allows for a new trace to be configured.
 ***REMOVED***@ViewBuilder private var newTraceTab: some View {
 ***REMOVED******REMOVED***List {
+***REMOVED******REMOVED******REMOVED***if viewModel.networks.count > 1 {
+***REMOVED******REMOVED******REMOVED******REMOVED***Section("Network") {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***DisclosureGroup(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.network?.name ?? "None selected",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isExpanded: Binding(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***get: { isFocused(traceCreationActivity: .viewingNetworkOptions) ***REMOVED***,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***set: { currentActivity = .creatingTrace($0 ? .viewingNetworkOptions : nil) ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***networksList
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***Section("Trace Configuration") {
 ***REMOVED******REMOVED******REMOVED******REMOVED***DisclosureGroup(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.pendingTrace.configuration?.name ?? "None selected",

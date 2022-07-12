@@ -24,6 +24,9 @@ import Foundation
 ***REMOVED******REMOVED***/ The available named trace configurations.
 ***REMOVED***@Published private(set) var configurations = [UtilityNamedTraceConfiguration]()
 ***REMOVED***
+***REMOVED******REMOVED***/ The utility network on which traces will be ran.
+***REMOVED***@Published private(set) var network: UtilityNetwork?
+***REMOVED***
 ***REMOVED******REMOVED***/ The trace currently under configuration.
 ***REMOVED***@Published var pendingTrace = Trace()
 ***REMOVED***
@@ -50,14 +53,21 @@ import Foundation
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating if the pending trace is configured to the point that it can be run.
 ***REMOVED***var canRunTrace: Bool {
-***REMOVED******REMOVED***pendingTrace.configuration != nil && !pendingTrace.startingPoints.isEmpty
+***REMOVED******REMOVED***network != nil &&
+***REMOVED******REMOVED***pendingTrace.configuration != nil &&
+***REMOVED******REMOVED***!pendingTrace.startingPoints.isEmpty
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ The map's utility networks.
+***REMOVED***var networks: [UtilityNetwork] {
+***REMOVED******REMOVED***return map.utilityNetworks
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The overlay on which trace graphics will be drawn.
 ***REMOVED***private var graphicsOverlay: GraphicsOverlay
 ***REMOVED***
-***REMOVED******REMOVED***/ The utility network on which traces will be ran.
-***REMOVED***private var network: UtilityNetwork?
+***REMOVED******REMOVED***/ A map containing one or more utility networks.
+***REMOVED***private var map: Map
 ***REMOVED***
 ***REMOVED******REMOVED***/ The selected trace.
 ***REMOVED***var selectedTrace: Trace? {
@@ -74,11 +84,19 @@ import Foundation
 ***REMOVED******REMOVED***/ - Parameter map: The map to be loaded that contains at least one utility network.
 ***REMOVED******REMOVED***/ - Parameter graphicsOverlay: The overlay on which trace graphics will be drawn.
 ***REMOVED***init(map: Map, graphicsOverlay: GraphicsOverlay) {
+***REMOVED******REMOVED***self.map = map
 ***REMOVED******REMOVED***self.graphicsOverlay = graphicsOverlay
 ***REMOVED******REMOVED***Task {
-***REMOVED******REMOVED******REMOVED***try? await map.load()
+***REMOVED******REMOVED******REMOVED***do {
+***REMOVED******REMOVED******REMOVED******REMOVED***try await map.load()
+***REMOVED******REMOVED******REMOVED******REMOVED***for network in map.utilityNetworks {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try await network.load()
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED*** catch {
+***REMOVED******REMOVED******REMOVED******REMOVED***print(error.localizedDescription)
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***network = map.utilityNetworks.first
-***REMOVED******REMOVED******REMOVED***await loadNamedTraceConfigurations(map)
+***REMOVED******REMOVED******REMOVED***await loadNamedTraceConfigurations()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -109,6 +127,15 @@ import Foundation
 ***REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***selectedTraceIndex = 0
 ***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Changes the selected network.
+***REMOVED******REMOVED***/ - Parameter network: The new utility network to be selected.
+***REMOVED***func setNetwork(_ network: UtilityNetwork) {
+***REMOVED******REMOVED***self.network = network
+***REMOVED******REMOVED***Task {
+***REMOVED******REMOVED******REMOVED***await loadNamedTraceConfigurations()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -153,11 +180,14 @@ import Foundation
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Block duplicate starting point selection
 ***REMOVED******REMOVED******REMOVED******REMOVED***guard let feature = geoElement as? ArcGISFeature,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  let globalid = feature.attributes["globalid"] as? UUID,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  !pendingTrace.startingPoints.contains(where: { startingPoint in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  let globalid = feature.attributes["globalid"] as? UUID else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***userWarning = "Element could not be identified"
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***guard !pendingTrace.startingPoints.contains(where: { startingPoint in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  return startingPoint.utilityElement.globalID == globalid
 ***REMOVED******REMOVED******REMOVED***  ***REMOVED***) else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***userWarning = "Duplicate starting points cannot be added "
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***userWarning = "Duplicate starting points cannot be added"
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
@@ -337,9 +367,8 @@ import Foundation
 ***REMOVED******REMOVED***_ = completedTraces[index].startingPoints.map { $0.graphic.isSelected = isSelected***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Loads the named trace configurations in the network on the provided map.
-***REMOVED******REMOVED***/ - Parameter map: A web map containing one or more utility networks.
-***REMOVED***private func loadNamedTraceConfigurations(_ map: Map) async {
+***REMOVED******REMOVED***/ Loads the named trace configurations in the network.
+***REMOVED***private func loadNamedTraceConfigurations() async {
 ***REMOVED******REMOVED***guard let network = network else { return ***REMOVED***
 ***REMOVED******REMOVED***configurations = (try? await map.getNamedTraceConfigurations(from: network)) ?? []
 ***REMOVED***
