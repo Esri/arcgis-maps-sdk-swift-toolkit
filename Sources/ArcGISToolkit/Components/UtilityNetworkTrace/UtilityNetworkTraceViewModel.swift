@@ -24,6 +24,9 @@ import SwiftUI
     /// The available named trace configurations.
     @Published private(set) var configurations = [UtilityNamedTraceConfiguration]()
     
+    /// The utility network on which traces will be ran.
+    @Published private(set) var network: UtilityNetwork?
+    
     /// The trace currently under configuration.
     @Published var pendingTrace = Trace()
     
@@ -50,14 +53,21 @@ import SwiftUI
     
     /// A Boolean value indicating if the pending trace is configured to the point that it can be run.
     var canRunTrace: Bool {
-        pendingTrace.configuration != nil && !pendingTrace.startingPoints.isEmpty
+        network != nil &&
+        pendingTrace.configuration != nil &&
+        !pendingTrace.startingPoints.isEmpty
+    }
+    
+    /// The map's utility networks.
+    var networks: [UtilityNetwork] {
+        return map.utilityNetworks
     }
     
     /// The overlay on which trace graphics will be drawn.
     private var graphicsOverlay: GraphicsOverlay
     
-    /// The utility network on which traces will be ran.
-    private var network: UtilityNetwork?
+    /// A map containing one or more utility networks.
+    private var map: Map
     
     /// The selected trace.
     var selectedTrace: Trace? {
@@ -74,11 +84,19 @@ import SwiftUI
     /// - Parameter map: The map to be loaded that contains at least one utility network.
     /// - Parameter graphicsOverlay: The overlay on which trace graphics will be drawn.
     init(map: Map, graphicsOverlay: GraphicsOverlay) {
+        self.map = map
         self.graphicsOverlay = graphicsOverlay
         Task {
-            try? await map.load()
+            do {
+                try await map.load()
+                for network in map.utilityNetworks {
+                    try await network.load()
+                }
+            } catch {
+                print(error.localizedDescription)
+            }
             network = map.utilityNetworks.first
-            await loadNamedTraceConfigurations(map)
+            await loadNamedTraceConfigurations()
         }
     }
     
@@ -109,6 +127,15 @@ import SwiftUI
             } else {
                 selectedTraceIndex = 0
             }
+        }
+    }
+    
+    /// Changes the selected network.
+    /// - Parameter network: The new utility network to be selected.
+    func setNetwork(_ network: UtilityNetwork) {
+        self.network = network
+        Task {
+            await loadNamedTraceConfigurations()
         }
     }
     
@@ -153,11 +180,14 @@ import SwiftUI
                 
                 // Block duplicate starting point selection
                 guard let feature = geoElement as? ArcGISFeature,
-                      let globalid = feature.attributes["globalid"] as? UUID,
-                      !pendingTrace.startingPoints.contains(where: { startingPoint in
+                      let globalid = feature.attributes["globalid"] as? UUID else {
+                    userWarning = "Element could not be identified"
+                    return
+                }
+                guard !pendingTrace.startingPoints.contains(where: { startingPoint in
                           return startingPoint.utilityElement.globalID == globalid
                       }) else {
-                    userWarning = "Duplicate starting points cannot be added "
+                    userWarning = "Duplicate starting points cannot be added"
                     return
                 }
                 
@@ -337,9 +367,8 @@ import SwiftUI
         _ = completedTraces[index].startingPoints.map { $0.graphic.isSelected = isSelected}
     }
     
-    /// Loads the named trace configurations in the network on the provided map.
-    /// - Parameter map: A web map containing one or more utility networks.
-    private func loadNamedTraceConfigurations(_ map: Map) async {
+    /// Loads the named trace configurations in the network.
+    private func loadNamedTraceConfigurations() async {
         guard let network = network else { return }
         configurations = (try? await map.getNamedTraceConfigurations(from: network)) ?? []
     }
