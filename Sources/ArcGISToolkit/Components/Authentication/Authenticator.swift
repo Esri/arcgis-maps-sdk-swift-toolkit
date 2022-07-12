@@ -115,7 +115,7 @@ public final class Authenticator: ObservableObject {
         }
     }
     
-    private var subject = PassthroughSubject<QueuedChallenge, Never>()
+    var subject = PassthroughSubject<QueuedChallenge, Never>()
     
     /// A serial queue for authentication challenges.
     private var challengeQueue: AsyncPublisher<AnyPublisher<QueuedChallenge, Never>> {
