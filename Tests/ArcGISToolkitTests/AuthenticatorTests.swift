@@ -15,9 +15,10 @@
 import XCTest
 @testable ***REMOVED***Toolkit
 ***REMOVED***
+import Combine
 
-@MainActor
 class AuthenticatorTests: XCTestCase {
+***REMOVED***@MainActor
 ***REMOVED***func testInit() {
 ***REMOVED******REMOVED***let config = OAuthConfiguration(
 ***REMOVED******REMOVED******REMOVED***portalURL: URL(string:"www.arcgis.com")!,
@@ -29,6 +30,7 @@ class AuthenticatorTests: XCTestCase {
 ***REMOVED******REMOVED***XCTAssertEqual(authenticator.oAuthConfigurations, [config])
 ***REMOVED***
 ***REMOVED***
+***REMOVED***@MainActor
 ***REMOVED***func testMakePersistent() async throws {
 ***REMOVED******REMOVED******REMOVED*** Make sure credential stores are restored.
 ***REMOVED******REMOVED***addTeardownBlock {
@@ -44,6 +46,7 @@ class AuthenticatorTests: XCTestCase {
 ***REMOVED*** catch {***REMOVED***
 ***REMOVED***
 ***REMOVED***
+***REMOVED***@MainActor
 ***REMOVED***func testClearCredentialStores() async {
 ***REMOVED******REMOVED***await ArcGISRuntimeEnvironment.credentialStore.add(
 ***REMOVED******REMOVED******REMOVED***.staticToken(
@@ -67,15 +70,72 @@ class AuthenticatorTests: XCTestCase {
 ***REMOVED******REMOVED***XCTAssertTrue(arcGISCreds.isEmpty)
 ***REMOVED***
 ***REMOVED***
+***REMOVED***@MainActor
 ***REMOVED***func testChallengeQueue() async throws {
-***REMOVED******REMOVED***class MockQueuedChallenge: QueuedChallenge {
+***REMOVED******REMOVED***actor MockQueuedChallenge: QueuedChallenge {
+***REMOVED******REMOVED******REMOVED***nonisolated let id: Int
+***REMOVED******REMOVED******REMOVED***init(id: Int) {
+***REMOVED******REMOVED******REMOVED******REMOVED***self.id = id
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***private var isComplete: Bool = false
+***REMOVED******REMOVED******REMOVED***func setCompleted() {
+***REMOVED******REMOVED******REMOVED******REMOVED***isComplete = true
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***func complete() async {
-***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***while !isComplete {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await Task.yield()
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let authenticator = Authenticator()
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Give chance for authenticator to start observation
+***REMOVED******REMOVED***await Task.yield()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertNil(authenticator.currentChallenge)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Create and enqueue first challenge.
+***REMOVED******REMOVED***let challenge = MockQueuedChallenge(id: 1)
+***REMOVED******REMOVED***authenticator.subject.send(challenge)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Make sure first challenge is published as the current challenge.
+***REMOVED******REMOVED***let currentChallenge = await AsyncPublisher(authenticator.$currentChallenge)
+***REMOVED******REMOVED******REMOVED***.compactMap( { $0 as? MockQueuedChallenge ***REMOVED***)
+***REMOVED******REMOVED******REMOVED***.first(where: { _ in true ***REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertEqual(currentChallenge?.id, 1)
+***REMOVED******REMOVED***XCTAssertNotNil(authenticator.currentChallenge)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Create and enqueue second challenge.
+***REMOVED******REMOVED***let challenge2 = MockQueuedChallenge(id: 2)
+***REMOVED******REMOVED***authenticator.subject.send(challenge2)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Make sure first challenge is still the current challenge
+***REMOVED******REMOVED***let mockedCurrentChallenge = try XCTUnwrap(authenticator.currentChallenge as? MockQueuedChallenge)
+***REMOVED******REMOVED***XCTAssertEqual(mockedCurrentChallenge.id, 1)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Complete first challenge.
+***REMOVED******REMOVED***await challenge.setCompleted()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Check next queued challenge
+***REMOVED******REMOVED***let currentChallenge2 = await AsyncPublisher(authenticator.$currentChallenge)
+***REMOVED******REMOVED******REMOVED***.compactMap( { $0 as? MockQueuedChallenge ***REMOVED***)
+***REMOVED******REMOVED******REMOVED***.dropFirst()
+***REMOVED******REMOVED******REMOVED***.first(where: { _ in true ***REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertEqual(currentChallenge2?.id, 2)
+***REMOVED******REMOVED***XCTAssertNotNil(authenticator.currentChallenge)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Complete second challenge.
+***REMOVED******REMOVED***await challenge2.setCompleted()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Check next queued challenge, should be nil
+***REMOVED******REMOVED***let currentChallenge3 = await AsyncPublisher(authenticator.$currentChallenge)
+***REMOVED******REMOVED******REMOVED***.dropFirst()
+***REMOVED******REMOVED******REMOVED***.first(where: { _ in true ***REMOVED***)
+***REMOVED******REMOVED******REMOVED*** nil coalescing seems required because currentChallenge3 is Optional<Optional<QueuedChallenge>>
+***REMOVED******REMOVED***XCTAssertNil(currentChallenge3 ?? nil)
 ***REMOVED***
 ***REMOVED***

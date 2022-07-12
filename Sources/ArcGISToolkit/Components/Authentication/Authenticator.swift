@@ -115,7 +115,7 @@ public final class Authenticator: ObservableObject {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED***private var subject = PassthroughSubject<QueuedChallenge, Never>()
+***REMOVED***var subject = PassthroughSubject<QueuedChallenge, Never>()
 ***REMOVED***
 ***REMOVED******REMOVED***/ A serial queue for authentication challenges.
 ***REMOVED***private var challengeQueue: AsyncPublisher<AnyPublisher<QueuedChallenge, Never>> {
