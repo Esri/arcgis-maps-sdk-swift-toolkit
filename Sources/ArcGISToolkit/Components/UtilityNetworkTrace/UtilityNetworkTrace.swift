@@ -260,14 +260,20 @@ public struct UtilityNetworkTrace: View {
         List {
             Section("Element Result") {
                 DisclosureGroup(
-                    viewModel.selectedTrace?.utilityElementTraceResult?.elements.count.description ?? "0",
+                    viewModel.selectedTrace?.assets.map({ $0.value.count }).reduce(0, +).description ?? "0",
                     isExpanded: Binding(
                         get: { isFocused(traceViewingActivity: .viewingElementResults) },
                         set: { currentActivity = .viewingTraces($0 ? .viewingElementResults : nil) }
                     )
                 ) {
-                    ForEach(viewModel.selectedTrace?.assetLabels ?? [], id: \.self) { label in
-                        Text(label)
+                    ForEach(
+                        (viewModel.selectedTrace?.assets ?? [:]).sorted(by: { $0.key < $1.key }), id: \.key
+                    ) { asset in
+                        HStack {
+                            Text(asset.key)
+                            Spacer()
+                            Text(asset.value.count.description)
+                        }
                     }
                 }
             }
