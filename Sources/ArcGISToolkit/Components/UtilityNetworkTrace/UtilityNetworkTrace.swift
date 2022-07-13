@@ -43,6 +43,8 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED***private enum TraceViewingActivity: Hashable {
 ***REMOVED******REMOVED******REMOVED***/ The user is viewing the list of available trace options.
 ***REMOVED******REMOVED***case viewingAdvancedOptions
+***REMOVED******REMOVED******REMOVED***/ The user is viewing a list of element results, grouped by asset group and asset type.
+***REMOVED******REMOVED***case viewingElementGroup([String: [UtilityElement]])
 ***REMOVED******REMOVED******REMOVED***/ The user is viewing the list of element results.
 ***REMOVED******REMOVED***case viewingElementResults
 ***REMOVED******REMOVED******REMOVED***/ The user is viewing the list of function results.
@@ -122,6 +124,27 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED***.buttonStyle(.bordered)
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ Displays information about a chosen asset group.
+***REMOVED***@ViewBuilder private var assetGroupDetail: some View {
+***REMOVED******REMOVED***if let assetGroup = selectedAssetGroup {
+***REMOVED******REMOVED******REMOVED***makeBackButton(title: elementResultsTitle) {
+***REMOVED******REMOVED******REMOVED******REMOVED***currentActivity = .viewingTraces(.viewingElementResults)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***makeDetailSectionHeader(
+***REMOVED******REMOVED******REMOVED******REMOVED***title: assetGroup.first?.value.first?.assetGroup.name ?? "Unnamed Asset Group"
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***List {
+***REMOVED******REMOVED******REMOVED******REMOVED***ForEach(assetGroup.sorted(by: { $0.key < $1.key ***REMOVED***), id: \.key) { assetTypeGroup in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Section(assetTypeGroup.key) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(assetTypeGroup.value) { element in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(element.objectID.description)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
 ***REMOVED******REMOVED***/ Displays the list of available named trace configurations.
 ***REMOVED***@ViewBuilder private var configurationsList: some View {
 ***REMOVED******REMOVED***if viewModel.configurations.isEmpty {
@@ -179,7 +202,7 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***configurationsList
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***Section("Starting Points") {
+***REMOVED******REMOVED******REMOVED***Section(startingPointsTitle) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentActivity = .creatingTrace(.addingStartingPoints)
 ***REMOVED******REMOVED******REMOVED*** label: {
@@ -258,9 +281,9 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED***Text(traceName)
 ***REMOVED***
 ***REMOVED******REMOVED***List {
-***REMOVED******REMOVED******REMOVED***Section("Element Result") {
+***REMOVED******REMOVED******REMOVED***Section(elementResultsTitle) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***DisclosureGroup(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.selectedTrace?.assets.map({ $0.value.count ***REMOVED***).reduce(0, +).description ?? "0",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.selectedTrace?.assetCount.description ?? "0",
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isExpanded: Binding(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***get: { isFocused(traceViewingActivity: .viewingElementResults) ***REMOVED***,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***set: { currentActivity = .viewingTraces($0 ? .viewingElementResults : nil) ***REMOVED***
@@ -268,11 +291,16 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***(viewModel.selectedTrace?.assets ?? [:]).sorted(by: { $0.key < $1.key ***REMOVED***), id: \.key
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***) { asset in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***) { assetGroup in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(asset.key)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(assetGroup.key)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(asset.value.count.description)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(assetGroup.value.compactMap({ $0.value.count ***REMOVED***).reduce(0, +).description)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.blue)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.contentShape(Rectangle())
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onTapGesture {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentActivity = .viewingTraces(.viewingElementGroup(assetGroup.value))
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
@@ -317,7 +345,7 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***makeZoomToButtom {
+***REMOVED******REMOVED***makeZoomToButton {
 ***REMOVED******REMOVED******REMOVED***if let resultEnvelope = GeometryEngine.combineExtents(of: [
 ***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.selectedTrace?.utilityGeometryTraceResult?.multipoint,
 ***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.selectedTrace?.utilityGeometryTraceResult?.polygon,
@@ -347,21 +375,12 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Displays information about a chosen starting point.
 ***REMOVED***@ViewBuilder private var startingPointDetail: some View {
-***REMOVED******REMOVED***Button {
+***REMOVED******REMOVED***makeBackButton(title: startingPointsTitle) {
 ***REMOVED******REMOVED******REMOVED***currentActivity = .creatingTrace(.viewingStartingPoints)
-***REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED***Label {
-***REMOVED******REMOVED******REMOVED******REMOVED***Text("Back")
-***REMOVED******REMOVED*** icon: {
-***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "chevron.backward")
-***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.padding()
-***REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .leading)
-***REMOVED******REMOVED***Text(selectedStartingPoint?.utilityElement.assetType.name ?? "Unnamed")
-***REMOVED******REMOVED******REMOVED***.font(.title3)
-***REMOVED******REMOVED******REMOVED***.lineLimit(1)
-***REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .center)
+***REMOVED******REMOVED***makeDetailSectionHeader(
+***REMOVED******REMOVED******REMOVED***title: selectedStartingPoint?.utilityElement.assetType.name ?? "Unnamed Asset Type"
+***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***List {
 ***REMOVED******REMOVED******REMOVED***if selectedStartingPoint?.utilityElement.networkSource.kind == .edge {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Section("Fraction Along Edge") {
@@ -407,7 +426,7 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***makeZoomToButtom {
+***REMOVED******REMOVED***makeZoomToButton {
 ***REMOVED******REMOVED******REMOVED***if let selectedStartingPoint {
 ***REMOVED******REMOVED******REMOVED******REMOVED***viewpoint = Viewpoint(targetExtent: selectedStartingPoint.extent)
 ***REMOVED******REMOVED***
@@ -487,8 +506,13 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***default:
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***newTraceTab
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***case .viewingTraces:
-***REMOVED******REMOVED******REMOVED******REMOVED***resultsTab
+***REMOVED******REMOVED******REMOVED***case .viewingTraces(let activity):
+***REMOVED******REMOVED******REMOVED******REMOVED***switch activity {
+***REMOVED******REMOVED******REMOVED******REMOVED***case .viewingElementGroup:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***assetGroupDetail
+***REMOVED******REMOVED******REMOVED******REMOVED***default:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***resultsTab
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.background(Color(uiColor: .systemGroupedBackground))
@@ -528,6 +552,15 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED***return "Trace \(index+1) of \(viewModel.completedTraces.count.description)"
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ The selected utility element asset group.
+***REMOVED***private var selectedAssetGroup: [String: [UtilityElement]]? {
+***REMOVED******REMOVED***if case let .viewingTraces(activity) = currentActivity,
+***REMOVED******REMOVED***   case let .viewingElementGroup(elementGroup) = activity {
+***REMOVED******REMOVED******REMOVED***return elementGroup
+***REMOVED***
+***REMOVED******REMOVED***return nil
+***REMOVED***
+***REMOVED***
 ***REMOVED******REMOVED***/ The starting point being inspected (if one exists).
 ***REMOVED***private var selectedStartingPoint: UtilityNetworkTraceStartingPoint? {
 ***REMOVED******REMOVED***if case let .creatingTrace(activity) = currentActivity,
@@ -559,13 +592,37 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED***return false
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ Returns a "Back" button that performs a specified action when pressed.
+***REMOVED******REMOVED***/ - Parameter title: The button's title.
+***REMOVED******REMOVED***/ - Parameter action: The action to be performed.
+***REMOVED******REMOVED***/ - Returns: The configured button.
+***REMOVED***private func makeBackButton(title: String, _ action: @escaping () -> Void) -> some View {
+***REMOVED******REMOVED***Button { action() ***REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED***Label {
+***REMOVED******REMOVED******REMOVED******REMOVED***Text(title)
+***REMOVED******REMOVED*** icon: {
+***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "chevron.backward")
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***.padding()
+***REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .leading)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Returns a section header.
+***REMOVED******REMOVED***/ - Parameter title: The title of the header.
+***REMOVED******REMOVED***/ - Returns: The configured title.
+***REMOVED***private func makeDetailSectionHeader(title: String) -> some View {
+***REMOVED******REMOVED***Text(title)
+***REMOVED******REMOVED******REMOVED***.font(.title3)
+***REMOVED******REMOVED******REMOVED***.lineLimit(1)
+***REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .center)
+***REMOVED***
+***REMOVED***
 ***REMOVED******REMOVED***/ Returns a "Zoom To" button that performs a specified action when pressed.
 ***REMOVED******REMOVED***/ - Parameter action: The action to be performed.
 ***REMOVED******REMOVED***/ - Returns: The configured button.
-***REMOVED***private func makeZoomToButtom(_ action: @escaping () -> Void) -> some View {
-***REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED***action()
-***REMOVED*** label: {
+***REMOVED***private func makeZoomToButton(_ action: @escaping () -> Void) -> some View {
+***REMOVED******REMOVED***Button { action() ***REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED***Label {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text("Zoom To")
 ***REMOVED******REMOVED*** icon: {
@@ -573,4 +630,10 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Title for the element results section
+***REMOVED***private let elementResultsTitle = "Element Results"
+***REMOVED***
+***REMOVED******REMOVED***/ Title for the starting points section
+***REMOVED***private let startingPointsTitle = "Starting Points"
 ***REMOVED***

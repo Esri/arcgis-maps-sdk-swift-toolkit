@@ -291,18 +291,24 @@ import Foundation
 ***REMOVED******REMOVED******REMOVED***return false
 ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***var assets = [String: [UtilityElement]]()
+***REMOVED******REMOVED***var assets = [String: [String: [UtilityElement]]]()
 ***REMOVED******REMOVED***for result in traceResults {
 ***REMOVED******REMOVED******REMOVED***switch result {
 ***REMOVED******REMOVED******REMOVED***case let result as UtilityElementTraceResult:
 ***REMOVED******REMOVED******REMOVED******REMOVED***result.elements.forEach { element in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***var assetsInGroup = assets[element.assetGroup.name, default: []]
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***assetsInGroup.append(element)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***var assetGroup = assets[element.assetGroup.name, default: [:]]
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***var assetTypeGroup = assetGroup[element.assetType.name, default: []]
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***assetTypeGroup.append(element)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***assetGroup.updateValue(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***assetTypeGroup,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***forKey: element.assetType.name
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***assets.updateValue(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***assetsInGroup,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***assetGroup,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***forKey: element.assetGroup.name
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***pendingTrace.assetCount = result.elements.count
 ***REMOVED******REMOVED******REMOVED******REMOVED***pendingTrace.assets = assets
 ***REMOVED******REMOVED******REMOVED***case let result as UtilityGeometryTraceResult:
 ***REMOVED******REMOVED******REMOVED******REMOVED***let createGraphic: ((Geometry, SimpleLineSymbol.Style, Color) -> (Graphic)) = { geometry, style, color in
