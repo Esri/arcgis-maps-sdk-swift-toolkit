@@ -17,8 +17,11 @@ import SwiftUI
 extension UtilityNetworkTraceViewModel {
     /// A trace performed on a utility network.
     struct Trace {
-        /// A collection of all elements returned in the trace, grouped by asset group.
-        var assets = [String: [UtilityElement]]()
+        /// The number of assets returned by the trace.
+        var assetCount: Int = 0
+        
+        /// A collection of all elements returned in the trace, grouped by asset group and asset type.
+        var assets = [String: [String: [UtilityElement]]]()
         
         /// A user given color for the trace with a default value of green.
         var color: Color = .green {
