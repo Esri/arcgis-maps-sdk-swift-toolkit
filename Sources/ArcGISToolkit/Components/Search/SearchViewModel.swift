@@ -414,7 +414,7 @@ private extension Symbol {
 ***REMOVED***static func searchResult() -> MarkerSymbol {
 ***REMOVED******REMOVED***let image = UIImage.mapPin
 ***REMOVED******REMOVED***let symbol = PictureMarkerSymbol(image: image)
-***REMOVED******REMOVED***symbol.offsetY = CGFloat(image.size.height / 2.0)
+***REMOVED******REMOVED***symbol.offsetY = Float(image.size.height / 2.0)
 ***REMOVED******REMOVED***return symbol
 ***REMOVED***
 ***REMOVED***
