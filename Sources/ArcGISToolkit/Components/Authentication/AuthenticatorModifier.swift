@@ -58,7 +58,7 @@ private struct AuthenticatorModifier: ViewModifier {
 ***REMOVED******REMOVED******REMOVED***case .certificate:
 ***REMOVED******REMOVED******REMOVED******REMOVED***fatalError("implementation coming soon in another PR")
 ***REMOVED******REMOVED******REMOVED***case .login:
-***REMOVED******REMOVED******REMOVED******REMOVED***fatalError("implementation coming soon in another PR")
+***REMOVED******REMOVED******REMOVED******REMOVED***content.modifier(UsernamePasswordViewModifier(challenge: challenge))
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***case .none:
 ***REMOVED******REMOVED******REMOVED***content
