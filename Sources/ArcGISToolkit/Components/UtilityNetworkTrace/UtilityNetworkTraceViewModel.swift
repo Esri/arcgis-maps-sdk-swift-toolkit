@@ -291,18 +291,19 @@ import Foundation
 ***REMOVED******REMOVED******REMOVED***return false
 ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***var assetGroups = [String: Int]()
+***REMOVED******REMOVED***var assets = [String: [UtilityElement]]()
 ***REMOVED******REMOVED***for result in traceResults {
 ***REMOVED******REMOVED******REMOVED***switch result {
 ***REMOVED******REMOVED******REMOVED***case let result as UtilityElementTraceResult:
 ***REMOVED******REMOVED******REMOVED******REMOVED***result.elements.forEach { element in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let count = assetGroups[element.assetGroup.name] ?? 0 + 1
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***assetGroups.updateValue(count, forKey: element.assetGroup.name)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***var assetsInGroup = assets[element.assetGroup.name, default: []]
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***assetsInGroup.append(element)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***assets.updateValue(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***assetsInGroup,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***forKey: element.assetGroup.name
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***assetGroups.forEach { (key, value) in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***pendingTrace.assetLabels.append("\(key): \(value)")
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***pendingTrace.utilityElementTraceResult = result
+***REMOVED******REMOVED******REMOVED******REMOVED***pendingTrace.assets = assets
 ***REMOVED******REMOVED******REMOVED***case let result as UtilityGeometryTraceResult:
 ***REMOVED******REMOVED******REMOVED******REMOVED***let createGraphic: ((Geometry, SimpleLineSymbol.Style, Color) -> (Graphic)) = { geometry, style, color in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return Graphic(

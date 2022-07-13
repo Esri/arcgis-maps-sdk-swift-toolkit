@@ -17,8 +17,8 @@
 extension UtilityNetworkTraceViewModel {
 ***REMOVED******REMOVED***/ A trace performed on a utility network.
 ***REMOVED***struct Trace {
-***REMOVED******REMOVED******REMOVED***/ A collection of asset labels for all elements returned in the trace.
-***REMOVED******REMOVED***var assetLabels = [String]()
+***REMOVED******REMOVED******REMOVED***/ A collection of all elements returned in the trace, grouped by asset group.
+***REMOVED******REMOVED***var assets = [String: [UtilityElement]]()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ A user given color for the trace with a default value of green.
 ***REMOVED******REMOVED***var color: Color = .green {
@@ -55,9 +55,6 @@ extension UtilityNetworkTraceViewModel {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ Indicates that the user has specified a name for the trace.
 ***REMOVED******REMOVED***var userDidSpecifyName: Bool = false
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ A trace result set comprised of an collection of UtilityElement objects.
-***REMOVED******REMOVED***var utilityElementTraceResult: UtilityElementTraceResult?
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ A trace result set comprised of a collection of UtilityTraceFunctionOutput objects.
 ***REMOVED******REMOVED***var utilityFunctionTraceResult: UtilityFunctionTraceResult?

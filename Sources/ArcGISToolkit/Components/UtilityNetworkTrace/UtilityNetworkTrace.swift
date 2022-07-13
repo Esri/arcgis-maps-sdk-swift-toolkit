@@ -260,14 +260,20 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED***List {
 ***REMOVED******REMOVED******REMOVED***Section("Element Result") {
 ***REMOVED******REMOVED******REMOVED******REMOVED***DisclosureGroup(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.selectedTrace?.utilityElementTraceResult?.elements.count.description ?? "0",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.selectedTrace?.assets.map({ $0.value.count ***REMOVED***).reduce(0, +).description ?? "0",
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isExpanded: Binding(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***get: { isFocused(traceViewingActivity: .viewingElementResults) ***REMOVED***,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***set: { currentActivity = .viewingTraces($0 ? .viewingElementResults : nil) ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(viewModel.selectedTrace?.assetLabels ?? [], id: \.self) { label in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(label)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***(viewModel.selectedTrace?.assets ?? [:]).sorted(by: { $0.key < $1.key ***REMOVED***), id: \.key
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***) { asset in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***HStack {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(asset.key)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(asset.value.count.description)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
