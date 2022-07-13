@@ -96,7 +96,7 @@ import Foundation
 ***REMOVED******REMOVED******REMOVED******REMOVED***print(error.localizedDescription)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***network = map.utilityNetworks.first
-***REMOVED******REMOVED******REMOVED***await loadNamedTraceConfigurations()
+***REMOVED******REMOVED******REMOVED***loadNamedTraceConfigurations()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -134,9 +134,7 @@ import Foundation
 ***REMOVED******REMOVED***/ - Parameter network: The new utility network to be selected.
 ***REMOVED***func setNetwork(_ network: UtilityNetwork) {
 ***REMOVED******REMOVED***self.network = network
-***REMOVED******REMOVED***Task {
-***REMOVED******REMOVED******REMOVED***await loadNamedTraceConfigurations()
-***REMOVED***
+***REMOVED******REMOVED***loadNamedTraceConfigurations()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Updates the pending trace's configuration and name, if applicable.
@@ -368,9 +366,13 @@ import Foundation
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Loads the named trace configurations in the network.
-***REMOVED***private func loadNamedTraceConfigurations() async {
+***REMOVED***private func loadNamedTraceConfigurations() {
 ***REMOVED******REMOVED***guard let network = network else { return ***REMOVED***
-***REMOVED******REMOVED***configurations = (try? await map.getNamedTraceConfigurations(from: network)) ?? []
+***REMOVED******REMOVED***Task {
+***REMOVED******REMOVED******REMOVED***configurations = (try? await map.getNamedTraceConfigurations(
+***REMOVED******REMOVED******REMOVED******REMOVED***from: network
+***REMOVED******REMOVED******REMOVED***)) ?? []
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
