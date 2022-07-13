@@ -135,8 +135,11 @@ extension Authenticator: AuthenticationChallengeHandler {
             return .performDefaultHandling
         }
         
+        guard let queuedChallenge = QueuedNetworkChallenge(networkChallenge: challenge) else {
+            return .performDefaultHandling
+        }
+        
         // Queue up the challenge.
-        let queuedChallenge = QueuedNetworkChallenge(networkChallenge: challenge)
         subject.send(queuedChallenge)
         
         // Wait for it to complete and return the resulting disposition.
