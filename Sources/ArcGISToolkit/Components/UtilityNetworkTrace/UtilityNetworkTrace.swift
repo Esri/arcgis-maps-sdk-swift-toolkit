@@ -43,6 +43,8 @@ public struct UtilityNetworkTrace: View {
     private enum TraceViewingActivity: Hashable {
         /// The user is viewing the list of available trace options.
         case viewingAdvancedOptions
+        /// The user is viewing a list of element results, grouped by asset group and asset type.
+        case viewingElementGroup([String: [UtilityElement]])
         /// The user is viewing the list of element results.
         case viewingElementResults
         /// The user is viewing the list of function results.
@@ -122,6 +124,27 @@ public struct UtilityNetworkTrace: View {
         .buttonStyle(.bordered)
     }
     
+    /// Displays information about a chosen asset group.
+    @ViewBuilder private var assetGroupDetail: some View {
+        if let assetGroup = selectedAssetGroup {
+            makeBackButton(title: elementResultsTitle) {
+                currentActivity = .viewingTraces(.viewingElementResults)
+            }
+            makeDetailSectionHeader(
+                title: assetGroup.first?.value.first?.assetGroup.name ?? "Unnamed Asset Group"
+            )
+            List {
+                ForEach(assetGroup.sorted(by: { $0.key < $1.key }), id: \.key) { assetTypeGroup in
+                    Section(assetTypeGroup.key) {
+                        ForEach(assetTypeGroup.value) { element in
+                            Text(element.objectID.description)
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
     /// Displays the list of available named trace configurations.
     @ViewBuilder private var configurationsList: some View {
         if viewModel.configurations.isEmpty {
@@ -179,7 +202,7 @@ public struct UtilityNetworkTrace: View {
                     configurationsList
                 }
             }
-            Section("Starting Points") {
+            Section(startingPointsTitle) {
                 Button {
                     currentActivity = .creatingTrace(.addingStartingPoints)
                 } label: {
@@ -258,9 +281,9 @@ public struct UtilityNetworkTrace: View {
             Text(traceName)
         }
         List {
-            Section("Element Result") {
+            Section(elementResultsTitle) {
                 DisclosureGroup(
-                    viewModel.selectedTrace?.assets.map({ $0.value.count }).reduce(0, +).description ?? "0",
+                    viewModel.selectedTrace?.assetCount.description ?? "0",
                     isExpanded: Binding(
                         get: { isFocused(traceViewingActivity: .viewingElementResults) },
                         set: { currentActivity = .viewingTraces($0 ? .viewingElementResults : nil) }
@@ -268,11 +291,16 @@ public struct UtilityNetworkTrace: View {
                 ) {
                     ForEach(
                         (viewModel.selectedTrace?.assets ?? [:]).sorted(by: { $0.key < $1.key }), id: \.key
-                    ) { asset in
+                    ) { assetGroup in
                         HStack {
-                            Text(asset.key)
+                            Text(assetGroup.key)
                             Spacer()
-                            Text(asset.value.count.description)
+                            Text(assetGroup.value.compactMap({ $0.value.count }).reduce(0, +).description)
+                        }
+                        .foregroundColor(.blue)
+                        .contentShape(Rectangle())
+                        .onTapGesture {
+                            currentActivity = .viewingTraces(.viewingElementGroup(assetGroup.value))
                         }
                     }
                 }
@@ -317,7 +345,7 @@ public struct UtilityNetworkTrace: View {
                 }
             }
         }
-        makeZoomToButtom {
+        makeZoomToButton {
             if let resultEnvelope = GeometryEngine.combineExtents(of: [
                 viewModel.selectedTrace?.utilityGeometryTraceResult?.multipoint,
                 viewModel.selectedTrace?.utilityGeometryTraceResult?.polygon,
@@ -347,21 +375,12 @@ public struct UtilityNetworkTrace: View {
     
     /// Displays information about a chosen starting point.
     @ViewBuilder private var startingPointDetail: some View {
-        Button {
+        makeBackButton(title: startingPointsTitle) {
             currentActivity = .creatingTrace(.viewingStartingPoints)
-        } label: {
-            Label {
-                Text("Back")
-            } icon: {
-                Image(systemName: "chevron.backward")
-            }
         }
-        .padding()
-        .frame(maxWidth: .infinity, alignment: .leading)
-        Text(selectedStartingPoint?.utilityElement.assetType.name ?? "Unnamed")
-            .font(.title3)
-            .lineLimit(1)
-            .frame(maxWidth: .infinity, alignment: .center)
+        makeDetailSectionHeader(
+            title: selectedStartingPoint?.utilityElement.assetType.name ?? "Unnamed Asset Type"
+        )
         List {
             if selectedStartingPoint?.utilityElement.networkSource.kind == .edge {
                 Section("Fraction Along Edge") {
@@ -407,7 +426,7 @@ public struct UtilityNetworkTrace: View {
                 }
             }
         }
-        makeZoomToButtom {
+        makeZoomToButton {
             if let selectedStartingPoint {
                 viewpoint = Viewpoint(targetExtent: selectedStartingPoint.extent)
             }
@@ -487,8 +506,13 @@ public struct UtilityNetworkTrace: View {
                 default:
                     newTraceTab
                 }
-            case .viewingTraces:
-                resultsTab
+            case .viewingTraces(let activity):
+                switch activity {
+                case .viewingElementGroup:
+                    assetGroupDetail
+                default:
+                    resultsTab
+                }
             }
         }
         .background(Color(uiColor: .systemGroupedBackground))
@@ -528,6 +552,15 @@ public struct UtilityNetworkTrace: View {
         return "Trace \(index+1) of \(viewModel.completedTraces.count.description)"
     }
     
+    /// The selected utility element asset group.
+    private var selectedAssetGroup: [String: [UtilityElement]]? {
+        if case let .viewingTraces(activity) = currentActivity,
+           case let .viewingElementGroup(elementGroup) = activity {
+            return elementGroup
+        }
+        return nil
+    }
+    
     /// The starting point being inspected (if one exists).
     private var selectedStartingPoint: UtilityNetworkTraceStartingPoint? {
         if case let .creatingTrace(activity) = currentActivity,
@@ -559,13 +592,37 @@ public struct UtilityNetworkTrace: View {
         return false
     }
     
+    /// Returns a "Back" button that performs a specified action when pressed.
+    /// - Parameter title: The button's title.
+    /// - Parameter action: The action to be performed.
+    /// - Returns: The configured button.
+    private func makeBackButton(title: String, _ action: @escaping () -> Void) -> some View {
+        Button { action() } label: {
+            Label {
+                Text(title)
+            } icon: {
+                Image(systemName: "chevron.backward")
+            }
+        }
+        .padding()
+        .frame(maxWidth: .infinity, alignment: .leading)
+    }
+    
+    /// Returns a section header.
+    /// - Parameter title: The title of the header.
+    /// - Returns: The configured title.
+    private func makeDetailSectionHeader(title: String) -> some View {
+        Text(title)
+            .font(.title3)
+            .lineLimit(1)
+            .frame(maxWidth: .infinity, alignment: .center)
+    }
+    
     /// Returns a "Zoom To" button that performs a specified action when pressed.
     /// - Parameter action: The action to be performed.
     /// - Returns: The configured button.
-    private func makeZoomToButtom(_ action: @escaping () -> Void) -> some View {
-        Button {
-            action()
-        } label: {
+    private func makeZoomToButton(_ action: @escaping () -> Void) -> some View {
+        Button { action() } label: {
             Label {
                 Text("Zoom To")
             } icon: {
@@ -573,4 +630,10 @@ public struct UtilityNetworkTrace: View {
             }
         }
     }
+    
+    /// Title for the element results section
+    private let elementResultsTitle = "Element Results"
+    
+    /// Title for the starting points section
+    private let startingPointsTitle = "Starting Points"
 }

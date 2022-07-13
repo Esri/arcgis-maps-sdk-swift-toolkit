@@ -291,18 +291,24 @@ import SwiftUI
             return false
         }
         
-        var assets = [String: [UtilityElement]]()
+        var assets = [String: [String: [UtilityElement]]]()
         for result in traceResults {
             switch result {
             case let result as UtilityElementTraceResult:
                 result.elements.forEach { element in
-                    var assetsInGroup = assets[element.assetGroup.name, default: []]
-                    assetsInGroup.append(element)
+                    var assetGroup = assets[element.assetGroup.name, default: [:]]
+                    var assetTypeGroup = assetGroup[element.assetType.name, default: []]
+                    assetTypeGroup.append(element)
+                    assetGroup.updateValue(
+                        assetTypeGroup,
+                        forKey: element.assetType.name
+                    )
                     assets.updateValue(
-                        assetsInGroup,
+                        assetGroup,
                         forKey: element.assetGroup.name
                     )
                 }
+                pendingTrace.assetCount = result.elements.count
                 pendingTrace.assets = assets
             case let result as UtilityGeometryTraceResult:
                 let createGraphic: ((Geometry, SimpleLineSymbol.Style, Color) -> (Graphic)) = { geometry, style, color in
