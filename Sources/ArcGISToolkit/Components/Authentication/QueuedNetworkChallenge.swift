@@ -16,13 +16,18 @@ import ArcGIS
 
 /// An object that represents a network authentication challenge in the queue of challenges.
 final class QueuedNetworkChallenge: QueuedChallenge {
-    /// The associated network authentication challenge.
-    let networkChallenge: NetworkAuthenticationChallenge
+    /// The host that prompted the challenge.
+    let host: String
+    /// The kind of challenge.
+    let kind: Kind
     
     /// Creates a `QueuedNetworkChallenge`.
-    /// - Parameter networkChallenge: The associated network authentication challenge.
-    init(networkChallenge: NetworkAuthenticationChallenge) {
-        self.networkChallenge = networkChallenge
+    /// - Parameters:
+    ///   - host: The host that prompted the challenge.
+    ///   - kind: The kind of challenge.
+    init(host: String, kind: Kind) {
+        self.host = host
+        self.kind = kind
     }
     
     /// Resumes the queued challenge.
@@ -48,7 +53,20 @@ final class QueuedNetworkChallenge: QueuedChallenge {
     public func complete() async {
         _ = await disposition
     }
-    
+}
+
+extension QueuedNetworkChallenge {
+    /// Creates a `QueuedNetworkChallenge`.
+    /// - Parameter networkChallenge: The associated network authentication challenge.
+    convenience init?(networkChallenge: NetworkAuthenticationChallenge) {
+        guard let kind = Kind(networkChallenge.kind) else {
+            return nil
+        }
+        self.init(host: networkChallenge.host, kind: kind)
+    }
+}
+
+extension QueuedNetworkChallenge {
     /// An enumeration that describes the kind of challenge.
     enum Kind {
         /// A challenge for an untrusted host.
@@ -58,18 +76,22 @@ final class QueuedNetworkChallenge: QueuedChallenge {
         /// A challenge that requires a client certificate.
         case certificate
     }
-    
-    /// The kind of challenge.
-    var kind: Kind {
-        switch networkChallenge.kind {
+}
+
+extension QueuedNetworkChallenge.Kind {
+    /// Creates an instance.
+    /// - Parameter networkAuthenticationChallengeKind: The kind of network authentication
+    /// challenge.
+    init?(_ networkAuthenticationChallengeKind: NetworkAuthenticationChallenge.Kind) {
+        switch networkAuthenticationChallengeKind {
         case .serverTrust:
-            return .serverTrust
+            self = .serverTrust
         case .ntlm, .basic, .digest:
-            return .login
+            self = .login
         case .pki:
-            return .certificate
+            self = .certificate
         case .htmlForm, .negotiate:
-            fatalError("TODO: ")
+            return nil
         }
     }
 }

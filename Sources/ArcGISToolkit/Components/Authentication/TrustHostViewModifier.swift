@@ -17,23 +17,20 @@ import SwiftUI
 struct TrustHostViewModifier: ViewModifier {
     /// Creates a `TrustHostViewModifier`.
     /// - Parameter challenge: The network authentication challenge for the untrusted host.
+    /// - Precondition: `challenge.kind` is equal to `serverTrust`.
     init(challenge: QueuedNetworkChallenge) {
+        precondition(challenge.kind == .serverTrust)
         self.challenge = challenge
     }
     
     /// The network authentication challenge for the untrusted host.
     let challenge: QueuedNetworkChallenge
     
-    /// The untrusted host.
-    var host: String {
-        challenge.networkChallenge.host
-    }
-    
     // Even though we will present it right away we need to use a state variable for this.
     // Using a constant has 2 issues. One, it won't animate. Two, when challenging for multiple
     // endpoints at a time, and the challenges stack up, you can end up with a "already presenting"
     // error.
-    @State private var isPresented: Bool = false
+    @State var isPresented: Bool = false
     
     func body(content: Content) -> some View {
         content
@@ -51,7 +48,7 @@ struct TrustHostViewModifier: ViewModifier {
                     challenge.resume(with: .cancelAuthenticationChallenge)
                 }
             } message: { _ in
-                Text("The certificate provided by '\(host)' is not signed by a trusted authority.")
+                Text("The certificate provided by '\(challenge.host)' is not signed by a trusted authority.")
             }
     }
 }
