@@ -11,13 +11,12 @@
 ***REMOVED*** See the License for the specific language governing permissions and
 ***REMOVED*** limitations under the License.
 
-***REMOVED***
 import XCTest
 @testable ***REMOVED***Toolkit
 
 @MainActor
 class TrustHostViewModifierTets: XCTestCase {
-***REMOVED***func testInit() async {
+***REMOVED***func testInit() {
 ***REMOVED******REMOVED***let challenge = QueuedNetworkChallenge(host: "host.com", kind: .serverTrust)
 ***REMOVED******REMOVED******REMOVED*** Tests the initial state.
 ***REMOVED******REMOVED***let modifier = TrustHostViewModifier(challenge: challenge)
