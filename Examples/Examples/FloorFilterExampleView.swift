@@ -18,26 +18,25 @@
 struct FloorFilterExampleView: View {
 ***REMOVED******REMOVED***/ Make a map from a portal item.
 ***REMOVED***static func makeMap() -> Map {
-***REMOVED******REMOVED******REMOVED*** Multiple sites/facilities: Esri IST map with all buildings.
-***REMOVED******REMOVED******REMOVED***let portal = Portal(url: URL(string: "https:***REMOVED***indoors.maps.arcgis.com/")!, isLoginRequired: false)
-***REMOVED******REMOVED******REMOVED***let portalItem = PortalItem(portal: portal, id: Item.ID(rawValue: "49520a67773842f1858602735ef538b5")!)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Redlands Campus map.
-***REMOVED******REMOVED***let portal = Portal(url: URL(string: "https:***REMOVED***runtimecoretest.maps.arcgis.com/")!, isLoginRequired: false)
-***REMOVED******REMOVED***let portalItem = PortalItem(portal: portal, id: Item.ID(rawValue: "7687805bd42549f5ba41237443d0c60a")!) ***REMOVED***<= another multiple sites/facilities
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Single site (ESRI Redlands Main) and facility (Building L).
-***REMOVED******REMOVED******REMOVED*** let portal = Portal(url: URL(string: "https:***REMOVED***indoors.maps.arcgis.com/")!, isLoginRequired: false)
-***REMOVED******REMOVED******REMOVED*** let portalItem = PortalItem(portal: portal, id: Item.ID(rawValue: "f133a698536f44c8884ad81f80b6cfc7")!)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***return Map(item: portalItem)
+***REMOVED******REMOVED***Map(item: PortalItem(
+***REMOVED******REMOVED******REMOVED***portal: .arcGISOnline(isLoginRequired: false),
+***REMOVED******REMOVED******REMOVED***id: Item.ID("b4b599a43a474d33946cf0df526426f5")!
+***REMOVED******REMOVED***))
 ***REMOVED***
 ***REMOVED***
-***REMOVED***@State private var isMapLoaded: Bool = false
+***REMOVED******REMOVED***/ Determines the arrangement of the inner `FloorFilter` UI componenets.
+***REMOVED***private let floorFilterAlignment = Alignment.bottomLeading
 ***REMOVED***
-***REMOVED***@State private var mapLoadError: Bool = false
+***REMOVED******REMOVED***/ Determines the appropriate time to initialize the `FloorFilter`.
+***REMOVED***@State private var isMapLoaded = false
 ***REMOVED***
-***REMOVED***@State private var viewpoint = Viewpoint(
+***REMOVED******REMOVED***/ A Boolean value indicating whether the map is currently being navigated.
+***REMOVED***@State private var isNavigating = false
+***REMOVED***
+***REMOVED***@State private var mapLoadError = false
+***REMOVED***
+***REMOVED******REMOVED***/ The initial viewpoint of the map.
+***REMOVED***@State private var viewpoint: Viewpoint? = Viewpoint(
 ***REMOVED******REMOVED***center: Point(
 ***REMOVED******REMOVED******REMOVED***x: -117.19496,
 ***REMOVED******REMOVED******REMOVED***y: 34.05713,
@@ -53,17 +52,27 @@ struct FloorFilterExampleView: View {
 ***REMOVED******REMOVED******REMOVED***map: map,
 ***REMOVED******REMOVED******REMOVED***viewpoint: viewpoint
 ***REMOVED******REMOVED***)
+***REMOVED******REMOVED***.onNavigatingChanged {
+***REMOVED******REMOVED******REMOVED***isNavigating = $0
+***REMOVED***
 ***REMOVED******REMOVED***.onViewpointChanged(kind: .centerAndScale) {
 ***REMOVED******REMOVED******REMOVED***viewpoint = $0
 ***REMOVED***
-***REMOVED******REMOVED***.overlay(alignment: .bottomLeading) {
+***REMOVED******REMOVED******REMOVED***/ Preserve the current viewpoint when a keyboard is presented in landscape.
+***REMOVED******REMOVED***.ignoresSafeArea(.keyboard, edges: .bottom)
+***REMOVED******REMOVED***.overlay(alignment: floorFilterAlignment) {
 ***REMOVED******REMOVED******REMOVED***if isMapLoaded,
 ***REMOVED******REMOVED******REMOVED***   let floorManager = map.floorManager {
 ***REMOVED******REMOVED******REMOVED******REMOVED***FloorFilter(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***floorManager: floorManager,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint: $viewpoint
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***alignment: floorFilterAlignment,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint: $viewpoint,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isNavigating: $isNavigating
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED***.frame(height: 300)
+***REMOVED******REMOVED******REMOVED******REMOVED***.frame(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***maxWidth: 400,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***maxHeight: 400
+***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding(36)
 ***REMOVED******REMOVED*** else if mapLoadError {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Label(
