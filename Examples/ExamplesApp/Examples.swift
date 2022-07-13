@@ -17,8 +17,7 @@ struct Examples: View {
 ***REMOVED******REMOVED***/ The list of example lists.  Allows for a hierarchical navigation model for examples.
 ***REMOVED***let lists: [ExampleList] = [
 ***REMOVED******REMOVED***.geoview,
-***REMOVED******REMOVED***.views,
-***REMOVED******REMOVED***.authentication
+***REMOVED******REMOVED***.views
 ***REMOVED***]
 ***REMOVED***
 ***REMOVED***var body: some View {
@@ -50,13 +49,6 @@ extension ExampleList {
 ***REMOVED******REMOVED***name: "Views",
 ***REMOVED******REMOVED***examples: [
 ***REMOVED******REMOVED******REMOVED***AnyExample("Floating Panel", content: FloatingPanelExampleView())
-***REMOVED******REMOVED***]
-***REMOVED***)
-***REMOVED***
-***REMOVED***static let authentication = Self(
-***REMOVED******REMOVED***name: "Authentication",
-***REMOVED******REMOVED***examples: [
-***REMOVED******REMOVED******REMOVED***AnyExample("All Authentication Types", content: AuthenticationExampleView())
 ***REMOVED******REMOVED***]
 ***REMOVED***)
 ***REMOVED***

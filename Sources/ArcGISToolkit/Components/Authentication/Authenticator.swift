@@ -24,6 +24,13 @@ public final class Authenticator: ObservableObject {
 ***REMOVED******REMOVED***/ A value indicating whether we should prompt the user when encountering an untrusted host.
 ***REMOVED***var promptForUntrustedHosts: Bool
 ***REMOVED***
+***REMOVED***deinit {
+***REMOVED******REMOVED***observationTask?.cancel()
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED*** The task for the observation of the challenge queue.
+***REMOVED***private var observationTask: Task<Void, Never>?
+***REMOVED***
 ***REMOVED******REMOVED***/ Creates an authenticator.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - promptForUntrustedHosts: A value indicating whether we should prompt the user when
@@ -35,8 +42,7 @@ public final class Authenticator: ObservableObject {
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.promptForUntrustedHosts = promptForUntrustedHosts
 ***REMOVED******REMOVED***self.oAuthConfigurations = oAuthConfigurations
-***REMOVED******REMOVED******REMOVED*** TODO: how to cancel this task?
-***REMOVED******REMOVED***Task { await observeChallengeQueue() ***REMOVED***
+***REMOVED******REMOVED***observationTask = Task { [weak self] in await self?.observeChallengeQueue() ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Sets up new credential stores that will be persisted to the keychain.
@@ -92,26 +98,14 @@ public final class Authenticator: ObservableObject {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** A yield here helps alleviate the already presenting bug.
 ***REMOVED******REMOVED******REMOVED***await Task.yield()
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***if let queuedArcGISChallenge = queuedChallenge as? QueuedArcGISChallenge,
-***REMOVED******REMOVED******REMOVED***   let url = queuedArcGISChallenge.arcGISChallenge.request.url,
-***REMOVED******REMOVED******REMOVED***   let config = oAuthConfigurations.first(where: { $0.canBeUsed(for: url) ***REMOVED***) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** For an OAuth challenge, we create the credential and resume.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Creating the OAuth credential will present the OAuth login view.
-***REMOVED******REMOVED******REMOVED******REMOVED***queuedArcGISChallenge.resume(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***with: await Result {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.useCredential(try await .oauth(configuration: config))
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Set the current challenge, this should present the appropriate view.
-***REMOVED******REMOVED******REMOVED******REMOVED***currentChallenge = queuedChallenge
+***REMOVED******REMOVED******REMOVED******REMOVED*** Set the current challenge, this should present the appropriate view.
+***REMOVED******REMOVED******REMOVED***currentChallenge = queuedChallenge
 
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Wait for the queued challenge to finish.
-***REMOVED******REMOVED******REMOVED******REMOVED***await queuedChallenge.complete()
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Reset the crrent challenge to `nil`, that will dismiss the view.
-***REMOVED******REMOVED******REMOVED******REMOVED***currentChallenge = nil
-***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED*** Wait for the queued challenge to finish.
+***REMOVED******REMOVED******REMOVED***await queuedChallenge.complete()
+
+***REMOVED******REMOVED******REMOVED******REMOVED*** Reset the crrent challenge to `nil`, that will dismiss the view.
+***REMOVED******REMOVED******REMOVED***currentChallenge = nil
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -132,17 +126,6 @@ public final class Authenticator: ObservableObject {
 ***REMOVED***
 
 extension Authenticator: AuthenticationChallengeHandler {
-***REMOVED***public func handleArcGISChallenge(
-***REMOVED******REMOVED***_ challenge: ArcGISAuthenticationChallenge
-***REMOVED***) async throws -> ArcGISAuthenticationChallenge.Disposition {
-***REMOVED******REMOVED******REMOVED*** Queue up the challenge.
-***REMOVED******REMOVED***let queuedChallenge = QueuedArcGISChallenge(arcGISChallenge: challenge)
-***REMOVED******REMOVED***subject.send(queuedChallenge)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Wait for it to complete and return the resulting disposition.
-***REMOVED******REMOVED***return try await queuedChallenge.result.get()
-***REMOVED***
-***REMOVED***
 ***REMOVED***public func handleNetworkChallenge(
 ***REMOVED******REMOVED***_ challenge: NetworkAuthenticationChallenge
 ***REMOVED***) async -> NetworkAuthenticationChallengeDisposition {

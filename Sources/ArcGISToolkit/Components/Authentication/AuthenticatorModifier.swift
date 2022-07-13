@@ -51,21 +51,19 @@ private struct AuthenticatorModifier: ViewModifier {
 ***REMOVED***@ViewBuilder
 ***REMOVED***func body(content: Content) -> some View {
 ***REMOVED******REMOVED***switch authenticator.currentChallenge {
-***REMOVED******REMOVED***case let challenge as QueuedArcGISChallenge:
-***REMOVED******REMOVED******REMOVED***content.modifier(UsernamePasswordViewModifier(challenge: challenge))
 ***REMOVED******REMOVED***case let challenge as QueuedNetworkChallenge:
 ***REMOVED******REMOVED******REMOVED***switch challenge.kind {
 ***REMOVED******REMOVED******REMOVED***case .serverTrust:
 ***REMOVED******REMOVED******REMOVED******REMOVED***content.modifier(TrustHostViewModifier(challenge: challenge))
 ***REMOVED******REMOVED******REMOVED***case .certificate:
-***REMOVED******REMOVED******REMOVED******REMOVED***content.modifier(CertificatePickerViewModifier(challenge: challenge))
+***REMOVED******REMOVED******REMOVED******REMOVED***fatalError("implementation coming soon in another PR")
 ***REMOVED******REMOVED******REMOVED***case .login:
-***REMOVED******REMOVED******REMOVED******REMOVED***content.modifier(UsernamePasswordViewModifier(challenge: challenge))
+***REMOVED******REMOVED******REMOVED******REMOVED***fatalError("implementation coming soon in another PR")
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***case .none:
 ***REMOVED******REMOVED******REMOVED***content
 ***REMOVED******REMOVED***default:
-***REMOVED******REMOVED******REMOVED***fatalError()
+***REMOVED******REMOVED******REMOVED***fatalError("unknown challenge type")
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
