@@ -135,8 +135,11 @@ extension Authenticator: AuthenticationChallengeHandler {
 ***REMOVED******REMOVED******REMOVED***return .performDefaultHandling
 ***REMOVED***
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED***guard let queuedChallenge = QueuedNetworkChallenge(networkChallenge: challenge) else {
+***REMOVED******REMOVED******REMOVED***return .performDefaultHandling
+***REMOVED***
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Queue up the challenge.
-***REMOVED******REMOVED***let queuedChallenge = QueuedNetworkChallenge(networkChallenge: challenge)
 ***REMOVED******REMOVED***subject.send(queuedChallenge)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Wait for it to complete and return the resulting disposition.

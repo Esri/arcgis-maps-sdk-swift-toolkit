@@ -17,23 +17,20 @@
 struct TrustHostViewModifier: ViewModifier {
 ***REMOVED******REMOVED***/ Creates a `TrustHostViewModifier`.
 ***REMOVED******REMOVED***/ - Parameter challenge: The network authentication challenge for the untrusted host.
+***REMOVED******REMOVED***/ - Precondition: `challenge.kind` is equal to `serverTrust`.
 ***REMOVED***init(challenge: QueuedNetworkChallenge) {
+***REMOVED******REMOVED***precondition(challenge.kind == .serverTrust)
 ***REMOVED******REMOVED***self.challenge = challenge
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The network authentication challenge for the untrusted host.
 ***REMOVED***let challenge: QueuedNetworkChallenge
 ***REMOVED***
-***REMOVED******REMOVED***/ The untrusted host.
-***REMOVED***var host: String {
-***REMOVED******REMOVED***challenge.networkChallenge.host
-***REMOVED***
-***REMOVED***
 ***REMOVED******REMOVED*** Even though we will present it right away we need to use a state variable for this.
 ***REMOVED******REMOVED*** Using a constant has 2 issues. One, it won't animate. Two, when challenging for multiple
 ***REMOVED******REMOVED*** endpoints at a time, and the challenges stack up, you can end up with a "already presenting"
 ***REMOVED******REMOVED*** error.
-***REMOVED***@State private var isPresented: Bool = false
+***REMOVED***@State var isPresented: Bool = false
 ***REMOVED***
 ***REMOVED***func body(content: Content) -> some View {
 ***REMOVED******REMOVED***content
@@ -51,7 +48,7 @@ struct TrustHostViewModifier: ViewModifier {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***challenge.resume(with: .cancelAuthenticationChallenge)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED*** message: { _ in
-***REMOVED******REMOVED******REMOVED******REMOVED***Text("The certificate provided by '\(host)' is not signed by a trusted authority.")
+***REMOVED******REMOVED******REMOVED******REMOVED***Text("The certificate provided by '\(challenge.host)' is not signed by a trusted authority.")
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
