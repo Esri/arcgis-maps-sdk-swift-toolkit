@@ -23,123 +23,248 @@ struct SiteAndFacilitySelector: View {
     }
     
     /// The view model used by the `SiteAndFacilitySelector`.
-    @EnvironmentObject var floorFilterViewModel: FloorFilterViewModel
+    @EnvironmentObject var viewModel: FloorFilterViewModel
     
     /// Allows the user to toggle the visibility of the site and facility selector.
     private var isHidden: Binding<Bool>
     
     var body: some View {
-        if let selectedSite = floorFilterViewModel.selectedSite {
-            FacilitiesView(facilities: selectedSite.facilities, isHidden: isHidden)
-        } else if floorFilterViewModel.sites.count == 1 {
-            FacilitiesView(
-                facilities: floorFilterViewModel.sites.first!.facilities,
-                isHidden: isHidden
-            )
-        } else {
-            SitesView(sites: floorFilterViewModel.sites, isHidden: isHidden)
-        }
+        SitesList(isHidden: isHidden)
     }
     
     /// A view displaying the sites contained in a `FloorManager`.
-    struct SitesView: View {
-        /// The floor sites.
-        let sites: [FloorSite]
+    struct SitesList: View {
+        @Environment(\.horizontalSizeClass)
+        private var horizontalSizeClass: UserInterfaceSizeClass?
         
-        /// Allows the user to toggle the visibility of the sites.
+        /// The view model used by this selector.
+        @EnvironmentObject var viewModel: FloorFilterViewModel
+        
+        /// A site name filter phrase entered by the user.
+        @State private var query: String = ""
+        
+        /// Indicates whether a site entry should be considered "selected" in the list.
+        @State var shouldAutoSelect = false
+        
+        /// Allows the user to toggle the visibility of the site and facility selector.
         var isHidden: Binding<Bool>
         
-        /// The view model used by the `Sites`.
-        @EnvironmentObject var floorFilterViewModel: FloorFilterViewModel
+        /// A subset of `sites` with names containing `searchPhrase` or all `sites` if
+        /// `searchPhrase` is empty.
+        var matchingSites: [FloorSite] {
+            guard !query.isEmpty else {
+                return viewModel.sites
+            }
+            return viewModel.sites.filter {
+                $0.name.localizedStandardContains(query)
+            }
+        }
         
-        /// The height of the scroll view's content.
-        @State private var scrollViewContentHeight: CGFloat = .zero
-        
+        /// A view containing a filter-via-name field, a list of the site names and an "All sites" button.
         var body: some View {
-            VStack(alignment: .center) {
-                Header(title: "Select a site", isHidden: isHidden)
-                Divider()
-                ScrollView {
-                    VStack {
-                        ForEach(sites) { site in
-                            HStack {
-                                Text(site.name)
-                                Spacer()
-                            }
-                            .onTapGesture {
-                                floorFilterViewModel.selection = .site(site)
-                            }
-                            .padding(4)
-                            .selected(floorFilterViewModel.selectedSite == site)
-                        }
+            NavigationView {
+                VStack {
+                    if matchingSites.isEmpty {
+                        NoMatchesView()
+                    } else if viewModel.sites.count == 1 {
+                        FacilitiesList(
+                            allSiteStyle: false,
+                            facilities: viewModel.sites.first?.facilities ?? [],
+                            isHidden: isHidden
+                        )
+                        .navigationBarBackButtonHidden(true)
+                    } else {
+                        siteListView
                     }
-                    .onSizeChange {
-                        scrollViewContentHeight = $0.height
+                    if viewModel.sites.count > 1 {
+                        NavigationLink("All sites") {
+                            FacilitiesList(
+                                allSiteStyle: true,
+                                facilities: viewModel.sites.flatMap(\.facilities),
+                                isHidden: isHidden
+                            )
+                        }
+                        .buttonStyle(.bordered)
+                        .padding([.bottom], horizontalSizeClass == .compact ? 5 : 0)
                     }
                 }
-                .frame(maxHeight: scrollViewContentHeight)
+                .searchable(
+                    text: $query,
+                    placement: .navigationBarDrawer(displayMode: .always),
+                    prompt: "Filter sites"
+                )
+                .keyboardType(.alphabet)
+                .disableAutocorrection(true)
+                .navigationTitle("Sites")
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        CloseButton { isHidden.wrappedValue.toggle() }
+                    }
+                }
+            }
+            .navigationViewStyle(.stack)
+        }
+        
+        /// A view containing a list of the site names.
+        ///
+        /// If `AutomaticSelectionMode` mode is in use, items will automatically be
+        /// selected/deselected.
+        var siteListView: some View {
+            List(matchingSites) { site in
+                NavigationLink(
+                    site.name,
+                    tag: site,
+                    selection: Binding(
+                        get: {
+                            return shouldAutoSelect ? viewModel.selectedSite : nil
+                        },
+                        set: { newSite in
+                            guard let newSite = newSite else { return }
+                            viewModel.setSite(newSite, zoomTo: true)
+                        }
+                    )
+                ) {
+                    FacilitiesList(
+                        allSiteStyle: false,
+                        facilities: site.facilities,
+                        isHidden: isHidden
+                    )
+                    .onDisappear {
+                        shouldAutoSelect = false
+                    }
+                }
+            }
+            .listStyle(.plain)
+            .onChange(of: viewModel.selection) { _ in
+                shouldAutoSelect = true
             }
         }
     }
     
     /// A view displaying the facilities contained in a `FloorManager`.
-    struct FacilitiesView: View {
-        /// The floor facilities.
+    struct FacilitiesList: View {
+        @Environment(\.horizontalSizeClass)
+        private var horizontalSizeClass: UserInterfaceSizeClass?
+        
+        /// The view model used by this selector.
+        @EnvironmentObject var viewModel: FloorFilterViewModel
+        
+        /// A facility name filter phrase entered by the user.
+        @State var query: String = ""
+        
+        /// When `true`, the facilites list will be display with all sites styling.
+        let allSiteStyle: Bool
+        
+        /// `FloorFacility`s to be displayed by this view.
         let facilities: [FloorFacility]
         
-        /// Allows the user to toggle the visibility of the sites.
+        /// Allows the user to toggle the visibility of the site and facility selector.
         var isHidden: Binding<Bool>
         
-        /// The view model used by the `SiteAndFacilitySelector`.
-        @EnvironmentObject var floorFilterViewModel: FloorFilterViewModel
-        
-        /// The height of the scroll view's content.
-        @State private var scrollViewContentHeight: CGFloat = .zero
+        /// A subset of `facilities` with names containing `searchPhrase` or all
+        /// `facilities` if `searchPhrase` is empty.
+        var matchingFacilities: [FloorFacility] {
+            guard !query.isEmpty else {
+                return facilities
+            }
+            return facilities.filter {
+                $0.name.localizedStandardContains(query)
+            }
+        }
         
         var body: some View {
-            VStack(alignment: .leading) {
-                Header(title: "Select a facility", isHidden: isHidden)
-                Divider()
-                ScrollView {
+            Group {
+                if matchingFacilities.isEmpty {
+                    NoMatchesView()
+                } else {
+                    facilityListView
+                }
+            }
+            .searchable(
+                text: $query,
+                placement: .navigationBarDrawer(displayMode: .always),
+                prompt: "Filter facilities"
+            )
+            .keyboardType(.alphabet)
+            .disableAutocorrection(true)
+            .navigationTitle(
+                allSiteStyle ? "All Sites" : viewModel.selectedSite?.name ?? "Select a facility"
+            )
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    CloseButton { isHidden.wrappedValue.toggle() }
+                }
+            }
+        }
+        
+        /// Displays a list of facilities matching the filter criteria as determined by
+        /// `matchingFacilities`.
+        ///
+        /// If a certain facility is indicated as selected by the view model, it will have a slightly different
+        /// appearance.
+        ///
+        /// If `AutomaticSelectionMode` mode is in use, this list will automatically scroll to the
+        /// selected item.
+        var facilityListView: some View {
+            ScrollViewReader { proxy in
+                List(matchingFacilities, id: \.id) { facility in
                     VStack {
-                        ForEach(facilities) { facility in
-                            HStack {
-                                Text(facility.name)
-                                Spacer()
-                            }
-                            .onTapGesture {
-                                floorFilterViewModel.selection = .facility(facility)
-                                isHidden.wrappedValue = true
-                            }
-                            .padding(4 )
-                            .selected(floorFilterViewModel.selectedFacility == facility)
+                        Text(facility.name)
+                            .frame(
+                                maxWidth: .infinity,
+                                alignment: .leading
+                            )
+                        if allSiteStyle, let siteName = facility.site?.name {
+                            Text(siteName)
+                                .font(.caption)
+                                .frame(
+                                    maxWidth: .infinity,
+                                    alignment: .leading
+                                )
                         }
                     }
-                    .onSizeChange {
-                        scrollViewContentHeight = $0.height
+                    .contentShape(Rectangle())
+                    .listRowBackground(facility.id == viewModel.selectedFacility?.id ? Color.secondary.opacity(0.5) : Color.clear)
+                    .onTapGesture {
+                        viewModel.setFacility(facility, zoomTo: true)
+                        if horizontalSizeClass == .compact {
+                            isHidden.wrappedValue.toggle()
+                        }
                     }
                 }
-                .frame(maxHeight: scrollViewContentHeight)
+                .listStyle(.plain)
+                .onChange(of: viewModel.selection) { _ in
+                    if let floorFacility = viewModel.selectedFacility {
+                        withAnimation {
+                            proxy.scrollTo(
+                                floorFacility.id
+                            )
+                        }
+                    }
+                }
             }
         }
     }
+}
+
+/// Displays text "No matches found".
+private struct NoMatchesView: View {
+    var body: some View {
+        Text("No matches found")
+            .frame(maxHeight: .infinity)
+    }
+}
+
+/// A custom button with an "X" enclosed within a circle to be used as a "close" button.
+private struct CloseButton: View {
+    /// The button's action to be performed when tapped.
+    var action: (() -> Void)
     
-    /// The header for a site or facility selector.
-    struct Header: View {
-        let title: String
-        var isHidden: Binding<Bool>
-        
-        var body: some View {
-            HStack {
-                Text(title)
-                    .bold()
-                Spacer()
-                Button {
-                    isHidden.wrappedValue.toggle()
-                } label: {
-                    Image(systemName: "xmark.circle")
-                }
-            }
+    var body: some View {
+        Button(action: action) {
+            Image(systemName: "xmark.circle")
         }
     }
 }
