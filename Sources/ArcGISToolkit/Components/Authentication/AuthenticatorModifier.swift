@@ -51,21 +51,19 @@ private struct AuthenticatorModifier: ViewModifier {
     @ViewBuilder
     func body(content: Content) -> some View {
         switch authenticator.currentChallenge {
-        case let challenge as QueuedArcGISChallenge:
-            content.modifier(UsernamePasswordViewModifier(challenge: challenge))
         case let challenge as QueuedNetworkChallenge:
             switch challenge.kind {
             case .serverTrust:
                 content.modifier(TrustHostViewModifier(challenge: challenge))
             case .certificate:
-                content.modifier(CertificatePickerViewModifier(challenge: challenge))
+                fatalError("implementation coming soon in another PR")
             case .login:
-                content.modifier(UsernamePasswordViewModifier(challenge: challenge))
+                fatalError("implementation coming soon in another PR")
             }
         case .none:
             content
         default:
-            fatalError()
+            fatalError("unknown challenge type")
         }
     }
 }

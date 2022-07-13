@@ -24,6 +24,13 @@ public final class Authenticator: ObservableObject {
     /// A value indicating whether we should prompt the user when encountering an untrusted host.
     var promptForUntrustedHosts: Bool
     
+    deinit {
+        observationTask?.cancel()
+    }
+    
+    // The task for the observation of the challenge queue.
+    private var observationTask: Task<Void, Never>?
+    
     /// Creates an authenticator.
     /// - Parameters:
     ///   - promptForUntrustedHosts: A value indicating whether we should prompt the user when
@@ -35,8 +42,7 @@ public final class Authenticator: ObservableObject {
     ) {
         self.promptForUntrustedHosts = promptForUntrustedHosts
         self.oAuthConfigurations = oAuthConfigurations
-        // TODO: how to cancel this task?
-        Task { await observeChallengeQueue() }
+        observationTask = Task { [weak self] in await self?.observeChallengeQueue() }
     }
     
     /// Sets up new credential stores that will be persisted to the keychain.
@@ -92,26 +98,14 @@ public final class Authenticator: ObservableObject {
             // A yield here helps alleviate the already presenting bug.
             await Task.yield()
             
-            if let queuedArcGISChallenge = queuedChallenge as? QueuedArcGISChallenge,
-               let url = queuedArcGISChallenge.arcGISChallenge.request.url,
-               let config = oAuthConfigurations.first(where: { $0.canBeUsed(for: url) }) {
-                // For an OAuth challenge, we create the credential and resume.
-                // Creating the OAuth credential will present the OAuth login view.
-                queuedArcGISChallenge.resume(
-                    with: await Result {
-                        .useCredential(try await .oauth(configuration: config))
-                    }
-                )
-            } else {
-                // Set the current challenge, this should present the appropriate view.
-                currentChallenge = queuedChallenge
+            // Set the current challenge, this should present the appropriate view.
+            currentChallenge = queuedChallenge
 
-                // Wait for the queued challenge to finish.
-                await queuedChallenge.complete()
-                
-                // Reset the crrent challenge to `nil`, that will dismiss the view.
-                currentChallenge = nil
-            }
+            // Wait for the queued challenge to finish.
+            await queuedChallenge.complete()
+
+            // Reset the crrent challenge to `nil`, that will dismiss the view.
+            currentChallenge = nil
         }
     }
     
@@ -132,17 +126,6 @@ public final class Authenticator: ObservableObject {
 }
 
 extension Authenticator: AuthenticationChallengeHandler {
-    public func handleArcGISChallenge(
-        _ challenge: ArcGISAuthenticationChallenge
-    ) async throws -> ArcGISAuthenticationChallenge.Disposition {
-        // Queue up the challenge.
-        let queuedChallenge = QueuedArcGISChallenge(arcGISChallenge: challenge)
-        subject.send(queuedChallenge)
-        
-        // Wait for it to complete and return the resulting disposition.
-        return try await queuedChallenge.result.get()
-    }
-    
     public func handleNetworkChallenge(
         _ challenge: NetworkAuthenticationChallenge
     ) async -> NetworkAuthenticationChallengeDisposition {
