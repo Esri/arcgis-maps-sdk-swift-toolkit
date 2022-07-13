@@ -11,16 +11,27 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import SwiftUI
 import XCTest
 @testable import ArcGISToolkit
 
-@MainActor
-class TrustHostViewModifierTets: XCTestCase {
+class QueuedNetworkChallengeTests: XCTestCase {
     func testInit() {
         let challenge = QueuedNetworkChallenge(host: "host.com", kind: .serverTrust)
-        // Tests the initial state.
-        let modifier = TrustHostViewModifier(challenge: challenge)
-        XCTAssertIdentical(modifier.challenge, challenge)
-        XCTAssertFalse(modifier.isPresented)
+        XCTAssertEqual(challenge.host, "host.com")
+        XCTAssertEqual(challenge.kind, .serverTrust)
+    }
+    
+    func testResumeAndComplete() async {
+        let challenge = QueuedNetworkChallenge(host: "host.com", kind: .serverTrust)
+        challenge.resume(with: .useCredential(.serverTrust))
+        let disposition = await challenge.disposition
+        XCTAssertEqual(disposition, .useCredential(.serverTrust))
+        
+        // Make sure multiple simultaneous listeners can await the completion.
+        let t1 = Task { await challenge.complete() }
+        let t2 = Task { await challenge.complete() }
+        await t1.value
+        await t2.value
     }
 }
