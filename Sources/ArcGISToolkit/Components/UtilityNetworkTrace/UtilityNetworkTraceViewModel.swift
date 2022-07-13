@@ -96,7 +96,7 @@ import SwiftUI
                 print(error.localizedDescription)
             }
             network = map.utilityNetworks.first
-            await loadNamedTraceConfigurations()
+            loadNamedTraceConfigurations()
         }
     }
     
@@ -134,9 +134,7 @@ import SwiftUI
     /// - Parameter network: The new utility network to be selected.
     func setNetwork(_ network: UtilityNetwork) {
         self.network = network
-        Task {
-            await loadNamedTraceConfigurations()
-        }
+        loadNamedTraceConfigurations()
     }
     
     /// Updates the pending trace's configuration and name, if applicable.
@@ -368,9 +366,13 @@ import SwiftUI
     }
     
     /// Loads the named trace configurations in the network.
-    private func loadNamedTraceConfigurations() async {
+    private func loadNamedTraceConfigurations() {
         guard let network = network else { return }
-        configurations = (try? await map.getNamedTraceConfigurations(from: network)) ?? []
+        Task {
+            configurations = (try? await map.getNamedTraceConfigurations(
+                from: network
+            )) ?? []
+        }
     }
 }
 
