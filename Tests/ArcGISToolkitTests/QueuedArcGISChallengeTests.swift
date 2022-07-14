@@ -36,6 +36,12 @@ class QueuedArcGISChallengeTests: XCTestCase {
         
         let result = await challenge.result
         XCTAssertTrue(result.error is MockError)
+        
+        // Make sure multiple simultaneous listeners can await the completion.
+        let t1 = Task { await challenge.complete() }
+        let t2 = Task { await challenge.complete() }
+        await t1.value
+        await t2.value
     }
     
     func testCancel() async {
@@ -45,7 +51,7 @@ class QueuedArcGISChallengeTests: XCTestCase {
         challenge.cancel()
         
         let result = await challenge.result
-        XCTAssertEqual(result.success, .cancelAuthenticationChallenge)
+        XCTAssertEqual(result.value, .cancelAuthenticationChallenge)
     }
 }
 
@@ -60,7 +66,8 @@ private extension Result {
         }
     }
     
-    var success: Success? {
+    /// The success value that is encapsulated in the success case when this result is a success.
+    var value: Success? {
         switch self {
         case .failure:
             return nil
