@@ -16,13 +16,15 @@
 
 ***REMOVED***/ A value that contains a username and password pair.
 struct LoginCredential {
+***REMOVED******REMOVED***/ The username.
 ***REMOVED***let username: String
+***REMOVED******REMOVED***/ The password.
 ***REMOVED***let password: String
 ***REMOVED***
 
 ***REMOVED***/ A type that provides the business logic for a view that prompts the user to login with a
 ***REMOVED***/ username and password.
-final class UsernamePasswordViewModel: ObservableObject {
+final class LoginViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ The username.
 ***REMOVED***@Published var username = "" {
 ***REMOVED******REMOVED***didSet { updateSigninButtonEnabled() ***REMOVED***
@@ -79,9 +81,9 @@ final class UsernamePasswordViewModel: ObservableObject {
 ***REMOVED***
 
 ***REMOVED***/ A view modifier that prompts a user to login with a username and password.
-struct UsernamePasswordViewModifier: ViewModifier {
+struct LoginViewModifier: ViewModifier {
 ***REMOVED******REMOVED***/ The view model.
-***REMOVED***let viewModel: UsernamePasswordViewModel
+***REMOVED***let viewModel: LoginViewModel
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether or not the prompt to login is displayed.
 ***REMOVED***@State var isPresented = false
@@ -90,16 +92,16 @@ struct UsernamePasswordViewModifier: ViewModifier {
 ***REMOVED******REMOVED***content
 ***REMOVED******REMOVED******REMOVED***.task { isPresented = true ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***.sheet(isPresented: $isPresented) {
-***REMOVED******REMOVED******REMOVED******REMOVED***UsernamePasswordView(viewModel: viewModel)
+***REMOVED******REMOVED******REMOVED******REMOVED***LoginView(viewModel: viewModel)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 
-extension UsernamePasswordViewModifier {
+extension LoginViewModifier {
 ***REMOVED******REMOVED***/ Creates a `UsernamePasswordViewModifier` with a queued network challenge.
 ***REMOVED***init(challenge: QueuedNetworkChallenge) {
 ***REMOVED******REMOVED***self.init(
-***REMOVED******REMOVED******REMOVED***viewModel: UsernamePasswordViewModel(
+***REMOVED******REMOVED******REMOVED***viewModel: LoginViewModel(
 ***REMOVED******REMOVED******REMOVED******REMOVED***challengingHost: challenge.host,
 ***REMOVED******REMOVED******REMOVED******REMOVED***onSignIn: { loginCredential in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***challenge.resume(
@@ -118,7 +120,7 @@ extension UsernamePasswordViewModifier {
 ***REMOVED******REMOVED***/ Creates a `UsernamePasswordViewModifier` with a queued ArcGIS challenge.
 ***REMOVED***init(challenge: QueuedArcGISChallenge) {
 ***REMOVED******REMOVED***self.init(
-***REMOVED******REMOVED******REMOVED***viewModel: UsernamePasswordViewModel(
+***REMOVED******REMOVED******REMOVED***viewModel: LoginViewModel(
 ***REMOVED******REMOVED******REMOVED******REMOVED***challengingHost: challenge.host,
 ***REMOVED******REMOVED******REMOVED******REMOVED***onSignIn: { loginCredential in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***challenge.resume(loginCredential: loginCredential)
@@ -132,18 +134,18 @@ extension UsernamePasswordViewModifier {
 ***REMOVED***
 
 ***REMOVED***/ A view that prompts a user to login with a username and password.
-private struct UsernamePasswordView: View {
+private struct LoginView: View {
 ***REMOVED******REMOVED***/ Creates the view.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - viewModel: The view model.
-***REMOVED***init(viewModel: UsernamePasswordViewModel) {
+***REMOVED***init(viewModel: LoginViewModel) {
 ***REMOVED******REMOVED***_viewModel = ObservedObject(initialValue: viewModel)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@Environment(\.dismiss) var dismissAction
 ***REMOVED***
 ***REMOVED******REMOVED***/ The view model.
-***REMOVED***@ObservedObject private var viewModel: UsernamePasswordViewModel
+***REMOVED***@ObservedObject private var viewModel: LoginViewModel
 ***REMOVED***
 ***REMOVED******REMOVED***/ The focused field.
 ***REMOVED***@FocusState private var focusedField: Field?
@@ -236,7 +238,7 @@ private struct UsernamePasswordView: View {
 ***REMOVED***
 ***REMOVED***
 
-private extension UsernamePasswordView {
+private extension LoginView {
 ***REMOVED******REMOVED***/ A type that represents the fields in the user name and password sign-in form.
 ***REMOVED***enum Field: Hashable {
 ***REMOVED******REMOVED******REMOVED***/ The username field.

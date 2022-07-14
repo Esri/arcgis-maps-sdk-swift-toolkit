@@ -17,9 +17,9 @@ import XCTest
 
 class QueuedArcGISChallengeTests: XCTestCase {
 ***REMOVED***func testInit() {
-***REMOVED******REMOVED***let challenge = QueuedArcGISChallenge(arcGISChallenge: ArcGISAuthenticationChallenge())
-***REMOVED******REMOVED***XCTAssertEqual(challenge.host, "host.com")
-***REMOVED******REMOVED***XCTAssertEqual(challenge.kind, .serverTrust)
+***REMOVED******REMOVED******REMOVED***let challenge = QueuedArcGISChallenge(arcGISChallenge: ArcGISAuthenticationChallenge())
+***REMOVED******REMOVED******REMOVED***XCTAssertEqual(challenge.host, "host.com")
+***REMOVED******REMOVED******REMOVED***XCTAssertEqual(challenge.kind, .serverTrust)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***func testResumeAndComplete() async {
