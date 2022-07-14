@@ -111,22 +111,10 @@ extension UsernamePasswordViewModifier {
 ***REMOVED******REMOVED******REMOVED***viewModel: UsernamePasswordViewModel(
 ***REMOVED******REMOVED******REMOVED******REMOVED***challengingHost: challenge.host,
 ***REMOVED******REMOVED******REMOVED******REMOVED***onSignIn: { username, password in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***challenge.resume(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***with: await Result {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.useCredential(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try await .token(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***challenge: challenge.arcGISChallenge,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***username: username,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***password: password
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***challenge.resume(username: username, password: password)
 ***REMOVED******REMOVED******REMOVED***,
 ***REMOVED******REMOVED******REMOVED******REMOVED***onCancel: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***challenge.resume(with: .success(.cancelAuthenticationChallenge))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***challenge.cancel()
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***)
@@ -162,7 +150,7 @@ private struct UsernamePasswordView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.listRowBackground(Color.clear)
 ***REMOVED******REMOVED******REMOVED***
-
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***Section {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***TextField("Username", text: $viewModel.username)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.focused($focusedField, equals: .username)
@@ -177,7 +165,7 @@ private struct UsernamePasswordView: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.autocapitalization(.none)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.disableAutocorrection(true)
-
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***Section {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***signinButton
 ***REMOVED******REMOVED******REMOVED***

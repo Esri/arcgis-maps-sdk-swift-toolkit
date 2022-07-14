@@ -14,22 +14,35 @@
 import Foundation
 ***REMOVED***
 
+***REMOVED*** TODO: should be actor?
 ***REMOVED***/ An object that represents an ArcGIS authentication challenge in the queue of challenges.
 final class QueuedArcGISChallenge: QueuedChallenge {
-***REMOVED******REMOVED***/ The ArcGIS authentication challenge.
-***REMOVED***let arcGISChallenge: ArcGISAuthenticationChallenge
+***REMOVED******REMOVED***/ The host that prompted the challenge.
+***REMOVED***let host: String
+***REMOVED***
+***REMOVED******REMOVED***/ A closure that provides a token credential from a username and password.
+***REMOVED***let tokenCredentialProvider: (String, String) async throws -> ArcGISCredential
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a `QueuedArcGISChallenge`.
 ***REMOVED******REMOVED***/ - Parameter arcGISChallenge: The associated ArcGIS authentication challenge.
 ***REMOVED***init(arcGISChallenge: ArcGISAuthenticationChallenge) {
-***REMOVED******REMOVED***self.arcGISChallenge = arcGISChallenge
+***REMOVED******REMOVED***host = arcGISChallenge.request.url?.host ?? ""
+***REMOVED******REMOVED***tokenCredentialProvider = { username, password in
+***REMOVED******REMOVED******REMOVED***try await .token(challenge: arcGISChallenge, username: username, password: password)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Resumes the challenge with a result.
-***REMOVED******REMOVED***/ - Parameter result: The result of the challenge.
-***REMOVED***func resume(with result: Result<ArcGISAuthenticationChallenge.Disposition, Error>) {
-***REMOVED******REMOVED***guard _result == nil else { return ***REMOVED***
-***REMOVED******REMOVED***_result = result
+***REMOVED***
+***REMOVED******REMOVED***/ Resumes the challenge with a username and password.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - username: The username.
+***REMOVED******REMOVED***/   - password: The password.
+***REMOVED***func resume(username: String, password: String) {
+***REMOVED******REMOVED***Task {
+***REMOVED******REMOVED******REMOVED***guard _result == nil else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED***_result = await Result {
+***REMOVED******REMOVED******REMOVED******REMOVED***.useCredential(try await tokenCredentialProvider(username, password))
+***REMOVED******REMOVED***
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Cancels the challenge.
@@ -49,11 +62,6 @@ final class QueuedArcGISChallenge: QueuedChallenge {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.compactMap({ $0 ***REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.first(where: { _ in true ***REMOVED***)!
 ***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ The host that prompted the challenge.
-***REMOVED***var host: String {
-***REMOVED******REMOVED***arcGISChallenge.request.url?.host ?? ""
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***public func complete() async {
