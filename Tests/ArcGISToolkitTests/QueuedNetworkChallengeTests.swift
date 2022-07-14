@@ -15,6 +15,7 @@ import SwiftUI
 import XCTest
 @testable import ArcGISToolkit
 
+@MainActor
 class QueuedNetworkChallengeTests: XCTestCase {
     func testInit() {
         let challenge = QueuedNetworkChallenge(host: "host.com", kind: .serverTrust)

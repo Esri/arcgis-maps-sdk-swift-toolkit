@@ -14,8 +14,8 @@
 import Foundation
 import ArcGIS
 
-// TODO: should be actor?
 /// An object that represents an ArcGIS authentication challenge in the queue of challenges.
+@MainActor
 final class QueuedArcGISChallenge: QueuedChallenge {
     /// The host that prompted the challenge.
     let host: String
