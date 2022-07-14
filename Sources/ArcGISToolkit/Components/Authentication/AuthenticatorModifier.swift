@@ -52,8 +52,7 @@ private struct AuthenticatorModifier: ViewModifier {
 ***REMOVED***func body(content: Content) -> some View {
 ***REMOVED******REMOVED***switch authenticator.currentChallenge {
 ***REMOVED******REMOVED***case let challenge as QueuedArcGISChallenge:
-***REMOVED******REMOVED******REMOVED******REMOVED***content.modifier(UsernamePasswordViewModifier()
-***REMOVED******REMOVED******REMOVED***fatalError()
+***REMOVED******REMOVED******REMOVED***content.modifier(UsernamePasswordViewModifier(challenge: challenge))
 ***REMOVED******REMOVED***case let challenge as QueuedNetworkChallenge:
 ***REMOVED******REMOVED******REMOVED***switch challenge.kind {
 ***REMOVED******REMOVED******REMOVED***case .serverTrust:

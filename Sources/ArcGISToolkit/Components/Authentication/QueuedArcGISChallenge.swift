@@ -51,6 +51,11 @@ final class QueuedArcGISChallenge: QueuedChallenge {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ The host that prompted the challenge.
+***REMOVED***var host: String {
+***REMOVED******REMOVED***arcGISChallenge.request.url?.host ?? ""
+***REMOVED***
+***REMOVED***
 ***REMOVED***public func complete() async {
 ***REMOVED******REMOVED***_ = await result
 ***REMOVED***
