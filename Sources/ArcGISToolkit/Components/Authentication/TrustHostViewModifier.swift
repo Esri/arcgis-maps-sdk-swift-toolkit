@@ -43,7 +43,6 @@ struct TrustHostViewModifier: ViewModifier {
                     challenge.resume(with: .useCredential(.serverTrust))
                 }
                 Button("Cancel", role: .cancel) {
-                    isPresented = false
                     challenge.resume(with: .cancelAuthenticationChallenge)
                 }
             } message: { _ in
