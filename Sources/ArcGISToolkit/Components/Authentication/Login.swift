@@ -16,13 +16,15 @@ import ArcGIS
 
 /// A value that contains a username and password pair.
 struct LoginCredential {
+    /// The username.
     let username: String
+    /// The password.
     let password: String
 }
 
 /// A type that provides the business logic for a view that prompts the user to login with a
 /// username and password.
-final class UsernamePasswordViewModel: ObservableObject {
+final class LoginViewModel: ObservableObject {
     /// The username.
     @Published var username = "" {
         didSet { updateSigninButtonEnabled() }
@@ -79,9 +81,9 @@ final class UsernamePasswordViewModel: ObservableObject {
 }
 
 /// A view modifier that prompts a user to login with a username and password.
-struct UsernamePasswordViewModifier: ViewModifier {
+struct LoginViewModifier: ViewModifier {
     /// The view model.
-    let viewModel: UsernamePasswordViewModel
+    let viewModel: LoginViewModel
     
     /// A Boolean value indicating whether or not the prompt to login is displayed.
     @State var isPresented = false
@@ -90,16 +92,16 @@ struct UsernamePasswordViewModifier: ViewModifier {
         content
             .task { isPresented = true }
             .sheet(isPresented: $isPresented) {
-                UsernamePasswordView(viewModel: viewModel)
+                LoginView(viewModel: viewModel)
             }
     }
 }
 
-extension UsernamePasswordViewModifier {
+extension LoginViewModifier {
     /// Creates a `UsernamePasswordViewModifier` with a queued network challenge.
     init(challenge: QueuedNetworkChallenge) {
         self.init(
-            viewModel: UsernamePasswordViewModel(
+            viewModel: LoginViewModel(
                 challengingHost: challenge.host,
                 onSignIn: { loginCredential in
                     challenge.resume(
@@ -118,7 +120,7 @@ extension UsernamePasswordViewModifier {
     /// Creates a `UsernamePasswordViewModifier` with a queued ArcGIS challenge.
     init(challenge: QueuedArcGISChallenge) {
         self.init(
-            viewModel: UsernamePasswordViewModel(
+            viewModel: LoginViewModel(
                 challengingHost: challenge.host,
                 onSignIn: { loginCredential in
                     challenge.resume(loginCredential: loginCredential)
@@ -132,18 +134,18 @@ extension UsernamePasswordViewModifier {
 }
 
 /// A view that prompts a user to login with a username and password.
-private struct UsernamePasswordView: View {
+private struct LoginView: View {
     /// Creates the view.
     /// - Parameters:
     ///   - viewModel: The view model.
-    init(viewModel: UsernamePasswordViewModel) {
+    init(viewModel: LoginViewModel) {
         _viewModel = ObservedObject(initialValue: viewModel)
     }
     
     @Environment(\.dismiss) var dismissAction
     
     /// The view model.
-    @ObservedObject private var viewModel: UsernamePasswordViewModel
+    @ObservedObject private var viewModel: LoginViewModel
     
     /// The focused field.
     @FocusState private var focusedField: Field?
@@ -236,7 +238,7 @@ private struct UsernamePasswordView: View {
     }
 }
 
-private extension UsernamePasswordView {
+private extension LoginView {
     /// A type that represents the fields in the user name and password sign-in form.
     enum Field: Hashable {
         /// The username field.

@@ -72,11 +72,14 @@ class AuthenticatorTests: XCTestCase {
     @MainActor
     func testChallengeQueue() async throws {
         actor MockQueuedChallenge: QueuedChallenge {
-            nonisolated let id: Int
-            init(id: Int) {
-                self.id = id
+            nonisolated let host: String
+            
+            init(host: String) {
+                self.host = host
             }
+            
             private var isComplete: Bool = false
+            
             func setCompleted() {
                 isComplete = true
             }
@@ -96,7 +99,7 @@ class AuthenticatorTests: XCTestCase {
         XCTAssertNil(authenticator.currentChallenge)
         
         // Create and enqueue first challenge.
-        let challenge = MockQueuedChallenge(id: 1)
+        let challenge = MockQueuedChallenge(host: "host1")
         authenticator.subject.send(challenge)
         
         // Make sure first challenge is published as the current challenge.
@@ -104,16 +107,16 @@ class AuthenticatorTests: XCTestCase {
             .compactMap( { $0 as? MockQueuedChallenge })
             .first(where: { _ in true })
         
-        XCTAssertEqual(currentChallenge?.id, 1)
+        XCTAssertEqual(currentChallenge?.host, "host1")
         XCTAssertNotNil(authenticator.currentChallenge)
         
         // Create and enqueue second challenge.
-        let challenge2 = MockQueuedChallenge(id: 2)
+        let challenge2 = MockQueuedChallenge(host: "host2")
         authenticator.subject.send(challenge2)
         
         // Make sure first challenge is still the current challenge
         let mockedCurrentChallenge = try XCTUnwrap(authenticator.currentChallenge as? MockQueuedChallenge)
-        XCTAssertEqual(mockedCurrentChallenge.id, 1)
+        XCTAssertEqual(mockedCurrentChallenge.host, "host1")
         
         // Complete first challenge.
         await challenge.setCompleted()
@@ -124,7 +127,7 @@ class AuthenticatorTests: XCTestCase {
             .dropFirst()
             .first(where: { _ in true })
         
-        XCTAssertEqual(currentChallenge2?.id, 2)
+        XCTAssertEqual(currentChallenge2?.host, "host2")
         XCTAssertNotNil(authenticator.currentChallenge)
         
         // Complete second challenge.
