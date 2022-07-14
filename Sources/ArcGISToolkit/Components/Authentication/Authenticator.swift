@@ -89,7 +89,9 @@ public final class Authenticator: ObservableObject {
 ***REMOVED******REMOVED******REMOVED*** We have to set new sessions for URLCredential storage to respect the removed credentials
 ***REMOVED******REMOVED******REMOVED*** right away.
 ***REMOVED******REMOVED***ArcGISRuntimeEnvironment.urlSession = ArcGISURLSession(configuration: .default)
-***REMOVED******REMOVED***ArcGISRuntimeEnvironment.backgroundURLSession = ArcGISURLSession(configuration: .background(withIdentifier: "com.esri.arcgis.toolkit." + UUID().uuidString))
+***REMOVED******REMOVED***ArcGISRuntimeEnvironment.backgroundURLSession = ArcGISURLSession(
+***REMOVED******REMOVED******REMOVED***configuration: .background(withIdentifier: "com.esri.arcgis.toolkit." + UUID().uuidString)
+***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Observes the challenge queue and sets the current challenge.
@@ -134,7 +136,9 @@ extension Authenticator: AuthenticationChallengeHandler {
 ***REMOVED******REMOVED******REMOVED*** Create the correct challenge type.
 ***REMOVED******REMOVED***if let url = challenge.request.url,
 ***REMOVED******REMOVED***   let config = oAuthConfigurations.first(where: { $0.canBeUsed(for: url) ***REMOVED***) {
-***REMOVED******REMOVED******REMOVED***queuedChallenge = QueuedOAuthChallenge()
+***REMOVED******REMOVED******REMOVED***let oAuthChallenge = QueuedOAuthChallenge(configuration: config)
+***REMOVED******REMOVED******REMOVED***queuedChallenge = oAuthChallenge
+***REMOVED******REMOVED******REMOVED***oAuthChallenge.presentPrompt()
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED***queuedChallenge = QueuedTokenChallenge(arcGISChallenge: challenge)
 ***REMOVED***

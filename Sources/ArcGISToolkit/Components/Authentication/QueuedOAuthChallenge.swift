@@ -17,13 +17,39 @@ import Foundation
 ***REMOVED***/ An object that represents an ArcGIS OAuth authentication challenge in the queue of challenges.
 @MainActor
 final class QueuedOAuthChallenge: QueuedArcGISChallenge {
-***REMOVED***init() {***REMOVED***
+***REMOVED******REMOVED***/ The OAuth configuration to be used for this challenge.
+***REMOVED***let configuration: OAuthConfiguration
+***REMOVED***
+***REMOVED******REMOVED***/ Creates a `QueuedOAuthChallenge`.
+***REMOVED******REMOVED***/ - Parameter configuration: The OAuth configuration to be used for this challenge.
+***REMOVED***init(configuration: OAuthConfiguration) {
+***REMOVED******REMOVED***self.configuration = configuration
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Presents the user with a prompt to login with OAuth. This is done by creating the OAuth
+***REMOVED******REMOVED***/ credential.
+***REMOVED***func presentPrompt() {
+***REMOVED******REMOVED***Task {
+***REMOVED******REMOVED******REMOVED***_result = await Result {
+***REMOVED******REMOVED******REMOVED******REMOVED***.useCredential(try await .oauth(configuration: configuration))
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Use a streamed property because we need to support multiple listeners
+***REMOVED******REMOVED***/ to know when the challenge completed.
+***REMOVED***@Streamed private var _result: Result<ArcGISAuthenticationChallenge.Disposition, Error>?
+***REMOVED***
+***REMOVED******REMOVED***/ The result of the challenge.
+***REMOVED***var result: Result<ArcGISAuthenticationChallenge.Disposition, Error> {
+***REMOVED******REMOVED***get async {
+***REMOVED******REMOVED******REMOVED***await $_result
+***REMOVED******REMOVED******REMOVED******REMOVED***.compactMap({ $0 ***REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***.first(where: { _ in true ***REMOVED***)!
+***REMOVED***
+***REMOVED***
 ***REMOVED***
 ***REMOVED***public func complete() async {
-***REMOVED******REMOVED***fatalError()
-***REMOVED***
-***REMOVED***
-***REMOVED***var result: Result<ArcGISAuthenticationChallenge.Disposition, Error> {
-***REMOVED******REMOVED***get async { fatalError() ***REMOVED***
+***REMOVED******REMOVED***_ = await result
 ***REMOVED***
 ***REMOVED***
