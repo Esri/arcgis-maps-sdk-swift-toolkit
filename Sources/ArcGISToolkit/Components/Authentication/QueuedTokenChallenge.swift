@@ -14,9 +14,9 @@
 import Foundation
 import ArcGIS
 
-/// An object that represents an ArcGIS authentication challenge in the queue of challenges.
+/// An object that represents an ArcGIS token authentication challenge in the queue of challenges.
 @MainActor
-final class QueuedArcGISChallenge: QueuedChallenge {
+final class QueuedTokenChallenge: QueuedChallenge {
     /// The host that prompted the challenge.
     let host: String
     
