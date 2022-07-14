@@ -111,22 +111,10 @@ extension UsernamePasswordViewModifier {
             viewModel: UsernamePasswordViewModel(
                 challengingHost: challenge.host,
                 onSignIn: { username, password in
-                    Task {
-                        challenge.resume(
-                            with: await Result {
-                                .useCredential(
-                                    try await .token(
-                                        challenge: challenge.arcGISChallenge,
-                                        username: username,
-                                        password: password
-                                    )
-                                )
-                            }
-                        )
-                    }
+                    challenge.resume(username: username, password: password)
                 },
                 onCancel: {
-                    challenge.resume(with: .success(.cancelAuthenticationChallenge))
+                    challenge.cancel()
                 }
             )
         )
@@ -162,7 +150,7 @@ private struct UsernamePasswordView: View {
                     .frame(maxWidth: .infinity)
                     .listRowBackground(Color.clear)
                 }
-
+                
                 Section {
                     TextField("Username", text: $viewModel.username)
                         .focused($focusedField, equals: .username)
@@ -177,7 +165,7 @@ private struct UsernamePasswordView: View {
                 }
                 .autocapitalization(.none)
                 .disableAutocorrection(true)
-
+                
                 Section {
                     signinButton
                 }

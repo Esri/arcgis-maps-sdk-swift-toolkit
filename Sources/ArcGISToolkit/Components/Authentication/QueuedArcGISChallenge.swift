@@ -14,22 +14,35 @@
 import Foundation
 import ArcGIS
 
+// TODO: should be actor?
 /// An object that represents an ArcGIS authentication challenge in the queue of challenges.
 final class QueuedArcGISChallenge: QueuedChallenge {
-    /// The ArcGIS authentication challenge.
-    let arcGISChallenge: ArcGISAuthenticationChallenge
+    /// The host that prompted the challenge.
+    let host: String
+    
+    /// A closure that provides a token credential from a username and password.
+    let tokenCredentialProvider: (String, String) async throws -> ArcGISCredential
     
     /// Creates a `QueuedArcGISChallenge`.
     /// - Parameter arcGISChallenge: The associated ArcGIS authentication challenge.
     init(arcGISChallenge: ArcGISAuthenticationChallenge) {
-        self.arcGISChallenge = arcGISChallenge
+        host = arcGISChallenge.request.url?.host ?? ""
+        tokenCredentialProvider = { username, password in
+            try await .token(challenge: arcGISChallenge, username: username, password: password)
+        }
     }
     
-    /// Resumes the challenge with a result.
-    /// - Parameter result: The result of the challenge.
-    func resume(with result: Result<ArcGISAuthenticationChallenge.Disposition, Error>) {
-        guard _result == nil else { return }
-        _result = result
+    /// Resumes the challenge with a username and password.
+    /// - Parameters:
+    ///   - username: The username.
+    ///   - password: The password.
+    func resume(username: String, password: String) {
+        Task {
+            guard _result == nil else { return }
+            _result = await Result {
+                .useCredential(try await tokenCredentialProvider(username, password))
+            }
+        }
     }
     
     /// Cancels the challenge.
@@ -49,11 +62,6 @@ final class QueuedArcGISChallenge: QueuedChallenge {
                 .compactMap({ $0 })
                 .first(where: { _ in true })!
         }
-    }
-    
-    /// The host that prompted the challenge.
-    var host: String {
-        arcGISChallenge.request.url?.host ?? ""
     }
     
     public func complete() async {
