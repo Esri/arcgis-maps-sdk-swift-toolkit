@@ -14,6 +14,12 @@
 import SwiftUI
 import ArcGIS
 
+/// A value that contains a username and password pair.
+struct LoginCredential {
+    let username: String
+    let password: String
+}
+
 /// A type that provides the business logic for a view that prompts the user to login with a
 /// username and password.
 final class UsernamePasswordViewModel: ObservableObject {
@@ -32,7 +38,7 @@ final class UsernamePasswordViewModel: ObservableObject {
     
     /// The action to perform when the user signs in. This is a closure that takes a username
     /// and password, respectively.
-    var signInAction: (String, String) -> Void
+    var signInAction: (LoginCredential) -> Void
     /// The action to perform when the user cancels.
     var cancelAction: () -> Void
     
@@ -44,7 +50,7 @@ final class UsernamePasswordViewModel: ObservableObject {
     ///   - cancelAction: The action to perform when the user cancels.
     init(
         challengingHost: String,
-        onSignIn signInAction: @escaping (String, String) -> Void,
+        onSignIn signInAction: @escaping (LoginCredential) -> Void,
         onCancel cancelAction: @escaping () -> Void
     ) {
         self.challengingHost = challengingHost
@@ -62,7 +68,7 @@ final class UsernamePasswordViewModel: ObservableObject {
     /// Attempts to log in with a username and password.
     func signIn() {
         formEnabled = false
-        signInAction(username, password)
+        signInAction(LoginCredential(username: username, password: password))
     }
     
     /// Cancels the challenge.
@@ -95,8 +101,12 @@ extension UsernamePasswordViewModifier {
         self.init(
             viewModel: UsernamePasswordViewModel(
                 challengingHost: challenge.host,
-                onSignIn: { username, password in
-                    challenge.resume(with: .useCredential(.login(username: username, password: password)))
+                onSignIn: { loginCredential in
+                    challenge.resume(
+                        with: .useCredential(
+                            .login(username: loginCredential.username, password: loginCredential.password)
+                        )
+                    )
                 },
                 onCancel: {
                     challenge.resume(with: .cancelAuthenticationChallenge)
@@ -110,8 +120,8 @@ extension UsernamePasswordViewModifier {
         self.init(
             viewModel: UsernamePasswordViewModel(
                 challengingHost: challenge.host,
-                onSignIn: { username, password in
-                    challenge.resume(username: username, password: password)
+                onSignIn: { loginCredential in
+                    challenge.resume(loginCredential: loginCredential)
                 },
                 onCancel: {
                     challenge.cancel()
@@ -145,6 +155,7 @@ private struct UsernamePasswordView: View {
                     VStack {
                         person
                         Text("You must sign in to access '\(viewModel.challengingHost)'")
+                            .multilineTextAlignment(.center)
                             .fixedSize(horizontal: false, vertical: true)
                     }
                     .frame(maxWidth: .infinity)
