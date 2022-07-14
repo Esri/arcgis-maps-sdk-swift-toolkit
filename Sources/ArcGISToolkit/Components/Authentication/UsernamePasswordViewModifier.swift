@@ -105,6 +105,27 @@ extension UsernamePasswordViewModifier {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ Creates a `UsernamePasswordViewModifier` with a queued ArcGIS challenge.
+***REMOVED***init(challenge: QueuedArcGISChallenge) {
+***REMOVED******REMOVED***self.init(
+***REMOVED******REMOVED******REMOVED***viewModel: UsernamePasswordViewModel(
+***REMOVED******REMOVED******REMOVED******REMOVED***challengingHost: challenge.host,
+***REMOVED******REMOVED******REMOVED******REMOVED***onSignIn: { username, password in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***challenge.resume(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***with: .success(.useCredential(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try await .token(challenge: challenge.arcGISChallenge, username: username, password: password)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***,
+***REMOVED******REMOVED******REMOVED******REMOVED***onCancel: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***challenge.resume(with: .cancelAuthenticationChallenge)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
 
 ***REMOVED***/ A view that prompts a user to login with a username and password.
 private struct UsernamePasswordView: View {
