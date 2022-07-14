@@ -130,6 +130,7 @@ private struct UsernamePasswordView: View {
                     VStack {
                         person
                         Text("You must sign in to access '\(viewModel.challengingHost)'")
+                            .multilineTextAlignment(.center)
                             .fixedSize(horizontal: false, vertical: true)
                     }
                     .frame(maxWidth: .infinity)
