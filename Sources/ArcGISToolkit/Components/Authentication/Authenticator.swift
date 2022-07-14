@@ -47,7 +47,7 @@ public final class Authenticator: ObservableObject {
     
     /// Sets up new credential stores that will be persisted to the keychain.
     /// - Remark: The credentials will be stored in the default access group of the keychain.
-    /// To know more about what the default group would be you can find information about that here:
+    /// You can find more information about what the default group would be here:
     /// https://developer.apple.com/documentation/security/keychain_services/keychain_items/sharing_access_to_keychain_items_among_a_collection_of_apps.
     /// - Parameters:
     ///   - access: When the credentials stored in the keychain can be accessed.
@@ -89,7 +89,7 @@ public final class Authenticator: ObservableObject {
         // We have to set new sessions for URLCredential storage to respect the removed credentials
         // right away.
         ArcGISRuntimeEnvironment.urlSession = ArcGISURLSession(configuration: .default)
-        ArcGISRuntimeEnvironment.backgroundURLSession = ArcGISURLSession(configuration: .background(withIdentifier: "com.esri.com.arcgis.toolkit." + UUID().uuidString))
+        ArcGISRuntimeEnvironment.backgroundURLSession = ArcGISURLSession(configuration: .background(withIdentifier: "com.esri.arcgis.toolkit." + UUID().uuidString))
     }
     
     /// Observes the challenge queue and sets the current challenge.
