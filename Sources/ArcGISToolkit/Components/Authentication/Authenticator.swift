@@ -47,7 +47,7 @@ public final class Authenticator: ObservableObject {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Sets up new credential stores that will be persisted to the keychain.
 ***REMOVED******REMOVED***/ - Remark: The credentials will be stored in the default access group of the keychain.
-***REMOVED******REMOVED***/ To know more about what the default group would be you can find information about that here:
+***REMOVED******REMOVED***/ You can find more information about what the default group would be here:
 ***REMOVED******REMOVED***/ https:***REMOVED***developer.apple.com/documentation/security/keychain_services/keychain_items/sharing_access_to_keychain_items_among_a_collection_of_apps.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - access: When the credentials stored in the keychain can be accessed.
