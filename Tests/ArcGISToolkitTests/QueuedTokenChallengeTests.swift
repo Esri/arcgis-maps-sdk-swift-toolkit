@@ -16,9 +16,9 @@ import XCTest
 @testable ***REMOVED***Toolkit
 
 @MainActor
-class QueuedArcGISChallengeTests: XCTestCase {
+class QueuedTokenChallengeTests: XCTestCase {
 ***REMOVED***func testInit() {
-***REMOVED******REMOVED***let challenge = QueuedArcGISChallenge(host: "host.com") { _ in
+***REMOVED******REMOVED***let challenge = QueuedTokenChallenge(host: "host.com") { _ in
 ***REMOVED******REMOVED******REMOVED***fatalError()
 ***REMOVED***
 ***REMOVED******REMOVED***
@@ -29,7 +29,7 @@ class QueuedArcGISChallengeTests: XCTestCase {
 ***REMOVED***func testResumeWithLogin() async {
 ***REMOVED******REMOVED***struct MockError: Error {***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***let challenge = QueuedArcGISChallenge(host: "host.com") { _ in
+***REMOVED******REMOVED***let challenge = QueuedTokenChallenge(host: "host.com") { _ in
 ***REMOVED******REMOVED******REMOVED***throw MockError()
 ***REMOVED***
 ***REMOVED******REMOVED***challenge.resume(with: .init(username: "user1", password: "1234"))
@@ -45,7 +45,7 @@ class QueuedArcGISChallengeTests: XCTestCase {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func testCancel() async {
-***REMOVED******REMOVED***let challenge = QueuedArcGISChallenge(host: "host.com") { _ in
+***REMOVED******REMOVED***let challenge = QueuedTokenChallenge(host: "host.com") { _ in
 ***REMOVED******REMOVED******REMOVED***fatalError()
 ***REMOVED***
 ***REMOVED******REMOVED***challenge.cancel()
