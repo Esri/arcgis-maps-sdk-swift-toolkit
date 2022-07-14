@@ -24,10 +24,21 @@ final class QueuedArcGISChallenge: QueuedChallenge {
     let tokenCredentialProvider: (LoginCredential) async throws -> ArcGISCredential
     
     /// Creates a `QueuedArcGISChallenge`.
+    /// - Parameters:
+    ///   - host: The host that prompted the challenge.
+    ///   - tokenCredentialProvider: A closure that provides a token credential from a username and password.
+    init(
+        host: String,
+        tokenCredentialProvider: @escaping (LoginCredential) async throws -> ArcGISCredential
+    ) {
+        self.host = host
+        self.tokenCredentialProvider = tokenCredentialProvider
+    }
+    
+    /// Creates a `QueuedArcGISChallenge`.
     /// - Parameter arcGISChallenge: The associated ArcGIS authentication challenge.
-    init(arcGISChallenge: ArcGISAuthenticationChallenge) {
-        host = arcGISChallenge.request.url?.host ?? ""
-        tokenCredentialProvider = { loginCredential in
+    convenience init(arcGISChallenge: ArcGISAuthenticationChallenge) {
+        self.init(host: arcGISChallenge.request.url?.host ?? "") { loginCredential in
             try await .token(
                 challenge: arcGISChallenge,
                 username: loginCredential.username,
@@ -39,7 +50,7 @@ final class QueuedArcGISChallenge: QueuedChallenge {
     /// Resumes the challenge with a username and password.
     /// - Parameters:
     ///   - loginCredential: The username and password.
-    func resume(loginCredential: LoginCredential) {
+    func resume(with loginCredential: LoginCredential) {
         Task {
             guard _result == nil else { return }
             _result = await Result {

@@ -17,21 +17,54 @@ import XCTest
 
 class QueuedArcGISChallengeTests: XCTestCase {
     func testInit() {
-//        let challenge = QueuedArcGISChallenge(arcGISChallenge: ArcGISAuthenticationChallenge())
-//        XCTAssertEqual(challenge.host, "host.com")
-//        XCTAssertEqual(challenge.kind, .serverTrust)
+        let challenge = QueuedArcGISChallenge(host: "host.com") { _ in
+            fatalError()
+        }
+        
+        XCTAssertEqual(challenge.host, "host.com")
+        XCTAssertNotNil(challenge.tokenCredentialProvider)
     }
     
-//    func testResumeAndComplete() async {
-//        let challenge = QueuedNetworkChallenge(host: "host.com", kind: .serverTrust)
-//        challenge.resume(with: .useCredential(.serverTrust))
-//        let disposition = await challenge.disposition
-//        XCTAssertEqual(disposition, .useCredential(.serverTrust))
-//
-//        // Make sure multiple simultaneous listeners can await the completion.
-//        let t1 = Task { await challenge.complete() }
-//        let t2 = Task { await challenge.complete() }
-//        await t1.value
-//        await t2.value
-//    }
+    func testResumeWithLogin() async {
+        struct MockError: Error {}
+        
+        let challenge = QueuedArcGISChallenge(host: "host.com") { _ in
+            throw MockError()
+        }
+        challenge.resume(with: .init(username: "user1", password: "1234"))
+        
+        let result = await challenge.result
+        XCTAssertTrue(result.error is MockError)
+    }
+    
+    func testCancel() async {
+        let challenge = QueuedArcGISChallenge(host: "host.com") { _ in
+            fatalError()
+        }
+        challenge.cancel()
+        
+        let result = await challenge.result
+        XCTAssertEqual(result.success, .cancelAuthenticationChallenge)
+    }
+}
+
+private extension Result {
+    /// The error that is encapsulated in the failure case when this result is a failure.
+    var error: Error? {
+        switch self {
+        case .failure(let error):
+            return error
+        case .success:
+            return nil
+        }
+    }
+    
+    var success: Success? {
+        switch self {
+        case .failure:
+            return nil
+        case .success(let value):
+            return value
+        }
+    }
 }
