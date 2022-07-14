@@ -98,14 +98,27 @@ public final class Authenticator: ObservableObject {
             // A yield here helps alleviate the already presenting bug.
             await Task.yield()
             
-            // Set the current challenge, this should present the appropriate view.
-            currentChallenge = queuedChallenge
-
-            // Wait for the queued challenge to finish.
-            await queuedChallenge.complete()
-
-            // Reset the crrent challenge to `nil`, that will dismiss the view.
-            currentChallenge = nil
+            if let queuedArcGISChallenge = queuedChallenge as? QueuedTokenChallenge,
+               let url = queuedArcGISChallenge.arcGISChallenge.request.url,
+               let config = oAuthConfigurations.first(where: { $0.canBeUsed(for: url) }) {
+                // For an OAuth challenge, we create the credential and resume.
+                // Creating the OAuth credential will present the OAuth login view.
+                // We don't set the current challenge because this one is handled internally.
+                queuedArcGISChallenge.resume(
+                    with: await Result {
+                        .useCredential(try await .oauth(configuration: config))
+                    }
+                )
+            } else {
+                // Set the current challenge, this should present the appropriate view.
+                currentChallenge = queuedChallenge
+                
+                // Wait for the queued challenge to finish.
+                await queuedChallenge.complete()
+                
+                // Reset the crrent challenge to `nil`, that will dismiss the view.
+                currentChallenge = nil
+            }
         }
     }
     
@@ -120,7 +133,7 @@ public final class Authenticator: ObservableObject {
         )
     }
     
-    /// The current queued challenge.
+    /// The current queued challenge being handled.
     @Published
     var currentChallenge: QueuedChallenge?
 }
@@ -130,7 +143,7 @@ extension Authenticator: AuthenticationChallengeHandler {
         _ challenge: ArcGISAuthenticationChallenge
     ) async throws -> ArcGISAuthenticationChallenge.Disposition {
         // Queue up the challenge.
-        let queuedChallenge = QueuedArcGISChallenge(arcGISChallenge: challenge)
+        let queuedChallenge = QueuedTokenChallenge(arcGISChallenge: challenge)
         subject.send(queuedChallenge)
         
         // Wait for it to complete and return the resulting disposition.

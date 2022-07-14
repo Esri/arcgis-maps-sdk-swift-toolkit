@@ -51,7 +51,7 @@ private struct AuthenticatorModifier: ViewModifier {
     @ViewBuilder
     func body(content: Content) -> some View {
         switch authenticator.currentChallenge {
-        case let challenge as QueuedArcGISChallenge:
+        case let challenge as QueuedTokenChallenge:
             content.modifier(LoginViewModifier(challenge: challenge))
         case let challenge as QueuedNetworkChallenge:
             switch challenge.kind {

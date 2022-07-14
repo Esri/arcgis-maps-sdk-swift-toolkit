@@ -121,7 +121,7 @@ extension LoginViewModifier {
     
     /// Creates a `UsernamePasswordViewModifier` with a queued ArcGIS challenge.
     @MainActor
-    init(challenge: QueuedArcGISChallenge) {
+    init(challenge: QueuedTokenChallenge) {
         self.init(
             viewModel: LoginViewModel(
                 challengingHost: challenge.host,

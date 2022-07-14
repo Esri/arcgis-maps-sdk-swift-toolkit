@@ -16,9 +16,9 @@ import XCTest
 @testable import ArcGISToolkit
 
 @MainActor
-class QueuedArcGISChallengeTests: XCTestCase {
+class QueuedTokenChallengeTests: XCTestCase {
     func testInit() {
-        let challenge = QueuedArcGISChallenge(host: "host.com") { _ in
+        let challenge = QueuedTokenChallenge(host: "host.com") { _ in
             fatalError()
         }
         
@@ -29,7 +29,7 @@ class QueuedArcGISChallengeTests: XCTestCase {
     func testResumeWithLogin() async {
         struct MockError: Error {}
         
-        let challenge = QueuedArcGISChallenge(host: "host.com") { _ in
+        let challenge = QueuedTokenChallenge(host: "host.com") { _ in
             throw MockError()
         }
         challenge.resume(with: .init(username: "user1", password: "1234"))
@@ -45,7 +45,7 @@ class QueuedArcGISChallengeTests: XCTestCase {
     }
     
     func testCancel() async {
-        let challenge = QueuedArcGISChallenge(host: "host.com") { _ in
+        let challenge = QueuedTokenChallenge(host: "host.com") { _ in
             fatalError()
         }
         challenge.cancel()
