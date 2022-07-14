@@ -14,6 +14,12 @@
 ***REMOVED***
 ***REMOVED***
 
+***REMOVED***/ A value that contains a username and password pair.
+struct LoginCredential {
+***REMOVED***let username: String
+***REMOVED***let password: String
+***REMOVED***
+
 ***REMOVED***/ A type that provides the business logic for a view that prompts the user to login with a
 ***REMOVED***/ username and password.
 final class UsernamePasswordViewModel: ObservableObject {
@@ -32,7 +38,7 @@ final class UsernamePasswordViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED******REMOVED***/ The action to perform when the user signs in. This is a closure that takes a username
 ***REMOVED******REMOVED***/ and password, respectively.
-***REMOVED***var signInAction: (String, String) -> Void
+***REMOVED***var signInAction: (LoginCredential) -> Void
 ***REMOVED******REMOVED***/ The action to perform when the user cancels.
 ***REMOVED***var cancelAction: () -> Void
 ***REMOVED***
@@ -44,7 +50,7 @@ final class UsernamePasswordViewModel: ObservableObject {
 ***REMOVED******REMOVED***/   - cancelAction: The action to perform when the user cancels.
 ***REMOVED***init(
 ***REMOVED******REMOVED***challengingHost: String,
-***REMOVED******REMOVED***onSignIn signInAction: @escaping (String, String) -> Void,
+***REMOVED******REMOVED***onSignIn signInAction: @escaping (LoginCredential) -> Void,
 ***REMOVED******REMOVED***onCancel cancelAction: @escaping () -> Void
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.challengingHost = challengingHost
@@ -62,7 +68,7 @@ final class UsernamePasswordViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ Attempts to log in with a username and password.
 ***REMOVED***func signIn() {
 ***REMOVED******REMOVED***formEnabled = false
-***REMOVED******REMOVED***signInAction(username, password)
+***REMOVED******REMOVED***signInAction(LoginCredential(username: username, password: password))
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Cancels the challenge.
@@ -95,8 +101,12 @@ extension UsernamePasswordViewModifier {
 ***REMOVED******REMOVED***self.init(
 ***REMOVED******REMOVED******REMOVED***viewModel: UsernamePasswordViewModel(
 ***REMOVED******REMOVED******REMOVED******REMOVED***challengingHost: challenge.host,
-***REMOVED******REMOVED******REMOVED******REMOVED***onSignIn: { username, password in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***challenge.resume(with: .useCredential(.login(username: username, password: password)))
+***REMOVED******REMOVED******REMOVED******REMOVED***onSignIn: { loginCredential in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***challenge.resume(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***with: .useCredential(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.login(username: loginCredential.username, password: loginCredential.password)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***,
 ***REMOVED******REMOVED******REMOVED******REMOVED***onCancel: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***challenge.resume(with: .cancelAuthenticationChallenge)
@@ -110,8 +120,8 @@ extension UsernamePasswordViewModifier {
 ***REMOVED******REMOVED***self.init(
 ***REMOVED******REMOVED******REMOVED***viewModel: UsernamePasswordViewModel(
 ***REMOVED******REMOVED******REMOVED******REMOVED***challengingHost: challenge.host,
-***REMOVED******REMOVED******REMOVED******REMOVED***onSignIn: { username, password in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***challenge.resume(username: username, password: password)
+***REMOVED******REMOVED******REMOVED******REMOVED***onSignIn: { loginCredential in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***challenge.resume(loginCredential: loginCredential)
 ***REMOVED******REMOVED******REMOVED***,
 ***REMOVED******REMOVED******REMOVED******REMOVED***onCancel: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***challenge.cancel()
@@ -145,6 +155,7 @@ private struct UsernamePasswordView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***VStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***person
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("You must sign in to access '\(viewModel.challengingHost)'")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.multilineTextAlignment(.center)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fixedSize(horizontal: false, vertical: true)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity)
