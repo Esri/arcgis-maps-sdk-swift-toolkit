@@ -16,7 +16,7 @@ import ArcGIS
 
 /// An object that represents an ArcGIS token authentication challenge in the queue of challenges.
 @MainActor
-final class QueuedTokenChallenge: QueuedChallenge {
+final class QueuedTokenChallenge: QueuedArcGISChallenge {
     /// The host that prompted the challenge.
     let host: String
     
