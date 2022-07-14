@@ -51,6 +51,11 @@ final class QueuedArcGISChallenge: QueuedChallenge {
         }
     }
     
+    /// The host that prompted the challenge.
+    var host: String {
+        arcGISChallenge.request.url?.host ?? ""
+    }
+    
     public func complete() async {
         _ = await result
     }

@@ -113,14 +113,20 @@ extension UsernamePasswordViewModifier {
                 onSignIn: { username, password in
                     Task {
                         challenge.resume(
-                            with: .success(.useCredential(
-                                try await .token(challenge: challenge.arcGISChallenge, username: username, password: password)
-                            ))
+                            with: await Result {
+                                .useCredential(
+                                    try await .token(
+                                        challenge: challenge.arcGISChallenge,
+                                        username: username,
+                                        password: password
+                                    )
+                                )
+                            }
                         )
                     }
                 },
                 onCancel: {
-                    challenge.resume(with: .cancelAuthenticationChallenge)
+                    challenge.resume(with: .success(.cancelAuthenticationChallenge))
                 }
             )
         )
