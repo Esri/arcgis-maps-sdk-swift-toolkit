@@ -51,6 +51,9 @@ private struct AuthenticatorModifier: ViewModifier {
     @ViewBuilder
     func body(content: Content) -> some View {
         switch authenticator.currentChallenge {
+        case let challenge as QueuedArcGISChallenge:
+            //content.modifier(UsernamePasswordViewModifier()
+            fatalError()
         case let challenge as QueuedNetworkChallenge:
             switch challenge.kind {
             case .serverTrust:

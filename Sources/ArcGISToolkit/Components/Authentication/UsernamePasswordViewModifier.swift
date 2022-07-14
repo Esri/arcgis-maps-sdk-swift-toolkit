@@ -104,6 +104,27 @@ extension UsernamePasswordViewModifier {
             )
         )
     }
+    
+    /// Creates a `UsernamePasswordViewModifier` with a queued ArcGIS challenge.
+    init(challenge: QueuedArcGISChallenge) {
+        self.init(
+            viewModel: UsernamePasswordViewModel(
+                challengingHost: challenge.host,
+                onSignIn: { username, password in
+                    Task {
+                        challenge.resume(
+                            with: .success(.useCredential(
+                                try await .token(challenge: challenge.arcGISChallenge, username: username, password: password)
+                            ))
+                        )
+                    }
+                },
+                onCancel: {
+                    challenge.resume(with: .cancelAuthenticationChallenge)
+                }
+            )
+        )
+    }
 }
 
 /// A view that prompts a user to login with a username and password.
