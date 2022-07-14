@@ -40,7 +40,6 @@ struct TrustHostViewModifier: ViewModifier {
             }
             .alert("Certificate Trust Warning", isPresented: $isPresented, presenting: challenge) { _ in
                 Button("Dangerous: Allow Connection", role: .destructive) {
-                    isPresented = false
                     challenge.resume(with: .useCredential(.serverTrust))
                 }
                 Button("Cancel", role: .cancel) {
