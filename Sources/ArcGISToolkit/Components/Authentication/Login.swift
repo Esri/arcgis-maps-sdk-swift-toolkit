@@ -24,6 +24,7 @@ struct LoginCredential: Hashable {
 
 ***REMOVED***/ A type that provides the business logic for a view that prompts the user to login with a
 ***REMOVED***/ username and password.
+@MainActor
 final class LoginViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ The username.
 ***REMOVED***@Published var username = "" {
@@ -99,6 +100,7 @@ struct LoginViewModifier: ViewModifier {
 
 extension LoginViewModifier {
 ***REMOVED******REMOVED***/ Creates a `UsernamePasswordViewModifier` with a queued network challenge.
+***REMOVED***@MainActor
 ***REMOVED***init(challenge: QueuedNetworkChallenge) {
 ***REMOVED******REMOVED***self.init(
 ***REMOVED******REMOVED******REMOVED***viewModel: LoginViewModel(
@@ -118,6 +120,7 @@ extension LoginViewModifier {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a `UsernamePasswordViewModifier` with a queued ArcGIS challenge.
+***REMOVED***@MainActor
 ***REMOVED***init(challenge: QueuedArcGISChallenge) {
 ***REMOVED******REMOVED***self.init(
 ***REMOVED******REMOVED******REMOVED***viewModel: LoginViewModel(

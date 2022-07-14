@@ -14,8 +14,8 @@
 import Foundation
 ***REMOVED***
 
-***REMOVED*** TODO: should be actor?
 ***REMOVED***/ An object that represents an ArcGIS authentication challenge in the queue of challenges.
+@MainActor
 final class QueuedArcGISChallenge: QueuedChallenge {
 ***REMOVED******REMOVED***/ The host that prompted the challenge.
 ***REMOVED***let host: String
