@@ -15,6 +15,7 @@ import Foundation
 import ArcGIS
 
 /// An object that represents a network authentication challenge in the queue of challenges.
+@MainActor
 final class QueuedNetworkChallenge: QueuedChallenge {
     /// The host that prompted the challenge.
     let host: String

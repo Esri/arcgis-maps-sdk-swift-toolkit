@@ -15,6 +15,7 @@ import SwiftUI
 import XCTest
 @testable import ArcGISToolkit
 
+@MainActor
 class QueuedArcGISChallengeTests: XCTestCase {
     func testInit() {
         let challenge = QueuedArcGISChallenge(host: "host.com") { _ in
