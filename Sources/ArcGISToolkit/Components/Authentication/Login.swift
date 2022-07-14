@@ -15,7 +15,7 @@ import SwiftUI
 import ArcGIS
 
 /// A value that contains a username and password pair.
-struct LoginCredential {
+struct LoginCredential: Hashable {
     /// The username.
     let username: String
     /// The password.
@@ -123,7 +123,7 @@ extension LoginViewModifier {
             viewModel: LoginViewModel(
                 challengingHost: challenge.host,
                 onSignIn: { loginCredential in
-                    challenge.resume(loginCredential: loginCredential)
+                    challenge.resume(with: loginCredential)
                 },
                 onCancel: {
                     challenge.cancel()
