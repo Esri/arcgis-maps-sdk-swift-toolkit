@@ -17,21 +17,54 @@ import XCTest
 
 class QueuedArcGISChallengeTests: XCTestCase {
 ***REMOVED***func testInit() {
-***REMOVED******REMOVED******REMOVED***let challenge = QueuedArcGISChallenge(arcGISChallenge: ArcGISAuthenticationChallenge())
-***REMOVED******REMOVED******REMOVED***XCTAssertEqual(challenge.host, "host.com")
-***REMOVED******REMOVED******REMOVED***XCTAssertEqual(challenge.kind, .serverTrust)
+***REMOVED******REMOVED***let challenge = QueuedArcGISChallenge(host: "host.com") { _ in
+***REMOVED******REMOVED******REMOVED***fatalError()
 ***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***func testResumeAndComplete() async {
-***REMOVED******REMOVED******REMOVED***let challenge = QueuedNetworkChallenge(host: "host.com", kind: .serverTrust)
-***REMOVED******REMOVED******REMOVED***challenge.resume(with: .useCredential(.serverTrust))
-***REMOVED******REMOVED******REMOVED***let disposition = await challenge.disposition
-***REMOVED******REMOVED******REMOVED***XCTAssertEqual(disposition, .useCredential(.serverTrust))
-***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED*** Make sure multiple simultaneous listeners can await the completion.
-***REMOVED******REMOVED******REMOVED***let t1 = Task { await challenge.complete() ***REMOVED***
-***REMOVED******REMOVED******REMOVED***let t2 = Task { await challenge.complete() ***REMOVED***
-***REMOVED******REMOVED******REMOVED***await t1.value
-***REMOVED******REMOVED******REMOVED***await t2.value
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertEqual(challenge.host, "host.com")
+***REMOVED******REMOVED***XCTAssertNotNil(challenge.tokenCredentialProvider)
+***REMOVED***
+***REMOVED***
+***REMOVED***func testResumeWithLogin() async {
+***REMOVED******REMOVED***struct MockError: Error {***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let challenge = QueuedArcGISChallenge(host: "host.com") { _ in
+***REMOVED******REMOVED******REMOVED***throw MockError()
+***REMOVED***
+***REMOVED******REMOVED***challenge.resume(with: .init(username: "user1", password: "1234"))
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let result = await challenge.result
+***REMOVED******REMOVED***XCTAssertTrue(result.error is MockError)
+***REMOVED***
+***REMOVED***
+***REMOVED***func testCancel() async {
+***REMOVED******REMOVED***let challenge = QueuedArcGISChallenge(host: "host.com") { _ in
+***REMOVED******REMOVED******REMOVED***fatalError()
+***REMOVED***
+***REMOVED******REMOVED***challenge.cancel()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let result = await challenge.result
+***REMOVED******REMOVED***XCTAssertEqual(result.success, .cancelAuthenticationChallenge)
+***REMOVED***
+***REMOVED***
+
+private extension Result {
+***REMOVED******REMOVED***/ The error that is encapsulated in the failure case when this result is a failure.
+***REMOVED***var error: Error? {
+***REMOVED******REMOVED***switch self {
+***REMOVED******REMOVED***case .failure(let error):
+***REMOVED******REMOVED******REMOVED***return error
+***REMOVED******REMOVED***case .success:
+***REMOVED******REMOVED******REMOVED***return nil
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***var success: Success? {
+***REMOVED******REMOVED***switch self {
+***REMOVED******REMOVED***case .failure:
+***REMOVED******REMOVED******REMOVED***return nil
+***REMOVED******REMOVED***case .success(let value):
+***REMOVED******REMOVED******REMOVED***return value
+***REMOVED***
+***REMOVED***
 ***REMOVED***

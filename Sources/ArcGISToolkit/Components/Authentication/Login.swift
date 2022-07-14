@@ -15,7 +15,7 @@
 ***REMOVED***
 
 ***REMOVED***/ A value that contains a username and password pair.
-struct LoginCredential {
+struct LoginCredential: Hashable {
 ***REMOVED******REMOVED***/ The username.
 ***REMOVED***let username: String
 ***REMOVED******REMOVED***/ The password.
@@ -123,7 +123,7 @@ extension LoginViewModifier {
 ***REMOVED******REMOVED******REMOVED***viewModel: LoginViewModel(
 ***REMOVED******REMOVED******REMOVED******REMOVED***challengingHost: challenge.host,
 ***REMOVED******REMOVED******REMOVED******REMOVED***onSignIn: { loginCredential in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***challenge.resume(loginCredential: loginCredential)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***challenge.resume(with: loginCredential)
 ***REMOVED******REMOVED******REMOVED***,
 ***REMOVED******REMOVED******REMOVED******REMOVED***onCancel: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***challenge.cancel()

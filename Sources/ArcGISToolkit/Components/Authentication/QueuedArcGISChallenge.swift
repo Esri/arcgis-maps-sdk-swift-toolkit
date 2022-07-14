@@ -24,10 +24,21 @@ final class QueuedArcGISChallenge: QueuedChallenge {
 ***REMOVED***let tokenCredentialProvider: (LoginCredential) async throws -> ArcGISCredential
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a `QueuedArcGISChallenge`.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - host: The host that prompted the challenge.
+***REMOVED******REMOVED***/   - tokenCredentialProvider: A closure that provides a token credential from a username and password.
+***REMOVED***init(
+***REMOVED******REMOVED***host: String,
+***REMOVED******REMOVED***tokenCredentialProvider: @escaping (LoginCredential) async throws -> ArcGISCredential
+***REMOVED***) {
+***REMOVED******REMOVED***self.host = host
+***REMOVED******REMOVED***self.tokenCredentialProvider = tokenCredentialProvider
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Creates a `QueuedArcGISChallenge`.
 ***REMOVED******REMOVED***/ - Parameter arcGISChallenge: The associated ArcGIS authentication challenge.
-***REMOVED***init(arcGISChallenge: ArcGISAuthenticationChallenge) {
-***REMOVED******REMOVED***host = arcGISChallenge.request.url?.host ?? ""
-***REMOVED******REMOVED***tokenCredentialProvider = { loginCredential in
+***REMOVED***convenience init(arcGISChallenge: ArcGISAuthenticationChallenge) {
+***REMOVED******REMOVED***self.init(host: arcGISChallenge.request.url?.host ?? "") { loginCredential in
 ***REMOVED******REMOVED******REMOVED***try await .token(
 ***REMOVED******REMOVED******REMOVED******REMOVED***challenge: arcGISChallenge,
 ***REMOVED******REMOVED******REMOVED******REMOVED***username: loginCredential.username,
@@ -39,7 +50,7 @@ final class QueuedArcGISChallenge: QueuedChallenge {
 ***REMOVED******REMOVED***/ Resumes the challenge with a username and password.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - loginCredential: The username and password.
-***REMOVED***func resume(loginCredential: LoginCredential) {
+***REMOVED***func resume(with loginCredential: LoginCredential) {
 ***REMOVED******REMOVED***Task {
 ***REMOVED******REMOVED******REMOVED***guard _result == nil else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***_result = await Result {
