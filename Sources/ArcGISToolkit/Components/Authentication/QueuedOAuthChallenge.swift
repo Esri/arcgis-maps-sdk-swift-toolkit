@@ -14,13 +14,16 @@
 import Foundation
 ***REMOVED***
 
-***REMOVED***/ A type that represents a challenge in the queue of authentication challenges.
-protocol QueuedChallenge: AnyObject {
-***REMOVED******REMOVED***/ Waits for the challenge to complete.
-***REMOVED***func complete() async
+***REMOVED***/ An object that represents an ArcGIS OAuth authentication challenge in the queue of challenges.
+@MainActor
+final class QueuedOAuthChallenge: QueuedArcGISChallenge {
+***REMOVED***init() {***REMOVED***
 ***REMOVED***
-
-protocol QueuedArcGISChallenge: QueuedChallenge {
-***REMOVED******REMOVED***/ The result of the challenge.
-***REMOVED***var result: Result<ArcGISAuthenticationChallenge.Disposition, Error> { get async ***REMOVED***
+***REMOVED***public func complete() async {
+***REMOVED******REMOVED***fatalError()
+***REMOVED***
+***REMOVED***
+***REMOVED***var result: Result<ArcGISAuthenticationChallenge.Disposition, Error> {
+***REMOVED******REMOVED***get async { fatalError() ***REMOVED***
+***REMOVED***
 ***REMOVED***

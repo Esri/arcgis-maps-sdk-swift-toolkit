@@ -98,27 +98,14 @@ public final class Authenticator: ObservableObject {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** A yield here helps alleviate the already presenting bug.
 ***REMOVED******REMOVED******REMOVED***await Task.yield()
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***if let queuedArcGISChallenge = queuedChallenge as? QueuedTokenChallenge,
-***REMOVED******REMOVED******REMOVED***   let url = queuedArcGISChallenge.arcGISChallenge.request.url,
-***REMOVED******REMOVED******REMOVED***   let config = oAuthConfigurations.first(where: { $0.canBeUsed(for: url) ***REMOVED***) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** For an OAuth challenge, we create the credential and resume.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Creating the OAuth credential will present the OAuth login view.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** We don't set the current challenge because this one is handled internally.
-***REMOVED******REMOVED******REMOVED******REMOVED***queuedArcGISChallenge.resume(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***with: await Result {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.useCredential(try await .oauth(configuration: config))
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Set the current challenge, this should present the appropriate view.
-***REMOVED******REMOVED******REMOVED******REMOVED***currentChallenge = queuedChallenge
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Wait for the queued challenge to finish.
-***REMOVED******REMOVED******REMOVED******REMOVED***await queuedChallenge.complete()
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Reset the crrent challenge to `nil`, that will dismiss the view.
-***REMOVED******REMOVED******REMOVED******REMOVED***currentChallenge = nil
-***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED*** Set the current challenge, this should present the appropriate view.
+***REMOVED******REMOVED******REMOVED***currentChallenge = queuedChallenge
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED*** Wait for the queued challenge to finish.
+***REMOVED******REMOVED******REMOVED***await queuedChallenge.complete()
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED*** Reset the crrent challenge to `nil`, that will dismiss the view.
+***REMOVED******REMOVED******REMOVED***currentChallenge = nil
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -142,8 +129,17 @@ extension Authenticator: AuthenticationChallengeHandler {
 ***REMOVED***public func handleArcGISChallenge(
 ***REMOVED******REMOVED***_ challenge: ArcGISAuthenticationChallenge
 ***REMOVED***) async throws -> ArcGISAuthenticationChallenge.Disposition {
+***REMOVED******REMOVED***let queuedChallenge: QueuedArcGISChallenge
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Create the correct challenge type.
+***REMOVED******REMOVED***if let url = challenge.request.url,
+***REMOVED******REMOVED***   let config = oAuthConfigurations.first(where: { $0.canBeUsed(for: url) ***REMOVED***) {
+***REMOVED******REMOVED******REMOVED***queuedChallenge = QueuedOAuthChallenge()
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***queuedChallenge = QueuedTokenChallenge(arcGISChallenge: challenge)
+***REMOVED***
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Queue up the challenge.
-***REMOVED******REMOVED***let queuedChallenge = QueuedTokenChallenge(arcGISChallenge: challenge)
 ***REMOVED******REMOVED***subject.send(queuedChallenge)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Wait for it to complete and return the resulting disposition.

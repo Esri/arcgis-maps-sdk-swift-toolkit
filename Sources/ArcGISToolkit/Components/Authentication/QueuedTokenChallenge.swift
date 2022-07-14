@@ -16,7 +16,7 @@ import Foundation
 
 ***REMOVED***/ An object that represents an ArcGIS token authentication challenge in the queue of challenges.
 @MainActor
-final class QueuedTokenChallenge: QueuedChallenge {
+final class QueuedTokenChallenge: QueuedArcGISChallenge {
 ***REMOVED******REMOVED***/ The host that prompted the challenge.
 ***REMOVED***let host: String
 ***REMOVED***
