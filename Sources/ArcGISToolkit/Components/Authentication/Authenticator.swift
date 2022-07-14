@@ -89,7 +89,9 @@ public final class Authenticator: ObservableObject {
         // We have to set new sessions for URLCredential storage to respect the removed credentials
         // right away.
         ArcGISRuntimeEnvironment.urlSession = ArcGISURLSession(configuration: .default)
-        ArcGISRuntimeEnvironment.backgroundURLSession = ArcGISURLSession(configuration: .background(withIdentifier: "com.esri.arcgis.toolkit." + UUID().uuidString))
+        ArcGISRuntimeEnvironment.backgroundURLSession = ArcGISURLSession(
+            configuration: .background(withIdentifier: "com.esri.arcgis.toolkit." + UUID().uuidString)
+        )
     }
     
     /// Observes the challenge queue and sets the current challenge.
@@ -134,7 +136,9 @@ extension Authenticator: AuthenticationChallengeHandler {
         // Create the correct challenge type.
         if let url = challenge.request.url,
            let config = oAuthConfigurations.first(where: { $0.canBeUsed(for: url) }) {
-            queuedChallenge = QueuedOAuthChallenge()
+            let oAuthChallenge = QueuedOAuthChallenge(configuration: config)
+            queuedChallenge = oAuthChallenge
+            oAuthChallenge.presentPrompt()
         } else {
             queuedChallenge = QueuedTokenChallenge(arcGISChallenge: challenge)
         }
