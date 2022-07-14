@@ -36,6 +36,12 @@ class QueuedArcGISChallengeTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let result = await challenge.result
 ***REMOVED******REMOVED***XCTAssertTrue(result.error is MockError)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Make sure multiple simultaneous listeners can await the completion.
+***REMOVED******REMOVED***let t1 = Task { await challenge.complete() ***REMOVED***
+***REMOVED******REMOVED***let t2 = Task { await challenge.complete() ***REMOVED***
+***REMOVED******REMOVED***await t1.value
+***REMOVED******REMOVED***await t2.value
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func testCancel() async {
@@ -45,7 +51,7 @@ class QueuedArcGISChallengeTests: XCTestCase {
 ***REMOVED******REMOVED***challenge.cancel()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let result = await challenge.result
-***REMOVED******REMOVED***XCTAssertEqual(result.success, .cancelAuthenticationChallenge)
+***REMOVED******REMOVED***XCTAssertEqual(result.value, .cancelAuthenticationChallenge)
 ***REMOVED***
 ***REMOVED***
 
@@ -60,7 +66,8 @@ private extension Result {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED***var success: Success? {
+***REMOVED******REMOVED***/ The success value that is encapsulated in the success case when this result is a success.
+***REMOVED***var value: Success? {
 ***REMOVED******REMOVED***switch self {
 ***REMOVED******REMOVED***case .failure:
 ***REMOVED******REMOVED******REMOVED***return nil
