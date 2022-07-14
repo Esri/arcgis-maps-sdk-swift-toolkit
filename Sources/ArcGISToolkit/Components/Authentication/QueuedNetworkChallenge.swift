@@ -88,10 +88,8 @@ extension QueuedNetworkChallenge.Kind {
             self = .serverTrust
         case .ntlm, .basic, .digest:
             self = .login
-        case .pki:
+        case .clientCertificate:
             self = .certificate
-        case .htmlForm, .negotiate:
-            return nil
         }
     }
 }
