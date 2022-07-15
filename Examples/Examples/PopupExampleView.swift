@@ -82,7 +82,6 @@ struct PopupExampleView: View {
                                     .esriBorder()
                             } else if let identifyResult = identifyResult {
                                 IdentifyResultView(identifyResult: identifyResult)
-                                    .esriBorder()
                             }
                         }
                         .frame(maxWidth: 400)
@@ -93,6 +92,7 @@ struct PopupExampleView: View {
     }
 }
 
+/// A view displaying the results of an identify operation.
 struct IdentifyResultView: View {
     var identifyResult: Result<[IdentifyLayerResult], Error>
     
@@ -102,6 +102,7 @@ struct IdentifyResultView: View {
             // Get the first popup from the first layer result.
             if let popup = identifyLayerResults.first?.popups.first {
                 PopupView(popup: popup)
+                    .esriBorder()
             }
         case .failure(let error):
             Text("Identify error: \(error.localizedDescription).")
