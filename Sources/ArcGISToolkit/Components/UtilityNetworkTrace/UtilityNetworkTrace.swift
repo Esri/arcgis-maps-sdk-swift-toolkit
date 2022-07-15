@@ -152,13 +152,13 @@ public struct UtilityNetworkTrace: View {
             Text("No configurations available")
         } else {
             ForEach(viewModel.configurations) { configuration in
-                Text(configuration.name)
-                    .lineLimit(1)
-                    .listRowBackground(configuration == viewModel.pendingTrace.configuration ? Color.secondary.opacity(0.5) : nil)
-                    .onTapGesture {
-                        viewModel.setPendingTrace(configuration: configuration)
-                        currentActivity = .creatingTrace(nil)
-                    }
+                Button {
+                    viewModel.setPendingTrace(configuration: configuration)
+                    currentActivity = .creatingTrace(nil)
+                } label: {
+                    Text(configuration.name)
+                }
+                .listRowBackground(configuration == viewModel.pendingTrace.configuration ? Color.secondary.opacity(0.5) : nil)
             }
         }
     }
