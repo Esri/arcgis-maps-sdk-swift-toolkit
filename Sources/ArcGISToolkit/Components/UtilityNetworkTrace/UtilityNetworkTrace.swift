@@ -396,7 +396,7 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED***/ - Returns: A Boolean value indicating whether the provided activity is the currently focused
 ***REMOVED******REMOVED***/ creation activity.
 ***REMOVED***private func isFocused(traceCreationActivity: TraceCreationActivity) -> Bool {
-***REMOVED******REMOVED***if case let .creatingTrace(activity) = currentActivity{
+***REMOVED******REMOVED***if case let .creatingTrace(activity) = currentActivity {
 ***REMOVED******REMOVED******REMOVED***return traceCreationActivity == activity
 ***REMOVED***
 ***REMOVED******REMOVED***return false
