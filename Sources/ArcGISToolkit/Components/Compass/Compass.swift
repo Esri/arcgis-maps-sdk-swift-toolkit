@@ -26,7 +26,7 @@ public struct Compass: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the compass should hide based on the
 ***REMOVED******REMOVED***/  current heading and whether the compass automatically hides.
-***REMOVED***private var shouldHide: Bool { heading.isZero && autoHide ***REMOVED***
+***REMOVED***internal var shouldHide: Bool { heading.isZero && autoHide ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The heading of the compass in degrees.
 ***REMOVED***@Binding private var heading: Double
