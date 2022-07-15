@@ -16,8 +16,7 @@ import ArcGISToolkit
 import ArcGIS
 
 struct FloatingPanelExampleView: View {
-    @Environment(\.horizontalSizeClass)
-    private var horizontalSizeClass: UserInterfaceSizeClass?
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     
     @StateObject private var map = Map(basemapStyle: .arcGISImagery)
     

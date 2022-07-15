@@ -28,8 +28,7 @@ public struct FloatingPanel<Content>: View where Content: View {
     // to have it be a view modifier, similar to how SwiftUI doesn't have a
     // SheetView, but a modifier that presents a sheet.
     
-    @Environment(\.horizontalSizeClass)
-    private var horizontalSizeClass: UserInterfaceSizeClass?
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     
     /// The content shown in the floating panel.
     let content: Content
