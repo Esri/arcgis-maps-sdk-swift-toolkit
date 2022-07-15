@@ -75,7 +75,7 @@ import SwiftUI
         Task {
             try? await map.load()
             network = map.utilityNetworks.first
-            await loadNamedTraceConfigurations(map)
+            configurations = await utilityNamedTraceConfigurations(from: map)
         }
     }
     
@@ -257,11 +257,11 @@ import SwiftUI
         _ = completedTraces[index].startingPoints.map { $0.graphic.isSelected = isSelected }
     }
     
-    /// Loads the named trace configurations in the network on the provided map.
+    /// Returns the named trace configurations in the network on the provided map.
     /// - Parameter map: A web map containing one or more utility networks.
-    private func loadNamedTraceConfigurations(_ map: Map) async {
-        guard let network = network else { return }
-        configurations = (try? await map.getNamedTraceConfigurations(from: network)) ?? []
+    private func utilityNamedTraceConfigurations(from map: Map) async -> [UtilityNamedTraceConfiguration] {
+        guard let network = network else { return [] }
+        return (try? await map.getNamedTraceConfigurations(from: network)) ?? []
     }
 }
 
