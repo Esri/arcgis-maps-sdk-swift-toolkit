@@ -96,7 +96,7 @@ import Foundation
 ***REMOVED******REMOVED******REMOVED******REMOVED***print(error.localizedDescription)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***network = map.utilityNetworks.first
-***REMOVED******REMOVED******REMOVED***loadNamedTraceConfigurations()
+***REMOVED******REMOVED******REMOVED***configurations = await utilityNamedTraceConfigurations(from: map)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -150,7 +150,9 @@ import Foundation
 ***REMOVED***func setNetwork(_ network: UtilityNetwork) {
 ***REMOVED******REMOVED***self.network = network
 ***REMOVED******REMOVED***pendingTrace.startingPoints.removeAll()
-***REMOVED******REMOVED***loadNamedTraceConfigurations()
+***REMOVED******REMOVED***Task {
+***REMOVED******REMOVED******REMOVED***configurations = await utilityNamedTraceConfigurations(from: map)
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Updates the pending trace's configuration and name, if applicable.
@@ -389,13 +391,11 @@ import Foundation
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Loads the named trace configurations in the network.
-***REMOVED***private func loadNamedTraceConfigurations() {
-***REMOVED******REMOVED***guard let network = network else { return ***REMOVED***
-***REMOVED******REMOVED***Task {
-***REMOVED******REMOVED******REMOVED***configurations = (try? await map.getNamedTraceConfigurations(
-***REMOVED******REMOVED******REMOVED******REMOVED***from: network
-***REMOVED******REMOVED******REMOVED***)) ?? []
-***REMOVED***
+***REMOVED******REMOVED***/ Returns the named trace configurations in the network on the provided map.
+***REMOVED******REMOVED***/ - Parameter map: A web map containing one or more utility networks.
+***REMOVED***private func utilityNamedTraceConfigurations(from map: Map) async -> [UtilityNamedTraceConfiguration] {
+***REMOVED******REMOVED***guard let network = network else { return [] ***REMOVED***
+***REMOVED******REMOVED***return (try? await map.getNamedTraceConfigurations(from: network)) ?? []
 ***REMOVED***
 ***REMOVED***
 
