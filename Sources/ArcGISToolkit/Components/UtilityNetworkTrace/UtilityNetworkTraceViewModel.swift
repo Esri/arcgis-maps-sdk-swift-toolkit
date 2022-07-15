@@ -172,7 +172,7 @@ import Foundation
 ***REMOVED******REMOVED******REMOVED***  let network = network else { return ***REMOVED***
 ***REMOVED******REMOVED***let params = UtilityTraceParameters(
 ***REMOVED******REMOVED******REMOVED***namedTraceConfiguration: config,
-***REMOVED******REMOVED******REMOVED***startingLocations: pendingTrace.startingPoints.compactMap{ $0.utilityElement ***REMOVED***
+***REMOVED******REMOVED******REMOVED***startingLocations: pendingTrace.startingPoints.compactMap { $0.utilityElement ***REMOVED***
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***Task {
 ***REMOVED******REMOVED******REMOVED***let traceResults = try await network.trace(traceParameters: params)
