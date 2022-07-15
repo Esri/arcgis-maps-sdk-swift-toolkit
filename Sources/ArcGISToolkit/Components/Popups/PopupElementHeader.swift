@@ -14,6 +14,7 @@
 import SwiftUI
 import ArcGIS
 
+/// A view dispaying a title and description of a `PopupElement`.
 struct PopupElementHeader: View {
     var title: String
     var description: String

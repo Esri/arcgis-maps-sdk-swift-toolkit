@@ -43,6 +43,7 @@ public struct PopupView: View {
                         Text("Evaluating popoup expressions...")
                         ProgressView()
                     }
+                    .frame(maxWidth: .infinity)
                 } else if isPopupEvaluated! {
                     popupElementScrollView(popup: popup)
                 } else {

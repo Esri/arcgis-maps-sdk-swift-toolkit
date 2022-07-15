@@ -20,30 +20,33 @@ struct FieldsPopupElementView: View {
     /// - Parameter popupElement: The `FieldsPopupElement`.
     init(popupElement: FieldsPopupElement) {
         self.popupElement = popupElement
-        self.fields = zip(popupElement.labels, popupElement.formattedValues).map {
+        self.displayFields = zip(popupElement.labels, popupElement.formattedValues).map {
             DisplayField(label: $0, formattedValue: $1)
         }
     }
-
+    
     /// The `PopupElement` to display.
     private var popupElement: FieldsPopupElement
-    private let fields: [DisplayField]
-
+    
+    /// The labels and values to display, as an array of `DisplayField`s.
+    private let displayFields: [DisplayField]
+    
     var body: some View {
         PopupElementHeader(
             title: popupElement.title,
             description: popupElement.description
         )
-        FieldsList(fields: fields)
+        FieldsGrid(fields: displayFields)
             .font(.footnote)
     }
     
-    struct FieldsList: View {
+    /// A view displaying a grid of labels and values.
+    struct FieldsGrid: View {
         let fields: [DisplayField]
         
-        var columns: [GridItem] = Array(repeating: .init(.flexible()), count: 2)
+        var columns: [GridItem] = Array(repeating: .init(.flexible(), spacing: 0), count: 2)
         var body: some View {
-            LazyVGrid(columns: columns) {
+            LazyVGrid(columns: columns, spacing: 0) {
                 ForEach(Array(fields.enumerated()), id: \.element) { index, element in
                     GridCell(label: element.label, rowIndex: index)
                     GridCell(label: element.formattedValue, rowIndex: index)
@@ -52,35 +55,34 @@ struct FieldsPopupElementView: View {
         }
     }
     
+    /// A view for dispaying text in a grid.
     struct GridCell: View {
+        /// The String to display.
         let label: String
+        /// The index of the row the view is in.
         let rowIndex: Int
+        /// The URL off the label if the label is an "http" string.
         var url: URL? {
             label.lowercased().starts(with: "http") ? URL(string: label) : nil
         }
         
         var body: some View {
-            Group {
-                HStack {
-                    Text(url != nil ? "View" : label)
-                        .underline(url != nil)
-                        .lineLimit(1)
-                        .frame(maxWidth: .greatestFiniteMagnitude, alignment: .leading)
-                        .foregroundColor(url != nil ? Color(UIColor.link) : .primary)
-                        .onTapGesture {
-                            if let url = url {
-                                UIApplication.shared.open(url)
-                            }
-                        }
-                        
+            Text(url != nil ? "View" : label)
+                .underline(url != nil)
+                .foregroundColor(url != nil ? Color(UIColor.link) : .primary)
+                .lineLimit(1)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(6)
+                .onTapGesture {
+                    if let url = url {
+                        UIApplication.shared.open(url)
+                    }
                 }
-                .padding([.leading, .trailing], 4)
-                .padding([.top, .bottom], 6)
-                .background(rowIndex % 2 != 1 ? Color.secondary: Color.clear)
-            }
+                .background(rowIndex % 2 != 1 ? Color.secondary.opacity(0.5) : Color.clear)
         }
     }
-
+    
+    /// A convenience type for displaying labels and values in a grid.
     struct DisplayField: Hashable {
         let label: String
         let formattedValue: String
