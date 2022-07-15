@@ -286,7 +286,7 @@ import SwiftUI
         
         let parameters = UtilityTraceParameters(
             namedTraceConfiguration: configuration,
-            startingLocations: pendingTrace.startingPoints.compactMap{ $0.utilityElement }
+            startingLocations: pendingTrace.startingPoints.compactMap { $0.utilityElement }
         )
         
         let traceResults: [UtilityTraceResult]
