@@ -286,7 +286,7 @@ import Foundation
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let parameters = UtilityTraceParameters(
 ***REMOVED******REMOVED******REMOVED***namedTraceConfiguration: configuration,
-***REMOVED******REMOVED******REMOVED***startingLocations: pendingTrace.startingPoints.compactMap{ $0.utilityElement ***REMOVED***
+***REMOVED******REMOVED******REMOVED***startingLocations: pendingTrace.startingPoints.compactMap { $0.utilityElement ***REMOVED***
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let traceResults: [UtilityTraceResult]
