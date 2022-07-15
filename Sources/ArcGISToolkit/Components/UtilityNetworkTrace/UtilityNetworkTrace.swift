@@ -15,12 +15,6 @@ import ArcGIS
 import SwiftUI
 
 public struct UtilityNetworkTrace: View {
-    @Environment(\.horizontalSizeClass)
-    private var horizontalSizeClass: UserInterfaceSizeClass?
-    
-    @Environment(\.verticalSizeClass)
-    private var verticalSizeClass: UserInterfaceSizeClass?
-    
     // MARK: Enums
     
     /// Activities users will perform while creating a new trace.
