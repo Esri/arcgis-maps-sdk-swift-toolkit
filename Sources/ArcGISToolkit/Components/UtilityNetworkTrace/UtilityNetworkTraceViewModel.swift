@@ -96,7 +96,7 @@ import SwiftUI
                 print(error.localizedDescription)
             }
             network = map.utilityNetworks.first
-            loadNamedTraceConfigurations()
+            configurations = await utilityNamedTraceConfigurations(from: map)
         }
     }
     
@@ -150,7 +150,9 @@ import SwiftUI
     func setNetwork(_ network: UtilityNetwork) {
         self.network = network
         pendingTrace.startingPoints.removeAll()
-        loadNamedTraceConfigurations()
+        Task {
+            configurations = await utilityNamedTraceConfigurations(from: map)
+        }
     }
     
     /// Updates the pending trace's configuration and name, if applicable.
@@ -389,13 +391,11 @@ import SwiftUI
     }
     
     /// Loads the named trace configurations in the network.
-    private func loadNamedTraceConfigurations() {
-        guard let network = network else { return }
-        Task {
-            configurations = (try? await map.getNamedTraceConfigurations(
-                from: network
-            )) ?? []
-        }
+    /// Returns the named trace configurations in the network on the provided map.
+    /// - Parameter map: A web map containing one or more utility networks.
+    private func utilityNamedTraceConfigurations(from map: Map) async -> [UtilityNamedTraceConfiguration] {
+        guard let network = network else { return [] }
+        return (try? await map.getNamedTraceConfigurations(from: network)) ?? []
     }
 }
 
