@@ -471,12 +471,12 @@ public struct UtilityNetworkTrace: View {
     ///   chosen.
     ///   - viewpoint: Allows the utility network trace tool to update the parent map view's viewpoint.
     public init(
-        _ graphicsOverlay: Binding<GraphicsOverlay>,
-        _ map: Map,
-        _ mapPoint: Binding<Point?>,
-        _ viewPoint: Binding<CGPoint?>,
-        _ mapViewProxy: Binding<MapViewProxy?>,
-        _ viewpoint: Binding<Viewpoint?>
+        graphicsOverlay: Binding<GraphicsOverlay>,
+        map: Map,
+        mapPoint: Binding<Point?>,
+        viewPoint: Binding<CGPoint?>,
+        mapViewProxy: Binding<MapViewProxy?>,
+        viewpoint: Binding<Viewpoint?>
     ) {
         _viewPoint = viewPoint
         _mapPoint = mapPoint
