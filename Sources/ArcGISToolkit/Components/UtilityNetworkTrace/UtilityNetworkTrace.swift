@@ -131,7 +131,14 @@ public struct UtilityNetworkTrace: View {
                 ForEach(assetGroup.sorted(by: { $0.key < $1.key }), id: \.key) { assetTypeGroup in
                     Section(assetTypeGroup.key) {
                         ForEach(assetTypeGroup.value) { element in
-                            Text(element.objectID.description)
+                            makeZoomToButton(text: element.objectID.description) {
+                                Task {
+                                    if let feature = await viewModel.getFeatureFor(element: element),
+                                       let geometry = feature.geometry {
+                                        viewpoint = Viewpoint(targetExtent: geometry.extent)
+                                    }
+                                }
+                            }
                         }
                     }
                 }
@@ -613,12 +620,16 @@ public struct UtilityNetworkTrace: View {
     }
     
     /// Returns a "Zoom To" button that performs a specified action when pressed.
+    /// - Parameter text: The custom text to be displayed within the button.
     /// - Parameter action: The action to be performed.
     /// - Returns: The configured button.
-    private func makeZoomToButton(_ action: @escaping () -> Void) -> some View {
+    private func makeZoomToButton(
+        text: String = "Zoom To",
+        _ action: @escaping () -> Void
+    ) -> some View {
         Button { action() } label: {
             Label {
-                Text("Zoom To")
+                Text(text)
             } icon: {
                 Image(systemName: "scope")
             }
