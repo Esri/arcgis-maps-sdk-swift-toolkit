@@ -51,7 +51,7 @@ extension UtilityNetworkTraceViewModel {
 ***REMOVED******REMOVED***let id = UUID()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ A user given name for the trace.
-***REMOVED******REMOVED***var name: String = ""
+***REMOVED******REMOVED***var name = ""
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ A collection of starting points for the trace.
 ***REMOVED******REMOVED***var startingPoints = [UtilityNetworkTraceStartingPoint]()
