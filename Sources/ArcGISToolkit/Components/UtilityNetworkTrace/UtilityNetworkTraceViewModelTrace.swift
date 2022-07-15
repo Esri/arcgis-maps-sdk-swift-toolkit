@@ -41,7 +41,7 @@ extension UtilityNetworkTraceViewModel {
         var graphics = [Graphic]()
         
         /// A user given name for the trace.
-        var name: String = ""
+        var name = ""
         
         /// A collection of starting points for the trace.
         var startingPoints = [UtilityNetworkTraceStartingPoint]()
