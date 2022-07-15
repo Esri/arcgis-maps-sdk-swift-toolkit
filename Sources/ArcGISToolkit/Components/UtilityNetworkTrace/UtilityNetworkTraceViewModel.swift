@@ -373,7 +373,7 @@ import Foundation
 ***REMOVED******REMOVED***completedTraces[traceIndex] = newValue
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED*** MARK: Private Items
+***REMOVED******REMOVED*** MARK: Private Methods
 ***REMOVED***
 ***REMOVED******REMOVED***/ Changes the selected state of the graphics for the completed trace at the provided index.
 ***REMOVED******REMOVED***/ - Parameters:
@@ -384,8 +384,8 @@ import Foundation
 ***REMOVED******REMOVED***to isSelected: Bool
 ***REMOVED***) {
 ***REMOVED******REMOVED***guard index >= 0, index <= completedTraces.count - 1 else { return ***REMOVED***
-***REMOVED******REMOVED***_ = completedTraces[index].graphics.map { $0.isSelected = isSelected***REMOVED***
-***REMOVED******REMOVED***_ = completedTraces[index].startingPoints.map { $0.graphic.isSelected = isSelected***REMOVED***
+***REMOVED******REMOVED***_ = completedTraces[index].graphics.map { $0.isSelected = isSelected ***REMOVED***
+***REMOVED******REMOVED***_ = completedTraces[index].startingPoints.map { $0.graphic.isSelected = isSelected ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Loads the named trace configurations in the network.
