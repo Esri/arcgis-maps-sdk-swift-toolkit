@@ -172,7 +172,7 @@ import SwiftUI
               let network = network else { return }
         let params = UtilityTraceParameters(
             namedTraceConfiguration: config,
-            startingLocations: pendingTrace.startingPoints.compactMap{ $0.utilityElement }
+            startingLocations: pendingTrace.startingPoints.compactMap { $0.utilityElement }
         )
         Task {
             let traceResults = try await network.trace(traceParameters: params)
