@@ -75,7 +75,7 @@ import Foundation
 ***REMOVED******REMOVED***Task {
 ***REMOVED******REMOVED******REMOVED***try? await map.load()
 ***REMOVED******REMOVED******REMOVED***network = map.utilityNetworks.first
-***REMOVED******REMOVED******REMOVED***await loadNamedTraceConfigurations(map)
+***REMOVED******REMOVED******REMOVED***configurations = await utilityNamedTraceConfigurations(from: map)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -257,11 +257,11 @@ import Foundation
 ***REMOVED******REMOVED***_ = completedTraces[index].startingPoints.map { $0.graphic.isSelected = isSelected ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Loads the named trace configurations in the network on the provided map.
+***REMOVED******REMOVED***/ Returns the named trace configurations in the network on the provided map.
 ***REMOVED******REMOVED***/ - Parameter map: A web map containing one or more utility networks.
-***REMOVED***private func loadNamedTraceConfigurations(_ map: Map) async {
-***REMOVED******REMOVED***guard let network = network else { return ***REMOVED***
-***REMOVED******REMOVED***configurations = (try? await map.getNamedTraceConfigurations(from: network)) ?? []
+***REMOVED***private func utilityNamedTraceConfigurations(from map: Map) async -> [UtilityNamedTraceConfiguration] {
+***REMOVED******REMOVED***guard let network = network else { return [] ***REMOVED***
+***REMOVED******REMOVED***return (try? await map.getNamedTraceConfigurations(from: network)) ?? []
 ***REMOVED***
 ***REMOVED***
 
