@@ -15,12 +15,6 @@
 ***REMOVED***
 
 public struct UtilityNetworkTrace: View {
-***REMOVED***@Environment(\.horizontalSizeClass)
-***REMOVED***private var horizontalSizeClass: UserInterfaceSizeClass?
-***REMOVED***
-***REMOVED***@Environment(\.verticalSizeClass)
-***REMOVED***private var verticalSizeClass: UserInterfaceSizeClass?
-***REMOVED***
 ***REMOVED******REMOVED*** MARK: Enums
 ***REMOVED***
 ***REMOVED******REMOVED***/ Activities users will perform while creating a new trace.
