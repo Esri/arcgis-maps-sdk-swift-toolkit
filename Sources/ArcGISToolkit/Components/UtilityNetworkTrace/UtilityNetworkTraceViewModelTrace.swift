@@ -51,7 +51,7 @@ extension UtilityNetworkTraceViewModel {
         let id = UUID()
         
         /// A user given name for the trace.
-        var name: String = ""
+        var name = ""
         
         /// A collection of starting points for the trace.
         var startingPoints = [UtilityNetworkTraceStartingPoint]()
