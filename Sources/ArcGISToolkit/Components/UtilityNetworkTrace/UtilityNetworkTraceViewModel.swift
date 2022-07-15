@@ -253,8 +253,8 @@ import SwiftUI
         to isSelected: Bool
     ) {
         guard index >= 0, index <= completedTraces.count - 1 else { return }
-        _ = completedTraces[index].graphics.map { $0.isSelected = isSelected}
-        _ = completedTraces[index].startingPoints.map { $0.graphic.isSelected = isSelected}
+        _ = completedTraces[index].graphics.map { $0.isSelected = isSelected }
+        _ = completedTraces[index].startingPoints.map { $0.graphic.isSelected = isSelected }
     }
     
     /// Loads the named trace configurations in the network on the provided map.
