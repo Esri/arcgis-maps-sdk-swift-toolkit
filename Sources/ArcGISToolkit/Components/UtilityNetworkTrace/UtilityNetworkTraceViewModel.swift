@@ -373,7 +373,7 @@ import SwiftUI
         completedTraces[traceIndex] = newValue
     }
     
-    // MARK: Private Items
+    // MARK: Private Methods
     
     /// Changes the selected state of the graphics for the completed trace at the provided index.
     /// - Parameters:
@@ -384,8 +384,8 @@ import SwiftUI
         to isSelected: Bool
     ) {
         guard index >= 0, index <= completedTraces.count - 1 else { return }
-        _ = completedTraces[index].graphics.map { $0.isSelected = isSelected}
-        _ = completedTraces[index].startingPoints.map { $0.graphic.isSelected = isSelected}
+        _ = completedTraces[index].graphics.map { $0.isSelected = isSelected }
+        _ = completedTraces[index].startingPoints.map { $0.graphic.isSelected = isSelected }
     }
     
     /// Loads the named trace configurations in the network.
