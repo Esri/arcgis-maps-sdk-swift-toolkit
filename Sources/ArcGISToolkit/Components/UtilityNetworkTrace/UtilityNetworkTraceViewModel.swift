@@ -242,7 +242,7 @@ import Foundation
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED*** MARK: Private Items
+***REMOVED******REMOVED*** MARK: Private Methods
 ***REMOVED***
 ***REMOVED******REMOVED***/ Changes the selected state of the graphics for the completed trace at the provided index.
 ***REMOVED******REMOVED***/ - Parameters:
