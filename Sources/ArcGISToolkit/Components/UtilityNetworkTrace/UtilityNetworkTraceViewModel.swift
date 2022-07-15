@@ -119,6 +119,18 @@ import Foundation
 ***REMOVED******REMOVED***completedTraces.removeAll()
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ Returns a feature for the given utility element
+***REMOVED******REMOVED***/ - Parameter element: The utility element to query the network for
+***REMOVED******REMOVED***/ - Returns: A feature for the given element
+***REMOVED***func getFeatureFor(element: UtilityElement) async -> ArcGISFeature? {
+***REMOVED******REMOVED***do {
+***REMOVED******REMOVED******REMOVED***return try await network?.getFeatures(for: [element]).first ?? nil
+***REMOVED*** catch {
+***REMOVED******REMOVED******REMOVED***print(error.localizedDescription)
+***REMOVED******REMOVED******REMOVED***return nil
+***REMOVED***
+***REMOVED***
+***REMOVED***
 ***REMOVED******REMOVED***/ Selects the next trace from the list of completed traces.
 ***REMOVED***func selectNextTrace() {
 ***REMOVED******REMOVED***if let current = selectedTraceIndex {
