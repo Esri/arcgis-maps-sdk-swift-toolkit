@@ -37,14 +37,13 @@ public struct FloatingPanel<Content>: View where Content: View {
     /// - Parameter content: The view shown in the floating panel.
     public init(@ViewBuilder content: () -> Content) {
         self.content = content()
-        _height = State(initialValue: .infinity)
     }
     
     /// The color of the handle.
     @State private var handleColor: Color = .defaultHandleColor
     
     /// The height of the content.
-    @State private var height: CGFloat
+    @State private var height: CGFloat = .infinity
     
     /// The maximum allowed height of the content.
     @State private var maximumHeight: CGFloat = .infinity
