@@ -14,6 +14,7 @@
 ***REMOVED***
 ***REMOVED***
 
+***REMOVED***/ A view dispaying a title and description of a `PopupElement`.
 struct PopupElementHeader: View {
 ***REMOVED***var title: String
 ***REMOVED***var description: String

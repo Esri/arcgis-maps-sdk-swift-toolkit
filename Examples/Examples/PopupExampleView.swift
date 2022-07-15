@@ -82,7 +82,6 @@ struct PopupExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.esriBorder()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** else if let identifyResult = identifyResult {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***IdentifyResultView(identifyResult: identifyResult)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.esriBorder()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: 400)
@@ -93,6 +92,7 @@ struct PopupExampleView: View {
 ***REMOVED***
 ***REMOVED***
 
+***REMOVED***/ A view displaying the results of an identify operation.
 struct IdentifyResultView: View {
 ***REMOVED***var identifyResult: Result<[IdentifyLayerResult], Error>
 ***REMOVED***
@@ -102,6 +102,7 @@ struct IdentifyResultView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Get the first popup from the first layer result.
 ***REMOVED******REMOVED******REMOVED***if let popup = identifyLayerResults.first?.popups.first {
 ***REMOVED******REMOVED******REMOVED******REMOVED***PopupView(popup: popup)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.esriBorder()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***case .failure(let error):
 ***REMOVED******REMOVED******REMOVED***Text("Identify error: \(error.localizedDescription).")

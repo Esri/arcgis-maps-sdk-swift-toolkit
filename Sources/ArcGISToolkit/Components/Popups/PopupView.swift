@@ -43,6 +43,7 @@ public struct PopupView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Evaluating popoup expressions...")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ProgressView()
 ***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity)
 ***REMOVED******REMOVED******REMOVED*** else if isPopupEvaluated! {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***popupElementScrollView(popup: popup)
 ***REMOVED******REMOVED******REMOVED*** else {
