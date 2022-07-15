@@ -58,7 +58,7 @@ struct UtilityNetworkTraceExampleView: View {
                         $viewpoint
                     )
                     .task {
-                        await ArcGISURLSession.credentialStore.add(try! await .publicSample)
+                        await ArcGISRuntimeEnvironment.credentialStore.add(try! await .publicSample)
                     }
                 }
                 .padding()
