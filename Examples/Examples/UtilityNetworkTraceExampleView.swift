@@ -50,12 +50,12 @@ struct UtilityNetworkTraceExampleView: View {
             .overlay(alignment: .topTrailing) {
                 FloatingPanel {
                     UtilityNetworkTrace(
-                        $resultGraphicsOverlay,
-                        map,
-                        $mapPoint,
-                        $viewPoint,
-                        $mapViewProxy,
-                        $viewpoint
+                        graphicsOverlay: $resultGraphicsOverlay,
+                        map: map,
+                        mapPoint: $mapPoint,
+                        viewPoint: $viewPoint,
+                        mapViewProxy: $mapViewProxy,
+                        viewpoint: $viewpoint
                     )
                     .task {
                         await ArcGISRuntimeEnvironment.credentialStore.add(try! await .publicSample)
