@@ -314,12 +314,12 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED***/   chosen.
 ***REMOVED******REMOVED***/   - viewpoint: Allows the utility network trace tool to update the parent map view's viewpoint.
 ***REMOVED***public init(
-***REMOVED******REMOVED***_ graphicsOverlay: Binding<GraphicsOverlay>,
-***REMOVED******REMOVED***_ map: Map,
-***REMOVED******REMOVED***_ mapPoint: Binding<Point?>,
-***REMOVED******REMOVED***_ viewPoint: Binding<CGPoint?>,
-***REMOVED******REMOVED***_ mapViewProxy: Binding<MapViewProxy?>,
-***REMOVED******REMOVED***_ viewpoint: Binding<Viewpoint?>
+***REMOVED******REMOVED***graphicsOverlay: Binding<GraphicsOverlay>,
+***REMOVED******REMOVED***map: Map,
+***REMOVED******REMOVED***mapPoint: Binding<Point?>,
+***REMOVED******REMOVED***viewPoint: Binding<CGPoint?>,
+***REMOVED******REMOVED***mapViewProxy: Binding<MapViewProxy?>,
+***REMOVED******REMOVED***viewpoint: Binding<Viewpoint?>
 ***REMOVED***) {
 ***REMOVED******REMOVED***_viewPoint = viewPoint
 ***REMOVED******REMOVED***_mapPoint = mapPoint
