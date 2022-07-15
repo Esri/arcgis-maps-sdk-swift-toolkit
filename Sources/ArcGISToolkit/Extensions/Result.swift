@@ -17,7 +17,7 @@ extension Result where Failure == Error {
     /// `failure`.
     ///
     /// Returns `nil` in the event that the task was cancelled.
-    init?(awaiting task: () async throws -> Success) async {
+    public init?(awaiting task: () async throws -> Success) async {
         do {
             self = .success(try await task())
         } catch is CancellationError {
