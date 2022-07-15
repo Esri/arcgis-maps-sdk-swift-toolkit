@@ -17,7 +17,7 @@ extension Result where Failure == Error {
 ***REMOVED******REMOVED***/ `failure`.
 ***REMOVED******REMOVED***/
 ***REMOVED******REMOVED***/ Returns `nil` in the event that the task was cancelled.
-***REMOVED***init?(awaiting task: () async throws -> Success) async {
+***REMOVED***public init?(awaiting task: () async throws -> Success) async {
 ***REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED***self = .success(try await task())
 ***REMOVED*** catch is CancellationError {
