@@ -119,6 +119,18 @@ import SwiftUI
         completedTraces.removeAll()
     }
     
+    /// Returns a feature for the given utility element
+    /// - Parameter element: The utility element to query the network for
+    /// - Returns: A feature for the given element
+    func getFeatureFor(element: UtilityElement) async -> ArcGISFeature? {
+        do {
+            return try await network?.getFeatures(for: [element]).first ?? nil
+        } catch {
+            print(error.localizedDescription)
+            return nil
+        }
+    }
+    
     /// Selects the next trace from the list of completed traces.
     func selectNextTrace() {
         if let current = selectedTraceIndex {
