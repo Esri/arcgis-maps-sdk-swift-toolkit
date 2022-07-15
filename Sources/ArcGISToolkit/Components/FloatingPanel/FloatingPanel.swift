@@ -28,8 +28,7 @@ public struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED******REMOVED*** to have it be a view modifier, similar to how SwiftUI doesn't have a
 ***REMOVED******REMOVED*** SheetView, but a modifier that presents a sheet.
 ***REMOVED***
-***REMOVED***@Environment(\.horizontalSizeClass)
-***REMOVED***private var horizontalSizeClass: UserInterfaceSizeClass?
+***REMOVED***@Environment(\.horizontalSizeClass) private var horizontalSizeClass
 ***REMOVED***
 ***REMOVED******REMOVED***/ The content shown in the floating panel.
 ***REMOVED***let content: Content

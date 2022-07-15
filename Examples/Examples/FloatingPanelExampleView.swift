@@ -16,8 +16,7 @@
 ***REMOVED***
 
 struct FloatingPanelExampleView: View {
-***REMOVED***@Environment(\.horizontalSizeClass)
-***REMOVED***private var horizontalSizeClass: UserInterfaceSizeClass?
+***REMOVED***@Environment(\.horizontalSizeClass) private var horizontalSizeClass
 ***REMOVED***
 ***REMOVED***@StateObject private var map = Map(basemapStyle: .arcGISImagery)
 ***REMOVED***
