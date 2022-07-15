@@ -92,7 +92,7 @@ import SwiftUI
     func deleteAllTraces() {
         selectedTraceIndex = nil
         completedTraces.forEach { traceResult in
-            graphicsOverlay.removeGraphics(traceResult.startingPoints.map({ $0.graphic }))
+            graphicsOverlay.removeGraphics(traceResult.startingPoints.map { $0.graphic })
             graphicsOverlay.removeGraphics(traceResult.graphics)
         }
         completedTraces.removeAll()
