@@ -101,7 +101,7 @@ public extension Compass {
         autoHide: Bool = true
     ) {
         let viewpointRotation = Binding {
-            viewpoint.wrappedValue?.rotation ?? .nan
+            viewpoint.wrappedValue?.rotation ?? .zero
         } set: { newViewpointRotation in
             guard let oldViewopint = viewpoint.wrappedValue else { return }
             viewpoint.wrappedValue = Viewpoint(
