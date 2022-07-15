@@ -242,7 +242,7 @@ import SwiftUI
         }
     }
     
-    // MARK: Private Items
+    // MARK: Private Methods
     
     /// Changes the selected state of the graphics for the completed trace at the provided index.
     /// - Parameters:
