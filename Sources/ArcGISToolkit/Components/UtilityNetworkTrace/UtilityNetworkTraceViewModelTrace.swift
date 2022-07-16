@@ -59,14 +59,19 @@ extension UtilityNetworkTraceViewModel {
         /// Indicates that the user has specified a name for the trace.
         var userDidSpecifyName: Bool = false
         
-        /// A trace result set comprised of a collection of UtilityTraceFunctionOutput objects.
+        /// A trace result comprised of a collection of UtilityElement objects.
+        var utilityElementTraceResult: UtilityElementTraceResult?
+        
+        /// A trace result comprised of a collection of UtilityTraceFunctionOutput objects.
         var utilityFunctionTraceResult: UtilityFunctionTraceResult?
         
-        /// The trace result comprised of a set of Geometry objects representing the network elements
-        /// identified by the trace.
+        /// A trace result comprised of Geometry objects
         var utilityGeometryTraceResult: UtilityGeometryTraceResult?
         
-        static func == (lhs: UtilityNetworkTraceViewModel.Trace, rhs: UtilityNetworkTraceViewModel.Trace) -> Bool {
+        static func == (
+            lhs: UtilityNetworkTraceViewModel.Trace,
+            rhs: UtilityNetworkTraceViewModel.Trace
+        ) -> Bool {
             return lhs.id == rhs.id
         }
     }
