@@ -59,14 +59,19 @@ extension UtilityNetworkTraceViewModel {
 ***REMOVED******REMOVED******REMOVED***/ Indicates that the user has specified a name for the trace.
 ***REMOVED******REMOVED***var userDidSpecifyName: Bool = false
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ A trace result set comprised of a collection of UtilityTraceFunctionOutput objects.
+***REMOVED******REMOVED******REMOVED***/ A trace result comprised of a collection of UtilityElement objects.
+***REMOVED******REMOVED***var utilityElementTraceResult: UtilityElementTraceResult?
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ A trace result comprised of a collection of UtilityTraceFunctionOutput objects.
 ***REMOVED******REMOVED***var utilityFunctionTraceResult: UtilityFunctionTraceResult?
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ The trace result comprised of a set of Geometry objects representing the network elements
-***REMOVED******REMOVED******REMOVED***/ identified by the trace.
+***REMOVED******REMOVED******REMOVED***/ A trace result comprised of Geometry objects
 ***REMOVED******REMOVED***var utilityGeometryTraceResult: UtilityGeometryTraceResult?
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***static func == (lhs: UtilityNetworkTraceViewModel.Trace, rhs: UtilityNetworkTraceViewModel.Trace) -> Bool {
+***REMOVED******REMOVED***static func == (
+***REMOVED******REMOVED******REMOVED***lhs: UtilityNetworkTraceViewModel.Trace,
+***REMOVED******REMOVED******REMOVED***rhs: UtilityNetworkTraceViewModel.Trace
+***REMOVED******REMOVED***) -> Bool {
 ***REMOVED******REMOVED******REMOVED***return lhs.id == rhs.id
 ***REMOVED***
 ***REMOVED***
