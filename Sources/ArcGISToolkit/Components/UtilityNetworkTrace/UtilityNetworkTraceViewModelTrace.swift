@@ -46,14 +46,13 @@ extension UtilityNetworkTraceViewModel {
 ***REMOVED******REMOVED******REMOVED***/ A collection of starting points for the trace.
 ***REMOVED******REMOVED***var startingPoints = [UtilityNetworkTraceStartingPoint]()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ A trace result set comprised of an collection of UtilityElement objects.
+***REMOVED******REMOVED******REMOVED***/ A trace result comprised of a collection of UtilityElement objects.
 ***REMOVED******REMOVED***var utilityElementTraceResult: UtilityElementTraceResult?
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ A trace result set comprised of a collection of UtilityTraceFunctionOutput objects.
+***REMOVED******REMOVED******REMOVED***/ A trace result comprised of a collection of UtilityTraceFunctionOutput objects.
 ***REMOVED******REMOVED***var utilityFunctionTraceResult: UtilityFunctionTraceResult?
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ The trace result comprised of a set of Geometry objects representing the network elements
-***REMOVED******REMOVED******REMOVED***/ identified by the trace.
+***REMOVED******REMOVED******REMOVED***/ A trace result comprised of Geometry objects
 ***REMOVED******REMOVED***var utilityGeometryTraceResult: UtilityGeometryTraceResult?
 ***REMOVED***
 ***REMOVED***
