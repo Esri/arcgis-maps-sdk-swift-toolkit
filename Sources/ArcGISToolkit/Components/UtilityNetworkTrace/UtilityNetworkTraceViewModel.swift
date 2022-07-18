@@ -67,9 +67,9 @@ import SwiftUI
     
     /// Performs required setup.
     ///
-    /// The first utility network in the provided map will be used.
-    /// - Parameter map: The map to be loaded that contains at least one utility network.
-    /// - Parameter graphicsOverlay: The overlay on which trace graphics will be drawn.
+    /// - Parameters:
+    ///   - map: The map to be loaded that contains at least one utility network.
+    ///   - graphicsOverlay: The overlay on which trace graphics will be drawn.
     init(map: Map, graphicsOverlay: GraphicsOverlay) {
         self.graphicsOverlay = graphicsOverlay
         Task {
