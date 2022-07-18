@@ -59,7 +59,7 @@ struct FieldsPopupElementView: View {
     struct GridCell: View {
         /// The String to display.
         let label: String
-        /// The index of the row the view is in.
+        /// The index of the row the cell is in.
         let rowIndex: Int
         /// The URL off the label if the label is an "http" string.
         var url: URL? {
