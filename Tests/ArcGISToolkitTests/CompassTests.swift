@@ -22,11 +22,11 @@ class CompassTests: XCTestCase {
 ***REMOVED***func testHiddenWithAutoHideOff() {
 ***REMOVED******REMOVED***let initialValue = 0.0
 ***REMOVED******REMOVED***let finalValue = 90.0
-***REMOVED******REMOVED***var _viewpoint: Viewpoint? = getViewpoint(initialValue)
+***REMOVED******REMOVED***var _viewpoint: Viewpoint? = makeViewpoint(initialValue)
 ***REMOVED******REMOVED***let viewpoint = Binding(get: { _viewpoint ***REMOVED***, set: { _viewpoint = $0 ***REMOVED***)
 ***REMOVED******REMOVED***let compass = Compass(viewpoint: viewpoint, autoHide: false)
 ***REMOVED******REMOVED***XCTAssertFalse(compass.shouldHide)
-***REMOVED******REMOVED***_viewpoint = getViewpoint(finalValue)
+***REMOVED******REMOVED***_viewpoint = makeViewpoint(finalValue)
 ***REMOVED******REMOVED***XCTAssertFalse(compass.shouldHide)
 ***REMOVED***
 ***REMOVED***
@@ -35,11 +35,11 @@ class CompassTests: XCTestCase {
 ***REMOVED***func testHiddenWithAutoHideOn() {
 ***REMOVED******REMOVED***let initialValue = 0.0
 ***REMOVED******REMOVED***let finalValue = 90.0
-***REMOVED******REMOVED***var _viewpoint: Viewpoint? = getViewpoint(initialValue)
+***REMOVED******REMOVED***var _viewpoint: Viewpoint? = makeViewpoint(initialValue)
 ***REMOVED******REMOVED***let viewpoint = Binding(get: { _viewpoint ***REMOVED***, set: { _viewpoint = $0 ***REMOVED***)
 ***REMOVED******REMOVED***let compass = Compass(viewpoint: viewpoint)
 ***REMOVED******REMOVED***XCTAssertTrue(compass.shouldHide)
-***REMOVED******REMOVED***_viewpoint = getViewpoint(finalValue)
+***REMOVED******REMOVED***_viewpoint = makeViewpoint(finalValue)
 ***REMOVED******REMOVED***XCTAssertFalse(compass.shouldHide)
 ***REMOVED***
 ***REMOVED***
@@ -61,7 +61,7 @@ class CompassTests: XCTestCase {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Asserts that the compass correctly initializes when given only a viewpoint.
 ***REMOVED***func testInitWithViewpoint() {
-***REMOVED******REMOVED***var _viewpoint: Viewpoint? = getViewpoint(0.0)
+***REMOVED******REMOVED***var _viewpoint: Viewpoint? = makeViewpoint(0.0)
 ***REMOVED******REMOVED***let viewpoint = Binding(get: { _viewpoint ***REMOVED***, set: { _viewpoint = $0 ***REMOVED***)
 ***REMOVED******REMOVED***let compass = Compass(viewpoint: viewpoint)
 ***REMOVED******REMOVED***XCTAssertEqual(compass.shouldHide, true)
@@ -70,12 +70,9 @@ class CompassTests: XCTestCase {
 ***REMOVED******REMOVED***/ Asserts that the compass correctly initializes when given only a viewpoint.
 ***REMOVED***func testInitWithViewpointAndAutoHide() {
 ***REMOVED******REMOVED***let autoHide = false
-***REMOVED******REMOVED***var _viewpoint: Viewpoint? = getViewpoint(0)
+***REMOVED******REMOVED***var _viewpoint: Viewpoint? = makeViewpoint(0)
 ***REMOVED******REMOVED***let viewpoint = Binding(get: { _viewpoint ***REMOVED***, set: { _viewpoint = $0 ***REMOVED***)
-***REMOVED******REMOVED***let compass = Compass(
-***REMOVED******REMOVED******REMOVED***viewpoint: viewpoint,
-***REMOVED******REMOVED******REMOVED***autoHide: autoHide
-***REMOVED******REMOVED***)
+***REMOVED******REMOVED***let compass = Compass(viewpoint: viewpoint, autoHide: autoHide)
 ***REMOVED******REMOVED***XCTAssertEqual(compass.shouldHide, false)
 ***REMOVED***
 ***REMOVED***
@@ -94,7 +91,7 @@ extension CompassTests {
 ***REMOVED******REMOVED***/ Builds viewpoints to use for tests.
 ***REMOVED******REMOVED***/ - Parameter rotation: The rotation to use for the resulting viewpoint.
 ***REMOVED******REMOVED***/ - Returns: A viewpoint object for tests.
-***REMOVED***func getViewpoint(_ rotation: Double) -> Viewpoint {
+***REMOVED***func makeViewpoint(_ rotation: Double) -> Viewpoint {
 ***REMOVED******REMOVED***return Viewpoint(center: point, scale: scale, rotation: rotation)
 ***REMOVED***
 ***REMOVED***
