@@ -43,7 +43,7 @@ struct PopupExampleView: View {
         //https://runtimecoretest.maps.arcgis.com/apps/mapviewer/index.html?webmap=9e3baeb5dcd4473aa13e0065d7794ca6
         let portalItem6 = PortalItem(portal: portal, id: Item.ID(rawValue: "9e3baeb5dcd4473aa13e0065d7794ca6")!)
 
-        return Map(item: portalItem6)
+        return Map(item: portalItem1)
     }
 
     /// The map displayed in the map view.
@@ -87,7 +87,6 @@ struct PopupExampleView: View {
                                 IdentifyResultView(identifyResult: identifyResult)
                             }
                         }
-                        .frame(maxWidth: 400)
                         .padding()
                     }
             }
@@ -116,7 +115,10 @@ struct IdentifyResultView: View {
             if let popup = identifyLayerResults.first?.popups.first {
                 GeometryReader { geometry in
                     PopupView(popup: popup)
-                        .frame(maxHeight: useHalfHeightResults ? geometry.size.height / 2 : nil)
+                        .frame(
+                            maxWidth: useHalfHeightResults ? .infinity : 400,
+                            maxHeight: useHalfHeightResults ? geometry.size.height / 2 : nil
+                        )
                         .esriBorder()
                 }
             }

@@ -70,12 +70,15 @@ public struct PopupView: View {
                         switch popupElement {
                         case let popupElement as AttachmentsPopupElement:
                             Text("AttachmentsPopupElementView implementation coming soon.")
+                                .font(.caption)
                         case let popupElement as FieldsPopupElement:
                             FieldsPopupElementView(popupElement: popupElement)
                         case let popupElement as MediaPopupElement:
                             Text("MediaPopupElementView implementation coming soon.")
+                                .font(.caption)
                         case let popupElement as TextPopupElement:
                             Text("TextPopupElementView implementation coming soon.")
+                                .font(.caption)
                         default:
                             EmptyView()
                         }
