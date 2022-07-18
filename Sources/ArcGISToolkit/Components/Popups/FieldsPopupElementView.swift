@@ -67,7 +67,9 @@ struct FieldsPopupElementView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var body: some View {
-***REMOVED******REMOVED******REMOVED***Text(url != nil ? "View" : label)
+***REMOVED******REMOVED******REMOVED******REMOVED*** Using a single space in place of an empty label allows the height
+***REMOVED******REMOVED******REMOVED******REMOVED*** of an empty cell to be calculated the same as a non-empty cell.
+***REMOVED******REMOVED******REMOVED***Text(url != nil ? "View" : (label.isEmpty ? " " : label))
 ***REMOVED******REMOVED******REMOVED******REMOVED***.underline(url != nil)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(url != nil ? Color(UIColor.link) : .primary)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.lineLimit(1)

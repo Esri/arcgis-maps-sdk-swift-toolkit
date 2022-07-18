@@ -43,13 +43,16 @@ struct PopupExampleView: View {
 ***REMOVED******REMOVED******REMOVED***https:***REMOVED***runtimecoretest.maps.arcgis.com/apps/mapviewer/index.html?webmap=9e3baeb5dcd4473aa13e0065d7794ca6
 ***REMOVED******REMOVED***let portalItem6 = PortalItem(portal: portal, id: Item.ID(rawValue: "9e3baeb5dcd4473aa13e0065d7794ca6")!)
 
-***REMOVED******REMOVED***return Map(item: portalItem1)
+***REMOVED******REMOVED***return Map(item: portalItem6)
 ***REMOVED***
-***REMOVED***
+
 ***REMOVED******REMOVED***/ The map displayed in the map view.
 ***REMOVED***@StateObject private var map = makeMap()
 ***REMOVED***
+***REMOVED******REMOVED***/ The point on the screen the user tapped on and used to identify layers.
 ***REMOVED***@State private var identifyScreenPoint: CGPoint?
+
+***REMOVED******REMOVED***/ The result of the layer identify operation.
 ***REMOVED***@State private var identifyResult: Result<[IdentifyLayerResult], Error>?
 
 ***REMOVED***var body: some View {
@@ -96,16 +99,30 @@ struct PopupExampleView: View {
 struct IdentifyResultView: View {
 ***REMOVED***var identifyResult: Result<[IdentifyLayerResult], Error>
 ***REMOVED***
+***REMOVED***@Environment(\.horizontalSizeClass) var horizontalSizeClass
+***REMOVED***@Environment(\.verticalSizeClass) var verticalSizeClass
+***REMOVED***
+***REMOVED******REMOVED***/ If `true`, will draw the popup view at half height, exposing a portion of the
+***REMOVED******REMOVED***/ underlying map below the view on an iPhone in portrait orientation (and certain iPad multitasking
+***REMOVED******REMOVED***/ configurations).  If `false`, will draw the popup view full size.
+***REMOVED***private var useHalfHeightResults: Bool {
+***REMOVED******REMOVED***horizontalSizeClass == .compact && verticalSizeClass == .regular
+***REMOVED***
+
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***switch identifyResult {
 ***REMOVED******REMOVED***case .success(let identifyLayerResults):
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Get the first popup from the first layer result.
 ***REMOVED******REMOVED******REMOVED***if let popup = identifyLayerResults.first?.popups.first {
-***REMOVED******REMOVED******REMOVED******REMOVED***PopupView(popup: popup)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.esriBorder()
+***REMOVED******REMOVED******REMOVED******REMOVED***GeometryReader { geometry in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***PopupView(popup: popup)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxHeight: useHalfHeightResults ? geometry.size.height / 2 : nil)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.esriBorder()
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***case .failure(let error):
 ***REMOVED******REMOVED******REMOVED***Text("Identify error: \(error.localizedDescription).")
+***REMOVED******REMOVED******REMOVED******REMOVED***.esriBorder()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
