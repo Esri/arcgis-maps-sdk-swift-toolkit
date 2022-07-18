@@ -80,9 +80,9 @@ import Foundation
 ***REMOVED***
 ***REMOVED******REMOVED***/ Performs required setup.
 ***REMOVED******REMOVED***/
-***REMOVED******REMOVED***/ The first utility network in the provided map will be used.
-***REMOVED******REMOVED***/ - Parameter map: The map to be loaded that contains at least one utility network.
-***REMOVED******REMOVED***/ - Parameter graphicsOverlay: The overlay on which trace graphics will be drawn.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - map: The map to be loaded that contains at least one utility network.
+***REMOVED******REMOVED***/   - graphicsOverlay: The overlay on which trace graphics will be drawn.
 ***REMOVED***init(map: Map, graphicsOverlay: GraphicsOverlay) {
 ***REMOVED******REMOVED***self.map = map
 ***REMOVED******REMOVED***self.graphicsOverlay = graphicsOverlay
