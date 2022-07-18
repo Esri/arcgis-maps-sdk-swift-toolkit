@@ -28,6 +28,8 @@ public struct FloatingPanel<Content>: View where Content: View {
     // to have it be a view modifier, similar to how SwiftUI doesn't have a
     // SheetView, but a modifier that presents a sheet.
     
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+    
     /// The content shown in the floating panel.
     let content: Content
     
@@ -37,34 +39,71 @@ public struct FloatingPanel<Content>: View where Content: View {
         self.content = content()
     }
     
-    @State
-    private var handleColor: Color = .defaultHandleColor
+    /// The color of the handle.
+    @State private var handleColor: Color = .defaultHandleColor
     
-    @State
-    private var height: CGFloat?
+    /// The height of the content.
+    @State private var height: CGFloat = .infinity
+    
+    /// The maximum allowed height of the content.
+    @State private var maximumHeight: CGFloat = .infinity
+    
+    /// A Boolean value indicating whether the panel should be configured for a compact environment.
+    private var isCompact: Bool {
+        horizontalSizeClass == .compact
+    }
     
     public var body: some View {
-        VStack {
-            content
-                .frame(minHeight: .minHeight, maxHeight: height)
-            Divider()
-            Handle(color: handleColor)
-                .gesture(drag)
+        GeometryReader { geometryProxy in
+            VStack {
+                if isCompact {
+                    Handle(color: handleColor)
+                        .gesture(drag)
+                    Divider()
+                    content
+                        .frame(minHeight: .minHeight, maxHeight: height)
+                } else {
+                    content
+                        .frame(minHeight: .minHeight, maxHeight: height)
+                    Divider()
+                    Handle(color: handleColor)
+                        .gesture(drag)
+                }
+            }
+            .esriBorder()
+            .padding(isCompact ? [] : [.leading, .top, .trailing])
+            .padding(.bottom, isCompact ? 0 : 50)
+            .frame(
+                width: geometryProxy.size.width,
+                height: geometryProxy.size.height,
+                alignment: isCompact ? .bottom : .top
+            )
+            .onSizeChange {
+                maximumHeight = $0.height
+                if height > maximumHeight {
+                    height = maximumHeight
+                }
+            }
         }
-        .esriBorder()
     }
     
     var drag: some Gesture {
         DragGesture(minimumDistance: 0)
             .onChanged { value in
                 handleColor = .activeHandleColor
-                // Note:  There is a bug here where `height` can be set
-                // larger than the displayed height.  This occurs by continuing
-                // to drag down on the handle after the panel reaches it's max
-                // height.  When that happens subsequent "drag up" operations
-                // don't cause the panel to shrink immediately, but will
-                // ultimately snap to the correct height.
-                height = max(.minHeight, (height ?? 0) + value.translation.height)
+                let proposedHeight: CGFloat
+                if isCompact {
+                    proposedHeight = max(
+                        .minHeight,
+                        height - value.translation.height
+                    )
+                } else {
+                    proposedHeight = max(
+                        .minHeight,
+                        height + value.translation.height
+                    )
+                }
+                height = min(proposedHeight, maximumHeight)
             }
             .onEnded { _ in
                 handleColor = .defaultHandleColor
