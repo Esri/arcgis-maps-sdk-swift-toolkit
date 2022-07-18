@@ -43,13 +43,16 @@ struct PopupExampleView: View {
         //https://runtimecoretest.maps.arcgis.com/apps/mapviewer/index.html?webmap=9e3baeb5dcd4473aa13e0065d7794ca6
         let portalItem6 = PortalItem(portal: portal, id: Item.ID(rawValue: "9e3baeb5dcd4473aa13e0065d7794ca6")!)
 
-        return Map(item: portalItem1)
+        return Map(item: portalItem6)
     }
-    
+
     /// The map displayed in the map view.
     @StateObject private var map = makeMap()
     
+    /// The point on the screen the user tapped on and used to identify layers.
     @State private var identifyScreenPoint: CGPoint?
+
+    /// The result of the layer identify operation.
     @State private var identifyResult: Result<[IdentifyLayerResult], Error>?
 
     var body: some View {
@@ -96,16 +99,30 @@ struct PopupExampleView: View {
 struct IdentifyResultView: View {
     var identifyResult: Result<[IdentifyLayerResult], Error>
     
+    @Environment(\.horizontalSizeClass) var horizontalSizeClass
+    @Environment(\.verticalSizeClass) var verticalSizeClass
+    
+    /// If `true`, will draw the popup view at half height, exposing a portion of the
+    /// underlying map below the view on an iPhone in portrait orientation (and certain iPad multitasking
+    /// configurations).  If `false`, will draw the popup view full size.
+    private var useHalfHeightResults: Bool {
+        horizontalSizeClass == .compact && verticalSizeClass == .regular
+    }
+
     var body: some View {
         switch identifyResult {
         case .success(let identifyLayerResults):
             // Get the first popup from the first layer result.
             if let popup = identifyLayerResults.first?.popups.first {
-                PopupView(popup: popup)
-                    .esriBorder()
+                GeometryReader { geometry in
+                    PopupView(popup: popup)
+                        .frame(maxHeight: useHalfHeightResults ? geometry.size.height / 2 : nil)
+                        .esriBorder()
+                }
             }
         case .failure(let error):
             Text("Identify error: \(error.localizedDescription).")
+                .esriBorder()
         }
     }
 }
