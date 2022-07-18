@@ -43,7 +43,7 @@ struct PopupExampleView: View {
 ***REMOVED******REMOVED******REMOVED***https:***REMOVED***runtimecoretest.maps.arcgis.com/apps/mapviewer/index.html?webmap=9e3baeb5dcd4473aa13e0065d7794ca6
 ***REMOVED******REMOVED***let portalItem6 = PortalItem(portal: portal, id: Item.ID(rawValue: "9e3baeb5dcd4473aa13e0065d7794ca6")!)
 
-***REMOVED******REMOVED***return Map(item: portalItem6)
+***REMOVED******REMOVED***return Map(item: portalItem1)
 ***REMOVED***
 
 ***REMOVED******REMOVED***/ The map displayed in the map view.
@@ -87,7 +87,6 @@ struct PopupExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***IdentifyResultView(identifyResult: identifyResult)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: 400)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
@@ -116,7 +115,10 @@ struct IdentifyResultView: View {
 ***REMOVED******REMOVED******REMOVED***if let popup = identifyLayerResults.first?.popups.first {
 ***REMOVED******REMOVED******REMOVED******REMOVED***GeometryReader { geometry in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***PopupView(popup: popup)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxHeight: useHalfHeightResults ? geometry.size.height / 2 : nil)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***maxWidth: useHalfHeightResults ? .infinity : 400,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***maxHeight: useHalfHeightResults ? geometry.size.height / 2 : nil
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.esriBorder()
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
