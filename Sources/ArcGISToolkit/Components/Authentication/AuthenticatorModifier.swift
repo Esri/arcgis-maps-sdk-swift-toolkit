@@ -14,11 +14,9 @@
 import SwiftUI
 
 public extension View {
-    /// Presents user experiences for collecting network authentication credentials from the
-    /// user.
+    /// Presents user experiences for collecting network authentication credentials from the user.
     /// - Parameter authenticator: The authenticator for which credentials will be prompted.
-    @ViewBuilder
-    func authenticator(_ authenticator: Authenticator) -> some View {
+    @ViewBuilder func authenticator(_ authenticator: Authenticator) -> some View {
         modifier(AuthenticatorOverlayModifier(authenticator: authenticator))
     }
 }
