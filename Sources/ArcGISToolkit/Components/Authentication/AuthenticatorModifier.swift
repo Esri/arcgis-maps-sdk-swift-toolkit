@@ -62,7 +62,7 @@ private struct AuthenticatorModifier: ViewModifier {
 ***REMOVED******REMOVED******REMOVED***case .serverTrust:
 ***REMOVED******REMOVED******REMOVED******REMOVED***content.modifier(TrustHostViewModifier(challenge: challenge))
 ***REMOVED******REMOVED******REMOVED***case .certificate:
-***REMOVED******REMOVED******REMOVED******REMOVED***fatalError("implementation coming soon in another PR")
+***REMOVED******REMOVED******REMOVED******REMOVED***content.modifier(CertificatePickerViewModifier(challenge: challenge))
 ***REMOVED******REMOVED******REMOVED***case .login:
 ***REMOVED******REMOVED******REMOVED******REMOVED***content.modifier(LoginViewModifier(challenge: challenge))
 ***REMOVED******REMOVED***
