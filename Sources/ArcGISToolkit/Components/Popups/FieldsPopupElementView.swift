@@ -33,34 +33,44 @@ struct FieldsPopupElementView: View {
     
     var body: some View {
         PopupElementHeader(
-            title: popupElement.title.isEmpty ? "Fields" : popupElement.title,
+            title: popupElement.displayTitle,
             description: popupElement.description
         )
-        FieldsGrid(fields: displayFields)
+        .padding([.bottom], 4)
+        FieldsList(fields: displayFields)
     }
     
     /// A view displaying a grid of labels and values.
-    struct FieldsGrid: View {
+    struct FieldsList: View {
         let fields: [DisplayField]
-        var columns: [GridItem] = Array(repeating: .init(.flexible(), spacing: 0), count: 1)
         
         var body: some View {
-            LazyVGrid(columns: columns, spacing: 0) {
+            VStack {
                 ForEach(fields) { field in
-                    VStack(alignment: .leading) {
-                        Text(field.label)
-                            .font(.subheadline)
-                            .foregroundColor(.secondary)
-                            .padding([.top], 6)
-                        FormattedValueText(formattedValue: field.formattedValue)
-                            .padding([.bottom], -2)
+                    FieldRow(field: field)
+                    if field != fields.last {
                         Divider()
                     }
-                    .lineLimit(1)
-                    .background(Color.clear)
-                    .frame(maxWidth: .infinity, alignment: .leading)
                 }
             }
+        }
+    }
+    
+    /// A view for displaying a `DisplayField`.
+    struct FieldRow: View {
+        var field: DisplayField
+        
+        var body: some View {
+            VStack(alignment: .leading) {
+                Text(field.label)
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
+                FormattedValueText(formattedValue: field.formattedValue)
+                    .padding([.bottom], -1)
+            }
+            .lineLimit(1)
+            .background(Color.clear)
+            .frame(maxWidth: .infinity, alignment: .leading)
         }
     }
     
@@ -94,3 +104,9 @@ struct DisplayField: Hashable {
 }
 
 extension DisplayField: Identifiable {}
+
+extension FieldsPopupElement {
+    var displayTitle: String {
+        title.isEmpty ? "Fields" : title
+    }
+}
