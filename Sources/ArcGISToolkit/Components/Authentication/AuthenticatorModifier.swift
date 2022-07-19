@@ -31,8 +31,7 @@ public extension View {
 private struct AuthenticatorOverlayModifier: ViewModifier {
     @ObservedObject var authenticator: Authenticator
     
-    @ViewBuilder
-    func body(content: Content) -> some View {
+    @ViewBuilder func body(content: Content) -> some View {
         ZStack {
             content
             Color.clear
@@ -46,8 +45,7 @@ private struct AuthenticatorOverlayModifier: ViewModifier {
 private struct AuthenticatorModifier: ViewModifier {
     @ObservedObject var authenticator: Authenticator
     
-    @ViewBuilder
-    func body(content: Content) -> some View {
+    @ViewBuilder func body(content: Content) -> some View {
         switch authenticator.currentChallenge {
         case let challenge as QueuedNetworkChallenge:
             switch challenge.kind {
