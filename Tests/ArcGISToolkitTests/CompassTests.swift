@@ -83,7 +83,7 @@ extension CompassTests {
     /// Builds viewpoints to use for tests.
     /// - Parameter rotation: The rotation to use for the resulting viewpoint.
     /// - Returns: A viewpoint object for tests.
-    func makeViewpoint(_ rotation: Double) -> Viewpoint {
+    func makeViewpoint(rotation: Double) -> Viewpoint {
         return Viewpoint(center: point, scale: scale, rotation: rotation)
     }
 }
