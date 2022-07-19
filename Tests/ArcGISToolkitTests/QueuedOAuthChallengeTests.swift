@@ -16,8 +16,7 @@ import XCTest
 @testable ***REMOVED***Toolkit
 ***REMOVED***
 
-@MainActor
-class QueuedOAuthChallengeTests: XCTestCase {
+@MainActor class QueuedOAuthChallengeTests: XCTestCase {
 ***REMOVED***func testInit() {
 ***REMOVED******REMOVED***let portalURL = URL(string: "www.test-portal.com")!
 ***REMOVED******REMOVED***let clientID = "client id"

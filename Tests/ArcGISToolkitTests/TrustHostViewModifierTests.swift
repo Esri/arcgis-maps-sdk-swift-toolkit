@@ -14,8 +14,7 @@
 import XCTest
 @testable ***REMOVED***Toolkit
 
-@MainActor
-class TrustHostViewModifierTets: XCTestCase {
+@MainActor class TrustHostViewModifierTets: XCTestCase {
 ***REMOVED***func testInit() {
 ***REMOVED******REMOVED***let challenge = QueuedNetworkChallenge(host: "host.com", kind: .serverTrust)
 ***REMOVED******REMOVED******REMOVED*** Tests the initial state.

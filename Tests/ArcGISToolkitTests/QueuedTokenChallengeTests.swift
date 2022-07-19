@@ -15,8 +15,7 @@
 import XCTest
 @testable ***REMOVED***Toolkit
 
-@MainActor
-class QueuedTokenChallengeTests: XCTestCase {
+@MainActor class QueuedTokenChallengeTests: XCTestCase {
 ***REMOVED***func testInit() {
 ***REMOVED******REMOVED***let challenge = QueuedTokenChallenge(host: "host.com") { _ in
 ***REMOVED******REMOVED******REMOVED***fatalError()
