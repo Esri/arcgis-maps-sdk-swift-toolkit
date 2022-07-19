@@ -30,8 +30,8 @@ final class CompassTests: XCTestCase {
         XCTAssertFalse(compass.shouldHide)
     }
     
-    /// Asserts that the compass accurately indicates when the compass should be hidden when autoHide
-    /// is enabled.
+    /// Verifies that the compass accurately indicates when the compass should be hidden when
+    /// `autoHide` is `true`.
     func testHiddenWithAutoHideOn() {
         let initialValue = 0.0
         let finalValue = 90.0
