@@ -17,8 +17,8 @@ import XCTest
 @testable ***REMOVED***Toolkit
 
 final class CompassTests: XCTestCase {
-***REMOVED******REMOVED***/ Asserts that the compass accurately indicates when the compass should be hidden when autoHide
-***REMOVED******REMOVED***/ is disabled.
+***REMOVED******REMOVED***/ Verifies that the compass accurately indicates when the compass should be hidden when
+***REMOVED******REMOVED***/ `autoHide` is `false`.
 ***REMOVED***func testHiddenWithAutoHideOff() {
 ***REMOVED******REMOVED***let initialValue = 0.0
 ***REMOVED******REMOVED***let finalValue = 90.0
