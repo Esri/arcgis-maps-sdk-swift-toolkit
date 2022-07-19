@@ -20,17 +20,21 @@ struct PopupElementHeader: View {
 ***REMOVED***var description: String
 ***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED******REMOVED*** Text views with empty text still take up some vertical space in
-***REMOVED******REMOVED******REMOVED*** a view, so conditionally check for an empty title and description.
-***REMOVED******REMOVED***if !title.isEmpty {
-***REMOVED******REMOVED******REMOVED***Text(title)
-***REMOVED******REMOVED******REMOVED******REMOVED***.font(.headline)
-***REMOVED***
+***REMOVED******REMOVED***VStack(alignment: .leading) {
+***REMOVED******REMOVED******REMOVED******REMOVED*** Text views with empty text still take up some vertical space in
+***REMOVED******REMOVED******REMOVED******REMOVED*** a view, so conditionally check for an empty title and description.
+***REMOVED******REMOVED******REMOVED***if !title.isEmpty {
+***REMOVED******REMOVED******REMOVED******REMOVED***Text(title)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.title3)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fontWeight(.bold)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.primary)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***if !description.isEmpty {
-***REMOVED******REMOVED******REMOVED***Text(description)
-***REMOVED******REMOVED******REMOVED******REMOVED***.font(.subheadline)
-***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***if !description.isEmpty {
+***REMOVED******REMOVED******REMOVED******REMOVED***Text(description)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.subheadline)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***

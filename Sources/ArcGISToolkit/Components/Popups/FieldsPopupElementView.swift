@@ -33,34 +33,44 @@ struct FieldsPopupElementView: View {
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***PopupElementHeader(
-***REMOVED******REMOVED******REMOVED***title: popupElement.title.isEmpty ? "Fields" : popupElement.title,
+***REMOVED******REMOVED******REMOVED***title: popupElement.displayTitle,
 ***REMOVED******REMOVED******REMOVED***description: popupElement.description
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED***FieldsGrid(fields: displayFields)
+***REMOVED******REMOVED***.padding([.bottom], 4)
+***REMOVED******REMOVED***FieldsList(fields: displayFields)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ A view displaying a grid of labels and values.
-***REMOVED***struct FieldsGrid: View {
+***REMOVED***struct FieldsList: View {
 ***REMOVED******REMOVED***let fields: [DisplayField]
-***REMOVED******REMOVED***var columns: [GridItem] = Array(repeating: .init(.flexible(), spacing: 0), count: 1)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var body: some View {
-***REMOVED******REMOVED******REMOVED***LazyVGrid(columns: columns, spacing: 0) {
+***REMOVED******REMOVED******REMOVED***VStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ForEach(fields) { field in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***VStack(alignment: .leading) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(field.label)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.subheadline)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding([.top], 6)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FormattedValueText(formattedValue: field.formattedValue)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding([.bottom], -2)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FieldRow(field: field)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if field != fields.last {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Divider()
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.lineLimit(1)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.background(Color.clear)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .leading)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ A view for displaying a `DisplayField`.
+***REMOVED***struct FieldRow: View {
+***REMOVED******REMOVED***var field: DisplayField
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***var body: some View {
+***REMOVED******REMOVED******REMOVED***VStack(alignment: .leading) {
+***REMOVED******REMOVED******REMOVED******REMOVED***Text(field.label)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.subheadline)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
+***REMOVED******REMOVED******REMOVED******REMOVED***FormattedValueText(formattedValue: field.formattedValue)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding([.bottom], -1)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.lineLimit(1)
+***REMOVED******REMOVED******REMOVED***.background(Color.clear)
+***REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .leading)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -94,3 +104,9 @@ struct DisplayField: Hashable {
 ***REMOVED***
 
 extension DisplayField: Identifiable {***REMOVED***
+
+extension FieldsPopupElement {
+***REMOVED***var displayTitle: String {
+***REMOVED******REMOVED***title.isEmpty ? "Fields" : title
+***REMOVED***
+***REMOVED***
