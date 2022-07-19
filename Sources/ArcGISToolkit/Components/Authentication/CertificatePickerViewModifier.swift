@@ -16,8 +16,7 @@ import UniformTypeIdentifiers
 
 /// An object that provides the business logic for the workflow of prompting the user for a
 /// certificate and a password.
-@MainActor
-final private class CertificatePickerViewModel: ObservableObject {
+@MainActor final private class CertificatePickerViewModel: ObservableObject {
     /// The challenge that requires a certificate to proceed.
     let challenge: QueuedNetworkChallenge
     
@@ -124,9 +123,7 @@ private extension View {
     /// - Parameters:
     ///   - isPresented: A Boolean value indicating if the view is presented.
     ///   - viewModel: The view model associated with the view.
-    @MainActor
-    @ViewBuilder
-    func promptBrowseCertificate(
+    @MainActor @ViewBuilder func promptBrowseCertificate(
         isPresented: Binding<Bool>,
         viewModel: CertificatePickerViewModel
     ) -> some View {
@@ -148,9 +145,7 @@ private extension View {
     /// - Parameters:
     ///   - isPresented: A Boolean value indicating if the view is presented.
     ///   - viewModel: The view model associated with the view.
-    @MainActor
-    @ViewBuilder
-    func certificateFilePicker(
+    @MainActor @ViewBuilder func certificateFilePicker(
         isPresented: Binding<Bool>,
         viewModel: CertificatePickerViewModel
     ) -> some View {
@@ -171,9 +166,7 @@ private extension View {
     /// - Parameters:
     ///   - isPresented: A Boolean value indicating if the view is presented.
     ///   - viewModel: The view model associated with the view.
-    @MainActor
-    @ViewBuilder
-    func passwordSheet(
+    @MainActor @ViewBuilder func passwordSheet(
         isPresented: Binding<Bool>,
         viewModel: CertificatePickerViewModel
     ) -> some View {
@@ -194,9 +187,7 @@ private extension View {
     /// - Parameters:
     ///   - isPresented: A Boolean value indicating if the view is presented.
     ///   - viewModel: The view model associated with the view.
-    @MainActor
-    @ViewBuilder
-    func alertCertificateImportError(
+    @MainActor @ViewBuilder func alertCertificateImportError(
         isPresented: Binding<Bool>,
         viewModel: CertificatePickerViewModel
     ) -> some View {
