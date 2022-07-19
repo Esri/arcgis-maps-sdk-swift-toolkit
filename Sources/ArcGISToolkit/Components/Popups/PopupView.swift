@@ -35,6 +35,7 @@ public struct PopupView: View {
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***VStack(alignment: .leading) {
 ***REMOVED******REMOVED******REMOVED***Text(popup.title)
+***REMOVED******REMOVED******REMOVED******REMOVED***.font(.title)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.fontWeight(.bold)
 ***REMOVED******REMOVED******REMOVED***Divider()
 ***REMOVED******REMOVED******REMOVED***Group {
@@ -45,7 +46,7 @@ public struct PopupView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity)
 ***REMOVED******REMOVED******REMOVED*** else if isPopupEvaluated! {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***popupElementScrollView(popup: popup)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***PopupElementScrollView(popup: popup)
 ***REMOVED******REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Popup failed evaluation.")
 ***REMOVED******REMOVED******REMOVED***
@@ -61,7 +62,7 @@ public struct PopupView: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED***struct popupElementScrollView: View {
+***REMOVED***struct PopupElementScrollView: View {
 ***REMOVED******REMOVED***var popup: Popup
 ***REMOVED******REMOVED***var body: some View {
 ***REMOVED******REMOVED******REMOVED***ScrollView {

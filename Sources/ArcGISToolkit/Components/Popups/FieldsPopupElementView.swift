@@ -33,60 +33,64 @@ struct FieldsPopupElementView: View {
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***PopupElementHeader(
-***REMOVED******REMOVED******REMOVED***title: popupElement.title,
+***REMOVED******REMOVED******REMOVED***title: popupElement.title.isEmpty ? "Fields" : popupElement.title,
 ***REMOVED******REMOVED******REMOVED***description: popupElement.description
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***FieldsGrid(fields: displayFields)
-***REMOVED******REMOVED******REMOVED***.font(.footnote)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ A view displaying a grid of labels and values.
 ***REMOVED***struct FieldsGrid: View {
 ***REMOVED******REMOVED***let fields: [DisplayField]
+***REMOVED******REMOVED***var columns: [GridItem] = Array(repeating: .init(.flexible(), spacing: 0), count: 1)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***var columns: [GridItem] = Array(repeating: .init(.flexible(), spacing: 0), count: 2)
 ***REMOVED******REMOVED***var body: some View {
 ***REMOVED******REMOVED******REMOVED***LazyVGrid(columns: columns, spacing: 0) {
-***REMOVED******REMOVED******REMOVED******REMOVED***ForEach(Array(fields.enumerated()), id: \.element) { index, element in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***GridCell(label: element.label, rowIndex: index)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***GridCell(label: element.formattedValue, rowIndex: index)
+***REMOVED******REMOVED******REMOVED******REMOVED***ForEach(fields) { field in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***VStack(alignment: .leading) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(field.label)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.subheadline)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding([.top], 6)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FormattedValueText(formattedValue: field.formattedValue)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding([.bottom], -2)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Divider()
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.lineLimit(1)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.background(Color.clear)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .leading)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ A view for dispaying text in a grid.
-***REMOVED***struct GridCell: View {
+***REMOVED******REMOVED***/ A view for dispaying a formatted value.
+***REMOVED***struct FormattedValueText: View {
 ***REMOVED******REMOVED******REMOVED***/ The String to display.
-***REMOVED******REMOVED***let label: String
-***REMOVED******REMOVED******REMOVED***/ The index of the row the cell is in.
-***REMOVED******REMOVED***let rowIndex: Int
-***REMOVED******REMOVED******REMOVED***/ The URL off the label if the label is an "http" string.
+***REMOVED******REMOVED***let formattedValue: String
+***REMOVED******REMOVED******REMOVED***/ The URL of the label if the label is an "http" string.
 ***REMOVED******REMOVED***var url: URL? {
-***REMOVED******REMOVED******REMOVED***label.lowercased().starts(with: "http") ? URL(string: label) : nil
+***REMOVED******REMOVED******REMOVED***formattedValue.lowercased().starts(with: "http") ? URL(string: formattedValue) : nil
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var body: some View {
-***REMOVED******REMOVED******REMOVED******REMOVED*** Using a single space in place of an empty label allows the height
-***REMOVED******REMOVED******REMOVED******REMOVED*** of an empty cell to be calculated the same as a non-empty cell.
-***REMOVED******REMOVED******REMOVED***Text(url != nil ? "View" : (label.isEmpty ? " " : label))
-***REMOVED******REMOVED******REMOVED******REMOVED***.underline(url != nil)
-***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(url != nil ? Color(UIColor.link) : .primary)
-***REMOVED******REMOVED******REMOVED******REMOVED***.lineLimit(1)
-***REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .leading)
-***REMOVED******REMOVED******REMOVED******REMOVED***.padding(6)
-***REMOVED******REMOVED******REMOVED******REMOVED***.onTapGesture {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let url = url {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***UIApplication.shared.open(url)
-***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***Group {
+***REMOVED******REMOVED******REMOVED******REMOVED***if let url = url,
+***REMOVED******REMOVED******REMOVED******REMOVED***   let link = "[View](\(url.absoluteString))"{
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(.init(link))
+***REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(formattedValue)
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.background(rowIndex % 2 != 1 ? Color.secondary.opacity(0.5) : Color.clear)
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ A convenience type for displaying labels and values in a grid.
-***REMOVED***struct DisplayField: Hashable {
-***REMOVED******REMOVED***let label: String
-***REMOVED******REMOVED***let formattedValue: String
+
+***REMOVED***/ A convenience type for displaying labels and values in a grid.
+struct DisplayField: Hashable {
+***REMOVED***let label: String
+***REMOVED***let formattedValue: String
+***REMOVED***let id = UUID()
 ***REMOVED***
-***REMOVED***
+
+extension DisplayField: Identifiable {***REMOVED***
