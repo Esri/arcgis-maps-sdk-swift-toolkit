@@ -103,10 +103,10 @@ public extension Compass {
 ***REMOVED******REMOVED***let viewpointRotation = Binding {
 ***REMOVED******REMOVED******REMOVED***viewpoint.wrappedValue?.rotation ?? .zero
 ***REMOVED*** set: { newViewpointRotation in
-***REMOVED******REMOVED******REMOVED***guard let oldViewopint = viewpoint.wrappedValue else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED***guard let oldViewpoint = viewpoint.wrappedValue else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***viewpoint.wrappedValue = Viewpoint(
-***REMOVED******REMOVED******REMOVED******REMOVED***center: oldViewopint.targetGeometry.extent.center,
-***REMOVED******REMOVED******REMOVED******REMOVED***scale: oldViewopint.targetScale,
+***REMOVED******REMOVED******REMOVED******REMOVED***center: oldViewpoint.targetGeometry.extent.center,
+***REMOVED******REMOVED******REMOVED******REMOVED***scale: oldViewpoint.targetScale,
 ***REMOVED******REMOVED******REMOVED******REMOVED***rotation: newViewpointRotation
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED***
