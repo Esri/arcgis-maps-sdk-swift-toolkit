@@ -43,7 +43,7 @@ final class CompassTests: XCTestCase {
 ***REMOVED******REMOVED***XCTAssertFalse(compass.shouldHide)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Asserts that the compass correctly initializes when given a nil viewpoint
+***REMOVED******REMOVED***/ Verifies that the compass correctly initializes when given a `nil` viewpoint.
 ***REMOVED***func testInit() {
 ***REMOVED******REMOVED***var _viewpoint: Viewpoint? = nil
 ***REMOVED******REMOVED***let viewpoint = Binding(get: { _viewpoint ***REMOVED***, set: { _viewpoint = $0 ***REMOVED***)
