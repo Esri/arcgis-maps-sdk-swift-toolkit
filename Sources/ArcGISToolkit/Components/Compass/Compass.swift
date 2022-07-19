@@ -26,7 +26,9 @@ public struct Compass: View {
     
     /// A Boolean value indicating whether the compass should hide based on the
     ///  current heading and whether the compass automatically hides.
-    var shouldHide: Bool { heading.isZero && autoHide }
+    var shouldHide: Bool {
+        (heading.isZero || heading.isNaN) && autoHide
+    }
     
     /// The heading of the compass in degrees.
     @Binding private var heading: Double
@@ -100,7 +102,7 @@ public extension Compass {
         autoHide: Bool = true
     ) {
         let viewpointRotation = Binding {
-            viewpoint.wrappedValue?.rotation ?? .zero
+            viewpoint.wrappedValue?.rotation ?? .nan
         } set: { newViewpointRotation in
             guard let oldViewpoint = viewpoint.wrappedValue else { return }
             viewpoint.wrappedValue = Viewpoint(
