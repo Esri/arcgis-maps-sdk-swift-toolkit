@@ -16,8 +16,7 @@ import UniformTypeIdentifiers
 
 ***REMOVED***/ An object that provides the business logic for the workflow of prompting the user for a
 ***REMOVED***/ certificate and a password.
-@MainActor
-final private class CertificatePickerViewModel: ObservableObject {
+@MainActor final private class CertificatePickerViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ The challenge that requires a certificate to proceed.
 ***REMOVED***let challenge: QueuedNetworkChallenge
 ***REMOVED***
@@ -124,9 +123,7 @@ private extension View {
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - isPresented: A Boolean value indicating if the view is presented.
 ***REMOVED******REMOVED***/   - viewModel: The view model associated with the view.
-***REMOVED***@MainActor
-***REMOVED***@ViewBuilder
-***REMOVED***func promptBrowseCertificate(
+***REMOVED***@MainActor @ViewBuilder func promptBrowseCertificate(
 ***REMOVED******REMOVED***isPresented: Binding<Bool>,
 ***REMOVED******REMOVED***viewModel: CertificatePickerViewModel
 ***REMOVED***) -> some View {
@@ -148,9 +145,7 @@ private extension View {
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - isPresented: A Boolean value indicating if the view is presented.
 ***REMOVED******REMOVED***/   - viewModel: The view model associated with the view.
-***REMOVED***@MainActor
-***REMOVED***@ViewBuilder
-***REMOVED***func certificateFilePicker(
+***REMOVED***@MainActor @ViewBuilder func certificateFilePicker(
 ***REMOVED******REMOVED***isPresented: Binding<Bool>,
 ***REMOVED******REMOVED***viewModel: CertificatePickerViewModel
 ***REMOVED***) -> some View {
@@ -171,9 +166,7 @@ private extension View {
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - isPresented: A Boolean value indicating if the view is presented.
 ***REMOVED******REMOVED***/   - viewModel: The view model associated with the view.
-***REMOVED***@MainActor
-***REMOVED***@ViewBuilder
-***REMOVED***func passwordSheet(
+***REMOVED***@MainActor @ViewBuilder func passwordSheet(
 ***REMOVED******REMOVED***isPresented: Binding<Bool>,
 ***REMOVED******REMOVED***viewModel: CertificatePickerViewModel
 ***REMOVED***) -> some View {
@@ -194,9 +187,7 @@ private extension View {
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - isPresented: A Boolean value indicating if the view is presented.
 ***REMOVED******REMOVED***/   - viewModel: The view model associated with the view.
-***REMOVED***@MainActor
-***REMOVED***@ViewBuilder
-***REMOVED***func alertCertificateImportError(
+***REMOVED***@MainActor @ViewBuilder func alertCertificateImportError(
 ***REMOVED******REMOVED***isPresented: Binding<Bool>,
 ***REMOVED******REMOVED***viewModel: CertificatePickerViewModel
 ***REMOVED***) -> some View {
