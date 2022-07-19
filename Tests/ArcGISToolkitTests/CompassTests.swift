@@ -51,7 +51,8 @@ final class CompassTests: XCTestCase {
         XCTAssertEqual(compass.shouldHide, true)
     }
     
-    /// Asserts that the compass correctly initializes when given a nil viewpoint, and autoHide is disabled.
+    /// Verifies that the compass correctly initializes when given a `nil` viewpoint, and `autoHide` is
+    /// `false`.
     func testInitNoAutoHide() {
         var _viewpoint: Viewpoint? = nil
         let viewpoint = Binding(get: { _viewpoint }, set: { _viewpoint = $0 })
@@ -59,7 +60,7 @@ final class CompassTests: XCTestCase {
         XCTAssertEqual(compass.shouldHide, false)
     }
     
-    /// Asserts that the compass correctly initializes when given only a viewpoint.
+    /// Verifies that the compass correctly initializes when given only a viewpoint.
     func testInitWithViewpoint() {
         var _viewpoint: Viewpoint? = makeViewpoint(0.0)
         let viewpoint = Binding(get: { _viewpoint }, set: { _viewpoint = $0 })
@@ -67,7 +68,7 @@ final class CompassTests: XCTestCase {
         XCTAssertEqual(compass.shouldHide, true)
     }
     
-    /// Asserts that the compass correctly initializes when given only a viewpoint.
+    /// Verifies that the compass correctly initializes when given only a viewpoint.
     func testInitWithViewpointAndAutoHide() {
         let autoHide = false
         var _viewpoint: Viewpoint? = makeViewpoint(0)
