@@ -92,10 +92,9 @@ public extension Compass {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a compass with a binding to an optional viewpoint.
 ***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - viewpoint: The viewopint whose rotation determines the heading of
-***REMOVED******REMOVED***/   the compass.
-***REMOVED******REMOVED***/   - autoHide: A Boolean value that determines whether the compass
-***REMOVED******REMOVED***/   automatically hides itself when the viewpoint's rotation is 0 degrees.
+***REMOVED******REMOVED***/   - viewpoint: The viewpoint whose rotation determines the heading of the compass.
+***REMOVED******REMOVED***/   - autoHide: A Boolean value that determines whether the compass automatically hides itself
+***REMOVED******REMOVED***/   when the viewpoint's rotation is 0 degrees.
 ***REMOVED***init(
 ***REMOVED******REMOVED***viewpoint: Binding<Viewpoint?>,
 ***REMOVED******REMOVED***autoHide: Bool = true
