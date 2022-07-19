@@ -20,17 +20,21 @@ struct PopupElementHeader: View {
     var description: String
     
     var body: some View {
-        // Text views with empty text still take up some vertical space in
-        // a view, so conditionally check for an empty title and description.
-        if !title.isEmpty {
-            Text(title)
-                .font(.headline)
-        }
-        
-        if !description.isEmpty {
-            Text(description)
-                .font(.subheadline)
-                .foregroundColor(.secondary)
+        VStack(alignment: .leading) {
+            // Text views with empty text still take up some vertical space in
+            // a view, so conditionally check for an empty title and description.
+            if !title.isEmpty {
+                Text(title)
+                    .font(.title3)
+                    .fontWeight(.bold)
+                    .foregroundColor(.primary)
+            }
+            
+            if !description.isEmpty {
+                Text(description)
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
+            }
         }
     }
 }
