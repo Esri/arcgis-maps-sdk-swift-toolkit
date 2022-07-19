@@ -62,7 +62,7 @@ private struct AuthenticatorModifier: ViewModifier {
             case .serverTrust:
                 content.modifier(TrustHostViewModifier(challenge: challenge))
             case .certificate:
-                fatalError("implementation coming soon in another PR")
+                content.modifier(CertificatePickerViewModifier(challenge: challenge))
             case .login:
                 content.modifier(LoginViewModifier(challenge: challenge))
             }
