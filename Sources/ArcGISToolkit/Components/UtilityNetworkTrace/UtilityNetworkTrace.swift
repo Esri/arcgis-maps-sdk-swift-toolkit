@@ -67,6 +67,9 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED***
 ***REMOVED******REMOVED*** MARK: Bindings
 ***REMOVED***
+***REMOVED******REMOVED***/ Starting points programmatically provided to the trace tool.
+***REMOVED***@Binding private var externalStartingPoints: [GeoElement]
+***REMOVED***
 ***REMOVED******REMOVED***/ The graphics overlay to hold generated starting point and trace graphics.
 ***REMOVED***@Binding private var graphicsOverlay: GraphicsOverlay
 ***REMOVED***
@@ -130,7 +133,10 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED***List {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ForEach(assetGroup.sorted(by: { $0.key < $1.key ***REMOVED***), id: \.key) { assetTypeGroup in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Section(assetTypeGroup.key) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(assetTypeGroup.value) { element in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let elements = assetTypeGroup.value.sorted {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***$0.objectID < $1.objectID
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(elements) { element in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeZoomToButton(text: element.objectID.description) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let feature = await viewModel.getFeatureFor(element: element),
@@ -470,23 +476,27 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED***/   - mapViewProxy: Provides a method of layer identification when starting points are being
 ***REMOVED******REMOVED***/   chosen.
 ***REMOVED******REMOVED***/   - viewpoint: Allows the utility network trace tool to update the parent map view's viewpoint.
+***REMOVED******REMOVED***/   - startingPoints: An optional list of elements to be used as starting points.
 ***REMOVED***public init(
 ***REMOVED******REMOVED***graphicsOverlay: Binding<GraphicsOverlay>,
 ***REMOVED******REMOVED***map: Map,
 ***REMOVED******REMOVED***mapPoint: Binding<Point?>,
 ***REMOVED******REMOVED***viewPoint: Binding<CGPoint?>,
 ***REMOVED******REMOVED***mapViewProxy: Binding<MapViewProxy?>,
-***REMOVED******REMOVED***viewpoint: Binding<Viewpoint?>
+***REMOVED******REMOVED***viewpoint: Binding<Viewpoint?>,
+***REMOVED******REMOVED***startingPoints: Binding<[GeoElement]> = .constant([])
 ***REMOVED***) {
 ***REMOVED******REMOVED***_viewPoint = viewPoint
 ***REMOVED******REMOVED***_mapPoint = mapPoint
 ***REMOVED******REMOVED***_mapViewProxy = mapViewProxy
 ***REMOVED******REMOVED***_graphicsOverlay = graphicsOverlay
 ***REMOVED******REMOVED***_viewpoint = viewpoint
+***REMOVED******REMOVED***_externalStartingPoints = startingPoints
 ***REMOVED******REMOVED***_viewModel = StateObject(
 ***REMOVED******REMOVED******REMOVED***wrappedValue: UtilityNetworkTraceViewModel(
 ***REMOVED******REMOVED******REMOVED******REMOVED***map: map,
-***REMOVED******REMOVED******REMOVED******REMOVED***graphicsOverlay: graphicsOverlay.wrappedValue
+***REMOVED******REMOVED******REMOVED******REMOVED***graphicsOverlay: graphicsOverlay.wrappedValue,
+***REMOVED******REMOVED******REMOVED******REMOVED***startingPoints: startingPoints.wrappedValue
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***)
 ***REMOVED***
@@ -533,6 +543,9 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***with: mapViewProxy
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***.onChange(of: externalStartingPoints.count) { _ in
+***REMOVED******REMOVED******REMOVED***viewModel.externalStartingPoints = externalStartingPoints
 ***REMOVED***
 ***REMOVED******REMOVED***.alert(
 ***REMOVED******REMOVED******REMOVED***"Warning",
