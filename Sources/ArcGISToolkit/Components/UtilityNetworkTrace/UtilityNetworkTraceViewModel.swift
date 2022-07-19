@@ -477,5 +477,3 @@ extension UtilityNetworkTraceViewModel {
         )
     }
 }
-
-extension UtilityTraceFunctionOutput: Identifiable { }
