@@ -45,36 +45,27 @@ final class CompassTests: XCTestCase {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Verifies that the compass correctly initializes when given a `nil` viewpoint.
 ***REMOVED***func testInit() {
-***REMOVED******REMOVED***var _viewpoint: Viewpoint? = nil
-***REMOVED******REMOVED***let viewpoint = Binding(get: { _viewpoint ***REMOVED***, set: { _viewpoint = $0 ***REMOVED***)
-***REMOVED******REMOVED***let compass = Compass(viewpoint: viewpoint)
-***REMOVED******REMOVED***XCTAssertEqual(compass.shouldHide, true)
+***REMOVED******REMOVED***let compass = Compass(viewpoint: .constant(nil))
+***REMOVED******REMOVED***XCTAssertTrue(compass.shouldHide)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Verifies that the compass correctly initializes when given a `nil` viewpoint, and `autoHide` is
 ***REMOVED******REMOVED***/ `false`.
 ***REMOVED***func testInitNoAutoHide() {
-***REMOVED******REMOVED***var _viewpoint: Viewpoint? = nil
-***REMOVED******REMOVED***let viewpoint = Binding(get: { _viewpoint ***REMOVED***, set: { _viewpoint = $0 ***REMOVED***)
-***REMOVED******REMOVED***let compass = Compass(viewpoint: viewpoint, autoHide: false)
-***REMOVED******REMOVED***XCTAssertEqual(compass.shouldHide, false)
+***REMOVED******REMOVED***let compass = Compass(viewpoint: .constant(nil), autoHide: false)
+***REMOVED******REMOVED***XCTAssertFalse(compass.shouldHide)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Verifies that the compass correctly initializes when given only a viewpoint.
 ***REMOVED***func testInitWithViewpoint() {
-***REMOVED******REMOVED***var _viewpoint: Viewpoint? = makeViewpoint(0.0)
-***REMOVED******REMOVED***let viewpoint = Binding(get: { _viewpoint ***REMOVED***, set: { _viewpoint = $0 ***REMOVED***)
-***REMOVED******REMOVED***let compass = Compass(viewpoint: viewpoint)
-***REMOVED******REMOVED***XCTAssertEqual(compass.shouldHide, true)
+***REMOVED******REMOVED***let compass = Compass(viewpoint: .constant(makeViewpoint(.zero)))
+***REMOVED******REMOVED***XCTAssertTrue(compass.shouldHide)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Verifies that the compass correctly initializes when given only a viewpoint.
 ***REMOVED***func testInitWithViewpointAndAutoHide() {
-***REMOVED******REMOVED***let autoHide = false
-***REMOVED******REMOVED***var _viewpoint: Viewpoint? = makeViewpoint(0)
-***REMOVED******REMOVED***let viewpoint = Binding(get: { _viewpoint ***REMOVED***, set: { _viewpoint = $0 ***REMOVED***)
-***REMOVED******REMOVED***let compass = Compass(viewpoint: viewpoint, autoHide: autoHide)
-***REMOVED******REMOVED***XCTAssertEqual(compass.shouldHide, false)
+***REMOVED******REMOVED***let compass = Compass(viewpoint: .constant(makeViewpoint(.zero)), autoHide: false)
+***REMOVED******REMOVED***XCTAssertFalse(compass.shouldHide)
 ***REMOVED***
 ***REMOVED***
 
