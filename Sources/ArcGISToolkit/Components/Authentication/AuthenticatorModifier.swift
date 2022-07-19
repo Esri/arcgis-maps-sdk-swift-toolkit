@@ -14,11 +14,9 @@
 ***REMOVED***
 
 public extension View {
-***REMOVED******REMOVED***/ Presents user experiences for collecting network authentication credentials from the
-***REMOVED******REMOVED***/ user.
+***REMOVED******REMOVED***/ Presents user experiences for collecting network authentication credentials from the user.
 ***REMOVED******REMOVED***/ - Parameter authenticator: The authenticator for which credentials will be prompted.
-***REMOVED***@ViewBuilder
-***REMOVED***func authenticator(_ authenticator: Authenticator) -> some View {
+***REMOVED***@ViewBuilder func authenticator(_ authenticator: Authenticator) -> some View {
 ***REMOVED******REMOVED***modifier(AuthenticatorOverlayModifier(authenticator: authenticator))
 ***REMOVED***
 ***REMOVED***
