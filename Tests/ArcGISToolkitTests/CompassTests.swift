@@ -16,7 +16,7 @@ import SwiftUI
 import XCTest
 @testable import ArcGISToolkit
 
-class CompassTests: XCTestCase {
+final class CompassTests: XCTestCase {
     /// Asserts that the compass accurately indicates when the compass should be hidden when autoHide
     /// is disabled.
     func testHiddenWithAutoHideOff() {
