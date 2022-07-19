@@ -45,36 +45,27 @@ final class CompassTests: XCTestCase {
     
     /// Verifies that the compass correctly initializes when given a `nil` viewpoint.
     func testInit() {
-        var _viewpoint: Viewpoint? = nil
-        let viewpoint = Binding(get: { _viewpoint }, set: { _viewpoint = $0 })
-        let compass = Compass(viewpoint: viewpoint)
-        XCTAssertEqual(compass.shouldHide, true)
+        let compass = Compass(viewpoint: .constant(nil))
+        XCTAssertTrue(compass.shouldHide)
     }
     
     /// Verifies that the compass correctly initializes when given a `nil` viewpoint, and `autoHide` is
     /// `false`.
     func testInitNoAutoHide() {
-        var _viewpoint: Viewpoint? = nil
-        let viewpoint = Binding(get: { _viewpoint }, set: { _viewpoint = $0 })
-        let compass = Compass(viewpoint: viewpoint, autoHide: false)
-        XCTAssertEqual(compass.shouldHide, false)
+        let compass = Compass(viewpoint: .constant(nil), autoHide: false)
+        XCTAssertFalse(compass.shouldHide)
     }
     
     /// Verifies that the compass correctly initializes when given only a viewpoint.
     func testInitWithViewpoint() {
-        var _viewpoint: Viewpoint? = makeViewpoint(0.0)
-        let viewpoint = Binding(get: { _viewpoint }, set: { _viewpoint = $0 })
-        let compass = Compass(viewpoint: viewpoint)
-        XCTAssertEqual(compass.shouldHide, true)
+        let compass = Compass(viewpoint: .constant(makeViewpoint(.zero)))
+        XCTAssertTrue(compass.shouldHide)
     }
     
     /// Verifies that the compass correctly initializes when given only a viewpoint.
     func testInitWithViewpointAndAutoHide() {
-        let autoHide = false
-        var _viewpoint: Viewpoint? = makeViewpoint(0)
-        let viewpoint = Binding(get: { _viewpoint }, set: { _viewpoint = $0 })
-        let compass = Compass(viewpoint: viewpoint, autoHide: autoHide)
-        XCTAssertEqual(compass.shouldHide, false)
+        let compass = Compass(viewpoint: .constant(makeViewpoint(.zero)), autoHide: false)
+        XCTAssertFalse(compass.shouldHide)
     }
 }
 
