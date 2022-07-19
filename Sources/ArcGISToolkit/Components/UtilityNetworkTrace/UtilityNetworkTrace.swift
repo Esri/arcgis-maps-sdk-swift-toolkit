@@ -67,6 +67,9 @@ public struct UtilityNetworkTrace: View {
     
     // MARK: Bindings
     
+    /// Starting points programmatically provided to the trace tool.
+    @Binding private var externalStartingPoints: [GeoElement]
+    
     /// The graphics overlay to hold generated starting point and trace graphics.
     @Binding private var graphicsOverlay: GraphicsOverlay
     
@@ -130,7 +133,10 @@ public struct UtilityNetworkTrace: View {
             List {
                 ForEach(assetGroup.sorted(by: { $0.key < $1.key }), id: \.key) { assetTypeGroup in
                     Section(assetTypeGroup.key) {
-                        ForEach(assetTypeGroup.value) { element in
+                        let elements = assetTypeGroup.value.sorted {
+                            $0.objectID < $1.objectID
+                        }
+                        ForEach(elements) { element in
                             makeZoomToButton(text: element.objectID.description) {
                                 Task {
                                     if let feature = await viewModel.getFeatureFor(element: element),
@@ -470,23 +476,27 @@ public struct UtilityNetworkTrace: View {
     ///   - mapViewProxy: Provides a method of layer identification when starting points are being
     ///   chosen.
     ///   - viewpoint: Allows the utility network trace tool to update the parent map view's viewpoint.
+    ///   - startingPoints: An optional list of elements to be used as starting points.
     public init(
         graphicsOverlay: Binding<GraphicsOverlay>,
         map: Map,
         mapPoint: Binding<Point?>,
         viewPoint: Binding<CGPoint?>,
         mapViewProxy: Binding<MapViewProxy?>,
-        viewpoint: Binding<Viewpoint?>
+        viewpoint: Binding<Viewpoint?>,
+        startingPoints: Binding<[GeoElement]> = .constant([])
     ) {
         _viewPoint = viewPoint
         _mapPoint = mapPoint
         _mapViewProxy = mapViewProxy
         _graphicsOverlay = graphicsOverlay
         _viewpoint = viewpoint
+        _externalStartingPoints = startingPoints
         _viewModel = StateObject(
             wrappedValue: UtilityNetworkTraceViewModel(
                 map: map,
-                graphicsOverlay: graphicsOverlay.wrappedValue
+                graphicsOverlay: graphicsOverlay.wrappedValue,
+                startingPoints: startingPoints.wrappedValue
             )
         )
     }
@@ -533,6 +543,9 @@ public struct UtilityNetworkTrace: View {
                     with: mapViewProxy
                 )
             }
+        }
+        .onChange(of: externalStartingPoints.count) { _ in
+            viewModel.externalStartingPoints = externalStartingPoints
         }
         .alert(
             "Warning",
