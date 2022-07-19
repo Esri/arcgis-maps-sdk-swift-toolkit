@@ -453,6 +453,9 @@ public struct UtilityNetworkTrace: View {
                         .lineLimit(1)
                 } icon: {
                     Image(uiImage: startingPoint.image)
+                        .frame(width: 25, height: 25)
+                        .background(Color.secondary)
+                        .cornerRadius(5)
                 }
             }
             .swipeActions {
