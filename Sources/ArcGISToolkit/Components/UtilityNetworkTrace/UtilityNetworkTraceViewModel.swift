@@ -69,6 +69,13 @@ import SwiftUI
     /// A map containing one or more utility networks.
     private var map: Map
     
+    /// Starting points programmatically provided to the trace tool.
+    var externalStartingPoints = [GeoElement]() {
+        didSet {
+            addExternalStartingPoints()
+        }
+    }
+    
     /// The selected trace.
     var selectedTrace: Trace? {
         if let index = selectedTraceIndex {
@@ -83,9 +90,15 @@ import SwiftUI
     /// - Parameters:
     ///   - map: The map to be loaded that contains at least one utility network.
     ///   - graphicsOverlay: The overlay on which trace graphics will be drawn.
-    init(map: Map, graphicsOverlay: GraphicsOverlay) {
+    ///   - startingPoints: Starting points programmatically provided to the trace tool.
+    init(
+        map: Map,
+        graphicsOverlay: GraphicsOverlay,
+        startingPoints: [GeoElement]
+    ) {
         self.map = map
         self.graphicsOverlay = graphicsOverlay
+        self.externalStartingPoints = startingPoints
         Task {
             do {
                 try await map.load()
@@ -142,6 +155,37 @@ import SwiftUI
         }
     }
     
+    /// Selects the previous trace from the list of completed traces.
+    func selectPreviousTrace() {
+        if let current = selectedTraceIndex {
+            if current - 1 >= 0 {
+                selectedTraceIndex = current - 1
+            } else {
+                selectedTraceIndex = completedTraces.count - 1
+            }
+        }
+    }
+    
+    /// Updates the fractional portion of an edge based starting point.
+    /// - Parameters:
+    ///   - startingPoint: The starting point to be updated.
+    ///   - newValue: A fraction along the starting point's edge.
+    func setFractionAlongEdgeFor(
+        startingPoint: UtilityNetworkTraceStartingPoint,
+        to newValue: Double
+    ) {
+        pendingTrace.startingPoints.first {
+            $0.utilityElement.globalID == startingPoint.utilityElement.globalID
+        }?.utilityElement.fractionAlongEdge = newValue
+        if let geometry = startingPoint.geoElement.geometry,
+           let polyline = geometry as? Polyline {
+            startingPoint.graphic.geometry = GeometryEngine.point(
+                along: polyline,
+                atDistance: GeometryEngine.length(of: geometry) * newValue
+            )
+        }
+    }
+    
     /// Changes the selected network.
     /// - Parameter network: The new utility network to be selected.
     ///
@@ -166,17 +210,6 @@ import SwiftUI
         }
     }
     
-    /// Selects the previous trace from the list of completed traces.
-    func selectPreviousTrace() {
-        if let current = selectedTraceIndex {
-            if current - 1 >= 0 {
-                selectedTraceIndex = current - 1
-            } else {
-                selectedTraceIndex = completedTraces.count - 1
-            }
-        }
-    }
-    
     /// Adds a new starting point to the pending trace.
     /// - Parameters:
     ///   - point: A point on the map in screen coordinates.
@@ -193,73 +226,74 @@ import SwiftUI
         )
         identifyLayerResults?.forEach { identifyLayerResult in
             identifyLayerResult.geoElements.forEach { geoElement in
-                
-                // Block duplicate starting point selection
-                guard let feature = geoElement as? ArcGISFeature,
-                      let globalid = feature.attributes["globalid"] as? UUID else {
-                    userWarning = "Element could not be identified"
-                    return
-                }
-                guard !pendingTrace.startingPoints.contains(where: { startingPoint in
-                          return startingPoint.utilityElement.globalID == globalid
-                      }) else {
-                    userWarning = "Duplicate starting points cannot be added"
-                    return
-                }
-                
-                Task {
-                    guard let network = network,
-                          let geometry = feature.geometry,
-                          let symbol = try? await (feature.featureTable?.layer as? FeatureLayer)?
-                        .renderer?
-                        .symbol(for: feature)?
-                        .makeSwatch(scale: 1.0),
-                          let utilityElement = network.createElement(arcGISFeature: feature) else { return }
-                    
-                    if utilityElement.networkSource.kind == .edge && geometry is Polyline {
-                        utilityElement.fractionAlongEdge = fractionAlongEdge(
-                            of: geometry,
-                            at: mapPoint
-                        )
-                    } else if utilityElement.networkSource.kind == .junction &&
-                                utilityElement.assetType.terminalConfiguration?.terminals.count ?? 0 > 1 {
-                        utilityElement.terminal = utilityElement.assetType.terminalConfiguration?.terminals.first
-                    }
-                    
-                    let graphic = Graphic(
-                        geometry: mapPoint,
-                        symbol: SimpleMarkerSymbol(
-                            color: UIColor(pendingTrace.color),
-                            size: 20
-                        )
-                    )
-                    let startingPoint = UtilityNetworkTraceStartingPoint(
-                        extent: geometry.extent,
-                        geoElement: geoElement,
-                        graphic: graphic,
-                        image: symbol,
-                        utilityElement: utilityElement
-                    )
-                    graphicsOverlay.addGraphic(graphic)
-                    pendingTrace.startingPoints.append(startingPoint)
-                }
+                setStartingPoint(geoElement: geoElement, mapPoint: mapPoint)
             }
         }
     }
     
-    func setFractionAlongEdgeFor(
-        startingPoint: UtilityNetworkTraceStartingPoint,
-        to newValue: Double
+    /// Adds a new starting point to the pending trace.
+    /// - Parameters:
+    ///   - geoElement: An element that corresponds to another within the utility network.
+    ///   - mapPoint: A point on the map in map coordinates.
+    func setStartingPoint(
+        geoElement: GeoElement,
+        mapPoint: Point? = nil
     ) {
-        pendingTrace.startingPoints.first {
-            $0.utilityElement.globalID == startingPoint.utilityElement.globalID
-        }?.utilityElement.fractionAlongEdge = newValue
-        if let geometry = startingPoint.geoElement.geometry,
-           let polyline = geometry as? Polyline  {
-            startingPoint.graphic.geometry = GeometryEngine.point(
-                along: polyline,
-                atDistance: GeometryEngine.length(of: geometry) * newValue
+        Task {
+            guard let feature = geoElement as? ArcGISFeature,
+                  let globalid = feature.attributes["globalid"] as? UUID else {
+                userWarning = "Element could not be identified"
+                return
+            }
+            
+            // Block duplicate starting point selection
+            guard !pendingTrace.startingPoints.contains(where: { startingPoint in
+                      return startingPoint.utilityElement.globalID == globalid
+                  }) else {
+                userWarning = "Duplicate starting points cannot be added"
+                return
+            }
+            
+            guard let network = self.network,
+                  let geometry = feature.geometry,
+                  let symbol = try? await (feature.featureTable?.layer as? FeatureLayer)?
+                .renderer?
+                .symbol(for: feature)?
+                .makeSwatch(scale: 1.0),
+                  let utilityElement = network.createElement(arcGISFeature: feature) else { return }
+            
+            if utilityElement.networkSource.kind == .edge && geometry is Polyline {
+                if let mapPoint {
+                    utilityElement.fractionAlongEdge = fractionAlongEdge(
+                        of: geometry,
+                        at: mapPoint
+                    )
+                } else {
+                    utilityElement.fractionAlongEdge = 0.5
+                }
+                
+            } else if utilityElement.networkSource.kind == .junction &&
+                        utilityElement.assetType.terminalConfiguration?.terminals.count ?? 0 > 1 {
+                utilityElement.terminal = utilityElement.assetType.terminalConfiguration?.terminals.first
+            }
+            
+            let graphic = Graphic(
+                geometry: mapPoint ?? feature.geometry?.extent.center,
+                symbol: SimpleMarkerSymbol(
+                    color: UIColor(self.pendingTrace.color),
+                    size: 20
+                )
             )
+            
+            let startingPoint = UtilityNetworkTraceStartingPoint(
+                extent: geometry.extent,
+                geoElement: geoElement,
+                graphic: graphic,
+                image: symbol,
+                utilityElement: utilityElement
+            )
+            graphicsOverlay.addGraphic(graphic)
+            pendingTrace.startingPoints.append(startingPoint)
         }
     }
     
@@ -363,6 +397,7 @@ import SwiftUI
         completedTraces.append(pendingTrace)
         selectedTraceIndex = completedTraces.count - 1
         pendingTrace = Trace()
+        addExternalStartingPoints()
         return true
     }
     
@@ -376,6 +411,13 @@ import SwiftUI
     }
     
     // MARK: Private Methods
+    
+    /// Adds programatic starting points to the pending trace.
+    private func addExternalStartingPoints() {
+        externalStartingPoints.forEach {
+            setStartingPoint(geoElement: $0)
+        }
+    }
     
     /// Changes the selected state of the graphics for the completed trace at the provided index.
     /// - Parameters:
