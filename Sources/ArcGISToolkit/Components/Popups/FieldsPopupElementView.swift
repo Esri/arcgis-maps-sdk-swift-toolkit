@@ -33,60 +33,64 @@ struct FieldsPopupElementView: View {
     
     var body: some View {
         PopupElementHeader(
-            title: popupElement.title,
+            title: popupElement.title.isEmpty ? "Fields" : popupElement.title,
             description: popupElement.description
         )
         FieldsGrid(fields: displayFields)
-            .font(.footnote)
     }
     
     /// A view displaying a grid of labels and values.
     struct FieldsGrid: View {
         let fields: [DisplayField]
+        var columns: [GridItem] = Array(repeating: .init(.flexible(), spacing: 0), count: 1)
         
-        var columns: [GridItem] = Array(repeating: .init(.flexible(), spacing: 0), count: 2)
         var body: some View {
             LazyVGrid(columns: columns, spacing: 0) {
-                ForEach(Array(fields.enumerated()), id: \.element) { index, element in
-                    GridCell(label: element.label, rowIndex: index)
-                    GridCell(label: element.formattedValue, rowIndex: index)
+                ForEach(fields) { field in
+                    VStack(alignment: .leading) {
+                        Text(field.label)
+                            .font(.subheadline)
+                            .foregroundColor(.secondary)
+                            .padding([.top], 6)
+                        FormattedValueText(formattedValue: field.formattedValue)
+                            .padding([.bottom], -2)
+                        Divider()
+                    }
+                    .lineLimit(1)
+                    .background(Color.clear)
+                    .frame(maxWidth: .infinity, alignment: .leading)
                 }
             }
         }
     }
     
-    /// A view for dispaying text in a grid.
-    struct GridCell: View {
+    /// A view for dispaying a formatted value.
+    struct FormattedValueText: View {
         /// The String to display.
-        let label: String
-        /// The index of the row the cell is in.
-        let rowIndex: Int
-        /// The URL off the label if the label is an "http" string.
+        let formattedValue: String
+        /// The URL of the label if the label is an "http" string.
         var url: URL? {
-            label.lowercased().starts(with: "http") ? URL(string: label) : nil
+            formattedValue.lowercased().starts(with: "http") ? URL(string: formattedValue) : nil
         }
         
         var body: some View {
-            // Using a single space in place of an empty label allows the height
-            // of an empty cell to be calculated the same as a non-empty cell.
-            Text(url != nil ? "View" : (label.isEmpty ? " " : label))
-                .underline(url != nil)
-                .foregroundColor(url != nil ? Color(UIColor.link) : .primary)
-                .lineLimit(1)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(6)
-                .onTapGesture {
-                    if let url = url {
-                        UIApplication.shared.open(url)
-                    }
+            Group {
+                if let url = url,
+                   let link = "[View](\(url.absoluteString))"{
+                    Text(.init(link))
+                } else {
+                    Text(formattedValue)
                 }
-                .background(rowIndex % 2 != 1 ? Color.secondary.opacity(0.5) : Color.clear)
+            }
         }
     }
-    
-    /// A convenience type for displaying labels and values in a grid.
-    struct DisplayField: Hashable {
-        let label: String
-        let formattedValue: String
-    }
 }
+
+/// A convenience type for displaying labels and values in a grid.
+struct DisplayField: Hashable {
+    let label: String
+    let formattedValue: String
+    let id = UUID()
+}
+
+extension DisplayField: Identifiable {}

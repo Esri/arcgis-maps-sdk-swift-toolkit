@@ -35,6 +35,7 @@ public struct PopupView: View {
     public var body: some View {
         VStack(alignment: .leading) {
             Text(popup.title)
+                .font(.title)
                 .fontWeight(.bold)
             Divider()
             Group {
@@ -45,7 +46,7 @@ public struct PopupView: View {
                     }
                     .frame(maxWidth: .infinity)
                 } else if isPopupEvaluated! {
-                    popupElementScrollView(popup: popup)
+                    PopupElementScrollView(popup: popup)
                 } else {
                     Text("Popup failed evaluation.")
                 }
@@ -61,7 +62,7 @@ public struct PopupView: View {
         }
     }
     
-    struct popupElementScrollView: View {
+    struct PopupElementScrollView: View {
         var popup: Popup
         var body: some View {
             ScrollView {
