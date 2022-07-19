@@ -83,7 +83,7 @@ extension CompassTests {
 ***REMOVED******REMOVED***/ Builds viewpoints to use for tests.
 ***REMOVED******REMOVED***/ - Parameter rotation: The rotation to use for the resulting viewpoint.
 ***REMOVED******REMOVED***/ - Returns: A viewpoint object for tests.
-***REMOVED***func makeViewpoint(_ rotation: Double) -> Viewpoint {
+***REMOVED***func makeViewpoint(rotation: Double) -> Viewpoint {
 ***REMOVED******REMOVED***return Viewpoint(center: point, scale: scale, rotation: rotation)
 ***REMOVED***
 ***REMOVED***
