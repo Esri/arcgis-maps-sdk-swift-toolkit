@@ -31,8 +31,7 @@ public extension View {
 private struct AuthenticatorOverlayModifier: ViewModifier {
 ***REMOVED***@ObservedObject var authenticator: Authenticator
 ***REMOVED***
-***REMOVED***@ViewBuilder
-***REMOVED***func body(content: Content) -> some View {
+***REMOVED***@ViewBuilder func body(content: Content) -> some View {
 ***REMOVED******REMOVED***ZStack {
 ***REMOVED******REMOVED******REMOVED***content
 ***REMOVED******REMOVED******REMOVED***Color.clear
@@ -46,8 +45,7 @@ private struct AuthenticatorOverlayModifier: ViewModifier {
 private struct AuthenticatorModifier: ViewModifier {
 ***REMOVED***@ObservedObject var authenticator: Authenticator
 ***REMOVED***
-***REMOVED***@ViewBuilder
-***REMOVED***func body(content: Content) -> some View {
+***REMOVED***@ViewBuilder func body(content: Content) -> some View {
 ***REMOVED******REMOVED***switch authenticator.currentChallenge {
 ***REMOVED******REMOVED***case let challenge as QueuedNetworkChallenge:
 ***REMOVED******REMOVED******REMOVED***switch challenge.kind {
