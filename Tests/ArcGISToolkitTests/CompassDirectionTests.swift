@@ -15,7 +15,7 @@ import XCTest
 @testable ***REMOVED***Toolkit
 
 class CompassDirectionTests: XCTestCase {
-***REMOVED******REMOVED***/ Tests the behvaior of `CompassDirection.init(_ : Double)`
+***REMOVED******REMOVED***/ Tests the behavior of `CompassDirection.init(_ : Double)`
 ***REMOVED***func testInitCompassDirection() {
 ***REMOVED******REMOVED***XCTAssertEqual(CompassDirection(-405), .northwest)
 ***REMOVED******REMOVED***XCTAssertEqual(CompassDirection(-360), .north)
