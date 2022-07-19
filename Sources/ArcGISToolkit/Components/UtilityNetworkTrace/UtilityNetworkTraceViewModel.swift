@@ -477,5 +477,3 @@ extension UtilityNetworkTraceViewModel {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-
-extension UtilityTraceFunctionOutput: Identifiable { ***REMOVED***
