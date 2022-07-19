@@ -88,10 +88,8 @@ extension QueuedNetworkChallenge.Kind {
 ***REMOVED******REMOVED******REMOVED***self = .serverTrust
 ***REMOVED******REMOVED***case .ntlm, .basic, .digest:
 ***REMOVED******REMOVED******REMOVED***self = .login
-***REMOVED******REMOVED***case .pki:
+***REMOVED******REMOVED***case .clientCertificate:
 ***REMOVED******REMOVED******REMOVED***self = .certificate
-***REMOVED******REMOVED***case .htmlForm, .negotiate:
-***REMOVED******REMOVED******REMOVED***return nil
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
