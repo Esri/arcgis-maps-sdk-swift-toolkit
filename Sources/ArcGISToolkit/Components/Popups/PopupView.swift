@@ -41,7 +41,7 @@ public struct PopupView: View {
 ***REMOVED******REMOVED******REMOVED***Group {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if isPopupEvaluated == nil {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***VStack(alignment: .center) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Evaluating popoup expressions...")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Evaluating popup expressions...")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ProgressView()
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity)
