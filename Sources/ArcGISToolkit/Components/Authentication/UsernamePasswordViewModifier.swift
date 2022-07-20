@@ -19,20 +19,24 @@
 final class UsernamePasswordViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ The username.
 ***REMOVED***@Published var username = "" {
-***REMOVED******REMOVED***didSet { updateSigninButtonEnabled() ***REMOVED***
+***REMOVED******REMOVED***didSet { updateSignInButtonEnabled() ***REMOVED***
+***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The password.
 ***REMOVED***@Published var password = "" {
 ***REMOVED******REMOVED***didSet { updateSigninButtonEnabled() ***REMOVED***
 ***REMOVED***
+***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating if the sign-in button is enabled.
 ***REMOVED***@Published var signinButtonEnabled = false
+***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating if the form is enabled.
 ***REMOVED***@Published var formEnabled: Bool = true
 ***REMOVED***
 ***REMOVED******REMOVED***/ The action to perform when the user signs in. This is a closure that takes a username
 ***REMOVED******REMOVED***/ and password, respectively.
 ***REMOVED***var signInAction: (String, String) -> Void
+***REMOVED***
 ***REMOVED******REMOVED***/ The action to perform when the user cancels.
 ***REMOVED***var cancelAction: () -> Void
 ***REMOVED***
