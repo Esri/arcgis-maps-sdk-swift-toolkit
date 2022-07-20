@@ -16,6 +16,8 @@
 ***REMOVED***
 
 struct FloatingPanelExampleView: View {
+***REMOVED***@Environment(\.horizontalSizeClass) private var horizontalSizeClass
+***REMOVED***
 ***REMOVED***@StateObject private var map = Map(basemapStyle: .arcGISImagery)
 ***REMOVED***
 ***REMOVED***private let initialViewpoint = Viewpoint(
@@ -28,19 +30,18 @@ struct FloatingPanelExampleView: View {
 ***REMOVED******REMOVED******REMOVED***map: map,
 ***REMOVED******REMOVED******REMOVED***viewpoint: initialViewpoint
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***.overlay(alignment: .topTrailing) {
-***REMOVED******REMOVED******REMOVED******REMOVED***FloatingPanel {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***SampleContent()
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 360)
+***REMOVED******REMOVED***.overlay(alignment: .topTrailing) {
+***REMOVED******REMOVED******REMOVED***FloatingPanel {
+***REMOVED******REMOVED******REMOVED******REMOVED***SampleContent()
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.frame(maxWidth: horizontalSizeClass == .regular ? 360 : .infinity)
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
 struct SampleContent: View {
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***List(1..<21) { Text("\($0)") ***REMOVED***
-***REMOVED******REMOVED***.listStyle(.plain)
+***REMOVED******REMOVED******REMOVED***.listStyle(.plain)
 ***REMOVED***
 ***REMOVED***

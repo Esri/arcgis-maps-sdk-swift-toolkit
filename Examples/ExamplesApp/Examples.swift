@@ -42,7 +42,8 @@ extension ExampleList {
 ***REMOVED******REMOVED******REMOVED***AnyExample("Overview Map", content: OverviewMapExampleView()),
 ***REMOVED******REMOVED******REMOVED***AnyExample("Popup", content: PopupExampleView()),
 ***REMOVED******REMOVED******REMOVED***AnyExample("Scalebar", content: ScalebarExampleView()),
-***REMOVED******REMOVED******REMOVED***AnyExample("Search", content: SearchExampleView())
+***REMOVED******REMOVED******REMOVED***AnyExample("Search", content: SearchExampleView()),
+***REMOVED******REMOVED******REMOVED***AnyExample("Utility Network Trace", content: UtilityNetworkTraceExampleView())
 ***REMOVED******REMOVED***]
 ***REMOVED***)
 ***REMOVED***
