@@ -265,7 +265,7 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED***if let selectedStartingPoint {
+***REMOVED******REMOVED******REMOVED***if let selectedStartingPoint = selectedStartingPoint {
 ***REMOVED******REMOVED******REMOVED******REMOVED***viewpoint = Viewpoint(targetExtent: selectedStartingPoint.extent)
 ***REMOVED******REMOVED***
 ***REMOVED*** label: {
