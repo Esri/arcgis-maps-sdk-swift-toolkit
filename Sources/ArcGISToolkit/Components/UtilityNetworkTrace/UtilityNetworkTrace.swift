@@ -265,7 +265,7 @@ public struct UtilityNetworkTrace: View {
             }
         }
         Button {
-            if let selectedStartingPoint {
+            if let selectedStartingPoint = selectedStartingPoint {
                 viewpoint = Viewpoint(targetExtent: selectedStartingPoint.extent)
             }
         } label: {
