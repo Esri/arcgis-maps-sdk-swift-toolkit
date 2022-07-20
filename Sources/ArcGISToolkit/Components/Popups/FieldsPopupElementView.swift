@@ -74,7 +74,7 @@ struct FieldsPopupElementView: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ A view for dispaying a formatted value.
+***REMOVED******REMOVED***/ A view for displaying a formatted value.
 ***REMOVED***struct FormattedValueText: View {
 ***REMOVED******REMOVED******REMOVED***/ The String to display.
 ***REMOVED******REMOVED***let formattedValue: String
@@ -97,15 +97,14 @@ struct FieldsPopupElementView: View {
 ***REMOVED***
 
 ***REMOVED***/ A convenience type for displaying labels and values in a grid.
-struct DisplayField: Hashable {
+struct DisplayField: Hashable, Identifiable {
 ***REMOVED***let label: String
 ***REMOVED***let formattedValue: String
 ***REMOVED***let id = UUID()
 ***REMOVED***
 
-extension DisplayField: Identifiable {***REMOVED***
-
 extension FieldsPopupElement {
+***REMOVED******REMOVED***/ Provides  a default title to dispaly if `title` is empty.
 ***REMOVED***var displayTitle: String {
 ***REMOVED******REMOVED***title.isEmpty ? "Fields" : title
 ***REMOVED***

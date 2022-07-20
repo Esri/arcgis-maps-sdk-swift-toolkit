@@ -91,5 +91,3 @@ public struct PopupView: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-
-extension PopupElement: Identifiable {***REMOVED***
