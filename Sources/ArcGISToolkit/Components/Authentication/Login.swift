@@ -99,7 +99,7 @@ struct LoginViewModifier: ViewModifier {
 ***REMOVED***
 
 extension LoginViewModifier {
-***REMOVED******REMOVED***/ Creates a `UsernamePasswordViewModifier` with a queued network challenge.
+***REMOVED******REMOVED***/ Creates a `LoginViewModifier` with a queued network challenge.
 ***REMOVED***@MainActor
 ***REMOVED***init(challenge: QueuedNetworkChallenge) {
 ***REMOVED******REMOVED***self.init(
