@@ -395,7 +395,7 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***sp.utilityElement.globalID == selectedStartingPoint?.utilityElement.globalID
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***?.utilityElement.fractionAlongEdge ?? .zero
 ***REMOVED******REMOVED******REMOVED******REMOVED***, set: { newValue in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let selectedStartingPoint {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let selectedStartingPoint = selectedStartingPoint {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.setFractionAlongEdgeFor(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***startingPoint: selectedStartingPoint,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***to: newValue
@@ -433,7 +433,7 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***makeZoomToButton {
-***REMOVED******REMOVED******REMOVED***if let selectedStartingPoint {
+***REMOVED******REMOVED******REMOVED***if let selectedStartingPoint = selectedStartingPoint {
 ***REMOVED******REMOVED******REMOVED******REMOVED***viewpoint = Viewpoint(targetExtent: selectedStartingPoint.extent)
 ***REMOVED******REMOVED***
 ***REMOVED***

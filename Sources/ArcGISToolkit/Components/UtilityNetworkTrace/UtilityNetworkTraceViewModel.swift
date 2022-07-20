@@ -263,7 +263,7 @@ import Foundation
 ***REMOVED******REMOVED******REMOVED******REMOVED***  let utilityElement = network.createElement(arcGISFeature: feature) else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***if utilityElement.networkSource.kind == .edge && geometry is Polyline {
-***REMOVED******REMOVED******REMOVED******REMOVED***if let mapPoint {
+***REMOVED******REMOVED******REMOVED******REMOVED***if let mapPoint = mapPoint {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***utilityElement.fractionAlongEdge = fractionAlongEdge(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***of: geometry,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***at: mapPoint
