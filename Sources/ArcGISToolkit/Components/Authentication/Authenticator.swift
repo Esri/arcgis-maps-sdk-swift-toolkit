@@ -28,7 +28,7 @@ public final class Authenticator: ObservableObject {
 ***REMOVED******REMOVED***observationTask?.cancel()
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED*** The task for the observation of the challenge queue.
+***REMOVED******REMOVED***/ The task for the observation of the challenge queue.
 ***REMOVED***private var observationTask: Task<Void, Never>?
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates an authenticator.
@@ -48,7 +48,7 @@ public final class Authenticator: ObservableObject {
 ***REMOVED******REMOVED***/ Sets up new credential stores that will be persisted to the keychain.
 ***REMOVED******REMOVED***/ - Remark: The credentials will be stored in the default access group of the keychain.
 ***REMOVED******REMOVED***/ You can find more information about what the default group would be here:
-***REMOVED******REMOVED***/ https:***REMOVED***developer.apple.com/documentation/security/keychain_services/keychain_items/sharing_access_to_keychain_items_among_a_collection_of_apps.
+***REMOVED******REMOVED***/ https:***REMOVED***developer.apple.com/documentation/security/keychain_services/keychain_items/sharing_access_to_keychain_items_among_a_collection_of_apps
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - access: When the credentials stored in the keychain can be accessed.
 ***REMOVED******REMOVED***/   - isSynchronizable: A value indicating whether the credentials are synchronized with iCloud.
@@ -100,11 +100,11 @@ public final class Authenticator: ObservableObject {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Set the current challenge, this should present the appropriate view.
 ***REMOVED******REMOVED******REMOVED***currentChallenge = queuedChallenge
-
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Wait for the queued challenge to finish.
 ***REMOVED******REMOVED******REMOVED***await queuedChallenge.complete()
-
-***REMOVED******REMOVED******REMOVED******REMOVED*** Reset the crrent challenge to `nil`, that will dismiss the view.
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED*** Reset the current challenge to `nil`, that will dismiss the view.
 ***REMOVED******REMOVED******REMOVED***currentChallenge = nil
 ***REMOVED***
 ***REMOVED***
@@ -121,8 +121,7 @@ public final class Authenticator: ObservableObject {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The current queued challenge.
-***REMOVED***@Published
-***REMOVED***var currentChallenge: QueuedChallenge?
+***REMOVED***@Published var currentChallenge: QueuedChallenge?
 ***REMOVED***
 
 extension Authenticator: AuthenticationChallengeHandler {

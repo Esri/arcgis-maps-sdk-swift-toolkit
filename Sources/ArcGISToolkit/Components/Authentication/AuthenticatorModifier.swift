@@ -14,11 +14,9 @@
 ***REMOVED***
 
 public extension View {
-***REMOVED******REMOVED***/ Presents user experiences for collecting network authentication credentials from the
-***REMOVED******REMOVED***/ user.
+***REMOVED******REMOVED***/ Presents user experiences for collecting network authentication credentials from the user.
 ***REMOVED******REMOVED***/ - Parameter authenticator: The authenticator for which credentials will be prompted.
-***REMOVED***@ViewBuilder
-***REMOVED***func authenticator(_ authenticator: Authenticator) -> some View {
+***REMOVED***@ViewBuilder func authenticator(_ authenticator: Authenticator) -> some View {
 ***REMOVED******REMOVED***modifier(AuthenticatorOverlayModifier(authenticator: authenticator))
 ***REMOVED***
 ***REMOVED***
@@ -33,8 +31,7 @@ public extension View {
 private struct AuthenticatorOverlayModifier: ViewModifier {
 ***REMOVED***@ObservedObject var authenticator: Authenticator
 ***REMOVED***
-***REMOVED***@ViewBuilder
-***REMOVED***func body(content: Content) -> some View {
+***REMOVED***@ViewBuilder func body(content: Content) -> some View {
 ***REMOVED******REMOVED***ZStack {
 ***REMOVED******REMOVED******REMOVED***content
 ***REMOVED******REMOVED******REMOVED***Color.clear
@@ -48,8 +45,7 @@ private struct AuthenticatorOverlayModifier: ViewModifier {
 private struct AuthenticatorModifier: ViewModifier {
 ***REMOVED***@ObservedObject var authenticator: Authenticator
 ***REMOVED***
-***REMOVED***@ViewBuilder
-***REMOVED***func body(content: Content) -> some View {
+***REMOVED***@ViewBuilder func body(content: Content) -> some View {
 ***REMOVED******REMOVED***switch authenticator.currentChallenge {
 ***REMOVED******REMOVED***case let challenge as QueuedArcGISChallenge:
 ***REMOVED******REMOVED******REMOVED***content.modifier(LoginViewModifier(challenge: challenge))
