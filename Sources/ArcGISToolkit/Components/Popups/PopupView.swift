@@ -41,7 +41,7 @@ public struct PopupView: View {
             Group {
                 if isPopupEvaluated == nil {
                     VStack(alignment: .center) {
-                        Text("Evaluating popoup expressions...")
+                        Text("Evaluating popup expressions...")
                         ProgressView()
                     }
                     .frame(maxWidth: .infinity)
