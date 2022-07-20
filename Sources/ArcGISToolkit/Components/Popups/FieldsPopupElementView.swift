@@ -41,7 +41,7 @@ struct FieldsPopupElementView: View {
     }
     
     /// A view displaying the labels and values.
-    struct FieldsList: View {
+    private struct FieldsList: View {
         let fields: [DisplayField]
         
         var body: some View {
@@ -57,7 +57,7 @@ struct FieldsPopupElementView: View {
     }
     
     /// A view for displaying a `DisplayField`.
-    struct FieldRow: View {
+    private struct FieldRow: View {
         var field: DisplayField
         
         var body: some View {
@@ -75,35 +75,28 @@ struct FieldsPopupElementView: View {
     }
     
     /// A view for displaying a formatted value.
-    struct FormattedValueText: View {
+    private struct FormattedValueText: View {
         /// The String to display.
         let formattedValue: String
-        /// The URL of the label if the label is an "http" string.
-        var url: URL? {
-            formattedValue.lowercased().starts(with: "http") ? URL(string: formattedValue) : nil
-        }
         
         var body: some View {
-            Group {
-                if let url = url,
-                   let link = "[View](\(url.absoluteString))"{
-                    Text(.init(link))
-                } else {
-                    Text(formattedValue)
-                }
+            if formattedValue.lowercased().starts(with: "http") {
+                Text(.init("[View](\(formattedValue))"))
+            } else {
+                Text(formattedValue)
             }
         }
     }
 }
 
 /// A convenience type for displaying labels and values in a grid.
-struct DisplayField: Hashable, Identifiable {
+private struct DisplayField: Hashable, Identifiable {
     let label: String
     let formattedValue: String
     let id = UUID()
 }
 
-extension FieldsPopupElement {
+private extension FieldsPopupElement {
     /// Provides  a default title to dispaly if `title` is empty.
     var displayTitle: String {
         title.isEmpty ? "Fields" : title
