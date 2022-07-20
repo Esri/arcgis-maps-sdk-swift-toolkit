@@ -119,7 +119,7 @@ extension LoginViewModifier {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Creates a `UsernamePasswordViewModifier` with a queued ArcGIS challenge.
+***REMOVED******REMOVED***/ Creates a `LoginViewModifier` with a queued ArcGIS challenge.
 ***REMOVED***@MainActor
 ***REMOVED***init(challenge: QueuedArcGISChallenge) {
 ***REMOVED******REMOVED***self.init(
