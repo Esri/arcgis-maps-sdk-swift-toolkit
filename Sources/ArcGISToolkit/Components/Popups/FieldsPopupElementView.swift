@@ -41,7 +41,7 @@ struct FieldsPopupElementView: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ A view displaying the labels and values.
-***REMOVED***struct FieldsList: View {
+***REMOVED***private struct FieldsList: View {
 ***REMOVED******REMOVED***let fields: [DisplayField]
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var body: some View {
@@ -57,7 +57,7 @@ struct FieldsPopupElementView: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ A view for displaying a `DisplayField`.
-***REMOVED***struct FieldRow: View {
+***REMOVED***private struct FieldRow: View {
 ***REMOVED******REMOVED***var field: DisplayField
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var body: some View {
@@ -75,35 +75,28 @@ struct FieldsPopupElementView: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ A view for displaying a formatted value.
-***REMOVED***struct FormattedValueText: View {
+***REMOVED***private struct FormattedValueText: View {
 ***REMOVED******REMOVED******REMOVED***/ The String to display.
 ***REMOVED******REMOVED***let formattedValue: String
-***REMOVED******REMOVED******REMOVED***/ The URL of the label if the label is an "http" string.
-***REMOVED******REMOVED***var url: URL? {
-***REMOVED******REMOVED******REMOVED***formattedValue.lowercased().starts(with: "http") ? URL(string: formattedValue) : nil
-***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var body: some View {
-***REMOVED******REMOVED******REMOVED***Group {
-***REMOVED******REMOVED******REMOVED******REMOVED***if let url = url,
-***REMOVED******REMOVED******REMOVED******REMOVED***   let link = "[View](\(url.absoluteString))"{
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(.init(link))
-***REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(formattedValue)
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***if formattedValue.lowercased().starts(with: "http") {
+***REMOVED******REMOVED******REMOVED******REMOVED***Text(.init("[View](\(formattedValue))"))
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***Text(formattedValue)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
 ***REMOVED***/ A convenience type for displaying labels and values in a grid.
-struct DisplayField: Hashable, Identifiable {
+private struct DisplayField: Hashable, Identifiable {
 ***REMOVED***let label: String
 ***REMOVED***let formattedValue: String
 ***REMOVED***let id = UUID()
 ***REMOVED***
 
-extension FieldsPopupElement {
+private extension FieldsPopupElement {
 ***REMOVED******REMOVED***/ Provides  a default title to dispaly if `title` is empty.
 ***REMOVED***var displayTitle: String {
 ***REMOVED******REMOVED***title.isEmpty ? "Fields" : title
