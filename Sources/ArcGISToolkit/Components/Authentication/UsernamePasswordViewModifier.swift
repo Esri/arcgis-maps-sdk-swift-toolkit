@@ -28,7 +28,7 @@ final class UsernamePasswordViewModel: ObservableObject {
     }
     
     /// A Boolean value indicating if the sign-in button is enabled.
-    @Published var signinButtonEnabled = false
+    @Published var signInButtonEnabled = false
     
     /// A Boolean value indicating if the form is enabled.
     @Published var formEnabled: Bool = true
@@ -57,7 +57,7 @@ final class UsernamePasswordViewModel: ObservableObject {
     }
     
     private func updateSigninButtonEnabled() {
-        signinButtonEnabled = !username.isEmpty && !password.isEmpty
+        signInButtonEnabled = !username.isEmpty && !password.isEmpty
     }
     
     /// The host that initiated the challenge.
@@ -157,7 +157,7 @@ private struct UsernamePasswordView: View {
                 .disableAutocorrection(true)
 
                 Section {
-                    signinButton
+                    signInButton
                 }
             }
             .disabled(!viewModel.formEnabled)
@@ -195,7 +195,7 @@ private struct UsernamePasswordView: View {
     }
     
     /// The sign-in button.
-    private var signinButton: some View {
+    private var signInButton: some View {
         Button(action: {
             dismissAction()
             viewModel.signIn()
@@ -210,8 +210,8 @@ private struct UsernamePasswordView: View {
                     .tint(.white)
             }
         })
-        .disabled(!viewModel.signinButtonEnabled)
-        .listRowBackground(viewModel.signinButtonEnabled ? Color.accentColor : Color.gray)
+        .disabled(!viewModel.signInButtonEnabled)
+        .listRowBackground(viewModel.signInButtonEnabled ? Color.accentColor : Color.gray)
     }
 }
 
