@@ -68,7 +68,7 @@ public struct UtilityNetworkTrace: View {
     // MARK: Bindings
     
     /// Starting points programmatically provided to the trace tool.
-    @Binding private var externalStartingPoints: [GeoElement]
+    @Binding private var externalStartingPoints: [(GeoElement, Point?)]
     
     /// The graphics overlay to hold generated starting point and trace graphics.
     @Binding private var graphicsOverlay: GraphicsOverlay
@@ -486,7 +486,7 @@ public struct UtilityNetworkTrace: View {
         viewPoint: Binding<CGPoint?>,
         mapViewProxy: Binding<MapViewProxy?>,
         viewpoint: Binding<Viewpoint?>,
-        startingPoints: Binding<[GeoElement]> = .constant([])
+        startingPoints: Binding<[(GeoElement, Point?)]> = .constant([])
     ) {
         _viewPoint = viewPoint
         _mapPoint = mapPoint
