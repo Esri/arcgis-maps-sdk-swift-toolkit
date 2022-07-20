@@ -18,6 +18,7 @@ import Foundation
 final class QueuedNetworkChallenge: QueuedChallenge {
 ***REMOVED******REMOVED***/ The host that prompted the challenge.
 ***REMOVED***let host: String
+***REMOVED***
 ***REMOVED******REMOVED***/ The kind of challenge.
 ***REMOVED***let kind: Kind
 ***REMOVED***
