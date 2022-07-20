@@ -48,16 +48,16 @@ class UsernamePasswordViewModelTests: XCTestCase {
         XCTAssertFalse(cancelCalled)
         
         model.username = "abc"
-        XCTAssertFalse(model.signinButtonEnabled)
+        XCTAssertFalse(model.signInButtonEnabled)
         
         model.password = "123"
-        XCTAssertTrue(model.signinButtonEnabled)
+        XCTAssertTrue(model.signInButtonEnabled)
         
         model.password = ""
-        XCTAssertFalse(model.signinButtonEnabled)
+        XCTAssertFalse(model.signInButtonEnabled)
         
         model.password = "123"
-        XCTAssertTrue(model.signinButtonEnabled)
+        XCTAssertTrue(model.signInButtonEnabled)
         
         model.signIn()
         XCTAssertFalse(model.formEnabled)
