@@ -70,7 +70,7 @@ import Foundation
 ***REMOVED***private var map: Map
 ***REMOVED***
 ***REMOVED******REMOVED***/ Starting points programmatically provided to the trace tool.
-***REMOVED***var externalStartingPoints = [GeoElement]() {
+***REMOVED***var externalStartingPoints = [(GeoElement, Point?)]() {
 ***REMOVED******REMOVED***didSet {
 ***REMOVED******REMOVED******REMOVED***addExternalStartingPoints()
 ***REMOVED***
@@ -94,7 +94,7 @@ import Foundation
 ***REMOVED***init(
 ***REMOVED******REMOVED***map: Map,
 ***REMOVED******REMOVED***graphicsOverlay: GraphicsOverlay,
-***REMOVED******REMOVED***startingPoints: [GeoElement]
+***REMOVED******REMOVED***startingPoints: [(GeoElement, Point?)]
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.map = map
 ***REMOVED******REMOVED***self.graphicsOverlay = graphicsOverlay
@@ -415,7 +415,7 @@ import Foundation
 ***REMOVED******REMOVED***/ Adds programatic starting points to the pending trace.
 ***REMOVED***private func addExternalStartingPoints() {
 ***REMOVED******REMOVED***externalStartingPoints.forEach {
-***REMOVED******REMOVED******REMOVED***setStartingPoint(geoElement: $0)
+***REMOVED******REMOVED******REMOVED***setStartingPoint(geoElement: $0.0, mapPoint: $0.1)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
