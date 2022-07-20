@@ -40,7 +40,7 @@ struct FieldsPopupElementView: View {
 ***REMOVED******REMOVED***FieldsList(fields: displayFields)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ A view displaying a grid of labels and values.
+***REMOVED******REMOVED***/ A view displaying the labels and values.
 ***REMOVED***struct FieldsList: View {
 ***REMOVED******REMOVED***let fields: [DisplayField]
 ***REMOVED******REMOVED***

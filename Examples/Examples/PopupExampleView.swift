@@ -49,7 +49,7 @@ struct PopupExampleView: View {
 ***REMOVED******REMOVED***/ The map displayed in the map view.
 ***REMOVED***@StateObject private var map = makeMap()
 ***REMOVED***
-***REMOVED******REMOVED***/ The point on the screen the user tapped on and used to identify layers.
+***REMOVED******REMOVED***/ The point on the screen the user tapped on to identify a feature.
 ***REMOVED***@State private var identifyScreenPoint: CGPoint?
 
 ***REMOVED******REMOVED***/ The result of the layer identify operation.
@@ -95,7 +95,7 @@ struct PopupExampleView: View {
 ***REMOVED***
 
 ***REMOVED***/ A view displaying the results of an identify operation.
-struct IdentifyResultView: View {
+private struct IdentifyResultView: View {
 ***REMOVED***var identifyResult: Result<[IdentifyLayerResult], Error>
 ***REMOVED***
 ***REMOVED***@Environment(\.horizontalSizeClass) var horizontalSizeClass
