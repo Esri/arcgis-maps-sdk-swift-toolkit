@@ -1,4 +1,4 @@
-// Copyright 2021 Esri.
+// Copyright 2022 Esri.
 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -11,19 +11,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-extension Result where Failure == Error {
-    /// Creates a result based on the outcome of the given task. If the task
-    /// succeeds, the result is `success`. If the task fails, the result is
-    /// `failure`.
-    ///
-    /// Returns `nil` in the event that the task was cancelled.
-    init?(awaiting task: () async throws -> Success) async {
-        do {
-            self = .success(try await task())
-        } catch is CancellationError {
-            return nil
-        } catch {
-            self = .failure(error)
-        }
+import XCTest
+@testable import ArcGISToolkit
+
+@MainActor
+class TrustHostViewModifierTests: XCTestCase {
+    func testInit() {
+        let challenge = QueuedNetworkChallenge(host: "host.com", kind: .serverTrust)
+        // Tests the initial state.
+        let modifier = TrustHostViewModifier(challenge: challenge)
+        XCTAssertIdentical(modifier.challenge, challenge)
+        XCTAssertFalse(modifier.isPresented)
     }
 }
