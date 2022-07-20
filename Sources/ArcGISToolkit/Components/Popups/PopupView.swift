@@ -91,5 +91,3 @@ public struct PopupView: View {
         }
     }
 }
-
-extension PopupElement: Identifiable {}

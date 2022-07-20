@@ -74,7 +74,7 @@ struct FieldsPopupElementView: View {
         }
     }
     
-    /// A view for dispaying a formatted value.
+    /// A view for displaying a formatted value.
     struct FormattedValueText: View {
         /// The String to display.
         let formattedValue: String
@@ -97,15 +97,14 @@ struct FieldsPopupElementView: View {
 }
 
 /// A convenience type for displaying labels and values in a grid.
-struct DisplayField: Hashable {
+struct DisplayField: Hashable, Identifiable {
     let label: String
     let formattedValue: String
     let id = UUID()
 }
 
-extension DisplayField: Identifiable {}
-
 extension FieldsPopupElement {
+    /// Provides  a default title to dispaly if `title` is empty.
     var displayTitle: String {
         title.isEmpty ? "Fields" : title
     }
