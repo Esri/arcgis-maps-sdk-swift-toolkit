@@ -250,8 +250,7 @@ public struct UtilityNetworkTrace: View {
         }
         Button {
             Task {
-                let traceSuccess = await viewModel.trace()
-                if traceSuccess {
+                if await viewModel.trace() {
                     currentActivity = .viewingTraces(nil)
                 }
             }
