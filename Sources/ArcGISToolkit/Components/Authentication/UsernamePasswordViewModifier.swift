@@ -19,20 +19,24 @@ import ArcGIS
 final class UsernamePasswordViewModel: ObservableObject {
     /// The username.
     @Published var username = "" {
-        didSet { updateSigninButtonEnabled() }
+        didSet { updateSignInButtonEnabled() }
     }
+    
     /// The password.
     @Published var password = "" {
         didSet { updateSigninButtonEnabled() }
     }
+    
     /// A Boolean value indicating if the sign-in button is enabled.
     @Published var signinButtonEnabled = false
+    
     /// A Boolean value indicating if the form is enabled.
     @Published var formEnabled: Bool = true
     
     /// The action to perform when the user signs in. This is a closure that takes a username
     /// and password, respectively.
     var signInAction: (String, String) -> Void
+    
     /// The action to perform when the user cancels.
     var cancelAction: () -> Void
     
