@@ -24,7 +24,7 @@ final class UsernamePasswordViewModel: ObservableObject {
     
     /// The password.
     @Published var password = "" {
-        didSet { updateSigninButtonEnabled() }
+        didSet { updateSignInButtonEnabled() }
     }
     
     /// A Boolean value indicating if the sign-in button is enabled.
@@ -56,7 +56,7 @@ final class UsernamePasswordViewModel: ObservableObject {
         self.cancelAction = cancelAction
     }
     
-    private func updateSigninButtonEnabled() {
+    private func updateSignInButtonEnabled() {
         signInButtonEnabled = !username.isEmpty && !password.isEmpty
     }
     

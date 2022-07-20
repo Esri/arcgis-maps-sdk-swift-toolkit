@@ -40,7 +40,7 @@ class UsernamePasswordViewModelTests: XCTestCase {
         XCTAssertEqual(model.challengingHost, "host.com")
         XCTAssertNotNil(model.signInAction)
         XCTAssertNotNil(model.cancelAction)
-        XCTAssertFalse(model.signinButtonEnabled)
+        XCTAssertFalse(model.signInButtonEnabled)
         XCTAssertTrue(model.formEnabled)
         XCTAssertTrue(model.username.isEmpty)
         XCTAssertTrue(model.password.isEmpty)
