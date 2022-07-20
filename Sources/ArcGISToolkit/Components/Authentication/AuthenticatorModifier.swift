@@ -14,11 +14,9 @@
 import SwiftUI
 
 public extension View {
-    /// Presents user experiences for collecting network authentication credentials from the
-    /// user.
+    /// Presents user experiences for collecting network authentication credentials from the user.
     /// - Parameter authenticator: The authenticator for which credentials will be prompted.
-    @ViewBuilder
-    func authenticator(_ authenticator: Authenticator) -> some View {
+    @ViewBuilder func authenticator(_ authenticator: Authenticator) -> some View {
         modifier(AuthenticatorOverlayModifier(authenticator: authenticator))
     }
 }
@@ -33,8 +31,7 @@ public extension View {
 private struct AuthenticatorOverlayModifier: ViewModifier {
     @ObservedObject var authenticator: Authenticator
     
-    @ViewBuilder
-    func body(content: Content) -> some View {
+    @ViewBuilder func body(content: Content) -> some View {
         ZStack {
             content
             Color.clear
@@ -48,8 +45,7 @@ private struct AuthenticatorOverlayModifier: ViewModifier {
 private struct AuthenticatorModifier: ViewModifier {
     @ObservedObject var authenticator: Authenticator
     
-    @ViewBuilder
-    func body(content: Content) -> some View {
+    @ViewBuilder func body(content: Content) -> some View {
         switch authenticator.currentChallenge {
         case let challenge as QueuedArcGISChallenge:
             content.modifier(LoginViewModifier(challenge: challenge))
