@@ -263,7 +263,7 @@ import SwiftUI
                   let utilityElement = network.createElement(arcGISFeature: feature) else { return }
             
             if utilityElement.networkSource.kind == .edge && geometry is Polyline {
-                if let mapPoint {
+                if let mapPoint = mapPoint {
                     utilityElement.fractionAlongEdge = fractionAlongEdge(
                         of: geometry,
                         at: mapPoint
