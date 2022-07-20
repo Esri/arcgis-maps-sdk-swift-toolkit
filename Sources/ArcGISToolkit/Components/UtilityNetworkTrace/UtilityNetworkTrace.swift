@@ -58,6 +58,10 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED***/ The current user activity.
 ***REMOVED***@State private var currentActivity: UserActivity = .creatingTrace(nil)
 ***REMOVED***
+***REMOVED******REMOVED***/ A value indicating whether the viewpoint should be automatically changed to show the resulting
+***REMOVED******REMOVED***/ extent of a trace.
+***REMOVED***@State private var shouldZoomOnTraceCompletion = false
+***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating if the warning that all traces will be deleted is presented.
 ***REMOVED***@State private var showWarningAlert = false
 ***REMOVED***
@@ -245,6 +249,9 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onSubmit {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.pendingTrace.userDidSpecifyName = true
 ***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Toggle(isOn: $shouldZoomOnTraceCompletion) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Zoom to result")
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
@@ -252,6 +259,10 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED***Task {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if await viewModel.trace() {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentActivity = .viewingTraces(nil)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if shouldZoomOnTraceCompletion,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***   let extent = viewModel.selectedTrace?.resultExtent {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint = Viewpoint(targetExtent: extent)
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED*** label: {
@@ -352,12 +363,8 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***makeZoomToButton {
-***REMOVED******REMOVED******REMOVED***if let resultEnvelope = GeometryEngine.combineExtents(of: [
-***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.selectedTrace?.utilityGeometryTraceResult?.multipoint,
-***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.selectedTrace?.utilityGeometryTraceResult?.polygon,
-***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.selectedTrace?.utilityGeometryTraceResult?.polyline
-***REMOVED******REMOVED******REMOVED***].compactMap { $0 ***REMOVED***) {
-***REMOVED******REMOVED******REMOVED******REMOVED***viewpoint = Viewpoint(targetExtent: resultEnvelope.extent)
+***REMOVED******REMOVED******REMOVED***if let extent = viewModel.selectedTrace?.resultExtent {
+***REMOVED******REMOVED******REMOVED******REMOVED***viewpoint = Viewpoint(targetExtent: extent)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.padding([.vertical], 2)

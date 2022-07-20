@@ -53,6 +53,23 @@ extension UtilityNetworkTraceViewModel {
 ***REMOVED******REMOVED******REMOVED***/ A user given name for the trace.
 ***REMOVED******REMOVED***var name = ""
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ The extent of the trace's geometry result with a small added buffer.
+***REMOVED******REMOVED***var resultExtent: Envelope? {
+***REMOVED******REMOVED******REMOVED***if let resultEnvelope = GeometryEngine.combineExtents(of: [
+***REMOVED******REMOVED******REMOVED******REMOVED***utilityGeometryTraceResult?.multipoint,
+***REMOVED******REMOVED******REMOVED******REMOVED***utilityGeometryTraceResult?.polygon,
+***REMOVED******REMOVED******REMOVED******REMOVED***utilityGeometryTraceResult?.polyline
+***REMOVED******REMOVED******REMOVED***].compactMap { $0 ***REMOVED***),
+***REMOVED******REMOVED******REMOVED***   let expandedEnvelope = GeometryEngine.buffer(
+***REMOVED******REMOVED******REMOVED******REMOVED***around: resultEnvelope,
+***REMOVED******REMOVED******REMOVED******REMOVED***distance: 200
+***REMOVED******REMOVED******REMOVED***   ) {
+***REMOVED******REMOVED******REMOVED******REMOVED***return expandedEnvelope.extent
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***return nil
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ A collection of starting points for the trace.
 ***REMOVED******REMOVED***var startingPoints = [UtilityNetworkTraceStartingPoint]()
 ***REMOVED******REMOVED***
