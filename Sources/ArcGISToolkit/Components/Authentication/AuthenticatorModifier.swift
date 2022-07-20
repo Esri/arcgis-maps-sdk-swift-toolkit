@@ -54,7 +54,7 @@ private struct AuthenticatorModifier: ViewModifier {
             case .certificate:
                 fatalError("implementation coming soon in another PR")
             case .login:
-                fatalError("implementation coming soon in another PR")
+                content.modifier(UsernamePasswordViewModifier(challenge: challenge))
             }
         case .none:
             content
