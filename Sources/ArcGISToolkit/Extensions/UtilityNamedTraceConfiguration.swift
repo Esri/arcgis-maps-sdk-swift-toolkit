@@ -11,16 +11,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import XCTest
-@testable import ArcGISToolkit
+import ArcGIS
 
-@MainActor
-class TrustHostViewModifierTests: XCTestCase {
-    func testInit() {
-        let challenge = QueuedNetworkChallenge(host: "host.com", kind: .serverTrust)
-        // Tests the initial state.
-        let modifier = TrustHostViewModifier(challenge: challenge)
-        XCTAssertIdentical(modifier.challenge, challenge)
-        XCTAssertFalse(modifier.isPresented)
+extension UtilityNamedTraceConfiguration: Hashable {
+    public static func == (
+        lhs: UtilityNamedTraceConfiguration,
+        rhs: UtilityNamedTraceConfiguration
+    ) -> Bool {
+        lhs.globalID == rhs.globalID
+    }
+    
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(globalID)
     }
 }
+
+extension UtilityNamedTraceConfiguration: Identifiable {}

@@ -40,7 +40,7 @@ class LoginViewModelTests: XCTestCase {
         XCTAssertEqual(model.challengingHost, "host.com")
         XCTAssertNotNil(model.signInAction)
         XCTAssertNotNil(model.cancelAction)
-        XCTAssertFalse(model.signinButtonEnabled)
+        XCTAssertFalse(model.signInButtonEnabled)
         XCTAssertTrue(model.formEnabled)
         XCTAssertTrue(model.username.isEmpty)
         XCTAssertTrue(model.password.isEmpty)
@@ -48,16 +48,16 @@ class LoginViewModelTests: XCTestCase {
         XCTAssertFalse(cancelCalled)
         
         model.username = "abc"
-        XCTAssertFalse(model.signinButtonEnabled)
+        XCTAssertFalse(model.signInButtonEnabled)
         
         model.password = "123"
-        XCTAssertTrue(model.signinButtonEnabled)
+        XCTAssertTrue(model.signInButtonEnabled)
         
         model.password = ""
-        XCTAssertFalse(model.signinButtonEnabled)
+        XCTAssertFalse(model.signInButtonEnabled)
         
         model.password = "123"
-        XCTAssertTrue(model.signinButtonEnabled)
+        XCTAssertTrue(model.signInButtonEnabled)
         
         model.signIn()
         XCTAssertFalse(model.formEnabled)

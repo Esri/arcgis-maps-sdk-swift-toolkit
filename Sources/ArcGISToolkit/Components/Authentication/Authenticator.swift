@@ -28,7 +28,7 @@ public final class Authenticator: ObservableObject {
         observationTask?.cancel()
     }
     
-    // The task for the observation of the challenge queue.
+    /// The task for the observation of the challenge queue.
     private var observationTask: Task<Void, Never>?
     
     /// Creates an authenticator.
@@ -48,7 +48,7 @@ public final class Authenticator: ObservableObject {
     /// Sets up new credential stores that will be persisted to the keychain.
     /// - Remark: The credentials will be stored in the default access group of the keychain.
     /// You can find more information about what the default group would be here:
-    /// https://developer.apple.com/documentation/security/keychain_services/keychain_items/sharing_access_to_keychain_items_among_a_collection_of_apps.
+    /// https://developer.apple.com/documentation/security/keychain_services/keychain_items/sharing_access_to_keychain_items_among_a_collection_of_apps
     /// - Parameters:
     ///   - access: When the credentials stored in the keychain can be accessed.
     ///   - isSynchronizable: A value indicating whether the credentials are synchronized with iCloud.
@@ -100,11 +100,11 @@ public final class Authenticator: ObservableObject {
             
             // Set the current challenge, this should present the appropriate view.
             currentChallenge = queuedChallenge
-
+            
             // Wait for the queued challenge to finish.
             await queuedChallenge.complete()
-
-            // Reset the crrent challenge to `nil`, that will dismiss the view.
+            
+            // Reset the current challenge to `nil`, that will dismiss the view.
             currentChallenge = nil
         }
     }
@@ -121,8 +121,7 @@ public final class Authenticator: ObservableObject {
     }
     
     /// The current queued challenge.
-    @Published
-    var currentChallenge: QueuedChallenge?
+    @Published var currentChallenge: QueuedChallenge?
 }
 
 extension Authenticator: AuthenticationChallengeHandler {
