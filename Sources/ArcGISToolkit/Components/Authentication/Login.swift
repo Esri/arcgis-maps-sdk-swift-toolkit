@@ -99,7 +99,7 @@ struct LoginViewModifier: ViewModifier {
 }
 
 extension LoginViewModifier {
-    /// Creates a `UsernamePasswordViewModifier` with a queued network challenge.
+    /// Creates a `LoginViewModifier` with a queued network challenge.
     @MainActor
     init(challenge: QueuedNetworkChallenge) {
         self.init(
