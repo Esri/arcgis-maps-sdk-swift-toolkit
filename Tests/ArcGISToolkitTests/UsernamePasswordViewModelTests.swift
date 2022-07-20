@@ -48,16 +48,16 @@ class UsernamePasswordViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***XCTAssertFalse(cancelCalled)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***model.username = "abc"
-***REMOVED******REMOVED***XCTAssertFalse(model.signinButtonEnabled)
+***REMOVED******REMOVED***XCTAssertFalse(model.signInButtonEnabled)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***model.password = "123"
-***REMOVED******REMOVED***XCTAssertTrue(model.signinButtonEnabled)
+***REMOVED******REMOVED***XCTAssertTrue(model.signInButtonEnabled)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***model.password = ""
-***REMOVED******REMOVED***XCTAssertFalse(model.signinButtonEnabled)
+***REMOVED******REMOVED***XCTAssertFalse(model.signInButtonEnabled)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***model.password = "123"
-***REMOVED******REMOVED***XCTAssertTrue(model.signinButtonEnabled)
+***REMOVED******REMOVED***XCTAssertTrue(model.signInButtonEnabled)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***model.signIn()
 ***REMOVED******REMOVED***XCTAssertFalse(model.formEnabled)

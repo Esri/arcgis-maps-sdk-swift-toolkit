@@ -28,7 +28,7 @@ final class UsernamePasswordViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating if the sign-in button is enabled.
-***REMOVED***@Published var signinButtonEnabled = false
+***REMOVED***@Published var signInButtonEnabled = false
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating if the form is enabled.
 ***REMOVED***@Published var formEnabled: Bool = true
@@ -57,7 +57,7 @@ final class UsernamePasswordViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***private func updateSigninButtonEnabled() {
-***REMOVED******REMOVED***signinButtonEnabled = !username.isEmpty && !password.isEmpty
+***REMOVED******REMOVED***signInButtonEnabled = !username.isEmpty && !password.isEmpty
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The host that initiated the challenge.
@@ -157,7 +157,7 @@ private struct UsernamePasswordView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.disableAutocorrection(true)
 
 ***REMOVED******REMOVED******REMOVED******REMOVED***Section {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***signinButton
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***signInButton
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.disabled(!viewModel.formEnabled)
@@ -195,7 +195,7 @@ private struct UsernamePasswordView: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The sign-in button.
-***REMOVED***private var signinButton: some View {
+***REMOVED***private var signInButton: some View {
 ***REMOVED******REMOVED***Button(action: {
 ***REMOVED******REMOVED******REMOVED***dismissAction()
 ***REMOVED******REMOVED******REMOVED***viewModel.signIn()
@@ -210,8 +210,8 @@ private struct UsernamePasswordView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.tint(.white)
 ***REMOVED******REMOVED***
 ***REMOVED***)
-***REMOVED******REMOVED***.disabled(!viewModel.signinButtonEnabled)
-***REMOVED******REMOVED***.listRowBackground(viewModel.signinButtonEnabled ? Color.accentColor : Color.gray)
+***REMOVED******REMOVED***.disabled(!viewModel.signInButtonEnabled)
+***REMOVED******REMOVED***.listRowBackground(viewModel.signInButtonEnabled ? Color.accentColor : Color.gray)
 ***REMOVED***
 ***REMOVED***
 
