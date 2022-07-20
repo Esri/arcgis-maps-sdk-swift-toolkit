@@ -53,6 +53,23 @@ extension UtilityNetworkTraceViewModel {
         /// A user given name for the trace.
         var name = ""
         
+        /// The extent of the trace's geometry result with a small added buffer.
+        var resultExtent: Envelope? {
+            if let resultEnvelope = GeometryEngine.combineExtents(of: [
+                utilityGeometryTraceResult?.multipoint,
+                utilityGeometryTraceResult?.polygon,
+                utilityGeometryTraceResult?.polyline
+            ].compactMap { $0 }),
+               let expandedEnvelope = GeometryEngine.buffer(
+                around: resultEnvelope,
+                distance: 200
+               ) {
+                return expandedEnvelope.extent
+            } else {
+                return nil
+            }
+        }
+        
         /// A collection of starting points for the trace.
         var startingPoints = [UtilityNetworkTraceStartingPoint]()
         

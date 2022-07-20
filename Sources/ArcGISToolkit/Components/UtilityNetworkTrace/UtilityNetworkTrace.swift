@@ -58,6 +58,10 @@ public struct UtilityNetworkTrace: View {
     /// The current user activity.
     @State private var currentActivity: UserActivity = .creatingTrace(nil)
     
+    /// A value indicating whether the viewpoint should be automatically changed to show the resulting
+    /// extent of a trace.
+    @State private var shouldZoomOnTraceCompletion = false
+    
     /// A Boolean value indicating if the warning that all traces will be deleted is presented.
     @State private var showWarningAlert = false
     
@@ -245,6 +249,9 @@ public struct UtilityNetworkTrace: View {
                     .onSubmit {
                         viewModel.pendingTrace.userDidSpecifyName = true
                     }
+                    Toggle(isOn: $shouldZoomOnTraceCompletion) {
+                        Text("Zoom to result")
+                    }
                 }
             }
         }
@@ -252,6 +259,10 @@ public struct UtilityNetworkTrace: View {
             Task {
                 if await viewModel.trace() {
                     currentActivity = .viewingTraces(nil)
+                    if shouldZoomOnTraceCompletion,
+                       let extent = viewModel.selectedTrace?.resultExtent {
+                        viewpoint = Viewpoint(targetExtent: extent)
+                    }
                 }
             }
         } label: {
@@ -352,12 +363,8 @@ public struct UtilityNetworkTrace: View {
             }
         }
         makeZoomToButton {
-            if let resultEnvelope = GeometryEngine.combineExtents(of: [
-                viewModel.selectedTrace?.utilityGeometryTraceResult?.multipoint,
-                viewModel.selectedTrace?.utilityGeometryTraceResult?.polygon,
-                viewModel.selectedTrace?.utilityGeometryTraceResult?.polyline
-            ].compactMap { $0 }) {
-                viewpoint = Viewpoint(targetExtent: resultEnvelope.extent)
+            if let extent = viewModel.selectedTrace?.resultExtent {
+                viewpoint = Viewpoint(targetExtent: extent)
             }
         }
         .padding([.vertical], 2)
