@@ -478,7 +478,9 @@ public struct UtilityNetworkTrace: View {
     ///   - mapViewProxy: Provides a method of layer identification when starting points are being
     ///   chosen.
     ///   - viewpoint: Allows the utility network trace tool to update the parent map view's viewpoint.
-    ///   - startingPoints: An optional list of elements to be used as starting points.
+    ///   - startingPoints: An optional list of elements to be used as starting points, provided as
+    ///   tuples. The first item is a geo element and the optional second item is a map point (useful for
+    ///   specifying a fractional starting location along an edge element).
     public init(
         graphicsOverlay: Binding<GraphicsOverlay>,
         map: Map,
