@@ -14,8 +14,8 @@
 import XCTest
 @testable import ArcGISToolkit
 
-class CompassDirectionTests: XCTestCase {
-    /// Tests the behvaior of `CompassDirection.init(_ : Double)`
+final class CompassDirectionTests: XCTestCase {
+    /// Tests the behavior of `CompassDirection.init(_ : Double)`
     func testInitCompassDirection() {
         XCTAssertEqual(CompassDirection(-405), .northwest)
         XCTAssertEqual(CompassDirection(-360), .north)
