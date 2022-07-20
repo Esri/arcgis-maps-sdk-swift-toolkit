@@ -18,6 +18,7 @@ import ArcGIS
 final class QueuedNetworkChallenge: QueuedChallenge {
     /// The host that prompted the challenge.
     let host: String
+    
     /// The kind of challenge.
     let kind: Kind
     
