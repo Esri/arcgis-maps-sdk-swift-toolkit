@@ -42,7 +42,8 @@ extension ExampleList {
             AnyExample("Overview Map", content: OverviewMapExampleView()),
             AnyExample("Popup", content: PopupExampleView()),
             AnyExample("Scalebar", content: ScalebarExampleView()),
-            AnyExample("Search", content: SearchExampleView())
+            AnyExample("Search", content: SearchExampleView()),
+            AnyExample("Utility Network Trace", content: UtilityNetworkTraceExampleView())
         ]
     )
     
