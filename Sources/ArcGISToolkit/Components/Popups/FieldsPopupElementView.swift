@@ -40,7 +40,7 @@ struct FieldsPopupElementView: View {
         FieldsList(fields: displayFields)
     }
     
-    /// A view displaying a grid of labels and values.
+    /// A view displaying the labels and values.
     struct FieldsList: View {
         let fields: [DisplayField]
         
