@@ -395,7 +395,7 @@ public struct UtilityNetworkTrace: View {
                             sp.utilityElement.globalID == selectedStartingPoint?.utilityElement.globalID
                         }?.utilityElement.fractionAlongEdge ?? .zero
                     }, set: { newValue in
-                        if let selectedStartingPoint {
+                        if let selectedStartingPoint = selectedStartingPoint {
                             viewModel.setFractionAlongEdgeFor(
                                 startingPoint: selectedStartingPoint,
                                 to: newValue
@@ -433,7 +433,7 @@ public struct UtilityNetworkTrace: View {
             }
         }
         makeZoomToButton {
-            if let selectedStartingPoint {
+            if let selectedStartingPoint = selectedStartingPoint {
                 viewpoint = Viewpoint(targetExtent: selectedStartingPoint.extent)
             }
         }
