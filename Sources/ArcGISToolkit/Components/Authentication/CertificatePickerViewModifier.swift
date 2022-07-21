@@ -16,12 +16,12 @@ import UniformTypeIdentifiers
 
 /// An object that provides the business logic for the workflow of prompting the user for a
 /// certificate and a password.
-@MainActor final private class CertificatePickerViewModel: ObservableObject {
+@MainActor final class CertificatePickerViewModel: ObservableObject {
     /// The challenge that requires a certificate to proceed.
     let challenge: QueuedNetworkChallenge
     
     /// The URL of the certificate that the user chose.
-    private var certificateURL: URL?
+    var certificateURL: URL?
     
     /// A Boolean value indicating whether to show the prompt.
     @Published var showPrompt = true
