@@ -14,7 +14,7 @@
 import XCTest
 @testable ***REMOVED***Toolkit
 
-@MainActor final class CertificatePIckerViewModelTests: XCTestCase {
+@MainActor final class CertificatePickerViewModelTests: XCTestCase {
 ***REMOVED***func testViewModel() async throws {
 ***REMOVED******REMOVED***let challenge = QueuedNetworkChallenge(host: "host.com", kind: .certificate)
 ***REMOVED******REMOVED***let model = CertificatePickerViewModel(challenge: challenge)
