@@ -18,6 +18,7 @@
 struct LoginCredential: Hashable {
 ***REMOVED******REMOVED***/ The username.
 ***REMOVED***let username: String
+***REMOVED***
 ***REMOVED******REMOVED***/ The password.
 ***REMOVED***let password: String
 ***REMOVED***
