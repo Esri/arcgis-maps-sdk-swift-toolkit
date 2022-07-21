@@ -47,7 +47,11 @@ private struct AuthenticatorModifier: ViewModifier {
 ***REMOVED***
 ***REMOVED***@ViewBuilder func body(content: Content) -> some View {
 ***REMOVED******REMOVED***switch authenticator.currentChallenge {
-***REMOVED******REMOVED***case let challenge as QueuedArcGISChallenge:
+***REMOVED******REMOVED***case is QueuedOAuthChallenge:
+***REMOVED******REMOVED******REMOVED******REMOVED*** OAuth is handled by the authenticator itself
+***REMOVED******REMOVED******REMOVED******REMOVED*** so just return the unmodified content here.
+***REMOVED******REMOVED******REMOVED***content
+***REMOVED******REMOVED***case let challenge as QueuedTokenChallenge:
 ***REMOVED******REMOVED******REMOVED***content.modifier(LoginViewModifier(challenge: challenge))
 ***REMOVED******REMOVED***case let challenge as QueuedNetworkChallenge:
 ***REMOVED******REMOVED******REMOVED***switch challenge.kind {
