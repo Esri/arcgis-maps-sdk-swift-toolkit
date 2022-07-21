@@ -18,6 +18,7 @@ import ArcGIS
 struct LoginCredential: Hashable {
     /// The username.
     let username: String
+    
     /// The password.
     let password: String
 }

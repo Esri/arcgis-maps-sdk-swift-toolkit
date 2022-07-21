@@ -14,8 +14,7 @@
 import XCTest
 @testable import ArcGISToolkit
 
-@MainActor
-class LoginViewModelTests: XCTestCase {
+@MainActor final class LoginViewModelTests: XCTestCase {
     func testViewModel() {
         var signInCalled = false
         func signIn(username: String, password: String) {
