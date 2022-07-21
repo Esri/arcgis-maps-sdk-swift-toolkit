@@ -280,6 +280,7 @@ import Foundation
 ***REMOVED******REMOVED******REMOVED***let graphic = Graphic(
 ***REMOVED******REMOVED******REMOVED******REMOVED***geometry: mapPoint ?? feature.geometry?.extent.center,
 ***REMOVED******REMOVED******REMOVED******REMOVED***symbol: SimpleMarkerSymbol(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***style: .cross,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***color: UIColor(self.pendingTrace.color),
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***size: 20
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
