@@ -42,9 +42,9 @@ final class BookmarksTests: XCTestCase {
         XCTAssertFalse(_isPresented)
         wait(for: [expectation], timeout: 1.0)
     }
-
+    
     /// Asserts that the list properly handles a selection when provided a modifier and web map.
-    func testSelectBookmarkWithModifierAndMap() async {
+    func testSelectBookmarkWithModifierAndMap() async throws {
         let expectation = XCTestExpectation(
             description: "Modifier action was performed"
         )
@@ -69,11 +69,12 @@ final class BookmarksTests: XCTestCase {
         )
         bookmarks.selectionChangedAction = action
         XCTAssertTrue(_isPresented)
-        bookmarks.selectBookmark(map.bookmarks.first!)
+        let firstBookmark = try XCTUnwrap(map.bookmarks.first)
+        bookmarks.selectBookmark(firstBookmark)
         XCTAssertFalse(_isPresented)
         wait(for: [expectation], timeout: 1.0)
     }
-
+    
     /// Asserts that the list properly handles a selection when provided a viewpoint.
     func testSelectBookmarkWithViewpoint() {
         let sampleBookmarks = sampleBookmarks
@@ -98,9 +99,9 @@ final class BookmarksTests: XCTestCase {
         XCTAssertFalse(_isPresented)
         XCTAssertEqual(_viewpoint, sampleBookmarks.first?.viewpoint)
     }
-
+    
     /// Asserts that the list properly handles a selection when provided a viewpoint and web map.
-    func testSelectBookmarkWithViewpointAndMap() async {
+    func testSelectBookmarkWithViewpointAndMap() async throws {
         let map = Map.portlandTreeSurvey
         do {
             try await map.load()
@@ -124,7 +125,8 @@ final class BookmarksTests: XCTestCase {
         )
         XCTAssertTrue(_isPresented)
         XCTAssertNotEqual(_viewpoint, map.bookmarks.first?.viewpoint)
-        bookmarks.selectBookmark(map.bookmarks.first!)
+        let firstBookmark = try XCTUnwrap(map.bookmarks.first)
+        bookmarks.selectBookmark(firstBookmark)
         XCTAssertFalse(_isPresented)
         XCTAssertEqual(_viewpoint, map.bookmarks.first?.viewpoint)
     }
