@@ -15,7 +15,7 @@
 import XCTest
 @testable ***REMOVED***Toolkit
 
-@MainActor class QueuedNetworkChallengeTests: XCTestCase {
+@MainActor final class QueuedNetworkChallengeTests: XCTestCase {
 ***REMOVED***func testInit() {
 ***REMOVED******REMOVED***let challenge = QueuedNetworkChallenge(host: "host.com", kind: .serverTrust)
 ***REMOVED******REMOVED***XCTAssertEqual(challenge.host, "host.com")

@@ -16,8 +16,8 @@ import XCTest
 ***REMOVED***
 import Combine
 
-class AuthenticatorTests: XCTestCase {
-***REMOVED***@MainActor func testInit() {
+@MainActor final class AuthenticatorTests: XCTestCase {
+***REMOVED***func testInit() {
 ***REMOVED******REMOVED***let config = OAuthConfiguration(
 ***REMOVED******REMOVED******REMOVED***portalURL: URL(string:"www.arcgis.com")!,
 ***REMOVED******REMOVED******REMOVED***clientID: "client id",
@@ -28,7 +28,7 @@ class AuthenticatorTests: XCTestCase {
 ***REMOVED******REMOVED***XCTAssertEqual(authenticator.oAuthConfigurations, [config])
 ***REMOVED***
 ***REMOVED***
-***REMOVED***@MainActor func testMakePersistent() async throws {
+***REMOVED***func testMakePersistent() async throws {
 ***REMOVED******REMOVED******REMOVED*** Make sure credential stores are restored.
 ***REMOVED******REMOVED***addTeardownBlock {
 ***REMOVED******REMOVED******REMOVED***ArcGISRuntimeEnvironment.credentialStore = ArcGISCredentialStore()
@@ -43,7 +43,7 @@ class AuthenticatorTests: XCTestCase {
 ***REMOVED*** catch {***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED***@MainActor func testClearCredentialStores() async {
+***REMOVED***func testClearCredentialStores() async {
 ***REMOVED******REMOVED***await ArcGISRuntimeEnvironment.credentialStore.add(
 ***REMOVED******REMOVED******REMOVED***.staticToken(
 ***REMOVED******REMOVED******REMOVED******REMOVED***url: URL(string: "www.arcgis.com")!,
@@ -66,7 +66,7 @@ class AuthenticatorTests: XCTestCase {
 ***REMOVED******REMOVED***XCTAssertTrue(arcGISCreds.isEmpty)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***@MainActor func testChallengeQueue() async throws {
+***REMOVED***func testChallengeQueue() async throws {
 ***REMOVED******REMOVED***actor MockQueuedChallenge: QueuedChallenge {
 ***REMOVED******REMOVED******REMOVED***nonisolated let host: String
 ***REMOVED******REMOVED******REMOVED***
