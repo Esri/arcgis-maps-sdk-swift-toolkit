@@ -13,6 +13,7 @@
 
 ***REMOVED***
 import UniformTypeIdentifiers
+***REMOVED***
 
 ***REMOVED***/ An object that provides the business logic for the workflow of prompting the user for a
 ***REMOVED***/ certificate and a password.
@@ -25,12 +26,18 @@ import UniformTypeIdentifiers
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether to show the prompt.
 ***REMOVED***@Published var showPrompt = true
+***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether to show the certificate file picker.
 ***REMOVED***@Published var showPicker = false
+***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether to show the password field view.
 ***REMOVED***@Published var showPassword = false
+***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether to display the error.
 ***REMOVED***@Published var showCertificateImportError = false
+***REMOVED***
+***REMOVED******REMOVED***/ The certificate import error that occurred.
+***REMOVED***var certificateImportError: CertificateImportError?
 ***REMOVED***
 ***REMOVED******REMOVED***/ The host that prompted the challenge.
 ***REMOVED***var challengingHost: String {
@@ -70,6 +77,7 @@ import UniformTypeIdentifiers
 ***REMOVED******REMOVED*** catch {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** This is required to prevent an "already presenting" error.
 ***REMOVED******REMOVED******REMOVED******REMOVED***try? await Task.sleep(nanoseconds: 100_000)
+***REMOVED******REMOVED******REMOVED******REMOVED***certificateImportError = error as? CertificateImportError
 ***REMOVED******REMOVED******REMOVED******REMOVED***showCertificateImportError = true
 ***REMOVED******REMOVED***
 ***REMOVED***
@@ -191,6 +199,8 @@ private extension View {
 ***REMOVED******REMOVED***isPresented: Binding<Bool>,
 ***REMOVED******REMOVED***viewModel: CertificatePickerViewModel
 ***REMOVED***) -> some View {
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***alert("Error importing certificate", isPresented: isPresented) {
 ***REMOVED******REMOVED******REMOVED***Button("Try Again") {
 ***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.proceedFromPrompt()
@@ -199,7 +209,23 @@ private extension View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.cancel()
 ***REMOVED******REMOVED***
 ***REMOVED*** message: {
-***REMOVED******REMOVED******REMOVED***Text("The certificate file or password was invalid.")
+***REMOVED******REMOVED******REMOVED***Text(message(for: viewModel.certificateImportError))
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***func message(for error: CertificateImportError?) -> String {
+***REMOVED******REMOVED***let defaultMessage = "The certificate file or password was invalid."
+***REMOVED******REMOVED***guard let error = error else {
+***REMOVED******REMOVED******REMOVED***return defaultMessage
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***switch error {
+***REMOVED******REMOVED***case .invalidData:
+***REMOVED******REMOVED******REMOVED***return "The certificate file was invalid."
+***REMOVED******REMOVED***case .invalidPassword:
+***REMOVED******REMOVED******REMOVED***return "The password was invalid."
+***REMOVED******REMOVED***default:
+***REMOVED******REMOVED******REMOVED***return defaultMessage
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
