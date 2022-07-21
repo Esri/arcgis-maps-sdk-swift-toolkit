@@ -11,15 +11,24 @@
 ***REMOVED*** See the License for the specific language governing permissions and
 ***REMOVED*** limitations under the License.
 
+***REMOVED***
 import XCTest
 @testable ***REMOVED***Toolkit
+***REMOVED***
 
-@MainActor final class TrustHostViewModifierTests: XCTestCase {
+@MainActor final class QueuedOAuthChallengeTests: XCTestCase {
 ***REMOVED***func testInit() {
-***REMOVED******REMOVED***let challenge = QueuedNetworkChallenge(host: "host.com", kind: .serverTrust)
-***REMOVED******REMOVED******REMOVED*** Tests the initial state.
-***REMOVED******REMOVED***let modifier = TrustHostViewModifier(challenge: challenge)
-***REMOVED******REMOVED***XCTAssertIdentical(modifier.challenge, challenge)
-***REMOVED******REMOVED***XCTAssertFalse(modifier.isPresented)
+***REMOVED******REMOVED***let portalURL = URL(string: "www.test-portal.com")!
+***REMOVED******REMOVED***let clientID = "client id"
+***REMOVED******REMOVED***let redirectURL = URL(string: "test-app:***REMOVED***redirect")!
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let config = OAuthConfiguration(
+***REMOVED******REMOVED******REMOVED***portalURL: portalURL,
+***REMOVED******REMOVED******REMOVED***clientID: clientID,
+***REMOVED******REMOVED******REMOVED***redirectURL: redirectURL
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let challenge = QueuedOAuthChallenge(configuration: config)
+***REMOVED******REMOVED***XCTAssertEqual(challenge.configuration, config)
 ***REMOVED***
 ***REMOVED***

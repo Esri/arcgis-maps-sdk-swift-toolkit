@@ -16,8 +16,7 @@ import XCTest
 ***REMOVED***
 import Combine
 
-class AuthenticatorTests: XCTestCase {
-***REMOVED***@MainActor
+@MainActor final class AuthenticatorTests: XCTestCase {
 ***REMOVED***func testInit() {
 ***REMOVED******REMOVED***let config = OAuthConfiguration(
 ***REMOVED******REMOVED******REMOVED***portalURL: URL(string:"www.arcgis.com")!,
@@ -29,7 +28,6 @@ class AuthenticatorTests: XCTestCase {
 ***REMOVED******REMOVED***XCTAssertEqual(authenticator.oAuthConfigurations, [config])
 ***REMOVED***
 ***REMOVED***
-***REMOVED***@MainActor
 ***REMOVED***func testMakePersistent() async throws {
 ***REMOVED******REMOVED******REMOVED*** Make sure credential stores are restored.
 ***REMOVED******REMOVED***addTeardownBlock {
@@ -45,7 +43,6 @@ class AuthenticatorTests: XCTestCase {
 ***REMOVED*** catch {***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED***@MainActor
 ***REMOVED***func testClearCredentialStores() async {
 ***REMOVED******REMOVED***await ArcGISRuntimeEnvironment.credentialStore.add(
 ***REMOVED******REMOVED******REMOVED***.staticToken(
@@ -69,14 +66,16 @@ class AuthenticatorTests: XCTestCase {
 ***REMOVED******REMOVED***XCTAssertTrue(arcGISCreds.isEmpty)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***@MainActor
 ***REMOVED***func testChallengeQueue() async throws {
 ***REMOVED******REMOVED***actor MockQueuedChallenge: QueuedChallenge {
-***REMOVED******REMOVED******REMOVED***nonisolated let id: Int
-***REMOVED******REMOVED******REMOVED***init(id: Int) {
-***REMOVED******REMOVED******REMOVED******REMOVED***self.id = id
+***REMOVED******REMOVED******REMOVED***nonisolated let host: String
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***init(host: String) {
+***REMOVED******REMOVED******REMOVED******REMOVED***self.host = host
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***private var isComplete: Bool = false
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***func setCompleted() {
 ***REMOVED******REMOVED******REMOVED******REMOVED***isComplete = true
 ***REMOVED******REMOVED***
@@ -96,7 +95,7 @@ class AuthenticatorTests: XCTestCase {
 ***REMOVED******REMOVED***XCTAssertNil(authenticator.currentChallenge)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Create and enqueue first challenge.
-***REMOVED******REMOVED***let challenge = MockQueuedChallenge(id: 1)
+***REMOVED******REMOVED***let challenge = MockQueuedChallenge(host: "host1")
 ***REMOVED******REMOVED***authenticator.subject.send(challenge)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Make sure first challenge is published as the current challenge.
@@ -104,19 +103,21 @@ class AuthenticatorTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***.compactMap( { $0 as? MockQueuedChallenge ***REMOVED***)
 ***REMOVED******REMOVED******REMOVED***.first(where: { _ in true ***REMOVED***)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***XCTAssertEqual(currentChallenge?.id, 1)
+***REMOVED******REMOVED***XCTAssertEqual(currentChallenge?.host, "host1")
 ***REMOVED******REMOVED***XCTAssertNotNil(authenticator.currentChallenge)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Create and enqueue second challenge.
-***REMOVED******REMOVED***let challenge2 = MockQueuedChallenge(id: 2)
+***REMOVED******REMOVED***let challenge2 = MockQueuedChallenge(host: "host2")
 ***REMOVED******REMOVED***authenticator.subject.send(challenge2)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Make sure first challenge is still the current challenge
 ***REMOVED******REMOVED***let mockedCurrentChallenge = try XCTUnwrap(authenticator.currentChallenge as? MockQueuedChallenge)
-***REMOVED******REMOVED***XCTAssertEqual(mockedCurrentChallenge.id, 1)
+***REMOVED******REMOVED***XCTAssertEqual(mockedCurrentChallenge.host, "host1")
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Complete first challenge.
-***REMOVED******REMOVED***await challenge.setCompleted()
+***REMOVED******REMOVED***Task(priority: .low) {
+***REMOVED******REMOVED******REMOVED******REMOVED*** Complete first challenge.
+***REMOVED******REMOVED******REMOVED***await challenge.setCompleted()
+***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Check next queued challenge
 ***REMOVED******REMOVED***let currentChallenge2 = await AsyncPublisher(authenticator.$currentChallenge)
@@ -124,7 +125,7 @@ class AuthenticatorTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***.dropFirst()
 ***REMOVED******REMOVED******REMOVED***.first(where: { _ in true ***REMOVED***)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***XCTAssertEqual(currentChallenge2?.id, 2)
+***REMOVED******REMOVED***XCTAssertEqual(currentChallenge2?.host, "host2")
 ***REMOVED******REMOVED***XCTAssertNotNil(authenticator.currentChallenge)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Complete second challenge.

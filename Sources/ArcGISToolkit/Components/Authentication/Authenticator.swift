@@ -89,7 +89,9 @@ public final class Authenticator: ObservableObject {
 ***REMOVED******REMOVED******REMOVED*** We have to set new sessions for URLCredential storage to respect the removed credentials
 ***REMOVED******REMOVED******REMOVED*** right away.
 ***REMOVED******REMOVED***ArcGISRuntimeEnvironment.urlSession = ArcGISURLSession(configuration: .default)
-***REMOVED******REMOVED***ArcGISRuntimeEnvironment.backgroundURLSession = ArcGISURLSession(configuration: .background(withIdentifier: "com.esri.arcgis.toolkit." + UUID().uuidString))
+***REMOVED******REMOVED***ArcGISRuntimeEnvironment.backgroundURLSession = ArcGISURLSession(
+***REMOVED******REMOVED******REMOVED***configuration: .background(withIdentifier: "com.esri.arcgis.toolkit." + UUID().uuidString)
+***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Observes the challenge queue and sets the current challenge.
@@ -125,6 +127,28 @@ public final class Authenticator: ObservableObject {
 ***REMOVED***
 
 extension Authenticator: AuthenticationChallengeHandler {
+***REMOVED***public func handleArcGISChallenge(
+***REMOVED******REMOVED***_ challenge: ArcGISAuthenticationChallenge
+***REMOVED***) async throws -> ArcGISAuthenticationChallenge.Disposition {
+***REMOVED******REMOVED***let queuedChallenge: QueuedArcGISChallenge
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Create the correct challenge type.
+***REMOVED******REMOVED***if let url = challenge.request.url,
+***REMOVED******REMOVED***   let config = oAuthConfigurations.first(where: { $0.canBeUsed(for: url) ***REMOVED***) {
+***REMOVED******REMOVED******REMOVED***let oAuthChallenge = QueuedOAuthChallenge(configuration: config)
+***REMOVED******REMOVED******REMOVED***queuedChallenge = oAuthChallenge
+***REMOVED******REMOVED******REMOVED***oAuthChallenge.presentPrompt()
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***queuedChallenge = QueuedTokenChallenge(arcGISChallenge: challenge)
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Queue up the challenge.
+***REMOVED******REMOVED***subject.send(queuedChallenge)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Wait for it to complete and return the resulting disposition.
+***REMOVED******REMOVED***return try await queuedChallenge.result.get()
+***REMOVED***
+***REMOVED***
 ***REMOVED***public func handleNetworkChallenge(
 ***REMOVED******REMOVED***_ challenge: NetworkAuthenticationChallenge
 ***REMOVED***) async -> NetworkAuthenticationChallengeDisposition {
