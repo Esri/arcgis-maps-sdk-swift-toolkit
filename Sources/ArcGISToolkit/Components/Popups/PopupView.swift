@@ -28,9 +28,6 @@ public struct PopupView: View {
     /// A Boolean value indicating whether the popup's elements have been evaluated via
     /// the `popup.evaluateExpressions()` method.
     @State private var isPopupEvaluated: Bool? = nil
-    
-    /// A Boolean value indicating whether  expression evaluations contains an error.
-    @State private var hasEvaluationErrors: Bool = false
 
     /// The results of calling the `popup.evaluateExpressions()` method.
     @State private var expressionEvaluations: [PopupExpressionEvaluation]? = nil
@@ -42,18 +39,18 @@ public struct PopupView: View {
                 .fontWeight(.bold)
             Divider()
             Group {
-                if isPopupEvaluated == nil {
+                if let isPopupEvaluated = isPopupEvaluated {
+                    if isPopupEvaluated {
+                        PopupElementScrollView(popup: popup)
+                    } else {
+                        Text("Popup evaluation failed.")
+                    }
+                } else {
                     VStack(alignment: .center) {
                         Text("Evaluating popup expressions...")
                         ProgressView()
                     }
                     .frame(maxWidth: .infinity)
-                } else if isPopupEvaluated! {
-                    PopupElementScrollView(popup: popup)
-                } else if !isPopupEvaluated! {
-                    Text("Popup failed evaluation.")
-                } else if hasEvaluationErrors {
-                    Text("There were errors with the expression evaluation.")
                 }
             }
         }
@@ -61,9 +58,6 @@ public struct PopupView: View {
             do {
                 expressionEvaluations = try await popup.evaluateExpressions()
                 isPopupEvaluated = true
-                
-                let evaluationErrors = expressionEvaluations?.filter { $0.error != nil }
-                hasEvaluationErrors = evaluationErrors != nil ? evaluationErrors!.count > 0 : false
             } catch {
                 isPopupEvaluated = false
             }
