@@ -52,8 +52,7 @@ public struct PopupView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***PopupElementScrollView(popup: popup)
 ***REMOVED******REMOVED******REMOVED*** else if !isPopupEvaluated! {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Popup failed evaluation.")
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***else if hasEvaluationErrors {
+***REMOVED******REMOVED******REMOVED*** else if hasEvaluationErrors {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("There were errors with the expression evaluation.")
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
