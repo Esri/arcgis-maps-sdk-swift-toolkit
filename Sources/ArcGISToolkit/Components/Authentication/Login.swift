@@ -28,20 +28,24 @@ struct LoginCredential: Hashable {
 final class LoginViewModel: ObservableObject {
     /// The username.
     @Published var username = "" {
-        didSet { updateSigninButtonEnabled() }
+        didSet { updateSignInButtonEnabled() }
     }
+    
     /// The password.
     @Published var password = "" {
-        didSet { updateSigninButtonEnabled() }
+        didSet { updateSignInButtonEnabled() }
     }
+    
     /// A Boolean value indicating if the sign-in button is enabled.
-    @Published var signinButtonEnabled = false
+    @Published var signInButtonEnabled = false
+    
     /// A Boolean value indicating if the form is enabled.
     @Published var formEnabled: Bool = true
     
     /// The action to perform when the user signs in. This is a closure that takes a username
     /// and password, respectively.
     var signInAction: (LoginCredential) -> Void
+    
     /// The action to perform when the user cancels.
     var cancelAction: () -> Void
     
@@ -61,8 +65,8 @@ final class LoginViewModel: ObservableObject {
         self.cancelAction = cancelAction
     }
     
-    private func updateSigninButtonEnabled() {
-        signinButtonEnabled = !username.isEmpty && !password.isEmpty
+    private func updateSignInButtonEnabled() {
+        signInButtonEnabled = !username.isEmpty && !password.isEmpty
     }
     
     /// The host that initiated the challenge.
@@ -99,9 +103,8 @@ struct LoginViewModifier: ViewModifier {
 }
 
 extension LoginViewModifier {
-    /// Creates a `UsernamePasswordViewModifier` with a queued network challenge.
-    @MainActor
-    init(challenge: QueuedNetworkChallenge) {
+    /// Creates a `LoginViewModifier` with a queued network challenge.
+    @MainActor init(challenge: QueuedNetworkChallenge) {
         self.init(
             viewModel: LoginViewModel(
                 challengingHost: challenge.host,
@@ -119,9 +122,8 @@ extension LoginViewModifier {
         )
     }
     
-    /// Creates a `UsernamePasswordViewModifier` with a queued ArcGIS challenge.
-    @MainActor
-    init(challenge: QueuedTokenChallenge) {
+    /// Creates a `LoginViewModifier` with a queued ArcGIS challenge.
+    @MainActor init(challenge: QueuedTokenChallenge) {
         self.init(
             viewModel: LoginViewModel(
                 challengingHost: challenge.host,
@@ -183,7 +185,7 @@ private struct LoginView: View {
                 .disableAutocorrection(true)
                 
                 Section {
-                    signinButton
+                    signInButton
                 }
             }
             .disabled(!viewModel.formEnabled)
@@ -221,7 +223,7 @@ private struct LoginView: View {
     }
     
     /// The sign-in button.
-    private var signinButton: some View {
+    private var signInButton: some View {
         Button(action: {
             dismissAction()
             viewModel.signIn()
@@ -236,8 +238,8 @@ private struct LoginView: View {
                     .tint(.white)
             }
         })
-        .disabled(!viewModel.signinButtonEnabled)
-        .listRowBackground(viewModel.signinButtonEnabled ? Color.accentColor : Color.gray)
+        .disabled(!viewModel.signInButtonEnabled)
+        .listRowBackground(viewModel.signInButtonEnabled ? Color.accentColor : Color.gray)
     }
 }
 

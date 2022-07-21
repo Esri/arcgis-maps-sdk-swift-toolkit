@@ -15,7 +15,7 @@ import SwiftUI
 import XCTest
 @testable import ArcGISToolkit
 
-@MainActor class QueuedTokenChallengeTests: XCTestCase {
+@MainActor final class QueuedTokenChallengeTests: XCTestCase {
     func testInit() {
         let challenge = QueuedTokenChallenge(host: "host.com") { _ in
             fatalError()
