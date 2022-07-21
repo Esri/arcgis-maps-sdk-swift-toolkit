@@ -114,8 +114,10 @@ import Combine
 ***REMOVED******REMOVED***let mockedCurrentChallenge = try XCTUnwrap(authenticator.currentChallenge as? MockQueuedChallenge)
 ***REMOVED******REMOVED***XCTAssertEqual(mockedCurrentChallenge.host, "host1")
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Complete first challenge.
-***REMOVED******REMOVED***await challenge.setCompleted()
+***REMOVED******REMOVED***Task(priority: .low) {
+***REMOVED******REMOVED******REMOVED******REMOVED*** Complete first challenge.
+***REMOVED******REMOVED******REMOVED***await challenge.setCompleted()
+***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Check next queued challenge
 ***REMOVED******REMOVED***let currentChallenge2 = await AsyncPublisher(authenticator.$currentChallenge)
