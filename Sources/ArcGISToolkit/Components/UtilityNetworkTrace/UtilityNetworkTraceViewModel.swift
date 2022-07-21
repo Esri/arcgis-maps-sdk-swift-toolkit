@@ -280,6 +280,7 @@ import SwiftUI
             let graphic = Graphic(
                 geometry: mapPoint ?? feature.geometry?.extent.center,
                 symbol: SimpleMarkerSymbol(
+                    style: .cross,
                     color: UIColor(self.pendingTrace.color),
                     size: 20
                 )
