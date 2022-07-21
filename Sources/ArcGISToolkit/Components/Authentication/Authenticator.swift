@@ -125,6 +125,17 @@ public final class Authenticator: ObservableObject {
 }
 
 extension Authenticator: AuthenticationChallengeHandler {
+    public func handleArcGISChallenge(
+        _ challenge: ArcGISAuthenticationChallenge
+    ) async throws -> ArcGISAuthenticationChallenge.Disposition {
+        // Queue up the challenge.
+        let queuedChallenge = QueuedArcGISChallenge(arcGISChallenge: challenge)
+        subject.send(queuedChallenge)
+        
+        // Wait for it to complete and return the resulting disposition.
+        return try await queuedChallenge.result.get()
+    }
+    
     public func handleNetworkChallenge(
         _ challenge: NetworkAuthenticationChallenge
     ) async -> NetworkAuthenticationChallengeDisposition {
