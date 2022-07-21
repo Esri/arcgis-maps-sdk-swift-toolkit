@@ -26,7 +26,9 @@ public struct Compass: View {
     
     /// A Boolean value indicating whether the compass should hide based on the
     ///  current heading and whether the compass automatically hides.
-    private var shouldHide: Bool { heading.isZero && autoHide }
+    var shouldHide: Bool {
+        (heading.isZero || heading.isNaN) && autoHide
+    }
     
     /// The heading of the compass in degrees.
     @Binding private var heading: Double
@@ -92,10 +94,9 @@ public extension Compass {
     
     /// Creates a compass with a binding to an optional viewpoint.
     /// - Parameters:
-    ///   - viewpoint: The viewopint whose rotation determines the heading of
-    ///   the compass.
-    ///   - autoHide: A Boolean value that determines whether the compass
-    ///   automatically hides itself when the viewpoint's rotation is 0 degrees.
+    ///   - viewpoint: The viewpoint whose rotation determines the heading of the compass.
+    ///   - autoHide: A Boolean value that determines whether the compass automatically hides itself
+    ///   when the viewpoint's rotation is 0 degrees.
     init(
         viewpoint: Binding<Viewpoint?>,
         autoHide: Bool = true
@@ -103,10 +104,10 @@ public extension Compass {
         let viewpointRotation = Binding {
             viewpoint.wrappedValue?.rotation ?? .nan
         } set: { newViewpointRotation in
-            guard let oldViewopint = viewpoint.wrappedValue else { return }
+            guard let oldViewpoint = viewpoint.wrappedValue else { return }
             viewpoint.wrappedValue = Viewpoint(
-                center: oldViewopint.targetGeometry.extent.center,
-                scale: oldViewopint.targetScale,
+                center: oldViewpoint.targetGeometry.extent.center,
+                scale: oldViewpoint.targetScale,
                 rotation: newViewpointRotation
             )
         }
