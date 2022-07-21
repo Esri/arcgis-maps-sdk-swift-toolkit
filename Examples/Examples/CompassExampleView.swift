@@ -31,7 +31,8 @@ struct CompassExampleView: View {
 ***REMOVED******REMOVED******REMOVED***.onViewpointChanged(kind: .centerAndScale) { viewpoint = $0 ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***.overlay(alignment: .topTrailing) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Compass(viewpoint: $viewpoint)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 44, height: 44)
+***REMOVED******REMOVED******REMOVED******REMOVED***  ***REMOVED*** Optionally provide a different size for the compass.
+***REMOVED******REMOVED******REMOVED******REMOVED***  ***REMOVED***  .compassSize(size: <#T##CGFloat#>)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
 ***REMOVED******REMOVED***
 ***REMOVED***
