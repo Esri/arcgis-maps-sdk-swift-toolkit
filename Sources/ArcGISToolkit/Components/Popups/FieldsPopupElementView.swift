@@ -97,7 +97,7 @@ private struct DisplayField: Hashable, Identifiable {
 }
 
 private extension FieldsPopupElement {
-    /// Provides  a default title to dispaly if `title` is empty.
+    /// Provides a default title to display if `title` is empty.
     var displayTitle: String {
         title.isEmpty ? "Fields" : title
     }

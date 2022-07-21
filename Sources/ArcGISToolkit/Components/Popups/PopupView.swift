@@ -52,8 +52,7 @@ public struct PopupView: View {
                     PopupElementScrollView(popup: popup)
                 } else if !isPopupEvaluated! {
                     Text("Popup failed evaluation.")
-                }
-                else if hasEvaluationErrors {
+                } else if hasEvaluationErrors {
                     Text("There were errors with the expression evaluation.")
                 }
             }
