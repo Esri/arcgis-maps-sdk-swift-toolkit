@@ -28,20 +28,24 @@ struct LoginCredential: Hashable {
 final class LoginViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ The username.
 ***REMOVED***@Published var username = "" {
-***REMOVED******REMOVED***didSet { updateSigninButtonEnabled() ***REMOVED***
+***REMOVED******REMOVED***didSet { updateSignInButtonEnabled() ***REMOVED***
+***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The password.
 ***REMOVED***@Published var password = "" {
-***REMOVED******REMOVED***didSet { updateSigninButtonEnabled() ***REMOVED***
+***REMOVED******REMOVED***didSet { updateSignInButtonEnabled() ***REMOVED***
+***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating if the sign-in button is enabled.
-***REMOVED***@Published var signinButtonEnabled = false
+***REMOVED***@Published var signInButtonEnabled = false
+***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating if the form is enabled.
 ***REMOVED***@Published var formEnabled: Bool = true
 ***REMOVED***
 ***REMOVED******REMOVED***/ The action to perform when the user signs in. This is a closure that takes a username
 ***REMOVED******REMOVED***/ and password, respectively.
 ***REMOVED***var signInAction: (LoginCredential) -> Void
+***REMOVED***
 ***REMOVED******REMOVED***/ The action to perform when the user cancels.
 ***REMOVED***var cancelAction: () -> Void
 ***REMOVED***
@@ -61,8 +65,8 @@ final class LoginViewModel: ObservableObject {
 ***REMOVED******REMOVED***self.cancelAction = cancelAction
 ***REMOVED***
 ***REMOVED***
-***REMOVED***private func updateSigninButtonEnabled() {
-***REMOVED******REMOVED***signinButtonEnabled = !username.isEmpty && !password.isEmpty
+***REMOVED***private func updateSignInButtonEnabled() {
+***REMOVED******REMOVED***signInButtonEnabled = !username.isEmpty && !password.isEmpty
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The host that initiated the challenge.
@@ -99,9 +103,8 @@ struct LoginViewModifier: ViewModifier {
 ***REMOVED***
 
 extension LoginViewModifier {
-***REMOVED******REMOVED***/ Creates a `UsernamePasswordViewModifier` with a queued network challenge.
-***REMOVED***@MainActor
-***REMOVED***init(challenge: QueuedNetworkChallenge) {
+***REMOVED******REMOVED***/ Creates a `LoginViewModifier` with a queued network challenge.
+***REMOVED***@MainActor init(challenge: QueuedNetworkChallenge) {
 ***REMOVED******REMOVED***self.init(
 ***REMOVED******REMOVED******REMOVED***viewModel: LoginViewModel(
 ***REMOVED******REMOVED******REMOVED******REMOVED***challengingHost: challenge.host,
@@ -119,9 +122,8 @@ extension LoginViewModifier {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Creates a `UsernamePasswordViewModifier` with a queued ArcGIS challenge.
-***REMOVED***@MainActor
-***REMOVED***init(challenge: QueuedTokenChallenge) {
+***REMOVED******REMOVED***/ Creates a `LoginViewModifier` with a queued ArcGIS challenge.
+***REMOVED***@MainActor init(challenge: QueuedTokenChallenge) {
 ***REMOVED******REMOVED***self.init(
 ***REMOVED******REMOVED******REMOVED***viewModel: LoginViewModel(
 ***REMOVED******REMOVED******REMOVED******REMOVED***challengingHost: challenge.host,
@@ -183,7 +185,7 @@ private struct LoginView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.disableAutocorrection(true)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***Section {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***signinButton
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***signInButton
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.disabled(!viewModel.formEnabled)
@@ -221,7 +223,7 @@ private struct LoginView: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The sign-in button.
-***REMOVED***private var signinButton: some View {
+***REMOVED***private var signInButton: some View {
 ***REMOVED******REMOVED***Button(action: {
 ***REMOVED******REMOVED******REMOVED***dismissAction()
 ***REMOVED******REMOVED******REMOVED***viewModel.signIn()
@@ -236,8 +238,8 @@ private struct LoginView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.tint(.white)
 ***REMOVED******REMOVED***
 ***REMOVED***)
-***REMOVED******REMOVED***.disabled(!viewModel.signinButtonEnabled)
-***REMOVED******REMOVED***.listRowBackground(viewModel.signinButtonEnabled ? Color.accentColor : Color.gray)
+***REMOVED******REMOVED***.disabled(!viewModel.signInButtonEnabled)
+***REMOVED******REMOVED***.listRowBackground(viewModel.signInButtonEnabled ? Color.accentColor : Color.gray)
 ***REMOVED***
 ***REMOVED***
 

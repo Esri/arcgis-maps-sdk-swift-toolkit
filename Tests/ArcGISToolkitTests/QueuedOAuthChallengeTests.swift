@@ -16,7 +16,7 @@ import XCTest
 @testable ***REMOVED***Toolkit
 ***REMOVED***
 
-@MainActor class QueuedOAuthChallengeTests: XCTestCase {
+@MainActor final class QueuedOAuthChallengeTests: XCTestCase {
 ***REMOVED***func testInit() {
 ***REMOVED******REMOVED***let portalURL = URL(string: "www.test-portal.com")!
 ***REMOVED******REMOVED***let clientID = "client id"
@@ -27,7 +27,7 @@ import XCTest
 ***REMOVED******REMOVED******REMOVED***clientID: clientID,
 ***REMOVED******REMOVED******REMOVED***redirectURL: redirectURL
 ***REMOVED******REMOVED***)
-
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let challenge = QueuedOAuthChallenge(configuration: config)
 ***REMOVED******REMOVED***XCTAssertEqual(challenge.configuration, config)
 ***REMOVED***

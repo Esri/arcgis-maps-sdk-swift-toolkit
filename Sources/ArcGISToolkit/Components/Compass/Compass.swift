@@ -26,7 +26,9 @@ public struct Compass: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the compass should hide based on the
 ***REMOVED******REMOVED***/  current heading and whether the compass automatically hides.
-***REMOVED***private var shouldHide: Bool { heading.isZero && autoHide ***REMOVED***
+***REMOVED***var shouldHide: Bool {
+***REMOVED******REMOVED***(heading.isZero || heading.isNaN) && autoHide
+***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The heading of the compass in degrees.
 ***REMOVED***@Binding private var heading: Double
@@ -92,10 +94,9 @@ public extension Compass {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a compass with a binding to an optional viewpoint.
 ***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - viewpoint: The viewopint whose rotation determines the heading of
-***REMOVED******REMOVED***/   the compass.
-***REMOVED******REMOVED***/   - autoHide: A Boolean value that determines whether the compass
-***REMOVED******REMOVED***/   automatically hides itself when the viewpoint's rotation is 0 degrees.
+***REMOVED******REMOVED***/   - viewpoint: The viewpoint whose rotation determines the heading of the compass.
+***REMOVED******REMOVED***/   - autoHide: A Boolean value that determines whether the compass automatically hides itself
+***REMOVED******REMOVED***/   when the viewpoint's rotation is 0 degrees.
 ***REMOVED***init(
 ***REMOVED******REMOVED***viewpoint: Binding<Viewpoint?>,
 ***REMOVED******REMOVED***autoHide: Bool = true
@@ -103,10 +104,10 @@ public extension Compass {
 ***REMOVED******REMOVED***let viewpointRotation = Binding {
 ***REMOVED******REMOVED******REMOVED***viewpoint.wrappedValue?.rotation ?? .nan
 ***REMOVED*** set: { newViewpointRotation in
-***REMOVED******REMOVED******REMOVED***guard let oldViewopint = viewpoint.wrappedValue else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED***guard let oldViewpoint = viewpoint.wrappedValue else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***viewpoint.wrappedValue = Viewpoint(
-***REMOVED******REMOVED******REMOVED******REMOVED***center: oldViewopint.targetGeometry.extent.center,
-***REMOVED******REMOVED******REMOVED******REMOVED***scale: oldViewopint.targetScale,
+***REMOVED******REMOVED******REMOVED******REMOVED***center: oldViewpoint.targetGeometry.extent.center,
+***REMOVED******REMOVED******REMOVED******REMOVED***scale: oldViewpoint.targetScale,
 ***REMOVED******REMOVED******REMOVED******REMOVED***rotation: newViewpointRotation
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED***
