@@ -114,8 +114,10 @@ import Combine
         let mockedCurrentChallenge = try XCTUnwrap(authenticator.currentChallenge as? MockQueuedChallenge)
         XCTAssertEqual(mockedCurrentChallenge.host, "host1")
         
-        // Complete first challenge.
-        await challenge.setCompleted()
+        Task(priority: .low) {
+            // Complete first challenge.
+            await challenge.setCompleted()
+        }
         
         // Check next queued challenge
         let currentChallenge2 = await AsyncPublisher(authenticator.$currentChallenge)
