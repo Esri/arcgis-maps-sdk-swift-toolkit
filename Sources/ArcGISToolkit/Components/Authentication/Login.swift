@@ -105,8 +105,7 @@ struct LoginViewModifier: ViewModifier {
 
 extension LoginViewModifier {
     /// Creates a `LoginViewModifier` with a queued network challenge.
-    @MainActor
-    init(challenge: QueuedNetworkChallenge) {
+    @MainActor init(challenge: QueuedNetworkChallenge) {
         self.init(
             viewModel: LoginViewModel(
                 challengingHost: challenge.host,
@@ -125,8 +124,7 @@ extension LoginViewModifier {
     }
     
     /// Creates a `LoginViewModifier` with a queued ArcGIS challenge.
-    @MainActor
-    init(challenge: QueuedArcGISChallenge) {
+    @MainActor init(challenge: QueuedTokenChallenge) {
         self.init(
             viewModel: LoginViewModel(
                 challengingHost: challenge.host,
