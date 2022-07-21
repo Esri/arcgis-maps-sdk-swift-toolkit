@@ -16,8 +16,7 @@ import XCTest
 @testable import ArcGISToolkit
 import ArcGIS
 
-@MainActor
-final class QueuedOAuthChallengeTests: XCTestCase {
+@MainActor final class QueuedOAuthChallengeTests: XCTestCase {
     func testInit() {
         let portalURL = URL(string: "www.test-portal.com")!
         let clientID = "client id"
