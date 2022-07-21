@@ -1,4 +1,4 @@
-// Copyright 2021 Esri.
+// Copyright 2022 Esri.
 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -11,15 +11,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-extension Result where Failure == Error {
-    /// Creates a result based on the outcome of the given task. If the task
-    /// succeeds, the result is `success`. If the task fails, the result is
-    /// `failure`.
-    init(awaiting task: () async throws -> Success) async {
-        do {
-            self = .success(try await task())
-        } catch {
-            self = .failure(error)
-        }
-    }
+import Foundation
+import ArcGIS
+
+/// A type that represents a challenge in the queue of authentication challenges.
+protocol QueuedChallenge: AnyObject {
+    /// Waits for the challenge to complete.
+    func complete() async
+}
+
+protocol QueuedArcGISChallenge: QueuedChallenge {
+    /// The result of the challenge.
+    var result: Result<ArcGISAuthenticationChallenge.Disposition, Error> { get async }
 }
