@@ -14,7 +14,7 @@
 import XCTest
 @testable import ArcGISToolkit
 
-@MainActor final class CertificatePIckerViewModelTests: XCTestCase {
+@MainActor final class CertificatePickerViewModelTests: XCTestCase {
     func testViewModel() async throws {
         let challenge = QueuedNetworkChallenge(host: "host.com", kind: .certificate)
         let model = CertificatePickerViewModel(challenge: challenge)
