@@ -15,8 +15,7 @@
 import XCTest
 @testable ***REMOVED***Toolkit
 
-@MainActor
-class QueuedArcGISChallengeTests: XCTestCase {
+@MainActor final class QueuedArcGISChallengeTests: XCTestCase {
 ***REMOVED***func testInit() {
 ***REMOVED******REMOVED***let challenge = QueuedArcGISChallenge(host: "host.com") { _ in
 ***REMOVED******REMOVED******REMOVED***fatalError()
