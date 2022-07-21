@@ -15,6 +15,9 @@ import Foundation
 
 ***REMOVED***/ A type that represents a challenge in the queue of authentication challenges.
 protocol QueuedChallenge: AnyObject {
+***REMOVED******REMOVED***/ The host that prompted the challenge.
+***REMOVED***var host: String { get ***REMOVED***
+***REMOVED***
 ***REMOVED******REMOVED***/ Waits for the challenge to complete.
 ***REMOVED***func complete() async
 ***REMOVED***

@@ -14,8 +14,7 @@
 import XCTest
 @testable ***REMOVED***Toolkit
 
-@MainActor
-class UsernamePasswordViewModelTests: XCTestCase {
+@MainActor final class LoginViewModelTests: XCTestCase {
 ***REMOVED***func testViewModel() {
 ***REMOVED******REMOVED***var signInCalled = false
 ***REMOVED******REMOVED***func signIn(username: String, password: String) {
@@ -27,9 +26,9 @@ class UsernamePasswordViewModelTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED***cancelCalled = true
 ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***let model = UsernamePasswordViewModel(
+***REMOVED******REMOVED***let model = LoginViewModel(
 ***REMOVED******REMOVED******REMOVED***challengingHost: "host.com",
-***REMOVED******REMOVED******REMOVED***onSignIn: { _, _ in
+***REMOVED******REMOVED******REMOVED***onSignIn: { _ in
 ***REMOVED******REMOVED******REMOVED******REMOVED***signInCalled = true
 ***REMOVED******REMOVED***,
 ***REMOVED******REMOVED******REMOVED***onCancel: {

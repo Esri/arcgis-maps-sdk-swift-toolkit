@@ -15,6 +15,7 @@ import Foundation
 ***REMOVED***
 
 ***REMOVED***/ An object that represents a network authentication challenge in the queue of challenges.
+@MainActor
 final class QueuedNetworkChallenge: QueuedChallenge {
 ***REMOVED******REMOVED***/ The host that prompted the challenge.
 ***REMOVED***let host: String

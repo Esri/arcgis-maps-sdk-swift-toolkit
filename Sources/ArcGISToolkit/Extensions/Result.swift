@@ -1,4 +1,4 @@
-***REMOVED*** Copyright 2022 Esri.
+***REMOVED***.
 
 ***REMOVED*** Licensed under the Apache License, Version 2.0 (the "License");
 ***REMOVED*** you may not use this file except in compliance with the License.
@@ -11,15 +11,15 @@
 ***REMOVED*** See the License for the specific language governing permissions and
 ***REMOVED*** limitations under the License.
 
-import XCTest
-@testable ***REMOVED***Toolkit
-
-@MainActor final class TrustHostViewModifierTests: XCTestCase {
-***REMOVED***func testInit() {
-***REMOVED******REMOVED***let challenge = QueuedNetworkChallenge(host: "host.com", kind: .serverTrust)
-***REMOVED******REMOVED******REMOVED*** Tests the initial state.
-***REMOVED******REMOVED***let modifier = TrustHostViewModifier(challenge: challenge)
-***REMOVED******REMOVED***XCTAssertIdentical(modifier.challenge, challenge)
-***REMOVED******REMOVED***XCTAssertFalse(modifier.isPresented)
+extension Result where Failure == Error {
+***REMOVED******REMOVED***/ Creates a result based on the outcome of the given task. If the task
+***REMOVED******REMOVED***/ succeeds, the result is `success`. If the task fails, the result is
+***REMOVED******REMOVED***/ `failure`.
+***REMOVED***init(awaiting task: () async throws -> Success) async {
+***REMOVED******REMOVED***do {
+***REMOVED******REMOVED******REMOVED***self = .success(try await task())
+***REMOVED*** catch {
+***REMOVED******REMOVED******REMOVED***self = .failure(error)
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
