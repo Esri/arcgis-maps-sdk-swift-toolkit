@@ -1,4 +1,4 @@
-***REMOVED***.
+***REMOVED*** Copyright 2022 Esri.
 
 ***REMOVED*** Licensed under the Apache License, Version 2.0 (the "License");
 ***REMOVED*** you may not use this file except in compliance with the License.
@@ -11,15 +11,16 @@
 ***REMOVED*** See the License for the specific language governing permissions and
 ***REMOVED*** limitations under the License.
 
-extension Result where Failure == Error {
-***REMOVED******REMOVED***/ Creates a result based on the outcome of the given task. If the task
-***REMOVED******REMOVED***/ succeeds, the result is `success`. If the task fails, the result is
-***REMOVED******REMOVED***/ `failure`.
-***REMOVED***init(awaiting task: () async throws -> Success) async {
-***REMOVED******REMOVED***do {
-***REMOVED******REMOVED******REMOVED***self = .success(try await task())
-***REMOVED*** catch {
-***REMOVED******REMOVED******REMOVED***self = .failure(error)
+import Foundation
 ***REMOVED***
+
+***REMOVED***/ A type that represents a challenge in the queue of authentication challenges.
+protocol QueuedChallenge: AnyObject {
+***REMOVED******REMOVED***/ Waits for the challenge to complete.
+***REMOVED***func complete() async
 ***REMOVED***
+
+protocol QueuedArcGISChallenge: QueuedChallenge {
+***REMOVED******REMOVED***/ The result of the challenge.
+***REMOVED***var result: Result<ArcGISAuthenticationChallenge.Disposition, Error> { get async ***REMOVED***
 ***REMOVED***
