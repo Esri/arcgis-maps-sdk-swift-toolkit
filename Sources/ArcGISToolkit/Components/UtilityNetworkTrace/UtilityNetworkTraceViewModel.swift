@@ -111,6 +111,9 @@ import Foundation
 ***REMOVED******REMOVED******REMOVED***network = map.utilityNetworks.first
 ***REMOVED******REMOVED******REMOVED***configurations = await utilityNamedTraceConfigurations(from: map)
 ***REMOVED***
+***REMOVED******REMOVED***if map.utilityNetworks.isEmpty {
+***REMOVED******REMOVED******REMOVED***userWarning = "No utility networks found."
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Deletes the provided starting point from the pending trace.
@@ -436,7 +439,7 @@ import Foundation
 ***REMOVED******REMOVED***/ Loads the named trace configurations in the network.
 ***REMOVED******REMOVED***/ Returns the named trace configurations in the network on the provided map.
 ***REMOVED******REMOVED***/ - Parameter map: A web map containing one or more utility networks.
-***REMOVED***private func utilityNamedTraceConfigurations(from map: Map) async -> [UtilityNamedTraceConfiguration] {
+***REMOVED***func utilityNamedTraceConfigurations(from map: Map) async -> [UtilityNamedTraceConfiguration] {
 ***REMOVED******REMOVED***guard let network = network else { return [] ***REMOVED***
 ***REMOVED******REMOVED***return (try? await map.getNamedTraceConfigurations(from: network)) ?? []
 ***REMOVED***
