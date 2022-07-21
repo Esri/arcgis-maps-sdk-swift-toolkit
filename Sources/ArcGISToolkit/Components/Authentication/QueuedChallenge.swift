@@ -12,9 +12,15 @@
 // limitations under the License.
 
 import Foundation
+import ArcGIS
 
 /// A type that represents a challenge in the queue of authentication challenges.
 protocol QueuedChallenge: AnyObject {
     /// Waits for the challenge to complete.
     func complete() async
+}
+
+protocol QueuedArcGISChallenge: QueuedChallenge {
+    /// The result of the challenge.
+    var result: Result<ArcGISAuthenticationChallenge.Disposition, Error> { get async }
 }

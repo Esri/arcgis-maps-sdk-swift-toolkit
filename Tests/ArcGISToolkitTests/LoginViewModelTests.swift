@@ -14,8 +14,7 @@
 import XCTest
 @testable import ArcGISToolkit
 
-@MainActor
-class UsernamePasswordViewModelTests: XCTestCase {
+@MainActor final class LoginViewModelTests: XCTestCase {
     func testViewModel() {
         var signInCalled = false
         func signIn(username: String, password: String) {
@@ -27,9 +26,9 @@ class UsernamePasswordViewModelTests: XCTestCase {
             cancelCalled = true
         }
         
-        let model = UsernamePasswordViewModel(
+        let model = LoginViewModel(
             challengingHost: "host.com",
-            onSignIn: { _, _ in
+            onSignIn: { _ in
                 signInCalled = true
             },
             onCancel: {
