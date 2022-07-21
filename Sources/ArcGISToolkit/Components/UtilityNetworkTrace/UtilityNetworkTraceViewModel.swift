@@ -111,6 +111,9 @@ import SwiftUI
             network = map.utilityNetworks.first
             configurations = await utilityNamedTraceConfigurations(from: map)
         }
+        if map.utilityNetworks.isEmpty {
+            userWarning = "No utility networks found."
+        }
     }
     
     /// Deletes the provided starting point from the pending trace.
@@ -436,7 +439,7 @@ import SwiftUI
     /// Loads the named trace configurations in the network.
     /// Returns the named trace configurations in the network on the provided map.
     /// - Parameter map: A web map containing one or more utility networks.
-    private func utilityNamedTraceConfigurations(from map: Map) async -> [UtilityNamedTraceConfiguration] {
+    func utilityNamedTraceConfigurations(from map: Map) async -> [UtilityNamedTraceConfiguration] {
         guard let network = network else { return [] }
         return (try? await map.getNamedTraceConfigurations(from: network)) ?? []
     }
