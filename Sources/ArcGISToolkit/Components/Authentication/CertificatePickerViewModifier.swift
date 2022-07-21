@@ -13,6 +13,7 @@
 
 import SwiftUI
 import UniformTypeIdentifiers
+import ArcGIS
 
 /// An object that provides the business logic for the workflow of prompting the user for a
 /// certificate and a password.
@@ -25,12 +26,18 @@ import UniformTypeIdentifiers
     
     /// A Boolean value indicating whether to show the prompt.
     @Published var showPrompt = true
+    
     /// A Boolean value indicating whether to show the certificate file picker.
     @Published var showPicker = false
+    
     /// A Boolean value indicating whether to show the password field view.
     @Published var showPassword = false
+    
     /// A Boolean value indicating whether to display the error.
     @Published var showCertificateImportError = false
+    
+    /// The certificate import error that occurred.
+    var certificateImportError: CertificateImportError?
     
     /// The host that prompted the challenge.
     var challengingHost: String {
@@ -70,6 +77,7 @@ import UniformTypeIdentifiers
             } catch {
                 // This is required to prevent an "already presenting" error.
                 try? await Task.sleep(nanoseconds: 100_000)
+                certificateImportError = error as? CertificateImportError
                 showCertificateImportError = true
             }
         }
@@ -191,6 +199,8 @@ private extension View {
         isPresented: Binding<Bool>,
         viewModel: CertificatePickerViewModel
     ) -> some View {
+        
+        
         alert("Error importing certificate", isPresented: isPresented) {
             Button("Try Again") {
                 viewModel.proceedFromPrompt()
@@ -199,7 +209,23 @@ private extension View {
                 viewModel.cancel()
             }
         } message: {
-            Text("The certificate file or password was invalid.")
+            Text(message(for: viewModel.certificateImportError))
+        }
+    }
+    
+    func message(for error: CertificateImportError?) -> String {
+        let defaultMessage = "The certificate file or password was invalid."
+        guard let error = error else {
+            return defaultMessage
+        }
+        
+        switch error {
+        case .invalidData:
+            return "The certificate file was invalid."
+        case .invalidPassword:
+            return "The password was invalid."
+        default:
+            return defaultMessage
         }
     }
 }
