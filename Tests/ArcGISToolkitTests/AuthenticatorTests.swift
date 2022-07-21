@@ -16,8 +16,7 @@ import XCTest
 import ArcGIS
 import Combine
 
-class AuthenticatorTests: XCTestCase {
-    @MainActor
+@MainActor final class AuthenticatorTests: XCTestCase {
     func testInit() {
         let config = OAuthConfiguration(
             portalURL: URL(string:"www.arcgis.com")!,
@@ -29,7 +28,6 @@ class AuthenticatorTests: XCTestCase {
         XCTAssertEqual(authenticator.oAuthConfigurations, [config])
     }
     
-    @MainActor
     func testMakePersistent() async throws {
         // Make sure credential stores are restored.
         addTeardownBlock {
@@ -45,7 +43,6 @@ class AuthenticatorTests: XCTestCase {
         } catch {}
     }
     
-    @MainActor
     func testClearCredentialStores() async {
         await ArcGISRuntimeEnvironment.credentialStore.add(
             .staticToken(
@@ -69,7 +66,6 @@ class AuthenticatorTests: XCTestCase {
         XCTAssertTrue(arcGISCreds.isEmpty)
     }
     
-    @MainActor
     func testChallengeQueue() async throws {
         actor MockQueuedChallenge: QueuedChallenge {
             nonisolated let host: String
