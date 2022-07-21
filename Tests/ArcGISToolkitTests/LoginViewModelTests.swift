@@ -14,8 +14,7 @@
 import XCTest
 @testable ***REMOVED***Toolkit
 
-@MainActor
-class LoginViewModelTests: XCTestCase {
+@MainActor final class LoginViewModelTests: XCTestCase {
 ***REMOVED***func testViewModel() {
 ***REMOVED******REMOVED***var signInCalled = false
 ***REMOVED******REMOVED***func signIn(username: String, password: String) {
