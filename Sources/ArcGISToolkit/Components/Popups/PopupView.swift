@@ -28,9 +28,6 @@ public struct PopupView: View {
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the popup's elements have been evaluated via
 ***REMOVED******REMOVED***/ the `popup.evaluateExpressions()` method.
 ***REMOVED***@State private var isPopupEvaluated: Bool? = nil
-***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value indicating whether  expression evaluations contains an error.
-***REMOVED***@State private var hasEvaluationErrors: Bool = false
 
 ***REMOVED******REMOVED***/ The results of calling the `popup.evaluateExpressions()` method.
 ***REMOVED***@State private var expressionEvaluations: [PopupExpressionEvaluation]? = nil
@@ -42,18 +39,18 @@ public struct PopupView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.fontWeight(.bold)
 ***REMOVED******REMOVED******REMOVED***Divider()
 ***REMOVED******REMOVED******REMOVED***Group {
-***REMOVED******REMOVED******REMOVED******REMOVED***if isPopupEvaluated == nil {
+***REMOVED******REMOVED******REMOVED******REMOVED***if let isPopupEvaluated = isPopupEvaluated {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if isPopupEvaluated {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***PopupElementScrollView(popup: popup)
+***REMOVED******REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Popup evaluation failed.")
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***VStack(alignment: .center) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Evaluating popup expressions...")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ProgressView()
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity)
-***REMOVED******REMOVED******REMOVED*** else if isPopupEvaluated! {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***PopupElementScrollView(popup: popup)
-***REMOVED******REMOVED******REMOVED*** else if !isPopupEvaluated! {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Popup failed evaluation.")
-***REMOVED******REMOVED******REMOVED*** else if hasEvaluationErrors {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("There were errors with the expression evaluation.")
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
@@ -61,9 +58,6 @@ public struct PopupView: View {
 ***REMOVED******REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED******REMOVED***expressionEvaluations = try await popup.evaluateExpressions()
 ***REMOVED******REMOVED******REMOVED******REMOVED***isPopupEvaluated = true
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***let evaluationErrors = expressionEvaluations?.filter { $0.error != nil ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***hasEvaluationErrors = evaluationErrors != nil ? evaluationErrors!.count > 0 : false
 ***REMOVED******REMOVED*** catch {
 ***REMOVED******REMOVED******REMOVED******REMOVED***isPopupEvaluated = false
 ***REMOVED******REMOVED***
