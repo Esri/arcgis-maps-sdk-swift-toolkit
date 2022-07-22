@@ -80,7 +80,7 @@ import XCTest
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***try XCTSkipIf(true, "Server trust handling required")
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***let serverPassword: String? = "test.publisher01"
+***REMOVED******REMOVED***let serverPassword: String? = nil
 ***REMOVED******REMOVED***try XCTSkipIf(serverPassword == nil)
 ***REMOVED******REMOVED***let token = try await ArcGISCredential.token(
 ***REMOVED******REMOVED******REMOVED***url: .rtc_100_8,
