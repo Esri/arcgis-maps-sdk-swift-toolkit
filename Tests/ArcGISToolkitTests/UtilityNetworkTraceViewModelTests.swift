@@ -12,13 +12,13 @@
 // limitations under the License.
 
 import ArcGIS
+import Combine
 import XCTest
 
 @testable import ArcGISToolkit
 
 /// - See Also: [Test Design](https://devtopia.esri.com/runtime/common-toolkit/blob/main/designs/UtilityNetworkTraceTool/UtilityNetworkTraceTool_Test_Design.md)
 @MainActor final class UtilityNetworkTraceViewModelTests: XCTestCase {
-    
     override func setUpWithError() throws {
         ArcGISRuntimeEnvironment.apiKey = APIKey("<#API Key#>")
         try XCTSkipIf(ArcGISRuntimeEnvironment.apiKey == .placeholder)
@@ -60,6 +60,18 @@ import XCTest
             startingPoints: []
         )
         let configurations = await viewModel.utilityNamedTraceConfigurations(from: map)
+        
+        let expectation = expectation(description: "init completed")
+        
+        var subscription = Set<AnyCancellable>()
+        viewModel.$initializationCompleted.sink { v in
+            if v == true {
+                expectation.fulfill()
+            }
+        }.store(in: &subscription)
+        
+        await Task.yield()
+        wait(for: [expectation], timeout: 2.0)
         XCTAssertTrue(configurations.isEmpty)
     }
     
