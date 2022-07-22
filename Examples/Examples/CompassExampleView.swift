@@ -31,7 +31,8 @@ struct CompassExampleView: View {
             .onViewpointChanged(kind: .centerAndScale) { viewpoint = $0 }
             .overlay(alignment: .topTrailing) {
                 Compass(viewpoint: $viewpoint)
-                    .frame(width: 44, height: 44)
+                    // Optionally provide a different size for the compass.
+                    //.compassSize(size: <#T##CGFloat#>)
                     .padding()
             }
     }
