@@ -40,6 +40,7 @@ import XCTest
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***await viewModel.load()
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertNil(viewModel.network)
 ***REMOVED******REMOVED***XCTAssertFalse(viewModel.canRunTrace)
 ***REMOVED******REMOVED***XCTAssertEqual(
 ***REMOVED******REMOVED******REMOVED***viewModel.userWarning,
@@ -69,6 +70,7 @@ import XCTest
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***await viewModel.load()
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertNotNil(viewModel.network)
 ***REMOVED******REMOVED***XCTAssertFalse(viewModel.canRunTrace)
 ***REMOVED******REMOVED***XCTAssertTrue(viewModel.configurations.isEmpty)
 ***REMOVED******REMOVED***XCTAssertEqual(
@@ -78,26 +80,14 @@ import XCTest
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func testCase_1_3() async throws {
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***let serverUsername = "publisher1"
 ***REMOVED******REMOVED***let serverPassword: String? = nil
 ***REMOVED******REMOVED***try XCTSkipIf(serverPassword == nil)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***let challengeHandler = ChallengeHandler(
-***REMOVED******REMOVED******REMOVED***trustedHosts: [URL.rtc_100_8.host!],
-***REMOVED******REMOVED******REMOVED***arcgisCredentialProvider: { challenge in
-***REMOVED******REMOVED******REMOVED******REMOVED***try await .token(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***challenge: challenge,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***username: serverUsername,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***password: serverPassword!
-***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***)
-***REMOVED******REMOVED***ArcGISRuntimeEnvironment.authenticationChallengeHandler = challengeHandler
+***REMOVED******REMOVED***setChallengeHandler(ChallengeHandler(trustedHosts: [URL.rtc_100_8.host!]))
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let token = try await ArcGISCredential.token(
 ***REMOVED******REMOVED******REMOVED***url: .rtc_100_8,
-***REMOVED******REMOVED******REMOVED***username: serverUsername,
+***REMOVED******REMOVED******REMOVED***username: "publisher1",
 ***REMOVED******REMOVED******REMOVED***password: serverPassword!
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***await ArcGISRuntimeEnvironment.credentialStore.add(token)
@@ -116,6 +106,7 @@ import XCTest
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***await viewModel.load()
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertNotNil(viewModel.network)
 ***REMOVED******REMOVED***XCTAssertFalse(viewModel.canRunTrace)
 ***REMOVED******REMOVED***XCTAssertTrue(viewModel.configurations.isEmpty)
 ***REMOVED******REMOVED***XCTAssertEqual(
@@ -125,11 +116,11 @@ import XCTest
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func testCase_1_4() async throws {
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***try XCTSkipIf(true, "Server trust handling required")
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let serverPassword: String? = nil
 ***REMOVED******REMOVED***try XCTSkipIf(serverPassword == nil)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***setChallengeHandler(ChallengeHandler(trustedHosts: [URL.rt_server109.host!]))
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let token = try await ArcGISCredential.token(
 ***REMOVED******REMOVED******REMOVED***url: .rt_server109,
 ***REMOVED******REMOVED******REMOVED***username: "publisher1",
@@ -137,7 +128,27 @@ import XCTest
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***await ArcGISRuntimeEnvironment.credentialStore.add(token)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** - TODO: Finish implementation after server trust handling is resolved
+***REMOVED******REMOVED***guard let map = Map(url: .rt_server109) else {
+***REMOVED******REMOVED******REMOVED***XCTFail("Failed to load map")
+***REMOVED******REMOVED******REMOVED***return
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let viewModel = UtilityNetworkTraceViewModel(
+***REMOVED******REMOVED******REMOVED***map: map,
+***REMOVED******REMOVED******REMOVED***graphicsOverlay: GraphicsOverlay(),
+***REMOVED******REMOVED******REMOVED***startingPoints: [],
+***REMOVED******REMOVED******REMOVED***autoLoad: false
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***await viewModel.load()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertNotNil(viewModel.network)
+***REMOVED******REMOVED***XCTAssertFalse(viewModel.canRunTrace)
+***REMOVED******REMOVED***XCTAssertFalse(viewModel.configurations.isEmpty)
+***REMOVED******REMOVED***XCTAssertEqual(
+***REMOVED******REMOVED******REMOVED***viewModel.network?.name,
+***REMOVED******REMOVED******REMOVED***"L23UtilityNetwork_Utility_Network Utility Network"
+***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func testCase_2_1() {***REMOVED***
@@ -192,55 +203,4 @@ private extension URL {
 ***REMOVED***static var rtc_100_8 = URL(string: "http:***REMOVED***rtc-100-8.esri.com/portal/home/webmap/viewer.html?webmap=78f993b89bad4ba0a8a22ce2e0bcfbd0")!
 ***REMOVED***
 ***REMOVED***static var sampleServer7 = URL(string: "https:***REMOVED***sampleserver7.arcgisonline.com/server/rest/services/UtilityNetwork/NapervilleElectric/FeatureServer")!
-***REMOVED***
-
-
-***REMOVED***/ A `ChallengeHandler` that that can handle trusting hosts with a self-signed certificate, the URL credential,
-***REMOVED***/ and the token credential.
-private class ChallengeHandler: AuthenticationChallengeHandler {
-***REMOVED******REMOVED***/ The hosts that can be trusted if they have certificate trust issues.
-***REMOVED***let trustedHosts: Set<String>
-***REMOVED***
-***REMOVED******REMOVED***/ The url credential used when a challenge is thrown.
-***REMOVED***let networkCredentialProvider: ((NetworkAuthenticationChallenge) async -> NetworkCredential?)?
-***REMOVED***
-***REMOVED******REMOVED***/ The arcgis credential used when an ArcGIS challenge is received.
-***REMOVED***let arcgisCredentialProvider: ((ArcGISAuthenticationChallenge) async throws -> ArcGISCredential?)?
-***REMOVED***
-***REMOVED******REMOVED***/ The network authentication challenges.
-***REMOVED***private(set) var networkChallenges: [NetworkAuthenticationChallenge] = []
-***REMOVED***
-***REMOVED******REMOVED***/ The ArcGIS authentication challenges.
-***REMOVED***private(set) var arcGISChallenges: [ArcGISAuthenticationChallenge] = []
-***REMOVED***
-***REMOVED***init(
-***REMOVED******REMOVED***trustedHosts: Set<String> = [],
-***REMOVED******REMOVED***networkCredentialProvider: ((NetworkAuthenticationChallenge) async -> NetworkCredential?)? = nil,
-***REMOVED******REMOVED***arcgisCredentialProvider: ((ArcGISAuthenticationChallenge) async throws -> ArcGISCredential?)? = nil
-***REMOVED***) {
-***REMOVED******REMOVED***self.trustedHosts = trustedHosts
-***REMOVED******REMOVED***self.networkCredentialProvider = networkCredentialProvider
-***REMOVED******REMOVED***self.arcgisCredentialProvider = arcgisCredentialProvider
-***REMOVED***
-***REMOVED***
-***REMOVED***func handleNetworkChallenge(_ challenge: NetworkAuthenticationChallenge) async -> NetworkAuthenticationChallengeDisposition {
-***REMOVED******REMOVED******REMOVED*** Record challenge only if it is not a server trust.
-***REMOVED******REMOVED***if challenge.kind != .serverTrust {
-***REMOVED******REMOVED******REMOVED***networkChallenges.append(challenge)
-***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***if challenge.kind == .serverTrust {
-***REMOVED******REMOVED******REMOVED***if trustedHosts.contains(challenge.host) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** This will cause a self-signed certificate to be trusted.
-***REMOVED******REMOVED******REMOVED******REMOVED***return .useCredential(.serverTrust)
-***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***return .performDefaultHandling
-***REMOVED******REMOVED***
-***REMOVED*** else if let networkCredentialProvider = networkCredentialProvider,
-***REMOVED******REMOVED******REMOVED******REMOVED***  let networkCredential = await networkCredentialProvider(challenge) {
-***REMOVED******REMOVED******REMOVED***return .useCredential(networkCredential)
-***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***return .cancelAuthenticationChallenge
-***REMOVED***
-***REMOVED***
 ***REMOVED***
