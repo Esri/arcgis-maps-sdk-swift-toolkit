@@ -33,21 +33,13 @@ import XCTest
         let viewModel = UtilityNetworkTraceViewModel(
             map: await makeMapWithNoUtilityNetworks(),
             graphicsOverlay: GraphicsOverlay(),
-            startingPoints: []
+            startingPoints: [],
+            autoLoad: false
         )
         
-        let expectation = expectation(description: "Initialization completed")
+        await viewModel.load()
         
-        var subscription = Set<AnyCancellable>()
-        viewModel.$initializationCompleted.sink { v in
-            if v == true {
-                expectation.fulfill()
-            }
-        }.store(in: &subscription)
-        
-        await Task.yield()
-        wait(for: [expectation], timeout: 2.0)
-        
+        XCTAssertFalse(viewModel.canRunTrace)
         XCTAssertEqual(
             viewModel.userWarning,
             "No utility networks found."
@@ -70,23 +62,18 @@ import XCTest
         let viewModel = UtilityNetworkTraceViewModel(
             map: map,
             graphicsOverlay: GraphicsOverlay(),
-            startingPoints: []
+            startingPoints: [],
+            autoLoad: false
         )
-        let configurations = await viewModel.utilityNamedTraceConfigurations(from: map)
         
-        let expectation = expectation(description: "Initialization completed")
+        await viewModel.load()
         
-        var subscription = Set<AnyCancellable>()
-        viewModel.$initializationCompleted.sink { v in
-            if v == true {
-                expectation.fulfill()
-            }
-        }.store(in: &subscription)
-        
-        await Task.yield()
-        wait(for: [expectation], timeout: 2.0)
-        
-        XCTAssertTrue(configurations.isEmpty)
+        XCTAssertFalse(viewModel.canRunTrace)
+        XCTAssertTrue(viewModel.configurations.isEmpty)
+        XCTAssertEqual(
+            viewModel.userWarning,
+            "No trace types found."
+        )
     }
     
     func testCase_1_3() {}
