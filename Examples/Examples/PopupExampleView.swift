@@ -71,6 +71,7 @@ struct PopupExampleView: View {
                                     returnPopupsOnly: true
                                   )
                               })
+                            .cancellationToNil()
                         else {
                             return
                         }
