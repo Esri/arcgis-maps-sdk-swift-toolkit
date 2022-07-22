@@ -22,10 +22,13 @@ import Foundation
 ***REMOVED***@Published private(set) var completedTraces = [Trace]()
 ***REMOVED***
 ***REMOVED******REMOVED***/ The available named trace configurations.
-***REMOVED***@Published private(set) var configurations = [UtilityNamedTraceConfiguration]()
+***REMOVED***@Published private(set) var configurations = [UtilityNamedTraceConfiguration]() {
+***REMOVED******REMOVED***didSet {
+***REMOVED******REMOVED******REMOVED***if configurations.isEmpty {
+***REMOVED******REMOVED******REMOVED******REMOVED***userWarning = "No trace types found."
+***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Indicates whether all of the initialization tasks completed.
-***REMOVED***@Published private(set) var initializationCompleted: Bool = false
+***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The utility network on which traces will be ran.
 ***REMOVED***@Published private(set) var network: UtilityNetwork?
@@ -94,29 +97,18 @@ import Foundation
 ***REMOVED******REMOVED***/   - map: The map to be loaded that contains at least one utility network.
 ***REMOVED******REMOVED***/   - graphicsOverlay: The overlay on which trace graphics will be drawn.
 ***REMOVED******REMOVED***/   - startingPoints: Starting points programmatically provided to the trace tool.
+***REMOVED******REMOVED***/   - autoLoad: If set `false`, `load()` will need to be manually called.
 ***REMOVED***init(
 ***REMOVED******REMOVED***map: Map,
 ***REMOVED******REMOVED***graphicsOverlay: GraphicsOverlay,
-***REMOVED******REMOVED***startingPoints: [(GeoElement, Point?)]
+***REMOVED******REMOVED***startingPoints: [(GeoElement, Point?)],
+***REMOVED******REMOVED***autoLoad: Bool = true
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.map = map
 ***REMOVED******REMOVED***self.graphicsOverlay = graphicsOverlay
 ***REMOVED******REMOVED***self.externalStartingPoints = startingPoints
-***REMOVED******REMOVED***Task {
-***REMOVED******REMOVED******REMOVED***do {
-***REMOVED******REMOVED******REMOVED******REMOVED***try await map.load()
-***REMOVED******REMOVED******REMOVED******REMOVED***for network in map.utilityNetworks {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try await network.load()
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED*** catch {
-***REMOVED******REMOVED******REMOVED******REMOVED***print(error.localizedDescription)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***network = map.utilityNetworks.first
-***REMOVED******REMOVED******REMOVED***configurations = await utilityNamedTraceConfigurations(from: map)
-***REMOVED******REMOVED******REMOVED***initializationCompleted = true
-***REMOVED***
-***REMOVED******REMOVED***if map.utilityNetworks.isEmpty {
-***REMOVED******REMOVED******REMOVED***userWarning = "No utility networks found."
+***REMOVED******REMOVED***if autoLoad {
+***REMOVED******REMOVED******REMOVED***Task { await load() ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -148,6 +140,23 @@ import Foundation
 ***REMOVED*** catch {
 ***REMOVED******REMOVED******REMOVED***print(error.localizedDescription)
 ***REMOVED******REMOVED******REMOVED***return nil
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Manually loads the components necessary to use the trace tool.
+***REMOVED***func load() async {
+***REMOVED******REMOVED***do {
+***REMOVED******REMOVED******REMOVED***try await map.load()
+***REMOVED******REMOVED******REMOVED***for network in map.utilityNetworks {
+***REMOVED******REMOVED******REMOVED******REMOVED***try await network.load()
+***REMOVED******REMOVED***
+***REMOVED*** catch {
+***REMOVED******REMOVED******REMOVED***print(error.localizedDescription)
+***REMOVED***
+***REMOVED******REMOVED***network = map.utilityNetworks.first
+***REMOVED******REMOVED***configurations = await utilityNamedTraceConfigurations(from: map)
+***REMOVED******REMOVED***if map.utilityNetworks.isEmpty {
+***REMOVED******REMOVED******REMOVED***userWarning = "No utility networks found."
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -445,7 +454,15 @@ import Foundation
 ***REMOVED******REMOVED***/ - Parameter map: A web map containing one or more utility networks.
 ***REMOVED***func utilityNamedTraceConfigurations(from map: Map) async -> [UtilityNamedTraceConfiguration] {
 ***REMOVED******REMOVED***guard let network = network else { return [] ***REMOVED***
-***REMOVED******REMOVED***return (try? await map.getNamedTraceConfigurations(from: network)) ?? []
+***REMOVED******REMOVED***do {
+***REMOVED******REMOVED******REMOVED***return try await map.getNamedTraceConfigurations(from: network)
+***REMOVED*** catch {
+***REMOVED******REMOVED******REMOVED***print(
+***REMOVED******REMOVED******REMOVED******REMOVED***"Failed to retrieve configurations.",
+***REMOVED******REMOVED******REMOVED******REMOVED***error.localizedDescription
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***return []
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
