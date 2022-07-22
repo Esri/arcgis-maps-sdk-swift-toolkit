@@ -200,7 +200,6 @@ private extension View {
 ***REMOVED******REMOVED***viewModel: CertificatePickerViewModel
 ***REMOVED***) -> some View {
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED***alert("Error importing certificate", isPresented: isPresented) {
 ***REMOVED******REMOVED******REMOVED***Button("Try Again") {
 ***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.proceedFromPrompt()
