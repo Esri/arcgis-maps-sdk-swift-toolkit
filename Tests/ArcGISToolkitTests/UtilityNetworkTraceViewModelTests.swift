@@ -80,7 +80,7 @@ import XCTest
         
         try XCTSkipIf(true, "Server trust handling required")
         
-        let serverPassword: String? = "test.publisher01"
+        let serverPassword: String? = nil
         try XCTSkipIf(serverPassword == nil)
         let token = try await ArcGISCredential.token(
             url: .rtc_100_8,
