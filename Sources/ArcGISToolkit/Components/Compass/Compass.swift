@@ -30,6 +30,9 @@ public struct Compass: View {
 ***REMOVED******REMOVED***(heading.isZero || heading.isNaN) && autoHide
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ The width and height of the compass.
+***REMOVED***var size: CGFloat = 44
+***REMOVED***
 ***REMOVED******REMOVED***/ The heading of the compass in degrees.
 ***REMOVED***@Binding private var heading: Double
 ***REMOVED***
@@ -58,6 +61,7 @@ public struct Compass: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.aspectRatio(1, contentMode: .fit)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.opacity(opacity)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onTapGesture { heading = .zero ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: size, height: size)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: heading) { _ in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let newOpacity: Double = shouldHide ? .zero : 1
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard opacity != newOpacity else { return ***REMOVED***
@@ -112,5 +116,13 @@ public extension Compass {
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED******REMOVED***self.init(viewpointRotation: viewpointRotation, autoHide: autoHide)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Define a custom size for the compass.
+***REMOVED******REMOVED***/ - Parameter size: The width and height of the compass.
+***REMOVED***func compassSize(size: CGFloat) -> Self {
+***REMOVED******REMOVED***var copy = self
+***REMOVED******REMOVED***copy.size = size
+***REMOVED******REMOVED***return copy
 ***REMOVED***
 ***REMOVED***
