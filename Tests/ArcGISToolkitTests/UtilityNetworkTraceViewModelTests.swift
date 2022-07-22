@@ -77,6 +77,9 @@ import XCTest
     }
     
     func testCase_1_3() async throws {
+        
+        try XCTSkipIf(true, "Server trust handling required")
+        
         let serverPassword: String? = "test.publisher01"
         try XCTSkipIf(serverPassword == nil)
         let token = try await ArcGISCredential.token(
@@ -100,8 +103,6 @@ import XCTest
         
         await viewModel.load()
         
-        XCTExpectFailure("Further server trust handling required.")
-        
         XCTAssertFalse(viewModel.canRunTrace)
         XCTAssertTrue(viewModel.configurations.isEmpty)
         XCTAssertEqual(
@@ -111,6 +112,9 @@ import XCTest
     }
     
     func testCase_1_4() async throws {
+        
+        try XCTSkipIf(true, "Server trust handling required")
+        
         let serverPassword: String? = nil
         try XCTSkipIf(serverPassword == nil)
         let token = try await ArcGISCredential.token(
@@ -119,6 +123,8 @@ import XCTest
             password: serverPassword!
         )
         await ArcGISRuntimeEnvironment.credentialStore.add(token)
+        
+        // - TODO: Finish implementation after server trust handling is resolved
     }
     
     func testCase_2_1() {}
