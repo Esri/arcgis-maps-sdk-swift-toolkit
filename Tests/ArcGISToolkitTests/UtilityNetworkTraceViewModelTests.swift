@@ -40,6 +40,7 @@ import XCTest
         
         await viewModel.load()
         
+        XCTAssertNil(viewModel.network)
         XCTAssertFalse(viewModel.canRunTrace)
         XCTAssertEqual(
             viewModel.userWarning,
@@ -69,6 +70,7 @@ import XCTest
         
         await viewModel.load()
         
+        XCTAssertNotNil(viewModel.network)
         XCTAssertFalse(viewModel.canRunTrace)
         XCTAssertTrue(viewModel.configurations.isEmpty)
         XCTAssertEqual(
@@ -78,26 +80,14 @@ import XCTest
     }
     
     func testCase_1_3() async throws {
-        
-        let serverUsername = "publisher1"
         let serverPassword: String? = nil
         try XCTSkipIf(serverPassword == nil)
         
-        let challengeHandler = ChallengeHandler(
-            trustedHosts: [URL.rtc_100_8.host!],
-            arcgisCredentialProvider: { challenge in
-                try await .token(
-                    challenge: challenge,
-                    username: serverUsername,
-                    password: serverPassword!
-                )
-            }
-        )
-        ArcGISRuntimeEnvironment.authenticationChallengeHandler = challengeHandler
+        setChallengeHandler(ChallengeHandler(trustedHosts: [URL.rtc_100_8.host!]))
         
         let token = try await ArcGISCredential.token(
             url: .rtc_100_8,
-            username: serverUsername,
+            username: "publisher1",
             password: serverPassword!
         )
         await ArcGISRuntimeEnvironment.credentialStore.add(token)
@@ -116,6 +106,7 @@ import XCTest
         
         await viewModel.load()
         
+        XCTAssertNotNil(viewModel.network)
         XCTAssertFalse(viewModel.canRunTrace)
         XCTAssertTrue(viewModel.configurations.isEmpty)
         XCTAssertEqual(
@@ -125,11 +116,11 @@ import XCTest
     }
     
     func testCase_1_4() async throws {
-        
-        try XCTSkipIf(true, "Server trust handling required")
-        
         let serverPassword: String? = nil
         try XCTSkipIf(serverPassword == nil)
+        
+        setChallengeHandler(ChallengeHandler(trustedHosts: [URL.rt_server109.host!]))
+        
         let token = try await ArcGISCredential.token(
             url: .rt_server109,
             username: "publisher1",
@@ -137,7 +128,27 @@ import XCTest
         )
         await ArcGISRuntimeEnvironment.credentialStore.add(token)
         
-        // - TODO: Finish implementation after server trust handling is resolved
+        guard let map = Map(url: .rt_server109) else {
+            XCTFail("Failed to load map")
+            return
+        }
+        
+        let viewModel = UtilityNetworkTraceViewModel(
+            map: map,
+            graphicsOverlay: GraphicsOverlay(),
+            startingPoints: [],
+            autoLoad: false
+        )
+        
+        await viewModel.load()
+        
+        XCTAssertNotNil(viewModel.network)
+        XCTAssertFalse(viewModel.canRunTrace)
+        XCTAssertFalse(viewModel.configurations.isEmpty)
+        XCTAssertEqual(
+            viewModel.network?.name,
+            "L23UtilityNetwork_Utility_Network Utility Network"
+        )
     }
     
     func testCase_2_1() {}
@@ -192,55 +203,4 @@ private extension URL {
     static var rtc_100_8 = URL(string: "http://rtc-100-8.esri.com/portal/home/webmap/viewer.html?webmap=78f993b89bad4ba0a8a22ce2e0bcfbd0")!
     
     static var sampleServer7 = URL(string: "https://sampleserver7.arcgisonline.com/server/rest/services/UtilityNetwork/NapervilleElectric/FeatureServer")!
-}
-
-
-/// A `ChallengeHandler` that that can handle trusting hosts with a self-signed certificate, the URL credential,
-/// and the token credential.
-private class ChallengeHandler: AuthenticationChallengeHandler {
-    /// The hosts that can be trusted if they have certificate trust issues.
-    let trustedHosts: Set<String>
-    
-    /// The url credential used when a challenge is thrown.
-    let networkCredentialProvider: ((NetworkAuthenticationChallenge) async -> NetworkCredential?)?
-    
-    /// The arcgis credential used when an ArcGIS challenge is received.
-    let arcgisCredentialProvider: ((ArcGISAuthenticationChallenge) async throws -> ArcGISCredential?)?
-    
-    /// The network authentication challenges.
-    private(set) var networkChallenges: [NetworkAuthenticationChallenge] = []
-    
-    /// The ArcGIS authentication challenges.
-    private(set) var arcGISChallenges: [ArcGISAuthenticationChallenge] = []
-    
-    init(
-        trustedHosts: Set<String> = [],
-        networkCredentialProvider: ((NetworkAuthenticationChallenge) async -> NetworkCredential?)? = nil,
-        arcgisCredentialProvider: ((ArcGISAuthenticationChallenge) async throws -> ArcGISCredential?)? = nil
-    ) {
-        self.trustedHosts = trustedHosts
-        self.networkCredentialProvider = networkCredentialProvider
-        self.arcgisCredentialProvider = arcgisCredentialProvider
-    }
-    
-    func handleNetworkChallenge(_ challenge: NetworkAuthenticationChallenge) async -> NetworkAuthenticationChallengeDisposition {
-        // Record challenge only if it is not a server trust.
-        if challenge.kind != .serverTrust {
-            networkChallenges.append(challenge)
-        }
-        
-        if challenge.kind == .serverTrust {
-            if trustedHosts.contains(challenge.host) {
-                // This will cause a self-signed certificate to be trusted.
-                return .useCredential(.serverTrust)
-            } else {
-                return .performDefaultHandling
-            }
-        } else if let networkCredentialProvider = networkCredentialProvider,
-                  let networkCredential = await networkCredentialProvider(challenge) {
-            return .useCredential(networkCredential)
-        } else {
-            return .cancelAuthenticationChallenge
-        }
-    }
 }
