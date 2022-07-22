@@ -22,10 +22,13 @@ import SwiftUI
     @Published private(set) var completedTraces = [Trace]()
     
     /// The available named trace configurations.
-    @Published private(set) var configurations = [UtilityNamedTraceConfiguration]()
-    
-    /// Indicates whether all of the initialization tasks completed.
-    @Published private(set) var initializationCompleted: Bool = false
+    @Published private(set) var configurations = [UtilityNamedTraceConfiguration]() {
+        didSet {
+            if configurations.isEmpty {
+                userWarning = "No trace types found."
+            }
+        }
+    }
     
     /// The utility network on which traces will be ran.
     @Published private(set) var network: UtilityNetwork?
@@ -94,29 +97,18 @@ import SwiftUI
     ///   - map: The map to be loaded that contains at least one utility network.
     ///   - graphicsOverlay: The overlay on which trace graphics will be drawn.
     ///   - startingPoints: Starting points programmatically provided to the trace tool.
+    ///   - autoLoad: If set `false`, `load()` will need to be manually called.
     init(
         map: Map,
         graphicsOverlay: GraphicsOverlay,
-        startingPoints: [(GeoElement, Point?)]
+        startingPoints: [(GeoElement, Point?)],
+        autoLoad: Bool = true
     ) {
         self.map = map
         self.graphicsOverlay = graphicsOverlay
         self.externalStartingPoints = startingPoints
-        Task {
-            do {
-                try await map.load()
-                for network in map.utilityNetworks {
-                    try await network.load()
-                }
-            } catch {
-                print(error.localizedDescription)
-            }
-            network = map.utilityNetworks.first
-            configurations = await utilityNamedTraceConfigurations(from: map)
-            initializationCompleted = true
-        }
-        if map.utilityNetworks.isEmpty {
-            userWarning = "No utility networks found."
+        if autoLoad {
+            Task { await load() }
         }
     }
     
@@ -148,6 +140,23 @@ import SwiftUI
         } catch {
             print(error.localizedDescription)
             return nil
+        }
+    }
+    
+    /// Manually loads the components necessary to use the trace tool.
+    func load() async {
+        do {
+            try await map.load()
+            for network in map.utilityNetworks {
+                try await network.load()
+            }
+        } catch {
+            print(error.localizedDescription)
+        }
+        network = map.utilityNetworks.first
+        configurations = await utilityNamedTraceConfigurations(from: map)
+        if map.utilityNetworks.isEmpty {
+            userWarning = "No utility networks found."
         }
     }
     
@@ -445,7 +454,15 @@ import SwiftUI
     /// - Parameter map: A web map containing one or more utility networks.
     func utilityNamedTraceConfigurations(from map: Map) async -> [UtilityNamedTraceConfiguration] {
         guard let network = network else { return [] }
-        return (try? await map.getNamedTraceConfigurations(from: network)) ?? []
+        do {
+            return try await map.getNamedTraceConfigurations(from: network)
+        } catch {
+            print(
+                "Failed to retrieve configurations.",
+                error.localizedDescription
+            )
+            return []
+        }
     }
 }
 
