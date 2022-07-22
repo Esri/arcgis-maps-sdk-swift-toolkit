@@ -119,7 +119,7 @@ public extension Compass {
     }
     
     /// Define a custom size for the compass.
-    /// - Parameter size: A value for the compass' width and height.
+    /// - Parameter size: The width and height of the compass.
     func compassSize(size: CGFloat) -> Self {
         var copy = self
         copy.size = size
