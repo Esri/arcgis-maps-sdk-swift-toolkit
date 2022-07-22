@@ -35,6 +35,19 @@ import XCTest
             graphicsOverlay: GraphicsOverlay(),
             startingPoints: []
         )
+        
+        let expectation = expectation(description: "Initialization completed")
+        
+        var subscription = Set<AnyCancellable>()
+        viewModel.$initializationCompleted.sink { v in
+            if v == true {
+                expectation.fulfill()
+            }
+        }.store(in: &subscription)
+        
+        await Task.yield()
+        wait(for: [expectation], timeout: 2.0)
+        
         XCTAssertEqual(
             viewModel.userWarning,
             "No utility networks found."
@@ -72,6 +85,7 @@ import XCTest
         
         await Task.yield()
         wait(for: [expectation], timeout: 2.0)
+        
         XCTAssertTrue(configurations.isEmpty)
     }
     
