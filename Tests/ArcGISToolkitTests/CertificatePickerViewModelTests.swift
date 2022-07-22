@@ -38,7 +38,10 @@ import XCTest
         // Have to yield here because the proceed function kicks off a task.
         await Task.yield()
         // Have to wait here because the proceed function waits to avoid a bug.
-        try? await Task.sleep(nanoseconds: 150_000)
+        try? await Task.sleep(nanoseconds: 300_000)
+        // Another yield seems to be required to deal with timing when running the test
+        // repeatedly.
+        await Task.yield()
         XCTAssertTrue(model.showCertificateImportError)
         
         model.cancel()
