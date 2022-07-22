@@ -77,6 +77,9 @@ import XCTest
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func testCase_1_3() async throws {
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***try XCTSkipIf(true, "Server trust handling required")
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let serverPassword: String? = "test.publisher01"
 ***REMOVED******REMOVED***try XCTSkipIf(serverPassword == nil)
 ***REMOVED******REMOVED***let token = try await ArcGISCredential.token(
@@ -100,8 +103,6 @@ import XCTest
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***await viewModel.load()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***XCTExpectFailure("Further server trust handling required.")
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertFalse(viewModel.canRunTrace)
 ***REMOVED******REMOVED***XCTAssertTrue(viewModel.configurations.isEmpty)
 ***REMOVED******REMOVED***XCTAssertEqual(
@@ -111,6 +112,9 @@ import XCTest
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func testCase_1_4() async throws {
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***try XCTSkipIf(true, "Server trust handling required")
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let serverPassword: String? = nil
 ***REMOVED******REMOVED***try XCTSkipIf(serverPassword == nil)
 ***REMOVED******REMOVED***let token = try await ArcGISCredential.token(
@@ -119,6 +123,8 @@ import XCTest
 ***REMOVED******REMOVED******REMOVED***password: serverPassword!
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***await ArcGISRuntimeEnvironment.credentialStore.add(token)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** - TODO: Finish implementation after server trust handling is resolved
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func testCase_2_1() {***REMOVED***
