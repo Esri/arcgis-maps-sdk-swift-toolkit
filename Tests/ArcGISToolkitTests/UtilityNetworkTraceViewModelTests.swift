@@ -197,7 +197,7 @@ private extension URL {
 
 /// A `ChallengeHandler` that that can handle trusting hosts with a self-signed certificate, the URL credential,
 /// and the token credential.
-class ChallengeHandler: AuthenticationChallengeHandler {
+private class ChallengeHandler: AuthenticationChallengeHandler {
     /// The hosts that can be trusted if they have certificate trust issues.
     let trustedHosts: Set<String>
     
@@ -223,13 +223,6 @@ class ChallengeHandler: AuthenticationChallengeHandler {
         self.arcgisCredentialProvider = arcgisCredentialProvider
     }
     
-    convenience init(
-        trustedHosts: Set<String>,
-        networkCredential: NetworkCredential
-    ) {
-        self.init(trustedHosts: trustedHosts, networkCredentialProvider: { _ in networkCredential })
-    }
-    
     func handleNetworkChallenge(_ challenge: NetworkAuthenticationChallenge) async -> NetworkAuthenticationChallengeDisposition {
         // Record challenge only if it is not a server trust.
         if challenge.kind != .serverTrust {
@@ -246,19 +239,6 @@ class ChallengeHandler: AuthenticationChallengeHandler {
         } else if let networkCredentialProvider = networkCredentialProvider,
                   let networkCredential = await networkCredentialProvider(challenge) {
             return .useCredential(networkCredential)
-        } else {
-            return .cancelAuthenticationChallenge
-        }
-    }
-    
-    func handleArcGISChallenge(
-        _ challenge: ArcGISAuthenticationChallenge
-    ) async throws -> ArcGISAuthenticationChallenge.Disposition {
-        arcGISChallenges.append(challenge)
-        
-        if let arcgisCredentialProvider = arcgisCredentialProvider,
-           let arcgisCredential = try? await arcgisCredentialProvider(challenge) {
-            return .useCredential(arcgisCredential)
         } else {
             return .cancelAuthenticationChallenge
         }
