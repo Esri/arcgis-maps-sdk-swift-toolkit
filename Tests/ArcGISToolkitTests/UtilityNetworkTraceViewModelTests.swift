@@ -33,21 +33,13 @@ import XCTest
 ***REMOVED******REMOVED***let viewModel = UtilityNetworkTraceViewModel(
 ***REMOVED******REMOVED******REMOVED***map: await makeMapWithNoUtilityNetworks(),
 ***REMOVED******REMOVED******REMOVED***graphicsOverlay: GraphicsOverlay(),
-***REMOVED******REMOVED******REMOVED***startingPoints: []
+***REMOVED******REMOVED******REMOVED***startingPoints: [],
+***REMOVED******REMOVED******REMOVED***autoLoad: false
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***let expectation = expectation(description: "Initialization completed")
+***REMOVED******REMOVED***await viewModel.load()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***var subscription = Set<AnyCancellable>()
-***REMOVED******REMOVED***viewModel.$initializationCompleted.sink { v in
-***REMOVED******REMOVED******REMOVED***if v == true {
-***REMOVED******REMOVED******REMOVED******REMOVED***expectation.fulfill()
-***REMOVED******REMOVED***
-***REMOVED***.store(in: &subscription)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***await Task.yield()
-***REMOVED******REMOVED***wait(for: [expectation], timeout: 2.0)
-***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertFalse(viewModel.canRunTrace)
 ***REMOVED******REMOVED***XCTAssertEqual(
 ***REMOVED******REMOVED******REMOVED***viewModel.userWarning,
 ***REMOVED******REMOVED******REMOVED***"No utility networks found."
@@ -70,23 +62,18 @@ import XCTest
 ***REMOVED******REMOVED***let viewModel = UtilityNetworkTraceViewModel(
 ***REMOVED******REMOVED******REMOVED***map: map,
 ***REMOVED******REMOVED******REMOVED***graphicsOverlay: GraphicsOverlay(),
-***REMOVED******REMOVED******REMOVED***startingPoints: []
+***REMOVED******REMOVED******REMOVED***startingPoints: [],
+***REMOVED******REMOVED******REMOVED***autoLoad: false
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED***let configurations = await viewModel.utilityNamedTraceConfigurations(from: map)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***let expectation = expectation(description: "Initialization completed")
+***REMOVED******REMOVED***await viewModel.load()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***var subscription = Set<AnyCancellable>()
-***REMOVED******REMOVED***viewModel.$initializationCompleted.sink { v in
-***REMOVED******REMOVED******REMOVED***if v == true {
-***REMOVED******REMOVED******REMOVED******REMOVED***expectation.fulfill()
-***REMOVED******REMOVED***
-***REMOVED***.store(in: &subscription)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***await Task.yield()
-***REMOVED******REMOVED***wait(for: [expectation], timeout: 2.0)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***XCTAssertTrue(configurations.isEmpty)
+***REMOVED******REMOVED***XCTAssertFalse(viewModel.canRunTrace)
+***REMOVED******REMOVED***XCTAssertTrue(viewModel.configurations.isEmpty)
+***REMOVED******REMOVED***XCTAssertEqual(
+***REMOVED******REMOVED******REMOVED***viewModel.userWarning,
+***REMOVED******REMOVED******REMOVED***"No trace types found."
+***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func testCase_1_3() {***REMOVED***
