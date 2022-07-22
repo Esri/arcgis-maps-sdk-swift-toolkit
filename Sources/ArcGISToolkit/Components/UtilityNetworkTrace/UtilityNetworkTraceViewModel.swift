@@ -24,6 +24,9 @@ import SwiftUI
     /// The available named trace configurations.
     @Published private(set) var configurations = [UtilityNamedTraceConfiguration]()
     
+    /// Indicates whether all of the initialization tasks completed.
+    @Published private(set) var initializationCompleted: Bool = false
+    
     /// The utility network on which traces will be ran.
     @Published private(set) var network: UtilityNetwork?
     
@@ -110,6 +113,7 @@ import SwiftUI
             }
             network = map.utilityNetworks.first
             configurations = await utilityNamedTraceConfigurations(from: map)
+            initializationCompleted = true
         }
         if map.utilityNetworks.isEmpty {
             userWarning = "No utility networks found."
