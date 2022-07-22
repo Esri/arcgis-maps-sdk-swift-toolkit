@@ -61,7 +61,7 @@ import XCTest
         )
         let configurations = await viewModel.utilityNamedTraceConfigurations(from: map)
         
-        let expectation = expectation(description: "init completed")
+        let expectation = expectation(description: "Initialization completed")
         
         var subscription = Set<AnyCancellable>()
         viewModel.$initializationCompleted.sink { v in
