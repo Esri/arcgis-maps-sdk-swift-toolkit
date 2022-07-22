@@ -11,7 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-extension Result where Failure == Error {
+public extension Result where Failure == Error {
     /// Creates a result based on the outcome of the given task. If the task
     /// succeeds, the result is `success`. If the task fails, the result is
     /// `failure`.
@@ -21,5 +21,14 @@ extension Result where Failure == Error {
         } catch {
             self = .failure(error)
         }
+    }
+    
+    /// Converts the result to a `nil` in the case of a user cancelled error.
+    /// - Returns: `Self` or `nil` if there was a cancellation error.
+    func cancellationToNil() -> Self? {
+        guard case .failure(_ as CancellationError) = self else {
+            return self
+        }
+        return nil
     }
 }
