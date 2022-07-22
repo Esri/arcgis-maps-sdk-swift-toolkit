@@ -200,7 +200,6 @@ private extension View {
         viewModel: CertificatePickerViewModel
     ) -> some View {
         
-        
         alert("Error importing certificate", isPresented: isPresented) {
             Button("Try Again") {
                 viewModel.proceedFromPrompt()
