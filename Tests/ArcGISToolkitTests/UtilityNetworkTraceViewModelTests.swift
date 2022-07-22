@@ -47,12 +47,12 @@ import XCTest
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func testCase_1_2() async throws {
-***REMOVED******REMOVED***let sampleServer7Password: String? = nil
-***REMOVED******REMOVED***try XCTSkipIf(sampleServer7Password == nil)
+***REMOVED******REMOVED***let serverPassword: String? = nil
+***REMOVED******REMOVED***try XCTSkipIf(serverPassword == nil)
 ***REMOVED******REMOVED***let token = try await ArcGISCredential.token(
 ***REMOVED******REMOVED******REMOVED***url: .sampleServer7,
 ***REMOVED******REMOVED******REMOVED***username: "viewer01",
-***REMOVED******REMOVED******REMOVED***password: sampleServer7Password!
+***REMOVED******REMOVED******REMOVED***password: serverPassword!
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***await ArcGISRuntimeEnvironment.credentialStore.add(token)
 ***REMOVED******REMOVED***let map = await makeMapWithNoUtilityNetworks()
@@ -76,7 +76,39 @@ import XCTest
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***func testCase_1_3() {***REMOVED***
+***REMOVED***func testCase_1_3() async throws {
+***REMOVED******REMOVED***let serverPassword: String? = "test.publisher01"
+***REMOVED******REMOVED***try XCTSkipIf(serverPassword == nil)
+***REMOVED******REMOVED***let token = try await ArcGISCredential.token(
+***REMOVED******REMOVED******REMOVED***url: .rtc_100_8,
+***REMOVED******REMOVED******REMOVED***username: "publisher1",
+***REMOVED******REMOVED******REMOVED***password: serverPassword!
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***await ArcGISRuntimeEnvironment.credentialStore.add(token)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***guard let map = Map(url: .rtc_100_8) else {
+***REMOVED******REMOVED******REMOVED***XCTFail("Failed to load map")
+***REMOVED******REMOVED******REMOVED***return
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let viewModel = UtilityNetworkTraceViewModel(
+***REMOVED******REMOVED******REMOVED***map: map,
+***REMOVED******REMOVED******REMOVED***graphicsOverlay: GraphicsOverlay(),
+***REMOVED******REMOVED******REMOVED***startingPoints: [],
+***REMOVED******REMOVED******REMOVED***autoLoad: false
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***await viewModel.load()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTExpectFailure("Further server trust handling required.")
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertFalse(viewModel.canRunTrace)
+***REMOVED******REMOVED***XCTAssertTrue(viewModel.configurations.isEmpty)
+***REMOVED******REMOVED***XCTAssertEqual(
+***REMOVED******REMOVED******REMOVED***viewModel.userWarning,
+***REMOVED******REMOVED******REMOVED***"No trace types found."
+***REMOVED******REMOVED***)
+***REMOVED***
 ***REMOVED***
 ***REMOVED***func testCase_1_4() {***REMOVED***
 ***REMOVED***
@@ -103,6 +135,17 @@ extension UtilityNetworkTraceViewModelTests {
 ***REMOVED******REMOVED***return map
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ - Returns: A loaded map that contains no utility networks.
+***REMOVED***func makeMapWith(url: URL) async -> Map? {
+***REMOVED******REMOVED***let map = Map(url: url)
+***REMOVED******REMOVED***do {
+***REMOVED******REMOVED******REMOVED***try await map?.load()
+***REMOVED*** catch {
+***REMOVED******REMOVED******REMOVED***XCTFail(error.localizedDescription)
+***REMOVED***
+***REMOVED******REMOVED***return map
+***REMOVED***
+***REMOVED***
 ***REMOVED******REMOVED***/ - Returns: A loaded utility network.
 ***REMOVED***func makeNetworkWith(url: URL) async -> UtilityNetwork {
 ***REMOVED******REMOVED***let network = UtilityNetwork(url: url)
@@ -117,4 +160,6 @@ extension UtilityNetworkTraceViewModelTests {
 
 private extension URL {
 ***REMOVED***static var sampleServer7 = URL(string: "https:***REMOVED***sampleserver7.arcgisonline.com/server/rest/services/UtilityNetwork/NapervilleElectric/FeatureServer")!
+***REMOVED***
+***REMOVED***static var rtc_100_8 = URL(string: "http:***REMOVED***rtc-100-8.esri.com/portal/home/webmap/viewer.html?webmap=78f993b89bad4ba0a8a22ce2e0bcfbd0")!
 ***REMOVED***
