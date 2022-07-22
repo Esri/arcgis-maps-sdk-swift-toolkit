@@ -110,7 +110,16 @@ import XCTest
         )
     }
     
-    func testCase_1_4() {}
+    func testCase_1_4() async throws {
+        let serverPassword: String? = nil
+        try XCTSkipIf(serverPassword == nil)
+        let token = try await ArcGISCredential.token(
+            url: .rt_server109,
+            username: "publisher1",
+            password: serverPassword!
+        )
+        await ArcGISRuntimeEnvironment.credentialStore.add(token)
+    }
     
     func testCase_2_1() {}
     
