@@ -197,7 +197,7 @@ private extension URL {
 
 ***REMOVED***/ A `ChallengeHandler` that that can handle trusting hosts with a self-signed certificate, the URL credential,
 ***REMOVED***/ and the token credential.
-class ChallengeHandler: AuthenticationChallengeHandler {
+private class ChallengeHandler: AuthenticationChallengeHandler {
 ***REMOVED******REMOVED***/ The hosts that can be trusted if they have certificate trust issues.
 ***REMOVED***let trustedHosts: Set<String>
 ***REMOVED***
@@ -223,13 +223,6 @@ class ChallengeHandler: AuthenticationChallengeHandler {
 ***REMOVED******REMOVED***self.arcgisCredentialProvider = arcgisCredentialProvider
 ***REMOVED***
 ***REMOVED***
-***REMOVED***convenience init(
-***REMOVED******REMOVED***trustedHosts: Set<String>,
-***REMOVED******REMOVED***networkCredential: NetworkCredential
-***REMOVED***) {
-***REMOVED******REMOVED***self.init(trustedHosts: trustedHosts, networkCredentialProvider: { _ in networkCredential ***REMOVED***)
-***REMOVED***
-***REMOVED***
 ***REMOVED***func handleNetworkChallenge(_ challenge: NetworkAuthenticationChallenge) async -> NetworkAuthenticationChallengeDisposition {
 ***REMOVED******REMOVED******REMOVED*** Record challenge only if it is not a server trust.
 ***REMOVED******REMOVED***if challenge.kind != .serverTrust {
@@ -246,19 +239,6 @@ class ChallengeHandler: AuthenticationChallengeHandler {
 ***REMOVED*** else if let networkCredentialProvider = networkCredentialProvider,
 ***REMOVED******REMOVED******REMOVED******REMOVED***  let networkCredential = await networkCredentialProvider(challenge) {
 ***REMOVED******REMOVED******REMOVED***return .useCredential(networkCredential)
-***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***return .cancelAuthenticationChallenge
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***func handleArcGISChallenge(
-***REMOVED******REMOVED***_ challenge: ArcGISAuthenticationChallenge
-***REMOVED***) async throws -> ArcGISAuthenticationChallenge.Disposition {
-***REMOVED******REMOVED***arcGISChallenges.append(challenge)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***if let arcgisCredentialProvider = arcgisCredentialProvider,
-***REMOVED******REMOVED***   let arcgisCredential = try? await arcgisCredentialProvider(challenge) {
-***REMOVED******REMOVED******REMOVED***return .useCredential(arcgisCredential)
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED***return .cancelAuthenticationChallenge
 ***REMOVED***
