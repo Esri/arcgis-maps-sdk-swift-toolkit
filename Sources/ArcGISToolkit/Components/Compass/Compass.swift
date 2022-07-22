@@ -119,7 +119,7 @@ public extension Compass {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Define a custom size for the compass.
-***REMOVED******REMOVED***/ - Parameter size: A value for the compass' width and height.
+***REMOVED******REMOVED***/ - Parameter size: The width and height of the compass.
 ***REMOVED***func compassSize(size: CGFloat) -> Self {
 ***REMOVED******REMOVED***var copy = self
 ***REMOVED******REMOVED***copy.size = size
