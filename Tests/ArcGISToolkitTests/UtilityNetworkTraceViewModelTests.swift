@@ -47,12 +47,12 @@ import XCTest
     }
     
     func testCase_1_2() async throws {
-        let sampleServer7Password: String? = nil
-        try XCTSkipIf(sampleServer7Password == nil)
+        let serverPassword: String? = nil
+        try XCTSkipIf(serverPassword == nil)
         let token = try await ArcGISCredential.token(
             url: .sampleServer7,
             username: "viewer01",
-            password: sampleServer7Password!
+            password: serverPassword!
         )
         await ArcGISRuntimeEnvironment.credentialStore.add(token)
         let map = await makeMapWithNoUtilityNetworks()
@@ -76,7 +76,39 @@ import XCTest
         )
     }
     
-    func testCase_1_3() {}
+    func testCase_1_3() async throws {
+        let serverPassword: String? = "test.publisher01"
+        try XCTSkipIf(serverPassword == nil)
+        let token = try await ArcGISCredential.token(
+            url: .rtc_100_8,
+            username: "publisher1",
+            password: serverPassword!
+        )
+        await ArcGISRuntimeEnvironment.credentialStore.add(token)
+        
+        guard let map = Map(url: .rtc_100_8) else {
+            XCTFail("Failed to load map")
+            return
+        }
+        
+        let viewModel = UtilityNetworkTraceViewModel(
+            map: map,
+            graphicsOverlay: GraphicsOverlay(),
+            startingPoints: [],
+            autoLoad: false
+        )
+        
+        await viewModel.load()
+        
+        XCTExpectFailure("Further server trust handling required.")
+        
+        XCTAssertFalse(viewModel.canRunTrace)
+        XCTAssertTrue(viewModel.configurations.isEmpty)
+        XCTAssertEqual(
+            viewModel.userWarning,
+            "No trace types found."
+        )
+    }
     
     func testCase_1_4() {}
     
@@ -103,6 +135,17 @@ extension UtilityNetworkTraceViewModelTests {
         return map
     }
     
+    /// - Returns: A loaded map that contains no utility networks.
+    func makeMapWith(url: URL) async -> Map? {
+        let map = Map(url: url)
+        do {
+            try await map?.load()
+        } catch {
+            XCTFail(error.localizedDescription)
+        }
+        return map
+    }
+    
     /// - Returns: A loaded utility network.
     func makeNetworkWith(url: URL) async -> UtilityNetwork {
         let network = UtilityNetwork(url: url)
@@ -117,4 +160,6 @@ extension UtilityNetworkTraceViewModelTests {
 
 private extension URL {
     static var sampleServer7 = URL(string: "https://sampleserver7.arcgisonline.com/server/rest/services/UtilityNetwork/NapervilleElectric/FeatureServer")!
+    
+    static var rtc_100_8 = URL(string: "http://rtc-100-8.esri.com/portal/home/webmap/viewer.html?webmap=78f993b89bad4ba0a8a22ce2e0bcfbd0")!
 }
