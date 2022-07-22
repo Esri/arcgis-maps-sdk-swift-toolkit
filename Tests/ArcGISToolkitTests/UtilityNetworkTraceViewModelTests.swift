@@ -35,6 +35,19 @@ import XCTest
 ***REMOVED******REMOVED******REMOVED***graphicsOverlay: GraphicsOverlay(),
 ***REMOVED******REMOVED******REMOVED***startingPoints: []
 ***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let expectation = expectation(description: "Initialization completed")
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***var subscription = Set<AnyCancellable>()
+***REMOVED******REMOVED***viewModel.$initializationCompleted.sink { v in
+***REMOVED******REMOVED******REMOVED***if v == true {
+***REMOVED******REMOVED******REMOVED******REMOVED***expectation.fulfill()
+***REMOVED******REMOVED***
+***REMOVED***.store(in: &subscription)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***await Task.yield()
+***REMOVED******REMOVED***wait(for: [expectation], timeout: 2.0)
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertEqual(
 ***REMOVED******REMOVED******REMOVED***viewModel.userWarning,
 ***REMOVED******REMOVED******REMOVED***"No utility networks found."
@@ -72,6 +85,7 @@ import XCTest
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***await Task.yield()
 ***REMOVED******REMOVED***wait(for: [expectation], timeout: 2.0)
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(configurations.isEmpty)
 ***REMOVED***
 ***REMOVED***
