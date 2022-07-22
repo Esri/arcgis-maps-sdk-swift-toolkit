@@ -159,7 +159,7 @@ extension UtilityNetworkTraceViewModelTests {
 }
 
 private extension URL {
-    static var sampleServer7 = URL(string: "https://sampleserver7.arcgisonline.com/server/rest/services/UtilityNetwork/NapervilleElectric/FeatureServer")!
-    
     static var rtc_100_8 = URL(string: "http://rtc-100-8.esri.com/portal/home/webmap/viewer.html?webmap=78f993b89bad4ba0a8a22ce2e0bcfbd0")!
+    
+    static var sampleServer7 = URL(string: "https://sampleserver7.arcgisonline.com/server/rest/services/UtilityNetwork/NapervilleElectric/FeatureServer")!
 }
