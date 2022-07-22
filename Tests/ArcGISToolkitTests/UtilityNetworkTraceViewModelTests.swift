@@ -12,13 +12,13 @@
 ***REMOVED*** limitations under the License.
 
 ***REMOVED***
+import Combine
 import XCTest
 
 @testable ***REMOVED***Toolkit
 
 ***REMOVED***/ - See Also: [Test Design](https:***REMOVED***devtopia.esri.com/runtime/common-toolkit/blob/main/designs/UtilityNetworkTraceTool/UtilityNetworkTraceTool_Test_Design.md)
 @MainActor final class UtilityNetworkTraceViewModelTests: XCTestCase {
-***REMOVED***
 ***REMOVED***override func setUpWithError() throws {
 ***REMOVED******REMOVED***ArcGISRuntimeEnvironment.apiKey = APIKey("<#API Key#>")
 ***REMOVED******REMOVED***try XCTSkipIf(ArcGISRuntimeEnvironment.apiKey == .placeholder)
@@ -60,6 +60,18 @@ import XCTest
 ***REMOVED******REMOVED******REMOVED***startingPoints: []
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***let configurations = await viewModel.utilityNamedTraceConfigurations(from: map)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let expectation = expectation(description: "init completed")
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***var subscription = Set<AnyCancellable>()
+***REMOVED******REMOVED***viewModel.$initializationCompleted.sink { v in
+***REMOVED******REMOVED******REMOVED***if v == true {
+***REMOVED******REMOVED******REMOVED******REMOVED***expectation.fulfill()
+***REMOVED******REMOVED***
+***REMOVED***.store(in: &subscription)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***await Task.yield()
+***REMOVED******REMOVED***wait(for: [expectation], timeout: 2.0)
 ***REMOVED******REMOVED***XCTAssertTrue(configurations.isEmpty)
 ***REMOVED***
 ***REMOVED***

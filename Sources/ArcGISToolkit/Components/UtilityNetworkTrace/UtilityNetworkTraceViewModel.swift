@@ -24,6 +24,9 @@ import Foundation
 ***REMOVED******REMOVED***/ The available named trace configurations.
 ***REMOVED***@Published private(set) var configurations = [UtilityNamedTraceConfiguration]()
 ***REMOVED***
+***REMOVED******REMOVED***/ Indicates whether all of the initialization tasks completed.
+***REMOVED***@Published private(set) var initializationCompleted: Bool = false
+***REMOVED***
 ***REMOVED******REMOVED***/ The utility network on which traces will be ran.
 ***REMOVED***@Published private(set) var network: UtilityNetwork?
 ***REMOVED***
@@ -110,6 +113,7 @@ import Foundation
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***network = map.utilityNetworks.first
 ***REMOVED******REMOVED******REMOVED***configurations = await utilityNamedTraceConfigurations(from: map)
+***REMOVED******REMOVED******REMOVED***initializationCompleted = true
 ***REMOVED***
 ***REMOVED******REMOVED***if map.utilityNetworks.isEmpty {
 ***REMOVED******REMOVED******REMOVED***userWarning = "No utility networks found."
