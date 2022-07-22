@@ -30,7 +30,7 @@ public struct Compass: View {
         (heading.isZero || heading.isNaN) && autoHide
     }
     
-    /// A value for the compass' width and height.
+    /// The width and height of the compass.
     var size: CGFloat = 44
     
     /// The heading of the compass in degrees.
