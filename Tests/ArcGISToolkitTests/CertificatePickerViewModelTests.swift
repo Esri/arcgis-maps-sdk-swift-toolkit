@@ -38,7 +38,10 @@ import XCTest
 ***REMOVED******REMOVED******REMOVED*** Have to yield here because the proceed function kicks off a task.
 ***REMOVED******REMOVED***await Task.yield()
 ***REMOVED******REMOVED******REMOVED*** Have to wait here because the proceed function waits to avoid a bug.
-***REMOVED******REMOVED***try? await Task.sleep(nanoseconds: 150_000)
+***REMOVED******REMOVED***try? await Task.sleep(nanoseconds: 300_000)
+***REMOVED******REMOVED******REMOVED*** Another yield seems to be required to deal with timing when running the test
+***REMOVED******REMOVED******REMOVED*** repeatedly.
+***REMOVED******REMOVED***await Task.yield()
 ***REMOVED******REMOVED***XCTAssertTrue(model.showCertificateImportError)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***model.cancel()
