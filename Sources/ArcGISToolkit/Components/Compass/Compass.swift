@@ -30,6 +30,9 @@ public struct Compass: View {
         (heading.isZero || heading.isNaN) && autoHide
     }
     
+    /// The width and height of the compass.
+    var size: CGFloat = 44
+    
     /// The heading of the compass in degrees.
     @Binding private var heading: Double
     
@@ -58,6 +61,7 @@ public struct Compass: View {
                 .aspectRatio(1, contentMode: .fit)
                 .opacity(opacity)
                 .onTapGesture { heading = .zero }
+                .frame(width: size, height: size)
                 .onChange(of: heading) { _ in
                     let newOpacity: Double = shouldHide ? .zero : 1
                     guard opacity != newOpacity else { return }
@@ -112,5 +116,13 @@ public extension Compass {
             )
         }
         self.init(viewpointRotation: viewpointRotation, autoHide: autoHide)
+    }
+    
+    /// Define a custom size for the compass.
+    /// - Parameter size: The width and height of the compass.
+    func compassSize(size: CGFloat) -> Self {
+        var copy = self
+        copy.size = size
+        return copy
     }
 }
