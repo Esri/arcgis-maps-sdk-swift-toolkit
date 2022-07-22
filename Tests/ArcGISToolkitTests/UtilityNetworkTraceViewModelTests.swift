@@ -110,7 +110,16 @@ import XCTest
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***func testCase_1_4() {***REMOVED***
+***REMOVED***func testCase_1_4() async throws {
+***REMOVED******REMOVED***let serverPassword: String? = nil
+***REMOVED******REMOVED***try XCTSkipIf(serverPassword == nil)
+***REMOVED******REMOVED***let token = try await ArcGISCredential.token(
+***REMOVED******REMOVED******REMOVED***url: .rt_server109,
+***REMOVED******REMOVED******REMOVED***username: "publisher1",
+***REMOVED******REMOVED******REMOVED***password: serverPassword!
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***await ArcGISRuntimeEnvironment.credentialStore.add(token)
+***REMOVED***
 ***REMOVED***
 ***REMOVED***func testCase_2_1() {***REMOVED***
 ***REMOVED***
