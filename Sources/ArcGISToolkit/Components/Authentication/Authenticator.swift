@@ -63,23 +63,6 @@ public final class Authenticator: ObservableObject {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Observes the challenge queue and sets the current challenge.
-***REMOVED***private func observeChallengeQueue() async {
-***REMOVED******REMOVED******REMOVED***for await queuedChallenge in challengeQueue {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** A yield here helps alleviate the already presenting bug.
-***REMOVED******REMOVED******REMOVED******REMOVED***await Task.yield()
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Set the current challenge, this should present the appropriate view.
-***REMOVED******REMOVED******REMOVED******REMOVED***currentChallenge = queuedChallenge
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Wait for the queued challenge to finish.
-***REMOVED******REMOVED******REMOVED******REMOVED***await queuedChallenge.complete()
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Reset the current challenge to `nil`, that will dismiss the view.
-***REMOVED******REMOVED******REMOVED******REMOVED***currentChallenge = nil
-***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED***
 ***REMOVED******REMOVED***/ Sets up new credential stores that will be persisted to the keychain.
 ***REMOVED******REMOVED***/ - Remark: The credentials will be stored in the default access group of the keychain.
 ***REMOVED******REMOVED***/ You can find more information about what the default group would be here:
