@@ -63,23 +63,6 @@ public final class Authenticator: ObservableObject {
         }
     }
     
-    /// Observes the challenge queue and sets the current challenge.
-    private func observeChallengeQueue() async {
-//        for await queuedChallenge in challengeQueue {
-//            // A yield here helps alleviate the already presenting bug.
-//            await Task.yield()
-//            
-//            // Set the current challenge, this should present the appropriate view.
-//            currentChallenge = queuedChallenge
-//            
-//            // Wait for the queued challenge to finish.
-//            await queuedChallenge.complete()
-//            
-//            // Reset the current challenge to `nil`, that will dismiss the view.
-//            currentChallenge = nil
-//        }
-    }
-    
     /// Sets up new credential stores that will be persisted to the keychain.
     /// - Remark: The credentials will be stored in the default access group of the keychain.
     /// You can find more information about what the default group would be here:
