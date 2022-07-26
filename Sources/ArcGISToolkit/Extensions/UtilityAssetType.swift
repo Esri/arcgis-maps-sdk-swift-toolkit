@@ -13,7 +13,7 @@
 
 import ArcGIS
 
-extension UtilityAssetType: Hashable, Identifiable {
+extension UtilityAssetType: Equatable, Hashable, Identifiable {
     public static func == (lhs: ArcGIS.UtilityAssetType, rhs: ArcGIS.UtilityAssetType) -> Bool {
         lhs.hashValue == rhs.hashValue
     }

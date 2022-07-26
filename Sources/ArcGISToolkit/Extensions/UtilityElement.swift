@@ -13,7 +13,7 @@
 
 import ArcGIS
 
-extension UtilityElement: Hashable, Identifiable {
+extension UtilityElement: Equatable, Hashable, Identifiable {
     public static func == (lhs: ArcGIS.UtilityElement, rhs: ArcGIS.UtilityElement) -> Bool {
         lhs.globalID == rhs.globalID
     }
