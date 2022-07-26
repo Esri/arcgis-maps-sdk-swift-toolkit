@@ -18,7 +18,7 @@ import SwiftUI
 /// A demonstration of the utility network trace tool which runs traces on a web map published with a utility
 /// network and trace configurations.
 struct UtilityNetworkTraceExampleView: View {
-    /// The map displayed in the map view.
+    /// The map containing the utility networks.
     @StateObject private var map = makeMap()
     
     /// Provides the ability to inspect map components.
