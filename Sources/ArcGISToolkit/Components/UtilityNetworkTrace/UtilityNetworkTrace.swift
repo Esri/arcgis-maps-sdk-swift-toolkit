@@ -58,8 +58,7 @@ public struct UtilityNetworkTrace: View {
     /// The current user activity.
     @State private var currentActivity: UserActivity = .creatingTrace(nil)
     
-    /// A value indicating whether the viewpoint should be automatically changed to show the resulting
-    /// extent of a trace.
+    /// A Boolean value indicating whether the map should be zoomed to the extent of the trace result.
     @State private var shouldZoomOnTraceCompletion = false
     
     /// A Boolean value indicating if the warning that all traces will be deleted is presented.
