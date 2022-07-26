@@ -78,7 +78,9 @@ import Foundation
 ***REMOVED******REMOVED***/ Starting points programmatically provided to the trace tool.
 ***REMOVED***var externalStartingPoints = [UtilityNetworkTraceSimpleStartingPoint]() {
 ***REMOVED******REMOVED***didSet {
-***REMOVED******REMOVED******REMOVED***addExternalStartingPoints()
+***REMOVED******REMOVED******REMOVED***Task {
+***REMOVED******REMOVED******REMOVED******REMOVED***await addExternalStartingPoints()
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -158,6 +160,7 @@ import Foundation
 ***REMOVED******REMOVED***if map.utilityNetworks.isEmpty {
 ***REMOVED******REMOVED******REMOVED***userWarning = "No utility networks found."
 ***REMOVED***
+***REMOVED******REMOVED***await addExternalStartingPoints()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Selects the next trace from the list of completed traces.
@@ -240,9 +243,12 @@ import Foundation
 ***REMOVED******REMOVED******REMOVED***screenPoint: point,
 ***REMOVED******REMOVED******REMOVED***tolerance: 10
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED***identifyLayerResults?.forEach { identifyLayerResult in
-***REMOVED******REMOVED******REMOVED***identifyLayerResult.geoElements.forEach { geoElement in
-***REMOVED******REMOVED******REMOVED******REMOVED***setStartingPoint(geoElement: geoElement, mapPoint: mapPoint)
+***REMOVED******REMOVED***for layerResult in identifyLayerResults ?? [] {
+***REMOVED******REMOVED******REMOVED***for geoElement in layerResult.geoElements {
+***REMOVED******REMOVED******REMOVED******REMOVED***await setStartingPoint(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***geoElement: geoElement,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mapPoint: mapPoint
+***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -254,64 +260,62 @@ import Foundation
 ***REMOVED***func setStartingPoint(
 ***REMOVED******REMOVED***geoElement: GeoElement,
 ***REMOVED******REMOVED***mapPoint: Point? = nil
-***REMOVED***) {
-***REMOVED******REMOVED***Task {
-***REMOVED******REMOVED******REMOVED***guard let feature = geoElement as? ArcGISFeature,
-***REMOVED******REMOVED******REMOVED******REMOVED***  let globalid = feature.attributes["globalid"] as? UUID else {
-***REMOVED******REMOVED******REMOVED******REMOVED***userWarning = "Element could not be identified"
-***REMOVED******REMOVED******REMOVED******REMOVED***return
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED*** Block duplicate starting point selection
-***REMOVED******REMOVED******REMOVED***guard !pendingTrace.startingPoints.contains(where: { startingPoint in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  return startingPoint.utilityElement.globalID == globalid
-***REMOVED******REMOVED***  ***REMOVED***) else {
-***REMOVED******REMOVED******REMOVED******REMOVED***userWarning = "Duplicate starting points cannot be added"
-***REMOVED******REMOVED******REMOVED******REMOVED***return
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***guard let network = self.network,
-***REMOVED******REMOVED******REMOVED******REMOVED***  let geometry = feature.geometry,
-***REMOVED******REMOVED******REMOVED******REMOVED***  let symbol = try? await (feature.featureTable?.layer as? FeatureLayer)?
-***REMOVED******REMOVED******REMOVED******REMOVED***.renderer?
-***REMOVED******REMOVED******REMOVED******REMOVED***.symbol(for: feature)?
-***REMOVED******REMOVED******REMOVED******REMOVED***.makeSwatch(scale: 1.0),
-***REMOVED******REMOVED******REMOVED******REMOVED***  let utilityElement = network.createElement(arcGISFeature: feature) else { return ***REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***if utilityElement.networkSource.kind == .edge && geometry is Polyline {
-***REMOVED******REMOVED******REMOVED******REMOVED***if let mapPoint = mapPoint {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***utilityElement.fractionAlongEdge = fractionAlongEdge(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***of: geometry,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***at: mapPoint
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***utilityElement.fractionAlongEdge = 0.5
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED*** else if utilityElement.networkSource.kind == .junction &&
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***utilityElement.assetType.terminalConfiguration?.terminals.count ?? 0 > 1 {
-***REMOVED******REMOVED******REMOVED******REMOVED***utilityElement.terminal = utilityElement.assetType.terminalConfiguration?.terminals.first
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***let graphic = Graphic(
-***REMOVED******REMOVED******REMOVED******REMOVED***geometry: mapPoint ?? feature.geometry?.extent.center,
-***REMOVED******REMOVED******REMOVED******REMOVED***symbol: SimpleMarkerSymbol(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***style: .cross,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***color: UIColor(self.pendingTrace.color),
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***size: 20
-***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***let startingPoint = UtilityNetworkTraceStartingPoint(
-***REMOVED******REMOVED******REMOVED******REMOVED***extent: geometry.extent,
-***REMOVED******REMOVED******REMOVED******REMOVED***geoElement: geoElement,
-***REMOVED******REMOVED******REMOVED******REMOVED***graphic: graphic,
-***REMOVED******REMOVED******REMOVED******REMOVED***image: symbol,
-***REMOVED******REMOVED******REMOVED******REMOVED***utilityElement: utilityElement
-***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***graphicsOverlay.addGraphic(graphic)
-***REMOVED******REMOVED******REMOVED***pendingTrace.startingPoints.append(startingPoint)
+***REMOVED***) async {
+***REMOVED******REMOVED***guard let feature = geoElement as? ArcGISFeature,
+***REMOVED******REMOVED******REMOVED***  let globalid = feature.globalID else {
+***REMOVED******REMOVED******REMOVED***userWarning = "Element could not be identified"
+***REMOVED******REMOVED******REMOVED***return
 ***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Block duplicate starting point selection
+***REMOVED******REMOVED***guard !pendingTrace.startingPoints.contains(where: { startingPoint in
+***REMOVED******REMOVED******REMOVED******REMOVED***  return startingPoint.utilityElement.globalID == globalid
+***REMOVED***  ***REMOVED***) else {
+***REMOVED******REMOVED******REMOVED***userWarning = "Duplicate starting points cannot be added"
+***REMOVED******REMOVED******REMOVED***return
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***guard let network = self.network,
+***REMOVED******REMOVED******REMOVED***  let geometry = feature.geometry,
+***REMOVED******REMOVED******REMOVED***  let symbol = try? await (feature.featureTable?.layer as? FeatureLayer)?
+***REMOVED******REMOVED******REMOVED***.renderer?
+***REMOVED******REMOVED******REMOVED***.symbol(for: feature)?
+***REMOVED******REMOVED******REMOVED***.makeSwatch(scale: 1.0),
+***REMOVED******REMOVED******REMOVED***  let utilityElement = network.createElement(arcGISFeature: feature) else { return ***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***if utilityElement.networkSource.kind == .edge && geometry is Polyline {
+***REMOVED******REMOVED******REMOVED***if let mapPoint = mapPoint {
+***REMOVED******REMOVED******REMOVED******REMOVED***utilityElement.fractionAlongEdge = fractionAlongEdge(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***of: geometry,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***at: mapPoint
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***utilityElement.fractionAlongEdge = 0.5
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED*** else if utilityElement.networkSource.kind == .junction &&
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***utilityElement.assetType.terminalConfiguration?.terminals.count ?? 0 > 1 {
+***REMOVED******REMOVED******REMOVED***utilityElement.terminal = utilityElement.assetType.terminalConfiguration?.terminals.first
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let graphic = Graphic(
+***REMOVED******REMOVED******REMOVED***geometry: mapPoint ?? feature.geometry?.extent.center,
+***REMOVED******REMOVED******REMOVED***symbol: SimpleMarkerSymbol(
+***REMOVED******REMOVED******REMOVED******REMOVED***style: .cross,
+***REMOVED******REMOVED******REMOVED******REMOVED***color: UIColor(self.pendingTrace.color),
+***REMOVED******REMOVED******REMOVED******REMOVED***size: 20
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let startingPoint = UtilityNetworkTraceStartingPoint(
+***REMOVED******REMOVED******REMOVED***extent: geometry.extent,
+***REMOVED******REMOVED******REMOVED***geoElement: geoElement,
+***REMOVED******REMOVED******REMOVED***graphic: graphic,
+***REMOVED******REMOVED******REMOVED***image: symbol,
+***REMOVED******REMOVED******REMOVED***utilityElement: utilityElement
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***graphicsOverlay.addGraphic(graphic)
+***REMOVED******REMOVED***pendingTrace.startingPoints.append(startingPoint)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func setTerminalConfigurationFor(
@@ -414,7 +418,7 @@ import Foundation
 ***REMOVED******REMOVED***completedTraces.append(pendingTrace)
 ***REMOVED******REMOVED***selectedTraceIndex = completedTraces.count - 1
 ***REMOVED******REMOVED***pendingTrace = Trace()
-***REMOVED******REMOVED***addExternalStartingPoints()
+***REMOVED******REMOVED***await addExternalStartingPoints()
 ***REMOVED******REMOVED***return true
 ***REMOVED***
 ***REMOVED***
@@ -430,11 +434,11 @@ import Foundation
 ***REMOVED******REMOVED*** MARK: Private Methods
 ***REMOVED***
 ***REMOVED******REMOVED***/ Adds programatic starting points to the pending trace.
-***REMOVED***private func addExternalStartingPoints() {
-***REMOVED******REMOVED***externalStartingPoints.forEach {
-***REMOVED******REMOVED******REMOVED***setStartingPoint(
-***REMOVED******REMOVED******REMOVED******REMOVED***geoElement: $0.geoElement,
-***REMOVED******REMOVED******REMOVED******REMOVED***mapPoint: $0.point
+***REMOVED***private func addExternalStartingPoints() async {
+***REMOVED******REMOVED***for startingPoint in externalStartingPoints {
+***REMOVED******REMOVED******REMOVED***await setStartingPoint(
+***REMOVED******REMOVED******REMOVED******REMOVED***geoElement: startingPoint.geoElement,
+***REMOVED******REMOVED******REMOVED******REMOVED***mapPoint: startingPoint.point
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***

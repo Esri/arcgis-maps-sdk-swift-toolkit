@@ -151,15 +151,296 @@ import XCTest
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***func testCase_2_1() {***REMOVED***
+***REMOVED***func testCase_2_1() async throws {
+***REMOVED******REMOVED***let serverPassword: String? = nil
+***REMOVED******REMOVED***try XCTSkipIf(serverPassword == nil)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***setChallengeHandler(ChallengeHandler(trustedHosts: [URL.rt_server109.host!]))
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let token = try await ArcGISCredential.token(
+***REMOVED******REMOVED******REMOVED***url: .rt_server109,
+***REMOVED******REMOVED******REMOVED***username: "publisher1",
+***REMOVED******REMOVED******REMOVED***password: serverPassword!
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***await ArcGISRuntimeEnvironment.credentialStore.add(token)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***guard let map = await makeMapWith(url: .rt_server109) else {
+***REMOVED******REMOVED******REMOVED***XCTFail()
+***REMOVED******REMOVED******REMOVED***return
 ***REMOVED***
-***REMOVED***func testCase_2_2() {***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let layer = try XCTUnwrap(map.operationalLayers.first {
+***REMOVED******REMOVED******REMOVED***$0.name == "ElecDist Device"
+***REMOVED*** as? FeatureLayer)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let parameters = QueryParameters()
+***REMOVED******REMOVED***parameters.addObjectId(171)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let result = try await layer.featureTable?.queryFeatures(parameters: parameters)
+***REMOVED******REMOVED***let features = try XCTUnwrap(result?.features().compactMap { $0 ***REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertEqual(features.count, 1)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let viewModel = UtilityNetworkTraceViewModel(
+***REMOVED******REMOVED******REMOVED***map: map,
+***REMOVED******REMOVED******REMOVED***graphicsOverlay: GraphicsOverlay(),
+***REMOVED******REMOVED******REMOVED***startingPoints: [
+***REMOVED******REMOVED******REMOVED******REMOVED***UtilityNetworkTraceSimpleStartingPoint(geoElement: features.first!)
+***REMOVED******REMOVED******REMOVED***],
+***REMOVED******REMOVED******REMOVED***autoLoad: false
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***await viewModel.load()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let startingPoints = viewModel.pendingTrace.startingPoints
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertNil(viewModel.pendingTrace.configuration)
+***REMOVED******REMOVED***XCTAssertFalse(viewModel.canRunTrace)
+***REMOVED******REMOVED***XCTAssertEqual(startingPoints.count, 1)
+***REMOVED******REMOVED***XCTAssertEqual(
+***REMOVED******REMOVED******REMOVED***startingPoints.first?.utilityElement.networkSource.name,
+***REMOVED******REMOVED******REMOVED***"ElecDist Device"
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***XCTAssertEqual(
+***REMOVED******REMOVED******REMOVED***startingPoints.first?.utilityElement.assetGroup.name,
+***REMOVED******REMOVED******REMOVED***"ServicePoint"
+***REMOVED******REMOVED***)
 ***REMOVED***
-***REMOVED***func testCase_2_3() {***REMOVED***
 ***REMOVED***
-***REMOVED***func testCase_3_1() {***REMOVED***
+***REMOVED***func testCase_2_2() async throws {
+***REMOVED******REMOVED***let serverPassword: String? = nil
+***REMOVED******REMOVED***try XCTSkipIf(serverPassword == nil)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***setChallengeHandler(ChallengeHandler(trustedHosts: [URL.rt_server109.host!]))
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let token = try await ArcGISCredential.token(
+***REMOVED******REMOVED******REMOVED***url: .rt_server109,
+***REMOVED******REMOVED******REMOVED***username: "publisher1",
+***REMOVED******REMOVED******REMOVED***password: serverPassword!
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***await ArcGISRuntimeEnvironment.credentialStore.add(token)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***guard let map = await makeMapWith(url: .rt_server109) else {
+***REMOVED******REMOVED******REMOVED***XCTFail()
+***REMOVED******REMOVED******REMOVED***return
 ***REMOVED***
-***REMOVED***func testCase_3_2() {***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let layer = try XCTUnwrap(map.operationalLayers.first {
+***REMOVED******REMOVED******REMOVED***$0.name == "ElecDist Device"
+***REMOVED*** as? FeatureLayer)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let parameters = QueryParameters()
+***REMOVED******REMOVED***parameters.addObjectId(463)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let result = try await layer.featureTable?.queryFeatures(parameters: parameters)
+***REMOVED******REMOVED***let features = try XCTUnwrap(result?.features().compactMap { $0 ***REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertEqual(features.count, 1)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let viewModel = UtilityNetworkTraceViewModel(
+***REMOVED******REMOVED******REMOVED***map: map,
+***REMOVED******REMOVED******REMOVED***graphicsOverlay: GraphicsOverlay(),
+***REMOVED******REMOVED******REMOVED***startingPoints: [
+***REMOVED******REMOVED******REMOVED******REMOVED***UtilityNetworkTraceSimpleStartingPoint(geoElement: features.first!)
+***REMOVED******REMOVED******REMOVED***],
+***REMOVED******REMOVED******REMOVED***autoLoad: false
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***await viewModel.load()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertEqual(viewModel.pendingTrace.startingPoints.count, 1)
+***REMOVED******REMOVED***XCTAssertFalse(viewModel.canRunTrace)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let terminal = try XCTUnwrap(viewModel.pendingTrace.startingPoints.first?.utilityElement.assetType.terminalConfiguration?.terminals.first { $0.name == "Low" ***REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let configuration = try XCTUnwrap( viewModel.configurations.first {
+***REMOVED******REMOVED******REMOVED***$0.name == "ConnectedWithResultTypes"
+***REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***viewModel.setTerminalConfigurationFor(startingPoint: viewModel.pendingTrace.startingPoints.first!, to: terminal)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***viewModel.setPendingTrace(configuration: configuration)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(viewModel.canRunTrace)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let succeeded = await viewModel.trace()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(succeeded)
+***REMOVED******REMOVED***XCTAssertEqual(viewModel.completedTraces.count, 1)
+***REMOVED******REMOVED***XCTAssertFalse(viewModel.canRunTrace)
+***REMOVED***
+***REMOVED***
+***REMOVED***func testCase_2_3() async throws {
+***REMOVED******REMOVED***let serverPassword: String? = nil
+***REMOVED******REMOVED***try XCTSkipIf(serverPassword == nil)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***setChallengeHandler(ChallengeHandler(trustedHosts: [URL.rt_server109.host!]))
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let token = try await ArcGISCredential.token(
+***REMOVED******REMOVED******REMOVED***url: .rt_server109,
+***REMOVED******REMOVED******REMOVED***username: "publisher1",
+***REMOVED******REMOVED******REMOVED***password: serverPassword!
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***await ArcGISRuntimeEnvironment.credentialStore.add(token)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***guard let map = await makeMapWith(url: .rt_server109) else {
+***REMOVED******REMOVED******REMOVED***XCTFail()
+***REMOVED******REMOVED******REMOVED***return
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let layer = try XCTUnwrap(map.operationalLayers.first {
+***REMOVED******REMOVED******REMOVED***$0.name == "ElecDist Line"
+***REMOVED*** as? FeatureLayer)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let parameters = QueryParameters()
+***REMOVED******REMOVED***parameters.addObjectId(177)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let result = try await layer.featureTable?.queryFeatures(parameters: parameters)
+***REMOVED******REMOVED***let features = try XCTUnwrap(result?.features().compactMap { $0 ***REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertEqual(features.count, 1)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let viewModel = UtilityNetworkTraceViewModel(
+***REMOVED******REMOVED******REMOVED***map: map,
+***REMOVED******REMOVED******REMOVED***graphicsOverlay: GraphicsOverlay(),
+***REMOVED******REMOVED******REMOVED***startingPoints: [
+***REMOVED******REMOVED******REMOVED******REMOVED***UtilityNetworkTraceSimpleStartingPoint(geoElement: features.first!)
+***REMOVED******REMOVED******REMOVED***],
+***REMOVED******REMOVED******REMOVED***autoLoad: false
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***await viewModel.load()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertEqual(viewModel.pendingTrace.startingPoints.count, 1)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let extent1 = try XCTUnwrap(viewModel.pendingTrace.startingPoints.first?.graphic.geometry?.extent)
+***REMOVED******REMOVED***viewModel.setFractionAlongEdgeFor(
+***REMOVED******REMOVED******REMOVED***startingPoint: viewModel.pendingTrace.startingPoints.first!,
+***REMOVED******REMOVED******REMOVED***to: 0.789
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***let extent2 = try XCTUnwrap(viewModel.pendingTrace.startingPoints.first?.graphic.geometry?.extent)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertNotEqual(
+***REMOVED******REMOVED******REMOVED***extent1.center,
+***REMOVED******REMOVED******REMOVED***extent2.center
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED***func testCase_3_1() async throws {
+***REMOVED******REMOVED***let serverPassword: String? = nil
+***REMOVED******REMOVED***try XCTSkipIf(serverPassword == nil)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***setChallengeHandler(ChallengeHandler(trustedHosts: [URL.rt_server109.host!]))
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let token = try await ArcGISCredential.token(
+***REMOVED******REMOVED******REMOVED***url: .rt_server109,
+***REMOVED******REMOVED******REMOVED***username: "publisher1",
+***REMOVED******REMOVED******REMOVED***password: serverPassword!
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***await ArcGISRuntimeEnvironment.credentialStore.add(token)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***guard let map = await makeMapWith(url: .rt_server109) else {
+***REMOVED******REMOVED******REMOVED***XCTFail()
+***REMOVED******REMOVED******REMOVED***return
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let layer = try XCTUnwrap(map.operationalLayers.first {
+***REMOVED******REMOVED******REMOVED***$0.name == "ElecDist Device"
+***REMOVED*** as? FeatureLayer)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let parameters = QueryParameters()
+***REMOVED******REMOVED***parameters.addObjectId(171)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let result = try await layer.featureTable?.queryFeatures(parameters: parameters)
+***REMOVED******REMOVED***let features = try XCTUnwrap(result?.features().compactMap { $0 ***REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertEqual(features.count, 1)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let viewModel = UtilityNetworkTraceViewModel(
+***REMOVED******REMOVED******REMOVED***map: map,
+***REMOVED******REMOVED******REMOVED***graphicsOverlay: GraphicsOverlay(),
+***REMOVED******REMOVED******REMOVED***startingPoints: [
+***REMOVED******REMOVED******REMOVED******REMOVED***UtilityNetworkTraceSimpleStartingPoint(geoElement: features.first!)
+***REMOVED******REMOVED******REMOVED***],
+***REMOVED******REMOVED******REMOVED***autoLoad: false
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***await viewModel.load()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let configuration = try XCTUnwrap( viewModel.configurations.first {
+***REMOVED******REMOVED******REMOVED***$0.name == "ConnectedWithFunction"
+***REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***viewModel.setPendingTrace(configuration: configuration)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertEqual(viewModel.pendingTrace.startingPoints.count, 1)
+***REMOVED******REMOVED***XCTAssertTrue(viewModel.canRunTrace)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let success = await viewModel.trace()
+***REMOVED******REMOVED***let functionOutput = try XCTUnwrap( viewModel.completedTraces.first?.functionOutputs.first)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(success)
+***REMOVED******REMOVED***XCTAssertFalse(viewModel.canRunTrace)
+***REMOVED******REMOVED***XCTAssertEqual(viewModel.completedTraces.first?.functionOutputs.count, 1)
+***REMOVED******REMOVED***XCTAssertEqual(functionOutput.function.functionType, .add)
+***REMOVED******REMOVED***XCTAssertEqual(functionOutput.function.networkAttribute?.name, "Shape length")
+***REMOVED***
+***REMOVED***
+***REMOVED***func testCase_3_2() async throws {
+***REMOVED******REMOVED***let serverPassword: String? = nil
+***REMOVED******REMOVED***try XCTSkipIf(serverPassword == nil)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***setChallengeHandler(ChallengeHandler(trustedHosts: [URL.rt_server109.host!]))
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let token = try await ArcGISCredential.token(
+***REMOVED******REMOVED******REMOVED***url: .rt_server109,
+***REMOVED******REMOVED******REMOVED***username: "publisher1",
+***REMOVED******REMOVED******REMOVED***password: serverPassword!
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***await ArcGISRuntimeEnvironment.credentialStore.add(token)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***guard let map = await makeMapWith(url: .rt_server109) else {
+***REMOVED******REMOVED******REMOVED***XCTFail()
+***REMOVED******REMOVED******REMOVED***return
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let layer = try XCTUnwrap(map.operationalLayers.first {
+***REMOVED******REMOVED******REMOVED***$0.name == "ElecDist Device"
+***REMOVED*** as? FeatureLayer)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let parameters = QueryParameters()
+***REMOVED******REMOVED***parameters.addObjectId(171)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let result = try await layer.featureTable?.queryFeatures(parameters: parameters)
+***REMOVED******REMOVED***let features = try XCTUnwrap(result?.features().compactMap { $0 ***REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertEqual(features.count, 1)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let viewModel = UtilityNetworkTraceViewModel(
+***REMOVED******REMOVED******REMOVED***map: map,
+***REMOVED******REMOVED******REMOVED***graphicsOverlay: GraphicsOverlay(),
+***REMOVED******REMOVED******REMOVED***startingPoints: [
+***REMOVED******REMOVED******REMOVED******REMOVED***UtilityNetworkTraceSimpleStartingPoint(geoElement: features.first!)
+***REMOVED******REMOVED******REMOVED***],
+***REMOVED******REMOVED******REMOVED***autoLoad: false
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***await viewModel.load()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertEqual(
+***REMOVED******REMOVED******REMOVED***viewModel.network?.name,
+***REMOVED******REMOVED******REMOVED***"L23UtilityNetwork_Utility_Network Utility Network"
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let configuration = try XCTUnwrap( viewModel.configurations.first {
+***REMOVED******REMOVED******REMOVED***$0.name == "ConnectedWithFunction"
+***REMOVED***)
+***REMOVED******REMOVED***viewModel.setPendingTrace(configuration: configuration)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let success = await viewModel.trace()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***XCTAssertTrue(success)
+***REMOVED***
 ***REMOVED***
 
 extension UtilityNetworkTraceViewModelTests {
