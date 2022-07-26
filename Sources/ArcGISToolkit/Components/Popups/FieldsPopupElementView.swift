@@ -68,7 +68,6 @@ struct FieldsPopupElementView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***FormattedValueText(formattedValue: field.formattedValue)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding([.bottom], -1)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.lineLimit(1)
 ***REMOVED******REMOVED******REMOVED***.background(Color.clear)
 ***REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .leading)
 ***REMOVED***
