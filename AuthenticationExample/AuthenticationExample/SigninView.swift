@@ -127,6 +127,7 @@ struct SigninView: View {
 ***REMOVED***
 
 private extension ArcGISCredential {
+***REMOVED******REMOVED***/ The username, if any, associated with this credential.
 ***REMOVED***var username: String? {
 ***REMOVED******REMOVED***get {
 ***REMOVED******REMOVED******REMOVED***switch self {
@@ -142,6 +143,7 @@ private extension ArcGISCredential {
 ***REMOVED***
 
 private extension NetworkCredential {
+***REMOVED******REMOVED***/ The username, if any, associated with this credential.
 ***REMOVED***var username: String? {
 ***REMOVED******REMOVED***switch self {
 ***REMOVED******REMOVED***case .serverTrust, .certificate:
