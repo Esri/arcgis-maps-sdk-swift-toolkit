@@ -58,6 +58,7 @@ public struct PopupView: View {
             do {
                 expressionEvaluations = try await popup.evaluateExpressions()
                 isPopupEvaluated = true
+                print("EE: \(expressionEvaluations?.count); first = \(expressionEvaluations?.first?.error)")
             } catch {
                 isPopupEvaluated = false
             }
@@ -80,8 +81,7 @@ public struct PopupView: View {
                             Text("MediaPopupElementView implementation coming soon.")
                                 .font(.caption)
                         case let popupElement as TextPopupElement:
-                            Text("TextPopupElementView implementation coming soon.")
-                                .font(.caption)
+                            TextPopupElementView(popupElement: popupElement)
                         default:
                             EmptyView()
                         }
