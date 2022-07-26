@@ -11,14 +11,9 @@
 			<string>com.esri.Examples</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>toolkit-auth-example</string>
+				<string>authexample</string>
 			</array>
 		</dict>
 	</array>
-	<key>NSAppTransportSecurity</key>
-	<dict>
-		<key>NSAllowsArbitraryLoads</key>
-		<true/>
-	</dict>
 </dict>
 </plist>
