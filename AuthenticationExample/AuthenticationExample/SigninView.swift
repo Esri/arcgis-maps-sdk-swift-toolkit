@@ -127,6 +127,7 @@ struct SigninView: View {
 }
 
 private extension ArcGISCredential {
+    /// The username, if any, associated with this credential.
     var username: String? {
         get {
             switch self {
@@ -142,6 +143,7 @@ private extension ArcGISCredential {
 }
 
 private extension NetworkCredential {
+    /// The username, if any, associated with this credential.
     var username: String? {
         switch self {
         case .serverTrust, .certificate:
