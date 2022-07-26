@@ -14,6 +14,7 @@
 import SwiftUI
 import ArcGIS
 import ArcGISToolkit
+import CryptoKit
 
 /// A view that allows the user to sign in to a portal.
 struct SigninView: View {
@@ -50,17 +51,33 @@ struct SigninView: View {
             }
         }
         .task {
-            let arcGISCredential = await ArcGISRuntimeEnvironment.credentialStore.credential(for: .portal)
-            let networkCredential = await ArcGISRuntimeEnvironment.networkCredentialStore.credential(for: )
+            if let arcGISCredential = await ArcGISRuntimeEnvironment.credentialStore.credential(for: .portal) {
+                lastSignedInUser = arcGISCredential.username ?? ""
+            }
+//            else if let networkCredential = await ArcGISRuntimeEnvironment.networkCredentialStore.credential(for: ) {
+//
+//            }
         }
         .padding()
+    }
+    
+    var signInButtonText: String {
+        if let lastSignedInUser = lastSignedInUser {
+            if lastSignedInUser.isEmpty {
+                return "Sign in again"
+            } else {
+                return "Sign in with \(lastSignedInUser)"
+            }
+        } else {
+            return "Sign in"
+        }
     }
     
     var signInButton: some View {
         Button {
             signIn()
         } label: {
-            Text("Sign in")
+            Text(signInButtonText)
                 .frame(maxWidth: .infinity)
         }
         .buttonStyle(.bordered)
@@ -86,22 +103,27 @@ struct SigninView: View {
 }
 
 private extension ArcGISCredential {
-    var username: String {
-        switch self {
-        case .oauth(let credential):
-            return credential.username
-        case .token(let credential):
-            return credential.username
-        case .staticToken(let credential):
-            return ""
+    var username: String? {
+        get {
+            switch self {
+            case .oauth(let credential):
+                return credential.username
+            case .token(let credential):
+                return credential.username
+            case .staticToken:
+                return nil
+            }
         }
     }
 }
 
 private extension NetworkCredential {
-    var username: String {
+    var username: String? {
         switch self {
-        case
+        case .serverTrust, .certificate:
+            return nil
+        case .password(let credential):
+            return credential.username
         }
     }
 }

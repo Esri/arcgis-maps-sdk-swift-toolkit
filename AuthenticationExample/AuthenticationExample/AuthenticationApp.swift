@@ -18,6 +18,7 @@ import ArcGIS
 @main
 struct AuthenticationApp: App {
     @ObservedObject var authenticator: Authenticator
+    @State var isSettingUp = true
     
     init() {
         // Create an authenticator.
@@ -34,7 +35,11 @@ struct AuthenticationApp: App {
     var body: some SwiftUI.Scene {
         WindowGroup {
             NavigationView {
-                HomeView()
+                if isSettingUp {
+                    ProgressView()
+                } else {
+                    HomeView()
+                }
             }
             // Using this view modifier will cause a prompt when the authenticator is asked
             // to handle an authentication challenge.
@@ -45,12 +50,14 @@ struct AuthenticationApp: App {
             .authenticator(authenticator)
             .environmentObject(authenticator)
             .task {
+                isSettingUp = true
                 // Here we make the authenticator persistent, which means that it will synchronize
                 // with they keychain for storing credentials.
                 // It also means that a user can sign in without having to be promped for
                 // credentials. Once credentials are cleared from the stores ("sign-out"),
                 // then the user will need to be prompted once again.
                 try? await authenticator.makePersistent(access: .whenUnlockedThisDeviceOnly)
+                isSettingUp = false
             }
         }
     }
