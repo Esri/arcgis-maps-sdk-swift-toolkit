@@ -13,7 +13,7 @@
 
 ***REMOVED***
 
-extension UtilityNetwork: Hashable {
+extension UtilityNetwork: Equatable, Hashable {
 ***REMOVED***public static func == (
 ***REMOVED******REMOVED***lhs: UtilityNetwork,
 ***REMOVED******REMOVED***rhs: UtilityNetwork

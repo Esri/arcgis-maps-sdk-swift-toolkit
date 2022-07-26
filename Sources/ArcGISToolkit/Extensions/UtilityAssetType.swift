@@ -13,7 +13,7 @@
 
 ***REMOVED***
 
-extension UtilityAssetType: Hashable, Identifiable {
+extension UtilityAssetType: Equatable, Hashable, Identifiable {
 ***REMOVED***public static func == (lhs: ArcGIS.UtilityAssetType, rhs: ArcGIS.UtilityAssetType) -> Bool {
 ***REMOVED******REMOVED***lhs.hashValue == rhs.hashValue
 ***REMOVED***

@@ -13,7 +13,7 @@
 
 ***REMOVED***
 
-extension UtilityTerminal: Hashable {
+extension UtilityTerminal: Equatable, Hashable {
 ***REMOVED***public static func == (
 ***REMOVED******REMOVED***lhs: ArcGIS.UtilityTerminal,
 ***REMOVED******REMOVED***rhs: ArcGIS.UtilityTerminal
