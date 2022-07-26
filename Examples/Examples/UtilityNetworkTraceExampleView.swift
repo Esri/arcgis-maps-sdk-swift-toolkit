@@ -18,7 +18,7 @@
 ***REMOVED***/ A demonstration of the utility network trace tool which runs traces on a web map published with a utility
 ***REMOVED***/ network and trace configurations.
 struct UtilityNetworkTraceExampleView: View {
-***REMOVED******REMOVED***/ The map displayed in the map view.
+***REMOVED******REMOVED***/ The map containing the utility networks.
 ***REMOVED***@StateObject private var map = makeMap()
 ***REMOVED***
 ***REMOVED******REMOVED***/ Provides the ability to inspect map components.
