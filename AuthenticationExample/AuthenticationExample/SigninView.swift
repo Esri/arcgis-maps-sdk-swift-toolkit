@@ -29,6 +29,8 @@ struct SigninView: View {
     /// The portal that the user successfully signed in to.
     @Binding var portal: Portal?
     
+    @State var lastSignedInUser: String?
+    
     var body: some View {
         VStack {
             Spacer()
@@ -46,6 +48,10 @@ struct SigninView: View {
                     .font(.footnote)
                     .foregroundColor(.secondary)
             }
+        }
+        .task {
+            let arcGISCredential = await ArcGISRuntimeEnvironment.credentialStore.credential(for: .portal)
+            let networkCredential = await ArcGISRuntimeEnvironment.networkCredentialStore.credential(for: )
         }
         .padding()
     }
@@ -75,6 +81,27 @@ struct SigninView: View {
                 self.error = error
             }
             isSigningIn = false
+        }
+    }
+}
+
+private extension ArcGISCredential {
+    var username: String {
+        switch self {
+        case .oauth(let credential):
+            return credential.username
+        case .token(let credential):
+            return credential.username
+        case .staticToken(let credential):
+            return ""
+        }
+    }
+}
+
+private extension NetworkCredential {
+    var username: String {
+        switch self {
+        case
         }
     }
 }
