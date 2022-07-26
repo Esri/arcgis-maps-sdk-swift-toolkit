@@ -19,8 +19,12 @@ import XCTest
 
 /// - See Also: [Test Design](https://devtopia.esri.com/runtime/common-toolkit/blob/main/designs/UtilityNetworkTraceTool/UtilityNetworkTraceTool_Test_Design.md)
 @MainActor final class UtilityNetworkTraceViewModelTests: XCTestCase {
+    
+    private let apiKey = APIKey("<#API Key#>")
+    private let passwordFor_rt_server109 = <#Password#>
+    
     override func setUpWithError() throws {
-        ArcGISRuntimeEnvironment.apiKey = APIKey("<#API Key#>")
+        ArcGISRuntimeEnvironment.apiKey = apiKey
         try XCTSkipIf(ArcGISRuntimeEnvironment.apiKey == .placeholder)
     }
     
@@ -484,4 +488,14 @@ private extension URL {
     static var rtc_100_8 = URL(string: "http://rtc-100-8.esri.com/portal/home/webmap/viewer.html?webmap=78f993b89bad4ba0a8a22ce2e0bcfbd0")!
     
     static var sampleServer7 = URL(string: "https://sampleserver7.arcgisonline.com/server/rest/services/UtilityNetwork/NapervilleElectric/FeatureServer")!
+}
+
+private extension ArcGISCredential {
+    static func rt_server109() async throws -> ArcGISCredential {
+        return try await ArcGISCredential.token(
+            url: URL.rt_server109,
+            username: "publisher1",
+            password: passwordFor_rt_server109
+        )
+    }
 }
