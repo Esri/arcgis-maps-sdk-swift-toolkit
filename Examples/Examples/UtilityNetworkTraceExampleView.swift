@@ -33,7 +33,7 @@ struct UtilityNetworkTraceExampleView: View {
     /// A container for graphical trace results.
     @State var resultGraphicsOverlay = GraphicsOverlay()
     
-    /// Optionally used to provide programmatic starting points to the trace tool.
+    /// Optional pre-defined starting points for the utility network trace.
     @State var startingPoints: [(GeoElement, Point?)] = []
     
     /// The map viewpoint used by the `UtilityNetworkTrace` to pan/zoom the map to selected features.
