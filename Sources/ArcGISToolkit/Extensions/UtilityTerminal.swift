@@ -13,7 +13,7 @@
 
 import ArcGIS
 
-extension UtilityTerminal: Hashable {
+extension UtilityTerminal: Equatable, Hashable {
     public static func == (
         lhs: ArcGIS.UtilityTerminal,
         rhs: ArcGIS.UtilityTerminal

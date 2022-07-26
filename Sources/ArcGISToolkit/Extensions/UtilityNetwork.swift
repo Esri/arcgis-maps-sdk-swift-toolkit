@@ -13,7 +13,7 @@
 
 import ArcGIS
 
-extension UtilityNetwork: Hashable {
+extension UtilityNetwork: Equatable, Hashable {
     public static func == (
         lhs: UtilityNetwork,
         rhs: UtilityNetwork
