@@ -59,9 +59,12 @@ struct AuthenticationApp: App {
 ***REMOVED*** If want to use OAuth, you can uncomment this code:
 ***REMOVED***private extension OAuthConfiguration {
 ***REMOVED******REMOVED***static let arcgisDotCom =  OAuthConfiguration(
-***REMOVED******REMOVED******REMOVED***portalURL: .arcgisDotCom,
-***REMOVED******REMOVED******REMOVED***clientID: <#Your client ID here#>,
-***REMOVED******REMOVED******REMOVED***redirectURL: URL(string: "toolkit-auth-example:***REMOVED***auth")!
+***REMOVED******REMOVED******REMOVED***portalURL: .portal,
+***REMOVED******REMOVED******REMOVED***clientID: "<#Your client ID goes here#>",
+***REMOVED******REMOVED******REMOVED******REMOVED*** Note: You must have the same redirect URL used here
+***REMOVED******REMOVED******REMOVED******REMOVED*** registered with your client ID.
+***REMOVED******REMOVED******REMOVED******REMOVED*** The scheme of the redirect URL is also specified in the Info.plist file.
+***REMOVED******REMOVED******REMOVED***redirectURL: URL(string: "authexample:***REMOVED***auth")!
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 
