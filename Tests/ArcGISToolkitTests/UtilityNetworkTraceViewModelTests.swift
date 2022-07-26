@@ -151,15 +151,296 @@ import XCTest
         )
     }
     
-    func testCase_2_1() {}
+    func testCase_2_1() async throws {
+        let serverPassword: String? = nil
+        try XCTSkipIf(serverPassword == nil)
+        
+        setChallengeHandler(ChallengeHandler(trustedHosts: [URL.rt_server109.host!]))
+        
+        let token = try await ArcGISCredential.token(
+            url: .rt_server109,
+            username: "publisher1",
+            password: serverPassword!
+        )
+        await ArcGISRuntimeEnvironment.credentialStore.add(token)
+        
+        guard let map = await makeMapWith(url: .rt_server109) else {
+            XCTFail()
+            return
+        }
+        
+        let layer = try XCTUnwrap(map.operationalLayers.first {
+            $0.name == "ElecDist Device"
+        } as? FeatureLayer)
+        
+        let parameters = QueryParameters()
+        parameters.addObjectId(171)
+        
+        let result = try await layer.featureTable?.queryFeatures(parameters: parameters)
+        let features = try XCTUnwrap(result?.features().compactMap { $0 })
+        
+        XCTAssertEqual(features.count, 1)
+        
+        let viewModel = UtilityNetworkTraceViewModel(
+            map: map,
+            graphicsOverlay: GraphicsOverlay(),
+            startingPoints: [
+                UtilityNetworkTraceSimpleStartingPoint(geoElement: features.first!)
+            ],
+            autoLoad: false
+        )
+        
+        await viewModel.load()
+        
+        let startingPoints = viewModel.pendingTrace.startingPoints
+        
+        XCTAssertNil(viewModel.pendingTrace.configuration)
+        XCTAssertFalse(viewModel.canRunTrace)
+        XCTAssertEqual(startingPoints.count, 1)
+        XCTAssertEqual(
+            startingPoints.first?.utilityElement.networkSource.name,
+            "ElecDist Device"
+        )
+        XCTAssertEqual(
+            startingPoints.first?.utilityElement.assetGroup.name,
+            "ServicePoint"
+        )
+    }
     
-    func testCase_2_2() {}
+    func testCase_2_2() async throws {
+        let serverPassword: String? = nil
+        try XCTSkipIf(serverPassword == nil)
+        
+        setChallengeHandler(ChallengeHandler(trustedHosts: [URL.rt_server109.host!]))
+        
+        let token = try await ArcGISCredential.token(
+            url: .rt_server109,
+            username: "publisher1",
+            password: serverPassword!
+        )
+        await ArcGISRuntimeEnvironment.credentialStore.add(token)
+        
+        guard let map = await makeMapWith(url: .rt_server109) else {
+            XCTFail()
+            return
+        }
+        
+        let layer = try XCTUnwrap(map.operationalLayers.first {
+            $0.name == "ElecDist Device"
+        } as? FeatureLayer)
+        
+        let parameters = QueryParameters()
+        parameters.addObjectId(463)
+        
+        let result = try await layer.featureTable?.queryFeatures(parameters: parameters)
+        let features = try XCTUnwrap(result?.features().compactMap { $0 })
+        
+        XCTAssertEqual(features.count, 1)
+        
+        let viewModel = UtilityNetworkTraceViewModel(
+            map: map,
+            graphicsOverlay: GraphicsOverlay(),
+            startingPoints: [
+                UtilityNetworkTraceSimpleStartingPoint(geoElement: features.first!)
+            ],
+            autoLoad: false
+        )
+        
+        await viewModel.load()
+        
+        XCTAssertEqual(viewModel.pendingTrace.startingPoints.count, 1)
+        XCTAssertFalse(viewModel.canRunTrace)
+        
+        let terminal = try XCTUnwrap(viewModel.pendingTrace.startingPoints.first?.utilityElement.assetType.terminalConfiguration?.terminals.first { $0.name == "Low" })
+        
+        let configuration = try XCTUnwrap( viewModel.configurations.first {
+            $0.name == "ConnectedWithResultTypes"
+        })
+        
+        viewModel.setTerminalConfigurationFor(startingPoint: viewModel.pendingTrace.startingPoints.first!, to: terminal)
+        
+        viewModel.setPendingTrace(configuration: configuration)
+        
+        XCTAssertTrue(viewModel.canRunTrace)
+        
+        let succeeded = await viewModel.trace()
+        
+        XCTAssertTrue(succeeded)
+        XCTAssertEqual(viewModel.completedTraces.count, 1)
+        XCTAssertFalse(viewModel.canRunTrace)
+    }
     
-    func testCase_2_3() {}
+    func testCase_2_3() async throws {
+        let serverPassword: String? = nil
+        try XCTSkipIf(serverPassword == nil)
+        
+        setChallengeHandler(ChallengeHandler(trustedHosts: [URL.rt_server109.host!]))
+        
+        let token = try await ArcGISCredential.token(
+            url: .rt_server109,
+            username: "publisher1",
+            password: serverPassword!
+        )
+        await ArcGISRuntimeEnvironment.credentialStore.add(token)
+        
+        guard let map = await makeMapWith(url: .rt_server109) else {
+            XCTFail()
+            return
+        }
+        
+        let layer = try XCTUnwrap(map.operationalLayers.first {
+            $0.name == "ElecDist Line"
+        } as? FeatureLayer)
+        
+        let parameters = QueryParameters()
+        parameters.addObjectId(177)
+        
+        let result = try await layer.featureTable?.queryFeatures(parameters: parameters)
+        let features = try XCTUnwrap(result?.features().compactMap { $0 })
+        
+        XCTAssertEqual(features.count, 1)
+        
+        let viewModel = UtilityNetworkTraceViewModel(
+            map: map,
+            graphicsOverlay: GraphicsOverlay(),
+            startingPoints: [
+                UtilityNetworkTraceSimpleStartingPoint(geoElement: features.first!)
+            ],
+            autoLoad: false
+        )
+        
+        await viewModel.load()
+        
+        XCTAssertEqual(viewModel.pendingTrace.startingPoints.count, 1)
+        
+        let extent1 = try XCTUnwrap(viewModel.pendingTrace.startingPoints.first?.graphic.geometry?.extent)
+        viewModel.setFractionAlongEdgeFor(
+            startingPoint: viewModel.pendingTrace.startingPoints.first!,
+            to: 0.789
+        )
+        let extent2 = try XCTUnwrap(viewModel.pendingTrace.startingPoints.first?.graphic.geometry?.extent)
+        
+        XCTAssertNotEqual(
+            extent1.center,
+            extent2.center
+        )
+    }
     
-    func testCase_3_1() {}
+    func testCase_3_1() async throws {
+        let serverPassword: String? = nil
+        try XCTSkipIf(serverPassword == nil)
+        
+        setChallengeHandler(ChallengeHandler(trustedHosts: [URL.rt_server109.host!]))
+        
+        let token = try await ArcGISCredential.token(
+            url: .rt_server109,
+            username: "publisher1",
+            password: serverPassword!
+        )
+        await ArcGISRuntimeEnvironment.credentialStore.add(token)
+        
+        guard let map = await makeMapWith(url: .rt_server109) else {
+            XCTFail()
+            return
+        }
+        
+        let layer = try XCTUnwrap(map.operationalLayers.first {
+            $0.name == "ElecDist Device"
+        } as? FeatureLayer)
+        
+        let parameters = QueryParameters()
+        parameters.addObjectId(171)
+        
+        let result = try await layer.featureTable?.queryFeatures(parameters: parameters)
+        let features = try XCTUnwrap(result?.features().compactMap { $0 })
+        
+        XCTAssertEqual(features.count, 1)
+        
+        let viewModel = UtilityNetworkTraceViewModel(
+            map: map,
+            graphicsOverlay: GraphicsOverlay(),
+            startingPoints: [
+                UtilityNetworkTraceSimpleStartingPoint(geoElement: features.first!)
+            ],
+            autoLoad: false
+        )
+        
+        await viewModel.load()
+        
+        let configuration = try XCTUnwrap( viewModel.configurations.first {
+            $0.name == "ConnectedWithFunction"
+        })
+        
+        viewModel.setPendingTrace(configuration: configuration)
+        
+        XCTAssertEqual(viewModel.pendingTrace.startingPoints.count, 1)
+        XCTAssertTrue(viewModel.canRunTrace)
+        
+        let success = await viewModel.trace()
+        let functionOutput = try XCTUnwrap( viewModel.completedTraces.first?.functionOutputs.first)
+        
+        XCTAssertTrue(success)
+        XCTAssertFalse(viewModel.canRunTrace)
+        XCTAssertEqual(viewModel.completedTraces.first?.functionOutputs.count, 1)
+        XCTAssertEqual(functionOutput.function.functionType, .add)
+        XCTAssertEqual(functionOutput.function.networkAttribute?.name, "Shape length")
+    }
     
-    func testCase_3_2() {}
+    func testCase_3_2() async throws {
+        let serverPassword: String? = nil
+        try XCTSkipIf(serverPassword == nil)
+        
+        setChallengeHandler(ChallengeHandler(trustedHosts: [URL.rt_server109.host!]))
+        
+        let token = try await ArcGISCredential.token(
+            url: .rt_server109,
+            username: "publisher1",
+            password: serverPassword!
+        )
+        await ArcGISRuntimeEnvironment.credentialStore.add(token)
+        
+        guard let map = await makeMapWith(url: .rt_server109) else {
+            XCTFail()
+            return
+        }
+        
+        let layer = try XCTUnwrap(map.operationalLayers.first {
+            $0.name == "ElecDist Device"
+        } as? FeatureLayer)
+        
+        let parameters = QueryParameters()
+        parameters.addObjectId(171)
+        
+        let result = try await layer.featureTable?.queryFeatures(parameters: parameters)
+        let features = try XCTUnwrap(result?.features().compactMap { $0 })
+        
+        XCTAssertEqual(features.count, 1)
+        
+        let viewModel = UtilityNetworkTraceViewModel(
+            map: map,
+            graphicsOverlay: GraphicsOverlay(),
+            startingPoints: [
+                UtilityNetworkTraceSimpleStartingPoint(geoElement: features.first!)
+            ],
+            autoLoad: false
+        )
+        
+        await viewModel.load()
+        
+        XCTAssertEqual(
+            viewModel.network?.name,
+            "L23UtilityNetwork_Utility_Network Utility Network"
+        )
+        
+        let configuration = try XCTUnwrap( viewModel.configurations.first {
+            $0.name == "ConnectedWithFunction"
+        })
+        viewModel.setPendingTrace(configuration: configuration)
+        
+        let success = await viewModel.trace()
+        
+        XCTAssertTrue(success)
+    }
 }
 
 extension UtilityNetworkTraceViewModelTests {
