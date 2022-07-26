@@ -21,11 +21,13 @@ import XCTest
 @MainActor final class UtilityNetworkTraceViewModelTests: XCTestCase {
     
     private let apiKey = APIKey("<#API Key#>")
-    private let passwordFor_rt_server109 = <#Password#>
+    private let passwordFor_rtc_100_8: String? = nil
+    private let passwordFor_rt_server109: String? = nil
+    private let passwordFor_sampleServer7: String? = nil
     
     override func setUpWithError() throws {
         ArcGISRuntimeEnvironment.apiKey = apiKey
-        try XCTSkipIf(ArcGISRuntimeEnvironment.apiKey == .placeholder)
+        try XCTSkipIf(apiKey == .placeholder)
     }
     
     func tearDownWithError() async throws {
@@ -53,14 +55,12 @@ import XCTest
     }
     
     func testCase_1_2() async throws {
-        let serverPassword: String? = nil
-        try XCTSkipIf(serverPassword == nil)
-        let token = try await ArcGISCredential.token(
-            url: .sampleServer7,
-            username: "viewer01",
-            password: serverPassword!
+        try XCTSkipIf(passwordFor_sampleServer7 == nil)
+        setChallengeHandler(ChallengeHandler(trustedHosts: [URL.sampleServer7.host!]))
+        await ArcGISRuntimeEnvironment.credentialStore.add(
+            try await tokenFor_sampleServer7()
         )
-        await ArcGISRuntimeEnvironment.credentialStore.add(token)
+        
         let map = await makeMapWithNoUtilityNetworks()
         map.addUtilityNetwork(
             await makeNetworkWith(url: .sampleServer7)
@@ -84,17 +84,11 @@ import XCTest
     }
     
     func testCase_1_3() async throws {
-        let serverPassword: String? = nil
-        try XCTSkipIf(serverPassword == nil)
-        
+        try XCTSkipIf(passwordFor_rtc_100_8 == nil)
         setChallengeHandler(ChallengeHandler(trustedHosts: [URL.rtc_100_8.host!]))
-        
-        let token = try await ArcGISCredential.token(
-            url: .rtc_100_8,
-            username: "publisher1",
-            password: serverPassword!
+        await ArcGISRuntimeEnvironment.credentialStore.add(
+            try await tokenFor_rtc_100_8()
         )
-        await ArcGISRuntimeEnvironment.credentialStore.add(token)
         
         guard let map = Map(url: .rtc_100_8) else {
             XCTFail("Failed to load map")
@@ -120,17 +114,11 @@ import XCTest
     }
     
     func testCase_1_4() async throws {
-        let serverPassword: String? = nil
-        try XCTSkipIf(serverPassword == nil)
-        
+        try XCTSkipIf(passwordFor_rt_server109 == nil)
         setChallengeHandler(ChallengeHandler(trustedHosts: [URL.rt_server109.host!]))
-        
-        let token = try await ArcGISCredential.token(
-            url: .rt_server109,
-            username: "publisher1",
-            password: serverPassword!
+        await ArcGISRuntimeEnvironment.credentialStore.add(
+            try await tokenFor_rt_server109()
         )
-        await ArcGISRuntimeEnvironment.credentialStore.add(token)
         
         guard let map = Map(url: .rt_server109) else {
             XCTFail("Failed to load map")
@@ -156,17 +144,11 @@ import XCTest
     }
     
     func testCase_2_1() async throws {
-        let serverPassword: String? = nil
-        try XCTSkipIf(serverPassword == nil)
-        
+        try XCTSkipIf(passwordFor_rt_server109 == nil)
         setChallengeHandler(ChallengeHandler(trustedHosts: [URL.rt_server109.host!]))
-        
-        let token = try await ArcGISCredential.token(
-            url: .rt_server109,
-            username: "publisher1",
-            password: serverPassword!
+        await ArcGISRuntimeEnvironment.credentialStore.add(
+            try await tokenFor_rt_server109()
         )
-        await ArcGISRuntimeEnvironment.credentialStore.add(token)
         
         guard let map = await makeMapWith(url: .rt_server109) else {
             XCTFail()
@@ -212,17 +194,11 @@ import XCTest
     }
     
     func testCase_2_2() async throws {
-        let serverPassword: String? = nil
-        try XCTSkipIf(serverPassword == nil)
-        
+        try XCTSkipIf(passwordFor_rt_server109 == nil)
         setChallengeHandler(ChallengeHandler(trustedHosts: [URL.rt_server109.host!]))
-        
-        let token = try await ArcGISCredential.token(
-            url: .rt_server109,
-            username: "publisher1",
-            password: serverPassword!
+        await ArcGISRuntimeEnvironment.credentialStore.add(
+            try await tokenFor_rt_server109()
         )
-        await ArcGISRuntimeEnvironment.credentialStore.add(token)
         
         guard let map = await makeMapWith(url: .rt_server109) else {
             XCTFail()
@@ -275,17 +251,11 @@ import XCTest
     }
     
     func testCase_2_3() async throws {
-        let serverPassword: String? = nil
-        try XCTSkipIf(serverPassword == nil)
-        
+        try XCTSkipIf(passwordFor_rt_server109 == nil)
         setChallengeHandler(ChallengeHandler(trustedHosts: [URL.rt_server109.host!]))
-        
-        let token = try await ArcGISCredential.token(
-            url: .rt_server109,
-            username: "publisher1",
-            password: serverPassword!
+        await ArcGISRuntimeEnvironment.credentialStore.add(
+            try await tokenFor_rt_server109()
         )
-        await ArcGISRuntimeEnvironment.credentialStore.add(token)
         
         guard let map = await makeMapWith(url: .rt_server109) else {
             XCTFail()
@@ -331,17 +301,11 @@ import XCTest
     }
     
     func testCase_3_1() async throws {
-        let serverPassword: String? = nil
-        try XCTSkipIf(serverPassword == nil)
-        
+        try XCTSkipIf(passwordFor_rt_server109 == nil)
         setChallengeHandler(ChallengeHandler(trustedHosts: [URL.rt_server109.host!]))
-        
-        let token = try await ArcGISCredential.token(
-            url: .rt_server109,
-            username: "publisher1",
-            password: serverPassword!
+        await ArcGISRuntimeEnvironment.credentialStore.add(
+            try await tokenFor_rt_server109()
         )
-        await ArcGISRuntimeEnvironment.credentialStore.add(token)
         
         guard let map = await makeMapWith(url: .rt_server109) else {
             XCTFail()
@@ -391,17 +355,11 @@ import XCTest
     }
     
     func testCase_3_2() async throws {
-        let serverPassword: String? = nil
-        try XCTSkipIf(serverPassword == nil)
-        
+        try XCTSkipIf(passwordFor_rt_server109 == nil)
         setChallengeHandler(ChallengeHandler(trustedHosts: [URL.rt_server109.host!]))
-        
-        let token = try await ArcGISCredential.token(
-            url: .rt_server109,
-            username: "publisher1",
-            password: serverPassword!
+        await ArcGISRuntimeEnvironment.credentialStore.add(
+            try await tokenFor_rt_server109()
         )
-        await ArcGISRuntimeEnvironment.credentialStore.add(token)
         
         guard let map = await makeMapWith(url: .rt_server109) else {
             XCTFail()
@@ -480,6 +438,30 @@ extension UtilityNetworkTraceViewModelTests {
         }
         return network
     }
+    
+    func tokenFor_rtc_100_8() async throws -> ArcGISCredential {
+        return try await ArcGISCredential.token(
+            url: URL.rtc_100_8,
+            username: "publisher1",
+            password: passwordFor_rtc_100_8!
+        )
+    }
+    
+    func tokenFor_rt_server109() async throws -> ArcGISCredential {
+        return try await ArcGISCredential.token(
+            url: URL.rt_server109,
+            username: "publisher1",
+            password: passwordFor_rt_server109!
+        )
+    }
+    
+    func tokenFor_sampleServer7() async throws -> ArcGISCredential {
+        return try await ArcGISCredential.token(
+            url: URL.sampleServer7,
+            username: "viewer01",
+            password: passwordFor_sampleServer7!
+        )
+    }
 }
 
 private extension URL {
@@ -488,14 +470,4 @@ private extension URL {
     static var rtc_100_8 = URL(string: "http://rtc-100-8.esri.com/portal/home/webmap/viewer.html?webmap=78f993b89bad4ba0a8a22ce2e0bcfbd0")!
     
     static var sampleServer7 = URL(string: "https://sampleserver7.arcgisonline.com/server/rest/services/UtilityNetwork/NapervilleElectric/FeatureServer")!
-}
-
-private extension ArcGISCredential {
-    static func rt_server109() async throws -> ArcGISCredential {
-        return try await ArcGISCredential.token(
-            url: URL.rt_server109,
-            username: "publisher1",
-            password: passwordFor_rt_server109
-        )
-    }
 }
