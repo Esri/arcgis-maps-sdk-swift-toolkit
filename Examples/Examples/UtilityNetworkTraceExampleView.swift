@@ -18,7 +18,7 @@ import SwiftUI
 /// A demonstration of the utility network trace tool which runs traces on a web map published with a utility
 /// network and trace configurations.
 struct UtilityNetworkTraceExampleView: View {
-    /// The map displayed in the map view.
+    /// The map containing the utility networks.
     @StateObject private var map = makeMap()
     
     /// Provides the ability to inspect map components.
@@ -33,8 +33,8 @@ struct UtilityNetworkTraceExampleView: View {
     /// A container for graphical trace results.
     @State var resultGraphicsOverlay = GraphicsOverlay()
     
-    /// Optionally used to provide programmatic starting points to the trace tool.
-    @State var startingPoints: [(GeoElement, Point?)] = []
+    /// Optional pre-defined starting points for the utility network trace.
+    @State var startingPoints: [UtilityNetworkTraceSimpleStartingPoint] = []
     
     /// The map viewpoint used by the `UtilityNetworkTrace` to pan/zoom the map to selected features.
     @State var viewpoint: Viewpoint?
@@ -123,7 +123,9 @@ extension UtilityNetworkTraceExampleView {
                 if let feature = element as? ArcGISFeature,
                    let id = feature.attributes["globalid"] as? UUID,
                    id == targetID {
-                    startingPoints = [(element, nil)]
+                    startingPoints = [
+                        UtilityNetworkTraceSimpleStartingPoint(geoElement: element)
+                    ]
                 }
             }
         }
