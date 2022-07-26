@@ -14,6 +14,7 @@
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***Toolkit
+import CryptoKit
 
 ***REMOVED***/ A view that allows the user to sign in to a portal.
 struct SigninView: View {
@@ -50,17 +51,33 @@ struct SigninView: View {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.task {
-***REMOVED******REMOVED******REMOVED***let arcGISCredential = await ArcGISRuntimeEnvironment.credentialStore.credential(for: .portal)
-***REMOVED******REMOVED******REMOVED***let networkCredential = await ArcGISRuntimeEnvironment.networkCredentialStore.credential(for: )
+***REMOVED******REMOVED******REMOVED***if let arcGISCredential = await ArcGISRuntimeEnvironment.credentialStore.credential(for: .portal) {
+***REMOVED******REMOVED******REMOVED******REMOVED***lastSignedInUser = arcGISCredential.username ?? ""
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***else if let networkCredential = await ArcGISRuntimeEnvironment.networkCredentialStore.credential(for: ) {
+***REMOVED***
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.padding()
+***REMOVED***
+***REMOVED***
+***REMOVED***var signInButtonText: String {
+***REMOVED******REMOVED***if let lastSignedInUser = lastSignedInUser {
+***REMOVED******REMOVED******REMOVED***if lastSignedInUser.isEmpty {
+***REMOVED******REMOVED******REMOVED******REMOVED***return "Sign in again"
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***return "Sign in with \(lastSignedInUser)"
+***REMOVED******REMOVED***
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***return "Sign in"
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var signInButton: some View {
 ***REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED***signIn()
 ***REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED***Text("Sign in")
+***REMOVED******REMOVED******REMOVED***Text(signInButtonText)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity)
 ***REMOVED***
 ***REMOVED******REMOVED***.buttonStyle(.bordered)
@@ -86,22 +103,27 @@ struct SigninView: View {
 ***REMOVED***
 
 private extension ArcGISCredential {
-***REMOVED***var username: String {
-***REMOVED******REMOVED***switch self {
-***REMOVED******REMOVED***case .oauth(let credential):
-***REMOVED******REMOVED******REMOVED***return credential.username
-***REMOVED******REMOVED***case .token(let credential):
-***REMOVED******REMOVED******REMOVED***return credential.username
-***REMOVED******REMOVED***case .staticToken(let credential):
-***REMOVED******REMOVED******REMOVED***return ""
+***REMOVED***var username: String? {
+***REMOVED******REMOVED***get {
+***REMOVED******REMOVED******REMOVED***switch self {
+***REMOVED******REMOVED******REMOVED***case .oauth(let credential):
+***REMOVED******REMOVED******REMOVED******REMOVED***return credential.username
+***REMOVED******REMOVED******REMOVED***case .token(let credential):
+***REMOVED******REMOVED******REMOVED******REMOVED***return credential.username
+***REMOVED******REMOVED******REMOVED***case .staticToken:
+***REMOVED******REMOVED******REMOVED******REMOVED***return nil
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
 private extension NetworkCredential {
-***REMOVED***var username: String {
+***REMOVED***var username: String? {
 ***REMOVED******REMOVED***switch self {
-***REMOVED******REMOVED***case
+***REMOVED******REMOVED***case .serverTrust, .certificate:
+***REMOVED******REMOVED******REMOVED***return nil
+***REMOVED******REMOVED***case .password(let credential):
+***REMOVED******REMOVED******REMOVED***return credential.username
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***

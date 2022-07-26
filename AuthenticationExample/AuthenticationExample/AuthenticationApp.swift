@@ -18,6 +18,7 @@
 ***REMOVED***
 struct AuthenticationApp: App {
 ***REMOVED***@ObservedObject var authenticator: Authenticator
+***REMOVED***@State var isSettingUp = true
 ***REMOVED***
 ***REMOVED***init() {
 ***REMOVED******REMOVED******REMOVED*** Create an authenticator.
@@ -34,7 +35,11 @@ struct AuthenticationApp: App {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***NavigationView {
-***REMOVED******REMOVED******REMOVED******REMOVED***HomeView()
+***REMOVED******REMOVED******REMOVED******REMOVED***if isSettingUp {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ProgressView()
+***REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***HomeView()
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Using this view modifier will cause a prompt when the authenticator is asked
 ***REMOVED******REMOVED******REMOVED******REMOVED*** to handle an authentication challenge.
@@ -45,12 +50,14 @@ struct AuthenticationApp: App {
 ***REMOVED******REMOVED******REMOVED***.authenticator(authenticator)
 ***REMOVED******REMOVED******REMOVED***.environmentObject(authenticator)
 ***REMOVED******REMOVED******REMOVED***.task {
+***REMOVED******REMOVED******REMOVED******REMOVED***isSettingUp = true
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Here we make the authenticator persistent, which means that it will synchronize
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** with they keychain for storing credentials.
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** It also means that a user can sign in without having to be promped for
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** credentials. Once credentials are cleared from the stores ("sign-out"),
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** then the user will need to be prompted once again.
 ***REMOVED******REMOVED******REMOVED******REMOVED***try? await authenticator.makePersistent(access: .whenUnlockedThisDeviceOnly)
+***REMOVED******REMOVED******REMOVED******REMOVED***isSettingUp = false
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
