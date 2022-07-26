@@ -76,7 +76,7 @@ import Foundation
 ***REMOVED***private var map: Map
 ***REMOVED***
 ***REMOVED******REMOVED***/ Starting points programmatically provided to the trace tool.
-***REMOVED***var externalStartingPoints = [(GeoElement, Point?)]() {
+***REMOVED***var externalStartingPoints = [UtilityNetworkTraceSimpleStartingPoint]() {
 ***REMOVED******REMOVED***didSet {
 ***REMOVED******REMOVED******REMOVED***addExternalStartingPoints()
 ***REMOVED***
@@ -101,7 +101,7 @@ import Foundation
 ***REMOVED***init(
 ***REMOVED******REMOVED***map: Map,
 ***REMOVED******REMOVED***graphicsOverlay: GraphicsOverlay,
-***REMOVED******REMOVED***startingPoints: [(GeoElement, Point?)],
+***REMOVED******REMOVED***startingPoints: [UtilityNetworkTraceSimpleStartingPoint],
 ***REMOVED******REMOVED***autoLoad: Bool = true
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.map = map
@@ -432,7 +432,10 @@ import Foundation
 ***REMOVED******REMOVED***/ Adds programatic starting points to the pending trace.
 ***REMOVED***private func addExternalStartingPoints() {
 ***REMOVED******REMOVED***externalStartingPoints.forEach {
-***REMOVED******REMOVED******REMOVED***setStartingPoint(geoElement: $0.0, mapPoint: $0.1)
+***REMOVED******REMOVED******REMOVED***setStartingPoint(
+***REMOVED******REMOVED******REMOVED******REMOVED***geoElement: $0.geoElement,
+***REMOVED******REMOVED******REMOVED******REMOVED***mapPoint: $0.point
+***REMOVED******REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***

@@ -12,13 +12,6 @@
 ***REMOVED*** limitations under the License.
 
 ***REMOVED***
+***REMOVED***
 
-extension UtilityAssetType: Equatable, Hashable, Identifiable {
-***REMOVED***public static func == (lhs: ArcGIS.UtilityAssetType, rhs: ArcGIS.UtilityAssetType) -> Bool {
-***REMOVED******REMOVED***lhs.hashValue == rhs.hashValue
-***REMOVED***
-***REMOVED***
-***REMOVED***public func hash(into hasher: inout Hasher) {
-***REMOVED******REMOVED***hasher.combine(hashValue)
-***REMOVED***
-***REMOVED***
+extension PopupElement: Identifiable {***REMOVED***

@@ -42,7 +42,25 @@ public final class Authenticator: ObservableObject {
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.promptForUntrustedHosts = promptForUntrustedHosts
 ***REMOVED******REMOVED***self.oAuthConfigurations = oAuthConfigurations
-***REMOVED******REMOVED***observationTask = Task { [weak self] in await self?.observeChallengeQueue() ***REMOVED***
+***REMOVED******REMOVED***observationTask = Task { [weak self] in
+***REMOVED******REMOVED******REMOVED******REMOVED*** Cannot unwrap self on the `for await` line or it will introduce a retain cycle.
+***REMOVED******REMOVED******REMOVED***guard let challengeQueue = self?.challengeQueue else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED***for await queuedChallenge in challengeQueue {
+***REMOVED******REMOVED******REMOVED******REMOVED***guard let self = self else { break ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** A yield here helps alleviate the already presenting bug.
+***REMOVED******REMOVED******REMOVED******REMOVED***await Task.yield()
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Set the current challenge, this should present the appropriate view.
+***REMOVED******REMOVED******REMOVED******REMOVED***self.currentChallenge = queuedChallenge
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Wait for the queued challenge to finish.
+***REMOVED******REMOVED******REMOVED******REMOVED***await queuedChallenge.complete()
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Reset the current challenge to `nil`, that will dismiss the view.
+***REMOVED******REMOVED******REMOVED******REMOVED***self.currentChallenge = nil
+***REMOVED******REMOVED***
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Sets up new credential stores that will be persisted to the keychain.
@@ -92,23 +110,6 @@ public final class Authenticator: ObservableObject {
 ***REMOVED******REMOVED***ArcGISRuntimeEnvironment.backgroundURLSession = ArcGISURLSession(
 ***REMOVED******REMOVED******REMOVED***configuration: .background(withIdentifier: "com.esri.arcgis.toolkit." + UUID().uuidString)
 ***REMOVED******REMOVED***)
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ Observes the challenge queue and sets the current challenge.
-***REMOVED***private func observeChallengeQueue() async {
-***REMOVED******REMOVED***for await queuedChallenge in challengeQueue {
-***REMOVED******REMOVED******REMOVED******REMOVED*** A yield here helps alleviate the already presenting bug.
-***REMOVED******REMOVED******REMOVED***await Task.yield()
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED*** Set the current challenge, this should present the appropriate view.
-***REMOVED******REMOVED******REMOVED***currentChallenge = queuedChallenge
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED*** Wait for the queued challenge to finish.
-***REMOVED******REMOVED******REMOVED***await queuedChallenge.complete()
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED*** Reset the current challenge to `nil`, that will dismiss the view.
-***REMOVED******REMOVED******REMOVED***currentChallenge = nil
-***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var subject = PassthroughSubject<QueuedChallenge, Never>()

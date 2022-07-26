@@ -84,12 +84,14 @@ extension UtilityNetworkTraceViewModel {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ A trace result comprised of Geometry objects
 ***REMOVED******REMOVED***var utilityGeometryTraceResult: UtilityGeometryTraceResult?
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***static func == (
-***REMOVED******REMOVED******REMOVED***lhs: UtilityNetworkTraceViewModel.Trace,
-***REMOVED******REMOVED******REMOVED***rhs: UtilityNetworkTraceViewModel.Trace
-***REMOVED******REMOVED***) -> Bool {
-***REMOVED******REMOVED******REMOVED***return lhs.id == rhs.id
 ***REMOVED***
+***REMOVED***
+
+extension UtilityNetworkTraceViewModel.Trace: Equatable {
+***REMOVED***static func == (
+***REMOVED******REMOVED***lhs: UtilityNetworkTraceViewModel.Trace,
+***REMOVED******REMOVED***rhs: UtilityNetworkTraceViewModel.Trace
+***REMOVED***) -> Bool {
+***REMOVED******REMOVED***return lhs.id == rhs.id
 ***REMOVED***
 ***REMOVED***

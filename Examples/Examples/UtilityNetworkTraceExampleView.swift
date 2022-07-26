@@ -18,7 +18,7 @@
 ***REMOVED***/ A demonstration of the utility network trace tool which runs traces on a web map published with a utility
 ***REMOVED***/ network and trace configurations.
 struct UtilityNetworkTraceExampleView: View {
-***REMOVED******REMOVED***/ The map displayed in the map view.
+***REMOVED******REMOVED***/ The map containing the utility networks.
 ***REMOVED***@StateObject private var map = makeMap()
 ***REMOVED***
 ***REMOVED******REMOVED***/ Provides the ability to inspect map components.
@@ -33,8 +33,8 @@ struct UtilityNetworkTraceExampleView: View {
 ***REMOVED******REMOVED***/ A container for graphical trace results.
 ***REMOVED***@State var resultGraphicsOverlay = GraphicsOverlay()
 ***REMOVED***
-***REMOVED******REMOVED***/ Optionally used to provide programmatic starting points to the trace tool.
-***REMOVED***@State var startingPoints: [(GeoElement, Point?)] = []
+***REMOVED******REMOVED***/ Optional pre-defined starting points for the utility network trace.
+***REMOVED***@State var startingPoints: [UtilityNetworkTraceSimpleStartingPoint] = []
 ***REMOVED***
 ***REMOVED******REMOVED***/ The map viewpoint used by the `UtilityNetworkTrace` to pan/zoom the map to selected features.
 ***REMOVED***@State var viewpoint: Viewpoint?
@@ -123,7 +123,9 @@ extension UtilityNetworkTraceExampleView {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if let feature = element as? ArcGISFeature,
 ***REMOVED******REMOVED******REMOVED******REMOVED***   let id = feature.attributes["globalid"] as? UUID,
 ***REMOVED******REMOVED******REMOVED******REMOVED***   id == targetID {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***startingPoints = [(element, nil)]
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***startingPoints = [
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***UtilityNetworkTraceSimpleStartingPoint(geoElement: element)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***]
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***

@@ -11,7 +11,7 @@
 ***REMOVED*** See the License for the specific language governing permissions and
 ***REMOVED*** limitations under the License.
 
-extension Result where Failure == Error {
+public extension Result where Failure == Error {
 ***REMOVED******REMOVED***/ Creates a result based on the outcome of the given task. If the task
 ***REMOVED******REMOVED***/ succeeds, the result is `success`. If the task fails, the result is
 ***REMOVED******REMOVED***/ `failure`.
@@ -21,5 +21,14 @@ extension Result where Failure == Error {
 ***REMOVED*** catch {
 ***REMOVED******REMOVED******REMOVED***self = .failure(error)
 ***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Converts the result to a `nil` in the case of a user cancelled error.
+***REMOVED******REMOVED***/ - Returns: `Self` or `nil` if there was a cancellation error.
+***REMOVED***func cancellationToNil() -> Self? {
+***REMOVED******REMOVED***guard case .failure(_ as CancellationError) = self else {
+***REMOVED******REMOVED******REMOVED***return self
+***REMOVED***
+***REMOVED******REMOVED***return nil
 ***REMOVED***
 ***REMOVED***

@@ -13,7 +13,7 @@
 
 ***REMOVED***
 
-extension UtilityElement: Hashable, Identifiable {
+extension UtilityElement: Equatable, Hashable, Identifiable {
 ***REMOVED***public static func == (lhs: ArcGIS.UtilityElement, rhs: ArcGIS.UtilityElement) -> Bool {
 ***REMOVED******REMOVED***lhs.globalID == rhs.globalID
 ***REMOVED***

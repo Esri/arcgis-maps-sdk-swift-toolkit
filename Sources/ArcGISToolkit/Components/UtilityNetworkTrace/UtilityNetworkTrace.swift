@@ -58,8 +58,7 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED***/ The current user activity.
 ***REMOVED***@State private var currentActivity: UserActivity = .creatingTrace(nil)
 ***REMOVED***
-***REMOVED******REMOVED***/ A value indicating whether the viewpoint should be automatically changed to show the resulting
-***REMOVED******REMOVED***/ extent of a trace.
+***REMOVED******REMOVED***/ A Boolean value indicating whether the map should be zoomed to the extent of the trace result.
 ***REMOVED***@State private var shouldZoomOnTraceCompletion = false
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating if the warning that all traces will be deleted is presented.
@@ -72,7 +71,7 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED*** MARK: Bindings
 ***REMOVED***
 ***REMOVED******REMOVED***/ Starting points programmatically provided to the trace tool.
-***REMOVED***@Binding private var externalStartingPoints: [(GeoElement, Point?)]
+***REMOVED***@Binding private var externalStartingPoints: [UtilityNetworkTraceSimpleStartingPoint]
 ***REMOVED***
 ***REMOVED******REMOVED***/ The graphics overlay to hold generated starting point and trace graphics.
 ***REMOVED***@Binding private var graphicsOverlay: GraphicsOverlay
@@ -485,9 +484,7 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED***/   - mapViewProxy: Provides a method of layer identification when starting points are being
 ***REMOVED******REMOVED***/   chosen.
 ***REMOVED******REMOVED***/   - viewpoint: Allows the utility network trace tool to update the parent map view's viewpoint.
-***REMOVED******REMOVED***/   - startingPoints: An optional list of elements to be used as starting points, provided as
-***REMOVED******REMOVED***/   tuples. The first item is a geo element and the optional second item is a map point (useful for
-***REMOVED******REMOVED***/   specifying a fractional starting location along an edge element).
+***REMOVED******REMOVED***/   - startingPoints: An optional list of programmatically provided starting points.
 ***REMOVED***public init(
 ***REMOVED******REMOVED***graphicsOverlay: Binding<GraphicsOverlay>,
 ***REMOVED******REMOVED***map: Map,
@@ -495,7 +492,7 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED***viewPoint: Binding<CGPoint?>,
 ***REMOVED******REMOVED***mapViewProxy: Binding<MapViewProxy?>,
 ***REMOVED******REMOVED***viewpoint: Binding<Viewpoint?>,
-***REMOVED******REMOVED***startingPoints: Binding<[(GeoElement, Point?)]> = .constant([])
+***REMOVED******REMOVED***startingPoints: Binding<[UtilityNetworkTraceSimpleStartingPoint]> = .constant([])
 ***REMOVED***) {
 ***REMOVED******REMOVED***_viewPoint = viewPoint
 ***REMOVED******REMOVED***_mapPoint = mapPoint
@@ -555,7 +552,7 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.onChange(of: externalStartingPoints.count) { _ in
+***REMOVED******REMOVED***.onChange(of: externalStartingPoints) { _ in
 ***REMOVED******REMOVED******REMOVED***viewModel.externalStartingPoints = externalStartingPoints
 ***REMOVED***
 ***REMOVED******REMOVED***.alert(
