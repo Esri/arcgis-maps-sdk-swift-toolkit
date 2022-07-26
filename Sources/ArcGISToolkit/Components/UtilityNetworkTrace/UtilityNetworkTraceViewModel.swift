@@ -70,7 +70,7 @@ import SwiftUI
     private var map: Map
     
     /// Starting points programmatically provided to the trace tool.
-    var externalStartingPoints = [(GeoElement, Point?)]() {
+    var externalStartingPoints = [UtilityNetworkTraceSimpleStartingPoint]() {
         didSet {
             addExternalStartingPoints()
         }
@@ -94,7 +94,7 @@ import SwiftUI
     init(
         map: Map,
         graphicsOverlay: GraphicsOverlay,
-        startingPoints: [(GeoElement, Point?)]
+        startingPoints: [UtilityNetworkTraceSimpleStartingPoint]
     ) {
         self.map = map
         self.graphicsOverlay = graphicsOverlay
@@ -416,7 +416,10 @@ import SwiftUI
     /// Adds programatic starting points to the pending trace.
     private func addExternalStartingPoints() {
         externalStartingPoints.forEach {
-            setStartingPoint(geoElement: $0.0, mapPoint: $0.1)
+            setStartingPoint(
+                geoElement: $0.geoElement,
+                mapPoint: $0.point
+            )
         }
     }
     

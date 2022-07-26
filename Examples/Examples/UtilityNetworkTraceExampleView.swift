@@ -34,7 +34,7 @@ struct UtilityNetworkTraceExampleView: View {
     @State var resultGraphicsOverlay = GraphicsOverlay()
     
     /// Optional pre-defined starting points for the utility network trace.
-    @State var startingPoints: [(GeoElement, Point?)] = []
+    @State var startingPoints: [UtilityNetworkTraceSimpleStartingPoint] = []
     
     /// The map viewpoint used by the `UtilityNetworkTrace` to pan/zoom the map to selected features.
     @State var viewpoint: Viewpoint?
@@ -123,7 +123,9 @@ extension UtilityNetworkTraceExampleView {
                 if let feature = element as? ArcGISFeature,
                    let id = feature.attributes["globalid"] as? UUID,
                    id == targetID {
-                    startingPoints = [(element, nil)]
+                    startingPoints = [
+                        UtilityNetworkTraceSimpleStartingPoint(geoElement: element)
+                    ]
                 }
             }
         }
