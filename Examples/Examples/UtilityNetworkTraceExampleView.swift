@@ -33,7 +33,7 @@ struct UtilityNetworkTraceExampleView: View {
 ***REMOVED******REMOVED***/ A container for graphical trace results.
 ***REMOVED***@State var resultGraphicsOverlay = GraphicsOverlay()
 ***REMOVED***
-***REMOVED******REMOVED***/ Optionally used to provide programmatic starting points to the trace tool.
+***REMOVED******REMOVED***/ Optional pre-defined starting points for the utility network trace.
 ***REMOVED***@State var startingPoints: [(GeoElement, Point?)] = []
 ***REMOVED***
 ***REMOVED******REMOVED***/ The map viewpoint used by the `UtilityNetworkTrace` to pan/zoom the map to selected features.
