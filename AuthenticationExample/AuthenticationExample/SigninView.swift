@@ -29,6 +29,8 @@ struct SigninView: View {
 ***REMOVED******REMOVED***/ The portal that the user successfully signed in to.
 ***REMOVED***@Binding var portal: Portal?
 ***REMOVED***
+***REMOVED***@State var lastSignedInUser: String?
+***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***VStack {
 ***REMOVED******REMOVED******REMOVED***Spacer()
@@ -46,6 +48,10 @@ struct SigninView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.footnote)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
 ***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***.task {
+***REMOVED******REMOVED******REMOVED***let arcGISCredential = await ArcGISRuntimeEnvironment.credentialStore.credential(for: .portal)
+***REMOVED******REMOVED******REMOVED***let networkCredential = await ArcGISRuntimeEnvironment.networkCredentialStore.credential(for: )
 ***REMOVED***
 ***REMOVED******REMOVED***.padding()
 ***REMOVED***
@@ -75,6 +81,27 @@ struct SigninView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***self.error = error
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***isSigningIn = false
+***REMOVED***
+***REMOVED***
+***REMOVED***
+
+private extension ArcGISCredential {
+***REMOVED***var username: String {
+***REMOVED******REMOVED***switch self {
+***REMOVED******REMOVED***case .oauth(let credential):
+***REMOVED******REMOVED******REMOVED***return credential.username
+***REMOVED******REMOVED***case .token(let credential):
+***REMOVED******REMOVED******REMOVED***return credential.username
+***REMOVED******REMOVED***case .staticToken(let credential):
+***REMOVED******REMOVED******REMOVED***return ""
+***REMOVED***
+***REMOVED***
+***REMOVED***
+
+private extension NetworkCredential {
+***REMOVED***var username: String {
+***REMOVED******REMOVED***switch self {
+***REMOVED******REMOVED***case
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
