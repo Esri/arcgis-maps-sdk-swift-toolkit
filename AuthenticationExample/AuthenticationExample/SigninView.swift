@@ -30,6 +30,10 @@ struct SigninView: View {
     /// The portal that the user successfully signed in to.
     @Binding var portal: Portal?
     
+    /// The last signed in user name.  If the property is `nil` then there was no previous effective
+    /// credential.  If the property is non-nil and empty, then the previously persisted and effective
+    /// credential did not have a username.  If the propert is non-nil and non-empty, then it contains
+    /// the previously used and persisted username.
     @State var lastSignedInUser: String?
     
     var body: some View {
@@ -51,12 +55,28 @@ struct SigninView: View {
             }
         }
         .task {
+            guard lastSignedInUser == nil else {
+                return
+            }
+            
             if let arcGISCredential = await ArcGISRuntimeEnvironment.credentialStore.credential(for: .portal) {
                 lastSignedInUser = arcGISCredential.username ?? ""
+            } else {
+                let networkCredentials = await ArcGISRuntimeEnvironment.networkCredentialStore.credentials(forHost: URL.portal.host!)
+                if !networkCredentials.isEmpty {
+                    lastSignedInUser = networkCredentials.compactMap { credential in
+                        switch credential {
+                        case .password(let passwordCredential):
+                            return passwordCredential.username
+                        case .certificate:
+                            return ""
+                        case .serverTrust:
+                            return nil
+                        }
+                    }
+                    .first
+                }
             }
-//            else if let networkCredential = await ArcGISRuntimeEnvironment.networkCredentialStore.credential(for: ) {
-//
-//            }
         }
         .padding()
     }
@@ -64,11 +84,15 @@ struct SigninView: View {
     var signInButtonText: String {
         if let lastSignedInUser = lastSignedInUser {
             if lastSignedInUser.isEmpty {
+                // Non-nil but empty, can't offer the username.
                 return "Sign in again"
             } else {
+                // Non-nil and non-empty, show the username in the button text.
                 return "Sign in with \(lastSignedInUser)"
             }
         } else {
+            // For nil username, then just use default text that implies there was no previous
+            // used credential persisted.
             return "Sign in"
         }
     }
