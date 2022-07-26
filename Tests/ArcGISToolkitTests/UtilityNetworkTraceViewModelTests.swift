@@ -19,8 +19,12 @@ import XCTest
 
 ***REMOVED***/ - See Also: [Test Design](https:***REMOVED***devtopia.esri.com/runtime/common-toolkit/blob/main/designs/UtilityNetworkTraceTool/UtilityNetworkTraceTool_Test_Design.md)
 @MainActor final class UtilityNetworkTraceViewModelTests: XCTestCase {
+***REMOVED***
+***REMOVED***private let apiKey = APIKey("<#API Key#>")
+***REMOVED***private let passwordFor_rt_server109 = <#Password#>
+***REMOVED***
 ***REMOVED***override func setUpWithError() throws {
-***REMOVED******REMOVED***ArcGISRuntimeEnvironment.apiKey = APIKey("<#API Key#>")
+***REMOVED******REMOVED***ArcGISRuntimeEnvironment.apiKey = apiKey
 ***REMOVED******REMOVED***try XCTSkipIf(ArcGISRuntimeEnvironment.apiKey == .placeholder)
 ***REMOVED***
 ***REMOVED***
@@ -484,4 +488,14 @@ private extension URL {
 ***REMOVED***static var rtc_100_8 = URL(string: "http:***REMOVED***rtc-100-8.esri.com/portal/home/webmap/viewer.html?webmap=78f993b89bad4ba0a8a22ce2e0bcfbd0")!
 ***REMOVED***
 ***REMOVED***static var sampleServer7 = URL(string: "https:***REMOVED***sampleserver7.arcgisonline.com/server/rest/services/UtilityNetwork/NapervilleElectric/FeatureServer")!
+***REMOVED***
+
+private extension ArcGISCredential {
+***REMOVED***static func rt_server109() async throws -> ArcGISCredential {
+***REMOVED******REMOVED***return try await ArcGISCredential.token(
+***REMOVED******REMOVED******REMOVED***url: URL.rt_server109,
+***REMOVED******REMOVED******REMOVED***username: "publisher1",
+***REMOVED******REMOVED******REMOVED***password: passwordFor_rt_server109
+***REMOVED******REMOVED***)
+***REMOVED***
 ***REMOVED***
