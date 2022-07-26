@@ -11,18 +11,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import SwiftUI
 import ArcGIS
 
-extension UtilityNetwork: Equatable, Hashable {
-    public static func == (
-        lhs: UtilityNetwork,
-        rhs: UtilityNetwork
-    ) -> Bool {
-        lhs.name == rhs.name && lhs.url == rhs.url
-    }
-    
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(name)
-        hasher.combine(url)
-    }
-}
+extension PopupElement: Identifiable {}

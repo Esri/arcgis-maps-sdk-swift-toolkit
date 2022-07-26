@@ -11,18 +11,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import ArcGIS
+import SwiftUI
+import XCTest
+@testable import ArcGISToolkit
 
-extension UtilityNetwork: Equatable, Hashable {
-    public static func == (
-        lhs: UtilityNetwork,
-        rhs: UtilityNetwork
-    ) -> Bool {
-        lhs.name == rhs.name && lhs.url == rhs.url
-    }
-    
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(name)
-        hasher.combine(url)
+class ResultTests: XCTestCase {
+    /// Tests the conversion of a cancellation error result to `nil.`
+    func testCancellationToNil() {
+        var result: Result<String, Error> = .success("hello")
+        XCTAssertNotNil(result.cancellationToNil())
+        
+        struct MockError: Error {}
+        result = .failure(MockError())
+        XCTAssertNotNil(result.cancellationToNil())
+        
+        result = .failure(CancellationError())
+        XCTAssertNil(result.cancellationToNil())
     }
 }

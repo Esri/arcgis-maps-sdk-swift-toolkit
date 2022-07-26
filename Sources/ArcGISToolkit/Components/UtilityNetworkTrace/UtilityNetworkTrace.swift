@@ -58,8 +58,7 @@ public struct UtilityNetworkTrace: View {
     /// The current user activity.
     @State private var currentActivity: UserActivity = .creatingTrace(nil)
     
-    /// A value indicating whether the viewpoint should be automatically changed to show the resulting
-    /// extent of a trace.
+    /// A Boolean value indicating whether the map should be zoomed to the extent of the trace result.
     @State private var shouldZoomOnTraceCompletion = false
     
     /// A Boolean value indicating if the warning that all traces will be deleted is presented.
@@ -72,7 +71,7 @@ public struct UtilityNetworkTrace: View {
     // MARK: Bindings
     
     /// Starting points programmatically provided to the trace tool.
-    @Binding private var externalStartingPoints: [(GeoElement, Point?)]
+    @Binding private var externalStartingPoints: [UtilityNetworkTraceSimpleStartingPoint]
     
     /// The graphics overlay to hold generated starting point and trace graphics.
     @Binding private var graphicsOverlay: GraphicsOverlay
@@ -485,9 +484,7 @@ public struct UtilityNetworkTrace: View {
     ///   - mapViewProxy: Provides a method of layer identification when starting points are being
     ///   chosen.
     ///   - viewpoint: Allows the utility network trace tool to update the parent map view's viewpoint.
-    ///   - startingPoints: An optional list of elements to be used as starting points, provided as
-    ///   tuples. The first item is a geo element and the optional second item is a map point (useful for
-    ///   specifying a fractional starting location along an edge element).
+    ///   - startingPoints: An optional list of programmatically provided starting points.
     public init(
         graphicsOverlay: Binding<GraphicsOverlay>,
         map: Map,
@@ -495,7 +492,7 @@ public struct UtilityNetworkTrace: View {
         viewPoint: Binding<CGPoint?>,
         mapViewProxy: Binding<MapViewProxy?>,
         viewpoint: Binding<Viewpoint?>,
-        startingPoints: Binding<[(GeoElement, Point?)]> = .constant([])
+        startingPoints: Binding<[UtilityNetworkTraceSimpleStartingPoint]> = .constant([])
     ) {
         _viewPoint = viewPoint
         _mapPoint = mapPoint
@@ -555,7 +552,7 @@ public struct UtilityNetworkTrace: View {
                 )
             }
         }
-        .onChange(of: externalStartingPoints.count) { _ in
+        .onChange(of: externalStartingPoints) { _ in
             viewModel.externalStartingPoints = externalStartingPoints
         }
         .alert(
