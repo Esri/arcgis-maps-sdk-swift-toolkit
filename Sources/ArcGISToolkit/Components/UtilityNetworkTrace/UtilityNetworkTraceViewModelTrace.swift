@@ -84,12 +84,14 @@ extension UtilityNetworkTraceViewModel {
         
         /// A trace result comprised of Geometry objects
         var utilityGeometryTraceResult: UtilityGeometryTraceResult?
-        
-        static func == (
-            lhs: UtilityNetworkTraceViewModel.Trace,
-            rhs: UtilityNetworkTraceViewModel.Trace
-        ) -> Bool {
-            return lhs.id == rhs.id
-        }
+    }
+}
+
+extension UtilityNetworkTraceViewModel.Trace: Equatable {
+    static func == (
+        lhs: UtilityNetworkTraceViewModel.Trace,
+        rhs: UtilityNetworkTraceViewModel.Trace
+    ) -> Bool {
+        return lhs.id == rhs.id
     }
 }
