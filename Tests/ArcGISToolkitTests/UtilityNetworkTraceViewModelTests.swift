@@ -171,7 +171,7 @@ import XCTest
 ***REMOVED******REMOVED******REMOVED***map: map,
 ***REMOVED******REMOVED******REMOVED***graphicsOverlay: GraphicsOverlay(),
 ***REMOVED******REMOVED******REMOVED***startingPoints: [
-***REMOVED******REMOVED******REMOVED******REMOVED***UtilityNetworkTraceSimpleStartingPoint(geoElement: features.first!)
+***REMOVED******REMOVED******REMOVED******REMOVED***UtilityNetworkTraceStartingPoint(geoElement: features.first!)
 ***REMOVED******REMOVED******REMOVED***],
 ***REMOVED******REMOVED******REMOVED***autoLoad: false
 ***REMOVED******REMOVED***)
@@ -184,11 +184,11 @@ import XCTest
 ***REMOVED******REMOVED***XCTAssertFalse(viewModel.canRunTrace)
 ***REMOVED******REMOVED***XCTAssertEqual(startingPoints.count, 1)
 ***REMOVED******REMOVED***XCTAssertEqual(
-***REMOVED******REMOVED******REMOVED***startingPoints.first?.utilityElement.networkSource.name,
+***REMOVED******REMOVED******REMOVED***startingPoints.first?.utilityElement?.networkSource.name,
 ***REMOVED******REMOVED******REMOVED***"ElecDist Device"
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***XCTAssertEqual(
-***REMOVED******REMOVED******REMOVED***startingPoints.first?.utilityElement.assetGroup.name,
+***REMOVED******REMOVED******REMOVED***startingPoints.first?.utilityElement?.assetGroup.name,
 ***REMOVED******REMOVED******REMOVED***"ServicePoint"
 ***REMOVED******REMOVED***)
 ***REMOVED***
@@ -221,7 +221,7 @@ import XCTest
 ***REMOVED******REMOVED******REMOVED***map: map,
 ***REMOVED******REMOVED******REMOVED***graphicsOverlay: GraphicsOverlay(),
 ***REMOVED******REMOVED******REMOVED***startingPoints: [
-***REMOVED******REMOVED******REMOVED******REMOVED***UtilityNetworkTraceSimpleStartingPoint(geoElement: features.first!)
+***REMOVED******REMOVED******REMOVED******REMOVED***UtilityNetworkTraceStartingPoint(geoElement: features.first!)
 ***REMOVED******REMOVED******REMOVED***],
 ***REMOVED******REMOVED******REMOVED***autoLoad: false
 ***REMOVED******REMOVED***)
@@ -231,7 +231,7 @@ import XCTest
 ***REMOVED******REMOVED***XCTAssertEqual(viewModel.pendingTrace.startingPoints.count, 1)
 ***REMOVED******REMOVED***XCTAssertFalse(viewModel.canRunTrace)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***let terminal = try XCTUnwrap(viewModel.pendingTrace.startingPoints.first?.utilityElement.assetType.terminalConfiguration?.terminals.first { $0.name == "Low" ***REMOVED***)
+***REMOVED******REMOVED***let terminal = try XCTUnwrap(viewModel.pendingTrace.startingPoints.first?.utilityElement?.assetType.terminalConfiguration?.terminals.first { $0.name == "Low" ***REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let configuration = try XCTUnwrap( viewModel.configurations.first {
 ***REMOVED******REMOVED******REMOVED***$0.name == "ConnectedWithResultTypes"
@@ -278,7 +278,7 @@ import XCTest
 ***REMOVED******REMOVED******REMOVED***map: map,
 ***REMOVED******REMOVED******REMOVED***graphicsOverlay: GraphicsOverlay(),
 ***REMOVED******REMOVED******REMOVED***startingPoints: [
-***REMOVED******REMOVED******REMOVED******REMOVED***UtilityNetworkTraceSimpleStartingPoint(geoElement: features.first!)
+***REMOVED******REMOVED******REMOVED******REMOVED***UtilityNetworkTraceStartingPoint(geoElement: features.first!)
 ***REMOVED******REMOVED******REMOVED***],
 ***REMOVED******REMOVED******REMOVED***autoLoad: false
 ***REMOVED******REMOVED***)
@@ -287,12 +287,12 @@ import XCTest
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertEqual(viewModel.pendingTrace.startingPoints.count, 1)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***let extent1 = try XCTUnwrap(viewModel.pendingTrace.startingPoints.first?.graphic.geometry?.extent)
+***REMOVED******REMOVED***let extent1 = try XCTUnwrap(viewModel.pendingTrace.startingPoints.first?.graphic?.geometry?.extent)
 ***REMOVED******REMOVED***viewModel.setFractionAlongEdgeFor(
 ***REMOVED******REMOVED******REMOVED***startingPoint: viewModel.pendingTrace.startingPoints.first!,
 ***REMOVED******REMOVED******REMOVED***to: 0.789
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED***let extent2 = try XCTUnwrap(viewModel.pendingTrace.startingPoints.first?.graphic.geometry?.extent)
+***REMOVED******REMOVED***let extent2 = try XCTUnwrap(viewModel.pendingTrace.startingPoints.first?.graphic?.geometry?.extent)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertNotEqual(
 ***REMOVED******REMOVED******REMOVED***extent1.center,
@@ -328,7 +328,7 @@ import XCTest
 ***REMOVED******REMOVED******REMOVED***map: map,
 ***REMOVED******REMOVED******REMOVED***graphicsOverlay: GraphicsOverlay(),
 ***REMOVED******REMOVED******REMOVED***startingPoints: [
-***REMOVED******REMOVED******REMOVED******REMOVED***UtilityNetworkTraceSimpleStartingPoint(geoElement: features.first!)
+***REMOVED******REMOVED******REMOVED******REMOVED***UtilityNetworkTraceStartingPoint(geoElement: features.first!)
 ***REMOVED******REMOVED******REMOVED***],
 ***REMOVED******REMOVED******REMOVED***autoLoad: false
 ***REMOVED******REMOVED***)
@@ -382,7 +382,7 @@ import XCTest
 ***REMOVED******REMOVED******REMOVED***map: map,
 ***REMOVED******REMOVED******REMOVED***graphicsOverlay: GraphicsOverlay(),
 ***REMOVED******REMOVED******REMOVED***startingPoints: [
-***REMOVED******REMOVED******REMOVED******REMOVED***UtilityNetworkTraceSimpleStartingPoint(geoElement: features.first!)
+***REMOVED******REMOVED******REMOVED******REMOVED***UtilityNetworkTraceStartingPoint(geoElement: features.first!)
 ***REMOVED******REMOVED******REMOVED***],
 ***REMOVED******REMOVED******REMOVED***autoLoad: false
 ***REMOVED******REMOVED***)

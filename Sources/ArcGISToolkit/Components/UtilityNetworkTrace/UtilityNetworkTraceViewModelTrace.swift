@@ -28,7 +28,7 @@ extension UtilityNetworkTraceViewModel {
 ***REMOVED******REMOVED******REMOVED***didSet {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Update the color of any pre-existing starting points
 ***REMOVED******REMOVED******REMOVED******REMOVED***startingPoints.forEach { startingPoint in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let symbol = startingPoint.graphic.symbol as? SimpleMarkerSymbol else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let symbol = startingPoint.graphic?.symbol as? SimpleMarkerSymbol else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***symbol.color = UIColor(color)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***graphics.forEach { graphic in
