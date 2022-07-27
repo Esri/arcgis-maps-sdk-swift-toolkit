@@ -238,15 +238,15 @@ public struct UtilityNetworkTrace: View {
                         set: { currentActivity = .creatingTrace($0 ? .viewingAdvancedOptions : nil) }
                     )
                 ) {
-                    ColorPicker(selection: $viewModel.pendingTrace.color) {
-                        Text("Trace Color")
-                    }
                     TextField(
                         "Trace Name",
                         text: $viewModel.pendingTrace.name
                     )
                     .onSubmit {
                         viewModel.pendingTrace.userDidSpecifyName = true
+                    }
+                    ColorPicker(selection: $viewModel.pendingTrace.color) {
+                        Text("Trace Color")
                     }
                     Toggle(isOn: $shouldZoomOnTraceCompletion) {
                         Text("Zoom to result")
