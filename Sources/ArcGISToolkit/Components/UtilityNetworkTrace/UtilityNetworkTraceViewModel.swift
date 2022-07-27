@@ -217,7 +217,7 @@ import Foundation
 ***REMOVED******REMOVED***/   - point: A point on the map in screen coordinates.
 ***REMOVED******REMOVED***/   - mapPoint: A point on the map in map coordinates.
 ***REMOVED******REMOVED***/   - proxy: Provides a method of layer identification.
-***REMOVED***func setStartingPoint(
+***REMOVED***func createStartingPoint(
 ***REMOVED******REMOVED***at point: CGPoint,
 ***REMOVED******REMOVED***mapPoint: Point,
 ***REMOVED******REMOVED***with proxy: MapViewProxy
@@ -232,17 +232,16 @@ import Foundation
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***geoElement: geoElement,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mapPoint: mapPoint
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED***setStartingPoint(startingPoint: startingPoint)
+***REMOVED******REMOVED******REMOVED******REMOVED***processAndAdd(startingPoint)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Adds a new starting point to the pending trace.
+***REMOVED******REMOVED***/ Asynchronously sets the nullable members of the provided starting point and adds it to the pending
+***REMOVED******REMOVED***/ trace.
 ***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - geoElement: An element that corresponds to another within the utility network.
-***REMOVED******REMOVED***/   - mapPoint: A point on the map in map coordinates.
-***REMOVED******REMOVED***/   - startingPoint: <#startingPoint description#>
-***REMOVED***func setStartingPoint(startingPoint: UtilityNetworkTraceStartingPoint) {
+***REMOVED******REMOVED***/   - startingPoint: The starting point to be processed and added to the pending trace.
+***REMOVED***func processAndAdd(_ startingPoint: UtilityNetworkTraceStartingPoint) {
 ***REMOVED******REMOVED***Task {
 ***REMOVED******REMOVED******REMOVED***guard let feature = startingPoint.geoElement as? ArcGISFeature,
 ***REMOVED******REMOVED******REMOVED******REMOVED***  let globalid = feature.attributes["globalid"] as? UUID else {
@@ -275,7 +274,6 @@ import Foundation
 ***REMOVED******REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***utilityElement.fractionAlongEdge = 0.5
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED*** else if utilityElement.networkSource.kind == .junction &&
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***utilityElement.assetType.terminalConfiguration?.terminals.count ?? 0 > 1 {
 ***REMOVED******REMOVED******REMOVED******REMOVED***utilityElement.terminal = utilityElement.assetType.terminalConfiguration?.terminals.first
@@ -418,7 +416,7 @@ import Foundation
 ***REMOVED******REMOVED***/ Adds programatic starting points to the pending trace.
 ***REMOVED***private func addExternalStartingPoints() {
 ***REMOVED******REMOVED***externalStartingPoints.forEach {
-***REMOVED******REMOVED******REMOVED***setStartingPoint(startingPoint: $0)
+***REMOVED******REMOVED******REMOVED***processAndAdd($0)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
