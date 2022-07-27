@@ -41,7 +41,7 @@ struct ProfileView: View {
     }
     
     var signOutButton: some View {
-        Button {
+        Button(role: .destructive) {
             signOut()
         } label: {
             if isSigningOut {
