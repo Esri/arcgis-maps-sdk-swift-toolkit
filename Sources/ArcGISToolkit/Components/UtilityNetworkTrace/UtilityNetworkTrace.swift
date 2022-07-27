@@ -39,8 +39,8 @@ public struct UtilityNetworkTrace: View {
         case viewingAdvancedOptions
         /// The user is viewing a list of element results, grouped by asset group and asset type.
         case viewingElementGroup([String: [UtilityElement]])
-        /// The user is viewing the list of element results.
-        case viewingElementResults
+        /// The user is viewing the list of feature results.
+        case viewingFeatureResults
         /// The user is viewing the list of function results.
         case viewingFunctionResults
     }
@@ -127,8 +127,8 @@ public struct UtilityNetworkTrace: View {
     /// Displays information about a chosen asset group.
     @ViewBuilder private var assetGroupDetail: some View {
         if let assetGroup = selectedAssetGroup {
-            makeBackButton(title: elementResultsTitle) {
-                currentActivity = .viewingTraces(.viewingElementResults)
+            makeBackButton(title: featureResultsTitle) {
+                currentActivity = .viewingTraces(.viewingFeatureResults)
             }
             makeDetailSectionHeader(
                 title: assetGroup.first?.value.first?.assetGroup.name ?? "Unnamed Asset Group"
@@ -303,12 +303,12 @@ public struct UtilityNetworkTrace: View {
             Text(traceName)
         }
         List {
-            Section(elementResultsTitle) {
+            Section(featureResultsTitle) {
                 DisclosureGroup(
                     "(\(viewModel.selectedTrace?.assetCount ?? 0))",
                     isExpanded: Binding(
-                        get: { isFocused(traceViewingActivity: .viewingElementResults) },
-                        set: { currentActivity = .viewingTraces($0 ? .viewingElementResults : nil) }
+                        get: { isFocused(traceViewingActivity: .viewingFeatureResults) },
+                        set: { currentActivity = .viewingTraces($0 ? .viewingFeatureResults : nil) }
                     )
                 ) {
                     ForEach(
@@ -674,8 +674,8 @@ public struct UtilityNetworkTrace: View {
         }
     }
     
-    /// Title for the element results section
-    private let elementResultsTitle = "Element Results"
+    /// Title for the feature results section
+    private let featureResultsTitle = "Feature Results"
     
     /// Title for the starting points section
     private let startingPointsTitle = "Starting Points"
