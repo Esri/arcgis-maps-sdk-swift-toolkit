@@ -390,9 +390,21 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED***makeBackButton(title: startingPointsTitle) {
 ***REMOVED******REMOVED******REMOVED***currentActivity = .creatingTrace(.viewingStartingPoints)
 ***REMOVED***
-***REMOVED******REMOVED***makeDetailSectionHeader(
-***REMOVED******REMOVED******REMOVED***title: selectedStartingPoint?.utilityElement?.assetType.name ?? "Unnamed Asset Type"
-***REMOVED******REMOVED***)
+***REMOVED******REMOVED***Menu(selectedStartingPoint?.utilityElement?.assetType.name ?? "Unnamed Asset Type") {
+***REMOVED******REMOVED******REMOVED***Button("Zoom To") {
+***REMOVED******REMOVED******REMOVED******REMOVED***if let selectedStartingPoint = selectedStartingPoint,
+***REMOVED******REMOVED******REMOVED******REMOVED***   let extent = selectedStartingPoint.geoElement.geometry?.extent {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint = Viewpoint(targetExtent: extent)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***Button("Delete", role: .destructive) {
+***REMOVED******REMOVED******REMOVED******REMOVED***if let startingPoint = selectedStartingPoint {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.delete(startingPoint)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentActivity = .creatingTrace(.viewingStartingPoints)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***.font(.title3)
 ***REMOVED******REMOVED***List {
 ***REMOVED******REMOVED******REMOVED***if selectedStartingPoint?.utilityElement?.networkSource.kind == .edge {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Section("Fraction Along Edge") {
@@ -438,12 +450,6 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(item.value as? String ?? "")
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***makeZoomToButton {
-***REMOVED******REMOVED******REMOVED***if let selectedStartingPoint = selectedStartingPoint,
-***REMOVED******REMOVED******REMOVED***   let extent = selectedStartingPoint.geoElement.geometry?.extent {
-***REMOVED******REMOVED******REMOVED******REMOVED***viewpoint = Viewpoint(targetExtent: extent)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
