@@ -47,7 +47,7 @@ struct AuthenticationApp: App {
 ***REMOVED******REMOVED******REMOVED***.task {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Here we make the authenticator persistent, which means that it will synchronize
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** with they keychain for storing credentials.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** It also means that a user can sign in without having to be promped for
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** It also means that a user can sign in without having to be prompted for
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** credentials. Once credentials are cleared from the stores ("sign-out"),
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** then the user will need to be prompted once again.
 ***REMOVED******REMOVED******REMOVED******REMOVED***try? await authenticator.makePersistent(access: .whenUnlockedThisDeviceOnly)
