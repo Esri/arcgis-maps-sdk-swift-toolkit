@@ -171,7 +171,7 @@ import XCTest
             map: map,
             graphicsOverlay: GraphicsOverlay(),
             startingPoints: [
-                UtilityNetworkTraceSimpleStartingPoint(geoElement: features.first!)
+                UtilityNetworkTraceStartingPoint(geoElement: features.first!)
             ],
             autoLoad: false
         )
@@ -184,11 +184,11 @@ import XCTest
         XCTAssertFalse(viewModel.canRunTrace)
         XCTAssertEqual(startingPoints.count, 1)
         XCTAssertEqual(
-            startingPoints.first?.utilityElement.networkSource.name,
+            startingPoints.first?.utilityElement?.networkSource.name,
             "ElecDist Device"
         )
         XCTAssertEqual(
-            startingPoints.first?.utilityElement.assetGroup.name,
+            startingPoints.first?.utilityElement?.assetGroup.name,
             "ServicePoint"
         )
     }
@@ -221,7 +221,7 @@ import XCTest
             map: map,
             graphicsOverlay: GraphicsOverlay(),
             startingPoints: [
-                UtilityNetworkTraceSimpleStartingPoint(geoElement: features.first!)
+                UtilityNetworkTraceStartingPoint(geoElement: features.first!)
             ],
             autoLoad: false
         )
@@ -231,7 +231,7 @@ import XCTest
         XCTAssertEqual(viewModel.pendingTrace.startingPoints.count, 1)
         XCTAssertFalse(viewModel.canRunTrace)
         
-        let terminal = try XCTUnwrap(viewModel.pendingTrace.startingPoints.first?.utilityElement.assetType.terminalConfiguration?.terminals.first { $0.name == "Low" })
+        let terminal = try XCTUnwrap(viewModel.pendingTrace.startingPoints.first?.utilityElement?.assetType.terminalConfiguration?.terminals.first { $0.name == "Low" })
         
         let configuration = try XCTUnwrap( viewModel.configurations.first {
             $0.name == "ConnectedWithResultTypes"
@@ -278,7 +278,7 @@ import XCTest
             map: map,
             graphicsOverlay: GraphicsOverlay(),
             startingPoints: [
-                UtilityNetworkTraceSimpleStartingPoint(geoElement: features.first!)
+                UtilityNetworkTraceStartingPoint(geoElement: features.first!)
             ],
             autoLoad: false
         )
@@ -287,12 +287,12 @@ import XCTest
         
         XCTAssertEqual(viewModel.pendingTrace.startingPoints.count, 1)
         
-        let extent1 = try XCTUnwrap(viewModel.pendingTrace.startingPoints.first?.graphic.geometry?.extent)
+        let extent1 = try XCTUnwrap(viewModel.pendingTrace.startingPoints.first?.graphic?.geometry?.extent)
         viewModel.setFractionAlongEdgeFor(
             startingPoint: viewModel.pendingTrace.startingPoints.first!,
             to: 0.789
         )
-        let extent2 = try XCTUnwrap(viewModel.pendingTrace.startingPoints.first?.graphic.geometry?.extent)
+        let extent2 = try XCTUnwrap(viewModel.pendingTrace.startingPoints.first?.graphic?.geometry?.extent)
         
         XCTAssertNotEqual(
             extent1.center,
@@ -328,7 +328,7 @@ import XCTest
             map: map,
             graphicsOverlay: GraphicsOverlay(),
             startingPoints: [
-                UtilityNetworkTraceSimpleStartingPoint(geoElement: features.first!)
+                UtilityNetworkTraceStartingPoint(geoElement: features.first!)
             ],
             autoLoad: false
         )
@@ -382,7 +382,7 @@ import XCTest
             map: map,
             graphicsOverlay: GraphicsOverlay(),
             startingPoints: [
-                UtilityNetworkTraceSimpleStartingPoint(geoElement: features.first!)
+                UtilityNetworkTraceStartingPoint(geoElement: features.first!)
             ],
             autoLoad: false
         )
