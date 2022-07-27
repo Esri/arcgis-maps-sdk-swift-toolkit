@@ -238,15 +238,21 @@ public struct UtilityNetworkTrace: View {
                         set: { currentActivity = .creatingTrace($0 ? .viewingAdvancedOptions : nil) }
                     )
                 ) {
-                    TextField(
-                        "Trace Name",
-                        text: $viewModel.pendingTrace.name
-                    )
-                    .onSubmit {
-                        viewModel.pendingTrace.userDidSpecifyName = true
+                    HStack {
+                        Text("Name")
+                        Spacer()
+                        TextField(
+                            "Name",
+                            text: $viewModel.pendingTrace.name
+                        )
+                        .onSubmit {
+                            viewModel.pendingTrace.userDidSpecifyName = true
+                        }
+                        .multilineTextAlignment(.trailing)
+                        .foregroundColor(.blue)
                     }
                     ColorPicker(selection: $viewModel.pendingTrace.color) {
-                        Text("Trace Color")
+                        Text("Color")
                     }
                     Toggle(isOn: $shouldZoomOnTraceCompletion) {
                         Text("Zoom to result")
@@ -356,7 +362,7 @@ public struct UtilityNetworkTrace: View {
                             }
                         })
                     ) {
-                        Text("Trace Color")
+                        Text("Color")
                     }
                 }
             }
