@@ -430,11 +430,13 @@ public struct UtilityNetworkTrace: View {
                     .foregroundColor(.blue)
                 }
             }
-            ForEach(Array(selectedStartingPoint!.geoElement.attributes.sorted(by: { $0.key < $1.key})), id: \.key) { item in
-                HStack{
-                    Text(item.key)
-                    Spacer()
-                    Text(item.value as? String ?? "")
+            Section("Attributes") {
+                ForEach(Array(selectedStartingPoint!.geoElement.attributes.sorted(by: { $0.key < $1.key})), id: \.key) { item in
+                    HStack{
+                        Text(item.key)
+                        Spacer()
+                        Text(item.value as? String ?? "")
+                    }
                 }
             }
         }
