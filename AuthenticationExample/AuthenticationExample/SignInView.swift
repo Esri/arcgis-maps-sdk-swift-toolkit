@@ -144,18 +144,6 @@ private extension ArcGISCredential {
     }
 }
 
-private extension NetworkCredential {
-    /// The username, if any, associated with this credential.
-    var username: String? {
-        switch self {
-        case .serverTrust, .certificate:
-            return nil
-        case .password(let credential):
-            return credential.username
-        }
-    }
-}
-
 private extension Error {
     /// Returns a Boolean value indicating whether the error is the result of cancelling an
     /// authentication challenge.
