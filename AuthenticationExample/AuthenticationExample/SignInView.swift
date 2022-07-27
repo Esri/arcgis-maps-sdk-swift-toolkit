@@ -16,7 +16,7 @@ import ArcGIS
 import ArcGISToolkit
 
 /// A view that allows the user to sign in to a portal.
-struct SigninView: View {
+struct SignInView: View {
     /// The authenticator which has been passed from the app through the environment.
     @EnvironmentObject var authenticator: Authenticator
     

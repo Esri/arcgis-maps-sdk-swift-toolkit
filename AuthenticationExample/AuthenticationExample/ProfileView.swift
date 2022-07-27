@@ -63,7 +63,7 @@ struct ProfileView: View {
         Task {
             await authenticator.clearCredentialStores()
             isSigningOut = false
-            signoutAction()
+            signOutAction()
         }
     }
 }
