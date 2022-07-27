@@ -39,8 +39,8 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED***case viewingAdvancedOptions
 ***REMOVED******REMOVED******REMOVED***/ The user is viewing a list of element results, grouped by asset group and asset type.
 ***REMOVED******REMOVED***case viewingElementGroup([String: [UtilityElement]])
-***REMOVED******REMOVED******REMOVED***/ The user is viewing the list of element results.
-***REMOVED******REMOVED***case viewingElementResults
+***REMOVED******REMOVED******REMOVED***/ The user is viewing the list of feature results.
+***REMOVED******REMOVED***case viewingFeatureResults
 ***REMOVED******REMOVED******REMOVED***/ The user is viewing the list of function results.
 ***REMOVED******REMOVED***case viewingFunctionResults
 ***REMOVED***
@@ -127,8 +127,8 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED***/ Displays information about a chosen asset group.
 ***REMOVED***@ViewBuilder private var assetGroupDetail: some View {
 ***REMOVED******REMOVED***if let assetGroup = selectedAssetGroup {
-***REMOVED******REMOVED******REMOVED***makeBackButton(title: elementResultsTitle) {
-***REMOVED******REMOVED******REMOVED******REMOVED***currentActivity = .viewingTraces(.viewingElementResults)
+***REMOVED******REMOVED******REMOVED***makeBackButton(title: featureResultsTitle) {
+***REMOVED******REMOVED******REMOVED******REMOVED***currentActivity = .viewingTraces(.viewingFeatureResults)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***makeDetailSectionHeader(
 ***REMOVED******REMOVED******REMOVED******REMOVED***title: assetGroup.first?.value.first?.assetGroup.name ?? "Unnamed Asset Group"
@@ -303,12 +303,12 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED***Text(traceName)
 ***REMOVED***
 ***REMOVED******REMOVED***List {
-***REMOVED******REMOVED******REMOVED***Section(elementResultsTitle) {
+***REMOVED******REMOVED******REMOVED***Section(featureResultsTitle) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***DisclosureGroup(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"(\(viewModel.selectedTrace?.assetCount ?? 0))",
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isExpanded: Binding(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***get: { isFocused(traceViewingActivity: .viewingElementResults) ***REMOVED***,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***set: { currentActivity = .viewingTraces($0 ? .viewingElementResults : nil) ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***get: { isFocused(traceViewingActivity: .viewingFeatureResults) ***REMOVED***,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***set: { currentActivity = .viewingTraces($0 ? .viewingFeatureResults : nil) ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(
@@ -674,8 +674,8 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Title for the element results section
-***REMOVED***private let elementResultsTitle = "Element Results"
+***REMOVED******REMOVED***/ Title for the feature results section
+***REMOVED***private let featureResultsTitle = "Feature Results"
 ***REMOVED***
 ***REMOVED******REMOVED***/ Title for the starting points section
 ***REMOVED***private let startingPointsTitle = "Starting Points"
