@@ -27,7 +27,7 @@ struct ProfileView: View {
     @State var isSigningOut: Bool = false
     
     /// The closure to call once the user has signed out.
-    var signoutAction: () -> Void
+    var signOutAction: () -> Void
     
     var body: some View {
         VStack {
@@ -63,7 +63,7 @@ struct ProfileView: View {
         Task {
             await authenticator.clearCredentialStores()
             isSigningOut = false
-            signoutAction()
+            signOutAction()
         }
     }
 }

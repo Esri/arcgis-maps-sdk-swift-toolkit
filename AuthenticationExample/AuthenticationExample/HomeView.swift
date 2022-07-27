@@ -24,23 +24,26 @@ struct HomeView: View {
     
     var body: some View {
         if let portal = portal {
-            FeaturedMapsView(portal: portal)
-                .toolbar {
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        Button {
-                            showProfile = true
-                        } label: {
-                            Image(systemName: "person.circle")
+            NavigationView{
+                FeaturedMapsView(portal: portal)
+                    .toolbar {
+                        ToolbarItem(placement: .navigationBarTrailing) {
+                            Button {
+                                showProfile = true
+                            } label: {
+                                Image(systemName: "person.circle")
+                            }
                         }
                     }
-                }
-                .sheet(isPresented: $showProfile) {
-                    ProfileView(portal: portal) {
-                        self.portal = nil
+                    .sheet(isPresented: $showProfile) {
+                        ProfileView(portal: portal) {
+                            self.portal = nil
+                        }
                     }
-                }
+            }
+            .navigationViewStyle(.stack)
         } else {
-            SigninView(portal: $portal)
+            SignInView(portal: $portal)
         }
     }
 }

@@ -34,7 +34,7 @@ struct AuthenticationApp: App {
     
     var body: some SwiftUI.Scene {
         WindowGroup {
-            NavigationView {
+            Group {
                 if isSettingUp {
                     ProgressView()
                 } else {
@@ -53,7 +53,7 @@ struct AuthenticationApp: App {
                 isSettingUp = true
                 // Here we make the authenticator persistent, which means that it will synchronize
                 // with they keychain for storing credentials.
-                // It also means that a user can sign in without having to be promped for
+                // It also means that a user can sign in without having to be prompted for
                 // credentials. Once credentials are cleared from the stores ("sign-out"),
                 // then the user will need to be prompted once again.
                 try? await authenticator.makePersistent(access: .whenUnlockedThisDeviceOnly)
@@ -63,7 +63,7 @@ struct AuthenticationApp: App {
     }
 }
 
-// If want to use OAuth, you can uncomment this code:
+// If you want to use OAuth, you can uncomment this code:
 //private extension OAuthConfiguration {
 //    static let arcgisDotCom =  OAuthConfiguration(
 //        portalURL: .portal,
