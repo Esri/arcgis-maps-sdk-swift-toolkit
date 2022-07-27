@@ -25,6 +25,7 @@ struct UserView: View {
                 if let thumbnail = user.thumbnail {
                     LoadableImageView(loadableImage: thumbnail)
                         .frame(width: 100, height: 100, alignment: .center)
+                        .clipShape(Circle())
                 } else {
                     Image(systemName: "person.circle")
                         .resizable()
