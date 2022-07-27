@@ -71,7 +71,7 @@ public struct UtilityNetworkTrace: View {
     // MARK: Bindings
     
     /// Starting points programmatically provided to the trace tool.
-    @Binding private var externalStartingPoints: [UtilityNetworkTraceSimpleStartingPoint]
+    @Binding private var externalStartingPoints: [UtilityNetworkTraceStartingPoint]
     
     /// The graphics overlay to hold generated starting point and trace graphics.
     @Binding private var graphicsOverlay: GraphicsOverlay
@@ -391,15 +391,15 @@ public struct UtilityNetworkTrace: View {
             currentActivity = .creatingTrace(.viewingStartingPoints)
         }
         makeDetailSectionHeader(
-            title: selectedStartingPoint?.utilityElement.assetType.name ?? "Unnamed Asset Type"
+            title: selectedStartingPoint?.utilityElement?.assetType.name ?? "Unnamed Asset Type"
         )
         List {
-            if selectedStartingPoint?.utilityElement.networkSource.kind == .edge {
+            if selectedStartingPoint?.utilityElement?.networkSource.kind == .edge {
                 Section("Fraction Along Edge") {
                     Slider(value: Binding(get: {
-                        viewModel.pendingTrace.startingPoints.first { sp in
-                            sp.utilityElement.globalID == selectedStartingPoint?.utilityElement.globalID
-                        }?.utilityElement.fractionAlongEdge ?? .zero
+                        viewModel.pendingTrace.startingPoints.first {
+                            $0 == selectedStartingPoint
+                        }?.utilityElement?.fractionAlongEdge ?? .zero
                     }, set: { newValue in
                         if let selectedStartingPoint = selectedStartingPoint {
                             viewModel.setFractionAlongEdgeFor(
@@ -409,21 +409,21 @@ public struct UtilityNetworkTrace: View {
                         }
                     }))
                 }
-            } else if selectedStartingPoint?.utilityElement.networkSource.kind == .junction &&
-                        selectedStartingPoint?.utilityElement.terminal != nil &&
-                        !(selectedStartingPoint?.utilityElement.assetType.terminalConfiguration?.terminals.isEmpty ?? true) {
+            } else if selectedStartingPoint?.utilityElement?.networkSource.kind == .junction &&
+                        selectedStartingPoint?.utilityElement?.terminal != nil &&
+                        !(selectedStartingPoint?.utilityElement?.assetType.terminalConfiguration?.terminals.isEmpty ?? true) {
                 Section {
                     Picker(
                         "Terminal Configuration",
                         selection: Binding(get: {
-                            selectedStartingPoint!.utilityElement.terminal!
+                            selectedStartingPoint!.utilityElement!.terminal!
                         }, set: { newValue in
                             viewModel.setTerminalConfigurationFor(startingPoint: selectedStartingPoint!, to: newValue)
                         })
                     ) {
-                        ForEach(viewModel.pendingTrace.startingPoints.first { sp in
-                            sp.utilityElement.globalID == selectedStartingPoint?.utilityElement.globalID
-                        }?.utilityElement.assetType.terminalConfiguration?.terminals ?? [], id: \.self) {
+                        ForEach(viewModel.pendingTrace.startingPoints.first {
+                            $0 == selectedStartingPoint
+                        }?.utilityElement?.assetType.terminalConfiguration?.terminals ?? [], id: \.self) {
                             Text($0.name)
                         }
                     }
@@ -439,28 +439,31 @@ public struct UtilityNetworkTrace: View {
             }
         }
         makeZoomToButton {
-            if let selectedStartingPoint = selectedStartingPoint {
-                viewpoint = Viewpoint(targetExtent: selectedStartingPoint.extent)
+            if let selectedStartingPoint = selectedStartingPoint,
+               let extent = selectedStartingPoint.geoElement.geometry?.extent {
+                viewpoint = Viewpoint(targetExtent: extent)
             }
         }
     }
     
     /// Displays the chosen starting points for the new trace.
     private var startingPointsList: some View {
-        ForEach(viewModel.pendingTrace.startingPoints, id: \.utilityElement.globalID) { startingPoint in
+        ForEach(viewModel.pendingTrace.startingPoints, id: \.self) { startingPoint in
             Button {
                 currentActivity = .creatingTrace(
                     .inspectingStartingPoint(startingPoint)
                 )
             } label: {
                 Label {
-                    Text(startingPoint.utilityElement.assetType.name)
+                    Text(startingPoint.utilityElement?.assetType.name ?? "")
                         .lineLimit(1)
                 } icon: {
-                    Image(uiImage: startingPoint.image)
-                        .frame(width: 25, height: 25)
-                        .background(Color.secondary)
-                        .cornerRadius(5)
+                    if let image = startingPoint.image {
+                        Image(uiImage: image)
+                            .frame(width: 25, height: 25)
+                            .background(Color.secondary)
+                            .cornerRadius(5)
+                    }
                 }
             }
             .swipeActions {
@@ -492,7 +495,7 @@ public struct UtilityNetworkTrace: View {
         viewPoint: Binding<CGPoint?>,
         mapViewProxy: Binding<MapViewProxy?>,
         viewpoint: Binding<Viewpoint?>,
-        startingPoints: Binding<[UtilityNetworkTraceSimpleStartingPoint]> = .constant([])
+        startingPoints: Binding<[UtilityNetworkTraceStartingPoint]> = .constant([])
     ) {
         _viewPoint = viewPoint
         _mapPoint = mapPoint
