@@ -390,9 +390,21 @@ public struct UtilityNetworkTrace: View {
         makeBackButton(title: startingPointsTitle) {
             currentActivity = .creatingTrace(.viewingStartingPoints)
         }
-        makeDetailSectionHeader(
-            title: selectedStartingPoint?.utilityElement?.assetType.name ?? "Unnamed Asset Type"
-        )
+        Menu(selectedStartingPoint?.utilityElement?.assetType.name ?? "Unnamed Asset Type") {
+            Button("Zoom To") {
+                if let selectedStartingPoint = selectedStartingPoint,
+                   let extent = selectedStartingPoint.geoElement.geometry?.extent {
+                    viewpoint = Viewpoint(targetExtent: extent)
+                }
+            }
+            Button("Delete", role: .destructive) {
+                if let startingPoint = selectedStartingPoint {
+                    viewModel.delete(startingPoint)
+                    currentActivity = .creatingTrace(.viewingStartingPoints)
+                }
+            }
+        }
+        .font(.title3)
         List {
             if selectedStartingPoint?.utilityElement?.networkSource.kind == .edge {
                 Section("Fraction Along Edge") {
@@ -438,12 +450,6 @@ public struct UtilityNetworkTrace: View {
                         Text(item.value as? String ?? "")
                     }
                 }
-            }
-        }
-        makeZoomToButton {
-            if let selectedStartingPoint = selectedStartingPoint,
-               let extent = selectedStartingPoint.geoElement.geometry?.extent {
-                viewpoint = Viewpoint(targetExtent: extent)
             }
         }
     }
