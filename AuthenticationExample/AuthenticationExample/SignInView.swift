@@ -144,18 +144,6 @@ private extension ArcGISCredential {
 ***REMOVED***
 ***REMOVED***
 
-private extension NetworkCredential {
-***REMOVED******REMOVED***/ The username, if any, associated with this credential.
-***REMOVED***var username: String? {
-***REMOVED******REMOVED***switch self {
-***REMOVED******REMOVED***case .serverTrust, .certificate:
-***REMOVED******REMOVED******REMOVED***return nil
-***REMOVED******REMOVED***case .password(let credential):
-***REMOVED******REMOVED******REMOVED***return credential.username
-***REMOVED***
-***REMOVED***
-***REMOVED***
-
 private extension Error {
 ***REMOVED******REMOVED***/ Returns a Boolean value indicating whether the error is the result of cancelling an
 ***REMOVED******REMOVED***/ authentication challenge.
