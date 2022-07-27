@@ -56,7 +56,7 @@ struct AuthenticationApp: App {
     }
 }
 
-// If want to use OAuth, you can uncomment this code:
+// If you want to use OAuth, you can uncomment this code:
 //private extension OAuthConfiguration {
 //    static let arcgisDotCom =  OAuthConfiguration(
 //        portalURL: .portal,
