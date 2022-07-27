@@ -60,11 +60,8 @@ final class QueuedNetworkChallenge: QueuedChallenge {
 extension QueuedNetworkChallenge {
 ***REMOVED******REMOVED***/ Creates a `QueuedNetworkChallenge`.
 ***REMOVED******REMOVED***/ - Parameter networkChallenge: The associated network authentication challenge.
-***REMOVED***convenience init?(networkChallenge: NetworkAuthenticationChallenge) {
-***REMOVED******REMOVED***guard let kind = Kind(networkChallenge.kind) else {
-***REMOVED******REMOVED******REMOVED***return nil
-***REMOVED***
-***REMOVED******REMOVED***self.init(host: networkChallenge.host, kind: kind)
+***REMOVED***convenience init(networkChallenge: NetworkAuthenticationChallenge) {
+***REMOVED******REMOVED***self.init(host: networkChallenge.host, kind: Kind(networkChallenge.kind))
 ***REMOVED***
 ***REMOVED***
 
@@ -84,7 +81,7 @@ extension QueuedNetworkChallenge.Kind {
 ***REMOVED******REMOVED***/ Creates an instance.
 ***REMOVED******REMOVED***/ - Parameter networkAuthenticationChallengeKind: The kind of network authentication
 ***REMOVED******REMOVED***/ challenge.
-***REMOVED***init?(_ networkAuthenticationChallengeKind: NetworkAuthenticationChallenge.Kind) {
+***REMOVED***init(_ networkAuthenticationChallengeKind: NetworkAuthenticationChallenge.Kind) {
 ***REMOVED******REMOVED***switch networkAuthenticationChallengeKind {
 ***REMOVED******REMOVED***case .serverTrust:
 ***REMOVED******REMOVED******REMOVED***self = .serverTrust
