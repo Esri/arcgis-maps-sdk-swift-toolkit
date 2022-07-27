@@ -52,7 +52,7 @@ struct FeaturedMapsView: View {
 ***REMOVED***
 ***REMOVED***
 
-***REMOVED***/ A view that displays information about a portal item for viewing that informationwithin a list.
+***REMOVED***/ A view that displays information about a portal item for viewing that information within a list.
 struct PortalItemView: View {
 ***REMOVED******REMOVED***/ The portal item to display information about.
 ***REMOVED***var item: PortalItem
