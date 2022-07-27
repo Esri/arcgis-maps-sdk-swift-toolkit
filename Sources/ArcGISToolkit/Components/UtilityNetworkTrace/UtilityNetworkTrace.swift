@@ -305,7 +305,7 @@ public struct UtilityNetworkTrace: View {
         List {
             Section(elementResultsTitle) {
                 DisclosureGroup(
-                    viewModel.selectedTrace?.assetCount.description ?? "0",
+                    "(\(viewModel.selectedTrace?.assetCount ?? 0))",
                     isExpanded: Binding(
                         get: { isFocused(traceViewingActivity: .viewingElementResults) },
                         set: { currentActivity = .viewingTraces($0 ? .viewingElementResults : nil) }
@@ -317,7 +317,7 @@ public struct UtilityNetworkTrace: View {
                         HStack {
                             Text(assetGroup.key)
                             Spacer()
-                            Text(assetGroup.value.compactMap({ $0.value.count }).reduce(0, +).description)
+                            Text("(\(assetGroup.value.compactMap({ $0.value.count }).reduce(0, +)))")
                         }
                         .foregroundColor(.blue)
                         .contentShape(Rectangle())
@@ -327,9 +327,9 @@ public struct UtilityNetworkTrace: View {
                     }
                 }
             }
-            Section("Function Result") {
+            Section("Function Results") {
                 DisclosureGroup(
-                    viewModel.selectedTrace?.utilityFunctionTraceResult?.functionOutputs.count.description ?? "0",
+                    "(\(viewModel.selectedTrace?.utilityFunctionTraceResult?.functionOutputs.count ?? 0))",
                     isExpanded: Binding(
                         get: { isFocused(traceViewingActivity: .viewingFunctionResults) },
                         set: { currentActivity = .viewingTraces($0 ? .viewingFunctionResults : nil) }
