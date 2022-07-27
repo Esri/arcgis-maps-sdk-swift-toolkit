@@ -76,7 +76,7 @@ import SwiftUI
     private var map: Map
     
     /// Starting points programmatically provided to the trace tool.
-    var externalStartingPoints = [UtilityNetworkTraceSimpleStartingPoint]() {
+    var externalStartingPoints = [UtilityNetworkTraceStartingPoint]() {
         didSet {
             Task {
                 await addExternalStartingPoints()
@@ -103,7 +103,7 @@ import SwiftUI
     init(
         map: Map,
         graphicsOverlay: GraphicsOverlay,
-        startingPoints: [UtilityNetworkTraceSimpleStartingPoint],
+        startingPoints: [UtilityNetworkTraceStartingPoint],
         autoLoad: Bool = true
     ) {
         self.map = map
@@ -118,16 +118,18 @@ import SwiftUI
     /// - Parameter startingPoint: The starting point to be deleted.
     func delete(_ startingPoint: UtilityNetworkTraceStartingPoint) {
         pendingTrace.startingPoints.removeAll {
-            $0.utilityElement.globalID == startingPoint.utilityElement.globalID
+            $0 == startingPoint
         }
-        graphicsOverlay.removeGraphic(startingPoint.graphic)
+        if let graphic = startingPoint.graphic {
+            graphicsOverlay.removeGraphic(graphic)
+        }
     }
     
     /// Deletes all of the completed traces.
     func deleteAllTraces() {
         selectedTraceIndex = nil
         completedTraces.forEach { traceResult in
-            graphicsOverlay.removeGraphics(traceResult.startingPoints.map { $0.graphic })
+            graphicsOverlay.removeGraphics(traceResult.startingPoints.compactMap { $0.graphic })
             graphicsOverlay.removeGraphics(traceResult.graphics)
         }
         completedTraces.removeAll()
@@ -194,11 +196,11 @@ import SwiftUI
         to newValue: Double
     ) {
         pendingTrace.startingPoints.first {
-            $0.utilityElement.globalID == startingPoint.utilityElement.globalID
-        }?.utilityElement.fractionAlongEdge = newValue
+            $0 == startingPoint
+        }?.utilityElement?.fractionAlongEdge = newValue
         if let geometry = startingPoint.geoElement.geometry,
            let polyline = geometry as? Polyline {
-            startingPoint.graphic.geometry = GeometryEngine.point(
+            startingPoint.graphic?.geometry = GeometryEngine.point(
                 along: polyline,
                 atDistance: GeometryEngine.length(of: geometry) * newValue
             )
@@ -234,7 +236,7 @@ import SwiftUI
     ///   - point: A point on the map in screen coordinates.
     ///   - mapPoint: A point on the map in map coordinates.
     ///   - proxy: Provides a method of layer identification.
-    func setStartingPoint(
+    func createStartingPoint(
         at point: CGPoint,
         mapPoint: Point,
         with proxy: MapViewProxy
@@ -245,23 +247,21 @@ import SwiftUI
         )
         for layerResult in identifyLayerResults ?? [] {
             for geoElement in layerResult.geoElements {
-                await setStartingPoint(
+                let startingPoint = UtilityNetworkTraceStartingPoint(
                     geoElement: geoElement,
                     mapPoint: mapPoint
                 )
+                await processAndAdd(startingPoint)
             }
         }
     }
     
-    /// Adds a new starting point to the pending trace.
+    /// Asynchronously sets the nullable members of the provided starting point and adds it to the pending
+    /// trace.
     /// - Parameters:
-    ///   - geoElement: An element that corresponds to another within the utility network.
-    ///   - mapPoint: A point on the map in map coordinates.
-    func setStartingPoint(
-        geoElement: GeoElement,
-        mapPoint: Point? = nil
-    ) async {
-        guard let feature = geoElement as? ArcGISFeature,
+    ///   - startingPoint: The starting point to be processed and added to the pending trace.
+    func processAndAdd(_ startingPoint: UtilityNetworkTraceStartingPoint) async {
+        guard let feature = startingPoint.geoElement as? ArcGISFeature,
               let globalid = feature.globalID else {
             userWarning = "Element could not be identified"
             return
@@ -269,8 +269,8 @@ import SwiftUI
         
         // Block duplicate starting point selection
         guard !pendingTrace.startingPoints.contains(where: { startingPoint in
-                  return startingPoint.utilityElement.globalID == globalid
-              }) else {
+            return startingPoint.utilityElement?.globalID == globalid
+        }) else {
             userWarning = "Duplicate starting points cannot be added"
             return
         }
@@ -284,7 +284,7 @@ import SwiftUI
               let utilityElement = network.createElement(arcGISFeature: feature) else { return }
         
         if utilityElement.networkSource.kind == .edge && geometry is Polyline {
-            if let mapPoint = mapPoint {
+            if let mapPoint = startingPoint.mapPoint {
                 utilityElement.fractionAlongEdge = fractionAlongEdge(
                     of: geometry,
                     at: mapPoint
@@ -292,14 +292,13 @@ import SwiftUI
             } else {
                 utilityElement.fractionAlongEdge = 0.5
             }
-            
         } else if utilityElement.networkSource.kind == .junction &&
                     utilityElement.assetType.terminalConfiguration?.terminals.count ?? 0 > 1 {
             utilityElement.terminal = utilityElement.assetType.terminalConfiguration?.terminals.first
         }
         
         let graphic = Graphic(
-            geometry: mapPoint ?? feature.geometry?.extent.center,
+            geometry: startingPoint.mapPoint ?? feature.geometry?.extent.center,
             symbol: SimpleMarkerSymbol(
                 style: .cross,
                 color: UIColor(self.pendingTrace.color),
@@ -307,15 +306,13 @@ import SwiftUI
             )
         )
         
-        let startingPoint = UtilityNetworkTraceStartingPoint(
-            extent: geometry.extent,
-            geoElement: geoElement,
-            graphic: graphic,
-            image: symbol,
-            utilityElement: utilityElement
-        )
+        var newStartingPoint = startingPoint
+        newStartingPoint.graphic = graphic
+        newStartingPoint.image = symbol
+        newStartingPoint.utilityElement = utilityElement
+        
         graphicsOverlay.addGraphic(graphic)
-        pendingTrace.startingPoints.append(startingPoint)
+        pendingTrace.startingPoints.append(newStartingPoint)
     }
     
     func setTerminalConfigurationFor(
@@ -323,8 +320,8 @@ import SwiftUI
         to newValue: UtilityTerminal
     ) {
         pendingTrace.startingPoints.first {
-            $0.utilityElement.globalID == startingPoint.utilityElement.globalID
-        }?.utilityElement.terminal = newValue
+            $0 == startingPoint
+        }?.utilityElement?.terminal = newValue
         objectWillChange.send()
     }
     
@@ -436,10 +433,7 @@ import SwiftUI
     /// Adds programatic starting points to the pending trace.
     private func addExternalStartingPoints() async {
         for startingPoint in externalStartingPoints {
-            await setStartingPoint(
-                geoElement: startingPoint.geoElement,
-                mapPoint: startingPoint.point
-            )
+            await processAndAdd(startingPoint)
         }
     }
     
@@ -453,7 +447,7 @@ import SwiftUI
     ) {
         guard index >= 0, index <= completedTraces.count - 1 else { return }
         _ = completedTraces[index].graphics.map { $0.isSelected = isSelected }
-        _ = completedTraces[index].startingPoints.map { $0.graphic.isSelected = isSelected }
+        _ = completedTraces[index].startingPoints.map { $0.graphic?.isSelected = isSelected }
     }
     
     /// Loads the named trace configurations in the network.
