@@ -281,7 +281,7 @@ import Foundation
 ***REMOVED******REMOVED******REMOVED***.renderer?
 ***REMOVED******REMOVED******REMOVED***.symbol(for: feature)?
 ***REMOVED******REMOVED******REMOVED***.makeSwatch(scale: 1.0),
-***REMOVED******REMOVED******REMOVED***  let utilityElement = network.createElement(arcGISFeature: feature) else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED***  let utilityElement = network.makeElement(arcGISFeature: feature) else { return ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***if utilityElement.networkSource.kind == .edge && geometry is Polyline {
 ***REMOVED******REMOVED******REMOVED***if let mapPoint = startingPoint.mapPoint {
