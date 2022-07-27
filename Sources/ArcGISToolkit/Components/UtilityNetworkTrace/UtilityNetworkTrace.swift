@@ -135,19 +135,23 @@ public struct UtilityNetworkTrace: View {
             )
             List {
                 ForEach(assetGroup.sorted(by: { $0.key < $1.key }), id: \.key) { assetTypeGroup in
+                    let elements = assetTypeGroup.value.sorted {
+                        $0.objectID < $1.objectID
+                    }
                     Section(assetTypeGroup.key) {
-                        let elements = assetTypeGroup.value.sorted {
-                            $0.objectID < $1.objectID
-                        }
-                        ForEach(elements) { element in
-                            makeZoomToButton(text: "Object ID \(element.objectID.description)") {
-                                Task {
-                                    if let feature = await viewModel.getFeatureFor(element: element),
-                                       let geometry = feature.geometry {
-                                        viewpoint = Viewpoint(targetExtent: geometry.extent)
+                        DisclosureGroup {
+                            ForEach(elements) { element in
+                                makeZoomToButton(text: "Object ID \(element.objectID.description)") {
+                                    Task {
+                                        if let feature = await viewModel.getFeatureFor(element: element),
+                                           let geometry = feature.geometry {
+                                            viewpoint = Viewpoint(targetExtent: geometry.extent)
+                                        }
                                     }
                                 }
                             }
+                        } label: {
+                            Text("(\(elements.count))")
                         }
                     }
                 }
