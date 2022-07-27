@@ -33,9 +33,7 @@ struct AuthenticationApp: App {
     
     var body: some SwiftUI.Scene {
         WindowGroup {
-            NavigationView {
-                HomeView()
-            }
+            HomeView()
             // Using this view modifier will cause a prompt when the authenticator is asked
             // to handle an authentication challenge.
             // This will handle many different types of authentication, for example:
