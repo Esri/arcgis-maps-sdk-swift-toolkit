@@ -28,7 +28,7 @@ extension UtilityNetworkTraceViewModel {
             didSet {
                 // Update the color of any pre-existing starting points
                 startingPoints.forEach { startingPoint in
-                    guard let symbol = startingPoint.graphic.symbol as? SimpleMarkerSymbol else { return }
+                    guard let symbol = startingPoint.graphic?.symbol as? SimpleMarkerSymbol else { return }
                     symbol.color = UIColor(color)
                 }
                 graphics.forEach { graphic in
