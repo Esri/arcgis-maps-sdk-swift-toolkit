@@ -49,6 +49,8 @@ struct HTMLTextView: UIViewRepresentable {
 ***REMOVED***class Coordinator: NSObject, WKNavigationDelegate {
 ***REMOVED******REMOVED***var parent: HTMLTextView
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED***private var runDidFinishAgain = true
+
 ***REMOVED******REMOVED***init(_ parent: HTMLTextView) {
 ***REMOVED******REMOVED******REMOVED***self.parent = parent
 ***REMOVED***
@@ -74,6 +76,17 @@ struct HTMLTextView: UIViewRepresentable {
 ***REMOVED******REMOVED******REMOVED*** WKNavigationDelegate method where the size calculation happens.
 ***REMOVED******REMOVED***func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!){
 ***REMOVED******REMOVED******REMOVED***self.parent.dynamicHeight = webView.scrollView.contentSize.height
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED*** Sometimes the contentSize has not been updated yet, probably
+***REMOVED******REMOVED******REMOVED******REMOVED*** because the view has not been rendered yet. So rerun this again
+***REMOVED******REMOVED******REMOVED******REMOVED*** after a delay.  This fixes the issue.
+***REMOVED******REMOVED******REMOVED***if runDidFinishAgain {
+***REMOVED******REMOVED******REMOVED******REMOVED***runDidFinishAgain = false
+***REMOVED******REMOVED******REMOVED******REMOVED***DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self?.webView(webView, didFinish: navigation)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self?.runDidFinishAgain = true
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
