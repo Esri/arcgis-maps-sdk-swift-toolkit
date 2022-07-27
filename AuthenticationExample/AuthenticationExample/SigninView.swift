@@ -80,7 +80,7 @@ struct SigninView: View {
 ***REMOVED***
 
 private extension Error {
-***REMOVED******REMOVED***/ Returns a Bool value indicating whether the error is the result of cancelling an
+***REMOVED******REMOVED***/ Returns a Boolean value indicating whether the error is the result of cancelling an
 ***REMOVED******REMOVED***/ authentication challenge.
 ***REMOVED***var isChallengeCancellationError: Bool {
 ***REMOVED******REMOVED***switch self {

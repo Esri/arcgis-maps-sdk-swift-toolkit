@@ -18,7 +18,9 @@
 ***REMOVED***/ A view that displays portal items.
 struct FeaturedMapsView: View {
 ***REMOVED***var portal: Portal
+***REMOVED***
 ***REMOVED***@State var isLoading = true
+***REMOVED***
 ***REMOVED***@State var featuredItems = [PortalItem]()
 ***REMOVED***
 ***REMOVED***var body: some View {

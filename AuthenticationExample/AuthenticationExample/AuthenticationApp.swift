@@ -56,7 +56,7 @@ struct AuthenticationApp: App {
 ***REMOVED***
 ***REMOVED***
 
-***REMOVED*** If want to use OAuth, you can uncomment this code:
+***REMOVED*** If you want to use OAuth, you can uncomment this code:
 ***REMOVED***private extension OAuthConfiguration {
 ***REMOVED******REMOVED***static let arcgisDotCom =  OAuthConfiguration(
 ***REMOVED******REMOVED******REMOVED***portalURL: .portal,
