@@ -42,7 +42,7 @@ struct FeaturedMapsView: View {
 ***REMOVED******REMOVED***.task {
 ***REMOVED******REMOVED******REMOVED***guard featuredItems.isEmpty else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***do {
-***REMOVED******REMOVED******REMOVED******REMOVED***featuredItems = try await portal.homePageFeaturedContent
+***REMOVED******REMOVED******REMOVED******REMOVED***featuredItems = try await portal.featuredItems
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.filter { $0.kind == .webMap ***REMOVED***
 ***REMOVED******REMOVED*** catch {***REMOVED***
 ***REMOVED******REMOVED******REMOVED***
