@@ -40,7 +40,7 @@ struct HomeView: View {
                     }
                 }
         } else {
-            SigninView(portal: $portal)
+            SignInView(portal: $portal)
         }
     }
 }
