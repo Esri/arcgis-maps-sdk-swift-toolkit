@@ -30,10 +30,12 @@ struct SignInView: View {
 ***REMOVED******REMOVED***/ The portal that the user successfully signed in to.
 ***REMOVED***@Binding var portal: Portal?
 ***REMOVED***
-***REMOVED******REMOVED***/ The last signed in user name.  If the property is `nil` then there was no previous effective
-***REMOVED******REMOVED***/ credential.  If the property is non-nil and empty, then the previously persisted and effective
-***REMOVED******REMOVED***/ credential did not have a username.  If the propert is non-nil and non-empty, then it contains
-***REMOVED******REMOVED***/ the previously used and persisted username.
+***REMOVED******REMOVED***/ The last signed in user name.
+***REMOVED******REMOVED***/ - If the property is `nil` then there was no previous effective credential.
+***REMOVED******REMOVED***/ - If the property is non-nil and empty, then the previously persisted and effective
+***REMOVED******REMOVED***/ credential did not have a username.
+***REMOVED******REMOVED***/ - If the property is non-nil and non-empty, then it contains the previously used and
+***REMOVED******REMOVED***/ persisted username.
 ***REMOVED***@State var lastSignedInUser: String?
 ***REMOVED***
 ***REMOVED***var body: some View {
