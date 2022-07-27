@@ -461,7 +461,7 @@ public struct UtilityNetworkTrace: View {
                     if let image = startingPoint.image {
                         Image(uiImage: image)
                             .frame(width: 25, height: 25)
-                            .background(Color.secondary)
+                            .background(.white)
                             .cornerRadius(5)
                     }
                 }
