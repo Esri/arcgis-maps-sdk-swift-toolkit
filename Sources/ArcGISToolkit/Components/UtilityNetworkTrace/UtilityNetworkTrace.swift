@@ -297,10 +297,10 @@ public struct UtilityNetworkTrace: View {
                 }
             }
         }
-        .font(.title3)
         .padding(2.5)
         if let traceName = viewModel.selectedTrace?.name, !traceName.isEmpty {
             Text(traceName)
+                .font(.title3)
         }
         List {
             Section(featureResultsTitle) {
