@@ -71,15 +71,15 @@ public struct PopupView: View {
                 VStack(alignment: .leading) {
                     ForEach(popup.evaluatedElements) { popupElement in
                         switch popupElement {
-                        case let popupElement as AttachmentsPopupElement:
+                        case is AttachmentsPopupElement:
                             Text("AttachmentsPopupElementView implementation coming soon.")
                                 .font(.caption)
                         case let popupElement as FieldsPopupElement:
                             FieldsPopupElementView(popupElement: popupElement)
-                        case let popupElement as MediaPopupElement:
+                        case is MediaPopupElement:
                             Text("MediaPopupElementView implementation coming soon.")
                                 .font(.caption)
-                        case let popupElement as TextPopupElement:
+                        case is TextPopupElement:
                             Text("TextPopupElementView implementation coming soon.")
                                 .font(.caption)
                         default:
