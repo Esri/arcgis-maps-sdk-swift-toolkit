@@ -52,7 +52,7 @@ struct FeaturedMapsView: View {
     }
 }
 
-/// A view that displays information about a portal item for viewing that informationwithin a list.
+/// A view that displays information about a portal item for viewing that information within a list.
 struct PortalItemView: View {
     /// The portal item to display information about.
     var item: PortalItem

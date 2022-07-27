@@ -80,7 +80,7 @@ struct SigninView: View {
 }
 
 private extension Error {
-    /// Returns a Bool value indicating whether the error is the result of cancelling an
+    /// Returns a Boolean value indicating whether the error is the result of cancelling an
     /// authentication challenge.
     var isChallengeCancellationError: Bool {
         switch self {

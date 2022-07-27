@@ -18,7 +18,9 @@ import ArcGISToolkit
 /// A view that displays portal items.
 struct FeaturedMapsView: View {
     var portal: Portal
+    
     @State var isLoading = true
+    
     @State var featuredItems = [PortalItem]()
     
     var body: some View {
