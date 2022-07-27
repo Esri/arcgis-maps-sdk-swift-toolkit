@@ -16,7 +16,7 @@
 ***REMOVED***Toolkit
 
 ***REMOVED***/ A view that allows the user to sign in to a portal.
-struct SigninView: View {
+struct SignInView: View {
 ***REMOVED******REMOVED***/ The authenticator which has been passed from the app through the environment.
 ***REMOVED***@EnvironmentObject var authenticator: Authenticator
 ***REMOVED***

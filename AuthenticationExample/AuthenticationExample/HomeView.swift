@@ -40,7 +40,7 @@ struct HomeView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***SigninView(portal: $portal)
+***REMOVED******REMOVED******REMOVED***SignInView(portal: $portal)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***

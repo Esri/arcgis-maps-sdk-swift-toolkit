@@ -63,7 +63,7 @@ struct ProfileView: View {
 ***REMOVED******REMOVED***Task {
 ***REMOVED******REMOVED******REMOVED***await authenticator.clearCredentialStores()
 ***REMOVED******REMOVED******REMOVED***isSigningOut = false
-***REMOVED******REMOVED******REMOVED***signoutAction()
+***REMOVED******REMOVED******REMOVED***signOutAction()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
