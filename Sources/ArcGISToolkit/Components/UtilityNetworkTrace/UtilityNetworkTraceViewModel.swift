@@ -217,7 +217,7 @@ import SwiftUI
     ///   - point: A point on the map in screen coordinates.
     ///   - mapPoint: A point on the map in map coordinates.
     ///   - proxy: Provides a method of layer identification.
-    func setStartingPoint(
+    func createStartingPoint(
         at point: CGPoint,
         mapPoint: Point,
         with proxy: MapViewProxy
@@ -232,17 +232,16 @@ import SwiftUI
                     geoElement: geoElement,
                     mapPoint: mapPoint
                 )
-                setStartingPoint(startingPoint: startingPoint)
+                processAndAdd(startingPoint)
             }
         }
     }
     
-    /// Adds a new starting point to the pending trace.
+    /// Asynchronously sets the nullable members of the provided starting point and adds it to the pending
+    /// trace.
     /// - Parameters:
-    ///   - geoElement: An element that corresponds to another within the utility network.
-    ///   - mapPoint: A point on the map in map coordinates.
-    ///   - startingPoint: <#startingPoint description#>
-    func setStartingPoint(startingPoint: UtilityNetworkTraceStartingPoint) {
+    ///   - startingPoint: The starting point to be processed and added to the pending trace.
+    func processAndAdd(_ startingPoint: UtilityNetworkTraceStartingPoint) {
         Task {
             guard let feature = startingPoint.geoElement as? ArcGISFeature,
                   let globalid = feature.attributes["globalid"] as? UUID else {
@@ -275,7 +274,6 @@ import SwiftUI
                 } else {
                     utilityElement.fractionAlongEdge = 0.5
                 }
-                
             } else if utilityElement.networkSource.kind == .junction &&
                         utilityElement.assetType.terminalConfiguration?.terminals.count ?? 0 > 1 {
                 utilityElement.terminal = utilityElement.assetType.terminalConfiguration?.terminals.first
@@ -418,7 +416,7 @@ import SwiftUI
     /// Adds programatic starting points to the pending trace.
     private func addExternalStartingPoints() {
         externalStartingPoints.forEach {
-            setStartingPoint(startingPoint: $0)
+            processAndAdd($0)
         }
     }
     
