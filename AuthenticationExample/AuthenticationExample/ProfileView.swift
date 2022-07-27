@@ -41,7 +41,7 @@ struct ProfileView: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var signOutButton: some View {
-***REMOVED******REMOVED***Button {
+***REMOVED******REMOVED***Button(role: .destructive) {
 ***REMOVED******REMOVED******REMOVED***signOut()
 ***REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED***if isSigningOut {
