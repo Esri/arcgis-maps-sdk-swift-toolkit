@@ -34,7 +34,7 @@ struct UtilityNetworkTraceExampleView: View {
 ***REMOVED***@State var resultGraphicsOverlay = GraphicsOverlay()
 ***REMOVED***
 ***REMOVED******REMOVED***/ Optional pre-defined starting points for the utility network trace.
-***REMOVED***@State var startingPoints: [UtilityNetworkTraceSimpleStartingPoint] = []
+***REMOVED***@State var startingPoints: [UtilityNetworkTraceStartingPoint] = []
 ***REMOVED***
 ***REMOVED******REMOVED***/ The map viewpoint used by the `UtilityNetworkTrace` to pan/zoom the map to selected features.
 ***REMOVED***@State var viewpoint: Viewpoint?
@@ -124,7 +124,7 @@ extension UtilityNetworkTraceExampleView {
 ***REMOVED******REMOVED******REMOVED******REMOVED***   let id = feature.attributes["globalid"] as? UUID,
 ***REMOVED******REMOVED******REMOVED******REMOVED***   id == targetID {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***startingPoints = [
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***UtilityNetworkTraceSimpleStartingPoint(geoElement: element)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***UtilityNetworkTraceStartingPoint(geoElement: element)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***]
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
