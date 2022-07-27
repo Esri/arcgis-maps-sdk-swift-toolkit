@@ -10,7 +10,11 @@ A named trace configuration defined for a utility network in a webmap comprises 
 
 ## Behavior:
 
-The tool allows users to choose between multiple networks (if more than one is defined in a webmap), choose between named trace configurations, add trace starting points either programmatically or by tapping on a map view and view trace results.
+The tool allows users to:
+ - Choose between multiple networks (if more than one is defined in a webmap) 
+ - Choose between named trace configurations
+ - Add trace starting points either programmatically or by tapping on a map view
+ - View trace results
 
 ## Usage
 
