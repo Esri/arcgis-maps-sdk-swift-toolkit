@@ -30,10 +30,12 @@ struct SignInView: View {
     /// The portal that the user successfully signed in to.
     @Binding var portal: Portal?
     
-    /// The last signed in user name.  If the property is `nil` then there was no previous effective
-    /// credential.  If the property is non-nil and empty, then the previously persisted and effective
-    /// credential did not have a username.  If the propert is non-nil and non-empty, then it contains
-    /// the previously used and persisted username.
+    /// The last signed in user name.
+    /// - If the property is `nil` then there was no previous effective credential.
+    /// - If the property is non-nil and empty, then the previously persisted and effective
+    /// credential did not have a username.
+    /// - If the property is non-nil and non-empty, then it contains the previously used and
+    /// persisted username.
     @State var lastSignedInUser: String?
     
     var body: some View {
