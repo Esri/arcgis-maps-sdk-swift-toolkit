@@ -140,7 +140,7 @@ public struct UtilityNetworkTrace: View {
                             $0.objectID < $1.objectID
                         }
                         ForEach(elements) { element in
-                            makeZoomToButton(text: element.objectID.description) {
+                            makeZoomToButton(text: "Object ID \(element.objectID.description)") {
                                 Task {
                                     if let feature = await viewModel.getFeatureFor(element: element),
                                        let geometry = feature.geometry {
