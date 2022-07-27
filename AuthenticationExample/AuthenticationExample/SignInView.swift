@@ -17,7 +17,7 @@ import ArcGISToolkit
 import CryptoKit
 
 /// A view that allows the user to sign in to a portal.
-struct SigninView: View {
+struct SignInView: View {
     /// The authenticator which has been passed from the app through the environment.
     @EnvironmentObject var authenticator: Authenticator
     
@@ -155,7 +155,7 @@ private extension NetworkCredential {
 }
 
 private extension Error {
-    /// Returns a Bool value indicating whether the error is the result of cancelling an
+    /// Returns a Boolean value indicating whether the error is the result of cancelling an
     /// authentication challenge.
     var isChallengeCancellationError: Bool {
         switch self {
