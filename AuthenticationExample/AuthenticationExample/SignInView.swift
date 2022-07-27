@@ -17,7 +17,7 @@
 import CryptoKit
 
 ***REMOVED***/ A view that allows the user to sign in to a portal.
-struct SigninView: View {
+struct SignInView: View {
 ***REMOVED******REMOVED***/ The authenticator which has been passed from the app through the environment.
 ***REMOVED***@EnvironmentObject var authenticator: Authenticator
 ***REMOVED***
@@ -155,7 +155,7 @@ private extension NetworkCredential {
 ***REMOVED***
 
 private extension Error {
-***REMOVED******REMOVED***/ Returns a Bool value indicating whether the error is the result of cancelling an
+***REMOVED******REMOVED***/ Returns a Boolean value indicating whether the error is the result of cancelling an
 ***REMOVED******REMOVED***/ authentication challenge.
 ***REMOVED***var isChallengeCancellationError: Bool {
 ***REMOVED******REMOVED***switch self {

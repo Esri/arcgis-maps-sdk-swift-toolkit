@@ -27,7 +27,7 @@ struct ProfileView: View {
 ***REMOVED***@State var isSigningOut: Bool = false
 ***REMOVED***
 ***REMOVED******REMOVED***/ The closure to call once the user has signed out.
-***REMOVED***var signoutAction: () -> Void
+***REMOVED***var signOutAction: () -> Void
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***VStack {
@@ -63,7 +63,7 @@ struct ProfileView: View {
 ***REMOVED******REMOVED***Task {
 ***REMOVED******REMOVED******REMOVED***await authenticator.clearCredentialStores()
 ***REMOVED******REMOVED******REMOVED***isSigningOut = false
-***REMOVED******REMOVED******REMOVED***signoutAction()
+***REMOVED******REMOVED******REMOVED***signOutAction()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
