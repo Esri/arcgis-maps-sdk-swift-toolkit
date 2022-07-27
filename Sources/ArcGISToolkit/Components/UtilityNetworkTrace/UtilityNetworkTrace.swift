@@ -297,10 +297,10 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.font(.title3)
 ***REMOVED******REMOVED***.padding(2.5)
 ***REMOVED******REMOVED***if let traceName = viewModel.selectedTrace?.name, !traceName.isEmpty {
 ***REMOVED******REMOVED******REMOVED***Text(traceName)
+***REMOVED******REMOVED******REMOVED******REMOVED***.font(.title3)
 ***REMOVED***
 ***REMOVED******REMOVED***List {
 ***REMOVED******REMOVED******REMOVED***Section(featureResultsTitle) {
