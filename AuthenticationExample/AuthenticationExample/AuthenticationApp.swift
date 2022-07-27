@@ -33,9 +33,7 @@ struct AuthenticationApp: App {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED******REMOVED***NavigationView {
-***REMOVED******REMOVED******REMOVED******REMOVED***HomeView()
-***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***HomeView()
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Using this view modifier will cause a prompt when the authenticator is asked
 ***REMOVED******REMOVED******REMOVED******REMOVED*** to handle an authentication challenge.
 ***REMOVED******REMOVED******REMOVED******REMOVED*** This will handle many different types of authentication, for example:
