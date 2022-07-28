@@ -309,9 +309,21 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED***@ViewBuilder private var resultsTab: some View {
 ***REMOVED******REMOVED***resultsNavigator
 ***REMOVED******REMOVED******REMOVED***.padding(2.5)
-***REMOVED******REMOVED***if let traceName = viewModel.selectedTrace?.name, !traceName.isEmpty {
-***REMOVED******REMOVED******REMOVED***Text(traceName)
-***REMOVED******REMOVED******REMOVED******REMOVED***.font(.title3)
+***REMOVED******REMOVED***if let selectedTrace = viewModel.selectedTrace {
+***REMOVED******REMOVED******REMOVED***Menu(selectedTrace.name) {
+***REMOVED******REMOVED******REMOVED******REMOVED***if let resultExtent = selectedTrace.resultExtent {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Zoom To") {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint = Viewpoint(targetExtent: resultExtent)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***Button("Delete", role: .destructive) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if viewModel.completedTraces.count == 1 {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentActivity = .creatingTrace(nil)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.delete(selectedTrace)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.font(.title3)
 ***REMOVED***
 ***REMOVED******REMOVED***List {
 ***REMOVED******REMOVED******REMOVED***Section(featureResultsTitle) {
@@ -381,11 +393,6 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Color")
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***makeZoomToButton {
-***REMOVED******REMOVED******REMOVED***if let extent = viewModel.selectedTrace?.resultExtent {
-***REMOVED******REMOVED******REMOVED******REMOVED***viewpoint = Viewpoint(targetExtent: extent)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.padding([.vertical], 2)
