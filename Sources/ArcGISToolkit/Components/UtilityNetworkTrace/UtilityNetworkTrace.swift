@@ -382,13 +382,13 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.padding([.vertical], 2)
-***REMOVED******REMOVED***Button {
+***REMOVED******REMOVED***Button(role: .destructive) {
 ***REMOVED******REMOVED******REMOVED***showWarningAlert.toggle()
 ***REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED***Text("Clear All Results")
-***REMOVED******REMOVED******REMOVED******REMOVED***.tint(.red)
+***REMOVED******REMOVED******REMOVED***Text(clearResultsTitle)
 ***REMOVED***
-***REMOVED******REMOVED***.alert("Clear All Results", isPresented: $showWarningAlert) {
+***REMOVED******REMOVED***.buttonStyle(.bordered)
+***REMOVED******REMOVED***.alert(clearResultsTitle, isPresented: $showWarningAlert) {
 ***REMOVED******REMOVED******REMOVED***Button(role: .destructive) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.deleteAllTraces()
 ***REMOVED******REMOVED******REMOVED******REMOVED***currentActivity = .creatingTrace(nil)
@@ -682,6 +682,9 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Title for the clear all results feature
+***REMOVED***private let clearResultsTitle = "Clear All Results"
 ***REMOVED***
 ***REMOVED******REMOVED***/ Title for the feature results section
 ***REMOVED***private let featureResultsTitle = "Feature Results"
