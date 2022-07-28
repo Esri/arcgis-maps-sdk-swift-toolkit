@@ -112,7 +112,7 @@ extension LoginViewModifier {
                 onSignIn: { loginCredential in
                     challenge.resume(
                         with: .useCredential(
-                            .login(username: loginCredential.username, password: loginCredential.password)
+                            .password(username: loginCredential.username, password: loginCredential.password)
                         )
                     )
                 },
