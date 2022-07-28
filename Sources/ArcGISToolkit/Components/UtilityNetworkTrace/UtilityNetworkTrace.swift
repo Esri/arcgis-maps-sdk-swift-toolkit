@@ -281,27 +281,34 @@ public struct UtilityNetworkTrace: View {
         .disabled(!viewModel.canRunTrace)
     }
     
-    /// The tab that allows for viewing completed traces.
-    @ViewBuilder private var resultsTab: some View {
-        HStack {
-            if viewModel.completedTraces.count > 1 {
-                Button {
-                    viewModel.selectPreviousTrace()
-                } label: {
-                    Image(systemName: "chevron.backward")
+    /// Navigator at the top of the results tab that allows users to cycle through completed traces.
+    @ViewBuilder private var resultsNavigator: some View {
+        if viewModel.completedTraces.count > 1 {
+            HStack {
+                if viewModel.completedTraces.count > 1 {
+                    Button {
+                        viewModel.selectPreviousTrace()
+                    } label: {
+                        Image(systemName: "chevron.backward")
+                    }
                 }
-            }
-            Text(currentTraceLabel)
-                .padding(.horizontal)
-            if viewModel.completedTraces.count > 1 {
-                Button {
-                    viewModel.selectNextTrace()
-                } label: {
-                    Image(systemName: "chevron.forward")
+                Text(currentTraceLabel)
+                    .padding(.horizontal)
+                if viewModel.completedTraces.count > 1 {
+                    Button {
+                        viewModel.selectNextTrace()
+                    } label: {
+                        Image(systemName: "chevron.forward")
+                    }
                 }
             }
         }
-        .padding(2.5)
+    }
+    
+    /// The tab that allows for viewing completed traces.
+    @ViewBuilder private var resultsTab: some View {
+        resultsNavigator
+            .padding(2.5)
         if let traceName = viewModel.selectedTrace?.name, !traceName.isEmpty {
             Text(traceName)
                 .font(.title3)
