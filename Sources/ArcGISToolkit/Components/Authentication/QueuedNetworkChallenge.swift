@@ -60,11 +60,8 @@ final class QueuedNetworkChallenge: QueuedChallenge {
 extension QueuedNetworkChallenge {
     /// Creates a `QueuedNetworkChallenge`.
     /// - Parameter networkChallenge: The associated network authentication challenge.
-    convenience init?(networkChallenge: NetworkAuthenticationChallenge) {
-        guard let kind = Kind(networkChallenge.kind) else {
-            return nil
-        }
-        self.init(host: networkChallenge.host, kind: kind)
+    convenience init(networkChallenge: NetworkAuthenticationChallenge) {
+        self.init(host: networkChallenge.host, kind: Kind(networkChallenge.kind))
     }
 }
 
@@ -84,7 +81,7 @@ extension QueuedNetworkChallenge.Kind {
     /// Creates an instance.
     /// - Parameter networkAuthenticationChallengeKind: The kind of network authentication
     /// challenge.
-    init?(_ networkAuthenticationChallengeKind: NetworkAuthenticationChallenge.Kind) {
+    init(_ networkAuthenticationChallengeKind: NetworkAuthenticationChallenge.Kind) {
         switch networkAuthenticationChallengeKind {
         case .serverTrust:
             self = .serverTrust

@@ -14,6 +14,7 @@
 import SwiftUI
 import ArcGIS
 import ArcGISToolkit
+import CryptoKit
 
 /// A view that allows the user to sign in to a portal.
 struct SignInView: View {
@@ -28,6 +29,14 @@ struct SignInView: View {
     
     /// The portal that the user successfully signed in to.
     @Binding var portal: Portal?
+    
+    /// The last signed in user name.
+    /// - If the property is `nil` then there was no previous effective credential.
+    /// - If the property is non-nil and empty, then the previously persisted and effective
+    /// credential did not have a username.
+    /// - If the property is non-nil and non-empty, then it contains the previously used and
+    /// persisted username.
+    @State var lastSignedInUser: String?
     
     var body: some View {
         VStack {
@@ -47,14 +56,54 @@ struct SignInView: View {
                     .foregroundColor(.secondary)
             }
         }
+        .task {
+            guard lastSignedInUser == nil else {
+                return
+            }
+            
+            if let arcGISCredential = await ArcGISRuntimeEnvironment.credentialStore.credential(for: .portal) {
+                lastSignedInUser = arcGISCredential.username ?? ""
+            } else {
+                let networkCredentials = await ArcGISRuntimeEnvironment.networkCredentialStore.credentials(forHost: URL.portal.host!)
+                if !networkCredentials.isEmpty {
+                    lastSignedInUser = networkCredentials.compactMap { credential in
+                        switch credential {
+                        case .password(let passwordCredential):
+                            return passwordCredential.username
+                        case .certificate:
+                            return ""
+                        case .serverTrust:
+                            return nil
+                        }
+                    }
+                    .first
+                }
+            }
+        }
         .padding()
+    }
+    
+    var signInButtonText: String {
+        if let lastSignedInUser = lastSignedInUser {
+            if lastSignedInUser.isEmpty {
+                // Non-nil but empty, can't offer the username.
+                return "Sign in again"
+            } else {
+                // Non-nil and non-empty, show the username in the button text.
+                return "Sign in with \(lastSignedInUser)"
+            }
+        } else {
+            // For nil username, then just use default text that implies there was no previous
+            // used credential persisted.
+            return "Sign in"
+        }
     }
     
     var signInButton: some View {
         Button {
             signIn()
         } label: {
-            Text("Sign in")
+            Text(signInButtonText)
                 .frame(maxWidth: .infinity)
         }
         .buttonStyle(.bordered)
@@ -75,6 +124,22 @@ struct SignInView: View {
                 self.error = error
             }
             isSigningIn = false
+        }
+    }
+}
+
+private extension ArcGISCredential {
+    /// The username, if any, associated with this credential.
+    var username: String? {
+        get {
+            switch self {
+            case .oauth(let credential):
+                return credential.username
+            case .token(let credential):
+                return credential.username
+            case .staticToken:
+                return nil
+            }
         }
     }
 }
