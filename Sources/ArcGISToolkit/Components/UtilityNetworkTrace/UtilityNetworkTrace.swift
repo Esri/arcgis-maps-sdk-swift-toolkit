@@ -343,7 +343,12 @@ public struct UtilityNetworkTrace: View {
                         HStack {
                             Text(item.function.networkAttribute?.name ?? "Unnamed")
                             Spacer()
-                            Text((item.result as? Double)?.description ?? "N/A")
+                            VStack(alignment: .trailing) {
+                                Text(item.function.functionType.description)
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
+                                Text((item.result as? Double)?.description ?? "N/A")
+                            }
                         }
                     }
                 }
