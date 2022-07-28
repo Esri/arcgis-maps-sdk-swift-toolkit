@@ -309,9 +309,21 @@ public struct UtilityNetworkTrace: View {
     @ViewBuilder private var resultsTab: some View {
         resultsNavigator
             .padding(2.5)
-        if let traceName = viewModel.selectedTrace?.name, !traceName.isEmpty {
-            Text(traceName)
-                .font(.title3)
+        if let selectedTrace = viewModel.selectedTrace {
+            Menu(selectedTrace.name) {
+                if let resultExtent = selectedTrace.resultExtent {
+                    Button("Zoom To") {
+                        viewpoint = Viewpoint(targetExtent: resultExtent)
+                    }
+                }
+                Button("Delete", role: .destructive) {
+                    if viewModel.completedTraces.count == 1 {
+                        currentActivity = .creatingTrace(nil)
+                    }
+                    viewModel.delete(selectedTrace)
+                }
+            }
+            .font(.title3)
         }
         List {
             Section(featureResultsTitle) {
@@ -381,11 +393,6 @@ public struct UtilityNetworkTrace: View {
                         Text("Color")
                     }
                 }
-            }
-        }
-        makeZoomToButton {
-            if let extent = viewModel.selectedTrace?.resultExtent {
-                viewpoint = Viewpoint(targetExtent: extent)
             }
         }
         .padding([.vertical], 2)
