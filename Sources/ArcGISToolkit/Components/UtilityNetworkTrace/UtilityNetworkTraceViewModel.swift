@@ -236,7 +236,7 @@ import SwiftUI
     ///   - point: A point on the map in screen coordinates.
     ///   - mapPoint: A point on the map in map coordinates.
     ///   - proxy: Provides a method of layer identification.
-    func createStartingPoint(
+    func makeStartingPoint(
         at point: CGPoint,
         mapPoint: Point,
         with proxy: MapViewProxy
