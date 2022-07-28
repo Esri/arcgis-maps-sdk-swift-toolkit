@@ -141,12 +141,18 @@ public struct UtilityNetworkTrace: View {
                     Section(assetTypeGroup.key) {
                         DisclosureGroup {
                             ForEach(elements) { element in
-                                makeZoomToButton(text: "Object ID \(element.objectID.description)") {
+                                Button {
                                     Task {
                                         if let feature = await viewModel.getFeatureFor(element: element),
                                            let geometry = feature.geometry {
                                             viewpoint = Viewpoint(targetExtent: geometry.extent)
                                         }
+                                    }
+                                } label: {
+                                    Label {
+                                        Text("Object ID \(element.objectID.description)")
+                                    } icon: {
+                                        Image(systemName: "scope")
                                     }
                                 }
                             }
@@ -678,23 +684,6 @@ public struct UtilityNetworkTrace: View {
             .font(.title3)
             .lineLimit(1)
             .frame(maxWidth: .infinity, alignment: .center)
-    }
-    
-    /// Returns a "Zoom To" button that performs a specified action when pressed.
-    /// - Parameter text: The custom text to be displayed within the button.
-    /// - Parameter action: The action to be performed.
-    /// - Returns: The configured button.
-    private func makeZoomToButton(
-        text: String = "Zoom To",
-        _ action: @escaping () -> Void
-    ) -> some View {
-        Button { action() } label: {
-            Label {
-                Text(text)
-            } icon: {
-                Image(systemName: "scope")
-            }
-        }
     }
     
     /// Title for the clear all results feature
