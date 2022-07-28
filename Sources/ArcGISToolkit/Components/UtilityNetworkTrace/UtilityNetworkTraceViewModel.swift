@@ -236,7 +236,7 @@ import Foundation
 ***REMOVED******REMOVED***/   - point: A point on the map in screen coordinates.
 ***REMOVED******REMOVED***/   - mapPoint: A point on the map in map coordinates.
 ***REMOVED******REMOVED***/   - proxy: Provides a method of layer identification.
-***REMOVED***func createStartingPoint(
+***REMOVED***func makeStartingPoint(
 ***REMOVED******REMOVED***at point: CGPoint,
 ***REMOVED******REMOVED***mapPoint: Point,
 ***REMOVED******REMOVED***with proxy: MapViewProxy
