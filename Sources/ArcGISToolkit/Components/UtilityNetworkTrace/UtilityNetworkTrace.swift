@@ -382,13 +382,13 @@ public struct UtilityNetworkTrace: View {
             }
         }
         .padding([.vertical], 2)
-        Button {
+        Button(role: .destructive) {
             showWarningAlert.toggle()
         } label: {
-            Text("Clear All Results")
-                .tint(.red)
+            Text(clearResultsTitle)
         }
-        .alert("Clear All Results", isPresented: $showWarningAlert) {
+        .buttonStyle(.bordered)
+        .alert(clearResultsTitle, isPresented: $showWarningAlert) {
             Button(role: .destructive) {
                 viewModel.deleteAllTraces()
                 currentActivity = .creatingTrace(nil)
@@ -682,6 +682,9 @@ public struct UtilityNetworkTrace: View {
             }
         }
     }
+    
+    /// Title for the clear all results feature
+    private let clearResultsTitle = "Clear All Results"
     
     /// Title for the feature results section
     private let featureResultsTitle = "Feature Results"
