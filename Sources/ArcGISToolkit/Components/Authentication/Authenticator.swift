@@ -156,7 +156,7 @@ extension Authenticator: AuthenticationChallengeHandler {
 ***REMOVED******REMOVED******REMOVED*** If `promptForUntrustedHosts` is `false` then perform default handling
 ***REMOVED******REMOVED******REMOVED*** for server trust challenges.
 ***REMOVED******REMOVED***guard promptForUntrustedHosts || challenge.kind != .serverTrust else {
-***REMOVED******REMOVED******REMOVED***return .performDefaultHandling
+***REMOVED******REMOVED******REMOVED***return .allowRequestToFail
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let queuedChallenge = QueuedNetworkChallenge(networkChallenge: challenge)

@@ -144,7 +144,7 @@ import Foundation
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.renderer?
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.symbol(for: feature)?
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.makeSwatch(scale: 1.0),
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  let utilityElement = network.createElement(arcGISFeature: feature) else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  let utilityElement = network.makeElement(arcGISFeature: feature) else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let graphic = Graphic(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***geometry: mapPoint,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***symbol: SimpleMarkerSymbol(
