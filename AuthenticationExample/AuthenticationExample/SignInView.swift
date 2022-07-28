@@ -14,6 +14,7 @@
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***Toolkit
+import CryptoKit
 
 ***REMOVED***/ A view that allows the user to sign in to a portal.
 struct SignInView: View {
@@ -28,6 +29,14 @@ struct SignInView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ The portal that the user successfully signed in to.
 ***REMOVED***@Binding var portal: Portal?
+***REMOVED***
+***REMOVED******REMOVED***/ The last signed in user name.
+***REMOVED******REMOVED***/ - If the property is `nil` then there was no previous effective credential.
+***REMOVED******REMOVED***/ - If the property is non-nil and empty, then the previously persisted and effective
+***REMOVED******REMOVED***/ credential did not have a username.
+***REMOVED******REMOVED***/ - If the property is non-nil and non-empty, then it contains the previously used and
+***REMOVED******REMOVED***/ persisted username.
+***REMOVED***@State var lastSignedInUser: String?
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***VStack {
@@ -47,14 +56,54 @@ struct SignInView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
 ***REMOVED******REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***.task {
+***REMOVED******REMOVED******REMOVED***guard lastSignedInUser == nil else {
+***REMOVED******REMOVED******REMOVED******REMOVED***return
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***if let arcGISCredential = await ArcGISRuntimeEnvironment.credentialStore.credential(for: .portal) {
+***REMOVED******REMOVED******REMOVED******REMOVED***lastSignedInUser = arcGISCredential.username ?? ""
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***let networkCredentials = await ArcGISRuntimeEnvironment.networkCredentialStore.credentials(forHost: URL.portal.host!)
+***REMOVED******REMOVED******REMOVED******REMOVED***if !networkCredentials.isEmpty {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***lastSignedInUser = networkCredentials.compactMap { credential in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***switch credential {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .password(let passwordCredential):
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return passwordCredential.username
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .certificate:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return ""
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .serverTrust:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return nil
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.first
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED***
 ***REMOVED******REMOVED***.padding()
+***REMOVED***
+***REMOVED***
+***REMOVED***var signInButtonText: String {
+***REMOVED******REMOVED***if let lastSignedInUser = lastSignedInUser {
+***REMOVED******REMOVED******REMOVED***if lastSignedInUser.isEmpty {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Non-nil but empty, can't offer the username.
+***REMOVED******REMOVED******REMOVED******REMOVED***return "Sign in again"
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Non-nil and non-empty, show the username in the button text.
+***REMOVED******REMOVED******REMOVED******REMOVED***return "Sign in with \(lastSignedInUser)"
+***REMOVED******REMOVED***
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED*** For nil username, then just use default text that implies there was no previous
+***REMOVED******REMOVED******REMOVED******REMOVED*** used credential persisted.
+***REMOVED******REMOVED******REMOVED***return "Sign in"
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var signInButton: some View {
 ***REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED***signIn()
 ***REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED***Text("Sign in")
+***REMOVED******REMOVED******REMOVED***Text(signInButtonText)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity)
 ***REMOVED***
 ***REMOVED******REMOVED***.buttonStyle(.bordered)
@@ -75,6 +124,22 @@ struct SignInView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***self.error = error
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***isSigningIn = false
+***REMOVED***
+***REMOVED***
+***REMOVED***
+
+private extension ArcGISCredential {
+***REMOVED******REMOVED***/ The username, if any, associated with this credential.
+***REMOVED***var username: String? {
+***REMOVED******REMOVED***get {
+***REMOVED******REMOVED******REMOVED***switch self {
+***REMOVED******REMOVED******REMOVED***case .oauth(let credential):
+***REMOVED******REMOVED******REMOVED******REMOVED***return credential.username
+***REMOVED******REMOVED******REMOVED***case .token(let credential):
+***REMOVED******REMOVED******REMOVED******REMOVED***return credential.username
+***REMOVED******REMOVED******REMOVED***case .staticToken:
+***REMOVED******REMOVED******REMOVED******REMOVED***return nil
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
