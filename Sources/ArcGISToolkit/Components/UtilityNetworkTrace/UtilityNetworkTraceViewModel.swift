@@ -144,7 +144,7 @@ import SwiftUI
                         .renderer?
                         .symbol(for: feature)?
                         .makeSwatch(scale: 1.0),
-                          let utilityElement = network.createElement(arcGISFeature: feature) else { return }
+                          let utilityElement = network.makeElement(arcGISFeature: feature) else { return }
                     let graphic = Graphic(
                         geometry: mapPoint,
                         symbol: SimpleMarkerSymbol(
