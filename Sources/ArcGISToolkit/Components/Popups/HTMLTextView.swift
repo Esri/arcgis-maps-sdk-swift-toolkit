@@ -19,28 +19,23 @@ struct HTMLTextView: UIViewRepresentable {
     /// The user-defined HTML string.
     var userHTML: String = ""
     
-    /// The html string to dispay, including the header.
+    /// The HTML string to dispay, including the header.
     var displayHTML: String {
         // Set the initial scale to 1, don't allow user scaling.
-        // When we went to WKWebView from UIWebView, the content got smaller,
-        // this fixes that and also doesn't allow the user to pinch to zoom.
+        // This fixess small text with WKWebView and also doesn't allow the
+        // user to pinch to zoom.
         var header = "<header><meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no'></header>"
         
         // Inject css in a head element to:
         // - word wrap long content such as urls
         // - set font family to default apple font
         // - set font size to subheadline
-        // - remove padding from the body. Add some margin to separate from the border of the webview.
+        // - remove padding from the body. Add some margin to separate from the
+        //   border of the webview.
         // - limit images to a maximum width of 100%
         //
-        // Also wrap the passed html fragment inside <html></html>
+        // Also wrap the passed HTML fragment inside <html></html>
         // open/close tags so that these css styles will apply
-        //
-        // In order to make hyperlinks match our
-        // app tint we need to be passed a color
-        // and to dynamically inject it into the
-        // HTML/CSS
-        //
         header = header.appending("""
                 <html>
                     <head>
@@ -59,20 +54,22 @@ struct HTMLTextView: UIViewRepresentable {
                     <body>
                 """)
         
-        // The final string is the header + userHTML + closing
-        return header.appending(userHTML.trimmingCharacters(in: .whitespacesAndNewlines)).appending("</body></html>")
+        // The final string is the header + userHTML + "</body></html>"
+        return header.appending(
+            userHTML.trimmingCharacters(in: .whitespacesAndNewlines)
+        ).appending("</body></html>")
     }
     
     /// The height of the view, calculated in the `webView(didFinish:)` delegate method.
-    @Binding private var dynamicHeight: CGFloat
-
+    @Binding private var height: CGFloat
+    
     /// Creates an `HTMLTextView`.
     /// - Parameters:
-    ///   - html: The html string to be displayed.
-    ///   - dynamicHeight: A binding to the calculated height of the `WKWebView`.
-    init(html: String, dynamicHeight: Binding<CGFloat>) {
+    ///   - html: The HTML string to be displayed.
+    ///   - height: A binding to the calculated height of the `WKWebView`.
+    init(html: String, height: Binding<CGFloat>) {
         userHTML = html
-        _dynamicHeight = dynamicHeight
+        _height = height
     }
     
     func makeUIView(context: Context) -> WKWebView {
@@ -81,8 +78,10 @@ struct HTMLTextView: UIViewRepresentable {
     
     func updateUIView(_ uiView: WKWebView, context: Context) {
         uiView.isOpaque = false
-        // This is a case where we always want the background to be white regardless of light/dark mode. If the user wants to implement dark mode,
-        // within their HTML, the background of the HTML will be shown over this background.
+        // This is a case where we always want the background to be white
+        // regardless of light/dark mode. If the user wants to implement dark
+        // mode, within their HTML, the background of the HTML will be shown
+        // over this background.
         uiView.backgroundColor = .white
         uiView.scrollView.backgroundColor = .white
         uiView.scrollView.isScrollEnabled = false
@@ -93,18 +92,27 @@ struct HTMLTextView: UIViewRepresentable {
     class Coordinator: NSObject, WKNavigationDelegate {
         var parent: HTMLTextView
         
+        /// A Boolean value specifying when content starts arriving for the main frame.
         private var hasCommitted = false
-
+        
+        /// A Boolean value specifying whether we've calculated a height for the web view or not.
+        private var hasHeight = false
+        
         init(_ parent: HTMLTextView) {
             self.parent = parent
         }
         
+        // WKNavigationDelegate method invoked when content starts
+        // arriving for the main frame.
         public func webView(_ webView: WKWebView, didCommit navigation: WKNavigation!) {
             hasCommitted = true
         }
         
         // WKNavigationDelegate method for navigation actions.
-        func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction) async -> WKNavigationActionPolicy {
+        func webView(
+            _ webView: WKWebView,
+            decidePolicyFor navigationAction: WKNavigationAction
+        ) async -> WKNavigationActionPolicy {
             if navigationAction.navigationType == .linkActivated,
                (navigationAction.request.url?.scheme?.lowercased() == "http" ||
                 navigationAction.request.url?.scheme?.lowercased() == "https"),
@@ -119,20 +127,30 @@ struct HTMLTextView: UIViewRepresentable {
             }
         }
         
-        // WKNavigationDelegate method where the size calculation happens.
+        // WKNavigationDelegate method invoked when a main frame navigation
+        // completes.  This is where the height calculation happens.
         func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!){
             webView.evaluateJavaScript("document.readyState") { [weak self] complete, _ in
-                guard complete != nil, let webView = webView  else {
-                    return
-                }
+                guard complete != nil,
+                      let webView = webView,
+                      self?.hasCommitted ?? false
+                else { return }
+                
                 webView.evaluateJavaScript("document.body.scrollHeight") { height, _ in
-                    // Pass the new height to the delegate so that is can change the
-                    // cell height with performBatchUpdates
-                    //
-                    guard let height = height as? CGFloat else {
+                    guard let self = self else { return }
+                    guard let height = height as? CGFloat,
+                          !self.hasHeight else {
                         return
                     }
-                    self?.parent.dynamicHeight = height
+                    // Set the new height, if we have one.
+                    self.parent.height = height
+                    
+                    // With certain HTML strings, the JavaScript above kept
+                    // getting called, with increasingly large heights.  This
+                    // prevents that from happening.  As this block is only
+                    // called after the `document.readyState` is "complete",
+                    // this should be OK.
+                    self.hasHeight = true
                 }
             }
         }
