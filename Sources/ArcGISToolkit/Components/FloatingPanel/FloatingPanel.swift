@@ -62,7 +62,6 @@ struct FloatingPanel<Content>: View where Content: View {
             VStack {
                 if isCompact {
                     Handle(color: handleColor)
-                        .gesture(drag)
                     Divider()
                 }
                 content
@@ -70,12 +69,12 @@ struct FloatingPanel<Content>: View where Content: View {
                 if !isCompact {
                     Divider()
                     Handle(color: handleColor)
-                        .gesture(drag)
                 }
             }
             .padding([.top, .bottom], 10)
             .background(Color(uiColor: .systemGroupedBackground))
             .cornerRadius(10, corners: isCompact ? [.topLeft, .topRight] : [.allCorners])
+            .gesture(drag)
             .shadow(radius: 10)
             .padding([.leading, .top, .trailing], isCompact ? 0 : 10)
             .padding([.bottom], isCompact ? 0 : 50)
@@ -104,7 +103,7 @@ struct FloatingPanel<Content>: View where Content: View {
     }
     
     var drag: some Gesture {
-        DragGesture(minimumDistance: 0)
+        DragGesture(minimumDistance: 1)
             .onChanged { value in
                 handleColor = .activeHandleColor
                 let proposedHeight: CGFloat
@@ -131,8 +130,7 @@ struct FloatingPanel<Content>: View where Content: View {
     
     /// The detent that would produce a height that is closest to the current height
     var closestDetent: FloatingPanelDetent {
-        let choices: [FloatingPanelDetent] = [.oneQuarter, .half, .threeQuarters]
-        return choices.min {
+        return FloatingPanelDetent.allCases.min {
             abs(heightFor(detent: $0) - height) <
                 abs(heightFor(detent: $1) - height)
         } ?? .half
@@ -142,16 +140,12 @@ struct FloatingPanel<Content>: View where Content: View {
     /// - Returns: A height for the provided detent based on the current maximum height
     func heightFor(detent: FloatingPanelDetent) -> CGFloat {
         switch detent {
-        case .min:
-            return .minHeight
-        case .oneQuarter:
-            return maximumHeight * 0.25
+        case .summary:
+            return maximumHeight * 0.15
         case .half:
-            return maximumHeight * 0.5
-        case .threeQuarters:
-            return maximumHeight * 0.75
-        case .max:
-            return maximumHeight
+            return maximumHeight * 0.4
+        case .full:
+            return maximumHeight * 0.90
         }
     }
 }
