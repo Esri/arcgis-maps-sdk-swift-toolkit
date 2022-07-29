@@ -42,7 +42,25 @@ public final class Authenticator: ObservableObject {
     ) {
         self.promptForUntrustedHosts = promptForUntrustedHosts
         self.oAuthConfigurations = oAuthConfigurations
-        observationTask = Task { [weak self] in await self?.observeChallengeQueue() }
+        observationTask = Task { [weak self] in
+            // Cannot unwrap self on the `for await` line or it will introduce a retain cycle.
+            guard let challengeQueue = self?.challengeQueue else { return }
+            for await queuedChallenge in challengeQueue {
+                guard let self = self else { break }
+                
+                // A yield here helps alleviate the already presenting bug.
+                await Task.yield()
+                
+                // Set the current challenge, this should present the appropriate view.
+                self.currentChallenge = queuedChallenge
+                
+                // Wait for the queued challenge to finish.
+                await queuedChallenge.complete()
+                
+                // Reset the current challenge to `nil`, that will dismiss the view.
+                self.currentChallenge = nil
+            }
+        }
     }
     
     /// Sets up new credential stores that will be persisted to the keychain.
@@ -94,23 +112,6 @@ public final class Authenticator: ObservableObject {
         )
     }
     
-    /// Observes the challenge queue and sets the current challenge.
-    private func observeChallengeQueue() async {
-        for await queuedChallenge in challengeQueue {
-            // A yield here helps alleviate the already presenting bug.
-            await Task.yield()
-            
-            // Set the current challenge, this should present the appropriate view.
-            currentChallenge = queuedChallenge
-            
-            // Wait for the queued challenge to finish.
-            await queuedChallenge.complete()
-            
-            // Reset the current challenge to `nil`, that will dismiss the view.
-            currentChallenge = nil
-        }
-    }
-    
     var subject = PassthroughSubject<QueuedChallenge, Never>()
     
     /// A serial queue for authentication challenges.
@@ -155,12 +156,10 @@ extension Authenticator: AuthenticationChallengeHandler {
         // If `promptForUntrustedHosts` is `false` then perform default handling
         // for server trust challenges.
         guard promptForUntrustedHosts || challenge.kind != .serverTrust else {
-            return .performDefaultHandling
+            return .allowRequestToFail
         }
         
-        guard let queuedChallenge = QueuedNetworkChallenge(networkChallenge: challenge) else {
-            return .performDefaultHandling
-        }
+        let queuedChallenge = QueuedNetworkChallenge(networkChallenge: challenge)
         
         // Queue up the challenge.
         subject.send(queuedChallenge)
