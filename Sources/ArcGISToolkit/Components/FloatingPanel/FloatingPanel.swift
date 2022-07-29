@@ -57,28 +57,24 @@ struct FloatingPanel<Content>: View where Content: View {
         GeometryReader { geometryProxy in
             VStack {
                 if isCompact {
-                    VStack {
-                        Handle(color: handleColor)
-                            .gesture(drag)
-                        Divider()
-                        content
-                            .frame(minHeight: .minHeight, maxHeight: height)
-                    }
-                    .background(Color(uiColor: .systemBackground))
-                    .cornerRadius(10, corners: [.topLeft, .topRight])
-                } else {
-                    VStack {
-                        content
-                            .frame(minHeight: .minHeight, maxHeight: height)
-                        Divider()
-                        Handle(color: handleColor)
-                            .gesture(drag)
-                    }
-                    .esriBorder()
+                    Handle(color: handleColor)
+                        .gesture(drag)
+                    Divider()
+                }
+                content
+                    .frame(minHeight: .minHeight, maxHeight: height)
+                if !isCompact {
+                    Divider()
+                    Handle(color: handleColor)
+                        .gesture(drag)
                 }
             }
-            .padding(isCompact ? [] : [.leading, .top, .trailing])
-            .padding(.bottom, isCompact ? 0 : 50)
+            .padding([.top, .bottom], 10)
+            .background(Color(uiColor: .systemGroupedBackground))
+            .cornerRadius(10, corners: isCompact ? [.topLeft, .topRight] : [.allCorners])
+            .shadow(radius: 10)
+            .padding([.leading, .top, .trailing], isCompact ? 0 : 10)
+            .padding([.bottom], isCompact ? 0 : 50)
             .frame(
                 width: geometryProxy.size.width,
                 height: geometryProxy.size.height,
