@@ -128,13 +128,18 @@ struct FloatingPanel<Content>: View where Content: View {
             .onEnded { _ in
                 handleColor = .defaultHandleColor
                 withAnimation {
-                    height = heightWithDetent
+                    height = heightFor(detent: closestDetent)
                 }
             }
     }
     
-    /// - Returns: Displayable height given the current detent
-    var heightWithDetent: CGFloat {
+    var closestDetent: FloatingPanelDetent {
+        return FloatingPanelDetent.allCases.min { d1, d2 in
+            abs(heightFor(detent: d1) - height) < abs(heightFor(detent: d2) - height)
+        } ?? .half
+    }
+    
+    func heightFor(detent: FloatingPanelDetent) -> CGFloat {
         switch detent {
         case .min:
             return .minHeight
@@ -147,6 +152,11 @@ struct FloatingPanel<Content>: View where Content: View {
         case .max:
             return maximumHeight
         }
+    }
+    
+    /// - Returns: Displayable height given the current detent
+    var heightWithDetent: CGFloat {
+        return heightFor(detent: detent)
     }
 }
 
