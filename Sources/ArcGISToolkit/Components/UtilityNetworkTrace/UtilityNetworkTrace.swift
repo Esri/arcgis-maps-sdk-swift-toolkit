@@ -39,7 +39,7 @@ public struct UtilityNetworkTrace: View {
     
     // MARK: States
     
-    @State private var activeDetent: FloatingPanelDetent = .mid
+    @State private var activeDetent: FloatingPanelDetent = .half
     
     /// The current user activity.
     @State private var currentActivity: UserActivity = .creatingTrace(nil)
@@ -98,7 +98,7 @@ public struct UtilityNetworkTrace: View {
     private var cancelAddStartingPoints: some View {
         Button(role: .destructive) {
             currentActivity = .creatingTrace(nil)
-            activeDetent = .mid
+            activeDetent = .half
         } label: {
             Text("Cancel starting point selection")
         }
@@ -373,7 +373,7 @@ public struct UtilityNetworkTrace: View {
                         return
                     }
                     currentActivity = .creatingTrace(.viewingStartingPoints)
-                    activeDetent = .mid
+                    activeDetent = .half
                     Task {
                         await viewModel.setStartingPoint(
                             at: viewPoint,
