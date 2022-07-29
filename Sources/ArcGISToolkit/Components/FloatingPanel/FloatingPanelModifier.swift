@@ -20,15 +20,21 @@ public extension View {
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - isPresented: <#isPresented description#>
 ***REMOVED******REMOVED***/   - content: <#content description#>
+***REMOVED******REMOVED***/   - horizontalAlignment: <#horizontalAlignment description#>
+***REMOVED******REMOVED***/   - detent: <#detent description#>
 ***REMOVED******REMOVED***/ - Returns: <#description#>
 ***REMOVED***func floatingPanel<Content>(
 ***REMOVED******REMOVED***isPresented: Binding<Bool>,
+***REMOVED******REMOVED***backgroundColor: Color = Color(uiColor: .systemBackground),
+***REMOVED******REMOVED***horizontalAlignment: HorizontalAlignment = .trailing,
 ***REMOVED******REMOVED***detent: Binding<FloatingPanelDetent>,
 ***REMOVED******REMOVED***_ content: @escaping () -> Content
 ***REMOVED***) -> some View where Content: View {
 ***REMOVED******REMOVED***modifier(
 ***REMOVED******REMOVED******REMOVED***FloatingPanelModifier(
 ***REMOVED******REMOVED******REMOVED******REMOVED***isPresented: isPresented,
+***REMOVED******REMOVED******REMOVED******REMOVED***backgroundColor: backgroundColor,
+***REMOVED******REMOVED******REMOVED******REMOVED***horizontalAlignment: horizontalAlignment,
 ***REMOVED******REMOVED******REMOVED******REMOVED***detent: detent,
 ***REMOVED******REMOVED******REMOVED******REMOVED***innerContent: content()
 ***REMOVED******REMOVED******REMOVED***)
@@ -44,6 +50,12 @@ private struct FloatingPanelModifier<InnerContent>: ViewModifier where InnerCont
 ***REMOVED***@Binding var isPresented: Bool
 ***REMOVED***
 ***REMOVED******REMOVED***/ <#Description#>
+***REMOVED***let backgroundColor: Color
+***REMOVED***
+***REMOVED******REMOVED***/ <#Description#>
+***REMOVED***let horizontalAlignment: HorizontalAlignment
+***REMOVED***
+***REMOVED******REMOVED***/ <#Description#>
 ***REMOVED***var detent: Binding<FloatingPanelDetent>
 ***REMOVED***
 ***REMOVED******REMOVED***/ <#Description#>
@@ -51,8 +63,11 @@ private struct FloatingPanelModifier<InnerContent>: ViewModifier where InnerCont
 ***REMOVED***
 ***REMOVED***func body(content: Content) -> some View {
 ***REMOVED******REMOVED***content
-***REMOVED******REMOVED******REMOVED***.overlay(alignment: .trailing) {
-***REMOVED******REMOVED******REMOVED******REMOVED***FloatingPanel(detent: detent) {
+***REMOVED******REMOVED******REMOVED***.overlay(alignment: Alignment(horizontal: horizontalAlignment, vertical: .top)) {
+***REMOVED******REMOVED******REMOVED******REMOVED***FloatingPanel(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***backgroundColor: backgroundColor,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***detent: detent
+***REMOVED******REMOVED******REMOVED******REMOVED***) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***innerContent
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.edgesIgnoringSafeArea(.bottom)

@@ -29,13 +29,19 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED******REMOVED***/ The content shown in the floating panel.
 ***REMOVED***let content: Content
 ***REMOVED***
+***REMOVED******REMOVED***/ <#Description#>
+***REMOVED***let backgroundColor: Color
+***REMOVED***
 ***REMOVED******REMOVED***/ Creates a `FloatingPanel`
 ***REMOVED******REMOVED***/ - Parameter content: The view shown in the floating panel.
 ***REMOVED******REMOVED***/ - Parameter detent: Controls the height of the panel.
+***REMOVED******REMOVED***/ - Parameter backgroundColor: <#backgroundColor description#>
 ***REMOVED***init(
+***REMOVED******REMOVED***backgroundColor: Color,
 ***REMOVED******REMOVED***detent: Binding<FloatingPanelDetent>,
 ***REMOVED******REMOVED***@ViewBuilder content: () -> Content
 ***REMOVED***) {
+***REMOVED******REMOVED***self.backgroundColor = backgroundColor
 ***REMOVED******REMOVED***self.content = content()
 ***REMOVED******REMOVED***_activeDetent = detent
 ***REMOVED***
@@ -74,7 +80,7 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.padding([.top, .bottom], 10)
-***REMOVED******REMOVED******REMOVED***.background(Color(uiColor: .systemGroupedBackground))
+***REMOVED******REMOVED******REMOVED***.background(backgroundColor)
 ***REMOVED******REMOVED******REMOVED***.cornerRadius(10, corners: isCompact ? [.topLeft, .topRight] : [.allCorners])
 ***REMOVED******REMOVED******REMOVED***.shadow(radius: 10)
 ***REMOVED******REMOVED******REMOVED***.padding([.leading, .top, .trailing], isCompact ? 0 : 10)
