@@ -341,9 +341,10 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***Color.clear
 ***REMOVED******REMOVED******REMOVED***.floatingPanel(
-***REMOVED******REMOVED******REMOVED******REMOVED***isPresented: .constant(true),
 ***REMOVED******REMOVED******REMOVED******REMOVED***backgroundColor: Color(uiColor: .systemGroupedBackground),
-***REMOVED******REMOVED******REMOVED******REMOVED***detent: $activeDetent
+***REMOVED******REMOVED******REMOVED******REMOVED***detent: $activeDetent,
+***REMOVED******REMOVED******REMOVED******REMOVED***horizontalAlignment: .trailing,
+***REMOVED******REMOVED******REMOVED******REMOVED***isPresented: .constant(true)
 ***REMOVED******REMOVED******REMOVED***) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***VStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if !viewModel.completedTraces.isEmpty &&

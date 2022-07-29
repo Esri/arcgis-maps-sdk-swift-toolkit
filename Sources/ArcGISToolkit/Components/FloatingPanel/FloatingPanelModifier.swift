@@ -22,23 +22,21 @@ public extension View {
 ***REMOVED******REMOVED***/   - isPresented: <#isPresented description#>
 ***REMOVED******REMOVED***/   - maxWidth: <#maxWidth description#>
 ***REMOVED******REMOVED***/   - content: <#content description#>
-***REMOVED******REMOVED***/   - horizontalAlignment: <#horizontalAlignment description#>
-***REMOVED******REMOVED***/   - detent: <#detent description#>
 ***REMOVED******REMOVED***/ - Returns: <#description#>
 ***REMOVED***func floatingPanel<Content>(
-***REMOVED******REMOVED***isPresented: Binding<Bool>,
 ***REMOVED******REMOVED***backgroundColor: Color = Color(uiColor: .systemBackground),
-***REMOVED******REMOVED***horizontalAlignment: HorizontalAlignment = .trailing,
 ***REMOVED******REMOVED***detent: Binding<FloatingPanelDetent>,
+***REMOVED******REMOVED***horizontalAlignment: HorizontalAlignment = .trailing,
+***REMOVED******REMOVED***isPresented: Binding<Bool>,
 ***REMOVED******REMOVED***maxWidth: CGFloat = 400,
 ***REMOVED******REMOVED***_ content: @escaping () -> Content
 ***REMOVED***) -> some View where Content: View {
 ***REMOVED******REMOVED***modifier(
 ***REMOVED******REMOVED******REMOVED***FloatingPanelModifier(
-***REMOVED******REMOVED******REMOVED******REMOVED***detent: detent,
-***REMOVED******REMOVED******REMOVED******REMOVED***isPresented: isPresented,
 ***REMOVED******REMOVED******REMOVED******REMOVED***backgroundColor: backgroundColor,
+***REMOVED******REMOVED******REMOVED******REMOVED***detent: detent,
 ***REMOVED******REMOVED******REMOVED******REMOVED***horizontalAlignment: horizontalAlignment,
+***REMOVED******REMOVED******REMOVED******REMOVED***isPresented: isPresented,
 ***REMOVED******REMOVED******REMOVED******REMOVED***maxWidth: maxWidth,
 ***REMOVED******REMOVED******REMOVED******REMOVED***innerContent: content()
 ***REMOVED******REMOVED******REMOVED***)
@@ -57,16 +55,16 @@ private struct FloatingPanelModifier<InnerContent>: ViewModifier where InnerCont
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ <#Description#>
-***REMOVED***let detent: Binding<FloatingPanelDetent>
-***REMOVED***
-***REMOVED******REMOVED***/ <#Description#>
-***REMOVED***@Binding var isPresented: Bool
-***REMOVED***
-***REMOVED******REMOVED***/ <#Description#>
 ***REMOVED***let backgroundColor: Color
 ***REMOVED***
 ***REMOVED******REMOVED***/ <#Description#>
+***REMOVED***let detent: Binding<FloatingPanelDetent>
+***REMOVED***
+***REMOVED******REMOVED***/ <#Description#>
 ***REMOVED***let horizontalAlignment: HorizontalAlignment
+***REMOVED***
+***REMOVED******REMOVED***/ <#Description#>
+***REMOVED***@Binding var isPresented: Bool
 ***REMOVED***
 ***REMOVED******REMOVED***/ <#Description#>
 ***REMOVED***let maxWidth: CGFloat

@@ -27,11 +27,11 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED***@Environment(\.horizontalSizeClass) private var horizontalSizeClass
 ***REMOVED***@Environment(\.verticalSizeClass) var verticalSizeClass
 ***REMOVED***
-***REMOVED******REMOVED***/ The content shown in the floating panel.
-***REMOVED***let content: Content
-***REMOVED***
 ***REMOVED******REMOVED***/ <#Description#>
 ***REMOVED***let backgroundColor: Color
+***REMOVED***
+***REMOVED******REMOVED***/ The content shown in the floating panel.
+***REMOVED***let content: Content
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a `FloatingPanel`
 ***REMOVED******REMOVED***/ - Parameter content: The view shown in the floating panel.

@@ -28,7 +28,7 @@ struct FloatingPanelExampleView: View {
 ***REMOVED******REMOVED******REMOVED***map: map,
 ***REMOVED******REMOVED******REMOVED***viewpoint: initialViewpoint
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED***.floatingPanel(isPresented: .constant(true), detent: .constant(.half)) {
+***REMOVED******REMOVED***.floatingPanel(detent: .constant(.half), isPresented: .constant(true)) {
 ***REMOVED******REMOVED******REMOVED***SampleContent()
 ***REMOVED***
 ***REMOVED***
