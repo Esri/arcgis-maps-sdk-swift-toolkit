@@ -139,7 +139,7 @@ public struct UtilityNetworkTrace: View {
             Section("Starting Points") {
                 Button {
                     currentActivity = .creatingTrace(.addingStartingPoints)
-                    activeDetent = .min
+                    activeDetent = .summary
                 } label: {
                     Text("Add new starting point")
                 }
