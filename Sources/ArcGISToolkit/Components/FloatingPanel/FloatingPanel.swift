@@ -57,28 +57,24 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED******REMOVED***GeometryReader { geometryProxy in
 ***REMOVED******REMOVED******REMOVED***VStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if isCompact {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***VStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Handle(color: handleColor)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.gesture(drag)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Divider()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***content
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(minHeight: .minHeight, maxHeight: height)
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.background(Color(uiColor: .systemBackground))
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.cornerRadius(10, corners: [.topLeft, .topRight])
-***REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***VStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***content
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(minHeight: .minHeight, maxHeight: height)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Divider()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Handle(color: handleColor)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.gesture(drag)
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.esriBorder()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Handle(color: handleColor)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.gesture(drag)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Divider()
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***content
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(minHeight: .minHeight, maxHeight: height)
+***REMOVED******REMOVED******REMOVED******REMOVED***if !isCompact {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Divider()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Handle(color: handleColor)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.gesture(drag)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.padding(isCompact ? [] : [.leading, .top, .trailing])
-***REMOVED******REMOVED******REMOVED***.padding(.bottom, isCompact ? 0 : 50)
+***REMOVED******REMOVED******REMOVED***.padding([.top, .bottom], 10)
+***REMOVED******REMOVED******REMOVED***.background(Color(uiColor: .systemGroupedBackground))
+***REMOVED******REMOVED******REMOVED***.cornerRadius(10, corners: isCompact ? [.topLeft, .topRight] : [.allCorners])
+***REMOVED******REMOVED******REMOVED***.shadow(radius: 10)
+***REMOVED******REMOVED******REMOVED***.padding([.leading, .top, .trailing], isCompact ? 0 : 10)
+***REMOVED******REMOVED******REMOVED***.padding([.bottom], isCompact ? 0 : 50)
 ***REMOVED******REMOVED******REMOVED***.frame(
 ***REMOVED******REMOVED******REMOVED******REMOVED***width: geometryProxy.size.width,
 ***REMOVED******REMOVED******REMOVED******REMOVED***height: geometryProxy.size.height,
