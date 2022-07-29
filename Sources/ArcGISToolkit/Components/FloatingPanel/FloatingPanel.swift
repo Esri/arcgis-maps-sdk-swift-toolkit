@@ -23,7 +23,7 @@ import SwiftUI
 /// or persistent, where the information is always displayed, for example a
 /// dedicated search panel. They will also be primarily simple containers
 /// that clients will fill with their own content.
-public struct FloatingPanel<Content>: View where Content: View {
+struct FloatingPanel<Content>: View where Content: View {
     // Note:  instead of the FloatingPanel being a view, it might be preferable
     // to have it be a view modifier, similar to how SwiftUI doesn't have a
     // SheetView, but a modifier that presents a sheet.
@@ -35,7 +35,7 @@ public struct FloatingPanel<Content>: View where Content: View {
     
     /// Creates a `FloatingPanel`
     /// - Parameter content: The view shown in the floating panel.
-    public init(@ViewBuilder content: () -> Content) {
+    init(@ViewBuilder content: () -> Content) {
         self.content = content()
     }
     
@@ -57,20 +57,26 @@ public struct FloatingPanel<Content>: View where Content: View {
         GeometryReader { geometryProxy in
             VStack {
                 if isCompact {
-                    Handle(color: handleColor)
-                        .gesture(drag)
-                    Divider()
-                    content
-                        .frame(minHeight: .minHeight, maxHeight: height)
+                    VStack {
+                        Handle(color: handleColor)
+                            .gesture(drag)
+                        Divider()
+                        content
+                            .frame(minHeight: .minHeight, maxHeight: height)
+                    }
+                    .background(Color(uiColor: .systemBackground))
+                    .cornerRadius(10, corners: [.topLeft, .topRight])
                 } else {
-                    content
-                        .frame(minHeight: .minHeight, maxHeight: height)
-                    Divider()
-                    Handle(color: handleColor)
-                        .gesture(drag)
+                    VStack {
+                        content
+                            .frame(minHeight: .minHeight, maxHeight: height)
+                        Divider()
+                        Handle(color: handleColor)
+                            .gesture(drag)
+                    }
+                    .esriBorder()
                 }
             }
-            .esriBorder()
             .padding(isCompact ? [] : [.leading, .top, .trailing])
             .padding(.bottom, isCompact ? 0 : 50)
             .frame(
@@ -130,4 +136,34 @@ private extension CGFloat {
 private extension Color {
     static var defaultHandleColor: Color { .secondary }
     static var activeHandleColor: Color { .primary }
+}
+
+private struct RoundedCorner: Shape {
+    var corners: UIRectCorner
+    
+    var radius: CGFloat
+    
+    func path(in rect: CGRect) -> Path {
+        let path = UIBezierPath(
+            roundedRect: rect,
+            byRoundingCorners: corners,
+            cornerRadii: CGSize(
+                width: radius,
+                height: radius
+            )
+        )
+        return Path(path.cgPath)
+    }
+}
+
+private extension View {
+    func cornerRadius(
+        _ radius: CGFloat,
+        corners: UIRectCorner
+    ) -> some View {
+        clipShape(RoundedCorner(
+            corners: corners,
+            radius: radius
+        ))
+    }
 }
