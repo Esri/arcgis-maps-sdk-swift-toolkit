@@ -18,7 +18,9 @@ public extension View {
 ***REMOVED******REMOVED***/ environments and a popover otherwise.
 ***REMOVED******REMOVED***/ The resulting view allows for interaction with background contents.
 ***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - detent: <#detent description#>
 ***REMOVED******REMOVED***/   - isPresented: <#isPresented description#>
+***REMOVED******REMOVED***/   - maxWidth: <#maxWidth description#>
 ***REMOVED******REMOVED***/   - content: <#content description#>
 ***REMOVED******REMOVED***/   - horizontalAlignment: <#horizontalAlignment description#>
 ***REMOVED******REMOVED***/   - detent: <#detent description#>
@@ -28,14 +30,16 @@ public extension View {
 ***REMOVED******REMOVED***backgroundColor: Color = Color(uiColor: .systemBackground),
 ***REMOVED******REMOVED***horizontalAlignment: HorizontalAlignment = .trailing,
 ***REMOVED******REMOVED***detent: Binding<FloatingPanelDetent>,
+***REMOVED******REMOVED***maxWidth: CGFloat = 400,
 ***REMOVED******REMOVED***_ content: @escaping () -> Content
 ***REMOVED***) -> some View where Content: View {
 ***REMOVED******REMOVED***modifier(
 ***REMOVED******REMOVED******REMOVED***FloatingPanelModifier(
+***REMOVED******REMOVED******REMOVED******REMOVED***detent: detent,
 ***REMOVED******REMOVED******REMOVED******REMOVED***isPresented: isPresented,
 ***REMOVED******REMOVED******REMOVED******REMOVED***backgroundColor: backgroundColor,
 ***REMOVED******REMOVED******REMOVED******REMOVED***horizontalAlignment: horizontalAlignment,
-***REMOVED******REMOVED******REMOVED******REMOVED***detent: detent,
+***REMOVED******REMOVED******REMOVED******REMOVED***maxWidth: maxWidth,
 ***REMOVED******REMOVED******REMOVED******REMOVED***innerContent: content()
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***)
@@ -53,6 +57,9 @@ private struct FloatingPanelModifier<InnerContent>: ViewModifier where InnerCont
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ <#Description#>
+***REMOVED***let detent: Binding<FloatingPanelDetent>
+***REMOVED***
+***REMOVED******REMOVED***/ <#Description#>
 ***REMOVED***@Binding var isPresented: Bool
 ***REMOVED***
 ***REMOVED******REMOVED***/ <#Description#>
@@ -62,7 +69,7 @@ private struct FloatingPanelModifier<InnerContent>: ViewModifier where InnerCont
 ***REMOVED***let horizontalAlignment: HorizontalAlignment
 ***REMOVED***
 ***REMOVED******REMOVED***/ <#Description#>
-***REMOVED***var detent: Binding<FloatingPanelDetent>
+***REMOVED***let maxWidth: CGFloat
 ***REMOVED***
 ***REMOVED******REMOVED***/ <#Description#>
 ***REMOVED***let innerContent: InnerContent
@@ -77,7 +84,7 @@ private struct FloatingPanelModifier<InnerContent>: ViewModifier where InnerCont
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***innerContent
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.edgesIgnoringSafeArea(.bottom)
-***REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: isCompact ? .infinity : 400)
+***REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: isCompact ? .infinity : maxWidth)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
