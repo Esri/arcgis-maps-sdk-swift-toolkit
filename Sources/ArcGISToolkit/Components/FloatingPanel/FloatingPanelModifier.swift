@@ -18,18 +18,22 @@ public extension View {
     /// environments and a popover otherwise.
     /// The resulting view allows for interaction with background contents.
     /// - Parameters:
+    ///   - detent: <#detent description#>
     ///   - isPresented: <#isPresented description#>
+    ///   - maxWidth: <#maxWidth description#>
     ///   - content: <#content description#>
     /// - Returns: <#description#>
     func floatingPanel<Content>(
-        isPresented: Binding<Bool>,
         detent: Binding<FloatingPanelDetent>,
+        isPresented: Binding<Bool>,
+        maxWidth: CGFloat = 400,
         _ content: @escaping () -> Content
     ) -> some View where Content: View {
         modifier(
             FloatingPanelModifier(
-                isPresented: isPresented,
                 detent: detent,
+                isPresented: isPresented,
+                maxWidth: maxWidth,
                 innerContent: content()
             )
         )
@@ -47,10 +51,13 @@ private struct FloatingPanelModifier<InnerContent>: ViewModifier where InnerCont
     }
     
     /// <#Description#>
+    let detent: Binding<FloatingPanelDetent>
+    
+    /// <#Description#>
     @Binding var isPresented: Bool
     
     /// <#Description#>
-    var detent: Binding<FloatingPanelDetent>
+    let maxWidth: CGFloat
     
     /// <#Description#>
     let innerContent: InnerContent
@@ -62,7 +69,7 @@ private struct FloatingPanelModifier<InnerContent>: ViewModifier where InnerCont
                     innerContent
                 }
                 .edgesIgnoringSafeArea(.bottom)
-                .frame(maxWidth: isCompact ? .infinity : 400)
+                .frame(maxWidth: isCompact ? .infinity : maxWidth)
             }
     }
 }
