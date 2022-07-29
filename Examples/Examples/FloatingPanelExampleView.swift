@@ -28,7 +28,7 @@ struct FloatingPanelExampleView: View {
             map: map,
             viewpoint: initialViewpoint
         )
-        .floatingPanel(isPresented: .constant(true)) {
+        .floatingPanel(isPresented: .constant(true), detent: .constant(.mid)) {
             SampleContent()
         }
     }
