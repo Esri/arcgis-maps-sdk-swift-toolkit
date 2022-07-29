@@ -39,6 +39,12 @@ public extension View {
 ***REMOVED***/ <#Description#>
 private struct FloatingPanelModifier<InnerContent>: ViewModifier where InnerContent: View {
 ***REMOVED***@Environment(\.horizontalSizeClass) private var horizontalSizeClass
+***REMOVED***@Environment(\.verticalSizeClass) var verticalSizeClass
+***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value indicating whether the environment is compact.
+***REMOVED***private var isCompact: Bool {
+***REMOVED******REMOVED***horizontalSizeClass == .compact && verticalSizeClass == .regular
+***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ <#Description#>
 ***REMOVED***@Binding var isPresented: Bool
@@ -56,7 +62,7 @@ private struct FloatingPanelModifier<InnerContent>: ViewModifier where InnerCont
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***innerContent
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.edgesIgnoringSafeArea(.bottom)
-***REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: horizontalSizeClass == .regular ? 360 : .infinity)
+***REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: isCompact ? .infinity : 400)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
