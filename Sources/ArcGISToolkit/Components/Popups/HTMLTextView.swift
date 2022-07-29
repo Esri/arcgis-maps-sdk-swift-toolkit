@@ -95,8 +95,6 @@ struct HTMLTextView: UIViewRepresentable {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***private var hasCommitted = false
 
-***REMOVED******REMOVED***private var runDidFinishAgain = true
-
 ***REMOVED******REMOVED***init(_ parent: HTMLTextView) {
 ***REMOVED******REMOVED******REMOVED***self.parent = parent
 ***REMOVED***
@@ -123,16 +121,18 @@ struct HTMLTextView: UIViewRepresentable {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** WKNavigationDelegate method where the size calculation happens.
 ***REMOVED******REMOVED***func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!){
-***REMOVED******REMOVED******REMOVED***self.parent.dynamicHeight = webView.scrollView.contentSize.height
+***REMOVED******REMOVED******REMOVED***webView.evaluateJavaScript("document.readyState") { [weak self] complete, _ in
+***REMOVED******REMOVED******REMOVED******REMOVED***guard complete != nil, let webView = webView  else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED*** Sometimes the contentSize has not been updated yet, probably
-***REMOVED******REMOVED******REMOVED******REMOVED*** because the view has not been rendered yet. So rerun this again
-***REMOVED******REMOVED******REMOVED******REMOVED*** after a delay.  This fixes the issue.
-***REMOVED******REMOVED******REMOVED***if runDidFinishAgain {
-***REMOVED******REMOVED******REMOVED******REMOVED***runDidFinishAgain = false
-***REMOVED******REMOVED******REMOVED******REMOVED***DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self?.webView(webView, didFinish: navigation)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self?.runDidFinishAgain = true
+***REMOVED******REMOVED******REMOVED******REMOVED***webView.evaluateJavaScript("document.body.scrollHeight") { height, _ in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Pass the new height to the delegate so that is can change the
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** cell height with performBatchUpdates
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let height = height as? CGFloat else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self?.parent.dynamicHeight = height
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
