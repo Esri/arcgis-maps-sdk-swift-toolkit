@@ -69,8 +69,8 @@ struct FloatingPanel<Content>: View where Content: View {
                     .frame(minHeight: .minHeight, maxHeight: height)
                 if !isCompact {
                     Divider()
-                        .gesture(drag)
                     Handle(color: handleColor)
+                        .gesture(drag)
                 }
             }
             .padding([.top, .bottom], 10)
@@ -104,7 +104,7 @@ struct FloatingPanel<Content>: View where Content: View {
     }
     
     var drag: some Gesture {
-        DragGesture()
+        DragGesture(minimumDistance: 0)
             .onChanged { value in
                 handleColor = .activeHandleColor
                 let proposedHeight: CGFloat
@@ -142,7 +142,7 @@ struct FloatingPanel<Content>: View where Content: View {
     func heightFor(detent: FloatingPanelDetent) -> CGFloat {
         switch detent {
         case .summary:
-            return maximumHeight * 0.15
+            return max(.minHeight, maximumHeight * 0.15)
         case .half:
             return maximumHeight * 0.4
         case .full:
