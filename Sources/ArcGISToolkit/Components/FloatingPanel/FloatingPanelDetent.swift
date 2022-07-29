@@ -13,8 +13,8 @@
 
 import Foundation
 
-***REMOVED***/ <#Description#>
-public enum FloatingPanelDetent: CaseIterable {
+***REMOVED***/ A value that represents a height where a sheet naturally rests.
+public enum FloatingPanelDetent {
 ***REMOVED***case min
 ***REMOVED***case oneQuarter
 ***REMOVED***case half
