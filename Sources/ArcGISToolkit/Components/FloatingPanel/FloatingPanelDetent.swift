@@ -14,7 +14,7 @@
 import Foundation
 
 ***REMOVED***/ <#Description#>
-public enum FloatingPanelDetent {
+public enum FloatingPanelDetent: CaseIterable {
 ***REMOVED***case min
 ***REMOVED***case oneQuarter
 ***REMOVED***case half
