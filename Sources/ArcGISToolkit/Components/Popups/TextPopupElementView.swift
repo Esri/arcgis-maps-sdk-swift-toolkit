@@ -26,7 +26,7 @@ struct TextPopupElementView: View {
 ***REMOVED******REMOVED***let roundedRect = RoundedRectangle(cornerRadius: 8)
 ***REMOVED******REMOVED***if !popupElement.text.isEmpty {
 ***REMOVED******REMOVED******REMOVED***ZStack {
-***REMOVED******REMOVED******REMOVED******REMOVED***HTMLTextView(htmlString: popupElement.text, dynamicHeight: $webViewHeight)
+***REMOVED******REMOVED******REMOVED******REMOVED***HTMLTextView(html: popupElement.text, dynamicHeight: $webViewHeight)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.clipShape(roundedRect)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(height: webViewHeight)
 ***REMOVED******REMOVED******REMOVED******REMOVED***roundedRect
