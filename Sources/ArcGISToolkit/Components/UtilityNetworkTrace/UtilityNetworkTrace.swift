@@ -39,7 +39,7 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED***
 ***REMOVED******REMOVED*** MARK: States
 ***REMOVED***
-***REMOVED***@State private var activeDetent: FloatingPanelDetent = .mid
+***REMOVED***@State private var activeDetent: FloatingPanelDetent = .half
 ***REMOVED***
 ***REMOVED******REMOVED***/ The current user activity.
 ***REMOVED***@State private var currentActivity: UserActivity = .creatingTrace(nil)
@@ -98,7 +98,7 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED***private var cancelAddStartingPoints: some View {
 ***REMOVED******REMOVED***Button(role: .destructive) {
 ***REMOVED******REMOVED******REMOVED***currentActivity = .creatingTrace(nil)
-***REMOVED******REMOVED******REMOVED***activeDetent = .mid
+***REMOVED******REMOVED******REMOVED***activeDetent = .half
 ***REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED***Text("Cancel starting point selection")
 ***REMOVED***
@@ -373,7 +373,7 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentActivity = .creatingTrace(.viewingStartingPoints)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***activeDetent = .mid
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***activeDetent = .half
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await viewModel.setStartingPoint(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***at: viewPoint,
