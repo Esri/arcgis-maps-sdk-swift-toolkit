@@ -47,7 +47,7 @@ struct UtilityNetworkTraceExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***self.mapPoint = mapPoint
 ***REMOVED******REMOVED******REMOVED******REMOVED***self.mapViewProxy = mapViewProxy
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.floatingPanel(isPresented: .constant(true), detent: .constant(.mid)) {
+***REMOVED******REMOVED******REMOVED***.floatingPanel(isPresented: .constant(true), detent: .constant(.half)) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***UtilityNetworkTrace(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***graphicsOverlay: $resultGraphicsOverlay,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***map: map,

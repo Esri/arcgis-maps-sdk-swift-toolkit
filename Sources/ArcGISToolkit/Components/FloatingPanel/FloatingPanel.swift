@@ -48,7 +48,7 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED***@State private var handleColor: Color = .defaultHandleColor
 ***REMOVED***
 ***REMOVED******REMOVED***/ The height of the content.
-***REMOVED***@State private var height: CGFloat = .infinity
+***REMOVED***@State private var height: CGFloat = .minHeight
 ***REMOVED***
 ***REMOVED******REMOVED***/ The maximum allowed height of the content.
 ***REMOVED***@State private var maximumHeight: CGFloat = .infinity
@@ -96,11 +96,12 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onChange(of: detent) { newValue in
 ***REMOVED******REMOVED******REMOVED******REMOVED***withAnimation {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***switch newValue {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .min: height = .minHeight + 75
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .mid: height = geometryProxy.size.height / 2.0
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .max: height = geometryProxy.size.height - 75
-***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***height = heightWithDetent(given: geometryProxy.size.height)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.onAppear {
+***REMOVED******REMOVED******REMOVED******REMOVED***withAnimation {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***height = heightWithDetent(given: geometryProxy.size.height)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
@@ -127,6 +128,23 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED******REMOVED******REMOVED***.onEnded { _ in
 ***REMOVED******REMOVED******REMOVED******REMOVED***handleColor = .defaultHandleColor
 ***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ - Parameter height: Maximum available height
+***REMOVED******REMOVED***/ - Returns: Height given the current detent
+***REMOVED***func heightWithDetent(given height: CGFloat) -> CGFloat {
+***REMOVED******REMOVED***switch detent {
+***REMOVED******REMOVED***case .min:
+***REMOVED******REMOVED******REMOVED***return .minHeight
+***REMOVED******REMOVED***case .oneQuarter:
+***REMOVED******REMOVED******REMOVED***return height * 0.25
+***REMOVED******REMOVED***case .half:
+***REMOVED******REMOVED******REMOVED***return height * 0.5
+***REMOVED******REMOVED***case .threeQuarters:
+***REMOVED******REMOVED******REMOVED***return height * 0.75
+***REMOVED******REMOVED***case .max:
+***REMOVED******REMOVED******REMOVED***return height
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 

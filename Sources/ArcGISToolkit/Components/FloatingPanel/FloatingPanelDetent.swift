@@ -16,6 +16,8 @@ import Foundation
 ***REMOVED***/ <#Description#>
 public enum FloatingPanelDetent {
 ***REMOVED***case min
-***REMOVED***case mid
+***REMOVED***case oneQuarter
+***REMOVED***case half
+***REMOVED***case threeQuarters
 ***REMOVED***case max
 ***REMOVED***
