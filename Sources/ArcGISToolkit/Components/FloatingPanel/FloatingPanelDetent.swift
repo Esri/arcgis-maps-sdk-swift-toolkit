@@ -16,6 +16,8 @@ import Foundation
 /// <#Description#>
 public enum FloatingPanelDetent {
     case min
-    case mid
+    case oneQuarter
+    case half
+    case threeQuarters
     case max
 }
