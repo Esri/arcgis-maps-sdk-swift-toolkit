@@ -96,12 +96,12 @@ struct FloatingPanel<Content>: View where Content: View {
             }
             .onChange(of: detent) { newValue in
                 withAnimation {
-                    height = heightWithDetent(given: geometryProxy.size.height)
+                    height = heightWithDetent
                 }
             }
             .onAppear {
                 withAnimation {
-                    height = heightWithDetent(given: geometryProxy.size.height)
+                    height = heightWithDetent
                 }
             }
         }
@@ -127,23 +127,25 @@ struct FloatingPanel<Content>: View where Content: View {
             }
             .onEnded { _ in
                 handleColor = .defaultHandleColor
+                withAnimation {
+                    height = heightWithDetent
+                }
             }
     }
     
-    /// - Parameter height: Maximum available height
-    /// - Returns: Height given the current detent
-    func heightWithDetent(given height: CGFloat) -> CGFloat {
+    /// - Returns: Displayable height given the current detent
+    var heightWithDetent: CGFloat {
         switch detent {
         case .min:
             return .minHeight
         case .oneQuarter:
-            return height * 0.25
+            return maximumHeight * 0.25
         case .half:
-            return height * 0.5
+            return maximumHeight * 0.5
         case .threeQuarters:
-            return height * 0.75
+            return maximumHeight * 0.75
         case .max:
-            return height
+            return maximumHeight
         }
     }
 }
