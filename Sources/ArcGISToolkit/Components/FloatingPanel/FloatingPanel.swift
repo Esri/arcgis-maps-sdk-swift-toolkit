@@ -35,8 +35,13 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a `FloatingPanel`
 ***REMOVED******REMOVED***/ - Parameter content: The view shown in the floating panel.
-***REMOVED***init(@ViewBuilder content: () -> Content) {
+***REMOVED******REMOVED***/ - Parameter detent: <#detent description#>
+***REMOVED***init(
+***REMOVED******REMOVED***detent: Binding<FloatingPanelDetent>,
+***REMOVED******REMOVED***@ViewBuilder content: () -> Content
+***REMOVED***) {
 ***REMOVED******REMOVED***self.content = content()
+***REMOVED******REMOVED***_detent = detent
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The color of the handle.
@@ -47,6 +52,9 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ The maximum allowed height of the content.
 ***REMOVED***@State private var maximumHeight: CGFloat = .infinity
+***REMOVED***
+***REMOVED******REMOVED***/ <#Description#>
+***REMOVED***@Binding var detent: FloatingPanelDetent
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the panel should be configured for a compact environment.
 ***REMOVED***private var isCompact: Bool {
@@ -84,6 +92,15 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***maximumHeight = $0.height
 ***REMOVED******REMOVED******REMOVED******REMOVED***if height > maximumHeight {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***height = maximumHeight
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.onChange(of: detent) { newValue in
+***REMOVED******REMOVED******REMOVED******REMOVED***withAnimation {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***switch newValue {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .min: height = .minHeight + 75
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .mid: height = geometryProxy.size.height / 2.0
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .max: height = geometryProxy.size.height - 75
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***

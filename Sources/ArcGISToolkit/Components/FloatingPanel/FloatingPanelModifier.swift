@@ -23,11 +23,13 @@ public extension View {
 ***REMOVED******REMOVED***/ - Returns: <#description#>
 ***REMOVED***func floatingPanel<Content>(
 ***REMOVED******REMOVED***isPresented: Binding<Bool>,
+***REMOVED******REMOVED***detent: Binding<FloatingPanelDetent>,
 ***REMOVED******REMOVED***_ content: @escaping () -> Content
 ***REMOVED***) -> some View where Content: View {
 ***REMOVED******REMOVED***modifier(
 ***REMOVED******REMOVED******REMOVED***FloatingPanelModifier(
 ***REMOVED******REMOVED******REMOVED******REMOVED***isPresented: isPresented,
+***REMOVED******REMOVED******REMOVED******REMOVED***detent: detent,
 ***REMOVED******REMOVED******REMOVED******REMOVED***innerContent: content()
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***)
@@ -42,15 +44,15 @@ private struct FloatingPanelModifier<InnerContent>: ViewModifier where InnerCont
 ***REMOVED***@Binding var isPresented: Bool
 ***REMOVED***
 ***REMOVED******REMOVED***/ <#Description#>
-***REMOVED***let innerContent: InnerContent
+***REMOVED***var detent: Binding<FloatingPanelDetent>
 ***REMOVED***
 ***REMOVED******REMOVED***/ <#Description#>
-***REMOVED******REMOVED***/ - Parameter content: <#content description#>
-***REMOVED******REMOVED***/ - Returns: <#description#>
+***REMOVED***let innerContent: InnerContent
+***REMOVED***
 ***REMOVED***func body(content: Content) -> some View {
 ***REMOVED******REMOVED***content
 ***REMOVED******REMOVED******REMOVED***.overlay(alignment: .trailing) {
-***REMOVED******REMOVED******REMOVED******REMOVED***FloatingPanel {
+***REMOVED******REMOVED******REMOVED******REMOVED***FloatingPanel(detent: detent) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***innerContent
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.edgesIgnoringSafeArea(.bottom)

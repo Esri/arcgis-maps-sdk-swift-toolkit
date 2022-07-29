@@ -39,6 +39,8 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED***
 ***REMOVED******REMOVED*** MARK: States
 ***REMOVED***
+***REMOVED***@State private var activeDetent: FloatingPanelDetent = .mid
+***REMOVED***
 ***REMOVED******REMOVED***/ The current user activity.
 ***REMOVED***@State private var currentActivity: UserActivity = .creatingTrace(nil)
 ***REMOVED***
@@ -96,6 +98,7 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED***private var cancelAddStartingPoints: some View {
 ***REMOVED******REMOVED***Button(role: .destructive) {
 ***REMOVED******REMOVED******REMOVED***currentActivity = .creatingTrace(nil)
+***REMOVED******REMOVED******REMOVED***activeDetent = .mid
 ***REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED***Text("Cancel starting point selection")
 ***REMOVED***
@@ -136,6 +139,7 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED***Section("Starting Points") {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentActivity = .creatingTrace(.addingStartingPoints)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***activeDetent = .min
 ***REMOVED******REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Add new starting point")
 ***REMOVED******REMOVED******REMOVED***
@@ -336,7 +340,10 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED***
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***Color.clear
-***REMOVED******REMOVED******REMOVED***.floatingPanel(isPresented: .constant(true)) {
+***REMOVED******REMOVED******REMOVED***.floatingPanel(
+***REMOVED******REMOVED******REMOVED******REMOVED***isPresented: .constant(true),
+***REMOVED******REMOVED******REMOVED******REMOVED***detent: $activeDetent
+***REMOVED******REMOVED******REMOVED***) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***VStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if !viewModel.completedTraces.isEmpty &&
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***!isFocused(traceCreationActivity: .addingStartingPoints) {
@@ -366,6 +373,7 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentActivity = .creatingTrace(.viewingStartingPoints)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***activeDetent = .mid
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await viewModel.setStartingPoint(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***at: viewPoint,
