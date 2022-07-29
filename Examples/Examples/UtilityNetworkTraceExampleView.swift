@@ -47,7 +47,7 @@ struct UtilityNetworkTraceExampleView: View {
                 self.mapPoint = mapPoint
                 self.mapViewProxy = mapViewProxy
             }
-            .floatingPanel(isPresented: .constant(true), detent: .constant(.mid)) {
+            .floatingPanel(isPresented: .constant(true), detent: .constant(.half)) {
                 UtilityNetworkTrace(
                     graphicsOverlay: $resultGraphicsOverlay,
                     map: map,
