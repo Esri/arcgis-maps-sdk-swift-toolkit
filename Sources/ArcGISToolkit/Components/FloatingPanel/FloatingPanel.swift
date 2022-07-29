@@ -25,6 +25,7 @@ import SwiftUI
 /// that clients will fill with their own content.
 struct FloatingPanel<Content>: View where Content: View {
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+    @Environment(\.verticalSizeClass) var verticalSizeClass
     
     /// The content shown in the floating panel.
     let content: Content
@@ -54,7 +55,7 @@ struct FloatingPanel<Content>: View where Content: View {
     
     /// A Boolean value indicating whether the panel should be configured for a compact environment.
     private var isCompact: Bool {
-        horizontalSizeClass == .compact
+        horizontalSizeClass == .compact && verticalSizeClass == .regular
     }
     
     public var body: some View {
