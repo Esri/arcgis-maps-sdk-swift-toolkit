@@ -23,7 +23,7 @@
 ***REMOVED***/ or persistent, where the information is always displayed, for example a
 ***REMOVED***/ dedicated search panel. They will also be primarily simple containers
 ***REMOVED***/ that clients will fill with their own content.
-public struct FloatingPanel<Content>: View where Content: View {
+struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED******REMOVED*** Note:  instead of the FloatingPanel being a view, it might be preferable
 ***REMOVED******REMOVED*** to have it be a view modifier, similar to how SwiftUI doesn't have a
 ***REMOVED******REMOVED*** SheetView, but a modifier that presents a sheet.
@@ -35,7 +35,7 @@ public struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a `FloatingPanel`
 ***REMOVED******REMOVED***/ - Parameter content: The view shown in the floating panel.
-***REMOVED***public init(@ViewBuilder content: () -> Content) {
+***REMOVED***init(@ViewBuilder content: () -> Content) {
 ***REMOVED******REMOVED***self.content = content()
 ***REMOVED***
 ***REMOVED***
@@ -57,20 +57,26 @@ public struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED******REMOVED***GeometryReader { geometryProxy in
 ***REMOVED******REMOVED******REMOVED***VStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if isCompact {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Handle(color: handleColor)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.gesture(drag)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Divider()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***content
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(minHeight: .minHeight, maxHeight: height)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***VStack {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Handle(color: handleColor)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.gesture(drag)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Divider()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***content
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(minHeight: .minHeight, maxHeight: height)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.background(Color(uiColor: .systemBackground))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.cornerRadius(10, corners: [.topLeft, .topRight])
 ***REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***content
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(minHeight: .minHeight, maxHeight: height)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Divider()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Handle(color: handleColor)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.gesture(drag)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***VStack {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***content
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(minHeight: .minHeight, maxHeight: height)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Divider()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Handle(color: handleColor)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.gesture(drag)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.esriBorder()
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.esriBorder()
 ***REMOVED******REMOVED******REMOVED***.padding(isCompact ? [] : [.leading, .top, .trailing])
 ***REMOVED******REMOVED******REMOVED***.padding(.bottom, isCompact ? 0 : 50)
 ***REMOVED******REMOVED******REMOVED***.frame(
@@ -130,4 +136,34 @@ private extension CGFloat {
 private extension Color {
 ***REMOVED***static var defaultHandleColor: Color { .secondary ***REMOVED***
 ***REMOVED***static var activeHandleColor: Color { .primary ***REMOVED***
+***REMOVED***
+
+private struct RoundedCorner: Shape {
+***REMOVED***var corners: UIRectCorner
+***REMOVED***
+***REMOVED***var radius: CGFloat
+***REMOVED***
+***REMOVED***func path(in rect: CGRect) -> Path {
+***REMOVED******REMOVED***let path = UIBezierPath(
+***REMOVED******REMOVED******REMOVED***roundedRect: rect,
+***REMOVED******REMOVED******REMOVED***byRoundingCorners: corners,
+***REMOVED******REMOVED******REMOVED***cornerRadii: CGSize(
+***REMOVED******REMOVED******REMOVED******REMOVED***width: radius,
+***REMOVED******REMOVED******REMOVED******REMOVED***height: radius
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***return Path(path.cgPath)
+***REMOVED***
+***REMOVED***
+
+private extension View {
+***REMOVED***func cornerRadius(
+***REMOVED******REMOVED***_ radius: CGFloat,
+***REMOVED******REMOVED***corners: UIRectCorner
+***REMOVED***) -> some View {
+***REMOVED******REMOVED***clipShape(RoundedCorner(
+***REMOVED******REMOVED******REMOVED***corners: corners,
+***REMOVED******REMOVED******REMOVED***radius: radius
+***REMOVED******REMOVED***))
+***REMOVED***
 ***REMOVED***
