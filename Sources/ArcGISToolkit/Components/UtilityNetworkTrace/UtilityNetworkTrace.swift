@@ -335,43 +335,46 @@ public struct UtilityNetworkTrace: View {
     }
     
     public var body: some View {
-        VStack {
-            if !viewModel.completedTraces.isEmpty &&
-                !isFocused(traceCreationActivity: .addingStartingPoints) {
-                activityPicker
-            }
-            switch currentActivity {
-            case .creatingTrace(let activity):
-                switch activity {
-                case .addingStartingPoints:
-                    cancelAddStartingPoints
-                case .inspectingStartingPoint:
-                    startingPointDetail
-                default:
-                    newTraceTab
+        Color.clear
+            .floatingPanel(isPresented: .constant(true)) {
+                VStack {
+                    if !viewModel.completedTraces.isEmpty &&
+                        !isFocused(traceCreationActivity: .addingStartingPoints) {
+                        activityPicker
+                    }
+                    switch currentActivity {
+                    case .creatingTrace(let activity):
+                        switch activity {
+                        case .addingStartingPoints:
+                            cancelAddStartingPoints
+                        case .inspectingStartingPoint:
+                            startingPointDetail
+                        default:
+                            newTraceTab
+                        }
+                    case .viewingTraces:
+                        resultsTab
+                    }
                 }
-            case .viewingTraces:
-                resultsTab
+                .background(Color(uiColor: .systemGroupedBackground))
+                .animation(.default, value: currentActivity)
+                .onChange(of: viewPoint) { newValue in
+                    guard isFocused(traceCreationActivity: .addingStartingPoints),
+                          let mapViewProxy = mapViewProxy,
+                          let mapPoint = mapPoint,
+                          let viewPoint = viewPoint else {
+                        return
+                    }
+                    currentActivity = .creatingTrace(.viewingStartingPoints)
+                    Task {
+                        await viewModel.setStartingPoint(
+                            at: viewPoint,
+                            mapPoint: mapPoint,
+                            with: mapViewProxy
+                        )
+                    }
+                }
             }
-        }
-        .background(Color(uiColor: .systemGroupedBackground))
-        .animation(.default, value: currentActivity)
-        .onChange(of: viewPoint) { newValue in
-            guard isFocused(traceCreationActivity: .addingStartingPoints),
-                  let mapViewProxy = mapViewProxy,
-                  let mapPoint = mapPoint,
-                  let viewPoint = viewPoint else {
-                return
-            }
-            currentActivity = .creatingTrace(.viewingStartingPoints)
-            Task {
-                await viewModel.setStartingPoint(
-                    at: viewPoint,
-                    mapPoint: mapPoint,
-                    with: mapViewProxy
-                )
-            }
-        }
     }
     
     // MARK: Computed Properties
