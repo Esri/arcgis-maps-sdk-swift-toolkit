@@ -341,9 +341,10 @@ public struct UtilityNetworkTrace: View {
     public var body: some View {
         Color.clear
             .floatingPanel(
-                isPresented: .constant(true),
                 backgroundColor: Color(uiColor: .systemGroupedBackground),
-                detent: $activeDetent
+                detent: $activeDetent,
+                horizontalAlignment: .trailing,
+                isPresented: .constant(true)
             ) {
                 VStack {
                     if !viewModel.completedTraces.isEmpty &&
