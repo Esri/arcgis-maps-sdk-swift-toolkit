@@ -34,10 +34,12 @@ public struct PopupView: View {
     
     public var body: some View {
         VStack(alignment: .leading) {
-            Text(popup.title)
-                .font(.title)
-                .fontWeight(.bold)
-            Divider()
+            if !popup.title.isEmpty {
+                Text(popup.title)
+                    .font(.title)
+                    .fontWeight(.bold)
+                Divider()
+            }
             Group {
                 if let isPopupEvaluated = isPopupEvaluated {
                     if isPopupEvaluated {
@@ -58,7 +60,6 @@ public struct PopupView: View {
             do {
                 expressionEvaluations = try await popup.evaluateExpressions()
                 isPopupEvaluated = true
-                print("EE: \(expressionEvaluations?.count); first = \(expressionEvaluations?.first?.error)")
             } catch {
                 isPopupEvaluated = false
             }
@@ -70,7 +71,7 @@ public struct PopupView: View {
         var body: some View {
             ScrollView {
                 VStack(alignment: .leading) {
-                    ForEach(popup.evaluatedElements) { popupElement in
+                    ForEach(Array(popup.evaluatedElements.enumerated()), id: \.offset) { index, popupElement in
                         switch popupElement {
                         case let popupElement as AttachmentsPopupElement:
                             Text("AttachmentsPopupElementView implementation coming soon.")
@@ -86,7 +87,9 @@ public struct PopupView: View {
                             EmptyView()
                         }
                         
-                        Divider()
+                        if index < popup.evaluatedElements.count - 1 {
+                            Divider()
+                        }
                     }
                 }
             }
