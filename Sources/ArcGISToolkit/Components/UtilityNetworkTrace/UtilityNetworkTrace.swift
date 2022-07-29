@@ -342,6 +342,7 @@ public struct UtilityNetworkTrace: View {
         Color.clear
             .floatingPanel(
                 isPresented: .constant(true),
+                backgroundColor: Color(uiColor: .systemGroupedBackground),
                 detent: $activeDetent
             ) {
                 VStack {
