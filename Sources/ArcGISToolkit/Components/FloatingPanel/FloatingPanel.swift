@@ -35,8 +35,13 @@ struct FloatingPanel<Content>: View where Content: View {
     
     /// Creates a `FloatingPanel`
     /// - Parameter content: The view shown in the floating panel.
-    init(@ViewBuilder content: () -> Content) {
+    /// - Parameter detent: <#detent description#>
+    init(
+        detent: Binding<FloatingPanelDetent>,
+        @ViewBuilder content: () -> Content
+    ) {
         self.content = content()
+        _detent = detent
     }
     
     /// The color of the handle.
@@ -47,6 +52,9 @@ struct FloatingPanel<Content>: View where Content: View {
     
     /// The maximum allowed height of the content.
     @State private var maximumHeight: CGFloat = .infinity
+    
+    /// <#Description#>
+    @Binding var detent: FloatingPanelDetent
     
     /// A Boolean value indicating whether the panel should be configured for a compact environment.
     private var isCompact: Bool {
@@ -84,6 +92,15 @@ struct FloatingPanel<Content>: View where Content: View {
                 maximumHeight = $0.height
                 if height > maximumHeight {
                     height = maximumHeight
+                }
+            }
+            .onChange(of: detent) { newValue in
+                withAnimation {
+                    switch newValue {
+                    case .min: height = .minHeight + 75
+                    case .mid: height = geometryProxy.size.height / 2.0
+                    case .max: height = geometryProxy.size.height - 75
+                    }
                 }
             }
         }

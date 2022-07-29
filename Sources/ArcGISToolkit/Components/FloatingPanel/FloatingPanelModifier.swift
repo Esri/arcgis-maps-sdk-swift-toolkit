@@ -23,11 +23,13 @@ public extension View {
     /// - Returns: <#description#>
     func floatingPanel<Content>(
         isPresented: Binding<Bool>,
+        detent: Binding<FloatingPanelDetent>,
         _ content: @escaping () -> Content
     ) -> some View where Content: View {
         modifier(
             FloatingPanelModifier(
                 isPresented: isPresented,
+                detent: detent,
                 innerContent: content()
             )
         )
@@ -42,15 +44,15 @@ private struct FloatingPanelModifier<InnerContent>: ViewModifier where InnerCont
     @Binding var isPresented: Bool
     
     /// <#Description#>
-    let innerContent: InnerContent
+    var detent: Binding<FloatingPanelDetent>
     
     /// <#Description#>
-    /// - Parameter content: <#content description#>
-    /// - Returns: <#description#>
+    let innerContent: InnerContent
+    
     func body(content: Content) -> some View {
         content
             .overlay(alignment: .trailing) {
-                FloatingPanel {
+                FloatingPanel(detent: detent) {
                     innerContent
                 }
                 .edgesIgnoringSafeArea(.bottom)
