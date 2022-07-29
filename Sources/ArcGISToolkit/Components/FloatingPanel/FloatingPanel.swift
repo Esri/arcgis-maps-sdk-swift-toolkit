@@ -24,10 +24,6 @@ import SwiftUI
 /// dedicated search panel. They will also be primarily simple containers
 /// that clients will fill with their own content.
 struct FloatingPanel<Content>: View where Content: View {
-    // Note:  instead of the FloatingPanel being a view, it might be preferable
-    // to have it be a view modifier, similar to how SwiftUI doesn't have a
-    // SheetView, but a modifier that presents a sheet.
-    
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     
     /// The content shown in the floating panel.
@@ -35,14 +31,17 @@ struct FloatingPanel<Content>: View where Content: View {
     
     /// Creates a `FloatingPanel`
     /// - Parameter content: The view shown in the floating panel.
-    /// - Parameter detent: <#detent description#>
+    /// - Parameter detent: Controls the height of the panel.
     init(
         detent: Binding<FloatingPanelDetent>,
         @ViewBuilder content: () -> Content
     ) {
         self.content = content()
-        _detent = detent
+        _activeDetent = detent
     }
+    
+    /// The detent that is currently set.
+    @Binding private var activeDetent: FloatingPanelDetent
     
     /// The color of the handle.
     @State private var handleColor: Color = .defaultHandleColor
@@ -52,9 +51,6 @@ struct FloatingPanel<Content>: View where Content: View {
     
     /// The maximum allowed height of the content.
     @State private var maximumHeight: CGFloat = .infinity
-    
-    /// <#Description#>
-    @Binding var detent: FloatingPanelDetent
     
     /// A Boolean value indicating whether the panel should be configured for a compact environment.
     private var isCompact: Bool {
@@ -94,14 +90,14 @@ struct FloatingPanel<Content>: View where Content: View {
                     height = maximumHeight
                 }
             }
-            .onChange(of: detent) { newValue in
+            .onChange(of: activeDetent) { _ in
                 withAnimation {
-                    height = heightWithDetent
+                    height = heightFor(detent: activeDetent)
                 }
             }
             .onAppear {
                 withAnimation {
-                    height = heightWithDetent
+                    height = heightFor(detent: activeDetent)
                 }
             }
         }
@@ -133,12 +129,17 @@ struct FloatingPanel<Content>: View where Content: View {
             }
     }
     
+    /// The detent that would produce a height that is closest to the current height
     var closestDetent: FloatingPanelDetent {
-        return FloatingPanelDetent.allCases.min { d1, d2 in
-            abs(heightFor(detent: d1) - height) < abs(heightFor(detent: d2) - height)
+        let choices: [FloatingPanelDetent] = [.oneQuarter, .half, .threeQuarters]
+        return choices.min {
+            abs(heightFor(detent: $0) - height) <
+                abs(heightFor(detent: $1) - height)
         } ?? .half
     }
     
+    /// - Parameter detent: The detent to use when calculating height
+    /// - Returns: A height for the provided detent based on the current maximum height
     func heightFor(detent: FloatingPanelDetent) -> CGFloat {
         switch detent {
         case .min:
@@ -152,11 +153,6 @@ struct FloatingPanel<Content>: View where Content: View {
         case .max:
             return maximumHeight
         }
-    }
-    
-    /// - Returns: Displayable height given the current detent
-    var heightWithDetent: CGFloat {
-        return heightFor(detent: detent)
     }
 }
 
