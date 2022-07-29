@@ -335,43 +335,46 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***public var body: some View {
-***REMOVED******REMOVED***VStack {
-***REMOVED******REMOVED******REMOVED***if !viewModel.completedTraces.isEmpty &&
-***REMOVED******REMOVED******REMOVED******REMOVED***!isFocused(traceCreationActivity: .addingStartingPoints) {
-***REMOVED******REMOVED******REMOVED******REMOVED***activityPicker
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***switch currentActivity {
-***REMOVED******REMOVED******REMOVED***case .creatingTrace(let activity):
-***REMOVED******REMOVED******REMOVED******REMOVED***switch activity {
-***REMOVED******REMOVED******REMOVED******REMOVED***case .addingStartingPoints:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***cancelAddStartingPoints
-***REMOVED******REMOVED******REMOVED******REMOVED***case .inspectingStartingPoint:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***startingPointDetail
-***REMOVED******REMOVED******REMOVED******REMOVED***default:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***newTraceTab
+***REMOVED******REMOVED***Color.clear
+***REMOVED******REMOVED******REMOVED***.floatingPanel(isPresented: .constant(true)) {
+***REMOVED******REMOVED******REMOVED******REMOVED***VStack {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if !viewModel.completedTraces.isEmpty &&
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***!isFocused(traceCreationActivity: .addingStartingPoints) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***activityPicker
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***switch currentActivity {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .creatingTrace(let activity):
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***switch activity {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .addingStartingPoints:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***cancelAddStartingPoints
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .inspectingStartingPoint:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***startingPointDetail
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***default:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***newTraceTab
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .viewingTraces:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***resultsTab
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***case .viewingTraces:
-***REMOVED******REMOVED******REMOVED******REMOVED***resultsTab
+***REMOVED******REMOVED******REMOVED******REMOVED***.background(Color(uiColor: .systemGroupedBackground))
+***REMOVED******REMOVED******REMOVED******REMOVED***.animation(.default, value: currentActivity)
+***REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: viewPoint) { newValue in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard isFocused(traceCreationActivity: .addingStartingPoints),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  let mapViewProxy = mapViewProxy,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  let mapPoint = mapPoint,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  let viewPoint = viewPoint else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentActivity = .creatingTrace(.viewingStartingPoints)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await viewModel.setStartingPoint(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***at: viewPoint,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mapPoint: mapPoint,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***with: mapViewProxy
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***.background(Color(uiColor: .systemGroupedBackground))
-***REMOVED******REMOVED***.animation(.default, value: currentActivity)
-***REMOVED******REMOVED***.onChange(of: viewPoint) { newValue in
-***REMOVED******REMOVED******REMOVED***guard isFocused(traceCreationActivity: .addingStartingPoints),
-***REMOVED******REMOVED******REMOVED******REMOVED***  let mapViewProxy = mapViewProxy,
-***REMOVED******REMOVED******REMOVED******REMOVED***  let mapPoint = mapPoint,
-***REMOVED******REMOVED******REMOVED******REMOVED***  let viewPoint = viewPoint else {
-***REMOVED******REMOVED******REMOVED******REMOVED***return
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***currentActivity = .creatingTrace(.viewingStartingPoints)
-***REMOVED******REMOVED******REMOVED***Task {
-***REMOVED******REMOVED******REMOVED******REMOVED***await viewModel.setStartingPoint(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***at: viewPoint,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mapPoint: mapPoint,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***with: mapViewProxy
-***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED***
-***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED*** MARK: Computed Properties
