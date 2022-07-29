@@ -14,10 +14,8 @@
 import Foundation
 
 ***REMOVED***/ A value that represents a height where a sheet naturally rests.
-public enum FloatingPanelDetent {
-***REMOVED***case min
-***REMOVED***case oneQuarter
+public enum FloatingPanelDetent: CaseIterable {
+***REMOVED***case summary
 ***REMOVED***case half
-***REMOVED***case threeQuarters
-***REMOVED***case max
+***REMOVED***case full
 ***REMOVED***

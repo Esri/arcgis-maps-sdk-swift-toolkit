@@ -62,7 +62,6 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED******REMOVED******REMOVED***VStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if isCompact {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Handle(color: handleColor)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.gesture(drag)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Divider()
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***content
@@ -70,12 +69,12 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if !isCompact {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Divider()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Handle(color: handleColor)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.gesture(drag)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.padding([.top, .bottom], 10)
 ***REMOVED******REMOVED******REMOVED***.background(Color(uiColor: .systemGroupedBackground))
 ***REMOVED******REMOVED******REMOVED***.cornerRadius(10, corners: isCompact ? [.topLeft, .topRight] : [.allCorners])
+***REMOVED******REMOVED******REMOVED***.gesture(drag)
 ***REMOVED******REMOVED******REMOVED***.shadow(radius: 10)
 ***REMOVED******REMOVED******REMOVED***.padding([.leading, .top, .trailing], isCompact ? 0 : 10)
 ***REMOVED******REMOVED******REMOVED***.padding([.bottom], isCompact ? 0 : 50)
@@ -104,7 +103,7 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var drag: some Gesture {
-***REMOVED******REMOVED***DragGesture(minimumDistance: 0)
+***REMOVED******REMOVED***DragGesture(minimumDistance: 1)
 ***REMOVED******REMOVED******REMOVED***.onChanged { value in
 ***REMOVED******REMOVED******REMOVED******REMOVED***handleColor = .activeHandleColor
 ***REMOVED******REMOVED******REMOVED******REMOVED***let proposedHeight: CGFloat
@@ -131,8 +130,7 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ The detent that would produce a height that is closest to the current height
 ***REMOVED***var closestDetent: FloatingPanelDetent {
-***REMOVED******REMOVED***let choices: [FloatingPanelDetent] = [.oneQuarter, .half, .threeQuarters]
-***REMOVED******REMOVED***return choices.min {
+***REMOVED******REMOVED***return FloatingPanelDetent.allCases.min {
 ***REMOVED******REMOVED******REMOVED***abs(heightFor(detent: $0) - height) <
 ***REMOVED******REMOVED******REMOVED******REMOVED***abs(heightFor(detent: $1) - height)
 ***REMOVED*** ?? .half
@@ -142,16 +140,12 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED******REMOVED***/ - Returns: A height for the provided detent based on the current maximum height
 ***REMOVED***func heightFor(detent: FloatingPanelDetent) -> CGFloat {
 ***REMOVED******REMOVED***switch detent {
-***REMOVED******REMOVED***case .min:
-***REMOVED******REMOVED******REMOVED***return .minHeight
-***REMOVED******REMOVED***case .oneQuarter:
-***REMOVED******REMOVED******REMOVED***return maximumHeight * 0.25
+***REMOVED******REMOVED***case .summary:
+***REMOVED******REMOVED******REMOVED***return maximumHeight * 0.15
 ***REMOVED******REMOVED***case .half:
-***REMOVED******REMOVED******REMOVED***return maximumHeight * 0.5
-***REMOVED******REMOVED***case .threeQuarters:
-***REMOVED******REMOVED******REMOVED***return maximumHeight * 0.75
-***REMOVED******REMOVED***case .max:
-***REMOVED******REMOVED******REMOVED***return maximumHeight
+***REMOVED******REMOVED******REMOVED***return maximumHeight * 0.4
+***REMOVED******REMOVED***case .full:
+***REMOVED******REMOVED******REMOVED***return maximumHeight * 0.90
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
