@@ -25,7 +25,7 @@ public extension View {
     /// - Returns: <#description#>
     func floatingPanel<Content>(
         backgroundColor: Color = Color(uiColor: .systemBackground),
-        detent: Binding<FloatingPanelDetent>,
+        detent: Binding<FloatingPanelDetent> = .constant(.half),
         horizontalAlignment: HorizontalAlignment = .trailing,
         isPresented: Binding<Bool>,
         maxWidth: CGFloat = 400,
