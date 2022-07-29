@@ -96,12 +96,12 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onChange(of: detent) { newValue in
 ***REMOVED******REMOVED******REMOVED******REMOVED***withAnimation {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***height = heightWithDetent(given: geometryProxy.size.height)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***height = heightWithDetent
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onAppear {
 ***REMOVED******REMOVED******REMOVED******REMOVED***withAnimation {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***height = heightWithDetent(given: geometryProxy.size.height)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***height = heightWithDetent
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
@@ -127,23 +127,25 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onEnded { _ in
 ***REMOVED******REMOVED******REMOVED******REMOVED***handleColor = .defaultHandleColor
+***REMOVED******REMOVED******REMOVED******REMOVED***withAnimation {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***height = heightWithDetent
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ - Parameter height: Maximum available height
-***REMOVED******REMOVED***/ - Returns: Height given the current detent
-***REMOVED***func heightWithDetent(given height: CGFloat) -> CGFloat {
+***REMOVED******REMOVED***/ - Returns: Displayable height given the current detent
+***REMOVED***var heightWithDetent: CGFloat {
 ***REMOVED******REMOVED***switch detent {
 ***REMOVED******REMOVED***case .min:
 ***REMOVED******REMOVED******REMOVED***return .minHeight
 ***REMOVED******REMOVED***case .oneQuarter:
-***REMOVED******REMOVED******REMOVED***return height * 0.25
+***REMOVED******REMOVED******REMOVED***return maximumHeight * 0.25
 ***REMOVED******REMOVED***case .half:
-***REMOVED******REMOVED******REMOVED***return height * 0.5
+***REMOVED******REMOVED******REMOVED***return maximumHeight * 0.5
 ***REMOVED******REMOVED***case .threeQuarters:
-***REMOVED******REMOVED******REMOVED***return height * 0.75
+***REMOVED******REMOVED******REMOVED***return maximumHeight * 0.75
 ***REMOVED******REMOVED***case .max:
-***REMOVED******REMOVED******REMOVED***return height
+***REMOVED******REMOVED******REMOVED***return maximumHeight
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
