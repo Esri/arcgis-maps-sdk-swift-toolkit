@@ -25,7 +25,7 @@ public extension View {
 ***REMOVED******REMOVED***/ - Returns: <#description#>
 ***REMOVED***func floatingPanel<Content>(
 ***REMOVED******REMOVED***backgroundColor: Color = Color(uiColor: .systemBackground),
-***REMOVED******REMOVED***detent: Binding<FloatingPanelDetent>,
+***REMOVED******REMOVED***detent: Binding<FloatingPanelDetent> = .constant(.half),
 ***REMOVED******REMOVED***horizontalAlignment: HorizontalAlignment = .trailing,
 ***REMOVED******REMOVED***isPresented: Binding<Bool>,
 ***REMOVED******REMOVED***maxWidth: CGFloat = 400,
