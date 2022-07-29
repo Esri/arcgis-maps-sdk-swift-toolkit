@@ -24,14 +24,18 @@ public extension View {
     ///   - content: <#content description#>
     /// - Returns: <#description#>
     func floatingPanel<Content>(
+        backgroundColor: Color = Color(uiColor: .systemBackground),
         detent: Binding<FloatingPanelDetent>,
+        horizontalAlignment: HorizontalAlignment = .trailing,
         isPresented: Binding<Bool>,
         maxWidth: CGFloat = 400,
         _ content: @escaping () -> Content
     ) -> some View where Content: View {
         modifier(
             FloatingPanelModifier(
+                backgroundColor: backgroundColor,
                 detent: detent,
+                horizontalAlignment: horizontalAlignment,
                 isPresented: isPresented,
                 maxWidth: maxWidth,
                 innerContent: content()
@@ -51,7 +55,13 @@ private struct FloatingPanelModifier<InnerContent>: ViewModifier where InnerCont
     }
     
     /// <#Description#>
+    let backgroundColor: Color
+    
+    /// <#Description#>
     let detent: Binding<FloatingPanelDetent>
+    
+    /// <#Description#>
+    let horizontalAlignment: HorizontalAlignment
     
     /// <#Description#>
     @Binding var isPresented: Bool
@@ -64,8 +74,11 @@ private struct FloatingPanelModifier<InnerContent>: ViewModifier where InnerCont
     
     func body(content: Content) -> some View {
         content
-            .overlay(alignment: .trailing) {
-                FloatingPanel(detent: detent) {
+            .overlay(alignment: Alignment(horizontal: horizontalAlignment, vertical: .top)) {
+                FloatingPanel(
+                    backgroundColor: backgroundColor,
+                    detent: detent
+                ) {
                     innerContent
                 }
                 .edgesIgnoringSafeArea(.bottom)

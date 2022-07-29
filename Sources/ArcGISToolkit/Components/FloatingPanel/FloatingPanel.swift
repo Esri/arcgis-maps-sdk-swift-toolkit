@@ -27,6 +27,9 @@ struct FloatingPanel<Content>: View where Content: View {
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @Environment(\.verticalSizeClass) var verticalSizeClass
     
+    /// <#Description#>
+    let backgroundColor: Color
+    
     /// The content shown in the floating panel.
     let content: Content
     
@@ -34,9 +37,11 @@ struct FloatingPanel<Content>: View where Content: View {
     /// - Parameter content: The view shown in the floating panel.
     /// - Parameter detent: Controls the height of the panel.
     init(
+        backgroundColor: Color,
         detent: Binding<FloatingPanelDetent>,
         @ViewBuilder content: () -> Content
     ) {
+        self.backgroundColor = backgroundColor
         self.content = content()
         _activeDetent = detent
     }
@@ -75,7 +80,7 @@ struct FloatingPanel<Content>: View where Content: View {
                 }
             }
             .padding([.top, .bottom], 10)
-            .background(Color(uiColor: .systemGroupedBackground))
+            .background(backgroundColor)
             .cornerRadius(10, corners: isCompact ? [.topLeft, .topRight] : [.allCorners])
             .shadow(radius: 10)
             .padding([.leading, .top, .trailing], isCompact ? 0 : 10)
