@@ -95,8 +95,6 @@ struct HTMLTextView: UIViewRepresentable {
         
         private var hasCommitted = false
 
-        private var runDidFinishAgain = true
-
         init(_ parent: HTMLTextView) {
             self.parent = parent
         }
@@ -123,16 +121,18 @@ struct HTMLTextView: UIViewRepresentable {
         
         // WKNavigationDelegate method where the size calculation happens.
         func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!){
-            self.parent.dynamicHeight = webView.scrollView.contentSize.height
-            
-            // Sometimes the contentSize has not been updated yet, probably
-            // because the view has not been rendered yet. So rerun this again
-            // after a delay.  This fixes the issue.
-            if runDidFinishAgain {
-                runDidFinishAgain = false
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
-                    self?.webView(webView, didFinish: navigation)
-                    self?.runDidFinishAgain = true
+            webView.evaluateJavaScript("document.readyState") { [weak self] complete, _ in
+                guard complete != nil, let webView = webView  else {
+                    return
+                }
+                webView.evaluateJavaScript("document.body.scrollHeight") { height, _ in
+                    // Pass the new height to the delegate so that is can change the
+                    // cell height with performBatchUpdates
+                    //
+                    guard let height = height as? CGFloat else {
+                        return
+                    }
+                    self?.parent.dynamicHeight = height
                 }
             }
         }
