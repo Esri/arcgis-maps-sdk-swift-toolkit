@@ -69,8 +69,8 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(minHeight: .minHeight, maxHeight: height)
 ***REMOVED******REMOVED******REMOVED******REMOVED***if !isCompact {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Divider()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.gesture(drag)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Handle(color: handleColor)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.gesture(drag)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.padding([.top, .bottom], 10)
@@ -104,7 +104,7 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var drag: some Gesture {
-***REMOVED******REMOVED***DragGesture()
+***REMOVED******REMOVED***DragGesture(minimumDistance: 0)
 ***REMOVED******REMOVED******REMOVED***.onChanged { value in
 ***REMOVED******REMOVED******REMOVED******REMOVED***handleColor = .activeHandleColor
 ***REMOVED******REMOVED******REMOVED******REMOVED***let proposedHeight: CGFloat
@@ -142,7 +142,7 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED***func heightFor(detent: FloatingPanelDetent) -> CGFloat {
 ***REMOVED******REMOVED***switch detent {
 ***REMOVED******REMOVED***case .summary:
-***REMOVED******REMOVED******REMOVED***return maximumHeight * 0.15
+***REMOVED******REMOVED******REMOVED***return max(.minHeight, maximumHeight * 0.15)
 ***REMOVED******REMOVED***case .half:
 ***REMOVED******REMOVED******REMOVED***return maximumHeight * 0.4
 ***REMOVED******REMOVED***case .full:
