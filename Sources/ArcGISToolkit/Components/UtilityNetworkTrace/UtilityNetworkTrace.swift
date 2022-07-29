@@ -39,6 +39,8 @@ public struct UtilityNetworkTrace: View {
     
     // MARK: States
     
+    @State private var activeDetent: FloatingPanelDetent = .mid
+    
     /// The current user activity.
     @State private var currentActivity: UserActivity = .creatingTrace(nil)
     
@@ -96,6 +98,7 @@ public struct UtilityNetworkTrace: View {
     private var cancelAddStartingPoints: some View {
         Button(role: .destructive) {
             currentActivity = .creatingTrace(nil)
+            activeDetent = .mid
         } label: {
             Text("Cancel starting point selection")
         }
@@ -136,6 +139,7 @@ public struct UtilityNetworkTrace: View {
             Section("Starting Points") {
                 Button {
                     currentActivity = .creatingTrace(.addingStartingPoints)
+                    activeDetent = .min
                 } label: {
                     Text("Add new starting point")
                 }
@@ -336,7 +340,10 @@ public struct UtilityNetworkTrace: View {
     
     public var body: some View {
         Color.clear
-            .floatingPanel(isPresented: .constant(true)) {
+            .floatingPanel(
+                isPresented: .constant(true),
+                detent: $activeDetent
+            ) {
                 VStack {
                     if !viewModel.completedTraces.isEmpty &&
                         !isFocused(traceCreationActivity: .addingStartingPoints) {
@@ -366,6 +373,7 @@ public struct UtilityNetworkTrace: View {
                         return
                     }
                     currentActivity = .creatingTrace(.viewingStartingPoints)
+                    activeDetent = .mid
                     Task {
                         await viewModel.setStartingPoint(
                             at: viewPoint,
