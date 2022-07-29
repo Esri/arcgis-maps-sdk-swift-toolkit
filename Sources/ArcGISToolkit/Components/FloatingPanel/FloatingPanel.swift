@@ -27,11 +27,11 @@ struct FloatingPanel<Content>: View where Content: View {
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @Environment(\.verticalSizeClass) var verticalSizeClass
     
-    /// The content shown in the floating panel.
-    let content: Content
-    
     /// <#Description#>
     let backgroundColor: Color
+    
+    /// The content shown in the floating panel.
+    let content: Content
     
     /// Creates a `FloatingPanel`
     /// - Parameter content: The view shown in the floating panel.

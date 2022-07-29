@@ -22,23 +22,21 @@ public extension View {
     ///   - isPresented: <#isPresented description#>
     ///   - maxWidth: <#maxWidth description#>
     ///   - content: <#content description#>
-    ///   - horizontalAlignment: <#horizontalAlignment description#>
-    ///   - detent: <#detent description#>
     /// - Returns: <#description#>
     func floatingPanel<Content>(
-        isPresented: Binding<Bool>,
         backgroundColor: Color = Color(uiColor: .systemBackground),
-        horizontalAlignment: HorizontalAlignment = .trailing,
         detent: Binding<FloatingPanelDetent>,
+        horizontalAlignment: HorizontalAlignment = .trailing,
+        isPresented: Binding<Bool>,
         maxWidth: CGFloat = 400,
         _ content: @escaping () -> Content
     ) -> some View where Content: View {
         modifier(
             FloatingPanelModifier(
-                detent: detent,
-                isPresented: isPresented,
                 backgroundColor: backgroundColor,
+                detent: detent,
                 horizontalAlignment: horizontalAlignment,
+                isPresented: isPresented,
                 maxWidth: maxWidth,
                 innerContent: content()
             )
@@ -57,16 +55,16 @@ private struct FloatingPanelModifier<InnerContent>: ViewModifier where InnerCont
     }
     
     /// <#Description#>
-    let detent: Binding<FloatingPanelDetent>
-    
-    /// <#Description#>
-    @Binding var isPresented: Bool
-    
-    /// <#Description#>
     let backgroundColor: Color
     
     /// <#Description#>
+    let detent: Binding<FloatingPanelDetent>
+    
+    /// <#Description#>
     let horizontalAlignment: HorizontalAlignment
+    
+    /// <#Description#>
+    @Binding var isPresented: Bool
     
     /// <#Description#>
     let maxWidth: CGFloat
