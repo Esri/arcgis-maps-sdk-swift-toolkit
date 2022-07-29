@@ -24,10 +24,6 @@
 ***REMOVED***/ dedicated search panel. They will also be primarily simple containers
 ***REMOVED***/ that clients will fill with their own content.
 struct FloatingPanel<Content>: View where Content: View {
-***REMOVED******REMOVED*** Note:  instead of the FloatingPanel being a view, it might be preferable
-***REMOVED******REMOVED*** to have it be a view modifier, similar to how SwiftUI doesn't have a
-***REMOVED******REMOVED*** SheetView, but a modifier that presents a sheet.
-***REMOVED***
 ***REMOVED***@Environment(\.horizontalSizeClass) private var horizontalSizeClass
 ***REMOVED***
 ***REMOVED******REMOVED***/ The content shown in the floating panel.
@@ -35,14 +31,17 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a `FloatingPanel`
 ***REMOVED******REMOVED***/ - Parameter content: The view shown in the floating panel.
-***REMOVED******REMOVED***/ - Parameter detent: <#detent description#>
+***REMOVED******REMOVED***/ - Parameter detent: Controls the height of the panel.
 ***REMOVED***init(
 ***REMOVED******REMOVED***detent: Binding<FloatingPanelDetent>,
 ***REMOVED******REMOVED***@ViewBuilder content: () -> Content
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.content = content()
-***REMOVED******REMOVED***_detent = detent
+***REMOVED******REMOVED***_activeDetent = detent
 ***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ The detent that is currently set.
+***REMOVED***@Binding private var activeDetent: FloatingPanelDetent
 ***REMOVED***
 ***REMOVED******REMOVED***/ The color of the handle.
 ***REMOVED***@State private var handleColor: Color = .defaultHandleColor
@@ -52,9 +51,6 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ The maximum allowed height of the content.
 ***REMOVED***@State private var maximumHeight: CGFloat = .infinity
-***REMOVED***
-***REMOVED******REMOVED***/ <#Description#>
-***REMOVED***@Binding var detent: FloatingPanelDetent
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the panel should be configured for a compact environment.
 ***REMOVED***private var isCompact: Bool {
@@ -94,14 +90,14 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***height = maximumHeight
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.onChange(of: detent) { newValue in
+***REMOVED******REMOVED******REMOVED***.onChange(of: activeDetent) { _ in
 ***REMOVED******REMOVED******REMOVED******REMOVED***withAnimation {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***height = heightWithDetent
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***height = heightFor(detent: activeDetent)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onAppear {
 ***REMOVED******REMOVED******REMOVED******REMOVED***withAnimation {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***height = heightWithDetent
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***height = heightFor(detent: activeDetent)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
@@ -133,12 +129,17 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ The detent that would produce a height that is closest to the current height
 ***REMOVED***var closestDetent: FloatingPanelDetent {
-***REMOVED******REMOVED***return FloatingPanelDetent.allCases.min { d1, d2 in
-***REMOVED******REMOVED******REMOVED***abs(heightFor(detent: d1) - height) < abs(heightFor(detent: d2) - height)
+***REMOVED******REMOVED***let choices: [FloatingPanelDetent] = [.oneQuarter, .half, .threeQuarters]
+***REMOVED******REMOVED***return choices.min {
+***REMOVED******REMOVED******REMOVED***abs(heightFor(detent: $0) - height) <
+***REMOVED******REMOVED******REMOVED******REMOVED***abs(heightFor(detent: $1) - height)
 ***REMOVED*** ?? .half
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ - Parameter detent: The detent to use when calculating height
+***REMOVED******REMOVED***/ - Returns: A height for the provided detent based on the current maximum height
 ***REMOVED***func heightFor(detent: FloatingPanelDetent) -> CGFloat {
 ***REMOVED******REMOVED***switch detent {
 ***REMOVED******REMOVED***case .min:
@@ -152,11 +153,6 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED******REMOVED***case .max:
 ***REMOVED******REMOVED******REMOVED***return maximumHeight
 ***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ - Returns: Displayable height given the current detent
-***REMOVED***var heightWithDetent: CGFloat {
-***REMOVED******REMOVED***return heightFor(detent: detent)
 ***REMOVED***
 ***REMOVED***
 
