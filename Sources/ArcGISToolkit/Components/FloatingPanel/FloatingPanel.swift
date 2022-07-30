@@ -34,16 +34,20 @@ struct FloatingPanel<Content>: View where Content: View {
     let content: Content
     
     /// Creates a `FloatingPanel`
+    /// - Parameter backgroundColor: <#backgroundColor description#>
     /// - Parameter content: The view shown in the floating panel.
     /// - Parameter detent: Controls the height of the panel.
+    /// - Parameter isPresented: <#isPresented description#>
     init(
         backgroundColor: Color,
         detent: Binding<FloatingPanelDetent>,
+        isPresented: Binding<Bool>,
         @ViewBuilder content: () -> Content
     ) {
         self.backgroundColor = backgroundColor
         self.content = content()
         _activeDetent = detent
+        _isPresented = isPresented
     }
     
     /// The detent that is currently set.
@@ -55,9 +59,12 @@ struct FloatingPanel<Content>: View where Content: View {
     /// The height of the content.
     @State private var height: CGFloat = .minHeight
     
+    /// <#Description#>
+    @Binding private var isPresented: Bool
+    
     /// The maximum allowed height of the content.
     @State private var maximumHeight: CGFloat = .infinity
-    
+        
     /// A Boolean value indicating whether the panel should be configured for a compact environment.
     private var isCompact: Bool {
         horizontalSizeClass == .compact && verticalSizeClass == .regular
@@ -66,14 +73,14 @@ struct FloatingPanel<Content>: View where Content: View {
     public var body: some View {
         GeometryReader { geometryProxy in
             VStack {
-                if isCompact {
+                if isCompact && isPresented {
                     Handle(color: handleColor)
                         .gesture(drag)
                     Divider()
                 }
                 content
-                    .frame(minHeight: .minHeight, maxHeight: height)
-                if !isCompact {
+                    .frame(minHeight: .zero, maxHeight: height)
+                if !isCompact && isPresented {
                     Divider()
                     Handle(color: handleColor)
                         .gesture(drag)
@@ -83,6 +90,7 @@ struct FloatingPanel<Content>: View where Content: View {
             .background(backgroundColor)
             .cornerRadius(10, corners: isCompact ? [.topLeft, .topRight] : [.allCorners])
             .shadow(radius: 10)
+            .opacity(isPresented ? 1.0 : .zero)
             .padding([.leading, .top, .trailing], isCompact ? 0 : 10)
             .padding([.bottom], isCompact ? 0 : 50)
             .frame(
@@ -101,11 +109,15 @@ struct FloatingPanel<Content>: View where Content: View {
                     height = heightFor(detent: activeDetent)
                 }
             }
+            .onChange(of: isPresented) {
+                height = $0 ? heightFor(detent: activeDetent) : .zero
+            }
             .onAppear {
                 withAnimation {
                     height = heightFor(detent: activeDetent)
                 }
             }
+            .animation(.default, value: isPresented)
         }
     }
     
