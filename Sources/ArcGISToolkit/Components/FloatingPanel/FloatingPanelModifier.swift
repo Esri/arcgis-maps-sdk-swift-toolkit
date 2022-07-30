@@ -14,15 +14,28 @@
 import SwiftUI
 
 public extension View {
-    /// Presents a dynamic view with a presentation style similar to that of a sheet in compact
-    /// environments and a popover otherwise.
-    /// The resulting view allows for interaction with background contents.
+    /// A floating panel is a view that overlays a view and supplies view-related
+    /// content. For a map view, for instance, it could display a legend, bookmarks, search results, etc..
+    /// Apple Maps, Google Maps, Windows 10, and Collector have floating panel
+    /// implementations, sometimes referred to as a "bottom sheet".
+    ///
+    /// Floating panels are non-modal and can be transient, only displaying
+    /// information for a short period of time like identify results,
+    /// or persistent, where the information is always displayed, for example a
+    /// dedicated search panel. They will also be primarily simple containers
+    /// that clients will fill with their own content.
+    ///
+    /// The floating panel allows for interaction with background contents, unlike native sheets or popovers.
+    ///
     /// - Parameters:
-    ///   - detent: <#detent description#>
-    ///   - isPresented: <#isPresented description#>
-    ///   - maxWidth: <#maxWidth description#>
-    ///   - content: <#content description#>
-    /// - Returns: <#description#>
+    ///   - backgroundColor: The background color of the floating panel.
+    ///   - detent: A binding to the currently selected detent.
+    ///   - horizontalAlignment: The horizontal alignment of the floating panel.
+    ///   - isPresented: A binding to a Boolean value that determines whether the view is presented.
+    ///   - maxWidth: The maximum width of the floating panel.
+    ///   - content: A closure that returns the content of the floating panel.
+    /// - Returns: A dynamic view with a presentation style similar to that of a sheet in compact
+    /// environments and a popover otherwise.
     func floatingPanel<Content>(
         backgroundColor: Color = Color(uiColor: .systemBackground),
         detent: Binding<FloatingPanelDetent> = .constant(.half),
@@ -38,13 +51,13 @@ public extension View {
                 horizontalAlignment: horizontalAlignment,
                 isPresented: isPresented,
                 maxWidth: maxWidth,
-                innerContent: content()
+                content: content()
             )
         )
     }
 }
 
-/// <#Description#>
+/// Overlays a floating panel on the parent content.
 private struct FloatingPanelModifier<InnerContent>: ViewModifier where InnerContent: View {
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @Environment(\.verticalSizeClass) var verticalSizeClass
@@ -54,23 +67,23 @@ private struct FloatingPanelModifier<InnerContent>: ViewModifier where InnerCont
         horizontalSizeClass == .compact && verticalSizeClass == .regular
     }
     
-    /// <#Description#>
+    /// The background color of the floating panel.
     let backgroundColor: Color
     
-    /// <#Description#>
+    /// A binding to the currently selected detent.
     let detent: Binding<FloatingPanelDetent>
     
-    /// <#Description#>
+    /// The horizontal alignment of the floating panel.
     let horizontalAlignment: HorizontalAlignment
     
-    /// <#Description#>
+    /// A binding to a Boolean value that determines whether the view is presented.
     let isPresented: Binding<Bool>
     
-    /// <#Description#>
+    /// The maximum width of the floating panel.
     let maxWidth: CGFloat
     
-    /// <#Description#>
-    let innerContent: InnerContent
+    /// The content to be displayed within the floating panel.
+    let content: InnerContent
     
     func body(content: Content) -> some View {
         content
@@ -80,7 +93,7 @@ private struct FloatingPanelModifier<InnerContent>: ViewModifier where InnerCont
                     detent: detent,
                     isPresented: isPresented
                 ) {
-                    innerContent
+                    content
                 }
                 .edgesIgnoringSafeArea(.bottom)
                 .frame(maxWidth: isCompact ? .infinity : maxWidth)

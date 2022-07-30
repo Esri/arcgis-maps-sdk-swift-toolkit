@@ -27,17 +27,17 @@ struct FloatingPanel<Content>: View where Content: View {
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @Environment(\.verticalSizeClass) var verticalSizeClass
     
-    /// <#Description#>
+    /// The background color of the floating panel.
     let backgroundColor: Color
     
     /// The content shown in the floating panel.
     let content: Content
     
     /// Creates a `FloatingPanel`
-    /// - Parameter backgroundColor: <#backgroundColor description#>
-    /// - Parameter content: The view shown in the floating panel.
+    /// - Parameter backgroundColor: The background color of the floating panel.
     /// - Parameter detent: Controls the height of the panel.
-    /// - Parameter isPresented: <#isPresented description#>
+    /// - Parameter isPresented: A Boolean value indicating if the view is presented.
+    /// - Parameter content: The view shown in the floating panel.
     init(
         backgroundColor: Color,
         detent: Binding<FloatingPanelDetent>,
@@ -50,7 +50,7 @@ struct FloatingPanel<Content>: View where Content: View {
         _isPresented = isPresented
     }
     
-    /// The detent that is currently set.
+    /// A binding to the currently selected detent.
     @Binding private var activeDetent: FloatingPanelDetent
     
     /// The color of the handle.
@@ -59,7 +59,7 @@ struct FloatingPanel<Content>: View where Content: View {
     /// The height of the content.
     @State private var height: CGFloat = .minHeight
     
-    /// <#Description#>
+    /// A binding to a Boolean value that determines whether the view is presented.
     @Binding private var isPresented: Bool
     
     /// The maximum allowed height of the content.
