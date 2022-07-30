@@ -13,7 +13,6 @@
 
 import SwiftUI
 import ArcGIS
-import Charts
 
 /// A view displaying a `MediaPopupElement`.
 struct MediaPopupElementView: View {
