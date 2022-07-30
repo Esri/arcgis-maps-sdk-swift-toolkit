@@ -50,7 +50,7 @@ struct FloatingPanel<Content>: View where Content: View {
         _isPresented = isPresented
     }
     
-    /// The detent that is currently set.
+    /// A binding to the currently selected detent.
     @Binding private var activeDetent: FloatingPanelDetent
     
     /// The color of the handle.
@@ -59,7 +59,7 @@ struct FloatingPanel<Content>: View where Content: View {
     /// The height of the content.
     @State private var height: CGFloat = .minHeight
     
-    /// A Boolean value indicating if the view is presented.
+    /// A binding to a Boolean value that determines whether the view is presented.
     @Binding private var isPresented: Bool
     
     /// The maximum allowed height of the content.
