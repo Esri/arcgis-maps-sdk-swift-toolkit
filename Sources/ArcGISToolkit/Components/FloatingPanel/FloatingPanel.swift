@@ -27,17 +27,17 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED***@Environment(\.horizontalSizeClass) private var horizontalSizeClass
 ***REMOVED***@Environment(\.verticalSizeClass) var verticalSizeClass
 ***REMOVED***
-***REMOVED******REMOVED***/ <#Description#>
+***REMOVED******REMOVED***/ The background color of the floating panel.
 ***REMOVED***let backgroundColor: Color
 ***REMOVED***
 ***REMOVED******REMOVED***/ The content shown in the floating panel.
 ***REMOVED***let content: Content
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a `FloatingPanel`
-***REMOVED******REMOVED***/ - Parameter backgroundColor: <#backgroundColor description#>
-***REMOVED******REMOVED***/ - Parameter content: The view shown in the floating panel.
+***REMOVED******REMOVED***/ - Parameter backgroundColor: The background color of the floating panel.
 ***REMOVED******REMOVED***/ - Parameter detent: Controls the height of the panel.
-***REMOVED******REMOVED***/ - Parameter isPresented: <#isPresented description#>
+***REMOVED******REMOVED***/ - Parameter isPresented: A Boolean value indicating if the view is presented.
+***REMOVED******REMOVED***/ - Parameter content: The view shown in the floating panel.
 ***REMOVED***init(
 ***REMOVED******REMOVED***backgroundColor: Color,
 ***REMOVED******REMOVED***detent: Binding<FloatingPanelDetent>,
@@ -59,7 +59,7 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED******REMOVED***/ The height of the content.
 ***REMOVED***@State private var height: CGFloat = .minHeight
 ***REMOVED***
-***REMOVED******REMOVED***/ <#Description#>
+***REMOVED******REMOVED***/ A Boolean value indicating if the view is presented.
 ***REMOVED***@Binding private var isPresented: Bool
 ***REMOVED***
 ***REMOVED******REMOVED***/ The maximum allowed height of the content.
