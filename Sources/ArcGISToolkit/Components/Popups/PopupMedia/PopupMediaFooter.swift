@@ -14,13 +14,23 @@
 ***REMOVED***
 ***REMOVED***
 
+***REMOVED***/ A view displaying details for popup media.
 struct PopupMediaFooter: View {
+***REMOVED******REMOVED***/ The popup media to display.
 ***REMOVED***let popupMedia: PopupMedia
+***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***Text(popupMedia.title)
-***REMOVED******REMOVED******REMOVED***.font(.body)
-***REMOVED******REMOVED***Text(popupMedia.caption)
-***REMOVED******REMOVED******REMOVED***.font(.subheadline)
-***REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
+***REMOVED******REMOVED***VStack(alignment: .leading) {
+***REMOVED******REMOVED******REMOVED***if !popupMedia.title.isEmpty {
+***REMOVED******REMOVED******REMOVED******REMOVED***Text(popupMedia.title)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.body)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***if !popupMedia.caption.isEmpty {
+***REMOVED******REMOVED******REMOVED******REMOVED***Text(popupMedia.caption)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.subheadline)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
+***REMOVED******REMOVED***
+***REMOVED***
 ***REMOVED***
 ***REMOVED***

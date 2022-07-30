@@ -19,7 +19,7 @@ import Charts
 struct MediaPopupElementView: View {
 ***REMOVED******REMOVED***/ The `PopupElement` to display.
 ***REMOVED***var popupElement: MediaPopupElement
-
+***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***PopupElementHeader(
 ***REMOVED******REMOVED******REMOVED***title: popupElement.title,
@@ -29,11 +29,14 @@ struct MediaPopupElementView: View {
 ***REMOVED******REMOVED***PopupMediaView(popupMedia: popupElement.media)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ A view to display an array of `PopupMedia`.
+***REMOVED******REMOVED***/ A view displaying an array of `PopupMedia`.
 ***REMOVED***struct PopupMediaView: View {
 ***REMOVED******REMOVED******REMOVED***/ The popup media to display.
 ***REMOVED******REMOVED***let popupMedia: [PopupMedia]
-
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ The width of the view content.
+***REMOVED******REMOVED***@State private var viewWidth: CGFloat = .zero
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var body: some View {
 ***REMOVED******REMOVED******REMOVED***TabView {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ForEach(popupMedia) { media in
@@ -41,36 +44,24 @@ struct MediaPopupElementView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***switch media.kind {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .image:
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ImageMediaView(popupMedia: media)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .barChart,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.columnChart,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.lineChart,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.pieChart:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .barChart, .columnChart, .lineChart, .pieChart:
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ChartMediaView(popupMedia: media)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***default:
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***EmptyView()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***EdgeInsets(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***top: 8,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***leading: 8,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bottom: popupMedia.count > 1 ? 48: 8,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***trailing: 8
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding([.bottom], popupMedia.count > 1 ? 48: 8)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.tabItem {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(media.title)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.tabViewStyle(PageTabViewStyle(indexDisplayMode: popupMedia.count > 1 ? .always : .never))
-***REMOVED******REMOVED******REMOVED***.indexViewStyle(
-***REMOVED******REMOVED******REMOVED******REMOVED***PageIndexViewStyle(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***backgroundDisplayMode: .always
-***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, minHeight: 250, maxHeight: .infinity)
-***REMOVED******REMOVED******REMOVED******REMOVED***.frame(minWidth: 0, maxWidth: .infinity, minHeight: 300, maxHeight: .infinity)
+***REMOVED******REMOVED******REMOVED***.tabViewStyle(PageTabViewStyle())
+***REMOVED******REMOVED******REMOVED***.indexViewStyle(PageIndexViewStyle(backgroundDisplayMode: .always))
+***REMOVED******REMOVED******REMOVED***.frame(height: viewWidth * 0.75)
+***REMOVED******REMOVED******REMOVED***.onSizeChange {
+***REMOVED******REMOVED******REMOVED******REMOVED***viewWidth = $0.width
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
