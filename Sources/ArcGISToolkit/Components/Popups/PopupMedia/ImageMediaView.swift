@@ -13,79 +13,55 @@
 
 import SwiftUI
 import ArcGIS
+
+/// A view displaying image popup media.
 struct ImageMediaView: View {
+    /// The popup media to display.
     let popupMedia: PopupMedia
-    // TODO: pass in url so we're sure it's available
     
-    // TODO: general: clean up main MediaPopupElementView and create sub view files.
+    /// A Boolean value specifying whether the media should be shown full screen.
     @State private var showingFullScreen = false
-    @State private var fullScreenURL: URL!
     
     var body: some View {
-        VStack(alignment: .leading) {
-            // Use popupMedia.sourceURL for thumbnail
-            // Use popupMedia.linkURL for full-screen link
-            Group {
-                if let sourceURL = popupMedia.value?.sourceURL {
-                    AsyncImage(url: sourceURL) { phase in
-                        if let image = phase.image {
-                            image // Displays the loaded image.
-                                .resizable()
-                                .aspectRatio(contentMode: .fill)
-                                .frame(maxHeight: 250)
-                                .clipped()  // <- need maxWidth as well for this to work.  Use GeometryReader somewhere above.
-                        } else if let error = phase.error {
-                            Text("sourceURL: \(sourceURL.absoluteString); An error occurred loading the image: \(error.localizedDescription)") // Indicates an error.
-                        } else {
-                            ProgressView() // Acts as a placeholder.
-                        }
-                    }
-                    .onTapGesture {
-                        showingFullScreen = true
-                    }
-                }
-                else {
-                    // TODO:  better error (if any at all)
-                    Text("No URL for the image.")
-                }
-            }
-            
-            PopupMediaFooter(popupMedia: popupMedia)
-        }
-        .sheet(isPresented: $showingFullScreen) {
-            if let url = popupMedia.value?.sourceURL {
-                VStack {
-                    HStack {
-                        Button("Done") {
-                            showingFullScreen = false
-                        }
-                        Spacer()
-                    }
-                    .padding()
-                    AsyncImage(url: url) { phase in
-                        if let image = phase.image {
-                            // Displays the loaded image.
-                            image
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
-                        } else if phase.error != nil {
-                            // Displays an error image.
+        VStack {
+            if let sourceURL = popupMedia.value?.sourceURL {
+                AsyncImage(url: sourceURL) { phase in
+                    if let image = phase.image {
+                        // Display the loaded image.
+                        image
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                    } else if phase.error != nil {
+                        // Display an error message.
+                        HStack {
                             Image(systemName: "exclamationmark.circle")
                                 .aspectRatio(contentMode: .fit)
                                 .foregroundColor(.red)
-                        } else {
-                            // Display the progress view until image loads.
-                            ProgressView()
+                            Text("An error occurred loading the image.")
                         }
+                    } else {
+                        // Display a placeholder while the image is loading.
+                        ProgressView()
                     }
-                    .padding()
-                    .onTapGesture {
-                        if let url = popupMedia.value?.linkURL {
-                            UIApplication.shared.open(url)
-                        }
-                    }
-                    Spacer()
                 }
+                .onTapGesture {
+                    showingFullScreen = true
+                }
+                .padding()
+            }
+            HStack {
+                PopupMediaFooter(popupMedia: popupMedia)
+                Spacer()
+            }
+        }
+        .sheet(isPresented: $showingFullScreen) {
+            if let url = popupMedia.value?.sourceURL {
+                FullScreenImageView(
+                    popupMedia: popupMedia,
+                    sourceURL: url,
+                    showingFullScreen: $showingFullScreen
+                )
+                .padding()
             }
         }
     }

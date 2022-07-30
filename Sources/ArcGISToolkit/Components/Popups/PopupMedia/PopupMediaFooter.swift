@@ -14,13 +14,23 @@
 import SwiftUI
 import ArcGIS
 
+/// A view displaying details for popup media.
 struct PopupMediaFooter: View {
+    /// The popup media to display.
     let popupMedia: PopupMedia
+    
     var body: some View {
-        Text(popupMedia.title)
-            .font(.body)
-        Text(popupMedia.caption)
-            .font(.subheadline)
-            .foregroundColor(.secondary)
+        VStack(alignment: .leading) {
+            if !popupMedia.title.isEmpty {
+                Text(popupMedia.title)
+                    .font(.body)
+            }
+            
+            if !popupMedia.caption.isEmpty {
+                Text(popupMedia.caption)
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
+            }
+        }
     }
 }
