@@ -19,7 +19,7 @@ import Charts
 struct MediaPopupElementView: View {
     /// The `PopupElement` to display.
     var popupElement: MediaPopupElement
-
+    
     var body: some View {
         PopupElementHeader(
             title: popupElement.title,
@@ -29,11 +29,14 @@ struct MediaPopupElementView: View {
         PopupMediaView(popupMedia: popupElement.media)
     }
     
-    /// A view to display an array of `PopupMedia`.
+    /// A view displaying an array of `PopupMedia`.
     struct PopupMediaView: View {
         /// The popup media to display.
         let popupMedia: [PopupMedia]
-
+        
+        /// The width of the view content.
+        @State private var viewWidth: CGFloat = .zero
+        
         var body: some View {
             TabView {
                 ForEach(popupMedia) { media in
@@ -41,36 +44,24 @@ struct MediaPopupElementView: View {
                         switch media.kind {
                         case .image:
                             ImageMediaView(popupMedia: media)
-                        case .barChart,
-                                .columnChart,
-                                .lineChart,
-                                .pieChart:
+                        case .barChart, .columnChart, .lineChart, .pieChart:
                             ChartMediaView(popupMedia: media)
                         default:
                             EmptyView()
                         }
                     }
-                    .padding(
-                        EdgeInsets(
-                            top: 8,
-                            leading: 8,
-                            bottom: popupMedia.count > 1 ? 48: 8,
-                            trailing: 8
-                        )
-                    )
+                    .padding([.bottom], popupMedia.count > 1 ? 48: 8)
                     .tabItem {
                         Text(media.title)
                     }
                 }
             }
-            .tabViewStyle(PageTabViewStyle(indexDisplayMode: popupMedia.count > 1 ? .always : .never))
-            .indexViewStyle(
-                PageIndexViewStyle(
-                    backgroundDisplayMode: .always
-                )
-            )
-            .frame(maxWidth: .infinity, minHeight: 250, maxHeight: .infinity)
-//            .frame(minWidth: 0, maxWidth: .infinity, minHeight: 300, maxHeight: .infinity)
+            .tabViewStyle(PageTabViewStyle())
+            .indexViewStyle(PageIndexViewStyle(backgroundDisplayMode: .always))
+            .frame(height: viewWidth * 0.75)
+            .onSizeChange {
+                viewWidth = $0.width
+            }
         }
     }
 }
