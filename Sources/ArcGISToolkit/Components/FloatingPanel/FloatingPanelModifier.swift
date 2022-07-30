@@ -27,7 +27,7 @@ public extension View {
         backgroundColor: Color = Color(uiColor: .systemBackground),
         detent: Binding<FloatingPanelDetent> = .constant(.half),
         horizontalAlignment: HorizontalAlignment = .trailing,
-        isPresented: Binding<Bool>,
+        isPresented: Binding<Bool> = .constant(true),
         maxWidth: CGFloat = 400,
         _ content: @escaping () -> Content
     ) -> some View where Content: View {
@@ -64,7 +64,7 @@ private struct FloatingPanelModifier<InnerContent>: ViewModifier where InnerCont
     let horizontalAlignment: HorizontalAlignment
     
     /// <#Description#>
-    @Binding var isPresented: Bool
+    let isPresented: Binding<Bool>
     
     /// <#Description#>
     let maxWidth: CGFloat
@@ -77,7 +77,8 @@ private struct FloatingPanelModifier<InnerContent>: ViewModifier where InnerCont
             .overlay(alignment: Alignment(horizontal: horizontalAlignment, vertical: .top)) {
                 FloatingPanel(
                     backgroundColor: backgroundColor,
-                    detent: detent
+                    detent: detent,
+                    isPresented: isPresented
                 ) {
                     innerContent
                 }
