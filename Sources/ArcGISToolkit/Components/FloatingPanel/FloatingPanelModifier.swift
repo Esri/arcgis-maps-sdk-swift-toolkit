@@ -27,7 +27,7 @@ public extension View {
 ***REMOVED******REMOVED***backgroundColor: Color = Color(uiColor: .systemBackground),
 ***REMOVED******REMOVED***detent: Binding<FloatingPanelDetent> = .constant(.half),
 ***REMOVED******REMOVED***horizontalAlignment: HorizontalAlignment = .trailing,
-***REMOVED******REMOVED***isPresented: Binding<Bool>,
+***REMOVED******REMOVED***isPresented: Binding<Bool> = .constant(true),
 ***REMOVED******REMOVED***maxWidth: CGFloat = 400,
 ***REMOVED******REMOVED***_ content: @escaping () -> Content
 ***REMOVED***) -> some View where Content: View {
@@ -64,7 +64,7 @@ private struct FloatingPanelModifier<InnerContent>: ViewModifier where InnerCont
 ***REMOVED***let horizontalAlignment: HorizontalAlignment
 ***REMOVED***
 ***REMOVED******REMOVED***/ <#Description#>
-***REMOVED***@Binding var isPresented: Bool
+***REMOVED***let isPresented: Binding<Bool>
 ***REMOVED***
 ***REMOVED******REMOVED***/ <#Description#>
 ***REMOVED***let maxWidth: CGFloat
@@ -77,7 +77,8 @@ private struct FloatingPanelModifier<InnerContent>: ViewModifier where InnerCont
 ***REMOVED******REMOVED******REMOVED***.overlay(alignment: Alignment(horizontal: horizontalAlignment, vertical: .top)) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***FloatingPanel(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***backgroundColor: backgroundColor,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***detent: detent
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***detent: detent,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented: isPresented
 ***REMOVED******REMOVED******REMOVED******REMOVED***) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***innerContent
 ***REMOVED******REMOVED******REMOVED***

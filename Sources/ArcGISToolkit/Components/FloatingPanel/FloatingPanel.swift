@@ -34,17 +34,20 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED***let content: Content
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a `FloatingPanel`
+***REMOVED******REMOVED***/ - Parameter backgroundColor: <#backgroundColor description#>
 ***REMOVED******REMOVED***/ - Parameter content: The view shown in the floating panel.
 ***REMOVED******REMOVED***/ - Parameter detent: Controls the height of the panel.
-***REMOVED******REMOVED***/ - Parameter backgroundColor: <#backgroundColor description#>
+***REMOVED******REMOVED***/ - Parameter isPresented: <#isPresented description#>
 ***REMOVED***init(
 ***REMOVED******REMOVED***backgroundColor: Color,
 ***REMOVED******REMOVED***detent: Binding<FloatingPanelDetent>,
+***REMOVED******REMOVED***isPresented: Binding<Bool>,
 ***REMOVED******REMOVED***@ViewBuilder content: () -> Content
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.backgroundColor = backgroundColor
 ***REMOVED******REMOVED***self.content = content()
 ***REMOVED******REMOVED***_activeDetent = detent
+***REMOVED******REMOVED***_isPresented = isPresented
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The detent that is currently set.
@@ -56,9 +59,12 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED******REMOVED***/ The height of the content.
 ***REMOVED***@State private var height: CGFloat = .minHeight
 ***REMOVED***
+***REMOVED******REMOVED***/ <#Description#>
+***REMOVED***@Binding private var isPresented: Bool
+***REMOVED***
 ***REMOVED******REMOVED***/ The maximum allowed height of the content.
 ***REMOVED***@State private var maximumHeight: CGFloat = .infinity
-***REMOVED***
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the panel should be configured for a compact environment.
 ***REMOVED***private var isCompact: Bool {
 ***REMOVED******REMOVED***horizontalSizeClass == .compact && verticalSizeClass == .regular
@@ -67,14 +73,14 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***GeometryReader { geometryProxy in
 ***REMOVED******REMOVED******REMOVED***VStack {
-***REMOVED******REMOVED******REMOVED******REMOVED***if isCompact {
+***REMOVED******REMOVED******REMOVED******REMOVED***if isCompact && isPresented {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Handle(color: handleColor)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.gesture(drag)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Divider()
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***content
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(minHeight: .minHeight, maxHeight: height)
-***REMOVED******REMOVED******REMOVED******REMOVED***if !isCompact {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(minHeight: .zero, maxHeight: height)
+***REMOVED******REMOVED******REMOVED******REMOVED***if !isCompact && isPresented {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Divider()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Handle(color: handleColor)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.gesture(drag)
@@ -84,6 +90,7 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED******REMOVED******REMOVED***.background(backgroundColor)
 ***REMOVED******REMOVED******REMOVED***.cornerRadius(10, corners: isCompact ? [.topLeft, .topRight] : [.allCorners])
 ***REMOVED******REMOVED******REMOVED***.shadow(radius: 10)
+***REMOVED******REMOVED******REMOVED***.opacity(isPresented ? 1.0 : .zero)
 ***REMOVED******REMOVED******REMOVED***.padding([.leading, .top, .trailing], isCompact ? 0 : 10)
 ***REMOVED******REMOVED******REMOVED***.padding([.bottom], isCompact ? 0 : 50)
 ***REMOVED******REMOVED******REMOVED***.frame(
@@ -102,11 +109,15 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***height = heightFor(detent: activeDetent)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.onChange(of: isPresented) {
+***REMOVED******REMOVED******REMOVED******REMOVED***height = $0 ? heightFor(detent: activeDetent) : .zero
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onAppear {
 ***REMOVED******REMOVED******REMOVED******REMOVED***withAnimation {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***height = heightFor(detent: activeDetent)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.animation(.default, value: isPresented)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
