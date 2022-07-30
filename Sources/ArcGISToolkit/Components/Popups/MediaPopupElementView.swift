@@ -13,7 +13,6 @@
 
 ***REMOVED***
 ***REMOVED***
-import Charts
 
 ***REMOVED***/ A view displaying a `MediaPopupElement`.
 struct MediaPopupElementView: View {
