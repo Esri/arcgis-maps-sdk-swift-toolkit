@@ -113,9 +113,8 @@ struct HTMLTextView: UIViewRepresentable {
             decidePolicyFor navigationAction: WKNavigationAction
         ) async -> WKNavigationActionPolicy {
             if navigationAction.navigationType == .linkActivated,
-               (navigationAction.request.url?.scheme?.lowercased() == "http" ||
-                navigationAction.request.url?.scheme?.lowercased() == "https"),
-               let url = navigationAction.request.url {
+               let url = navigationAction.request.url,
+               (url.isHTTP || url.isHTTPS) {
                 DispatchQueue.main.async {
                     UIApplication.shared.open(url)
                 }
