@@ -102,8 +102,7 @@ struct HTMLTextView: UIViewRepresentable {
 ***REMOVED******REMOVED******REMOVED***self.parent = parent
 ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** WKNavigationDelegate method invoked when content starts
-***REMOVED******REMOVED******REMOVED*** arriving for the main frame.
+***REMOVED******REMOVED******REMOVED*** `WKNavigationDelegate` method invoked when content starts arriving for the main frame.
 ***REMOVED******REMOVED***public func webView(_ webView: WKWebView, didCommit navigation: WKNavigation!) {
 ***REMOVED******REMOVED******REMOVED***hasCommitted = true
 ***REMOVED***
