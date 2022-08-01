@@ -126,8 +126,8 @@ struct HTMLTextView: UIViewRepresentable {
             }
         }
         
-        // WKNavigationDelegate method invoked when a main frame navigation
-        // completes.  This is where the height calculation happens.
+        // `WKNavigationDelegate` method invoked when a main frame navigation completes. This is
+        // where the height calculation happens.
         func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!){
             webView.evaluateJavaScript("document.readyState") { [weak self] complete, _ in
                 guard complete != nil,
