@@ -28,10 +28,10 @@ struct FullScreenImageView: View {
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***VStack() {
 ***REMOVED******REMOVED******REMOVED***HStack {
+***REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED******REMOVED***Button("Done") {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***showingFullScreen = false
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***Text("\(popupMedia.title)")
 ***REMOVED******REMOVED******REMOVED******REMOVED***.font(.title2)
