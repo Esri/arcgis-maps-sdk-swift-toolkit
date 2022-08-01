@@ -30,7 +30,7 @@ struct TextPopupElementView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.clipShape(roundedRect)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(height: webViewHeight)
 ***REMOVED******REMOVED******REMOVED******REMOVED***if webViewHeight == .zero {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Show ProgressView until HTMLTextView has set the height.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Show `ProgressView` until `HTMLTextView` has set the height.
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ProgressView()
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***else {
