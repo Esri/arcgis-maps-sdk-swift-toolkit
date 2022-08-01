@@ -209,6 +209,11 @@ private struct RoundedCorners: Shape {
 ***REMOVED***
 
 private extension View {
+***REMOVED******REMOVED***/ Clips this view to its bounding frame, with the specified corner radius, on the specified corners.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - corners: The corners to be rounded.
+***REMOVED******REMOVED***/ - Returns: A view that clips this view to its bounding frame with the specified corner radius and
+***REMOVED******REMOVED***/ corners.
 ***REMOVED***func cornerRadius(
 ***REMOVED******REMOVED***_ radius: CGFloat,
 ***REMOVED******REMOVED***corners: UIRectCorner
