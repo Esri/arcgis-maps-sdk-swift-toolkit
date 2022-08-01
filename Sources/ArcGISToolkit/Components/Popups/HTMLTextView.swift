@@ -92,7 +92,7 @@ struct HTMLTextView: UIViewRepresentable {
 ***REMOVED***class Coordinator: NSObject, WKNavigationDelegate {
 ***REMOVED******REMOVED***var parent: HTMLTextView
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ A Boolean value specifying when content starts arriving for the main frame.
+***REMOVED******REMOVED******REMOVED***/ A Boolean value indicating whether the content started arriving for the main frame.
 ***REMOVED******REMOVED***private var hasCommitted = false
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ A Boolean value specifying whether we've calculated a height for the web view or not.
