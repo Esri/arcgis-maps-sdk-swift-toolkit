@@ -19,9 +19,9 @@ struct TextPopupElementView: View {
 ***REMOVED******REMOVED***/ The `PopupElement` to display.
 ***REMOVED***var popupElement: TextPopupElement
 ***REMOVED***
-***REMOVED******REMOVED***/ The calcuated height of the `HTMLTextView`.
+***REMOVED******REMOVED***/ The calculated height of the `HTMLTextView`.
 ***REMOVED***@State private var webViewHeight: CGFloat = .zero
-
+***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***let roundedRect = RoundedRectangle(cornerRadius: 8)
 ***REMOVED******REMOVED***if !popupElement.text.isEmpty {

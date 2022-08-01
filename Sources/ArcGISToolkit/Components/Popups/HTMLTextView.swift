@@ -19,7 +19,7 @@ struct HTMLTextView: UIViewRepresentable {
 ***REMOVED******REMOVED***/ The user-defined HTML string.
 ***REMOVED***var userHTML: String = ""
 ***REMOVED***
-***REMOVED******REMOVED***/ The HTML string to dispay, including the header.
+***REMOVED******REMOVED***/ The HTML string to display, including the header.
 ***REMOVED***var displayHTML: String {
 ***REMOVED******REMOVED******REMOVED*** Set the initial scale to 1, don't allow user scaling.
 ***REMOVED******REMOVED******REMOVED*** This fixes small text with `WKWebView` and also doesn't allow the
@@ -28,7 +28,7 @@ struct HTMLTextView: UIViewRepresentable {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Inject CSS in a head element to:
 ***REMOVED******REMOVED******REMOVED*** - word wrap long content such as urls
-***REMOVED******REMOVED******REMOVED*** - set font family to default apple font
+***REMOVED******REMOVED******REMOVED*** - set font family to default Apple font
 ***REMOVED******REMOVED******REMOVED*** - set font size to subheadline
 ***REMOVED******REMOVED******REMOVED*** - remove padding from the body. Add some margin to separate from the
 ***REMOVED******REMOVED******REMOVED***   border of the webview.
