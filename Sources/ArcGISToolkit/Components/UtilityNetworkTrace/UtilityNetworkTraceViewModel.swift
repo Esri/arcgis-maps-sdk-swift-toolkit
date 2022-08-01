@@ -114,6 +114,31 @@ import SwiftUI
         }
     }
     
+    /// Adds a new starting point to the pending trace.
+    /// - Parameters:
+    ///   - point: A point on the map in screen coordinates.
+    ///   - mapPoint: A point on the map in map coordinates.
+    ///   - proxy: Provides a method of layer identification.
+    func addStartingPoint(
+        at point: CGPoint,
+        mapPoint: Point,
+        with proxy: MapViewProxy
+    ) async {
+        let identifyLayerResults = try? await proxy.identifyLayers(
+            screenPoint: point,
+            tolerance: 10
+        )
+        for layerResult in identifyLayerResults ?? [] {
+            for geoElement in layerResult.geoElements {
+                let startingPoint = UtilityNetworkTraceStartingPoint(
+                    geoElement: geoElement,
+                    mapPoint: mapPoint
+                )
+                await processAndAdd(startingPoint)
+            }
+        }
+    }
+    
     /// Deletes the provided starting point from the pending trace.
     /// - Parameter startingPoint: The starting point to be deleted.
     func delete(_ startingPoint: UtilityNetworkTraceStartingPoint) {
@@ -228,31 +253,6 @@ import SwiftUI
         pendingTrace.configuration = configuration
         if !pendingTrace.userDidSpecifyName {
             pendingTrace.name = "\(configuration.name) \((completedTraces.filter({ $0.configuration == configuration }).count + 1).description)"
-        }
-    }
-    
-    /// Adds a new starting point to the pending trace.
-    /// - Parameters:
-    ///   - point: A point on the map in screen coordinates.
-    ///   - mapPoint: A point on the map in map coordinates.
-    ///   - proxy: Provides a method of layer identification.
-    func makeStartingPoint(
-        at point: CGPoint,
-        mapPoint: Point,
-        with proxy: MapViewProxy
-    ) async {
-        let identifyLayerResults = try? await proxy.identifyLayers(
-            screenPoint: point,
-            tolerance: 10
-        )
-        for layerResult in identifyLayerResults ?? [] {
-            for geoElement in layerResult.geoElements {
-                let startingPoint = UtilityNetworkTraceStartingPoint(
-                    geoElement: geoElement,
-                    mapPoint: mapPoint
-                )
-                await processAndAdd(startingPoint)
-            }
         }
     }
     
