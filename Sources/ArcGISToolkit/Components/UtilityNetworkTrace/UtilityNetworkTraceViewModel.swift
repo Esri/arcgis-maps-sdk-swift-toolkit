@@ -314,6 +314,10 @@ import SwiftUI
         pendingTrace.startingPoints.append(newStartingPoint)
     }
     
+    /// Sets the terminal configuration of the provided starting point.
+    /// - Parameters:
+    ///   - startingPoint: The starting point to be modified.
+    ///   - newValue: The new utility terminal to be set on the provided starting point.
     func setTerminalConfigurationFor(
         startingPoint: UtilityNetworkTraceStartingPoint,
         to newValue: UtilityTerminal
