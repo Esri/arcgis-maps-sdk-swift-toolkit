@@ -26,7 +26,7 @@ struct HTMLTextView: UIViewRepresentable {
         // user to pinch to zoom.
         var header = "<header><meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no'></header>"
         
-        // Inject css in a head element to:
+        // Inject CSS in a head element to:
         // - word wrap long content such as urls
         // - set font family to default apple font
         // - set font size to subheadline
