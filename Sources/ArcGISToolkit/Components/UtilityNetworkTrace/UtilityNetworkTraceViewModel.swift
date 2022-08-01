@@ -189,10 +189,10 @@ import Foundation
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Changes the selected network.
-***REMOVED******REMOVED***/ - Parameter network: The new utility network to be selected.
 ***REMOVED******REMOVED***/
 ***REMOVED******REMOVED***/ This function also clears any set starting points in the pending trace and reloads the list of available
 ***REMOVED******REMOVED***/ trace configurations.
+***REMOVED******REMOVED***/ - Parameter network: The new utility network to be selected.
 ***REMOVED***func setNetwork(_ network: UtilityNetwork) {
 ***REMOVED******REMOVED***self.network = network
 ***REMOVED******REMOVED***pendingTrace.startingPoints.removeAll()
