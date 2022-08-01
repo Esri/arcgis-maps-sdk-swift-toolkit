@@ -131,7 +131,6 @@ struct HTMLTextView: UIViewRepresentable {
         func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!){
             webView.evaluateJavaScript("document.readyState") { [weak self] complete, _ in
                 guard complete != nil,
-                      let webView = webView,
                       self?.hasCommitted ?? false
                 else { return }
                 
