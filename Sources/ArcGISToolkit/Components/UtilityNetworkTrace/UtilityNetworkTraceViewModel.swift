@@ -453,9 +453,8 @@ import Foundation
 ***REMOVED******REMOVED***_ = completedTraces[index].startingPoints.map { $0.graphic?.isSelected = isSelected ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Loads the named trace configurations in the network.
-***REMOVED******REMOVED***/ Returns the named trace configurations in the network on the provided map.
 ***REMOVED******REMOVED***/ - Parameter map: A web map containing one or more utility networks.
+***REMOVED******REMOVED***/ ***REMOVED***/ - Returns: The named trace configurations in the network on the provided map.
 ***REMOVED***func utilityNamedTraceConfigurations(from map: Map) async -> [UtilityNamedTraceConfiguration] {
 ***REMOVED******REMOVED***guard let network = network else { return [] ***REMOVED***
 ***REMOVED******REMOVED***do {
@@ -471,16 +470,17 @@ import Foundation
 ***REMOVED***
 
 extension UtilityNetworkTraceViewModel {
-***REMOVED******REMOVED***/ Finds the location on the line nearest the input point, expressed as the fraction along the line’s total
-***REMOVED******REMOVED***/ geodesic length.
+***REMOVED******REMOVED***/ Finds the location on the line nearest the input point.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - inputGeometry: The line to be measured.
 ***REMOVED******REMOVED***/   - point: A location along the line.
+***REMOVED******REMOVED***/ - Returns: A location along the line expressed as a fraction of its total length.
+***REMOVED******REMOVED***/ - Precondition: `inputGeometry` is a `Polyline`.
 ***REMOVED***private func fractionAlongEdge(
 ***REMOVED******REMOVED***of inputGeometry: Geometry,
 ***REMOVED******REMOVED***at point: Point
 ***REMOVED***) -> Double {
-***REMOVED******REMOVED***var geometry = inputGeometry
+***REMOVED******REMOVED***guard var geometry = inputGeometry as? Polyline else { return .zero ***REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Remove Z
 ***REMOVED******REMOVED***if geometry.hasZ {
 ***REMOVED******REMOVED******REMOVED***geometry = GeometryEngine.makeGeometry(
@@ -500,7 +500,7 @@ extension UtilityNetworkTraceViewModel {
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***return GeometryEngine.polyline(
-***REMOVED******REMOVED******REMOVED***geometry as! Polyline,
+***REMOVED******REMOVED******REMOVED***geometry,
 ***REMOVED******REMOVED******REMOVED***fractionalLengthClosestTo: point,
 ***REMOVED******REMOVED******REMOVED***tolerance: 10
 ***REMOVED******REMOVED***)
