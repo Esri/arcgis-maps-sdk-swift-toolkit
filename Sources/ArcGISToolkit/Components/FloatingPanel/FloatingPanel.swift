@@ -209,6 +209,11 @@ private struct RoundedCorners: Shape {
 }
 
 private extension View {
+    /// Clips this view to its bounding frame, with the specified corner radius, on the specified corners.
+    /// - Parameters:
+    ///   - corners: The corners to be rounded.
+    /// - Returns: A view that clips this view to its bounding frame with the specified corner radius and
+    /// corners.
     func cornerRadius(
         _ radius: CGFloat,
         corners: UIRectCorner
