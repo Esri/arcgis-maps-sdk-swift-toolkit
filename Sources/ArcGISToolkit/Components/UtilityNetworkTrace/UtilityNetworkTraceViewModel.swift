@@ -237,8 +237,7 @@ import Foundation
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Asynchronously sets the nullable members of the provided starting point and adds it to the pending
-***REMOVED******REMOVED***/ trace.
+***REMOVED******REMOVED***/ Sets the nullable members of the provided starting point and adds it to the pending trace.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - startingPoint: The starting point to be processed and added to the pending trace.
 ***REMOVED***func processAndAdd(_ startingPoint: UtilityNetworkTraceStartingPoint) {
