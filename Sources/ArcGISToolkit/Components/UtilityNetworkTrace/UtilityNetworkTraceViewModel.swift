@@ -115,6 +115,31 @@ import Foundation
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ Adds a new starting point to the pending trace.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - point: A point on the map in screen coordinates.
+***REMOVED******REMOVED***/   - mapPoint: A point on the map in map coordinates.
+***REMOVED******REMOVED***/   - proxy: Provides a method of layer identification.
+***REMOVED***func addStartingPoint(
+***REMOVED******REMOVED***at point: CGPoint,
+***REMOVED******REMOVED***mapPoint: Point,
+***REMOVED******REMOVED***with proxy: MapViewProxy
+***REMOVED***) async {
+***REMOVED******REMOVED***let identifyLayerResults = try? await proxy.identifyLayers(
+***REMOVED******REMOVED******REMOVED***screenPoint: point,
+***REMOVED******REMOVED******REMOVED***tolerance: 10
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***for layerResult in identifyLayerResults ?? [] {
+***REMOVED******REMOVED******REMOVED***for geoElement in layerResult.geoElements {
+***REMOVED******REMOVED******REMOVED******REMOVED***let startingPoint = UtilityNetworkTraceStartingPoint(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***geoElement: geoElement,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mapPoint: mapPoint
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***await processAndAdd(startingPoint)
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
 ***REMOVED******REMOVED***/ Deletes the provided starting point from the pending trace.
 ***REMOVED******REMOVED***/ - Parameter startingPoint: The starting point to be deleted.
 ***REMOVED***func delete(_ startingPoint: UtilityNetworkTraceStartingPoint) {
@@ -236,31 +261,6 @@ import Foundation
 ***REMOVED******REMOVED***pendingTrace.configuration = configuration
 ***REMOVED******REMOVED***if !pendingTrace.userDidSpecifyName {
 ***REMOVED******REMOVED******REMOVED***pendingTrace.name = "\(configuration.name) \((completedTraces.filter({ $0.configuration == configuration ***REMOVED***).count + 1).description)"
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ Adds a new starting point to the pending trace.
-***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - point: A point on the map in screen coordinates.
-***REMOVED******REMOVED***/   - mapPoint: A point on the map in map coordinates.
-***REMOVED******REMOVED***/   - proxy: Provides a method of layer identification.
-***REMOVED***func makeStartingPoint(
-***REMOVED******REMOVED***at point: CGPoint,
-***REMOVED******REMOVED***mapPoint: Point,
-***REMOVED******REMOVED***with proxy: MapViewProxy
-***REMOVED***) async {
-***REMOVED******REMOVED***let identifyLayerResults = try? await proxy.identifyLayers(
-***REMOVED******REMOVED******REMOVED***screenPoint: point,
-***REMOVED******REMOVED******REMOVED***tolerance: 10
-***REMOVED******REMOVED***)
-***REMOVED******REMOVED***for layerResult in identifyLayerResults ?? [] {
-***REMOVED******REMOVED******REMOVED***for geoElement in layerResult.geoElements {
-***REMOVED******REMOVED******REMOVED******REMOVED***let startingPoint = UtilityNetworkTraceStartingPoint(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***geoElement: geoElement,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mapPoint: mapPoint
-***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED***await processAndAdd(startingPoint)
-***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
