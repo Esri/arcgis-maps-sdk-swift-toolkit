@@ -157,3 +157,15 @@ struct HTMLTextView: UIViewRepresentable {
         Coordinator(self)
     }
 }
+
+private extension URL {
+    /// A Boolean value indicating whether the scheme is HTTP (case-insensitive).
+    var isHTTP: Bool {
+        scheme?.caseInsensitiveCompare("http") == .orderedSame
+    }
+    
+    /// A Boolean value indicating whether the scheme is HTTPS (case-insensitive).
+    var isHTTPS: Bool {
+        scheme?.caseInsensitiveCompare("https") == .orderedSame
+    }
+}
