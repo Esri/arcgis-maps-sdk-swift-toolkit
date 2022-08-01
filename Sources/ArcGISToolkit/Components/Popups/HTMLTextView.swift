@@ -131,7 +131,6 @@ struct HTMLTextView: UIViewRepresentable {
 ***REMOVED******REMOVED***func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!){
 ***REMOVED******REMOVED******REMOVED***webView.evaluateJavaScript("document.readyState") { [weak self] complete, _ in
 ***REMOVED******REMOVED******REMOVED******REMOVED***guard complete != nil,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  let webView = webView,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  self?.hasCommitted ?? false
 ***REMOVED******REMOVED******REMOVED******REMOVED***else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
