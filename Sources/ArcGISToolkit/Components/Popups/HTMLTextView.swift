@@ -95,7 +95,7 @@ struct HTMLTextView: UIViewRepresentable {
         /// A Boolean value indicating whether the content started arriving for the main frame.
         private var hasCommitted = false
         
-        /// A Boolean value specifying whether we've calculated a height for the web view or not.
+        /// A Boolean value indicating whether the height is calculated for the web view.
         private var hasHeight = false
         
         init(_ parent: HTMLTextView) {
