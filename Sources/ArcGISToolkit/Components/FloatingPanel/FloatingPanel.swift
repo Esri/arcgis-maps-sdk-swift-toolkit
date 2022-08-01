@@ -190,7 +190,7 @@ private extension Color {
 ***REMOVED***static var activeHandleColor: Color { .primary ***REMOVED***
 ***REMOVED***
 
-private struct RoundedCorner: Shape {
+private struct RoundedCorners: Shape {
 ***REMOVED***var corners: UIRectCorner
 ***REMOVED***
 ***REMOVED***var radius: CGFloat
@@ -213,7 +213,7 @@ private extension View {
 ***REMOVED******REMOVED***_ radius: CGFloat,
 ***REMOVED******REMOVED***corners: UIRectCorner
 ***REMOVED***) -> some View {
-***REMOVED******REMOVED***clipShape(RoundedCorner(
+***REMOVED******REMOVED***clipShape(RoundedCorners(
 ***REMOVED******REMOVED******REMOVED***corners: corners,
 ***REMOVED******REMOVED******REMOVED***radius: radius
 ***REMOVED******REMOVED***))
