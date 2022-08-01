@@ -216,10 +216,10 @@ import SwiftUI
     }
     
     /// Changes the selected network.
-    /// - Parameter network: The new utility network to be selected.
     ///
     /// This function also clears any set starting points in the pending trace and reloads the list of available
     /// trace configurations.
+    /// - Parameter network: The new utility network to be selected.
     func setNetwork(_ network: UtilityNetwork) {
         self.network = network
         pendingTrace.startingPoints.removeAll()
