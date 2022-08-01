@@ -28,10 +28,10 @@ struct FullScreenImageView: View {
     var body: some View {
         VStack() {
             HStack {
+                Spacer()
                 Button("Done") {
                     showingFullScreen = false
                 }
-                Spacer()
             }
             Text("\(popupMedia.title)")
                 .font(.title2)
