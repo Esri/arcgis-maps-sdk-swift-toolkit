@@ -485,12 +485,11 @@ import Foundation
 ***REMOVED***
 
 extension UtilityNetworkTraceViewModel {
-***REMOVED******REMOVED***/ Finds the location on the line nearest the input point.
+***REMOVED******REMOVED***/ Finds the location on a polyline nearest the point.
 ***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - inputGeometry: The line to be measured.
-***REMOVED******REMOVED***/   - point: A location along the line.
-***REMOVED******REMOVED***/ - Returns: A location along the line expressed as a fraction of its total length.
-***REMOVED******REMOVED***/ - Precondition: `inputGeometry` is a `Polyline`.
+***REMOVED******REMOVED***/   - inputGeometry: The polyline to be evaluated.
+***REMOVED******REMOVED***/   - point: A location along the polyline.
+***REMOVED******REMOVED***/ - Returns: A location along the polyline expressed as a fraction of its total length.
 ***REMOVED***private func fractionAlongEdge(
 ***REMOVED******REMOVED***of inputGeometry: Geometry,
 ***REMOVED******REMOVED***at point: Point
