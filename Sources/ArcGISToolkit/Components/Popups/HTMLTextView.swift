@@ -113,9 +113,8 @@ struct HTMLTextView: UIViewRepresentable {
 ***REMOVED******REMOVED******REMOVED***decidePolicyFor navigationAction: WKNavigationAction
 ***REMOVED******REMOVED***) async -> WKNavigationActionPolicy {
 ***REMOVED******REMOVED******REMOVED***if navigationAction.navigationType == .linkActivated,
-***REMOVED******REMOVED******REMOVED***   (navigationAction.request.url?.scheme?.lowercased() == "http" ||
-***REMOVED******REMOVED******REMOVED******REMOVED***navigationAction.request.url?.scheme?.lowercased() == "https"),
-***REMOVED******REMOVED******REMOVED***   let url = navigationAction.request.url {
+***REMOVED******REMOVED******REMOVED***   let url = navigationAction.request.url,
+***REMOVED******REMOVED******REMOVED***   (url.isHTTP || url.isHTTPS) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***DispatchQueue.main.async {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***UIApplication.shared.open(url)
 ***REMOVED******REMOVED******REMOVED***
