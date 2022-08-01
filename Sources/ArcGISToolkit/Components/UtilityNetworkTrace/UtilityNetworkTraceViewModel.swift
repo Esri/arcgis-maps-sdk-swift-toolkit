@@ -314,6 +314,10 @@ import Foundation
 ***REMOVED******REMOVED***pendingTrace.startingPoints.append(newStartingPoint)
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ Sets the terminal configuration of the provided starting point.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - startingPoint: The starting point to be modified.
+***REMOVED******REMOVED***/   - newValue: The new utility terminal to be set on the provided starting point.
 ***REMOVED***func setTerminalConfigurationFor(
 ***REMOVED******REMOVED***startingPoint: UtilityNetworkTraceStartingPoint,
 ***REMOVED******REMOVED***to newValue: UtilityTerminal
