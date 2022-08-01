@@ -25,29 +25,10 @@ struct ImageMediaView: View {
     var body: some View {
         VStack {
             if let sourceURL = popupMedia.value?.sourceURL {
-                AsyncImage(url: sourceURL) { phase in
-                    if let image = phase.image {
-                        // Display the loaded image.
-                        image
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                    } else if phase.error != nil {
-                        // Display an error message.
-                        HStack {
-                            Image(systemName: "exclamationmark.circle")
-                                .aspectRatio(contentMode: .fit)
-                                .foregroundColor(.red)
-                            Text("An error occurred loading the image.")
-                        }
-                    } else {
-                        // Display a placeholder while the image is loading.
-                        ProgressView()
-                    }
-                }
+                AsyncImageView(url: sourceURL)
                 .onTapGesture {
                     showingFullScreen = true
                 }
-                .padding()
             }
             HStack {
                 PopupMediaFooter(popupMedia: popupMedia)
