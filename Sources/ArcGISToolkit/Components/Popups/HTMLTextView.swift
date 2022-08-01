@@ -35,7 +35,7 @@ struct HTMLTextView: UIViewRepresentable {
 ***REMOVED******REMOVED******REMOVED*** - limit images to a maximum width of 100%
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Also wrap the passed HTML fragment inside <html></html>
-***REMOVED******REMOVED******REMOVED*** open/close tags so that these css styles will apply
+***REMOVED******REMOVED******REMOVED*** open/close tags so that these CSS styles will apply
 ***REMOVED******REMOVED***header = header.appending("""
 ***REMOVED******REMOVED******REMOVED******REMOVED***<html>
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***<head>
