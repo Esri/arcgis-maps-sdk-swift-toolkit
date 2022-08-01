@@ -54,7 +54,7 @@ struct HTMLTextView: UIViewRepresentable {
                     <body>
                 """)
         
-        // The final string is the header + userHTML + "</body></html>"
+        // The final string is the header + userHTML + "</body></html>".
         return header.appending(
             userHTML.trimmingCharacters(in: .whitespacesAndNewlines)
         ).appending("</body></html>")
