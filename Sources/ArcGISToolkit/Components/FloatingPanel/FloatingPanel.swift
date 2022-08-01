@@ -64,7 +64,7 @@ struct FloatingPanel<Content>: View where Content: View {
     
     /// The maximum allowed height of the content.
     @State private var maximumHeight: CGFloat = .infinity
-        
+    
     /// A Boolean value indicating whether the panel should be configured for a compact environment.
     private var isCompact: Bool {
         horizontalSizeClass == .compact && verticalSizeClass == .regular
