@@ -190,7 +190,7 @@ private extension Color {
     static var activeHandleColor: Color { .primary }
 }
 
-private struct RoundedCorner: Shape {
+private struct RoundedCorners: Shape {
     var corners: UIRectCorner
     
     var radius: CGFloat
@@ -213,7 +213,7 @@ private extension View {
         _ radius: CGFloat,
         corners: UIRectCorner
     ) -> some View {
-        clipShape(RoundedCorner(
+        clipShape(RoundedCorners(
             corners: corners,
             radius: radius
         ))
