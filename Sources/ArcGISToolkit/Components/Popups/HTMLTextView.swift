@@ -54,7 +54,7 @@ struct HTMLTextView: UIViewRepresentable {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***<body>
 ***REMOVED******REMOVED******REMOVED******REMOVED***""")
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** The final string is the header + userHTML + "</body></html>"
+***REMOVED******REMOVED******REMOVED*** The final string is the header + userHTML + "</body></html>".
 ***REMOVED******REMOVED***return header.appending(
 ***REMOVED******REMOVED******REMOVED***userHTML.trimmingCharacters(in: .whitespacesAndNewlines)
 ***REMOVED******REMOVED***).appending("</body></html>")
