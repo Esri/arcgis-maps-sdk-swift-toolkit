@@ -145,8 +145,8 @@ struct HTMLTextView: UIViewRepresentable {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.parent.height = height
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** With certain HTML strings, the JavaScript above kept
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** getting called, with increasingly large heights.  This
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** prevents that from happening.  As this block is only
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** getting called, with increasingly large heights. This
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** prevents that from happening. As this block is only
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** called after the `document.readyState` is "complete",
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** this should be OK.
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.hasHeight = true
