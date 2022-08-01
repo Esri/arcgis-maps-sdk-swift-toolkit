@@ -27,7 +27,7 @@ struct AsyncImageView: View {
                     .resizable()
                     .aspectRatio(contentMode: .fit)
             } else if phase.error != nil {
-                // Displays an error image.
+                // Displays an error notification.
                 HStack(alignment: .center) {
                     Image(systemName: "exclamationmark.circle")
                         .aspectRatio(contentMode: .fit)

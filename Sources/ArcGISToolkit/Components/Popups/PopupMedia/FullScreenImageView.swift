@@ -37,7 +37,7 @@ struct FullScreenImageView: View {
                 }
                 .padding([.bottom], 4)
             }
-            Text("\(popupMedia.title)")
+            Text(popupMedia.title)
                 .font(.title3)
                 .fontWeight(.bold)
             AsyncImageView(url: sourceURL)
