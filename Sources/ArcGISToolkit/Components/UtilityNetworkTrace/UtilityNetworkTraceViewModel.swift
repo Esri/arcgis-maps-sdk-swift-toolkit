@@ -454,7 +454,7 @@ import Foundation
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ - Parameter map: A web map containing one or more utility networks.
-***REMOVED******REMOVED***/ ***REMOVED***/ - Returns: The named trace configurations in the network on the provided map.
+***REMOVED******REMOVED***/ - Returns: The named trace configurations in the network on the provided map.
 ***REMOVED***func utilityNamedTraceConfigurations(from map: Map) async -> [UtilityNamedTraceConfiguration] {
 ***REMOVED******REMOVED***guard let network = network else { return [] ***REMOVED***
 ***REMOVED******REMOVED***do {
