@@ -22,7 +22,7 @@ struct HTMLTextView: UIViewRepresentable {
 ***REMOVED******REMOVED***/ The HTML string to dispay, including the header.
 ***REMOVED***var displayHTML: String {
 ***REMOVED******REMOVED******REMOVED*** Set the initial scale to 1, don't allow user scaling.
-***REMOVED******REMOVED******REMOVED*** This fixess small text with `WKWebView` and also doesn't allow the
+***REMOVED******REMOVED******REMOVED*** This fixes small text with `WKWebView` and also doesn't allow the
 ***REMOVED******REMOVED******REMOVED*** user to pinch to zoom.
 ***REMOVED******REMOVED***var header = "<header><meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no'></header>"
 ***REMOVED******REMOVED***
