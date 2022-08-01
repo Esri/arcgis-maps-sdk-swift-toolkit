@@ -102,8 +102,7 @@ struct HTMLTextView: UIViewRepresentable {
             self.parent = parent
         }
         
-        // WKNavigationDelegate method invoked when content starts
-        // arriving for the main frame.
+        // `WKNavigationDelegate` method invoked when content starts arriving for the main frame.
         public func webView(_ webView: WKWebView, didCommit navigation: WKNavigation!) {
             hasCommitted = true
         }
