@@ -30,7 +30,7 @@ struct TextPopupElementView: View {
                     .clipShape(roundedRect)
                     .frame(height: webViewHeight)
                 if webViewHeight == .zero {
-                    // Show ProgressView until HTMLTextView has set the height.
+                    // Show `ProgressView` until `HTMLTextView` has set the height.
                     ProgressView()
                 }
                 else {
