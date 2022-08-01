@@ -19,7 +19,7 @@ struct HTMLTextView: UIViewRepresentable {
     /// The user-defined HTML string.
     var userHTML: String = ""
     
-    /// The HTML string to dispay, including the header.
+    /// The HTML string to display, including the header.
     var displayHTML: String {
         // Set the initial scale to 1, don't allow user scaling.
         // This fixes small text with `WKWebView` and also doesn't allow the
@@ -28,7 +28,7 @@ struct HTMLTextView: UIViewRepresentable {
         
         // Inject CSS in a head element to:
         // - word wrap long content such as urls
-        // - set font family to default apple font
+        // - set font family to default Apple font
         // - set font size to subheadline
         // - remove padding from the body. Add some margin to separate from the
         //   border of the webview.
