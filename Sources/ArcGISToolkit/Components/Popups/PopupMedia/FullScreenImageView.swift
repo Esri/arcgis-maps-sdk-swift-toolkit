@@ -37,7 +37,7 @@ struct FullScreenImageView: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding([.bottom], 4)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***Text("\(popupMedia.title)")
+***REMOVED******REMOVED******REMOVED***Text(popupMedia.title)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.font(.title3)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.fontWeight(.bold)
 ***REMOVED******REMOVED******REMOVED***AsyncImageView(url: sourceURL)

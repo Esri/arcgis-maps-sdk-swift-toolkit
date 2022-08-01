@@ -27,7 +27,7 @@ struct AsyncImageView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.resizable()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.aspectRatio(contentMode: .fit)
 ***REMOVED******REMOVED*** else if phase.error != nil {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Displays an error image.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Displays an error notification.
 ***REMOVED******REMOVED******REMOVED******REMOVED***HStack(alignment: .center) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "exclamationmark.circle")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.aspectRatio(contentMode: .fit)
