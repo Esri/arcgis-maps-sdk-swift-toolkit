@@ -160,7 +160,7 @@ import XCTest
 ***REMOVED*** as? FeatureLayer)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let parameters = QueryParameters()
-***REMOVED******REMOVED***parameters.addObjectId(171)
+***REMOVED******REMOVED***parameters.addObjectID(171)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let result = try await layer.featureTable?.queryFeatures(parameters: parameters)
 ***REMOVED******REMOVED***let features = try XCTUnwrap(result?.features().compactMap { $0 ***REMOVED***)
@@ -210,7 +210,7 @@ import XCTest
 ***REMOVED*** as? FeatureLayer)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let parameters = QueryParameters()
-***REMOVED******REMOVED***parameters.addObjectId(463)
+***REMOVED******REMOVED***parameters.addObjectID(463)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let result = try await layer.featureTable?.queryFeatures(parameters: parameters)
 ***REMOVED******REMOVED***let features = try XCTUnwrap(result?.features().compactMap { $0 ***REMOVED***)
@@ -267,7 +267,7 @@ import XCTest
 ***REMOVED*** as? FeatureLayer)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let parameters = QueryParameters()
-***REMOVED******REMOVED***parameters.addObjectId(177)
+***REMOVED******REMOVED***parameters.addObjectID(177)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let result = try await layer.featureTable?.queryFeatures(parameters: parameters)
 ***REMOVED******REMOVED***let features = try XCTUnwrap(result?.features().compactMap { $0 ***REMOVED***)
@@ -317,7 +317,7 @@ import XCTest
 ***REMOVED*** as? FeatureLayer)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let parameters = QueryParameters()
-***REMOVED******REMOVED***parameters.addObjectId(171)
+***REMOVED******REMOVED***parameters.addObjectID(171)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let result = try await layer.featureTable?.queryFeatures(parameters: parameters)
 ***REMOVED******REMOVED***let features = try XCTUnwrap(result?.features().compactMap { $0 ***REMOVED***)
@@ -371,7 +371,7 @@ import XCTest
 ***REMOVED*** as? FeatureLayer)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let parameters = QueryParameters()
-***REMOVED******REMOVED***parameters.addObjectId(171)
+***REMOVED******REMOVED***parameters.addObjectID(171)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let result = try await layer.featureTable?.queryFeatures(parameters: parameters)
 ***REMOVED******REMOVED***let features = try XCTUnwrap(result?.features().compactMap { $0 ***REMOVED***)
