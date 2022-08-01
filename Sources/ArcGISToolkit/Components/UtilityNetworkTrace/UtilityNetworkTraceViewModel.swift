@@ -468,9 +468,8 @@ import SwiftUI
         graphicsOverlay.removeGraphics(trace.graphics)
     }
     
-    /// Loads the named trace configurations in the network.
-    /// Returns the named trace configurations in the network on the provided map.
     /// - Parameter map: A web map containing one or more utility networks.
+    /// - Returns: The named trace configurations in the network on the provided map.
     func utilityNamedTraceConfigurations(from map: Map) async -> [UtilityNamedTraceConfiguration] {
         guard let network = network else { return [] }
         do {
@@ -486,16 +485,17 @@ import SwiftUI
 }
 
 extension UtilityNetworkTraceViewModel {
-    /// Finds the location on the line nearest the input point, expressed as the fraction along the line’s total
-    /// geodesic length.
+    /// Finds the location on the line nearest the input point.
     /// - Parameters:
     ///   - inputGeometry: The line to be measured.
     ///   - point: A location along the line.
+    /// - Returns: A location along the line expressed as a fraction of its total length.
+    /// - Precondition: `inputGeometry` is a `Polyline`.
     private func fractionAlongEdge(
         of inputGeometry: Geometry,
         at point: Point
     ) -> Double {
-        var geometry = inputGeometry
+        guard var geometry = inputGeometry as? Polyline else { return .zero }
         // Remove Z
         if geometry.hasZ {
             geometry = GeometryEngine.makeGeometry(
@@ -515,7 +515,7 @@ extension UtilityNetworkTraceViewModel {
         }
         
         return GeometryEngine.polyline(
-            geometry as! Polyline,
+            geometry,
             fractionalLengthClosestTo: point,
             tolerance: 10
         )
