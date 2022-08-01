@@ -51,14 +51,14 @@ public extension View {
                 horizontalAlignment: horizontalAlignment,
                 isPresented: isPresented,
                 maxWidth: maxWidth,
-                content: content()
+                panelContent: content()
             )
         )
     }
 }
 
 /// Overlays a floating panel on the parent content.
-private struct FloatingPanelModifier<InnerContent>: ViewModifier where InnerContent: View {
+private struct FloatingPanelModifier<PanelContent>: ViewModifier where PanelContent: View {
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @Environment(\.verticalSizeClass) var verticalSizeClass
     
@@ -83,7 +83,7 @@ private struct FloatingPanelModifier<InnerContent>: ViewModifier where InnerCont
     let maxWidth: CGFloat
     
     /// The content to be displayed within the floating panel.
-    let content: InnerContent
+    let panelContent: PanelContent
     
     func body(content: Content) -> some View {
         content
@@ -93,7 +93,7 @@ private struct FloatingPanelModifier<InnerContent>: ViewModifier where InnerCont
                     detent: detent,
                     isPresented: isPresented
                 ) {
-                    content
+                    panelContent
                 }
                 .edgesIgnoringSafeArea(.bottom)
                 .frame(maxWidth: isCompact ? .infinity : maxWidth)
