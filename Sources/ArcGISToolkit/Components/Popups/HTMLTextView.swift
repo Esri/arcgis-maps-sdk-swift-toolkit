@@ -107,7 +107,7 @@ struct HTMLTextView: UIViewRepresentable {
 ***REMOVED******REMOVED******REMOVED***hasCommitted = true
 ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** WKNavigationDelegate method for navigation actions.
+***REMOVED******REMOVED******REMOVED*** `WKNavigationDelegate` method for navigation actions.
 ***REMOVED******REMOVED***func webView(
 ***REMOVED******REMOVED******REMOVED***_ webView: WKWebView,
 ***REMOVED******REMOVED******REMOVED***decidePolicyFor navigationAction: WKNavigationAction
