@@ -126,8 +126,8 @@ struct HTMLTextView: UIViewRepresentable {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** WKNavigationDelegate method invoked when a main frame navigation
-***REMOVED******REMOVED******REMOVED*** completes.  This is where the height calculation happens.
+***REMOVED******REMOVED******REMOVED*** `WKNavigationDelegate` method invoked when a main frame navigation completes. This is
+***REMOVED******REMOVED******REMOVED*** where the height calculation happens.
 ***REMOVED******REMOVED***func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!){
 ***REMOVED******REMOVED******REMOVED***webView.evaluateJavaScript("document.readyState") { [weak self] complete, _ in
 ***REMOVED******REMOVED******REMOVED******REMOVED***guard complete != nil,
