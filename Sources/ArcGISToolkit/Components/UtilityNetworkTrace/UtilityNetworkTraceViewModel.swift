@@ -134,7 +134,7 @@ import SwiftUI
                     geoElement: geoElement,
                     mapPoint: mapPoint
                 )
-                await processAndAdd(startingPoint)
+                await processAndAdd(startingPoint: startingPoint)
             }
         }
     }
@@ -259,7 +259,7 @@ import SwiftUI
     /// Sets the nullable members of the provided starting point and adds it to the pending trace.
     /// - Parameters:
     ///   - startingPoint: The starting point to be processed and added to the pending trace.
-    func processAndAdd(_ startingPoint: UtilityNetworkTraceStartingPoint) async {
+    func processAndAdd(startingPoint: UtilityNetworkTraceStartingPoint) async {
         guard let feature = startingPoint.geoElement as? ArcGISFeature,
               let globalid = feature.globalID else {
             userWarning = "Element could not be identified"
@@ -432,7 +432,7 @@ import SwiftUI
     /// Adds programatic starting points to the pending trace.
     private func addExternalStartingPoints() async {
         for startingPoint in externalStartingPoints {
-            await processAndAdd(startingPoint)
+            await processAndAdd(startingPoint: startingPoint)
         }
     }
     
