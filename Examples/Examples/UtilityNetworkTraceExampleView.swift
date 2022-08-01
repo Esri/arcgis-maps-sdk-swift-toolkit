@@ -112,10 +112,10 @@ extension UtilityNetworkTraceExampleView {
     /// Queries the map for a feature with a certain ID and sets the list of starting points.
     func setPredefinedStartingPoints() async {
         let targetID = UUID(uuidString: "2A6D25D5-8B9E-400A-BC07-4A11BD8B6C82")
-        let groupLayer = map.operationalLayers.first as? GroupLayer
+        guard let groupLayer = map.operationalLayers.first as? GroupLayer else { return }
         let parameters = QueryParameters()
         parameters.addObjectID(1740)
-        for layer in groupLayer?.layers ?? [] {
+        for layer in groupLayer.layers {
             guard let layer = layer as? FeatureLayer,
                   let table = layer.featureTable else { continue }
             let query = try? await table.queryFeatures(parameters: parameters)
