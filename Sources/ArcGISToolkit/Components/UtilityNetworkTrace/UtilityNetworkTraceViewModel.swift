@@ -237,8 +237,7 @@ import SwiftUI
         }
     }
     
-    /// Asynchronously sets the nullable members of the provided starting point and adds it to the pending
-    /// trace.
+    /// Sets the nullable members of the provided starting point and adds it to the pending trace.
     /// - Parameters:
     ///   - startingPoint: The starting point to be processed and added to the pending trace.
     func processAndAdd(_ startingPoint: UtilityNetworkTraceStartingPoint) {
