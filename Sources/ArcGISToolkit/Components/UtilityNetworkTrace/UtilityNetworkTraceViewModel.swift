@@ -485,12 +485,11 @@ import SwiftUI
 }
 
 extension UtilityNetworkTraceViewModel {
-    /// Finds the location on the line nearest the input point.
+    /// Finds the location on a polyline nearest the point.
     /// - Parameters:
-    ///   - inputGeometry: The line to be measured.
-    ///   - point: A location along the line.
-    /// - Returns: A location along the line expressed as a fraction of its total length.
-    /// - Precondition: `inputGeometry` is a `Polyline`.
+    ///   - inputGeometry: The polyline to be evaluated.
+    ///   - point: A location along the polyline.
+    /// - Returns: A location along the polyline expressed as a fraction of its total length.
     private func fractionAlongEdge(
         of inputGeometry: Geometry,
         at point: Point
