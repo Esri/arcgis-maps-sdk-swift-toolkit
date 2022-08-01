@@ -18,7 +18,7 @@ extension UtilityNetworkTraceViewModel {
     /// A trace performed on a utility network.
     struct Trace {
         /// The number of assets returned by the trace.
-        var assetCount: Int = 0
+        var assetCount = 0
         
         /// A collection of all elements returned in the trace, grouped by asset group and asset type.
         var assets = [String: [String: [UtilityElement]]]()
@@ -73,8 +73,8 @@ extension UtilityNetworkTraceViewModel {
         /// A collection of starting points for the trace.
         var startingPoints = [UtilityNetworkTraceStartingPoint]()
         
-        /// Indicates that the user has specified a name for the trace.
-        var userDidSpecifyName: Bool = false
+        /// A Boolean value that indicates that the user has specified a name for the trace.
+        var userDidSpecifyName = false
         
         /// A trace result comprised of a collection of UtilityElement objects.
         var utilityElementTraceResult: UtilityElementTraceResult?
