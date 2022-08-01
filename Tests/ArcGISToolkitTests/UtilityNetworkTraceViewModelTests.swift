@@ -160,7 +160,7 @@ import XCTest
         } as? FeatureLayer)
         
         let parameters = QueryParameters()
-        parameters.addObjectId(171)
+        parameters.addObjectID(171)
         
         let result = try await layer.featureTable?.queryFeatures(parameters: parameters)
         let features = try XCTUnwrap(result?.features().compactMap { $0 })
@@ -210,7 +210,7 @@ import XCTest
         } as? FeatureLayer)
         
         let parameters = QueryParameters()
-        parameters.addObjectId(463)
+        parameters.addObjectID(463)
         
         let result = try await layer.featureTable?.queryFeatures(parameters: parameters)
         let features = try XCTUnwrap(result?.features().compactMap { $0 })
@@ -267,7 +267,7 @@ import XCTest
         } as? FeatureLayer)
         
         let parameters = QueryParameters()
-        parameters.addObjectId(177)
+        parameters.addObjectID(177)
         
         let result = try await layer.featureTable?.queryFeatures(parameters: parameters)
         let features = try XCTUnwrap(result?.features().compactMap { $0 })
@@ -317,7 +317,7 @@ import XCTest
         } as? FeatureLayer)
         
         let parameters = QueryParameters()
-        parameters.addObjectId(171)
+        parameters.addObjectID(171)
         
         let result = try await layer.featureTable?.queryFeatures(parameters: parameters)
         let features = try XCTUnwrap(result?.features().compactMap { $0 })
@@ -371,7 +371,7 @@ import XCTest
         } as? FeatureLayer)
         
         let parameters = QueryParameters()
-        parameters.addObjectId(171)
+        parameters.addObjectID(171)
         
         let result = try await layer.featureTable?.queryFeatures(parameters: parameters)
         let features = try XCTUnwrap(result?.features().compactMap { $0 })

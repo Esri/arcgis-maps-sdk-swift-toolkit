@@ -65,7 +65,7 @@ class ChallengeHandler: AuthenticationChallengeHandler {
                 // This will cause a self-signed certificate to be trusted.
                 return .useCredential(.serverTrust)
             } else {
-                return .performDefaultHandling
+                return .allowRequestToFail
             }
         } else if let networkCredentialProvider = networkCredentialProvider,
                   let networkCredential = await networkCredentialProvider(challenge) {
