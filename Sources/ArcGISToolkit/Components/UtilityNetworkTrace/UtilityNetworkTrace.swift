@@ -143,7 +143,7 @@ public struct UtilityNetworkTrace: View {
                             ForEach(elements) { element in
                                 Button {
                                     Task {
-                                        if let feature = await viewModel.getFeatureFor(element: element),
+                                        if let feature = await viewModel.feature(for: element),
                                            let geometry = feature.geometry {
                                             viewpoint = Viewpoint(targetExtent: geometry.extent)
                                         }
