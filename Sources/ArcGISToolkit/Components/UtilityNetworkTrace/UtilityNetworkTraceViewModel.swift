@@ -133,7 +133,7 @@ import Foundation
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***geoElement: geoElement,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mapPoint: mapPoint
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED***processAndAdd(startingPoint)
+***REMOVED******REMOVED******REMOVED******REMOVED***processAndAdd(startingPoint: startingPoint)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -240,7 +240,7 @@ import Foundation
 ***REMOVED******REMOVED***/ Sets the nullable members of the provided starting point and adds it to the pending trace.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - startingPoint: The starting point to be processed and added to the pending trace.
-***REMOVED***func processAndAdd(_ startingPoint: UtilityNetworkTraceStartingPoint) {
+***REMOVED***func processAndAdd(startingPoint: UtilityNetworkTraceStartingPoint) {
 ***REMOVED******REMOVED***Task {
 ***REMOVED******REMOVED******REMOVED***guard let feature = startingPoint.geoElement as? ArcGISFeature,
 ***REMOVED******REMOVED******REMOVED******REMOVED***  let globalid = feature.attributes["globalid"] as? UUID else {
@@ -415,7 +415,7 @@ import Foundation
 ***REMOVED******REMOVED***/ Adds programatic starting points to the pending trace.
 ***REMOVED***private func addExternalStartingPoints() {
 ***REMOVED******REMOVED***externalStartingPoints.forEach {
-***REMOVED******REMOVED******REMOVED***processAndAdd($0)
+***REMOVED******REMOVED******REMOVED***processAndAdd(startingPoint: $0)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
