@@ -138,7 +138,7 @@ import Foundation
 ***REMOVED******REMOVED***/ Returns a feature for the given utility element
 ***REMOVED******REMOVED***/ - Parameter element: The utility element to query the network for
 ***REMOVED******REMOVED***/ - Returns: A feature for the given element
-***REMOVED***func getFeatureFor(element: UtilityElement) async -> ArcGISFeature? {
+***REMOVED***func feature(for element: UtilityElement) async -> ArcGISFeature? {
 ***REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED***return try await network?.getFeatures(for: [element]).first ?? nil
 ***REMOVED*** catch {
