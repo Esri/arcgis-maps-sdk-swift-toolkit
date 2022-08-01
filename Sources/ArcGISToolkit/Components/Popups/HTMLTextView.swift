@@ -145,8 +145,8 @@ struct HTMLTextView: UIViewRepresentable {
                     self.parent.height = height
                     
                     // With certain HTML strings, the JavaScript above kept
-                    // getting called, with increasingly large heights.  This
-                    // prevents that from happening.  As this block is only
+                    // getting called, with increasingly large heights. This
+                    // prevents that from happening. As this block is only
                     // called after the `document.readyState` is "complete",
                     // this should be OK.
                     self.hasHeight = true
