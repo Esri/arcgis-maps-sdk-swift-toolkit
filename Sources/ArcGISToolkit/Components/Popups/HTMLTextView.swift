@@ -107,7 +107,7 @@ struct HTMLTextView: UIViewRepresentable {
             hasCommitted = true
         }
         
-        // WKNavigationDelegate method for navigation actions.
+        // `WKNavigationDelegate` method for navigation actions.
         func webView(
             _ webView: WKWebView,
             decidePolicyFor navigationAction: WKNavigationAction
