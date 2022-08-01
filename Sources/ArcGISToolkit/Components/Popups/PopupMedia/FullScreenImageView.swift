@@ -29,37 +29,23 @@ struct FullScreenImageView: View {
         VStack() {
             HStack {
                 Spacer()
-                Button("Done") {
+                Button {
                     showingFullScreen = false
+                } label: {
+                    Text("Done")
+                        .fontWeight(.semibold)
                 }
+                .padding([.bottom], 4)
             }
             Text("\(popupMedia.title)")
-                .font(.title2)
-            AsyncImage(url: sourceURL) { phase in
-                if let image = phase.image {
-                    // Displays the loaded image.
-                    image
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                } else if phase.error != nil {
-                    // Displays an error image.
-                    HStack {
-                        Image(systemName: "exclamationmark.circle")
-                            .aspectRatio(contentMode: .fit)
-                            .foregroundColor(.red)
-                        Text("An error occurred loading the image.")
+                .font(.title3)
+                .fontWeight(.bold)
+            AsyncImageView(url: sourceURL)
+                .onTapGesture {
+                    if let url = popupMedia.value?.linkURL {
+                        UIApplication.shared.open(url)
                     }
-                    .padding([.top])
-                } else {
-                    // Display the progress view until image loads.
-                    ProgressView()
                 }
-            }
-            .onTapGesture {
-                if let url = popupMedia.value?.linkURL {
-                    UIApplication.shared.open(url)
-                }
-            }
             if popupMedia.value?.linkURL != nil {
                 HStack {
                     Text("Tap on the image for more information.")
