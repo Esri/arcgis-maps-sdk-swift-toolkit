@@ -114,7 +114,7 @@ extension UtilityNetworkTraceExampleView {
         let targetID = UUID(uuidString: "2A6D25D5-8B9E-400A-BC07-4A11BD8B6C82")
         let groupLayer = map.operationalLayers.first as? GroupLayer
         let parameters = QueryParameters()
-        parameters.addObjectId(1740)
+        parameters.addObjectID(1740)
         for layer in groupLayer?.layers ?? [] {
             guard let layer = layer as? FeatureLayer,
                   let table = layer.featureTable else { continue }
