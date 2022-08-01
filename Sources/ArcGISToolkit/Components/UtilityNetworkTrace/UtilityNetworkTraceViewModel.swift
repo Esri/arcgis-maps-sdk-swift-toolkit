@@ -454,7 +454,7 @@ import SwiftUI
     }
     
     /// - Parameter map: A web map containing one or more utility networks.
-    /// /// - Returns: The named trace configurations in the network on the provided map.
+    /// - Returns: The named trace configurations in the network on the provided map.
     func utilityNamedTraceConfigurations(from map: Map) async -> [UtilityNamedTraceConfiguration] {
         guard let network = network else { return [] }
         do {
