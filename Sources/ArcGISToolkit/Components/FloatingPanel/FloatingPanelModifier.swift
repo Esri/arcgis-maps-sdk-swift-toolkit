@@ -51,14 +51,14 @@ public extension View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***horizontalAlignment: horizontalAlignment,
 ***REMOVED******REMOVED******REMOVED******REMOVED***isPresented: isPresented,
 ***REMOVED******REMOVED******REMOVED******REMOVED***maxWidth: maxWidth,
-***REMOVED******REMOVED******REMOVED******REMOVED***content: content()
+***REMOVED******REMOVED******REMOVED******REMOVED***panelContent: content()
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 
 ***REMOVED***/ Overlays a floating panel on the parent content.
-private struct FloatingPanelModifier<InnerContent>: ViewModifier where InnerContent: View {
+private struct FloatingPanelModifier<PanelContent>: ViewModifier where PanelContent: View {
 ***REMOVED***@Environment(\.horizontalSizeClass) private var horizontalSizeClass
 ***REMOVED***@Environment(\.verticalSizeClass) var verticalSizeClass
 ***REMOVED***
@@ -83,7 +83,7 @@ private struct FloatingPanelModifier<InnerContent>: ViewModifier where InnerCont
 ***REMOVED***let maxWidth: CGFloat
 ***REMOVED***
 ***REMOVED******REMOVED***/ The content to be displayed within the floating panel.
-***REMOVED***let content: InnerContent
+***REMOVED***let panelContent: PanelContent
 ***REMOVED***
 ***REMOVED***func body(content: Content) -> some View {
 ***REMOVED******REMOVED***content
@@ -93,7 +93,7 @@ private struct FloatingPanelModifier<InnerContent>: ViewModifier where InnerCont
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***detent: detent,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented: isPresented
 ***REMOVED******REMOVED******REMOVED******REMOVED***) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***content
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***panelContent
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.edgesIgnoringSafeArea(.bottom)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: isCompact ? .infinity : maxWidth)
