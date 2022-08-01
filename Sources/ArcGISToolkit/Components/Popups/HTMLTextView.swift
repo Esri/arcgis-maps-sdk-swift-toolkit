@@ -95,7 +95,7 @@ struct HTMLTextView: UIViewRepresentable {
 ***REMOVED******REMOVED******REMOVED***/ A Boolean value indicating whether the content started arriving for the main frame.
 ***REMOVED******REMOVED***private var hasCommitted = false
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ A Boolean value specifying whether we've calculated a height for the web view or not.
+***REMOVED******REMOVED******REMOVED***/ A Boolean value indicating whether the height is calculated for the web view.
 ***REMOVED******REMOVED***private var hasHeight = false
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***init(_ parent: HTMLTextView) {
