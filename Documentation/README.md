@@ -8,4 +8,4 @@
 * **[Overview Map](OverviewMap)** - Displays an "overview" (or "inset") map on top of an existing map or scene view.
 * **[Scalebar](Scalebar)** - Displays current scale reference.
 * **[Search](Search)** - Displays a search experience for geo views.
-* **[UtilityNetworkTrace](UtilityNetworkTrace)** - Run traces on a web map published with a utility network and trace configurations.
+* **[UtilityNetworkTrace](UtilityNetworkTrace)** - Runs traces on a web map published with a utility network and trace configurations.
