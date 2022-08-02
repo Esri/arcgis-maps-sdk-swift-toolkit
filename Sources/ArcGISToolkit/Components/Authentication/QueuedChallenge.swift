@@ -15,12 +15,7 @@ import Foundation
 ***REMOVED***
 
 ***REMOVED***/ A type that represents a challenge in the queue of authentication challenges.
-protocol QueuedChallenge: AnyObject {
-***REMOVED******REMOVED***/ Waits for the challenge to complete.
-***REMOVED***func complete() async
-***REMOVED***
+protocol QueuedChallenge: AnyObject {***REMOVED***
 
-protocol QueuedArcGISChallenge: QueuedChallenge {
-***REMOVED******REMOVED***/ The result of the challenge.
-***REMOVED***var result: Result<ArcGISAuthenticationChallenge.Disposition, Error> { get async ***REMOVED***
-***REMOVED***
+***REMOVED***/ A type that represents a continuation for an ArcGIS challenge.
+protocol QueuedArcGISChallenge: ValueContinuation<Result<ArcGISAuthenticationChallenge.Disposition, Error>>, QueuedChallenge {***REMOVED***

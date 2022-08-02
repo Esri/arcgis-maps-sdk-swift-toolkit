@@ -16,7 +16,7 @@ import Foundation
 
 ***REMOVED***/ An object that represents an ArcGIS token authentication challenge in the queue of challenges.
 @MainActor
-final class QueuedTokenChallenge: QueuedArcGISChallenge {
+final class QueuedTokenChallenge: ValueContinuation<Result<ArcGISAuthenticationChallenge.Disposition, Error>>, QueuedArcGISChallenge {
 ***REMOVED******REMOVED***/ The host that prompted the challenge.
 ***REMOVED***let host: String
 ***REMOVED***
@@ -52,33 +52,14 @@ final class QueuedTokenChallenge: QueuedArcGISChallenge {
 ***REMOVED******REMOVED***/   - loginCredential: The username and password.
 ***REMOVED***func resume(with loginCredential: LoginCredential) {
 ***REMOVED******REMOVED***Task {
-***REMOVED******REMOVED******REMOVED***guard _result == nil else { return ***REMOVED***
-***REMOVED******REMOVED******REMOVED***_result = await Result {
+***REMOVED******REMOVED******REMOVED***setValue(await Result {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.useCredential(try await tokenCredentialProvider(loginCredential))
-***REMOVED******REMOVED***
+***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Cancels the challenge.
 ***REMOVED***func cancel() {
-***REMOVED******REMOVED***guard _result == nil else { return ***REMOVED***
-***REMOVED******REMOVED***_result = .success(.cancelAuthenticationChallenge)
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ Use a streamed property because we need to support multiple listeners
-***REMOVED******REMOVED***/ to know when the challenge completed.
-***REMOVED***@Streamed private var _result: Result<ArcGISAuthenticationChallenge.Disposition, Error>?
-***REMOVED***
-***REMOVED******REMOVED***/ The result of the challenge.
-***REMOVED***var result: Result<ArcGISAuthenticationChallenge.Disposition, Error> {
-***REMOVED******REMOVED***get async {
-***REMOVED******REMOVED******REMOVED***await $_result
-***REMOVED******REMOVED******REMOVED******REMOVED***.compactMap({ $0 ***REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED***.first(where: { _ in true ***REMOVED***)!
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***public func complete() async {
-***REMOVED******REMOVED***_ = await result
+***REMOVED******REMOVED***setValue(.success(.cancelAuthenticationChallenge))
 ***REMOVED***
 ***REMOVED***

@@ -16,7 +16,7 @@ import Foundation
 
 ***REMOVED***/ An object that represents a network authentication challenge in the queue of challenges.
 @MainActor
-final class QueuedNetworkChallenge: QueuedChallenge {
+final class QueuedNetworkChallenge: ValueContinuation<NetworkAuthenticationChallengeDisposition>, QueuedChallenge {
 ***REMOVED******REMOVED***/ The host that prompted the challenge.
 ***REMOVED***let host: String
 ***REMOVED***
@@ -35,25 +35,7 @@ final class QueuedNetworkChallenge: QueuedChallenge {
 ***REMOVED******REMOVED***/ Resumes the queued challenge.
 ***REMOVED******REMOVED***/ - Parameter disposition: The disposition to resume with.
 ***REMOVED***func resume(with disposition: NetworkAuthenticationChallengeDisposition) {
-***REMOVED******REMOVED***guard _disposition == nil else { return ***REMOVED***
-***REMOVED******REMOVED***_disposition = disposition
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ Use a streamed property because we need to support multiple listeners
-***REMOVED******REMOVED***/ to know when the challenge completed.
-***REMOVED***@Streamed private var _disposition: (NetworkAuthenticationChallengeDisposition)?
-***REMOVED***
-***REMOVED******REMOVED***/ The resulting disposition of the challenge.
-***REMOVED***var disposition: NetworkAuthenticationChallengeDisposition {
-***REMOVED******REMOVED***get async {
-***REMOVED******REMOVED******REMOVED***await $_disposition
-***REMOVED******REMOVED******REMOVED******REMOVED***.compactMap({ $0 ***REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED***.first(where: { _ in true ***REMOVED***)!
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***public func complete() async {
-***REMOVED******REMOVED***_ = await disposition
+***REMOVED******REMOVED***setValue(disposition)
 ***REMOVED***
 ***REMOVED***
 

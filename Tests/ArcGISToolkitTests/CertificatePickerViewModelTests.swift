@@ -45,7 +45,7 @@ import XCTest
 ***REMOVED******REMOVED***XCTAssertTrue(model.showCertificateImportError)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***model.cancel()
-***REMOVED******REMOVED***let disposition = await challenge.disposition
+***REMOVED******REMOVED***let disposition = await challenge.value
 ***REMOVED******REMOVED***XCTAssertEqual(disposition, .cancelAuthenticationChallenge)
 ***REMOVED***
 ***REMOVED***

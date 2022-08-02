@@ -106,12 +106,15 @@ extension Authenticator: AuthenticationChallengeHandler {
 ***REMOVED******REMOVED******REMOVED***queuedChallenge = QueuedTokenChallenge(arcGISChallenge: challenge)
 ***REMOVED***
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Alleviates an error with "already presenting".
+***REMOVED******REMOVED***await Task.yield()
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Set the current challenge, which will present the UX.
 ***REMOVED******REMOVED***self.currentChallenge = queuedChallenge
 ***REMOVED******REMOVED***defer { self.currentChallenge = nil ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Wait for it to complete and return the resulting disposition.
-***REMOVED******REMOVED***return try await queuedChallenge.result.get()
+***REMOVED******REMOVED***return try await queuedChallenge.value.get()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***public func handleNetworkChallenge(
@@ -133,6 +136,6 @@ extension Authenticator: AuthenticationChallengeHandler {
 ***REMOVED******REMOVED***defer { self.currentChallenge = nil ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Wait for it to complete and return the resulting disposition.
-***REMOVED******REMOVED***return await queuedChallenge.disposition
+***REMOVED******REMOVED***return await queuedChallenge.value
 ***REMOVED***
 ***REMOVED***
