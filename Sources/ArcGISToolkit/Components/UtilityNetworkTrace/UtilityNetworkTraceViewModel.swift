@@ -104,7 +104,7 @@ import Foundation
 ***REMOVED***init(
 ***REMOVED******REMOVED***map: Map,
 ***REMOVED******REMOVED***graphicsOverlay: GraphicsOverlay,
-***REMOVED******REMOVED***startingPoints: [UtilityNetworkTraceStartingPoint],
+***REMOVED******REMOVED***startingPoints: [UtilityNetworkTraceStartingPoint] = [],
 ***REMOVED******REMOVED***autoLoad: Bool = true
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.map = map
@@ -265,8 +265,7 @@ import Foundation
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Sets the nullable members of the provided starting point and adds it to the pending trace.
-***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - startingPoint: The starting point to be processed and added to the pending trace.
+***REMOVED******REMOVED***/ - Parameter startingPoint: The starting point to be processed and added to the pending trace.
 ***REMOVED***func processAndAdd(startingPoint: UtilityNetworkTraceStartingPoint) async {
 ***REMOVED******REMOVED***guard let feature = startingPoint.geoElement as? ArcGISFeature,
 ***REMOVED******REMOVED******REMOVED***  let globalid = feature.globalID else {
