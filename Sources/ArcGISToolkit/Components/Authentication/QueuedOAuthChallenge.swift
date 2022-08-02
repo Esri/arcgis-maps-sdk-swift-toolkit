@@ -16,7 +16,7 @@ import ArcGIS
 
 /// An object that represents an ArcGIS OAuth authentication challenge in the queue of challenges.
 @MainActor
-final class QueuedOAuthChallenge: QueuedArcGISChallenge {
+final class QueuedOAuthChallenge: ValueContinuation<Result<ArcGISAuthenticationChallenge.Disposition, Error>>, QueuedArcGISChallenge {
     /// The OAuth configuration to be used for this challenge.
     let configuration: OAuthConfiguration
     
@@ -30,26 +30,9 @@ final class QueuedOAuthChallenge: QueuedArcGISChallenge {
     /// credential.
     func presentPrompt() {
         Task {
-            _result = await Result {
+            setValue(await Result {
                 .useCredential(try await .oauth(configuration: configuration))
-            }
+            })
         }
-    }
-    
-    /// Use a streamed property because we need to support multiple listeners
-    /// to know when the challenge completed.
-    @Streamed private var _result: Result<ArcGISAuthenticationChallenge.Disposition, Error>?
-    
-    /// The result of the challenge.
-    var result: Result<ArcGISAuthenticationChallenge.Disposition, Error> {
-        get async {
-            await $_result
-                .compactMap({ $0 })
-                .first(where: { _ in true })!
-        }
-    }
-    
-    public func complete() async {
-        _ = await result
     }
 }

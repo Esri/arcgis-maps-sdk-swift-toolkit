@@ -45,7 +45,7 @@ import XCTest
         XCTAssertTrue(model.showCertificateImportError)
         
         model.cancel()
-        let disposition = await challenge.disposition
+        let disposition = await challenge.value
         XCTAssertEqual(disposition, .cancelAuthenticationChallenge)
     }
 }

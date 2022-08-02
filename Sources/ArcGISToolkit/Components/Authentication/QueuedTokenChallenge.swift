@@ -16,7 +16,7 @@ import ArcGIS
 
 /// An object that represents an ArcGIS token authentication challenge in the queue of challenges.
 @MainActor
-final class QueuedTokenChallenge: QueuedArcGISChallenge {
+final class QueuedTokenChallenge: ValueContinuation<Result<ArcGISAuthenticationChallenge.Disposition, Error>>, QueuedArcGISChallenge {
     /// The host that prompted the challenge.
     let host: String
     
@@ -52,33 +52,14 @@ final class QueuedTokenChallenge: QueuedArcGISChallenge {
     ///   - loginCredential: The username and password.
     func resume(with loginCredential: LoginCredential) {
         Task {
-            guard _result == nil else { return }
-            _result = await Result {
+            setValue(await Result {
                 .useCredential(try await tokenCredentialProvider(loginCredential))
-            }
+            })
         }
     }
     
     /// Cancels the challenge.
     func cancel() {
-        guard _result == nil else { return }
-        _result = .success(.cancelAuthenticationChallenge)
-    }
-    
-    /// Use a streamed property because we need to support multiple listeners
-    /// to know when the challenge completed.
-    @Streamed private var _result: Result<ArcGISAuthenticationChallenge.Disposition, Error>?
-    
-    /// The result of the challenge.
-    var result: Result<ArcGISAuthenticationChallenge.Disposition, Error> {
-        get async {
-            await $_result
-                .compactMap({ $0 })
-                .first(where: { _ in true })!
-        }
-    }
-    
-    public func complete() async {
-        _ = await result
+        setValue(.success(.cancelAuthenticationChallenge))
     }
 }
