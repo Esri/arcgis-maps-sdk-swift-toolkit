@@ -12,7 +12,6 @@
 // limitations under the License.
 
 import ArcGIS
-import Combine
 import XCTest
 
 @testable import ArcGISToolkit
@@ -36,11 +35,10 @@ import XCTest
         await ArcGISRuntimeEnvironment.credentialStore.removeAll()
     }
     
-    func testCase_1_1() async {
+    func testCase_1_1() async throws {
         let viewModel = UtilityNetworkTraceViewModel(
-            map: await makeMapWithNoUtilityNetworks(),
+            map: try await makeMap(),
             graphicsOverlay: GraphicsOverlay(),
-            startingPoints: [],
             autoLoad: false
         )
         
@@ -58,17 +56,16 @@ import XCTest
         try XCTSkipIf(passwordFor_sampleServer7 == nil)
         setChallengeHandler(ChallengeHandler(trustedHosts: [URL.sampleServer7.host!]))
         await ArcGISRuntimeEnvironment.credentialStore.add(
-            try await tokenFor_sampleServer7()
+            try await tokenForSampleServer7
         )
         
-        let map = await makeMapWithNoUtilityNetworks()
+        let map = try await makeMap()
         map.addUtilityNetwork(
-            await makeNetworkWith(url: .sampleServer7)
+            try await makeNetwork(url: .sampleServer7)
         )
         let viewModel = UtilityNetworkTraceViewModel(
             map: map,
             graphicsOverlay: GraphicsOverlay(),
-            startingPoints: [],
             autoLoad: false
         )
         
@@ -85,12 +82,12 @@ import XCTest
     
     func testCase_1_3() async throws {
         try XCTSkipIf(passwordFor_rtc_100_8 == nil)
-        setChallengeHandler(ChallengeHandler(trustedHosts: [URL.rtc_100_8.host!]))
+        setChallengeHandler(ChallengeHandler(trustedHosts: [URL.RTC100_8.host!]))
         await ArcGISRuntimeEnvironment.credentialStore.add(
-            try await tokenFor_rtc_100_8()
+            try await tokenForRTC100_8
         )
         
-        guard let map = Map(url: .rtc_100_8) else {
+        guard let map = Map(url: .RTC100_8) else {
             XCTFail("Failed to load map")
             return
         }
@@ -98,7 +95,6 @@ import XCTest
         let viewModel = UtilityNetworkTraceViewModel(
             map: map,
             graphicsOverlay: GraphicsOverlay(),
-            startingPoints: [],
             autoLoad: false
         )
         
@@ -115,12 +111,12 @@ import XCTest
     
     func testCase_1_4() async throws {
         try XCTSkipIf(passwordFor_rt_server109 == nil)
-        setChallengeHandler(ChallengeHandler(trustedHosts: [URL.rt_server109.host!]))
+        setChallengeHandler(ChallengeHandler(trustedHosts: [URL.rtServer109.host!]))
         await ArcGISRuntimeEnvironment.credentialStore.add(
-            try await tokenFor_rt_server109()
+            try await tokenForRTServer109
         )
         
-        guard let map = Map(url: .rt_server109) else {
+        guard let map = Map(url: .rtServer109) else {
             XCTFail("Failed to load map")
             return
         }
@@ -128,7 +124,6 @@ import XCTest
         let viewModel = UtilityNetworkTraceViewModel(
             map: map,
             graphicsOverlay: GraphicsOverlay(),
-            startingPoints: [],
             autoLoad: false
         )
         
@@ -145,12 +140,12 @@ import XCTest
     
     func testCase_2_1() async throws {
         try XCTSkipIf(passwordFor_rt_server109 == nil)
-        setChallengeHandler(ChallengeHandler(trustedHosts: [URL.rt_server109.host!]))
+        setChallengeHandler(ChallengeHandler(trustedHosts: [URL.rtServer109.host!]))
         await ArcGISRuntimeEnvironment.credentialStore.add(
-            try await tokenFor_rt_server109()
+            try await tokenForRTServer109
         )
         
-        guard let map = await makeMapWith(url: .rt_server109) else {
+        guard let map = try await makeMap(url: .rtServer109) else {
             XCTFail()
             return
         }
@@ -195,12 +190,12 @@ import XCTest
     
     func testCase_2_2() async throws {
         try XCTSkipIf(passwordFor_rt_server109 == nil)
-        setChallengeHandler(ChallengeHandler(trustedHosts: [URL.rt_server109.host!]))
+        setChallengeHandler(ChallengeHandler(trustedHosts: [URL.rtServer109.host!]))
         await ArcGISRuntimeEnvironment.credentialStore.add(
-            try await tokenFor_rt_server109()
+            try await tokenForRTServer109
         )
         
-        guard let map = await makeMapWith(url: .rt_server109) else {
+        guard let map = try await makeMap(url: .rtServer109) else {
             XCTFail()
             return
         }
@@ -252,12 +247,12 @@ import XCTest
     
     func testCase_2_3() async throws {
         try XCTSkipIf(passwordFor_rt_server109 == nil)
-        setChallengeHandler(ChallengeHandler(trustedHosts: [URL.rt_server109.host!]))
+        setChallengeHandler(ChallengeHandler(trustedHosts: [URL.rtServer109.host!]))
         await ArcGISRuntimeEnvironment.credentialStore.add(
-            try await tokenFor_rt_server109()
+            try await tokenForRTServer109
         )
         
-        guard let map = await makeMapWith(url: .rt_server109) else {
+        guard let map = try await makeMap(url: .rtServer109) else {
             XCTFail()
             return
         }
@@ -302,12 +297,12 @@ import XCTest
     
     func testCase_3_1() async throws {
         try XCTSkipIf(passwordFor_rt_server109 == nil)
-        setChallengeHandler(ChallengeHandler(trustedHosts: [URL.rt_server109.host!]))
+        setChallengeHandler(ChallengeHandler(trustedHosts: [URL.rtServer109.host!]))
         await ArcGISRuntimeEnvironment.credentialStore.add(
-            try await tokenFor_rt_server109()
+            try await tokenForRTServer109
         )
         
-        guard let map = await makeMapWith(url: .rt_server109) else {
+        guard let map = try await makeMap(url: .rtServer109) else {
             XCTFail()
             return
         }
@@ -345,7 +340,7 @@ import XCTest
         XCTAssertTrue(viewModel.canRunTrace)
         
         let success = await viewModel.trace()
-        let functionOutput = try XCTUnwrap( viewModel.completedTraces.first?.functionOutputs.first)
+        let functionOutput = try XCTUnwrap(viewModel.completedTraces.first?.functionOutputs.first)
         
         XCTAssertTrue(success)
         XCTAssertFalse(viewModel.canRunTrace)
@@ -356,12 +351,12 @@ import XCTest
     
     func testCase_3_2() async throws {
         try XCTSkipIf(passwordFor_rt_server109 == nil)
-        setChallengeHandler(ChallengeHandler(trustedHosts: [URL.rt_server109.host!]))
+        setChallengeHandler(ChallengeHandler(trustedHosts: [URL.rtServer109.host!]))
         await ArcGISRuntimeEnvironment.credentialStore.add(
-            try await tokenFor_rt_server109()
+            try await tokenForRTServer109
         )
         
-        guard let map = await makeMapWith(url: .rt_server109) else {
+        guard let map = try await makeMap(url: .rtServer109) else {
             XCTFail()
             return
         }
@@ -406,68 +401,69 @@ import XCTest
 }
 
 extension UtilityNetworkTraceViewModelTests {
-    /// - Returns: A loaded map that contains no utility networks.
-    func makeMapWithNoUtilityNetworks() async -> Map {
+    /// Initializes and loads a topographic map.
+    /// - Returns: A loaded map.
+    ///
+    /// The returned map contains no utility networks.
+    func makeMap() async throws -> Map {
         let map = Map(basemapStyle: .arcGISTopographic)
-        do {
-            try await map.load()
-        } catch {
-            XCTFail(error.localizedDescription)
-        }
+        try await map.load()
         return map
     }
     
-    /// - Returns: A loaded map that contains no utility networks.
-    func makeMapWith(url: URL) async -> Map? {
-        let map = Map(url: url)
-        do {
-            try await map?.load()
-        } catch {
-            XCTFail(error.localizedDescription)
-        }
+    /// Initializes and loads a map at the provided URL.
+    /// - Parameter url: The address of the map.
+    /// - Returns: A loaded map.
+    func makeMap(url: URL) async throws -> Map? {
+        let map = try XCTUnwrap(Map(url: url))
+        try await map.load()
         return map
     }
     
+    /// Initializes and loads a utility network at the provided URL.
+    /// - Parameter url: The address of the utility network.
     /// - Returns: A loaded utility network.
-    func makeNetworkWith(url: URL) async -> UtilityNetwork {
+    func makeNetwork(url: URL) async throws -> UtilityNetwork {
         let network = UtilityNetwork(url: url)
-        do {
-            try await network.load()
-        } catch {
-            XCTFail(error.localizedDescription)
-        }
+        try await network.load()
         return network
     }
     
-    func tokenFor_rtc_100_8() async throws -> ArcGISCredential {
-        return try await ArcGISCredential.token(
-            url: URL.rtc_100_8,
-            username: "publisher1",
-            password: passwordFor_rtc_100_8!
-        )
+    var tokenForRTC100_8: ArcGISCredential {
+        get async throws {
+            try await ArcGISCredential.token(
+                url: URL.RTC100_8,
+                username: "publisher1",
+                password: passwordFor_rtc_100_8!
+            )
+        }
     }
     
-    func tokenFor_rt_server109() async throws -> ArcGISCredential {
-        return try await ArcGISCredential.token(
-            url: URL.rt_server109,
-            username: "publisher1",
-            password: passwordFor_rt_server109!
-        )
+    var tokenForRTServer109: ArcGISCredential {
+        get async throws {
+            try await ArcGISCredential.token(
+                url: URL.rtServer109,
+                username: "publisher1",
+                password: passwordFor_rt_server109!
+            )
+        }
     }
     
-    func tokenFor_sampleServer7() async throws -> ArcGISCredential {
-        return try await ArcGISCredential.token(
-            url: URL.sampleServer7,
-            username: "viewer01",
-            password: passwordFor_sampleServer7!
-        )
+    var tokenForSampleServer7: ArcGISCredential {
+        get async throws {
+            try await ArcGISCredential.token(
+                url: URL.sampleServer7,
+                username: "viewer01",
+                password: passwordFor_sampleServer7!
+            )
+        }
     }
 }
 
 private extension URL {
-    static var rt_server109 = URL(string: "https://rt-server109.esri.com/portal/home/item.html?id=54fa9aadf6c645d39f006cf279147204")!
+    static let rtServer109 = URL(string: "https://rt-server109.esri.com/portal/home/item.html?id=54fa9aadf6c645d39f006cf279147204")!
     
-    static var rtc_100_8 = URL(string: "http://rtc-100-8.esri.com/portal/home/webmap/viewer.html?webmap=78f993b89bad4ba0a8a22ce2e0bcfbd0")!
+    static let RTC100_8 = URL(string: "http://rtc-100-8.esri.com/portal/home/webmap/viewer.html?webmap=78f993b89bad4ba0a8a22ce2e0bcfbd0")!
     
-    static var sampleServer7 = URL(string: "https://sampleserver7.arcgisonline.com/server/rest/services/UtilityNetwork/NapervilleElectric/FeatureServer")!
+    static let sampleServer7 = URL(string: "https://sampleserver7.arcgisonline.com/server/rest/services/UtilityNetwork/NapervilleElectric/FeatureServer")!
 }
