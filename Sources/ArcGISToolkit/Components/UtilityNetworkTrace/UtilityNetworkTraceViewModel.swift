@@ -103,7 +103,7 @@ import SwiftUI
     init(
         map: Map,
         graphicsOverlay: GraphicsOverlay,
-        startingPoints: [UtilityNetworkTraceStartingPoint],
+        startingPoints: [UtilityNetworkTraceStartingPoint] = [],
         autoLoad: Bool = true
     ) {
         self.map = map
@@ -257,8 +257,7 @@ import SwiftUI
     }
     
     /// Sets the nullable members of the provided starting point and adds it to the pending trace.
-    /// - Parameters:
-    ///   - startingPoint: The starting point to be processed and added to the pending trace.
+    /// - Parameter startingPoint: The starting point to be processed and added to the pending trace.
     func processAndAdd(startingPoint: UtilityNetworkTraceStartingPoint) async {
         guard let feature = startingPoint.geoElement as? ArcGISFeature,
               let globalid = feature.globalID else {

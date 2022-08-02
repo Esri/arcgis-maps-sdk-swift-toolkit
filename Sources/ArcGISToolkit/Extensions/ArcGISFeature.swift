@@ -14,9 +14,10 @@
 import ArcGIS
 import Foundation
 
-
 extension ArcGISFeature {
-    /// A case invariant method of accessing the global ID attribute.
+    /// The global ID of the feature.
+    ///
+    /// This property is `nil` if there is no global ID.
     var globalID: UUID? {
         if let id = attributes["globalid"] as? UUID {
             return id
