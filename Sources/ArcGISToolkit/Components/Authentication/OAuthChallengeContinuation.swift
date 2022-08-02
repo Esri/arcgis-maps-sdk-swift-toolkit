@@ -14,13 +14,13 @@
 import Foundation
 ***REMOVED***
 
-***REMOVED***/ An object that represents an ArcGIS OAuth authentication challenge in the queue of challenges.
+***REMOVED***/ An object that represents an ArcGIS OAuth authentication challenge continuation.
 @MainActor
-final class QueuedOAuthChallenge: ValueContinuation<Result<ArcGISAuthenticationChallenge.Disposition, Error>>, QueuedArcGISChallenge {
+final class OAuthChallengeContinuation: ValueContinuation<Result<ArcGISAuthenticationChallenge.Disposition, Error>>, ArcGISChallengeContinuation {
 ***REMOVED******REMOVED***/ The OAuth configuration to be used for this challenge.
 ***REMOVED***let configuration: OAuthConfiguration
 ***REMOVED***
-***REMOVED******REMOVED***/ Creates a `QueuedOAuthChallenge`.
+***REMOVED******REMOVED***/ Creates a `OAuthChallengeContinuation`.
 ***REMOVED******REMOVED***/ - Parameter configuration: The OAuth configuration to be used for this challenge.
 ***REMOVED***init(configuration: OAuthConfiguration) {
 ***REMOVED******REMOVED***self.configuration = configuration

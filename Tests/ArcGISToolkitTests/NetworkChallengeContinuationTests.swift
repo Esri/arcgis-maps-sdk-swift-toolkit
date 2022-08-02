@@ -15,15 +15,15 @@
 import XCTest
 @testable ***REMOVED***Toolkit
 
-@MainActor final class QueuedNetworkChallengeTests: XCTestCase {
+@MainActor final class NetworkChallengeContinuationTests: XCTestCase {
 ***REMOVED***func testInit() {
-***REMOVED******REMOVED***let challenge = QueuedNetworkChallenge(host: "host.com", kind: .serverTrust)
+***REMOVED******REMOVED***let challenge = NetworkChallengeContinuation(host: "host.com", kind: .serverTrust)
 ***REMOVED******REMOVED***XCTAssertEqual(challenge.host, "host.com")
 ***REMOVED******REMOVED***XCTAssertEqual(challenge.kind, .serverTrust)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func testResumeAndComplete() async {
-***REMOVED******REMOVED***let challenge = QueuedNetworkChallenge(host: "host.com", kind: .serverTrust)
+***REMOVED******REMOVED***let challenge = NetworkChallengeContinuation(host: "host.com", kind: .serverTrust)
 ***REMOVED******REMOVED***challenge.resume(with: .useCredential(.serverTrust))
 ***REMOVED******REMOVED***let disposition = await challenge.value
 ***REMOVED******REMOVED***XCTAssertEqual(disposition, .useCredential(.serverTrust))

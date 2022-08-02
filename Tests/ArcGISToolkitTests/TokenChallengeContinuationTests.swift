@@ -15,9 +15,9 @@
 import XCTest
 @testable ***REMOVED***Toolkit
 
-@MainActor final class QueuedTokenChallengeTests: XCTestCase {
+@MainActor final class TokenChallengeContinuationTests: XCTestCase {
 ***REMOVED***func testInit() {
-***REMOVED******REMOVED***let challenge = QueuedTokenChallenge(host: "host.com") { _ in
+***REMOVED******REMOVED***let challenge = TokenChallengeContinuation(host: "host.com") { _ in
 ***REMOVED******REMOVED******REMOVED***fatalError()
 ***REMOVED***
 ***REMOVED******REMOVED***
@@ -28,7 +28,7 @@ import XCTest
 ***REMOVED***func testResumeWithLogin() async {
 ***REMOVED******REMOVED***struct MockError: Error {***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***let challenge = QueuedTokenChallenge(host: "host.com") { _ in
+***REMOVED******REMOVED***let challenge = TokenChallengeContinuation(host: "host.com") { _ in
 ***REMOVED******REMOVED******REMOVED***throw MockError()
 ***REMOVED***
 ***REMOVED******REMOVED***challenge.resume(with: .init(username: "user1", password: "1234"))
@@ -38,7 +38,7 @@ import XCTest
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func testCancel() async {
-***REMOVED******REMOVED***let challenge = QueuedTokenChallenge(host: "host.com") { _ in
+***REMOVED******REMOVED***let challenge = TokenChallengeContinuation(host: "host.com") { _ in
 ***REMOVED******REMOVED******REMOVED***fatalError()
 ***REMOVED***
 ***REMOVED******REMOVED***challenge.cancel()

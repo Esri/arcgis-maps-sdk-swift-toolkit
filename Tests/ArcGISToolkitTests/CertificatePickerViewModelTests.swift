@@ -16,7 +16,7 @@ import XCTest
 
 @MainActor final class CertificatePickerViewModelTests: XCTestCase {
 ***REMOVED***func testViewModel() async throws {
-***REMOVED******REMOVED***let challenge = QueuedNetworkChallenge(host: "host.com", kind: .certificate)
+***REMOVED******REMOVED***let challenge = NetworkChallengeContinuation(host: "host.com", kind: .certificate)
 ***REMOVED******REMOVED***let model = CertificatePickerViewModel(challenge: challenge)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertNil(model.certificateURL)

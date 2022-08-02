@@ -14,16 +14,16 @@
 import Foundation
 ***REMOVED***
 
-***REMOVED***/ An object that represents a network authentication challenge in the queue of challenges.
+***REMOVED***/ An object that represents a network authentication challenge continuation.
 @MainActor
-final class QueuedNetworkChallenge: ValueContinuation<NetworkAuthenticationChallengeDisposition>, QueuedChallenge {
+final class NetworkChallengeContinuation: ValueContinuation<NetworkAuthenticationChallengeDisposition>, ChallengeContinuation {
 ***REMOVED******REMOVED***/ The host that prompted the challenge.
 ***REMOVED***let host: String
 ***REMOVED***
 ***REMOVED******REMOVED***/ The kind of challenge.
 ***REMOVED***let kind: Kind
 ***REMOVED***
-***REMOVED******REMOVED***/ Creates a `QueuedNetworkChallenge`.
+***REMOVED******REMOVED***/ Creates a `NetworkChallengeContinuation`.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - host: The host that prompted the challenge.
 ***REMOVED******REMOVED***/   - kind: The kind of challenge.
@@ -32,22 +32,22 @@ final class QueuedNetworkChallenge: ValueContinuation<NetworkAuthenticationChall
 ***REMOVED******REMOVED***self.kind = kind
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Resumes the queued challenge.
+***REMOVED******REMOVED***/ Resumes the challenge continuation.
 ***REMOVED******REMOVED***/ - Parameter disposition: The disposition to resume with.
 ***REMOVED***func resume(with disposition: NetworkAuthenticationChallengeDisposition) {
 ***REMOVED******REMOVED***setValue(disposition)
 ***REMOVED***
 ***REMOVED***
 
-extension QueuedNetworkChallenge {
-***REMOVED******REMOVED***/ Creates a `QueuedNetworkChallenge`.
+extension NetworkChallengeContinuation {
+***REMOVED******REMOVED***/ Creates a `NetworkChallengeContinuation`.
 ***REMOVED******REMOVED***/ - Parameter networkChallenge: The associated network authentication challenge.
 ***REMOVED***convenience init(networkChallenge: NetworkAuthenticationChallenge) {
 ***REMOVED******REMOVED***self.init(host: networkChallenge.host, kind: Kind(networkChallenge.kind))
 ***REMOVED***
 ***REMOVED***
 
-extension QueuedNetworkChallenge {
+extension NetworkChallengeContinuation {
 ***REMOVED******REMOVED***/ An enumeration that describes the kind of challenge.
 ***REMOVED***enum Kind {
 ***REMOVED******REMOVED******REMOVED***/ A challenge for an untrusted host.
@@ -59,7 +59,7 @@ extension QueuedNetworkChallenge {
 ***REMOVED***
 ***REMOVED***
 
-extension QueuedNetworkChallenge.Kind {
+extension NetworkChallengeContinuation.Kind {
 ***REMOVED******REMOVED***/ Creates an instance.
 ***REMOVED******REMOVED***/ - Parameter networkAuthenticationChallengeKind: The kind of network authentication
 ***REMOVED******REMOVED***/ challenge.

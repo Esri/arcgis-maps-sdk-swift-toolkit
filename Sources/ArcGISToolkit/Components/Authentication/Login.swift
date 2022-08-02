@@ -104,8 +104,8 @@ struct LoginViewModifier: ViewModifier {
 ***REMOVED***
 
 extension LoginViewModifier {
-***REMOVED******REMOVED***/ Creates a `LoginViewModifier` with a queued network challenge.
-***REMOVED***@MainActor init(challenge: QueuedNetworkChallenge) {
+***REMOVED******REMOVED***/ Creates a `LoginViewModifier` with a network challenge continuation.
+***REMOVED***@MainActor init(challenge: NetworkChallengeContinuation) {
 ***REMOVED******REMOVED***self.init(
 ***REMOVED******REMOVED******REMOVED***viewModel: LoginViewModel(
 ***REMOVED******REMOVED******REMOVED******REMOVED***challengingHost: challenge.host,
@@ -123,8 +123,8 @@ extension LoginViewModifier {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Creates a `LoginViewModifier` with a queued ArcGIS challenge.
-***REMOVED***@MainActor init(challenge: QueuedTokenChallenge) {
+***REMOVED******REMOVED***/ Creates a `LoginViewModifier` with an ArcGIS challenge continuation.
+***REMOVED***@MainActor init(challenge: TokenChallengeContinuation) {
 ***REMOVED******REMOVED***self.init(
 ***REMOVED******REMOVED******REMOVED***viewModel: LoginViewModel(
 ***REMOVED******REMOVED******REMOVED******REMOVED***challengingHost: challenge.host,
