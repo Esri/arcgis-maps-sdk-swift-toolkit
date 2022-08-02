@@ -86,35 +86,35 @@ public final class Authenticator: ObservableObject {
         )
     }
     
-    /// The current queued challenge.
-    @Published var currentChallenge: QueuedChallenge?
+    /// The current challenge.
+    @Published var currentChallenge: ChallengeContinuation?
 }
 
 extension Authenticator: AuthenticationChallengeHandler {
     public func handleArcGISChallenge(
         _ challenge: ArcGISAuthenticationChallenge
     ) async throws -> ArcGISAuthenticationChallenge.Disposition {
-        let queuedChallenge: QueuedArcGISChallenge
+        let challengeContinuation: ArcGISChallengeContinuation
         
         // Create the correct challenge type.
         if let url = challenge.request.url,
            let config = oAuthConfigurations.first(where: { $0.canBeUsed(for: url) }) {
-            let oAuthChallenge = QueuedOAuthChallenge(configuration: config)
-            queuedChallenge = oAuthChallenge
+            let oAuthChallenge = OAuthChallengeContinuation(configuration: config)
+            challengeContinuation = oAuthChallenge
             oAuthChallenge.presentPrompt()
         } else {
-            queuedChallenge = QueuedTokenChallenge(arcGISChallenge: challenge)
+            challengeContinuation = TokenChallengeContinuation(arcGISChallenge: challenge)
         }
         
         // Alleviates an error with "already presenting".
         await Task.yield()
         
         // Set the current challenge, which will present the UX.
-        self.currentChallenge = queuedChallenge
+        self.currentChallenge = challengeContinuation
         defer { self.currentChallenge = nil }
         
         // Wait for it to complete and return the resulting disposition.
-        return try await queuedChallenge.value.get()
+        return try await challengeContinuation.value.get()
     }
     
     public func handleNetworkChallenge(
@@ -125,17 +125,17 @@ extension Authenticator: AuthenticationChallengeHandler {
         guard promptForUntrustedHosts || challenge.kind != .serverTrust else {
             return .allowRequestToFail
         }
-        
-        let queuedChallenge = QueuedNetworkChallenge(networkChallenge: challenge)
+
+        let challengeContinuation = NetworkChallengeContinuation(networkChallenge: challenge)
         
         // Alleviates an error with "already presenting".
         await Task.yield()
         
         // Set the current challenge, which will present the UX.
-        self.currentChallenge = queuedChallenge
+        self.currentChallenge = challengeContinuation
         defer { self.currentChallenge = nil }
         
         // Wait for it to complete and return the resulting disposition.
-        return await queuedChallenge.value
+        return await challengeContinuation.value
     }
 }

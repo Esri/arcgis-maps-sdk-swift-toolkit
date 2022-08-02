@@ -14,16 +14,16 @@
 import Foundation
 import ArcGIS
 
-/// An object that represents an ArcGIS token authentication challenge in the queue of challenges.
+/// An object that represents an ArcGIS token authentication challenge continuation.
 @MainActor
-final class QueuedTokenChallenge: ValueContinuation<Result<ArcGISAuthenticationChallenge.Disposition, Error>>, QueuedArcGISChallenge {
+final class TokenChallengeContinuation: ValueContinuation<Result<ArcGISAuthenticationChallenge.Disposition, Error>>, ArcGISChallengeContinuation {
     /// The host that prompted the challenge.
     let host: String
     
     /// A closure that provides a token credential from a username and password.
     let tokenCredentialProvider: (LoginCredential) async throws -> ArcGISCredential
     
-    /// Creates a `QueuedArcGISChallenge`.
+    /// Creates a `ArcGISChallengeContinuation`.
     /// - Parameters:
     ///   - host: The host that prompted the challenge.
     ///   - tokenCredentialProvider: A closure that provides a token credential from a username and password.
@@ -35,7 +35,7 @@ final class QueuedTokenChallenge: ValueContinuation<Result<ArcGISAuthenticationC
         self.tokenCredentialProvider = tokenCredentialProvider
     }
     
-    /// Creates a `QueuedArcGISChallenge`.
+    /// Creates a `ArcGISChallengeContinuation`.
     /// - Parameter arcGISChallenge: The associated ArcGIS authentication challenge.
     convenience init(arcGISChallenge: ArcGISAuthenticationChallenge) {
         self.init(host: arcGISChallenge.request.url?.host ?? "") { loginCredential in
