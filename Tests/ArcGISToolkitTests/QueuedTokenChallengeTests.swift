@@ -33,14 +33,8 @@ import XCTest
         }
         challenge.resume(with: .init(username: "user1", password: "1234"))
         
-        let result = await challenge.result
+        let result = await challenge.value
         XCTAssertTrue(result.error is MockError)
-        
-        // Make sure multiple simultaneous listeners can await the completion.
-        let t1 = Task { await challenge.complete() }
-        let t2 = Task { await challenge.complete() }
-        await t1.value
-        await t2.value
     }
     
     func testCancel() async {
@@ -49,7 +43,7 @@ import XCTest
         }
         challenge.cancel()
         
-        let result = await challenge.result
+        let result = await challenge.value
         XCTAssertEqual(result.value, .cancelAuthenticationChallenge)
     }
 }

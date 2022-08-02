@@ -16,7 +16,7 @@ import ArcGIS
 
 /// An object that represents a network authentication challenge in the queue of challenges.
 @MainActor
-final class QueuedNetworkChallenge: QueuedChallenge {
+final class QueuedNetworkChallenge: ValueContinuation<NetworkAuthenticationChallengeDisposition>, QueuedChallenge {
     /// The host that prompted the challenge.
     let host: String
     
@@ -35,25 +35,7 @@ final class QueuedNetworkChallenge: QueuedChallenge {
     /// Resumes the queued challenge.
     /// - Parameter disposition: The disposition to resume with.
     func resume(with disposition: NetworkAuthenticationChallengeDisposition) {
-        guard _disposition == nil else { return }
-        _disposition = disposition
-    }
-    
-    /// Use a streamed property because we need to support multiple listeners
-    /// to know when the challenge completed.
-    @Streamed private var _disposition: (NetworkAuthenticationChallengeDisposition)?
-    
-    /// The resulting disposition of the challenge.
-    var disposition: NetworkAuthenticationChallengeDisposition {
-        get async {
-            await $_disposition
-                .compactMap({ $0 })
-                .first(where: { _ in true })!
-        }
-    }
-    
-    public func complete() async {
-        _ = await disposition
+        setValue(disposition)
     }
 }
 
