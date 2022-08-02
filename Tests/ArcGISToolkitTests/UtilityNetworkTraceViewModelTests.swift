@@ -12,7 +12,6 @@
 ***REMOVED*** limitations under the License.
 
 ***REMOVED***
-import Combine
 import XCTest
 
 @testable ***REMOVED***Toolkit
@@ -36,11 +35,10 @@ import XCTest
 ***REMOVED******REMOVED***await ArcGISRuntimeEnvironment.credentialStore.removeAll()
 ***REMOVED***
 ***REMOVED***
-***REMOVED***func testCase_1_1() async {
+***REMOVED***func testCase_1_1() async throws {
 ***REMOVED******REMOVED***let viewModel = UtilityNetworkTraceViewModel(
-***REMOVED******REMOVED******REMOVED***map: await makeMapWithNoUtilityNetworks(),
+***REMOVED******REMOVED******REMOVED***map: try await makeMap(),
 ***REMOVED******REMOVED******REMOVED***graphicsOverlay: GraphicsOverlay(),
-***REMOVED******REMOVED******REMOVED***startingPoints: [],
 ***REMOVED******REMOVED******REMOVED***autoLoad: false
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
@@ -58,17 +56,16 @@ import XCTest
 ***REMOVED******REMOVED***try XCTSkipIf(passwordFor_sampleServer7 == nil)
 ***REMOVED******REMOVED***setChallengeHandler(ChallengeHandler(trustedHosts: [URL.sampleServer7.host!]))
 ***REMOVED******REMOVED***await ArcGISRuntimeEnvironment.credentialStore.add(
-***REMOVED******REMOVED******REMOVED***try await tokenFor_sampleServer7()
+***REMOVED******REMOVED******REMOVED***try await tokenForSampleServer7
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***let map = await makeMapWithNoUtilityNetworks()
+***REMOVED******REMOVED***let map = try await makeMap()
 ***REMOVED******REMOVED***map.addUtilityNetwork(
-***REMOVED******REMOVED******REMOVED***await makeNetworkWith(url: .sampleServer7)
+***REMOVED******REMOVED******REMOVED***try await makeNetwork(url: .sampleServer7)
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***let viewModel = UtilityNetworkTraceViewModel(
 ***REMOVED******REMOVED******REMOVED***map: map,
 ***REMOVED******REMOVED******REMOVED***graphicsOverlay: GraphicsOverlay(),
-***REMOVED******REMOVED******REMOVED***startingPoints: [],
 ***REMOVED******REMOVED******REMOVED***autoLoad: false
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
@@ -85,12 +82,12 @@ import XCTest
 ***REMOVED***
 ***REMOVED***func testCase_1_3() async throws {
 ***REMOVED******REMOVED***try XCTSkipIf(passwordFor_rtc_100_8 == nil)
-***REMOVED******REMOVED***setChallengeHandler(ChallengeHandler(trustedHosts: [URL.rtc_100_8.host!]))
+***REMOVED******REMOVED***setChallengeHandler(ChallengeHandler(trustedHosts: [URL.RTC100_8.host!]))
 ***REMOVED******REMOVED***await ArcGISRuntimeEnvironment.credentialStore.add(
-***REMOVED******REMOVED******REMOVED***try await tokenFor_rtc_100_8()
+***REMOVED******REMOVED******REMOVED***try await tokenForRTC100_8
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***guard let map = Map(url: .rtc_100_8) else {
+***REMOVED******REMOVED***guard let map = Map(url: .RTC100_8) else {
 ***REMOVED******REMOVED******REMOVED***XCTFail("Failed to load map")
 ***REMOVED******REMOVED******REMOVED***return
 ***REMOVED***
@@ -98,7 +95,6 @@ import XCTest
 ***REMOVED******REMOVED***let viewModel = UtilityNetworkTraceViewModel(
 ***REMOVED******REMOVED******REMOVED***map: map,
 ***REMOVED******REMOVED******REMOVED***graphicsOverlay: GraphicsOverlay(),
-***REMOVED******REMOVED******REMOVED***startingPoints: [],
 ***REMOVED******REMOVED******REMOVED***autoLoad: false
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
@@ -115,12 +111,12 @@ import XCTest
 ***REMOVED***
 ***REMOVED***func testCase_1_4() async throws {
 ***REMOVED******REMOVED***try XCTSkipIf(passwordFor_rt_server109 == nil)
-***REMOVED******REMOVED***setChallengeHandler(ChallengeHandler(trustedHosts: [URL.rt_server109.host!]))
+***REMOVED******REMOVED***setChallengeHandler(ChallengeHandler(trustedHosts: [URL.rtServer109.host!]))
 ***REMOVED******REMOVED***await ArcGISRuntimeEnvironment.credentialStore.add(
-***REMOVED******REMOVED******REMOVED***try await tokenFor_rt_server109()
+***REMOVED******REMOVED******REMOVED***try await tokenForRTServer109
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***guard let map = Map(url: .rt_server109) else {
+***REMOVED******REMOVED***guard let map = Map(url: .rtServer109) else {
 ***REMOVED******REMOVED******REMOVED***XCTFail("Failed to load map")
 ***REMOVED******REMOVED******REMOVED***return
 ***REMOVED***
@@ -128,7 +124,6 @@ import XCTest
 ***REMOVED******REMOVED***let viewModel = UtilityNetworkTraceViewModel(
 ***REMOVED******REMOVED******REMOVED***map: map,
 ***REMOVED******REMOVED******REMOVED***graphicsOverlay: GraphicsOverlay(),
-***REMOVED******REMOVED******REMOVED***startingPoints: [],
 ***REMOVED******REMOVED******REMOVED***autoLoad: false
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
@@ -145,12 +140,12 @@ import XCTest
 ***REMOVED***
 ***REMOVED***func testCase_2_1() async throws {
 ***REMOVED******REMOVED***try XCTSkipIf(passwordFor_rt_server109 == nil)
-***REMOVED******REMOVED***setChallengeHandler(ChallengeHandler(trustedHosts: [URL.rt_server109.host!]))
+***REMOVED******REMOVED***setChallengeHandler(ChallengeHandler(trustedHosts: [URL.rtServer109.host!]))
 ***REMOVED******REMOVED***await ArcGISRuntimeEnvironment.credentialStore.add(
-***REMOVED******REMOVED******REMOVED***try await tokenFor_rt_server109()
+***REMOVED******REMOVED******REMOVED***try await tokenForRTServer109
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***guard let map = await makeMapWith(url: .rt_server109) else {
+***REMOVED******REMOVED***guard let map = try await makeMap(url: .rtServer109) else {
 ***REMOVED******REMOVED******REMOVED***XCTFail()
 ***REMOVED******REMOVED******REMOVED***return
 ***REMOVED***
@@ -195,12 +190,12 @@ import XCTest
 ***REMOVED***
 ***REMOVED***func testCase_2_2() async throws {
 ***REMOVED******REMOVED***try XCTSkipIf(passwordFor_rt_server109 == nil)
-***REMOVED******REMOVED***setChallengeHandler(ChallengeHandler(trustedHosts: [URL.rt_server109.host!]))
+***REMOVED******REMOVED***setChallengeHandler(ChallengeHandler(trustedHosts: [URL.rtServer109.host!]))
 ***REMOVED******REMOVED***await ArcGISRuntimeEnvironment.credentialStore.add(
-***REMOVED******REMOVED******REMOVED***try await tokenFor_rt_server109()
+***REMOVED******REMOVED******REMOVED***try await tokenForRTServer109
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***guard let map = await makeMapWith(url: .rt_server109) else {
+***REMOVED******REMOVED***guard let map = try await makeMap(url: .rtServer109) else {
 ***REMOVED******REMOVED******REMOVED***XCTFail()
 ***REMOVED******REMOVED******REMOVED***return
 ***REMOVED***
@@ -252,12 +247,12 @@ import XCTest
 ***REMOVED***
 ***REMOVED***func testCase_2_3() async throws {
 ***REMOVED******REMOVED***try XCTSkipIf(passwordFor_rt_server109 == nil)
-***REMOVED******REMOVED***setChallengeHandler(ChallengeHandler(trustedHosts: [URL.rt_server109.host!]))
+***REMOVED******REMOVED***setChallengeHandler(ChallengeHandler(trustedHosts: [URL.rtServer109.host!]))
 ***REMOVED******REMOVED***await ArcGISRuntimeEnvironment.credentialStore.add(
-***REMOVED******REMOVED******REMOVED***try await tokenFor_rt_server109()
+***REMOVED******REMOVED******REMOVED***try await tokenForRTServer109
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***guard let map = await makeMapWith(url: .rt_server109) else {
+***REMOVED******REMOVED***guard let map = try await makeMap(url: .rtServer109) else {
 ***REMOVED******REMOVED******REMOVED***XCTFail()
 ***REMOVED******REMOVED******REMOVED***return
 ***REMOVED***
@@ -302,12 +297,12 @@ import XCTest
 ***REMOVED***
 ***REMOVED***func testCase_3_1() async throws {
 ***REMOVED******REMOVED***try XCTSkipIf(passwordFor_rt_server109 == nil)
-***REMOVED******REMOVED***setChallengeHandler(ChallengeHandler(trustedHosts: [URL.rt_server109.host!]))
+***REMOVED******REMOVED***setChallengeHandler(ChallengeHandler(trustedHosts: [URL.rtServer109.host!]))
 ***REMOVED******REMOVED***await ArcGISRuntimeEnvironment.credentialStore.add(
-***REMOVED******REMOVED******REMOVED***try await tokenFor_rt_server109()
+***REMOVED******REMOVED******REMOVED***try await tokenForRTServer109
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***guard let map = await makeMapWith(url: .rt_server109) else {
+***REMOVED******REMOVED***guard let map = try await makeMap(url: .rtServer109) else {
 ***REMOVED******REMOVED******REMOVED***XCTFail()
 ***REMOVED******REMOVED******REMOVED***return
 ***REMOVED***
@@ -345,7 +340,7 @@ import XCTest
 ***REMOVED******REMOVED***XCTAssertTrue(viewModel.canRunTrace)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let success = await viewModel.trace()
-***REMOVED******REMOVED***let functionOutput = try XCTUnwrap( viewModel.completedTraces.first?.functionOutputs.first)
+***REMOVED******REMOVED***let functionOutput = try XCTUnwrap(viewModel.completedTraces.first?.functionOutputs.first)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertTrue(success)
 ***REMOVED******REMOVED***XCTAssertFalse(viewModel.canRunTrace)
@@ -356,12 +351,12 @@ import XCTest
 ***REMOVED***
 ***REMOVED***func testCase_3_2() async throws {
 ***REMOVED******REMOVED***try XCTSkipIf(passwordFor_rt_server109 == nil)
-***REMOVED******REMOVED***setChallengeHandler(ChallengeHandler(trustedHosts: [URL.rt_server109.host!]))
+***REMOVED******REMOVED***setChallengeHandler(ChallengeHandler(trustedHosts: [URL.rtServer109.host!]))
 ***REMOVED******REMOVED***await ArcGISRuntimeEnvironment.credentialStore.add(
-***REMOVED******REMOVED******REMOVED***try await tokenFor_rt_server109()
+***REMOVED******REMOVED******REMOVED***try await tokenForRTServer109
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***guard let map = await makeMapWith(url: .rt_server109) else {
+***REMOVED******REMOVED***guard let map = try await makeMap(url: .rtServer109) else {
 ***REMOVED******REMOVED******REMOVED***XCTFail()
 ***REMOVED******REMOVED******REMOVED***return
 ***REMOVED***
@@ -406,68 +401,69 @@ import XCTest
 ***REMOVED***
 
 extension UtilityNetworkTraceViewModelTests {
-***REMOVED******REMOVED***/ - Returns: A loaded map that contains no utility networks.
-***REMOVED***func makeMapWithNoUtilityNetworks() async -> Map {
+***REMOVED******REMOVED***/ Initializes and loads a topographic map.
+***REMOVED******REMOVED***/ - Returns: A loaded map.
+***REMOVED******REMOVED***/
+***REMOVED******REMOVED***/ The returned map contains no utility networks.
+***REMOVED***func makeMap() async throws -> Map {
 ***REMOVED******REMOVED***let map = Map(basemapStyle: .arcGISTopographic)
-***REMOVED******REMOVED***do {
-***REMOVED******REMOVED******REMOVED***try await map.load()
-***REMOVED*** catch {
-***REMOVED******REMOVED******REMOVED***XCTFail(error.localizedDescription)
-***REMOVED***
+***REMOVED******REMOVED***try await map.load()
 ***REMOVED******REMOVED***return map
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ - Returns: A loaded map that contains no utility networks.
-***REMOVED***func makeMapWith(url: URL) async -> Map? {
-***REMOVED******REMOVED***let map = Map(url: url)
-***REMOVED******REMOVED***do {
-***REMOVED******REMOVED******REMOVED***try await map?.load()
-***REMOVED*** catch {
-***REMOVED******REMOVED******REMOVED***XCTFail(error.localizedDescription)
-***REMOVED***
+***REMOVED******REMOVED***/ Initializes and loads a map at the provided URL.
+***REMOVED******REMOVED***/ - Parameter url: The address of the map.
+***REMOVED******REMOVED***/ - Returns: A loaded map.
+***REMOVED***func makeMap(url: URL) async throws -> Map? {
+***REMOVED******REMOVED***let map = try XCTUnwrap(Map(url: url))
+***REMOVED******REMOVED***try await map.load()
 ***REMOVED******REMOVED***return map
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ Initializes and loads a utility network at the provided URL.
+***REMOVED******REMOVED***/ - Parameter url: The address of the utility network.
 ***REMOVED******REMOVED***/ - Returns: A loaded utility network.
-***REMOVED***func makeNetworkWith(url: URL) async -> UtilityNetwork {
+***REMOVED***func makeNetwork(url: URL) async throws -> UtilityNetwork {
 ***REMOVED******REMOVED***let network = UtilityNetwork(url: url)
-***REMOVED******REMOVED***do {
-***REMOVED******REMOVED******REMOVED***try await network.load()
-***REMOVED*** catch {
-***REMOVED******REMOVED******REMOVED***XCTFail(error.localizedDescription)
-***REMOVED***
+***REMOVED******REMOVED***try await network.load()
 ***REMOVED******REMOVED***return network
 ***REMOVED***
 ***REMOVED***
-***REMOVED***func tokenFor_rtc_100_8() async throws -> ArcGISCredential {
-***REMOVED******REMOVED***return try await ArcGISCredential.token(
-***REMOVED******REMOVED******REMOVED***url: URL.rtc_100_8,
-***REMOVED******REMOVED******REMOVED***username: "publisher1",
-***REMOVED******REMOVED******REMOVED***password: passwordFor_rtc_100_8!
-***REMOVED******REMOVED***)
+***REMOVED***var tokenForRTC100_8: ArcGISCredential {
+***REMOVED******REMOVED***get async throws {
+***REMOVED******REMOVED******REMOVED***try await ArcGISCredential.token(
+***REMOVED******REMOVED******REMOVED******REMOVED***url: URL.RTC100_8,
+***REMOVED******REMOVED******REMOVED******REMOVED***username: "publisher1",
+***REMOVED******REMOVED******REMOVED******REMOVED***password: passwordFor_rtc_100_8!
+***REMOVED******REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***func tokenFor_rt_server109() async throws -> ArcGISCredential {
-***REMOVED******REMOVED***return try await ArcGISCredential.token(
-***REMOVED******REMOVED******REMOVED***url: URL.rt_server109,
-***REMOVED******REMOVED******REMOVED***username: "publisher1",
-***REMOVED******REMOVED******REMOVED***password: passwordFor_rt_server109!
-***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***var tokenForRTServer109: ArcGISCredential {
+***REMOVED******REMOVED***get async throws {
+***REMOVED******REMOVED******REMOVED***try await ArcGISCredential.token(
+***REMOVED******REMOVED******REMOVED******REMOVED***url: URL.rtServer109,
+***REMOVED******REMOVED******REMOVED******REMOVED***username: "publisher1",
+***REMOVED******REMOVED******REMOVED******REMOVED***password: passwordFor_rt_server109!
+***REMOVED******REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***func tokenFor_sampleServer7() async throws -> ArcGISCredential {
-***REMOVED******REMOVED***return try await ArcGISCredential.token(
-***REMOVED******REMOVED******REMOVED***url: URL.sampleServer7,
-***REMOVED******REMOVED******REMOVED***username: "viewer01",
-***REMOVED******REMOVED******REMOVED***password: passwordFor_sampleServer7!
-***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***var tokenForSampleServer7: ArcGISCredential {
+***REMOVED******REMOVED***get async throws {
+***REMOVED******REMOVED******REMOVED***try await ArcGISCredential.token(
+***REMOVED******REMOVED******REMOVED******REMOVED***url: URL.sampleServer7,
+***REMOVED******REMOVED******REMOVED******REMOVED***username: "viewer01",
+***REMOVED******REMOVED******REMOVED******REMOVED***password: passwordFor_sampleServer7!
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
 private extension URL {
-***REMOVED***static var rt_server109 = URL(string: "https:***REMOVED***rt-server109.esri.com/portal/home/item.html?id=54fa9aadf6c645d39f006cf279147204")!
+***REMOVED***static let rtServer109 = URL(string: "https:***REMOVED***rt-server109.esri.com/portal/home/item.html?id=54fa9aadf6c645d39f006cf279147204")!
 ***REMOVED***
-***REMOVED***static var rtc_100_8 = URL(string: "http:***REMOVED***rtc-100-8.esri.com/portal/home/webmap/viewer.html?webmap=78f993b89bad4ba0a8a22ce2e0bcfbd0")!
+***REMOVED***static let RTC100_8 = URL(string: "http:***REMOVED***rtc-100-8.esri.com/portal/home/webmap/viewer.html?webmap=78f993b89bad4ba0a8a22ce2e0bcfbd0")!
 ***REMOVED***
-***REMOVED***static var sampleServer7 = URL(string: "https:***REMOVED***sampleserver7.arcgisonline.com/server/rest/services/UtilityNetwork/NapervilleElectric/FeatureServer")!
+***REMOVED***static let sampleServer7 = URL(string: "https:***REMOVED***sampleserver7.arcgisonline.com/server/rest/services/UtilityNetwork/NapervilleElectric/FeatureServer")!
 ***REMOVED***

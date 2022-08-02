@@ -14,9 +14,10 @@
 ***REMOVED***
 import Foundation
 
-
 extension ArcGISFeature {
-***REMOVED******REMOVED***/ A case invariant method of accessing the global ID attribute.
+***REMOVED******REMOVED***/ The global ID of the feature.
+***REMOVED******REMOVED***/
+***REMOVED******REMOVED***/ This property is `nil` if there is no global ID.
 ***REMOVED***var globalID: UUID? {
 ***REMOVED******REMOVED***if let id = attributes["globalid"] as? UUID {
 ***REMOVED******REMOVED******REMOVED***return id
