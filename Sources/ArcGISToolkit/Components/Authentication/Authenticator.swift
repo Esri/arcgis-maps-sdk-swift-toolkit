@@ -24,13 +24,6 @@ public final class Authenticator: ObservableObject {
     /// A value indicating whether we should prompt the user when encountering an untrusted host.
     var promptForUntrustedHosts: Bool
     
-    deinit {
-        observationTask?.cancel()
-    }
-    
-    /// The task for the observation of the challenge queue.
-    private var observationTask: Task<Void, Never>?
-    
     /// Creates an authenticator.
     /// - Parameters:
     ///   - promptForUntrustedHosts: A value indicating whether we should prompt the user when
@@ -42,25 +35,6 @@ public final class Authenticator: ObservableObject {
     ) {
         self.promptForUntrustedHosts = promptForUntrustedHosts
         self.oAuthConfigurations = oAuthConfigurations
-        observationTask = Task { [weak self] in
-            // Cannot unwrap self on the `for await` line or it will introduce a retain cycle.
-            guard let challengeQueue = self?.challengeQueue else { return }
-            for await queuedChallenge in challengeQueue {
-                guard let self = self else { break }
-                
-                // A yield here helps alleviate the already presenting bug.
-                await Task.yield()
-                
-                // Set the current challenge, this should present the appropriate view.
-                self.currentChallenge = queuedChallenge
-                
-                // Wait for the queued challenge to finish.
-                await queuedChallenge.complete()
-                
-                // Reset the current challenge to `nil`, that will dismiss the view.
-                self.currentChallenge = nil
-            }
-        }
     }
     
     /// Sets up new credential stores that will be persisted to the keychain.
@@ -112,17 +86,6 @@ public final class Authenticator: ObservableObject {
         )
     }
     
-    var subject = PassthroughSubject<QueuedChallenge, Never>()
-    
-    /// A serial queue for authentication challenges.
-    private var challengeQueue: AsyncPublisher<AnyPublisher<QueuedChallenge, Never>> {
-        AsyncPublisher(
-            subject
-                .buffer(size: .max, prefetch: .byRequest, whenFull: .dropOldest)
-                .eraseToAnyPublisher()
-        )
-    }
-    
     /// The current queued challenge.
     @Published var currentChallenge: QueuedChallenge?
 }
@@ -143,8 +106,9 @@ extension Authenticator: AuthenticationChallengeHandler {
             queuedChallenge = QueuedTokenChallenge(arcGISChallenge: challenge)
         }
         
-        // Queue up the challenge.
-        subject.send(queuedChallenge)
+        // Set the current challenge, which will present the UX.
+        self.currentChallenge = queuedChallenge
+        defer { self.currentChallenge = nil }
         
         // Wait for it to complete and return the resulting disposition.
         return try await queuedChallenge.result.get()
@@ -161,8 +125,12 @@ extension Authenticator: AuthenticationChallengeHandler {
         
         let queuedChallenge = QueuedNetworkChallenge(networkChallenge: challenge)
         
-        // Queue up the challenge.
-        subject.send(queuedChallenge)
+        // Alleviates an error with "already presenting".
+        await Task.yield()
+        
+        // Set the current challenge, which will present the UX.
+        self.currentChallenge = queuedChallenge
+        defer { self.currentChallenge = nil }
         
         // Wait for it to complete and return the resulting disposition.
         return await queuedChallenge.disposition
