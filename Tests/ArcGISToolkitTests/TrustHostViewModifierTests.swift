@@ -16,7 +16,7 @@ import XCTest
 
 @MainActor final class TrustHostViewModifierTests: XCTestCase {
     func testInit() {
-        let challenge = QueuedNetworkChallenge(host: "host.com", kind: .serverTrust)
+        let challenge = NetworkChallengeContinuation(host: "host.com", kind: .serverTrust)
         // Tests the initial state.
         let modifier = TrustHostViewModifier(challenge: challenge)
         XCTAssertIdentical(modifier.challenge, challenge)

@@ -14,8 +14,8 @@
 import Foundation
 import ArcGIS
 
-/// A type that represents a challenge in the queue of authentication challenges.
-protocol QueuedChallenge: AnyObject {}
+/// A type that represents an authentication challenge that can be continued..
+protocol ChallengeContinuation: AnyObject {}
 
 /// A type that represents a continuation for an ArcGIS challenge.
-protocol QueuedArcGISChallenge: ValueContinuation<Result<ArcGISAuthenticationChallenge.Disposition, Error>>, QueuedChallenge {}
+protocol ArcGISChallengeContinuation: ValueContinuation<Result<ArcGISAuthenticationChallenge.Disposition, Error>>, ChallengeContinuation {}

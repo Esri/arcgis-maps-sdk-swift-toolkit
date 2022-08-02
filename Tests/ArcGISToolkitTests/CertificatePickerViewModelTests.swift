@@ -16,7 +16,7 @@ import XCTest
 
 @MainActor final class CertificatePickerViewModelTests: XCTestCase {
     func testViewModel() async throws {
-        let challenge = QueuedNetworkChallenge(host: "host.com", kind: .certificate)
+        let challenge = NetworkChallengeContinuation(host: "host.com", kind: .certificate)
         let model = CertificatePickerViewModel(challenge: challenge)
         
         XCTAssertNil(model.certificateURL)
