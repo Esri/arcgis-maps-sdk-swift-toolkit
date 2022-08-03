@@ -14,7 +14,7 @@
 import Foundation
 ***REMOVED***
 
-***REMOVED***/ An object that represents an ArcGIS OAuth authentication challenge continuation.
+***REMOVED***/ An object that represents an ArcGIS OAuth challenge continuation.
 @MainActor
 final class OAuthChallengeContinuation: ValueContinuation<Result<ArcGISAuthenticationChallenge.Disposition, Error>>, ArcGISChallengeContinuation {
 ***REMOVED******REMOVED***/ The OAuth configuration to be used for this challenge.
