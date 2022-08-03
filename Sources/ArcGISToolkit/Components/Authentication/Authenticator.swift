@@ -24,13 +24,6 @@ public final class Authenticator: ObservableObject {
 ***REMOVED******REMOVED***/ A value indicating whether we should prompt the user when encountering an untrusted host.
 ***REMOVED***var promptForUntrustedHosts: Bool
 ***REMOVED***
-***REMOVED***deinit {
-***REMOVED******REMOVED***observationTask?.cancel()
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ The task for the observation of the challenge queue.
-***REMOVED***private var observationTask: Task<Void, Never>?
-***REMOVED***
 ***REMOVED******REMOVED***/ Creates an authenticator.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - promptForUntrustedHosts: A value indicating whether we should prompt the user when
@@ -42,25 +35,6 @@ public final class Authenticator: ObservableObject {
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.promptForUntrustedHosts = promptForUntrustedHosts
 ***REMOVED******REMOVED***self.oAuthConfigurations = oAuthConfigurations
-***REMOVED******REMOVED***observationTask = Task { [weak self] in
-***REMOVED******REMOVED******REMOVED******REMOVED*** Cannot unwrap self on the `for await` line or it will introduce a retain cycle.
-***REMOVED******REMOVED******REMOVED***guard let challengeQueue = self?.challengeQueue else { return ***REMOVED***
-***REMOVED******REMOVED******REMOVED***for await queuedChallenge in challengeQueue {
-***REMOVED******REMOVED******REMOVED******REMOVED***guard let self = self else { break ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** A yield here helps alleviate the already presenting bug.
-***REMOVED******REMOVED******REMOVED******REMOVED***await Task.yield()
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Set the current challenge, this should present the appropriate view.
-***REMOVED******REMOVED******REMOVED******REMOVED***self.currentChallenge = queuedChallenge
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Wait for the queued challenge to finish.
-***REMOVED******REMOVED******REMOVED******REMOVED***await queuedChallenge.complete()
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Reset the current challenge to `nil`, that will dismiss the view.
-***REMOVED******REMOVED******REMOVED******REMOVED***self.currentChallenge = nil
-***REMOVED******REMOVED***
-***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Sets up new credential stores that will be persisted to the keychain.
@@ -112,42 +86,35 @@ public final class Authenticator: ObservableObject {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***var subject = PassthroughSubject<QueuedChallenge, Never>()
-***REMOVED***
-***REMOVED******REMOVED***/ A serial queue for authentication challenges.
-***REMOVED***private var challengeQueue: AsyncPublisher<AnyPublisher<QueuedChallenge, Never>> {
-***REMOVED******REMOVED***AsyncPublisher(
-***REMOVED******REMOVED******REMOVED***subject
-***REMOVED******REMOVED******REMOVED******REMOVED***.buffer(size: .max, prefetch: .byRequest, whenFull: .dropOldest)
-***REMOVED******REMOVED******REMOVED******REMOVED***.eraseToAnyPublisher()
-***REMOVED******REMOVED***)
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ The current queued challenge.
-***REMOVED***@Published var currentChallenge: QueuedChallenge?
+***REMOVED******REMOVED***/ The current challenge.
+***REMOVED***@Published var currentChallenge: ChallengeContinuation?
 ***REMOVED***
 
 extension Authenticator: AuthenticationChallengeHandler {
 ***REMOVED***public func handleArcGISChallenge(
 ***REMOVED******REMOVED***_ challenge: ArcGISAuthenticationChallenge
 ***REMOVED***) async throws -> ArcGISAuthenticationChallenge.Disposition {
-***REMOVED******REMOVED***let queuedChallenge: QueuedArcGISChallenge
+***REMOVED******REMOVED***let challengeContinuation: ArcGISChallengeContinuation
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Create the correct challenge type.
 ***REMOVED******REMOVED***if let url = challenge.request.url,
 ***REMOVED******REMOVED***   let config = oAuthConfigurations.first(where: { $0.canBeUsed(for: url) ***REMOVED***) {
-***REMOVED******REMOVED******REMOVED***let oAuthChallenge = QueuedOAuthChallenge(configuration: config)
-***REMOVED******REMOVED******REMOVED***queuedChallenge = oAuthChallenge
+***REMOVED******REMOVED******REMOVED***let oAuthChallenge = OAuthChallengeContinuation(configuration: config)
+***REMOVED******REMOVED******REMOVED***challengeContinuation = oAuthChallenge
 ***REMOVED******REMOVED******REMOVED***oAuthChallenge.presentPrompt()
 ***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***queuedChallenge = QueuedTokenChallenge(arcGISChallenge: challenge)
+***REMOVED******REMOVED******REMOVED***challengeContinuation = TokenChallengeContinuation(arcGISChallenge: challenge)
 ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Queue up the challenge.
-***REMOVED******REMOVED***subject.send(queuedChallenge)
+***REMOVED******REMOVED******REMOVED*** Alleviates an error with "already presenting".
+***REMOVED******REMOVED***await Task.yield()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Set the current challenge, which will present the UX.
+***REMOVED******REMOVED***self.currentChallenge = challengeContinuation
+***REMOVED******REMOVED***defer { self.currentChallenge = nil ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Wait for it to complete and return the resulting disposition.
-***REMOVED******REMOVED***return try await queuedChallenge.result.get()
+***REMOVED******REMOVED***return try await challengeContinuation.value.get()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***public func handleNetworkChallenge(
@@ -158,13 +125,17 @@ extension Authenticator: AuthenticationChallengeHandler {
 ***REMOVED******REMOVED***guard promptForUntrustedHosts || challenge.kind != .serverTrust else {
 ***REMOVED******REMOVED******REMOVED***return .allowRequestToFail
 ***REMOVED***
+
+***REMOVED******REMOVED***let challengeContinuation = NetworkChallengeContinuation(networkChallenge: challenge)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***let queuedChallenge = QueuedNetworkChallenge(networkChallenge: challenge)
+***REMOVED******REMOVED******REMOVED*** Alleviates an error with "already presenting".
+***REMOVED******REMOVED***await Task.yield()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Queue up the challenge.
-***REMOVED******REMOVED***subject.send(queuedChallenge)
+***REMOVED******REMOVED******REMOVED*** Set the current challenge, which will present the UX.
+***REMOVED******REMOVED***self.currentChallenge = challengeContinuation
+***REMOVED******REMOVED***defer { self.currentChallenge = nil ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Wait for it to complete and return the resulting disposition.
-***REMOVED******REMOVED***return await queuedChallenge.disposition
+***REMOVED******REMOVED***return await challengeContinuation.value
 ***REMOVED***
 ***REMOVED***

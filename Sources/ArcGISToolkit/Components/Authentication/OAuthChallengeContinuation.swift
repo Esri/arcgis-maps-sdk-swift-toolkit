@@ -14,13 +14,13 @@
 import Foundation
 ***REMOVED***
 
-***REMOVED***/ An object that represents an ArcGIS OAuth authentication challenge in the queue of challenges.
+***REMOVED***/ An object that represents an ArcGIS OAuth challenge continuation.
 @MainActor
-final class QueuedOAuthChallenge: QueuedArcGISChallenge {
+final class OAuthChallengeContinuation: ValueContinuation<Result<ArcGISAuthenticationChallenge.Disposition, Error>>, ArcGISChallengeContinuation {
 ***REMOVED******REMOVED***/ The OAuth configuration to be used for this challenge.
 ***REMOVED***let configuration: OAuthConfiguration
 ***REMOVED***
-***REMOVED******REMOVED***/ Creates a `QueuedOAuthChallenge`.
+***REMOVED******REMOVED***/ Creates a `OAuthChallengeContinuation`.
 ***REMOVED******REMOVED***/ - Parameter configuration: The OAuth configuration to be used for this challenge.
 ***REMOVED***init(configuration: OAuthConfiguration) {
 ***REMOVED******REMOVED***self.configuration = configuration
@@ -30,26 +30,9 @@ final class QueuedOAuthChallenge: QueuedArcGISChallenge {
 ***REMOVED******REMOVED***/ credential.
 ***REMOVED***func presentPrompt() {
 ***REMOVED******REMOVED***Task {
-***REMOVED******REMOVED******REMOVED***_result = await Result {
+***REMOVED******REMOVED******REMOVED***setValue(await Result {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.useCredential(try await .oauth(configuration: configuration))
-***REMOVED******REMOVED***
+***REMOVED******REMOVED***)
 ***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ Use a streamed property because we need to support multiple listeners
-***REMOVED******REMOVED***/ to know when the challenge completed.
-***REMOVED***@Streamed private var _result: Result<ArcGISAuthenticationChallenge.Disposition, Error>?
-***REMOVED***
-***REMOVED******REMOVED***/ The result of the challenge.
-***REMOVED***var result: Result<ArcGISAuthenticationChallenge.Disposition, Error> {
-***REMOVED******REMOVED***get async {
-***REMOVED******REMOVED******REMOVED***await $_result
-***REMOVED******REMOVED******REMOVED******REMOVED***.compactMap({ $0 ***REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED***.first(where: { _ in true ***REMOVED***)!
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***public func complete() async {
-***REMOVED******REMOVED***_ = await result
 ***REMOVED***
 ***REMOVED***
