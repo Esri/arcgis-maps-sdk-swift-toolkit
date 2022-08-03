@@ -47,13 +47,13 @@ private struct AuthenticatorModifier: ViewModifier {
     
     @ViewBuilder func body(content: Content) -> some View {
         switch authenticator.currentChallenge {
-        case is QueuedOAuthChallenge:
+        case is OAuthChallengeContinuation:
             // OAuth is handled by the authenticator itself
             // so just return the unmodified content here.
             content
-        case let challenge as QueuedTokenChallenge:
+        case let challenge as TokenChallengeContinuation:
             content.modifier(LoginViewModifier(challenge: challenge))
-        case let challenge as QueuedNetworkChallenge:
+        case let challenge as NetworkChallengeContinuation:
             switch challenge.kind {
             case .serverTrust:
                 content.modifier(TrustHostViewModifier(challenge: challenge))
