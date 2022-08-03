@@ -80,6 +80,7 @@ struct FloatingPanel<Content>: View where Content: View {
                 }
                 content
                     .frame(minHeight: .zero, maxHeight: height)
+                    .padding(.bottom, isCompact ? 15 : .zero)
                 if !isCompact && isPresented {
                     Divider()
                     Handle(color: handleColor)
