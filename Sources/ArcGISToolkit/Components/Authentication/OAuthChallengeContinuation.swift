@@ -14,7 +14,7 @@
 import Foundation
 import ArcGIS
 
-/// An object that represents an ArcGIS OAuth authentication challenge continuation.
+/// An object that represents an ArcGIS OAuth challenge continuation.
 @MainActor
 final class OAuthChallengeContinuation: ValueContinuation<Result<ArcGISAuthenticationChallenge.Disposition, Error>>, ArcGISChallengeContinuation {
     /// The OAuth configuration to be used for this challenge.
