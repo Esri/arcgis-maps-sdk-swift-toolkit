@@ -68,7 +68,6 @@ struct FieldsPopupElementView: View {
                 FormattedValueText(formattedValue: field.formattedValue)
                     .padding([.bottom], -1)
             }
-            .lineLimit(1)
             .background(Color.clear)
             .frame(maxWidth: .infinity, alignment: .leading)
         }
