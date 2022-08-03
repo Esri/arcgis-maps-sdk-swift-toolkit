@@ -80,6 +80,7 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***content
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(minHeight: .zero, maxHeight: height)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.bottom, isCompact ? 15 : .zero)
 ***REMOVED******REMOVED******REMOVED******REMOVED***if !isCompact && isPresented {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Divider()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Handle(color: handleColor)
