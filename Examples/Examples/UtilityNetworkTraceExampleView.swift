@@ -18,6 +18,7 @@ import SwiftUI
 /// A demonstration of the utility network trace tool which runs traces on a web map published with a utility
 /// network and trace configurations.
 struct UtilityNetworkTraceExampleView: View {
+    /// The map containing the utility networks.
     @StateObject private var map = makeMap()
     
     /// Provides the ability to inspect map components.
@@ -31,6 +32,9 @@ struct UtilityNetworkTraceExampleView: View {
     
     /// A container for graphical trace results.
     @State var resultGraphicsOverlay = GraphicsOverlay()
+    
+    /// Optional pre-defined starting points for the utility network trace.
+    @State var startingPoints: [UtilityNetworkTraceStartingPoint] = []
     
     /// The map viewpoint used by the `UtilityNetworkTrace` to pan/zoom the map to selected features.
     @State var viewpoint: Viewpoint?
@@ -47,6 +51,9 @@ struct UtilityNetworkTraceExampleView: View {
                 self.mapPoint = mapPoint
                 self.mapViewProxy = mapViewProxy
             }
+            .onViewpointChanged(kind: .centerAndScale) {
+                viewpoint = $0
+            }
             .floatingPanel(isPresented: .constant(true)) {
                 UtilityNetworkTrace(
                     graphicsOverlay: $resultGraphicsOverlay,
@@ -59,6 +66,17 @@ struct UtilityNetworkTraceExampleView: View {
                 .task {
                     await ArcGISRuntimeEnvironment.credentialStore.add(try! await .publicSample)
                 }
+            }
+            .overlay(alignment: .topLeading) {
+                Button {
+                    Task {
+                        await setPredefinedStartingPoints()
+                    }
+                } label: {
+                    Text("Set predefined starting points")
+                }
+                .buttonStyle(.borderedProminent)
+                .padding()
             }
         }
     }
@@ -81,6 +99,30 @@ private extension ArcGISCredential {
                 username: "viewer01",
                 password: "I68VGU^nMurF"
             )
+        }
+    }
+}
+
+extension UtilityNetworkTraceExampleView {
+    /// Queries the map for a feature with a certain ID and sets the list of starting points.
+    func setPredefinedStartingPoints() async {
+        let targetID = UUID(uuidString: "2A6D25D5-8B9E-400A-BC07-4A11BD8B6C82")
+        guard let groupLayer = map.operationalLayers.first as? GroupLayer else { return }
+        let parameters = QueryParameters()
+        parameters.addObjectID(1740)
+        for layer in groupLayer.layers {
+            guard let layer = layer as? FeatureLayer,
+                  let table = layer.featureTable else { continue }
+            let query = try? await table.queryFeatures(parameters: parameters)
+            query?.features().forEach { element in
+                if let feature = element as? ArcGISFeature,
+                   let id = feature.attributes["globalid"] as? UUID,
+                   id == targetID {
+                    startingPoints = [
+                        UtilityNetworkTraceStartingPoint(geoElement: element)
+                    ]
+                }
+            }
         }
     }
 }
