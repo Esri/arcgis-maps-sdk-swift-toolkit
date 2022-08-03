@@ -18,6 +18,7 @@
 ***REMOVED***/ A demonstration of the utility network trace tool which runs traces on a web map published with a utility
 ***REMOVED***/ network and trace configurations.
 struct UtilityNetworkTraceExampleView: View {
+***REMOVED******REMOVED***/ The map containing the utility networks.
 ***REMOVED***@StateObject private var map = makeMap()
 ***REMOVED***
 ***REMOVED******REMOVED***/ Provides the ability to inspect map components.
@@ -31,6 +32,9 @@ struct UtilityNetworkTraceExampleView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ A container for graphical trace results.
 ***REMOVED***@State var resultGraphicsOverlay = GraphicsOverlay()
+***REMOVED***
+***REMOVED******REMOVED***/ Optional pre-defined starting points for the utility network trace.
+***REMOVED***@State var startingPoints: [UtilityNetworkTraceStartingPoint] = []
 ***REMOVED***
 ***REMOVED******REMOVED***/ The map viewpoint used by the `UtilityNetworkTrace` to pan/zoom the map to selected features.
 ***REMOVED***@State var viewpoint: Viewpoint?
@@ -47,6 +51,9 @@ struct UtilityNetworkTraceExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***self.mapPoint = mapPoint
 ***REMOVED******REMOVED******REMOVED******REMOVED***self.mapViewProxy = mapViewProxy
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.onViewpointChanged(kind: .centerAndScale) {
+***REMOVED******REMOVED******REMOVED******REMOVED***viewpoint = $0
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.overlay {
 ***REMOVED******REMOVED******REMOVED******REMOVED***UtilityNetworkTrace(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***graphicsOverlay: $resultGraphicsOverlay,
@@ -59,6 +66,17 @@ struct UtilityNetworkTraceExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.task {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await ArcGISRuntimeEnvironment.credentialStore.add(try! await .publicSample)
 ***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.overlay(alignment: .topLeading) {
+***REMOVED******REMOVED******REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await setPredefinedStartingPoints()
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Set predefined starting points")
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.buttonStyle(.borderedProminent)
+***REMOVED******REMOVED******REMOVED******REMOVED***.padding()
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -81,6 +99,30 @@ private extension ArcGISCredential {
 ***REMOVED******REMOVED******REMOVED******REMOVED***username: "viewer01",
 ***REMOVED******REMOVED******REMOVED******REMOVED***password: "I68VGU^nMurF"
 ***REMOVED******REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED***
+
+extension UtilityNetworkTraceExampleView {
+***REMOVED******REMOVED***/ Queries the map for a feature with a certain ID and sets the list of starting points.
+***REMOVED***func setPredefinedStartingPoints() async {
+***REMOVED******REMOVED***let targetID = UUID(uuidString: "2A6D25D5-8B9E-400A-BC07-4A11BD8B6C82")
+***REMOVED******REMOVED***guard let groupLayer = map.operationalLayers.first as? GroupLayer else { return ***REMOVED***
+***REMOVED******REMOVED***let parameters = QueryParameters()
+***REMOVED******REMOVED***parameters.addObjectID(1740)
+***REMOVED******REMOVED***for layer in groupLayer.layers {
+***REMOVED******REMOVED******REMOVED***guard let layer = layer as? FeatureLayer,
+***REMOVED******REMOVED******REMOVED******REMOVED***  let table = layer.featureTable else { continue ***REMOVED***
+***REMOVED******REMOVED******REMOVED***let query = try? await table.queryFeatures(parameters: parameters)
+***REMOVED******REMOVED******REMOVED***query?.features().forEach { element in
+***REMOVED******REMOVED******REMOVED******REMOVED***if let feature = element as? ArcGISFeature,
+***REMOVED******REMOVED******REMOVED******REMOVED***   let id = feature.attributes["globalid"] as? UUID,
+***REMOVED******REMOVED******REMOVED******REMOVED***   id == targetID {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***startingPoints = [
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***UtilityNetworkTraceStartingPoint(geoElement: element)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***]
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
