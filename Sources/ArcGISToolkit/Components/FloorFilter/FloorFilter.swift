@@ -52,7 +52,7 @@ public struct FloorFilter: View {
 ***REMOVED***@State private var isLevelsViewCollapsed = false
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value that indicates whether the site and facility selector is presented.
-***REMOVED***@State private var isSitesAndFacilitiesHidden = false
+***REMOVED***@State private var isSitesAndFacilitiesHidden = true
 ***REMOVED***
 ***REMOVED******REMOVED***/ The alignment configuration.
 ***REMOVED***private let alignment: Alignment
