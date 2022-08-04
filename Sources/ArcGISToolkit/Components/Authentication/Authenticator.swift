@@ -58,8 +58,9 @@ public final class Authenticator: ObservableObject {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Set a persistent network credential store on the ArcGIS environment.
-***REMOVED******REMOVED******REMOVED***ArcGISRuntimeEnvironment.networkCredentialStore =
+***REMOVED******REMOVED******REMOVED***await ArcGISRuntimeEnvironment.setNetworkCredentialStore(
 ***REMOVED******REMOVED******REMOVED******REMOVED***try await .makePersistent(access: access, isSynchronizable: isSynchronizable)
+***REMOVED******REMOVED******REMOVED***)
 ***REMOVED*** catch {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** If making the shared network credential store persistent fails,
 ***REMOVED******REMOVED******REMOVED******REMOVED*** then restore the ArcGIS credential store.
@@ -77,13 +78,6 @@ public final class Authenticator: ObservableObject {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Clear network credentials.
 ***REMOVED******REMOVED***await ArcGISRuntimeEnvironment.networkCredentialStore.removeAll()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** We have to set new sessions for URLCredential storage to respect the removed credentials
-***REMOVED******REMOVED******REMOVED*** right away.
-***REMOVED******REMOVED***ArcGISRuntimeEnvironment.urlSession = ArcGISURLSession(configuration: .default)
-***REMOVED******REMOVED***ArcGISRuntimeEnvironment.backgroundURLSession = ArcGISURLSession(
-***REMOVED******REMOVED******REMOVED***configuration: .background(withIdentifier: "com.esri.arcgis.toolkit." + UUID().uuidString)
-***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The current challenge.
@@ -125,7 +119,7 @@ extension Authenticator: AuthenticationChallengeHandler {
 ***REMOVED******REMOVED***guard promptForUntrustedHosts || challenge.kind != .serverTrust else {
 ***REMOVED******REMOVED******REMOVED***return .allowRequestToFail
 ***REMOVED***
-
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let challengeContinuation = NetworkChallengeContinuation(networkChallenge: challenge)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Alleviates an error with "already presenting".
