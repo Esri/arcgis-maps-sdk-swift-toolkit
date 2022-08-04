@@ -60,7 +60,7 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED***/ The width of the level selector.
 ***REMOVED***private let filterWidth: CGFloat = 60
 ***REMOVED***
-***REMOVED******REMOVED***/ The `Viewpoint` used to pan/zoom to the selected site/facilty.
+***REMOVED******REMOVED***/ The `Viewpoint` used to pan/zoom to the selected site/facility.
 ***REMOVED******REMOVED***/ If `nil`, there will be no automatic pan/zoom operations or automatic selection support.
 ***REMOVED***private var viewpoint: Binding<Viewpoint?>
 ***REMOVED***
@@ -103,7 +103,7 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the map is currently being navigated.
 ***REMOVED***private var isNavigating: Binding<Bool>
 ***REMOVED***
-***REMOVED******REMOVED***/ Indicates that the selector should be presented with a top oriented aligment configuration.
+***REMOVED******REMOVED***/ Indicates that the selector should be presented with a top oriented alignment configuration.
 ***REMOVED***private var isTopAligned: Bool {
 ***REMOVED******REMOVED***alignment.vertical == .top
 ***REMOVED***
