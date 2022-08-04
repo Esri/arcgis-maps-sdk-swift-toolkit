@@ -18,7 +18,6 @@ import XCTest
 
 /// - See Also: [Test Design](https://devtopia.esri.com/runtime/common-toolkit/blob/main/designs/UtilityNetworkTraceTool/UtilityNetworkTraceTool_Test_Design.md)
 @MainActor final class UtilityNetworkTraceViewModelTests: XCTestCase {
-    
     private let apiKey = APIKey("<#API Key#>")
     private let passwordFor_rtc_100_8: String? = nil
     private let passwordFor_rt_server109: String? = nil
@@ -82,15 +81,12 @@ import XCTest
     
     func testCase_1_3() async throws {
         try XCTSkipIf(passwordFor_rtc_100_8 == nil)
-        setChallengeHandler(ChallengeHandler(trustedHosts: [URL.RTC100_8.host!]))
+        setChallengeHandler(ChallengeHandler(trustedHosts: [URL.rtc1008.host!]))
         await ArcGISRuntimeEnvironment.credentialStore.add(
-            try await tokenForRTC100_8
+            try await tokenForRTC1008
         )
         
-        guard let map = Map(url: .RTC100_8) else {
-            XCTFail("Failed to load map")
-            return
-        }
+        let map = try XCTUnwrap(Map(url: .rtc1008))
         
         let viewModel = UtilityNetworkTraceViewModel(
             map: map,
@@ -162,11 +158,13 @@ import XCTest
         
         XCTAssertEqual(features.count, 1)
         
+        let feature = try XCTUnwrap(features.first)
+        
         let viewModel = UtilityNetworkTraceViewModel(
             map: map,
             graphicsOverlay: GraphicsOverlay(),
             startingPoints: [
-                UtilityNetworkTraceStartingPoint(geoElement: features.first!)
+                UtilityNetworkTraceStartingPoint(geoElement: feature)
             ],
             autoLoad: false
         )
@@ -212,11 +210,13 @@ import XCTest
         
         XCTAssertEqual(features.count, 1)
         
+        let feature = try XCTUnwrap(features.first)
+        
         let viewModel = UtilityNetworkTraceViewModel(
             map: map,
             graphicsOverlay: GraphicsOverlay(),
             startingPoints: [
-                UtilityNetworkTraceStartingPoint(geoElement: features.first!)
+                UtilityNetworkTraceStartingPoint(geoElement: feature)
             ],
             autoLoad: false
         )
@@ -226,7 +226,10 @@ import XCTest
         XCTAssertEqual(viewModel.pendingTrace.startingPoints.count, 1)
         XCTAssertFalse(viewModel.canRunTrace)
         
-        let terminal = try XCTUnwrap(viewModel.pendingTrace.startingPoints.first?.utilityElement?.assetType.terminalConfiguration?.terminals.first { $0.name == "Low" })
+        let startingPoint = try XCTUnwrap(viewModel.pendingTrace.startingPoints.first)
+        let assetType = try XCTUnwrap(startingPoint.utilityElement?.assetType)
+        let terminals = try XCTUnwrap(assetType.terminalConfiguration?.terminals)
+        let terminal = try XCTUnwrap(terminals.first { $0.name == "Low" })
         
         let configuration = try XCTUnwrap( viewModel.configurations.first {
             $0.name == "ConnectedWithResultTypes"
@@ -269,11 +272,13 @@ import XCTest
         
         XCTAssertEqual(features.count, 1)
         
+        let feature = try XCTUnwrap(features.first)
+        
         let viewModel = UtilityNetworkTraceViewModel(
             map: map,
             graphicsOverlay: GraphicsOverlay(),
             startingPoints: [
-                UtilityNetworkTraceStartingPoint(geoElement: features.first!)
+                UtilityNetworkTraceStartingPoint(geoElement: feature)
             ],
             autoLoad: false
         )
@@ -319,11 +324,13 @@ import XCTest
         
         XCTAssertEqual(features.count, 1)
         
+        let feature = try XCTUnwrap(features.first)
+        
         let viewModel = UtilityNetworkTraceViewModel(
             map: map,
             graphicsOverlay: GraphicsOverlay(),
             startingPoints: [
-                UtilityNetworkTraceStartingPoint(geoElement: features.first!)
+                UtilityNetworkTraceStartingPoint(geoElement: feature)
             ],
             autoLoad: false
         )
@@ -373,11 +380,13 @@ import XCTest
         
         XCTAssertEqual(features.count, 1)
         
+        let feature = try XCTUnwrap(features.first)
+        
         let viewModel = UtilityNetworkTraceViewModel(
             map: map,
             graphicsOverlay: GraphicsOverlay(),
             startingPoints: [
-                UtilityNetworkTraceStartingPoint(geoElement: features.first!)
+                UtilityNetworkTraceStartingPoint(geoElement: feature)
             ],
             autoLoad: false
         )
@@ -401,17 +410,17 @@ import XCTest
 }
 
 extension UtilityNetworkTraceViewModelTests {
-    /// Initializes and loads a topographic map.
-    /// - Returns: A loaded map.
+    /// Creates and loads a topographic map.
     ///
     /// The returned map contains no utility networks.
+    /// - Returns: A loaded map.
     func makeMap() async throws -> Map {
         let map = Map(basemapStyle: .arcGISTopographic)
         try await map.load()
         return map
     }
     
-    /// Initializes and loads a map at the provided URL.
+    /// Creates and loads a map at the provided URL.
     /// - Parameter url: The address of the map.
     /// - Returns: A loaded map.
     func makeMap(url: URL) async throws -> Map? {
@@ -420,7 +429,7 @@ extension UtilityNetworkTraceViewModelTests {
         return map
     }
     
-    /// Initializes and loads a utility network at the provided URL.
+    /// Creates and loads a utility network at the provided URL.
     /// - Parameter url: The address of the utility network.
     /// - Returns: A loaded utility network.
     func makeNetwork(url: URL) async throws -> UtilityNetwork {
@@ -429,10 +438,10 @@ extension UtilityNetworkTraceViewModelTests {
         return network
     }
     
-    var tokenForRTC100_8: ArcGISCredential {
+    var tokenForRTC1008: ArcGISCredential {
         get async throws {
             try await ArcGISCredential.token(
-                url: URL.RTC100_8,
+                url: URL.rtc1008,
                 username: "publisher1",
                 password: passwordFor_rtc_100_8!
             )
@@ -463,7 +472,7 @@ extension UtilityNetworkTraceViewModelTests {
 private extension URL {
     static let rtServer109 = URL(string: "https://rt-server109.esri.com/portal/home/item.html?id=54fa9aadf6c645d39f006cf279147204")!
     
-    static let RTC100_8 = URL(string: "http://rtc-100-8.esri.com/portal/home/webmap/viewer.html?webmap=78f993b89bad4ba0a8a22ce2e0bcfbd0")!
+    static let rtc1008 = URL(string: "http://rtc-100-8.esri.com/portal/home/webmap/viewer.html?webmap=78f993b89bad4ba0a8a22ce2e0bcfbd0")!
     
     static let sampleServer7 = URL(string: "https://sampleserver7.arcgisonline.com/server/rest/services/UtilityNetwork/NapervilleElectric/FeatureServer")!
 }
