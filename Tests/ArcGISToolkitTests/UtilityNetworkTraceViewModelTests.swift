@@ -18,7 +18,6 @@ import XCTest
 
 ***REMOVED***/ - See Also: [Test Design](https:***REMOVED***devtopia.esri.com/runtime/common-toolkit/blob/main/designs/UtilityNetworkTraceTool/UtilityNetworkTraceTool_Test_Design.md)
 @MainActor final class UtilityNetworkTraceViewModelTests: XCTestCase {
-***REMOVED***
 ***REMOVED***private let apiKey = APIKey("<#API Key#>")
 ***REMOVED***private let passwordFor_rtc_100_8: String? = nil
 ***REMOVED***private let passwordFor_rt_server109: String? = nil
@@ -82,15 +81,12 @@ import XCTest
 ***REMOVED***
 ***REMOVED***func testCase_1_3() async throws {
 ***REMOVED******REMOVED***try XCTSkipIf(passwordFor_rtc_100_8 == nil)
-***REMOVED******REMOVED***setChallengeHandler(ChallengeHandler(trustedHosts: [URL.RTC100_8.host!]))
+***REMOVED******REMOVED***setChallengeHandler(ChallengeHandler(trustedHosts: [URL.rtc1008.host!]))
 ***REMOVED******REMOVED***await ArcGISRuntimeEnvironment.credentialStore.add(
-***REMOVED******REMOVED******REMOVED***try await tokenForRTC100_8
+***REMOVED******REMOVED******REMOVED***try await tokenForRTC1008
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***guard let map = Map(url: .RTC100_8) else {
-***REMOVED******REMOVED******REMOVED***XCTFail("Failed to load map")
-***REMOVED******REMOVED******REMOVED***return
-***REMOVED***
+***REMOVED******REMOVED***let map = try XCTUnwrap(Map(url: .rtc1008))
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let viewModel = UtilityNetworkTraceViewModel(
 ***REMOVED******REMOVED******REMOVED***map: map,
@@ -162,11 +158,13 @@ import XCTest
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertEqual(features.count, 1)
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED***let feature = try XCTUnwrap(features.first)
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let viewModel = UtilityNetworkTraceViewModel(
 ***REMOVED******REMOVED******REMOVED***map: map,
 ***REMOVED******REMOVED******REMOVED***graphicsOverlay: GraphicsOverlay(),
 ***REMOVED******REMOVED******REMOVED***startingPoints: [
-***REMOVED******REMOVED******REMOVED******REMOVED***UtilityNetworkTraceStartingPoint(geoElement: features.first!)
+***REMOVED******REMOVED******REMOVED******REMOVED***UtilityNetworkTraceStartingPoint(geoElement: feature)
 ***REMOVED******REMOVED******REMOVED***],
 ***REMOVED******REMOVED******REMOVED***autoLoad: false
 ***REMOVED******REMOVED***)
@@ -212,11 +210,13 @@ import XCTest
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertEqual(features.count, 1)
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED***let feature = try XCTUnwrap(features.first)
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let viewModel = UtilityNetworkTraceViewModel(
 ***REMOVED******REMOVED******REMOVED***map: map,
 ***REMOVED******REMOVED******REMOVED***graphicsOverlay: GraphicsOverlay(),
 ***REMOVED******REMOVED******REMOVED***startingPoints: [
-***REMOVED******REMOVED******REMOVED******REMOVED***UtilityNetworkTraceStartingPoint(geoElement: features.first!)
+***REMOVED******REMOVED******REMOVED******REMOVED***UtilityNetworkTraceStartingPoint(geoElement: feature)
 ***REMOVED******REMOVED******REMOVED***],
 ***REMOVED******REMOVED******REMOVED***autoLoad: false
 ***REMOVED******REMOVED***)
@@ -226,7 +226,10 @@ import XCTest
 ***REMOVED******REMOVED***XCTAssertEqual(viewModel.pendingTrace.startingPoints.count, 1)
 ***REMOVED******REMOVED***XCTAssertFalse(viewModel.canRunTrace)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***let terminal = try XCTUnwrap(viewModel.pendingTrace.startingPoints.first?.utilityElement?.assetType.terminalConfiguration?.terminals.first { $0.name == "Low" ***REMOVED***)
+***REMOVED******REMOVED***let startingPoint = try XCTUnwrap(viewModel.pendingTrace.startingPoints.first)
+***REMOVED******REMOVED***let assetType = try XCTUnwrap(startingPoint.utilityElement?.assetType)
+***REMOVED******REMOVED***let terminals = try XCTUnwrap(assetType.terminalConfiguration?.terminals)
+***REMOVED******REMOVED***let terminal = try XCTUnwrap(terminals.first { $0.name == "Low" ***REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let configuration = try XCTUnwrap( viewModel.configurations.first {
 ***REMOVED******REMOVED******REMOVED***$0.name == "ConnectedWithResultTypes"
@@ -269,11 +272,13 @@ import XCTest
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertEqual(features.count, 1)
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED***let feature = try XCTUnwrap(features.first)
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let viewModel = UtilityNetworkTraceViewModel(
 ***REMOVED******REMOVED******REMOVED***map: map,
 ***REMOVED******REMOVED******REMOVED***graphicsOverlay: GraphicsOverlay(),
 ***REMOVED******REMOVED******REMOVED***startingPoints: [
-***REMOVED******REMOVED******REMOVED******REMOVED***UtilityNetworkTraceStartingPoint(geoElement: features.first!)
+***REMOVED******REMOVED******REMOVED******REMOVED***UtilityNetworkTraceStartingPoint(geoElement: feature)
 ***REMOVED******REMOVED******REMOVED***],
 ***REMOVED******REMOVED******REMOVED***autoLoad: false
 ***REMOVED******REMOVED***)
@@ -319,11 +324,13 @@ import XCTest
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertEqual(features.count, 1)
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED***let feature = try XCTUnwrap(features.first)
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let viewModel = UtilityNetworkTraceViewModel(
 ***REMOVED******REMOVED******REMOVED***map: map,
 ***REMOVED******REMOVED******REMOVED***graphicsOverlay: GraphicsOverlay(),
 ***REMOVED******REMOVED******REMOVED***startingPoints: [
-***REMOVED******REMOVED******REMOVED******REMOVED***UtilityNetworkTraceStartingPoint(geoElement: features.first!)
+***REMOVED******REMOVED******REMOVED******REMOVED***UtilityNetworkTraceStartingPoint(geoElement: feature)
 ***REMOVED******REMOVED******REMOVED***],
 ***REMOVED******REMOVED******REMOVED***autoLoad: false
 ***REMOVED******REMOVED***)
@@ -373,11 +380,13 @@ import XCTest
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertEqual(features.count, 1)
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED***let feature = try XCTUnwrap(features.first)
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let viewModel = UtilityNetworkTraceViewModel(
 ***REMOVED******REMOVED******REMOVED***map: map,
 ***REMOVED******REMOVED******REMOVED***graphicsOverlay: GraphicsOverlay(),
 ***REMOVED******REMOVED******REMOVED***startingPoints: [
-***REMOVED******REMOVED******REMOVED******REMOVED***UtilityNetworkTraceStartingPoint(geoElement: features.first!)
+***REMOVED******REMOVED******REMOVED******REMOVED***UtilityNetworkTraceStartingPoint(geoElement: feature)
 ***REMOVED******REMOVED******REMOVED***],
 ***REMOVED******REMOVED******REMOVED***autoLoad: false
 ***REMOVED******REMOVED***)
@@ -401,17 +410,17 @@ import XCTest
 ***REMOVED***
 
 extension UtilityNetworkTraceViewModelTests {
-***REMOVED******REMOVED***/ Initializes and loads a topographic map.
-***REMOVED******REMOVED***/ - Returns: A loaded map.
+***REMOVED******REMOVED***/ Creates and loads a topographic map.
 ***REMOVED******REMOVED***/
 ***REMOVED******REMOVED***/ The returned map contains no utility networks.
+***REMOVED******REMOVED***/ - Returns: A loaded map.
 ***REMOVED***func makeMap() async throws -> Map {
 ***REMOVED******REMOVED***let map = Map(basemapStyle: .arcGISTopographic)
 ***REMOVED******REMOVED***try await map.load()
 ***REMOVED******REMOVED***return map
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Initializes and loads a map at the provided URL.
+***REMOVED******REMOVED***/ Creates and loads a map at the provided URL.
 ***REMOVED******REMOVED***/ - Parameter url: The address of the map.
 ***REMOVED******REMOVED***/ - Returns: A loaded map.
 ***REMOVED***func makeMap(url: URL) async throws -> Map? {
@@ -420,7 +429,7 @@ extension UtilityNetworkTraceViewModelTests {
 ***REMOVED******REMOVED***return map
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Initializes and loads a utility network at the provided URL.
+***REMOVED******REMOVED***/ Creates and loads a utility network at the provided URL.
 ***REMOVED******REMOVED***/ - Parameter url: The address of the utility network.
 ***REMOVED******REMOVED***/ - Returns: A loaded utility network.
 ***REMOVED***func makeNetwork(url: URL) async throws -> UtilityNetwork {
@@ -429,10 +438,10 @@ extension UtilityNetworkTraceViewModelTests {
 ***REMOVED******REMOVED***return network
 ***REMOVED***
 ***REMOVED***
-***REMOVED***var tokenForRTC100_8: ArcGISCredential {
+***REMOVED***var tokenForRTC1008: ArcGISCredential {
 ***REMOVED******REMOVED***get async throws {
 ***REMOVED******REMOVED******REMOVED***try await ArcGISCredential.token(
-***REMOVED******REMOVED******REMOVED******REMOVED***url: URL.RTC100_8,
+***REMOVED******REMOVED******REMOVED******REMOVED***url: URL.rtc1008,
 ***REMOVED******REMOVED******REMOVED******REMOVED***username: "publisher1",
 ***REMOVED******REMOVED******REMOVED******REMOVED***password: passwordFor_rtc_100_8!
 ***REMOVED******REMOVED******REMOVED***)
@@ -463,7 +472,7 @@ extension UtilityNetworkTraceViewModelTests {
 private extension URL {
 ***REMOVED***static let rtServer109 = URL(string: "https:***REMOVED***rt-server109.esri.com/portal/home/item.html?id=54fa9aadf6c645d39f006cf279147204")!
 ***REMOVED***
-***REMOVED***static let RTC100_8 = URL(string: "http:***REMOVED***rtc-100-8.esri.com/portal/home/webmap/viewer.html?webmap=78f993b89bad4ba0a8a22ce2e0bcfbd0")!
+***REMOVED***static let rtc1008 = URL(string: "http:***REMOVED***rtc-100-8.esri.com/portal/home/webmap/viewer.html?webmap=78f993b89bad4ba0a8a22ce2e0bcfbd0")!
 ***REMOVED***
 ***REMOVED***static let sampleServer7 = URL(string: "https:***REMOVED***sampleserver7.arcgisonline.com/server/rest/services/UtilityNetwork/NapervilleElectric/FeatureServer")!
 ***REMOVED***
