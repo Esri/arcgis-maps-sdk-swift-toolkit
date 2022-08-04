@@ -33,6 +33,9 @@ struct FloatingPanel<Content>: View where Content: View {
     /// The content shown in the floating panel.
     let content: Content
     
+    /// The height of the handle area.
+    let handleAreaHeight: CGFloat = 20
+    
     /// Creates a `FloatingPanel`
     /// - Parameter backgroundColor: The background color of the floating panel.
     /// - Parameter detent: Controls the height of the panel.
@@ -74,20 +77,16 @@ struct FloatingPanel<Content>: View where Content: View {
         GeometryReader { geometryProxy in
             VStack {
                 if isCompact && isPresented {
-                    Handle(color: handleColor)
-                        .gesture(drag)
-                    Divider()
+                    makeHandleArea()
                 }
                 content
-                    .frame(minHeight: .zero, maxHeight: height)
+                    .frame(minHeight: .zero, maxHeight: height - handleAreaHeight)
                     .padding(.bottom, isCompact ? 15 : .zero)
                 if !isCompact && isPresented {
-                    Divider()
-                    Handle(color: handleColor)
-                        .gesture(drag)
+                    makeHandleArea()
                 }
             }
-            .padding([.top, .bottom], 10)
+            .padding(.bottom, isCompact ? 10 : .zero)
             .background(backgroundColor)
             .cornerRadius(10, corners: isCompact ? [.topLeft, .topRight] : [.allCorners])
             .shadow(radius: 10)
@@ -167,6 +166,19 @@ struct FloatingPanel<Content>: View where Content: View {
         case .full:
             return maximumHeight * 0.90
         }
+    }
+    
+    /// Configures a handle area.
+    /// - Returns: A configured handle area, suitable for placement in the panel.
+    @ViewBuilder func makeHandleArea() -> some View {
+        ZStack {
+            backgroundColor
+            Handle(color: handleColor)
+                .gesture(drag)
+                .padding(.vertical, 5)
+        }
+        .frame(height: handleAreaHeight)
+        .zIndex(1)
     }
 }
 
