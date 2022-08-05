@@ -33,9 +33,6 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED******REMOVED***/ The content shown in the floating panel.
 ***REMOVED***let content: Content
 ***REMOVED***
-***REMOVED******REMOVED***/ The height of the handle area.
-***REMOVED***let handleAreaHeight: CGFloat = 20
-***REMOVED***
 ***REMOVED******REMOVED***/ Creates a `FloatingPanel`
 ***REMOVED******REMOVED***/ - Parameter backgroundColor: The background color of the floating panel.
 ***REMOVED******REMOVED***/ - Parameter detent: Controls the height of the panel.
@@ -75,18 +72,17 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED***
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***GeometryReader { geometryProxy in
-***REMOVED******REMOVED******REMOVED***VStack {
+***REMOVED******REMOVED******REMOVED***VStack(spacing: 0) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if isCompact && isPresented {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeHandleArea()
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***content
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(minHeight: .zero, maxHeight: height - handleAreaHeight)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.bottom, isCompact ? 15 : .zero)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(height: height)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.bottom, isCompact ? 25 : .zero)
 ***REMOVED******REMOVED******REMOVED******REMOVED***if !isCompact && isPresented {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeHandleArea()
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.padding(.bottom, isCompact ? 10 : .zero)
 ***REMOVED******REMOVED******REMOVED***.background(backgroundColor)
 ***REMOVED******REMOVED******REMOVED***.cornerRadius(10, corners: isCompact ? [.topLeft, .topRight] : [.allCorners])
 ***REMOVED******REMOVED******REMOVED***.shadow(radius: 10)
@@ -174,10 +170,9 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED******REMOVED***ZStack {
 ***REMOVED******REMOVED******REMOVED***backgroundColor
 ***REMOVED******REMOVED******REMOVED***Handle(color: handleColor)
-***REMOVED******REMOVED******REMOVED******REMOVED***.gesture(drag)
-***REMOVED******REMOVED******REMOVED******REMOVED***.padding(.vertical, 5)
 ***REMOVED***
-***REMOVED******REMOVED***.frame(height: handleAreaHeight)
+***REMOVED******REMOVED***.frame(height: 20)
+***REMOVED******REMOVED***.gesture(drag)
 ***REMOVED******REMOVED***.zIndex(1)
 ***REMOVED***
 ***REMOVED***
