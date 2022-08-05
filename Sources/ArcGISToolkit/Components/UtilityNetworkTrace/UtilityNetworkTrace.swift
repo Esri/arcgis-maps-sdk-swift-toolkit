@@ -403,21 +403,18 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED***
 ***REMOVED******REMOVED***.padding([.vertical], 2)
 ***REMOVED******REMOVED***Button(role: .destructive) {
-***REMOVED******REMOVED******REMOVED***showWarningAlert.toggle()
+***REMOVED******REMOVED******REMOVED***viewModel.userAlert = UtilityNetworkTraceViewModel.UserAlert(
+***REMOVED******REMOVED******REMOVED******REMOVED***description: "Are you sure? All the trace inputs and results will be lost.",
+***REMOVED******REMOVED******REMOVED******REMOVED***button: Button(role: .destructive) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.deleteAllTraces()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentActivity = .creatingTrace(nil)
+***REMOVED******REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("OK")
+***REMOVED******REMOVED******REMOVED***)
 ***REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED***Text(clearResultsTitle)
 ***REMOVED***
 ***REMOVED******REMOVED***.buttonStyle(.bordered)
-***REMOVED******REMOVED***.alert(clearResultsTitle, isPresented: $showWarningAlert) {
-***REMOVED******REMOVED******REMOVED***Button(role: .destructive) {
-***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.deleteAllTraces()
-***REMOVED******REMOVED******REMOVED******REMOVED***currentActivity = .creatingTrace(nil)
-***REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED***Text("OK")
-***REMOVED******REMOVED***
-***REMOVED*** message: {
-***REMOVED******REMOVED******REMOVED***Text("Are you sure? All the trace inputs and results will be lost.")
-***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Displays information about a chosen starting point.
@@ -602,13 +599,15 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED***viewModel.externalStartingPoints = externalStartingPoints
 ***REMOVED***
 ***REMOVED******REMOVED***.alert(
-***REMOVED******REMOVED******REMOVED***"Warning",
+***REMOVED******REMOVED******REMOVED***viewModel.userAlert?.title ?? "",
 ***REMOVED******REMOVED******REMOVED***isPresented: Binding(
-***REMOVED******REMOVED******REMOVED******REMOVED***get: { !viewModel.userWarning.isEmpty ***REMOVED***,
-***REMOVED******REMOVED******REMOVED******REMOVED***set: { _ in viewModel.userWarning = "" ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***get: { viewModel.userAlert != nil ***REMOVED***,
+***REMOVED******REMOVED******REMOVED******REMOVED***set: { _ in viewModel.userAlert = nil ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED***) { ***REMOVED*** message: {
-***REMOVED******REMOVED******REMOVED***Text(viewModel.userWarning)
+***REMOVED******REMOVED***) {
+***REMOVED******REMOVED******REMOVED***viewModel.userAlert?.button
+***REMOVED*** message: {
+***REMOVED******REMOVED******REMOVED***Text(viewModel.userAlert?.description ?? "")
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
