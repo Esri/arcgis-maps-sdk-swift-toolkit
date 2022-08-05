@@ -92,30 +92,6 @@ public struct UtilityNetworkTrace: View {
     
     // MARK: Subviews
     
-    /// Allows the user to switch between the trace creation and viewing tabs.
-    private var activityPicker: some View {
-        Picker(
-            "Mode",
-            selection: Binding<UserActivity>(
-                get: {
-                    switch currentActivity {
-                    case .creatingTrace(_):
-                        return UserActivity.creatingTrace(nil)
-                    case .viewingTraces:
-                        return UserActivity.viewingTraces(nil)
-                    }
-                }, set: { newActivity, _ in
-                    currentActivity = newActivity
-                }
-            )
-        ) {
-            Text("New trace").tag(UserActivity.creatingTrace(nil))
-            Text("Results").tag(UserActivity.viewingTraces(nil))
-        }
-        .pickerStyle(.segmented)
-        .padding()
-    }
-    
     /// Allows the user to cancel out of selecting a new starting point.
     private var cancelAddStartingPoints: some View {
         Button(role: .destructive) {
@@ -125,6 +101,32 @@ public struct UtilityNetworkTrace: View {
             Text("Cancel starting point selection")
         }
         .buttonStyle(.bordered)
+    }
+    
+    /// Allows the user to switch between the trace creation and viewing tabs.
+    @ViewBuilder private var activityPicker: some View {
+        if activeDetent != .summary {
+            Picker(
+                "Mode",
+                selection: Binding<UserActivity>(
+                    get: {
+                        switch currentActivity {
+                        case .creatingTrace(_):
+                            return UserActivity.creatingTrace(nil)
+                        case .viewingTraces:
+                            return UserActivity.viewingTraces(nil)
+                        }
+                    }, set: { newActivity, _ in
+                        currentActivity = newActivity
+                    }
+                )
+            ) {
+                Text("New trace").tag(UserActivity.creatingTrace(nil))
+                Text("Results").tag(UserActivity.viewingTraces(nil))
+            }
+            .pickerStyle(.segmented)
+            .padding()
+        }
     }
     
     /// Displays information about a chosen asset group.
@@ -300,92 +302,94 @@ public struct UtilityNetworkTrace: View {
         if let traceName = viewModel.selectedTrace?.name, !traceName.isEmpty {
             Text(traceName)
         }
-        List {
-            Section(elementResultsTitle) {
-                DisclosureGroup(
-                    viewModel.selectedTrace?.assetCount.description ?? "0",
-                    isExpanded: Binding(
-                        get: { isFocused(traceViewingActivity: .viewingElementResults) },
-                        set: { currentActivity = .viewingTraces($0 ? .viewingElementResults : nil) }
-                    )
-                ) {
-                    ForEach(
-                        (viewModel.selectedTrace?.assets ?? [:]).sorted(by: { $0.key < $1.key }), id: \.key
-                    ) { assetGroup in
-                        HStack {
-                            Text(assetGroup.key)
-                            Spacer()
-                            Text(assetGroup.value.compactMap({ $0.value.count }).reduce(0, +).description)
-                        }
-                        .foregroundColor(.blue)
-                        .contentShape(Rectangle())
-                        .onTapGesture {
-                            currentActivity = .viewingTraces(.viewingElementGroup(assetGroup.value))
-                        }
-                    }
-                }
-            }
-            Section("Function Result") {
-                DisclosureGroup(
-                    viewModel.selectedTrace?.utilityFunctionTraceResult?.functionOutputs.count.description ?? "0",
-                    isExpanded: Binding(
-                        get: { isFocused(traceViewingActivity: .viewingFunctionResults) },
-                        set: { currentActivity = .viewingTraces($0 ? .viewingFunctionResults : nil) }
-                    )
-                ) {
-                    ForEach(viewModel.selectedTrace?.functionOutputs ?? [], id: \.id) { item in
-                        HStack {
-                            Text(item.function.networkAttribute?.name ?? "Unnamed")
-                            Spacer()
-                            Text((item.result as? Double)?.description ?? "N/A")
-                        }
-                    }
-                }
-            }
-            Section {
-                DisclosureGroup(
-                    "Advanced Options",
-                    isExpanded: Binding(
-                        get: { isFocused(traceViewingActivity: .viewingAdvancedOptions) },
-                        set: { currentActivity = .viewingTraces($0 ? .viewingAdvancedOptions : nil) }
-                    )
-                ) {
-                    ColorPicker(
-                        selection: Binding(get: {
-                            viewModel.selectedTrace?.color ?? Color.clear
-                        }, set: { newValue in
-                            if var trace = viewModel.selectedTrace {
-                                trace.color = newValue
-                                viewModel.update(completedTrace: trace)
-                            }
-                        })
+        if activeDetent != .summary {
+            List {
+                Section(elementResultsTitle) {
+                    DisclosureGroup(
+                        viewModel.selectedTrace?.assetCount.description ?? "0",
+                        isExpanded: Binding(
+                            get: { isFocused(traceViewingActivity: .viewingElementResults) },
+                            set: { currentActivity = .viewingTraces($0 ? .viewingElementResults : nil) }
+                        )
                     ) {
-                        Text("Trace Color")
+                        ForEach(
+                            (viewModel.selectedTrace?.assets ?? [:]).sorted(by: { $0.key < $1.key }), id: \.key
+                        ) { assetGroup in
+                            HStack {
+                                Text(assetGroup.key)
+                                Spacer()
+                                Text(assetGroup.value.compactMap({ $0.value.count }).reduce(0, +).description)
+                            }
+                            .foregroundColor(.blue)
+                            .contentShape(Rectangle())
+                            .onTapGesture {
+                                currentActivity = .viewingTraces(.viewingElementGroup(assetGroup.value))
+                            }
+                        }
+                    }
+                }
+                Section("Function Result") {
+                    DisclosureGroup(
+                        viewModel.selectedTrace?.utilityFunctionTraceResult?.functionOutputs.count.description ?? "0",
+                        isExpanded: Binding(
+                            get: { isFocused(traceViewingActivity: .viewingFunctionResults) },
+                            set: { currentActivity = .viewingTraces($0 ? .viewingFunctionResults : nil) }
+                        )
+                    ) {
+                        ForEach(viewModel.selectedTrace?.functionOutputs ?? [], id: \.id) { item in
+                            HStack {
+                                Text(item.function.networkAttribute?.name ?? "Unnamed")
+                                Spacer()
+                                Text((item.result as? Double)?.description ?? "N/A")
+                            }
+                        }
+                    }
+                }
+                Section {
+                    DisclosureGroup(
+                        "Advanced Options",
+                        isExpanded: Binding(
+                            get: { isFocused(traceViewingActivity: .viewingAdvancedOptions) },
+                            set: { currentActivity = .viewingTraces($0 ? .viewingAdvancedOptions : nil) }
+                        )
+                    ) {
+                        ColorPicker(
+                            selection: Binding(get: {
+                                viewModel.selectedTrace?.color ?? Color.clear
+                            }, set: { newValue in
+                                if var trace = viewModel.selectedTrace {
+                                    trace.color = newValue
+                                    viewModel.update(completedTrace: trace)
+                                }
+                            })
+                        ) {
+                            Text("Trace Color")
+                        }
                     }
                 }
             }
-        }
-        makeZoomToButton {
-            if let extent = viewModel.selectedTrace?.resultExtent {
-                viewpoint = Viewpoint(targetExtent: extent)
+            makeZoomToButton {
+                if let extent = viewModel.selectedTrace?.resultExtent {
+                    viewpoint = Viewpoint(targetExtent: extent)
+                }
             }
-        }
-        .padding([.vertical], 2)
-        Button {
-            showWarningAlert.toggle()
-        } label: {
-            Text("Clear All Results")
-                .tint(.red)
-        }
-        .alert("Clear All Results", isPresented: $showWarningAlert) {
-            Button(role: .destructive) {
-                viewModel.deleteAllTraces()
-                currentActivity = .creatingTrace(nil)
+            .padding([.vertical], 2)
+            Button {
+                showWarningAlert.toggle()
             } label: {
-                Text("OK")
+                Text("Clear All Results")
+                    .tint(.red)
             }
-        } message: {
-            Text("Are you sure? All the trace inputs and results will be lost.")
+            .alert("Clear All Results", isPresented: $showWarningAlert) {
+                Button(role: .destructive) {
+                    viewModel.deleteAllTraces()
+                    currentActivity = .creatingTrace(nil)
+                } label: {
+                    Text("OK")
+                }
+            } message: {
+                Text("Are you sure? All the trace inputs and results will be lost.")
+            }
         }
     }
     
