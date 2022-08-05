@@ -25,7 +25,7 @@ import SwiftUI
     @Published private(set) var configurations = [UtilityNamedTraceConfiguration]() {
         didSet {
             if configurations.isEmpty {
-                userWarning = "No trace types found."
+                userAlert = UserAlert(description: "No trace types found.")
             }
         }
     }
@@ -54,8 +54,8 @@ import SwiftUI
         }
     }
     
-    /// Warning message presented to the user
-    @Published var userWarning = ""
+    /// Alert presented to the user
+    @Published var userAlert: UserAlert?
     
     /// A Boolean value indicating if the pending trace is configured to the point that it can be run.
     var canRunTrace: Bool {
@@ -193,7 +193,7 @@ import SwiftUI
         network = map.utilityNetworks.first
         configurations = await utilityNamedTraceConfigurations(from: map)
         if map.utilityNetworks.isEmpty {
-            userWarning = "No utility networks found."
+            userAlert = UserAlert(description: "No utility networks found.")
         }
         await addExternalStartingPoints()
     }
@@ -269,7 +269,7 @@ import SwiftUI
     func processAndAdd(startingPoint: UtilityNetworkTraceStartingPoint) async {
         guard let feature = startingPoint.geoElement as? ArcGISFeature,
               let globalid = feature.globalID else {
-            userWarning = "Element could not be identified"
+            userAlert = UserAlert(description: "Element could not be identified")
             return
         }
         
@@ -277,7 +277,10 @@ import SwiftUI
         guard !pendingTrace.startingPoints.contains(where: { startingPoint in
             return startingPoint.utilityElement?.globalID == globalid
         }) else {
-            userWarning = "Duplicate starting points cannot be added"
+            userAlert = UserAlert(
+                title: "Failed to set starting point",
+                description: "Duplicate starting points cannot be added"
+            )
             return
         }
         
@@ -344,7 +347,7 @@ import SwiftUI
         let minStartingPoints = configuration.minimumStartingLocations.rawValue
         
         guard pendingTrace.startingPoints.count >= minStartingPoints else {
-            userWarning = "Please set at least \(minStartingPoints) starting location\(minStartingPoints > 1 ? "s" : "")."
+            userAlert = UserAlert(description: "Please set at least \(minStartingPoints) starting location\(minStartingPoints > 1 ? "s" : "").")
             return false
         }
         
@@ -359,11 +362,11 @@ import SwiftUI
             traceResults = try await network.trace(traceParameters: parameters)
         } catch(let serviceError as ServiceError) {
             if let reason = serviceError.failureReason {
-                userWarning = reason
+                userAlert = UserAlert(description: reason)
             }
             return false
         } catch {
-            userWarning = "An unknown error occurred"
+            userAlert = UserAlert(description: error.localizedDescription)
             return false
         }
         
@@ -517,5 +520,19 @@ extension UtilityNetworkTraceViewModel {
             fractionalLengthClosestTo: point,
             tolerance: 10
         )
+    }
+}
+
+extension UtilityNetworkTraceViewModel {
+    /// A user presentable alert.
+    struct UserAlert {
+        /// Title of the alert.
+        var title: String? = "Error"
+        
+        /// Description of the alert.
+        var description: String
+        
+        /// An additional action to be taken on the alert.
+        var button: Button<Text>?
     }
 }
