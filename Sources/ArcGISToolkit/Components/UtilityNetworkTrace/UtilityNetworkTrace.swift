@@ -403,21 +403,18 @@ public struct UtilityNetworkTrace: View {
         }
         .padding([.vertical], 2)
         Button(role: .destructive) {
-            showWarningAlert.toggle()
+            viewModel.userAlert = UtilityNetworkTraceViewModel.UserAlert(
+                description: "Are you sure? All the trace inputs and results will be lost.",
+                button: Button(role: .destructive) {
+                    viewModel.deleteAllTraces()
+                    currentActivity = .creatingTrace(nil)
+                } label: {
+                    Text("OK")
+                })
         } label: {
             Text(clearResultsTitle)
         }
         .buttonStyle(.bordered)
-        .alert(clearResultsTitle, isPresented: $showWarningAlert) {
-            Button(role: .destructive) {
-                viewModel.deleteAllTraces()
-                currentActivity = .creatingTrace(nil)
-            } label: {
-                Text("OK")
-            }
-        } message: {
-            Text("Are you sure? All the trace inputs and results will be lost.")
-        }
     }
     
     /// Displays information about a chosen starting point.
@@ -602,13 +599,15 @@ public struct UtilityNetworkTrace: View {
             viewModel.externalStartingPoints = externalStartingPoints
         }
         .alert(
-            "Warning",
+            viewModel.userAlert?.title ?? "",
             isPresented: Binding(
-                get: { !viewModel.userWarning.isEmpty },
-                set: { _ in viewModel.userWarning = "" }
+                get: { viewModel.userAlert != nil },
+                set: { _ in viewModel.userAlert = nil }
             )
-        ) { } message: {
-            Text(viewModel.userWarning)
+        ) {
+            viewModel.userAlert?.button
+        } message: {
+            Text(viewModel.userAlert?.description ?? "")
         }
     }
     
