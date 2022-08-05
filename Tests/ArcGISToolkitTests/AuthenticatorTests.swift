@@ -32,7 +32,7 @@ import Combine
 ***REMOVED******REMOVED******REMOVED*** Make sure credential stores are restored.
 ***REMOVED******REMOVED***addTeardownBlock {
 ***REMOVED******REMOVED******REMOVED***ArcGISRuntimeEnvironment.credentialStore = ArcGISCredentialStore()
-***REMOVED******REMOVED******REMOVED***ArcGISRuntimeEnvironment.networkCredentialStore = NetworkCredentialStore()
+***REMOVED******REMOVED******REMOVED***await ArcGISRuntimeEnvironment.setNetworkCredentialStore(NetworkCredentialStore())
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** This tests that calling makePersistent tries to sync with the keychain.
