@@ -58,8 +58,9 @@ public final class Authenticator: ObservableObject {
         
         do {
             // Set a persistent network credential store on the ArcGIS environment.
-            ArcGISRuntimeEnvironment.networkCredentialStore =
+            await ArcGISRuntimeEnvironment.setNetworkCredentialStore(
                 try await .makePersistent(access: access, isSynchronizable: isSynchronizable)
+            )
         } catch {
             // If making the shared network credential store persistent fails,
             // then restore the ArcGIS credential store.
@@ -77,13 +78,6 @@ public final class Authenticator: ObservableObject {
         
         // Clear network credentials.
         await ArcGISRuntimeEnvironment.networkCredentialStore.removeAll()
-        
-        // We have to set new sessions for URLCredential storage to respect the removed credentials
-        // right away.
-        ArcGISRuntimeEnvironment.urlSession = ArcGISURLSession(configuration: .default)
-        ArcGISRuntimeEnvironment.backgroundURLSession = ArcGISURLSession(
-            configuration: .background(withIdentifier: "com.esri.arcgis.toolkit." + UUID().uuidString)
-        )
     }
     
     /// The current challenge.
@@ -125,7 +119,7 @@ extension Authenticator: AuthenticationChallengeHandler {
         guard promptForUntrustedHosts || challenge.kind != .serverTrust else {
             return .allowRequestToFail
         }
-
+        
         let challengeContinuation = NetworkChallengeContinuation(networkChallenge: challenge)
         
         // Alleviates an error with "already presenting".
