@@ -138,6 +138,7 @@ struct FloatingPanel<Content>: View where Content: View {
             .onEnded { _ in
                 handleColor = .defaultHandleColor
                 withAnimation {
+                    activeDetent = closestDetent
                     height = heightFor(detent: closestDetent)
                 }
             }
