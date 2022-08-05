@@ -33,9 +33,6 @@ struct FloatingPanel<Content>: View where Content: View {
     /// The content shown in the floating panel.
     let content: Content
     
-    /// The height of the handle area.
-    let handleAreaHeight: CGFloat = 20
-    
     /// Creates a `FloatingPanel`
     /// - Parameter backgroundColor: The background color of the floating panel.
     /// - Parameter detent: Controls the height of the panel.
@@ -75,18 +72,17 @@ struct FloatingPanel<Content>: View where Content: View {
     
     public var body: some View {
         GeometryReader { geometryProxy in
-            VStack {
+            VStack(spacing: 0) {
                 if isCompact && isPresented {
                     makeHandleArea()
                 }
                 content
-                    .frame(minHeight: .zero, maxHeight: height - handleAreaHeight)
-                    .padding(.bottom, isCompact ? 15 : .zero)
+                    .frame(height: height)
+                    .padding(.bottom, isCompact ? 25 : .zero)
                 if !isCompact && isPresented {
                     makeHandleArea()
                 }
             }
-            .padding(.bottom, isCompact ? 10 : .zero)
             .background(backgroundColor)
             .cornerRadius(10, corners: isCompact ? [.topLeft, .topRight] : [.allCorners])
             .shadow(radius: 10)
@@ -142,6 +138,7 @@ struct FloatingPanel<Content>: View where Content: View {
             .onEnded { _ in
                 handleColor = .defaultHandleColor
                 withAnimation {
+                    activeDetent = closestDetent
                     height = heightFor(detent: closestDetent)
                 }
             }
@@ -174,10 +171,9 @@ struct FloatingPanel<Content>: View where Content: View {
         ZStack {
             backgroundColor
             Handle(color: handleColor)
-                .gesture(drag)
-                .padding(.vertical, 5)
         }
-        .frame(height: handleAreaHeight)
+        .frame(height: 20)
+        .gesture(drag)
         .zIndex(1)
     }
 }
