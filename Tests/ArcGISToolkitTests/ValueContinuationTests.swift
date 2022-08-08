@@ -11,24 +11,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import SwiftUI
 import XCTest
 @testable import ArcGISToolkit
-import ArcGIS
 
-@MainActor final class QueuedOAuthChallengeTests: XCTestCase {
-    func testInit() {
-        let portalURL = URL(string: "www.test-portal.com")!
-        let clientID = "client id"
-        let redirectURL = URL(string: "test-app://redirect")!
+@MainActor final class ValueContinuationTests: XCTestCase {
+    func testValueContinuation() async {
+        // Tests setting value before awaiting.
+        let valueContinuation = ValueContinuation<String>()
+        valueContinuation.setValue("hello")
+        let value = await valueContinuation.value
+        XCTAssertEqual(value, "hello")
         
-        let config = OAuthConfiguration(
-            portalURL: portalURL,
-            clientID: clientID,
-            redirectURL: redirectURL
-        )
-        
-        let challenge = QueuedOAuthChallenge(configuration: config)
-        XCTAssertEqual(challenge.configuration, config)
+        // Tests setting value after awaiting.
+        let valueContinuation2 = ValueContinuation<Int>()
+        Task { valueContinuation2.setValue(1) }
+        let value2 = await valueContinuation2.value
+        XCTAssertEqual(value2, 1)
     }
 }
