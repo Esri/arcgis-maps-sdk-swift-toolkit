@@ -14,16 +14,16 @@
 import Foundation
 ***REMOVED***
 
-***REMOVED***/ An object that represents an ArcGIS token authentication challenge in the queue of challenges.
+***REMOVED***/ An object that represents an ArcGIS token authentication challenge continuation.
 @MainActor
-final class QueuedTokenChallenge: QueuedArcGISChallenge {
+final class TokenChallengeContinuation: ValueContinuation<Result<ArcGISAuthenticationChallenge.Disposition, Error>>, ArcGISChallengeContinuation {
 ***REMOVED******REMOVED***/ The host that prompted the challenge.
 ***REMOVED***let host: String
 ***REMOVED***
 ***REMOVED******REMOVED***/ A closure that provides a token credential from a username and password.
 ***REMOVED***let tokenCredentialProvider: (LoginCredential) async throws -> ArcGISCredential
 ***REMOVED***
-***REMOVED******REMOVED***/ Creates a `QueuedArcGISChallenge`.
+***REMOVED******REMOVED***/ Creates a `ArcGISChallengeContinuation`.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - host: The host that prompted the challenge.
 ***REMOVED******REMOVED***/   - tokenCredentialProvider: A closure that provides a token credential from a username and password.
@@ -35,7 +35,7 @@ final class QueuedTokenChallenge: QueuedArcGISChallenge {
 ***REMOVED******REMOVED***self.tokenCredentialProvider = tokenCredentialProvider
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Creates a `QueuedArcGISChallenge`.
+***REMOVED******REMOVED***/ Creates a `ArcGISChallengeContinuation`.
 ***REMOVED******REMOVED***/ - Parameter arcGISChallenge: The associated ArcGIS authentication challenge.
 ***REMOVED***convenience init(arcGISChallenge: ArcGISAuthenticationChallenge) {
 ***REMOVED******REMOVED***self.init(host: arcGISChallenge.request.url?.host ?? "") { loginCredential in
@@ -52,33 +52,14 @@ final class QueuedTokenChallenge: QueuedArcGISChallenge {
 ***REMOVED******REMOVED***/   - loginCredential: The username and password.
 ***REMOVED***func resume(with loginCredential: LoginCredential) {
 ***REMOVED******REMOVED***Task {
-***REMOVED******REMOVED******REMOVED***guard _result == nil else { return ***REMOVED***
-***REMOVED******REMOVED******REMOVED***_result = await Result {
+***REMOVED******REMOVED******REMOVED***setValue(await Result {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.useCredential(try await tokenCredentialProvider(loginCredential))
-***REMOVED******REMOVED***
+***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Cancels the challenge.
 ***REMOVED***func cancel() {
-***REMOVED******REMOVED***guard _result == nil else { return ***REMOVED***
-***REMOVED******REMOVED***_result = .success(.cancelAuthenticationChallenge)
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ Use a streamed property because we need to support multiple listeners
-***REMOVED******REMOVED***/ to know when the challenge completed.
-***REMOVED***@Streamed private var _result: Result<ArcGISAuthenticationChallenge.Disposition, Error>?
-***REMOVED***
-***REMOVED******REMOVED***/ The result of the challenge.
-***REMOVED***var result: Result<ArcGISAuthenticationChallenge.Disposition, Error> {
-***REMOVED******REMOVED***get async {
-***REMOVED******REMOVED******REMOVED***await $_result
-***REMOVED******REMOVED******REMOVED******REMOVED***.compactMap({ $0 ***REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED***.first(where: { _ in true ***REMOVED***)!
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***public func complete() async {
-***REMOVED******REMOVED***_ = await result
+***REMOVED******REMOVED***setValue(.success(.cancelAuthenticationChallenge))
 ***REMOVED***
 ***REMOVED***
