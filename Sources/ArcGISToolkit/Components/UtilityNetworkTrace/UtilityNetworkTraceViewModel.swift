@@ -165,7 +165,7 @@ import Foundation
 ***REMOVED******REMOVED***/ - Returns: A feature for the given element
 ***REMOVED***func feature(for element: UtilityElement) async -> ArcGISFeature? {
 ***REMOVED******REMOVED***do {
-***REMOVED******REMOVED******REMOVED***return try await network?.getFeatures(for: [element]).first ?? nil
+***REMOVED******REMOVED******REMOVED***return try await network?.features(for: [element]).first ?? nil
 ***REMOVED*** catch {
 ***REMOVED******REMOVED******REMOVED***print(error.localizedDescription)
 ***REMOVED******REMOVED******REMOVED***return nil
@@ -457,7 +457,7 @@ import Foundation
 ***REMOVED***func utilityNamedTraceConfigurations(from map: Map) async -> [UtilityNamedTraceConfiguration] {
 ***REMOVED******REMOVED***guard let network = network else { return [] ***REMOVED***
 ***REMOVED******REMOVED***do {
-***REMOVED******REMOVED******REMOVED***return try await map.getNamedTraceConfigurations(from: network)
+***REMOVED******REMOVED******REMOVED***return try await map.namedTraceConfigurations(from: network)
 ***REMOVED*** catch {
 ***REMOVED******REMOVED******REMOVED***print(
 ***REMOVED******REMOVED******REMOVED******REMOVED***"Failed to retrieve configurations.",
