@@ -23,12 +23,16 @@ import Combine
 // required a bit more properties/logic in the 'BasemapGalleryItem' (such
 // as the 'loadBasemapError' and 'spatialReferenceStatus' properties than
 // the 'BasemapGallery' design specifies. Tests not present in the
-// test design have been added to accomodate those differences.
+// test design have been added to accommodate those differences.
 @MainActor
 final class BasemapGalleryItemTests: XCTestCase {
     override func setUp() async throws {
         ArcGISRuntimeEnvironment.apiKey = APIKey("<#API Key#>")
         try XCTSkipIf(ArcGISRuntimeEnvironment.apiKey == .placeholder)
+    }
+    
+    override func tearDown() {
+        ArcGISRuntimeEnvironment.apiKey = nil
     }
     
     func testInit() async throws {

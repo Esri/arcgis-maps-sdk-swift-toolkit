@@ -11,15 +11,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import XCTest
-@testable import ArcGISToolkit
+import ArcGIS
+import Foundation
 
-@MainActor final class TrustHostViewModifierTests: XCTestCase {
-    func testInit() {
-        let challenge = NetworkChallengeContinuation(host: "host.com", kind: .serverTrust)
-        // Tests the initial state.
-        let modifier = TrustHostViewModifier(challenge: challenge)
-        XCTAssertIdentical(modifier.challenge, challenge)
-        XCTAssertFalse(modifier.isPresented)
+extension ArcGISFeature {
+    /// The global ID of the feature.
+    ///
+    /// This property is `nil` if there is no global ID.
+    var globalID: UUID? {
+        if let id = attributes["globalid"] as? UUID {
+            return id
+        } else if let id = attributes["GLOBALID"] as? UUID {
+            return id
+        } else {
+            return nil
+        }
     }
 }
