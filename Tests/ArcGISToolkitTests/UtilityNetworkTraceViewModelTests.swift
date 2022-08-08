@@ -112,10 +112,7 @@ import XCTest
             try await tokenForRTServer109
         )
         
-        guard let map = Map(url: .rtServer109) else {
-            XCTFail("Failed to load map")
-            return
-        }
+        let map = Map(url: .rtServer109)!
         
         let viewModel = UtilityNetworkTraceViewModel(
             map: map,
@@ -141,10 +138,7 @@ import XCTest
             try await tokenForRTServer109
         )
         
-        guard let map = try await makeMap(url: .rtServer109) else {
-            XCTFail()
-            return
-        }
+        let map = try await makeMap(url: .rtServer109)
         
         let layer = try XCTUnwrap(map.operationalLayers.first {
             $0.name == "ElecDist Device"
@@ -193,10 +187,7 @@ import XCTest
             try await tokenForRTServer109
         )
         
-        guard let map = try await makeMap(url: .rtServer109) else {
-            XCTFail()
-            return
-        }
+        let map = try await makeMap(url: .rtServer109)
         
         let layer = try XCTUnwrap(map.operationalLayers.first {
             $0.name == "ElecDist Device"
@@ -255,10 +246,7 @@ import XCTest
             try await tokenForRTServer109
         )
         
-        guard let map = try await makeMap(url: .rtServer109) else {
-            XCTFail()
-            return
-        }
+        let map = try await makeMap(url: .rtServer109)
         
         let layer = try XCTUnwrap(map.operationalLayers.first {
             $0.name == "ElecDist Line"
@@ -307,10 +295,7 @@ import XCTest
             try await tokenForRTServer109
         )
         
-        guard let map = try await makeMap(url: .rtServer109) else {
-            XCTFail()
-            return
-        }
+        let map = try await makeMap(url: .rtServer109)
         
         let layer = try XCTUnwrap(map.operationalLayers.first {
             $0.name == "ElecDist Device"
@@ -363,10 +348,7 @@ import XCTest
             try await tokenForRTServer109
         )
         
-        guard let map = try await makeMap(url: .rtServer109) else {
-            XCTFail()
-            return
-        }
+        let map = try await makeMap(url: .rtServer109)
         
         let layer = try XCTUnwrap(map.operationalLayers.first {
             $0.name == "ElecDist Device"
@@ -423,7 +405,7 @@ extension UtilityNetworkTraceViewModelTests {
     /// Creates and loads a map at the provided URL.
     /// - Parameter url: The address of the map.
     /// - Returns: A loaded map.
-    func makeMap(url: URL) async throws -> Map? {
+    func makeMap(url: URL) async throws -> Map {
         let map = try XCTUnwrap(Map(url: url))
         try await map.load()
         return map

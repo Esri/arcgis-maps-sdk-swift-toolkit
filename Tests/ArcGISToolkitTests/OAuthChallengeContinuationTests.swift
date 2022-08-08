@@ -11,15 +11,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import SwiftUI
 import XCTest
 @testable import ArcGISToolkit
+import ArcGIS
 
-@MainActor final class TrustHostViewModifierTests: XCTestCase {
+@MainActor final class OAuthChallengeContinuationTests: XCTestCase {
     func testInit() {
-        let challenge = NetworkChallengeContinuation(host: "host.com", kind: .serverTrust)
-        // Tests the initial state.
-        let modifier = TrustHostViewModifier(challenge: challenge)
-        XCTAssertIdentical(modifier.challenge, challenge)
-        XCTAssertFalse(modifier.isPresented)
+        let portalURL = URL(string: "www.test-portal.com")!
+        let clientID = "client id"
+        let redirectURL = URL(string: "test-app://redirect")!
+        
+        let config = OAuthConfiguration(
+            portalURL: portalURL,
+            clientID: clientID,
+            redirectURL: redirectURL
+        )
+        
+        let challenge = OAuthChallengeContinuation(configuration: config)
+        XCTAssertEqual(challenge.configuration, config)
     }
 }
