@@ -11,15 +11,20 @@
 ***REMOVED*** See the License for the specific language governing permissions and
 ***REMOVED*** limitations under the License.
 
-import XCTest
-@testable ***REMOVED***Toolkit
+***REMOVED***
+import Foundation
 
-@MainActor final class TrustHostViewModifierTests: XCTestCase {
-***REMOVED***func testInit() {
-***REMOVED******REMOVED***let challenge = NetworkChallengeContinuation(host: "host.com", kind: .serverTrust)
-***REMOVED******REMOVED******REMOVED*** Tests the initial state.
-***REMOVED******REMOVED***let modifier = TrustHostViewModifier(challenge: challenge)
-***REMOVED******REMOVED***XCTAssertIdentical(modifier.challenge, challenge)
-***REMOVED******REMOVED***XCTAssertFalse(modifier.isPresented)
+extension ArcGISFeature {
+***REMOVED******REMOVED***/ The global ID of the feature.
+***REMOVED******REMOVED***/
+***REMOVED******REMOVED***/ This property is `nil` if there is no global ID.
+***REMOVED***var globalID: UUID? {
+***REMOVED******REMOVED***if let id = attributes["globalid"] as? UUID {
+***REMOVED******REMOVED******REMOVED***return id
+***REMOVED*** else if let id = attributes["GLOBALID"] as? UUID {
+***REMOVED******REMOVED******REMOVED***return id
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***return nil
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
