@@ -23,12 +23,16 @@ import Combine
 ***REMOVED*** required a bit more properties/logic in the 'BasemapGalleryItem' (such
 ***REMOVED*** as the 'loadBasemapError' and 'spatialReferenceStatus' properties than
 ***REMOVED*** the 'BasemapGallery' design specifies. Tests not present in the
-***REMOVED*** test design have been added to accomodate those differences.
+***REMOVED*** test design have been added to accommodate those differences.
 @MainActor
 final class BasemapGalleryItemTests: XCTestCase {
 ***REMOVED***override func setUp() async throws {
 ***REMOVED******REMOVED***ArcGISRuntimeEnvironment.apiKey = APIKey("<#API Key#>")
 ***REMOVED******REMOVED***try XCTSkipIf(ArcGISRuntimeEnvironment.apiKey == .placeholder)
+***REMOVED***
+***REMOVED***
+***REMOVED***override func tearDown() {
+***REMOVED******REMOVED***ArcGISRuntimeEnvironment.apiKey = nil
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func testInit() async throws {
