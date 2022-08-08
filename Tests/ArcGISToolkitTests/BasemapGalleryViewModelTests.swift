@@ -23,12 +23,16 @@ import Combine
 ***REMOVED*** required a bit more properties/logic in the 'BasemapGalleryViewModel' (such
 ***REMOVED*** as 'geoModel.actualSpatialReference') than the 'BasemapGallery' design
 ***REMOVED*** specifies. Tests not present in the test design have been added to
-***REMOVED*** accomodate those differences.
+***REMOVED*** accommodate those differences.
 @MainActor
 class BasemapGalleryViewModelTests: XCTestCase {
 ***REMOVED***override func setUp() async throws {
 ***REMOVED******REMOVED***ArcGISRuntimeEnvironment.apiKey = APIKey("<#API Key#>")
 ***REMOVED******REMOVED***try XCTSkipIf(ArcGISRuntimeEnvironment.apiKey == .placeholder)
+***REMOVED***
+***REMOVED***
+***REMOVED***override func tearDown() {
+***REMOVED******REMOVED***ArcGISRuntimeEnvironment.apiKey = nil
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***let defaultBasemapGalleryItems: [BasemapGalleryItem] = [

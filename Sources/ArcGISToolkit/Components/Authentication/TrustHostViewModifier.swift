@@ -18,13 +18,13 @@ struct TrustHostViewModifier: ViewModifier {
 ***REMOVED******REMOVED***/ Creates a `TrustHostViewModifier`.
 ***REMOVED******REMOVED***/ - Parameter challenge: The network authentication challenge for the untrusted host.
 ***REMOVED******REMOVED***/ - Precondition: `challenge.kind` is equal to `serverTrust`.
-***REMOVED***init(challenge: QueuedNetworkChallenge) {
+***REMOVED***init(challenge: NetworkChallengeContinuation) {
 ***REMOVED******REMOVED***precondition(challenge.kind == .serverTrust)
 ***REMOVED******REMOVED***self.challenge = challenge
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The network authentication challenge for the untrusted host.
-***REMOVED***let challenge: QueuedNetworkChallenge
+***REMOVED***let challenge: NetworkChallengeContinuation
 ***REMOVED***
 ***REMOVED******REMOVED*** Even though we will present it right away we need to use a state variable for this.
 ***REMOVED******REMOVED*** Using a constant has 2 issues. One, it won't animate. Two, when challenging for multiple
