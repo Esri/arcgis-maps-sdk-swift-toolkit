@@ -16,7 +16,7 @@ import XCTest
 
 @MainActor final class TrustHostViewModifierTests: XCTestCase {
 ***REMOVED***func testInit() {
-***REMOVED******REMOVED***let challenge = QueuedNetworkChallenge(host: "host.com", kind: .serverTrust)
+***REMOVED******REMOVED***let challenge = NetworkChallengeContinuation(host: "host.com", kind: .serverTrust)
 ***REMOVED******REMOVED******REMOVED*** Tests the initial state.
 ***REMOVED******REMOVED***let modifier = TrustHostViewModifier(challenge: challenge)
 ***REMOVED******REMOVED***XCTAssertIdentical(modifier.challenge, challenge)

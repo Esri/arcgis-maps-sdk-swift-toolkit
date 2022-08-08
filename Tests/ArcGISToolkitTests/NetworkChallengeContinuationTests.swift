@@ -15,23 +15,17 @@
 import XCTest
 @testable ***REMOVED***Toolkit
 
-@MainActor final class QueuedNetworkChallengeTests: XCTestCase {
+@MainActor final class NetworkChallengeContinuationTests: XCTestCase {
 ***REMOVED***func testInit() {
-***REMOVED******REMOVED***let challenge = QueuedNetworkChallenge(host: "host.com", kind: .serverTrust)
+***REMOVED******REMOVED***let challenge = NetworkChallengeContinuation(host: "host.com", kind: .serverTrust)
 ***REMOVED******REMOVED***XCTAssertEqual(challenge.host, "host.com")
 ***REMOVED******REMOVED***XCTAssertEqual(challenge.kind, .serverTrust)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func testResumeAndComplete() async {
-***REMOVED******REMOVED***let challenge = QueuedNetworkChallenge(host: "host.com", kind: .serverTrust)
+***REMOVED******REMOVED***let challenge = NetworkChallengeContinuation(host: "host.com", kind: .serverTrust)
 ***REMOVED******REMOVED***challenge.resume(with: .useCredential(.serverTrust))
-***REMOVED******REMOVED***let disposition = await challenge.disposition
+***REMOVED******REMOVED***let disposition = await challenge.value
 ***REMOVED******REMOVED***XCTAssertEqual(disposition, .useCredential(.serverTrust))
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Make sure multiple simultaneous listeners can await the completion.
-***REMOVED******REMOVED***let t1 = Task { await challenge.complete() ***REMOVED***
-***REMOVED******REMOVED***let t2 = Task { await challenge.complete() ***REMOVED***
-***REMOVED******REMOVED***await t1.value
-***REMOVED******REMOVED***await t2.value
 ***REMOVED***
 ***REMOVED***

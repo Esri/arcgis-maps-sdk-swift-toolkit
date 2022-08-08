@@ -112,10 +112,7 @@ import XCTest
 ***REMOVED******REMOVED******REMOVED***try await tokenForRTServer109
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***guard let map = Map(url: .rtServer109) else {
-***REMOVED******REMOVED******REMOVED***XCTFail("Failed to load map")
-***REMOVED******REMOVED******REMOVED***return
-***REMOVED***
+***REMOVED******REMOVED***let map = Map(url: .rtServer109)!
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let viewModel = UtilityNetworkTraceViewModel(
 ***REMOVED******REMOVED******REMOVED***map: map,
@@ -141,10 +138,7 @@ import XCTest
 ***REMOVED******REMOVED******REMOVED***try await tokenForRTServer109
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***guard let map = try await makeMap(url: .rtServer109) else {
-***REMOVED******REMOVED******REMOVED***XCTFail()
-***REMOVED******REMOVED******REMOVED***return
-***REMOVED***
+***REMOVED******REMOVED***let map = try await makeMap(url: .rtServer109)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let layer = try XCTUnwrap(map.operationalLayers.first {
 ***REMOVED******REMOVED******REMOVED***$0.name == "ElecDist Device"
@@ -193,10 +187,7 @@ import XCTest
 ***REMOVED******REMOVED******REMOVED***try await tokenForRTServer109
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***guard let map = try await makeMap(url: .rtServer109) else {
-***REMOVED******REMOVED******REMOVED***XCTFail()
-***REMOVED******REMOVED******REMOVED***return
-***REMOVED***
+***REMOVED******REMOVED***let map = try await makeMap(url: .rtServer109)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let layer = try XCTUnwrap(map.operationalLayers.first {
 ***REMOVED******REMOVED******REMOVED***$0.name == "ElecDist Device"
@@ -255,10 +246,7 @@ import XCTest
 ***REMOVED******REMOVED******REMOVED***try await tokenForRTServer109
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***guard let map = try await makeMap(url: .rtServer109) else {
-***REMOVED******REMOVED******REMOVED***XCTFail()
-***REMOVED******REMOVED******REMOVED***return
-***REMOVED***
+***REMOVED******REMOVED***let map = try await makeMap(url: .rtServer109)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let layer = try XCTUnwrap(map.operationalLayers.first {
 ***REMOVED******REMOVED******REMOVED***$0.name == "ElecDist Line"
@@ -307,10 +295,7 @@ import XCTest
 ***REMOVED******REMOVED******REMOVED***try await tokenForRTServer109
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***guard let map = try await makeMap(url: .rtServer109) else {
-***REMOVED******REMOVED******REMOVED***XCTFail()
-***REMOVED******REMOVED******REMOVED***return
-***REMOVED***
+***REMOVED******REMOVED***let map = try await makeMap(url: .rtServer109)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let layer = try XCTUnwrap(map.operationalLayers.first {
 ***REMOVED******REMOVED******REMOVED***$0.name == "ElecDist Device"
@@ -363,10 +348,7 @@ import XCTest
 ***REMOVED******REMOVED******REMOVED***try await tokenForRTServer109
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***guard let map = try await makeMap(url: .rtServer109) else {
-***REMOVED******REMOVED******REMOVED***XCTFail()
-***REMOVED******REMOVED******REMOVED***return
-***REMOVED***
+***REMOVED******REMOVED***let map = try await makeMap(url: .rtServer109)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let layer = try XCTUnwrap(map.operationalLayers.first {
 ***REMOVED******REMOVED******REMOVED***$0.name == "ElecDist Device"
@@ -423,7 +405,7 @@ extension UtilityNetworkTraceViewModelTests {
 ***REMOVED******REMOVED***/ Creates and loads a map at the provided URL.
 ***REMOVED******REMOVED***/ - Parameter url: The address of the map.
 ***REMOVED******REMOVED***/ - Returns: A loaded map.
-***REMOVED***func makeMap(url: URL) async throws -> Map? {
+***REMOVED***func makeMap(url: URL) async throws -> Map {
 ***REMOVED******REMOVED***let map = try XCTUnwrap(Map(url: url))
 ***REMOVED******REMOVED***try await map.load()
 ***REMOVED******REMOVED***return map

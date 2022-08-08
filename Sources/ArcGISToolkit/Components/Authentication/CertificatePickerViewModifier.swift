@@ -19,7 +19,7 @@ import UniformTypeIdentifiers
 ***REMOVED***/ certificate and a password.
 @MainActor final class CertificatePickerViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ The challenge that requires a certificate to proceed.
-***REMOVED***let challenge: QueuedNetworkChallenge
+***REMOVED***let challenge: NetworkChallengeContinuation
 ***REMOVED***
 ***REMOVED******REMOVED***/ The URL of the certificate that the user chose.
 ***REMOVED***var certificateURL: URL?
@@ -46,7 +46,7 @@ import UniformTypeIdentifiers
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a certificate picker view model.
 ***REMOVED******REMOVED***/ - Parameter challenge: The challenge that requires a certificate.
-***REMOVED***init(challenge: QueuedNetworkChallenge) {
+***REMOVED***init(challenge: NetworkChallengeContinuation) {
 ***REMOVED******REMOVED***self.challenge = challenge
 ***REMOVED***
 ***REMOVED***
@@ -93,7 +93,7 @@ import UniformTypeIdentifiers
 struct CertificatePickerViewModifier: ViewModifier {
 ***REMOVED******REMOVED***/ Creates a certificate picker view modifier.
 ***REMOVED******REMOVED***/ - Parameter challenge: The challenge that requires a certificate.
-***REMOVED***init(challenge: QueuedNetworkChallenge) {
+***REMOVED***init(challenge: NetworkChallengeContinuation) {
 ***REMOVED******REMOVED***viewModel = CertificatePickerViewModel(challenge: challenge)
 ***REMOVED***
 ***REMOVED***
