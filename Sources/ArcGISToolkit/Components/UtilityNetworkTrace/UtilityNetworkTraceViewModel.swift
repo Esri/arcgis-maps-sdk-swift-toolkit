@@ -165,7 +165,7 @@ import SwiftUI
     /// - Returns: A feature for the given element
     func feature(for element: UtilityElement) async -> ArcGISFeature? {
         do {
-            return try await network?.getFeatures(for: [element]).first ?? nil
+            return try await network?.features(for: [element]).first ?? nil
         } catch {
             print(error.localizedDescription)
             return nil
@@ -457,7 +457,7 @@ import SwiftUI
     func utilityNamedTraceConfigurations(from map: Map) async -> [UtilityNamedTraceConfiguration] {
         guard let network = network else { return [] }
         do {
-            return try await map.getNamedTraceConfigurations(from: network)
+            return try await map.namedTraceConfigurations(from: network)
         } catch {
             print(
                 "Failed to retrieve configurations.",
