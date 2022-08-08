@@ -19,6 +19,7 @@ To use Toolkit in your project:
 * **[OverviewMap](Documentation/OverviewMap)** - Displays the visible extent of a geo view in a small "inset" map.
 * **[Scalebar](Documentation/Scalebar)** - Displays current scale reference.
 * **[Search](Documentation/Search)** - Displays a search experience for geo views.
+* **[UtilityNetworkTrace](Documentation/UtilityNetworkTrace)** - Runs traces on a web map published with a utility network and trace configurations.
 
 
 ## Requirements

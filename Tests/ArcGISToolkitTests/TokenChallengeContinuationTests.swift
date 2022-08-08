@@ -15,9 +15,9 @@ import SwiftUI
 import XCTest
 @testable import ArcGISToolkit
 
-@MainActor final class QueuedTokenChallengeTests: XCTestCase {
+@MainActor final class TokenChallengeContinuationTests: XCTestCase {
     func testInit() {
-        let challenge = QueuedTokenChallenge(host: "host.com") { _ in
+        let challenge = TokenChallengeContinuation(host: "host.com") { _ in
             fatalError()
         }
         
@@ -28,28 +28,22 @@ import XCTest
     func testResumeWithLogin() async {
         struct MockError: Error {}
         
-        let challenge = QueuedTokenChallenge(host: "host.com") { _ in
+        let challenge = TokenChallengeContinuation(host: "host.com") { _ in
             throw MockError()
         }
         challenge.resume(with: .init(username: "user1", password: "1234"))
         
-        let result = await challenge.result
+        let result = await challenge.value
         XCTAssertTrue(result.error is MockError)
-        
-        // Make sure multiple simultaneous listeners can await the completion.
-        let t1 = Task { await challenge.complete() }
-        let t2 = Task { await challenge.complete() }
-        await t1.value
-        await t2.value
     }
     
     func testCancel() async {
-        let challenge = QueuedTokenChallenge(host: "host.com") { _ in
+        let challenge = TokenChallengeContinuation(host: "host.com") { _ in
             fatalError()
         }
         challenge.cancel()
         
-        let result = await challenge.result
+        let result = await challenge.value
         XCTAssertEqual(result.value, .cancelAuthenticationChallenge)
     }
 }
