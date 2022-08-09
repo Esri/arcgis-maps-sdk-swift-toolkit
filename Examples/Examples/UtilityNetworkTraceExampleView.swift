@@ -66,7 +66,7 @@ struct UtilityNetworkTraceExampleView: View {
                     }
                 }
                 .padding()
-                .frame(width: 360)
+                .frame(width: 400)
             }
         }
     }
