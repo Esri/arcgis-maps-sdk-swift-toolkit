@@ -66,7 +66,7 @@ struct UtilityNetworkTraceExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding()
-***REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 360)
+***REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 400)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
