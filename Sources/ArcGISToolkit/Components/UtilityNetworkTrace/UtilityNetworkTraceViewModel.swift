@@ -140,9 +140,18 @@ import SwiftUI
         }
     }
     
+    /// Deletes all of the completed traces.
+    func deleteAllTraces() {
+        selectedTraceIndex = nil
+        completedTraces.forEach { traceResult in
+            deleteGraphics(for: traceResult)
+        }
+        completedTraces.removeAll()
+    }
+    
     /// Deletes the provided starting point from the pending trace.
     /// - Parameter startingPoint: The starting point to be deleted.
-    func delete(_ startingPoint: UtilityNetworkTraceStartingPoint) {
+    func deleteStartingPoint(_ startingPoint: UtilityNetworkTraceStartingPoint) {
         pendingTrace.startingPoints.removeAll {
             $0 == startingPoint
         }
@@ -153,19 +162,10 @@ import SwiftUI
     
     /// Deletes the provided trace from the list of completed traces.
     /// - Parameter trace: The trace to be deleted.
-    func delete(_ trace: Trace) {
+    func deleteTrace(_ trace: Trace) {
         deleteGraphics(for: trace)
         completedTraces.removeAll { $0 == trace }
         selectPreviousTrace()
-    }
-    
-    /// Deletes all of the completed traces.
-    func deleteAllTraces() {
-        selectedTraceIndex = nil
-        completedTraces.forEach { traceResult in
-            deleteGraphics(for: traceResult)
-        }
-        completedTraces.removeAll()
     }
     
     /// Returns a feature for the given utility element
