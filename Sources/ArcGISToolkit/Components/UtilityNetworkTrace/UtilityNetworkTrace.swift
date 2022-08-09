@@ -326,7 +326,7 @@ public struct UtilityNetworkTrace: View {
                     if viewModel.completedTraces.count == 1 {
                         currentActivity = .creatingTrace(nil)
                     }
-                    viewModel.delete(selectedTrace)
+                    viewModel.deleteTrace(selectedTrace)
                 }
             }
             .font(.title3)
@@ -431,7 +431,7 @@ public struct UtilityNetworkTrace: View {
             }
             Button("Delete", role: .destructive) {
                 if let startingPoint = selectedStartingPoint {
-                    viewModel.delete(startingPoint)
+                    viewModel.deleteStartingPoint(startingPoint)
                     currentActivity = .creatingTrace(.viewingStartingPoints)
                 }
             }
@@ -508,7 +508,7 @@ public struct UtilityNetworkTrace: View {
             }
             .swipeActions {
                 Button(role: .destructive) {
-                    viewModel.delete(startingPoint)
+                    viewModel.deleteStartingPoint(startingPoint)
                 } label: {
                     Image(systemName: "trash")
                 }
