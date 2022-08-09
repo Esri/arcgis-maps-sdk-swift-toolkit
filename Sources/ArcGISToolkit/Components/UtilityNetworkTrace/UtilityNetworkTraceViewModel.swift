@@ -140,9 +140,18 @@ import Foundation
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ Deletes all of the completed traces.
+***REMOVED***func deleteAllTraces() {
+***REMOVED******REMOVED***selectedTraceIndex = nil
+***REMOVED******REMOVED***completedTraces.forEach { traceResult in
+***REMOVED******REMOVED******REMOVED***deleteGraphics(for: traceResult)
+***REMOVED***
+***REMOVED******REMOVED***completedTraces.removeAll()
+***REMOVED***
+***REMOVED***
 ***REMOVED******REMOVED***/ Deletes the provided starting point from the pending trace.
 ***REMOVED******REMOVED***/ - Parameter startingPoint: The starting point to be deleted.
-***REMOVED***func delete(_ startingPoint: UtilityNetworkTraceStartingPoint) {
+***REMOVED***func deleteStartingPoint(_ startingPoint: UtilityNetworkTraceStartingPoint) {
 ***REMOVED******REMOVED***pendingTrace.startingPoints.removeAll {
 ***REMOVED******REMOVED******REMOVED***$0 == startingPoint
 ***REMOVED***
@@ -153,19 +162,10 @@ import Foundation
 ***REMOVED***
 ***REMOVED******REMOVED***/ Deletes the provided trace from the list of completed traces.
 ***REMOVED******REMOVED***/ - Parameter trace: The trace to be deleted.
-***REMOVED***func delete(_ trace: Trace) {
+***REMOVED***func deleteTrace(_ trace: Trace) {
 ***REMOVED******REMOVED***deleteGraphics(for: trace)
 ***REMOVED******REMOVED***completedTraces.removeAll { $0 == trace ***REMOVED***
 ***REMOVED******REMOVED***selectPreviousTrace()
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ Deletes all of the completed traces.
-***REMOVED***func deleteAllTraces() {
-***REMOVED******REMOVED***selectedTraceIndex = nil
-***REMOVED******REMOVED***completedTraces.forEach { traceResult in
-***REMOVED******REMOVED******REMOVED***deleteGraphics(for: traceResult)
-***REMOVED***
-***REMOVED******REMOVED***completedTraces.removeAll()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Returns a feature for the given utility element
