@@ -61,9 +61,6 @@ public struct UtilityNetworkTrace: View {
     /// A Boolean value indicating whether the map should be zoomed to the extent of the trace result.
     @State private var shouldZoomOnTraceCompletion = false
     
-    /// A Boolean value indicating if the warning that all traces will be deleted is presented.
-    @State private var showWarningAlert = false
-    
     /// The view model used by the view. The `UtilityNetworkTraceViewModel` manages state.
     /// The view observes `UtilityNetworkTraceViewModel` for changes in state.
     @StateObject private var viewModel: UtilityNetworkTraceViewModel
