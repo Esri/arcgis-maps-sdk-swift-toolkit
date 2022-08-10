@@ -86,7 +86,8 @@ import SwiftUI
     
     /// The selected trace.
     var selectedTrace: Trace? {
-        if let index = selectedTraceIndex {
+        if let index = selectedTraceIndex,
+           index >= 0, index < completedTraces.count {
             return completedTraces[index]
         } else {
             return nil
@@ -139,9 +140,18 @@ import SwiftUI
         }
     }
     
+    /// Deletes all of the completed traces.
+    func deleteAllTraces() {
+        selectedTraceIndex = nil
+        completedTraces.forEach { traceResult in
+            deleteGraphics(for: traceResult)
+        }
+        completedTraces.removeAll()
+    }
+    
     /// Deletes the provided starting point from the pending trace.
     /// - Parameter startingPoint: The starting point to be deleted.
-    func delete(_ startingPoint: UtilityNetworkTraceStartingPoint) {
+    func deleteStartingPoint(_ startingPoint: UtilityNetworkTraceStartingPoint) {
         pendingTrace.startingPoints.removeAll {
             $0 == startingPoint
         }
@@ -150,14 +160,12 @@ import SwiftUI
         }
     }
     
-    /// Deletes all of the completed traces.
-    func deleteAllTraces() {
-        selectedTraceIndex = nil
-        completedTraces.forEach { traceResult in
-            graphicsOverlay.removeGraphics(traceResult.startingPoints.compactMap { $0.graphic })
-            graphicsOverlay.removeGraphics(traceResult.graphics)
-        }
-        completedTraces.removeAll()
+    /// Deletes the provided trace from the list of completed traces.
+    /// - Parameter trace: The trace to be deleted.
+    func deleteTrace(_ trace: Trace) {
+        deleteGraphics(for: trace)
+        completedTraces.removeAll { $0 == trace }
+        selectPreviousTrace()
     }
     
     /// Returns a feature for the given utility element
@@ -450,6 +458,13 @@ import SwiftUI
         guard index >= 0, index <= completedTraces.count - 1 else { return }
         _ = completedTraces[index].graphics.map { $0.isSelected = isSelected }
         _ = completedTraces[index].startingPoints.map { $0.graphic?.isSelected = isSelected }
+    }
+    
+    /// Deletes all graphics for the provided trace.
+    /// - Parameter trace: The trace to which delete graphics for.
+    private func deleteGraphics(for trace: Trace) {
+        graphicsOverlay.removeGraphics(trace.startingPoints.compactMap { $0.graphic })
+        graphicsOverlay.removeGraphics(trace.graphics)
     }
     
     /// - Parameter map: A web map containing one or more utility networks.
