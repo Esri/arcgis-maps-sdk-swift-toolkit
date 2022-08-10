@@ -39,8 +39,8 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED***case viewingAdvancedOptions
 ***REMOVED******REMOVED******REMOVED***/ The user is viewing a list of element results, grouped by asset group and asset type.
 ***REMOVED******REMOVED***case viewingElementGroup([String: [UtilityElement]])
-***REMOVED******REMOVED******REMOVED***/ The user is viewing the list of element results.
-***REMOVED******REMOVED***case viewingElementResults
+***REMOVED******REMOVED******REMOVED***/ The user is viewing the list of feature results.
+***REMOVED******REMOVED***case viewingFeatureResults
 ***REMOVED******REMOVED******REMOVED***/ The user is viewing the list of function results.
 ***REMOVED******REMOVED***case viewingFunctionResults
 ***REMOVED***
@@ -132,27 +132,37 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED***/ Displays information about a chosen asset group.
 ***REMOVED***@ViewBuilder private var assetGroupDetail: some View {
 ***REMOVED******REMOVED***if let assetGroup = selectedAssetGroup {
-***REMOVED******REMOVED******REMOVED***makeBackButton(title: elementResultsTitle) {
-***REMOVED******REMOVED******REMOVED******REMOVED***currentActivity = .viewingTraces(.viewingElementResults)
+***REMOVED******REMOVED******REMOVED***makeBackButton(title: featureResultsTitle) {
+***REMOVED******REMOVED******REMOVED******REMOVED***currentActivity = .viewingTraces(.viewingFeatureResults)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***makeDetailSectionHeader(
 ***REMOVED******REMOVED******REMOVED******REMOVED***title: assetGroup.first?.value.first?.assetGroup.name ?? "Unnamed Asset Group"
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***List {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ForEach(assetGroup.sorted(by: { $0.key < $1.key ***REMOVED***), id: \.key) { assetTypeGroup in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let elements = assetTypeGroup.value.sorted {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***$0.objectID < $1.objectID
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Section(assetTypeGroup.key) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let elements = assetTypeGroup.value.sorted {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***$0.objectID < $1.objectID
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(elements) { element in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeZoomToButton(text: element.objectID.description) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let feature = await viewModel.feature(for: element),
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***   let geometry = feature.geometry {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint = Viewpoint(targetExtent: geometry.extent)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***DisclosureGroup {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(elements) { element in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let feature = await viewModel.feature(for: element),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***   let geometry = feature.geometry {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint = Viewpoint(targetExtent: geometry.extent)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Label {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Object ID \(element.objectID.description)")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** icon: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "scope")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("(\(elements.count))")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
@@ -244,15 +254,21 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***set: { currentActivity = .creatingTrace($0 ? .viewingAdvancedOptions : nil) ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ColorPicker(selection: $viewModel.pendingTrace.color) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Trace Color")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***HStack {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Name")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***TextField(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Name",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***text: $viewModel.pendingTrace.name
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onSubmit {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.pendingTrace.userDidSpecifyName = true
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.multilineTextAlignment(.trailing)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.blue)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***TextField(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Trace Name",
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***text: $viewModel.pendingTrace.name
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onSubmit {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.pendingTrace.userDidSpecifyName = true
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ColorPicker(selection: $viewModel.pendingTrace.color) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Color")
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Toggle(isOn: $shouldZoomOnTraceCompletion) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Zoom to result")
@@ -277,39 +293,58 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED***.disabled(!viewModel.canRunTrace)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ The tab that allows for viewing completed traces.
-***REMOVED***@ViewBuilder private var resultsTab: some View {
-***REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED***if viewModel.completedTraces.count > 1 {
-***REMOVED******REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.selectPreviousTrace()
-***REMOVED******REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "chevron.backward")
+***REMOVED******REMOVED***/ Navigator at the top of the results tab that allows users to cycle through completed traces.
+***REMOVED***@ViewBuilder private var resultsNavigator: some View {
+***REMOVED******REMOVED***if viewModel.completedTraces.count > 1 {
+***REMOVED******REMOVED******REMOVED***HStack {
+***REMOVED******REMOVED******REMOVED******REMOVED***if viewModel.completedTraces.count > 1 {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.selectPreviousTrace()
+***REMOVED******REMOVED******REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "chevron.backward")
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***Text(currentTraceLabel)
-***REMOVED******REMOVED******REMOVED******REMOVED***.padding(.horizontal)
-***REMOVED******REMOVED******REMOVED***if viewModel.completedTraces.count > 1 {
-***REMOVED******REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.selectNextTrace()
-***REMOVED******REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "chevron.forward")
+***REMOVED******REMOVED******REMOVED******REMOVED***Text(currentTraceLabel)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.horizontal)
+***REMOVED******REMOVED******REMOVED******REMOVED***if viewModel.completedTraces.count > 1 {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.selectNextTrace()
+***REMOVED******REMOVED******REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "chevron.forward")
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.font(.title3)
-***REMOVED******REMOVED***.padding(2.5)
-***REMOVED******REMOVED***if let traceName = viewModel.selectedTrace?.name, !traceName.isEmpty {
-***REMOVED******REMOVED******REMOVED***Text(traceName)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ The tab that allows for viewing completed traces.
+***REMOVED***@ViewBuilder private var resultsTab: some View {
+***REMOVED******REMOVED***resultsNavigator
+***REMOVED******REMOVED******REMOVED***.padding(2.5)
+***REMOVED******REMOVED***if let selectedTrace = viewModel.selectedTrace {
+***REMOVED******REMOVED******REMOVED***Menu(selectedTrace.name) {
+***REMOVED******REMOVED******REMOVED******REMOVED***if let resultExtent = selectedTrace.resultExtent {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Zoom To") {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint = Viewpoint(targetExtent: resultExtent)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***Button("Delete", role: .destructive) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if viewModel.completedTraces.count == 1 {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentActivity = .creatingTrace(nil)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.deleteTrace(selectedTrace)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.font(.title3)
 ***REMOVED***
 ***REMOVED******REMOVED***if activeDetent != .summary {
 ***REMOVED******REMOVED******REMOVED***List {
-***REMOVED******REMOVED******REMOVED******REMOVED***Section(elementResultsTitle) {
+***REMOVED******REMOVED******REMOVED******REMOVED***Section(featureResultsTitle) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***DisclosureGroup(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.selectedTrace?.assetCount.description ?? "0",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"(\(viewModel.selectedTrace?.assetCount ?? 0))",
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isExpanded: Binding(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***get: { isFocused(traceViewingActivity: .viewingElementResults) ***REMOVED***,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***set: { currentActivity = .viewingTraces($0 ? .viewingElementResults : nil) ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***get: { isFocused(traceViewingActivity: .viewingFeatureResults) ***REMOVED***,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***set: { currentActivity = .viewingTraces($0 ? .viewingFeatureResults : nil) ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(
@@ -318,7 +353,7 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(assetGroup.key)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(assetGroup.value.compactMap({ $0.value.count ***REMOVED***).reduce(0, +).description)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("(\(assetGroup.value.compactMap({ $0.value.count ***REMOVED***).reduce(0, +)))")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.blue)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.contentShape(Rectangle())
@@ -328,9 +363,9 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***Section("Function Result") {
+***REMOVED******REMOVED******REMOVED******REMOVED***Section("Function Results") {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***DisclosureGroup(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.selectedTrace?.utilityFunctionTraceResult?.functionOutputs.count.description ?? "0",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"(\(viewModel.selectedTrace?.utilityFunctionTraceResult?.functionOutputs.count ?? 0))",
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isExpanded: Binding(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***get: { isFocused(traceViewingActivity: .viewingFunctionResults) ***REMOVED***,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***set: { currentActivity = .viewingTraces($0 ? .viewingFunctionResults : nil) ***REMOVED***
@@ -340,7 +375,12 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(item.function.networkAttribute?.name ?? "Unnamed")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text((item.result as? Double)?.description ?? "N/A")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***VStack(alignment: .trailing) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(item.function.functionType.description)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.caption)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text((item.result as? Double)?.description ?? "N/A")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
@@ -363,24 +403,19 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Trace Color")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Color")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***makeZoomToButton {
-***REMOVED******REMOVED******REMOVED******REMOVED***if let extent = viewModel.selectedTrace?.resultExtent {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint = Viewpoint(targetExtent: extent)
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.padding([.vertical], 2)
-***REMOVED******REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED***Button(role: .destructive) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***showWarningAlert.toggle()
 ***REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED***Text("Clear All Results")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.tint(.red)
+***REMOVED******REMOVED******REMOVED******REMOVED***Text(clearResultsTitle)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.alert("Clear All Results", isPresented: $showWarningAlert) {
+***REMOVED******REMOVED******REMOVED***.buttonStyle(.bordered)
+***REMOVED******REMOVED******REMOVED***.alert(clearResultsTitle, isPresented: $showWarningAlert) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Button(role: .destructive) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.deleteAllTraces()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentActivity = .creatingTrace(nil)
@@ -398,9 +433,21 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED***makeBackButton(title: startingPointsTitle) {
 ***REMOVED******REMOVED******REMOVED***currentActivity = .creatingTrace(.viewingStartingPoints)
 ***REMOVED***
-***REMOVED******REMOVED***makeDetailSectionHeader(
-***REMOVED******REMOVED******REMOVED***title: selectedStartingPoint?.utilityElement?.assetType.name ?? "Unnamed Asset Type"
-***REMOVED******REMOVED***)
+***REMOVED******REMOVED***Menu(selectedStartingPoint?.utilityElement?.assetType.name ?? "Unnamed Asset Type") {
+***REMOVED******REMOVED******REMOVED***Button("Zoom To") {
+***REMOVED******REMOVED******REMOVED******REMOVED***if let selectedStartingPoint = selectedStartingPoint,
+***REMOVED******REMOVED******REMOVED******REMOVED***   let extent = selectedStartingPoint.geoElement.geometry?.extent {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint = Viewpoint(targetExtent: extent)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***Button("Delete", role: .destructive) {
+***REMOVED******REMOVED******REMOVED******REMOVED***if let startingPoint = selectedStartingPoint {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.deleteStartingPoint(startingPoint)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentActivity = .creatingTrace(.viewingStartingPoints)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***.font(.title3)
 ***REMOVED******REMOVED***List {
 ***REMOVED******REMOVED******REMOVED***if selectedStartingPoint?.utilityElement?.networkSource.kind == .edge {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Section("Fraction Along Edge") {
@@ -438,18 +485,14 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.blue)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***ForEach(Array(selectedStartingPoint!.geoElement.attributes.sorted(by: { $0.key < $1.key***REMOVED***)), id: \.key) { item in
-***REMOVED******REMOVED******REMOVED******REMOVED***HStack{
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(item.key)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(item.value as? String ?? "")
+***REMOVED******REMOVED******REMOVED***Section("Attributes") {
+***REMOVED******REMOVED******REMOVED******REMOVED***ForEach(Array(selectedStartingPoint!.geoElement.attributes.sorted(by: { $0.key < $1.key***REMOVED***)), id: \.key) { item in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***HStack{
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(item.key)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(item.value as? String ?? "")
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***makeZoomToButton {
-***REMOVED******REMOVED******REMOVED***if let selectedStartingPoint = selectedStartingPoint,
-***REMOVED******REMOVED******REMOVED***   let extent = selectedStartingPoint.geoElement.geometry?.extent {
-***REMOVED******REMOVED******REMOVED******REMOVED***viewpoint = Viewpoint(targetExtent: extent)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -469,14 +512,14 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let image = startingPoint.image {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(uiImage: image)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 25, height: 25)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.background(Color.secondary)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.background(.white)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.cornerRadius(5)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.swipeActions {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Button(role: .destructive) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.delete(startingPoint)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.deleteStartingPoint(startingPoint)
 ***REMOVED******REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "trash")
 ***REMOVED******REMOVED******REMOVED***
@@ -660,25 +703,11 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .center)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Returns a "Zoom To" button that performs a specified action when pressed.
-***REMOVED******REMOVED***/ - Parameter text: The custom text to be displayed within the button.
-***REMOVED******REMOVED***/ - Parameter action: The action to be performed.
-***REMOVED******REMOVED***/ - Returns: The configured button.
-***REMOVED***private func makeZoomToButton(
-***REMOVED******REMOVED***text: String = "Zoom To",
-***REMOVED******REMOVED***_ action: @escaping () -> Void
-***REMOVED***) -> some View {
-***REMOVED******REMOVED***Button { action() ***REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED***Label {
-***REMOVED******REMOVED******REMOVED******REMOVED***Text(text)
-***REMOVED******REMOVED*** icon: {
-***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "scope")
-***REMOVED******REMOVED***
+***REMOVED******REMOVED***/ Title for the clear all results feature
+***REMOVED***private let clearResultsTitle = "Clear All Results"
 ***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ Title for the element results section
-***REMOVED***private let elementResultsTitle = "Element Results"
+***REMOVED******REMOVED***/ Title for the feature results section
+***REMOVED***private let featureResultsTitle = "Feature Results"
 ***REMOVED***
 ***REMOVED******REMOVED***/ Title for the starting points section
 ***REMOVED***private let startingPointsTitle = "Starting Points"
