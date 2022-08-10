@@ -85,7 +85,7 @@ public final class Authenticator: ObservableObject {
 ***REMOVED***
 
 extension Authenticator: AuthenticationChallengeHandler {
-***REMOVED***public func handleArcGISChallenge(
+***REMOVED***public func handleArcGISAuthenticationChallenge(
 ***REMOVED******REMOVED***_ challenge: ArcGISAuthenticationChallenge
 ***REMOVED***) async throws -> ArcGISAuthenticationChallenge.Disposition {
 ***REMOVED******REMOVED***let challengeContinuation: ArcGISChallengeContinuation
@@ -111,7 +111,7 @@ extension Authenticator: AuthenticationChallengeHandler {
 ***REMOVED******REMOVED***return try await challengeContinuation.value.get()
 ***REMOVED***
 ***REMOVED***
-***REMOVED***public func handleNetworkChallenge(
+***REMOVED***public func handleNetworkAuthenticationChallenge(
 ***REMOVED******REMOVED***_ challenge: NetworkAuthenticationChallenge
 ***REMOVED***) async -> NetworkAuthenticationChallenge.Disposition  {
 ***REMOVED******REMOVED******REMOVED*** If `promptForUntrustedHosts` is `false` then perform default handling
