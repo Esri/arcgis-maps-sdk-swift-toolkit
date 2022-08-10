@@ -113,7 +113,7 @@ extension Authenticator: AuthenticationChallengeHandler {
 ***REMOVED***
 ***REMOVED***public func handleNetworkChallenge(
 ***REMOVED******REMOVED***_ challenge: NetworkAuthenticationChallenge
-***REMOVED***) async -> NetworkAuthenticationChallengeDisposition {
+***REMOVED***) async -> NetworkAuthenticationChallenge.Disposition  {
 ***REMOVED******REMOVED******REMOVED*** If `promptForUntrustedHosts` is `false` then perform default handling
 ***REMOVED******REMOVED******REMOVED*** for server trust challenges.
 ***REMOVED******REMOVED***guard promptForUntrustedHosts || challenge.kind != .serverTrust else {
