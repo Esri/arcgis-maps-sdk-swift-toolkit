@@ -113,7 +113,7 @@ extension Authenticator: AuthenticationChallengeHandler {
     
     public func handleNetworkChallenge(
         _ challenge: NetworkAuthenticationChallenge
-    ) async -> NetworkAuthenticationChallengeDisposition {
+    ) async -> NetworkAuthenticationChallenge.Disposition  {
         // If `promptForUntrustedHosts` is `false` then perform default handling
         // for server trust challenges.
         guard promptForUntrustedHosts || challenge.kind != .serverTrust else {
