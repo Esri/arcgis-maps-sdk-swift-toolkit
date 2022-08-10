@@ -16,7 +16,7 @@ import ArcGIS
 
 /// An object that represents a network authentication challenge continuation.
 @MainActor
-final class NetworkChallengeContinuation: ValueContinuation<NetworkAuthenticationChallengeDisposition>, ChallengeContinuation {
+final class NetworkChallengeContinuation: ValueContinuation<NetworkAuthenticationChallenge.Disposition>, ChallengeContinuation {
     /// The host that prompted the challenge.
     let host: String
     
@@ -34,7 +34,7 @@ final class NetworkChallengeContinuation: ValueContinuation<NetworkAuthenticatio
     
     /// Resumes the challenge continuation.
     /// - Parameter disposition: The disposition to resume with.
-    func resume(with disposition: NetworkAuthenticationChallengeDisposition) {
+    func resume(with disposition: NetworkAuthenticationChallenge.Disposition) {
         setValue(disposition)
     }
 }
