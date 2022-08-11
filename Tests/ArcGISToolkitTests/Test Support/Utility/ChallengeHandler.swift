@@ -54,7 +54,7 @@ class ChallengeHandler: AuthenticationChallengeHandler {
 ***REMOVED******REMOVED***self.init(trustedHosts: trustedHosts, networkCredentialProvider: { _ in networkCredential ***REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***func handleNetworkChallenge(_ challenge: NetworkAuthenticationChallenge) async -> NetworkAuthenticationChallengeDisposition {
+***REMOVED***func handleNetworkChallenge(_ challenge: NetworkAuthenticationChallenge) async -> NetworkAuthenticationChallenge.Disposition {
 ***REMOVED******REMOVED******REMOVED*** Record challenge only if it is not a server trust.
 ***REMOVED******REMOVED***if challenge.kind != .serverTrust {
 ***REMOVED******REMOVED******REMOVED***networkChallenges.append(challenge)
