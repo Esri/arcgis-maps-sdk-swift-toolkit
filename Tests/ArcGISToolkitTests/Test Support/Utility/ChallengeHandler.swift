@@ -54,7 +54,7 @@ class ChallengeHandler: AuthenticationChallengeHandler {
         self.init(trustedHosts: trustedHosts, networkCredentialProvider: { _ in networkCredential })
     }
     
-    func handleNetworkChallenge(_ challenge: NetworkAuthenticationChallenge) async -> NetworkAuthenticationChallengeDisposition {
+    func handleNetworkChallenge(_ challenge: NetworkAuthenticationChallenge) async -> NetworkAuthenticationChallenge.Disposition {
         // Record challenge only if it is not a server trust.
         if challenge.kind != .serverTrust {
             networkChallenges.append(challenge)
