@@ -16,7 +16,7 @@ import Foundation
 
 ***REMOVED***/ An object that represents a network authentication challenge continuation.
 @MainActor
-final class NetworkChallengeContinuation: ValueContinuation<NetworkAuthenticationChallengeDisposition>, ChallengeContinuation {
+final class NetworkChallengeContinuation: ValueContinuation<NetworkAuthenticationChallenge.Disposition>, ChallengeContinuation {
 ***REMOVED******REMOVED***/ The host that prompted the challenge.
 ***REMOVED***let host: String
 ***REMOVED***
@@ -34,7 +34,7 @@ final class NetworkChallengeContinuation: ValueContinuation<NetworkAuthenticatio
 ***REMOVED***
 ***REMOVED******REMOVED***/ Resumes the challenge continuation.
 ***REMOVED******REMOVED***/ - Parameter disposition: The disposition to resume with.
-***REMOVED***func resume(with disposition: NetworkAuthenticationChallengeDisposition) {
+***REMOVED***func resume(with disposition: NetworkAuthenticationChallenge.Disposition) {
 ***REMOVED******REMOVED***setValue(disposition)
 ***REMOVED***
 ***REMOVED***
