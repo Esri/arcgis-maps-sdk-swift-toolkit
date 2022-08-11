@@ -400,7 +400,7 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED***
 ***REMOVED******REMOVED***.padding([.vertical], 2)
 ***REMOVED******REMOVED***Button(role: .destructive) {
-***REMOVED******REMOVED******REMOVED***viewModel.userAlert = UtilityNetworkTraceViewModel.UserAlert(
+***REMOVED******REMOVED******REMOVED***viewModel.userAlert = .init(
 ***REMOVED******REMOVED******REMOVED******REMOVED***description: "Are you sure? All the trace inputs and results will be lost.",
 ***REMOVED******REMOVED******REMOVED******REMOVED***button: Button(role: .destructive) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.deleteAllTraces()

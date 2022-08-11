@@ -25,7 +25,7 @@ import Foundation
 ***REMOVED***@Published private(set) var configurations = [UtilityNamedTraceConfiguration]() {
 ***REMOVED******REMOVED***didSet {
 ***REMOVED******REMOVED******REMOVED***if configurations.isEmpty {
-***REMOVED******REMOVED******REMOVED******REMOVED***userAlert = UserAlert(description: "No trace types found.")
+***REMOVED******REMOVED******REMOVED******REMOVED***userAlert = .init(description: "No trace types found.")
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -55,7 +55,7 @@ import Foundation
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Alert presented to the user
-***REMOVED***@Published var userAlert: UserAlert?
+***REMOVED***@Published var userAlert: UtilityNetworkTraceUserAlert?
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating if the pending trace is configured to the point that it can be run.
 ***REMOVED***var canRunTrace: Bool {
@@ -193,7 +193,7 @@ import Foundation
 ***REMOVED******REMOVED***network = map.utilityNetworks.first
 ***REMOVED******REMOVED***configurations = await utilityNamedTraceConfigurations(from: map)
 ***REMOVED******REMOVED***if map.utilityNetworks.isEmpty {
-***REMOVED******REMOVED******REMOVED***userAlert = UserAlert(description: "No utility networks found.")
+***REMOVED******REMOVED******REMOVED***userAlert = .init(description: "No utility networks found.")
 ***REMOVED***
 ***REMOVED******REMOVED***await addExternalStartingPoints()
 ***REMOVED***
@@ -269,7 +269,7 @@ import Foundation
 ***REMOVED***func processAndAdd(startingPoint: UtilityNetworkTraceStartingPoint) async {
 ***REMOVED******REMOVED***guard let feature = startingPoint.geoElement as? ArcGISFeature,
 ***REMOVED******REMOVED******REMOVED***  let globalid = feature.globalID else {
-***REMOVED******REMOVED******REMOVED***userAlert = UserAlert(description: "Element could not be identified")
+***REMOVED******REMOVED******REMOVED***userAlert = .init(description: "Element could not be identified")
 ***REMOVED******REMOVED******REMOVED***return
 ***REMOVED***
 ***REMOVED******REMOVED***
@@ -277,7 +277,7 @@ import Foundation
 ***REMOVED******REMOVED***guard !pendingTrace.startingPoints.contains(where: { startingPoint in
 ***REMOVED******REMOVED******REMOVED***return startingPoint.utilityElement?.globalID == globalid
 ***REMOVED***) else {
-***REMOVED******REMOVED******REMOVED***userAlert = UserAlert(
+***REMOVED******REMOVED******REMOVED***userAlert = .init(
 ***REMOVED******REMOVED******REMOVED******REMOVED***title: "Failed to set starting point",
 ***REMOVED******REMOVED******REMOVED******REMOVED***description: "Duplicate starting points cannot be added"
 ***REMOVED******REMOVED******REMOVED***)
@@ -347,7 +347,7 @@ import Foundation
 ***REMOVED******REMOVED***let minStartingPoints = configuration.minimumStartingLocations.rawValue
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***guard pendingTrace.startingPoints.count >= minStartingPoints else {
-***REMOVED******REMOVED******REMOVED***userAlert = UserAlert(description: "Please set at least \(minStartingPoints) starting location\(minStartingPoints > 1 ? "s" : "").")
+***REMOVED******REMOVED******REMOVED***userAlert = .init(description: "Please set at least \(minStartingPoints) starting location\(minStartingPoints > 1 ? "s" : "").")
 ***REMOVED******REMOVED******REMOVED***return false
 ***REMOVED***
 ***REMOVED******REMOVED***
@@ -362,11 +362,11 @@ import Foundation
 ***REMOVED******REMOVED******REMOVED***traceResults = try await network.trace(traceParameters: parameters)
 ***REMOVED*** catch(let serviceError as ServiceError) {
 ***REMOVED******REMOVED******REMOVED***if let reason = serviceError.failureReason {
-***REMOVED******REMOVED******REMOVED******REMOVED***userAlert = UserAlert(description: reason)
+***REMOVED******REMOVED******REMOVED******REMOVED***userAlert = .init(description: reason)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***return false
 ***REMOVED*** catch {
-***REMOVED******REMOVED******REMOVED***userAlert = UserAlert(description: error.localizedDescription)
+***REMOVED******REMOVED******REMOVED***userAlert = .init(description: error.localizedDescription)
 ***REMOVED******REMOVED******REMOVED***return false
 ***REMOVED***
 ***REMOVED******REMOVED***
@@ -520,19 +520,5 @@ extension UtilityNetworkTraceViewModel {
 ***REMOVED******REMOVED******REMOVED***fractionalLengthClosestTo: point,
 ***REMOVED******REMOVED******REMOVED***tolerance: 10
 ***REMOVED******REMOVED***)
-***REMOVED***
-***REMOVED***
-
-extension UtilityNetworkTraceViewModel {
-***REMOVED******REMOVED***/ A user presentable alert.
-***REMOVED***struct UserAlert {
-***REMOVED******REMOVED******REMOVED***/ Title of the alert.
-***REMOVED******REMOVED***var title: String? = "Error"
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ Description of the alert.
-***REMOVED******REMOVED***var description: String
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ An additional action to be taken on the alert.
-***REMOVED******REMOVED***var button: Button<Text>?
 ***REMOVED***
 ***REMOVED***
