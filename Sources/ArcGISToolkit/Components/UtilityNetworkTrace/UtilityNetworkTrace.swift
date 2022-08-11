@@ -400,7 +400,7 @@ public struct UtilityNetworkTrace: View {
         }
         .padding([.vertical], 2)
         Button(role: .destructive) {
-            viewModel.userAlert = UtilityNetworkTraceViewModel.UserAlert(
+            viewModel.userAlert = .init(
                 description: "Are you sure? All the trace inputs and results will be lost.",
                 button: Button(role: .destructive) {
                     viewModel.deleteAllTraces()
