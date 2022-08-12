@@ -16,7 +16,7 @@
 ***REMOVED***/ A user presentable alert.
 struct UtilityNetworkTraceUserAlert {
 ***REMOVED******REMOVED***/ Title of the alert.
-***REMOVED***var title: String? = "Error"
+***REMOVED***var title: String = "Error"
 ***REMOVED***
 ***REMOVED******REMOVED***/ Description of the alert.
 ***REMOVED***var description: String
