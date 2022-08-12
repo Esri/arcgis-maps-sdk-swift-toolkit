@@ -16,7 +16,7 @@ import SwiftUI
 /// A user presentable alert.
 struct UtilityNetworkTraceUserAlert {
     /// Title of the alert.
-    var title: String? = "Error"
+    var title: String = "Error"
     
     /// Description of the alert.
     var description: String
