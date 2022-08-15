@@ -69,13 +69,15 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED***isSitesAndFacilitiesHidden.toggle()
 ***REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED***if viewModel.isLoading {
-***REMOVED******REMOVED******REMOVED******REMOVED***ProgressView()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.progressViewStyle(.circular)
-***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "building.2")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.toolkitDefault)
-***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***Image(systemName: "building.2")
+***REMOVED******REMOVED******REMOVED******REMOVED***.padding(.toolkitDefault)
+***REMOVED******REMOVED******REMOVED******REMOVED***.opacity(viewModel.isLoading ? .zero : 1)
+***REMOVED******REMOVED******REMOVED******REMOVED***.overlay {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if viewModel.isLoading {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ProgressView()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.progressViewStyle(.circular)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
