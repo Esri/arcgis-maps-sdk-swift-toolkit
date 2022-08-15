@@ -196,6 +196,7 @@ private struct LoginView: View {
 ***REMOVED******REMOVED******REMOVED***.toolbar {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ToolbarItem(placement: .cancellationAction) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Cancel") {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***focusedField = nil
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***dismissAction()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.cancel()
 ***REMOVED******REMOVED******REMOVED******REMOVED***
