@@ -69,13 +69,15 @@ public struct FloorFilter: View {
         Button {
             isSitesAndFacilitiesHidden.toggle()
         } label: {
-            if viewModel.isLoading {
-                ProgressView()
-                    .progressViewStyle(.circular)
-            } else {
-                Image(systemName: "building.2")
-                    .padding(.toolkitDefault)
-            }
+            Image(systemName: "building.2")
+                .padding(.toolkitDefault)
+                .opacity(viewModel.isLoading ? .zero : 1)
+                .overlay {
+                    if viewModel.isLoading {
+                        ProgressView()
+                            .progressViewStyle(.circular)
+                    }
+                }
         }
     }
     
