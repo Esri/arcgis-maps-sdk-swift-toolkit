@@ -97,8 +97,11 @@ struct LoginViewModifier: ViewModifier {
 ***REMOVED***func body(content: Content) -> some View {
 ***REMOVED******REMOVED***content
 ***REMOVED******REMOVED******REMOVED***.task { isPresented = true ***REMOVED***
-***REMOVED******REMOVED******REMOVED***.sheet(isPresented: $isPresented) {
-***REMOVED******REMOVED******REMOVED******REMOVED***LoginView(viewModel: viewModel)
+***REMOVED******REMOVED******REMOVED***.overlay {
+***REMOVED******REMOVED******REMOVED******REMOVED***LoginView(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel: viewModel,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented: $isPresented
+***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -140,117 +143,142 @@ extension LoginViewModifier {
 ***REMOVED***
 
 ***REMOVED***/ A view that prompts a user to login with a username and password.
-private struct LoginView: View {
+***REMOVED***/
+***REMOVED***/ Implemented in UIKit because as of iOS 16, SwiftUI alerts don't support visible but disabled buttons.
+private struct LoginView: UIViewControllerRepresentable {
+***REMOVED******REMOVED***/ The view model.
+***REMOVED***@ObservedObject var viewModel: LoginViewModel
+***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value indicating whether or not the view is displayed.
+***REMOVED***@Binding var isPresented: Bool
+***REMOVED***
+***REMOVED******REMOVED***/ The cancel action for the `UIAlertController`.
+***REMOVED***let cancelAction: UIAlertAction
+***REMOVED***
+***REMOVED******REMOVED***/ The sign in action for the `UIAlertController`.
+***REMOVED***let signInAction: UIAlertAction
+***REMOVED***
 ***REMOVED******REMOVED***/ Creates the view.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - viewModel: The view model.
-***REMOVED***init(viewModel: LoginViewModel) {
-***REMOVED******REMOVED***_viewModel = ObservedObject(initialValue: viewModel)
-***REMOVED***
-***REMOVED***
-***REMOVED***@Environment(\.dismiss) var dismissAction
-***REMOVED***
-***REMOVED******REMOVED***/ The view model.
-***REMOVED***@ObservedObject private var viewModel: LoginViewModel
-***REMOVED***
-***REMOVED******REMOVED***/ The focused field.
-***REMOVED***@FocusState private var focusedField: Field?
-***REMOVED***
-***REMOVED***var body: some View {
-***REMOVED******REMOVED***NavigationView {
-***REMOVED******REMOVED******REMOVED***Form {
-***REMOVED******REMOVED******REMOVED******REMOVED***Section {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***VStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***person
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("You must sign in to access '\(viewModel.challengingHost)'")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.multilineTextAlignment(.center)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fixedSize(horizontal: false, vertical: true)
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.listRowBackground(Color.clear)
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***Section {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***TextField("Username", text: $viewModel.username)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.focused($focusedField, equals: .username)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.textContentType(.username)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.submitLabel(.next)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onSubmit { focusedField = .password ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***SecureField("Password", text: $viewModel.password)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.focused($focusedField, equals: .password)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.textContentType(.password)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.submitLabel(.go)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onSubmit { viewModel.signIn() ***REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.autocapitalization(.none)
-***REMOVED******REMOVED******REMOVED******REMOVED***.disableAutocorrection(true)
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***Section {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***signInButton
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***/   - isPresented: A Boolean value indicating whether or not the view is displayed.
+***REMOVED***init(viewModel: LoginViewModel, isPresented: Binding<Bool>) {
+***REMOVED******REMOVED***self.viewModel = viewModel
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.disabled(!viewModel.formEnabled)
-***REMOVED******REMOVED******REMOVED***.navigationTitle("Sign In")
-***REMOVED******REMOVED******REMOVED***.navigationBarTitleDisplayMode(.inline)
-***REMOVED******REMOVED******REMOVED***.interactiveDismissDisabled()
-***REMOVED******REMOVED******REMOVED***.toolbar {
-***REMOVED******REMOVED******REMOVED******REMOVED***ToolbarItem(placement: .cancellationAction) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Cancel") {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***focusedField = nil
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***dismissAction()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.cancel()
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***_isPresented = isPresented
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.onAppear {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Workaround for Apple bug - FB9676178.
-***REMOVED******REMOVED******REMOVED******REMOVED***DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***focusedField = .username
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
+***REMOVED******REMOVED***cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { _ in
+***REMOVED******REMOVED******REMOVED***viewModel.cancel()
 ***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ An image used in the form.
-***REMOVED***private var person: some View {
-***REMOVED******REMOVED***Image(systemName: "person.circle")
-***REMOVED******REMOVED******REMOVED***.resizable()
-***REMOVED******REMOVED******REMOVED***.frame(width: 150, height: 150)
-***REMOVED******REMOVED******REMOVED***.shadow(
-***REMOVED******REMOVED******REMOVED******REMOVED***color: .gray.opacity(0.4),
-***REMOVED******REMOVED******REMOVED******REMOVED***radius: 3,
-***REMOVED******REMOVED******REMOVED******REMOVED***x: 1,
-***REMOVED******REMOVED******REMOVED******REMOVED***y: 2
-***REMOVED******REMOVED******REMOVED***)
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ The sign-in button.
-***REMOVED***private var signInButton: some View {
-***REMOVED******REMOVED***Button(action: {
-***REMOVED******REMOVED******REMOVED***dismissAction()
+***REMOVED******REMOVED***signInAction = UIAlertAction(title: "Sign In", style: .default) { _ in
 ***REMOVED******REMOVED******REMOVED***viewModel.signIn()
-***REMOVED***, label: {
-***REMOVED******REMOVED******REMOVED***if viewModel.formEnabled {
-***REMOVED******REMOVED******REMOVED******REMOVED***Text("Sign In")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .center)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.white)
-***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***ProgressView()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .center)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.tint(.white)
+***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED***)
-***REMOVED******REMOVED***.disabled(!viewModel.signInButtonEnabled)
-***REMOVED******REMOVED***.listRowBackground(viewModel.signInButtonEnabled ? Color.accentColor : Color.gray)
+***REMOVED******REMOVED***cancelAction.isEnabled = true
+***REMOVED******REMOVED***signInAction.isEnabled = false
+***REMOVED***
+***REMOVED***
+***REMOVED***func makeCoordinator() -> Coordinator {
+***REMOVED******REMOVED***Coordinator(self)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Creates the alert controller object and configures its initial state.
+***REMOVED******REMOVED***/ - Parameter context: A context structure containing information about the current state of the
+***REMOVED******REMOVED***/ system.
+***REMOVED******REMOVED***/ - Returns: A configured alert controller.
+***REMOVED***func makeAlertController(context: Context) -> UIAlertController {
+***REMOVED******REMOVED***let uiAlertController = UIAlertController(
+***REMOVED******REMOVED******REMOVED***title: "You must sign in to access '\(viewModel.challengingHost)'",
+***REMOVED******REMOVED******REMOVED***message: nil,
+***REMOVED******REMOVED******REMOVED***preferredStyle: .alert
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***uiAlertController.addTextField { textField in
+***REMOVED******REMOVED******REMOVED***textField.autocapitalizationType = .none
+***REMOVED******REMOVED******REMOVED***textField.autocorrectionType = .no
+***REMOVED******REMOVED******REMOVED***textField.delegate = context.coordinator
+***REMOVED******REMOVED******REMOVED***textField.placeholder = "Username"
+***REMOVED******REMOVED******REMOVED***textField.returnKeyType = .next
+***REMOVED******REMOVED******REMOVED***textField.textContentType = .username
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***uiAlertController.addTextField { textField in
+***REMOVED******REMOVED******REMOVED***textField.autocapitalizationType = .none
+***REMOVED******REMOVED******REMOVED***textField.autocorrectionType = .no
+***REMOVED******REMOVED******REMOVED***textField.delegate = context.coordinator
+***REMOVED******REMOVED******REMOVED***textField.isSecureTextEntry = true
+***REMOVED******REMOVED******REMOVED***textField.placeholder = "Password"
+***REMOVED******REMOVED******REMOVED***textField.returnKeyType = .go
+***REMOVED******REMOVED******REMOVED***textField.textContentType = .password
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***uiAlertController.addAction(cancelAction)
+***REMOVED******REMOVED***uiAlertController.addAction(signInAction)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***return uiAlertController
+***REMOVED***
+***REMOVED***
+***REMOVED***func makeUIViewController(context: Context) -> UIViewController {
+***REMOVED******REMOVED***return UIViewController()
+***REMOVED***
+***REMOVED***
+***REMOVED***func updateUIViewController(
+***REMOVED******REMOVED***_ uiViewController: UIViewControllerType,
+***REMOVED******REMOVED***context: Context
+***REMOVED***) {
+***REMOVED******REMOVED***if isPresented {
+***REMOVED******REMOVED******REMOVED***let alertController = makeAlertController(context: context)
+***REMOVED******REMOVED******REMOVED***DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+***REMOVED******REMOVED******REMOVED******REMOVED***uiViewController.present(alertController, animated: true) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented = false
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
-private extension LoginView {
-***REMOVED******REMOVED***/ A type that represents the fields in the user name and password sign-in form.
-***REMOVED***enum Field: Hashable {
-***REMOVED******REMOVED******REMOVED***/ The username field.
-***REMOVED******REMOVED***case username
-***REMOVED******REMOVED******REMOVED***/ The password field.
-***REMOVED******REMOVED***case password
+extension LoginView {
+***REMOVED******REMOVED***/ The coordinator for the login view that acts as a delegate to the underlying
+***REMOVED******REMOVED***/ `UIAlertViewController`.
+***REMOVED***final class Coordinator: NSObject, UITextFieldDelegate {
+***REMOVED******REMOVED******REMOVED***/ The view that owns this coordinator.
+***REMOVED******REMOVED***let parent: LoginView
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ Creates the coordinator.
+***REMOVED******REMOVED******REMOVED***/ - Parameter parent: The view that owns this coordinator.
+***REMOVED******REMOVED***init(_ parent: LoginView) {
+***REMOVED******REMOVED******REMOVED***self.parent = parent
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***func textField(
+***REMOVED******REMOVED******REMOVED***_ textField: UITextField,
+***REMOVED******REMOVED******REMOVED***shouldChangeCharactersIn range: NSRange,
+***REMOVED******REMOVED******REMOVED***replacementString string: String
+***REMOVED******REMOVED***) -> Bool {
+***REMOVED******REMOVED******REMOVED***DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
+***REMOVED******REMOVED******REMOVED******REMOVED***self?.updateValues(with: textField)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***return true
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+***REMOVED******REMOVED******REMOVED***if textField.textContentType == .password &&
+***REMOVED******REMOVED******REMOVED******REMOVED***parent.viewModel.signInButtonEnabled {
+***REMOVED******REMOVED******REMOVED******REMOVED***parent.viewModel.signIn()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***return true
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ Updates the view model with the latest text field values and the enabled state of the sign in
+***REMOVED******REMOVED******REMOVED***/ button.
+***REMOVED******REMOVED******REMOVED***/ - Parameter textField: The text field who's value recently changed.
+***REMOVED******REMOVED***func updateValues(with textField: UITextField) {
+***REMOVED******REMOVED******REMOVED***if textField.textContentType == .username {
+***REMOVED******REMOVED******REMOVED******REMOVED***parent.viewModel.username = textField.text ?? ""
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***parent.viewModel.password = textField.text ?? ""
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***parent.signInAction.isEnabled = parent.viewModel.signInButtonEnabled
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
