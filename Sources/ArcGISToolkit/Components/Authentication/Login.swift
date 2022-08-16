@@ -97,8 +97,11 @@ struct LoginViewModifier: ViewModifier {
     func body(content: Content) -> some View {
         content
             .task { isPresented = true }
-            .sheet(isPresented: $isPresented) {
-                LoginView(viewModel: viewModel)
+            .overlay {
+                LoginView(
+                    viewModel: viewModel,
+                    isPresented: $isPresented
+                )
             }
     }
 }
@@ -140,117 +143,142 @@ extension LoginViewModifier {
 }
 
 /// A view that prompts a user to login with a username and password.
-private struct LoginView: View {
+///
+/// Implemented in UIKit because as of iOS 16, SwiftUI alerts don't support visible but disabled buttons.
+private struct LoginView: UIViewControllerRepresentable {
+    /// The view model.
+    @ObservedObject var viewModel: LoginViewModel
+    
+    /// A Boolean value indicating whether or not the view is displayed.
+    @Binding var isPresented: Bool
+    
+    /// The cancel action for the `UIAlertController`.
+    let cancelAction: UIAlertAction
+    
+    /// The sign in action for the `UIAlertController`.
+    let signInAction: UIAlertAction
+    
     /// Creates the view.
     /// - Parameters:
     ///   - viewModel: The view model.
-    init(viewModel: LoginViewModel) {
-        _viewModel = ObservedObject(initialValue: viewModel)
+    ///   - isPresented: A Boolean value indicating whether or not the view is displayed.
+    init(viewModel: LoginViewModel, isPresented: Binding<Bool>) {
+        self.viewModel = viewModel
+        
+        _isPresented = isPresented
+        
+        cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { _ in
+            viewModel.cancel()
+        }
+        signInAction = UIAlertAction(title: "Sign In", style: .default) { _ in
+            viewModel.signIn()
+        }
+        
+        cancelAction.isEnabled = true
+        signInAction.isEnabled = false
     }
     
-    @Environment(\.dismiss) var dismissAction
+    func makeCoordinator() -> Coordinator {
+        Coordinator(self)
+    }
     
-    /// The view model.
-    @ObservedObject private var viewModel: LoginViewModel
+    /// Creates the alert controller object and configures its initial state.
+    /// - Parameter context: A context structure containing information about the current state of the
+    /// system.
+    /// - Returns: A configured alert controller.
+    func makeAlertController(context: Context) -> UIAlertController {
+        let uiAlertController = UIAlertController(
+            title: "You must sign in to access '\(viewModel.challengingHost)'",
+            message: nil,
+            preferredStyle: .alert
+        )
+        
+        uiAlertController.addTextField { textField in
+            textField.autocapitalizationType = .none
+            textField.autocorrectionType = .no
+            textField.delegate = context.coordinator
+            textField.placeholder = "Username"
+            textField.returnKeyType = .next
+            textField.textContentType = .username
+        }
+        
+        uiAlertController.addTextField { textField in
+            textField.autocapitalizationType = .none
+            textField.autocorrectionType = .no
+            textField.delegate = context.coordinator
+            textField.isSecureTextEntry = true
+            textField.placeholder = "Password"
+            textField.returnKeyType = .go
+            textField.textContentType = .password
+        }
+        
+        uiAlertController.addAction(cancelAction)
+        uiAlertController.addAction(signInAction)
+        
+        return uiAlertController
+    }
     
-    /// The focused field.
-    @FocusState private var focusedField: Field?
+    func makeUIViewController(context: Context) -> UIViewController {
+        return UIViewController()
+    }
     
-    var body: some View {
-        NavigationView {
-            Form {
-                Section {
-                    VStack {
-                        person
-                        Text("You must sign in to access '\(viewModel.challengingHost)'")
-                            .multilineTextAlignment(.center)
-                            .fixedSize(horizontal: false, vertical: true)
-                    }
-                    .frame(maxWidth: .infinity)
-                    .listRowBackground(Color.clear)
-                }
-                
-                Section {
-                    TextField("Username", text: $viewModel.username)
-                        .focused($focusedField, equals: .username)
-                        .textContentType(.username)
-                        .submitLabel(.next)
-                        .onSubmit { focusedField = .password }
-                    SecureField("Password", text: $viewModel.password)
-                        .focused($focusedField, equals: .password)
-                        .textContentType(.password)
-                        .submitLabel(.go)
-                        .onSubmit { viewModel.signIn() }
-                }
-                .autocapitalization(.none)
-                .disableAutocorrection(true)
-                
-                Section {
-                    signInButton
-                }
-            }
-            .disabled(!viewModel.formEnabled)
-            .navigationTitle("Sign In")
-            .navigationBarTitleDisplayMode(.inline)
-            .interactiveDismissDisabled()
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel") {
-                        focusedField = nil
-                        dismissAction()
-                        viewModel.cancel()
-                    }
-                }
-            }
-            .onAppear {
-                // Workaround for Apple bug - FB9676178.
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                    focusedField = .username
+    func updateUIViewController(
+        _ uiViewController: UIViewControllerType,
+        context: Context
+    ) {
+        if isPresented {
+            let alertController = makeAlertController(context: context)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                uiViewController.present(alertController, animated: true) {
+                    isPresented = false
                 }
             }
         }
     }
-    
-    /// An image used in the form.
-    private var person: some View {
-        Image(systemName: "person.circle")
-            .resizable()
-            .frame(width: 150, height: 150)
-            .shadow(
-                color: .gray.opacity(0.4),
-                radius: 3,
-                x: 1,
-                y: 2
-            )
-    }
-    
-    /// The sign-in button.
-    private var signInButton: some View {
-        Button(action: {
-            dismissAction()
-            viewModel.signIn()
-        }, label: {
-            if viewModel.formEnabled {
-                Text("Sign In")
-                    .frame(maxWidth: .infinity, alignment: .center)
-                    .foregroundColor(.white)
-            } else {
-                ProgressView()
-                    .frame(maxWidth: .infinity, alignment: .center)
-                    .tint(.white)
-            }
-        })
-        .disabled(!viewModel.signInButtonEnabled)
-        .listRowBackground(viewModel.signInButtonEnabled ? Color.accentColor : Color.gray)
-    }
 }
 
-private extension LoginView {
-    /// A type that represents the fields in the user name and password sign-in form.
-    enum Field: Hashable {
-        /// The username field.
-        case username
-        /// The password field.
-        case password
+extension LoginView {
+    /// The coordinator for the login view that acts as a delegate to the underlying
+    /// `UIAlertViewController`.
+    final class Coordinator: NSObject, UITextFieldDelegate {
+        /// The view that owns this coordinator.
+        let parent: LoginView
+        
+        /// Creates the coordinator.
+        /// - Parameter parent: The view that owns this coordinator.
+        init(_ parent: LoginView) {
+            self.parent = parent
+        }
+        
+        func textField(
+            _ textField: UITextField,
+            shouldChangeCharactersIn range: NSRange,
+            replacementString string: String
+        ) -> Bool {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
+                self?.updateValues(with: textField)
+            }
+            return true
+        }
+        
+        func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+            if textField.textContentType == .password &&
+                parent.viewModel.signInButtonEnabled {
+                parent.viewModel.signIn()
+            }
+            return true
+        }
+        
+        /// Updates the view model with the latest text field values and the enabled state of the sign in
+        /// button.
+        /// - Parameter textField: The text field who's value recently changed.
+        func updateValues(with textField: UITextField) {
+            if textField.textContentType == .username {
+                parent.viewModel.username = textField.text ?? ""
+            } else {
+                parent.viewModel.password = textField.text ?? ""
+            }
+            parent.signInAction.isEnabled = parent.viewModel.signInButtonEnabled
+        }
     }
 }
