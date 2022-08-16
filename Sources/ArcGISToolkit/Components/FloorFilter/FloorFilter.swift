@@ -71,11 +71,18 @@ public struct FloorFilter: View {
 ***REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED***Image(systemName: "building.2")
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding(.toolkitDefault)
+***REMOVED******REMOVED******REMOVED******REMOVED***.opacity(viewModel.isLoading ? .zero : 1)
+***REMOVED******REMOVED******REMOVED******REMOVED***.overlay {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if viewModel.isLoading {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ProgressView()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.progressViewStyle(.circular)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ A view that allows selecting between levels.
-***REMOVED***private var floorFilter: some View {
+***REMOVED******REMOVED***/ A view that displays the level selector and the sites and facilites button.
+***REMOVED***private var levelSelectorContainer: some View {
 ***REMOVED******REMOVED***VStack {
 ***REMOVED******REMOVED******REMOVED***if isTopAligned {
 ***REMOVED******REMOVED******REMOVED******REMOVED***sitesAndFacilitiesButton
@@ -114,7 +121,7 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED***viewModel.onViewpointChanged(viewpoint)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Displays the available levels.
+***REMOVED******REMOVED***/ A view that allows selecting between levels.
 ***REMOVED***@ViewBuilder private var levelSelector: some View {
 ***REMOVED******REMOVED***LevelSelector(
 ***REMOVED******REMOVED******REMOVED***isTopAligned: isTopAligned,
@@ -157,9 +164,9 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED***HStack(alignment: .bottom) {
 ***REMOVED******REMOVED******REMOVED***if alignment.horizontal == .trailing {
 ***REMOVED******REMOVED******REMOVED******REMOVED***siteAndFacilitySelector
-***REMOVED******REMOVED******REMOVED******REMOVED***floorFilter
+***REMOVED******REMOVED******REMOVED******REMOVED***levelSelectorContainer
 ***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***floorFilter
+***REMOVED******REMOVED******REMOVED******REMOVED***levelSelectorContainer
 ***REMOVED******REMOVED******REMOVED******REMOVED***siteAndFacilitySelector
 ***REMOVED******REMOVED***
 ***REMOVED***
