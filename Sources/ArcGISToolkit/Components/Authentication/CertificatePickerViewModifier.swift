@@ -24,6 +24,9 @@ import ArcGIS
     /// The URL of the certificate that the user chose.
     var certificateURL: URL?
     
+    /// The password.
+    @Published var password = ""
+    
     /// A Boolean value indicating whether to show the prompt.
     @Published var showPrompt = true
     
@@ -65,9 +68,8 @@ import ArcGIS
     }
     
     /// Attempts to use the certificate and password to respond to the challenge.
-    /// - Parameter password: The password for the certificate.
-    func proceed(withPassword password: String) {
-        guard let certificateURL = certificateURL else {
+    func proceedWithPassword() {
+        guard let certificateURL = certificateURL, !password.isEmpty else {
             preconditionFailure()
         }
         
@@ -99,7 +101,7 @@ struct CertificatePickerViewModifier: ViewModifier {
     
     /// The view model.
     @ObservedObject private var viewModel: CertificatePickerViewModel
-
+    
     func body(content: Content) -> some View {
         content
             .promptBrowseCertificate(
@@ -178,14 +180,11 @@ private extension View {
         isPresented: Binding<Bool>,
         viewModel: CertificatePickerViewModel
     ) -> some View {
-        sheet(isPresented: isPresented) {
-            EnterPasswordView() { password in
-                viewModel.proceed(withPassword: password)
-            } onCancel: {
-                viewModel.cancel()
-            }
-            .edgesIgnoringSafeArea(.bottom)
-            .interactiveDismissDisabled()
+        overlay {
+            EnterPasswordView(
+                viewModel: viewModel,
+                isPresented: isPresented
+            )
         }
     }
 }
@@ -230,80 +229,131 @@ private extension View {
 }
 
 /// A view that allows the user to enter a password.
-struct EnterPasswordView: View {
-    @Environment(\.dismiss) var dismissAction
+///
+/// Implemented in UIKit because as of iOS 16, SwiftUI alerts don't support visible but disabled buttons.
+struct EnterPasswordView: UIViewControllerRepresentable {
+    /// The view model.
+    @ObservedObject var viewModel: CertificatePickerViewModel
     
-    /// The password that the user entered.
-    @State var password: String = ""
+    /// A Boolean value indicating whether or not the view is displayed.
+    @Binding var isPresented: Bool
     
-    /// The action to call once the user has completed entering the password.
-    var onContinue: (String) -> Void
+    /// The cancel action for the `UIAlertController`.
+    let cancelAction: UIAlertAction
     
-    /// The action to call if the user cancels.
-    var onCancel: () -> Void
+    /// The continue action for the `UIAlertController`.
+    let continueAction: UIAlertAction
     
-    /// A Boolean value indicating whether the password field has focus.
-    @FocusState var isPasswordFocused: Bool
+    /// Creates the view.
+    /// - Parameters:
+    ///   - viewModel: The view model.
+    ///   - isPresented: A Boolean value indicating whether or not the view is displayed.
+    init(
+        viewModel: CertificatePickerViewModel,
+        isPresented: Binding<Bool>
+    ) {
+        self.viewModel = viewModel
+        
+        _isPresented = isPresented
+        
+        cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { _ in
+            viewModel.cancel()
+        }
+        continueAction = UIAlertAction(title: "OK", style: .default) { _ in
+            viewModel.proceedWithPassword()
+        }
+        
+        cancelAction.isEnabled = true
+        continueAction.isEnabled = false
+    }
     
-    var body: some View {
-        NavigationView {
-            Form {
-                Section {
-                    VStack {
-                        Text("Please enter a password for the chosen certificate.")
-                            .fixedSize(horizontal: false, vertical: true)
-                    }
-                    .frame(maxWidth: .infinity)
-                    .listRowBackground(Color.clear)
-                }
-
-                Section {
-                    SecureField("Password", text: $password)
-                        .focused($isPasswordFocused)
-                        .textContentType(.password)
-                        .submitLabel(.go)
-                        .onSubmit {
-                            dismissAction()
-                            onContinue(password)
-                        }
-                }
-                .autocapitalization(.none)
-                .disableAutocorrection(true)
-
-                Section {
-                    okButton
-                }
-            }
-            .navigationTitle("Certificate")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel") {
-                        dismissAction()
-                        onCancel()
-                    }
-                }
-            }
-            .onAppear {
-                // Workaround for Apple bug - FB9676178.
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                    isPasswordFocused = true
+    func makeCoordinator() -> Coordinator {
+        Coordinator(self)
+    }
+    
+    /// Creates the alert controller object and configures its initial state.
+    /// - Parameter context: A context structure containing information about the current state of the
+    /// system.
+    /// - Returns: A configured alert controller.
+    func makeAlertController(context: Context) -> UIAlertController {
+        let uiAlertController = UIAlertController(
+            title: "Please enter a password for the chosen certificate.",
+            message: nil,
+            preferredStyle: .alert
+        )
+        
+        uiAlertController.addTextField { textField in
+            textField.autocapitalizationType = .none
+            textField.autocorrectionType = .no
+            textField.delegate = context.coordinator
+            textField.isSecureTextEntry = true
+            textField.placeholder = "Password"
+            textField.returnKeyType = .go
+            textField.textContentType = .password
+        }
+        
+        uiAlertController.addAction(cancelAction)
+        uiAlertController.addAction(continueAction)
+        
+        return uiAlertController
+    }
+    
+    func makeUIViewController(context: Context) -> UIViewController {
+        return UIViewController()
+    }
+    
+    func updateUIViewController(
+        _ uiViewController: UIViewControllerType,
+        context: Context
+    ) {
+        if isPresented {
+            let alertController = makeAlertController(context: context)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                uiViewController.present(alertController, animated: true) {
+                    isPresented = false
                 }
             }
         }
     }
-    
-    /// The "OK" button.
-    private var okButton: some View {
-        Button(action: {
-            dismissAction()
-            onContinue(password)
-        }, label: {
-            Text("OK")
-                .frame(maxWidth: .infinity, alignment: .center)
-                .foregroundColor(.white)
-        })
-        .disabled(password.isEmpty)
-        .listRowBackground(!password.isEmpty ? Color.accentColor : Color.gray)
+}
+
+extension EnterPasswordView {
+    /// The coordinator for the password view that acts as a delegate to the underlying
+    /// `UIAlertViewController`.
+    final class Coordinator: NSObject, UITextFieldDelegate {
+        /// The view that owns this coordinator.
+        let parent: EnterPasswordView
+        
+        /// Creates the coordinator.
+        /// - Parameter parent: The view that owns this coordinator.
+        init(_ parent: EnterPasswordView) {
+            self.parent = parent
+        }
+        
+        func textField(
+            _ textField: UITextField,
+            shouldChangeCharactersIn range: NSRange,
+            replacementString string: String
+        ) -> Bool {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
+                self?.updateValues(with: textField)
+            }
+            return true
+        }
+        
+        func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+            if !parent.viewModel.password.isEmpty {
+                parent.viewModel.proceedWithPassword()
+            }
+            return true
+        }
+        
+        /// Updates the view model with the latest text field values and the enabled state of the continue
+        /// button.
+        /// - Parameter textField: The text field who's value recently changed.
+        func updateValues(with textField: UITextField) {
+            parent.viewModel.password = textField.text ?? ""
+            parent.continueAction.isEnabled = !parent.viewModel.password.isEmpty
+        }
     }
 }
