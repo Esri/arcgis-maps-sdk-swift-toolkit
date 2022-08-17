@@ -87,7 +87,7 @@ public final class Authenticator: ObservableObject {
 extension Authenticator: AuthenticationChallengeHandler {
     public func handleArcGISAuthenticationChallenge(
         _ challenge: ArcGISAuthenticationChallenge
-    ) async throws -> ArcGISAuthenticationChallenge.Disposition {
+    ) async -> ArcGISAuthenticationChallenge.Disposition {
         let challengeContinuation: ArcGISChallengeContinuation
         
         // Create the correct challenge type.
@@ -108,7 +108,7 @@ extension Authenticator: AuthenticationChallengeHandler {
         defer { self.currentChallenge = nil }
         
         // Wait for it to complete and return the resulting disposition.
-        return try await challengeContinuation.value.get()
+        return await challengeContinuation.value
     }
     
     public func handleNetworkAuthenticationChallenge(
