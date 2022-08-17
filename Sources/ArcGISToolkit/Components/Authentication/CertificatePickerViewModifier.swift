@@ -24,6 +24,9 @@ import UniformTypeIdentifiers
 ***REMOVED******REMOVED***/ The URL of the certificate that the user chose.
 ***REMOVED***var certificateURL: URL?
 ***REMOVED***
+***REMOVED******REMOVED***/ The password.
+***REMOVED***@Published var password = ""
+***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether to show the prompt.
 ***REMOVED***@Published var showPrompt = true
 ***REMOVED***
@@ -65,9 +68,8 @@ import UniformTypeIdentifiers
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Attempts to use the certificate and password to respond to the challenge.
-***REMOVED******REMOVED***/ - Parameter password: The password for the certificate.
-***REMOVED***func proceed(withPassword password: String) {
-***REMOVED******REMOVED***guard let certificateURL = certificateURL else {
+***REMOVED***func proceedWithPassword() {
+***REMOVED******REMOVED***guard let certificateURL = certificateURL, !password.isEmpty else {
 ***REMOVED******REMOVED******REMOVED***preconditionFailure()
 ***REMOVED***
 ***REMOVED******REMOVED***
@@ -99,7 +101,7 @@ struct CertificatePickerViewModifier: ViewModifier {
 ***REMOVED***
 ***REMOVED******REMOVED***/ The view model.
 ***REMOVED***@ObservedObject private var viewModel: CertificatePickerViewModel
-
+***REMOVED***
 ***REMOVED***func body(content: Content) -> some View {
 ***REMOVED******REMOVED***content
 ***REMOVED******REMOVED******REMOVED***.promptBrowseCertificate(
@@ -178,14 +180,11 @@ private extension View {
 ***REMOVED******REMOVED***isPresented: Binding<Bool>,
 ***REMOVED******REMOVED***viewModel: CertificatePickerViewModel
 ***REMOVED***) -> some View {
-***REMOVED******REMOVED***sheet(isPresented: isPresented) {
-***REMOVED******REMOVED******REMOVED***EnterPasswordView() { password in
-***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.proceed(withPassword: password)
-***REMOVED******REMOVED*** onCancel: {
-***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.cancel()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.edgesIgnoringSafeArea(.bottom)
-***REMOVED******REMOVED******REMOVED***.interactiveDismissDisabled()
+***REMOVED******REMOVED***overlay {
+***REMOVED******REMOVED******REMOVED***EnterPasswordView(
+***REMOVED******REMOVED******REMOVED******REMOVED***viewModel: viewModel,
+***REMOVED******REMOVED******REMOVED******REMOVED***isPresented: isPresented
+***REMOVED******REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -230,80 +229,131 @@ private extension View {
 ***REMOVED***
 
 ***REMOVED***/ A view that allows the user to enter a password.
-struct EnterPasswordView: View {
-***REMOVED***@Environment(\.dismiss) var dismissAction
+***REMOVED***/
+***REMOVED***/ Implemented in UIKit because as of iOS 16, SwiftUI alerts don't support visible but disabled buttons.
+struct EnterPasswordView: UIViewControllerRepresentable {
+***REMOVED******REMOVED***/ The view model.
+***REMOVED***@ObservedObject var viewModel: CertificatePickerViewModel
 ***REMOVED***
-***REMOVED******REMOVED***/ The password that the user entered.
-***REMOVED***@State var password: String = ""
+***REMOVED******REMOVED***/ A Boolean value indicating whether or not the view is displayed.
+***REMOVED***@Binding var isPresented: Bool
 ***REMOVED***
-***REMOVED******REMOVED***/ The action to call once the user has completed entering the password.
-***REMOVED***var onContinue: (String) -> Void
+***REMOVED******REMOVED***/ The cancel action for the `UIAlertController`.
+***REMOVED***let cancelAction: UIAlertAction
 ***REMOVED***
-***REMOVED******REMOVED***/ The action to call if the user cancels.
-***REMOVED***var onCancel: () -> Void
+***REMOVED******REMOVED***/ The continue action for the `UIAlertController`.
+***REMOVED***let continueAction: UIAlertAction
 ***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value indicating whether the password field has focus.
-***REMOVED***@FocusState var isPasswordFocused: Bool
+***REMOVED******REMOVED***/ Creates the view.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - viewModel: The view model.
+***REMOVED******REMOVED***/   - isPresented: A Boolean value indicating whether or not the view is displayed.
+***REMOVED***init(
+***REMOVED******REMOVED***viewModel: CertificatePickerViewModel,
+***REMOVED******REMOVED***isPresented: Binding<Bool>
+***REMOVED***) {
+***REMOVED******REMOVED***self.viewModel = viewModel
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***_isPresented = isPresented
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { _ in
+***REMOVED******REMOVED******REMOVED***viewModel.cancel()
 ***REMOVED***
-***REMOVED***var body: some View {
-***REMOVED******REMOVED***NavigationView {
-***REMOVED******REMOVED******REMOVED***Form {
-***REMOVED******REMOVED******REMOVED******REMOVED***Section {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***VStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Please enter a password for the chosen certificate.")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fixedSize(horizontal: false, vertical: true)
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.listRowBackground(Color.clear)
+***REMOVED******REMOVED***continueAction = UIAlertAction(title: "OK", style: .default) { _ in
+***REMOVED******REMOVED******REMOVED***viewModel.proceedWithPassword()
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***cancelAction.isEnabled = true
+***REMOVED******REMOVED***continueAction.isEnabled = false
+***REMOVED***
+***REMOVED***
+***REMOVED***func makeCoordinator() -> Coordinator {
+***REMOVED******REMOVED***Coordinator(self)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Creates the alert controller object and configures its initial state.
+***REMOVED******REMOVED***/ - Parameter context: A context structure containing information about the current state of the
+***REMOVED******REMOVED***/ system.
+***REMOVED******REMOVED***/ - Returns: A configured alert controller.
+***REMOVED***func makeAlertController(context: Context) -> UIAlertController {
+***REMOVED******REMOVED***let uiAlertController = UIAlertController(
+***REMOVED******REMOVED******REMOVED***title: "Please enter a password for the chosen certificate.",
+***REMOVED******REMOVED******REMOVED***message: nil,
+***REMOVED******REMOVED******REMOVED***preferredStyle: .alert
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***uiAlertController.addTextField { textField in
+***REMOVED******REMOVED******REMOVED***textField.autocapitalizationType = .none
+***REMOVED******REMOVED******REMOVED***textField.autocorrectionType = .no
+***REMOVED******REMOVED******REMOVED***textField.delegate = context.coordinator
+***REMOVED******REMOVED******REMOVED***textField.isSecureTextEntry = true
+***REMOVED******REMOVED******REMOVED***textField.placeholder = "Password"
+***REMOVED******REMOVED******REMOVED***textField.returnKeyType = .go
+***REMOVED******REMOVED******REMOVED***textField.textContentType = .password
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***uiAlertController.addAction(cancelAction)
+***REMOVED******REMOVED***uiAlertController.addAction(continueAction)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***return uiAlertController
+***REMOVED***
+***REMOVED***
+***REMOVED***func makeUIViewController(context: Context) -> UIViewController {
+***REMOVED******REMOVED***return UIViewController()
+***REMOVED***
+***REMOVED***
+***REMOVED***func updateUIViewController(
+***REMOVED******REMOVED***_ uiViewController: UIViewControllerType,
+***REMOVED******REMOVED***context: Context
+***REMOVED***) {
+***REMOVED******REMOVED***if isPresented {
+***REMOVED******REMOVED******REMOVED***let alertController = makeAlertController(context: context)
+***REMOVED******REMOVED******REMOVED***DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+***REMOVED******REMOVED******REMOVED******REMOVED***uiViewController.present(alertController, animated: true) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented = false
 ***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
 
-***REMOVED******REMOVED******REMOVED******REMOVED***Section {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***SecureField("Password", text: $password)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.focused($isPasswordFocused)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.textContentType(.password)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.submitLabel(.go)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onSubmit {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***dismissAction()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onContinue(password)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.autocapitalization(.none)
-***REMOVED******REMOVED******REMOVED******REMOVED***.disableAutocorrection(true)
-
-***REMOVED******REMOVED******REMOVED******REMOVED***Section {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***okButton
-***REMOVED******REMOVED******REMOVED***
+extension EnterPasswordView {
+***REMOVED******REMOVED***/ The coordinator for the password view that acts as a delegate to the underlying
+***REMOVED******REMOVED***/ `UIAlertViewController`.
+***REMOVED***final class Coordinator: NSObject, UITextFieldDelegate {
+***REMOVED******REMOVED******REMOVED***/ The view that owns this coordinator.
+***REMOVED******REMOVED***let parent: EnterPasswordView
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.navigationTitle("Certificate")
-***REMOVED******REMOVED******REMOVED***.navigationBarTitleDisplayMode(.inline)
-***REMOVED******REMOVED******REMOVED***.toolbar {
-***REMOVED******REMOVED******REMOVED******REMOVED***ToolbarItem(placement: .cancellationAction) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Cancel") {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***dismissAction()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onCancel()
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ Creates the coordinator.
+***REMOVED******REMOVED******REMOVED***/ - Parameter parent: The view that owns this coordinator.
+***REMOVED******REMOVED***init(_ parent: EnterPasswordView) {
+***REMOVED******REMOVED******REMOVED***self.parent = parent
+***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.onAppear {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Workaround for Apple bug - FB9676178.
-***REMOVED******REMOVED******REMOVED******REMOVED***DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPasswordFocused = true
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***func textField(
+***REMOVED******REMOVED******REMOVED***_ textField: UITextField,
+***REMOVED******REMOVED******REMOVED***shouldChangeCharactersIn range: NSRange,
+***REMOVED******REMOVED******REMOVED***replacementString string: String
+***REMOVED******REMOVED***) -> Bool {
+***REMOVED******REMOVED******REMOVED***DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
+***REMOVED******REMOVED******REMOVED******REMOVED***self?.updateValues(with: textField)
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***return true
 ***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+***REMOVED******REMOVED******REMOVED***if !parent.viewModel.password.isEmpty {
+***REMOVED******REMOVED******REMOVED******REMOVED***parent.viewModel.proceedWithPassword()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***return true
 ***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ Updates the view model with the latest text field values and the enabled state of the continue
+***REMOVED******REMOVED******REMOVED***/ button.
+***REMOVED******REMOVED******REMOVED***/ - Parameter textField: The text field who's value recently changed.
+***REMOVED******REMOVED***func updateValues(with textField: UITextField) {
+***REMOVED******REMOVED******REMOVED***parent.viewModel.password = textField.text ?? ""
+***REMOVED******REMOVED******REMOVED***parent.continueAction.isEnabled = !parent.viewModel.password.isEmpty
 ***REMOVED***
-***REMOVED******REMOVED***/ The "OK" button.
-***REMOVED***private var okButton: some View {
-***REMOVED******REMOVED***Button(action: {
-***REMOVED******REMOVED******REMOVED***dismissAction()
-***REMOVED******REMOVED******REMOVED***onContinue(password)
-***REMOVED***, label: {
-***REMOVED******REMOVED******REMOVED***Text("OK")
-***REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .center)
-***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.white)
-***REMOVED***)
-***REMOVED******REMOVED***.disabled(password.isEmpty)
-***REMOVED******REMOVED***.listRowBackground(!password.isEmpty ? Color.accentColor : Color.gray)
 ***REMOVED***
 ***REMOVED***
