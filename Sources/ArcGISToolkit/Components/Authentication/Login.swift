@@ -40,9 +40,6 @@ final class LoginViewModel: ObservableObject {
     /// A Boolean value indicating if the sign-in button is enabled.
     @Published var signInButtonEnabled = false
     
-    /// A Boolean value indicating if the form is enabled.
-    @Published var formEnabled: Bool = true
-    
     /// The action to perform when the user signs in. This is a closure that takes a username
     /// and password, respectively.
     var signInAction: (LoginCredential) -> Void
@@ -75,13 +72,11 @@ final class LoginViewModel: ObservableObject {
     
     /// Attempts to log in with a username and password.
     func signIn() {
-        formEnabled = false
         signInAction(LoginCredential(username: username, password: password))
     }
     
     /// Cancels the challenge.
     func cancel() {
-        formEnabled = false
         cancelAction()
     }
 }
