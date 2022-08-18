@@ -216,7 +216,7 @@ extension GeoModel {
 ***REMOVED******REMOVED***/ is `webMercator`. Otherwise scene's `spatialReference`.
 ***REMOVED***var actualSpatialReference: SpatialReference? {
 ***REMOVED******REMOVED***if let scene = self as? ArcGIS.Scene,
-***REMOVED******REMOVED***   scene.sceneViewTilingScheme == .webMercator {
+***REMOVED******REMOVED***   scene.tilingScheme == .webMercator {
 ***REMOVED******REMOVED******REMOVED***return .webMercator
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED***return spatialReference
