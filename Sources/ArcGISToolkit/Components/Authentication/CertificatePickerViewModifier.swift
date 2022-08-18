@@ -283,6 +283,13 @@ struct EnterPasswordView: UIViewControllerRepresentable {
         )
         
         uiAlertController.addTextField { textField in
+            textField.addAction(
+                UIAction { _ in
+                    viewModel.password = textField.text ?? ""
+                    continueAction.isEnabled = !viewModel.password.isEmpty
+                },
+                for: .editingChanged
+            )
             textField.autocapitalizationType = .none
             textField.autocorrectionType = .no
             textField.delegate = context.coordinator
@@ -329,30 +336,12 @@ extension EnterPasswordView {
             self.parent = parent
         }
         
-        func textField(
-            _ textField: UITextField,
-            shouldChangeCharactersIn range: NSRange,
-            replacementString string: String
-        ) -> Bool {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
-                self?.updateValues(with: textField)
-            }
-            return true
-        }
-        
         func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-            if !parent.viewModel.password.isEmpty {
-                parent.viewModel.proceedWithPassword()
+            guard !parent.viewModel.password.isEmpty else {
+                return false
             }
+            parent.viewModel.proceedWithPassword()
             return true
-        }
-        
-        /// Updates the view model with the latest text field values and the enabled state of the continue
-        /// button.
-        /// - Parameter textField: The text field who's value recently changed.
-        func updateValues(with textField: UITextField) {
-            parent.viewModel.password = textField.text ?? ""
-            parent.continueAction.isEnabled = !parent.viewModel.password.isEmpty
         }
     }
 }

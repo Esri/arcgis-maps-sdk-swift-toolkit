@@ -189,15 +189,28 @@ private struct LoginView: UIViewControllerRepresentable {
         )
         
         uiAlertController.addTextField { textField in
+            textField.addAction(
+                UIAction { _ in
+                    viewModel.username = textField.text ?? ""
+                    signInAction.isEnabled = viewModel.signInButtonEnabled
+                },
+                for: .editingChanged
+            )
             textField.autocapitalizationType = .none
             textField.autocorrectionType = .no
-            textField.delegate = context.coordinator
             textField.placeholder = "Username"
             textField.returnKeyType = .next
             textField.textContentType = .username
         }
         
         uiAlertController.addTextField { textField in
+            textField.addAction(
+                UIAction { _ in
+                    viewModel.password = textField.text ?? ""
+                    signInAction.isEnabled = viewModel.signInButtonEnabled
+                },
+                for: .editingChanged
+            )
             textField.autocapitalizationType = .none
             textField.autocorrectionType = .no
             textField.delegate = context.coordinator
@@ -244,35 +257,12 @@ extension LoginView {
             self.parent = parent
         }
         
-        func textField(
-            _ textField: UITextField,
-            shouldChangeCharactersIn range: NSRange,
-            replacementString string: String
-        ) -> Bool {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
-                self?.updateValues(with: textField)
-            }
-            return true
-        }
-        
         func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-            if textField.textContentType == .password &&
-                parent.viewModel.signInButtonEnabled {
-                parent.viewModel.signIn()
+            guard parent.viewModel.signInButtonEnabled else {
+                return false
             }
+            parent.viewModel.signIn()
             return true
-        }
-        
-        /// Updates the view model with the latest text field values and the enabled state of the sign in
-        /// button.
-        /// - Parameter textField: The text field who's value recently changed.
-        func updateValues(with textField: UITextField) {
-            if textField.textContentType == .username {
-                parent.viewModel.username = textField.text ?? ""
-            } else {
-                parent.viewModel.password = textField.text ?? ""
-            }
-            parent.signInAction.isEnabled = parent.viewModel.signInButtonEnabled
         }
     }
 }
