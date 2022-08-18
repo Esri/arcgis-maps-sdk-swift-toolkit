@@ -14,31 +14,31 @@
 import SwiftUI
 import ArcGIS
 
+// TODO: taking info from Ryan and come up with API for fetching attachment file urls
+// TODO: update Visual Code tooling from README and generate stuff for all but attachments(?)
+// TODO: look at notes and follow up
+// TODO: look at prototype implementations and update if necessary
+// TODO: Goal is to have all done on Monday (or at least all but attachments).
+
 struct AttachmentsPopupElementView: View {
-    typealias AttachmentImage = (attachment:PopupAttachment, image:UIImage?)
-
+    typealias AttachmentImage = (attachment:PopupAttachment, image:UIImage)
+    
     var popupElement: AttachmentsPopupElement
-
+    
     @State var attachmentImages = [AttachmentImage]()
     
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
     @Environment(\.verticalSizeClass) var verticalSizeClass
     
-    /// If `true`, the gallery will display as if the device is in a regular-width orientation.
-    /// If `false`, the gallery will display as if the device is in a compact-width orientation.
+    /// A Boolean value denoting if the view should be shown as regular width.
     var isRegularWidth: Bool {
         !(horizontalSizeClass == .compact && verticalSizeClass == .regular)
     }
     
     @State var loadingAttachments = true
     
-    init(
-        popupElement: AttachmentsPopupElement,
-        popup: Popup
-    ) {
+    init(popupElement: AttachmentsPopupElement) {
         self.popupElement = popupElement
-        //        self.popup = popup
-        //        _attachmentHelper = StateObject(wrappedValue: AttachmentHelper(feature: popup.geoElement as? ArcGISFeature))
     }
     
     var body: some View {
@@ -56,14 +56,14 @@ struct AttachmentsPopupElementView: View {
             else {
                 switch popupElement.displayType {
                 case .list:
-                    //                    AttachmentPreview(attachments: attachmentHelper.attachments, images: attachmentHelper.attachmentImages)
                     AttachmentList(attachmentImages: attachmentImages)
                 case.preview:
-                    //                    AttachmentPreview(attachments: attachmentHelper.attachments, images: attachmentHelper.attachmentImages)
                     AttachmentList(attachmentImages: attachmentImages)
+//                        AttachmentPreview(attachmentImages: attachmentImages)
                 case .auto:
                     if isRegularWidth {
-                        AttachmentPreview(attachmentImages: attachmentImages)
+                        AttachmentList(attachmentImages: attachmentImages)
+//                        AttachmentPreview(attachmentImages: attachmentImages)
                     } else {
                         AttachmentList(attachmentImages: attachmentImages)
                     }
@@ -77,17 +77,16 @@ struct AttachmentsPopupElementView: View {
                 for attachment in popupElement.attachments {
                     group.addTask {
                         if attachment.kind == .image {
-                            let image = try? await attachment.makeFullImage()
-                            return (attachment,image)
+                            do {
+                                let image = try await attachment.makeFullImage()
+                                return (attachment, image)
+                            } catch {
+                                return (attachment, UIImage(systemName: "photo")!)
+                            }
                         }
                         else {
-                            
+                            return(attachment, UIImage(systemName: "doc")!)
                         }
-//                        let data = try? await attachment.fetchData()
-//                        if let data = data, let image = UIImage(data: data) {
-//                            return (attachment,image)
-//                        }
-                        return (attachment, nil)
                     }
                 }
                 for await pair in group {
@@ -96,44 +95,25 @@ struct AttachmentsPopupElementView: View {
             }
             
             loadingAttachments = false
-            
-            
-            //            attachments.forEach { attachment in
-            //                Task {
-            //                    let data = try? await attachment.fetchData()
-            //                    if let data = data, let image = UIImage(data: data) {
-            //                        attachmentImages.append(image)
-            //                    }
-            //                }
-            //            }
-            //            loadingAttachments = false
         }
     }
     
     struct AttachmentList: View {
         var attachmentImages: [AttachmentImage]
-        //        let attachments: [Attachment]
-        //        let images: [UIImage]
         
         var body: some View {
             VStack(alignment: .leading, spacing: 6) {
-                //                if images.count != 2 {
-                //                    EmptyView()
-                //                }
-                //                else {
-                //                    ForEach(0..<2) { i in
-                //                    ForEach(attachmentImages) { attachmentImage in
-                //                        HStack {
-                //                            Image(uiImage: attachmentImage.image)
-                //                                .resizable()
-                //                                .aspectRatio(contentMode: .fit)
-                //                                .clipShape(RoundedRectangle(cornerRadius: 8))
-                //                                .padding(EdgeInsets(top: 0, leading: 4, bottom: 0, trailing: 4))
-                //                                .frame(width: 75, height: 75, alignment: .center)
-                //                            Text(attachmentImage.attachment.name)
-                //                        }
-                //                    }
-                //                }
+                ForEach(attachmentImages, id: \.image) { attachmentImage in
+                    HStack {
+                        Image(uiImage: attachmentImage.image)
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .clipShape(RoundedRectangle(cornerRadius: 8))
+                            .padding(EdgeInsets(top: 0, leading: 4, bottom: 0, trailing: 4))
+                            .frame(width: 75, height: 75, alignment: .center)
+                        Text(attachmentImage.attachment.name)
+                    }
+                }
             }
         }
     }
@@ -166,37 +146,3 @@ struct AttachmentsPopupElementView: View {
 }
 
 extension Attachment: Identifiable {}
-
-@MainActor class AttachmentHelper: ObservableObject {
-    var feature: ArcGISFeature?
-    @Published var attachments = [Attachment]()
-    @Published var attachmentImages = [UIImage]()
-    
-    init(feature: ArcGISFeature?) {
-        self.feature = feature
-        if let feature = feature {
-            Task {
-                try await fetchAttachments(for: feature)
-                attachments.forEach { attachment in
-                    Task {
-                        let data = try? await attachment.fetchData()
-                        if let data = data, let image = UIImage(data: data) {
-                            attachmentImages.append(image)
-                        }
-                    }
-                }
-            }
-        }
-    }
-    
-    // TODO: taking info from Ryan and come up with API for fetching attachment file urls
-    // TODO: update Visual Code tooling from README and generate stuff for all but attachments(?)
-    // TODO: look at notes and follow up
-    // TODO: look at prototype implementations and update if necessary
-    // TODO: Goal is to have all done on Monday (or at least all but attachments).
-    
-    func fetchAttachments(for feature: ArcGISFeature) async throws {
-        print("fetching attachments")
-        attachments = try await feature.fetchAttachments()
-    }
-}
