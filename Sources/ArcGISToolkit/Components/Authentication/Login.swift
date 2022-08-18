@@ -221,12 +221,11 @@ private struct LoginView: UIViewControllerRepresentable {
 ***REMOVED******REMOVED***_ uiViewController: UIViewControllerType,
 ***REMOVED******REMOVED***context: Context
 ***REMOVED***) {
-***REMOVED******REMOVED***if isPresented {
-***REMOVED******REMOVED******REMOVED***let alertController = makeAlertController(context: context)
-***REMOVED******REMOVED******REMOVED***DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-***REMOVED******REMOVED******REMOVED******REMOVED***uiViewController.present(alertController, animated: true) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented = false
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***guard isPresented else { return ***REMOVED***
+***REMOVED******REMOVED***let alertController = makeAlertController(context: context)
+***REMOVED******REMOVED***DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+***REMOVED******REMOVED******REMOVED***uiViewController.present(alertController, animated: true) {
+***REMOVED******REMOVED******REMOVED******REMOVED***isPresented = false
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
