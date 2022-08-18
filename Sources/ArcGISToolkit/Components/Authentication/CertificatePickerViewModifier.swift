@@ -239,10 +239,10 @@ struct EnterPasswordView: UIViewControllerRepresentable {
 ***REMOVED***@Binding var isPresented: Bool
 ***REMOVED***
 ***REMOVED******REMOVED***/ The cancel action for the `UIAlertController`.
-***REMOVED***@State var cancelAction: UIAlertAction
+***REMOVED***let cancelAction: UIAlertAction
 ***REMOVED***
 ***REMOVED******REMOVED***/ The continue action for the `UIAlertController`.
-***REMOVED***@State var continueAction: UIAlertAction
+***REMOVED***let continueAction: UIAlertAction
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates the view.
 ***REMOVED******REMOVED***/ - Parameters:
