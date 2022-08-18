@@ -283,6 +283,13 @@ struct EnterPasswordView: UIViewControllerRepresentable {
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***uiAlertController.addTextField { textField in
+***REMOVED******REMOVED******REMOVED***textField.addAction(
+***REMOVED******REMOVED******REMOVED******REMOVED***UIAction { _ in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.password = textField.text ?? ""
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***continueAction.isEnabled = !viewModel.password.isEmpty
+***REMOVED******REMOVED******REMOVED***,
+***REMOVED******REMOVED******REMOVED******REMOVED***for: .editingChanged
+***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***textField.autocapitalizationType = .none
 ***REMOVED******REMOVED******REMOVED***textField.autocorrectionType = .no
 ***REMOVED******REMOVED******REMOVED***textField.delegate = context.coordinator
@@ -329,30 +336,12 @@ extension EnterPasswordView {
 ***REMOVED******REMOVED******REMOVED***self.parent = parent
 ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***func textField(
-***REMOVED******REMOVED******REMOVED***_ textField: UITextField,
-***REMOVED******REMOVED******REMOVED***shouldChangeCharactersIn range: NSRange,
-***REMOVED******REMOVED******REMOVED***replacementString string: String
-***REMOVED******REMOVED***) -> Bool {
-***REMOVED******REMOVED******REMOVED***DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) { [weak self] in
-***REMOVED******REMOVED******REMOVED******REMOVED***self?.updateValues(with: textField)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***return true
-***REMOVED***
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED***func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-***REMOVED******REMOVED******REMOVED***if !parent.viewModel.password.isEmpty {
-***REMOVED******REMOVED******REMOVED******REMOVED***parent.viewModel.proceedWithPassword()
+***REMOVED******REMOVED******REMOVED***guard !parent.viewModel.password.isEmpty else {
+***REMOVED******REMOVED******REMOVED******REMOVED***return false
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***parent.viewModel.proceedWithPassword()
 ***REMOVED******REMOVED******REMOVED***return true
-***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ Updates the view model with the latest text field values and the enabled state of the continue
-***REMOVED******REMOVED******REMOVED***/ button.
-***REMOVED******REMOVED******REMOVED***/ - Parameter textField: The text field who's value recently changed.
-***REMOVED******REMOVED***func updateValues(with textField: UITextField) {
-***REMOVED******REMOVED******REMOVED***parent.viewModel.password = textField.text ?? ""
-***REMOVED******REMOVED******REMOVED***parent.continueAction.isEnabled = !parent.viewModel.password.isEmpty
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
