@@ -277,8 +277,8 @@ struct EnterPasswordView: UIViewControllerRepresentable {
 ***REMOVED******REMOVED***/ - Returns: A configured alert controller.
 ***REMOVED***func makeAlertController(context: Context) -> UIAlertController {
 ***REMOVED******REMOVED***let uiAlertController = UIAlertController(
-***REMOVED******REMOVED******REMOVED***title: "Please enter a password for the chosen certificate.",
-***REMOVED******REMOVED******REMOVED***message: nil,
+***REMOVED******REMOVED******REMOVED***title: "Password Required",
+***REMOVED******REMOVED******REMOVED***message: "Please enter a password for the chosen certificate.",
 ***REMOVED******REMOVED******REMOVED***preferredStyle: .alert
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
