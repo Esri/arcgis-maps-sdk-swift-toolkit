@@ -25,7 +25,7 @@ import Foundation
 ***REMOVED***@Published private(set) var configurations = [UtilityNamedTraceConfiguration]() {
 ***REMOVED******REMOVED***didSet {
 ***REMOVED******REMOVED******REMOVED***if configurations.isEmpty {
-***REMOVED******REMOVED******REMOVED******REMOVED***userWarning = "No trace types found."
+***REMOVED******REMOVED******REMOVED******REMOVED***userAlert = .init(description: "No trace types found.")
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -54,8 +54,8 @@ import Foundation
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Warning message presented to the user
-***REMOVED***@Published var userWarning = ""
+***REMOVED******REMOVED***/ Alert presented to the user
+***REMOVED***@Published var userAlert: UtilityNetworkTraceUserAlert?
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating if the pending trace is configured to the point that it can be run.
 ***REMOVED***var canRunTrace: Bool {
@@ -193,7 +193,7 @@ import Foundation
 ***REMOVED******REMOVED***network = map.utilityNetworks.first
 ***REMOVED******REMOVED***configurations = await utilityNamedTraceConfigurations(from: map)
 ***REMOVED******REMOVED***if map.utilityNetworks.isEmpty {
-***REMOVED******REMOVED******REMOVED***userWarning = "No utility networks found."
+***REMOVED******REMOVED******REMOVED***userAlert = .init(description: "No utility networks found.")
 ***REMOVED***
 ***REMOVED******REMOVED***await addExternalStartingPoints()
 ***REMOVED***
@@ -269,7 +269,7 @@ import Foundation
 ***REMOVED***func processAndAdd(startingPoint: UtilityNetworkTraceStartingPoint) async {
 ***REMOVED******REMOVED***guard let feature = startingPoint.geoElement as? ArcGISFeature,
 ***REMOVED******REMOVED******REMOVED***  let globalid = feature.globalID else {
-***REMOVED******REMOVED******REMOVED***userWarning = "Element could not be identified"
+***REMOVED******REMOVED******REMOVED***userAlert = .init(description: "Element could not be identified")
 ***REMOVED******REMOVED******REMOVED***return
 ***REMOVED***
 ***REMOVED******REMOVED***
@@ -277,13 +277,16 @@ import Foundation
 ***REMOVED******REMOVED***guard !pendingTrace.startingPoints.contains(where: { startingPoint in
 ***REMOVED******REMOVED******REMOVED***return startingPoint.utilityElement?.globalID == globalid
 ***REMOVED***) else {
-***REMOVED******REMOVED******REMOVED***userWarning = "Duplicate starting points cannot be added"
+***REMOVED******REMOVED******REMOVED***userAlert = .init(
+***REMOVED******REMOVED******REMOVED******REMOVED***title: "Failed to set starting point",
+***REMOVED******REMOVED******REMOVED******REMOVED***description: "Duplicate starting points cannot be added"
+***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***return
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***guard let network = self.network,
 ***REMOVED******REMOVED******REMOVED***  let geometry = feature.geometry,
-***REMOVED******REMOVED******REMOVED***  let symbol = try? await (feature.featureTable?.layer as? FeatureLayer)?
+***REMOVED******REMOVED******REMOVED***  let symbol = try? await (feature.table?.layer as? FeatureLayer)?
 ***REMOVED******REMOVED******REMOVED***.renderer?
 ***REMOVED******REMOVED******REMOVED***.symbol(for: feature)?
 ***REMOVED******REMOVED******REMOVED***.makeSwatch(scale: 1.0),
@@ -344,7 +347,7 @@ import Foundation
 ***REMOVED******REMOVED***let minStartingPoints = configuration.minimumStartingLocations.rawValue
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***guard pendingTrace.startingPoints.count >= minStartingPoints else {
-***REMOVED******REMOVED******REMOVED***userWarning = "Please set at least \(minStartingPoints) starting location\(minStartingPoints > 1 ? "s" : "")."
+***REMOVED******REMOVED******REMOVED***userAlert = .init(description: "Please set at least \(minStartingPoints) starting location\(minStartingPoints > 1 ? "s" : "").")
 ***REMOVED******REMOVED******REMOVED***return false
 ***REMOVED***
 ***REMOVED******REMOVED***
@@ -359,11 +362,11 @@ import Foundation
 ***REMOVED******REMOVED******REMOVED***traceResults = try await network.trace(traceParameters: parameters)
 ***REMOVED*** catch(let serviceError as ServiceError) {
 ***REMOVED******REMOVED******REMOVED***if let reason = serviceError.failureReason {
-***REMOVED******REMOVED******REMOVED******REMOVED***userWarning = reason
+***REMOVED******REMOVED******REMOVED******REMOVED***userAlert = .init(description: reason)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***return false
 ***REMOVED*** catch {
-***REMOVED******REMOVED******REMOVED***userWarning = "An unknown error occurred"
+***REMOVED******REMOVED******REMOVED***userAlert = .init(description: error.localizedDescription)
 ***REMOVED******REMOVED******REMOVED***return false
 ***REMOVED***
 ***REMOVED******REMOVED***
