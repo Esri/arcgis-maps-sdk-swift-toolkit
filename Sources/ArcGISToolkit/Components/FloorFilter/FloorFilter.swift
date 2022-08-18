@@ -71,11 +71,18 @@ public struct FloorFilter: View {
         } label: {
             Image(systemName: "building.2")
                 .padding(.toolkitDefault)
+                .opacity(viewModel.isLoading ? .zero : 1)
+                .overlay {
+                    if viewModel.isLoading {
+                        ProgressView()
+                            .progressViewStyle(.circular)
+                    }
+                }
         }
     }
     
-    /// A view that allows selecting between levels.
-    private var floorFilter: some View {
+    /// A view that displays the level selector and the sites and facilites button.
+    private var levelSelectorContainer: some View {
         VStack {
             if isTopAligned {
                 sitesAndFacilitiesButton
@@ -114,7 +121,7 @@ public struct FloorFilter: View {
         viewModel.onViewpointChanged(viewpoint)
     }
     
-    /// Displays the available levels.
+    /// A view that allows selecting between levels.
     @ViewBuilder private var levelSelector: some View {
         LevelSelector(
             isTopAligned: isTopAligned,
@@ -157,9 +164,9 @@ public struct FloorFilter: View {
         HStack(alignment: .bottom) {
             if alignment.horizontal == .trailing {
                 siteAndFacilitySelector
-                floorFilter
+                levelSelectorContainer
             } else {
-                floorFilter
+                levelSelectorContainer
                 siteAndFacilitySelector
             }
         }
