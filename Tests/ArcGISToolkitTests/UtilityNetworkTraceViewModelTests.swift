@@ -46,7 +46,7 @@ import XCTest
         XCTAssertNil(viewModel.network)
         XCTAssertFalse(viewModel.canRunTrace)
         XCTAssertEqual(
-            viewModel.userWarning,
+            viewModel.userAlert?.description,
             "No utility networks found."
         )
     }
@@ -74,7 +74,7 @@ import XCTest
         XCTAssertFalse(viewModel.canRunTrace)
         XCTAssertTrue(viewModel.configurations.isEmpty)
         XCTAssertEqual(
-            viewModel.userWarning,
+            viewModel.userAlert?.description,
             "No trace types found."
         )
     }
@@ -100,7 +100,7 @@ import XCTest
         XCTAssertFalse(viewModel.canRunTrace)
         XCTAssertTrue(viewModel.configurations.isEmpty)
         XCTAssertEqual(
-            viewModel.userWarning,
+            viewModel.userAlert?.description,
             "No trace types found."
         )
     }
