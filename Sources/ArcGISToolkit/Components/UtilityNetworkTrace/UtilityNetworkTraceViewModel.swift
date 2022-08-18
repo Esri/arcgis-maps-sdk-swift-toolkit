@@ -286,7 +286,7 @@ import SwiftUI
         
         guard let network = self.network,
               let geometry = feature.geometry,
-              let symbol = try? await (feature.featureTable?.layer as? FeatureLayer)?
+              let symbol = try? await (feature.table?.layer as? FeatureLayer)?
             .renderer?
             .symbol(for: feature)?
             .makeSwatch(scale: 1.0),
