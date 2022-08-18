@@ -196,6 +196,7 @@ private struct LoginView: View {
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel") {
+                        focusedField = nil
                         dismissAction()
                         viewModel.cancel()
                     }
