@@ -221,12 +221,11 @@ private struct LoginView: UIViewControllerRepresentable {
         _ uiViewController: UIViewControllerType,
         context: Context
     ) {
-        if isPresented {
-            let alertController = makeAlertController(context: context)
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                uiViewController.present(alertController, animated: true) {
-                    isPresented = false
-                }
+        guard isPresented else { return }
+        let alertController = makeAlertController(context: context)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            uiViewController.present(alertController, animated: true) {
+                isPresented = false
             }
         }
     }
