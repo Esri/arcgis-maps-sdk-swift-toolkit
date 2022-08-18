@@ -14,31 +14,31 @@
 ***REMOVED***
 ***REMOVED***
 
+***REMOVED*** TODO: taking info from Ryan and come up with API for fetching attachment file urls
+***REMOVED*** TODO: update Visual Code tooling from README and generate stuff for all but attachments(?)
+***REMOVED*** TODO: look at notes and follow up
+***REMOVED*** TODO: look at prototype implementations and update if necessary
+***REMOVED*** TODO: Goal is to have all done on Monday (or at least all but attachments).
+
 struct AttachmentsPopupElementView: View {
-***REMOVED***typealias AttachmentImage = (attachment:PopupAttachment, image:UIImage?)
-
+***REMOVED***typealias AttachmentImage = (attachment:PopupAttachment, image:UIImage)
+***REMOVED***
 ***REMOVED***var popupElement: AttachmentsPopupElement
-
+***REMOVED***
 ***REMOVED***@State var attachmentImages = [AttachmentImage]()
 ***REMOVED***
 ***REMOVED***@Environment(\.horizontalSizeClass) var horizontalSizeClass
 ***REMOVED***@Environment(\.verticalSizeClass) var verticalSizeClass
 ***REMOVED***
-***REMOVED******REMOVED***/ If `true`, the gallery will display as if the device is in a regular-width orientation.
-***REMOVED******REMOVED***/ If `false`, the gallery will display as if the device is in a compact-width orientation.
+***REMOVED******REMOVED***/ A Boolean value denoting if the view should be shown as regular width.
 ***REMOVED***var isRegularWidth: Bool {
 ***REMOVED******REMOVED***!(horizontalSizeClass == .compact && verticalSizeClass == .regular)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@State var loadingAttachments = true
 ***REMOVED***
-***REMOVED***init(
-***REMOVED******REMOVED***popupElement: AttachmentsPopupElement,
-***REMOVED******REMOVED***popup: Popup
-***REMOVED***) {
+***REMOVED***init(popupElement: AttachmentsPopupElement) {
 ***REMOVED******REMOVED***self.popupElement = popupElement
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.popup = popup
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***_attachmentHelper = StateObject(wrappedValue: AttachmentHelper(feature: popup.geoElement as? ArcGISFeature))
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var body: some View {
@@ -56,14 +56,14 @@ struct AttachmentsPopupElementView: View {
 ***REMOVED******REMOVED******REMOVED***else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***switch popupElement.displayType {
 ***REMOVED******REMOVED******REMOVED******REMOVED***case .list:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AttachmentPreview(attachments: attachmentHelper.attachments, images: attachmentHelper.attachmentImages)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AttachmentList(attachmentImages: attachmentImages)
 ***REMOVED******REMOVED******REMOVED******REMOVED***case.preview:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AttachmentPreview(attachments: attachmentHelper.attachments, images: attachmentHelper.attachmentImages)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AttachmentList(attachmentImages: attachmentImages)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AttachmentPreview(attachmentImages: attachmentImages)
 ***REMOVED******REMOVED******REMOVED******REMOVED***case .auto:
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if isRegularWidth {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AttachmentPreview(attachmentImages: attachmentImages)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AttachmentList(attachmentImages: attachmentImages)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AttachmentPreview(attachmentImages: attachmentImages)
 ***REMOVED******REMOVED******REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AttachmentList(attachmentImages: attachmentImages)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
@@ -77,17 +77,16 @@ struct AttachmentsPopupElementView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***for attachment in popupElement.attachments {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***group.addTask {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if attachment.kind == .image {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let image = try? await attachment.makeFullImage()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return (attachment,image)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***do {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let image = try await attachment.makeFullImage()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return (attachment, image)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** catch {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return (attachment, UIImage(systemName: "photo")!)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return(attachment, UIImage(systemName: "doc")!)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let data = try? await attachment.fetchData()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let data = data, let image = UIImage(data: data) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return (attachment,image)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return (attachment, nil)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***for await pair in group {
@@ -96,44 +95,25 @@ struct AttachmentsPopupElementView: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***loadingAttachments = false
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***attachments.forEach { attachment in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let data = try? await attachment.fetchData()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let data = data, let image = UIImage(data: data) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***attachmentImages.append(image)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***loadingAttachments = false
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***struct AttachmentList: View {
 ***REMOVED******REMOVED***var attachmentImages: [AttachmentImage]
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let attachments: [Attachment]
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let images: [UIImage]
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var body: some View {
 ***REMOVED******REMOVED******REMOVED***VStack(alignment: .leading, spacing: 6) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if images.count != 2 {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***EmptyView()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(0..<2) { i in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(attachmentImages) { attachmentImage in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(uiImage: attachmentImage.image)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.resizable()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.aspectRatio(contentMode: .fit)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.clipShape(RoundedRectangle(cornerRadius: 8))
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(EdgeInsets(top: 0, leading: 4, bottom: 0, trailing: 4))
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 75, height: 75, alignment: .center)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(attachmentImage.attachment.name)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***ForEach(attachmentImages, id: \.image) { attachmentImage in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***HStack {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(uiImage: attachmentImage.image)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.resizable()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.aspectRatio(contentMode: .fit)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.clipShape(RoundedRectangle(cornerRadius: 8))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(EdgeInsets(top: 0, leading: 4, bottom: 0, trailing: 4))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 75, height: 75, alignment: .center)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(attachmentImage.attachment.name)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -166,37 +146,3 @@ struct AttachmentsPopupElementView: View {
 ***REMOVED***
 
 extension Attachment: Identifiable {***REMOVED***
-
-@MainActor class AttachmentHelper: ObservableObject {
-***REMOVED***var feature: ArcGISFeature?
-***REMOVED***@Published var attachments = [Attachment]()
-***REMOVED***@Published var attachmentImages = [UIImage]()
-***REMOVED***
-***REMOVED***init(feature: ArcGISFeature?) {
-***REMOVED******REMOVED***self.feature = feature
-***REMOVED******REMOVED***if let feature = feature {
-***REMOVED******REMOVED******REMOVED***Task {
-***REMOVED******REMOVED******REMOVED******REMOVED***try await fetchAttachments(for: feature)
-***REMOVED******REMOVED******REMOVED******REMOVED***attachments.forEach { attachment in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let data = try? await attachment.fetchData()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let data = data, let image = UIImage(data: data) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***attachmentImages.append(image)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED*** TODO: taking info from Ryan and come up with API for fetching attachment file urls
-***REMOVED******REMOVED*** TODO: update Visual Code tooling from README and generate stuff for all but attachments(?)
-***REMOVED******REMOVED*** TODO: look at notes and follow up
-***REMOVED******REMOVED*** TODO: look at prototype implementations and update if necessary
-***REMOVED******REMOVED*** TODO: Goal is to have all done on Monday (or at least all but attachments).
-***REMOVED***
-***REMOVED***func fetchAttachments(for feature: ArcGISFeature) async throws {
-***REMOVED******REMOVED***print("fetching attachments")
-***REMOVED******REMOVED***attachments = try await feature.fetchAttachments()
-***REMOVED***
-***REMOVED***
