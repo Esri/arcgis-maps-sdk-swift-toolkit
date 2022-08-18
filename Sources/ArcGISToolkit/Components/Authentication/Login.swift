@@ -183,8 +183,8 @@ private struct LoginView: UIViewControllerRepresentable {
     /// - Returns: A configured alert controller.
     func makeAlertController(context: Context) -> UIAlertController {
         let uiAlertController = UIAlertController(
-            title: "You must sign in to access '\(viewModel.challengingHost)'",
-            message: nil,
+            title: "Authentication Required",
+            message: "You must sign in to access '\(viewModel.challengingHost)'",
             preferredStyle: .alert
         )
         
