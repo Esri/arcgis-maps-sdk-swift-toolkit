@@ -286,7 +286,7 @@ import Foundation
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***guard let network = self.network,
 ***REMOVED******REMOVED******REMOVED***  let geometry = feature.geometry,
-***REMOVED******REMOVED******REMOVED***  let symbol = try? await (feature.featureTable?.layer as? FeatureLayer)?
+***REMOVED******REMOVED******REMOVED***  let symbol = try? await (feature.table?.layer as? FeatureLayer)?
 ***REMOVED******REMOVED******REMOVED***.renderer?
 ***REMOVED******REMOVED******REMOVED***.symbol(for: feature)?
 ***REMOVED******REMOVED******REMOVED***.makeSwatch(scale: 1.0),
