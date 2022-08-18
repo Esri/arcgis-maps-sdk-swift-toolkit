@@ -239,10 +239,10 @@ struct EnterPasswordView: UIViewControllerRepresentable {
     @Binding var isPresented: Bool
     
     /// The cancel action for the `UIAlertController`.
-    @State var cancelAction: UIAlertAction
+    let cancelAction: UIAlertAction
     
     /// The continue action for the `UIAlertController`.
-    @State var continueAction: UIAlertAction
+    let continueAction: UIAlertAction
     
     /// Creates the view.
     /// - Parameters:

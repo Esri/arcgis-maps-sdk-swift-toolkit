@@ -148,10 +148,10 @@ private struct LoginView: UIViewControllerRepresentable {
     @Binding var isPresented: Bool
     
     /// The cancel action for the `UIAlertController`.
-    @State var cancelAction: UIAlertAction
+    let cancelAction: UIAlertAction
     
     /// The sign in action for the `UIAlertController`.
-    @State var signInAction: UIAlertAction
+    let signInAction: UIAlertAction
     
     /// Creates the view.
     /// - Parameters:
