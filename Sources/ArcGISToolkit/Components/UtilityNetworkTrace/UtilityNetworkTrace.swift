@@ -413,11 +413,13 @@ public struct UtilityNetworkTrace: View {
                         viewModel.deleteAllTraces()
                         currentActivity = .creatingTrace(nil)
                     } label: {
-                        Text(clearResultsTitle)
-                    }
-                )
+                        Text("OK")
+                    })
+            } label: {
+                Text(clearResultsTitle)
             }
             .buttonStyle(.bordered)
+        }
     }
     
     /// Displays information about a chosen starting point.
