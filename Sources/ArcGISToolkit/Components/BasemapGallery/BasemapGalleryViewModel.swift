@@ -216,7 +216,7 @@ extension GeoModel {
     /// is `webMercator`. Otherwise scene's `spatialReference`.
     var actualSpatialReference: SpatialReference? {
         if let scene = self as? ArcGIS.Scene,
-           scene.sceneViewTilingScheme == .webMercator {
+           scene.tilingScheme == .webMercator {
             return .webMercator
         } else {
             return spatialReference
