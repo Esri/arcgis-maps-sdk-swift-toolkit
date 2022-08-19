@@ -13,6 +13,7 @@
 
 import SwiftUI
 import ArcGIS
+import QuickLook
 
 // TODO: taking info from Ryan and come up with API for fetching attachment file urls
 // TODO: update Visual Code tooling from README and generate stuff for all but attachments(?)
@@ -20,12 +21,26 @@ import ArcGIS
 // TODO: look at prototype implementations and update if necessary
 // TODO: Goal is to have all done on Monday (or at least all but attachments).
 
+class AttachmentImage: ObservableObject, Identifiable {
+    @Published var attachment: PopupAttachment
+    @Published var image: UIImage?
+    @Published var isLoaded = false
+    var id = UUID()
+    
+    init(attachment: PopupAttachment, image: UIImage? = nil) {
+        self.attachment = attachment
+        self.image = image
+    }
+}
+
+@MainActor
+class AttachmentModel: ObservableObject {
+    @Published var attachmentImages = [AttachmentImage]()
+}
+
 struct AttachmentsPopupElementView: View {
-    typealias AttachmentImage = (attachment:PopupAttachment, image:UIImage)
-    
     var popupElement: AttachmentsPopupElement
-    
-    @State var attachmentImages = [AttachmentImage]()
+    @StateObject private var viewModel: AttachmentModel
     
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
     @Environment(\.verticalSizeClass) var verticalSizeClass
@@ -39,10 +54,13 @@ struct AttachmentsPopupElementView: View {
     
     init(popupElement: AttachmentsPopupElement) {
         self.popupElement = popupElement
+        _viewModel = StateObject(
+            wrappedValue: AttachmentModel()
+        )
     }
     
     var body: some View {
-        VStack {
+        VStack(alignment: .leading) {
             PopupElementHeader(
                 title: popupElement.title,
                 description: popupElement.description
@@ -56,43 +74,46 @@ struct AttachmentsPopupElementView: View {
             else {
                 switch popupElement.displayType {
                 case .list:
-                    AttachmentList(attachmentImages: attachmentImages)
+                    AttachmentList(attachmentImages: viewModel.attachmentImages)
                 case.preview:
-                    AttachmentList(attachmentImages: attachmentImages)
-//                        AttachmentPreview(attachmentImages: attachmentImages)
+                    AttachmentList(attachmentImages: viewModel.attachmentImages)
+//                        AttachmentPreview(attachmentImages: viewModel.attachmentImages)
                 case .auto:
                     if isRegularWidth {
-                        AttachmentList(attachmentImages: attachmentImages)
-//                        AttachmentPreview(attachmentImages: attachmentImages)
+                        AttachmentList(attachmentImages: viewModel.attachmentImages)
+//                        AttachmentPreview(attachmentImages: viewModel.attachmentImages)
                     } else {
-                        AttachmentList(attachmentImages: attachmentImages)
+                        AttachmentList(attachmentImages: viewModel.attachmentImages)
                     }
                 }
             }
         }
         .task {
             try? await popupElement.fetchAttachments()
-            
-            await withTaskGroup(of: AttachmentImage.self) { group in
-                for attachment in popupElement.attachments {
-                    group.addTask {
-                        if attachment.kind == .image {
-                            do {
-                                let image = try await attachment.makeFullImage()
-                                return (attachment, image)
-                            } catch {
-                                return (attachment, UIImage(systemName: "photo")!)
-                            }
-                        }
-                        else {
-                            return(attachment, UIImage(systemName: "doc")!)
-                        }
-                    }
-                }
-                for await pair in group {
-                    attachmentImages.append(pair)
-                }
+            let attachmentImages = popupElement.attachments.map { attachment in
+                AttachmentImage(attachment: attachment)
             }
+            viewModel.attachmentImages.append(contentsOf: attachmentImages)
+//            await withTaskGroup(of: AttachmentImage.self) { group in
+//                for attachment in popupElement.attachments {
+//                    group.addTask {
+//                        if attachment.kind == .image {
+//                            do {
+//                                let image = try await attachment.makeFullImage()
+//                                return (attachment, image)
+//                            } catch {
+//                                return (attachment, UIImage(systemName: "photo")!)
+//                            }
+//                        }
+//                        else {
+//                            return(attachment, UIImage(systemName: "doc")!)
+//                        }
+//                    }
+//                }
+//                for await pair in group {
+//                    attachmentImages.append(pair)
+//                }
+//            }
             
             loadingAttachments = false
         }
@@ -100,20 +121,79 @@ struct AttachmentsPopupElementView: View {
     
     struct AttachmentList: View {
         var attachmentImages: [AttachmentImage]
-        
+        @State var url: URL?
         var body: some View {
             VStack(alignment: .leading, spacing: 6) {
-                ForEach(attachmentImages, id: \.image) { attachmentImage in
-                    HStack {
-                        Image(uiImage: attachmentImage.image)
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .clipShape(RoundedRectangle(cornerRadius: 8))
-                            .padding(EdgeInsets(top: 0, leading: 4, bottom: 0, trailing: 4))
-                            .frame(width: 75, height: 75, alignment: .center)
-                        Text(attachmentImage.attachment.name)
+                ForEach(attachmentImages) { attachmentImage in
+                    makeAttachmentView(for: attachmentImage)
+                    .onTapGesture {
+                        //QuickLook
                     }
                 }
+            }
+        }
+        
+        func makeImage(for attachmentImage: AttachmentImage) -> Image  {
+            switch attachmentImage.attachment.kind {
+            case .image:
+                if let image = attachmentImage.image {
+                    return Image(uiImage: image)
+                }
+                else {
+                    return Image(systemName: "photo")
+                }
+            case .video:
+                return Image(systemName: "video")
+            case .document, .other:
+                return Image(systemName: "doc")
+            }
+        }
+        
+        @ViewBuilder func makeAttachmentView(for attachmentImage: AttachmentImage) -> some View  {
+            HStack {
+                HStack {
+                    makeImage(for: attachmentImage)
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .clipShape(RoundedRectangle(cornerRadius: 8))
+                        .padding(EdgeInsets(top: 0, leading: 4, bottom: 0, trailing: 4))
+                        .frame(width: 60, height: 40, alignment: .center)
+                    VStack(alignment: .leading) {
+                        Text(attachmentImage.attachment.name)
+                            .lineLimit(1)
+                            .truncationMode(.middle)
+                        Text("\(attachmentImage.attachment.size.formatted(.byteCount(style: .file)))")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    }
+                    Spacer()
+                }
+                .onTapGesture {
+                    if attachmentImage.attachment.loadStatus == .loaded {
+                        url = attachmentImage.attachment.fileURL
+                    }
+                }
+                .quickLookPreview($url)
+                Button {
+                    Task {
+                        try await attachmentImage.attachment.load()
+                        let image = try await attachmentImage.attachment.makeThumbnail(width: 60, height: 60)
+                        attachmentImage.image = image
+                    }
+                } label: {
+                    Image(systemName: "square.and.arrow.down")
+                        .padding(.leading)
+                }
+                .opacity(showDownloadButton(attachmentImage) ? 1 : 0)
+            }
+        }
+
+        func showDownloadButton(_ attachmentImage: AttachmentImage) -> Bool {
+            print("loadStatus = \(attachmentImage.attachment.loadStatus)")
+            if attachmentImage.attachment.kind == .image {
+                return attachmentImage.image == nil
+            } else {
+                return attachmentImage.attachment.loadStatus != .loaded
             }
         }
     }
