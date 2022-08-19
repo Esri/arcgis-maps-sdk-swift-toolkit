@@ -17,7 +17,7 @@
 ***REMOVED***
 
 import Foundation
-***REMOVED***
+@testable ***REMOVED***
 
 ***REMOVED***/ A `ChallengeHandler` that that can handle trusting hosts with a self-signed certificate, the URL credential,
 ***REMOVED***/ and the token credential.
@@ -54,7 +54,9 @@ class ChallengeHandler: AuthenticationChallengeHandler {
 ***REMOVED******REMOVED***self.init(trustedHosts: trustedHosts, networkCredentialProvider: { _ in networkCredential ***REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***func handleNetworkChallenge(_ challenge: NetworkAuthenticationChallenge) async -> NetworkAuthenticationChallenge.Disposition {
+***REMOVED***func handleNetworkAuthenticationChallenge(
+***REMOVED******REMOVED***_ challenge: NetworkAuthenticationChallenge
+***REMOVED***) async -> NetworkAuthenticationChallenge.Disposition {
 ***REMOVED******REMOVED******REMOVED*** Record challenge only if it is not a server trust.
 ***REMOVED******REMOVED***if challenge.kind != .serverTrust {
 ***REMOVED******REMOVED******REMOVED***networkChallenges.append(challenge)
@@ -75,7 +77,7 @@ class ChallengeHandler: AuthenticationChallengeHandler {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED***func handleArcGISChallenge(
+***REMOVED***func handleArcGISAuthenticationChallenge(
 ***REMOVED******REMOVED***_ challenge: ArcGISAuthenticationChallenge
 ***REMOVED***) async throws -> ArcGISAuthenticationChallenge.Disposition {
 ***REMOVED******REMOVED***arcGISChallenges.append(challenge)
