@@ -117,7 +117,7 @@ extension Authenticator: AuthenticationChallengeHandler {
         // If `promptForUntrustedHosts` is `false` then perform default handling
         // for server trust challenges.
         guard promptForUntrustedHosts || challenge.kind != .serverTrust else {
-            return .allowRequestToFail
+            return .continueWithoutCredential
         }
         
         let challengeContinuation = NetworkChallengeContinuation(networkChallenge: challenge)
