@@ -228,7 +228,7 @@ private extension View {
 ***REMOVED***
 ***REMOVED***
 
-***REMOVED***/ A view that allows the user to enter a password.
+***REMOVED***/ A view that allows the user to enter a password via an alert.
 ***REMOVED***/
 ***REMOVED***/ Implemented in UIKit because as of iOS 16, SwiftUI alerts don't support visible but disabled buttons.
 struct EnterPasswordView: UIViewControllerRepresentable {
