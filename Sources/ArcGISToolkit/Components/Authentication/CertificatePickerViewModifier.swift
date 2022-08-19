@@ -112,7 +112,7 @@ struct CertificatePickerViewModifier: ViewModifier {
                 isPresented: $viewModel.showPicker,
                 viewModel: viewModel
             )
-            .passwordSheet(
+            .passwordAlert(
                 isPresented: $viewModel.showPassword,
                 viewModel: viewModel
             )
@@ -176,7 +176,7 @@ private extension View {
     /// - Parameters:
     ///   - isPresented: A Boolean value indicating if the view is presented.
     ///   - viewModel: The view model associated with the view.
-    @MainActor @ViewBuilder func passwordSheet(
+    @MainActor @ViewBuilder func passwordAlert(
         isPresented: Binding<Bool>,
         viewModel: CertificatePickerViewModel
     ) -> some View {
