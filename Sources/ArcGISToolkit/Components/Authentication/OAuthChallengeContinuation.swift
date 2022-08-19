@@ -16,7 +16,7 @@ import Foundation
 
 ***REMOVED***/ An object that represents an ArcGIS OAuth challenge continuation.
 @MainActor
-final class OAuthChallengeContinuation: ValueContinuation<Result<ArcGISAuthenticationChallenge.Disposition, Error>>, ArcGISChallengeContinuation {
+final class OAuthChallengeContinuation: ValueContinuation<ArcGISAuthenticationChallenge.Disposition>, ArcGISChallengeContinuation {
 ***REMOVED******REMOVED***/ The OAuth configuration to be used for this challenge.
 ***REMOVED***let configuration: OAuthConfiguration
 ***REMOVED***
@@ -30,9 +30,12 @@ final class OAuthChallengeContinuation: ValueContinuation<Result<ArcGISAuthentic
 ***REMOVED******REMOVED***/ credential.
 ***REMOVED***func presentPrompt() {
 ***REMOVED******REMOVED***Task {
-***REMOVED******REMOVED******REMOVED***setValue(await Result {
-***REMOVED******REMOVED******REMOVED******REMOVED***.useCredential(try await .oauth(configuration: configuration))
-***REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***do {
+***REMOVED******REMOVED******REMOVED******REMOVED***let credential = try await ArcGISCredential.oauth(configuration: configuration)
+***REMOVED******REMOVED******REMOVED******REMOVED***setValue(.useCredential(credential))
+***REMOVED******REMOVED*** catch {
+***REMOVED******REMOVED******REMOVED******REMOVED***setValue(.allowRequestToFail)
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
