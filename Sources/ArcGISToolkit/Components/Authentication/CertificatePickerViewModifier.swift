@@ -233,16 +233,16 @@ private extension View {
 ***REMOVED***/ Implemented in UIKit because as of iOS 16, SwiftUI alerts don't support visible but disabled buttons.
 struct EnterPasswordView: UIViewControllerRepresentable {
 ***REMOVED******REMOVED***/ The view model.
-***REMOVED***@ObservedObject var viewModel: CertificatePickerViewModel
+***REMOVED***@ObservedObject private var viewModel: CertificatePickerViewModel
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether or not the view is displayed.
-***REMOVED***@Binding var isPresented: Bool
+***REMOVED***@Binding private var isPresented: Bool
 ***REMOVED***
 ***REMOVED******REMOVED***/ The cancel action for the `UIAlertController`.
-***REMOVED***let cancelAction: UIAlertAction
+***REMOVED***private let cancelAction: UIAlertAction
 ***REMOVED***
 ***REMOVED******REMOVED***/ The continue action for the `UIAlertController`.
-***REMOVED***let continueAction: UIAlertAction
+***REMOVED***private let continueAction: UIAlertAction
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates the view.
 ***REMOVED******REMOVED***/ - Parameters:
