@@ -142,16 +142,16 @@ extension LoginViewModifier {
 /// Implemented in UIKit because as of iOS 16, SwiftUI alerts don't support visible but disabled buttons.
 private struct LoginView: UIViewControllerRepresentable {
     /// The view model.
-    @ObservedObject var viewModel: LoginViewModel
+    @ObservedObject private var viewModel: LoginViewModel
     
     /// A Boolean value indicating whether or not the view is displayed.
-    @Binding var isPresented: Bool
+    @Binding private var isPresented: Bool
     
     /// The cancel action for the `UIAlertController`.
-    let cancelAction: UIAlertAction
+    private let cancelAction: UIAlertAction
     
     /// The sign in action for the `UIAlertController`.
-    let signInAction: UIAlertAction
+    private let signInAction: UIAlertAction
     
     /// Creates the view.
     /// - Parameters:
