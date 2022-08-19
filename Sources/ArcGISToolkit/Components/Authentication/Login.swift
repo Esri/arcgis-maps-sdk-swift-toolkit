@@ -236,6 +236,8 @@ private struct LoginView: UIViewControllerRepresentable {
 ***REMOVED***) {
 ***REMOVED******REMOVED***guard isPresented else { return ***REMOVED***
 ***REMOVED******REMOVED***let alertController = makeAlertController(context: context)
+***REMOVED******REMOVED******REMOVED*** On a physical iOS 16 device, without the following delay, the
+***REMOVED******REMOVED******REMOVED*** presentation fails and an error is thrown.
 ***REMOVED******REMOVED***DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
 ***REMOVED******REMOVED******REMOVED***uiViewController.present(alertController, animated: true) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***isPresented = false
