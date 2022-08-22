@@ -87,7 +87,7 @@ public final class Authenticator: ObservableObject {
 extension Authenticator: AuthenticationChallengeHandler {
 ***REMOVED***public func handleArcGISAuthenticationChallenge(
 ***REMOVED******REMOVED***_ challenge: ArcGISAuthenticationChallenge
-***REMOVED***) async throws -> ArcGISAuthenticationChallenge.Disposition {
+***REMOVED***) async -> ArcGISAuthenticationChallenge.Disposition {
 ***REMOVED******REMOVED***let challengeContinuation: ArcGISChallengeContinuation
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Create the correct challenge type.
@@ -108,7 +108,7 @@ extension Authenticator: AuthenticationChallengeHandler {
 ***REMOVED******REMOVED***defer { self.currentChallenge = nil ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Wait for it to complete and return the resulting disposition.
-***REMOVED******REMOVED***return try await challengeContinuation.value.get()
+***REMOVED******REMOVED***return await challengeContinuation.value
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***public func handleNetworkAuthenticationChallenge(
@@ -117,7 +117,7 @@ extension Authenticator: AuthenticationChallengeHandler {
 ***REMOVED******REMOVED******REMOVED*** If `promptForUntrustedHosts` is `false` then perform default handling
 ***REMOVED******REMOVED******REMOVED*** for server trust challenges.
 ***REMOVED******REMOVED***guard promptForUntrustedHosts || challenge.kind != .serverTrust else {
-***REMOVED******REMOVED******REMOVED***return .allowRequestToFail
+***REMOVED******REMOVED******REMOVED***return .continueWithoutCredential
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let challengeContinuation = NetworkChallengeContinuation(networkChallenge: challenge)
