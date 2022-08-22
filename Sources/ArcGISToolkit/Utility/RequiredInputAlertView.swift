@@ -28,6 +28,9 @@ struct RequiredInputAlertView: UIViewControllerRepresentable {
     @State var fieldTwo = ""
     
     /// <#Description#>
+    private let style: Style
+    
+    /// <#Description#>
     private let title: String
     
     /// <#Description#>
@@ -42,18 +45,22 @@ struct RequiredInputAlertView: UIViewControllerRepresentable {
     /// <#Description#>
     /// - Parameters:
     ///   - isPresented: <#isPresented description#>
+    ///   - style: <#style description#>
     ///   - title: <#title description#>
     ///   - message: <#message description#>
     ///   - cancelConfiguration: <#cancelConfiguration description#>
     ///   - continueConfiguration: <#continueConfiguration description#>
     init(
         isPresented: Binding<Bool>,
+        style: Style,
         title: String,
         message: String,
         cancelConfiguration: ActionConfiguration,
         continueConfiguration: ActionConfiguration
     ) {
         _isPresented = isPresented
+        
+        self.style = style
         
         self.cancelConfiguration = cancelConfiguration
         
@@ -87,19 +94,21 @@ struct RequiredInputAlertView: UIViewControllerRepresentable {
             continueConfiguration.handler(fieldOne, fieldTwo)
         }
         
-        uiAlertController.addTextField { textField in
-            textField.addAction(
-                UIAction { _ in
-                    fieldOne = textField.text ?? ""
-                    continueAction.isEnabled = isContinueEnabled
-                },
-                for: .editingChanged
-            )
-            textField.autocapitalizationType = .none
-            textField.autocorrectionType = .no
-            textField.placeholder = "Username"
-            textField.returnKeyType = .next
-            textField.textContentType = .username
+        if style == .identityAndPassword {
+            uiAlertController.addTextField { textField in
+                textField.addAction(
+                    UIAction { _ in
+                        fieldOne = textField.text ?? ""
+                        continueAction.isEnabled = isContinueEnabled
+                    },
+                    for: .editingChanged
+                )
+                textField.autocapitalizationType = .none
+                textField.autocorrectionType = .no
+                textField.placeholder = "Username"
+                textField.returnKeyType = .next
+                textField.textContentType = .username
+            }
         }
         
         uiAlertController.addTextField { textField in
@@ -183,5 +192,16 @@ extension RequiredInputAlertView {
         
         /// <#Description#>
         let handler: (String, String) -> Void
+    }
+}
+
+extension RequiredInputAlertView {
+    /// <#Description#>
+    enum Style {
+        ///
+        case identityAndPassword
+        
+        ///
+        case passwordOnly
     }
 }
