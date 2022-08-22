@@ -74,13 +74,13 @@ struct FloatingPanel<Content>: View where Content: View {
         GeometryReader { geometryProxy in
             VStack(spacing: 0) {
                 if isCompact && isPresented {
-                    makeHandleArea()
+                    makeHandleView()
                 }
                 content
                     .frame(height: height)
                     .padding(.bottom, isCompact ? 25 : .zero)
                 if !isCompact && isPresented {
-                    makeHandleArea()
+                    makeHandleView()
                 }
             }
             .background(backgroundColor)
@@ -167,7 +167,7 @@ struct FloatingPanel<Content>: View where Content: View {
     
     /// Configures a handle area.
     /// - Returns: A configured handle area, suitable for placement in the panel.
-    @ViewBuilder func makeHandleArea() -> some View {
+    @ViewBuilder func makeHandleView() -> some View {
         ZStack {
             backgroundColor
             Handle(color: handleColor)
