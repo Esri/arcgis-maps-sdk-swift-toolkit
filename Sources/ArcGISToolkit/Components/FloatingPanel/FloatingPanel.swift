@@ -174,7 +174,7 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED******REMOVED******REMOVED***backgroundColor
 ***REMOVED******REMOVED******REMOVED***Handle(color: handleColor)
 ***REMOVED***
-***REMOVED******REMOVED***.frame(height: 20)
+***REMOVED******REMOVED***.frame(height: 30)
 ***REMOVED******REMOVED***.gesture(drag)
 ***REMOVED******REMOVED***.zIndex(1)
 ***REMOVED***
