@@ -16,7 +16,7 @@ import Foundation
 
 ***REMOVED***/ An object that represents an ArcGIS token authentication challenge continuation.
 @MainActor
-final class TokenChallengeContinuation: ValueContinuation<Result<ArcGISAuthenticationChallenge.Disposition, Error>>, ArcGISChallengeContinuation {
+final class TokenChallengeContinuation: ValueContinuation<ArcGISAuthenticationChallenge.Disposition>, ArcGISChallengeContinuation {
 ***REMOVED******REMOVED***/ The host that prompted the challenge.
 ***REMOVED***let host: String
 ***REMOVED***
@@ -52,14 +52,17 @@ final class TokenChallengeContinuation: ValueContinuation<Result<ArcGISAuthentic
 ***REMOVED******REMOVED***/   - loginCredential: The username and password.
 ***REMOVED***func resume(with loginCredential: LoginCredential) {
 ***REMOVED******REMOVED***Task {
-***REMOVED******REMOVED******REMOVED***setValue(await Result {
-***REMOVED******REMOVED******REMOVED******REMOVED***.useCredential(try await tokenCredentialProvider(loginCredential))
-***REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***do {
+***REMOVED******REMOVED******REMOVED******REMOVED***let credential = try await tokenCredentialProvider(loginCredential)
+***REMOVED******REMOVED******REMOVED******REMOVED***setValue(.useCredential(credential))
+***REMOVED******REMOVED*** catch {
+***REMOVED******REMOVED******REMOVED******REMOVED***setValue(.allowRequestToFail)
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Cancels the challenge.
 ***REMOVED***func cancel() {
-***REMOVED******REMOVED***setValue(.success(.cancelAuthenticationChallenge))
+***REMOVED******REMOVED***setValue(.cancelAuthenticationChallenge)
 ***REMOVED***
 ***REMOVED***
