@@ -20,39 +20,9 @@ import QuickLook
 // TODO: Add alert for when attachments fail to load...
 // TODO: Move classes into separate file; maybe structs too.
 
-@MainActor class AttachmentImage: ObservableObject {
-    @Published var attachment: PopupAttachment
-    @Published var image: UIImage?
-    @Published var loadStatus: LoadStatus = .notLoaded
-    
-    init(attachment: PopupAttachment, image: UIImage? = nil) {
-        self.attachment = attachment
-        self.image = image
-    }
-    
-    func load() async throws {
-        loadStatus = .loading
-        try? await self.attachment.load()
-        loadStatus = self.attachment.loadStatus
-    }
-}
-
-extension AttachmentImage: Identifiable {}
-
-extension AttachmentImage: Equatable {
-    static func == (lhs: AttachmentImage, rhs: AttachmentImage) -> Bool {
-        lhs.attachment === rhs.attachment &&
-        lhs.image === rhs.image
-    }
-}
-
-@MainActor class AttachmentModel: ObservableObject {
-    @Published var attachmentImages = [AttachmentImage]()
-}
-
 struct AttachmentsPopupElementView: View {
     var popupElement: AttachmentsPopupElement
-    @StateObject private var viewModel: AttachmentModel
+    @StateObject private var viewModel: AttachmentsPopupElementModel
     
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
     @Environment(\.verticalSizeClass) var verticalSizeClass
@@ -67,7 +37,7 @@ struct AttachmentsPopupElementView: View {
     init(popupElement: AttachmentsPopupElement) {
         self.popupElement = popupElement
         _viewModel = StateObject(
-            wrappedValue: AttachmentModel()
+            wrappedValue: AttachmentsPopupElementModel()
         )
     }
     
@@ -89,199 +59,190 @@ struct AttachmentsPopupElementView: View {
             else {
                 switch popupElement.displayType {
                 case .list:
-                    AttachmentList(attachmentImages: viewModel.attachmentImages)
+//                    AttachmentList(attachmentModels: viewModel.attachmentModels)
+                    AttachmentPreview(attachmentModels: viewModel.attachmentModels)
                 case.preview:
-                    AttachmentList(attachmentImages: viewModel.attachmentImages)
-//                        AttachmentPreview(attachmentImages: viewModel.attachmentImages)
+//                    AttachmentList(attachmentModels: viewModel.attachmentModels)
+                    AttachmentPreview(attachmentModels: viewModel.attachmentModels)
                 case .auto:
                     if isRegularWidth {
-                        AttachmentList(attachmentImages: viewModel.attachmentImages)
-//                        AttachmentPreview(attachmentImages: viewModel.attachmentImages)
+//                        AttachmentList(attachmentModels: viewModel.attachmentModels)
+                        AttachmentPreview(attachmentModels: viewModel.attachmentModels)
                     } else {
-                        AttachmentList(attachmentImages: viewModel.attachmentImages)
+                        AttachmentList(attachmentModels: viewModel.attachmentModels)
+                        AttachmentPreview(attachmentModels: viewModel.attachmentModels)
                     }
                 }
             }
         }
         .task {
             try? await popupElement.fetchAttachments()
-            let attachmentImages = popupElement.attachments.map { attachment in
-                AttachmentImage(attachment: attachment)
+            let attachmentModels = popupElement.attachments.map { attachment in
+                AttachmentModel(attachment: attachment)
             }
-            viewModel.attachmentImages.append(contentsOf: attachmentImages)
+            viewModel.attachmentModels.append(contentsOf: attachmentModels)
             loadingAttachments = false
         }
     }
     
     struct AttachmentList: View {
-        var attachmentImages: [AttachmentImage]
+        var attachmentModels: [AttachmentModel]
         var body: some View {
             VStack(alignment: .leading, spacing: 6) {
-                ForEach(attachmentImages) { attachmentImage in
-                    AttachmentRow(attachmentImage: attachmentImage)
-                    if attachmentImage != attachmentImages.last {
+                ForEach(attachmentModels) { attachmentModel in
+                    AttachmentRow(attachmentModel: attachmentModel)
+                    if attachmentModel != attachmentModels.last {
                         Divider()
                     }
                 }
             }
         }
         
-        struct ImageView: View  {
-            @ObservedObject var attachmentImage: AttachmentImage
-            
-            // TODO: instead of this big block, pre-load attachmentImage.image with correct placeholder image
-            //       which will get overwritten when the preview image loads.
-            var body: some View {
-                if let image = attachmentImage.image {
-                    Image(uiImage: image)
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .clipShape(RoundedRectangle(cornerRadius: 4))
-                        .padding(2)
-                        .frame(width: 40, height: 40, alignment: .center)
-                }
-                else {
-                    switch attachmentImage.attachment.kind {
-                    case .image:
-                        if let image = attachmentImage.image {
-                            Image(uiImage: image)
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
-                                .clipShape(RoundedRectangle(cornerRadius: 4))
-                                .padding(EdgeInsets(top: 0, leading: 4, bottom: 0, trailing: 4))
-                                .frame(width: 40, height: 40, alignment: .center)
-                        }
-                        else {
-                            Image(systemName: "photo")
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
-                                .foregroundColor(.accentColor)
-                                .clipShape(RoundedRectangle(cornerRadius: 4))
-                                .padding(EdgeInsets(top: 0, leading: 4, bottom: 0, trailing: 4))
-                                .frame(width: 40, height: 40, alignment: .center)
-                        }
-                    case .video:
-                        Image(systemName: "video")
-                            .resizable()
-                            .foregroundColor(.accentColor)
-                            .aspectRatio(contentMode: .fit)
-                            .clipShape(RoundedRectangle(cornerRadius: 4))
-                            .padding(EdgeInsets(top: 0, leading: 4, bottom: 0, trailing: 4))
-                            .frame(width: 40, height: 40, alignment: .center)
-                    case .document, .other:
-                        Image(systemName: "doc")
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .foregroundColor(.accentColor)
-                            .clipShape(RoundedRectangle(cornerRadius: 4))
-                            .padding(EdgeInsets(top: 0, leading: 4, bottom: 0, trailing: 4))
-                            .frame(width: 40, height: 30, alignment: .center)
-                    }
-                }
-            }
-        }
-        
         struct AttachmentRow: View  {
-            @ObservedObject var attachmentImage: AttachmentImage
+            @ObservedObject var attachmentModel: AttachmentModel
             @State var url: URL?
-            @Environment(\.displayScale) var displayScale
-
+            
             var body: some View {
                 HStack {
                     HStack {
-                        ImageView(attachmentImage: attachmentImage)
+                        ThumbnailView(attachmentModel: attachmentModel)
+                            .padding(2)
                         VStack(alignment: .leading) {
-                            Text(attachmentImage.attachment.name)
+                            Text(attachmentModel.attachment.name)
                                 .lineLimit(1)
                                 .truncationMode(.middle)
-                            Text("\(attachmentImage.attachment.size.formatted(.byteCount(style: .file)))")
+                            Text("\(attachmentModel.attachment.size.formatted(.byteCount(style: .file)))")
                                 .foregroundColor(.secondary)
                         }
                         .frame(maxWidth: .infinity, alignment: .leading)
                     }
                     .onTapGesture {
-                        if attachmentImage.attachment.loadStatus == .loaded {
-                            url = attachmentImage.attachment.fileURL
+                        if attachmentModel.attachment.loadStatus == .loaded {
+                            url = attachmentModel.attachment.fileURL
                         }
                     }
-                    .quickLookPreview($url)
-                    if attachmentImage.loadStatus != .loaded {
-                        Button {
-                            Task {
-                                // TODO: Move this into a separate function
-                                try await attachmentImage.load()
-                                
-                                let request = QLThumbnailGenerator.Request(
-                                    fileAt: attachmentImage.attachment.fileURL,
-                                    size: CGSize(width: 40, height: 40),
-                                    scale: displayScale,
-                                    representationTypes: .thumbnail)
-                                
-                                // 2
-                                let generator = QLThumbnailGenerator.shared
-                                generator.generateRepresentations(for: request) { thumbnail, _, error in
-                                    // 3
-                                    Task {
-                                        await MainActor.run {
-                                            if let thumbnail = thumbnail {
-                                                attachmentImage.image = thumbnail.uiImage
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        } label: {
-                            // TODO: Move this into a separate view
-                            Group {
-                                switch attachmentImage.loadStatus {
-                                case .notLoaded:
-                                    Image(systemName: "square.and.arrow.down")
-                                        .resizable()
-                                        .aspectRatio(contentMode: .fit)
-                                        .frame(width: 24, height: 24)
-                                case .loading:
-                                    ProgressView()
-                                case .loaded:
-                                    EmptyView()
-                                case .failed:
-                                    Image(systemName: "exclamationmark.circle.fill")
-                                        .resizable()
-                                        .aspectRatio(contentMode: .fit)
-                                        .foregroundColor(.red)
-                                        .background(Color.clear)
-                                        .frame(width: 24, height: 24)
-                                }
-                            }
-                            .padding(.leading)
-                        }
+                    if attachmentModel.loadStatus != .loaded {
+                        AttachmentLoadButton(attachmentModel: attachmentModel)
                     }
                 }
+                .quickLookPreview($url)
+            }
+        }
+    }
+    
+    struct ThumbnailView: View  {
+        @ObservedObject var attachmentModel: AttachmentModel
+        var size: CGSize = CGSize(width: 40, height: 40)
+        
+        var body: some View {
+            if let image = attachmentModel.thumbnail {
+                Image(uiImage: image)
+                    .resizable()
+                    .renderingMode(attachmentModel.usingDefaultImage ? .template : .original)
+                    .aspectRatio(contentMode: attachmentModel.usingDefaultImage ? .fit : .fill)
+                    .frame(width: size.width, height: size.height, alignment: .center)
+                    .clipShape(RoundedRectangle(cornerRadius: 4))
+                    .foregroundColor(foregroundColor(for: attachmentModel))
+            }
+        }
+        
+        func foregroundColor(for attachmentModel: AttachmentModel) -> Color {
+            attachmentModel.loadStatus == .failed ? .red :
+            (attachmentModel.usingDefaultImage ? .accentColor : .primary)
+        }
+    }
+    
+    struct AttachmentLoadButton: View  {
+        @ObservedObject var attachmentModel: AttachmentModel
+        
+        var body: some View {
+            Button {
+                if attachmentModel.loadStatus == .notLoaded {
+                    attachmentModel.load()
+                }
+                else if attachmentModel.loadStatus == .failed {
+                    // TODO:  Show error alert, similar to BasemapGallery.
+                }
+            } label: {
+                Group {
+                    switch attachmentModel.loadStatus {
+                    case .notLoaded:
+                        Image(systemName: "square.and.arrow.down")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                    case .loading:
+                        ProgressView()
+                    case .loaded:
+                        EmptyView()
+                    case .failed:
+                        Image(systemName: "exclamationmark.circle.fill")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .foregroundColor(.red)
+                            .background(Color.clear)
+                    }
+                }
+                .frame(width: 24, height: 24)
+                .padding(.leading)
             }
         }
     }
     
     struct AttachmentPreview: View {
-        var attachmentImages: [AttachmentImage]
+        var attachmentModels: [AttachmentModel]
         
         var body: some View {
-            VStack(alignment: .center) {
-                //                ForEach(0..<attachments.count) { i in
-                ////                ForEach(attachments) { attachment in
-                //                    HStack {
-                //                        Spacer()
-                //                        VStack {
-                //                            if i < images.count {
-                //                                Image(uiImage: images[i])
-                //                                    .resizable()
-                //                                    .aspectRatio(contentMode: .fit)
-                //                                    .clipShape(RoundedRectangle(cornerRadius: 4))
-                ////                                    .frame(width: 75, height: 75, alignment: .center)
-                //                            }
-                //                            Text(attachments[i].name)
-                //                        }
-                //                        Spacer()
-                //                    }
-                //                }
+            ScrollView(.horizontal) {
+                HStack(alignment: .top, spacing: 8) {
+                    ForEach(attachmentModels) { attachmentModel in
+                        AttachmentCell(attachmentModel: attachmentModel)
+                    }
+                }
+            }
+        }
+        
+        struct AttachmentCell: View  {
+            @ObservedObject var attachmentModel: AttachmentModel
+            @State var url: URL?
+            
+            var body: some View {
+                VStack(alignment: .center) {
+                    ZStack {
+                        if attachmentModel.loadStatus != .loading {
+                            ThumbnailView(
+                                attachmentModel: attachmentModel,
+                                size: attachmentModel.usingDefaultImage ?
+                                CGSize(width: 40, height: 40) :
+                                    CGSize(width: 120, height: 120)
+                            )
+                        } else {
+                            ProgressView()
+                                .padding(8)
+                                .background(Color.white.opacity(0.75))
+                                .clipShape(RoundedRectangle(cornerRadius: 8))
+                        }
+                    }
+                    if attachmentModel.usingDefaultImage {
+                        Text(attachmentModel.attachment.name)
+                            .lineLimit(1)
+                            .truncationMode(.middle)
+                        Text("\(attachmentModel.attachment.size.formatted(.byteCount(style: .file)))")
+                            .foregroundColor(.secondary)
+                    }
+                }
+                .font(.caption)
+                .frame(width: 120, height: 120)
+                .background(Color.gray.opacity(0.2))
+                .clipShape(RoundedRectangle(cornerRadius: 8))
+                .onTapGesture {
+                    if attachmentModel.attachment.loadStatus == .loaded {
+                        url = attachmentModel.attachment.fileURL
+                    }
+                    else if attachmentModel.attachment.loadStatus == .notLoaded {
+                        attachmentModel.load(thumbnailSize: CGSize(width: 120, height: 120))
+                    }
+                }
+                .quickLookPreview($url)
             }
         }
     }
