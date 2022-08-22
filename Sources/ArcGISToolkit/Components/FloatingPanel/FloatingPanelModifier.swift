@@ -95,7 +95,7 @@ private struct FloatingPanelModifier<PanelContent>: ViewModifier where PanelCont
                 ) {
                     panelContent
                 }
-                .edgesIgnoringSafeArea(.bottom)
+                .ignoresSafeArea(.all, edges: .bottom)
                 .frame(maxWidth: isCompact ? .infinity : maxWidth)
             }
     }
