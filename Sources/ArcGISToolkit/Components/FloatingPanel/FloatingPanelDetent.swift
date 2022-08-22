@@ -15,7 +15,10 @@ import Foundation
 
 /// A value that represents a height where a sheet naturally rests.
 public enum FloatingPanelDetent: CaseIterable {
+    /// A height large enough to display a short summary.
     case summary
+    /// A height roughly half of the maximum height.
     case half
+    /// A height just less than the maximum height.
     case full
 }
