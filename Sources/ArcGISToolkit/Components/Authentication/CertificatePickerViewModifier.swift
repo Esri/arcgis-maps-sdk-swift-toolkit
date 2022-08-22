@@ -181,7 +181,7 @@ private extension View {
 ***REMOVED******REMOVED***viewModel: CertificatePickerViewModel
 ***REMOVED***) -> some View {
 ***REMOVED******REMOVED***overlay {
-***REMOVED******REMOVED******REMOVED***RequiredInputAlertView(
+***REMOVED******REMOVED******REMOVED***CredentialInputView(
 ***REMOVED******REMOVED******REMOVED******REMOVED***isPresented: isPresented,
 ***REMOVED******REMOVED******REMOVED******REMOVED***message: "Please enter a password for the chosen certificate.",
 ***REMOVED******REMOVED******REMOVED******REMOVED***title: "Password Required",
