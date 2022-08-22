@@ -145,7 +145,7 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ The detent that would produce a height that is closest to the current height
+***REMOVED******REMOVED***/ The detent that would produce a height that is closest to the current height.
 ***REMOVED***var closestDetent: FloatingPanelDetent {
 ***REMOVED******REMOVED***return FloatingPanelDetent.allCases.min {
 ***REMOVED******REMOVED******REMOVED***abs(heightFor(detent: $0) - height) <
@@ -153,6 +153,7 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED*** ?? .half
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ Calculates the height for the `detent`.
 ***REMOVED******REMOVED***/ - Parameter detent: The detent to use when calculating height
 ***REMOVED******REMOVED***/ - Returns: A height for the provided detent based on the current maximum height
 ***REMOVED***func heightFor(detent: FloatingPanelDetent) -> CGFloat {
@@ -166,8 +167,8 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Configures a handle area.
-***REMOVED******REMOVED***/ - Returns: A configured handle area, suitable for placement in the panel.
+***REMOVED******REMOVED***/ Configures a handle view.
+***REMOVED******REMOVED***/ - Returns: A configured handle view, suitable for placement in the panel.
 ***REMOVED***@ViewBuilder func makeHandleView() -> some View {
 ***REMOVED******REMOVED***ZStack {
 ***REMOVED******REMOVED******REMOVED***backgroundColor
@@ -221,6 +222,7 @@ private struct RoundedCorners: Shape {
 private extension View {
 ***REMOVED******REMOVED***/ Clips this view to its bounding frame, with the specified corner radius, on the specified corners.
 ***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - radius: The radius used to round the corners.
 ***REMOVED******REMOVED***/   - corners: The corners to be rounded.
 ***REMOVED******REMOVED***/ - Returns: A view that clips this view to its bounding frame with the specified corner radius and
 ***REMOVED******REMOVED***/ corners.
