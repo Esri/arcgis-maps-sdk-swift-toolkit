@@ -34,10 +34,11 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED***let content: Content
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a `FloatingPanel`
-***REMOVED******REMOVED***/ - Parameter backgroundColor: The background color of the floating panel.
-***REMOVED******REMOVED***/ - Parameter detent: Controls the height of the panel.
-***REMOVED******REMOVED***/ - Parameter isPresented: A Boolean value indicating if the view is presented.
-***REMOVED******REMOVED***/ - Parameter content: The view shown in the floating panel.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - backgroundColor: The background color of the floating panel.
+***REMOVED******REMOVED***/   - detent: Controls the height of the panel.
+***REMOVED******REMOVED***/   - isPresented: A Boolean value indicating if the view is presented.
+***REMOVED******REMOVED***/   - content: The view shown in the floating panel.
 ***REMOVED***init(
 ***REMOVED******REMOVED***backgroundColor: Color,
 ***REMOVED******REMOVED***detent: Binding<FloatingPanelDetent>,
