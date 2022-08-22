@@ -174,7 +174,7 @@ struct FloatingPanel<Content>: View where Content: View {
             backgroundColor
             Handle(color: handleColor)
         }
-        .frame(height: 20)
+        .frame(height: 30)
         .gesture(drag)
         .zIndex(1)
     }
