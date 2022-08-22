@@ -28,7 +28,7 @@ struct RequiredInputAlertView: UIViewControllerRepresentable {
     @State var fieldTwo = ""
     
     /// <#Description#>
-    private let style: Style
+    private let usage: Usage
     
     /// <#Description#>
     private let title: String
@@ -45,35 +45,37 @@ struct RequiredInputAlertView: UIViewControllerRepresentable {
     /// <#Description#>
     /// - Parameters:
     ///   - isPresented: <#isPresented description#>
-    ///   - style: <#style description#>
-    ///   - title: <#title description#>
     ///   - message: <#message description#>
+    ///   - title: <#title description#>
+    ///   - usage: <#usage description#>
     ///   - cancelConfiguration: <#cancelConfiguration description#>
     ///   - continueConfiguration: <#continueConfiguration description#>
     init(
         isPresented: Binding<Bool>,
-        style: Style,
-        title: String,
         message: String,
+        title: String,
+        usage: Usage,
         cancelConfiguration: ActionConfiguration,
         continueConfiguration: ActionConfiguration
     ) {
         _isPresented = isPresented
         
-        self.style = style
+        self.message = message
+        self.title = title
+        self.usage = usage
         
         self.cancelConfiguration = cancelConfiguration
-        
         self.continueConfiguration = continueConfiguration
-        
-        self.title = title
-        
-        self.message = message
     }
     
     /// <#Description#>
     var isContinueEnabled: Bool {
-        !fieldOne.isEmpty && !fieldTwo.isEmpty
+        switch usage {
+        case .identityAndPassword:
+            return !fieldOne.isEmpty && !fieldTwo.isEmpty
+        case .passwordOnly:
+            return !fieldTwo.isEmpty
+        }
     }
     
     /// <#Description#>
@@ -94,7 +96,7 @@ struct RequiredInputAlertView: UIViewControllerRepresentable {
             continueConfiguration.handler(fieldOne, fieldTwo)
         }
         
-        if style == .identityAndPassword {
+        if usage == .identityAndPassword {
             uiAlertController.addTextField { textField in
                 textField.addAction(
                     UIAction { _ in
@@ -197,7 +199,7 @@ extension RequiredInputAlertView {
 
 extension RequiredInputAlertView {
     /// <#Description#>
-    enum Style {
+    enum Usage {
         ///
         case identityAndPassword
         

@@ -183,9 +183,9 @@ private extension View {
         overlay {
             RequiredInputAlertView(
                 isPresented: isPresented,
-                style: .passwordOnly,
-                title: "Password Required",
                 message: "Please enter a password for the chosen certificate.",
+                title: "Password Required",
+                usage: .passwordOnly,
                 cancelConfiguration: .init(
                     title: "Cancel",
                     handler: { _, _ in
