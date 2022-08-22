@@ -145,7 +145,7 @@ struct FloatingPanel<Content>: View where Content: View {
             }
     }
     
-    /// The detent that would produce a height that is closest to the current height
+    /// The detent that would produce a height that is closest to the current height.
     var closestDetent: FloatingPanelDetent {
         return FloatingPanelDetent.allCases.min {
             abs(heightFor(detent: $0) - height) <
@@ -153,6 +153,7 @@ struct FloatingPanel<Content>: View where Content: View {
         } ?? .half
     }
     
+    /// Calculates the height for the `detent`.
     /// - Parameter detent: The detent to use when calculating height
     /// - Returns: A height for the provided detent based on the current maximum height
     func heightFor(detent: FloatingPanelDetent) -> CGFloat {
@@ -166,8 +167,8 @@ struct FloatingPanel<Content>: View where Content: View {
         }
     }
     
-    /// Configures a handle area.
-    /// - Returns: A configured handle area, suitable for placement in the panel.
+    /// Configures a handle view.
+    /// - Returns: A configured handle view, suitable for placement in the panel.
     @ViewBuilder func makeHandleView() -> some View {
         ZStack {
             backgroundColor
@@ -221,6 +222,7 @@ private struct RoundedCorners: Shape {
 private extension View {
     /// Clips this view to its bounding frame, with the specified corner radius, on the specified corners.
     /// - Parameters:
+    ///   - radius: The radius used to round the corners.
     ///   - corners: The corners to be rounded.
     /// - Returns: A view that clips this view to its bounding frame with the specified corner radius and
     /// corners.
