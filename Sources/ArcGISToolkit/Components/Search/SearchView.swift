@@ -55,7 +55,10 @@ public struct SearchView: View {
     ///
     /// If `nil`, does not prioritize the search results around any point.
     @Binding var queryCenter: Point?
-
+    
+    /// A closure to performed when the query has changed.
+    private var onQueryChangedAction: ((String) -> Void)?
+    
     /// The current map/scene view extent. Defaults to `nil`.
     ///
     /// This will be used to determine the value of `isEligibleForRequery` for the 'Repeat
@@ -166,6 +169,7 @@ public struct SearchView: View {
         }
         .listStyle(.plain)
         .onReceive(viewModel.$currentQuery) { _ in
+            onQueryChangedAction?(viewModel.currentQuery)
             viewModel.updateSuggestions()
         }
         .onChange(of: geoViewExtent) { _ in
@@ -229,6 +233,16 @@ extension SearchView {
     public func currentQuery(_ newQuery: String) -> Self {
         var copy = self
         copy.currentQuery = newQuery
+        return copy
+    }
+    
+    /// Sets a closure to perform when the query changes.
+    /// - Parameters:
+    ///   - action: The closure to performed when the query has changed.
+    ///   - query: The new query.
+    public func onQueryChanged(perform action: @escaping (_ query: String) -> Void) -> Self {
+        var copy = self
+        copy.onQueryChangedAction = action
         return copy
     }
     
