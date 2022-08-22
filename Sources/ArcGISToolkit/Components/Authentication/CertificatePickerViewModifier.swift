@@ -181,9 +181,24 @@ private extension View {
         viewModel: CertificatePickerViewModel
     ) -> some View {
         overlay {
-            EnterPasswordView(
-                viewModel: viewModel,
-                isPresented: isPresented
+            RequiredInputAlertView(
+                isPresented: isPresented,
+                style: .passwordOnly,
+                title: "Password Required",
+                message: "Please enter a password for the chosen certificate.",
+                cancelConfiguration: .init(
+                    title: "Cancel",
+                    handler: { _, _ in
+                        viewModel.cancel()
+                    }
+                ),
+                continueConfiguration: .init(
+                    title: "OK",
+                    handler: { _, password in
+                        viewModel.password = password
+                        viewModel.proceedWithPassword()
+                    }
+                )
             )
         }
     }
@@ -224,126 +239,6 @@ private extension View {
             return "The password was invalid."
         default:
             return defaultMessage
-        }
-    }
-}
-
-/// A view that allows the user to enter a password via an alert.
-///
-/// Implemented in UIKit because as of iOS 16, SwiftUI alerts don't support visible but disabled buttons.
-struct EnterPasswordView: UIViewControllerRepresentable {
-    /// The view model.
-    @ObservedObject private var viewModel: CertificatePickerViewModel
-    
-    /// A Boolean value indicating whether or not the view is displayed.
-    @Binding private var isPresented: Bool
-    
-    /// The cancel action for the `UIAlertController`.
-    private let cancelAction: UIAlertAction
-    
-    /// The continue action for the `UIAlertController`.
-    private let continueAction: UIAlertAction
-    
-    /// Creates the view.
-    /// - Parameters:
-    ///   - viewModel: The view model.
-    ///   - isPresented: A Boolean value indicating whether or not the view is displayed.
-    init(
-        viewModel: CertificatePickerViewModel,
-        isPresented: Binding<Bool>
-    ) {
-        self.viewModel = viewModel
-        
-        _isPresented = isPresented
-        
-        cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { _ in
-            viewModel.cancel()
-        }
-        continueAction = UIAlertAction(title: "OK", style: .default) { _ in
-            viewModel.proceedWithPassword()
-        }
-        
-        cancelAction.isEnabled = true
-        continueAction.isEnabled = false
-    }
-    
-    func makeCoordinator() -> Coordinator {
-        Coordinator(self)
-    }
-    
-    /// Creates the alert controller object and configures its initial state.
-    /// - Parameter context: A context structure containing information about the current state of the
-    /// system.
-    /// - Returns: A configured alert controller.
-    func makeAlertController(context: Context) -> UIAlertController {
-        let uiAlertController = UIAlertController(
-            title: "Password Required",
-            message: "Please enter a password for the chosen certificate.",
-            preferredStyle: .alert
-        )
-        
-        uiAlertController.addTextField { textField in
-            textField.addAction(
-                UIAction { _ in
-                    viewModel.password = textField.text ?? ""
-                    continueAction.isEnabled = !viewModel.password.isEmpty
-                },
-                for: .editingChanged
-            )
-            textField.autocapitalizationType = .none
-            textField.autocorrectionType = .no
-            textField.delegate = context.coordinator
-            textField.isSecureTextEntry = true
-            textField.placeholder = "Password"
-            textField.returnKeyType = .go
-            textField.textContentType = .password
-        }
-        
-        uiAlertController.addAction(cancelAction)
-        uiAlertController.addAction(continueAction)
-        
-        return uiAlertController
-    }
-    
-    func makeUIViewController(context: Context) -> UIViewController {
-        return UIViewController()
-    }
-    
-    func updateUIViewController(
-        _ uiViewController: UIViewControllerType,
-        context: Context
-    ) {
-        guard isPresented else { return }
-        let alertController = makeAlertController(context: context)
-        // On a physical iOS 16 device, without the following delay, the
-        // presentation fails and an error is thrown.
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-            uiViewController.present(alertController, animated: true) {
-                isPresented = false
-            }
-        }
-    }
-}
-
-extension EnterPasswordView {
-    /// The coordinator for the password view that acts as a delegate to the underlying
-    /// `UIAlertViewController`.
-    final class Coordinator: NSObject, UITextFieldDelegate {
-        /// The view that owns this coordinator.
-        let parent: EnterPasswordView
-        
-        /// Creates the coordinator.
-        /// - Parameter parent: The view that owns this coordinator.
-        init(_ parent: EnterPasswordView) {
-            self.parent = parent
-        }
-        
-        func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-            guard !parent.viewModel.password.isEmpty else {
-                return false
-            }
-            parent.viewModel.proceedWithPassword()
-            return true
         }
     }
 }

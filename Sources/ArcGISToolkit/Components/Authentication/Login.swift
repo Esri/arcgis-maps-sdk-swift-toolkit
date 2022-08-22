@@ -95,6 +95,7 @@ struct LoginViewModifier: ViewModifier {
             .overlay {
                 RequiredInputAlertView(
                     isPresented: $isPresented,
+                    style: .identityAndPassword,
                     title: "Authentication Required",
                     message: "You must sign in to access '\(viewModel.challengingHost)'",
                     cancelConfiguration: .init(
@@ -105,9 +106,9 @@ struct LoginViewModifier: ViewModifier {
                     ),
                     continueConfiguration: .init(
                         title: "Continue",
-                        handler: { u, p in
-                            viewModel.username = u
-                            viewModel.password = p
+                        handler: { username, password in
+                            viewModel.username = username
+                            viewModel.password = password
                             viewModel.signIn()
                         }
                     )
