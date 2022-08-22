@@ -95,6 +95,7 @@ struct LoginViewModifier: ViewModifier {
 ***REMOVED******REMOVED******REMOVED***.overlay {
 ***REMOVED******REMOVED******REMOVED******REMOVED***RequiredInputAlertView(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented: $isPresented,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***style: .identityAndPassword,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title: "Authentication Required",
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***message: "You must sign in to access '\(viewModel.challengingHost)'",
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***cancelConfiguration: .init(
@@ -105,9 +106,9 @@ struct LoginViewModifier: ViewModifier {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***),
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***continueConfiguration: .init(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title: "Continue",
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***handler: { u, p in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.username = u
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.password = p
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***handler: { username, password in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.username = username
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.password = password
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.signIn()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)

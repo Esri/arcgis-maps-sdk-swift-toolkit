@@ -181,9 +181,24 @@ private extension View {
 ***REMOVED******REMOVED***viewModel: CertificatePickerViewModel
 ***REMOVED***) -> some View {
 ***REMOVED******REMOVED***overlay {
-***REMOVED******REMOVED******REMOVED***EnterPasswordView(
-***REMOVED******REMOVED******REMOVED******REMOVED***viewModel: viewModel,
-***REMOVED******REMOVED******REMOVED******REMOVED***isPresented: isPresented
+***REMOVED******REMOVED******REMOVED***RequiredInputAlertView(
+***REMOVED******REMOVED******REMOVED******REMOVED***isPresented: isPresented,
+***REMOVED******REMOVED******REMOVED******REMOVED***style: .passwordOnly,
+***REMOVED******REMOVED******REMOVED******REMOVED***title: "Password Required",
+***REMOVED******REMOVED******REMOVED******REMOVED***message: "Please enter a password for the chosen certificate.",
+***REMOVED******REMOVED******REMOVED******REMOVED***cancelConfiguration: .init(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title: "Cancel",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***handler: { _, _ in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.cancel()
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***),
+***REMOVED******REMOVED******REMOVED******REMOVED***continueConfiguration: .init(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title: "OK",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***handler: { _, password in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.password = password
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.proceedWithPassword()
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
@@ -224,126 +239,6 @@ private extension View {
 ***REMOVED******REMOVED******REMOVED***return "The password was invalid."
 ***REMOVED******REMOVED***default:
 ***REMOVED******REMOVED******REMOVED***return defaultMessage
-***REMOVED***
-***REMOVED***
-***REMOVED***
-
-***REMOVED***/ A view that allows the user to enter a password via an alert.
-***REMOVED***/
-***REMOVED***/ Implemented in UIKit because as of iOS 16, SwiftUI alerts don't support visible but disabled buttons.
-struct EnterPasswordView: UIViewControllerRepresentable {
-***REMOVED******REMOVED***/ The view model.
-***REMOVED***@ObservedObject private var viewModel: CertificatePickerViewModel
-***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value indicating whether or not the view is displayed.
-***REMOVED***@Binding private var isPresented: Bool
-***REMOVED***
-***REMOVED******REMOVED***/ The cancel action for the `UIAlertController`.
-***REMOVED***private let cancelAction: UIAlertAction
-***REMOVED***
-***REMOVED******REMOVED***/ The continue action for the `UIAlertController`.
-***REMOVED***private let continueAction: UIAlertAction
-***REMOVED***
-***REMOVED******REMOVED***/ Creates the view.
-***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - viewModel: The view model.
-***REMOVED******REMOVED***/   - isPresented: A Boolean value indicating whether or not the view is displayed.
-***REMOVED***init(
-***REMOVED******REMOVED***viewModel: CertificatePickerViewModel,
-***REMOVED******REMOVED***isPresented: Binding<Bool>
-***REMOVED***) {
-***REMOVED******REMOVED***self.viewModel = viewModel
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***_isPresented = isPresented
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { _ in
-***REMOVED******REMOVED******REMOVED***viewModel.cancel()
-***REMOVED***
-***REMOVED******REMOVED***continueAction = UIAlertAction(title: "OK", style: .default) { _ in
-***REMOVED******REMOVED******REMOVED***viewModel.proceedWithPassword()
-***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***cancelAction.isEnabled = true
-***REMOVED******REMOVED***continueAction.isEnabled = false
-***REMOVED***
-***REMOVED***
-***REMOVED***func makeCoordinator() -> Coordinator {
-***REMOVED******REMOVED***Coordinator(self)
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ Creates the alert controller object and configures its initial state.
-***REMOVED******REMOVED***/ - Parameter context: A context structure containing information about the current state of the
-***REMOVED******REMOVED***/ system.
-***REMOVED******REMOVED***/ - Returns: A configured alert controller.
-***REMOVED***func makeAlertController(context: Context) -> UIAlertController {
-***REMOVED******REMOVED***let uiAlertController = UIAlertController(
-***REMOVED******REMOVED******REMOVED***title: "Password Required",
-***REMOVED******REMOVED******REMOVED***message: "Please enter a password for the chosen certificate.",
-***REMOVED******REMOVED******REMOVED***preferredStyle: .alert
-***REMOVED******REMOVED***)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***uiAlertController.addTextField { textField in
-***REMOVED******REMOVED******REMOVED***textField.addAction(
-***REMOVED******REMOVED******REMOVED******REMOVED***UIAction { _ in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.password = textField.text ?? ""
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***continueAction.isEnabled = !viewModel.password.isEmpty
-***REMOVED******REMOVED******REMOVED***,
-***REMOVED******REMOVED******REMOVED******REMOVED***for: .editingChanged
-***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***textField.autocapitalizationType = .none
-***REMOVED******REMOVED******REMOVED***textField.autocorrectionType = .no
-***REMOVED******REMOVED******REMOVED***textField.delegate = context.coordinator
-***REMOVED******REMOVED******REMOVED***textField.isSecureTextEntry = true
-***REMOVED******REMOVED******REMOVED***textField.placeholder = "Password"
-***REMOVED******REMOVED******REMOVED***textField.returnKeyType = .go
-***REMOVED******REMOVED******REMOVED***textField.textContentType = .password
-***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***uiAlertController.addAction(cancelAction)
-***REMOVED******REMOVED***uiAlertController.addAction(continueAction)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***return uiAlertController
-***REMOVED***
-***REMOVED***
-***REMOVED***func makeUIViewController(context: Context) -> UIViewController {
-***REMOVED******REMOVED***return UIViewController()
-***REMOVED***
-***REMOVED***
-***REMOVED***func updateUIViewController(
-***REMOVED******REMOVED***_ uiViewController: UIViewControllerType,
-***REMOVED******REMOVED***context: Context
-***REMOVED***) {
-***REMOVED******REMOVED***guard isPresented else { return ***REMOVED***
-***REMOVED******REMOVED***let alertController = makeAlertController(context: context)
-***REMOVED******REMOVED******REMOVED*** On a physical iOS 16 device, without the following delay, the
-***REMOVED******REMOVED******REMOVED*** presentation fails and an error is thrown.
-***REMOVED******REMOVED***DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-***REMOVED******REMOVED******REMOVED***uiViewController.present(alertController, animated: true) {
-***REMOVED******REMOVED******REMOVED******REMOVED***isPresented = false
-***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***
-
-extension EnterPasswordView {
-***REMOVED******REMOVED***/ The coordinator for the password view that acts as a delegate to the underlying
-***REMOVED******REMOVED***/ `UIAlertViewController`.
-***REMOVED***final class Coordinator: NSObject, UITextFieldDelegate {
-***REMOVED******REMOVED******REMOVED***/ The view that owns this coordinator.
-***REMOVED******REMOVED***let parent: EnterPasswordView
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ Creates the coordinator.
-***REMOVED******REMOVED******REMOVED***/ - Parameter parent: The view that owns this coordinator.
-***REMOVED******REMOVED***init(_ parent: EnterPasswordView) {
-***REMOVED******REMOVED******REMOVED***self.parent = parent
-***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-***REMOVED******REMOVED******REMOVED***guard !parent.viewModel.password.isEmpty else {
-***REMOVED******REMOVED******REMOVED******REMOVED***return false
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***parent.viewModel.proceedWithPassword()
-***REMOVED******REMOVED******REMOVED***return true
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***

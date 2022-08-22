@@ -28,6 +28,9 @@ struct RequiredInputAlertView: UIViewControllerRepresentable {
 ***REMOVED***@State var fieldTwo = ""
 ***REMOVED***
 ***REMOVED******REMOVED***/ <#Description#>
+***REMOVED***private let style: Style
+***REMOVED***
+***REMOVED******REMOVED***/ <#Description#>
 ***REMOVED***private let title: String
 ***REMOVED***
 ***REMOVED******REMOVED***/ <#Description#>
@@ -42,18 +45,22 @@ struct RequiredInputAlertView: UIViewControllerRepresentable {
 ***REMOVED******REMOVED***/ <#Description#>
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - isPresented: <#isPresented description#>
+***REMOVED******REMOVED***/   - style: <#style description#>
 ***REMOVED******REMOVED***/   - title: <#title description#>
 ***REMOVED******REMOVED***/   - message: <#message description#>
 ***REMOVED******REMOVED***/   - cancelConfiguration: <#cancelConfiguration description#>
 ***REMOVED******REMOVED***/   - continueConfiguration: <#continueConfiguration description#>
 ***REMOVED***init(
 ***REMOVED******REMOVED***isPresented: Binding<Bool>,
+***REMOVED******REMOVED***style: Style,
 ***REMOVED******REMOVED***title: String,
 ***REMOVED******REMOVED***message: String,
 ***REMOVED******REMOVED***cancelConfiguration: ActionConfiguration,
 ***REMOVED******REMOVED***continueConfiguration: ActionConfiguration
 ***REMOVED***) {
 ***REMOVED******REMOVED***_isPresented = isPresented
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***self.style = style
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***self.cancelConfiguration = cancelConfiguration
 ***REMOVED******REMOVED***
@@ -87,19 +94,21 @@ struct RequiredInputAlertView: UIViewControllerRepresentable {
 ***REMOVED******REMOVED******REMOVED***continueConfiguration.handler(fieldOne, fieldTwo)
 ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***uiAlertController.addTextField { textField in
-***REMOVED******REMOVED******REMOVED***textField.addAction(
-***REMOVED******REMOVED******REMOVED******REMOVED***UIAction { _ in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***fieldOne = textField.text ?? ""
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***continueAction.isEnabled = isContinueEnabled
-***REMOVED******REMOVED******REMOVED***,
-***REMOVED******REMOVED******REMOVED******REMOVED***for: .editingChanged
-***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***textField.autocapitalizationType = .none
-***REMOVED******REMOVED******REMOVED***textField.autocorrectionType = .no
-***REMOVED******REMOVED******REMOVED***textField.placeholder = "Username"
-***REMOVED******REMOVED******REMOVED***textField.returnKeyType = .next
-***REMOVED******REMOVED******REMOVED***textField.textContentType = .username
+***REMOVED******REMOVED***if style == .identityAndPassword {
+***REMOVED******REMOVED******REMOVED***uiAlertController.addTextField { textField in
+***REMOVED******REMOVED******REMOVED******REMOVED***textField.addAction(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***UIAction { _ in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***fieldOne = textField.text ?? ""
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***continueAction.isEnabled = isContinueEnabled
+***REMOVED******REMOVED******REMOVED******REMOVED***,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for: .editingChanged
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***textField.autocapitalizationType = .none
+***REMOVED******REMOVED******REMOVED******REMOVED***textField.autocorrectionType = .no
+***REMOVED******REMOVED******REMOVED******REMOVED***textField.placeholder = "Username"
+***REMOVED******REMOVED******REMOVED******REMOVED***textField.returnKeyType = .next
+***REMOVED******REMOVED******REMOVED******REMOVED***textField.textContentType = .username
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***uiAlertController.addTextField { textField in
@@ -183,5 +192,16 @@ extension RequiredInputAlertView {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ <#Description#>
 ***REMOVED******REMOVED***let handler: (String, String) -> Void
+***REMOVED***
+***REMOVED***
+
+extension RequiredInputAlertView {
+***REMOVED******REMOVED***/ <#Description#>
+***REMOVED***enum Style {
+***REMOVED******REMOVED******REMOVED***/
+***REMOVED******REMOVED***case identityAndPassword
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/
+***REMOVED******REMOVED***case passwordOnly
 ***REMOVED***
 ***REMOVED***
