@@ -15,7 +15,10 @@ import Foundation
 
 ***REMOVED***/ A value that represents a height where a sheet naturally rests.
 public enum FloatingPanelDetent: CaseIterable {
+***REMOVED******REMOVED***/ A height large enough to display a short summary.
 ***REMOVED***case summary
+***REMOVED******REMOVED***/ A height roughly half of the maximum height.
 ***REMOVED***case half
+***REMOVED******REMOVED***/ A height just less than the maximum height.
 ***REMOVED***case full
 ***REMOVED***
