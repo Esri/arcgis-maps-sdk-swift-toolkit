@@ -33,7 +33,7 @@ struct FloatingPanel<Content>: View where Content: View {
     /// The content shown in the floating panel.
     let content: Content
     
-    /// Creates a `FloatingPanel`
+    /// Creates a `FloatingPanel`.
     /// - Parameters:
     ///   - backgroundColor: The background color of the floating panel.
     ///   - detent: Controls the height of the panel.
