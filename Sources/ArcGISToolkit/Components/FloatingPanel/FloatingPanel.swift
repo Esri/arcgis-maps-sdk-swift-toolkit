@@ -33,11 +33,12 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED******REMOVED***/ The content shown in the floating panel.
 ***REMOVED***let content: Content
 ***REMOVED***
-***REMOVED******REMOVED***/ Creates a `FloatingPanel`
-***REMOVED******REMOVED***/ - Parameter backgroundColor: The background color of the floating panel.
-***REMOVED******REMOVED***/ - Parameter detent: Controls the height of the panel.
-***REMOVED******REMOVED***/ - Parameter isPresented: A Boolean value indicating if the view is presented.
-***REMOVED******REMOVED***/ - Parameter content: The view shown in the floating panel.
+***REMOVED******REMOVED***/ Creates a `FloatingPanel`.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - backgroundColor: The background color of the floating panel.
+***REMOVED******REMOVED***/   - detent: Controls the height of the panel.
+***REMOVED******REMOVED***/   - isPresented: A Boolean value indicating if the view is presented.
+***REMOVED******REMOVED***/   - content: The view shown in the floating panel.
 ***REMOVED***init(
 ***REMOVED******REMOVED***backgroundColor: Color,
 ***REMOVED******REMOVED***detent: Binding<FloatingPanelDetent>,
@@ -74,13 +75,13 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED******REMOVED***GeometryReader { geometryProxy in
 ***REMOVED******REMOVED******REMOVED***VStack(spacing: 0) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if isCompact && isPresented {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeHandleArea()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeHandleView()
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***content
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(height: height)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.bottom, isCompact ? 25 : .zero)
 ***REMOVED******REMOVED******REMOVED******REMOVED***if !isCompact && isPresented {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeHandleArea()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeHandleView()
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.background(backgroundColor)
@@ -144,7 +145,7 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ The detent that would produce a height that is closest to the current height
+***REMOVED******REMOVED***/ The detent that would produce a height that is closest to the current height.
 ***REMOVED***var closestDetent: FloatingPanelDetent {
 ***REMOVED******REMOVED***return FloatingPanelDetent.allCases.min {
 ***REMOVED******REMOVED******REMOVED***abs(heightFor(detent: $0) - height) <
@@ -152,6 +153,7 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED*** ?? .half
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ Calculates the height for the `detent`.
 ***REMOVED******REMOVED***/ - Parameter detent: The detent to use when calculating height
 ***REMOVED******REMOVED***/ - Returns: A height for the provided detent based on the current maximum height
 ***REMOVED***func heightFor(detent: FloatingPanelDetent) -> CGFloat {
@@ -165,14 +167,14 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Configures a handle area.
-***REMOVED******REMOVED***/ - Returns: A configured handle area, suitable for placement in the panel.
-***REMOVED***@ViewBuilder func makeHandleArea() -> some View {
+***REMOVED******REMOVED***/ Configures a handle view.
+***REMOVED******REMOVED***/ - Returns: A configured handle view, suitable for placement in the panel.
+***REMOVED***@ViewBuilder func makeHandleView() -> some View {
 ***REMOVED******REMOVED***ZStack {
 ***REMOVED******REMOVED******REMOVED***backgroundColor
 ***REMOVED******REMOVED******REMOVED***Handle(color: handleColor)
 ***REMOVED***
-***REMOVED******REMOVED***.frame(height: 20)
+***REMOVED******REMOVED***.frame(height: 30)
 ***REMOVED******REMOVED***.gesture(drag)
 ***REMOVED******REMOVED***.zIndex(1)
 ***REMOVED***
@@ -220,6 +222,7 @@ private struct RoundedCorners: Shape {
 private extension View {
 ***REMOVED******REMOVED***/ Clips this view to its bounding frame, with the specified corner radius, on the specified corners.
 ***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - radius: The radius used to round the corners.
 ***REMOVED******REMOVED***/   - corners: The corners to be rounded.
 ***REMOVED******REMOVED***/ - Returns: A view that clips this view to its bounding frame with the specified corner radius and
 ***REMOVED******REMOVED***/ corners.
