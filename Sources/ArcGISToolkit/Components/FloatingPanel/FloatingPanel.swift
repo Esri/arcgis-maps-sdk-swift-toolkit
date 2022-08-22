@@ -88,8 +88,6 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED******REMOVED******REMOVED***.cornerRadius(10, corners: isCompact ? [.topLeft, .topRight] : [.allCorners])
 ***REMOVED******REMOVED******REMOVED***.shadow(radius: 10)
 ***REMOVED******REMOVED******REMOVED***.opacity(isPresented ? 1.0 : .zero)
-***REMOVED******REMOVED******REMOVED***.padding([.leading, .top, .trailing], isCompact ? 0 : 10)
-***REMOVED******REMOVED******REMOVED***.padding([.bottom], isCompact ? 0 : 50)
 ***REMOVED******REMOVED******REMOVED***.frame(
 ***REMOVED******REMOVED******REMOVED******REMOVED***width: geometryProxy.size.width,
 ***REMOVED******REMOVED******REMOVED******REMOVED***height: geometryProxy.size.height,
@@ -116,6 +114,8 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.animation(.default, value: isPresented)
 ***REMOVED***
+***REMOVED******REMOVED***.padding([.leading, .top, .trailing], isCompact ? 0 : 10)
+***REMOVED******REMOVED***.padding([.bottom], isCompact ? 0 : 50)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var drag: some Gesture {
