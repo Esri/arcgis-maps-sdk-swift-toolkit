@@ -95,7 +95,7 @@ private struct FloatingPanelModifier<PanelContent>: ViewModifier where PanelCont
 ***REMOVED******REMOVED******REMOVED******REMOVED***) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***panelContent
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.edgesIgnoringSafeArea(.bottom)
+***REMOVED******REMOVED******REMOVED******REMOVED***.ignoresSafeArea(.all, edges: .bottom)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: isCompact ? .infinity : maxWidth)
 ***REMOVED******REMOVED***
 ***REMOVED***
