@@ -28,7 +28,7 @@ struct RequiredInputAlertView: UIViewControllerRepresentable {
 ***REMOVED***@State var fieldTwo = ""
 ***REMOVED***
 ***REMOVED******REMOVED***/ <#Description#>
-***REMOVED***private let style: Style
+***REMOVED***private let usage: Usage
 ***REMOVED***
 ***REMOVED******REMOVED***/ <#Description#>
 ***REMOVED***private let title: String
@@ -45,35 +45,37 @@ struct RequiredInputAlertView: UIViewControllerRepresentable {
 ***REMOVED******REMOVED***/ <#Description#>
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - isPresented: <#isPresented description#>
-***REMOVED******REMOVED***/   - style: <#style description#>
-***REMOVED******REMOVED***/   - title: <#title description#>
 ***REMOVED******REMOVED***/   - message: <#message description#>
+***REMOVED******REMOVED***/   - title: <#title description#>
+***REMOVED******REMOVED***/   - usage: <#usage description#>
 ***REMOVED******REMOVED***/   - cancelConfiguration: <#cancelConfiguration description#>
 ***REMOVED******REMOVED***/   - continueConfiguration: <#continueConfiguration description#>
 ***REMOVED***init(
 ***REMOVED******REMOVED***isPresented: Binding<Bool>,
-***REMOVED******REMOVED***style: Style,
-***REMOVED******REMOVED***title: String,
 ***REMOVED******REMOVED***message: String,
+***REMOVED******REMOVED***title: String,
+***REMOVED******REMOVED***usage: Usage,
 ***REMOVED******REMOVED***cancelConfiguration: ActionConfiguration,
 ***REMOVED******REMOVED***continueConfiguration: ActionConfiguration
 ***REMOVED***) {
 ***REMOVED******REMOVED***_isPresented = isPresented
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***self.style = style
+***REMOVED******REMOVED***self.message = message
+***REMOVED******REMOVED***self.title = title
+***REMOVED******REMOVED***self.usage = usage
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***self.cancelConfiguration = cancelConfiguration
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED***self.continueConfiguration = continueConfiguration
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***self.title = title
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***self.message = message
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ <#Description#>
 ***REMOVED***var isContinueEnabled: Bool {
-***REMOVED******REMOVED***!fieldOne.isEmpty && !fieldTwo.isEmpty
+***REMOVED******REMOVED***switch usage {
+***REMOVED******REMOVED***case .identityAndPassword:
+***REMOVED******REMOVED******REMOVED***return !fieldOne.isEmpty && !fieldTwo.isEmpty
+***REMOVED******REMOVED***case .passwordOnly:
+***REMOVED******REMOVED******REMOVED***return !fieldTwo.isEmpty
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ <#Description#>
@@ -94,7 +96,7 @@ struct RequiredInputAlertView: UIViewControllerRepresentable {
 ***REMOVED******REMOVED******REMOVED***continueConfiguration.handler(fieldOne, fieldTwo)
 ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***if style == .identityAndPassword {
+***REMOVED******REMOVED***if usage == .identityAndPassword {
 ***REMOVED******REMOVED******REMOVED***uiAlertController.addTextField { textField in
 ***REMOVED******REMOVED******REMOVED******REMOVED***textField.addAction(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***UIAction { _ in
@@ -197,7 +199,7 @@ extension RequiredInputAlertView {
 
 extension RequiredInputAlertView {
 ***REMOVED******REMOVED***/ <#Description#>
-***REMOVED***enum Style {
+***REMOVED***enum Usage {
 ***REMOVED******REMOVED******REMOVED***/
 ***REMOVED******REMOVED***case identityAndPassword
 ***REMOVED******REMOVED***

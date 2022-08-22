@@ -183,9 +183,9 @@ private extension View {
 ***REMOVED******REMOVED***overlay {
 ***REMOVED******REMOVED******REMOVED***RequiredInputAlertView(
 ***REMOVED******REMOVED******REMOVED******REMOVED***isPresented: isPresented,
-***REMOVED******REMOVED******REMOVED******REMOVED***style: .passwordOnly,
-***REMOVED******REMOVED******REMOVED******REMOVED***title: "Password Required",
 ***REMOVED******REMOVED******REMOVED******REMOVED***message: "Please enter a password for the chosen certificate.",
+***REMOVED******REMOVED******REMOVED******REMOVED***title: "Password Required",
+***REMOVED******REMOVED******REMOVED******REMOVED***usage: .passwordOnly,
 ***REMOVED******REMOVED******REMOVED******REMOVED***cancelConfiguration: .init(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title: "Cancel",
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***handler: { _, _ in
