@@ -74,13 +74,13 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED******REMOVED***GeometryReader { geometryProxy in
 ***REMOVED******REMOVED******REMOVED***VStack(spacing: 0) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if isCompact && isPresented {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeHandleArea()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeHandleView()
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***content
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(height: height)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.bottom, isCompact ? 25 : .zero)
 ***REMOVED******REMOVED******REMOVED******REMOVED***if !isCompact && isPresented {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeHandleArea()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeHandleView()
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.background(backgroundColor)
@@ -167,7 +167,7 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Configures a handle area.
 ***REMOVED******REMOVED***/ - Returns: A configured handle area, suitable for placement in the panel.
-***REMOVED***@ViewBuilder func makeHandleArea() -> some View {
+***REMOVED***@ViewBuilder func makeHandleView() -> some View {
 ***REMOVED******REMOVED***ZStack {
 ***REMOVED******REMOVED******REMOVED***backgroundColor
 ***REMOVED******REMOVED******REMOVED***Handle(color: handleColor)
