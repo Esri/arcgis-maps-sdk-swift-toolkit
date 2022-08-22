@@ -34,10 +34,11 @@ struct FloatingPanel<Content>: View where Content: View {
     let content: Content
     
     /// Creates a `FloatingPanel`
-    /// - Parameter backgroundColor: The background color of the floating panel.
-    /// - Parameter detent: Controls the height of the panel.
-    /// - Parameter isPresented: A Boolean value indicating if the view is presented.
-    /// - Parameter content: The view shown in the floating panel.
+    /// - Parameters:
+    ///   - backgroundColor: The background color of the floating panel.
+    ///   - detent: Controls the height of the panel.
+    ///   - isPresented: A Boolean value indicating if the view is presented.
+    ///   - content: The view shown in the floating panel.
     init(
         backgroundColor: Color,
         detent: Binding<FloatingPanelDetent>,
