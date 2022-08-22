@@ -14,42 +14,46 @@
 import Foundation
 import SwiftUI
 
-/// A view that prompts a user to login with a username and password.
+/// A view that prompts a user to provide credentials. It can be configured to require either an identity and
+/// password, or a password only.
 ///
-/// Implemented in UIKit because as of iOS 16, SwiftUI alerts don't support visible but disabled buttons.
-struct RequiredInputAlertView: UIViewControllerRepresentable {
+/// The view is implemented as a wrapper for a UIKit `UIAlertController` because as of iOS 16,
+/// SwiftUI alerts don't support visible but disabled buttons.
+struct CredentialInputView: UIViewControllerRepresentable {
+    /// The cancel action configuration.
+    private let cancelConfiguration: ActionConfiguration
+    
+    /// The continue action configuration.
+    private let continueConfiguration: ActionConfiguration
+    
+    /// The value in the identity field.
+    ///
+    /// This member is unused when usage is set to `Usage.passwordOnly`.
+    @State private var identity = ""
+    
     /// A Boolean value indicating whether or not the view is displayed.
     @Binding private var isPresented: Bool
     
-    /// <#Description#>
-    @State var fieldOne = ""
-    
-    /// <#Description#>
-    @State var fieldTwo = ""
-    
-    /// <#Description#>
-    private let usage: Usage
-    
-    /// <#Description#>
-    private let title: String
-    
-    /// <#Description#>
+    /// Descriptive text that provides more details about the reason for the alert.
     private let message: String
     
-    /// <#Description#>
-    private let cancelConfiguration: ActionConfiguration
+    /// The value in the password field.
+    @State private var password = ""
     
-    /// <#Description#>
-    private let continueConfiguration: ActionConfiguration
+    /// The title of the alert.
+    private let title: String
     
-    /// <#Description#>
+    /// The usage of the alert.
+    private let usage: Usage
+    
+    /// Creates the view.
     /// - Parameters:
-    ///   - isPresented: <#isPresented description#>
-    ///   - message: <#message description#>
-    ///   - title: <#title description#>
-    ///   - usage: <#usage description#>
-    ///   - cancelConfiguration: <#cancelConfiguration description#>
-    ///   - continueConfiguration: <#continueConfiguration description#>
+    ///   - isPresented: A Boolean value indicating whether or not the view is displayed.
+    ///   - message: Descriptive text that provides more details about the reason for the alert.
+    ///   - title: The title of the alert.
+    ///   - usage: The usage of the alert.
+    ///   - cancelConfiguration: The cancel action configuration.
+    ///   - continueConfiguration: The continue action configuration.
     init(
         isPresented: Binding<Bool>,
         message: String,
@@ -58,49 +62,56 @@ struct RequiredInputAlertView: UIViewControllerRepresentable {
         cancelConfiguration: ActionConfiguration,
         continueConfiguration: ActionConfiguration
     ) {
+        self.cancelConfiguration = cancelConfiguration
+        self.continueConfiguration = continueConfiguration
+        
         _isPresented = isPresented
         
         self.message = message
         self.title = title
         self.usage = usage
-        
-        self.cancelConfiguration = cancelConfiguration
-        self.continueConfiguration = continueConfiguration
     }
     
-    /// <#Description#>
-    var isContinueEnabled: Bool {
+    /// A Boolean value indicating whether the alert should allow the continue action to proceed.
+    private var isContinueEnabled: Bool {
         switch usage {
         case .identityAndPassword:
-            return !fieldOne.isEmpty && !fieldTwo.isEmpty
+            return !identity.isEmpty && !password.isEmpty
         case .passwordOnly:
-            return !fieldTwo.isEmpty
+            return !password.isEmpty
         }
     }
     
-    /// <#Description#>
-    /// - Parameter context: <#context description#>
-    /// - Returns: <#description#>
-    func makeAlertController(context: Context) -> UIAlertController {
+    /// Creates the alert controller.
+    /// - Parameter context: A context structure containing information about the current state of the
+    /// system.
+    /// - Returns: The alert controller displayed to the user.
+    private func makeAlertController(context: Context) -> UIAlertController {
         let uiAlertController = UIAlertController(
             title: title,
             message: message,
             preferredStyle: .alert
         )
         
-        let cancelAction = UIAlertAction(title: cancelConfiguration.title, style: .cancel) { _ in
-            cancelConfiguration.handler(fieldOne, fieldTwo)
+        let cancelAction = UIAlertAction(
+            title: cancelConfiguration.title,
+            style: .cancel
+        ) { _ in
+            cancelConfiguration.handler(identity, password)
         }
         
-        let continueAction = UIAlertAction(title: continueConfiguration.title, style: .default) { _ in
-            continueConfiguration.handler(fieldOne, fieldTwo)
+        let continueAction = UIAlertAction(
+            title: continueConfiguration.title,
+            style: .default
+        ) { _ in
+            continueConfiguration.handler(identity, password)
         }
         
         if usage == .identityAndPassword {
             uiAlertController.addTextField { textField in
                 textField.addAction(
                     UIAction { _ in
-                        fieldOne = textField.text ?? ""
+                        identity = textField.text ?? ""
                         continueAction.isEnabled = isContinueEnabled
                     },
                     for: .editingChanged
@@ -116,14 +127,18 @@ struct RequiredInputAlertView: UIViewControllerRepresentable {
         uiAlertController.addTextField { textField in
             textField.addAction(
                 UIAction { _ in
-                    fieldTwo = textField.text ?? ""
+                    password = textField.text ?? ""
                     continueAction.isEnabled = isContinueEnabled
                 },
                 for: .editingChanged
             )
             textField.autocapitalizationType = .none
             textField.autocorrectionType = .no
+            
+            // Add a coordinator to the password field so that the primary
+            // keyboard action can be disabled when the field is empty.
             textField.delegate = context.coordinator
+            
             textField.isSecureTextEntry = true
             textField.placeholder = "Password"
             textField.returnKeyType = .go
@@ -163,47 +178,59 @@ struct RequiredInputAlertView: UIViewControllerRepresentable {
     }
 }
 
-extension RequiredInputAlertView {
+extension CredentialInputView {
     /// The coordinator for the login view that acts as a delegate to the underlying
     /// `UIAlertViewController`.
     final class Coordinator: NSObject, UITextFieldDelegate {
         /// The view that owns this coordinator.
-        let parent: RequiredInputAlertView
+        let parent: CredentialInputView
         
         /// Creates the coordinator.
         /// - Parameter parent: The view that owns this coordinator.
-        init(_ parent: RequiredInputAlertView) {
+        init(_ parent: CredentialInputView) {
             self.parent = parent
         }
         
         func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-            guard !parent.fieldTwo.isEmpty else {
-                return false
-            }
-            parent.continueConfiguration.handler(parent.fieldOne, parent.fieldTwo)
+            guard !parent.password.isEmpty else { return false }
+            parent.continueConfiguration.handler(
+                parent.identity,
+                parent.password
+            )
             return true
         }
     }
 }
 
-extension RequiredInputAlertView {
-    /// <#Description#>
+extension CredentialInputView {
+    /// A configuration for an alert action.
     struct ActionConfiguration {
-        /// <#Description#>
+        /// The title of the action.
         let title: String
         
-        /// <#Description#>
+        /// The block to execute when the action is triggered.
         let handler: (String, String) -> Void
+        
+        /// Makes the action configuration.
+        /// - Parameters:
+        ///   - title: The title of the action.
+        ///   - handler: The block to execute when the action is triggered. The first and second
+        ///   parameters correspond to the identity and password field values.
+        init(title: String, handler: @escaping (String, String) -> Void) {
+            self.title = title
+            self.handler = handler
+        }
     }
 }
 
-extension RequiredInputAlertView {
-    /// <#Description#>
+extension CredentialInputView {
+    /// The usage of the view. This determines if the view is intended to require either an identity and
+    /// password, or a password only.
     enum Usage {
-        ///
+        /// Indicates the view is intended to collect an identity and password.
         case identityAndPassword
         
-        ///
+        /// Indicates the view is intended to collect a password only.
         case passwordOnly
     }
 }

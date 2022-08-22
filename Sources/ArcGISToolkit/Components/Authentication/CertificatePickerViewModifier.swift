@@ -181,7 +181,7 @@ private extension View {
         viewModel: CertificatePickerViewModel
     ) -> some View {
         overlay {
-            RequiredInputAlertView(
+            CredentialInputView(
                 isPresented: isPresented,
                 message: "Please enter a password for the chosen certificate.",
                 title: "Password Required",
