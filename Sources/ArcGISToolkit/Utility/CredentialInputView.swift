@@ -43,22 +43,22 @@ struct CredentialInputView: UIViewControllerRepresentable {
 ***REMOVED******REMOVED***/ The title of the alert.
 ***REMOVED***private let title: String
 ***REMOVED***
-***REMOVED******REMOVED***/ The usage of the alert.
-***REMOVED***private let usage: Usage
+***REMOVED******REMOVED***/ The fields shown in the alert.
+***REMOVED***private let fields: Fields
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates the view.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - isPresented: A Boolean value indicating whether or not the view is displayed.
 ***REMOVED******REMOVED***/   - message: Descriptive text that provides more details about the reason for the alert.
 ***REMOVED******REMOVED***/   - title: The title of the alert.
-***REMOVED******REMOVED***/   - usage: The usage of the alert.
+***REMOVED******REMOVED***/   - fields: The fields shown in the alert.
 ***REMOVED******REMOVED***/   - cancelConfiguration: The cancel action configuration.
 ***REMOVED******REMOVED***/   - continueConfiguration: The continue action configuration.
 ***REMOVED***init(
+***REMOVED******REMOVED***fields: Fields,
 ***REMOVED******REMOVED***isPresented: Binding<Bool>,
 ***REMOVED******REMOVED***message: String,
 ***REMOVED******REMOVED***title: String,
-***REMOVED******REMOVED***usage: Usage,
 ***REMOVED******REMOVED***cancelConfiguration: Action,
 ***REMOVED******REMOVED***continueConfiguration: Action
 ***REMOVED***) {
@@ -67,14 +67,14 @@ struct CredentialInputView: UIViewControllerRepresentable {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***_isPresented = isPresented
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED***self.fields = fields
 ***REMOVED******REMOVED***self.message = message
 ***REMOVED******REMOVED***self.title = title
-***REMOVED******REMOVED***self.usage = usage
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the alert should allow the continue action to proceed.
 ***REMOVED***private var isContinueEnabled: Bool {
-***REMOVED******REMOVED***switch usage {
+***REMOVED******REMOVED***switch fields {
 ***REMOVED******REMOVED***case .identityAndPassword:
 ***REMOVED******REMOVED******REMOVED***return !identity.isEmpty && !password.isEmpty
 ***REMOVED******REMOVED***case .passwordOnly:
@@ -107,7 +107,7 @@ struct CredentialInputView: UIViewControllerRepresentable {
 ***REMOVED******REMOVED******REMOVED***continueConfiguration.handler(identity, password)
 ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***if usage == .identityAndPassword {
+***REMOVED******REMOVED***if fields == .identityAndPassword {
 ***REMOVED******REMOVED******REMOVED***uiAlertController.addTextField { textField in
 ***REMOVED******REMOVED******REMOVED******REMOVED***textField.addAction(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***UIAction { _ in
@@ -216,7 +216,7 @@ extension CredentialInputView {
 extension CredentialInputView {
 ***REMOVED******REMOVED***/ The usage of the view. This determines if the view is intended to require either an identity and
 ***REMOVED******REMOVED***/ password, or a password only.
-***REMOVED***enum Usage {
+***REMOVED***enum Fields {
 ***REMOVED******REMOVED******REMOVED***/ Indicates the view is intended to collect an identity and password.
 ***REMOVED******REMOVED***case identityAndPassword
 ***REMOVED******REMOVED***
