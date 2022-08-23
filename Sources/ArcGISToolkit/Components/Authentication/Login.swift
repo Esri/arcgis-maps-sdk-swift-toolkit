@@ -98,13 +98,13 @@ struct LoginViewModifier: ViewModifier {
                     isPresented: $isPresented,
                     message: "You must sign in to access '\(viewModel.challengingHost)'",
                     title: "Authentication Required",
-                    cancelConfiguration: .init(
+                    cancelAction: .init(
                         title: "Cancel",
                         handler: { _, _ in
                             viewModel.cancel()
                         }
                     ),
-                    continueConfiguration: .init(
+                    continueAction: .init(
                         title: "Continue",
                         handler: { username, password in
                             viewModel.username = username

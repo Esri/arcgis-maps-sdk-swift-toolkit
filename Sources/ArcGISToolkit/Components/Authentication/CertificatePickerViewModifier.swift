@@ -186,13 +186,13 @@ private extension View {
                 isPresented: isPresented,
                 message: "Please enter a password for the chosen certificate.",
                 title: "Password Required",
-                cancelConfiguration: .init(
+                cancelAction: .init(
                     title: "Cancel",
                     handler: { _, _ in
                         viewModel.cancel()
                     }
                 ),
-                continueConfiguration: .init(
+                continueAction: .init(
                     title: "OK",
                     handler: { _, password in
                         viewModel.password = password
