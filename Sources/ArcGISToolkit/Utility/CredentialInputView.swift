@@ -75,7 +75,7 @@ struct CredentialInputView: UIViewControllerRepresentable {
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the alert should allow the continue action to proceed.
 ***REMOVED***private var isContinueEnabled: Bool {
 ***REMOVED******REMOVED***switch fields {
-***REMOVED******REMOVED***case .identityAndPassword:
+***REMOVED******REMOVED***case .usernamePassword:
 ***REMOVED******REMOVED******REMOVED***return !identity.isEmpty && !password.isEmpty
 ***REMOVED******REMOVED***case .password:
 ***REMOVED******REMOVED******REMOVED***return !password.isEmpty
@@ -107,7 +107,7 @@ struct CredentialInputView: UIViewControllerRepresentable {
 ***REMOVED******REMOVED******REMOVED***continueConfiguration.handler(identity, password)
 ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***if fields == .identityAndPassword {
+***REMOVED******REMOVED***if fields == .usernamePassword {
 ***REMOVED******REMOVED******REMOVED***uiAlertController.addTextField { textField in
 ***REMOVED******REMOVED******REMOVED******REMOVED***textField.addAction(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***UIAction { _ in
@@ -214,11 +214,11 @@ extension CredentialInputView {
 ***REMOVED***
 
 extension CredentialInputView {
-***REMOVED******REMOVED***/ The usage of the view. This determines if the view is intended to require either an identity and
+***REMOVED******REMOVED***/ The usage of the view. This determines if the view is intended to require either a username and
 ***REMOVED******REMOVED***/ password, or a password only.
 ***REMOVED***enum Fields {
-***REMOVED******REMOVED******REMOVED***/ Indicates the view is intended to collect an identity and password.
-***REMOVED******REMOVED***case identityAndPassword
+***REMOVED******REMOVED******REMOVED***/ Indicates the view is intended to collect a username and password.
+***REMOVED******REMOVED***case usernamePassword
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ Indicates the view is intended to collect a password only.
 ***REMOVED******REMOVED***case password

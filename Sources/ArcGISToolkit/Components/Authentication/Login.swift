@@ -94,7 +94,7 @@ struct LoginViewModifier: ViewModifier {
 ***REMOVED******REMOVED******REMOVED***.task { isPresented = true ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***.overlay {
 ***REMOVED******REMOVED******REMOVED******REMOVED***CredentialInputView(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***fields: .identityAndPassword,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***fields: .usernamePassword,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented: $isPresented,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***message: "You must sign in to access '\(viewModel.challengingHost)'",
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title: "Authentication Required",
