@@ -51,22 +51,18 @@ struct UtilityNetworkTraceExampleView: View {
 ***REMOVED******REMOVED******REMOVED***.onViewpointChanged(kind: .centerAndScale) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***viewpoint = $0
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.overlay(alignment: .topTrailing) {
-***REMOVED******REMOVED******REMOVED******REMOVED***FloatingPanel {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***UtilityNetworkTrace(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***graphicsOverlay: $resultGraphicsOverlay,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***map: map,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mapPoint: $mapPoint,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewPoint: $viewPoint,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mapViewProxy: $mapViewProxy,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint: $viewpoint
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.task {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await ArcGISRuntimeEnvironment.credentialStore.add(try! await .publicSample)
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.padding()
-***REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 400)
+***REMOVED******REMOVED******REMOVED***.floatingPanel(isPresented: .constant(true)) {
+***REMOVED******REMOVED******REMOVED******REMOVED***UtilityNetworkTrace(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***graphicsOverlay: $resultGraphicsOverlay,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***map: map,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mapPoint: $mapPoint,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewPoint: $viewPoint,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mapViewProxy: $mapViewProxy,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint: $viewpoint
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.task {
+***REMOVED******REMOVED******REMOVED******REMOVED***await ArcGISRuntimeEnvironment.credentialStore.add(try! await .publicSample)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***

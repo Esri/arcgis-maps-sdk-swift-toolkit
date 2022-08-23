@@ -34,7 +34,7 @@ import XCTest
 ***REMOVED******REMOVED***challenge.resume(with: .init(username: "user1", password: "1234"))
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let result = await challenge.value
-***REMOVED******REMOVED***XCTAssertTrue(result.error is MockError)
+***REMOVED******REMOVED***XCTAssertEqual(result, .allowRequestToFail)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func testCancel() async {
@@ -44,7 +44,7 @@ import XCTest
 ***REMOVED******REMOVED***challenge.cancel()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let result = await challenge.value
-***REMOVED******REMOVED***XCTAssertEqual(result.value, .cancelAuthenticationChallenge)
+***REMOVED******REMOVED***XCTAssertEqual(result, .cancel)
 ***REMOVED***
 ***REMOVED***
 
