@@ -219,11 +219,11 @@ extension CredentialInputView {
 ***REMOVED******REMOVED***/ The fields shown in the alert. This determines if the view is intended to require either a username
 ***REMOVED******REMOVED***/ and password, or a password only.
 ***REMOVED***enum Fields {
-***REMOVED******REMOVED******REMOVED***/ Indicates the view is intended to collect a username and password.
-***REMOVED******REMOVED***case usernamePassword
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ Indicates the view is intended to collect a password only.
 ***REMOVED******REMOVED***case password
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ Indicates the view is intended to collect a username and password.
+***REMOVED******REMOVED***case usernamePassword
 ***REMOVED***
 ***REMOVED***
 
