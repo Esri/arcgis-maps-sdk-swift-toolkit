@@ -14,7 +14,7 @@
 import Foundation
 import SwiftUI
 
-/// A view that prompts a user to provide credentials. It can be configured to require either an identity and
+/// A view that prompts a user to provide credentials. It can be configured to require either a username and
 /// password, or a password only.
 ///
 /// The view is implemented as a wrapper for a UIKit `UIAlertController` because as of iOS 16,
@@ -214,8 +214,8 @@ extension CredentialInputView {
 }
 
 extension CredentialInputView {
-    /// The usage of the view. This determines if the view is intended to require either a username and
-    /// password, or a password only.
+    /// The fields shown in the alert. This determines if the view is intended to require either a username
+    /// and password, or a password only.
     enum Fields {
         /// Indicates the view is intended to collect a username and password.
         case usernamePassword
