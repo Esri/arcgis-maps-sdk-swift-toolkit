@@ -85,7 +85,7 @@ import UniformTypeIdentifiers
 ***REMOVED***
 ***REMOVED******REMOVED***/ Cancels the challenge.
 ***REMOVED***func cancel() {
-***REMOVED******REMOVED***challenge.resume(with: .cancelAuthenticationChallenge)
+***REMOVED******REMOVED***challenge.resume(with: .cancel)
 ***REMOVED***
 ***REMOVED***
 
