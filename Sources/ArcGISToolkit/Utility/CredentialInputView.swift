@@ -77,7 +77,7 @@ struct CredentialInputView: UIViewControllerRepresentable {
 ***REMOVED******REMOVED***switch fields {
 ***REMOVED******REMOVED***case .identityAndPassword:
 ***REMOVED******REMOVED******REMOVED***return !identity.isEmpty && !password.isEmpty
-***REMOVED******REMOVED***case .passwordOnly:
+***REMOVED******REMOVED***case .password:
 ***REMOVED******REMOVED******REMOVED***return !password.isEmpty
 ***REMOVED***
 ***REMOVED***
@@ -221,6 +221,6 @@ extension CredentialInputView {
 ***REMOVED******REMOVED***case identityAndPassword
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ Indicates the view is intended to collect a password only.
-***REMOVED******REMOVED***case passwordOnly
+***REMOVED******REMOVED***case password
 ***REMOVED***
 ***REMOVED***
