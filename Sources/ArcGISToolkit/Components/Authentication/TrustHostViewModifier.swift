@@ -43,7 +43,7 @@ struct TrustHostViewModifier: ViewModifier {
                     challenge.resume(with: .useCredential(.serverTrust))
                 }
                 Button("Cancel", role: .cancel) {
-                    challenge.resume(with: .cancelAuthenticationChallenge)
+                    challenge.resume(with: .cancel)
                 }
             } message: { _ in
                 Text("The certificate provided by '\(challenge.host)' is not signed by a trusted authority.")
