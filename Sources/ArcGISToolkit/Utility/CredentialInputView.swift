@@ -26,7 +26,7 @@ struct CredentialInputView: UIViewControllerRepresentable {
 ***REMOVED******REMOVED***/ The continue action.
 ***REMOVED***private let continueAction: Action
 ***REMOVED***
-***REMOVED******REMOVED***/ The value in the identity field.
+***REMOVED******REMOVED***/ The value in the username field.
 ***REMOVED******REMOVED***/
 ***REMOVED******REMOVED***/ This member is unused when usage is set to `Usage.passwordOnly`.
 ***REMOVED***@State private var username = ""
@@ -76,7 +76,7 @@ struct CredentialInputView: UIViewControllerRepresentable {
 ***REMOVED***private var isContinueEnabled: Bool {
 ***REMOVED******REMOVED***switch fields {
 ***REMOVED******REMOVED***case .usernamePassword:
-***REMOVED******REMOVED******REMOVED***return !identity.isEmpty && !password.isEmpty
+***REMOVED******REMOVED******REMOVED***return !username.isEmpty && !password.isEmpty
 ***REMOVED******REMOVED***case .password:
 ***REMOVED******REMOVED******REMOVED***return !password.isEmpty
 ***REMOVED***
@@ -97,21 +97,21 @@ struct CredentialInputView: UIViewControllerRepresentable {
 ***REMOVED******REMOVED******REMOVED***title: cancelAction.title,
 ***REMOVED******REMOVED******REMOVED***style: .cancel
 ***REMOVED******REMOVED***) { _ in
-***REMOVED******REMOVED******REMOVED***cancelAction.handler(identity, password)
+***REMOVED******REMOVED******REMOVED***cancelAction.handler(username, password)
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let continueUIAlertAction = UIAlertAction(
 ***REMOVED******REMOVED******REMOVED***title: continueAction.title,
 ***REMOVED******REMOVED******REMOVED***style: .default
 ***REMOVED******REMOVED***) { _ in
-***REMOVED******REMOVED******REMOVED***continueAction.handler(identity, password)
+***REMOVED******REMOVED******REMOVED***continueAction.handler(username, password)
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***if fields == .usernamePassword {
 ***REMOVED******REMOVED******REMOVED***uiAlertController.addTextField { textField in
 ***REMOVED******REMOVED******REMOVED******REMOVED***textField.addAction(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***UIAction { _ in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***identity = textField.text ?? ""
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***username = textField.text ?? ""
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***continueUIAlertAction.isEnabled = isContinueEnabled
 ***REMOVED******REMOVED******REMOVED******REMOVED***,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for: .editingChanged
@@ -196,7 +196,7 @@ extension CredentialInputView {
 ***REMOVED******REMOVED***func textFieldShouldReturn(_ textField: UITextField) -> Bool {
 ***REMOVED******REMOVED******REMOVED***guard !parent.password.isEmpty else { return false ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***parent.continueAction.handler(
-***REMOVED******REMOVED******REMOVED******REMOVED***parent.identity,
+***REMOVED******REMOVED******REMOVED******REMOVED***parent.username,
 ***REMOVED******REMOVED******REMOVED******REMOVED***parent.password
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***return true
