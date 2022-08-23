@@ -210,16 +210,6 @@ extension CredentialInputView {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ The block to execute when the action is triggered.
 ***REMOVED******REMOVED***let handler: (String, String) -> Void
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ Makes the action configuration.
-***REMOVED******REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED******REMOVED***/   - title: The title of the action.
-***REMOVED******REMOVED******REMOVED***/   - handler: The block to execute when the action is triggered. The first and second
-***REMOVED******REMOVED******REMOVED***/   parameters correspond to the identity and password field values.
-***REMOVED******REMOVED***init(title: String, handler: @escaping (String, String) -> Void) {
-***REMOVED******REMOVED******REMOVED***self.title = title
-***REMOVED******REMOVED******REMOVED***self.handler = handler
-***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
