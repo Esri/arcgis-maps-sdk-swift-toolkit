@@ -186,13 +186,13 @@ private extension View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***isPresented: isPresented,
 ***REMOVED******REMOVED******REMOVED******REMOVED***message: "Please enter a password for the chosen certificate.",
 ***REMOVED******REMOVED******REMOVED******REMOVED***title: "Password Required",
-***REMOVED******REMOVED******REMOVED******REMOVED***cancelConfiguration: .init(
+***REMOVED******REMOVED******REMOVED******REMOVED***cancelAction: .init(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title: "Cancel",
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***handler: { _, _ in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.cancel()
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***),
-***REMOVED******REMOVED******REMOVED******REMOVED***continueConfiguration: .init(
+***REMOVED******REMOVED******REMOVED******REMOVED***continueAction: .init(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title: "OK",
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***handler: { _, password in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.password = password

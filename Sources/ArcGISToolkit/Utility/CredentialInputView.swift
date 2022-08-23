@@ -20,11 +20,11 @@ import Foundation
 ***REMOVED***/ The view is implemented as a wrapper for a UIKit `UIAlertController` because as of iOS 16,
 ***REMOVED***/ SwiftUI alerts don't support visible but disabled buttons.
 struct CredentialInputView: UIViewControllerRepresentable {
-***REMOVED******REMOVED***/ The cancel action configuration.
-***REMOVED***private let cancelConfiguration: Action
+***REMOVED******REMOVED***/ The cancel action.
+***REMOVED***private let cancelAction: Action
 ***REMOVED***
-***REMOVED******REMOVED***/ The continue action configuration.
-***REMOVED***private let continueConfiguration: Action
+***REMOVED******REMOVED***/ The continue action.
+***REMOVED***private let continueAction: Action
 ***REMOVED***
 ***REMOVED******REMOVED***/ The value in the identity field.
 ***REMOVED******REMOVED***/
@@ -52,18 +52,18 @@ struct CredentialInputView: UIViewControllerRepresentable {
 ***REMOVED******REMOVED***/   - message: Descriptive text that provides more details about the reason for the alert.
 ***REMOVED******REMOVED***/   - title: The title of the alert.
 ***REMOVED******REMOVED***/   - fields: The fields shown in the alert.
-***REMOVED******REMOVED***/   - cancelConfiguration: The cancel action configuration.
-***REMOVED******REMOVED***/   - continueConfiguration: The continue action configuration.
+***REMOVED******REMOVED***/   - cancelAction: The cancel action.
+***REMOVED******REMOVED***/   - continueAction: The continue action.
 ***REMOVED***init(
 ***REMOVED******REMOVED***fields: Fields,
 ***REMOVED******REMOVED***isPresented: Binding<Bool>,
 ***REMOVED******REMOVED***message: String,
 ***REMOVED******REMOVED***title: String,
-***REMOVED******REMOVED***cancelConfiguration: Action,
-***REMOVED******REMOVED***continueConfiguration: Action
+***REMOVED******REMOVED***cancelAction: Action,
+***REMOVED******REMOVED***continueAction: Action
 ***REMOVED***) {
-***REMOVED******REMOVED***self.cancelConfiguration = cancelConfiguration
-***REMOVED******REMOVED***self.continueConfiguration = continueConfiguration
+***REMOVED******REMOVED***self.cancelAction = cancelAction
+***REMOVED******REMOVED***self.continueAction = continueAction
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***_isPresented = isPresented
 ***REMOVED******REMOVED***
@@ -93,18 +93,18 @@ struct CredentialInputView: UIViewControllerRepresentable {
 ***REMOVED******REMOVED******REMOVED***preferredStyle: .alert
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***let cancelAction = UIAlertAction(
-***REMOVED******REMOVED******REMOVED***title: cancelConfiguration.title,
+***REMOVED******REMOVED***let cancelUIAlertAction = UIAlertAction(
+***REMOVED******REMOVED******REMOVED***title: cancelAction.title,
 ***REMOVED******REMOVED******REMOVED***style: .cancel
 ***REMOVED******REMOVED***) { _ in
-***REMOVED******REMOVED******REMOVED***cancelConfiguration.handler(identity, password)
+***REMOVED******REMOVED******REMOVED***cancelAction.handler(identity, password)
 ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***let continueAction = UIAlertAction(
-***REMOVED******REMOVED******REMOVED***title: continueConfiguration.title,
+***REMOVED******REMOVED***let continueUIAlertAction = UIAlertAction(
+***REMOVED******REMOVED******REMOVED***title: continueAction.title,
 ***REMOVED******REMOVED******REMOVED***style: .default
 ***REMOVED******REMOVED***) { _ in
-***REMOVED******REMOVED******REMOVED***continueConfiguration.handler(identity, password)
+***REMOVED******REMOVED******REMOVED***continueAction.handler(identity, password)
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***if fields == .usernamePassword {
@@ -112,7 +112,7 @@ struct CredentialInputView: UIViewControllerRepresentable {
 ***REMOVED******REMOVED******REMOVED******REMOVED***textField.addAction(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***UIAction { _ in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***identity = textField.text ?? ""
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***continueAction.isEnabled = isContinueEnabled
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***continueUIAlertAction.isEnabled = isContinueEnabled
 ***REMOVED******REMOVED******REMOVED******REMOVED***,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for: .editingChanged
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
@@ -128,7 +128,7 @@ struct CredentialInputView: UIViewControllerRepresentable {
 ***REMOVED******REMOVED******REMOVED***textField.addAction(
 ***REMOVED******REMOVED******REMOVED******REMOVED***UIAction { _ in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***password = textField.text ?? ""
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***continueAction.isEnabled = isContinueEnabled
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***continueUIAlertAction.isEnabled = isContinueEnabled
 ***REMOVED******REMOVED******REMOVED***,
 ***REMOVED******REMOVED******REMOVED******REMOVED***for: .editingChanged
 ***REMOVED******REMOVED******REMOVED***)
@@ -145,11 +145,11 @@ struct CredentialInputView: UIViewControllerRepresentable {
 ***REMOVED******REMOVED******REMOVED***textField.textContentType = .password
 ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***cancelAction.isEnabled = true
-***REMOVED******REMOVED***continueAction.isEnabled = false
+***REMOVED******REMOVED***cancelUIAlertAction.isEnabled = true
+***REMOVED******REMOVED***continueUIAlertAction.isEnabled = false
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***uiAlertController.addAction(cancelAction)
-***REMOVED******REMOVED***uiAlertController.addAction(continueAction)
+***REMOVED******REMOVED***uiAlertController.addAction(cancelUIAlertAction)
+***REMOVED******REMOVED***uiAlertController.addAction(continueUIAlertAction)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***return uiAlertController
 ***REMOVED***
@@ -193,7 +193,7 @@ extension CredentialInputView {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***func textFieldShouldReturn(_ textField: UITextField) -> Bool {
 ***REMOVED******REMOVED******REMOVED***guard !parent.password.isEmpty else { return false ***REMOVED***
-***REMOVED******REMOVED******REMOVED***parent.continueConfiguration.handler(
+***REMOVED******REMOVED******REMOVED***parent.continueAction.handler(
 ***REMOVED******REMOVED******REMOVED******REMOVED***parent.identity,
 ***REMOVED******REMOVED******REMOVED******REMOVED***parent.password
 ***REMOVED******REMOVED******REMOVED***)
