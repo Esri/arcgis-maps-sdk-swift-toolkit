@@ -46,6 +46,6 @@ import XCTest
         
         model.cancel()
         let disposition = await challenge.value
-        XCTAssertEqual(disposition, .cancelAuthenticationChallenge)
+        XCTAssertEqual(disposition, .cancel)
     }
 }

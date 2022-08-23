@@ -51,22 +51,18 @@ struct UtilityNetworkTraceExampleView: View {
             .onViewpointChanged(kind: .centerAndScale) {
                 viewpoint = $0
             }
-            .overlay(alignment: .topTrailing) {
-                FloatingPanel {
-                    UtilityNetworkTrace(
-                        graphicsOverlay: $resultGraphicsOverlay,
-                        map: map,
-                        mapPoint: $mapPoint,
-                        viewPoint: $viewPoint,
-                        mapViewProxy: $mapViewProxy,
-                        viewpoint: $viewpoint
-                    )
-                    .task {
-                        await ArcGISRuntimeEnvironment.credentialStore.add(try! await .publicSample)
-                    }
-                }
-                .padding()
-                .frame(width: 400)
+            .floatingPanel(isPresented: .constant(true)) {
+                UtilityNetworkTrace(
+                    graphicsOverlay: $resultGraphicsOverlay,
+                    map: map,
+                    mapPoint: $mapPoint,
+                    viewPoint: $viewPoint,
+                    mapViewProxy: $mapViewProxy,
+                    viewpoint: $viewpoint
+                )
+            }
+            .task {
+                await ArcGISRuntimeEnvironment.credentialStore.add(try! await .publicSample)
             }
         }
     }
