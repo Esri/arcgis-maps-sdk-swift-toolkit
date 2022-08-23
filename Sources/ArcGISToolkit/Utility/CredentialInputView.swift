@@ -169,7 +169,9 @@ struct CredentialInputView: UIViewControllerRepresentable {
 ***REMOVED******REMOVED***guard isPresented else { return ***REMOVED***
 ***REMOVED******REMOVED***let alertController = makeAlertController(context: context)
 ***REMOVED******REMOVED******REMOVED*** On a physical iOS 16 device, without the following delay, the
-***REMOVED******REMOVED******REMOVED*** presentation fails and an error is thrown.
+***REMOVED******REMOVED******REMOVED*** presentation fails and the following warning is logged: "Attempt to
+***REMOVED******REMOVED******REMOVED*** present UIAlertController on UIViewController whose view is not in
+***REMOVED******REMOVED******REMOVED*** the window hierarchy."
 ***REMOVED******REMOVED***DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
 ***REMOVED******REMOVED******REMOVED***uiViewController.present(alertController, animated: true) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***isPresented = false
