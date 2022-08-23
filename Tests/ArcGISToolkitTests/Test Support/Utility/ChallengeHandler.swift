@@ -67,13 +67,13 @@ class ChallengeHandler: AuthenticationChallengeHandler {
                 // This will cause a self-signed certificate to be trusted.
                 return .useCredential(.serverTrust)
             } else {
-                return .allowRequestToFail
+                return .continueWithoutCredential
             }
         } else if let networkCredentialProvider = networkCredentialProvider,
                   let networkCredential = await networkCredentialProvider(challenge) {
             return .useCredential(networkCredential)
         } else {
-            return .cancelAuthenticationChallenge
+            return .cancel
         }
     }
     
@@ -86,7 +86,7 @@ class ChallengeHandler: AuthenticationChallengeHandler {
            let arcgisCredential = try? await arcgisCredentialProvider(challenge) {
             return .useCredential(arcgisCredential)
         } else {
-            return .cancelAuthenticationChallenge
+            return .cancel
         }
     }
 }

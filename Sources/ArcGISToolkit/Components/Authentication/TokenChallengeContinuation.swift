@@ -63,6 +63,6 @@ final class TokenChallengeContinuation: ValueContinuation<ArcGISAuthenticationCh
     
     /// Cancels the challenge.
     func cancel() {
-        setValue(.cancelAuthenticationChallenge)
+        setValue(.cancel)
     }
 }
