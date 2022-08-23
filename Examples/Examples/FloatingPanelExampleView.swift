@@ -16,8 +16,6 @@
 ***REMOVED***
 
 struct FloatingPanelExampleView: View {
-***REMOVED***@Environment(\.horizontalSizeClass) private var horizontalSizeClass
-***REMOVED***
 ***REMOVED***@StateObject private var map = Map(basemapStyle: .arcGISImagery)
 ***REMOVED***
 ***REMOVED***private let initialViewpoint = Viewpoint(
@@ -30,11 +28,8 @@ struct FloatingPanelExampleView: View {
 ***REMOVED******REMOVED******REMOVED***map: map,
 ***REMOVED******REMOVED******REMOVED***viewpoint: initialViewpoint
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED***.overlay(alignment: .topTrailing) {
-***REMOVED******REMOVED******REMOVED***FloatingPanel {
-***REMOVED******REMOVED******REMOVED******REMOVED***SampleContent()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.frame(maxWidth: horizontalSizeClass == .regular ? 360 : .infinity)
+***REMOVED******REMOVED***.floatingPanel(isPresented: .constant(true)) {
+***REMOVED******REMOVED******REMOVED***SampleContent()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
