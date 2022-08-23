@@ -21,10 +21,10 @@ import SwiftUI
 /// SwiftUI alerts don't support visible but disabled buttons.
 struct CredentialInputView: UIViewControllerRepresentable {
     /// The cancel action configuration.
-    private let cancelConfiguration: ActionConfiguration
+    private let cancelConfiguration: Action
     
     /// The continue action configuration.
-    private let continueConfiguration: ActionConfiguration
+    private let continueConfiguration: Action
     
     /// The value in the identity field.
     ///
@@ -59,8 +59,8 @@ struct CredentialInputView: UIViewControllerRepresentable {
         message: String,
         title: String,
         usage: Usage,
-        cancelConfiguration: ActionConfiguration,
-        continueConfiguration: ActionConfiguration
+        cancelConfiguration: Action,
+        continueConfiguration: Action
     ) {
         self.cancelConfiguration = cancelConfiguration
         self.continueConfiguration = continueConfiguration
@@ -204,7 +204,7 @@ extension CredentialInputView {
 
 extension CredentialInputView {
     /// A configuration for an alert action.
-    struct ActionConfiguration {
+    struct Action {
         /// The title of the action.
         let title: String
         
