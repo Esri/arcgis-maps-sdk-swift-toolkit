@@ -46,6 +46,6 @@ import XCTest
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***model.cancel()
 ***REMOVED******REMOVED***let disposition = await challenge.value
-***REMOVED******REMOVED***XCTAssertEqual(disposition, .cancelAuthenticationChallenge)
+***REMOVED******REMOVED***XCTAssertEqual(disposition, .cancel)
 ***REMOVED***
 ***REMOVED***

@@ -63,6 +63,6 @@ final class TokenChallengeContinuation: ValueContinuation<ArcGISAuthenticationCh
 ***REMOVED***
 ***REMOVED******REMOVED***/ Cancels the challenge.
 ***REMOVED***func cancel() {
-***REMOVED******REMOVED***setValue(.cancelAuthenticationChallenge)
+***REMOVED******REMOVED***setValue(.cancel)
 ***REMOVED***
 ***REMOVED***
