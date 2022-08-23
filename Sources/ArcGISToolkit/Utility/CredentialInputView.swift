@@ -14,7 +14,7 @@
 import Foundation
 ***REMOVED***
 
-***REMOVED***/ A view that prompts a user to provide credentials. It can be configured to require either an identity and
+***REMOVED***/ A view that prompts a user to provide credentials. It can be configured to require either a username and
 ***REMOVED***/ password, or a password only.
 ***REMOVED***/
 ***REMOVED***/ The view is implemented as a wrapper for a UIKit `UIAlertController` because as of iOS 16,
@@ -214,8 +214,8 @@ extension CredentialInputView {
 ***REMOVED***
 
 extension CredentialInputView {
-***REMOVED******REMOVED***/ The usage of the view. This determines if the view is intended to require either a username and
-***REMOVED******REMOVED***/ password, or a password only.
+***REMOVED******REMOVED***/ The fields shown in the alert. This determines if the view is intended to require either a username
+***REMOVED******REMOVED***/ and password, or a password only.
 ***REMOVED***enum Fields {
 ***REMOVED******REMOVED******REMOVED***/ Indicates the view is intended to collect a username and password.
 ***REMOVED******REMOVED***case usernamePassword
