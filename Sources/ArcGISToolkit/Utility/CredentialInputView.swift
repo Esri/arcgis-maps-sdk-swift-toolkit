@@ -20,11 +20,11 @@ import SwiftUI
 /// The view is implemented as a wrapper for a UIKit `UIAlertController` because as of iOS 16,
 /// SwiftUI alerts don't support visible but disabled buttons.
 struct CredentialInputView: UIViewControllerRepresentable {
-    /// The cancel action configuration.
-    private let cancelConfiguration: Action
+    /// The cancel action.
+    private let cancelAction: Action
     
-    /// The continue action configuration.
-    private let continueConfiguration: Action
+    /// The continue action.
+    private let continueAction: Action
     
     /// The value in the identity field.
     ///
@@ -52,18 +52,18 @@ struct CredentialInputView: UIViewControllerRepresentable {
     ///   - message: Descriptive text that provides more details about the reason for the alert.
     ///   - title: The title of the alert.
     ///   - fields: The fields shown in the alert.
-    ///   - cancelConfiguration: The cancel action configuration.
-    ///   - continueConfiguration: The continue action configuration.
+    ///   - cancelAction: The cancel action.
+    ///   - continueAction: The continue action.
     init(
         fields: Fields,
         isPresented: Binding<Bool>,
         message: String,
         title: String,
-        cancelConfiguration: Action,
-        continueConfiguration: Action
+        cancelAction: Action,
+        continueAction: Action
     ) {
-        self.cancelConfiguration = cancelConfiguration
-        self.continueConfiguration = continueConfiguration
+        self.cancelAction = cancelAction
+        self.continueAction = continueAction
         
         _isPresented = isPresented
         
@@ -93,18 +93,18 @@ struct CredentialInputView: UIViewControllerRepresentable {
             preferredStyle: .alert
         )
         
-        let cancelAction = UIAlertAction(
-            title: cancelConfiguration.title,
+        let cancelUIAlertAction = UIAlertAction(
+            title: cancelAction.title,
             style: .cancel
         ) { _ in
-            cancelConfiguration.handler(identity, password)
+            cancelAction.handler(identity, password)
         }
         
-        let continueAction = UIAlertAction(
-            title: continueConfiguration.title,
+        let continueUIAlertAction = UIAlertAction(
+            title: continueAction.title,
             style: .default
         ) { _ in
-            continueConfiguration.handler(identity, password)
+            continueAction.handler(identity, password)
         }
         
         if fields == .usernamePassword {
@@ -112,7 +112,7 @@ struct CredentialInputView: UIViewControllerRepresentable {
                 textField.addAction(
                     UIAction { _ in
                         identity = textField.text ?? ""
-                        continueAction.isEnabled = isContinueEnabled
+                        continueUIAlertAction.isEnabled = isContinueEnabled
                     },
                     for: .editingChanged
                 )
@@ -128,7 +128,7 @@ struct CredentialInputView: UIViewControllerRepresentable {
             textField.addAction(
                 UIAction { _ in
                     password = textField.text ?? ""
-                    continueAction.isEnabled = isContinueEnabled
+                    continueUIAlertAction.isEnabled = isContinueEnabled
                 },
                 for: .editingChanged
             )
@@ -145,11 +145,11 @@ struct CredentialInputView: UIViewControllerRepresentable {
             textField.textContentType = .password
         }
         
-        cancelAction.isEnabled = true
-        continueAction.isEnabled = false
+        cancelUIAlertAction.isEnabled = true
+        continueUIAlertAction.isEnabled = false
         
-        uiAlertController.addAction(cancelAction)
-        uiAlertController.addAction(continueAction)
+        uiAlertController.addAction(cancelUIAlertAction)
+        uiAlertController.addAction(continueUIAlertAction)
         
         return uiAlertController
     }
@@ -193,7 +193,7 @@ extension CredentialInputView {
         
         func textFieldShouldReturn(_ textField: UITextField) -> Bool {
             guard !parent.password.isEmpty else { return false }
-            parent.continueConfiguration.handler(
+            parent.continueAction.handler(
                 parent.identity,
                 parent.password
             )
