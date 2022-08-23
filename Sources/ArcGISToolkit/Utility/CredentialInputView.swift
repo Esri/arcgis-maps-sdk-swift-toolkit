@@ -77,7 +77,7 @@ struct CredentialInputView: UIViewControllerRepresentable {
         switch fields {
         case .identityAndPassword:
             return !identity.isEmpty && !password.isEmpty
-        case .passwordOnly:
+        case .password:
             return !password.isEmpty
         }
     }
@@ -221,6 +221,6 @@ extension CredentialInputView {
         case identityAndPassword
         
         /// Indicates the view is intended to collect a password only.
-        case passwordOnly
+        case password
     }
 }

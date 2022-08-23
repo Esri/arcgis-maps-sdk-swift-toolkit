@@ -182,7 +182,7 @@ private extension View {
     ) -> some View {
         overlay {
             CredentialInputView(
-                fields: .passwordOnly,
+                fields: .password,
                 isPresented: isPresented,
                 message: "Please enter a password for the chosen certificate.",
                 title: "Password Required",
