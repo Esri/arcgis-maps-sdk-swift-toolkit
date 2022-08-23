@@ -85,7 +85,7 @@ import ArcGIS
     
     /// Cancels the challenge.
     func cancel() {
-        challenge.resume(with: .cancelAuthenticationChallenge)
+        challenge.resume(with: .cancel)
     }
 }
 
