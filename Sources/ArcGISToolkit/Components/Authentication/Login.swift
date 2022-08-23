@@ -92,28 +92,26 @@ struct LoginViewModifier: ViewModifier {
     func body(content: Content) -> some View {
         content
             .task { isPresented = true }
-            .overlay {
-                CredentialInputView(
-                    fields: .usernamePassword,
-                    isPresented: $isPresented,
-                    message: "You must sign in to access '\(viewModel.challengingHost)'",
-                    title: "Authentication Required",
-                    cancelAction: .init(
-                        title: "Cancel",
-                        handler: { _, _ in
-                            viewModel.cancel()
-                        }
-                    ),
-                    continueAction: .init(
-                        title: "Continue",
-                        handler: { username, password in
-                            viewModel.username = username
-                            viewModel.password = password
-                            viewModel.signIn()
-                        }
-                    )
+            .credentialInput(
+                fields: .usernamePassword,
+                isPresented: $isPresented,
+                message: "You must sign in to access '\(viewModel.challengingHost)'",
+                title: "Authentication Required",
+                cancelAction: .init(
+                    title: "Cancel",
+                    handler: { _, _ in
+                        viewModel.cancel()
+                    }
+                ),
+                continueAction: .init(
+                    title: "Continue",
+                    handler: { username, password in
+                        viewModel.username = username
+                        viewModel.password = password
+                        viewModel.signIn()
+                    }
                 )
-            }
+            )
     }
 }
 

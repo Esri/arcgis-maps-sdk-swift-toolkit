@@ -226,3 +226,69 @@ extension CredentialInputView {
         case password
     }
 }
+
+extension View {
+    /// Presents user experiences for collecting credentials from the user.
+    /// - Parameters:
+    ///   - fields: The fields shown in the view.
+    ///   - isPresented: A Boolean value indicating whether or not the view is displayed.
+    ///   - message: Descriptive text that provides more details about the reason for the alert.
+    ///   - title: The title of the alert.
+    ///   - cancelAction: The cancel action.
+    ///   - continueAction: The continue action.
+    @ViewBuilder func credentialInput(
+        fields: CredentialInputView.Fields,
+        isPresented: Binding<Bool>,
+        message: String,
+        title: String,
+        cancelAction: CredentialInputView.Action,
+        continueAction: CredentialInputView.Action
+    ) -> some View {
+        modifier(
+            CredentialInputModifier(
+                fields: fields,
+                isPresented: isPresented,
+                message: message,
+                title: title,
+                cancelAction: cancelAction,
+                continueAction: continueAction
+            )
+        )
+    }
+}
+
+/// A view modifier that prompts for credentials.
+struct CredentialInputModifier: ViewModifier {
+    
+    /// The fields shown in the view.
+    let fields: CredentialInputView.Fields
+    
+    /// A Boolean value indicating whether or not the view is displayed.
+    @Binding var isPresented: Bool
+    
+    /// Descriptive text that provides more details about the reason for the alert.
+    let message: String
+    
+    /// The title of the alert.
+    let title: String
+    
+    /// The cancel action.
+    let cancelAction: CredentialInputView.Action
+    
+    /// The continue action.
+    let continueAction: CredentialInputView.Action
+    
+    @ViewBuilder func body(content: Content) -> some View {
+        ZStack {
+            content
+            CredentialInputView(
+                fields: fields,
+                isPresented: $isPresented,
+                message: message,
+                title: title,
+                cancelAction: cancelAction,
+                continueAction: continueAction
+            )
+        }
+    }
+}

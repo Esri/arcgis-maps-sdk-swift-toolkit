@@ -112,9 +112,24 @@ struct CertificatePickerViewModifier: ViewModifier {
                 isPresented: $viewModel.showPicker,
                 viewModel: viewModel
             )
-            .passwordAlert(
+            .credentialInput(
+                fields: .password,
                 isPresented: $viewModel.showPassword,
-                viewModel: viewModel
+                message: "Please enter a password for the chosen certificate.",
+                title: "Password Required",
+                cancelAction: .init(
+                    title: "Cancel",
+                    handler: { _, _ in
+                        viewModel.cancel()
+                    }
+                ),
+                continueAction: .init(
+                    title: "OK",
+                    handler: { _, password in
+                        viewModel.password = password
+                        viewModel.proceedWithPassword()
+                    }
+                )
             )
             .alertCertificateImportError(
                 isPresented: $viewModel.showCertificateImportError,
@@ -167,39 +182,6 @@ private extension View {
             }
             .edgesIgnoringSafeArea(.bottom)
             .interactiveDismissDisabled()
-        }
-    }
-}
-
-private extension View {
-    /// Displays a sheet that allows the user to enter a password.
-    /// - Parameters:
-    ///   - isPresented: A Boolean value indicating if the view is presented.
-    ///   - viewModel: The view model associated with the view.
-    @MainActor @ViewBuilder func passwordAlert(
-        isPresented: Binding<Bool>,
-        viewModel: CertificatePickerViewModel
-    ) -> some View {
-        overlay {
-            CredentialInputView(
-                fields: .password,
-                isPresented: isPresented,
-                message: "Please enter a password for the chosen certificate.",
-                title: "Password Required",
-                cancelAction: .init(
-                    title: "Cancel",
-                    handler: { _, _ in
-                        viewModel.cancel()
-                    }
-                ),
-                continueAction: .init(
-                    title: "OK",
-                    handler: { _, password in
-                        viewModel.password = password
-                        viewModel.proceedWithPassword()
-                    }
-                )
-            )
         }
     }
 }
