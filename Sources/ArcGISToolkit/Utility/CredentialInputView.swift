@@ -75,7 +75,7 @@ struct CredentialInputView: UIViewControllerRepresentable {
     /// A Boolean value indicating whether the alert should allow the continue action to proceed.
     private var isContinueEnabled: Bool {
         switch fields {
-        case .identityAndPassword:
+        case .usernamePassword:
             return !identity.isEmpty && !password.isEmpty
         case .password:
             return !password.isEmpty
@@ -107,7 +107,7 @@ struct CredentialInputView: UIViewControllerRepresentable {
             continueConfiguration.handler(identity, password)
         }
         
-        if fields == .identityAndPassword {
+        if fields == .usernamePassword {
             uiAlertController.addTextField { textField in
                 textField.addAction(
                     UIAction { _ in
@@ -214,11 +214,11 @@ extension CredentialInputView {
 }
 
 extension CredentialInputView {
-    /// The usage of the view. This determines if the view is intended to require either an identity and
+    /// The usage of the view. This determines if the view is intended to require either a username and
     /// password, or a password only.
     enum Fields {
-        /// Indicates the view is intended to collect an identity and password.
-        case identityAndPassword
+        /// Indicates the view is intended to collect a username and password.
+        case usernamePassword
         
         /// Indicates the view is intended to collect a password only.
         case password
