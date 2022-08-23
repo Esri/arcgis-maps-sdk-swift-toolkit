@@ -92,28 +92,26 @@ struct LoginViewModifier: ViewModifier {
 ***REMOVED***func body(content: Content) -> some View {
 ***REMOVED******REMOVED***content
 ***REMOVED******REMOVED******REMOVED***.task { isPresented = true ***REMOVED***
-***REMOVED******REMOVED******REMOVED***.overlay {
-***REMOVED******REMOVED******REMOVED******REMOVED***CredentialInputView(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***fields: .usernamePassword,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented: $isPresented,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***message: "You must sign in to access '\(viewModel.challengingHost)'",
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title: "Authentication Required",
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***cancelAction: .init(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title: "Cancel",
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***handler: { _, _ in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.cancel()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***),
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***continueAction: .init(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title: "Continue",
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***handler: { username, password in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.username = username
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.password = password
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.signIn()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***.credentialInput(
+***REMOVED******REMOVED******REMOVED******REMOVED***fields: .usernamePassword,
+***REMOVED******REMOVED******REMOVED******REMOVED***isPresented: $isPresented,
+***REMOVED******REMOVED******REMOVED******REMOVED***message: "You must sign in to access '\(viewModel.challengingHost)'",
+***REMOVED******REMOVED******REMOVED******REMOVED***title: "Authentication Required",
+***REMOVED******REMOVED******REMOVED******REMOVED***cancelAction: .init(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title: "Cancel",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***handler: { _, _ in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.cancel()
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***),
+***REMOVED******REMOVED******REMOVED******REMOVED***continueAction: .init(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title: "Continue",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***handler: { username, password in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.username = username
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.password = password
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.signIn()
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 

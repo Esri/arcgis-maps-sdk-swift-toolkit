@@ -226,3 +226,69 @@ extension CredentialInputView {
 ***REMOVED******REMOVED***case password
 ***REMOVED***
 ***REMOVED***
+
+extension View {
+***REMOVED******REMOVED***/ Presents user experiences for collecting credentials from the user.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - fields: The fields shown in the view.
+***REMOVED******REMOVED***/   - isPresented: A Boolean value indicating whether or not the view is displayed.
+***REMOVED******REMOVED***/   - message: Descriptive text that provides more details about the reason for the alert.
+***REMOVED******REMOVED***/   - title: The title of the alert.
+***REMOVED******REMOVED***/   - cancelAction: The cancel action.
+***REMOVED******REMOVED***/   - continueAction: The continue action.
+***REMOVED***@ViewBuilder func credentialInput(
+***REMOVED******REMOVED***fields: CredentialInputView.Fields,
+***REMOVED******REMOVED***isPresented: Binding<Bool>,
+***REMOVED******REMOVED***message: String,
+***REMOVED******REMOVED***title: String,
+***REMOVED******REMOVED***cancelAction: CredentialInputView.Action,
+***REMOVED******REMOVED***continueAction: CredentialInputView.Action
+***REMOVED***) -> some View {
+***REMOVED******REMOVED***modifier(
+***REMOVED******REMOVED******REMOVED***CredentialInputModifier(
+***REMOVED******REMOVED******REMOVED******REMOVED***fields: fields,
+***REMOVED******REMOVED******REMOVED******REMOVED***isPresented: isPresented,
+***REMOVED******REMOVED******REMOVED******REMOVED***message: message,
+***REMOVED******REMOVED******REMOVED******REMOVED***title: title,
+***REMOVED******REMOVED******REMOVED******REMOVED***cancelAction: cancelAction,
+***REMOVED******REMOVED******REMOVED******REMOVED***continueAction: continueAction
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+
+***REMOVED***/ A view modifier that prompts for credentials.
+struct CredentialInputModifier: ViewModifier {
+***REMOVED***
+***REMOVED******REMOVED***/ The fields shown in the view.
+***REMOVED***let fields: CredentialInputView.Fields
+***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value indicating whether or not the view is displayed.
+***REMOVED***@Binding var isPresented: Bool
+***REMOVED***
+***REMOVED******REMOVED***/ Descriptive text that provides more details about the reason for the alert.
+***REMOVED***let message: String
+***REMOVED***
+***REMOVED******REMOVED***/ The title of the alert.
+***REMOVED***let title: String
+***REMOVED***
+***REMOVED******REMOVED***/ The cancel action.
+***REMOVED***let cancelAction: CredentialInputView.Action
+***REMOVED***
+***REMOVED******REMOVED***/ The continue action.
+***REMOVED***let continueAction: CredentialInputView.Action
+***REMOVED***
+***REMOVED***@ViewBuilder func body(content: Content) -> some View {
+***REMOVED******REMOVED***ZStack {
+***REMOVED******REMOVED******REMOVED***content
+***REMOVED******REMOVED******REMOVED***CredentialInputView(
+***REMOVED******REMOVED******REMOVED******REMOVED***fields: fields,
+***REMOVED******REMOVED******REMOVED******REMOVED***isPresented: $isPresented,
+***REMOVED******REMOVED******REMOVED******REMOVED***message: message,
+***REMOVED******REMOVED******REMOVED******REMOVED***title: title,
+***REMOVED******REMOVED******REMOVED******REMOVED***cancelAction: cancelAction,
+***REMOVED******REMOVED******REMOVED******REMOVED***continueAction: continueAction
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+***REMOVED***

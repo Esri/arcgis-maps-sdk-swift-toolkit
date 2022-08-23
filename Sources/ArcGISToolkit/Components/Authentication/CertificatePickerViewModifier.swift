@@ -112,9 +112,24 @@ struct CertificatePickerViewModifier: ViewModifier {
 ***REMOVED******REMOVED******REMOVED******REMOVED***isPresented: $viewModel.showPicker,
 ***REMOVED******REMOVED******REMOVED******REMOVED***viewModel: viewModel
 ***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***.passwordAlert(
+***REMOVED******REMOVED******REMOVED***.credentialInput(
+***REMOVED******REMOVED******REMOVED******REMOVED***fields: .password,
 ***REMOVED******REMOVED******REMOVED******REMOVED***isPresented: $viewModel.showPassword,
-***REMOVED******REMOVED******REMOVED******REMOVED***viewModel: viewModel
+***REMOVED******REMOVED******REMOVED******REMOVED***message: "Please enter a password for the chosen certificate.",
+***REMOVED******REMOVED******REMOVED******REMOVED***title: "Password Required",
+***REMOVED******REMOVED******REMOVED******REMOVED***cancelAction: .init(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title: "Cancel",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***handler: { _, _ in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.cancel()
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***),
+***REMOVED******REMOVED******REMOVED******REMOVED***continueAction: .init(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title: "OK",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***handler: { _, password in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.password = password
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.proceedWithPassword()
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***.alertCertificateImportError(
 ***REMOVED******REMOVED******REMOVED******REMOVED***isPresented: $viewModel.showCertificateImportError,
@@ -167,39 +182,6 @@ private extension View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.edgesIgnoringSafeArea(.bottom)
 ***REMOVED******REMOVED******REMOVED***.interactiveDismissDisabled()
-***REMOVED***
-***REMOVED***
-***REMOVED***
-
-private extension View {
-***REMOVED******REMOVED***/ Displays a sheet that allows the user to enter a password.
-***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - isPresented: A Boolean value indicating if the view is presented.
-***REMOVED******REMOVED***/   - viewModel: The view model associated with the view.
-***REMOVED***@MainActor @ViewBuilder func passwordAlert(
-***REMOVED******REMOVED***isPresented: Binding<Bool>,
-***REMOVED******REMOVED***viewModel: CertificatePickerViewModel
-***REMOVED***) -> some View {
-***REMOVED******REMOVED***overlay {
-***REMOVED******REMOVED******REMOVED***CredentialInputView(
-***REMOVED******REMOVED******REMOVED******REMOVED***fields: .password,
-***REMOVED******REMOVED******REMOVED******REMOVED***isPresented: isPresented,
-***REMOVED******REMOVED******REMOVED******REMOVED***message: "Please enter a password for the chosen certificate.",
-***REMOVED******REMOVED******REMOVED******REMOVED***title: "Password Required",
-***REMOVED******REMOVED******REMOVED******REMOVED***cancelAction: .init(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title: "Cancel",
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***handler: { _, _ in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.cancel()
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***),
-***REMOVED******REMOVED******REMOVED******REMOVED***continueAction: .init(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title: "OK",
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***handler: { _, password in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.password = password
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.proceedWithPassword()
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
