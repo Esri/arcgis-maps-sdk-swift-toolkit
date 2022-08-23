@@ -26,7 +26,7 @@ struct CredentialInputView: UIViewControllerRepresentable {
     /// The continue action.
     private let continueAction: Action
     
-    /// The value in the identity field.
+    /// The value in the username field.
     ///
     /// This member is unused when usage is set to `Usage.passwordOnly`.
     @State private var username = ""
@@ -76,7 +76,7 @@ struct CredentialInputView: UIViewControllerRepresentable {
     private var isContinueEnabled: Bool {
         switch fields {
         case .usernamePassword:
-            return !identity.isEmpty && !password.isEmpty
+            return !username.isEmpty && !password.isEmpty
         case .password:
             return !password.isEmpty
         }
@@ -97,21 +97,21 @@ struct CredentialInputView: UIViewControllerRepresentable {
             title: cancelAction.title,
             style: .cancel
         ) { _ in
-            cancelAction.handler(identity, password)
+            cancelAction.handler(username, password)
         }
         
         let continueUIAlertAction = UIAlertAction(
             title: continueAction.title,
             style: .default
         ) { _ in
-            continueAction.handler(identity, password)
+            continueAction.handler(username, password)
         }
         
         if fields == .usernamePassword {
             uiAlertController.addTextField { textField in
                 textField.addAction(
                     UIAction { _ in
-                        identity = textField.text ?? ""
+                        username = textField.text ?? ""
                         continueUIAlertAction.isEnabled = isContinueEnabled
                     },
                     for: .editingChanged
@@ -196,7 +196,7 @@ extension CredentialInputView {
         func textFieldShouldReturn(_ textField: UITextField) -> Bool {
             guard !parent.password.isEmpty else { return false }
             parent.continueAction.handler(
-                parent.identity,
+                parent.username,
                 parent.password
             )
             return true
