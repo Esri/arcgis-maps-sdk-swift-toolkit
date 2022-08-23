@@ -29,7 +29,7 @@ struct CredentialInputView: UIViewControllerRepresentable {
     /// The value in the identity field.
     ///
     /// This member is unused when usage is set to `Usage.passwordOnly`.
-    @State private var identity = ""
+    @State private var username = ""
     
     /// A Boolean value indicating whether or not the view is displayed.
     @Binding private var isPresented: Bool
