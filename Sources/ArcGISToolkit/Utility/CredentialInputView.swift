@@ -219,11 +219,11 @@ extension CredentialInputView {
     /// The fields shown in the alert. This determines if the view is intended to require either a username
     /// and password, or a password only.
     enum Fields {
-        /// Indicates the view is intended to collect a username and password.
-        case usernamePassword
-        
         /// Indicates the view is intended to collect a password only.
         case password
+        
+        /// Indicates the view is intended to collect a username and password.
+        case usernamePassword
     }
 }
 
