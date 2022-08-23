@@ -94,10 +94,10 @@ struct LoginViewModifier: ViewModifier {
             .task { isPresented = true }
             .overlay {
                 CredentialInputView(
+                    fields: .identityAndPassword,
                     isPresented: $isPresented,
                     message: "You must sign in to access '\(viewModel.challengingHost)'",
                     title: "Authentication Required",
-                    usage: .identityAndPassword,
                     cancelConfiguration: .init(
                         title: "Cancel",
                         handler: { _, _ in
