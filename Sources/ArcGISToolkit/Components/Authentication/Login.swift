@@ -129,7 +129,7 @@ extension LoginViewModifier {
                     )
                 },
                 onCancel: {
-                    challenge.resume(with: .cancelAuthenticationChallenge)
+                    challenge.resume(with: .cancel)
                 }
             )
         )
