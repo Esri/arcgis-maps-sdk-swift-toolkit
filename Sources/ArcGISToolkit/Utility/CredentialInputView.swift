@@ -169,7 +169,9 @@ struct CredentialInputView: UIViewControllerRepresentable {
         guard isPresented else { return }
         let alertController = makeAlertController(context: context)
         // On a physical iOS 16 device, without the following delay, the
-        // presentation fails and an error is thrown.
+        // presentation fails and the following warning is logged: "Attempt to
+        // present UIAlertController on UIViewController whose view is not in
+        // the window hierarchy."
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
             uiViewController.present(alertController, animated: true) {
                 isPresented = false
