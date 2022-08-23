@@ -29,7 +29,7 @@ struct CredentialInputView: UIViewControllerRepresentable {
 ***REMOVED******REMOVED***/ The value in the identity field.
 ***REMOVED******REMOVED***/
 ***REMOVED******REMOVED***/ This member is unused when usage is set to `Usage.passwordOnly`.
-***REMOVED***@State private var identity = ""
+***REMOVED***@State private var username = ""
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether or not the view is displayed.
 ***REMOVED***@Binding private var isPresented: Bool
