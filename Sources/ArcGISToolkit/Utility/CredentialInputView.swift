@@ -210,16 +210,6 @@ extension CredentialInputView {
         
         /// The block to execute when the action is triggered.
         let handler: (String, String) -> Void
-        
-        /// Makes the action configuration.
-        /// - Parameters:
-        ///   - title: The title of the action.
-        ///   - handler: The block to execute when the action is triggered. The first and second
-        ///   parameters correspond to the identity and password field values.
-        init(title: String, handler: @escaping (String, String) -> Void) {
-            self.title = title
-            self.handler = handler
-        }
     }
 }
 
