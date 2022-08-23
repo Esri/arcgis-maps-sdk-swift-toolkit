@@ -43,22 +43,22 @@ struct CredentialInputView: UIViewControllerRepresentable {
     /// The title of the alert.
     private let title: String
     
-    /// The usage of the alert.
-    private let usage: Usage
+    /// The fields shown in the alert.
+    private let fields: Fields
     
     /// Creates the view.
     /// - Parameters:
     ///   - isPresented: A Boolean value indicating whether or not the view is displayed.
     ///   - message: Descriptive text that provides more details about the reason for the alert.
     ///   - title: The title of the alert.
-    ///   - usage: The usage of the alert.
+    ///   - fields: The fields shown in the alert.
     ///   - cancelConfiguration: The cancel action configuration.
     ///   - continueConfiguration: The continue action configuration.
     init(
+        fields: Fields,
         isPresented: Binding<Bool>,
         message: String,
         title: String,
-        usage: Usage,
         cancelConfiguration: Action,
         continueConfiguration: Action
     ) {
@@ -67,14 +67,14 @@ struct CredentialInputView: UIViewControllerRepresentable {
         
         _isPresented = isPresented
         
+        self.fields = fields
         self.message = message
         self.title = title
-        self.usage = usage
     }
     
     /// A Boolean value indicating whether the alert should allow the continue action to proceed.
     private var isContinueEnabled: Bool {
-        switch usage {
+        switch fields {
         case .identityAndPassword:
             return !identity.isEmpty && !password.isEmpty
         case .passwordOnly:
@@ -107,7 +107,7 @@ struct CredentialInputView: UIViewControllerRepresentable {
             continueConfiguration.handler(identity, password)
         }
         
-        if usage == .identityAndPassword {
+        if fields == .identityAndPassword {
             uiAlertController.addTextField { textField in
                 textField.addAction(
                     UIAction { _ in
@@ -216,7 +216,7 @@ extension CredentialInputView {
 extension CredentialInputView {
     /// The usage of the view. This determines if the view is intended to require either an identity and
     /// password, or a password only.
-    enum Usage {
+    enum Fields {
         /// Indicates the view is intended to collect an identity and password.
         case identityAndPassword
         

@@ -182,10 +182,10 @@ private extension View {
     ) -> some View {
         overlay {
             CredentialInputView(
+                fields: .passwordOnly,
                 isPresented: isPresented,
                 message: "Please enter a password for the chosen certificate.",
                 title: "Password Required",
-                usage: .passwordOnly,
                 cancelConfiguration: .init(
                     title: "Cancel",
                     handler: { _, _ in
