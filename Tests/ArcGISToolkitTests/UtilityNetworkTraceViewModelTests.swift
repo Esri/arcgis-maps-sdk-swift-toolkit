@@ -46,7 +46,7 @@ import XCTest
 ***REMOVED******REMOVED***XCTAssertNil(viewModel.network)
 ***REMOVED******REMOVED***XCTAssertFalse(viewModel.canRunTrace)
 ***REMOVED******REMOVED***XCTAssertEqual(
-***REMOVED******REMOVED******REMOVED***viewModel.userWarning,
+***REMOVED******REMOVED******REMOVED***viewModel.userAlert?.description,
 ***REMOVED******REMOVED******REMOVED***"No utility networks found."
 ***REMOVED******REMOVED***)
 ***REMOVED***
@@ -74,7 +74,7 @@ import XCTest
 ***REMOVED******REMOVED***XCTAssertFalse(viewModel.canRunTrace)
 ***REMOVED******REMOVED***XCTAssertTrue(viewModel.configurations.isEmpty)
 ***REMOVED******REMOVED***XCTAssertEqual(
-***REMOVED******REMOVED******REMOVED***viewModel.userWarning,
+***REMOVED******REMOVED******REMOVED***viewModel.userAlert?.description,
 ***REMOVED******REMOVED******REMOVED***"No trace types found."
 ***REMOVED******REMOVED***)
 ***REMOVED***
@@ -100,7 +100,7 @@ import XCTest
 ***REMOVED******REMOVED***XCTAssertFalse(viewModel.canRunTrace)
 ***REMOVED******REMOVED***XCTAssertTrue(viewModel.configurations.isEmpty)
 ***REMOVED******REMOVED***XCTAssertEqual(
-***REMOVED******REMOVED******REMOVED***viewModel.userWarning,
+***REMOVED******REMOVED******REMOVED***viewModel.userAlert?.description,
 ***REMOVED******REMOVED******REMOVED***"No trace types found."
 ***REMOVED******REMOVED***)
 ***REMOVED***
