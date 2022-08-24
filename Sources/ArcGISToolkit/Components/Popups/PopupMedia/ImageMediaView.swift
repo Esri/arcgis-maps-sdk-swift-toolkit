@@ -26,6 +26,7 @@ struct ImageMediaView: View {
 ***REMOVED******REMOVED***VStack {
 ***REMOVED******REMOVED******REMOVED***if let sourceURL = popupMedia.value?.sourceURL {
 ***REMOVED******REMOVED******REMOVED******REMOVED***AsyncImageView(url: sourceURL)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.clipShape(RoundedRectangle(cornerRadius: 8))
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onTapGesture {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***showingFullScreen = true
 ***REMOVED******REMOVED******REMOVED***
