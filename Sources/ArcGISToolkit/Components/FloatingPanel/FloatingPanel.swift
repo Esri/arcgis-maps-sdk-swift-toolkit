@@ -23,56 +23,71 @@ import SwiftUI
 /// or persistent, where the information is always displayed, for example a
 /// dedicated search panel. They will also be primarily simple containers
 /// that clients will fill with their own content.
-public struct FloatingPanel<Content>: View where Content: View {
-    // Note:  instead of the FloatingPanel being a view, it might be preferable
-    // to have it be a view modifier, similar to how SwiftUI doesn't have a
-    // SheetView, but a modifier that presents a sheet.
-    
+struct FloatingPanel<Content>: View where Content: View {
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+    @Environment(\.verticalSizeClass) var verticalSizeClass
+    
+    /// The background color of the floating panel.
+    let backgroundColor: Color
     
     /// The content shown in the floating panel.
     let content: Content
     
-    /// Creates a `FloatingPanel`
-    /// - Parameter content: The view shown in the floating panel.
-    public init(@ViewBuilder content: () -> Content) {
+    /// Creates a `FloatingPanel`.
+    /// - Parameters:
+    ///   - backgroundColor: The background color of the floating panel.
+    ///   - detent: Controls the height of the panel.
+    ///   - isPresented: A Boolean value indicating if the view is presented.
+    ///   - content: The view shown in the floating panel.
+    init(
+        backgroundColor: Color,
+        detent: Binding<FloatingPanelDetent>,
+        isPresented: Binding<Bool>,
+        @ViewBuilder content: () -> Content
+    ) {
+        self.backgroundColor = backgroundColor
         self.content = content()
+        _activeDetent = detent
+        _isPresented = isPresented
     }
+    
+    /// A binding to the currently selected detent.
+    @Binding private var activeDetent: FloatingPanelDetent
     
     /// The color of the handle.
     @State private var handleColor: Color = .defaultHandleColor
     
     /// The height of the content.
-    @State private var height: CGFloat = .infinity
+    @State private var height: CGFloat = .minHeight
+    
+    /// A binding to a Boolean value that determines whether the view is presented.
+    @Binding private var isPresented: Bool
     
     /// The maximum allowed height of the content.
     @State private var maximumHeight: CGFloat = .infinity
     
     /// A Boolean value indicating whether the panel should be configured for a compact environment.
     private var isCompact: Bool {
-        horizontalSizeClass == .compact
+        horizontalSizeClass == .compact && verticalSizeClass == .regular
     }
     
     public var body: some View {
         GeometryReader { geometryProxy in
-            VStack {
-                if isCompact {
-                    Handle(color: handleColor)
-                        .gesture(drag)
-                    Divider()
-                    content
-                        .frame(minHeight: .minHeight, maxHeight: height)
-                } else {
-                    content
-                        .frame(minHeight: .minHeight, maxHeight: height)
-                    Divider()
-                    Handle(color: handleColor)
-                        .gesture(drag)
+            VStack(spacing: 0) {
+                if isCompact && isPresented {
+                    makeHandleView()
+                }
+                content
+                    .frame(height: height)
+                    .padding(.bottom, isCompact ? 25 : .zero)
+                if !isCompact && isPresented {
+                    makeHandleView()
                 }
             }
-            .esriBorder()
-            .padding(isCompact ? [] : [.leading, .top, .trailing])
-            .padding(.bottom, isCompact ? 0 : 50)
+            .background(backgroundColor)
+            .cornerRadius(10, corners: isCompact ? [.topLeft, .topRight] : [.allCorners])
+            .shadow(radius: 10)
+            .opacity(isPresented ? 1.0 : .zero)
             .frame(
                 width: geometryProxy.size.width,
                 height: geometryProxy.size.height,
@@ -84,7 +99,23 @@ public struct FloatingPanel<Content>: View where Content: View {
                     height = maximumHeight
                 }
             }
+            .onChange(of: activeDetent) { _ in
+                withAnimation {
+                    height = heightFor(detent: activeDetent)
+                }
+            }
+            .onChange(of: isPresented) {
+                height = $0 ? heightFor(detent: activeDetent) : .zero
+            }
+            .onAppear {
+                withAnimation {
+                    height = heightFor(detent: activeDetent)
+                }
+            }
+            .animation(.default, value: isPresented)
         }
+        .padding([.leading, .top, .trailing], isCompact ? 0 : 10)
+        .padding([.bottom], isCompact ? 0 : 50)
     }
     
     var drag: some Gesture {
@@ -107,7 +138,45 @@ public struct FloatingPanel<Content>: View where Content: View {
             }
             .onEnded { _ in
                 handleColor = .defaultHandleColor
+                withAnimation {
+                    activeDetent = closestDetent
+                    height = heightFor(detent: closestDetent)
+                }
             }
+    }
+    
+    /// The detent that would produce a height that is closest to the current height.
+    var closestDetent: FloatingPanelDetent {
+        return FloatingPanelDetent.allCases.min {
+            abs(heightFor(detent: $0) - height) <
+                abs(heightFor(detent: $1) - height)
+        } ?? .half
+    }
+    
+    /// Calculates the height for the `detent`.
+    /// - Parameter detent: The detent to use when calculating height
+    /// - Returns: A height for the provided detent based on the current maximum height
+    func heightFor(detent: FloatingPanelDetent) -> CGFloat {
+        switch detent {
+        case .summary:
+            return max(.minHeight, maximumHeight * 0.15)
+        case .half:
+            return maximumHeight * 0.4
+        case .full:
+            return maximumHeight * 0.90
+        }
+    }
+    
+    /// Configures a handle view.
+    /// - Returns: A configured handle view, suitable for placement in the panel.
+    @ViewBuilder func makeHandleView() -> some View {
+        ZStack {
+            backgroundColor
+            Handle(color: handleColor)
+        }
+        .frame(height: 30)
+        .gesture(drag)
+        .zIndex(1)
     }
 }
 
@@ -130,4 +199,40 @@ private extension CGFloat {
 private extension Color {
     static var defaultHandleColor: Color { .secondary }
     static var activeHandleColor: Color { .primary }
+}
+
+private struct RoundedCorners: Shape {
+    var corners: UIRectCorner
+    
+    var radius: CGFloat
+    
+    func path(in rect: CGRect) -> Path {
+        let path = UIBezierPath(
+            roundedRect: rect,
+            byRoundingCorners: corners,
+            cornerRadii: CGSize(
+                width: radius,
+                height: radius
+            )
+        )
+        return Path(path.cgPath)
+    }
+}
+
+private extension View {
+    /// Clips this view to its bounding frame, with the specified corner radius, on the specified corners.
+    /// - Parameters:
+    ///   - radius: The radius used to round the corners.
+    ///   - corners: The corners to be rounded.
+    /// - Returns: A view that clips this view to its bounding frame with the specified corner radius and
+    /// corners.
+    func cornerRadius(
+        _ radius: CGFloat,
+        corners: UIRectCorner
+    ) -> some View {
+        clipShape(RoundedCorners(
+            corners: corners,
+            radius: radius
+        ))
+    }
 }

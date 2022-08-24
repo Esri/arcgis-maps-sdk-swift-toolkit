@@ -100,7 +100,7 @@ public class LocatorSearchSource: ObservableObject, SearchSource {
         geocodeParameters.preferredSearchLocation = preferredSearchLocation
         
         let geocodeResults = try await locatorTask.geocode(
-            suggestResult: suggestResult,
+            forSuggestResult: suggestResult,
             parameters: geocodeParameters
         )
         
@@ -119,7 +119,7 @@ public class LocatorSearchSource: ObservableObject, SearchSource {
         suggestParameters.preferredSearchLocation = preferredSearchLocation
         
         let geocodeResults = try await locatorTask.suggest(
-            searchText: query,
+            forSearchText: query,
             parameters: suggestParameters
         )
         // Convert to an array of `SearchSuggestion` objects and return.
@@ -139,7 +139,7 @@ private extension LocatorSearchSource {
         geocodeParameters.preferredSearchLocation = preferredSearchLocation
         
         let geocodeResults = try await locatorTask.geocode(
-            searchText: query,
+            forSearchText: query,
             parameters: geocodeParameters
         )
         
