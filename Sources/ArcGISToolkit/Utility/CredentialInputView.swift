@@ -48,10 +48,10 @@ struct CredentialInputView: UIViewControllerRepresentable {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates the view.
 ***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - fields: The fields shown in the alert.
 ***REMOVED******REMOVED***/   - isPresented: A Boolean value indicating whether or not the view is displayed.
 ***REMOVED******REMOVED***/   - message: Descriptive text that provides more details about the reason for the alert.
 ***REMOVED******REMOVED***/   - title: The title of the alert.
-***REMOVED******REMOVED***/   - fields: The fields shown in the alert.
 ***REMOVED******REMOVED***/   - cancelAction: The cancel action.
 ***REMOVED******REMOVED***/   - continueAction: The continue action.
 ***REMOVED***init(
