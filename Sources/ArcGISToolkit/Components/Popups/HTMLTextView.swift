@@ -19,23 +19,23 @@ struct HTMLTextView: UIViewRepresentable {
     /// The user-defined HTML string.
     var userHTML: String = ""
     
-    /// The HTML string to dispay, including the header.
+    /// The HTML string to display, including the header.
     var displayHTML: String {
         // Set the initial scale to 1, don't allow user scaling.
-        // This fixess small text with WKWebView and also doesn't allow the
+        // This fixes small text with `WKWebView` and also doesn't allow the
         // user to pinch to zoom.
         var header = "<header><meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no'></header>"
         
-        // Inject css in a head element to:
+        // Inject CSS in a head element to:
         // - word wrap long content such as urls
-        // - set font family to default apple font
+        // - set font family to default Apple font
         // - set font size to subheadline
         // - remove padding from the body. Add some margin to separate from the
         //   border of the webview.
         // - limit images to a maximum width of 100%
         //
         // Also wrap the passed HTML fragment inside <html></html>
-        // open/close tags so that these css styles will apply
+        // open/close tags so that these CSS styles will apply.
         header = header.appending("""
                 <html>
                     <head>
@@ -54,7 +54,7 @@ struct HTMLTextView: UIViewRepresentable {
                     <body>
                 """)
         
-        // The final string is the header + userHTML + "</body></html>"
+        // The final string is the header + userHTML + "</body></html>".
         return header.appending(
             userHTML.trimmingCharacters(in: .whitespacesAndNewlines)
         ).appending("</body></html>")
@@ -92,31 +92,29 @@ struct HTMLTextView: UIViewRepresentable {
     class Coordinator: NSObject, WKNavigationDelegate {
         var parent: HTMLTextView
         
-        /// A Boolean value specifying when content starts arriving for the main frame.
+        /// A Boolean value indicating whether the content started arriving for the main frame.
         private var hasCommitted = false
         
-        /// A Boolean value specifying whether we've calculated a height for the web view or not.
+        /// A Boolean value indicating whether the height is calculated for the web view.
         private var hasHeight = false
         
         init(_ parent: HTMLTextView) {
             self.parent = parent
         }
         
-        // WKNavigationDelegate method invoked when content starts
-        // arriving for the main frame.
+        // `WKNavigationDelegate` method invoked when content starts arriving for the main frame.
         public func webView(_ webView: WKWebView, didCommit navigation: WKNavigation!) {
             hasCommitted = true
         }
         
-        // WKNavigationDelegate method for navigation actions.
+        // `WKNavigationDelegate` method for navigation actions.
         func webView(
             _ webView: WKWebView,
             decidePolicyFor navigationAction: WKNavigationAction
         ) async -> WKNavigationActionPolicy {
             if navigationAction.navigationType == .linkActivated,
-               (navigationAction.request.url?.scheme?.lowercased() == "http" ||
-                navigationAction.request.url?.scheme?.lowercased() == "https"),
-               let url = navigationAction.request.url {
+               let url = navigationAction.request.url,
+               (url.isHTTP || url.isHTTPS) {
                 DispatchQueue.main.async {
                     UIApplication.shared.open(url)
                 }
@@ -127,12 +125,11 @@ struct HTMLTextView: UIViewRepresentable {
             }
         }
         
-        // WKNavigationDelegate method invoked when a main frame navigation
-        // completes.  This is where the height calculation happens.
+        // `WKNavigationDelegate` method invoked when a main frame navigation completes. This is
+        // where the height calculation happens.
         func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!){
             webView.evaluateJavaScript("document.readyState") { [weak self] complete, _ in
                 guard complete != nil,
-                      let webView = webView,
                       self?.hasCommitted ?? false
                 else { return }
                 
@@ -146,8 +143,8 @@ struct HTMLTextView: UIViewRepresentable {
                     self.parent.height = height
                     
                     // With certain HTML strings, the JavaScript above kept
-                    // getting called, with increasingly large heights.  This
-                    // prevents that from happening.  As this block is only
+                    // getting called, with increasingly large heights. This
+                    // prevents that from happening. As this block is only
                     // called after the `document.readyState` is "complete",
                     // this should be OK.
                     self.hasHeight = true
@@ -158,5 +155,17 @@ struct HTMLTextView: UIViewRepresentable {
     
     func makeCoordinator() -> Coordinator {
         Coordinator(self)
+    }
+}
+
+private extension URL {
+    /// A Boolean value indicating whether the scheme is HTTP (case-insensitive).
+    var isHTTP: Bool {
+        scheme?.caseInsensitiveCompare("http") == .orderedSame
+    }
+    
+    /// A Boolean value indicating whether the scheme is HTTPS (case-insensitive).
+    var isHTTPS: Bool {
+        scheme?.caseInsensitiveCompare("https") == .orderedSame
     }
 }

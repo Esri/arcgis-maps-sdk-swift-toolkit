@@ -104,8 +104,8 @@ struct LoginViewModifier: ViewModifier {
 }
 
 extension LoginViewModifier {
-    /// Creates a `LoginViewModifier` with a queued network challenge.
-    @MainActor init(challenge: QueuedNetworkChallenge) {
+    /// Creates a `LoginViewModifier` with a network challenge continuation.
+    @MainActor init(challenge: NetworkChallengeContinuation) {
         self.init(
             viewModel: LoginViewModel(
                 challengingHost: challenge.host,
@@ -117,14 +117,14 @@ extension LoginViewModifier {
                     )
                 },
                 onCancel: {
-                    challenge.resume(with: .cancelAuthenticationChallenge)
+                    challenge.resume(with: .cancel)
                 }
             )
         )
     }
     
-    /// Creates a `LoginViewModifier` with a queued ArcGIS challenge.
-    @MainActor init(challenge: QueuedTokenChallenge) {
+    /// Creates a `LoginViewModifier` with an ArcGIS challenge continuation.
+    @MainActor init(challenge: TokenChallengeContinuation) {
         self.init(
             viewModel: LoginViewModel(
                 challengingHost: challenge.host,
@@ -196,6 +196,7 @@ private struct LoginView: View {
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel") {
+                        focusedField = nil
                         dismissAction()
                         viewModel.cancel()
                     }

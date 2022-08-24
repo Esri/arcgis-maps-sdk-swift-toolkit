@@ -11,15 +11,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import XCTest
-@testable import ArcGISToolkit
+import Foundation
+import ArcGIS
 
-@MainActor final class TrustHostViewModifierTests: XCTestCase {
-    func testInit() {
-        let challenge = NetworkChallengeContinuation(host: "host.com", kind: .serverTrust)
-        // Tests the initial state.
-        let modifier = TrustHostViewModifier(challenge: challenge)
-        XCTAssertIdentical(modifier.challenge, challenge)
-        XCTAssertFalse(modifier.isPresented)
-    }
-}
+/// A type that represents an authentication challenge that can be continued.
+protocol ChallengeContinuation: AnyObject {}
+
+/// A type that represents a continuation for an ArcGIS challenge.
+protocol ArcGISChallengeContinuation: ValueContinuation<ArcGISAuthenticationChallenge.Disposition>, ChallengeContinuation {}

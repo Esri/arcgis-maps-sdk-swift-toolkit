@@ -19,9 +19,9 @@ struct TextPopupElementView: View {
     /// The `PopupElement` to display.
     var popupElement: TextPopupElement
     
-    /// The calcuated height of the `HTMLTextView`.
+    /// The calculated height of the `HTMLTextView`.
     @State private var webViewHeight: CGFloat = .zero
-
+    
     var body: some View {
         let roundedRect = RoundedRectangle(cornerRadius: 8)
         if !popupElement.text.isEmpty {
@@ -30,7 +30,7 @@ struct TextPopupElementView: View {
                     .clipShape(roundedRect)
                     .frame(height: webViewHeight)
                 if webViewHeight == .zero {
-                    // Show ProgressView until HTMLTextView has set the height.
+                    // Show `ProgressView` until `HTMLTextView` has set the height.
                     ProgressView()
                 }
                 else {

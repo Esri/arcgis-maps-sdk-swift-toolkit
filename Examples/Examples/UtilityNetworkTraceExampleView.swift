@@ -18,6 +18,7 @@ import SwiftUI
 /// A demonstration of the utility network trace tool which runs traces on a web map published with a utility
 /// network and trace configurations.
 struct UtilityNetworkTraceExampleView: View {
+    /// The map containing the utility networks.
     @StateObject private var map = makeMap()
     
     /// Provides the ability to inspect map components.
@@ -47,22 +48,21 @@ struct UtilityNetworkTraceExampleView: View {
                 self.mapPoint = mapPoint
                 self.mapViewProxy = mapViewProxy
             }
-            .overlay(alignment: .topTrailing) {
-                FloatingPanel {
-                    UtilityNetworkTrace(
-                        graphicsOverlay: $resultGraphicsOverlay,
-                        map: map,
-                        mapPoint: $mapPoint,
-                        viewPoint: $viewPoint,
-                        mapViewProxy: $mapViewProxy,
-                        viewpoint: $viewpoint
-                    )
-                    .task {
-                        await ArcGISRuntimeEnvironment.credentialStore.add(try! await .publicSample)
-                    }
-                }
-                .padding()
-                .frame(width: 360)
+            .onViewpointChanged(kind: .centerAndScale) {
+                viewpoint = $0
+            }
+            .floatingPanel(isPresented: .constant(true)) {
+                UtilityNetworkTrace(
+                    graphicsOverlay: $resultGraphicsOverlay,
+                    map: map,
+                    mapPoint: $mapPoint,
+                    viewPoint: $viewPoint,
+                    mapViewProxy: $mapViewProxy,
+                    viewpoint: $viewpoint
+                )
+            }
+            .task {
+                await ArcGISRuntimeEnvironment.credentialStore.add(try! await .publicSample)
             }
         }
     }

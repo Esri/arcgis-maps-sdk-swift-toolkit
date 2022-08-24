@@ -23,12 +23,16 @@ import Combine
 // required a bit more properties/logic in the 'BasemapGalleryViewModel' (such
 // as 'geoModel.actualSpatialReference') than the 'BasemapGallery' design
 // specifies. Tests not present in the test design have been added to
-// accomodate those differences.
+// accommodate those differences.
 @MainActor
 class BasemapGalleryViewModelTests: XCTestCase {
     override func setUp() async throws {
         ArcGISRuntimeEnvironment.apiKey = APIKey("<#API Key#>")
         try XCTSkipIf(ArcGISRuntimeEnvironment.apiKey == .placeholder)
+    }
+    
+    override func tearDown() {
+        ArcGISRuntimeEnvironment.apiKey = nil
     }
     
     let defaultBasemapGalleryItems: [BasemapGalleryItem] = [

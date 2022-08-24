@@ -11,15 +11,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import XCTest
-@testable import ArcGISToolkit
+import SwiftUI
 
-@MainActor final class TrustHostViewModifierTests: XCTestCase {
-    func testInit() {
-        let challenge = NetworkChallengeContinuation(host: "host.com", kind: .serverTrust)
-        // Tests the initial state.
-        let modifier = TrustHostViewModifier(challenge: challenge)
-        XCTAssertIdentical(modifier.challenge, challenge)
-        XCTAssertFalse(modifier.isPresented)
-    }
+/// A user presentable alert.
+struct UtilityNetworkTraceUserAlert {
+    /// Title of the alert.
+    var title: String = "Error"
+    
+    /// Description of the alert.
+    var description: String
+    
+    /// An additional action to be taken on the alert.
+    var button: Button<Text>?
 }

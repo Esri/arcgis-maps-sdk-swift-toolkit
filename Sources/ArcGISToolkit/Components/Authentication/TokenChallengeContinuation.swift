@@ -14,16 +14,16 @@
 import Foundation
 import ArcGIS
 
-/// An object that represents an ArcGIS token authentication challenge in the queue of challenges.
+/// An object that represents an ArcGIS token authentication challenge continuation.
 @MainActor
-final class QueuedTokenChallenge: QueuedArcGISChallenge {
+final class TokenChallengeContinuation: ValueContinuation<ArcGISAuthenticationChallenge.Disposition>, ArcGISChallengeContinuation {
     /// The host that prompted the challenge.
     let host: String
     
     /// A closure that provides a token credential from a username and password.
     let tokenCredentialProvider: (LoginCredential) async throws -> ArcGISCredential
     
-    /// Creates a `QueuedArcGISChallenge`.
+    /// Creates a `ArcGISChallengeContinuation`.
     /// - Parameters:
     ///   - host: The host that prompted the challenge.
     ///   - tokenCredentialProvider: A closure that provides a token credential from a username and password.
@@ -35,7 +35,7 @@ final class QueuedTokenChallenge: QueuedArcGISChallenge {
         self.tokenCredentialProvider = tokenCredentialProvider
     }
     
-    /// Creates a `QueuedArcGISChallenge`.
+    /// Creates a `ArcGISChallengeContinuation`.
     /// - Parameter arcGISChallenge: The associated ArcGIS authentication challenge.
     convenience init(arcGISChallenge: ArcGISAuthenticationChallenge) {
         self.init(host: arcGISChallenge.request.url?.host ?? "") { loginCredential in
@@ -52,33 +52,17 @@ final class QueuedTokenChallenge: QueuedArcGISChallenge {
     ///   - loginCredential: The username and password.
     func resume(with loginCredential: LoginCredential) {
         Task {
-            guard _result == nil else { return }
-            _result = await Result {
-                .useCredential(try await tokenCredentialProvider(loginCredential))
+            do {
+                let credential = try await tokenCredentialProvider(loginCredential)
+                setValue(.useCredential(credential))
+            } catch {
+                setValue(.allowRequestToFail)
             }
         }
     }
     
     /// Cancels the challenge.
     func cancel() {
-        guard _result == nil else { return }
-        _result = .success(.cancelAuthenticationChallenge)
-    }
-    
-    /// Use a streamed property because we need to support multiple listeners
-    /// to know when the challenge completed.
-    @Streamed private var _result: Result<ArcGISAuthenticationChallenge.Disposition, Error>?
-    
-    /// The result of the challenge.
-    var result: Result<ArcGISAuthenticationChallenge.Disposition, Error> {
-        get async {
-            await $_result
-                .compactMap({ $0 })
-                .first(where: { _ in true })!
-        }
-    }
-    
-    public func complete() async {
-        _ = await result
+        setValue(.cancel)
     }
 }
