@@ -91,7 +91,7 @@ struct LoginViewModifier: ViewModifier {
 ***REMOVED***
 ***REMOVED***func body(content: Content) -> some View {
 ***REMOVED******REMOVED***content
-***REMOVED******REMOVED******REMOVED***.task { isPresented = true ***REMOVED***
+***REMOVED******REMOVED******REMOVED***.onAppear { isPresented = true ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***.credentialInput(
 ***REMOVED******REMOVED******REMOVED******REMOVED***fields: .usernamePassword,
 ***REMOVED******REMOVED******REMOVED******REMOVED***isPresented: $isPresented,
