@@ -80,7 +80,7 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
         // Remove geographic constraints and re-run search.
         geocodeParameters.searchArea = nil
         let geocodeResults = try await locatorTask.geocode(
-            searchText: query,
+            forSearchText: query,
             parameters: geocodeParameters
         )
         
@@ -119,7 +119,7 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
         // Remove geographic constraints and re-run search.
         geocodeParameters.searchArea = nil
         let geocodeResults = try await locatorTask.geocode(
-            suggestResult: suggestResult,
+            forSuggestResult: suggestResult,
             parameters: geocodeParameters
         )
         
@@ -154,7 +154,7 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
         // Remove geographic constraints and re-run search.
         suggestParameters.searchArea = nil
         let geocodeResults =  try await locatorTask.suggest(
-            searchText: query,
+            forSearchText: query,
             parameters: suggestParameters
         )
         
