@@ -55,6 +55,7 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED***
 ***REMOVED******REMOVED*** MARK: States
 ***REMOVED***
+***REMOVED******REMOVED***/ The current detent of the floating panel.
 ***REMOVED***@State private var activeDetent: FloatingPanelDetent = .half
 ***REMOVED***
 ***REMOVED******REMOVED***/ The current user activity.
@@ -89,6 +90,30 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED***
 ***REMOVED******REMOVED*** MARK: Subviews
 ***REMOVED***
+***REMOVED******REMOVED***/ Allows the user to switch between the trace creation and viewing tabs.
+***REMOVED***@ViewBuilder private var activityPicker: some View {
+***REMOVED******REMOVED***Picker(
+***REMOVED******REMOVED******REMOVED***"Mode",
+***REMOVED******REMOVED******REMOVED***selection: Binding<UserActivity>(
+***REMOVED******REMOVED******REMOVED******REMOVED***get: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***switch currentActivity {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .creatingTrace(_):
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return UserActivity.creatingTrace(nil)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .viewingTraces:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return UserActivity.viewingTraces(nil)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***, set: { newActivity, _ in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentActivity = newActivity
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***) {
+***REMOVED******REMOVED******REMOVED***Text("New trace").tag(UserActivity.creatingTrace(nil))
+***REMOVED******REMOVED******REMOVED***Text("Results").tag(UserActivity.viewingTraces(nil))
+***REMOVED***
+***REMOVED******REMOVED***.pickerStyle(.segmented)
+***REMOVED******REMOVED***.padding()
+***REMOVED***
+***REMOVED***
 ***REMOVED******REMOVED***/ Allows the user to cancel out of selecting a new starting point.
 ***REMOVED***private var cancelAddStartingPoints: some View {
 ***REMOVED******REMOVED***Button(role: .destructive) {
@@ -98,32 +123,6 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED***Text("Cancel starting point selection")
 ***REMOVED***
 ***REMOVED******REMOVED***.buttonStyle(.bordered)
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ Allows the user to switch between the trace creation and viewing tabs.
-***REMOVED***@ViewBuilder private var activityPicker: some View {
-***REMOVED******REMOVED***if activeDetent != .summary {
-***REMOVED******REMOVED******REMOVED***Picker(
-***REMOVED******REMOVED******REMOVED******REMOVED***"Mode",
-***REMOVED******REMOVED******REMOVED******REMOVED***selection: Binding<UserActivity>(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***get: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***switch currentActivity {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .creatingTrace(_):
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return UserActivity.creatingTrace(nil)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .viewingTraces:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return UserActivity.viewingTraces(nil)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***, set: { newActivity, _ in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentActivity = newActivity
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***) {
-***REMOVED******REMOVED******REMOVED******REMOVED***Text("New trace").tag(UserActivity.creatingTrace(nil))
-***REMOVED******REMOVED******REMOVED******REMOVED***Text("Results").tag(UserActivity.viewingTraces(nil))
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.pickerStyle(.segmented)
-***REMOVED******REMOVED******REMOVED***.padding()
-***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Displays information about a chosen asset group.
@@ -567,7 +566,8 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED***) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***VStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if !viewModel.completedTraces.isEmpty &&
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***!isFocused(traceCreationActivity: .addingStartingPoints) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***!isFocused(traceCreationActivity: .addingStartingPoints) &&
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***activeDetent != .summary {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***activityPicker
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***switch currentActivity {
