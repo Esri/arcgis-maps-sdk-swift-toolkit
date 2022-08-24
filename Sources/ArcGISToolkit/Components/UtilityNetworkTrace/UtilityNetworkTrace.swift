@@ -14,7 +14,7 @@
 ***REMOVED***
 ***REMOVED***
 
-public struct UtilityNetworkTrace: View {
+struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED*** MARK: Enums
 ***REMOVED***
 ***REMOVED******REMOVED***/ Activities users will perform while creating a new trace.
@@ -56,7 +56,7 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED*** MARK: States
 ***REMOVED***
 ***REMOVED******REMOVED***/ The current detent of the floating panel.
-***REMOVED***@State private var activeDetent: FloatingPanelDetent = .half
+***REMOVED***@Binding private var activeDetent: FloatingPanelDetent
 ***REMOVED***
 ***REMOVED******REMOVED***/ The current user activity.
 ***REMOVED***@State private var currentActivity: UserActivity = .creatingTrace(nil)
@@ -522,17 +522,17 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ A graphical interface to run pre-configured traces on a map's utility networks.
 ***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - graphicsOverlay: The graphics overlay to hold generated starting point and trace
-***REMOVED******REMOVED***/   graphics.
+***REMOVED******REMOVED***/   - activeDetent: The current detent of the floating panel.
+***REMOVED******REMOVED***/   - graphicsOverlay: The graphics overlay to hold generated starting point and trace graphics.
 ***REMOVED******REMOVED***/   - map: The map containing the utility network(s).
-***REMOVED******REMOVED***/   - mapPoint: Acts as the point at which newly selected starting point graphics will be
-***REMOVED******REMOVED***/   created.
+***REMOVED******REMOVED***/   - mapPoint: Acts as the point at which newly selected starting point graphics will be created.
 ***REMOVED******REMOVED***/   - viewPoint: Acts as the point of identification for items tapped in the utility network.
 ***REMOVED******REMOVED***/   - mapViewProxy: Provides a method of layer identification when starting points are being
 ***REMOVED******REMOVED***/   chosen.
 ***REMOVED******REMOVED***/   - viewpoint: Allows the utility network trace tool to update the parent map view's viewpoint.
 ***REMOVED******REMOVED***/   - startingPoints: An optional list of programmatically provided starting points.
-***REMOVED***public init(
+***REMOVED***init(
+***REMOVED******REMOVED***activeDetent: Binding<FloatingPanelDetent>,
 ***REMOVED******REMOVED***graphicsOverlay: Binding<GraphicsOverlay>,
 ***REMOVED******REMOVED***map: Map,
 ***REMOVED******REMOVED***mapPoint: Binding<Point?>,
@@ -541,6 +541,7 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED***viewpoint: Binding<Viewpoint?>,
 ***REMOVED******REMOVED***startingPoints: Binding<[UtilityNetworkTraceStartingPoint]> = .constant([])
 ***REMOVED***) {
+***REMOVED******REMOVED***_activeDetent = activeDetent
 ***REMOVED******REMOVED***_viewPoint = viewPoint
 ***REMOVED******REMOVED***_mapPoint = mapPoint
 ***REMOVED******REMOVED***_mapViewProxy = mapViewProxy
@@ -557,72 +558,64 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***public var body: some View {
-***REMOVED******REMOVED***Color.clear
-***REMOVED******REMOVED******REMOVED***.floatingPanel(
-***REMOVED******REMOVED******REMOVED******REMOVED***backgroundColor: Color(uiColor: .systemGroupedBackground),
-***REMOVED******REMOVED******REMOVED******REMOVED***detent: $activeDetent,
-***REMOVED******REMOVED******REMOVED******REMOVED***horizontalAlignment: .trailing,
-***REMOVED******REMOVED******REMOVED******REMOVED***isPresented: .constant(true)
-***REMOVED******REMOVED******REMOVED***) {
-***REMOVED******REMOVED******REMOVED******REMOVED***VStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if !viewModel.completedTraces.isEmpty &&
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***!isFocused(traceCreationActivity: .addingStartingPoints) &&
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***activeDetent != .summary {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***activityPicker
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***switch currentActivity {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .creatingTrace(let activity):
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***switch activity {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .addingStartingPoints:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***cancelAddStartingPoints
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .inspectingStartingPoint:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***startingPointDetail
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***default:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***newTraceTab
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .viewingTraces(let activity):
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***switch activity {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .viewingElementGroup:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***assetGroupDetail
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***default:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***resultsTab
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***VStack {
+***REMOVED******REMOVED******REMOVED***if !viewModel.completedTraces.isEmpty &&
+***REMOVED******REMOVED******REMOVED******REMOVED***!isFocused(traceCreationActivity: .addingStartingPoints) &&
+***REMOVED******REMOVED******REMOVED******REMOVED***activeDetent != .summary {
+***REMOVED******REMOVED******REMOVED******REMOVED***activityPicker
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***switch currentActivity {
+***REMOVED******REMOVED******REMOVED***case .creatingTrace(let activity):
+***REMOVED******REMOVED******REMOVED******REMOVED***switch activity {
+***REMOVED******REMOVED******REMOVED******REMOVED***case .addingStartingPoints:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***cancelAddStartingPoints
+***REMOVED******REMOVED******REMOVED******REMOVED***case .inspectingStartingPoint:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***startingPointDetail
+***REMOVED******REMOVED******REMOVED******REMOVED***default:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***newTraceTab
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.background(Color(uiColor: .systemGroupedBackground))
-***REMOVED******REMOVED******REMOVED******REMOVED***.animation(.default, value: currentActivity)
-***REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: viewPoint) { newValue in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard isFocused(traceCreationActivity: .addingStartingPoints),
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  let mapViewProxy = mapViewProxy,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  let mapPoint = mapPoint,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  let viewPoint = viewPoint else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentActivity = .creatingTrace(.viewingStartingPoints)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***activeDetent = .half
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await viewModel.addStartingPoint(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***at: viewPoint,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mapPoint: mapPoint,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***with: mapViewProxy
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: externalStartingPoints) { _ in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.externalStartingPoints = externalStartingPoints
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.alert(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.userAlert?.title ?? "",
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented: Binding(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***get: { viewModel.userAlert != nil ***REMOVED***,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***set: { _ in viewModel.userAlert = nil ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED***) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.userAlert?.button
-***REMOVED******REMOVED******REMOVED*** message: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(viewModel.userAlert?.description ?? "")
+***REMOVED******REMOVED******REMOVED***case .viewingTraces(let activity):
+***REMOVED******REMOVED******REMOVED******REMOVED***switch activity {
+***REMOVED******REMOVED******REMOVED******REMOVED***case .viewingElementGroup:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***assetGroupDetail
+***REMOVED******REMOVED******REMOVED******REMOVED***default:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***resultsTab
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***.background(Color(uiColor: .systemGroupedBackground))
+***REMOVED******REMOVED***.animation(.default, value: currentActivity)
+***REMOVED******REMOVED***.onChange(of: viewPoint) { newValue in
+***REMOVED******REMOVED******REMOVED***guard isFocused(traceCreationActivity: .addingStartingPoints),
+***REMOVED******REMOVED******REMOVED******REMOVED***  let mapViewProxy = mapViewProxy,
+***REMOVED******REMOVED******REMOVED******REMOVED***  let mapPoint = mapPoint,
+***REMOVED******REMOVED******REMOVED******REMOVED***  let viewPoint = viewPoint else {
+***REMOVED******REMOVED******REMOVED******REMOVED***return
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***currentActivity = .creatingTrace(.viewingStartingPoints)
+***REMOVED******REMOVED******REMOVED***activeDetent = .half
+***REMOVED******REMOVED******REMOVED***Task {
+***REMOVED******REMOVED******REMOVED******REMOVED***await viewModel.addStartingPoint(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***at: viewPoint,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mapPoint: mapPoint,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***with: mapViewProxy
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***.onChange(of: externalStartingPoints) { _ in
+***REMOVED******REMOVED******REMOVED***viewModel.externalStartingPoints = externalStartingPoints
+***REMOVED***
+***REMOVED******REMOVED***.alert(
+***REMOVED******REMOVED******REMOVED***viewModel.userAlert?.title ?? "",
+***REMOVED******REMOVED******REMOVED***isPresented: Binding(
+***REMOVED******REMOVED******REMOVED******REMOVED***get: { viewModel.userAlert != nil ***REMOVED***,
+***REMOVED******REMOVED******REMOVED******REMOVED***set: { _ in viewModel.userAlert = nil ***REMOVED***
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***) {
+***REMOVED******REMOVED******REMOVED***viewModel.userAlert?.button
+***REMOVED*** message: {
+***REMOVED******REMOVED******REMOVED***Text(viewModel.userAlert?.description ?? "")
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED*** MARK: Computed Properties
