@@ -55,6 +55,7 @@ public struct UtilityNetworkTrace: View {
     
     // MARK: States
     
+    /// The current detent of the floating panel.
     @State private var activeDetent: FloatingPanelDetent = .half
     
     /// The current user activity.
@@ -89,6 +90,30 @@ public struct UtilityNetworkTrace: View {
     
     // MARK: Subviews
     
+    /// Allows the user to switch between the trace creation and viewing tabs.
+    @ViewBuilder private var activityPicker: some View {
+        Picker(
+            "Mode",
+            selection: Binding<UserActivity>(
+                get: {
+                    switch currentActivity {
+                    case .creatingTrace(_):
+                        return UserActivity.creatingTrace(nil)
+                    case .viewingTraces:
+                        return UserActivity.viewingTraces(nil)
+                    }
+                }, set: { newActivity, _ in
+                    currentActivity = newActivity
+                }
+            )
+        ) {
+            Text("New trace").tag(UserActivity.creatingTrace(nil))
+            Text("Results").tag(UserActivity.viewingTraces(nil))
+        }
+        .pickerStyle(.segmented)
+        .padding()
+    }
+    
     /// Allows the user to cancel out of selecting a new starting point.
     private var cancelAddStartingPoints: some View {
         Button(role: .destructive) {
@@ -98,32 +123,6 @@ public struct UtilityNetworkTrace: View {
             Text("Cancel starting point selection")
         }
         .buttonStyle(.bordered)
-    }
-    
-    /// Allows the user to switch between the trace creation and viewing tabs.
-    @ViewBuilder private var activityPicker: some View {
-        if activeDetent != .summary {
-            Picker(
-                "Mode",
-                selection: Binding<UserActivity>(
-                    get: {
-                        switch currentActivity {
-                        case .creatingTrace(_):
-                            return UserActivity.creatingTrace(nil)
-                        case .viewingTraces:
-                            return UserActivity.viewingTraces(nil)
-                        }
-                    }, set: { newActivity, _ in
-                        currentActivity = newActivity
-                    }
-                )
-            ) {
-                Text("New trace").tag(UserActivity.creatingTrace(nil))
-                Text("Results").tag(UserActivity.viewingTraces(nil))
-            }
-            .pickerStyle(.segmented)
-            .padding()
-        }
     }
     
     /// Displays information about a chosen asset group.
@@ -567,7 +566,8 @@ public struct UtilityNetworkTrace: View {
             ) {
                 VStack {
                     if !viewModel.completedTraces.isEmpty &&
-                        !isFocused(traceCreationActivity: .addingStartingPoints) {
+                        !isFocused(traceCreationActivity: .addingStartingPoints) &&
+                        activeDetent != .summary {
                         activityPicker
                     }
                     switch currentActivity {
