@@ -56,7 +56,7 @@ public struct SearchView: View {
     /// If `nil`, does not prioritize the search results around any point.
     @Binding var queryCenter: Point?
     
-    /// A closure to performed when the query has changed.
+    /// A closure performed when the query has changed.
     private var onQueryChangedAction: ((String) -> Void)?
     
     /// The current map/scene view extent. Defaults to `nil`.
