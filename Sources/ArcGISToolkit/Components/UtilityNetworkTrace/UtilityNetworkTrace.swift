@@ -14,7 +14,7 @@
 import ArcGIS
 import SwiftUI
 
-public struct UtilityNetworkTrace: View {
+struct UtilityNetworkTrace: View {
     // MARK: Enums
     
     /// Activities users will perform while creating a new trace.
@@ -56,7 +56,7 @@ public struct UtilityNetworkTrace: View {
     // MARK: States
     
     /// The current detent of the floating panel.
-    @State private var activeDetent: FloatingPanelDetent = .half
+    @Binding private var activeDetent: FloatingPanelDetent
     
     /// The current user activity.
     @State private var currentActivity: UserActivity = .creatingTrace(nil)
@@ -522,17 +522,17 @@ public struct UtilityNetworkTrace: View {
     
     /// A graphical interface to run pre-configured traces on a map's utility networks.
     /// - Parameters:
-    ///   - graphicsOverlay: The graphics overlay to hold generated starting point and trace
-    ///   graphics.
+    ///   - activeDetent: The current detent of the floating panel.
+    ///   - graphicsOverlay: The graphics overlay to hold generated starting point and trace graphics.
     ///   - map: The map containing the utility network(s).
-    ///   - mapPoint: Acts as the point at which newly selected starting point graphics will be
-    ///   created.
+    ///   - mapPoint: Acts as the point at which newly selected starting point graphics will be created.
     ///   - viewPoint: Acts as the point of identification for items tapped in the utility network.
     ///   - mapViewProxy: Provides a method of layer identification when starting points are being
     ///   chosen.
     ///   - viewpoint: Allows the utility network trace tool to update the parent map view's viewpoint.
     ///   - startingPoints: An optional list of programmatically provided starting points.
-    public init(
+    init(
+        activeDetent: Binding<FloatingPanelDetent>,
         graphicsOverlay: Binding<GraphicsOverlay>,
         map: Map,
         mapPoint: Binding<Point?>,
@@ -541,6 +541,7 @@ public struct UtilityNetworkTrace: View {
         viewpoint: Binding<Viewpoint?>,
         startingPoints: Binding<[UtilityNetworkTraceStartingPoint]> = .constant([])
     ) {
+        _activeDetent = activeDetent
         _viewPoint = viewPoint
         _mapPoint = mapPoint
         _mapViewProxy = mapViewProxy
@@ -557,72 +558,64 @@ public struct UtilityNetworkTrace: View {
     }
     
     public var body: some View {
-        Color.clear
-            .floatingPanel(
-                backgroundColor: Color(uiColor: .systemGroupedBackground),
-                detent: $activeDetent,
-                horizontalAlignment: .trailing,
-                isPresented: .constant(true)
-            ) {
-                VStack {
-                    if !viewModel.completedTraces.isEmpty &&
-                        !isFocused(traceCreationActivity: .addingStartingPoints) &&
-                        activeDetent != .summary {
-                        activityPicker
-                    }
-                    switch currentActivity {
-                    case .creatingTrace(let activity):
-                        switch activity {
-                        case .addingStartingPoints:
-                            cancelAddStartingPoints
-                        case .inspectingStartingPoint:
-                            startingPointDetail
-                        default:
-                            newTraceTab
-                        }
-                    case .viewingTraces(let activity):
-                        switch activity {
-                        case .viewingElementGroup:
-                            assetGroupDetail
-                        default:
-                            resultsTab
-                        }
-                    }
+        VStack {
+            if !viewModel.completedTraces.isEmpty &&
+                !isFocused(traceCreationActivity: .addingStartingPoints) &&
+                activeDetent != .summary {
+                activityPicker
+            }
+            switch currentActivity {
+            case .creatingTrace(let activity):
+                switch activity {
+                case .addingStartingPoints:
+                    cancelAddStartingPoints
+                case .inspectingStartingPoint:
+                    startingPointDetail
+                default:
+                    newTraceTab
                 }
-                .background(Color(uiColor: .systemGroupedBackground))
-                .animation(.default, value: currentActivity)
-                .onChange(of: viewPoint) { newValue in
-                    guard isFocused(traceCreationActivity: .addingStartingPoints),
-                          let mapViewProxy = mapViewProxy,
-                          let mapPoint = mapPoint,
-                          let viewPoint = viewPoint else {
-                        return
-                    }
-                    currentActivity = .creatingTrace(.viewingStartingPoints)
-                    activeDetent = .half
-                    Task {
-                        await viewModel.addStartingPoint(
-                            at: viewPoint,
-                            mapPoint: mapPoint,
-                            with: mapViewProxy
-                        )
-                    }
-                }
-                .onChange(of: externalStartingPoints) { _ in
-                    viewModel.externalStartingPoints = externalStartingPoints
-                }
-                .alert(
-                    viewModel.userAlert?.title ?? "",
-                    isPresented: Binding(
-                        get: { viewModel.userAlert != nil },
-                        set: { _ in viewModel.userAlert = nil }
-                    )
-                ) {
-                    viewModel.userAlert?.button
-                } message: {
-                    Text(viewModel.userAlert?.description ?? "")
+            case .viewingTraces(let activity):
+                switch activity {
+                case .viewingElementGroup:
+                    assetGroupDetail
+                default:
+                    resultsTab
                 }
             }
+        }
+        .background(Color(uiColor: .systemGroupedBackground))
+        .animation(.default, value: currentActivity)
+        .onChange(of: viewPoint) { newValue in
+            guard isFocused(traceCreationActivity: .addingStartingPoints),
+                  let mapViewProxy = mapViewProxy,
+                  let mapPoint = mapPoint,
+                  let viewPoint = viewPoint else {
+                return
+            }
+            currentActivity = .creatingTrace(.viewingStartingPoints)
+            activeDetent = .half
+            Task {
+                await viewModel.addStartingPoint(
+                    at: viewPoint,
+                    mapPoint: mapPoint,
+                    with: mapViewProxy
+                )
+            }
+        }
+        .onChange(of: externalStartingPoints) { _ in
+            viewModel.externalStartingPoints = externalStartingPoints
+        }
+        .alert(
+            viewModel.userAlert?.title ?? "",
+            isPresented: Binding(
+                get: { viewModel.userAlert != nil },
+                set: { _ in viewModel.userAlert = nil }
+            )
+        ) {
+            viewModel.userAlert?.button
+        } message: {
+            Text(viewModel.userAlert?.description ?? "")
+        }
     }
     
     // MARK: Computed Properties

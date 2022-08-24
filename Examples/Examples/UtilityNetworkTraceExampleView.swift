@@ -51,16 +51,15 @@ struct UtilityNetworkTraceExampleView: View {
             .onViewpointChanged(kind: .centerAndScale) {
                 viewpoint = $0
             }
-            .overlay {
-                UtilityNetworkTrace(
-                    graphicsOverlay: $resultGraphicsOverlay,
-                    map: map,
-                    mapPoint: $mapPoint,
-                    viewPoint: $viewPoint,
-                    mapViewProxy: $mapViewProxy,
-                    viewpoint: $viewpoint
-                )
-            }
+            .utilityNetworkTrace(
+                isPresented: .constant(true),
+                graphicsOverlay: $resultGraphicsOverlay,
+                map: map,
+                mapPoint: $mapPoint,
+                viewPoint: $viewPoint,
+                mapViewProxy: $mapViewProxy,
+                viewpoint: $viewpoint
+            )
             .task {
                 await ArcGISRuntimeEnvironment.credentialStore.add(try! await .publicSample)
             }
