@@ -91,7 +91,7 @@ public struct UtilityNetworkTrace: View {
     // MARK: Subviews
     
     /// Allows the user to switch between the trace creation and viewing tabs.
-    @ViewBuilder private var activityPicker: some View {
+    private var activityPicker: some View {
         Picker(
             "Mode",
             selection: Binding<UserActivity>(
