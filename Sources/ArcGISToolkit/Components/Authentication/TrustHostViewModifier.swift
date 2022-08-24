@@ -18,13 +18,13 @@ struct TrustHostViewModifier: ViewModifier {
     /// Creates a `TrustHostViewModifier`.
     /// - Parameter challenge: The network authentication challenge for the untrusted host.
     /// - Precondition: `challenge.kind` is equal to `serverTrust`.
-    init(challenge: QueuedNetworkChallenge) {
+    init(challenge: NetworkChallengeContinuation) {
         precondition(challenge.kind == .serverTrust)
         self.challenge = challenge
     }
     
     /// The network authentication challenge for the untrusted host.
-    let challenge: QueuedNetworkChallenge
+    let challenge: NetworkChallengeContinuation
     
     // Even though we will present it right away we need to use a state variable for this.
     // Using a constant has 2 issues. One, it won't animate. Two, when challenging for multiple
@@ -43,7 +43,7 @@ struct TrustHostViewModifier: ViewModifier {
                     challenge.resume(with: .useCredential(.serverTrust))
                 }
                 Button("Cancel", role: .cancel) {
-                    challenge.resume(with: .cancelAuthenticationChallenge)
+                    challenge.resume(with: .cancel)
                 }
             } message: { _ in
                 Text("The certificate provided by '\(challenge.host)' is not signed by a trusted authority.")

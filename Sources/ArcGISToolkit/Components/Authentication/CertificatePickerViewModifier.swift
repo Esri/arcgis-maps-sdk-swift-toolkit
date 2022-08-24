@@ -19,7 +19,7 @@ import ArcGIS
 /// certificate and a password.
 @MainActor final class CertificatePickerViewModel: ObservableObject {
     /// The challenge that requires a certificate to proceed.
-    let challenge: QueuedNetworkChallenge
+    let challenge: NetworkChallengeContinuation
     
     /// The URL of the certificate that the user chose.
     var certificateURL: URL?
@@ -46,7 +46,7 @@ import ArcGIS
     
     /// Creates a certificate picker view model.
     /// - Parameter challenge: The challenge that requires a certificate.
-    init(challenge: QueuedNetworkChallenge) {
+    init(challenge: NetworkChallengeContinuation) {
         self.challenge = challenge
     }
     
@@ -85,7 +85,7 @@ import ArcGIS
     
     /// Cancels the challenge.
     func cancel() {
-        challenge.resume(with: .cancelAuthenticationChallenge)
+        challenge.resume(with: .cancel)
     }
 }
 
@@ -93,7 +93,7 @@ import ArcGIS
 struct CertificatePickerViewModifier: ViewModifier {
     /// Creates a certificate picker view modifier.
     /// - Parameter challenge: The challenge that requires a certificate.
-    init(challenge: QueuedNetworkChallenge) {
+    init(challenge: NetworkChallengeContinuation) {
         viewModel = CertificatePickerViewModel(challenge: challenge)
     }
     

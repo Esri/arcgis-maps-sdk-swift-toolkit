@@ -52,7 +52,7 @@ public struct FloorFilter: View {
     @State private var isLevelsViewCollapsed = false
     
     /// A Boolean value that indicates whether the site and facility selector is presented.
-    @State private var isSitesAndFacilitiesHidden = false
+    @State private var isSitesAndFacilitiesHidden = true
     
     /// The alignment configuration.
     private let alignment: Alignment
@@ -60,7 +60,7 @@ public struct FloorFilter: View {
     /// The width of the level selector.
     private let filterWidth: CGFloat = 60
     
-    /// The `Viewpoint` used to pan/zoom to the selected site/facilty.
+    /// The `Viewpoint` used to pan/zoom to the selected site/facility.
     /// If `nil`, there will be no automatic pan/zoom operations or automatic selection support.
     private var viewpoint: Binding<Viewpoint?>
     
@@ -71,11 +71,18 @@ public struct FloorFilter: View {
         } label: {
             Image(systemName: "building.2")
                 .padding(.toolkitDefault)
+                .opacity(viewModel.isLoading ? .zero : 1)
+                .overlay {
+                    if viewModel.isLoading {
+                        ProgressView()
+                            .progressViewStyle(.circular)
+                    }
+                }
         }
     }
     
-    /// A view that allows selecting between levels.
-    private var floorFilter: some View {
+    /// A view that displays the level selector and the sites and facilites button.
+    private var levelSelectorContainer: some View {
         VStack {
             if isTopAligned {
                 sitesAndFacilitiesButton
@@ -103,7 +110,7 @@ public struct FloorFilter: View {
     /// A Boolean value indicating whether the map is currently being navigated.
     private var isNavigating: Binding<Bool>
     
-    /// Indicates that the selector should be presented with a top oriented aligment configuration.
+    /// Indicates that the selector should be presented with a top oriented alignment configuration.
     private var isTopAligned: Bool {
         alignment.vertical == .top
     }
@@ -114,7 +121,7 @@ public struct FloorFilter: View {
         viewModel.onViewpointChanged(viewpoint)
     }
     
-    /// Displays the available levels.
+    /// A view that allows selecting between levels.
     @ViewBuilder private var levelSelector: some View {
         LevelSelector(
             isTopAligned: isTopAligned,
@@ -157,9 +164,9 @@ public struct FloorFilter: View {
         HStack(alignment: .bottom) {
             if alignment.horizontal == .trailing {
                 siteAndFacilitySelector
-                floorFilter
+                levelSelectorContainer
             } else {
-                floorFilter
+                levelSelectorContainer
                 siteAndFacilitySelector
             }
         }

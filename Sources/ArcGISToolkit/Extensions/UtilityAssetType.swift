@@ -11,15 +11,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import XCTest
-@testable import ArcGISToolkit
+import ArcGIS
 
-@MainActor final class TrustHostViewModifierTests: XCTestCase {
-    func testInit() {
-        let challenge = NetworkChallengeContinuation(host: "host.com", kind: .serverTrust)
-        // Tests the initial state.
-        let modifier = TrustHostViewModifier(challenge: challenge)
-        XCTAssertIdentical(modifier.challenge, challenge)
-        XCTAssertFalse(modifier.isPresented)
+extension UtilityAssetType: Equatable, Hashable, Identifiable {
+    public static func == (lhs: ArcGIS.UtilityAssetType, rhs: ArcGIS.UtilityAssetType) -> Bool {
+        lhs.hashValue == rhs.hashValue
+    }
+    
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(hashValue)
     }
 }

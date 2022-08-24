@@ -14,16 +14,16 @@
 import Foundation
 import ArcGIS
 
-/// An object that represents a network authentication challenge in the queue of challenges.
+/// An object that represents a network authentication challenge continuation.
 @MainActor
-final class QueuedNetworkChallenge: QueuedChallenge {
+final class NetworkChallengeContinuation: ValueContinuation<NetworkAuthenticationChallenge.Disposition>, ChallengeContinuation {
     /// The host that prompted the challenge.
     let host: String
     
     /// The kind of challenge.
     let kind: Kind
     
-    /// Creates a `QueuedNetworkChallenge`.
+    /// Creates a `NetworkChallengeContinuation`.
     /// - Parameters:
     ///   - host: The host that prompted the challenge.
     ///   - kind: The kind of challenge.
@@ -32,40 +32,22 @@ final class QueuedNetworkChallenge: QueuedChallenge {
         self.kind = kind
     }
     
-    /// Resumes the queued challenge.
+    /// Resumes the challenge continuation.
     /// - Parameter disposition: The disposition to resume with.
-    func resume(with disposition: NetworkAuthenticationChallengeDisposition) {
-        guard _disposition == nil else { return }
-        _disposition = disposition
-    }
-    
-    /// Use a streamed property because we need to support multiple listeners
-    /// to know when the challenge completed.
-    @Streamed private var _disposition: (NetworkAuthenticationChallengeDisposition)?
-    
-    /// The resulting disposition of the challenge.
-    var disposition: NetworkAuthenticationChallengeDisposition {
-        get async {
-            await $_disposition
-                .compactMap({ $0 })
-                .first(where: { _ in true })!
-        }
-    }
-    
-    public func complete() async {
-        _ = await disposition
+    func resume(with disposition: NetworkAuthenticationChallenge.Disposition) {
+        setValue(disposition)
     }
 }
 
-extension QueuedNetworkChallenge {
-    /// Creates a `QueuedNetworkChallenge`.
+extension NetworkChallengeContinuation {
+    /// Creates a `NetworkChallengeContinuation`.
     /// - Parameter networkChallenge: The associated network authentication challenge.
     convenience init(networkChallenge: NetworkAuthenticationChallenge) {
         self.init(host: networkChallenge.host, kind: Kind(networkChallenge.kind))
     }
 }
 
-extension QueuedNetworkChallenge {
+extension NetworkChallengeContinuation {
     /// An enumeration that describes the kind of challenge.
     enum Kind {
         /// A challenge for an untrusted host.
@@ -77,7 +59,7 @@ extension QueuedNetworkChallenge {
     }
 }
 
-extension QueuedNetworkChallenge.Kind {
+extension NetworkChallengeContinuation.Kind {
     /// Creates an instance.
     /// - Parameter networkAuthenticationChallengeKind: The kind of network authentication
     /// challenge.

@@ -12,15 +12,13 @@
 // limitations under the License.
 
 import Foundation
-import ArcGIS
 
-/// A type that represents a challenge in the queue of authentication challenges.
-protocol QueuedChallenge: AnyObject {
-    /// Waits for the challenge to complete.
-    func complete() async
-}
-
-protocol QueuedArcGISChallenge: QueuedChallenge {
-    /// The result of the challenge.
-    var result: Result<ArcGISAuthenticationChallenge.Disposition, Error> { get async }
+/// A value that represents a height where a sheet naturally rests.
+public enum FloatingPanelDetent: CaseIterable {
+    /// A height large enough to display a short summary.
+    case summary
+    /// A height roughly half of the maximum height.
+    case half
+    /// A height just less than the maximum height.
+    case full
 }
