@@ -12,31 +12,24 @@
 // limitations under the License.
 
 import SwiftUI
-import ArcGISToolkit
 import ArcGIS
 
-struct FloatingPanelExampleView: View {
-    @StateObject private var map = Map(basemapStyle: .arcGISImagery)
-    
-    private let initialViewpoint = Viewpoint(
-        center: Point(x: -93.258133, y: 44.986656, spatialReference: .wgs84),
-        scale: 1_000_000
-    )
+/// A view displaying chart popup media.
+struct ChartMediaView: View {
+    /// The popup media to display.
+    let popupMedia: PopupMedia
     
     var body: some View {
-        MapView(
-            map: map,
-            viewpoint: initialViewpoint
-        )
-        .floatingPanel(isPresented: .constant(true)) {
-            SampleContent()
+        ZStack {
+            VStack(alignment: .center) {
+                Image(systemName: "chart.bar")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 100, height: 100)
+                Text("Charts coming soon!")
+            }
+            RoundedRectangle(cornerRadius: 8)
+                .stroke(.black, lineWidth: 1)
         }
-    }
-}
-
-struct SampleContent: View {
-    var body: some View {
-        List(1..<21) { Text("\($0)") }
-            .listStyle(.plain)
     }
 }

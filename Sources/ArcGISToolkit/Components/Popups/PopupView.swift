@@ -77,9 +77,8 @@ public struct PopupView: View {
                             AttachmentsPopupElementView(popupElement: popupElement)
                         case let popupElement as FieldsPopupElement:
                             FieldsPopupElementView(popupElement: popupElement)
-                        case is MediaPopupElement:
-                            Text("MediaPopupElementView implementation coming soon.")
-                                .font(.caption)
+                        case let popupElement as MediaPopupElement:
+                            MediaPopupElementView(popupElement: popupElement)
                         case let popupElement as TextPopupElement:
                             TextPopupElementView(popupElement: popupElement)
                         default:

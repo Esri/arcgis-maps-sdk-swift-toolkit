@@ -17,7 +17,7 @@
 //
 
 import Foundation
-import ArcGIS
+@testable import ArcGIS
 
 /// A `ChallengeHandler` that that can handle trusting hosts with a self-signed certificate, the URL credential,
 /// and the token credential.
@@ -54,7 +54,9 @@ class ChallengeHandler: AuthenticationChallengeHandler {
         self.init(trustedHosts: trustedHosts, networkCredentialProvider: { _ in networkCredential })
     }
     
-    func handleNetworkChallenge(_ challenge: NetworkAuthenticationChallenge) async -> NetworkAuthenticationChallenge.Disposition {
+    func handleNetworkAuthenticationChallenge(
+        _ challenge: NetworkAuthenticationChallenge
+    ) async -> NetworkAuthenticationChallenge.Disposition {
         // Record challenge only if it is not a server trust.
         if challenge.kind != .serverTrust {
             networkChallenges.append(challenge)
@@ -65,17 +67,17 @@ class ChallengeHandler: AuthenticationChallengeHandler {
                 // This will cause a self-signed certificate to be trusted.
                 return .useCredential(.serverTrust)
             } else {
-                return .allowRequestToFail
+                return .continueWithoutCredential
             }
         } else if let networkCredentialProvider = networkCredentialProvider,
                   let networkCredential = await networkCredentialProvider(challenge) {
             return .useCredential(networkCredential)
         } else {
-            return .cancelAuthenticationChallenge
+            return .cancel
         }
     }
     
-    func handleArcGISChallenge(
+    func handleArcGISAuthenticationChallenge(
         _ challenge: ArcGISAuthenticationChallenge
     ) async throws -> ArcGISAuthenticationChallenge.Disposition {
         arcGISChallenges.append(challenge)
@@ -84,7 +86,7 @@ class ChallengeHandler: AuthenticationChallengeHandler {
            let arcgisCredential = try? await arcgisCredentialProvider(challenge) {
             return .useCredential(arcgisCredential)
         } else {
-            return .cancelAuthenticationChallenge
+            return .cancel
         }
     }
 }

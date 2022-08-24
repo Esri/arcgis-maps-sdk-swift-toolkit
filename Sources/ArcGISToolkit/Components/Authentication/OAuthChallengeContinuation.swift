@@ -16,7 +16,7 @@ import ArcGIS
 
 /// An object that represents an ArcGIS OAuth challenge continuation.
 @MainActor
-final class OAuthChallengeContinuation: ValueContinuation<Result<ArcGISAuthenticationChallenge.Disposition, Error>>, ArcGISChallengeContinuation {
+final class OAuthChallengeContinuation: ValueContinuation<ArcGISAuthenticationChallenge.Disposition>, ArcGISChallengeContinuation {
     /// The OAuth configuration to be used for this challenge.
     let configuration: OAuthConfiguration
     
@@ -30,9 +30,12 @@ final class OAuthChallengeContinuation: ValueContinuation<Result<ArcGISAuthentic
     /// credential.
     func presentPrompt() {
         Task {
-            setValue(await Result {
-                .useCredential(try await .oauth(configuration: configuration))
-            })
+            do {
+                let credential = try await ArcGISCredential.oauth(configuration: configuration)
+                setValue(.useCredential(credential))
+            } catch {
+                setValue(.allowRequestToFail)
+            }
         }
     }
 }

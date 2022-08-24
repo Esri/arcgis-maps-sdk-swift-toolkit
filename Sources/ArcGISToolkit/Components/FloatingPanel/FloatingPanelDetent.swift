@@ -12,10 +12,13 @@
 // limitations under the License.
 
 import Foundation
-import ArcGIS
 
-/// A type that represents an authentication challenge that can be continued.
-protocol ChallengeContinuation: AnyObject {}
-
-/// A type that represents a continuation for an ArcGIS challenge.
-protocol ArcGISChallengeContinuation: ValueContinuation<ArcGISAuthenticationChallenge.Disposition>, ChallengeContinuation {}
+/// A value that represents a height where a sheet naturally rests.
+public enum FloatingPanelDetent: CaseIterable {
+    /// A height large enough to display a short summary.
+    case summary
+    /// A height roughly half of the maximum height.
+    case half
+    /// A height just less than the maximum height.
+    case full
+}

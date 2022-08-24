@@ -87,7 +87,7 @@ public final class Authenticator: ObservableObject {
 extension Authenticator: AuthenticationChallengeHandler {
     public func handleArcGISAuthenticationChallenge(
         _ challenge: ArcGISAuthenticationChallenge
-    ) async throws -> ArcGISAuthenticationChallenge.Disposition {
+    ) async -> ArcGISAuthenticationChallenge.Disposition {
         let challengeContinuation: ArcGISChallengeContinuation
         
         // Create the correct challenge type.
@@ -108,7 +108,7 @@ extension Authenticator: AuthenticationChallengeHandler {
         defer { self.currentChallenge = nil }
         
         // Wait for it to complete and return the resulting disposition.
-        return try await challengeContinuation.value.get()
+        return await challengeContinuation.value
     }
     
     public func handleNetworkAuthenticationChallenge(
@@ -117,7 +117,7 @@ extension Authenticator: AuthenticationChallengeHandler {
         // If `promptForUntrustedHosts` is `false` then perform default handling
         // for server trust challenges.
         guard promptForUntrustedHosts || challenge.kind != .serverTrust else {
-            return .allowRequestToFail
+            return .continueWithoutCredential
         }
         
         let challengeContinuation = NetworkChallengeContinuation(networkChallenge: challenge)
