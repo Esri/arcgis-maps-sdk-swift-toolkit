@@ -11,15 +11,16 @@
 ***REMOVED*** See the License for the specific language governing permissions and
 ***REMOVED*** limitations under the License.
 
-import XCTest
-@testable ***REMOVED***Toolkit
-
-@MainActor final class TrustHostViewModifierTests: XCTestCase {
-***REMOVED***func testInit() {
-***REMOVED******REMOVED***let challenge = NetworkChallengeContinuation(host: "host.com", kind: .serverTrust)
-***REMOVED******REMOVED******REMOVED*** Tests the initial state.
-***REMOVED******REMOVED***let modifier = TrustHostViewModifier(challenge: challenge)
-***REMOVED******REMOVED***XCTAssertIdentical(modifier.challenge, challenge)
-***REMOVED******REMOVED***XCTAssertFalse(modifier.isPresented)
 ***REMOVED***
+
+***REMOVED***/ A user presentable alert.
+struct UtilityNetworkTraceUserAlert {
+***REMOVED******REMOVED***/ Title of the alert.
+***REMOVED***var title: String = "Error"
+***REMOVED***
+***REMOVED******REMOVED***/ Description of the alert.
+***REMOVED***var description: String
+***REMOVED***
+***REMOVED******REMOVED***/ An additional action to be taken on the alert.
+***REMOVED***var button: Button<Text>?
 ***REMOVED***

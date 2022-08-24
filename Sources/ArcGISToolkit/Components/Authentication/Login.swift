@@ -104,8 +104,8 @@ struct LoginViewModifier: ViewModifier {
 ***REMOVED***
 
 extension LoginViewModifier {
-***REMOVED******REMOVED***/ Creates a `LoginViewModifier` with a queued network challenge.
-***REMOVED***@MainActor init(challenge: QueuedNetworkChallenge) {
+***REMOVED******REMOVED***/ Creates a `LoginViewModifier` with a network challenge continuation.
+***REMOVED***@MainActor init(challenge: NetworkChallengeContinuation) {
 ***REMOVED******REMOVED***self.init(
 ***REMOVED******REMOVED******REMOVED***viewModel: LoginViewModel(
 ***REMOVED******REMOVED******REMOVED******REMOVED***challengingHost: challenge.host,
@@ -117,14 +117,14 @@ extension LoginViewModifier {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***,
 ***REMOVED******REMOVED******REMOVED******REMOVED***onCancel: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***challenge.resume(with: .cancelAuthenticationChallenge)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***challenge.resume(with: .cancel)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Creates a `LoginViewModifier` with a queued ArcGIS challenge.
-***REMOVED***@MainActor init(challenge: QueuedTokenChallenge) {
+***REMOVED******REMOVED***/ Creates a `LoginViewModifier` with an ArcGIS challenge continuation.
+***REMOVED***@MainActor init(challenge: TokenChallengeContinuation) {
 ***REMOVED******REMOVED***self.init(
 ***REMOVED******REMOVED******REMOVED***viewModel: LoginViewModel(
 ***REMOVED******REMOVED******REMOVED******REMOVED***challengingHost: challenge.host,
@@ -196,6 +196,7 @@ private struct LoginView: View {
 ***REMOVED******REMOVED******REMOVED***.toolbar {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ToolbarItem(placement: .cancellationAction) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Cancel") {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***focusedField = nil
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***dismissAction()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.cancel()
 ***REMOVED******REMOVED******REMOVED******REMOVED***

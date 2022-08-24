@@ -16,7 +16,7 @@ import XCTest
 
 @MainActor final class CertificatePickerViewModelTests: XCTestCase {
 ***REMOVED***func testViewModel() async throws {
-***REMOVED******REMOVED***let challenge = QueuedNetworkChallenge(host: "host.com", kind: .certificate)
+***REMOVED******REMOVED***let challenge = NetworkChallengeContinuation(host: "host.com", kind: .certificate)
 ***REMOVED******REMOVED***let model = CertificatePickerViewModel(challenge: challenge)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertNil(model.certificateURL)
@@ -45,7 +45,7 @@ import XCTest
 ***REMOVED******REMOVED***XCTAssertTrue(model.showCertificateImportError)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***model.cancel()
-***REMOVED******REMOVED***let disposition = await challenge.disposition
-***REMOVED******REMOVED***XCTAssertEqual(disposition, .cancelAuthenticationChallenge)
+***REMOVED******REMOVED***let disposition = await challenge.value
+***REMOVED******REMOVED***XCTAssertEqual(disposition, .cancel)
 ***REMOVED***
 ***REMOVED***

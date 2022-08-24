@@ -11,15 +11,14 @@
 ***REMOVED*** See the License for the specific language governing permissions and
 ***REMOVED*** limitations under the License.
 
-import XCTest
-@testable ***REMOVED***Toolkit
+***REMOVED***
 
-@MainActor final class TrustHostViewModifierTests: XCTestCase {
-***REMOVED***func testInit() {
-***REMOVED******REMOVED***let challenge = NetworkChallengeContinuation(host: "host.com", kind: .serverTrust)
-***REMOVED******REMOVED******REMOVED*** Tests the initial state.
-***REMOVED******REMOVED***let modifier = TrustHostViewModifier(challenge: challenge)
-***REMOVED******REMOVED***XCTAssertIdentical(modifier.challenge, challenge)
-***REMOVED******REMOVED***XCTAssertFalse(modifier.isPresented)
+extension UtilityElement: Equatable, Hashable, Identifiable {
+***REMOVED***public static func == (lhs: ArcGIS.UtilityElement, rhs: ArcGIS.UtilityElement) -> Bool {
+***REMOVED******REMOVED***lhs.globalID == rhs.globalID
+***REMOVED***
+***REMOVED***
+***REMOVED***public func hash(into hasher: inout Hasher) {
+***REMOVED******REMOVED***hasher.combine(globalID)
 ***REMOVED***
 ***REMOVED***

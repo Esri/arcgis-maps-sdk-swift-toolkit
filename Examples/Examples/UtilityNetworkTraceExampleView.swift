@@ -18,6 +18,7 @@
 ***REMOVED***/ A demonstration of the utility network trace tool which runs traces on a web map published with a utility
 ***REMOVED***/ network and trace configurations.
 struct UtilityNetworkTraceExampleView: View {
+***REMOVED******REMOVED***/ The map containing the utility networks.
 ***REMOVED***@StateObject private var map = makeMap()
 ***REMOVED***
 ***REMOVED******REMOVED***/ Provides the ability to inspect map components.
@@ -47,22 +48,21 @@ struct UtilityNetworkTraceExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***self.mapPoint = mapPoint
 ***REMOVED******REMOVED******REMOVED******REMOVED***self.mapViewProxy = mapViewProxy
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.overlay(alignment: .topTrailing) {
-***REMOVED******REMOVED******REMOVED******REMOVED***FloatingPanel {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***UtilityNetworkTrace(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***graphicsOverlay: $resultGraphicsOverlay,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***map: map,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mapPoint: $mapPoint,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewPoint: $viewPoint,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mapViewProxy: $mapViewProxy,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint: $viewpoint
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.task {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await ArcGISRuntimeEnvironment.credentialStore.add(try! await .publicSample)
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.padding()
-***REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 360)
+***REMOVED******REMOVED******REMOVED***.onViewpointChanged(kind: .centerAndScale) {
+***REMOVED******REMOVED******REMOVED******REMOVED***viewpoint = $0
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.floatingPanel(isPresented: .constant(true)) {
+***REMOVED******REMOVED******REMOVED******REMOVED***UtilityNetworkTrace(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***graphicsOverlay: $resultGraphicsOverlay,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***map: map,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mapPoint: $mapPoint,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewPoint: $viewPoint,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mapViewProxy: $mapViewProxy,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint: $viewpoint
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.task {
+***REMOVED******REMOVED******REMOVED******REMOVED***await ArcGISRuntimeEnvironment.credentialStore.add(try! await .publicSample)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***

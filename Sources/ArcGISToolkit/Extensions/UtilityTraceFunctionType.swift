@@ -11,15 +11,17 @@
 ***REMOVED*** See the License for the specific language governing permissions and
 ***REMOVED*** limitations under the License.
 
-import XCTest
-@testable ***REMOVED***Toolkit
+***REMOVED***
 
-@MainActor final class TrustHostViewModifierTests: XCTestCase {
-***REMOVED***func testInit() {
-***REMOVED******REMOVED***let challenge = NetworkChallengeContinuation(host: "host.com", kind: .serverTrust)
-***REMOVED******REMOVED******REMOVED*** Tests the initial state.
-***REMOVED******REMOVED***let modifier = TrustHostViewModifier(challenge: challenge)
-***REMOVED******REMOVED***XCTAssertIdentical(modifier.challenge, challenge)
-***REMOVED******REMOVED***XCTAssertFalse(modifier.isPresented)
+extension UtilityTraceFunctionType: CustomStringConvertible {
+***REMOVED***public var description: String {
+***REMOVED******REMOVED***switch self {
+***REMOVED******REMOVED***case .add: return "Add"
+***REMOVED******REMOVED***case .average: return "Average"
+***REMOVED******REMOVED***case .count: return "Count"
+***REMOVED******REMOVED***case .max: return "Max"
+***REMOVED******REMOVED***case .min: return "Min"
+***REMOVED******REMOVED***case .subtract: return "Subtract"
+***REMOVED***
 ***REMOVED***
 ***REMOVED***

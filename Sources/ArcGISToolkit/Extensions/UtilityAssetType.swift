@@ -11,16 +11,14 @@
 ***REMOVED*** See the License for the specific language governing permissions and
 ***REMOVED*** limitations under the License.
 
-import Foundation
 ***REMOVED***
 
-***REMOVED***/ A type that represents a challenge in the queue of authentication challenges.
-protocol QueuedChallenge: AnyObject {
-***REMOVED******REMOVED***/ Waits for the challenge to complete.
-***REMOVED***func complete() async
+extension UtilityAssetType: Equatable, Hashable, Identifiable {
+***REMOVED***public static func == (lhs: ArcGIS.UtilityAssetType, rhs: ArcGIS.UtilityAssetType) -> Bool {
+***REMOVED******REMOVED***lhs.hashValue == rhs.hashValue
 ***REMOVED***
-
-protocol QueuedArcGISChallenge: QueuedChallenge {
-***REMOVED******REMOVED***/ The result of the challenge.
-***REMOVED***var result: Result<ArcGISAuthenticationChallenge.Disposition, Error> { get async ***REMOVED***
+***REMOVED***
+***REMOVED***public func hash(into hasher: inout Hasher) {
+***REMOVED******REMOVED***hasher.combine(hashValue)
+***REMOVED***
 ***REMOVED***
