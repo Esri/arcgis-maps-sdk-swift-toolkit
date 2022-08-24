@@ -100,7 +100,7 @@ public class LocatorSearchSource: ObservableObject, SearchSource {
 ***REMOVED******REMOVED***geocodeParameters.preferredSearchLocation = preferredSearchLocation
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let geocodeResults = try await locatorTask.geocode(
-***REMOVED******REMOVED******REMOVED***suggestResult: suggestResult,
+***REMOVED******REMOVED******REMOVED***forSuggestResult: suggestResult,
 ***REMOVED******REMOVED******REMOVED***parameters: geocodeParameters
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
@@ -119,7 +119,7 @@ public class LocatorSearchSource: ObservableObject, SearchSource {
 ***REMOVED******REMOVED***suggestParameters.preferredSearchLocation = preferredSearchLocation
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let geocodeResults = try await locatorTask.suggest(
-***REMOVED******REMOVED******REMOVED***searchText: query,
+***REMOVED******REMOVED******REMOVED***forSearchText: query,
 ***REMOVED******REMOVED******REMOVED***parameters: suggestParameters
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED*** Convert to an array of `SearchSuggestion` objects and return.
@@ -139,7 +139,7 @@ private extension LocatorSearchSource {
 ***REMOVED******REMOVED***geocodeParameters.preferredSearchLocation = preferredSearchLocation
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let geocodeResults = try await locatorTask.geocode(
-***REMOVED******REMOVED******REMOVED***searchText: query,
+***REMOVED******REMOVED******REMOVED***forSearchText: query,
 ***REMOVED******REMOVED******REMOVED***parameters: geocodeParameters
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
