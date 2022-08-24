@@ -91,7 +91,7 @@ struct LoginViewModifier: ViewModifier {
     
     func body(content: Content) -> some View {
         content
-            .task { isPresented = true }
+            .onAppear { isPresented = true }
             .credentialInput(
                 fields: .usernamePassword,
                 isPresented: $isPresented,
