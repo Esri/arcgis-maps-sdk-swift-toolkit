@@ -35,10 +35,10 @@ import Combine
             await ArcGISRuntimeEnvironment.setNetworkCredentialStore(NetworkCredentialStore())
         }
         
-        // This tests that calling makePersistent tries to sync with the keychain.
+        // This tests that calling setupPersistentCredentialStorage tries to sync with the keychain.
         let authenticator = Authenticator()
         do {
-            try await authenticator.makePersistent(access: .whenUnlocked)
+            try await authenticator.setupPersistentCredentialStorage(access: .whenUnlocked)
             XCTFail("Expected an error to be thrown as unit tests should not have access to the keychain")
         } catch {}
     }
