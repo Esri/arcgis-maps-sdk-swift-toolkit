@@ -55,7 +55,10 @@ public struct SearchView: View {
 ***REMOVED******REMOVED***/
 ***REMOVED******REMOVED***/ If `nil`, does not prioritize the search results around any point.
 ***REMOVED***@Binding var queryCenter: Point?
-
+***REMOVED***
+***REMOVED******REMOVED***/ A closure performed when the query has changed.
+***REMOVED***private var onQueryChangedAction: ((String) -> Void)?
+***REMOVED***
 ***REMOVED******REMOVED***/ The current map/scene view extent. Defaults to `nil`.
 ***REMOVED******REMOVED***/
 ***REMOVED******REMOVED***/ This will be used to determine the value of `isEligibleForRequery` for the 'Repeat
@@ -166,6 +169,7 @@ public struct SearchView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***.listStyle(.plain)
 ***REMOVED******REMOVED***.onReceive(viewModel.$currentQuery) { _ in
+***REMOVED******REMOVED******REMOVED***onQueryChangedAction?(viewModel.currentQuery)
 ***REMOVED******REMOVED******REMOVED***viewModel.updateSuggestions()
 ***REMOVED***
 ***REMOVED******REMOVED***.onChange(of: geoViewExtent) { _ in
@@ -229,6 +233,16 @@ extension SearchView {
 ***REMOVED***public func currentQuery(_ newQuery: String) -> Self {
 ***REMOVED******REMOVED***var copy = self
 ***REMOVED******REMOVED***copy.currentQuery = newQuery
+***REMOVED******REMOVED***return copy
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Sets a closure to perform when the query changes.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - action: The closure to performed when the query has changed.
+***REMOVED******REMOVED***/   - query: The new query.
+***REMOVED***public func onQueryChanged(perform action: @escaping (_ query: String) -> Void) -> Self {
+***REMOVED******REMOVED***var copy = self
+***REMOVED******REMOVED***copy.onQueryChangedAction = action
 ***REMOVED******REMOVED***return copy
 ***REMOVED***
 ***REMOVED***
