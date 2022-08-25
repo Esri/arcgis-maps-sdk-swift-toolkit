@@ -23,18 +23,17 @@ struct ImageMediaView: View {
     @State private var showingFullScreen = false
     
     var body: some View {
-        VStack {
+        VStack(alignment: .leading) {
             if let sourceURL = popupMedia.value?.sourceURL {
-                AsyncImageView(url: sourceURL)
-                    .clipShape(RoundedRectangle(cornerRadius: 8))
-                .onTapGesture {
-                    showingFullScreen = true
-                }
+                AsyncImageView(url: sourceURL, contentMode: .fill)
+                    .frame(maxWidth: .infinity, maxHeight: 200)
+                    .clipped()
+                    .cornerRadius(8)
+                    .onTapGesture {
+                        showingFullScreen = true
+                    }
             }
-            HStack {
-                PopupMediaFooter(popupMedia: popupMedia)
-                Spacer()
-            }
+            PopupMediaFooter(popupMedia: popupMedia)
         }
         .sheet(isPresented: $showingFullScreen) {
             if let url = popupMedia.value?.sourceURL {

@@ -26,7 +26,7 @@ struct FullScreenImageView: View {
     @Binding var showingFullScreen: Bool
     
     var body: some View {
-        VStack() {
+        VStack {
             HStack {
                 Spacer()
                 Button {
@@ -37,9 +37,16 @@ struct FullScreenImageView: View {
                 }
                 .padding([.bottom], 4)
             }
-            Text(popupMedia.title)
-                .font(.title3)
-                .fontWeight(.bold)
+            HStack {
+                VStack(alignment: .leading) {
+                    Text(popupMedia.title)
+                        .font(.title2)
+                    Text(popupMedia.caption)
+                        .font(.title3)
+                        .foregroundColor(.secondary)
+                }
+                Spacer()
+            }
             AsyncImageView(url: sourceURL)
                 .onTapGesture {
                     if let url = popupMedia.value?.linkURL {
@@ -49,7 +56,7 @@ struct FullScreenImageView: View {
             if popupMedia.value?.linkURL != nil {
                 HStack {
                     Text("Tap on the image for more information.")
-                        .font(.caption)
+                        .font(.subheadline)
                         .foregroundColor(.secondary)
                     Spacer()
                 }

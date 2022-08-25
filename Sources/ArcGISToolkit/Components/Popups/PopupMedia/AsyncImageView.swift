@@ -19,13 +19,25 @@ struct AsyncImageView: View {
     /// The `URL` of the image.
     let url: URL
     
+    /// The `ContentMode` defining how the image fills the available space.
+    let contentMode: ContentMode
+    
+    /// Creates an `AsyncImageView`.
+    /// - Parameters:
+    ///   - url: The `URL` of the image.
+    ///   - contentMode: The `ContentMode` defining how the image fills the available space.
+    public init(url: URL, contentMode: ContentMode = .fit) {
+        self.url = url
+        self.contentMode = contentMode
+    }
+    
     var body: some View {
         AsyncImage(url: url) { phase in
             if let image = phase.image {
                 // Displays the loaded image.
                 image
                     .resizable()
-                    .aspectRatio(contentMode: .fit)
+                    .aspectRatio(contentMode: contentMode)
             } else if phase.error != nil {
                 // Displays an error notification.
                 HStack(alignment: .center) {
