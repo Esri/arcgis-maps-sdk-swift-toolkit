@@ -24,9 +24,6 @@ import UniformTypeIdentifiers
 ***REMOVED******REMOVED***/ The URL of the certificate that the user chose.
 ***REMOVED***var certificateURL: URL?
 ***REMOVED***
-***REMOVED******REMOVED***/ The password.
-***REMOVED***@Published var password = ""
-***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether to show the prompt.
 ***REMOVED***@Published var showPrompt = true
 ***REMOVED***
@@ -68,8 +65,9 @@ import UniformTypeIdentifiers
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Attempts to use the certificate and password to respond to the challenge.
-***REMOVED***func proceedWithPassword() {
-***REMOVED******REMOVED***guard let certificateURL = certificateURL, !password.isEmpty else {
+***REMOVED******REMOVED***/ - Parameter password: The password for the certificate.
+***REMOVED***func proceed(withPassword password: String) {
+***REMOVED******REMOVED***guard let certificateURL = certificateURL else {
 ***REMOVED******REMOVED******REMOVED***preconditionFailure()
 ***REMOVED***
 ***REMOVED******REMOVED***
@@ -126,8 +124,7 @@ struct CertificatePickerViewModifier: ViewModifier {
 ***REMOVED******REMOVED******REMOVED******REMOVED***continueAction: .init(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title: "OK",
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***handler: { _, password in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.password = password
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.proceedWithPassword()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.proceed(withPassword: password)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***)
