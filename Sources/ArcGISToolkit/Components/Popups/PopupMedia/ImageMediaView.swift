@@ -23,7 +23,7 @@ struct ImageMediaView: View {
 ***REMOVED***@State private var showingFullScreen = false
 ***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***VStack(alignment: .leading) {
+***REMOVED******REMOVED***VStack {
 ***REMOVED******REMOVED******REMOVED***if let sourceURL = popupMedia.value?.sourceURL {
 ***REMOVED******REMOVED******REMOVED******REMOVED***AsyncImageView(url: sourceURL, contentMode: .fill)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, maxHeight: 200)
@@ -33,7 +33,10 @@ struct ImageMediaView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***showingFullScreen = true
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***PopupMediaFooter(popupMedia: popupMedia)
+***REMOVED******REMOVED******REMOVED***HStack {
+***REMOVED******REMOVED******REMOVED******REMOVED***PopupMediaFooter(popupMedia: popupMedia)
+***REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.sheet(isPresented: $showingFullScreen) {
 ***REMOVED******REMOVED******REMOVED***if let url = popupMedia.value?.sourceURL {
