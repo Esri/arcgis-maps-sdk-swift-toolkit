@@ -18,6 +18,7 @@ import ArcGIS
 struct ImageMediaView: View {
     /// The popup media to display.
     let popupMedia: PopupMedia
+    let mediaSize: CGSize
     
     /// A Boolean value specifying whether the media should be shown full screen.
     @State private var showingFullScreen = false
@@ -26,9 +27,8 @@ struct ImageMediaView: View {
         VStack {
             if let sourceURL = popupMedia.value?.sourceURL {
                 AsyncImageView(url: sourceURL, contentMode: .fill)
-                    .frame(maxWidth: .infinity, maxHeight: 200)
-                    .clipped()
-                    .cornerRadius(8)
+                    .frame(width: mediaSize.width, height: mediaSize.height)
+                    .clipShape(RoundedRectangle(cornerRadius: 8))
                     .onTapGesture {
                         showingFullScreen = true
                     }
