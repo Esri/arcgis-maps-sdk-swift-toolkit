@@ -24,9 +24,6 @@ import ArcGIS
     /// The URL of the certificate that the user chose.
     var certificateURL: URL?
     
-    /// The password.
-    @Published var password = ""
-    
     /// A Boolean value indicating whether to show the prompt.
     @Published var showPrompt = true
     
@@ -68,8 +65,9 @@ import ArcGIS
     }
     
     /// Attempts to use the certificate and password to respond to the challenge.
-    func proceedWithPassword() {
-        guard let certificateURL = certificateURL, !password.isEmpty else {
+    /// - Parameter password: The password for the certificate.
+    func proceed(withPassword password: String) {
+        guard let certificateURL = certificateURL else {
             preconditionFailure()
         }
         
@@ -126,8 +124,7 @@ struct CertificatePickerViewModifier: ViewModifier {
                 continueAction: .init(
                     title: "OK",
                     handler: { _, password in
-                        viewModel.password = password
-                        viewModel.proceedWithPassword()
+                        viewModel.proceed(withPassword: password)
                     }
                 )
             )
