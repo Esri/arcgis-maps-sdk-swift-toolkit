@@ -19,13 +19,25 @@ struct AsyncImageView: View {
 ***REMOVED******REMOVED***/ The `URL` of the image.
 ***REMOVED***let url: URL
 ***REMOVED***
+***REMOVED******REMOVED***/ The `ContentMode` defining how the image fills the available space.
+***REMOVED***let contentMode: ContentMode
+***REMOVED***
+***REMOVED******REMOVED***/ Creates an `AsyncImageView`.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - url: The `URL` of the image.
+***REMOVED******REMOVED***/   - contentMode: The `ContentMode` defining how the image fills the available space.
+***REMOVED***public init(url: URL, contentMode: ContentMode = .fit) {
+***REMOVED******REMOVED***self.url = url
+***REMOVED******REMOVED***self.contentMode = contentMode
+***REMOVED***
+***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***AsyncImage(url: url) { phase in
 ***REMOVED******REMOVED******REMOVED***if let image = phase.image {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Displays the loaded image.
 ***REMOVED******REMOVED******REMOVED******REMOVED***image
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.resizable()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.aspectRatio(contentMode: .fit)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.aspectRatio(contentMode: contentMode)
 ***REMOVED******REMOVED*** else if phase.error != nil {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Displays an error notification.
 ***REMOVED******REMOVED******REMOVED******REMOVED***HStack(alignment: .center) {
