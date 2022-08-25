@@ -23,18 +23,17 @@ struct ImageMediaView: View {
 ***REMOVED***@State private var showingFullScreen = false
 ***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***VStack {
+***REMOVED******REMOVED***VStack(alignment: .leading) {
 ***REMOVED******REMOVED******REMOVED***if let sourceURL = popupMedia.value?.sourceURL {
-***REMOVED******REMOVED******REMOVED******REMOVED***AsyncImageView(url: sourceURL)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.clipShape(RoundedRectangle(cornerRadius: 8))
-***REMOVED******REMOVED******REMOVED******REMOVED***.onTapGesture {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***showingFullScreen = true
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***AsyncImageView(url: sourceURL, contentMode: .fill)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, maxHeight: 200)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.clipped()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.cornerRadius(8)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onTapGesture {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***showingFullScreen = true
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED******REMOVED***PopupMediaFooter(popupMedia: popupMedia)
-***REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***PopupMediaFooter(popupMedia: popupMedia)
 ***REMOVED***
 ***REMOVED******REMOVED***.sheet(isPresented: $showingFullScreen) {
 ***REMOVED******REMOVED******REMOVED***if let url = popupMedia.value?.sourceURL {
