@@ -37,29 +37,35 @@ struct MediaPopupElementView: View {
         @State private var viewWidth: CGFloat = .zero
         
         var body: some View {
-            TabView {
-                ForEach(popupMedia) { media in
-                    Group {
-                        switch media.kind {
-                        case .image:
-                            ImageMediaView(popupMedia: media)
-                        case .barChart, .columnChart, .lineChart, .pieChart:
-                            ChartMediaView(popupMedia: media)
-                        default:
-                            EmptyView()
+            ScrollView(.horizontal) {
+                HStack(alignment: .top, spacing: 8) {
+                    ForEach(popupMedia) { media in
+                        Group {
+                            switch media.kind {
+                            case .image:
+                                ImageMediaView(popupMedia: media)
+                            case .barChart, .columnChart, .lineChart, .pieChart:
+                                ChartMediaView(popupMedia: media)
+                            default:
+                                EmptyView()
+                            }
                         }
-                    }
-                    .padding([.bottom], popupMedia.count > 1 ? 48: 8)
-                    .tabItem {
-                        Text(media.title)
+                        .frame(width: viewWidth * widthScaleFactor)
+                        .clipped()
                     }
                 }
             }
-            .tabViewStyle(PageTabViewStyle())
-            .indexViewStyle(PageIndexViewStyle(backgroundDisplayMode: .always))
-            .frame(height: viewWidth * 0.75)
             .onSizeChange {
                 viewWidth = $0.width
+            }
+        }
+        
+        /// The scale factor for specifying the width of popup media.  If there is only one popup media,
+        /// the scale is 1.0 (full width); if there is more than one, the scale is 0.85, which allows for
+        /// second and subsequent media to be partially visible, to indicate there is more than one.
+        var widthScaleFactor: Double {
+            get {
+                popupMedia.count > 1 ? 0.85 : 1
             }
         }
     }
