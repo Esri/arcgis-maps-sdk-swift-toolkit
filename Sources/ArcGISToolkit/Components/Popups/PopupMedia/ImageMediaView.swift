@@ -23,7 +23,7 @@ struct ImageMediaView: View {
     @State private var showingFullScreen = false
     
     var body: some View {
-        VStack(alignment: .leading) {
+        VStack {
             if let sourceURL = popupMedia.value?.sourceURL {
                 AsyncImageView(url: sourceURL, contentMode: .fill)
                     .frame(maxWidth: .infinity, maxHeight: 200)
@@ -33,7 +33,10 @@ struct ImageMediaView: View {
                         showingFullScreen = true
                     }
             }
-            PopupMediaFooter(popupMedia: popupMedia)
+            HStack {
+                PopupMediaFooter(popupMedia: popupMedia)
+                Spacer()
+            }
         }
         .sheet(isPresented: $showingFullScreen) {
             if let url = popupMedia.value?.sourceURL {
