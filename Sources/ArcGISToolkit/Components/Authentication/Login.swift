@@ -91,13 +91,27 @@ struct LoginViewModifier: ViewModifier {
 ***REMOVED***
 ***REMOVED***func body(content: Content) -> some View {
 ***REMOVED******REMOVED***content
-***REMOVED******REMOVED******REMOVED***.task { isPresented = true ***REMOVED***
-***REMOVED******REMOVED******REMOVED***.overlay {
-***REMOVED******REMOVED******REMOVED******REMOVED***LoginView(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel: viewModel,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented: $isPresented
+***REMOVED******REMOVED******REMOVED***.onAppear { isPresented = true ***REMOVED***
+***REMOVED******REMOVED******REMOVED***.credentialInput(
+***REMOVED******REMOVED******REMOVED******REMOVED***fields: .usernamePassword,
+***REMOVED******REMOVED******REMOVED******REMOVED***isPresented: $isPresented,
+***REMOVED******REMOVED******REMOVED******REMOVED***message: "You must sign in to access '\(viewModel.challengingHost)'",
+***REMOVED******REMOVED******REMOVED******REMOVED***title: "Authentication Required",
+***REMOVED******REMOVED******REMOVED******REMOVED***cancelAction: .init(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title: "Cancel",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***handler: { _, _ in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.cancel()
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***),
+***REMOVED******REMOVED******REMOVED******REMOVED***continueAction: .init(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title: "Continue",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***handler: { username, password in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.username = username
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.password = password
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.signIn()
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 
@@ -134,137 +148,5 @@ extension LoginViewModifier {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***)
-***REMOVED***
-***REMOVED***
-
-***REMOVED***/ A view that prompts a user to login with a username and password.
-***REMOVED***/
-***REMOVED***/ Implemented in UIKit because as of iOS 16, SwiftUI alerts don't support visible but disabled buttons.
-private struct LoginView: UIViewControllerRepresentable {
-***REMOVED******REMOVED***/ The view model.
-***REMOVED***@ObservedObject private var viewModel: LoginViewModel
-***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value indicating whether or not the view is displayed.
-***REMOVED***@Binding private var isPresented: Bool
-***REMOVED***
-***REMOVED******REMOVED***/ The cancel action for the `UIAlertController`.
-***REMOVED***private let cancelAction: UIAlertAction
-***REMOVED***
-***REMOVED******REMOVED***/ The sign in action for the `UIAlertController`.
-***REMOVED***private let signInAction: UIAlertAction
-***REMOVED***
-***REMOVED******REMOVED***/ Creates the view.
-***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - viewModel: The view model.
-***REMOVED******REMOVED***/   - isPresented: A Boolean value indicating whether or not the view is displayed.
-***REMOVED***init(viewModel: LoginViewModel, isPresented: Binding<Bool>) {
-***REMOVED******REMOVED***self.viewModel = viewModel
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***_isPresented = isPresented
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { _ in
-***REMOVED******REMOVED******REMOVED***viewModel.cancel()
-***REMOVED***
-***REMOVED******REMOVED***signInAction = UIAlertAction(title: "Sign In", style: .default) { _ in
-***REMOVED******REMOVED******REMOVED***viewModel.signIn()
-***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***cancelAction.isEnabled = true
-***REMOVED******REMOVED***signInAction.isEnabled = false
-***REMOVED***
-***REMOVED***
-***REMOVED***func makeCoordinator() -> Coordinator {
-***REMOVED******REMOVED***Coordinator(self)
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ Creates the alert controller object and configures its initial state.
-***REMOVED******REMOVED***/ - Parameter context: A context structure containing information about the current state of the
-***REMOVED******REMOVED***/ system.
-***REMOVED******REMOVED***/ - Returns: A configured alert controller.
-***REMOVED***func makeAlertController(context: Context) -> UIAlertController {
-***REMOVED******REMOVED***let uiAlertController = UIAlertController(
-***REMOVED******REMOVED******REMOVED***title: "Authentication Required",
-***REMOVED******REMOVED******REMOVED***message: "You must sign in to access '\(viewModel.challengingHost)'",
-***REMOVED******REMOVED******REMOVED***preferredStyle: .alert
-***REMOVED******REMOVED***)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***uiAlertController.addTextField { textField in
-***REMOVED******REMOVED******REMOVED***textField.addAction(
-***REMOVED******REMOVED******REMOVED******REMOVED***UIAction { _ in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.username = textField.text ?? ""
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***signInAction.isEnabled = viewModel.signInButtonEnabled
-***REMOVED******REMOVED******REMOVED***,
-***REMOVED******REMOVED******REMOVED******REMOVED***for: .editingChanged
-***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***textField.autocapitalizationType = .none
-***REMOVED******REMOVED******REMOVED***textField.autocorrectionType = .no
-***REMOVED******REMOVED******REMOVED***textField.placeholder = "Username"
-***REMOVED******REMOVED******REMOVED***textField.returnKeyType = .next
-***REMOVED******REMOVED******REMOVED***textField.textContentType = .username
-***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***uiAlertController.addTextField { textField in
-***REMOVED******REMOVED******REMOVED***textField.addAction(
-***REMOVED******REMOVED******REMOVED******REMOVED***UIAction { _ in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.password = textField.text ?? ""
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***signInAction.isEnabled = viewModel.signInButtonEnabled
-***REMOVED******REMOVED******REMOVED***,
-***REMOVED******REMOVED******REMOVED******REMOVED***for: .editingChanged
-***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***textField.autocapitalizationType = .none
-***REMOVED******REMOVED******REMOVED***textField.autocorrectionType = .no
-***REMOVED******REMOVED******REMOVED***textField.delegate = context.coordinator
-***REMOVED******REMOVED******REMOVED***textField.isSecureTextEntry = true
-***REMOVED******REMOVED******REMOVED***textField.placeholder = "Password"
-***REMOVED******REMOVED******REMOVED***textField.returnKeyType = .go
-***REMOVED******REMOVED******REMOVED***textField.textContentType = .password
-***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***uiAlertController.addAction(cancelAction)
-***REMOVED******REMOVED***uiAlertController.addAction(signInAction)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***return uiAlertController
-***REMOVED***
-***REMOVED***
-***REMOVED***func makeUIViewController(context: Context) -> UIViewController {
-***REMOVED******REMOVED***return UIViewController()
-***REMOVED***
-***REMOVED***
-***REMOVED***func updateUIViewController(
-***REMOVED******REMOVED***_ uiViewController: UIViewControllerType,
-***REMOVED******REMOVED***context: Context
-***REMOVED***) {
-***REMOVED******REMOVED***guard isPresented else { return ***REMOVED***
-***REMOVED******REMOVED***let alertController = makeAlertController(context: context)
-***REMOVED******REMOVED******REMOVED*** On a physical iOS 16 device, without the following delay, the
-***REMOVED******REMOVED******REMOVED*** presentation fails and an error is thrown.
-***REMOVED******REMOVED***DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-***REMOVED******REMOVED******REMOVED***uiViewController.present(alertController, animated: true) {
-***REMOVED******REMOVED******REMOVED******REMOVED***isPresented = false
-***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***
-
-extension LoginView {
-***REMOVED******REMOVED***/ The coordinator for the login view that acts as a delegate to the underlying
-***REMOVED******REMOVED***/ `UIAlertViewController`.
-***REMOVED***final class Coordinator: NSObject, UITextFieldDelegate {
-***REMOVED******REMOVED******REMOVED***/ The view that owns this coordinator.
-***REMOVED******REMOVED***let parent: LoginView
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ Creates the coordinator.
-***REMOVED******REMOVED******REMOVED***/ - Parameter parent: The view that owns this coordinator.
-***REMOVED******REMOVED***init(_ parent: LoginView) {
-***REMOVED******REMOVED******REMOVED***self.parent = parent
-***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-***REMOVED******REMOVED******REMOVED***guard parent.viewModel.signInButtonEnabled else {
-***REMOVED******REMOVED******REMOVED******REMOVED***return false
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***parent.viewModel.signIn()
-***REMOVED******REMOVED******REMOVED***return true
-***REMOVED***
 ***REMOVED***
 ***REMOVED***
