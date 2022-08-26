@@ -44,7 +44,7 @@ public final class Authenticator: ObservableObject {
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - access: When the credentials stored in the keychain can be accessed.
 ***REMOVED******REMOVED***/   - isSynchronizable: A value indicating whether the credentials are synchronized with iCloud.
-***REMOVED***public func makePersistent(
+***REMOVED***public func setupPersistentCredentialStorage(
 ***REMOVED******REMOVED***access: ArcGIS.KeychainAccess,
 ***REMOVED******REMOVED***isSynchronizable: Bool = false
 ***REMOVED***) async throws {
