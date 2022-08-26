@@ -21,6 +21,9 @@ struct UtilityNetworkTraceExampleView: View {
     /// The map containing the utility networks.
     @StateObject private var map = makeMap()
     
+    /// The current detent of the floating panel presenting the trace tool.
+    @State var activeDetent: FloatingPanelDetent = .half
+    
     /// Provides the ability to inspect map components.
     @State var mapViewProxy: MapViewProxy?
     
@@ -51,7 +54,15 @@ struct UtilityNetworkTraceExampleView: View {
             .onViewpointChanged(kind: .centerAndScale) {
                 viewpoint = $0
             }
-            .overlay {
+            .task {
+                await ArcGISRuntimeEnvironment.credentialStore.add(try! await .publicSample)
+            }
+            .floatingPanel(
+                    backgroundColor: Color(uiColor: .systemGroupedBackground),
+                    detent: $activeDetent,
+                    horizontalAlignment: .trailing,
+                    isPresented: .constant(true)
+            ) {
                 UtilityNetworkTrace(
                     graphicsOverlay: $resultGraphicsOverlay,
                     map: map,
@@ -60,9 +71,7 @@ struct UtilityNetworkTraceExampleView: View {
                     mapViewProxy: $mapViewProxy,
                     viewpoint: $viewpoint
                 )
-            }
-            .task {
-                await ArcGISRuntimeEnvironment.credentialStore.add(try! await .publicSample)
+                .floatingPanelDetent($activeDetent)
             }
         }
     }
