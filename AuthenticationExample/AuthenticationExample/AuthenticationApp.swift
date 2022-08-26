@@ -54,7 +54,7 @@ struct AuthenticationApp: App {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** It also means that a user can sign in without having to be prompted for
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** credentials. Once credentials are cleared from the stores ("sign-out"),
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** then the user will need to be prompted once again.
-***REMOVED******REMOVED******REMOVED******REMOVED***try? await authenticator.makePersistent(access: .whenUnlockedThisDeviceOnly)
+***REMOVED******REMOVED******REMOVED******REMOVED***try? await authenticator.setupPersistentCredentialStorage(access: .whenUnlockedThisDeviceOnly)
 ***REMOVED******REMOVED******REMOVED******REMOVED***isSettingUp = false
 ***REMOVED******REMOVED***
 ***REMOVED***
