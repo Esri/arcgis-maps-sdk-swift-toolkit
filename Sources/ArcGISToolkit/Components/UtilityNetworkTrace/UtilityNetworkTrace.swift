@@ -56,7 +56,7 @@ public struct UtilityNetworkTrace: View {
     // MARK: States
     
     /// The current detent of the floating panel.
-    @State private var activeDetent: FloatingPanelDetent = .half
+    @Binding private var activeDetent: FloatingPanelDetent?
     
     /// The current user activity.
     @State private var currentActivity: UserActivity = .creatingTrace(nil)
@@ -540,6 +540,7 @@ public struct UtilityNetworkTrace: View {
         viewpoint: Binding<Viewpoint?>,
         startingPoints: Binding<[UtilityNetworkTraceStartingPoint]> = .constant([])
     ) {
+        _activeDetent = .constant(nil)
         _viewPoint = viewPoint
         _mapPoint = mapPoint
         _mapViewProxy = mapViewProxy
@@ -555,73 +556,78 @@ public struct UtilityNetworkTrace: View {
         )
     }
     
+    /// Sets the active detent for a hosting floating panel.
+    /// - Parameter detent: A binding to a value that determines the height of a hosting
+    /// floating panel.
+    /// - Returns: A trace tool that automatically sets and responds to detent values to improve user
+    /// experience.
+    public func floatingPanelDetent(
+        _ detent: Binding<FloatingPanelDetent>
+    ) -> UtilityNetworkTrace {
+        var copy = self
+        copy._activeDetent = Binding(detent)
+        return copy
+    }
+    
     public var body: some View {
-        Color.clear
-            .floatingPanel(
-                backgroundColor: Color(uiColor: .systemGroupedBackground),
-                detent: $activeDetent,
-                horizontalAlignment: .trailing,
-                isPresented: .constant(true)
-            ) {
-                VStack {
-                    if !viewModel.completedTraces.isEmpty &&
-                        !isFocused(traceCreationActivity: .addingStartingPoints) &&
-                        activeDetent != .summary {
-                        activityPicker
-                    }
-                    switch currentActivity {
-                    case .creatingTrace(let activity):
-                        switch activity {
-                        case .addingStartingPoints:
-                            cancelAddStartingPoints
-                        case .inspectingStartingPoint:
-                            startingPointDetail
-                        default:
-                            newTraceTab
-                        }
-                    case .viewingTraces(let activity):
-                        switch activity {
-                        case .viewingElementGroup:
-                            assetGroupDetail
-                        default:
-                            resultsTab
-                        }
-                    }
+        VStack {
+            if !viewModel.completedTraces.isEmpty &&
+                !isFocused(traceCreationActivity: .addingStartingPoints) &&
+                activeDetent != .summary {
+                activityPicker
+            }
+            switch currentActivity {
+            case .creatingTrace(let activity):
+                switch activity {
+                case .addingStartingPoints:
+                    cancelAddStartingPoints
+                case .inspectingStartingPoint:
+                    startingPointDetail
+                default:
+                    newTraceTab
                 }
-                .background(Color(uiColor: .systemGroupedBackground))
-                .animation(.default, value: currentActivity)
-                .onChange(of: viewPoint) { newValue in
-                    guard isFocused(traceCreationActivity: .addingStartingPoints),
-                          let mapViewProxy = mapViewProxy,
-                          let mapPoint = mapPoint,
-                          let viewPoint = viewPoint else {
-                        return
-                    }
-                    currentActivity = .creatingTrace(.viewingStartingPoints)
-                    activeDetent = .half
-                    Task {
-                        await viewModel.addStartingPoint(
-                            at: viewPoint,
-                            mapPoint: mapPoint,
-                            with: mapViewProxy
-                        )
-                    }
-                }
-                .onChange(of: externalStartingPoints) { _ in
-                    viewModel.externalStartingPoints = externalStartingPoints
-                }
-                .alert(
-                    viewModel.userAlert?.title ?? "",
-                    isPresented: Binding(
-                        get: { viewModel.userAlert != nil },
-                        set: { _ in viewModel.userAlert = nil }
-                    )
-                ) {
-                    viewModel.userAlert?.button
-                } message: {
-                    Text(viewModel.userAlert?.description ?? "")
+            case .viewingTraces(let activity):
+                switch activity {
+                case .viewingElementGroup:
+                    assetGroupDetail
+                default:
+                    resultsTab
                 }
             }
+        }
+        .background(Color(uiColor: .systemGroupedBackground))
+        .animation(.default, value: currentActivity)
+        .onChange(of: viewPoint) { newValue in
+            guard isFocused(traceCreationActivity: .addingStartingPoints),
+                  let mapViewProxy = mapViewProxy,
+                  let mapPoint = mapPoint,
+                  let viewPoint = viewPoint else {
+                return
+            }
+            currentActivity = .creatingTrace(.viewingStartingPoints)
+            activeDetent = .half
+            Task {
+                await viewModel.addStartingPoint(
+                    at: viewPoint,
+                    mapPoint: mapPoint,
+                    with: mapViewProxy
+                )
+            }
+        }
+        .onChange(of: externalStartingPoints) { _ in
+            viewModel.externalStartingPoints = externalStartingPoints
+        }
+        .alert(
+            viewModel.userAlert?.title ?? "",
+            isPresented: Binding(
+                get: { viewModel.userAlert != nil },
+                set: { _ in viewModel.userAlert = nil }
+            )
+        ) {
+            viewModel.userAlert?.button
+        } message: {
+            Text(viewModel.userAlert?.description ?? "")
+        }
     }
     
     // MARK: Computed Properties
