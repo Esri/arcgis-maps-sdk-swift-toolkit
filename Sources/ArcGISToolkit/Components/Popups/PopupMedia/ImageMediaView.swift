@@ -22,22 +22,33 @@ struct ImageMediaView: View {
     
     /// A Boolean value specifying whether the media should be shown full screen.
     @State private var showingFullScreen = false
-    
+    private let cornerRadius: CGFloat = 8
+
     var body: some View {
-        VStack {
+        ZStack {
             if let sourceURL = popupMedia.value?.sourceURL {
                 AsyncImageView(url: sourceURL, contentMode: .fill)
-                    .frame(width: mediaSize.width, height: mediaSize.height)
-                    .clipShape(RoundedRectangle(cornerRadius: 8))
                     .onTapGesture {
                         showingFullScreen = true
                     }
+                    .frame(width: mediaSize.width, height: mediaSize.height)
             }
-            HStack {
-                PopupMediaFooter(popupMedia: popupMedia)
+            RoundedRectangle(cornerRadius: cornerRadius)
+                .stroke(.gray, lineWidth: 1)
+                .frame(width: mediaSize.width, height: mediaSize.height)
+            VStack {
                 Spacer()
+                HStack {
+                    PopupMediaFooter(
+                        popupMedia: popupMedia,
+                        mediaSize: mediaSize
+                    )
+                    Spacer()
+                }
             }
         }
+        .frame(width: mediaSize.width, height: mediaSize.height)
+        .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
         .sheet(isPresented: $showingFullScreen) {
             if let url = popupMedia.value?.sourceURL {
                 FullScreenImageView(

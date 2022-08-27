@@ -25,6 +25,7 @@ struct MediaPopupElementView: View {
             description: popupElement.description
         )
         .padding([.bottom], 4)
+        Divider()
         PopupMediaView(popupMedia: popupElement.media)
     }
     
@@ -53,8 +54,8 @@ struct MediaPopupElementView: View {
                                 EmptyView()
                             }
                         }
-                        .frame(width: width)
-                        .contentShape(Rectangle())
+                        .frame(width: mediaSize.width, height: mediaSize.height)
+                        .contentShape(RoundedRectangle(cornerRadius: 8))
                     }
                 }
             }
@@ -68,7 +69,7 @@ struct MediaPopupElementView: View {
         /// second and subsequent media to be partially visible, to indicate there is more than one.
         var widthScaleFactor: Double {
             get {
-                popupMedia.count > 1 ? 0.85 : 1
+                popupMedia.count > 1 ? 0.75 : 1
             }
         }
         
