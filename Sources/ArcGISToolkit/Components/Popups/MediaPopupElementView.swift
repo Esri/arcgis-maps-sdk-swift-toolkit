@@ -25,6 +25,7 @@ struct MediaPopupElementView: View {
 ***REMOVED******REMOVED******REMOVED***description: popupElement.description
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***.padding([.bottom], 4)
+***REMOVED******REMOVED***Divider()
 ***REMOVED******REMOVED***PopupMediaView(popupMedia: popupElement.media)
 ***REMOVED***
 ***REMOVED***
@@ -53,8 +54,8 @@ struct MediaPopupElementView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***EmptyView()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: width)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.contentShape(Rectangle())
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: mediaSize.width, height: mediaSize.height)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.contentShape(RoundedRectangle(cornerRadius: 8))
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
@@ -68,7 +69,7 @@ struct MediaPopupElementView: View {
 ***REMOVED******REMOVED******REMOVED***/ second and subsequent media to be partially visible, to indicate there is more than one.
 ***REMOVED******REMOVED***var widthScaleFactor: Double {
 ***REMOVED******REMOVED******REMOVED***get {
-***REMOVED******REMOVED******REMOVED******REMOVED***popupMedia.count > 1 ? 0.85 : 1
+***REMOVED******REMOVED******REMOVED******REMOVED***popupMedia.count > 1 ? 0.75 : 1
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***
