@@ -33,19 +33,16 @@ struct ImageMediaView: View {
                     }
                     .frame(width: mediaSize.width, height: mediaSize.height)
             }
+            VStack {
+                Spacer()
+                PopupMediaFooter(
+                    popupMedia: popupMedia,
+                    mediaSize: mediaSize
+                )
+            }
             RoundedRectangle(cornerRadius: cornerRadius)
                 .stroke(.gray, lineWidth: 1)
                 .frame(width: mediaSize.width, height: mediaSize.height)
-            VStack {
-                Spacer()
-                HStack {
-                    PopupMediaFooter(
-                        popupMedia: popupMedia,
-                        mediaSize: mediaSize
-                    )
-                    Spacer()
-                }
-            }
         }
         .frame(width: mediaSize.width, height: mediaSize.height)
         .clipShape(RoundedRectangle(cornerRadius: cornerRadius))

@@ -23,12 +23,11 @@ struct PopupMediaFooter: View {
     
     var body: some View {
         ZStack {
-            let gradient = Gradient(colors: [.black, .black.opacity(0.35)])
+            let gradient = Gradient(colors: [.black, .black.opacity(0.15)])
             Rectangle()
                 .fill(
                     LinearGradient(gradient: gradient, startPoint: .bottom, endPoint: .top)
                 )
-                .frame(maxWidth: .infinity)
                 .frame(height: mediaSize.height * 0.25)
             HStack {
                 VStack(alignment: .leading) {
