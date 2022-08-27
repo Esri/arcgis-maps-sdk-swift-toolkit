@@ -50,7 +50,7 @@ struct ImageMediaView: View {
         .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
         .sheet(isPresented: $showingFullScreen) {
             if let url = popupMedia.value?.sourceURL {
-                FullScreenImageView(
+                DetailImageView(
                     popupMedia: popupMedia,
                     sourceURL: url,
                     showingFullScreen: $showingFullScreen
