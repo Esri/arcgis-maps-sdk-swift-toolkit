@@ -18,6 +18,8 @@ import ArcGIS
 struct ImageMediaView: View {
     /// The popup media to display.
     let popupMedia: PopupMedia
+    
+    /// The size of the media's frame.
     let mediaSize: CGSize
     
     /// A Boolean value specifying whether the media should be shown full screen.
