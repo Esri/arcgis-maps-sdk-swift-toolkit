@@ -19,6 +19,7 @@ struct PopupMediaFooter: View {
 ***REMOVED******REMOVED***/ The popup media to display.
 ***REMOVED***let popupMedia: PopupMedia
 ***REMOVED***
+***REMOVED******REMOVED***/ The size of the media's frame.
 ***REMOVED***let mediaSize: CGSize
 ***REMOVED***
 ***REMOVED***var body: some View {
