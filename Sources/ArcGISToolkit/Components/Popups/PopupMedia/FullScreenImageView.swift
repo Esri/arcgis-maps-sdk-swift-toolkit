@@ -15,7 +15,7 @@
 ***REMOVED***
 
 ***REMOVED***/ A view displaying a popup media image in full screen.
-struct FullScreenImageView: View {
+struct DetailImageView: View {
 ***REMOVED******REMOVED***/ The popup media to display.
 ***REMOVED***let popupMedia: PopupMedia
 ***REMOVED***
