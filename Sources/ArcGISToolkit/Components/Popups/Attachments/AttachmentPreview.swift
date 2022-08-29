@@ -14,7 +14,9 @@
 import SwiftUI
 import ArcGIS
 
+/// A view displaying a list of attachments in a "carousel", with a thumbnail and title.
 struct AttachmentPreview: View {
+    /// The attachment models displayed in the list.
     var attachmentModels: [AttachmentModel]
     
     var body: some View {
@@ -27,8 +29,12 @@ struct AttachmentPreview: View {
         }
     }
     
+    /// A view representing a single cell in an `AttachmentPreview`.
     struct AttachmentCell: View  {
+        /// The model representing the attachment to display.
         @ObservedObject var attachmentModel: AttachmentModel
+        
+        /// The url of the the attachment, used to display the attachment via `QuickLook`.
         @State var url: URL?
         
         var body: some View {
@@ -64,9 +70,10 @@ struct AttachmentPreview: View {
             .clipShape(RoundedRectangle(cornerRadius: 8))
             .onTapGesture {
                 if attachmentModel.attachment.loadStatus == .loaded {
+                    // Set the url to trigger `.quickLookPreview`.
                     url = attachmentModel.attachment.fileURL
-                }
-                else if attachmentModel.attachment.loadStatus == .notLoaded {
+                } else if attachmentModel.attachment.loadStatus == .notLoaded {
+                    // Load the attachment model with the given size.
                     attachmentModel.load(thumbnailSize: CGSize(width: 120, height: 120))
                 }
             }
