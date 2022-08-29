@@ -15,21 +15,30 @@
 ***REMOVED***
 import QuickLook
 
-***REMOVED***/ The view model for
+***REMOVED***/ The view model for an `AttachmentPopupElement`.
 @MainActor class AttachmentsPopupElementModel: ObservableObject {
+***REMOVED******REMOVED***/ The array of `AttachmentModels`, one for each popup attachment.
 ***REMOVED***@Published var attachmentModels = [AttachmentModel]()
 ***REMOVED***
 
 ***REMOVED***/ A view model representing the combination of a `PopupAttachment` and
 ***REMOVED***/ an associated `UIImage` used as a thumbnail.
 @MainActor class AttachmentModel: ObservableObject {
+***REMOVED******REMOVED***/ The `PopupAttachment`.
 ***REMOVED***@Published var attachment: PopupAttachment
+***REMOVED***
+***REMOVED******REMOVED***/ The thumbnail representing the attachment.
 ***REMOVED***@Published var thumbnail: UIImage? {
 ***REMOVED******REMOVED***didSet {
 ***REMOVED******REMOVED******REMOVED***usingDefaultImage = false
 ***REMOVED***
 ***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ The `LoadStatus` of the popup attachment.
 ***REMOVED***@Published var loadStatus: LoadStatus = .notLoaded
+***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value specifying whether the thumbnails is the default image
+***REMOVED******REMOVED***/ or an image generated from the popup attachment.
 ***REMOVED***var usingDefaultImage: Bool
 ***REMOVED***
 ***REMOVED***@Environment(\.displayScale) var displayScale
@@ -48,8 +57,8 @@ import QuickLook
 ***REMOVED******REMOVED***usingDefaultImage = true
 ***REMOVED***
 ***REMOVED***
-***REMOVED***
-***REMOVED***
+***REMOVED******REMOVED***/ Loads the popup attachment and generates a thumbnail image.
+***REMOVED******REMOVED***/ - Parameter thumbnailSize: The size for the generated thumbnail.
 ***REMOVED***func load(thumbnailSize: CGSize = CGSize(width: 40, height: 40)) {
 ***REMOVED******REMOVED***Task {
 ***REMOVED******REMOVED******REMOVED***loadStatus = .loading

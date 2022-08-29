@@ -1,0 +1,96 @@
+***REMOVED*** Copyright 2022 Esri.
+
+***REMOVED*** Licensed under the Apache License, Version 2.0 (the "License");
+***REMOVED*** you may not use this file except in compliance with the License.
+***REMOVED*** You may obtain a copy of the License at
+***REMOVED*** http:***REMOVED***www.apache.org/licenses/LICENSE-2.0
+
+***REMOVED*** Unless required by applicable law or agreed to in writing, software
+***REMOVED*** distributed under the License is distributed on an "AS IS" BASIS,
+***REMOVED*** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+***REMOVED*** See the License for the specific language governing permissions and
+***REMOVED*** limitations under the License.
+
+***REMOVED***
+***REMOVED***
+
+struct AttachmentList: View {
+***REMOVED***var attachmentModels: [AttachmentModel]
+***REMOVED***var body: some View {
+***REMOVED******REMOVED***VStack(alignment: .leading, spacing: 6) {
+***REMOVED******REMOVED******REMOVED***ForEach(attachmentModels) { attachmentModel in
+***REMOVED******REMOVED******REMOVED******REMOVED***AttachmentRow(attachmentModel: attachmentModel)
+***REMOVED******REMOVED******REMOVED******REMOVED***if attachmentModel != attachmentModels.last {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Divider()
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
+
+struct AttachmentRow: View  {
+***REMOVED***@ObservedObject var attachmentModel: AttachmentModel
+***REMOVED***@State var url: URL?
+***REMOVED***
+***REMOVED***var body: some View {
+***REMOVED******REMOVED***HStack {
+***REMOVED******REMOVED******REMOVED***HStack {
+***REMOVED******REMOVED******REMOVED******REMOVED***ThumbnailView(attachmentModel: attachmentModel)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(2)
+***REMOVED******REMOVED******REMOVED******REMOVED***VStack(alignment: .leading) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(attachmentModel.attachment.name)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.lineLimit(1)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.truncationMode(.middle)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("\(attachmentModel.attachment.size.formatted(.byteCount(style: .file)))")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .leading)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.onTapGesture {
+***REMOVED******REMOVED******REMOVED******REMOVED***if attachmentModel.attachment.loadStatus == .loaded {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***url = attachmentModel.attachment.fileURL
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***if attachmentModel.loadStatus != .loaded {
+***REMOVED******REMOVED******REMOVED******REMOVED***AttachmentLoadButton(attachmentModel: attachmentModel)
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***.quickLookPreview($url)
+***REMOVED***
+***REMOVED***
+
+struct AttachmentLoadButton: View  {
+***REMOVED***@ObservedObject var attachmentModel: AttachmentModel
+***REMOVED***
+***REMOVED***var body: some View {
+***REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED***if attachmentModel.loadStatus == .notLoaded {
+***REMOVED******REMOVED******REMOVED******REMOVED***attachmentModel.load()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***else if attachmentModel.loadStatus == .failed {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** TODO:  Show error alert, similar to BasemapGallery.
+***REMOVED******REMOVED***
+***REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED***Group {
+***REMOVED******REMOVED******REMOVED******REMOVED***switch attachmentModel.loadStatus {
+***REMOVED******REMOVED******REMOVED******REMOVED***case .notLoaded:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "square.and.arrow.down")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.resizable()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.aspectRatio(contentMode: .fit)
+***REMOVED******REMOVED******REMOVED******REMOVED***case .loading:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ProgressView()
+***REMOVED******REMOVED******REMOVED******REMOVED***case .loaded:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***EmptyView()
+***REMOVED******REMOVED******REMOVED******REMOVED***case .failed:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "exclamationmark.circle.fill")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.resizable()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.aspectRatio(contentMode: .fit)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.red)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.background(Color.clear)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.frame(width: 24, height: 24)
+***REMOVED******REMOVED******REMOVED***.padding(.leading)
+***REMOVED***
+***REMOVED***
+***REMOVED***
