@@ -32,7 +32,7 @@ struct AttachmentsPopupElementView: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value specifying whether the attachments are currently being loaded.
-***REMOVED***@State var loadingAttachments = false
+***REMOVED***@State var loadingAttachments = true
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a new `AttachmentsPopupElementView`.
 ***REMOVED******REMOVED***/ - Parameter popupElement: The `AttachmentsPopupElement`.
@@ -48,7 +48,7 @@ struct AttachmentsPopupElementView: View {
 ***REMOVED******REMOVED******REMOVED***if loadingAttachments {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ProgressView()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
-***REMOVED******REMOVED*** else if popupElement.attachments.count > 0 {
+***REMOVED******REMOVED*** else if viewModel.attachmentModels.count > 0 {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Divider()
 ***REMOVED******REMOVED******REMOVED******REMOVED***VStack(alignment: .leading) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***PopupElementHeader(
@@ -73,7 +73,6 @@ struct AttachmentsPopupElementView: View {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.task {
-***REMOVED******REMOVED******REMOVED***loadingAttachments = true
 ***REMOVED******REMOVED******REMOVED***try? await popupElement.fetchAttachments()
 ***REMOVED******REMOVED******REMOVED***let attachmentModels = popupElement.attachments.map { attachment in
 ***REMOVED******REMOVED******REMOVED******REMOVED***AttachmentModel(attachment: attachment)
