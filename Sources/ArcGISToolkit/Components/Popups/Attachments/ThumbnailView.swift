@@ -14,8 +14,12 @@
 import SwiftUI
 import ArcGIS
 
+/// A view displaying a thumbnail image for an attachment.
 struct ThumbnailView: View  {
+    /// The model represented by the thumbnail.
     @ObservedObject var attachmentModel: AttachmentModel
+    
+    /// The display size of the thumbnail.
     var size: CGSize = CGSize(width: 36, height: 36)
     
     var body: some View {
@@ -31,6 +35,9 @@ struct ThumbnailView: View  {
         }
     }
     
+    /// The foreground color of the thumbnail image.
+    /// - Parameter attachmentModel: The model for the associated attachment.
+    /// - Returns: A color to be used as the foreground color.
     func foregroundColor(for attachmentModel: AttachmentModel) -> Color {
         attachmentModel.loadStatus == .failed ? .red :
         (attachmentModel.usingDefaultImage ? .accentColor : .primary)

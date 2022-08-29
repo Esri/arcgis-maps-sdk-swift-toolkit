@@ -14,8 +14,11 @@
 import SwiftUI
 import ArcGIS
 
+/// A view displaying a list of attachments, with a thumbnail, title, and download button.
 struct AttachmentList: View {
+    /// The attachment models displayed in the list.
     var attachmentModels: [AttachmentModel]
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
             ForEach(attachmentModels) { attachmentModel in
@@ -28,8 +31,12 @@ struct AttachmentList: View {
     }
 }
 
+/// A view representing a single row in an `AttachmentList`.
 struct AttachmentRow: View  {
+    /// The model representing the attachment to display.
     @ObservedObject var attachmentModel: AttachmentModel
+    
+    /// The url of the the attachment, used to display the attachment via `QuickLook`.
     @State var url: URL?
     
     var body: some View {
@@ -48,6 +55,7 @@ struct AttachmentRow: View  {
             }
             .onTapGesture {
                 if attachmentModel.attachment.loadStatus == .loaded {
+                    // Set the url to trigger `.quickLookPreview`.
                     url = attachmentModel.attachment.fileURL
                 }
             }
@@ -59,6 +67,7 @@ struct AttachmentRow: View  {
     }
 }
 
+/// View displaying a button used to load an attachment.
 struct AttachmentLoadButton: View  {
     @ObservedObject var attachmentModel: AttachmentModel
     
@@ -66,9 +75,6 @@ struct AttachmentLoadButton: View  {
         Button {
             if attachmentModel.loadStatus == .notLoaded {
                 attachmentModel.load()
-            }
-            else if attachmentModel.loadStatus == .failed {
-                // TODO:  Show error alert, similar to BasemapGallery.
             }
         } label: {
             Group {
