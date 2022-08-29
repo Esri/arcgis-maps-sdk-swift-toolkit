@@ -32,7 +32,7 @@ struct AttachmentsPopupElementView: View {
     }
     
     /// A Boolean value specifying whether the attachments are currently being loaded.
-    @State var loadingAttachments = false
+    @State var loadingAttachments = true
     
     /// Creates a new `AttachmentsPopupElementView`.
     /// - Parameter popupElement: The `AttachmentsPopupElement`.
@@ -48,7 +48,7 @@ struct AttachmentsPopupElementView: View {
             if loadingAttachments {
                 ProgressView()
                     .padding()
-            } else if popupElement.attachments.count > 0 {
+            } else if viewModel.attachmentModels.count > 0 {
                 Divider()
                 VStack(alignment: .leading) {
                     PopupElementHeader(
@@ -73,7 +73,6 @@ struct AttachmentsPopupElementView: View {
             }
         }
         .task {
-            loadingAttachments = true
             try? await popupElement.fetchAttachments()
             let attachmentModels = popupElement.attachments.map { attachment in
                 AttachmentModel(attachment: attachment)
