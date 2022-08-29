@@ -44,9 +44,10 @@ struct PopupMediaFooter: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.init(white: 0.75))
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.lineLimit(1)
 ***REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.padding([.leading], 20)
+***REMOVED******REMOVED******REMOVED***.padding([.leading, .trailing], 12)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
