@@ -15,7 +15,7 @@ import SwiftUI
 import ArcGIS
 
 /// A view displaying a popup media image in full screen.
-struct FullScreenImageView: View {
+struct DetailImageView: View {
     /// The popup media to display.
     let popupMedia: PopupMedia
     

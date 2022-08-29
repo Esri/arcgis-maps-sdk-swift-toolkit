@@ -25,6 +25,7 @@ struct MediaPopupElementView: View {
             description: popupElement.description
         )
         .padding([.bottom], 4)
+        Divider()
         PopupMediaView(popupMedia: popupElement.media)
     }
     
@@ -34,7 +35,7 @@ struct MediaPopupElementView: View {
         let popupMedia: [PopupMedia]
         
         /// The width of the view content.
-        @State private var viewWidth: CGFloat = .zero
+        @State private var width: CGFloat = .zero
         
         var body: some View {
             ScrollView(.horizontal) {
@@ -43,20 +44,23 @@ struct MediaPopupElementView: View {
                         Group {
                             switch media.kind {
                             case .image:
-                                ImageMediaView(popupMedia: media)
+                                ImageMediaView(
+                                    popupMedia: media,
+                                    mediaSize: mediaSize
+                                )
                             case .barChart, .columnChart, .lineChart, .pieChart:
                                 ChartMediaView(popupMedia: media)
                             default:
                                 EmptyView()
                             }
                         }
-                        .frame(width: viewWidth * widthScaleFactor)
-                        .clipped()
+                        .frame(width: mediaSize.width, height: mediaSize.height)
+                        .contentShape(RoundedRectangle(cornerRadius: 8))
                     }
                 }
             }
             .onSizeChange {
-                viewWidth = $0.width
+                width = $0.width * widthScaleFactor
             }
         }
         
@@ -65,8 +69,13 @@ struct MediaPopupElementView: View {
         /// second and subsequent media to be partially visible, to indicate there is more than one.
         var widthScaleFactor: Double {
             get {
-                popupMedia.count > 1 ? 0.85 : 1
+                popupMedia.count > 1 ? 0.75 : 1
             }
+        }
+        
+        /// The size of the image or chart media, not counting descriptive text.
+        var mediaSize: CGSize {
+            CGSize(width: width, height: 200)
         }
     }
 }
