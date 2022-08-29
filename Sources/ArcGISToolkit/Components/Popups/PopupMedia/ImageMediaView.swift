@@ -19,25 +19,38 @@ struct ImageMediaView: View {
 ***REMOVED******REMOVED***/ The popup media to display.
 ***REMOVED***let popupMedia: PopupMedia
 ***REMOVED***
+***REMOVED******REMOVED***/ The size of the media's frame.
+***REMOVED***let mediaSize: CGSize
+***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value specifying whether the media should be shown full screen.
 ***REMOVED***@State private var showingFullScreen = false
-***REMOVED***
+***REMOVED***private let cornerRadius: CGFloat = 8
+
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***VStack(alignment: .leading) {
+***REMOVED******REMOVED***ZStack {
 ***REMOVED******REMOVED******REMOVED***if let sourceURL = popupMedia.value?.sourceURL {
 ***REMOVED******REMOVED******REMOVED******REMOVED***AsyncImageView(url: sourceURL, contentMode: .fill)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, maxHeight: 200)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.clipped()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.cornerRadius(8)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onTapGesture {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***showingFullScreen = true
 ***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: mediaSize.width, height: mediaSize.height)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***PopupMediaFooter(popupMedia: popupMedia)
+***REMOVED******REMOVED******REMOVED***VStack {
+***REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED******REMOVED******REMOVED***PopupMediaFooter(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***popupMedia: popupMedia,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mediaSize: mediaSize
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***RoundedRectangle(cornerRadius: cornerRadius)
+***REMOVED******REMOVED******REMOVED******REMOVED***.stroke(.gray, lineWidth: 1)
+***REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: mediaSize.width, height: mediaSize.height)
 ***REMOVED***
+***REMOVED******REMOVED***.frame(width: mediaSize.width, height: mediaSize.height)
+***REMOVED******REMOVED***.clipShape(RoundedRectangle(cornerRadius: cornerRadius))
 ***REMOVED******REMOVED***.sheet(isPresented: $showingFullScreen) {
 ***REMOVED******REMOVED******REMOVED***if let url = popupMedia.value?.sourceURL {
-***REMOVED******REMOVED******REMOVED******REMOVED***FullScreenImageView(
+***REMOVED******REMOVED******REMOVED******REMOVED***DetailImageView(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***popupMedia: popupMedia,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***sourceURL: url,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***showingFullScreen: $showingFullScreen
