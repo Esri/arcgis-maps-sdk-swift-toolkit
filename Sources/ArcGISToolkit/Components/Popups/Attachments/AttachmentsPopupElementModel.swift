@@ -15,21 +15,30 @@ import SwiftUI
 import ArcGIS
 import QuickLook
 
-/// The view model for
+/// The view model for an `AttachmentPopupElement`.
 @MainActor class AttachmentsPopupElementModel: ObservableObject {
+    /// The array of `AttachmentModels`, one for each popup attachment.
     @Published var attachmentModels = [AttachmentModel]()
 }
 
 /// A view model representing the combination of a `PopupAttachment` and
 /// an associated `UIImage` used as a thumbnail.
 @MainActor class AttachmentModel: ObservableObject {
+    /// The `PopupAttachment`.
     @Published var attachment: PopupAttachment
+    
+    /// The thumbnail representing the attachment.
     @Published var thumbnail: UIImage? {
         didSet {
             usingDefaultImage = false
         }
     }
+    
+    /// The `LoadStatus` of the popup attachment.
     @Published var loadStatus: LoadStatus = .notLoaded
+    
+    /// A Boolean value specifying whether the thumbnails is the default image
+    /// or an image generated from the popup attachment.
     var usingDefaultImage: Bool
     
     @Environment(\.displayScale) var displayScale
@@ -48,8 +57,8 @@ import QuickLook
         usingDefaultImage = true
     }
     
-    
-    
+    /// Loads the popup attachment and generates a thumbnail image.
+    /// - Parameter thumbnailSize: The size for the generated thumbnail.
     func load(thumbnailSize: CGSize = CGSize(width: 40, height: 40)) {
         Task {
             loadStatus = .loading
