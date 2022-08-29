@@ -18,10 +18,13 @@ import QuickLook
 ***REMOVED*** TODO: look at notes and follow up
 
 ***REMOVED*** TODO: Add alert for when attachments fail to load...
-***REMOVED*** TODO: Move classes into separate file; maybe structs too.
 
+***REMOVED***/ A view displaying an `AttachmentsPopupElement`.
 struct AttachmentsPopupElementView: View {
+***REMOVED******REMOVED***/ The `PopupElement` to display.
 ***REMOVED***var popupElement: AttachmentsPopupElement
+***REMOVED***
+***REMOVED******REMOVED***/ The model for the view.
 ***REMOVED***@StateObject private var viewModel: AttachmentsPopupElementModel
 ***REMOVED***
 ***REMOVED***@Environment(\.horizontalSizeClass) var horizontalSizeClass
@@ -32,8 +35,11 @@ struct AttachmentsPopupElementView: View {
 ***REMOVED******REMOVED***!(horizontalSizeClass == .compact && verticalSizeClass == .regular)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***@State var loadingAttachments = true
+***REMOVED******REMOVED***/ A Boolean value specifying whether the attachments are currently being loaded.
+***REMOVED***@State var loadingAttachments = false
 ***REMOVED***
+***REMOVED******REMOVED***/ Creates a new `AttachmentsPopupElementView`.
+***REMOVED******REMOVED***/ - Parameter popupElement: The `AttachmentsPopupElement`.
 ***REMOVED***init(popupElement: AttachmentsPopupElement) {
 ***REMOVED******REMOVED***self.popupElement = popupElement
 ***REMOVED******REMOVED***_viewModel = StateObject(
@@ -41,47 +47,40 @@ struct AttachmentsPopupElementView: View {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED*** TODO: Move VStack into final else so that we won't show anything if there are no attachments?????
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***VStack(alignment: .leading) {
-***REMOVED******REMOVED******REMOVED***PopupElementHeader(
-***REMOVED******REMOVED******REMOVED******REMOVED***title: popupElement.title,
-***REMOVED******REMOVED******REMOVED******REMOVED***description: popupElement.description
-***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***Divider()
-***REMOVED******REMOVED******REMOVED***if loadingAttachments {
-***REMOVED******REMOVED******REMOVED******REMOVED***ProgressView()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
-***REMOVED******REMOVED*** else if popupElement.attachments.count == 0 {
-***REMOVED******REMOVED******REMOVED******REMOVED***Text("No attachments.")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***else {
+***REMOVED******REMOVED***if loadingAttachments {
+***REMOVED******REMOVED******REMOVED***ProgressView()
+***REMOVED******REMOVED******REMOVED******REMOVED***.padding()
+***REMOVED*** else if popupElement.attachments.count > 0 {
+***REMOVED******REMOVED******REMOVED***VStack(alignment: .leading) {
+***REMOVED******REMOVED******REMOVED******REMOVED***PopupElementHeader(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title: popupElement.title,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***description: popupElement.description
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***Divider()
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***switch popupElement.displayType {
 ***REMOVED******REMOVED******REMOVED******REMOVED***case .list:
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AttachmentList(attachmentModels: viewModel.attachmentModels)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AttachmentPreview(attachmentModels: viewModel.attachmentModels)
 ***REMOVED******REMOVED******REMOVED******REMOVED***case.preview:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AttachmentList(attachmentModels: viewModel.attachmentModels)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AttachmentPreview(attachmentModels: viewModel.attachmentModels)
 ***REMOVED******REMOVED******REMOVED******REMOVED***case .auto:
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if isRegularWidth {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AttachmentList(attachmentModels: viewModel.attachmentModels)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AttachmentPreview(attachmentModels: viewModel.attachmentModels)
 ***REMOVED******REMOVED******REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AttachmentList(attachmentModels: viewModel.attachmentModels)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AttachmentPreview(attachmentModels: viewModel.attachmentModels)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***.task {
-***REMOVED******REMOVED******REMOVED***try? await popupElement.fetchAttachments()
-***REMOVED******REMOVED******REMOVED***let attachmentModels = popupElement.attachments.map { attachment in
-***REMOVED******REMOVED******REMOVED******REMOVED***AttachmentModel(attachment: attachment)
+***REMOVED******REMOVED******REMOVED***.task {
+***REMOVED******REMOVED******REMOVED******REMOVED***loadingAttachments = true
+***REMOVED******REMOVED******REMOVED******REMOVED***try? await popupElement.fetchAttachments()
+***REMOVED******REMOVED******REMOVED******REMOVED***let attachmentModels = popupElement.attachments.map { attachment in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AttachmentModel(attachment: attachment)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.attachmentModels.append(contentsOf: attachmentModels)
+***REMOVED******REMOVED******REMOVED******REMOVED***loadingAttachments = false
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***viewModel.attachmentModels.append(contentsOf: attachmentModels)
-***REMOVED******REMOVED******REMOVED***loadingAttachments = false
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
