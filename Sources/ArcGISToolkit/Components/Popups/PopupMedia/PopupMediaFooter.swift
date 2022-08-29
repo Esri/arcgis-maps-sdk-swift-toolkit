@@ -44,9 +44,10 @@ struct PopupMediaFooter: View {
                             .foregroundColor(.init(white: 0.75))
                     }
                 }
+                .lineLimit(1)
                 Spacer()
             }
-            .padding([.leading], 20)
+            .padding([.leading, .trailing], 12)
         }
     }
 }
