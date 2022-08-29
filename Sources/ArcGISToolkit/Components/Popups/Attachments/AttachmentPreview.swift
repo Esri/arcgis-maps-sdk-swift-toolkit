@@ -14,7 +14,9 @@
 ***REMOVED***
 ***REMOVED***
 
+***REMOVED***/ A view displaying a list of attachments in a "carousel", with a thumbnail and title.
 struct AttachmentPreview: View {
+***REMOVED******REMOVED***/ The attachment models displayed in the list.
 ***REMOVED***var attachmentModels: [AttachmentModel]
 ***REMOVED***
 ***REMOVED***var body: some View {
@@ -27,8 +29,12 @@ struct AttachmentPreview: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ A view representing a single cell in an `AttachmentPreview`.
 ***REMOVED***struct AttachmentCell: View  {
+***REMOVED******REMOVED******REMOVED***/ The model representing the attachment to display.
 ***REMOVED******REMOVED***@ObservedObject var attachmentModel: AttachmentModel
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ The url of the the attachment, used to display the attachment via `QuickLook`.
 ***REMOVED******REMOVED***@State var url: URL?
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var body: some View {
@@ -64,9 +70,10 @@ struct AttachmentPreview: View {
 ***REMOVED******REMOVED******REMOVED***.clipShape(RoundedRectangle(cornerRadius: 8))
 ***REMOVED******REMOVED******REMOVED***.onTapGesture {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if attachmentModel.attachment.loadStatus == .loaded {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Set the url to trigger `.quickLookPreview`.
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***url = attachmentModel.attachment.fileURL
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***else if attachmentModel.attachment.loadStatus == .notLoaded {
+***REMOVED******REMOVED******REMOVED*** else if attachmentModel.attachment.loadStatus == .notLoaded {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Load the attachment model with the given size.
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***attachmentModel.load(thumbnailSize: CGSize(width: 120, height: 120))
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***

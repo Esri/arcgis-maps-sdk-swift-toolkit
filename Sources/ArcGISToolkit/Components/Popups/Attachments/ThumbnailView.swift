@@ -14,8 +14,12 @@
 ***REMOVED***
 ***REMOVED***
 
+***REMOVED***/ A view displaying a thumbnail image for an attachment.
 struct ThumbnailView: View  {
+***REMOVED******REMOVED***/ The model represented by the thumbnail.
 ***REMOVED***@ObservedObject var attachmentModel: AttachmentModel
+***REMOVED***
+***REMOVED******REMOVED***/ The display size of the thumbnail.
 ***REMOVED***var size: CGSize = CGSize(width: 36, height: 36)
 ***REMOVED***
 ***REMOVED***var body: some View {
@@ -31,6 +35,9 @@ struct ThumbnailView: View  {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ The foreground color of the thumbnail image.
+***REMOVED******REMOVED***/ - Parameter attachmentModel: The model for the associated attachment.
+***REMOVED******REMOVED***/ - Returns: A color to be used as the foreground color.
 ***REMOVED***func foregroundColor(for attachmentModel: AttachmentModel) -> Color {
 ***REMOVED******REMOVED***attachmentModel.loadStatus == .failed ? .red :
 ***REMOVED******REMOVED***(attachmentModel.usingDefaultImage ? .accentColor : .primary)

@@ -14,8 +14,11 @@
 ***REMOVED***
 ***REMOVED***
 
+***REMOVED***/ A view displaying a list of attachments, with a thumbnail, title, and download button.
 struct AttachmentList: View {
+***REMOVED******REMOVED***/ The attachment models displayed in the list.
 ***REMOVED***var attachmentModels: [AttachmentModel]
+***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***VStack(alignment: .leading, spacing: 6) {
 ***REMOVED******REMOVED******REMOVED***ForEach(attachmentModels) { attachmentModel in
@@ -28,8 +31,12 @@ struct AttachmentList: View {
 ***REMOVED***
 ***REMOVED***
 
+***REMOVED***/ A view representing a single row in an `AttachmentList`.
 struct AttachmentRow: View  {
+***REMOVED******REMOVED***/ The model representing the attachment to display.
 ***REMOVED***@ObservedObject var attachmentModel: AttachmentModel
+***REMOVED***
+***REMOVED******REMOVED***/ The url of the the attachment, used to display the attachment via `QuickLook`.
 ***REMOVED***@State var url: URL?
 ***REMOVED***
 ***REMOVED***var body: some View {
@@ -48,6 +55,7 @@ struct AttachmentRow: View  {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onTapGesture {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if attachmentModel.attachment.loadStatus == .loaded {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Set the url to trigger `.quickLookPreview`.
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***url = attachmentModel.attachment.fileURL
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
@@ -59,6 +67,7 @@ struct AttachmentRow: View  {
 ***REMOVED***
 ***REMOVED***
 
+***REMOVED***/ View displaying a button used to load an attachment.
 struct AttachmentLoadButton: View  {
 ***REMOVED***@ObservedObject var attachmentModel: AttachmentModel
 ***REMOVED***
@@ -66,9 +75,6 @@ struct AttachmentLoadButton: View  {
 ***REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED***if attachmentModel.loadStatus == .notLoaded {
 ***REMOVED******REMOVED******REMOVED******REMOVED***attachmentModel.load()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***else if attachmentModel.loadStatus == .failed {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** TODO:  Show error alert, similar to BasemapGallery.
 ***REMOVED******REMOVED***
 ***REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED***Group {
