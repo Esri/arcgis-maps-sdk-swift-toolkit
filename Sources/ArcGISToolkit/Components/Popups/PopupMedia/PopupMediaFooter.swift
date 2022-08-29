@@ -19,18 +19,34 @@ struct PopupMediaFooter: View {
     /// The popup media to display.
     let popupMedia: PopupMedia
     
+    /// The size of the media's frame.
+    let mediaSize: CGSize
+    
     var body: some View {
-        VStack(alignment: .leading) {
-            if !popupMedia.title.isEmpty {
-                Text(popupMedia.title)
-                    .font(.body)
+        ZStack {
+            let gradient = Gradient(colors: [.black, .black.opacity(0.15)])
+            Rectangle()
+                .fill(
+                    LinearGradient(gradient: gradient, startPoint: .bottom, endPoint: .top)
+                )
+                .frame(height: mediaSize.height * 0.25)
+            HStack {
+                VStack(alignment: .leading) {
+                    if !popupMedia.title.isEmpty {
+                        Text(popupMedia.title)
+                            .foregroundColor(.white)
+                            .font(.body)
+                    }
+                    
+                    if !popupMedia.caption.isEmpty {
+                        Text(popupMedia.caption)
+                            .font(.subheadline)
+                            .foregroundColor(.init(white: 0.75))
+                    }
+                }
+                Spacer()
             }
-            
-            if !popupMedia.caption.isEmpty {
-                Text(popupMedia.caption)
-                    .font(.subheadline)
-                    .foregroundColor(.secondary)
-            }
+            .padding([.leading], 20)
         }
     }
 }
