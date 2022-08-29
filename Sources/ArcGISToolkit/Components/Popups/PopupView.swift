@@ -38,7 +38,6 @@ public struct PopupView: View {
                 Text(popup.title)
                     .font(.title)
                     .fontWeight(.bold)
-                Divider()
             }
             Group {
                 if let isPopupEvaluated = isPopupEvaluated {
@@ -83,10 +82,6 @@ public struct PopupView: View {
                             TextPopupElementView(popupElement: popupElement)
                         default:
                             EmptyView()
-                        }
-                        
-                        if index < popup.evaluatedElements.count - 1 {
-                            Divider()
                         }
                     }
                 }

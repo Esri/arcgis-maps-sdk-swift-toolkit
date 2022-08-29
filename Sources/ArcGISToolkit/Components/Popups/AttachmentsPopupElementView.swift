@@ -15,10 +15,6 @@ import SwiftUI
 import ArcGIS
 import QuickLook
 
-// TODO: look at notes and follow up
-
-// TODO: Add alert for when attachments fail to load...
-
 /// A view displaying an `AttachmentsPopupElement`.
 struct AttachmentsPopupElementView: View {
     /// The `PopupElement` to display.
@@ -48,39 +44,42 @@ struct AttachmentsPopupElementView: View {
     }
     
     var body: some View {
-        if loadingAttachments {
-            ProgressView()
-                .padding()
-        } else if popupElement.attachments.count > 0 {
-            VStack(alignment: .leading) {
-                PopupElementHeader(
-                    title: popupElement.title,
-                    description: popupElement.description
-                )
+        Group {
+            if loadingAttachments {
+                ProgressView()
+                    .padding()
+            } else if popupElement.attachments.count > 0 {
                 Divider()
-                
-                switch popupElement.displayType {
-                case .list:
-                    AttachmentList(attachmentModels: viewModel.attachmentModels)
-                case.preview:
-                    AttachmentPreview(attachmentModels: viewModel.attachmentModels)
-                case .auto:
-                    if isRegularWidth {
-                        AttachmentPreview(attachmentModels: viewModel.attachmentModels)
-                    } else {
+                VStack(alignment: .leading) {
+                    PopupElementHeader(
+                        title: popupElement.title,
+                        description: popupElement.description
+                    )
+                    Divider()
+                    
+                    switch popupElement.displayType {
+                    case .list:
                         AttachmentList(attachmentModels: viewModel.attachmentModels)
+                    case.preview:
+                        AttachmentPreview(attachmentModels: viewModel.attachmentModels)
+                    case .auto:
+                        if isRegularWidth {
+                            AttachmentPreview(attachmentModels: viewModel.attachmentModels)
+                        } else {
+                            AttachmentList(attachmentModels: viewModel.attachmentModels)
+                        }
                     }
                 }
             }
-            .task {
-                loadingAttachments = true
-                try? await popupElement.fetchAttachments()
-                let attachmentModels = popupElement.attachments.map { attachment in
-                    AttachmentModel(attachment: attachment)
-                }
-                viewModel.attachmentModels.append(contentsOf: attachmentModels)
-                loadingAttachments = false
+        }
+        .task {
+            loadingAttachments = true
+            try? await popupElement.fetchAttachments()
+            let attachmentModels = popupElement.attachments.map { attachment in
+                AttachmentModel(attachment: attachment)
             }
+            viewModel.attachmentModels.append(contentsOf: attachmentModels)
+            loadingAttachments = false
         }
     }
 }

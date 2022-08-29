@@ -23,8 +23,9 @@ struct TextPopupElementView: View {
     @State private var webViewHeight: CGFloat = .zero
     
     var body: some View {
-        let roundedRect = RoundedRectangle(cornerRadius: 8)
         if !popupElement.text.isEmpty {
+            let roundedRect = RoundedRectangle(cornerRadius: 8)
+            Divider()
             ZStack {
                 HTMLTextView(html: popupElement.text, height: $webViewHeight)
                     .clipShape(roundedRect)
