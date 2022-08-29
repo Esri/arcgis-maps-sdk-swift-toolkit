@@ -18,10 +18,13 @@ import QuickLook
 // TODO: look at notes and follow up
 
 // TODO: Add alert for when attachments fail to load...
-// TODO: Move classes into separate file; maybe structs too.
 
+/// A view displaying an `AttachmentsPopupElement`.
 struct AttachmentsPopupElementView: View {
+    /// The `PopupElement` to display.
     var popupElement: AttachmentsPopupElement
+    
+    /// The model for the view.
     @StateObject private var viewModel: AttachmentsPopupElementModel
     
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
@@ -32,8 +35,11 @@ struct AttachmentsPopupElementView: View {
         !(horizontalSizeClass == .compact && verticalSizeClass == .regular)
     }
     
-    @State var loadingAttachments = true
+    /// A Boolean value specifying whether the attachments are currently being loaded.
+    @State var loadingAttachments = false
     
+    /// Creates a new `AttachmentsPopupElementView`.
+    /// - Parameter popupElement: The `AttachmentsPopupElement`.
     init(popupElement: AttachmentsPopupElement) {
         self.popupElement = popupElement
         _viewModel = StateObject(
@@ -41,47 +47,40 @@ struct AttachmentsPopupElementView: View {
         )
     }
     
-    // TODO: Move VStack into final else so that we won't show anything if there are no attachments?????
     var body: some View {
-        VStack(alignment: .leading) {
-            PopupElementHeader(
-                title: popupElement.title,
-                description: popupElement.description
-            )
-            Divider()
-            if loadingAttachments {
-                ProgressView()
-                    .padding()
-            } else if popupElement.attachments.count == 0 {
-                Text("No attachments.")
-                    .padding()
-            }
-            else {
+        if loadingAttachments {
+            ProgressView()
+                .padding()
+        } else if popupElement.attachments.count > 0 {
+            VStack(alignment: .leading) {
+                PopupElementHeader(
+                    title: popupElement.title,
+                    description: popupElement.description
+                )
+                Divider()
+                
                 switch popupElement.displayType {
                 case .list:
                     AttachmentList(attachmentModels: viewModel.attachmentModels)
-//                    AttachmentPreview(attachmentModels: viewModel.attachmentModels)
                 case.preview:
-//                    AttachmentList(attachmentModels: viewModel.attachmentModels)
                     AttachmentPreview(attachmentModels: viewModel.attachmentModels)
                 case .auto:
                     if isRegularWidth {
-//                        AttachmentList(attachmentModels: viewModel.attachmentModels)
                         AttachmentPreview(attachmentModels: viewModel.attachmentModels)
                     } else {
                         AttachmentList(attachmentModels: viewModel.attachmentModels)
-                        AttachmentPreview(attachmentModels: viewModel.attachmentModels)
                     }
                 }
             }
-        }
-        .task {
-            try? await popupElement.fetchAttachments()
-            let attachmentModels = popupElement.attachments.map { attachment in
-                AttachmentModel(attachment: attachment)
+            .task {
+                loadingAttachments = true
+                try? await popupElement.fetchAttachments()
+                let attachmentModels = popupElement.attachments.map { attachment in
+                    AttachmentModel(attachment: attachment)
+                }
+                viewModel.attachmentModels.append(contentsOf: attachmentModels)
+                loadingAttachments = false
             }
-            viewModel.attachmentModels.append(contentsOf: attachmentModels)
-            loadingAttachments = false
         }
     }
 }
