@@ -40,9 +40,6 @@ final class LoginViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ A Boolean value indicating if the sign-in button is enabled.
 ***REMOVED***@Published var signInButtonEnabled = false
 ***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value indicating if the form is enabled.
-***REMOVED***@Published var formEnabled: Bool = true
-***REMOVED***
 ***REMOVED******REMOVED***/ The action to perform when the user signs in. This is a closure that takes a username
 ***REMOVED******REMOVED***/ and password, respectively.
 ***REMOVED***var signInAction: (LoginCredential) -> Void
@@ -75,13 +72,11 @@ final class LoginViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Attempts to log in with a username and password.
 ***REMOVED***func signIn() {
-***REMOVED******REMOVED***formEnabled = false
 ***REMOVED******REMOVED***signInAction(LoginCredential(username: username, password: password))
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Cancels the challenge.
 ***REMOVED***func cancel() {
-***REMOVED******REMOVED***formEnabled = false
 ***REMOVED******REMOVED***cancelAction()
 ***REMOVED***
 ***REMOVED***
@@ -96,10 +91,27 @@ struct LoginViewModifier: ViewModifier {
 ***REMOVED***
 ***REMOVED***func body(content: Content) -> some View {
 ***REMOVED******REMOVED***content
-***REMOVED******REMOVED******REMOVED***.task { isPresented = true ***REMOVED***
-***REMOVED******REMOVED******REMOVED***.sheet(isPresented: $isPresented) {
-***REMOVED******REMOVED******REMOVED******REMOVED***LoginView(viewModel: viewModel)
-***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.onAppear { isPresented = true ***REMOVED***
+***REMOVED******REMOVED******REMOVED***.credentialInput(
+***REMOVED******REMOVED******REMOVED******REMOVED***fields: .usernamePassword,
+***REMOVED******REMOVED******REMOVED******REMOVED***isPresented: $isPresented,
+***REMOVED******REMOVED******REMOVED******REMOVED***message: "You must sign in to access '\(viewModel.challengingHost)'",
+***REMOVED******REMOVED******REMOVED******REMOVED***title: "Authentication Required",
+***REMOVED******REMOVED******REMOVED******REMOVED***cancelAction: .init(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title: "Cancel",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***handler: { _, _ in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.cancel()
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***),
+***REMOVED******REMOVED******REMOVED******REMOVED***continueAction: .init(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title: "Continue",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***handler: { username, password in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.username = username
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.password = password
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.signIn()
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 
@@ -136,121 +148,5 @@ extension LoginViewModifier {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***)
-***REMOVED***
-***REMOVED***
-
-***REMOVED***/ A view that prompts a user to login with a username and password.
-private struct LoginView: View {
-***REMOVED******REMOVED***/ Creates the view.
-***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - viewModel: The view model.
-***REMOVED***init(viewModel: LoginViewModel) {
-***REMOVED******REMOVED***_viewModel = ObservedObject(initialValue: viewModel)
-***REMOVED***
-***REMOVED***
-***REMOVED***@Environment(\.dismiss) var dismissAction
-***REMOVED***
-***REMOVED******REMOVED***/ The view model.
-***REMOVED***@ObservedObject private var viewModel: LoginViewModel
-***REMOVED***
-***REMOVED******REMOVED***/ The focused field.
-***REMOVED***@FocusState private var focusedField: Field?
-***REMOVED***
-***REMOVED***var body: some View {
-***REMOVED******REMOVED***NavigationView {
-***REMOVED******REMOVED******REMOVED***Form {
-***REMOVED******REMOVED******REMOVED******REMOVED***Section {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***VStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***person
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("You must sign in to access '\(viewModel.challengingHost)'")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.multilineTextAlignment(.center)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fixedSize(horizontal: false, vertical: true)
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.listRowBackground(Color.clear)
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***Section {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***TextField("Username", text: $viewModel.username)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.focused($focusedField, equals: .username)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.textContentType(.username)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.submitLabel(.next)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onSubmit { focusedField = .password ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***SecureField("Password", text: $viewModel.password)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.focused($focusedField, equals: .password)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.textContentType(.password)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.submitLabel(.go)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onSubmit { viewModel.signIn() ***REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.autocapitalization(.none)
-***REMOVED******REMOVED******REMOVED******REMOVED***.disableAutocorrection(true)
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***Section {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***signInButton
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.disabled(!viewModel.formEnabled)
-***REMOVED******REMOVED******REMOVED***.navigationTitle("Sign In")
-***REMOVED******REMOVED******REMOVED***.navigationBarTitleDisplayMode(.inline)
-***REMOVED******REMOVED******REMOVED***.interactiveDismissDisabled()
-***REMOVED******REMOVED******REMOVED***.toolbar {
-***REMOVED******REMOVED******REMOVED******REMOVED***ToolbarItem(placement: .cancellationAction) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Cancel") {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***focusedField = nil
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***dismissAction()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.cancel()
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.onAppear {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Workaround for Apple bug - FB9676178.
-***REMOVED******REMOVED******REMOVED******REMOVED***DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***focusedField = .username
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ An image used in the form.
-***REMOVED***private var person: some View {
-***REMOVED******REMOVED***Image(systemName: "person.circle")
-***REMOVED******REMOVED******REMOVED***.resizable()
-***REMOVED******REMOVED******REMOVED***.frame(width: 150, height: 150)
-***REMOVED******REMOVED******REMOVED***.shadow(
-***REMOVED******REMOVED******REMOVED******REMOVED***color: .gray.opacity(0.4),
-***REMOVED******REMOVED******REMOVED******REMOVED***radius: 3,
-***REMOVED******REMOVED******REMOVED******REMOVED***x: 1,
-***REMOVED******REMOVED******REMOVED******REMOVED***y: 2
-***REMOVED******REMOVED******REMOVED***)
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ The sign-in button.
-***REMOVED***private var signInButton: some View {
-***REMOVED******REMOVED***Button(action: {
-***REMOVED******REMOVED******REMOVED***dismissAction()
-***REMOVED******REMOVED******REMOVED***viewModel.signIn()
-***REMOVED***, label: {
-***REMOVED******REMOVED******REMOVED***if viewModel.formEnabled {
-***REMOVED******REMOVED******REMOVED******REMOVED***Text("Sign In")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .center)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.white)
-***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***ProgressView()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .center)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.tint(.white)
-***REMOVED******REMOVED***
-***REMOVED***)
-***REMOVED******REMOVED***.disabled(!viewModel.signInButtonEnabled)
-***REMOVED******REMOVED***.listRowBackground(viewModel.signInButtonEnabled ? Color.accentColor : Color.gray)
-***REMOVED***
-***REMOVED***
-
-private extension LoginView {
-***REMOVED******REMOVED***/ A type that represents the fields in the user name and password sign-in form.
-***REMOVED***enum Field: Hashable {
-***REMOVED******REMOVED******REMOVED***/ The username field.
-***REMOVED******REMOVED***case username
-***REMOVED******REMOVED******REMOVED***/ The password field.
-***REMOVED******REMOVED***case password
 ***REMOVED***
 ***REMOVED***

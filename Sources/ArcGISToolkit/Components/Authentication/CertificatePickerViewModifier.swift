@@ -99,7 +99,7 @@ struct CertificatePickerViewModifier: ViewModifier {
 ***REMOVED***
 ***REMOVED******REMOVED***/ The view model.
 ***REMOVED***@ObservedObject private var viewModel: CertificatePickerViewModel
-
+***REMOVED***
 ***REMOVED***func body(content: Content) -> some View {
 ***REMOVED******REMOVED***content
 ***REMOVED******REMOVED******REMOVED***.promptBrowseCertificate(
@@ -110,9 +110,23 @@ struct CertificatePickerViewModifier: ViewModifier {
 ***REMOVED******REMOVED******REMOVED******REMOVED***isPresented: $viewModel.showPicker,
 ***REMOVED******REMOVED******REMOVED******REMOVED***viewModel: viewModel
 ***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***.passwordSheet(
+***REMOVED******REMOVED******REMOVED***.credentialInput(
+***REMOVED******REMOVED******REMOVED******REMOVED***fields: .password,
 ***REMOVED******REMOVED******REMOVED******REMOVED***isPresented: $viewModel.showPassword,
-***REMOVED******REMOVED******REMOVED******REMOVED***viewModel: viewModel
+***REMOVED******REMOVED******REMOVED******REMOVED***message: "Please enter a password for the chosen certificate.",
+***REMOVED******REMOVED******REMOVED******REMOVED***title: "Password Required",
+***REMOVED******REMOVED******REMOVED******REMOVED***cancelAction: .init(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title: "Cancel",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***handler: { _, _ in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.cancel()
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***),
+***REMOVED******REMOVED******REMOVED******REMOVED***continueAction: .init(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title: "OK",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***handler: { _, password in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.proceed(withPassword: password)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***.alertCertificateImportError(
 ***REMOVED******REMOVED******REMOVED******REMOVED***isPresented: $viewModel.showCertificateImportError,
@@ -170,27 +184,6 @@ private extension View {
 ***REMOVED***
 
 private extension View {
-***REMOVED******REMOVED***/ Displays a sheet that allows the user to enter a password.
-***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - isPresented: A Boolean value indicating if the view is presented.
-***REMOVED******REMOVED***/   - viewModel: The view model associated with the view.
-***REMOVED***@MainActor @ViewBuilder func passwordSheet(
-***REMOVED******REMOVED***isPresented: Binding<Bool>,
-***REMOVED******REMOVED***viewModel: CertificatePickerViewModel
-***REMOVED***) -> some View {
-***REMOVED******REMOVED***sheet(isPresented: isPresented) {
-***REMOVED******REMOVED******REMOVED***EnterPasswordView() { password in
-***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.proceed(withPassword: password)
-***REMOVED******REMOVED*** onCancel: {
-***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.cancel()
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.edgesIgnoringSafeArea(.bottom)
-***REMOVED******REMOVED******REMOVED***.interactiveDismissDisabled()
-***REMOVED***
-***REMOVED***
-***REMOVED***
-
-private extension View {
 ***REMOVED******REMOVED***/ Displays an alert to notify that there was an error importing the certificate.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - isPresented: A Boolean value indicating if the view is presented.
@@ -226,84 +219,5 @@ private extension View {
 ***REMOVED******REMOVED***default:
 ***REMOVED******REMOVED******REMOVED***return defaultMessage
 ***REMOVED***
-***REMOVED***
-***REMOVED***
-
-***REMOVED***/ A view that allows the user to enter a password.
-struct EnterPasswordView: View {
-***REMOVED***@Environment(\.dismiss) var dismissAction
-***REMOVED***
-***REMOVED******REMOVED***/ The password that the user entered.
-***REMOVED***@State var password: String = ""
-***REMOVED***
-***REMOVED******REMOVED***/ The action to call once the user has completed entering the password.
-***REMOVED***var onContinue: (String) -> Void
-***REMOVED***
-***REMOVED******REMOVED***/ The action to call if the user cancels.
-***REMOVED***var onCancel: () -> Void
-***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value indicating whether the password field has focus.
-***REMOVED***@FocusState var isPasswordFocused: Bool
-***REMOVED***
-***REMOVED***var body: some View {
-***REMOVED******REMOVED***NavigationView {
-***REMOVED******REMOVED******REMOVED***Form {
-***REMOVED******REMOVED******REMOVED******REMOVED***Section {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***VStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Please enter a password for the chosen certificate.")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fixedSize(horizontal: false, vertical: true)
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.listRowBackground(Color.clear)
-***REMOVED******REMOVED******REMOVED***
-
-***REMOVED******REMOVED******REMOVED******REMOVED***Section {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***SecureField("Password", text: $password)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.focused($isPasswordFocused)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.textContentType(.password)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.submitLabel(.go)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onSubmit {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***dismissAction()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onContinue(password)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.autocapitalization(.none)
-***REMOVED******REMOVED******REMOVED******REMOVED***.disableAutocorrection(true)
-
-***REMOVED******REMOVED******REMOVED******REMOVED***Section {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***okButton
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.navigationTitle("Certificate")
-***REMOVED******REMOVED******REMOVED***.navigationBarTitleDisplayMode(.inline)
-***REMOVED******REMOVED******REMOVED***.toolbar {
-***REMOVED******REMOVED******REMOVED******REMOVED***ToolbarItem(placement: .cancellationAction) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Cancel") {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***dismissAction()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***onCancel()
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.onAppear {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Workaround for Apple bug - FB9676178.
-***REMOVED******REMOVED******REMOVED******REMOVED***DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPasswordFocused = true
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ The "OK" button.
-***REMOVED***private var okButton: some View {
-***REMOVED******REMOVED***Button(action: {
-***REMOVED******REMOVED******REMOVED***dismissAction()
-***REMOVED******REMOVED******REMOVED***onContinue(password)
-***REMOVED***, label: {
-***REMOVED******REMOVED******REMOVED***Text("OK")
-***REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .center)
-***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.white)
-***REMOVED***)
-***REMOVED******REMOVED***.disabled(password.isEmpty)
-***REMOVED******REMOVED***.listRowBackground(!password.isEmpty ? Color.accentColor : Color.gray)
 ***REMOVED***
 ***REMOVED***

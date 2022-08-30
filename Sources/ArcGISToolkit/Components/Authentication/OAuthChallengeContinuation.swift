@@ -34,7 +34,12 @@ final class OAuthChallengeContinuation: ValueContinuation<ArcGISAuthenticationCh
 ***REMOVED******REMOVED******REMOVED******REMOVED***let credential = try await ArcGISCredential.oauth(configuration: configuration)
 ***REMOVED******REMOVED******REMOVED******REMOVED***setValue(.useCredential(credential))
 ***REMOVED******REMOVED*** catch {
-***REMOVED******REMOVED******REMOVED******REMOVED***setValue(.allowRequestToFail)
+***REMOVED******REMOVED******REMOVED******REMOVED***if let authorizationError = error as? OAuthCredential.AuthorizationError,
+***REMOVED******REMOVED******REMOVED******REMOVED***   authorizationError == .userCancelled {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***setValue(.cancel)
+***REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***setValue(.allowRequestToFail)
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***

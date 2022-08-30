@@ -21,6 +21,9 @@ struct UtilityNetworkTraceExampleView: View {
 ***REMOVED******REMOVED***/ The map containing the utility networks.
 ***REMOVED***@StateObject private var map = makeMap()
 ***REMOVED***
+***REMOVED******REMOVED***/ The current detent of the floating panel presenting the trace tool.
+***REMOVED***@State var activeDetent: FloatingPanelDetent = .half
+***REMOVED***
 ***REMOVED******REMOVED***/ Provides the ability to inspect map components.
 ***REMOVED***@State var mapViewProxy: MapViewProxy?
 ***REMOVED***
@@ -51,7 +54,15 @@ struct UtilityNetworkTraceExampleView: View {
 ***REMOVED******REMOVED******REMOVED***.onViewpointChanged(kind: .centerAndScale) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***viewpoint = $0
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.floatingPanel(isPresented: .constant(true)) {
+***REMOVED******REMOVED******REMOVED***.task {
+***REMOVED******REMOVED******REMOVED******REMOVED***await ArcGISRuntimeEnvironment.credentialStore.add(try! await .publicSample)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.floatingPanel(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***backgroundColor: Color(uiColor: .systemGroupedBackground),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***detent: $activeDetent,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***horizontalAlignment: .trailing,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented: .constant(true)
+***REMOVED******REMOVED******REMOVED***) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***UtilityNetworkTrace(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***graphicsOverlay: $resultGraphicsOverlay,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***map: map,
@@ -60,9 +71,7 @@ struct UtilityNetworkTraceExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mapViewProxy: $mapViewProxy,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint: $viewpoint
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.task {
-***REMOVED******REMOVED******REMOVED******REMOVED***await ArcGISRuntimeEnvironment.credentialStore.add(try! await .publicSample)
+***REMOVED******REMOVED******REMOVED******REMOVED***.floatingPanelDetent($activeDetent)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
