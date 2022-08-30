@@ -34,6 +34,7 @@ import QuickLook
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ The name of the system SF symbol used instead of `thumbnail`.
 ***REMOVED***@Published var defaultSystemName: String?
 ***REMOVED***
 ***REMOVED******REMOVED***/ The `LoadStatus` of the popup attachment.
