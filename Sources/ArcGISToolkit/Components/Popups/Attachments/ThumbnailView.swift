@@ -23,16 +23,24 @@ struct ThumbnailView: View  {
     var size: CGSize = CGSize(width: 36, height: 36)
     
     var body: some View {
-        if let image = attachmentModel.thumbnail {
-            Image(uiImage: image)
-                .resizable()
-                .renderingMode(attachmentModel.usingDefaultImage ? .template : .original)
-                .aspectRatio(contentMode: attachmentModel.usingDefaultImage ? .fit : .fill)
-                .frame(width: size.width, height: size.height, alignment: .center)
-                .clipShape(RoundedRectangle(cornerRadius: 4))
-                .contentShape(RoundedRectangle(cornerRadius: 4))
-                .foregroundColor(foregroundColor(for: attachmentModel))
+        Group {
+            if attachmentModel.usingDefaultImage,
+               let systemName = attachmentModel.defaultSystemName {
+                Image(systemName: systemName)
+                    .resizable()
+                    .renderingMode(.template)
+                    .aspectRatio(contentMode: .fit)
+            } else if let image = attachmentModel.thumbnail {
+                Image(uiImage: image)
+                    .resizable()
+                    .renderingMode(.original)
+                    .aspectRatio(contentMode: .fill)
+            }
         }
+        .frame(width: size.width, height: size.height, alignment: .center)
+        .clipShape(RoundedRectangle(cornerRadius: 4))
+        .contentShape(RoundedRectangle(cornerRadius: 4))
+        .foregroundColor(foregroundColor(for: attachmentModel))
     }
     
     /// The foreground color of the thumbnail image.
@@ -40,6 +48,6 @@ struct ThumbnailView: View  {
     /// - Returns: A color to be used as the foreground color.
     func foregroundColor(for attachmentModel: AttachmentModel) -> Color {
         attachmentModel.loadStatus == .failed ? .red :
-        (attachmentModel.usingDefaultImage ? .accentColor : .primary)
+        (attachmentModel.usingDefaultImage ? .gray : .primary)
     }
 }

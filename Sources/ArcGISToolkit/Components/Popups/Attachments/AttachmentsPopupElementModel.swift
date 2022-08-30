@@ -30,16 +30,20 @@ import QuickLook
     /// The thumbnail representing the attachment.
     @Published var thumbnail: UIImage? {
         didSet {
-            usingDefaultImage = false
+            defaultSystemName = nil
         }
     }
+    
+    @Published var defaultSystemName: String?
     
     /// The `LoadStatus` of the popup attachment.
     @Published var loadStatus: LoadStatus = .notLoaded
     
     /// A Boolean value specifying whether the thumbnails is the default image
     /// or an image generated from the popup attachment.
-    var usingDefaultImage: Bool
+    var usingDefaultImage: Bool {
+        defaultSystemName != nil
+    }
     
     @Environment(\.displayScale) var displayScale
     
@@ -48,13 +52,12 @@ import QuickLook
         
         switch attachment.kind {
         case .image:
-            thumbnail = UIImage(systemName: "photo")
+            defaultSystemName = "photo"
         case .video:
-            thumbnail = UIImage(systemName: "film")
+            defaultSystemName = "film"
         case .document, .other:
-            thumbnail = UIImage(systemName: "doc")
+            defaultSystemName = "doc"
         }
-        usingDefaultImage = true
     }
     
     /// Loads the popup attachment and generates a thumbnail image.
@@ -78,8 +81,7 @@ import QuickLook
                         self.thumbnail = thumbnail.uiImage
                     }
                     else if self.attachment.loadStatus == .failed {
-                        self.thumbnail = UIImage(systemName: "exclamationmark.circle.fill")
-                        self.usingDefaultImage = true
+                        self.defaultSystemName = "exclamationmark.circle.fill"
                     }
                     
                     self.loadStatus = self.attachment.loadStatus
