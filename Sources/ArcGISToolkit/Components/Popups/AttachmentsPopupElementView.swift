@@ -60,7 +60,7 @@ struct AttachmentsPopupElementView: View {
                     switch popupElement.displayType {
                     case .list:
                         AttachmentList(attachmentModels: viewModel.attachmentModels)
-                    case.preview:
+                    case .preview:
                         AttachmentPreview(attachmentModels: viewModel.attachmentModels)
                     case .auto:
                         if isRegularWidth {
