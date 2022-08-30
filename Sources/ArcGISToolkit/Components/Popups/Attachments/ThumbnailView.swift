@@ -23,16 +23,24 @@ struct ThumbnailView: View  {
 ***REMOVED***var size: CGSize = CGSize(width: 36, height: 36)
 ***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***if let image = attachmentModel.thumbnail {
-***REMOVED******REMOVED******REMOVED***Image(uiImage: image)
-***REMOVED******REMOVED******REMOVED******REMOVED***.resizable()
-***REMOVED******REMOVED******REMOVED******REMOVED***.renderingMode(attachmentModel.usingDefaultImage ? .template : .original)
-***REMOVED******REMOVED******REMOVED******REMOVED***.aspectRatio(contentMode: attachmentModel.usingDefaultImage ? .fit : .fill)
-***REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: size.width, height: size.height, alignment: .center)
-***REMOVED******REMOVED******REMOVED******REMOVED***.clipShape(RoundedRectangle(cornerRadius: 4))
-***REMOVED******REMOVED******REMOVED******REMOVED***.contentShape(RoundedRectangle(cornerRadius: 4))
-***REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(foregroundColor(for: attachmentModel))
+***REMOVED******REMOVED***Group {
+***REMOVED******REMOVED******REMOVED***if attachmentModel.usingDefaultImage,
+***REMOVED******REMOVED******REMOVED***   let systemName = attachmentModel.defaultSystemName {
+***REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: systemName)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.resizable()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.renderingMode(.template)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.aspectRatio(contentMode: .fit)
+***REMOVED******REMOVED*** else if let image = attachmentModel.thumbnail {
+***REMOVED******REMOVED******REMOVED******REMOVED***Image(uiImage: image)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.resizable()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.renderingMode(.original)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.aspectRatio(contentMode: .fill)
+***REMOVED******REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***.frame(width: size.width, height: size.height, alignment: .center)
+***REMOVED******REMOVED***.clipShape(RoundedRectangle(cornerRadius: 4))
+***REMOVED******REMOVED***.contentShape(RoundedRectangle(cornerRadius: 4))
+***REMOVED******REMOVED***.foregroundColor(foregroundColor(for: attachmentModel))
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The foreground color of the thumbnail image.
@@ -40,6 +48,6 @@ struct ThumbnailView: View  {
 ***REMOVED******REMOVED***/ - Returns: A color to be used as the foreground color.
 ***REMOVED***func foregroundColor(for attachmentModel: AttachmentModel) -> Color {
 ***REMOVED******REMOVED***attachmentModel.loadStatus == .failed ? .red :
-***REMOVED******REMOVED***(attachmentModel.usingDefaultImage ? .accentColor : .primary)
+***REMOVED******REMOVED***(attachmentModel.usingDefaultImage ? .gray : .primary)
 ***REMOVED***
 ***REMOVED***

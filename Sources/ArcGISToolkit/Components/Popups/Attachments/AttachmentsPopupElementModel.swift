@@ -30,16 +30,20 @@ import QuickLook
 ***REMOVED******REMOVED***/ The thumbnail representing the attachment.
 ***REMOVED***@Published var thumbnail: UIImage? {
 ***REMOVED******REMOVED***didSet {
-***REMOVED******REMOVED******REMOVED***usingDefaultImage = false
+***REMOVED******REMOVED******REMOVED***defaultSystemName = nil
 ***REMOVED***
 ***REMOVED***
+***REMOVED***
+***REMOVED***@Published var defaultSystemName: String?
 ***REMOVED***
 ***REMOVED******REMOVED***/ The `LoadStatus` of the popup attachment.
 ***REMOVED***@Published var loadStatus: LoadStatus = .notLoaded
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value specifying whether the thumbnails is the default image
 ***REMOVED******REMOVED***/ or an image generated from the popup attachment.
-***REMOVED***var usingDefaultImage: Bool
+***REMOVED***var usingDefaultImage: Bool {
+***REMOVED******REMOVED***defaultSystemName != nil
+***REMOVED***
 ***REMOVED***
 ***REMOVED***@Environment(\.displayScale) var displayScale
 ***REMOVED***
@@ -48,13 +52,12 @@ import QuickLook
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***switch attachment.kind {
 ***REMOVED******REMOVED***case .image:
-***REMOVED******REMOVED******REMOVED***thumbnail = UIImage(systemName: "photo")
+***REMOVED******REMOVED******REMOVED***defaultSystemName = "photo"
 ***REMOVED******REMOVED***case .video:
-***REMOVED******REMOVED******REMOVED***thumbnail = UIImage(systemName: "film")
+***REMOVED******REMOVED******REMOVED***defaultSystemName = "film"
 ***REMOVED******REMOVED***case .document, .other:
-***REMOVED******REMOVED******REMOVED***thumbnail = UIImage(systemName: "doc")
+***REMOVED******REMOVED******REMOVED***defaultSystemName = "doc"
 ***REMOVED***
-***REMOVED******REMOVED***usingDefaultImage = true
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Loads the popup attachment and generates a thumbnail image.
@@ -78,8 +81,7 @@ import QuickLook
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.thumbnail = thumbnail.uiImage
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***else if self.attachment.loadStatus == .failed {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.thumbnail = UIImage(systemName: "exclamationmark.circle.fill")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.usingDefaultImage = true
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.defaultSystemName = "exclamationmark.circle.fill"
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.loadStatus = self.attachment.loadStatus
