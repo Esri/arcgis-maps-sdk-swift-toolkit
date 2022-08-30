@@ -34,6 +34,7 @@ import QuickLook
         }
     }
     
+    /// The name of the system SF symbol used instead of `thumbnail`.
     @Published var defaultSystemName: String?
     
     /// The `LoadStatus` of the popup attachment.
