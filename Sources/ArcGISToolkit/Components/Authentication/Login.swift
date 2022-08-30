@@ -40,9 +40,6 @@ final class LoginViewModel: ObservableObject {
     /// A Boolean value indicating if the sign-in button is enabled.
     @Published var signInButtonEnabled = false
     
-    /// A Boolean value indicating if the form is enabled.
-    @Published var formEnabled: Bool = true
-    
     /// The action to perform when the user signs in. This is a closure that takes a username
     /// and password, respectively.
     var signInAction: (LoginCredential) -> Void
@@ -75,13 +72,11 @@ final class LoginViewModel: ObservableObject {
     
     /// Attempts to log in with a username and password.
     func signIn() {
-        formEnabled = false
         signInAction(LoginCredential(username: username, password: password))
     }
     
     /// Cancels the challenge.
     func cancel() {
-        formEnabled = false
         cancelAction()
     }
 }
@@ -96,10 +91,27 @@ struct LoginViewModifier: ViewModifier {
     
     func body(content: Content) -> some View {
         content
-            .task { isPresented = true }
-            .sheet(isPresented: $isPresented) {
-                LoginView(viewModel: viewModel)
-            }
+            .onAppear { isPresented = true }
+            .credentialInput(
+                fields: .usernamePassword,
+                isPresented: $isPresented,
+                message: "You must sign in to access '\(viewModel.challengingHost)'",
+                title: "Authentication Required",
+                cancelAction: .init(
+                    title: "Cancel",
+                    handler: { _, _ in
+                        viewModel.cancel()
+                    }
+                ),
+                continueAction: .init(
+                    title: "Continue",
+                    handler: { username, password in
+                        viewModel.username = username
+                        viewModel.password = password
+                        viewModel.signIn()
+                    }
+                )
+            )
     }
 }
 
@@ -136,121 +148,5 @@ extension LoginViewModifier {
                 }
             )
         )
-    }
-}
-
-/// A view that prompts a user to login with a username and password.
-private struct LoginView: View {
-    /// Creates the view.
-    /// - Parameters:
-    ///   - viewModel: The view model.
-    init(viewModel: LoginViewModel) {
-        _viewModel = ObservedObject(initialValue: viewModel)
-    }
-    
-    @Environment(\.dismiss) var dismissAction
-    
-    /// The view model.
-    @ObservedObject private var viewModel: LoginViewModel
-    
-    /// The focused field.
-    @FocusState private var focusedField: Field?
-    
-    var body: some View {
-        NavigationView {
-            Form {
-                Section {
-                    VStack {
-                        person
-                        Text("You must sign in to access '\(viewModel.challengingHost)'")
-                            .multilineTextAlignment(.center)
-                            .fixedSize(horizontal: false, vertical: true)
-                    }
-                    .frame(maxWidth: .infinity)
-                    .listRowBackground(Color.clear)
-                }
-                
-                Section {
-                    TextField("Username", text: $viewModel.username)
-                        .focused($focusedField, equals: .username)
-                        .textContentType(.username)
-                        .submitLabel(.next)
-                        .onSubmit { focusedField = .password }
-                    SecureField("Password", text: $viewModel.password)
-                        .focused($focusedField, equals: .password)
-                        .textContentType(.password)
-                        .submitLabel(.go)
-                        .onSubmit { viewModel.signIn() }
-                }
-                .autocapitalization(.none)
-                .disableAutocorrection(true)
-                
-                Section {
-                    signInButton
-                }
-            }
-            .disabled(!viewModel.formEnabled)
-            .navigationTitle("Sign In")
-            .navigationBarTitleDisplayMode(.inline)
-            .interactiveDismissDisabled()
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel") {
-                        focusedField = nil
-                        dismissAction()
-                        viewModel.cancel()
-                    }
-                }
-            }
-            .onAppear {
-                // Workaround for Apple bug - FB9676178.
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                    focusedField = .username
-                }
-            }
-        }
-    }
-    
-    /// An image used in the form.
-    private var person: some View {
-        Image(systemName: "person.circle")
-            .resizable()
-            .frame(width: 150, height: 150)
-            .shadow(
-                color: .gray.opacity(0.4),
-                radius: 3,
-                x: 1,
-                y: 2
-            )
-    }
-    
-    /// The sign-in button.
-    private var signInButton: some View {
-        Button(action: {
-            dismissAction()
-            viewModel.signIn()
-        }, label: {
-            if viewModel.formEnabled {
-                Text("Sign In")
-                    .frame(maxWidth: .infinity, alignment: .center)
-                    .foregroundColor(.white)
-            } else {
-                ProgressView()
-                    .frame(maxWidth: .infinity, alignment: .center)
-                    .tint(.white)
-            }
-        })
-        .disabled(!viewModel.signInButtonEnabled)
-        .listRowBackground(viewModel.signInButtonEnabled ? Color.accentColor : Color.gray)
-    }
-}
-
-private extension LoginView {
-    /// A type that represents the fields in the user name and password sign-in form.
-    enum Field: Hashable {
-        /// The username field.
-        case username
-        /// The password field.
-        case password
     }
 }

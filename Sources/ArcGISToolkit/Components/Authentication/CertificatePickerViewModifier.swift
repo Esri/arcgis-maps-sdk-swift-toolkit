@@ -99,7 +99,7 @@ struct CertificatePickerViewModifier: ViewModifier {
     
     /// The view model.
     @ObservedObject private var viewModel: CertificatePickerViewModel
-
+    
     func body(content: Content) -> some View {
         content
             .promptBrowseCertificate(
@@ -110,9 +110,23 @@ struct CertificatePickerViewModifier: ViewModifier {
                 isPresented: $viewModel.showPicker,
                 viewModel: viewModel
             )
-            .passwordSheet(
+            .credentialInput(
+                fields: .password,
                 isPresented: $viewModel.showPassword,
-                viewModel: viewModel
+                message: "Please enter a password for the chosen certificate.",
+                title: "Password Required",
+                cancelAction: .init(
+                    title: "Cancel",
+                    handler: { _, _ in
+                        viewModel.cancel()
+                    }
+                ),
+                continueAction: .init(
+                    title: "OK",
+                    handler: { _, password in
+                        viewModel.proceed(withPassword: password)
+                    }
+                )
             )
             .alertCertificateImportError(
                 isPresented: $viewModel.showCertificateImportError,
@@ -170,27 +184,6 @@ private extension View {
 }
 
 private extension View {
-    /// Displays a sheet that allows the user to enter a password.
-    /// - Parameters:
-    ///   - isPresented: A Boolean value indicating if the view is presented.
-    ///   - viewModel: The view model associated with the view.
-    @MainActor @ViewBuilder func passwordSheet(
-        isPresented: Binding<Bool>,
-        viewModel: CertificatePickerViewModel
-    ) -> some View {
-        sheet(isPresented: isPresented) {
-            EnterPasswordView() { password in
-                viewModel.proceed(withPassword: password)
-            } onCancel: {
-                viewModel.cancel()
-            }
-            .edgesIgnoringSafeArea(.bottom)
-            .interactiveDismissDisabled()
-        }
-    }
-}
-
-private extension View {
     /// Displays an alert to notify that there was an error importing the certificate.
     /// - Parameters:
     ///   - isPresented: A Boolean value indicating if the view is presented.
@@ -226,84 +219,5 @@ private extension View {
         default:
             return defaultMessage
         }
-    }
-}
-
-/// A view that allows the user to enter a password.
-struct EnterPasswordView: View {
-    @Environment(\.dismiss) var dismissAction
-    
-    /// The password that the user entered.
-    @State var password: String = ""
-    
-    /// The action to call once the user has completed entering the password.
-    var onContinue: (String) -> Void
-    
-    /// The action to call if the user cancels.
-    var onCancel: () -> Void
-    
-    /// A Boolean value indicating whether the password field has focus.
-    @FocusState var isPasswordFocused: Bool
-    
-    var body: some View {
-        NavigationView {
-            Form {
-                Section {
-                    VStack {
-                        Text("Please enter a password for the chosen certificate.")
-                            .fixedSize(horizontal: false, vertical: true)
-                    }
-                    .frame(maxWidth: .infinity)
-                    .listRowBackground(Color.clear)
-                }
-
-                Section {
-                    SecureField("Password", text: $password)
-                        .focused($isPasswordFocused)
-                        .textContentType(.password)
-                        .submitLabel(.go)
-                        .onSubmit {
-                            dismissAction()
-                            onContinue(password)
-                        }
-                }
-                .autocapitalization(.none)
-                .disableAutocorrection(true)
-
-                Section {
-                    okButton
-                }
-            }
-            .navigationTitle("Certificate")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel") {
-                        dismissAction()
-                        onCancel()
-                    }
-                }
-            }
-            .onAppear {
-                // Workaround for Apple bug - FB9676178.
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                    isPasswordFocused = true
-                }
-            }
-        }
-    }
-    
-    /// The "OK" button.
-    private var okButton: some View {
-        Button(action: {
-            dismissAction()
-            onContinue(password)
-        }, label: {
-            Text("OK")
-                .frame(maxWidth: .infinity, alignment: .center)
-                .foregroundColor(.white)
-        })
-        .disabled(password.isEmpty)
-        .listRowBackground(!password.isEmpty ? Color.accentColor : Color.gray)
     }
 }
