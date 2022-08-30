@@ -60,7 +60,7 @@ struct AttachmentsPopupElementView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***switch popupElement.displayType {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .list:
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AttachmentList(attachmentModels: viewModel.attachmentModels)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case.preview:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .preview:
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AttachmentPreview(attachmentModels: viewModel.attachmentModels)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .auto:
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if isRegularWidth {
