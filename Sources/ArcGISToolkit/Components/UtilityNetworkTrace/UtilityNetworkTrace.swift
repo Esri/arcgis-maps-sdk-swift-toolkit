@@ -55,6 +55,9 @@ public struct UtilityNetworkTrace: View {
     
     // MARK: States
     
+    /// The current detent of the floating panel.
+    @Binding private var activeDetent: FloatingPanelDetent?
+    
     /// The current user activity.
     @State private var currentActivity: UserActivity = .creatingTrace(nil)
     
@@ -115,6 +118,7 @@ public struct UtilityNetworkTrace: View {
     private var cancelAddStartingPoints: some View {
         Button(role: .destructive) {
             currentActivity = .creatingTrace(nil)
+            activeDetent = .half
         } label: {
             Text("Cancel starting point selection")
         }
@@ -222,6 +226,7 @@ public struct UtilityNetworkTrace: View {
             Section(startingPointsTitle) {
                 Button {
                     currentActivity = .creatingTrace(.addingStartingPoints)
+                    activeDetent = .summary
                 } label: {
                     Text("Add new")
                 }
@@ -328,90 +333,92 @@ public struct UtilityNetworkTrace: View {
             }
             .font(.title3)
         }
-        List {
-            Section(featureResultsTitle) {
-                DisclosureGroup(
-                    "(\(viewModel.selectedTrace?.assetCount ?? 0))",
-                    isExpanded: Binding(
-                        get: { isFocused(traceViewingActivity: .viewingFeatureResults) },
-                        set: { currentActivity = .viewingTraces($0 ? .viewingFeatureResults : nil) }
-                    )
-                ) {
-                    ForEach(
-                        (viewModel.selectedTrace?.assets ?? [:]).sorted(by: { $0.key < $1.key }), id: \.key
-                    ) { assetGroup in
-                        HStack {
-                            Text(assetGroup.key)
-                            Spacer()
-                            Text("(\(assetGroup.value.compactMap({ $0.value.count }).reduce(0, +)))")
-                        }
-                        .foregroundColor(.blue)
-                        .contentShape(Rectangle())
-                        .onTapGesture {
-                            currentActivity = .viewingTraces(.viewingElementGroup(assetGroup.value))
-                        }
-                    }
-                }
-            }
-            Section("Function Results") {
-                DisclosureGroup(
-                    "(\(viewModel.selectedTrace?.utilityFunctionTraceResult?.functionOutputs.count ?? 0))",
-                    isExpanded: Binding(
-                        get: { isFocused(traceViewingActivity: .viewingFunctionResults) },
-                        set: { currentActivity = .viewingTraces($0 ? .viewingFunctionResults : nil) }
-                    )
-                ) {
-                    ForEach(viewModel.selectedTrace?.functionOutputs ?? [], id: \.id) { item in
-                        HStack {
-                            Text(item.function.networkAttribute?.name ?? "Unnamed")
-                            Spacer()
-                            VStack(alignment: .trailing) {
-                                Text(item.function.functionType.description)
-                                    .font(.caption)
-                                    .foregroundColor(.secondary)
-                                Text((item.result as? Double)?.description ?? "N/A")
-                            }
-                        }
-                    }
-                }
-            }
-            Section {
-                DisclosureGroup(
-                    "Advanced Options",
-                    isExpanded: Binding(
-                        get: { isFocused(traceViewingActivity: .viewingAdvancedOptions) },
-                        set: { currentActivity = .viewingTraces($0 ? .viewingAdvancedOptions : nil) }
-                    )
-                ) {
-                    ColorPicker(
-                        selection: Binding(get: {
-                            viewModel.selectedTrace?.color ?? Color.clear
-                        }, set: { newValue in
-                            if var trace = viewModel.selectedTrace {
-                                trace.color = newValue
-                                viewModel.update(completedTrace: trace)
-                            }
-                        })
+        if activeDetent != .summary {
+            List {
+                Section(featureResultsTitle) {
+                    DisclosureGroup(
+                        "(\(viewModel.selectedTrace?.assetCount ?? 0))",
+                        isExpanded: Binding(
+                            get: { isFocused(traceViewingActivity: .viewingFeatureResults) },
+                            set: { currentActivity = .viewingTraces($0 ? .viewingFeatureResults : nil) }
+                        )
                     ) {
-                        Text("Color")
+                        ForEach(
+                            (viewModel.selectedTrace?.assets ?? [:]).sorted(by: { $0.key < $1.key }), id: \.key
+                        ) { assetGroup in
+                            HStack {
+                                Text(assetGroup.key)
+                                Spacer()
+                                Text("(\(assetGroup.value.compactMap({ $0.value.count }).reduce(0, +)))")
+                            }
+                            .foregroundColor(.blue)
+                            .contentShape(Rectangle())
+                            .onTapGesture {
+                                currentActivity = .viewingTraces(.viewingElementGroup(assetGroup.value))
+                            }
+                        }
+                    }
+                }
+                Section("Function Results") {
+                    DisclosureGroup(
+                        "(\(viewModel.selectedTrace?.utilityFunctionTraceResult?.functionOutputs.count ?? 0))",
+                        isExpanded: Binding(
+                            get: { isFocused(traceViewingActivity: .viewingFunctionResults) },
+                            set: { currentActivity = .viewingTraces($0 ? .viewingFunctionResults : nil) }
+                        )
+                    ) {
+                        ForEach(viewModel.selectedTrace?.functionOutputs ?? [], id: \.id) { item in
+                            HStack {
+                                Text(item.function.networkAttribute?.name ?? "Unnamed")
+                                Spacer()
+                                VStack(alignment: .trailing) {
+                                    Text(item.function.functionType.description)
+                                        .font(.caption)
+                                        .foregroundColor(.secondary)
+                                    Text((item.result as? Double)?.description ?? "N/A")
+                                }
+                            }
+                        }
+                    }
+                }
+                Section {
+                    DisclosureGroup(
+                        "Advanced Options",
+                        isExpanded: Binding(
+                            get: { isFocused(traceViewingActivity: .viewingAdvancedOptions) },
+                            set: { currentActivity = .viewingTraces($0 ? .viewingAdvancedOptions : nil) }
+                        )
+                    ) {
+                        ColorPicker(
+                            selection: Binding(get: {
+                                viewModel.selectedTrace?.color ?? Color.clear
+                            }, set: { newValue in
+                                if var trace = viewModel.selectedTrace {
+                                    trace.color = newValue
+                                    viewModel.update(completedTrace: trace)
+                                }
+                            })
+                        ) {
+                            Text("Color")
+                        }
                     }
                 }
             }
+            .padding([.vertical], 2)
+            Button(role: .destructive) {
+                viewModel.userAlert = .init(
+                    description: "Are you sure? All the trace inputs and results will be lost.",
+                    button: Button(role: .destructive) {
+                        viewModel.deleteAllTraces()
+                        currentActivity = .creatingTrace(nil)
+                    } label: {
+                        Text("OK")
+                    })
+            } label: {
+                Text(clearResultsTitle)
+            }
+            .buttonStyle(.bordered)
         }
-        .padding([.vertical], 2)
-        Button(role: .destructive) {
-            viewModel.userAlert = .init(
-                description: "Are you sure? All the trace inputs and results will be lost.",
-                button: Button(role: .destructive) {
-                    viewModel.deleteAllTraces()
-                    currentActivity = .creatingTrace(nil)
-                } label: {
-                    Text("OK")
-                })
-        } label: {
-            Text(clearResultsTitle)
-        }
-        .buttonStyle(.bordered)
     }
     
     /// Displays information about a chosen starting point.
@@ -515,11 +522,10 @@ public struct UtilityNetworkTrace: View {
     
     /// A graphical interface to run pre-configured traces on a map's utility networks.
     /// - Parameters:
-    ///   - graphicsOverlay: The graphics overlay to hold generated starting point and trace
-    ///   graphics.
+    ///   - activeDetent: The current detent of the floating panel.
+    ///   - graphicsOverlay: The graphics overlay to hold generated starting point and trace graphics.
     ///   - map: The map containing the utility network(s).
-    ///   - mapPoint: Acts as the point at which newly selected starting point graphics will be
-    ///   created.
+    ///   - mapPoint: Acts as the point at which newly selected starting point graphics will be created.
     ///   - viewPoint: Acts as the point of identification for items tapped in the utility network.
     ///   - mapViewProxy: Provides a method of layer identification when starting points are being
     ///   chosen.
@@ -534,6 +540,7 @@ public struct UtilityNetworkTrace: View {
         viewpoint: Binding<Viewpoint?>,
         startingPoints: Binding<[UtilityNetworkTraceStartingPoint]> = .constant([])
     ) {
+        _activeDetent = .constant(nil)
         _viewPoint = viewPoint
         _mapPoint = mapPoint
         _mapViewProxy = mapViewProxy
@@ -549,10 +556,24 @@ public struct UtilityNetworkTrace: View {
         )
     }
     
+    /// Sets the active detent for a hosting floating panel.
+    /// - Parameter detent: A binding to a value that determines the height of a hosting
+    /// floating panel.
+    /// - Returns: A trace tool that automatically sets and responds to detent values to improve user
+    /// experience.
+    public func floatingPanelDetent(
+        _ detent: Binding<FloatingPanelDetent>
+    ) -> UtilityNetworkTrace {
+        var copy = self
+        copy._activeDetent = Binding(detent)
+        return copy
+    }
+    
     public var body: some View {
         VStack {
             if !viewModel.completedTraces.isEmpty &&
-                !isFocused(traceCreationActivity: .addingStartingPoints) {
+                !isFocused(traceCreationActivity: .addingStartingPoints) &&
+                activeDetent != .summary {
                 activityPicker
             }
             switch currentActivity {
@@ -584,6 +605,7 @@ public struct UtilityNetworkTrace: View {
                 return
             }
             currentActivity = .creatingTrace(.viewingStartingPoints)
+            activeDetent = .half
             Task {
                 await viewModel.addStartingPoint(
                     at: viewPoint,

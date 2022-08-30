@@ -54,7 +54,7 @@ struct AuthenticationApp: App {
                 // It also means that a user can sign in without having to be prompted for
                 // credentials. Once credentials are cleared from the stores ("sign-out"),
                 // then the user will need to be prompted once again.
-                try? await authenticator.makePersistent(access: .whenUnlockedThisDeviceOnly)
+                try? await authenticator.setupPersistentCredentialStorage(access: .whenUnlockedThisDeviceOnly)
                 isSettingUp = false
             }
         }
