@@ -18,4 +18,4 @@ import ArcGIS
 protocol ChallengeContinuation: AnyObject {}
 
 /// A type that represents a continuation for an ArcGIS challenge.
-protocol ArcGISChallengeContinuation: ValueContinuation<ArcGISAuthenticationChallenge.Disposition>, ChallengeContinuation {}
+protocol ArcGISChallengeContinuation: ValueContinuation<Result<ArcGISAuthenticationChallenge.Disposition, Error>>, ChallengeContinuation {}

@@ -16,7 +16,7 @@ import ArcGIS
 
 /// An object that represents an ArcGIS token authentication challenge continuation.
 @MainActor
-final class TokenChallengeContinuation: ValueContinuation<ArcGISAuthenticationChallenge.Disposition>, ArcGISChallengeContinuation {
+final class TokenChallengeContinuation: ValueContinuation<Result<ArcGISAuthenticationChallenge.Disposition, Error>>, ArcGISChallengeContinuation {
     /// The host that prompted the challenge.
     let host: String
     
@@ -52,17 +52,14 @@ final class TokenChallengeContinuation: ValueContinuation<ArcGISAuthenticationCh
     ///   - loginCredential: The username and password.
     func resume(with loginCredential: LoginCredential) {
         Task {
-            do {
-                let credential = try await tokenCredentialProvider(loginCredential)
-                setValue(.useCredential(credential))
-            } catch {
-                setValue(.allowRequestToFail)
-            }
+            setValue(await Result {
+                .useCredential(try await tokenCredentialProvider(loginCredential))
+            })
         }
     }
     
     /// Cancels the challenge.
     func cancel() {
-        setValue(.cancel)
+        setValue(.success(.cancel))
     }
 }
