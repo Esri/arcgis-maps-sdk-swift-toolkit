@@ -40,7 +40,6 @@ import XCTest
 ***REMOVED******REMOVED***XCTAssertNotNil(model.signInAction)
 ***REMOVED******REMOVED***XCTAssertNotNil(model.cancelAction)
 ***REMOVED******REMOVED***XCTAssertFalse(model.signInButtonEnabled)
-***REMOVED******REMOVED***XCTAssertTrue(model.formEnabled)
 ***REMOVED******REMOVED***XCTAssertTrue(model.username.isEmpty)
 ***REMOVED******REMOVED***XCTAssertTrue(model.password.isEmpty)
 ***REMOVED******REMOVED***XCTAssertFalse(signInCalled)
@@ -59,7 +58,6 @@ import XCTest
 ***REMOVED******REMOVED***XCTAssertTrue(model.signInButtonEnabled)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***model.signIn()
-***REMOVED******REMOVED***XCTAssertFalse(model.formEnabled)
 ***REMOVED******REMOVED***XCTAssertTrue(signInCalled)
 ***REMOVED******REMOVED***XCTAssertFalse(cancelCalled)
 ***REMOVED******REMOVED***
