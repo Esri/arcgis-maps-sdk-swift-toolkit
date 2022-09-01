@@ -14,23 +14,20 @@
 ***REMOVED***
 ***REMOVED***
 
-***REMOVED***/ A view displaying a popup media image in full screen.
-struct DetailImageView: View {
+***REMOVED***/ A view displaying a popup media in full screen.
+struct MediaDetailView : View {
 ***REMOVED******REMOVED***/ The popup media to display.
 ***REMOVED***let popupMedia: PopupMedia
-***REMOVED***
-***REMOVED******REMOVED***/ The sourceURL of the image media.
-***REMOVED***let sourceURL: URL
-***REMOVED***
+
 ***REMOVED******REMOVED***/ A Boolean value specifying whether the media should be shown full screen.
-***REMOVED***@Binding var showingFullScreen: Bool
+***REMOVED***var showingFullScreen: Binding<Bool>
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***VStack {
 ***REMOVED******REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***showingFullScreen = false
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***showingFullScreen.wrappedValue = false
 ***REMOVED******REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Done")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fontWeight(.semibold)
@@ -47,19 +44,29 @@ struct DetailImageView: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***AsyncImageView(url: sourceURL)
-***REMOVED******REMOVED******REMOVED******REMOVED***.onTapGesture {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let url = popupMedia.value?.linkURL {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***UIApplication.shared.open(url)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***switch popupMedia.kind {
+***REMOVED******REMOVED******REMOVED***case .image:
+***REMOVED******REMOVED******REMOVED******REMOVED***if let sourceURL = popupMedia.value?.sourceURL {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AsyncImageView(url: sourceURL)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onTapGesture {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let linkURL = popupMedia.value?.linkURL {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***UIApplication.shared.open(linkURL)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if popupMedia.value?.linkURL != nil {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***HStack {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Tap on the image for more information.")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.subheadline)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***if popupMedia.value?.linkURL != nil {
-***REMOVED******REMOVED******REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Tap on the image for more information.")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.subheadline)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***case .barChart, .columnChart, .pieChart, .lineChart:
+***REMOVED******REMOVED******REMOVED******REMOVED***ChartView(popupMedia: popupMedia, data: ChartData.getChartData(popupMedia: popupMedia))
+***REMOVED******REMOVED******REMOVED***default:
+***REMOVED******REMOVED******REMOVED******REMOVED***EmptyView()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED***

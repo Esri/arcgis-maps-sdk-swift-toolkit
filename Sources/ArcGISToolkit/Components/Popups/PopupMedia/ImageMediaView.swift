@@ -49,10 +49,9 @@ struct ImageMediaView: View {
 ***REMOVED******REMOVED***.frame(width: mediaSize.width, height: mediaSize.height)
 ***REMOVED******REMOVED***.clipShape(RoundedRectangle(cornerRadius: cornerRadius))
 ***REMOVED******REMOVED***.sheet(isPresented: $showingFullScreen) {
-***REMOVED******REMOVED******REMOVED***if let url = popupMedia.value?.sourceURL {
-***REMOVED******REMOVED******REMOVED******REMOVED***DetailImageView(
+***REMOVED******REMOVED******REMOVED***if popupMedia.value?.sourceURL != nil {
+***REMOVED******REMOVED******REMOVED******REMOVED***MediaDetailView(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***popupMedia: popupMedia,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***sourceURL: url,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***showingFullScreen: $showingFullScreen
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding()

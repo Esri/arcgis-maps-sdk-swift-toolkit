@@ -25,11 +25,6 @@ struct MediaPopupElementView: View {
 ***REMOVED******REMOVED******REMOVED***title: popupElement.title,
 ***REMOVED******REMOVED******REMOVED***description: popupElement.description
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED***.padding([.bottom], 4)
-***REMOVED******REMOVED***if !popupElement.title.isEmpty ||
-***REMOVED******REMOVED******REMOVED***!popupElement.description.isEmpty {
-***REMOVED******REMOVED******REMOVED***Divider()
-***REMOVED***
 ***REMOVED******REMOVED***PopupMediaView(popupMedia: popupElement.media)
 ***REMOVED***
 ***REMOVED***
@@ -53,7 +48,10 @@ struct MediaPopupElementView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mediaSize: mediaSize
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .barChart, .columnChart, .lineChart, .pieChart:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ChartMediaView(popupMedia: media)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ChartMediaView(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***popupMedia: media,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mediaSize: mediaSize
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***default:
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***EmptyView()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
