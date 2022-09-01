@@ -16,7 +16,7 @@ import Foundation
 
 ***REMOVED***/ An object that represents an ArcGIS token authentication challenge continuation.
 @MainActor
-final class TokenChallengeContinuation: ValueContinuation<Result<ArcGISAuthenticationChallenge.Disposition, Error>>, ArcGISChallengeContinuation {
+final class TokenChallengeContinuation: ValueContinuation<Result<ArcGISAuthenticationChallenge.Disposition, Error>>, ChallengeContinuation {
 ***REMOVED******REMOVED***/ The host that prompted the challenge.
 ***REMOVED***let host: String
 ***REMOVED***

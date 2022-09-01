@@ -81,6 +81,7 @@ public final class Authenticator: ObservableObject {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The current challenge.
+***REMOVED******REMOVED***/ This property is not set for OAuth challenges.
 ***REMOVED***@Published var currentChallenge: ChallengeContinuation?
 ***REMOVED***
 
@@ -88,27 +89,23 @@ extension Authenticator: AuthenticationChallengeHandler {
 ***REMOVED***public func handleArcGISAuthenticationChallenge(
 ***REMOVED******REMOVED***_ challenge: ArcGISAuthenticationChallenge
 ***REMOVED***) async throws -> ArcGISAuthenticationChallenge.Disposition {
-***REMOVED******REMOVED***let challengeContinuation: ArcGISChallengeContinuation
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Alleviates an error with "already presenting".
 ***REMOVED******REMOVED***await Task.yield()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Create the correct challenge type.
 ***REMOVED******REMOVED***if let url = challenge.request.url,
-***REMOVED******REMOVED***   let config = oAuthConfigurations.first(where: { $0.canBeUsed(for: url) ***REMOVED***) {
-***REMOVED******REMOVED******REMOVED***let oAuthChallenge = OAuthChallengeContinuation(configuration: config)
-***REMOVED******REMOVED******REMOVED***challengeContinuation = oAuthChallenge
-***REMOVED******REMOVED******REMOVED***await oAuthChallenge.presentPrompt()
+***REMOVED******REMOVED***   let configuration = oAuthConfigurations.first(where: { $0.canBeUsed(for: url) ***REMOVED***) {
+***REMOVED******REMOVED******REMOVED***return .useCredential(try await ArcGISCredential.oauth(configuration: configuration))
 ***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***challengeContinuation = TokenChallengeContinuation(arcGISChallenge: challenge)
+***REMOVED******REMOVED******REMOVED***let tokenChallengeContinuation = TokenChallengeContinuation(arcGISChallenge: challenge)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED*** Set the current challenge, which will present the UX.
+***REMOVED******REMOVED******REMOVED***self.currentChallenge = tokenChallengeContinuation
+***REMOVED******REMOVED******REMOVED***defer { self.currentChallenge = nil ***REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED*** Wait for it to complete and return the resulting disposition.
+***REMOVED******REMOVED******REMOVED***return try await tokenChallengeContinuation.value.get()
 ***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Set the current challenge, which will present the UX.
-***REMOVED******REMOVED***self.currentChallenge = challengeContinuation
-***REMOVED******REMOVED***defer { self.currentChallenge = nil ***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Wait for it to complete and return the resulting disposition.
-***REMOVED******REMOVED***return try await challengeContinuation.value.get()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***public func handleNetworkAuthenticationChallenge(
