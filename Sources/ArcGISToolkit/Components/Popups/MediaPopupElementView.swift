@@ -25,11 +25,6 @@ struct MediaPopupElementView: View {
             title: popupElement.title,
             description: popupElement.description
         )
-        .padding([.bottom], 4)
-        if !popupElement.title.isEmpty ||
-            !popupElement.description.isEmpty {
-            Divider()
-        }
         PopupMediaView(popupMedia: popupElement.media)
     }
     
@@ -53,7 +48,10 @@ struct MediaPopupElementView: View {
                                     mediaSize: mediaSize
                                 )
                             case .barChart, .columnChart, .lineChart, .pieChart:
-                                ChartMediaView(popupMedia: media)
+                                ChartMediaView(
+                                    popupMedia: media,
+                                    mediaSize: mediaSize
+                                )
                             default:
                                 EmptyView()
                             }

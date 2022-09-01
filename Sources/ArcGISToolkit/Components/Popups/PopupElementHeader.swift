@@ -35,5 +35,11 @@ struct PopupElementHeader: View {
                     .foregroundColor(.secondary)
             }
         }
+        .padding([.bottom], 4)
+        
+        if !title.isEmpty ||
+            !description.isEmpty {
+            Divider()
+        }
     }
 }
