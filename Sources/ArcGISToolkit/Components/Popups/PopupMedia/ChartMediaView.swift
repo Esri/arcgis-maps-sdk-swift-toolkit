@@ -19,17 +19,65 @@ struct ChartMediaView: View {
     /// The popup media to display.
     let popupMedia: PopupMedia
     
+    /// The size of the media's frame.
+    let mediaSize: CGSize
+    
+    let chartData: [ChartData]
+    
+    init(popupMedia: PopupMedia, mediaSize: CGSize) {
+        self.popupMedia = popupMedia
+        self.mediaSize = mediaSize
+        self.chartData = ChartData.getChartData(popupMedia: popupMedia)
+    }
+    
+    /// A Boolean value specifying whether the media should be shown full screen.
+    @State private var showingFullScreen = false
+    
+    private let cornerRadius: CGFloat = 8
+
     var body: some View {
         ZStack {
-            VStack(alignment: .center) {
-                Image(systemName: "chart.bar")
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(width: 100, height: 100)
-                Text("Charts coming soon!")
+            ChartView(popupMedia: popupMedia, data: chartData)
+            VStack {
+                Spacer()
+                PopupMediaFooter(
+                    popupMedia: popupMedia,
+                    mediaSize: mediaSize
+                )
             }
-            RoundedRectangle(cornerRadius: 8)
-                .stroke(.black, lineWidth: 1)
+            RoundedRectangle(cornerRadius: cornerRadius)
+                .stroke(.gray, lineWidth: 1)
+                .frame(width: mediaSize.width, height: mediaSize.height)
+        }
+        .frame(width: mediaSize.width, height: mediaSize.height)
+        .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
+        .onTapGesture {
+            showingFullScreen = true
+        }
+        .sheet(isPresented: $showingFullScreen) {
+            MediaDetailView(
+                popupMedia: popupMedia,
+                showingFullScreen: $showingFullScreen
+            )
+            .padding()
+        }
+    }
+}
+
+struct ChartView: View {
+    let popupMedia: PopupMedia
+    let data: [ChartData]
+    
+    var body: some View {
+        switch popupMedia.kind {
+        case .barChart, .columnChart:
+            BarChart(chartData: data)
+        case .pieChart:
+            PieChart(chartData: data)
+        case .lineChart:
+            LineChart(chartData: data)
+        default:
+            EmptyView()
         }
     }
 }

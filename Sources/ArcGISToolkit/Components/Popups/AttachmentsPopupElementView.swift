@@ -55,7 +55,6 @@ struct AttachmentsPopupElementView: View {
                         title: popupElement.title,
                         description: popupElement.description
                     )
-                    Divider()
                     
                     switch popupElement.displayType {
                     case .list:

@@ -14,23 +14,20 @@
 import SwiftUI
 import ArcGIS
 
-/// A view displaying a popup media image in full screen.
-struct DetailImageView: View {
+/// A view displaying a popup media in full screen.
+struct MediaDetailView : View {
     /// The popup media to display.
     let popupMedia: PopupMedia
-    
-    /// The sourceURL of the image media.
-    let sourceURL: URL
-    
+
     /// A Boolean value specifying whether the media should be shown full screen.
-    @Binding var showingFullScreen: Bool
+    var showingFullScreen: Binding<Bool>
     
     var body: some View {
         VStack {
             HStack {
                 Spacer()
                 Button {
-                    showingFullScreen = false
+                    showingFullScreen.wrappedValue = false
                 } label: {
                     Text("Done")
                         .fontWeight(.semibold)
@@ -47,19 +44,29 @@ struct DetailImageView: View {
                 }
                 Spacer()
             }
-            AsyncImageView(url: sourceURL)
-                .onTapGesture {
-                    if let url = popupMedia.value?.linkURL {
-                        UIApplication.shared.open(url)
+            
+            switch popupMedia.kind {
+            case .image:
+                if let sourceURL = popupMedia.value?.sourceURL {
+                    AsyncImageView(url: sourceURL)
+                        .onTapGesture {
+                            if let linkURL = popupMedia.value?.linkURL {
+                                UIApplication.shared.open(linkURL)
+                            }
+                        }
+                    if popupMedia.value?.linkURL != nil {
+                        HStack {
+                            Text("Tap on the image for more information.")
+                                .font(.subheadline)
+                                .foregroundColor(.secondary)
+                            Spacer()
+                        }
                     }
                 }
-            if popupMedia.value?.linkURL != nil {
-                HStack {
-                    Text("Tap on the image for more information.")
-                        .font(.subheadline)
-                        .foregroundColor(.secondary)
-                    Spacer()
-                }
+            case .barChart, .columnChart, .pieChart, .lineChart:
+                ChartView(popupMedia: popupMedia, data: ChartData.getChartData(popupMedia: popupMedia))
+            default:
+                EmptyView()
             }
             Spacer()
         }

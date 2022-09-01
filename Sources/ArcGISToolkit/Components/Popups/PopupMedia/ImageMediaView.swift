@@ -49,10 +49,9 @@ struct ImageMediaView: View {
         .frame(width: mediaSize.width, height: mediaSize.height)
         .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
         .sheet(isPresented: $showingFullScreen) {
-            if let url = popupMedia.value?.sourceURL {
-                DetailImageView(
+            if popupMedia.value?.sourceURL != nil {
+                MediaDetailView(
                     popupMedia: popupMedia,
-                    sourceURL: url,
                     showingFullScreen: $showingFullScreen
                 )
                 .padding()
