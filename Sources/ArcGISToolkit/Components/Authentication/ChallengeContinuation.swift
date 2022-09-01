@@ -16,6 +16,3 @@ import Foundation
 
 ***REMOVED***/ A type that represents an authentication challenge that can be continued.
 protocol ChallengeContinuation: AnyObject {***REMOVED***
-
-***REMOVED***/ A type that represents a continuation for an ArcGIS challenge.
-protocol ArcGISChallengeContinuation: ValueContinuation<ArcGISAuthenticationChallenge.Disposition>, ChallengeContinuation {***REMOVED***
