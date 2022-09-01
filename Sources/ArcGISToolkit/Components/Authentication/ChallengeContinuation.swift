@@ -16,6 +16,3 @@ import ArcGIS
 
 /// A type that represents an authentication challenge that can be continued.
 protocol ChallengeContinuation: AnyObject {}
-
-/// A type that represents a continuation for an ArcGIS challenge.
-protocol ArcGISChallengeContinuation: ValueContinuation<ArcGISAuthenticationChallenge.Disposition>, ChallengeContinuation {}
