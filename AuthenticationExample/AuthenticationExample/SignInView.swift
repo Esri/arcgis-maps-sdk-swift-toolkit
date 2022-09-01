@@ -156,6 +156,13 @@ private extension Error {
             default:
                 return false
             }
+        case let error as OAuthCredential.AuthorizationError:
+            switch error {
+            case .userCancelled:
+                return true
+            default:
+                return false
+            }
         case let error as NSError:
             return error.domain == NSURLErrorDomain && error.code == -999
         default:
