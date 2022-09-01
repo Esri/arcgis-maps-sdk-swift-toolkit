@@ -90,6 +90,9 @@ extension Authenticator: AuthenticationChallengeHandler {
     ) async throws -> ArcGISAuthenticationChallenge.Disposition {
         let challengeContinuation: ArcGISChallengeContinuation
         
+        // Alleviates an error with "already presenting".
+        await Task.yield()
+        
         // Create the correct challenge type.
         if let url = challenge.request.url,
            let config = oAuthConfigurations.first(where: { $0.canBeUsed(for: url) }) {
@@ -99,9 +102,6 @@ extension Authenticator: AuthenticationChallengeHandler {
         } else {
             challengeContinuation = TokenChallengeContinuation(arcGISChallenge: challenge)
         }
-        
-        // Alleviates an error with "already presenting".
-        await Task.yield()
         
         // Set the current challenge, which will present the UX.
         self.currentChallenge = challengeContinuation

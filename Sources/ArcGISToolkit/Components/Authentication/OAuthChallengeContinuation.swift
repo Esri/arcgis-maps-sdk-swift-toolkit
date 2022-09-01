@@ -29,16 +29,8 @@ final class OAuthChallengeContinuation: ValueContinuation<Result<ArcGISAuthentic
     /// Presents the user with a prompt to login with OAuth. This is done by creating the OAuth
     /// credential.
     func presentPrompt() async {
-        do {
-            let credential = try await ArcGISCredential.oauth(configuration: configuration)
-            setValue(.success(.useCredential(credential)))
-        } catch {
-            if let authorizationError = error as? OAuthCredential.AuthorizationError,
-               authorizationError == .userCancelled {
-                setValue(.success(.cancel))
-            } else {
-                setValue(.failure(error))
-            }
-        }
+        await setValue(
+            Result { .useCredential(try await ArcGISCredential.oauth(configuration: configuration)) }
+        )
     }
 }
