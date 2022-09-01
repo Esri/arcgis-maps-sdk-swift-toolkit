@@ -90,6 +90,9 @@ extension Authenticator: AuthenticationChallengeHandler {
 ***REMOVED***) async throws -> ArcGISAuthenticationChallenge.Disposition {
 ***REMOVED******REMOVED***let challengeContinuation: ArcGISChallengeContinuation
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Alleviates an error with "already presenting".
+***REMOVED******REMOVED***await Task.yield()
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Create the correct challenge type.
 ***REMOVED******REMOVED***if let url = challenge.request.url,
 ***REMOVED******REMOVED***   let config = oAuthConfigurations.first(where: { $0.canBeUsed(for: url) ***REMOVED***) {
@@ -99,9 +102,6 @@ extension Authenticator: AuthenticationChallengeHandler {
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED***challengeContinuation = TokenChallengeContinuation(arcGISChallenge: challenge)
 ***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Alleviates an error with "already presenting".
-***REMOVED******REMOVED***await Task.yield()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Set the current challenge, which will present the UX.
 ***REMOVED******REMOVED***self.currentChallenge = challengeContinuation

@@ -29,16 +29,8 @@ final class OAuthChallengeContinuation: ValueContinuation<Result<ArcGISAuthentic
 ***REMOVED******REMOVED***/ Presents the user with a prompt to login with OAuth. This is done by creating the OAuth
 ***REMOVED******REMOVED***/ credential.
 ***REMOVED***func presentPrompt() async {
-***REMOVED******REMOVED***do {
-***REMOVED******REMOVED******REMOVED***let credential = try await ArcGISCredential.oauth(configuration: configuration)
-***REMOVED******REMOVED******REMOVED***setValue(.success(.useCredential(credential)))
-***REMOVED*** catch {
-***REMOVED******REMOVED******REMOVED***if let authorizationError = error as? OAuthCredential.AuthorizationError,
-***REMOVED******REMOVED******REMOVED***   authorizationError == .userCancelled {
-***REMOVED******REMOVED******REMOVED******REMOVED***setValue(.success(.cancel))
-***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***setValue(.failure(error))
-***REMOVED******REMOVED***
-***REMOVED***
+***REMOVED******REMOVED***await setValue(
+***REMOVED******REMOVED******REMOVED***Result { .useCredential(try await ArcGISCredential.oauth(configuration: configuration)) ***REMOVED***
+***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***

@@ -156,6 +156,13 @@ private extension Error {
 ***REMOVED******REMOVED******REMOVED***default:
 ***REMOVED******REMOVED******REMOVED******REMOVED***return false
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED***case let error as OAuthCredential.AuthorizationError:
+***REMOVED******REMOVED******REMOVED***switch error {
+***REMOVED******REMOVED******REMOVED***case .userCancelled:
+***REMOVED******REMOVED******REMOVED******REMOVED***return true
+***REMOVED******REMOVED******REMOVED***default:
+***REMOVED******REMOVED******REMOVED******REMOVED***return false
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***case let error as NSError:
 ***REMOVED******REMOVED******REMOVED***return error.domain == NSURLErrorDomain && error.code == -999
 ***REMOVED******REMOVED***default:
