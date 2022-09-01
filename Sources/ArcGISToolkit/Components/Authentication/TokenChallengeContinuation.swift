@@ -16,7 +16,7 @@ import ArcGIS
 
 /// An object that represents an ArcGIS token authentication challenge continuation.
 @MainActor
-final class TokenChallengeContinuation: ValueContinuation<Result<ArcGISAuthenticationChallenge.Disposition, Error>>, ArcGISChallengeContinuation {
+final class TokenChallengeContinuation: ValueContinuation<Result<ArcGISAuthenticationChallenge.Disposition, Error>>, ChallengeContinuation {
     /// The host that prompted the challenge.
     let host: String
     

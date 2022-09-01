@@ -81,6 +81,7 @@ public final class Authenticator: ObservableObject {
     }
     
     /// The current challenge.
+    /// This property is not set for OAuth challenges.
     @Published var currentChallenge: ChallengeContinuation?
 }
 
@@ -88,27 +89,23 @@ extension Authenticator: AuthenticationChallengeHandler {
     public func handleArcGISAuthenticationChallenge(
         _ challenge: ArcGISAuthenticationChallenge
     ) async throws -> ArcGISAuthenticationChallenge.Disposition {
-        let challengeContinuation: ArcGISChallengeContinuation
-        
         // Alleviates an error with "already presenting".
         await Task.yield()
         
         // Create the correct challenge type.
         if let url = challenge.request.url,
-           let config = oAuthConfigurations.first(where: { $0.canBeUsed(for: url) }) {
-            let oAuthChallenge = OAuthChallengeContinuation(configuration: config)
-            challengeContinuation = oAuthChallenge
-            await oAuthChallenge.presentPrompt()
+           let configuration = oAuthConfigurations.first(where: { $0.canBeUsed(for: url) }) {
+            return .useCredential(try await ArcGISCredential.oauth(configuration: configuration))
         } else {
-            challengeContinuation = TokenChallengeContinuation(arcGISChallenge: challenge)
+            let tokenChallengeContinuation = TokenChallengeContinuation(arcGISChallenge: challenge)
+            
+            // Set the current challenge, which will present the UX.
+            self.currentChallenge = tokenChallengeContinuation
+            defer { self.currentChallenge = nil }
+            
+            // Wait for it to complete and return the resulting disposition.
+            return try await tokenChallengeContinuation.value.get()
         }
-        
-        // Set the current challenge, which will present the UX.
-        self.currentChallenge = challengeContinuation
-        defer { self.currentChallenge = nil }
-        
-        // Wait for it to complete and return the resulting disposition.
-        return try await challengeContinuation.value.get()
     }
     
     public func handleNetworkAuthenticationChallenge(
