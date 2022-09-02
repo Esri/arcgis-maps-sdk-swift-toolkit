@@ -16,14 +16,19 @@ import Charts
 
 /// A view displaying details for popup media.
 struct PieChart: View {
-    /// The chart data to display.
-    let chartData: [ChartData]
-    let showLegend: Bool
-    
     @ObservedObject private var viewModel: PieChartModel
     
+    let showLegend: Bool
+    
+    @Environment(\.horizontalSizeClass) var horizontalSizeClass
+    @Environment(\.verticalSizeClass) var verticalSizeClass
+    
+    /// A Boolean value denoting if the view should be shown as regular width.
+    var isRegularWidth: Bool {
+        !(horizontalSizeClass == .compact && verticalSizeClass == .regular)
+    }
+
     init(chartData: [ChartData], showLegend: Bool = false) {
-        self.chartData = chartData
         self.showLegend = showLegend
         _viewModel = ObservedObject(wrappedValue: PieChartModel(chartData: chartData))
     }
@@ -36,13 +41,12 @@ struct PieChart: View {
         }
     }
     
-    func makeLegend(slices: [PieSlice]) -> some View {
+    @ViewBuilder func makeLegend(slices: [PieSlice]) -> some View {
         LazyVGrid(
             columns: Array(
                 repeating: GridItem(.flexible(), alignment: .top),
-                count: 3
-            ),
-            alignment: .leading
+                count: isRegularWidth ? 3 : 2
+            )
         ) {
             ForEach(slices) { slice in
                 HStack {
@@ -51,6 +55,7 @@ struct PieChart: View {
                         .frame(width: 20, height: 20)
                         .background(slice.color)
                     Text(slice.name)
+                        .font(.footnote)
                     Spacer()
                 }
             }
