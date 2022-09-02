@@ -18,8 +18,79 @@ import Charts
 struct PieChart: View {
     /// The chart data to display.
     let chartData: [ChartData]
-
+    let showLegend: Bool
+    
+    @ObservedObject private var viewModel: PieChartModel
+    
+    init(chartData: [ChartData], showLegend: Bool = false) {
+        self.chartData = chartData
+        self.showLegend = showLegend
+        _viewModel = ObservedObject(wrappedValue: PieChartModel(chartData: chartData))
+    }
+    
     var body: some View {
-        Text("Pie Chart")
+        Pie(viewModel: viewModel)
+            .padding()
+        if showLegend {
+            makeLegend(slices: viewModel.pieSlices)
+        }
+    }
+    
+    func makeLegend(slices: [PieSlice]) -> some View {
+        LazyVGrid(
+            columns: Array(
+                repeating: GridItem(.flexible(), alignment: .top),
+                count: 3
+            ),
+            alignment: .leading
+        ) {
+            ForEach(slices) { slice in
+                HStack {
+                    Rectangle()
+                        .stroke(.gray, lineWidth: 1)
+                        .frame(width: 20, height: 20)
+                        .background(slice.color)
+                    Text(slice.name)
+                    Spacer()
+                }
+            }
+        }
+    }
+}
+
+struct Pie: View {
+    @ObservedObject private var viewModel: PieChartModel
+
+    init(viewModel: PieChartModel) {
+        self.viewModel = viewModel
+    }
+    
+    var body: some View {
+        GeometryReader { geometry in
+            let radius = min(geometry.size.width, geometry.size.height) / 2.0
+            let center = CGPoint(
+                x: geometry.size.width / 2.0,
+                y: geometry.size.height / 2.0
+            )
+            var startAngle: Double = -90
+            ForEach(viewModel.pieSlices, id: \.self) { slice in
+                let endAngle = startAngle + slice.fraction * 360.0
+                let path = Path { pieChart in
+                    pieChart.move(to: center)
+                    pieChart.addArc(
+                        center: center,
+                        radius: radius,
+                        startAngle: .degrees(startAngle),
+                        endAngle: .degrees(endAngle),
+                        clockwise: false
+                    )
+                    
+                    pieChart.closeSubpath()
+                    startAngle = endAngle
+                }
+                path.fill(slice.color)
+                path.stroke(.gray, lineWidth: 1)
+            }
+        }
     }
 }
