@@ -32,7 +32,7 @@ struct AttachmentsPopupElementView: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value specifying whether the attachments are currently being loaded.
-***REMOVED***@State var loadingAttachments = true
+***REMOVED***@State var isLoadingAttachments = true
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a new `AttachmentsPopupElementView`.
 ***REMOVED******REMOVED***/ - Parameter popupElement: The `AttachmentsPopupElement`.
