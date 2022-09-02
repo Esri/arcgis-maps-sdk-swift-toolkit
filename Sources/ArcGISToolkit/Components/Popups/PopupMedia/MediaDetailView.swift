@@ -64,7 +64,11 @@ struct MediaDetailView : View {
                     }
                 }
             case .barChart, .columnChart, .pieChart, .lineChart:
-                ChartView(popupMedia: popupMedia, data: ChartData.getChartData(popupMedia: popupMedia))
+                ChartView(
+                    popupMedia: popupMedia,
+                    data: ChartData.getChartData(popupMedia: popupMedia),
+                    isFullScreen: true
+                )
             default:
                 EmptyView()
             }

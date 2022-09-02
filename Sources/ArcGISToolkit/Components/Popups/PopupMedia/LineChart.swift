@@ -35,6 +35,7 @@ struct LineChart: View {
                 .chartXAxis {
                     AxisMarks { _ in
                         AxisValueLabel(collisionResolution: .greedy, orientation: .verticalReversed)
+                        AxisGridLine()
                     }
                 }
             }
