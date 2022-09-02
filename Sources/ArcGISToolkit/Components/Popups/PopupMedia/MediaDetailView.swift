@@ -64,7 +64,11 @@ struct MediaDetailView : View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***case .barChart, .columnChart, .pieChart, .lineChart:
-***REMOVED******REMOVED******REMOVED******REMOVED***ChartView(popupMedia: popupMedia, data: ChartData.getChartData(popupMedia: popupMedia))
+***REMOVED******REMOVED******REMOVED******REMOVED***ChartView(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***popupMedia: popupMedia,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***data: ChartData.getChartData(popupMedia: popupMedia),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isFullScreen: true
+***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***default:
 ***REMOVED******REMOVED******REMOVED******REMOVED***EmptyView()
 ***REMOVED******REMOVED***

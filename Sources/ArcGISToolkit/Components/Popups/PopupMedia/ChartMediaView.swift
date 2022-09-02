@@ -67,13 +67,20 @@ struct ChartMediaView: View {
 struct ChartView: View {
 ***REMOVED***let popupMedia: PopupMedia
 ***REMOVED***let data: [ChartData]
+***REMOVED***let isFullScreen: Bool
+
+***REMOVED***init(popupMedia: PopupMedia, data: [ChartData], isFullScreen: Bool = false) {
+***REMOVED******REMOVED***self.popupMedia = popupMedia
+***REMOVED******REMOVED***self.data = data
+***REMOVED******REMOVED***self.isFullScreen = isFullScreen
+***REMOVED***
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***switch popupMedia.kind {
 ***REMOVED******REMOVED***case .barChart, .columnChart:
 ***REMOVED******REMOVED******REMOVED***BarChart(chartData: data)
 ***REMOVED******REMOVED***case .pieChart:
-***REMOVED******REMOVED******REMOVED***PieChart(chartData: data)
+***REMOVED******REMOVED******REMOVED***PieChart(chartData: data, showLegend: isFullScreen)
 ***REMOVED******REMOVED***case .lineChart:
 ***REMOVED******REMOVED******REMOVED***LineChart(chartData: data)
 ***REMOVED******REMOVED***default:

@@ -18,8 +18,79 @@ import Charts
 struct PieChart: View {
 ***REMOVED******REMOVED***/ The chart data to display.
 ***REMOVED***let chartData: [ChartData]
-
+***REMOVED***let showLegend: Bool
+***REMOVED***
+***REMOVED***@ObservedObject private var viewModel: PieChartModel
+***REMOVED***
+***REMOVED***init(chartData: [ChartData], showLegend: Bool = false) {
+***REMOVED******REMOVED***self.chartData = chartData
+***REMOVED******REMOVED***self.showLegend = showLegend
+***REMOVED******REMOVED***_viewModel = ObservedObject(wrappedValue: PieChartModel(chartData: chartData))
+***REMOVED***
+***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***Text("Pie Chart")
+***REMOVED******REMOVED***Pie(viewModel: viewModel)
+***REMOVED******REMOVED******REMOVED***.padding()
+***REMOVED******REMOVED***if showLegend {
+***REMOVED******REMOVED******REMOVED***makeLegend(slices: viewModel.pieSlices)
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***func makeLegend(slices: [PieSlice]) -> some View {
+***REMOVED******REMOVED***LazyVGrid(
+***REMOVED******REMOVED******REMOVED***columns: Array(
+***REMOVED******REMOVED******REMOVED******REMOVED***repeating: GridItem(.flexible(), alignment: .top),
+***REMOVED******REMOVED******REMOVED******REMOVED***count: 3
+***REMOVED******REMOVED******REMOVED***),
+***REMOVED******REMOVED******REMOVED***alignment: .leading
+***REMOVED******REMOVED***) {
+***REMOVED******REMOVED******REMOVED***ForEach(slices) { slice in
+***REMOVED******REMOVED******REMOVED******REMOVED***HStack {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Rectangle()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.stroke(.gray, lineWidth: 1)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 20, height: 20)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.background(slice.color)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(slice.name)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
+
+struct Pie: View {
+***REMOVED***@ObservedObject private var viewModel: PieChartModel
+
+***REMOVED***init(viewModel: PieChartModel) {
+***REMOVED******REMOVED***self.viewModel = viewModel
+***REMOVED***
+***REMOVED***
+***REMOVED***var body: some View {
+***REMOVED******REMOVED***GeometryReader { geometry in
+***REMOVED******REMOVED******REMOVED***let radius = min(geometry.size.width, geometry.size.height) / 2.0
+***REMOVED******REMOVED******REMOVED***let center = CGPoint(
+***REMOVED******REMOVED******REMOVED******REMOVED***x: geometry.size.width / 2.0,
+***REMOVED******REMOVED******REMOVED******REMOVED***y: geometry.size.height / 2.0
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***var startAngle: Double = -90
+***REMOVED******REMOVED******REMOVED***ForEach(viewModel.pieSlices, id: \.self) { slice in
+***REMOVED******REMOVED******REMOVED******REMOVED***let endAngle = startAngle + slice.fraction * 360.0
+***REMOVED******REMOVED******REMOVED******REMOVED***let path = Path { pieChart in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***pieChart.move(to: center)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***pieChart.addArc(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***center: center,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***radius: radius,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***startAngle: .degrees(startAngle),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***endAngle: .degrees(endAngle),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***clockwise: false
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***pieChart.closeSubpath()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***startAngle = endAngle
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***path.fill(slice.color)
+***REMOVED******REMOVED******REMOVED******REMOVED***path.stroke(.gray, lineWidth: 1)
+***REMOVED******REMOVED***
+***REMOVED***
 ***REMOVED***
 ***REMOVED***

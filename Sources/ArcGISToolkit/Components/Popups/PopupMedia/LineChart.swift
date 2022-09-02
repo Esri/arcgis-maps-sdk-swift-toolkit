@@ -35,6 +35,7 @@ struct LineChart: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.chartXAxis {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AxisMarks { _ in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AxisValueLabel(collisionResolution: .greedy, orientation: .verticalReversed)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AxisGridLine()
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
