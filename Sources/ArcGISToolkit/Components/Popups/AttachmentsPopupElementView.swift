@@ -45,7 +45,7 @@ struct AttachmentsPopupElementView: View {
     
     var body: some View {
         Group {
-            if loadingAttachments {
+            if isLoadingAttachments {
                 ProgressView()
                     .padding()
             } else if viewModel.attachmentModels.count > 0 {
@@ -78,7 +78,7 @@ struct AttachmentsPopupElementView: View {
                 AttachmentModel(attachment: attachment)
             }
             viewModel.attachmentModels.append(contentsOf: attachmentModels)
-            loadingAttachments = false
+            isLoadingAttachments = false
         }
     }
 }
