@@ -16,14 +16,19 @@ import Charts
 
 ***REMOVED***/ A view displaying details for popup media.
 struct PieChart: View {
-***REMOVED******REMOVED***/ The chart data to display.
-***REMOVED***let chartData: [ChartData]
-***REMOVED***let showLegend: Bool
-***REMOVED***
 ***REMOVED***@ObservedObject private var viewModel: PieChartModel
 ***REMOVED***
+***REMOVED***let showLegend: Bool
+***REMOVED***
+***REMOVED***@Environment(\.horizontalSizeClass) var horizontalSizeClass
+***REMOVED***@Environment(\.verticalSizeClass) var verticalSizeClass
+***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value denoting if the view should be shown as regular width.
+***REMOVED***var isRegularWidth: Bool {
+***REMOVED******REMOVED***!(horizontalSizeClass == .compact && verticalSizeClass == .regular)
+***REMOVED***
+
 ***REMOVED***init(chartData: [ChartData], showLegend: Bool = false) {
-***REMOVED******REMOVED***self.chartData = chartData
 ***REMOVED******REMOVED***self.showLegend = showLegend
 ***REMOVED******REMOVED***_viewModel = ObservedObject(wrappedValue: PieChartModel(chartData: chartData))
 ***REMOVED***
@@ -36,13 +41,12 @@ struct PieChart: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED***func makeLegend(slices: [PieSlice]) -> some View {
+***REMOVED***@ViewBuilder func makeLegend(slices: [PieSlice]) -> some View {
 ***REMOVED******REMOVED***LazyVGrid(
 ***REMOVED******REMOVED******REMOVED***columns: Array(
 ***REMOVED******REMOVED******REMOVED******REMOVED***repeating: GridItem(.flexible(), alignment: .top),
-***REMOVED******REMOVED******REMOVED******REMOVED***count: 3
-***REMOVED******REMOVED******REMOVED***),
-***REMOVED******REMOVED******REMOVED***alignment: .leading
+***REMOVED******REMOVED******REMOVED******REMOVED***count: isRegularWidth ? 3 : 2
+***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***) {
 ***REMOVED******REMOVED******REMOVED***ForEach(slices) { slice in
 ***REMOVED******REMOVED******REMOVED******REMOVED***HStack {
@@ -51,6 +55,7 @@ struct PieChart: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 20, height: 20)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.background(slice.color)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(slice.name)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.footnote)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
