@@ -20,12 +20,16 @@ struct MediaPopupElementView: View {
     var popupElement: MediaPopupElement
     
     var body: some View {
+        Divider()
         PopupElementHeader(
             title: popupElement.title,
             description: popupElement.description
         )
         .padding([.bottom], 4)
-        Divider()
+        if !popupElement.title.isEmpty ||
+            !popupElement.description.isEmpty {
+            Divider()
+        }
         PopupMediaView(popupMedia: popupElement.media)
     }
     
