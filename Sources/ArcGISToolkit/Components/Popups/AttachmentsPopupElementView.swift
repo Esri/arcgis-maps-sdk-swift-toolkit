@@ -32,7 +32,7 @@ struct AttachmentsPopupElementView: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value specifying whether the attachments are currently being loaded.
-***REMOVED***@State var loadingAttachments = true
+***REMOVED***@State var isLoadingAttachments = true
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a new `AttachmentsPopupElementView`.
 ***REMOVED******REMOVED***/ - Parameter popupElement: The `AttachmentsPopupElement`.
@@ -45,7 +45,7 @@ struct AttachmentsPopupElementView: View {
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***Group {
-***REMOVED******REMOVED******REMOVED***if loadingAttachments {
+***REMOVED******REMOVED******REMOVED***if isLoadingAttachments {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ProgressView()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
 ***REMOVED******REMOVED*** else if viewModel.attachmentModels.count > 0 {
@@ -77,7 +77,7 @@ struct AttachmentsPopupElementView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***AttachmentModel(attachment: attachment)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***viewModel.attachmentModels.append(contentsOf: attachmentModels)
-***REMOVED******REMOVED******REMOVED***loadingAttachments = false
+***REMOVED******REMOVED******REMOVED***isLoadingAttachments = false
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
