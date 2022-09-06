@@ -20,12 +20,16 @@ struct MediaPopupElementView: View {
 ***REMOVED***var popupElement: MediaPopupElement
 ***REMOVED***
 ***REMOVED***var body: some View {
+***REMOVED******REMOVED***Divider()
 ***REMOVED******REMOVED***PopupElementHeader(
 ***REMOVED******REMOVED******REMOVED***title: popupElement.title,
 ***REMOVED******REMOVED******REMOVED***description: popupElement.description
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***.padding([.bottom], 4)
-***REMOVED******REMOVED***Divider()
+***REMOVED******REMOVED***if !popupElement.title.isEmpty ||
+***REMOVED******REMOVED******REMOVED***!popupElement.description.isEmpty {
+***REMOVED******REMOVED******REMOVED***Divider()
+***REMOVED***
 ***REMOVED******REMOVED***PopupMediaView(popupMedia: popupElement.media)
 ***REMOVED***
 ***REMOVED***

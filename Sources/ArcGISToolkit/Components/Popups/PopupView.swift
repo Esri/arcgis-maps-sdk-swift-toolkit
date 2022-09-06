@@ -38,7 +38,6 @@ public struct PopupView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text(popup.title)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.title)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fontWeight(.bold)
-***REMOVED******REMOVED******REMOVED******REMOVED***Divider()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***Group {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if let isPopupEvaluated = isPopupEvaluated {
@@ -73,9 +72,8 @@ public struct PopupView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***VStack(alignment: .leading) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(Array(popup.evaluatedElements.enumerated()), id: \.offset) { index, popupElement in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***switch popupElement {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case is AttachmentsPopupElement:
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("AttachmentsPopupElementView implementation coming soon.")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.caption)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case let popupElement as AttachmentsPopupElement:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AttachmentsPopupElementView(popupElement: popupElement)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case let popupElement as FieldsPopupElement:
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FieldsPopupElementView(popupElement: popupElement)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case let popupElement as MediaPopupElement:
@@ -84,10 +82,6 @@ public struct PopupView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***TextPopupElementView(popupElement: popupElement)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***default:
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***EmptyView()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if index < popup.evaluatedElements.count - 1 {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Divider()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***

@@ -32,6 +32,7 @@ struct FieldsPopupElementView: View {
 ***REMOVED***private let displayFields: [DisplayField]
 ***REMOVED***
 ***REMOVED***var body: some View {
+***REMOVED******REMOVED***Divider()
 ***REMOVED******REMOVED***PopupElementHeader(
 ***REMOVED******REMOVED******REMOVED***title: popupElement.displayTitle,
 ***REMOVED******REMOVED******REMOVED***description: popupElement.description
