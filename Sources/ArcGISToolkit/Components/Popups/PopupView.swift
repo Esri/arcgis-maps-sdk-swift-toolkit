@@ -38,7 +38,6 @@ public struct PopupView: View {
                 Text(popup.title)
                     .font(.title)
                     .fontWeight(.bold)
-                Divider()
             }
             Group {
                 if let isPopupEvaluated = isPopupEvaluated {
@@ -73,9 +72,8 @@ public struct PopupView: View {
                 VStack(alignment: .leading) {
                     ForEach(Array(popup.evaluatedElements.enumerated()), id: \.offset) { index, popupElement in
                         switch popupElement {
-                        case is AttachmentsPopupElement:
-                            Text("AttachmentsPopupElementView implementation coming soon.")
-                                .font(.caption)
+                        case let popupElement as AttachmentsPopupElement:
+                            AttachmentsPopupElementView(popupElement: popupElement)
                         case let popupElement as FieldsPopupElement:
                             FieldsPopupElementView(popupElement: popupElement)
                         case let popupElement as MediaPopupElement:
@@ -84,10 +82,6 @@ public struct PopupView: View {
                             TextPopupElementView(popupElement: popupElement)
                         default:
                             EmptyView()
-                        }
-                        
-                        if index < popup.evaluatedElements.count - 1 {
-                            Divider()
                         }
                     }
                 }

@@ -32,6 +32,7 @@ struct FieldsPopupElementView: View {
     private let displayFields: [DisplayField]
     
     var body: some View {
+        Divider()
         PopupElementHeader(
             title: popupElement.displayTitle,
             description: popupElement.description
