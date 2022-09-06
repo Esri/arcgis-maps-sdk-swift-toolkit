@@ -32,7 +32,7 @@ struct AttachmentsPopupElementView: View {
     }
     
     /// A Boolean value specifying whether the attachments are currently being loaded.
-    @State var loadingAttachments = true
+    @State var isLoadingAttachments = true
     
     /// Creates a new `AttachmentsPopupElementView`.
     /// - Parameter popupElement: The `AttachmentsPopupElement`.
@@ -45,7 +45,7 @@ struct AttachmentsPopupElementView: View {
     
     var body: some View {
         Group {
-            if loadingAttachments {
+            if isLoadingAttachments {
                 ProgressView()
                     .padding()
             } else if viewModel.attachmentModels.count > 0 {
@@ -77,7 +77,7 @@ struct AttachmentsPopupElementView: View {
                 AttachmentModel(attachment: attachment)
             }
             viewModel.attachmentModels.append(contentsOf: attachmentModels)
-            loadingAttachments = false
+            isLoadingAttachments = false
         }
     }
 }

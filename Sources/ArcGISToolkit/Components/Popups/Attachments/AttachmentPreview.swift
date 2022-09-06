@@ -50,8 +50,7 @@ struct AttachmentPreview: View {
                     } else {
                         ProgressView()
                             .padding(8)
-                            .background(Color.white.opacity(0.75))
-                            .clipShape(RoundedRectangle(cornerRadius: 8))
+                            .background(Material.thin, in: RoundedRectangle(cornerRadius: 8))
                     }
                 }
                 if attachmentModel.usingDefaultImage {
