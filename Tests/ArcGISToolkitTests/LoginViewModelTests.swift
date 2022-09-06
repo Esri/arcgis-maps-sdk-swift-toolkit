@@ -40,7 +40,6 @@ import XCTest
         XCTAssertNotNil(model.signInAction)
         XCTAssertNotNil(model.cancelAction)
         XCTAssertFalse(model.signInButtonEnabled)
-        XCTAssertTrue(model.formEnabled)
         XCTAssertTrue(model.username.isEmpty)
         XCTAssertTrue(model.password.isEmpty)
         XCTAssertFalse(signInCalled)
@@ -59,7 +58,6 @@ import XCTest
         XCTAssertTrue(model.signInButtonEnabled)
         
         model.signIn()
-        XCTAssertFalse(model.formEnabled)
         XCTAssertTrue(signInCalled)
         XCTAssertFalse(cancelCalled)
         

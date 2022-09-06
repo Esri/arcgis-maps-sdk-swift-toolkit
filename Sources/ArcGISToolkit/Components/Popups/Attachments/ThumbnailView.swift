@@ -26,10 +26,18 @@ struct ThumbnailView: View  {
         Group {
             if attachmentModel.usingDefaultImage,
                let systemName = attachmentModel.defaultSystemName {
-                Image(systemName: systemName)
-                    .resizable()
-                    .renderingMode(.template)
-                    .aspectRatio(contentMode: .fit)
+                if #available(iOS 16, *) {
+                    Image(systemName: systemName)
+                        .resizable()
+                        .renderingMode(.template)
+                        .aspectRatio(contentMode: .fit)
+                        .fontWeight(.light)
+                } else {
+                    Image(systemName: systemName)
+                        .resizable()
+                        .renderingMode(.template)
+                        .aspectRatio(contentMode: .fit)
+                }
             } else if let image = attachmentModel.thumbnail {
                 Image(uiImage: image)
                     .resizable()
