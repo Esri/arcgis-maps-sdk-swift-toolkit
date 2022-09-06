@@ -19,14 +19,24 @@ struct BarChart: View {
     /// The chart data to display.
     let chartData: [ChartData]
     
+    let isColumnChart: Bool
+    
     var body: some View {
         if #available(iOS 16, *) {
             Group {
                 Chart(chartData) {
-                    BarMark(
-                        x: .value("Field", $0.label),
-                        y: .value("Value", $0.value)
-                    )
+                    if isColumnChart {
+                        // reverse x/y values
+                        BarMark(
+                            x: .value("Field", $0.label),
+                            y: .value("Value", $0.value)
+                        )
+                    } else {
+                        BarMark(
+                            x: .value("Value", $0.value),
+                            y: .value("Field", $0.label)
+                        )
+                    }
                 }
                 .chartXAxis {
                     AxisMarks { _ in

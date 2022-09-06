@@ -78,7 +78,7 @@ struct ChartView: View {
     var body: some View {
         switch popupMedia.kind {
         case .barChart, .columnChart:
-            BarChart(chartData: data)
+            BarChart(chartData: data, isColumnChart: (popupMedia.kind == .columnChart))
         case .pieChart:
             PieChart(chartData: data, showLegend: isFullScreen)
         case .lineChart:
