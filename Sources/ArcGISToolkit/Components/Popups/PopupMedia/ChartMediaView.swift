@@ -78,7 +78,7 @@ struct ChartView: View {
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***switch popupMedia.kind {
 ***REMOVED******REMOVED***case .barChart, .columnChart:
-***REMOVED******REMOVED******REMOVED***BarChart(chartData: data)
+***REMOVED******REMOVED******REMOVED***BarChart(chartData: data, isColumnChart: (popupMedia.kind == .columnChart))
 ***REMOVED******REMOVED***case .pieChart:
 ***REMOVED******REMOVED******REMOVED***PieChart(chartData: data, showLegend: isFullScreen)
 ***REMOVED******REMOVED***case .lineChart:
