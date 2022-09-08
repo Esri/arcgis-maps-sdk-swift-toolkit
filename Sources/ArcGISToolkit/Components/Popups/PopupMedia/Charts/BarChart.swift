@@ -24,6 +24,22 @@ struct BarChart: View {
 ***REMOVED******REMOVED***/ not a "column" chart, then the bars are horizontal.
 ***REMOVED***let isColumnChart: Bool
 ***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value determining whether to show the x axis labels for the chart.
+***REMOVED***let showXAxisLabels: Bool
+***REMOVED***
+***REMOVED******REMOVED***/ Creates a `BarChart`.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - chartData: The data to display in the chart.
+***REMOVED******REMOVED***/   - isColumnChart: Specifying whether the chart is a "column" chart, with vertical bars.
+***REMOVED******REMOVED***/   - isShowingDetalView: Specifies whether the chart is being drawn in a larger format.
+***REMOVED***init(chartData: [ChartData], isColumnChart: Bool, isShowingDetalView: Bool = false) {
+***REMOVED******REMOVED***self.chartData = chartData
+***REMOVED******REMOVED***self.isColumnChart = isColumnChart
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Only show the x axis labels if we're being show in a detail view.
+***REMOVED******REMOVED***showXAxisLabels = isShowingDetalView
+***REMOVED***
+
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***Group {
 ***REMOVED******REMOVED******REMOVED***Chart(chartData) {
@@ -43,7 +59,12 @@ struct BarChart: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.chartXAxis {
 ***REMOVED******REMOVED******REMOVED******REMOVED***AxisMarks { _ in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AxisValueLabel(collisionResolution: .greedy, orientation: .verticalReversed)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if showXAxisLabels {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AxisValueLabel(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***collisionResolution: .greedy,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***orientation: .verticalReversed
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***

@@ -35,8 +35,10 @@ struct PieChart: View {
 ***REMOVED******REMOVED***/   - chartData: The data to display in the chart.
 ***REMOVED******REMOVED***/   - isShowingDetalView: Specifies whether the chart is being drawn in a larger format.
 ***REMOVED***init(chartData: [ChartData], isShowingDetalView: Bool = false) {
-***REMOVED******REMOVED***showLegend = isShowingDetalView
 ***REMOVED******REMOVED***_viewModel = ObservedObject(wrappedValue: PieChartModel(chartData: chartData))
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Only show the legend if we're being show in a detail view.
+***REMOVED******REMOVED***showLegend = isShowingDetalView
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var body: some View {
