@@ -35,12 +35,12 @@ struct ChartMediaView: View {
         self.chartData = ChartData.getChartData(from: popupMedia)
     }
     
-    /// A Boolean value specifying whether the media should be drawn in a larger format.
-    @State private var isShowingDetailView = false
-    
     /// The corner radius for the view.
     private let cornerRadius: CGFloat = 8
     
+    /// A Boolean value specifying whether the media should be drawn in a larger format.
+    @State private var isShowingDetailView = false
+
     var body: some View {
         if #available(iOS 16, *) {
             ZStack {
