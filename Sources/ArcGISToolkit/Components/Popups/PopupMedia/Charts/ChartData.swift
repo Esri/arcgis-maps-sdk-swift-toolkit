@@ -34,7 +34,7 @@ internal struct ChartData: Identifiable {
         }
     }
     
-    static func getChartData(popupMedia: PopupMedia) -> [ChartData] {
+    static func getChartData(from popupMedia: PopupMedia) -> [ChartData] {
         guard let labels = popupMedia.value?.labels,
               let data = popupMedia.value?.data else { return [] }
         
