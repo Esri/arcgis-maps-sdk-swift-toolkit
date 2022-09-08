@@ -35,12 +35,12 @@ struct ChartMediaView: View {
 ***REMOVED******REMOVED***self.chartData = ChartData.getChartData(from: popupMedia)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value specifying whether the media should be drawn in a larger format.
-***REMOVED***@State private var isShowingDetailView = false
-***REMOVED***
 ***REMOVED******REMOVED***/ The corner radius for the view.
 ***REMOVED***private let cornerRadius: CGFloat = 8
 ***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value specifying whether the media should be drawn in a larger format.
+***REMOVED***@State private var isShowingDetailView = false
+
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***if #available(iOS 16, *) {
 ***REMOVED******REMOVED******REMOVED***ZStack {

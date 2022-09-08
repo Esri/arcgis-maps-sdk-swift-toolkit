@@ -22,37 +22,37 @@ struct ImageMediaView: View {
 ***REMOVED******REMOVED***/ The size of the media's frame.
 ***REMOVED***let mediaSize: CGSize
 ***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value specifying whether the media should be drawn in a larger format.
-***REMOVED***@State private var isShowingDetalView = false
+***REMOVED******REMOVED***/ The corner radius for the view.
 ***REMOVED***private let cornerRadius: CGFloat = 8
+***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value specifying whether the media should be drawn in a larger format.
+***REMOVED***@State private var isShowingDetailView = false
 
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***ZStack {
-***REMOVED******REMOVED******REMOVED***if let sourceURL = popupMedia.value?.sourceURL {
+***REMOVED******REMOVED***if let sourceURL = popupMedia.value?.sourceURL {
+***REMOVED******REMOVED******REMOVED***ZStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED***AsyncImageView(url: sourceURL, contentMode: .fill)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onTapGesture {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isShowingDetalView = true
-***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: mediaSize.width, height: mediaSize.height)
+***REMOVED******REMOVED******REMOVED******REMOVED***VStack {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***PopupMediaFooter(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***popupMedia: popupMedia,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mediaSize: mediaSize
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***RoundedRectangle(cornerRadius: cornerRadius)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.stroke(.gray, lineWidth: 1)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: mediaSize.width, height: mediaSize.height)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***VStack {
-***REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED******REMOVED***PopupMediaFooter(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***popupMedia: popupMedia,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mediaSize: mediaSize
-***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***.frame(width: mediaSize.width, height: mediaSize.height)
+***REMOVED******REMOVED******REMOVED***.clipShape(RoundedRectangle(cornerRadius: cornerRadius))
+***REMOVED******REMOVED******REMOVED***.onTapGesture {
+***REMOVED******REMOVED******REMOVED******REMOVED***isShowingDetailView = true
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***RoundedRectangle(cornerRadius: cornerRadius)
-***REMOVED******REMOVED******REMOVED******REMOVED***.stroke(.gray, lineWidth: 1)
-***REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: mediaSize.width, height: mediaSize.height)
-***REMOVED***
-***REMOVED******REMOVED***.frame(width: mediaSize.width, height: mediaSize.height)
-***REMOVED******REMOVED***.clipShape(RoundedRectangle(cornerRadius: cornerRadius))
-***REMOVED******REMOVED***.sheet(isPresented: $isShowingDetalView) {
-***REMOVED******REMOVED******REMOVED***if popupMedia.value?.sourceURL != nil {
+***REMOVED******REMOVED******REMOVED***.sheet(isPresented: $isShowingDetailView) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***MediaDetailView(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***popupMedia: popupMedia,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isShowingDetalView: $isShowingDetalView
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isShowingDetalView: $isShowingDetailView
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding()
 ***REMOVED******REMOVED***

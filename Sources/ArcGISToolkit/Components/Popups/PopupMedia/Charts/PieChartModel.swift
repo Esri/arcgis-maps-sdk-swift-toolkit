@@ -67,10 +67,10 @@ final class PieChartModel: ObservableObject {
 ***REMOVED***
 
 ***REMOVED***/ A single slice of a pie chart.
-class PieSlice: Identifiable {
+final class PieSlice: Identifiable {
 ***REMOVED******REMOVED***/ The fraction of the whole the slice represents.
 ***REMOVED***let fraction: Double
-
+***REMOVED***
 ***REMOVED******REMOVED***/ The color of the slice.
 ***REMOVED***let color: Color
 ***REMOVED***
