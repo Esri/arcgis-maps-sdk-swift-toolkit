@@ -14,12 +14,12 @@
 import SwiftUI
 import ArcGIS
 
-/// A view displaying a popup media in full screen.
+/// A view displaying a popup media in a large format.
 struct MediaDetailView : View {
     /// The popup media to display.
     let popupMedia: PopupMedia
 
-    /// A Boolean value specifying whether the media should be shown full screen.
+    /// A Boolean value specifying whether the media should be drawn in a larger format.
     var isShowingDetalView: Binding<Bool>
     
     var body: some View {
@@ -67,8 +67,8 @@ struct MediaDetailView : View {
                 if #available(iOS 16, *) {
                     ChartView(
                         popupMedia: popupMedia,
-                        data: ChartData.getChartData(popupMedia: popupMedia),
-                        isFullScreen: true
+                        data: ChartData.getChartData(from: popupMedia),
+                        isShowingDetalView: true
                     )
                 } else {
                     EmptyView()

@@ -20,36 +20,39 @@ struct MediaPopupElementView: View {
     var popupElement: MediaPopupElement
     
     var body: some View {
-        if hasDisplayableMedia {
+        if displayableMediaCount > 0 {
             Divider()
             PopupElementHeader(
                 title: popupElement.title,
                 description: popupElement.description
             )
-            PopupMediaView(popupMedia: popupElement.media)
+            PopupMediaView(
+                popupMedia: popupElement.media,
+                displayableMediaCount: displayableMediaCount
+            )
         }
     }
     
-    /// A Boolean value specifying if there is available media to display.  Available media would
-    /// be image media or chart media when running on iOS 16 or newer.
-    var hasDisplayableMedia: Bool {
-        let media = popupElement.media
-        let imageMedia = media.filter { $0.kind == .image }
-        if imageMedia.count > 0 {
-            // We have image media to display.
-            return true
-        }
+    /// The number of popup media that can be displayed. The count includes
+    /// all image media and chart media when running on iOS 16 or newer.
+    var displayableMediaCount: Int {
         if #available(iOS 16, *) {
-            // We're on iOS 16 and we have more media than just images.
-            return media.count > imageMedia.count
+            // Include all images and charts.
+            return popupElement.media.count
+        } else {
+            // Only include image media.
+            let imageMedia = popupElement.media.filter { $0.kind == .image }
+            return imageMedia.count
         }
-        return false
     }
     
     /// A view displaying an array of `PopupMedia`.
     struct PopupMediaView: View {
         /// The popup media to display.
         let popupMedia: [PopupMedia]
+        
+        /// The number of popup media that can be displayed.
+        let displayableMediaCount: Int
         
         /// The width of the view content.
         @State private var width: CGFloat = .zero
@@ -89,11 +92,11 @@ struct MediaPopupElementView: View {
         /// second and subsequent media to be partially visible, to indicate there is more than one.
         var widthScaleFactor: Double {
             get {
-                popupMedia.count > 1 ? 0.75 : 1
+                displayableMediaCount > 1 ? 0.75 : 1
             }
         }
         
-        /// The size of the image or chart media, not counting descriptive text.
+        /// The size of the image or chart media.
         var mediaSize: CGSize {
             CGSize(width: width, height: 200)
         }

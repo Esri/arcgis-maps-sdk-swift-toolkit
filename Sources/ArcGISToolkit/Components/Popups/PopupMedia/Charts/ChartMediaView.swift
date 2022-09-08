@@ -32,15 +32,15 @@ struct ChartMediaView: View {
     init(popupMedia: PopupMedia, mediaSize: CGSize) {
         self.popupMedia = popupMedia
         self.mediaSize = mediaSize
-        self.chartData = ChartData.getChartData(popupMedia: popupMedia)
+        self.chartData = ChartData.getChartData(from: popupMedia)
     }
     
-    /// A Boolean value specifying whether the media should be shown full screen.
+    /// A Boolean value specifying whether the media should be drawn in a larger format.
     @State private var isShowingDetailView = false
     
     /// The corner radius for the view.
     private let cornerRadius: CGFloat = 8
-
+    
     var body: some View {
         if #available(iOS 16, *) {
             ZStack {
@@ -81,18 +81,18 @@ struct ChartView: View {
     /// The data to display in the chart.
     let data: [ChartData]
     
-    /// A Boolean value specifying whether the chart is being draw full screen.
-    let isFullScreen: Bool
+    /// A Boolean value specifying whether the chart is being drawn in a larger format.
+    let isShowingDetalView: Bool
     
     /// Creates a `ChartView`.
     /// - Parameters:
     ///   - popupMedia: The popup media to display.
     ///   - data: The data to display in the chart.
-    ///   - isFullScreen: Specifies whether the chart is being draw full screen.
-    init(popupMedia: PopupMedia, data: [ChartData], isFullScreen: Bool = false) {
+    ///   - isShowingDetalView: Specifies whether the chart is being drawn in a larger format.
+    init(popupMedia: PopupMedia, data: [ChartData], isShowingDetalView: Bool = false) {
         self.popupMedia = popupMedia
         self.data = data
-        self.isFullScreen = isFullScreen
+        self.isShowingDetalView = isShowingDetalView
     }
     
     var body: some View {
@@ -100,7 +100,7 @@ struct ChartView: View {
         case .barChart, .columnChart:
             BarChart(chartData: data, isColumnChart: (popupMedia.kind == .columnChart))
         case .pieChart:
-            PieChart(chartData: data, showLegend: isFullScreen)
+            PieChart(chartData: data, isShowingDetalView: isShowingDetalView)
         case .lineChart:
             LineChart(chartData: data)
         default:

@@ -14,10 +14,12 @@
 import SwiftUI
 import Charts
 
-/// A view displaying details for popup media.
+/// A view displaying details for pie chart popup media.
 struct PieChart: View {
+    /// The view model for the pie chart.
     @ObservedObject private var viewModel: PieChartModel
     
+    /// A Boolean value determining whether to show the legend for the chart.
     let showLegend: Bool
     
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
@@ -27,9 +29,13 @@ struct PieChart: View {
     var isRegularWidth: Bool {
         !(horizontalSizeClass == .compact && verticalSizeClass == .regular)
     }
-
-    init(chartData: [ChartData], showLegend: Bool = false) {
-        self.showLegend = showLegend
+    
+    /// Creates a `PieChart`.
+    /// - Parameters:
+    ///   - chartData: The data to display in the chart.
+    ///   - isShowingDetalView: Specifies whether the chart is being drawn in a larger format.
+    init(chartData: [ChartData], isShowingDetalView: Bool = false) {
+        showLegend = isShowingDetalView
         _viewModel = ObservedObject(wrappedValue: PieChartModel(chartData: chartData))
     }
     
