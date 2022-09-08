@@ -14,7 +14,7 @@
 ***REMOVED***
 import Charts
 
-***REMOVED***/ A view displaying details for popup media.
+***REMOVED***/ A view displaying details for bar chart popup media.
 @available(iOS 16, *)
 struct BarChart: View {
 ***REMOVED******REMOVED***/ The chart data to display.

@@ -14,10 +14,12 @@
 ***REMOVED***
 import Charts
 
-***REMOVED***/ A view displaying details for popup media.
+***REMOVED***/ A view displaying details for pie chart popup media.
 struct PieChart: View {
+***REMOVED******REMOVED***/ The view model for the pie chart.
 ***REMOVED***@ObservedObject private var viewModel: PieChartModel
 ***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value determining whether to show the legend for the chart.
 ***REMOVED***let showLegend: Bool
 ***REMOVED***
 ***REMOVED***@Environment(\.horizontalSizeClass) var horizontalSizeClass
@@ -27,9 +29,13 @@ struct PieChart: View {
 ***REMOVED***var isRegularWidth: Bool {
 ***REMOVED******REMOVED***!(horizontalSizeClass == .compact && verticalSizeClass == .regular)
 ***REMOVED***
-
-***REMOVED***init(chartData: [ChartData], showLegend: Bool = false) {
-***REMOVED******REMOVED***self.showLegend = showLegend
+***REMOVED***
+***REMOVED******REMOVED***/ Creates a `PieChart`.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - chartData: The data to display in the chart.
+***REMOVED******REMOVED***/   - isShowingDetalView: Specifies whether the chart is being drawn in a larger format.
+***REMOVED***init(chartData: [ChartData], isShowingDetalView: Bool = false) {
+***REMOVED******REMOVED***showLegend = isShowingDetalView
 ***REMOVED******REMOVED***_viewModel = ObservedObject(wrappedValue: PieChartModel(chartData: chartData))
 ***REMOVED***
 ***REMOVED***

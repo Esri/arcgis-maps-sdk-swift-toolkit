@@ -32,15 +32,15 @@ struct ChartMediaView: View {
 ***REMOVED***init(popupMedia: PopupMedia, mediaSize: CGSize) {
 ***REMOVED******REMOVED***self.popupMedia = popupMedia
 ***REMOVED******REMOVED***self.mediaSize = mediaSize
-***REMOVED******REMOVED***self.chartData = ChartData.getChartData(popupMedia: popupMedia)
+***REMOVED******REMOVED***self.chartData = ChartData.getChartData(from: popupMedia)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value specifying whether the media should be shown full screen.
+***REMOVED******REMOVED***/ A Boolean value specifying whether the media should be drawn in a larger format.
 ***REMOVED***@State private var isShowingDetailView = false
 ***REMOVED***
 ***REMOVED******REMOVED***/ The corner radius for the view.
 ***REMOVED***private let cornerRadius: CGFloat = 8
-
+***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***if #available(iOS 16, *) {
 ***REMOVED******REMOVED******REMOVED***ZStack {
@@ -81,18 +81,18 @@ struct ChartView: View {
 ***REMOVED******REMOVED***/ The data to display in the chart.
 ***REMOVED***let data: [ChartData]
 ***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value specifying whether the chart is being draw full screen.
-***REMOVED***let isFullScreen: Bool
+***REMOVED******REMOVED***/ A Boolean value specifying whether the chart is being drawn in a larger format.
+***REMOVED***let isShowingDetalView: Bool
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a `ChartView`.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - popupMedia: The popup media to display.
 ***REMOVED******REMOVED***/   - data: The data to display in the chart.
-***REMOVED******REMOVED***/   - isFullScreen: Specifies whether the chart is being draw full screen.
-***REMOVED***init(popupMedia: PopupMedia, data: [ChartData], isFullScreen: Bool = false) {
+***REMOVED******REMOVED***/   - isShowingDetalView: Specifies whether the chart is being drawn in a larger format.
+***REMOVED***init(popupMedia: PopupMedia, data: [ChartData], isShowingDetalView: Bool = false) {
 ***REMOVED******REMOVED***self.popupMedia = popupMedia
 ***REMOVED******REMOVED***self.data = data
-***REMOVED******REMOVED***self.isFullScreen = isFullScreen
+***REMOVED******REMOVED***self.isShowingDetalView = isShowingDetalView
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var body: some View {
@@ -100,7 +100,7 @@ struct ChartView: View {
 ***REMOVED******REMOVED***case .barChart, .columnChart:
 ***REMOVED******REMOVED******REMOVED***BarChart(chartData: data, isColumnChart: (popupMedia.kind == .columnChart))
 ***REMOVED******REMOVED***case .pieChart:
-***REMOVED******REMOVED******REMOVED***PieChart(chartData: data, showLegend: isFullScreen)
+***REMOVED******REMOVED******REMOVED***PieChart(chartData: data, isShowingDetalView: isShowingDetalView)
 ***REMOVED******REMOVED***case .lineChart:
 ***REMOVED******REMOVED******REMOVED***LineChart(chartData: data)
 ***REMOVED******REMOVED***default:

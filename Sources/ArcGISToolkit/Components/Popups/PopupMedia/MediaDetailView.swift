@@ -14,12 +14,12 @@
 ***REMOVED***
 ***REMOVED***
 
-***REMOVED***/ A view displaying a popup media in full screen.
+***REMOVED***/ A view displaying a popup media in a large format.
 struct MediaDetailView : View {
 ***REMOVED******REMOVED***/ The popup media to display.
 ***REMOVED***let popupMedia: PopupMedia
 
-***REMOVED******REMOVED***/ A Boolean value specifying whether the media should be shown full screen.
+***REMOVED******REMOVED***/ A Boolean value specifying whether the media should be drawn in a larger format.
 ***REMOVED***var isShowingDetalView: Binding<Bool>
 ***REMOVED***
 ***REMOVED***var body: some View {
@@ -67,8 +67,8 @@ struct MediaDetailView : View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if #available(iOS 16, *) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ChartView(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***popupMedia: popupMedia,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***data: ChartData.getChartData(popupMedia: popupMedia),
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isFullScreen: true
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***data: ChartData.getChartData(from: popupMedia),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isShowingDetalView: true
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***EmptyView()

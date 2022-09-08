@@ -22,7 +22,7 @@ struct ImageMediaView: View {
 ***REMOVED******REMOVED***/ The size of the media's frame.
 ***REMOVED***let mediaSize: CGSize
 ***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value specifying whether the media should be shown full screen.
+***REMOVED******REMOVED***/ A Boolean value specifying whether the media should be drawn in a larger format.
 ***REMOVED***@State private var isShowingDetalView = false
 ***REMOVED***private let cornerRadius: CGFloat = 8
 

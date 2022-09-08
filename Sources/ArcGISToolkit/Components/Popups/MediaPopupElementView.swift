@@ -20,36 +20,39 @@ struct MediaPopupElementView: View {
 ***REMOVED***var popupElement: MediaPopupElement
 ***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***if hasDisplayableMedia {
+***REMOVED******REMOVED***if displayableMediaCount > 0 {
 ***REMOVED******REMOVED******REMOVED***Divider()
 ***REMOVED******REMOVED******REMOVED***PopupElementHeader(
 ***REMOVED******REMOVED******REMOVED******REMOVED***title: popupElement.title,
 ***REMOVED******REMOVED******REMOVED******REMOVED***description: popupElement.description
 ***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***PopupMediaView(popupMedia: popupElement.media)
+***REMOVED******REMOVED******REMOVED***PopupMediaView(
+***REMOVED******REMOVED******REMOVED******REMOVED***popupMedia: popupElement.media,
+***REMOVED******REMOVED******REMOVED******REMOVED***displayableMediaCount: displayableMediaCount
+***REMOVED******REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value specifying if there is available media to display.  Available media would
-***REMOVED******REMOVED***/ be image media or chart media when running on iOS 16 or newer.
-***REMOVED***var hasDisplayableMedia: Bool {
-***REMOVED******REMOVED***let media = popupElement.media
-***REMOVED******REMOVED***let imageMedia = media.filter { $0.kind == .image ***REMOVED***
-***REMOVED******REMOVED***if imageMedia.count > 0 {
-***REMOVED******REMOVED******REMOVED******REMOVED*** We have image media to display.
-***REMOVED******REMOVED******REMOVED***return true
-***REMOVED***
+***REMOVED******REMOVED***/ The number of popup media that can be displayed. The count includes
+***REMOVED******REMOVED***/ all image media and chart media when running on iOS 16 or newer.
+***REMOVED***var displayableMediaCount: Int {
 ***REMOVED******REMOVED***if #available(iOS 16, *) {
-***REMOVED******REMOVED******REMOVED******REMOVED*** We're on iOS 16 and we have more media than just images.
-***REMOVED******REMOVED******REMOVED***return media.count > imageMedia.count
+***REMOVED******REMOVED******REMOVED******REMOVED*** Include all images and charts.
+***REMOVED******REMOVED******REMOVED***return popupElement.media.count
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED*** Only include image media.
+***REMOVED******REMOVED******REMOVED***let imageMedia = popupElement.media.filter { $0.kind == .image ***REMOVED***
+***REMOVED******REMOVED******REMOVED***return imageMedia.count
 ***REMOVED***
-***REMOVED******REMOVED***return false
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ A view displaying an array of `PopupMedia`.
 ***REMOVED***struct PopupMediaView: View {
 ***REMOVED******REMOVED******REMOVED***/ The popup media to display.
 ***REMOVED******REMOVED***let popupMedia: [PopupMedia]
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ The number of popup media that can be displayed.
+***REMOVED******REMOVED***let displayableMediaCount: Int
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ The width of the view content.
 ***REMOVED******REMOVED***@State private var width: CGFloat = .zero
@@ -89,11 +92,11 @@ struct MediaPopupElementView: View {
 ***REMOVED******REMOVED******REMOVED***/ second and subsequent media to be partially visible, to indicate there is more than one.
 ***REMOVED******REMOVED***var widthScaleFactor: Double {
 ***REMOVED******REMOVED******REMOVED***get {
-***REMOVED******REMOVED******REMOVED******REMOVED***popupMedia.count > 1 ? 0.75 : 1
+***REMOVED******REMOVED******REMOVED******REMOVED***displayableMediaCount > 1 ? 0.75 : 1
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ The size of the image or chart media, not counting descriptive text.
+***REMOVED******REMOVED******REMOVED***/ The size of the image or chart media.
 ***REMOVED******REMOVED***var mediaSize: CGSize {
 ***REMOVED******REMOVED******REMOVED***CGSize(width: width, height: 200)
 ***REMOVED***
