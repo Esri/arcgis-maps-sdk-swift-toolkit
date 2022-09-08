@@ -13,9 +13,13 @@
 
 import SwiftUI
 
+/// The view model for pie charts.
 final class PieChartModel: ObservableObject {
+    /// The slices that make up the pie chart.
     let pieSlices: [PieSlice]
     
+    /// Creates a `PieChartModel`
+    /// - Parameter chartData: The data used for the pie chart.
     init(chartData: [ChartData]) {
         var slices = [PieSlice]()
         var dataTotal: Double = 0
@@ -32,6 +36,7 @@ final class PieChartModel: ObservableObject {
         pieSlices = slices
     }
     
+    /// The pre-defined colors for the pie slices.
     static var sliceColors: [Color] = [
         .mint,
         .teal,
@@ -47,21 +52,36 @@ final class PieChartModel: ObservableObject {
         .brown
     ]
     
+    /// Calculates a slice color for the given slice index.
+    /// - Parameter index: The index of the slice.
+    /// - Returns: The color for the slice at `index`.
     static func color(for index: Int) -> Color {
         // We don't want to just wrap color indices because we don't want
         // two adjacent slices to have the same color.  "extra" will skip the
-        // the first color for the 2nd time through the list, skip the second
-        // color the second time through the list, etc.
+        // the 1st color for the second time through the list, skip the 2nd
+        // color the thrid time through the list, etc., ensuring that we
+        // don't get adjacent colors.
         let extra = index / sliceColors.count
         return sliceColors[(index + extra) % sliceColors.count].opacity(0.75)
     }
 }
 
+/// A single slice of a pie chart.
 class PieSlice: Identifiable {
+    /// The fraction of the whole the slice represents.
     let fraction: Double
+
+    /// The color of the slice.
     let color: Color
+    
+    /// The name of the slice.
     let name: String
     
+    /// Creates a `PieSlice`.
+    /// - Parameters:
+    ///   - fraction: The fraction of the whole the slice represents.
+    ///   - color: The color of the slice.
+    ///   - name: The name of the slice.
     init(fraction: Double, color: Color, name: String) {
         self.fraction = fraction
         self.color = color

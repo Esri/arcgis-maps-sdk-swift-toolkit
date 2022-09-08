@@ -22,8 +22,13 @@ struct ChartMediaView: View {
     /// The size of the media's frame.
     let mediaSize: CGSize
     
+    /// The data to display in the chart.
     let chartData: [ChartData]
     
+    /// Creates a `ChartMediaView`.
+    /// - Parameters:
+    ///   - popupMedia: The popup media to display.
+    ///   - mediaSize: The size of the media's frame.
     init(popupMedia: PopupMedia, mediaSize: CGSize) {
         self.popupMedia = popupMedia
         self.mediaSize = mediaSize
@@ -31,44 +36,59 @@ struct ChartMediaView: View {
     }
     
     /// A Boolean value specifying whether the media should be shown full screen.
-    @State private var showingFullScreen = false
+    @State private var isShowingDetailView = false
     
+    /// The corner radius for the view.
     private let cornerRadius: CGFloat = 8
 
     var body: some View {
-        ZStack {
-            ChartView(popupMedia: popupMedia, data: chartData)
-            VStack {
-                Spacer()
-                PopupMediaFooter(
-                    popupMedia: popupMedia,
-                    mediaSize: mediaSize
-                )
+        if #available(iOS 16, *) {
+            ZStack {
+                ChartView(popupMedia: popupMedia, data: chartData)
+                VStack {
+                    Spacer()
+                    PopupMediaFooter(
+                        popupMedia: popupMedia,
+                        mediaSize: mediaSize
+                    )
+                }
+                RoundedRectangle(cornerRadius: cornerRadius)
+                    .stroke(.gray, lineWidth: 1)
+                    .frame(width: mediaSize.width, height: mediaSize.height)
             }
-            RoundedRectangle(cornerRadius: cornerRadius)
-                .stroke(.gray, lineWidth: 1)
-                .frame(width: mediaSize.width, height: mediaSize.height)
-        }
-        .frame(width: mediaSize.width, height: mediaSize.height)
-        .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
-        .onTapGesture {
-            showingFullScreen = true
-        }
-        .sheet(isPresented: $showingFullScreen) {
-            MediaDetailView(
-                popupMedia: popupMedia,
-                showingFullScreen: $showingFullScreen
-            )
-            .padding()
+            .frame(width: mediaSize.width, height: mediaSize.height)
+            .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
+            .onTapGesture {
+                isShowingDetailView = true
+            }
+            .sheet(isPresented: $isShowingDetailView) {
+                MediaDetailView(
+                    popupMedia: popupMedia,
+                    isShowingDetalView: $isShowingDetailView
+                )
+                .padding()
+            }
         }
     }
 }
 
+@available(iOS 16, *)
+/// A view describing a chart.
 struct ChartView: View {
+    /// The popup media to display.
     let popupMedia: PopupMedia
+    
+    /// The data to display in the chart.
     let data: [ChartData]
+    
+    /// A Boolean value specifying whether the chart is being draw full screen.
     let isFullScreen: Bool
-
+    
+    /// Creates a `ChartView`.
+    /// - Parameters:
+    ///   - popupMedia: The popup media to display.
+    ///   - data: The data to display in the chart.
+    ///   - isFullScreen: Specifies whether the chart is being draw full screen.
     init(popupMedia: PopupMedia, data: [ChartData], isFullScreen: Bool = false) {
         self.popupMedia = popupMedia
         self.data = data

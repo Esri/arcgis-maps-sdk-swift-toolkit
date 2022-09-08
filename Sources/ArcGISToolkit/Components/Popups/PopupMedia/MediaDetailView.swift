@@ -20,14 +20,14 @@ struct MediaDetailView : View {
     let popupMedia: PopupMedia
 
     /// A Boolean value specifying whether the media should be shown full screen.
-    var showingFullScreen: Binding<Bool>
+    var isShowingDetalView: Binding<Bool>
     
     var body: some View {
         VStack {
             HStack {
                 Spacer()
                 Button {
-                    showingFullScreen.wrappedValue = false
+                    isShowingDetalView.wrappedValue = false
                 } label: {
                     Text("Done")
                         .fontWeight(.semibold)
@@ -64,11 +64,15 @@ struct MediaDetailView : View {
                     }
                 }
             case .barChart, .columnChart, .pieChart, .lineChart:
-                ChartView(
-                    popupMedia: popupMedia,
-                    data: ChartData.getChartData(popupMedia: popupMedia),
-                    isFullScreen: true
-                )
+                if #available(iOS 16, *) {
+                    ChartView(
+                        popupMedia: popupMedia,
+                        data: ChartData.getChartData(popupMedia: popupMedia),
+                        isFullScreen: true
+                    )
+                } else {
+                    EmptyView()
+                }
             default:
                 EmptyView()
             }

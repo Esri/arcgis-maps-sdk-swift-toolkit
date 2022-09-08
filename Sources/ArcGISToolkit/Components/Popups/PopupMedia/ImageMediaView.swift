@@ -23,7 +23,7 @@ struct ImageMediaView: View {
     let mediaSize: CGSize
     
     /// A Boolean value specifying whether the media should be shown full screen.
-    @State private var showingFullScreen = false
+    @State private var isShowingDetalView = false
     private let cornerRadius: CGFloat = 8
 
     var body: some View {
@@ -31,7 +31,7 @@ struct ImageMediaView: View {
             if let sourceURL = popupMedia.value?.sourceURL {
                 AsyncImageView(url: sourceURL, contentMode: .fill)
                     .onTapGesture {
-                        showingFullScreen = true
+                        isShowingDetalView = true
                     }
                     .frame(width: mediaSize.width, height: mediaSize.height)
             }
@@ -48,11 +48,11 @@ struct ImageMediaView: View {
         }
         .frame(width: mediaSize.width, height: mediaSize.height)
         .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
-        .sheet(isPresented: $showingFullScreen) {
+        .sheet(isPresented: $isShowingDetalView) {
             if popupMedia.value?.sourceURL != nil {
                 MediaDetailView(
                     popupMedia: popupMedia,
-                    showingFullScreen: $showingFullScreen
+                    isShowingDetalView: $isShowingDetalView
                 )
                 .padding()
             }

@@ -20,12 +20,30 @@ struct MediaPopupElementView: View {
     var popupElement: MediaPopupElement
     
     var body: some View {
-        Divider()
-        PopupElementHeader(
-            title: popupElement.title,
-            description: popupElement.description
-        )
-        PopupMediaView(popupMedia: popupElement.media)
+        if hasDisplayableMedia {
+            Divider()
+            PopupElementHeader(
+                title: popupElement.title,
+                description: popupElement.description
+            )
+            PopupMediaView(popupMedia: popupElement.media)
+        }
+    }
+    
+    /// A Boolean value specifying if there is available media to display.  Available media would
+    /// be image media or chart media when running on iOS 16 or newer.
+    var hasDisplayableMedia: Bool {
+        let media = popupElement.media
+        let imageMedia = media.filter { $0.kind == .image }
+        if imageMedia.count > 0 {
+            // We have image media to display.
+            return true
+        }
+        if #available(iOS 16, *) {
+            // We're on iOS 16 and we have more media than just images.
+            return media.count > imageMedia.count
+        }
+        return false
     }
     
     /// A view displaying an array of `PopupMedia`.
