@@ -35,8 +35,10 @@ struct PieChart: View {
     ///   - chartData: The data to display in the chart.
     ///   - isShowingDetalView: Specifies whether the chart is being drawn in a larger format.
     init(chartData: [ChartData], isShowingDetalView: Bool = false) {
-        showLegend = isShowingDetalView
         _viewModel = ObservedObject(wrappedValue: PieChartModel(chartData: chartData))
+        
+        // Only show the legend if we're being show in a detail view.
+        showLegend = isShowingDetalView
     }
     
     var body: some View {
