@@ -20,12 +20,30 @@ struct MediaPopupElementView: View {
 ***REMOVED***var popupElement: MediaPopupElement
 ***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***Divider()
-***REMOVED******REMOVED***PopupElementHeader(
-***REMOVED******REMOVED******REMOVED***title: popupElement.title,
-***REMOVED******REMOVED******REMOVED***description: popupElement.description
-***REMOVED******REMOVED***)
-***REMOVED******REMOVED***PopupMediaView(popupMedia: popupElement.media)
+***REMOVED******REMOVED***if hasDisplayableMedia {
+***REMOVED******REMOVED******REMOVED***Divider()
+***REMOVED******REMOVED******REMOVED***PopupElementHeader(
+***REMOVED******REMOVED******REMOVED******REMOVED***title: popupElement.title,
+***REMOVED******REMOVED******REMOVED******REMOVED***description: popupElement.description
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***PopupMediaView(popupMedia: popupElement.media)
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value specifying if there is available media to display.  Available media would
+***REMOVED******REMOVED***/ be image media or chart media when running on iOS 16 or newer.
+***REMOVED***var hasDisplayableMedia: Bool {
+***REMOVED******REMOVED***let media = popupElement.media
+***REMOVED******REMOVED***let imageMedia = media.filter { $0.kind == .image ***REMOVED***
+***REMOVED******REMOVED***if imageMedia.count > 0 {
+***REMOVED******REMOVED******REMOVED******REMOVED*** We have image media to display.
+***REMOVED******REMOVED******REMOVED***return true
+***REMOVED***
+***REMOVED******REMOVED***if #available(iOS 16, *) {
+***REMOVED******REMOVED******REMOVED******REMOVED*** We're on iOS 16 and we have more media than just images.
+***REMOVED******REMOVED******REMOVED***return media.count > imageMedia.count
+***REMOVED***
+***REMOVED******REMOVED***return false
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ A view displaying an array of `PopupMedia`.

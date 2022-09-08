@@ -23,7 +23,7 @@ struct ImageMediaView: View {
 ***REMOVED***let mediaSize: CGSize
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value specifying whether the media should be shown full screen.
-***REMOVED***@State private var showingFullScreen = false
+***REMOVED***@State private var isShowingDetalView = false
 ***REMOVED***private let cornerRadius: CGFloat = 8
 
 ***REMOVED***var body: some View {
@@ -31,7 +31,7 @@ struct ImageMediaView: View {
 ***REMOVED******REMOVED******REMOVED***if let sourceURL = popupMedia.value?.sourceURL {
 ***REMOVED******REMOVED******REMOVED******REMOVED***AsyncImageView(url: sourceURL, contentMode: .fill)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onTapGesture {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***showingFullScreen = true
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isShowingDetalView = true
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: mediaSize.width, height: mediaSize.height)
 ***REMOVED******REMOVED***
@@ -48,11 +48,11 @@ struct ImageMediaView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***.frame(width: mediaSize.width, height: mediaSize.height)
 ***REMOVED******REMOVED***.clipShape(RoundedRectangle(cornerRadius: cornerRadius))
-***REMOVED******REMOVED***.sheet(isPresented: $showingFullScreen) {
+***REMOVED******REMOVED***.sheet(isPresented: $isShowingDetalView) {
 ***REMOVED******REMOVED******REMOVED***if popupMedia.value?.sourceURL != nil {
 ***REMOVED******REMOVED******REMOVED******REMOVED***MediaDetailView(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***popupMedia: popupMedia,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***showingFullScreen: $showingFullScreen
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isShowingDetalView: $isShowingDetalView
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding()
 ***REMOVED******REMOVED***

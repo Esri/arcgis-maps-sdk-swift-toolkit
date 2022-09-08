@@ -20,14 +20,14 @@ struct MediaDetailView : View {
 ***REMOVED***let popupMedia: PopupMedia
 
 ***REMOVED******REMOVED***/ A Boolean value specifying whether the media should be shown full screen.
-***REMOVED***var showingFullScreen: Binding<Bool>
+***REMOVED***var isShowingDetalView: Binding<Bool>
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***VStack {
 ***REMOVED******REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***showingFullScreen.wrappedValue = false
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isShowingDetalView.wrappedValue = false
 ***REMOVED******REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Done")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fontWeight(.semibold)
@@ -64,11 +64,15 @@ struct MediaDetailView : View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***case .barChart, .columnChart, .pieChart, .lineChart:
-***REMOVED******REMOVED******REMOVED******REMOVED***ChartView(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***popupMedia: popupMedia,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***data: ChartData.getChartData(popupMedia: popupMedia),
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isFullScreen: true
-***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***if #available(iOS 16, *) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ChartView(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***popupMedia: popupMedia,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***data: ChartData.getChartData(popupMedia: popupMedia),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isFullScreen: true
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***EmptyView()
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***default:
 ***REMOVED******REMOVED******REMOVED******REMOVED***EmptyView()
 ***REMOVED******REMOVED***

@@ -15,28 +15,27 @@
 import Charts
 
 ***REMOVED***/ A view displaying details for popup media.
+@available(iOS 16, *)
 struct LineChart: View {
 ***REMOVED******REMOVED***/ The chart data to display.
 ***REMOVED***let chartData: [ChartData]
-
+***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***if #available(iOS 16, *) {
-***REMOVED******REMOVED******REMOVED***Group {
-***REMOVED******REMOVED******REMOVED******REMOVED***Chart(chartData) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***LineMark(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***x: .value("Field", $0.label),
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***y: .value("Value", $0.value)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***PointMark(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***x: .value("Field", $0.label),
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***y: .value("Value", $0.value)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.chartXAxis {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AxisMarks { _ in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AxisValueLabel(collisionResolution: .greedy, orientation: .verticalReversed)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AxisGridLine()
-***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***Group {
+***REMOVED******REMOVED******REMOVED***Chart(chartData) {
+***REMOVED******REMOVED******REMOVED******REMOVED***LineMark(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***x: .value("Field", $0.label),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***y: .value("Value", $0.value)
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***PointMark(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***x: .value("Field", $0.label),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***y: .value("Value", $0.value)
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.chartXAxis {
+***REMOVED******REMOVED******REMOVED******REMOVED***AxisMarks { _ in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AxisValueLabel(collisionResolution: .greedy, orientation: .verticalReversed)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AxisGridLine()
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***

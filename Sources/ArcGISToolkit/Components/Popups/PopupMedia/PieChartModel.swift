@@ -13,9 +13,13 @@
 
 ***REMOVED***
 
+***REMOVED***/ The view model for pie charts.
 final class PieChartModel: ObservableObject {
+***REMOVED******REMOVED***/ The slices that make up the pie chart.
 ***REMOVED***let pieSlices: [PieSlice]
 ***REMOVED***
+***REMOVED******REMOVED***/ Creates a `PieChartModel`
+***REMOVED******REMOVED***/ - Parameter chartData: The data used for the pie chart.
 ***REMOVED***init(chartData: [ChartData]) {
 ***REMOVED******REMOVED***var slices = [PieSlice]()
 ***REMOVED******REMOVED***var dataTotal: Double = 0
@@ -32,6 +36,7 @@ final class PieChartModel: ObservableObject {
 ***REMOVED******REMOVED***pieSlices = slices
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ The pre-defined colors for the pie slices.
 ***REMOVED***static var sliceColors: [Color] = [
 ***REMOVED******REMOVED***.mint,
 ***REMOVED******REMOVED***.teal,
@@ -47,21 +52,36 @@ final class PieChartModel: ObservableObject {
 ***REMOVED******REMOVED***.brown
 ***REMOVED***]
 ***REMOVED***
+***REMOVED******REMOVED***/ Calculates a slice color for the given slice index.
+***REMOVED******REMOVED***/ - Parameter index: The index of the slice.
+***REMOVED******REMOVED***/ - Returns: The color for the slice at `index`.
 ***REMOVED***static func color(for index: Int) -> Color {
 ***REMOVED******REMOVED******REMOVED*** We don't want to just wrap color indices because we don't want
 ***REMOVED******REMOVED******REMOVED*** two adjacent slices to have the same color.  "extra" will skip the
-***REMOVED******REMOVED******REMOVED*** the first color for the 2nd time through the list, skip the second
-***REMOVED******REMOVED******REMOVED*** color the second time through the list, etc.
+***REMOVED******REMOVED******REMOVED*** the 1st color for the second time through the list, skip the 2nd
+***REMOVED******REMOVED******REMOVED*** color the thrid time through the list, etc., ensuring that we
+***REMOVED******REMOVED******REMOVED*** don't get adjacent colors.
 ***REMOVED******REMOVED***let extra = index / sliceColors.count
 ***REMOVED******REMOVED***return sliceColors[(index + extra) % sliceColors.count].opacity(0.75)
 ***REMOVED***
 ***REMOVED***
 
+***REMOVED***/ A single slice of a pie chart.
 class PieSlice: Identifiable {
+***REMOVED******REMOVED***/ The fraction of the whole the slice represents.
 ***REMOVED***let fraction: Double
+
+***REMOVED******REMOVED***/ The color of the slice.
 ***REMOVED***let color: Color
+***REMOVED***
+***REMOVED******REMOVED***/ The name of the slice.
 ***REMOVED***let name: String
 ***REMOVED***
+***REMOVED******REMOVED***/ Creates a `PieSlice`.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - fraction: The fraction of the whole the slice represents.
+***REMOVED******REMOVED***/   - color: The color of the slice.
+***REMOVED******REMOVED***/   - name: The name of the slice.
 ***REMOVED***init(fraction: Double, color: Color, name: String) {
 ***REMOVED******REMOVED***self.fraction = fraction
 ***REMOVED******REMOVED***self.color = color
