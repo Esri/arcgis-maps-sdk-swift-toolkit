@@ -15,28 +15,27 @@ import SwiftUI
 import Charts
 
 /// A view displaying details for popup media.
+@available(iOS 16, *)
 struct LineChart: View {
     /// The chart data to display.
     let chartData: [ChartData]
-
+    
     var body: some View {
-        if #available(iOS 16, *) {
-            Group {
-                Chart(chartData) {
-                    LineMark(
-                        x: .value("Field", $0.label),
-                        y: .value("Value", $0.value)
-                    )
-                    PointMark(
-                        x: .value("Field", $0.label),
-                        y: .value("Value", $0.value)
-                    )
-                }
-                .chartXAxis {
-                    AxisMarks { _ in
-                        AxisValueLabel(collisionResolution: .greedy, orientation: .verticalReversed)
-                        AxisGridLine()
-                    }
+        Group {
+            Chart(chartData) {
+                LineMark(
+                    x: .value("Field", $0.label),
+                    y: .value("Value", $0.value)
+                )
+                PointMark(
+                    x: .value("Field", $0.label),
+                    y: .value("Value", $0.value)
+                )
+            }
+            .chartXAxis {
+                AxisMarks { _ in
+                    AxisValueLabel(collisionResolution: .greedy, orientation: .verticalReversed)
+                    AxisGridLine()
                 }
             }
         }

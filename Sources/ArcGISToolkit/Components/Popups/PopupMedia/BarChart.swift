@@ -15,33 +15,35 @@ import SwiftUI
 import Charts
 
 /// A view displaying details for popup media.
+@available(iOS 16, *)
 struct BarChart: View {
     /// The chart data to display.
     let chartData: [ChartData]
     
+    /// A Boolean value specifying whether the chart is a "column" chart, with vertical bars.  If it's
+    /// not a "column" chart, then the bars are horizontal.
     let isColumnChart: Bool
     
     var body: some View {
-        if #available(iOS 16, *) {
-            Group {
-                Chart(chartData) {
-                    if isColumnChart {
-                        // reverse x/y values
-                        BarMark(
-                            x: .value("Field", $0.label),
-                            y: .value("Value", $0.value)
-                        )
-                    } else {
-                        BarMark(
-                            x: .value("Value", $0.value),
-                            y: .value("Field", $0.label)
-                        )
-                    }
+        Group {
+            Chart(chartData) {
+                if isColumnChart {
+                    // Vertical bars.
+                    BarMark(
+                        x: .value("Field", $0.label),
+                        y: .value("Value", $0.value)
+                    )
+                } else {
+                    // Horizontal bars.
+                    BarMark(
+                        x: .value("Value", $0.value),
+                        y: .value("Field", $0.label)
+                    )
                 }
-                .chartXAxis {
-                    AxisMarks { _ in
-                        AxisValueLabel(collisionResolution: .greedy, orientation: .verticalReversed)
-                    }
+            }
+            .chartXAxis {
+                AxisMarks { _ in
+                    AxisValueLabel(collisionResolution: .greedy, orientation: .verticalReversed)
                 }
             }
         }
