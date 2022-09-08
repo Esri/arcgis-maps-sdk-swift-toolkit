@@ -20,6 +20,20 @@ struct LineChart: View {
     /// The chart data to display.
     let chartData: [ChartData]
     
+    /// A Boolean value determining whether to show the x axis labels for the chart.
+    let showXAxisLabels: Bool
+
+    /// Creates a `BarChart`.
+    /// - Parameters:
+    ///   - chartData: The data to display in the chart.
+    ///   - isShowingDetalView: Specifies whether the chart is being drawn in a larger format.
+    init(chartData: [ChartData], isShowingDetalView: Bool = false) {
+        self.chartData = chartData
+        
+        // Only show the x axis labels if we're being show in a detail view.
+        showXAxisLabels = isShowingDetalView
+    }
+
     var body: some View {
         Group {
             Chart(chartData) {
@@ -34,7 +48,12 @@ struct LineChart: View {
             }
             .chartXAxis {
                 AxisMarks { _ in
-                    AxisValueLabel(collisionResolution: .greedy, orientation: .verticalReversed)
+                    if showXAxisLabels {
+                        AxisValueLabel(
+                            collisionResolution: .greedy,
+                            orientation: .verticalReversed
+                        )
+                    }
                     AxisGridLine()
                 }
             }

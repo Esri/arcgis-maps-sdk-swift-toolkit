@@ -98,11 +98,21 @@ struct ChartView: View {
     var body: some View {
         switch popupMedia.kind {
         case .barChart, .columnChart:
-            BarChart(chartData: data, isColumnChart: (popupMedia.kind == .columnChart))
+            BarChart(
+                chartData: data,
+                isColumnChart: (popupMedia.kind == .columnChart),
+                isShowingDetalView: isShowingDetalView
+            )
         case .pieChart:
-            PieChart(chartData: data, isShowingDetalView: isShowingDetalView)
+            PieChart(
+                chartData: data,
+                isShowingDetalView: isShowingDetalView
+            )
         case .lineChart:
-            LineChart(chartData: data)
+            LineChart(
+                chartData: data,
+                isShowingDetalView: isShowingDetalView
+            )
         default:
             EmptyView()
         }
