@@ -47,6 +47,9 @@ struct PieChart: View {
         }
     }
     
+    /// Creates a legend view for a pie chart.
+    /// - Parameter slices: The slices that make up the pie chart.
+    /// - Returns: A view representing a pie chart legend.
     @ViewBuilder func makeLegend(slices: [PieSlice]) -> some View {
         LazyVGrid(
             columns: Array(
@@ -69,9 +72,13 @@ struct PieChart: View {
     }
 }
 
+/// A view representing a pie chart.
 struct Pie: View {
+    /// The view model for the pie chart.
     @ObservedObject private var viewModel: PieChartModel
-
+    
+    /// Creates a Pie view.
+    /// - Parameter viewModel: The view model for the pie chart.
     init(viewModel: PieChartModel) {
         self.viewModel = viewModel
     }

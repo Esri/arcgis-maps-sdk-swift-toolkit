@@ -67,10 +67,10 @@ final class PieChartModel: ObservableObject {
 }
 
 /// A single slice of a pie chart.
-class PieSlice: Identifiable {
+final class PieSlice: Identifiable {
     /// The fraction of the whole the slice represents.
     let fraction: Double
-
+    
     /// The color of the slice.
     let color: Color
     
