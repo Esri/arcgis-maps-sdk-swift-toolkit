@@ -36,10 +36,5 @@ struct PopupElementHeader: View {
             }
         }
         .padding([.bottom], 4)
-        
-        if !title.isEmpty ||
-            !description.isEmpty {
-            Divider()
-        }
     }
 }
