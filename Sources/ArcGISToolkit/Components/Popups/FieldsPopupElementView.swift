@@ -40,13 +40,13 @@ struct FieldsPopupElementView: View {
 ***REMOVED******REMOVED******REMOVED***FieldsList(fields: displayFields)
 ***REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED***VStack(alignment: .leading) {
-***REMOVED******REMOVED******REMOVED******REMOVED***Divider()
 ***REMOVED******REMOVED******REMOVED******REMOVED***PopupElementHeader(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title: popupElement.displayTitle,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***description: popupElement.description
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***Divider()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ A view displaying the labels and values.

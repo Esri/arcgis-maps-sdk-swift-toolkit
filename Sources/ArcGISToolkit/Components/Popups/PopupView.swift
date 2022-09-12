@@ -38,6 +38,7 @@ public struct PopupView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Text(popup.title)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.title)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fontWeight(.bold)
+***REMOVED******REMOVED******REMOVED******REMOVED***Divider()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***Group {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if let isPopupEvaluated = isPopupEvaluated {
