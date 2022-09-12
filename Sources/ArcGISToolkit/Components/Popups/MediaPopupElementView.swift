@@ -56,7 +56,7 @@ struct MediaPopupElementView: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ The width of the view content.
 ***REMOVED******REMOVED***@State private var width: CGFloat = .zero
-
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var body: some View {
 ***REMOVED******REMOVED******REMOVED***ScrollView(.horizontal) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***HStack(alignment: .top, spacing: 8) {

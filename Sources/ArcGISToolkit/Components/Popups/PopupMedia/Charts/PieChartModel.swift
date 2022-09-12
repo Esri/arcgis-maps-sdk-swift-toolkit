@@ -59,7 +59,7 @@ final class PieChartModel: ObservableObject {
 ***REMOVED******REMOVED******REMOVED*** We don't want to just wrap color indices because we don't want
 ***REMOVED******REMOVED******REMOVED*** two adjacent slices to have the same color.  "extra" will skip the
 ***REMOVED******REMOVED******REMOVED*** the 1st color for the second time through the list, skip the 2nd
-***REMOVED******REMOVED******REMOVED*** color the thrid time through the list, etc., ensuring that we
+***REMOVED******REMOVED******REMOVED*** color the third time through the list, etc., ensuring that we
 ***REMOVED******REMOVED******REMOVED*** don't get adjacent colors.
 ***REMOVED******REMOVED***let extra = index / sliceColors.count
 ***REMOVED******REMOVED***return sliceColors[(index + extra) % sliceColors.count].opacity(0.75)

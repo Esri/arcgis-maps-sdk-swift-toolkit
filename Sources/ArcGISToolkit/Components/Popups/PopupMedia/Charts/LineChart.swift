@@ -22,7 +22,7 @@ struct LineChart: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value determining whether to show the x axis labels for the chart.
 ***REMOVED***let showXAxisLabels: Bool
-
+***REMOVED***
 ***REMOVED******REMOVED***/ Creates a `BarChart`.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - chartData: The data to display in the chart.
@@ -33,7 +33,7 @@ struct LineChart: View {
 ***REMOVED******REMOVED******REMOVED*** Only show the x axis labels if we're being show in a detail view.
 ***REMOVED******REMOVED***showXAxisLabels = isShowingDetalView
 ***REMOVED***
-
+***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***Group {
 ***REMOVED******REMOVED******REMOVED***Chart(chartData) {

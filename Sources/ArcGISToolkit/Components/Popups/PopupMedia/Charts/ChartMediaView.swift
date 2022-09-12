@@ -40,7 +40,7 @@ struct ChartMediaView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value specifying whether the media should be drawn in a larger format.
 ***REMOVED***@State private var isShowingDetailView = false
-
+***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***if #available(iOS 16, *) {
 ***REMOVED******REMOVED******REMOVED***ZStack {

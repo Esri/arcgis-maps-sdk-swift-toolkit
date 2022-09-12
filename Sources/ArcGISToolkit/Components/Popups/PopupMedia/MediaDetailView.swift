@@ -18,7 +18,7 @@
 struct MediaDetailView : View {
 ***REMOVED******REMOVED***/ The popup media to display.
 ***REMOVED***let popupMedia: PopupMedia
-
+***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value specifying whether the media should be drawn in a larger format.
 ***REMOVED***var isShowingDetalView: Binding<Bool>
 ***REMOVED***

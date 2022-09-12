@@ -15,7 +15,9 @@
 ***REMOVED***
 
 internal struct ChartData: Identifiable {
+***REMOVED******REMOVED***/ A label for the data.
 ***REMOVED***var label: String
+***REMOVED******REMOVED***/ The value of the data.
 ***REMOVED***var value: Double
 ***REMOVED***var id = UUID()
 ***REMOVED***
