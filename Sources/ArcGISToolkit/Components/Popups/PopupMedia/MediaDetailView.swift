@@ -20,14 +20,14 @@ struct MediaDetailView : View {
     let popupMedia: PopupMedia
     
     /// A Boolean value specifying whether the media should be drawn in a larger format.
-    var isShowingDetalView: Binding<Bool>
+    var isShowingDetailView: Binding<Bool>
     
     var body: some View {
         VStack {
             HStack {
                 Spacer()
                 Button {
-                    isShowingDetalView.wrappedValue = false
+                    isShowingDetailView.wrappedValue = false
                 } label: {
                     Text("Done")
                         .fontWeight(.semibold)
@@ -68,7 +68,7 @@ struct MediaDetailView : View {
                     ChartView(
                         popupMedia: popupMedia,
                         data: ChartData.getChartData(from: popupMedia),
-                        isShowingDetalView: true
+                        isShowingDetailView: true
                     )
                 } else {
                     EmptyView()

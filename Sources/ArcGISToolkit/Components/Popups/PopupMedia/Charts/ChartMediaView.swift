@@ -64,7 +64,7 @@ struct ChartMediaView: View {
             .sheet(isPresented: $isShowingDetailView) {
                 MediaDetailView(
                     popupMedia: popupMedia,
-                    isShowingDetalView: $isShowingDetailView
+                    isShowingDetailView: $isShowingDetailView
                 )
                 .padding()
             }
@@ -82,17 +82,17 @@ struct ChartView: View {
     let data: [ChartData]
     
     /// A Boolean value specifying whether the chart is being drawn in a larger format.
-    let isShowingDetalView: Bool
+    let isShowingDetailView: Bool
     
     /// Creates a `ChartView`.
     /// - Parameters:
     ///   - popupMedia: The popup media to display.
     ///   - data: The data to display in the chart.
-    ///   - isShowingDetalView: Specifies whether the chart is being drawn in a larger format.
-    init(popupMedia: PopupMedia, data: [ChartData], isShowingDetalView: Bool = false) {
+    ///   - isShowingDetailView: Specifies whether the chart is being drawn in a larger format.
+    init(popupMedia: PopupMedia, data: [ChartData], isShowingDetailView: Bool = false) {
         self.popupMedia = popupMedia
         self.data = data
-        self.isShowingDetalView = isShowingDetalView
+        self.isShowingDetailView = isShowingDetailView
     }
     
     var body: some View {
@@ -101,17 +101,17 @@ struct ChartView: View {
             BarChart(
                 chartData: data,
                 isColumnChart: (popupMedia.kind == .columnChart),
-                isShowingDetalView: isShowingDetalView
+                isShowingDetailView: isShowingDetailView
             )
         case .pieChart:
             PieChart(
                 chartData: data,
-                isShowingDetalView: isShowingDetalView
+                isShowingDetailView: isShowingDetailView
             )
         case .lineChart:
             LineChart(
                 chartData: data,
-                isShowingDetalView: isShowingDetalView
+                isShowingDetailView: isShowingDetailView
             )
         default:
             EmptyView()

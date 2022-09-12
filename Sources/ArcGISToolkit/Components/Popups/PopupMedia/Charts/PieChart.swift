@@ -33,12 +33,12 @@ struct PieChart: View {
     /// Creates a `PieChart`.
     /// - Parameters:
     ///   - chartData: The data to display in the chart.
-    ///   - isShowingDetalView: Specifies whether the chart is being drawn in a larger format.
-    init(chartData: [ChartData], isShowingDetalView: Bool = false) {
+    ///   - isShowingDetailView: Specifies whether the chart is being drawn in a larger format.
+    init(chartData: [ChartData], isShowingDetailView: Bool = false) {
         _viewModel = ObservedObject(wrappedValue: PieChartModel(chartData: chartData))
         
         // Only show the legend if we're being show in a detail view.
-        showLegend = isShowingDetalView
+        showLegend = isShowingDetailView
     }
     
     var body: some View {

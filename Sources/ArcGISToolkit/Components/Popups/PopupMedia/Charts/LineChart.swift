@@ -26,12 +26,12 @@ struct LineChart: View {
     /// Creates a `BarChart`.
     /// - Parameters:
     ///   - chartData: The data to display in the chart.
-    ///   - isShowingDetalView: Specifies whether the chart is being drawn in a larger format.
-    init(chartData: [ChartData], isShowingDetalView: Bool = false) {
+    ///   - isShowingDetailView: Specifies whether the chart is being drawn in a larger format.
+    init(chartData: [ChartData], isShowingDetailView: Bool = false) {
         self.chartData = chartData
         
         // Only show the x axis labels if we're being show in a detail view.
-        showXAxisLabels = isShowingDetalView
+        showXAxisLabels = isShowingDetailView
     }
     
     var body: some View {
