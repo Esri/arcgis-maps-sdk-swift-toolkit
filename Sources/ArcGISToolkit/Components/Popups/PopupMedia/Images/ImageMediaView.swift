@@ -52,7 +52,7 @@ struct ImageMediaView: View {
             .sheet(isPresented: $isShowingDetailView) {
                 MediaDetailView(
                     popupMedia: popupMedia,
-                    isShowingDetalView: $isShowingDetailView
+                    isShowingDetailView: $isShowingDetailView
                 )
                 .padding()
             }
