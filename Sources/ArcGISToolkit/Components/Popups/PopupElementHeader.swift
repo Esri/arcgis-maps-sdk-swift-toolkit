@@ -36,10 +36,5 @@ struct PopupElementHeader: View {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.padding([.bottom], 4)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***if !title.isEmpty ||
-***REMOVED******REMOVED******REMOVED***!description.isEmpty {
-***REMOVED******REMOVED******REMOVED***Divider()
-***REMOVED***
 ***REMOVED***
 ***REMOVED***
