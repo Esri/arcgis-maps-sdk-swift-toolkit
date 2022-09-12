@@ -31,13 +31,13 @@ struct BarChart: View {
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - chartData: The data to display in the chart.
 ***REMOVED******REMOVED***/   - isColumnChart: Specifying whether the chart is a "column" chart, with vertical bars.
-***REMOVED******REMOVED***/   - isShowingDetalView: Specifies whether the chart is being drawn in a larger format.
-***REMOVED***init(chartData: [ChartData], isColumnChart: Bool, isShowingDetalView: Bool = false) {
+***REMOVED******REMOVED***/   - isShowingDetailView: Specifies whether the chart is being drawn in a larger format.
+***REMOVED***init(chartData: [ChartData], isColumnChart: Bool, isShowingDetailView: Bool = false) {
 ***REMOVED******REMOVED***self.chartData = chartData
 ***REMOVED******REMOVED***self.isColumnChart = isColumnChart
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Only show the x axis labels if we're being show in a detail view.
-***REMOVED******REMOVED***showXAxisLabels = isShowingDetalView
+***REMOVED******REMOVED***showXAxisLabels = isShowingDetailView
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var body: some View {

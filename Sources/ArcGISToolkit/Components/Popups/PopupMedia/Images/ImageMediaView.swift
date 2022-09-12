@@ -52,7 +52,7 @@ struct ImageMediaView: View {
 ***REMOVED******REMOVED******REMOVED***.sheet(isPresented: $isShowingDetailView) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***MediaDetailView(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***popupMedia: popupMedia,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isShowingDetalView: $isShowingDetailView
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isShowingDetailView: $isShowingDetailView
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding()
 ***REMOVED******REMOVED***

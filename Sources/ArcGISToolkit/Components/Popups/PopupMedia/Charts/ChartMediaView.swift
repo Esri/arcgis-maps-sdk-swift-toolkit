@@ -64,7 +64,7 @@ struct ChartMediaView: View {
 ***REMOVED******REMOVED******REMOVED***.sheet(isPresented: $isShowingDetailView) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***MediaDetailView(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***popupMedia: popupMedia,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isShowingDetalView: $isShowingDetailView
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isShowingDetailView: $isShowingDetailView
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding()
 ***REMOVED******REMOVED***
@@ -82,17 +82,17 @@ struct ChartView: View {
 ***REMOVED***let data: [ChartData]
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value specifying whether the chart is being drawn in a larger format.
-***REMOVED***let isShowingDetalView: Bool
+***REMOVED***let isShowingDetailView: Bool
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a `ChartView`.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - popupMedia: The popup media to display.
 ***REMOVED******REMOVED***/   - data: The data to display in the chart.
-***REMOVED******REMOVED***/   - isShowingDetalView: Specifies whether the chart is being drawn in a larger format.
-***REMOVED***init(popupMedia: PopupMedia, data: [ChartData], isShowingDetalView: Bool = false) {
+***REMOVED******REMOVED***/   - isShowingDetailView: Specifies whether the chart is being drawn in a larger format.
+***REMOVED***init(popupMedia: PopupMedia, data: [ChartData], isShowingDetailView: Bool = false) {
 ***REMOVED******REMOVED***self.popupMedia = popupMedia
 ***REMOVED******REMOVED***self.data = data
-***REMOVED******REMOVED***self.isShowingDetalView = isShowingDetalView
+***REMOVED******REMOVED***self.isShowingDetailView = isShowingDetailView
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var body: some View {
@@ -101,17 +101,17 @@ struct ChartView: View {
 ***REMOVED******REMOVED******REMOVED***BarChart(
 ***REMOVED******REMOVED******REMOVED******REMOVED***chartData: data,
 ***REMOVED******REMOVED******REMOVED******REMOVED***isColumnChart: (popupMedia.kind == .columnChart),
-***REMOVED******REMOVED******REMOVED******REMOVED***isShowingDetalView: isShowingDetalView
+***REMOVED******REMOVED******REMOVED******REMOVED***isShowingDetailView: isShowingDetailView
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***case .pieChart:
 ***REMOVED******REMOVED******REMOVED***PieChart(
 ***REMOVED******REMOVED******REMOVED******REMOVED***chartData: data,
-***REMOVED******REMOVED******REMOVED******REMOVED***isShowingDetalView: isShowingDetalView
+***REMOVED******REMOVED******REMOVED******REMOVED***isShowingDetailView: isShowingDetailView
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***case .lineChart:
 ***REMOVED******REMOVED******REMOVED***LineChart(
 ***REMOVED******REMOVED******REMOVED******REMOVED***chartData: data,
-***REMOVED******REMOVED******REMOVED******REMOVED***isShowingDetalView: isShowingDetalView
+***REMOVED******REMOVED******REMOVED******REMOVED***isShowingDetailView: isShowingDetailView
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***default:
 ***REMOVED******REMOVED******REMOVED***EmptyView()

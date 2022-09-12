@@ -20,14 +20,14 @@ struct MediaDetailView : View {
 ***REMOVED***let popupMedia: PopupMedia
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value specifying whether the media should be drawn in a larger format.
-***REMOVED***var isShowingDetalView: Binding<Bool>
+***REMOVED***var isShowingDetailView: Binding<Bool>
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***VStack {
 ***REMOVED******REMOVED******REMOVED***HStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isShowingDetalView.wrappedValue = false
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isShowingDetailView.wrappedValue = false
 ***REMOVED******REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Done")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fontWeight(.semibold)
@@ -68,7 +68,7 @@ struct MediaDetailView : View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ChartView(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***popupMedia: popupMedia,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***data: ChartData.getChartData(from: popupMedia),
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isShowingDetalView: true
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isShowingDetailView: true
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***EmptyView()
