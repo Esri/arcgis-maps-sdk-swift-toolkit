@@ -59,7 +59,7 @@ final class PieChartModel: ObservableObject {
         // We don't want to just wrap color indices because we don't want
         // two adjacent slices to have the same color.  "extra" will skip the
         // the 1st color for the second time through the list, skip the 2nd
-        // color the thrid time through the list, etc., ensuring that we
+        // color the third time through the list, etc., ensuring that we
         // don't get adjacent colors.
         let extra = index / sliceColors.count
         return sliceColors[(index + extra) % sliceColors.count].opacity(0.75)

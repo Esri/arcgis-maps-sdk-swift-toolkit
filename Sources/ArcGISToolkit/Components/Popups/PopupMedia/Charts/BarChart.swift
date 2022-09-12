@@ -39,7 +39,7 @@ struct BarChart: View {
         // Only show the x axis labels if we're being show in a detail view.
         showXAxisLabels = isShowingDetalView
     }
-
+    
     var body: some View {
         Group {
             Chart(chartData) {

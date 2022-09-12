@@ -40,7 +40,7 @@ struct ChartMediaView: View {
     
     /// A Boolean value specifying whether the media should be drawn in a larger format.
     @State private var isShowingDetailView = false
-
+    
     var body: some View {
         if #available(iOS 16, *) {
             ZStack {
