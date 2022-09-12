@@ -14,13 +14,18 @@
 import SwiftUI
 import ArcGIS
 
-internal struct ChartData: Identifiable {
+/// Data for a chart, representing a label and value pair.
+struct ChartData: Identifiable {
     /// A label for the data.
     var label: String
     /// The value of the data.
     var value: Double
     var id = UUID()
     
+    /// Creates a `ChartData`.
+    /// - Parameters:
+    ///   - label: The label for the data.
+    ///   - value: The value of the data.
     init(label: String, value: Any) {
         self.label = label
         if let int32 = value as? Int32 {
@@ -36,6 +41,9 @@ internal struct ChartData: Identifiable {
         }
     }
     
+    /// Gets the chart data for a `PopupMedia`.
+    /// - Parameter popupMedia: The popup media to get the data for.
+    /// - Returns: The array of chart data for the popup media.
     static func getChartData(from popupMedia: PopupMedia) -> [ChartData] {
         guard let labels = popupMedia.value?.labels,
               let data = popupMedia.value?.data else { return [] }
