@@ -68,13 +68,13 @@ struct AttachmentsPopupElementView: View {
                     }
                 } label: {
                     VStack(alignment: .leading) {
-                        Divider()
                         PopupElementHeader(
                             title: popupElement.displayTitle,
                             description: popupElement.description
                         )
                     }
                 }
+                Divider()
             }
         }
         .task {

@@ -40,13 +40,13 @@ struct FieldsPopupElementView: View {
             FieldsList(fields: displayFields)
         } label: {
             VStack(alignment: .leading) {
-                Divider()
                 PopupElementHeader(
                     title: popupElement.displayTitle,
                     description: popupElement.description
                 )
             }
         }
+        Divider()
     }
     
     /// A view displaying the labels and values.
