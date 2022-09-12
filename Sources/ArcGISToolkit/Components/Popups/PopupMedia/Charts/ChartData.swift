@@ -14,13 +14,18 @@
 ***REMOVED***
 ***REMOVED***
 
-internal struct ChartData: Identifiable {
+***REMOVED***/ Data for a chart, representing a label and value pair.
+struct ChartData: Identifiable {
 ***REMOVED******REMOVED***/ A label for the data.
 ***REMOVED***var label: String
 ***REMOVED******REMOVED***/ The value of the data.
 ***REMOVED***var value: Double
 ***REMOVED***var id = UUID()
 ***REMOVED***
+***REMOVED******REMOVED***/ Creates a `ChartData`.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - label: The label for the data.
+***REMOVED******REMOVED***/   - value: The value of the data.
 ***REMOVED***init(label: String, value: Any) {
 ***REMOVED******REMOVED***self.label = label
 ***REMOVED******REMOVED***if let int32 = value as? Int32 {
@@ -36,6 +41,9 @@ internal struct ChartData: Identifiable {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ Gets the chart data for a `PopupMedia`.
+***REMOVED******REMOVED***/ - Parameter popupMedia: The popup media to get the data for.
+***REMOVED******REMOVED***/ - Returns: The array of chart data for the popup media.
 ***REMOVED***static func getChartData(from popupMedia: PopupMedia) -> [ChartData] {
 ***REMOVED******REMOVED***guard let labels = popupMedia.value?.labels,
 ***REMOVED******REMOVED******REMOVED***  let data = popupMedia.value?.data else { return [] ***REMOVED***
