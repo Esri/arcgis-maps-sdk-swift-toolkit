@@ -22,7 +22,7 @@ struct LineChart: View {
     
     /// A Boolean value determining whether to show the x axis labels for the chart.
     let showXAxisLabels: Bool
-
+    
     /// Creates a `BarChart`.
     /// - Parameters:
     ///   - chartData: The data to display in the chart.
@@ -33,7 +33,7 @@ struct LineChart: View {
         // Only show the x axis labels if we're being show in a detail view.
         showXAxisLabels = isShowingDetalView
     }
-
+    
     var body: some View {
         Group {
             Chart(chartData) {

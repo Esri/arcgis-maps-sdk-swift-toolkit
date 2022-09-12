@@ -15,7 +15,9 @@ import SwiftUI
 import ArcGIS
 
 internal struct ChartData: Identifiable {
+    /// A label for the data.
     var label: String
+    /// The value of the data.
     var value: Double
     var id = UUID()
     

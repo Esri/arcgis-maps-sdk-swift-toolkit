@@ -18,7 +18,7 @@ import ArcGIS
 struct MediaDetailView : View {
     /// The popup media to display.
     let popupMedia: PopupMedia
-
+    
     /// A Boolean value specifying whether the media should be drawn in a larger format.
     var isShowingDetalView: Binding<Bool>
     
