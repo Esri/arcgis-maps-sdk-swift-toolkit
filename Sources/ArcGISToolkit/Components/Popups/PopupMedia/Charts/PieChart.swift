@@ -109,7 +109,7 @@ struct Pie: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***startAngle = endAngle
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***path.fill(slice.color)
-***REMOVED******REMOVED******REMOVED******REMOVED***path.stroke(.gray, lineWidth: 1)
+***REMOVED******REMOVED******REMOVED******REMOVED***path.stroke(.gray, lineWidth: 0.5)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
