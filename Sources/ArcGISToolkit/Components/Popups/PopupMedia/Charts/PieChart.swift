@@ -109,7 +109,7 @@ struct Pie: View {
                     startAngle = endAngle
                 }
                 path.fill(slice.color)
-                path.stroke(.gray, lineWidth: 1)
+                path.stroke(.gray, lineWidth: 0.5)
             }
         }
     }
