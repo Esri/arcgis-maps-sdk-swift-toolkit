@@ -20,7 +20,7 @@ struct BarChart: View {
     /// The chart data to display.
     let chartData: [ChartData]
     
-    /// A Boolean value specifying whether the chart is a "column" chart, with vertical bars.  If it's
+    /// A Boolean value specifying whether the chart is a "column" chart, with vertical bars. If it's
     /// not a "column" chart, then the bars are horizontal.
     let isColumnChart: Bool
     
@@ -36,7 +36,7 @@ struct BarChart: View {
         self.chartData = chartData
         self.isColumnChart = isColumnChart
         
-        // Only show the x axis labels if we're being show in a detail view.
+        // Only show the x axis labels if we're being shown in a detail view.
         showXAxisLabels = isShowingDetailView
     }
     
