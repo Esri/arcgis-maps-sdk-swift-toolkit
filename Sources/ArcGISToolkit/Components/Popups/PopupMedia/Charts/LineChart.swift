@@ -30,7 +30,7 @@ struct LineChart: View {
 ***REMOVED***init(chartData: [ChartData], isShowingDetailView: Bool = false) {
 ***REMOVED******REMOVED***self.chartData = chartData
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Only show the x axis labels if we're being show in a detail view.
+***REMOVED******REMOVED******REMOVED*** Only show the x axis labels if we're being shown in a detail view.
 ***REMOVED******REMOVED***showXAxisLabels = isShowingDetailView
 ***REMOVED***
 ***REMOVED***

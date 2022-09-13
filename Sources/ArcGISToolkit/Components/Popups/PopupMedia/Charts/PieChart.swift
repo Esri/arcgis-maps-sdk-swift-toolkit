@@ -37,7 +37,7 @@ struct PieChart: View {
 ***REMOVED***init(chartData: [ChartData], isShowingDetailView: Bool = false) {
 ***REMOVED******REMOVED***_viewModel = ObservedObject(wrappedValue: PieChartModel(chartData: chartData))
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Only show the legend if we're being show in a detail view.
+***REMOVED******REMOVED******REMOVED*** Only show the legend if we're being shown in a detail view.
 ***REMOVED******REMOVED***showLegend = isShowingDetailView
 ***REMOVED***
 ***REMOVED***
