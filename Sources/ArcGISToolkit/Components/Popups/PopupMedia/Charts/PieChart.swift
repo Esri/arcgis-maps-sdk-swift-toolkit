@@ -37,7 +37,7 @@ struct PieChart: View {
     init(chartData: [ChartData], isShowingDetailView: Bool = false) {
         _viewModel = ObservedObject(wrappedValue: PieChartModel(chartData: chartData))
         
-        // Only show the legend if we're being show in a detail view.
+        // Only show the legend if we're being shown in a detail view.
         showLegend = isShowingDetailView
     }
     
