@@ -57,7 +57,7 @@ final class PieChartModel: ObservableObject {
     /// - Returns: The color for the slice at `index`.
     static func color(for index: Int) -> Color {
         // We don't want to just wrap color indices because we don't want
-        // two adjacent slices to have the same color.  "extra" will skip the
+        // two adjacent slices to have the same color. "extra" will skip the
         // the 1st color for the second time through the list, skip the 2nd
         // color the third time through the list, etc., ensuring that we
         // don't get adjacent colors.

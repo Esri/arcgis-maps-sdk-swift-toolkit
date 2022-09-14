@@ -30,7 +30,7 @@ struct LineChart: View {
     init(chartData: [ChartData], isShowingDetailView: Bool = false) {
         self.chartData = chartData
         
-        // Only show the x axis labels if we're being show in a detail view.
+        // Only show the x axis labels if we're being shown in a detail view.
         showXAxisLabels = isShowingDetailView
     }
     

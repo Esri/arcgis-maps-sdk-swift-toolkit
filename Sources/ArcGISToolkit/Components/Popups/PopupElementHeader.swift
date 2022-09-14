@@ -16,8 +16,8 @@ import ArcGIS
 
 /// A view displaying a title and description of a `PopupElement`.
 struct PopupElementHeader: View {
-    var title: String
-    var description: String
+    let title: String
+    let description: String
     
     var body: some View {
         VStack(alignment: .leading) {

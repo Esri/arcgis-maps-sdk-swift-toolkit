@@ -17,10 +17,10 @@ import ArcGIS
 /// Data for a chart, representing a label and value pair.
 struct ChartData: Identifiable {
     /// A label for the data.
-    var label: String
+    let label: String
     /// The value of the data.
-    var value: Double
-    var id = UUID()
+    let value: Double
+    let id = UUID()
     
     /// Creates a `ChartData`.
     /// - Parameters:
