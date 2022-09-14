@@ -37,7 +37,7 @@ struct PieChart: View {
 ***REMOVED***init(chartData: [ChartData], isShowingDetailView: Bool = false) {
 ***REMOVED******REMOVED***_viewModel = ObservedObject(wrappedValue: PieChartModel(chartData: chartData))
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Only show the legend if we're being show in a detail view.
+***REMOVED******REMOVED******REMOVED*** Only show the legend if we're being shown in a detail view.
 ***REMOVED******REMOVED***showLegend = isShowingDetailView
 ***REMOVED***
 ***REMOVED***
@@ -109,7 +109,7 @@ struct Pie: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***startAngle = endAngle
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***path.fill(slice.color)
-***REMOVED******REMOVED******REMOVED******REMOVED***path.stroke(.gray, lineWidth: 1)
+***REMOVED******REMOVED******REMOVED******REMOVED***path.stroke(.gray, lineWidth: 0.5)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***

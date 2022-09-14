@@ -17,10 +17,10 @@
 ***REMOVED***/ Data for a chart, representing a label and value pair.
 struct ChartData: Identifiable {
 ***REMOVED******REMOVED***/ A label for the data.
-***REMOVED***var label: String
+***REMOVED***let label: String
 ***REMOVED******REMOVED***/ The value of the data.
-***REMOVED***var value: Double
-***REMOVED***var id = UUID()
+***REMOVED***let value: Double
+***REMOVED***let id = UUID()
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a `ChartData`.
 ***REMOVED******REMOVED***/ - Parameters:
