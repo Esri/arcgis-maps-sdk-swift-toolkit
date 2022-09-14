@@ -16,8 +16,8 @@
 
 ***REMOVED***/ A view displaying a title and description of a `PopupElement`.
 struct PopupElementHeader: View {
-***REMOVED***var title: String
-***REMOVED***var description: String
+***REMOVED***let title: String
+***REMOVED***let description: String
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***VStack(alignment: .leading) {
@@ -34,6 +34,12 @@ struct PopupElementHeader: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.subheadline)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
 ***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***.padding([.bottom], 4)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***if !title.isEmpty ||
+***REMOVED******REMOVED******REMOVED***!description.isEmpty {
+***REMOVED******REMOVED******REMOVED***Divider()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
