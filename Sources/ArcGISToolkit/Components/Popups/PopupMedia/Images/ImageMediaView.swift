@@ -22,38 +22,37 @@ struct ImageMediaView: View {
     /// The size of the media's frame.
     let mediaSize: CGSize
     
-    /// A Boolean value specifying whether the media should be shown full screen.
-    @State private var showingFullScreen = false
+    /// The corner radius for the view.
     private let cornerRadius: CGFloat = 8
-
+    
+    /// A Boolean value specifying whether the media should be drawn in a larger format.
+    @State private var isShowingDetailView = false
+    
     var body: some View {
-        ZStack {
-            if let sourceURL = popupMedia.value?.sourceURL {
+        if let sourceURL = popupMedia.value?.sourceURL {
+            ZStack {
                 AsyncImageView(url: sourceURL, contentMode: .fill)
-                    .onTapGesture {
-                        showingFullScreen = true
-                    }
+                    .frame(width: mediaSize.width, height: mediaSize.height)
+                VStack {
+                    Spacer()
+                    PopupMediaFooter(
+                        popupMedia: popupMedia,
+                        mediaSize: mediaSize
+                    )
+                }
+                RoundedRectangle(cornerRadius: cornerRadius)
+                    .stroke(.gray, lineWidth: 1)
                     .frame(width: mediaSize.width, height: mediaSize.height)
             }
-            VStack {
-                Spacer()
-                PopupMediaFooter(
-                    popupMedia: popupMedia,
-                    mediaSize: mediaSize
-                )
+            .frame(width: mediaSize.width, height: mediaSize.height)
+            .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
+            .onTapGesture {
+                isShowingDetailView = true
             }
-            RoundedRectangle(cornerRadius: cornerRadius)
-                .stroke(.gray, lineWidth: 1)
-                .frame(width: mediaSize.width, height: mediaSize.height)
-        }
-        .frame(width: mediaSize.width, height: mediaSize.height)
-        .clipShape(RoundedRectangle(cornerRadius: cornerRadius))
-        .sheet(isPresented: $showingFullScreen) {
-            if let url = popupMedia.value?.sourceURL {
-                DetailImageView(
+            .sheet(isPresented: $isShowingDetailView) {
+                MediaDetailView(
                     popupMedia: popupMedia,
-                    sourceURL: url,
-                    showingFullScreen: $showingFullScreen
+                    isShowingDetailView: $isShowingDetailView
                 )
                 .padding()
             }

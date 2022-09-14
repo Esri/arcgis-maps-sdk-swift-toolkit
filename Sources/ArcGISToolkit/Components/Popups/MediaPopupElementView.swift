@@ -20,23 +20,39 @@ struct MediaPopupElementView: View {
     var popupElement: MediaPopupElement
     
     var body: some View {
-        Divider()
-        PopupElementHeader(
-            title: popupElement.title,
-            description: popupElement.description
-        )
-        .padding([.bottom], 4)
-        if !popupElement.title.isEmpty ||
-            !popupElement.description.isEmpty {
+        if displayableMediaCount > 0 {
             Divider()
+            PopupElementHeader(
+                title: popupElement.title,
+                description: popupElement.description
+            )
+            PopupMediaView(
+                popupMedia: popupElement.media,
+                displayableMediaCount: displayableMediaCount
+            )
         }
-        PopupMediaView(popupMedia: popupElement.media)
+    }
+    
+    /// The number of popup media that can be displayed. The count includes
+    /// all image media and chart media when running on iOS 16 or newer.
+    var displayableMediaCount: Int {
+        if #available(iOS 16, *) {
+            // Include all images and charts.
+            return popupElement.media.count
+        } else {
+            // Only include image media.
+            let imageMedia = popupElement.media.filter { $0.kind == .image }
+            return imageMedia.count
+        }
     }
     
     /// A view displaying an array of `PopupMedia`.
     struct PopupMediaView: View {
         /// The popup media to display.
         let popupMedia: [PopupMedia]
+        
+        /// The number of popup media that can be displayed.
+        let displayableMediaCount: Int
         
         /// The width of the view content.
         @State private var width: CGFloat = .zero
@@ -53,7 +69,10 @@ struct MediaPopupElementView: View {
                                     mediaSize: mediaSize
                                 )
                             case .barChart, .columnChart, .lineChart, .pieChart:
-                                ChartMediaView(popupMedia: media)
+                                ChartMediaView(
+                                    popupMedia: media,
+                                    mediaSize: mediaSize
+                                )
                             default:
                                 EmptyView()
                             }
@@ -73,11 +92,11 @@ struct MediaPopupElementView: View {
         /// second and subsequent media to be partially visible, to indicate there is more than one.
         var widthScaleFactor: Double {
             get {
-                popupMedia.count > 1 ? 0.75 : 1
+                displayableMediaCount > 1 ? 0.75 : 1
             }
         }
         
-        /// The size of the image or chart media, not counting descriptive text.
+        /// The size of the image or chart media.
         var mediaSize: CGSize {
             CGSize(width: width, height: 200)
         }
