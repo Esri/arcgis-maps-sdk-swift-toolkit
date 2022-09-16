@@ -25,12 +25,14 @@ struct PopupElementHeader: View {
             // a view, so conditionally check for an empty title and description.
             if !title.isEmpty {
                 Text(title)
+                    .multilineTextAlignment(.leading)
                     .font(.title2)
                     .foregroundColor(.primary)
             }
             
             if !description.isEmpty {
                 Text(description)
+                    .multilineTextAlignment(.leading)
                     .font(.subheadline)
                     .foregroundColor(.secondary)
             }
