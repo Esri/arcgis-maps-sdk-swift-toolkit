@@ -46,22 +46,22 @@ struct FloatingPanel<Content>: View where Content: View {
         @ViewBuilder content: () -> Content
     ) {
         self.backgroundColor = backgroundColor
+        self.activeDetent = detent
+        self.isPresented = isPresented
         self.content = content()
-        _activeDetent = detent
-        _isPresented = isPresented
     }
     
     /// A binding to the currently selected detent.
-    @Binding private var activeDetent: FloatingPanelDetent
+    private var activeDetent: Binding<FloatingPanelDetent>
     
     /// The color of the handle.
     @State private var handleColor: Color = .defaultHandleColor
     
     /// The height of the content.
     @State private var height: CGFloat = .minHeight
-    
+
     /// A binding to a Boolean value that determines whether the view is presented.
-    @Binding private var isPresented: Bool
+    private var isPresented: Binding<Bool>
     
     /// The maximum allowed height of the content.
     @State private var maximumHeight: CGFloat = .infinity
@@ -72,50 +72,53 @@ struct FloatingPanel<Content>: View where Content: View {
     }
     
     public var body: some View {
-        GeometryReader { geometryProxy in
-            VStack(spacing: 0) {
-                if isCompact && isPresented {
-                    makeHandleView()
+        if isPresented.wrappedValue {
+            GeometryReader { geometryProxy in
+                VStack(spacing: 0) {
+                    if isCompact {
+                        makeHandleView()
+                    }
+                    content
+                        .frame(height: height)
+                        .padding(.bottom, isCompact ? 25 : .zero)
+                    if !isCompact {
+                        Divider()
+                        makeHandleView()
+                    }
                 }
-                content
-                    .frame(height: height)
-                    .padding(.bottom, isCompact ? 25 : .zero)
-                if !isCompact && isPresented {
-                    makeHandleView()
+                .background(backgroundColor)
+                .cornerRadius(10, corners: isCompact ? [.topLeft, .topRight] : [.allCorners])
+                .shadow(radius: 10)
+                .opacity(isPresented.wrappedValue ? 1.0 : .zero)
+                .frame(
+                    width: geometryProxy.size.width,
+                    height: geometryProxy.size.height,
+                    alignment: isCompact ? .bottom : .top
+                )
+                .onSizeChange {
+                    maximumHeight = $0.height
+                    if height > maximumHeight {
+                        height = maximumHeight
+                    }
                 }
-            }
-            .background(backgroundColor)
-            .cornerRadius(10, corners: isCompact ? [.topLeft, .topRight] : [.allCorners])
-            .shadow(radius: 10)
-            .opacity(isPresented ? 1.0 : .zero)
-            .frame(
-                width: geometryProxy.size.width,
-                height: geometryProxy.size.height,
-                alignment: isCompact ? .bottom : .top
-            )
-            .onSizeChange {
-                maximumHeight = $0.height
-                if height > maximumHeight {
-                    height = maximumHeight
+                .onChange(of: activeDetent.wrappedValue) { _ in
+                    withAnimation {
+                        height = heightFor(detent: activeDetent.wrappedValue)
+                    }
                 }
-            }
-            .onChange(of: activeDetent) { _ in
-                withAnimation {
-                    height = heightFor(detent: activeDetent)
+                .onChange(of: isPresented.wrappedValue) {
+                    height = $0 ? heightFor(detent: activeDetent.wrappedValue) : .zero
                 }
-            }
-            .onChange(of: isPresented) {
-                height = $0 ? heightFor(detent: activeDetent) : .zero
-            }
-            .onAppear {
-                withAnimation {
-                    height = heightFor(detent: activeDetent)
+                .onAppear {
+                    withAnimation {
+                        height = heightFor(detent: activeDetent.wrappedValue)
+                    }
                 }
+                .animation(.default, value: isPresented.wrappedValue)
             }
-            .animation(.default, value: isPresented)
+            .padding([.leading, .top, .trailing], isCompact ? 0 : 10)
+            .padding([.bottom], isCompact ? 0 : 50)
         }
-        .padding([.leading, .top, .trailing], isCompact ? 0 : 10)
-        .padding([.bottom], isCompact ? 0 : 50)
     }
     
     var drag: some Gesture {
@@ -139,7 +142,7 @@ struct FloatingPanel<Content>: View where Content: View {
             .onEnded { _ in
                 handleColor = .defaultHandleColor
                 withAnimation {
-                    activeDetent = closestDetent
+                    activeDetent.wrappedValue = closestDetent
                     height = heightFor(detent: closestDetent)
                 }
             }
@@ -163,7 +166,7 @@ struct FloatingPanel<Content>: View where Content: View {
         case .half:
             return maximumHeight * 0.4
         case .full:
-            return maximumHeight * 0.90
+            return maximumHeight * (isCompact ? 0.90 : 1.0)
         }
     }
     
