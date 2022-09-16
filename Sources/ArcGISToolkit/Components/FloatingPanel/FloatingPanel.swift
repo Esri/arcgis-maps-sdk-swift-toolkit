@@ -46,22 +46,22 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED******REMOVED***@ViewBuilder content: () -> Content
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.backgroundColor = backgroundColor
+***REMOVED******REMOVED***self.activeDetent = detent
+***REMOVED******REMOVED***self.isPresented = isPresented
 ***REMOVED******REMOVED***self.content = content()
-***REMOVED******REMOVED***_activeDetent = detent
-***REMOVED******REMOVED***_isPresented = isPresented
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ A binding to the currently selected detent.
-***REMOVED***@Binding private var activeDetent: FloatingPanelDetent
+***REMOVED***private var activeDetent: Binding<FloatingPanelDetent>
 ***REMOVED***
 ***REMOVED******REMOVED***/ The color of the handle.
 ***REMOVED***@State private var handleColor: Color = .defaultHandleColor
 ***REMOVED***
 ***REMOVED******REMOVED***/ The height of the content.
 ***REMOVED***@State private var height: CGFloat = .minHeight
-***REMOVED***
+
 ***REMOVED******REMOVED***/ A binding to a Boolean value that determines whether the view is presented.
-***REMOVED***@Binding private var isPresented: Bool
+***REMOVED***private var isPresented: Binding<Bool>
 ***REMOVED***
 ***REMOVED******REMOVED***/ The maximum allowed height of the content.
 ***REMOVED***@State private var maximumHeight: CGFloat = .infinity
@@ -72,50 +72,53 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***public var body: some View {
-***REMOVED******REMOVED***GeometryReader { geometryProxy in
-***REMOVED******REMOVED******REMOVED***VStack(spacing: 0) {
-***REMOVED******REMOVED******REMOVED******REMOVED***if isCompact && isPresented {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeHandleView()
+***REMOVED******REMOVED***if isPresented.wrappedValue {
+***REMOVED******REMOVED******REMOVED***GeometryReader { geometryProxy in
+***REMOVED******REMOVED******REMOVED******REMOVED***VStack(spacing: 0) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if isCompact {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeHandleView()
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***content
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(height: height)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.bottom, isCompact ? 25 : .zero)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if !isCompact {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Divider()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeHandleView()
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***content
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(height: height)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.bottom, isCompact ? 25 : .zero)
-***REMOVED******REMOVED******REMOVED******REMOVED***if !isCompact && isPresented {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeHandleView()
+***REMOVED******REMOVED******REMOVED******REMOVED***.background(backgroundColor)
+***REMOVED******REMOVED******REMOVED******REMOVED***.cornerRadius(10, corners: isCompact ? [.topLeft, .topRight] : [.allCorners])
+***REMOVED******REMOVED******REMOVED******REMOVED***.shadow(radius: 10)
+***REMOVED******REMOVED******REMOVED******REMOVED***.opacity(isPresented.wrappedValue ? 1.0 : .zero)
+***REMOVED******REMOVED******REMOVED******REMOVED***.frame(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***width: geometryProxy.size.width,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***height: geometryProxy.size.height,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***alignment: isCompact ? .bottom : .top
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***.onSizeChange {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***maximumHeight = $0.height
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if height > maximumHeight {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***height = maximumHeight
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.background(backgroundColor)
-***REMOVED******REMOVED******REMOVED***.cornerRadius(10, corners: isCompact ? [.topLeft, .topRight] : [.allCorners])
-***REMOVED******REMOVED******REMOVED***.shadow(radius: 10)
-***REMOVED******REMOVED******REMOVED***.opacity(isPresented ? 1.0 : .zero)
-***REMOVED******REMOVED******REMOVED***.frame(
-***REMOVED******REMOVED******REMOVED******REMOVED***width: geometryProxy.size.width,
-***REMOVED******REMOVED******REMOVED******REMOVED***height: geometryProxy.size.height,
-***REMOVED******REMOVED******REMOVED******REMOVED***alignment: isCompact ? .bottom : .top
-***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***.onSizeChange {
-***REMOVED******REMOVED******REMOVED******REMOVED***maximumHeight = $0.height
-***REMOVED******REMOVED******REMOVED******REMOVED***if height > maximumHeight {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***height = maximumHeight
+***REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: activeDetent.wrappedValue) { _ in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***withAnimation {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***height = heightFor(detent: activeDetent.wrappedValue)
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.onChange(of: activeDetent) { _ in
-***REMOVED******REMOVED******REMOVED******REMOVED***withAnimation {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***height = heightFor(detent: activeDetent)
+***REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: isPresented.wrappedValue) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***height = $0 ? heightFor(detent: activeDetent.wrappedValue) : .zero
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.onChange(of: isPresented) {
-***REMOVED******REMOVED******REMOVED******REMOVED***height = $0 ? heightFor(detent: activeDetent) : .zero
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.onAppear {
-***REMOVED******REMOVED******REMOVED******REMOVED***withAnimation {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***height = heightFor(detent: activeDetent)
+***REMOVED******REMOVED******REMOVED******REMOVED***.onAppear {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***withAnimation {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***height = heightFor(detent: activeDetent.wrappedValue)
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.animation(.default, value: isPresented.wrappedValue)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.animation(.default, value: isPresented)
+***REMOVED******REMOVED******REMOVED***.padding([.leading, .top, .trailing], isCompact ? 0 : 10)
+***REMOVED******REMOVED******REMOVED***.padding([.bottom], isCompact ? 0 : 50)
 ***REMOVED***
-***REMOVED******REMOVED***.padding([.leading, .top, .trailing], isCompact ? 0 : 10)
-***REMOVED******REMOVED***.padding([.bottom], isCompact ? 0 : 50)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var drag: some Gesture {
@@ -139,7 +142,7 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED******REMOVED******REMOVED***.onEnded { _ in
 ***REMOVED******REMOVED******REMOVED******REMOVED***handleColor = .defaultHandleColor
 ***REMOVED******REMOVED******REMOVED******REMOVED***withAnimation {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***activeDetent = closestDetent
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***activeDetent.wrappedValue = closestDetent
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***height = heightFor(detent: closestDetent)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
@@ -163,7 +166,7 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED******REMOVED***case .half:
 ***REMOVED******REMOVED******REMOVED***return maximumHeight * 0.4
 ***REMOVED******REMOVED***case .full:
-***REMOVED******REMOVED******REMOVED***return maximumHeight * 0.90
+***REMOVED******REMOVED******REMOVED***return maximumHeight * (isCompact ? 0.90 : 1.0)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***

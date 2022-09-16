@@ -45,16 +45,22 @@ struct PopupExampleView: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***return Map(item: portalItem1)
 ***REMOVED***
-
+***REMOVED***
 ***REMOVED******REMOVED***/ The map displayed in the map view.
 ***REMOVED***@StateObject private var map = makeMap()
 ***REMOVED***
 ***REMOVED******REMOVED***/ The point on the screen the user tapped on to identify a feature.
 ***REMOVED***@State private var identifyScreenPoint: CGPoint?
-
-***REMOVED******REMOVED***/ The result of the layer identify operation.
-***REMOVED***@State private var identifyResult: Result<[IdentifyLayerResult], Error>?
-
+***REMOVED***
+***REMOVED******REMOVED***/ The popup to be shown as the result of the layer identify operation.
+***REMOVED***@State private var popup: Popup?
+***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value specifying whether the popup view should be shown or not.
+***REMOVED***@State private var showPopup = false
+***REMOVED***
+***REMOVED******REMOVED***/ The detent value specifying the initial `FloatingPanelDetent`.  Defaults to "full".
+***REMOVED***@State private var floatingPanelDetent: FloatingPanelDetent = .full
+***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***MapViewReader { proxy in
 ***REMOVED******REMOVED******REMOVED***VStack {
@@ -76,56 +82,24 @@ struct PopupExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.identifyResult = identifyResult
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.identifyScreenPoint = nil
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.popup = try? identifyResult.get().first?.popups.first
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.showPopup = self.popup != nil
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.overlay(alignment: .topLeading) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.floatingPanel(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***detent: $floatingPanelDetent,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***horizontalAlignment: .leading,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented: $showPopup
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Group {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if identifyScreenPoint != nil {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ProgressView()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.esriBorder()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** else if let identifyResult = identifyResult {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***IdentifyResultView(identifyResult: identifyResult)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let popup = popup {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***PopupView(popup: popup, isPresented: $showPopup)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.showCloseButton(true)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***
-
-***REMOVED***/ A view displaying the results of an identify operation.
-private struct IdentifyResultView: View {
-***REMOVED***var identifyResult: Result<[IdentifyLayerResult], Error>
-***REMOVED***
-***REMOVED***@Environment(\.horizontalSizeClass) var horizontalSizeClass
-***REMOVED***@Environment(\.verticalSizeClass) var verticalSizeClass
-***REMOVED***
-***REMOVED******REMOVED***/ If `true`, will draw the popup view at half height, exposing a portion of the
-***REMOVED******REMOVED***/ underlying map below the view on an iPhone in portrait orientation (and certain iPad multitasking
-***REMOVED******REMOVED***/ configurations).  If `false`, will draw the popup view full size.
-***REMOVED***private var useHalfHeightResults: Bool {
-***REMOVED******REMOVED***horizontalSizeClass == .compact && verticalSizeClass == .regular
-***REMOVED***
-
-***REMOVED***var body: some View {
-***REMOVED******REMOVED***switch identifyResult {
-***REMOVED******REMOVED***case .success(let identifyLayerResults):
-***REMOVED******REMOVED******REMOVED******REMOVED*** Get the first popup from the first layer result.
-***REMOVED******REMOVED******REMOVED***if let popup = identifyLayerResults.first?.popups.first {
-***REMOVED******REMOVED******REMOVED******REMOVED***GeometryReader { geometry in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***PopupView(popup: popup)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***maxWidth: useHalfHeightResults ? .infinity : 400,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***maxHeight: useHalfHeightResults ? geometry.size.height / 2 : nil
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.esriBorder()
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***case .failure(let error):
-***REMOVED******REMOVED******REMOVED***Text("Identify error: \(error.localizedDescription).")
-***REMOVED******REMOVED******REMOVED******REMOVED***.esriBorder()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
