@@ -17,13 +17,21 @@ import ArcGIS
 /// A view displaying the elements of a single Popup.
 public struct PopupView: View {
     /// Creates a `PopupView` with the given popup.
-    /// - Parameter popup: The popup to display.
-    public init(popup: Popup) {
+    /// - Parameters
+    ///     popup: The popup to display.
+    ///   - isPresented: A Boolean value indicating if the view is presented.
+    public init(popup: Popup, isPresented: Binding<Bool>? = nil) {
         self.popup = popup
+        self.isPresented = isPresented
     }
     
     /// The `Popup` to display.
     private var popup: Popup
+    
+    /// A Boolean value specifying whether a "close" button should be shown or not.  If the "close"
+    /// button is shown, you should pass in the `isPresented` argument to the initializer,
+    /// so that the the "close" button can close the view.
+    private var showCloseButton = false
     
     /// A Boolean value indicating whether the popup's elements have been evaluated via
     /// the `popup.evaluateExpressions()` method.
@@ -32,14 +40,29 @@ public struct PopupView: View {
     /// The results of calling the `popup.evaluateExpressions()` method.
     @State private var expressionEvaluations: [PopupExpressionEvaluation]? = nil
     
+    /// A binding to a Boolean value that determines whether the view is presented.
+    private var isPresented: Binding<Bool>?
+
     public var body: some View {
         VStack(alignment: .leading) {
-            if !popup.title.isEmpty {
-                Text(popup.title)
-                    .font(.title)
-                    .fontWeight(.bold)
-                Divider()
+            HStack {
+                if !popup.title.isEmpty {
+                    Text(popup.title)
+                        .font(.title)
+                        .fontWeight(.bold)
+                }
+                Spacer()
+                if showCloseButton {
+                    Button(action: {
+                        isPresented?.wrappedValue = false
+                    }, label: {
+                        Image(systemName: "xmark.circle")
+                            .foregroundColor(.secondary)
+                            .padding([.top, .bottom, .trailing], 4)
+                    })
+                }
             }
+            Divider()
             Group {
                 if let isPopupEvaluated = isPopupEvaluated {
                     if isPopupEvaluated {
@@ -88,5 +111,19 @@ public struct PopupView: View {
                 }
             }
         }
+    }
+}
+
+extension PopupView {
+    /// Specifies whether a "close" button should be shown to the right of the popup title.  If the "close"
+    /// button is shown, you should pass in the `isPresented` argument to the `PopupView`
+    /// initializer, so that the the "close" button can close the view.
+    /// Defaults to `false`.
+    /// - Parameter newShowCloseButton: The new value.
+    /// - Returns: A new `PopupView`.
+    public func showCloseButton(_ newShowCloseButton: Bool) -> Self {
+        var copy = self
+        copy.showCloseButton = newShowCloseButton
+        return copy
     }
 }

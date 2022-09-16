@@ -45,16 +45,22 @@ struct PopupExampleView: View {
         
         return Map(item: portalItem1)
     }
-
+    
     /// The map displayed in the map view.
     @StateObject private var map = makeMap()
     
     /// The point on the screen the user tapped on to identify a feature.
     @State private var identifyScreenPoint: CGPoint?
-
-    /// The result of the layer identify operation.
-    @State private var identifyResult: Result<[IdentifyLayerResult], Error>?
-
+    
+    /// The popup to be shown as the result of the layer identify operation.
+    @State private var popup: Popup?
+    
+    /// A Boolean value specifying whether the popup view should be shown or not.
+    @State private var showPopup = false
+    
+    /// The detent value specifying the initial `FloatingPanelDetent`.  Defaults to "full".
+    @State private var floatingPanelDetent: FloatingPanelDetent = .full
+    
     var body: some View {
         MapViewReader { proxy in
             VStack {
@@ -76,56 +82,24 @@ struct PopupExampleView: View {
                             return
                         }
                         
-                        self.identifyResult = identifyResult
                         self.identifyScreenPoint = nil
+                        self.popup = try? identifyResult.get().first?.popups.first
+                        self.showPopup = self.popup != nil
                     }
-                    .overlay(alignment: .topLeading) {
+                    .floatingPanel(
+                        detent: $floatingPanelDetent,
+                        horizontalAlignment: .leading,
+                        isPresented: $showPopup
+                    ) {
                         Group {
-                            if identifyScreenPoint != nil {
-                                ProgressView()
-                                    .esriBorder()
-                            } else if let identifyResult = identifyResult {
-                                IdentifyResultView(identifyResult: identifyResult)
+                            if let popup = popup {
+                                PopupView(popup: popup, isPresented: $showPopup)
+                                    .showCloseButton(true)
                             }
                         }
                         .padding()
                     }
             }
-        }
-    }
-}
-
-/// A view displaying the results of an identify operation.
-private struct IdentifyResultView: View {
-    var identifyResult: Result<[IdentifyLayerResult], Error>
-    
-    @Environment(\.horizontalSizeClass) var horizontalSizeClass
-    @Environment(\.verticalSizeClass) var verticalSizeClass
-    
-    /// If `true`, will draw the popup view at half height, exposing a portion of the
-    /// underlying map below the view on an iPhone in portrait orientation (and certain iPad multitasking
-    /// configurations).  If `false`, will draw the popup view full size.
-    private var useHalfHeightResults: Bool {
-        horizontalSizeClass == .compact && verticalSizeClass == .regular
-    }
-
-    var body: some View {
-        switch identifyResult {
-        case .success(let identifyLayerResults):
-            // Get the first popup from the first layer result.
-            if let popup = identifyLayerResults.first?.popups.first {
-                GeometryReader { geometry in
-                    PopupView(popup: popup)
-                        .frame(
-                            maxWidth: useHalfHeightResults ? .infinity : 400,
-                            maxHeight: useHalfHeightResults ? geometry.size.height / 2 : nil
-                        )
-                        .esriBorder()
-                }
-            }
-        case .failure(let error):
-            Text("Identify error: \(error.localizedDescription).")
-                .esriBorder()
         }
     }
 }
