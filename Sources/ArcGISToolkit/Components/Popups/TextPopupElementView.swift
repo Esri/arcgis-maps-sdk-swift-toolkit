@@ -35,7 +35,7 @@ struct TextPopupElementView: View {
                 }
                 else {
                     roundedRect
-                        .stroke(Color.black, lineWidth: 1)
+                        .stroke(Color.primary, lineWidth: 1)
                 }
             }
             Divider()
