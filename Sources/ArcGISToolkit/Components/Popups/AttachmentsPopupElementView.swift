@@ -43,19 +43,17 @@ struct AttachmentsPopupElementView: View {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
+***REMOVED***@State var isExpanded: Bool = true
+***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***Group {
 ***REMOVED******REMOVED******REMOVED***if isLoadingAttachments {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ProgressView()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
 ***REMOVED******REMOVED*** else if viewModel.attachmentModels.count > 0 {
-***REMOVED******REMOVED******REMOVED******REMOVED***Divider()
-***REMOVED******REMOVED******REMOVED******REMOVED***VStack(alignment: .leading) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***PopupElementHeader(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title: popupElement.title,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***description: popupElement.description
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***DisclosureGroup(isExpanded: $isExpanded) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Divider()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.bottom, 4)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***switch popupElement.displayType {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .list:
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AttachmentList(attachmentModels: viewModel.attachmentModels)
@@ -68,7 +66,15 @@ struct AttachmentsPopupElementView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AttachmentList(attachmentModels: viewModel.attachmentModels)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***VStack(alignment: .leading) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***PopupElementHeader(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title: popupElement.displayTitle,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***description: popupElement.description
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***Divider()
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.task {
@@ -79,5 +85,12 @@ struct AttachmentsPopupElementView: View {
 ***REMOVED******REMOVED******REMOVED***viewModel.attachmentModels.append(contentsOf: attachmentModels)
 ***REMOVED******REMOVED******REMOVED***isLoadingAttachments = false
 ***REMOVED***
+***REMOVED***
+***REMOVED***
+
+private extension AttachmentsPopupElement {
+***REMOVED******REMOVED***/ Provides a default title to display if `title` is empty.
+***REMOVED***var displayTitle: String {
+***REMOVED******REMOVED***title.isEmpty ? "Attachments" : title
 ***REMOVED***
 ***REMOVED***

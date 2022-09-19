@@ -19,17 +19,26 @@ struct MediaPopupElementView: View {
 ***REMOVED******REMOVED***/ The `PopupElement` to display.
 ***REMOVED***var popupElement: MediaPopupElement
 ***REMOVED***
+***REMOVED***@State var isExpanded: Bool = true
+***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***if displayableMediaCount > 0 {
+***REMOVED******REMOVED******REMOVED***DisclosureGroup(isExpanded: $isExpanded) {
+***REMOVED******REMOVED******REMOVED******REMOVED***Divider()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.bottom, 4)
+***REMOVED******REMOVED******REMOVED******REMOVED***PopupMediaView(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***popupMedia: popupElement.media,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***displayableMediaCount: displayableMediaCount
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED***VStack(alignment: .leading) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***PopupElementHeader(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***title: popupElement.displayTitle,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***description: popupElement.description
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***Divider()
-***REMOVED******REMOVED******REMOVED***PopupElementHeader(
-***REMOVED******REMOVED******REMOVED******REMOVED***title: popupElement.title,
-***REMOVED******REMOVED******REMOVED******REMOVED***description: popupElement.description
-***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***PopupMediaView(
-***REMOVED******REMOVED******REMOVED******REMOVED***popupMedia: popupElement.media,
-***REMOVED******REMOVED******REMOVED******REMOVED***displayableMediaCount: displayableMediaCount
-***REMOVED******REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -104,3 +113,10 @@ struct MediaPopupElementView: View {
 ***REMOVED***
 
 extension PopupMedia: Identifiable {***REMOVED***
+
+private extension MediaPopupElement {
+***REMOVED******REMOVED***/ Provides a default title to display if `title` is empty.
+***REMOVED***var displayTitle: String {
+***REMOVED******REMOVED***title.isEmpty ? "Media" : title
+***REMOVED***
+***REMOVED***

@@ -12,7 +12,6 @@
 ***REMOVED*** limitations under the License.
 
 ***REMOVED***
-import Charts
 
 ***REMOVED***/ A view displaying details for pie chart popup media.
 struct PieChart: View {
