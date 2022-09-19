@@ -59,7 +59,7 @@ struct FloatingPanel<Content>: View where Content: View {
     
     /// The height of the content.
     @State private var height: CGFloat = .minHeight
-
+    
     /// A binding to a Boolean value that determines whether the view is presented.
     private var isPresented: Binding<Bool>
     
@@ -77,6 +77,7 @@ struct FloatingPanel<Content>: View where Content: View {
                 VStack(spacing: 0) {
                     if isCompact {
                         makeHandleView()
+                        Divider()
                     }
                     content
                         .frame(height: height)
