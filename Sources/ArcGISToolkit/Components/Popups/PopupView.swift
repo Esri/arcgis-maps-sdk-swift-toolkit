@@ -28,7 +28,7 @@ public struct PopupView: View {
 ***REMOVED******REMOVED***/ The `Popup` to display.
 ***REMOVED***private var popup: Popup
 ***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value specifying whether a "close" button should be shown or not.  If the "close"
+***REMOVED******REMOVED***/ A Boolean value specifying whether a "close" button should be shown or not. If the "close"
 ***REMOVED******REMOVED***/ button is shown, you should pass in the `isPresented` argument to the initializer,
 ***REMOVED******REMOVED***/ so that the the "close" button can close the view.
 ***REMOVED***private var showCloseButton = false
@@ -115,7 +115,7 @@ public struct PopupView: View {
 ***REMOVED***
 
 extension PopupView {
-***REMOVED******REMOVED***/ Specifies whether a "close" button should be shown to the right of the popup title.  If the "close"
+***REMOVED******REMOVED***/ Specifies whether a "close" button should be shown to the right of the popup title. If the "close"
 ***REMOVED******REMOVED***/ button is shown, you should pass in the `isPresented` argument to the `PopupView`
 ***REMOVED******REMOVED***/ initializer, so that the the "close" button can close the view.
 ***REMOVED******REMOVED***/ Defaults to `false`.
