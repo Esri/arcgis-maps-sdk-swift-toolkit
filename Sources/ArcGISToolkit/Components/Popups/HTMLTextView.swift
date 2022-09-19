@@ -45,9 +45,31 @@ struct HTMLTextView: UIViewRepresentable {
                             }
                             body {
                                 margin:10px; padding:0px;
+                                background: var(--body-bg);
+                                color: var(--body-color);
                             }
                             img {
                                 max-width: 100%;
+                            }
+                            a {
+                                color: var(--link-color);
+                            }
+                        </style>
+                        <style type="text/css" media="screen">
+                            /* Light mode */
+                            :root {
+                                --body-bg: #FFFFFF;
+                                --body-color: #000000;
+                                --link-color: #0164C8;
+                            }
+                            
+                            /* Dark mode */
+                            @media (prefers-color-scheme: dark) {
+                                :root {
+                                    --body-bg: #000000;
+                                    --body-color: #FFFFFF;
+                                    --link-color: #1796FA;
+                                }
                             }
                         </style>
                     </head>
