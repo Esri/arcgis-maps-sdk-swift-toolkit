@@ -44,7 +44,8 @@ struct HTMLTextView: UIViewRepresentable {
                                 word-wrap:break-word; font-family:-apple-system; font:-apple-system-subheadline;
                             }
                             body {
-                                margin:10px; padding:0px;
+                                margin: 10px; 
+                                padding:0px;
                                 background: var(--body-bg);
                                 color: var(--body-color);
                             }
