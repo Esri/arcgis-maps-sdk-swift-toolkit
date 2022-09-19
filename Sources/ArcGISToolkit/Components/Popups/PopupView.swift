@@ -28,7 +28,7 @@ public struct PopupView: View {
     /// The `Popup` to display.
     private var popup: Popup
     
-    /// A Boolean value specifying whether a "close" button should be shown or not.  If the "close"
+    /// A Boolean value specifying whether a "close" button should be shown or not. If the "close"
     /// button is shown, you should pass in the `isPresented` argument to the initializer,
     /// so that the the "close" button can close the view.
     private var showCloseButton = false
@@ -115,7 +115,7 @@ public struct PopupView: View {
 }
 
 extension PopupView {
-    /// Specifies whether a "close" button should be shown to the right of the popup title.  If the "close"
+    /// Specifies whether a "close" button should be shown to the right of the popup title. If the "close"
     /// button is shown, you should pass in the `isPresented` argument to the `PopupView`
     /// initializer, so that the the "close" button can close the view.
     /// Defaults to `false`.
