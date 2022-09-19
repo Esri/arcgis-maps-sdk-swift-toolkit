@@ -43,19 +43,17 @@ struct AttachmentsPopupElementView: View {
         )
     }
     
+    @State var isExpanded: Bool = true
+    
     var body: some View {
         Group {
             if isLoadingAttachments {
                 ProgressView()
                     .padding()
             } else if viewModel.attachmentModels.count > 0 {
-                Divider()
-                VStack(alignment: .leading) {
-                    PopupElementHeader(
-                        title: popupElement.title,
-                        description: popupElement.description
-                    )
-                    
+                DisclosureGroup(isExpanded: $isExpanded) {
+                    Divider()
+                        .padding(.bottom, 4)
                     switch popupElement.displayType {
                     case .list:
                         AttachmentList(attachmentModels: viewModel.attachmentModels)
@@ -68,7 +66,15 @@ struct AttachmentsPopupElementView: View {
                             AttachmentList(attachmentModels: viewModel.attachmentModels)
                         }
                     }
+                } label: {
+                    VStack(alignment: .leading) {
+                        PopupElementHeader(
+                            title: popupElement.displayTitle,
+                            description: popupElement.description
+                        )
+                    }
                 }
+                Divider()
             }
         }
         .task {
@@ -79,5 +85,12 @@ struct AttachmentsPopupElementView: View {
             viewModel.attachmentModels.append(contentsOf: attachmentModels)
             isLoadingAttachments = false
         }
+    }
+}
+
+private extension AttachmentsPopupElement {
+    /// Provides a default title to display if `title` is empty.
+    var displayTitle: String {
+        title.isEmpty ? "Attachments" : title
     }
 }

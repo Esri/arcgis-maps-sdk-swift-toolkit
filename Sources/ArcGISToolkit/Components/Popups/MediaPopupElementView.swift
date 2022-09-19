@@ -19,17 +19,26 @@ struct MediaPopupElementView: View {
     /// The `PopupElement` to display.
     var popupElement: MediaPopupElement
     
+    @State var isExpanded: Bool = true
+    
     var body: some View {
         if displayableMediaCount > 0 {
+            DisclosureGroup(isExpanded: $isExpanded) {
+                Divider()
+                    .padding(.bottom, 4)
+                PopupMediaView(
+                    popupMedia: popupElement.media,
+                    displayableMediaCount: displayableMediaCount
+                )
+            } label: {
+                VStack(alignment: .leading) {
+                    PopupElementHeader(
+                        title: popupElement.displayTitle,
+                        description: popupElement.description
+                    )
+                }
+            }
             Divider()
-            PopupElementHeader(
-                title: popupElement.title,
-                description: popupElement.description
-            )
-            PopupMediaView(
-                popupMedia: popupElement.media,
-                displayableMediaCount: displayableMediaCount
-            )
         }
     }
     
@@ -104,3 +113,10 @@ struct MediaPopupElementView: View {
 }
 
 extension PopupMedia: Identifiable {}
+
+private extension MediaPopupElement {
+    /// Provides a default title to display if `title` is empty.
+    var displayTitle: String {
+        title.isEmpty ? "Media" : title
+    }
+}
