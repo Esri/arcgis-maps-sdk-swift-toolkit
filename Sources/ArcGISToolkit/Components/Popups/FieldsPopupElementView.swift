@@ -31,14 +31,22 @@ struct FieldsPopupElementView: View {
     /// The labels and values to display, as an array of `DisplayField`s.
     private let displayFields: [DisplayField]
     
+    @State var isExpanded: Bool = true
+    
     var body: some View {
+        DisclosureGroup(isExpanded: $isExpanded) {
+            Divider()
+                .padding(.bottom, 4)
+            FieldsList(fields: displayFields)
+        } label: {
+            VStack(alignment: .leading) {
+                PopupElementHeader(
+                    title: popupElement.displayTitle,
+                    description: popupElement.description
+                )
+            }
+        }
         Divider()
-        PopupElementHeader(
-            title: popupElement.displayTitle,
-            description: popupElement.description
-        )
-        .padding([.bottom], 4)
-        FieldsList(fields: displayFields)
     }
     
     /// A view displaying the labels and values.
