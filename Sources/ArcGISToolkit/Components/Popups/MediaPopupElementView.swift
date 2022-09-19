@@ -20,7 +20,7 @@ struct MediaPopupElementView: View {
     var popupElement: MediaPopupElement
     
     @State var isExpanded: Bool = true
-
+    
     var body: some View {
         if displayableMediaCount > 0 {
             DisclosureGroup(isExpanded: $isExpanded) {
