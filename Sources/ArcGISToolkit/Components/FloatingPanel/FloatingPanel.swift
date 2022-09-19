@@ -77,6 +77,7 @@ struct FloatingPanel<Content>: View where Content: View {
                 VStack(spacing: 0) {
                     if isCompact {
                         makeHandleView()
+                        Divider()
                     }
                     content
                         .frame(height: height)
