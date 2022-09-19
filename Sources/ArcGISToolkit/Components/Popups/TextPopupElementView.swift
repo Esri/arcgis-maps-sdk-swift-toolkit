@@ -35,7 +35,7 @@ struct TextPopupElementView: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***else {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***roundedRect
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.stroke(Color.black, lineWidth: 1)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.stroke(Color.primary, lineWidth: 1)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***Divider()
