@@ -81,7 +81,7 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
         geocodeParameters.searchArea = nil
         let geocodeResults = try await locatorTask.geocode(
             forSearchText: query,
-            parameters: geocodeParameters
+            using: geocodeParameters
         )
         
         // Union results and return.
@@ -120,7 +120,7 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
         geocodeParameters.searchArea = nil
         let geocodeResults = try await locatorTask.geocode(
             forSuggestResult: suggestResult,
-            parameters: geocodeParameters
+            using: geocodeParameters
         )
         
         // Union results and return.
