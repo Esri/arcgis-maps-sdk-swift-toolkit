@@ -101,7 +101,7 @@ public class LocatorSearchSource: ObservableObject, SearchSource {
         
         let geocodeResults = try await locatorTask.geocode(
             forSuggestResult: suggestResult,
-            parameters: geocodeParameters
+            using: geocodeParameters
         )
         
         // Convert to an array of `SearchResult` objects and return.
@@ -140,7 +140,7 @@ private extension LocatorSearchSource {
         
         let geocodeResults = try await locatorTask.geocode(
             forSearchText: query,
-            parameters: geocodeParameters
+            using: geocodeParameters
         )
         
         // Convert to SearchResults and return.
