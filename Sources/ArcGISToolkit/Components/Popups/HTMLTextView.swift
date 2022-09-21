@@ -60,14 +60,14 @@ struct HTMLTextView: UIViewRepresentable {
                             /* Light mode */
                             :root {
                                 --body-bg: #FFFFFF;
-                                --body-color: #000000;
+                                --body-color: #1C1C1E;
                                 --link-color: #0164C8;
                             }
                             
                             /* Dark mode */
                             @media (prefers-color-scheme: dark) {
                                 :root {
-                                    --body-bg: #000000;
+                                    --body-bg: #1C1C1E;
                                     --body-color: #FFFFFF;
                                     --link-color: #1796FA;
                                 }
