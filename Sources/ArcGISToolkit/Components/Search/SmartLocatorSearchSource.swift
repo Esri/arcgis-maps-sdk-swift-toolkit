@@ -81,7 +81,7 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
 ***REMOVED******REMOVED***geocodeParameters.searchArea = nil
 ***REMOVED******REMOVED***let geocodeResults = try await locatorTask.geocode(
 ***REMOVED******REMOVED******REMOVED***forSearchText: query,
-***REMOVED******REMOVED******REMOVED***parameters: geocodeParameters
+***REMOVED******REMOVED******REMOVED***using: geocodeParameters
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Union results and return.
@@ -120,7 +120,7 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
 ***REMOVED******REMOVED***geocodeParameters.searchArea = nil
 ***REMOVED******REMOVED***let geocodeResults = try await locatorTask.geocode(
 ***REMOVED******REMOVED******REMOVED***forSuggestResult: suggestResult,
-***REMOVED******REMOVED******REMOVED***parameters: geocodeParameters
+***REMOVED******REMOVED******REMOVED***using: geocodeParameters
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Union results and return.
