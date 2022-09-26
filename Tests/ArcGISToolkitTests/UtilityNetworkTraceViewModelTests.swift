@@ -147,7 +147,7 @@ import XCTest
         let parameters = QueryParameters()
         parameters.addObjectID(171)
         
-        let result = try await layer.featureTable?.queryFeatures(parameters: parameters)
+        let result = try await layer.featureTable?.queryFeatures(using: parameters)
         let features = try XCTUnwrap(result?.features().compactMap { $0 })
         
         XCTAssertEqual(features.count, 1)
@@ -196,7 +196,7 @@ import XCTest
         let parameters = QueryParameters()
         parameters.addObjectID(463)
         
-        let result = try await layer.featureTable?.queryFeatures(parameters: parameters)
+        let result = try await layer.featureTable?.queryFeatures(using: parameters)
         let features = try XCTUnwrap(result?.features().compactMap { $0 })
         
         XCTAssertEqual(features.count, 1)
@@ -255,7 +255,7 @@ import XCTest
         let parameters = QueryParameters()
         parameters.addObjectID(177)
         
-        let result = try await layer.featureTable?.queryFeatures(parameters: parameters)
+        let result = try await layer.featureTable?.queryFeatures(using: parameters)
         let features = try XCTUnwrap(result?.features().compactMap { $0 })
         
         XCTAssertEqual(features.count, 1)
@@ -304,7 +304,7 @@ import XCTest
         let parameters = QueryParameters()
         parameters.addObjectID(171)
         
-        let result = try await layer.featureTable?.queryFeatures(parameters: parameters)
+        let result = try await layer.featureTable?.queryFeatures(using: parameters)
         let features = try XCTUnwrap(result?.features().compactMap { $0 })
         
         XCTAssertEqual(features.count, 1)
@@ -357,7 +357,7 @@ import XCTest
         let parameters = QueryParameters()
         parameters.addObjectID(171)
         
-        let result = try await layer.featureTable?.queryFeatures(parameters: parameters)
+        let result = try await layer.featureTable?.queryFeatures(using: parameters)
         let features = try XCTUnwrap(result?.features().compactMap { $0 })
         
         XCTAssertEqual(features.count, 1)
