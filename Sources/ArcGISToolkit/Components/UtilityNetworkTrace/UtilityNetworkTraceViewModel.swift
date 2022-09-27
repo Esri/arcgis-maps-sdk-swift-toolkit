@@ -359,7 +359,7 @@ import SwiftUI
         let traceResults: [UtilityTraceResult]
         
         do {
-            traceResults = try await network.trace(traceParameters: parameters)
+            traceResults = try await network.trace(using: parameters)
         } catch(let serviceError as ServiceError) {
             if let reason = serviceError.failureReason {
                 userAlert = .init(description: reason)
