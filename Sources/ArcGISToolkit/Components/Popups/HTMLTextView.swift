@@ -59,15 +59,15 @@ struct HTMLTextView: UIViewRepresentable {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***<style type="text/css" media="screen">
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***/* Light mode */
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***:root {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***--body-bg: #FFFFFF;
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***--body-color: #1C1C1E;
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***--body-bg: #FFFFFF00;
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***--body-color: #000000;
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***--link-color: #0164C8;
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***/* Dark mode */
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***@media (prefers-color-scheme: dark) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***:root {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***--body-bg: #1C1C1E;
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***--body-bg: #00000000;
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***--body-color: #FFFFFF;
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***--link-color: #1796FA;
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
@@ -105,8 +105,8 @@ struct HTMLTextView: UIViewRepresentable {
 ***REMOVED******REMOVED******REMOVED*** regardless of light/dark mode. If the user wants to implement dark
 ***REMOVED******REMOVED******REMOVED*** mode, within their HTML, the background of the HTML will be shown
 ***REMOVED******REMOVED******REMOVED*** over this background.
-***REMOVED******REMOVED***uiView.backgroundColor = .white
-***REMOVED******REMOVED***uiView.scrollView.backgroundColor = .white
+***REMOVED******REMOVED***uiView.backgroundColor = .clear
+***REMOVED******REMOVED***uiView.scrollView.backgroundColor = .clear
 ***REMOVED******REMOVED***uiView.scrollView.isScrollEnabled = false
 ***REMOVED******REMOVED***uiView.loadHTMLString(displayHTML, baseURL: nil)
 ***REMOVED******REMOVED***uiView.navigationDelegate = context.coordinator
