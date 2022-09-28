@@ -59,15 +59,15 @@ struct HTMLTextView: UIViewRepresentable {
                         <style type="text/css" media="screen">
                             /* Light mode */
                             :root {
-                                --body-bg: #FFFFFF;
-                                --body-color: #1C1C1E;
+                                --body-bg: #FFFFFF00;
+                                --body-color: #000000;
                                 --link-color: #0164C8;
                             }
                             
                             /* Dark mode */
                             @media (prefers-color-scheme: dark) {
                                 :root {
-                                    --body-bg: #1C1C1E;
+                                    --body-bg: #00000000;
                                     --body-color: #FFFFFF;
                                     --link-color: #1796FA;
                                 }
@@ -105,8 +105,8 @@ struct HTMLTextView: UIViewRepresentable {
         // regardless of light/dark mode. If the user wants to implement dark
         // mode, within their HTML, the background of the HTML will be shown
         // over this background.
-        uiView.backgroundColor = .white
-        uiView.scrollView.backgroundColor = .white
+        uiView.backgroundColor = .clear
+        uiView.scrollView.backgroundColor = .clear
         uiView.scrollView.isScrollEnabled = false
         uiView.loadHTMLString(displayHTML, baseURL: nil)
         uiView.navigationDelegate = context.coordinator
