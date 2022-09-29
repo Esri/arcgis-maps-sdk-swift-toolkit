@@ -24,18 +24,12 @@ struct TextPopupElementView: View {
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***if !popupElement.text.isEmpty {
-***REMOVED******REMOVED******REMOVED***let roundedRect = RoundedRectangle(cornerRadius: 8)
 ***REMOVED******REMOVED******REMOVED***ZStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED***HTMLTextView(html: popupElement.text, height: $webViewHeight)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.clipShape(roundedRect)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(height: webViewHeight)
 ***REMOVED******REMOVED******REMOVED******REMOVED***if webViewHeight == .zero {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Show `ProgressView` until `HTMLTextView` has set the height.
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ProgressView()
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***roundedRect
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.stroke(Color.black, lineWidth: 1)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***Divider()
