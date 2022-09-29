@@ -44,10 +44,33 @@ struct HTMLTextView: UIViewRepresentable {
                                 word-wrap:break-word; font-family:-apple-system; font:-apple-system-subheadline;
                             }
                             body {
-                                margin:10px; padding:0px;
+                                margin: 10px; 
+                                padding:0px;
+                                background: var(--body-bg);
+                                color: var(--body-color);
                             }
                             img {
                                 max-width: 100%;
+                            }
+                            a {
+                                color: var(--link-color);
+                            }
+                        </style>
+                        <style type="text/css" media="screen">
+                            /* Light mode */
+                            :root {
+                                --body-bg: #FFFFFF00;
+                                --body-color: #000000;
+                                --link-color: #0164C8;
+                            }
+                            
+                            /* Dark mode */
+                            @media (prefers-color-scheme: dark) {
+                                :root {
+                                    --body-bg: #00000000;
+                                    --body-color: #FFFFFF;
+                                    --link-color: #1796FA;
+                                }
                             }
                         </style>
                     </head>
@@ -82,8 +105,8 @@ struct HTMLTextView: UIViewRepresentable {
         // regardless of light/dark mode. If the user wants to implement dark
         // mode, within their HTML, the background of the HTML will be shown
         // over this background.
-        uiView.backgroundColor = .white
-        uiView.scrollView.backgroundColor = .white
+        uiView.backgroundColor = .clear
+        uiView.scrollView.backgroundColor = .clear
         uiView.scrollView.isScrollEnabled = false
         uiView.loadHTMLString(displayHTML, baseURL: nil)
         uiView.navigationDelegate = context.coordinator

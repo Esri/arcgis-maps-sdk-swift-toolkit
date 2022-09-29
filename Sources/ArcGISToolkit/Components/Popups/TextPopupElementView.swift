@@ -24,18 +24,12 @@ struct TextPopupElementView: View {
     
     var body: some View {
         if !popupElement.text.isEmpty {
-            let roundedRect = RoundedRectangle(cornerRadius: 8)
             ZStack {
                 HTMLTextView(html: popupElement.text, height: $webViewHeight)
-                    .clipShape(roundedRect)
                     .frame(height: webViewHeight)
                 if webViewHeight == .zero {
                     // Show `ProgressView` until `HTMLTextView` has set the height.
                     ProgressView()
-                }
-                else {
-                    roundedRect
-                        .stroke(Color.black, lineWidth: 1)
                 }
             }
             Divider()
