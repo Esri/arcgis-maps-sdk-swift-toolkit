@@ -13,8 +13,8 @@
 
 ***REMOVED***
 
-extension UtilityTraceFunctionType: CustomStringConvertible {
-***REMOVED***public var description: String {
+extension UtilityTraceFunction.FunctionType {
+***REMOVED***var title: String {
 ***REMOVED******REMOVED***switch self {
 ***REMOVED******REMOVED***case .add: return "Add"
 ***REMOVED******REMOVED***case .average: return "Average"
