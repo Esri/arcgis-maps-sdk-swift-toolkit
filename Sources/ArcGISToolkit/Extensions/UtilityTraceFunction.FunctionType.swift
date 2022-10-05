@@ -13,8 +13,8 @@
 
 import ArcGIS
 
-extension UtilityTraceFunctionType: CustomStringConvertible {
-    public var description: String {
+extension UtilityTraceFunction.FunctionType {
+    var title: String {
         switch self {
         case .add: return "Add"
         case .average: return "Average"
