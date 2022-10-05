@@ -31,18 +31,31 @@ struct AuthenticationApp: App {
     }
     
     var body: some SwiftUI.Scene {
-        var body: some SwiftUI.Scene {
-            WindowGroup {
-                HomeView()
-                    .authenticator(authenticator)
-                    .task {
-                        // Here we make the authenticator persistent, which means that it will synchronize
-                        // with they keychain for storing credentials.
-                        // It also means that a user can sign in without having to be prompted for
-                        // credentials. Once credentials are cleared from the stores ("sign-out"),
-                        // then the user will need to be prompted once again.
-                        try? await authenticator.setupPersistentCredentialStorage(access: .whenUnlockedThisDeviceOnly)
-                    }
+        WindowGroup {
+            Group {
+                if isSettingUp {
+                    ProgressView()
+                } else {
+                    HomeView()
+                }
+            }
+            // Using this view modifier will cause a prompt when the authenticator is asked
+            // to handle an authentication challenge.
+            // This will handle many different types of authentication, for example:
+            // - ArcGIS authentication (token and OAuth)
+            // - Integrated Windows Authentication (IWA)
+            // - Client Certificate (PKI)
+            .authenticator(authenticator)
+            .environmentObject(authenticator)
+            .task {
+                isSettingUp = true
+                // Here we make the authenticator persistent, which means that it will synchronize
+                // with they keychain for storing credentials.
+                // It also means that a user can sign in without having to be prompted for
+                // credentials. Once credentials are cleared from the stores ("sign-out"),
+                // then the user will need to be prompted once again.
+                try? await authenticator.setupPersistentCredentialStorage(access: .whenUnlockedThisDeviceOnly)
+                isSettingUp = false
             }
         }
     }
