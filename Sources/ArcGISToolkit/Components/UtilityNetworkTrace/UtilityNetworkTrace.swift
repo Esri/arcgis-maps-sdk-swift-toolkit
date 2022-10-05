@@ -372,7 +372,7 @@ public struct UtilityNetworkTrace: View {
                                 Text(item.function.networkAttribute?.name ?? "Unnamed")
                                 Spacer()
                                 VStack(alignment: .trailing) {
-                                    Text(item.function.functionType.description)
+                                    Text(item.function.functionType.title)
                                         .font(.caption)
                                         .foregroundColor(.secondary)
                                     Text((item.result as? Double)?.description ?? "N/A")
