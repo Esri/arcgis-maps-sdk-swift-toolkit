@@ -9,3 +9,4 @@
 * **[Scalebar](Scalebar)** - Displays current scale reference.
 * **[Search](Search)** - Displays a search experience for geo views.
 * **[UtilityNetworkTrace](UtilityNetworkTrace)** - Runs traces on a web map published with a utility network and trace configurations.
+* **[Authenticator](Documentation/Authenticator)** - Displays user interface when network and ArcGIS authentication challenges occur.
