@@ -9,7 +9,7 @@ The Authenticator is a view modifier that will cause a prompt when the Authentic
   - Integrated Windows Authentication (IWA)
   - Client Certificate (PKI)
 
-The Authenticator can be configured to support securely persisting credentials to they keychain.
+The Authenticator can be configured to support securely persisting credentials to the keychain.
 
 ## Behavior:
 
