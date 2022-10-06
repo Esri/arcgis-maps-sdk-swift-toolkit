@@ -29,7 +29,7 @@ The Authenticator view modifier will display an alert or a full screen modal vie
     }
     
     var body: some SwiftUI.Scene {
-        WindowGroup {     
+        WindowGroup {
             HomeView()
                 .authenticator(authenticator)
                 .task {
