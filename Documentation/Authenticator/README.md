@@ -1,6 +1,6 @@
 # Authenticator
 
-Displays user interface when network and ArcGIS authentication challenges occur.
+Displays a user interface when network and ArcGIS authentication challenges occur.
 
 ## Features
 
