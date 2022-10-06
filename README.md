@@ -20,7 +20,7 @@ To use Toolkit in your project:
 * **[Scalebar](Documentation/Scalebar)** - Displays current scale reference.
 * **[Search](Documentation/Search)** - Displays a search experience for geo views.
 * **[UtilityNetworkTrace](Documentation/UtilityNetworkTrace)** - Runs traces on a web map published with a utility network and trace configurations.
-* **[Authenticator](Documentation/Authenticator)** - Displays user interface when network and ArcGIS authentication challenges occur.
+* **[Authenticator](Documentation/Authenticator)** - Displays a user interface when network and ArcGIS authentication challenges occur.
 
 
 ## Requirements
