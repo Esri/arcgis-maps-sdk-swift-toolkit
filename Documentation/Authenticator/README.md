@@ -34,7 +34,7 @@ The Authenticator view modifier will display an alert or a full screen modal vie
                 .authenticator(authenticator)
                 .task {
                     // Here we make the authenticator persistent, which means that it will synchronize
-                    // with they keychain for storing credentials.
+                    // with the keychain for storing credentials.
                     // It also means that a user can sign in without having to be prompted for
                     // credentials. Once credentials are cleared from the stores ("sign-out"),
                     // then the user will need to be prompted once again.
