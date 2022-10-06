@@ -29,7 +29,7 @@ The Authenticator view modifier will display an alert or a full screen modal vie
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED*** 
+***REMOVED***
 ***REMOVED******REMOVED******REMOVED***HomeView()
 ***REMOVED******REMOVED******REMOVED******REMOVED***.authenticator(authenticator)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.task {
