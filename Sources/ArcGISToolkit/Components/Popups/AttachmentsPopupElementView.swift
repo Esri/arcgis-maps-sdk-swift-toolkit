@@ -79,7 +79,7 @@ struct AttachmentsPopupElementView: View {
         }
         .task {
             try? await popupElement.fetchAttachments()
-            let attachmentModels = popupElement.attachments.map { attachment in
+            let attachmentModels = popupElement.attachments.reversed().map { attachment in
                 AttachmentModel(attachment: attachment)
             }
             viewModel.attachmentModels.append(contentsOf: attachmentModels)
