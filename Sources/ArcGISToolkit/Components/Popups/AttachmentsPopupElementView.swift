@@ -79,7 +79,7 @@ struct AttachmentsPopupElementView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***.task {
 ***REMOVED******REMOVED******REMOVED***try? await popupElement.fetchAttachments()
-***REMOVED******REMOVED******REMOVED***let attachmentModels = popupElement.attachments.map { attachment in
+***REMOVED******REMOVED******REMOVED***let attachmentModels = popupElement.attachments.reversed().map { attachment in
 ***REMOVED******REMOVED******REMOVED******REMOVED***AttachmentModel(attachment: attachment)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***viewModel.attachmentModels.append(contentsOf: attachmentModels)
