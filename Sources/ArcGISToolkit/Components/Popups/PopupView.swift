@@ -26,7 +26,7 @@ public struct PopupView: View {
     }
     
     /// The `Popup` to display.
-    private var popup: Popup
+    private let popup: Popup
     
     /// A Boolean value specifying whether a "close" button should be shown or not. If the "close"
     /// button is shown, you should pass in the `isPresented` argument to the initializer,
@@ -35,7 +35,9 @@ public struct PopupView: View {
     
     /// A Boolean value indicating whether the popup's elements have been evaluated via
     /// the `popup.evaluateExpressions()` method.
-    @State private var isPopupEvaluated: Bool? = nil
+    private var isPopupEvaluated: Bool {
+        expressionEvaluations != nil
+    }
 
     /// The results of calling the `popup.evaluateExpressions()` method.
     @State private var expressionEvaluations: [PopupExpressionEvaluation]? = nil
@@ -64,9 +66,9 @@ public struct PopupView: View {
             }
             Divider()
             Group {
-                if let isPopupEvaluated = isPopupEvaluated {
+                if expressionEvaluations != nil {
                     if isPopupEvaluated {
-                        PopupElementScrollView(popup: popup)
+                        PopupElementScrollView(popupElements: popup.evaluatedElements)
                     } else {
                         Text("Popup evaluation failed.")
                     }
@@ -79,22 +81,20 @@ public struct PopupView: View {
                 }
             }
         }
-        .task {
+        .task(id: ObjectIdentifier(popup)) {
+            expressionEvaluations = nil
             do {
                 expressionEvaluations = try await popup.evaluateExpressions()
-                isPopupEvaluated = true
-            } catch {
-                isPopupEvaluated = false
-            }
+            } catch {}
         }
     }
     
     struct PopupElementScrollView: View {
-        var popup: Popup
+        var popupElements: [PopupElement]
         var body: some View {
             ScrollView {
                 VStack(alignment: .leading) {
-                    ForEach(Array(popup.evaluatedElements.enumerated()), id: \.offset) { index, popupElement in
+                    ForEach(popupElements) { popupElement in
                         switch popupElement {
                         case let popupElement as AttachmentsPopupElement:
                             AttachmentsPopupElementView(popupElement: popupElement)
