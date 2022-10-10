@@ -12,13 +12,6 @@
 ***REMOVED*** limitations under the License.
 
 ***REMOVED***
-import Foundation
-
-extension Bookmark: Equatable {
-***REMOVED***public static func == (lhs: Bookmark, rhs: Bookmark) -> Bool {
-***REMOVED******REMOVED***lhs.hashValue == rhs.hashValue
-***REMOVED***
-***REMOVED***
 
 extension Bookmark: Hashable {
 ***REMOVED***public func hash(into hasher: inout Hasher) {
