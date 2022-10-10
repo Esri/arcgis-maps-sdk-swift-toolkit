@@ -99,7 +99,7 @@ extension SearchResult {
 ***REMOVED******REMOVED******REMOVED******REMOVED***geometry: geocodeResult.displayLocation,
 ***REMOVED******REMOVED******REMOVED******REMOVED***attributes: geocodeResult.attributes
 ***REMOVED******REMOVED******REMOVED***),
-***REMOVED******REMOVED******REMOVED***selectionViewpoint: geocodeResult.extent.map(Viewpoint.init)
+***REMOVED******REMOVED******REMOVED***selectionViewpoint: geocodeResult.extent.map { .init(targetExtent: $0) ***REMOVED***
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
