@@ -12,13 +12,6 @@
 // limitations under the License.
 
 import ArcGIS
-import Foundation
-
-extension Bookmark: Equatable {
-    public static func == (lhs: Bookmark, rhs: Bookmark) -> Bool {
-        lhs.hashValue == rhs.hashValue
-    }
-}
 
 extension Bookmark: Hashable {
     public func hash(into hasher: inout Hasher) {
