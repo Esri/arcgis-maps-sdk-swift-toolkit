@@ -26,20 +26,16 @@ public struct PopupView: View {
     }
     
     /// The `Popup` to display.
-    private var popup: Popup
+    private let popup: Popup
     
     /// A Boolean value specifying whether a "close" button should be shown or not. If the "close"
     /// button is shown, you should pass in the `isPresented` argument to the initializer,
     /// so that the the "close" button can close the view.
     private var showCloseButton = false
     
-    /// A Boolean value indicating whether the popup's elements have been evaluated via
-    /// the `popup.evaluateExpressions()` method.
-    @State private var isPopupEvaluated: Bool? = nil
+    /// The result of evaluating the popup expressions.
+    @State private var evaluateExpressionsResult: Result<[PopupExpressionEvaluation], Error>?
 
-    /// The results of calling the `popup.evaluateExpressions()` method.
-    @State private var expressionEvaluations: [PopupExpressionEvaluation]? = nil
-    
     /// A binding to a Boolean value that determines whether the view is presented.
     private var isPresented: Binding<Bool>?
 
@@ -64,11 +60,12 @@ public struct PopupView: View {
             }
             Divider()
             Group {
-                if let isPopupEvaluated = isPopupEvaluated {
-                    if isPopupEvaluated {
-                        PopupElementScrollView(popup: popup)
-                    } else {
-                        Text("Popup evaluation failed.")
+                if let evaluateExpressionsResult {
+                    switch evaluateExpressionsResult {
+                    case .success(_):
+                        PopupElementScrollView(popupElements: popup.evaluatedElements)
+                    case .failure(let error):
+                        Text("Popup evaluation failed: \(error.localizedDescription)")
                     }
                 } else {
                     VStack(alignment: .center) {
@@ -79,22 +76,21 @@ public struct PopupView: View {
                 }
             }
         }
-        .task {
-            do {
-                expressionEvaluations = try await popup.evaluateExpressions()
-                isPopupEvaluated = true
-            } catch {
-                isPopupEvaluated = false
+        .task(id: ObjectIdentifier(popup)) {
+            evaluateExpressionsResult = nil
+            evaluateExpressionsResult = await Result {
+                try await popup.evaluateExpressions()
             }
         }
     }
     
     struct PopupElementScrollView: View {
-        var popup: Popup
+        let popupElements: [PopupElement]
+        
         var body: some View {
             ScrollView {
                 VStack(alignment: .leading) {
-                    ForEach(Array(popup.evaluatedElements.enumerated()), id: \.offset) { index, popupElement in
+                    ForEach(popupElements) { popupElement in
                         switch popupElement {
                         case let popupElement as AttachmentsPopupElement:
                             AttachmentsPopupElementView(popupElement: popupElement)
