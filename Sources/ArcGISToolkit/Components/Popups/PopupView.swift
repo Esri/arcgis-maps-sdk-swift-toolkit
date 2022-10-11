@@ -91,7 +91,8 @@ public struct PopupView: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***struct PopupElementScrollView: View {
-***REMOVED******REMOVED***var popupElements: [PopupElement]
+***REMOVED******REMOVED***let popupElements: [PopupElement]
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var body: some View {
 ***REMOVED******REMOVED******REMOVED***ScrollView {
 ***REMOVED******REMOVED******REMOVED******REMOVED***VStack(alignment: .leading) {
