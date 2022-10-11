@@ -33,13 +33,9 @@ public struct PopupView: View {
     /// so that the the "close" button can close the view.
     private var showCloseButton = false
     
-    /// The error signifying that `Popup.evaluateExpressions` failed. Individual expression
-    /// evaluation results are found in `expressionEvaluations`.
-    @State private var popupEvalutationError: Error? = nil
+    /// The result of evaluating the popup expressions.
+    @State private var evaluateExpressionsResult: Result<[PopupExpressionEvaluation], Error>?
 
-    /// The results of calling the `popup.evaluateExpressions()` method.
-    @State private var expressionEvaluations: [PopupExpressionEvaluation]? = nil
-    
     /// A binding to a Boolean value that determines whether the view is presented.
     private var isPresented: Binding<Bool>?
 
@@ -64,11 +60,12 @@ public struct PopupView: View {
             }
             Divider()
             Group {
-                if expressionEvaluations != nil {
-                    if popupEvalutationError == nil {
+                if let evaluateExpressionsResult {
+                    switch evaluateExpressionsResult {
+                    case .success(_):
                         PopupElementScrollView(popupElements: popup.evaluatedElements)
-                    } else {
-                        Text("Popup evaluation failed.")
+                    case .failure(let error):
+                        Text("Popup evaluation failed: \(error.localizedDescription)")
                     }
                 } else {
                     VStack(alignment: .center) {
@@ -80,12 +77,9 @@ public struct PopupView: View {
             }
         }
         .task(id: ObjectIdentifier(popup)) {
-            expressionEvaluations = nil
-            popupEvalutationError = nil
-            do {
-                expressionEvaluations = try await popup.evaluateExpressions()
-            } catch {
-                popupEvalutationError = error
+            evaluateExpressionsResult = nil
+            evaluateExpressionsResult = await Result {
+                try await popup.evaluateExpressions()
             }
         }
     }
