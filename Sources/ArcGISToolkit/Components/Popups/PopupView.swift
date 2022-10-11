@@ -91,7 +91,8 @@ public struct PopupView: View {
     }
     
     struct PopupElementScrollView: View {
-        var popupElements: [PopupElement]
+        let popupElements: [PopupElement]
+        
         var body: some View {
             ScrollView {
                 VStack(alignment: .leading) {
