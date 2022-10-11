@@ -33,11 +33,9 @@ public struct PopupView: View {
 ***REMOVED******REMOVED***/ so that the the "close" button can close the view.
 ***REMOVED***private var showCloseButton = false
 ***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value indicating whether the popup's elements have been evaluated via
-***REMOVED******REMOVED***/ the `popup.evaluateExpressions()` method.
-***REMOVED***private var isPopupEvaluated: Bool {
-***REMOVED******REMOVED***expressionEvaluations != nil
-***REMOVED***
+***REMOVED******REMOVED***/ The error signifying that `Popup.evaluateExpressions` failed. Individual expression
+***REMOVED******REMOVED***/ evaluation results are found in `expressionEvaluations`.
+***REMOVED***@State private var popupEvalutationError: Error? = nil
 
 ***REMOVED******REMOVED***/ The results of calling the `popup.evaluateExpressions()` method.
 ***REMOVED***@State private var expressionEvaluations: [PopupExpressionEvaluation]? = nil
@@ -67,7 +65,7 @@ public struct PopupView: View {
 ***REMOVED******REMOVED******REMOVED***Divider()
 ***REMOVED******REMOVED******REMOVED***Group {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if expressionEvaluations != nil {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if isPopupEvaluated {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if popupEvalutationError == nil {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***PopupElementScrollView(popupElements: popup.evaluatedElements)
 ***REMOVED******REMOVED******REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Popup evaluation failed.")
@@ -83,9 +81,12 @@ public struct PopupView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***.task(id: ObjectIdentifier(popup)) {
 ***REMOVED******REMOVED******REMOVED***expressionEvaluations = nil
+***REMOVED******REMOVED******REMOVED***popupEvalutationError = nil
 ***REMOVED******REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED******REMOVED***expressionEvaluations = try await popup.evaluateExpressions()
-***REMOVED******REMOVED*** catch {***REMOVED***
+***REMOVED******REMOVED*** catch {
+***REMOVED******REMOVED******REMOVED******REMOVED***popupEvalutationError = error
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
