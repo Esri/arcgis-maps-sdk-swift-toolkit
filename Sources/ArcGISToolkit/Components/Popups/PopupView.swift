@@ -33,13 +33,9 @@ public struct PopupView: View {
 ***REMOVED******REMOVED***/ so that the the "close" button can close the view.
 ***REMOVED***private var showCloseButton = false
 ***REMOVED***
-***REMOVED******REMOVED***/ The error signifying that `Popup.evaluateExpressions` failed. Individual expression
-***REMOVED******REMOVED***/ evaluation results are found in `expressionEvaluations`.
-***REMOVED***@State private var popupEvalutationError: Error? = nil
+***REMOVED******REMOVED***/ The result of evaluating the popup expressions.
+***REMOVED***@State private var evaluateExpressionsResult: Result<[PopupExpressionEvaluation], Error>?
 
-***REMOVED******REMOVED***/ The results of calling the `popup.evaluateExpressions()` method.
-***REMOVED***@State private var expressionEvaluations: [PopupExpressionEvaluation]? = nil
-***REMOVED***
 ***REMOVED******REMOVED***/ A binding to a Boolean value that determines whether the view is presented.
 ***REMOVED***private var isPresented: Binding<Bool>?
 
@@ -64,11 +60,12 @@ public struct PopupView: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***Divider()
 ***REMOVED******REMOVED******REMOVED***Group {
-***REMOVED******REMOVED******REMOVED******REMOVED***if expressionEvaluations != nil {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if popupEvalutationError == nil {
+***REMOVED******REMOVED******REMOVED******REMOVED***if let evaluateExpressionsResult {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***switch evaluateExpressionsResult {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .success(_):
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***PopupElementScrollView(popupElements: popup.evaluatedElements)
-***REMOVED******REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Popup evaluation failed.")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .failure(let error):
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Popup evaluation failed: \(error.localizedDescription)")
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***VStack(alignment: .center) {
@@ -80,12 +77,9 @@ public struct PopupView: View {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.task(id: ObjectIdentifier(popup)) {
-***REMOVED******REMOVED******REMOVED***expressionEvaluations = nil
-***REMOVED******REMOVED******REMOVED***popupEvalutationError = nil
-***REMOVED******REMOVED******REMOVED***do {
-***REMOVED******REMOVED******REMOVED******REMOVED***expressionEvaluations = try await popup.evaluateExpressions()
-***REMOVED******REMOVED*** catch {
-***REMOVED******REMOVED******REMOVED******REMOVED***popupEvalutationError = error
+***REMOVED******REMOVED******REMOVED***evaluateExpressionsResult = nil
+***REMOVED******REMOVED******REMOVED***evaluateExpressionsResult = await Result {
+***REMOVED******REMOVED******REMOVED******REMOVED***try await popup.evaluateExpressions()
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
