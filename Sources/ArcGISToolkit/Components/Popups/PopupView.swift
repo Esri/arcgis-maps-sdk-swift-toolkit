@@ -26,20 +26,16 @@ public struct PopupView: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The `Popup` to display.
-***REMOVED***private var popup: Popup
+***REMOVED***private let popup: Popup
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value specifying whether a "close" button should be shown or not. If the "close"
 ***REMOVED******REMOVED***/ button is shown, you should pass in the `isPresented` argument to the initializer,
 ***REMOVED******REMOVED***/ so that the the "close" button can close the view.
 ***REMOVED***private var showCloseButton = false
 ***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value indicating whether the popup's elements have been evaluated via
-***REMOVED******REMOVED***/ the `popup.evaluateExpressions()` method.
-***REMOVED***@State private var isPopupEvaluated: Bool? = nil
+***REMOVED******REMOVED***/ The result of evaluating the popup expressions.
+***REMOVED***@State private var evaluateExpressionsResult: Result<[PopupExpressionEvaluation], Error>?
 
-***REMOVED******REMOVED***/ The results of calling the `popup.evaluateExpressions()` method.
-***REMOVED***@State private var expressionEvaluations: [PopupExpressionEvaluation]? = nil
-***REMOVED***
 ***REMOVED******REMOVED***/ A binding to a Boolean value that determines whether the view is presented.
 ***REMOVED***private var isPresented: Binding<Bool>?
 
@@ -64,11 +60,12 @@ public struct PopupView: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***Divider()
 ***REMOVED******REMOVED******REMOVED***Group {
-***REMOVED******REMOVED******REMOVED******REMOVED***if let isPopupEvaluated = isPopupEvaluated {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if isPopupEvaluated {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***PopupElementScrollView(popup: popup)
-***REMOVED******REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Popup evaluation failed.")
+***REMOVED******REMOVED******REMOVED******REMOVED***if let evaluateExpressionsResult {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***switch evaluateExpressionsResult {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .success(_):
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***PopupElementScrollView(popupElements: popup.evaluatedElements)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case .failure(let error):
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Popup evaluation failed: \(error.localizedDescription)")
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***VStack(alignment: .center) {
@@ -79,22 +76,21 @@ public struct PopupView: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.task {
-***REMOVED******REMOVED******REMOVED***do {
-***REMOVED******REMOVED******REMOVED******REMOVED***expressionEvaluations = try await popup.evaluateExpressions()
-***REMOVED******REMOVED******REMOVED******REMOVED***isPopupEvaluated = true
-***REMOVED******REMOVED*** catch {
-***REMOVED******REMOVED******REMOVED******REMOVED***isPopupEvaluated = false
+***REMOVED******REMOVED***.task(id: ObjectIdentifier(popup)) {
+***REMOVED******REMOVED******REMOVED***evaluateExpressionsResult = nil
+***REMOVED******REMOVED******REMOVED***evaluateExpressionsResult = await Result {
+***REMOVED******REMOVED******REMOVED******REMOVED***try await popup.evaluateExpressions()
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***struct PopupElementScrollView: View {
-***REMOVED******REMOVED***var popup: Popup
+***REMOVED******REMOVED***let popupElements: [PopupElement]
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var body: some View {
 ***REMOVED******REMOVED******REMOVED***ScrollView {
 ***REMOVED******REMOVED******REMOVED******REMOVED***VStack(alignment: .leading) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(Array(popup.evaluatedElements.enumerated()), id: \.offset) { index, popupElement in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(popupElements) { popupElement in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***switch popupElement {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***case let popupElement as AttachmentsPopupElement:
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AttachmentsPopupElementView(popupElement: popupElement)
