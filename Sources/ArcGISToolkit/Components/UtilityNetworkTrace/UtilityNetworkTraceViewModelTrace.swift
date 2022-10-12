@@ -17,11 +17,35 @@
 extension UtilityNetworkTraceViewModel {
 ***REMOVED******REMOVED***/ A trace performed on a utility network.
 ***REMOVED***struct Trace {
-***REMOVED******REMOVED******REMOVED***/ The number of assets returned by the trace.
-***REMOVED******REMOVED***var assetCount = 0
+***REMOVED******REMOVED******REMOVED***/ - Parameter name: A name of a utility asset group.
+***REMOVED******REMOVED******REMOVED***/ - Returns: The set of utility elements returned by the trace that belong to the provided
+***REMOVED******REMOVED******REMOVED***/ asset group, grouped by type.
+***REMOVED******REMOVED***func elementsByTypeInGroup(named name: String) -> [String: [UtilityElement]] {
+***REMOVED******REMOVED******REMOVED***let assetsInGroup = elementsInAssetGroup(named: name)
+***REMOVED******REMOVED******REMOVED***var result = [String : [UtilityElement]]()
+***REMOVED******REMOVED******REMOVED***assetsInGroup.forEach { e in
+***REMOVED******REMOVED******REMOVED******REMOVED***var assetTypeGroup = result[e.assetType.name, default: []]
+***REMOVED******REMOVED******REMOVED******REMOVED***assetTypeGroup.append(e)
+***REMOVED******REMOVED******REMOVED******REMOVED***result.updateValue(assetTypeGroup, forKey: e.assetType.name)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ A collection of all elements returned in the trace, grouped by asset group and asset type.
-***REMOVED******REMOVED***var assets = [String: [String: [UtilityElement]]]()
+***REMOVED******REMOVED******REMOVED***return result
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ - Parameter name: A name of a utility asset group.
+***REMOVED******REMOVED******REMOVED***/ - Returns: The set of utility elements returned by the trace that belong to the provided
+***REMOVED******REMOVED******REMOVED***/ asset group.
+***REMOVED******REMOVED***func elementsInAssetGroup(named name: String) -> [UtilityElement] {
+***REMOVED******REMOVED******REMOVED***return elementResults.filter({ $0.assetGroup.name == name ***REMOVED***)
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ A set of the asset group names returned by the trace.
+***REMOVED******REMOVED***var assetGroupNames: Set<String> {
+***REMOVED******REMOVED******REMOVED***var assetGroupNames = Set<String>()
+***REMOVED******REMOVED******REMOVED***elementResults.forEach {
+***REMOVED******REMOVED******REMOVED******REMOVED***assetGroupNames.insert($0.assetGroup.name)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***return assetGroupNames
+***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ A user given color for the trace with a default value of green.
 ***REMOVED******REMOVED***var color: Color = .green {
@@ -40,6 +64,9 @@ extension UtilityNetworkTraceViewModel {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ The chosen named trace configuration.
 ***REMOVED******REMOVED***var configuration: UtilityNamedTraceConfiguration?
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ A collection of all elements returned in the trace.
+***REMOVED******REMOVED***var elementResults = [UtilityElement]()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ A collection of utility trace function outputs.
 ***REMOVED******REMOVED***var functionOutputs = [UtilityTraceFunctionOutput]()
