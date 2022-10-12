@@ -17,11 +17,35 @@ import SwiftUI
 extension UtilityNetworkTraceViewModel {
     /// A trace performed on a utility network.
     struct Trace {
-        /// The number of assets returned by the trace.
-        var assetCount = 0
+        /// - Parameter name: A name of a utility asset group.
+        /// - Returns: The set of utility elements returned by the trace that belong to the provided
+        /// asset group, grouped by type.
+        func elementsByTypeInGroup(named name: String) -> [String: [UtilityElement]] {
+            let assetsInGroup = elementsInAssetGroup(named: name)
+            var result = [String : [UtilityElement]]()
+            assetsInGroup.forEach { e in
+                var assetTypeGroup = result[e.assetType.name, default: []]
+                assetTypeGroup.append(e)
+                result.updateValue(assetTypeGroup, forKey: e.assetType.name)
+            }
+            return result
+        }
         
-        /// A collection of all elements returned in the trace, grouped by asset group and asset type.
-        var assets = [String: [String: [UtilityElement]]]()
+        /// - Parameter name: A name of a utility asset group.
+        /// - Returns: The set of utility elements returned by the trace that belong to the provided
+        /// asset group.
+        func elementsInAssetGroup(named name: String) -> [UtilityElement] {
+            return elementResults.filter({ $0.assetGroup.name == name })
+        }
+        
+        /// A set of the asset group names returned by the trace.
+        var assetGroupNames: Set<String> {
+            var assetGroupNames = Set<String>()
+            elementResults.forEach {
+                assetGroupNames.insert($0.assetGroup.name)
+            }
+            return assetGroupNames
+        }
         
         /// A user given color for the trace with a default value of green.
         var color: Color = .green {
@@ -40,6 +64,9 @@ extension UtilityNetworkTraceViewModel {
         
         /// The chosen named trace configuration.
         var configuration: UtilityNamedTraceConfiguration?
+        
+        /// A collection of all elements returned in the trace.
+        var elementResults = [UtilityElement]()
         
         /// A collection of utility trace function outputs.
         var functionOutputs = [UtilityTraceFunctionOutput]()
