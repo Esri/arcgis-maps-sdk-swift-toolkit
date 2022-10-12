@@ -37,8 +37,8 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED***private enum TraceViewingActivity: Hashable {
 ***REMOVED******REMOVED******REMOVED***/ The user is viewing the list of available trace options.
 ***REMOVED******REMOVED***case viewingAdvancedOptions
-***REMOVED******REMOVED******REMOVED***/ The user is viewing a list of element results, grouped by asset group and asset type.
-***REMOVED******REMOVED***case viewingElementGroup([String: [UtilityElement]])
+***REMOVED******REMOVED******REMOVED***/ The user is viewing the list of element results.
+***REMOVED******REMOVED***case viewingElementGroup(named: String)
 ***REMOVED******REMOVED******REMOVED***/ The user is viewing the list of feature results.
 ***REMOVED******REMOVED***case viewingFeatureResults
 ***REMOVED******REMOVED******REMOVED***/ The user is viewing the list of function results.
@@ -127,21 +127,17 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Displays information about a chosen asset group.
 ***REMOVED***@ViewBuilder private var assetGroupDetail: some View {
-***REMOVED******REMOVED***if let assetGroup = selectedAssetGroup {
+***REMOVED******REMOVED***if let assetGroupName = selectedAssetGroupName,
+***REMOVED******REMOVED***   let assetTypeGroups = viewModel.selectedTrace?.elementsByTypeInGroup(named: assetGroupName) {
 ***REMOVED******REMOVED******REMOVED***makeBackButton(title: featureResultsTitle) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***currentActivity = .viewingTraces(.viewingFeatureResults)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***makeDetailSectionHeader(
-***REMOVED******REMOVED******REMOVED******REMOVED***title: assetGroup.first?.value.first?.assetGroup.name ?? "Unnamed Asset Group"
-***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***makeDetailSectionHeader(title: assetGroupName)
 ***REMOVED******REMOVED******REMOVED***List {
-***REMOVED******REMOVED******REMOVED******REMOVED***ForEach(assetGroup.sorted(by: { $0.key < $1.key ***REMOVED***), id: \.key) { assetTypeGroup in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let elements = assetTypeGroup.value.sorted {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***$0.objectID < $1.objectID
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Section(assetTypeGroup.key) {
+***REMOVED******REMOVED******REMOVED******REMOVED***ForEach(assetTypeGroups.keys.compactMap({$0***REMOVED***).sorted(), id: \.self) { assetTypeGroupName in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Section(assetTypeGroupName) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***DisclosureGroup {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(elements) { element in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(assetTypeGroups[assetTypeGroupName] ?? [], id: \.globalID) { element in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let feature = await viewModel.feature(for: element),
@@ -158,7 +154,7 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("(\(elements.count))")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(assetTypeGroups[assetTypeGroupName]?.count.description ?? "N/A")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
@@ -337,24 +333,22 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED***List {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Section(featureResultsTitle) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***DisclosureGroup(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"(\(viewModel.selectedTrace?.assetCount ?? 0))",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"(\(viewModel.selectedTrace?.elementResults.count ?? 0))",
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isExpanded: Binding(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***get: { isFocused(traceViewingActivity: .viewingFeatureResults) ***REMOVED***,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***set: { currentActivity = .viewingTraces($0 ? .viewingFeatureResults : nil) ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***(viewModel.selectedTrace?.assets ?? [:]).sorted(by: { $0.key < $1.key ***REMOVED***), id: \.key
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***) { assetGroup in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(viewModel.selectedTrace?.assetGroupNames.sorted() ?? [], id: \.self) { assetGroupName in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(assetGroup.key)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(assetGroupName)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("(\(assetGroup.value.compactMap({ $0.value.count ***REMOVED***).reduce(0, +)))")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(viewModel.selectedTrace?.elementsInAssetGroup(named: assetGroupName).count.description ?? "N/A")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.blue)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.contentShape(Rectangle())
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onTapGesture {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentActivity = .viewingTraces(.viewingElementGroup(assetGroup.value))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentActivity = .viewingTraces(.viewingElementGroup(named: assetGroupName))
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
@@ -638,8 +632,8 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED***return "Trace \(index+1) of \(viewModel.completedTraces.count.description)"
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ The selected utility element asset group.
-***REMOVED***private var selectedAssetGroup: [String: [UtilityElement]]? {
+***REMOVED******REMOVED***/ The name of the selected utility element asset group.
+***REMOVED***private var selectedAssetGroupName: String? {
 ***REMOVED******REMOVED***if case let .viewingTraces(activity) = currentActivity,
 ***REMOVED******REMOVED***   case let .viewingElementGroup(elementGroup) = activity {
 ***REMOVED******REMOVED******REMOVED***return elementGroup
