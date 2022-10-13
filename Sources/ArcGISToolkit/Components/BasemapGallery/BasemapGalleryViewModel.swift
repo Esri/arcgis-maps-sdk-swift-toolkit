@@ -34,7 +34,7 @@
 ***REMOVED******REMOVED******REMOVED******REMOVED*** We have no basemap items, so fetch the
 ***REMOVED******REMOVED******REMOVED******REMOVED*** developer basemaps from AGOL.
 ***REMOVED******REMOVED******REMOVED***fetchBasemaps(
-***REMOVED******REMOVED******REMOVED******REMOVED***from: Portal.arcGISOnline(isLoginRequired: false),
+***REMOVED******REMOVED******REMOVED******REMOVED***from: Portal.arcGISOnline(requiresLogin: false),
 ***REMOVED******REMOVED******REMOVED******REMOVED***useDeveloperBasemaps: true
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED***
