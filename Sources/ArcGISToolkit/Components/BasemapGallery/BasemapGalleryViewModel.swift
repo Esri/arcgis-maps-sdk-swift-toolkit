@@ -34,7 +34,7 @@ import ArcGIS
             // We have no basemap items, so fetch the
             // developer basemaps from AGOL.
             fetchBasemaps(
-                from: Portal.arcGISOnline(isLoginRequired: false),
+                from: Portal.arcGISOnline(requiresLogin: false),
                 useDeveloperBasemaps: true
             )
         }
