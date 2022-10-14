@@ -32,7 +32,7 @@ struct AsyncImageView: View {
 ***REMOVED***@State var refreshing: Bool = false
 ***REMOVED***
 ***REMOVED***@State var currentImage: Image?
-
+***REMOVED***
 ***REMOVED******REMOVED***/ Creates an `AsyncImageView`.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - url: The `URL` of the image.
@@ -63,12 +63,9 @@ struct AsyncImageView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.resizable()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.aspectRatio(contentMode: contentMode)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.task(id: refreshing) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print(".task(id: refreshing) = \(refreshing)")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if refreshing {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***refreshing = false
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentImage = image
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print("refreshing = \(refreshing)")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print("ImageDrawing, refreshing = \(refreshing)")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***refreshing = false
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentImage = image
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** else if phase.error != nil, !refreshing {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Displays an error notification.
@@ -86,23 +83,16 @@ struct AsyncImageView: View {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.onAppear() {
-***REMOVED******REMOVED******REMOVED******REMOVED***put refresh interval here???
-***REMOVED******REMOVED******REMOVED******REMOVED***put refresh interval here???
-***REMOVED******REMOVED******REMOVED***print("refreshInterval = \(refreshInterval)")
 ***REMOVED******REMOVED******REMOVED***if refreshInterval > 0 {
 ***REMOVED******REMOVED******REMOVED******REMOVED***timer = Timer.scheduledTimer(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***withTimeInterval: Double(refreshInterval) / 1000,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***repeats: true,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***block: { timer in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if !refreshing {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if !refreshing {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print("Timer fired, refreshing = \(refreshing)")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***refreshing = true
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print("refreshing: \(refreshing) url: \(url.absoluteString)")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***imageURL = nil
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***imageURL = url
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***imageURL = URL(string: "https:***REMOVED***upload.wikimedia.org/wikipedia/commons/thumb/4/45/Nationale_oldtimerdag_Zandvoort_2010%2C_1978_FIAT_X1-9%2C_51-VV-18_pic2.JPG/1280px-Nationale_oldtimerdag_Zandvoort_2010%2C_1978_FIAT_X1-9%2C_51-VV-18_pic2.JPG")!
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***timer?.fire()
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.onDisappear() {
