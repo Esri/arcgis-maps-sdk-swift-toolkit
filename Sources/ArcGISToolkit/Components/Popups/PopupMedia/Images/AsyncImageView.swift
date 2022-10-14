@@ -32,7 +32,7 @@ struct AsyncImageView: View {
     @State var refreshing: Bool = false
     
     @State var currentImage: Image?
-
+    
     /// Creates an `AsyncImageView`.
     /// - Parameters:
     ///   - url: The `URL` of the image.
@@ -63,12 +63,9 @@ struct AsyncImageView: View {
                         .resizable()
                         .aspectRatio(contentMode: contentMode)
                         .task(id: refreshing) {
-                            print(".task(id: refreshing) = \(refreshing)")
-                            if refreshing {
-                                refreshing = false
-                                currentImage = image
-                                print("refreshing = \(refreshing)")
-                            }
+                            print("ImageDrawing, refreshing = \(refreshing)")
+                            refreshing = false
+                            currentImage = image
                         }
                 } else if phase.error != nil, !refreshing {
                     // Displays an error notification.
@@ -86,23 +83,16 @@ struct AsyncImageView: View {
             }
         }
         .onAppear() {
-            //put refresh interval here???
-            //put refresh interval here???
-            print("refreshInterval = \(refreshInterval)")
             if refreshInterval > 0 {
                 timer = Timer.scheduledTimer(
                     withTimeInterval: Double(refreshInterval) / 1000,
                     repeats: true,
                     block: { timer in
-//                        if !refreshing {
+                        if !refreshing {
+                            print("Timer fired, refreshing = \(refreshing)")
                             refreshing = true
-//                        }
-                        print("refreshing: \(refreshing) url: \(url.absoluteString)")
-//                        imageURL = nil
-//                        imageURL = url
-//                        imageURL = URL(string: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/Nationale_oldtimerdag_Zandvoort_2010%2C_1978_FIAT_X1-9%2C_51-VV-18_pic2.JPG/1280px-Nationale_oldtimerdag_Zandvoort_2010%2C_1978_FIAT_X1-9%2C_51-VV-18_pic2.JPG")!
+                        }
                     })
-//                timer?.fire()
             }
         }
         .onDisappear() {
