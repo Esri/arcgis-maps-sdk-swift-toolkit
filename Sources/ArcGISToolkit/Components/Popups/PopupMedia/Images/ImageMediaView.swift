@@ -31,7 +31,11 @@ struct ImageMediaView: View {
     var body: some View {
         if let sourceURL = popupMedia.value?.sourceURL {
             ZStack {
-                AsyncImageView(url: sourceURL, contentMode: .fill)
+                AsyncImageView(
+                    url: sourceURL,
+                    contentMode: .fill,
+                    refreshInterval: popupMedia.imageRefreshInterval
+                )
                     .frame(width: mediaSize.width, height: mediaSize.height)
                 VStack {
                     Spacer()

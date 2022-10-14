@@ -19,38 +19,84 @@ struct AsyncImageView: View {
     /// The `URL` of the image.
     let url: URL
     
+    var imageURL: URL
+    
     /// The `ContentMode` defining how the image fills the available space.
     let contentMode: ContentMode
     
+    /// The `ContentMode` defining how the image fills the available space.
+    let refreshInterval: UInt64
+    
+    @State var timer: Timer?
+    
+    @State var refreshing: Bool = false
+
     /// Creates an `AsyncImageView`.
     /// - Parameters:
     ///   - url: The `URL` of the image.
     ///   - contentMode: The `ContentMode` defining how the image fills the available space.
-    public init(url: URL, contentMode: ContentMode = .fit) {
+    public init(url: URL, contentMode: ContentMode = .fit, refreshInterval: UInt64 = 0) {
         self.url = url
+        self.imageURL = url
         self.contentMode = contentMode
+        self.refreshInterval = refreshInterval
+        print("self.refreshInterval = \(self.refreshInterval)")
     }
     
     var body: some View {
-        AsyncImage(url: url) { phase in
-            if let image = phase.image {
-                // Displays the loaded image.
-                image
-                    .resizable()
-                    .aspectRatio(contentMode: contentMode)
-            } else if phase.error != nil {
-                // Displays an error notification.
-                HStack(alignment: .center) {
-                    Image(systemName: "exclamationmark.circle")
-                        .aspectRatio(contentMode: .fit)
-                        .foregroundColor(.red)
-                    Text("An error occurred loading the image.")
+        ZStack {
+        TODO: Maybe put in another Image as a background while this is refreshing
+        TODO: maybe have an `oldImage` that gets displayed behind this.
+            AsyncImage(url: refreshing ? nil : imageURL) { phase in
+                if let image = phase.image {
+                    // Displays the loaded image.
+                    image
+                        .resizable()
+                        .aspectRatio(contentMode: contentMode)
+                        .task(id: refreshing) {
+                            print(".task(id: refreshing) = \(refreshing)")
+                            if refreshing {
+                                refreshing = false
+                                print("refreshing = \(refreshing)")
+                            }
+                        }
+                } else if phase.error != nil, !refreshing {
+                    // Displays an error notification.
+                    HStack(alignment: .center) {
+                        Image(systemName: "exclamationmark.circle")
+                            .aspectRatio(contentMode: .fit)
+                            .foregroundColor(.red)
+                        Text("An error occurred loading the image.")
+                    }
+                    .padding([.top, .bottom])
+                } else {
+                    // Display the progress view until image loads.
+                    ProgressView()
                 }
-                .padding([.top, .bottom])
-            } else {
-                // Display the progress view until image loads.
-                ProgressView()
             }
+        }
+        .onAppear() {
+            //put refresh interval here???
+            //put refresh interval here???
+            print("refreshInterval = \(refreshInterval)")
+            if refreshInterval > 0 {
+                timer = Timer.scheduledTimer(
+                    withTimeInterval: Double(refreshInterval) / 1000,
+                    repeats: true,
+                    block: { timer in
+                        if !refreshing {
+                            refreshing = true
+                        }
+                        print("refreshing: \(refreshing) url: \(url.absoluteString)")
+//                        imageURL = nil
+//                        imageURL = url
+//                        imageURL = URL(string: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/45/Nationale_oldtimerdag_Zandvoort_2010%2C_1978_FIAT_X1-9%2C_51-VV-18_pic2.JPG/1280px-Nationale_oldtimerdag_Zandvoort_2010%2C_1978_FIAT_X1-9%2C_51-VV-18_pic2.JPG")!
+                    })
+//                timer?.fire()
+            }
+        }
+        .onDisappear() {
+            timer?.invalidate()
         }
     }
 }
