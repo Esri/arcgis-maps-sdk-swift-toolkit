@@ -13,6 +13,7 @@
 
 ***REMOVED***
 ***REMOVED***
+import Combine
 
 ***REMOVED***/ A view displaying an async image, with error display and progress view.
 struct AsyncImageView: View {
@@ -27,8 +28,9 @@ struct AsyncImageView: View {
 ***REMOVED******REMOVED***/ The `ContentMode` defining how the image fills the available space.
 ***REMOVED***let refreshInterval: UInt64
 ***REMOVED***
-***REMOVED***@State var timer: Timer?
-***REMOVED***
+***REMOVED******REMOVED***@State var timer: Timer?
+***REMOVED***var timer: Publishers.Autoconnect<Timer.TimerPublisher>
+
 ***REMOVED***@State var refreshing: Bool = false
 ***REMOVED***
 ***REMOVED***@State var currentImage: Image?
@@ -44,6 +46,8 @@ struct AsyncImageView: View {
 ***REMOVED******REMOVED***self.contentMode = contentMode
 ***REMOVED******REMOVED***self.refreshInterval = refreshInterval
 ***REMOVED******REMOVED***print("self.refreshInterval = \(self.refreshInterval)")
+***REMOVED******REMOVED***let interval = refreshInterval > 0 ? Double(refreshInterval) / 1000 : TimeInterval.greatestFiniteMagnitude
+***REMOVED******REMOVED***timer = Timer.publish(every: interval, on: .main, in: .common).autoconnect()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var body: some View {
@@ -82,21 +86,27 @@ struct AsyncImageView: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.onAppear() {
-***REMOVED******REMOVED******REMOVED***if refreshInterval > 0 {
-***REMOVED******REMOVED******REMOVED******REMOVED***timer = Timer.scheduledTimer(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***withTimeInterval: Double(refreshInterval) / 1000,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***repeats: true,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***block: { timer in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if !refreshing {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print("Timer fired, refreshing = \(refreshing)")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***refreshing = true
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***.onReceive(timer) { _ in
+***REMOVED******REMOVED******REMOVED***if !refreshing, currentImage != nil {
+***REMOVED******REMOVED******REMOVED******REMOVED***print("Timer fired, refreshing = \(refreshing)")
+***REMOVED******REMOVED******REMOVED******REMOVED***refreshing = true
 ***REMOVED******REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***.onAppear() {
+***REMOVED******REMOVED******REMOVED******REMOVED***if refreshInterval > 0 {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***timer = Timer.scheduledTimer(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***withTimeInterval: Double(refreshInterval) / 1000,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***repeats: true,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***block: { timer in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if !refreshing {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print("Timer fired, refreshing = \(refreshing)")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***refreshing = true
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED***
 ***REMOVED******REMOVED***.onDisappear() {
-***REMOVED******REMOVED******REMOVED***timer?.invalidate()
+***REMOVED******REMOVED******REMOVED******REMOVED***timer?.invalidate()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
