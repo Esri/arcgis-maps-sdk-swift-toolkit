@@ -30,11 +30,14 @@ struct AsyncImageView: View {
     @State var timer: Timer?
     
     @State var refreshing: Bool = false
+    
+    @State var currentImage: Image?
 
     /// Creates an `AsyncImageView`.
     /// - Parameters:
     ///   - url: The `URL` of the image.
     ///   - contentMode: The `ContentMode` defining how the image fills the available space.
+    ///   - refreshInterval: The refresh interval, in milliseconds. A refresh interval of 0 means never refresh.
     public init(url: URL, contentMode: ContentMode = .fit, refreshInterval: UInt64 = 0) {
         self.url = url
         self.imageURL = url
@@ -45,8 +48,14 @@ struct AsyncImageView: View {
     
     var body: some View {
         ZStack {
-        TODO: Maybe put in another Image as a background while this is refreshing
-        TODO: maybe have an `oldImage` that gets displayed behind this.
+            // Display the current image behind the AsyncImage so when the
+            // AsyncImage is refreshing we don't get a white background with
+            // just the progress view.
+            if let currentImage {
+                currentImage
+                    .resizable()
+                    .aspectRatio(contentMode: contentMode)
+            }
             AsyncImage(url: refreshing ? nil : imageURL) { phase in
                 if let image = phase.image {
                     // Displays the loaded image.
@@ -57,6 +66,7 @@ struct AsyncImageView: View {
                             print(".task(id: refreshing) = \(refreshing)")
                             if refreshing {
                                 refreshing = false
+                                currentImage = image
                                 print("refreshing = \(refreshing)")
                             }
                         }
@@ -84,9 +94,9 @@ struct AsyncImageView: View {
                     withTimeInterval: Double(refreshInterval) / 1000,
                     repeats: true,
                     block: { timer in
-                        if !refreshing {
+//                        if !refreshing {
                             refreshing = true
-                        }
+//                        }
                         print("refreshing: \(refreshing) url: \(url.absoluteString)")
 //                        imageURL = nil
 //                        imageURL = url
