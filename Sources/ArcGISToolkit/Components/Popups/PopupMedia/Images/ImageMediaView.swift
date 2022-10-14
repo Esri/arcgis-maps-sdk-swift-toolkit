@@ -31,7 +31,11 @@ struct ImageMediaView: View {
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***if let sourceURL = popupMedia.value?.sourceURL {
 ***REMOVED******REMOVED******REMOVED***ZStack {
-***REMOVED******REMOVED******REMOVED******REMOVED***AsyncImageView(url: sourceURL, contentMode: .fill)
+***REMOVED******REMOVED******REMOVED******REMOVED***AsyncImageView(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***url: sourceURL,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***contentMode: .fill,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***refreshInterval: popupMedia.imageRefreshInterval
+***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: mediaSize.width, height: mediaSize.height)
 ***REMOVED******REMOVED******REMOVED******REMOVED***VStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
