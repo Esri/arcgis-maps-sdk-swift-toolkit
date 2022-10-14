@@ -13,6 +13,7 @@
 
 import SwiftUI
 import ArcGIS
+import Combine
 
 /// A view displaying an async image, with error display and progress view.
 struct AsyncImageView: View {
@@ -27,8 +28,9 @@ struct AsyncImageView: View {
     /// The `ContentMode` defining how the image fills the available space.
     let refreshInterval: UInt64
     
-    @State var timer: Timer?
-    
+//    @State var timer: Timer?
+    var timer: Publishers.Autoconnect<Timer.TimerPublisher>
+
     @State var refreshing: Bool = false
     
     @State var currentImage: Image?
@@ -44,6 +46,8 @@ struct AsyncImageView: View {
         self.contentMode = contentMode
         self.refreshInterval = refreshInterval
         print("self.refreshInterval = \(self.refreshInterval)")
+        let interval = refreshInterval > 0 ? Double(refreshInterval) / 1000 : TimeInterval.greatestFiniteMagnitude
+        timer = Timer.publish(every: interval, on: .main, in: .common).autoconnect()
     }
     
     var body: some View {
@@ -82,21 +86,27 @@ struct AsyncImageView: View {
                 }
             }
         }
-        .onAppear() {
-            if refreshInterval > 0 {
-                timer = Timer.scheduledTimer(
-                    withTimeInterval: Double(refreshInterval) / 1000,
-                    repeats: true,
-                    block: { timer in
-                        if !refreshing {
-                            print("Timer fired, refreshing = \(refreshing)")
-                            refreshing = true
-                        }
-                    })
+        .onReceive(timer) { _ in
+            if !refreshing, currentImage != nil {
+                print("Timer fired, refreshing = \(refreshing)")
+                refreshing = true
             }
         }
+        .onAppear() {
+//            if refreshInterval > 0 {
+//                timer = Timer.scheduledTimer(
+//                    withTimeInterval: Double(refreshInterval) / 1000,
+//                    repeats: true,
+//                    block: { timer in
+//                        if !refreshing {
+//                            print("Timer fired, refreshing = \(refreshing)")
+//                            refreshing = true
+//                        }
+//                    })
+//            }
+        }
         .onDisappear() {
-            timer?.invalidate()
+//            timer?.invalidate()
         }
     }
 }
