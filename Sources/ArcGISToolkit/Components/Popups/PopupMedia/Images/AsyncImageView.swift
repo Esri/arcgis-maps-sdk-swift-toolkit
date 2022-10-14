@@ -30,11 +30,14 @@ struct AsyncImageView: View {
 ***REMOVED***@State var timer: Timer?
 ***REMOVED***
 ***REMOVED***@State var refreshing: Bool = false
+***REMOVED***
+***REMOVED***@State var currentImage: Image?
 
 ***REMOVED******REMOVED***/ Creates an `AsyncImageView`.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - url: The `URL` of the image.
 ***REMOVED******REMOVED***/   - contentMode: The `ContentMode` defining how the image fills the available space.
+***REMOVED******REMOVED***/   - refreshInterval: The refresh interval, in milliseconds. A refresh interval of 0 means never refresh.
 ***REMOVED***public init(url: URL, contentMode: ContentMode = .fit, refreshInterval: UInt64 = 0) {
 ***REMOVED******REMOVED***self.url = url
 ***REMOVED******REMOVED***self.imageURL = url
@@ -45,8 +48,14 @@ struct AsyncImageView: View {
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***ZStack {
-***REMOVED******REMOVED***TODO: Maybe put in another Image as a background while this is refreshing
-***REMOVED******REMOVED***TODO: maybe have an `oldImage` that gets displayed behind this.
+***REMOVED******REMOVED******REMOVED******REMOVED*** Display the current image behind the AsyncImage so when the
+***REMOVED******REMOVED******REMOVED******REMOVED*** AsyncImage is refreshing we don't get a white background with
+***REMOVED******REMOVED******REMOVED******REMOVED*** just the progress view.
+***REMOVED******REMOVED******REMOVED***if let currentImage {
+***REMOVED******REMOVED******REMOVED******REMOVED***currentImage
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.resizable()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.aspectRatio(contentMode: contentMode)
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***AsyncImage(url: refreshing ? nil : imageURL) { phase in
 ***REMOVED******REMOVED******REMOVED******REMOVED***if let image = phase.image {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Displays the loaded image.
@@ -57,6 +66,7 @@ struct AsyncImageView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print(".task(id: refreshing) = \(refreshing)")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if refreshing {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***refreshing = false
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentImage = image
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print("refreshing = \(refreshing)")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
@@ -84,9 +94,9 @@ struct AsyncImageView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***withTimeInterval: Double(refreshInterval) / 1000,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***repeats: true,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***block: { timer in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if !refreshing {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if !refreshing {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***refreshing = true
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print("refreshing: \(refreshing) url: \(url.absoluteString)")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***imageURL = nil
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***imageURL = url
