@@ -248,7 +248,7 @@ final class FloorFilterViewModelTests: XCTestCase {
         file: StaticString = #filePath,
         line: UInt = #line
     ) async throws -> FloorManager {
-        let portal = Portal(url: URL(string: "https://www.arcgis.com/")!, isLoginRequired: false)
+        let portal = Portal(url: URL(string: "https://www.arcgis.com/")!, requiresLogin: false)
         let item = PortalItem(portal: portal, id: id)
         let map = Map(item: item)
         try await map.load()
