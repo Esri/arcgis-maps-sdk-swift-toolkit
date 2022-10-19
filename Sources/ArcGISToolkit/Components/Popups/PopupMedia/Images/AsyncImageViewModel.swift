@@ -28,6 +28,7 @@
 ***REMOVED******REMOVED***/ The result of the operation to load the image from `imageURL`.
 ***REMOVED***@Published var result: Result<UIImage?, Error> = .success(nil)
 ***REMOVED***
+***REMOVED******REMOVED***/ The image download task.
 ***REMOVED***var task: URLSessionDataTask?
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates an `AsyncImageViewModel`.
@@ -54,10 +55,13 @@
 ***REMOVED***
 ***REMOVED******REMOVED***/ Refreshes the image data from `imageURL` and creates the image.
 ***REMOVED***private func refresh() {
-***REMOVED******REMOVED***print("Wants to refresh image... self = \(ObjectIdentifier(self))")
 ***REMOVED******REMOVED***if !isRefreshing {
+***REMOVED******REMOVED******REMOVED******REMOVED*** Only refresh if we're not already refreshing.  Sometimes the
+***REMOVED******REMOVED******REMOVED******REMOVED*** `refreshInterval` will be shorter than the time it takes to
+***REMOVED******REMOVED******REMOVED******REMOVED*** download the image.  In this case, we want to finish downloading
+***REMOVED******REMOVED******REMOVED******REMOVED*** the current image before starting a new download, otherwise
+***REMOVED******REMOVED******REMOVED******REMOVED*** we may never get an image to display.
 ***REMOVED******REMOVED******REMOVED***isRefreshing = true
-***REMOVED******REMOVED******REMOVED***print("Refreshing image...")
 ***REMOVED******REMOVED******REMOVED***task = URLSession.shared.dataTask(with: imageURL) { [weak self]
 ***REMOVED******REMOVED******REMOVED******REMOVED***(data, response, error) in
 ***REMOVED******REMOVED******REMOVED******REMOVED***DispatchQueue.main.async { [weak self] in
@@ -66,23 +70,23 @@
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let image = UIImage(data: data) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self?.result = .success(image)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** We have data, but couldn't create an image.
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self?.result = .failure(LoadImageError())
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** else if let error {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self?.result = .failure(error)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self?.isRefreshing = false
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***print("Done refreshing image...")
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED*** Start the download
+***REMOVED******REMOVED******REMOVED******REMOVED*** Start the download task.
 ***REMOVED******REMOVED******REMOVED***task?.resume()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
-***REMOVED***/ An error returned when an image can't be created from a URL.
+***REMOVED***/ An error returned when an image can't be created from data downloaded via a URL.
 struct LoadImageError: Error {
 ***REMOVED***
 
