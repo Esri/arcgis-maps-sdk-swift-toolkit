@@ -71,12 +71,60 @@ struct MediaDetailView : View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isShowingDetailView: true
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***EmptyView()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***CoreChartView(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***popupMedia: popupMedia,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***data: ChartData.getChartData(from: popupMedia),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isShowingDetalView: true
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 512, height: 512)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***default:
 ***REMOVED******REMOVED******REMOVED******REMOVED***EmptyView()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED***
+***REMOVED***
+***REMOVED***
+
+struct CoreChartView: View {
+***REMOVED***let popupMedia: PopupMedia
+***REMOVED***let data: [ChartData]
+***REMOVED***let isShowingDetalView: Bool
+***REMOVED***@State var chartImage: ChartImage? = nil
+***REMOVED******REMOVED***let parameters = ChartImageParameters(width: 2048, height: 2048)
+***REMOVED***let parameters = ChartImageParameters(width: 1024, height: 1024)
+***REMOVED******REMOVED***let parameters = ChartImageParameters(width: 256, height: 256)
+***REMOVED******REMOVED***let parameters = ChartImageParameters(width: 512, height: 512)
+***REMOVED******REMOVED***let parameters = ChartImageParameters(width: 261, height: 200)
+***REMOVED******REMOVED***let parameters = ChartImageParameters(width: 128, height: 128)
+
+***REMOVED***init(popupMedia: PopupMedia, data: [ChartData], isShowingDetalView: Bool = false) {
+***REMOVED******REMOVED***self.popupMedia = popupMedia
+***REMOVED******REMOVED***self.data = data
+***REMOVED******REMOVED***self.isShowingDetalView = isShowingDetalView
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***parameters.generateLegend = true
+***REMOVED******REMOVED***parameters.screenScale = Float(UIScreen.main.scale)  ***REMOVED*** 2.0 in the simulator.
+***REMOVED******REMOVED***parameters.style = .neutral
+***REMOVED***
+***REMOVED***
+***REMOVED***var body: some View {
+***REMOVED******REMOVED***Group {
+***REMOVED******REMOVED******REMOVED***if let image = chartImage?.image {
+***REMOVED******REMOVED******REMOVED******REMOVED***ZStack {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(uiImage: image)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.resizable()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.aspectRatio(contentMode: .fit)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.aspectRatio(contentMode: isShowingDetalView ? .fit : .fill)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Rectangle()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.stroke()
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***ProgressView()
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***.task {
+***REMOVED******REMOVED******REMOVED***chartImage = try? await popupMedia.generateChart(parameters: parameters)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
