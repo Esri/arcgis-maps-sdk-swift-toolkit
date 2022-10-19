@@ -28,6 +28,7 @@ import SwiftUI
     /// The result of the operation to load the image from `imageURL`.
     @Published var result: Result<UIImage?, Error> = .success(nil)
     
+    /// The image download task.
     var task: URLSessionDataTask?
     
     /// Creates an `AsyncImageViewModel`.
@@ -54,10 +55,13 @@ import SwiftUI
     
     /// Refreshes the image data from `imageURL` and creates the image.
     private func refresh() {
-        print("Wants to refresh image... self = \(ObjectIdentifier(self))")
         if !isRefreshing {
+            // Only refresh if we're not already refreshing.  Sometimes the
+            // `refreshInterval` will be shorter than the time it takes to
+            // download the image.  In this case, we want to finish downloading
+            // the current image before starting a new download, otherwise
+            // we may never get an image to display.
             isRefreshing = true
-            print("Refreshing image...")
             task = URLSession.shared.dataTask(with: imageURL) { [weak self]
                 (data, response, error) in
                 DispatchQueue.main.async { [weak self] in
@@ -66,23 +70,23 @@ import SwiftUI
                         if let image = UIImage(data: data) {
                             self?.result = .success(image)
                         } else {
+                            // We have data, but couldn't create an image.
                             self?.result = .failure(LoadImageError())
                         }
                     } else if let error {
                         self?.result = .failure(error)
                     }
                     self?.isRefreshing = false
-                    print("Done refreshing image...")
                 }
             }
             
-            // Start the download
+            // Start the download task.
             task?.resume()
         }
     }
 }
 
-/// An error returned when an image can't be created from a URL.
+/// An error returned when an image can't be created from data downloaded via a URL.
 struct LoadImageError: Error {
 }
 
