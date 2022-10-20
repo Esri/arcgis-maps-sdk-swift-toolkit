@@ -37,8 +37,8 @@ public struct UtilityNetworkTrace: View {
     private enum TraceViewingActivity: Hashable {
         /// The user is viewing the list of available trace options.
         case viewingAdvancedOptions
-        /// The user is viewing a list of element results, grouped by asset group and asset type.
-        case viewingElementGroup([String: [UtilityElement]])
+        /// The user is viewing the list of element results.
+        case viewingElementGroup(named: String)
         /// The user is viewing the list of feature results.
         case viewingFeatureResults
         /// The user is viewing the list of function results.
@@ -127,21 +127,17 @@ public struct UtilityNetworkTrace: View {
     
     /// Displays information about a chosen asset group.
     @ViewBuilder private var assetGroupDetail: some View {
-        if let assetGroup = selectedAssetGroup {
+        if let assetGroupName = selectedAssetGroupName,
+           let assetTypeGroups = viewModel.selectedTrace?.elementsByTypeInGroup(named: assetGroupName) {
             makeBackButton(title: featureResultsTitle) {
                 currentActivity = .viewingTraces(.viewingFeatureResults)
             }
-            makeDetailSectionHeader(
-                title: assetGroup.first?.value.first?.assetGroup.name ?? "Unnamed Asset Group"
-            )
+            makeDetailSectionHeader(title: assetGroupName)
             List {
-                ForEach(assetGroup.sorted(by: { $0.key < $1.key }), id: \.key) { assetTypeGroup in
-                    let elements = assetTypeGroup.value.sorted {
-                        $0.objectID < $1.objectID
-                    }
-                    Section(assetTypeGroup.key) {
+                ForEach(assetTypeGroups.keys.compactMap({$0}).sorted(), id: \.self) { assetTypeGroupName in
+                    Section(assetTypeGroupName) {
                         DisclosureGroup {
-                            ForEach(elements) { element in
+                            ForEach(assetTypeGroups[assetTypeGroupName] ?? [], id: \.globalID) { element in
                                 Button {
                                     Task {
                                         if let feature = await viewModel.feature(for: element),
@@ -158,7 +154,7 @@ public struct UtilityNetworkTrace: View {
                                 }
                             }
                         } label: {
-                            Text("(\(elements.count))")
+                            Text(assetTypeGroups[assetTypeGroupName]?.count.description ?? "N/A")
                         }
                     }
                 }
@@ -337,24 +333,22 @@ public struct UtilityNetworkTrace: View {
             List {
                 Section(featureResultsTitle) {
                     DisclosureGroup(
-                        "(\(viewModel.selectedTrace?.assetCount ?? 0))",
+                        "(\(viewModel.selectedTrace?.elementResults.count ?? 0))",
                         isExpanded: Binding(
                             get: { isFocused(traceViewingActivity: .viewingFeatureResults) },
                             set: { currentActivity = .viewingTraces($0 ? .viewingFeatureResults : nil) }
                         )
                     ) {
-                        ForEach(
-                            (viewModel.selectedTrace?.assets ?? [:]).sorted(by: { $0.key < $1.key }), id: \.key
-                        ) { assetGroup in
+                        ForEach(viewModel.selectedTrace?.assetGroupNames.sorted() ?? [], id: \.self) { assetGroupName in
                             HStack {
-                                Text(assetGroup.key)
+                                Text(assetGroupName)
                                 Spacer()
-                                Text("(\(assetGroup.value.compactMap({ $0.value.count }).reduce(0, +)))")
+                                Text(viewModel.selectedTrace?.elementsInAssetGroup(named: assetGroupName).count.description ?? "N/A")
                             }
                             .foregroundColor(.blue)
                             .contentShape(Rectangle())
                             .onTapGesture {
-                                currentActivity = .viewingTraces(.viewingElementGroup(assetGroup.value))
+                                currentActivity = .viewingTraces(.viewingElementGroup(named: assetGroupName))
                             }
                         }
                     }
@@ -638,8 +632,8 @@ public struct UtilityNetworkTrace: View {
         return "Trace \(index+1) of \(viewModel.completedTraces.count.description)"
     }
     
-    /// The selected utility element asset group.
-    private var selectedAssetGroup: [String: [UtilityElement]]? {
+    /// The name of the selected utility element asset group.
+    private var selectedAssetGroupName: String? {
         if case let .viewingTraces(activity) = currentActivity,
            case let .viewingElementGroup(elementGroup) = activity {
             return elementGroup
