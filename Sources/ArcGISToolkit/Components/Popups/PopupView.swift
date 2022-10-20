@@ -63,7 +63,7 @@ public struct PopupView: View {
                 if let evaluateExpressionsResult {
                     switch evaluateExpressionsResult {
                     case .success(_):
-                        PopupElementScrollView(popupElements: popup.evaluatedElements)
+                        PopupElementScrollView(popupElements: popup.evaluatedElements, popup: popup)
                     case .failure(let error):
                         Text("Popup evaluation failed: \(error.localizedDescription)")
                     }
@@ -86,6 +86,7 @@ public struct PopupView: View {
     
     struct PopupElementScrollView: View {
         let popupElements: [PopupElement]
+        let popup: Popup
         
         var body: some View {
             ScrollView {
@@ -98,6 +99,11 @@ public struct PopupView: View {
                             FieldsPopupElementView(popupElement: popupElement)
                         case let popupElement as MediaPopupElement:
                             MediaPopupElementView(popupElement: popupElement)
+                        case let popupElement as RelationshipPopupElement:
+                            RelationshipPopupElementView(
+                                popupElement: popupElement,
+                                geoElement: popup.geoElement
+                            )
                         case let popupElement as TextPopupElement:
                             TextPopupElementView(popupElement: popupElement)
                         default:
