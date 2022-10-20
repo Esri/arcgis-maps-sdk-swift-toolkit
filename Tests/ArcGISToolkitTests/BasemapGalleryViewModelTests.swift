@@ -81,7 +81,7 @@ class BasemapGalleryViewModelTests: XCTestCase {
         // Portal.
         //
         let geoModel2 = Map(basemapStyle: .arcGISLightGray)
-        let portal = Portal.arcGISOnline(isLoginRequired: false)
+        let portal = Portal.arcGISOnline(requiresLogin: false)
         let portalViewModel = BasemapGalleryViewModel(geoModel2, portal: portal)
         
         XCTAssertIdentical(portalViewModel.geoModel, geoModel2)
@@ -243,7 +243,7 @@ class BasemapGalleryViewModelTests: XCTestCase {
         
         // Set a portal on the model. This should clear out the existing
         // array of items and load basemaps from the portal.
-        viewModel.portal = Portal.arcGISOnline(isLoginRequired: false)
+        viewModel.portal = Portal.arcGISOnline(requiresLogin: false)
         
         // The items should be cleared prior to loading those from the portal.
         let items2 = try await viewModel.$items.first
