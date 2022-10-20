@@ -16,9 +16,6 @@
 
 ***REMOVED***/ A view displaying an async image, with error display and progress view.
 struct AsyncImageView: View {
-***REMOVED******REMOVED***/ The `URL` of the image.
-***REMOVED***let url: URL
-***REMOVED***
 ***REMOVED******REMOVED***/ The `ContentMode` defining how the image fills the available space.
 ***REMOVED***let contentMode: ContentMode
 ***REMOVED***
@@ -31,7 +28,6 @@ struct AsyncImageView: View {
 ***REMOVED******REMOVED***/   - contentMode: The `ContentMode` defining how the image fills the available space.
 ***REMOVED******REMOVED***/   - refreshInterval: The refresh interval, in milliseconds. A refresh interval of 0 means never refresh.
 ***REMOVED***public init(url: URL, contentMode: ContentMode = .fit, refreshInterval: UInt64 = 0) {
-***REMOVED******REMOVED***self.url = url
 ***REMOVED******REMOVED***self.contentMode = contentMode
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***_viewModel = StateObject(
