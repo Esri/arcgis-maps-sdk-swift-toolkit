@@ -16,9 +16,6 @@ import ArcGIS
 
 /// A view displaying an async image, with error display and progress view.
 struct AsyncImageView: View {
-    /// The `URL` of the image.
-    let url: URL
-    
     /// The `ContentMode` defining how the image fills the available space.
     let contentMode: ContentMode
     
@@ -31,7 +28,6 @@ struct AsyncImageView: View {
     ///   - contentMode: The `ContentMode` defining how the image fills the available space.
     ///   - refreshInterval: The refresh interval, in milliseconds. A refresh interval of 0 means never refresh.
     public init(url: URL, contentMode: ContentMode = .fit, refreshInterval: UInt64 = 0) {
-        self.url = url
         self.contentMode = contentMode
         
         _viewModel = StateObject(
