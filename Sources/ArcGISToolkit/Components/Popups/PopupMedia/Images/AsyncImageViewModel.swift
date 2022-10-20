@@ -14,7 +14,7 @@
 import SwiftUI
 
 /// A view model which performs the work necessary to asynchronously download an image
-/// from a URL and handles refreshing that image at a given time interal.
+/// from a URL and handles refreshing that image at a given time interval.
 @MainActor final class AsyncImageViewModel: ObservableObject {
     /// The `URL` of the image.
     private var imageURL: URL
