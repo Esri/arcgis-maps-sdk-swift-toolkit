@@ -55,34 +55,34 @@ import SwiftUI
     
     /// Refreshes the image data from `imageURL` and creates the image.
     private func refresh() {
-        if !isRefreshing {
-            // Only refresh if we're not already refreshing.  Sometimes the
-            // `refreshInterval` will be shorter than the time it takes to
-            // download the image.  In this case, we want to finish downloading
-            // the current image before starting a new download, otherwise
-            // we may never get an image to display.
-            isRefreshing = true
-            task = URLSession.shared.dataTask(with: imageURL) { [weak self]
-                (data, response, error) in
-                DispatchQueue.main.async { [weak self] in
-                    if let data {
-                        // Create the image.
-                        if let image = UIImage(data: data) {
-                            self?.result = .success(image)
-                        } else {
-                            // We have data, but couldn't create an image.
-                            self?.result = .failure(LoadImageError())
-                        }
-                    } else if let error {
-                        self?.result = .failure(error)
+        guard !isRefreshing else { return }
+        
+        // Only refresh if we're not already refreshing.  Sometimes the
+        // `refreshInterval` will be shorter than the time it takes to
+        // download the image.  In this case, we want to finish downloading
+        // the current image before starting a new download, otherwise
+        // we may never get an image to display.
+        isRefreshing = true
+        task = URLSession.shared.dataTask(with: imageURL) { [weak self]
+            (data, response, error) in
+            DispatchQueue.main.async { [weak self] in
+                if let data {
+                    // Create the image.
+                    if let image = UIImage(data: data) {
+                        self?.result = .success(image)
+                    } else {
+                        // We have data, but couldn't create an image.
+                        self?.result = .failure(LoadImageError())
                     }
-                    self?.isRefreshing = false
+                } else if let error {
+                    self?.result = .failure(error)
                 }
+                self?.isRefreshing = false
             }
-            
-            // Start the download task.
-            task?.resume()
         }
+        
+        // Start the download task.
+        task?.resume()
     }
 }
 
