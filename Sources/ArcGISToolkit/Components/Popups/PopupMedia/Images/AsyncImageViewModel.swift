@@ -12,6 +12,7 @@
 ***REMOVED*** limitations under the License.
 
 ***REMOVED***
+***REMOVED***
 
 ***REMOVED***/ A view model which performs the work necessary to asynchronously download an image
 ***REMOVED***/ from a URL and handles refreshing that image at a given time interval.
@@ -63,26 +64,25 @@
 ***REMOVED******REMOVED******REMOVED*** the current image before starting a new download, otherwise
 ***REMOVED******REMOVED******REMOVED*** we may never get an image to display.
 ***REMOVED******REMOVED***isRefreshing = true
-***REMOVED******REMOVED***task = URLSession.shared.dataTask(with: imageURL) { [weak self]
-***REMOVED******REMOVED******REMOVED***(data, response, error) in
-***REMOVED******REMOVED******REMOVED***DispatchQueue.main.async { [weak self] in
-***REMOVED******REMOVED******REMOVED******REMOVED***if let data {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Create the image.
+***REMOVED******REMOVED***Task { [weak self] in
+***REMOVED******REMOVED******REMOVED***guard let self = self else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***do {
+***REMOVED******REMOVED******REMOVED******REMOVED***let (data, _) = try await ArcGISRuntimeEnvironment.urlSession.data(from: imageURL)
+***REMOVED******REMOVED******REMOVED******REMOVED***DispatchQueue.main.async { [weak self] in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let image = UIImage(data: data) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self?.result = .success(image)
 ***REMOVED******REMOVED******REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** We have data, but couldn't create an image.
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self?.result = .failure(LoadImageError())
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** else if let error {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self?.result = .failure(error)
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***self?.isRefreshing = false
+***REMOVED******REMOVED*** catch {
+***REMOVED******REMOVED******REMOVED******REMOVED***result = .failure(error)
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***isRefreshing = false
 ***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Start the download task.
-***REMOVED******REMOVED***task?.resume()
 ***REMOVED***
 ***REMOVED***
 
