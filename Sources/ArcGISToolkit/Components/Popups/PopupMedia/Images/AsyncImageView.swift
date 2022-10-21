@@ -16,40 +16,49 @@ import ArcGIS
 
 /// A view displaying an async image, with error display and progress view.
 struct AsyncImageView: View {
-    /// The `URL` of the image.
-    let url: URL
-    
     /// The `ContentMode` defining how the image fills the available space.
     let contentMode: ContentMode
+    
+    /// The data model for an `AsyncImageView`.
+    @StateObject var viewModel: AsyncImageViewModel
     
     /// Creates an `AsyncImageView`.
     /// - Parameters:
     ///   - url: The `URL` of the image.
     ///   - contentMode: The `ContentMode` defining how the image fills the available space.
-    public init(url: URL, contentMode: ContentMode = .fit) {
-        self.url = url
+    ///   - refreshInterval: The refresh interval, in milliseconds. A refresh interval of 0 means never refresh.
+    public init(url: URL, contentMode: ContentMode = .fit, refreshInterval: UInt64 = 0) {
         self.contentMode = contentMode
+        
+        _viewModel = StateObject(
+            wrappedValue: AsyncImageViewModel(
+                imageURL: url,
+                refreshInterval: refreshInterval
+            )
+        )
     }
     
     var body: some View {
-        AsyncImage(url: url) { phase in
-            if let image = phase.image {
-                // Displays the loaded image.
-                image
-                    .resizable()
-                    .aspectRatio(contentMode: contentMode)
-            } else if phase.error != nil {
-                // Displays an error notification.
+        ZStack {
+            switch viewModel.result {
+            case .success(let image):
+                if let image {
+                    ZStack {
+                        Image(uiImage: image)
+                            .resizable()
+                            .aspectRatio(contentMode: contentMode)
+                    }
+                } else {
+                    ProgressView()
+                }
+            case .failure(let error):
                 HStack(alignment: .center) {
                     Image(systemName: "exclamationmark.circle")
                         .aspectRatio(contentMode: .fit)
                         .foregroundColor(.red)
-                    Text("An error occurred loading the image.")
+                    Text("An error occurred loading the image: \(error.localizedDescription).")
                 }
                 .padding([.top, .bottom])
-            } else {
-                // Display the progress view until image loads.
-                ProgressView()
             }
         }
     }
