@@ -12,6 +12,7 @@
 // limitations under the License.
 
 import SwiftUI
+import ArcGIS
 
 /// A view model which performs the work necessary to asynchronously download an image
 /// from a URL and handles refreshing that image at a given time interval.
@@ -63,26 +64,25 @@ import SwiftUI
         // the current image before starting a new download, otherwise
         // we may never get an image to display.
         isRefreshing = true
-        task = URLSession.shared.dataTask(with: imageURL) { [weak self]
-            (data, response, error) in
-            DispatchQueue.main.async { [weak self] in
-                if let data {
-                    // Create the image.
+        Task { [weak self] in
+            guard let self = self else { return }
+            
+            do {
+                let (data, _) = try await ArcGISRuntimeEnvironment.urlSession.data(from: imageURL)
+                DispatchQueue.main.async { [weak self] in
                     if let image = UIImage(data: data) {
                         self?.result = .success(image)
                     } else {
                         // We have data, but couldn't create an image.
                         self?.result = .failure(LoadImageError())
                     }
-                } else if let error {
-                    self?.result = .failure(error)
                 }
-                self?.isRefreshing = false
+            } catch {
+                result = .failure(error)
             }
+            
+            isRefreshing = false
         }
-        
-        // Start the download task.
-        task?.resume()
     }
 }
 
