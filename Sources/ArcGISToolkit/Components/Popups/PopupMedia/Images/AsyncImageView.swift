@@ -16,40 +16,49 @@
 
 ***REMOVED***/ A view displaying an async image, with error display and progress view.
 struct AsyncImageView: View {
-***REMOVED******REMOVED***/ The `URL` of the image.
-***REMOVED***let url: URL
-***REMOVED***
 ***REMOVED******REMOVED***/ The `ContentMode` defining how the image fills the available space.
 ***REMOVED***let contentMode: ContentMode
+***REMOVED***
+***REMOVED******REMOVED***/ The data model for an `AsyncImageView`.
+***REMOVED***@StateObject var viewModel: AsyncImageViewModel
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates an `AsyncImageView`.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - url: The `URL` of the image.
 ***REMOVED******REMOVED***/   - contentMode: The `ContentMode` defining how the image fills the available space.
-***REMOVED***public init(url: URL, contentMode: ContentMode = .fit) {
-***REMOVED******REMOVED***self.url = url
+***REMOVED******REMOVED***/   - refreshInterval: The refresh interval, in milliseconds. A refresh interval of 0 means never refresh.
+***REMOVED***public init(url: URL, contentMode: ContentMode = .fit, refreshInterval: UInt64 = 0) {
 ***REMOVED******REMOVED***self.contentMode = contentMode
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***_viewModel = StateObject(
+***REMOVED******REMOVED******REMOVED***wrappedValue: AsyncImageViewModel(
+***REMOVED******REMOVED******REMOVED******REMOVED***imageURL: url,
+***REMOVED******REMOVED******REMOVED******REMOVED***refreshInterval: refreshInterval
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***AsyncImage(url: url) { phase in
-***REMOVED******REMOVED******REMOVED***if let image = phase.image {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Displays the loaded image.
-***REMOVED******REMOVED******REMOVED******REMOVED***image
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.resizable()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.aspectRatio(contentMode: contentMode)
-***REMOVED******REMOVED*** else if phase.error != nil {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Displays an error notification.
+***REMOVED******REMOVED***ZStack {
+***REMOVED******REMOVED******REMOVED***switch viewModel.result {
+***REMOVED******REMOVED******REMOVED***case .success(let image):
+***REMOVED******REMOVED******REMOVED******REMOVED***if let image {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ZStack {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(uiImage: image)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.resizable()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.aspectRatio(contentMode: contentMode)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ProgressView()
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***case .failure(let error):
 ***REMOVED******REMOVED******REMOVED******REMOVED***HStack(alignment: .center) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "exclamationmark.circle")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.aspectRatio(contentMode: .fit)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.red)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("An error occurred loading the image.")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("An error occurred loading the image: \(error.localizedDescription).")
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding([.top, .bottom])
-***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Display the progress view until image loads.
-***REMOVED******REMOVED******REMOVED******REMOVED***ProgressView()
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
