@@ -54,8 +54,9 @@ struct RelationshipPopupElementView: View {
 //                .navigationViewStyle(StackNavigationViewStyle())
 //            }
             VStack(alignment: .leading) {
-                if let relatedFeatures {
-                    ForEach(Array(relatedFeatures)) { relatedFeature in
+                if let relatedFeatures,
+                   let relatedFeaturesArray = Array(relatedFeatures) {
+                    ForEach(relatedFeaturesArray) { relatedFeature in
                         HStack {
                             VStack(alignment: .leading) {
                                 if let field = fields.first,
@@ -70,6 +71,16 @@ struct RelationshipPopupElementView: View {
                             }
                             Spacer()
                         }
+                        Divider()
+                    }
+                    if relatedFeaturesArray.count > popupElement.displayCount {
+                        VStack(alignment: .leading) {
+                            Text("Show All")
+                            Text("\(Array(relatedFeatures).count) records")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                        }
+                        Divider()
                     }
                 }
             }
