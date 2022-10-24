@@ -43,11 +43,9 @@ struct AsyncImageView: View {
             switch viewModel.result {
             case .success(let image):
                 if let image {
-                    ZStack {
-                        Image(uiImage: image)
-                            .resizable()
-                            .aspectRatio(contentMode: contentMode)
-                    }
+                    Image(uiImage: image)
+                        .resizable()
+                        .aspectRatio(contentMode: contentMode)
                 } else {
                     ProgressView()
                 }
@@ -59,6 +57,19 @@ struct AsyncImageView: View {
                     Text("An error occurred loading the image: \(error.localizedDescription).")
                 }
                 .padding([.top, .bottom])
+            }
+            if #available(iOS 16.0, *),
+               let progressInterval = viewModel.progressInterval {
+                VStack {
+                    ProgressView(
+                        timerInterval: progressInterval,
+                        countsDown: false
+                    )
+                        .tint(.white)
+                        .opacity(0.5)
+                        .padding([.top], 4)
+                    Spacer()
+                }
             }
         }
     }
