@@ -338,7 +338,7 @@ import XCTest
 ***REMOVED******REMOVED***XCTAssertFalse(viewModel.canRunTrace)
 ***REMOVED******REMOVED***XCTAssertEqual(viewModel.completedTraces.first?.functionOutputs.count, 1)
 ***REMOVED******REMOVED***XCTAssertEqual(functionOutput.function.functionType, .add)
-***REMOVED******REMOVED***XCTAssertEqual(functionOutput.function.networkAttribute?.name, "Shape length")
+***REMOVED******REMOVED***XCTAssertEqual(functionOutput.function.networkAttribute.name, "Shape length")
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func testCase_3_2() async throws {
