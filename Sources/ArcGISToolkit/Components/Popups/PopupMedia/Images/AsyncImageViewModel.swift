@@ -23,6 +23,13 @@ import ArcGIS
     /// The timer used refresh the image when `refreshInterval` is not zero.
     private var timer: Timer?
     
+    /// The refresh interval, in milliseconds. A refresh interval of 0 means never refresh.
+    let refreshInterval: UInt64
+    
+    /// An interval to be used by an indeterminate ProgressView to display progress
+    /// until next refresh.  Will be `nil` if `refreshInterval` is less than 1.
+    @Published var progressInterval: ClosedRange<Date>? = nil
+    
     /// A Boolean value specifying whether data from the image url is currently being refreshed.
     private var isRefreshing: Bool = false
     
@@ -38,6 +45,7 @@ import ArcGIS
     ///   - refreshInterval: The refresh interval, in milliseconds. A refresh interval of 0 means never refresh.
     init(imageURL: URL, refreshInterval: UInt64 = 0) {
         self.imageURL = imageURL
+        self.refreshInterval = refreshInterval
         
         if refreshInterval > 0 {
             timer = Timer.scheduledTimer(
@@ -82,6 +90,9 @@ import ArcGIS
             }
             
             isRefreshing = false
+            if refreshInterval >= 1 {
+                progressInterval = Date()...Date().addingTimeInterval(Double(refreshInterval) / 1000)
+            }
         }
     }
 }
