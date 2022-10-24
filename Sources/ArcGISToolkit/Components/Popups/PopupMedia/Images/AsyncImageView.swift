@@ -43,11 +43,9 @@ struct AsyncImageView: View {
 ***REMOVED******REMOVED******REMOVED***switch viewModel.result {
 ***REMOVED******REMOVED******REMOVED***case .success(let image):
 ***REMOVED******REMOVED******REMOVED******REMOVED***if let image {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ZStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(uiImage: image)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.resizable()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.aspectRatio(contentMode: contentMode)
-***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(uiImage: image)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.resizable()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.aspectRatio(contentMode: contentMode)
 ***REMOVED******REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ProgressView()
 ***REMOVED******REMOVED******REMOVED***
@@ -59,6 +57,19 @@ struct AsyncImageView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("An error occurred loading the image: \(error.localizedDescription).")
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding([.top, .bottom])
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***if #available(iOS 16.0, *),
+***REMOVED******REMOVED******REMOVED***   let progressInterval = viewModel.progressInterval {
+***REMOVED******REMOVED******REMOVED******REMOVED***VStack {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ProgressView(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***timerInterval: progressInterval,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***countsDown: false
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.tint(.white)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.opacity(0.5)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding([.top], 4)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***

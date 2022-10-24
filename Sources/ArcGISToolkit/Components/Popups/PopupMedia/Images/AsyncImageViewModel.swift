@@ -23,6 +23,13 @@
 ***REMOVED******REMOVED***/ The timer used refresh the image when `refreshInterval` is not zero.
 ***REMOVED***private var timer: Timer?
 ***REMOVED***
+***REMOVED******REMOVED***/ The refresh interval, in milliseconds. A refresh interval of 0 means never refresh.
+***REMOVED***let refreshInterval: UInt64
+***REMOVED***
+***REMOVED******REMOVED***/ An interval to be used by an indeterminate ProgressView to display progress
+***REMOVED******REMOVED***/ until next refresh.  Will be `nil` if `refreshInterval` is less than 1.
+***REMOVED***@Published var progressInterval: ClosedRange<Date>? = nil
+***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value specifying whether data from the image url is currently being refreshed.
 ***REMOVED***private var isRefreshing: Bool = false
 ***REMOVED***
@@ -38,6 +45,7 @@
 ***REMOVED******REMOVED***/   - refreshInterval: The refresh interval, in milliseconds. A refresh interval of 0 means never refresh.
 ***REMOVED***init(imageURL: URL, refreshInterval: UInt64 = 0) {
 ***REMOVED******REMOVED***self.imageURL = imageURL
+***REMOVED******REMOVED***self.refreshInterval = refreshInterval
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***if refreshInterval > 0 {
 ***REMOVED******REMOVED******REMOVED***timer = Timer.scheduledTimer(
@@ -82,6 +90,9 @@
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***isRefreshing = false
+***REMOVED******REMOVED******REMOVED***if refreshInterval >= 1 {
+***REMOVED******REMOVED******REMOVED******REMOVED***progressInterval = Date()...Date().addingTimeInterval(Double(refreshInterval) / 1000)
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
