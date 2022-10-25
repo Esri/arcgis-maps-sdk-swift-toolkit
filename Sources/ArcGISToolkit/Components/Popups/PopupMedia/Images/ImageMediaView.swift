@@ -34,7 +34,8 @@ struct ImageMediaView: View {
                 AsyncImageView(
                     url: sourceURL,
                     contentMode: .fill,
-                    refreshInterval: popupMedia.imageRefreshInterval
+                    refreshInterval: popupMedia.imageRefreshInterval,
+                    mediaSize: mediaSize
                 )
                     .frame(width: mediaSize.width, height: mediaSize.height)
                 VStack {

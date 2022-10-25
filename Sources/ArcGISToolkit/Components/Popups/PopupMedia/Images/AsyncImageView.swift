@@ -19,6 +19,9 @@ struct AsyncImageView: View {
     /// The `ContentMode` defining how the image fills the available space.
     let contentMode: ContentMode
     
+    /// The size of the media's frame.
+    private let mediaSize: CGSize?
+    
     /// The data model for an `AsyncImageView`.
     @StateObject var viewModel: AsyncImageViewModel
     
@@ -27,8 +30,14 @@ struct AsyncImageView: View {
     ///   - url: The `URL` of the image.
     ///   - contentMode: The `ContentMode` defining how the image fills the available space.
     ///   - refreshInterval: The refresh interval, in milliseconds. A refresh interval of 0 means never refresh.
-    public init(url: URL, contentMode: ContentMode = .fit, refreshInterval: UInt64 = 0) {
+    ///   - mediaSize: The size of the media's frame.
+    public init(url: URL,
+                contentMode: ContentMode = .fit,
+                refreshInterval: UInt64 = 0,
+                mediaSize: CGSize? = nil
+    ) {
         self.contentMode = contentMode
+        self.mediaSize = mediaSize
         
         _viewModel = StateObject(
             wrappedValue: AsyncImageViewModel(
@@ -68,6 +77,7 @@ struct AsyncImageView: View {
                         .tint(.white)
                         .opacity(0.5)
                         .padding([.top], 4)
+                        .frame(width: mediaSize?.width)
                     Spacer()
                 }
             }
