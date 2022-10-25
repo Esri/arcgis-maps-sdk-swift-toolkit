@@ -12,6 +12,7 @@
 // limitations under the License.
 
 import SwiftUI
+import ArcGIS
 
 /// A view model which performs the work necessary to asynchronously download an image
 /// from a URL and handles refreshing that image at a given time interval.
@@ -21,6 +22,13 @@ import SwiftUI
     
     /// The timer used refresh the image when `refreshInterval` is not zero.
     private var timer: Timer?
+    
+    /// The refresh interval, in milliseconds. A refresh interval of 0 means never refresh.
+    let refreshInterval: UInt64
+    
+    /// An interval to be used by an indeterminate ProgressView to display progress
+    /// until next refresh.  Will be `nil` if `refreshInterval` is less than 1.
+    @Published var progressInterval: ClosedRange<Date>? = nil
     
     /// A Boolean value specifying whether data from the image url is currently being refreshed.
     private var isRefreshing: Bool = false
@@ -37,6 +45,7 @@ import SwiftUI
     ///   - refreshInterval: The refresh interval, in milliseconds. A refresh interval of 0 means never refresh.
     init(imageURL: URL, refreshInterval: UInt64 = 0) {
         self.imageURL = imageURL
+        self.refreshInterval = refreshInterval
         
         if refreshInterval > 0 {
             timer = Timer.scheduledTimer(
@@ -63,26 +72,28 @@ import SwiftUI
         // the current image before starting a new download, otherwise
         // we may never get an image to display.
         isRefreshing = true
-        task = URLSession.shared.dataTask(with: imageURL) { [weak self]
-            (data, response, error) in
-            DispatchQueue.main.async { [weak self] in
-                if let data {
-                    // Create the image.
+        Task { [weak self] in
+            guard let self = self else { return }
+            
+            do {
+                let (data, _) = try await ArcGISRuntimeEnvironment.urlSession.data(from: imageURL)
+                DispatchQueue.main.async { [weak self] in
                     if let image = UIImage(data: data) {
                         self?.result = .success(image)
                     } else {
                         // We have data, but couldn't create an image.
                         self?.result = .failure(LoadImageError())
                     }
-                } else if let error {
-                    self?.result = .failure(error)
                 }
-                self?.isRefreshing = false
+            } catch {
+                result = .failure(error)
+            }
+            
+            isRefreshing = false
+            if refreshInterval >= 1 {
+                progressInterval = Date()...Date().addingTimeInterval(Double(refreshInterval) / 1000)
             }
         }
-        
-        // Start the download task.
-        task?.resume()
     }
 }
 
