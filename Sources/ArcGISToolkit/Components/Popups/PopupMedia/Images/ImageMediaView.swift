@@ -34,7 +34,8 @@ struct ImageMediaView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***AsyncImageView(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***url: sourceURL,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***contentMode: .fill,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***refreshInterval: popupMedia.imageRefreshInterval
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***refreshInterval: popupMedia.imageRefreshInterval,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mediaSize: mediaSize
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: mediaSize.width, height: mediaSize.height)
 ***REMOVED******REMOVED******REMOVED******REMOVED***VStack {

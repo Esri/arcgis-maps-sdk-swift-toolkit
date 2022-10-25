@@ -19,6 +19,9 @@ struct AsyncImageView: View {
 ***REMOVED******REMOVED***/ The `ContentMode` defining how the image fills the available space.
 ***REMOVED***let contentMode: ContentMode
 ***REMOVED***
+***REMOVED******REMOVED***/ The size of the media's frame.
+***REMOVED***private let mediaSize: CGSize?
+***REMOVED***
 ***REMOVED******REMOVED***/ The data model for an `AsyncImageView`.
 ***REMOVED***@StateObject var viewModel: AsyncImageViewModel
 ***REMOVED***
@@ -27,8 +30,14 @@ struct AsyncImageView: View {
 ***REMOVED******REMOVED***/   - url: The `URL` of the image.
 ***REMOVED******REMOVED***/   - contentMode: The `ContentMode` defining how the image fills the available space.
 ***REMOVED******REMOVED***/   - refreshInterval: The refresh interval, in milliseconds. A refresh interval of 0 means never refresh.
-***REMOVED***public init(url: URL, contentMode: ContentMode = .fit, refreshInterval: UInt64 = 0) {
+***REMOVED******REMOVED***/   - mediaSize: The size of the media's frame.
+***REMOVED***public init(url: URL,
+***REMOVED******REMOVED******REMOVED******REMOVED***contentMode: ContentMode = .fit,
+***REMOVED******REMOVED******REMOVED******REMOVED***refreshInterval: UInt64 = 0,
+***REMOVED******REMOVED******REMOVED******REMOVED***mediaSize: CGSize? = nil
+***REMOVED***) {
 ***REMOVED******REMOVED***self.contentMode = contentMode
+***REMOVED******REMOVED***self.mediaSize = mediaSize
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***_viewModel = StateObject(
 ***REMOVED******REMOVED******REMOVED***wrappedValue: AsyncImageViewModel(
@@ -68,6 +77,7 @@ struct AsyncImageView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.tint(.white)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.opacity(0.5)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding([.top], 4)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: mediaSize?.width)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***

@@ -48,7 +48,10 @@ struct MediaDetailView : View {
 ***REMOVED******REMOVED******REMOVED***switch popupMedia.kind {
 ***REMOVED******REMOVED******REMOVED***case .image:
 ***REMOVED******REMOVED******REMOVED******REMOVED***if let sourceURL = popupMedia.value?.sourceURL {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AsyncImageView(url: sourceURL, refreshInterval: popupMedia.imageRefreshInterval)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AsyncImageView(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***url: sourceURL,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***refreshInterval: popupMedia.imageRefreshInterval
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onTapGesture {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let linkURL = popupMedia.value?.linkURL {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***UIApplication.shared.open(linkURL)
