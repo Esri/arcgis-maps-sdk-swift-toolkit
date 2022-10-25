@@ -95,16 +95,43 @@ struct RelationshipPopupElementView: View {
         .task {
             guard let feature,
                   let table = feature.table as? ServiceFeatureTable,
-                  let relationshipInfo = table.layerInfo?.relationshipInfos.first
+                    let relationshipInfo = table.layerInfo?.relationshipInfos.first(where: { relationshipInfo in
+                        relationshipInfo.id == popupElement.relationshipID
+                    })
             else { return }
             
+            // User QueryBy fields in `RelatedQueryParameters`
             let params = RelatedQueryParameters(relationshipInfo: relationshipInfo)
+            params.addOrderByFields(popupElement.orderByFields)
+
+            // What about nested related records.  Can the UI handle unlimited recursive
+            // levels?  Or do we limit it to only 1 or 2 levels deep?  Test it.
+            
+            // When service is up, look at what's it's displaying in the related fields
+            // Does it use "orderByFields" to display [last inspection result].
+            // Do we need to display all information in "orderByFields" in the related
+            // records view?
             let relatedFeatureQueryResult = try? await table.queryRelatedFeatures(
                 to: feature,
                 using: params,
                 queryFeatureFields: .loadAll
             ).first
+            // What about the rest of the `relatedFeatureQueryResult`s???
             relatedFeatures = relatedFeatureQueryResult?.features()
+
+            //for each related feature, create a popup with the popupDefinition
+            
+            //PopupDefinition from either feature table or feature layer?
+//            let pud = relatedFeatures?.first(where: $0 = "x").featureTable
+
+            // Test to see if a popupDefinition is created automatically if we're using
+            // a feature (from the feature's table) or if it's just a "dumb" one).
+//            let popup = Popup(geoElement: relatedFeatures.first, popupDefinition: PopupDefinition())
+            
+            // Make sure to evaluate each popup
+            // Maybe need to just evaluate the title for display, then if the user
+            // taps on it, evaluate everything (which popupview should do automatically)
+            
             fields = relatedFeatureQueryResult?.fields ?? []
         }
     }
