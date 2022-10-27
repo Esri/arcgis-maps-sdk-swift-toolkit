@@ -29,12 +29,13 @@ struct AsyncImageView: View {
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - url: The `URL` of the image.
 ***REMOVED******REMOVED***/   - contentMode: The `ContentMode` defining how the image fills the available space.
-***REMOVED******REMOVED***/   - refreshInterval: The refresh interval, in milliseconds. A refresh interval of 0 means never refresh.
+***REMOVED******REMOVED***/   - refreshInterval: The refresh interval, in seconds. A`nil` interval means never refresh.
 ***REMOVED******REMOVED***/   - mediaSize: The size of the media's frame.
-***REMOVED***public init(url: URL,
-***REMOVED******REMOVED******REMOVED******REMOVED***contentMode: ContentMode = .fit,
-***REMOVED******REMOVED******REMOVED******REMOVED***refreshInterval: UInt64 = 0,
-***REMOVED******REMOVED******REMOVED******REMOVED***mediaSize: CGSize? = nil
+***REMOVED***public init(
+***REMOVED******REMOVED***url: URL,
+***REMOVED******REMOVED***contentMode: ContentMode = .fit,
+***REMOVED******REMOVED***refreshInterval: TimeInterval? = nil,
+***REMOVED******REMOVED***mediaSize: CGSize? = nil
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.contentMode = contentMode
 ***REMOVED******REMOVED***self.mediaSize = mediaSize

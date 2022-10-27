@@ -24,7 +24,7 @@
 ***REMOVED***private var timer: Timer?
 ***REMOVED***
 ***REMOVED******REMOVED***/ The refresh interval, in milliseconds. A refresh interval of 0 means never refresh.
-***REMOVED***let refreshInterval: UInt64
+***REMOVED***let refreshInterval: TimeInterval?
 ***REMOVED***
 ***REMOVED******REMOVED***/ An interval to be used by an indeterminate ProgressView to display progress
 ***REMOVED******REMOVED***/ until next refresh.  Will be `nil` if `refreshInterval` is less than 1.
@@ -42,14 +42,14 @@
 ***REMOVED******REMOVED***/ Creates an `AsyncImageViewModel`.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - imageURL: The URL of the image to download.
-***REMOVED******REMOVED***/   - refreshInterval: The refresh interval, in milliseconds. A refresh interval of 0 means never refresh.
-***REMOVED***init(imageURL: URL, refreshInterval: UInt64 = 0) {
+***REMOVED******REMOVED***/   - refreshInterval: The refresh interval, in seconds. A`nil` interval means never refresh.
+***REMOVED***init(imageURL: URL, refreshInterval: TimeInterval? = nil) {
 ***REMOVED******REMOVED***self.imageURL = imageURL
 ***REMOVED******REMOVED***self.refreshInterval = refreshInterval
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***if refreshInterval > 0 {
+***REMOVED******REMOVED***if let refreshInterval {
 ***REMOVED******REMOVED******REMOVED***timer = Timer.scheduledTimer(
-***REMOVED******REMOVED******REMOVED******REMOVED***withTimeInterval: Double(refreshInterval) / 1000,
+***REMOVED******REMOVED******REMOVED******REMOVED***withTimeInterval: refreshInterval,
 ***REMOVED******REMOVED******REMOVED******REMOVED***repeats: true,
 ***REMOVED******REMOVED******REMOVED******REMOVED***block: { [weak self] timer in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let self = self else { return ***REMOVED***
@@ -90,8 +90,9 @@
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***isRefreshing = false
-***REMOVED******REMOVED******REMOVED***if refreshInterval >= 1 {
-***REMOVED******REMOVED******REMOVED******REMOVED***progressInterval = Date()...Date().addingTimeInterval(Double(refreshInterval) / 1000)
+***REMOVED******REMOVED******REMOVED***if let refreshInterval,
+***REMOVED******REMOVED******REMOVED***   refreshInterval >= 1 {
+***REMOVED******REMOVED******REMOVED******REMOVED***progressInterval = Date()...Date().addingTimeInterval(refreshInterval)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
