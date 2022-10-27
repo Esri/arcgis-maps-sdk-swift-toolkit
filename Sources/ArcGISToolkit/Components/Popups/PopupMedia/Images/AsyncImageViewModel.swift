@@ -24,7 +24,7 @@ import ArcGIS
     private var timer: Timer?
     
     /// The refresh interval, in milliseconds. A refresh interval of 0 means never refresh.
-    let refreshInterval: UInt64
+    let refreshInterval: TimeInterval?
     
     /// An interval to be used by an indeterminate ProgressView to display progress
     /// until next refresh.  Will be `nil` if `refreshInterval` is less than 1.
@@ -42,14 +42,14 @@ import ArcGIS
     /// Creates an `AsyncImageViewModel`.
     /// - Parameters:
     ///   - imageURL: The URL of the image to download.
-    ///   - refreshInterval: The refresh interval, in milliseconds. A refresh interval of 0 means never refresh.
-    init(imageURL: URL, refreshInterval: UInt64 = 0) {
+    ///   - refreshInterval: The refresh interval, in seconds. A`nil` interval means never refresh.
+    init(imageURL: URL, refreshInterval: TimeInterval? = nil) {
         self.imageURL = imageURL
         self.refreshInterval = refreshInterval
         
-        if refreshInterval > 0 {
+        if let refreshInterval {
             timer = Timer.scheduledTimer(
-                withTimeInterval: Double(refreshInterval) / 1000,
+                withTimeInterval: refreshInterval,
                 repeats: true,
                 block: { [weak self] timer in
                     guard let self = self else { return }
@@ -90,8 +90,9 @@ import ArcGIS
             }
             
             isRefreshing = false
-            if refreshInterval >= 1 {
-                progressInterval = Date()...Date().addingTimeInterval(Double(refreshInterval) / 1000)
+            if let refreshInterval,
+               refreshInterval >= 1 {
+                progressInterval = Date()...Date().addingTimeInterval(refreshInterval)
             }
         }
     }
