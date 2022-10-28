@@ -42,7 +42,7 @@
 ***REMOVED******REMOVED***/ Creates an `AsyncImageViewModel`.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - imageURL: The URL of the image to download.
-***REMOVED******REMOVED***/   - refreshInterval: The refresh interval, in seconds. A`nil` interval means never refresh.
+***REMOVED******REMOVED***/   - refreshInterval: The refresh interval, in seconds. A `nil` interval means never refresh.
 ***REMOVED***init(imageURL: URL, refreshInterval: TimeInterval? = nil) {
 ***REMOVED******REMOVED***self.imageURL = imageURL
 ***REMOVED******REMOVED***self.refreshInterval = refreshInterval

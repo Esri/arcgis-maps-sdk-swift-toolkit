@@ -29,7 +29,7 @@ struct AsyncImageView: View {
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - url: The `URL` of the image.
 ***REMOVED******REMOVED***/   - contentMode: The `ContentMode` defining how the image fills the available space.
-***REMOVED******REMOVED***/   - refreshInterval: The refresh interval, in seconds. A`nil` interval means never refresh.
+***REMOVED******REMOVED***/   - refreshInterval: The refresh interval, in seconds. A `nil` interval means never refresh.
 ***REMOVED******REMOVED***/   - mediaSize: The size of the media's frame.
 ***REMOVED***public init(
 ***REMOVED******REMOVED***url: URL,
