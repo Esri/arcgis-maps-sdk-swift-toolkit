@@ -29,7 +29,7 @@ struct AsyncImageView: View {
     /// - Parameters:
     ///   - url: The `URL` of the image.
     ///   - contentMode: The `ContentMode` defining how the image fills the available space.
-    ///   - refreshInterval: The refresh interval, in seconds. A`nil` interval means never refresh.
+    ///   - refreshInterval: The refresh interval, in seconds. A `nil` interval means never refresh.
     ///   - mediaSize: The size of the media's frame.
     public init(
         url: URL,

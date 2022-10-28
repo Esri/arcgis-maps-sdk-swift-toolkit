@@ -42,7 +42,7 @@ import ArcGIS
     /// Creates an `AsyncImageViewModel`.
     /// - Parameters:
     ///   - imageURL: The URL of the image to download.
-    ///   - refreshInterval: The refresh interval, in seconds. A`nil` interval means never refresh.
+    ///   - refreshInterval: The refresh interval, in seconds. A `nil` interval means never refresh.
     init(imageURL: URL, refreshInterval: TimeInterval? = nil) {
         self.imageURL = imageURL
         self.refreshInterval = refreshInterval
