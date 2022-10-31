@@ -18,13 +18,31 @@ import ArcGIS
 /// from a URL and handles refreshing that image at a given time interval.
 @MainActor final class AsyncImageViewModel: ObservableObject {
     /// The `URL` of the image.
-    private var imageURL: URL
+    var url: URL?{
+        didSet {
+            refresh()
+        }
+    }
+    
+    /// The refresh interval, in milliseconds. A refresh interval of 0 means never refresh.
+    var refreshInterval: TimeInterval? {
+        didSet {
+            if let refreshInterval {
+                timer = Timer.scheduledTimer(
+                    withTimeInterval: refreshInterval,
+                    repeats: true,
+                    block: { [weak self] timer in
+                        guard let self = self else { return }
+                        DispatchQueue.main.async {
+                            self.refresh()
+                        }
+                    })
+            }
+        }
+    }
     
     /// The timer used refresh the image when `refreshInterval` is not zero.
     private var timer: Timer?
-    
-    /// The refresh interval, in milliseconds. A refresh interval of 0 means never refresh.
-    let refreshInterval: TimeInterval?
     
     /// An interval to be used by an indeterminate ProgressView to display progress
     /// until next refresh. Will be `nil` if `refreshInterval` is less than 1.
@@ -33,36 +51,18 @@ import ArcGIS
     /// A Boolean value specifying whether data from the image url is currently being refreshed.
     private var isRefreshing: Bool = false
     
-    /// The result of the operation to load the image from `imageURL`.
+    /// The result of the operation to load the image from `url`.
     @Published var result: Result<UIImage?, Error> = .success(nil)
     
     /// The image download task.
-    var task: URLSessionDataTask?
+    private var task: URLSessionDataTask?
     
     /// Creates an `AsyncImageViewModel`.
-    /// - Parameters:
-    ///   - imageURL: The URL of the image to download.
-    ///   - refreshInterval: The refresh interval, in seconds. A `nil` interval means never refresh.
-    init(imageURL: URL, refreshInterval: TimeInterval? = nil) {
-        self.imageURL = imageURL
-        self.refreshInterval = refreshInterval
-        
-        if let refreshInterval {
-            timer = Timer.scheduledTimer(
-                withTimeInterval: refreshInterval,
-                repeats: true,
-                block: { [weak self] timer in
-                    guard let self = self else { return }
-                    DispatchQueue.main.async {
-                        self.refresh()
-                    }
-                })
-        }
-        // First refresh.
+    init() {
         refresh()
     }
     
-    /// Refreshes the image data from `imageURL` and creates the image.
+    /// Refreshes the image data from `url` and creates the image.
     private func refresh() {
         guard !isRefreshing else { return }
         
@@ -73,10 +73,10 @@ import ArcGIS
         // we may never get an image to display.
         isRefreshing = true
         Task { [weak self] in
-            guard let self else { return }
+            guard let self, let url else { return }
             
             do {
-                let (data, _) = try await ArcGISRuntimeEnvironment.urlSession.data(from: imageURL)
+                let (data, _) = try await ArcGISRuntimeEnvironment.urlSession.data(from: url)
                 DispatchQueue.main.async { [weak self] in
                     if let image = UIImage(data: data) {
                         self?.result = .success(image)

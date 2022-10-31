@@ -16,8 +16,14 @@ import ArcGIS
 
 /// A view displaying an async image, with error display and progress view.
 struct AsyncImageView: View {
+    /// The `URL` of the image.
+    private var url: URL
+    
     /// The `ContentMode` defining how the image fills the available space.
-    let contentMode: ContentMode
+    private let contentMode: ContentMode
+    
+    /// The refresh interval, in milliseconds. A refresh interval of 0 means never refresh.
+    private let refreshInterval: TimeInterval?
     
     /// The size of the media's frame.
     private let mediaSize: CGSize?
@@ -39,13 +45,10 @@ struct AsyncImageView: View {
     ) {
         self.contentMode = contentMode
         self.mediaSize = mediaSize
+        self.url = url
+        self.refreshInterval = refreshInterval
         
-        _viewModel = StateObject(
-            wrappedValue: AsyncImageViewModel(
-                imageURL: url,
-                refreshInterval: refreshInterval
-            )
-        )
+        _viewModel = StateObject(wrappedValue: AsyncImageViewModel())
     }
     
     var body: some View {
@@ -82,6 +85,10 @@ struct AsyncImageView: View {
                     Spacer()
                 }
             }
+        }
+        .onAppear() {
+            viewModel.url = url
+            viewModel.refreshInterval = refreshInterval
         }
     }
 }
