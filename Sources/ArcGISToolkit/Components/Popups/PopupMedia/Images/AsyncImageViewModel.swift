@@ -18,13 +18,31 @@
 ***REMOVED***/ from a URL and handles refreshing that image at a given time interval.
 @MainActor final class AsyncImageViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ The `URL` of the image.
-***REMOVED***private var imageURL: URL
+***REMOVED***var url: URL?{
+***REMOVED******REMOVED***didSet {
+***REMOVED******REMOVED******REMOVED***refresh()
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ The refresh interval, in milliseconds. A refresh interval of 0 means never refresh.
+***REMOVED***var refreshInterval: TimeInterval? {
+***REMOVED******REMOVED***didSet {
+***REMOVED******REMOVED******REMOVED***if let refreshInterval {
+***REMOVED******REMOVED******REMOVED******REMOVED***timer = Timer.scheduledTimer(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***withTimeInterval: refreshInterval,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***repeats: true,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***block: { [weak self] timer in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let self = self else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***DispatchQueue.main.async {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.refresh()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The timer used refresh the image when `refreshInterval` is not zero.
 ***REMOVED***private var timer: Timer?
-***REMOVED***
-***REMOVED******REMOVED***/ The refresh interval, in milliseconds. A refresh interval of 0 means never refresh.
-***REMOVED***let refreshInterval: TimeInterval?
 ***REMOVED***
 ***REMOVED******REMOVED***/ An interval to be used by an indeterminate ProgressView to display progress
 ***REMOVED******REMOVED***/ until next refresh. Will be `nil` if `refreshInterval` is less than 1.
@@ -33,36 +51,18 @@
 ***REMOVED******REMOVED***/ A Boolean value specifying whether data from the image url is currently being refreshed.
 ***REMOVED***private var isRefreshing: Bool = false
 ***REMOVED***
-***REMOVED******REMOVED***/ The result of the operation to load the image from `imageURL`.
+***REMOVED******REMOVED***/ The result of the operation to load the image from `url`.
 ***REMOVED***@Published var result: Result<UIImage?, Error> = .success(nil)
 ***REMOVED***
 ***REMOVED******REMOVED***/ The image download task.
-***REMOVED***var task: URLSessionDataTask?
+***REMOVED***private var task: URLSessionDataTask?
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates an `AsyncImageViewModel`.
-***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - imageURL: The URL of the image to download.
-***REMOVED******REMOVED***/   - refreshInterval: The refresh interval, in seconds. A `nil` interval means never refresh.
-***REMOVED***init(imageURL: URL, refreshInterval: TimeInterval? = nil) {
-***REMOVED******REMOVED***self.imageURL = imageURL
-***REMOVED******REMOVED***self.refreshInterval = refreshInterval
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***if let refreshInterval {
-***REMOVED******REMOVED******REMOVED***timer = Timer.scheduledTimer(
-***REMOVED******REMOVED******REMOVED******REMOVED***withTimeInterval: refreshInterval,
-***REMOVED******REMOVED******REMOVED******REMOVED***repeats: true,
-***REMOVED******REMOVED******REMOVED******REMOVED***block: { [weak self] timer in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let self = self else { return ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***DispatchQueue.main.async {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.refresh()
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***)
-***REMOVED***
-***REMOVED******REMOVED******REMOVED*** First refresh.
+***REMOVED***init() {
 ***REMOVED******REMOVED***refresh()
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Refreshes the image data from `imageURL` and creates the image.
+***REMOVED******REMOVED***/ Refreshes the image data from `url` and creates the image.
 ***REMOVED***private func refresh() {
 ***REMOVED******REMOVED***guard !isRefreshing else { return ***REMOVED***
 ***REMOVED******REMOVED***
@@ -73,10 +73,10 @@
 ***REMOVED******REMOVED******REMOVED*** we may never get an image to display.
 ***REMOVED******REMOVED***isRefreshing = true
 ***REMOVED******REMOVED***Task { [weak self] in
-***REMOVED******REMOVED******REMOVED***guard let self else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED***guard let self, let url else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***do {
-***REMOVED******REMOVED******REMOVED******REMOVED***let (data, _) = try await ArcGISRuntimeEnvironment.urlSession.data(from: imageURL)
+***REMOVED******REMOVED******REMOVED******REMOVED***let (data, _) = try await ArcGISRuntimeEnvironment.urlSession.data(from: url)
 ***REMOVED******REMOVED******REMOVED******REMOVED***DispatchQueue.main.async { [weak self] in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let image = UIImage(data: data) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self?.result = .success(image)
