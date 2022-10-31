@@ -27,7 +27,7 @@ import ArcGIS
     let refreshInterval: TimeInterval?
     
     /// An interval to be used by an indeterminate ProgressView to display progress
-    /// until next refresh.  Will be `nil` if `refreshInterval` is less than 1.
+    /// until next refresh. Will be `nil` if `refreshInterval` is less than 1.
     @Published var progressInterval: ClosedRange<Date>? = nil
     
     /// A Boolean value specifying whether data from the image url is currently being refreshed.
@@ -73,7 +73,7 @@ import ArcGIS
         // we may never get an image to display.
         isRefreshing = true
         Task { [weak self] in
-            guard let self = self else { return }
+            guard let self else { return }
             
             do {
                 let (data, _) = try await ArcGISRuntimeEnvironment.urlSession.data(from: imageURL)

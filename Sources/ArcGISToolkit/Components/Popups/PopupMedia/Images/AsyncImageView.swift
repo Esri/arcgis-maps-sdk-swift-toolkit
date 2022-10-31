@@ -31,7 +31,7 @@ struct AsyncImageView: View {
     ///   - contentMode: The `ContentMode` defining how the image fills the available space.
     ///   - refreshInterval: The refresh interval, in seconds. A `nil` interval means never refresh.
     ///   - mediaSize: The size of the media's frame.
-    public init(
+    init(
         url: URL,
         contentMode: ContentMode = .fit,
         refreshInterval: TimeInterval? = nil,
@@ -75,10 +75,10 @@ struct AsyncImageView: View {
                         timerInterval: progressInterval,
                         countsDown: false
                     )
-                        .tint(.white)
-                        .opacity(0.5)
-                        .padding([.top], 4)
-                        .frame(width: mediaSize?.width)
+                    .tint(.white)
+                    .opacity(0.5)
+                    .padding([.top], 4)
+                    .frame(width: mediaSize?.width)
                     Spacer()
                 }
             }
