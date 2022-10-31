@@ -73,7 +73,7 @@ struct AsyncImageView: View {
                 VStack {
                     ProgressView(
                         timerInterval: progressInterval,
-                        countsDown: false
+                        countsDown: true
                     )
                     .tint(.white)
                     .opacity(0.5)
