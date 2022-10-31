@@ -73,7 +73,7 @@ struct AsyncImageView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***VStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ProgressView(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***timerInterval: progressInterval,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***countsDown: false
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***countsDown: true
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.tint(.white)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.opacity(0.5)
