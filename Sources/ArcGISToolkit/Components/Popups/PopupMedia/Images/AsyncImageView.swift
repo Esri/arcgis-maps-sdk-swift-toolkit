@@ -90,5 +90,11 @@ struct AsyncImageView: View {
 ***REMOVED******REMOVED******REMOVED***viewModel.url = url
 ***REMOVED******REMOVED******REMOVED***viewModel.refreshInterval = refreshInterval
 ***REMOVED***
+***REMOVED******REMOVED***.onChange(of: url) { _ in
+***REMOVED******REMOVED******REMOVED***viewModel.url = url
+***REMOVED***
+***REMOVED******REMOVED***.onChange(of: refreshInterval) { _ in
+***REMOVED******REMOVED******REMOVED***viewModel.refreshInterval = refreshInterval
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
