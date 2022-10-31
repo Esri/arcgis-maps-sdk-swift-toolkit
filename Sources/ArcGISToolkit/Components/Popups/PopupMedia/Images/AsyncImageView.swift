@@ -90,5 +90,11 @@ struct AsyncImageView: View {
             viewModel.url = url
             viewModel.refreshInterval = refreshInterval
         }
+        .onChange(of: url) { _ in
+            viewModel.url = url
+        }
+        .onChange(of: refreshInterval) { _ in
+            viewModel.refreshInterval = refreshInterval
+        }
     }
 }
