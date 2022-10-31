@@ -40,39 +40,41 @@ public struct PopupView: View {
     private var isPresented: Binding<Bool>?
 
     public var body: some View {
-        VStack(alignment: .leading) {
-            HStack {
-                if !popup.title.isEmpty {
-                    Text(popup.title)
-                        .font(.title)
-                        .fontWeight(.bold)
-                }
-                Spacer()
-                if showCloseButton {
-                    Button(action: {
-                        isPresented?.wrappedValue = false
-                    }, label: {
-                        Image(systemName: "xmark.circle")
-                            .foregroundColor(.secondary)
-                            .padding([.top, .bottom, .trailing], 4)
-                    })
-                }
-            }
-            Divider()
-            Group {
-                if let evaluateExpressionsResult {
-                    switch evaluateExpressionsResult {
-                    case .success(_):
-                        PopupElementScrollView(popupElements: popup.evaluatedElements, popup: popup)
-                    case .failure(let error):
-                        Text("Popup evaluation failed: \(error.localizedDescription)")
+        NavigationStack {
+            VStack(alignment: .leading) {
+                HStack {
+                    if !popup.title.isEmpty {
+                        Text(popup.title)
+                            .font(.title)
+                            .fontWeight(.bold)
                     }
-                } else {
-                    VStack(alignment: .center) {
-                        Text("Evaluating popup expressions...")
-                        ProgressView()
+                    Spacer()
+                    if showCloseButton {
+                        Button(action: {
+                            isPresented?.wrappedValue = false
+                        }, label: {
+                            Image(systemName: "xmark.circle")
+                                .foregroundColor(.secondary)
+                                .padding([.top, .bottom, .trailing], 4)
+                        })
                     }
-                    .frame(maxWidth: .infinity)
+                }
+                Divider()
+                Group {
+                    if let evaluateExpressionsResult {
+                        switch evaluateExpressionsResult {
+                        case .success(_):
+                            PopupElementScrollView(popupElements: popup.evaluatedElements, popup: popup)
+                        case .failure(let error):
+                            Text("Popup evaluation failed: \(error.localizedDescription)")
+                        }
+                    } else {
+                        VStack(alignment: .center) {
+                            Text("Evaluating popup expressions...")
+                            ProgressView()
+                        }
+                        .frame(maxWidth: .infinity)
+                    }
                 }
             }
         }
