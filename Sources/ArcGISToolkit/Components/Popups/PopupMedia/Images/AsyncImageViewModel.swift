@@ -27,7 +27,7 @@
 ***REMOVED***let refreshInterval: TimeInterval?
 ***REMOVED***
 ***REMOVED******REMOVED***/ An interval to be used by an indeterminate ProgressView to display progress
-***REMOVED******REMOVED***/ until next refresh.  Will be `nil` if `refreshInterval` is less than 1.
+***REMOVED******REMOVED***/ until next refresh. Will be `nil` if `refreshInterval` is less than 1.
 ***REMOVED***@Published var progressInterval: ClosedRange<Date>? = nil
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value specifying whether data from the image url is currently being refreshed.
@@ -73,7 +73,7 @@
 ***REMOVED******REMOVED******REMOVED*** we may never get an image to display.
 ***REMOVED******REMOVED***isRefreshing = true
 ***REMOVED******REMOVED***Task { [weak self] in
-***REMOVED******REMOVED******REMOVED***guard let self = self else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED***guard let self else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED******REMOVED***let (data, _) = try await ArcGISRuntimeEnvironment.urlSession.data(from: imageURL)

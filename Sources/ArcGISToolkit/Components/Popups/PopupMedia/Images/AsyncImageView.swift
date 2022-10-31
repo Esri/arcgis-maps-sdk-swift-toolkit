@@ -31,7 +31,7 @@ struct AsyncImageView: View {
 ***REMOVED******REMOVED***/   - contentMode: The `ContentMode` defining how the image fills the available space.
 ***REMOVED******REMOVED***/   - refreshInterval: The refresh interval, in seconds. A `nil` interval means never refresh.
 ***REMOVED******REMOVED***/   - mediaSize: The size of the media's frame.
-***REMOVED***public init(
+***REMOVED***init(
 ***REMOVED******REMOVED***url: URL,
 ***REMOVED******REMOVED***contentMode: ContentMode = .fit,
 ***REMOVED******REMOVED***refreshInterval: TimeInterval? = nil,
@@ -75,10 +75,10 @@ struct AsyncImageView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***timerInterval: progressInterval,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***countsDown: false
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.tint(.white)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.opacity(0.5)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding([.top], 4)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: mediaSize?.width)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.tint(.white)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.opacity(0.5)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding([.top], 4)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: mediaSize?.width)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
