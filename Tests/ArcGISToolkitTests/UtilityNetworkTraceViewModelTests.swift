@@ -338,7 +338,7 @@ import XCTest
         XCTAssertFalse(viewModel.canRunTrace)
         XCTAssertEqual(viewModel.completedTraces.first?.functionOutputs.count, 1)
         XCTAssertEqual(functionOutput.function.functionType, .add)
-        XCTAssertEqual(functionOutput.function.networkAttribute?.name, "Shape length")
+        XCTAssertEqual(functionOutput.function.networkAttribute.name, "Shape length")
     }
     
     func testCase_3_2() async throws {

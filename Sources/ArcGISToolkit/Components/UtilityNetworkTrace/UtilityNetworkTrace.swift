@@ -363,7 +363,7 @@ public struct UtilityNetworkTrace: View {
                     ) {
                         ForEach(viewModel.selectedTrace?.functionOutputs ?? [], id: \.id) { item in
                             HStack {
-                                Text(item.function.networkAttribute?.name ?? "Unnamed")
+                                Text(item.function.networkAttribute.name)
                                 Spacer()
                                 VStack(alignment: .trailing) {
                                     Text(item.function.functionType.title)
