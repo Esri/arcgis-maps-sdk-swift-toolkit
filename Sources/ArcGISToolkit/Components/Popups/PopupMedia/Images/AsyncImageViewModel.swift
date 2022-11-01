@@ -18,7 +18,7 @@
 ***REMOVED***/ from a URL and handles refreshing that image at a given time interval.
 @MainActor final class AsyncImageViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ The `URL` of the image.
-***REMOVED***var url: URL?{
+***REMOVED***var url: URL? {
 ***REMOVED******REMOVED***didSet {
 ***REMOVED******REMOVED******REMOVED***refresh()
 ***REMOVED***
