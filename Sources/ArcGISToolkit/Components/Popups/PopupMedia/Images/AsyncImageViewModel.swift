@@ -27,6 +27,8 @@
 ***REMOVED******REMOVED***/ The refresh interval, in milliseconds. A refresh interval of 0 means never refresh.
 ***REMOVED***var refreshInterval: TimeInterval? {
 ***REMOVED******REMOVED***didSet {
+***REMOVED******REMOVED******REMOVED***timer?.invalidate()
+***REMOVED******REMOVED******REMOVED***progressInterval = nil
 ***REMOVED******REMOVED******REMOVED***if let refreshInterval {
 ***REMOVED******REMOVED******REMOVED******REMOVED***timer = Timer.scheduledTimer(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***withTimeInterval: refreshInterval,
@@ -37,6 +39,7 @@
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.refresh()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***refresh()
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
