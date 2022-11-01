@@ -18,7 +18,7 @@ import ArcGIS
 /// from a URL and handles refreshing that image at a given time interval.
 @MainActor final class AsyncImageViewModel: ObservableObject {
     /// The `URL` of the image.
-    var url: URL?{
+    var url: URL? {
         didSet {
             refresh()
         }
