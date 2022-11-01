@@ -35,45 +35,58 @@ public struct PopupView: View {
     
     /// The result of evaluating the popup expressions.
     @State private var evaluateExpressionsResult: Result<[PopupExpressionEvaluation], Error>?
-
+    
     /// A binding to a Boolean value that determines whether the view is presented.
     private var isPresented: Binding<Bool>?
-
+    
     public var body: some View {
-        NavigationStack {
-            VStack(alignment: .leading) {
-                HStack {
-                    if !popup.title.isEmpty {
-                        Text(popup.title)
-                            .font(.title)
-                            .fontWeight(.bold)
-                    }
-                    Spacer()
-                    if showCloseButton {
-                        Button(action: {
-                            isPresented?.wrappedValue = false
-                        }, label: {
-                            Image(systemName: "xmark.circle")
-                                .foregroundColor(.secondary)
-                                .padding([.top, .bottom, .trailing], 4)
-                        })
-                    }
+        Group {
+            if #available(iOS 16.0, *) {
+                NavigationStack {
+                    PopupViewInternal(
+                        popup: self.popup,
+                        isPresented: isPresented,
+                        showCloseButton: showCloseButton,
+                        evaluateExpressionsResult: evaluateExpressionsResult
+                    )
                 }
-                Divider()
-                Group {
-                    if let evaluateExpressionsResult {
-                        switch evaluateExpressionsResult {
-                        case .success(_):
-                            PopupElementScrollView(popupElements: popup.evaluatedElements, popup: popup)
-                        case .failure(let error):
-                            Text("Popup evaluation failed: \(error.localizedDescription)")
+            } else {
+                NavigationView {
+                    VStack(alignment: .leading) {
+                        HStack {
+                            if !popup.title.isEmpty {
+                                Text(popup.title)
+                                    .font(.title)
+                                    .fontWeight(.bold)
+                            }
+                            Spacer()
+                            if showCloseButton {
+                                Button(action: {
+                                    isPresented?.wrappedValue = false
+                                }, label: {
+                                    Image(systemName: "xmark.circle")
+                                        .foregroundColor(.secondary)
+                                        .padding([.top, .bottom, .trailing], 4)
+                                })
+                            }
                         }
-                    } else {
-                        VStack(alignment: .center) {
-                            Text("Evaluating popup expressions...")
-                            ProgressView()
+                        Divider()
+                        Group {
+                            if let evaluateExpressionsResult {
+                                switch evaluateExpressionsResult {
+                                case .success(_):
+                                    PopupElementScrollView(popupElements: popup.evaluatedElements, popup: popup)
+                                case .failure(let error):
+                                    Text("Popup evaluation failed: \(error.localizedDescription)")
+                                }
+                            } else {
+                                VStack(alignment: .center) {
+                                    Text("Evaluating popup expressions...")
+                                    ProgressView()
+                                }
+                                .frame(maxWidth: .infinity)
+                            }
                         }
-                        .frame(maxWidth: .infinity)
                     }
                 }
             }
@@ -85,36 +98,100 @@ public struct PopupView: View {
             }
         }
     }
+}
+
+struct PopupViewInternal: View {
+    let popup: Popup
+    private var evaluateExpressionsResult: Result<[PopupExpressionEvaluation], Error>?
+    private var showCloseButton = false
+    private var isPresented: Binding<Bool>?
     
-    struct PopupElementScrollView: View {
-        let popupElements: [PopupElement]
-        let popup: Popup
-        
-        var body: some View {
-            ScrollView {
-                VStack(alignment: .leading) {
-                    ForEach(popupElements) { popupElement in
-                        switch popupElement {
-                        case let popupElement as AttachmentsPopupElement:
-                            AttachmentsPopupElementView(popupElement: popupElement)
-                        case let popupElement as FieldsPopupElement:
-                            FieldsPopupElementView(popupElement: popupElement)
-                        case let popupElement as MediaPopupElement:
-                            MediaPopupElementView(popupElement: popupElement)
-                        case let popupElement as RelationshipPopupElement:
-                            RelationshipPopupElementView(
-                                popupElement: popupElement,
-                                geoElement: popup.geoElement
-                            )
-                        case let popupElement as TextPopupElement:
-                            TextPopupElementView(popupElement: popupElement)
-                        default:
-                            EmptyView()
-                        }
+    /// Creates a `PopupView` with the given popup.
+    /// - Parameters
+    ///     popup: The popup to display.
+    ///   - isPresented: A Boolean value indicating if the view is presented.
+    public init(
+        popup: Popup,
+        isPresented: Binding<Bool>? = nil,
+        showCloseButton: Bool,
+        evaluateExpressionsResult: Result<[PopupExpressionEvaluation], Error>?
+    ) {
+        self.popup = popup
+        self.isPresented = isPresented
+        self.showCloseButton = showCloseButton
+        self.evaluateExpressionsResult = evaluateExpressionsResult
+    }
+    
+    var body: some View {
+        VStack(alignment: .leading) {
+            HStack {
+                if !popup.title.isEmpty {
+                    Text(popup.title)
+                        .font(.title)
+                        .fontWeight(.bold)
+                }
+                Spacer()
+                if showCloseButton {
+                    Button(action: {
+                        isPresented?.wrappedValue = false
+                    }, label: {
+                        Image(systemName: "xmark.circle")
+                            .foregroundColor(.secondary)
+                            .padding([.top, .bottom, .trailing], 4)
+                    })
+                }
+            }
+            Divider()
+            Group {
+                if let evaluateExpressionsResult {
+                    switch evaluateExpressionsResult {
+                    case .success(_):
+                        PopupElementScrollView(popupElements: popup.evaluatedElements, popup: popup)
+                    case .failure(let error):
+                        Text("Popup evaluation failed: \(error.localizedDescription)")
                     }
+                } else {
+                    VStack(alignment: .center) {
+                        Text("Evaluating popup expressions...")
+                        ProgressView()
+                    }
+                    .frame(maxWidth: .infinity)
                 }
             }
         }
+    }
+}
+
+struct PopupElementScrollView: View {
+    let popupElements: [PopupElement]
+    let popup: Popup
+    
+    var body: some View {
+        List {
+            ForEach(popupElements) { popupElement in
+                switch popupElement {
+                case let popupElement as AttachmentsPopupElement:
+                    AttachmentsPopupElementView(popupElement: popupElement)
+                case let popupElement as FieldsPopupElement:
+                    FieldsPopupElementView(popupElement: popupElement)
+                case let popupElement as MediaPopupElement:
+                    MediaPopupElementView(popupElement: popupElement)
+                case let popupElement as RelationshipPopupElement:
+                    RelationshipPopupElementView(
+                        popupElement: popupElement,
+                        geoElement: popup.geoElement
+                    )
+                case let popupElement as TextPopupElement:
+                    TextPopupElementView(popupElement: popupElement)
+                default:
+                    EmptyView()
+                }
+            }
+        }
+//        .listRowInsets(EdgeInsets())
+        .listStyle(.plain)
+//        .listRowSeparator(.hidden)
+        .listRowSeparatorTint(.red)
     }
 }
 
