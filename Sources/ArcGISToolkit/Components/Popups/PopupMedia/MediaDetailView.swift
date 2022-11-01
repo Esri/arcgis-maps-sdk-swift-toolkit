@@ -48,12 +48,15 @@ struct MediaDetailView : View {
             switch popupMedia.kind {
             case .image:
                 if let sourceURL = popupMedia.value?.sourceURL {
-                    AsyncImageView(url: sourceURL, refreshInterval: popupMedia.imageRefreshInterval)
-                        .onTapGesture {
-                            if let linkURL = popupMedia.value?.linkURL {
-                                UIApplication.shared.open(linkURL)
-                            }
+                    AsyncImageView(
+                        url: sourceURL,
+                        refreshInterval: popupMedia.imageRefreshInterval
+                    )
+                    .onTapGesture {
+                        if let linkURL = popupMedia.value?.linkURL {
+                            UIApplication.shared.open(linkURL)
                         }
+                    }
                     if popupMedia.value?.linkURL != nil {
                         HStack {
                             Text("Tap on the image for more information.")
