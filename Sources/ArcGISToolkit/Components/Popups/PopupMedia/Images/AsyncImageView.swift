@@ -16,8 +16,17 @@
 
 ***REMOVED***/ A view displaying an async image, with error display and progress view.
 struct AsyncImageView: View {
+***REMOVED******REMOVED***/ The `URL` of the image.
+***REMOVED***private var url: URL
+***REMOVED***
 ***REMOVED******REMOVED***/ The `ContentMode` defining how the image fills the available space.
-***REMOVED***let contentMode: ContentMode
+***REMOVED***private let contentMode: ContentMode
+***REMOVED***
+***REMOVED******REMOVED***/ The refresh interval, in milliseconds. A refresh interval of 0 means never refresh.
+***REMOVED***private let refreshInterval: TimeInterval?
+***REMOVED***
+***REMOVED******REMOVED***/ The size of the media's frame.
+***REMOVED***private let mediaSize: CGSize?
 ***REMOVED***
 ***REMOVED******REMOVED***/ The data model for an `AsyncImageView`.
 ***REMOVED***@StateObject var viewModel: AsyncImageViewModel
@@ -26,16 +35,20 @@ struct AsyncImageView: View {
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - url: The `URL` of the image.
 ***REMOVED******REMOVED***/   - contentMode: The `ContentMode` defining how the image fills the available space.
-***REMOVED******REMOVED***/   - refreshInterval: The refresh interval, in milliseconds. A refresh interval of 0 means never refresh.
-***REMOVED***public init(url: URL, contentMode: ContentMode = .fit, refreshInterval: UInt64 = 0) {
+***REMOVED******REMOVED***/   - refreshInterval: The refresh interval, in seconds. A `nil` interval means never refresh.
+***REMOVED******REMOVED***/   - mediaSize: The size of the media's frame.
+***REMOVED***init(
+***REMOVED******REMOVED***url: URL,
+***REMOVED******REMOVED***contentMode: ContentMode = .fit,
+***REMOVED******REMOVED***refreshInterval: TimeInterval? = nil,
+***REMOVED******REMOVED***mediaSize: CGSize? = nil
+***REMOVED***) {
 ***REMOVED******REMOVED***self.contentMode = contentMode
+***REMOVED******REMOVED***self.mediaSize = mediaSize
+***REMOVED******REMOVED***self.url = url
+***REMOVED******REMOVED***self.refreshInterval = refreshInterval
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***_viewModel = StateObject(
-***REMOVED******REMOVED******REMOVED***wrappedValue: AsyncImageViewModel(
-***REMOVED******REMOVED******REMOVED******REMOVED***imageURL: url,
-***REMOVED******REMOVED******REMOVED******REMOVED***refreshInterval: refreshInterval
-***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED***)
+***REMOVED******REMOVED***_viewModel = StateObject(wrappedValue: AsyncImageViewModel())
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var body: some View {
@@ -43,11 +56,9 @@ struct AsyncImageView: View {
 ***REMOVED******REMOVED******REMOVED***switch viewModel.result {
 ***REMOVED******REMOVED******REMOVED***case .success(let image):
 ***REMOVED******REMOVED******REMOVED******REMOVED***if let image {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ZStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(uiImage: image)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.resizable()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.aspectRatio(contentMode: contentMode)
-***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(uiImage: image)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.resizable()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.aspectRatio(contentMode: contentMode)
 ***REMOVED******REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ProgressView()
 ***REMOVED******REMOVED******REMOVED***
@@ -60,6 +71,30 @@ struct AsyncImageView: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding([.top, .bottom])
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***if #available(iOS 16.0, *),
+***REMOVED******REMOVED******REMOVED***   let progressInterval = viewModel.progressInterval {
+***REMOVED******REMOVED******REMOVED******REMOVED***VStack {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ProgressView(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***timerInterval: progressInterval,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***countsDown: true
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.tint(.white)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.opacity(0.5)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding([.top], 4)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: mediaSize?.width)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***.onAppear() {
+***REMOVED******REMOVED******REMOVED***viewModel.url = url
+***REMOVED******REMOVED******REMOVED***viewModel.refreshInterval = refreshInterval
+***REMOVED***
+***REMOVED******REMOVED***.onChange(of: url) { _ in
+***REMOVED******REMOVED******REMOVED***viewModel.url = url
+***REMOVED***
+***REMOVED******REMOVED***.onChange(of: refreshInterval) { _ in
+***REMOVED******REMOVED******REMOVED***viewModel.refreshInterval = refreshInterval
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
