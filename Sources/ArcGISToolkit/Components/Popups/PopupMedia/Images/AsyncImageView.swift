@@ -16,8 +16,17 @@ import ArcGIS
 
 /// A view displaying an async image, with error display and progress view.
 struct AsyncImageView: View {
+    /// The `URL` of the image.
+    private var url: URL
+    
     /// The `ContentMode` defining how the image fills the available space.
-    let contentMode: ContentMode
+    private let contentMode: ContentMode
+    
+    /// The refresh interval, in milliseconds. A refresh interval of 0 means never refresh.
+    private let refreshInterval: TimeInterval?
+    
+    /// The size of the media's frame.
+    private let mediaSize: CGSize?
     
     /// The data model for an `AsyncImageView`.
     @StateObject var viewModel: AsyncImageViewModel
@@ -26,16 +35,20 @@ struct AsyncImageView: View {
     /// - Parameters:
     ///   - url: The `URL` of the image.
     ///   - contentMode: The `ContentMode` defining how the image fills the available space.
-    ///   - refreshInterval: The refresh interval, in milliseconds. A refresh interval of 0 means never refresh.
-    public init(url: URL, contentMode: ContentMode = .fit, refreshInterval: UInt64 = 0) {
+    ///   - refreshInterval: The refresh interval, in seconds. A `nil` interval means never refresh.
+    ///   - mediaSize: The size of the media's frame.
+    init(
+        url: URL,
+        contentMode: ContentMode = .fit,
+        refreshInterval: TimeInterval? = nil,
+        mediaSize: CGSize? = nil
+    ) {
         self.contentMode = contentMode
+        self.mediaSize = mediaSize
+        self.url = url
+        self.refreshInterval = refreshInterval
         
-        _viewModel = StateObject(
-            wrappedValue: AsyncImageViewModel(
-                imageURL: url,
-                refreshInterval: refreshInterval
-            )
-        )
+        _viewModel = StateObject(wrappedValue: AsyncImageViewModel())
     }
     
     var body: some View {
@@ -43,11 +56,9 @@ struct AsyncImageView: View {
             switch viewModel.result {
             case .success(let image):
                 if let image {
-                    ZStack {
-                        Image(uiImage: image)
-                            .resizable()
-                            .aspectRatio(contentMode: contentMode)
-                    }
+                    Image(uiImage: image)
+                        .resizable()
+                        .aspectRatio(contentMode: contentMode)
                 } else {
                     ProgressView()
                 }
@@ -60,6 +71,30 @@ struct AsyncImageView: View {
                 }
                 .padding([.top, .bottom])
             }
+            if #available(iOS 16.0, *),
+               let progressInterval = viewModel.progressInterval {
+                VStack {
+                    ProgressView(
+                        timerInterval: progressInterval,
+                        countsDown: true
+                    )
+                    .tint(.white)
+                    .opacity(0.5)
+                    .padding([.top], 4)
+                    .frame(width: mediaSize?.width)
+                    Spacer()
+                }
+            }
+        }
+        .onAppear() {
+            viewModel.url = url
+            viewModel.refreshInterval = refreshInterval
+        }
+        .onChange(of: url) { _ in
+            viewModel.url = url
+        }
+        .onChange(of: refreshInterval) { _ in
+            viewModel.refreshInterval = refreshInterval
         }
     }
 }
