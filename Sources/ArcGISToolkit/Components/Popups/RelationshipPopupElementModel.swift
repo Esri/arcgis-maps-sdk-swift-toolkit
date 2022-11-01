@@ -16,24 +16,16 @@ import ArcGIS
 
 /// The view model for an `RelationshipPopupElementModel`.
 @MainActor class RelationshipPopupElementModel: ObservableObject {
-    /// The array of `AttachmentModels`, one for each popup attachment.
+    /// The array of related `Popup`s
     @Published var relatedPopups = [Popup]()
     
-    let feature: ArcGISFeature?
+    /// The feature to display relationships for.
+    var feature: ArcGISFeature?
 
     /// The `PopupElement` to display.
     var popupElement: RelationshipPopupElement
+    
     @State var fields = [Field]()
-
-    
-    //
-///// A view model representing the combination of a `PopupAttachment` and
-///// an associated `UIImage` used as a thumbnail.
-//@MainActor class AttachmentModel: ObservableObject {
-    
-    /// The `LoadStatus` of the popup attachment.
-    @Published var loadStatus: LoadStatus = .notLoaded
-    
     
     init(
         feature: ArcGISFeature?,

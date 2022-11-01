@@ -22,100 +22,63 @@ struct RelationshipPopupElementView: View {
     /// The feature associated with the popup
     var feature: ArcGISFeature?
     
+    @StateObject private var viewModel: RelationshipPopupElementModel
+    
     init(popupElement: RelationshipPopupElement, geoElement: GeoElement) {
         self.popupElement = popupElement
         self.feature = geoElement as? ArcGISFeature
+        
+        _viewModel = StateObject(
+            wrappedValue: RelationshipPopupElementModel(
+                feature: geoElement as? ArcGISFeature,
+                popupElement: popupElement
+            )
+        )
     }
     
     @State var isExpanded: Bool = true
     
     @State var relatedFeatures: AnySequence<Feature>?
     
-    
     @State var relatedPopups = [Popup]()
     
-    @State private var presentedParks: [String] = ["Yosemite", "Sequoia"]
-
     var body: some View {
-        if #available(iOS 16.0, *) {
-//            VStack {
-//                Text("nav stack below")
-                NavigationStack {
-                    List(presentedParks, id:\.self) { park in
-                        VStack {
-                            Text(park)
-                            NavigationLink(park, value: park)
+        DisclosureGroup(isExpanded: $isExpanded) {
+            if #available(iOS 16.0, *) {
+                VStack {
+                    ForEach(viewModel.relatedPopups) { popup in
+//                    List(viewModel.relatedPopups) { popup in
+                        NavigationLink(value: popup) {
+//                            VStack(alignment: .leading) {
+                                Text(popup.title)
+//                                Text(popup.definition.description)
+//                            }
                         }
-                    }
-                    .navigationDestination(for: String.self) { park in
-                        Text(park)
+//                        NavigationLink(popup.title, value: popup)
                     }
                 }
-//            }
-        } else {
-            Text("need ios 16")
+                .navigationDestination(for: Popup.self) { popup in
+                    PopupViewInternal(
+                        popup: popup,
+                        showCloseButton: false,
+                        evaluateExpressionsResult: Result<[PopupExpressionEvaluation], Error>.success([])
+
+                    )
+                }
+            }
+        } label: {
+            VStack(alignment: .leading) {
+                PopupElementHeader(
+                    title: popupElement.title,
+                    description: popupElement.description
+                )
+            }
         }
     }
-//    var body: some View {
-//        DisclosureGroup(isExpanded: $isExpanded) {
-//            Divider()
-//                .padding(.bottom, 4)
-//
-//            if #available(iOS 16.0, *) {
-//                VStack {
-//                    Text("nav stack below")
-//                NavigationStack {
-//                    List(presentedParks, id:\.self) { park in
-//                        VStack {
-//                            Text(park)
-//                            NavigationLink(park, value: park)
-//                        }
-//                    }
-//                    .navigationDestination(for: String.self) { park in
-//                        Text(park)
-//                    }
-//                }
-//                }
-//
-////                NavigationStack {
-////                    ForEach(relatedPopups) { popup in
-////                        NavigationLink(popup.title, value: popup)
-////                    }
-////                    .navigationDestination(for: Popup.self) { popup in
-////                        PopupView(popup: popup)
-////                    }
-////                }
-////                NavigationStack {
-////                    relatedFeaturesView
-////                }
-//            } else {
-//                // Fallback on earlier versions
-//                Text("need iOS 16")
-//            }
-//
-//
-//            /*
-//            NavigationStack {
-//                List(parks) { park in
-//                    NavigationLink(park.name, value: park)
-//                }
-//                .navigationDestination(for: Park.self) { park in
-//                    ParkDetails(park: park)
-//                }
-//            }
-//            */
-//
+
 //
 ////            relatedFeaturesView
 //
-//        } label: {
-//            VStack(alignment: .leading) {
-//                PopupElementHeader(
-//                    title: popupElement.title,
-//                    description: popupElement.description
-//                )
-//            }
-//        }
 ////        .task {
 ////            guard let feature,
 ////                  let table = feature.table as? ServiceFeatureTable,
@@ -242,3 +205,31 @@ extension Popup: Hashable {
         hasher.combine(ObjectIdentifier(self))
     }
 }
+////                NavigationStack {
+////                    ForEach(relatedPopups) { popup in
+////                        NavigationLink(popup.title, value: popup)
+////                    }
+////                    .navigationDestination(for: Popup.self) { popup in
+////                        PopupView(popup: popup)
+////                    }
+////                }
+////                NavigationStack {
+////                    relatedFeaturesView
+////                }
+//            } else {
+//                // Fallback on earlier versions
+//                Text("need iOS 16")
+//            }
+//
+//
+//            /*
+//            NavigationStack {
+//                List(parks) { park in
+//                    NavigationLink(park.name, value: park)
+//                }
+//                .navigationDestination(for: Park.self) { park in
+//                    ParkDetails(park: park)
+//                }
+//            }
+//            */
+//
