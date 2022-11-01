@@ -27,6 +27,8 @@ import ArcGIS
     /// The refresh interval, in milliseconds. A refresh interval of 0 means never refresh.
     var refreshInterval: TimeInterval? {
         didSet {
+            timer?.invalidate()
+            progressInterval = nil
             if let refreshInterval {
                 timer = Timer.scheduledTimer(
                     withTimeInterval: refreshInterval,
@@ -37,6 +39,7 @@ import ArcGIS
                             self.refresh()
                         }
                     })
+                refresh()
             }
         }
     }
