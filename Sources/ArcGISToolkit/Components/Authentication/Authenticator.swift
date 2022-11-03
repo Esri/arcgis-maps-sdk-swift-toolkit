@@ -43,23 +43,23 @@ public final class Authenticator: ObservableObject {
 ***REMOVED******REMOVED***/ https:***REMOVED***developer.apple.com/documentation/security/keychain_services/keychain_items/sharing_access_to_keychain_items_among_a_collection_of_apps
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - access: When the credentials stored in the keychain can be accessed.
-***REMOVED******REMOVED***/   - isSynchronizable: A value indicating whether the credentials are synchronized with iCloud.
+***REMOVED******REMOVED***/   - synchronizesWithiCloud: A Boolean value indicating whether the credentials are synchronized with iCloud.
 ***REMOVED***public func setupPersistentCredentialStorage(
 ***REMOVED******REMOVED***access: ArcGIS.KeychainAccess,
-***REMOVED******REMOVED***isSynchronizable: Bool = false
+***REMOVED******REMOVED***synchronizesWithiCloud: Bool = false
 ***REMOVED***) async throws {
 ***REMOVED******REMOVED***let previousArcGISCredentialStore = ArcGISRuntimeEnvironment.credentialStore
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Set a persistent ArcGIS credential store on the ArcGIS environment.
 ***REMOVED******REMOVED***ArcGISRuntimeEnvironment.credentialStore = try await .makePersistent(
 ***REMOVED******REMOVED******REMOVED***access: access,
-***REMOVED******REMOVED******REMOVED***isSynchronizable: isSynchronizable
+***REMOVED******REMOVED******REMOVED***synchronizesWithiCloud: synchronizesWithiCloud
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Set a persistent network credential store on the ArcGIS environment.
 ***REMOVED******REMOVED******REMOVED***await ArcGISRuntimeEnvironment.setNetworkCredentialStore(
-***REMOVED******REMOVED******REMOVED******REMOVED***try await .makePersistent(access: access, isSynchronizable: isSynchronizable)
+***REMOVED******REMOVED******REMOVED******REMOVED***try await .makePersistent(access: access, synchronizesWithiCloud: synchronizesWithiCloud)
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED*** catch {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** If making the shared network credential store persistent fails,
