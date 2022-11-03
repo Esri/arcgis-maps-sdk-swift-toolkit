@@ -43,23 +43,23 @@ public final class Authenticator: ObservableObject {
     /// https://developer.apple.com/documentation/security/keychain_services/keychain_items/sharing_access_to_keychain_items_among_a_collection_of_apps
     /// - Parameters:
     ///   - access: When the credentials stored in the keychain can be accessed.
-    ///   - isSynchronizable: A value indicating whether the credentials are synchronized with iCloud.
+    ///   - synchronizesWithiCloud: A Boolean value indicating whether the credentials are synchronized with iCloud.
     public func setupPersistentCredentialStorage(
         access: ArcGIS.KeychainAccess,
-        isSynchronizable: Bool = false
+        synchronizesWithiCloud: Bool = false
     ) async throws {
         let previousArcGISCredentialStore = ArcGISRuntimeEnvironment.credentialStore
         
         // Set a persistent ArcGIS credential store on the ArcGIS environment.
         ArcGISRuntimeEnvironment.credentialStore = try await .makePersistent(
             access: access,
-            isSynchronizable: isSynchronizable
+            synchronizesWithiCloud: synchronizesWithiCloud
         )
         
         do {
             // Set a persistent network credential store on the ArcGIS environment.
             await ArcGISRuntimeEnvironment.setNetworkCredentialStore(
-                try await .makePersistent(access: access, isSynchronizable: isSynchronizable)
+                try await .makePersistent(access: access, synchronizesWithiCloud: synchronizesWithiCloud)
             )
         } catch {
             // If making the shared network credential store persistent fails,
