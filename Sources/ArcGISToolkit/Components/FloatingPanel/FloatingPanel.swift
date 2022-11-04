@@ -151,7 +151,7 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ The detent that would produce a height that is closest to the current height.
 ***REMOVED***var closestDetent: FloatingPanelDetent {
-***REMOVED******REMOVED***return FloatingPanelDetent.allCases.min {
+***REMOVED******REMOVED***return [FloatingPanelDetent.summary, .full, .half].min {
 ***REMOVED******REMOVED******REMOVED***abs(heightFor(detent: $0) - height) <
 ***REMOVED******REMOVED******REMOVED******REMOVED***abs(heightFor(detent: $1) - height)
 ***REMOVED*** ?? .half
