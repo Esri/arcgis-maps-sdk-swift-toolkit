@@ -36,23 +36,23 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED******REMOVED***/ Creates a `FloatingPanel`.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - backgroundColor: The background color of the floating panel.
-***REMOVED******REMOVED***/   - detent: Controls the height of the panel.
+***REMOVED******REMOVED***/   - selection: Controls the height of the panel.
 ***REMOVED******REMOVED***/   - isPresented: A Boolean value indicating if the view is presented.
 ***REMOVED******REMOVED***/   - content: The view shown in the floating panel.
 ***REMOVED***init(
 ***REMOVED******REMOVED***backgroundColor: Color,
-***REMOVED******REMOVED***detent: Binding<FloatingPanelDetent>,
+***REMOVED******REMOVED***selection: Binding<FloatingPanelDetent>,
 ***REMOVED******REMOVED***isPresented: Binding<Bool>,
 ***REMOVED******REMOVED***@ViewBuilder content: () -> Content
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.backgroundColor = backgroundColor
-***REMOVED******REMOVED***self.activeDetent = detent
+***REMOVED******REMOVED***self.selectedDetent = selection
 ***REMOVED******REMOVED***self.isPresented = isPresented
 ***REMOVED******REMOVED***self.content = content()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ A binding to the currently selected detent.
-***REMOVED***private var activeDetent: Binding<FloatingPanelDetent>
+***REMOVED***private var selectedDetent: Binding<FloatingPanelDetent>
 ***REMOVED***
 ***REMOVED******REMOVED***/ The color of the handle.
 ***REMOVED***@State private var handleColor: Color = .defaultHandleColor
@@ -102,17 +102,17 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***height = maximumHeight
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: activeDetent.wrappedValue) { _ in
+***REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: selectedDetent.wrappedValue) { _ in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***withAnimation {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***height = heightFor(detent: activeDetent.wrappedValue)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***height = heightFor(detent: selectedDetent.wrappedValue)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: isPresented.wrappedValue) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***height = $0 ? heightFor(detent: activeDetent.wrappedValue) : .zero
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***height = $0 ? heightFor(detent: selectedDetent.wrappedValue) : .zero
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onAppear {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***withAnimation {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***height = heightFor(detent: activeDetent.wrappedValue)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***height = heightFor(detent: selectedDetent.wrappedValue)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.animation(.default, value: isPresented.wrappedValue)
@@ -143,7 +143,7 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED******REMOVED******REMOVED***.onEnded { _ in
 ***REMOVED******REMOVED******REMOVED******REMOVED***handleColor = .defaultHandleColor
 ***REMOVED******REMOVED******REMOVED******REMOVED***withAnimation {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***activeDetent.wrappedValue = closestDetent
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedDetent.wrappedValue = closestDetent
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***height = heightFor(detent: closestDetent)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
