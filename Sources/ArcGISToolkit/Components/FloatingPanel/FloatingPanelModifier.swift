@@ -29,7 +29,7 @@ public extension View {
     ///
     /// - Parameters:
     ///   - backgroundColor: The background color of the floating panel.
-    ///   - detent: A binding to the currently selected detent.
+    ///   - selection: A binding to the currently selected detent.
     ///   - horizontalAlignment: The horizontal alignment of the floating panel.
     ///   - isPresented: A binding to a Boolean value that determines whether the view is presented.
     ///   - maxWidth: The maximum width of the floating panel.
@@ -38,7 +38,7 @@ public extension View {
     /// environments and a popover otherwise.
     func floatingPanel<Content>(
         backgroundColor: Color = Color(uiColor: .systemBackground),
-        detent: Binding<FloatingPanelDetent> = .constant(.half),
+        selection: Binding<FloatingPanelDetent> = .constant(.half),
         horizontalAlignment: HorizontalAlignment = .trailing,
         isPresented: Binding<Bool> = .constant(true),
         maxWidth: CGFloat = 400,
@@ -47,7 +47,7 @@ public extension View {
         modifier(
             FloatingPanelModifier(
                 backgroundColor: backgroundColor,
-                detent: detent,
+                selection: selection,
                 horizontalAlignment: horizontalAlignment,
                 isPresented: isPresented,
                 maxWidth: maxWidth,
@@ -71,7 +71,7 @@ private struct FloatingPanelModifier<PanelContent>: ViewModifier where PanelCont
     let backgroundColor: Color
     
     /// A binding to the currently selected detent.
-    let detent: Binding<FloatingPanelDetent>
+    let selection: Binding<FloatingPanelDetent>
     
     /// The horizontal alignment of the floating panel.
     let horizontalAlignment: HorizontalAlignment
@@ -90,7 +90,7 @@ private struct FloatingPanelModifier<PanelContent>: ViewModifier where PanelCont
             .overlay(alignment: Alignment(horizontal: horizontalAlignment, vertical: .top)) {
                 FloatingPanel(
                     backgroundColor: backgroundColor,
-                    detent: detent,
+                    selection: selection,
                     isPresented: isPresented
                 ) {
                     panelContent
