@@ -18,6 +18,8 @@
 struct FloatingPanelExampleView: View {
 ***REMOVED***@StateObject private var map = Map(basemapStyle: .arcGISImagery)
 ***REMOVED***
+***REMOVED***@State var selectedDetent: FloatingPanelDetent = .half
+***REMOVED***
 ***REMOVED***private let initialViewpoint = Viewpoint(
 ***REMOVED******REMOVED***center: Point(x: -93.258133, y: 44.986656, spatialReference: .wgs84),
 ***REMOVED******REMOVED***scale: 1_000_000
@@ -28,15 +30,39 @@ struct FloatingPanelExampleView: View {
 ***REMOVED******REMOVED******REMOVED***map: map,
 ***REMOVED******REMOVED******REMOVED***viewpoint: initialViewpoint
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED***.floatingPanel(isPresented: .constant(true)) {
-***REMOVED******REMOVED******REMOVED***SampleContent()
+***REMOVED******REMOVED***.floatingPanel(selection: $selectedDetent, isPresented: .constant(true)) {
+***REMOVED******REMOVED******REMOVED***List {
+***REMOVED******REMOVED******REMOVED******REMOVED***Section("Preset Heights") {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Summary") {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedDetent = .summary
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Half") {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedDetent = .half
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Full") {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedDetent = .full
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***Section("Fractional Heights") {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("1/4") {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedDetent = .fraction(1/4)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("1/2") {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedDetent = .fraction(1/2)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("3/4") {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedDetent = .fraction(3/4)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***Section("Value Heights") {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("200") {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedDetent = .height(200)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("600") {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedDetent = .height(600)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED***
-***REMOVED***
-
-struct SampleContent: View {
-***REMOVED***var body: some View {
-***REMOVED******REMOVED***List(1..<21) { Text("\($0)") ***REMOVED***
-***REMOVED******REMOVED******REMOVED***.listStyle(.plain)
 ***REMOVED***
 ***REMOVED***
