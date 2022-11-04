@@ -32,6 +32,7 @@ struct TextPopupElementView: View {
                     ProgressView()
                 }
             }
+            .listRowInsets(EdgeInsets())
             Divider()
         }
     }
