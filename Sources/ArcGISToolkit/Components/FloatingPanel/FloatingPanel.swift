@@ -36,23 +36,23 @@ struct FloatingPanel<Content>: View where Content: View {
     /// Creates a `FloatingPanel`.
     /// - Parameters:
     ///   - backgroundColor: The background color of the floating panel.
-    ///   - detent: Controls the height of the panel.
+    ///   - selection: Controls the height of the panel.
     ///   - isPresented: A Boolean value indicating if the view is presented.
     ///   - content: The view shown in the floating panel.
     init(
         backgroundColor: Color,
-        detent: Binding<FloatingPanelDetent>,
+        selection: Binding<FloatingPanelDetent>,
         isPresented: Binding<Bool>,
         @ViewBuilder content: () -> Content
     ) {
         self.backgroundColor = backgroundColor
-        self.activeDetent = detent
+        self.selectedDetent = selection
         self.isPresented = isPresented
         self.content = content()
     }
     
     /// A binding to the currently selected detent.
-    private var activeDetent: Binding<FloatingPanelDetent>
+    private var selectedDetent: Binding<FloatingPanelDetent>
     
     /// The color of the handle.
     @State private var handleColor: Color = .defaultHandleColor
@@ -102,17 +102,17 @@ struct FloatingPanel<Content>: View where Content: View {
                         height = maximumHeight
                     }
                 }
-                .onChange(of: activeDetent.wrappedValue) { _ in
+                .onChange(of: selectedDetent.wrappedValue) { _ in
                     withAnimation {
-                        height = heightFor(detent: activeDetent.wrappedValue)
+                        height = heightFor(detent: selectedDetent.wrappedValue)
                     }
                 }
                 .onChange(of: isPresented.wrappedValue) {
-                    height = $0 ? heightFor(detent: activeDetent.wrappedValue) : .zero
+                    height = $0 ? heightFor(detent: selectedDetent.wrappedValue) : .zero
                 }
                 .onAppear {
                     withAnimation {
-                        height = heightFor(detent: activeDetent.wrappedValue)
+                        height = heightFor(detent: selectedDetent.wrappedValue)
                     }
                 }
                 .animation(.default, value: isPresented.wrappedValue)
@@ -143,7 +143,7 @@ struct FloatingPanel<Content>: View where Content: View {
             .onEnded { _ in
                 handleColor = .defaultHandleColor
                 withAnimation {
-                    activeDetent.wrappedValue = closestDetent
+                    selectedDetent.wrappedValue = closestDetent
                     height = heightFor(detent: closestDetent)
                 }
             }
