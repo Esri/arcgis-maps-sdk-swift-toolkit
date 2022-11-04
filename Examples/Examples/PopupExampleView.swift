@@ -87,7 +87,7 @@ struct PopupExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.showPopup = self.popup != nil
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.floatingPanel(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***detent: $floatingPanelDetent,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selection: $floatingPanelDetent,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***horizontalAlignment: .leading,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented: $showPopup
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***) {

@@ -29,7 +29,7 @@ public extension View {
 ***REMOVED******REMOVED***/
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - backgroundColor: The background color of the floating panel.
-***REMOVED******REMOVED***/   - detent: A binding to the currently selected detent.
+***REMOVED******REMOVED***/   - selection: A binding to the currently selected detent.
 ***REMOVED******REMOVED***/   - horizontalAlignment: The horizontal alignment of the floating panel.
 ***REMOVED******REMOVED***/   - isPresented: A binding to a Boolean value that determines whether the view is presented.
 ***REMOVED******REMOVED***/   - maxWidth: The maximum width of the floating panel.
@@ -38,7 +38,7 @@ public extension View {
 ***REMOVED******REMOVED***/ environments and a popover otherwise.
 ***REMOVED***func floatingPanel<Content>(
 ***REMOVED******REMOVED***backgroundColor: Color = Color(uiColor: .systemBackground),
-***REMOVED******REMOVED***detent: Binding<FloatingPanelDetent> = .constant(.half),
+***REMOVED******REMOVED***selection: Binding<FloatingPanelDetent> = .constant(.half),
 ***REMOVED******REMOVED***horizontalAlignment: HorizontalAlignment = .trailing,
 ***REMOVED******REMOVED***isPresented: Binding<Bool> = .constant(true),
 ***REMOVED******REMOVED***maxWidth: CGFloat = 400,
@@ -47,7 +47,7 @@ public extension View {
 ***REMOVED******REMOVED***modifier(
 ***REMOVED******REMOVED******REMOVED***FloatingPanelModifier(
 ***REMOVED******REMOVED******REMOVED******REMOVED***backgroundColor: backgroundColor,
-***REMOVED******REMOVED******REMOVED******REMOVED***detent: detent,
+***REMOVED******REMOVED******REMOVED******REMOVED***selection: selection,
 ***REMOVED******REMOVED******REMOVED******REMOVED***horizontalAlignment: horizontalAlignment,
 ***REMOVED******REMOVED******REMOVED******REMOVED***isPresented: isPresented,
 ***REMOVED******REMOVED******REMOVED******REMOVED***maxWidth: maxWidth,
@@ -71,7 +71,7 @@ private struct FloatingPanelModifier<PanelContent>: ViewModifier where PanelCont
 ***REMOVED***let backgroundColor: Color
 ***REMOVED***
 ***REMOVED******REMOVED***/ A binding to the currently selected detent.
-***REMOVED***let detent: Binding<FloatingPanelDetent>
+***REMOVED***let selection: Binding<FloatingPanelDetent>
 ***REMOVED***
 ***REMOVED******REMOVED***/ The horizontal alignment of the floating panel.
 ***REMOVED***let horizontalAlignment: HorizontalAlignment
@@ -90,7 +90,7 @@ private struct FloatingPanelModifier<PanelContent>: ViewModifier where PanelCont
 ***REMOVED******REMOVED******REMOVED***.overlay(alignment: Alignment(horizontal: horizontalAlignment, vertical: .top)) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***FloatingPanel(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***backgroundColor: backgroundColor,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***detent: detent,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selection: selection,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented: isPresented
 ***REMOVED******REMOVED******REMOVED******REMOVED***) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***panelContent
