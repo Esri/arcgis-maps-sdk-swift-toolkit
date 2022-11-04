@@ -168,6 +168,10 @@ struct FloatingPanel<Content>: View where Content: View {
             return maximumHeight * 0.4
         case .full:
             return maximumHeight * (isCompact ? 0.90 : 1.0)
+        case let .fraction(fraction):
+            return min(maximumHeight, max(.minHeight, maximumHeight * fraction))
+        case let .height(height):
+            return min(maximumHeight, max(.minHeight, height))
         }
     }
     
