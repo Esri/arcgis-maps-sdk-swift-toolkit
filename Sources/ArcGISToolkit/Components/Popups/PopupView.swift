@@ -13,6 +13,7 @@
 
 import SwiftUI
 import ArcGIS
+import UIKit
 
 /// A view displaying the elements of a single Popup.
 public struct PopupView: View {
@@ -23,6 +24,11 @@ public struct PopupView: View {
     public init(popup: Popup, isPresented: Binding<Bool>? = nil) {
         self.popup = popup
         self.isPresented = isPresented
+        
+        let navBarAppearance = UINavigationBarAppearance()
+        navBarAppearance.configureWithOpaqueBackground()
+        navBarAppearance.backgroundColor = UIColor(Color.primary.opacity(0.15))
+        UINavigationBar.appearance().scrollEdgeAppearance = navBarAppearance
     }
     
     /// The `Popup` to display.
@@ -42,13 +48,41 @@ public struct PopupView: View {
     public var body: some View {
         Group {
             if #available(iOS 16.0, *) {
-                NavigationStack {
-                    PopupViewInternal(
+                VStack {
+                    PopupViewTitle(
                         popup: self.popup,
                         isPresented: isPresented,
                         showCloseButton: showCloseButton,
                         evaluateExpressionsResult: evaluateExpressionsResult
                     )
+                    NavigationStack {
+                        PopupViewBody(
+                            popup: self.popup,
+                            isPresented: isPresented,
+                            showCloseButton: showCloseButton,
+                            evaluateExpressionsResult: evaluateExpressionsResult
+                        )
+                        .navigationDestination(for: Array<Popup>.self) { popupArray in
+                            List(popupArray, id:\Popup.self) { popup in
+                                NavigationLink(value: popup) {
+                                    VStack(alignment: .leading) {
+                                        Text(popup.title)
+                                    }
+                                }
+                            }
+                            .listStyle(.plain)
+                            .navigationTitle("Related Popups")
+                        }
+                        .navigationDestination(for: Popup.self) { popup in
+                            PopupViewBody(
+                                popup: popup,
+                                showCloseButton: false,
+                                evaluateExpressionsResult: Result<[PopupExpressionEvaluation], Error>.success([])
+                            )
+                            .navigationTitle(popup.title)
+                        }
+                    }
+                    .navigationBarTitleDisplayMode(.inline)
                 }
             } else {
                 NavigationView {
@@ -123,6 +157,46 @@ struct PopupViewInternal: View {
     }
     
     var body: some View {
+        VStack {
+            PopupViewTitle(
+                popup: self.popup,
+                isPresented: isPresented,
+                showCloseButton: showCloseButton,
+                evaluateExpressionsResult: evaluateExpressionsResult
+            )
+            PopupViewBody(
+                popup: self.popup,
+                isPresented: isPresented,
+                showCloseButton: showCloseButton,
+                evaluateExpressionsResult: evaluateExpressionsResult
+            )
+        }
+    }
+}
+
+struct PopupViewTitle: View {
+    let popup: Popup
+    private var evaluateExpressionsResult: Result<[PopupExpressionEvaluation], Error>?
+    private var showCloseButton = false
+    private var isPresented: Binding<Bool>?
+    
+    /// Creates a `PopupView` with the given popup.
+    /// - Parameters
+    ///     popup: The popup to display.
+    ///   - isPresented: A Boolean value indicating if the view is presented.
+    public init(
+        popup: Popup,
+        isPresented: Binding<Bool>? = nil,
+        showCloseButton: Bool,
+        evaluateExpressionsResult: Result<[PopupExpressionEvaluation], Error>?
+    ) {
+        self.popup = popup
+        self.isPresented = isPresented
+        self.showCloseButton = showCloseButton
+        self.evaluateExpressionsResult = evaluateExpressionsResult
+    }
+    
+    var body: some View {
         VStack(alignment: .leading) {
             HStack {
                 if !popup.title.isEmpty {
@@ -142,21 +216,47 @@ struct PopupViewInternal: View {
                 }
             }
             Divider()
-            Group {
-                if let evaluateExpressionsResult {
-                    switch evaluateExpressionsResult {
-                    case .success(_):
-                        PopupElementScrollView(popupElements: popup.evaluatedElements, popup: popup)
-                    case .failure(let error):
-                        Text("Popup evaluation failed: \(error.localizedDescription)")
-                    }
-                } else {
-                    VStack(alignment: .center) {
-                        Text("Evaluating popup expressions...")
-                        ProgressView()
-                    }
-                    .frame(maxWidth: .infinity)
+        }
+    }
+}
+
+struct PopupViewBody: View {
+    let popup: Popup
+    private var evaluateExpressionsResult: Result<[PopupExpressionEvaluation], Error>?
+    private var showCloseButton = false
+    private var isPresented: Binding<Bool>?
+    
+    /// Creates a `PopupView` with the given popup.
+    /// - Parameters
+    ///     popup: The popup to display.
+    ///   - isPresented: A Boolean value indicating if the view is presented.
+    public init(
+        popup: Popup,
+        isPresented: Binding<Bool>? = nil,
+        showCloseButton: Bool,
+        evaluateExpressionsResult: Result<[PopupExpressionEvaluation], Error>?
+    ) {
+        self.popup = popup
+        self.isPresented = isPresented
+        self.showCloseButton = showCloseButton
+        self.evaluateExpressionsResult = evaluateExpressionsResult
+    }
+    
+    var body: some View {
+        Group {
+            if let evaluateExpressionsResult {
+                switch evaluateExpressionsResult {
+                case .success(_):
+                    PopupElementScrollView(popupElements: popup.evaluatedElements, popup: popup)
+                case .failure(let error):
+                    Text("Popup evaluation failed: \(error.localizedDescription)")
                 }
+            } else {
+                VStack(alignment: .center) {
+                    Text("Evaluating popup expressions...")
+                    ProgressView()
+                }
+                .frame(maxWidth: .infinity)
             }
         }
     }
@@ -167,8 +267,8 @@ struct PopupElementScrollView: View {
     let popup: Popup
     
     var body: some View {
-        List {
-            ForEach(popupElements) { popupElement in
+        List(popupElements) { popupElement in
+            Group {
                 switch popupElement {
                 case let popupElement as AttachmentsPopupElement:
                     AttachmentsPopupElementView(popupElement: popupElement)
@@ -187,11 +287,10 @@ struct PopupElementScrollView: View {
                     EmptyView()
                 }
             }
+            .listRowSeparator(.hidden)
+            .listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
         }
-//        .listRowInsets(EdgeInsets())
         .listStyle(.plain)
-//        .listRowSeparator(.hidden)
-        .listRowSeparatorTint(.red)
     }
 }
 

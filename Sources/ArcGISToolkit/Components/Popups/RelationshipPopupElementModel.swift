@@ -19,6 +19,8 @@ import ArcGIS
     /// The array of related `Popup`s
     @Published var relatedPopups = [Popup]()
     
+    @Published var displayedPopups = [Popup]()
+    
     /// The feature to display relationships for.
     var feature: ArcGISFeature?
 
@@ -39,8 +41,6 @@ import ArcGIS
     /// Loads the popup attachment and generates a thumbnail image.
     /// - Parameter thumbnailSize: The size for the generated thumbnail.
     func load() {
-//            loadStatus = .loading
-            
             guard let feature,
                   let table = feature.table as? ServiceFeatureTable,
                   let relationshipInfo = table.layerInfo?.relationshipInfos.first(where: { relationshipInfo in
@@ -52,30 +52,20 @@ import ArcGIS
             let params = RelatedQueryParameters(relationshipInfo: relationshipInfo)
             params.addOrderByFields(popupElement.orderByFields)
             
-            // What about nested related records.  Can the UI handle unlimited recursive
-            // levels?  Or do we limit it to only 1 or 2 levels deep?  Test it.
-            
             // When service is up, look at what's it's displaying in the related fields
             // Does it use "orderByFields" to display [last inspection result].
             // Do we need to display all information in "orderByFields" in the related
             // records view?
-        Task { [weak self] in
-            guard let self else { return }
+        Task {
             let relatedFeatureQueryResult = try? await table.queryRelatedFeatures(
                 to: feature,
                 using: params,
                 queryFeatureFields: .loadAll
             ).first
             // What about the rest of the `relatedFeatureQueryResult`s???
-//            let relatedFeatures = relatedFeatureQueryResult?.features()
             
             guard let relatedFeatures = relatedFeatureQueryResult?.features() else { return }
             
-            //for each related feature, create a popup with the popupDefinition
-            
-            //PopupDefinition from either feature table or feature layer?
-            //            let pud = relatedFeatures?.first(where: $0 = "x").featureTable
-            //
             let features = Array(relatedFeatures)
             var popups = [Popup]()
             features.forEach { feature in
@@ -88,39 +78,40 @@ import ArcGIS
                 )
             }
             
-            popups.forEach { popup in
-                Task {
-                    let _ = try? await popup.evaluateExpressions()
-                    relatedPopups.append(popup)
+            await withThrowingTaskGroup(of: Void.self) { taskGroup in
+                for popup in popups {
+                    taskGroup.addTask {
+                        let _ = try await popup.evaluateExpressions()
+                    }
                 }
             }
             
-            
-            
-            
-            //for each related feature, create a popup with the popupDefinition
-            
-            //PopupDefinition from either feature table or feature layer?
-            //            let pud = relatedFeatures?.first(where: $0 = "x").featureTable
-            
-            // Test to see if a popupDefinition is created automatically if we're using
-            // a feature (from the feature's table) or if it's just a "dumb" one).
-            //            let popup = Popup(geoElement: relatedFeatures.first, popupDefinition: PopupDefinition())
-            
-            // Make sure to evaluate each popup
-            // Maybe need to just evaluate the title for display, then if the user
-            // taps on it, evaluate everything (which popupview should do automatically)
-            
-            fields = relatedFeatureQueryResult?.fields ?? []
+            relatedPopups.append(contentsOf: popups)
+            displayedPopups = Array(relatedPopups.prefix(Int(popupElement.displayCount)))
+            print("relatedPopups: \(relatedPopups.count)")
+            print("displayedPopups: \(displayedPopups.count); displayCount = \(popupElement.displayCount)")
+                        
+            fields.append(contentsOf: relatedFeatureQueryResult?.fields ?? [])
+            print("fields: \(fields); rfqr?.fields: \(relatedFeatureQueryResult?.fields ?? [])")
         }
     }
 }
 
-//extension AttachmentModel: Identifiable {}
-//
-//extension AttachmentModel: Equatable {
-//    static func == (lhs: AttachmentModel, rhs: AttachmentModel) -> Bool {
-//        lhs.attachment === rhs.attachment &&
-//        lhs.thumbnail === rhs.thumbnail
-//    }
-//}
+extension Popup {
+    /// The description of the popup using the `orderByFields` property and the popup definition`.`
+    /// - Parameters:
+    ///   - popup: The popup to get the description for.
+    ///   - popupElement: The relationship popup element.
+    /// - Returns: The description.
+    func description(popup: Popup, popupElement: RelationshipPopupElement) -> String? {
+        print("")
+        if let firstOrderByFieldName = popupElement.orderByFields.first?.fieldName,
+           let popupField = popup.definition.fields.first(where: {
+               $0.fieldName == firstOrderByFieldName
+           }) {
+            return popup.formattedValue(for: popupField)
+        }
+
+        return nil
+    }
+}
