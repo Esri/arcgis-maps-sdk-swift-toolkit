@@ -19,14 +19,10 @@ struct RelationshipPopupElementView: View {
     /// The `PopupElement` to display.
     var popupElement: RelationshipPopupElement
     
-    /// The feature associated with the popup
-    var feature: ArcGISFeature?
-    
     @StateObject private var viewModel: RelationshipPopupElementModel
     
     init(popupElement: RelationshipPopupElement, geoElement: GeoElement) {
         self.popupElement = popupElement
-        self.feature = geoElement as? ArcGISFeature
         
         _viewModel = StateObject(
             wrappedValue: RelationshipPopupElementModel(
@@ -37,10 +33,6 @@ struct RelationshipPopupElementView: View {
     }
     
     @State var isExpanded: Bool = true
-    
-    @State var relatedFeatures: AnySequence<Feature>?
-    
-    @State var relatedPopups = [Popup]()
     
     var body: some View {
         DisclosureGroup(isExpanded: $isExpanded) {
@@ -62,7 +54,7 @@ struct RelationshipPopupElementView: View {
                 NavigationLink(value: popup) {
                     VStack(alignment: .leading) {
                         Text(popup.title)
-                        if let text = popup.description(popup: popup, popupElement: popupElement) {
+                        if let text = popupElement.relatedPopupDescription(popup: popup) {
                             Text(text)
                                 .font(.subheadline)
                                 .foregroundColor(.secondary)
