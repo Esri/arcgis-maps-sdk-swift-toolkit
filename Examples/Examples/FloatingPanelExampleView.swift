@@ -30,7 +30,7 @@ struct FloatingPanelExampleView: View {
 ***REMOVED******REMOVED******REMOVED***map: map,
 ***REMOVED******REMOVED******REMOVED***viewpoint: initialViewpoint
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED***.floatingPanel(selection: $selectedDetent, isPresented: .constant(true)) {
+***REMOVED******REMOVED***.floatingPanel(selectedDetent: $selectedDetent, isPresented: .constant(true)) {
 ***REMOVED******REMOVED******REMOVED***List {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Section("Preset Heights") {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Summary") {

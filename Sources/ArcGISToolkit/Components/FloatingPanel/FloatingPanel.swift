@@ -36,17 +36,17 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED******REMOVED***/ Creates a `FloatingPanel`.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - backgroundColor: The background color of the floating panel.
-***REMOVED******REMOVED***/   - selection: Controls the height of the panel.
+***REMOVED******REMOVED***/   - selectedDetent: Controls the height of the panel.
 ***REMOVED******REMOVED***/   - isPresented: A Boolean value indicating if the view is presented.
 ***REMOVED******REMOVED***/   - content: The view shown in the floating panel.
 ***REMOVED***init(
 ***REMOVED******REMOVED***backgroundColor: Color,
-***REMOVED******REMOVED***selection: Binding<FloatingPanelDetent>,
+***REMOVED******REMOVED***selectedDetent: Binding<FloatingPanelDetent>,
 ***REMOVED******REMOVED***isPresented: Binding<Bool>,
 ***REMOVED******REMOVED***@ViewBuilder content: () -> Content
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.backgroundColor = backgroundColor
-***REMOVED******REMOVED***self.selectedDetent = selection
+***REMOVED******REMOVED***self.selectedDetent = selectedDetent
 ***REMOVED******REMOVED***self.isPresented = isPresented
 ***REMOVED******REMOVED***self.content = content()
 ***REMOVED***
