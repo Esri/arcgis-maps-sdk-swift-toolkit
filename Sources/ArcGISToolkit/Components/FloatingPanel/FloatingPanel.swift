@@ -36,17 +36,17 @@ struct FloatingPanel<Content>: View where Content: View {
     /// Creates a `FloatingPanel`.
     /// - Parameters:
     ///   - backgroundColor: The background color of the floating panel.
-    ///   - selection: Controls the height of the panel.
+    ///   - selectedDetent: Controls the height of the panel.
     ///   - isPresented: A Boolean value indicating if the view is presented.
     ///   - content: The view shown in the floating panel.
     init(
         backgroundColor: Color,
-        selection: Binding<FloatingPanelDetent>,
+        selectedDetent: Binding<FloatingPanelDetent>,
         isPresented: Binding<Bool>,
         @ViewBuilder content: () -> Content
     ) {
         self.backgroundColor = backgroundColor
-        self.selectedDetent = selection
+        self.selectedDetent = selectedDetent
         self.isPresented = isPresented
         self.content = content()
     }
