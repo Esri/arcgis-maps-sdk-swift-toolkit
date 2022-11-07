@@ -126,19 +126,8 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED******REMOVED***DragGesture(minimumDistance: 0)
 ***REMOVED******REMOVED******REMOVED***.onChanged { value in
 ***REMOVED******REMOVED******REMOVED******REMOVED***handleColor = .activeHandleColor
-***REMOVED******REMOVED******REMOVED******REMOVED***let proposedHeight: CGFloat
-***REMOVED******REMOVED******REMOVED******REMOVED***if isCompact {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***proposedHeight = max(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.minHeight,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***height - value.translation.height
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***proposedHeight = max(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.minHeight,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***height + value.translation.height
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***height = min(proposedHeight, maximumHeight)
+***REMOVED******REMOVED******REMOVED******REMOVED***let proposedHeight = height + ((isCompact ? -1 : +1) * value.translation.height)
+***REMOVED******REMOVED******REMOVED******REMOVED***height = min(max(.minHeight, proposedHeight), maximumHeight)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onEnded { _ in
 ***REMOVED******REMOVED******REMOVED******REMOVED***handleColor = .defaultHandleColor
