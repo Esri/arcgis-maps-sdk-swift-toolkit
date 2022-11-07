@@ -126,19 +126,8 @@ struct FloatingPanel<Content>: View where Content: View {
         DragGesture(minimumDistance: 0)
             .onChanged { value in
                 handleColor = .activeHandleColor
-                let proposedHeight: CGFloat
-                if isCompact {
-                    proposedHeight = max(
-                        .minHeight,
-                        height - value.translation.height
-                    )
-                } else {
-                    proposedHeight = max(
-                        .minHeight,
-                        height + value.translation.height
-                    )
-                }
-                height = min(proposedHeight, maximumHeight)
+                let proposedHeight = height + ((isCompact ? -1 : +1) * value.translation.height)
+                height = min(max(.minHeight, proposedHeight), maximumHeight)
             }
             .onEnded { _ in
                 handleColor = .defaultHandleColor
