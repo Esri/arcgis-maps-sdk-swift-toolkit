@@ -87,7 +87,7 @@ struct PopupExampleView: View {
                         self.showPopup = self.popup != nil
                     }
                     .floatingPanel(
-                        selection: $floatingPanelDetent,
+                        selectedDetent: $floatingPanelDetent,
                         horizontalAlignment: .leading,
                         isPresented: $showPopup
                     ) {

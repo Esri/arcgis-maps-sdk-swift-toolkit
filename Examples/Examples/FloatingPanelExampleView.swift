@@ -30,7 +30,7 @@ struct FloatingPanelExampleView: View {
             map: map,
             viewpoint: initialViewpoint
         )
-        .floatingPanel(selection: $selectedDetent, isPresented: .constant(true)) {
+        .floatingPanel(selectedDetent: $selectedDetent, isPresented: .constant(true)) {
             List {
                 Section("Preset Heights") {
                     Button("Summary") {
