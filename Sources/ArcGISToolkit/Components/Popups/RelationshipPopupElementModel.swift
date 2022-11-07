@@ -35,83 +35,84 @@ import ArcGIS
     ) {
         self.feature = feature
         self.popupElement = popupElement
-        load()
+        Task {
+            try? await load()
+        }
     }
     
     /// Loads the popup attachment and generates a thumbnail image.
     /// - Parameter thumbnailSize: The size for the generated thumbnail.
-    func load() {
-            guard let feature,
-                  let table = feature.table as? ServiceFeatureTable,
-                  let relationshipInfo = table.layerInfo?.relationshipInfos.first(where: { relationshipInfo in
-                      relationshipInfo.id == popupElement.relationshipID
-                  })
-            else { return }
-            
-            // User QueryBy fields in `RelatedQueryParameters`
-            let params = RelatedQueryParameters(relationshipInfo: relationshipInfo)
-            params.addOrderByFields(popupElement.orderByFields)
-            
-            // When service is up, look at what's it's displaying in the related fields
-            // Does it use "orderByFields" to display [last inspection result].
-            // Do we need to display all information in "orderByFields" in the related
-            // records view?
-        Task {
-            let relatedFeatureQueryResult = try? await table.queryRelatedFeatures(
-                to: feature,
-                using: params,
-                queryFeatureFields: .loadAll
-            ).first
-            // What about the rest of the `relatedFeatureQueryResult`s???
-            
-            guard let relatedFeatures = relatedFeatureQueryResult?.features() else { return }
-            
-            let features = Array(relatedFeatures)
-            var popups = [Popup]()
-            features.forEach { feature in
-                let popupDefinition = feature.table?.popupDefinition
-                popups.append(
-                    Popup(
-                        geoElement: feature,
-                        definition: popupDefinition ?? PopupDefinition(geoElement: feature)
-                    )
-                )
-            }
-            
-            await withThrowingTaskGroup(of: Void.self) { taskGroup in
-                for popup in popups {
-                    taskGroup.addTask {
-                        let _ = try await popup.evaluateExpressions()
-                    }
-                }
-            }
-            
-            relatedPopups.append(contentsOf: popups)
-            displayedPopups = Array(relatedPopups.prefix(Int(popupElement.displayCount)))
-            print("relatedPopups: \(relatedPopups.count)")
-            print("displayedPopups: \(displayedPopups.count); displayCount = \(popupElement.displayCount)")
-                        
-            fields.append(contentsOf: relatedFeatureQueryResult?.fields ?? [])
-            print("fields: \(fields); rfqr?.fields: \(relatedFeatureQueryResult?.fields ?? [])")
-        }
+    func load() async throws {
+        guard let feature else { return }
+        relatedPopups = try await popupElement.relatedPopups(for: feature)
+        displayedPopups = Array(relatedPopups.prefix(Int(popupElement.displayCount)))
     }
 }
 
-extension Popup {
+public extension RelationshipPopupElement {
     /// The description of the popup using the `orderByFields` property and the popup definition`.`
     /// - Parameters:
     ///   - popup: The popup to get the description for.
     ///   - popupElement: The relationship popup element.
     /// - Returns: The description.
-    func description(popup: Popup, popupElement: RelationshipPopupElement) -> String? {
-        print("")
-        if let firstOrderByFieldName = popupElement.orderByFields.first?.fieldName,
+    func relatedPopupDescription(popup: Popup) -> String? {
+        if let firstOrderByFieldName = orderByFields.first?.fieldName,
            let popupField = popup.definition.fields.first(where: {
                $0.fieldName == firstOrderByFieldName
            }) {
             return popup.formattedValue(for: popupField)
         }
-
+        
         return nil
+    }
+
+    //    var relatedPopups: [Popup] {
+    func relatedPopups(for feature: ArcGISFeature) async throws -> [Popup] {
+        guard let table = feature.table as? ServiceFeatureTable,
+              let relationshipInfo = table.layerInfo?.relationshipInfos.first(where: { relationshipInfo in
+                  relationshipInfo.id == relationshipID
+              })
+        else { return [] }
+        
+        // User QueryBy fields in `RelatedQueryParameters`
+        let params = RelatedQueryParameters(relationshipInfo: relationshipInfo)
+        params.addOrderByFields(orderByFields)
+        let relatedFeatureQueryResult = try? await table.queryRelatedFeatures(
+            to: feature,
+            using: params,
+            queryFeatureFields: .loadAll
+        ).first
+        // What about the rest of the `relatedFeatureQueryResult`s???
+        
+        guard let relatedFeatures = relatedFeatureQueryResult?.features() else { return [] }
+        
+        let features = Array(relatedFeatures)
+        var relatedPopups = [Popup]()
+        features.forEach { feature in
+            let popupDefinition = feature.table?.popupDefinition
+            relatedPopups.append(
+                Popup(
+                    geoElement: feature,
+                    definition: popupDefinition ?? PopupDefinition(geoElement: feature)
+                )
+            )
+        }
+        
+        await withThrowingTaskGroup(of: Void.self) { taskGroup in
+            for popup in relatedPopups {
+                taskGroup.addTask {
+                    let _ = try await popup.evaluateExpressions()
+                }
+            }
+        }
+        
+//        let displayedPopups = Array(relatedPopups.prefix(Int(displayCount)))
+//        print("relatedPopups: \(relatedPopups.count)")
+//        print("displayedPopups: \(displayedPopups.count); displayCount = \(displayCount)")
+        
+        // What do we do with fields?
+//        fields.append(contentsOf: relatedFeatureQueryResult?.fields ?? [])
+//        print("fields: \(fields); rfqr?.fields: \(relatedFeatureQueryResult?.fields ?? [])")
+        return relatedPopups
     }
 }

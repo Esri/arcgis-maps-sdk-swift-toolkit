@@ -25,10 +25,10 @@ public struct PopupView: View {
         self.popup = popup
         self.isPresented = isPresented
         
-        let navBarAppearance = UINavigationBarAppearance()
-        navBarAppearance.configureWithOpaqueBackground()
-        navBarAppearance.backgroundColor = UIColor(Color.primary.opacity(0.15))
-        UINavigationBar.appearance().scrollEdgeAppearance = navBarAppearance
+//        let navBarAppearance = UINavigationBarAppearance()
+//        navBarAppearance.configureWithOpaqueBackground()
+//        navBarAppearance.backgroundColor = UIColor(Color.primary.opacity(0.15))
+//        UINavigationBar.appearance().scrollEdgeAppearance = navBarAppearance
     }
     
     /// The `Popup` to display.
@@ -48,39 +48,59 @@ public struct PopupView: View {
     public var body: some View {
         Group {
             if #available(iOS 16.0, *) {
-                VStack {
-                    PopupViewTitle(
+                NavigationStack {
+//                        PopupViewTitle(
+//                            popup: self.popup,
+//                            isPresented: isPresented,
+//                            showCloseButton: showCloseButton,
+//                            evaluateExpressionsResult: evaluateExpressionsResult
+//                        )
+                    Divider()
+                    PopupViewBody(
                         popup: self.popup,
                         isPresented: isPresented,
                         showCloseButton: showCloseButton,
                         evaluateExpressionsResult: evaluateExpressionsResult
                     )
-                    NavigationStack {
-                        PopupViewBody(
-                            popup: self.popup,
-                            isPresented: isPresented,
-                            showCloseButton: showCloseButton,
-                            evaluateExpressionsResult: evaluateExpressionsResult
-                        )
-                        .navigationDestination(for: Array<Popup>.self) { popupArray in
-                            List(popupArray, id:\Popup.self) { popup in
-                                NavigationLink(value: popup) {
-                                    VStack(alignment: .leading) {
-                                        Text(popup.title)
-                                    }
+//                    .navigationTitle(popup.title)
+                    .toolbar {
+                        ToolbarItem(placement: .navigationBarLeading) {
+                            Text(popup.title)
+                                .font(.title)
+                        }
+                        ToolbarItem(placement: .primaryAction) {
+//                            if showCloseButton {
+                                Button(action: {
+                                    isPresented?.wrappedValue = false
+                                }, label: {
+                                    Image(systemName: "xmark.circle")
+                                        .foregroundColor(.accentColor)
+                                        .padding([.top, .bottom, .trailing], 4)
+                                })
+//                            }
+
+//                            Text(popup.title)
+//                                .font(.headline)
+                        }
+                    }
+                    .navigationDestination(for: Array<Popup>.self) { popupArray in
+                        List(popupArray, id:\Popup.self) { popup in
+                            NavigationLink(value: popup) {
+                                VStack(alignment: .leading) {
+                                    Text(popup.title)
                                 }
                             }
-                            .listStyle(.plain)
-                            .navigationTitle("Related Popups")
                         }
-                        .navigationDestination(for: Popup.self) { popup in
-                            PopupViewBody(
-                                popup: popup,
-                                showCloseButton: false,
-                                evaluateExpressionsResult: Result<[PopupExpressionEvaluation], Error>.success([])
-                            )
-                            .navigationTitle(popup.title)
-                        }
+                        .listStyle(.plain)
+                        .navigationTitle("Related Popups")
+                    }
+                    .navigationDestination(for: Popup.self) { popup in
+                        PopupViewBody(
+                            popup: popup,
+                            showCloseButton: false,
+                            evaluateExpressionsResult: Result<[PopupExpressionEvaluation], Error>.success([])
+                        )
+                        .navigationTitle(popup.title)
                     }
                     .navigationBarTitleDisplayMode(.inline)
                 }
