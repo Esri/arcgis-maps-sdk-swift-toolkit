@@ -126,7 +126,7 @@ struct FloatingPanel<Content>: View where Content: View {
     }
     
     var drag: some Gesture {
-        DragGesture(minimumDistance: 0)
+        DragGesture(minimumDistance: 0, coordinateSpace: .global)
             .onChanged {
                 handleColor = .activeHandleColor
                 previousDragGesture = $0
