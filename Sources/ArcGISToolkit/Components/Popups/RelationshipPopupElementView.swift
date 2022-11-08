@@ -52,24 +52,38 @@ struct RelationshipPopupElementView: View {
         if #available(iOS 16.0, *) {
             ForEach(viewModel.displayedPopups, id:\Popup.self) { popup in
                 NavigationLink(value: popup) {
-                    VStack(alignment: .leading) {
-                        Text(popup.title)
-                        if let text = popupElement.relatedPopupDescription(popup: popup) {
-                            Text(text)
-                                .font(.subheadline)
-                                .foregroundColor(.secondary)
+                    HStack {
+                        VStack(alignment: .leading) {
+                            Text(popup.title)
+                                .foregroundColor(.primary)
+                            if let text = popupElement.relatedPopupDescription(popup: popup) {
+                                Text(text)
+                                    .font(.subheadline)
+                                    .foregroundColor(.secondary)
+                            }
                         }
+                        Spacer()
+                        Image(systemName: "chevron.forward")
+                            .font(.subheadline)
+                            .foregroundColor(.secondary)
                     }
                 }
             }
+            
             Divider()
             if viewModel.relatedPopups.count > 0/*popupElement.displayCount*/ {
                 NavigationLink(value: viewModel.relatedPopups) {
-                    VStack(alignment: .leading) {
-                        Text("Show All")
-                            .fontWeight(.bold)
-                        Text("\(viewModel.relatedPopups.count) records")
-                            .font(.subheadline)
+                    HStack {
+                        VStack(alignment: .leading) {
+                            Text("Show All")
+                                .foregroundColor(.primary)
+                            Text("\(viewModel.relatedPopups.count) records")
+                                .font(.subheadline)
+                                .foregroundColor(.secondary)
+                        }
+                        Spacer()
+                        Image(systemName: "chevron.forward")
+                            .font(.caption)
                             .foregroundColor(.secondary)
                     }
                 }
