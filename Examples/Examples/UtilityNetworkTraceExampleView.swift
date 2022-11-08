@@ -59,7 +59,7 @@ struct UtilityNetworkTraceExampleView: View {
             }
             .floatingPanel(
                     backgroundColor: Color(uiColor: .systemGroupedBackground),
-                    detent: $activeDetent,
+                    selectedDetent: $activeDetent,
                     horizontalAlignment: .trailing,
                     isPresented: .constant(true)
             ) {
