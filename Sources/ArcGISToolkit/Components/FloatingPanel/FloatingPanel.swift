@@ -126,7 +126,7 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var drag: some Gesture {
-***REMOVED******REMOVED***DragGesture(minimumDistance: 0)
+***REMOVED******REMOVED***DragGesture(minimumDistance: 0, coordinateSpace: .global)
 ***REMOVED******REMOVED******REMOVED***.onChanged {
 ***REMOVED******REMOVED******REMOVED******REMOVED***handleColor = .activeHandleColor
 ***REMOVED******REMOVED******REMOVED******REMOVED***previousDragGesture = $0
