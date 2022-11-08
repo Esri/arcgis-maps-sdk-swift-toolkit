@@ -66,6 +66,9 @@ struct FloatingPanel<Content>: View where Content: View {
     /// The maximum allowed height of the content.
     @State private var maximumHeight: CGFloat = .infinity
     
+    /// The last recorded drag gesture value.
+    @State var previousDragGesture: DragGesture.Value?
+    
     /// A Boolean value indicating whether the panel should be configured for a compact environment.
     private var isCompact: Bool {
         horizontalSizeClass == .compact && verticalSizeClass == .regular
@@ -124,26 +127,65 @@ struct FloatingPanel<Content>: View where Content: View {
     
     var drag: some Gesture {
         DragGesture(minimumDistance: 0)
-            .onChanged { value in
+            .onChanged {
                 handleColor = .activeHandleColor
-                let proposedHeight = height + ((isCompact ? -1 : +1) * value.translation.height)
+                previousDragGesture = $0
+                let proposedHeight = height + ((isCompact ? -1 : +1) * $0.translation.height)
                 height = min(max(.minHeight, proposedHeight), maximumHeight)
             }
-            .onEnded { _ in
+            .onEnded {
                 handleColor = .defaultHandleColor
-                withAnimation {
-                    selectedDetent.wrappedValue = closestDetent
-                    height = heightFor(detent: closestDetent)
+                
+                let deltaY = $0.location.y - previousDragGesture!.location.y
+                let deltaTime = $0.time.timeIntervalSince(previousDragGesture!.time)
+                let velocity = deltaY/deltaTime
+                let speed = abs(velocity)
+                
+                let predictedHeight = height + ((isCompact ? -1 : +1) * $0.predictedEndTranslation.height)
+                let clampedHeight = min(max(.minHeight, predictedHeight), maximumHeight)
+                let newDetent = bestDetentFor(newHeight: clampedHeight, at: velocity)
+                let targetHeight = heightFor(detent: newDetent)
+                
+                let distanceAhead = abs(height - targetHeight)
+                let travelTime = min(0.5, distanceAhead / speed)
+                    
+                withAnimation(.easeOut(duration: travelTime)) {
+                    selectedDetent.wrappedValue = newDetent
+                    height = targetHeight
                 }
+                previousDragGesture = nil
             }
     }
     
-    /// The detent that would produce a height that is closest to the current height.
-    var closestDetent: FloatingPanelDetent {
-        return [FloatingPanelDetent.summary, .full, .half].min {
-            abs(heightFor(detent: $0) - height) <
-                abs(heightFor(detent: $1) - height)
-        } ?? .half
+    /// Determines the best detent based on the provided metrics.
+    /// - Parameters:
+    ///   - newHeight: The height target for the detent.
+    ///   - velocity: The velocity of travel to the new detent.
+    /// - Returns: The best detent based on the provided metrics.
+    func bestDetentFor(newHeight: CGFloat, at velocity: Double) -> FloatingPanelDetent {
+        let detentsAndHeights = [FloatingPanelDetent.summary, .full, .half]
+            .map { (detent: $0, height: heightFor(detent: $0)) }
+            .sorted { $0.1 < $1.1 }
+        let speed = abs(velocity)
+        
+        if speed < 100 {
+            return detentsAndHeights.min { abs($0.height - height) < abs($1.height - height) }?.detent ?? selectedDetent.wrappedValue
+        }
+        
+        // Determine whether to grow or shrink the panel based on the drag direction and compact state.
+        let qualifiedDetentsAndHeights = detentsAndHeights.filter {
+            if velocity >= 0 {
+                return isCompact ? $0.height < height : $0.height > height
+            } else {
+                return isCompact ? $0.height > height : $0.height < height
+            }
+        }
+        
+        if speed > 2500 {
+            return qualifiedDetentsAndHeights.max { abs($0.height - height) < abs($1.height - height) }?.detent ?? selectedDetent.wrappedValue
+        } else {
+            return qualifiedDetentsAndHeights.max { abs($0.height - newHeight) < abs($1.height - newHeight) }?.detent ?? selectedDetent.wrappedValue
+        }
     }
     
     /// Calculates the height for the `detent`.
