@@ -24,11 +24,6 @@ public struct PopupView: View {
     public init(popup: Popup, isPresented: Binding<Bool>? = nil) {
         self.popup = popup
         self.isPresented = isPresented
-        
-//        let navBarAppearance = UINavigationBarAppearance()
-//        navBarAppearance.configureWithOpaqueBackground()
-//        navBarAppearance.backgroundColor = UIColor(Color.primary.opacity(0.15))
-//        UINavigationBar.appearance().scrollEdgeAppearance = navBarAppearance
     }
     
     /// The `Popup` to display.
@@ -46,150 +41,58 @@ public struct PopupView: View {
     private var isPresented: Binding<Bool>?
     
     public var body: some View {
-        Group {
-            if #available(iOS 16.0, *) {
-                NavigationStack {
-//                        PopupViewTitle(
-//                            popup: self.popup,
-//                            isPresented: isPresented,
-//                            showCloseButton: showCloseButton,
-//                            evaluateExpressionsResult: evaluateExpressionsResult
-//                        )
-                    Divider()
-                    PopupViewBody(
-                        popup: self.popup,
-                        isPresented: isPresented,
-                        showCloseButton: showCloseButton,
-                        evaluateExpressionsResult: evaluateExpressionsResult
-                    )
-//                    .navigationTitle(popup.title)
-                    .toolbar {
-                        ToolbarItem(placement: .navigationBarLeading) {
-                            Text(popup.title)
-                                .font(.title)
-                        }
-                        ToolbarItem(placement: .primaryAction) {
-//                            if showCloseButton {
-                                Button(action: {
-                                    isPresented?.wrappedValue = false
-                                }, label: {
-                                    Image(systemName: "xmark.circle")
-                                        .foregroundColor(.accentColor)
-                                        .padding([.top, .bottom, .trailing], 4)
-                                })
-//                            }
-
-//                            Text(popup.title)
-//                                .font(.headline)
-                        }
-                    }
-                    .navigationDestination(for: Array<Popup>.self) { popupArray in
-                        List(popupArray, id:\Popup.self) { popup in
-                            NavigationLink(value: popup) {
-                                VStack(alignment: .leading) {
-                                    Text(popup.title)
-                                }
-                            }
-                        }
-                        .listStyle(.plain)
-                        .navigationTitle("Related Popups")
-                    }
-                    .navigationDestination(for: Popup.self) { popup in
-                        PopupViewBody(
-                            popup: popup,
-                            showCloseButton: false,
-                            evaluateExpressionsResult: Result<[PopupExpressionEvaluation], Error>.success([])
-                        )
-                        .navigationTitle(popup.title)
-                    }
-                    .navigationBarTitleDisplayMode(.inline)
-                }
-            } else {
-                NavigationView {
+        if #available(iOS 16.0, *) {
+            NavigationStack {
+                PopupViewTitle(
+                    popup: self.popup,
+                    isPresented: isPresented,
+                    showCloseButton: showCloseButton,
+                    evaluateExpressionsResult: evaluateExpressionsResult
+                )
+                PopupViewBody(
+                    popup: self.popup,
+                    isPresented: isPresented,
+                    showCloseButton: showCloseButton,
+                    evaluateExpressionsResult: evaluateExpressionsResult
+                )
+                .navigationDestination(for: Array<Popup>.self) { popupArray in
                     VStack(alignment: .leading) {
-                        HStack {
-                            if !popup.title.isEmpty {
-                                Text(popup.title)
-                                    .font(.title)
-                                    .fontWeight(.bold)
-                            }
-                            Spacer()
-                            if showCloseButton {
-                                Button(action: {
-                                    isPresented?.wrappedValue = false
-                                }, label: {
-                                    Image(systemName: "xmark.circle")
-                                        .foregroundColor(.secondary)
-                                        .padding([.top, .bottom, .trailing], 4)
-                                })
-                            }
-                        }
                         Divider()
-                        Group {
-                            if let evaluateExpressionsResult {
-                                switch evaluateExpressionsResult {
-                                case .success(_):
-                                    PopupElementScrollView(popupElements: popup.evaluatedElements, popup: popup)
-                                case .failure(let error):
-                                    Text("Popup evaluation failed: \(error.localizedDescription)")
+                        ForEach(popupArray, id:\Popup.self) { popup in
+                            NavigationLink(value: popup) {
+                                HStack {
+                                    VStack(alignment: .leading) {
+                                        Text(popup.title)
+                                            .foregroundColor(.primary)
+                                    }
+                                    Spacer()
+                                    Image(systemName: "chevron.forward")
+                                        .font(.caption)
+                                        .foregroundColor(.secondary)
                                 }
-                            } else {
-                                VStack(alignment: .center) {
-                                    Text("Evaluating popup expressions...")
-                                    ProgressView()
-                                }
-                                .frame(maxWidth: .infinity)
                             }
+                            Divider()
                         }
+                        Spacer()
                     }
+                    .navigationTitle("Related Popups")
+                }
+                .navigationDestination(for: Popup.self) { popup in
+                    PopupViewBody(
+                        popup: popup,
+                        showCloseButton: false,
+                        evaluateExpressionsResult: Result<[PopupExpressionEvaluation], Error>.success([])
+                    )
+                    .navigationTitle(popup.title)
+                }
+                .navigationBarTitleDisplayMode(.inline)
+            }
+            .task(id: ObjectIdentifier(popup)) {
+                evaluateExpressionsResult = nil
+                evaluateExpressionsResult = await Result {
+                    try await popup.evaluateExpressions()
                 }
             }
-        }
-        .task(id: ObjectIdentifier(popup)) {
-            evaluateExpressionsResult = nil
-            evaluateExpressionsResult = await Result {
-                try await popup.evaluateExpressions()
-            }
-        }
-    }
-}
-
-struct PopupViewInternal: View {
-    let popup: Popup
-    private var evaluateExpressionsResult: Result<[PopupExpressionEvaluation], Error>?
-    private var showCloseButton = false
-    private var isPresented: Binding<Bool>?
-    
-    /// Creates a `PopupView` with the given popup.
-    /// - Parameters
-    ///     popup: The popup to display.
-    ///   - isPresented: A Boolean value indicating if the view is presented.
-    public init(
-        popup: Popup,
-        isPresented: Binding<Bool>? = nil,
-        showCloseButton: Bool,
-        evaluateExpressionsResult: Result<[PopupExpressionEvaluation], Error>?
-    ) {
-        self.popup = popup
-        self.isPresented = isPresented
-        self.showCloseButton = showCloseButton
-        self.evaluateExpressionsResult = evaluateExpressionsResult
-    }
-    
-    var body: some View {
-        VStack {
-            PopupViewTitle(
-                popup: self.popup,
-                isPresented: isPresented,
-                showCloseButton: showCloseButton,
-                evaluateExpressionsResult: evaluateExpressionsResult
-            )
-            PopupViewBody(
-                popup: self.popup,
-                isPresented: isPresented,
-                showCloseButton: showCloseButton,
-                evaluateExpressionsResult: evaluateExpressionsResult
-            )
         }
     }
 }
@@ -287,30 +190,29 @@ struct PopupElementScrollView: View {
     let popup: Popup
     
     var body: some View {
-        List(popupElements) { popupElement in
-            Group {
-                switch popupElement {
-                case let popupElement as AttachmentsPopupElement:
-                    AttachmentsPopupElementView(popupElement: popupElement)
-                case let popupElement as FieldsPopupElement:
-                    FieldsPopupElementView(popupElement: popupElement)
-                case let popupElement as MediaPopupElement:
-                    MediaPopupElementView(popupElement: popupElement)
-                case let popupElement as RelationshipPopupElement:
-                    RelationshipPopupElementView(
-                        popupElement: popupElement,
-                        geoElement: popup.geoElement
-                    )
-                case let popupElement as TextPopupElement:
-                    TextPopupElementView(popupElement: popupElement)
-                default:
-                    EmptyView()
+        ScrollView {
+            VStack(alignment: .leading) {
+                ForEach(popupElements) { popupElement in
+                    switch popupElement {
+                    case let popupElement as AttachmentsPopupElement:
+                        AttachmentsPopupElementView(popupElement: popupElement)
+                    case let popupElement as FieldsPopupElement:
+                        FieldsPopupElementView(popupElement: popupElement)
+                    case let popupElement as MediaPopupElement:
+                        MediaPopupElementView(popupElement: popupElement)
+                    case let popupElement as RelationshipPopupElement:
+                        RelationshipPopupElementView(
+                            popupElement: popupElement,
+                            geoElement: popup.geoElement
+                        )
+                    case let popupElement as TextPopupElement:
+                        TextPopupElementView(popupElement: popupElement)
+                    default:
+                        EmptyView()
+                    }
                 }
             }
-            .listRowSeparator(.hidden)
-            .listRowInsets(.init(top: 0, leading: 0, bottom: 0, trailing: 0))
         }
-        .listStyle(.plain)
     }
 }
 
