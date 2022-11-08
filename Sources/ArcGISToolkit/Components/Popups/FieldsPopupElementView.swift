@@ -36,6 +36,7 @@ struct FieldsPopupElementView: View {
     var body: some View {
         DisclosureGroup(isExpanded: $isExpanded) {
             Divider()
+                .padding(.bottom, 4)
             FieldsList(fields: displayFields)
         } label: {
             VStack(alignment: .leading) {
