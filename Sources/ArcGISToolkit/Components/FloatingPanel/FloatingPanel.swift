@@ -128,10 +128,11 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED***var drag: some Gesture {
 ***REMOVED******REMOVED***DragGesture(minimumDistance: 0, coordinateSpace: .global)
 ***REMOVED******REMOVED******REMOVED***.onChanged {
+***REMOVED******REMOVED******REMOVED******REMOVED***let deltaY = $0.location.y - (previousDragGesture?.location.y ?? $0.location.y)
+***REMOVED******REMOVED******REMOVED******REMOVED***let proposedHeight = height + ((isCompact ? -1 : +1) * deltaY)
 ***REMOVED******REMOVED******REMOVED******REMOVED***handleColor = .activeHandleColor
-***REMOVED******REMOVED******REMOVED******REMOVED***previousDragGesture = $0
-***REMOVED******REMOVED******REMOVED******REMOVED***let proposedHeight = height + ((isCompact ? -1 : +1) * $0.translation.height)
 ***REMOVED******REMOVED******REMOVED******REMOVED***height = min(max(.minHeight, proposedHeight), maximumHeight)
+***REMOVED******REMOVED******REMOVED******REMOVED***previousDragGesture = $0
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onEnded {
 ***REMOVED******REMOVED******REMOVED******REMOVED***handleColor = .defaultHandleColor
