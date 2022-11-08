@@ -63,11 +63,11 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED******REMOVED***/ A binding to a Boolean value that determines whether the view is presented.
 ***REMOVED***private var isPresented: Binding<Bool>
 ***REMOVED***
+***REMOVED******REMOVED***/ The latest recorded drag gesture value.
+***REMOVED***@State var latestDragGesture: DragGesture.Value?
+***REMOVED***
 ***REMOVED******REMOVED***/ The maximum allowed height of the content.
 ***REMOVED***@State private var maximumHeight: CGFloat = .infinity
-***REMOVED***
-***REMOVED******REMOVED***/ The last recorded drag gesture value.
-***REMOVED***@State var previousDragGesture: DragGesture.Value?
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the panel should be configured for a compact environment.
 ***REMOVED***private var isCompact: Bool {
@@ -128,11 +128,11 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED***var drag: some Gesture {
 ***REMOVED******REMOVED***DragGesture(minimumDistance: 0, coordinateSpace: .global)
 ***REMOVED******REMOVED******REMOVED***.onChanged {
-***REMOVED******REMOVED******REMOVED******REMOVED***let deltaY = $0.location.y - (previousDragGesture?.location.y ?? $0.location.y)
+***REMOVED******REMOVED******REMOVED******REMOVED***let deltaY = $0.location.y - (latestDragGesture?.location.y ?? $0.location.y)
 ***REMOVED******REMOVED******REMOVED******REMOVED***let proposedHeight = height + ((isCompact ? -1 : +1) * deltaY)
 ***REMOVED******REMOVED******REMOVED******REMOVED***handleColor = .activeHandleColor
 ***REMOVED******REMOVED******REMOVED******REMOVED***height = min(max(.minHeight, proposedHeight), maximumHeight)
-***REMOVED******REMOVED******REMOVED******REMOVED***previousDragGesture = $0
+***REMOVED******REMOVED******REMOVED******REMOVED***latestDragGesture = $0
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onEnded {
 ***REMOVED******REMOVED******REMOVED******REMOVED***handleColor = .defaultHandleColor
