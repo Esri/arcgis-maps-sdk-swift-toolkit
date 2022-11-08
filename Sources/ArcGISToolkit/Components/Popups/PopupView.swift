@@ -63,6 +63,7 @@ public struct PopupView: View {
                                 HStack {
                                     VStack(alignment: .leading) {
                                         Text(popup.title)
+//                                            .foregroundColor(.secondary)
                                             .foregroundColor(.primary)
                                     }
                                     Spacer()
@@ -71,6 +72,7 @@ public struct PopupView: View {
                                         .foregroundColor(.secondary)
                                 }
                             }
+                            .padding([.bottom], -2)
                             Divider()
                         }
                         Spacer()

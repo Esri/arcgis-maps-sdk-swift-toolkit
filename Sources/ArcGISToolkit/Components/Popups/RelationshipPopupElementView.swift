@@ -55,31 +55,11 @@ struct RelationshipPopupElementView: View {
                     HStack {
                         VStack(alignment: .leading) {
                             Text(popup.title)
-                                .foregroundColor(.primary)
+                                .foregroundColor(.secondary)
                             if let text = popupElement.relatedPopupDescription(popup: popup) {
                                 Text(text)
-                                    .font(.subheadline)
-                                    .foregroundColor(.secondary)
+                                    .foregroundColor(.primary)
                             }
-                        }
-                        Spacer()
-                        Image(systemName: "chevron.forward")
-                            .font(.subheadline)
-                            .foregroundColor(.secondary)
-                    }
-                }
-            }
-            
-            Divider()
-            if viewModel.relatedPopups.count > 0/*popupElement.displayCount*/ {
-                NavigationLink(value: viewModel.relatedPopups) {
-                    HStack {
-                        VStack(alignment: .leading) {
-                            Text("Show All")
-                                .foregroundColor(.primary)
-                            Text("\(viewModel.relatedPopups.count) records")
-                                .font(.subheadline)
-                                .foregroundColor(.secondary)
                         }
                         Spacer()
                         Image(systemName: "chevron.forward")
@@ -87,9 +67,38 @@ struct RelationshipPopupElementView: View {
                             .foregroundColor(.secondary)
                     }
                 }
+                .padding([.bottom], -2)
+                if popup != viewModel.displayedPopups.last {
+                    Divider()
+                }
+            }
+            Divider()
+            if viewModel.relatedPopups.count > 0/*popupElement.displayCount*/ {
+                NavigationLink(value: viewModel.relatedPopups) {
+                    HStack {
+                        VStack(alignment: .leading) {
+                            Text("Show All")
+                                .foregroundColor(.secondary)
+                            Text("\(viewModel.relatedPopups.count) records")
+                                .foregroundColor(.primary)
+                        }
+                        Spacer()
+                        Image(systemName: "chevron.forward")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    }
+                }
+                .padding([.bottom], -2)
                 Divider()
             }
         }
+    }
+}
+
+private extension RelationshipPopupElement {
+    /// Provides a default title to display if `title` is empty.
+    var displayTitle: String {
+        title.isEmpty ? "Related Records" : title
     }
 }
 

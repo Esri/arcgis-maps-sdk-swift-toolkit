@@ -16,19 +16,22 @@ import ArcGIS
 
 /// The view model for an `RelationshipPopupElementModel`.
 @MainActor class RelationshipPopupElementModel: ObservableObject {
-    /// The array of related `Popup`s
+    /// The array of all related `Popup`s
     @Published var relatedPopups = [Popup]()
     
+    /// The array of displayed `Popup`s.
     @Published var displayedPopups = [Popup]()
     
     /// The feature to display relationships for.
     var feature: ArcGISFeature?
 
-    /// The `PopupElement` to display.
+    /// The `PopupElement` being displayed.
     var popupElement: RelationshipPopupElement
     
-    @State var fields = [Field]()
-    
+    /// Creates a `RelationshipPopupElementModel`.
+    /// - Parameters:
+    ///   - feature: The feature to display relationships for.
+    ///   - popupElement: The `PopupElement` being displayed.
     init(
         feature: ArcGISFeature?,
         popupElement: RelationshipPopupElement
@@ -40,8 +43,8 @@ import ArcGIS
         }
     }
     
-    /// Loads the popup attachment and generates a thumbnail image.
-    /// - Parameter thumbnailSize: The size for the generated thumbnail.
+    /// Queries the feature for related popups and populates `relatedPopups`
+    /// and `displayedPopups`.
     func load() async throws {
         guard let feature else { return }
         relatedPopups = try await popupElement.relatedPopups(for: feature)
@@ -51,10 +54,8 @@ import ArcGIS
 
 public extension RelationshipPopupElement {
     /// The description of the popup using the `orderByFields` property and the popup definition`.`
-    /// - Parameters:
-    ///   - popup: The popup to get the description for.
-    ///   - popupElement: The relationship popup element.
-    /// - Returns: The description.
+    /// - Parameter popup: The popup to get the description for.
+    /// - Returns: The description
     func relatedPopupDescription(popup: Popup) -> String? {
         if let firstOrderByFieldName = orderByFields.first?.fieldName,
            let popupField = popup.definition.fields.first(where: {
@@ -65,8 +66,10 @@ public extension RelationshipPopupElement {
         
         return nil
     }
-
-    //    var relatedPopups: [Popup] {
+    
+    /// Queries the related popups for the feature.
+    /// - Parameter feature: The feature to display relationships for.
+    /// - Returns: An array of related popups.
     func relatedPopups(for feature: ArcGISFeature) async throws -> [Popup] {
         guard let table = feature.table as? ServiceFeatureTable,
               let relationshipInfo = table.layerInfo?.relationshipInfos.first(where: { relationshipInfo in
@@ -101,18 +104,12 @@ public extension RelationshipPopupElement {
         await withThrowingTaskGroup(of: Void.self) { taskGroup in
             for popup in relatedPopups {
                 taskGroup.addTask {
+                    // Need to evaluate expressions to make sure
+                    // `popup.title` is evaluated.
                     let _ = try await popup.evaluateExpressions()
                 }
             }
         }
-        
-//        let displayedPopups = Array(relatedPopups.prefix(Int(displayCount)))
-//        print("relatedPopups: \(relatedPopups.count)")
-//        print("displayedPopups: \(displayedPopups.count); displayCount = \(displayCount)")
-        
-        // What do we do with fields?
-//        fields.append(contentsOf: relatedFeatureQueryResult?.fields ?? [])
-//        print("fields: \(fields); rfqr?.fields: \(relatedFeatureQueryResult?.fields ?? [])")
         return relatedPopups
     }
 }
