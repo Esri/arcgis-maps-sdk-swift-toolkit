@@ -167,14 +167,14 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED***if viewModel.configurations.isEmpty {
 ***REMOVED******REMOVED******REMOVED***Text("No configurations available")
 ***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***ForEach(viewModel.configurations) { configuration in
+***REMOVED******REMOVED******REMOVED***ForEach(viewModel.configurations, id: \.name) { configuration in
 ***REMOVED******REMOVED******REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.setPendingTrace(configuration: configuration)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentActivity = .creatingTrace(nil)
 ***REMOVED******REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(configuration.name)
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.listRowBackground(configuration == viewModel.pendingTrace.configuration ? Color.secondary.opacity(0.5) : nil)
+***REMOVED******REMOVED******REMOVED******REMOVED***.listRowBackground(configuration.name == viewModel.pendingTrace.configuration?.name ? Color.secondary.opacity(0.5) : nil)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
