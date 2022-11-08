@@ -167,14 +167,14 @@ public struct UtilityNetworkTrace: View {
         if viewModel.configurations.isEmpty {
             Text("No configurations available")
         } else {
-            ForEach(viewModel.configurations) { configuration in
+            ForEach(viewModel.configurations, id: \.name) { configuration in
                 Button {
                     viewModel.setPendingTrace(configuration: configuration)
                     currentActivity = .creatingTrace(nil)
                 } label: {
                     Text(configuration.name)
                 }
-                .listRowBackground(configuration == viewModel.pendingTrace.configuration ? Color.secondary.opacity(0.5) : nil)
+                .listRowBackground(configuration.name == viewModel.pendingTrace.configuration?.name ? Color.secondary.opacity(0.5) : nil)
             }
         }
     }
