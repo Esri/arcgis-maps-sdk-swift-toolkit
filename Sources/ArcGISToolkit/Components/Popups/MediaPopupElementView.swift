@@ -25,6 +25,7 @@ struct MediaPopupElementView: View {
         if displayableMediaCount > 0 {
             DisclosureGroup(isExpanded: $isExpanded) {
                 Divider()
+                    .padding(.bottom, 4)
                 PopupMediaView(
                     popupMedia: popupElement.media,
                     displayableMediaCount: displayableMediaCount
