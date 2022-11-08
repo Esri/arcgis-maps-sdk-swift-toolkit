@@ -135,11 +135,9 @@ struct FloatingPanel<Content>: View where Content: View {
                 latestDragGesture = $0
             }
             .onEnded {
-                handleColor = .defaultHandleColor
-                
-                let deltaY = $0.location.y - previousDragGesture!.location.y
-                let deltaTime = $0.time.timeIntervalSince(previousDragGesture!.time)
-                let velocity = deltaY/deltaTime
+                let deltaY = $0.location.y - latestDragGesture!.location.y
+                let deltaTime = $0.time.timeIntervalSince(latestDragGesture!.time)
+                let velocity = deltaY / deltaTime
                 let speed = abs(velocity)
                 
                 let predictedHeight = height + ((isCompact ? -1 : +1) * $0.predictedEndTranslation.height)
@@ -154,7 +152,8 @@ struct FloatingPanel<Content>: View where Content: View {
                     selectedDetent.wrappedValue = newDetent
                     height = targetHeight
                 }
-                previousDragGesture = nil
+                handleColor = .defaultHandleColor
+                latestDragGesture = nil
             }
     }
     
