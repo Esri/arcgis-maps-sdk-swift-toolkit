@@ -148,7 +148,7 @@ struct FloatingPanel<Content>: View where Content: View {
                 
                 let distanceAhead = abs(height - targetHeight)
                 let travelTime = min(0.5, distanceAhead / speed)
-                    
+                
                 withAnimation(.easeOut(duration: travelTime)) {
                     selectedDetent.wrappedValue = newDetent
                     height = targetHeight
