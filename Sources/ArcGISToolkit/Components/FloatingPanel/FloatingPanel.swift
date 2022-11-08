@@ -135,11 +135,9 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***latestDragGesture = $0
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onEnded {
-***REMOVED******REMOVED******REMOVED******REMOVED***handleColor = .defaultHandleColor
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***let deltaY = $0.location.y - previousDragGesture!.location.y
-***REMOVED******REMOVED******REMOVED******REMOVED***let deltaTime = $0.time.timeIntervalSince(previousDragGesture!.time)
-***REMOVED******REMOVED******REMOVED******REMOVED***let velocity = deltaY/deltaTime
+***REMOVED******REMOVED******REMOVED******REMOVED***let deltaY = $0.location.y - latestDragGesture!.location.y
+***REMOVED******REMOVED******REMOVED******REMOVED***let deltaTime = $0.time.timeIntervalSince(latestDragGesture!.time)
+***REMOVED******REMOVED******REMOVED******REMOVED***let velocity = deltaY / deltaTime
 ***REMOVED******REMOVED******REMOVED******REMOVED***let speed = abs(velocity)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***let predictedHeight = height + ((isCompact ? -1 : +1) * $0.predictedEndTranslation.height)
@@ -154,7 +152,8 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedDetent.wrappedValue = newDetent
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***height = targetHeight
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***previousDragGesture = nil
+***REMOVED******REMOVED******REMOVED******REMOVED***handleColor = .defaultHandleColor
+***REMOVED******REMOVED******REMOVED******REMOVED***latestDragGesture = nil
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
