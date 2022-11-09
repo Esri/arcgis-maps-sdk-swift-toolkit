@@ -24,7 +24,7 @@ import ArcGIS
     
     /// The feature to display relationships for.
     var feature: ArcGISFeature?
-
+    
     /// The `PopupElement` being displayed.
     var popupElement: RelationshipPopupElement
     
@@ -67,8 +67,8 @@ public extension RelationshipPopupElement {
         return nil
     }
     
-    /// Queries the related popups for the feature.
-    /// - Parameter feature: The feature to display relationships for.
+    /// Queries the related records for the feature and return popups for those related records.
+    /// - Parameter feature: The feature to query for related records.
     /// - Returns: An array of related popups.
     func relatedPopups(for feature: ArcGISFeature) async throws -> [Popup] {
         guard let table = feature.table as? ServiceFeatureTable,
@@ -80,27 +80,29 @@ public extension RelationshipPopupElement {
         // User QueryBy fields in `RelatedQueryParameters`
         let params = RelatedQueryParameters(relationshipInfo: relationshipInfo)
         params.addOrderByFields(orderByFields)
-        let relatedFeatureQueryResult = try? await table.queryRelatedFeatures(
+        let relatedFeatureQueryResults = try? await table.queryRelatedFeatures(
             to: feature,
             using: params,
             queryFeatureFields: .loadAll
-        ).first
-        // What about the rest of the `relatedFeatureQueryResult`s???
+        )
         
-        guard let relatedFeatures = relatedFeatureQueryResult?.features() else { return [] }
-        
-        let features = Array(relatedFeatures)
         var relatedPopups = [Popup]()
-        features.forEach { feature in
-            let popupDefinition = feature.table?.popupDefinition
-            relatedPopups.append(
-                Popup(
-                    geoElement: feature,
-                    definition: popupDefinition ?? PopupDefinition(geoElement: feature)
+        
+        // Create popups for all features in each `RelatedFeatureQueryResult`.
+        relatedFeatureQueryResults?.forEach { relatedFeatureQueryResult in
+            let features = Array(relatedFeatureQueryResult.features())
+            features.forEach { feature in
+                let popupDefinition = feature.table?.popupDefinition
+                relatedPopups.append(
+                    Popup(
+                        geoElement: feature,
+                        definition: popupDefinition ?? PopupDefinition(geoElement: feature)
+                    )
                 )
-            )
+            }
         }
         
+        // Evaluate expressions for all popups.
         await withThrowingTaskGroup(of: Void.self) { taskGroup in
             for popup in relatedPopups {
                 taskGroup.addTask {
@@ -110,6 +112,7 @@ public extension RelationshipPopupElement {
                 }
             }
         }
+        
         return relatedPopups
     }
 }

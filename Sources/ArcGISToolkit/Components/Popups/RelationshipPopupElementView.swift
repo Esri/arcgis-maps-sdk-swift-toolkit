@@ -15,6 +15,7 @@ import SwiftUI
 import ArcGIS
 
 /// A view displaying a `RelationshipPopupElement`.
+@available(iOS 16, *)
 struct RelationshipPopupElementView: View {
     /// The `PopupElement` to display.
     var popupElement: RelationshipPopupElement
@@ -49,16 +50,16 @@ struct RelationshipPopupElementView: View {
     }
     
     @ViewBuilder private var relatedFeaturesView: some View {
-        if #available(iOS 16.0, *) {
+        if viewModel.relatedPopups.count > 0 {
             ForEach(viewModel.displayedPopups, id:\Popup.self) { popup in
                 NavigationLink(value: popup) {
                     HStack {
                         VStack(alignment: .leading) {
                             Text(popup.title)
-                                .foregroundColor(.secondary)
+                                .foregroundColor(.primary)
                             if let text = popupElement.relatedPopupDescription(popup: popup) {
                                 Text(text)
-                                    .foregroundColor(.primary)
+                                    .foregroundColor(.secondary)
                             }
                         }
                         Spacer()
@@ -78,9 +79,9 @@ struct RelationshipPopupElementView: View {
                     HStack {
                         VStack(alignment: .leading) {
                             Text("Show All")
-                                .foregroundColor(.secondary)
-                            Text("\(viewModel.relatedPopups.count) records")
                                 .foregroundColor(.primary)
+                            Text("\(viewModel.relatedPopups.count) records")
+                                .foregroundColor(.secondary)
                         }
                         Spacer()
                         Image(systemName: "chevron.forward")
@@ -90,6 +91,13 @@ struct RelationshipPopupElementView: View {
                 }
                 .padding([.bottom], -2)
                 Divider()
+            }
+        } else {
+            HStack {
+                Text("No related records found.")
+                    .italic()
+                    .foregroundColor(.secondary)
+                Spacer()
             }
         }
     }

@@ -24,6 +24,11 @@ public struct PopupView: View {
     public init(popup: Popup, isPresented: Binding<Bool>? = nil) {
         self.popup = popup
         self.isPresented = isPresented
+        
+//        let navBarAppearance = UINavigationBarAppearance()
+//        navBarAppearance.configureWithOpaqueBackground()
+//        navBarAppearance.backgroundColor = UIColor(Color.primary.opacity(0.15))
+//        UINavigationBar.appearance().scrollEdgeAppearance = navBarAppearance
     }
     
     /// The `Popup` to display.
@@ -41,8 +46,56 @@ public struct PopupView: View {
     private var isPresented: Binding<Bool>?
     
     public var body: some View {
-        if #available(iOS 16.0, *) {
-            NavigationStack {
+        Group {
+            if #available(iOS 16.0, *) {
+                PopupViewInternal16(
+                    navigationPath: nil,
+                    popup: self.popup,
+                    isPresented: isPresented,
+                    showCloseButton: showCloseButton,
+                    evaluateExpressionsResult: evaluateExpressionsResult
+                )
+            } else {
+                PopupViewInternal(
+                    popup: self.popup,
+                    isPresented: isPresented,
+                    showCloseButton: showCloseButton,
+                    evaluateExpressionsResult: evaluateExpressionsResult
+                )
+            }
+        }
+        .task(id: ObjectIdentifier(popup)) {
+            evaluateExpressionsResult = nil
+            evaluateExpressionsResult = await Result {
+                try await popup.evaluateExpressions()
+            }
+        }
+    }
+    
+    struct PopupViewInternal: View {
+        let popup: Popup
+        private var evaluateExpressionsResult: Result<[PopupExpressionEvaluation], Error>?
+        private var showCloseButton = false
+        private var isPresented: Binding<Bool>?
+        
+        /// Creates a `PopupView` with the given popup.
+        /// - Parameters
+        ///     popup: The popup to display.
+        ///   - isPresented: A Boolean value indicating if the view is presented.
+        public init(
+            popup: Popup,
+            isPresented: Binding<Bool>? = nil,
+            showCloseButton: Bool,
+            evaluateExpressionsResult: Result<[PopupExpressionEvaluation], Error>?
+        ) {
+            self.popup = popup
+            self.isPresented = isPresented
+            self.showCloseButton = showCloseButton
+            self.evaluateExpressionsResult = evaluateExpressionsResult
+        }
+        
+        var body: some View {
+            VStack {
                 PopupViewTitle(
                     popup: self.popup,
                     isPresented: isPresented,
@@ -55,15 +108,69 @@ public struct PopupView: View {
                     showCloseButton: showCloseButton,
                     evaluateExpressionsResult: evaluateExpressionsResult
                 )
+            }
+        }
+    }
+    
+    @available(iOS 16.0, *)
+    struct PopupViewInternal16: View {
+        let popup: Popup
+        private var evaluateExpressionsResult: Result<[PopupExpressionEvaluation], Error>?
+        private var showCloseButton = false
+        private var isPresented: Binding<Bool>?
+        @State private var navigationPath = NavigationPath()
+        
+        /// Creates a `PopupView` with the given popup.
+        /// - Parameters
+        ///     popup: The popup to display.
+        ///   - isPresented: A Boolean value indicating if the view is presented.
+        public init(
+            navigationPath: Binding<NavigationPath>?,
+            popup: Popup,
+            isPresented: Binding<Bool>? = nil,
+            showCloseButton: Bool,
+            evaluateExpressionsResult: Result<[PopupExpressionEvaluation], Error>?
+        ) {
+            self.popup = popup
+            self.isPresented = isPresented
+            self.showCloseButton = showCloseButton
+            self.evaluateExpressionsResult = evaluateExpressionsResult
+            if let navigationPath {
+                self.navigationPath = navigationPath.wrappedValue
+            }
+        }
+        
+        var body: some View {
+            NavigationStack(path: $navigationPath) {
+                VStack {
+                    PopupViewTitle16(
+                        navigationPath: $navigationPath,
+                        popup: self.popup,
+                        isPresented: isPresented,
+                        showCloseButton: showCloseButton,
+                        evaluateExpressionsResult: evaluateExpressionsResult
+                    )
+                    PopupViewBody(
+                        popup: self.popup,
+                        isPresented: isPresented,
+                        showCloseButton: showCloseButton,
+                        evaluateExpressionsResult: evaluateExpressionsResult
+                    )
+                }
                 .navigationDestination(for: Array<Popup>.self) { popupArray in
                     VStack(alignment: .leading) {
-                        Divider()
+                        PopupViewTitle16(
+                            navigationPath: $navigationPath,
+                            title: "Related Popups",
+                            isPresented: isPresented,
+                            showCloseButton: showCloseButton,
+                            evaluateExpressionsResult: evaluateExpressionsResult
+                        )
                         ForEach(popupArray, id:\Popup.self) { popup in
                             NavigationLink(value: popup) {
                                 HStack {
                                     VStack(alignment: .leading) {
                                         Text(popup.title)
-//                                            .foregroundColor(.secondary)
                                             .foregroundColor(.primary)
                                     }
                                     Spacer()
@@ -77,30 +184,76 @@ public struct PopupView: View {
                         }
                         Spacer()
                     }
-                    .navigationTitle("Related Popups")
+                    .navigationBarHidden(true)
                 }
                 .navigationDestination(for: Popup.self) { popup in
-                    PopupViewBody(
+                    // This can't be done, as `PopupViewInternal16` contains
+                    // the NavigationStack.
+                    PopupViewInternal16Internal(
+                        navigationPath: $navigationPath,
                         popup: popup,
-                        showCloseButton: false,
+                        isPresented: isPresented,
+                        showCloseButton: showCloseButton,
                         evaluateExpressionsResult: Result<[PopupExpressionEvaluation], Error>.success([])
                     )
-                    .navigationTitle(popup.title)
-                }
-                .navigationBarTitleDisplayMode(.inline)
-            }
-            .task(id: ObjectIdentifier(popup)) {
-                evaluateExpressionsResult = nil
-                evaluateExpressionsResult = await Result {
-                    try await popup.evaluateExpressions()
+                    .navigationBarHidden(true)
                 }
             }
         }
     }
 }
 
-struct PopupViewTitle: View {
+@available(iOS 16.0, *)
+struct PopupViewInternal16Internal: View {
     let popup: Popup
+    private var evaluateExpressionsResult: Result<[PopupExpressionEvaluation], Error>?
+    private var showCloseButton = false
+    private var isPresented: Binding<Bool>?
+    
+    //    @available(iOS 16.0, *)
+    private var navigationPath: Binding<NavigationPath>
+    //TODO:  add back button to title that will remove last path
+    //TODO:  move the "if #available" block below to a separate struct that can be ios 16; include navigationpath to that.
+    
+    /// Creates a `PopupView` with the given popup.
+    /// - Parameters
+    ///     popup: The popup to display.
+    ///   - isPresented: A Boolean value indicating if the view is presented.
+    public init(
+        navigationPath: Binding<NavigationPath>,
+        popup: Popup,
+        isPresented: Binding<Bool>? = nil,
+        showCloseButton: Bool,
+        evaluateExpressionsResult: Result<[PopupExpressionEvaluation], Error>?
+    ) {
+        self.popup = popup
+        self.isPresented = isPresented
+        self.showCloseButton = showCloseButton
+        self.evaluateExpressionsResult = evaluateExpressionsResult
+        self.navigationPath = navigationPath
+    }
+    
+    var body: some View {
+        VStack {
+            PopupViewTitle16(
+                navigationPath: navigationPath,
+                popup: self.popup,
+                isPresented: isPresented,
+                showCloseButton: showCloseButton,
+                evaluateExpressionsResult: evaluateExpressionsResult
+            )
+            PopupViewBody(
+                popup: self.popup,
+                isPresented: isPresented,
+                showCloseButton: showCloseButton,
+                evaluateExpressionsResult: evaluateExpressionsResult
+            )
+        }
+    }
+}
+
+struct PopupViewTitle: View {
+    let title: String
     private var evaluateExpressionsResult: Result<[PopupExpressionEvaluation], Error>?
     private var showCloseButton = false
     private var isPresented: Binding<Bool>?
@@ -115,7 +268,23 @@ struct PopupViewTitle: View {
         showCloseButton: Bool,
         evaluateExpressionsResult: Result<[PopupExpressionEvaluation], Error>?
     ) {
-        self.popup = popup
+        self.title = popup.title
+        self.isPresented = isPresented
+        self.showCloseButton = showCloseButton
+        self.evaluateExpressionsResult = evaluateExpressionsResult
+    }
+    
+    /// Creates a `PopupView` with the given popup.
+    /// - Parameters
+    ///     popup: The popup to display.
+    ///   - isPresented: A Boolean value indicating if the view is presented.
+    public init(
+        title: String,
+        isPresented: Binding<Bool>? = nil,
+        showCloseButton: Bool,
+        evaluateExpressionsResult: Result<[PopupExpressionEvaluation], Error>?
+    ) {
+        self.title = title
         self.isPresented = isPresented
         self.showCloseButton = showCloseButton
         self.evaluateExpressionsResult = evaluateExpressionsResult
@@ -124,8 +293,8 @@ struct PopupViewTitle: View {
     var body: some View {
         VStack(alignment: .leading) {
             HStack {
-                if !popup.title.isEmpty {
-                    Text(popup.title)
+                if !title.isEmpty {
+                    Text(title)
                         .font(.title)
                         .fontWeight(.bold)
                 }
@@ -140,6 +309,86 @@ struct PopupViewTitle: View {
                     })
                 }
             }
+            Divider()
+        }
+    }
+}
+
+@available(iOS 16.0, *)
+struct PopupViewTitle16: View {
+    private var navigationPath: Binding<NavigationPath>
+    private let title: String
+    private var evaluateExpressionsResult: Result<[PopupExpressionEvaluation], Error>?
+    private var showCloseButton = false
+    private var isPresented: Binding<Bool>?
+    
+    /// Creates a `PopupView` with the given popup.
+    /// - Parameters
+    ///     popup: The popup to display.
+    ///   - isPresented: A Boolean value indicating if the view is presented.
+    public init(
+        navigationPath: Binding<NavigationPath>,
+        popup: Popup,
+        isPresented: Binding<Bool>? = nil,
+        showCloseButton: Bool,
+        evaluateExpressionsResult: Result<[PopupExpressionEvaluation], Error>?
+    ) {
+        self.navigationPath = navigationPath
+        self.title = popup.title
+        self.isPresented = isPresented
+        self.showCloseButton = showCloseButton
+        self.evaluateExpressionsResult = evaluateExpressionsResult
+    }
+    
+    /// Creates a `PopupView` with the given popup.
+    /// - Parameters
+    ///     popup: The popup to display.
+    ///   - isPresented: A Boolean value indicating if the view is presented.
+    public init(
+        navigationPath: Binding<NavigationPath>,
+        title: String,
+        isPresented: Binding<Bool>? = nil,
+        showCloseButton: Bool,
+        evaluateExpressionsResult: Result<[PopupExpressionEvaluation], Error>?
+    ) {
+        self.navigationPath = navigationPath
+        self.title = title
+        self.isPresented = isPresented
+        self.showCloseButton = showCloseButton
+        self.evaluateExpressionsResult = evaluateExpressionsResult
+    }
+    
+    var body: some View {
+        VStack(alignment: .leading) {
+            HStack {
+                if navigationPath.wrappedValue.count > 0 {
+                    Button(action: {
+                        navigationPath.wrappedValue.removeLast()
+                    }, label: {
+                        Image(systemName: "chevron.backward")
+                            .font(.title2)
+                            .fontWeight(.medium)
+                        Text("Back")
+                    })
+                    .padding([.trailing], 12)
+                }
+                if !title.isEmpty {
+                    Text(title)
+                        .font(navigationPath.wrappedValue.count > 0 ? .headline : .title)
+                        .fontWeight(.bold)
+                }
+                Spacer()
+                if showCloseButton {
+                    Button(action: {
+                        isPresented?.wrappedValue = false
+                    }, label: {
+                        Image(systemName: "xmark.circle")
+                            .foregroundColor(.secondary)
+                            .padding([.top, .bottom, .trailing], 4)
+                    })
+                }
+            }
+            .padding([.top, .bottom], navigationPath.wrappedValue.count == 0 ? -2 : 0)
             Divider()
         }
     }
@@ -203,10 +452,12 @@ struct PopupElementScrollView: View {
                     case let popupElement as MediaPopupElement:
                         MediaPopupElementView(popupElement: popupElement)
                     case let popupElement as RelationshipPopupElement:
-                        RelationshipPopupElementView(
-                            popupElement: popupElement,
-                            geoElement: popup.geoElement
-                        )
+                        if #available(iOS 16.0, *) {
+                            RelationshipPopupElementView(
+                                popupElement: popupElement,
+                                geoElement: popup.geoElement
+                            )
+                        }
                     case let popupElement as TextPopupElement:
                         TextPopupElementView(popupElement: popupElement)
                     default:
