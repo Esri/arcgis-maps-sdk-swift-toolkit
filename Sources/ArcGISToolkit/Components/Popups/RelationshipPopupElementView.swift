@@ -20,8 +20,13 @@ struct RelationshipPopupElementView: View {
     /// The `PopupElement` to display.
     var popupElement: RelationshipPopupElement
     
+    /// The view model for the view.
     @StateObject private var viewModel: RelationshipPopupElementModel
     
+    /// Creates a `RelationshipPopupElementView`.
+    /// - Parameters:
+    ///   - popupElement: The popup element to display.
+    ///   - geoElement: The geo element to display relationships for.
     init(popupElement: RelationshipPopupElement, geoElement: GeoElement) {
         self.popupElement = popupElement
         
@@ -33,6 +38,7 @@ struct RelationshipPopupElementView: View {
         )
     }
     
+    /// A Boolean value specifying whether the dislosure group is expanded or not.
     @State var isExpanded: Bool = true
     
     var body: some View {
