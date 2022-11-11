@@ -17,7 +17,7 @@ import ArcGISToolkit
 
 struct PopupExampleView: View {
     static func makeMap() -> Map {
-        let portal = Portal(url: URL(string: "https://runtimecoretest.maps.arcgis.com/")!, requiresLogin: false)
+        let portal = Portal(url: URL(string: "https://runtimecoretest.maps.arcgis.com/")!, connection: .anonymous)
         
         // Popups example map. - 4 types: text, media image, media chart, fields list
         let portalItem1 = PortalItem(portal: portal, id: Item.ID(rawValue: "10b79e7ad1944422b87f73da86dcf752")!)
