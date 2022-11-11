@@ -117,7 +117,7 @@ struct SignInView: View {
         error = nil
         Task {
             do {
-                let portal = Portal(url: .portal, requiresLogin: true)
+                let portal = Portal(url: .portal, connection: .authenticated)
                 try await portal.load()
                 self.portal = portal
             } catch {
