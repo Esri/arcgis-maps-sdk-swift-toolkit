@@ -17,7 +17,7 @@
 
 struct PopupExampleView: View {
 ***REMOVED***static func makeMap() -> Map {
-***REMOVED******REMOVED***let portal = Portal(url: URL(string: "https:***REMOVED***runtimecoretest.maps.arcgis.com/")!, requiresLogin: false)
+***REMOVED******REMOVED***let portal = Portal(url: URL(string: "https:***REMOVED***runtimecoretest.maps.arcgis.com/")!, connection: .anonymous)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Popups example map. - 4 types: text, media image, media chart, fields list
 ***REMOVED******REMOVED***let portalItem1 = PortalItem(portal: portal, id: Item.ID(rawValue: "10b79e7ad1944422b87f73da86dcf752")!)
