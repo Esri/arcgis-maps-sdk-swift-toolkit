@@ -19,7 +19,7 @@ struct FloorFilterExampleView: View {
 ***REMOVED******REMOVED***/ Make a map from a portal item.
 ***REMOVED***static func makeMap() -> Map {
 ***REMOVED******REMOVED***Map(item: PortalItem(
-***REMOVED******REMOVED******REMOVED***portal: .arcGISOnline(requiresLogin: false),
+***REMOVED******REMOVED******REMOVED***portal: .arcGISOnline(connection: .anonymous),
 ***REMOVED******REMOVED******REMOVED***id: Item.ID("b4b599a43a474d33946cf0df526426f5")!
 ***REMOVED******REMOVED***))
 ***REMOVED***

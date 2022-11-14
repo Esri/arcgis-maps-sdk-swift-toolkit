@@ -117,7 +117,7 @@ struct SignInView: View {
 ***REMOVED******REMOVED***error = nil
 ***REMOVED******REMOVED***Task {
 ***REMOVED******REMOVED******REMOVED***do {
-***REMOVED******REMOVED******REMOVED******REMOVED***let portal = Portal(url: .portal, requiresLogin: true)
+***REMOVED******REMOVED******REMOVED******REMOVED***let portal = Portal(url: .portal, connection: .authenticated)
 ***REMOVED******REMOVED******REMOVED******REMOVED***try await portal.load()
 ***REMOVED******REMOVED******REMOVED******REMOVED***self.portal = portal
 ***REMOVED******REMOVED*** catch {
