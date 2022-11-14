@@ -19,7 +19,7 @@ struct FloorFilterExampleView: View {
     /// Make a map from a portal item.
     static func makeMap() -> Map {
         Map(item: PortalItem(
-            portal: .arcGISOnline(requiresLogin: false),
+            portal: .arcGISOnline(connection: .anonymous),
             id: Item.ID("b4b599a43a474d33946cf0df526426f5")!
         ))
     }

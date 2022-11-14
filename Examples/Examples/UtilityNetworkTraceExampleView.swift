@@ -79,7 +79,7 @@ struct UtilityNetworkTraceExampleView: View {
     /// Makes a map from a portal item.
     static func makeMap() -> Map {
         let portalItem = PortalItem(
-            portal: .arcGISOnline(requiresLogin: false),
+            portal: .arcGISOnline(connection: .anonymous),
             id: Item.ID(rawValue: "471eb0bf37074b1fbb972b1da70fb310")!
         )
         return Map(item: portalItem)
