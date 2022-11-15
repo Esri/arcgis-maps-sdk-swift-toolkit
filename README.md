@@ -10,18 +10,17 @@ To use Toolkit in your project:
 
 ## Toolkit Components
 
+* **[Authenticator](Documentation/Authenticator)** - Displays a user interface when network and ArcGIS authentication challenges occur.
 * **[BasemapGallery](Documentation/BasemapGallery)** - Displays a collection of basemaps.
 * **[Bookmarks](Documentation/Bookmarks)** - Shows bookmarks, from a map, scene, or a list.
-* **[Compass](Documentation/Compass)** - Shows a compass direction when the map is rotated. Auto-hides when the map
-  points north up.
+* **[Compass](Documentation/Compass)** - Shows a compass direction when the map is rotated. Auto-hides when the map points north.
 * **[FloatingPanel](Documentation/FloatingPanel)** - Allows display of view-related content in a "bottom sheet". 
 * **[FloorFilter](Documentation/FloorFilter)** - Allows to filter floor plan data in a geo view by a site, a building in the site, or a floor in the building. 
 * **[OverviewMap](Documentation/OverviewMap)** - Displays the visible extent of a geo view in a small "inset" map.
+* **[Popup](Documentation/Popup)** - Display details, media, and attachments of features and graphics.
 * **[Scalebar](Documentation/Scalebar)** - Displays current scale reference.
 * **[Search](Documentation/Search)** - Displays a search experience for geo views.
 * **[UtilityNetworkTrace](Documentation/UtilityNetworkTrace)** - Runs traces on a web map published with a utility network and trace configurations.
-* **[Authenticator](Documentation/Authenticator)** - Displays a user interface when network and ArcGIS authentication challenges occur.
-
 
 ## Requirements
 * ArcGIS Maps SDK for Swift
@@ -49,12 +48,12 @@ Some of the toolkit components and examples utilize a set of ready-to-use ArcGIS
 
 * [Developers guide documentation](https://developers.arcgis.com/ios)
 * [Maps SDK API Reference](https://developers.arcgis.com/ios/api-reference)
-* [Samples](https://github.com/Esri/arcgis-maps-sdk-swift-samples)
+* [Samples](https://github.com/ArcGIS/arcgis-maps-sdk-swift-samples)
 * Got a question? Ask the community on our [forum](http://geonet.esri.com/community/developers/native-app-developers/arcgis-runtime-sdk-for-ios)
 
 ## Issues
 
-Find a bug or want to request a new feature?  Please let us know by [submitting an issue](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/issues/new).
+Find a bug or want to request a new feature?  Please let us know by [submitting an issue](https://github.com/ArcGIS/arcgis-maps-sdk-swift-toolkit/issues/new).
 
 ## Contributing
 
