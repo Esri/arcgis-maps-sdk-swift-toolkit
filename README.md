@@ -25,9 +25,9 @@ To use Toolkit in your project:
 
 ## Requirements
 * ArcGIS Maps SDK for Swift
-* Xcode 13.0 (or higher)
+* Xcode 14.0 (or newer)
 
-The *ArcGIS Maps SDK Toolkit for Swift* has a *Target SDK* version of *15.0*, meaning that it can run on devices with *iOS 15.0* or newer.
+The *ArcGIS Maps SDK for Swift Toolkit* has a *Target SDK* version of *15.0*, meaning that it can run on devices with *iOS 15.0* or newer.
 
 ## Instructions
 
@@ -35,7 +35,7 @@ The *ArcGIS Maps SDK Toolkit for Swift* has a *Target SDK* version of *15.0*, me
 
  1. Open your project in Xcode
  2. Go to *File* > *Swift Packages* > *Add Package Dependency* option 
- 3. Enter `https://github.com/ArcGIS/arcgis-maps-sdk-toolkit-swift` as the package repository URL
+ 3. Enter `https://github.com/ArcGIS/arcgis-maps-sdk-swift-toolkit` as the package repository URL
  
  Note: The Toolkit Swift Package adds the ArcGIS Maps SDK for Swift Package as a dependency so there's no need to add both separately. If you already have the ArcGIS Maps SDK for Swift Package, delete it and just add the Toolkit Swift Package. 
 
@@ -50,7 +50,7 @@ Some of the toolkit components and examples utilize a set of ready-to-use ArcGIS
 * [Developers guide documentation](https://developers.arcgis.com/ios)
 * [Maps SDK API Reference](https://developers.arcgis.com/ios/api-reference)
 * [Samples](https://github.com/Esri/arcgis-maps-sdk-swift-samples)
-* Got a question? Ask the community on our [forum](http://geonet.esri.com/community/developers/native-app-developers/arcgis-maps-sdk-for-swift)
+* Got a question? Ask the community on our [forum](http://geonet.esri.com/community/developers/native-app-developers/arcgis-runtime-sdk-for-ios)
 
 ## Issues
 
