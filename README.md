@@ -15,9 +15,9 @@ To use Toolkit in your project:
 * **[Bookmarks](Documentation/Bookmarks)** - Shows bookmarks, from a map, scene, or a list.
 * **[Compass](Documentation/Compass)** - Shows a compass direction when the map is rotated. Auto-hides when the map points north.
 * **[FloatingPanel](Documentation/FloatingPanel)** - Allows display of view-related content in a "bottom sheet". 
-* **[FloorFilter](Documentation/FloorFilter)** - Allows to filter floor plan data in a geo view by a site, a building in the site, or a floor in the building. 
+* **[FloorFilter](Documentation/FloorFilter)** - Allows filtering of floor plan data in a geo view by a site, a building in the site, or a floor in the building. 
 * **[OverviewMap](Documentation/OverviewMap)** - Displays the visible extent of a geo view in a small "inset" map.
-* **[Popup](Documentation/Popup)** - Display details, media, and attachments of features and graphics.
+* **[Popup](Documentation/Popup)** - Displays details, media, and attachments of features and graphics.
 * **[Scalebar](Documentation/Scalebar)** - Displays current scale reference.
 * **[Search](Documentation/Search)** - Displays a search experience for geo views.
 * **[UtilityNetworkTrace](Documentation/UtilityNetworkTrace)** - Runs traces on a web map published with a utility network and trace configurations.
