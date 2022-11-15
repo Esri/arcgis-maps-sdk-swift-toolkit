@@ -79,7 +79,7 @@
 ***REMOVED******REMOVED******REMOVED***guard let self, let url else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***do {
-***REMOVED******REMOVED******REMOVED******REMOVED***let (data, _) = try await ArcGISRuntimeEnvironment.urlSession.data(from: url)
+***REMOVED******REMOVED******REMOVED******REMOVED***let (data, _) = try await ArcGISEnvironment.urlSession.data(from: url)
 ***REMOVED******REMOVED******REMOVED******REMOVED***DispatchQueue.main.async { [weak self] in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let image = UIImage(data: data) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self?.result = .success(image)

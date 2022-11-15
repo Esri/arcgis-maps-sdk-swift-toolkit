@@ -31,8 +31,8 @@ import Combine
 ***REMOVED***func testMakePersistent() async throws {
 ***REMOVED******REMOVED******REMOVED*** Make sure credential stores are restored.
 ***REMOVED******REMOVED***addTeardownBlock {
-***REMOVED******REMOVED******REMOVED***ArcGISRuntimeEnvironment.credentialStore = ArcGISCredentialStore()
-***REMOVED******REMOVED******REMOVED***await ArcGISRuntimeEnvironment.setNetworkCredentialStore(NetworkCredentialStore())
+***REMOVED******REMOVED******REMOVED***ArcGISEnvironment.credentialStore = ArcGISCredentialStore()
+***REMOVED******REMOVED******REMOVED***await ArcGISEnvironment.setNetworkCredentialStore(NetworkCredentialStore())
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** This tests that calling setupPersistentCredentialStorage tries to sync with the keychain.
@@ -44,7 +44,7 @@ import Combine
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func testClearCredentialStores() async {
-***REMOVED******REMOVED***await ArcGISRuntimeEnvironment.credentialStore.add(
+***REMOVED******REMOVED***await ArcGISEnvironment.credentialStore.add(
 ***REMOVED******REMOVED******REMOVED***.staticToken(
 ***REMOVED******REMOVED******REMOVED******REMOVED***url: URL(string: "www.arcgis.com")!,
 ***REMOVED******REMOVED******REMOVED******REMOVED***tokenInfo: .init(
@@ -57,12 +57,12 @@ import Combine
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let authenticator = Authenticator()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***var arcGISCreds = await ArcGISRuntimeEnvironment.credentialStore.credentials
+***REMOVED******REMOVED***var arcGISCreds = await ArcGISEnvironment.credentialStore.credentials
 ***REMOVED******REMOVED***XCTAssertEqual(arcGISCreds.count, 1)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***await authenticator.clearCredentialStores()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***arcGISCreds = await ArcGISRuntimeEnvironment.credentialStore.credentials
+***REMOVED******REMOVED***arcGISCreds = await ArcGISEnvironment.credentialStore.credentials
 ***REMOVED******REMOVED***XCTAssertTrue(arcGISCreds.isEmpty)
 ***REMOVED***
 ***REMOVED***
