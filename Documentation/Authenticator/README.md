@@ -25,7 +25,7 @@ The Authenticator view modifier will display an alert or a full screen modal vie
 ***REMOVED******REMOVED******REMOVED******REMOVED***oAuthConfigurations: [.arcgisDotCom]
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED*** Set the challenge handler to be the authenticator we just created.
-***REMOVED******REMOVED***ArcGISRuntimeEnvironment.authenticationChallengeHandler = authenticator
+***REMOVED******REMOVED***ArcGISEnvironment.authenticationChallengeHandler = authenticator
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***

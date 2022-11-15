@@ -48,23 +48,23 @@ public final class Authenticator: ObservableObject {
 ***REMOVED******REMOVED***access: ArcGIS.KeychainAccess,
 ***REMOVED******REMOVED***synchronizesWithiCloud: Bool = false
 ***REMOVED***) async throws {
-***REMOVED******REMOVED***let previousArcGISCredentialStore = ArcGISRuntimeEnvironment.credentialStore
+***REMOVED******REMOVED***let previousArcGISCredentialStore = ArcGISEnvironment.credentialStore
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Set a persistent ArcGIS credential store on the ArcGIS environment.
-***REMOVED******REMOVED***ArcGISRuntimeEnvironment.credentialStore = try await .makePersistent(
+***REMOVED******REMOVED***ArcGISEnvironment.credentialStore = try await .makePersistent(
 ***REMOVED******REMOVED******REMOVED***access: access,
 ***REMOVED******REMOVED******REMOVED***synchronizesWithiCloud: synchronizesWithiCloud
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Set a persistent network credential store on the ArcGIS environment.
-***REMOVED******REMOVED******REMOVED***await ArcGISRuntimeEnvironment.setNetworkCredentialStore(
+***REMOVED******REMOVED******REMOVED***await ArcGISEnvironment.setNetworkCredentialStore(
 ***REMOVED******REMOVED******REMOVED******REMOVED***try await .makePersistent(access: access, synchronizesWithiCloud: synchronizesWithiCloud)
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED*** catch {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** If making the shared network credential store persistent fails,
 ***REMOVED******REMOVED******REMOVED******REMOVED*** then restore the ArcGIS credential store.
-***REMOVED******REMOVED******REMOVED***ArcGISRuntimeEnvironment.credentialStore = previousArcGISCredentialStore
+***REMOVED******REMOVED******REMOVED***ArcGISEnvironment.credentialStore = previousArcGISCredentialStore
 ***REMOVED******REMOVED******REMOVED***throw error
 ***REMOVED***
 ***REMOVED***
@@ -74,10 +74,10 @@ public final class Authenticator: ObservableObject {
 ***REMOVED******REMOVED***/ right away.
 ***REMOVED***public func clearCredentialStores() async {
 ***REMOVED******REMOVED******REMOVED*** Clear ArcGIS Credentials.
-***REMOVED******REMOVED***await ArcGISRuntimeEnvironment.credentialStore.removeAll()
+***REMOVED******REMOVED***await ArcGISEnvironment.credentialStore.removeAll()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Clear network credentials.
-***REMOVED******REMOVED***await ArcGISRuntimeEnvironment.networkCredentialStore.removeAll()
+***REMOVED******REMOVED***await ArcGISEnvironment.networkCredentialStore.removeAll()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The current challenge.

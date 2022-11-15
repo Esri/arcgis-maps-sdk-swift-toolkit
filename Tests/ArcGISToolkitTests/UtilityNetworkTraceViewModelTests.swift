@@ -24,14 +24,14 @@ import XCTest
 ***REMOVED***private let passwordFor_sampleServer7: String? = nil
 ***REMOVED***
 ***REMOVED***override func setUpWithError() throws {
-***REMOVED******REMOVED***ArcGISRuntimeEnvironment.apiKey = apiKey
+***REMOVED******REMOVED***ArcGISEnvironment.apiKey = apiKey
 ***REMOVED******REMOVED***try XCTSkipIf(apiKey == .placeholder)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func tearDownWithError() async throws {
-***REMOVED******REMOVED***ArcGISRuntimeEnvironment.apiKey = nil
-***REMOVED******REMOVED***ArcGISRuntimeEnvironment.authenticationChallengeHandler = nil
-***REMOVED******REMOVED***await ArcGISRuntimeEnvironment.credentialStore.removeAll()
+***REMOVED******REMOVED***ArcGISEnvironment.apiKey = nil
+***REMOVED******REMOVED***ArcGISEnvironment.authenticationChallengeHandler = nil
+***REMOVED******REMOVED***await ArcGISEnvironment.credentialStore.removeAll()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func testCase_1_1() async throws {
@@ -54,7 +54,7 @@ import XCTest
 ***REMOVED***func testCase_1_2() async throws {
 ***REMOVED******REMOVED***try XCTSkipIf(passwordFor_sampleServer7 == nil)
 ***REMOVED******REMOVED***setChallengeHandler(ChallengeHandler(trustedHosts: [URL.sampleServer7.host!]))
-***REMOVED******REMOVED***await ArcGISRuntimeEnvironment.credentialStore.add(
+***REMOVED******REMOVED***await ArcGISEnvironment.credentialStore.add(
 ***REMOVED******REMOVED******REMOVED***try await tokenForSampleServer7
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
@@ -82,7 +82,7 @@ import XCTest
 ***REMOVED***func testCase_1_3() async throws {
 ***REMOVED******REMOVED***try XCTSkipIf(passwordFor_rtc_100_8 == nil)
 ***REMOVED******REMOVED***setChallengeHandler(ChallengeHandler(trustedHosts: [URL.rtc1008.host!]))
-***REMOVED******REMOVED***await ArcGISRuntimeEnvironment.credentialStore.add(
+***REMOVED******REMOVED***await ArcGISEnvironment.credentialStore.add(
 ***REMOVED******REMOVED******REMOVED***try await tokenForRTC1008
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
@@ -108,7 +108,7 @@ import XCTest
 ***REMOVED***func testCase_1_4() async throws {
 ***REMOVED******REMOVED***try XCTSkipIf(passwordFor_rt_server109 == nil)
 ***REMOVED******REMOVED***setChallengeHandler(ChallengeHandler(trustedHosts: [URL.rtServer109.host!]))
-***REMOVED******REMOVED***await ArcGISRuntimeEnvironment.credentialStore.add(
+***REMOVED******REMOVED***await ArcGISEnvironment.credentialStore.add(
 ***REMOVED******REMOVED******REMOVED***try await tokenForRTServer109
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
@@ -134,7 +134,7 @@ import XCTest
 ***REMOVED***func testCase_2_1() async throws {
 ***REMOVED******REMOVED***try XCTSkipIf(passwordFor_rt_server109 == nil)
 ***REMOVED******REMOVED***setChallengeHandler(ChallengeHandler(trustedHosts: [URL.rtServer109.host!]))
-***REMOVED******REMOVED***await ArcGISRuntimeEnvironment.credentialStore.add(
+***REMOVED******REMOVED***await ArcGISEnvironment.credentialStore.add(
 ***REMOVED******REMOVED******REMOVED***try await tokenForRTServer109
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
@@ -183,7 +183,7 @@ import XCTest
 ***REMOVED***func testCase_2_2() async throws {
 ***REMOVED******REMOVED***try XCTSkipIf(passwordFor_rt_server109 == nil)
 ***REMOVED******REMOVED***setChallengeHandler(ChallengeHandler(trustedHosts: [URL.rtServer109.host!]))
-***REMOVED******REMOVED***await ArcGISRuntimeEnvironment.credentialStore.add(
+***REMOVED******REMOVED***await ArcGISEnvironment.credentialStore.add(
 ***REMOVED******REMOVED******REMOVED***try await tokenForRTServer109
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
@@ -242,7 +242,7 @@ import XCTest
 ***REMOVED***func testCase_2_3() async throws {
 ***REMOVED******REMOVED***try XCTSkipIf(passwordFor_rt_server109 == nil)
 ***REMOVED******REMOVED***setChallengeHandler(ChallengeHandler(trustedHosts: [URL.rtServer109.host!]))
-***REMOVED******REMOVED***await ArcGISRuntimeEnvironment.credentialStore.add(
+***REMOVED******REMOVED***await ArcGISEnvironment.credentialStore.add(
 ***REMOVED******REMOVED******REMOVED***try await tokenForRTServer109
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
@@ -291,7 +291,7 @@ import XCTest
 ***REMOVED***func testCase_3_1() async throws {
 ***REMOVED******REMOVED***try XCTSkipIf(passwordFor_rt_server109 == nil)
 ***REMOVED******REMOVED***setChallengeHandler(ChallengeHandler(trustedHosts: [URL.rtServer109.host!]))
-***REMOVED******REMOVED***await ArcGISRuntimeEnvironment.credentialStore.add(
+***REMOVED******REMOVED***await ArcGISEnvironment.credentialStore.add(
 ***REMOVED******REMOVED******REMOVED***try await tokenForRTServer109
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
@@ -344,7 +344,7 @@ import XCTest
 ***REMOVED***func testCase_3_2() async throws {
 ***REMOVED******REMOVED***try XCTSkipIf(passwordFor_rt_server109 == nil)
 ***REMOVED******REMOVED***setChallengeHandler(ChallengeHandler(trustedHosts: [URL.rtServer109.host!]))
-***REMOVED******REMOVED***await ArcGISRuntimeEnvironment.credentialStore.add(
+***REMOVED******REMOVED***await ArcGISEnvironment.credentialStore.add(
 ***REMOVED******REMOVED******REMOVED***try await tokenForRTServer109
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
