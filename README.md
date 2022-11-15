@@ -1,12 +1,12 @@
-# ArcGIS Maps SDK Toolkit for Swift
+# ArcGIS Maps SDK for Swift Toolkit
 
 [![doc](https:***REMOVED***img.shields.io/badge/Doc-purple)](Documentation)  [![SPM](https:***REMOVED***img.shields.io/badge/SPM-compatible-4BC51D.svg?style=flat)](https:***REMOVED***github.com/apple/swift-package-manager/)
 
-The ArcGIS Maps SDK Toolkit for Swift contains components that will simplify your iOS app development.  It is built off of the new ArcGIS Maps SDK for Swift.
+The ArcGIS Maps SDK for Swift Toolkit contains components that will simplify your iOS app development.  It is built off of the new ArcGIS Maps SDK for Swift.
 
 To use Toolkit in your project:
 
-* **[Install with Swift Package Manager](#swift-package-manager)** - Add `https:***REMOVED***github.com/ArcGIS/arcgis-maps-sdk-toolkit-swift` as the package repository URL.
+* **[Install with Swift Package Manager](#swift-package-manager)** - Add `https:***REMOVED***github.com/ArcGIS/arcgis-maps-sdk-swift-toolkit` as the package repository URL.
 
 ## Toolkit Components
 
@@ -36,9 +36,8 @@ The *ArcGIS Maps SDK Toolkit for Swift* has a *Target SDK* version of *15.0*, me
  1. Open your project in Xcode
  2. Go to *File* > *Swift Packages* > *Add Package Dependency* option 
  3. Enter `https:***REMOVED***github.com/ArcGIS/arcgis-maps-sdk-toolkit-swift` as the package repository URL
- 4. ~Choose version 100.12.0 or a later version. Click Next. Only version 100.12.0 or newer supports Swift Package Manager.~
  
- Note: The Toolkit Swift Package adds the ArcGIS SDK Swift Package as a dependency so there's no need to add both separately. If you already have the ArcGIS SDK Swift Package, delete it and just add the Toolkit Swift Package. 
+ Note: The Toolkit Swift Package adds the ArcGIS Maps SDK for Swift Package as a dependency so there's no need to add both separately. If you already have the ArcGIS Maps SDK for Swift Package, delete it and just add the Toolkit Swift Package. 
 
  New to Swift Package Manager? Visit [swift.org/package-manager/](https:***REMOVED***swift.org/package-manager/).
 
@@ -55,7 +54,7 @@ Some of the toolkit components and examples utilize a set of ready-to-use ArcGIS
 
 ## Issues
 
-Find a bug or want to request a new feature?  Please let us know by [submitting an issue](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-toolkit-swift/issues/new).
+Find a bug or want to request a new feature?  Please let us know by [submitting an issue](https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/issues/new).
 
 ## Contributing
 
