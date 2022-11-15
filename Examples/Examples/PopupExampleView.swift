@@ -17,33 +17,11 @@
 
 struct PopupExampleView: View {
 ***REMOVED***static func makeMap() -> Map {
-***REMOVED******REMOVED***let portal = Portal(url: URL(string: "https:***REMOVED***runtimecoretest.maps.arcgis.com/")!, connection: .anonymous)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Popups example map. - 4 types: text, media image, media chart, fields list
-***REMOVED******REMOVED***let portalItem1 = PortalItem(portal: portal, id: Item.ID(rawValue: "10b79e7ad1944422b87f73da86dcf752")!)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Popups example map. - Arcade
-***REMOVED******REMOVED******REMOVED*** Test Case 3.5 Display popup with expression elements defining media [SDK]
-***REMOVED******REMOVED******REMOVED*** https:***REMOVED***runtimecoretest.maps.arcgis.com/home/item.html?id=34752f1d149f4b2db96f7a1637767173
-***REMOVED******REMOVED******REMOVED***let portalItem2 = PortalItem(portal: portal, id: Item.ID(rawValue: "34752f1d149f4b2db96f7a1637767173")!)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Test Case 3.2 Display popup with multiple fields elements [FT-SDK]
-***REMOVED******REMOVED******REMOVED*** https:***REMOVED***runtimecoretest.maps.arcgis.com/home/item.html?id=8d75d1dbdb5c4ad5849abb26b783987e  **Modified**
-***REMOVED******REMOVED******REMOVED***let portalItem3 = PortalItem(portal: portal, id: Item.ID(rawValue: "8d75d1dbdb5c4ad5849abb26b783987e")!)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Recreation Map with Attachments.
-***REMOVED******REMOVED******REMOVED*** https:***REMOVED***runtimecoretest.maps.arcgis.com/home/item.html?id=2afef81236db4eabbbae357e4f990039
-***REMOVED******REMOVED******REMOVED***let portalItem4 = PortalItem(portal: portal, id: Item.ID(rawValue: "2afef81236db4eabbbae357e4f990039")!)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Recreation Map with Attachments - New
-***REMOVED******REMOVED******REMOVED*** https:***REMOVED***runtimecoretest.maps.arcgis.com/apps/mapviewer/index.html?webmap=79c995874bea47d08aab5a2c85120e7f
-***REMOVED******REMOVED******REMOVED***let portalItem5 = PortalItem(portal: portal, id: Item.ID(rawValue: "79c995874bea47d08aab5a2c85120e7f")!)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Attachments
-***REMOVED******REMOVED******REMOVED*** https:***REMOVED***runtimecoretest.maps.arcgis.com/apps/mapviewer/index.html?webmap=9e3baeb5dcd4473aa13e0065d7794ca6
-***REMOVED******REMOVED******REMOVED***let portalItem6 = PortalItem(portal: portal, id: Item.ID(rawValue: "9e3baeb5dcd4473aa13e0065d7794ca6")!)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***return Map(item: portalItem1)
+***REMOVED******REMOVED***let portalItem = PortalItem(
+***REMOVED******REMOVED******REMOVED***portal: .arcGISOnline(connection: .anonymous),
+***REMOVED******REMOVED******REMOVED***id: Item.ID(rawValue: "67c72e385e6e46bc813e0b378696aba8")!
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***return Map(item: portalItem)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The map displayed in the map view.
