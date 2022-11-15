@@ -25,7 +25,7 @@ The Authenticator view modifier will display an alert or a full screen modal vie
             //oAuthConfigurations: [.arcgisDotCom]
         )
         // Set the challenge handler to be the authenticator we just created.
-        ArcGISRuntimeEnvironment.authenticationChallengeHandler = authenticator
+        ArcGISEnvironment.authenticationChallengeHandler = authenticator
     }
     
     var body: some SwiftUI.Scene {

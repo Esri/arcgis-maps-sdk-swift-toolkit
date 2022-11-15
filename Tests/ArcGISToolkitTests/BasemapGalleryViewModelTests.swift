@@ -27,12 +27,12 @@ import Combine
 @MainActor
 class BasemapGalleryViewModelTests: XCTestCase {
     override func setUp() async throws {
-        ArcGISRuntimeEnvironment.apiKey = APIKey("<#API Key#>")
-        try XCTSkipIf(ArcGISRuntimeEnvironment.apiKey == .placeholder)
+        ArcGISEnvironment.apiKey = APIKey("<#API Key#>")
+        try XCTSkipIf(ArcGISEnvironment.apiKey == .placeholder)
     }
     
     override func tearDown() {
-        ArcGISRuntimeEnvironment.apiKey = nil
+        ArcGISEnvironment.apiKey = nil
     }
     
     let defaultBasemapGalleryItems: [BasemapGalleryItem] = [

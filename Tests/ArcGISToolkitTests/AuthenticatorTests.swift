@@ -31,8 +31,8 @@ import Combine
     func testMakePersistent() async throws {
         // Make sure credential stores are restored.
         addTeardownBlock {
-            ArcGISRuntimeEnvironment.credentialStore = ArcGISCredentialStore()
-            await ArcGISRuntimeEnvironment.setNetworkCredentialStore(NetworkCredentialStore())
+            ArcGISEnvironment.credentialStore = ArcGISCredentialStore()
+            await ArcGISEnvironment.setNetworkCredentialStore(NetworkCredentialStore())
         }
         
         // This tests that calling setupPersistentCredentialStorage tries to sync with the keychain.
@@ -44,7 +44,7 @@ import Combine
     }
     
     func testClearCredentialStores() async {
-        await ArcGISRuntimeEnvironment.credentialStore.add(
+        await ArcGISEnvironment.credentialStore.add(
             .staticToken(
                 url: URL(string: "www.arcgis.com")!,
                 tokenInfo: .init(
@@ -57,12 +57,12 @@ import Combine
         
         let authenticator = Authenticator()
         
-        var arcGISCreds = await ArcGISRuntimeEnvironment.credentialStore.credentials
+        var arcGISCreds = await ArcGISEnvironment.credentialStore.credentials
         XCTAssertEqual(arcGISCreds.count, 1)
         
         await authenticator.clearCredentialStores()
         
-        arcGISCreds = await ArcGISRuntimeEnvironment.credentialStore.credentials
+        arcGISCreds = await ArcGISEnvironment.credentialStore.credentials
         XCTAssertTrue(arcGISCreds.isEmpty)
     }
 }

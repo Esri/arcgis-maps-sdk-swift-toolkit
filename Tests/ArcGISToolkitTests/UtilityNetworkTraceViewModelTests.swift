@@ -24,14 +24,14 @@ import XCTest
     private let passwordFor_sampleServer7: String? = nil
     
     override func setUpWithError() throws {
-        ArcGISRuntimeEnvironment.apiKey = apiKey
+        ArcGISEnvironment.apiKey = apiKey
         try XCTSkipIf(apiKey == .placeholder)
     }
     
     func tearDownWithError() async throws {
-        ArcGISRuntimeEnvironment.apiKey = nil
-        ArcGISRuntimeEnvironment.authenticationChallengeHandler = nil
-        await ArcGISRuntimeEnvironment.credentialStore.removeAll()
+        ArcGISEnvironment.apiKey = nil
+        ArcGISEnvironment.authenticationChallengeHandler = nil
+        await ArcGISEnvironment.credentialStore.removeAll()
     }
     
     func testCase_1_1() async throws {
@@ -54,7 +54,7 @@ import XCTest
     func testCase_1_2() async throws {
         try XCTSkipIf(passwordFor_sampleServer7 == nil)
         setChallengeHandler(ChallengeHandler(trustedHosts: [URL.sampleServer7.host!]))
-        await ArcGISRuntimeEnvironment.credentialStore.add(
+        await ArcGISEnvironment.credentialStore.add(
             try await tokenForSampleServer7
         )
         
@@ -82,7 +82,7 @@ import XCTest
     func testCase_1_3() async throws {
         try XCTSkipIf(passwordFor_rtc_100_8 == nil)
         setChallengeHandler(ChallengeHandler(trustedHosts: [URL.rtc1008.host!]))
-        await ArcGISRuntimeEnvironment.credentialStore.add(
+        await ArcGISEnvironment.credentialStore.add(
             try await tokenForRTC1008
         )
         
@@ -108,7 +108,7 @@ import XCTest
     func testCase_1_4() async throws {
         try XCTSkipIf(passwordFor_rt_server109 == nil)
         setChallengeHandler(ChallengeHandler(trustedHosts: [URL.rtServer109.host!]))
-        await ArcGISRuntimeEnvironment.credentialStore.add(
+        await ArcGISEnvironment.credentialStore.add(
             try await tokenForRTServer109
         )
         
@@ -134,7 +134,7 @@ import XCTest
     func testCase_2_1() async throws {
         try XCTSkipIf(passwordFor_rt_server109 == nil)
         setChallengeHandler(ChallengeHandler(trustedHosts: [URL.rtServer109.host!]))
-        await ArcGISRuntimeEnvironment.credentialStore.add(
+        await ArcGISEnvironment.credentialStore.add(
             try await tokenForRTServer109
         )
         
@@ -183,7 +183,7 @@ import XCTest
     func testCase_2_2() async throws {
         try XCTSkipIf(passwordFor_rt_server109 == nil)
         setChallengeHandler(ChallengeHandler(trustedHosts: [URL.rtServer109.host!]))
-        await ArcGISRuntimeEnvironment.credentialStore.add(
+        await ArcGISEnvironment.credentialStore.add(
             try await tokenForRTServer109
         )
         
@@ -242,7 +242,7 @@ import XCTest
     func testCase_2_3() async throws {
         try XCTSkipIf(passwordFor_rt_server109 == nil)
         setChallengeHandler(ChallengeHandler(trustedHosts: [URL.rtServer109.host!]))
-        await ArcGISRuntimeEnvironment.credentialStore.add(
+        await ArcGISEnvironment.credentialStore.add(
             try await tokenForRTServer109
         )
         
@@ -291,7 +291,7 @@ import XCTest
     func testCase_3_1() async throws {
         try XCTSkipIf(passwordFor_rt_server109 == nil)
         setChallengeHandler(ChallengeHandler(trustedHosts: [URL.rtServer109.host!]))
-        await ArcGISRuntimeEnvironment.credentialStore.add(
+        await ArcGISEnvironment.credentialStore.add(
             try await tokenForRTServer109
         )
         
@@ -344,7 +344,7 @@ import XCTest
     func testCase_3_2() async throws {
         try XCTSkipIf(passwordFor_rt_server109 == nil)
         setChallengeHandler(ChallengeHandler(trustedHosts: [URL.rtServer109.host!]))
-        await ArcGISRuntimeEnvironment.credentialStore.add(
+        await ArcGISEnvironment.credentialStore.add(
             try await tokenForRTServer109
         )
         
