@@ -105,6 +105,7 @@ public struct PopupView: View {
         }
     }
     
+    // TODO: figure out better way to handle v16 vs v15.
     @available(iOS 16.0, *)
     struct PopupViewNavigationStack: View {
         let popup: Popup
@@ -157,6 +158,7 @@ public struct PopupView: View {
                             NavigationLink(value: popup) {
                                 HStack {
                                     VStack(alignment: .leading) {
+                                        // TODO: need to display popupElement.relatedPopupDescription here.
                                         Text(popup.title)
                                             .foregroundColor(.primary)
                                     }
@@ -194,11 +196,7 @@ struct PopupViewInternal16Internal: View {
     private var evaluateExpressionsResult: Result<[PopupExpressionEvaluation], Error>?
     private var showCloseButton = false
     private var isPresented: Binding<Bool>?
-    
-    //    @available(iOS 16.0, *)
     private var navigationPath: Binding<NavigationPath>
-    //TODO:  add back button to title that will remove last path
-    //TODO:  move the "if #available" block below to a separate struct that can be ios 16; include navigationpath to that.
     
     /// Creates a `PopupView` with the given popup.
     /// - Parameters

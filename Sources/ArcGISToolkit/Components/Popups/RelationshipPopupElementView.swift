@@ -58,6 +58,9 @@ struct RelationshipPopupElementView: View {
     @ViewBuilder private var relatedFeaturesView: some View {
         if viewModel.relatedPopups.count > 0 {
             ForEach(viewModel.displayedPopups, id:\Popup.self) { popup in
+                // TODO: create custom NavigationLink (NavLink?) that handles
+                // TODO: all the commonalities between here and the "ShowAll"
+                // TODO: link below.
                 NavigationLink(value: popup) {
                     HStack {
                         VStack(alignment: .leading) {
@@ -80,6 +83,7 @@ struct RelationshipPopupElementView: View {
                 }
             }
             Divider()
+            // TODO: put back `popupElement.displayCount`.
             if viewModel.relatedPopups.count > 0/*popupElement.displayCount*/ {
                 NavigationLink(value: viewModel.relatedPopups) {
                     HStack {
@@ -116,6 +120,7 @@ private extension RelationshipPopupElement {
     }
 }
 
+// TODO: remove these once they are implemented in core.
 extension Popup: Equatable {
     public static func == (lhs: Popup, rhs: Popup) -> Bool {
         lhs === rhs
