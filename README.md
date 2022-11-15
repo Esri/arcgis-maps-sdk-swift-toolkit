@@ -33,9 +33,9 @@ The *ArcGIS Maps SDK for Swift Toolkit* has a *Target SDK* version of *15.0*, me
 ### Swift Package Manager
 
  1. Open your project in Xcode
- 2. Go to *File* > *Swift Packages* > *Add Package Dependency* option 
+ 2. Go to *File* > *Add Packages...* option
  3. Enter `https://github.com/ArcGIS/arcgis-maps-sdk-swift-toolkit` as the package repository URL
- 
+
  Note: The Toolkit Swift Package adds the ArcGIS Maps SDK for Swift Package as a dependency so there's no need to add both separately. If you already have the ArcGIS Maps SDK for Swift Package, delete it and just add the Toolkit Swift Package. 
 
  New to Swift Package Manager? Visit [swift.org/package-manager/](https://swift.org/package-manager/).
