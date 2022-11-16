@@ -2,7 +2,7 @@
 
 [![doc](https:***REMOVED***img.shields.io/badge/Doc-purple)](Documentation)  [![SPM](https:***REMOVED***img.shields.io/badge/SPM-compatible-4BC51D.svg?style=flat)](https:***REMOVED***github.com/apple/swift-package-manager/)
 
-The ArcGIS Maps SDK for Swift Toolkit contains components that will simplify your iOS app development.  It is built off of the new ArcGIS Maps SDK for Swift.
+The ArcGIS Maps SDK for Swift Toolkit contains components that will simplify your iOS app development. It is built off of the new ArcGIS Maps SDK for Swift.
 
 To use Toolkit in your project:
 
