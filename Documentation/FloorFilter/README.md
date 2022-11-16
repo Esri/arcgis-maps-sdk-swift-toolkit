@@ -2,7 +2,7 @@
 
 The `FloorFilter` component simplifies visualization of GIS data for a specific floor of a building in your application. It allows you to filter down the floor plan data displayed in your geo view to a site, a building in the site, or a floor in the building. 
 
-The ArcGIS Runtime SDK currently supports filtering a 2D floor aware map based on the sites, buildings, or levels in the map.
+The ArcGIS Maps SDK currently supports filtering a 2D floor aware map based on the sites, buildings, or levels in the map.
 
 ### Behavior:
 

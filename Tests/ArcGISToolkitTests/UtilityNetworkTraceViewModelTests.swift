@@ -16,7 +16,6 @@ import XCTest
 
 @testable import ArcGISToolkit
 
-/// - See Also: [Test Design](https://devtopia.esri.com/runtime/common-toolkit/blob/main/designs/UtilityNetworkTraceTool/UtilityNetworkTraceTool_Test_Design.md)
 @MainActor final class UtilityNetworkTraceViewModelTests: XCTestCase {
     private let apiKey = APIKey("<#API Key#>")
     private let passwordFor_rtc_100_8: String? = nil
