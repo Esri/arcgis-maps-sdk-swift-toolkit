@@ -39,14 +39,14 @@ class BasemapGalleryViewModelTests: XCTestCase {
         BasemapGalleryItem(
             basemap: Basemap(
                 item: PortalItem(
-                    url: URL(string: "https://runtime.maps.arcgis.com/home/item.html?id=46a87c20f09e4fc48fa3c38081e0cae6")!
+                    url: URL(string: "https://arcgis.com/home/item.html?id=46a87c20f09e4fc48fa3c38081e0cae6")!
                 )!
             )
         ),
         BasemapGalleryItem(
             basemap: Basemap(
                 item: PortalItem(
-                    url: URL(string: "https://runtime.maps.arcgis.com/home/item.html?id=f33a34de3a294590ab48f246e99958c9")!
+                    url: URL(string: "https://arcgis.com/home/item.html?id=f33a34de3a294590ab48f246e99958c9")!
                 )!
             )
         )
@@ -135,7 +135,7 @@ class BasemapGalleryViewModelTests: XCTestCase {
         let geoModel2 = Map(
             basemap: Basemap(
                 item: PortalItem(
-                    url: URL(string: "https://runtime.maps.arcgis.com/home/item.html?id=52bdc7ab7fb044d98add148764eaa30a")!
+                    url: URL(string: "https://arcgis.com/home/item.html?id=52bdc7ab7fb044d98add148764eaa30a")!
                 )!
             )
         )
@@ -147,7 +147,7 @@ class BasemapGalleryViewModelTests: XCTestCase {
         let geoModel3 = Scene(
             basemap: Basemap(
                 item: PortalItem(
-                    url: URL(string: "https://runtime.maps.arcgis.com/home/item.html?id=46a87c20f09e4fc48fa3c38081e0cae6")!
+                    url: URL(string: "https://arcgis.com/home/item.html?id=46a87c20f09e4fc48fa3c38081e0cae6")!
                 )!
             )
         )
@@ -159,7 +159,7 @@ class BasemapGalleryViewModelTests: XCTestCase {
         let geoModel4 = Scene(
             basemap: Basemap(
                 item: PortalItem(
-                    url: URL(string: "https://runtime.maps.arcgis.com/home/item.html?id=52bdc7ab7fb044d98add148764eaa30a")!
+                    url: URL(string: "https://arcgis.com/home/item.html?id=52bdc7ab7fb044d98add148764eaa30a")!
                 )!
             )
         )
@@ -183,7 +183,7 @@ class BasemapGalleryViewModelTests: XCTestCase {
         let validItem = BasemapGalleryItem(
             basemap: Basemap(
                 item: PortalItem(
-                    url: URL(string: "https://runtime.maps.arcgis.com/home/item.html?id=46a87c20f09e4fc48fa3c38081e0cae6")!
+                    url: URL(string: "https://arcgis.com/home/item.html?id=46a87c20f09e4fc48fa3c38081e0cae6")!
                 )!
             )
         )
@@ -207,7 +207,7 @@ class BasemapGalleryViewModelTests: XCTestCase {
         let invalidItem = BasemapGalleryItem(
             basemap: Basemap(
                 item: PortalItem(
-                    url: URL(string: "https://runtime.maps.arcgis.com/home/item.html?id=52bdc7ab7fb044d98add148764eaa30a")!
+                    url: URL(string: "https://arcgis.com/home/item.html?id=52bdc7ab7fb044d98add148764eaa30a")!
                 )!
             )
         )
