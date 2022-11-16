@@ -42,12 +42,12 @@ The *ArcGIS Maps SDK for Swift Toolkit* has a *Target SDK* version of *15.0*, me
 
 ## Configure API Key
 
-Some of the toolkit components and examples utilize a set of ready-to-use ArcGIS Platform services, including basemaps, and therefore require an API Key to be set in `ExamplesApp.swift`. Please see the [setup guide](https:***REMOVED***developers.arcgis.com/documentation/) for more information.
+Some of the toolkit components and examples utilize a set of ready-to-use ArcGIS Platform services, including basemaps, and therefore require an API Key to be set in `ExamplesApp.swift`. Please see the [setup guide](https:***REMOVED***developers.arcgis.com/swift/get-started/#3-access-services-and-content-with-an-api-key/) for more information.
 
 ## Additional Resources
 
-* [Developers guide documentation](https:***REMOVED***developers.arcgis.com/ios)
-* [Maps SDK API Reference](https:***REMOVED***developers.arcgis.com/ios/api-reference)
+* [Developers guide documentation](https:***REMOVED***developers.arcgis.com/swift)
+* [Maps SDK API Reference](https:***REMOVED***developers.arcgis.com/swift/api-reference/documentation/arcgis)
 * [Samples](https:***REMOVED***github.com/ArcGIS/arcgis-maps-sdk-swift-samples)
 * Got a question? Ask the community on our [forum](http:***REMOVED***geonet.esri.com/community/developers/native-app-developers/arcgis-runtime-sdk-for-ios)
 
