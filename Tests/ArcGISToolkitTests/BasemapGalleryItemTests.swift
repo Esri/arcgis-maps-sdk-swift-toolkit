@@ -70,7 +70,7 @@ final class BasemapGalleryItemTests: XCTestCase {
 ***REMOVED******REMOVED***let item3 = BasemapGalleryItem(
 ***REMOVED******REMOVED******REMOVED***basemap: Basemap(
 ***REMOVED******REMOVED******REMOVED******REMOVED***item: PortalItem(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***url: URL(string: "https:***REMOVED***runtime.maps.arcgis.com/home/item.html?id=46a87c20f09e4fc48fa3c38081e0cae6")!
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***url: URL(string: "https:***REMOVED***arcgis.com/home/item.html?id=46a87c20f09e4fc48fa3c38081e0cae6")!
 ***REMOVED******REMOVED******REMOVED******REMOVED***)!
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***)
@@ -89,7 +89,7 @@ final class BasemapGalleryItemTests: XCTestCase {
 ***REMOVED******REMOVED***let item = BasemapGalleryItem(
 ***REMOVED******REMOVED******REMOVED***basemap: Basemap(
 ***REMOVED******REMOVED******REMOVED******REMOVED***item: PortalItem(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***url: URL(string: "https:***REMOVED***runtime.maps.arcgis.com/home/item.html?id=4a3922d6d15f405d8c2b7a448a7fbad2")!
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***url: URL(string: "https:***REMOVED***arcgis.com/home/item.html?id=4a3922d6d15f405d8c2b7a448a7fbad2")!
 ***REMOVED******REMOVED******REMOVED******REMOVED***)!
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***)
@@ -146,7 +146,7 @@ final class BasemapGalleryItemTests: XCTestCase {
 ***REMOVED******REMOVED***let otherItem = BasemapGalleryItem(
 ***REMOVED******REMOVED******REMOVED***basemap: Basemap(
 ***REMOVED******REMOVED******REMOVED******REMOVED***item: PortalItem(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***url: URL(string: "https:***REMOVED***runtime.maps.arcgis.com/home/item.html?id=52bdc7ab7fb044d98add148764eaa30a")!
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***url: URL(string: "https:***REMOVED***arcgis.com/home/item.html?id=52bdc7ab7fb044d98add148764eaa30a")!
 ***REMOVED******REMOVED******REMOVED******REMOVED***)!
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***)
