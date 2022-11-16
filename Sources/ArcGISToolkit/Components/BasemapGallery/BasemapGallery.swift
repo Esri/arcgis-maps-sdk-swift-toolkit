@@ -215,7 +215,7 @@ extension AlertItem {
 ***REMOVED***init(loadBasemapError: Error) {
 ***REMOVED******REMOVED***self.init(
 ***REMOVED******REMOVED******REMOVED***title: "Error loading basemap.",
-***REMOVED******REMOVED******REMOVED***message: "\((loadBasemapError as? RuntimeError)?.failureReason ?? "The basemap failed to load for an unknown reason.")"
+***REMOVED******REMOVED******REMOVED***message: "\((loadBasemapError as? ArcGISError)?.failureReason ?? "The basemap failed to load for an unknown reason.")"
 ***REMOVED******REMOVED***)
 ***REMOVED***
 
