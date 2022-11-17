@@ -1,6 +1,6 @@
 # BasemapGallery
 
-The `BasemapGallery` tool displays a collection of basemaps from either ArcGIS Online, a user-defined portal, or an array of `BasemapGalleryItem`s. When a new basemap is selected from the `BasemapGallery` and the optional `BasemapGalleryViewModel.geoModel` property is set, then the basemap of the `geoModel` is replaced with the basemap in the gallery.
+The `BasemapGallery` component displays a collection of basemaps from either ArcGIS Online, a user-defined portal, or an array of `BasemapGalleryItem`s. When a new basemap is selected from the `BasemapGallery` and the optional `BasemapGalleryViewModel.geoModel` property is set, then the basemap of the `geoModel` is replaced with the basemap in the gallery.
 
 ## BasemapGallery Behavior:
 
