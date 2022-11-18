@@ -6,9 +6,6 @@ The `BasemapGallery` displays a collection of basemaps from ArcGIS Online, a use
 |:--:|:--:|
 |![image](https://user-images.githubusercontent.com/3998072/202764289-9fce4772-b75b-4726-8020-cd2757bf8c8b.png)|![image](https://user-images.githubusercontent.com/3998072/202764359-07fc6265-723f-490b-a412-25350e7b3c76.png)|
 
-
-
-
 > **NOTE**: BasemapGallery uses metered ArcGIS basemaps by default, so you will need to configure an API key. See [Security and authentication documentation](https://developers.arcgis.com/documentation/mapping-apis-and-services/security/#api-keys) for more information.
 
 ## Features:
@@ -48,7 +45,6 @@ BasemapGallery:
 
 - `style(_ newStyle: Style)` - The `Style` of the `BasemapGallery`, used to specify how the list of basemaps is displayed (list, grid, or automatic depending on display width).
 
-
 `BasemapGallery` has the following helper class and initializer:
 
 ```swift
@@ -71,7 +67,6 @@ public init(
 )
 
 ```
-
 
 ## Behavior:
 
