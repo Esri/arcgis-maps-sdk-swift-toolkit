@@ -36,11 +36,11 @@ public struct BasemapGallery: View {
     /// - Remark: If `items` is empty, ArcGIS Online's developer basemaps will
     /// be loaded and added to `items`.
     /// - Parameters:
-    ///   - geoModel: A geo model.
     ///   - items: A list of pre-defined base maps to display.
+    ///   - geoModel: A geo model.
     public init(
-        geoModel: GeoModel? = nil,
-        items: [BasemapGalleryItem] = []
+        items: [BasemapGalleryItem] = [],
+        geoModel: GeoModel? = nil
     ) {
         viewModel = BasemapGalleryViewModel(geoModel: geoModel, items: items)
     }
@@ -48,11 +48,11 @@ public struct BasemapGallery: View {
     /// Creates a `BasemapGallery` with the given geo model and portal.
     /// The portal will be used to retrieve basemaps.
     /// - Parameters:
-    ///   - geoModel: A geo model.
     ///   - portal: The portal to use to load basemaps.
-    init(
-        _ geoModel: GeoModel? = nil,
-        portal: Portal
+    ///   - geoModel: A geo model.
+    public init(
+        portal: Portal,
+        geoModel: GeoModel? = nil
     ) {
         viewModel = BasemapGalleryViewModel(geoModel, portal: portal)
     }
