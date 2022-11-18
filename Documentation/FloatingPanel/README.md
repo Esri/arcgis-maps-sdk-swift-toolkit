@@ -6,6 +6,47 @@ Floating panels are non-modal and primarily simple containers that clients will 
 
 The floating panel allows for interaction with background content, unlike native sheets or popovers.
 
+The following images are of a simple list of numbers in a floating panel.
+
+|iPhone|iPad|
+|:--:|:--:|
+|![image](https://user-images.githubusercontent.com/3998072/202795901-b86d6d26-3572-4c88-8f6e-84473ce57002.png)|![image](https://user-images.githubusercontent.com/3998072/202796009-92e3b5c3-d88b-4124-8d9f-bad6df445f02.png)|
+
+## Features:
+
+FloatingPanel:
+
+- Can display any custom content.
+- Can be resized by dragging the panel's handle.
+- Has three predefined height settings, called "detents", that the panel will snap to when the user drags and releases the handle.
+- Can be configured with a custom detent, specifying either a fraction of the maximum height or a fixed value.
+- Can be configured with a custom background color, selected detent, horizontal alignment, and maximum width.
+- Is displayed using the `.floatingPanel` view modifier.
+
+## Key properties
+
+`FloatingPanel` has the following modifer:
+
+```swift
+    /// - Parameters:
+    ///   - backgroundColor: The background color of the floating panel.
+    ///   - selectedDetent: A binding to the currently selected detent.
+    ///   - horizontalAlignment: The horizontal alignment of the floating panel.
+    ///   - isPresented: A binding to a Boolean value that determines whether the view is presented.
+    ///   - maxWidth: The maximum width of the floating panel.
+    ///   - content: A closure that returns the content of the floating panel.
+    /// - Returns: A dynamic view with a presentation style similar to that of a sheet in compact
+    /// environments and a popover otherwise.
+    func floatingPanel<Content>(
+        backgroundColor: Color = Color(uiColor: .systemBackground),
+        selectedDetent: Binding<FloatingPanelDetent> = .constant(.half),
+        horizontalAlignment: HorizontalAlignment = .trailing,
+        isPresented: Binding<Bool> = .constant(true),
+        maxWidth: CGFloat = 400,
+        _ content: @escaping () -> Content
+    ) -> some View where Content: View
+```
+
 ### Behavior:
 
 Content in a floating panel can be resized using a “handle” on the bottom (for regular-width environments) or on the top (compact-width environments).
