@@ -34,20 +34,45 @@ BasemapGallery:
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - portal: The portal to use to load basemaps.
 ***REMOVED******REMOVED***/   - geoModel: A geo model.
-***REMOVED***internal init(portal: Portal, geoModel: GeoModel? = nil)
+***REMOVED***public init(portal: Portal, geoModel: GeoModel? = nil)
 ```
 
 `BasemapGallery` has the following modifer:
 
 - `style(_ newStyle: Style)` - The `Style` of the `BasemapGallery`, used to specify how the list of basemaps is displayed (list, grid, or automatic depending on display width).
 
+
+`BasemapGallery` has the following helper class and initializer:
+
+```swift
+***REMOVED***/  The `BasemapGalleryItem` encompasses an element in a `BasemapGallery`.
+public class BasemapGalleryItem : ObservableObject
+
+***REMOVED***/ Creates a `BasemapGalleryItem`.
+***REMOVED***/ - Parameters:
+***REMOVED***/   - basemap: The `Basemap` represented by the item.
+***REMOVED***/   - name: The item name. If `nil`, `Basemap.name` is used, if available.
+***REMOVED***/   - description: The item description. If `nil`, `Basemap.Item.description`
+***REMOVED***/   is used, if available.
+***REMOVED***/   - thumbnail: The thumbnail used to represent the item. If `nil`,
+***REMOVED***/   `Basemap.Item.thumbnail` is used, if available.
+public init(
+***REMOVED***basemap: Basemap,
+***REMOVED***name: String? = nil,
+***REMOVED***description: String? = nil,
+***REMOVED***thumbnail: UIImage? = nil
+)
+
+```
+
+
 ## Behavior:
 
-Selecting a basemap with a spatial reference that does not match that of the geo model will display an error. It will also display an error if a provided base map cannot be loaded.
+Selecting a basemap with a spatial reference that does not match that of the geo model will display an error. It will also display an error if a provided base map cannot be loaded. If a `GeoModel` is provided to the `BasemapGallery`, selecting an item in the gallery will set that basemap on the geo model.
 
 ## Usage
 
-### Basic usage for overlaying a `BasemapGallery` with a geo model.
+### Basic usage for displaying a `BasemapGallery`.
 
 ```swift
 @StateObject var map = Map(basemapStyle: .arcGISImagery)
