@@ -2,6 +2,13 @@
 
 The `BasemapGallery` displays a collection of basemaps from ArcGIS Online, a user-defined portal, or an array of `BasemapGalleryItem`s. When a new basemap is selected from the `BasemapGallery` and the optional `BasemapGalleryViewModel.geoModel` property is set, the basemap of the `geoModel` is replaced with the basemap in the gallery.
 
+|iPhone|iPad|
+|:--:|:--:|
+|![image](https://user-images.githubusercontent.com/3998072/202764289-9fce4772-b75b-4726-8020-cd2757bf8c8b.png)|![image](https://user-images.githubusercontent.com/3998072/202764359-07fc6265-723f-490b-a412-25350e7b3c76.png)|
+
+
+
+
 > **NOTE**: BasemapGallery uses metered ArcGIS basemaps by default, so you will need to configure an API key. See [Security and authentication documentation](https://developers.arcgis.com/documentation/mapping-apis-and-services/security/#api-keys) for more information.
 
 ## Features:
