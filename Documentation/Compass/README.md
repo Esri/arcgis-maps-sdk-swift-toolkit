@@ -4,9 +4,7 @@ The Compass (alias North arrow) displays the current viewpoint rotation of a Map
 
 The ArcGIS Maps SDK for Swift currently supports rotating MapViews and SceneViews interactively with a 2-finger gesture and while the map/scene will snap to north when rotating using gestures, the Compass provides an easier way. The Compass Toolkit component will appear when the map is rotated and, when tapped, re-orientates the map back to north and hides the compass icon (note that the MapView auto-snaps back to north when it's within a threshold of north, and in that case the compass also auto hides).
 
-|Compass|
-|:--:|:--:|
-|![image](https:***REMOVED***user-images.githubusercontent.com/3998072/202810369-a0b82778-77d4-404e-bebf-1a84841fbb1b.png)|![image](https:***REMOVED***user-images.githubusercontent.com/3998072/202764359-07fc6265-723f-490b-a412-25350e7b3c76.png)|
+![image](https:***REMOVED***user-images.githubusercontent.com/3998072/202810369-a0b82778-77d4-404e-bebf-1a84841fbb1b.png)
 
 ## Features:
 
