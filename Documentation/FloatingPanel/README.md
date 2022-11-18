@@ -20,12 +20,11 @@ FloatingPanel:
 - Can be resized by dragging the panel's handle.
 - Has three predefined height settings, called "detents", that the panel will snap to when the user drags and releases the handle.
 - Can be configured with a custom detent, specifying either a fraction of the maximum height or a fixed value.
-- Can be configured with a custom background color, selected detent, horizontal alignment, and maximum width.
 - Is displayed using the `.floatingPanel` view modifier.
 
 ## Key properties
 
-`FloatingPanel` has the following modifer:
+`FloatingPanel` exposes the following view modifer:
 
 ```swift
     /// - Parameters:
