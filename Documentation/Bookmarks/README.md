@@ -4,6 +4,10 @@ The `Bookmarks` component will display a list of bookmarks and allow the user to
 
 `Bookmarks` can be configured to handle automated bookmark selection (zooming the map/scene to the bookmark’s viewpoint) by passing in a `Viewpoint` binding or the client can handle bookmark selection changes manually using the `.onSelectionChanged(perform:)` modifier.
 
+|iPhone|iPad|
+|:--:|:--:|
+|![image](https://user-images.githubusercontent.com/3998072/202765630-894bee44-a0c2-4435-86f4-c80c4cc4a0b9.png)|![image](https://user-images.githubusercontent.com/3998072/202765729-91c52555-4677-4c2b-b62b-215e6c3790a6.png)|
+
 ## Features:
 
 Bookmarks:
