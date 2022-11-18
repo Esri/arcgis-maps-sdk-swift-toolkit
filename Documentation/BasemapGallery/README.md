@@ -34,20 +34,45 @@ BasemapGallery:
     /// - Parameters:
     ///   - portal: The portal to use to load basemaps.
     ///   - geoModel: A geo model.
-    internal init(portal: Portal, geoModel: GeoModel? = nil)
+    public init(portal: Portal, geoModel: GeoModel? = nil)
 ```
 
 `BasemapGallery` has the following modifer:
 
 - `style(_ newStyle: Style)` - The `Style` of the `BasemapGallery`, used to specify how the list of basemaps is displayed (list, grid, or automatic depending on display width).
 
+
+`BasemapGallery` has the following helper class and initializer:
+
+```swift
+///  The `BasemapGalleryItem` encompasses an element in a `BasemapGallery`.
+public class BasemapGalleryItem : ObservableObject
+
+/// Creates a `BasemapGalleryItem`.
+/// - Parameters:
+///   - basemap: The `Basemap` represented by the item.
+///   - name: The item name. If `nil`, `Basemap.name` is used, if available.
+///   - description: The item description. If `nil`, `Basemap.Item.description`
+///   is used, if available.
+///   - thumbnail: The thumbnail used to represent the item. If `nil`,
+///   `Basemap.Item.thumbnail` is used, if available.
+public init(
+    basemap: Basemap,
+    name: String? = nil,
+    description: String? = nil,
+    thumbnail: UIImage? = nil
+)
+
+```
+
+
 ## Behavior:
 
-Selecting a basemap with a spatial reference that does not match that of the geo model will display an error. It will also display an error if a provided base map cannot be loaded.
+Selecting a basemap with a spatial reference that does not match that of the geo model will display an error. It will also display an error if a provided base map cannot be loaded. If a `GeoModel` is provided to the `BasemapGallery`, selecting an item in the gallery will set that basemap on the geo model.
 
 ## Usage
 
-### Basic usage for overlaying a `BasemapGallery` with a geo model.
+### Basic usage for displaying a `BasemapGallery`.
 
 ```swift
 @StateObject var map = Map(basemapStyle: .arcGISImagery)
