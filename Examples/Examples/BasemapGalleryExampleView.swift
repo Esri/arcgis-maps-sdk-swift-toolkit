@@ -35,7 +35,7 @@ struct BasemapGalleryExampleView: View {
         MapView(map: map, viewpoint: initialViewpoint)
             .overlay(alignment: .topTrailing) {
                 if showBasemapGallery {
-                    BasemapGallery(geoModel: map, items: basemaps)
+                    BasemapGallery(items: basemaps, geoModel: map)
                         .style(.automatic())
                         .esriBorder()
                         .padding()
