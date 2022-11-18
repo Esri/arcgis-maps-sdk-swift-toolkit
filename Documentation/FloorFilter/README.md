@@ -8,6 +8,79 @@ The ArcGIS Maps SDK currently supports filtering a 2D floor aware map based on t
 |:--:|:--:|
 |![image](https:***REMOVED***user-images.githubusercontent.com/3998072/202811733-dcd640e9-3b27-43a8-8bec-fd9aeb6798c7.png)|![image](https:***REMOVED***user-images.githubusercontent.com/3998072/202811772-bf6009e7-82ec-459f-86ae-6651f519b2ef.png)|
 
+## Features:
+
+- Automatically hides the floor browsing view when the associated map or scene is not floor-aware.
+- Selects the facility in view automatically (can be configured through the `AutomaticSelectionMode`).
+- Shows the selected facility's levels in proper vertical order.
+- Filters the map/scene content to show the selected level.
+- Allows browsing the full floor-aware hierarchy of sites, facilities, and levels.
+- Shows the ground floor of all facilities when there is no active selection.
+- Updates the visibility of floor levels across all facilities (e.g. if you are looking at floor 3 in building A, floor 3 will be shown in neighboring buildings).
+- Adjusts layout and presentation to work well regardless of positioning - left/right and top/bottom.
+- Keeps the selected facility visible in the list while the selection is changing in response to map navigation.
+
+## Key properties
+
+`FloorFilter` has the following initializer:
+
+```swift
+***REMOVED******REMOVED***/ Creates a `FloorFilter`.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - floorManager: The floor manager used by the `FloorFilter`.
+***REMOVED******REMOVED***/   - alignment: Determines the display configuration of Floor Filter elements.
+***REMOVED******REMOVED***/   - automaticSelectionMode: The selection behavior of the floor filter.
+***REMOVED******REMOVED***/   - viewpoint: Viewpoint updated when the selected site or facility changes.
+***REMOVED******REMOVED***/   - isNavigating: A Boolean value indicating whether the map is currently being navigated.
+***REMOVED***public init(
+***REMOVED******REMOVED***floorManager: FloorManager,
+***REMOVED******REMOVED***alignment: Alignment,
+***REMOVED******REMOVED***automaticSelectionMode: FloorFilterAutomaticSelectionMode = .always,
+***REMOVED******REMOVED***viewpoint: Binding<Viewpoint?> = .constant(nil),
+***REMOVED******REMOVED***isNavigating: Binding<Bool>
+***REMOVED***)
+```
+
+`FloorFilter` has the associated enum:
+
+```swift
+***REMOVED***/ Defines automatic selection behavior.
+public enum FloorFilterAutomaticSelectionMode {
+***REMOVED******REMOVED***/ Always update selection based on the current viewpoint; clear the selection when the user
+***REMOVED******REMOVED***/ navigates away.
+***REMOVED***case always
+***REMOVED******REMOVED***/ Only update the selection when there is a new site or facility in the current viewpoint; don't clear
+***REMOVED******REMOVED***/ selection when the user navigates away.
+***REMOVED***case alwaysNotClearing
+***REMOVED******REMOVED***/ Never update selection based on the map or scene view's current viewpoint.
+***REMOVED***case never
+***REMOVED***
+```
+
+## Behavior:
+
+Selecting a basemap with a spatial reference that does not match that of the geo model will display an error. It will also display an error if a provided base map cannot be loaded. If a `GeoModel` is provided to the `BasemapGallery`, selecting an item in the gallery will set that basemap on the geo model.
+
+## Usage
+
+### Basic usage for displaying a `FloorFilter`.
+
+```swift
+@StateObject var map = Map(basemapStyle: .arcGISImagery)
+
+var body: some View {
+***REMOVED***MapView(map: map)
+***REMOVED******REMOVED***.overlay(alignment: .topTrailing) {
+***REMOVED******REMOVED******REMOVED***BasemapGallery(geoModel: map)
+***REMOVED******REMOVED******REMOVED******REMOVED***.style(.automatic())
+***REMOVED******REMOVED******REMOVED******REMOVED***.padding()
+***REMOVED***
+***REMOVED***
+```
+
+
+
+
 ### Behavior:
 
 When the Site button is tapped, a prompt opens so the user can select a site and then a facility. After selecting a site and facility, a list of levels is displayed either above or below the site button.
