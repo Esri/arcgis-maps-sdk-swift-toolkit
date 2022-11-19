@@ -270,15 +270,6 @@ extension UtilityNetworkTraceViewModelTests {
 ***REMOVED******REMOVED***return map
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Creates and loads a map at the provided URL.
-***REMOVED******REMOVED***/ - Parameter url: The address of the map.
-***REMOVED******REMOVED***/ - Returns: A loaded map.
-***REMOVED***func makeMap(url: URL) async throws -> Map {
-***REMOVED******REMOVED***let map = try XCTUnwrap(Map(url: url))
-***REMOVED******REMOVED***try await map.load()
-***REMOVED******REMOVED***return map
-***REMOVED***
-***REMOVED***
 ***REMOVED***func makeMapWithPortalItem() async throws -> Map {
 ***REMOVED******REMOVED***let portalItem = PortalItem(
 ***REMOVED******REMOVED******REMOVED***portal: .arcGISOnline(connection: .anonymous),
@@ -287,15 +278,6 @@ extension UtilityNetworkTraceViewModelTests {
 ***REMOVED******REMOVED***let map = Map(item: portalItem)
 ***REMOVED******REMOVED***try await map.load()
 ***REMOVED******REMOVED***return map
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ Creates and loads a utility network at the provided URL.
-***REMOVED******REMOVED***/ - Parameter url: The address of the utility network.
-***REMOVED******REMOVED***/ - Returns: A loaded utility network.
-***REMOVED***func makeNetwork(url: URL) async throws -> UtilityNetwork {
-***REMOVED******REMOVED***let network = UtilityNetwork(url: url)
-***REMOVED******REMOVED***try await network.load()
-***REMOVED******REMOVED***return network
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var tokenForSampleServer7: ArcGISCredential {
