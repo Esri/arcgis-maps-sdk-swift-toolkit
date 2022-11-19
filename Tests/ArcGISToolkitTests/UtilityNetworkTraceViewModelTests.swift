@@ -270,15 +270,6 @@ extension UtilityNetworkTraceViewModelTests {
         return map
     }
     
-    /// Creates and loads a map at the provided URL.
-    /// - Parameter url: The address of the map.
-    /// - Returns: A loaded map.
-    func makeMap(url: URL) async throws -> Map {
-        let map = try XCTUnwrap(Map(url: url))
-        try await map.load()
-        return map
-    }
-    
     func makeMapWithPortalItem() async throws -> Map {
         let portalItem = PortalItem(
             portal: .arcGISOnline(connection: .anonymous),
@@ -287,15 +278,6 @@ extension UtilityNetworkTraceViewModelTests {
         let map = Map(item: portalItem)
         try await map.load()
         return map
-    }
-    
-    /// Creates and loads a utility network at the provided URL.
-    /// - Parameter url: The address of the utility network.
-    /// - Returns: A loaded utility network.
-    func makeNetwork(url: URL) async throws -> UtilityNetwork {
-        let network = UtilityNetwork(url: url)
-        try await network.load()
-        return network
     }
     
     var tokenForSampleServer7: ArcGISCredential {
