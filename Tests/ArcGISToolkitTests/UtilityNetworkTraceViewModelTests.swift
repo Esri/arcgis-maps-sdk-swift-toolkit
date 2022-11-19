@@ -18,13 +18,15 @@ import XCTest
 
 @MainActor final class UtilityNetworkTraceViewModelTests: XCTestCase {
     private let apiKey = APIKey("<#API Key#>")
-    private let passwordFor_rtc_100_8: String? = nil
-    private let passwordFor_rt_server109: String? = nil
-    private let passwordFor_sampleServer7: String? = nil
     
-    override func setUpWithError() throws {
+    override func setUp() async throws {
         ArcGISEnvironment.apiKey = apiKey
         try XCTSkipIf(apiKey == .placeholder)
+        
+        setChallengeHandler(ChallengeHandler(trustedHosts: [URL.sampleServer7.host!]))
+        await ArcGISEnvironment.credentialStore.add(
+            try await tokenForSampleServer7
+        )
     }
     
     func tearDownWithError() async throws {
@@ -33,6 +35,7 @@ import XCTest
         await ArcGISEnvironment.credentialStore.removeAll()
     }
     
+    /// Test `UtilityNetworkTraceViewModel` on a map that does not contain a utility network.
     func testCase_1_1() async throws {
         let viewModel = UtilityNetworkTraceViewModel(
             map: try await makeMap(),
@@ -50,68 +53,9 @@ import XCTest
         )
     }
     
-    func testCase_1_2() async throws {
-        try XCTSkipIf(passwordFor_sampleServer7 == nil)
-        setChallengeHandler(ChallengeHandler(trustedHosts: [URL.sampleServer7.host!]))
-        await ArcGISEnvironment.credentialStore.add(
-            try await tokenForSampleServer7
-        )
-        
-        let map = try await makeMap()
-        map.addUtilityNetwork(
-            try await makeNetwork(url: .sampleServer7)
-        )
-        let viewModel = UtilityNetworkTraceViewModel(
-            map: map,
-            graphicsOverlay: GraphicsOverlay(),
-            autoLoad: false
-        )
-        
-        await viewModel.load()
-        
-        XCTAssertNotNil(viewModel.network)
-        XCTAssertFalse(viewModel.canRunTrace)
-        XCTAssertTrue(viewModel.configurations.isEmpty)
-        XCTAssertEqual(
-            viewModel.userAlert?.description,
-            "No trace types found."
-        )
-    }
-    
-    func testCase_1_3() async throws {
-        try XCTSkipIf(passwordFor_rtc_100_8 == nil)
-        setChallengeHandler(ChallengeHandler(trustedHosts: [URL.rtc1008.host!]))
-        await ArcGISEnvironment.credentialStore.add(
-            try await tokenForRTC1008
-        )
-        
-        let map = try XCTUnwrap(Map(url: .rtc1008))
-        
-        let viewModel = UtilityNetworkTraceViewModel(
-            map: map,
-            graphicsOverlay: GraphicsOverlay(),
-            autoLoad: false
-        )
-        
-        await viewModel.load()
-        
-        XCTAssertNotNil(viewModel.network)
-        XCTAssertFalse(viewModel.canRunTrace)
-        XCTAssertTrue(viewModel.configurations.isEmpty)
-        XCTAssertEqual(
-            viewModel.userAlert?.description,
-            "No trace types found."
-        )
-    }
-    
+    /// Test `UtilityNetworkTraceViewModel` on a map that contains a utility network.
     func testCase_1_4() async throws {
-        try XCTSkipIf(passwordFor_rt_server109 == nil)
-        setChallengeHandler(ChallengeHandler(trustedHosts: [URL.rtServer109.host!]))
-        await ArcGISEnvironment.credentialStore.add(
-            try await tokenForRTServer109
-        )
-        
-        let map = Map(url: .rtServer109)!
+        let map = try await makeMapWithPortalItem()
         
         let viewModel = UtilityNetworkTraceViewModel(
             map: map,
@@ -123,28 +67,21 @@ import XCTest
         
         XCTAssertNotNil(viewModel.network)
         XCTAssertFalse(viewModel.canRunTrace)
-        XCTAssertFalse(viewModel.configurations.isEmpty)
+        XCTAssertEqual(viewModel.configurations.count, 5)
         XCTAssertEqual(
             viewModel.network?.name,
-            "L23UtilityNetwork_Utility_Network Utility Network"
+            "NapervilleElectric Utility Network"
         )
     }
     
+    /// Test initializing a `UtilityNetworkTraceViewModel` with starting points.
     func testCase_2_1() async throws {
-        try XCTSkipIf(passwordFor_rt_server109 == nil)
-        setChallengeHandler(ChallengeHandler(trustedHosts: [URL.rtServer109.host!]))
-        await ArcGISEnvironment.credentialStore.add(
-            try await tokenForRTServer109
-        )
+        let map = try await makeMapWithPortalItem()
         
-        let map = try await makeMap(url: .rtServer109)
-        
-        let layer = try XCTUnwrap(map.operationalLayers.first {
-            $0.name == "ElecDist Device"
-        } as? FeatureLayer)
+        let layer = try XCTUnwrap(map.operationalLayers[0].subLayerContents[4] as? FeatureLayer)
         
         let parameters = QueryParameters()
-        parameters.addObjectID(171)
+        parameters.addObjectID(3726)
         
         let result = try await layer.featureTable?.queryFeatures(using: parameters)
         let features = try XCTUnwrap(result?.features().compactMap { $0 })
@@ -171,29 +108,23 @@ import XCTest
         XCTAssertEqual(startingPoints.count, 1)
         XCTAssertEqual(
             startingPoints.first?.utilityElement?.networkSource.name,
-            "ElecDist Device"
+            "Electric Distribution Line"
         )
         XCTAssertEqual(
             startingPoints.first?.utilityElement?.assetGroup.name,
-            "ServicePoint"
+            "Low Voltage"
         )
     }
     
+    /// Test modifying the terminal configuration of a utility element that supports terminal
+    /// configuration.
     func testCase_2_2() async throws {
-        try XCTSkipIf(passwordFor_rt_server109 == nil)
-        setChallengeHandler(ChallengeHandler(trustedHosts: [URL.rtServer109.host!]))
-        await ArcGISEnvironment.credentialStore.add(
-            try await tokenForRTServer109
-        )
+        let map = try await makeMapWithPortalItem()
         
-        let map = try await makeMap(url: .rtServer109)
-        
-        let layer = try XCTUnwrap(map.operationalLayers.first {
-            $0.name == "ElecDist Device"
-        } as? FeatureLayer)
+        let layer = try XCTUnwrap(map.operationalLayers[0].subLayerContents[7] as? FeatureLayer)
         
         let parameters = QueryParameters()
-        parameters.addObjectID(463)
+        parameters.addObjectID(3174)
         
         let result = try await layer.featureTable?.queryFeatures(using: parameters)
         let features = try XCTUnwrap(result?.features().compactMap { $0 })
@@ -222,7 +153,7 @@ import XCTest
         let terminal = try XCTUnwrap(terminals.first { $0.name == "Low" })
         
         let configuration = try XCTUnwrap( viewModel.configurations.first {
-            $0.name == "ConnectedWithResultTypes"
+            $0.name == "Upstream Trace"
         })
         
         viewModel.setTerminalConfigurationFor(startingPoint: viewModel.pendingTrace.startingPoints.first!, to: terminal)
@@ -238,21 +169,14 @@ import XCTest
         XCTAssertFalse(viewModel.canRunTrace)
     }
     
+    /// Test modifying the fractional starting point along an edge based utility element.
     func testCase_2_3() async throws {
-        try XCTSkipIf(passwordFor_rt_server109 == nil)
-        setChallengeHandler(ChallengeHandler(trustedHosts: [URL.rtServer109.host!]))
-        await ArcGISEnvironment.credentialStore.add(
-            try await tokenForRTServer109
-        )
+        let map = try await makeMapWithPortalItem()
         
-        let map = try await makeMap(url: .rtServer109)
-        
-        let layer = try XCTUnwrap(map.operationalLayers.first {
-            $0.name == "ElecDist Line"
-        } as? FeatureLayer)
+        let layer = try XCTUnwrap(map.operationalLayers[0].subLayerContents[4] as? FeatureLayer)
         
         let parameters = QueryParameters()
-        parameters.addObjectID(177)
+        parameters.addObjectID(1748)
         
         let result = try await layer.featureTable?.queryFeatures(using: parameters)
         let features = try XCTUnwrap(result?.features().compactMap { $0 })
@@ -287,21 +211,14 @@ import XCTest
         )
     }
     
+    // Test an upstream trace and validate a function result.
     func testCase_3_1() async throws {
-        try XCTSkipIf(passwordFor_rt_server109 == nil)
-        setChallengeHandler(ChallengeHandler(trustedHosts: [URL.rtServer109.host!]))
-        await ArcGISEnvironment.credentialStore.add(
-            try await tokenForRTServer109
-        )
+        let map = try await makeMapWithPortalItem()
         
-        let map = try await makeMap(url: .rtServer109)
-        
-        let layer = try XCTUnwrap(map.operationalLayers.first {
-            $0.name == "ElecDist Device"
-        } as? FeatureLayer)
+        let layer = try XCTUnwrap(map.operationalLayers[0].subLayerContents[7] as? FeatureLayer)
         
         let parameters = QueryParameters()
-        parameters.addObjectID(171)
+        parameters.addObjectID(2247)
         
         let result = try await layer.featureTable?.queryFeatures(using: parameters)
         let features = try XCTUnwrap(result?.features().compactMap { $0 })
@@ -322,7 +239,7 @@ import XCTest
         await viewModel.load()
         
         let configuration = try XCTUnwrap( viewModel.configurations.first {
-            $0.name == "ConnectedWithFunction"
+            $0.name == "Upstream Trace"
         })
         
         viewModel.setPendingTrace(configuration: configuration)
@@ -331,62 +248,14 @@ import XCTest
         XCTAssertTrue(viewModel.canRunTrace)
         
         let success = await viewModel.trace()
-        let functionOutput = try XCTUnwrap(viewModel.completedTraces.first?.functionOutputs.first)
+        let functionOutput = try XCTUnwrap(viewModel.completedTraces.first?.functionOutputs[1])
         
         XCTAssertTrue(success)
         XCTAssertFalse(viewModel.canRunTrace)
-        XCTAssertEqual(viewModel.completedTraces.first?.functionOutputs.count, 1)
+        XCTAssertEqual(viewModel.completedTraces.first?.functionOutputs.count, 6)
         XCTAssertEqual(functionOutput.function.functionType, .add)
-        XCTAssertEqual(functionOutput.function.networkAttribute.name, "Shape length")
-    }
-    
-    func testCase_3_2() async throws {
-        try XCTSkipIf(passwordFor_rt_server109 == nil)
-        setChallengeHandler(ChallengeHandler(trustedHosts: [URL.rtServer109.host!]))
-        await ArcGISEnvironment.credentialStore.add(
-            try await tokenForRTServer109
-        )
-        
-        let map = try await makeMap(url: .rtServer109)
-        
-        let layer = try XCTUnwrap(map.operationalLayers.first {
-            $0.name == "ElecDist Device"
-        } as? FeatureLayer)
-        
-        let parameters = QueryParameters()
-        parameters.addObjectID(171)
-        
-        let result = try await layer.featureTable?.queryFeatures(using: parameters)
-        let features = try XCTUnwrap(result?.features().compactMap { $0 })
-        
-        XCTAssertEqual(features.count, 1)
-        
-        let feature = try XCTUnwrap(features.first)
-        
-        let viewModel = UtilityNetworkTraceViewModel(
-            map: map,
-            graphicsOverlay: GraphicsOverlay(),
-            startingPoints: [
-                UtilityNetworkTraceStartingPoint(geoElement: feature)
-            ],
-            autoLoad: false
-        )
-        
-        await viewModel.load()
-        
-        XCTAssertEqual(
-            viewModel.network?.name,
-            "L23UtilityNetwork_Utility_Network Utility Network"
-        )
-        
-        let configuration = try XCTUnwrap( viewModel.configurations.first {
-            $0.name == "ConnectedWithFunction"
-        })
-        viewModel.setPendingTrace(configuration: configuration)
-        
-        let success = await viewModel.trace()
-        
-        XCTAssertTrue(success)
+        XCTAssertEqual(functionOutput.function.networkAttribute.name, "Service Load")
+        XCTAssertEqual(functionOutput.result as? Double, 600.0)
     }
 }
 
@@ -410,6 +279,16 @@ extension UtilityNetworkTraceViewModelTests {
         return map
     }
     
+    func makeMapWithPortalItem() async throws -> Map {
+        let portalItem = PortalItem(
+            portal: .arcGISOnline(connection: .anonymous),
+            id: Item.ID(rawValue: "471eb0bf37074b1fbb972b1da70fb310")!
+        )
+        let map = Map(item: portalItem)
+        try await map.load()
+        return map
+    }
+    
     /// Creates and loads a utility network at the provided URL.
     /// - Parameter url: The address of the utility network.
     /// - Returns: A loaded utility network.
@@ -419,41 +298,17 @@ extension UtilityNetworkTraceViewModelTests {
         return network
     }
     
-    var tokenForRTC1008: ArcGISCredential {
-        get async throws {
-            try await ArcGISCredential.token(
-                url: URL.rtc1008,
-                username: "publisher1",
-                password: passwordFor_rtc_100_8!
-            )
-        }
-    }
-    
-    var tokenForRTServer109: ArcGISCredential {
-        get async throws {
-            try await ArcGISCredential.token(
-                url: URL.rtServer109,
-                username: "publisher1",
-                password: passwordFor_rt_server109!
-            )
-        }
-    }
-    
     var tokenForSampleServer7: ArcGISCredential {
         get async throws {
             try await ArcGISCredential.token(
                 url: URL.sampleServer7,
                 username: "viewer01",
-                password: passwordFor_sampleServer7!
+                password: "I68VGU^nMurF"
             )
         }
     }
 }
 
 private extension URL {
-    static let rtServer109 = URL(string: "https://rt-server109.esri.com/portal/home/item.html?id=54fa9aadf6c645d39f006cf279147204")!
-    
-    static let rtc1008 = URL(string: "http://rtc-100-8.esri.com/portal/home/webmap/viewer.html?webmap=78f993b89bad4ba0a8a22ce2e0bcfbd0")!
-    
-    static let sampleServer7 = URL(string: "https://sampleserver7.arcgisonline.com/server/rest/services/UtilityNetwork/NapervilleElectric/FeatureServer")!
+    static let sampleServer7 = URL(string: "https://sampleserver7.arcgisonline.com/portal/sharing/rest")!
 }
