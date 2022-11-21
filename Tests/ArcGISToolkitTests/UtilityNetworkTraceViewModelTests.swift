@@ -280,6 +280,8 @@ extension UtilityNetworkTraceViewModelTests {
 ***REMOVED******REMOVED***return map
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ A token to a sample public utility network dataset as previously published in the
+***REMOVED******REMOVED***/ [Javascript sample](https:***REMOVED***developers.arcgis.com/javascript/latest/sample-code/widgets-untrace/).
 ***REMOVED***var tokenForSampleServer7: ArcGISCredential {
 ***REMOVED******REMOVED***get async throws {
 ***REMOVED******REMOVED******REMOVED***try await ArcGISCredential.token(
