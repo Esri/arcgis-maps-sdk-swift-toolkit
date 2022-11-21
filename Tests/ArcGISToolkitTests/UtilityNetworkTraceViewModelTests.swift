@@ -280,6 +280,8 @@ extension UtilityNetworkTraceViewModelTests {
         return map
     }
     
+    /// A token to a sample public utility network dataset as previously published in the
+    /// [Javascript sample](https://developers.arcgis.com/javascript/latest/sample-code/widgets-untrace/).
     var tokenForSampleServer7: ArcGISCredential {
         get async throws {
             try await ArcGISCredential.token(
