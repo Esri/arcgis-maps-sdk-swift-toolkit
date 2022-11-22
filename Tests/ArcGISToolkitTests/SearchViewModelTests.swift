@@ -17,9 +17,6 @@ import ArcGIS
 
 @MainActor
 class SearchViewModelTests: XCTestCase {
-    //
-    // Test Design: https://devtopia.esri.com/runtime/common-toolkit/blob/master/designs/Search/Search_Test_Design.md
-    //
     func testAcceptSuggestion() async throws {
         let model = SearchViewModel(sources: [LocatorSearchSource()])
         model.currentQuery = "Magers & Quinn Booksellers"

@@ -54,7 +54,7 @@
 		E47ABE472652FE0C00FD2FE3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E47ABE4A2652FE0C00FD2FE3 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		E47ABE4C2652FE0C00FD2FE3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		E47ABE622653005F00FD2FE3 /* arcgis-runtime-toolkit-swift */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "arcgis-runtime-toolkit-swift"; path = ..; sourceTree = "<group>"; };
+		E47ABE622653005F00FD2FE3 /* arcgis-maps-sdk-swift-toolit */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "arcgis-maps-sdk-swift-toolit"; path = ..; sourceTree = "<group>"; };
 		E48A733D2658227000F5C118 /* Examples.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Examples.swift; sourceTree = "<group>"; };
 		E48A733E2658227100F5C118 /* ExampleList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExampleList.swift; sourceTree = "<group>"; };
 		E48A733F2658227100F5C118 /* Examples.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Examples.entitlements; sourceTree = "<group>"; };
@@ -98,7 +98,7 @@
 		E47ABE372652FE0900FD2FE3 = {
 			isa = PBXGroup;
 			children = (
-				E47ABE622653005F00FD2FE3 /* arcgis-runtime-toolkit-swift */,
+				E47ABE622653005F00FD2FE3 /* arcgis-maps-sdk-swift-toolit */,
 				E47ABE562652FE7F00FD2FE3 /* Examples */,
 				E47ABE422652FE0900FD2FE3 /* ExamplesApp */,
 				E47ABE412652FE0900FD2FE3 /* Products */,

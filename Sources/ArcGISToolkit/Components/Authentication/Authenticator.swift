@@ -48,23 +48,23 @@ public final class Authenticator: ObservableObject {
         access: ArcGIS.KeychainAccess,
         synchronizesWithiCloud: Bool = false
     ) async throws {
-        let previousArcGISCredentialStore = ArcGISRuntimeEnvironment.credentialStore
+        let previousArcGISCredentialStore = ArcGISEnvironment.credentialStore
         
         // Set a persistent ArcGIS credential store on the ArcGIS environment.
-        ArcGISRuntimeEnvironment.credentialStore = try await .makePersistent(
+        ArcGISEnvironment.credentialStore = try await .makePersistent(
             access: access,
             synchronizesWithiCloud: synchronizesWithiCloud
         )
         
         do {
             // Set a persistent network credential store on the ArcGIS environment.
-            await ArcGISRuntimeEnvironment.setNetworkCredentialStore(
+            await ArcGISEnvironment.setNetworkCredentialStore(
                 try await .makePersistent(access: access, synchronizesWithiCloud: synchronizesWithiCloud)
             )
         } catch {
             // If making the shared network credential store persistent fails,
             // then restore the ArcGIS credential store.
-            ArcGISRuntimeEnvironment.credentialStore = previousArcGISCredentialStore
+            ArcGISEnvironment.credentialStore = previousArcGISCredentialStore
             throw error
         }
     }
@@ -74,10 +74,10 @@ public final class Authenticator: ObservableObject {
     /// right away.
     public func clearCredentialStores() async {
         // Clear ArcGIS Credentials.
-        await ArcGISRuntimeEnvironment.credentialStore.removeAll()
+        await ArcGISEnvironment.credentialStore.removeAll()
         
         // Clear network credentials.
-        await ArcGISRuntimeEnvironment.networkCredentialStore.removeAll()
+        await ArcGISEnvironment.networkCredentialStore.removeAll()
     }
     
     /// The current challenge.
