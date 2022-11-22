@@ -41,7 +41,7 @@ BasemapGallery:
 ***REMOVED***public init(portal: Portal, geoModel: GeoModel? = nil)
 ```
 
-`BasemapGallery` has the following modifier:
+`BasemapGallery` has the following instance method:
 
 - `style(_ newStyle: Style)` - The `Style` of the `BasemapGallery`, used to specify how the list of basemaps is displayed (list, grid, or automatic depending on display width).
 
