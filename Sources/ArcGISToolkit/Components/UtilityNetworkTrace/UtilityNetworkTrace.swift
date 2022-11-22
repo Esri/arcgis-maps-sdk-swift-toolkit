@@ -181,10 +181,10 @@ public struct UtilityNetworkTrace: View {
     
     /// Displays the list of available networks.
     @ViewBuilder private var networksList: some View {
-        ForEach(viewModel.networks, id: \.self) { network in
+        ForEach(viewModel.networks, id: \.name) { network in
             Text(network.name)
                 .lineLimit(1)
-                .listRowBackground(network == viewModel.network ? Color.secondary.opacity(0.5) : nil)
+                .listRowBackground(network.name == viewModel.network?.name ? Color.secondary.opacity(0.5) : nil)
                 .onTapGesture {
                     viewModel.setNetwork(network)
                     currentActivity = .creatingTrace(nil)
