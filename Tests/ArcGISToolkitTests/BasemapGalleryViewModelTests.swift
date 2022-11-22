@@ -27,26 +27,26 @@ import Combine
 @MainActor
 class BasemapGalleryViewModelTests: XCTestCase {
     override func setUp() async throws {
-        ArcGISRuntimeEnvironment.apiKey = APIKey("<#API Key#>")
-        try XCTSkipIf(ArcGISRuntimeEnvironment.apiKey == .placeholder)
+        ArcGISEnvironment.apiKey = APIKey("<#API Key#>")
+        try XCTSkipIf(ArcGISEnvironment.apiKey == .placeholder)
     }
     
     override func tearDown() {
-        ArcGISRuntimeEnvironment.apiKey = nil
+        ArcGISEnvironment.apiKey = nil
     }
     
     let defaultBasemapGalleryItems: [BasemapGalleryItem] = [
         BasemapGalleryItem(
             basemap: Basemap(
                 item: PortalItem(
-                    url: URL(string: "https://runtime.maps.arcgis.com/home/item.html?id=46a87c20f09e4fc48fa3c38081e0cae6")!
+                    url: URL(string: "https://arcgis.com/home/item.html?id=46a87c20f09e4fc48fa3c38081e0cae6")!
                 )!
             )
         ),
         BasemapGalleryItem(
             basemap: Basemap(
                 item: PortalItem(
-                    url: URL(string: "https://runtime.maps.arcgis.com/home/item.html?id=f33a34de3a294590ab48f246e99958c9")!
+                    url: URL(string: "https://arcgis.com/home/item.html?id=f33a34de3a294590ab48f246e99958c9")!
                 )!
             )
         )
@@ -81,7 +81,7 @@ class BasemapGalleryViewModelTests: XCTestCase {
         // Portal.
         //
         let geoModel2 = Map(basemapStyle: .arcGISLightGray)
-        let portal = Portal.arcGISOnline(requiresLogin: false)
+        let portal = Portal.arcGISOnline(connection: .anonymous)
         let portalViewModel = BasemapGalleryViewModel(geoModel2, portal: portal)
         
         XCTAssertIdentical(portalViewModel.geoModel, geoModel2)
@@ -135,7 +135,7 @@ class BasemapGalleryViewModelTests: XCTestCase {
         let geoModel2 = Map(
             basemap: Basemap(
                 item: PortalItem(
-                    url: URL(string: "https://runtime.maps.arcgis.com/home/item.html?id=52bdc7ab7fb044d98add148764eaa30a")!
+                    url: URL(string: "https://arcgis.com/home/item.html?id=52bdc7ab7fb044d98add148764eaa30a")!
                 )!
             )
         )
@@ -147,7 +147,7 @@ class BasemapGalleryViewModelTests: XCTestCase {
         let geoModel3 = Scene(
             basemap: Basemap(
                 item: PortalItem(
-                    url: URL(string: "https://runtime.maps.arcgis.com/home/item.html?id=46a87c20f09e4fc48fa3c38081e0cae6")!
+                    url: URL(string: "https://arcgis.com/home/item.html?id=46a87c20f09e4fc48fa3c38081e0cae6")!
                 )!
             )
         )
@@ -159,7 +159,7 @@ class BasemapGalleryViewModelTests: XCTestCase {
         let geoModel4 = Scene(
             basemap: Basemap(
                 item: PortalItem(
-                    url: URL(string: "https://runtime.maps.arcgis.com/home/item.html?id=52bdc7ab7fb044d98add148764eaa30a")!
+                    url: URL(string: "https://arcgis.com/home/item.html?id=52bdc7ab7fb044d98add148764eaa30a")!
                 )!
             )
         )
@@ -183,7 +183,7 @@ class BasemapGalleryViewModelTests: XCTestCase {
         let validItem = BasemapGalleryItem(
             basemap: Basemap(
                 item: PortalItem(
-                    url: URL(string: "https://runtime.maps.arcgis.com/home/item.html?id=46a87c20f09e4fc48fa3c38081e0cae6")!
+                    url: URL(string: "https://arcgis.com/home/item.html?id=46a87c20f09e4fc48fa3c38081e0cae6")!
                 )!
             )
         )
@@ -207,7 +207,7 @@ class BasemapGalleryViewModelTests: XCTestCase {
         let invalidItem = BasemapGalleryItem(
             basemap: Basemap(
                 item: PortalItem(
-                    url: URL(string: "https://runtime.maps.arcgis.com/home/item.html?id=52bdc7ab7fb044d98add148764eaa30a")!
+                    url: URL(string: "https://arcgis.com/home/item.html?id=52bdc7ab7fb044d98add148764eaa30a")!
                 )!
             )
         )
@@ -243,7 +243,7 @@ class BasemapGalleryViewModelTests: XCTestCase {
         
         // Set a portal on the model. This should clear out the existing
         // array of items and load basemaps from the portal.
-        viewModel.portal = Portal.arcGISOnline(requiresLogin: false)
+        viewModel.portal = Portal.arcGISOnline(connection: .anonymous)
         
         // The items should be cleared prior to loading those from the portal.
         let items2 = try await viewModel.$items.first

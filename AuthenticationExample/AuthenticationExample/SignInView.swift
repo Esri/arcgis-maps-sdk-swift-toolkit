@@ -61,10 +61,10 @@ struct SignInView: View {
                 return
             }
             
-            if let arcGISCredential = await ArcGISRuntimeEnvironment.credentialStore.credential(for: .portal) {
+            if let arcGISCredential = await ArcGISEnvironment.credentialStore.credential(for: .portal) {
                 lastSignedInUser = arcGISCredential.username ?? ""
             } else {
-                let networkCredentials = await ArcGISRuntimeEnvironment.networkCredentialStore.credentials(forHost: URL.portal.host!)
+                let networkCredentials = await ArcGISEnvironment.networkCredentialStore.credentials(forHost: URL.portal.host!)
                 if !networkCredentials.isEmpty {
                     lastSignedInUser = networkCredentials.compactMap { credential in
                         switch credential {
@@ -117,7 +117,7 @@ struct SignInView: View {
         error = nil
         Task {
             do {
-                let portal = Portal(url: .portal, requiresLogin: true)
+                let portal = Portal(url: .portal, connection: .authenticated)
                 try await portal.load()
                 self.portal = portal
             } catch {

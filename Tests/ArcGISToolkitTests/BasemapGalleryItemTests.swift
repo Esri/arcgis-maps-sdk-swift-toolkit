@@ -27,12 +27,12 @@ import Combine
 @MainActor
 final class BasemapGalleryItemTests: XCTestCase {
     override func setUp() async throws {
-        ArcGISRuntimeEnvironment.apiKey = APIKey("<#API Key#>")
-        try XCTSkipIf(ArcGISRuntimeEnvironment.apiKey == .placeholder)
+        ArcGISEnvironment.apiKey = APIKey("<#API Key#>")
+        try XCTSkipIf(ArcGISEnvironment.apiKey == .placeholder)
     }
     
     override func tearDown() {
-        ArcGISRuntimeEnvironment.apiKey = nil
+        ArcGISEnvironment.apiKey = nil
     }
     
     func testInit() async throws {
@@ -70,7 +70,7 @@ final class BasemapGalleryItemTests: XCTestCase {
         let item3 = BasemapGalleryItem(
             basemap: Basemap(
                 item: PortalItem(
-                    url: URL(string: "https://runtime.maps.arcgis.com/home/item.html?id=46a87c20f09e4fc48fa3c38081e0cae6")!
+                    url: URL(string: "https://arcgis.com/home/item.html?id=46a87c20f09e4fc48fa3c38081e0cae6")!
                 )!
             )
         )
@@ -89,7 +89,7 @@ final class BasemapGalleryItemTests: XCTestCase {
         let item = BasemapGalleryItem(
             basemap: Basemap(
                 item: PortalItem(
-                    url: URL(string: "https://runtime.maps.arcgis.com/home/item.html?id=4a3922d6d15f405d8c2b7a448a7fbad2")!
+                    url: URL(string: "https://arcgis.com/home/item.html?id=4a3922d6d15f405d8c2b7a448a7fbad2")!
                 )!
             )
         )
@@ -146,7 +146,7 @@ final class BasemapGalleryItemTests: XCTestCase {
         let otherItem = BasemapGalleryItem(
             basemap: Basemap(
                 item: PortalItem(
-                    url: URL(string: "https://runtime.maps.arcgis.com/home/item.html?id=52bdc7ab7fb044d98add148764eaa30a")!
+                    url: URL(string: "https://arcgis.com/home/item.html?id=52bdc7ab7fb044d98add148764eaa30a")!
                 )!
             )
         )

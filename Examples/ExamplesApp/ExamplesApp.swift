@@ -25,12 +25,12 @@ struct ExamplesApp: App {
     init() {
         #warning("Require user to sign in with an ArcGIS identity or set your developer API key")
         /*
-         Use of Esri location services, including basemaps and geocoding, requires either an ArcGIS identity or an API Key. For more information see https://links.esri.com/arcgis-runtime-security-auth.
+         Use of Esri location services, including basemaps and geocoding, requires either an ArcGIS identity or an API Key. For more information see https://links.esri.com/arcgis-maps-sdk-security-auth.
          1) ArcGIS identity: An ArcGIS named user account that is a member of an organization in ArcGIS Online or ArcGIS Enterprise.
          2) API key: A permanent key that gives your application access to Esri location services. Create a new API key or access existing API keys from your ArcGIS for Developers dashboard (https://links.esri.com/arcgis-api-keys).
-         Production deployment of applications built with ArcGIS Runtime requires you to license ArcGIS Runtime functionality. For more information see https://links.esri.com/arcgis-runtime-license-and-deploy.
+         Production deployment of applications built with ArcGIS Maps SDK requires you to license ArcGIS Maps SDK functionality. For more information see https://links.esri.com/arcgis-maps-sdk-license-and-deploy.
          */
         // Uncomment the following line to access Esri location services using an API key.
-//         ArcGISRuntimeEnvironment.apiKey = APIKey("<#API Key#>")
+//         ArcGISEnvironment.apiKey = APIKey("<#API Key#>")
     }
 }

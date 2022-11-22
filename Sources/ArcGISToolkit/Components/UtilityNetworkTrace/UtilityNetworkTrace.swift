@@ -167,24 +167,24 @@ public struct UtilityNetworkTrace: View {
         if viewModel.configurations.isEmpty {
             Text("No configurations available")
         } else {
-            ForEach(viewModel.configurations) { configuration in
+            ForEach(viewModel.configurations, id: \.name) { configuration in
                 Button {
                     viewModel.setPendingTrace(configuration: configuration)
                     currentActivity = .creatingTrace(nil)
                 } label: {
                     Text(configuration.name)
                 }
-                .listRowBackground(configuration == viewModel.pendingTrace.configuration ? Color.secondary.opacity(0.5) : nil)
+                .listRowBackground(configuration.name == viewModel.pendingTrace.configuration?.name ? Color.secondary.opacity(0.5) : nil)
             }
         }
     }
     
     /// Displays the list of available networks.
     @ViewBuilder private var networksList: some View {
-        ForEach(viewModel.networks, id: \.self) { network in
+        ForEach(viewModel.networks, id: \.name) { network in
             Text(network.name)
                 .lineLimit(1)
-                .listRowBackground(network == viewModel.network ? Color.secondary.opacity(0.5) : nil)
+                .listRowBackground(network.name == viewModel.network?.name ? Color.secondary.opacity(0.5) : nil)
                 .onTapGesture {
                     viewModel.setNetwork(network)
                     currentActivity = .creatingTrace(nil)

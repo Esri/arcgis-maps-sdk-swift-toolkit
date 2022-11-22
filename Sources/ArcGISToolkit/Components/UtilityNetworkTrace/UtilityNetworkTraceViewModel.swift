@@ -260,7 +260,10 @@ import SwiftUI
     func setPendingTrace(configuration: UtilityNamedTraceConfiguration) {
         pendingTrace.configuration = configuration
         if !pendingTrace.userDidSpecifyName {
-            pendingTrace.name = "\(configuration.name) \((completedTraces.filter({ $0.configuration == configuration }).count + 1).description)"
+            // If the user didn't specify a custom trace name, generate one consisting of trace
+            // configuration name followed by the number of completed traces in memory performed with
+            // that configuration.
+            pendingTrace.name = "\(configuration.name) \((completedTraces.filter({ $0.configuration?.name == configuration.name }).count + 1).description)"
         }
     }
     

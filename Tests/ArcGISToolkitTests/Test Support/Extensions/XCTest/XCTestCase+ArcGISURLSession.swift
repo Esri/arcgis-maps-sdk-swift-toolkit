@@ -21,8 +21,8 @@ import ArcGIS
 
 extension XCTestCase {
     func setChallengeHandler(_ challengeHandler: AuthenticationChallengeHandler) {
-        let previous = ArcGISRuntimeEnvironment.authenticationChallengeHandler
-        ArcGISRuntimeEnvironment.authenticationChallengeHandler = challengeHandler
-        addTeardownBlock { ArcGISRuntimeEnvironment.authenticationChallengeHandler = previous }
+        let previous = ArcGISEnvironment.authenticationChallengeHandler
+        ArcGISEnvironment.authenticationChallengeHandler = challengeHandler
+        addTeardownBlock { ArcGISEnvironment.authenticationChallengeHandler = previous }
     }
 }
