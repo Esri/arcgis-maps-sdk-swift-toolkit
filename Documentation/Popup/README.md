@@ -55,7 +55,7 @@ The popup view can display an optional "close" button, allowing the user to dism
 
 ## Usage
 
-### Basic usage for displaying a `FloorFilter`.
+### Basic usage for displaying a `PopupView`.
 
 ```swift
 static func makeMap() -> Map {
@@ -124,4 +124,4 @@ var body: some View {
 }
 ```
 
-To see it in action, try out the [Examples](../../Examples) and refer to [FloorFilterExampleView.swift](../../Examples/Examples/FloorFilterExampleView.swift) in the project.
+To see it in action, try out the [Examples](../../Examples) and refer to [PopupExampleView.swift](../../Examples/Examples/PopupExampleView.swift) in the project.
