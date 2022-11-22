@@ -2,13 +2,9 @@
 
 `OverviewMap` is a small, secondary `MapView` (sometimes called an inset map), that can be overlaid on an existing `GeoView` (`MapView` or `SceneView`). `OverviewMap` shows a representation of the current `visibleArea` (for a `MapView`) or `viewpoint` (for a `SceneView`).
 
-MapView
-
-![OverviewMap - MapView](./OverviewMap_MapView.png)
-
-SceneView
-
-![OverviewMap - SceneView](./OverviewMap_SceneView.png)
+|MapView|SceneView
+|:--:|:--:|
+|![OverviewMap - MapView](./OverviewMap_MapView.png)|![OverviewMap - SceneView](./OverviewMap_SceneView.png)|
 
 
 > **NOTE**: OverviewMap uses metered ArcGIS basemaps by default, so you will need to configure an API key. See [Security and authentication documentation](https://developers.arcgis.com/documentation/mapping-apis-and-services/security/#api-keys) for more information.
@@ -23,7 +19,7 @@ OverviewMap:
 
 ## Key properties
 
-`OverviewMap` has the following modifiers:
+`OverviewMap` has the following instance methods:
 
 - `map(_ map: Map)` - The `Map` displayed in the `OverviewMap`. For example, you can use `map(_:)` to display a custom base map in the `OverviewMap`.
 - `scaleFactor(_ scaleFactor: Double)` - The scale of the `OverviewMap` relative to the scale of the connected `GeoView`. The `OverviewMap` will display at the a scale equal to: `viewpoint.targetScale` x `scaleFactor`. The default is `25`.
