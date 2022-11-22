@@ -1,6 +1,6 @@
 #  FloorFilter
 
-The `FloorFilter` component simplifies visualization of GIS data for a specific floor of a building in your application. It allows you to filter down the floor plan data displayed in your geo view to a site, a building in the site, or a floor in the building. 
+The `FloorFilter` component simplifies visualization of GIS data for a specific floor of a building in your application. It allows you to filter the floor plan data displayed in your geo view to view a site, a building in the site, or a floor in the building. 
 
 The ArcGIS Maps SDK currently supports filtering a 2D floor aware map based on the sites, buildings, or levels in the map.
 
@@ -59,35 +59,75 @@ public enum FloorFilterAutomaticSelectionMode {
 
 ## Behavior:
 
-Selecting a basemap with a spatial reference that does not match that of the geo model will display an error. It will also display an error if a provided base map cannot be loaded. If a `GeoModel` is provided to the `BasemapGallery`, selecting an item in the gallery will set that basemap on the geo model.
+When the Site button is tapped, a prompt opens so the user can select a site and then a facility. After selecting a site and facility, a list of levels is displayed. The list of sites and facilities can be dynamically filtered using the search bar.
 
 ## Usage
 
 ### Basic usage for displaying a `FloorFilter`.
 
 ```swift
-@StateObject var map = Map(basemapStyle: .arcGISImagery)
+***REMOVED***/ Make a map from a portal item.
+static func makeMap() -> Map {
+***REMOVED***Map(item: PortalItem(
+***REMOVED******REMOVED***portal: .arcGISOnline(connection: .anonymous),
+***REMOVED******REMOVED***id: Item.ID("b4b599a43a474d33946cf0df526426f5")!
+***REMOVED***))
+***REMOVED***
+
+***REMOVED***/ Determines the appropriate time to initialize the `FloorFilter`.
+@State private var isMapLoaded = false
+
+***REMOVED***/ A Boolean value indicating whether the map is currently being navigated.
+@State private var isNavigating = false
+
+***REMOVED***/ The initial viewpoint of the map.
+@State private var viewpoint: Viewpoint? = Viewpoint(
+***REMOVED***center: Point(
+***REMOVED******REMOVED***x: -117.19496,
+***REMOVED******REMOVED***y: 34.05713,
+***REMOVED******REMOVED***spatialReference: .wgs84
+***REMOVED***),
+***REMOVED***scale: 100_000
+)
+
+@StateObject private var map = makeMap()
 
 var body: some View {
-***REMOVED***MapView(map: map)
-***REMOVED******REMOVED***.overlay(alignment: .topTrailing) {
-***REMOVED******REMOVED******REMOVED***BasemapGallery(geoModel: map)
-***REMOVED******REMOVED******REMOVED******REMOVED***.style(.automatic())
-***REMOVED******REMOVED******REMOVED******REMOVED***.padding()
+***REMOVED***MapView(
+***REMOVED******REMOVED***map: map,
+***REMOVED******REMOVED***viewpoint: viewpoint
+***REMOVED***)
+***REMOVED***.onNavigatingChanged {
+***REMOVED******REMOVED***isNavigating = $0
+***REMOVED***
+***REMOVED***.onViewpointChanged(kind: .centerAndScale) {
+***REMOVED******REMOVED***viewpoint = $0
+***REMOVED***
+***REMOVED******REMOVED***/ Preserve the current viewpoint when a keyboard is presented in landscape.
+***REMOVED***.ignoresSafeArea(.keyboard, edges: .bottom)
+***REMOVED***.overlay(alignment: .bottomLeading) {
+***REMOVED******REMOVED***if isMapLoaded,
+***REMOVED******REMOVED***   let floorManager = map.floorManager {
+***REMOVED******REMOVED******REMOVED***FloorFilter(
+***REMOVED******REMOVED******REMOVED******REMOVED***floorManager: floorManager,
+***REMOVED******REMOVED******REMOVED******REMOVED***alignment: .bottomLeading,
+***REMOVED******REMOVED******REMOVED******REMOVED***viewpoint: $viewpoint,
+***REMOVED******REMOVED******REMOVED******REMOVED***isNavigating: $isNavigating
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***.frame(
+***REMOVED******REMOVED******REMOVED******REMOVED***maxWidth: 400,
+***REMOVED******REMOVED******REMOVED******REMOVED***maxHeight: 400
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***.padding(36)
 ***REMOVED***
 ***REMOVED***
-```
-
-
-
-
-### Behavior:
-
-When the Site button is tapped, a prompt opens so the user can select a site and then a facility. After selecting a site and facility, a list of levels is displayed either above or below the site button.
-
-### Usage
-
-```swift
+***REMOVED***.task {
+***REMOVED******REMOVED***do {
+***REMOVED******REMOVED******REMOVED***try await map.load()
+***REMOVED******REMOVED******REMOVED***isMapLoaded = true
+***REMOVED*** catch { ***REMOVED***
+***REMOVED***
+***REMOVED***
 ```
 
 To see it in action, try out the [Examples](../../Examples) and refer to [FloorFilterExampleView.swift](../../Examples/Examples/FloorFilterExampleView.swift) in the project.
