@@ -43,7 +43,7 @@ Bookmarks:
 ***REMOVED***public init(isPresented: Binding<Bool>, mapOrScene: GeoModel, viewpoint: Binding<Viewpoint?>? = nil)
 ```
 
-`Bookmarks` has the following modifer:
+`Bookmarks` has the following instance method:
 
 ```swift
 ***REMOVED******REMOVED***/ Sets an action to perform when the bookmark selection changes.
