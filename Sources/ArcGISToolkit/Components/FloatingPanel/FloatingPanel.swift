@@ -140,13 +140,11 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***let velocity = deltaY / deltaTime
 ***REMOVED******REMOVED******REMOVED******REMOVED***let speed = abs(velocity)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***let predictedHeight = height + ((isCompact ? -1 : +1) * $0.predictedEndTranslation.height)
-***REMOVED******REMOVED******REMOVED******REMOVED***let clampedHeight = min(max(.minHeight, predictedHeight), maximumHeight)
-***REMOVED******REMOVED******REMOVED******REMOVED***let newDetent = bestDetentFor(newHeight: clampedHeight, at: velocity)
+***REMOVED******REMOVED******REMOVED******REMOVED***let newDetent = bestDetentFor(currentHeight: height, at: velocity)
 ***REMOVED******REMOVED******REMOVED******REMOVED***let targetHeight = heightFor(detent: newDetent)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***let distanceAhead = abs(height - targetHeight)
-***REMOVED******REMOVED******REMOVED******REMOVED***let travelTime = min(0.5, distanceAhead / speed)
+***REMOVED******REMOVED******REMOVED******REMOVED***let travelTime = min(0.35, distanceAhead / speed)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***withAnimation(.easeOut(duration: travelTime)) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedDetent.wrappedValue = newDetent
@@ -159,32 +157,39 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Determines the best detent based on the provided metrics.
 ***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - newHeight: The height target for the detent.
+***REMOVED******REMOVED***/   - currentHeight: The height target for the detent.
 ***REMOVED******REMOVED***/   - velocity: The velocity of travel to the new detent.
 ***REMOVED******REMOVED***/ - Returns: The best detent based on the provided metrics.
-***REMOVED***func bestDetentFor(newHeight: CGFloat, at velocity: Double) -> FloatingPanelDetent {
-***REMOVED******REMOVED***let detentsAndHeights = [FloatingPanelDetent.summary, .full, .half]
-***REMOVED******REMOVED******REMOVED***.map { (detent: $0, height: heightFor(detent: $0)) ***REMOVED***
-***REMOVED******REMOVED******REMOVED***.sorted { $0.1 < $1.1 ***REMOVED***
+***REMOVED***func bestDetentFor(currentHeight: CGFloat, at velocity: Double) -> FloatingPanelDetent {
+***REMOVED******REMOVED***let isExpanding = (isCompact && velocity <= 0) || (!isCompact && velocity > 0)
 ***REMOVED******REMOVED***let speed = abs(velocity)
+***REMOVED******REMOVED***let candidateDetents = [FloatingPanelDetent.summary, .full, .half]
+***REMOVED******REMOVED******REMOVED***.map { (detent: $0, height: heightFor(detent: $0)) ***REMOVED***
+***REMOVED******REMOVED******REMOVED***.filter { (detent, height) in
+***REMOVED******REMOVED******REMOVED******REMOVED***if isExpanding {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return height >= currentHeight
+***REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return height < currentHeight
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***if speed < 100 {
-***REMOVED******REMOVED******REMOVED***return detentsAndHeights.min { abs($0.height - height) < abs($1.height - height) ***REMOVED***?.detent ?? selectedDetent.wrappedValue
+***REMOVED******REMOVED******REMOVED***.sorted {
+***REMOVED******REMOVED******REMOVED******REMOVED***if isExpanding {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return $0.1 < $1.1
+***REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return $1.1 < $0.1
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***print("isExpanding", isExpanding, "fast", speed >= 2000, "speed", speed)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***candidateDetents.forEach { (detent: FloatingPanelDetent, height: CGFloat) in
+***REMOVED******REMOVED******REMOVED***print(detent, height)
 ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED*** Determine whether to grow or shrink the panel based on the drag direction and compact state.
-***REMOVED******REMOVED***let qualifiedDetentsAndHeights = detentsAndHeights.filter {
-***REMOVED******REMOVED******REMOVED***if velocity >= 0 {
-***REMOVED******REMOVED******REMOVED******REMOVED***return isCompact ? $0.height < height : $0.height > height
-***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***return isCompact ? $0.height > height : $0.height < height
-***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***if speed > 2500 {
-***REMOVED******REMOVED******REMOVED***return qualifiedDetentsAndHeights.max { abs($0.height - height) < abs($1.height - height) ***REMOVED***?.detent ?? selectedDetent.wrappedValue
+***REMOVED******REMOVED***if speed >= 2000 {
+***REMOVED******REMOVED******REMOVED***return candidateDetents.last?.0 ?? selectedDetent.wrappedValue
 ***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***return qualifiedDetentsAndHeights.max { abs($0.height - newHeight) < abs($1.height - newHeight) ***REMOVED***?.detent ?? selectedDetent.wrappedValue
+***REMOVED******REMOVED******REMOVED***return candidateDetents.first?.0 ?? selectedDetent.wrappedValue
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
