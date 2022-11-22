@@ -140,7 +140,7 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***let velocity = deltaY / deltaTime
 ***REMOVED******REMOVED******REMOVED******REMOVED***let speed = abs(velocity)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***let newDetent = bestDetentFor(currentHeight: height, at: velocity)
+***REMOVED******REMOVED******REMOVED******REMOVED***let newDetent = bestDetent(given: height, travelingAt: velocity)
 ***REMOVED******REMOVED******REMOVED******REMOVED***let targetHeight = heightFor(detent: newDetent)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***let distanceAhead = abs(height - targetHeight)
@@ -160,11 +160,23 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED******REMOVED***/   - currentHeight: The height target for the detent.
 ***REMOVED******REMOVED***/   - velocity: The velocity of travel to the new detent.
 ***REMOVED******REMOVED***/ - Returns: The best detent based on the provided metrics.
-***REMOVED***func bestDetentFor(currentHeight: CGFloat, at velocity: Double) -> FloatingPanelDetent {
+***REMOVED***func bestDetent(given currentHeight: CGFloat, travelingAt velocity: Double) -> FloatingPanelDetent {
+***REMOVED******REMOVED***let lowSpeedThreshold = 100.0
+***REMOVED******REMOVED***let highSpeedThreshold = 2000.0
 ***REMOVED******REMOVED***let isExpanding = (isCompact && velocity <= 0) || (!isCompact && velocity > 0)
 ***REMOVED******REMOVED***let speed = abs(velocity)
-***REMOVED******REMOVED***let candidateDetents = [FloatingPanelDetent.summary, .full, .half]
+***REMOVED******REMOVED***let allDetents = [FloatingPanelDetent.summary, .full, .half]
 ***REMOVED******REMOVED******REMOVED***.map { (detent: $0, height: heightFor(detent: $0)) ***REMOVED***
+***REMOVED******REMOVED******REMOVED*** If the speed was low, choose the closest detent, regardless of direction.
+***REMOVED******REMOVED***guard speed > lowSpeedThreshold else {
+***REMOVED******REMOVED******REMOVED***return allDetents.min {
+***REMOVED******REMOVED******REMOVED******REMOVED***abs(currentHeight - $0.height) < abs(currentHeight - $1.height)
+***REMOVED******REMOVED***?.detent ?? selectedDetent.wrappedValue
+***REMOVED***
+***REMOVED******REMOVED******REMOVED*** Generate a new set of detents, filtering out those that would produce a height in the
+***REMOVED******REMOVED******REMOVED*** opposite direction of the gesture, and sorting them in order of closest to furthest from
+***REMOVED******REMOVED******REMOVED*** the current height.
+***REMOVED******REMOVED***let candidateDetents = allDetents
 ***REMOVED******REMOVED******REMOVED***.filter { (detent, height) in
 ***REMOVED******REMOVED******REMOVED******REMOVED***if isExpanding {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return height >= currentHeight
@@ -180,13 +192,11 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***print("isExpanding", isExpanding, "fast", speed >= 2000, "speed", speed)
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***candidateDetents.forEach { (detent: FloatingPanelDetent, height: CGFloat) in
-***REMOVED******REMOVED******REMOVED***print(detent, height)
-***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***if speed >= 2000 {
+***REMOVED******REMOVED******REMOVED*** If the gesture had high speed, select the last candidate detent (the one that would
+***REMOVED******REMOVED******REMOVED*** produce the greatest size difference from the current height). Otherwise, choose the
+***REMOVED******REMOVED******REMOVED*** first candidate detent (the one that would produce the least size difference from the
+***REMOVED******REMOVED******REMOVED*** current height).
+***REMOVED******REMOVED***if speed >= highSpeedThreshold {
 ***REMOVED******REMOVED******REMOVED***return candidateDetents.last?.0 ?? selectedDetent.wrappedValue
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED***return candidateDetents.first?.0 ?? selectedDetent.wrappedValue
