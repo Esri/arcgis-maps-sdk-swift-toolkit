@@ -1,6 +1,6 @@
 #  FloorFilter
 
-The `FloorFilter` component simplifies visualization of GIS data for a specific floor of a building in your application. It allows you to filter down the floor plan data displayed in your geo view to a site, a building in the site, or a floor in the building. 
+The `FloorFilter` component simplifies visualization of GIS data for a specific floor of a building in your application. It allows you to filter the floor plan data displayed in your geo view to view a site, a building in the site, or a floor in the building. 
 
 The ArcGIS Maps SDK currently supports filtering a 2D floor aware map based on the sites, buildings, or levels in the map.
 
@@ -59,35 +59,75 @@ public enum FloorFilterAutomaticSelectionMode {
 
 ## Behavior:
 
-Selecting a basemap with a spatial reference that does not match that of the geo model will display an error. It will also display an error if a provided base map cannot be loaded. If a `GeoModel` is provided to the `BasemapGallery`, selecting an item in the gallery will set that basemap on the geo model.
+When the Site button is tapped, a prompt opens so the user can select a site and then a facility. After selecting a site and facility, a list of levels is displayed. The list of sites and facilities can be dynamically filtered using the search bar.
 
 ## Usage
 
 ### Basic usage for displaying a `FloorFilter`.
 
 ```swift
-@StateObject var map = Map(basemapStyle: .arcGISImagery)
+/// Make a map from a portal item.
+static func makeMap() -> Map {
+    Map(item: PortalItem(
+        portal: .arcGISOnline(connection: .anonymous),
+        id: Item.ID("b4b599a43a474d33946cf0df526426f5")!
+    ))
+}
+
+/// Determines the appropriate time to initialize the `FloorFilter`.
+@State private var isMapLoaded = false
+
+/// A Boolean value indicating whether the map is currently being navigated.
+@State private var isNavigating = false
+
+/// The initial viewpoint of the map.
+@State private var viewpoint: Viewpoint? = Viewpoint(
+    center: Point(
+        x: -117.19496,
+        y: 34.05713,
+        spatialReference: .wgs84
+    ),
+    scale: 100_000
+)
+
+@StateObject private var map = makeMap()
 
 var body: some View {
-    MapView(map: map)
-        .overlay(alignment: .topTrailing) {
-            BasemapGallery(geoModel: map)
-                .style(.automatic())
-                .padding()
+    MapView(
+        map: map,
+        viewpoint: viewpoint
+    )
+    .onNavigatingChanged {
+        isNavigating = $0
+    }
+    .onViewpointChanged(kind: .centerAndScale) {
+        viewpoint = $0
+    }
+    /// Preserve the current viewpoint when a keyboard is presented in landscape.
+    .ignoresSafeArea(.keyboard, edges: .bottom)
+    .overlay(alignment: .bottomLeading) {
+        if isMapLoaded,
+           let floorManager = map.floorManager {
+            FloorFilter(
+                floorManager: floorManager,
+                alignment: .bottomLeading,
+                viewpoint: $viewpoint,
+                isNavigating: $isNavigating
+            )
+            .frame(
+                maxWidth: 400,
+                maxHeight: 400
+            )
+            .padding(36)
         }
+    }
+    .task {
+        do {
+            try await map.load()
+            isMapLoaded = true
+        } catch { }
+    }
 }
-```
-
-
-
-
-### Behavior:
-
-When the Site button is tapped, a prompt opens so the user can select a site and then a facility. After selecting a site and facility, a list of levels is displayed either above or below the site button.
-
-### Usage
-
-```swift
 ```
 
 To see it in action, try out the [Examples](../../Examples) and refer to [FloorFilterExampleView.swift](../../Examples/Examples/FloorFilterExampleView.swift) in the project.
