@@ -36,11 +36,11 @@ public struct BasemapGallery: View {
 ***REMOVED******REMOVED***/ - Remark: If `items` is empty, ArcGIS Online's developer basemaps will
 ***REMOVED******REMOVED***/ be loaded and added to `items`.
 ***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - geoModel: A geo model.
 ***REMOVED******REMOVED***/   - items: A list of pre-defined base maps to display.
+***REMOVED******REMOVED***/   - geoModel: A geo model.
 ***REMOVED***public init(
-***REMOVED******REMOVED***geoModel: GeoModel? = nil,
-***REMOVED******REMOVED***items: [BasemapGalleryItem] = []
+***REMOVED******REMOVED***items: [BasemapGalleryItem] = [],
+***REMOVED******REMOVED***geoModel: GeoModel? = nil
 ***REMOVED***) {
 ***REMOVED******REMOVED***viewModel = BasemapGalleryViewModel(geoModel: geoModel, items: items)
 ***REMOVED***
@@ -48,11 +48,11 @@ public struct BasemapGallery: View {
 ***REMOVED******REMOVED***/ Creates a `BasemapGallery` with the given geo model and portal.
 ***REMOVED******REMOVED***/ The portal will be used to retrieve basemaps.
 ***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - geoModel: A geo model.
 ***REMOVED******REMOVED***/   - portal: The portal to use to load basemaps.
-***REMOVED***init(
-***REMOVED******REMOVED***_ geoModel: GeoModel? = nil,
-***REMOVED******REMOVED***portal: Portal
+***REMOVED******REMOVED***/   - geoModel: A geo model.
+***REMOVED***public init(
+***REMOVED******REMOVED***portal: Portal,
+***REMOVED******REMOVED***geoModel: GeoModel? = nil
 ***REMOVED***) {
 ***REMOVED******REMOVED***viewModel = BasemapGalleryViewModel(geoModel, portal: portal)
 ***REMOVED***

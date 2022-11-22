@@ -24,7 +24,7 @@ FloatingPanel:
 
 ## Key properties
 
-`FloatingPanel` exposes the following view modifer:
+`FloatingPanel` exposes the following view modifier:
 
 ```swift
 ***REMOVED******REMOVED***/ - Parameters:
@@ -50,7 +50,7 @@ FloatingPanel:
 
 Content in a floating panel can be resized using a “handle” on the bottom (for regular-width environments) or on the top (compact-width environments).
 
-The height of the floating panel is determined by a selected “detent”.  There are pre-defined detents for full screen height, half screen height, and a “summary” height, along with the ability to set custom detent heights. Dragging and releasing the handle will snap the floating panel height to the neartest detent.
+The height of the floating panel is determined by a selected “detent”. There are pre-defined detents for full screen height, half screen height, and a “summary” height, along with the ability to set custom detent heights. Dragging and releasing the handle will snap the floating panel height to the nearest detent.
 
 The floating panel is displayed via a view modifier that allows you to set the content of the floating panel along with a number of other properties, including:
 

@@ -181,10 +181,10 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Displays the list of available networks.
 ***REMOVED***@ViewBuilder private var networksList: some View {
-***REMOVED******REMOVED***ForEach(viewModel.networks, id: \.self) { network in
+***REMOVED******REMOVED***ForEach(viewModel.networks, id: \.name) { network in
 ***REMOVED******REMOVED******REMOVED***Text(network.name)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.lineLimit(1)
-***REMOVED******REMOVED******REMOVED******REMOVED***.listRowBackground(network == viewModel.network ? Color.secondary.opacity(0.5) : nil)
+***REMOVED******REMOVED******REMOVED******REMOVED***.listRowBackground(network.name == viewModel.network?.name ? Color.secondary.opacity(0.5) : nil)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onTapGesture {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.setNetwork(network)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentActivity = .creatingTrace(nil)
