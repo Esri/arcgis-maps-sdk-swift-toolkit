@@ -248,7 +248,7 @@ final class FloorFilterViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***file: StaticString = #filePath,
 ***REMOVED******REMOVED***line: UInt = #line
 ***REMOVED***) async throws -> FloorManager {
-***REMOVED******REMOVED***let portal = Portal(url: URL(string: "https:***REMOVED***www.arcgis.com/")!, requiresLogin: false)
+***REMOVED******REMOVED***let portal = Portal(url: URL(string: "https:***REMOVED***www.arcgis.com/")!, connection: .anonymous)
 ***REMOVED******REMOVED***let item = PortalItem(portal: portal, id: id)
 ***REMOVED******REMOVED***let map = Map(item: item)
 ***REMOVED******REMOVED***try await map.load()

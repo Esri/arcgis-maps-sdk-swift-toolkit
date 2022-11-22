@@ -167,24 +167,24 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED***if viewModel.configurations.isEmpty {
 ***REMOVED******REMOVED******REMOVED***Text("No configurations available")
 ***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***ForEach(viewModel.configurations) { configuration in
+***REMOVED******REMOVED******REMOVED***ForEach(viewModel.configurations, id: \.name) { configuration in
 ***REMOVED******REMOVED******REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.setPendingTrace(configuration: configuration)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentActivity = .creatingTrace(nil)
 ***REMOVED******REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(configuration.name)
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.listRowBackground(configuration == viewModel.pendingTrace.configuration ? Color.secondary.opacity(0.5) : nil)
+***REMOVED******REMOVED******REMOVED******REMOVED***.listRowBackground(configuration.name == viewModel.pendingTrace.configuration?.name ? Color.secondary.opacity(0.5) : nil)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Displays the list of available networks.
 ***REMOVED***@ViewBuilder private var networksList: some View {
-***REMOVED******REMOVED***ForEach(viewModel.networks, id: \.self) { network in
+***REMOVED******REMOVED***ForEach(viewModel.networks, id: \.name) { network in
 ***REMOVED******REMOVED******REMOVED***Text(network.name)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.lineLimit(1)
-***REMOVED******REMOVED******REMOVED******REMOVED***.listRowBackground(network == viewModel.network ? Color.secondary.opacity(0.5) : nil)
+***REMOVED******REMOVED******REMOVED******REMOVED***.listRowBackground(network.name == viewModel.network?.name ? Color.secondary.opacity(0.5) : nil)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onTapGesture {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.setNetwork(network)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentActivity = .creatingTrace(nil)

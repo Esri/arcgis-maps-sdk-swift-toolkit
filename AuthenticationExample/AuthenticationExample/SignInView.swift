@@ -61,10 +61,10 @@ struct SignInView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***return
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***if let arcGISCredential = await ArcGISRuntimeEnvironment.credentialStore.credential(for: .portal) {
+***REMOVED******REMOVED******REMOVED***if let arcGISCredential = await ArcGISEnvironment.credentialStore.credential(for: .portal) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***lastSignedInUser = arcGISCredential.username ?? ""
 ***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***let networkCredentials = await ArcGISRuntimeEnvironment.networkCredentialStore.credentials(forHost: URL.portal.host!)
+***REMOVED******REMOVED******REMOVED******REMOVED***let networkCredentials = await ArcGISEnvironment.networkCredentialStore.credentials(forHost: URL.portal.host!)
 ***REMOVED******REMOVED******REMOVED******REMOVED***if !networkCredentials.isEmpty {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***lastSignedInUser = networkCredentials.compactMap { credential in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***switch credential {
@@ -117,7 +117,7 @@ struct SignInView: View {
 ***REMOVED******REMOVED***error = nil
 ***REMOVED******REMOVED***Task {
 ***REMOVED******REMOVED******REMOVED***do {
-***REMOVED******REMOVED******REMOVED******REMOVED***let portal = Portal(url: .portal, requiresLogin: true)
+***REMOVED******REMOVED******REMOVED******REMOVED***let portal = Portal(url: .portal, connection: .authenticated)
 ***REMOVED******REMOVED******REMOVED******REMOVED***try await portal.load()
 ***REMOVED******REMOVED******REMOVED******REMOVED***self.portal = portal
 ***REMOVED******REMOVED*** catch {

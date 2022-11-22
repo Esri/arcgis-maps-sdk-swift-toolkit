@@ -260,7 +260,10 @@ import Foundation
 ***REMOVED***func setPendingTrace(configuration: UtilityNamedTraceConfiguration) {
 ***REMOVED******REMOVED***pendingTrace.configuration = configuration
 ***REMOVED******REMOVED***if !pendingTrace.userDidSpecifyName {
-***REMOVED******REMOVED******REMOVED***pendingTrace.name = "\(configuration.name) \((completedTraces.filter({ $0.configuration == configuration ***REMOVED***).count + 1).description)"
+***REMOVED******REMOVED******REMOVED******REMOVED*** If the user didn't specify a custom trace name, generate one consisting of trace
+***REMOVED******REMOVED******REMOVED******REMOVED*** configuration name followed by the number of completed traces in memory performed with
+***REMOVED******REMOVED******REMOVED******REMOVED*** that configuration.
+***REMOVED******REMOVED******REMOVED***pendingTrace.name = "\(configuration.name) \((completedTraces.filter({ $0.configuration?.name == configuration.name ***REMOVED***).count + 1).description)"
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***

@@ -17,9 +17,6 @@ import XCTest
 
 @MainActor
 class SearchViewModelTests: XCTestCase {
-***REMOVED******REMOVED***
-***REMOVED******REMOVED*** Test Design: https:***REMOVED***devtopia.esri.com/runtime/common-toolkit/blob/master/designs/Search/Search_Test_Design.md
-***REMOVED******REMOVED***
 ***REMOVED***func testAcceptSuggestion() async throws {
 ***REMOVED******REMOVED***let model = SearchViewModel(sources: [LocatorSearchSource()])
 ***REMOVED******REMOVED***model.currentQuery = "Magers & Quinn Booksellers"

@@ -27,26 +27,26 @@ import Combine
 @MainActor
 class BasemapGalleryViewModelTests: XCTestCase {
 ***REMOVED***override func setUp() async throws {
-***REMOVED******REMOVED***ArcGISRuntimeEnvironment.apiKey = APIKey("<#API Key#>")
-***REMOVED******REMOVED***try XCTSkipIf(ArcGISRuntimeEnvironment.apiKey == .placeholder)
+***REMOVED******REMOVED***ArcGISEnvironment.apiKey = APIKey("<#API Key#>")
+***REMOVED******REMOVED***try XCTSkipIf(ArcGISEnvironment.apiKey == .placeholder)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***override func tearDown() {
-***REMOVED******REMOVED***ArcGISRuntimeEnvironment.apiKey = nil
+***REMOVED******REMOVED***ArcGISEnvironment.apiKey = nil
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***let defaultBasemapGalleryItems: [BasemapGalleryItem] = [
 ***REMOVED******REMOVED***BasemapGalleryItem(
 ***REMOVED******REMOVED******REMOVED***basemap: Basemap(
 ***REMOVED******REMOVED******REMOVED******REMOVED***item: PortalItem(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***url: URL(string: "https:***REMOVED***runtime.maps.arcgis.com/home/item.html?id=46a87c20f09e4fc48fa3c38081e0cae6")!
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***url: URL(string: "https:***REMOVED***arcgis.com/home/item.html?id=46a87c20f09e4fc48fa3c38081e0cae6")!
 ***REMOVED******REMOVED******REMOVED******REMOVED***)!
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***),
 ***REMOVED******REMOVED***BasemapGalleryItem(
 ***REMOVED******REMOVED******REMOVED***basemap: Basemap(
 ***REMOVED******REMOVED******REMOVED******REMOVED***item: PortalItem(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***url: URL(string: "https:***REMOVED***runtime.maps.arcgis.com/home/item.html?id=f33a34de3a294590ab48f246e99958c9")!
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***url: URL(string: "https:***REMOVED***arcgis.com/home/item.html?id=f33a34de3a294590ab48f246e99958c9")!
 ***REMOVED******REMOVED******REMOVED******REMOVED***)!
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***)
@@ -81,7 +81,7 @@ class BasemapGalleryViewModelTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED*** Portal.
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***let geoModel2 = Map(basemapStyle: .arcGISLightGray)
-***REMOVED******REMOVED***let portal = Portal.arcGISOnline(requiresLogin: false)
+***REMOVED******REMOVED***let portal = Portal.arcGISOnline(connection: .anonymous)
 ***REMOVED******REMOVED***let portalViewModel = BasemapGalleryViewModel(geoModel2, portal: portal)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***XCTAssertIdentical(portalViewModel.geoModel, geoModel2)
@@ -135,7 +135,7 @@ class BasemapGalleryViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***let geoModel2 = Map(
 ***REMOVED******REMOVED******REMOVED***basemap: Basemap(
 ***REMOVED******REMOVED******REMOVED******REMOVED***item: PortalItem(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***url: URL(string: "https:***REMOVED***runtime.maps.arcgis.com/home/item.html?id=52bdc7ab7fb044d98add148764eaa30a")!
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***url: URL(string: "https:***REMOVED***arcgis.com/home/item.html?id=52bdc7ab7fb044d98add148764eaa30a")!
 ***REMOVED******REMOVED******REMOVED******REMOVED***)!
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***)
@@ -147,7 +147,7 @@ class BasemapGalleryViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***let geoModel3 = Scene(
 ***REMOVED******REMOVED******REMOVED***basemap: Basemap(
 ***REMOVED******REMOVED******REMOVED******REMOVED***item: PortalItem(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***url: URL(string: "https:***REMOVED***runtime.maps.arcgis.com/home/item.html?id=46a87c20f09e4fc48fa3c38081e0cae6")!
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***url: URL(string: "https:***REMOVED***arcgis.com/home/item.html?id=46a87c20f09e4fc48fa3c38081e0cae6")!
 ***REMOVED******REMOVED******REMOVED******REMOVED***)!
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***)
@@ -159,7 +159,7 @@ class BasemapGalleryViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***let geoModel4 = Scene(
 ***REMOVED******REMOVED******REMOVED***basemap: Basemap(
 ***REMOVED******REMOVED******REMOVED******REMOVED***item: PortalItem(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***url: URL(string: "https:***REMOVED***runtime.maps.arcgis.com/home/item.html?id=52bdc7ab7fb044d98add148764eaa30a")!
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***url: URL(string: "https:***REMOVED***arcgis.com/home/item.html?id=52bdc7ab7fb044d98add148764eaa30a")!
 ***REMOVED******REMOVED******REMOVED******REMOVED***)!
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***)
@@ -183,7 +183,7 @@ class BasemapGalleryViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***let validItem = BasemapGalleryItem(
 ***REMOVED******REMOVED******REMOVED***basemap: Basemap(
 ***REMOVED******REMOVED******REMOVED******REMOVED***item: PortalItem(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***url: URL(string: "https:***REMOVED***runtime.maps.arcgis.com/home/item.html?id=46a87c20f09e4fc48fa3c38081e0cae6")!
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***url: URL(string: "https:***REMOVED***arcgis.com/home/item.html?id=46a87c20f09e4fc48fa3c38081e0cae6")!
 ***REMOVED******REMOVED******REMOVED******REMOVED***)!
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***)
@@ -207,7 +207,7 @@ class BasemapGalleryViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***let invalidItem = BasemapGalleryItem(
 ***REMOVED******REMOVED******REMOVED***basemap: Basemap(
 ***REMOVED******REMOVED******REMOVED******REMOVED***item: PortalItem(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***url: URL(string: "https:***REMOVED***runtime.maps.arcgis.com/home/item.html?id=52bdc7ab7fb044d98add148764eaa30a")!
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***url: URL(string: "https:***REMOVED***arcgis.com/home/item.html?id=52bdc7ab7fb044d98add148764eaa30a")!
 ***REMOVED******REMOVED******REMOVED******REMOVED***)!
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***)
@@ -243,7 +243,7 @@ class BasemapGalleryViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Set a portal on the model. This should clear out the existing
 ***REMOVED******REMOVED******REMOVED*** array of items and load basemaps from the portal.
-***REMOVED******REMOVED***viewModel.portal = Portal.arcGISOnline(requiresLogin: false)
+***REMOVED******REMOVED***viewModel.portal = Portal.arcGISOnline(connection: .anonymous)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** The items should be cleared prior to loading those from the portal.
 ***REMOVED******REMOVED***let items2 = try await viewModel.$items.first
