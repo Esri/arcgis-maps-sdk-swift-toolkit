@@ -140,13 +140,11 @@ struct FloatingPanel<Content>: View where Content: View {
                 let velocity = deltaY / deltaTime
                 let speed = abs(velocity)
                 
-                let predictedHeight = height + ((isCompact ? -1 : +1) * $0.predictedEndTranslation.height)
-                let clampedHeight = min(max(.minHeight, predictedHeight), maximumHeight)
-                let newDetent = bestDetentFor(newHeight: clampedHeight, at: velocity)
+                let newDetent = bestDetentFor(currentHeight: height, at: velocity)
                 let targetHeight = heightFor(detent: newDetent)
                 
                 let distanceAhead = abs(height - targetHeight)
-                let travelTime = min(0.5, distanceAhead / speed)
+                let travelTime = min(0.35, distanceAhead / speed)
                 
                 withAnimation(.easeOut(duration: travelTime)) {
                     selectedDetent.wrappedValue = newDetent
@@ -159,32 +157,39 @@ struct FloatingPanel<Content>: View where Content: View {
     
     /// Determines the best detent based on the provided metrics.
     /// - Parameters:
-    ///   - newHeight: The height target for the detent.
+    ///   - currentHeight: The height target for the detent.
     ///   - velocity: The velocity of travel to the new detent.
     /// - Returns: The best detent based on the provided metrics.
-    func bestDetentFor(newHeight: CGFloat, at velocity: Double) -> FloatingPanelDetent {
-        let detentsAndHeights = [FloatingPanelDetent.summary, .full, .half]
-            .map { (detent: $0, height: heightFor(detent: $0)) }
-            .sorted { $0.1 < $1.1 }
+    func bestDetentFor(currentHeight: CGFloat, at velocity: Double) -> FloatingPanelDetent {
+        let isExpanding = (isCompact && velocity <= 0) || (!isCompact && velocity > 0)
         let speed = abs(velocity)
-        
-        if speed < 100 {
-            return detentsAndHeights.min { abs($0.height - height) < abs($1.height - height) }?.detent ?? selectedDetent.wrappedValue
-        }
-        
-        // Determine whether to grow or shrink the panel based on the drag direction and compact state.
-        let qualifiedDetentsAndHeights = detentsAndHeights.filter {
-            if velocity >= 0 {
-                return isCompact ? $0.height < height : $0.height > height
-            } else {
-                return isCompact ? $0.height > height : $0.height < height
+        let candidateDetents = [FloatingPanelDetent.summary, .full, .half]
+            .map { (detent: $0, height: heightFor(detent: $0)) }
+            .filter { (detent, height) in
+                if isExpanding {
+                    return height >= currentHeight
+                } else {
+                    return height < currentHeight
+                }
             }
+            .sorted {
+                if isExpanding {
+                    return $0.1 < $1.1
+                } else {
+                    return $1.1 < $0.1
+                }
+            }
+        
+        print("isExpanding", isExpanding, "fast", speed >= 2000, "speed", speed)
+        
+        candidateDetents.forEach { (detent: FloatingPanelDetent, height: CGFloat) in
+            print(detent, height)
         }
         
-        if speed > 2500 {
-            return qualifiedDetentsAndHeights.max { abs($0.height - height) < abs($1.height - height) }?.detent ?? selectedDetent.wrappedValue
+        if speed >= 2000 {
+            return candidateDetents.last?.0 ?? selectedDetent.wrappedValue
         } else {
-            return qualifiedDetentsAndHeights.max { abs($0.height - newHeight) < abs($1.height - newHeight) }?.detent ?? selectedDetent.wrappedValue
+            return candidateDetents.first?.0 ?? selectedDetent.wrappedValue
         }
     }
     
