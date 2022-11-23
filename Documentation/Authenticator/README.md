@@ -1,21 +1,21 @@
 # Authenticator
 
-Displays a user interface when network and ArcGIS authentication challenges occur.
+The `Authenticator` is a configurable object that handles authentication challenges.  It will display a user interface when network and ArcGIS authentication challenges occur.
 
 ![image](https://user-images.githubusercontent.com/3998072/203615041-c887d5e3-bb64-469a-a76b-126059329e92.png)
 
 ## Features
 
-The `Authenticator` is a view modifier that will cause a prompt when the Authenticator is asked to handle an authentication challenge.  This will handle many different types of authentication, for example:
+The `Authenticator` has a view modifier that will display a prompt when the `Authenticator` is asked to handle an authentication challenge.  This will handle many different types of authentication, for example:
   - ArcGIS authentication (token and OAuth)
   - Integrated Windows Authentication (IWA)
   - Client Certificate (PKI)
 
-The Authenticator can be configured to support securely persisting credentials to the keychain.
+The `Authenticator` can be configured to support securely persisting credentials to the keychain.
 
 ## Key properties
 
-`Authenticator` view modifier:
+`Authenticator` has the following view modifier:
 
 ```swift
     /// Presents user experiences for collecting network authentication credentials from the user.
@@ -23,11 +23,31 @@ The Authenticator can be configured to support securely persisting credentials t
     @ViewBuilder func authenticator(_ authenticator: Authenticator) -> some View
 ```
 
+To securely store credentials in the keychain, use the following instance method on `Authenticator`:
+
+```swift
+    /// Sets up new credential stores that will be persisted to the keychain.
+    /// - Remark: The credentials will be stored in the default access group of the keychain.
+    /// You can find more information about what the default group would be here:
+    /// https://developer.apple.com/documentation/security/keychain_services/keychain_items/sharing_access_to_keychain_items_among_a_collection_of_apps
+    /// - Parameters:
+    ///   - access: When the credentials stored in the keychain can be accessed.
+    ///   - synchronizesWithiCloud: A Boolean value indicating whether the credentials are synchronized with iCloud.
+    public func setupPersistentCredentialStorage(
+        access: ArcGIS.KeychainAccess,
+        synchronizesWithiCloud: Bool = false
+    ) async throws
+```
+
 ## Behavior:
 
 The Authenticator view modifier will display an alert or a full screen modal view to prompt the user for credentials.
 
 ## Usage
+
+### Basic usage for displaying a `PopupView`.
+
+This would typically go in your application's `App` struct.
 
 ```swift
 init() {
