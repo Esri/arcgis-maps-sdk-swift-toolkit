@@ -72,6 +72,7 @@ public struct ScalebarSettings {
 ***REMOVED******REMOVED***textColor: Color = .primary,
 ***REMOVED******REMOVED***textShadowColor: Color = .white
 ***REMOVED***)
+***REMOVED***
 ```
 
 ## Behavior:
