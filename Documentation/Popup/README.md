@@ -1,6 +1,6 @@
 #  Popup
 
-The `PopupView` component will display a popup for an individual feature. This includes showing the feature's title, attributes, custom description, media, and attachments. The new online Map Viewer allows users to create a popup definition by assembling a list of “popup elements”. `PopupView` will support the display of the following popup element types created by the Map Viewer:
+The `PopupView` component will display a popup for an individual feature. This includes showing the feature's title, attributes, custom description, media, and attachments. The new online Map Viewer allows users to create a popup definition by assembling a list of “popup elements”. `PopupView` will support the display of popup elements created by the Map Viewer, including:
 
 - Text
 - Fields
@@ -15,11 +15,11 @@ Thanks to the backwards compatibility support in the API, it will also work with
 
 ## Features:
 
-- Automatically display a popup for a feature or graphic based on the web map-defined popup definition.
+- Display a popup for a feature based on the popup definition defined in a web map.
 - Supports image refresh intervals on image popup media, refreshing the image at a given interval defined in the popup element.
 - Supports elements containing Arcade expression and automatically evalutes expressions.
 - Displays media (images and charts) full-screen.
-- Supports hyperlinks in text, media, and fields elemets.
+- Supports hyperlinks in text, media, and fields elements.
 - Fully supports dark mode, as do all Toolkit components.
 
 ## Key properties
@@ -31,10 +31,7 @@ Thanks to the backwards compatibility support in the API, it will also work with
 ***REMOVED******REMOVED***/ - Parameters
 ***REMOVED******REMOVED***/***REMOVED*** popup: The popup to display.
 ***REMOVED******REMOVED***/   - isPresented: A Boolean value indicating if the view is presented.
-***REMOVED***public init(popup: Popup, isPresented: Binding<Bool>? = nil) {
-***REMOVED******REMOVED***self.popup = popup
-***REMOVED******REMOVED***self.isPresented = isPresented
-***REMOVED***
+***REMOVED***public init(popup: Popup, isPresented: Binding<Bool>? = nil)
 ```
 
 `PopupView` has the following instance method:
