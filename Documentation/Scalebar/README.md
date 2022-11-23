@@ -72,6 +72,7 @@ public struct ScalebarSettings {
         textColor: Color = .primary,
         textShadowColor: Color = .white
     )
+}
 ```
 
 ## Behavior:
