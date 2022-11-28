@@ -8,7 +8,7 @@ The ArcGIS Maps SDK currently supports filtering a 2D floor aware map based on t
 |:--:|:--:|
 |![image](https:***REMOVED***user-images.githubusercontent.com/3998072/202811733-dcd640e9-3b27-43a8-8bec-fd9aeb6798c7.png)|![image](https:***REMOVED***user-images.githubusercontent.com/3998072/202811772-bf6009e7-82ec-459f-86ae-6651f519b2ef.png)|
 
-## Features:
+## Features
 
 - Automatically hides the floor browsing view when the associated map or scene is not floor-aware.
 - Selects the facility in view automatically (can be configured through the `AutomaticSelectionMode`).
