@@ -64,6 +64,10 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the map should be zoomed to the extent of the trace result.
 ***REMOVED***@State private var shouldZoomOnTraceCompletion = false
 ***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value indicating whether the Clear All Results confirmation
+***REMOVED******REMOVED***/ dialog is being shown.
+***REMOVED***@State private var isShowingClearAllResultsConfirmationDialog = false
+***REMOVED***
 ***REMOVED******REMOVED***/ The view model used by the view. The `UtilityNetworkTraceViewModel` manages state.
 ***REMOVED******REMOVED***/ The view observes `UtilityNetworkTraceViewModel` for changes in state.
 ***REMOVED***@StateObject private var viewModel: UtilityNetworkTraceViewModel
@@ -399,19 +403,23 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.padding([.vertical], 2)
-***REMOVED******REMOVED******REMOVED***Button(role: .destructive) {
-***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.userAlert = .init(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***description: "Are you sure? All the trace inputs and results will be lost.",
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***button: Button(role: .destructive) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.deleteAllTraces()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentActivity = .creatingTrace(nil)
-***REMOVED******REMOVED******REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("OK")
-***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED***Text(clearResultsTitle)
+***REMOVED******REMOVED******REMOVED***Button("Clear All Results", role: .destructive) {
+***REMOVED******REMOVED******REMOVED******REMOVED***isShowingClearAllResultsConfirmationDialog = true
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.buttonStyle(.bordered)
+***REMOVED******REMOVED******REMOVED***.confirmationDialog(
+***REMOVED******REMOVED******REMOVED******REMOVED***"Clear all results?",
+***REMOVED******REMOVED******REMOVED******REMOVED***isPresented: $isShowingClearAllResultsConfirmationDialog
+***REMOVED******REMOVED******REMOVED***) {
+***REMOVED******REMOVED******REMOVED******REMOVED***Button(role: .destructive) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.deleteAllTraces()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentActivity = .creatingTrace(nil)
+***REMOVED******REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Clear All Results")
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED*** message: {
+***REMOVED******REMOVED******REMOVED******REMOVED***Text("All the trace inputs and results will be lost.")
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -697,9 +705,6 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED***.lineLimit(1)
 ***REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .center)
 ***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ Title for the clear all results feature
-***REMOVED***private let clearResultsTitle = "Clear All Results"
 ***REMOVED***
 ***REMOVED******REMOVED***/ Title for the feature results section
 ***REMOVED***private let featureResultsTitle = "Feature Results"
