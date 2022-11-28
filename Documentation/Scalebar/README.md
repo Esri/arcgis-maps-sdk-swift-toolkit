@@ -4,7 +4,7 @@ A scalebar displays the representation of an accurate linear measurement on the 
 
 ![image](https://user-images.githubusercontent.com/3998072/203605457-df6f845c-9245-4608-a61e-6d1e2e63a81b.png)
 
-## Features:
+## Features
 
 Scalebar:
 
