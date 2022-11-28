@@ -1,5 +1,6 @@
 ### Table of Contents
 
+* **[Authenticator](Documentation/Authenticator)** - Displays a user interface when network and ArcGIS authentication challenges occur.
 * **[BasemapGallery](BasemapGallery)** - Displays a collection of basemaps.
 * **[Bookmarks](Bookmarks)** - Shows bookmarks, from a map, scene, or a list.
 * **[Compass](Compass)** - Shows a compass direction when the map is rotated. Auto-hides when the map points north up.
@@ -9,4 +10,3 @@
 * **[Scalebar](Scalebar)** - Displays current scale reference.
 * **[Search](Search)** - Displays a search experience for geo views.
 * **[UtilityNetworkTrace](UtilityNetworkTrace)** - Runs traces on a web map published with a utility network and trace configurations.
-* **[Authenticator](Documentation/Authenticator)** - Displays a user interface when network and ArcGIS authentication challenges occur.
