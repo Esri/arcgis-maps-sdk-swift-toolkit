@@ -64,6 +64,10 @@ public struct UtilityNetworkTrace: View {
     /// A Boolean value indicating whether the map should be zoomed to the extent of the trace result.
     @State private var shouldZoomOnTraceCompletion = false
     
+    /// A Boolean value indicating whether the Clear All Results confirmation
+    /// dialog is being shown.
+    @State private var isShowingClearAllResultsConfirmationDialog = false
+    
     /// The view model used by the view. The `UtilityNetworkTraceViewModel` manages state.
     /// The view observes `UtilityNetworkTraceViewModel` for changes in state.
     @StateObject private var viewModel: UtilityNetworkTraceViewModel
@@ -399,19 +403,23 @@ public struct UtilityNetworkTrace: View {
                 }
             }
             .padding([.vertical], 2)
-            Button(role: .destructive) {
-                viewModel.userAlert = .init(
-                    description: "Are you sure? All the trace inputs and results will be lost.",
-                    button: Button(role: .destructive) {
-                        viewModel.deleteAllTraces()
-                        currentActivity = .creatingTrace(nil)
-                    } label: {
-                        Text("OK")
-                    })
-            } label: {
-                Text(clearResultsTitle)
+            Button("Clear All Results", role: .destructive) {
+                isShowingClearAllResultsConfirmationDialog = true
             }
             .buttonStyle(.bordered)
+            .confirmationDialog(
+                "Clear all results?",
+                isPresented: $isShowingClearAllResultsConfirmationDialog
+            ) {
+                Button(role: .destructive) {
+                    viewModel.deleteAllTraces()
+                    currentActivity = .creatingTrace(nil)
+                } label: {
+                    Text("Clear All Results")
+                }
+            } message: {
+                Text("All the trace inputs and results will be lost.")
+            }
         }
     }
     
@@ -697,9 +705,6 @@ public struct UtilityNetworkTrace: View {
             .lineLimit(1)
             .frame(maxWidth: .infinity, alignment: .center)
     }
-    
-    /// Title for the clear all results feature
-    private let clearResultsTitle = "Clear All Results"
     
     /// Title for the feature results section
     private let featureResultsTitle = "Feature Results"
