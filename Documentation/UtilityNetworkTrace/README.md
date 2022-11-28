@@ -2,7 +2,6 @@
 
 `UtilityNetworkTrace` runs traces on a webmap published with a utility network and trace configurations.
 
-#### Initial View
 |iPhone|iPad|
 |:--:|:--:|
 |![image](https://user-images.githubusercontent.com/3998072/204343568-a236ae0d-6b70-4175-a70c-41c902123ea1.png)|![image](https://user-images.githubusercontent.com/3998072/204344567-c86b3a49-6109-4333-8993-7fdc74f2b35d.png)|
@@ -48,7 +47,7 @@ A named trace configuration defined for a utility network in a webmap comprises 
     /// floating panel.
     /// - Returns: A trace tool that automatically sets and responds to detent values to improve user
     /// experience.
-    public func floatingPanelDetent(_ detent: Binding<FloatingPanelDetent>)
+    public func floatingPanelDetent(_ detent: Binding<FloatingPanelDetent>) -> UtilityNetworkTrace
 ```
 
 ## Behavior:
