@@ -49,7 +49,7 @@ Compass:
 ***REMOVED***public init(viewpoint: Binding<Viewpoint?>, autoHide: Bool = true)
 ```
 
-`Compass` has the following modifer:
+`Compass` has the following modifier:
 
 - `func compassSize(size: CGFloat)` - The size of the `Compass`, specifying both the width and height of the compass.
 
