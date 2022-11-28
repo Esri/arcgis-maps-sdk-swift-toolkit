@@ -45,7 +45,7 @@ The Authenticator view modifier will display an alert prompting the user for cre
 
 ## Usage
 
-### Basic usage for displaying a `PopupView`.
+### Basic usage for displaying the `Authenticator`.
 
 This would typically go in your application's `App` struct.
 
