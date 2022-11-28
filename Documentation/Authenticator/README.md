@@ -41,11 +41,11 @@ To securely store credentials in the keychain, use the following instance method
 
 ## Behavior:
 
-The Authenticator view modifier will display an alert or a full screen modal view to prompt the user for credentials.
+The Authenticator view modifier will display an alert prompting the user for credentials. If credentials are persisted to the keychain, the Authenticator will use those instead of requiring the user to reenter credentials.
 
 ## Usage
 
-### Basic usage for displaying a `PopupView`.
+### Basic usage for displaying the `Authenticator`.
 
 This would typically go in your application's `App` struct.
 
