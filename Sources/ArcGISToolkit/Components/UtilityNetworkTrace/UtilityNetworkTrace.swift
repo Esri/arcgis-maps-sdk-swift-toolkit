@@ -361,7 +361,7 @@ public struct UtilityNetworkTrace: View {
                             set: { currentActivity = .viewingTraces($0 ? .viewingFunctionResults : nil) }
                         )
                     ) {
-                        ForEach(viewModel.selectedTrace?.functionOutputs ?? [], id: \.id) { item in
+                        ForEach(viewModel.selectedTrace?.functionOutputs ?? [], id: \.objectID) { item in
                             HStack {
                                 Text(item.function.networkAttribute.name)
                                 Spacer()
