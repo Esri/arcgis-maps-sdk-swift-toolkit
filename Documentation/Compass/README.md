@@ -6,7 +6,7 @@ The ArcGIS Maps SDK for Swift currently supports rotating MapViews and SceneView
 
 ![image](https://user-images.githubusercontent.com/3998072/202810369-a0b82778-77d4-404e-bebf-1a84841fbb1b.png)
 
-## Features:
+## Features
 
 Compass:
 
