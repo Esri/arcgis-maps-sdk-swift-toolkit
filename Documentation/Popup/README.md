@@ -13,7 +13,7 @@ Thanks to the backwards compatibility support in the API, it will also work with
 |:--:|:--:|
 |![image](https://user-images.githubusercontent.com/3998072/203422507-66b6c6dc-a6c3-4040-b996-9c0da8d4e580.png)|![image](https://user-images.githubusercontent.com/3998072/203422665-c4759c1f-5863-4251-94df-ed7a06ac7a8f.png)|
 
-## Features:
+## Features
 
 - Display a popup for a feature based on the popup definition defined in a web map.
 - Supports image refresh intervals on image popup media, refreshing the image at a given interval defined in the popup element.
