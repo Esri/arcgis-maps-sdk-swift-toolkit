@@ -1,4 +1,4 @@
-// swift-tools-version:5.3
+// swift-tools-version:5.7
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 // Copyright 2021 Esri.
 
@@ -28,18 +28,25 @@ let package = Package(
     ],
     dependencies: [
         // To use a daily build of the Swift API, change the path below to point to the daily build's `output` folder.
-        .package(name: "arcgis-runtime-swift", path: "../swift/ArcGIS")
+        .package(name: "arcgis-runtime-swift", path: "../swift/ArcGIS"),
+        .package(url: "https://github.com/realm/SwiftLint", branch: "release-0.50.0-rc.4")
     ],
     targets: [
         .target(
             name: "ArcGISToolkit",
             dependencies: [
                 .product(name: "ArcGIS", package: "arcgis-runtime-swift")
+            ],
+            plugins: [
+                .plugin(name: "SwiftLintPlugin", package: "SwiftLint")
             ]
         ),
         .testTarget(
             name: "ArcGISToolkitTests",
-            dependencies: ["ArcGISToolkit"]
+            dependencies: ["ArcGISToolkit"],
+            plugins: [
+                .plugin(name: "SwiftLintPlugin", package: "SwiftLint")
+            ]
         )
     ]
 )
