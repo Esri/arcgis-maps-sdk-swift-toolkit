@@ -45,13 +45,13 @@ struct FloatingPanelExampleView: View {
                 }
                 Section("Fractional Heights") {
                     Button("1/4") {
-                        selectedDetent = .fraction(1/4)
+                        selectedDetent = .fraction(1 / 4)
                     }
                     Button("1/2") {
-                        selectedDetent = .fraction(1/2)
+                        selectedDetent = .fraction(1 / 2)
                     }
                     Button("3/4") {
-                        selectedDetent = .fraction(3/4)
+                        selectedDetent = .fraction(3 / 4)
                     }
                 }
                 Section("Value Heights") {
