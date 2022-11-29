@@ -55,7 +55,8 @@ struct UtilityNetworkTraceExampleView: View {
                 viewpoint = $0
             }
             .task {
-                await ArcGISEnvironment.credentialStore.add(try! await .publicSample)
+                let publicSample = try? await ArcGISCredential.publicSample
+                await ArcGISEnvironment.credentialStore.add(publicSample!)
             }
             .floatingPanel(
                     backgroundColor: Color(uiColor: .systemGroupedBackground),

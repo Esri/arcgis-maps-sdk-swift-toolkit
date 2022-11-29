@@ -17,9 +17,11 @@ import SwiftUI
 
 struct BookmarksExampleView: View {
     @Environment(\.horizontalSizeClass)
+    
     private var horizontalSizeClass: UserInterfaceSizeClass?
     
     @Environment(\.verticalSizeClass)
+    
     private var verticalSizeClass: UserInterfaceSizeClass?
     
     /// A web map with predefined bookmarks.
@@ -32,7 +34,7 @@ struct BookmarksExampleView: View {
     
     /// Allows for communication between the `Bookmarks` component and a `MapView` or
     /// `SceneView`.
-    @State var viewpoint: Viewpoint? = nil
+    @State var viewpoint: Viewpoint?
     
     var body: some View {
         MapView(map: map, viewpoint: viewpoint)
