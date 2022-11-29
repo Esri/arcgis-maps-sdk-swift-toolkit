@@ -17,7 +17,7 @@ Thanks to the backwards compatibility support in the API, it will also work with
 
 - Display a popup for a feature based on the popup definition defined in a web map.
 - Supports image refresh intervals on image popup media, refreshing the image at a given interval defined in the popup element.
-- Supports elements containing Arcade expression and automatically evalutes expressions.
+- Supports elements containing Arcade expression and automatically evaluates expressions.
 - Displays media (images and charts) full-screen.
 - Supports hyperlinks in text, media, and fields elements.
 - Fully supports dark mode, as do all Toolkit components.

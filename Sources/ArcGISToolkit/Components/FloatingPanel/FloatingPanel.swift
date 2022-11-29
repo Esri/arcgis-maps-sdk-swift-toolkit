@@ -63,6 +63,9 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED******REMOVED***/ A binding to a Boolean value that determines whether the view is presented.
 ***REMOVED***private var isPresented: Binding<Bool>
 ***REMOVED***
+***REMOVED******REMOVED***/ The latest recorded drag gesture value.
+***REMOVED***@State var latestDragGesture: DragGesture.Value?
+***REMOVED***
 ***REMOVED******REMOVED***/ The maximum allowed height of the content.
 ***REMOVED***@State private var maximumHeight: CGFloat = .infinity
 ***REMOVED***
@@ -123,38 +126,81 @@ struct FloatingPanel<Content>: View where Content: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***var drag: some Gesture {
-***REMOVED******REMOVED***DragGesture(minimumDistance: 0)
-***REMOVED******REMOVED******REMOVED***.onChanged { value in
+***REMOVED******REMOVED***DragGesture(minimumDistance: 0, coordinateSpace: .global)
+***REMOVED******REMOVED******REMOVED***.onChanged {
+***REMOVED******REMOVED******REMOVED******REMOVED***let deltaY = $0.location.y - (latestDragGesture?.location.y ?? $0.location.y)
+***REMOVED******REMOVED******REMOVED******REMOVED***let proposedHeight = height + ((isCompact ? -1 : +1) * deltaY)
 ***REMOVED******REMOVED******REMOVED******REMOVED***handleColor = .activeHandleColor
-***REMOVED******REMOVED******REMOVED******REMOVED***let proposedHeight: CGFloat
-***REMOVED******REMOVED******REMOVED******REMOVED***if isCompact {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***proposedHeight = max(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.minHeight,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***height - value.translation.height
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***proposedHeight = max(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.minHeight,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***height + value.translation.height
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***height = min(proposedHeight, maximumHeight)
+***REMOVED******REMOVED******REMOVED******REMOVED***height = min(max(.minHeight, proposedHeight), maximumHeight)
+***REMOVED******REMOVED******REMOVED******REMOVED***latestDragGesture = $0
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.onEnded { _ in
+***REMOVED******REMOVED******REMOVED***.onEnded {
+***REMOVED******REMOVED******REMOVED******REMOVED***let deltaY = $0.location.y - latestDragGesture!.location.y
+***REMOVED******REMOVED******REMOVED******REMOVED***let deltaTime = $0.time.timeIntervalSince(latestDragGesture!.time)
+***REMOVED******REMOVED******REMOVED******REMOVED***let velocity = deltaY / deltaTime
+***REMOVED******REMOVED******REMOVED******REMOVED***let speed = abs(velocity)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***let newDetent = bestDetent(given: height, travelingAt: velocity)
+***REMOVED******REMOVED******REMOVED******REMOVED***let targetHeight = heightFor(detent: newDetent)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***let distanceAhead = abs(height - targetHeight)
+***REMOVED******REMOVED******REMOVED******REMOVED***let travelTime = min(0.35, distanceAhead / speed)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***withAnimation(.easeOut(duration: travelTime)) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedDetent.wrappedValue = newDetent
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***height = targetHeight
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***handleColor = .defaultHandleColor
-***REMOVED******REMOVED******REMOVED******REMOVED***withAnimation {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedDetent.wrappedValue = closestDetent
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***height = heightFor(detent: closestDetent)
-***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***latestDragGesture = nil
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ The detent that would produce a height that is closest to the current height.
-***REMOVED***var closestDetent: FloatingPanelDetent {
-***REMOVED******REMOVED***return [FloatingPanelDetent.summary, .full, .half].min {
-***REMOVED******REMOVED******REMOVED***abs(heightFor(detent: $0) - height) <
-***REMOVED******REMOVED******REMOVED******REMOVED***abs(heightFor(detent: $1) - height)
-***REMOVED*** ?? .half
+***REMOVED******REMOVED***/ Determines the best detent based on the provided metrics.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - currentHeight: The height target for the detent.
+***REMOVED******REMOVED***/   - velocity: The velocity of travel to the new detent.
+***REMOVED******REMOVED***/ - Returns: The best detent based on the provided metrics.
+***REMOVED***func bestDetent(given currentHeight: CGFloat, travelingAt velocity: Double) -> FloatingPanelDetent {
+***REMOVED******REMOVED***let lowSpeedThreshold = 100.0
+***REMOVED******REMOVED***let highSpeedThreshold = 2000.0
+***REMOVED******REMOVED***let isExpanding = (isCompact && velocity <= 0) || (!isCompact && velocity > 0)
+***REMOVED******REMOVED***let speed = abs(velocity)
+***REMOVED******REMOVED***let allDetents = [FloatingPanelDetent.summary, .full, .half]
+***REMOVED******REMOVED******REMOVED***.map { (detent: $0, height: heightFor(detent: $0)) ***REMOVED***
+***REMOVED******REMOVED******REMOVED*** If the speed was low, choose the closest detent, regardless of direction.
+***REMOVED******REMOVED***guard speed > lowSpeedThreshold else {
+***REMOVED******REMOVED******REMOVED***return allDetents.min {
+***REMOVED******REMOVED******REMOVED******REMOVED***abs(currentHeight - $0.height) < abs(currentHeight - $1.height)
+***REMOVED******REMOVED***?.detent ?? selectedDetent.wrappedValue
+***REMOVED***
+***REMOVED******REMOVED******REMOVED*** Generate a new set of detents, filtering out those that would produce a height in the
+***REMOVED******REMOVED******REMOVED*** opposite direction of the gesture, and sorting them in order of closest to furthest from
+***REMOVED******REMOVED******REMOVED*** the current height.
+***REMOVED******REMOVED***let candidateDetents = allDetents
+***REMOVED******REMOVED******REMOVED***.filter { (detent, height) in
+***REMOVED******REMOVED******REMOVED******REMOVED***if isExpanding {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return height >= currentHeight
+***REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return height < currentHeight
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.sorted {
+***REMOVED******REMOVED******REMOVED******REMOVED***if isExpanding {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return $0.1 < $1.1
+***REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return $1.1 < $0.1
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** If the gesture had high speed, select the last candidate detent (the one that would
+***REMOVED******REMOVED******REMOVED*** produce the greatest size difference from the current height). Otherwise, choose the
+***REMOVED******REMOVED******REMOVED*** first candidate detent (the one that would produce the least size difference from the
+***REMOVED******REMOVED******REMOVED*** current height).
+***REMOVED******REMOVED***if speed >= highSpeedThreshold {
+***REMOVED******REMOVED******REMOVED***return candidateDetents.last?.0 ?? selectedDetent.wrappedValue
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***return candidateDetents.first?.0 ?? selectedDetent.wrappedValue
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Calculates the height for the `detent`.

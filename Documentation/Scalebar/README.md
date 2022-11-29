@@ -10,7 +10,7 @@ Scalebar:
 
 - Can be configured to display as either a bar or line, with different styles for each.
 - Can be configured with custom colors for fills, lines, shadows, and text.
-- Can be configured to automatically hide after a pan zoom operation.
+- Can be configured to automatically hide after a pan or zoom operation.
 - Displays both metric and imperial units.
 
 ## Key properties

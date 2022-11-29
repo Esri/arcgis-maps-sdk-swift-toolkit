@@ -13,4 +13,8 @@
 
 ***REMOVED***
 
-extension UtilityTraceFunctionOutput: Identifiable { ***REMOVED***
+extension UtilityTraceFunctionOutput {
+***REMOVED***var objectID: ObjectIdentifier {
+***REMOVED******REMOVED***return ObjectIdentifier(self)
+***REMOVED***
+***REMOVED***
