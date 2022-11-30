@@ -55,7 +55,7 @@ struct UtilityNetworkTraceExampleView: View {
                 viewpoint = $0
             }
             .task {
-                await ArcGISEnvironment.credentialStore.add(try! await .publicSample)
+                ArcGISEnvironment.authenticationManager.arcGISCredentialStore.add(try! await .publicSample)
             }
             .floatingPanel(
                     backgroundColor: Color(uiColor: .systemGroupedBackground),
@@ -89,8 +89,8 @@ struct UtilityNetworkTraceExampleView: View {
 private extension ArcGISCredential {
     static var publicSample: ArcGISCredential {
         get async throws {
-            try await .token(
-                url: URL(string: "https://sampleserver7.arcgisonline.com/portal/sharing/rest")!,
+            try await TokenCredential.credential(
+                for: URL(string: "https://sampleserver7.arcgisonline.com/portal/sharing/rest")!,
                 username: "viewer01",
                 password: "I68VGU^nMurF"
             )

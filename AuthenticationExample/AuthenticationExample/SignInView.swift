@@ -61,10 +61,10 @@ struct SignInView: View {
                 return
             }
             
-            if let arcGISCredential = await ArcGISEnvironment.credentialStore.credential(for: .portal) {
-                lastSignedInUser = arcGISCredential.username ?? ""
+            if let arcGISCredential = ArcGISEnvironment.authenticationManager.arcGISCredentialStore.credential(for: .portal) {
+                lastSignedInUser = arcGISCredential.username
             } else {
-                let networkCredentials = await ArcGISEnvironment.networkCredentialStore.credentials(forHost: URL.portal.host!)
+                let networkCredentials = await ArcGISEnvironment.authenticationManager.networkCredentialStore.credentials(forHost: URL.portal.host!)
                 if !networkCredentials.isEmpty {
                     lastSignedInUser = networkCredentials.compactMap { credential in
                         switch credential {
@@ -128,41 +128,13 @@ struct SignInView: View {
     }
 }
 
-private extension ArcGISCredential {
-    /// The username, if any, associated with this credential.
-    var username: String? {
-        get {
-            switch self {
-            case .oauth(let credential):
-                return credential.username
-            case .token(let credential):
-                return credential.username
-            case .staticToken:
-                return nil
-            }
-        }
-    }
-}
-
 private extension Error {
     /// Returns a Boolean value indicating whether the error is the result of cancelling an
     /// authentication challenge.
     var isChallengeCancellationError: Bool {
         switch self {
-        case let error as ArcGISAuthenticationChallenge.Error:
-            switch error {
-            case .userCancelled:
-                return true
-            default:
-                return false
-            }
-        case let error as OAuthCredential.AuthorizationError:
-            switch error {
-            case .userCancelled:
-                return true
-            default:
-                return false
-            }
+        case is CancellationError:
+            return true
         case let error as NSError:
             return error.domain == NSURLErrorDomain && error.code == -999
         default:

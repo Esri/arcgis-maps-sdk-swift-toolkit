@@ -24,10 +24,10 @@ struct AuthenticationApp: App {
         // Create an authenticator.
         authenticator = Authenticator(
             // If you want to use OAuth, uncomment this code:
-            //oAuthConfigurations: [.arcgisDotCom]
+            //oAuthUserConfigurations: [.arcgisDotCom]
         )
         // Set the challenge handler to be the authenticator we just created.
-        ArcGISEnvironment.authenticationChallengeHandler = authenticator
+        ArcGISEnvironment.authenticationManager.authenticationChallengeHandler = authenticator
     }
     
     var body: some SwiftUI.Scene {
@@ -62,8 +62,8 @@ struct AuthenticationApp: App {
 }
 
 // If you want to use OAuth, you can uncomment this code:
-//private extension OAuthConfiguration {
-//    static let arcgisDotCom =  OAuthConfiguration(
+//private extension OAuthUserConfiguration {
+//    static let arcgisDotCom = OAuthUserConfiguration(
 //        portalURL: .portal,
 //        clientID: "<#Your client ID goes here#>",
 //        // Note: You must have the same redirect URL used here
