@@ -24,15 +24,15 @@ import XCTest
         try XCTSkipIf(apiKey == .placeholder)
         
         setChallengeHandler(ChallengeHandler(trustedHosts: [URL.sampleServer7.host!]))
-        await ArcGISEnvironment.credentialStore.add(
+        ArcGISEnvironment.authenticationManager.arcGISCredentialStore.add(
             try await tokenForSampleServer7
         )
     }
     
     func tearDownWithError() async throws {
         ArcGISEnvironment.apiKey = nil
-        ArcGISEnvironment.authenticationChallengeHandler = nil
-        await ArcGISEnvironment.credentialStore.removeAll()
+        ArcGISEnvironment.authenticationManager.authenticationChallengeHandler = nil
+        ArcGISEnvironment.authenticationManager.arcGISCredentialStore.removeAll()
     }
     
     /// Test `UtilityNetworkTraceViewModel` on a map that does not contain a utility network.
@@ -284,8 +284,8 @@ extension UtilityNetworkTraceViewModelTests {
     /// [Javascript sample](https://developers.arcgis.com/javascript/latest/sample-code/widgets-untrace/).
     var tokenForSampleServer7: ArcGISCredential {
         get async throws {
-            try await ArcGISCredential.token(
-                url: URL.sampleServer7,
+            try await TokenCredential.credential(
+                for: URL.sampleServer7,
                 username: "viewer01",
                 password: "I68VGU^nMurF"
             )
