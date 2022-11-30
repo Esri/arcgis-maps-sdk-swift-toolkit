@@ -20,7 +20,7 @@ struct BasemapGalleryExampleView: View {
 ***REMOVED***@StateObject private var map = Map(basemapStyle: .arcGISImagery)
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether to show the basemap gallery.
-***REMOVED***@State private var showBasemapGallery: Bool = false
+***REMOVED***@State private var showBasemapGallery = false
 ***REMOVED***
 ***REMOVED******REMOVED***/ The initial viewpoint of the map.
 ***REMOVED***let initialViewpoint = Viewpoint(
@@ -47,12 +47,12 @@ struct BasemapGalleryExampleView: View {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***static private func initialBasemaps() -> [BasemapGalleryItem] {
+***REMOVED***private static func initialBasemaps() -> [BasemapGalleryItem] {
 ***REMOVED******REMOVED***let identifiers = [
 ***REMOVED******REMOVED******REMOVED***"46a87c20f09e4fc48fa3c38081e0cae6",
 ***REMOVED******REMOVED******REMOVED***"f33a34de3a294590ab48f246e99958c9",
-***REMOVED******REMOVED******REMOVED***"52bdc7ab7fb044d98add148764eaa30a",  ***REMOVED***<<== mismatched spatial reference
-***REMOVED******REMOVED******REMOVED***"3a8d410a4a034a2ba9738bb0860d68c4"   ***REMOVED***<<== incorrect portal item type
+***REMOVED******REMOVED******REMOVED***"52bdc7ab7fb044d98add148764eaa30a",  ***REMOVED*** <<== mismatched spatial reference
+***REMOVED******REMOVED******REMOVED***"3a8d410a4a034a2ba9738bb0860d68c4"   ***REMOVED*** <<== incorrect portal item type
 ***REMOVED******REMOVED***]
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***return identifiers.map { identifier in
