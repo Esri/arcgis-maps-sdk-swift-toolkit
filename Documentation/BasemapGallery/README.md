@@ -8,7 +8,7 @@ The `BasemapGallery` displays a collection of basemaps from ArcGIS Online, a use
 
 > **NOTE**: BasemapGallery uses metered ArcGIS basemaps by default, so you will need to configure an API key. See [Security and authentication documentation](https://developers.arcgis.com/documentation/mapping-apis-and-services/security/#api-keys) for more information.
 
-## Features:
+## Features
 
 BasemapGallery:
 
