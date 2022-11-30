@@ -24,10 +24,10 @@ struct AuthenticationApp: App {
 ***REMOVED******REMOVED******REMOVED*** Create an authenticator.
 ***REMOVED******REMOVED***authenticator = Authenticator(
 ***REMOVED******REMOVED******REMOVED******REMOVED*** If you want to use OAuth, uncomment this code:
-***REMOVED******REMOVED******REMOVED******REMOVED***oAuthConfigurations: [.arcgisDotCom]
+***REMOVED******REMOVED******REMOVED******REMOVED***oAuthUserConfigurations: [.arcgisDotCom]
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED*** Set the challenge handler to be the authenticator we just created.
-***REMOVED******REMOVED***ArcGISEnvironment.authenticationChallengeHandler = authenticator
+***REMOVED******REMOVED***ArcGISEnvironment.authenticationManager.authenticationChallengeHandler = authenticator
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -62,8 +62,8 @@ struct AuthenticationApp: App {
 ***REMOVED***
 
 ***REMOVED*** If you want to use OAuth, you can uncomment this code:
-***REMOVED***private extension OAuthConfiguration {
-***REMOVED******REMOVED***static let arcgisDotCom =  OAuthConfiguration(
+***REMOVED***private extension OAuthUserConfiguration {
+***REMOVED******REMOVED***static let arcgisDotCom = OAuthUserConfiguration(
 ***REMOVED******REMOVED******REMOVED***portalURL: .portal,
 ***REMOVED******REMOVED******REMOVED***clientID: "<#Your client ID goes here#>",
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Note: You must have the same redirect URL used here

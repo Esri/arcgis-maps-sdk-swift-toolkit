@@ -13,26 +13,26 @@
 
 import XCTest
 @testable ***REMOVED***Toolkit
-***REMOVED***
+@testable ***REMOVED***
 import Combine
 
 @MainActor final class AuthenticatorTests: XCTestCase {
 ***REMOVED***func testInit() {
-***REMOVED******REMOVED***let config = OAuthConfiguration(
+***REMOVED******REMOVED***let config = OAuthUserConfiguration(
 ***REMOVED******REMOVED******REMOVED***portalURL: URL(string:"www.arcgis.com")!,
 ***REMOVED******REMOVED******REMOVED***clientID: "client id",
 ***REMOVED******REMOVED******REMOVED***redirectURL: URL(string:"myapp:***REMOVED***oauth")!
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED***let authenticator = Authenticator(promptForUntrustedHosts: true, oAuthConfigurations: [config])
+***REMOVED******REMOVED***let authenticator = Authenticator(promptForUntrustedHosts: true, oAuthUserConfigurations: [config])
 ***REMOVED******REMOVED***XCTAssertTrue(authenticator.promptForUntrustedHosts)
-***REMOVED******REMOVED***XCTAssertEqual(authenticator.oAuthConfigurations, [config])
+***REMOVED******REMOVED***XCTAssertEqual(authenticator.oAuthUserConfigurations, [config])
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func testMakePersistent() async throws {
 ***REMOVED******REMOVED******REMOVED*** Make sure credential stores are restored.
 ***REMOVED******REMOVED***addTeardownBlock {
-***REMOVED******REMOVED******REMOVED***ArcGISEnvironment.credentialStore = ArcGISCredentialStore()
-***REMOVED******REMOVED******REMOVED***await ArcGISEnvironment.setNetworkCredentialStore(NetworkCredentialStore())
+***REMOVED******REMOVED******REMOVED***ArcGISEnvironment.authenticationManager.arcGISCredentialStore = ArcGISCredentialStore()
+***REMOVED******REMOVED******REMOVED***await ArcGISEnvironment.authenticationManager.setNetworkCredentialStore(NetworkCredentialStore())
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** This tests that calling setupPersistentCredentialStorage tries to sync with the keychain.
@@ -44,25 +44,25 @@ import Combine
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func testClearCredentialStores() async {
-***REMOVED******REMOVED***await ArcGISEnvironment.credentialStore.add(
-***REMOVED******REMOVED******REMOVED***.staticToken(
+***REMOVED******REMOVED***ArcGISEnvironment.authenticationManager.arcGISCredentialStore.add(
+***REMOVED******REMOVED******REMOVED***PregeneratedTokenCredential(
 ***REMOVED******REMOVED******REMOVED******REMOVED***url: URL(string: "www.arcgis.com")!,
 ***REMOVED******REMOVED******REMOVED******REMOVED***tokenInfo: .init(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***accessToken: "token",
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isSSLRequired: false,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***expirationDate: .distantFuture
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***expirationDate: .distantFuture,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isSSLRequired: false
 ***REMOVED******REMOVED******REMOVED******REMOVED***)!
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let authenticator = Authenticator()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***var arcGISCreds = await ArcGISEnvironment.credentialStore.credentials
+***REMOVED******REMOVED***var arcGISCreds = ArcGISEnvironment.authenticationManager.arcGISCredentialStore.credentials
 ***REMOVED******REMOVED***XCTAssertEqual(arcGISCreds.count, 1)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***await authenticator.clearCredentialStores()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***arcGISCreds = await ArcGISEnvironment.credentialStore.credentials
+***REMOVED******REMOVED***arcGISCreds = ArcGISEnvironment.authenticationManager.arcGISCredentialStore.credentials
 ***REMOVED******REMOVED***XCTAssertTrue(arcGISCreds.isEmpty)
 ***REMOVED***
 ***REMOVED***

@@ -21,8 +21,8 @@ import XCTest
 
 extension XCTestCase {
 ***REMOVED***func setChallengeHandler(_ challengeHandler: AuthenticationChallengeHandler) {
-***REMOVED******REMOVED***let previous = ArcGISEnvironment.authenticationChallengeHandler
-***REMOVED******REMOVED***ArcGISEnvironment.authenticationChallengeHandler = challengeHandler
-***REMOVED******REMOVED***addTeardownBlock { ArcGISEnvironment.authenticationChallengeHandler = previous ***REMOVED***
+***REMOVED******REMOVED***let previous = ArcGISEnvironment.authenticationManager.authenticationChallengeHandler
+***REMOVED******REMOVED***ArcGISEnvironment.authenticationManager.authenticationChallengeHandler = challengeHandler
+***REMOVED******REMOVED***addTeardownBlock { ArcGISEnvironment.authenticationManager.authenticationChallengeHandler = previous ***REMOVED***
 ***REMOVED***
 ***REMOVED***
