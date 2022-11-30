@@ -1,4 +1,4 @@
-***REMOVED*** swift-tools-version:5.7
+***REMOVED*** swift-tools-version:5.3
 ***REMOVED*** The swift-tools-version declares the minimum version of Swift required to build this package.
 ***REMOVED***.
 
@@ -28,25 +28,18 @@ let package = Package(
 ***REMOVED***],
 ***REMOVED***dependencies: [
 ***REMOVED******REMOVED******REMOVED*** To use a daily build of the Swift API, change the path below to point to the daily build's `output` folder.
-***REMOVED******REMOVED***.package(name: "arcgis-runtime-swift", path: "../swift/ArcGIS"),
-***REMOVED******REMOVED***.package(url: "https:***REMOVED***github.com/realm/SwiftLint", branch: "release-0.50.0-rc.4")
+***REMOVED******REMOVED***.package(name: "arcgis-runtime-swift", path: "../swift/ArcGIS")
 ***REMOVED***],
 ***REMOVED***targets: [
 ***REMOVED******REMOVED***.target(
 ***REMOVED******REMOVED******REMOVED***name: "ArcGISToolkit",
 ***REMOVED******REMOVED******REMOVED***dependencies: [
 ***REMOVED******REMOVED******REMOVED******REMOVED***.product(name: "ArcGIS", package: "arcgis-runtime-swift")
-***REMOVED******REMOVED******REMOVED***],
-***REMOVED******REMOVED******REMOVED***plugins: [
-***REMOVED******REMOVED******REMOVED******REMOVED***.plugin(name: "SwiftLintPlugin", package: "SwiftLint")
 ***REMOVED******REMOVED******REMOVED***]
 ***REMOVED******REMOVED***),
 ***REMOVED******REMOVED***.testTarget(
 ***REMOVED******REMOVED******REMOVED***name: "ArcGISToolkitTests",
-***REMOVED******REMOVED******REMOVED***dependencies: ["ArcGISToolkit"],
-***REMOVED******REMOVED******REMOVED***plugins: [
-***REMOVED******REMOVED******REMOVED******REMOVED***.plugin(name: "SwiftLintPlugin", package: "SwiftLint")
-***REMOVED******REMOVED******REMOVED***]
+***REMOVED******REMOVED******REMOVED***dependencies: ["ArcGISToolkit"]
 ***REMOVED******REMOVED***)
 ***REMOVED***]
 )
