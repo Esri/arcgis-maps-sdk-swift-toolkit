@@ -63,7 +63,9 @@ struct AttachmentRow: View  {
 ***REMOVED******REMOVED******REMOVED******REMOVED***AttachmentLoadButton(attachmentModel: attachmentModel)
 ***REMOVED******REMOVED***
 ***REMOVED***
+#if !targetEnvironment(macCatalyst)
 ***REMOVED******REMOVED***.quickLookPreview($url)
+#endif
 ***REMOVED***
 ***REMOVED***
 

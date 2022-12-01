@@ -12,10 +12,12 @@
 ***REMOVED*** limitations under the License.
 
 ***REMOVED***
+#if canImport(Charts)
 import Charts
+#endif
 
 ***REMOVED***/ A view displaying details for line chart popup media.
-@available(iOS 16, *)
+@available(iOS 16, macCatalyst 16, *)
 struct LineChart: View {
 ***REMOVED******REMOVED***/ The chart data to display.
 ***REMOVED***let chartData: [ChartData]
@@ -36,6 +38,7 @@ struct LineChart: View {
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***Group {
+#if canImport(Charts)
 ***REMOVED******REMOVED******REMOVED***Chart(chartData) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***LineMark(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***x: .value("Field", $0.label),
@@ -57,6 +60,7 @@ struct LineChart: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***AxisGridLine()
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
+#endif
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***

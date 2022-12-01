@@ -42,7 +42,7 @@ struct ChartMediaView: View {
 ***REMOVED***@State private var isShowingDetailView = false
 ***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***if #available(iOS 16, *) {
+***REMOVED******REMOVED***if #available(iOS 16, macCatalyst 16, *) {
 ***REMOVED******REMOVED******REMOVED***ZStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ChartView(popupMedia: popupMedia, data: chartData)
 ***REMOVED******REMOVED******REMOVED******REMOVED***VStack {
@@ -72,7 +72,7 @@ struct ChartMediaView: View {
 ***REMOVED***
 ***REMOVED***
 
-@available(iOS 16, *)
+@available(iOS 16, macCatalyst 16, *)
 ***REMOVED***/ A view describing a chart.
 struct ChartView: View {
 ***REMOVED******REMOVED***/ The popup media to display.

@@ -76,7 +76,9 @@ struct AttachmentPreview: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***attachmentModel.load(thumbnailSize: CGSize(width: 120, height: 120))
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
+#if !targetEnvironment(macCatalyst)
 ***REMOVED******REMOVED******REMOVED***.quickLookPreview($url)
+#endif
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
