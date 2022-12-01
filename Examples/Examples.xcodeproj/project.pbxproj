@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	***REMOVED***;
-	objectVersion = 52;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -54,7 +54,7 @@
 		E47ABE472652FE0C00FD2FE3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; ***REMOVED***;
 		E47ABE4A2652FE0C00FD2FE3 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; ***REMOVED***;
 		E47ABE4C2652FE0C00FD2FE3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; ***REMOVED***;
-		E47ABE622653005F00FD2FE3 /* arcgis-maps-sdk-swift-toolit */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "arcgis-maps-sdk-swift-toolit"; path = ..; sourceTree = "<group>"; ***REMOVED***;
+		E47ABE622653005F00FD2FE3 /* arcgis-maps-sdk-swift-toolkit */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "arcgis-maps-sdk-swift-toolkit"; path = ..; sourceTree = "<group>"; ***REMOVED***;
 		E48A733D2658227000F5C118 /* Examples.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Examples.swift; sourceTree = "<group>"; ***REMOVED***;
 		E48A733E2658227100F5C118 /* ExampleList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExampleList.swift; sourceTree = "<group>"; ***REMOVED***;
 		E48A733F2658227100F5C118 /* Examples.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Examples.entitlements; sourceTree = "<group>"; ***REMOVED***;
@@ -98,7 +98,7 @@
 		E47ABE372652FE0900FD2FE3 = {
 			isa = PBXGroup;
 			children = (
-				E47ABE622653005F00FD2FE3 /* arcgis-maps-sdk-swift-toolit */,
+				E47ABE622653005F00FD2FE3 /* arcgis-maps-sdk-swift-toolkit */,
 				E47ABE562652FE7F00FD2FE3 /* Examples */,
 				E47ABE422652FE0900FD2FE3 /* ExamplesApp */,
 				E47ABE412652FE0900FD2FE3 /* Products */,
@@ -165,6 +165,7 @@
 				E47ABE3D2652FE0900FD2FE3 /* Frameworks */,
 				E47ABE3E2652FE0900FD2FE3 /* Resources */,
 				E47ABE5E2652FF1300FD2FE3 /* Embed Frameworks */,
+				4DFDB9BB29367B7F00A0AC42 /* Lint Sources */,
 			);
 			buildRules = (
 			);
@@ -221,6 +222,28 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		***REMOVED***;
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		4DFDB9BB29367B7F00A0AC42 /* Lint Sources */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Lint Sources";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "export PATH=\"$PATH:/opt/homebrew/bin\"\nif which swiftlint > /dev/null; then\n  swiftlint --config ../.swiftlint.yml\nelse\n  echo \"warning: SwiftLint not installed, download from https:***REMOVED***github.com/realm/SwiftLint\"\nfi\n";
+		***REMOVED***;
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		E47ABE3C2652FE0900FD2FE3 /* Sources */ = {

@@ -45,13 +45,13 @@ struct FloatingPanelExampleView: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***Section("Fractional Heights") {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("1/4") {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedDetent = .fraction(1/4)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedDetent = .fraction(1 / 4)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("1/2") {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedDetent = .fraction(1/2)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedDetent = .fraction(1 / 2)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("3/4") {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedDetent = .fraction(3/4)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedDetent = .fraction(3 / 4)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***Section("Value Heights") {

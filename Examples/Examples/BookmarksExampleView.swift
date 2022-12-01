@@ -17,9 +17,11 @@
 
 struct BookmarksExampleView: View {
 ***REMOVED***@Environment(\.horizontalSizeClass)
+***REMOVED***
 ***REMOVED***private var horizontalSizeClass: UserInterfaceSizeClass?
 ***REMOVED***
 ***REMOVED***@Environment(\.verticalSizeClass)
+***REMOVED***
 ***REMOVED***private var verticalSizeClass: UserInterfaceSizeClass?
 ***REMOVED***
 ***REMOVED******REMOVED***/ A web map with predefined bookmarks.
@@ -32,7 +34,7 @@ struct BookmarksExampleView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Allows for communication between the `Bookmarks` component and a `MapView` or
 ***REMOVED******REMOVED***/ `SceneView`.
-***REMOVED***@State var viewpoint: Viewpoint? = nil
+***REMOVED***@State var viewpoint: Viewpoint?
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***MapView(map: map, viewpoint: viewpoint)

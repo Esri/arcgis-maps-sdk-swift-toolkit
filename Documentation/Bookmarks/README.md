@@ -8,7 +8,7 @@ The `Bookmarks` component will display a list of bookmarks and allow the user to
 |:--:|:--:|
 |![image](https:***REMOVED***user-images.githubusercontent.com/3998072/202765630-894bee44-a0c2-4435-86f4-c80c4cc4a0b9.png)|![image](https:***REMOVED***user-images.githubusercontent.com/3998072/202765729-91c52555-4677-4c2b-b62b-215e6c3790a6.png)|
 
-## Features:
+## Features
 
 Bookmarks:
 
