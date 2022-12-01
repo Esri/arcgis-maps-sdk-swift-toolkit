@@ -71,8 +71,9 @@ struct AsyncImageView: View {
                 }
                 .padding([.top, .bottom])
             }
-            if #available(iOS 16.0, *),
+            if #available(iOS 16.0, macCatalyst 16.0, *),
                let progressInterval = viewModel.progressInterval {
+#if canImport(Charts)
                 VStack {
                     ProgressView(
                         timerInterval: progressInterval,
@@ -84,6 +85,7 @@ struct AsyncImageView: View {
                     .frame(width: mediaSize?.width)
                     Spacer()
                 }
+#endif
             }
         }
         .onAppear() {
