@@ -28,13 +28,13 @@ let package = Package(
     ],
     dependencies: [
         // To use a daily build of the Swift API, change the path below to point to the daily build's `output` folder.
-        .package(name: "arcgis-runtime-swift", path: "../swift/ArcGIS")
+        .package(name: "arcgis-maps-swift", path: "../swift/ArcGIS")
     ],
     targets: [
         .target(
             name: "ArcGISToolkit",
             dependencies: [
-                .product(name: "ArcGIS", package: "arcgis-runtime-swift")
+                .product(name: "ArcGIS", package: "arcgis-maps-swift")
             ]
         ),
         .testTarget(
