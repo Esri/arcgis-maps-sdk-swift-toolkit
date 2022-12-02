@@ -95,25 +95,32 @@ public struct BasemapGallery: View {
 ***REMOVED******REMOVED***/ The current alert item to display.
 ***REMOVED***@State private var alertItem: AlertItem?
 ***REMOVED***
+***REMOVED******REMOVED***/ The height of the bookmark gallery content.
+***REMOVED***@State private var contentHeight: CGFloat = .zero
+***REMOVED***
 ***REMOVED***public var body: some View {
-***REMOVED******REMOVED***makeGalleryView()
-***REMOVED******REMOVED******REMOVED***.frame(width: galleryWidth)
-***REMOVED******REMOVED******REMOVED***.onReceive(
-***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.$spatialReferenceMismatchError.dropFirst(),
-***REMOVED******REMOVED******REMOVED******REMOVED***perform: { error in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let error = error else { return ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***alertItem = AlertItem(spatialReferenceMismatchError: error)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***showErrorAlert = true
+***REMOVED******REMOVED***GeometryReader { geometry in
+***REMOVED******REMOVED******REMOVED***makeGalleryView()
+***REMOVED******REMOVED******REMOVED******REMOVED***.onReceive(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.$spatialReferenceMismatchError.dropFirst(),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***perform: { error in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let error = error else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***alertItem = AlertItem(spatialReferenceMismatchError: error)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***showErrorAlert = true
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***.alert(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***alertItem?.title ?? "",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented: $showErrorAlert,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***presenting: alertItem
+***REMOVED******REMOVED******REMOVED******REMOVED***) { _ in
+***REMOVED******REMOVED******REMOVED*** message: { item in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(item.message)
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***.alert(
-***REMOVED******REMOVED******REMOVED******REMOVED***alertItem?.title ?? "",
-***REMOVED******REMOVED******REMOVED******REMOVED***isPresented: $showErrorAlert,
-***REMOVED******REMOVED******REMOVED******REMOVED***presenting: alertItem
-***REMOVED******REMOVED******REMOVED***) { _ in
-***REMOVED******REMOVED*** message: { item in
-***REMOVED******REMOVED******REMOVED******REMOVED***Text(item.message)
-***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.frame(height: min(contentHeight, geometry.size.height))
+***REMOVED******REMOVED******REMOVED******REMOVED***.esriBorder()
+***REMOVED***
+***REMOVED******REMOVED***.frame(width: galleryWidth)
 ***REMOVED***
 ***REMOVED***
 
@@ -183,6 +190,9 @@ private extension BasemapGallery {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***.onSizeChange {
+***REMOVED******REMOVED******REMOVED***contentHeight = $0.height
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
@@ -218,12 +228,12 @@ extension AlertItem {
 ***REMOVED******REMOVED******REMOVED***message: "\((loadBasemapError as? ArcGISError)?.failureReason ?? "The basemap failed to load for an unknown reason.")"
 ***REMOVED******REMOVED***)
 ***REMOVED***
-
+***REMOVED***
 ***REMOVED******REMOVED***/ Creates an alert item based on a spatial reference mismatch error.
 ***REMOVED******REMOVED***/ - Parameter spatialReferenceMismatchError: The error associated with the mismatch.
 ***REMOVED***init(spatialReferenceMismatchError: SpatialReferenceMismatchError) {
 ***REMOVED******REMOVED***let message: String
-
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***switch (spatialReferenceMismatchError.basemapSpatialReference, spatialReferenceMismatchError.geoModelSpatialReference) {
 ***REMOVED******REMOVED***case (.some(_), .some(_)):
 ***REMOVED******REMOVED******REMOVED***message = "The basemap has a spatial reference that is incompatible with the map."
@@ -232,7 +242,7 @@ extension AlertItem {
 ***REMOVED******REMOVED***case (.none, _):
 ***REMOVED******REMOVED******REMOVED***message = "The basemap does not have a spatial reference."
 ***REMOVED***
-
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***self.init(
 ***REMOVED******REMOVED******REMOVED***title: "Spatial reference mismatch.",
 ***REMOVED******REMOVED******REMOVED***message: message
