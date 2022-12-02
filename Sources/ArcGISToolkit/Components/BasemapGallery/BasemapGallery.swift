@@ -95,25 +95,32 @@ public struct BasemapGallery: View {
     /// The current alert item to display.
     @State private var alertItem: AlertItem?
     
+    /// The height of the bookmark gallery content.
+    @State private var contentHeight: CGFloat = .zero
+    
     public var body: some View {
-        makeGalleryView()
-            .frame(width: galleryWidth)
-            .onReceive(
-                viewModel.$spatialReferenceMismatchError.dropFirst(),
-                perform: { error in
-                    guard let error = error else { return }
-                    alertItem = AlertItem(spatialReferenceMismatchError: error)
-                    showErrorAlert = true
+        GeometryReader { geometry in
+            makeGalleryView()
+                .onReceive(
+                    viewModel.$spatialReferenceMismatchError.dropFirst(),
+                    perform: { error in
+                        guard let error = error else { return }
+                        alertItem = AlertItem(spatialReferenceMismatchError: error)
+                        showErrorAlert = true
+                    }
+                )
+                .alert(
+                    alertItem?.title ?? "",
+                    isPresented: $showErrorAlert,
+                    presenting: alertItem
+                ) { _ in
+                } message: { item in
+                    Text(item.message)
                 }
-            )
-            .alert(
-                alertItem?.title ?? "",
-                isPresented: $showErrorAlert,
-                presenting: alertItem
-            ) { _ in
-            } message: { item in
-                Text(item.message)
-            }
+                .frame(height: min(contentHeight, geometry.size.height))
+                .esriBorder()
+        }
+        .frame(width: galleryWidth)
     }
 }
 
@@ -183,6 +190,9 @@ private extension BasemapGallery {
                 }
             }
         }
+        .onSizeChange {
+            contentHeight = $0.height
+        }
     }
 }
 
@@ -218,12 +228,12 @@ extension AlertItem {
             message: "\((loadBasemapError as? ArcGISError)?.failureReason ?? "The basemap failed to load for an unknown reason.")"
         )
     }
-
+    
     /// Creates an alert item based on a spatial reference mismatch error.
     /// - Parameter spatialReferenceMismatchError: The error associated with the mismatch.
     init(spatialReferenceMismatchError: SpatialReferenceMismatchError) {
         let message: String
-
+        
         switch (spatialReferenceMismatchError.basemapSpatialReference, spatialReferenceMismatchError.geoModelSpatialReference) {
         case (.some(_), .some(_)):
             message = "The basemap has a spatial reference that is incompatible with the map."
@@ -232,7 +242,7 @@ extension AlertItem {
         case (.none, _):
             message = "The basemap does not have a spatial reference."
         }
-
+        
         self.init(
             title: "Spatial reference mismatch.",
             message: message
