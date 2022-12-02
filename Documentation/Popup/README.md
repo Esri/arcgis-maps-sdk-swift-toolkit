@@ -13,7 +13,7 @@ Thanks to the backwards compatibility support in the API, it will also work with
 |:--:|:--:|
 |![image](https:***REMOVED***user-images.githubusercontent.com/3998072/203422507-66b6c6dc-a6c3-4040-b996-9c0da8d4e580.png)|![image](https:***REMOVED***user-images.githubusercontent.com/3998072/203422665-c4759c1f-5863-4251-94df-ed7a06ac7a8f.png)|
 
-> **NOTE**: Displaying charts in a popup requires running on a device with iOS 16.0 or greater. Displaying charts in MacCatalyst requires building your application with Xcode 14.1 or greater and running on a Mac with macOS 13.0 (Ventura) or greater.
+> **NOTE**: Displaying charts in a popup requires running on a device with iOS 16.0 or greater. Displaying charts in MacCatalyst requires building your application with Xcode 14.1 or greater and running on a Mac with macOS 13.0 (Ventura) or greater.  Also, Attachment previews are not available when running on MacCatalyst (regardless of Xcode version).
 
 ## Features
 
