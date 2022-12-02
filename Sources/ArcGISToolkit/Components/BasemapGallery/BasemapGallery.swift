@@ -95,7 +95,7 @@ public struct BasemapGallery: View {
 ***REMOVED******REMOVED***/ The current alert item to display.
 ***REMOVED***@State private var alertItem: AlertItem?
 ***REMOVED***
-***REMOVED******REMOVED***/ The height of the bookmark gallery content.
+***REMOVED******REMOVED***/ The height of the basemap gallery content.
 ***REMOVED***@State private var contentHeight: CGFloat = .zero
 ***REMOVED***
 ***REMOVED***public var body: some View {
