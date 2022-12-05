@@ -22,7 +22,7 @@ public struct OverviewMap: View {
 ***REMOVED***let viewpoint: Viewpoint?
 ***REMOVED***
 ***REMOVED******REMOVED***/ The visible area of the main `GeoView`. Not applicable to `SceneView`s.
-***REMOVED***let visibleArea: Polygon?
+***REMOVED***let visibleArea: ArcGIS.Polygon?
 ***REMOVED***
 ***REMOVED***private var symbol: Symbol
 ***REMOVED***
@@ -43,7 +43,7 @@ public struct OverviewMap: View {
 ***REMOVED******REMOVED***/ - Returns: A new `OverviewMap`.
 ***REMOVED***public static func forMapView(
 ***REMOVED******REMOVED***with viewpoint: Viewpoint?,
-***REMOVED******REMOVED***visibleArea: Polygon?
+***REMOVED******REMOVED***visibleArea: ArcGIS.Polygon?
 ***REMOVED***) -> OverviewMap {
 ***REMOVED******REMOVED***OverviewMap(viewpoint: viewpoint, visibleArea: visibleArea, symbol: .defaultFill)
 ***REMOVED***
@@ -64,7 +64,7 @@ public struct OverviewMap: View {
 ***REMOVED******REMOVED***/   - visibleArea: Visible area of the main `GeoView` used to display the extent graphic.
 ***REMOVED***init(
 ***REMOVED******REMOVED***viewpoint: Viewpoint?,
-***REMOVED******REMOVED***visibleArea: Polygon? = nil,
+***REMOVED******REMOVED***visibleArea: ArcGIS.Polygon? = nil,
 ***REMOVED******REMOVED***symbol: Symbol
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.visibleArea = visibleArea

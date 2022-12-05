@@ -67,7 +67,7 @@ struct MediaDetailView : View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***case .barChart, .columnChart, .pieChart, .lineChart:
-***REMOVED******REMOVED******REMOVED******REMOVED***if #available(iOS 16, *) {
+***REMOVED******REMOVED******REMOVED******REMOVED***if #available(iOS 16, macCatalyst 16, *) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ChartView(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***popupMedia: popupMedia,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***data: ChartData.getChartData(from: popupMedia),

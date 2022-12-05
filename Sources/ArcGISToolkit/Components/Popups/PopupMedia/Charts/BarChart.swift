@@ -12,10 +12,12 @@
 ***REMOVED*** limitations under the License.
 
 ***REMOVED***
+#if canImport(Charts)
 import Charts
+#endif
 
 ***REMOVED***/ A view displaying details for bar chart popup media.
-@available(iOS 16, *)
+@available(iOS 16, macCatalyst 16, *)
 struct BarChart: View {
 ***REMOVED******REMOVED***/ The chart data to display.
 ***REMOVED***let chartData: [ChartData]
@@ -42,6 +44,7 @@ struct BarChart: View {
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***Group {
+#if canImport(Charts)
 ***REMOVED******REMOVED******REMOVED***Chart(chartData) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if isColumnChart {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Vertical bars.
@@ -67,6 +70,7 @@ struct BarChart: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
+#endif
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***

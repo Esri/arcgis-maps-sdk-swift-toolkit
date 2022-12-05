@@ -1,4 +1,4 @@
-***REMOVED*** swift-tools-version:5.3
+***REMOVED*** swift-tools-version:5.7
 ***REMOVED*** The swift-tools-version declares the minimum version of Swift required to build this package.
 ***REMOVED***.
 
@@ -18,7 +18,8 @@ import PackageDescription
 let package = Package(
 ***REMOVED***name: "arcgis-maps-sdk-swift-toolkit",
 ***REMOVED***platforms: [
-***REMOVED******REMOVED***.macOS("12"), .iOS("15")
+***REMOVED******REMOVED***.iOS(.v15),
+***REMOVED******REMOVED***.macCatalyst(.v15)
 ***REMOVED***],
 ***REMOVED***products: [
 ***REMOVED******REMOVED***.library(
