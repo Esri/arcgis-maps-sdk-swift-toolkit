@@ -12,10 +12,12 @@
 // limitations under the License.
 
 import SwiftUI
+#if canImport(Charts)
 import Charts
+#endif
 
 /// A view displaying details for bar chart popup media.
-@available(iOS 16, *)
+@available(iOS 16, macCatalyst 16, *)
 struct BarChart: View {
     /// The chart data to display.
     let chartData: [ChartData]
@@ -42,6 +44,7 @@ struct BarChart: View {
     
     var body: some View {
         Group {
+#if canImport(Charts)
             Chart(chartData) {
                 if isColumnChart {
                     // Vertical bars.
@@ -67,6 +70,7 @@ struct BarChart: View {
                     }
                 }
             }
+#endif
         }
     }
 }
