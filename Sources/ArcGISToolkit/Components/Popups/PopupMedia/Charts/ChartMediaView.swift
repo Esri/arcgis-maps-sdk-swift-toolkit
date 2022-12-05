@@ -42,7 +42,7 @@ struct ChartMediaView: View {
     @State private var isShowingDetailView = false
     
     var body: some View {
-        if #available(iOS 16, *) {
+        if #available(iOS 16, macCatalyst 16, *) {
             ZStack {
                 ChartView(popupMedia: popupMedia, data: chartData)
                 VStack {
@@ -72,7 +72,7 @@ struct ChartMediaView: View {
     }
 }
 
-@available(iOS 16, *)
+@available(iOS 16, macCatalyst 16, *)
 /// A view describing a chart.
 struct ChartView: View {
     /// The popup media to display.

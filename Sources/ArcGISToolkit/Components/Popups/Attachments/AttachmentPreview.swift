@@ -76,7 +76,9 @@ struct AttachmentPreview: View {
                     attachmentModel.load(thumbnailSize: CGSize(width: 120, height: 120))
                 }
             }
+#if !targetEnvironment(macCatalyst)
             .quickLookPreview($url)
+#endif
         }
     }
 }
