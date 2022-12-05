@@ -22,7 +22,7 @@ public struct SearchField: View {
 ***REMOVED******REMOVED***/   - prompt: The default placeholder displayed when `currentQuery` is empty.
 ***REMOVED******REMOVED***/   - isResultsButtonHidden: The visibility of the button used to toggle visibility of the results list.
 ***REMOVED******REMOVED***/   - isResultListHidden: Binding allowing the user to toggle the visibility of the results list.
-***REMOVED***init(
+***REMOVED***public init(
 ***REMOVED******REMOVED***query: Binding<String>,
 ***REMOVED******REMOVED***prompt: String = "",
 ***REMOVED******REMOVED***isResultsButtonHidden: Bool = false,

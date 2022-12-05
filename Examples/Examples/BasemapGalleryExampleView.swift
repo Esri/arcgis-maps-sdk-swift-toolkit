@@ -37,7 +37,6 @@ struct BasemapGalleryExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if showBasemapGallery {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***BasemapGallery(items: basemaps, geoModel: map)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.style(.automatic())
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.esriBorder()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
