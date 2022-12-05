@@ -37,7 +37,6 @@ struct BasemapGalleryExampleView: View {
                 if showBasemapGallery {
                     BasemapGallery(items: basemaps, geoModel: map)
                         .style(.automatic())
-                        .esriBorder()
                         .padding()
                 }
             }
