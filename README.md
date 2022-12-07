@@ -51,7 +51,7 @@ Some of the toolkit components and examples utilize a set of ready-to-use ArcGIS
 * [Developers guide documentation](https://developers.arcgis.com/swift)
 * [Maps SDK API Reference](https://developers.arcgis.com/swift/api-reference/documentation/arcgis)
 * [Samples](https://github.com/Esri/arcgis-maps-sdk-swift-samples)
-* Got a question? Ask the community on our [forum](http://geonet.esri.com/community/developers/native-app-developers/arcgis-runtime-sdk-for-ios)
+* Got a question? Ask the community on our [forum](https://community.esri.com/t5/arcgis-runtime-sdk-for-ios-questions/bd-p/arcgis-runtime-sdk-for-ios-questions)
 
 ## Issues
 
