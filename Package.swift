@@ -34,7 +34,7 @@ let package = Package(
 ***REMOVED******REMOVED***.target(
 ***REMOVED******REMOVED******REMOVED***name: "ArcGISToolkit",
 ***REMOVED******REMOVED******REMOVED***dependencies: [
-***REMOVED******REMOVED******REMOVED******REMOVED***.product(name: "ArcGIS", package: "arcgis-maps-swift")
+***REMOVED******REMOVED******REMOVED******REMOVED***.product(name: "ArcGIS", package: "arcgis-maps-sdk-swift")
 ***REMOVED******REMOVED******REMOVED***]
 ***REMOVED******REMOVED***),
 ***REMOVED******REMOVED***.testTarget(
