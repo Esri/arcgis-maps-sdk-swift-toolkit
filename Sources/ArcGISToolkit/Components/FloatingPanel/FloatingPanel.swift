@@ -84,7 +84,7 @@ struct FloatingPanel<Content>: View where Content: View {
                     }
                     content
                         .frame(height: height)
-                        .padding(.bottom, isCompact ? 25 : .zero)
+                        .padding(.bottom, isCompact ? 25 : 10)
                     if !isCompact {
                         Divider()
                         makeHandleView()
