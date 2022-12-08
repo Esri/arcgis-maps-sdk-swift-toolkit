@@ -17,7 +17,7 @@
 //
 
 import Foundation
-@testable import ArcGIS
+import ArcGIS
 
 /// A `ChallengeHandler` that that can handle trusting hosts with a self-signed certificate, the URL credential,
 /// and the token credential.
