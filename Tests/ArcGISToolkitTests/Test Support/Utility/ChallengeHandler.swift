@@ -17,7 +17,7 @@
 ***REMOVED***
 
 import Foundation
-@testable ***REMOVED***
+***REMOVED***
 
 ***REMOVED***/ A `ChallengeHandler` that that can handle trusting hosts with a self-signed certificate, the URL credential,
 ***REMOVED***/ and the token credential.
