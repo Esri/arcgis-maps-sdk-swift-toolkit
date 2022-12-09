@@ -43,9 +43,8 @@ struct SiteAndFacilitySelector: View {
         /// A site name filter phrase entered by the user.
         @State private var query: String = ""
         
-        /// Indicates that a user pressed the back button in the navigation view, indicating that
-        /// the site should technically be considered "de-selected" even though the viewpoint hasn't
-        /// changed.
+        /// Indicates that the user pressed the back button in the navigation view, indicating the
+        /// site should appear "de-selected" even though the viewpoint hasn't changed.
         @State private var userBackedOutOfSelectedSite = false
         
         /// Allows the user to toggle the visibility of the site and facility selector.
