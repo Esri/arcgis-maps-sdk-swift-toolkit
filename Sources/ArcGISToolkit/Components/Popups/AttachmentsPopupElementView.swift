@@ -65,6 +65,8 @@ struct AttachmentsPopupElementView: View {
                         } else {
                             AttachmentList(attachmentModels: viewModel.attachmentModels)
                         }
+                    @unknown default:
+                        EmptyView()
                     }
                 } label: {
                     VStack(alignment: .leading) {
