@@ -71,6 +71,8 @@ extension NetworkChallengeContinuation.Kind {
 ***REMOVED******REMOVED******REMOVED***self = .login
 ***REMOVED******REMOVED***case .clientCertificate:
 ***REMOVED******REMOVED******REMOVED***self = .certificate
+***REMOVED******REMOVED***@unknown default:
+***REMOVED******REMOVED******REMOVED***fatalError("Unknown NetworkAuthenticationChallenge.Kind")
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
