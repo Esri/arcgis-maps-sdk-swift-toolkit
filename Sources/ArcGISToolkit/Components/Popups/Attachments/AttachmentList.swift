@@ -95,6 +95,8 @@ struct AttachmentLoadButton: View  {
                         .aspectRatio(contentMode: .fit)
                         .foregroundColor(.red)
                         .background(Color.clear)
+                @unknown default:
+                    EmptyView()
                 }
             }
             .frame(width: 24, height: 24)
