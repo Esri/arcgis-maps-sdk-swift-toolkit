@@ -58,6 +58,8 @@ import QuickLook
             defaultSystemName = "film"
         case .document, .other:
             defaultSystemName = "doc"
+        @unknown default:
+            defaultSystemName = "questionmark"
         }
     }
     
