@@ -22,6 +22,7 @@ extension UtilityTraceFunction.FunctionType {
 ***REMOVED******REMOVED***case .max: return "Max"
 ***REMOVED******REMOVED***case .min: return "Min"
 ***REMOVED******REMOVED***case .subtract: return "Subtract"
+***REMOVED******REMOVED***@unknown default: return "Unknown"
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***

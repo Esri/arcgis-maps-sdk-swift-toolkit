@@ -58,6 +58,8 @@ import QuickLook
 ***REMOVED******REMOVED******REMOVED***defaultSystemName = "film"
 ***REMOVED******REMOVED***case .document, .other:
 ***REMOVED******REMOVED******REMOVED***defaultSystemName = "doc"
+***REMOVED******REMOVED***@unknown default:
+***REMOVED******REMOVED******REMOVED***defaultSystemName = nil
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
