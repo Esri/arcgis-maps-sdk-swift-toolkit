@@ -43,9 +43,8 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED***/ A site name filter phrase entered by the user.
 ***REMOVED******REMOVED***@State private var query: String = ""
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ Indicates that a user pressed the back button in the navigation view, indicating that
-***REMOVED******REMOVED******REMOVED***/ the site should technically be considered "de-selected" even though the viewpoint hasn't
-***REMOVED******REMOVED******REMOVED***/ changed.
+***REMOVED******REMOVED******REMOVED***/ Indicates that the user pressed the back button in the navigation view, indicating the
+***REMOVED******REMOVED******REMOVED***/ site should appear "de-selected" even though the viewpoint hasn't changed.
 ***REMOVED******REMOVED***@State private var userBackedOutOfSelectedSite = false
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ Allows the user to toggle the visibility of the site and facility selector.
