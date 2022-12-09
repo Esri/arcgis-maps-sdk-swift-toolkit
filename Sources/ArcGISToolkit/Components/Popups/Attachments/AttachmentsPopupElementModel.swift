@@ -59,7 +59,7 @@ import QuickLook
         case .document, .other:
             defaultSystemName = "doc"
         @unknown default:
-            defaultSystemName = nil
+            defaultSystemName = "questionmark"
         }
     }
     
