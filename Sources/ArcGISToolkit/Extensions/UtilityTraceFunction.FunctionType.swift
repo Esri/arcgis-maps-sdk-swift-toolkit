@@ -22,6 +22,7 @@ extension UtilityTraceFunction.FunctionType {
         case .max: return "Max"
         case .min: return "Min"
         case .subtract: return "Subtract"
+        @unknown default: return "Unknown"
         }
     }
 }

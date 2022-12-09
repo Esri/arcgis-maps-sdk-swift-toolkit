@@ -71,6 +71,8 @@ extension NetworkChallengeContinuation.Kind {
             self = .login
         case .clientCertificate:
             self = .certificate
+        @unknown default:
+            fatalError("Unknown NetworkAuthenticationChallenge.Kind")
         }
     }
 }
