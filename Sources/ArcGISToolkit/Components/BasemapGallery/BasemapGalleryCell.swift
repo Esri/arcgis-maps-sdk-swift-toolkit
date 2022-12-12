@@ -67,7 +67,7 @@ struct BasemapGalleryCell: View {
             if item.hasError {
                 HStack {
                     Spacer()
-                    VStack{
+                    VStack {
                         ZStack {
                             // For a white background behind the exclamation mark.
                             Circle()
