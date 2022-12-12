@@ -38,18 +38,11 @@ struct BasemapGalleryCell: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.resizable()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.aspectRatio(contentMode: .fit)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.clipShape(roundedRect)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if isSelected {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***roundedRect
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.stroke(lineWidth: 2)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(Color.accentColor)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.overlay(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeOverlay()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.all, 4)
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Display an overlay if the item has an error.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if item.hasError {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeErrorOverlay()
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Display a progress view if the item is loading.
@@ -67,26 +60,34 @@ struct BasemapGalleryCell: View {
 ***REMOVED***).disabled(item.isBasemapLoading)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Creates a red exclamation mark, used to denote a basemap with an error.
-***REMOVED******REMOVED***/ - Returns: A new transparent rectagle view.
-***REMOVED***private func makeErrorOverlay() -> some View {
-***REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED***VStack{
-***REMOVED******REMOVED******REMOVED******REMOVED***ZStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** For a white background behind the exclamation mark.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Circle()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.white)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 16, height: 16)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "exclamationmark.circle.fill")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.red)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.background(Color.clear)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 32, height: 32)
+***REMOVED******REMOVED***/ Creates an overlay which is either a selection outline or an error icon.
+***REMOVED******REMOVED***/ - Returns: A thumbnail overlay view.
+***REMOVED***private func makeOverlay() -> some View {
+***REMOVED******REMOVED***Group {
+***REMOVED******REMOVED******REMOVED***if item.hasError {
+***REMOVED******REMOVED******REMOVED******REMOVED***HStack {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***VStack{
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ZStack {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** For a white background behind the exclamation mark.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Circle()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.white)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 16, height: 16)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "exclamationmark.circle.fill")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.red)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.background(Color.clear)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 32, height: 32)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED******REMOVED******REMOVED***.padding(.all, -10)
+***REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED***RoundedRectangle(cornerRadius: 8)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.stroke(lineWidth: isSelected ? 2 : 0)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(Color.accentColor)
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.padding(.all, -6)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a circular progress view with a rounded rectangle background.
