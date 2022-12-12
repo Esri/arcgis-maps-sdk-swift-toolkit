@@ -19,7 +19,7 @@ struct PopupExampleView: View {
     static func makeMap() -> Map {
         let portalItem = PortalItem(
             portal: .arcGISOnline(connection: .anonymous),
-            id: Item.ID(rawValue: "67c72e385e6e46bc813e0b378696aba8")!
+            id: Item.ID(rawValue: "9f3a674e998f461580006e626611f9ad")!
         )
         return Map(item: portalItem)
     }
