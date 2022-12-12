@@ -1,0 +1,23 @@
+{
+  "images" : [
+***REMOVED***{
+***REMOVED***  "filename" : "basemap@1x.png",
+***REMOVED***  "idiom" : "universal",
+***REMOVED***  "scale" : "1x"
+***REMOVED***,
+***REMOVED***{
+***REMOVED***  "filename" : "basemap@2x.png",
+***REMOVED***  "idiom" : "universal",
+***REMOVED***  "scale" : "2x"
+***REMOVED***,
+***REMOVED***{
+***REMOVED***  "filename" : "basemap@3x.png",
+***REMOVED***  "idiom" : "universal",
+***REMOVED***  "scale" : "3x"
+***REMOVED***
+  ],
+  "info" : {
+***REMOVED***"author" : "xcode",
+***REMOVED***"version" : 1
+  ***REMOVED***
+***REMOVED***

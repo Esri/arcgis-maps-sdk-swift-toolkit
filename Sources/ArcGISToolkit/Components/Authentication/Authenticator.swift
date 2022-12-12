@@ -1,0 +1,132 @@
+***REMOVED*** Copyright 2022 Esri.
+
+***REMOVED*** Licensed under the Apache License, Version 2.0 (the "License");
+***REMOVED*** you may not use this file except in compliance with the License.
+***REMOVED*** You may obtain a copy of the License at
+***REMOVED*** http:***REMOVED***www.apache.org/licenses/LICENSE-2.0
+
+***REMOVED*** Unless required by applicable law or agreed to in writing, software
+***REMOVED*** distributed under the License is distributed on an "AS IS" BASIS,
+***REMOVED*** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+***REMOVED*** See the License for the specific language governing permissions and
+***REMOVED*** limitations under the License.
+
+***REMOVED***
+***REMOVED***
+import Combine
+
+***REMOVED***/ A configurable object that handles authentication challenges.
+@MainActor
+public final class Authenticator: ObservableObject {
+***REMOVED******REMOVED***/ The OAuth configurations that this authenticator can work with.
+***REMOVED***let oAuthConfigurations: [OAuthConfiguration]
+***REMOVED***
+***REMOVED******REMOVED***/ A value indicating whether we should prompt the user when encountering an untrusted host.
+***REMOVED***var promptForUntrustedHosts: Bool
+***REMOVED***
+***REMOVED******REMOVED***/ Creates an authenticator.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - promptForUntrustedHosts: A value indicating whether we should prompt the user when
+***REMOVED******REMOVED***/   encountering an untrusted host.
+***REMOVED******REMOVED***/   - oAuthConfigurations: The OAuth configurations that this authenticator can work with.
+***REMOVED***public init(
+***REMOVED******REMOVED***promptForUntrustedHosts: Bool = false,
+***REMOVED******REMOVED***oAuthConfigurations: [OAuthConfiguration] = []
+***REMOVED***) {
+***REMOVED******REMOVED***self.promptForUntrustedHosts = promptForUntrustedHosts
+***REMOVED******REMOVED***self.oAuthConfigurations = oAuthConfigurations
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Sets up new credential stores that will be persisted to the keychain.
+***REMOVED******REMOVED***/ - Remark: The credentials will be stored in the default access group of the keychain.
+***REMOVED******REMOVED***/ You can find more information about what the default group would be here:
+***REMOVED******REMOVED***/ https:***REMOVED***developer.apple.com/documentation/security/keychain_services/keychain_items/sharing_access_to_keychain_items_among_a_collection_of_apps
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - access: When the credentials stored in the keychain can be accessed.
+***REMOVED******REMOVED***/   - synchronizesWithiCloud: A Boolean value indicating whether the credentials are synchronized with iCloud.
+***REMOVED***public func setupPersistentCredentialStorage(
+***REMOVED******REMOVED***access: ArcGIS.KeychainAccess,
+***REMOVED******REMOVED***synchronizesWithiCloud: Bool = false
+***REMOVED***) async throws {
+***REMOVED******REMOVED***let previousArcGISCredentialStore = ArcGISEnvironment.credentialStore
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Set a persistent ArcGIS credential store on the ArcGIS environment.
+***REMOVED******REMOVED***ArcGISEnvironment.credentialStore = try await .makePersistent(
+***REMOVED******REMOVED******REMOVED***access: access,
+***REMOVED******REMOVED******REMOVED***synchronizesWithiCloud: synchronizesWithiCloud
+***REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***do {
+***REMOVED******REMOVED******REMOVED******REMOVED*** Set a persistent network credential store on the ArcGIS environment.
+***REMOVED******REMOVED******REMOVED***await ArcGISEnvironment.setNetworkCredentialStore(
+***REMOVED******REMOVED******REMOVED******REMOVED***try await .makePersistent(access: access, synchronizesWithiCloud: synchronizesWithiCloud)
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED*** catch {
+***REMOVED******REMOVED******REMOVED******REMOVED*** If making the shared network credential store persistent fails,
+***REMOVED******REMOVED******REMOVED******REMOVED*** then restore the ArcGIS credential store.
+***REMOVED******REMOVED******REMOVED***ArcGISEnvironment.credentialStore = previousArcGISCredentialStore
+***REMOVED******REMOVED******REMOVED***throw error
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Clears all ArcGIS and network credentials from the respective stores.
+***REMOVED******REMOVED***/ Note: This sets up new `URLSessions` so that removed network credentials are respected
+***REMOVED******REMOVED***/ right away.
+***REMOVED***public func clearCredentialStores() async {
+***REMOVED******REMOVED******REMOVED*** Clear ArcGIS Credentials.
+***REMOVED******REMOVED***await ArcGISEnvironment.credentialStore.removeAll()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Clear network credentials.
+***REMOVED******REMOVED***await ArcGISEnvironment.networkCredentialStore.removeAll()
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ The current challenge.
+***REMOVED******REMOVED***/ This property is not set for OAuth challenges.
+***REMOVED***@Published var currentChallenge: ChallengeContinuation?
+***REMOVED***
+
+extension Authenticator: AuthenticationChallengeHandler {
+***REMOVED***public func handleArcGISAuthenticationChallenge(
+***REMOVED******REMOVED***_ challenge: ArcGISAuthenticationChallenge
+***REMOVED***) async throws -> ArcGISAuthenticationChallenge.Disposition {
+***REMOVED******REMOVED******REMOVED*** Alleviates an error with "already presenting".
+***REMOVED******REMOVED***await Task.yield()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Create the correct challenge type.
+***REMOVED******REMOVED***if let url = challenge.request.url,
+***REMOVED******REMOVED***   let configuration = oAuthConfigurations.first(where: { $0.canBeUsed(for: url) ***REMOVED***) {
+***REMOVED******REMOVED******REMOVED***return .useCredential(try await ArcGISCredential.oauth(configuration: configuration))
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***let tokenChallengeContinuation = TokenChallengeContinuation(arcGISChallenge: challenge)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED*** Set the current challenge, which will present the UX.
+***REMOVED******REMOVED******REMOVED***self.currentChallenge = tokenChallengeContinuation
+***REMOVED******REMOVED******REMOVED***defer { self.currentChallenge = nil ***REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED*** Wait for it to complete and return the resulting disposition.
+***REMOVED******REMOVED******REMOVED***return try await tokenChallengeContinuation.value.get()
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***public func handleNetworkAuthenticationChallenge(
+***REMOVED******REMOVED***_ challenge: NetworkAuthenticationChallenge
+***REMOVED***) async -> NetworkAuthenticationChallenge.Disposition  {
+***REMOVED******REMOVED******REMOVED*** If `promptForUntrustedHosts` is `false` then perform default handling
+***REMOVED******REMOVED******REMOVED*** for server trust challenges.
+***REMOVED******REMOVED***guard promptForUntrustedHosts || challenge.kind != .serverTrust else {
+***REMOVED******REMOVED******REMOVED***return .continueWithoutCredential
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let challengeContinuation = NetworkChallengeContinuation(networkChallenge: challenge)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Alleviates an error with "already presenting".
+***REMOVED******REMOVED***await Task.yield()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Set the current challenge, which will present the UX.
+***REMOVED******REMOVED***self.currentChallenge = challengeContinuation
+***REMOVED******REMOVED***defer { self.currentChallenge = nil ***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED*** Wait for it to complete and return the resulting disposition.
+***REMOVED******REMOVED***return await challengeContinuation.value
+***REMOVED***
+***REMOVED***
