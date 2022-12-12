@@ -6,7 +6,7 @@ The ArcGIS Maps SDK for Swift Toolkit contains components that will simplify you
 
 To use Toolkit in your project:
 
-* **[Install with Swift Package Manager](#swift-package-manager)** - Add `https://github.com/ArcGIS/arcgis-maps-sdk-swift-toolkit` as the package repository URL.
+* **[Install with Swift Package Manager](#swift-package-manager)** - Add `https://github.com/Esri/arcgis-maps-sdk-swift-toolkit` as the package repository URL.
 
 ## Toolkit Components
 
@@ -32,9 +32,11 @@ The *ArcGIS Maps SDK for Swift Toolkit* has a *Target SDK* version of *15.0*, me
 
 ### Swift Package Manager
 
- 1. Open your project in Xcode
- 2. Go to *File* > *Add Packages...* option
- 3. Enter `https://github.com/ArcGIS/arcgis-maps-sdk-swift-toolkit` as the package repository URL
+1. Open your Xcode project. In the menu bar, select **File** > **Add Packages...** 
+1. In the search bar, enter `https://github.com/Esri/arcgis-maps-sdk-swift-toolkit` as the package repository URL. 
+1. Optionally, select an option for the **Dependency Rule** if you want to specify an exact version or a range of versions to use.   
+1. Click **Add Package**.
+1. Add `import ArcGIS` and `import ArcGISToolkit` in your source code and start using the toolkit components.
 
  Note: The Toolkit Swift Package adds the ArcGIS Maps SDK for Swift Package as a dependency so there's no need to add both separately. If you already have the ArcGIS Maps SDK for Swift Package, delete it and just add the Toolkit Swift Package. 
 
@@ -48,12 +50,12 @@ Some of the toolkit components and examples utilize a set of ready-to-use ArcGIS
 
 * [Developers guide documentation](https://developers.arcgis.com/swift)
 * [Maps SDK API Reference](https://developers.arcgis.com/swift/api-reference/documentation/arcgis)
-* [Samples](https://github.com/ArcGIS/arcgis-maps-sdk-swift-samples)
-* Got a question? Ask the community on our [forum](http://geonet.esri.com/community/developers/native-app-developers/arcgis-runtime-sdk-for-ios)
+* [Samples](https://github.com/Esri/arcgis-maps-sdk-swift-samples)
+* Got a question? Ask the community on our [forum](https://community.esri.com/t5/arcgis-runtime-sdk-for-ios-questions/bd-p/arcgis-runtime-sdk-for-ios-questions)
 
 ## Issues
 
-Find a bug or want to request a new feature?  Please let us know by [submitting an issue](https://github.com/ArcGIS/arcgis-maps-sdk-swift-toolkit/issues/new).
+Find a bug or want to request a new feature?  Please let us know by [submitting an issue](https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/issues/new).
 
 ## Contributing
 
