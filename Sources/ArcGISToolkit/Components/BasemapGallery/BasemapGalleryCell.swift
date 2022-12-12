@@ -75,7 +75,6 @@ struct BasemapGalleryCell: View {
                                 .frame(width: 16, height: 16)
                             Image(systemName: "exclamationmark.circle.fill")
                                 .foregroundColor(.red)
-                                .background(Color.clear)
                                 .frame(width: 32, height: 32)
                         }
                         Spacer()
