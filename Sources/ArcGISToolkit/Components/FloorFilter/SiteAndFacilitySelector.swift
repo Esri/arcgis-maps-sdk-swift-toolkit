@@ -43,8 +43,9 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED***/ A site name filter phrase entered by the user.
 ***REMOVED******REMOVED***@State private var query: String = ""
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ Indicates whether a site entry should be considered "selected" in the list.
-***REMOVED******REMOVED***@State var shouldAutoSelect = false
+***REMOVED******REMOVED******REMOVED***/ Indicates that the user pressed the back button in the navigation view, indicating the
+***REMOVED******REMOVED******REMOVED***/ site should appear "de-selected" even though the viewpoint hasn't changed.
+***REMOVED******REMOVED***@State private var userBackedOutOfSelectedSite = false
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ Allows the user to toggle the visibility of the site and facility selector.
 ***REMOVED******REMOVED***var isHidden: Binding<Bool>
@@ -117,7 +118,7 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***tag: site,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selection: Binding(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***get: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return shouldAutoSelect ? viewModel.selectedSite : nil
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***userBackedOutOfSelectedSite ? nil : viewModel.selectedSite
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***set: { newSite in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let newSite = newSite else { return ***REMOVED***
@@ -130,14 +131,19 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***facilities: site.facilities,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isHidden: isHidden
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onDisappear {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***shouldAutoSelect = false
-***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.navigationBarBackButtonHidden(true)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.navigationBarItems(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***leading: Button {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***userBackedOutOfSelectedSite = true
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "chevron.left")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.listStyle(.plain)
 ***REMOVED******REMOVED******REMOVED***.onChange(of: viewModel.selection) { _ in
-***REMOVED******REMOVED******REMOVED******REMOVED***shouldAutoSelect = true
+***REMOVED******REMOVED******REMOVED******REMOVED***userBackedOutOfSelectedSite = false
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
