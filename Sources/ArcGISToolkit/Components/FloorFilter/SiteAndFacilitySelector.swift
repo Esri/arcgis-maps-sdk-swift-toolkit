@@ -43,8 +43,9 @@ struct SiteAndFacilitySelector: View {
         /// A site name filter phrase entered by the user.
         @State private var query: String = ""
         
-        /// Indicates whether a site entry should be considered "selected" in the list.
-        @State var shouldAutoSelect = false
+        /// Indicates that the user pressed the back button in the navigation view, indicating the
+        /// site should appear "de-selected" even though the viewpoint hasn't changed.
+        @State private var userBackedOutOfSelectedSite = false
         
         /// Allows the user to toggle the visibility of the site and facility selector.
         var isHidden: Binding<Bool>
@@ -117,7 +118,7 @@ struct SiteAndFacilitySelector: View {
                     tag: site,
                     selection: Binding(
                         get: {
-                            return shouldAutoSelect ? viewModel.selectedSite : nil
+                            userBackedOutOfSelectedSite ? nil : viewModel.selectedSite
                         },
                         set: { newSite in
                             guard let newSite = newSite else { return }
@@ -130,14 +131,19 @@ struct SiteAndFacilitySelector: View {
                         facilities: site.facilities,
                         isHidden: isHidden
                     )
-                    .onDisappear {
-                        shouldAutoSelect = false
-                    }
+                    .navigationBarBackButtonHidden(true)
+                    .navigationBarItems(
+                        leading: Button {
+                            userBackedOutOfSelectedSite = true
+                        } label: {
+                            Image(systemName: "chevron.left")
+                        }
+                    )
                 }
             }
             .listStyle(.plain)
             .onChange(of: viewModel.selection) { _ in
-                shouldAutoSelect = true
+                userBackedOutOfSelectedSite = false
             }
         }
     }
