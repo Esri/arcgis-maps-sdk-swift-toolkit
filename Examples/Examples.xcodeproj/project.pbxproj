@@ -396,7 +396,7 @@
 				CODE_SIGN_ENTITLEMENTS = ExamplesApp/Examples.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"ExamplesApp/Preview Content\"";
-				DEVELOPMENT_TEAM = P8HGHS7JQ8;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = ExamplesApp/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
@@ -405,7 +405,8 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.esri.Examples;
+				MARKETING_VERSION = "200.0.0-beta";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.esri.arcgis-swift-sdk-toolkit-examples";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = YES;
@@ -423,7 +424,7 @@
 				CODE_SIGN_ENTITLEMENTS = ExamplesApp/Examples.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"ExamplesApp/Preview Content\"";
-				DEVELOPMENT_TEAM = P8HGHS7JQ8;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = ExamplesApp/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
@@ -432,7 +433,8 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.esri.Examples;
+				MARKETING_VERSION = "200.0.0-beta";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.esri.arcgis-swift-sdk-toolkit-examples";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SUPPORTS_MACCATALYST = YES;
