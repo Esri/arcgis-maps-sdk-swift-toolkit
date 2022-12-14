@@ -38,9 +38,9 @@ final class TokenChallengeContinuation: ValueContinuation<Result<ArcGISAuthentic
     /// Creates a `ArcGISChallengeContinuation`.
     /// - Parameter arcGISChallenge: The associated ArcGIS authentication challenge.
     convenience init(arcGISChallenge: ArcGISAuthenticationChallenge) {
-        self.init(host: arcGISChallenge.request.url?.host ?? "") { loginCredential in
-            try await .token(
-                challenge: arcGISChallenge,
+        self.init(host: arcGISChallenge.requestURL.host ?? "") { loginCredential in
+            try await TokenCredential.credential(
+                for: arcGISChallenge,
                 username: loginCredential.username,
                 password: loginCredential.password
             )
