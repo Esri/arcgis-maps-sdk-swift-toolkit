@@ -24,15 +24,15 @@ import XCTest
 ***REMOVED******REMOVED***try XCTSkipIf(apiKey == .placeholder)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***setChallengeHandler(ChallengeHandler(trustedHosts: [URL.sampleServer7.host!]))
-***REMOVED******REMOVED***await ArcGISEnvironment.credentialStore.add(
+***REMOVED******REMOVED***ArcGISEnvironment.authenticationManager.arcGISCredentialStore.add(
 ***REMOVED******REMOVED******REMOVED***try await tokenForSampleServer7
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func tearDownWithError() async throws {
 ***REMOVED******REMOVED***ArcGISEnvironment.apiKey = nil
-***REMOVED******REMOVED***ArcGISEnvironment.authenticationChallengeHandler = nil
-***REMOVED******REMOVED***await ArcGISEnvironment.credentialStore.removeAll()
+***REMOVED******REMOVED***ArcGISEnvironment.authenticationManager.authenticationChallengeHandler = nil
+***REMOVED******REMOVED***ArcGISEnvironment.authenticationManager.arcGISCredentialStore.removeAll()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Test `UtilityNetworkTraceViewModel` on a map that does not contain a utility network.
@@ -284,8 +284,8 @@ extension UtilityNetworkTraceViewModelTests {
 ***REMOVED******REMOVED***/ [Javascript sample](https:***REMOVED***developers.arcgis.com/javascript/latest/sample-code/widgets-untrace/).
 ***REMOVED***var tokenForSampleServer7: ArcGISCredential {
 ***REMOVED******REMOVED***get async throws {
-***REMOVED******REMOVED******REMOVED***try await ArcGISCredential.token(
-***REMOVED******REMOVED******REMOVED******REMOVED***url: URL.sampleServer7,
+***REMOVED******REMOVED******REMOVED***try await TokenCredential.credential(
+***REMOVED******REMOVED******REMOVED******REMOVED***for: URL.sampleServer7,
 ***REMOVED******REMOVED******REMOVED******REMOVED***username: "viewer01",
 ***REMOVED******REMOVED******REMOVED******REMOVED***password: "I68VGU^nMurF"
 ***REMOVED******REMOVED******REMOVED***)

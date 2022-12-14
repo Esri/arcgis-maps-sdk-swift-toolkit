@@ -56,7 +56,7 @@ struct UtilityNetworkTraceExampleView: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.task {
 ***REMOVED******REMOVED******REMOVED******REMOVED***let publicSample = try? await ArcGISCredential.publicSample
-***REMOVED******REMOVED******REMOVED******REMOVED***await ArcGISEnvironment.credentialStore.add(publicSample!)
+***REMOVED******REMOVED******REMOVED******REMOVED***ArcGISEnvironment.authenticationManager.arcGISCredentialStore.add(publicSample!)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.floatingPanel(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***backgroundColor: Color(uiColor: .systemGroupedBackground),
@@ -90,8 +90,8 @@ struct UtilityNetworkTraceExampleView: View {
 private extension ArcGISCredential {
 ***REMOVED***static var publicSample: ArcGISCredential {
 ***REMOVED******REMOVED***get async throws {
-***REMOVED******REMOVED******REMOVED***try await .token(
-***REMOVED******REMOVED******REMOVED******REMOVED***url: URL(string: "https:***REMOVED***sampleserver7.arcgisonline.com/portal/sharing/rest")!,
+***REMOVED******REMOVED******REMOVED***try await TokenCredential.credential(
+***REMOVED******REMOVED******REMOVED******REMOVED***for: URL(string: "https:***REMOVED***sampleserver7.arcgisonline.com/portal/sharing/rest")!,
 ***REMOVED******REMOVED******REMOVED******REMOVED***username: "viewer01",
 ***REMOVED******REMOVED******REMOVED******REMOVED***password: "I68VGU^nMurF"
 ***REMOVED******REMOVED******REMOVED***)

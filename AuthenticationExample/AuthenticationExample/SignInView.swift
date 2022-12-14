@@ -61,10 +61,10 @@ struct SignInView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***return
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***if let arcGISCredential = await ArcGISEnvironment.credentialStore.credential(for: .portal) {
-***REMOVED******REMOVED******REMOVED******REMOVED***lastSignedInUser = arcGISCredential.username ?? ""
+***REMOVED******REMOVED******REMOVED***if let arcGISCredential = ArcGISEnvironment.authenticationManager.arcGISCredentialStore.credential(for: .portal) {
+***REMOVED******REMOVED******REMOVED******REMOVED***lastSignedInUser = arcGISCredential.username
 ***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***let networkCredentials = await ArcGISEnvironment.networkCredentialStore.credentials(forHost: URL.portal.host!)
+***REMOVED******REMOVED******REMOVED******REMOVED***let networkCredentials = await ArcGISEnvironment.authenticationManager.networkCredentialStore.credentials(forHost: URL.portal.host!)
 ***REMOVED******REMOVED******REMOVED******REMOVED***if !networkCredentials.isEmpty {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***lastSignedInUser = networkCredentials.compactMap { credential in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***switch credential {
@@ -128,41 +128,13 @@ struct SignInView: View {
 ***REMOVED***
 ***REMOVED***
 
-private extension ArcGISCredential {
-***REMOVED******REMOVED***/ The username, if any, associated with this credential.
-***REMOVED***var username: String? {
-***REMOVED******REMOVED***get {
-***REMOVED******REMOVED******REMOVED***switch self {
-***REMOVED******REMOVED******REMOVED***case .oauth(let credential):
-***REMOVED******REMOVED******REMOVED******REMOVED***return credential.username
-***REMOVED******REMOVED******REMOVED***case .token(let credential):
-***REMOVED******REMOVED******REMOVED******REMOVED***return credential.username
-***REMOVED******REMOVED******REMOVED***case .staticToken:
-***REMOVED******REMOVED******REMOVED******REMOVED***return nil
-***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***
-
 private extension Error {
 ***REMOVED******REMOVED***/ Returns a Boolean value indicating whether the error is the result of cancelling an
 ***REMOVED******REMOVED***/ authentication challenge.
 ***REMOVED***var isChallengeCancellationError: Bool {
 ***REMOVED******REMOVED***switch self {
-***REMOVED******REMOVED***case let error as ArcGISAuthenticationChallenge.Error:
-***REMOVED******REMOVED******REMOVED***switch error {
-***REMOVED******REMOVED******REMOVED***case .userCancelled:
-***REMOVED******REMOVED******REMOVED******REMOVED***return true
-***REMOVED******REMOVED******REMOVED***default:
-***REMOVED******REMOVED******REMOVED******REMOVED***return false
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***case let error as OAuthCredential.AuthorizationError:
-***REMOVED******REMOVED******REMOVED***switch error {
-***REMOVED******REMOVED******REMOVED***case .userCancelled:
-***REMOVED******REMOVED******REMOVED******REMOVED***return true
-***REMOVED******REMOVED******REMOVED***default:
-***REMOVED******REMOVED******REMOVED******REMOVED***return false
-***REMOVED******REMOVED***
+***REMOVED******REMOVED***case is CancellationError:
+***REMOVED******REMOVED******REMOVED***return true
 ***REMOVED******REMOVED***case let error as NSError:
 ***REMOVED******REMOVED******REMOVED***return error.domain == NSURLErrorDomain && error.code == -999
 ***REMOVED******REMOVED***default:

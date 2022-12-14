@@ -19,7 +19,7 @@ import Combine
 @MainActor
 public final class Authenticator: ObservableObject {
 ***REMOVED******REMOVED***/ The OAuth configurations that this authenticator can work with.
-***REMOVED***let oAuthConfigurations: [OAuthConfiguration]
+***REMOVED***let oAuthUserConfigurations: [OAuthUserConfiguration]
 ***REMOVED***
 ***REMOVED******REMOVED***/ A value indicating whether we should prompt the user when encountering an untrusted host.
 ***REMOVED***var promptForUntrustedHosts: Bool
@@ -31,10 +31,10 @@ public final class Authenticator: ObservableObject {
 ***REMOVED******REMOVED***/   - oAuthConfigurations: The OAuth configurations that this authenticator can work with.
 ***REMOVED***public init(
 ***REMOVED******REMOVED***promptForUntrustedHosts: Bool = false,
-***REMOVED******REMOVED***oAuthConfigurations: [OAuthConfiguration] = []
+***REMOVED******REMOVED***oAuthUserConfigurations: [OAuthUserConfiguration] = []
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.promptForUntrustedHosts = promptForUntrustedHosts
-***REMOVED******REMOVED***self.oAuthConfigurations = oAuthConfigurations
+***REMOVED******REMOVED***self.oAuthUserConfigurations = oAuthUserConfigurations
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Sets up new credential stores that will be persisted to the keychain.
@@ -48,23 +48,23 @@ public final class Authenticator: ObservableObject {
 ***REMOVED******REMOVED***access: ArcGIS.KeychainAccess,
 ***REMOVED******REMOVED***synchronizesWithiCloud: Bool = false
 ***REMOVED***) async throws {
-***REMOVED******REMOVED***let previousArcGISCredentialStore = ArcGISEnvironment.credentialStore
+***REMOVED******REMOVED***let previousArcGISCredentialStore = ArcGISEnvironment.authenticationManager.arcGISCredentialStore
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Set a persistent ArcGIS credential store on the ArcGIS environment.
-***REMOVED******REMOVED***ArcGISEnvironment.credentialStore = try await .makePersistent(
+***REMOVED******REMOVED***ArcGISEnvironment.authenticationManager.arcGISCredentialStore = try await .makePersistent(
 ***REMOVED******REMOVED******REMOVED***access: access,
 ***REMOVED******REMOVED******REMOVED***synchronizesWithiCloud: synchronizesWithiCloud
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Set a persistent network credential store on the ArcGIS environment.
-***REMOVED******REMOVED******REMOVED***await ArcGISEnvironment.setNetworkCredentialStore(
+***REMOVED******REMOVED******REMOVED***await ArcGISEnvironment.authenticationManager.setNetworkCredentialStore(
 ***REMOVED******REMOVED******REMOVED******REMOVED***try await .makePersistent(access: access, synchronizesWithiCloud: synchronizesWithiCloud)
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED*** catch {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** If making the shared network credential store persistent fails,
 ***REMOVED******REMOVED******REMOVED******REMOVED*** then restore the ArcGIS credential store.
-***REMOVED******REMOVED******REMOVED***ArcGISEnvironment.credentialStore = previousArcGISCredentialStore
+***REMOVED******REMOVED******REMOVED***ArcGISEnvironment.authenticationManager.arcGISCredentialStore = previousArcGISCredentialStore
 ***REMOVED******REMOVED******REMOVED***throw error
 ***REMOVED***
 ***REMOVED***
@@ -74,10 +74,10 @@ public final class Authenticator: ObservableObject {
 ***REMOVED******REMOVED***/ right away.
 ***REMOVED***public func clearCredentialStores() async {
 ***REMOVED******REMOVED******REMOVED*** Clear ArcGIS Credentials.
-***REMOVED******REMOVED***await ArcGISEnvironment.credentialStore.removeAll()
+***REMOVED******REMOVED***ArcGISEnvironment.authenticationManager.arcGISCredentialStore.removeAll()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Clear network credentials.
-***REMOVED******REMOVED***await ArcGISEnvironment.networkCredentialStore.removeAll()
+***REMOVED******REMOVED***await ArcGISEnvironment.authenticationManager.networkCredentialStore.removeAll()
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The current challenge.
@@ -93,9 +93,8 @@ extension Authenticator: AuthenticationChallengeHandler {
 ***REMOVED******REMOVED***await Task.yield()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Create the correct challenge type.
-***REMOVED******REMOVED***if let url = challenge.request.url,
-***REMOVED******REMOVED***   let configuration = oAuthConfigurations.first(where: { $0.canBeUsed(for: url) ***REMOVED***) {
-***REMOVED******REMOVED******REMOVED***return .useCredential(try await ArcGISCredential.oauth(configuration: configuration))
+***REMOVED******REMOVED***if let configuration = oAuthUserConfigurations.first(where: { $0.canBeUsed(for: challenge.requestURL) ***REMOVED***) {
+***REMOVED******REMOVED******REMOVED***return .useCredential(try await OAuthUserCredential.credential(for: configuration))
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED***let tokenChallengeContinuation = TokenChallengeContinuation(arcGISChallenge: challenge)
 ***REMOVED******REMOVED******REMOVED***
