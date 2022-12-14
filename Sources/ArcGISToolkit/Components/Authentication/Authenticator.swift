@@ -19,7 +19,7 @@ import Combine
 @MainActor
 public final class Authenticator: ObservableObject {
     /// The OAuth configurations that this authenticator can work with.
-    let oAuthConfigurations: [OAuthConfiguration]
+    let oAuthUserConfigurations: [OAuthUserConfiguration]
     
     /// A value indicating whether we should prompt the user when encountering an untrusted host.
     var promptForUntrustedHosts: Bool
@@ -31,10 +31,10 @@ public final class Authenticator: ObservableObject {
     ///   - oAuthConfigurations: The OAuth configurations that this authenticator can work with.
     public init(
         promptForUntrustedHosts: Bool = false,
-        oAuthConfigurations: [OAuthConfiguration] = []
+        oAuthUserConfigurations: [OAuthUserConfiguration] = []
     ) {
         self.promptForUntrustedHosts = promptForUntrustedHosts
-        self.oAuthConfigurations = oAuthConfigurations
+        self.oAuthUserConfigurations = oAuthUserConfigurations
     }
     
     /// Sets up new credential stores that will be persisted to the keychain.
@@ -48,23 +48,23 @@ public final class Authenticator: ObservableObject {
         access: ArcGIS.KeychainAccess,
         synchronizesWithiCloud: Bool = false
     ) async throws {
-        let previousArcGISCredentialStore = ArcGISEnvironment.credentialStore
+        let previousArcGISCredentialStore = ArcGISEnvironment.authenticationManager.arcGISCredentialStore
         
         // Set a persistent ArcGIS credential store on the ArcGIS environment.
-        ArcGISEnvironment.credentialStore = try await .makePersistent(
+        ArcGISEnvironment.authenticationManager.arcGISCredentialStore = try await .makePersistent(
             access: access,
             synchronizesWithiCloud: synchronizesWithiCloud
         )
         
         do {
             // Set a persistent network credential store on the ArcGIS environment.
-            await ArcGISEnvironment.setNetworkCredentialStore(
+            await ArcGISEnvironment.authenticationManager.setNetworkCredentialStore(
                 try await .makePersistent(access: access, synchronizesWithiCloud: synchronizesWithiCloud)
             )
         } catch {
             // If making the shared network credential store persistent fails,
             // then restore the ArcGIS credential store.
-            ArcGISEnvironment.credentialStore = previousArcGISCredentialStore
+            ArcGISEnvironment.authenticationManager.arcGISCredentialStore = previousArcGISCredentialStore
             throw error
         }
     }
@@ -74,10 +74,10 @@ public final class Authenticator: ObservableObject {
     /// right away.
     public func clearCredentialStores() async {
         // Clear ArcGIS Credentials.
-        await ArcGISEnvironment.credentialStore.removeAll()
+        ArcGISEnvironment.authenticationManager.arcGISCredentialStore.removeAll()
         
         // Clear network credentials.
-        await ArcGISEnvironment.networkCredentialStore.removeAll()
+        await ArcGISEnvironment.authenticationManager.networkCredentialStore.removeAll()
     }
     
     /// The current challenge.
@@ -93,9 +93,8 @@ extension Authenticator: AuthenticationChallengeHandler {
         await Task.yield()
         
         // Create the correct challenge type.
-        if let url = challenge.request.url,
-           let configuration = oAuthConfigurations.first(where: { $0.canBeUsed(for: url) }) {
-            return .useCredential(try await ArcGISCredential.oauth(configuration: configuration))
+        if let configuration = oAuthUserConfigurations.first(where: { $0.canBeUsed(for: challenge.requestURL) }) {
+            return .useCredential(try await OAuthUserCredential.credential(for: configuration))
         } else {
             let tokenChallengeContinuation = TokenChallengeContinuation(arcGISChallenge: challenge)
             

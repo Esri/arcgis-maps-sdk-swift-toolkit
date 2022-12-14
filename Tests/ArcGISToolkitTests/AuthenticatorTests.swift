@@ -13,26 +13,26 @@
 
 import XCTest
 @testable import ArcGISToolkit
-import ArcGIS
+@testable import ArcGIS
 import Combine
 
 @MainActor final class AuthenticatorTests: XCTestCase {
     func testInit() {
-        let config = OAuthConfiguration(
+        let config = OAuthUserConfiguration(
             portalURL: URL(string:"www.arcgis.com")!,
             clientID: "client id",
             redirectURL: URL(string:"myapp://oauth")!
         )
-        let authenticator = Authenticator(promptForUntrustedHosts: true, oAuthConfigurations: [config])
+        let authenticator = Authenticator(promptForUntrustedHosts: true, oAuthUserConfigurations: [config])
         XCTAssertTrue(authenticator.promptForUntrustedHosts)
-        XCTAssertEqual(authenticator.oAuthConfigurations, [config])
+        XCTAssertEqual(authenticator.oAuthUserConfigurations, [config])
     }
     
     func testMakePersistent() async throws {
         // Make sure credential stores are restored.
         addTeardownBlock {
-            ArcGISEnvironment.credentialStore = ArcGISCredentialStore()
-            await ArcGISEnvironment.setNetworkCredentialStore(NetworkCredentialStore())
+            ArcGISEnvironment.authenticationManager.arcGISCredentialStore = ArcGISCredentialStore()
+            await ArcGISEnvironment.authenticationManager.setNetworkCredentialStore(NetworkCredentialStore())
         }
         
         // This tests that calling setupPersistentCredentialStorage tries to sync with the keychain.
@@ -44,25 +44,25 @@ import Combine
     }
     
     func testClearCredentialStores() async {
-        await ArcGISEnvironment.credentialStore.add(
-            .staticToken(
+        ArcGISEnvironment.authenticationManager.arcGISCredentialStore.add(
+            PregeneratedTokenCredential(
                 url: URL(string: "www.arcgis.com")!,
                 tokenInfo: .init(
                     accessToken: "token",
-                    isSSLRequired: false,
-                    expirationDate: .distantFuture
+                    expirationDate: .distantFuture,
+                    isSSLRequired: false
                 )!
             )
         )
         
         let authenticator = Authenticator()
         
-        var arcGISCreds = await ArcGISEnvironment.credentialStore.credentials
+        var arcGISCreds = ArcGISEnvironment.authenticationManager.arcGISCredentialStore.credentials
         XCTAssertEqual(arcGISCreds.count, 1)
         
         await authenticator.clearCredentialStores()
         
-        arcGISCreds = await ArcGISEnvironment.credentialStore.credentials
+        arcGISCreds = ArcGISEnvironment.authenticationManager.arcGISCredentialStore.credentials
         XCTAssertTrue(arcGISCreds.isEmpty)
     }
 }
