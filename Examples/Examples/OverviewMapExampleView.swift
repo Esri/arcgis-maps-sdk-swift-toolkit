@@ -47,14 +47,17 @@ struct OverviewMapExampleView: View {
 }
 
 struct OverviewMapForMapView: View {
-    @StateObject private var map = Map(basemapStyle: .arcGISImagery)
+    /// The data model containing the `Map` displayed in the `MapView`.
+    @StateObject private var dataModel = MapDataModel(
+        map: Map(basemapStyle: .arcGISImagery)
+    )
     
     @State private var viewpoint: Viewpoint?
     
     @State private var visibleArea: ArcGIS.Polygon?
     
     var body: some View {
-        MapView(map: map)
+        MapView(map: dataModel.map)
             .onViewpointChanged(kind: .centerAndScale) { viewpoint = $0 }
             .onVisibleAreaChanged { visibleArea = $0 }
             .overlay(
@@ -75,12 +78,15 @@ struct OverviewMapForMapView: View {
 }
 
 struct OverviewMapForSceneView: View {
-    @StateObject private var scene = Scene(basemapStyle: .arcGISImagery)
+    /// The data model containing the `Scene` displayed in the `SceneView`.
+    @StateObject private var dataModel = SceneDataModel(
+        scene: Scene(basemapStyle: .arcGISImagery)
+    )
     
     @State private var viewpoint: Viewpoint?
     
     var body: some View {
-        SceneView(scene: scene)
+        SceneView(scene: dataModel.scene)
             .onViewpointChanged(kind: .centerAndScale) { viewpoint = $0 }
             .overlay(
                 OverviewMap.forSceneView(with: viewpoint)
