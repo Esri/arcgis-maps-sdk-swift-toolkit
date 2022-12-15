@@ -28,7 +28,10 @@ public struct OverviewMap: View {
     
     private var scaleFactor = 25.0
     
-    @StateObject private var map = Map(basemapStyle: .arcGISTopographic)
+    /// The data model containing the `Map` displayed in the overview map.
+    @StateObject private var dataModel = MapDataModel(
+        map: Map(basemapStyle: .arcGISTopographic)
+    )
     
     /// The `Graphic` displaying the visible area of the main `GeoView`.
     @StateObject private var graphic: Graphic
@@ -83,11 +86,11 @@ public struct OverviewMap: View {
     
     public var body: some View {
         MapView(
-            map: map,
+            map: dataModel.map,
             viewpoint: makeOverviewViewpoint(),
             graphicsOverlays: [graphicsOverlay]
         )
-        .attributionText(hidden: true)
+        .attributionBarHidden(true)
         .interactionModes([])
         .border(
             .black,
@@ -131,9 +134,8 @@ public struct OverviewMap: View {
     /// - Parameter map: The new map.
     /// - Returns: The `OverviewMap`.
     public func map(_ map: Map) -> OverviewMap {
-        var copy = self
-        copy._map = StateObject(wrappedValue: map)
-        return copy
+        self.dataModel.map = map
+        return self
     }
     
     /// The factor to multiply the main `GeoView`'s scale by.  The `OverviewMap` will display
