@@ -47,14 +47,17 @@ struct OverviewMapExampleView: View {
 ***REMOVED***
 
 struct OverviewMapForMapView: View {
-***REMOVED***@StateObject private var map = Map(basemapStyle: .arcGISImagery)
+***REMOVED******REMOVED***/ The data model containing the `Map` displayed in the `MapView`.
+***REMOVED***@StateObject private var dataModel = MapDataModel(
+***REMOVED******REMOVED***map: Map(basemapStyle: .arcGISImagery)
+***REMOVED***)
 ***REMOVED***
 ***REMOVED***@State private var viewpoint: Viewpoint?
 ***REMOVED***
 ***REMOVED***@State private var visibleArea: ArcGIS.Polygon?
 ***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***MapView(map: map)
+***REMOVED******REMOVED***MapView(map: dataModel.map)
 ***REMOVED******REMOVED******REMOVED***.onViewpointChanged(kind: .centerAndScale) { viewpoint = $0 ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onVisibleAreaChanged { visibleArea = $0 ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***.overlay(
@@ -75,12 +78,15 @@ struct OverviewMapForMapView: View {
 ***REMOVED***
 
 struct OverviewMapForSceneView: View {
-***REMOVED***@StateObject private var scene = Scene(basemapStyle: .arcGISImagery)
+***REMOVED******REMOVED***/ The data model containing the `Scene` displayed in the `SceneView`.
+***REMOVED***@StateObject private var dataModel = SceneDataModel(
+***REMOVED******REMOVED***scene: Scene(basemapStyle: .arcGISImagery)
+***REMOVED***)
 ***REMOVED***
 ***REMOVED***@State private var viewpoint: Viewpoint?
 ***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***SceneView(scene: scene)
+***REMOVED******REMOVED***SceneView(scene: dataModel.scene)
 ***REMOVED******REMOVED******REMOVED***.onViewpointChanged(kind: .centerAndScale) { viewpoint = $0 ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***.overlay(
 ***REMOVED******REMOVED******REMOVED******REMOVED***OverviewMap.forSceneView(with: viewpoint)

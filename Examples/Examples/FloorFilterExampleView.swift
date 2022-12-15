@@ -45,11 +45,14 @@ struct FloorFilterExampleView: View {
 ***REMOVED******REMOVED***scale: 100_000
 ***REMOVED***)
 ***REMOVED***
-***REMOVED***@StateObject private var map = makeMap()
+***REMOVED******REMOVED***/ The data model containing the `Map` displayed in the `MapView`.
+***REMOVED***@StateObject private var dataModel = MapDataModel(
+***REMOVED******REMOVED***map: makeMap()
+***REMOVED***)
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***MapView(
-***REMOVED******REMOVED******REMOVED***map: map,
+***REMOVED******REMOVED******REMOVED***map: dataModel.map,
 ***REMOVED******REMOVED******REMOVED***viewpoint: viewpoint
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***.onNavigatingChanged {
@@ -62,7 +65,7 @@ struct FloorFilterExampleView: View {
 ***REMOVED******REMOVED***.ignoresSafeArea(.keyboard, edges: .bottom)
 ***REMOVED******REMOVED***.overlay(alignment: floorFilterAlignment) {
 ***REMOVED******REMOVED******REMOVED***if isMapLoaded,
-***REMOVED******REMOVED******REMOVED***   let floorManager = map.floorManager {
+***REMOVED******REMOVED******REMOVED***   let floorManager = dataModel.map.floorManager {
 ***REMOVED******REMOVED******REMOVED******REMOVED***FloorFilter(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***floorManager: floorManager,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***alignment: floorFilterAlignment,
@@ -89,7 +92,7 @@ struct FloorFilterExampleView: View {
 ***REMOVED***
 ***REMOVED******REMOVED***.task {
 ***REMOVED******REMOVED******REMOVED***do {
-***REMOVED******REMOVED******REMOVED******REMOVED***try await map.load()
+***REMOVED******REMOVED******REMOVED******REMOVED***try await dataModel.map.load()
 ***REMOVED******REMOVED******REMOVED******REMOVED***isMapLoaded = true
 ***REMOVED******REMOVED*** catch {
 ***REMOVED******REMOVED******REMOVED******REMOVED***mapLoadError = true

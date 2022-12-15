@@ -16,8 +16,10 @@
 ***REMOVED***Toolkit
 
 struct BasemapGalleryExampleView: View {
-***REMOVED******REMOVED***/ The map displayed in the map view.
-***REMOVED***@StateObject private var map = Map(basemapStyle: .arcGISImagery)
+***REMOVED******REMOVED***/ The data model containing the `Map` displayed in the `MapView`.
+***REMOVED***@StateObject private var dataModel = MapDataModel(
+***REMOVED******REMOVED***map: Map(basemapStyle: .arcGISImagery)
+***REMOVED***)
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether to show the basemap gallery.
 ***REMOVED***@State private var showBasemapGallery = false
@@ -32,10 +34,10 @@ struct BasemapGalleryExampleView: View {
 ***REMOVED***private let basemaps = initialBasemaps()
 ***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***MapView(map: map, viewpoint: initialViewpoint)
+***REMOVED******REMOVED***MapView(map: dataModel.map, viewpoint: initialViewpoint)
 ***REMOVED******REMOVED******REMOVED***.overlay(alignment: .topTrailing) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if showBasemapGallery {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***BasemapGallery(items: basemaps, geoModel: map)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***BasemapGallery(items: basemaps, geoModel: dataModel.map)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.style(.automatic())
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
 ***REMOVED******REMOVED******REMOVED***

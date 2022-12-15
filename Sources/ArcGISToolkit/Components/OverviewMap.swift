@@ -28,7 +28,10 @@ public struct OverviewMap: View {
 ***REMOVED***
 ***REMOVED***private var scaleFactor = 25.0
 ***REMOVED***
-***REMOVED***@StateObject private var map = Map(basemapStyle: .arcGISTopographic)
+***REMOVED******REMOVED***/ The data model containing the `Map` displayed in the overview map.
+***REMOVED***@StateObject private var dataModel = MapDataModel(
+***REMOVED******REMOVED***map: Map(basemapStyle: .arcGISTopographic)
+***REMOVED***)
 ***REMOVED***
 ***REMOVED******REMOVED***/ The `Graphic` displaying the visible area of the main `GeoView`.
 ***REMOVED***@StateObject private var graphic: Graphic
@@ -83,11 +86,11 @@ public struct OverviewMap: View {
 ***REMOVED***
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***MapView(
-***REMOVED******REMOVED******REMOVED***map: map,
+***REMOVED******REMOVED******REMOVED***map: dataModel.map,
 ***REMOVED******REMOVED******REMOVED***viewpoint: makeOverviewViewpoint(),
 ***REMOVED******REMOVED******REMOVED***graphicsOverlays: [graphicsOverlay]
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED***.attributionText(hidden: true)
+***REMOVED******REMOVED***.attributionBarHidden(true)
 ***REMOVED******REMOVED***.interactionModes([])
 ***REMOVED******REMOVED***.border(
 ***REMOVED******REMOVED******REMOVED***.black,
@@ -131,9 +134,8 @@ public struct OverviewMap: View {
 ***REMOVED******REMOVED***/ - Parameter map: The new map.
 ***REMOVED******REMOVED***/ - Returns: The `OverviewMap`.
 ***REMOVED***public func map(_ map: Map) -> OverviewMap {
-***REMOVED******REMOVED***var copy = self
-***REMOVED******REMOVED***copy._map = StateObject(wrappedValue: map)
-***REMOVED******REMOVED***return copy
+***REMOVED******REMOVED***self.dataModel.map = map
+***REMOVED******REMOVED***return self
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The factor to multiply the main `GeoView`'s scale by.  The `OverviewMap` will display

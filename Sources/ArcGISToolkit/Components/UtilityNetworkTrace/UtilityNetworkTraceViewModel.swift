@@ -347,7 +347,7 @@ import Foundation
 ***REMOVED******REMOVED***guard let configuration = pendingTrace.configuration,
 ***REMOVED******REMOVED******REMOVED***  let network = network else { return false ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***let minStartingPoints = configuration.minimumStartingLocations.rawValue
+***REMOVED******REMOVED***let minStartingPoints = configuration.minimumStartingLocations == .one ? 1 : 2
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***guard pendingTrace.startingPoints.count >= minStartingPoints else {
 ***REMOVED******REMOVED******REMOVED***userAlert = .init(description: "Please set at least \(minStartingPoints) starting location\(minStartingPoints > 1 ? "s" : "").")
