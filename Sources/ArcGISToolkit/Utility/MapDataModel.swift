@@ -17,7 +17,7 @@
 ***REMOVED***/ A data model class containing a Map.
 public class MapDataModel: ObservableObject {
 ***REMOVED******REMOVED***/ The `Map` used for display in a `MapView`.
-***REMOVED***public var map: Map
+***REMOVED***@Published public var map: Map
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a `MapDataModel`.
 ***REMOVED******REMOVED***/ - Parameter map: The `Map` used for display.

@@ -17,7 +17,7 @@
 ***REMOVED***/ A data model class containing a Scene.
 public class SceneDataModel: ObservableObject {
 ***REMOVED******REMOVED***/ The `Scene` used for display in a `SceneView`.
-***REMOVED***public var scene: ArcGIS.Scene
+***REMOVED***@Published public var scene: ArcGIS.Scene
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a `SceneDataModel`.
 ***REMOVED******REMOVED***/ - Parameter scene: The `Scene` used for display.
