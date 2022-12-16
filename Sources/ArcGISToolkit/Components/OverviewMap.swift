@@ -186,8 +186,8 @@ private extension Symbol {
     )
 }
 
-/// A very basic data model class containing a Map.
-private class MapDataModel: ObservableObject {
+///// A very basic data model class containing a Map.
+class MapDataModel: ObservableObject {
     /// The `Map` used for display in a `MapView`.
     @Published var map: Map
     
