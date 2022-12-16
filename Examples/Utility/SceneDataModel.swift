@@ -21,13 +21,13 @@
 ***REMOVED***/ Being stored in the model also prevents the scene from continually being created during redraws.
 ***REMOVED***/ The data model class would be expanded upon in client code to contain other properties required
 ***REMOVED***/ for the model.
-public class SceneDataModel: ObservableObject {
+class SceneDataModel: ObservableObject {
 ***REMOVED******REMOVED***/ The `Scene` used for display in a `SceneView`.
-***REMOVED***@Published public var scene: ArcGIS.Scene
+***REMOVED***@Published var scene: ArcGIS.Scene
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a `SceneDataModel`.
 ***REMOVED******REMOVED***/ - Parameter scene: The `Scene` used for display.
-***REMOVED***public init(scene: ArcGIS.Scene) {
+***REMOVED***init(scene: ArcGIS.Scene) {
 ***REMOVED******REMOVED***self.scene = scene
 ***REMOVED***
 ***REMOVED***

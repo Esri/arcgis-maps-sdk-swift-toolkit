@@ -187,13 +187,13 @@ private extension Symbol {
 ***REMOVED***
 
 ***REMOVED***/ A very basic data model class containing a Map.
-public class MapDataModel: ObservableObject {
+private class MapDataModel: ObservableObject {
 ***REMOVED******REMOVED***/ The `Map` used for display in a `MapView`.
-***REMOVED***@Published public var map: Map
+***REMOVED***@Published var map: Map
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a `MapDataModel`.
 ***REMOVED******REMOVED***/ - Parameter map: The `Map` used for display.
-***REMOVED***public init(map: Map) {
+***REMOVED***init(map: Map) {
 ***REMOVED******REMOVED***self.map = map
 ***REMOVED***
 ***REMOVED***

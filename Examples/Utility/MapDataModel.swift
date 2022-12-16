@@ -21,13 +21,13 @@
 ***REMOVED***/ Being stored in the model also prevents the map from continually being created during redraws.
 ***REMOVED***/ The data model class would be expanded upon in client code to contain other properties required
 ***REMOVED***/ for the model.
-public class MapDataModel: ObservableObject {
+class MapDataModel: ObservableObject {
 ***REMOVED******REMOVED***/ The `Map` used for display in a `MapView`.
-***REMOVED***@Published public var map: Map
+***REMOVED***@Published var map: Map
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a `MapDataModel`.
 ***REMOVED******REMOVED***/ - Parameter map: The `Map` used for display.
-***REMOVED***public init(map: Map) {
+***REMOVED***init(map: Map) {
 ***REMOVED******REMOVED***self.map = map
 ***REMOVED***
 ***REMOVED***
