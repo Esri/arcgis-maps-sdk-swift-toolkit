@@ -17,7 +17,7 @@ import ArcGIS
 /// A data model class containing a Scene.
 public class SceneDataModel: ObservableObject {
     /// The `Scene` used for display in a `SceneView`.
-    public var scene: ArcGIS.Scene
+    @Published public var scene: ArcGIS.Scene
     
     /// Creates a `SceneDataModel`.
     /// - Parameter scene: The `Scene` used for display.
