@@ -17,7 +17,7 @@ import ArcGIS
 /// A data model class containing a Map.
 public class MapDataModel: ObservableObject {
     /// The `Map` used for display in a `MapView`.
-    public var map: Map
+    @Published public var map: Map
     
     /// Creates a `MapDataModel`.
     /// - Parameter map: The `Map` used for display.
