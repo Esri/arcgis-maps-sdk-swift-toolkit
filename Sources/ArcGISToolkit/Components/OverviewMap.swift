@@ -185,3 +185,15 @@ private extension Symbol {
         )
     )
 }
+
+/// A very basic data model class containing a Map.
+public class MapDataModel: ObservableObject {
+    /// The `Map` used for display in a `MapView`.
+    @Published public var map: Map
+    
+    /// Creates a `MapDataModel`.
+    /// - Parameter map: The `Map` used for display.
+    public init(map: Map) {
+        self.map = map
+    }
+}
