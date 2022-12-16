@@ -21,13 +21,13 @@ import ArcGIS
 /// Being stored in the model also prevents the scene from continually being created during redraws.
 /// The data model class would be expanded upon in client code to contain other properties required
 /// for the model.
-public class SceneDataModel: ObservableObject {
+class SceneDataModel: ObservableObject {
     /// The `Scene` used for display in a `SceneView`.
-    @Published public var scene: ArcGIS.Scene
+    @Published var scene: ArcGIS.Scene
     
     /// Creates a `SceneDataModel`.
     /// - Parameter scene: The `Scene` used for display.
-    public init(scene: ArcGIS.Scene) {
+    init(scene: ArcGIS.Scene) {
         self.scene = scene
     }
 }
