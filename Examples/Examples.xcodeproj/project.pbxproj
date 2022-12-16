@@ -113,6 +113,7 @@
 			children = (
 				E47ABE622653005F00FD2FE3 /* arcgis-maps-sdk-swift-toolkit */,
 				E47ABE562652FE7F00FD2FE3 /* Examples */,
+				752A4FC7294D26DC00A49479 /* Utility */,
 				E47ABE422652FE0900FD2FE3 /* ExamplesApp */,
 				E47ABE412652FE0900FD2FE3 /* Products */,
 				E47ABE5A2652FF1200FD2FE3 /* Frameworks */,
@@ -130,7 +131,6 @@
 		E47ABE422652FE0900FD2FE3 /* ExamplesApp */ = {
 			isa = PBXGroup;
 			children = (
-				752A4FC7294D26DC00A49479 /* Utility */,
 				E48A73412658227100F5C118 /* AnyExample.swift */,
 				E47ABE472652FE0C00FD2FE3 /* Assets.xcassets */,
 				E48A73402658227100F5C118 /* Example.swift */,
