@@ -21,13 +21,13 @@ import ArcGIS
 /// Being stored in the model also prevents the map from continually being created during redraws.
 /// The data model class would be expanded upon in client code to contain other properties required
 /// for the model.
-public class MapDataModel: ObservableObject {
+class MapDataModel: ObservableObject {
     /// The `Map` used for display in a `MapView`.
-    @Published public var map: Map
+    @Published var map: Map
     
     /// Creates a `MapDataModel`.
     /// - Parameter map: The `Map` used for display.
-    public init(map: Map) {
+    init(map: Map) {
         self.map = map
     }
 }
