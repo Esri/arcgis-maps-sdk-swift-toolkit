@@ -14,7 +14,13 @@
 import SwiftUI
 import ArcGIS
 
-/// A data model class containing a Map.
+/// A very basic data model class containing a Map. Since a `Map` is not an observable object,
+/// clients can use `MapDataModel` as an example of how you would store a map in a data model
+/// class. The class inherits from `ObservableObject` and the `Map` is defined as an @Published
+/// property. This allows SwiftUI views to be updated automatically when a new map is set on the model.
+/// Being stored in the model also prevents the map from continually being created during redraws.
+/// The data model class would be expanded upon in client code to contain other properties required
+/// for the model.
 public class MapDataModel: ObservableObject {
     /// The `Map` used for display in a `MapView`.
     @Published public var map: Map
