@@ -82,13 +82,13 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		752A4FC7294D26DC00A49479 /* Models */ = {
+		752A4FC7294D26DC00A49479 /* Utility */ = {
 			isa = PBXGroup;
 			children = (
 				752A4FC2294D268000A49479 /* MapDataModel.swift */,
 				752A4FC3294D268000A49479 /* SceneDataModel.swift */,
 			);
-			path = Models;
+			path = Utility;
 			sourceTree = "<group>";
 		***REMOVED***;
 		E40F58042656E509006F5CB9 /* Examples */ = {
@@ -130,7 +130,7 @@
 		E47ABE422652FE0900FD2FE3 /* ExamplesApp */ = {
 			isa = PBXGroup;
 			children = (
-				752A4FC7294D26DC00A49479 /* Models */,
+				752A4FC7294D26DC00A49479 /* Utility */,
 				E48A73412658227100F5C118 /* AnyExample.swift */,
 				E47ABE472652FE0C00FD2FE3 /* Assets.xcassets */,
 				E48A73402658227100F5C118 /* Example.swift */,
