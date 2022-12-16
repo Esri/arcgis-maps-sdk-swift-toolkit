@@ -16,7 +16,7 @@ import ArcGIS
 
 /// A very basic data model class containing a Scene. Since a `Scene` is not an observable object,
 /// clients can use `SceneDataModel` as an example of how you would store a scene in a data model
-/// class. The class inherits from `ObservableObject` and the `Scene` is defined as an @Published
+/// class. The class inherits from `ObservableObject` and the `Scene` is defined as a @Published
 /// property. This allows SwiftUI views to be updated automatically when a new scene is set on the model.
 /// Being stored in the model also prevents the scene from continually being created during redraws.
 /// The data model class would be expanded upon in client code to contain other properties required
