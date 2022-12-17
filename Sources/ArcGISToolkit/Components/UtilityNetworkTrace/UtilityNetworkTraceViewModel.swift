@@ -347,7 +347,7 @@ import SwiftUI
         guard let configuration = pendingTrace.configuration,
               let network = network else { return false }
         
-        let minStartingPoints = configuration.minimumStartingLocations.rawValue
+        let minStartingPoints = configuration.minimumStartingLocations == .one ? 1 : 2
         
         guard pendingTrace.startingPoints.count >= minStartingPoints else {
             userAlert = .init(description: "Please set at least \(minStartingPoints) starting location\(minStartingPoints > 1 ? "s" : "").")

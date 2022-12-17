@@ -28,14 +28,16 @@ struct ScalebarExampleView: View {
     /// The location of the scalebar on screen.
     private let alignment: Alignment = .bottomLeading
     
-    /// The `Map` displayed in the `MapView`.
-    @StateObject private var map = Map(basemapStyle: .arcGISTopographic)
+    /// The data model containing the `Map` displayed in the `MapView`.
+    @StateObject private var dataModel = MapDataModel(
+        map: Map(basemapStyle: .arcGISTopographic)
+    )
     
     /// The maximum screen width allotted to the scalebar.
     private let maxWidth: Double = 175.0
     
     var body: some View {
-        MapView(map: map)
+        MapView(map: dataModel.map)
             .onSpatialReferenceChanged { spatialReference = $0 }
             .onUnitsPerPointChanged { unitsPerPoint = $0 }
             .onViewpointChanged(kind: .centerAndScale) { viewpoint = $0 }

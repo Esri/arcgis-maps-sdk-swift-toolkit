@@ -16,7 +16,10 @@ import ArcGISToolkit
 import ArcGIS
 
 struct FloatingPanelExampleView: View {
-    @StateObject private var map = Map(basemapStyle: .arcGISImagery)
+    /// The data model containing the `Map` displayed in the `MapView`.
+    @StateObject private var dataModel = MapDataModel(
+        map: Map(basemapStyle: .arcGISImagery)
+    )
     
     @State var selectedDetent: FloatingPanelDetent = .half
     
@@ -27,7 +30,7 @@ struct FloatingPanelExampleView: View {
     
     var body: some View {
         MapView(
-            map: map,
+            map: dataModel.map,
             viewpoint: initialViewpoint
         )
         .floatingPanel(selectedDetent: $selectedDetent, isPresented: .constant(true)) {

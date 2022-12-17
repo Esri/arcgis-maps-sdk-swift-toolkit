@@ -16,8 +16,10 @@ import ArcGISToolkit
 import SwiftUI
 
 struct BookmarksExampleView: View {
-    /// A web map with predefined bookmarks.
-    @StateObject private var map = Map(url: URL(string: "https://www.arcgis.com/home/item.html?id=16f1b8ba37b44dc3884afc8d5f454dd2")!)!
+    /// The data model containing a `Map` with predefined bookmarks.
+    @StateObject private var dataModel = MapDataModel(
+        map: Map(url: URL(string: "https://www.arcgis.com/home/item.html?id=16f1b8ba37b44dc3884afc8d5f454dd2")!)!
+    )
     
     /// Indicates if the `Bookmarks` component is shown or not.
     /// - Remark: This allows a developer to control when the `Bookmarks` component is
@@ -29,7 +31,7 @@ struct BookmarksExampleView: View {
     @State var viewpoint: Viewpoint?
     
     var body: some View {
-        MapView(map: map, viewpoint: viewpoint)
+        MapView(map: dataModel.map, viewpoint: viewpoint)
             .onViewpointChanged(kind: .centerAndScale) {
                 viewpoint = $0
             }
@@ -50,7 +52,7 @@ struct BookmarksExampleView: View {
                         // bookmark selection.
                         Bookmarks(
                             isPresented: $showingBookmarks,
-                            mapOrScene: map,
+                            mapOrScene: dataModel.map,
                             viewpoint: $viewpoint
                         )
                         
