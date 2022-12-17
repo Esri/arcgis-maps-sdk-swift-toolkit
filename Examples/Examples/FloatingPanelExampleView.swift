@@ -16,7 +16,10 @@
 ***REMOVED***
 
 struct FloatingPanelExampleView: View {
-***REMOVED***@StateObject private var map = Map(basemapStyle: .arcGISImagery)
+***REMOVED******REMOVED***/ The data model containing the `Map` displayed in the `MapView`.
+***REMOVED***@StateObject private var dataModel = MapDataModel(
+***REMOVED******REMOVED***map: Map(basemapStyle: .arcGISImagery)
+***REMOVED***)
 ***REMOVED***
 ***REMOVED***@State var selectedDetent: FloatingPanelDetent = .half
 ***REMOVED***
@@ -27,7 +30,7 @@ struct FloatingPanelExampleView: View {
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***MapView(
-***REMOVED******REMOVED******REMOVED***map: map,
+***REMOVED******REMOVED******REMOVED***map: dataModel.map,
 ***REMOVED******REMOVED******REMOVED***viewpoint: initialViewpoint
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***.floatingPanel(selectedDetent: $selectedDetent, isPresented: .constant(true)) {

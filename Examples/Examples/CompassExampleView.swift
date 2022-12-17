@@ -16,8 +16,10 @@
 ***REMOVED***
 
 struct CompassExampleView: View {
-***REMOVED******REMOVED***/ The map displayed in the map view.
-***REMOVED***@StateObject private var map = Map(basemapStyle: .arcGISImagery)
+***REMOVED******REMOVED***/ The data model containing the `Map` displayed in the `MapView`.
+***REMOVED***@StateObject private var dataModel = MapDataModel(
+***REMOVED******REMOVED***map: Map(basemapStyle: .arcGISImagery)
+***REMOVED***)
 ***REMOVED***
 ***REMOVED******REMOVED***/ Allows for communication between the Compass and MapView or SceneView.
 ***REMOVED***@State private var viewpoint: Viewpoint? = Viewpoint(
@@ -27,7 +29,7 @@ struct CompassExampleView: View {
 ***REMOVED***)
 ***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***MapView(map: map, viewpoint: viewpoint)
+***REMOVED******REMOVED***MapView(map: dataModel.map, viewpoint: viewpoint)
 ***REMOVED******REMOVED******REMOVED***.onViewpointChanged(kind: .centerAndScale) { viewpoint = $0 ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***.overlay(alignment: .topTrailing) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Compass(viewpoint: $viewpoint)
