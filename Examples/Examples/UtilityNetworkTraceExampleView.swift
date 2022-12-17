@@ -18,8 +18,10 @@ import SwiftUI
 /// A demonstration of the utility network trace tool which runs traces on a web map published with a utility
 /// network and trace configurations.
 struct UtilityNetworkTraceExampleView: View {
-    /// The map containing the utility networks.
-    @StateObject private var map = makeMap()
+    /// The data model containing a `Map` with the utility networks.
+    @StateObject private var dataModel = MapDataModel(
+        map: makeMap()
+    )
     
     /// The current detent of the floating panel presenting the trace tool.
     @State var activeDetent: FloatingPanelDetent = .half
@@ -42,7 +44,7 @@ struct UtilityNetworkTraceExampleView: View {
     var body: some View {
         MapViewReader { mapViewProxy in
             MapView(
-                map: map,
+                map: dataModel.map,
                 viewpoint: viewpoint,
                 graphicsOverlays: [resultGraphicsOverlay]
             )
@@ -66,7 +68,7 @@ struct UtilityNetworkTraceExampleView: View {
             ) {
                 UtilityNetworkTrace(
                     graphicsOverlay: $resultGraphicsOverlay,
-                    map: map,
+                    map: dataModel.map,
                     mapPoint: $mapPoint,
                     viewPoint: $viewPoint,
                     mapViewProxy: $mapViewProxy,

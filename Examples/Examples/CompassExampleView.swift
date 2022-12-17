@@ -16,8 +16,10 @@ import ArcGISToolkit
 import SwiftUI
 
 struct CompassExampleView: View {
-    /// The map displayed in the map view.
-    @StateObject private var map = Map(basemapStyle: .arcGISImagery)
+    /// The data model containing the `Map` displayed in the `MapView`.
+    @StateObject private var dataModel = MapDataModel(
+        map: Map(basemapStyle: .arcGISImagery)
+    )
     
     /// Allows for communication between the Compass and MapView or SceneView.
     @State private var viewpoint: Viewpoint? = Viewpoint(
@@ -27,7 +29,7 @@ struct CompassExampleView: View {
     )
     
     var body: some View {
-        MapView(map: map, viewpoint: viewpoint)
+        MapView(map: dataModel.map, viewpoint: viewpoint)
             .onViewpointChanged(kind: .centerAndScale) { viewpoint = $0 }
             .overlay(alignment: .topTrailing) {
                 Compass(viewpoint: $viewpoint)

@@ -23,7 +23,10 @@ struct SearchExampleView: View {
         maximumSuggestions: 16
     )
     
-    @StateObject private var map = Map(basemapStyle: .arcGISImagery)
+    /// The data model containing the `Map` displayed in the `MapView`.
+    @StateObject private var dataModel = MapDataModel(
+        map: Map(basemapStyle: .arcGISImagery)
+    )
     
     /// The `GraphicsOverlay` used by the `SearchView` to display search results on the map.
     private let searchResultsOverlay = GraphicsOverlay()
@@ -49,7 +52,7 @@ struct SearchExampleView: View {
     
     var body: some View {
         MapView(
-            map: map,
+            map: dataModel.map,
             viewpoint: searchResultViewpoint,
             graphicsOverlays: [searchResultsOverlay]
         )
