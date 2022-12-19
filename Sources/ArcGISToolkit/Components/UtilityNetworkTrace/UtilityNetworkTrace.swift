@@ -138,10 +138,13 @@ public struct UtilityNetworkTrace: View {
             }
             makeDetailSectionHeader(title: assetGroupName)
             List {
-                ForEach(assetTypeGroups.keys.compactMap({$0}).sorted(), id: \.self) { assetTypeGroupName in
-                    Section(assetTypeGroupName) {
+                ForEach(
+                    assetTypeGroups.sorted(using: KeyPathComparator(\.key)),
+                    id: \.key
+                ) { (name, elements) in
+                    Section(name) {
                         DisclosureGroup {
-                            ForEach(assetTypeGroups[assetTypeGroupName] ?? [], id: \.globalID) { element in
+                            ForEach(elements, id: \.globalID) { element in
                                 Button {
                                     Task {
                                         if let feature = await viewModel.feature(for: element),
@@ -151,14 +154,14 @@ public struct UtilityNetworkTrace: View {
                                     }
                                 } label: {
                                     Label {
-                                        Text("Object ID \(element.objectID.description)")
+                                        Text("Object ID \(element.objectID, format: .number.grouping(.never))")
                                     } icon: {
                                         Image(systemName: "scope")
                                     }
                                 }
                             }
                         } label: {
-                            Text(assetTypeGroups[assetTypeGroupName]?.count.description ?? "N/A")
+                            Text(elements.count, format: .number)
                         }
                     }
                 }
@@ -343,16 +346,18 @@ public struct UtilityNetworkTrace: View {
                             set: { currentActivity = .viewingTraces($0 ? .viewingFeatureResults : nil) }
                         )
                     ) {
-                        ForEach(viewModel.selectedTrace?.assetGroupNames.sorted() ?? [], id: \.self) { assetGroupName in
-                            HStack {
-                                Text(assetGroupName)
-                                Spacer()
-                                Text(viewModel.selectedTrace?.elementsInAssetGroup(named: assetGroupName).count.description ?? "N/A")
-                            }
-                            .foregroundColor(.blue)
-                            .contentShape(Rectangle())
-                            .onTapGesture {
-                                currentActivity = .viewingTraces(.viewingElementGroup(named: assetGroupName))
+                        if let selectedTrace = viewModel.selectedTrace {
+                            ForEach(selectedTrace.assetGroupNames.sorted(), id: \.self) { assetGroupName in
+                                HStack {
+                                    Text(assetGroupName)
+                                    Spacer()
+                                    Text(selectedTrace.elementsInAssetGroup(named: assetGroupName).count, format: .number)
+                                }
+                                .foregroundColor(.blue)
+                                .contentShape(Rectangle())
+                                .onTapGesture {
+                                    currentActivity = .viewingTraces(.viewingElementGroup(named: assetGroupName))
+                                }
                             }
                         }
                     }
@@ -365,15 +370,17 @@ public struct UtilityNetworkTrace: View {
                             set: { currentActivity = .viewingTraces($0 ? .viewingFunctionResults : nil) }
                         )
                     ) {
-                        ForEach(viewModel.selectedTrace?.functionOutputs ?? [], id: \.objectID) { item in
-                            HStack {
-                                Text(item.function.networkAttribute.name)
-                                Spacer()
-                                VStack(alignment: .trailing) {
-                                    Text(item.function.functionType.title)
-                                        .font(.caption)
-                                        .foregroundColor(.secondary)
-                                    Text((item.result as? Double)?.description ?? "N/A")
+                        if let selectedTrace = viewModel.selectedTrace {
+                            ForEach(selectedTrace.functionOutputs, id: \.objectID) { item in
+                                HStack {
+                                    Text(item.function.networkAttribute.name)
+                                    Spacer()
+                                    VStack(alignment: .trailing) {
+                                        Text(item.function.functionType.title)
+                                            .font(.caption)
+                                            .foregroundColor(.secondary)
+                                        Text((item.result as? Double).map { "\($0)" } ?? "N/A")
+                                    }
                                 }
                             }
                         }
@@ -635,9 +642,9 @@ public struct UtilityNetworkTrace: View {
     // MARK: Computed Properties
     
     /// Indicates the number of the trace currently being viewed out the total number of traces.
-    private var currentTraceLabel: String {
+    private var currentTraceLabel: LocalizedStringKey {
         guard let index = viewModel.selectedTraceIndex else { return "Error" }
-        return "Trace \(index+1) of \(viewModel.completedTraces.count.description)"
+        return "Trace \(index+1) of \(viewModel.completedTraces.count)"
     }
     
     /// The name of the selected utility element asset group.
