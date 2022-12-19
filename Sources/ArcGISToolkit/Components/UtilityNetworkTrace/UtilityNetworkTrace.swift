@@ -531,7 +531,6 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ A graphical interface to run pre-configured traces on a map's utility networks.
 ***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - activeDetent: The current detent of the floating panel.
 ***REMOVED******REMOVED***/   - graphicsOverlay: The graphics overlay to hold generated starting point and trace graphics.
 ***REMOVED******REMOVED***/   - map: The map containing the utility network(s).
 ***REMOVED******REMOVED***/   - mapPoint: Acts as the point at which newly selected starting point graphics will be created.
