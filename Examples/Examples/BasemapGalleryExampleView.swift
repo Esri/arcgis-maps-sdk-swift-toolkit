@@ -43,9 +43,13 @@ struct BasemapGalleryExampleView: View {
                 }
             }
             .navigationTitle("Basemap Gallery")
-            .navigationBarItems(trailing: Toggle(isOn: $showBasemapGallery) {
-                Image("basemap", label: Text("Show base map"))
-            })
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Toggle(isOn: $showBasemapGallery) {
+                        Image("basemap", label: Text("Show base map"))
+                    }
+                }
+            }
     }
     
     private static func initialBasemaps() -> [BasemapGalleryItem] {
