@@ -53,7 +53,7 @@ final class TokenChallengeContinuation: ValueContinuation<Result<ArcGISAuthentic
     func resume(with loginCredential: LoginCredential) {
         Task {
             setValue(await Result {
-                .useCredential(try await tokenCredentialProvider(loginCredential))
+                .continueWithCredential(try await tokenCredentialProvider(loginCredential))
             })
         }
     }
