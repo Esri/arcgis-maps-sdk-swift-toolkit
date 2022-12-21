@@ -53,7 +53,7 @@ final class TokenChallengeContinuation: ValueContinuation<Result<ArcGISAuthentic
 ***REMOVED***func resume(with loginCredential: LoginCredential) {
 ***REMOVED******REMOVED***Task {
 ***REMOVED******REMOVED******REMOVED***setValue(await Result {
-***REMOVED******REMOVED******REMOVED******REMOVED***.useCredential(try await tokenCredentialProvider(loginCredential))
+***REMOVED******REMOVED******REMOVED******REMOVED***.continueWithCredential(try await tokenCredentialProvider(loginCredential))
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
