@@ -73,7 +73,7 @@ import ArcGIS
         
         Task {
             do {
-                challenge.resume(with: .useCredential(try .certificate(at: certificateURL, password: password)))
+                challenge.resume(with: .continueWithCredential(try .certificate(at: certificateURL, password: password)))
             } catch {
                 // This is required to prevent an "already presenting" error.
                 try? await Task.sleep(nanoseconds: 100_000)
