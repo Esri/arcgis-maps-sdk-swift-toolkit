@@ -94,7 +94,7 @@ extension Authenticator: AuthenticationChallengeHandler {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Create the correct challenge type.
 ***REMOVED******REMOVED***if let configuration = oAuthUserConfigurations.first(where: { $0.canBeUsed(for: challenge.requestURL) ***REMOVED***) {
-***REMOVED******REMOVED******REMOVED***return .useCredential(try await OAuthUserCredential.credential(for: configuration))
+***REMOVED******REMOVED******REMOVED***return .continueWithCredential(try await OAuthUserCredential.credential(for: configuration))
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED***let tokenChallengeContinuation = TokenChallengeContinuation(arcGISChallenge: challenge)
 ***REMOVED******REMOVED******REMOVED***

@@ -73,7 +73,7 @@ import UniformTypeIdentifiers
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***Task {
 ***REMOVED******REMOVED******REMOVED***do {
-***REMOVED******REMOVED******REMOVED******REMOVED***challenge.resume(with: .useCredential(try .certificate(at: certificateURL, password: password)))
+***REMOVED******REMOVED******REMOVED******REMOVED***challenge.resume(with: .continueWithCredential(try .certificate(at: certificateURL, password: password)))
 ***REMOVED******REMOVED*** catch {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** This is required to prevent an "already presenting" error.
 ***REMOVED******REMOVED******REMOVED******REMOVED***try? await Task.sleep(nanoseconds: 100_000)
