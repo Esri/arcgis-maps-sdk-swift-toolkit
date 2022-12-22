@@ -29,9 +29,7 @@ public struct OverviewMap: View {
     private var scaleFactor = 25.0
     
     /// The data model containing the `Map` displayed in the overview map.
-    @StateObject private var dataModel = MapDataModel(
-        map: Map(basemapStyle: .arcGISTopographic)
-    )
+    @StateObject private var dataModel: MapDataModel
     
     /// The `Graphic` displaying the visible area of the main `GeoView`.
     @StateObject private var graphic: Graphic
@@ -43,36 +41,56 @@ public struct OverviewMap: View {
     /// - Parameters:
     ///   - viewpoint: Viewpoint of the main `MapView` used to update the `OverviewMap` view.
     ///   - visibleArea: Visible area of the main `MapView ` used to display the extent graphic.
+    ///   - map: The `Map` displayed in the `OverviewMap`. Defaults to `nil`, in which case
+    ///   a map with the `arcGISTopographic` basemap style is used.
     /// - Returns: A new `OverviewMap`.
     public static func forMapView(
         with viewpoint: Viewpoint?,
-        visibleArea: ArcGIS.Polygon?
+        visibleArea: ArcGIS.Polygon?,
+        map: Map? = nil
     ) -> OverviewMap {
-        OverviewMap(viewpoint: viewpoint, visibleArea: visibleArea, symbol: .defaultFill)
+        OverviewMap(
+            viewpoint: viewpoint,
+            visibleArea: visibleArea,
+            symbol: .defaultFill,
+            map: map
+        )
     }
-    
+
     /// Creates an `OverviewMap` for use on a `SceneView`.
-    /// - Parameter viewpoint: Viewpoint of the main `SceneView` used to update the
+    /// - Parameters:
+    ///   - viewpoint: Viewpoint of the main `SceneView` used to update the
     /// `OverviewMap` view.
+    ///   - map: The `Map` displayed in the `OverviewMap`. Defaults to `nil`, in which case
+    ///   a map with the `arcGISTopographic` basemap style is used.
     /// - Returns: A new `OverviewMap`.
     public static func forSceneView(
-        with viewpoint: Viewpoint?
+        with viewpoint: Viewpoint?,
+        map: Map? = nil
     ) -> OverviewMap {
-        OverviewMap(viewpoint: viewpoint, symbol: .defaultMarker)
+        OverviewMap(viewpoint: viewpoint, symbol: .defaultMarker, map: map)
     }
     
     /// Creates an `OverviewMap`. Used for creating an `OverviewMap` for use on a `MapView`.
     /// - Parameters:
     ///   - viewpoint: Viewpoint of the main `GeoView` used to update the `OverviewMap` view.
     ///   - visibleArea: Visible area of the main `GeoView` used to display the extent graphic.
+    ///   - map: The `Map` displayed in the `OverviewMap`.
     init(
         viewpoint: Viewpoint?,
         visibleArea: ArcGIS.Polygon? = nil,
-        symbol: Symbol
+        symbol: Symbol,
+        map: Map?
     ) {
         self.visibleArea = visibleArea
         self.viewpoint = viewpoint
         self.symbol = symbol
+        
+        _dataModel = StateObject(
+            wrappedValue: MapDataModel(
+                map: map ?? Map(basemapStyle: .arcGISTopographic)
+            )
+        )
         
         let graphic = Graphic(symbol: self.symbol)
         
@@ -129,14 +147,6 @@ public struct OverviewMap: View {
     }
     
     // MARK: Modifiers
-    
-    /// The `Map` displayed in the `OverviewMap`.
-    /// - Parameter map: The new map.
-    /// - Returns: The `OverviewMap`.
-    public func map(_ map: Map) -> OverviewMap {
-        self.dataModel.map = map
-        return self
-    }
     
     /// The factor to multiply the main `GeoView`'s scale by.  The `OverviewMap` will display
     /// at the a scale equal to: `viewpoint.targetScale` x `scaleFactor`.
