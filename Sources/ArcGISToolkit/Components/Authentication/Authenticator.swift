@@ -94,7 +94,7 @@ extension Authenticator: AuthenticationChallengeHandler {
         
         // Create the correct challenge type.
         if let configuration = oAuthUserConfigurations.first(where: { $0.canBeUsed(for: challenge.requestURL) }) {
-            return .useCredential(try await OAuthUserCredential.credential(for: configuration))
+            return .continueWithCredential(try await OAuthUserCredential.credential(for: configuration))
         } else {
             let tokenChallengeContinuation = TokenChallengeContinuation(arcGISChallenge: challenge)
             
