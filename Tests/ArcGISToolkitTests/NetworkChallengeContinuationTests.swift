@@ -24,8 +24,9 @@ import XCTest
     
     func testResumeAndComplete() async {
         let challenge = NetworkChallengeContinuation(host: "host.com", kind: .serverTrust)
-        challenge.resume(with: .useCredential(.serverTrust))
+        challenge.resume(with: .continueWithCredential(.serverTrust))
+        challenge.resume(with: .continueWithCredential(.serverTrust))
         let disposition = await challenge.value
-        XCTAssertEqual(disposition, .useCredential(.serverTrust))
+        XCTAssertEqual(disposition, .continueWithCredential(.serverTrust))
     }
 }
