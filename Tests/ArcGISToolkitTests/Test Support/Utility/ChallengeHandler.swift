@@ -65,13 +65,13 @@ class ChallengeHandler: AuthenticationChallengeHandler {
 ***REMOVED******REMOVED***if challenge.kind == .serverTrust {
 ***REMOVED******REMOVED******REMOVED***if trustedHosts.contains(challenge.host) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** This will cause a self-signed certificate to be trusted.
-***REMOVED******REMOVED******REMOVED******REMOVED***return .useCredential(.serverTrust)
+***REMOVED******REMOVED******REMOVED******REMOVED***return .continueWithCredential(.serverTrust)
 ***REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***return .continueWithoutCredential
 ***REMOVED******REMOVED***
 ***REMOVED*** else if let networkCredentialProvider = networkCredentialProvider,
 ***REMOVED******REMOVED******REMOVED******REMOVED***  let networkCredential = await networkCredentialProvider(challenge) {
-***REMOVED******REMOVED******REMOVED***return .useCredential(networkCredential)
+***REMOVED******REMOVED******REMOVED***return .continueWithCredential(networkCredential)
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED***return .cancel
 ***REMOVED***
@@ -84,7 +84,7 @@ class ChallengeHandler: AuthenticationChallengeHandler {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***if let arcgisCredentialProvider = arcgisCredentialProvider,
 ***REMOVED******REMOVED***   let arcgisCredential = try? await arcgisCredentialProvider(challenge) {
-***REMOVED******REMOVED******REMOVED***return .useCredential(arcgisCredential)
+***REMOVED******REMOVED******REMOVED***return .continueWithCredential(arcgisCredential)
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED***return .cancel
 ***REMOVED***
