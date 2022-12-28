@@ -82,19 +82,21 @@ extension UtilityNetworkTraceViewModel {
         
         /// The extent of the trace's geometry result with a small added buffer.
         var resultExtent: Envelope? {
-            if let resultEnvelope = GeometryEngine.combineExtents(of: [
+            let geometries = [
                 utilityGeometryTraceResult?.multipoint,
                 utilityGeometryTraceResult?.polygon,
                 utilityGeometryTraceResult?.polyline
-            ].compactMap { $0 }),
-               let expandedEnvelope = GeometryEngine.buffer(
-                around: resultEnvelope,
-                distance: 200
-               ) {
-                return expandedEnvelope.extent
-            } else {
+            ]
+                .compactMap { $0 }
+                .filter { !$0.isEmpty }
+            
+            guard !geometries.isEmpty,
+                  let combinedExtents = GeometryEngine.combineExtents(of: geometries),
+                  let expandedEnvelope = GeometryEngine.buffer(around: combinedExtents, distance: 200) else {
                 return nil
             }
+            
+            return expandedEnvelope.extent
         }
         
         /// A collection of starting points for the trace.
