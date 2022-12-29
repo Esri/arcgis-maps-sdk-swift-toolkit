@@ -122,6 +122,7 @@ struct SiteAndFacilitySelector: View {
                         },
                         set: { newSite in
                             guard let newSite = newSite else { return }
+                            userBackedOutOfSelectedSite = false
                             viewModel.setSite(newSite, zoomTo: true)
                         }
                     )
