@@ -29,13 +29,21 @@ public struct OverviewMap: View {
 ***REMOVED***private var scaleFactor = 25.0
 ***REMOVED***
 ***REMOVED******REMOVED***/ The data model containing the `Map` displayed in the overview map.
-***REMOVED***@StateObject private var dataModel: MapDataModel
+***REMOVED***@StateObject private var dataModel = MapDataModel()
 ***REMOVED***
 ***REMOVED******REMOVED***/ The `Graphic` displaying the visible area of the main `GeoView`.
 ***REMOVED***@StateObject private var graphic: Graphic
 ***REMOVED***
 ***REMOVED******REMOVED***/ The `GraphicsOverlay` used to display the visible area graphic.
 ***REMOVED***@StateObject private var graphicsOverlay: GraphicsOverlay
+***REMOVED***
+***REMOVED******REMOVED***/ The user-defined map used in the overview map. Defaults to `nil`.
+***REMOVED***private let userProvidedMap: Map?
+***REMOVED***
+***REMOVED******REMOVED***/ The actual map used in the overaview map.
+***REMOVED***private var effectiveMap: Map {
+***REMOVED******REMOVED***userProvidedMap ?? dataModel.defaultMap
+***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates an `OverviewMap` for use on a `MapView`.
 ***REMOVED******REMOVED***/ - Parameters:
@@ -56,7 +64,7 @@ public struct OverviewMap: View {
 ***REMOVED******REMOVED******REMOVED***map: map
 ***REMOVED******REMOVED***)
 ***REMOVED***
-
+***REMOVED***
 ***REMOVED******REMOVED***/ Creates an `OverviewMap` for use on a `SceneView`.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - viewpoint: Viewpoint of the main `SceneView` used to update the
@@ -86,12 +94,6 @@ public struct OverviewMap: View {
 ***REMOVED******REMOVED***self.viewpoint = viewpoint
 ***REMOVED******REMOVED***self.symbol = symbol
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***_dataModel = StateObject(
-***REMOVED******REMOVED******REMOVED***wrappedValue: MapDataModel(
-***REMOVED******REMOVED******REMOVED******REMOVED***map: map ?? Map(basemapStyle: .arcGISTopographic)
-***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED***)
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let graphic = Graphic(symbol: self.symbol)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** It is necessary to set the graphic and graphicsOverlay this way
@@ -100,11 +102,13 @@ public struct OverviewMap: View {
 ***REMOVED******REMOVED******REMOVED*** with the graphic during panning/zooming/rotating.
 ***REMOVED******REMOVED***_graphic = StateObject(wrappedValue: graphic)
 ***REMOVED******REMOVED***_graphicsOverlay = StateObject(wrappedValue: GraphicsOverlay(graphics: [graphic]))
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***userProvidedMap = map
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***MapView(
-***REMOVED******REMOVED******REMOVED***map: dataModel.map,
+***REMOVED******REMOVED******REMOVED***map: effectiveMap,
 ***REMOVED******REMOVED******REMOVED***viewpoint: makeOverviewViewpoint(),
 ***REMOVED******REMOVED******REMOVED***graphicsOverlays: [graphicsOverlay]
 ***REMOVED******REMOVED***)
@@ -198,12 +202,6 @@ private extension Symbol {
 
 ***REMOVED***/ A very basic data model class containing a Map.
 class MapDataModel: ObservableObject {
-***REMOVED******REMOVED***/ The `Map` used for display in a `MapView`.
-***REMOVED***@Published var map: Map
-***REMOVED***
-***REMOVED******REMOVED***/ Creates a `MapDataModel`.
-***REMOVED******REMOVED***/ - Parameter map: The `Map` used for display.
-***REMOVED***init(map: Map) {
-***REMOVED******REMOVED***self.map = map
-***REMOVED***
+***REMOVED******REMOVED***/ The default `Map` used for display in a `MapView`.
+***REMOVED***let defaultMap = Map(basemapStyle: .arcGISTopographic)
 ***REMOVED***
