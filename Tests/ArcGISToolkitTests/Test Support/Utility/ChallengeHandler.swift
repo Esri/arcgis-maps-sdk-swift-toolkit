@@ -65,13 +65,13 @@ class ChallengeHandler: AuthenticationChallengeHandler {
         if challenge.kind == .serverTrust {
             if trustedHosts.contains(challenge.host) {
                 // This will cause a self-signed certificate to be trusted.
-                return .useCredential(.serverTrust)
+                return .continueWithCredential(.serverTrust)
             } else {
                 return .continueWithoutCredential
             }
         } else if let networkCredentialProvider = networkCredentialProvider,
                   let networkCredential = await networkCredentialProvider(challenge) {
-            return .useCredential(networkCredential)
+            return .continueWithCredential(networkCredential)
         } else {
             return .cancel
         }
@@ -84,7 +84,7 @@ class ChallengeHandler: AuthenticationChallengeHandler {
         
         if let arcgisCredentialProvider = arcgisCredentialProvider,
            let arcgisCredential = try? await arcgisCredentialProvider(challenge) {
-            return .useCredential(arcgisCredential)
+            return .continueWithCredential(arcgisCredential)
         } else {
             return .cancel
         }
