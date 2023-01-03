@@ -29,13 +29,21 @@ public struct OverviewMap: View {
     private var scaleFactor = 25.0
     
     /// The data model containing the `Map` displayed in the overview map.
-    @StateObject private var dataModel: MapDataModel
+    @StateObject private var dataModel = MapDataModel()
     
     /// The `Graphic` displaying the visible area of the main `GeoView`.
     @StateObject private var graphic: Graphic
     
     /// The `GraphicsOverlay` used to display the visible area graphic.
     @StateObject private var graphicsOverlay: GraphicsOverlay
+    
+    /// The user-defined map used in the overview map. Defaults to `nil`.
+    private let userProvidedMap: Map?
+    
+    /// The actual map used in the overaview map.
+    private var effectiveMap: Map {
+        userProvidedMap ?? dataModel.defaultMap
+    }
     
     /// Creates an `OverviewMap` for use on a `MapView`.
     /// - Parameters:
@@ -56,7 +64,7 @@ public struct OverviewMap: View {
             map: map
         )
     }
-
+    
     /// Creates an `OverviewMap` for use on a `SceneView`.
     /// - Parameters:
     ///   - viewpoint: Viewpoint of the main `SceneView` used to update the
@@ -86,12 +94,6 @@ public struct OverviewMap: View {
         self.viewpoint = viewpoint
         self.symbol = symbol
         
-        _dataModel = StateObject(
-            wrappedValue: MapDataModel(
-                map: map ?? Map(basemapStyle: .arcGISTopographic)
-            )
-        )
-        
         let graphic = Graphic(symbol: self.symbol)
         
         // It is necessary to set the graphic and graphicsOverlay this way
@@ -100,11 +102,13 @@ public struct OverviewMap: View {
         // with the graphic during panning/zooming/rotating.
         _graphic = StateObject(wrappedValue: graphic)
         _graphicsOverlay = StateObject(wrappedValue: GraphicsOverlay(graphics: [graphic]))
+        
+        userProvidedMap = map
     }
     
     public var body: some View {
         MapView(
-            map: dataModel.map,
+            map: effectiveMap,
             viewpoint: makeOverviewViewpoint(),
             graphicsOverlays: [graphicsOverlay]
         )
@@ -198,12 +202,6 @@ private extension Symbol {
 
 /// A very basic data model class containing a Map.
 class MapDataModel: ObservableObject {
-    /// The `Map` used for display in a `MapView`.
-    @Published var map: Map
-    
-    /// Creates a `MapDataModel`.
-    /// - Parameter map: The `Map` used for display.
-    init(map: Map) {
-        self.map = map
-    }
+    /// The default `Map` used for display in a `MapView`.
+    let defaultMap = Map(basemapStyle: .arcGISTopographic)
 }
