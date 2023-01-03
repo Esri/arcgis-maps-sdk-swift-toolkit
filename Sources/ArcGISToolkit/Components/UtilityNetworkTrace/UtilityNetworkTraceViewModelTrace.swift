@@ -82,10 +82,12 @@ extension UtilityNetworkTraceViewModel {
         
         /// The extent of the trace's geometry result with a small added buffer.
         var resultExtent: Envelope? {
+            guard let utilityGeometryTraceResult else { return nil }
+            
             let geometries = [
-                utilityGeometryTraceResult?.multipoint,
-                utilityGeometryTraceResult?.polygon,
-                utilityGeometryTraceResult?.polyline
+                utilityGeometryTraceResult.multipoint,
+                utilityGeometryTraceResult.polygon,
+                utilityGeometryTraceResult.polyline
             ]
                 .compactMap { $0 }
                 .filter { !$0.isEmpty }
