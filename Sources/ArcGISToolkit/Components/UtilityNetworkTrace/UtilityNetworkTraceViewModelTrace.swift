@@ -17,36 +17,6 @@ import SwiftUI
 extension UtilityNetworkTraceViewModel {
     /// A trace performed on a utility network.
     struct Trace {
-        /// - Parameter name: A name of a utility asset group.
-        /// - Returns: The set of utility elements returned by the trace that belong to the provided
-        /// asset group, grouped by type.
-        func elementsByTypeInGroup(named name: String) -> [String: [UtilityElement]] {
-            let assetsInGroup = elementsInAssetGroup(named: name)
-            var result = [String : [UtilityElement]]()
-            assetsInGroup.forEach { e in
-                var assetTypeGroup = result[e.assetType.name, default: []]
-                assetTypeGroup.append(e)
-                result.updateValue(assetTypeGroup, forKey: e.assetType.name)
-            }
-            return result
-        }
-        
-        /// - Parameter name: A name of a utility asset group.
-        /// - Returns: The set of utility elements returned by the trace that belong to the provided
-        /// asset group.
-        func elementsInAssetGroup(named name: String) -> [UtilityElement] {
-            return elementResults.filter({ $0.assetGroup.name == name })
-        }
-        
-        /// A set of the asset group names returned by the trace.
-        var assetGroupNames: Set<String> {
-            var assetGroupNames = Set<String>()
-            elementResults.forEach {
-                assetGroupNames.insert($0.assetGroup.name)
-            }
-            return assetGroupNames
-        }
-        
         /// A user given color for the trace with a default value of green.
         var color: Color = .green {
             didSet {
@@ -80,32 +50,6 @@ extension UtilityNetworkTraceViewModel {
         /// A user given name for the trace.
         var name = ""
         
-        /// The extent of the trace's geometry result with a small added buffer.
-        var resultExtent: Envelope? {
-            guard let utilityGeometryTraceResult else { return nil }
-            
-            let geometries = [
-                utilityGeometryTraceResult.multipoint,
-                utilityGeometryTraceResult.polygon,
-                utilityGeometryTraceResult.polyline
-            ]
-                .compactMap { geometry in
-                    if let geometry, !geometry.isEmpty {
-                        return geometry
-                    } else {
-                        return nil
-                    }
-                }
-            
-            guard !geometries.isEmpty,
-                  let combinedExtents = GeometryEngine.combineExtents(of: geometries),
-                  let expandedEnvelope = GeometryEngine.buffer(around: combinedExtents, distance: 200) else {
-                return nil
-            }
-            
-            return expandedEnvelope.extent
-        }
-        
         /// A collection of starting points for the trace.
         var startingPoints = [UtilityNetworkTraceStartingPoint]()
         
@@ -120,6 +64,64 @@ extension UtilityNetworkTraceViewModel {
         
         /// A trace result comprised of Geometry objects
         var utilityGeometryTraceResult: UtilityGeometryTraceResult?
+    }
+}
+
+extension UtilityNetworkTraceViewModel.Trace {
+    /// - Parameter name: A name of a utility asset group.
+    /// - Returns: The set of utility elements returned by the trace that belong to the provided
+    /// asset group, grouped by type.
+    func elementsByTypeInGroup(named name: String) -> [String: [UtilityElement]] {
+        let assetsInGroup = elementsInAssetGroup(named: name)
+        var result = [String : [UtilityElement]]()
+        assetsInGroup.forEach { e in
+            var assetTypeGroup = result[e.assetType.name, default: []]
+            assetTypeGroup.append(e)
+            result.updateValue(assetTypeGroup, forKey: e.assetType.name)
+        }
+        return result
+    }
+    
+    /// - Parameter name: A name of a utility asset group.
+    /// - Returns: The set of utility elements returned by the trace that belong to the provided
+    /// asset group.
+    func elementsInAssetGroup(named name: String) -> [UtilityElement] {
+        return elementResults.filter({ $0.assetGroup.name == name })
+    }
+    
+    /// A set of the asset group names returned by the trace.
+    var assetGroupNames: Set<String> {
+        var assetGroupNames = Set<String>()
+        elementResults.forEach {
+            assetGroupNames.insert($0.assetGroup.name)
+        }
+        return assetGroupNames
+    }
+    
+    /// The extent of the trace's geometry result with a small added buffer.
+    var resultExtent: Envelope? {
+        guard let utilityGeometryTraceResult else { return nil }
+        
+        let geometries = [
+            utilityGeometryTraceResult.multipoint,
+            utilityGeometryTraceResult.polygon,
+            utilityGeometryTraceResult.polyline
+        ]
+            .compactMap { geometry in
+                if let geometry, !geometry.isEmpty {
+                    return geometry
+                } else {
+                    return nil
+                }
+            }
+        
+        guard !geometries.isEmpty,
+              let combinedExtents = GeometryEngine.combineExtents(of: geometries),
+              let expandedEnvelope = GeometryEngine.buffer(around: combinedExtents, distance: 200) else {
+            return nil
+        }
+        
+        return expandedEnvelope.extent
     }
 }
 
