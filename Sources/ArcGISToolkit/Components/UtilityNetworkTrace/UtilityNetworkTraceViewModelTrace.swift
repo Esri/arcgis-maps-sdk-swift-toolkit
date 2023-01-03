@@ -89,8 +89,13 @@ extension UtilityNetworkTraceViewModel {
 ***REMOVED******REMOVED******REMOVED******REMOVED***utilityGeometryTraceResult.polygon,
 ***REMOVED******REMOVED******REMOVED******REMOVED***utilityGeometryTraceResult.polyline
 ***REMOVED******REMOVED******REMOVED***]
-***REMOVED******REMOVED******REMOVED******REMOVED***.compactMap { $0 ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.filter { !$0.isEmpty ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.compactMap { geometry in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let geometry, !geometry.isEmpty {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return geometry
+***REMOVED******REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return nil
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***guard !geometries.isEmpty,
 ***REMOVED******REMOVED******REMOVED******REMOVED***  let combinedExtents = GeometryEngine.combineExtents(of: geometries),
