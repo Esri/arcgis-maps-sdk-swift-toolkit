@@ -89,8 +89,13 @@ extension UtilityNetworkTraceViewModel {
                 utilityGeometryTraceResult.polygon,
                 utilityGeometryTraceResult.polyline
             ]
-                .compactMap { $0 }
-                .filter { !$0.isEmpty }
+                .compactMap { geometry in
+                    if let geometry, !geometry.isEmpty {
+                        return geometry
+                    } else {
+                        return nil
+                    }
+                }
             
             guard !geometries.isEmpty,
                   let combinedExtents = GeometryEngine.combineExtents(of: geometries),
