@@ -115,8 +115,7 @@ extension UtilityNetworkTraceViewModel.Trace {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***guard !geometries.isEmpty,
-***REMOVED******REMOVED******REMOVED***  let combinedExtents = GeometryEngine.combineExtents(of: geometries),
+***REMOVED******REMOVED***guard let combinedExtents = GeometryEngine.combineExtents(of: geometries),
 ***REMOVED******REMOVED******REMOVED***  let expandedEnvelope = GeometryEngine.buffer(around: combinedExtents, distance: 200) else {
 ***REMOVED******REMOVED******REMOVED***return nil
 ***REMOVED***
