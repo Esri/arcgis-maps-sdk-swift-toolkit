@@ -115,8 +115,7 @@ extension UtilityNetworkTraceViewModel.Trace {
                 }
             }
         
-        guard !geometries.isEmpty,
-              let combinedExtents = GeometryEngine.combineExtents(of: geometries),
+        guard let combinedExtents = GeometryEngine.combineExtents(of: geometries),
               let expandedEnvelope = GeometryEngine.buffer(around: combinedExtents, distance: 200) else {
             return nil
         }
