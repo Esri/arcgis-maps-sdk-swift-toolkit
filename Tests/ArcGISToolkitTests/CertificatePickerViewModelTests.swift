@@ -23,7 +23,7 @@ import XCTest
         XCTAssertTrue(model.showPrompt)
         XCTAssertFalse(model.showPicker)
         XCTAssertFalse(model.showPassword)
-        XCTAssertFalse(model.showCertificateImportError)
+        XCTAssertFalse(model.showCertificateError)
         XCTAssertEqual(model.challengingHost, "host.com")
         
         model.proceedFromPrompt()
@@ -42,7 +42,7 @@ import XCTest
         // Another yield seems to be required to deal with timing when running the test
         // repeatedly.
         await Task.yield()
-        XCTAssertTrue(model.showCertificateImportError)
+        XCTAssertTrue(model.showCertificateError)
         
         model.cancel()
         let disposition = await challenge.value

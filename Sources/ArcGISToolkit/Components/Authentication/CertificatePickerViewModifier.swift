@@ -18,6 +18,16 @@ import ArcGIS
 /// An object that provides the business logic for the workflow of prompting the user for a
 /// certificate and a password.
 @MainActor final class CertificatePickerViewModel: ObservableObject {
+    /// The types of certificate error.
+    enum CertificateError: Error {
+        /// Could not access the certificate file.
+        case couldNotAccessCertificateFile
+        /// The certificate import error.
+        case importError(CertificateImportError)
+        // The failure error.
+        case failure(Error)
+    }
+    
     /// The challenge that requires a certificate to proceed.
     let challenge: NetworkChallengeContinuation
     
@@ -34,10 +44,10 @@ import ArcGIS
     @Published var showPassword = false
     
     /// A Boolean value indicating whether to display the error.
-    @Published var showCertificateImportError = false
+    @Published var showCertificateError = false
     
-    /// The certificate import error that occurred.
-    var certificateImportError: CertificateImportError?
+    /// The certificate error that occurred.
+    var certificateError: CertificateError?
     
     /// The host that prompted the challenge.
     var challengingHost: String {
@@ -74,15 +84,16 @@ import ArcGIS
         Task.detached {
             do {
                 guard certificateURL.startAccessingSecurityScopedResource() else {
-                    await self.showCertificateImportError(nil)
+                    await self.showCertificateError(CertificateError.couldNotAccessCertificateFile)
                     return
                 }
-
                 defer { certificateURL.stopAccessingSecurityScopedResource() }
 
                 await self.challenge.resume(with: .continueWithCredential(try .certificate(at: certificateURL, password: password)))
+            } catch(let certificateImportError as CertificateImportError) {
+                await self.showCertificateError(CertificateError.importError(certificateImportError))
             } catch {
-                await self.showCertificateImportError(error)
+                await self.showCertificateError(CertificateError.failure(error))
             }
         }
     }
@@ -92,11 +103,31 @@ import ArcGIS
         challenge.resume(with: .cancel)
     }
 
-    private func showCertificateImportError(_ error: Error?) async {
+    private func showCertificateError(_ error: CertificateError) async {
         // This is required to prevent an "already presenting" error.
         try? await Task.sleep(nanoseconds: 100_000)
-        certificateImportError = error as? CertificateImportError
-        showCertificateImportError = true
+        certificateError = error
+        showCertificateError = true
+    }
+}
+
+extension CertificatePickerViewModel.CertificateError {
+    var message: String {
+        switch self {
+        case .couldNotAccessCertificateFile:
+            return "Could not access the certificate file."
+        case .importError(let certificateImportError):
+            switch certificateImportError {
+            case .invalidData:
+                return "The certificate file was invalid."
+            case .invalidPassword:
+                return "The password was invalid."
+            default:
+                return "The certificate file or password was invalid."
+            }
+        case .failure(let error):
+            return error.localizedDescription
+        }
     }
 }
 
@@ -139,8 +170,8 @@ struct CertificatePickerViewModifier: ViewModifier {
                     }
                 )
             )
-            .alertCertificateImportError(
-                isPresented: $viewModel.showCertificateImportError,
+            .alertCertificateError(
+                isPresented: $viewModel.showCertificateError,
                 viewModel: viewModel
             )
     }
@@ -199,7 +230,7 @@ private extension View {
     /// - Parameters:
     ///   - isPresented: A Boolean value indicating if the view is presented.
     ///   - viewModel: The view model associated with the view.
-    @MainActor @ViewBuilder func alertCertificateImportError(
+    @MainActor @ViewBuilder func alertCertificateError(
         isPresented: Binding<Bool>,
         viewModel: CertificatePickerViewModel
     ) -> some View {
@@ -212,23 +243,7 @@ private extension View {
                 viewModel.cancel()
             }
         } message: {
-            Text(message(for: viewModel.certificateImportError))
-        }
-    }
-    
-    func message(for error: CertificateImportError?) -> String {
-        let defaultMessage = "The certificate file or password was invalid."
-        guard let error = error else {
-            return defaultMessage
-        }
-        
-        switch error {
-        case .invalidData:
-            return "The certificate file was invalid."
-        case .invalidPassword:
-            return "The password was invalid."
-        default:
-            return defaultMessage
+            Text(viewModel.certificateError?.message ?? "The certificate file or password was invalid.")
         }
     }
 }
