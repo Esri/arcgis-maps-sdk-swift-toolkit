@@ -74,7 +74,7 @@ import UniformTypeIdentifiers
 ***REMOVED******REMOVED***Task.detached {
 ***REMOVED******REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED******REMOVED***guard certificateURL.startAccessingSecurityScopedResource() else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.showCertificateImportError(nil)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await self.showCertificateImportError(nil)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return
 ***REMOVED******REMOVED******REMOVED***
 
@@ -82,7 +82,7 @@ import UniformTypeIdentifiers
 
 ***REMOVED******REMOVED******REMOVED******REMOVED***await self.challenge.resume(with: .continueWithCredential(try .certificate(at: certificateURL, password: password)))
 ***REMOVED******REMOVED*** catch {
-***REMOVED******REMOVED******REMOVED******REMOVED***self.showCertificateImportError(error)
+***REMOVED******REMOVED******REMOVED******REMOVED***await self.showCertificateImportError(error)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
