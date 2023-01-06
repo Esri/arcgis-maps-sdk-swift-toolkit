@@ -18,6 +18,16 @@ import UniformTypeIdentifiers
 ***REMOVED***/ An object that provides the business logic for the workflow of prompting the user for a
 ***REMOVED***/ certificate and a password.
 @MainActor final class CertificatePickerViewModel: ObservableObject {
+***REMOVED******REMOVED***/ The types of certificate error.
+***REMOVED***enum CertificateError: Error {
+***REMOVED******REMOVED******REMOVED***/ Could not access the certificate file.
+***REMOVED******REMOVED***case couldNotAccessCertificateFile
+***REMOVED******REMOVED******REMOVED***/ The certificate import error.
+***REMOVED******REMOVED***case importError(CertificateImportError)
+***REMOVED******REMOVED******REMOVED*** The failure error.
+***REMOVED******REMOVED***case failure(Error)
+***REMOVED***
+***REMOVED***
 ***REMOVED******REMOVED***/ The challenge that requires a certificate to proceed.
 ***REMOVED***let challenge: NetworkChallengeContinuation
 ***REMOVED***
@@ -34,10 +44,10 @@ import UniformTypeIdentifiers
 ***REMOVED***@Published var showPassword = false
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether to display the error.
-***REMOVED***@Published var showCertificateImportError = false
+***REMOVED***@Published var showCertificateError = false
 ***REMOVED***
-***REMOVED******REMOVED***/ The certificate import error that occurred.
-***REMOVED***var certificateImportError: CertificateImportError?
+***REMOVED******REMOVED***/ The certificate error that occurred.
+***REMOVED***var certificateError: CertificateError?
 ***REMOVED***
 ***REMOVED******REMOVED***/ The host that prompted the challenge.
 ***REMOVED***var challengingHost: String {
@@ -74,15 +84,16 @@ import UniformTypeIdentifiers
 ***REMOVED******REMOVED***Task.detached {
 ***REMOVED******REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED******REMOVED***guard certificateURL.startAccessingSecurityScopedResource() else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await self.showCertificateImportError(nil)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await self.showCertificateError(CertificateError.couldNotAccessCertificateFile)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return
 ***REMOVED******REMOVED******REMOVED***
-
 ***REMOVED******REMOVED******REMOVED******REMOVED***defer { certificateURL.stopAccessingSecurityScopedResource() ***REMOVED***
 
 ***REMOVED******REMOVED******REMOVED******REMOVED***await self.challenge.resume(with: .continueWithCredential(try .certificate(at: certificateURL, password: password)))
+***REMOVED******REMOVED*** catch(let certificateImportError as CertificateImportError) {
+***REMOVED******REMOVED******REMOVED******REMOVED***await self.showCertificateError(CertificateError.importError(certificateImportError))
 ***REMOVED******REMOVED*** catch {
-***REMOVED******REMOVED******REMOVED******REMOVED***await self.showCertificateImportError(error)
+***REMOVED******REMOVED******REMOVED******REMOVED***await self.showCertificateError(CertificateError.failure(error))
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -92,11 +103,31 @@ import UniformTypeIdentifiers
 ***REMOVED******REMOVED***challenge.resume(with: .cancel)
 ***REMOVED***
 
-***REMOVED***private func showCertificateImportError(_ error: Error?) async {
+***REMOVED***private func showCertificateError(_ error: CertificateError) async {
 ***REMOVED******REMOVED******REMOVED*** This is required to prevent an "already presenting" error.
 ***REMOVED******REMOVED***try? await Task.sleep(nanoseconds: 100_000)
-***REMOVED******REMOVED***certificateImportError = error as? CertificateImportError
-***REMOVED******REMOVED***showCertificateImportError = true
+***REMOVED******REMOVED***certificateError = error
+***REMOVED******REMOVED***showCertificateError = true
+***REMOVED***
+***REMOVED***
+
+extension CertificatePickerViewModel.CertificateError {
+***REMOVED***var message: String {
+***REMOVED******REMOVED***switch self {
+***REMOVED******REMOVED***case .couldNotAccessCertificateFile:
+***REMOVED******REMOVED******REMOVED***return "Could not access the certificate file."
+***REMOVED******REMOVED***case .importError(let certificateImportError):
+***REMOVED******REMOVED******REMOVED***switch certificateImportError {
+***REMOVED******REMOVED******REMOVED***case .invalidData:
+***REMOVED******REMOVED******REMOVED******REMOVED***return "The certificate file was invalid."
+***REMOVED******REMOVED******REMOVED***case .invalidPassword:
+***REMOVED******REMOVED******REMOVED******REMOVED***return "The password was invalid."
+***REMOVED******REMOVED******REMOVED***default:
+***REMOVED******REMOVED******REMOVED******REMOVED***return "The certificate file or password was invalid."
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***case .failure(let error):
+***REMOVED******REMOVED******REMOVED***return error.localizedDescription
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
@@ -139,8 +170,8 @@ struct CertificatePickerViewModifier: ViewModifier {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***.alertCertificateImportError(
-***REMOVED******REMOVED******REMOVED******REMOVED***isPresented: $viewModel.showCertificateImportError,
+***REMOVED******REMOVED******REMOVED***.alertCertificateError(
+***REMOVED******REMOVED******REMOVED******REMOVED***isPresented: $viewModel.showCertificateError,
 ***REMOVED******REMOVED******REMOVED******REMOVED***viewModel: viewModel
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED***
@@ -199,7 +230,7 @@ private extension View {
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - isPresented: A Boolean value indicating if the view is presented.
 ***REMOVED******REMOVED***/   - viewModel: The view model associated with the view.
-***REMOVED***@MainActor @ViewBuilder func alertCertificateImportError(
+***REMOVED***@MainActor @ViewBuilder func alertCertificateError(
 ***REMOVED******REMOVED***isPresented: Binding<Bool>,
 ***REMOVED******REMOVED***viewModel: CertificatePickerViewModel
 ***REMOVED***) -> some View {
@@ -212,23 +243,7 @@ private extension View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.cancel()
 ***REMOVED******REMOVED***
 ***REMOVED*** message: {
-***REMOVED******REMOVED******REMOVED***Text(message(for: viewModel.certificateImportError))
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***func message(for error: CertificateImportError?) -> String {
-***REMOVED******REMOVED***let defaultMessage = "The certificate file or password was invalid."
-***REMOVED******REMOVED***guard let error = error else {
-***REMOVED******REMOVED******REMOVED***return defaultMessage
-***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***switch error {
-***REMOVED******REMOVED***case .invalidData:
-***REMOVED******REMOVED******REMOVED***return "The certificate file was invalid."
-***REMOVED******REMOVED***case .invalidPassword:
-***REMOVED******REMOVED******REMOVED***return "The password was invalid."
-***REMOVED******REMOVED***default:
-***REMOVED******REMOVED******REMOVED***return defaultMessage
+***REMOVED******REMOVED******REMOVED***Text(viewModel.certificateError?.message ?? "The certificate file or password was invalid.")
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***

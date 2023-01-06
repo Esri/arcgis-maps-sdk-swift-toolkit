@@ -23,7 +23,7 @@ import XCTest
 ***REMOVED******REMOVED***XCTAssertTrue(model.showPrompt)
 ***REMOVED******REMOVED***XCTAssertFalse(model.showPicker)
 ***REMOVED******REMOVED***XCTAssertFalse(model.showPassword)
-***REMOVED******REMOVED***XCTAssertFalse(model.showCertificateImportError)
+***REMOVED******REMOVED***XCTAssertFalse(model.showCertificateError)
 ***REMOVED******REMOVED***XCTAssertEqual(model.challengingHost, "host.com")
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***model.proceedFromPrompt()
@@ -42,7 +42,7 @@ import XCTest
 ***REMOVED******REMOVED******REMOVED*** Another yield seems to be required to deal with timing when running the test
 ***REMOVED******REMOVED******REMOVED*** repeatedly.
 ***REMOVED******REMOVED***await Task.yield()
-***REMOVED******REMOVED***XCTAssertTrue(model.showCertificateImportError)
+***REMOVED******REMOVED***XCTAssertTrue(model.showCertificateError)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***model.cancel()
 ***REMOVED******REMOVED***let disposition = await challenge.value
