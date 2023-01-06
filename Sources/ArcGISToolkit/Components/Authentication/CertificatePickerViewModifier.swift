@@ -71,14 +71,18 @@ import ArcGIS
             preconditionFailure()
         }
         
-        Task {
+        Task.detached {
             do {
-                challenge.resume(with: .continueWithCredential(try .certificate(at: certificateURL, password: password)))
+                guard certificateURL.startAccessingSecurityScopedResource() else {
+                    self.showCertificateImportError(nil)
+                    return
+                }
+
+                defer { certificateURL.stopAccessingSecurityScopedResource() }
+
+                await self.challenge.resume(with: .continueWithCredential(try .certificate(at: certificateURL, password: password)))
             } catch {
-                // This is required to prevent an "already presenting" error.
-                try? await Task.sleep(nanoseconds: 100_000)
-                certificateImportError = error as? CertificateImportError
-                showCertificateImportError = true
+                self.showCertificateImportError(error)
             }
         }
     }
@@ -86,6 +90,13 @@ import ArcGIS
     /// Cancels the challenge.
     func cancel() {
         challenge.resume(with: .cancel)
+    }
+
+    private func showCertificateImportError(_ error: Error?) async {
+        // This is required to prevent an "already presenting" error.
+        try? await Task.sleep(nanoseconds: 100_000)
+        certificateImportError = error as? CertificateImportError
+        showCertificateImportError = true
     }
 }
 
