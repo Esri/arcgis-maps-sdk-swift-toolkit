@@ -74,7 +74,7 @@ import ArcGIS
         Task.detached {
             do {
                 guard certificateURL.startAccessingSecurityScopedResource() else {
-                    self.showCertificateImportError(nil)
+                    await self.showCertificateImportError(nil)
                     return
                 }
 
@@ -82,7 +82,7 @@ import ArcGIS
 
                 await self.challenge.resume(with: .continueWithCredential(try .certificate(at: certificateURL, password: password)))
             } catch {
-                self.showCertificateImportError(error)
+                await self.showCertificateImportError(error)
             }
         }
     }
