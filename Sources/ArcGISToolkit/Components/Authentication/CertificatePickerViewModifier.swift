@@ -71,14 +71,18 @@ import UniformTypeIdentifiers
 ***REMOVED******REMOVED******REMOVED***preconditionFailure()
 ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***Task {
+***REMOVED******REMOVED***Task.detached {
 ***REMOVED******REMOVED******REMOVED***do {
-***REMOVED******REMOVED******REMOVED******REMOVED***challenge.resume(with: .continueWithCredential(try .certificate(at: certificateURL, password: password)))
+***REMOVED******REMOVED******REMOVED******REMOVED***guard certificateURL.startAccessingSecurityScopedResource() else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***self.showCertificateImportError(nil)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return
+***REMOVED******REMOVED******REMOVED***
+
+***REMOVED******REMOVED******REMOVED******REMOVED***defer { certificateURL.stopAccessingSecurityScopedResource() ***REMOVED***
+
+***REMOVED******REMOVED******REMOVED******REMOVED***await self.challenge.resume(with: .continueWithCredential(try .certificate(at: certificateURL, password: password)))
 ***REMOVED******REMOVED*** catch {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** This is required to prevent an "already presenting" error.
-***REMOVED******REMOVED******REMOVED******REMOVED***try? await Task.sleep(nanoseconds: 100_000)
-***REMOVED******REMOVED******REMOVED******REMOVED***certificateImportError = error as? CertificateImportError
-***REMOVED******REMOVED******REMOVED******REMOVED***showCertificateImportError = true
+***REMOVED******REMOVED******REMOVED******REMOVED***self.showCertificateImportError(error)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -86,6 +90,13 @@ import UniformTypeIdentifiers
 ***REMOVED******REMOVED***/ Cancels the challenge.
 ***REMOVED***func cancel() {
 ***REMOVED******REMOVED***challenge.resume(with: .cancel)
+***REMOVED***
+
+***REMOVED***private func showCertificateImportError(_ error: Error?) async {
+***REMOVED******REMOVED******REMOVED*** This is required to prevent an "already presenting" error.
+***REMOVED******REMOVED***try? await Task.sleep(nanoseconds: 100_000)
+***REMOVED******REMOVED***certificateImportError = error as? CertificateImportError
+***REMOVED******REMOVED***showCertificateImportError = true
 ***REMOVED***
 ***REMOVED***
 
