@@ -43,6 +43,7 @@ import ArcGIS
         // Another yield seems to be required to deal with timing when running the test
         // repeatedly.
         await Task.yield()
+        // Sometime this fails. See details in https://github.com/Esri/arcgis-maps-sdk-swift-toolkit/issues/245.
         XCTAssertTrue(model.showCertificateError)
         
         model.cancel()
