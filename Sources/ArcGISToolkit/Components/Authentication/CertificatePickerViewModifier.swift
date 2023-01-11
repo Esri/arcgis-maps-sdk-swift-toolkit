@@ -125,13 +125,13 @@ extension CertificateImportError: LocalizedError {
 ***REMOVED***
 ***REMOVED***
 
-extension CertificatePickerViewModel.CertificateError {
-***REMOVED***var message: String {
+extension CertificatePickerViewModel.CertificateError: LocalizedError {
+***REMOVED***public var errorDescription: String? {
 ***REMOVED******REMOVED***switch self {
 ***REMOVED******REMOVED***case .couldNotAccessCertificateFile:
-***REMOVED******REMOVED******REMOVED***return "Could not access the certificate file."
-***REMOVED******REMOVED***case .importError(let certificateImportError):
-***REMOVED******REMOVED******REMOVED***return certificateImportError.localizedDescription
+***REMOVED******REMOVED******REMOVED***return NSLocalizedString("Could not access the certificate file.", comment: "Could not access certificate file")
+***REMOVED******REMOVED***case .importError(let error):
+***REMOVED******REMOVED******REMOVED***return error.localizedDescription
 ***REMOVED******REMOVED***case .other(let error):
 ***REMOVED******REMOVED******REMOVED***return error.localizedDescription
 ***REMOVED***
@@ -250,7 +250,7 @@ private extension View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.cancel()
 ***REMOVED******REMOVED***
 ***REMOVED*** message: {
-***REMOVED******REMOVED******REMOVED***Text(viewModel.certificateError?.message ?? "The certificate file or password was invalid.")
+***REMOVED******REMOVED******REMOVED***Text(viewModel.certificateError?.localizedDescription ?? "The certificate file or password was invalid.")
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***

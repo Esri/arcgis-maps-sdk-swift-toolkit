@@ -50,20 +50,20 @@ import XCTest
 ***REMOVED******REMOVED***XCTAssertEqual(disposition, .cancel)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***func testCertificateErrorMessage() {
+***REMOVED***func testCertificateErrorLocalizedDescription() {
 ***REMOVED******REMOVED***let couldNotAccessCertificateFileError = CertificatePickerViewModel.CertificateError.couldNotAccessCertificateFile
-***REMOVED******REMOVED***XCTAssertEqual(couldNotAccessCertificateFileError.message, "Could not access the certificate file.")
+***REMOVED******REMOVED***XCTAssertEqual(couldNotAccessCertificateFileError.localizedDescription, "Could not access the certificate file.")
 
 ***REMOVED******REMOVED***let importErrorInvalidData = CertificatePickerViewModel.CertificateError.importError(.invalidData)
-***REMOVED******REMOVED***XCTAssertEqual(importErrorInvalidData.message, "The certificate file was invalid.")
+***REMOVED******REMOVED***XCTAssertEqual(importErrorInvalidData.localizedDescription, "The certificate file was invalid.")
 
 ***REMOVED******REMOVED***let importErrorInvalidPassword = CertificatePickerViewModel.CertificateError.importError(.invalidPassword)
-***REMOVED******REMOVED***XCTAssertEqual(importErrorInvalidPassword.message, "The password was invalid.")
+***REMOVED******REMOVED***XCTAssertEqual(importErrorInvalidPassword.localizedDescription, "The password was invalid.")
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let importErrorInternalError = CertificatePickerViewModel.CertificateError.importError(CertificateImportError(rawValue: errSecInternalError)!)
-***REMOVED******REMOVED***XCTAssertEqual(importErrorInternalError.message, "An internal error has occurred.")
+***REMOVED******REMOVED***XCTAssertEqual(importErrorInternalError.localizedDescription, "An internal error has occurred.")
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let otherError = CertificatePickerViewModel.CertificateError.other(NSError(domain: NSOSStatusErrorDomain, code: Int(errSecInvalidCertAuthority)))
-***REMOVED******REMOVED***XCTAssertEqual(otherError.message, "The operation couldn’t be completed. (OSStatus error -67826.)")
+***REMOVED******REMOVED***XCTAssertEqual(otherError.localizedDescription, "The operation couldn’t be completed. (OSStatus error -67826.)")
 ***REMOVED***
 ***REMOVED***
