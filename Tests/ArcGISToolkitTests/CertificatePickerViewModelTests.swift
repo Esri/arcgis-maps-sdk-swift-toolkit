@@ -12,6 +12,7 @@
 // limitations under the License.
 
 import XCTest
+import ArcGIS
 @testable import ArcGISToolkit
 
 @MainActor final class CertificatePickerViewModelTests: XCTestCase {
@@ -47,5 +48,22 @@ import XCTest
         model.cancel()
         let disposition = await challenge.value
         XCTAssertEqual(disposition, .cancel)
+    }
+    
+    func testCertificateErrorMessage() {
+        let couldNotAccessCertificateFileError = CertificatePickerViewModel.CertificateError.couldNotAccessCertificateFile
+        XCTAssertEqual(couldNotAccessCertificateFileError.message, "Could not access the certificate file.")
+
+        let importErrorInvalidData = CertificatePickerViewModel.CertificateError.importError(.invalidData)
+        XCTAssertEqual(importErrorInvalidData.message, "The certificate file was invalid.")
+
+        let importErrorInvalidPassword = CertificatePickerViewModel.CertificateError.importError(.invalidPassword)
+        XCTAssertEqual(importErrorInvalidPassword.message, "The password was invalid.")
+        
+        let importErrorInternalError = CertificatePickerViewModel.CertificateError.importError(CertificateImportError(rawValue: errSecInternalError)!)
+        XCTAssertEqual(importErrorInternalError.message, "An internal error has occurred.")
+        
+        let otherError = CertificatePickerViewModel.CertificateError.other(NSError(domain: NSOSStatusErrorDomain, code: Int(errSecInvalidCertAuthority)))
+        XCTAssertEqual(otherError.message, "The operation couldn’t be completed. (OSStatus error -67826.)")
     }
 }

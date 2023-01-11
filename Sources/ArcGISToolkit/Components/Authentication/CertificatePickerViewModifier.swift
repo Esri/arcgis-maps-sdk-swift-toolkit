@@ -24,8 +24,8 @@ import ArcGIS
         case couldNotAccessCertificateFile
         /// The certificate import error.
         case importError(CertificateImportError)
-        // The failure error.
-        case failure(Error)
+        // The other error.
+        case other(Error)
     }
     
     /// The challenge that requires a certificate to proceed.
@@ -93,7 +93,7 @@ import ArcGIS
             } catch(let certificateImportError as CertificateImportError) {
                 await self.showCertificateError(CertificateError.importError(certificateImportError))
             } catch {
-                await self.showCertificateError(CertificateError.failure(error))
+                await self.showCertificateError(CertificateError.other(error))
             }
         }
     }
@@ -111,21 +111,28 @@ import ArcGIS
     }
 }
 
+extension CertificateImportError: LocalizedError {
+    public var errorDescription: String? {
+        switch self {
+        case .invalidData:
+            return NSLocalizedString("The certificate file was invalid.", comment: "Invalid certificate")
+        case .invalidPassword:
+            return NSLocalizedString("The password was invalid.", comment: "Invalid password")
+        default:
+            let errorString = SecCopyErrorMessageString(rawValue, nil) as? String ?? "The certificate file or password was invalid."
+            return NSLocalizedString(errorString, comment: "Other certificate error")
+        }
+    }
+}
+
 extension CertificatePickerViewModel.CertificateError {
     var message: String {
         switch self {
         case .couldNotAccessCertificateFile:
             return "Could not access the certificate file."
         case .importError(let certificateImportError):
-            switch certificateImportError {
-            case .invalidData:
-                return "The certificate file was invalid."
-            case .invalidPassword:
-                return "The password was invalid."
-            default:
-                return "The certificate file or password was invalid."
-            }
-        case .failure(let error):
+            return certificateImportError.localizedDescription
+        case .other(let error):
             return error.localizedDescription
         }
     }
