@@ -125,13 +125,13 @@ extension CertificateImportError: LocalizedError {
     }
 }
 
-extension CertificatePickerViewModel.CertificateError {
-    var message: String {
+extension CertificatePickerViewModel.CertificateError: LocalizedError {
+    public var errorDescription: String? {
         switch self {
         case .couldNotAccessCertificateFile:
-            return "Could not access the certificate file."
-        case .importError(let certificateImportError):
-            return certificateImportError.localizedDescription
+            return NSLocalizedString("Could not access the certificate file.", comment: "Could not access certificate file")
+        case .importError(let error):
+            return error.localizedDescription
         case .other(let error):
             return error.localizedDescription
         }
@@ -250,7 +250,7 @@ private extension View {
                 viewModel.cancel()
             }
         } message: {
-            Text(viewModel.certificateError?.message ?? "The certificate file or password was invalid.")
+            Text(viewModel.certificateError?.localizedDescription ?? "The certificate file or password was invalid.")
         }
     }
 }
