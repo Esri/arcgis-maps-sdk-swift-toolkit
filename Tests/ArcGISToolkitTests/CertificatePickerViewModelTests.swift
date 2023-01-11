@@ -50,20 +50,20 @@ import ArcGIS
         XCTAssertEqual(disposition, .cancel)
     }
     
-    func testCertificateErrorMessage() {
+    func testCertificateErrorLocalizedDescription() {
         let couldNotAccessCertificateFileError = CertificatePickerViewModel.CertificateError.couldNotAccessCertificateFile
-        XCTAssertEqual(couldNotAccessCertificateFileError.message, "Could not access the certificate file.")
+        XCTAssertEqual(couldNotAccessCertificateFileError.localizedDescription, "Could not access the certificate file.")
 
         let importErrorInvalidData = CertificatePickerViewModel.CertificateError.importError(.invalidData)
-        XCTAssertEqual(importErrorInvalidData.message, "The certificate file was invalid.")
+        XCTAssertEqual(importErrorInvalidData.localizedDescription, "The certificate file was invalid.")
 
         let importErrorInvalidPassword = CertificatePickerViewModel.CertificateError.importError(.invalidPassword)
-        XCTAssertEqual(importErrorInvalidPassword.message, "The password was invalid.")
+        XCTAssertEqual(importErrorInvalidPassword.localizedDescription, "The password was invalid.")
         
         let importErrorInternalError = CertificatePickerViewModel.CertificateError.importError(CertificateImportError(rawValue: errSecInternalError)!)
-        XCTAssertEqual(importErrorInternalError.message, "An internal error has occurred.")
+        XCTAssertEqual(importErrorInternalError.localizedDescription, "An internal error has occurred.")
         
         let otherError = CertificatePickerViewModel.CertificateError.other(NSError(domain: NSOSStatusErrorDomain, code: Int(errSecInvalidCertAuthority)))
-        XCTAssertEqual(otherError.message, "The operation couldn’t be completed. (OSStatus error -67826.)")
+        XCTAssertEqual(otherError.localizedDescription, "The operation couldn’t be completed. (OSStatus error -67826.)")
     }
 }
