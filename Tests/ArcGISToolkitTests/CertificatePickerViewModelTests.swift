@@ -12,6 +12,7 @@
 ***REMOVED*** limitations under the License.
 
 import XCTest
+***REMOVED***
 @testable ***REMOVED***Toolkit
 
 @MainActor final class CertificatePickerViewModelTests: XCTestCase {
@@ -47,5 +48,22 @@ import XCTest
 ***REMOVED******REMOVED***model.cancel()
 ***REMOVED******REMOVED***let disposition = await challenge.value
 ***REMOVED******REMOVED***XCTAssertEqual(disposition, .cancel)
+***REMOVED***
+***REMOVED***
+***REMOVED***func testCertificateErrorMessage() {
+***REMOVED******REMOVED***let couldNotAccessCertificateFileError = CertificatePickerViewModel.CertificateError.couldNotAccessCertificateFile
+***REMOVED******REMOVED***XCTAssertEqual(couldNotAccessCertificateFileError.message, "Could not access the certificate file.")
+
+***REMOVED******REMOVED***let importErrorInvalidData = CertificatePickerViewModel.CertificateError.importError(.invalidData)
+***REMOVED******REMOVED***XCTAssertEqual(importErrorInvalidData.message, "The certificate file was invalid.")
+
+***REMOVED******REMOVED***let importErrorInvalidPassword = CertificatePickerViewModel.CertificateError.importError(.invalidPassword)
+***REMOVED******REMOVED***XCTAssertEqual(importErrorInvalidPassword.message, "The password was invalid.")
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let importErrorInternalError = CertificatePickerViewModel.CertificateError.importError(CertificateImportError(rawValue: errSecInternalError)!)
+***REMOVED******REMOVED***XCTAssertEqual(importErrorInternalError.message, "An internal error has occurred.")
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let otherError = CertificatePickerViewModel.CertificateError.other(NSError(domain: NSOSStatusErrorDomain, code: Int(errSecInvalidCertAuthority)))
+***REMOVED******REMOVED***XCTAssertEqual(otherError.message, "The operation couldn’t be completed. (OSStatus error -67826.)")
 ***REMOVED***
 ***REMOVED***

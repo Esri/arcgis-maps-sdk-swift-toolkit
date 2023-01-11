@@ -24,8 +24,8 @@ import UniformTypeIdentifiers
 ***REMOVED******REMOVED***case couldNotAccessCertificateFile
 ***REMOVED******REMOVED******REMOVED***/ The certificate import error.
 ***REMOVED******REMOVED***case importError(CertificateImportError)
-***REMOVED******REMOVED******REMOVED*** The failure error.
-***REMOVED******REMOVED***case failure(Error)
+***REMOVED******REMOVED******REMOVED*** The other error.
+***REMOVED******REMOVED***case other(Error)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The challenge that requires a certificate to proceed.
@@ -93,7 +93,7 @@ import UniformTypeIdentifiers
 ***REMOVED******REMOVED*** catch(let certificateImportError as CertificateImportError) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***await self.showCertificateError(CertificateError.importError(certificateImportError))
 ***REMOVED******REMOVED*** catch {
-***REMOVED******REMOVED******REMOVED******REMOVED***await self.showCertificateError(CertificateError.failure(error))
+***REMOVED******REMOVED******REMOVED******REMOVED***await self.showCertificateError(CertificateError.other(error))
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -111,21 +111,28 @@ import UniformTypeIdentifiers
 ***REMOVED***
 ***REMOVED***
 
+extension CertificateImportError: LocalizedError {
+***REMOVED***public var errorDescription: String? {
+***REMOVED******REMOVED***switch self {
+***REMOVED******REMOVED***case .invalidData:
+***REMOVED******REMOVED******REMOVED***return NSLocalizedString("The certificate file was invalid.", comment: "Invalid certificate")
+***REMOVED******REMOVED***case .invalidPassword:
+***REMOVED******REMOVED******REMOVED***return NSLocalizedString("The password was invalid.", comment: "Invalid password")
+***REMOVED******REMOVED***default:
+***REMOVED******REMOVED******REMOVED***let errorString = SecCopyErrorMessageString(rawValue, nil) as? String ?? "The certificate file or password was invalid."
+***REMOVED******REMOVED******REMOVED***return NSLocalizedString(errorString, comment: "Other certificate error")
+***REMOVED***
+***REMOVED***
+***REMOVED***
+
 extension CertificatePickerViewModel.CertificateError {
 ***REMOVED***var message: String {
 ***REMOVED******REMOVED***switch self {
 ***REMOVED******REMOVED***case .couldNotAccessCertificateFile:
 ***REMOVED******REMOVED******REMOVED***return "Could not access the certificate file."
 ***REMOVED******REMOVED***case .importError(let certificateImportError):
-***REMOVED******REMOVED******REMOVED***switch certificateImportError {
-***REMOVED******REMOVED******REMOVED***case .invalidData:
-***REMOVED******REMOVED******REMOVED******REMOVED***return "The certificate file was invalid."
-***REMOVED******REMOVED******REMOVED***case .invalidPassword:
-***REMOVED******REMOVED******REMOVED******REMOVED***return "The password was invalid."
-***REMOVED******REMOVED******REMOVED***default:
-***REMOVED******REMOVED******REMOVED******REMOVED***return "The certificate file or password was invalid."
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***case .failure(let error):
+***REMOVED******REMOVED******REMOVED***return certificateImportError.localizedDescription
+***REMOVED******REMOVED***case .other(let error):
 ***REMOVED******REMOVED******REMOVED***return error.localizedDescription
 ***REMOVED***
 ***REMOVED***
