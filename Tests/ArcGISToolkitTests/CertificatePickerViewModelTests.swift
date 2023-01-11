@@ -43,6 +43,7 @@ import XCTest
 ***REMOVED******REMOVED******REMOVED*** Another yield seems to be required to deal with timing when running the test
 ***REMOVED******REMOVED******REMOVED*** repeatedly.
 ***REMOVED******REMOVED***await Task.yield()
+***REMOVED******REMOVED******REMOVED*** Sometime this fails. See details in https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/issues/245.
 ***REMOVED******REMOVED***XCTAssertTrue(model.showCertificateError)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***model.cancel()
