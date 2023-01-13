@@ -115,12 +115,15 @@ extension CertificateImportError: LocalizedError {
     public var errorDescription: String? {
         switch self {
         case .invalidData:
-            return NSLocalizedString("The certificate file was invalid.", comment: "Invalid certificate")
+            return String(localized: "The certificate file was invalid.", bundle: .module)
         case .invalidPassword:
-            return NSLocalizedString("The password was invalid.", comment: "Invalid password")
+            return String(localized: "The password was invalid.", bundle: .module)
         default:
-            let errorString = SecCopyErrorMessageString(rawValue, nil) as? String ?? "The certificate file or password was invalid."
-            return NSLocalizedString(errorString, comment: "Other certificate error")
+            let errorString = SecCopyErrorMessageString(rawValue, nil) as? String ?? String(
+                localized: "The certificate file or password was invalid.",
+                bundle: .module
+            )
+            return errorString
         }
     }
 }
@@ -129,7 +132,7 @@ extension CertificatePickerViewModel.CertificateError: LocalizedError {
     public var errorDescription: String? {
         switch self {
         case .couldNotAccessCertificateFile:
-            return NSLocalizedString("Could not access the certificate file.", comment: "Could not access certificate file")
+            return String(localized: "Could not access the certificate file.", bundle: .module)
         case .importError(let error):
             return error.localizedDescription
         case .other(let error):
@@ -250,7 +253,11 @@ private extension View {
                 viewModel.cancel()
             }
         } message: {
-            Text(viewModel.certificateError?.localizedDescription ?? "The certificate file or password was invalid.")
+            Text(viewModel.certificateError?.localizedDescription ?? String(
+                    localized: "The certificate file or password was invalid.",
+                    bundle: .module
+                 )
+            )
         }
     }
 }
