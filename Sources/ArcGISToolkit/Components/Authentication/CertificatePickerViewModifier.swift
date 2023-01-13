@@ -115,12 +115,15 @@ extension CertificateImportError: LocalizedError {
 ***REMOVED***public var errorDescription: String? {
 ***REMOVED******REMOVED***switch self {
 ***REMOVED******REMOVED***case .invalidData:
-***REMOVED******REMOVED******REMOVED***return NSLocalizedString("The certificate file was invalid.", comment: "Invalid certificate")
+***REMOVED******REMOVED******REMOVED***return String(localized: "The certificate file was invalid.", bundle: .module)
 ***REMOVED******REMOVED***case .invalidPassword:
-***REMOVED******REMOVED******REMOVED***return NSLocalizedString("The password was invalid.", comment: "Invalid password")
+***REMOVED******REMOVED******REMOVED***return String(localized: "The password was invalid.", bundle: .module)
 ***REMOVED******REMOVED***default:
-***REMOVED******REMOVED******REMOVED***let errorString = SecCopyErrorMessageString(rawValue, nil) as? String ?? "The certificate file or password was invalid."
-***REMOVED******REMOVED******REMOVED***return NSLocalizedString(errorString, comment: "Other certificate error")
+***REMOVED******REMOVED******REMOVED***let errorString = SecCopyErrorMessageString(rawValue, nil) as? String ?? String(
+***REMOVED******REMOVED******REMOVED******REMOVED***localized: "The certificate file or password was invalid.",
+***REMOVED******REMOVED******REMOVED******REMOVED***bundle: .module
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***return errorString
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -129,7 +132,7 @@ extension CertificatePickerViewModel.CertificateError: LocalizedError {
 ***REMOVED***public var errorDescription: String? {
 ***REMOVED******REMOVED***switch self {
 ***REMOVED******REMOVED***case .couldNotAccessCertificateFile:
-***REMOVED******REMOVED******REMOVED***return NSLocalizedString("Could not access the certificate file.", comment: "Could not access certificate file")
+***REMOVED******REMOVED******REMOVED***return String(localized: "Could not access the certificate file.", bundle: .module)
 ***REMOVED******REMOVED***case .importError(let error):
 ***REMOVED******REMOVED******REMOVED***return error.localizedDescription
 ***REMOVED******REMOVED***case .other(let error):
@@ -250,7 +253,11 @@ private extension View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.cancel()
 ***REMOVED******REMOVED***
 ***REMOVED*** message: {
-***REMOVED******REMOVED******REMOVED***Text(viewModel.certificateError?.localizedDescription ?? "The certificate file or password was invalid.")
+***REMOVED******REMOVED******REMOVED***Text(viewModel.certificateError?.localizedDescription ?? String(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***localized: "The certificate file or password was invalid.",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .module
+***REMOVED******REMOVED******REMOVED******REMOVED*** )
+***REMOVED******REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
