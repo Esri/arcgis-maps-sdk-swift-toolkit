@@ -83,17 +83,17 @@ import UniformTypeIdentifiers
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***Task.detached {
 ***REMOVED******REMOVED******REMOVED***do {
-***REMOVED******REMOVED******REMOVED******REMOVED***guard certificateURL.startAccessingSecurityScopedResource() else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await self.showCertificateError(CertificateError.couldNotAccessCertificateFile)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return
+***REMOVED******REMOVED******REMOVED******REMOVED***if certificateURL.startAccessingSecurityScopedResource() {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***defer { certificateURL.stopAccessingSecurityScopedResource() ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let credential = try NetworkCredential.certificate(at: certificateURL, password: password)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await self.challenge.resume(with: .continueWithCredential(credential))
+***REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await self.showCertificateError(.couldNotAccessCertificateFile)
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***defer { certificateURL.stopAccessingSecurityScopedResource() ***REMOVED***
-
-***REMOVED******REMOVED******REMOVED******REMOVED***await self.challenge.resume(with: .continueWithCredential(try .certificate(at: certificateURL, password: password)))
 ***REMOVED******REMOVED*** catch(let certificateImportError as CertificateImportError) {
-***REMOVED******REMOVED******REMOVED******REMOVED***await self.showCertificateError(CertificateError.importError(certificateImportError))
+***REMOVED******REMOVED******REMOVED******REMOVED***await self.showCertificateError(.importError(certificateImportError))
 ***REMOVED******REMOVED*** catch {
-***REMOVED******REMOVED******REMOVED******REMOVED***await self.showCertificateError(CertificateError.other(error))
+***REMOVED******REMOVED******REMOVED******REMOVED***await self.showCertificateError(.other(error))
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -119,11 +119,10 @@ extension CertificateImportError: LocalizedError {
 ***REMOVED******REMOVED***case .invalidPassword:
 ***REMOVED******REMOVED******REMOVED***return String(localized: "The password was invalid.", bundle: .module)
 ***REMOVED******REMOVED***default:
-***REMOVED******REMOVED******REMOVED***let errorString = SecCopyErrorMessageString(rawValue, nil) as? String ?? String(
+***REMOVED******REMOVED******REMOVED***return SecCopyErrorMessageString(rawValue, nil) as String? ?? String(
 ***REMOVED******REMOVED******REMOVED******REMOVED***localized: "The certificate file or password was invalid.",
 ***REMOVED******REMOVED******REMOVED******REMOVED***bundle: .module
 ***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***return errorString
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -253,7 +252,8 @@ private extension View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.cancel()
 ***REMOVED******REMOVED***
 ***REMOVED*** message: {
-***REMOVED******REMOVED******REMOVED***Text(viewModel.certificateError?.localizedDescription ?? String(
+***REMOVED******REMOVED******REMOVED***Text(
+***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.certificateError?.localizedDescription ?? String(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***localized: "The certificate file or password was invalid.",
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***bundle: .module
 ***REMOVED******REMOVED******REMOVED******REMOVED*** )
