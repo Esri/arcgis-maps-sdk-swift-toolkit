@@ -83,17 +83,17 @@ import ArcGIS
         
         Task.detached {
             do {
-                guard certificateURL.startAccessingSecurityScopedResource() else {
-                    await self.showCertificateError(CertificateError.couldNotAccessCertificateFile)
-                    return
+                if certificateURL.startAccessingSecurityScopedResource() {
+                    defer { certificateURL.stopAccessingSecurityScopedResource() }
+                    let credential = try NetworkCredential.certificate(at: certificateURL, password: password)
+                    await self.challenge.resume(with: .continueWithCredential(credential))
+                } else {
+                    await self.showCertificateError(.couldNotAccessCertificateFile)
                 }
-                defer { certificateURL.stopAccessingSecurityScopedResource() }
-
-                await self.challenge.resume(with: .continueWithCredential(try .certificate(at: certificateURL, password: password)))
             } catch(let certificateImportError as CertificateImportError) {
-                await self.showCertificateError(CertificateError.importError(certificateImportError))
+                await self.showCertificateError(.importError(certificateImportError))
             } catch {
-                await self.showCertificateError(CertificateError.other(error))
+                await self.showCertificateError(.other(error))
             }
         }
     }
@@ -119,11 +119,10 @@ extension CertificateImportError: LocalizedError {
         case .invalidPassword:
             return String(localized: "The password was invalid.", bundle: .module)
         default:
-            let errorString = SecCopyErrorMessageString(rawValue, nil) as? String ?? String(
+            return SecCopyErrorMessageString(rawValue, nil) as String? ?? String(
                 localized: "The certificate file or password was invalid.",
                 bundle: .module
             )
-            return errorString
         }
     }
 }
@@ -253,7 +252,8 @@ private extension View {
                 viewModel.cancel()
             }
         } message: {
-            Text(viewModel.certificateError?.localizedDescription ?? String(
+            Text(
+                viewModel.certificateError?.localizedDescription ?? String(
                     localized: "The certificate file or password was invalid.",
                     bundle: .module
                  )
