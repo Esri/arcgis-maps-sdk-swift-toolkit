@@ -128,7 +128,7 @@ extension CertificateImportError: LocalizedError {
 ***REMOVED***
 
 extension CertificatePickerViewModel.CertificateError: LocalizedError {
-***REMOVED***public var errorDescription: String? {
+***REMOVED***var errorDescription: String? {
 ***REMOVED******REMOVED***switch self {
 ***REMOVED******REMOVED***case .couldNotAccessCertificateFile:
 ***REMOVED******REMOVED******REMOVED***return String(localized: "Could not access the certificate file.", bundle: .module)
