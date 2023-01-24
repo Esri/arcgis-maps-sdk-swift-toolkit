@@ -128,7 +128,7 @@ extension CertificateImportError: LocalizedError {
 }
 
 extension CertificatePickerViewModel.CertificateError: LocalizedError {
-    public var errorDescription: String? {
+    var errorDescription: String? {
         switch self {
         case .couldNotAccessCertificateFile:
             return String(localized: "Could not access the certificate file.", bundle: .module)
