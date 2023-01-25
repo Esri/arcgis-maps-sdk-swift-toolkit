@@ -17,6 +17,7 @@ import PackageDescription
 
 let package = Package(
 ***REMOVED***name: "arcgis-maps-sdk-swift-toolkit",
+***REMOVED***defaultLocalization: "en",
 ***REMOVED***platforms: [
 ***REMOVED******REMOVED***.iOS(.v15),
 ***REMOVED******REMOVED***.macCatalyst(.v15)
