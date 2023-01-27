@@ -29,7 +29,7 @@ let package = Package(
         ),
     ],
     dependencies: [
-        .package(name: "arcgis-maps-sdk-swift", path: "../swift/ArcGIS")
+        .package(url: "https://github.com/Esri/arcgis-maps-sdk-swift", .upToNextMinor(from: "200.0.0-beta"))
     ],
     targets: [
         .target(
