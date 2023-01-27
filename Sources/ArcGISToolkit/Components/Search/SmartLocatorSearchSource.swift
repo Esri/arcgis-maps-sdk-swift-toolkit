@@ -26,8 +26,8 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
     ///   - repeatSuggestResultThreshold: The minimum number of suggestions to attempt to return.
     public init(
         name: String = "Smart Locator",
-        maximumResults: Int32 = 6,
-        maximumSuggestions: Int32 = 6,
+        maximumResults: Int = 6,
+        maximumSuggestions: Int = 6,
         repeatSearchResultThreshold: Int? = 1,
         repeatSuggestResultThreshold: Int? = 6
     ) {

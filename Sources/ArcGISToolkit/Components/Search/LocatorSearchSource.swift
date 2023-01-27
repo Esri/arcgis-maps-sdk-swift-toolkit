@@ -30,8 +30,8 @@ public class LocatorSearchSource: ObservableObject, SearchSource {
                 string: "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer"
             )!
         ),
-        maximumResults: Int32 = 6,
-        maximumSuggestions: Int32 = 6
+        maximumResults: Int = 6,
+        maximumSuggestions: Int = 6
     ) {
         self.name = name
         self.locatorTask = locatorTask
@@ -45,13 +45,13 @@ public class LocatorSearchSource: ObservableObject, SearchSource {
     public var name: String
     
     /// The maximum results to return when performing a search. Most sources default to `6`.
-    public var maximumResults: Int32 {
+    public var maximumResults: Int {
         get { geocodeParameters.maxResults }
         set { geocodeParameters.maxResults = newValue }
     }
     
     /// The maximum suggestions to return. Most sources default to `6`.
-    public var maximumSuggestions: Int32 {
+    public var maximumSuggestions: Int {
         get { suggestParameters.maxResults }
         set { suggestParameters.maxResults = newValue }
     }
