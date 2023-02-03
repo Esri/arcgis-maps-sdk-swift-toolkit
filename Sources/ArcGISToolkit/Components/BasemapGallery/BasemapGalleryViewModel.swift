@@ -172,7 +172,7 @@ private extension BasemapGalleryViewModel {
                 if useDeveloperBasemaps {
                     basemaps = try await portal.developerBasemaps
                 } else if let portalInfo = portal.info,
-                          portalInfo.useVectorBasemaps {
+                          portalInfo.usesVectorBasemaps {
                     basemaps = try await portal.vectorBasemaps
                 } else {
                     basemaps = try await portal.basemaps
