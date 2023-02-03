@@ -172,7 +172,7 @@ private extension BasemapGalleryViewModel {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if useDeveloperBasemaps {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***basemaps = try await portal.developerBasemaps
 ***REMOVED******REMOVED******REMOVED*** else if let portalInfo = portal.info,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  portalInfo.useVectorBasemaps {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  portalInfo.usesVectorBasemaps {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***basemaps = try await portal.vectorBasemaps
 ***REMOVED******REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***basemaps = try await portal.basemaps
