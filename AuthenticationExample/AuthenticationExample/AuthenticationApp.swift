@@ -26,8 +26,9 @@ struct AuthenticationApp: App {
             // If you want to use OAuth, uncomment this code:
             //oAuthUserConfigurations: [.arcgisDotCom]
         )
-        // Set the challenge handler to be the authenticator we just created.
-        ArcGISEnvironment.authenticationManager.authenticationChallengeHandler = authenticator
+        // Set the ArcGIS and Network challenge handlers to be the authenticator we just created.
+        ArcGISEnvironment.authenticationManager.arcGISAuthenticationChallengeHandler = authenticator
+        ArcGISEnvironment.authenticationManager.networkAuthenticationChallengeHandler = authenticator
     }
     
     var body: some SwiftUI.Scene {

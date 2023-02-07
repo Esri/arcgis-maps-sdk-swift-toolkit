@@ -85,7 +85,7 @@ public final class Authenticator: ObservableObject {
     @Published var currentChallenge: ChallengeContinuation?
 }
 
-extension Authenticator: AuthenticationChallengeHandler {
+extension Authenticator: ArcGISAuthenticationChallengeHandler {
     public func handleArcGISAuthenticationChallenge(
         _ challenge: ArcGISAuthenticationChallenge
     ) async throws -> ArcGISAuthenticationChallenge.Disposition {
@@ -106,7 +106,9 @@ extension Authenticator: AuthenticationChallengeHandler {
             return try await tokenChallengeContinuation.value.get()
         }
     }
-    
+}
+
+extension Authenticator: NetworkAuthenticationChallengeHandler {
     public func handleNetworkAuthenticationChallenge(
         _ challenge: NetworkAuthenticationChallenge
     ) async -> NetworkAuthenticationChallenge.Disposition  {
