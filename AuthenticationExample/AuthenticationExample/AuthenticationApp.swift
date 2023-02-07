@@ -26,8 +26,9 @@ struct AuthenticationApp: App {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** If you want to use OAuth, uncomment this code:
 ***REMOVED******REMOVED******REMOVED******REMOVED***oAuthUserConfigurations: [.arcgisDotCom]
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED*** Set the challenge handler to be the authenticator we just created.
-***REMOVED******REMOVED***ArcGISEnvironment.authenticationManager.authenticationChallengeHandler = authenticator
+***REMOVED******REMOVED******REMOVED*** Set the ArcGIS and Network challenge handlers to be the authenticator we just created.
+***REMOVED******REMOVED***ArcGISEnvironment.authenticationManager.arcGISAuthenticationChallengeHandler = authenticator
+***REMOVED******REMOVED***ArcGISEnvironment.authenticationManager.networkAuthenticationChallengeHandler = authenticator
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
