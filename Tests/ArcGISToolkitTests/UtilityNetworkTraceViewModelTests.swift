@@ -31,7 +31,7 @@ import XCTest
     
     func tearDownWithError() async throws {
         ArcGISEnvironment.apiKey = nil
-        ArcGISEnvironment.authenticationManager.authenticationChallengeHandler = nil
+        ArcGISEnvironment.authenticationManager.arcGISAuthenticationChallengeHandler = nil
         ArcGISEnvironment.authenticationManager.arcGISCredentialStore.removeAll()
     }
     
