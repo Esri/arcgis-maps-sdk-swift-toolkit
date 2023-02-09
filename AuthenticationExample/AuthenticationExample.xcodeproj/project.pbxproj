@@ -26,7 +26,7 @@
 		88AD137A2834355000500B2E /* SigninView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SigninView.swift; sourceTree = "<group>"; };
 		88AD137C2834355100500B2E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		88AD137F2834355100500B2E /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		88AD13862834355C00500B2E /* arcgis-maps-sdk-swift-toolit */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "arcgis-maps-sdk-swift-toolit"; path = ..; sourceTree = "<group>"; };
+		88AD13862834355C00500B2E /* arcgis-maps-sdk-swift-toolkit */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "arcgis-maps-sdk-swift-toolkit"; path = ..; sourceTree = "<group>"; };
 		88AD1387283435EA00500B2E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		88AD138D283443F800500B2E /* MapItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapItemView.swift; sourceTree = "<group>"; };
 		88D24DEF288F062D007A539C /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
@@ -51,7 +51,7 @@
 		88AD136C2834355000500B2E = {
 			isa = PBXGroup;
 			children = (
-				88AD13862834355C00500B2E /* arcgis-maps-sdk-swift-toolit */,
+				88AD13862834355C00500B2E /* arcgis-maps-sdk-swift-toolkit */,
 				88AD13772834355000500B2E /* AuthenticationExample */,
 				88AD13762834355000500B2E /* Products */,
 				88AD13882834366100500B2E /* Frameworks */,
