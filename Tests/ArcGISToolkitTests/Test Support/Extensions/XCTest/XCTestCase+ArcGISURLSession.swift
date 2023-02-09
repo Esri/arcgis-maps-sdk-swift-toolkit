@@ -20,9 +20,9 @@ import XCTest
 import ArcGIS
 
 extension XCTestCase {
-    func setChallengeHandler(_ challengeHandler: AuthenticationChallengeHandler) {
-        let previous = ArcGISEnvironment.authenticationManager.authenticationChallengeHandler
-        ArcGISEnvironment.authenticationManager.authenticationChallengeHandler = challengeHandler
-        addTeardownBlock { ArcGISEnvironment.authenticationManager.authenticationChallengeHandler = previous }
+    func setChallengeHandler(_ challengeHandler: ArcGISAuthenticationChallengeHandler) {
+        let previous = ArcGISEnvironment.authenticationManager.arcGISAuthenticationChallengeHandler
+        ArcGISEnvironment.authenticationManager.arcGISAuthenticationChallengeHandler = challengeHandler
+        addTeardownBlock { ArcGISEnvironment.authenticationManager.arcGISAuthenticationChallengeHandler = previous }
     }
 }
