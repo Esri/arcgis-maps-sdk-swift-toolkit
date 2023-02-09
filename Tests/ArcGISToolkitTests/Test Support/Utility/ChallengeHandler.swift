@@ -21,7 +21,7 @@ import ArcGIS
 
 /// A `ChallengeHandler` that that can handle trusting hosts with a self-signed certificate, the URL credential,
 /// and the token credential.
-class ChallengeHandler: AuthenticationChallengeHandler {
+class ChallengeHandler: ArcGISAuthenticationChallengeHandler {
     /// The hosts that can be trusted if they have certificate trust issues.
     let trustedHosts: Set<String>
     
