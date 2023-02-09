@@ -31,7 +31,7 @@ import XCTest
 ***REMOVED***
 ***REMOVED***func tearDownWithError() async throws {
 ***REMOVED******REMOVED***ArcGISEnvironment.apiKey = nil
-***REMOVED******REMOVED***ArcGISEnvironment.authenticationManager.authenticationChallengeHandler = nil
+***REMOVED******REMOVED***ArcGISEnvironment.authenticationManager.arcGISAuthenticationChallengeHandler = nil
 ***REMOVED******REMOVED***ArcGISEnvironment.authenticationManager.arcGISCredentialStore.removeAll()
 ***REMOVED***
 ***REMOVED***
