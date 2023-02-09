@@ -21,7 +21,7 @@ import Foundation
 
 ***REMOVED***/ A `ChallengeHandler` that that can handle trusting hosts with a self-signed certificate, the URL credential,
 ***REMOVED***/ and the token credential.
-class ChallengeHandler: AuthenticationChallengeHandler {
+class ChallengeHandler: ArcGISAuthenticationChallengeHandler {
 ***REMOVED******REMOVED***/ The hosts that can be trusted if they have certificate trust issues.
 ***REMOVED***let trustedHosts: Set<String>
 ***REMOVED***
