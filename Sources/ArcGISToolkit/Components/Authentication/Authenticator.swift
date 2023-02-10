@@ -37,6 +37,12 @@ public final class Authenticator: ObservableObject {
         self.oAuthUserConfigurations = oAuthUserConfigurations
     }
     
+    /// Sets the ArcGIS and Network challenge handlers to be this authenticator.
+    public func setupAuthenticationChallengeHandlers() {
+        ArcGISEnvironment.authenticationManager.arcGISAuthenticationChallengeHandler = self
+        ArcGISEnvironment.authenticationManager.networkAuthenticationChallengeHandler = self
+    }
+    
     /// Sets up new credential stores that will be persisted to the keychain.
     /// - Remark: The credentials will be stored in the default access group of the keychain.
     /// You can find more information about what the default group would be here:

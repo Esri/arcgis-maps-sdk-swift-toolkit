@@ -1,12 +1,12 @@
 # Authenticator
 
-The `Authenticator` is a configurable object that handles authentication challenges.  It will display a user interface when network and ArcGIS authentication challenges occur.
+The `Authenticator` is a configurable object that handles authentication challenges. It will display a user interface when network and ArcGIS authentication challenges occur.
 
 ![image](https://user-images.githubusercontent.com/3998072/203615041-c887d5e3-bb64-469a-a76b-126059329e92.png)
 
 ## Features
 
-The `Authenticator` has a view modifier that will display a prompt when the `Authenticator` is asked to handle an authentication challenge.  This will handle many different types of authentication, for example:
+The `Authenticator` has a view modifier that will display a prompt when the `Authenticator` is asked to handle an authentication challenge. This will handle many different types of authentication, for example:
   - ArcGIS authentication (token and OAuth)
   - Integrated Windows Authentication (IWA)
   - Client Certificate (PKI)
@@ -56,8 +56,8 @@ init() {
         // If you want to use OAuth, uncomment this code:
         //oAuthConfigurations: [.arcgisDotCom]
     )
-    // Set the challenge handler to be the authenticator we just created.
-    ArcGISEnvironment.authenticationChallengeHandler = authenticator
+    // Set the ArcGIS and Network challenge handlers to be the authenticator we just created.
+    authenticator.setupAuthenticationChallengeHandlers()
 }
 
 var body: some SwiftUI.Scene {
