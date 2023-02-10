@@ -27,8 +27,7 @@ struct AuthenticationApp: App {
             //oAuthUserConfigurations: [.arcgisDotCom]
         )
         // Set the ArcGIS and Network challenge handlers to be the authenticator we just created.
-        ArcGISEnvironment.authenticationManager.arcGISAuthenticationChallengeHandler = authenticator
-        ArcGISEnvironment.authenticationManager.networkAuthenticationChallengeHandler = authenticator
+        authenticator.setupAuthenticationChallengeHandlers()
     }
     
     var body: some SwiftUI.Scene {
@@ -51,7 +50,7 @@ struct AuthenticationApp: App {
             .task {
                 isSettingUp = true
                 // Here we make the authenticator persistent, which means that it will synchronize
-                // with they keychain for storing credentials.
+                // with the keychain for storing credentials.
                 // It also means that a user can sign in without having to be prompted for
                 // credentials. Once credentials are cleared from the stores ("sign-out"),
                 // then the user will need to be prompted once again.
