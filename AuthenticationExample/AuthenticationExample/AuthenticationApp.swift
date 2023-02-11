@@ -26,8 +26,9 @@ struct AuthenticationApp: App {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** If you want to use OAuth, uncomment this code:
 ***REMOVED******REMOVED******REMOVED******REMOVED***oAuthUserConfigurations: [.arcgisDotCom]
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED*** Set the ArcGIS and Network challenge handlers to be the authenticator we just created.
-***REMOVED******REMOVED***authenticator.setupAuthenticationChallengeHandlers()
+***REMOVED******REMOVED******REMOVED*** Sets authenticator as ArcGIS and Network challenge handlers to handle authentication
+***REMOVED******REMOVED******REMOVED*** challenges.
+***REMOVED******REMOVED***ArcGISEnvironment.authenticationManager.handleAuthenticationChallenges(using: authenticator)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -54,7 +55,7 @@ struct AuthenticationApp: App {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** It also means that a user can sign in without having to be prompted for
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** credentials. Once credentials are cleared from the stores ("sign-out"),
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** then the user will need to be prompted once again.
-***REMOVED******REMOVED******REMOVED******REMOVED***try? await authenticator.setupPersistentCredentialStorage(access: .whenUnlockedThisDeviceOnly)
+***REMOVED******REMOVED******REMOVED******REMOVED***try? await ArcGISEnvironment.authenticationManager.setupPersistentCredentialStorage(access: .whenUnlockedThisDeviceOnly)
 ***REMOVED******REMOVED******REMOVED******REMOVED***isSettingUp = false
 ***REMOVED******REMOVED***
 ***REMOVED***
