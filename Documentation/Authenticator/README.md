@@ -23,7 +23,7 @@ The `Authenticator` can be configured to support securely persisting credentials
     @ViewBuilder func authenticator(_ authenticator: Authenticator) -> some View
 ```
 
-To securely store credentials in the keychain, use the following instance method on `Authenticator`:
+To securely store credentials in the keychain, use the following extension method of `AuthenticationManager`:
 
 ```swift
     /// Sets up new credential stores that will be persisted to the keychain.
@@ -56,8 +56,9 @@ init() {
         // If you want to use OAuth, uncomment this code:
         //oAuthConfigurations: [.arcgisDotCom]
     )
-    // Set the ArcGIS and Network challenge handlers to be the authenticator we just created.
-    authenticator.setupAuthenticationChallengeHandlers()
+    // Sets authenticator as ArcGIS and Network challenge handlers to handle authentication
+    // challenges.
+    ArcGISEnvironment.authenticationManager.handleAuthenticationChallenges(using: authenticator)
 }
 
 var body: some SwiftUI.Scene {
