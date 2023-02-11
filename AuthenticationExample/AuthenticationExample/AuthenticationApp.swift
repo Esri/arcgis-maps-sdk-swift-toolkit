@@ -26,8 +26,9 @@ struct AuthenticationApp: App {
             // If you want to use OAuth, uncomment this code:
             //oAuthUserConfigurations: [.arcgisDotCom]
         )
-        // Set the ArcGIS and Network challenge handlers to be the authenticator we just created.
-        authenticator.setupAuthenticationChallengeHandlers()
+        // Sets authenticator as ArcGIS and Network challenge handlers to handle authentication
+        // challenges.
+        ArcGISEnvironment.authenticationManager.handleAuthenticationChallenges(using: authenticator)
     }
     
     var body: some SwiftUI.Scene {
@@ -54,7 +55,7 @@ struct AuthenticationApp: App {
                 // It also means that a user can sign in without having to be prompted for
                 // credentials. Once credentials are cleared from the stores ("sign-out"),
                 // then the user will need to be prompted once again.
-                try? await authenticator.setupPersistentCredentialStorage(access: .whenUnlockedThisDeviceOnly)
+                try? await ArcGISEnvironment.authenticationManager.setupPersistentCredentialStorage(access: .whenUnlockedThisDeviceOnly)
                 isSettingUp = false
             }
         }

@@ -37,55 +37,6 @@ public final class Authenticator: ObservableObject {
         self.oAuthUserConfigurations = oAuthUserConfigurations
     }
     
-    /// Sets the ArcGIS and Network challenge handlers to be this authenticator.
-    public func setupAuthenticationChallengeHandlers() {
-        ArcGISEnvironment.authenticationManager.arcGISAuthenticationChallengeHandler = self
-        ArcGISEnvironment.authenticationManager.networkAuthenticationChallengeHandler = self
-    }
-    
-    /// Sets up new credential stores that will be persisted to the keychain.
-    /// - Remark: The credentials will be stored in the default access group of the keychain.
-    /// You can find more information about what the default group would be here:
-    /// https://developer.apple.com/documentation/security/keychain_services/keychain_items/sharing_access_to_keychain_items_among_a_collection_of_apps
-    /// - Parameters:
-    ///   - access: When the credentials stored in the keychain can be accessed.
-    ///   - synchronizesWithiCloud: A Boolean value indicating whether the credentials are synchronized with iCloud.
-    public func setupPersistentCredentialStorage(
-        access: ArcGIS.KeychainAccess,
-        synchronizesWithiCloud: Bool = false
-    ) async throws {
-        let previousArcGISCredentialStore = ArcGISEnvironment.authenticationManager.arcGISCredentialStore
-        
-        // Set a persistent ArcGIS credential store on the ArcGIS environment.
-        ArcGISEnvironment.authenticationManager.arcGISCredentialStore = try await .makePersistent(
-            access: access,
-            synchronizesWithiCloud: synchronizesWithiCloud
-        )
-        
-        do {
-            // Set a persistent network credential store on the ArcGIS environment.
-            await ArcGISEnvironment.authenticationManager.setNetworkCredentialStore(
-                try await .makePersistent(access: access, synchronizesWithiCloud: synchronizesWithiCloud)
-            )
-        } catch {
-            // If making the shared network credential store persistent fails,
-            // then restore the ArcGIS credential store.
-            ArcGISEnvironment.authenticationManager.arcGISCredentialStore = previousArcGISCredentialStore
-            throw error
-        }
-    }
-    
-    /// Clears all ArcGIS and network credentials from the respective stores.
-    /// Note: This sets up new `URLSessions` so that removed network credentials are respected
-    /// right away.
-    public func clearCredentialStores() async {
-        // Clear ArcGIS Credentials.
-        ArcGISEnvironment.authenticationManager.arcGISCredentialStore.removeAll()
-        
-        // Clear network credentials.
-        await ArcGISEnvironment.authenticationManager.networkCredentialStore.removeAll()
-    }
-    
     /// The current challenge.
     /// This property is not set for OAuth challenges.
     @Published var currentChallenge: ChallengeContinuation?
@@ -135,5 +86,58 @@ extension Authenticator: NetworkAuthenticationChallengeHandler {
         
         // Wait for it to complete and return the resulting disposition.
         return await challengeContinuation.value
+    }
+}
+
+public extension AuthenticationManager {
+    /// Sets authenticator as ArcGIS and Network challenge handlers to handle authentication
+    /// challenges.
+    /// - Parameter authenticator: The authenticator to be used for handling challenges.
+    func handleAuthenticationChallenges(using authenticator: Authenticator) {
+        ArcGISEnvironment.authenticationManager.arcGISAuthenticationChallengeHandler = authenticator
+        ArcGISEnvironment.authenticationManager.networkAuthenticationChallengeHandler = authenticator
+    }
+    
+    /// Sets up new credential stores that will be persisted to the keychain.
+    /// - Remark: The credentials will be stored in the default access group of the keychain.
+    /// You can find more information about what the default group would be here:
+    /// https://developer.apple.com/documentation/security/keychain_services/keychain_items/sharing_access_to_keychain_items_among_a_collection_of_apps
+    /// - Parameters:
+    ///   - access: When the credentials stored in the keychain can be accessed.
+    ///   - synchronizesWithiCloud: A Boolean value indicating whether the credentials are synchronized with iCloud.
+    func setupPersistentCredentialStorage(
+        access: ArcGIS.KeychainAccess,
+        synchronizesWithiCloud: Bool = false
+    ) async throws {
+        let previousArcGISCredentialStore = ArcGISEnvironment.authenticationManager.arcGISCredentialStore
+        
+        // Set a persistent ArcGIS credential store on the ArcGIS environment.
+        ArcGISEnvironment.authenticationManager.arcGISCredentialStore = try await .makePersistent(
+            access: access,
+            synchronizesWithiCloud: synchronizesWithiCloud
+        )
+        
+        do {
+            // Set a persistent network credential store on the ArcGIS environment.
+            await ArcGISEnvironment.authenticationManager.setNetworkCredentialStore(
+                try await .makePersistent(access: access, synchronizesWithiCloud: synchronizesWithiCloud)
+            )
+        } catch {
+            // If making the shared network credential store persistent fails,
+            // then restore the ArcGIS credential store.
+            ArcGISEnvironment.authenticationManager.arcGISCredentialStore = previousArcGISCredentialStore
+            throw error
+        }
+    }
+    
+    /// Clears all ArcGIS and network credentials from the respective stores.
+    /// Note: This sets up new `URLSessions` so that removed network credentials are respected
+    /// right away.
+    func clearCredentialStores() async {
+        // Clear ArcGIS Credentials.
+        ArcGISEnvironment.authenticationManager.arcGISCredentialStore.removeAll()
+        
+        // Clear network credentials.
+        await ArcGISEnvironment.authenticationManager.networkCredentialStore.removeAll()
     }
 }
