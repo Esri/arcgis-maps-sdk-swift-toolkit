@@ -90,12 +90,12 @@ extension Authenticator: NetworkAuthenticationChallengeHandler {
 }
 
 public extension AuthenticationManager {
-    /// Sets authenticator as ArcGIS and Network challenge handlers to handle authentication
+    /// Sets up authenticator as ArcGIS and Network challenge handlers to handle authentication
     /// challenges.
     /// - Parameter authenticator: The authenticator to be used for handling challenges.
     func handleAuthenticationChallenges(using authenticator: Authenticator) {
-        ArcGISEnvironment.authenticationManager.arcGISAuthenticationChallengeHandler = authenticator
-        ArcGISEnvironment.authenticationManager.networkAuthenticationChallengeHandler = authenticator
+        arcGISAuthenticationChallengeHandler = authenticator
+        networkAuthenticationChallengeHandler = authenticator
     }
     
     /// Sets up new credential stores that will be persisted to the keychain.
@@ -109,23 +109,23 @@ public extension AuthenticationManager {
         access: ArcGIS.KeychainAccess,
         synchronizesWithiCloud: Bool = false
     ) async throws {
-        let previousArcGISCredentialStore = ArcGISEnvironment.authenticationManager.arcGISCredentialStore
+        let previousArcGISCredentialStore = arcGISCredentialStore
         
         // Set a persistent ArcGIS credential store on the ArcGIS environment.
-        ArcGISEnvironment.authenticationManager.arcGISCredentialStore = try await .makePersistent(
+        arcGISCredentialStore = try await .makePersistent(
             access: access,
             synchronizesWithiCloud: synchronizesWithiCloud
         )
         
         do {
             // Set a persistent network credential store on the ArcGIS environment.
-            await ArcGISEnvironment.authenticationManager.setNetworkCredentialStore(
+            await setNetworkCredentialStore(
                 try await .makePersistent(access: access, synchronizesWithiCloud: synchronizesWithiCloud)
             )
         } catch {
             // If making the shared network credential store persistent fails,
             // then restore the ArcGIS credential store.
-            ArcGISEnvironment.authenticationManager.arcGISCredentialStore = previousArcGISCredentialStore
+            arcGISCredentialStore = previousArcGISCredentialStore
             throw error
         }
     }
@@ -134,10 +134,18 @@ public extension AuthenticationManager {
     /// Note: This sets up new `URLSessions` so that removed network credentials are respected
     /// right away.
     func clearCredentialStores() async {
+        // Revoke tokens for OAuth user credentials.
+        let oAuthUserCredentials = arcGISCredentialStore.credentials.compactMap { $0 as? OAuthUserCredential }
+        oAuthUserCredentials.forEach { oAuthUserCredential in
+            Task {
+                try? await oAuthUserCredential.revokeToken()
+            }
+        }
+        
         // Clear ArcGIS Credentials.
-        ArcGISEnvironment.authenticationManager.arcGISCredentialStore.removeAll()
+        arcGISCredentialStore.removeAll()
         
         // Clear network credentials.
-        await ArcGISEnvironment.authenticationManager.networkCredentialStore.removeAll()
+        await networkCredentialStore.removeAll()
     }
 }

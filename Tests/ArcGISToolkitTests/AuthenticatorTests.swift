@@ -36,9 +36,8 @@ import Combine
         }
         
         // This tests that calling setupPersistentCredentialStorage tries to sync with the keychain.
-        let authenticator = Authenticator()
         do {
-            try await authenticator.setupPersistentCredentialStorage(access: .whenUnlocked)
+            try await ArcGISEnvironment.authenticationManager.setupPersistentCredentialStorage(access: .whenUnlocked)
             XCTFail("Expected an error to be thrown as unit tests should not have access to the keychain")
         } catch {}
     }
@@ -55,12 +54,10 @@ import Combine
             )
         )
         
-        let authenticator = Authenticator()
-        
         var arcGISCreds = ArcGISEnvironment.authenticationManager.arcGISCredentialStore.credentials
         XCTAssertEqual(arcGISCreds.count, 1)
         
-        await authenticator.clearCredentialStores()
+        await ArcGISEnvironment.authenticationManager.clearCredentialStores()
         
         arcGISCreds = ArcGISEnvironment.authenticationManager.arcGISCredentialStore.credentials
         XCTAssertTrue(arcGISCreds.isEmpty)
