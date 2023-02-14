@@ -50,7 +50,7 @@ struct AuthenticationApp: App {
             .environmentObject(authenticator)
             .task {
                 isSettingUp = true
-                // Here we setup credential stores to be persistent, which means that it will be
+                // Here we setup credential stores to be persistent, which means that it will
                 // synchronize with the keychain for storing credentials.
                 // It also means that a user can sign in without having to be prompted for
                 // credentials. Once credentials are cleared from the stores ("sign-out"),
