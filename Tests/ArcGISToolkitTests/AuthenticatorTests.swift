@@ -36,9 +36,8 @@ import Combine
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** This tests that calling setupPersistentCredentialStorage tries to sync with the keychain.
-***REMOVED******REMOVED***let authenticator = Authenticator()
 ***REMOVED******REMOVED***do {
-***REMOVED******REMOVED******REMOVED***try await authenticator.setupPersistentCredentialStorage(access: .whenUnlocked)
+***REMOVED******REMOVED******REMOVED***try await ArcGISEnvironment.authenticationManager.setupPersistentCredentialStorage(access: .whenUnlocked)
 ***REMOVED******REMOVED******REMOVED***XCTFail("Expected an error to be thrown as unit tests should not have access to the keychain")
 ***REMOVED*** catch {***REMOVED***
 ***REMOVED***
@@ -55,12 +54,10 @@ import Combine
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***let authenticator = Authenticator()
-***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var arcGISCreds = ArcGISEnvironment.authenticationManager.arcGISCredentialStore.credentials
 ***REMOVED******REMOVED***XCTAssertEqual(arcGISCreds.count, 1)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***await authenticator.clearCredentialStores()
+***REMOVED******REMOVED***await ArcGISEnvironment.authenticationManager.clearCredentialStores()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***arcGISCreds = ArcGISEnvironment.authenticationManager.arcGISCredentialStore.credentials
 ***REMOVED******REMOVED***XCTAssertTrue(arcGISCreds.isEmpty)

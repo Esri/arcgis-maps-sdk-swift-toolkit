@@ -39,6 +39,15 @@ To securely store credentials in the keychain, use the following extension metho
 ***REMOVED***) async throws
 ```
 
+While sign-out, use the following extension method of `AuthenticationManager`:
+
+```swift
+***REMOVED******REMOVED***/ Clears all ArcGIS and network credentials from the respective stores.
+***REMOVED******REMOVED***/ Note: This sets up new `URLSessions` so that removed network credentials are respected
+***REMOVED******REMOVED***/ right away.
+***REMOVED***func clearCredentialStores() async
+```
+
 ## Behavior:
 
 The Authenticator view modifier will display an alert prompting the user for credentials. If credentials were persisted to the keychain, the Authenticator will use those instead of requiring the user to reenter credentials.
@@ -66,12 +75,12 @@ var body: some SwiftUI.Scene {
 ***REMOVED******REMOVED***HomeView()
 ***REMOVED******REMOVED******REMOVED***.authenticator(authenticator)
 ***REMOVED******REMOVED******REMOVED***.task {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Here we make the authenticator persistent, which means that it will synchronize
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** with the keychain for storing credentials.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Here we setup credential stores to be persistent, which means that it will be
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** synchronize with the keychain for storing credentials.
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** It also means that a user can sign in without having to be prompted for
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** credentials. Once credentials are cleared from the stores ("sign-out"),
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** then the user will need to be prompted once again.
-***REMOVED******REMOVED******REMOVED******REMOVED***try? await authenticator.setupPersistentCredentialStorage(access: .whenUnlockedThisDeviceOnly)
+***REMOVED******REMOVED******REMOVED******REMOVED***try? await ArcGISEnvironment.authenticationManager.setupPersistentCredentialStorage(access: .whenUnlockedThisDeviceOnly)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***

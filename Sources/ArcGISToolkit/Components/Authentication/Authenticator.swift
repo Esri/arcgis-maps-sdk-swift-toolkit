@@ -90,12 +90,12 @@ extension Authenticator: NetworkAuthenticationChallengeHandler {
 ***REMOVED***
 
 public extension AuthenticationManager {
-***REMOVED******REMOVED***/ Sets authenticator as ArcGIS and Network challenge handlers to handle authentication
+***REMOVED******REMOVED***/ Sets up authenticator as ArcGIS and Network challenge handlers to handle authentication
 ***REMOVED******REMOVED***/ challenges.
 ***REMOVED******REMOVED***/ - Parameter authenticator: The authenticator to be used for handling challenges.
 ***REMOVED***func handleAuthenticationChallenges(using authenticator: Authenticator) {
-***REMOVED******REMOVED***ArcGISEnvironment.authenticationManager.arcGISAuthenticationChallengeHandler = authenticator
-***REMOVED******REMOVED***ArcGISEnvironment.authenticationManager.networkAuthenticationChallengeHandler = authenticator
+***REMOVED******REMOVED***arcGISAuthenticationChallengeHandler = authenticator
+***REMOVED******REMOVED***networkAuthenticationChallengeHandler = authenticator
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Sets up new credential stores that will be persisted to the keychain.
@@ -109,23 +109,23 @@ public extension AuthenticationManager {
 ***REMOVED******REMOVED***access: ArcGIS.KeychainAccess,
 ***REMOVED******REMOVED***synchronizesWithiCloud: Bool = false
 ***REMOVED***) async throws {
-***REMOVED******REMOVED***let previousArcGISCredentialStore = ArcGISEnvironment.authenticationManager.arcGISCredentialStore
+***REMOVED******REMOVED***let previousArcGISCredentialStore = arcGISCredentialStore
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Set a persistent ArcGIS credential store on the ArcGIS environment.
-***REMOVED******REMOVED***ArcGISEnvironment.authenticationManager.arcGISCredentialStore = try await .makePersistent(
+***REMOVED******REMOVED***arcGISCredentialStore = try await .makePersistent(
 ***REMOVED******REMOVED******REMOVED***access: access,
 ***REMOVED******REMOVED******REMOVED***synchronizesWithiCloud: synchronizesWithiCloud
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Set a persistent network credential store on the ArcGIS environment.
-***REMOVED******REMOVED******REMOVED***await ArcGISEnvironment.authenticationManager.setNetworkCredentialStore(
+***REMOVED******REMOVED******REMOVED***await setNetworkCredentialStore(
 ***REMOVED******REMOVED******REMOVED******REMOVED***try await .makePersistent(access: access, synchronizesWithiCloud: synchronizesWithiCloud)
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED*** catch {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** If making the shared network credential store persistent fails,
 ***REMOVED******REMOVED******REMOVED******REMOVED*** then restore the ArcGIS credential store.
-***REMOVED******REMOVED******REMOVED***ArcGISEnvironment.authenticationManager.arcGISCredentialStore = previousArcGISCredentialStore
+***REMOVED******REMOVED******REMOVED***arcGISCredentialStore = previousArcGISCredentialStore
 ***REMOVED******REMOVED******REMOVED***throw error
 ***REMOVED***
 ***REMOVED***
@@ -134,10 +134,18 @@ public extension AuthenticationManager {
 ***REMOVED******REMOVED***/ Note: This sets up new `URLSessions` so that removed network credentials are respected
 ***REMOVED******REMOVED***/ right away.
 ***REMOVED***func clearCredentialStores() async {
+***REMOVED******REMOVED******REMOVED*** Revoke tokens for OAuth user credentials.
+***REMOVED******REMOVED***let oAuthUserCredentials = arcGISCredentialStore.credentials.compactMap { $0 as? OAuthUserCredential ***REMOVED***
+***REMOVED******REMOVED***oAuthUserCredentials.forEach { oAuthUserCredential in
+***REMOVED******REMOVED******REMOVED***Task {
+***REMOVED******REMOVED******REMOVED******REMOVED***try? await oAuthUserCredential.revokeToken()
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Clear ArcGIS Credentials.
-***REMOVED******REMOVED***ArcGISEnvironment.authenticationManager.arcGISCredentialStore.removeAll()
+***REMOVED******REMOVED***arcGISCredentialStore.removeAll()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Clear network credentials.
-***REMOVED******REMOVED***await ArcGISEnvironment.authenticationManager.networkCredentialStore.removeAll()
+***REMOVED******REMOVED***await networkCredentialStore.removeAll()
 ***REMOVED***
 ***REMOVED***
