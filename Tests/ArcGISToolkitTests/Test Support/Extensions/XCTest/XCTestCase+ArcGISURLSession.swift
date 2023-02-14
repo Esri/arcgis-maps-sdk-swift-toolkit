@@ -20,9 +20,19 @@ import XCTest
 import ArcGIS
 
 extension XCTestCase {
-    func setChallengeHandler(_ challengeHandler: AuthenticationChallengeHandler) {
-        let previous = ArcGISEnvironment.authenticationManager.authenticationChallengeHandler
-        ArcGISEnvironment.authenticationManager.authenticationChallengeHandler = challengeHandler
-        addTeardownBlock { ArcGISEnvironment.authenticationManager.authenticationChallengeHandler = previous }
+    /// Sets up an ArcGIS challenge handler on the `ArcGISURLSession` and registers a tear-down block to
+    /// reset it to previous handler.
+    func setArcGISChallengeHandler(_ challengeHandler: ArcGISAuthenticationChallengeHandler) {
+        let previous = ArcGISEnvironment.authenticationManager.arcGISAuthenticationChallengeHandler
+        ArcGISEnvironment.authenticationManager.arcGISAuthenticationChallengeHandler = challengeHandler
+        addTeardownBlock { ArcGISEnvironment.authenticationManager.arcGISAuthenticationChallengeHandler = previous }
+    }
+    
+    /// Sets up a network challenge handler on the `ArcGISURLSession` and registers a tear-down block to
+    /// reset it to  previous handler.
+    func setNetworkChallengeHandler(_ challengeHandler: NetworkAuthenticationChallengeHandler) {
+        let previous = ArcGISEnvironment.authenticationManager.networkAuthenticationChallengeHandler
+        ArcGISEnvironment.authenticationManager.networkAuthenticationChallengeHandler = challengeHandler
+        addTeardownBlock { ArcGISEnvironment.authenticationManager.networkAuthenticationChallengeHandler = previous }
     }
 }
