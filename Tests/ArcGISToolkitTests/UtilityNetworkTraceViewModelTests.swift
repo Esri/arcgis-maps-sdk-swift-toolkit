@@ -23,7 +23,7 @@ import XCTest
         ArcGISEnvironment.apiKey = apiKey
         try XCTSkipIf(apiKey == .placeholder)
         
-        setChallengeHandler(ChallengeHandler(trustedHosts: [URL.sampleServer7.host!]))
+        setNetworkChallengeHandler(NetworkChallengeHandler(allowUntrustedHosts: true))
         ArcGISEnvironment.authenticationManager.arcGISCredentialStore.add(
             try await tokenForSampleServer7
         )
@@ -31,7 +31,8 @@ import XCTest
     
     func tearDownWithError() async throws {
         ArcGISEnvironment.apiKey = nil
-        ArcGISEnvironment.authenticationManager.authenticationChallengeHandler = nil
+        ArcGISEnvironment.authenticationManager.arcGISAuthenticationChallengeHandler = nil
+        ArcGISEnvironment.authenticationManager.networkAuthenticationChallengeHandler = nil
         ArcGISEnvironment.authenticationManager.arcGISCredentialStore.removeAll()
     }
     
