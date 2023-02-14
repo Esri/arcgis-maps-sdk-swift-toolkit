@@ -39,6 +39,15 @@ To securely store credentials in the keychain, use the following extension metho
     ) async throws
 ```
 
+While sign-out, use the following extension method of `AuthenticationManager`:
+
+```swift
+    /// Clears all ArcGIS and network credentials from the respective stores.
+    /// Note: This sets up new `URLSessions` so that removed network credentials are respected
+    /// right away.
+    func clearCredentialStores() async
+```
+
 ## Behavior:
 
 The Authenticator view modifier will display an alert prompting the user for credentials. If credentials were persisted to the keychain, the Authenticator will use those instead of requiring the user to reenter credentials.
@@ -66,12 +75,12 @@ var body: some SwiftUI.Scene {
         HomeView()
             .authenticator(authenticator)
             .task {
-                // Here we make the authenticator persistent, which means that it will synchronize
-                // with the keychain for storing credentials.
+                // Here we setup credential stores to be persistent, which means that it will be
+                // synchronize with the keychain for storing credentials.
                 // It also means that a user can sign in without having to be prompted for
                 // credentials. Once credentials are cleared from the stores ("sign-out"),
                 // then the user will need to be prompted once again.
-                try? await authenticator.setupPersistentCredentialStorage(access: .whenUnlockedThisDeviceOnly)
+                try? await ArcGISEnvironment.authenticationManager.setupPersistentCredentialStorage(access: .whenUnlockedThisDeviceOnly)
             }
     }
 }
