@@ -39,7 +39,7 @@ To securely store credentials in the keychain, use the following extension metho
     ) async throws
 ```
 
-While sign-out, use the following extension method of `AuthenticationManager`:
+During sign-out, use the following extension method of `AuthenticationManager`:
 
 ```swift
     /// Clears all ArcGIS and network credentials from the respective stores.
