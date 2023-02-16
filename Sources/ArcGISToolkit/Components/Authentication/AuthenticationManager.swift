@@ -66,17 +66,24 @@ public extension AuthenticationManager {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Revokes tokens of OAuth user credentials.
-***REMOVED***func revokeOAuthTokens() async {
+***REMOVED******REMOVED***/ - Returns: `true` if successfully revokes tokens for all `OAuthUserCredential`, otherwise
+***REMOVED******REMOVED***/ `false`.
+***REMOVED***@discardableResult
+***REMOVED***func revokeOAuthTokens() async -> Bool {
 ***REMOVED******REMOVED***let oAuthUserCredentials = arcGISCredentialStore.credentials.compactMap { $0 as? OAuthUserCredential ***REMOVED***
-***REMOVED******REMOVED***await withTaskGroup(of: Void.self) { group in
+***REMOVED******REMOVED***return await withTaskGroup(of: Bool.self, returning: Bool.self) { group in
 ***REMOVED******REMOVED******REMOVED***for credential in oAuthUserCredentials {
 ***REMOVED******REMOVED******REMOVED******REMOVED***group.addTask {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try? await credential.revokeToken()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***do {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try await credential.revokeToken()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return true
+***REMOVED******REMOVED******REMOVED******REMOVED*** catch {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***return false
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED*** Make sure that all tasks complete.
-***REMOVED******REMOVED******REMOVED***await group.waitForAll()
+***REMOVED******REMOVED******REMOVED***return await group.allSatisfy { $0 == true ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***

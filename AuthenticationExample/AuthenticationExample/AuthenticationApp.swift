@@ -28,7 +28,7 @@ struct AuthenticationApp: App {
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED*** Sets authenticator as ArcGIS and Network challenge handlers to handle authentication
 ***REMOVED******REMOVED******REMOVED*** challenges.
-***REMOVED******REMOVED***ArcGISEnvironment.authenticationManager.handleAuthenticationChallenges(using: authenticator)
+***REMOVED******REMOVED***ArcGISEnvironment.authenticationManager.handleChallenges(using: authenticator)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
