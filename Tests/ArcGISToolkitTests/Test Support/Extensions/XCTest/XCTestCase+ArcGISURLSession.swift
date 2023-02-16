@@ -20,9 +20,19 @@ import XCTest
 ***REMOVED***
 
 extension XCTestCase {
-***REMOVED***func setChallengeHandler(_ challengeHandler: ArcGISAuthenticationChallengeHandler) {
+***REMOVED******REMOVED***/ Sets up an ArcGIS challenge handler on the `ArcGISURLSession` and registers a tear-down block to
+***REMOVED******REMOVED***/ reset it to previous handler.
+***REMOVED***func setArcGISChallengeHandler(_ challengeHandler: ArcGISAuthenticationChallengeHandler) {
 ***REMOVED******REMOVED***let previous = ArcGISEnvironment.authenticationManager.arcGISAuthenticationChallengeHandler
 ***REMOVED******REMOVED***ArcGISEnvironment.authenticationManager.arcGISAuthenticationChallengeHandler = challengeHandler
 ***REMOVED******REMOVED***addTeardownBlock { ArcGISEnvironment.authenticationManager.arcGISAuthenticationChallengeHandler = previous ***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Sets up a network challenge handler on the `ArcGISURLSession` and registers a tear-down block to
+***REMOVED******REMOVED***/ reset it to  previous handler.
+***REMOVED***func setNetworkChallengeHandler(_ challengeHandler: NetworkAuthenticationChallengeHandler) {
+***REMOVED******REMOVED***let previous = ArcGISEnvironment.authenticationManager.networkAuthenticationChallengeHandler
+***REMOVED******REMOVED***ArcGISEnvironment.authenticationManager.networkAuthenticationChallengeHandler = challengeHandler
+***REMOVED******REMOVED***addTeardownBlock { ArcGISEnvironment.authenticationManager.networkAuthenticationChallengeHandler = previous ***REMOVED***
 ***REMOVED***
 ***REMOVED***
