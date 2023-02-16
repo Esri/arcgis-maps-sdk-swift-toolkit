@@ -28,7 +28,7 @@ struct AuthenticationApp: App {
         )
         // Sets authenticator as ArcGIS and Network challenge handlers to handle authentication
         // challenges.
-        ArcGISEnvironment.authenticationManager.handleAuthenticationChallenges(using: authenticator)
+        ArcGISEnvironment.authenticationManager.handleChallenges(using: authenticator)
     }
     
     var body: some SwiftUI.Scene {
