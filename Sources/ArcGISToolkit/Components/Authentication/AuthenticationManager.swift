@@ -66,17 +66,24 @@ public extension AuthenticationManager {
     }
     
     /// Revokes tokens of OAuth user credentials.
-    func revokeOAuthTokens() async {
+    /// - Returns: `true` if successfully revokes tokens for all `OAuthUserCredential`, otherwise
+    /// `false`.
+    @discardableResult
+    func revokeOAuthTokens() async -> Bool {
         let oAuthUserCredentials = arcGISCredentialStore.credentials.compactMap { $0 as? OAuthUserCredential }
-        await withTaskGroup(of: Void.self) { group in
+        return await withTaskGroup(of: Bool.self, returning: Bool.self) { group in
             for credential in oAuthUserCredentials {
                 group.addTask {
-                    try? await credential.revokeToken()
+                    do {
+                        try await credential.revokeToken()
+                        return true
+                    } catch {
+                        return false
+                    }
                 }
             }
             
-            // Make sure that all tasks complete.
-            await group.waitForAll()
+            return await group.allSatisfy { $0 == true }
         }
     }
 }
