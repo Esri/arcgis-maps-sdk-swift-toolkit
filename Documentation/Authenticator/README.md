@@ -39,9 +39,12 @@ To securely store credentials in the keychain, use the following extension metho
 ***REMOVED***) async throws
 ```
 
-During sign-out, use the following extension method of `AuthenticationManager`:
+During sign-out, use the following extension methods of `AuthenticationManager`:
 
 ```swift
+***REMOVED******REMOVED***/ Revokes tokens of OAuth user credentials.
+***REMOVED***func revokeOAuthTokens() async
+
 ***REMOVED******REMOVED***/ Clears all ArcGIS and network credentials from the respective stores.
 ***REMOVED******REMOVED***/ Note: This sets up new `URLSessions` so that removed network credentials are respected
 ***REMOVED******REMOVED***/ right away.
@@ -67,7 +70,7 @@ init() {
 ***REMOVED***)
 ***REMOVED******REMOVED*** Sets authenticator as ArcGIS and Network challenge handlers to handle authentication
 ***REMOVED******REMOVED*** challenges.
-***REMOVED***ArcGISEnvironment.authenticationManager.handleAuthenticationChallenges(using: authenticator)
+***REMOVED***ArcGISEnvironment.authenticationManager.handleChallenges(using: authenticator)
 ***REMOVED***
 
 var body: some SwiftUI.Scene {

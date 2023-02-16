@@ -61,6 +61,7 @@ struct ProfileView: View {
 ***REMOVED***func signOut() {
 ***REMOVED******REMOVED***isSigningOut = true
 ***REMOVED******REMOVED***Task {
+***REMOVED******REMOVED******REMOVED***await ArcGISEnvironment.authenticationManager.revokeOAuthTokens()
 ***REMOVED******REMOVED******REMOVED***await ArcGISEnvironment.authenticationManager.clearCredentialStores()
 ***REMOVED******REMOVED******REMOVED***isSigningOut = false
 ***REMOVED******REMOVED******REMOVED***signOutAction()
