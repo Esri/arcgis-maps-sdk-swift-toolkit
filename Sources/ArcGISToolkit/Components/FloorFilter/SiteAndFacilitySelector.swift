@@ -30,6 +30,11 @@ struct SiteAndFacilitySelector: View {
     
     var body: some View {
         SitesList(isHidden: isHidden)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    CloseButton { isHidden.wrappedValue.toggle() }
+                }
+            }
     }
     
     /// A view displaying the sites contained in a `FloorManager`.
@@ -98,11 +103,6 @@ struct SiteAndFacilitySelector: View {
                 .disableAutocorrection(true)
                 .navigationTitle("Sites")
                 .navigationBarTitleDisplayMode(.inline)
-                .toolbar {
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        CloseButton { isHidden.wrappedValue.toggle() }
-                    }
-                }
             }
             .navigationViewStyle(.stack)
         }
@@ -201,11 +201,6 @@ struct SiteAndFacilitySelector: View {
                 usesAllSitesStyling ? "All Sites" : viewModel.selectedSite?.name ?? "Select a facility"
             )
             .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    CloseButton { isHidden.wrappedValue.toggle() }
-                }
-            }
         }
         
         /// Displays a list of facilities matching the filter criteria as determined by
