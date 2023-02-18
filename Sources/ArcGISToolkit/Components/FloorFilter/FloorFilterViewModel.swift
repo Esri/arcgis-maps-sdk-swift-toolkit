@@ -251,7 +251,7 @@ final class FloorFilterViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** If the centerpoint is within a site's geometry, select that site.
-***REMOVED******REMOVED***let siteResult = floorManager.sites.first { site in
+***REMOVED******REMOVED***let siteResult = sites.first { site in
 ***REMOVED******REMOVED******REMOVED***guard let extent1 = viewpoint.wrappedValue?.targetGeometry.extent,
 ***REMOVED******REMOVED******REMOVED******REMOVED***  let extent2 = site.geometry?.extent else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***return false
