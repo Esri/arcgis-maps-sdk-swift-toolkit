@@ -86,31 +86,6 @@ struct SiteAndFacilitySelector: View {
         
         /// A view containing a filter-via-name field, a list of the site names and an "All sites" button.
         var body: some View {
-            NavigationView {
-                VStack {
-                    if matchingSites.isEmpty {
-                        NoMatchesView()
-                    } else if viewModel.sites.count == 1 {
-                        FacilitiesList(
-                            allSiteStyle: false,
-                            facilities: viewModel.sites.first?.facilities ?? [],
-                            isHidden: isHidden
-                        )
-                        .navigationBarBackButtonHidden(true)
-                    } else {
-                        siteListView
-                    }
-                    if viewModel.sites.count > 1 {
-                        NavigationLink("All sites") {
-                            FacilitiesList(
-                                allSiteStyle: true,
-                                facilities: viewModel.sites.flatMap(\.facilities),
-                                isHidden: isHidden
-                            )
-                        }
-                        .buttonStyle(.bordered)
-                        .padding([.bottom], horizontalSizeClass == .compact ? 5 : 0)
-                    }
             VStack {
                 // If the filtered set of sites is empty
                 if matchingSites.isEmpty {
@@ -120,10 +95,6 @@ struct SiteAndFacilitySelector: View {
                     // Show the filtered set of sites
                     siteListView
                 }
-                .searchable(
-                    text: $query,
-                    placement: .navigationBarDrawer(displayMode: .always),
-                    prompt: "Filter sites"
                 allSitesButton
             }
             .searchable(
