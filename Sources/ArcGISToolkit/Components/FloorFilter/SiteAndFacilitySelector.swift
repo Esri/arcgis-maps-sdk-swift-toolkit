@@ -36,7 +36,7 @@ struct SiteAndFacilitySelector: View {
                     // Show the list of sites for site selection
                     SitesList(isHidden: isHidden)
                 } else {
-                    // Otherwise, there's zero or one site only, so show the list of facilities instead
+                    // Otherwise there're no sites or only one site, show the list of facilities
                     FacilitiesList(
                         usesAllSitesStyling: false,
                         facilities: viewModel.facilities,
