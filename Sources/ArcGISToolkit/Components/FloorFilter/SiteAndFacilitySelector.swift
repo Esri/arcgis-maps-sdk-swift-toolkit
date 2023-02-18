@@ -116,12 +116,26 @@ struct SiteAndFacilitySelector: View {
                     text: $query,
                     placement: .navigationBarDrawer(displayMode: .always),
                     prompt: "Filter sites"
+                allSitesButton
+        
+        /// The "All sites" button.
+        ///
+        /// This button presents the facilities list in a special format where the facilities list
+        /// shows every facility in every site within the floor manager.
+        var allSitesButton: some View {
+            NavigationLink("All sites") {
+                FacilitiesList(
+                    usesAllSitesStyling: true,
+                    facilities: viewModel.sites.flatMap(\.facilities),
+                    isHidden: isHidden
                 )
                 .keyboardType(.alphabet)
                 .disableAutocorrection(true)
                 .navigationTitle("Sites")
             }
             .navigationViewStyle(.stack)
+            .buttonStyle(.bordered)
+            .padding([.bottom], horizontalSizeClass == .compact ? 5 : 0)
         }
         
         /// A view containing a list of the site names.
