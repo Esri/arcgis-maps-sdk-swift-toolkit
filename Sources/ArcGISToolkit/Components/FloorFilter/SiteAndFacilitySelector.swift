@@ -148,15 +148,8 @@ struct SiteAndFacilitySelector: View {
                         facilities: site.facilities,
                         isHidden: isHidden
                     )
-                    .navigationBarBackButtonHidden(true)
-                    .toolbar {
-                        ToolbarItem(placement: .navigationBarLeading) {
-                            Button {
-                                userBackedOutOfSelectedSite = true
-                            } label: {
-                                Image(systemName: "chevron.left")
-                            }
-                        }
+                    .onDisappear {
+                        userBackedOutOfSelectedSite = true
                     }
                 }
             }
