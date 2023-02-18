@@ -35,11 +35,13 @@ public struct FloorFilter: View {
         viewpoint: Binding<Viewpoint?> = .constant(nil),
         isNavigating: Binding<Bool>
     ) {
-        _viewModel = StateObject(wrappedValue: FloorFilterViewModel(
-            automaticSelectionMode: automaticSelectionMode,
-            floorManager: floorManager,
-            viewpoint: viewpoint
-        ))
+        _viewModel = StateObject(
+            wrappedValue: FloorFilterViewModel(
+                automaticSelectionMode: automaticSelectionMode,
+                floorManager: floorManager,
+                viewpoint: viewpoint
+            )
+        )
         self.alignment = alignment
         self.isNavigating = isNavigating
         self.viewpoint = viewpoint
