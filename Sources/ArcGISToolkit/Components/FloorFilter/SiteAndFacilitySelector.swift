@@ -29,13 +29,30 @@ struct SiteAndFacilitySelector: View {
     private var isHidden: Binding<Bool>
     
     var body: some View {
-        SitesList(isHidden: isHidden)
+        NavigationView {
+            Group {
+                // If there's more than one site
+                if viewModel.sites.count > 1 {
+                    // Show the list of sites for site selection
+                    SitesList(isHidden: isHidden)
+                } else {
+                    // Otherwise, there's zero or one site only, so show the list of facilities instead
+                    FacilitiesList(
+                        usesAllSitesStyling: false,
+                        facilities: viewModel.facilities,
+                        isHidden: isHidden
+                    )
+                    .navigationBarBackButtonHidden(true)
+                }
+            }
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     CloseButton { isHidden.wrappedValue.toggle() }
                 }
             }
+        }
+        .navigationViewStyle(.stack)
     }
     
     /// A view displaying the sites contained in a `FloorManager`.
