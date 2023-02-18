@@ -128,7 +128,7 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FacilitiesList(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***allSiteStyle: false,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***usesAllSitesStyling: false,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***facilities: site.facilities,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isHidden: isHidden
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
@@ -163,7 +163,7 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED***@State var query: String = ""
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ When `true`, the facilites list will be display with all sites styling.
-***REMOVED******REMOVED***let allSiteStyle: Bool
+***REMOVED******REMOVED***let usesAllSitesStyling: Bool
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ `FloorFacility`s to be displayed by this view.
 ***REMOVED******REMOVED***let facilities: [FloorFacility]
@@ -198,7 +198,7 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED***.keyboardType(.alphabet)
 ***REMOVED******REMOVED******REMOVED***.disableAutocorrection(true)
 ***REMOVED******REMOVED******REMOVED***.navigationTitle(
-***REMOVED******REMOVED******REMOVED******REMOVED***allSiteStyle ? "All Sites" : viewModel.selectedSite?.name ?? "Select a facility"
+***REMOVED******REMOVED******REMOVED******REMOVED***usesAllSitesStyling ? "All Sites" : viewModel.selectedSite?.name ?? "Select a facility"
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***.navigationBarTitleDisplayMode(.inline)
 ***REMOVED******REMOVED******REMOVED***.toolbar {
@@ -225,7 +225,7 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***maxWidth: .infinity,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***alignment: .leading
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if allSiteStyle, let siteName = facility.site?.name {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if usesAllSitesStyling, let siteName = facility.site?.name {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(siteName)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.caption)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(
