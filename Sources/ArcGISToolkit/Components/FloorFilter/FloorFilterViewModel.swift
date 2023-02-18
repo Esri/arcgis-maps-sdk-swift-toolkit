@@ -259,7 +259,7 @@ final class FloorFilterViewModel: ObservableObject {
             return GeometryEngine.isGeometry(extent1, intersecting: extent2)
         }
         
-        if let siteResult = siteResult {
+        if let siteResult {
             setSite(siteResult)
         } else if automaticSelectionMode == .always {
             selection = nil
