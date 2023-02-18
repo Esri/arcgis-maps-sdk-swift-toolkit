@@ -259,7 +259,7 @@ final class FloorFilterViewModel: ObservableObject {
 ***REMOVED******REMOVED******REMOVED***return GeometryEngine.isGeometry(extent1, intersecting: extent2)
 ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***if let siteResult = siteResult {
+***REMOVED******REMOVED***if let siteResult {
 ***REMOVED******REMOVED******REMOVED***setSite(siteResult)
 ***REMOVED*** else if automaticSelectionMode == .always {
 ***REMOVED******REMOVED******REMOVED***selection = nil
