@@ -30,6 +30,7 @@ struct SiteAndFacilitySelector: View {
     
     var body: some View {
         SitesList(isHidden: isHidden)
+            .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     CloseButton { isHidden.wrappedValue.toggle() }
@@ -102,7 +103,6 @@ struct SiteAndFacilitySelector: View {
                 .keyboardType(.alphabet)
                 .disableAutocorrection(true)
                 .navigationTitle("Sites")
-                .navigationBarTitleDisplayMode(.inline)
             }
             .navigationViewStyle(.stack)
         }
@@ -200,7 +200,6 @@ struct SiteAndFacilitySelector: View {
             .navigationTitle(
                 usesAllSitesStyling ? "All Sites" : viewModel.selectedSite?.name ?? "Select a facility"
             )
-            .navigationBarTitleDisplayMode(.inline)
         }
         
         /// Displays a list of facilities matching the filter criteria as determined by
