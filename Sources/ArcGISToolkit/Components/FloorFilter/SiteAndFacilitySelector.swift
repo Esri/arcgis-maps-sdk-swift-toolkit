@@ -116,12 +116,26 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***text: $query,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***placement: .navigationBarDrawer(displayMode: .always),
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***prompt: "Filter sites"
+***REMOVED******REMOVED******REMOVED******REMOVED***allSitesButton
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***/ The "All sites" button.
+***REMOVED******REMOVED******REMOVED***/
+***REMOVED******REMOVED******REMOVED***/ This button presents the facilities list in a special format where the facilities list
+***REMOVED******REMOVED******REMOVED***/ shows every facility in every site within the floor manager.
+***REMOVED******REMOVED***var allSitesButton: some View {
+***REMOVED******REMOVED******REMOVED***NavigationLink("All sites") {
+***REMOVED******REMOVED******REMOVED******REMOVED***FacilitiesList(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***usesAllSitesStyling: true,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***facilities: viewModel.sites.flatMap(\.facilities),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isHidden: isHidden
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.keyboardType(.alphabet)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.disableAutocorrection(true)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.navigationTitle("Sites")
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.navigationViewStyle(.stack)
+***REMOVED******REMOVED******REMOVED***.buttonStyle(.bordered)
+***REMOVED******REMOVED******REMOVED***.padding([.bottom], horizontalSizeClass == .compact ? 5 : 0)
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ A view containing a list of the site names.
