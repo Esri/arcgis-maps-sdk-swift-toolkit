@@ -116,7 +116,7 @@ final class FloorFilterViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED******REMOVED***/ The floor manager sites.
 ***REMOVED***var sites: [FloorSite] {
-***REMOVED******REMOVED***floorManager.sites
+***REMOVED******REMOVED***floorManager.sites.sorted { $0.name <  $1.name ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The selected facility's levels, sorted by `level.verticalOrder`.
