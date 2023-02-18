@@ -191,7 +191,7 @@ final class FloorFilterViewModel: ObservableObject {
     
     // MARK: Private items
     
-    /// The `Viewpoint` used to pan/zoom to the selected site/facilty.
+    /// The `Viewpoint` used to pan/zoom to the selected site/facility.
     /// If `nil`, there will be no automatic pan/zoom operations.
     private var viewpoint: Binding<Viewpoint?>
     
