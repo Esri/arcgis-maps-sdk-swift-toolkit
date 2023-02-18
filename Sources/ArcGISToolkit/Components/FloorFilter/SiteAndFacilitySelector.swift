@@ -36,7 +36,7 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Show the list of sites for site selection
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***SitesList(isHidden: isHidden)
 ***REMOVED******REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Otherwise, there's zero or one site only, so show the list of facilities instead
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Otherwise there're no sites or only one site, show the list of facilities
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***FacilitiesList(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***usesAllSitesStyling: false,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***facilities: viewModel.facilities,
