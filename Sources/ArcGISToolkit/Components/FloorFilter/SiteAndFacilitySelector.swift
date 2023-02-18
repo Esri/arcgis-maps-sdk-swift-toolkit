@@ -128,7 +128,7 @@ struct SiteAndFacilitySelector: View {
                     )
                 ) {
                     FacilitiesList(
-                        allSiteStyle: false,
+                        usesAllSitesStyling: false,
                         facilities: site.facilities,
                         isHidden: isHidden
                     )
@@ -163,7 +163,7 @@ struct SiteAndFacilitySelector: View {
         @State var query: String = ""
         
         /// When `true`, the facilites list will be display with all sites styling.
-        let allSiteStyle: Bool
+        let usesAllSitesStyling: Bool
         
         /// `FloorFacility`s to be displayed by this view.
         let facilities: [FloorFacility]
@@ -198,7 +198,7 @@ struct SiteAndFacilitySelector: View {
             .keyboardType(.alphabet)
             .disableAutocorrection(true)
             .navigationTitle(
-                allSiteStyle ? "All Sites" : viewModel.selectedSite?.name ?? "Select a facility"
+                usesAllSitesStyling ? "All Sites" : viewModel.selectedSite?.name ?? "Select a facility"
             )
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
@@ -225,7 +225,7 @@ struct SiteAndFacilitySelector: View {
                                 maxWidth: .infinity,
                                 alignment: .leading
                             )
-                        if allSiteStyle, let siteName = facility.site?.name {
+                        if usesAllSitesStyling, let siteName = facility.site?.name {
                             Text(siteName)
                                 .font(.caption)
                                 .frame(
