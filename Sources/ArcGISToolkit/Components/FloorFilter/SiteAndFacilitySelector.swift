@@ -192,10 +192,11 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED***var matchingFacilities: [FloorFacility] {
 ***REMOVED******REMOVED******REMOVED***guard !query.isEmpty else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***return facilities
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.sorted { $0.name < $1.name ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***return facilities.filter {
-***REMOVED******REMOVED******REMOVED******REMOVED***$0.name.localizedStandardContains(query)
-***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***return facilities
+***REMOVED******REMOVED******REMOVED******REMOVED***.filter { $0.name.localizedStandardContains(query) ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.sorted { $0.name < $1.name  ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var body: some View {
