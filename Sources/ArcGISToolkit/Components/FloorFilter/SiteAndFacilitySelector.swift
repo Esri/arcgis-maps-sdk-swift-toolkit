@@ -117,6 +117,9 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***placement: .navigationBarDrawer(displayMode: .always),
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***prompt: "Filter sites"
 ***REMOVED******REMOVED******REMOVED******REMOVED***allSitesButton
+***REMOVED******REMOVED******REMOVED***.keyboardType(.alphabet)
+***REMOVED******REMOVED******REMOVED***.disableAutocorrection(true)
+***REMOVED******REMOVED******REMOVED***.navigationTitle("Sites")
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ The "All sites" button.
 ***REMOVED******REMOVED******REMOVED***/
@@ -129,9 +132,6 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***facilities: viewModel.sites.flatMap(\.facilities),
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isHidden: isHidden
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED***.keyboardType(.alphabet)
-***REMOVED******REMOVED******REMOVED******REMOVED***.disableAutocorrection(true)
-***REMOVED******REMOVED******REMOVED******REMOVED***.navigationTitle("Sites")
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.navigationViewStyle(.stack)
 ***REMOVED******REMOVED******REMOVED***.buttonStyle(.bordered)
