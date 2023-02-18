@@ -34,7 +34,7 @@ final class FloorFilterViewModel: ObservableObject {
     ///   - floorManager: The floor manager used by the `FloorFilterViewModel`.
     ///   - viewpoint: Viewpoint updated when the selected site or facility changes.
     init(
-        automaticSelectionMode: FloorFilterAutomaticSelectionMode = .always,
+        automaticSelectionMode: FloorFilterAutomaticSelectionMode,
         floorManager: FloorManager,
         viewpoint: Binding<Viewpoint?>
     ) {
