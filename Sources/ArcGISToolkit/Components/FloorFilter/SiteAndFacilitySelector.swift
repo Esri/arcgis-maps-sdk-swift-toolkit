@@ -117,6 +117,9 @@ struct SiteAndFacilitySelector: View {
                     placement: .navigationBarDrawer(displayMode: .always),
                     prompt: "Filter sites"
                 allSitesButton
+            .keyboardType(.alphabet)
+            .disableAutocorrection(true)
+            .navigationTitle("Sites")
         
         /// The "All sites" button.
         ///
@@ -129,9 +132,6 @@ struct SiteAndFacilitySelector: View {
                     facilities: viewModel.sites.flatMap(\.facilities),
                     isHidden: isHidden
                 )
-                .keyboardType(.alphabet)
-                .disableAutocorrection(true)
-                .navigationTitle("Sites")
             }
             .navigationViewStyle(.stack)
             .buttonStyle(.bordered)
