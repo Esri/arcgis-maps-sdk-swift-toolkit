@@ -111,15 +111,30 @@ struct SiteAndFacilitySelector: View {
                         .buttonStyle(.bordered)
                         .padding([.bottom], horizontalSizeClass == .compact ? 5 : 0)
                     }
+            VStack {
+                // If the filtered set of sites is empty
+                if matchingSites.isEmpty {
+                    // Show the "no matches" view
+                    NoMatchesView()
+                } else {
+                    // Show the filtered set of sites
+                    siteListView
                 }
                 .searchable(
                     text: $query,
                     placement: .navigationBarDrawer(displayMode: .always),
                     prompt: "Filter sites"
                 allSitesButton
+            }
+            .searchable(
+                text: $query,
+                placement: .navigationBarDrawer(displayMode: .always),
+                prompt: "Filter sites"
+            )
             .keyboardType(.alphabet)
             .disableAutocorrection(true)
             .navigationTitle("Sites")
+        }
         
         /// The "All sites" button.
         ///
