@@ -42,7 +42,7 @@ struct SiteAndFacilitySelector: View {
                         facilities: viewModel.facilities,
                         isHidden: isHidden
                     )
-                    .navigationBarBackButtonHidden(true)
+                    .navigationBarBackButtonHidden()
                 }
             }
             .navigationBarTitleDisplayMode(.inline)
