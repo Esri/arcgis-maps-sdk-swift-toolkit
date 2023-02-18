@@ -192,10 +192,11 @@ struct SiteAndFacilitySelector: View {
         var matchingFacilities: [FloorFacility] {
             guard !query.isEmpty else {
                 return facilities
+                    .sorted { $0.name < $1.name }
             }
-            return facilities.filter {
-                $0.name.localizedStandardContains(query)
-            }
+            return facilities
+                .filter { $0.name.localizedStandardContains(query) }
+                .sorted { $0.name < $1.name  }
         }
         
         var body: some View {
