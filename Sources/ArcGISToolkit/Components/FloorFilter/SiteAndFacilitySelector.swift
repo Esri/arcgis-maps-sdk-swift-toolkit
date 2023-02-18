@@ -118,6 +118,11 @@ struct SiteAndFacilitySelector: View {
                     facilities: viewModel.sites.flatMap(\.facilities),
                     isHidden: isHidden
                 )
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        CloseButton { isHidden.wrappedValue.toggle() }
+                    }
+                }
             }
             .buttonStyle(.bordered)
             .padding([.bottom], horizontalSizeClass == .compact ? 5 : 0)
@@ -150,6 +155,11 @@ struct SiteAndFacilitySelector: View {
                     )
                     .onDisappear {
                         userBackedOutOfSelectedSite = true
+                    }
+                    .toolbar {
+                        ToolbarItem(placement: .navigationBarTrailing) {
+                            CloseButton { isHidden.wrappedValue.toggle() }
+                        }
                     }
                 }
             }
