@@ -148,7 +148,6 @@ struct SiteAndFacilitySelector: View {
                     isHidden: isHidden
                 )
             }
-            .navigationViewStyle(.stack)
             .buttonStyle(.bordered)
             .padding([.bottom], horizontalSizeClass == .compact ? 5 : 0)
         }
