@@ -24,8 +24,8 @@ import XCTest
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let authenticator = Authenticator()
 ***REMOVED******REMOVED***ArcGISEnvironment.authenticationManager.handleChallenges(using: authenticator)
-***REMOVED******REMOVED***XCTAssertNotNil(ArcGISEnvironment.authenticationManager.arcGISAuthenticationChallengeHandler)
-***REMOVED******REMOVED***XCTAssertNotNil(ArcGISEnvironment.authenticationManager.networkAuthenticationChallengeHandler)
+***REMOVED******REMOVED***XCTAssertIdentical(ArcGISEnvironment.authenticationManager.arcGISAuthenticationChallengeHandler as? Authenticator, authenticator)
+***REMOVED******REMOVED***XCTAssertIdentical(ArcGISEnvironment.authenticationManager.networkAuthenticationChallengeHandler as? Authenticator, authenticator)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func testMakePersistent() async throws {
