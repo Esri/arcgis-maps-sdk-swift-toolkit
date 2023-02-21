@@ -24,7 +24,7 @@ struct FloorFilterExampleView: View {
         ))
     }
     
-    /// Determines the arrangement of the inner `FloorFilter` UI componenets.
+    /// Determines the arrangement of the inner `FloorFilter` UI components.
     private let floorFilterAlignment = Alignment.bottomLeading
     
     /// Determines the appropriate time to initialize the `FloorFilter`.
