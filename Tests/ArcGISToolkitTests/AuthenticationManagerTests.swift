@@ -54,13 +54,11 @@ import ArcGIS
             )
         )
         
-        var arcGISCreds = ArcGISEnvironment.authenticationManager.arcGISCredentialStore.credentials
-        XCTAssertEqual(arcGISCreds.count, 1)
+        XCTAssertEqual(ArcGISEnvironment.authenticationManager.arcGISCredentialStore.credentials.count, 1)
         
         await ArcGISEnvironment.authenticationManager.clearCredentialStores()
         
-        arcGISCreds = ArcGISEnvironment.authenticationManager.arcGISCredentialStore.credentials
-        XCTAssertTrue(arcGISCreds.isEmpty)
+        XCTAssertTrue(ArcGISEnvironment.authenticationManager.arcGISCredentialStore.credentials.isEmpty)
     }
     
     func testRevokeOAuthTokens() async {
