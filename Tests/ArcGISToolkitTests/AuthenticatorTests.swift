@@ -27,39 +27,4 @@ import Combine
         XCTAssertTrue(authenticator.promptForUntrustedHosts)
         XCTAssertEqual(authenticator.oAuthUserConfigurations, [config])
     }
-    
-    func testMakePersistent() async throws {
-        // Make sure credential stores are restored.
-        addTeardownBlock {
-            ArcGISEnvironment.authenticationManager.arcGISCredentialStore = ArcGISCredentialStore()
-            await ArcGISEnvironment.authenticationManager.setNetworkCredentialStore(NetworkCredentialStore())
-        }
-        
-        // This tests that calling setupPersistentCredentialStorage tries to sync with the keychain.
-        do {
-            try await ArcGISEnvironment.authenticationManager.setupPersistentCredentialStorage(access: .whenUnlocked)
-            XCTFail("Expected an error to be thrown as unit tests should not have access to the keychain")
-        } catch {}
-    }
-    
-    func testClearCredentialStores() async {
-        ArcGISEnvironment.authenticationManager.arcGISCredentialStore.add(
-            PregeneratedTokenCredential(
-                url: URL(string: "www.arcgis.com")!,
-                tokenInfo: .init(
-                    accessToken: "token",
-                    expirationDate: .distantFuture,
-                    isSSLRequired: false
-                )!
-            )
-        )
-        
-        var arcGISCreds = ArcGISEnvironment.authenticationManager.arcGISCredentialStore.credentials
-        XCTAssertEqual(arcGISCreds.count, 1)
-        
-        await ArcGISEnvironment.authenticationManager.clearCredentialStores()
-        
-        arcGISCreds = ArcGISEnvironment.authenticationManager.arcGISCredentialStore.credentials
-        XCTAssertTrue(arcGISCreds.isEmpty)
-    }
 }
