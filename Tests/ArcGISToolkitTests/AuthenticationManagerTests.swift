@@ -54,13 +54,11 @@ import XCTest
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***var arcGISCreds = ArcGISEnvironment.authenticationManager.arcGISCredentialStore.credentials
-***REMOVED******REMOVED***XCTAssertEqual(arcGISCreds.count, 1)
+***REMOVED******REMOVED***XCTAssertEqual(ArcGISEnvironment.authenticationManager.arcGISCredentialStore.credentials.count, 1)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***await ArcGISEnvironment.authenticationManager.clearCredentialStores()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***arcGISCreds = ArcGISEnvironment.authenticationManager.arcGISCredentialStore.credentials
-***REMOVED******REMOVED***XCTAssertTrue(arcGISCreds.isEmpty)
+***REMOVED******REMOVED***XCTAssertTrue(ArcGISEnvironment.authenticationManager.arcGISCredentialStore.credentials.isEmpty)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***func testRevokeOAuthTokens() async {
