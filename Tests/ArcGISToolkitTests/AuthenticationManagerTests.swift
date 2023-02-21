@@ -24,8 +24,8 @@ import ArcGIS
         
         let authenticator = Authenticator()
         ArcGISEnvironment.authenticationManager.handleChallenges(using: authenticator)
-        XCTAssertNotNil(ArcGISEnvironment.authenticationManager.arcGISAuthenticationChallengeHandler)
-        XCTAssertNotNil(ArcGISEnvironment.authenticationManager.networkAuthenticationChallengeHandler)
+        XCTAssertIdentical(ArcGISEnvironment.authenticationManager.arcGISAuthenticationChallengeHandler as? Authenticator, authenticator)
+        XCTAssertIdentical(ArcGISEnvironment.authenticationManager.networkAuthenticationChallengeHandler as? Authenticator, authenticator)
     }
     
     func testMakePersistent() async throws {
