@@ -29,7 +29,7 @@ let package = Package(
 ***REMOVED******REMOVED***),
 ***REMOVED***],
 ***REMOVED***dependencies: [
-***REMOVED******REMOVED***.package(name: "arcgis-maps-sdk-swift", path: "../swift-demo-dev-summit/arcgis-maps-swift")
+***REMOVED******REMOVED***.package(name: "arcgis-maps-sdk-swift", path: "../arcgis-maps-swift")
 ***REMOVED******REMOVED******REMOVED***.package(url: "https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift", .upToNextMinor(from: "200.0.0-beta"))
 ***REMOVED***],
 ***REMOVED***targets: [
