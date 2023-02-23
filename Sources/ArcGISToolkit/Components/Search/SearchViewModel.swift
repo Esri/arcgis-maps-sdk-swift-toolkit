@@ -171,10 +171,21 @@ public enum SearchOutcome {
     /// property and update the associated GeoView's viewpoint, if configured.
     var selectedResult: SearchResult? {
         willSet {
-            (selectedResult?.geoElement as? Graphic)?.isSelected = false
+            if let graphic = selectedResult?.geoElement as? Graphic {
+                graphic.isSelected = false
+            } else if let feature = selectedResult?.geoElement as? ArcGISFeature,
+                      let layer = feature.table?.layer as? FeatureLayer {
+                layer.unselectFeature(feature)
+            }
+
         }
         didSet {
-            (selectedResult?.geoElement as? Graphic)?.isSelected = true
+            if let graphic = selectedResult?.geoElement as? Graphic {
+                graphic.isSelected = true
+            } else if let feature = selectedResult?.geoElement as? ArcGISFeature,
+                      let layer = feature.table?.layer as? FeatureLayer {
+                layer.selectFeature(feature)
+            }
             display(selectedResult: selectedResult)
         }
     }
