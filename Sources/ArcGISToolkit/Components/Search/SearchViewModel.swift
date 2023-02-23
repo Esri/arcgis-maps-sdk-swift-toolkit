@@ -171,10 +171,21 @@ public enum SearchOutcome {
 ***REMOVED******REMOVED***/ property and update the associated GeoView's viewpoint, if configured.
 ***REMOVED***var selectedResult: SearchResult? {
 ***REMOVED******REMOVED***willSet {
-***REMOVED******REMOVED******REMOVED***(selectedResult?.geoElement as? Graphic)?.isSelected = false
+***REMOVED******REMOVED******REMOVED***if let graphic = selectedResult?.geoElement as? Graphic {
+***REMOVED******REMOVED******REMOVED******REMOVED***graphic.isSelected = false
+***REMOVED******REMOVED*** else if let feature = selectedResult?.geoElement as? ArcGISFeature,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  let layer = feature.table?.layer as? FeatureLayer {
+***REMOVED******REMOVED******REMOVED******REMOVED***layer.unselectFeature(feature)
+***REMOVED******REMOVED***
+
 ***REMOVED***
 ***REMOVED******REMOVED***didSet {
-***REMOVED******REMOVED******REMOVED***(selectedResult?.geoElement as? Graphic)?.isSelected = true
+***REMOVED******REMOVED******REMOVED***if let graphic = selectedResult?.geoElement as? Graphic {
+***REMOVED******REMOVED******REMOVED******REMOVED***graphic.isSelected = true
+***REMOVED******REMOVED*** else if let feature = selectedResult?.geoElement as? ArcGISFeature,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***  let layer = feature.table?.layer as? FeatureLayer {
+***REMOVED******REMOVED******REMOVED******REMOVED***layer.selectFeature(feature)
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***display(selectedResult: selectedResult)
 ***REMOVED***
 ***REMOVED***
