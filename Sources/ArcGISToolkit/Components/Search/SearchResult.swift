@@ -99,7 +99,7 @@ extension SearchResult {
                 geometry: geocodeResult.displayLocation,
                 attributes: geocodeResult.attributes
             ),
-            selectionViewpoint: geocodeResult.extent.map { .init(targetExtent: $0) }
+            selectionViewpoint: geocodeResult.extent.map { .init(boundingGeometry: $0) }
         )
     }
 }
