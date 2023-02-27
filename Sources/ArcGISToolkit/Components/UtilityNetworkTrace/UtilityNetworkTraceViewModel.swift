@@ -364,9 +364,7 @@ import SwiftUI
         do {
             traceResults = try await network.trace(using: parameters)
         } catch(let serviceError as ServiceError) {
-            if let reason = serviceError.failureReason {
-                userAlert = .init(description: reason)
-            }
+            userAlert = .init(description: serviceError.details)
             return false
         } catch {
             userAlert = .init(description: error.localizedDescription)

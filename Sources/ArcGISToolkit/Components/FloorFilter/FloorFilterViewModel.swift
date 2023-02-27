@@ -310,7 +310,7 @@ final class FloorFilterViewModel: ObservableObject {
         let targetExtent = builder.toGeometry()
         if !targetExtent.isEmpty {
             viewpoint.wrappedValue = Viewpoint(
-                targetExtent: targetExtent
+                boundingGeometry: targetExtent
             )
         }
     }
