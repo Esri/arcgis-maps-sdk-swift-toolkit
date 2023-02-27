@@ -381,7 +381,7 @@ private extension SearchViewModel {
             builder.expand(factor: 1.1)
             let targetExtent = builder.toGeometry()
             viewpoint.wrappedValue = Viewpoint(
-                targetExtent: targetExtent
+                boundingGeometry: targetExtent
             )
             lastSearchExtent = targetExtent
         } else {

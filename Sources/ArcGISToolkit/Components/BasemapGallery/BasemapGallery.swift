@@ -225,7 +225,7 @@ extension AlertItem {
     init(loadBasemapError: Error) {
         self.init(
             title: "Error loading basemap.",
-            message: "\((loadBasemapError as? ArcGISError)?.failureReason ?? "The basemap failed to load for an unknown reason.")"
+            message: "\((loadBasemapError as? ArcGISError)?.details ?? "The basemap failed to load for an unknown reason.")"
         )
     }
     
