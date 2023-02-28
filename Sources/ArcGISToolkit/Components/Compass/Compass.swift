@@ -60,7 +60,6 @@ public struct Compass: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.aspectRatio(1, contentMode: .fit)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.opacity(opacity)
-***REMOVED******REMOVED******REMOVED******REMOVED***.onTapGesture { heading = .zero ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: size, height: size)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: heading) { _ in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let newOpacity: Double = shouldHide ? .zero : 1
