@@ -60,7 +60,6 @@ public struct Compass: View {
                 }
                 .aspectRatio(1, contentMode: .fit)
                 .opacity(opacity)
-                .onTapGesture { heading = .zero }
                 .frame(width: size, height: size)
                 .onChange(of: heading) { _ in
                     let newOpacity: Double = shouldHide ? .zero : 1
