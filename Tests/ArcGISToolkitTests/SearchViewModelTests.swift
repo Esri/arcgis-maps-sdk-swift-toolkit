@@ -140,7 +140,7 @@ class SearchViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***XCTAssertFalse(model.isEligibleForRequery)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Offset extent by 10% - isEligibleForRequery should still be `false`.
-***REMOVED******REMOVED***var builder = EnvelopeBuilder(envelope: model.geoViewExtent)
+***REMOVED******REMOVED***var builder = EnvelopeBuilder(envelope: model.geoViewExtent!)
 ***REMOVED******REMOVED***let tenPercentWidth = model.geoViewExtent!.width * 0.1
 ***REMOVED******REMOVED***builder.offsetBy(x: tenPercentWidth, y: 0.0)
 ***REMOVED******REMOVED***var newExtent = builder.toGeometry()
@@ -149,7 +149,7 @@ class SearchViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***XCTAssertFalse(model.isEligibleForRequery)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Offset extent by 50% - isEligibleForRequery should now be `true`.
-***REMOVED******REMOVED***builder = EnvelopeBuilder(envelope: model.geoViewExtent)
+***REMOVED******REMOVED***builder = EnvelopeBuilder(envelope: model.geoViewExtent!)
 ***REMOVED******REMOVED***let fiftyPercentWidth = model.geoViewExtent!.width * 0.5
 ***REMOVED******REMOVED***builder.offsetBy(x: fiftyPercentWidth, y: 0.0)
 ***REMOVED******REMOVED***newExtent = builder.toGeometry()
@@ -167,16 +167,16 @@ class SearchViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***XCTAssertFalse(model.isEligibleForRequery)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Expand extent by 1.1x - isEligibleForRequery should still be `false`.
-***REMOVED******REMOVED***builder = EnvelopeBuilder(envelope: model.geoViewExtent)
-***REMOVED******REMOVED***builder.expand(factor: 1.1)
+***REMOVED******REMOVED***builder = EnvelopeBuilder(envelope: model.geoViewExtent!)
+***REMOVED******REMOVED***builder.expand(by: 1.1)
 ***REMOVED******REMOVED***newExtent = builder.toGeometry()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***model.geoViewExtent = newExtent
 ***REMOVED******REMOVED***XCTAssertFalse(model.isEligibleForRequery)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Expand extent by 1.5x - isEligibleForRequery should now be `true`.
-***REMOVED******REMOVED***builder = EnvelopeBuilder(envelope: model.geoViewExtent)
-***REMOVED******REMOVED***builder.expand(factor: 1.5)
+***REMOVED******REMOVED***builder = EnvelopeBuilder(envelope: model.geoViewExtent!)
+***REMOVED******REMOVED***builder.expand(by: 1.5)
 ***REMOVED******REMOVED***newExtent = builder.toGeometry()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***model.geoViewExtent = newExtent
