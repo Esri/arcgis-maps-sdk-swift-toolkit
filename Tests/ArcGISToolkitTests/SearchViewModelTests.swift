@@ -140,7 +140,7 @@ class SearchViewModelTests: XCTestCase {
         XCTAssertFalse(model.isEligibleForRequery)
         
         // Offset extent by 10% - isEligibleForRequery should still be `false`.
-        var builder = EnvelopeBuilder(envelope: model.geoViewExtent)
+        var builder = EnvelopeBuilder(envelope: model.geoViewExtent!)
         let tenPercentWidth = model.geoViewExtent!.width * 0.1
         builder.offsetBy(x: tenPercentWidth, y: 0.0)
         var newExtent = builder.toGeometry()
@@ -149,7 +149,7 @@ class SearchViewModelTests: XCTestCase {
         XCTAssertFalse(model.isEligibleForRequery)
         
         // Offset extent by 50% - isEligibleForRequery should now be `true`.
-        builder = EnvelopeBuilder(envelope: model.geoViewExtent)
+        builder = EnvelopeBuilder(envelope: model.geoViewExtent!)
         let fiftyPercentWidth = model.geoViewExtent!.width * 0.5
         builder.offsetBy(x: fiftyPercentWidth, y: 0.0)
         newExtent = builder.toGeometry()
@@ -167,16 +167,16 @@ class SearchViewModelTests: XCTestCase {
         XCTAssertFalse(model.isEligibleForRequery)
         
         // Expand extent by 1.1x - isEligibleForRequery should still be `false`.
-        builder = EnvelopeBuilder(envelope: model.geoViewExtent)
-        builder.expand(factor: 1.1)
+        builder = EnvelopeBuilder(envelope: model.geoViewExtent!)
+        builder.expand(by: 1.1)
         newExtent = builder.toGeometry()
         
         model.geoViewExtent = newExtent
         XCTAssertFalse(model.isEligibleForRequery)
         
         // Expand extent by 1.5x - isEligibleForRequery should now be `true`.
-        builder = EnvelopeBuilder(envelope: model.geoViewExtent)
-        builder.expand(factor: 1.5)
+        builder = EnvelopeBuilder(envelope: model.geoViewExtent!)
+        builder.expand(by: 1.5)
         newExtent = builder.toGeometry()
         
         model.geoViewExtent = newExtent
