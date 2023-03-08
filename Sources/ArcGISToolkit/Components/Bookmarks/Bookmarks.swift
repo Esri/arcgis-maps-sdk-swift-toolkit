@@ -82,9 +82,9 @@ public struct Bookmarks: View {
         bookmarks: [Bookmark],
         viewpoint: Binding<Viewpoint?>? = nil
     ) {
+        _isPresented = isPresented
         self.bookmarks = bookmarks
         self.viewpoint = viewpoint
-        _isPresented = isPresented
     }
     
     /// Creates a `Bookmarks` component.
