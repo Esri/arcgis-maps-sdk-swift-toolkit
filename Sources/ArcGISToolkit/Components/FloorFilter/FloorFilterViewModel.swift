@@ -116,7 +116,7 @@ final class FloorFilterViewModel: ObservableObject {
     
     /// The floor manager sites.
     var sites: [FloorSite] {
-        floorManager.sites
+        floorManager.sites.sorted { $0.name <  $1.name }
     }
     
     /// The selected facility's levels, sorted by `level.verticalOrder`.
@@ -191,7 +191,7 @@ final class FloorFilterViewModel: ObservableObject {
     
     // MARK: Private items
     
-    /// The `Viewpoint` used to pan/zoom to the selected site/facilty.
+    /// The `Viewpoint` used to pan/zoom to the selected site/facility.
     /// If `nil`, there will be no automatic pan/zoom operations.
     private var viewpoint: Binding<Viewpoint?>
     
@@ -251,7 +251,7 @@ final class FloorFilterViewModel: ObservableObject {
         }
         
         // If the centerpoint is within a site's geometry, select that site.
-        let siteResult = floorManager.sites.first { site in
+        let siteResult = sites.first { site in
             guard let extent1 = viewpoint.wrappedValue?.targetGeometry.extent,
                   let extent2 = site.geometry?.extent else {
                 return false
@@ -259,7 +259,7 @@ final class FloorFilterViewModel: ObservableObject {
             return GeometryEngine.isGeometry(extent1, intersecting: extent2)
         }
         
-        if let siteResult = siteResult {
+        if let siteResult {
             setSite(siteResult)
         } else if automaticSelectionMode == .always {
             selection = nil

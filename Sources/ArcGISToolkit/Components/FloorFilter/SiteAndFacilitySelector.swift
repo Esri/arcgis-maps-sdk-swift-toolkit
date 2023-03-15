@@ -29,7 +29,30 @@ struct SiteAndFacilitySelector: View {
     private var isHidden: Binding<Bool>
     
     var body: some View {
-        SitesList(isHidden: isHidden)
+        NavigationView {
+            Group {
+                // If there's more than one site
+                if viewModel.sites.count > 1 {
+                    // Show the list of sites for site selection
+                    SitesList(isHidden: isHidden)
+                } else {
+                    // Otherwise there're no sites or only one site, show the list of facilities
+                    FacilitiesList(
+                        usesAllSitesStyling: false,
+                        facilities: viewModel.facilities,
+                        isHidden: isHidden
+                    )
+                    .navigationBarBackButtonHidden()
+                }
+            }
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    CloseButton { isHidden.wrappedValue.toggle() }
+                }
+            }
+        }
+        .navigationViewStyle(.stack)
     }
     
     /// A view displaying the sites contained in a `FloorManager`.
@@ -63,48 +86,46 @@ struct SiteAndFacilitySelector: View {
         
         /// A view containing a filter-via-name field, a list of the site names and an "All sites" button.
         var body: some View {
-            NavigationView {
-                VStack {
-                    if matchingSites.isEmpty {
-                        NoMatchesView()
-                    } else if viewModel.sites.count == 1 {
-                        FacilitiesList(
-                            allSiteStyle: false,
-                            facilities: viewModel.sites.first?.facilities ?? [],
-                            isHidden: isHidden
-                        )
-                        .navigationBarBackButtonHidden(true)
-                    } else {
-                        siteListView
-                    }
-                    if viewModel.sites.count > 1 {
-                        NavigationLink("All sites") {
-                            FacilitiesList(
-                                allSiteStyle: true,
-                                facilities: viewModel.sites.flatMap(\.facilities),
-                                isHidden: isHidden
-                            )
-                        }
-                        .buttonStyle(.bordered)
-                        .padding([.bottom], horizontalSizeClass == .compact ? 5 : 0)
-                    }
+            VStack {
+                // If the filtered set of sites is empty
+                if matchingSites.isEmpty {
+                    // Show the "no matches" view
+                    NoMatchesView()
+                } else {
+                    // Show the filtered set of sites
+                    siteListView
                 }
-                .searchable(
-                    text: $query,
-                    placement: .navigationBarDrawer(displayMode: .always),
-                    prompt: "Filter sites"
+                allSitesButton
+            }
+            .searchable(
+                text: $query,
+                placement: .navigationBarDrawer(displayMode: .always),
+                prompt: "Filter sites"
+            )
+            .keyboardType(.alphabet)
+            .disableAutocorrection(true)
+            .navigationTitle("Sites")
+        }
+        
+        /// The "All sites" button.
+        ///
+        /// This button presents the facilities list in a special format where the facilities list
+        /// shows every facility in every site within the floor manager.
+        var allSitesButton: some View {
+            NavigationLink("All sites") {
+                FacilitiesList(
+                    usesAllSitesStyling: true,
+                    facilities: viewModel.sites.flatMap(\.facilities),
+                    isHidden: isHidden
                 )
-                .keyboardType(.alphabet)
-                .disableAutocorrection(true)
-                .navigationTitle("Sites")
-                .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
                     ToolbarItem(placement: .navigationBarTrailing) {
                         CloseButton { isHidden.wrappedValue.toggle() }
                     }
                 }
             }
-            .navigationViewStyle(.stack)
+            .buttonStyle(.bordered)
+            .padding([.bottom], horizontalSizeClass == .compact ? 5 : 0)
         }
         
         /// A view containing a list of the site names.
@@ -128,7 +149,7 @@ struct SiteAndFacilitySelector: View {
                     )
                 ) {
                     FacilitiesList(
-                        allSiteStyle: false,
+                        usesAllSitesStyling: false,
                         facilities: site.facilities,
                         isHidden: isHidden
                     )
@@ -140,6 +161,11 @@ struct SiteAndFacilitySelector: View {
                             } label: {
                                 Image(systemName: "chevron.left")
                             }
+                        }
+                    }
+                    .toolbar {
+                        ToolbarItem(placement: .navigationBarTrailing) {
+                            CloseButton { isHidden.wrappedValue.toggle() }
                         }
                     }
                 }
@@ -163,7 +189,7 @@ struct SiteAndFacilitySelector: View {
         @State var query: String = ""
         
         /// When `true`, the facilites list will be display with all sites styling.
-        let allSiteStyle: Bool
+        let usesAllSitesStyling: Bool
         
         /// `FloorFacility`s to be displayed by this view.
         let facilities: [FloorFacility]
@@ -176,10 +202,11 @@ struct SiteAndFacilitySelector: View {
         var matchingFacilities: [FloorFacility] {
             guard !query.isEmpty else {
                 return facilities
+                    .sorted { $0.name < $1.name }
             }
-            return facilities.filter {
-                $0.name.localizedStandardContains(query)
-            }
+            return facilities
+                .filter { $0.name.localizedStandardContains(query) }
+                .sorted { $0.name < $1.name  }
         }
         
         var body: some View {
@@ -198,14 +225,8 @@ struct SiteAndFacilitySelector: View {
             .keyboardType(.alphabet)
             .disableAutocorrection(true)
             .navigationTitle(
-                allSiteStyle ? "All Sites" : viewModel.selectedSite?.name ?? "Select a facility"
+                usesAllSitesStyling ? "All Sites" : viewModel.selectedSite?.name ?? "Select a facility"
             )
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    CloseButton { isHidden.wrappedValue.toggle() }
-                }
-            }
         }
         
         /// Displays a list of facilities matching the filter criteria as determined by
@@ -225,7 +246,7 @@ struct SiteAndFacilitySelector: View {
                                 maxWidth: .infinity,
                                 alignment: .leading
                             )
-                        if allSiteStyle, let siteName = facility.site?.name {
+                        if usesAllSitesStyling, let siteName = facility.site?.name {
                             Text(siteName)
                                 .font(.caption)
                                 .frame(
