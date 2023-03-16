@@ -92,11 +92,7 @@ extension UtilityNetworkTraceViewModel.Trace {
 ***REMOVED***
 ***REMOVED******REMOVED***/ A set of the asset group names returned by the trace.
 ***REMOVED***var assetGroupNames: Set<String> {
-***REMOVED******REMOVED***var assetGroupNames = Set<String>()
-***REMOVED******REMOVED***elementResults.forEach {
-***REMOVED******REMOVED******REMOVED***assetGroupNames.insert($0.assetGroup.name)
-***REMOVED***
-***REMOVED******REMOVED***return assetGroupNames
+***REMOVED******REMOVED***Set(elementResults.map(\.assetGroup.name))
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The extent of the trace's geometry result with a small added buffer.
