@@ -378,10 +378,10 @@ private extension SearchViewModel {
            let envelope = resultsOverlay.extent,
            shouldZoomToResults {
             let builder = EnvelopeBuilder(envelope: envelope)
-            builder.expand(factor: 1.1)
+            builder.expand(by: 1.1)
             let targetExtent = builder.toGeometry()
             viewpoint.wrappedValue = Viewpoint(
-                targetExtent: targetExtent
+                boundingGeometry: targetExtent
             )
             lastSearchExtent = targetExtent
         } else {

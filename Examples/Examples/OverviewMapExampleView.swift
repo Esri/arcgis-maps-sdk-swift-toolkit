@@ -56,6 +56,9 @@ struct OverviewMapForMapView: View {
     
     @State private var visibleArea: ArcGIS.Polygon?
     
+    // A custom map to display as the overview map.
+//    @State var customOverviewMap = Map(basemapStyle: .arcGISDarkGray)
+    
     var body: some View {
         MapView(map: dataModel.map)
             .onViewpointChanged(kind: .centerAndScale) { viewpoint = $0 }
@@ -63,12 +66,12 @@ struct OverviewMapForMapView: View {
             .overlay(
                 OverviewMap.forMapView(
                     with: viewpoint,
-                    visibleArea: visibleArea
+                    visibleArea: visibleArea// ,
+                    // map: customOverviewMap // Uncomment to use a custom map.
                 )
                 // These modifiers show how you can modify the default
                 // values used for the symbol, map, and scaleFactor.
 //                    .symbol(.customFillSymbol)
-//                    .map(.customOverviewMapForMapView)
 //                    .scaleFactor(15.0)
                     .frame(width: 200, height: 132)
                     .padding(),
@@ -85,15 +88,20 @@ struct OverviewMapForSceneView: View {
     
     @State private var viewpoint: Viewpoint?
     
+    // A custom map to display as the overview map.
+    //    @State var customOverviewMap = Map(basemapStyle: .arcGISDarkGray)
+
     var body: some View {
         SceneView(scene: dataModel.scene)
             .onViewpointChanged(kind: .centerAndScale) { viewpoint = $0 }
             .overlay(
-                OverviewMap.forSceneView(with: viewpoint)
+                OverviewMap.forSceneView(
+                    with: viewpoint// ,
+                    // map: customOverviewMap // Uncomment to use a custom map.
+                )
                 // These modifiers show how you can modify the default
                 // values used for the symbol, map, and scaleFactor.
 //                    .symbol(.customMarkerSymbol)
-//                    .map(.customOverviewMapForSceneView)
 //                    .scaleFactor(15.0)
                     .frame(width: 200, height: 132)
                     .padding(),
@@ -128,12 +136,4 @@ private extension Symbol {
         color: .blue,
         size: 16.0
     )
-}
-
-private extension Map {
-    /// A custom map for the `OverviewMap` used in a MapView.
-    static let customOverviewMapForMapView = Map(basemapStyle: .arcGISDarkGray)
-
-    /// A custom map for the `OverviewMap` used in a SceneView.
-    static let customOverviewMapForSceneView = Map(basemapStyle: .arcGISDarkGray)
 }

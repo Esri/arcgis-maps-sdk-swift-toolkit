@@ -1,12 +1,12 @@
 # Authenticator
 
-The `Authenticator` is a configurable object that handles authentication challenges.  It will display a user interface when network and ArcGIS authentication challenges occur.
+The `Authenticator` is a configurable object that handles authentication challenges. It will display a user interface when network and ArcGIS authentication challenges occur.
 
 ![image](https://user-images.githubusercontent.com/3998072/203615041-c887d5e3-bb64-469a-a76b-126059329e92.png)
 
 ## Features
 
-The `Authenticator` has a view modifier that will display a prompt when the `Authenticator` is asked to handle an authentication challenge.  This will handle many different types of authentication, for example:
+The `Authenticator` has a view modifier that will display a prompt when the `Authenticator` is asked to handle an authentication challenge. This will handle many different types of authentication, for example:
   - ArcGIS authentication (token and OAuth)
   - Integrated Windows Authentication (IWA)
   - Client Certificate (PKI)
@@ -23,7 +23,7 @@ The `Authenticator` can be configured to support securely persisting credentials
     @ViewBuilder func authenticator(_ authenticator: Authenticator) -> some View
 ```
 
-To securely store credentials in the keychain, use the following instance method on `Authenticator`:
+To securely store credentials in the keychain, use the following extension method of `AuthenticationManager`:
 
 ```swift
     /// Sets up new credential stores that will be persisted to the keychain.
@@ -37,6 +37,18 @@ To securely store credentials in the keychain, use the following instance method
         access: ArcGIS.KeychainAccess,
         synchronizesWithiCloud: Bool = false
     ) async throws
+```
+
+During sign-out, use the following extension methods of `AuthenticationManager`:
+
+```swift
+    /// Revokes tokens of OAuth user credentials.
+    func revokeOAuthTokens() async
+
+    /// Clears all ArcGIS and network credentials from the respective stores.
+    /// Note: This sets up new `URLSessions` so that removed network credentials are respected
+    /// right away.
+    func clearCredentialStores() async
 ```
 
 ## Behavior:
@@ -56,8 +68,9 @@ init() {
         // If you want to use OAuth, uncomment this code:
         //oAuthConfigurations: [.arcgisDotCom]
     )
-    // Set the challenge handler to be the authenticator we just created.
-    ArcGISEnvironment.authenticationChallengeHandler = authenticator
+    // Sets authenticator as ArcGIS and Network challenge handlers to handle authentication
+    // challenges.
+    ArcGISEnvironment.authenticationManager.handleChallenges(using: authenticator)
 }
 
 var body: some SwiftUI.Scene {
@@ -65,12 +78,12 @@ var body: some SwiftUI.Scene {
         HomeView()
             .authenticator(authenticator)
             .task {
-                // Here we make the authenticator persistent, which means that it will synchronize
-                // with the keychain for storing credentials.
+                // Here we setup credential stores to be persistent, which means that it will
+                // synchronize with the keychain for storing credentials.
                 // It also means that a user can sign in without having to be prompted for
                 // credentials. Once credentials are cleared from the stores ("sign-out"),
                 // then the user will need to be prompted once again.
-                try? await authenticator.setupPersistentCredentialStorage(access: .whenUnlockedThisDeviceOnly)
+                try? await ArcGISEnvironment.authenticationManager.setupPersistentCredentialStorage(access: .whenUnlockedThisDeviceOnly)
             }
     }
 }
