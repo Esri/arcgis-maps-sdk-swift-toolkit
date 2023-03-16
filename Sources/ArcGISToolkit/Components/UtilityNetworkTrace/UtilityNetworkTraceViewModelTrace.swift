@@ -87,7 +87,7 @@ extension UtilityNetworkTraceViewModel.Trace {
 ***REMOVED******REMOVED***/ - Parameter assetGroupName: A name of a utility asset group.
 ***REMOVED******REMOVED***/ - Returns: The elements in the indicated group.
 ***REMOVED***func elements(inAssetGroupNamed assetGroupName: String) -> [UtilityElement] {
-***REMOVED******REMOVED***return elementResults.filter({ $0.assetGroup.name == assetGroupName ***REMOVED***)
+***REMOVED******REMOVED***elementResults.filter { $0.assetGroup.name == assetGroupName ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ A set of the asset group names returned by the trace.
