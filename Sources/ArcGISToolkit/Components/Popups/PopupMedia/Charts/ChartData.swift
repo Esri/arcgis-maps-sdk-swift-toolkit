@@ -28,9 +28,7 @@ struct ChartData: Identifiable {
     ///   - value: The value of the data.
     init(label: String, value: Any) {
         self.label = label
-        if let int32 = value as? Int32 {
-            self.value = Double(int32)
-        } else if let int = value as? Int {
+        if let int = value as? Int {
             self.value = Double(int)
         } else if let float = value as? Float {
             self.value = Double(float)

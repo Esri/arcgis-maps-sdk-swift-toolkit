@@ -140,7 +140,7 @@ class SearchViewModelTests: XCTestCase {
         XCTAssertFalse(model.isEligibleForRequery)
         
         // Offset extent by 10% - isEligibleForRequery should still be `false`.
-        var builder = EnvelopeBuilder(envelope: model.geoViewExtent)
+        var builder = EnvelopeBuilder(envelope: model.geoViewExtent!)
         let tenPercentWidth = model.geoViewExtent!.width * 0.1
         builder.offsetBy(x: tenPercentWidth, y: 0.0)
         var newExtent = builder.toGeometry()
@@ -149,7 +149,7 @@ class SearchViewModelTests: XCTestCase {
         XCTAssertFalse(model.isEligibleForRequery)
         
         // Offset extent by 50% - isEligibleForRequery should now be `true`.
-        builder = EnvelopeBuilder(envelope: model.geoViewExtent)
+        builder = EnvelopeBuilder(envelope: model.geoViewExtent!)
         let fiftyPercentWidth = model.geoViewExtent!.width * 0.5
         builder.offsetBy(x: fiftyPercentWidth, y: 0.0)
         newExtent = builder.toGeometry()
@@ -167,16 +167,16 @@ class SearchViewModelTests: XCTestCase {
         XCTAssertFalse(model.isEligibleForRequery)
         
         // Expand extent by 1.1x - isEligibleForRequery should still be `false`.
-        builder = EnvelopeBuilder(envelope: model.geoViewExtent)
-        builder.expand(factor: 1.1)
+        builder = EnvelopeBuilder(envelope: model.geoViewExtent!)
+        builder.expand(by: 1.1)
         newExtent = builder.toGeometry()
         
         model.geoViewExtent = newExtent
         XCTAssertFalse(model.isEligibleForRequery)
         
         // Expand extent by 1.5x - isEligibleForRequery should now be `true`.
-        builder = EnvelopeBuilder(envelope: model.geoViewExtent)
-        builder.expand(factor: 1.5)
+        builder = EnvelopeBuilder(envelope: model.geoViewExtent!)
+        builder.expand(by: 1.5)
         newExtent = builder.toGeometry()
         
         model.geoViewExtent = newExtent
@@ -446,27 +446,33 @@ extension SearchViewModelTests {
     }
 }
 
-extension Polygon {
-    static let chippewaFalls: Polygon = {
-        let builder = PolygonBuilder(spatialReference: .wgs84)
-        _ = builder.add(Point(x: -91.59127653822401, y: 44.74770908213401, spatialReference: .wgs84))
-        _ = builder.add(Point(x: -91.19322516572637, y: 44.74770908213401, spatialReference: .wgs84))
-        _ = builder.add(Point(x: -91.19322516572637, y: 45.116100854348254, spatialReference: .wgs84))
-        _ = builder.add(Point(x: -91.59127653822401, y: 45.116100854348254, spatialReference: .wgs84))
-        return builder.toGeometry()
-    }()
+extension ArcGIS.Polygon {
+    class var chippewaFalls: ArcGIS.Polygon {
+        let points = [
+            Point(x: -91.59127653822401, y: 44.74770908213401),
+            Point(x: -91.19322516572637, y: 44.74770908213401),
+            Point(x: -91.19322516572637, y: 45.116100854348254),
+            Point(x: -91.59127653822401, y: 45.116100854348254)
+        ]
+        return .init(points: points, spatialReference: .wgs84)
+    }
     
-    static let minneapolis: Polygon = {
-        let builder = PolygonBuilder(spatialReference: .wgs84)
-        _ = builder.add(Point(x: -94.170821328662, y: 44.13656401114444, spatialReference: .wgs84))
-        _ = builder.add(Point(x: -94.170821328662, y: 44.13656401114444, spatialReference: .wgs84))
-        _ = builder.add(Point(x: -92.34544467133114, y: 45.824325577904446, spatialReference: .wgs84))
-        _ = builder.add(Point(x: -92.34544467133114, y: 45.824325577904446, spatialReference: .wgs84))
-        return builder.toGeometry()
-    }()
+    class var minneapolis: ArcGIS.Polygon {
+        let points = [
+            Point(x: -94.170821328662, y: 44.13656401114444),
+            Point(x: -94.170821328662, y: 44.13656401114444),
+            Point(x: -92.34544467133114, y: 45.824325577904446),
+            Point(x: -92.34544467133114, y: 45.824325577904446)
+        ]
+        return .init(points: points, spatialReference: .wgs84)
+    }
 }
 
 extension Point {
-    static let edinburgh = Point(x: -3.188267, y: 55.953251, spatialReference: .wgs84)
-    static let portland = Point(x: -122.658722, y: 45.512230, spatialReference: .wgs84)
+    class var edinburgh: Point {
+        .init(x: -3.188267, y: 55.953251, spatialReference: .wgs84)
+    }
+    class var portland: Point {
+        .init(x: -122.658722, y: 45.512230, spatialReference: .wgs84)
+    }
 }
