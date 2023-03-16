@@ -92,11 +92,7 @@ extension UtilityNetworkTraceViewModel.Trace {
     
     /// A set of the asset group names returned by the trace.
     var assetGroupNames: Set<String> {
-        var assetGroupNames = Set<String>()
-        elementResults.forEach {
-            assetGroupNames.insert($0.assetGroup.name)
-        }
-        return assetGroupNames
+        Set(elementResults.map(\.assetGroup.name))
     }
     
     /// The extent of the trace's geometry result with a small added buffer.
