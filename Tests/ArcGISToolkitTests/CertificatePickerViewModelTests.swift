@@ -12,6 +12,7 @@
 ***REMOVED*** limitations under the License.
 
 import XCTest
+***REMOVED***
 @testable ***REMOVED***Toolkit
 
 @MainActor final class CertificatePickerViewModelTests: XCTestCase {
@@ -23,7 +24,7 @@ import XCTest
 ***REMOVED******REMOVED***XCTAssertTrue(model.showPrompt)
 ***REMOVED******REMOVED***XCTAssertFalse(model.showPicker)
 ***REMOVED******REMOVED***XCTAssertFalse(model.showPassword)
-***REMOVED******REMOVED***XCTAssertFalse(model.showCertificateImportError)
+***REMOVED******REMOVED***XCTAssertFalse(model.showCertificateError)
 ***REMOVED******REMOVED***XCTAssertEqual(model.challengingHost, "host.com")
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***model.proceedFromPrompt()
@@ -42,10 +43,28 @@ import XCTest
 ***REMOVED******REMOVED******REMOVED*** Another yield seems to be required to deal with timing when running the test
 ***REMOVED******REMOVED******REMOVED*** repeatedly.
 ***REMOVED******REMOVED***await Task.yield()
-***REMOVED******REMOVED***XCTAssertTrue(model.showCertificateImportError)
+***REMOVED******REMOVED******REMOVED*** Sometime this fails. See details in https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift-toolkit/issues/245.
+***REMOVED******REMOVED***XCTAssertTrue(model.showCertificateError)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***model.cancel()
 ***REMOVED******REMOVED***let disposition = await challenge.value
 ***REMOVED******REMOVED***XCTAssertEqual(disposition, .cancel)
+***REMOVED***
+***REMOVED***
+***REMOVED***func testCertificateErrorLocalizedDescription() {
+***REMOVED******REMOVED***let couldNotAccessCertificateFileError = CertificatePickerViewModel.CertificateError.couldNotAccessCertificateFile
+***REMOVED******REMOVED***XCTAssertEqual(couldNotAccessCertificateFileError.localizedDescription, "Could not access the certificate file.")
+
+***REMOVED******REMOVED***let importErrorInvalidData = CertificatePickerViewModel.CertificateError.importError(.invalidData)
+***REMOVED******REMOVED***XCTAssertEqual(importErrorInvalidData.localizedDescription, "The certificate file was invalid.")
+
+***REMOVED******REMOVED***let importErrorInvalidPassword = CertificatePickerViewModel.CertificateError.importError(.invalidPassword)
+***REMOVED******REMOVED***XCTAssertEqual(importErrorInvalidPassword.localizedDescription, "The password was invalid.")
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let importErrorInternalError = CertificatePickerViewModel.CertificateError.importError(CertificateImportError(rawValue: errSecInternalError)!)
+***REMOVED******REMOVED***XCTAssertEqual(importErrorInternalError.localizedDescription, "An internal error has occurred.")
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let otherError = CertificatePickerViewModel.CertificateError.other(NSError(domain: NSOSStatusErrorDomain, code: Int(errSecInvalidCertAuthority)))
+***REMOVED******REMOVED***XCTAssertEqual(otherError.localizedDescription, "The operation couldn’t be completed. (OSStatus error -67826.)")
 ***REMOVED***
 ***REMOVED***

@@ -364,9 +364,7 @@ import Foundation
 ***REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED***traceResults = try await network.trace(using: parameters)
 ***REMOVED*** catch(let serviceError as ServiceError) {
-***REMOVED******REMOVED******REMOVED***if let reason = serviceError.failureReason {
-***REMOVED******REMOVED******REMOVED******REMOVED***userAlert = .init(description: reason)
-***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***userAlert = .init(description: serviceError.details)
 ***REMOVED******REMOVED******REMOVED***return false
 ***REMOVED*** catch {
 ***REMOVED******REMOVED******REMOVED***userAlert = .init(description: error.localizedDescription)

@@ -28,9 +28,7 @@ struct ChartData: Identifiable {
 ***REMOVED******REMOVED***/   - value: The value of the data.
 ***REMOVED***init(label: String, value: Any) {
 ***REMOVED******REMOVED***self.label = label
-***REMOVED******REMOVED***if let int32 = value as? Int32 {
-***REMOVED******REMOVED******REMOVED***self.value = Double(int32)
-***REMOVED*** else if let int = value as? Int {
+***REMOVED******REMOVED***if let int = value as? Int {
 ***REMOVED******REMOVED******REMOVED***self.value = Double(int)
 ***REMOVED*** else if let float = value as? Float {
 ***REMOVED******REMOVED******REMOVED***self.value = Double(float)

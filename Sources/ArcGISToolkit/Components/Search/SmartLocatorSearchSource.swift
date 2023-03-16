@@ -26,8 +26,8 @@ public class SmartLocatorSearchSource: LocatorSearchSource {
 ***REMOVED******REMOVED***/   - repeatSuggestResultThreshold: The minimum number of suggestions to attempt to return.
 ***REMOVED***public init(
 ***REMOVED******REMOVED***name: String = "Smart Locator",
-***REMOVED******REMOVED***maximumResults: Int32 = 6,
-***REMOVED******REMOVED***maximumSuggestions: Int32 = 6,
+***REMOVED******REMOVED***maximumResults: Int = 6,
+***REMOVED******REMOVED***maximumSuggestions: Int = 6,
 ***REMOVED******REMOVED***repeatSearchResultThreshold: Int? = 1,
 ***REMOVED******REMOVED***repeatSuggestResultThreshold: Int? = 6
 ***REMOVED***) {

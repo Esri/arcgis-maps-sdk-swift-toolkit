@@ -35,11 +35,13 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED***viewpoint: Binding<Viewpoint?> = .constant(nil),
 ***REMOVED******REMOVED***isNavigating: Binding<Bool>
 ***REMOVED***) {
-***REMOVED******REMOVED***_viewModel = StateObject(wrappedValue: FloorFilterViewModel(
-***REMOVED******REMOVED******REMOVED***automaticSelectionMode: automaticSelectionMode,
-***REMOVED******REMOVED******REMOVED***floorManager: floorManager,
-***REMOVED******REMOVED******REMOVED***viewpoint: viewpoint
-***REMOVED******REMOVED***))
+***REMOVED******REMOVED***_viewModel = StateObject(
+***REMOVED******REMOVED******REMOVED***wrappedValue: FloorFilterViewModel(
+***REMOVED******REMOVED******REMOVED******REMOVED***automaticSelectionMode: automaticSelectionMode,
+***REMOVED******REMOVED******REMOVED******REMOVED***floorManager: floorManager,
+***REMOVED******REMOVED******REMOVED******REMOVED***viewpoint: viewpoint
+***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***self.alignment = alignment
 ***REMOVED******REMOVED***self.isNavigating = isNavigating
 ***REMOVED******REMOVED***self.viewpoint = viewpoint

@@ -23,7 +23,7 @@ import XCTest
 ***REMOVED******REMOVED***ArcGISEnvironment.apiKey = apiKey
 ***REMOVED******REMOVED***try XCTSkipIf(apiKey == .placeholder)
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***setChallengeHandler(ChallengeHandler(trustedHosts: [URL.sampleServer7.host!]))
+***REMOVED******REMOVED***setNetworkChallengeHandler(NetworkChallengeHandler(allowUntrustedHosts: true))
 ***REMOVED******REMOVED***ArcGISEnvironment.authenticationManager.arcGISCredentialStore.add(
 ***REMOVED******REMOVED******REMOVED***try await tokenForSampleServer7
 ***REMOVED******REMOVED***)
@@ -31,7 +31,8 @@ import XCTest
 ***REMOVED***
 ***REMOVED***func tearDownWithError() async throws {
 ***REMOVED******REMOVED***ArcGISEnvironment.apiKey = nil
-***REMOVED******REMOVED***ArcGISEnvironment.authenticationManager.authenticationChallengeHandler = nil
+***REMOVED******REMOVED***ArcGISEnvironment.authenticationManager.arcGISAuthenticationChallengeHandler = nil
+***REMOVED******REMOVED***ArcGISEnvironment.authenticationManager.networkAuthenticationChallengeHandler = nil
 ***REMOVED******REMOVED***ArcGISEnvironment.authenticationManager.arcGISCredentialStore.removeAll()
 ***REMOVED***
 ***REMOVED***
