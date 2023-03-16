@@ -87,7 +87,7 @@ extension UtilityNetworkTraceViewModel.Trace {
     /// - Parameter assetGroupName: A name of a utility asset group.
     /// - Returns: The elements in the indicated group.
     func elements(inAssetGroupNamed assetGroupName: String) -> [UtilityElement] {
-        return elementResults.filter({ $0.assetGroup.name == assetGroupName })
+        elementResults.filter { $0.assetGroup.name == assetGroupName }
     }
     
     /// A set of the asset group names returned by the trace.
