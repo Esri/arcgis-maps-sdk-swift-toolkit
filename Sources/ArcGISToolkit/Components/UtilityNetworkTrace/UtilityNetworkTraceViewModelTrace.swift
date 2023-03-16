@@ -68,11 +68,12 @@ extension UtilityNetworkTraceViewModel {
 ***REMOVED***
 
 extension UtilityNetworkTraceViewModel.Trace {
-***REMOVED******REMOVED***/ - Parameter name: A name of a utility asset group.
-***REMOVED******REMOVED***/ - Returns: The set of utility elements returned by the trace that belong to the provided
+***REMOVED******REMOVED***/ - Finds the set of utility elements returned by the trace that belong to the provided
 ***REMOVED******REMOVED***/ asset group, grouped by type.
-***REMOVED***func elementsByTypeInGroup(named name: String) -> [String: [UtilityElement]] {
-***REMOVED******REMOVED***let assetsInGroup = elementsInAssetGroup(named: name)
+***REMOVED******REMOVED***/ - Parameter groupName: A name of a utility asset group.
+***REMOVED******REMOVED***/ - Returns: The elements in the indicated group.
+***REMOVED***func elementsByType(inGroupNamed groupName: String) -> [String: [UtilityElement]] {
+***REMOVED******REMOVED***let assetsInGroup = elementsInAssetGroup(named: groupName)
 ***REMOVED******REMOVED***var result = [String : [UtilityElement]]()
 ***REMOVED******REMOVED***assetsInGroup.forEach { e in
 ***REMOVED******REMOVED******REMOVED***var assetTypeGroup = result[e.assetType.name, default: []]

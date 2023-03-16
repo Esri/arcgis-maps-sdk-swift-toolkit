@@ -132,7 +132,7 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED***/ Displays information about a chosen asset group.
 ***REMOVED***@ViewBuilder private var assetGroupDetail: some View {
 ***REMOVED******REMOVED***if let assetGroupName = selectedAssetGroupName,
-***REMOVED******REMOVED***   let assetTypeGroups = viewModel.selectedTrace?.elementsByTypeInGroup(named: assetGroupName) {
+***REMOVED******REMOVED***   let assetTypeGroups = viewModel.selectedTrace?.elementsByType(inGroupNamed: assetGroupName) {
 ***REMOVED******REMOVED******REMOVED***makeBackButton(title: featureResultsTitle) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***currentActivity = .viewingTraces(.viewingFeatureResults)
 ***REMOVED******REMOVED***
