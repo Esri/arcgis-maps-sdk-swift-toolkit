@@ -68,12 +68,12 @@ extension UtilityNetworkTraceViewModel {
 }
 
 extension UtilityNetworkTraceViewModel.Trace {
-    /// - Finds the set of utility elements returned by the trace that belong to the provided
+    /// Finds the set of utility elements returned by the trace that belong to the provided
     /// asset group, grouped by type.
     /// - Parameter groupName: A name of a utility asset group.
     /// - Returns: The elements in the indicated group.
     func elementsByType(inGroupNamed groupName: String) -> [String: [UtilityElement]] {
-        let assetsInGroup = elementsInAssetGroup(named: groupName)
+        let assetsInGroup = elements(inAssetGroupNamed: groupName)
         var result = [String : [UtilityElement]]()
         assetsInGroup.forEach { e in
             var assetTypeGroup = result[e.assetType.name, default: []]
@@ -83,11 +83,12 @@ extension UtilityNetworkTraceViewModel.Trace {
         return result
     }
     
-    /// - Parameter name: A name of a utility asset group.
-    /// - Returns: The set of utility elements returned by the trace that belong to the provided
+    /// Finds the set of utility elements returned by the trace that belong to the provided
     /// asset group.
-    func elementsInAssetGroup(named name: String) -> [UtilityElement] {
-        return elementResults.filter({ $0.assetGroup.name == name })
+    /// - Parameter assetGroupName: A name of a utility asset group.
+    /// - Returns: The elements in the indicated group.
+    func elements(inAssetGroupNamed assetGroupName: String) -> [UtilityElement] {
+        return elementResults.filter({ $0.assetGroup.name == assetGroupName })
     }
     
     /// A set of the asset group names returned by the trace.
