@@ -68,12 +68,12 @@ extension UtilityNetworkTraceViewModel {
 ***REMOVED***
 
 extension UtilityNetworkTraceViewModel.Trace {
-***REMOVED******REMOVED***/ - Finds the set of utility elements returned by the trace that belong to the provided
+***REMOVED******REMOVED***/ Finds the set of utility elements returned by the trace that belong to the provided
 ***REMOVED******REMOVED***/ asset group, grouped by type.
 ***REMOVED******REMOVED***/ - Parameter groupName: A name of a utility asset group.
 ***REMOVED******REMOVED***/ - Returns: The elements in the indicated group.
 ***REMOVED***func elementsByType(inGroupNamed groupName: String) -> [String: [UtilityElement]] {
-***REMOVED******REMOVED***let assetsInGroup = elementsInAssetGroup(named: groupName)
+***REMOVED******REMOVED***let assetsInGroup = elements(inAssetGroupNamed: groupName)
 ***REMOVED******REMOVED***var result = [String : [UtilityElement]]()
 ***REMOVED******REMOVED***assetsInGroup.forEach { e in
 ***REMOVED******REMOVED******REMOVED***var assetTypeGroup = result[e.assetType.name, default: []]
@@ -83,11 +83,12 @@ extension UtilityNetworkTraceViewModel.Trace {
 ***REMOVED******REMOVED***return result
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ - Parameter name: A name of a utility asset group.
-***REMOVED******REMOVED***/ - Returns: The set of utility elements returned by the trace that belong to the provided
+***REMOVED******REMOVED***/ Finds the set of utility elements returned by the trace that belong to the provided
 ***REMOVED******REMOVED***/ asset group.
-***REMOVED***func elementsInAssetGroup(named name: String) -> [UtilityElement] {
-***REMOVED******REMOVED***return elementResults.filter({ $0.assetGroup.name == name ***REMOVED***)
+***REMOVED******REMOVED***/ - Parameter assetGroupName: A name of a utility asset group.
+***REMOVED******REMOVED***/ - Returns: The elements in the indicated group.
+***REMOVED***func elements(inAssetGroupNamed assetGroupName: String) -> [UtilityElement] {
+***REMOVED******REMOVED***return elementResults.filter({ $0.assetGroup.name == assetGroupName ***REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ A set of the asset group names returned by the trace.
