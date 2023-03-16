@@ -73,14 +73,13 @@ extension UtilityNetworkTraceViewModel.Trace {
 ***REMOVED******REMOVED***/ - Parameter groupName: A name of a utility asset group.
 ***REMOVED******REMOVED***/ - Returns: The elements in the indicated group.
 ***REMOVED***func elementsByType(inGroupNamed groupName: String) -> [String: [UtilityElement]] {
-***REMOVED******REMOVED***let assetsInGroup = elements(inAssetGroupNamed: groupName)
-***REMOVED******REMOVED***var result = [String : [UtilityElement]]()
-***REMOVED******REMOVED***assetsInGroup.forEach { e in
-***REMOVED******REMOVED******REMOVED***var assetTypeGroup = result[e.assetType.name, default: []]
-***REMOVED******REMOVED******REMOVED***assetTypeGroup.append(e)
-***REMOVED******REMOVED******REMOVED***result.updateValue(assetTypeGroup, forKey: e.assetType.name)
-***REMOVED***
-***REMOVED******REMOVED***return result
+***REMOVED******REMOVED***elements(inAssetGroupNamed: name)
+***REMOVED******REMOVED******REMOVED***.reduce(into: [:]) { result, element in
+***REMOVED******REMOVED******REMOVED******REMOVED***let key = element.assetType.name
+***REMOVED******REMOVED******REMOVED******REMOVED***var assetTypeGroup = result[key, default: []]
+***REMOVED******REMOVED******REMOVED******REMOVED***assetTypeGroup.append(element)
+***REMOVED******REMOVED******REMOVED******REMOVED***result[key] = assetTypeGroup
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Finds the set of utility elements returned by the trace that belong to the provided
