@@ -351,7 +351,7 @@ public struct UtilityNetworkTrace: View {
                                 HStack {
                                     Text(assetGroupName)
                                     Spacer()
-                                    Text(selectedTrace.elementsInAssetGroup(named: assetGroupName).count, format: .number)
+                                    Text(selectedTrace.elements(inAssetGroupNamed: assetGroupName).count, format: .number)
                                 }
                                 .foregroundColor(.blue)
                                 .contentShape(Rectangle())
