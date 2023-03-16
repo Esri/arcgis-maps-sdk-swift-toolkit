@@ -122,10 +122,7 @@ extension UtilityNetworkTraceViewModel.Trace {
 }
 
 extension UtilityNetworkTraceViewModel.Trace: Equatable {
-    static func == (
-        lhs: UtilityNetworkTraceViewModel.Trace,
-        rhs: UtilityNetworkTraceViewModel.Trace
-    ) -> Bool {
+    static func == (lhs: Self, rhs: Self) -> Bool {
         return lhs.id == rhs.id
     }
 }
