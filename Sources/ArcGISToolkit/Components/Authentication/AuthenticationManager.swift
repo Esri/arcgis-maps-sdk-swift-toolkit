@@ -16,8 +16,9 @@
 public extension AuthenticationManager {
 ***REMOVED******REMOVED***/ Sets up authenticator as ArcGIS and Network challenge handlers to handle authentication
 ***REMOVED******REMOVED***/ challenges.
-***REMOVED******REMOVED***/ - Parameter authenticator: The authenticator to be used for handling challenges.
-***REMOVED***func handleChallenges(using authenticator: Authenticator) {
+***REMOVED******REMOVED***/ - Parameter authenticator: The authenticator to be used for handling challenges or `nil` to
+***REMOVED******REMOVED***/ reset the challenge handlers.
+***REMOVED***func handleChallenges(using authenticator: Authenticator?) {
 ***REMOVED******REMOVED***arcGISAuthenticationChallengeHandler = authenticator
 ***REMOVED******REMOVED***networkAuthenticationChallengeHandler = authenticator
 ***REMOVED***

@@ -17,10 +17,7 @@
 import CryptoKit
 
 ***REMOVED***/ A view that allows the user to sign in to a portal.
-struct SignInView: View {
-***REMOVED******REMOVED***/ The authenticator which has been passed from the app through the environment.
-***REMOVED***@EnvironmentObject var authenticator: Authenticator
-***REMOVED***
+struct SignInView: View {***REMOVED***
 ***REMOVED******REMOVED***/ The error that occurred during an attempt to sign in.
 ***REMOVED***@State var error: Error?
 ***REMOVED***
