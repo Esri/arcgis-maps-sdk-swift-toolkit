@@ -16,8 +16,9 @@ import ArcGIS
 public extension AuthenticationManager {
     /// Sets up authenticator as ArcGIS and Network challenge handlers to handle authentication
     /// challenges.
-    /// - Parameter authenticator: The authenticator to be used for handling challenges.
-    func handleChallenges(using authenticator: Authenticator) {
+    /// - Parameter authenticator: The authenticator to be used for handling challenges or `nil` to
+    /// reset the challenge handlers.
+    func handleChallenges(using authenticator: Authenticator?) {
         arcGISAuthenticationChallengeHandler = authenticator
         networkAuthenticationChallengeHandler = authenticator
     }
