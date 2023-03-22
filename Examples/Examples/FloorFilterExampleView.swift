@@ -50,12 +50,8 @@ struct FloorFilterExampleView: View {
     
     var body: some View {
         MapView(map: map, viewpoint: viewpoint)
-        .onNavigatingChanged {
-            isNavigating = $0
-        }
-        .onViewpointChanged(kind: .centerAndScale) {
-            viewpoint = $0
-        }
+        .onNavigatingChanged { isNavigating = $0 }
+        .onViewpointChanged(kind: .centerAndScale) { viewpoint = $0 }
         // Preserve the current viewpoint when a keyboard is presented in landscape.
         .ignoresSafeArea(.keyboard, edges: .bottom)
         .overlay(alignment: floorFilterAlignment) {
