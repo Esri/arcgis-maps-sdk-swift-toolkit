@@ -53,6 +53,9 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED***/ A Boolean value that indicates whether the site and facility selector is presented.
 ***REMOVED***@State private var isSitesAndFacilitiesHidden = true
 ***REMOVED***
+***REMOVED******REMOVED***/ The selected site, floor, or level.
+***REMOVED***private var selection: Binding<FloorFilterSelection?>?
+***REMOVED***
 ***REMOVED******REMOVED***/ The alignment configuration.
 ***REMOVED***private let alignment: Alignment
 ***REMOVED***
@@ -173,5 +176,24 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED***.frame(minHeight: 100)
 ***REMOVED******REMOVED***.environmentObject(viewModel)
 ***REMOVED******REMOVED***.disabled(viewModel.isLoading)
+***REMOVED******REMOVED***.onChange(of: selection?.wrappedValue) { newValue in
+***REMOVED******REMOVED******REMOVED******REMOVED*** Prevent a double-set if the view model triggered the original change.
+***REMOVED******REMOVED******REMOVED***guard newValue != viewModel.selection else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED***viewModel.selection = newValue
+***REMOVED***
+***REMOVED******REMOVED***.onChange(of: viewModel.selection) { newValue in
+***REMOVED******REMOVED******REMOVED******REMOVED*** Prevent a double-set if the user triggered the original change.
+***REMOVED******REMOVED******REMOVED***guard selection?.wrappedValue != newValue else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED***selection?.wrappedValue = newValue
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ The currently selected site, facility, or level.
+***REMOVED******REMOVED***/ - Parameter selection: The selection.
+***REMOVED******REMOVED***/ - Returns: The `FloorFilter`.
+***REMOVED***public func selection(_ selection: Binding<FloorFilterSelection?>) -> Self {
+***REMOVED******REMOVED***var copy = self
+***REMOVED******REMOVED***copy.selection = selection
+***REMOVED******REMOVED***return copy
 ***REMOVED***
 ***REMOVED***

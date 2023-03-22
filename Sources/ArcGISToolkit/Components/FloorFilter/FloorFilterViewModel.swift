@@ -18,16 +18,6 @@ import Combine
 ***REMOVED***/ Manages the state for a `FloorFilter`.
 @MainActor
 final class FloorFilterViewModel: ObservableObject {
-***REMOVED******REMOVED***/  A selected site, floor, or level.
-***REMOVED***enum Selection: Hashable {
-***REMOVED******REMOVED******REMOVED***/ A selected site.
-***REMOVED******REMOVED***case site(FloorSite)
-***REMOVED******REMOVED******REMOVED***/ A selected facility.
-***REMOVED******REMOVED***case facility(FloorFacility)
-***REMOVED******REMOVED******REMOVED***/ A selected level.
-***REMOVED******REMOVED***case level(FloorLevel)
-***REMOVED***
-***REMOVED***
 ***REMOVED******REMOVED***/ Creates a `FloorFilterViewModel`.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - automaticSelectionMode: The selection behavior of the floor filter.
@@ -51,7 +41,7 @@ final class FloorFilterViewModel: ObservableObject {
 ***REMOVED***@Published private(set) var isLoading = true
 ***REMOVED***
 ***REMOVED******REMOVED***/ The selected site, floor, or level.
-***REMOVED***@Published private(set) var selection: Selection?
+***REMOVED***@Published var selection: FloorFilterSelection?
 ***REMOVED***
 ***REMOVED******REMOVED*** MARK: Constants
 ***REMOVED***

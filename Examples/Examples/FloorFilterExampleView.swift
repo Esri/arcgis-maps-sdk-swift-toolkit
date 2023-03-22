@@ -48,6 +48,11 @@ struct FloorFilterExampleView: View {
 ***REMOVED******REMOVED***/ The data model containing the `Map` displayed in the `MapView`.
 ***REMOVED***@State private var map = makeMap()
 ***REMOVED***
+***REMOVED******REMOVED***/ The filter's current selection. This may be a site, facility, or level.
+***REMOVED******REMOVED***/
+***REMOVED******REMOVED***/ Optionally monitor or update the filter's selection.
+***REMOVED***@State private var selectedItem: FloorFilterSelection?
+***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***MapView(map: map, viewpoint: viewpoint)
 ***REMOVED******REMOVED***.onNavigatingChanged { isNavigating = $0 ***REMOVED***
@@ -63,6 +68,7 @@ struct FloorFilterExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint: $viewpoint,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isNavigating: $isNavigating
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***.selection($selectedItem)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.frame(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***maxWidth: 400,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***maxHeight: 400
@@ -87,6 +93,19 @@ struct FloorFilterExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***isMapLoaded = true
 ***REMOVED******REMOVED*** catch {
 ***REMOVED******REMOVED******REMOVED******REMOVED***mapLoadError = true
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***.onChange(of: selectedItem) { newValue in
+***REMOVED******REMOVED******REMOVED***print("The selection changed")
+***REMOVED******REMOVED******REMOVED***switch newValue {
+***REMOVED******REMOVED******REMOVED***case .none:
+***REMOVED******REMOVED******REMOVED******REMOVED***print("None")
+***REMOVED******REMOVED******REMOVED***case .site(let site):
+***REMOVED******REMOVED******REMOVED******REMOVED***print("Site:", site.name)
+***REMOVED******REMOVED******REMOVED***case .facility(let facility):
+***REMOVED******REMOVED******REMOVED******REMOVED***print("Facility:", facility.site?.name ?? "", facility.name)
+***REMOVED******REMOVED******REMOVED***case .level(let level):
+***REMOVED******REMOVED******REMOVED******REMOVED***print("Level:", level.facility?.site?.name ?? "", level.facility?.name ?? "", level.verticalOrder + 1)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
