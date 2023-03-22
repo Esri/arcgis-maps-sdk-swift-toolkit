@@ -53,6 +53,9 @@ public struct FloorFilter: View {
     /// A Boolean value that indicates whether the site and facility selector is presented.
     @State private var isSitesAndFacilitiesHidden = true
     
+    /// The selected site, floor, or level.
+    private var selection: Binding<FloorFilterSelection?>?
+    
     /// The alignment configuration.
     private let alignment: Alignment
     
@@ -173,5 +176,24 @@ public struct FloorFilter: View {
         .frame(minHeight: 100)
         .environmentObject(viewModel)
         .disabled(viewModel.isLoading)
+        .onChange(of: selection?.wrappedValue) { newValue in
+            // Prevent a double-set if the view model triggered the original change.
+            guard newValue != viewModel.selection else { return }
+            viewModel.selection = newValue
+        }
+        .onChange(of: viewModel.selection) { newValue in
+            // Prevent a double-set if the user triggered the original change.
+            guard selection?.wrappedValue != newValue else { return }
+            selection?.wrappedValue = newValue
+        }
+    }
+    
+    /// The currently selected site, facility, or level.
+    /// - Parameter selection: The selection.
+    /// - Returns: The `FloorFilter`.
+    public func selection(_ selection: Binding<FloorFilterSelection?>) -> Self {
+        var copy = self
+        copy.selection = selection
+        return copy
     }
 }

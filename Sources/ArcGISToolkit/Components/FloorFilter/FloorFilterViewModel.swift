@@ -18,16 +18,6 @@ import SwiftUI
 /// Manages the state for a `FloorFilter`.
 @MainActor
 final class FloorFilterViewModel: ObservableObject {
-    ///  A selected site, floor, or level.
-    enum Selection: Hashable {
-        /// A selected site.
-        case site(FloorSite)
-        /// A selected facility.
-        case facility(FloorFacility)
-        /// A selected level.
-        case level(FloorLevel)
-    }
-    
     /// Creates a `FloorFilterViewModel`.
     /// - Parameters:
     ///   - automaticSelectionMode: The selection behavior of the floor filter.
@@ -51,7 +41,7 @@ final class FloorFilterViewModel: ObservableObject {
     @Published private(set) var isLoading = true
     
     /// The selected site, floor, or level.
-    @Published private(set) var selection: Selection?
+    @Published var selection: FloorFilterSelection?
     
     // MARK: Constants
     

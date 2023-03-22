@@ -48,6 +48,11 @@ struct FloorFilterExampleView: View {
     /// The data model containing the `Map` displayed in the `MapView`.
     @State private var map = makeMap()
     
+    /// The filter's current selection. This may be a site, facility, or level.
+    ///
+    /// Optionally monitor or update the filter's selection.
+    @State private var selectedItem: FloorFilterSelection?
+    
     var body: some View {
         MapView(map: map, viewpoint: viewpoint)
         .onNavigatingChanged { isNavigating = $0 }
@@ -63,6 +68,7 @@ struct FloorFilterExampleView: View {
                     viewpoint: $viewpoint,
                     isNavigating: $isNavigating
                 )
+                .selection($selectedItem)
                 .frame(
                     maxWidth: 400,
                     maxHeight: 400
@@ -87,6 +93,19 @@ struct FloorFilterExampleView: View {
                 isMapLoaded = true
             } catch {
                 mapLoadError = true
+            }
+        }
+        .onChange(of: selectedItem) { newValue in
+            print("The selection changed")
+            switch newValue {
+            case .none:
+                print("None")
+            case .site(let site):
+                print("Site:", site.name)
+            case .facility(let facility):
+                print("Facility:", facility.site?.name ?? "", facility.name)
+            case .level(let level):
+                print("Level:", level.facility?.site?.name ?? "", level.facility?.name ?? "", level.verticalOrder + 1)
             }
         }
     }
