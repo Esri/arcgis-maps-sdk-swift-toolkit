@@ -41,7 +41,7 @@ final class FloorFilterViewModel: ObservableObject {
     @Published private(set) var isLoading = true
     
     /// The selected site, floor, or level.
-    @Published var selection: FloorFilterSelection?
+    @Published private(set) var selection: FloorFilterSelection?
     
     // MARK: Constants
     
