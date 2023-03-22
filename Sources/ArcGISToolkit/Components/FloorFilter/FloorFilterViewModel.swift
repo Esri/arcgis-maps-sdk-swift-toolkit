@@ -49,7 +49,7 @@ final class FloorFilterViewModel: ObservableObject {
     private let automaticSelectionMode: FloorFilterAutomaticSelectionMode
     
     /// The `FloorManager` containing the site, floor, and level information.
-    let floorManager: FloorManager
+    private let floorManager: FloorManager
     
     // MARK: Properties
     
