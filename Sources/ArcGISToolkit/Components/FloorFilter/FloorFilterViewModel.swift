@@ -117,6 +117,11 @@ final class FloorFilterViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED******REMOVED*** MARK: Methods
 ***REMOVED***
+***REMOVED******REMOVED***/ Sets the current selection to `nil`.
+***REMOVED***func clearSelection() {
+***REMOVED******REMOVED***selection = nil
+***REMOVED***
+***REMOVED***
 ***REMOVED******REMOVED***/ Allows model users to alert the model that the viewpoint has changed.
 ***REMOVED***func onViewpointChanged(_ viewpoint: Viewpoint?) {
 ***REMOVED******REMOVED***guard let viewpoint = viewpoint,
@@ -235,7 +240,7 @@ final class FloorFilterViewModel: ObservableObject {
 ***REMOVED******REMOVED******REMOVED*** If viewpoint is out of range, reset selection and return early.
 ***REMOVED******REMOVED***if viewpoint.wrappedValue?.targetScale ?? .zero > siteMinScale {
 ***REMOVED******REMOVED******REMOVED***if automaticSelectionMode == .always {
-***REMOVED******REMOVED******REMOVED******REMOVED***selection = nil
+***REMOVED******REMOVED******REMOVED******REMOVED***clearSelection()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***return false
 ***REMOVED***
@@ -252,7 +257,7 @@ final class FloorFilterViewModel: ObservableObject {
 ***REMOVED******REMOVED***if let siteResult {
 ***REMOVED******REMOVED******REMOVED***setSite(siteResult)
 ***REMOVED*** else if automaticSelectionMode == .always {
-***REMOVED******REMOVED******REMOVED***selection = nil
+***REMOVED******REMOVED******REMOVED***clearSelection()
 ***REMOVED***
 ***REMOVED******REMOVED***return true
 ***REMOVED***
