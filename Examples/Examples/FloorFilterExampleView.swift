@@ -49,10 +49,7 @@ struct FloorFilterExampleView: View {
     @State private var map = makeMap()
     
     var body: some View {
-        MapView(
-            map: map,
-            viewpoint: viewpoint
-        )
+        MapView(map: map, viewpoint: viewpoint)
         .onNavigatingChanged {
             isNavigating = $0
         }
