@@ -179,7 +179,12 @@ public struct FloorFilter: View {
         .onChange(of: selection?.wrappedValue) { newValue in
             // Prevent a double-set if the view model triggered the original change.
             guard newValue != viewModel.selection else { return }
-            viewModel.selection = newValue
+            switch newValue {
+            case .site(let site): viewModel.setSite(site)
+            case .facility(let facility): viewModel.setFacility(facility)
+            case .level(let level): viewModel.setLevel(level)
+            case .none: viewModel.clearSelection()
+            }
         }
         .onChange(of: viewModel.selection) { newValue in
             // Prevent a double-set if the user triggered the original change.
