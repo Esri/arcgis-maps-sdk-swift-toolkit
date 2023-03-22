@@ -49,10 +49,7 @@ struct FloorFilterExampleView: View {
 ***REMOVED***@State private var map = makeMap()
 ***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***MapView(
-***REMOVED******REMOVED******REMOVED***map: map,
-***REMOVED******REMOVED******REMOVED***viewpoint: viewpoint
-***REMOVED******REMOVED***)
+***REMOVED******REMOVED***MapView(map: map, viewpoint: viewpoint)
 ***REMOVED******REMOVED***.onNavigatingChanged {
 ***REMOVED******REMOVED******REMOVED***isNavigating = $0
 ***REMOVED***
