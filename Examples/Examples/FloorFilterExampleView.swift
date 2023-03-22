@@ -69,10 +69,7 @@ struct FloorFilterExampleView: View {
                         isNavigating: $isNavigating
                     )
                     .selection($selectedItem)
-                    .frame(
-                        maxWidth: 400,
-                        maxHeight: 400
-                    )
+                    .frame(maxWidth: 400, maxHeight: 400)
                     .padding(36)
                 } else if mapLoadError {
                     Label(
