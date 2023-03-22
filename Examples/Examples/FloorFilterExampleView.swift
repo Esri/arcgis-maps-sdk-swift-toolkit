@@ -45,52 +45,64 @@ struct FloorFilterExampleView: View {
         scale: 100_000
     )
     
-    /// The data model containing the `Map` displayed in the `MapView`.
-    @State private var map = makeMap()
-    
     /// The filter's current selection. This may be a site, facility, or level.
     ///
     /// Optionally monitor or update the filter's selection.
     @State private var selectedItem: FloorFilterSelection?
     
+    /// The data model containing the `Map` displayed in the `MapView`.
+    @StateObject private var dataModel = MapDataModel(
+        map: makeMap()
+    )
+    
     var body: some View {
-        MapView(map: map, viewpoint: viewpoint)
-            .onNavigatingChanged { isNavigating = $0 }
-            .onViewpointChanged(kind: .centerAndScale) { viewpoint = $0 }
-            // Preserve the current viewpoint when a keyboard is presented in landscape.
-            .ignoresSafeArea(.keyboard, edges: .bottom)
-            .overlay(alignment: floorFilterAlignment) {
-                if isMapLoaded,
-                   let floorManager = map.floorManager {
-                    FloorFilter(
-                        floorManager: floorManager,
-                        alignment: floorFilterAlignment,
-                        viewpoint: $viewpoint,
-                        isNavigating: $isNavigating
-                    )
-                    .selection($selectedItem)
-                    .frame(maxWidth: 400, maxHeight: 400)
-                    .padding(36)
-                } else if mapLoadError {
-                    Label(
-                        "Map load error!",
-                        systemImage: "exclamationmark.triangle"
-                    )
-                    .foregroundColor(.red)
-                    .frame(
-                        maxWidth: .infinity,
-                        maxHeight: .infinity,
-                        alignment: .center
-                    )
-                }
+        MapView(
+            map: dataModel.map,
+            viewpoint: viewpoint
+        )
+        .onNavigatingChanged {
+            isNavigating = $0
+        }
+        .onViewpointChanged(kind: .centerAndScale) {
+            viewpoint = $0
+        }
+        // Preserve the current viewpoint when a keyboard is presented in landscape.
+        .ignoresSafeArea(.keyboard, edges: .bottom)
+        .overlay(alignment: floorFilterAlignment) {
+            if isMapLoaded,
+               let floorManager = dataModel.map.floorManager {
+                FloorFilter(
+                    floorManager: floorManager,
+                    alignment: floorFilterAlignment,
+                    viewpoint: $viewpoint,
+                    isNavigating: $isNavigating
+                )
+                .selection($selectedItem)
+                .frame(
+                    maxWidth: 400,
+                    maxHeight: 400
+                )
+                .padding(36)
+            } else if mapLoadError {
+                Label(
+                    "Map load error!",
+                    systemImage: "exclamationmark.triangle"
+                )
+                .foregroundColor(.red)
+                .frame(
+                    maxWidth: .infinity,
+                    maxHeight: .infinity,
+                    alignment: .center
+                )
             }
-            .task {
-                do {
-                    try await map.load()
-                    isMapLoaded = true
-                } catch {
-                    mapLoadError = true
-                }
+        }
+        .task {
+            do {
+                try await dataModel.map.load()
+                isMapLoaded = true
+            } catch {
+                mapLoadError = true
             }
+        }
     }
 }
