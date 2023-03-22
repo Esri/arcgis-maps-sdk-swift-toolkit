@@ -46,13 +46,11 @@ struct FloorFilterExampleView: View {
     )
     
     /// The data model containing the `Map` displayed in the `MapView`.
-    @StateObject private var dataModel = MapDataModel(
-        map: makeMap()
-    )
+    @State private var map = makeMap()
     
     var body: some View {
         MapView(
-            map: dataModel.map,
+            map: map,
             viewpoint: viewpoint
         )
         .onNavigatingChanged {
@@ -65,7 +63,7 @@ struct FloorFilterExampleView: View {
         .ignoresSafeArea(.keyboard, edges: .bottom)
         .overlay(alignment: floorFilterAlignment) {
             if isMapLoaded,
-               let floorManager = dataModel.map.floorManager {
+               let floorManager = map.floorManager {
                 FloorFilter(
                     floorManager: floorManager,
                     alignment: floorFilterAlignment,
@@ -92,7 +90,7 @@ struct FloorFilterExampleView: View {
         }
         .task {
             do {
-                try await dataModel.map.load()
+                try await map.load()
                 isMapLoaded = true
             } catch {
                 mapLoadError = true
