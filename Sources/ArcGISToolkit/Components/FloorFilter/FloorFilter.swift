@@ -180,8 +180,8 @@ public struct FloorFilter: View {
             // Prevent a double-set if the view model triggered the original change.
             guard newValue != viewModel.selection else { return }
             switch newValue {
-            case .site(let site): viewModel.setSite(site)
-            case .facility(let facility): viewModel.setFacility(facility)
+            case .site(let site): viewModel.setSite(site, zoomTo: true)
+            case .facility(let facility): viewModel.setFacility(facility, zoomTo: true)
             case .level(let level): viewModel.setLevel(level)
             case .none: viewModel.clearSelection()
             }
