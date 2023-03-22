@@ -69,10 +69,7 @@ struct FloorFilterExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isNavigating: $isNavigating
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.selection($selectedItem)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***maxWidth: 400,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***maxHeight: 400
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: 400, maxHeight: 400)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(36)
 ***REMOVED******REMOVED******REMOVED*** else if mapLoadError {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Label(
