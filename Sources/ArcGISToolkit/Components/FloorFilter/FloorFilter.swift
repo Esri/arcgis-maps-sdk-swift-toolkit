@@ -50,6 +50,9 @@ public struct FloorFilter: View {
     /// The view model used by the `FloorFilter`.
     @StateObject private var viewModel: FloorFilterViewModel
     
+    /// A Boolean value that indicates whether the levels view is currently collapsed.
+    @State private var isLevelsViewCollapsed = false
+    
     /// A Boolean value that indicates whether the site and facility selector is presented.
     @State private var isSitesAndFacilitiesHidden = true
     
