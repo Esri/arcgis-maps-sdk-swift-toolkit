@@ -117,6 +117,11 @@ final class FloorFilterViewModel: ObservableObject {
     
     // MARK: Methods
     
+    /// Sets the current selection to `nil`.
+    func clearSelection() {
+        selection = nil
+    }
+    
     /// Allows model users to alert the model that the viewpoint has changed.
     func onViewpointChanged(_ viewpoint: Viewpoint?) {
         guard let viewpoint = viewpoint,
@@ -235,7 +240,7 @@ final class FloorFilterViewModel: ObservableObject {
         // If viewpoint is out of range, reset selection and return early.
         if viewpoint.wrappedValue?.targetScale ?? .zero > siteMinScale {
             if automaticSelectionMode == .always {
-                selection = nil
+                clearSelection()
             }
             return false
         }
@@ -252,7 +257,7 @@ final class FloorFilterViewModel: ObservableObject {
         if let siteResult {
             setSite(siteResult)
         } else if automaticSelectionMode == .always {
-            selection = nil
+            clearSelection()
         }
         return true
     }
