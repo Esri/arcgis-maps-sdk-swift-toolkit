@@ -95,18 +95,5 @@ struct FloorFilterExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***mapLoadError = true
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.onChange(of: selectedItem) { newValue in
-***REMOVED******REMOVED******REMOVED***print("The selection changed")
-***REMOVED******REMOVED******REMOVED***switch newValue {
-***REMOVED******REMOVED******REMOVED***case .none:
-***REMOVED******REMOVED******REMOVED******REMOVED***print("None")
-***REMOVED******REMOVED******REMOVED***case .site(let site):
-***REMOVED******REMOVED******REMOVED******REMOVED***print("Site:", site.name)
-***REMOVED******REMOVED******REMOVED***case .facility(let facility):
-***REMOVED******REMOVED******REMOVED******REMOVED***print("Facility:", facility.site?.name ?? "", facility.name)
-***REMOVED******REMOVED******REMOVED***case .level(let level):
-***REMOVED******REMOVED******REMOVED******REMOVED***print("Level:", level.facility?.site?.name ?? "", level.facility?.name ?? "", level.verticalOrder + 1)
-***REMOVED******REMOVED***
-***REMOVED***
 ***REMOVED***
 ***REMOVED***
