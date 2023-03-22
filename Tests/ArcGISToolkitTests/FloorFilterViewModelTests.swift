@@ -164,6 +164,12 @@ final class FloorFilterViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***XCTAssertEqual(viewModel.selectedSite, level.facility?.site)
 ***REMOVED******REMOVED***XCTAssertEqual(viewModel.selectedFacility, level.facility)
 ***REMOVED******REMOVED***XCTAssertEqual(viewModel.selectedLevel, level)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***viewModel.clearSelection()
+***REMOVED******REMOVED***XCTAssertEqual(viewModel.selection, nil)
+***REMOVED******REMOVED***XCTAssertEqual(viewModel.selectedSite, nil)
+***REMOVED******REMOVED***XCTAssertEqual(viewModel.selectedFacility, nil)
+***REMOVED******REMOVED***XCTAssertEqual(viewModel.selectedLevel, nil)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Confirms that the selection property indicates the correct facility (and therefore level) value.
