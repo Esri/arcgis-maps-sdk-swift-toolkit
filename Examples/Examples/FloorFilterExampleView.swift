@@ -55,45 +55,45 @@ struct FloorFilterExampleView: View {
     
     var body: some View {
         MapView(map: map, viewpoint: viewpoint)
-        .onNavigatingChanged { isNavigating = $0 }
-        .onViewpointChanged(kind: .centerAndScale) { viewpoint = $0 }
+            .onNavigatingChanged { isNavigating = $0 }
+            .onViewpointChanged(kind: .centerAndScale) { viewpoint = $0 }
         // Preserve the current viewpoint when a keyboard is presented in landscape.
-        .ignoresSafeArea(.keyboard, edges: .bottom)
-        .overlay(alignment: floorFilterAlignment) {
-            if isMapLoaded,
-               let floorManager = map.floorManager {
-                FloorFilter(
-                    floorManager: floorManager,
-                    alignment: floorFilterAlignment,
-                    viewpoint: $viewpoint,
-                    isNavigating: $isNavigating
-                )
-                .selection($selectedItem)
-                .frame(
-                    maxWidth: 400,
-                    maxHeight: 400
-                )
-                .padding(36)
-            } else if mapLoadError {
-                Label(
-                    "Map load error!",
-                    systemImage: "exclamationmark.triangle"
-                )
-                .foregroundColor(.red)
-                .frame(
-                    maxWidth: .infinity,
-                    maxHeight: .infinity,
-                    alignment: .center
-                )
+            .ignoresSafeArea(.keyboard, edges: .bottom)
+            .overlay(alignment: floorFilterAlignment) {
+                if isMapLoaded,
+                   let floorManager = map.floorManager {
+                    FloorFilter(
+                        floorManager: floorManager,
+                        alignment: floorFilterAlignment,
+                        viewpoint: $viewpoint,
+                        isNavigating: $isNavigating
+                    )
+                    .selection($selectedItem)
+                    .frame(
+                        maxWidth: 400,
+                        maxHeight: 400
+                    )
+                    .padding(36)
+                } else if mapLoadError {
+                    Label(
+                        "Map load error!",
+                        systemImage: "exclamationmark.triangle"
+                    )
+                    .foregroundColor(.red)
+                    .frame(
+                        maxWidth: .infinity,
+                        maxHeight: .infinity,
+                        alignment: .center
+                    )
+                }
             }
-        }
-        .task {
-            do {
-                try await map.load()
-                isMapLoaded = true
-            } catch {
-                mapLoadError = true
+            .task {
+                do {
+                    try await map.load()
+                    isMapLoaded = true
+                } catch {
+                    mapLoadError = true
+                }
             }
-        }
     }
 }
