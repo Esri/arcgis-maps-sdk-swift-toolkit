@@ -66,7 +66,7 @@ struct FloorFilterExampleView: View {
         .onViewpointChanged(kind: .centerAndScale) {
             viewpoint = $0
         }
-        /// Preserve the current viewpoint when a keyboard is presented in landscape.
+        // Preserve the current viewpoint when a keyboard is presented in landscape.
         .ignoresSafeArea(.keyboard, edges: .bottom)
         .overlay(alignment: floorFilterAlignment) {
             if isMapLoaded,
