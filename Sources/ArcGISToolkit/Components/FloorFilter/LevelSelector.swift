@@ -75,6 +75,7 @@ extension LevelSelector {
             Image(systemName: isTopAligned ? "chevron.up.circle" : "chevron.down.circle")
                 .padding(.toolkitDefault)
         }
+        .disabled(levels.count == 1)
     }
     
     /// A button for a level in the floor level list.
