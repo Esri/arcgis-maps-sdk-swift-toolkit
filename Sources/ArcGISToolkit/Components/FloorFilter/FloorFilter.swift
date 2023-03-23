@@ -183,8 +183,8 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Prevent a double-set if the view model triggered the original change.
 ***REMOVED******REMOVED******REMOVED***guard newValue != viewModel.selection else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***switch newValue {
-***REMOVED******REMOVED******REMOVED***case .site(let site): viewModel.setSite(site, zoomTo: true)
-***REMOVED******REMOVED******REMOVED***case .facility(let facility): viewModel.setFacility(facility, zoomTo: true)
+***REMOVED******REMOVED******REMOVED***case .site(let site): viewModel.setSite(site)
+***REMOVED******REMOVED******REMOVED***case .facility(let facility): viewModel.setFacility(facility)
 ***REMOVED******REMOVED******REMOVED***case .level(let level): viewModel.setLevel(level)
 ***REMOVED******REMOVED******REMOVED***case .none: viewModel.clearSelection()
 ***REMOVED******REMOVED***
