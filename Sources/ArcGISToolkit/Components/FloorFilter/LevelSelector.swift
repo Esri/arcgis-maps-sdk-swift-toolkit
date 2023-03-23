@@ -96,7 +96,7 @@ extension LevelSelector {
             .frame(maxWidth: .infinity)
             .background {
                 RoundedRectangle(cornerRadius: 5)
-                    .fill(viewModel.selectedLevel == level ? Color.accentColor : Color(uiColor: .secondarySystemBackground))
+                    .fill(buttonColorFor(level))
             }
             .onTapGesture {
                 viewModel.setLevel(level)
@@ -121,6 +121,17 @@ extension LevelSelector {
             .frame(maxHeight: contentHeight)
             .onAppear { scrollToSelectedLevel(with: proxy) }
             .onChange(of: isCollapsed) { _ in scrollToSelectedLevel(with: proxy) }
+        }
+    }
+    
+    /// Determines a appropriate color for a button in the floor level list.
+    /// - Parameter level: THe level represented by the button.
+    /// - Returns: The color for the button representing the provided level.
+    func buttonColorFor(_ level: FloorLevel) -> Color {
+        if viewModel.selectedLevel == level {
+            return Color.accentColor
+        } else {
+            return Color(uiColor: .secondarySystemBackground)
         }
     }
     
