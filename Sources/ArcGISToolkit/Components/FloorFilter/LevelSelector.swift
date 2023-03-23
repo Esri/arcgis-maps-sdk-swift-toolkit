@@ -90,22 +90,21 @@ extension LevelSelector {
     /// - Parameter level: The level represented by the button.
     /// - Returns: The button representing the provided level.
     @ViewBuilder func makeLevelButton(_ level: FloorLevel) -> some View {
-        Button(level.shortName) {
-            viewModel.setLevel(level)
-            if isCollapsed && levels.count > 1 {
-                isCollapsed.toggle()
+        Text(level.shortName)
+            .foregroundColor(.primary)
+            .padding([.vertical], 4)
+            .frame(maxWidth: .infinity)
+            .background {
+                RoundedRectangle(cornerRadius: 5)
+                    .fill(viewModel.selectedLevel == level ? Color.accentColor : Color(uiColor: .secondarySystemBackground))
+                
             }
-        }
-        .foregroundColor(.primary)
-        .padding([.vertical], 4)
-        .frame(maxWidth: .infinity)
-        .background(viewModel.selectedLevel == level ? Color.accentColor : .secondary)
-        .border(
-            viewModel.selectedLevel == level ? Color.accentColor : .secondary,
-            width: 2
-        )
-        .cornerRadius(5)
-        .contentShape(Rectangle())
+            .onTapGesture {
+                viewModel.setLevel(level)
+                if isCollapsed && levels.count > 1 {
+                    isCollapsed.toggle()
+                }
+            }
     }
     
     /// A scrollable list of buttons; one for each level to be displayed.
