@@ -64,6 +64,14 @@ extension LevelSelector {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***/ The system name of the icon that reflects the current state of `isCollapsed`.
+***REMOVED***var iconForCollapsedState: String {
+***REMOVED******REMOVED***switch (isCollapsed, isTopAligned) {
+***REMOVED******REMOVED***case (true, true), (false, false): return "chevron.down.circle"
+***REMOVED******REMOVED***case (true, false), (false, true): return "chevron.up.circle"
+***REMOVED***
+***REMOVED***
+***REMOVED***
 ***REMOVED******REMOVED***/ A button used to collapse the floor level list.
 ***REMOVED******REMOVED***/ - Returns: The button used to collapse and expand the selector.
 ***REMOVED***@ViewBuilder func makeCollapseButton() -> some View {
@@ -72,7 +80,7 @@ extension LevelSelector {
 ***REMOVED******REMOVED******REMOVED******REMOVED***isCollapsed.toggle()
 ***REMOVED******REMOVED***
 ***REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED***Image(systemName: isTopAligned ? "chevron.up.circle" : "chevron.down.circle")
+***REMOVED******REMOVED******REMOVED***Image(systemName: iconForCollapsedState)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding(.toolkitDefault)
 ***REMOVED***
 ***REMOVED******REMOVED***.disabled(levels.count == 1)
