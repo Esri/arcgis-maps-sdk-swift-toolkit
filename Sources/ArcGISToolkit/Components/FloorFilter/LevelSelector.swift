@@ -96,16 +96,16 @@ extension LevelSelector {
 ***REMOVED******REMOVED******REMOVED******REMOVED***isCollapsed.toggle()
 ***REMOVED******REMOVED***
 ***REMOVED***
+***REMOVED******REMOVED***.foregroundColor(.primary)
 ***REMOVED******REMOVED***.padding([.vertical], 4)
 ***REMOVED******REMOVED***.frame(maxWidth: .infinity)
-***REMOVED******REMOVED***.contentShape(Rectangle())
-***REMOVED******REMOVED***.background(
-***REMOVED******REMOVED******REMOVED***viewModel.selectedLevel == level ?
-***REMOVED******REMOVED******REMOVED***Color(uiColor: .secondarySystemBackground) :
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.clear
+***REMOVED******REMOVED***.background(viewModel.selectedLevel == level ? Color.accentColor : .secondary)
+***REMOVED******REMOVED***.border(
+***REMOVED******REMOVED******REMOVED***viewModel.selectedLevel == level ? Color.accentColor : .secondary,
+***REMOVED******REMOVED******REMOVED***width: 2
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED***.border(Color(uiColor: .secondarySystemBackground), width: 2)
 ***REMOVED******REMOVED***.cornerRadius(5)
+***REMOVED******REMOVED***.contentShape(Rectangle())
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ A scrollable list of buttons; one for each level to be displayed.
