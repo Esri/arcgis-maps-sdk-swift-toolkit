@@ -75,6 +75,7 @@ extension LevelSelector {
 ***REMOVED******REMOVED******REMOVED***Image(systemName: isTopAligned ? "chevron.up.circle" : "chevron.down.circle")
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding(.toolkitDefault)
 ***REMOVED***
+***REMOVED******REMOVED***.disabled(levels.count == 1)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ A button for a level in the floor level list.
