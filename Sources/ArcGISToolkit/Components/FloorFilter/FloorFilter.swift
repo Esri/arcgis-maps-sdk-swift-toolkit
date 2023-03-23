@@ -28,12 +28,14 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED***/   - automaticSelectionMode: The selection behavior of the floor filter.
 ***REMOVED******REMOVED***/   - viewpoint: Viewpoint updated when the selected site or facility changes.
 ***REMOVED******REMOVED***/   - isNavigating: A Boolean value indicating whether the map is currently being navigated.
+***REMOVED******REMOVED***/   - selection: The selected site, facility, or level.
 ***REMOVED***public init(
 ***REMOVED******REMOVED***floorManager: FloorManager,
 ***REMOVED******REMOVED***alignment: Alignment,
 ***REMOVED******REMOVED***automaticSelectionMode: FloorFilterAutomaticSelectionMode = .always,
 ***REMOVED******REMOVED***viewpoint: Binding<Viewpoint?> = .constant(nil),
-***REMOVED******REMOVED***isNavigating: Binding<Bool>
+***REMOVED******REMOVED***isNavigating: Binding<Bool>,
+***REMOVED******REMOVED***selection: Binding<FloorFilterSelection?>? = nil
 ***REMOVED***) {
 ***REMOVED******REMOVED***_viewModel = StateObject(
 ***REMOVED******REMOVED******REMOVED***wrappedValue: FloorFilterViewModel(
@@ -45,6 +47,7 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED***self.alignment = alignment
 ***REMOVED******REMOVED***self.isNavigating = isNavigating
 ***REMOVED******REMOVED***self.viewpoint = viewpoint
+***REMOVED******REMOVED***self.selection = selection
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The view model used by the `FloorFilter`.
@@ -193,23 +196,12 @@ public struct FloorFilter: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-
-public extension FloorFilter {
 ***REMOVED******REMOVED***/ The width of the level selector.
 ***REMOVED******REMOVED***/ - Parameter width: The new width for the level selector.
 ***REMOVED******REMOVED***/ - Returns: The `FloorFilter`.
 ***REMOVED***func levelSelectorWidth(_ width: CGFloat) -> Self {
 ***REMOVED******REMOVED***var copy = self
 ***REMOVED******REMOVED***copy.levelSelectorWidth = width
-***REMOVED******REMOVED***return copy
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ The currently selected site, facility, or level.
-***REMOVED******REMOVED***/ - Parameter selection: The selection.
-***REMOVED******REMOVED***/ - Returns: The `FloorFilter`.
-***REMOVED***func selection(_ selection: Binding<FloorFilterSelection?>) -> Self {
-***REMOVED******REMOVED***var copy = self
-***REMOVED******REMOVED***copy.selection = selection
 ***REMOVED******REMOVED***return copy
 ***REMOVED***
 ***REMOVED***
