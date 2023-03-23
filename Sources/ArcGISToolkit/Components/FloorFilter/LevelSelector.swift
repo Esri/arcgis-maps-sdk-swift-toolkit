@@ -96,7 +96,7 @@ extension LevelSelector {
 ***REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity)
 ***REMOVED******REMOVED******REMOVED***.background {
 ***REMOVED******REMOVED******REMOVED******REMOVED***RoundedRectangle(cornerRadius: 5)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fill(viewModel.selectedLevel == level ? Color.accentColor : Color(uiColor: .secondarySystemBackground))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fill(buttonColorFor(level))
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onTapGesture {
 ***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.setLevel(level)
@@ -121,6 +121,17 @@ extension LevelSelector {
 ***REMOVED******REMOVED******REMOVED***.frame(maxHeight: contentHeight)
 ***REMOVED******REMOVED******REMOVED***.onAppear { scrollToSelectedLevel(with: proxy) ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onChange(of: isCollapsed) { _ in scrollToSelectedLevel(with: proxy) ***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Determines a appropriate color for a button in the floor level list.
+***REMOVED******REMOVED***/ - Parameter level: THe level represented by the button.
+***REMOVED******REMOVED***/ - Returns: The color for the button representing the provided level.
+***REMOVED***func buttonColorFor(_ level: FloorLevel) -> Color {
+***REMOVED******REMOVED***if viewModel.selectedLevel == level {
+***REMOVED******REMOVED******REMOVED***return Color.accentColor
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***return Color(uiColor: .secondarySystemBackground)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
