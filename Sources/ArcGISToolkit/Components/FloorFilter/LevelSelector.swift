@@ -97,7 +97,6 @@ extension LevelSelector {
 ***REMOVED******REMOVED******REMOVED***.background {
 ***REMOVED******REMOVED******REMOVED******REMOVED***RoundedRectangle(cornerRadius: 5)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fill(viewModel.selectedLevel == level ? Color.accentColor : Color(uiColor: .secondarySystemBackground))
-***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onTapGesture {
 ***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.setLevel(level)
