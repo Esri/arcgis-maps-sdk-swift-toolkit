@@ -28,12 +28,14 @@ public struct FloorFilter: View {
     ///   - automaticSelectionMode: The selection behavior of the floor filter.
     ///   - viewpoint: Viewpoint updated when the selected site or facility changes.
     ///   - isNavigating: A Boolean value indicating whether the map is currently being navigated.
+    ///   - selection: The selected site, facility, or level.
     public init(
         floorManager: FloorManager,
         alignment: Alignment,
         automaticSelectionMode: FloorFilterAutomaticSelectionMode = .always,
         viewpoint: Binding<Viewpoint?> = .constant(nil),
-        isNavigating: Binding<Bool>
+        isNavigating: Binding<Bool>,
+        selection: Binding<FloorFilterSelection?>? = nil
     ) {
         _viewModel = StateObject(
             wrappedValue: FloorFilterViewModel(
@@ -45,6 +47,7 @@ public struct FloorFilter: View {
         self.alignment = alignment
         self.isNavigating = isNavigating
         self.viewpoint = viewpoint
+        self.selection = selection
     }
     
     /// The view model used by the `FloorFilter`.
@@ -192,24 +195,13 @@ public struct FloorFilter: View {
             selection?.wrappedValue = newValue
         }
     }
-}
-
-public extension FloorFilter {
+    
     /// The width of the level selector.
     /// - Parameter width: The new width for the level selector.
     /// - Returns: The `FloorFilter`.
     func levelSelectorWidth(_ width: CGFloat) -> Self {
         var copy = self
         copy.levelSelectorWidth = width
-        return copy
-    }
-    
-    /// The currently selected site, facility, or level.
-    /// - Parameter selection: The selection.
-    /// - Returns: The `FloorFilter`.
-    func selection(_ selection: Binding<FloorFilterSelection?>) -> Self {
-        var copy = self
-        copy.selection = selection
         return copy
     }
 }
