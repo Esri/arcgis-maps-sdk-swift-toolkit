@@ -60,7 +60,7 @@ public struct FloorFilter: View {
     private let alignment: Alignment
     
     /// The width of the level selector.
-    private let filterWidth: CGFloat = 60
+    private var levelSelectorWidth: CGFloat = 60
     
     /// The `Viewpoint` used to pan/zoom to the selected site/facility.
     /// If `nil`, there will be no automatic pan/zoom operations or automatic selection support.
@@ -100,7 +100,7 @@ public struct FloorFilter: View {
                 sitesAndFacilitiesButton
             }
         }
-        .frame(width: filterWidth)
+        .frame(width: levelSelectorWidth)
         .esriBorder()
         .frame(
             maxWidth: horizontalSizeClass == .compact ? .infinity : nil,
@@ -192,11 +192,22 @@ public struct FloorFilter: View {
             selection?.wrappedValue = newValue
         }
     }
+}
+
+public extension FloorFilter {
+    /// The width of the level selector.
+    /// - Parameter width: The new width for the level selector.
+    /// - Returns: The `FloorFilter`.
+    func levelSelectorWidth(_ width: CGFloat) -> Self {
+        var copy = self
+        copy.levelSelectorWidth = width
+        return copy
+    }
     
     /// The currently selected site, facility, or level.
     /// - Parameter selection: The selection.
     /// - Returns: The `FloorFilter`.
-    public func selection(_ selection: Binding<FloorFilterSelection?>) -> Self {
+    func selection(_ selection: Binding<FloorFilterSelection?>) -> Self {
         var copy = self
         copy.selection = selection
         return copy
