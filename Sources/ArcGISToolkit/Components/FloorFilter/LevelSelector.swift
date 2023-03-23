@@ -97,7 +97,6 @@ extension LevelSelector {
             .background {
                 RoundedRectangle(cornerRadius: 5)
                     .fill(viewModel.selectedLevel == level ? Color.accentColor : Color(uiColor: .secondarySystemBackground))
-                
             }
             .onTapGesture {
                 viewModel.setLevel(level)
