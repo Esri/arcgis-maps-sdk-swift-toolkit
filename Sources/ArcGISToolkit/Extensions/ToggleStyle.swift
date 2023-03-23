@@ -47,7 +47,7 @@ struct SelectedButtonStyle: ToggleStyle {
 }
 
 extension ToggleStyle where Self == SelectableButtonStyle {
-    /// Appears as a selected or deselected button despending on the toggle's current state.
+    /// Appears as a selected or deselected button depending on the toggle's current state.
     static var selectableButton: SelectableButtonStyle { .init() }
 }
 
