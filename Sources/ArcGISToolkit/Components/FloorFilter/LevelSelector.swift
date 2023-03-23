@@ -131,7 +131,7 @@ extension LevelSelector {
 ***REMOVED******REMOVED***if viewModel.selectedLevel == level {
 ***REMOVED******REMOVED******REMOVED***return Color.accentColor
 ***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***return Color(uiColor: .secondarySystemBackground)
+***REMOVED******REMOVED******REMOVED***return Color.secondary.opacity(0.5)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
