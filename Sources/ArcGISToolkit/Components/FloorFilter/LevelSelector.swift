@@ -131,7 +131,7 @@ extension LevelSelector {
         if viewModel.selectedLevel == level {
             return Color.accentColor
         } else {
-            return Color(uiColor: .secondarySystemBackground)
+            return Color.secondary.opacity(0.5)
         }
     }
     
