@@ -90,22 +90,21 @@ extension LevelSelector {
 ***REMOVED******REMOVED***/ - Parameter level: The level represented by the button.
 ***REMOVED******REMOVED***/ - Returns: The button representing the provided level.
 ***REMOVED***@ViewBuilder func makeLevelButton(_ level: FloorLevel) -> some View {
-***REMOVED******REMOVED***Button(level.shortName) {
-***REMOVED******REMOVED******REMOVED***viewModel.setLevel(level)
-***REMOVED******REMOVED******REMOVED***if isCollapsed && levels.count > 1 {
-***REMOVED******REMOVED******REMOVED******REMOVED***isCollapsed.toggle()
+***REMOVED******REMOVED***Text(level.shortName)
+***REMOVED******REMOVED******REMOVED***.foregroundColor(.primary)
+***REMOVED******REMOVED******REMOVED***.padding([.vertical], 4)
+***REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity)
+***REMOVED******REMOVED******REMOVED***.background {
+***REMOVED******REMOVED******REMOVED******REMOVED***RoundedRectangle(cornerRadius: 5)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.fill(viewModel.selectedLevel == level ? Color.accentColor : Color(uiColor: .secondarySystemBackground))
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***.foregroundColor(.primary)
-***REMOVED******REMOVED***.padding([.vertical], 4)
-***REMOVED******REMOVED***.frame(maxWidth: .infinity)
-***REMOVED******REMOVED***.background(viewModel.selectedLevel == level ? Color.accentColor : .secondary)
-***REMOVED******REMOVED***.border(
-***REMOVED******REMOVED******REMOVED***viewModel.selectedLevel == level ? Color.accentColor : .secondary,
-***REMOVED******REMOVED******REMOVED***width: 2
-***REMOVED******REMOVED***)
-***REMOVED******REMOVED***.cornerRadius(5)
-***REMOVED******REMOVED***.contentShape(Rectangle())
+***REMOVED******REMOVED******REMOVED***.onTapGesture {
+***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.setLevel(level)
+***REMOVED******REMOVED******REMOVED******REMOVED***if isCollapsed && levels.count > 1 {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isCollapsed.toggle()
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ A scrollable list of buttons; one for each level to be displayed.
