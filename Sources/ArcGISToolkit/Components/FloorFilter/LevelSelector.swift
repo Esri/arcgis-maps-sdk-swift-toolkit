@@ -96,16 +96,16 @@ extension LevelSelector {
                 isCollapsed.toggle()
             }
         }
+        .foregroundColor(.primary)
         .padding([.vertical], 4)
         .frame(maxWidth: .infinity)
-        .contentShape(Rectangle())
-        .background(
-            viewModel.selectedLevel == level ?
-            Color(uiColor: .secondarySystemBackground) :
-                    .clear
+        .background(viewModel.selectedLevel == level ? Color.accentColor : .secondary)
+        .border(
+            viewModel.selectedLevel == level ? Color.accentColor : .secondary,
+            width: 2
         )
-        .border(Color(uiColor: .secondarySystemBackground), width: 2)
         .cornerRadius(5)
+        .contentShape(Rectangle())
     }
     
     /// A scrollable list of buttons; one for each level to be displayed.
