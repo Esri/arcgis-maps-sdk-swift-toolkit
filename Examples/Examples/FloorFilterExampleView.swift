@@ -45,11 +45,6 @@ struct FloorFilterExampleView: View {
         scale: 100_000
     )
     
-    /// The filter's current selection. This may be a site, facility, or level.
-    ///
-    /// Optionally monitor or update the filter's selection.
-    @State private var selectedItem: FloorFilterSelection?
-    
     /// The data model containing the `Map` displayed in the `MapView`.
     @StateObject private var dataModel = MapDataModel(
         map: makeMap()
@@ -77,7 +72,6 @@ struct FloorFilterExampleView: View {
                     viewpoint: $viewpoint,
                     isNavigating: $isNavigating
                 )
-                .selection($selectedItem)
                 .frame(
                     maxWidth: 400,
                     maxHeight: 400
