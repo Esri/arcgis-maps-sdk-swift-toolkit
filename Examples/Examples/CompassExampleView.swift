@@ -155,9 +155,9 @@ struct SceneWithCameraController: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ The orbit location camera controller used by the scene view.
 ***REMOVED***private let cameraController = OrbitLocationCameraController(
-***REMOVED******REMOVED***targetPoint: .esriRedlands,
+***REMOVED******REMOVED***target: .esriRedlands,
 ***REMOVED******REMOVED***distance: 10_000
-***REMOVED***)!
+***REMOVED***)
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***SceneView(scene: dataModel.scene, cameraController: cameraController)
