@@ -139,7 +139,7 @@ struct SiteAndFacilitySelector: View {
                     tag: site,
                     selection: Binding(
                         get: {
-                            userBackedOutOfSelectedSite ? nil : viewModel.selectedSite
+                            userBackedOutOfSelectedSite ? nil : viewModel.selection?.site
                         },
                         set: { newSite in
                             guard let newSite = newSite else { return }
@@ -225,7 +225,7 @@ struct SiteAndFacilitySelector: View {
             .keyboardType(.alphabet)
             .disableAutocorrection(true)
             .navigationTitle(
-                usesAllSitesStyling ? "All Sites" : viewModel.selectedSite?.name ?? "Select a facility"
+                usesAllSitesStyling ? "All Sites" : viewModel.selection?.site?.name ?? "Select a facility"
             )
         }
         
@@ -256,7 +256,7 @@ struct SiteAndFacilitySelector: View {
                         }
                     }
                     .contentShape(Rectangle())
-                    .listRowBackground(facility.id == viewModel.selectedFacility?.id ? Color.secondary.opacity(0.5) : Color.clear)
+                    .listRowBackground(facility.id == viewModel.selection?.facility?.id ? Color.secondary.opacity(0.5) : Color.clear)
                     .onTapGesture {
                         viewModel.setFacility(facility, zoomTo: true)
                         if horizontalSizeClass == .compact {
@@ -266,7 +266,7 @@ struct SiteAndFacilitySelector: View {
                 }
                 .listStyle(.plain)
                 .onChange(of: viewModel.selection) { _ in
-                    if let floorFacility = viewModel.selectedFacility {
+                    if let floorFacility = viewModel.selection?.facility {
                         withAnimation {
                             proxy.scrollTo(
                                 floorFacility.id
