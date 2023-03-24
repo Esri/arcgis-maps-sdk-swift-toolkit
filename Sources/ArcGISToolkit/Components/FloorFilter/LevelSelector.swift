@@ -56,7 +56,7 @@ extension LevelSelector {
         if !isCollapsed, levels.count > 1 {
             return levels
         } else {
-            if let selectedLevel = viewModel.selectedLevel {
+            if let selectedLevel = viewModel.selection?.level {
                 return [selectedLevel]
             } else {
                 return []
@@ -128,7 +128,7 @@ extension LevelSelector {
     /// - Parameter level: THe level represented by the button.
     /// - Returns: The color for the button representing the provided level.
     func buttonColorFor(_ level: FloorLevel) -> Color {
-        if viewModel.selectedLevel == level {
+        if viewModel.selection?.level == level {
             return Color.accentColor
         } else {
             return Color.secondary.opacity(0.5)
@@ -138,7 +138,7 @@ extension LevelSelector {
     /// Scrolls the list within the provided proxy to the button representing the selected level.
     /// - Parameter proxy: The proxy containing the scroll view.
     func scrollToSelectedLevel(with proxy: ScrollViewProxy) {
-        if let level = viewModel.selectedLevel {
+        if let level = viewModel.selection?.level {
             withAnimation {
                 proxy.scrollTo(level.id)
             }
