@@ -116,7 +116,7 @@ final class FloorFilterViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED******REMOVED***/ The floor manager sites.
 ***REMOVED***var sites: [FloorSite] {
-***REMOVED******REMOVED***floorManager.sites
+***REMOVED******REMOVED***floorManager.sites.sorted { $0.name <  $1.name ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The selected facility's levels, sorted by `level.verticalOrder`.
@@ -191,7 +191,7 @@ final class FloorFilterViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED******REMOVED*** MARK: Private items
 ***REMOVED***
-***REMOVED******REMOVED***/ The `Viewpoint` used to pan/zoom to the selected site/facilty.
+***REMOVED******REMOVED***/ The `Viewpoint` used to pan/zoom to the selected site/facility.
 ***REMOVED******REMOVED***/ If `nil`, there will be no automatic pan/zoom operations.
 ***REMOVED***private var viewpoint: Binding<Viewpoint?>
 ***REMOVED***
@@ -251,7 +251,7 @@ final class FloorFilterViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** If the centerpoint is within a site's geometry, select that site.
-***REMOVED******REMOVED***let siteResult = floorManager.sites.first { site in
+***REMOVED******REMOVED***let siteResult = sites.first { site in
 ***REMOVED******REMOVED******REMOVED***guard let extent1 = viewpoint.wrappedValue?.targetGeometry.extent,
 ***REMOVED******REMOVED******REMOVED******REMOVED***  let extent2 = site.geometry?.extent else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***return false
@@ -259,7 +259,7 @@ final class FloorFilterViewModel: ObservableObject {
 ***REMOVED******REMOVED******REMOVED***return GeometryEngine.isGeometry(extent1, intersecting: extent2)
 ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***if let siteResult = siteResult {
+***REMOVED******REMOVED***if let siteResult {
 ***REMOVED******REMOVED******REMOVED***setSite(siteResult)
 ***REMOVED*** else if automaticSelectionMode == .always {
 ***REMOVED******REMOVED******REMOVED***selection = nil
@@ -306,7 +306,7 @@ final class FloorFilterViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***let builder = EnvelopeBuilder(envelope: extent)
-***REMOVED******REMOVED***builder.expand(factor: 1.5)
+***REMOVED******REMOVED***builder.expand(by: 1.5)
 ***REMOVED******REMOVED***let targetExtent = builder.toGeometry()
 ***REMOVED******REMOVED***if !targetExtent.isEmpty {
 ***REMOVED******REMOVED******REMOVED***viewpoint.wrappedValue = Viewpoint(
