@@ -17,10 +17,7 @@ import ArcGISToolkit
 import CryptoKit
 
 /// A view that allows the user to sign in to a portal.
-struct SignInView: View {
-    /// The authenticator which has been passed from the app through the environment.
-    @EnvironmentObject var authenticator: Authenticator
-    
+struct SignInView: View {    
     /// The error that occurred during an attempt to sign in.
     @State var error: Error?
     

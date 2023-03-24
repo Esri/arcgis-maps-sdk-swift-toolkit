@@ -132,7 +132,7 @@ public struct UtilityNetworkTrace: View {
     /// Displays information about a chosen asset group.
     @ViewBuilder private var assetGroupDetail: some View {
         if let assetGroupName = selectedAssetGroupName,
-           let assetTypeGroups = viewModel.selectedTrace?.elementsByTypeInGroup(named: assetGroupName) {
+           let assetTypeGroups = viewModel.selectedTrace?.elementsByType(inGroupNamed: assetGroupName) {
             makeBackButton(title: featureResultsTitle) {
                 currentActivity = .viewingTraces(.viewingFeatureResults)
             }
@@ -351,7 +351,7 @@ public struct UtilityNetworkTrace: View {
                                 HStack {
                                     Text(assetGroupName)
                                     Spacer()
-                                    Text(selectedTrace.elementsInAssetGroup(named: assetGroupName).count, format: .number)
+                                    Text(selectedTrace.elements(inAssetGroupNamed: assetGroupName).count, format: .number)
                                 }
                                 .foregroundColor(.blue)
                                 .contentShape(Rectangle())
