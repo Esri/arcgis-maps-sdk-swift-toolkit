@@ -32,12 +32,14 @@ The ArcGIS Maps SDK currently supports filtering a 2D floor aware map based on t
     ///   - automaticSelectionMode: The selection behavior of the floor filter.
     ///   - viewpoint: Viewpoint updated when the selected site or facility changes.
     ///   - isNavigating: A Boolean value indicating whether the map is currently being navigated.
+    ///   - selection: The selected site, facility, or level.
     public init(
         floorManager: FloorManager,
         alignment: Alignment,
         automaticSelectionMode: FloorFilterAutomaticSelectionMode = .always,
         viewpoint: Binding<Viewpoint?> = .constant(nil),
-        isNavigating: Binding<Bool>
+        isNavigating: Binding<Bool>,
+        selection: Binding<FloorFilterSelection?>? = nil
     )
 ```
 
@@ -54,6 +56,16 @@ public enum FloorFilterAutomaticSelectionMode {
     case alwaysNotClearing
     /// Never update selection based on the map or scene view's current viewpoint.
     case never
+}
+
+///  A selected site, facility, or level.
+public enum FloorFilterSelection: Hashable {
+    /// A selected site.
+    case site(FloorSite)
+    /// A selected facility.
+    case facility(FloorFacility)
+    /// A selected level.
+    case level(FloorLevel)
 }
 ```
 
