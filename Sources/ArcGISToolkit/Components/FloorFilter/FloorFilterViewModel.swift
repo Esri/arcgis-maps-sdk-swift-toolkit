@@ -61,47 +61,12 @@ final class FloorFilterViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ A Boolean value that indicates whether there are levels to display. This will be `false` if
 ***REMOVED******REMOVED***/ there is no selected facility or if the selected facility has no levels.
 ***REMOVED***var hasLevelsToDisplay: Bool {
-***REMOVED******REMOVED***!(selectedFacility?.levels.isEmpty ?? true)
+***REMOVED******REMOVED***!(selection?.facility?.levels.isEmpty ?? true)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The floor manager levels.
 ***REMOVED***var levels: [FloorLevel] {
 ***REMOVED******REMOVED***floorManager.levels
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ The selected site.
-***REMOVED***var selectedSite: FloorSite? {
-***REMOVED******REMOVED***switch selection {
-***REMOVED******REMOVED***case .site(let site):
-***REMOVED******REMOVED******REMOVED***return site
-***REMOVED******REMOVED***case .facility(let facility):
-***REMOVED******REMOVED******REMOVED***return facility.site
-***REMOVED******REMOVED***case .level(let level):
-***REMOVED******REMOVED******REMOVED***return level.facility?.site
-***REMOVED******REMOVED***default:
-***REMOVED******REMOVED******REMOVED***return nil
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ The selected facility.
-***REMOVED***var selectedFacility: FloorFacility? {
-***REMOVED******REMOVED***switch selection {
-***REMOVED******REMOVED***case .facility(let facility):
-***REMOVED******REMOVED******REMOVED***return facility
-***REMOVED******REMOVED***case .level(let level):
-***REMOVED******REMOVED******REMOVED***return level.facility
-***REMOVED******REMOVED***default:
-***REMOVED******REMOVED******REMOVED***return nil
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ The selected level.
-***REMOVED***var selectedLevel: FloorLevel? {
-***REMOVED******REMOVED***if case let .level(level) = selection {
-***REMOVED******REMOVED******REMOVED***return level
-***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***return nil
-***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The floor manager sites.
@@ -111,7 +76,7 @@ final class FloorFilterViewModel: ObservableObject {
 ***REMOVED***
 ***REMOVED******REMOVED***/ The selected facility's levels, sorted by `level.verticalOrder`.
 ***REMOVED***var sortedLevels: [FloorLevel] {
-***REMOVED******REMOVED***selectedFacility?.levels
+***REMOVED******REMOVED***selection?.facility?.levels
 ***REMOVED******REMOVED******REMOVED***.sorted(by: { $0.verticalOrder > $1.verticalOrder ***REMOVED***) ?? []
 ***REMOVED***
 ***REMOVED***
@@ -136,7 +101,7 @@ final class FloorFilterViewModel: ObservableObject {
 ***REMOVED******REMOVED***/   - newFacility: The new facility to be selected.
 ***REMOVED******REMOVED***/   - zoomTo: If `true`, changes the viewpoint to the extent of the new facility.
 ***REMOVED***func setFacility(_ newFacility: FloorFacility, zoomTo: Bool = false) {
-***REMOVED******REMOVED***if let oldLevel = selectedLevel,
+***REMOVED******REMOVED***if let oldLevel = selection?.level,
 ***REMOVED******REMOVED***   let newLevel = newFacility.levels.first(
 ***REMOVED******REMOVED******REMOVED***where: { $0.verticalOrder == oldLevel.verticalOrder ***REMOVED***
 ***REMOVED******REMOVED***   ) {
@@ -265,7 +230,7 @@ final class FloorFilterViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ Sets the visibility of all the levels on the map based on the vertical order of the current
 ***REMOVED******REMOVED***/ selected level.
 ***REMOVED***private func filterMapToSelectedLevel() {
-***REMOVED******REMOVED***if let selectedLevel = selectedLevel {
+***REMOVED******REMOVED***if let selectedLevel = selection?.level {
 ***REMOVED******REMOVED******REMOVED***levels.forEach {
 ***REMOVED******REMOVED******REMOVED******REMOVED***$0.isVisible = $0.verticalOrder == selectedLevel.verticalOrder
 ***REMOVED******REMOVED***

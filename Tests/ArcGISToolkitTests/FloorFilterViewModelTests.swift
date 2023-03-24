@@ -34,20 +34,20 @@ final class FloorFilterViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Viewpoint is Los Angeles, selection should be nil
-***REMOVED******REMOVED***XCTAssertNil(viewModel.selectedFacility)
-***REMOVED******REMOVED***XCTAssertNil(viewModel.selectedSite)
+***REMOVED******REMOVED***XCTAssertNil(viewModel.selection?.facility)
+***REMOVED******REMOVED***XCTAssertNil(viewModel.selection?.site)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Viewpoint is Research Annex Lattice
 ***REMOVED******REMOVED***_viewpoint = .researchAnnexLattice
 ***REMOVED******REMOVED***viewModel.automaticallySelectFacilityOrSite()
-***REMOVED******REMOVED***XCTAssertEqual(viewModel.selectedSite?.name, "Research Annex")
-***REMOVED******REMOVED***XCTAssertEqual(viewModel.selectedFacility?.name, "Lattice")
+***REMOVED******REMOVED***XCTAssertEqual(viewModel.selection?.site?.name, "Research Annex")
+***REMOVED******REMOVED***XCTAssertEqual(viewModel.selection?.facility?.name, "Lattice")
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Viewpoint is Los Angeles, selection should be nil
 ***REMOVED******REMOVED***_viewpoint = .losAngeles
 ***REMOVED******REMOVED***viewModel.automaticallySelectFacilityOrSite()
-***REMOVED******REMOVED***XCTAssertNil(viewModel.selectedSite)
-***REMOVED******REMOVED***XCTAssertNil(viewModel.selectedFacility)
+***REMOVED******REMOVED***XCTAssertNil(viewModel.selection?.site)
+***REMOVED******REMOVED***XCTAssertNil(viewModel.selection?.facility)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Confirms that the selected site/facility/level properties and the viewpoint are correctly updated.
@@ -67,14 +67,14 @@ final class FloorFilterViewModelTests: XCTestCase {
 ***REMOVED******REMOVED******REMOVED*** Viewpoint is Research Annex Lattice
 ***REMOVED******REMOVED***_viewpoint = .researchAnnexLattice
 ***REMOVED******REMOVED***viewModel.automaticallySelectFacilityOrSite()
-***REMOVED******REMOVED***XCTAssertEqual(viewModel.selectedSite?.name, "Research Annex")
-***REMOVED******REMOVED***XCTAssertEqual(viewModel.selectedFacility?.name, "Lattice")
+***REMOVED******REMOVED***XCTAssertEqual(viewModel.selection?.site?.name, "Research Annex")
+***REMOVED******REMOVED***XCTAssertEqual(viewModel.selection?.facility?.name, "Lattice")
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Viewpoint is Los Angeles, but selection should remain Research Annex Lattice
 ***REMOVED******REMOVED***_viewpoint = .losAngeles
 ***REMOVED******REMOVED***viewModel.automaticallySelectFacilityOrSite()
-***REMOVED******REMOVED***XCTAssertEqual(viewModel.selectedSite?.name, "Research Annex")
-***REMOVED******REMOVED***XCTAssertEqual(viewModel.selectedFacility?.name, "Lattice")
+***REMOVED******REMOVED***XCTAssertEqual(viewModel.selection?.site?.name, "Research Annex")
+***REMOVED******REMOVED***XCTAssertEqual(viewModel.selection?.facility?.name, "Lattice")
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Confirms that the selected site/facility/level properties and the viewpoint are correctly updated.
@@ -92,14 +92,14 @@ final class FloorFilterViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Viewpoint is Los Angeles, selection should be nil
-***REMOVED******REMOVED***XCTAssertNil(viewModel.selectedFacility)
-***REMOVED******REMOVED***XCTAssertNil(viewModel.selectedSite)
+***REMOVED******REMOVED***XCTAssertNil(viewModel.selection?.facility)
+***REMOVED******REMOVED***XCTAssertNil(viewModel.selection?.site)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED*** Viewpoint is Research Annex Lattice but selection should remain nil
 ***REMOVED******REMOVED***_viewpoint = .researchAnnexLattice
 ***REMOVED******REMOVED***viewModel.automaticallySelectFacilityOrSite()
-***REMOVED******REMOVED***XCTAssertNil(viewModel.selectedFacility)
-***REMOVED******REMOVED***XCTAssertNil(viewModel.selectedSite)
+***REMOVED******REMOVED***XCTAssertNil(viewModel.selection?.facility)
+***REMOVED******REMOVED***XCTAssertNil(viewModel.selection?.site)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Tests that a `FloorFilterViewModel` successfully initializes.
@@ -151,25 +151,25 @@ final class FloorFilterViewModelTests: XCTestCase {
 ***REMOVED******REMOVED***let level = try XCTUnwrap(viewModel.levels.first)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***viewModel.setSite(site, zoomTo: true)
-***REMOVED******REMOVED***XCTAssertEqual(viewModel.selectedSite, site)
-***REMOVED******REMOVED***XCTAssertNil(viewModel.selectedFacility)
-***REMOVED******REMOVED***XCTAssertNil(viewModel.selectedLevel)
+***REMOVED******REMOVED***XCTAssertEqual(viewModel.selection?.site, site)
+***REMOVED******REMOVED***XCTAssertNil(viewModel.selection?.facility)
+***REMOVED******REMOVED***XCTAssertNil(viewModel.selection?.level)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***viewModel.setFacility(facility, zoomTo: true)
-***REMOVED******REMOVED***XCTAssertEqual(viewModel.selectedSite, facility.site)
-***REMOVED******REMOVED***XCTAssertEqual(viewModel.selectedFacility, facility)
-***REMOVED******REMOVED***XCTAssertEqual(viewModel.selectedLevel, facility.defaultLevel)
+***REMOVED******REMOVED***XCTAssertEqual(viewModel.selection?.site, facility.site)
+***REMOVED******REMOVED***XCTAssertEqual(viewModel.selection?.facility, facility)
+***REMOVED******REMOVED***XCTAssertEqual(viewModel.selection?.level, facility.defaultLevel)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***viewModel.setLevel(level)
-***REMOVED******REMOVED***XCTAssertEqual(viewModel.selectedSite, level.facility?.site)
-***REMOVED******REMOVED***XCTAssertEqual(viewModel.selectedFacility, level.facility)
-***REMOVED******REMOVED***XCTAssertEqual(viewModel.selectedLevel, level)
+***REMOVED******REMOVED***XCTAssertEqual(viewModel.selection?.site, level.facility?.site)
+***REMOVED******REMOVED***XCTAssertEqual(viewModel.selection?.facility, level.facility)
+***REMOVED******REMOVED***XCTAssertEqual(viewModel.selection?.level, level)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***viewModel.clearSelection()
 ***REMOVED******REMOVED***XCTAssertEqual(viewModel.selection, nil)
-***REMOVED******REMOVED***XCTAssertEqual(viewModel.selectedSite, nil)
-***REMOVED******REMOVED***XCTAssertEqual(viewModel.selectedFacility, nil)
-***REMOVED******REMOVED***XCTAssertEqual(viewModel.selectedLevel, nil)
+***REMOVED******REMOVED***XCTAssertEqual(viewModel.selection?.site, nil)
+***REMOVED******REMOVED***XCTAssertEqual(viewModel.selection?.facility, nil)
+***REMOVED******REMOVED***XCTAssertEqual(viewModel.selection?.level, nil)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Confirms that the selection property indicates the correct facility (and therefore level) value.
