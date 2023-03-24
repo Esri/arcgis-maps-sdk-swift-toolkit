@@ -61,47 +61,12 @@ final class FloorFilterViewModel: ObservableObject {
     /// A Boolean value that indicates whether there are levels to display. This will be `false` if
     /// there is no selected facility or if the selected facility has no levels.
     var hasLevelsToDisplay: Bool {
-        !(selectedFacility?.levels.isEmpty ?? true)
+        !(selection?.facility?.levels.isEmpty ?? true)
     }
     
     /// The floor manager levels.
     var levels: [FloorLevel] {
         floorManager.levels
-    }
-    
-    /// The selected site.
-    var selectedSite: FloorSite? {
-        switch selection {
-        case .site(let site):
-            return site
-        case .facility(let facility):
-            return facility.site
-        case .level(let level):
-            return level.facility?.site
-        default:
-            return nil
-        }
-    }
-    
-    /// The selected facility.
-    var selectedFacility: FloorFacility? {
-        switch selection {
-        case .facility(let facility):
-            return facility
-        case .level(let level):
-            return level.facility
-        default:
-            return nil
-        }
-    }
-    
-    /// The selected level.
-    var selectedLevel: FloorLevel? {
-        if case let .level(level) = selection {
-            return level
-        } else {
-            return nil
-        }
     }
     
     /// The floor manager sites.
@@ -111,7 +76,7 @@ final class FloorFilterViewModel: ObservableObject {
     
     /// The selected facility's levels, sorted by `level.verticalOrder`.
     var sortedLevels: [FloorLevel] {
-        selectedFacility?.levels
+        selection?.facility?.levels
             .sorted(by: { $0.verticalOrder > $1.verticalOrder }) ?? []
     }
     
@@ -136,7 +101,7 @@ final class FloorFilterViewModel: ObservableObject {
     ///   - newFacility: The new facility to be selected.
     ///   - zoomTo: If `true`, changes the viewpoint to the extent of the new facility.
     func setFacility(_ newFacility: FloorFacility, zoomTo: Bool = false) {
-        if let oldLevel = selectedLevel,
+        if let oldLevel = selection?.level,
            let newLevel = newFacility.levels.first(
             where: { $0.verticalOrder == oldLevel.verticalOrder }
            ) {
@@ -264,7 +229,7 @@ final class FloorFilterViewModel: ObservableObject {
     
     /// Sets the visibility of all the levels on the map based on the vertical order of the current selected level.
     private func filterMapToSelectedLevel() {
-        if let selectedLevel = selectedLevel {
+        if let selectedLevel = selection?.level {
             levels.forEach {
                 $0.isVisible = $0.verticalOrder == selectedLevel.verticalOrder
             }

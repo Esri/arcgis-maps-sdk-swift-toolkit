@@ -22,3 +22,38 @@ public enum FloorFilterSelection: Hashable {
     /// A selected level.
     case level(FloorLevel)
 }
+
+public extension FloorFilterSelection {
+    /// The selected site.
+    var site: FloorSite? {
+        switch self {
+        case .site(let site):
+            return site
+        case .facility(let facility):
+            return facility.site
+        case .level(let level):
+            return level.facility?.site
+        }
+    }
+    
+    /// The selected facility.
+    var facility: FloorFacility? {
+        switch self {
+        case .facility(let facility):
+            return facility
+        case .level(let level):
+            return level.facility
+        default:
+            return nil
+        }
+    }
+    
+    /// The selected level.
+    var level: FloorLevel? {
+        if case let .level(level) = self {
+            return level
+        } else {
+            return nil
+        }
+    }
+}
