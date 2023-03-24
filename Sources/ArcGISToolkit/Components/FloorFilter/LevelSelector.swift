@@ -56,7 +56,7 @@ extension LevelSelector {
 ***REMOVED******REMOVED***if !isCollapsed, levels.count > 1 {
 ***REMOVED******REMOVED******REMOVED***return levels
 ***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***if let selectedLevel = viewModel.selectedLevel {
+***REMOVED******REMOVED******REMOVED***if let selectedLevel = viewModel.selection?.level {
 ***REMOVED******REMOVED******REMOVED******REMOVED***return [selectedLevel]
 ***REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***return []
@@ -128,7 +128,7 @@ extension LevelSelector {
 ***REMOVED******REMOVED***/ - Parameter level: THe level represented by the button.
 ***REMOVED******REMOVED***/ - Returns: The color for the button representing the provided level.
 ***REMOVED***func buttonColorFor(_ level: FloorLevel) -> Color {
-***REMOVED******REMOVED***if viewModel.selectedLevel == level {
+***REMOVED******REMOVED***if viewModel.selection?.level == level {
 ***REMOVED******REMOVED******REMOVED***return Color.accentColor
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED***return Color.secondary.opacity(0.5)
@@ -138,7 +138,7 @@ extension LevelSelector {
 ***REMOVED******REMOVED***/ Scrolls the list within the provided proxy to the button representing the selected level.
 ***REMOVED******REMOVED***/ - Parameter proxy: The proxy containing the scroll view.
 ***REMOVED***func scrollToSelectedLevel(with proxy: ScrollViewProxy) {
-***REMOVED******REMOVED***if let level = viewModel.selectedLevel {
+***REMOVED******REMOVED***if let level = viewModel.selection?.level {
 ***REMOVED******REMOVED******REMOVED***withAnimation {
 ***REMOVED******REMOVED******REMOVED******REMOVED***proxy.scrollTo(level.id)
 ***REMOVED******REMOVED***

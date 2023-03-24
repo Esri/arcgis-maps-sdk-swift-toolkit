@@ -139,7 +139,7 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***tag: site,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selection: Binding(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***get: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***userBackedOutOfSelectedSite ? nil : viewModel.selectedSite
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***userBackedOutOfSelectedSite ? nil : viewModel.selection?.site
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***set: { newSite in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let newSite = newSite else { return ***REMOVED***
@@ -225,7 +225,7 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED***.keyboardType(.alphabet)
 ***REMOVED******REMOVED******REMOVED***.disableAutocorrection(true)
 ***REMOVED******REMOVED******REMOVED***.navigationTitle(
-***REMOVED******REMOVED******REMOVED******REMOVED***usesAllSitesStyling ? "All Sites" : viewModel.selectedSite?.name ?? "Select a facility"
+***REMOVED******REMOVED******REMOVED******REMOVED***usesAllSitesStyling ? "All Sites" : viewModel.selection?.site?.name ?? "Select a facility"
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED******REMOVED***
@@ -256,7 +256,7 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.contentShape(Rectangle())
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.listRowBackground(facility.id == viewModel.selectedFacility?.id ? Color.secondary.opacity(0.5) : Color.clear)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.listRowBackground(facility.id == viewModel.selection?.facility?.id ? Color.secondary.opacity(0.5) : Color.clear)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onTapGesture {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.setFacility(facility, zoomTo: true)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if horizontalSizeClass == .compact {
@@ -266,7 +266,7 @@ struct SiteAndFacilitySelector: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.listStyle(.plain)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: viewModel.selection) { _ in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let floorFacility = viewModel.selectedFacility {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let floorFacility = viewModel.selection?.facility {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***withAnimation {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***proxy.scrollTo(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***floorFacility.id
