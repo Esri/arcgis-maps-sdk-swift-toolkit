@@ -21,8 +21,14 @@ public struct Compass: View {
 ***REMOVED******REMOVED***/ hide/show itself when the heading is `0`.
 ***REMOVED***private let autoHide: Bool
 ***REMOVED***
+***REMOVED******REMOVED***/ The last time the compass was tapped.
+***REMOVED***@State private var lastTapTime: Date?
+***REMOVED***
 ***REMOVED******REMOVED***/ The opacity of the compass.
 ***REMOVED***@State private var opacity: Double = .zero
+***REMOVED***
+***REMOVED******REMOVED***/ An action to perform when the compass is tapped.
+***REMOVED***private var action: (() async -> Void)?
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the compass should hide based on the
 ***REMOVED******REMOVED***/  current heading and whether the compass automatically hides.
@@ -41,13 +47,16 @@ public struct Compass: View {
 ***REMOVED******REMOVED***/ direction toward true East, etc.).
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - heading: The heading of the compass.
+***REMOVED******REMOVED***/   - action: An action to perform when the compass is tapped.
 ***REMOVED******REMOVED***/   - autoHide: A Boolean value that determines whether the compass
 ***REMOVED******REMOVED***/   automatically hides itself when the heading is `0`.
 ***REMOVED***public init(
 ***REMOVED******REMOVED***heading: Binding<Double>,
+***REMOVED******REMOVED***action: (() async -> Void)? = nil,
 ***REMOVED******REMOVED***autoHide: Bool = true
 ***REMOVED***) {
 ***REMOVED******REMOVED***_heading = heading
+***REMOVED******REMOVED***self.action = action
 ***REMOVED******REMOVED***self.autoHide = autoHide
 ***REMOVED***
 ***REMOVED***
@@ -61,6 +70,7 @@ public struct Compass: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.aspectRatio(1, contentMode: .fit)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.opacity(opacity)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: size, height: size)
+***REMOVED******REMOVED******REMOVED******REMOVED***.onAppear { opacity = shouldHide ? 0 : 1 ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: heading) { _ in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let newOpacity: Double = shouldHide ? .zero : 1
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard opacity != newOpacity else { return ***REMOVED***
@@ -68,8 +78,15 @@ public struct Compass: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***opacity = newOpacity
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.onAppear { opacity = shouldHide ? 0 : 1 ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.onTapGesture { lastTapTime = .now ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityLabel("Compass, heading \(Int(heading.rounded())) degrees \(CompassDirection(heading).rawValue)")
+***REMOVED******REMOVED******REMOVED******REMOVED***.task(id: lastTapTime) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let action {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await action()
+***REMOVED******REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***heading = .zero
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -81,10 +98,12 @@ public extension Compass {
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - viewpointRotation: The viewpoint rotation whose value determines the
 ***REMOVED******REMOVED***/   heading of the compass.
+***REMOVED******REMOVED***/   - action: An action to perform when the compass is tapped.
 ***REMOVED******REMOVED***/   - autoHide: A Boolean value that determines whether the compass
 ***REMOVED******REMOVED***/   automatically hides itself when the viewpoint rotation is 0 degrees.
 ***REMOVED***init(
 ***REMOVED******REMOVED***viewpointRotation: Binding<Double>,
+***REMOVED******REMOVED***action: (() async -> Void)? = nil,
 ***REMOVED******REMOVED***autoHide: Bool = true
 ***REMOVED***) {
 ***REMOVED******REMOVED***let heading = Binding(get: {
@@ -92,16 +111,18 @@ public extension Compass {
 ***REMOVED***, set: { newHeading in
 ***REMOVED******REMOVED******REMOVED***viewpointRotation.wrappedValue = newHeading.isZero ? .zero : 360 - newHeading
 ***REMOVED***)
-***REMOVED******REMOVED***self.init(heading: heading, autoHide: autoHide)
+***REMOVED******REMOVED***self.init(heading: heading, action: action, autoHide: autoHide)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a compass with a binding to an optional viewpoint.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - viewpoint: The viewpoint whose rotation determines the heading of the compass.
+***REMOVED******REMOVED***/   - action: An action to perform when the compass is tapped.
 ***REMOVED******REMOVED***/   - autoHide: A Boolean value that determines whether the compass automatically hides itself
 ***REMOVED******REMOVED***/   when the viewpoint's rotation is 0 degrees.
 ***REMOVED***init(
 ***REMOVED******REMOVED***viewpoint: Binding<Viewpoint?>,
+***REMOVED******REMOVED***action: (() async -> Void)? = nil,
 ***REMOVED******REMOVED***autoHide: Bool = true
 ***REMOVED***) {
 ***REMOVED******REMOVED***let viewpointRotation = Binding {
@@ -114,7 +135,7 @@ public extension Compass {
 ***REMOVED******REMOVED******REMOVED******REMOVED***rotation: newViewpointRotation
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED***
-***REMOVED******REMOVED***self.init(viewpointRotation: viewpointRotation, autoHide: autoHide)
+***REMOVED******REMOVED***self.init(viewpointRotation: viewpointRotation, action: action, autoHide: autoHide)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Define a custom size for the compass.
