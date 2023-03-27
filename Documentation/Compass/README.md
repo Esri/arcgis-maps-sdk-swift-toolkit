@@ -23,9 +23,10 @@ Compass:
 ***REMOVED******REMOVED***/ direction toward true East, etc.).
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - heading: The heading of the compass.
+***REMOVED******REMOVED***/   - action: An action to perform when the compass is tapped.
 ***REMOVED******REMOVED***/   - autoHide: A Boolean value that determines whether the compass
 ***REMOVED******REMOVED***/   automatically hides itself when the heading is `0`.
-***REMOVED***public init(heading: Binding<Double>, autoHide: Bool = true)
+***REMOVED***public init(heading: Binding<Double>, action: (() async -> Void)? = nil, autoHide: Bool = true)
 ```
 
 ```swift
@@ -35,18 +36,20 @@ Compass:
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - viewpointRotation: The viewpoint rotation whose value determines the
 ***REMOVED******REMOVED***/   heading of the compass.
+***REMOVED******REMOVED***/   - action: An action to perform when the compass is tapped.
 ***REMOVED******REMOVED***/   - autoHide: A Boolean value that determines whether the compass
 ***REMOVED******REMOVED***/   automatically hides itself when the viewpoint rotation is 0 degrees.
-***REMOVED***public init(viewpointRotation: Binding<Double>, autoHide: Bool = true)
+***REMOVED***public init(viewpointRotation: Binding<Double>, action: (() async -> Void)? = nil, autoHide: Bool = true)
 ```
 
 ```swift
 ***REMOVED******REMOVED***/ Creates a compass with a binding to an optional viewpoint.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - viewpoint: The viewpoint whose rotation determines the heading of the compass.
+***REMOVED******REMOVED***/   - action: An action to perform when the compass is tapped.
 ***REMOVED******REMOVED***/   - autoHide: A Boolean value that determines whether the compass automatically hides itself
 ***REMOVED******REMOVED***/   when the viewpoint's rotation is 0 degrees.
-***REMOVED***public init(viewpoint: Binding<Viewpoint?>, autoHide: Bool = true)
+***REMOVED***public init(viewpoint: Binding<Viewpoint?>, action: (() async -> Void)? = nil, autoHide: Bool = true)
 ```
 
 `Compass` has the following modifier:
