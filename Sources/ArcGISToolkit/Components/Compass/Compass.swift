@@ -17,9 +17,6 @@
 ***REMOVED***/ A `Compass` (alias North arrow) shows where north is in a `MapView` or
 ***REMOVED***/ `SceneView`.
 public struct Compass: View {
-***REMOVED******REMOVED***/ The last time the compass was tapped.
-***REMOVED***@State private var lastTapTime: Date?
-***REMOVED***
 ***REMOVED******REMOVED***/ The opacity of the compass.
 ***REMOVED***@State private var opacity: Double = .zero
 ***REMOVED***
@@ -78,15 +75,14 @@ public struct Compass: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***opacity = newOpacity
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.onTapGesture { lastTapTime = .now ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityLabel("Compass, heading \(Int(heading.rounded())) degrees \(CompassDirection(heading).rawValue)")
-***REMOVED******REMOVED******REMOVED******REMOVED***.task(id: lastTapTime) {
+***REMOVED******REMOVED******REMOVED******REMOVED***.onTapGesture {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let action {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await action()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task { await action() ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***heading = .zero
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityLabel("Compass, heading \(Int(heading.rounded())) degrees \(CompassDirection(heading).rawValue)")
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
