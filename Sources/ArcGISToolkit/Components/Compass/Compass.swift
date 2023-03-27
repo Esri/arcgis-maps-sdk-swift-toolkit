@@ -17,9 +17,6 @@ import SwiftUI
 /// A `Compass` (alias North arrow) shows where north is in a `MapView` or
 /// `SceneView`.
 public struct Compass: View {
-    /// The last time the compass was tapped.
-    @State private var lastTapTime: Date?
-    
     /// The opacity of the compass.
     @State private var opacity: Double = .zero
     
@@ -78,15 +75,14 @@ public struct Compass: View {
                         opacity = newOpacity
                     }
                 }
-                .onTapGesture { lastTapTime = .now }
-                .accessibilityLabel("Compass, heading \(Int(heading.rounded())) degrees \(CompassDirection(heading).rawValue)")
-                .task(id: lastTapTime) {
+                .onTapGesture {
                     if let action {
-                        await action()
+                        Task { await action() }
                     } else {
                         heading = .zero
                     }
                 }
+                .accessibilityLabel("Compass, heading \(Int(heading.rounded())) degrees \(CompassDirection(heading).rawValue)")
         }
     }
 }
