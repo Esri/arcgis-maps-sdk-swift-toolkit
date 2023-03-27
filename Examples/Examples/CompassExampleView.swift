@@ -20,14 +20,12 @@ struct CompassExampleView: View {
 ***REMOVED******REMOVED***/ A scenario represents a type of environment a compass may be used in.
 ***REMOVED***enum Scenario: CaseIterable {
 ***REMOVED******REMOVED***case map
-***REMOVED******REMOVED***case sceneWithCamera
 ***REMOVED******REMOVED***case sceneWithCameraController
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***/ A human-readable label for the scenario.
 ***REMOVED******REMOVED***var label: String {
 ***REMOVED******REMOVED******REMOVED***switch self {
 ***REMOVED******REMOVED******REMOVED***case .map: return "Map"
-***REMOVED******REMOVED******REMOVED***case .sceneWithCamera: return "Scene with camera"
 ***REMOVED******REMOVED******REMOVED***case .sceneWithCameraController: return "Scene with camera controller"
 ***REMOVED******REMOVED***
 ***REMOVED***
@@ -41,8 +39,6 @@ struct CompassExampleView: View {
 ***REMOVED******REMOVED******REMOVED***switch scenario {
 ***REMOVED******REMOVED******REMOVED***case.map:
 ***REMOVED******REMOVED******REMOVED******REMOVED***MapWithViewpoint()
-***REMOVED******REMOVED******REMOVED***case .sceneWithCamera:
-***REMOVED******REMOVED******REMOVED******REMOVED***SceneWithCamera()
 ***REMOVED******REMOVED******REMOVED***case .sceneWithCameraController:
 ***REMOVED******REMOVED******REMOVED******REMOVED***SceneWithCameraController()
 ***REMOVED******REMOVED***
@@ -68,74 +64,12 @@ struct MapWithViewpoint: View {
 ***REMOVED***)
 ***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***MapViewReader { mapViewProxy in
-***REMOVED******REMOVED******REMOVED***MapView(map: map, viewpoint: viewpoint)
-***REMOVED******REMOVED******REMOVED******REMOVED***.onViewpointChanged(kind: .centerAndScale) { viewpoint = $0 ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.overlay(alignment: .topTrailing) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Compass(viewpoint: $viewpoint)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onTapGesture {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try? await mapViewProxy.setViewpointRotation(0)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***
-
-***REMOVED***/ An example demonstrating how to use a compass with a scene view and camera.
-struct SceneWithCamera: View {
-***REMOVED******REMOVED***/ The camera used by the scene view.
-***REMOVED***@State private var camera: Camera? = Camera(
-***REMOVED******REMOVED***lookingAt: .esriRedlands,
-***REMOVED******REMOVED***distance: 1_000,
-***REMOVED******REMOVED***heading: 45,
-***REMOVED******REMOVED***pitch: 45,
-***REMOVED******REMOVED***roll: .zero
-***REMOVED***)
-***REMOVED***
-***REMOVED******REMOVED***/ The data model containing the `Scene` displayed in the `SceneView`.
-***REMOVED***@StateObject private var dataModel = SceneDataModel(
-***REMOVED******REMOVED***scene: Scene(basemapStyle: .arcGISImagery)
-***REMOVED***)
-***REMOVED***
-***REMOVED******REMOVED***/ The current heading as reported by the scene view.
-***REMOVED***var heading: Binding<Double> {
-***REMOVED******REMOVED***Binding {
-***REMOVED******REMOVED******REMOVED***if let camera {
-***REMOVED******REMOVED******REMOVED******REMOVED***return camera.heading
-***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***return .zero
+***REMOVED******REMOVED***MapView(map: map, viewpoint: viewpoint)
+***REMOVED******REMOVED******REMOVED***.onViewpointChanged(kind: .centerAndScale) { viewpoint = $0 ***REMOVED***
+***REMOVED******REMOVED******REMOVED***.overlay(alignment: .topTrailing) {
+***REMOVED******REMOVED******REMOVED******REMOVED***Compass(viewpoint: $viewpoint)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
 ***REMOVED******REMOVED***
-***REMOVED*** set: { _ in
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***var body: some View {
-***REMOVED******REMOVED***SceneViewReader { sceneViewProxy in
-***REMOVED******REMOVED******REMOVED***SceneView(scene: dataModel.scene, camera: $camera)
-***REMOVED******REMOVED******REMOVED******REMOVED***.overlay(alignment: .topTrailing) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Compass(viewpointRotation: heading)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onTapGesture {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let camera {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let newCamera = Camera(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***location: camera.location,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***heading: .zero,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***pitch: camera.pitch,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***roll: camera.roll
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try? await sceneViewProxy.setViewpointCamera(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***newCamera,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***duration: 0.3
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***
-***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
@@ -159,18 +93,18 @@ struct SceneWithCameraController: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***heading = newCamera.heading.rounded()
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.overlay(alignment: .topTrailing) {
-***REMOVED******REMOVED******REMOVED******REMOVED***Compass(viewpointRotation: $heading)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onTapGesture {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try? await cameraController.moveCamera(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***distanceDelta: .zero,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***headingDelta: heading > 180 ? 360 - heading : -heading,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***pitchDelta: .zero,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***duration: 0.3
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***Compass(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpointRotation: $heading,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***action: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***_ = try? await cameraController.moveCamera(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***distanceDelta: .zero,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***headingDelta: heading > 180 ? 360 - heading : -heading,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***pitchDelta: .zero,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***duration: 0.3
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***.padding()
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
