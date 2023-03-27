@@ -29,7 +29,7 @@ public struct Compass: View {
     
     /// A Boolean value indicating whether the compass should hide based on the
     ///  current heading and whether the compass automatically hides.
-    private var shouldHide: Bool {
+    var shouldHide: Bool {
         (heading.isZero || heading.isNaN) && autoHide
     }
     
