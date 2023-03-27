@@ -21,8 +21,14 @@ public struct Compass: View {
     /// hide/show itself when the heading is `0`.
     private let autoHide: Bool
     
+    /// The last time the compass was tapped.
+    @State private var lastTapTime: Date?
+    
     /// The opacity of the compass.
     @State private var opacity: Double = .zero
+    
+    /// An action to perform when the compass is tapped.
+    private var action: (() async -> Void)?
     
     /// A Boolean value indicating whether the compass should hide based on the
     ///  current heading and whether the compass automatically hides.
@@ -41,13 +47,16 @@ public struct Compass: View {
     /// direction toward true East, etc.).
     /// - Parameters:
     ///   - heading: The heading of the compass.
+    ///   - action: An action to perform when the compass is tapped.
     ///   - autoHide: A Boolean value that determines whether the compass
     ///   automatically hides itself when the heading is `0`.
     public init(
         heading: Binding<Double>,
+        action: (() async -> Void)? = nil,
         autoHide: Bool = true
     ) {
         _heading = heading
+        self.action = action
         self.autoHide = autoHide
     }
     
@@ -61,6 +70,7 @@ public struct Compass: View {
                 .aspectRatio(1, contentMode: .fit)
                 .opacity(opacity)
                 .frame(width: size, height: size)
+                .onAppear { opacity = shouldHide ? 0 : 1 }
                 .onChange(of: heading) { _ in
                     let newOpacity: Double = shouldHide ? .zero : 1
                     guard opacity != newOpacity else { return }
@@ -68,8 +78,15 @@ public struct Compass: View {
                         opacity = newOpacity
                     }
                 }
-                .onAppear { opacity = shouldHide ? 0 : 1 }
+                .onTapGesture { lastTapTime = .now }
                 .accessibilityLabel("Compass, heading \(Int(heading.rounded())) degrees \(CompassDirection(heading).rawValue)")
+                .task(id: lastTapTime) {
+                    if let action {
+                        await action()
+                    } else {
+                        heading = .zero
+                    }
+                }
         }
     }
 }
@@ -81,10 +98,12 @@ public extension Compass {
     /// - Parameters:
     ///   - viewpointRotation: The viewpoint rotation whose value determines the
     ///   heading of the compass.
+    ///   - action: An action to perform when the compass is tapped.
     ///   - autoHide: A Boolean value that determines whether the compass
     ///   automatically hides itself when the viewpoint rotation is 0 degrees.
     init(
         viewpointRotation: Binding<Double>,
+        action: (() async -> Void)? = nil,
         autoHide: Bool = true
     ) {
         let heading = Binding(get: {
@@ -92,16 +111,18 @@ public extension Compass {
         }, set: { newHeading in
             viewpointRotation.wrappedValue = newHeading.isZero ? .zero : 360 - newHeading
         })
-        self.init(heading: heading, autoHide: autoHide)
+        self.init(heading: heading, action: action, autoHide: autoHide)
     }
     
     /// Creates a compass with a binding to an optional viewpoint.
     /// - Parameters:
     ///   - viewpoint: The viewpoint whose rotation determines the heading of the compass.
+    ///   - action: An action to perform when the compass is tapped.
     ///   - autoHide: A Boolean value that determines whether the compass automatically hides itself
     ///   when the viewpoint's rotation is 0 degrees.
     init(
         viewpoint: Binding<Viewpoint?>,
+        action: (() async -> Void)? = nil,
         autoHide: Bool = true
     ) {
         let viewpointRotation = Binding {
@@ -114,7 +135,7 @@ public extension Compass {
                 rotation: newViewpointRotation
             )
         }
-        self.init(viewpointRotation: viewpointRotation, autoHide: autoHide)
+        self.init(viewpointRotation: viewpointRotation, action: action, autoHide: autoHide)
     }
     
     /// Define a custom size for the compass.
