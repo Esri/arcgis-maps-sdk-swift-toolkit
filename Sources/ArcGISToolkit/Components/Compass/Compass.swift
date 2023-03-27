@@ -29,7 +29,7 @@ public struct Compass: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the compass should hide based on the
 ***REMOVED******REMOVED***/  current heading and whether the compass automatically hides.
-***REMOVED***private var shouldHide: Bool {
+***REMOVED***var shouldHide: Bool {
 ***REMOVED******REMOVED***(heading.isZero || heading.isNaN) && autoHide
 ***REMOVED***
 ***REMOVED***
