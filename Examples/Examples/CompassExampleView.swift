@@ -57,10 +57,8 @@ struct CompassExampleView: View {
 
 ***REMOVED***/ An example demonstrating how to use a compass with a map view.
 struct MapWithViewpoint: View {
-***REMOVED******REMOVED***/ The data model containing the `Map` displayed in the `MapView`.
-***REMOVED***@StateObject private var dataModel = MapDataModel(
-***REMOVED******REMOVED***map: Map(basemapStyle: .arcGISImagery)
-***REMOVED***)
+***REMOVED******REMOVED***/ The `Map` displayed in the `MapView`.
+***REMOVED***@State private var map = Map(basemapStyle: .arcGISImagery)
 ***REMOVED***
 ***REMOVED******REMOVED***/ Allows for communication between the Compass and MapView or SceneView.
 ***REMOVED***@State private var viewpoint: Viewpoint? = Viewpoint(
@@ -71,12 +69,10 @@ struct MapWithViewpoint: View {
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***MapViewReader { mapViewProxy in
-***REMOVED******REMOVED******REMOVED***MapView(map: dataModel.map, viewpoint: viewpoint)
+***REMOVED******REMOVED******REMOVED***MapView(map: map, viewpoint: viewpoint)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onViewpointChanged(kind: .centerAndScale) { viewpoint = $0 ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.overlay(alignment: .topTrailing) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Compass(viewpoint: $viewpoint)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Optionally provide a different size for the compass.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.compassSize(size: T##CGFloat)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onTapGesture {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task {
@@ -146,12 +142,10 @@ struct SceneWithCamera: View {
 ***REMOVED***/ An example demonstrating how to use a compass with a scene view and camera controller.
 struct SceneWithCameraController: View {
 ***REMOVED******REMOVED***/ The data model containing the `Scene` displayed in the `SceneView`.
-***REMOVED***@StateObject private var dataModel = SceneDataModel(
-***REMOVED******REMOVED***scene: Scene(basemapStyle: .arcGISImagery)
-***REMOVED***)
+***REMOVED***@State private var scene = Scene(basemapStyle: .arcGISImagery)
 ***REMOVED***
 ***REMOVED******REMOVED***/ The current heading as reported by the scene view.
-***REMOVED***@State private var heading: Double = .zero
+***REMOVED***@State private var heading = Double.zero
 ***REMOVED***
 ***REMOVED******REMOVED***/ The orbit location camera controller used by the scene view.
 ***REMOVED***private let cameraController = OrbitLocationCameraController(
@@ -160,7 +154,7 @@ struct SceneWithCameraController: View {
 ***REMOVED***)
 ***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***SceneView(scene: dataModel.scene, cameraController: cameraController)
+***REMOVED******REMOVED***SceneView(scene: scene, cameraController: cameraController)
 ***REMOVED******REMOVED******REMOVED***.onCameraChanged { newCamera in
 ***REMOVED******REMOVED******REMOVED******REMOVED***heading = newCamera.heading.rounded()
 ***REMOVED******REMOVED***
