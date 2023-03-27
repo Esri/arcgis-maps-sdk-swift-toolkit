@@ -18,34 +18,39 @@ import SwiftUI
 /// An example demonstrating how to use a compass in three different environments.
 struct CompassExampleView: View {
     /// A scenario represents a type of environment a compass may be used in.
-    enum Scenario: CaseIterable {
+    enum Scenario: String {
         case map
-        case sceneWithCameraController
-        
-        /// A human-readable label for the scenario.
-        var label: String {
-            switch self {
-            case .map: return "Map"
-            case .sceneWithCameraController: return "Scene with camera controller"
-            }
-        }
+        case scene
     }
     
     /// The active scenario.
     @State private var scenario = Scenario.map
     
     var body: some View {
-        VStack {
+        Group {
             switch scenario {
-            case.map:
+            case .map:
                 MapWithViewpoint()
-            case .sceneWithCameraController:
+            case .scene:
                 SceneWithCameraController()
             }
-            Picker("Scenario", selection: $scenario) {
-                ForEach(Scenario.allCases, id: \.self) { scen in
-                    Text(scen.label)
+        }
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Menu(scenario.rawValue.capitalized) {
+                    Button {
+                        scenario = .map
+                    } label: {
+                        Label("Map", systemImage: "map.fill")
+                    }
+                    
+                    Button {
+                        scenario = .scene
+                    } label: {
+                        Label("Scene", systemImage: "globe.americas.fill")
+                    }
                 }
+                .labelStyle(.titleAndIcon)
             }
         }
     }
