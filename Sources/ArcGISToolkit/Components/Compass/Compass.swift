@@ -17,10 +17,6 @@ import SwiftUI
 /// A `Compass` (alias North arrow) shows where north is in a `MapView` or
 /// `SceneView`.
 public struct Compass: View {
-    /// A Boolean value indicating whether  the compass should automatically
-    /// hide/show itself when the heading is `0`.
-    private let autoHide: Bool
-    
     /// The last time the compass was tapped.
     @State private var lastTapTime: Date?
     
@@ -28,16 +24,20 @@ public struct Compass: View {
     @State private var opacity: Double = .zero
     
     /// An action to perform when the compass is tapped.
-    private var action: (() async -> Void)?
+    private let action: (() async -> Void)?
+    
+    /// A Boolean value indicating whether  the compass should automatically
+    /// hide/show itself when the heading is `0`.
+    private let autoHide: Bool
     
     /// A Boolean value indicating whether the compass should hide based on the
     ///  current heading and whether the compass automatically hides.
-    var shouldHide: Bool {
+    private var shouldHide: Bool {
         (heading.isZero || heading.isNaN) && autoHide
     }
     
     /// The width and height of the compass.
-    var size: CGFloat = 44
+    private var size: CGFloat = 44
     
     /// The heading of the compass in degrees.
     @Binding private var heading: Double
