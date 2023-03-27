@@ -57,10 +57,8 @@ struct CompassExampleView: View {
 
 /// An example demonstrating how to use a compass with a map view.
 struct MapWithViewpoint: View {
-    /// The data model containing the `Map` displayed in the `MapView`.
-    @StateObject private var dataModel = MapDataModel(
-        map: Map(basemapStyle: .arcGISImagery)
-    )
+    /// The `Map` displayed in the `MapView`.
+    @State private var map = Map(basemapStyle: .arcGISImagery)
     
     /// Allows for communication between the Compass and MapView or SceneView.
     @State private var viewpoint: Viewpoint? = Viewpoint(
@@ -71,12 +69,10 @@ struct MapWithViewpoint: View {
     
     var body: some View {
         MapViewReader { mapViewProxy in
-            MapView(map: dataModel.map, viewpoint: viewpoint)
+            MapView(map: map, viewpoint: viewpoint)
                 .onViewpointChanged(kind: .centerAndScale) { viewpoint = $0 }
                 .overlay(alignment: .topTrailing) {
                     Compass(viewpoint: $viewpoint)
-                    // Optionally provide a different size for the compass.
-                    //    .compassSize(size: T##CGFloat)
                         .padding()
                         .onTapGesture {
                             Task {
@@ -146,12 +142,10 @@ struct SceneWithCamera: View {
 /// An example demonstrating how to use a compass with a scene view and camera controller.
 struct SceneWithCameraController: View {
     /// The data model containing the `Scene` displayed in the `SceneView`.
-    @StateObject private var dataModel = SceneDataModel(
-        scene: Scene(basemapStyle: .arcGISImagery)
-    )
+    @State private var scene = Scene(basemapStyle: .arcGISImagery)
     
     /// The current heading as reported by the scene view.
-    @State private var heading: Double = .zero
+    @State private var heading = Double.zero
     
     /// The orbit location camera controller used by the scene view.
     private let cameraController = OrbitLocationCameraController(
@@ -160,7 +154,7 @@ struct SceneWithCameraController: View {
     )
     
     var body: some View {
-        SceneView(scene: dataModel.scene, cameraController: cameraController)
+        SceneView(scene: scene, cameraController: cameraController)
             .onCameraChanged { newCamera in
                 heading = newCamera.heading.rounded()
             }
