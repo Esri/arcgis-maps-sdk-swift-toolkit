@@ -20,14 +20,12 @@ struct CompassExampleView: View {
     /// A scenario represents a type of environment a compass may be used in.
     enum Scenario: CaseIterable {
         case map
-        case sceneWithCamera
         case sceneWithCameraController
         
         /// A human-readable label for the scenario.
         var label: String {
             switch self {
             case .map: return "Map"
-            case .sceneWithCamera: return "Scene with camera"
             case .sceneWithCameraController: return "Scene with camera controller"
             }
         }
@@ -41,8 +39,6 @@ struct CompassExampleView: View {
             switch scenario {
             case.map:
                 MapWithViewpoint()
-            case .sceneWithCamera:
-                SceneWithCamera()
             case .sceneWithCameraController:
                 SceneWithCameraController()
             }
@@ -68,74 +64,12 @@ struct MapWithViewpoint: View {
     )
     
     var body: some View {
-        MapViewReader { mapViewProxy in
-            MapView(map: map, viewpoint: viewpoint)
-                .onViewpointChanged(kind: .centerAndScale) { viewpoint = $0 }
-                .overlay(alignment: .topTrailing) {
-                    Compass(viewpoint: $viewpoint)
-                        .padding()
-                        .onTapGesture {
-                            Task {
-                                try? await mapViewProxy.setViewpointRotation(0)
-                            }
-                        }
-                }
-        }
-    }
-}
-
-/// An example demonstrating how to use a compass with a scene view and camera.
-struct SceneWithCamera: View {
-    /// The camera used by the scene view.
-    @State private var camera: Camera? = Camera(
-        lookingAt: .esriRedlands,
-        distance: 1_000,
-        heading: 45,
-        pitch: 45,
-        roll: .zero
-    )
-    
-    /// The data model containing the `Scene` displayed in the `SceneView`.
-    @StateObject private var dataModel = SceneDataModel(
-        scene: Scene(basemapStyle: .arcGISImagery)
-    )
-    
-    /// The current heading as reported by the scene view.
-    var heading: Binding<Double> {
-        Binding {
-            if let camera {
-                return camera.heading
-            } else {
-                return .zero
+        MapView(map: map, viewpoint: viewpoint)
+            .onViewpointChanged(kind: .centerAndScale) { viewpoint = $0 }
+            .overlay(alignment: .topTrailing) {
+                Compass(viewpoint: $viewpoint)
+                    .padding()
             }
-        } set: { _ in
-        }
-    }
-    
-    var body: some View {
-        SceneViewReader { sceneViewProxy in
-            SceneView(scene: dataModel.scene, camera: $camera)
-                .overlay(alignment: .topTrailing) {
-                    Compass(viewpointRotation: heading)
-                        .padding()
-                        .onTapGesture {
-                            if let camera {
-                                let newCamera = Camera(
-                                    location: camera.location,
-                                    heading: .zero,
-                                    pitch: camera.pitch,
-                                    roll: camera.roll
-                                )
-                                Task {
-                                    try? await sceneViewProxy.setViewpointCamera(
-                                        newCamera,
-                                        duration: 0.3
-                                    )
-                                }
-                            }
-                        }
-                }
-        }
     }
 }
 
@@ -159,18 +93,18 @@ struct SceneWithCameraController: View {
                 heading = newCamera.heading.rounded()
             }
             .overlay(alignment: .topTrailing) {
-                Compass(viewpointRotation: $heading)
-                    .padding()
-                    .onTapGesture {
-                        Task {
-                            try? await cameraController.moveCamera(
-                                distanceDelta: .zero,
-                                headingDelta: heading > 180 ? 360 - heading : -heading,
-                                pitchDelta: .zero,
-                                duration: 0.3
-                            )
-                        }
+                Compass(
+                    viewpointRotation: $heading,
+                    action: {
+                        _ = try? await cameraController.moveCamera(
+                            distanceDelta: .zero,
+                            headingDelta: heading > 180 ? 360 - heading : -heading,
+                            pitchDelta: .zero,
+                            duration: 0.3
+                        )
                     }
+                )
+                .padding()
             }
     }
 }
