@@ -17,10 +17,6 @@
 ***REMOVED***/ A `Compass` (alias North arrow) shows where north is in a `MapView` or
 ***REMOVED***/ `SceneView`.
 public struct Compass: View {
-***REMOVED******REMOVED***/ A Boolean value indicating whether  the compass should automatically
-***REMOVED******REMOVED***/ hide/show itself when the heading is `0`.
-***REMOVED***private let autoHide: Bool
-***REMOVED***
 ***REMOVED******REMOVED***/ The last time the compass was tapped.
 ***REMOVED***@State private var lastTapTime: Date?
 ***REMOVED***
@@ -28,16 +24,20 @@ public struct Compass: View {
 ***REMOVED***@State private var opacity: Double = .zero
 ***REMOVED***
 ***REMOVED******REMOVED***/ An action to perform when the compass is tapped.
-***REMOVED***private var action: (() async -> Void)?
+***REMOVED***private let action: (() async -> Void)?
+***REMOVED***
+***REMOVED******REMOVED***/ A Boolean value indicating whether  the compass should automatically
+***REMOVED******REMOVED***/ hide/show itself when the heading is `0`.
+***REMOVED***private let autoHide: Bool
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the compass should hide based on the
 ***REMOVED******REMOVED***/  current heading and whether the compass automatically hides.
-***REMOVED***var shouldHide: Bool {
+***REMOVED***private var shouldHide: Bool {
 ***REMOVED******REMOVED***(heading.isZero || heading.isNaN) && autoHide
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The width and height of the compass.
-***REMOVED***var size: CGFloat = 44
+***REMOVED***private var size: CGFloat = 44
 ***REMOVED***
 ***REMOVED******REMOVED***/ The heading of the compass in degrees.
 ***REMOVED***@Binding private var heading: Double
