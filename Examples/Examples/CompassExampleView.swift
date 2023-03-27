@@ -18,34 +18,39 @@
 ***REMOVED***/ An example demonstrating how to use a compass in three different environments.
 struct CompassExampleView: View {
 ***REMOVED******REMOVED***/ A scenario represents a type of environment a compass may be used in.
-***REMOVED***enum Scenario: CaseIterable {
+***REMOVED***enum Scenario: String {
 ***REMOVED******REMOVED***case map
-***REMOVED******REMOVED***case sceneWithCameraController
-***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***/ A human-readable label for the scenario.
-***REMOVED******REMOVED***var label: String {
-***REMOVED******REMOVED******REMOVED***switch self {
-***REMOVED******REMOVED******REMOVED***case .map: return "Map"
-***REMOVED******REMOVED******REMOVED***case .sceneWithCameraController: return "Scene with camera controller"
-***REMOVED******REMOVED***
-***REMOVED***
+***REMOVED******REMOVED***case scene
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The active scenario.
 ***REMOVED***@State private var scenario = Scenario.map
 ***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***VStack {
+***REMOVED******REMOVED***Group {
 ***REMOVED******REMOVED******REMOVED***switch scenario {
-***REMOVED******REMOVED******REMOVED***case.map:
+***REMOVED******REMOVED******REMOVED***case .map:
 ***REMOVED******REMOVED******REMOVED******REMOVED***MapWithViewpoint()
-***REMOVED******REMOVED******REMOVED***case .sceneWithCameraController:
+***REMOVED******REMOVED******REMOVED***case .scene:
 ***REMOVED******REMOVED******REMOVED******REMOVED***SceneWithCameraController()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***Picker("Scenario", selection: $scenario) {
-***REMOVED******REMOVED******REMOVED******REMOVED***ForEach(Scenario.allCases, id: \.self) { scen in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(scen.label)
+***REMOVED***
+***REMOVED******REMOVED***.toolbar {
+***REMOVED******REMOVED******REMOVED***ToolbarItem(placement: .navigationBarTrailing) {
+***REMOVED******REMOVED******REMOVED******REMOVED***Menu(scenario.rawValue.capitalized) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***scenario = .map
+***REMOVED******REMOVED******REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Label("Map", systemImage: "map.fill")
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***scenario = .scene
+***REMOVED******REMOVED******REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Label("Scene", systemImage: "globe.americas.fill")
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.labelStyle(.titleAndIcon)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
