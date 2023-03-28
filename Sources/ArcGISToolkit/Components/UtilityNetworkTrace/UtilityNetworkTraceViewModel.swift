@@ -125,11 +125,20 @@ import Foundation
 ***REMOVED******REMOVED***mapPoint: Point,
 ***REMOVED******REMOVED***with proxy: MapViewProxy
 ***REMOVED***) async {
-***REMOVED******REMOVED***let identifyLayerResults = try? await proxy.identifyLayers(
-***REMOVED******REMOVED******REMOVED***screenPoint: point,
-***REMOVED******REMOVED******REMOVED***tolerance: 10
-***REMOVED******REMOVED***)
-***REMOVED******REMOVED***for layerResult in identifyLayerResults ?? [] {
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***let identify: (Layer, CGPoint) async -> IdentifyLayerResult? = { layer, point in
+***REMOVED******REMOVED******REMOVED***try? await proxy.identify(on: layer, screenPoint: point, tolerance: 10)
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***var identifyLayerResults = [IdentifyLayerResult]()
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***for layer in layers ?? [] {
+***REMOVED******REMOVED******REMOVED***if let r = await identify(layer, point) {
+***REMOVED******REMOVED******REMOVED******REMOVED***identifyLayerResults.append(r)
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***for layerResult in identifyLayerResults {
 ***REMOVED******REMOVED******REMOVED***for geoElement in layerResult.geoElements {
 ***REMOVED******REMOVED******REMOVED******REMOVED***let startingPoint = UtilityNetworkTraceStartingPoint(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***geoElement: geoElement,
@@ -138,6 +147,10 @@ import Foundation
 ***REMOVED******REMOVED******REMOVED******REMOVED***await processAndAdd(startingPoint: startingPoint)
 ***REMOVED******REMOVED***
 ***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***var layers: [Layer]? {
+***REMOVED******REMOVED***network?.definition?.networkSources.compactMap { $0.featureTable.layer ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Deletes all of the completed traces.
