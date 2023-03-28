@@ -125,11 +125,20 @@ import SwiftUI
         mapPoint: Point,
         with proxy: MapViewProxy
     ) async {
-        let identifyLayerResults = try? await proxy.identifyLayers(
-            screenPoint: point,
-            tolerance: 10
-        )
-        for layerResult in identifyLayerResults ?? [] {
+        
+        let identify: (Layer, CGPoint) async -> IdentifyLayerResult? = { layer, point in
+            try? await proxy.identify(on: layer, screenPoint: point, tolerance: 10)
+        }
+        
+        var identifyLayerResults = [IdentifyLayerResult]()
+        
+        for layer in layers ?? [] {
+            if let r = await identify(layer, point) {
+                identifyLayerResults.append(r)
+            }
+        }
+        
+        for layerResult in identifyLayerResults {
             for geoElement in layerResult.geoElements {
                 let startingPoint = UtilityNetworkTraceStartingPoint(
                     geoElement: geoElement,
@@ -138,6 +147,10 @@ import SwiftUI
                 await processAndAdd(startingPoint: startingPoint)
             }
         }
+    }
+    
+    var layers: [Layer]? {
+        network?.definition?.networkSources.compactMap { $0.featureTable.layer }
     }
     
     /// Deletes all of the completed traces.
