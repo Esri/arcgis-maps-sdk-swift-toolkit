@@ -132,7 +132,7 @@ import SwiftUI
         
         var identifyLayerResults = [IdentifyLayerResult]()
         
-        for layer in layers ?? [] {
+        for layer in network?.layers ?? [] {
             if let r = await identify(layer, point) {
                 identifyLayerResults.append(r)
             }
@@ -147,10 +147,6 @@ import SwiftUI
                 await processAndAdd(startingPoint: startingPoint)
             }
         }
-    }
-    
-    var layers: [Layer]? {
-        network?.definition?.networkSources.compactMap { $0.featureTable.layer }
     }
     
     /// Deletes all of the completed traces.
@@ -519,5 +515,11 @@ extension UtilityNetworkTraceViewModel {
             fractionalLengthClosestTo: point,
             tolerance: 10
         )
+    }
+}
+
+extension UtilityNetwork {
+    var layers: [Layer] {
+        definition?.networkSources.compactMap { $0.featureTable.layer } ?? []
     }
 }
