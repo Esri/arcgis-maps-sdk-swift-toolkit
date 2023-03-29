@@ -505,6 +505,7 @@ extension UtilityNetworkTraceViewModel {
 }
 
 extension UtilityNetwork {
+    /// The defined in the network.
     var layers: [Layer] {
         definition?.networkSources.compactMap { $0.featureTable.layer } ?? []
     }
