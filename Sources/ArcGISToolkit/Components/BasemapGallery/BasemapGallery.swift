@@ -42,7 +42,7 @@ public struct BasemapGallery: View {
         items: [BasemapGalleryItem] = [],
         geoModel: GeoModel? = nil
     ) {
-        viewModel = BasemapGalleryViewModel(geoModel: geoModel, items: items)
+        _viewModel = StateObject(wrappedValue: BasemapGalleryViewModel(geoModel: geoModel, items: items))
     }
     
     /// Creates a `BasemapGallery` with the given geo model and portal.
@@ -54,14 +54,14 @@ public struct BasemapGallery: View {
         portal: Portal,
         geoModel: GeoModel? = nil
     ) {
-        viewModel = BasemapGalleryViewModel(geoModel, portal: portal)
+        _viewModel = StateObject(wrappedValue: BasemapGalleryViewModel(geoModel, portal: portal))
     }
     
     /// The view model used by the view. The `BasemapGalleryViewModel` manages the state
     /// of the `BasemapGallery`. The view observes `BasemapGalleryViewModel` for changes
     /// in state. The view updates the state of the `BasemapGalleryViewModel` in response to
     /// user action.
-    @ObservedObject private var viewModel: BasemapGalleryViewModel
+    @StateObject private var viewModel: BasemapGalleryViewModel
     
     /// The style of the basemap gallery. The gallery can be displayed as a list, grid, or automatically
     /// switch between the two based on-screen real estate. Defaults to ``BasemapGallery/Style/automatic``.
