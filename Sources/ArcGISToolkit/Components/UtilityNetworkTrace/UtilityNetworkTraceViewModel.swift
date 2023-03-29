@@ -115,36 +115,22 @@ import Foundation
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Adds a new starting point to the pending trace.
+***REMOVED******REMOVED***/ Adds new starting points to the pending trace.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - point: A point on the map in screen coordinates.
 ***REMOVED******REMOVED***/   - mapPoint: A point on the map in map coordinates.
 ***REMOVED******REMOVED***/   - proxy: Provides a method of layer identification.
-***REMOVED***func addStartingPoint(
-***REMOVED******REMOVED***at point: CGPoint,
-***REMOVED******REMOVED***mapPoint: Point,
-***REMOVED******REMOVED***with proxy: MapViewProxy
-***REMOVED***) async {
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***let identify: (Layer, CGPoint) async -> IdentifyLayerResult? = { layer, point in
-***REMOVED******REMOVED******REMOVED***try? await proxy.identify(on: layer, screenPoint: point, tolerance: 10)
-***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***var identifyLayerResults = [IdentifyLayerResult]()
-***REMOVED******REMOVED***
+***REMOVED******REMOVED***/
+***REMOVED******REMOVED***/ An identify operation will run on each layer in the network. Every element returned from
+***REMOVED******REMOVED***/ each layer will be added as a new starting point.
+***REMOVED***func addStartingPoints(at point: CGPoint, mapPoint: Point, with proxy: MapViewProxy) async {
 ***REMOVED******REMOVED***for layer in network?.layers ?? [] {
-***REMOVED******REMOVED******REMOVED***if let r = await identify(layer, point) {
-***REMOVED******REMOVED******REMOVED******REMOVED***identifyLayerResults.append(r)
-***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***
-***REMOVED******REMOVED***for layerResult in identifyLayerResults {
-***REMOVED******REMOVED******REMOVED***for geoElement in layerResult.geoElements {
-***REMOVED******REMOVED******REMOVED******REMOVED***let startingPoint = UtilityNetworkTraceStartingPoint(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***geoElement: geoElement,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mapPoint: mapPoint
-***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED***await processAndAdd(startingPoint: startingPoint)
+***REMOVED******REMOVED******REMOVED***if let result = try? await proxy.identify(on: layer, screenPoint: point, tolerance: 10) {
+***REMOVED******REMOVED******REMOVED******REMOVED***for element in result.geoElements {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await processAndAdd(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***startingPoint: UtilityNetworkTraceStartingPoint(geoElement: element, mapPoint: mapPoint)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
