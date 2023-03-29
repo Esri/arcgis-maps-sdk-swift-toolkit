@@ -42,7 +42,7 @@ public struct BasemapGallery: View {
 ***REMOVED******REMOVED***items: [BasemapGalleryItem] = [],
 ***REMOVED******REMOVED***geoModel: GeoModel? = nil
 ***REMOVED***) {
-***REMOVED******REMOVED***viewModel = BasemapGalleryViewModel(geoModel: geoModel, items: items)
+***REMOVED******REMOVED***_viewModel = StateObject(wrappedValue: BasemapGalleryViewModel(geoModel: geoModel, items: items))
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a `BasemapGallery` with the given geo model and portal.
@@ -54,14 +54,14 @@ public struct BasemapGallery: View {
 ***REMOVED******REMOVED***portal: Portal,
 ***REMOVED******REMOVED***geoModel: GeoModel? = nil
 ***REMOVED***) {
-***REMOVED******REMOVED***viewModel = BasemapGalleryViewModel(geoModel, portal: portal)
+***REMOVED******REMOVED***_viewModel = StateObject(wrappedValue: BasemapGalleryViewModel(geoModel, portal: portal))
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The view model used by the view. The `BasemapGalleryViewModel` manages the state
 ***REMOVED******REMOVED***/ of the `BasemapGallery`. The view observes `BasemapGalleryViewModel` for changes
 ***REMOVED******REMOVED***/ in state. The view updates the state of the `BasemapGalleryViewModel` in response to
 ***REMOVED******REMOVED***/ user action.
-***REMOVED***@ObservedObject private var viewModel: BasemapGalleryViewModel
+***REMOVED***@StateObject private var viewModel: BasemapGalleryViewModel
 ***REMOVED***
 ***REMOVED******REMOVED***/ The style of the basemap gallery. The gallery can be displayed as a list, grid, or automatically
 ***REMOVED******REMOVED***/ switch between the two based on-screen real estate. Defaults to ``BasemapGallery/Style/automatic``.
