@@ -115,36 +115,22 @@ import SwiftUI
         }
     }
     
-    /// Adds a new starting point to the pending trace.
+    /// Adds new starting points to the pending trace.
     /// - Parameters:
     ///   - point: A point on the map in screen coordinates.
     ///   - mapPoint: A point on the map in map coordinates.
     ///   - proxy: Provides a method of layer identification.
-    func addStartingPoint(
-        at point: CGPoint,
-        mapPoint: Point,
-        with proxy: MapViewProxy
-    ) async {
-        
-        let identify: (Layer, CGPoint) async -> IdentifyLayerResult? = { layer, point in
-            try? await proxy.identify(on: layer, screenPoint: point, tolerance: 10)
-        }
-        
-        var identifyLayerResults = [IdentifyLayerResult]()
-        
+    ///
+    /// An identify operation will run on each layer in the network. Every element returned from
+    /// each layer will be added as a new starting point.
+    func addStartingPoints(at point: CGPoint, mapPoint: Point, with proxy: MapViewProxy) async {
         for layer in network?.layers ?? [] {
-            if let r = await identify(layer, point) {
-                identifyLayerResults.append(r)
-            }
-        }
-        
-        for layerResult in identifyLayerResults {
-            for geoElement in layerResult.geoElements {
-                let startingPoint = UtilityNetworkTraceStartingPoint(
-                    geoElement: geoElement,
-                    mapPoint: mapPoint
-                )
-                await processAndAdd(startingPoint: startingPoint)
+            if let result = try? await proxy.identify(on: layer, screenPoint: point, tolerance: 10) {
+                for element in result.geoElements {
+                    await processAndAdd(
+                        startingPoint: UtilityNetworkTraceStartingPoint(geoElement: element, mapPoint: mapPoint)
+                    )
+                }
             }
         }
     }
