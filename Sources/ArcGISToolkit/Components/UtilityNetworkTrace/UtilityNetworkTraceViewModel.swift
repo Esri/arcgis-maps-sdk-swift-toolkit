@@ -124,12 +124,17 @@ import Foundation
 ***REMOVED******REMOVED***/ An identify operation will run on each layer in the network. Every element returned from
 ***REMOVED******REMOVED***/ each layer will be added as a new starting point.
 ***REMOVED***func addStartingPoints(at point: CGPoint, mapPoint: Point, with proxy: MapViewProxy) async {
-***REMOVED******REMOVED***for layer in network?.layers ?? [] {
-***REMOVED******REMOVED******REMOVED***if let result = try? await proxy.identify(on: layer, screenPoint: point, tolerance: 10) {
-***REMOVED******REMOVED******REMOVED******REMOVED***for element in result.geoElements {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await processAndAdd(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***startingPoint: UtilityNetworkTraceStartingPoint(geoElement: element, mapPoint: mapPoint)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***await withTaskGroup(of: Void.self) { [weak self] taskGroup in
+***REMOVED******REMOVED******REMOVED***guard let self else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED***for layer in network?.layers ?? [] {
+***REMOVED******REMOVED******REMOVED******REMOVED***taskGroup.addTask {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let result = try? await proxy.identify(on: layer, screenPoint: point, tolerance: 10) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for element in result.geoElements {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await self.processAndAdd(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***startingPoint: UtilityNetworkTraceStartingPoint(geoElement: element, mapPoint: mapPoint)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
