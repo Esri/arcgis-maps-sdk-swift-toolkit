@@ -505,6 +505,7 @@ extension UtilityNetworkTraceViewModel {
 ***REMOVED***
 
 extension UtilityNetwork {
+***REMOVED******REMOVED***/ The defined in the network.
 ***REMOVED***var layers: [Layer] {
 ***REMOVED******REMOVED***definition?.networkSources.compactMap { $0.featureTable.layer ***REMOVED*** ?? []
 ***REMOVED***
