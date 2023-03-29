@@ -132,7 +132,7 @@ import Foundation
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***var identifyLayerResults = [IdentifyLayerResult]()
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***for layer in layers ?? [] {
+***REMOVED******REMOVED***for layer in network?.layers ?? [] {
 ***REMOVED******REMOVED******REMOVED***if let r = await identify(layer, point) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***identifyLayerResults.append(r)
 ***REMOVED******REMOVED***
@@ -147,10 +147,6 @@ import Foundation
 ***REMOVED******REMOVED******REMOVED******REMOVED***await processAndAdd(startingPoint: startingPoint)
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***var layers: [Layer]? {
-***REMOVED******REMOVED***network?.definition?.networkSources.compactMap { $0.featureTable.layer ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Deletes all of the completed traces.
@@ -519,5 +515,11 @@ extension UtilityNetworkTraceViewModel {
 ***REMOVED******REMOVED******REMOVED***fractionalLengthClosestTo: point,
 ***REMOVED******REMOVED******REMOVED***tolerance: 10
 ***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+
+extension UtilityNetwork {
+***REMOVED***var layers: [Layer] {
+***REMOVED******REMOVED***definition?.networkSources.compactMap { $0.featureTable.layer ***REMOVED*** ?? []
 ***REMOVED***
 ***REMOVED***
