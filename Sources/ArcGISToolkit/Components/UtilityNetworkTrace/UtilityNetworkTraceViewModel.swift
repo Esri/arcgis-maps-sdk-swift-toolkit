@@ -124,12 +124,17 @@ import SwiftUI
     /// An identify operation will run on each layer in the network. Every element returned from
     /// each layer will be added as a new starting point.
     func addStartingPoints(at point: CGPoint, mapPoint: Point, with proxy: MapViewProxy) async {
-        for layer in network?.layers ?? [] {
-            if let result = try? await proxy.identify(on: layer, screenPoint: point, tolerance: 10) {
-                for element in result.geoElements {
-                    await processAndAdd(
-                        startingPoint: UtilityNetworkTraceStartingPoint(geoElement: element, mapPoint: mapPoint)
-                    )
+        await withTaskGroup(of: Void.self) { [weak self] taskGroup in
+            guard let self else { return }
+            for layer in network?.layers ?? [] {
+                taskGroup.addTask {
+                    if let result = try? await proxy.identify(on: layer, screenPoint: point, tolerance: 10) {
+                        for element in result.geoElements {
+                            await self.processAndAdd(
+                                startingPoint: UtilityNetworkTraceStartingPoint(geoElement: element, mapPoint: mapPoint)
+                            )
+                        }
+                    }
                 }
             }
         }
