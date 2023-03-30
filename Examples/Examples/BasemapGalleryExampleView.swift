@@ -45,7 +45,8 @@ struct BasemapGalleryExampleView: View {
             // Display in a floating panel
             //
 //            .floatingPanel(isPresented: $showBasemapGallery) {
-//                BasemapGallery(items: basemaps, geoModel: dataModel.map)
+//                BasemapGallery(items: basemaps, geoModel: map)
+//                    .style(.grid)
 //            }
             
             // Display in an overlay
