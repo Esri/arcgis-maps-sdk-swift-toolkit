@@ -51,7 +51,7 @@
 ***REMOVED******REMOVED***items = []
 ***REMOVED******REMOVED***self.geoModel = geoModel
 ***REMOVED******REMOVED***geoModelDidChange(nil)
-
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***self.portal = portal
 ***REMOVED******REMOVED***portalDidChange(portal)
 ***REMOVED***
@@ -80,7 +80,7 @@
 ***REMOVED******REMOVED******REMOVED***portalDidChange(oldValue)
 ***REMOVED***
 ***REMOVED***
-
+***REMOVED***
 ***REMOVED******REMOVED***/ The list of basemaps shown in the gallery.
 ***REMOVED***@Published var items: [BasemapGalleryItem]
 ***REMOVED***
