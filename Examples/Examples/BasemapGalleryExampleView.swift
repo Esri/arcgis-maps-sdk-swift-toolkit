@@ -16,10 +16,8 @@ import ArcGIS
 import ArcGISToolkit
 
 struct BasemapGalleryExampleView: View {
-    /// The data model containing the `Map` displayed in the `MapView`.
-    @StateObject private var dataModel = MapDataModel(
-        map: Map(basemapStyle: .arcGISImagery)
-    )
+    /// The `Map` displayed in the `MapView`.
+    @State private var map = Map(basemapStyle: .arcGISImagery)
     
     /// A Boolean value indicating whether to show the basemap gallery.
     @State private var showBasemapGallery = false
@@ -34,7 +32,7 @@ struct BasemapGalleryExampleView: View {
     private let basemaps = initialBasemaps()
     
     var body: some View {
-        MapView(map: dataModel.map, viewpoint: initialViewpoint)
+        MapView(map: map, viewpoint: initialViewpoint)
             
             // Display in a sheet
             //
