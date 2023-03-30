@@ -117,9 +117,11 @@ public struct BasemapGallery: View {
 ***REMOVED******REMOVED******REMOVED*** message: { item in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(item.message)
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.frame(height: min(contentHeight, geometry.size.height))
+***REMOVED******REMOVED******REMOVED******REMOVED***.frame(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***width: geometry.size.width,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***height: geometry.size.height
+***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED***
-***REMOVED******REMOVED***.frame(width: galleryWidth)
 ***REMOVED***
 ***REMOVED***
 
