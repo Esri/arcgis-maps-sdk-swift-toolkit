@@ -35,13 +35,32 @@ struct BasemapGalleryExampleView: View {
     
     var body: some View {
         MapView(map: dataModel.map, viewpoint: initialViewpoint)
-            .overlay(alignment: .topTrailing) {
-                if showBasemapGallery {
-                    BasemapGallery(items: basemaps, geoModel: dataModel.map)
-                        .style(.automatic())
-                        .padding()
-                }
+            
+            // Display in a sheet
+            //
+            .sheet(isPresented: $showBasemapGallery) {
+                BasemapGallery(items: basemaps, geoModel: dataModel.map)
+                    .padding()
             }
+            
+            // Display in a floating panel
+            //
+//            .floatingPanel(isPresented: $showBasemapGallery) {
+//                BasemapGallery(items: basemaps, geoModel: dataModel.map)
+//            }
+            
+            // Display in an overlay
+            //
+//            .overlay(alignment: .topTrailing) {
+//                if showBasemapGallery {
+//                    BasemapGallery(items: basemaps, geoModel: dataModel.map)
+//                        .style(.list)
+//                        .frame(width: 150, height: 400)
+//                        .esriBorder()
+//                        .padding()
+//                }
+//            }
+            
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Toggle(isOn: $showBasemapGallery) {
