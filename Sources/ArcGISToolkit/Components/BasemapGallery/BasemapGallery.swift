@@ -118,7 +118,6 @@ public struct BasemapGallery: View {
                     Text(item.message)
                 }
                 .frame(height: min(contentHeight, geometry.size.height))
-                .esriBorder()
         }
         .frame(width: galleryWidth)
     }
