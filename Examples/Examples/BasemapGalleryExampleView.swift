@@ -38,6 +38,7 @@ struct BasemapGalleryExampleView: View {
             //
             .sheet(isPresented: $showBasemapGallery) {
                 BasemapGallery(items: basemaps, geoModel: map)
+                    .style(.grid)
                     .padding()
             }
             
