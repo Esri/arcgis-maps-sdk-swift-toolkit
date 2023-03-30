@@ -53,7 +53,7 @@ struct BasemapGalleryExampleView: View {
             //
 //            .overlay(alignment: .topTrailing) {
 //                if showBasemapGallery {
-//                    BasemapGallery(items: basemaps, geoModel: dataModel.map)
+//                    BasemapGallery(items: basemaps, geoModel: map)
 //                        .style(.list)
 //                        .frame(width: 150, height: 400)
 //                        .esriBorder()
