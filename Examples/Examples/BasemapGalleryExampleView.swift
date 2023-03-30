@@ -42,7 +42,6 @@ struct BasemapGalleryExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.navigationTitle("Basemap Gallery")
 ***REMOVED******REMOVED******REMOVED***.toolbar {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ToolbarItem(placement: .navigationBarTrailing) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Toggle(isOn: $showBasemapGallery) {
