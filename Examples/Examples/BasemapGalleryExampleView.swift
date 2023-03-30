@@ -16,10 +16,8 @@
 ***REMOVED***Toolkit
 
 struct BasemapGalleryExampleView: View {
-***REMOVED******REMOVED***/ The data model containing the `Map` displayed in the `MapView`.
-***REMOVED***@StateObject private var dataModel = MapDataModel(
-***REMOVED******REMOVED***map: Map(basemapStyle: .arcGISImagery)
-***REMOVED***)
+***REMOVED******REMOVED***/ The `Map` displayed in the `MapView`.
+***REMOVED***@State private var map = Map(basemapStyle: .arcGISImagery)
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether to show the basemap gallery.
 ***REMOVED***@State private var showBasemapGallery = false
@@ -34,7 +32,7 @@ struct BasemapGalleryExampleView: View {
 ***REMOVED***private let basemaps = initialBasemaps()
 ***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***MapView(map: dataModel.map, viewpoint: initialViewpoint)
+***REMOVED******REMOVED***MapView(map: map, viewpoint: initialViewpoint)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Display in a sheet
 ***REMOVED******REMOVED******REMOVED******REMOVED***
