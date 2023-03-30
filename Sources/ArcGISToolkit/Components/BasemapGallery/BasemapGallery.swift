@@ -118,7 +118,6 @@ public struct BasemapGallery: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(item.message)
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.frame(height: min(contentHeight, geometry.size.height))
-***REMOVED******REMOVED******REMOVED******REMOVED***.esriBorder()
 ***REMOVED***
 ***REMOVED******REMOVED***.frame(width: galleryWidth)
 ***REMOVED***
