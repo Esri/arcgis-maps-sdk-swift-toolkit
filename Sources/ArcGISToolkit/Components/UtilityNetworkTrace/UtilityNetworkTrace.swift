@@ -615,7 +615,7 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED***currentActivity = .creatingTrace(.viewingStartingPoints)
 ***REMOVED******REMOVED******REMOVED***activeDetent = .half
 ***REMOVED******REMOVED******REMOVED***Task {
-***REMOVED******REMOVED******REMOVED******REMOVED***await viewModel.addStartingPoint(
+***REMOVED******REMOVED******REMOVED******REMOVED***await viewModel.addStartingPoints(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***at: viewPoint,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mapPoint: mapPoint,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***with: mapViewProxy
