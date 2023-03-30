@@ -42,7 +42,6 @@ struct BasemapGalleryExampleView: View {
                         .padding()
                 }
             }
-            .navigationTitle("Basemap Gallery")
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Toggle(isOn: $showBasemapGallery) {
