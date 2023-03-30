@@ -62,7 +62,7 @@ import ArcGIS
     /// The error signifying the spatial reference of ``geoModel`` and the spatial reference of
     /// ``currentItem`` do not match.
     @Published private(set) var spatialReferenceMismatchError: SpatialReferenceMismatchError? = nil
-
+    
     /// If the `GeoModel` is not loaded when passed to the `BasemapGalleryViewModel`, then
     /// the geoModel will be immediately loaded. The spatial reference of geoModel dictates which
     /// basemaps from the gallery are enabled. When an enabled basemap is selected by the user,
@@ -109,7 +109,7 @@ import ArcGIS
     func portalDidChange(_ previousPortal: Portal?) {
         // Remove all items from `items`.
         items.removeAll()
-
+        
         guard let portal = portal else { return }
         fetchBasemaps(from: portal)
     }
