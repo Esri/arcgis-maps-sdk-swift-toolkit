@@ -83,9 +83,6 @@ public struct BasemapGallery: View {
 ***REMOVED******REMOVED***/ The current alert item to display.
 ***REMOVED***@State private var alertItem: AlertItem?
 ***REMOVED***
-***REMOVED******REMOVED***/ The height of the basemap gallery content.
-***REMOVED***@State private var contentHeight: CGFloat = .zero
-***REMOVED***
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***GeometryReader { geometry in
 ***REMOVED******REMOVED******REMOVED***makeGalleryView()
@@ -178,9 +175,6 @@ private extension BasemapGallery {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***.onSizeChange {
-***REMOVED******REMOVED******REMOVED***contentHeight = $0.height
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
