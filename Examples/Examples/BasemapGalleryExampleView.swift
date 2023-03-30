@@ -37,7 +37,7 @@ struct BasemapGalleryExampleView: View {
             // Display in a sheet
             //
             .sheet(isPresented: $showBasemapGallery) {
-                BasemapGallery(items: basemaps, geoModel: dataModel.map)
+                BasemapGallery(items: basemaps, geoModel: map)
                     .padding()
             }
             
