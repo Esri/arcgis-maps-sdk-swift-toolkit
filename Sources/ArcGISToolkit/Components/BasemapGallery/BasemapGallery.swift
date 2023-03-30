@@ -117,9 +117,11 @@ public struct BasemapGallery: View {
                 } message: { item in
                     Text(item.message)
                 }
-                .frame(height: min(contentHeight, geometry.size.height))
+                .frame(
+                    width: geometry.size.width,
+                    height: geometry.size.height
+                )
         }
-        .frame(width: galleryWidth)
     }
 }
 
