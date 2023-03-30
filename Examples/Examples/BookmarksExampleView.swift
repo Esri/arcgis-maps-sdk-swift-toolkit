@@ -49,7 +49,7 @@ struct BookmarksExampleView: View {
                             // bookmarks in a map.
                             Bookmarks(
                                 isPresented: $showingBookmarks,
-                                mapOrScene: map
+                                geoModel: map
                             )
                             // In order to handle bookmark selection changes
                             // manually, use `onSelectionChanged(perform:)`.
