@@ -53,7 +53,7 @@ struct BasemapGalleryExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.overlay(alignment: .topTrailing) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if showBasemapGallery {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***BasemapGallery(items: basemaps, geoModel: dataModel.map)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***BasemapGallery(items: basemaps, geoModel: map)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.style(.list)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(width: 150, height: 400)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.esriBorder()
