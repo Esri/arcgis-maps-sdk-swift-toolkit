@@ -51,7 +51,7 @@ import ArcGIS
         items = []
         self.geoModel = geoModel
         geoModelDidChange(nil)
-
+        
         self.portal = portal
         portalDidChange(portal)
     }
@@ -80,7 +80,7 @@ import ArcGIS
             portalDidChange(oldValue)
         }
     }
-
+    
     /// The list of basemaps shown in the gallery.
     @Published var items: [BasemapGalleryItem]
     
