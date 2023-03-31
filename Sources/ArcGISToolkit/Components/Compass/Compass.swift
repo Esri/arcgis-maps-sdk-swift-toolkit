@@ -45,8 +45,6 @@ public struct Compass: View {
     /// - Parameters:
     ///   - heading: The heading of the compass.
     ///   - action: An action to perform when the compass is tapped.
-    ///   - autoHide: A Boolean value that determines whether the compass
-    ///   automatically hides itself when the heading is `0`.
     public init(
         heading: Binding<Double>,
         action: (() async -> Void)? = nil
@@ -93,8 +91,6 @@ public extension Compass {
     ///   - viewpointRotation: The viewpoint rotation whose value determines the
     ///   heading of the compass.
     ///   - action: An action to perform when the compass is tapped.
-    ///   - autoHide: A Boolean value that determines whether the compass
-    ///   automatically hides itself when the viewpoint rotation is 0 degrees.
     init(
         viewpointRotation: Binding<Double>,
         action: (() async -> Void)? = nil
@@ -111,7 +107,6 @@ public extension Compass {
     /// - Parameters:
     ///   - viewpoint: The viewpoint whose rotation determines the heading of the compass.
     ///   - action: An action to perform when the compass is tapped.
-    ///   - autoHide: A Boolean value that determines whether the compass automatically hides itself
     ///   when the viewpoint's rotation is 0 degrees.
     init(
         viewpoint: Binding<Viewpoint?>,

@@ -74,7 +74,9 @@ struct MapWithViewpoint: View {
                 .onViewpointChanged(kind: .centerAndScale) { viewpoint = $0 }
                 .overlay(alignment: .topTrailing) {
                     Compass(viewpoint: $viewpoint) {
-                        _ = try? await proxy.setViewpoint(
+                        guard let viewpoint else { return }
+                        // Animate the map view to zero when the compass is tapped.
+                        _ = await proxy.setViewpoint(
                             viewpoint.withRotation(0),
                             duration: 0.25
                         )
@@ -106,6 +108,7 @@ struct SceneWithCameraController: View {
             }
             .overlay(alignment: .topTrailing) {
                 Compass(viewpointRotation: $heading) {
+                    // Animate the scene view when the compass is tapped.
                     _ = try? await cameraController.moveCamera(
                         distanceDelta: .zero,
                         headingDelta: heading > 180 ? 360 - heading : -heading,
