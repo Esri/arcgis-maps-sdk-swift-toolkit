@@ -45,8 +45,6 @@ public struct Compass: View {
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - heading: The heading of the compass.
 ***REMOVED******REMOVED***/   - action: An action to perform when the compass is tapped.
-***REMOVED******REMOVED***/   - autoHide: A Boolean value that determines whether the compass
-***REMOVED******REMOVED***/   automatically hides itself when the heading is `0`.
 ***REMOVED***public init(
 ***REMOVED******REMOVED***heading: Binding<Double>,
 ***REMOVED******REMOVED***action: (() async -> Void)? = nil
@@ -93,8 +91,6 @@ public extension Compass {
 ***REMOVED******REMOVED***/   - viewpointRotation: The viewpoint rotation whose value determines the
 ***REMOVED******REMOVED***/   heading of the compass.
 ***REMOVED******REMOVED***/   - action: An action to perform when the compass is tapped.
-***REMOVED******REMOVED***/   - autoHide: A Boolean value that determines whether the compass
-***REMOVED******REMOVED***/   automatically hides itself when the viewpoint rotation is 0 degrees.
 ***REMOVED***init(
 ***REMOVED******REMOVED***viewpointRotation: Binding<Double>,
 ***REMOVED******REMOVED***action: (() async -> Void)? = nil
@@ -111,7 +107,6 @@ public extension Compass {
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - viewpoint: The viewpoint whose rotation determines the heading of the compass.
 ***REMOVED******REMOVED***/   - action: An action to perform when the compass is tapped.
-***REMOVED******REMOVED***/   - autoHide: A Boolean value that determines whether the compass automatically hides itself
 ***REMOVED******REMOVED***/   when the viewpoint's rotation is 0 degrees.
 ***REMOVED***init(
 ***REMOVED******REMOVED***viewpoint: Binding<Viewpoint?>,
