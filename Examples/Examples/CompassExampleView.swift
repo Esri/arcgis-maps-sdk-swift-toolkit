@@ -76,7 +76,7 @@ struct MapWithViewpoint: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Compass(viewpoint: $viewpoint) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let viewpoint else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Animate the map view to zero when the compass is tapped.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***_ = await proxy.setViewpoint(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await proxy.setViewpoint(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint.withRotation(0),
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***duration: 0.25
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
