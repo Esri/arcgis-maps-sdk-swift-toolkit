@@ -84,7 +84,7 @@ struct SiteAndFacilitySelector: View {
             }
         }
         
-        /// A view containing a filter-via-name field, a list of the site names and an "All sites" button.
+        /// A view with a filter-via-name field, a list of site names and an "All sites" button.
         var body: some View {
             VStack {
                 // If the filtered set of sites is empty
@@ -232,8 +232,8 @@ struct SiteAndFacilitySelector: View {
         /// Displays a list of facilities matching the filter criteria as determined by
         /// `matchingFacilities`.
         ///
-        /// If a certain facility is indicated as selected by the view model, it will have a slightly different
-        /// appearance.
+        /// If a certain facility is indicated as selected by the view model, it will have a
+        /// slightly different appearance.
         ///
         /// If `AutomaticSelectionMode` mode is in use, this list will automatically scroll to the
         /// selected item.
