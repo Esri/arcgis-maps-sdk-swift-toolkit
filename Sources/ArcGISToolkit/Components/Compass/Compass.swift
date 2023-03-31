@@ -25,7 +25,7 @@ public struct Compass: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether  the compass should automatically
 ***REMOVED******REMOVED***/ hide/show itself when the heading is `0`.
-***REMOVED***private let autoHide: Bool
+***REMOVED***private var autoHide: Bool = true
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether the compass should hide based on the
 ***REMOVED******REMOVED***/  current heading and whether the compass automatically hides.
@@ -49,12 +49,10 @@ public struct Compass: View {
 ***REMOVED******REMOVED***/   automatically hides itself when the heading is `0`.
 ***REMOVED***public init(
 ***REMOVED******REMOVED***heading: Binding<Double>,
-***REMOVED******REMOVED***action: (() async -> Void)? = nil,
-***REMOVED******REMOVED***autoHide: Bool = true
+***REMOVED******REMOVED***action: (() async -> Void)? = nil
 ***REMOVED***) {
 ***REMOVED******REMOVED***_heading = heading
 ***REMOVED******REMOVED***self.action = action
-***REMOVED******REMOVED***self.autoHide = autoHide
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***public var body: some View {
@@ -99,15 +97,14 @@ public extension Compass {
 ***REMOVED******REMOVED***/   automatically hides itself when the viewpoint rotation is 0 degrees.
 ***REMOVED***init(
 ***REMOVED******REMOVED***viewpointRotation: Binding<Double>,
-***REMOVED******REMOVED***action: (() async -> Void)? = nil,
-***REMOVED******REMOVED***autoHide: Bool = true
+***REMOVED******REMOVED***action: (() async -> Void)? = nil
 ***REMOVED***) {
 ***REMOVED******REMOVED***let heading = Binding(get: {
 ***REMOVED******REMOVED******REMOVED***viewpointRotation.wrappedValue.isZero ? .zero : 360 - viewpointRotation.wrappedValue
 ***REMOVED***, set: { newHeading in
 ***REMOVED******REMOVED******REMOVED***viewpointRotation.wrappedValue = newHeading.isZero ? .zero : 360 - newHeading
 ***REMOVED***)
-***REMOVED******REMOVED***self.init(heading: heading, action: action, autoHide: autoHide)
+***REMOVED******REMOVED***self.init(heading: heading, action: action)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a compass with a binding to an optional viewpoint.
@@ -118,8 +115,7 @@ public extension Compass {
 ***REMOVED******REMOVED***/   when the viewpoint's rotation is 0 degrees.
 ***REMOVED***init(
 ***REMOVED******REMOVED***viewpoint: Binding<Viewpoint?>,
-***REMOVED******REMOVED***action: (() async -> Void)? = nil,
-***REMOVED******REMOVED***autoHide: Bool = true
+***REMOVED******REMOVED***action: (() async -> Void)? = nil
 ***REMOVED***) {
 ***REMOVED******REMOVED***let viewpointRotation = Binding {
 ***REMOVED******REMOVED******REMOVED***viewpoint.wrappedValue?.rotation ?? .nan
@@ -131,7 +127,7 @@ public extension Compass {
 ***REMOVED******REMOVED******REMOVED******REMOVED***rotation: newViewpointRotation
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED***
-***REMOVED******REMOVED***self.init(viewpointRotation: viewpointRotation, action: action, autoHide: autoHide)
+***REMOVED******REMOVED***self.init(viewpointRotation: viewpointRotation, action: action)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Define a custom size for the compass.
@@ -139,6 +135,15 @@ public extension Compass {
 ***REMOVED***func compassSize(size: CGFloat) -> Self {
 ***REMOVED******REMOVED***var copy = self
 ***REMOVED******REMOVED***copy.size = size
+***REMOVED******REMOVED***return copy
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Specifies whether the ``Compass`` should automatically hide when the heading is 0.
+***REMOVED******REMOVED***/ - Parameter newAutomaticallyHides: A Boolean value indicating whether  the compass should automatically
+***REMOVED******REMOVED***/ hide/show itself when the heading is `0`.
+***REMOVED***func automaticallyHides(_ newAutomaticallyHides: Bool) -> some View {
+***REMOVED******REMOVED***var copy = self
+***REMOVED******REMOVED***copy.autoHide = newAutomaticallyHides
 ***REMOVED******REMOVED***return copy
 ***REMOVED***
 ***REMOVED***
