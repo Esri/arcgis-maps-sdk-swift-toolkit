@@ -50,7 +50,6 @@ struct CompassExampleView: View {
                         Label("Scene", systemImage: "globe.americas.fill")
                     }
                 }
-                .labelStyle(.titleAndIcon)
             }
         }
     }
