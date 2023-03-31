@@ -96,7 +96,7 @@ public struct Scalebar: View {
 ***REMOVED******REMOVED***useGeodeticCalculations: Bool = true,
 ***REMOVED******REMOVED***viewpoint: Binding<Viewpoint?>
 ***REMOVED***) {
-***REMOVED******REMOVED***self.opacity = settings.autoHide ? .zero : 1
+***REMOVED******REMOVED***_opacity = State(initialValue: settings.autoHide ? .zero : 1)
 ***REMOVED******REMOVED***self.settings = settings
 ***REMOVED******REMOVED***self.style = style
 ***REMOVED******REMOVED***self.viewpoint = viewpoint
