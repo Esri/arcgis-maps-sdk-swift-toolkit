@@ -80,12 +80,12 @@ struct AttachmentsPopupElementView: View {
             }
         }
         .task {
-            try? await popupElement.fetchAttachments()
-            let attachmentModels = popupElement.attachments.reversed().map { attachment in
-                AttachmentModel(attachment: attachment)
+            if let attachmentModels = try? await popupElement.attachments.reversed().map({ 
+                AttachmentModel(attachment: $0)
+            }) {
+                viewModel.attachmentModels.append(contentsOf: attachmentModels)
+                isLoadingAttachments = false
             }
-            viewModel.attachmentModels.append(contentsOf: attachmentModels)
-            isLoadingAttachments = false
         }
     }
 }
