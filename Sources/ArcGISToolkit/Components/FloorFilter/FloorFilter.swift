@@ -14,9 +14,9 @@
 import SwiftUI
 import ArcGIS
 
-/// The `FloorFilter` component simplifies visualization of GIS data for a specific floor of a building
-/// in your application. It allows you to filter the floor plan data displayed in your map or scene view
-/// to a site, a facility (building) in the site, or a floor in the facility.
+/// The `FloorFilter` component simplifies visualization of GIS data for a specific floor of a
+/// building in your application. It allows you to filter the floor plan data displayed in your map
+/// or scene view to a site, a facility (building) in the site, or a floor in the facility.
 public struct FloorFilter: View {
     @Environment(\.horizontalSizeClass)
     private var horizontalSizeClass: UserInterfaceSizeClass?
@@ -52,9 +52,6 @@ public struct FloorFilter: View {
     
     /// The view model used by the `FloorFilter`.
     @StateObject private var viewModel: FloorFilterViewModel
-    
-    /// A Boolean value that indicates whether the levels view is currently collapsed.
-    @State private var isLevelsViewCollapsed = false
     
     /// A Boolean value that indicates whether the site and facility selector is presented.
     @State private var isSitesAndFacilitiesHidden = true

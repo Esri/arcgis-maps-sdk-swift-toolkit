@@ -49,7 +49,7 @@ final class FloorFilterViewModel: ObservableObject {
     private let automaticSelectionMode: FloorFilterAutomaticSelectionMode
     
     /// The `FloorManager` containing the site, floor, and level information.
-    let floorManager: FloorManager
+    private let floorManager: FloorManager
     
     // MARK: Properties
     
@@ -139,7 +139,7 @@ final class FloorFilterViewModel: ObservableObject {
     
     /// Attempts to make an automated selection based on the current viewpoint.
     ///
-    /// This method first attempts to select a facility, if that fails, a site selection is attempted.
+    /// This method first attempts to select a facility, if that fails, site selection is attempted.
     func automaticallySelectFacilityOrSite() {
         guard automaticSelectionMode != .never else {
             return
@@ -227,7 +227,8 @@ final class FloorFilterViewModel: ObservableObject {
         return true
     }
     
-    /// Sets the visibility of all the levels on the map based on the vertical order of the current selected level.
+    /// Sets the visibility of all the levels on the map based on the vertical order of the current
+    /// selected level.
     private func filterMapToSelectedLevel() {
         if let selectedLevel = selection?.level {
             levels.forEach {
