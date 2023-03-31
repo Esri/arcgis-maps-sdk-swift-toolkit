@@ -14,9 +14,9 @@
 ***REMOVED***
 ***REMOVED***
 
-***REMOVED***/ The `FloorFilter` component simplifies visualization of GIS data for a specific floor of a building
-***REMOVED***/ in your application. It allows you to filter the floor plan data displayed in your map or scene view
-***REMOVED***/ to a site, a facility (building) in the site, or a floor in the facility.
+***REMOVED***/ The `FloorFilter` component simplifies visualization of GIS data for a specific floor of a
+***REMOVED***/ building in your application. It allows you to filter the floor plan data displayed in your map
+***REMOVED***/ or scene view to a site, a facility (building) in the site, or a floor in the facility.
 public struct FloorFilter: View {
 ***REMOVED***@Environment(\.horizontalSizeClass)
 ***REMOVED***private var horizontalSizeClass: UserInterfaceSizeClass?
@@ -52,9 +52,6 @@ public struct FloorFilter: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ The view model used by the `FloorFilter`.
 ***REMOVED***@StateObject private var viewModel: FloorFilterViewModel
-***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value that indicates whether the levels view is currently collapsed.
-***REMOVED***@State private var isLevelsViewCollapsed = false
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value that indicates whether the site and facility selector is presented.
 ***REMOVED***@State private var isSitesAndFacilitiesHidden = true
