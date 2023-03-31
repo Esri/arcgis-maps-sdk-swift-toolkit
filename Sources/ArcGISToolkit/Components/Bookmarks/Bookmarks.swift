@@ -90,16 +90,16 @@ public struct Bookmarks: View {
 ***REMOVED******REMOVED***/ Creates a `Bookmarks` component.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - isPresented: Determines if the bookmarks list is presented.
-***REMOVED******REMOVED***/   - mapOrScene: A `GeoModel` authored with pre-existing bookmarks.
+***REMOVED******REMOVED***/   - geoModel: A `GeoModel` authored with pre-existing bookmarks.
 ***REMOVED******REMOVED***/   - viewpoint: A viewpoint binding that will be updated when a bookmark is selected.
 ***REMOVED******REMOVED***/   Alternately, you can use the `onSelectionChanged(perform:)` modifier to handle
 ***REMOVED******REMOVED***/   bookmark selection.
 ***REMOVED***public init(
 ***REMOVED******REMOVED***isPresented: Binding<Bool>,
-***REMOVED******REMOVED***mapOrScene: GeoModel,
+***REMOVED******REMOVED***geoModel: GeoModel,
 ***REMOVED******REMOVED***viewpoint: Binding<Viewpoint?>? = nil
 ***REMOVED***) {
-***REMOVED******REMOVED***geoModel = mapOrScene
+***REMOVED******REMOVED***self.geoModel = geoModel
 ***REMOVED******REMOVED***self.viewpoint = viewpoint
 ***REMOVED******REMOVED***_isPresented = isPresented
 ***REMOVED***
