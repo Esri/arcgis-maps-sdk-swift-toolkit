@@ -50,7 +50,6 @@ struct CompassExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Label("Scene", systemImage: "globe.americas.fill")
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.labelStyle(.titleAndIcon)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
