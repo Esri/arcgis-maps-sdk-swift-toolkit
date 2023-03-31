@@ -34,20 +34,20 @@ final class FloorFilterViewModelTests: XCTestCase {
         )
         
         // Viewpoint is Los Angeles, selection should be nil
-        XCTAssertNil(viewModel.selectedFacility)
-        XCTAssertNil(viewModel.selectedSite)
+        XCTAssertNil(viewModel.selection?.facility)
+        XCTAssertNil(viewModel.selection?.site)
         
         // Viewpoint is Research Annex Lattice
         _viewpoint = .researchAnnexLattice
         viewModel.automaticallySelectFacilityOrSite()
-        XCTAssertEqual(viewModel.selectedSite?.name, "Research Annex")
-        XCTAssertEqual(viewModel.selectedFacility?.name, "Lattice")
+        XCTAssertEqual(viewModel.selection?.site?.name, "Research Annex")
+        XCTAssertEqual(viewModel.selection?.facility?.name, "Lattice")
         
         // Viewpoint is Los Angeles, selection should be nil
         _viewpoint = .losAngeles
         viewModel.automaticallySelectFacilityOrSite()
-        XCTAssertNil(viewModel.selectedSite)
-        XCTAssertNil(viewModel.selectedFacility)
+        XCTAssertNil(viewModel.selection?.site)
+        XCTAssertNil(viewModel.selection?.facility)
     }
     
     /// Confirms that the selected site/facility/level properties and the viewpoint are correctly updated.
@@ -67,14 +67,14 @@ final class FloorFilterViewModelTests: XCTestCase {
         // Viewpoint is Research Annex Lattice
         _viewpoint = .researchAnnexLattice
         viewModel.automaticallySelectFacilityOrSite()
-        XCTAssertEqual(viewModel.selectedSite?.name, "Research Annex")
-        XCTAssertEqual(viewModel.selectedFacility?.name, "Lattice")
+        XCTAssertEqual(viewModel.selection?.site?.name, "Research Annex")
+        XCTAssertEqual(viewModel.selection?.facility?.name, "Lattice")
         
         // Viewpoint is Los Angeles, but selection should remain Research Annex Lattice
         _viewpoint = .losAngeles
         viewModel.automaticallySelectFacilityOrSite()
-        XCTAssertEqual(viewModel.selectedSite?.name, "Research Annex")
-        XCTAssertEqual(viewModel.selectedFacility?.name, "Lattice")
+        XCTAssertEqual(viewModel.selection?.site?.name, "Research Annex")
+        XCTAssertEqual(viewModel.selection?.facility?.name, "Lattice")
     }
     
     /// Confirms that the selected site/facility/level properties and the viewpoint are correctly updated.
@@ -92,14 +92,14 @@ final class FloorFilterViewModelTests: XCTestCase {
         )
         
         // Viewpoint is Los Angeles, selection should be nil
-        XCTAssertNil(viewModel.selectedFacility)
-        XCTAssertNil(viewModel.selectedSite)
+        XCTAssertNil(viewModel.selection?.facility)
+        XCTAssertNil(viewModel.selection?.site)
         
         // Viewpoint is Research Annex Lattice but selection should remain nil
         _viewpoint = .researchAnnexLattice
         viewModel.automaticallySelectFacilityOrSite()
-        XCTAssertNil(viewModel.selectedFacility)
-        XCTAssertNil(viewModel.selectedSite)
+        XCTAssertNil(viewModel.selection?.facility)
+        XCTAssertNil(viewModel.selection?.site)
     }
     
     /// Tests that a `FloorFilterViewModel` successfully initializes.
@@ -151,19 +151,25 @@ final class FloorFilterViewModelTests: XCTestCase {
         let level = try XCTUnwrap(viewModel.levels.first)
         
         viewModel.setSite(site, zoomTo: true)
-        XCTAssertEqual(viewModel.selectedSite, site)
-        XCTAssertNil(viewModel.selectedFacility)
-        XCTAssertNil(viewModel.selectedLevel)
+        XCTAssertEqual(viewModel.selection?.site, site)
+        XCTAssertNil(viewModel.selection?.facility)
+        XCTAssertNil(viewModel.selection?.level)
         
         viewModel.setFacility(facility, zoomTo: true)
-        XCTAssertEqual(viewModel.selectedSite, facility.site)
-        XCTAssertEqual(viewModel.selectedFacility, facility)
-        XCTAssertEqual(viewModel.selectedLevel, facility.defaultLevel)
+        XCTAssertEqual(viewModel.selection?.site, facility.site)
+        XCTAssertEqual(viewModel.selection?.facility, facility)
+        XCTAssertEqual(viewModel.selection?.level, facility.defaultLevel)
         
         viewModel.setLevel(level)
-        XCTAssertEqual(viewModel.selectedSite, level.facility?.site)
-        XCTAssertEqual(viewModel.selectedFacility, level.facility)
-        XCTAssertEqual(viewModel.selectedLevel, level)
+        XCTAssertEqual(viewModel.selection?.site, level.facility?.site)
+        XCTAssertEqual(viewModel.selection?.facility, level.facility)
+        XCTAssertEqual(viewModel.selection?.level, level)
+        
+        viewModel.clearSelection()
+        XCTAssertEqual(viewModel.selection, nil)
+        XCTAssertEqual(viewModel.selection?.site, nil)
+        XCTAssertEqual(viewModel.selection?.facility, nil)
+        XCTAssertEqual(viewModel.selection?.level, nil)
     }
     
     /// Confirms that the selection property indicates the correct facility (and therefore level) value.

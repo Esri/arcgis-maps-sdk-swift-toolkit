@@ -28,12 +28,14 @@ public struct FloorFilter: View {
     ///   - automaticSelectionMode: The selection behavior of the floor filter.
     ///   - viewpoint: Viewpoint updated when the selected site or facility changes.
     ///   - isNavigating: A Boolean value indicating whether the map is currently being navigated.
+    ///   - selection: The selected site, facility, or level.
     public init(
         floorManager: FloorManager,
         alignment: Alignment,
         automaticSelectionMode: FloorFilterAutomaticSelectionMode = .always,
         viewpoint: Binding<Viewpoint?> = .constant(nil),
-        isNavigating: Binding<Bool>
+        isNavigating: Binding<Bool>,
+        selection: Binding<FloorFilterSelection?>? = nil
     ) {
         _viewModel = StateObject(
             wrappedValue: FloorFilterViewModel(
@@ -45,6 +47,7 @@ public struct FloorFilter: View {
         self.alignment = alignment
         self.isNavigating = isNavigating
         self.viewpoint = viewpoint
+        self.selection = selection
     }
     
     /// The view model used by the `FloorFilter`.
@@ -55,6 +58,9 @@ public struct FloorFilter: View {
     
     /// A Boolean value that indicates whether the site and facility selector is presented.
     @State private var isSitesAndFacilitiesHidden = true
+    
+    /// The selected site, floor, or level.
+    private var selection: Binding<FloorFilterSelection?>?
     
     /// The alignment configuration.
     private let alignment: Alignment
@@ -176,5 +182,20 @@ public struct FloorFilter: View {
         .frame(minHeight: 100)
         .environmentObject(viewModel)
         .disabled(viewModel.isLoading)
+        .onChange(of: selection?.wrappedValue) { newValue in
+            // Prevent a double-set if the view model triggered the original change.
+            guard newValue != viewModel.selection else { return }
+            switch newValue {
+            case .site(let site): viewModel.setSite(site)
+            case .facility(let facility): viewModel.setFacility(facility)
+            case .level(let level): viewModel.setLevel(level)
+            case .none: viewModel.clearSelection()
+            }
+        }
+        .onChange(of: viewModel.selection) { newValue in
+            // Prevent a double-set if the user triggered the original change.
+            guard selection?.wrappedValue != newValue else { return }
+            selection?.wrappedValue = newValue
+        }
     }
 }
