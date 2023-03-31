@@ -96,7 +96,7 @@ public struct Scalebar: View {
         useGeodeticCalculations: Bool = true,
         viewpoint: Binding<Viewpoint?>
     ) {
-        self.opacity = settings.autoHide ? .zero : 1
+        _opacity = State(initialValue: settings.autoHide ? .zero : 1)
         self.settings = settings
         self.style = style
         self.viewpoint = viewpoint
