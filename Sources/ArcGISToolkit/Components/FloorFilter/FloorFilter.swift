@@ -28,12 +28,14 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED***/   - automaticSelectionMode: The selection behavior of the floor filter.
 ***REMOVED******REMOVED***/   - viewpoint: Viewpoint updated when the selected site or facility changes.
 ***REMOVED******REMOVED***/   - isNavigating: A Boolean value indicating whether the map is currently being navigated.
+***REMOVED******REMOVED***/   - selection: The selected site, facility, or level.
 ***REMOVED***public init(
 ***REMOVED******REMOVED***floorManager: FloorManager,
 ***REMOVED******REMOVED***alignment: Alignment,
 ***REMOVED******REMOVED***automaticSelectionMode: FloorFilterAutomaticSelectionMode = .always,
 ***REMOVED******REMOVED***viewpoint: Binding<Viewpoint?> = .constant(nil),
-***REMOVED******REMOVED***isNavigating: Binding<Bool>
+***REMOVED******REMOVED***isNavigating: Binding<Bool>,
+***REMOVED******REMOVED***selection: Binding<FloorFilterSelection?>? = nil
 ***REMOVED***) {
 ***REMOVED******REMOVED***_viewModel = StateObject(
 ***REMOVED******REMOVED******REMOVED***wrappedValue: FloorFilterViewModel(
@@ -45,6 +47,7 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED***self.alignment = alignment
 ***REMOVED******REMOVED***self.isNavigating = isNavigating
 ***REMOVED******REMOVED***self.viewpoint = viewpoint
+***REMOVED******REMOVED***self.selection = selection
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The view model used by the `FloorFilter`.
@@ -55,6 +58,9 @@ public struct FloorFilter: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value that indicates whether the site and facility selector is presented.
 ***REMOVED***@State private var isSitesAndFacilitiesHidden = true
+***REMOVED***
+***REMOVED******REMOVED***/ The selected site, floor, or level.
+***REMOVED***private var selection: Binding<FloorFilterSelection?>?
 ***REMOVED***
 ***REMOVED******REMOVED***/ The alignment configuration.
 ***REMOVED***private let alignment: Alignment
@@ -176,5 +182,20 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED***.frame(minHeight: 100)
 ***REMOVED******REMOVED***.environmentObject(viewModel)
 ***REMOVED******REMOVED***.disabled(viewModel.isLoading)
+***REMOVED******REMOVED***.onChange(of: selection?.wrappedValue) { newValue in
+***REMOVED******REMOVED******REMOVED******REMOVED*** Prevent a double-set if the view model triggered the original change.
+***REMOVED******REMOVED******REMOVED***guard newValue != viewModel.selection else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED***switch newValue {
+***REMOVED******REMOVED******REMOVED***case .site(let site): viewModel.setSite(site)
+***REMOVED******REMOVED******REMOVED***case .facility(let facility): viewModel.setFacility(facility)
+***REMOVED******REMOVED******REMOVED***case .level(let level): viewModel.setLevel(level)
+***REMOVED******REMOVED******REMOVED***case .none: viewModel.clearSelection()
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***.onChange(of: viewModel.selection) { newValue in
+***REMOVED******REMOVED******REMOVED******REMOVED*** Prevent a double-set if the user triggered the original change.
+***REMOVED******REMOVED******REMOVED***guard selection?.wrappedValue != newValue else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED***selection?.wrappedValue = newValue
+***REMOVED***
 ***REMOVED***
 ***REMOVED***

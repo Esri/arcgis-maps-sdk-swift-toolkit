@@ -33,7 +33,7 @@ struct LevelSelector: View {
 ***REMOVED******REMOVED***/ The short name of the currently selected level, the first level, or "None" if none of the levels
 ***REMOVED******REMOVED***/ are available.
 ***REMOVED***private var selectedLevelName: String {
-***REMOVED******REMOVED***viewModel.selectedLevel?.shortName ?? ""
+***REMOVED******REMOVED***viewModel.selection?.level?.shortName ?? ""
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***public var body: some View {
@@ -91,7 +91,7 @@ private struct LevelsStack: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Toggle(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isOn: Binding(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***get: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.selectedLevel == level
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.selection?.level == level
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***set: { newIsOn in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard newIsOn else { return ***REMOVED***
@@ -111,7 +111,7 @@ private struct LevelsStack: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.frame(maxHeight: contentHeight)
 ***REMOVED******REMOVED******REMOVED***.onAppear {
-***REMOVED******REMOVED******REMOVED******REMOVED***if let floorLevel = viewModel.selectedLevel {
+***REMOVED******REMOVED******REMOVED******REMOVED***if let floorLevel = viewModel.selection?.level {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***withAnimation {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***proxy.scrollTo(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***floorLevel.id
