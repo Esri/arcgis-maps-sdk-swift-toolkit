@@ -69,12 +69,19 @@ struct MapWithViewpoint: View {
     )
     
     var body: some View {
-        MapView(map: map, viewpoint: viewpoint)
-            .onViewpointChanged(kind: .centerAndScale) { viewpoint = $0 }
-            .overlay(alignment: .topTrailing) {
-                Compass(viewpoint: $viewpoint)
+        MapViewReader { proxy in
+            MapView(map: map, viewpoint: viewpoint)
+                .onViewpointChanged(kind: .centerAndScale) { viewpoint = $0 }
+                .overlay(alignment: .topTrailing) {
+                    Compass(viewpoint: $viewpoint) {
+                        _ = try? await proxy.setViewpoint(
+                            viewpoint.withRotation(0),
+                            duration: 0.25
+                        )
+                    }
                     .padding()
-            }
+                }
+        }
     }
 }
 
@@ -98,17 +105,14 @@ struct SceneWithCameraController: View {
                 heading = newCamera.heading.rounded()
             }
             .overlay(alignment: .topTrailing) {
-                Compass(
-                    viewpointRotation: $heading,
-                    action: {
-                        _ = try? await cameraController.moveCamera(
-                            distanceDelta: .zero,
-                            headingDelta: heading > 180 ? 360 - heading : -heading,
-                            pitchDelta: .zero,
-                            duration: 0.3
-                        )
-                    }
-                )
+                Compass(viewpointRotation: $heading) {
+                    _ = try? await cameraController.moveCamera(
+                        distanceDelta: .zero,
+                        headingDelta: heading > 180 ? 360 - heading : -heading,
+                        pitchDelta: .zero,
+                        duration: 0.3
+                    )
+                }
                 .padding()
             }
     }

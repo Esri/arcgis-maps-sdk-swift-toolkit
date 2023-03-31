@@ -25,7 +25,7 @@ public struct Compass: View {
     
     /// A Boolean value indicating whether  the compass should automatically
     /// hide/show itself when the heading is `0`.
-    private let autoHide: Bool
+    private var autoHide: Bool = true
     
     /// A Boolean value indicating whether the compass should hide based on the
     ///  current heading and whether the compass automatically hides.
@@ -49,12 +49,10 @@ public struct Compass: View {
     ///   automatically hides itself when the heading is `0`.
     public init(
         heading: Binding<Double>,
-        action: (() async -> Void)? = nil,
-        autoHide: Bool = true
+        action: (() async -> Void)? = nil
     ) {
         _heading = heading
         self.action = action
-        self.autoHide = autoHide
     }
     
     public var body: some View {
@@ -99,15 +97,14 @@ public extension Compass {
     ///   automatically hides itself when the viewpoint rotation is 0 degrees.
     init(
         viewpointRotation: Binding<Double>,
-        action: (() async -> Void)? = nil,
-        autoHide: Bool = true
+        action: (() async -> Void)? = nil
     ) {
         let heading = Binding(get: {
             viewpointRotation.wrappedValue.isZero ? .zero : 360 - viewpointRotation.wrappedValue
         }, set: { newHeading in
             viewpointRotation.wrappedValue = newHeading.isZero ? .zero : 360 - newHeading
         })
-        self.init(heading: heading, action: action, autoHide: autoHide)
+        self.init(heading: heading, action: action)
     }
     
     /// Creates a compass with a binding to an optional viewpoint.
@@ -118,8 +115,7 @@ public extension Compass {
     ///   when the viewpoint's rotation is 0 degrees.
     init(
         viewpoint: Binding<Viewpoint?>,
-        action: (() async -> Void)? = nil,
-        autoHide: Bool = true
+        action: (() async -> Void)? = nil
     ) {
         let viewpointRotation = Binding {
             viewpoint.wrappedValue?.rotation ?? .nan
@@ -131,7 +127,7 @@ public extension Compass {
                 rotation: newViewpointRotation
             )
         }
-        self.init(viewpointRotation: viewpointRotation, action: action, autoHide: autoHide)
+        self.init(viewpointRotation: viewpointRotation, action: action)
     }
     
     /// Define a custom size for the compass.
@@ -139,6 +135,15 @@ public extension Compass {
     func compassSize(size: CGFloat) -> Self {
         var copy = self
         copy.size = size
+        return copy
+    }
+    
+    /// Specifies whether the ``Compass`` should automatically hide when the heading is 0.
+    /// - Parameter newAutomaticallyHides: A Boolean value indicating whether  the compass should automatically
+    /// hide/show itself when the heading is `0`.
+    func automaticallyHides(_ newAutomaticallyHides: Bool) -> some View {
+        var copy = self
+        copy.autoHide = newAutomaticallyHides
         return copy
     }
 }
