@@ -21,7 +21,7 @@ public struct Compass: View {
     @State private var opacity: Double = .zero
     
     /// An action to perform when the compass is tapped.
-    private let action: (() async -> Void)?
+    private let action: (() -> Void)?
     
     /// A Boolean value indicating whether  the compass should automatically
     /// hide/show itself when the heading is `0`.
@@ -47,7 +47,7 @@ public struct Compass: View {
     ///   - action: An action to perform when the compass is tapped.
     public init(
         heading: Binding<Double>,
-        action: (() async -> Void)? = nil
+        action: (() -> Void)? = nil
     ) {
         _heading = heading
         self.action = action
@@ -73,7 +73,7 @@ public struct Compass: View {
                 }
                 .onTapGesture {
                     if let action {
-                        Task { await action() }
+                        action()
                     } else {
                         heading = .zero
                     }
@@ -93,7 +93,7 @@ public extension Compass {
     ///   - action: An action to perform when the compass is tapped.
     init(
         viewpointRotation: Binding<Double>,
-        action: (() async -> Void)? = nil
+        action: (() -> Void)? = nil
     ) {
         let heading = Binding(get: {
             viewpointRotation.wrappedValue.isZero ? .zero : 360 - viewpointRotation.wrappedValue
@@ -110,7 +110,7 @@ public extension Compass {
     ///   when the viewpoint's rotation is 0 degrees.
     init(
         viewpoint: Binding<Viewpoint?>,
-        action: (() async -> Void)? = nil
+        action: (() -> Void)? = nil
     ) {
         let viewpointRotation = Binding {
             viewpoint.wrappedValue?.rotation ?? .nan
