@@ -74,11 +74,13 @@ struct MapWithViewpoint: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***.overlay(alignment: .topTrailing) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Compass(viewpoint: $viewpoint) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let viewpoint else { return ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Animate the map view to zero when the compass is tapped.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await proxy.setViewpoint(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint.withRotation(0),
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***duration: 0.25
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Animate the map view to zero when the compass is tapped.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await proxy.setViewpoint(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint.withRotation(0),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***duration: 0.25
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
 ***REMOVED******REMOVED******REMOVED***
@@ -108,12 +110,14 @@ struct SceneWithCameraController: View {
 ***REMOVED******REMOVED******REMOVED***.overlay(alignment: .topTrailing) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Compass(viewpointRotation: $heading) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Animate the scene view when the compass is tapped.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***_ = try? await cameraController.moveCamera(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***distanceDelta: .zero,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***headingDelta: heading > 180 ? 360 - heading : -heading,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***pitchDelta: .zero,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***duration: 0.3
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***_ = try? await cameraController.moveCamera(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***distanceDelta: .zero,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***headingDelta: heading > 180 ? 360 - heading : -heading,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***pitchDelta: .zero,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***duration: 0.3
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding()
 ***REMOVED******REMOVED***

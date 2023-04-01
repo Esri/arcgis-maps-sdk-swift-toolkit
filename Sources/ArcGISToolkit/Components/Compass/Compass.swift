@@ -21,7 +21,7 @@ public struct Compass: View {
 ***REMOVED***@State private var opacity: Double = .zero
 ***REMOVED***
 ***REMOVED******REMOVED***/ An action to perform when the compass is tapped.
-***REMOVED***private let action: (() async -> Void)?
+***REMOVED***private let action: (() -> Void)?
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether  the compass should automatically
 ***REMOVED******REMOVED***/ hide/show itself when the heading is `0`.
@@ -47,7 +47,7 @@ public struct Compass: View {
 ***REMOVED******REMOVED***/   - action: An action to perform when the compass is tapped.
 ***REMOVED***public init(
 ***REMOVED******REMOVED***heading: Binding<Double>,
-***REMOVED******REMOVED***action: (() async -> Void)? = nil
+***REMOVED******REMOVED***action: (() -> Void)? = nil
 ***REMOVED***) {
 ***REMOVED******REMOVED***_heading = heading
 ***REMOVED******REMOVED***self.action = action
@@ -73,7 +73,7 @@ public struct Compass: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onTapGesture {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let action {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task { await action() ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***action()
 ***REMOVED******REMOVED******REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***heading = .zero
 ***REMOVED******REMOVED******REMOVED******REMOVED***
@@ -93,7 +93,7 @@ public extension Compass {
 ***REMOVED******REMOVED***/   - action: An action to perform when the compass is tapped.
 ***REMOVED***init(
 ***REMOVED******REMOVED***viewpointRotation: Binding<Double>,
-***REMOVED******REMOVED***action: (() async -> Void)? = nil
+***REMOVED******REMOVED***action: (() -> Void)? = nil
 ***REMOVED***) {
 ***REMOVED******REMOVED***let heading = Binding(get: {
 ***REMOVED******REMOVED******REMOVED***viewpointRotation.wrappedValue.isZero ? .zero : 360 - viewpointRotation.wrappedValue
@@ -110,7 +110,7 @@ public extension Compass {
 ***REMOVED******REMOVED***/   when the viewpoint's rotation is 0 degrees.
 ***REMOVED***init(
 ***REMOVED******REMOVED***viewpoint: Binding<Viewpoint?>,
-***REMOVED******REMOVED***action: (() async -> Void)? = nil
+***REMOVED******REMOVED***action: (() -> Void)? = nil
 ***REMOVED***) {
 ***REMOVED******REMOVED***let viewpointRotation = Binding {
 ***REMOVED******REMOVED******REMOVED***viewpoint.wrappedValue?.rotation ?? .nan
