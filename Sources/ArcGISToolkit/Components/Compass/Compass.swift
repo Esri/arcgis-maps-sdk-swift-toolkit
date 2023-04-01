@@ -134,7 +134,7 @@ public extension Compass {
     }
     
     /// Specifies whether the ``Compass`` should automatically hide when the heading is 0.
-    /// - Parameter flag: A Boolean value indicating whether  the compass should automatically
+    /// - Parameter flag: A Boolean value indicating whether the compass should automatically
     /// hide/show itself when the heading is `0`.
     func automaticallyHides(_ flag: Bool) -> some View {
         var copy = self
