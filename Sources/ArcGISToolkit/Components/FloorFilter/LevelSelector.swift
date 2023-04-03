@@ -20,8 +20,8 @@ struct LevelSelector: View {
 ***REMOVED***@EnvironmentObject var viewModel: FloorFilterViewModel
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating the whether the view shows only the selected level or all levels.
-***REMOVED******REMOVED***/ If the value is`false`, the view will display all levels; if it is `true`, the view will only display
-***REMOVED******REMOVED***/ the selected level.
+***REMOVED******REMOVED***/ If the value is`false`, the view will display all levels; if it is `true`, the view will
+***REMOVED******REMOVED***/ only display the selected level.
 ***REMOVED***@State private var isCollapsed: Bool = false
 ***REMOVED***
 ***REMOVED******REMOVED***/ The alignment configuration.
@@ -30,10 +30,10 @@ struct LevelSelector: View {
 ***REMOVED******REMOVED***/ The levels to display.
 ***REMOVED***let levels: [FloorLevel]
 ***REMOVED***
-***REMOVED******REMOVED***/ The short name of the currently selected level, the first level, or "None" if none of the levels
-***REMOVED******REMOVED***/ are available.
+***REMOVED******REMOVED***/ The short name of the currently selected level, the first level, or "None" if none of the
+***REMOVED******REMOVED***/ levels are available.
 ***REMOVED***private var selectedLevelName: String {
-***REMOVED******REMOVED***viewModel.selectedLevel?.shortName ?? ""
+***REMOVED******REMOVED***viewModel.selection?.level?.shortName ?? ""
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***public var body: some View {
@@ -91,7 +91,7 @@ private struct LevelsStack: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Toggle(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isOn: Binding(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***get: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.selectedLevel == level
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.selection?.level == level
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***set: { newIsOn in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard newIsOn else { return ***REMOVED***
@@ -111,7 +111,7 @@ private struct LevelsStack: View {
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.frame(maxHeight: contentHeight)
 ***REMOVED******REMOVED******REMOVED***.onAppear {
-***REMOVED******REMOVED******REMOVED******REMOVED***if let floorLevel = viewModel.selectedLevel {
+***REMOVED******REMOVED******REMOVED******REMOVED***if let floorLevel = viewModel.selection?.level {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***withAnimation {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***proxy.scrollTo(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***floorLevel.id

@@ -65,7 +65,7 @@ final class BookmarksTests: XCTestCase {
 ***REMOVED***
 ***REMOVED******REMOVED***var bookmarks = Bookmarks(
 ***REMOVED******REMOVED******REMOVED***isPresented: isPresented,
-***REMOVED******REMOVED******REMOVED***mapOrScene: map
+***REMOVED******REMOVED******REMOVED***geoModel: map
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***bookmarks.selectionChangedAction = action
 ***REMOVED******REMOVED***XCTAssertTrue(_isPresented)
@@ -120,7 +120,7 @@ final class BookmarksTests: XCTestCase {
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***let bookmarks = Bookmarks(
 ***REMOVED******REMOVED******REMOVED***isPresented: isPresented,
-***REMOVED******REMOVED******REMOVED***mapOrScene: map,
+***REMOVED******REMOVED******REMOVED***geoModel: map,
 ***REMOVED******REMOVED******REMOVED***viewpoint: viewpoint
 ***REMOVED******REMOVED***)
 ***REMOVED******REMOVED***XCTAssertTrue(_isPresented)
