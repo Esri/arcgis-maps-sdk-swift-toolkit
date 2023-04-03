@@ -14,9 +14,9 @@
 import SwiftUI
 import ArcGIS
 
-/// The `FloorFilter` component simplifies visualization of GIS data for a specific floor of a building
-/// in your application. It allows you to filter the floor plan data displayed in your map or scene view
-/// to a site, a facility (building) in the site, or a floor in the facility.
+/// The `FloorFilter` component simplifies visualization of GIS data for a specific floor of a
+/// building in your application. It allows you to filter the floor plan data displayed in your map
+/// or scene view to a site, a facility (building) in the site, or a floor in the facility.
 public struct FloorFilter: View {
     @Environment(\.horizontalSizeClass)
     private var horizontalSizeClass: UserInterfaceSizeClass?
@@ -28,12 +28,14 @@ public struct FloorFilter: View {
     ///   - automaticSelectionMode: The selection behavior of the floor filter.
     ///   - viewpoint: Viewpoint updated when the selected site or facility changes.
     ///   - isNavigating: A Boolean value indicating whether the map is currently being navigated.
+    ///   - selection: The selected site, facility, or level.
     public init(
         floorManager: FloorManager,
         alignment: Alignment,
         automaticSelectionMode: FloorFilterAutomaticSelectionMode = .always,
         viewpoint: Binding<Viewpoint?> = .constant(nil),
-        isNavigating: Binding<Bool>
+        isNavigating: Binding<Bool>,
+        selection: Binding<FloorFilterSelection?>? = nil
     ) {
         _viewModel = StateObject(
             wrappedValue: FloorFilterViewModel(
@@ -45,16 +47,17 @@ public struct FloorFilter: View {
         self.alignment = alignment
         self.isNavigating = isNavigating
         self.viewpoint = viewpoint
+        self.selection = selection
     }
     
     /// The view model used by the `FloorFilter`.
     @StateObject private var viewModel: FloorFilterViewModel
     
-    /// A Boolean value that indicates whether the levels view is currently collapsed.
-    @State private var isLevelsViewCollapsed = false
-    
     /// A Boolean value that indicates whether the site and facility selector is presented.
     @State private var isSitesAndFacilitiesHidden = true
+    
+    /// The selected site, floor, or level.
+    private var selection: Binding<FloorFilterSelection?>?
     
     /// The alignment configuration.
     private let alignment: Alignment
@@ -176,5 +179,20 @@ public struct FloorFilter: View {
         .frame(minHeight: 100)
         .environmentObject(viewModel)
         .disabled(viewModel.isLoading)
+        .onChange(of: selection?.wrappedValue) { newValue in
+            // Prevent a double-set if the view model triggered the original change.
+            guard newValue != viewModel.selection else { return }
+            switch newValue {
+            case .site(let site): viewModel.setSite(site)
+            case .facility(let facility): viewModel.setFacility(facility)
+            case .level(let level): viewModel.setLevel(level)
+            case .none: viewModel.clearSelection()
+            }
+        }
+        .onChange(of: viewModel.selection) { newValue in
+            // Prevent a double-set if the user triggered the original change.
+            guard selection?.wrappedValue != newValue else { return }
+            selection?.wrappedValue = newValue
+        }
     }
 }

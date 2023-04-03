@@ -90,16 +90,16 @@ public struct Bookmarks: View {
     /// Creates a `Bookmarks` component.
     /// - Parameters:
     ///   - isPresented: Determines if the bookmarks list is presented.
-    ///   - mapOrScene: A `GeoModel` authored with pre-existing bookmarks.
+    ///   - geoModel: A `GeoModel` authored with pre-existing bookmarks.
     ///   - viewpoint: A viewpoint binding that will be updated when a bookmark is selected.
     ///   Alternately, you can use the `onSelectionChanged(perform:)` modifier to handle
     ///   bookmark selection.
     public init(
         isPresented: Binding<Bool>,
-        mapOrScene: GeoModel,
+        geoModel: GeoModel,
         viewpoint: Binding<Viewpoint?>? = nil
     ) {
-        geoModel = mapOrScene
+        self.geoModel = geoModel
         self.viewpoint = viewpoint
         _isPresented = isPresented
     }

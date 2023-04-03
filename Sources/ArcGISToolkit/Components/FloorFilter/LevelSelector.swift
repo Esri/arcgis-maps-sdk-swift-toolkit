@@ -20,8 +20,8 @@ struct LevelSelector: View {
     @EnvironmentObject var viewModel: FloorFilterViewModel
     
     /// A Boolean value indicating the whether the view shows only the selected level or all levels.
-    /// If the value is`false`, the view will display all levels; if it is `true`, the view will only display
-    /// the selected level.
+    /// If the value is`false`, the view will display all levels; if it is `true`, the view will
+    /// only display the selected level.
     @State private var isCollapsed: Bool = false
     
     /// The alignment configuration.
@@ -30,10 +30,10 @@ struct LevelSelector: View {
     /// The levels to display.
     let levels: [FloorLevel]
     
-    /// The short name of the currently selected level, the first level, or "None" if none of the levels
-    /// are available.
+    /// The short name of the currently selected level, the first level, or "None" if none of the
+    /// levels are available.
     private var selectedLevelName: String {
-        viewModel.selectedLevel?.shortName ?? ""
+        viewModel.selection?.level?.shortName ?? ""
     }
     
     public var body: some View {
@@ -91,7 +91,7 @@ private struct LevelsStack: View {
                         Toggle(
                             isOn: Binding(
                                 get: {
-                                    viewModel.selectedLevel == level
+                                    viewModel.selection?.level == level
                                 },
                                 set: { newIsOn in
                                     guard newIsOn else { return }
@@ -111,7 +111,7 @@ private struct LevelsStack: View {
             }
             .frame(maxHeight: contentHeight)
             .onAppear {
-                if let floorLevel = viewModel.selectedLevel {
+                if let floorLevel = viewModel.selection?.level {
                     withAnimation {
                         proxy.scrollTo(
                             floorLevel.id
