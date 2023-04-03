@@ -37,9 +37,18 @@ struct BasemapGalleryExampleView: View {
             // Display in a sheet
             //
             .sheet(isPresented: $showBasemapGallery) {
-                BasemapGallery(items: basemaps, geoModel: map)
-                    .style(.grid)
-                    .padding()
+                VStack {
+                    Button {
+                        showBasemapGallery.toggle()
+                    } label: {
+                        Image(systemName: "xmark")
+                    }
+                    .padding([.top, .trailing])
+                    .frame(maxWidth: .infinity, alignment: .trailing)
+                    BasemapGallery(items: basemaps, geoModel: map)
+                        .style(.grid)
+                        .padding()
+                }
             }
             
             // Display in a floating panel
