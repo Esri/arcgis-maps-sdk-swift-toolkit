@@ -199,7 +199,7 @@ public struct FloorFilter: View {
     /// The width of the level selector.
     /// - Parameter width: The new width for the level selector.
     /// - Returns: The `FloorFilter`.
-    func levelSelectorWidth(_ width: CGFloat) -> Self {
+    public func levelSelectorWidth(_ width: CGFloat) -> Self {
         var copy = self
         copy.levelSelectorWidth = width
         return copy
