@@ -80,12 +80,11 @@ struct AttachmentsPopupElementView: View {
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***.task {
-***REMOVED******REMOVED******REMOVED***if let attachmentModels = try? await popupElement.attachments.reversed().map({ 
-***REMOVED******REMOVED******REMOVED******REMOVED***AttachmentModel(attachment: $0)
-***REMOVED******REMOVED***) {
-***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.attachmentModels.append(contentsOf: attachmentModels)
-***REMOVED******REMOVED******REMOVED******REMOVED***isLoadingAttachments = false
+***REMOVED******REMOVED******REMOVED***let attachmentModels = try? await popupElement.attachments.reversed().map { attachment in
+***REMOVED******REMOVED******REMOVED******REMOVED***AttachmentModel(attachment: attachment)
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***viewModel.attachmentModels.append(contentsOf: attachmentModels ?? [])
+***REMOVED******REMOVED******REMOVED***isLoadingAttachments = false
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
