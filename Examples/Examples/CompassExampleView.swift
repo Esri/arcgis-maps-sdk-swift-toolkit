@@ -58,7 +58,11 @@ struct CompassExampleView: View {
 ***REMOVED***/ An example demonstrating how to use a compass with a map view.
 struct MapWithViewpoint: View {
 ***REMOVED******REMOVED***/ The `Map` displayed in the `MapView`.
-***REMOVED***@State private var map = Map(basemapStyle: .arcGISImagery)
+***REMOVED***@State private var map = {
+***REMOVED***   let map = Map()
+***REMOVED******REMOVED***map.addOperationalLayer(OpenStreetMapLayer())
+***REMOVED******REMOVED***return map
+***REMOVED***()
 ***REMOVED***
 ***REMOVED******REMOVED***/ Allows for communication between the Compass and MapView or SceneView.
 ***REMOVED***@State private var viewpoint: Viewpoint? = Viewpoint(
@@ -68,23 +72,24 @@ struct MapWithViewpoint: View {
 ***REMOVED***)
 ***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***MapViewReader { proxy in
+***REMOVED******REMOVED******REMOVED***MapViewReader { proxy in
 ***REMOVED******REMOVED******REMOVED***MapView(map: map, viewpoint: viewpoint)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onViewpointChanged(kind: .centerAndScale) { viewpoint = $0 ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.overlay(alignment: .topTrailing) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Compass(viewpoint: $viewpoint) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let viewpoint else { return ***REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Animate the map view to zero when the compass is tapped.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await proxy.setViewpoint(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint.withRotation(0),
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***duration: 0.25
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Compass(viewpoint: $viewpoint)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***{
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***guard let viewpoint else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Animate the map view to zero when the compass is tapped.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await proxy.setViewpoint(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint.withRotation(0),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***duration: 0.25
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED***
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 
