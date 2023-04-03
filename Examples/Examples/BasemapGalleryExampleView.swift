@@ -37,9 +37,18 @@ struct BasemapGalleryExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Display in a sheet
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.sheet(isPresented: $showBasemapGallery) {
-***REMOVED******REMOVED******REMOVED******REMOVED***BasemapGallery(items: basemaps, geoModel: map)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.style(.grid)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
+***REMOVED******REMOVED******REMOVED******REMOVED***VStack {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***showBasemapGallery.toggle()
+***REMOVED******REMOVED******REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "xmark")
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding([.top, .trailing])
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .trailing)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***BasemapGallery(items: basemaps, geoModel: map)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.style(.grid)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Display in a floating panel
