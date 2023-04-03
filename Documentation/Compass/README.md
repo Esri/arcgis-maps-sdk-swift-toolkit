@@ -50,7 +50,7 @@ Compass:
 `Compass` has the following modifiers:
 
 - `func compassSize(size: CGFloat)` - The size of the `Compass`, specifying both the width and height of the compass.
-- `func automaticallyHides(_:)` - Specifies whether the ``Compass`` should automatically hide when the heading is 0.
+- `func disableAutoHide(_:)` - Specifies whether the ``Compass`` should automatically hide when the heading is 0.
 
 ## Behavior:
 
