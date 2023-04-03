@@ -84,7 +84,7 @@ struct SiteAndFacilitySelector: View {
             }
         }
         
-        /// A view containing a filter-via-name field, a list of the site names and an "All sites" button.
+        /// A view with a filter-via-name field, a list of site names and an "All sites" button.
         var body: some View {
             VStack {
                 // If the filtered set of sites is empty
@@ -139,7 +139,7 @@ struct SiteAndFacilitySelector: View {
                     tag: site,
                     selection: Binding(
                         get: {
-                            userBackedOutOfSelectedSite ? nil : viewModel.selectedSite
+                            userBackedOutOfSelectedSite ? nil : viewModel.selection?.site
                         },
                         set: { newSite in
                             guard let newSite = newSite else { return }
@@ -225,15 +225,15 @@ struct SiteAndFacilitySelector: View {
             .keyboardType(.alphabet)
             .disableAutocorrection(true)
             .navigationTitle(
-                usesAllSitesStyling ? "All Sites" : viewModel.selectedSite?.name ?? "Select a facility"
+                usesAllSitesStyling ? "All Sites" : viewModel.selection?.site?.name ?? "Select a facility"
             )
         }
         
         /// Displays a list of facilities matching the filter criteria as determined by
         /// `matchingFacilities`.
         ///
-        /// If a certain facility is indicated as selected by the view model, it will have a slightly different
-        /// appearance.
+        /// If a certain facility is indicated as selected by the view model, it will have a
+        /// slightly different appearance.
         ///
         /// If `AutomaticSelectionMode` mode is in use, this list will automatically scroll to the
         /// selected item.
@@ -256,7 +256,7 @@ struct SiteAndFacilitySelector: View {
                         }
                     }
                     .contentShape(Rectangle())
-                    .listRowBackground(facility.id == viewModel.selectedFacility?.id ? Color.secondary.opacity(0.5) : Color.clear)
+                    .listRowBackground(facility.id == viewModel.selection?.facility?.id ? Color.secondary.opacity(0.5) : Color.clear)
                     .onTapGesture {
                         viewModel.setFacility(facility, zoomTo: true)
                         if horizontalSizeClass == .compact {
@@ -266,7 +266,7 @@ struct SiteAndFacilitySelector: View {
                 }
                 .listStyle(.plain)
                 .onChange(of: viewModel.selection) { _ in
-                    if let floorFacility = viewModel.selectedFacility {
+                    if let floorFacility = viewModel.selection?.facility {
                         withAnimation {
                             proxy.scrollTo(
                                 floorFacility.id

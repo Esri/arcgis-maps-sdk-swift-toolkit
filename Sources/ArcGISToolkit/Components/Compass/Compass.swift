@@ -17,12 +17,15 @@ import SwiftUI
 /// A `Compass` (alias North arrow) shows where north is in a `MapView` or
 /// `SceneView`.
 public struct Compass: View {
-    /// A Boolean value indicating whether  the compass should automatically
-    /// hide/show itself when the heading is `0`.
-    private let autoHide: Bool
-    
     /// The opacity of the compass.
     @State private var opacity: Double = .zero
+    
+    /// An action to perform when the compass is tapped.
+    private let action: (() -> Void)?
+    
+    /// A Boolean value indicating whether  the compass should automatically
+    /// hide/show itself when the heading is `0`.
+    private var autoHide: Bool = true
     
     /// A Boolean value indicating whether the compass should hide based on the
     ///  current heading and whether the compass automatically hides.
@@ -31,7 +34,7 @@ public struct Compass: View {
     }
     
     /// The width and height of the compass.
-    var size: CGFloat = 44
+    private var size: CGFloat = 44
     
     /// The heading of the compass in degrees.
     @Binding private var heading: Double
@@ -41,14 +44,13 @@ public struct Compass: View {
     /// direction toward true East, etc.).
     /// - Parameters:
     ///   - heading: The heading of the compass.
-    ///   - autoHide: A Boolean value that determines whether the compass
-    ///   automatically hides itself when the heading is `0`.
+    ///   - action: An action to perform when the compass is tapped.
     public init(
         heading: Binding<Double>,
-        autoHide: Bool = true
+        action: (() -> Void)? = nil
     ) {
         _heading = heading
-        self.autoHide = autoHide
+        self.action = action
     }
     
     public var body: some View {
@@ -60,8 +62,8 @@ public struct Compass: View {
                 }
                 .aspectRatio(1, contentMode: .fit)
                 .opacity(opacity)
-                .onTapGesture { heading = .zero }
                 .frame(width: size, height: size)
+                .onAppear { opacity = shouldHide ? 0 : 1 }
                 .onChange(of: heading) { _ in
                     let newOpacity: Double = shouldHide ? .zero : 1
                     guard opacity != newOpacity else { return }
@@ -69,7 +71,13 @@ public struct Compass: View {
                         opacity = newOpacity
                     }
                 }
-                .onAppear { opacity = shouldHide ? 0 : 1 }
+                .onTapGesture {
+                    if let action {
+                        action()
+                    } else {
+                        heading = .zero
+                    }
+                }
                 .accessibilityLabel("Compass, heading \(Int(heading.rounded())) degrees \(CompassDirection(heading).rawValue)")
         }
     }
@@ -82,28 +90,27 @@ public extension Compass {
     /// - Parameters:
     ///   - viewpointRotation: The viewpoint rotation whose value determines the
     ///   heading of the compass.
-    ///   - autoHide: A Boolean value that determines whether the compass
-    ///   automatically hides itself when the viewpoint rotation is 0 degrees.
+    ///   - action: An action to perform when the compass is tapped.
     init(
         viewpointRotation: Binding<Double>,
-        autoHide: Bool = true
+        action: (() -> Void)? = nil
     ) {
         let heading = Binding(get: {
             viewpointRotation.wrappedValue.isZero ? .zero : 360 - viewpointRotation.wrappedValue
         }, set: { newHeading in
             viewpointRotation.wrappedValue = newHeading.isZero ? .zero : 360 - newHeading
         })
-        self.init(heading: heading, autoHide: autoHide)
+        self.init(heading: heading, action: action)
     }
     
     /// Creates a compass with a binding to an optional viewpoint.
     /// - Parameters:
     ///   - viewpoint: The viewpoint whose rotation determines the heading of the compass.
-    ///   - autoHide: A Boolean value that determines whether the compass automatically hides itself
+    ///   - action: An action to perform when the compass is tapped.
     ///   when the viewpoint's rotation is 0 degrees.
     init(
         viewpoint: Binding<Viewpoint?>,
-        autoHide: Bool = true
+        action: (() -> Void)? = nil
     ) {
         let viewpointRotation = Binding {
             viewpoint.wrappedValue?.rotation ?? .nan
@@ -115,7 +122,7 @@ public extension Compass {
                 rotation: newViewpointRotation
             )
         }
-        self.init(viewpointRotation: viewpointRotation, autoHide: autoHide)
+        self.init(viewpointRotation: viewpointRotation, action: action)
     }
     
     /// Define a custom size for the compass.
@@ -123,6 +130,15 @@ public extension Compass {
     func compassSize(size: CGFloat) -> Self {
         var copy = self
         copy.size = size
+        return copy
+    }
+    
+    /// Specifies whether the ``Compass`` should automatically hide when the heading is 0.
+    /// - Parameter flag: A Boolean value indicating whether the compass should automatically
+    /// hide/show itself when the heading is `0`.
+    func automaticallyHides(_ flag: Bool) -> some View {
+        var copy = self
+        copy.autoHide = flag
         return copy
     }
 }
