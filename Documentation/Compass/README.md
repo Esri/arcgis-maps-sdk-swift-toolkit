@@ -25,7 +25,7 @@ Compass:
     /// - Parameters:
     ///   - heading: The heading of the compass.
     ///   - action: An action to perform when the compass is tapped.
-    public init(heading: Binding<Double>, action: (() async -> Void)? = nil)
+    public init(heading: Binding<Double>, action: (() -> Void)? = nil)
 ```
 
 ```swift
@@ -36,7 +36,7 @@ Compass:
     ///   - viewpointRotation: The viewpoint rotation whose value determines the
     ///   heading of the compass.
     ///   - action: An action to perform when the compass is tapped.
-    public init(viewpointRotation: Binding<Double>, action: (() async -> Void)? = nil)
+    public init(viewpointRotation: Binding<Double>, action: (() -> Void)? = nil)
 ```
 
 ```swift
@@ -44,7 +44,7 @@ Compass:
     /// - Parameters:
     ///   - viewpoint: The viewpoint whose rotation determines the heading of the compass.
     ///   - action: An action to perform when the compass is tapped.
-    public init(viewpoint: Binding<Viewpoint?>, action: (() async -> Void)? = nil)
+    public init(viewpoint: Binding<Viewpoint?>, action: (() -> Void)? = nil)
 ```
 
 `Compass` has the following modifiers:
