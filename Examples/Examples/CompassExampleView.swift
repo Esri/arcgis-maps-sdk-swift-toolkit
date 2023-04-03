@@ -58,7 +58,11 @@ struct CompassExampleView: View {
 /// An example demonstrating how to use a compass with a map view.
 struct MapWithViewpoint: View {
     /// The `Map` displayed in the `MapView`.
-    @State private var map = Map(basemapStyle: .arcGISImagery)
+    @State private var map = {
+       let map = Map()
+        map.addOperationalLayer(OpenStreetMapLayer())
+        return map
+    }()
     
     /// Allows for communication between the Compass and MapView or SceneView.
     @State private var viewpoint: Viewpoint? = Viewpoint(
@@ -68,23 +72,24 @@ struct MapWithViewpoint: View {
     )
     
     var body: some View {
-        MapViewReader { proxy in
+//        MapViewReader { proxy in
             MapView(map: map, viewpoint: viewpoint)
                 .onViewpointChanged(kind: .centerAndScale) { viewpoint = $0 }
                 .overlay(alignment: .topTrailing) {
-                    Compass(viewpoint: $viewpoint) {
-                        guard let viewpoint else { return }
-                        Task {
-                            // Animate the map view to zero when the compass is tapped.
-                            await proxy.setViewpoint(
-                                viewpoint.withRotation(0),
-                                duration: 0.25
-                            )
-                        }
-                    }
+                    Compass(viewpoint: $viewpoint)
+//                    {
+//                        guard let viewpoint else { return }
+//                        Task {
+//                            // Animate the map view to zero when the compass is tapped.
+//                            await proxy.setViewpoint(
+//                                viewpoint.withRotation(0),
+//                                duration: 0.25
+//                            )
+//                        }
+//                    }
                     .padding()
                 }
-        }
+//        }
     }
 }
 

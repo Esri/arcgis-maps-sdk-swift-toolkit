@@ -20,6 +20,8 @@ public struct Compass: View {
     /// The opacity of the compass.
     @State private var opacity: Double = .zero
     
+    @EnvironmentObject private var proxy: MapViewProxy
+    
     /// An action to perform when the compass is tapped.
     private let action: (() -> Void)?
     
@@ -72,11 +74,14 @@ public struct Compass: View {
                     }
                 }
                 .onTapGesture {
-                    if let action {
-                        action()
-                    } else {
-                        heading = .zero
+                    Task {
+                        await proxy.setViewpointRotation(0)
                     }
+//                    if let action {
+//                        action()
+//                    } else {
+//                        heading = .zero
+//                    }
                 }
                 .accessibilityLabel("Compass, heading \(Int(heading.rounded())) degrees \(CompassDirection(heading).rawValue)")
         }
