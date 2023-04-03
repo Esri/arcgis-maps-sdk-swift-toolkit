@@ -136,7 +136,7 @@ public extension Compass {
 ***REMOVED******REMOVED***/ Specifies whether the ``Compass`` should automatically hide when the heading is 0.
 ***REMOVED******REMOVED***/ - Parameter disable: A Boolean value indicating whether the compass should automatically
 ***REMOVED******REMOVED***/ hide/show itself when the heading is `0`.
-***REMOVED***func disableAutoHide(_ disable: Bool = true) -> some View {
+***REMOVED***func autoHideDisabled(_ disable: Bool = true) -> some View {
 ***REMOVED******REMOVED***var copy = self
 ***REMOVED******REMOVED***copy.autoHide = !disable
 ***REMOVED******REMOVED***return copy
