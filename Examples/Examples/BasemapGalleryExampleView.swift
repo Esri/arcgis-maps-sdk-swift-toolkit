@@ -38,13 +38,9 @@ struct BasemapGalleryExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.sheet(isPresented: $showBasemapGallery) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***VStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***showBasemapGallery.toggle()
-***REMOVED******REMOVED******REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "xmark")
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding([.top, .trailing])
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .trailing)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***xButton
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding([.top, .trailing])
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .trailing)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***BasemapGallery(items: basemaps, geoModel: map)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.style(.grid)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
@@ -77,6 +73,17 @@ struct BasemapGalleryExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ A button that allows a user to close a sheet.
+***REMOVED******REMOVED***/
+***REMOVED******REMOVED***/ This is especially useful for when the sheet is open an iPhone in landscape.
+***REMOVED***private var xButton: some View {
+***REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED***showBasemapGallery.toggle()
+***REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED***Image(systemName: "xmark")
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***private static func initialBasemaps() -> [BasemapGalleryItem] {
