@@ -36,7 +36,7 @@ Bookmarks:
     /// Creates a `Bookmarks` component.
     /// - Parameters:
     ///   - isPresented: Determines if the bookmarks list is presented.
-    ///   - mapOrScene: A `GeoModel` authored with pre-existing bookmarks.
+    ///   - geoModel: A `GeoModel` authored with pre-existing bookmarks.
     ///   - viewpoint: A viewpoint binding that will be updated when a bookmark is selected.
     ///   Alternately, you can use the `onSelectionChanged(perform:)` modifier to handle
     ///   bookmark selection.
@@ -95,7 +95,7 @@ var body: some View {
                     // bookmark selection.
                     Bookmarks(
                         isPresented: $showingBookmarks,
-                        mapOrScene: map,
+                        geoModel: map,
                         viewpoint: $viewpoint
                     )
                 }

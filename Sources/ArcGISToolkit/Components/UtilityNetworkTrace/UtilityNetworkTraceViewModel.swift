@@ -115,27 +115,27 @@ import SwiftUI
         }
     }
     
-    /// Adds a new starting point to the pending trace.
+    /// Adds new starting points to the pending trace.
     /// - Parameters:
     ///   - point: A point on the map in screen coordinates.
     ///   - mapPoint: A point on the map in map coordinates.
     ///   - proxy: Provides a method of layer identification.
-    func addStartingPoint(
-        at point: CGPoint,
-        mapPoint: Point,
-        with proxy: MapViewProxy
-    ) async {
-        let identifyLayerResults = try? await proxy.identifyLayers(
-            screenPoint: point,
-            tolerance: 10
-        )
-        for layerResult in identifyLayerResults ?? [] {
-            for geoElement in layerResult.geoElements {
-                let startingPoint = UtilityNetworkTraceStartingPoint(
-                    geoElement: geoElement,
-                    mapPoint: mapPoint
-                )
-                await processAndAdd(startingPoint: startingPoint)
+    ///
+    /// An identify operation will run on each layer in the network. Every element returned from
+    /// each layer will be added as a new starting point.
+    func addStartingPoints(at point: CGPoint, mapPoint: Point, with proxy: MapViewProxy) async {
+        await withTaskGroup(of: Void.self) { [weak self] taskGroup in
+            guard let self else { return }
+            for layer in network?.layers ?? [] {
+                taskGroup.addTask {
+                    if let result = try? await proxy.identify(on: layer, screenPoint: point, tolerance: 10) {
+                        for element in result.geoElements {
+                            await self.processAndAdd(
+                                startingPoint: UtilityNetworkTraceStartingPoint(geoElement: element, mapPoint: mapPoint)
+                            )
+                        }
+                    }
+                }
             }
         }
     }
@@ -506,5 +506,12 @@ extension UtilityNetworkTraceViewModel {
             fractionalLengthClosestTo: point,
             tolerance: 10
         )
+    }
+}
+
+extension UtilityNetwork {
+    /// The defined in the network.
+    var layers: [Layer] {
+        definition?.networkSources.compactMap { $0.featureTable.layer } ?? []
     }
 }
