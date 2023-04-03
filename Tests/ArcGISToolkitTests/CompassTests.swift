@@ -24,14 +24,15 @@ final class CompassTests: XCTestCase {
 ***REMOVED******REMOVED***let finalValue = 90.0
 ***REMOVED******REMOVED***var _viewpoint: Viewpoint? = makeViewpoint(rotation: initialValue)
 ***REMOVED******REMOVED***let viewpoint = Binding(get: { _viewpoint ***REMOVED***, set: { _viewpoint = $0 ***REMOVED***)
-***REMOVED******REMOVED***let compass = Compass(viewpoint: viewpoint, autoHide: false)
+***REMOVED******REMOVED***let compass = Compass(viewpoint: viewpoint)
+***REMOVED******REMOVED******REMOVED***.autoHideDisabled() as! Compass
 ***REMOVED******REMOVED***XCTAssertFalse(compass.shouldHide)
 ***REMOVED******REMOVED***_viewpoint = makeViewpoint(rotation: finalValue)
 ***REMOVED******REMOVED***XCTAssertFalse(compass.shouldHide)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Verifies that the compass accurately indicates when the compass should be hidden when
-***REMOVED******REMOVED***/ `autoHide` is `true`.
+***REMOVED******REMOVED***/ `autoHide` is `true` (which is the default).
 ***REMOVED***func testHiddenWithAutoHideOn() {
 ***REMOVED******REMOVED***let initialValue = 0.0
 ***REMOVED******REMOVED***let finalValue = 90.0
@@ -51,8 +52,9 @@ final class CompassTests: XCTestCase {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Verifies that the compass correctly initializes when given a `nil` viewpoint, and `autoHide` is
 ***REMOVED******REMOVED***/ `false`.
-***REMOVED***func testInitNoAutoHide() {
-***REMOVED******REMOVED***let compass = Compass(viewpoint: .constant(nil), autoHide: false)
+***REMOVED***func testAutomaticallyHidesNoAutoHide() {
+***REMOVED******REMOVED***let compass = Compass(viewpoint: .constant(nil))
+***REMOVED******REMOVED******REMOVED***.autoHideDisabled() as! Compass
 ***REMOVED******REMOVED***XCTAssertFalse(compass.shouldHide)
 ***REMOVED***
 ***REMOVED***
@@ -64,7 +66,8 @@ final class CompassTests: XCTestCase {
 ***REMOVED***
 ***REMOVED******REMOVED***/ Verifies that the compass correctly initializes when given only a viewpoint.
 ***REMOVED***func testInitWithViewpointAndAutoHide() {
-***REMOVED******REMOVED***let compass = Compass(viewpoint: .constant(makeViewpoint(rotation: .zero)), autoHide: false)
+***REMOVED******REMOVED***let compass = Compass(viewpoint: .constant(makeViewpoint(rotation: .zero)))
+***REMOVED******REMOVED******REMOVED***.autoHideDisabled() as! Compass
 ***REMOVED******REMOVED***XCTAssertFalse(compass.shouldHide)
 ***REMOVED***
 ***REMOVED***

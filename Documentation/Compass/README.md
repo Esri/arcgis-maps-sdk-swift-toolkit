@@ -10,7 +10,8 @@ The ArcGIS Maps SDK for Swift currently supports rotating MapViews and SceneView
 
 Compass:
 
-- Can be configured to automatically hide when the rotation is zero.
+- Automatically hides when the rotation is zero.
+- Can be configured to be always visible.
 - Will reset the map/scene rotation to North when tapped on.
 
 ## Key properties
@@ -23,9 +24,8 @@ Compass:
 ***REMOVED******REMOVED***/ direction toward true East, etc.).
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - heading: The heading of the compass.
-***REMOVED******REMOVED***/   - autoHide: A Boolean value that determines whether the compass
-***REMOVED******REMOVED***/   automatically hides itself when the heading is `0`.
-***REMOVED***public init(heading: Binding<Double>, autoHide: Bool = true)
+***REMOVED******REMOVED***/   - action: An action to perform when the compass is tapped.
+***REMOVED***public init(heading: Binding<Double>, action: (() -> Void)? = nil)
 ```
 
 ```swift
@@ -35,27 +35,26 @@ Compass:
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - viewpointRotation: The viewpoint rotation whose value determines the
 ***REMOVED******REMOVED***/   heading of the compass.
-***REMOVED******REMOVED***/   - autoHide: A Boolean value that determines whether the compass
-***REMOVED******REMOVED***/   automatically hides itself when the viewpoint rotation is 0 degrees.
-***REMOVED***public init(viewpointRotation: Binding<Double>, autoHide: Bool = true)
+***REMOVED******REMOVED***/   - action: An action to perform when the compass is tapped.
+***REMOVED***public init(viewpointRotation: Binding<Double>, action: (() -> Void)? = nil)
 ```
 
 ```swift
 ***REMOVED******REMOVED***/ Creates a compass with a binding to an optional viewpoint.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - viewpoint: The viewpoint whose rotation determines the heading of the compass.
-***REMOVED******REMOVED***/   - autoHide: A Boolean value that determines whether the compass automatically hides itself
-***REMOVED******REMOVED***/   when the viewpoint's rotation is 0 degrees.
-***REMOVED***public init(viewpoint: Binding<Viewpoint?>, autoHide: Bool = true)
+***REMOVED******REMOVED***/   - action: An action to perform when the compass is tapped.
+***REMOVED***public init(viewpoint: Binding<Viewpoint?>, action: (() -> Void)? = nil)
 ```
 
-`Compass` has the following modifier:
+`Compass` has the following modifiers:
 
 - `func compassSize(size: CGFloat)` - The size of the `Compass`, specifying both the width and height of the compass.
+- `func autoHideDisabled(_:)` - Specifies whether the ``Compass`` should automatically hide when the heading is 0.
 
 ## Behavior:
 
-Whenever the map is not orientated North (non-zero bearing) the compass appears. When reset to north, it disappears. An initializer argument allows you to disable the auto-hide feature so that it always appears.
+Whenever the map is not orientated North (non-zero bearing) the compass appears. When reset to north, it disappears. The `automaticallyHides` view modifier allows you to disable the auto-hide feature so that it is always displayed.
 
 When the compass is tapped, the map orients back to north (zero bearing).
 
