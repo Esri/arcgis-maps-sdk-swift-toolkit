@@ -111,7 +111,7 @@ struct SceneWithCameraController: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Compass(viewpointRotation: $heading) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Animate the scene view when the compass is tapped.
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***_ = try? await cameraController.moveCamera(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await cameraController.moveCamera(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***distanceDelta: .zero,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***headingDelta: heading > 180 ? 360 - heading : -heading,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***pitchDelta: .zero,
