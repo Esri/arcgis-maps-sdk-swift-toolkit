@@ -38,13 +38,9 @@ struct BasemapGalleryExampleView: View {
             //
             .sheet(isPresented: $showBasemapGallery) {
                 VStack {
-                    Button {
-                        showBasemapGallery.toggle()
-                    } label: {
-                        Image(systemName: "xmark")
-                    }
-                    .padding([.top, .trailing])
-                    .frame(maxWidth: .infinity, alignment: .trailing)
+                    xButton
+                        .padding([.top, .trailing])
+                        .frame(maxWidth: .infinity, alignment: .trailing)
                     BasemapGallery(items: basemaps, geoModel: map)
                         .style(.grid)
                         .padding()
@@ -77,6 +73,17 @@ struct BasemapGalleryExampleView: View {
                     }
                 }
             }
+    }
+    
+    /// A button that allows a user to close a sheet.
+    ///
+    /// This is especially useful for when the sheet is open an iPhone in landscape.
+    private var xButton: some View {
+        Button {
+            showBasemapGallery.toggle()
+        } label: {
+            Image(systemName: "xmark")
+        }
     }
     
     private static func initialBasemaps() -> [BasemapGalleryItem] {
