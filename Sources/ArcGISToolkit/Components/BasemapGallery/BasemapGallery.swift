@@ -26,7 +26,7 @@ public struct BasemapGallery: View {
 ***REMOVED******REMOVED******REMOVED***/ width available for the gallery to do so. Otherwise, the gallery will display as a list.
 ***REMOVED******REMOVED***case automatic
 ***REMOVED******REMOVED******REMOVED***/ The `BasemapGallery` will display as a grid.
-***REMOVED******REMOVED***case grid
+***REMOVED******REMOVED***case grid(maxItemWidth: CGFloat = 300.0)
 ***REMOVED******REMOVED******REMOVED***/ The `BasemapGallery` will display as a list.
 ***REMOVED******REMOVED***case list
 ***REMOVED***
@@ -84,7 +84,7 @@ public struct BasemapGallery: View {
 ***REMOVED***
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***GeometryReader { geometry in
-***REMOVED******REMOVED******REMOVED***makeGalleryView()
+***REMOVED******REMOVED******REMOVED***makeGalleryView(geometry.size.width)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onReceive(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.$spatialReferenceMismatchError.dropFirst(),
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***perform: { error in
@@ -111,18 +111,19 @@ public struct BasemapGallery: View {
 
 private extension BasemapGallery {
 ***REMOVED******REMOVED***/ Creates a gallery view.
+***REMOVED******REMOVED***/ - Parameter containerWidth: The width of the container holding the gallery.
 ***REMOVED******REMOVED***/ - Returns: A view representing the basemap gallery.
-***REMOVED***func makeGalleryView() -> some View {
+***REMOVED***func makeGalleryView(_ containerWidth: CGFloat) -> some View {
 ***REMOVED******REMOVED***ScrollView {
 ***REMOVED******REMOVED******REMOVED***switch style {
 ***REMOVED******REMOVED******REMOVED***case .automatic:
 ***REMOVED******REMOVED******REMOVED******REMOVED***if isRegularWidth {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeGridView()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeGridView(containerWidth)
 ***REMOVED******REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeListView()
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***case .grid:
-***REMOVED******REMOVED******REMOVED******REMOVED***makeGridView()
+***REMOVED******REMOVED******REMOVED***case .grid(let maxItemWidth):
+***REMOVED******REMOVED******REMOVED******REMOVED***makeGridView(containerWidth, maxItemWidth: maxItemWidth)
 ***REMOVED******REMOVED******REMOVED***case .list:
 ***REMOVED******REMOVED******REMOVED******REMOVED***makeListView()
 ***REMOVED******REMOVED***
@@ -130,15 +131,21 @@ private extension BasemapGallery {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The gallery view, displayed as a grid.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - containerWidth: The width of the container holding the grid view.
+***REMOVED******REMOVED***/   - maxItemWidth: The maximum allowable width for an item in the grid. Defaults to `300`.
 ***REMOVED******REMOVED***/ - Returns: A view representing the basemap gallery grid.
-***REMOVED***func makeGridView() -> some View {
+***REMOVED***func makeGridView(_ containerWidth: CGFloat, maxItemWidth: CGFloat = 300) -> some View {
 ***REMOVED******REMOVED***internalMakeGalleryView(
 ***REMOVED******REMOVED******REMOVED***columns: Array(
 ***REMOVED******REMOVED******REMOVED******REMOVED***repeating: GridItem(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.flexible(),
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***alignment: .top
 ***REMOVED******REMOVED******REMOVED******REMOVED***),
-***REMOVED******REMOVED******REMOVED******REMOVED***count: 3
+***REMOVED******REMOVED******REMOVED******REMOVED***count: max(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***1,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Int((containerWidth / maxItemWidth).rounded(.down))
+***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***)
 ***REMOVED***
