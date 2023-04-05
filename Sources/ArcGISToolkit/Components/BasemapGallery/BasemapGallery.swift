@@ -24,9 +24,10 @@ public struct BasemapGallery: View {
     public enum Style {
         /// The `BasemapGallery` will display as a grid when there is an appropriate
         /// width available for the gallery to do so. Otherwise, the gallery will display as a list.
-        case automatic
+        /// When displayed as a grid, `maxGridItemWidth` sets the maximum width of a grid item.
+        case automatic(maxGridItemWidth: CGFloat = 300)
         /// The `BasemapGallery` will display as a grid.
-        case grid(maxItemWidth: CGFloat = 300.0)
+        case grid(maxItemWidth: CGFloat = 300)
         /// The `BasemapGallery` will display as a list.
         case list
     }
@@ -65,7 +66,7 @@ public struct BasemapGallery: View {
     /// The style of the basemap gallery. The gallery can be displayed as a list, grid, or automatically
     /// switch between the two based on-screen real estate. Defaults to ``BasemapGallery/Style/automatic``.
     /// Set using the `style` modifier.
-    private var style: Style = .automatic
+    private var style: Style = .automatic()
     
     @Environment(\.horizontalSizeClass) var horizontalSizeClass
     @Environment(\.verticalSizeClass) var verticalSizeClass
@@ -116,14 +117,14 @@ private extension BasemapGallery {
     func makeGalleryView(_ containerWidth: CGFloat) -> some View {
         ScrollView {
             switch style {
-            case .automatic:
+            case .automatic(let maxGridItemWidth):
                 if isRegularWidth {
-                    makeGridView(containerWidth)
+                    makeGridView(containerWidth, maxGridItemWidth)
                 } else {
                     makeListView()
                 }
             case .grid(let maxItemWidth):
-                makeGridView(containerWidth, maxItemWidth: maxItemWidth)
+                makeGridView(containerWidth, maxItemWidth)
             case .list:
                 makeListView()
             }
@@ -135,7 +136,7 @@ private extension BasemapGallery {
     ///   - containerWidth: The width of the container holding the grid view.
     ///   - maxItemWidth: The maximum allowable width for an item in the grid. Defaults to `300`.
     /// - Returns: A view representing the basemap gallery grid.
-    func makeGridView(_ containerWidth: CGFloat, maxItemWidth: CGFloat = 300) -> some View {
+    func makeGridView(_ containerWidth: CGFloat, _ maxItemWidth: CGFloat) -> some View {
         internalMakeGalleryView(
             columns: Array(
                 repeating: GridItem(
