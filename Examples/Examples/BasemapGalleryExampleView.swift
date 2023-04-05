@@ -82,7 +82,7 @@ struct BasemapGalleryExampleView: View {
 ***REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED***showBasemapGallery.toggle()
 ***REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED***Image(systemName: "xmark")
+***REMOVED******REMOVED******REMOVED***Text("Done")
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
