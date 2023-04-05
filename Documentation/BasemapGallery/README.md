@@ -83,7 +83,7 @@ var body: some View {
     MapView(map: map)
         .overlay(alignment: .topTrailing) {
             BasemapGallery(geoModel: map)
-                .style(.automatic())
+                .style(.automatic)
                 .padding()
         }
 }
