@@ -24,9 +24,10 @@ public struct BasemapGallery: View {
 ***REMOVED***public enum Style {
 ***REMOVED******REMOVED******REMOVED***/ The `BasemapGallery` will display as a grid when there is an appropriate
 ***REMOVED******REMOVED******REMOVED***/ width available for the gallery to do so. Otherwise, the gallery will display as a list.
-***REMOVED******REMOVED***case automatic
+***REMOVED******REMOVED******REMOVED***/ When displayed as a grid, `maxGridItemWidth` sets the maximum width of a grid item.
+***REMOVED******REMOVED***case automatic(maxGridItemWidth: CGFloat = 300)
 ***REMOVED******REMOVED******REMOVED***/ The `BasemapGallery` will display as a grid.
-***REMOVED******REMOVED***case grid(maxItemWidth: CGFloat = 300.0)
+***REMOVED******REMOVED***case grid(maxItemWidth: CGFloat = 300)
 ***REMOVED******REMOVED******REMOVED***/ The `BasemapGallery` will display as a list.
 ***REMOVED******REMOVED***case list
 ***REMOVED***
@@ -65,7 +66,7 @@ public struct BasemapGallery: View {
 ***REMOVED******REMOVED***/ The style of the basemap gallery. The gallery can be displayed as a list, grid, or automatically
 ***REMOVED******REMOVED***/ switch between the two based on-screen real estate. Defaults to ``BasemapGallery/Style/automatic``.
 ***REMOVED******REMOVED***/ Set using the `style` modifier.
-***REMOVED***private var style: Style = .automatic
+***REMOVED***private var style: Style = .automatic()
 ***REMOVED***
 ***REMOVED***@Environment(\.horizontalSizeClass) var horizontalSizeClass
 ***REMOVED***@Environment(\.verticalSizeClass) var verticalSizeClass
@@ -116,14 +117,14 @@ private extension BasemapGallery {
 ***REMOVED***func makeGalleryView(_ containerWidth: CGFloat) -> some View {
 ***REMOVED******REMOVED***ScrollView {
 ***REMOVED******REMOVED******REMOVED***switch style {
-***REMOVED******REMOVED******REMOVED***case .automatic:
+***REMOVED******REMOVED******REMOVED***case .automatic(let maxGridItemWidth):
 ***REMOVED******REMOVED******REMOVED******REMOVED***if isRegularWidth {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeGridView(containerWidth)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeGridView(containerWidth, maxGridItemWidth)
 ***REMOVED******REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeListView()
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***case .grid(let maxItemWidth):
-***REMOVED******REMOVED******REMOVED******REMOVED***makeGridView(containerWidth, maxItemWidth: maxItemWidth)
+***REMOVED******REMOVED******REMOVED******REMOVED***makeGridView(containerWidth, maxItemWidth)
 ***REMOVED******REMOVED******REMOVED***case .list:
 ***REMOVED******REMOVED******REMOVED******REMOVED***makeListView()
 ***REMOVED******REMOVED***
@@ -135,7 +136,7 @@ private extension BasemapGallery {
 ***REMOVED******REMOVED***/   - containerWidth: The width of the container holding the grid view.
 ***REMOVED******REMOVED***/   - maxItemWidth: The maximum allowable width for an item in the grid. Defaults to `300`.
 ***REMOVED******REMOVED***/ - Returns: A view representing the basemap gallery grid.
-***REMOVED***func makeGridView(_ containerWidth: CGFloat, maxItemWidth: CGFloat = 300) -> some View {
+***REMOVED***func makeGridView(_ containerWidth: CGFloat, _ maxItemWidth: CGFloat) -> some View {
 ***REMOVED******REMOVED***internalMakeGalleryView(
 ***REMOVED******REMOVED******REMOVED***columns: Array(
 ***REMOVED******REMOVED******REMOVED******REMOVED***repeating: GridItem(

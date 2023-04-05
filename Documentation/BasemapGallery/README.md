@@ -83,7 +83,7 @@ var body: some View {
 ***REMOVED***MapView(map: map)
 ***REMOVED******REMOVED***.overlay(alignment: .topTrailing) {
 ***REMOVED******REMOVED******REMOVED***BasemapGallery(geoModel: map)
-***REMOVED******REMOVED******REMOVED******REMOVED***.style(.automatic)
+***REMOVED******REMOVED******REMOVED******REMOVED***.style(.automatic())
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding()
 ***REMOVED***
 ***REMOVED***
