@@ -26,7 +26,7 @@ public struct BasemapGallery: View {
         /// width available for the gallery to do so. Otherwise, the gallery will display as a list.
         case automatic
         /// The `BasemapGallery` will display as a grid.
-        case grid
+        case grid(maxItemWidth: CGFloat = 300.0)
         /// The `BasemapGallery` will display as a list.
         case list
     }
@@ -84,7 +84,7 @@ public struct BasemapGallery: View {
     
     public var body: some View {
         GeometryReader { geometry in
-            makeGalleryView()
+            makeGalleryView(geometry.size.width)
                 .onReceive(
                     viewModel.$spatialReferenceMismatchError.dropFirst(),
                     perform: { error in
@@ -111,18 +111,19 @@ public struct BasemapGallery: View {
 
 private extension BasemapGallery {
     /// Creates a gallery view.
+    /// - Parameter containerWidth: The width of the container holding the gallery.
     /// - Returns: A view representing the basemap gallery.
-    func makeGalleryView() -> some View {
+    func makeGalleryView(_ containerWidth: CGFloat) -> some View {
         ScrollView {
             switch style {
             case .automatic:
                 if isRegularWidth {
-                    makeGridView()
+                    makeGridView(containerWidth)
                 } else {
                     makeListView()
                 }
-            case .grid:
-                makeGridView()
+            case .grid(let maxItemWidth):
+                makeGridView(containerWidth, maxItemWidth: maxItemWidth)
             case .list:
                 makeListView()
             }
@@ -130,15 +131,21 @@ private extension BasemapGallery {
     }
     
     /// The gallery view, displayed as a grid.
+    /// - Parameters:
+    ///   - containerWidth: The width of the container holding the grid view.
+    ///   - maxItemWidth: The maximum allowable width for an item in the grid. Defaults to `300`.
     /// - Returns: A view representing the basemap gallery grid.
-    func makeGridView() -> some View {
+    func makeGridView(_ containerWidth: CGFloat, maxItemWidth: CGFloat = 300) -> some View {
         internalMakeGalleryView(
             columns: Array(
                 repeating: GridItem(
                     .flexible(),
                     alignment: .top
                 ),
-                count: 3
+                count: max(
+                    1,
+                    Int((containerWidth / maxItemWidth).rounded(.down))
+                )
             )
         )
     }
