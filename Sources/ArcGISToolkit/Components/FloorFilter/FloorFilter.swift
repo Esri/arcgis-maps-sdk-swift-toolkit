@@ -63,7 +63,7 @@ public struct FloorFilter: View {
 ***REMOVED***private let alignment: Alignment
 ***REMOVED***
 ***REMOVED******REMOVED***/ The width of the level selector.
-***REMOVED***private let filterWidth: CGFloat = 60
+***REMOVED***private var levelSelectorWidth: CGFloat = 60
 ***REMOVED***
 ***REMOVED******REMOVED***/ The `Viewpoint` used to pan/zoom to the selected site/facility.
 ***REMOVED******REMOVED***/ If `nil`, there will be no automatic pan/zoom operations or automatic selection support.
@@ -103,7 +103,7 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***sitesAndFacilitiesButton
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.frame(width: filterWidth)
+***REMOVED******REMOVED***.frame(width: levelSelectorWidth)
 ***REMOVED******REMOVED***.esriBorder()
 ***REMOVED******REMOVED***.frame(
 ***REMOVED******REMOVED******REMOVED***maxWidth: horizontalSizeClass == .compact ? .infinity : nil,
@@ -194,5 +194,14 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED******REMOVED***guard selection?.wrappedValue != newValue else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***selection?.wrappedValue = newValue
 ***REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ The width of the level selector.
+***REMOVED******REMOVED***/ - Parameter width: The new width for the level selector.
+***REMOVED******REMOVED***/ - Returns: The `FloorFilter`.
+***REMOVED***public func levelSelectorWidth(_ width: CGFloat) -> Self {
+***REMOVED******REMOVED***var copy = self
+***REMOVED******REMOVED***copy.levelSelectorWidth = width
+***REMOVED******REMOVED***return copy
 ***REMOVED***
 ***REMOVED***
