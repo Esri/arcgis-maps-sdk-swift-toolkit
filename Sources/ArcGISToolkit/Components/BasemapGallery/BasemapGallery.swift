@@ -24,11 +24,10 @@ public struct BasemapGallery: View {
     public enum Style {
         /// The `BasemapGallery` will display as a grid when there is an appropriate
         /// width available for the gallery to do so. Otherwise, the gallery will display as a list.
-        /// Defaults to `125` when displayed as a list, `300` when displayed as a grid.
         case automatic
-        /// The `BasemapGallery` will display as a grid. Defaults to `300`.
+        /// The `BasemapGallery` will display as a grid.
         case grid
-        /// The `BasemapGallery` will display as a list. Defaults to `125`.
+        /// The `BasemapGallery` will display as a list.
         case list
     }
     
