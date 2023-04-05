@@ -69,6 +69,10 @@ public enum FloorFilterSelection: Hashable {
 }
 ```
 
+`FloorFilter` has the following modifier:
+
+- `func levelSelectorWidth(_ width: CGFloat)` - The width of the level selector.
+
 ## Behavior:
 
 |Site Button|

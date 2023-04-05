@@ -19,6 +19,9 @@ struct LevelSelector: View {
     /// The view model used by the `LevelsView`.
     @EnvironmentObject var viewModel: FloorFilterViewModel
     
+    /// The height of the scroll view's content.
+    @State private var contentHeight: CGFloat = .zero
+    
     /// A Boolean value indicating the whether the view shows only the selected level or all levels.
     /// If the value is`false`, the view will display all levels; if it is `true`, the view will
     /// only display the selected level.
@@ -30,104 +33,115 @@ struct LevelSelector: View {
     /// The levels to display.
     let levels: [FloorLevel]
     
-    /// The short name of the currently selected level, the first level, or "None" if none of the
-    /// levels are available.
-    private var selectedLevelName: String {
-        viewModel.selection?.level?.shortName ?? ""
+    public var body: some View {
+        VStack {
+            if !isTopAligned {
+                makeCollapseButton()
+                Divider()
+            }
+            makeLevelButtons()
+            if isTopAligned {
+                Divider()
+                makeCollapseButton()
+            }
+        }
+    }
+}
+
+extension LevelSelector {
+    /// A list of all the levels to be displayed.
+    ///
+    /// If the selector is collapsed, only the selected level is shown.
+    var filteredLevels: [FloorLevel] {
+        if !isCollapsed, levels.count > 1 {
+            return levels
+        } else {
+            if let selectedLevel = viewModel.selection?.level {
+                return [selectedLevel]
+            } else {
+                return []
+            }
+        }
     }
     
-    public var body: some View {
-        if !isCollapsed,
-           levels.count > 1 {
-            VStack {
-                if !isTopAligned {
-                    makeCollapseButton()
-                    Divider()
-                }
-                LevelsStack(levels: levels)
-                if isTopAligned {
-                    Divider()
-                    makeCollapseButton()
-                }
-            }
-        } else {
-            Toggle(isOn: $isCollapsed) {
-                Text(selectedLevelName)
-                    .modifier(LevelNameFormat())
-            }
-            .toggleStyle(.selectedButton)
+    /// The system name of the icon that reflects the current state of `isCollapsed`.
+    var iconForCollapsedState: String {
+        switch (isCollapsed, isTopAligned) {
+        case (true, true), (false, false): return "chevron.down.circle"
+        case (true, false), (false, true): return "chevron.up.circle"
         }
     }
     
     /// A button used to collapse the floor level list.
+    /// - Returns: The button used to collapse and expand the selector.
     @ViewBuilder func makeCollapseButton() -> some View {
         Button {
             withAnimation {
                 isCollapsed.toggle()
             }
         } label: {
-            Image(systemName: isTopAligned ? "chevron.up.circle" : "chevron.down.circle")
+            Image(systemName: iconForCollapsedState)
                 .padding(.toolkitDefault)
         }
+        .disabled(levels.count == 1)
     }
-}
-
-/// A vertical list of floor levels.
-private struct LevelsStack: View {
-    /// The view model used by the `LevelsView`.
-    @EnvironmentObject var viewModel: FloorFilterViewModel
     
-    /// The height of the scroll view's content.
-    @State private var contentHeight: CGFloat = .zero
+    /// A button for a level in the floor level list.
+    /// - Parameter level: The level represented by the button.
+    /// - Returns: The button representing the provided level.
+    @ViewBuilder func makeLevelButton(_ level: FloorLevel) -> some View {
+        Text(level.shortName)
+            .foregroundColor(.primary)
+            .padding([.vertical], 4)
+            .frame(maxWidth: .infinity)
+            .background {
+                RoundedRectangle(cornerRadius: 5)
+                    .fill(buttonColorFor(level))
+            }
+            .onTapGesture {
+                viewModel.setLevel(level)
+                if isCollapsed && levels.count > 1 {
+                    isCollapsed.toggle()
+                }
+            }
+    }
     
-    /// The levels to display.
-    let levels: [FloorLevel]
-    
-    var body: some View {
+    /// A scrollable list of buttons; one for each level to be displayed.
+    /// - Returns: The scrollable list of level buttons.
+    @ViewBuilder func makeLevelButtons() -> some View {
         ScrollViewReader { proxy in
             ScrollView {
-                VStack {
-                    ForEach(levels, id: \.id) { level in
-                        Toggle(
-                            isOn: Binding(
-                                get: {
-                                    viewModel.selection?.level == level
-                                },
-                                set: { newIsOn in
-                                    guard newIsOn else { return }
-                                    viewModel.setLevel(level)
-                                }
-                            )
-                        ) {
-                            Text(level.shortName)
-                                .modifier(LevelNameFormat())
-                        }
-                        .toggleStyle(.selectableButton)
+                VStack(spacing: 4) {
+                    ForEach(filteredLevels, id: \.id) { level in
+                        makeLevelButton(level)
                     }
                 }
-                .onSizeChange {
-                    contentHeight = $0.height
-                }
+                .onSizeChange { contentHeight = $0.height }
             }
             .frame(maxHeight: contentHeight)
-            .onAppear {
-                if let floorLevel = viewModel.selection?.level {
-                    withAnimation {
-                        proxy.scrollTo(
-                            floorLevel.id
-                        )
-                    }
-                }
-            }
+            .onAppear { scrollToSelectedLevel(with: proxy) }
+            .onChange(of: isCollapsed) { _ in scrollToSelectedLevel(with: proxy) }
         }
     }
-}
-
-private struct LevelNameFormat: ViewModifier {
-    func body(content: Content) -> some View {
-        content
-            .lineLimit(1)
-            .fixedSize()
-            .frame(minWidth: 40)
+    
+    /// Determines a appropriate color for a button in the floor level list.
+    /// - Parameter level: THe level represented by the button.
+    /// - Returns: The color for the button representing the provided level.
+    func buttonColorFor(_ level: FloorLevel) -> Color {
+        if viewModel.selection?.level == level {
+            return Color.accentColor
+        } else {
+            return Color.secondary.opacity(0.5)
+        }
+    }
+    
+    /// Scrolls the list within the provided proxy to the button representing the selected level.
+    /// - Parameter proxy: The proxy containing the scroll view.
+    func scrollToSelectedLevel(with proxy: ScrollViewProxy) {
+        if let level = viewModel.selection?.level {
+            withAnimation {
+                proxy.scrollTo(level.id)
+            }
+        }
     }
 }
