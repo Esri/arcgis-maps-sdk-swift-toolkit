@@ -38,7 +38,7 @@ struct BasemapGalleryExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.sheet(isPresented: $showBasemapGallery) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***VStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***xButton
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***doneButton
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding([.top, .trailing])
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.frame(maxWidth: .infinity, alignment: .trailing)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***BasemapGallery(items: basemaps, geoModel: map)
@@ -78,7 +78,7 @@ struct BasemapGalleryExampleView: View {
 ***REMOVED******REMOVED***/ A button that allows a user to close a sheet.
 ***REMOVED******REMOVED***/
 ***REMOVED******REMOVED***/ This is especially useful for when the sheet is open an iPhone in landscape.
-***REMOVED***private var xButton: some View {
+***REMOVED***private var doneButton: some View {
 ***REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED***showBasemapGallery.toggle()
 ***REMOVED*** label: {
