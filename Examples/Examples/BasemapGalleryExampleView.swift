@@ -33,39 +33,15 @@ struct BasemapGalleryExampleView: View {
     
     var body: some View {
         MapView(map: map, viewpoint: initialViewpoint)
-            
-            // Display in a sheet
-            //
             .sheet(isPresented: $showBasemapGallery) {
-                VStack {
+                VStack(alignment: .trailing) {
                     doneButton
-                        .padding([.top, .trailing])
-                        .frame(maxWidth: .infinity, alignment: .trailing)
+                        .padding()
                     BasemapGallery(items: basemaps, geoModel: map)
-                        .style(.grid)
+                        .style(.automatic())
                         .padding()
                 }
             }
-            
-            // Display in a floating panel
-            //
-//            .floatingPanel(isPresented: $showBasemapGallery) {
-//                BasemapGallery(items: basemaps, geoModel: map)
-//                    .style(.grid)
-//            }
-            
-            // Display in an overlay
-            //
-//            .overlay(alignment: .topTrailing) {
-//                if showBasemapGallery {
-//                    BasemapGallery(items: basemaps, geoModel: map)
-//                        .style(.list)
-//                        .frame(width: 150, height: 400)
-//                        .esriBorder()
-//                        .padding()
-//                }
-//            }
-            
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Toggle(isOn: $showBasemapGallery) {
