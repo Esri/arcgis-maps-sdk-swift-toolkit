@@ -82,7 +82,7 @@ struct BasemapGalleryExampleView: View {
         Button {
             showBasemapGallery.toggle()
         } label: {
-            Image(systemName: "xmark")
+            Text("Done")
         }
     }
     
