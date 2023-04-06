@@ -51,7 +51,7 @@
 ***REMOVED******REMOVED***items = []
 ***REMOVED******REMOVED***self.geoModel = geoModel
 ***REMOVED******REMOVED***geoModelDidChange(nil)
-
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***self.portal = portal
 ***REMOVED******REMOVED***portalDidChange(portal)
 ***REMOVED***
@@ -62,7 +62,7 @@
 ***REMOVED******REMOVED***/ The error signifying the spatial reference of ``geoModel`` and the spatial reference of
 ***REMOVED******REMOVED***/ ``currentItem`` do not match.
 ***REMOVED***@Published private(set) var spatialReferenceMismatchError: SpatialReferenceMismatchError? = nil
-
+***REMOVED***
 ***REMOVED******REMOVED***/ If the `GeoModel` is not loaded when passed to the `BasemapGalleryViewModel`, then
 ***REMOVED******REMOVED***/ the geoModel will be immediately loaded. The spatial reference of geoModel dictates which
 ***REMOVED******REMOVED***/ basemaps from the gallery are enabled. When an enabled basemap is selected by the user,
@@ -80,7 +80,7 @@
 ***REMOVED******REMOVED******REMOVED***portalDidChange(oldValue)
 ***REMOVED***
 ***REMOVED***
-
+***REMOVED***
 ***REMOVED******REMOVED***/ The list of basemaps shown in the gallery.
 ***REMOVED***@Published var items: [BasemapGalleryItem]
 ***REMOVED***
@@ -109,7 +109,7 @@
 ***REMOVED***func portalDidChange(_ previousPortal: Portal?) {
 ***REMOVED******REMOVED******REMOVED*** Remove all items from `items`.
 ***REMOVED******REMOVED***items.removeAll()
-
+***REMOVED******REMOVED***
 ***REMOVED******REMOVED***guard let portal = portal else { return ***REMOVED***
 ***REMOVED******REMOVED***fetchBasemaps(from: portal)
 ***REMOVED***

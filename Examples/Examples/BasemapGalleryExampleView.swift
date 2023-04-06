@@ -16,10 +16,8 @@
 ***REMOVED***Toolkit
 
 struct BasemapGalleryExampleView: View {
-***REMOVED******REMOVED***/ The data model containing the `Map` displayed in the `MapView`.
-***REMOVED***@StateObject private var dataModel = MapDataModel(
-***REMOVED******REMOVED***map: Map(basemapStyle: .arcGISImagery)
-***REMOVED***)
+***REMOVED******REMOVED***/ The `Map` displayed in the `MapView`.
+***REMOVED***@State private var map = Map(basemapStyle: .arcGISImagery)
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether to show the basemap gallery.
 ***REMOVED***@State private var showBasemapGallery = false
@@ -34,15 +32,16 @@ struct BasemapGalleryExampleView: View {
 ***REMOVED***private let basemaps = initialBasemaps()
 ***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***MapView(map: dataModel.map, viewpoint: initialViewpoint)
-***REMOVED******REMOVED******REMOVED***.overlay(alignment: .topTrailing) {
-***REMOVED******REMOVED******REMOVED******REMOVED***if showBasemapGallery {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***BasemapGallery(items: basemaps, geoModel: dataModel.map)
+***REMOVED******REMOVED***MapView(map: map, viewpoint: initialViewpoint)
+***REMOVED******REMOVED******REMOVED***.sheet(isPresented: $showBasemapGallery) {
+***REMOVED******REMOVED******REMOVED******REMOVED***VStack(alignment: .trailing) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***doneButton
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***BasemapGallery(items: basemaps, geoModel: map)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.style(.automatic())
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***.navigationTitle("Basemap Gallery")
 ***REMOVED******REMOVED******REMOVED***.toolbar {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ToolbarItem(placement: .navigationBarTrailing) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Toggle(isOn: $showBasemapGallery) {
@@ -50,6 +49,17 @@ struct BasemapGalleryExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ A button that allows a user to close a sheet.
+***REMOVED******REMOVED***/
+***REMOVED******REMOVED***/ This is especially useful for when the sheet is open an iPhone in landscape.
+***REMOVED***private var doneButton: some View {
+***REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED***showBasemapGallery.toggle()
+***REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED***Text("Done")
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***private static func initialBasemaps() -> [BasemapGalleryItem] {

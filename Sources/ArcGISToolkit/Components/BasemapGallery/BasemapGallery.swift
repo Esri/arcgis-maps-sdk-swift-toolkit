@@ -24,12 +24,12 @@ public struct BasemapGallery: View {
 ***REMOVED***public enum Style {
 ***REMOVED******REMOVED******REMOVED***/ The `BasemapGallery` will display as a grid when there is an appropriate
 ***REMOVED******REMOVED******REMOVED***/ width available for the gallery to do so. Otherwise, the gallery will display as a list.
-***REMOVED******REMOVED******REMOVED***/ Defaults to `125` when displayed as a list, `300` when displayed as a grid.
-***REMOVED******REMOVED***case automatic(listWidth: CGFloat = 125, gridWidth: CGFloat = 300)
-***REMOVED******REMOVED******REMOVED***/ The `BasemapGallery` will display as a grid. Defaults to `300`.
-***REMOVED******REMOVED***case grid(width: CGFloat = 300)
-***REMOVED******REMOVED******REMOVED***/ The `BasemapGallery` will display as a list. Defaults to `125`.
-***REMOVED******REMOVED***case list(width: CGFloat = 125)
+***REMOVED******REMOVED******REMOVED***/ When displayed as a grid, `maxGridItemWidth` sets the maximum width of a grid item.
+***REMOVED******REMOVED***case automatic(maxGridItemWidth: CGFloat = 300)
+***REMOVED******REMOVED******REMOVED***/ The `BasemapGallery` will display as a grid.
+***REMOVED******REMOVED***case grid(maxItemWidth: CGFloat = 300)
+***REMOVED******REMOVED******REMOVED***/ The `BasemapGallery` will display as a list.
+***REMOVED******REMOVED***case list
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a `BasemapGallery` with the given geo model and array of basemap gallery items.
@@ -42,7 +42,7 @@ public struct BasemapGallery: View {
 ***REMOVED******REMOVED***items: [BasemapGalleryItem] = [],
 ***REMOVED******REMOVED***geoModel: GeoModel? = nil
 ***REMOVED***) {
-***REMOVED******REMOVED***viewModel = BasemapGalleryViewModel(geoModel: geoModel, items: items)
+***REMOVED******REMOVED***_viewModel = StateObject(wrappedValue: BasemapGalleryViewModel(geoModel: geoModel, items: items))
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a `BasemapGallery` with the given geo model and portal.
@@ -54,14 +54,14 @@ public struct BasemapGallery: View {
 ***REMOVED******REMOVED***portal: Portal,
 ***REMOVED******REMOVED***geoModel: GeoModel? = nil
 ***REMOVED***) {
-***REMOVED******REMOVED***viewModel = BasemapGalleryViewModel(geoModel, portal: portal)
+***REMOVED******REMOVED***_viewModel = StateObject(wrappedValue: BasemapGalleryViewModel(geoModel, portal: portal))
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The view model used by the view. The `BasemapGalleryViewModel` manages the state
 ***REMOVED******REMOVED***/ of the `BasemapGallery`. The view observes `BasemapGalleryViewModel` for changes
 ***REMOVED******REMOVED***/ in state. The view updates the state of the `BasemapGalleryViewModel` in response to
 ***REMOVED******REMOVED***/ user action.
-***REMOVED***@ObservedObject private var viewModel: BasemapGalleryViewModel
+***REMOVED***@StateObject private var viewModel: BasemapGalleryViewModel
 ***REMOVED***
 ***REMOVED******REMOVED***/ The style of the basemap gallery. The gallery can be displayed as a list, grid, or automatically
 ***REMOVED******REMOVED***/ switch between the two based on-screen real estate. Defaults to ``BasemapGallery/Style/automatic``.
@@ -77,30 +77,15 @@ public struct BasemapGallery: View {
 ***REMOVED******REMOVED***!(horizontalSizeClass == .compact && verticalSizeClass == .regular)
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ The width of the gallery, taking into account the horizontal and vertical size classes of the device.
-***REMOVED***private var galleryWidth: CGFloat {
-***REMOVED******REMOVED***switch style {
-***REMOVED******REMOVED***case .list(let width):
-***REMOVED******REMOVED******REMOVED***return width
-***REMOVED******REMOVED***case .grid(let width):
-***REMOVED******REMOVED******REMOVED***return width
-***REMOVED******REMOVED***case .automatic(let listWidth, let gridWidth):
-***REMOVED******REMOVED******REMOVED***return isRegularWidth ? gridWidth : listWidth
-***REMOVED***
-***REMOVED***
-***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether to show an error alert.
 ***REMOVED***@State private var showErrorAlert = false
 ***REMOVED***
 ***REMOVED******REMOVED***/ The current alert item to display.
 ***REMOVED***@State private var alertItem: AlertItem?
 ***REMOVED***
-***REMOVED******REMOVED***/ The height of the basemap gallery content.
-***REMOVED***@State private var contentHeight: CGFloat = .zero
-***REMOVED***
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***GeometryReader { geometry in
-***REMOVED******REMOVED******REMOVED***makeGalleryView()
+***REMOVED******REMOVED******REMOVED***makeGalleryView(geometry.size.width)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onReceive(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewModel.$spatialReferenceMismatchError.dropFirst(),
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***perform: { error in
@@ -117,27 +102,29 @@ public struct BasemapGallery: View {
 ***REMOVED******REMOVED******REMOVED*** message: { item in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(item.message)
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.frame(height: min(contentHeight, geometry.size.height))
-***REMOVED******REMOVED******REMOVED******REMOVED***.esriBorder()
+***REMOVED******REMOVED******REMOVED******REMOVED***.frame(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***width: geometry.size.width,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***height: geometry.size.height
+***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED***
-***REMOVED******REMOVED***.frame(width: galleryWidth)
 ***REMOVED***
 ***REMOVED***
 
 private extension BasemapGallery {
 ***REMOVED******REMOVED***/ Creates a gallery view.
+***REMOVED******REMOVED***/ - Parameter containerWidth: The width of the container holding the gallery.
 ***REMOVED******REMOVED***/ - Returns: A view representing the basemap gallery.
-***REMOVED***func makeGalleryView() -> some View {
+***REMOVED***func makeGalleryView(_ containerWidth: CGFloat) -> some View {
 ***REMOVED******REMOVED***ScrollView {
 ***REMOVED******REMOVED******REMOVED***switch style {
-***REMOVED******REMOVED******REMOVED***case .automatic:
+***REMOVED******REMOVED******REMOVED***case .automatic(let maxGridItemWidth):
 ***REMOVED******REMOVED******REMOVED******REMOVED***if isRegularWidth {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeGridView()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeGridView(containerWidth, maxGridItemWidth)
 ***REMOVED******REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***makeListView()
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED***case .grid:
-***REMOVED******REMOVED******REMOVED******REMOVED***makeGridView()
+***REMOVED******REMOVED******REMOVED***case .grid(let maxItemWidth):
+***REMOVED******REMOVED******REMOVED******REMOVED***makeGridView(containerWidth, maxItemWidth)
 ***REMOVED******REMOVED******REMOVED***case .list:
 ***REMOVED******REMOVED******REMOVED******REMOVED***makeListView()
 ***REMOVED******REMOVED***
@@ -145,15 +132,21 @@ private extension BasemapGallery {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The gallery view, displayed as a grid.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - containerWidth: The width of the container holding the grid view.
+***REMOVED******REMOVED***/   - maxItemWidth: The maximum allowable width for an item in the grid. Defaults to `300`.
 ***REMOVED******REMOVED***/ - Returns: A view representing the basemap gallery grid.
-***REMOVED***func makeGridView() -> some View {
+***REMOVED***func makeGridView(_ containerWidth: CGFloat, _ maxItemWidth: CGFloat) -> some View {
 ***REMOVED******REMOVED***internalMakeGalleryView(
 ***REMOVED******REMOVED******REMOVED***columns: Array(
 ***REMOVED******REMOVED******REMOVED******REMOVED***repeating: GridItem(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.flexible(),
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***alignment: .top
 ***REMOVED******REMOVED******REMOVED******REMOVED***),
-***REMOVED******REMOVED******REMOVED******REMOVED***count: 3
+***REMOVED******REMOVED******REMOVED******REMOVED***count: max(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***1,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Int((containerWidth / maxItemWidth).rounded(.down))
+***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED***)
 ***REMOVED***
@@ -189,9 +182,6 @@ private extension BasemapGallery {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***.onSizeChange {
-***REMOVED******REMOVED******REMOVED***contentHeight = $0.height
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
