@@ -20,8 +20,8 @@ public struct Compass: View {
 ***REMOVED******REMOVED***/ The opacity of the compass.
 ***REMOVED***@State private var opacity: Double = .zero
 ***REMOVED***
-***REMOVED******REMOVED***/ An action to perform when the compass is tapped.
-***REMOVED***private let action: (() -> Void)?
+***REMOVED******REMOVED***/ <#Description#>
+***REMOVED***private var geoViewProxy: GeoViewProxy?
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether  the compass should automatically
 ***REMOVED******REMOVED***/ hide/show itself when the heading is `0`.
@@ -44,13 +44,13 @@ public struct Compass: View {
 ***REMOVED******REMOVED***/ direction toward true East, etc.).
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - heading: The heading of the compass.
-***REMOVED******REMOVED***/   - action: An action to perform when the compass is tapped.
+***REMOVED******REMOVED***/   - geoViewProxy: <#Description#>
 ***REMOVED***public init(
 ***REMOVED******REMOVED***heading: Binding<Double>,
-***REMOVED******REMOVED***action: (() -> Void)? = nil
+***REMOVED******REMOVED***geoViewProxy: GeoViewProxy? = nil
 ***REMOVED***) {
 ***REMOVED******REMOVED***_heading = heading
-***REMOVED******REMOVED***self.action = action
+***REMOVED******REMOVED***self.geoViewProxy = geoViewProxy
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***public var body: some View {
@@ -72,8 +72,8 @@ public struct Compass: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onTapGesture {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let action {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***action()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let mapViewProxy = geoViewProxy as? MapViewProxy {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task { await mapViewProxy.setViewpointRotation(0) ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***heading = .zero
 ***REMOVED******REMOVED******REMOVED******REMOVED***
@@ -90,27 +90,26 @@ public extension Compass {
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - viewpointRotation: The viewpoint rotation whose value determines the
 ***REMOVED******REMOVED***/   heading of the compass.
-***REMOVED******REMOVED***/   - action: An action to perform when the compass is tapped.
+***REMOVED******REMOVED***/   - geoViewProxy: <#Description#>
 ***REMOVED***init(
 ***REMOVED******REMOVED***viewpointRotation: Binding<Double>,
-***REMOVED******REMOVED***action: (() -> Void)? = nil
+***REMOVED******REMOVED***geoViewProxy: GeoViewProxy? = nil
 ***REMOVED***) {
 ***REMOVED******REMOVED***let heading = Binding(get: {
 ***REMOVED******REMOVED******REMOVED***viewpointRotation.wrappedValue.isZero ? .zero : 360 - viewpointRotation.wrappedValue
 ***REMOVED***, set: { newHeading in
 ***REMOVED******REMOVED******REMOVED***viewpointRotation.wrappedValue = newHeading.isZero ? .zero : 360 - newHeading
 ***REMOVED***)
-***REMOVED******REMOVED***self.init(heading: heading, action: action)
+***REMOVED******REMOVED***self.init(heading: heading, geoViewProxy: geoViewProxy)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates a compass with a binding to an optional viewpoint.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - viewpoint: The viewpoint whose rotation determines the heading of the compass.
-***REMOVED******REMOVED***/   - action: An action to perform when the compass is tapped.
-***REMOVED******REMOVED***/   when the viewpoint's rotation is 0 degrees.
+***REMOVED******REMOVED***/   - geoViewProxy: <#Description#>
 ***REMOVED***init(
 ***REMOVED******REMOVED***viewpoint: Binding<Viewpoint?>,
-***REMOVED******REMOVED***action: (() -> Void)? = nil
+***REMOVED******REMOVED***geoViewProxy: GeoViewProxy? = nil
 ***REMOVED***) {
 ***REMOVED******REMOVED***let viewpointRotation = Binding {
 ***REMOVED******REMOVED******REMOVED***viewpoint.wrappedValue?.rotation ?? .nan
@@ -122,7 +121,7 @@ public extension Compass {
 ***REMOVED******REMOVED******REMOVED******REMOVED***rotation: newViewpointRotation
 ***REMOVED******REMOVED******REMOVED***)
 ***REMOVED***
-***REMOVED******REMOVED***self.init(viewpointRotation: viewpointRotation, action: action)
+***REMOVED******REMOVED***self.init(viewpointRotation: viewpointRotation, geoViewProxy: geoViewProxy)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Define a custom size for the compass.
