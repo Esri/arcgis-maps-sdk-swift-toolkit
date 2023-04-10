@@ -19,17 +19,17 @@ import SwiftUI
 struct CompassExampleView: View {
     /// A scenario represents a type of environment a compass may be used in.
     enum Scenario: String {
-        case map
         case scene
+        case viewpoint
     }
     
     /// The active scenario.
-    @State private var scenario = Scenario.map
+    @State private var scenario = Scenario.viewpoint
     
     var body: some View {
         Group {
             switch scenario {
-            case .map:
+            case .viewpoint:
                 MapWithViewpoint()
             case .scene:
                 SceneWithCameraController()
@@ -39,9 +39,9 @@ struct CompassExampleView: View {
             ToolbarItem(placement: .navigationBarTrailing) {
                 Menu(scenario.rawValue.capitalized) {
                     Button {
-                        scenario = .map
+                        scenario = .viewpoint
                     } label: {
-                        Label("Map", systemImage: "map.fill")
+                        Text("Viewpoint")
                     }
                     
                     Button {
@@ -72,17 +72,8 @@ struct MapWithViewpoint: View {
             MapView(map: map, viewpoint: viewpoint)
                 .onViewpointChanged(kind: .centerAndScale) { viewpoint = $0 }
                 .overlay(alignment: .topTrailing) {
-                    Compass(viewpoint: $viewpoint) {
-                        guard let viewpoint else { return }
-                        Task {
-                            // Animate the map view to zero when the compass is tapped.
-                            await proxy.setViewpoint(
-                                viewpoint.withRotation(0),
-                                duration: 0.25
-                            )
-                        }
-                    }
-                    .padding()
+                    Compass(viewpoint: $viewpoint, geoViewProxy: proxy)
+                        .padding()
                 }
         }
     }
@@ -108,18 +99,7 @@ struct SceneWithCameraController: View {
                 heading = newCamera.heading.rounded()
             }
             .overlay(alignment: .topTrailing) {
-                Compass(viewpointRotation: $heading) {
-                    // Animate the scene view when the compass is tapped.
-                    Task {
-                        await cameraController.moveCamera(
-                            distanceDelta: .zero,
-                            headingDelta: heading > 180 ? 360 - heading : -heading,
-                            pitchDelta: .zero,
-                            duration: 0.3
-                        )
-                    }
-                }
-                .padding()
+                Compass(viewpointRotation: $heading)
             }
     }
 }
