@@ -84,7 +84,7 @@ public struct UtilityNetworkTrace: View {
     @Binding private var mapViewProxy: MapViewProxy?
     
     /// Acts as the point of identification for items tapped in the utility network.
-    @Binding private var viewPoint: CGPoint?
+    @Binding private var screenPoint: CGPoint?
     
     /// Acts as the point at which newly selected starting point graphics will be created.
     @Binding private var mapPoint: Point?
@@ -534,7 +534,7 @@ public struct UtilityNetworkTrace: View {
     ///   - graphicsOverlay: The graphics overlay to hold generated starting point and trace graphics.
     ///   - map: The map containing the utility network(s).
     ///   - mapPoint: Acts as the point at which newly selected starting point graphics will be created.
-    ///   - viewPoint: Acts as the point of identification for items tapped in the utility network.
+    ///   - screenPoint: Acts as the point of identification for items tapped in the utility network.
     ///   - mapViewProxy: Provides a method of layer identification when starting points are being
     ///   chosen.
     ///   - viewpoint: Allows the utility network trace tool to update the parent map view's viewpoint.
@@ -543,13 +543,13 @@ public struct UtilityNetworkTrace: View {
         graphicsOverlay: Binding<GraphicsOverlay>,
         map: Map,
         mapPoint: Binding<Point?>,
-        viewPoint: Binding<CGPoint?>,
+        screenPoint: Binding<CGPoint?>,
         mapViewProxy: Binding<MapViewProxy?>,
         viewpoint: Binding<Viewpoint?>,
         startingPoints: Binding<[UtilityNetworkTraceStartingPoint]> = .constant([])
     ) {
         _activeDetent = .constant(nil)
-        _viewPoint = viewPoint
+        _screenPoint = screenPoint
         _mapPoint = mapPoint
         _mapViewProxy = mapViewProxy
         _graphicsOverlay = graphicsOverlay
@@ -605,18 +605,18 @@ public struct UtilityNetworkTrace: View {
         }
         .background(Color(uiColor: .systemGroupedBackground))
         .animation(.default, value: currentActivity)
-        .onChange(of: viewPoint) { newValue in
+        .onChange(of: screenPoint) { newScreenPoint in
             guard isFocused(traceCreationActivity: .addingStartingPoints),
                   let mapViewProxy = mapViewProxy,
                   let mapPoint = mapPoint,
-                  let viewPoint = viewPoint else {
+                  let screenPoint = newScreenPoint else {
                 return
             }
             currentActivity = .creatingTrace(.viewingStartingPoints)
             activeDetent = .half
             Task {
                 await viewModel.addStartingPoints(
-                    at: viewPoint,
+                    at: screenPoint,
                     mapPoint: mapPoint,
                     with: mapViewProxy
                 )

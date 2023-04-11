@@ -15,8 +15,8 @@ import ArcGIS
 import ArcGISToolkit
 import SwiftUI
 
-/// A demonstration of the utility network trace tool which runs traces on a web map published with a utility
-/// network and trace configurations.
+/// A demonstration of the utility network trace tool which runs traces on a web map published with
+/// a utility network and trace configurations.
 struct UtilityNetworkTraceExampleView: View {
     /// The data model containing a `Map` with the utility networks.
     @StateObject private var dataModel = MapDataModel(
@@ -33,7 +33,7 @@ struct UtilityNetworkTraceExampleView: View {
     @State var mapPoint: Point?
     
     /// Provides the ability to detect tap locations in the context of the screen.
-    @State var viewPoint: CGPoint?
+    @State var screenPoint: CGPoint?
     
     /// A container for graphical trace results.
     @State var resultGraphicsOverlay = GraphicsOverlay()
@@ -48,8 +48,8 @@ struct UtilityNetworkTraceExampleView: View {
                 viewpoint: viewpoint,
                 graphicsOverlays: [resultGraphicsOverlay]
             )
-            .onSingleTapGesture { viewPoint, mapPoint in
-                self.viewPoint = viewPoint
+            .onSingleTapGesture { screenPoint, mapPoint in
+                self.screenPoint = screenPoint
                 self.mapPoint = mapPoint
                 self.mapViewProxy = mapViewProxy
             }
@@ -70,7 +70,7 @@ struct UtilityNetworkTraceExampleView: View {
                     graphicsOverlay: $resultGraphicsOverlay,
                     map: dataModel.map,
                     mapPoint: $mapPoint,
-                    viewPoint: $viewPoint,
+                    screenPoint: $screenPoint,
                     mapViewProxy: $mapViewProxy,
                     viewpoint: $viewpoint
                 )
