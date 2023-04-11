@@ -386,14 +386,7 @@ private extension SearchViewModel {
             let builder = EnvelopeBuilder(envelope: envelope)
             builder.expand(by: 1.1)
             let targetExtent = builder.toGeometry()
-            let newViewpoint = Viewpoint(boundingGeometry: targetExtent)
-            if let geoViewProxy {
-                Task {
-                    await geoViewProxy.setViewpoint(newViewpoint, duration: nil)
-                }
-            } else {
-                viewpoint.wrappedValue = newViewpoint
-            }
+            display(newViewpoint: Viewpoint(boundingGeometry: targetExtent))
             lastSearchExtent = targetExtent
         } else {
             viewpoint.wrappedValue = nil
@@ -404,13 +397,16 @@ private extension SearchViewModel {
     
     func display(selectedResult: SearchResult?) {
         guard let selectedResult = selectedResult else { return }
+        display(newViewpoint: selectedResult.selectionViewpoint)
+    }
     
-        if let geoViewProxy, let viewpoint = selectedResult.selectionViewpoint {
-            Task {
-                await geoViewProxy.setViewpoint(viewpoint, duration: nil)
-            }
+    /// Update the viewpoint to the new viewpoint, if a geo view proxy was supplied, the transition
+    /// will be animated.
+    func display(newViewpoint: Viewpoint?) {
+        if let geoViewProxy, let newViewpoint {
+            Task { await geoViewProxy.setViewpoint(newViewpoint, duration: nil) }
         } else {
-            viewpoint?.wrappedValue = selectedResult.selectionViewpoint
+            viewpoint?.wrappedValue = newViewpoint
         }
     }
 }
