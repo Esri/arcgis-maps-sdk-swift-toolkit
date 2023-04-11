@@ -545,8 +545,7 @@ public struct UtilityNetworkTrace: View {
     ///   - map: The map containing the utility network(s).
     ///   - mapPoint: Acts as the point at which newly selected starting point graphics will be created.
     ///   - screenPoint: Acts as the point of identification for items tapped in the utility network.
-    ///   - mapViewProxy: Provides a method of layer identification when starting points are being
-    ///   chosen.
+    ///   - mapViewProxy: Provides access to the map view's identification and animation functionality.
     ///   - viewpoint: Allows the utility network trace tool to update the parent map view's viewpoint.
     ///   - startingPoints: An optional list of programmatically provided starting points.
     public init(
