@@ -439,7 +439,12 @@ public struct UtilityNetworkTrace: View {
             Button("Zoom To") {
                 if let selectedStartingPoint = selectedStartingPoint,
                    let extent = selectedStartingPoint.geoElement.geometry?.extent {
-                    viewpoint = Viewpoint(boundingGeometry: extent)
+                    let newViewpoint = Viewpoint(boundingGeometry: extent)
+                    if let mapViewProxy {
+                        Task { await mapViewProxy.setViewpoint(newViewpoint, duration: nil) }
+                    } else {
+                        viewpoint = newViewpoint
+                    }
                 }
             }
             Button("Delete", role: .destructive) {
