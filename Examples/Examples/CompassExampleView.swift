@@ -15,101 +15,32 @@ import ArcGIS
 import ArcGISToolkit
 import SwiftUI
 
-/// An example demonstrating how to use a compass in three different environments.
-struct CompassExampleView: View {
-    /// A scenario represents a type of environment a compass may be used in.
-    enum Scenario: String {
-        case scene
-        case viewpoint
-    }
-    
-    /// The active scenario.
-    @State private var scenario = Scenario.viewpoint
-    
-    var body: some View {
-        Group {
-            switch scenario {
-            case .viewpoint:
-                MapWithViewpoint()
-            case .scene:
-                SceneWithCameraController()
-            }
-        }
-        .toolbar {
-            ToolbarItem(placement: .navigationBarTrailing) {
-                Menu(scenario.rawValue.capitalized) {
-                    Button {
-                        scenario = .viewpoint
-                    } label: {
-                        Text("Viewpoint")
-                    }
-                    
-                    Button {
-                        scenario = .scene
-                    } label: {
-                        Label("Scene", systemImage: "globe.americas.fill")
-                    }
-                }
-            }
-        }
-    }
-}
-
 /// An example demonstrating how to use a compass with a map view.
-struct MapWithViewpoint: View {
+struct CompassExampleView: View {
     /// The `Map` displayed in the `MapView`.
     @State private var map = Map(basemapStyle: .arcGISImagery)
     
     /// Allows for communication between the Compass and MapView or SceneView.
-    @State private var viewpoint: Viewpoint? = Viewpoint(
-        center: .esriRedlands,
-        scale: 10_000,
-        rotation: -45
-    )
+    @State private var viewpoint: Viewpoint? = .esriRedlands
     
     var body: some View {
         MapViewReader { proxy in
             MapView(map: map, viewpoint: viewpoint)
                 .onViewpointChanged(kind: .centerAndScale) { viewpoint = $0 }
                 .overlay(alignment: .topTrailing) {
-                    Compass(viewpoint: $viewpoint, geoViewProxy: proxy)
+                    Compass(viewpoint: $viewpoint, mapViewProxy: proxy)
                         .padding()
                 }
         }
     }
 }
 
-/// An example demonstrating how to use a compass with a scene view and camera controller.
-struct SceneWithCameraController: View {
-    /// The data model containing the `Scene` displayed in the `SceneView`.
-    @State private var scene = Scene(basemapStyle: .arcGISImagery)
-    
-    /// The current heading as reported by the scene view.
-    @State private var heading = Double.zero
-    
-    /// The orbit location camera controller used by the scene view.
-    private let cameraController = OrbitLocationCameraController(
-        target: .esriRedlands,
-        distance: 10_000
-    )
-    
-    var body: some View {
-        SceneView(scene: scene, cameraController: cameraController)
-            .onCameraChanged { newCamera in
-                heading = newCamera.heading.rounded()
-            }
-            .overlay(alignment: .topTrailing) {
-                Compass(viewpointRotation: $heading)
-            }
-    }
-}
-
-private extension Point {
-    static var esriRedlands: Point {
+private extension Viewpoint {
+    static var esriRedlands: Viewpoint {
         .init(
-            x: -117.19494,
-            y: 34.05723,
-            spatialReference: .wgs84
+            center: .init(x: -117.19494, y: 34.05723, spatialReference: .wgs84),
+            scale: 10_000,
+            rotation: -45
         )
     }
 }

@@ -20,8 +20,8 @@ public struct Compass: View {
     /// The opacity of the compass.
     @State private var opacity: Double = .zero
     
-    /// <#Description#>
-    private var geoViewProxy: GeoViewProxy?
+    /// Provides access to viewpoint animation.
+    private var mapViewProxy: MapViewProxy?
     
     /// A Boolean value indicating whether  the compass should automatically
     /// hide/show itself when the heading is `0`.
@@ -44,13 +44,13 @@ public struct Compass: View {
     /// direction toward true East, etc.).
     /// - Parameters:
     ///   - heading: The heading of the compass.
-    ///   - geoViewProxy: <#Description#>
+    ///   - mapViewProxy: Provides access to viewpoint animation.
     public init(
         heading: Binding<Double>,
-        geoViewProxy: GeoViewProxy? = nil
+        mapViewProxy: MapViewProxy? = nil
     ) {
         _heading = heading
-        self.geoViewProxy = geoViewProxy
+        self.mapViewProxy = mapViewProxy
     }
     
     public var body: some View {
@@ -72,7 +72,7 @@ public struct Compass: View {
                     }
                 }
                 .onTapGesture {
-                    if let mapViewProxy = geoViewProxy as? MapViewProxy {
+                    if let mapViewProxy {
                         Task { await mapViewProxy.setViewpointRotation(0) }
                     } else {
                         heading = .zero
@@ -90,26 +90,26 @@ public extension Compass {
     /// - Parameters:
     ///   - viewpointRotation: The viewpoint rotation whose value determines the
     ///   heading of the compass.
-    ///   - geoViewProxy: <#Description#>
+    ///   - mapViewProxy: Provides access to viewpoint animation.
     init(
         viewpointRotation: Binding<Double>,
-        geoViewProxy: GeoViewProxy? = nil
+        mapViewProxy: MapViewProxy? = nil
     ) {
         let heading = Binding(get: {
             viewpointRotation.wrappedValue.isZero ? .zero : 360 - viewpointRotation.wrappedValue
         }, set: { newHeading in
             viewpointRotation.wrappedValue = newHeading.isZero ? .zero : 360 - newHeading
         })
-        self.init(heading: heading, geoViewProxy: geoViewProxy)
+        self.init(heading: heading, mapViewProxy: mapViewProxy)
     }
     
     /// Creates a compass with a binding to an optional viewpoint.
     /// - Parameters:
     ///   - viewpoint: The viewpoint whose rotation determines the heading of the compass.
-    ///   - geoViewProxy: <#Description#>
+    ///   - mapViewProxy: Provides access to viewpoint animation.
     init(
         viewpoint: Binding<Viewpoint?>,
-        geoViewProxy: GeoViewProxy? = nil
+        mapViewProxy: MapViewProxy? = nil
     ) {
         let viewpointRotation = Binding {
             viewpoint.wrappedValue?.rotation ?? .nan
@@ -121,7 +121,7 @@ public extension Compass {
                 rotation: newViewpointRotation
             )
         }
-        self.init(viewpointRotation: viewpointRotation, geoViewProxy: geoViewProxy)
+        self.init(viewpointRotation: viewpointRotation, mapViewProxy: mapViewProxy)
     }
     
     /// Define a custom size for the compass.
