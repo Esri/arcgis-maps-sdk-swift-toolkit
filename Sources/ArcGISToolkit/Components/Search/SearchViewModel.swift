@@ -386,14 +386,7 @@ private extension SearchViewModel {
 ***REMOVED******REMOVED******REMOVED***let builder = EnvelopeBuilder(envelope: envelope)
 ***REMOVED******REMOVED******REMOVED***builder.expand(by: 1.1)
 ***REMOVED******REMOVED******REMOVED***let targetExtent = builder.toGeometry()
-***REMOVED******REMOVED******REMOVED***let newViewpoint = Viewpoint(boundingGeometry: targetExtent)
-***REMOVED******REMOVED******REMOVED***if let geoViewProxy {
-***REMOVED******REMOVED******REMOVED******REMOVED***Task {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await geoViewProxy.setViewpoint(newViewpoint, duration: nil)
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***viewpoint.wrappedValue = newViewpoint
-***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***display(newViewpoint: Viewpoint(boundingGeometry: targetExtent))
 ***REMOVED******REMOVED******REMOVED***lastSearchExtent = targetExtent
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED***viewpoint.wrappedValue = nil
@@ -404,13 +397,16 @@ private extension SearchViewModel {
 ***REMOVED***
 ***REMOVED***func display(selectedResult: SearchResult?) {
 ***REMOVED******REMOVED***guard let selectedResult = selectedResult else { return ***REMOVED***
+***REMOVED******REMOVED***display(newViewpoint: selectedResult.selectionViewpoint)
 ***REMOVED***
-***REMOVED******REMOVED***if let geoViewProxy, let viewpoint = selectedResult.selectionViewpoint {
-***REMOVED******REMOVED******REMOVED***Task {
-***REMOVED******REMOVED******REMOVED******REMOVED***await geoViewProxy.setViewpoint(viewpoint, duration: nil)
-***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Update the viewpoint to the new viewpoint, if a geo view proxy was supplied, the transition
+***REMOVED******REMOVED***/ will be animated.
+***REMOVED***func display(newViewpoint: Viewpoint?) {
+***REMOVED******REMOVED***if let geoViewProxy, let newViewpoint {
+***REMOVED******REMOVED******REMOVED***Task { await geoViewProxy.setViewpoint(newViewpoint, duration: nil) ***REMOVED***
 ***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***viewpoint?.wrappedValue = selectedResult.selectionViewpoint
+***REMOVED******REMOVED******REMOVED***viewpoint?.wrappedValue = newViewpoint
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
