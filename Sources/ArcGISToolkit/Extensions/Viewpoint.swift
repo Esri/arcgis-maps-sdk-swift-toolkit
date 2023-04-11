@@ -25,11 +25,13 @@ public extension Viewpoint {
 ***REMOVED******REMOVED******REMOVED******REMOVED***scale: self.targetScale,
 ***REMOVED******REMOVED******REMOVED******REMOVED***rotation: rotation
 ***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED***case.boundingGeometry:
+***REMOVED******REMOVED***case .boundingGeometry:
 ***REMOVED******REMOVED******REMOVED***return Viewpoint(
 ***REMOVED******REMOVED******REMOVED******REMOVED***boundingGeometry: self.targetGeometry,
 ***REMOVED******REMOVED******REMOVED******REMOVED***rotation: rotation
 ***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***@unknown default:
+***REMOVED******REMOVED******REMOVED***return self
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
