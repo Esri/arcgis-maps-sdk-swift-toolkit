@@ -84,13 +84,13 @@ struct FloatingPanel<Content>: View where Content: View {
                 content
                     .frame(height: height)
                     .clipped()
-                    .padding(.bottom, isCompact ? 25 : 10)
+                    .padding(.bottom, isPresented.wrappedValue ? (isCompact ? 25 : 10) : .zero)
                 if !isCompact && isPresented.wrappedValue {
                         Divider()
                         makeHandleView()
                 }
             }
-            .background(isPresented.wrappedValue ? backgroundColor : .clear)
+            .background(backgroundColor)
             .clipShape(
                 RoundedCorners(
                     corners: isCompact ? [.topLeft, .topRight] : [.allCorners],
