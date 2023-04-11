@@ -324,7 +324,12 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED***Menu(selectedTrace.name) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if let resultExtent = selectedTrace.resultExtent {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Zoom To") {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint = Viewpoint(boundingGeometry: resultExtent)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let newViewpoint = Viewpoint(boundingGeometry: resultExtent)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let mapViewProxy {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task { await mapViewProxy.setViewpoint(newViewpoint, duration: nil) ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint = newViewpoint
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***Button("Delete", role: .destructive) {
