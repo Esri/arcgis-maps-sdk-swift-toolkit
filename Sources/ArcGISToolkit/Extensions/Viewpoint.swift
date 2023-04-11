@@ -25,11 +25,13 @@ public extension Viewpoint {
                 scale: self.targetScale,
                 rotation: rotation
             )
-        case.boundingGeometry:
+        case .boundingGeometry:
             return Viewpoint(
                 boundingGeometry: self.targetGeometry,
                 rotation: rotation
             )
+        @unknown default:
+            return self
         }
     }
 }
