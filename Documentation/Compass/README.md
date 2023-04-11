@@ -24,8 +24,8 @@ Compass:
     /// direction toward true East, etc.).
     /// - Parameters:
     ///   - heading: The heading of the compass.
-    ///   - action: An action to perform when the compass is tapped.
-    public init(heading: Binding<Double>, action: (() -> Void)? = nil)
+    ///   - mapViewProxy: Provides access to viewpoint animation.
+    public init(heading: Binding<Double>, mapViewProxy: MapViewProxy? = nil)
 ```
 
 ```swift
@@ -35,16 +35,16 @@ Compass:
     /// - Parameters:
     ///   - viewpointRotation: The viewpoint rotation whose value determines the
     ///   heading of the compass.
-    ///   - action: An action to perform when the compass is tapped.
-    public init(viewpointRotation: Binding<Double>, action: (() -> Void)? = nil)
+    ///   - mapViewProxy: Provides access to viewpoint animation.
+    public init(viewpointRotation: Binding<Double>, mapViewProxy: MapViewProxy? = nil)
 ```
 
 ```swift
     /// Creates a compass with a binding to an optional viewpoint.
     /// - Parameters:
     ///   - viewpoint: The viewpoint whose rotation determines the heading of the compass.
-    ///   - action: An action to perform when the compass is tapped.
-    public init(viewpoint: Binding<Viewpoint?>, action: (() -> Void)? = nil)
+    ///   - mapViewProxy: Provides access to viewpoint animation.
+    public init(viewpoint: Binding<Viewpoint?>, mapViewProxy: MapViewProxy? = nil)
 ```
 
 `Compass` has the following modifiers:
@@ -63,7 +63,7 @@ When the compass is tapped, the map orients back to north (zero bearing).
 ### Basic usage for displaying a `Compass`.
 
 ```swift
-@StateObject var map = Map(basemapStyle: .arcGISImagery)
+@State private var map = Map(basemapStyle: .arcGISImagery)
 
 /// Allows for communication between the Compass and MapView or SceneView.
 @State private var viewpoint: Viewpoint? = Viewpoint(
@@ -73,12 +73,14 @@ When the compass is tapped, the map orients back to north (zero bearing).
 )
 
 var body: some View {
-    MapView(map: map, viewpoint: viewpoint)
-        .onViewpointChanged(kind: .centerAndScale) { viewpoint = $0 }
-        .overlay(alignment: .topTrailing) {
-            Compass(viewpoint: $viewpoint)
-                .padding()
-        }
+    MapViewReader { proxy in
+        MapView(map: map, viewpoint: viewpoint)
+            .onViewpointChanged(kind: .centerAndScale) { viewpoint = $0 }
+            .overlay(alignment: .topTrailing) {
+                Compass(viewpoint: $viewpoint, mapViewProxy: proxy)
+                    .padding()
+            }
+    }
 }
 ```
 
