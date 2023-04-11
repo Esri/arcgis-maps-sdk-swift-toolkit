@@ -13,7 +13,7 @@
 
 import XCTest
 @testable ***REMOVED***Toolkit
-@testable ***REMOVED***
+***REMOVED***
 import Combine
 
 @MainActor final class AuthenticatorTests: XCTestCase {
