@@ -18,18 +18,20 @@ public extension Viewpoint {
 ***REMOVED******REMOVED***/ - Parameter rotation: The rotation for the new viewpoint.
 ***REMOVED******REMOVED***/ - Returns: A new viewpoint.
 ***REMOVED***func withRotation(_ rotation: Double) -> Viewpoint {
-***REMOVED******REMOVED***switch self.kind {
+***REMOVED******REMOVED***switch kind {
 ***REMOVED******REMOVED***case .centerAndScale:
 ***REMOVED******REMOVED******REMOVED***return Viewpoint(
-***REMOVED******REMOVED******REMOVED******REMOVED***center: self.targetGeometry as! Point,
-***REMOVED******REMOVED******REMOVED******REMOVED***scale: self.targetScale,
+***REMOVED******REMOVED******REMOVED******REMOVED***center: targetGeometry as! Point,
+***REMOVED******REMOVED******REMOVED******REMOVED***scale: targetScale,
 ***REMOVED******REMOVED******REMOVED******REMOVED***rotation: rotation
 ***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED***case.boundingGeometry:
+***REMOVED******REMOVED***case .boundingGeometry:
 ***REMOVED******REMOVED******REMOVED***return Viewpoint(
-***REMOVED******REMOVED******REMOVED******REMOVED***boundingGeometry: self.targetGeometry,
+***REMOVED******REMOVED******REMOVED******REMOVED***boundingGeometry: targetGeometry,
 ***REMOVED******REMOVED******REMOVED******REMOVED***rotation: rotation
 ***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***@unknown default:
+***REMOVED******REMOVED******REMOVED***return self
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
