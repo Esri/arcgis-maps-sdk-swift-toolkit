@@ -24,8 +24,8 @@ Compass:
 ***REMOVED******REMOVED***/ direction toward true East, etc.).
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - heading: The heading of the compass.
-***REMOVED******REMOVED***/   - action: An action to perform when the compass is tapped.
-***REMOVED***public init(heading: Binding<Double>, action: (() -> Void)? = nil)
+***REMOVED******REMOVED***/   - mapViewProxy: Provides access to viewpoint animation.
+***REMOVED***public init(heading: Binding<Double>, mapViewProxy: MapViewProxy? = nil)
 ```
 
 ```swift
@@ -35,16 +35,16 @@ Compass:
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - viewpointRotation: The viewpoint rotation whose value determines the
 ***REMOVED******REMOVED***/   heading of the compass.
-***REMOVED******REMOVED***/   - action: An action to perform when the compass is tapped.
-***REMOVED***public init(viewpointRotation: Binding<Double>, action: (() -> Void)? = nil)
+***REMOVED******REMOVED***/   - mapViewProxy: Provides access to viewpoint animation.
+***REMOVED***public init(viewpointRotation: Binding<Double>, mapViewProxy: MapViewProxy? = nil)
 ```
 
 ```swift
 ***REMOVED******REMOVED***/ Creates a compass with a binding to an optional viewpoint.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - viewpoint: The viewpoint whose rotation determines the heading of the compass.
-***REMOVED******REMOVED***/   - action: An action to perform when the compass is tapped.
-***REMOVED***public init(viewpoint: Binding<Viewpoint?>, action: (() -> Void)? = nil)
+***REMOVED******REMOVED***/   - mapViewProxy: Provides access to viewpoint animation.
+***REMOVED***public init(viewpoint: Binding<Viewpoint?>, mapViewProxy: MapViewProxy? = nil)
 ```
 
 `Compass` has the following modifiers:
@@ -63,7 +63,7 @@ When the compass is tapped, the map orients back to north (zero bearing).
 ### Basic usage for displaying a `Compass`.
 
 ```swift
-@StateObject var map = Map(basemapStyle: .arcGISImagery)
+@State private var map = Map(basemapStyle: .arcGISImagery)
 
 ***REMOVED***/ Allows for communication between the Compass and MapView or SceneView.
 @State private var viewpoint: Viewpoint? = Viewpoint(
@@ -73,11 +73,13 @@ When the compass is tapped, the map orients back to north (zero bearing).
 )
 
 var body: some View {
-***REMOVED***MapView(map: map, viewpoint: viewpoint)
-***REMOVED******REMOVED***.onViewpointChanged(kind: .centerAndScale) { viewpoint = $0 ***REMOVED***
-***REMOVED******REMOVED***.overlay(alignment: .topTrailing) {
-***REMOVED******REMOVED******REMOVED***Compass(viewpoint: $viewpoint)
-***REMOVED******REMOVED******REMOVED******REMOVED***.padding()
+***REMOVED***MapViewReader { proxy in
+***REMOVED******REMOVED***MapView(map: map, viewpoint: viewpoint)
+***REMOVED******REMOVED******REMOVED***.onViewpointChanged(kind: .centerAndScale) { viewpoint = $0 ***REMOVED***
+***REMOVED******REMOVED******REMOVED***.overlay(alignment: .topTrailing) {
+***REMOVED******REMOVED******REMOVED******REMOVED***Compass(viewpoint: $viewpoint, mapViewProxy: proxy)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ```
