@@ -23,7 +23,7 @@ A named trace configuration defined for a utility network in a webmap comprises 
     ///   - graphicsOverlay: The graphics overlay to hold generated starting point and trace graphics.
     ///   - map: The map containing the utility network(s).
     ///   - mapPoint: Acts as the point at which newly selected starting point graphics will be created.
-    ///   - viewPoint: Acts as the point of identification for items tapped in the utility network.
+    ///   - screenPoint: Acts as the point of identification for items tapped in the utility network.
     ///   - mapViewProxy: Provides a method of layer identification when starting points are being
     ///   chosen.
     ///   - viewpoint: Allows the utility network trace tool to update the parent map view's viewpoint.
@@ -32,7 +32,7 @@ A named trace configuration defined for a utility network in a webmap comprises 
         graphicsOverlay: Binding<GraphicsOverlay>,
         map: Map,
         mapPoint: Binding<Point?>,
-        viewPoint: Binding<CGPoint?>,
+        screenPoint: Binding<CGPoint?>,
         mapViewProxy: Binding<MapViewProxy?>,
         viewpoint: Binding<Viewpoint?>,
         startingPoints: Binding<[UtilityNetworkTraceStartingPoint]> = .constant([])
