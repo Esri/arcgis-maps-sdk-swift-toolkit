@@ -84,7 +84,7 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED***@Binding private var mapViewProxy: MapViewProxy?
 ***REMOVED***
 ***REMOVED******REMOVED***/ Acts as the point of identification for items tapped in the utility network.
-***REMOVED***@Binding private var viewPoint: CGPoint?
+***REMOVED***@Binding private var screenPoint: CGPoint?
 ***REMOVED***
 ***REMOVED******REMOVED***/ Acts as the point at which newly selected starting point graphics will be created.
 ***REMOVED***@Binding private var mapPoint: Point?
@@ -534,7 +534,7 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED***/   - graphicsOverlay: The graphics overlay to hold generated starting point and trace graphics.
 ***REMOVED******REMOVED***/   - map: The map containing the utility network(s).
 ***REMOVED******REMOVED***/   - mapPoint: Acts as the point at which newly selected starting point graphics will be created.
-***REMOVED******REMOVED***/   - viewPoint: Acts as the point of identification for items tapped in the utility network.
+***REMOVED******REMOVED***/   - screenPoint: Acts as the point of identification for items tapped in the utility network.
 ***REMOVED******REMOVED***/   - mapViewProxy: Provides a method of layer identification when starting points are being
 ***REMOVED******REMOVED***/   chosen.
 ***REMOVED******REMOVED***/   - viewpoint: Allows the utility network trace tool to update the parent map view's viewpoint.
@@ -543,13 +543,13 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED***graphicsOverlay: Binding<GraphicsOverlay>,
 ***REMOVED******REMOVED***map: Map,
 ***REMOVED******REMOVED***mapPoint: Binding<Point?>,
-***REMOVED******REMOVED***viewPoint: Binding<CGPoint?>,
+***REMOVED******REMOVED***screenPoint: Binding<CGPoint?>,
 ***REMOVED******REMOVED***mapViewProxy: Binding<MapViewProxy?>,
 ***REMOVED******REMOVED***viewpoint: Binding<Viewpoint?>,
 ***REMOVED******REMOVED***startingPoints: Binding<[UtilityNetworkTraceStartingPoint]> = .constant([])
 ***REMOVED***) {
 ***REMOVED******REMOVED***_activeDetent = .constant(nil)
-***REMOVED******REMOVED***_viewPoint = viewPoint
+***REMOVED******REMOVED***_screenPoint = screenPoint
 ***REMOVED******REMOVED***_mapPoint = mapPoint
 ***REMOVED******REMOVED***_mapViewProxy = mapViewProxy
 ***REMOVED******REMOVED***_graphicsOverlay = graphicsOverlay
@@ -605,18 +605,18 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED***
 ***REMOVED******REMOVED***.background(Color(uiColor: .systemGroupedBackground))
 ***REMOVED******REMOVED***.animation(.default, value: currentActivity)
-***REMOVED******REMOVED***.onChange(of: viewPoint) { newValue in
+***REMOVED******REMOVED***.onChange(of: screenPoint) { newScreenPoint in
 ***REMOVED******REMOVED******REMOVED***guard isFocused(traceCreationActivity: .addingStartingPoints),
 ***REMOVED******REMOVED******REMOVED******REMOVED***  let mapViewProxy = mapViewProxy,
 ***REMOVED******REMOVED******REMOVED******REMOVED***  let mapPoint = mapPoint,
-***REMOVED******REMOVED******REMOVED******REMOVED***  let viewPoint = viewPoint else {
+***REMOVED******REMOVED******REMOVED******REMOVED***  let screenPoint = newScreenPoint else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***return
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***currentActivity = .creatingTrace(.viewingStartingPoints)
 ***REMOVED******REMOVED******REMOVED***activeDetent = .half
 ***REMOVED******REMOVED******REMOVED***Task {
 ***REMOVED******REMOVED******REMOVED******REMOVED***await viewModel.addStartingPoints(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***at: viewPoint,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***at: screenPoint,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mapPoint: mapPoint,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***with: mapViewProxy
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
