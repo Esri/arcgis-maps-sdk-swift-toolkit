@@ -18,16 +18,16 @@ public extension Viewpoint {
     /// - Parameter rotation: The rotation for the new viewpoint.
     /// - Returns: A new viewpoint.
     func withRotation(_ rotation: Double) -> Viewpoint {
-        switch self.kind {
+        switch kind {
         case .centerAndScale:
             return Viewpoint(
-                center: self.targetGeometry as! Point,
-                scale: self.targetScale,
+                center: targetGeometry as! Point,
+                scale: targetScale,
                 rotation: rotation
             )
         case .boundingGeometry:
             return Viewpoint(
-                boundingGeometry: self.targetGeometry,
+                boundingGeometry: targetGeometry,
                 rotation: rotation
             )
         @unknown default:
