@@ -21,7 +21,7 @@ public struct SearchView: View {
 ***REMOVED******REMOVED***/   - sources: A collection of search sources to be used.
 ***REMOVED******REMOVED***/   - viewpoint: The `Viewpoint` used to pan/zoom to results. If `nil`, there will be
 ***REMOVED******REMOVED***/   no zooming to results.
-***REMOVED******REMOVED***/   - geoViewProxy: <#Description#>
+***REMOVED******REMOVED***/   - geoViewProxy: The proxy to provide access to geo view operations.
 ***REMOVED***public init(
 ***REMOVED******REMOVED***sources: [SearchSource] = [],
 ***REMOVED******REMOVED***viewpoint: Binding<Viewpoint?>? = nil,
