@@ -15,6 +15,9 @@
 ***REMOVED***
 
 public struct UtilityNetworkTrace: View {
+***REMOVED******REMOVED***/ The proxy to provide access to map view operations.
+***REMOVED***private var mapViewProxy: MapViewProxy?
+***REMOVED***
 ***REMOVED******REMOVED*** MARK: Enums
 ***REMOVED***
 ***REMOVED******REMOVED***/ Activities users will perform while creating a new trace.
@@ -79,9 +82,6 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ The graphics overlay to hold generated starting point and trace graphics.
 ***REMOVED***@Binding private var graphicsOverlay: GraphicsOverlay
-***REMOVED***
-***REMOVED******REMOVED***/ The proxy to provide access to map view operations.
-***REMOVED***@Binding private var mapViewProxy: MapViewProxy?
 ***REMOVED***
 ***REMOVED******REMOVED***/ Acts as the point of identification for items tapped in the utility network.
 ***REMOVED***@Binding private var screenPoint: CGPoint?
@@ -553,14 +553,14 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED***map: Map,
 ***REMOVED******REMOVED***mapPoint: Binding<Point?>,
 ***REMOVED******REMOVED***screenPoint: Binding<CGPoint?>,
-***REMOVED******REMOVED***mapViewProxy: Binding<MapViewProxy?>,
+***REMOVED******REMOVED***mapViewProxy: MapViewProxy?,
 ***REMOVED******REMOVED***viewpoint: Binding<Viewpoint?>,
 ***REMOVED******REMOVED***startingPoints: Binding<[UtilityNetworkTraceStartingPoint]> = .constant([])
 ***REMOVED***) {
+***REMOVED******REMOVED***self.mapViewProxy = mapViewProxy
 ***REMOVED******REMOVED***_activeDetent = .constant(nil)
 ***REMOVED******REMOVED***_screenPoint = screenPoint
 ***REMOVED******REMOVED***_mapPoint = mapPoint
-***REMOVED******REMOVED***_mapViewProxy = mapViewProxy
 ***REMOVED******REMOVED***_graphicsOverlay = graphicsOverlay
 ***REMOVED******REMOVED***_viewpoint = viewpoint
 ***REMOVED******REMOVED***_externalStartingPoints = startingPoints

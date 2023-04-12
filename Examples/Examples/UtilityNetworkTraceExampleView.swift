@@ -24,9 +24,6 @@ struct UtilityNetworkTraceExampleView: View {
 ***REMOVED******REMOVED***/ The current detent of the floating panel presenting the trace tool.
 ***REMOVED***@State var activeDetent: FloatingPanelDetent = .half
 ***REMOVED***
-***REMOVED******REMOVED***/ Provides the ability to inspect map components.
-***REMOVED***@State var mapViewProxy: MapViewProxy?
-***REMOVED***
 ***REMOVED******REMOVED***/ Provides the ability to detect tap locations in the context of the map view.
 ***REMOVED***@State var mapPoint: Point?
 ***REMOVED***
@@ -49,7 +46,6 @@ struct UtilityNetworkTraceExampleView: View {
 ***REMOVED******REMOVED******REMOVED***.onSingleTapGesture { screenPoint, mapPoint in
 ***REMOVED******REMOVED******REMOVED******REMOVED***self.screenPoint = screenPoint
 ***REMOVED******REMOVED******REMOVED******REMOVED***self.mapPoint = mapPoint
-***REMOVED******REMOVED******REMOVED******REMOVED***self.mapViewProxy = mapViewProxy
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onViewpointChanged(kind: .centerAndScale) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***viewpoint = $0
@@ -69,7 +65,7 @@ struct UtilityNetworkTraceExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***map: map,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mapPoint: $mapPoint,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***screenPoint: $screenPoint,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mapViewProxy: $mapViewProxy,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mapViewProxy: mapViewProxy,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint: $viewpoint
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.floatingPanelDetent($activeDetent)
