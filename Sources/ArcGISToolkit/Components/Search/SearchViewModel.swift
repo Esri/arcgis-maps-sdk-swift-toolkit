@@ -44,12 +44,15 @@ public enum SearchOutcome {
 ***REMOVED******REMOVED***/   - sources: Collection of search sources to be used.
 ***REMOVED******REMOVED***/   - viewpoint: The `Viewpoint` used to pan/zoom to results. If `nil`, there will be
 ***REMOVED******REMOVED***/   no zooming to results.
+***REMOVED******REMOVED***/   - geoViewProxy: The proxy to provide access to geo view operations.
 ***REMOVED***init(
 ***REMOVED******REMOVED***sources: [SearchSource] = [],
-***REMOVED******REMOVED***viewpoint: Binding<Viewpoint?>? = nil
+***REMOVED******REMOVED***viewpoint: Binding<Viewpoint?>? = nil,
+***REMOVED******REMOVED***geoViewProxy: GeoViewProxy? = nil
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.sources = sources
 ***REMOVED******REMOVED***self.viewpoint = viewpoint
+***REMOVED******REMOVED***self.geoViewProxy = geoViewProxy
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The active search source.  If `nil`, the first item in `sources` is used.
@@ -115,6 +118,9 @@ public enum SearchOutcome {
 ***REMOVED******REMOVED******REMOVED***isEligibleForRequery = (centerDiff ?? 0.0) > threshold
 ***REMOVED***
 ***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ The proxy to provide access to geo view operations.
+***REMOVED***private var geoViewProxy: GeoViewProxy?
 ***REMOVED***
 ***REMOVED******REMOVED***/ `true` when the geoView is navigating, `false` otherwise. Set by the external client.
 ***REMOVED***var isGeoViewNavigating = false
@@ -380,9 +386,7 @@ private extension SearchViewModel {
 ***REMOVED******REMOVED******REMOVED***let builder = EnvelopeBuilder(envelope: envelope)
 ***REMOVED******REMOVED******REMOVED***builder.expand(by: 1.1)
 ***REMOVED******REMOVED******REMOVED***let targetExtent = builder.toGeometry()
-***REMOVED******REMOVED******REMOVED***viewpoint.wrappedValue = Viewpoint(
-***REMOVED******REMOVED******REMOVED******REMOVED***boundingGeometry: targetExtent
-***REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED***display(newViewpoint: Viewpoint(boundingGeometry: targetExtent))
 ***REMOVED******REMOVED******REMOVED***lastSearchExtent = targetExtent
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED***viewpoint.wrappedValue = nil
@@ -393,7 +397,17 @@ private extension SearchViewModel {
 ***REMOVED***
 ***REMOVED***func display(selectedResult: SearchResult?) {
 ***REMOVED******REMOVED***guard let selectedResult = selectedResult else { return ***REMOVED***
-***REMOVED******REMOVED***viewpoint?.wrappedValue = selectedResult.selectionViewpoint
+***REMOVED******REMOVED***display(newViewpoint: selectedResult.selectionViewpoint)
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ Update the viewpoint to the new viewpoint, if a geo view proxy was supplied, the transition
+***REMOVED******REMOVED***/ will be animated.
+***REMOVED***func display(newViewpoint: Viewpoint?) {
+***REMOVED******REMOVED***if let geoViewProxy, let newViewpoint {
+***REMOVED******REMOVED******REMOVED***Task { await geoViewProxy.setViewpoint(newViewpoint, duration: nil) ***REMOVED***
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***viewpoint?.wrappedValue = newViewpoint
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 
