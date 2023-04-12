@@ -73,7 +73,7 @@ extension UtilityNetworkTraceViewModel.Trace {
     /// - Parameter groupName: A name of a utility asset group.
     /// - Returns: The elements in the indicated group.
     func elementsByType(inGroupNamed groupName: String) -> [String: [UtilityElement]] {
-        elements(inAssetGroupNamed: name)
+        elements(inAssetGroupNamed: groupName)
             .reduce(into: [:]) { result, element in
                 let key = element.assetType.name
                 var assetTypeGroup = result[key, default: []]
