@@ -44,7 +44,7 @@ public enum SearchOutcome {
     ///   - sources: Collection of search sources to be used.
     ///   - viewpoint: The `Viewpoint` used to pan/zoom to results. If `nil`, there will be
     ///   no zooming to results.
-    ///   - geoViewProxy: <#Description#>
+    ///   - geoViewProxy: The proxy to provide access to geo view operations.
     init(
         sources: [SearchSource] = [],
         viewpoint: Binding<Viewpoint?>? = nil,
@@ -119,7 +119,7 @@ public enum SearchOutcome {
         }
     }
     
-    /// <#Description#>
+    /// The proxy to provide access to geo view operations.
     private var geoViewProxy: GeoViewProxy?
     
     /// `true` when the geoView is navigating, `false` otherwise. Set by the external client.
