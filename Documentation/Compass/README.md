@@ -23,7 +23,7 @@ Compass:
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - viewpoint: The viewpoint whose rotation determines the heading of the compass.
 ***REMOVED******REMOVED***/   - mapViewProxy: The proxy to provide access to map view operations.
-***REMOVED***public init(viewpoint: Viewpoint?, mapViewProxy: MapViewProxy? = nil)
+***REMOVED***public init(viewpoint: Viewpoint?, mapViewProxy: MapViewProxy)
 ```
 
 ```swift
@@ -33,7 +33,7 @@ Compass:
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - viewpointRotation: The viewpoint rotation whose value determines the heading of the compass.
 ***REMOVED******REMOVED***/   - mapViewProxy: The proxy to provide access to map view operations.
-***REMOVED***public init(viewpointRotation: Double?, mapViewProxy: MapViewProxy? = nil)
+***REMOVED***public init(viewpointRotation: Double?, mapViewProxy: MapViewProxy)
 ```
 
 `Compass` has the following modifiers:
