@@ -75,54 +75,58 @@ struct FloatingPanel<Content>: View where Content: View {
     }
     
     public var body: some View {
-        if isPresented.wrappedValue {
-            GeometryReader { geometryProxy in
-                VStack(spacing: 0) {
-                    if isCompact {
-                        makeHandleView()
+        GeometryReader { geometryProxy in
+            VStack(spacing: 0) {
+                if isCompact && isPresented.wrappedValue {
+                    makeHandleView()
+                    Divider()
+                }
+                content
+                    .frame(height: height)
+                    .clipped()
+                    .padding(.bottom, isPresented.wrappedValue ? (isCompact ? 25 : 10) : .zero)
+                if !isCompact && isPresented.wrappedValue {
                         Divider()
-                    }
-                    content
-                        .frame(height: height)
-                        .padding(.bottom, isCompact ? 25 : 10)
-                    if !isCompact {
-                        Divider()
                         makeHandleView()
-                    }
                 }
-                .background(backgroundColor)
-                .cornerRadius(10, corners: isCompact ? [.topLeft, .topRight] : [.allCorners])
-                .shadow(radius: 10)
-                .opacity(isPresented.wrappedValue ? 1.0 : .zero)
-                .frame(
-                    width: geometryProxy.size.width,
-                    height: geometryProxy.size.height,
-                    alignment: isCompact ? .bottom : .top
-                )
-                .onSizeChange {
-                    maximumHeight = $0.height
-                    if height > maximumHeight {
-                        height = maximumHeight
-                    }
-                }
-                .onChange(of: selectedDetent.wrappedValue) { _ in
-                    withAnimation {
-                        height = heightFor(detent: selectedDetent.wrappedValue)
-                    }
-                }
-                .onChange(of: isPresented.wrappedValue) {
-                    height = $0 ? heightFor(detent: selectedDetent.wrappedValue) : .zero
-                }
-                .onAppear {
-                    withAnimation {
-                        height = heightFor(detent: selectedDetent.wrappedValue)
-                    }
-                }
-                .animation(.default, value: isPresented.wrappedValue)
             }
-            .padding([.leading, .top, .trailing], isCompact ? 0 : 10)
-            .padding([.bottom], isCompact ? 0 : 50)
+            .background(backgroundColor)
+            .clipShape(
+                RoundedCorners(
+                    corners: isCompact ? [.topLeft, .topRight] : [.allCorners],
+                    radius: 10
+                )
+            )
+            .shadow(radius: 10)
+            .frame(
+                width: geometryProxy.size.width,
+                height: geometryProxy.size.height,
+                alignment: isCompact ? .bottom : .top
+            )
+            .onSizeChange {
+                maximumHeight = $0.height
+                if height > maximumHeight {
+                    height = maximumHeight
+                }
+            }
+            .onAppear {
+                withAnimation {
+                    height = isPresented.wrappedValue ? heightFor(detent: selectedDetent.wrappedValue) : .zero
+                }
+            }
+            .onChange(of: isPresented.wrappedValue) { isPresented in
+                withAnimation {
+                    height = isPresented ? heightFor(detent: selectedDetent.wrappedValue) : .zero
+                }
+            }
+            .onChange(of: selectedDetent.wrappedValue) { selectedDetent in
+                withAnimation {
+                    height = heightFor(detent: selectedDetent)
+                }
+            }
         }
+        .padding([.leading, .top, .trailing], isCompact ? 0 : 10)
+        .padding([.bottom], isCompact ? 0 : 50)
     }
     
     var drag: some Gesture {
@@ -224,13 +228,11 @@ struct FloatingPanel<Content>: View where Content: View {
     /// Configures a handle view.
     /// - Returns: A configured handle view, suitable for placement in the panel.
     @ViewBuilder func makeHandleView() -> some View {
-        ZStack {
-            backgroundColor
-            Handle(color: handleColor)
-        }
-        .frame(height: 30)
-        .gesture(drag)
-        .zIndex(1)
+        Handle(color: handleColor)
+            .background(backgroundColor)
+            .frame(height: 30)
+            .gesture(drag)
+            .zIndex(1)
     }
 }
 
@@ -270,23 +272,5 @@ private struct RoundedCorners: Shape {
             )
         )
         return Path(path.cgPath)
-    }
-}
-
-private extension View {
-    /// Clips this view to its bounding frame, with the specified corner radius, on the specified corners.
-    /// - Parameters:
-    ///   - radius: The radius used to round the corners.
-    ///   - corners: The corners to be rounded.
-    /// - Returns: A view that clips this view to its bounding frame with the specified corner radius and
-    /// corners.
-    func cornerRadius(
-        _ radius: CGFloat,
-        corners: UIRectCorner
-    ) -> some View {
-        clipShape(RoundedCorners(
-            corners: corners,
-            radius: radius
-        ))
     }
 }
