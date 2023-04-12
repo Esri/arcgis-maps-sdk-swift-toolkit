@@ -32,7 +32,7 @@ A named trace configuration defined for a utility network in a webmap comprises 
 ***REMOVED******REMOVED***map: Map,
 ***REMOVED******REMOVED***mapPoint: Binding<Point?>,
 ***REMOVED******REMOVED***screenPoint: Binding<CGPoint?>,
-***REMOVED******REMOVED***mapViewProxy: Binding<MapViewProxy?>,
+***REMOVED******REMOVED***mapViewProxy: MapViewProxy?,
 ***REMOVED******REMOVED***viewpoint: Binding<Viewpoint?>,
 ***REMOVED******REMOVED***startingPoints: Binding<[UtilityNetworkTraceStartingPoint]> = .constant([])
 ***REMOVED***)
