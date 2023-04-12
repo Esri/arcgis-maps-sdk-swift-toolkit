@@ -149,7 +149,12 @@ public struct UtilityNetworkTrace: View {
                                     Task {
                                         if let feature = await viewModel.feature(for: element),
                                            let geometry = feature.geometry {
-                                            viewpoint = Viewpoint(boundingGeometry: geometry.extent)
+                                            let newViewpoint = Viewpoint(boundingGeometry: geometry.extent)
+                                            if let mapViewProxy {
+                                                Task { await mapViewProxy.setViewpoint(newViewpoint, duration: nil) }
+                                            } else {
+                                                viewpoint = newViewpoint
+                                            }
                                         }
                                     }
                                 } label: {
