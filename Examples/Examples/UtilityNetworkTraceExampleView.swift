@@ -24,9 +24,6 @@ struct UtilityNetworkTraceExampleView: View {
     /// The current detent of the floating panel presenting the trace tool.
     @State var activeDetent: FloatingPanelDetent = .half
     
-    /// Provides the ability to inspect map components.
-    @State var mapViewProxy: MapViewProxy?
-    
     /// Provides the ability to detect tap locations in the context of the map view.
     @State var mapPoint: Point?
     
@@ -49,7 +46,6 @@ struct UtilityNetworkTraceExampleView: View {
             .onSingleTapGesture { screenPoint, mapPoint in
                 self.screenPoint = screenPoint
                 self.mapPoint = mapPoint
-                self.mapViewProxy = mapViewProxy
             }
             .onViewpointChanged(kind: .centerAndScale) {
                 viewpoint = $0
@@ -69,7 +65,7 @@ struct UtilityNetworkTraceExampleView: View {
                     map: map,
                     mapPoint: $mapPoint,
                     screenPoint: $screenPoint,
-                    mapViewProxy: $mapViewProxy,
+                    mapViewProxy: mapViewProxy,
                     viewpoint: $viewpoint
                 )
                 .floatingPanelDetent($activeDetent)
