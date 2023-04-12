@@ -24,7 +24,7 @@ Compass:
 ***REMOVED******REMOVED***/ direction toward true East, etc.).
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - heading: The heading of the compass.
-***REMOVED******REMOVED***/   - mapViewProxy: Provides access to viewpoint animation.
+***REMOVED******REMOVED***/   - mapViewProxy: The proxy to provide access to map view operations.
 ***REMOVED***public init(heading: Binding<Double>, mapViewProxy: MapViewProxy? = nil)
 ```
 
@@ -35,7 +35,7 @@ Compass:
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - viewpointRotation: The viewpoint rotation whose value determines the
 ***REMOVED******REMOVED***/   heading of the compass.
-***REMOVED******REMOVED***/   - mapViewProxy: Provides access to viewpoint animation.
+***REMOVED******REMOVED***/   - mapViewProxy: The proxy to provide access to map view operations.
 ***REMOVED***public init(viewpointRotation: Binding<Double>, mapViewProxy: MapViewProxy? = nil)
 ```
 
@@ -43,7 +43,7 @@ Compass:
 ***REMOVED******REMOVED***/ Creates a compass with a binding to an optional viewpoint.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - viewpoint: The viewpoint whose rotation determines the heading of the compass.
-***REMOVED******REMOVED***/   - mapViewProxy: Provides access to viewpoint animation.
+***REMOVED******REMOVED***/   - mapViewProxy: The proxy to provide access to map view operations.
 ***REMOVED***public init(viewpoint: Binding<Viewpoint?>, mapViewProxy: MapViewProxy? = nil)
 ```
 

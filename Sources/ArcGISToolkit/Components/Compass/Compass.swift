@@ -20,7 +20,7 @@ public struct Compass: View {
 ***REMOVED******REMOVED***/ The opacity of the compass.
 ***REMOVED***@State private var opacity: Double = .zero
 ***REMOVED***
-***REMOVED******REMOVED***/ Provides access to viewpoint animation.
+***REMOVED******REMOVED***/ The proxy to provide access to map view operations.
 ***REMOVED***private var mapViewProxy: MapViewProxy?
 ***REMOVED***
 ***REMOVED******REMOVED***/ A Boolean value indicating whether  the compass should automatically
@@ -44,7 +44,7 @@ public struct Compass: View {
 ***REMOVED******REMOVED***/ direction toward true East, etc.).
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - heading: The heading of the compass.
-***REMOVED******REMOVED***/   - mapViewProxy: Provides access to viewpoint animation.
+***REMOVED******REMOVED***/   - mapViewProxy: The proxy to provide access to map view operations.
 ***REMOVED***public init(
 ***REMOVED******REMOVED***heading: Binding<Double>,
 ***REMOVED******REMOVED***mapViewProxy: MapViewProxy? = nil
@@ -90,7 +90,7 @@ public extension Compass {
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - viewpointRotation: The viewpoint rotation whose value determines the
 ***REMOVED******REMOVED***/   heading of the compass.
-***REMOVED******REMOVED***/   - mapViewProxy: Provides access to viewpoint animation.
+***REMOVED******REMOVED***/   - mapViewProxy: The proxy to provide access to map view operations.
 ***REMOVED***init(
 ***REMOVED******REMOVED***viewpointRotation: Binding<Double>,
 ***REMOVED******REMOVED***mapViewProxy: MapViewProxy? = nil
@@ -106,7 +106,7 @@ public extension Compass {
 ***REMOVED******REMOVED***/ Creates a compass with a binding to an optional viewpoint.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - viewpoint: The viewpoint whose rotation determines the heading of the compass.
-***REMOVED******REMOVED***/   - mapViewProxy: Provides access to viewpoint animation.
+***REMOVED******REMOVED***/   - mapViewProxy: The proxy to provide access to map view operations.
 ***REMOVED***init(
 ***REMOVED******REMOVED***viewpoint: Binding<Viewpoint?>,
 ***REMOVED******REMOVED***mapViewProxy: MapViewProxy? = nil
