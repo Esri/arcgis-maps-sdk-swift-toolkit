@@ -80,7 +80,7 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED***/ The graphics overlay to hold generated starting point and trace graphics.
 ***REMOVED***@Binding private var graphicsOverlay: GraphicsOverlay
 ***REMOVED***
-***REMOVED******REMOVED***/ Provides a method of layer identification when starting points are being chosen.
+***REMOVED******REMOVED***/ The proxy to provide access to map view operations.
 ***REMOVED***@Binding private var mapViewProxy: MapViewProxy?
 ***REMOVED***
 ***REMOVED******REMOVED***/ Acts as the point of identification for items tapped in the utility network.
@@ -545,7 +545,7 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED***/   - map: The map containing the utility network(s).
 ***REMOVED******REMOVED***/   - mapPoint: Acts as the point at which newly selected starting point graphics will be created.
 ***REMOVED******REMOVED***/   - screenPoint: Acts as the point of identification for items tapped in the utility network.
-***REMOVED******REMOVED***/   - mapViewProxy: Provides access to the map view's identification and animation functionality.
+***REMOVED******REMOVED***/   - mapViewProxy: The proxy to provide access to map view operations.
 ***REMOVED******REMOVED***/   - viewpoint: Allows the utility network trace tool to update the parent map view's viewpoint.
 ***REMOVED******REMOVED***/   - startingPoints: An optional list of programmatically provided starting points.
 ***REMOVED***public init(
