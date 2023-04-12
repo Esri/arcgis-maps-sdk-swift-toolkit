@@ -21,6 +21,8 @@ struct FloatingPanelExampleView: View {
         map: Map(basemapStyle: .arcGISImagery)
     )
     
+    @State var isPresented = true
+    
     @State var selectedDetent: FloatingPanelDetent = .half
     
     private let initialViewpoint = Viewpoint(
@@ -33,7 +35,7 @@ struct FloatingPanelExampleView: View {
             map: dataModel.map,
             viewpoint: initialViewpoint
         )
-        .floatingPanel(selectedDetent: $selectedDetent, isPresented: .constant(true)) {
+        .floatingPanel(selectedDetent: $selectedDetent, isPresented: $isPresented) {
             List {
                 Section("Preset Heights") {
                     Button("Summary") {
@@ -64,6 +66,13 @@ struct FloatingPanelExampleView: View {
                     Button("600") {
                         selectedDetent = .height(600)
                     }
+                }
+            }
+        }
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button(isPresented ? "Close" : "Open") {
+                    isPresented.toggle()
                 }
             }
         }
