@@ -79,8 +79,7 @@ extension Compass {
 ***REMOVED******REMOVED***/ - Parameter heading: The heading used to determine if the compass should hide.
 ***REMOVED******REMOVED***/ - Returns: `true` if the compass should hide, `false` otherwise.
 ***REMOVED***func shouldHide(forHeading heading: Double) -> Bool {
-***REMOVED******REMOVED***print(heading)
-***REMOVED******REMOVED***return (heading.rounded(.up) == 360 || heading.rounded(.down) == 0 || heading.isNaN) && autoHide
+***REMOVED******REMOVED***(heading.rounded(.up) == 360 || heading.rounded(.down) == 0 || heading.isNaN) && autoHide
 ***REMOVED***
 ***REMOVED***
 
