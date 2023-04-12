@@ -19,22 +19,11 @@ Compass:
 `Compass` has the following initializers:
 
 ```swift
-***REMOVED******REMOVED***/ Creates a compass with a binding to a heading based on compass
-***REMOVED******REMOVED***/ directions (0° indicates a direction toward true North, 90° indicates a
-***REMOVED******REMOVED***/ direction toward true East, etc.).
-***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - heading: The heading of the compass.
-***REMOVED******REMOVED***/   - mapViewProxy: The proxy to provide access to map view operations.
-***REMOVED***public init(heading: Binding<Double>, mapViewProxy: MapViewProxy? = nil)
-```
-
-```swift
 ***REMOVED******REMOVED***/ Creates a compass with a binding to a viewpoint rotation (0° indicates
 ***REMOVED******REMOVED***/ a direction toward true North, 90° indicates a direction toward true
 ***REMOVED******REMOVED***/ West, etc.).
 ***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - viewpointRotation: The viewpoint rotation whose value determines the
-***REMOVED******REMOVED***/   heading of the compass.
+***REMOVED******REMOVED***/   - viewpointRotation: The viewpoint rotation whose value determines the heading of the compass.
 ***REMOVED******REMOVED***/   - mapViewProxy: The proxy to provide access to map view operations.
 ***REMOVED***public init(viewpointRotation: Binding<Double>, mapViewProxy: MapViewProxy? = nil)
 ```
@@ -65,19 +54,14 @@ When the compass is tapped, the map orients back to north (zero bearing).
 ```swift
 @State private var map = Map(basemapStyle: .arcGISImagery)
 
-***REMOVED***/ Allows for communication between the Compass and MapView or SceneView.
-@State private var viewpoint: Viewpoint? = Viewpoint(
-***REMOVED***center: Point(x: -117.19494, y: 34.05723, spatialReference: .wgs84),
-***REMOVED***scale: 10_000,
-***REMOVED***rotation: -45
-)
+@State private var viewpoint: Viewpoint?
 
 var body: some View {
 ***REMOVED***MapViewReader { proxy in
 ***REMOVED******REMOVED***MapView(map: map, viewpoint: viewpoint)
 ***REMOVED******REMOVED******REMOVED***.onViewpointChanged(kind: .centerAndScale) { viewpoint = $0 ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***.overlay(alignment: .topTrailing) {
-***REMOVED******REMOVED******REMOVED******REMOVED***Compass(viewpoint: $viewpoint, mapViewProxy: proxy)
+***REMOVED******REMOVED******REMOVED******REMOVED***Compass(viewpoint: viewpoint, mapViewProxy: proxy)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
 ***REMOVED******REMOVED***
 ***REMOVED***

@@ -14,8 +14,7 @@
 ***REMOVED***
 ***REMOVED***
 
-***REMOVED***/ A `Compass` (alias North arrow) shows where north is in a `MapView` or
-***REMOVED***/ `SceneView`.
+***REMOVED***/ A `Compass` (alias North arrow) shows where north is in a `MapView` or `SceneView`.
 public struct Compass: View {
 ***REMOVED******REMOVED***/ The opacity of the compass.
 ***REMOVED***@State private var opacity: Double = .zero
@@ -28,7 +27,7 @@ public struct Compass: View {
 ***REMOVED***private var heading: Double
 ***REMOVED***
 ***REMOVED******REMOVED***/ The proxy to provide access to map view operations.
-***REMOVED***private var mapViewProxy: MapViewProxy
+***REMOVED***private var mapViewProxy: MapViewProxy?
 ***REMOVED***
 ***REMOVED******REMOVED***/ The width and height of the compass.
 ***REMOVED***private var size: CGFloat = 44
@@ -41,7 +40,7 @@ public struct Compass: View {
 ***REMOVED******REMOVED***/   - mapViewProxy: The proxy to provide access to map view operations.
 ***REMOVED***init(
 ***REMOVED******REMOVED***heading: Double,
-***REMOVED******REMOVED***mapViewProxy: MapViewProxy
+***REMOVED******REMOVED***mapViewProxy: MapViewProxy? = nil
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.heading = heading
 ***REMOVED******REMOVED***self.mapViewProxy = mapViewProxy
@@ -66,7 +65,7 @@ public struct Compass: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onTapGesture {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task { await mapViewProxy.setViewpointRotation(0) ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task { await mapViewProxy?.setViewpointRotation(0) ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityLabel("Compass, heading \(Int(heading.rounded())) degrees \(CompassDirection(heading).rawValue)")
 ***REMOVED***
@@ -88,8 +87,7 @@ public extension Compass {
 ***REMOVED******REMOVED***/ a direction toward true North, 90° indicates a direction toward true
 ***REMOVED******REMOVED***/ West, etc.).
 ***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - viewpointRotation: The viewpoint rotation whose value determines the
-***REMOVED******REMOVED***/   heading of the compass.
+***REMOVED******REMOVED***/   - viewpointRotation: The viewpoint rotation whose value determines the heading of the compass.
 ***REMOVED******REMOVED***/   - mapViewProxy: The proxy to provide access to map view operations.
 ***REMOVED***init(
 ***REMOVED******REMOVED***viewpointRotation: Double?,
