@@ -13,7 +13,7 @@
 
 import XCTest
 @testable import ArcGISToolkit
-@testable import ArcGIS
+import ArcGIS
 import Combine
 
 @MainActor final class AuthenticatorTests: XCTestCase {

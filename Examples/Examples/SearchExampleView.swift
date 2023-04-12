@@ -51,35 +51,38 @@ struct SearchExampleView: View {
     @State private var queryCenter: Point?
     
     var body: some View {
-        MapView(
-            map: dataModel.map,
-            viewpoint: searchResultViewpoint,
-            graphicsOverlays: [searchResultsOverlay]
-        )
-        .onNavigatingChanged { isGeoViewNavigating = $0 }
-        .onViewpointChanged(kind: .centerAndScale) {
-            queryCenter = $0.targetGeometry as? Point
-        }
-        .onVisibleAreaChanged { newValue in
-            // For "Repeat Search Here" behavior, use the `geoViewExtent` and
-            // `isGeoViewNavigating` modifiers on the `SearchView`.
-            geoViewExtent = newValue.extent
-            
-            // The visible area can be used to limit the results by
-            // using the `queryArea` modifier on the `SearchView`.
-//            queryArea = newValue
-        }
-        .overlay {
-            SearchView(
-                sources: [locatorDataSource],
-                viewpoint: $searchResultViewpoint
+        MapViewReader { mapViewProxy in
+            MapView(
+                map: dataModel.map,
+                viewpoint: searchResultViewpoint,
+                graphicsOverlays: [searchResultsOverlay]
             )
-            .resultsOverlay(searchResultsOverlay)
-//            .queryArea($queryArea)
-            .queryCenter($queryCenter)
-            .geoViewExtent($geoViewExtent)
-            .isGeoViewNavigating($isGeoViewNavigating)
-            .padding()
+            .onNavigatingChanged { isGeoViewNavigating = $0 }
+            .onViewpointChanged(kind: .centerAndScale) {
+                queryCenter = $0.targetGeometry as? Point
+            }
+            .onVisibleAreaChanged { newValue in
+                // For "Repeat Search Here" behavior, use the `geoViewExtent` and
+                // `isGeoViewNavigating` modifiers on the `SearchView`.
+                geoViewExtent = newValue.extent
+                
+                // The visible area can be used to limit the results by
+                // using the `queryArea` modifier on the `SearchView`.
+//                queryArea = newValue
+            }
+            .overlay {
+                SearchView(
+                    sources: [locatorDataSource],
+                    viewpoint: $searchResultViewpoint,
+                    geoViewProxy: mapViewProxy
+                )
+                .resultsOverlay(searchResultsOverlay)
+//                .queryArea($queryArea)
+                .queryCenter($queryCenter)
+                .geoViewExtent($geoViewExtent)
+                .isGeoViewNavigating($isGeoViewNavigating)
+                .padding()
+            }
         }
     }
 }
