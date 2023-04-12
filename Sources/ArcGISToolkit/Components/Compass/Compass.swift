@@ -79,7 +79,7 @@ extension Compass {
     /// - Parameter heading: The heading used to determine if the compass should hide.
     /// - Returns: `true` if the compass should hide, `false` otherwise.
     func shouldHide(forHeading heading: Double) -> Bool {
-        (heading.rounded(.up) == 360 || heading.rounded(.down) == 0 || heading.isNaN) && autoHide
+        (heading.isZero || heading.isNaN) && autoHide
     }
 }
 
