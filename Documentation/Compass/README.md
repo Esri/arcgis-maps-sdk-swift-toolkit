@@ -19,6 +19,14 @@ Compass:
 `Compass` has the following initializers:
 
 ```swift
+***REMOVED******REMOVED***/ Creates a compass with a binding to an optional viewpoint.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - viewpoint: The viewpoint whose rotation determines the heading of the compass.
+***REMOVED******REMOVED***/   - mapViewProxy: The proxy to provide access to map view operations.
+***REMOVED***public init(viewpoint: Viewpoint?, mapViewProxy: MapViewProxy? = nil)
+```
+
+```swift
 ***REMOVED******REMOVED***/ Creates a compass with a binding to a viewpoint rotation (0° indicates
 ***REMOVED******REMOVED***/ a direction toward true North, 90° indicates a direction toward true
 ***REMOVED******REMOVED***/ West, etc.).
@@ -26,14 +34,6 @@ Compass:
 ***REMOVED******REMOVED***/   - viewpointRotation: The viewpoint rotation whose value determines the heading of the compass.
 ***REMOVED******REMOVED***/   - mapViewProxy: The proxy to provide access to map view operations.
 ***REMOVED***public init(viewpointRotation: Double?, mapViewProxy: MapViewProxy? = nil)
-```
-
-```swift
-***REMOVED******REMOVED***/ Creates a compass with a binding to an optional viewpoint.
-***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - viewpoint: The viewpoint whose rotation determines the heading of the compass.
-***REMOVED******REMOVED***/   - mapViewProxy: The proxy to provide access to map view operations.
-***REMOVED***public init(viewpoint: Viewpoint?, mapViewProxy: MapViewProxy? = nil)
 ```
 
 `Compass` has the following modifiers:

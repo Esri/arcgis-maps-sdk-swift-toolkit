@@ -83,6 +83,20 @@ extension Compass {
 ***REMOVED***
 
 public extension Compass {
+***REMOVED******REMOVED***/ Creates a compass with a binding to an optional viewpoint.
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - viewpoint: The viewpoint whose rotation determines the heading of the compass.
+***REMOVED******REMOVED***/   - mapViewProxy: The proxy to provide access to map view operations.
+***REMOVED***init(
+***REMOVED******REMOVED***viewpoint: Viewpoint?,
+***REMOVED******REMOVED***mapViewProxy: MapViewProxy
+***REMOVED***) {
+***REMOVED******REMOVED***self.init(
+***REMOVED******REMOVED******REMOVED***viewpointRotation: viewpoint?.rotation ?? .nan,
+***REMOVED******REMOVED******REMOVED***mapViewProxy: mapViewProxy
+***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
 ***REMOVED******REMOVED***/ Creates a compass with a binding to a viewpoint rotation (0° indicates
 ***REMOVED******REMOVED***/ a direction toward true North, 90° indicates a direction toward true
 ***REMOVED******REMOVED***/ West, etc.).
@@ -101,20 +115,6 @@ public extension Compass {
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED***self.init(heading: .nan, mapViewProxy: mapViewProxy)
 ***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ Creates a compass with a binding to an optional viewpoint.
-***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - viewpoint: The viewpoint whose rotation determines the heading of the compass.
-***REMOVED******REMOVED***/   - mapViewProxy: The proxy to provide access to map view operations.
-***REMOVED***init(
-***REMOVED******REMOVED***viewpoint: Viewpoint?,
-***REMOVED******REMOVED***mapViewProxy: MapViewProxy
-***REMOVED***) {
-***REMOVED******REMOVED***self.init(
-***REMOVED******REMOVED******REMOVED***viewpointRotation: viewpoint?.rotation ?? .nan,
-***REMOVED******REMOVED******REMOVED***mapViewProxy: mapViewProxy
-***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Define a custom size for the compass.
