@@ -20,7 +20,7 @@ public struct Compass: View {
     /// The opacity of the compass.
     @State private var opacity: Double = .zero
     
-    /// Provides access to viewpoint animation.
+    /// The proxy to provide access to map view operations.
     private var mapViewProxy: MapViewProxy?
     
     /// A Boolean value indicating whether  the compass should automatically
@@ -44,7 +44,7 @@ public struct Compass: View {
     /// direction toward true East, etc.).
     /// - Parameters:
     ///   - heading: The heading of the compass.
-    ///   - mapViewProxy: Provides access to viewpoint animation.
+    ///   - mapViewProxy: The proxy to provide access to map view operations.
     public init(
         heading: Binding<Double>,
         mapViewProxy: MapViewProxy? = nil
@@ -90,7 +90,7 @@ public extension Compass {
     /// - Parameters:
     ///   - viewpointRotation: The viewpoint rotation whose value determines the
     ///   heading of the compass.
-    ///   - mapViewProxy: Provides access to viewpoint animation.
+    ///   - mapViewProxy: The proxy to provide access to map view operations.
     init(
         viewpointRotation: Binding<Double>,
         mapViewProxy: MapViewProxy? = nil
@@ -106,7 +106,7 @@ public extension Compass {
     /// Creates a compass with a binding to an optional viewpoint.
     /// - Parameters:
     ///   - viewpoint: The viewpoint whose rotation determines the heading of the compass.
-    ///   - mapViewProxy: Provides access to viewpoint animation.
+    ///   - mapViewProxy: The proxy to provide access to map view operations.
     init(
         viewpoint: Binding<Viewpoint?>,
         mapViewProxy: MapViewProxy? = nil

@@ -24,7 +24,7 @@ Compass:
     /// direction toward true East, etc.).
     /// - Parameters:
     ///   - heading: The heading of the compass.
-    ///   - mapViewProxy: Provides access to viewpoint animation.
+    ///   - mapViewProxy: The proxy to provide access to map view operations.
     public init(heading: Binding<Double>, mapViewProxy: MapViewProxy? = nil)
 ```
 
@@ -35,7 +35,7 @@ Compass:
     /// - Parameters:
     ///   - viewpointRotation: The viewpoint rotation whose value determines the
     ///   heading of the compass.
-    ///   - mapViewProxy: Provides access to viewpoint animation.
+    ///   - mapViewProxy: The proxy to provide access to map view operations.
     public init(viewpointRotation: Binding<Double>, mapViewProxy: MapViewProxy? = nil)
 ```
 
@@ -43,7 +43,7 @@ Compass:
     /// Creates a compass with a binding to an optional viewpoint.
     /// - Parameters:
     ///   - viewpoint: The viewpoint whose rotation determines the heading of the compass.
-    ///   - mapViewProxy: Provides access to viewpoint animation.
+    ///   - mapViewProxy: The proxy to provide access to map view operations.
     public init(viewpoint: Binding<Viewpoint?>, mapViewProxy: MapViewProxy? = nil)
 ```
 
