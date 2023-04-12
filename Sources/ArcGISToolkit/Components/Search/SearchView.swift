@@ -21,13 +21,16 @@ public struct SearchView: View {
     ///   - sources: A collection of search sources to be used.
     ///   - viewpoint: The `Viewpoint` used to pan/zoom to results. If `nil`, there will be
     ///   no zooming to results.
+    ///   - geoViewProxy: The proxy to provide access to geo view operations.
     public init(
         sources: [SearchSource] = [],
-        viewpoint: Binding<Viewpoint?>? = nil
+        viewpoint: Binding<Viewpoint?>? = nil,
+        geoViewProxy: GeoViewProxy? = nil
     ) {
         _viewModel = StateObject(wrappedValue: SearchViewModel(
             sources: sources.isEmpty ? [LocatorSearchSource()] : sources,
-            viewpoint: viewpoint
+            viewpoint: viewpoint,
+            geoViewProxy: geoViewProxy
         ))
         
         _queryArea = .constant(nil)

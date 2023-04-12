@@ -44,12 +44,15 @@ public enum SearchOutcome {
     ///   - sources: Collection of search sources to be used.
     ///   - viewpoint: The `Viewpoint` used to pan/zoom to results. If `nil`, there will be
     ///   no zooming to results.
+    ///   - geoViewProxy: The proxy to provide access to geo view operations.
     init(
         sources: [SearchSource] = [],
-        viewpoint: Binding<Viewpoint?>? = nil
+        viewpoint: Binding<Viewpoint?>? = nil,
+        geoViewProxy: GeoViewProxy? = nil
     ) {
         self.sources = sources
         self.viewpoint = viewpoint
+        self.geoViewProxy = geoViewProxy
     }
     
     /// The active search source.  If `nil`, the first item in `sources` is used.
@@ -115,6 +118,9 @@ public enum SearchOutcome {
             isEligibleForRequery = (centerDiff ?? 0.0) > threshold
         }
     }
+    
+    /// The proxy to provide access to geo view operations.
+    private var geoViewProxy: GeoViewProxy?
     
     /// `true` when the geoView is navigating, `false` otherwise. Set by the external client.
     var isGeoViewNavigating = false
@@ -380,9 +386,7 @@ private extension SearchViewModel {
             let builder = EnvelopeBuilder(envelope: envelope)
             builder.expand(by: 1.1)
             let targetExtent = builder.toGeometry()
-            viewpoint.wrappedValue = Viewpoint(
-                boundingGeometry: targetExtent
-            )
+            display(newViewpoint: Viewpoint(boundingGeometry: targetExtent))
             lastSearchExtent = targetExtent
         } else {
             viewpoint.wrappedValue = nil
@@ -393,7 +397,17 @@ private extension SearchViewModel {
     
     func display(selectedResult: SearchResult?) {
         guard let selectedResult = selectedResult else { return }
-        viewpoint?.wrappedValue = selectedResult.selectionViewpoint
+        display(newViewpoint: selectedResult.selectionViewpoint)
+    }
+    
+    /// Update the viewpoint to the new viewpoint, if a geo view proxy was supplied, the transition
+    /// will be animated.
+    func display(newViewpoint: Viewpoint?) {
+        if let geoViewProxy, let newViewpoint {
+            Task { await geoViewProxy.setViewpoint(newViewpoint, duration: nil) }
+        } else {
+            viewpoint?.wrappedValue = newViewpoint
+        }
     }
 }
 
