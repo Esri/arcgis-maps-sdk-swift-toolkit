@@ -15,6 +15,9 @@ import ArcGIS
 import SwiftUI
 
 public struct UtilityNetworkTrace: View {
+    /// The proxy to provide access to map view operations.
+    private var mapViewProxy: MapViewProxy?
+    
     // MARK: Enums
     
     /// Activities users will perform while creating a new trace.
@@ -79,9 +82,6 @@ public struct UtilityNetworkTrace: View {
     
     /// The graphics overlay to hold generated starting point and trace graphics.
     @Binding private var graphicsOverlay: GraphicsOverlay
-    
-    /// The proxy to provide access to map view operations.
-    @Binding private var mapViewProxy: MapViewProxy?
     
     /// Acts as the point of identification for items tapped in the utility network.
     @Binding private var screenPoint: CGPoint?
@@ -553,14 +553,14 @@ public struct UtilityNetworkTrace: View {
         map: Map,
         mapPoint: Binding<Point?>,
         screenPoint: Binding<CGPoint?>,
-        mapViewProxy: Binding<MapViewProxy?>,
+        mapViewProxy: MapViewProxy?,
         viewpoint: Binding<Viewpoint?>,
         startingPoints: Binding<[UtilityNetworkTraceStartingPoint]> = .constant([])
     ) {
+        self.mapViewProxy = mapViewProxy
         _activeDetent = .constant(nil)
         _screenPoint = screenPoint
         _mapPoint = mapPoint
-        _mapViewProxy = mapViewProxy
         _graphicsOverlay = graphicsOverlay
         _viewpoint = viewpoint
         _externalStartingPoints = startingPoints
