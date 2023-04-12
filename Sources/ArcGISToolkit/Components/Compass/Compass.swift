@@ -14,8 +14,7 @@
 import ArcGIS
 import SwiftUI
 
-/// A `Compass` (alias North arrow) shows where north is in a `MapView` or
-/// `SceneView`.
+/// A `Compass` (alias North arrow) shows where north is in a `MapView` or `SceneView`.
 public struct Compass: View {
     /// The opacity of the compass.
     @State private var opacity: Double = .zero
@@ -28,7 +27,7 @@ public struct Compass: View {
     private var heading: Double
     
     /// The proxy to provide access to map view operations.
-    private var mapViewProxy: MapViewProxy
+    private var mapViewProxy: MapViewProxy?
     
     /// The width and height of the compass.
     private var size: CGFloat = 44
@@ -41,7 +40,7 @@ public struct Compass: View {
     ///   - mapViewProxy: The proxy to provide access to map view operations.
     init(
         heading: Double,
-        mapViewProxy: MapViewProxy
+        mapViewProxy: MapViewProxy? = nil
     ) {
         self.heading = heading
         self.mapViewProxy = mapViewProxy
@@ -66,7 +65,7 @@ public struct Compass: View {
                     }
                 }
                 .onTapGesture {
-                    Task { await mapViewProxy.setViewpointRotation(0) }
+                    Task { await mapViewProxy?.setViewpointRotation(0) }
                 }
                 .accessibilityLabel("Compass, heading \(Int(heading.rounded())) degrees \(CompassDirection(heading).rawValue)")
         }
@@ -88,8 +87,7 @@ public extension Compass {
     /// a direction toward true North, 90° indicates a direction toward true
     /// West, etc.).
     /// - Parameters:
-    ///   - viewpointRotation: The viewpoint rotation whose value determines the
-    ///   heading of the compass.
+    ///   - viewpointRotation: The viewpoint rotation whose value determines the heading of the compass.
     ///   - mapViewProxy: The proxy to provide access to map view operations.
     init(
         viewpointRotation: Double?,
