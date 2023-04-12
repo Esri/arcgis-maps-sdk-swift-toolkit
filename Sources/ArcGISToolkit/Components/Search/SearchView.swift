@@ -21,7 +21,7 @@ public struct SearchView: View {
     ///   - sources: A collection of search sources to be used.
     ///   - viewpoint: The `Viewpoint` used to pan/zoom to results. If `nil`, there will be
     ///   no zooming to results.
-    ///   - geoViewProxy: <#Description#>
+    ///   - geoViewProxy: The proxy to provide access to geo view operations.
     public init(
         sources: [SearchSource] = [],
         viewpoint: Binding<Viewpoint?>? = nil,
