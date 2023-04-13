@@ -83,33 +83,19 @@ extension Compass {
 }
 
 public extension Compass {
-    /// Creates a compass with a binding to an optional viewpoint.
-    /// - Parameters:
-    ///   - viewpoint: The viewpoint whose rotation determines the heading of the compass.
-    ///   - mapViewProxy: The proxy to provide access to map view operations.
-    init(
-        viewpoint: Viewpoint?,
-        mapViewProxy: MapViewProxy
-    ) {
-        self.init(
-            viewpointRotation: viewpoint?.rotation ?? .nan,
-            mapViewProxy: mapViewProxy
-        )
-    }
-    
     /// Creates a compass with a binding to a viewpoint rotation (0° indicates
     /// a direction toward true North, 90° indicates a direction toward true
     /// West, etc.).
     /// - Parameters:
-    ///   - viewpointRotation: The viewpoint rotation whose value determines the heading of the compass.
+    ///   - rotation: The viewpoint rotation whose value determines the heading of the compass.
     ///   - mapViewProxy: The proxy to provide access to map view operations.
     init(
-        viewpointRotation: Double?,
+        rotation: Double?,
         mapViewProxy: MapViewProxy
     ) {
         let heading: Double
-        if let viewpointRotation {
-            heading = viewpointRotation.isZero ? .zero : 360 - viewpointRotation
+        if let rotation {
+            heading = rotation.isZero ? .zero : 360 - rotation
         } else {
             heading = .nan
         }
