@@ -15,6 +15,9 @@ import ArcGIS
 import SwiftUI
 
 public struct UtilityNetworkTrace: View {
+    /// The proxy to provide access to map view operations.
+    private var mapViewProxy: MapViewProxy?
+    
     // MARK: Enums
     
     /// Activities users will perform while creating a new trace.
@@ -80,11 +83,8 @@ public struct UtilityNetworkTrace: View {
     /// The graphics overlay to hold generated starting point and trace graphics.
     @Binding private var graphicsOverlay: GraphicsOverlay
     
-    /// Provides a method of layer identification when starting points are being chosen.
-    @Binding private var mapViewProxy: MapViewProxy?
-    
     /// Acts as the point of identification for items tapped in the utility network.
-    @Binding private var viewPoint: CGPoint?
+    @Binding private var screenPoint: CGPoint?
     
     /// Acts as the point at which newly selected starting point graphics will be created.
     @Binding private var mapPoint: Point?
@@ -149,7 +149,12 @@ public struct UtilityNetworkTrace: View {
                                     Task {
                                         if let feature = await viewModel.feature(for: element),
                                            let geometry = feature.geometry {
-                                            viewpoint = Viewpoint(boundingGeometry: geometry.extent)
+                                            let newViewpoint = Viewpoint(boundingGeometry: geometry.extent)
+                                            if let mapViewProxy {
+                                                Task { await mapViewProxy.setViewpoint(newViewpoint, duration: nil) }
+                                            } else {
+                                                viewpoint = newViewpoint
+                                            }
                                         }
                                     }
                                 } label: {
@@ -324,7 +329,12 @@ public struct UtilityNetworkTrace: View {
             Menu(selectedTrace.name) {
                 if let resultExtent = selectedTrace.resultExtent {
                     Button("Zoom To") {
-                        viewpoint = Viewpoint(boundingGeometry: resultExtent)
+                        let newViewpoint = Viewpoint(boundingGeometry: resultExtent)
+                        if let mapViewProxy {
+                            Task { await mapViewProxy.setViewpoint(newViewpoint, duration: nil) }
+                        } else {
+                            viewpoint = newViewpoint
+                        }
                     }
                 }
                 Button("Delete", role: .destructive) {
@@ -439,7 +449,12 @@ public struct UtilityNetworkTrace: View {
             Button("Zoom To") {
                 if let selectedStartingPoint = selectedStartingPoint,
                    let extent = selectedStartingPoint.geoElement.geometry?.extent {
-                    viewpoint = Viewpoint(boundingGeometry: extent)
+                    let newViewpoint = Viewpoint(boundingGeometry: extent)
+                    if let mapViewProxy {
+                        Task { await mapViewProxy.setViewpoint(newViewpoint, duration: nil) }
+                    } else {
+                        viewpoint = newViewpoint
+                    }
                 }
             }
             Button("Delete", role: .destructive) {
@@ -534,24 +549,23 @@ public struct UtilityNetworkTrace: View {
     ///   - graphicsOverlay: The graphics overlay to hold generated starting point and trace graphics.
     ///   - map: The map containing the utility network(s).
     ///   - mapPoint: Acts as the point at which newly selected starting point graphics will be created.
-    ///   - viewPoint: Acts as the point of identification for items tapped in the utility network.
-    ///   - mapViewProxy: Provides a method of layer identification when starting points are being
-    ///   chosen.
+    ///   - screenPoint: Acts as the point of identification for items tapped in the utility network.
+    ///   - mapViewProxy: The proxy to provide access to map view operations.
     ///   - viewpoint: Allows the utility network trace tool to update the parent map view's viewpoint.
     ///   - startingPoints: An optional list of programmatically provided starting points.
     public init(
         graphicsOverlay: Binding<GraphicsOverlay>,
         map: Map,
         mapPoint: Binding<Point?>,
-        viewPoint: Binding<CGPoint?>,
-        mapViewProxy: Binding<MapViewProxy?>,
+        screenPoint: Binding<CGPoint?>,
+        mapViewProxy: MapViewProxy?,
         viewpoint: Binding<Viewpoint?>,
         startingPoints: Binding<[UtilityNetworkTraceStartingPoint]> = .constant([])
     ) {
+        self.mapViewProxy = mapViewProxy
         _activeDetent = .constant(nil)
-        _viewPoint = viewPoint
+        _screenPoint = screenPoint
         _mapPoint = mapPoint
-        _mapViewProxy = mapViewProxy
         _graphicsOverlay = graphicsOverlay
         _viewpoint = viewpoint
         _externalStartingPoints = startingPoints
@@ -605,18 +619,18 @@ public struct UtilityNetworkTrace: View {
         }
         .background(Color(uiColor: .systemGroupedBackground))
         .animation(.default, value: currentActivity)
-        .onChange(of: viewPoint) { newValue in
+        .onChange(of: screenPoint) { newScreenPoint in
             guard isFocused(traceCreationActivity: .addingStartingPoints),
                   let mapViewProxy = mapViewProxy,
                   let mapPoint = mapPoint,
-                  let viewPoint = viewPoint else {
+                  let screenPoint = newScreenPoint else {
                 return
             }
             currentActivity = .creatingTrace(.viewingStartingPoints)
             activeDetent = .half
             Task {
                 await viewModel.addStartingPoints(
-                    at: viewPoint,
+                    at: screenPoint,
                     mapPoint: mapPoint,
                     with: mapViewProxy
                 )
