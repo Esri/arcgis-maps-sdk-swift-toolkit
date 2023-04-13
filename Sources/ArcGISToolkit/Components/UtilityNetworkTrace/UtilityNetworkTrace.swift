@@ -15,6 +15,9 @@
 ***REMOVED***
 
 public struct UtilityNetworkTrace: View {
+***REMOVED******REMOVED***/ The proxy to provide access to map view operations.
+***REMOVED***private var mapViewProxy: MapViewProxy?
+***REMOVED***
 ***REMOVED******REMOVED*** MARK: Enums
 ***REMOVED***
 ***REMOVED******REMOVED***/ Activities users will perform while creating a new trace.
@@ -80,11 +83,8 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED***/ The graphics overlay to hold generated starting point and trace graphics.
 ***REMOVED***@Binding private var graphicsOverlay: GraphicsOverlay
 ***REMOVED***
-***REMOVED******REMOVED***/ Provides a method of layer identification when starting points are being chosen.
-***REMOVED***@Binding private var mapViewProxy: MapViewProxy?
-***REMOVED***
 ***REMOVED******REMOVED***/ Acts as the point of identification for items tapped in the utility network.
-***REMOVED***@Binding private var viewPoint: CGPoint?
+***REMOVED***@Binding private var screenPoint: CGPoint?
 ***REMOVED***
 ***REMOVED******REMOVED***/ Acts as the point at which newly selected starting point graphics will be created.
 ***REMOVED***@Binding private var mapPoint: Point?
@@ -149,7 +149,12 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let feature = await viewModel.feature(for: element),
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***   let geometry = feature.geometry {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint = Viewpoint(boundingGeometry: geometry.extent)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let newViewpoint = Viewpoint(boundingGeometry: geometry.extent)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let mapViewProxy {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task { await mapViewProxy.setViewpoint(newViewpoint, duration: nil) ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint = newViewpoint
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** label: {
@@ -324,7 +329,12 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED***Menu(selectedTrace.name) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if let resultExtent = selectedTrace.resultExtent {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Zoom To") {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint = Viewpoint(boundingGeometry: resultExtent)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let newViewpoint = Viewpoint(boundingGeometry: resultExtent)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let mapViewProxy {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task { await mapViewProxy.setViewpoint(newViewpoint, duration: nil) ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint = newViewpoint
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***Button("Delete", role: .destructive) {
@@ -439,7 +449,12 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED***Button("Zoom To") {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if let selectedStartingPoint = selectedStartingPoint,
 ***REMOVED******REMOVED******REMOVED******REMOVED***   let extent = selectedStartingPoint.geoElement.geometry?.extent {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint = Viewpoint(boundingGeometry: extent)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let newViewpoint = Viewpoint(boundingGeometry: extent)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let mapViewProxy {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task { await mapViewProxy.setViewpoint(newViewpoint, duration: nil) ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint = newViewpoint
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***Button("Delete", role: .destructive) {
@@ -534,24 +549,23 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED***/   - graphicsOverlay: The graphics overlay to hold generated starting point and trace graphics.
 ***REMOVED******REMOVED***/   - map: The map containing the utility network(s).
 ***REMOVED******REMOVED***/   - mapPoint: Acts as the point at which newly selected starting point graphics will be created.
-***REMOVED******REMOVED***/   - viewPoint: Acts as the point of identification for items tapped in the utility network.
-***REMOVED******REMOVED***/   - mapViewProxy: Provides a method of layer identification when starting points are being
-***REMOVED******REMOVED***/   chosen.
+***REMOVED******REMOVED***/   - screenPoint: Acts as the point of identification for items tapped in the utility network.
+***REMOVED******REMOVED***/   - mapViewProxy: The proxy to provide access to map view operations.
 ***REMOVED******REMOVED***/   - viewpoint: Allows the utility network trace tool to update the parent map view's viewpoint.
 ***REMOVED******REMOVED***/   - startingPoints: An optional list of programmatically provided starting points.
 ***REMOVED***public init(
 ***REMOVED******REMOVED***graphicsOverlay: Binding<GraphicsOverlay>,
 ***REMOVED******REMOVED***map: Map,
 ***REMOVED******REMOVED***mapPoint: Binding<Point?>,
-***REMOVED******REMOVED***viewPoint: Binding<CGPoint?>,
-***REMOVED******REMOVED***mapViewProxy: Binding<MapViewProxy?>,
+***REMOVED******REMOVED***screenPoint: Binding<CGPoint?>,
+***REMOVED******REMOVED***mapViewProxy: MapViewProxy?,
 ***REMOVED******REMOVED***viewpoint: Binding<Viewpoint?>,
 ***REMOVED******REMOVED***startingPoints: Binding<[UtilityNetworkTraceStartingPoint]> = .constant([])
 ***REMOVED***) {
+***REMOVED******REMOVED***self.mapViewProxy = mapViewProxy
 ***REMOVED******REMOVED***_activeDetent = .constant(nil)
-***REMOVED******REMOVED***_viewPoint = viewPoint
+***REMOVED******REMOVED***_screenPoint = screenPoint
 ***REMOVED******REMOVED***_mapPoint = mapPoint
-***REMOVED******REMOVED***_mapViewProxy = mapViewProxy
 ***REMOVED******REMOVED***_graphicsOverlay = graphicsOverlay
 ***REMOVED******REMOVED***_viewpoint = viewpoint
 ***REMOVED******REMOVED***_externalStartingPoints = startingPoints
@@ -605,18 +619,18 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED***
 ***REMOVED******REMOVED***.background(Color(uiColor: .systemGroupedBackground))
 ***REMOVED******REMOVED***.animation(.default, value: currentActivity)
-***REMOVED******REMOVED***.onChange(of: viewPoint) { newValue in
+***REMOVED******REMOVED***.onChange(of: screenPoint) { newScreenPoint in
 ***REMOVED******REMOVED******REMOVED***guard isFocused(traceCreationActivity: .addingStartingPoints),
 ***REMOVED******REMOVED******REMOVED******REMOVED***  let mapViewProxy = mapViewProxy,
 ***REMOVED******REMOVED******REMOVED******REMOVED***  let mapPoint = mapPoint,
-***REMOVED******REMOVED******REMOVED******REMOVED***  let viewPoint = viewPoint else {
+***REMOVED******REMOVED******REMOVED******REMOVED***  let screenPoint = newScreenPoint else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***return
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***currentActivity = .creatingTrace(.viewingStartingPoints)
 ***REMOVED******REMOVED******REMOVED***activeDetent = .half
 ***REMOVED******REMOVED******REMOVED***Task {
 ***REMOVED******REMOVED******REMOVED******REMOVED***await viewModel.addStartingPoints(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***at: viewPoint,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***at: screenPoint,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mapPoint: mapPoint,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***with: mapViewProxy
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
