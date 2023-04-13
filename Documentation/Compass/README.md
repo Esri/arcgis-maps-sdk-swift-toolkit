@@ -16,35 +16,15 @@ Compass:
 
 ## Key properties
 
-`Compass` has the following initializers:
+`Compass` has the following initializer:
 
 ```swift
-***REMOVED******REMOVED***/ Creates a compass with a binding to a heading based on compass
-***REMOVED******REMOVED***/ directions (0° indicates a direction toward true North, 90° indicates a
-***REMOVED******REMOVED***/ direction toward true East, etc.).
+***REMOVED******REMOVED***/ Creates a compass with a rotation (0° indicates a direction toward true North, 90° indicates
+***REMOVED******REMOVED***/ a direction toward true West, etc.).
 ***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - heading: The heading of the compass.
-***REMOVED******REMOVED***/   - action: An action to perform when the compass is tapped.
-***REMOVED***public init(heading: Binding<Double>, action: (() -> Void)? = nil)
-```
-
-```swift
-***REMOVED******REMOVED***/ Creates a compass with a binding to a viewpoint rotation (0° indicates
-***REMOVED******REMOVED***/ a direction toward true North, 90° indicates a direction toward true
-***REMOVED******REMOVED***/ West, etc.).
-***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - viewpointRotation: The viewpoint rotation whose value determines the
-***REMOVED******REMOVED***/   heading of the compass.
-***REMOVED******REMOVED***/   - action: An action to perform when the compass is tapped.
-***REMOVED***public init(viewpointRotation: Binding<Double>, action: (() -> Void)? = nil)
-```
-
-```swift
-***REMOVED******REMOVED***/ Creates a compass with a binding to an optional viewpoint.
-***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - viewpoint: The viewpoint whose rotation determines the heading of the compass.
-***REMOVED******REMOVED***/   - action: An action to perform when the compass is tapped.
-***REMOVED***public init(viewpoint: Binding<Viewpoint?>, action: (() -> Void)? = nil)
+***REMOVED******REMOVED***/   - rotation: The rotation whose value determines the heading of the compass.
+***REMOVED******REMOVED***/   - mapViewProxy: The proxy to provide access to map view operations.
+***REMOVED***public init(rotation: Double?, mapViewProxy: MapViewProxy)
 ```
 
 `Compass` has the following modifiers:
@@ -63,21 +43,18 @@ When the compass is tapped, the map orients back to north (zero bearing).
 ### Basic usage for displaying a `Compass`.
 
 ```swift
-@StateObject var map = Map(basemapStyle: .arcGISImagery)
+@State private var map = Map(basemapStyle: .arcGISImagery)
 
-***REMOVED***/ Allows for communication between the Compass and MapView or SceneView.
-@State private var viewpoint: Viewpoint? = Viewpoint(
-***REMOVED***center: Point(x: -117.19494, y: 34.05723, spatialReference: .wgs84),
-***REMOVED***scale: 10_000,
-***REMOVED***rotation: -45
-)
+@State private var viewpoint: Viewpoint?
 
 var body: some View {
-***REMOVED***MapView(map: map, viewpoint: viewpoint)
-***REMOVED******REMOVED***.onViewpointChanged(kind: .centerAndScale) { viewpoint = $0 ***REMOVED***
-***REMOVED******REMOVED***.overlay(alignment: .topTrailing) {
-***REMOVED******REMOVED******REMOVED***Compass(viewpoint: $viewpoint)
-***REMOVED******REMOVED******REMOVED******REMOVED***.padding()
+***REMOVED***MapViewReader { proxy in
+***REMOVED******REMOVED***MapView(map: map, viewpoint: viewpoint)
+***REMOVED******REMOVED******REMOVED***.onViewpointChanged(kind: .centerAndScale) { viewpoint = $0 ***REMOVED***
+***REMOVED******REMOVED******REMOVED***.overlay(alignment: .topTrailing) {
+***REMOVED******REMOVED******REMOVED******REMOVED***Compass(rotation: viewpoint?.rotation, mapViewProxy: proxy)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ```
