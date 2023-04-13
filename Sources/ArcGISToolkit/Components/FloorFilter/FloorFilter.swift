@@ -120,12 +120,6 @@ public struct FloorFilter: View {
         alignment.vertical == .top
     }
     
-    /// Reports a viewpoint change to the view model if the map is not navigating.
-    private func reportChange(of viewpoint: Viewpoint?) {
-        guard isNavigating.wrappedValue else { return }
-        viewModel.onViewpointChanged(viewpoint)
-    }
-    
     /// A view that allows selecting between levels.
     @ViewBuilder private var levelSelector: some View {
         LevelSelector(
@@ -189,8 +183,9 @@ public struct FloorFilter: View {
             selection?.wrappedValue = newValue
         }
         .onChange(of: viewpoint.wrappedValue) { newViewpoint in
+            guard isNavigating.wrappedValue else { return }
             if let newViewpoint {
-                reportChange(of: newViewpoint)
+                viewModel.onViewpointChanged(newViewpoint)
             }
         }
     }
