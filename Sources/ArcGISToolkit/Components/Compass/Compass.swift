@@ -82,8 +82,8 @@ extension Compass {
 ***REMOVED***
 
 public extension Compass {
-***REMOVED******REMOVED***/ Creates a compass with a rotation (0° indicates a map rotation towards true North, 90°
-***REMOVED******REMOVED***/ indicates a map rotation towards true East, etc.).
+***REMOVED******REMOVED***/ Creates a compass with a rotation (0° indicates a direction toward true North, 90° indicates
+***REMOVED******REMOVED***/ a direction toward true West, etc.).
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - rotation: The rotation whose value determines the heading of the compass.
 ***REMOVED******REMOVED***/   - mapViewProxy: The proxy to provide access to map view operations.
