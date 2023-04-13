@@ -146,18 +146,12 @@ public struct FloorFilter: View {
             Color.clear
                 .sheet(isPresented: .constant(!$isSitesAndFacilitiesHidden.wrappedValue)) {
                     SiteAndFacilitySelector(isHidden: $isSitesAndFacilitiesHidden)
-                        .onChange(of: viewpoint.wrappedValue) { viewpoint in
-                            reportChange(of: viewpoint)
-                        }
                 }
         } else {
             ZStack {
                 Color.clear
                     .esriBorder()
                 SiteAndFacilitySelector(isHidden: $isSitesAndFacilitiesHidden)
-                    .onChange(of: viewpoint.wrappedValue) { viewpoint in
-                        reportChange(of: viewpoint)
-                    }
                     .padding([.top, .leading, .trailing], 2.5)
                     .padding(.bottom)
             }
@@ -193,6 +187,11 @@ public struct FloorFilter: View {
             // Prevent a double-set if the user triggered the original change.
             guard selection?.wrappedValue != newValue else { return }
             selection?.wrappedValue = newValue
+        }
+        .onChange(of: viewpoint.wrappedValue) { newViewpoint in
+            if let newViewpoint {
+                reportChange(of: newViewpoint)
+            }
         }
     }
     
