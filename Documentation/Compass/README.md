@@ -19,8 +19,8 @@ Compass:
 `Compass` has the following initializer:
 
 ```swift
-    /// Creates a compass with a rotation (0° indicates a direction toward true North, 90° indicates
-    /// a direction toward true West, etc.).
+    /// Creates a compass with a rotation (0° indicates a map rotation towards true North, 90°
+    /// indicates a map rotation towards true East, etc.).
     /// - Parameters:
     ///   - rotation: The rotation whose value determines the heading of the compass.
     ///   - mapViewProxy: The proxy to provide access to map view operations.
