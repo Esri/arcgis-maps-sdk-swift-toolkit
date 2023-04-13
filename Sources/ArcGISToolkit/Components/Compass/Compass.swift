@@ -107,14 +107,13 @@ public extension Compass {
         viewpointRotation: Double?,
         mapViewProxy: MapViewProxy
     ) {
+        let heading: Double
         if let viewpointRotation {
-            self.init(
-                heading: viewpointRotation.isZero ? .zero : 360 - viewpointRotation,
-                mapViewProxy: mapViewProxy
-            )
+            heading = viewpointRotation.isZero ? .zero : 360 - viewpointRotation
         } else {
-            self.init(heading: .nan, mapViewProxy: mapViewProxy)
+            heading = .nan
         }
+        self.init(heading: heading, mapViewProxy: mapViewProxy)
     }
     
     /// Define a custom size for the compass.
