@@ -15,25 +15,20 @@
 ***REMOVED***Toolkit
 ***REMOVED***
 
-***REMOVED***/ A demonstration of the utility network trace tool which runs traces on a web map published with a utility
-***REMOVED***/ network and trace configurations.
+***REMOVED***/ A demonstration of the utility network trace tool which runs traces on a web map published with
+***REMOVED***/ a utility network and trace configurations.
 struct UtilityNetworkTraceExampleView: View {
-***REMOVED******REMOVED***/ The data model containing a `Map` with the utility networks.
-***REMOVED***@StateObject private var dataModel = MapDataModel(
-***REMOVED******REMOVED***map: makeMap()
-***REMOVED***)
+***REMOVED******REMOVED***/ The map with the utility networks.
+***REMOVED***@State private var map = makeMap()
 ***REMOVED***
 ***REMOVED******REMOVED***/ The current detent of the floating panel presenting the trace tool.
 ***REMOVED***@State var activeDetent: FloatingPanelDetent = .half
-***REMOVED***
-***REMOVED******REMOVED***/ Provides the ability to inspect map components.
-***REMOVED***@State var mapViewProxy: MapViewProxy?
 ***REMOVED***
 ***REMOVED******REMOVED***/ Provides the ability to detect tap locations in the context of the map view.
 ***REMOVED***@State var mapPoint: Point?
 ***REMOVED***
 ***REMOVED******REMOVED***/ Provides the ability to detect tap locations in the context of the screen.
-***REMOVED***@State var viewPoint: CGPoint?
+***REMOVED***@State var screenPoint: CGPoint?
 ***REMOVED***
 ***REMOVED******REMOVED***/ A container for graphical trace results.
 ***REMOVED***@State var resultGraphicsOverlay = GraphicsOverlay()
@@ -44,14 +39,13 @@ struct UtilityNetworkTraceExampleView: View {
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***MapViewReader { mapViewProxy in
 ***REMOVED******REMOVED******REMOVED***MapView(
-***REMOVED******REMOVED******REMOVED******REMOVED***map: dataModel.map,
+***REMOVED******REMOVED******REMOVED******REMOVED***map: map,
 ***REMOVED******REMOVED******REMOVED******REMOVED***viewpoint: viewpoint,
 ***REMOVED******REMOVED******REMOVED******REMOVED***graphicsOverlays: [resultGraphicsOverlay]
 ***REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED***.onSingleTapGesture { viewPoint, mapPoint in
-***REMOVED******REMOVED******REMOVED******REMOVED***self.viewPoint = viewPoint
+***REMOVED******REMOVED******REMOVED***.onSingleTapGesture { screenPoint, mapPoint in
+***REMOVED******REMOVED******REMOVED******REMOVED***self.screenPoint = screenPoint
 ***REMOVED******REMOVED******REMOVED******REMOVED***self.mapPoint = mapPoint
-***REMOVED******REMOVED******REMOVED******REMOVED***self.mapViewProxy = mapViewProxy
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onViewpointChanged(kind: .centerAndScale) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***viewpoint = $0
@@ -68,10 +62,10 @@ struct UtilityNetworkTraceExampleView: View {
 ***REMOVED******REMOVED******REMOVED***) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***UtilityNetworkTrace(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***graphicsOverlay: $resultGraphicsOverlay,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***map: dataModel.map,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***map: map,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mapPoint: $mapPoint,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewPoint: $viewPoint,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mapViewProxy: $mapViewProxy,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***screenPoint: $screenPoint,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mapViewProxy: mapViewProxy,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint: $viewpoint
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.floatingPanelDetent($activeDetent)
