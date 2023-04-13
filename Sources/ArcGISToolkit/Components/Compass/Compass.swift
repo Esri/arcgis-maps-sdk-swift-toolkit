@@ -32,9 +32,8 @@ public struct Compass: View {
     /// The width and height of the compass.
     private var size: CGFloat = 44
     
-    /// Creates a compass with a binding to a heading based on compass
-    /// directions (0° indicates a direction toward true North, 90° indicates a
-    /// direction toward true East, etc.).
+    /// Creates a compass with a heading based on compass directions (0° indicates a direction
+    /// toward true North, 90° indicates a direction toward true East, etc.).
     /// - Parameters:
     ///   - heading: The heading of the compass.
     ///   - mapViewProxy: The proxy to provide access to map view operations.
@@ -83,11 +82,10 @@ extension Compass {
 }
 
 public extension Compass {
-    /// Creates a compass with a binding to a viewpoint rotation (0° indicates
-    /// a direction toward true North, 90° indicates a direction toward true
-    /// West, etc.).
+    /// Creates a compass with a rotation (0° indicates a direction toward true North, 90° indicates
+    /// a direction toward true West, etc.).
     /// - Parameters:
-    ///   - rotation: The viewpoint rotation whose value determines the heading of the compass.
+    ///   - rotation: The rotation whose value determines the heading of the compass.
     ///   - mapViewProxy: The proxy to provide access to map view operations.
     init(
         rotation: Double?,
