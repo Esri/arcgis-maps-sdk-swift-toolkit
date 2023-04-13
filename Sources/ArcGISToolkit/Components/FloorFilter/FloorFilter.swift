@@ -146,18 +146,12 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED******REMOVED***Color.clear
 ***REMOVED******REMOVED******REMOVED******REMOVED***.sheet(isPresented: .constant(!$isSitesAndFacilitiesHidden.wrappedValue)) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***SiteAndFacilitySelector(isHidden: $isSitesAndFacilitiesHidden)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: viewpoint.wrappedValue) { viewpoint in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***reportChange(of: viewpoint)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED***ZStack {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Color.clear
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.esriBorder()
 ***REMOVED******REMOVED******REMOVED******REMOVED***SiteAndFacilitySelector(isHidden: $isSitesAndFacilitiesHidden)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onChange(of: viewpoint.wrappedValue) { viewpoint in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***reportChange(of: viewpoint)
-***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding([.top, .leading, .trailing], 2.5)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding(.bottom)
 ***REMOVED******REMOVED***
@@ -193,6 +187,11 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Prevent a double-set if the user triggered the original change.
 ***REMOVED******REMOVED******REMOVED***guard selection?.wrappedValue != newValue else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***selection?.wrappedValue = newValue
+***REMOVED***
+***REMOVED******REMOVED***.onChange(of: viewpoint.wrappedValue) { newViewpoint in
+***REMOVED******REMOVED******REMOVED***if let newViewpoint {
+***REMOVED******REMOVED******REMOVED******REMOVED***reportChange(of: newViewpoint)
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
