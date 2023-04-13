@@ -32,9 +32,8 @@ public struct Compass: View {
 ***REMOVED******REMOVED***/ The width and height of the compass.
 ***REMOVED***private var size: CGFloat = 44
 ***REMOVED***
-***REMOVED******REMOVED***/ Creates a compass with a binding to a heading based on compass
-***REMOVED******REMOVED***/ directions (0° indicates a direction toward true North, 90° indicates a
-***REMOVED******REMOVED***/ direction toward true East, etc.).
+***REMOVED******REMOVED***/ Creates a compass with a heading based on compass directions (0° indicates a direction
+***REMOVED******REMOVED***/ toward true North, 90° indicates a direction toward true East, etc.).
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - heading: The heading of the compass.
 ***REMOVED******REMOVED***/   - mapViewProxy: The proxy to provide access to map view operations.
@@ -83,11 +82,10 @@ extension Compass {
 ***REMOVED***
 
 public extension Compass {
-***REMOVED******REMOVED***/ Creates a compass with a binding to a viewpoint rotation (0° indicates
-***REMOVED******REMOVED***/ a direction toward true North, 90° indicates a direction toward true
-***REMOVED******REMOVED***/ West, etc.).
+***REMOVED******REMOVED***/ Creates a compass with a rotation (0° indicates a direction toward true North, 90° indicates
+***REMOVED******REMOVED***/ a direction toward true West, etc.).
 ***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - rotation: The viewpoint rotation whose value determines the heading of the compass.
+***REMOVED******REMOVED***/   - rotation: The rotation whose value determines the heading of the compass.
 ***REMOVED******REMOVED***/   - mapViewProxy: The proxy to provide access to map view operations.
 ***REMOVED***init(
 ***REMOVED******REMOVED***rotation: Double?,

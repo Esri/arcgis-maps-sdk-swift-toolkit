@@ -19,13 +19,12 @@ Compass:
 `Compass` has the following initializer:
 
 ```swift
-***REMOVED******REMOVED***/ Creates a compass with a binding to a viewpoint rotation (0° indicates
-***REMOVED******REMOVED***/ a direction toward true North, 90° indicates a direction toward true
-***REMOVED******REMOVED***/ West, etc.).
+***REMOVED******REMOVED***/ Creates a compass with a rotation (0° indicates a direction toward true North, 90° indicates
+***REMOVED******REMOVED***/ a direction toward true West, etc.).
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - rotation: The rotation whose value determines the heading of the compass.
 ***REMOVED******REMOVED***/   - mapViewProxy: The proxy to provide access to map view operations.
-***REMOVED***public init(viewpointRotation: Double?, mapViewProxy: MapViewProxy)
+***REMOVED***public init(rotation: Double?, mapViewProxy: MapViewProxy)
 ```
 
 `Compass` has the following modifiers:
