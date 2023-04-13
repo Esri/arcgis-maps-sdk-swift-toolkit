@@ -16,22 +16,14 @@ Compass:
 
 ## Key properties
 
-`Compass` has the following initializers:
-
-```swift
-    /// Creates a compass with a binding to an optional viewpoint.
-    /// - Parameters:
-    ///   - viewpoint: The viewpoint whose rotation determines the heading of the compass.
-    ///   - mapViewProxy: The proxy to provide access to map view operations.
-    public init(viewpoint: Viewpoint?, mapViewProxy: MapViewProxy)
-```
+`Compass` has the following initializer:
 
 ```swift
     /// Creates a compass with a binding to a viewpoint rotation (0° indicates
     /// a direction toward true North, 90° indicates a direction toward true
     /// West, etc.).
     /// - Parameters:
-    ///   - viewpointRotation: The viewpoint rotation whose value determines the heading of the compass.
+    ///   - rotation: The rotation whose value determines the heading of the compass.
     ///   - mapViewProxy: The proxy to provide access to map view operations.
     public init(viewpointRotation: Double?, mapViewProxy: MapViewProxy)
 ```
@@ -61,7 +53,7 @@ var body: some View {
         MapView(map: map, viewpoint: viewpoint)
             .onViewpointChanged(kind: .centerAndScale) { viewpoint = $0 }
             .overlay(alignment: .topTrailing) {
-                Compass(viewpoint: viewpoint, mapViewProxy: proxy)
+                Compass(rotation: viewpoint?.rotation, mapViewProxy: proxy)
                     .padding()
             }
     }
