@@ -14,42 +14,34 @@
 import ArcGIS
 import SwiftUI
 
-/// A `Compass` (alias North arrow) shows where north is in a `MapView` or
-/// `SceneView`.
+/// A `Compass` (alias North arrow) shows where north is in a `MapView`.
 public struct Compass: View {
     /// The opacity of the compass.
     @State private var opacity: Double = .zero
-    
-    /// The proxy to provide access to map view operations.
-    private var mapViewProxy: MapViewProxy?
     
     /// A Boolean value indicating whether  the compass should automatically
     /// hide/show itself when the heading is `0`.
     private var autoHide: Bool = true
     
-    /// A Boolean value indicating whether the compass should hide based on the
-    ///  current heading and whether the compass automatically hides.
-    var shouldHide: Bool {
-        (heading.isZero || heading.isNaN) && autoHide
-    }
+    /// The heading of the compass in degrees.
+    private var heading: Double
+    
+    /// The proxy to provide access to map view operations.
+    private var mapViewProxy: MapViewProxy?
     
     /// The width and height of the compass.
     private var size: CGFloat = 44
     
-    /// The heading of the compass in degrees.
-    @Binding private var heading: Double
-    
-    /// Creates a compass with a binding to a heading based on compass
-    /// directions (0° indicates a direction toward true North, 90° indicates a
-    /// direction toward true East, etc.).
+    /// Creates a compass with a heading based on compass directions (0° indicates a direction
+    /// toward true North, 90° indicates a direction toward true East, etc.).
     /// - Parameters:
     ///   - heading: The heading of the compass.
     ///   - mapViewProxy: The proxy to provide access to map view operations.
-    public init(
-        heading: Binding<Double>,
+    init(
+        heading: Double,
         mapViewProxy: MapViewProxy? = nil
     ) {
-        _heading = heading
+        self.heading = heading
         self.mapViewProxy = mapViewProxy
     }
     
@@ -63,65 +55,49 @@ public struct Compass: View {
                 .aspectRatio(1, contentMode: .fit)
                 .opacity(opacity)
                 .frame(width: size, height: size)
-                .onAppear { opacity = shouldHide ? 0 : 1 }
-                .onChange(of: heading) { _ in
-                    let newOpacity: Double = shouldHide ? .zero : 1
+                .onAppear { opacity = shouldHide(forHeading: heading) ? 0 : 1 }
+                .onChange(of: heading) { newHeading in
+                    let newOpacity: Double = shouldHide(forHeading: newHeading) ? .zero : 1
                     guard opacity != newOpacity else { return }
-                    withAnimation(.default.delay(shouldHide ? 0.25 : 0)) {
+                    withAnimation(.default.delay(shouldHide(forHeading: newHeading) ? 0.25 : 0)) {
                         opacity = newOpacity
                     }
                 }
                 .onTapGesture {
-                    if let mapViewProxy {
-                        Task { await mapViewProxy.setViewpointRotation(0) }
-                    } else {
-                        heading = .zero
-                    }
+                    Task { await mapViewProxy?.setViewpointRotation(0) }
                 }
                 .accessibilityLabel("Compass, heading \(Int(heading.rounded())) degrees \(CompassDirection(heading).rawValue)")
         }
     }
 }
 
-public extension Compass {
-    /// Creates a compass with a binding to a viewpoint rotation (0° indicates
-    /// a direction toward true North, 90° indicates a direction toward true
-    /// West, etc.).
-    /// - Parameters:
-    ///   - viewpointRotation: The viewpoint rotation whose value determines the
-    ///   heading of the compass.
-    ///   - mapViewProxy: The proxy to provide access to map view operations.
-    init(
-        viewpointRotation: Binding<Double>,
-        mapViewProxy: MapViewProxy? = nil
-    ) {
-        let heading = Binding(get: {
-            viewpointRotation.wrappedValue.isZero ? .zero : 360 - viewpointRotation.wrappedValue
-        }, set: { newHeading in
-            viewpointRotation.wrappedValue = newHeading.isZero ? .zero : 360 - newHeading
-        })
-        self.init(heading: heading, mapViewProxy: mapViewProxy)
+extension Compass {
+    /// Returns a Boolean value indicating whether the compass should hide based on the
+    /// provided heading and whether the compass has been configured to automatically hide.
+    /// - Parameter heading: The heading used to determine if the compass should hide.
+    /// - Returns: `true` if the compass should hide, `false` otherwise.
+    func shouldHide(forHeading heading: Double) -> Bool {
+        (heading.isZero || heading.isNaN) && autoHide
     }
-    
-    /// Creates a compass with a binding to an optional viewpoint.
+}
+
+public extension Compass {
+    /// Creates a compass with a rotation (0° indicates a direction toward true North, 90° indicates
+    /// a direction toward true West, etc.).
     /// - Parameters:
-    ///   - viewpoint: The viewpoint whose rotation determines the heading of the compass.
+    ///   - rotation: The rotation whose value determines the heading of the compass.
     ///   - mapViewProxy: The proxy to provide access to map view operations.
     init(
-        viewpoint: Binding<Viewpoint?>,
-        mapViewProxy: MapViewProxy? = nil
+        rotation: Double?,
+        mapViewProxy: MapViewProxy
     ) {
-        let viewpointRotation = Binding {
-            viewpoint.wrappedValue?.rotation ?? .nan
-        } set: { newViewpointRotation in
-            guard let oldViewpoint = viewpoint.wrappedValue else { return }
-            viewpoint.wrappedValue = Viewpoint(
-                center: oldViewpoint.targetGeometry.extent.center,
-                scale: oldViewpoint.targetScale,
-                rotation: newViewpointRotation
-            )
+        let heading: Double
+        if let rotation {
+            heading = rotation.isZero ? .zero : 360 - rotation
+        } else {
+            heading = .nan
         }
-        self.init(viewpointRotation: viewpointRotation, mapViewProxy: mapViewProxy)
+        self.init(heading: heading, mapViewProxy: mapViewProxy)
     }
     
     /// Define a custom size for the compass.
