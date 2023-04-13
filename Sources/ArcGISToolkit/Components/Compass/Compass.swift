@@ -14,7 +14,7 @@
 ***REMOVED***
 ***REMOVED***
 
-***REMOVED***/ A `Compass` (alias North arrow) shows where north is in a `MapView` or `SceneView`.
+***REMOVED***/ A `Compass` (alias North arrow) shows where north is in a `MapView`.
 public struct Compass: View {
 ***REMOVED******REMOVED***/ The opacity of the compass.
 ***REMOVED***@State private var opacity: Double = .zero
