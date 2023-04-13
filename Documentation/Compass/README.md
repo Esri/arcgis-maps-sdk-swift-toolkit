@@ -16,22 +16,14 @@ Compass:
 
 ## Key properties
 
-`Compass` has the following initializers:
-
-```swift
-***REMOVED******REMOVED***/ Creates a compass with a binding to an optional viewpoint.
-***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - viewpoint: The viewpoint whose rotation determines the heading of the compass.
-***REMOVED******REMOVED***/   - mapViewProxy: The proxy to provide access to map view operations.
-***REMOVED***public init(viewpoint: Viewpoint?, mapViewProxy: MapViewProxy)
-```
+`Compass` has the following initializer:
 
 ```swift
 ***REMOVED******REMOVED***/ Creates a compass with a binding to a viewpoint rotation (0° indicates
 ***REMOVED******REMOVED***/ a direction toward true North, 90° indicates a direction toward true
 ***REMOVED******REMOVED***/ West, etc.).
 ***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - viewpointRotation: The viewpoint rotation whose value determines the heading of the compass.
+***REMOVED******REMOVED***/   - rotation: The rotation whose value determines the heading of the compass.
 ***REMOVED******REMOVED***/   - mapViewProxy: The proxy to provide access to map view operations.
 ***REMOVED***public init(viewpointRotation: Double?, mapViewProxy: MapViewProxy)
 ```
@@ -61,7 +53,7 @@ var body: some View {
 ***REMOVED******REMOVED***MapView(map: map, viewpoint: viewpoint)
 ***REMOVED******REMOVED******REMOVED***.onViewpointChanged(kind: .centerAndScale) { viewpoint = $0 ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***.overlay(alignment: .topTrailing) {
-***REMOVED******REMOVED******REMOVED******REMOVED***Compass(viewpoint: viewpoint, mapViewProxy: proxy)
+***REMOVED******REMOVED******REMOVED******REMOVED***Compass(rotation: viewpoint?.rotation, mapViewProxy: proxy)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
 ***REMOVED******REMOVED***
 ***REMOVED***
