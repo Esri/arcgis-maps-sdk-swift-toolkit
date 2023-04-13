@@ -83,33 +83,19 @@ extension Compass {
 ***REMOVED***
 
 public extension Compass {
-***REMOVED******REMOVED***/ Creates a compass with a binding to an optional viewpoint.
-***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - viewpoint: The viewpoint whose rotation determines the heading of the compass.
-***REMOVED******REMOVED***/   - mapViewProxy: The proxy to provide access to map view operations.
-***REMOVED***init(
-***REMOVED******REMOVED***viewpoint: Viewpoint?,
-***REMOVED******REMOVED***mapViewProxy: MapViewProxy
-***REMOVED***) {
-***REMOVED******REMOVED***self.init(
-***REMOVED******REMOVED******REMOVED***viewpointRotation: viewpoint?.rotation ?? .nan,
-***REMOVED******REMOVED******REMOVED***mapViewProxy: mapViewProxy
-***REMOVED******REMOVED***)
-***REMOVED***
-***REMOVED***
 ***REMOVED******REMOVED***/ Creates a compass with a binding to a viewpoint rotation (0° indicates
 ***REMOVED******REMOVED***/ a direction toward true North, 90° indicates a direction toward true
 ***REMOVED******REMOVED***/ West, etc.).
 ***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - viewpointRotation: The viewpoint rotation whose value determines the heading of the compass.
+***REMOVED******REMOVED***/   - rotation: The viewpoint rotation whose value determines the heading of the compass.
 ***REMOVED******REMOVED***/   - mapViewProxy: The proxy to provide access to map view operations.
 ***REMOVED***init(
-***REMOVED******REMOVED***viewpointRotation: Double?,
+***REMOVED******REMOVED***rotation: Double?,
 ***REMOVED******REMOVED***mapViewProxy: MapViewProxy
 ***REMOVED***) {
 ***REMOVED******REMOVED***let heading: Double
-***REMOVED******REMOVED***if let viewpointRotation {
-***REMOVED******REMOVED******REMOVED***heading = viewpointRotation.isZero ? .zero : 360 - viewpointRotation
+***REMOVED******REMOVED***if let rotation {
+***REMOVED******REMOVED******REMOVED***heading = rotation.isZero ? .zero : 360 - rotation
 ***REMOVED*** else {
 ***REMOVED******REMOVED******REMOVED***heading = .nan
 ***REMOVED***
