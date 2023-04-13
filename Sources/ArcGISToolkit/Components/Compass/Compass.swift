@@ -14,7 +14,7 @@
 import ArcGIS
 import SwiftUI
 
-/// A `Compass` (alias North arrow) shows where north is in a `MapView` or `SceneView`.
+/// A `Compass` (alias North arrow) shows where north is in a `MapView`.
 public struct Compass: View {
     /// The opacity of the compass.
     @State private var opacity: Double = .zero
