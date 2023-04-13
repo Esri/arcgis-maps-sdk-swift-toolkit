@@ -30,7 +30,7 @@ struct FeaturedMapsView: View {
 ***REMOVED******REMOVED******REMOVED***if isLoading {
 ***REMOVED******REMOVED******REMOVED******REMOVED***ProgressView()
 ***REMOVED******REMOVED*** else {
-***REMOVED******REMOVED******REMOVED******REMOVED***List(featuredItems) { item in
+***REMOVED******REMOVED******REMOVED******REMOVED***List(featuredItems, id: \.id) { item in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***NavigationLink {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***MapItemView(map: Map(item: item))
 ***REMOVED******REMOVED******REMOVED******REMOVED*** label: {
