@@ -120,12 +120,6 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED***alignment.vertical == .top
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Reports a viewpoint change to the view model if the map is not navigating.
-***REMOVED***private func reportChange(of viewpoint: Viewpoint?) {
-***REMOVED******REMOVED***guard isNavigating.wrappedValue else { return ***REMOVED***
-***REMOVED******REMOVED***viewModel.onViewpointChanged(viewpoint)
-***REMOVED***
-***REMOVED***
 ***REMOVED******REMOVED***/ A view that allows selecting between levels.
 ***REMOVED***@ViewBuilder private var levelSelector: some View {
 ***REMOVED******REMOVED***LevelSelector(
@@ -189,8 +183,9 @@ public struct FloorFilter: View {
 ***REMOVED******REMOVED******REMOVED***selection?.wrappedValue = newValue
 ***REMOVED***
 ***REMOVED******REMOVED***.onChange(of: viewpoint.wrappedValue) { newViewpoint in
+***REMOVED******REMOVED******REMOVED***guard isNavigating.wrappedValue else { return ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***if let newViewpoint {
-***REMOVED******REMOVED******REMOVED******REMOVED***reportChange(of: newViewpoint)
+***REMOVED******REMOVED******REMOVED******REMOVED***viewModel.onViewpointChanged(newViewpoint)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
