@@ -61,8 +61,11 @@ If a `Viewpoint` binding is provided to the `Bookmarks` view, selecting a bookma
 The view is displayed in a `popover` in response to a toolbar button tap.
 
 ```swift
-***REMOVED***/ A web map with predefined bookmarks.
-@StateObject private var map = Map(url: URL(string: "https:***REMOVED***www.arcgis.com/home/item.html?id=16f1b8ba37b44dc3884afc8d5f454dd2")!)!
+***REMOVED***/ The `Map` with predefined bookmarks.
+@State private var map = Map(url: URL(string: "https:***REMOVED***www.arcgis.com/home/item.html?id=16f1b8ba37b44dc3884afc8d5f454dd2")!)!
+
+***REMOVED***/ The last selected bookmark.
+@State var selectedBookmark: Bookmark?
 
 ***REMOVED***/ Indicates if the `Bookmarks` component is shown or not.
 ***REMOVED***/ - Remark: This allows a developer to control when the `Bookmarks` component is
@@ -71,33 +74,37 @@ The view is displayed in a `popover` in response to a toolbar button tap.
 
 ***REMOVED***/ Allows for communication between the `Bookmarks` component and a `MapView` or
 ***REMOVED***/ `SceneView`.
-@State var viewpoint: Viewpoint? = nil
+@State var viewpoint: Viewpoint?
 
 var body: some View {
-***REMOVED***MapView(map: map, viewpoint: viewpoint)
-***REMOVED******REMOVED***.onViewpointChanged(kind: .centerAndScale) {
-***REMOVED******REMOVED******REMOVED***viewpoint = $0
-***REMOVED***
-***REMOVED******REMOVED***.toolbar {
-***REMOVED******REMOVED******REMOVED***ToolbarItem(placement: .primaryAction) {
-***REMOVED******REMOVED******REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***showingBookmarks.toggle()
-***REMOVED******REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Label(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Show Bookmarks",
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***systemImage: "bookmark"
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED***MapViewReader { mapViewProxy in
+***REMOVED******REMOVED***MapView(map: map, viewpoint: viewpoint)
+***REMOVED******REMOVED******REMOVED***.onViewpointChanged(kind: .centerAndScale) {
+***REMOVED******REMOVED******REMOVED******REMOVED***viewpoint = $0
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.task(id: selectedBookmark) {
+***REMOVED******REMOVED******REMOVED******REMOVED***if let selectedBookmark, let viewpoint = selectedBookmark.viewpoint {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await mapViewProxy.setViewpoint(viewpoint)
 ***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED***.popover(isPresented: $showingBookmarks) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Display the `Bookmarks` components with a pre-defined
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** list of bookmarks. Passing in a `Viewpoint` binding
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** will allow the `Bookmarks` component to handle
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** bookmark selection.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Bookmarks(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented: $showingBookmarks,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***geoModel: map,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint: $viewpoint
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.toolbar {
+***REMOVED******REMOVED******REMOVED******REMOVED***ToolbarItem(placement: .primaryAction) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***showingBookmarks.toggle()
+***REMOVED******REMOVED******REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Label(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Show Bookmarks",
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***systemImage: "bookmark"
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.popover(isPresented: $showingBookmarks) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Display the `Bookmarks` component with the list of bookmarks in a map.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Bookmarks(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented: $showingBookmarks,
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***geoModel: map
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onSelectionChanged { selectedBookmark = $0 ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
