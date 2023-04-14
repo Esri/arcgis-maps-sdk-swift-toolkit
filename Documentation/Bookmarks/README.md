@@ -61,8 +61,11 @@ If a `Viewpoint` binding is provided to the `Bookmarks` view, selecting a bookma
 The view is displayed in a `popover` in response to a toolbar button tap.
 
 ```swift
-/// A web map with predefined bookmarks.
-@StateObject private var map = Map(url: URL(string: "https://www.arcgis.com/home/item.html?id=16f1b8ba37b44dc3884afc8d5f454dd2")!)!
+/// The `Map` with predefined bookmarks.
+@State private var map = Map(url: URL(string: "https://www.arcgis.com/home/item.html?id=16f1b8ba37b44dc3884afc8d5f454dd2")!)!
+
+/// The last selected bookmark.
+@State var selectedBookmark: Bookmark?
 
 /// Indicates if the `Bookmarks` component is shown or not.
 /// - Remark: This allows a developer to control when the `Bookmarks` component is
@@ -71,36 +74,40 @@ The view is displayed in a `popover` in response to a toolbar button tap.
 
 /// Allows for communication between the `Bookmarks` component and a `MapView` or
 /// `SceneView`.
-@State var viewpoint: Viewpoint? = nil
+@State var viewpoint: Viewpoint?
 
 var body: some View {
-    MapView(map: map, viewpoint: viewpoint)
-        .onViewpointChanged(kind: .centerAndScale) {
-            viewpoint = $0
-        }
-        .toolbar {
-            ToolbarItem(placement: .primaryAction) {
-                Button {
-                    showingBookmarks.toggle()
-                } label: {
-                    Label(
-                        "Show Bookmarks",
-                        systemImage: "bookmark"
-                    )
-                }
-                .popover(isPresented: $showingBookmarks) {
-                    // Display the `Bookmarks` components with a pre-defined
-                    // list of bookmarks. Passing in a `Viewpoint` binding
-                    // will allow the `Bookmarks` component to handle
-                    // bookmark selection.
-                    Bookmarks(
-                        isPresented: $showingBookmarks,
-                        geoModel: map,
-                        viewpoint: $viewpoint
-                    )
+    MapViewReader { mapViewProxy in
+        MapView(map: map, viewpoint: viewpoint)
+            .onViewpointChanged(kind: .centerAndScale) {
+                viewpoint = $0
+            }
+            .task(id: selectedBookmark) {
+                if let selectedBookmark, let viewpoint = selectedBookmark.viewpoint {
+                    await mapViewProxy.setViewpoint(viewpoint)
                 }
             }
-        }
+            .toolbar {
+                ToolbarItem(placement: .primaryAction) {
+                    Button {
+                        showingBookmarks.toggle()
+                    } label: {
+                        Label(
+                            "Show Bookmarks",
+                            systemImage: "bookmark"
+                        )
+                    }
+                    .popover(isPresented: $showingBookmarks) {
+                        // Display the `Bookmarks` component with the list of bookmarks in a map.
+                        Bookmarks(
+                            isPresented: $showingBookmarks,
+                            geoModel: map
+                        )
+                        .onSelectionChanged { selectedBookmark = $0 }
+                    }
+                }
+            }
+    }
 }
 ```
 
