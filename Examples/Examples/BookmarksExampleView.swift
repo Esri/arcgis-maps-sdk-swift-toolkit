@@ -19,6 +19,9 @@ struct BookmarksExampleView: View {
     /// The `Map` with predefined bookmarks.
     @State private var map = Map(url: URL(string: "https://www.arcgis.com/home/item.html?id=16f1b8ba37b44dc3884afc8d5f454dd2")!)!
     
+    /// The last selected bookmark.
+    @State var selectedBookmark: Bookmark?
+    
     /// Indicates if the `Bookmarks` component is shown or not.
     /// - Remark: This allows a developer to control when the `Bookmarks` component is
     /// shown/hidden, whether that be in a group of options or a standalone button.
@@ -34,6 +37,11 @@ struct BookmarksExampleView: View {
                 .onViewpointChanged(kind: .centerAndScale) {
                     viewpoint = $0
                 }
+                .task(id: selectedBookmark) {
+                    if let selectedBookmark, let viewpoint = selectedBookmark.viewpoint {
+                        await mapViewProxy.setViewpoint(viewpoint)
+                    }
+                }
                 .toolbar {
                     ToolbarItem(placement: .primaryAction) {
                         Button {
@@ -45,19 +53,12 @@ struct BookmarksExampleView: View {
                             )
                         }
                         .popover(isPresented: $showingBookmarks) {
-                            // Display the `Bookmarks` component with the list of
-                            // bookmarks in a map.
+                            // Display the `Bookmarks` component with the list of bookmarks in a map.
                             Bookmarks(
                                 isPresented: $showingBookmarks,
                                 geoModel: map
                             )
-                            // In order to handle bookmark selection changes
-                            // manually, use `onSelectionChanged(perform:)`.
-                            .onSelectionChanged { bookmark in
-                                if let viewpoint = bookmark.viewpoint {
-                                    Task { await mapViewProxy.setViewpoint(viewpoint, duration: 1) }
-                                }
-                            }
+                            .onSelectionChanged { selectedBookmark = $0 }
                         }
                     }
                 }
