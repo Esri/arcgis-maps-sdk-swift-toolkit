@@ -2,7 +2,7 @@
 
 [![doc](https://img.shields.io/badge/Doc-purple)](Documentation)  [![SPM](https://img.shields.io/badge/SPM-compatible-4BC51D.svg?style=flat)](https://github.com/apple/swift-package-manager/)
 
-The ArcGIS Maps SDK for Swift Toolkit contains components that will simplify your iOS app development. It is built off of the new ArcGIS Maps SDK for Swift.
+The ArcGIS Maps SDK for Swift Toolkit contains components that will simplify your Swift app development. It is built off of the new ArcGIS Maps SDK for Swift.
 
 To use Toolkit in your project:
 
@@ -62,7 +62,7 @@ Find a bug or want to request a new feature?  Please let us know by [submitting 
 Esri welcomes contributions from anyone and everyone. Please see our [guidelines for contributing](https://github.com/esri/contributing).
 
 ## Licensing
-Copyright 2017 - 2022 Esri
+Copyright 2022, 2023 Esri
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
