@@ -21,6 +21,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		21B31E8B29EF53BE00A40B10 /* AuthenticationExample.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = AuthenticationExample.entitlements; sourceTree = "<group>"; ***REMOVED***;
 		88AD13752834355000500B2E /* AuthenticationExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AuthenticationExample.app; sourceTree = BUILT_PRODUCTS_DIR; ***REMOVED***;
 		88AD13782834355000500B2E /* AuthenticationApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationApp.swift; sourceTree = "<group>"; ***REMOVED***;
 		88AD137A2834355000500B2E /* SigninView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SigninView.swift; sourceTree = "<group>"; ***REMOVED***;
@@ -69,6 +70,7 @@
 		88AD13772834355000500B2E /* AuthenticationExample */ = {
 			isa = PBXGroup;
 			children = (
+				21B31E8B29EF53BE00A40B10 /* AuthenticationExample.entitlements */,
 				88AD1387283435EA00500B2E /* Info.plist */,
 				88AD13782834355000500B2E /* AuthenticationApp.swift */,
 				88D24DF1288F2FA1007A539C /* HomeView.swift */,
@@ -307,6 +309,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = AuthenticationExample/AuthenticationExample.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"AuthenticationExample/Preview Content\"";
@@ -325,6 +328,9 @@
 				MARKETING_VERSION = 200.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.esri.Authentication;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = YES;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -336,6 +342,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = AuthenticationExample/AuthenticationExample.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"AuthenticationExample/Preview Content\"";
@@ -354,6 +361,9 @@
 				MARKETING_VERSION = 200.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.esri.Authentication;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = YES;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
