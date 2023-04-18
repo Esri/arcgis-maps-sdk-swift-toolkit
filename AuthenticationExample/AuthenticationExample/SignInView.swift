@@ -71,6 +71,8 @@ struct SignInView: View {
                             return ""
                         case .serverTrust:
                             return nil
+                        @unknown default:
+                            fatalError("Unknown NetworkCredential")
                         }
                     }
                     .first
