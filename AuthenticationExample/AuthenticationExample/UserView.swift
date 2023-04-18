@@ -73,6 +73,8 @@ extension PortalUser.Role: CustomStringConvertible {
 ***REMOVED******REMOVED******REMOVED***return "Admin"
 ***REMOVED******REMOVED***case .publisher:
 ***REMOVED******REMOVED******REMOVED***return "Publisher"
+***REMOVED******REMOVED***@unknown default:
+***REMOVED******REMOVED******REMOVED***fatalError("Unknown PortalUser.Role")
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
