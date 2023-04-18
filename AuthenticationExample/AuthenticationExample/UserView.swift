@@ -73,6 +73,8 @@ extension PortalUser.Role: CustomStringConvertible {
             return "Admin"
         case .publisher:
             return "Publisher"
+        @unknown default:
+            fatalError("Unknown PortalUser.Role")
         }
     }
 }
