@@ -1,6 +1,7 @@
 @Tutorials(name: "Using the ArcGIS Maps SDK for Swift Toolkit") {
 ***REMOVED***@Intro(title: "Toolkit Tutorials") {
-***REMOVED******REMOVED***A quick look at how to use the toolkit's 11 components.
+***REMOVED******REMOVED***The ArcGIS Maps SDK for Swift Toolkit contains components that will simplify your Swift app
+***REMOVED******REMOVED***development. It is built off of the new ArcGIS Maps SDK for Swift.
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***@Chapter(name: "Compass") {
