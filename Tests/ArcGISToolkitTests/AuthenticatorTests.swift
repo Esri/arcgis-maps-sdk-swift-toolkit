@@ -18,51 +18,13 @@ import Combine
 
 @MainActor final class AuthenticatorTests: XCTestCase {
     func testInit() {
-        let config = OAuthConfiguration(
+        let config = OAuthUserConfiguration(
             portalURL: URL(string:"www.arcgis.com")!,
             clientID: "client id",
             redirectURL: URL(string:"myapp://oauth")!
         )
-        let authenticator = Authenticator(promptForUntrustedHosts: true, oAuthConfigurations: [config])
+        let authenticator = Authenticator(promptForUntrustedHosts: true, oAuthUserConfigurations: [config])
         XCTAssertTrue(authenticator.promptForUntrustedHosts)
-        XCTAssertEqual(authenticator.oAuthConfigurations, [config])
-    }
-    
-    func testMakePersistent() async throws {
-        // Make sure credential stores are restored.
-        addTeardownBlock {
-            ArcGISEnvironment.credentialStore = ArcGISCredentialStore()
-            await ArcGISEnvironment.setNetworkCredentialStore(NetworkCredentialStore())
-        }
-        
-        // This tests that calling setupPersistentCredentialStorage tries to sync with the keychain.
-        let authenticator = Authenticator()
-        do {
-            try await authenticator.setupPersistentCredentialStorage(access: .whenUnlocked)
-            XCTFail("Expected an error to be thrown as unit tests should not have access to the keychain")
-        } catch {}
-    }
-    
-    func testClearCredentialStores() async {
-        await ArcGISEnvironment.credentialStore.add(
-            .staticToken(
-                url: URL(string: "www.arcgis.com")!,
-                tokenInfo: .init(
-                    accessToken: "token",
-                    isSSLRequired: false,
-                    expirationDate: .distantFuture
-                )!
-            )
-        )
-        
-        let authenticator = Authenticator()
-        
-        var arcGISCreds = await ArcGISEnvironment.credentialStore.credentials
-        XCTAssertEqual(arcGISCreds.count, 1)
-        
-        await authenticator.clearCredentialStores()
-        
-        arcGISCreds = await ArcGISEnvironment.credentialStore.credentials
-        XCTAssertTrue(arcGISCreds.isEmpty)
+        XCTAssertEqual(authenticator.oAuthUserConfigurations, [config])
     }
 }

@@ -17,9 +17,6 @@ import ArcGISToolkit
 
 /// A view that displays the profile of a user.
 struct ProfileView: View {
-    /// The authenticator that has been passed through the environment down to the app.
-    @EnvironmentObject var authenticator: Authenticator
-    
     /// The portal that the user is signed in to.
     @State var portal: Portal
     
@@ -61,7 +58,8 @@ struct ProfileView: View {
     func signOut() {
         isSigningOut = true
         Task {
-            await authenticator.clearCredentialStores()
+            await ArcGISEnvironment.authenticationManager.revokeOAuthTokens()
+            await ArcGISEnvironment.authenticationManager.clearCredentialStores()
             isSigningOut = false
             signOutAction()
         }

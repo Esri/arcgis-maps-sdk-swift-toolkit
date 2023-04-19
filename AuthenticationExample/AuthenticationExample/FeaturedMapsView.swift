@@ -30,7 +30,7 @@ struct FeaturedMapsView: View {
             if isLoading {
                 ProgressView()
             } else {
-                List(featuredItems) { item in
+                List(featuredItems, id: \.id) { item in
                     NavigationLink {
                         MapItemView(map: Map(item: item))
                     } label: {

@@ -16,8 +16,8 @@ import ArcGIS
 import ArcGISToolkit
 
 struct BasemapGalleryExampleView: View {
-    /// The map displayed in the map view.
-    @StateObject private var map = Map(basemapStyle: .arcGISImagery)
+    /// The `Map` displayed in the `MapView`.
+    @State private var map = Map(basemapStyle: .arcGISImagery)
     
     /// A Boolean value indicating whether to show the basemap gallery.
     @State private var showBasemapGallery = false
@@ -33,17 +33,33 @@ struct BasemapGalleryExampleView: View {
     
     var body: some View {
         MapView(map: map, viewpoint: initialViewpoint)
-            .overlay(alignment: .topTrailing) {
-                if showBasemapGallery {
+            .sheet(isPresented: $showBasemapGallery) {
+                VStack(alignment: .trailing) {
+                    doneButton
+                        .padding()
                     BasemapGallery(items: basemaps, geoModel: map)
                         .style(.automatic())
                         .padding()
                 }
             }
-            .navigationTitle("Basemap Gallery")
-            .navigationBarItems(trailing: Toggle(isOn: $showBasemapGallery) {
-                Image("basemap", label: Text("Show base map"))
-            })
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Toggle(isOn: $showBasemapGallery) {
+                        Image("basemap", label: Text("Show base map"))
+                    }
+                }
+            }
+    }
+    
+    /// A button that allows a user to close a sheet.
+    ///
+    /// This is especially useful for when the sheet is open an iPhone in landscape.
+    private var doneButton: some View {
+        Button {
+            showBasemapGallery.toggle()
+        } label: {
+            Text("Done")
+        }
     }
     
     private static func initialBasemaps() -> [BasemapGalleryItem] {

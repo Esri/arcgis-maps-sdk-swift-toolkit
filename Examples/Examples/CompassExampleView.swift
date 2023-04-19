@@ -15,25 +15,32 @@ import ArcGIS
 import ArcGISToolkit
 import SwiftUI
 
+/// An example demonstrating how to use a compass with a map view.
 struct CompassExampleView: View {
-    /// The map displayed in the map view.
-    @StateObject private var map = Map(basemapStyle: .arcGISImagery)
+    /// The `Map` displayed in the `MapView`.
+    @State private var map = Map(basemapStyle: .arcGISImagery)
     
     /// Allows for communication between the Compass and MapView or SceneView.
-    @State private var viewpoint: Viewpoint? = Viewpoint(
-        center: Point(x: -117.19494, y: 34.05723, spatialReference: .wgs84),
-        scale: 10_000,
-        rotation: -45
-    )
+    @State private var viewpoint: Viewpoint? = .esriRedlands
     
     var body: some View {
-        MapView(map: map, viewpoint: viewpoint)
-            .onViewpointChanged(kind: .centerAndScale) { viewpoint = $0 }
-            .overlay(alignment: .topTrailing) {
-                Compass(viewpoint: $viewpoint)
-                    // Optionally provide a different size for the compass.
-                    // .compassSize(size: <#T##CGFloat#>)
-                    .padding()
-            }
+        MapViewReader { proxy in
+            MapView(map: map, viewpoint: viewpoint)
+                .onViewpointChanged(kind: .centerAndScale) { viewpoint = $0 }
+                .overlay(alignment: .topTrailing) {
+                    Compass(rotation: viewpoint?.rotation, mapViewProxy: proxy)
+                        .padding()
+                }
+        }
+    }
+}
+
+private extension Viewpoint {
+    static var esriRedlands: Viewpoint {
+        .init(
+            center: .init(x: -117.19494, y: 34.05723, spatialReference: .wgs84),
+            scale: 10_000,
+            rotation: -45
+        )
     }
 }

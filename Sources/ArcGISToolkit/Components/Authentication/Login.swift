@@ -123,7 +123,7 @@ extension LoginViewModifier {
                 challengingHost: challenge.host,
                 onSignIn: { loginCredential in
                     challenge.resume(
-                        with: .useCredential(
+                        with: .continueWithCredential(
                             .password(username: loginCredential.username, password: loginCredential.password)
                         )
                     )

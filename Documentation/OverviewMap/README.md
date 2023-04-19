@@ -16,12 +16,12 @@ OverviewMap:
 - Displays a representation of the current `VisibleArea`/`Viewpoint` for a connected `GeoView`.
 - Supports a configurable scaling factor for setting the overview map's zoom level relative to the connected view.
 - Supports a configurable symbol for visualizing the current `VisibleArea`/`Viewpoint` representation (a `FillSymbol` for a connected `MapView`; a `MarkerSymbol` for a connected `SceneView`).
+- Supports using a custom map in the overview map display.
 
 ## Key properties
 
 `OverviewMap` has the following instance methods:
 
-- `map(_ map: Map)` - The `Map` displayed in the `OverviewMap`. For example, you can use `map(_:)` to display a custom base map in the `OverviewMap`.
 - `scaleFactor(_ scaleFactor: Double)` - The scale of the `OverviewMap` relative to the scale of the connected `GeoView`. The `OverviewMap` will display at the a scale equal to: `viewpoint.targetScale` x `scaleFactor`. The default is `25`.
 - `symbol(_ symbol: Symbol)` - The symbol used to visualize the current `VisibleArea`/`Viewpoint`. This is a red rectangle by default for a `MapView`; for a `SceneView`, this is a red cross.
 
@@ -83,5 +83,7 @@ var body: some View {
         )
 }
 ```
+
+To use a custom map in the `OverviewMap`, use the `map` argument in either `OverviewMap.forMapView` or `OverviewMap.forSceneView`.
 
 To see the `OverviewMap` in action, and for examples of `OverviewMap` customization, check out the [Examples](../../Examples) and refer to [OverviewMapExampleView.swift](../../Examples/Examples/OverviewMapExampleView.swift) in the project.
