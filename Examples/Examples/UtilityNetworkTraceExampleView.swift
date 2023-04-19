@@ -15,23 +15,20 @@ import ArcGIS
 import ArcGISToolkit
 import SwiftUI
 
-/// A demonstration of the utility network trace tool which runs traces on a web map published with a utility
-/// network and trace configurations.
+/// A demonstration of the utility network trace tool which runs traces on a web map published with
+/// a utility network and trace configurations.
 struct UtilityNetworkTraceExampleView: View {
-    /// The map containing the utility networks.
-    @StateObject private var map = makeMap()
+    /// The map with the utility networks.
+    @State private var map = makeMap()
     
     /// The current detent of the floating panel presenting the trace tool.
     @State var activeDetent: FloatingPanelDetent = .half
-    
-    /// Provides the ability to inspect map components.
-    @State var mapViewProxy: MapViewProxy?
     
     /// Provides the ability to detect tap locations in the context of the map view.
     @State var mapPoint: Point?
     
     /// Provides the ability to detect tap locations in the context of the screen.
-    @State var viewPoint: CGPoint?
+    @State var screenPoint: CGPoint?
     
     /// A container for graphical trace results.
     @State var resultGraphicsOverlay = GraphicsOverlay()
@@ -46,17 +43,16 @@ struct UtilityNetworkTraceExampleView: View {
                 viewpoint: viewpoint,
                 graphicsOverlays: [resultGraphicsOverlay]
             )
-            .onSingleTapGesture { viewPoint, mapPoint in
-                self.viewPoint = viewPoint
+            .onSingleTapGesture { screenPoint, mapPoint in
+                self.screenPoint = screenPoint
                 self.mapPoint = mapPoint
-                self.mapViewProxy = mapViewProxy
             }
             .onViewpointChanged(kind: .centerAndScale) {
                 viewpoint = $0
             }
             .task {
                 let publicSample = try? await ArcGISCredential.publicSample
-                await ArcGISEnvironment.credentialStore.add(publicSample!)
+                ArcGISEnvironment.authenticationManager.arcGISCredentialStore.add(publicSample!)
             }
             .floatingPanel(
                     backgroundColor: Color(uiColor: .systemGroupedBackground),
@@ -68,8 +64,8 @@ struct UtilityNetworkTraceExampleView: View {
                     graphicsOverlay: $resultGraphicsOverlay,
                     map: map,
                     mapPoint: $mapPoint,
-                    viewPoint: $viewPoint,
-                    mapViewProxy: $mapViewProxy,
+                    screenPoint: $screenPoint,
+                    mapViewProxy: mapViewProxy,
                     viewpoint: $viewpoint
                 )
                 .floatingPanelDetent($activeDetent)
@@ -90,8 +86,8 @@ struct UtilityNetworkTraceExampleView: View {
 private extension ArcGISCredential {
     static var publicSample: ArcGISCredential {
         get async throws {
-            try await .token(
-                url: URL(string: "https://sampleserver7.arcgisonline.com/portal/sharing/rest")!,
+            try await TokenCredential.credential(
+                for: URL(string: "https://sampleserver7.arcgisonline.com/portal/sharing/rest")!,
                 username: "viewer01",
                 password: "I68VGU^nMurF"
             )

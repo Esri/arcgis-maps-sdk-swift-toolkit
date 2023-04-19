@@ -24,10 +24,11 @@ struct AuthenticationApp: App {
         // Create an authenticator.
         authenticator = Authenticator(
             // If you want to use OAuth, uncomment this code:
-            //oAuthConfigurations: [.arcgisDotCom]
+            //oAuthUserConfigurations: [.arcgisDotCom]
         )
-        // Set the challenge handler to be the authenticator we just created.
-        ArcGISEnvironment.authenticationChallengeHandler = authenticator
+        // Sets authenticator as ArcGIS and Network challenge handlers to handle authentication
+        // challenges.
+        ArcGISEnvironment.authenticationManager.handleChallenges(using: authenticator)
     }
     
     var body: some SwiftUI.Scene {
@@ -49,12 +50,12 @@ struct AuthenticationApp: App {
             .environmentObject(authenticator)
             .task {
                 isSettingUp = true
-                // Here we make the authenticator persistent, which means that it will synchronize
-                // with they keychain for storing credentials.
+                // Here we setup credential stores to be persistent, which means that it will
+                // synchronize with the keychain for storing credentials.
                 // It also means that a user can sign in without having to be prompted for
                 // credentials. Once credentials are cleared from the stores ("sign-out"),
                 // then the user will need to be prompted once again.
-                try? await authenticator.setupPersistentCredentialStorage(access: .whenUnlockedThisDeviceOnly)
+                try? await ArcGISEnvironment.authenticationManager.setupPersistentCredentialStorage(access: .whenUnlockedThisDeviceOnly)
                 isSettingUp = false
             }
         }
@@ -62,8 +63,8 @@ struct AuthenticationApp: App {
 }
 
 // If you want to use OAuth, you can uncomment this code:
-//private extension OAuthConfiguration {
-//    static let arcgisDotCom =  OAuthConfiguration(
+//private extension OAuthUserConfiguration {
+//    static let arcgisDotCom = OAuthUserConfiguration(
 //        portalURL: .portal,
 //        clientID: "<#Your client ID goes here#>",
 //        // Note: You must have the same redirect URL used here

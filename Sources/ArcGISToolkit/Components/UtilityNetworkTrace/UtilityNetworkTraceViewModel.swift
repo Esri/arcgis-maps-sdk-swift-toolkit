@@ -115,27 +115,27 @@ import SwiftUI
         }
     }
     
-    /// Adds a new starting point to the pending trace.
+    /// Adds new starting points to the pending trace.
     /// - Parameters:
-    ///   - point: A point on the map in screen coordinates.
+    ///   - screenPoint: A point on the map in screen coordinates.
     ///   - mapPoint: A point on the map in map coordinates.
     ///   - proxy: Provides a method of layer identification.
-    func addStartingPoint(
-        at point: CGPoint,
-        mapPoint: Point,
-        with proxy: MapViewProxy
-    ) async {
-        let identifyLayerResults = try? await proxy.identifyLayers(
-            screenPoint: point,
-            tolerance: 10
-        )
-        for layerResult in identifyLayerResults ?? [] {
-            for geoElement in layerResult.geoElements {
-                let startingPoint = UtilityNetworkTraceStartingPoint(
-                    geoElement: geoElement,
-                    mapPoint: mapPoint
-                )
-                await processAndAdd(startingPoint: startingPoint)
+    ///
+    /// An identify operation will run on each layer in the network. Every element returned from
+    /// each layer will be added as a new starting point.
+    func addStartingPoints(at screenPoint: CGPoint, mapPoint: Point, with proxy: MapViewProxy) async {
+        await withTaskGroup(of: Void.self) { [weak self] taskGroup in
+            guard let self else { return }
+            for layer in network?.layers ?? [] {
+                taskGroup.addTask {
+                    if let result = try? await proxy.identify(on: layer, screenPoint: screenPoint, tolerance: 10) {
+                        for element in result.geoElements {
+                            await self.processAndAdd(
+                                startingPoint: UtilityNetworkTraceStartingPoint(geoElement: element, mapPoint: mapPoint)
+                            )
+                        }
+                    }
+                }
             }
         }
     }
@@ -347,7 +347,7 @@ import SwiftUI
         guard let configuration = pendingTrace.configuration,
               let network = network else { return false }
         
-        let minStartingPoints = configuration.minimumStartingLocations.rawValue
+        let minStartingPoints = configuration.minimumStartingLocations == .one ? 1 : 2
         
         guard pendingTrace.startingPoints.count >= minStartingPoints else {
             userAlert = .init(description: "Please set at least \(minStartingPoints) starting location\(minStartingPoints > 1 ? "s" : "").")
@@ -364,9 +364,7 @@ import SwiftUI
         do {
             traceResults = try await network.trace(using: parameters)
         } catch(let serviceError as ServiceError) {
-            if let reason = serviceError.failureReason {
-                userAlert = .init(description: reason)
-            }
+            userAlert = .init(description: serviceError.details)
             return false
         } catch {
             userAlert = .init(description: error.localizedDescription)
@@ -508,5 +506,12 @@ extension UtilityNetworkTraceViewModel {
             fractionalLengthClosestTo: point,
             tolerance: 10
         )
+    }
+}
+
+extension UtilityNetwork {
+    /// The defined in the network.
+    var layers: [Layer] {
+        definition?.networkSources.compactMap { $0.featureTable.layer } ?? []
     }
 }

@@ -10,52 +10,31 @@ The ArcGIS Maps SDK for Swift currently supports rotating MapViews and SceneView
 
 Compass:
 
-- Can be configured to automatically hide when the rotation is zero.
+- Automatically hides when the rotation is zero.
+- Can be configured to be always visible.
 - Will reset the map/scene rotation to North when tapped on.
 
 ## Key properties
 
-`Compass` has the following initializers:
+`Compass` has the following initializer:
 
 ```swift
-    /// Creates a compass with a binding to a heading based on compass
-    /// directions (0° indicates a direction toward true North, 90° indicates a
-    /// direction toward true East, etc.).
+    /// Creates a compass with a rotation (0° indicates a direction toward true North, 90° indicates
+    /// a direction toward true West, etc.).
     /// - Parameters:
-    ///   - heading: The heading of the compass.
-    ///   - autoHide: A Boolean value that determines whether the compass
-    ///   automatically hides itself when the heading is `0`.
-    public init(heading: Binding<Double>, autoHide: Bool = true)
+    ///   - rotation: The rotation whose value determines the heading of the compass.
+    ///   - mapViewProxy: The proxy to provide access to map view operations.
+    public init(rotation: Double?, mapViewProxy: MapViewProxy)
 ```
 
-```swift
-    /// Creates a compass with a binding to a viewpoint rotation (0° indicates
-    /// a direction toward true North, 90° indicates a direction toward true
-    /// West, etc.).
-    /// - Parameters:
-    ///   - viewpointRotation: The viewpoint rotation whose value determines the
-    ///   heading of the compass.
-    ///   - autoHide: A Boolean value that determines whether the compass
-    ///   automatically hides itself when the viewpoint rotation is 0 degrees.
-    public init(viewpointRotation: Binding<Double>, autoHide: Bool = true)
-```
-
-```swift
-    /// Creates a compass with a binding to an optional viewpoint.
-    /// - Parameters:
-    ///   - viewpoint: The viewpoint whose rotation determines the heading of the compass.
-    ///   - autoHide: A Boolean value that determines whether the compass automatically hides itself
-    ///   when the viewpoint's rotation is 0 degrees.
-    public init(viewpoint: Binding<Viewpoint?>, autoHide: Bool = true)
-```
-
-`Compass` has the following modifier:
+`Compass` has the following modifiers:
 
 - `func compassSize(size: CGFloat)` - The size of the `Compass`, specifying both the width and height of the compass.
+- `func autoHideDisabled(_:)` - Specifies whether the ``Compass`` should automatically hide when the heading is 0.
 
 ## Behavior:
 
-Whenever the map is not orientated North (non-zero bearing) the compass appears. When reset to north, it disappears. An initializer argument allows you to disable the auto-hide feature so that it always appears.
+Whenever the map is not orientated North (non-zero bearing) the compass appears. When reset to north, it disappears. The `automaticallyHides` view modifier allows you to disable the auto-hide feature so that it is always displayed.
 
 When the compass is tapped, the map orients back to north (zero bearing).
 
@@ -64,22 +43,19 @@ When the compass is tapped, the map orients back to north (zero bearing).
 ### Basic usage for displaying a `Compass`.
 
 ```swift
-@StateObject var map = Map(basemapStyle: .arcGISImagery)
+@State private var map = Map(basemapStyle: .arcGISImagery)
 
-/// Allows for communication between the Compass and MapView or SceneView.
-@State private var viewpoint: Viewpoint? = Viewpoint(
-    center: Point(x: -117.19494, y: 34.05723, spatialReference: .wgs84),
-    scale: 10_000,
-    rotation: -45
-)
+@State private var viewpoint: Viewpoint?
 
 var body: some View {
-    MapView(map: map, viewpoint: viewpoint)
-        .onViewpointChanged(kind: .centerAndScale) { viewpoint = $0 }
-        .overlay(alignment: .topTrailing) {
-            Compass(viewpoint: $viewpoint)
-                .padding()
-        }
+    MapViewReader { proxy in
+        MapView(map: map, viewpoint: viewpoint)
+            .onViewpointChanged(kind: .centerAndScale) { viewpoint = $0 }
+            .overlay(alignment: .topTrailing) {
+                Compass(rotation: viewpoint?.rotation, mapViewProxy: proxy)
+                    .padding()
+            }
+    }
 }
 ```
 

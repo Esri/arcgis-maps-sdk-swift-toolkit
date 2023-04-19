@@ -24,9 +24,11 @@
     ///   - sources: A collection of search sources to be used.
     ///   - viewpoint: The `Viewpoint` used to pan/zoom to results. If `nil`, there will be
     ///   no zooming to results.
+    ///   - geoViewProxy: The proxy to provide access to geo view operations.
     public init(
         sources: [SearchSource] = [],
-        viewpoint: Binding<Viewpoint?>? = nil
+        viewpoint: Binding<Viewpoint?>? = nil,
+        geoViewProxy: GeoViewProxy? = nil
     )
 ```
 
@@ -40,10 +42,10 @@ public protocol SearchSource {
     var name: String { get set }
 
     /// The maximum results to return when performing a search. Most sources default to `6`.
-    var maximumResults: Int32 { get set }
+    var maximumResults: Int { get set }
 
     /// The maximum suggestions to return. Most sources default to `6`.
-    var maximumSuggestions: Int32 { get set }
+    var maximumSuggestions: Int { get set }
 
     /// Returns the search suggestions for the specified query.
     /// - Parameters:
@@ -170,7 +172,8 @@ The `SearchView` will display the results list view at half height, exposing a p
 ```swift
 SearchView(
     sources: [locatorDataSource],
-    viewpoint: $searchResultViewpoint
+    viewpoint: $searchResultViewpoint,
+    geoViewProxy: mapViewProxy
 )
 .resultsOverlay(searchResultsOverlay)
 .queryCenter($queryCenter)

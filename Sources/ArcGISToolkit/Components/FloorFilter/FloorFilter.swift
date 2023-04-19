@@ -14,9 +14,9 @@
 import SwiftUI
 import ArcGIS
 
-/// The `FloorFilter` component simplifies visualization of GIS data for a specific floor of a building
-/// in your application. It allows you to filter the floor plan data displayed in your map or scene view
-/// to a site, a facility (building) in the site, or a floor in the facility.
+/// The `FloorFilter` component simplifies visualization of GIS data for a specific floor of a
+/// building in your application. It allows you to filter the floor plan data displayed in your map
+/// or scene view to a site, a facility (building) in the site, or a floor in the facility.
 public struct FloorFilter: View {
     @Environment(\.horizontalSizeClass)
     private var horizontalSizeClass: UserInterfaceSizeClass?
@@ -28,37 +28,42 @@ public struct FloorFilter: View {
     ///   - automaticSelectionMode: The selection behavior of the floor filter.
     ///   - viewpoint: Viewpoint updated when the selected site or facility changes.
     ///   - isNavigating: A Boolean value indicating whether the map is currently being navigated.
+    ///   - selection: The selected site, facility, or level.
     public init(
         floorManager: FloorManager,
         alignment: Alignment,
         automaticSelectionMode: FloorFilterAutomaticSelectionMode = .always,
         viewpoint: Binding<Viewpoint?> = .constant(nil),
-        isNavigating: Binding<Bool>
+        isNavigating: Binding<Bool>,
+        selection: Binding<FloorFilterSelection?>? = nil
     ) {
-        _viewModel = StateObject(wrappedValue: FloorFilterViewModel(
-            automaticSelectionMode: automaticSelectionMode,
-            floorManager: floorManager,
-            viewpoint: viewpoint
-        ))
+        _viewModel = StateObject(
+            wrappedValue: FloorFilterViewModel(
+                automaticSelectionMode: automaticSelectionMode,
+                floorManager: floorManager,
+                viewpoint: viewpoint
+            )
+        )
         self.alignment = alignment
         self.isNavigating = isNavigating
         self.viewpoint = viewpoint
+        self.selection = selection
     }
     
     /// The view model used by the `FloorFilter`.
     @StateObject private var viewModel: FloorFilterViewModel
     
-    /// A Boolean value that indicates whether the levels view is currently collapsed.
-    @State private var isLevelsViewCollapsed = false
-    
     /// A Boolean value that indicates whether the site and facility selector is presented.
     @State private var isSitesAndFacilitiesHidden = true
+    
+    /// The selected site, floor, or level.
+    private var selection: Binding<FloorFilterSelection?>?
     
     /// The alignment configuration.
     private let alignment: Alignment
     
     /// The width of the level selector.
-    private let filterWidth: CGFloat = 60
+    private var levelSelectorWidth: CGFloat = 60
     
     /// The `Viewpoint` used to pan/zoom to the selected site/facility.
     /// If `nil`, there will be no automatic pan/zoom operations or automatic selection support.
@@ -98,7 +103,7 @@ public struct FloorFilter: View {
                 sitesAndFacilitiesButton
             }
         }
-        .frame(width: filterWidth)
+        .frame(width: levelSelectorWidth)
         .esriBorder()
         .frame(
             maxWidth: horizontalSizeClass == .compact ? .infinity : nil,
@@ -113,12 +118,6 @@ public struct FloorFilter: View {
     /// Indicates that the selector should be presented with a top oriented alignment configuration.
     private var isTopAligned: Bool {
         alignment.vertical == .top
-    }
-    
-    /// Reports a viewpoint change to the view model if the map is not navigating.
-    private func reportChange(of viewpoint: Viewpoint?) {
-        guard isNavigating.wrappedValue else { return }
-        viewModel.onViewpointChanged(viewpoint)
     }
     
     /// A view that allows selecting between levels.
@@ -141,18 +140,12 @@ public struct FloorFilter: View {
             Color.clear
                 .sheet(isPresented: .constant(!$isSitesAndFacilitiesHidden.wrappedValue)) {
                     SiteAndFacilitySelector(isHidden: $isSitesAndFacilitiesHidden)
-                        .onChange(of: viewpoint.wrappedValue) { viewpoint in
-                            reportChange(of: viewpoint)
-                        }
                 }
         } else {
             ZStack {
                 Color.clear
                     .esriBorder()
                 SiteAndFacilitySelector(isHidden: $isSitesAndFacilitiesHidden)
-                    .onChange(of: viewpoint.wrappedValue) { viewpoint in
-                        reportChange(of: viewpoint)
-                    }
                     .padding([.top, .leading, .trailing], 2.5)
                     .padding(.bottom)
             }
@@ -174,5 +167,35 @@ public struct FloorFilter: View {
         .frame(minHeight: 100)
         .environmentObject(viewModel)
         .disabled(viewModel.isLoading)
+        .onChange(of: selection?.wrappedValue) { newValue in
+            // Prevent a double-set if the view model triggered the original change.
+            guard newValue != viewModel.selection else { return }
+            switch newValue {
+            case .site(let site): viewModel.setSite(site)
+            case .facility(let facility): viewModel.setFacility(facility)
+            case .level(let level): viewModel.setLevel(level)
+            case .none: viewModel.clearSelection()
+            }
+        }
+        .onChange(of: viewModel.selection) { newValue in
+            // Prevent a double-set if the user triggered the original change.
+            guard selection?.wrappedValue != newValue else { return }
+            selection?.wrappedValue = newValue
+        }
+        .onChange(of: viewpoint.wrappedValue) { newViewpoint in
+            guard isNavigating.wrappedValue else { return }
+            if let newViewpoint {
+                viewModel.onViewpointChanged(newViewpoint)
+            }
+        }
+    }
+    
+    /// The width of the level selector.
+    /// - Parameter width: The new width for the level selector.
+    /// - Returns: The `FloorFilter`.
+    public func levelSelectorWidth(_ width: CGFloat) -> Self {
+        var copy = self
+        copy.levelSelectorWidth = width
+        return copy
     }
 }
