@@ -17,9 +17,6 @@
 
 ***REMOVED***/ A view that displays the profile of a user.
 struct ProfileView: View {
-***REMOVED******REMOVED***/ The authenticator that has been passed through the environment down to the app.
-***REMOVED***@EnvironmentObject var authenticator: Authenticator
-***REMOVED***
 ***REMOVED******REMOVED***/ The portal that the user is signed in to.
 ***REMOVED***@State var portal: Portal
 ***REMOVED***
@@ -61,7 +58,8 @@ struct ProfileView: View {
 ***REMOVED***func signOut() {
 ***REMOVED******REMOVED***isSigningOut = true
 ***REMOVED******REMOVED***Task {
-***REMOVED******REMOVED******REMOVED***await authenticator.clearCredentialStores()
+***REMOVED******REMOVED******REMOVED***await ArcGISEnvironment.authenticationManager.revokeOAuthTokens()
+***REMOVED******REMOVED******REMOVED***await ArcGISEnvironment.authenticationManager.clearCredentialStores()
 ***REMOVED******REMOVED******REMOVED***isSigningOut = false
 ***REMOVED******REMOVED******REMOVED***signOutAction()
 ***REMOVED***

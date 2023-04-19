@@ -15,6 +15,9 @@
 ***REMOVED***
 
 public struct UtilityNetworkTrace: View {
+***REMOVED******REMOVED***/ The proxy to provide access to map view operations.
+***REMOVED***private var mapViewProxy: MapViewProxy?
+***REMOVED***
 ***REMOVED******REMOVED*** MARK: Enums
 ***REMOVED***
 ***REMOVED******REMOVED***/ Activities users will perform while creating a new trace.
@@ -80,11 +83,8 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED***/ The graphics overlay to hold generated starting point and trace graphics.
 ***REMOVED***@Binding private var graphicsOverlay: GraphicsOverlay
 ***REMOVED***
-***REMOVED******REMOVED***/ Provides a method of layer identification when starting points are being chosen.
-***REMOVED***@Binding private var mapViewProxy: MapViewProxy?
-***REMOVED***
 ***REMOVED******REMOVED***/ Acts as the point of identification for items tapped in the utility network.
-***REMOVED***@Binding private var viewPoint: CGPoint?
+***REMOVED***@Binding private var screenPoint: CGPoint?
 ***REMOVED***
 ***REMOVED******REMOVED***/ Acts as the point at which newly selected starting point graphics will be created.
 ***REMOVED***@Binding private var mapPoint: Point?
@@ -132,33 +132,41 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED***/ Displays information about a chosen asset group.
 ***REMOVED***@ViewBuilder private var assetGroupDetail: some View {
 ***REMOVED******REMOVED***if let assetGroupName = selectedAssetGroupName,
-***REMOVED******REMOVED***   let assetTypeGroups = viewModel.selectedTrace?.elementsByTypeInGroup(named: assetGroupName) {
+***REMOVED******REMOVED***   let assetTypeGroups = viewModel.selectedTrace?.elementsByType(inGroupNamed: assetGroupName) {
 ***REMOVED******REMOVED******REMOVED***makeBackButton(title: featureResultsTitle) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***currentActivity = .viewingTraces(.viewingFeatureResults)
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***makeDetailSectionHeader(title: assetGroupName)
 ***REMOVED******REMOVED******REMOVED***List {
-***REMOVED******REMOVED******REMOVED******REMOVED***ForEach(assetTypeGroups.keys.compactMap({$0***REMOVED***).sorted(), id: \.self) { assetTypeGroupName in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Section(assetTypeGroupName) {
+***REMOVED******REMOVED******REMOVED******REMOVED***ForEach(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***assetTypeGroups.sorted(using: KeyPathComparator(\.key)),
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***id: \.key
+***REMOVED******REMOVED******REMOVED******REMOVED***) { (name, elements) in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Section(name) {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***DisclosureGroup {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(assetTypeGroups[assetTypeGroupName] ?? [], id: \.globalID) { element in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(elements, id: \.globalID) { element in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let feature = await viewModel.feature(for: element),
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***   let geometry = feature.geometry {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint = Viewpoint(targetExtent: geometry.extent)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let newViewpoint = Viewpoint(boundingGeometry: geometry.extent)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let mapViewProxy {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task { await mapViewProxy.setViewpoint(newViewpoint, duration: nil) ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint = newViewpoint
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** label: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Label {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Object ID \(element.objectID.description)")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Object ID \(element.objectID, format: .number.grouping(.never))")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** icon: {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Image(systemName: "scope")
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(assetTypeGroups[assetTypeGroupName]?.count.description ?? "N/A")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(elements.count, format: .number)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
@@ -278,7 +286,7 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentActivity = .viewingTraces(nil)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if shouldZoomOnTraceCompletion,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***   let extent = viewModel.selectedTrace?.resultExtent {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint = Viewpoint(targetExtent: extent)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint = Viewpoint(boundingGeometry: extent)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
@@ -321,7 +329,12 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED***Menu(selectedTrace.name) {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if let resultExtent = selectedTrace.resultExtent {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Zoom To") {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint = Viewpoint(targetExtent: resultExtent)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let newViewpoint = Viewpoint(boundingGeometry: resultExtent)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let mapViewProxy {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task { await mapViewProxy.setViewpoint(newViewpoint, duration: nil) ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint = newViewpoint
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***Button("Delete", role: .destructive) {
@@ -343,16 +356,18 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***set: { currentActivity = .viewingTraces($0 ? .viewingFeatureResults : nil) ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(viewModel.selectedTrace?.assetGroupNames.sorted() ?? [], id: \.self) { assetGroupName in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(assetGroupName)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(viewModel.selectedTrace?.elementsInAssetGroup(named: assetGroupName).count.description ?? "N/A")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.blue)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.contentShape(Rectangle())
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onTapGesture {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentActivity = .viewingTraces(.viewingElementGroup(named: assetGroupName))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let selectedTrace = viewModel.selectedTrace {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(selectedTrace.assetGroupNames.sorted(), id: \.self) { assetGroupName in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***HStack {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(assetGroupName)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(selectedTrace.elements(inAssetGroupNamed: assetGroupName).count, format: .number)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.blue)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.contentShape(Rectangle())
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.onTapGesture {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***currentActivity = .viewingTraces(.viewingElementGroup(named: assetGroupName))
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
@@ -365,15 +380,17 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***set: { currentActivity = .viewingTraces($0 ? .viewingFunctionResults : nil) ***REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(viewModel.selectedTrace?.functionOutputs ?? [], id: \.objectID) { item in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(item.function.networkAttribute.name)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***VStack(alignment: .trailing) {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(item.function.functionType.title)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.caption)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text((item.result as? Double)?.description ?? "N/A")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let selectedTrace = viewModel.selectedTrace {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ForEach(selectedTrace.functionOutputs, id: \.objectID) { item in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***HStack {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(item.function.networkAttribute.name)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***VStack(alignment: .trailing) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text(item.function.functionType.title)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.font(.caption)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text((item.result as? Double).map { "\($0)" ***REMOVED*** ?? "N/A")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
@@ -432,7 +449,12 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED******REMOVED***Button("Zoom To") {
 ***REMOVED******REMOVED******REMOVED******REMOVED***if let selectedStartingPoint = selectedStartingPoint,
 ***REMOVED******REMOVED******REMOVED******REMOVED***   let extent = selectedStartingPoint.geoElement.geometry?.extent {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint = Viewpoint(targetExtent: extent)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***let newViewpoint = Viewpoint(boundingGeometry: extent)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let mapViewProxy {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task { await mapViewProxy.setViewpoint(newViewpoint, duration: nil) ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED*** else {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint = newViewpoint
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***Button("Delete", role: .destructive) {
@@ -524,28 +546,26 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED***
 ***REMOVED******REMOVED***/ A graphical interface to run pre-configured traces on a map's utility networks.
 ***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - activeDetent: The current detent of the floating panel.
 ***REMOVED******REMOVED***/   - graphicsOverlay: The graphics overlay to hold generated starting point and trace graphics.
 ***REMOVED******REMOVED***/   - map: The map containing the utility network(s).
 ***REMOVED******REMOVED***/   - mapPoint: Acts as the point at which newly selected starting point graphics will be created.
-***REMOVED******REMOVED***/   - viewPoint: Acts as the point of identification for items tapped in the utility network.
-***REMOVED******REMOVED***/   - mapViewProxy: Provides a method of layer identification when starting points are being
-***REMOVED******REMOVED***/   chosen.
+***REMOVED******REMOVED***/   - screenPoint: Acts as the point of identification for items tapped in the utility network.
+***REMOVED******REMOVED***/   - mapViewProxy: The proxy to provide access to map view operations.
 ***REMOVED******REMOVED***/   - viewpoint: Allows the utility network trace tool to update the parent map view's viewpoint.
 ***REMOVED******REMOVED***/   - startingPoints: An optional list of programmatically provided starting points.
 ***REMOVED***public init(
 ***REMOVED******REMOVED***graphicsOverlay: Binding<GraphicsOverlay>,
 ***REMOVED******REMOVED***map: Map,
 ***REMOVED******REMOVED***mapPoint: Binding<Point?>,
-***REMOVED******REMOVED***viewPoint: Binding<CGPoint?>,
-***REMOVED******REMOVED***mapViewProxy: Binding<MapViewProxy?>,
+***REMOVED******REMOVED***screenPoint: Binding<CGPoint?>,
+***REMOVED******REMOVED***mapViewProxy: MapViewProxy?,
 ***REMOVED******REMOVED***viewpoint: Binding<Viewpoint?>,
 ***REMOVED******REMOVED***startingPoints: Binding<[UtilityNetworkTraceStartingPoint]> = .constant([])
 ***REMOVED***) {
+***REMOVED******REMOVED***self.mapViewProxy = mapViewProxy
 ***REMOVED******REMOVED***_activeDetent = .constant(nil)
-***REMOVED******REMOVED***_viewPoint = viewPoint
+***REMOVED******REMOVED***_screenPoint = screenPoint
 ***REMOVED******REMOVED***_mapPoint = mapPoint
-***REMOVED******REMOVED***_mapViewProxy = mapViewProxy
 ***REMOVED******REMOVED***_graphicsOverlay = graphicsOverlay
 ***REMOVED******REMOVED***_viewpoint = viewpoint
 ***REMOVED******REMOVED***_externalStartingPoints = startingPoints
@@ -599,18 +619,18 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED***
 ***REMOVED******REMOVED***.background(Color(uiColor: .systemGroupedBackground))
 ***REMOVED******REMOVED***.animation(.default, value: currentActivity)
-***REMOVED******REMOVED***.onChange(of: viewPoint) { newValue in
+***REMOVED******REMOVED***.onChange(of: screenPoint) { newScreenPoint in
 ***REMOVED******REMOVED******REMOVED***guard isFocused(traceCreationActivity: .addingStartingPoints),
 ***REMOVED******REMOVED******REMOVED******REMOVED***  let mapViewProxy = mapViewProxy,
 ***REMOVED******REMOVED******REMOVED******REMOVED***  let mapPoint = mapPoint,
-***REMOVED******REMOVED******REMOVED******REMOVED***  let viewPoint = viewPoint else {
+***REMOVED******REMOVED******REMOVED******REMOVED***  let screenPoint = newScreenPoint else {
 ***REMOVED******REMOVED******REMOVED******REMOVED***return
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***currentActivity = .creatingTrace(.viewingStartingPoints)
 ***REMOVED******REMOVED******REMOVED***activeDetent = .half
 ***REMOVED******REMOVED******REMOVED***Task {
-***REMOVED******REMOVED******REMOVED******REMOVED***await viewModel.addStartingPoint(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***at: viewPoint,
+***REMOVED******REMOVED******REMOVED******REMOVED***await viewModel.addStartingPoints(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***at: screenPoint,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mapPoint: mapPoint,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***with: mapViewProxy
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
@@ -635,9 +655,9 @@ public struct UtilityNetworkTrace: View {
 ***REMOVED******REMOVED*** MARK: Computed Properties
 ***REMOVED***
 ***REMOVED******REMOVED***/ Indicates the number of the trace currently being viewed out the total number of traces.
-***REMOVED***private var currentTraceLabel: String {
+***REMOVED***private var currentTraceLabel: LocalizedStringKey {
 ***REMOVED******REMOVED***guard let index = viewModel.selectedTraceIndex else { return "Error" ***REMOVED***
-***REMOVED******REMOVED***return "Trace \(index+1) of \(viewModel.completedTraces.count.description)"
+***REMOVED******REMOVED***return "Trace \(index+1) of \(viewModel.completedTraces.count)"
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The name of the selected utility element asset group.

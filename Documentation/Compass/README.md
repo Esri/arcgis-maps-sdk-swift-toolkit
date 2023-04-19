@@ -10,52 +10,31 @@ The ArcGIS Maps SDK for Swift currently supports rotating MapViews and SceneView
 
 Compass:
 
-- Can be configured to automatically hide when the rotation is zero.
+- Automatically hides when the rotation is zero.
+- Can be configured to be always visible.
 - Will reset the map/scene rotation to North when tapped on.
 
 ## Key properties
 
-`Compass` has the following initializers:
+`Compass` has the following initializer:
 
 ```swift
-***REMOVED******REMOVED***/ Creates a compass with a binding to a heading based on compass
-***REMOVED******REMOVED***/ directions (0° indicates a direction toward true North, 90° indicates a
-***REMOVED******REMOVED***/ direction toward true East, etc.).
+***REMOVED******REMOVED***/ Creates a compass with a rotation (0° indicates a direction toward true North, 90° indicates
+***REMOVED******REMOVED***/ a direction toward true West, etc.).
 ***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - heading: The heading of the compass.
-***REMOVED******REMOVED***/   - autoHide: A Boolean value that determines whether the compass
-***REMOVED******REMOVED***/   automatically hides itself when the heading is `0`.
-***REMOVED***public init(heading: Binding<Double>, autoHide: Bool = true)
+***REMOVED******REMOVED***/   - rotation: The rotation whose value determines the heading of the compass.
+***REMOVED******REMOVED***/   - mapViewProxy: The proxy to provide access to map view operations.
+***REMOVED***public init(rotation: Double?, mapViewProxy: MapViewProxy)
 ```
 
-```swift
-***REMOVED******REMOVED***/ Creates a compass with a binding to a viewpoint rotation (0° indicates
-***REMOVED******REMOVED***/ a direction toward true North, 90° indicates a direction toward true
-***REMOVED******REMOVED***/ West, etc.).
-***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - viewpointRotation: The viewpoint rotation whose value determines the
-***REMOVED******REMOVED***/   heading of the compass.
-***REMOVED******REMOVED***/   - autoHide: A Boolean value that determines whether the compass
-***REMOVED******REMOVED***/   automatically hides itself when the viewpoint rotation is 0 degrees.
-***REMOVED***public init(viewpointRotation: Binding<Double>, autoHide: Bool = true)
-```
-
-```swift
-***REMOVED******REMOVED***/ Creates a compass with a binding to an optional viewpoint.
-***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - viewpoint: The viewpoint whose rotation determines the heading of the compass.
-***REMOVED******REMOVED***/   - autoHide: A Boolean value that determines whether the compass automatically hides itself
-***REMOVED******REMOVED***/   when the viewpoint's rotation is 0 degrees.
-***REMOVED***public init(viewpoint: Binding<Viewpoint?>, autoHide: Bool = true)
-```
-
-`Compass` has the following modifier:
+`Compass` has the following modifiers:
 
 - `func compassSize(size: CGFloat)` - The size of the `Compass`, specifying both the width and height of the compass.
+- `func autoHideDisabled(_:)` - Specifies whether the ``Compass`` should automatically hide when the heading is 0.
 
 ## Behavior:
 
-Whenever the map is not orientated North (non-zero bearing) the compass appears. When reset to north, it disappears. An initializer argument allows you to disable the auto-hide feature so that it always appears.
+Whenever the map is not orientated North (non-zero bearing) the compass appears. When reset to north, it disappears. The `automaticallyHides` view modifier allows you to disable the auto-hide feature so that it is always displayed.
 
 When the compass is tapped, the map orients back to north (zero bearing).
 
@@ -64,21 +43,18 @@ When the compass is tapped, the map orients back to north (zero bearing).
 ### Basic usage for displaying a `Compass`.
 
 ```swift
-@StateObject var map = Map(basemapStyle: .arcGISImagery)
+@State private var map = Map(basemapStyle: .arcGISImagery)
 
-***REMOVED***/ Allows for communication between the Compass and MapView or SceneView.
-@State private var viewpoint: Viewpoint? = Viewpoint(
-***REMOVED***center: Point(x: -117.19494, y: 34.05723, spatialReference: .wgs84),
-***REMOVED***scale: 10_000,
-***REMOVED***rotation: -45
-)
+@State private var viewpoint: Viewpoint?
 
 var body: some View {
-***REMOVED***MapView(map: map, viewpoint: viewpoint)
-***REMOVED******REMOVED***.onViewpointChanged(kind: .centerAndScale) { viewpoint = $0 ***REMOVED***
-***REMOVED******REMOVED***.overlay(alignment: .topTrailing) {
-***REMOVED******REMOVED******REMOVED***Compass(viewpoint: $viewpoint)
-***REMOVED******REMOVED******REMOVED******REMOVED***.padding()
+***REMOVED***MapViewReader { proxy in
+***REMOVED******REMOVED***MapView(map: map, viewpoint: viewpoint)
+***REMOVED******REMOVED******REMOVED***.onViewpointChanged(kind: .centerAndScale) { viewpoint = $0 ***REMOVED***
+***REMOVED******REMOVED******REMOVED***.overlay(alignment: .topTrailing) {
+***REMOVED******REMOVED******REMOVED******REMOVED***Compass(rotation: viewpoint?.rotation, mapViewProxy: proxy)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 ```

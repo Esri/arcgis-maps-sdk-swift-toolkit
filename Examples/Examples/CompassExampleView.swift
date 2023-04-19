@@ -15,25 +15,32 @@
 ***REMOVED***Toolkit
 ***REMOVED***
 
+***REMOVED***/ An example demonstrating how to use a compass with a map view.
 struct CompassExampleView: View {
-***REMOVED******REMOVED***/ The map displayed in the map view.
-***REMOVED***@StateObject private var map = Map(basemapStyle: .arcGISImagery)
+***REMOVED******REMOVED***/ The `Map` displayed in the `MapView`.
+***REMOVED***@State private var map = Map(basemapStyle: .arcGISImagery)
 ***REMOVED***
 ***REMOVED******REMOVED***/ Allows for communication between the Compass and MapView or SceneView.
-***REMOVED***@State private var viewpoint: Viewpoint? = Viewpoint(
-***REMOVED******REMOVED***center: Point(x: -117.19494, y: 34.05723, spatialReference: .wgs84),
-***REMOVED******REMOVED***scale: 10_000,
-***REMOVED******REMOVED***rotation: -45
-***REMOVED***)
+***REMOVED***@State private var viewpoint: Viewpoint? = .esriRedlands
 ***REMOVED***
 ***REMOVED***var body: some View {
-***REMOVED******REMOVED***MapView(map: map, viewpoint: viewpoint)
-***REMOVED******REMOVED******REMOVED***.onViewpointChanged(kind: .centerAndScale) { viewpoint = $0 ***REMOVED***
-***REMOVED******REMOVED******REMOVED***.overlay(alignment: .topTrailing) {
-***REMOVED******REMOVED******REMOVED******REMOVED***Compass(viewpoint: $viewpoint)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Optionally provide a different size for the compass.
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** .compassSize(size: <#T##CGFloat#>)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
-***REMOVED******REMOVED***
+***REMOVED******REMOVED***MapViewReader { proxy in
+***REMOVED******REMOVED******REMOVED***MapView(map: map, viewpoint: viewpoint)
+***REMOVED******REMOVED******REMOVED******REMOVED***.onViewpointChanged(kind: .centerAndScale) { viewpoint = $0 ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.overlay(alignment: .topTrailing) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Compass(rotation: viewpoint?.rotation, mapViewProxy: proxy)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
+***REMOVED******REMOVED******REMOVED***
+***REMOVED***
+***REMOVED***
+***REMOVED***
+
+private extension Viewpoint {
+***REMOVED***static var esriRedlands: Viewpoint {
+***REMOVED******REMOVED***.init(
+***REMOVED******REMOVED******REMOVED***center: .init(x: -117.19494, y: 34.05723, spatialReference: .wgs84),
+***REMOVED******REMOVED******REMOVED***scale: 10_000,
+***REMOVED******REMOVED******REMOVED***rotation: -45
+***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***

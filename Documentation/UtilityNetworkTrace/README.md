@@ -23,17 +23,16 @@ A named trace configuration defined for a utility network in a webmap comprises 
 ***REMOVED******REMOVED***/   - graphicsOverlay: The graphics overlay to hold generated starting point and trace graphics.
 ***REMOVED******REMOVED***/   - map: The map containing the utility network(s).
 ***REMOVED******REMOVED***/   - mapPoint: Acts as the point at which newly selected starting point graphics will be created.
-***REMOVED******REMOVED***/   - viewPoint: Acts as the point of identification for items tapped in the utility network.
-***REMOVED******REMOVED***/   - mapViewProxy: Provides a method of layer identification when starting points are being
-***REMOVED******REMOVED***/   chosen.
+***REMOVED******REMOVED***/   - screenPoint: Acts as the point of identification for items tapped in the utility network.
+***REMOVED******REMOVED***/   - mapViewProxy: The proxy to provide access to map view operations.
 ***REMOVED******REMOVED***/   - viewpoint: Allows the utility network trace tool to update the parent map view's viewpoint.
 ***REMOVED******REMOVED***/   - startingPoints: An optional list of programmatically provided starting points.
 ***REMOVED***public init(
 ***REMOVED******REMOVED***graphicsOverlay: Binding<GraphicsOverlay>,
 ***REMOVED******REMOVED***map: Map,
 ***REMOVED******REMOVED***mapPoint: Binding<Point?>,
-***REMOVED******REMOVED***viewPoint: Binding<CGPoint?>,
-***REMOVED******REMOVED***mapViewProxy: Binding<MapViewProxy?>,
+***REMOVED******REMOVED***screenPoint: Binding<CGPoint?>,
+***REMOVED******REMOVED***mapViewProxy: MapViewProxy?,
 ***REMOVED******REMOVED***viewpoint: Binding<Viewpoint?>,
 ***REMOVED******REMOVED***startingPoints: Binding<[UtilityNetworkTraceStartingPoint]> = .constant([])
 ***REMOVED***)

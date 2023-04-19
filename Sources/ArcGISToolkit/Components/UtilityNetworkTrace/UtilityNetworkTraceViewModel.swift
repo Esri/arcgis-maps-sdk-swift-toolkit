@@ -115,27 +115,27 @@ import Foundation
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***/ Adds a new starting point to the pending trace.
+***REMOVED******REMOVED***/ Adds new starting points to the pending trace.
 ***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - point: A point on the map in screen coordinates.
+***REMOVED******REMOVED***/   - screenPoint: A point on the map in screen coordinates.
 ***REMOVED******REMOVED***/   - mapPoint: A point on the map in map coordinates.
 ***REMOVED******REMOVED***/   - proxy: Provides a method of layer identification.
-***REMOVED***func addStartingPoint(
-***REMOVED******REMOVED***at point: CGPoint,
-***REMOVED******REMOVED***mapPoint: Point,
-***REMOVED******REMOVED***with proxy: MapViewProxy
-***REMOVED***) async {
-***REMOVED******REMOVED***let identifyLayerResults = try? await proxy.identifyLayers(
-***REMOVED******REMOVED******REMOVED***screenPoint: point,
-***REMOVED******REMOVED******REMOVED***tolerance: 10
-***REMOVED******REMOVED***)
-***REMOVED******REMOVED***for layerResult in identifyLayerResults ?? [] {
-***REMOVED******REMOVED******REMOVED***for geoElement in layerResult.geoElements {
-***REMOVED******REMOVED******REMOVED******REMOVED***let startingPoint = UtilityNetworkTraceStartingPoint(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***geoElement: geoElement,
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***mapPoint: mapPoint
-***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED***await processAndAdd(startingPoint: startingPoint)
+***REMOVED******REMOVED***/
+***REMOVED******REMOVED***/ An identify operation will run on each layer in the network. Every element returned from
+***REMOVED******REMOVED***/ each layer will be added as a new starting point.
+***REMOVED***func addStartingPoints(at screenPoint: CGPoint, mapPoint: Point, with proxy: MapViewProxy) async {
+***REMOVED******REMOVED***await withTaskGroup(of: Void.self) { [weak self] taskGroup in
+***REMOVED******REMOVED******REMOVED***guard let self else { return ***REMOVED***
+***REMOVED******REMOVED******REMOVED***for layer in network?.layers ?? [] {
+***REMOVED******REMOVED******REMOVED******REMOVED***taskGroup.addTask {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let result = try? await proxy.identify(on: layer, screenPoint: screenPoint, tolerance: 10) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for element in result.geoElements {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await self.processAndAdd(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***startingPoint: UtilityNetworkTraceStartingPoint(geoElement: element, mapPoint: mapPoint)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -347,7 +347,7 @@ import Foundation
 ***REMOVED******REMOVED***guard let configuration = pendingTrace.configuration,
 ***REMOVED******REMOVED******REMOVED***  let network = network else { return false ***REMOVED***
 ***REMOVED******REMOVED***
-***REMOVED******REMOVED***let minStartingPoints = configuration.minimumStartingLocations.rawValue
+***REMOVED******REMOVED***let minStartingPoints = configuration.minimumStartingLocations == .one ? 1 : 2
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED***guard pendingTrace.startingPoints.count >= minStartingPoints else {
 ***REMOVED******REMOVED******REMOVED***userAlert = .init(description: "Please set at least \(minStartingPoints) starting location\(minStartingPoints > 1 ? "s" : "").")
@@ -364,9 +364,7 @@ import Foundation
 ***REMOVED******REMOVED***do {
 ***REMOVED******REMOVED******REMOVED***traceResults = try await network.trace(using: parameters)
 ***REMOVED*** catch(let serviceError as ServiceError) {
-***REMOVED******REMOVED******REMOVED***if let reason = serviceError.failureReason {
-***REMOVED******REMOVED******REMOVED******REMOVED***userAlert = .init(description: reason)
-***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***userAlert = .init(description: serviceError.details)
 ***REMOVED******REMOVED******REMOVED***return false
 ***REMOVED*** catch {
 ***REMOVED******REMOVED******REMOVED***userAlert = .init(description: error.localizedDescription)
@@ -508,5 +506,12 @@ extension UtilityNetworkTraceViewModel {
 ***REMOVED******REMOVED******REMOVED***fractionalLengthClosestTo: point,
 ***REMOVED******REMOVED******REMOVED***tolerance: 10
 ***REMOVED******REMOVED***)
+***REMOVED***
+***REMOVED***
+
+extension UtilityNetwork {
+***REMOVED******REMOVED***/ The defined in the network.
+***REMOVED***var layers: [Layer] {
+***REMOVED******REMOVED***definition?.networkSources.compactMap { $0.featureTable.layer ***REMOVED*** ?? []
 ***REMOVED***
 ***REMOVED***

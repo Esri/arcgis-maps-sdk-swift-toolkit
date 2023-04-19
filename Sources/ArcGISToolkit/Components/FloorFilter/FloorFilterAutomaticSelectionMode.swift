@@ -16,8 +16,8 @@ public enum FloorFilterAutomaticSelectionMode {
 ***REMOVED******REMOVED***/ Always update selection based on the current viewpoint; clear the selection when the user
 ***REMOVED******REMOVED***/ navigates away.
 ***REMOVED***case always
-***REMOVED******REMOVED***/ Only update the selection when there is a new site or facility in the current viewpoint; don't clear
-***REMOVED******REMOVED***/ selection when the user navigates away.
+***REMOVED******REMOVED***/ Only update the selection when there is a new site or facility in the current viewpoint;
+***REMOVED******REMOVED***/ don't clear selection when the user navigates away.
 ***REMOVED***case alwaysNotClearing
 ***REMOVED******REMOVED***/ Never update selection based on the map or scene view's current viewpoint.
 ***REMOVED***case never

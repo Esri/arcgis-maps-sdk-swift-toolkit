@@ -1,12 +1,12 @@
 # Authenticator
 
-The `Authenticator` is a configurable object that handles authentication challenges.  It will display a user interface when network and ArcGIS authentication challenges occur.
+The `Authenticator` is a configurable object that handles authentication challenges. It will display a user interface when network and ArcGIS authentication challenges occur.
 
 ![image](https:***REMOVED***user-images.githubusercontent.com/3998072/203615041-c887d5e3-bb64-469a-a76b-126059329e92.png)
 
 ## Features
 
-The `Authenticator` has a view modifier that will display a prompt when the `Authenticator` is asked to handle an authentication challenge.  This will handle many different types of authentication, for example:
+The `Authenticator` has a view modifier that will display a prompt when the `Authenticator` is asked to handle an authentication challenge. This will handle many different types of authentication, for example:
   - ArcGIS authentication (token and OAuth)
   - Integrated Windows Authentication (IWA)
   - Client Certificate (PKI)
@@ -23,7 +23,7 @@ The `Authenticator` can be configured to support securely persisting credentials
 ***REMOVED***@ViewBuilder func authenticator(_ authenticator: Authenticator) -> some View
 ```
 
-To securely store credentials in the keychain, use the following instance method on `Authenticator`:
+To securely store credentials in the keychain, use the following extension method of `AuthenticationManager`:
 
 ```swift
 ***REMOVED******REMOVED***/ Sets up new credential stores that will be persisted to the keychain.
@@ -37,6 +37,18 @@ To securely store credentials in the keychain, use the following instance method
 ***REMOVED******REMOVED***access: ArcGIS.KeychainAccess,
 ***REMOVED******REMOVED***synchronizesWithiCloud: Bool = false
 ***REMOVED***) async throws
+```
+
+During sign-out, use the following extension methods of `AuthenticationManager`:
+
+```swift
+***REMOVED******REMOVED***/ Revokes tokens of OAuth user credentials.
+***REMOVED***func revokeOAuthTokens() async
+
+***REMOVED******REMOVED***/ Clears all ArcGIS and network credentials from the respective stores.
+***REMOVED******REMOVED***/ Note: This sets up new `URLSessions` so that removed network credentials are respected
+***REMOVED******REMOVED***/ right away.
+***REMOVED***func clearCredentialStores() async
 ```
 
 ## Behavior:
@@ -56,8 +68,9 @@ init() {
 ***REMOVED******REMOVED******REMOVED*** If you want to use OAuth, uncomment this code:
 ***REMOVED******REMOVED******REMOVED***oAuthConfigurations: [.arcgisDotCom]
 ***REMOVED***)
-***REMOVED******REMOVED*** Set the challenge handler to be the authenticator we just created.
-***REMOVED***ArcGISEnvironment.authenticationChallengeHandler = authenticator
+***REMOVED******REMOVED*** Sets authenticator as ArcGIS and Network challenge handlers to handle authentication
+***REMOVED******REMOVED*** challenges.
+***REMOVED***ArcGISEnvironment.authenticationManager.handleChallenges(using: authenticator)
 ***REMOVED***
 
 var body: some SwiftUI.Scene {
@@ -65,12 +78,12 @@ var body: some SwiftUI.Scene {
 ***REMOVED******REMOVED***HomeView()
 ***REMOVED******REMOVED******REMOVED***.authenticator(authenticator)
 ***REMOVED******REMOVED******REMOVED***.task {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Here we make the authenticator persistent, which means that it will synchronize
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** with the keychain for storing credentials.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Here we setup credential stores to be persistent, which means that it will
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** synchronize with the keychain for storing credentials.
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** It also means that a user can sign in without having to be prompted for
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** credentials. Once credentials are cleared from the stores ("sign-out"),
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** then the user will need to be prompted once again.
-***REMOVED******REMOVED******REMOVED******REMOVED***try? await authenticator.setupPersistentCredentialStorage(access: .whenUnlockedThisDeviceOnly)
+***REMOVED******REMOVED******REMOVED******REMOVED***try? await ArcGISEnvironment.authenticationManager.setupPersistentCredentialStorage(access: .whenUnlockedThisDeviceOnly)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***

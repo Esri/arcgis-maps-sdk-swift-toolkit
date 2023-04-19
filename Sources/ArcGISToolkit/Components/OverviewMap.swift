@@ -28,7 +28,8 @@ public struct OverviewMap: View {
 ***REMOVED***
 ***REMOVED***private var scaleFactor = 25.0
 ***REMOVED***
-***REMOVED***@StateObject private var map = Map(basemapStyle: .arcGISTopographic)
+***REMOVED******REMOVED***/ The data model containing the `Map` displayed in the overview map.
+***REMOVED***@StateObject private var dataModel = MapDataModel()
 ***REMOVED***
 ***REMOVED******REMOVED***/ The `Graphic` displaying the visible area of the main `GeoView`.
 ***REMOVED***@StateObject private var graphic: Graphic
@@ -36,36 +37,58 @@ public struct OverviewMap: View {
 ***REMOVED******REMOVED***/ The `GraphicsOverlay` used to display the visible area graphic.
 ***REMOVED***@StateObject private var graphicsOverlay: GraphicsOverlay
 ***REMOVED***
+***REMOVED******REMOVED***/ The user-defined map used in the overview map. Defaults to `nil`.
+***REMOVED***private let userProvidedMap: Map?
+***REMOVED***
+***REMOVED******REMOVED***/ The actual map used in the overaview map.
+***REMOVED***private var effectiveMap: Map {
+***REMOVED******REMOVED***userProvidedMap ?? dataModel.defaultMap
+***REMOVED***
+***REMOVED***
 ***REMOVED******REMOVED***/ Creates an `OverviewMap` for use on a `MapView`.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - viewpoint: Viewpoint of the main `MapView` used to update the `OverviewMap` view.
 ***REMOVED******REMOVED***/   - visibleArea: Visible area of the main `MapView ` used to display the extent graphic.
+***REMOVED******REMOVED***/   - map: The `Map` displayed in the `OverviewMap`. Defaults to `nil`, in which case
+***REMOVED******REMOVED***/   a map with the `arcGISTopographic` basemap style is used.
 ***REMOVED******REMOVED***/ - Returns: A new `OverviewMap`.
 ***REMOVED***public static func forMapView(
 ***REMOVED******REMOVED***with viewpoint: Viewpoint?,
-***REMOVED******REMOVED***visibleArea: ArcGIS.Polygon?
+***REMOVED******REMOVED***visibleArea: ArcGIS.Polygon?,
+***REMOVED******REMOVED***map: Map? = nil
 ***REMOVED***) -> OverviewMap {
-***REMOVED******REMOVED***OverviewMap(viewpoint: viewpoint, visibleArea: visibleArea, symbol: .defaultFill)
+***REMOVED******REMOVED***OverviewMap(
+***REMOVED******REMOVED******REMOVED***viewpoint: viewpoint,
+***REMOVED******REMOVED******REMOVED***visibleArea: visibleArea,
+***REMOVED******REMOVED******REMOVED***symbol: .defaultFill,
+***REMOVED******REMOVED******REMOVED***map: map
+***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates an `OverviewMap` for use on a `SceneView`.
-***REMOVED******REMOVED***/ - Parameter viewpoint: Viewpoint of the main `SceneView` used to update the
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - viewpoint: Viewpoint of the main `SceneView` used to update the
 ***REMOVED******REMOVED***/ `OverviewMap` view.
+***REMOVED******REMOVED***/   - map: The `Map` displayed in the `OverviewMap`. Defaults to `nil`, in which case
+***REMOVED******REMOVED***/   a map with the `arcGISTopographic` basemap style is used.
 ***REMOVED******REMOVED***/ - Returns: A new `OverviewMap`.
 ***REMOVED***public static func forSceneView(
-***REMOVED******REMOVED***with viewpoint: Viewpoint?
+***REMOVED******REMOVED***with viewpoint: Viewpoint?,
+***REMOVED******REMOVED***map: Map? = nil
 ***REMOVED***) -> OverviewMap {
-***REMOVED******REMOVED***OverviewMap(viewpoint: viewpoint, symbol: .defaultMarker)
+***REMOVED******REMOVED***OverviewMap(viewpoint: viewpoint, symbol: .defaultMarker, map: map)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates an `OverviewMap`. Used for creating an `OverviewMap` for use on a `MapView`.
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - viewpoint: Viewpoint of the main `GeoView` used to update the `OverviewMap` view.
 ***REMOVED******REMOVED***/   - visibleArea: Visible area of the main `GeoView` used to display the extent graphic.
+***REMOVED******REMOVED***/   - map: The `Map` displayed in the `OverviewMap`.
 ***REMOVED***init(
 ***REMOVED******REMOVED***viewpoint: Viewpoint?,
 ***REMOVED******REMOVED***visibleArea: ArcGIS.Polygon? = nil,
-***REMOVED******REMOVED***symbol: Symbol
+***REMOVED******REMOVED***symbol: Symbol,
+***REMOVED******REMOVED***map: Map?
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.visibleArea = visibleArea
 ***REMOVED******REMOVED***self.viewpoint = viewpoint
@@ -79,15 +102,17 @@ public struct OverviewMap: View {
 ***REMOVED******REMOVED******REMOVED*** with the graphic during panning/zooming/rotating.
 ***REMOVED******REMOVED***_graphic = StateObject(wrappedValue: graphic)
 ***REMOVED******REMOVED***_graphicsOverlay = StateObject(wrappedValue: GraphicsOverlay(graphics: [graphic]))
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***userProvidedMap = map
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***public var body: some View {
 ***REMOVED******REMOVED***MapView(
-***REMOVED******REMOVED******REMOVED***map: map,
+***REMOVED******REMOVED******REMOVED***map: effectiveMap,
 ***REMOVED******REMOVED******REMOVED***viewpoint: makeOverviewViewpoint(),
 ***REMOVED******REMOVED******REMOVED***graphicsOverlays: [graphicsOverlay]
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED***.attributionText(hidden: true)
+***REMOVED******REMOVED***.attributionBarHidden(true)
 ***REMOVED******REMOVED***.interactionModes([])
 ***REMOVED******REMOVED***.border(
 ***REMOVED******REMOVED******REMOVED***.black,
@@ -126,15 +151,6 @@ public struct OverviewMap: View {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED*** MARK: Modifiers
-***REMOVED***
-***REMOVED******REMOVED***/ The `Map` displayed in the `OverviewMap`.
-***REMOVED******REMOVED***/ - Parameter map: The new map.
-***REMOVED******REMOVED***/ - Returns: The `OverviewMap`.
-***REMOVED***public func map(_ map: Map) -> OverviewMap {
-***REMOVED******REMOVED***var copy = self
-***REMOVED******REMOVED***copy._map = StateObject(wrappedValue: map)
-***REMOVED******REMOVED***return copy
-***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The factor to multiply the main `GeoView`'s scale by.  The `OverviewMap` will display
 ***REMOVED******REMOVED***/ at the a scale equal to: `viewpoint.targetScale` x `scaleFactor`.
@@ -182,4 +198,10 @@ private extension Symbol {
 ***REMOVED******REMOVED******REMOVED***width: 1.0
 ***REMOVED******REMOVED***)
 ***REMOVED***)
+***REMOVED***
+
+***REMOVED***/ A very basic data model class containing a Map.
+class MapDataModel: ObservableObject {
+***REMOVED******REMOVED***/ The default `Map` used for display in a `MapView`.
+***REMOVED***let defaultMap = Map(basemapStyle: .arcGISTopographic)
 ***REMOVED***

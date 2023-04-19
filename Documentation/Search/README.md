@@ -24,9 +24,11 @@
 ***REMOVED******REMOVED***/   - sources: A collection of search sources to be used.
 ***REMOVED******REMOVED***/   - viewpoint: The `Viewpoint` used to pan/zoom to results. If `nil`, there will be
 ***REMOVED******REMOVED***/   no zooming to results.
+***REMOVED******REMOVED***/   - geoViewProxy: The proxy to provide access to geo view operations.
 ***REMOVED***public init(
 ***REMOVED******REMOVED***sources: [SearchSource] = [],
-***REMOVED******REMOVED***viewpoint: Binding<Viewpoint?>? = nil
+***REMOVED******REMOVED***viewpoint: Binding<Viewpoint?>? = nil,
+***REMOVED******REMOVED***geoViewProxy: GeoViewProxy? = nil
 ***REMOVED***)
 ```
 
@@ -40,10 +42,10 @@ public protocol SearchSource {
 ***REMOVED***var name: String { get set ***REMOVED***
 
 ***REMOVED******REMOVED***/ The maximum results to return when performing a search. Most sources default to `6`.
-***REMOVED***var maximumResults: Int32 { get set ***REMOVED***
+***REMOVED***var maximumResults: Int { get set ***REMOVED***
 
 ***REMOVED******REMOVED***/ The maximum suggestions to return. Most sources default to `6`.
-***REMOVED***var maximumSuggestions: Int32 { get set ***REMOVED***
+***REMOVED***var maximumSuggestions: Int { get set ***REMOVED***
 
 ***REMOVED******REMOVED***/ Returns the search suggestions for the specified query.
 ***REMOVED******REMOVED***/ - Parameters:
@@ -170,7 +172,8 @@ The `SearchView` will display the results list view at half height, exposing a p
 ```swift
 SearchView(
 ***REMOVED***sources: [locatorDataSource],
-***REMOVED***viewpoint: $searchResultViewpoint
+***REMOVED***viewpoint: $searchResultViewpoint,
+***REMOVED***geoViewProxy: mapViewProxy
 )
 .resultsOverlay(searchResultsOverlay)
 .queryCenter($queryCenter)

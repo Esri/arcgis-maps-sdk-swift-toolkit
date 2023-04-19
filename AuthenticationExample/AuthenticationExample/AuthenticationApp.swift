@@ -24,10 +24,11 @@ struct AuthenticationApp: App {
 ***REMOVED******REMOVED******REMOVED*** Create an authenticator.
 ***REMOVED******REMOVED***authenticator = Authenticator(
 ***REMOVED******REMOVED******REMOVED******REMOVED*** If you want to use OAuth, uncomment this code:
-***REMOVED******REMOVED******REMOVED******REMOVED***oAuthConfigurations: [.arcgisDotCom]
+***REMOVED******REMOVED******REMOVED******REMOVED***oAuthUserConfigurations: [.arcgisDotCom]
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED*** Set the challenge handler to be the authenticator we just created.
-***REMOVED******REMOVED***ArcGISEnvironment.authenticationChallengeHandler = authenticator
+***REMOVED******REMOVED******REMOVED*** Sets authenticator as ArcGIS and Network challenge handlers to handle authentication
+***REMOVED******REMOVED******REMOVED*** challenges.
+***REMOVED******REMOVED***ArcGISEnvironment.authenticationManager.handleChallenges(using: authenticator)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -49,12 +50,12 @@ struct AuthenticationApp: App {
 ***REMOVED******REMOVED******REMOVED***.environmentObject(authenticator)
 ***REMOVED******REMOVED******REMOVED***.task {
 ***REMOVED******REMOVED******REMOVED******REMOVED***isSettingUp = true
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Here we make the authenticator persistent, which means that it will synchronize
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** with they keychain for storing credentials.
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Here we setup credential stores to be persistent, which means that it will
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** synchronize with the keychain for storing credentials.
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** It also means that a user can sign in without having to be prompted for
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** credentials. Once credentials are cleared from the stores ("sign-out"),
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** then the user will need to be prompted once again.
-***REMOVED******REMOVED******REMOVED******REMOVED***try? await authenticator.setupPersistentCredentialStorage(access: .whenUnlockedThisDeviceOnly)
+***REMOVED******REMOVED******REMOVED******REMOVED***try? await ArcGISEnvironment.authenticationManager.setupPersistentCredentialStorage(access: .whenUnlockedThisDeviceOnly)
 ***REMOVED******REMOVED******REMOVED******REMOVED***isSettingUp = false
 ***REMOVED******REMOVED***
 ***REMOVED***
@@ -62,8 +63,8 @@ struct AuthenticationApp: App {
 ***REMOVED***
 
 ***REMOVED*** If you want to use OAuth, you can uncomment this code:
-***REMOVED***private extension OAuthConfiguration {
-***REMOVED******REMOVED***static let arcgisDotCom =  OAuthConfiguration(
+***REMOVED***private extension OAuthUserConfiguration {
+***REMOVED******REMOVED***static let arcgisDotCom = OAuthUserConfiguration(
 ***REMOVED******REMOVED******REMOVED***portalURL: .portal,
 ***REMOVED******REMOVED******REMOVED***clientID: "<#Your client ID goes here#>",
 ***REMOVED******REMOVED******REMOVED******REMOVED*** Note: You must have the same redirect URL used here

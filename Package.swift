@@ -17,6 +17,7 @@ import PackageDescription
 
 let package = Package(
 ***REMOVED***name: "arcgis-maps-sdk-swift-toolkit",
+***REMOVED***defaultLocalization: "en",
 ***REMOVED***platforms: [
 ***REMOVED******REMOVED***.iOS(.v15),
 ***REMOVED******REMOVED***.macCatalyst(.v15)
@@ -28,7 +29,7 @@ let package = Package(
 ***REMOVED******REMOVED***),
 ***REMOVED***],
 ***REMOVED***dependencies: [
-***REMOVED******REMOVED***.package(url: "https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift", .upToNextMinor(from: "200.0.0-beta"))
+***REMOVED******REMOVED***.package(url: "https:***REMOVED***github.com/Esri/arcgis-maps-sdk-swift", .upToNextMinor(from: "200.1.0"))
 ***REMOVED***],
 ***REMOVED***targets: [
 ***REMOVED******REMOVED***.target(

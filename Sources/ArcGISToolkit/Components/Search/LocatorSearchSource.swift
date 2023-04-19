@@ -30,8 +30,8 @@ public class LocatorSearchSource: ObservableObject, SearchSource {
 ***REMOVED******REMOVED******REMOVED******REMOVED***string: "https:***REMOVED***geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer"
 ***REMOVED******REMOVED******REMOVED***)!
 ***REMOVED******REMOVED***),
-***REMOVED******REMOVED***maximumResults: Int32 = 6,
-***REMOVED******REMOVED***maximumSuggestions: Int32 = 6
+***REMOVED******REMOVED***maximumResults: Int = 6,
+***REMOVED******REMOVED***maximumSuggestions: Int = 6
 ***REMOVED***) {
 ***REMOVED******REMOVED***self.name = name
 ***REMOVED******REMOVED***self.locatorTask = locatorTask
@@ -45,13 +45,13 @@ public class LocatorSearchSource: ObservableObject, SearchSource {
 ***REMOVED***public var name: String
 ***REMOVED***
 ***REMOVED******REMOVED***/ The maximum results to return when performing a search. Most sources default to `6`.
-***REMOVED***public var maximumResults: Int32 {
+***REMOVED***public var maximumResults: Int {
 ***REMOVED******REMOVED***get { geocodeParameters.maxResults ***REMOVED***
 ***REMOVED******REMOVED***set { geocodeParameters.maxResults = newValue ***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The maximum suggestions to return. Most sources default to `6`.
-***REMOVED***public var maximumSuggestions: Int32 {
+***REMOVED***public var maximumSuggestions: Int {
 ***REMOVED******REMOVED***get { suggestParameters.maxResults ***REMOVED***
 ***REMOVED******REMOVED***set { suggestParameters.maxResults = newValue ***REMOVED***
 ***REMOVED***

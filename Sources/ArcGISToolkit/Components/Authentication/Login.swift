@@ -123,7 +123,7 @@ extension LoginViewModifier {
 ***REMOVED******REMOVED******REMOVED******REMOVED***challengingHost: challenge.host,
 ***REMOVED******REMOVED******REMOVED******REMOVED***onSignIn: { loginCredential in
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***challenge.resume(
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***with: .useCredential(
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***with: .continueWithCredential(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.password(username: loginCredential.username, password: loginCredential.password)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***)

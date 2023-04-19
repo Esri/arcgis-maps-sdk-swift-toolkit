@@ -16,7 +16,12 @@
 ***REMOVED***
 
 struct FloatingPanelExampleView: View {
-***REMOVED***@StateObject private var map = Map(basemapStyle: .arcGISImagery)
+***REMOVED******REMOVED***/ The data model containing the `Map` displayed in the `MapView`.
+***REMOVED***@StateObject private var dataModel = MapDataModel(
+***REMOVED******REMOVED***map: Map(basemapStyle: .arcGISImagery)
+***REMOVED***)
+***REMOVED***
+***REMOVED***@State var isPresented = true
 ***REMOVED***
 ***REMOVED***@State var selectedDetent: FloatingPanelDetent = .half
 ***REMOVED***
@@ -27,10 +32,10 @@ struct FloatingPanelExampleView: View {
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***MapView(
-***REMOVED******REMOVED******REMOVED***map: map,
+***REMOVED******REMOVED******REMOVED***map: dataModel.map,
 ***REMOVED******REMOVED******REMOVED***viewpoint: initialViewpoint
 ***REMOVED******REMOVED***)
-***REMOVED******REMOVED***.floatingPanel(selectedDetent: $selectedDetent, isPresented: .constant(true)) {
+***REMOVED******REMOVED***.floatingPanel(selectedDetent: $selectedDetent, isPresented: $isPresented) {
 ***REMOVED******REMOVED******REMOVED***List {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Section("Preset Heights") {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("Summary") {
@@ -61,6 +66,13 @@ struct FloatingPanelExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Button("600") {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***selectedDetent = .height(600)
 ***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***.toolbar {
+***REMOVED******REMOVED******REMOVED***ToolbarItem(placement: .navigationBarTrailing) {
+***REMOVED******REMOVED******REMOVED******REMOVED***Button(isPresented ? "Close" : "Open") {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***isPresented.toggle()
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***

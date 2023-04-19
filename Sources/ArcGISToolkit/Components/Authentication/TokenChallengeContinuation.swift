@@ -38,9 +38,9 @@ final class TokenChallengeContinuation: ValueContinuation<Result<ArcGISAuthentic
 ***REMOVED******REMOVED***/ Creates a `ArcGISChallengeContinuation`.
 ***REMOVED******REMOVED***/ - Parameter arcGISChallenge: The associated ArcGIS authentication challenge.
 ***REMOVED***convenience init(arcGISChallenge: ArcGISAuthenticationChallenge) {
-***REMOVED******REMOVED***self.init(host: arcGISChallenge.request.url?.host ?? "") { loginCredential in
-***REMOVED******REMOVED******REMOVED***try await .token(
-***REMOVED******REMOVED******REMOVED******REMOVED***challenge: arcGISChallenge,
+***REMOVED******REMOVED***self.init(host: arcGISChallenge.requestURL.host ?? "") { loginCredential in
+***REMOVED******REMOVED******REMOVED***try await TokenCredential.credential(
+***REMOVED******REMOVED******REMOVED******REMOVED***for: arcGISChallenge,
 ***REMOVED******REMOVED******REMOVED******REMOVED***username: loginCredential.username,
 ***REMOVED******REMOVED******REMOVED******REMOVED***password: loginCredential.password
 ***REMOVED******REMOVED******REMOVED***)
@@ -53,7 +53,7 @@ final class TokenChallengeContinuation: ValueContinuation<Result<ArcGISAuthentic
 ***REMOVED***func resume(with loginCredential: LoginCredential) {
 ***REMOVED******REMOVED***Task {
 ***REMOVED******REMOVED******REMOVED***setValue(await Result {
-***REMOVED******REMOVED******REMOVED******REMOVED***.useCredential(try await tokenCredentialProvider(loginCredential))
+***REMOVED******REMOVED******REMOVED******REMOVED***.continueWithCredential(try await tokenCredentialProvider(loginCredential))
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
