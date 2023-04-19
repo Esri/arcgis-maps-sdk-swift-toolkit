@@ -26,6 +26,8 @@ struct ProfileView: View {
     /// The closure to call once the user has signed out.
     var signOutAction: () -> Void
     
+    @EnvironmentObject var authenticator: Authenticator
+    
     var body: some View {
         VStack {
             if let user = portal.user {
@@ -33,7 +35,9 @@ struct ProfileView: View {
             }
             Spacer()
             signOutButton
+            testButton
         }
+        .authenticator(authenticator)
         .padding()
     }
     
@@ -48,6 +52,21 @@ struct ProfileView: View {
                 Text("Sign Out")
                     .frame(maxWidth: .infinity)
             }
+        }
+        .buttonStyle(.bordered)
+        .controlSize(.large)
+        .disabled(isSigningOut)
+    }
+    
+    var testButton: some View {
+        Button {
+            Task {
+                let portal = Portal(url: URL(string: "https://dev0004327.esri.com/portal")!, connection: .authenticated)
+                try await portal.load()
+                print("-- loaded dev portal")
+            }
+        } label: {
+            Text("Test")
         }
         .buttonStyle(.bordered)
         .controlSize(.large)
