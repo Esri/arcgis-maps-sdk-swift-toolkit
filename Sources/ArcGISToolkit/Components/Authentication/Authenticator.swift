@@ -18,11 +18,10 @@ import Combine
 ***REMOVED***/ A configurable object that handles authentication challenges.
 @MainActor
 public final class Authenticator: ObservableObject {
+***REMOVED******REMOVED***/ A value indicating whether we should prompt the user when encountering an untrusted host.
+***REMOVED***let promptForUntrustedHosts: Bool
 ***REMOVED******REMOVED***/ The OAuth configurations that this authenticator can work with.
 ***REMOVED***let oAuthUserConfigurations: [OAuthUserConfiguration]
-***REMOVED***
-***REMOVED******REMOVED***/ A value indicating whether we should prompt the user when encountering an untrusted host.
-***REMOVED***var promptForUntrustedHosts: Bool
 ***REMOVED***
 ***REMOVED******REMOVED***/ Creates an authenticator.
 ***REMOVED******REMOVED***/ - Parameters:
