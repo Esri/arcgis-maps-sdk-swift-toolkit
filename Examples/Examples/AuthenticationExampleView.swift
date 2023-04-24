@@ -16,9 +16,7 @@ import ArcGIS
 import ArcGISToolkit
 
 struct AuthenticationExampleView: View {
-    @StateObject var authenticator = Authenticator(
-        promptForUntrustedHosts: true
-    )
+    @EnvironmentObject var authenticator: Authenticator
     @State var previousApiKey: APIKey?
     @State private var items = AuthenticationItem.makeAll()
     
@@ -37,33 +35,33 @@ struct AuthenticationExampleView: View {
                 }
             }
         }
-        .authenticator(authenticator)
+//        .authenticator(authenticator)
         .task {
-            try? await ArcGISEnvironment.authenticationManager.setupPersistentCredentialStorage(access: .whenUnlockedThisDeviceOnly)
+//            try? await ArcGISEnvironment.authenticationManager.setupPersistentCredentialStorage(access: .whenUnlockedThisDeviceOnly)
         }
         .navigationBarTitle(Text("Authentication"), displayMode: .inline)
-        .onAppear {
-            ArcGISEnvironment.authenticationManager.handleChallenges(using: authenticator)
-        }
-        .onDisappear {
-            ArcGISEnvironment.authenticationManager.handleChallenges(using: nil)
-        }
-        // Save and restore the API Key.
-        // Note: This is only necessary in this example. Other examples make use of the global
-        // api key that is set when the app starts up. Using an api key will prevent an
-        // authentication challenge prompt for certain services. Since this example highlights
-        // the usage of authentication challenge prompts, we want to set the api key to `nil`
-        // when this example appears and restore it when this example disappears.
-        .onAppear {
-            // Save off the api key
-            previousApiKey = ArcGISEnvironment.apiKey
-            // Set the api key to nil so that the authenticated services will prompt.
-            ArcGISEnvironment.apiKey = nil
-        }
-        .onDisappear {
-            // Restore api key when exiting this example.
-            ArcGISEnvironment.apiKey = previousApiKey
-        }
+//        .onAppear {
+//            ArcGISEnvironment.authenticationManager.handleChallenges(using: authenticator)
+//        }
+//        .onDisappear {
+//            ArcGISEnvironment.authenticationManager.handleChallenges(using: nil)
+//        }
+//        // Save and restore the API Key.
+//        // Note: This is only necessary in this example. Other examples make use of the global
+//        // api key that is set when the app starts up. Using an api key will prevent an
+//        // authentication challenge prompt for certain services. Since this example highlights
+//        // the usage of authentication challenge prompts, we want to set the api key to `nil`
+//        // when this example appears and restore it when this example disappears.
+//        .onAppear {
+//            // Save off the api key
+//            previousApiKey = ArcGISEnvironment.apiKey
+//            // Set the api key to nil so that the authenticated services will prompt.
+//            ArcGISEnvironment.apiKey = nil
+//        }
+//        .onDisappear {
+//            // Restore api key when exiting this example.
+//            ArcGISEnvironment.apiKey = previousApiKey
+//        }
     }
 }
 
@@ -162,7 +160,6 @@ private extension URL {
     static let hostedPointsLayer = URL(string: "https://rt-server107a.esri.com/server/rest/services/Hosted/PointsLayer/FeatureServer/0")!
 }
 
-@MainActor
 private class AuthenticationItem: ObservableObject {
     let title: String
     let loadables: [Loadable]
@@ -174,6 +171,7 @@ private class AuthenticationItem: ObservableObject {
         self.loadables = loadables
     }
     
+    @MainActor
     func load() async {
         status = .loading
         do {
@@ -253,8 +251,7 @@ extension AuthenticationItem {
     }
     
     static func makeAll() -> [AuthenticationItem]  {
-        print("-- make all")
-        return [
+        [
             makeToken(),
             makeMultipleToken(),
             makeMultipleTokenSame(),
