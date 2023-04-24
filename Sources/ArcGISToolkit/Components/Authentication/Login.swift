@@ -28,17 +28,10 @@ struct LoginCredential: Hashable {
 @MainActor
 final class LoginViewModel: ObservableObject {
 ***REMOVED******REMOVED***/ The username.
-***REMOVED***@Published var username = "" {
-***REMOVED******REMOVED***didSet { updateSignInButtonEnabled() ***REMOVED***
-***REMOVED***
+***REMOVED***@Published var username = ""
 ***REMOVED***
 ***REMOVED******REMOVED***/ The password.
-***REMOVED***@Published var password = "" {
-***REMOVED******REMOVED***didSet { updateSignInButtonEnabled() ***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ A Boolean value indicating if the sign-in button is enabled.
-***REMOVED***@Published var signInButtonEnabled = false
+***REMOVED***@Published var password = ""
 ***REMOVED***
 ***REMOVED******REMOVED***/ The action to perform when the user signs in. This is a closure that takes a username
 ***REMOVED******REMOVED***/ and password, respectively.
@@ -61,10 +54,6 @@ final class LoginViewModel: ObservableObject {
 ***REMOVED******REMOVED***self.challengingHost = challengingHost
 ***REMOVED******REMOVED***self.signInAction = signInAction
 ***REMOVED******REMOVED***self.cancelAction = cancelAction
-***REMOVED***
-***REMOVED***
-***REMOVED***private func updateSignInButtonEnabled() {
-***REMOVED******REMOVED***signInButtonEnabled = !username.isEmpty && !password.isEmpty
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ The host that initiated the challenge.
