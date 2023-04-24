@@ -17,20 +17,15 @@ import ArcGISToolkit
 
 struct AuthenticationExampleView: View {
     @StateObject var authenticator = Authenticator(
-        promptForUntrustedHosts: true //,
-        // oAuthConfigurations: [.arcgisDotCom]
+        promptForUntrustedHosts: true
     )
     @State var previousApiKey: APIKey?
     @State private var items = AuthenticationItem.makeAll()
     
     var body: some View {
         VStack {
-            if items.isEmpty {
-                ProgressView()
-            } else {
-                List(items) { item in
-                    AuthenticationItemView(item: item)
-                }
+            List(items) { item in
+                AuthenticationItemView(item: item)
             }
             
             Button("Clear Credential Store") {
@@ -73,22 +68,58 @@ struct AuthenticationExampleView: View {
 }
 
 private struct AuthenticationItemView: View {
-    let loadables: [Loadable]
-    let title: String
-    @State var status = LoadStatus.notLoaded
+    @ObservedObject var item: AuthenticationItem
     
     init(item: AuthenticationItem) {
-        self.loadables = item.loadables
-        self.title = item.title
+        self.item = item
     }
     
     var body: some View {
         Button {
             Task {
+                await item.load()
+            }
+        } label: {
+            buttonContent
+        }
+    }
+    
+    var buttonContent: some View {
+        HStack {
+            Text(item.title)
+            Spacer()
+            switch item.status {
+            case .loading:
+                ProgressView()
+            case .loaded:
+                Text("Loaded")
+                    .foregroundColor(.green)
+            case .notLoaded:
+                Text("Tap to load")
+                    .foregroundColor(.secondary)
+            case .failed:
+                Text("Failed to load")
+                    .foregroundColor(.red)
+            }
+        }
+    }
+}
+
+private struct AuthenticationItemView1: View {
+    @ObservedObject var item: AuthenticationItem
+    @State var status = LoadStatus.notLoaded
+    
+    init(item: AuthenticationItem) {
+        self.item = item
+    }
+    
+    var body: some View {
+        Button {
+            Task.detached { @MainActor [self] in
                 status = .loading
                 do {
                     try await withThrowingTaskGroup(of: Void.self) { group in
-                        for loadable in loadables {
+                        for loadable in item.loadables {
                             group.addTask {
                                 try await loadable.load()
                             }
@@ -107,7 +138,7 @@ private struct AuthenticationItemView: View {
     
     var buttonContent: some View {
         HStack {
-            Text(title)
+            Text(item.title)
             Spacer()
             switch status {
             case .loading:
@@ -131,13 +162,32 @@ private extension URL {
     static let hostedPointsLayer = URL(string: "https://rt-server107a.esri.com/server/rest/services/Hosted/PointsLayer/FeatureServer/0")!
 }
 
-private class AuthenticationItem {
+private class AuthenticationItem: ObservableObject {
     let title: String
     let loadables: [Loadable]
+    
+    @Published var status: LoadStatus = .notLoaded
     
     init(title: String, loadables: [Loadable]) {
         self.title = title
         self.loadables = loadables
+    }
+    
+    func load() async {
+        status = .loading
+        do {
+            try await withThrowingTaskGroup(of: Void.self) { group in
+                for loadable in loadables {
+                    group.addTask {
+                        try await loadable.load()
+                    }
+                }
+                try await group.waitForAll()
+            }
+            status = .loaded
+        } catch {
+            status = .failed
+        }
     }
 }
 
@@ -183,7 +233,7 @@ extension AuthenticationItem {
     static func makeIWAPortal() -> AuthenticationItem {
         AuthenticationItem(
             title: "IWA Portal",
-            loadables: [Portal.init(url: URL(string: "https://dev0004327.esri.com/portal")!)]
+            loadables: [Portal(url: URL(string: "https://dev0004327.esri.com/portal")!)]
         )
     }
     
@@ -202,7 +252,8 @@ extension AuthenticationItem {
     }
     
     static func makeAll() -> [AuthenticationItem]  {
-        [
+        print("-- make all")
+        return [
             makeToken(),
             makeMultipleToken(),
             makeMultipleTokenSame(),
@@ -212,14 +263,6 @@ extension AuthenticationItem {
             makeEricPKIMap()
         ]
     }
-}
-
-private extension OAuthUserConfiguration {
-    static let arcgisDotCom =  OAuthUserConfiguration(
-        portalURL: .arcgisDotCom,
-        clientID: "",
-        redirectURL: URL(string: "runtimeswiftexamples://auth")!
-    )
 }
 
 private extension URL {
