@@ -16,9 +16,7 @@
 ***REMOVED***Toolkit
 
 struct AuthenticationExampleView: View {
-***REMOVED***@StateObject var authenticator = Authenticator(
-***REMOVED******REMOVED***promptForUntrustedHosts: true
-***REMOVED***)
+***REMOVED***@EnvironmentObject var authenticator: Authenticator
 ***REMOVED***@State var previousApiKey: APIKey?
 ***REMOVED***@State private var items = AuthenticationItem.makeAll()
 ***REMOVED***
@@ -37,33 +35,33 @@ struct AuthenticationExampleView: View {
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED***
-***REMOVED******REMOVED***.authenticator(authenticator)
+***REMOVED******REMOVED******REMOVED***.authenticator(authenticator)
 ***REMOVED******REMOVED***.task {
-***REMOVED******REMOVED******REMOVED***try? await ArcGISEnvironment.authenticationManager.setupPersistentCredentialStorage(access: .whenUnlockedThisDeviceOnly)
+***REMOVED******REMOVED******REMOVED******REMOVED***try? await ArcGISEnvironment.authenticationManager.setupPersistentCredentialStorage(access: .whenUnlockedThisDeviceOnly)
 ***REMOVED***
 ***REMOVED******REMOVED***.navigationBarTitle(Text("Authentication"), displayMode: .inline)
-***REMOVED******REMOVED***.onAppear {
-***REMOVED******REMOVED******REMOVED***ArcGISEnvironment.authenticationManager.handleChallenges(using: authenticator)
-***REMOVED***
-***REMOVED******REMOVED***.onDisappear {
-***REMOVED******REMOVED******REMOVED***ArcGISEnvironment.authenticationManager.handleChallenges(using: nil)
-***REMOVED***
-***REMOVED******REMOVED******REMOVED*** Save and restore the API Key.
-***REMOVED******REMOVED******REMOVED*** Note: This is only necessary in this example. Other examples make use of the global
-***REMOVED******REMOVED******REMOVED*** api key that is set when the app starts up. Using an api key will prevent an
-***REMOVED******REMOVED******REMOVED*** authentication challenge prompt for certain services. Since this example highlights
-***REMOVED******REMOVED******REMOVED*** the usage of authentication challenge prompts, we want to set the api key to `nil`
-***REMOVED******REMOVED******REMOVED*** when this example appears and restore it when this example disappears.
-***REMOVED******REMOVED***.onAppear {
-***REMOVED******REMOVED******REMOVED******REMOVED*** Save off the api key
-***REMOVED******REMOVED******REMOVED***previousApiKey = ArcGISEnvironment.apiKey
-***REMOVED******REMOVED******REMOVED******REMOVED*** Set the api key to nil so that the authenticated services will prompt.
-***REMOVED******REMOVED******REMOVED***ArcGISEnvironment.apiKey = nil
-***REMOVED***
-***REMOVED******REMOVED***.onDisappear {
-***REMOVED******REMOVED******REMOVED******REMOVED*** Restore api key when exiting this example.
-***REMOVED******REMOVED******REMOVED***ArcGISEnvironment.apiKey = previousApiKey
-***REMOVED***
+***REMOVED******REMOVED******REMOVED***.onAppear {
+***REMOVED******REMOVED******REMOVED******REMOVED***ArcGISEnvironment.authenticationManager.handleChallenges(using: authenticator)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.onDisappear {
+***REMOVED******REMOVED******REMOVED******REMOVED***ArcGISEnvironment.authenticationManager.handleChallenges(using: nil)
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED*** Save and restore the API Key.
+***REMOVED******REMOVED******REMOVED******REMOVED*** Note: This is only necessary in this example. Other examples make use of the global
+***REMOVED******REMOVED******REMOVED******REMOVED*** api key that is set when the app starts up. Using an api key will prevent an
+***REMOVED******REMOVED******REMOVED******REMOVED*** authentication challenge prompt for certain services. Since this example highlights
+***REMOVED******REMOVED******REMOVED******REMOVED*** the usage of authentication challenge prompts, we want to set the api key to `nil`
+***REMOVED******REMOVED******REMOVED******REMOVED*** when this example appears and restore it when this example disappears.
+***REMOVED******REMOVED******REMOVED***.onAppear {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Save off the api key
+***REMOVED******REMOVED******REMOVED******REMOVED***previousApiKey = ArcGISEnvironment.apiKey
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Set the api key to nil so that the authenticated services will prompt.
+***REMOVED******REMOVED******REMOVED******REMOVED***ArcGISEnvironment.apiKey = nil
+***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***.onDisappear {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED*** Restore api key when exiting this example.
+***REMOVED******REMOVED******REMOVED******REMOVED***ArcGISEnvironment.apiKey = previousApiKey
+***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
 
@@ -162,7 +160,6 @@ private extension URL {
 ***REMOVED***static let hostedPointsLayer = URL(string: "https:***REMOVED***rt-server107a.esri.com/server/rest/services/Hosted/PointsLayer/FeatureServer/0")!
 ***REMOVED***
 
-@MainActor
 private class AuthenticationItem: ObservableObject {
 ***REMOVED***let title: String
 ***REMOVED***let loadables: [Loadable]
@@ -174,6 +171,7 @@ private class AuthenticationItem: ObservableObject {
 ***REMOVED******REMOVED***self.loadables = loadables
 ***REMOVED***
 ***REMOVED***
+***REMOVED***@MainActor
 ***REMOVED***func load() async {
 ***REMOVED******REMOVED***status = .loading
 ***REMOVED******REMOVED***do {
@@ -253,8 +251,7 @@ extension AuthenticationItem {
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***static func makeAll() -> [AuthenticationItem]  {
-***REMOVED******REMOVED***print("-- make all")
-***REMOVED******REMOVED***return [
+***REMOVED******REMOVED***[
 ***REMOVED******REMOVED******REMOVED***makeToken(),
 ***REMOVED******REMOVED******REMOVED***makeMultipleToken(),
 ***REMOVED******REMOVED******REMOVED***makeMultipleTokenSame(),
