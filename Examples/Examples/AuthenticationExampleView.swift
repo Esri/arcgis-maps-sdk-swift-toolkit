@@ -162,6 +162,7 @@ private extension URL {
 ***REMOVED***static let hostedPointsLayer = URL(string: "https:***REMOVED***rt-server107a.esri.com/server/rest/services/Hosted/PointsLayer/FeatureServer/0")!
 ***REMOVED***
 
+@MainActor
 private class AuthenticationItem: ObservableObject {
 ***REMOVED***let title: String
 ***REMOVED***let loadables: [Loadable]
