@@ -13,12 +13,25 @@
 
 import SwiftUI
 import ArcGIS
+import ArcGISToolkit
 
 @main
 struct ExamplesApp: App {
+    @StateObject var authenticator = Authenticator(
+        promptForUntrustedHosts: true
+    )
+    
     var body: some SwiftUI.Scene {
         WindowGroup {
             Examples()
+                .environmentObject(authenticator)
+                .authenticator(authenticator)
+                .onAppear {
+                    ArcGISEnvironment.authenticationManager.handleChallenges(using: authenticator)
+                }
+                .task {
+                    //try? await ArcGISEnvironment.authenticationManager.setupPersistentCredentialStorage(access: .whenUnlockedThisDeviceOnly)
+                }
         }
     }
     
