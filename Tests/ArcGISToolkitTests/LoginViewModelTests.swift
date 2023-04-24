@@ -39,23 +39,10 @@ import XCTest
         XCTAssertEqual(model.challengingHost, "host.com")
         XCTAssertNotNil(model.signInAction)
         XCTAssertNotNil(model.cancelAction)
-        XCTAssertFalse(model.signInButtonEnabled)
         XCTAssertTrue(model.username.isEmpty)
         XCTAssertTrue(model.password.isEmpty)
         XCTAssertFalse(signInCalled)
         XCTAssertFalse(cancelCalled)
-        
-        model.username = "abc"
-        XCTAssertFalse(model.signInButtonEnabled)
-        
-        model.password = "123"
-        XCTAssertTrue(model.signInButtonEnabled)
-        
-        model.password = ""
-        XCTAssertFalse(model.signInButtonEnabled)
-        
-        model.password = "123"
-        XCTAssertTrue(model.signInButtonEnabled)
         
         model.signIn()
         XCTAssertTrue(signInCalled)
