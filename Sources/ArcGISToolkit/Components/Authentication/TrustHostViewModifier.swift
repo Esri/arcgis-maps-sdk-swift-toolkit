@@ -34,7 +34,7 @@ struct TrustHostViewModifier: ViewModifier {
     
     func body(content: Content) -> some View {
         content
-            .task {
+            .onAppear {
                 // Present the alert right away. This makes it animated.
                 isPresented = true
             }
