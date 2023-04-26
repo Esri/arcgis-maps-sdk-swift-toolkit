@@ -38,6 +38,7 @@ struct FeaturedMapsView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***testButton
 ***REMOVED***
 ***REMOVED******REMOVED***.task {
 ***REMOVED******REMOVED******REMOVED***guard featuredItems.isEmpty else { return ***REMOVED***
@@ -49,6 +50,20 @@ struct FeaturedMapsView: View {
 ***REMOVED******REMOVED******REMOVED***isLoading = false
 ***REMOVED***
 ***REMOVED******REMOVED***.navigationTitle("Featured Maps")
+***REMOVED***
+***REMOVED***
+***REMOVED***var testButton: some View {
+***REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED***Task {
+***REMOVED******REMOVED******REMOVED******REMOVED***let portal = Portal(url: URL(string: "https:***REMOVED***dev0004327.esri.com/portal")!, connection: .authenticated)
+***REMOVED******REMOVED******REMOVED******REMOVED***try await portal.load()
+***REMOVED******REMOVED******REMOVED******REMOVED***print("-- loaded dev portal")
+***REMOVED******REMOVED***
+***REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED***Text("Test")
+***REMOVED***
+***REMOVED******REMOVED***.buttonStyle(.bordered)
+***REMOVED******REMOVED***.controlSize(.large)
 ***REMOVED***
 ***REMOVED***
 

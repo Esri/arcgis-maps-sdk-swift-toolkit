@@ -37,7 +37,7 @@ struct ProfileView: View {
 ***REMOVED******REMOVED******REMOVED***signOutButton
 ***REMOVED******REMOVED******REMOVED***testButton
 ***REMOVED***
-***REMOVED******REMOVED***.authenticator(authenticator)
+***REMOVED******REMOVED******REMOVED***.authenticator(authenticator)
 ***REMOVED******REMOVED***.padding()
 ***REMOVED***
 ***REMOVED***

@@ -103,58 +103,6 @@ private struct AuthenticationItemView: View {
 ***REMOVED***
 ***REMOVED***
 
-private struct AuthenticationItemView1: View {
-***REMOVED***@ObservedObject var item: AuthenticationItem
-***REMOVED***@State var status = LoadStatus.notLoaded
-***REMOVED***
-***REMOVED***init(item: AuthenticationItem) {
-***REMOVED******REMOVED***self.item = item
-***REMOVED***
-***REMOVED***
-***REMOVED***var body: some View {
-***REMOVED******REMOVED***Button {
-***REMOVED******REMOVED******REMOVED***Task.detached { @MainActor [self] in
-***REMOVED******REMOVED******REMOVED******REMOVED***status = .loading
-***REMOVED******REMOVED******REMOVED******REMOVED***do {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try await withThrowingTaskGroup(of: Void.self) { group in
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for loadable in item.loadables {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***group.addTask {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try await loadable.load()
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try await group.waitForAll()
-***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***status = .loaded
-***REMOVED******REMOVED******REMOVED*** catch {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***status = .failed
-***REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED***
-***REMOVED*** label: {
-***REMOVED******REMOVED******REMOVED***buttonContent
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***var buttonContent: some View {
-***REMOVED******REMOVED***HStack {
-***REMOVED******REMOVED******REMOVED***Text(item.title)
-***REMOVED******REMOVED******REMOVED***Spacer()
-***REMOVED******REMOVED******REMOVED***switch status {
-***REMOVED******REMOVED******REMOVED***case .loading:
-***REMOVED******REMOVED******REMOVED******REMOVED***ProgressView()
-***REMOVED******REMOVED******REMOVED***case .loaded:
-***REMOVED******REMOVED******REMOVED******REMOVED***Text("Loaded")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.green)
-***REMOVED******REMOVED******REMOVED***case .notLoaded:
-***REMOVED******REMOVED******REMOVED******REMOVED***Text("Tap to load")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
-***REMOVED******REMOVED******REMOVED***case .failed:
-***REMOVED******REMOVED******REMOVED******REMOVED***Text("Failed to load")
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.red)
-***REMOVED******REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***
-
 private extension URL {
 ***REMOVED***static let worldImageryMapServer = URL(string: "https:***REMOVED***ibasemaps-api.arcgis.com/arcgis/rest/services/World_Imagery/MapServer")!
 ***REMOVED***static let hostedPointsLayer = URL(string: "https:***REMOVED***rt-server107a.esri.com/server/rest/services/Hosted/PointsLayer/FeatureServer/0")!
@@ -250,7 +198,7 @@ extension AuthenticationItem {
 ***REMOVED******REMOVED***)
 ***REMOVED***
 ***REMOVED***
-***REMOVED***static func makeAll() -> [AuthenticationItem]  {
+***REMOVED***static func makeAll() -> [AuthenticationItem] {
 ***REMOVED******REMOVED***[
 ***REMOVED******REMOVED******REMOVED***makeToken(),
 ***REMOVED******REMOVED******REMOVED***makeMultipleToken(),
@@ -266,3 +214,55 @@ extension AuthenticationItem {
 private extension URL {
 ***REMOVED***static let arcgisDotCom = URL(string: "https:***REMOVED***www.arcgis.com")!
 ***REMOVED***
+
+***REMOVED***private struct AuthenticationItemView1: View {
+***REMOVED******REMOVED***@ObservedObject var item: AuthenticationItem
+***REMOVED******REMOVED***@State var status = LoadStatus.notLoaded
+***REMOVED***
+***REMOVED******REMOVED***init(item: AuthenticationItem) {
+***REMOVED******REMOVED******REMOVED***self.item = item
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***var body: some View {
+***REMOVED******REMOVED******REMOVED***Button {
+***REMOVED******REMOVED******REMOVED******REMOVED***Task.detached { @MainActor [self] in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***status = .loading
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***do {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try await withThrowingTaskGroup(of: Void.self) { group in
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***for loadable in item.loadables {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***group.addTask {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try await loadable.load()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***try await group.waitForAll()
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***status = .loaded
+***REMOVED******REMOVED******REMOVED******REMOVED*** catch {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***status = .failed
+***REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED*** label: {
+***REMOVED******REMOVED******REMOVED******REMOVED***buttonContent
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***var buttonContent: some View {
+***REMOVED******REMOVED******REMOVED***HStack {
+***REMOVED******REMOVED******REMOVED******REMOVED***Text(item.title)
+***REMOVED******REMOVED******REMOVED******REMOVED***Spacer()
+***REMOVED******REMOVED******REMOVED******REMOVED***switch status {
+***REMOVED******REMOVED******REMOVED******REMOVED***case .loading:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***ProgressView()
+***REMOVED******REMOVED******REMOVED******REMOVED***case .loaded:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Loaded")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.green)
+***REMOVED******REMOVED******REMOVED******REMOVED***case .notLoaded:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Tap to load")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.secondary)
+***REMOVED******REMOVED******REMOVED******REMOVED***case .failed:
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Text("Failed to load")
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.foregroundColor(.red)
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***
+***REMOVED******REMOVED***
