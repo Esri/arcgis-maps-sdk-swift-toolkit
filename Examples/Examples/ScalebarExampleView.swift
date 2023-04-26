@@ -16,8 +16,8 @@
 ***REMOVED***
 
 struct ScalebarExampleView: View {
-***REMOVED******REMOVED***/ The size of the map view's attribution bar.
-***REMOVED***@State private var attributionBarSize: CGSize = .zero
+***REMOVED******REMOVED***/ The height of the map view's attribution bar.
+***REMOVED***@State private var attributionBarHeight: CGFloat = .zero
 ***REMOVED***
 ***REMOVED******REMOVED***/ Allows for communication between the `Scalebar` and `MapView`.
 ***REMOVED***@State private var spatialReference: SpatialReference?
@@ -41,8 +41,8 @@ struct ScalebarExampleView: View {
 ***REMOVED***
 ***REMOVED***var body: some View {
 ***REMOVED******REMOVED***MapView(map: dataModel.map)
-***REMOVED******REMOVED******REMOVED***.onAttributionBarSizeChanged { newSize in
-***REMOVED******REMOVED******REMOVED******REMOVED***withAnimation { attributionBarSize = newSize ***REMOVED***
+***REMOVED******REMOVED******REMOVED***.onAttributionBarHeightChanged { newHeight in
+***REMOVED******REMOVED******REMOVED******REMOVED***withAnimation { attributionBarHeight = newHeight ***REMOVED***
 ***REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onSpatialReferenceChanged { spatialReference = $0 ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***.onUnitsPerPointChanged { unitsPerPoint = $0 ***REMOVED***
@@ -55,7 +55,7 @@ struct ScalebarExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***viewpoint: $viewpoint
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
 ***REMOVED******REMOVED******REMOVED******REMOVED***.padding(.horizontal, 10)
-***REMOVED******REMOVED******REMOVED******REMOVED***.padding(.vertical, 10 + attributionBarSize.height)
+***REMOVED******REMOVED******REMOVED******REMOVED***.padding(.vertical, 10 + attributionBarHeight)
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***
