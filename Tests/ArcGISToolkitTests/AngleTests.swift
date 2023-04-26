@@ -16,7 +16,7 @@ import XCTest
 @testable import ArcGISToolkit
 
 class AngleTests: XCTestCase {
-    /// Tests the behvaior of `Angle`'s normalized member.
+    /// Tests the behavior of `Angle`'s normalized member.
     func testNormalizedAngle() {
         XCTAssertEqual(Angle(degrees: -361.0).normalizedDegrees, 359)
         XCTAssertEqual(Angle(degrees: -360.0).normalizedDegrees, 0)
