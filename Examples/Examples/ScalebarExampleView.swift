@@ -16,6 +16,9 @@ import ArcGISToolkit
 import SwiftUI
 
 struct ScalebarExampleView: View {
+    /// The size of the map view's attribution bar.
+    @State private var attributionBarSize: CGSize = .zero
+    
     /// Allows for communication between the `Scalebar` and `MapView`.
     @State private var spatialReference: SpatialReference?
     
@@ -38,6 +41,9 @@ struct ScalebarExampleView: View {
     
     var body: some View {
         MapView(map: dataModel.map)
+            .onAttributionBarSizeChanged { newSize in
+                withAnimation { attributionBarSize = newSize }
+            }
             .onSpatialReferenceChanged { spatialReference = $0 }
             .onUnitsPerPointChanged { unitsPerPoint = $0 }
             .onViewpointChanged(kind: .centerAndScale) { viewpoint = $0 }
@@ -49,7 +55,7 @@ struct ScalebarExampleView: View {
                     viewpoint: $viewpoint
                 )
                 .padding(.horizontal, 10)
-                .padding(.vertical, 50)
+                .padding(.vertical, 10 + attributionBarSize.height)
             }
     }
 }
