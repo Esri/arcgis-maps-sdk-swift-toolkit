@@ -27,8 +27,8 @@ struct FloorFilterExampleView: View {
     /// Determines the arrangement of the inner `FloorFilter` UI components.
     private let floorFilterAlignment = Alignment.bottomLeading
     
-    /// The size of the map view's attribution bar.
-    @State private var attributionBarSize: CGSize = .zero
+    /// The height of the map view's attribution bar.
+    @State private var attributionBarHeight: CGFloat = .zero
     
     /// Determines the appropriate time to initialize the `FloorFilter`.
     @State private var isMapLoaded = false
@@ -58,8 +58,8 @@ struct FloorFilterExampleView: View {
             map: dataModel.map,
             viewpoint: viewpoint
         )
-        .onAttributionBarSizeChanged { newSize in
-            withAnimation { attributionBarSize = newSize }
+        .onAttributionBarHeightChanged { newHeight in
+            withAnimation { attributionBarHeight = newHeight }
         }
         .onNavigatingChanged {
             isNavigating = $0
@@ -83,7 +83,7 @@ struct FloorFilterExampleView: View {
                     maxHeight: 400
                 )
                 .padding([.horizontal], 10)
-                .padding([.vertical], 10 + attributionBarSize.height)
+                .padding([.vertical], 10 + attributionBarHeight)
             } else if mapLoadError {
                 Label(
                     "Map load error!",
