@@ -27,6 +27,9 @@ struct FloorFilterExampleView: View {
 ***REMOVED******REMOVED***/ Determines the arrangement of the inner `FloorFilter` UI components.
 ***REMOVED***private let floorFilterAlignment = Alignment.bottomLeading
 ***REMOVED***
+***REMOVED******REMOVED***/ The size of the map view's attribution bar.
+***REMOVED***@State private var attributionBarSize: CGSize = .zero
+***REMOVED***
 ***REMOVED******REMOVED***/ Determines the appropriate time to initialize the `FloorFilter`.
 ***REMOVED***@State private var isMapLoaded = false
 ***REMOVED***
@@ -55,6 +58,9 @@ struct FloorFilterExampleView: View {
 ***REMOVED******REMOVED******REMOVED***map: dataModel.map,
 ***REMOVED******REMOVED******REMOVED***viewpoint: viewpoint
 ***REMOVED******REMOVED***)
+***REMOVED******REMOVED***.onAttributionBarSizeChanged { newSize in
+***REMOVED******REMOVED******REMOVED***withAnimation { attributionBarSize = newSize ***REMOVED***
+***REMOVED***
 ***REMOVED******REMOVED***.onNavigatingChanged {
 ***REMOVED******REMOVED******REMOVED***isNavigating = $0
 ***REMOVED***
@@ -76,7 +82,8 @@ struct FloorFilterExampleView: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***maxWidth: 400,
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***maxHeight: 400
 ***REMOVED******REMOVED******REMOVED******REMOVED***)
-***REMOVED******REMOVED******REMOVED******REMOVED***.padding(36)
+***REMOVED******REMOVED******REMOVED******REMOVED***.padding([.horizontal], 10)
+***REMOVED******REMOVED******REMOVED******REMOVED***.padding([.vertical], 10 + attributionBarSize.height)
 ***REMOVED******REMOVED*** else if mapLoadError {
 ***REMOVED******REMOVED******REMOVED******REMOVED***Label(
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***"Map load error!",
