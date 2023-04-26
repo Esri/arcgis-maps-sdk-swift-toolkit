@@ -37,7 +37,7 @@ struct ProfileView: View {
             signOutButton
             testButton
         }
-        .authenticator(authenticator)
+        //.authenticator(authenticator)
         .padding()
     }
     
