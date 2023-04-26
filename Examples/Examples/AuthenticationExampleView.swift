@@ -103,58 +103,6 @@ private struct AuthenticationItemView: View {
     }
 }
 
-private struct AuthenticationItemView1: View {
-    @ObservedObject var item: AuthenticationItem
-    @State var status = LoadStatus.notLoaded
-    
-    init(item: AuthenticationItem) {
-        self.item = item
-    }
-    
-    var body: some View {
-        Button {
-            Task.detached { @MainActor [self] in
-                status = .loading
-                do {
-                    try await withThrowingTaskGroup(of: Void.self) { group in
-                        for loadable in item.loadables {
-                            group.addTask {
-                                try await loadable.load()
-                            }
-                        }
-                        try await group.waitForAll()
-                    }
-                    status = .loaded
-                } catch {
-                    status = .failed
-                }
-            }
-        } label: {
-            buttonContent
-        }
-    }
-    
-    var buttonContent: some View {
-        HStack {
-            Text(item.title)
-            Spacer()
-            switch status {
-            case .loading:
-                ProgressView()
-            case .loaded:
-                Text("Loaded")
-                    .foregroundColor(.green)
-            case .notLoaded:
-                Text("Tap to load")
-                    .foregroundColor(.secondary)
-            case .failed:
-                Text("Failed to load")
-                    .foregroundColor(.red)
-            }
-        }
-    }
-}
-
 private extension URL {
     static let worldImageryMapServer = URL(string: "https://ibasemaps-api.arcgis.com/arcgis/rest/services/World_Imagery/MapServer")!
     static let hostedPointsLayer = URL(string: "https://rt-server107a.esri.com/server/rest/services/Hosted/PointsLayer/FeatureServer/0")!
@@ -250,7 +198,7 @@ extension AuthenticationItem {
         )
     }
     
-    static func makeAll() -> [AuthenticationItem]  {
+    static func makeAll() -> [AuthenticationItem] {
         [
             makeToken(),
             makeMultipleToken(),
@@ -266,3 +214,55 @@ extension AuthenticationItem {
 private extension URL {
     static let arcgisDotCom = URL(string: "https://www.arcgis.com")!
 }
+
+//private struct AuthenticationItemView1: View {
+//    @ObservedObject var item: AuthenticationItem
+//    @State var status = LoadStatus.notLoaded
+//
+//    init(item: AuthenticationItem) {
+//        self.item = item
+//    }
+//
+//    var body: some View {
+//        Button {
+//            Task.detached { @MainActor [self] in
+//                status = .loading
+//                do {
+//                    try await withThrowingTaskGroup(of: Void.self) { group in
+//                        for loadable in item.loadables {
+//                            group.addTask {
+//                                try await loadable.load()
+//                            }
+//                        }
+//                        try await group.waitForAll()
+//                    }
+//                    status = .loaded
+//                } catch {
+//                    status = .failed
+//                }
+//            }
+//        } label: {
+//            buttonContent
+//        }
+//    }
+//
+//    var buttonContent: some View {
+//        HStack {
+//            Text(item.title)
+//            Spacer()
+//            switch status {
+//            case .loading:
+//                ProgressView()
+//            case .loaded:
+//                Text("Loaded")
+//                    .foregroundColor(.green)
+//            case .notLoaded:
+//                Text("Tap to load")
+//                    .foregroundColor(.secondary)
+//            case .failed:
+//                Text("Failed to load")
+//                    .foregroundColor(.red)
+//            }
+//        }
+//    }
+//}
