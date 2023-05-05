@@ -32,6 +32,10 @@ public struct Compass: View {
 ***REMOVED******REMOVED***/ The width and height of the compass.
 ***REMOVED***private var size: CGFloat = 44
 ***REMOVED***
+***REMOVED******REMOVED***/ An action to perform when the compass is tapped. Note if `mapViewProxy` is non-`nil`
+***REMOVED******REMOVED***/ this will not be invoked.
+***REMOVED***private var action: (() -> Void)?
+
 ***REMOVED******REMOVED***/ Creates a compass with a heading based on compass directions (0° indicates a direction
 ***REMOVED******REMOVED***/ toward true North, 90° indicates a direction toward true East, etc.).
 ***REMOVED******REMOVED***/ - Parameters:
@@ -64,7 +68,11 @@ public struct Compass: View {
 ***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.onTapGesture {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task { await mapViewProxy?.setViewpointRotation(0) ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let mapViewProxy {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task { await mapViewProxy.setViewpointRotation(0) ***REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED*** else if let action {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***action()
+***REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***.accessibilityLabel("Compass, heading \(Int(heading.rounded())) degrees \(CompassDirection(heading).rawValue)")
 ***REMOVED***
@@ -86,10 +94,12 @@ public extension Compass {
 ***REMOVED******REMOVED***/ a direction toward true West, etc.).
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - rotation: The rotation whose value determines the heading of the compass.
-***REMOVED******REMOVED***/   - mapViewProxy: The proxy to provide access to map view operations.
+***REMOVED******REMOVED***/   - mapViewProxy: The proxy to provide access to map view operations. If `mapViewProxy`
+***REMOVED******REMOVED***/   is non-`nil`, the proxy will be used to set the rotation to `.zero` when the compass is
+***REMOVED******REMOVED***/   tapped on. Otherwise, the `action` will be called (set using the `action` view modifier).
 ***REMOVED***init(
 ***REMOVED******REMOVED***rotation: Double?,
-***REMOVED******REMOVED***mapViewProxy: MapViewProxy
+***REMOVED******REMOVED***mapViewProxy: MapViewProxy? = nil
 ***REMOVED***) {
 ***REMOVED******REMOVED***let heading: Double
 ***REMOVED******REMOVED***if let rotation {
@@ -114,6 +124,14 @@ public extension Compass {
 ***REMOVED***func autoHideDisabled(_ disable: Bool = true) -> some View {
 ***REMOVED******REMOVED***var copy = self
 ***REMOVED******REMOVED***copy.autoHide = !disable
+***REMOVED******REMOVED***return copy
+***REMOVED***
+***REMOVED***
+***REMOVED******REMOVED***/ An action to perform when the compass is tapped. If `mapViewProxy` is non-`nil`,
+***REMOVED******REMOVED***/ then this will have no affect.
+***REMOVED***func action(_ action: @escaping () -> Void) -> some View {
+***REMOVED******REMOVED***var copy = self
+***REMOVED******REMOVED***copy.action = action
 ***REMOVED******REMOVED***return copy
 ***REMOVED***
 ***REMOVED***
