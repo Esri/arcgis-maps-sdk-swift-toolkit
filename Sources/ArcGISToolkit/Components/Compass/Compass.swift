@@ -32,6 +32,10 @@ public struct Compass: View {
     /// The width and height of the compass.
     private var size: CGFloat = 44
     
+    /// An action to perform when the compass is tapped. Note if `mapViewProxy` is non-`nil`
+    /// this will not be invoked.
+    private var action: (() -> Void)?
+
     /// Creates a compass with a heading based on compass directions (0° indicates a direction
     /// toward true North, 90° indicates a direction toward true East, etc.).
     /// - Parameters:
@@ -64,7 +68,11 @@ public struct Compass: View {
                     }
                 }
                 .onTapGesture {
-                    Task { await mapViewProxy?.setViewpointRotation(0) }
+                    if let mapViewProxy {
+                        Task { await mapViewProxy.setViewpointRotation(0) }
+                    } else if let action {
+                        action()
+                    }
                 }
                 .accessibilityLabel("Compass, heading \(Int(heading.rounded())) degrees \(CompassDirection(heading).rawValue)")
         }
@@ -86,10 +94,12 @@ public extension Compass {
     /// a direction toward true West, etc.).
     /// - Parameters:
     ///   - rotation: The rotation whose value determines the heading of the compass.
-    ///   - mapViewProxy: The proxy to provide access to map view operations.
+    ///   - mapViewProxy: The proxy to provide access to map view operations. If `mapViewProxy`
+    ///   is non-`nil`, the proxy will be used to set the rotation to `.zero` when the compass is
+    ///   tapped on. Otherwise, the `action` will be called (set using the `action` view modifier).
     init(
         rotation: Double?,
-        mapViewProxy: MapViewProxy
+        mapViewProxy: MapViewProxy? = nil
     ) {
         let heading: Double
         if let rotation {
@@ -114,6 +124,14 @@ public extension Compass {
     func autoHideDisabled(_ disable: Bool = true) -> some View {
         var copy = self
         copy.autoHide = !disable
+        return copy
+    }
+    
+    /// An action to perform when the compass is tapped. If `mapViewProxy` is non-`nil`,
+    /// then this will have no affect.
+    func action(_ action: @escaping () -> Void) -> some View {
+        var copy = self
+        copy.action = action
         return copy
     }
 }
