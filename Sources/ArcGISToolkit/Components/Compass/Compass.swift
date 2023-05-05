@@ -121,15 +121,15 @@ public extension Compass {
     /// Specifies whether the ``Compass`` should automatically hide when the heading is 0.
     /// - Parameter disable: A Boolean value indicating whether the compass should automatically
     /// hide/show itself when the heading is `0`.
-    func autoHideDisabled(_ disable: Bool = true) -> some View {
+    func autoHideDisabled(_ disable: Bool = true) -> Self {
         var copy = self
         copy.autoHide = !disable
         return copy
     }
     
     /// An action to perform when the compass is tapped. If `mapViewProxy` is non-`nil`,
-    /// then this will have no affect.
-    func action(_ action: @escaping () -> Void) -> some View {
+    /// then this will have no effect.
+    func action(perform action: @escaping () -> Void) -> Self {
         var copy = self
         copy.action = action
         return copy
