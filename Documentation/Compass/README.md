@@ -23,20 +23,23 @@ Compass:
     /// a direction toward true West, etc.).
     /// - Parameters:
     ///   - rotation: The rotation whose value determines the heading of the compass.
-    ///   - mapViewProxy: The proxy to provide access to map view operations.
-    public init(rotation: Double?, mapViewProxy: MapViewProxy)
+    ///   - mapViewProxy: The proxy to provide access to map view operations. If `mapViewProxy`
+    ///   is non-`nil`, the proxy will be used to set the rotation to `.zero` when the compass is
+    ///   tapped on. Otherwise, the `action` will be called (set using the `action` view modifier).
+    public init(rotation: Double?, mapViewProxy: MapViewProxy? = nil)
 ```
 
 `Compass` has the following modifiers:
 
 - `func compassSize(size: CGFloat)` - The size of the `Compass`, specifying both the width and height of the compass.
 - `func autoHideDisabled(_:)` - Specifies whether the ``Compass`` should automatically hide when the heading is 0.
+- `action(perform action: @escaping () -> Void)` - An action to perform when the compass is tapped. If `mapViewProxy` is non-`nil`, then this will have no effect.
 
 ## Behavior:
 
-Whenever the map is not orientated North (non-zero bearing) the compass appears. When reset to north, it disappears. The `automaticallyHides` view modifier allows you to disable the auto-hide feature so that it is always displayed.
+Whenever the map is not orientated North (non-zero bearing) the compass appears. When reset to north, it disappears. The `autoHideDisabled` view modifier allows you to disable the auto-hide feature so that it is always displayed.
 
-When the compass is tapped, the map orients back to north (zero bearing).
+When the compass is tapped, the map orients back to north (zero bearing). 
 
 ## Usage
 
@@ -58,5 +61,33 @@ var body: some View {
     }
 }
 ```
+
+To add a `Compass` to a scene view, you would not pass in a `mapViewProxy` argument in the initalizer, but use the `action` modifier to perform a custom action when the compass is tapped on.
+
+```swift
+@State private var scene = Scene(basemapStyle: .arcGISImagery)
+
+@State private var viewpoint: Viewpoint?
+
+var body: some View {
+    SceneViewReader { proxy in
+        SceneView(scene: scene)
+            .onViewpointChanged(kind: .centerAndScale) { viewpoint = $0 }
+            .overlay(alignment: .topTrailing) {
+                Compass(rotation: viewpoint?.rotation)
+                    .action {
+                        if let viewpoint {
+                            Task {
+                                await proxy.setViewpoint(viewpoint.withRotation(.zero))
+                            }
+                        }
+                    }
+                    .padding()
+            }
+    }
+}
+```
+
+
 
 To see it in action, try out the [Examples](../../Examples/Examples) and refer to [CompassExampleView.swift](../../Examples/Examples/CompassExampleView.swift) in the project.
