@@ -16,24 +16,28 @@ Compass:
 
 ## Key properties
 
-`Compass` has the following initializer:
+`Compass` has the following initializers:
 
 ```swift
 ***REMOVED******REMOVED***/ Creates a compass with a rotation (0° indicates a direction toward true North, 90° indicates
 ***REMOVED******REMOVED***/ a direction toward true West, etc.).
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - rotation: The rotation whose value determines the heading of the compass.
-***REMOVED******REMOVED***/   - mapViewProxy: The proxy to provide access to map view operations. If `mapViewProxy`
-***REMOVED******REMOVED***/   is non-`nil`, the proxy will be used to set the rotation to `.zero` when the compass is
-***REMOVED******REMOVED***/   tapped on. Otherwise, the `action` will be called (set using the `action` view modifier).
-***REMOVED***public init(rotation: Double?, mapViewProxy: MapViewProxy? = nil)
+***REMOVED******REMOVED***/   - mapViewProxy: The proxy to provide access to map view operations.
+***REMOVED***public init(rotation: Double?, mapViewProxy: MapViewProxy)
+***REMOVED***
+***REMOVED******REMOVED***/ Creates a compass with a rotation (0° indicates a direction toward true North, 90° indicates
+***REMOVED******REMOVED***/ a direction toward true West, etc.).
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - rotation: The rotation whose value determines the heading of the compass.
+***REMOVED******REMOVED***/   - action: The action to perform when the compass is tapped.
+***REMOVED***public init(rotation: Double?, action: @escaping () -> Void)
 ```
 
 `Compass` has the following modifiers:
 
 - `func compassSize(size: CGFloat)` - The size of the `Compass`, specifying both the width and height of the compass.
 - `func autoHideDisabled(_:)` - Specifies whether the ``Compass`` should automatically hide when the heading is 0.
-- `action(perform action: @escaping () -> Void)` - An action to perform when the compass is tapped. If `mapViewProxy` is non-`nil`, then this will have no effect.
 
 ## Behavior:
 
@@ -62,7 +66,7 @@ var body: some View {
 ***REMOVED***
 ```
 
-To add a `Compass` to a scene view, you would not pass in a `mapViewProxy` argument in the initalizer, but use the `action` modifier to perform a custom action when the compass is tapped on.
+To add a `Compass` to a SceneView, use the initializer which takes an `action` argument to perform a custom action when the compass is tapped on.
 
 ```swift
 @State private var scene = Scene(basemapStyle: .arcGISImagery)
@@ -74,15 +78,14 @@ var body: some View {
 ***REMOVED******REMOVED***SceneView(scene: scene)
 ***REMOVED******REMOVED******REMOVED***.onViewpointChanged(kind: .centerAndScale) { viewpoint = $0 ***REMOVED***
 ***REMOVED******REMOVED******REMOVED***.overlay(alignment: .topTrailing) {
-***REMOVED******REMOVED******REMOVED******REMOVED***Compass(rotation: viewpoint?.rotation)
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.action {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let viewpoint {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task {
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await proxy.setViewpoint(viewpoint.withRotation(.zero))
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***Compass(rotation: viewpoint?.rotation) {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***if let viewpoint {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***Task {
+***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***await proxy.setViewpoint(viewpoint.withRotation(.zero))
 ***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***
 ***REMOVED******REMOVED******REMOVED******REMOVED***
-***REMOVED******REMOVED******REMOVED******REMOVED******REMOVED***.padding()
+***REMOVED******REMOVED******REMOVED***
+***REMOVED******REMOVED******REMOVED******REMOVED***.padding()
 ***REMOVED******REMOVED***
 ***REMOVED***
 ***REMOVED***

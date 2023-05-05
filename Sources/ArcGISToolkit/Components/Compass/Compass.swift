@@ -39,14 +39,23 @@ public struct Compass: View {
 ***REMOVED******REMOVED***/ Creates a compass with a heading based on compass directions (0° indicates a direction
 ***REMOVED******REMOVED***/ toward true North, 90° indicates a direction toward true East, etc.).
 ***REMOVED******REMOVED***/ - Parameters:
-***REMOVED******REMOVED***/   - heading: The heading of the compass.
+***REMOVED******REMOVED***/   - rotation: The rotation whose value determines the heading of the compass.
 ***REMOVED******REMOVED***/   - mapViewProxy: The proxy to provide access to map view operations.
+***REMOVED******REMOVED***/   - action: The action to perform when the compass is tapped.
 ***REMOVED***init(
-***REMOVED******REMOVED***heading: Double,
-***REMOVED******REMOVED***mapViewProxy: MapViewProxy? = nil
+***REMOVED******REMOVED***rotation: Double?,
+***REMOVED******REMOVED***mapViewProxy: MapViewProxy?,
+***REMOVED******REMOVED***action: (() -> Void)?
 ***REMOVED***) {
+***REMOVED******REMOVED***let heading: Double
+***REMOVED******REMOVED***if let rotation {
+***REMOVED******REMOVED******REMOVED***heading = rotation.isZero ? .zero : 360 - rotation
+***REMOVED*** else {
+***REMOVED******REMOVED******REMOVED***heading = .nan
+***REMOVED***
 ***REMOVED******REMOVED***self.heading = heading
 ***REMOVED******REMOVED***self.mapViewProxy = mapViewProxy
+***REMOVED******REMOVED***self.action = action
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***public var body: some View {
@@ -94,20 +103,24 @@ public extension Compass {
 ***REMOVED******REMOVED***/ a direction toward true West, etc.).
 ***REMOVED******REMOVED***/ - Parameters:
 ***REMOVED******REMOVED***/   - rotation: The rotation whose value determines the heading of the compass.
-***REMOVED******REMOVED***/   - mapViewProxy: The proxy to provide access to map view operations. If `mapViewProxy`
-***REMOVED******REMOVED***/   is non-`nil`, the proxy will be used to set the rotation to `.zero` when the compass is
-***REMOVED******REMOVED***/   tapped on. Otherwise, the `action` will be called (set using the `action` view modifier).
+***REMOVED******REMOVED***/   - mapViewProxy: The proxy to provide access to map view operations.
 ***REMOVED***init(
 ***REMOVED******REMOVED***rotation: Double?,
-***REMOVED******REMOVED***mapViewProxy: MapViewProxy? = nil
+***REMOVED******REMOVED***mapViewProxy: MapViewProxy
 ***REMOVED***) {
-***REMOVED******REMOVED***let heading: Double
-***REMOVED******REMOVED***if let rotation {
-***REMOVED******REMOVED******REMOVED***heading = rotation.isZero ? .zero : 360 - rotation
-***REMOVED*** else {
-***REMOVED******REMOVED******REMOVED***heading = .nan
+***REMOVED******REMOVED***self.init(rotation: rotation, mapViewProxy: mapViewProxy, action: nil)
 ***REMOVED***
-***REMOVED******REMOVED***self.init(heading: heading, mapViewProxy: mapViewProxy)
+***REMOVED***
+***REMOVED******REMOVED***/ Creates a compass with a rotation (0° indicates a direction toward true North, 90° indicates
+***REMOVED******REMOVED***/ a direction toward true West, etc.).
+***REMOVED******REMOVED***/ - Parameters:
+***REMOVED******REMOVED***/   - rotation: The rotation whose value determines the heading of the compass.
+***REMOVED******REMOVED***/   - action: The action to perform when the compass is tapped.
+***REMOVED***init(
+***REMOVED******REMOVED***rotation: Double?,
+***REMOVED******REMOVED***action: @escaping () -> Void
+***REMOVED***) {
+***REMOVED******REMOVED***self.init(rotation: rotation, mapViewProxy: nil, action: action)
 ***REMOVED***
 ***REMOVED***
 ***REMOVED******REMOVED***/ Define a custom size for the compass.
@@ -124,14 +137,6 @@ public extension Compass {
 ***REMOVED***func autoHideDisabled(_ disable: Bool = true) -> Self {
 ***REMOVED******REMOVED***var copy = self
 ***REMOVED******REMOVED***copy.autoHide = !disable
-***REMOVED******REMOVED***return copy
-***REMOVED***
-***REMOVED***
-***REMOVED******REMOVED***/ An action to perform when the compass is tapped. If `mapViewProxy` is non-`nil`,
-***REMOVED******REMOVED***/ then this will have no effect.
-***REMOVED***func action(perform action: @escaping () -> Void) -> Self {
-***REMOVED******REMOVED***var copy = self
-***REMOVED******REMOVED***copy.action = action
 ***REMOVED******REMOVED***return copy
 ***REMOVED***
 ***REMOVED***
