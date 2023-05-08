@@ -35,7 +35,7 @@ public struct Compass: View {
 ***REMOVED******REMOVED***/ An action to perform when the compass is tapped. Note if `mapViewProxy` is non-`nil`
 ***REMOVED******REMOVED***/ this will not be invoked.
 ***REMOVED***private var action: (() -> Void)?
-
+***REMOVED***
 ***REMOVED******REMOVED***/ Creates a compass with a heading based on compass directions (0° indicates a direction
 ***REMOVED******REMOVED***/ toward true North, 90° indicates a direction toward true East, etc.).
 ***REMOVED******REMOVED***/ - Parameters:
