@@ -43,7 +43,7 @@ Compass:
 
 Whenever the map is not orientated North (non-zero bearing) the compass appears. When reset to north, it disappears. The `autoHideDisabled` view modifier allows you to disable the auto-hide feature so that it is always displayed.
 
-When the compass is tapped, the map orients back to north (zero bearing). 
+When the compass is tapped, the map orients back to north (zero bearing).
 
 ## Usage
 
